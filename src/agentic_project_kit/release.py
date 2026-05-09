@@ -202,14 +202,21 @@ def check_github_release_absent(
     output = "\n".join(part for part in (result.stdout.strip(), result.stderr.strip()) if part)
     if result.returncode == 0:
         return ReleaseCheckResult("GitHub release unused", ReleaseCheckStatus.FAIL, f"GitHub release already exists: {tag}")
+    if result.returncode == 127 or _looks_like_unavailable_github_cli(output):
+        return ReleaseCheckResult("GitHub release unused", ReleaseCheckStatus.WARN, output or "gh release view failed")
     if _looks_like_missing_github_release(output):
         return ReleaseCheckResult("GitHub release unused", ReleaseCheckStatus.PASS, f"GitHub release is absent: {tag}")
     return ReleaseCheckResult("GitHub release unused", ReleaseCheckStatus.WARN, output or "gh release view failed")
 
 
+def _looks_like_unavailable_github_cli(output: str) -> bool:
+    normalized = output.lower()
+    return any(fragment in normalized for fragment in ("could not run gh", "gh unavailable"))
+
+
 def _looks_like_missing_github_release(output: str) -> bool:
     normalized = output.lower()
-    return any(fragment in normalized for fragment in ("not found", "release not found", "http 404"))
+    return any(fragment in normalized for fragment in ("release not found", "http 404"))
 
 
 def run_command(project_root: Path, command: Sequence[str]) -> CommandResult:
