@@ -44,6 +44,8 @@ Run this command when changing project health diagnostics:
 
 Expected evidence: required project files, documentation/TODO gates, version drift, and citation metadata drift are reported as PASS, WARN, or FAIL with an overall status.
 
+Citation metadata is optional for young or generated projects. Missing DOI/Zenodo metadata must produce WARN, not FAIL. Once any DOI/Zenodo metadata is present, partial or inconsistent metadata must produce FAIL.
+
 ## Packaging Gate
 
 Run these commands:
