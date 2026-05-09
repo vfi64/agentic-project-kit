@@ -22,6 +22,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Release planning change | Unit tests plus agentic-kit release-plan CLI smoke command |
 | Release state validation change | Unit tests plus agentic-kit release-check CLI smoke command |
 | Project health check change | Unit tests plus agentic-kit doctor CLI smoke command |
+| Citation metadata health change | Unit tests plus agentic-kit doctor CLI smoke command |
 | TestPyPI validation | TestPyPI upload, fresh venv install, CLI smoke command |
 | Handoff/state change | Update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md |
 
@@ -41,7 +42,7 @@ Run this command when changing project health diagnostics:
 
     agentic-kit doctor
 
-Expected evidence: required project files and documentation/TODO gates are reported as PASS, WARN, or FAIL with an overall status.
+Expected evidence: required project files, documentation/TODO gates, version drift, and citation metadata drift are reported as PASS, WARN, or FAIL with an overall status.
 
 ## Packaging Gate
 
