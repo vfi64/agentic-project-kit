@@ -1,5 +1,7 @@
 # Agentic Project Kit
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/zenodo.20101359)
+
 `agentic-project-kit` is a local Python package for generating GitHub-ready project skeletons for human-AI software development workflows.
 
 It creates not only files, but a reusable development process: agent onboarding, status discipline, test gates, TODO tracking, bounded logging conventions, and optional GitHub automation.
@@ -124,9 +126,11 @@ Logs are diagnostic evidence, not automatic source material. Do not commit secre
 
 Citation metadata is provided in `CITATION.cff`.
 
-Zenodo metadata is provided in `.zenodo.json`. The repository is intended to be archived through the Zenodo GitHub integration starting with the first release after that integration is enabled.
+Zenodo metadata is provided in `.zenodo.json`. The project is archived through the Zenodo GitHub integration.
 
-A DOI badge should be added here only after Zenodo has archived a release and assigned the DOI.
+For citation, prefer the all-versions DOI: `10.5281/zenodo.20101359`.
+
+The version-specific DOI for `v0.2.4` is `10.5281/zenodo.20101360`.
 
 ## Safety rule
 
@@ -136,4 +140,4 @@ This kit creates a fresh repository from generic templates. It does not copy a p
 
 ## Current status
 
-Version `0.2.4` is an early MVP with release-state validation and Zenodo-ready citation metadata. It is suitable for local use, generating new starter repositories, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
+Version `0.2.4` is an early MVP with release-state validation and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
