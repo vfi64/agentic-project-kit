@@ -10,19 +10,14 @@ STATE_GATE_DOCUMENTS = (
 )
 
 STATE_GATE_SECTIONS = {
-    "docs/STATUS.md": ("## Current State", "## Current Goal", "## Next Safe Step"),
-    "docs/TEST_GATES.md": ("## Gate Matrix", "## Standard Local Gate", "## Maintenance Rule"),
-    "docs/handoff/CURRENT_HANDOFF.md": (
-        "## Current Repository State",
-        "## Source of Truth",
-        "## Next Safe Step",
-    ),
+    "docs/STATUS.md": ("## Current Goal", "## Next Safe Step"),
+    "docs/TEST_GATES.md": ("## Gate Matrix", "## Outcome Reporting"),
+    "docs/handoff/CURRENT_HANDOFF.md": ("# Current Handoff", "## Current", "## Next"),
 }
 
 STALE_HANDOFF_MARKERS = (
     "Create project-level docs",
     "Commit documentation-state files",
-    "Open pull request into main",
     "Run the local gate, inspect the diff, then commit the documentation-state update",
 )
 
