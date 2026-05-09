@@ -25,3 +25,78 @@ def test_create_project_generates_core_files(tmp_path: Path):
     assert (target / "docs/PROJECT_START.md").exists()
     assert (target / ".agentic/todo.yaml").exists()
     assert (target / ".github/workflows/ci.yml").exists()
+
+def test_generated_ci_uses_pypi_kit_source_by_default(tmp_path):
+    from agentic_project_kit.models import ProjectOptions
+    from agentic_project_kit.templates import create_project
+
+    target = tmp_path / "demo-default"
+    create_project(
+        ProjectOptions(
+            name="demo-default",
+            description="Demo",
+            project_type="python-cli",
+            license_name="MIT",
+            github_actions=True,
+            pre_commit=True,
+            agent_docs=True,
+            logging_evidence=True,
+            target_dir=target,
+        )
+    )
+
+    ci = (target / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    assert "pip install agentic-project-kit" in ci
+    assert "test.pypi.org" not in ci
+
+
+def test_generated_ci_can_use_testpypi_kit_source(tmp_path):
+    from agentic_project_kit.models import ProjectOptions
+    from agentic_project_kit.templates import create_project
+
+    target = tmp_path / "demo-testpypi"
+    create_project(
+        ProjectOptions(
+            name="demo-testpypi",
+            description="Demo",
+            project_type="python-cli",
+            license_name="MIT",
+            github_actions=True,
+            pre_commit=True,
+            agent_docs=True,
+            logging_evidence=True,
+            target_dir=target,
+            kit_source="testpypi",
+        )
+    )
+
+    ci = (target / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    assert "https://test.pypi.org/simple/" in ci
+    assert "--extra-index-url https://pypi.org/simple/" in ci
+    assert "agentic-project-kit" in ci
+
+
+def test_generated_ci_can_skip_kit_install(tmp_path):
+    from agentic_project_kit.models import ProjectOptions
+    from agentic_project_kit.templates import create_project
+
+    target = tmp_path / "demo-none"
+    create_project(
+        ProjectOptions(
+            name="demo-none",
+            description="Demo",
+            project_type="python-cli",
+            license_name="MIT",
+            github_actions=True,
+            pre_commit=True,
+            agent_docs=True,
+            logging_evidence=True,
+            target_dir=target,
+            kit_source="none",
+        )
+    )
+
+    ci = (target / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    assert "agentic-project-kit install intentionally skipped" in ci
+    assert "pip install agentic-project-kit" not in ci
+    assert "test.pypi.org" not in ci

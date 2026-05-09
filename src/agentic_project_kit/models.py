@@ -13,3 +13,4 @@ class ProjectOptions:
     agent_docs: bool
     logging_evidence: bool
     target_dir: Path
+    kit_source: str = "pypi"
