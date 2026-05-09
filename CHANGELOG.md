@@ -4,6 +4,12 @@ All notable changes to this project are documented here.
 
 This project uses a pragmatic semantic versioning scheme while it is in early MVP development.
 
+## 0.2.2
+
+- Add `--kit-source` option for generated CI.
+- Support `pypi`, `testpypi`, and `none` as generated CI install sources for `agentic-project-kit`.
+- Add generator tests for configurable kit install source behavior.
+
 ## 0.2.1
 
 - Fix generated CI to install `agentic-project-kit` from the package index instead of a private GitHub repository.
