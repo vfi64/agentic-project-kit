@@ -35,23 +35,24 @@ Project-level state documentation is machine-checkable:
 Release preparation is CLI-supported:
 
 - agentic-kit release-plan prints a release preparation checklist for the target version.
-- The plan includes local gates, package validation, state-file checks, tag lookup, and release verification commands.
-- The plan checks for an existing target tag before suggesting tag creation.
+- The plan includes local gates, package validation, state-file checks, local tag lookup, remote tag lookup, GitHub release lookup, and release verification commands.
+- The plan checks for an existing target tag and release before suggesting tag creation.
 
 Release state validation is CLI-supported:
 
 - agentic-kit release-check validates release state for a target version.
-- It checks semantic version shape, CHANGELOG version text, STATUS version text, CURRENT_HANDOFF version text, and local tag availability.
+- It checks semantic version shape, CHANGELOG version text, STATUS version text, CURRENT_HANDOFF version text, local tag availability, remote tag availability, and GitHub release availability.
+- It treats unavailable remote/GitHub tooling as WARN, while existing local tags, remote tags, or GitHub releases are FAIL.
 - It exits with code 1 when a required release-state check fails.
 
 Current validated gates:
 
-- python -m pytest -q -> 24 passed
+- python -m pytest -q -> 28 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
 - agentic-kit release-plan -> passed
-- agentic-kit release-check --version 0.2.3 -> failed as expected because state files are not prepared for 0.2.3
-- agentic-kit release-check --version 0.2.2 -> failed as expected because tag v0.2.2 already exists and CHANGELOG lacks the exact searched heading text
+- agentic-kit release-check --version 0.2.3 -> failed as expected because state files are not prepared for 0.2.3; local tag, remote tag, and GitHub release are free
+- agentic-kit release-check --version 0.2.2 -> failed as expected because local tag, remote tag, and GitHub release v0.2.2 already exist and CHANGELOG lacks the exact searched heading text
 - python -m build -> wheel and sdist built before v0.2.2 release
 - twine check dist/* -> passed before v0.2.2 release
 - TestPyPI upload for 0.2.2 -> passed
@@ -85,4 +86,4 @@ twine check dist/*
 
 ## Next Safe Step
 
-Start the next functional change from main on a fresh feature branch. Recommended next feature: improve release-check so it can validate GitHub remote tag and GitHub release existence or absence in addition to the local tag check.
+Start the next functional change from main on a fresh feature branch. Recommended next feature: prepare a real next release candidate by updating CHANGELOG, STATUS, CURRENT_HANDOFF, and version metadata consistently, then validate it with release-check before tagging.
