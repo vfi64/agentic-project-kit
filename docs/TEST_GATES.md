@@ -1,0 +1,73 @@
+# Test Gates
+
+Status-date: 2026-05-09
+Project: agentic-project-kit
+
+## Purpose
+
+This file defines the required evidence before claiming that a change is complete.
+
+The repository must not rely on memory, chat history, or informal claims. Relevant checks must be run and reported explicitly.
+
+## Gate Matrix
+
+| Change type | Required evidence |
+|---|---|
+| Documentation only | git diff, content review, and if possible agentic-kit check-docs on a generated project |
+| Python code | python -m pytest -q and ruff check . |
+| CLI behavior | Unit tests plus CLI smoke command |
+| Generator behavior | Generator test plus generated-project file inspection |
+| GitHub workflow change | Local workflow review plus GitHub Actions run |
+| Packaging/release change | python -m build, twine check dist/*, release workflow result |
+| TestPyPI validation | TestPyPI upload, fresh venv install, CLI smoke command |
+| Handoff/state change | Update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md |
+
+## Standard Local Gate
+
+Run these commands:
+
+    git status --short
+    git branch --show-current
+    python -m pytest -q
+    ruff check .
+
+## Packaging Gate
+
+Run these commands:
+
+    rm -rf dist build
+    find . -maxdepth 3 -name "*.egg-info" -type d -prune -exec rm -rf {} +
+    python -m build
+    twine check dist/*
+    ls -lh dist/
+
+## Release Gate
+
+Before tagging:
+
+    git status --short
+    git log --oneline -5
+    git show HEAD:pyproject.toml | grep '^version'
+
+After tagging:
+
+    gh run list --workflow Release --limit 5
+    gh run watch $(gh run list --workflow Release --limit 1 --json databaseId --jq '.[0].databaseId')
+    gh release view <tag>
+
+## Outcome Reporting
+
+Use this shape:
+
+    - Intended outcome:
+    - Required evidence:
+    - Outcome achieved: yes / no / partial
+    - Changed files:
+    - Tests run:
+    - Tests not run:
+    - Remaining risks:
+    - Next safe step:
+
+## Maintenance Rule
+
+Whenever the current branch, version, release state, test status, or next safe step changes, update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md.
