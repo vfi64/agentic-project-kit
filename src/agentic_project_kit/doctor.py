@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import tomllib
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
@@ -40,6 +41,7 @@ def build_doctor_report(project_root: Path) -> DoctorReport:
         _path_check(root, ".github/workflows/ci.yml", required=False),
         _docs_check(root),
         _todo_check(root),
+        _version_drift_check(root),
     ]
     return DoctorReport(project_root=root, checks=checks)
 
@@ -76,3 +78,53 @@ def _todo_check(project_root: Path) -> DoctorCheck:
     if errors:
         return DoctorCheck("todo gates", DoctorStatus.FAIL, "; ".join(errors))
     return DoctorCheck("todo gates", DoctorStatus.PASS, "passed")
+
+
+def _version_drift_check(project_root: Path) -> DoctorCheck:
+    version = _read_pyproject_version(project_root / "pyproject.toml")
+    if version is None:
+        return DoctorCheck("version drift", DoctorStatus.WARN, "pyproject.toml absent or version unavailable")
+
+    missing: list[str] = []
+    current_text = f"Current version: {version}"
+    changelog_text = f"v{version}"
+
+    if not _file_contains(project_root / "docs/STATUS.md", current_text):
+        missing.append("docs/STATUS.md")
+    if not _file_contains(project_root / "docs/handoff/CURRENT_HANDOFF.md", current_text):
+        missing.append("docs/handoff/CURRENT_HANDOFF.md")
+    if not _file_contains(project_root / "CHANGELOG.md", changelog_text):
+        missing.append("CHANGELOG.md")
+
+    citation_path = project_root / "CITATION.cff"
+    if citation_path.exists() and not _citation_version_matches(citation_path, version):
+        missing.append("CITATION.cff")
+
+    if missing:
+        return DoctorCheck("version drift", DoctorStatus.FAIL, "version mismatch in: " + ", ".join(missing))
+    return DoctorCheck("version drift", DoctorStatus.PASS, f"project state matches version {version}")
+
+
+def _read_pyproject_version(path: Path) -> str | None:
+    if not path.exists():
+        return None
+    data = tomllib.loads(path.read_text(encoding="utf-8"))
+    project = data.get("project", {})
+    version = project.get("version")
+    if isinstance(version, str) and version:
+        return version
+    return None
+
+
+def _file_contains(path: Path, needle: str) -> bool:
+    return path.exists() and needle in path.read_text(encoding="utf-8")
+
+
+def _citation_version_matches(path: Path, version: str) -> bool:
+    text = path.read_text(encoding="utf-8")
+    accepted = (
+        f"version: {version}",
+        f'version: "{version}"',
+        f"version: '{version}'",
+    )
+    return any(item in text for item in accepted)
