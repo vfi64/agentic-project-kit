@@ -2,17 +2,17 @@
 
 Status-date: 2026-05-09
 Project: agentic-project-kit
-Branch: main
+Branch: feature/prepare-v0.2.3-release
 Base branch: main
-Current version: 0.2.2
+Current version: 0.2.3
 
 ## Current Goal
 
-Keep repository state, handoff information, and required evidence current before starting the next functional feature branch.
+Prepare version 0.2.3 consistently across package metadata, CHANGELOG, STATUS, and CURRENT_HANDOFF, then validate the release state before tagging.
 
 ## Current Repository State
 
-The project has released version 0.2.2.
+The project has released version 0.2.2 and is preparing release candidate 0.2.3.
 
 Important completed work:
 
@@ -33,8 +33,10 @@ Important completed work:
 
 Current branch work:
 
-- None on main.
-- New functional work should start from main on a fresh feature branch.
+- pyproject.toml is bumped to 0.2.3.
+- CHANGELOG.md contains a v0.2.3 entry.
+- docs/STATUS.md uses Current version: 0.2.3.
+- docs/handoff/CURRENT_HANDOFF.md uses Current version: 0.2.3.
 
 ## Source of Truth
 
@@ -58,7 +60,7 @@ Run:
     ruff check .
     agentic-kit check-docs
     agentic-kit release-plan
-    agentic-kit release-check --version <target-version>
+    agentic-kit release-check --version 0.2.3
 
 For package validation, also run:
 
@@ -70,13 +72,13 @@ For package validation, also run:
 
 ## Latest Known Evidence
 
-Last known successful checks:
+Last known successful checks before this release-preparation branch:
 
 - python -m pytest -q -> 28 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
 - agentic-kit release-plan -> passed
-- agentic-kit release-check --version 0.2.3 -> failed as expected because state files are not prepared for 0.2.3; local tag, remote tag, and GitHub release are free
+- agentic-kit release-check --version 0.2.3 -> failed as expected because state files were not yet prepared for 0.2.3; local tag, remote tag, and GitHub release were free
 - agentic-kit release-check --version 0.2.2 -> failed as expected because local tag, remote tag, and GitHub release v0.2.2 already exist and CHANGELOG lacks the exact searched heading text
 - python -m build -> passed before v0.2.2 release
 - twine check dist/* -> passed before v0.2.2 release
@@ -88,8 +90,11 @@ Last known successful checks:
 
 ## Current Open Work
 
-- None.
+- Run the full local gate on feature/prepare-v0.2.3-release.
+- Confirm that agentic-kit release-check --version 0.2.3 passes.
+- Merge the branch after validation.
+- Tag v0.2.3 only after the branch is merged and the release state remains clean.
 
 ## Next Safe Step
 
-Start a new feature branch from main. Recommended next feature: prepare a real next release candidate by updating CHANGELOG, STATUS, CURRENT_HANDOFF, and version metadata consistently, then validate it with release-check before tagging.
+Pull feature/prepare-v0.2.3-release locally and run the required local gate. If release-check --version 0.2.3 passes, open and merge the release preparation PR.
