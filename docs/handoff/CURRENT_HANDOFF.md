@@ -23,6 +23,8 @@ Important completed work:
 - Project-level state documentation is present in docs/STATUS.md, docs/TEST_GATES.md, and docs/handoff/CURRENT_HANDOFF.md.
 - PR #7 made project-level state documentation machine-checkable through agentic-kit check-docs.
 - check-docs can run in the kit repository root without sentinel.yaml.
+- PR #9 added agentic-kit release-plan for release preparation.
+- release-plan includes local gates, package validation, version checks, tag lookup, and release verification commands.
 
 Current branch work:
 
@@ -50,6 +52,7 @@ Run:
     python -m pytest -q
     ruff check .
     agentic-kit check-docs
+    agentic-kit release-plan
 
 For package validation, also run:
 
@@ -63,9 +66,10 @@ For package validation, also run:
 
 Last known successful checks:
 
-- python -m pytest -q -> 15 passed
+- python -m pytest -q -> 19 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
+- agentic-kit release-plan -> passed
 - python -m build -> passed before v0.2.2 release
 - twine check dist/* -> passed before v0.2.2 release
 - GitHub CI for v0.2.2 commit -> passed
@@ -80,4 +84,4 @@ Last known successful checks:
 
 ## Next Safe Step
 
-Start a new feature branch from main. Recommended next feature: add a release preparation command or checklist that updates status, changelog, package build checks, and tag readiness in one documented flow.
+Start a new feature branch from main. Recommended next feature: improve release-plan so it can validate the target release state instead of only printing a checklist.
