@@ -19,6 +19,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Generator behavior | Generator test plus generated-project file inspection |
 | GitHub workflow change | Local workflow review plus GitHub Actions run |
 | Packaging/release change | python -m build, twine check dist/*, release workflow result |
+| Release planning change | Unit tests plus agentic-kit release-plan CLI smoke command |
 | TestPyPI validation | TestPyPI upload, fresh venv install, CLI smoke command |
 | Handoff/state change | Update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md |
 
@@ -30,6 +31,7 @@ Run these commands:
     git branch --show-current
     python -m pytest -q
     ruff check .
+    agentic-kit check-docs
 
 ## Packaging Gate
 
@@ -42,6 +44,10 @@ Run these commands:
     ls -lh dist/
 
 ## Release Gate
+
+Plan first:
+
+    agentic-kit release-plan
 
 Before tagging:
 
