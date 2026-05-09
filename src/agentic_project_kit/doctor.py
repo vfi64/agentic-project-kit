@@ -88,7 +88,6 @@ def _version_drift_check(project_root: Path) -> DoctorCheck:
     missing: list[str] = []
     current_text = f"Current version: {version}"
     changelog_text = f"v{version}"
-    citation_text = f"version: {version}"
 
     if not _file_contains(project_root / "docs/STATUS.md", current_text):
         missing.append("docs/STATUS.md")
@@ -98,7 +97,7 @@ def _version_drift_check(project_root: Path) -> DoctorCheck:
         missing.append("CHANGELOG.md")
 
     citation_path = project_root / "CITATION.cff"
-    if citation_path.exists() and not _file_contains(citation_path, citation_text):
+    if citation_path.exists() and not _citation_version_matches(citation_path, version):
         missing.append("CITATION.cff")
 
     if missing:
@@ -119,3 +118,13 @@ def _read_pyproject_version(path: Path) -> str | None:
 
 def _file_contains(path: Path, needle: str) -> bool:
     return path.exists() and needle in path.read_text(encoding="utf-8")
+
+
+def _citation_version_matches(path: Path, version: str) -> bool:
+    text = path.read_text(encoding="utf-8")
+    accepted = (
+        f"version: {version}",
+        f'version: "{version}"',
+        f"version: '{version}'",
+    )
+    return any(item in text for item in accepted)
