@@ -121,6 +121,14 @@ The generated `scripts/stage_recent_logs.py` script is intentionally bounded. It
 
 Logs are diagnostic evidence, not automatic source material. Do not commit secrets, local credentials, broad raw logs, or private runtime state.
 
+## Citation and archiving
+
+Citation metadata is provided in `CITATION.cff`.
+
+Zenodo metadata is provided in `.zenodo.json`. The repository is intended to be archived through the Zenodo GitHub integration starting with the first release after that integration is enabled.
+
+A DOI badge should be added here only after Zenodo has archived a release and assigned the DOI.
+
 ## Safety rule
 
 Do not generate a public project from a private repository history.
@@ -129,4 +137,4 @@ This kit creates a fresh repository from generic templates. It does not copy a p
 
 ## Current status
 
-Version `0.2.0` is an early MVP. It is suitable for local use and for generating new starter repositories, but it is not yet a polished public package release.
+Version `0.2.3` is an early MVP. It is suitable for local use, generating new starter repositories, and validating release state before tagging. Zenodo metadata is being prepared for the next release.

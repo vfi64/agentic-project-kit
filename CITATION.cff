@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata from this file."
+title: "agentic-project-kit"
+type: software
+authors:
+  - family-names: "Fickert"
+    given-names: "Volker"
+repository-code: "https://github.com/vfi64/agentic-project-kit"
+url: "https://github.com/vfi64/agentic-project-kit"
+abstract: "Generate GitHub-ready project templates for human-AI software development workflows."
+keywords:
+  - agentic development
+  - project templates
+  - software engineering
+  - GitHub automation
+  - AI-assisted development
+license: MIT
+version: "0.2.3"
+date-released: "2026-05-09"
