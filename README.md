@@ -111,7 +111,6 @@ Generated projects separate:
 - output from outcome
 - logs from committed source state
 - agent instructions from project overview
-- local evidence from public repository content
 
 Agents should start with `AGENTS.md`, `docs/PROJECT_START.md`, `docs/STATUS.md`, and `docs/TEST_GATES.md`. They should not infer current state from memory or stale prose.
 
@@ -137,4 +136,4 @@ This kit creates a fresh repository from generic templates. It does not copy a p
 
 ## Current status
 
-Version `0.2.3` is an early MVP. It is suitable for local use, generating new starter repositories, and validating release state before tagging. Zenodo metadata is being prepared for the next release.
+Version `0.2.4` is an early MVP with release-state validation and Zenodo-ready citation metadata. It is suitable for local use, generating new starter repositories, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
