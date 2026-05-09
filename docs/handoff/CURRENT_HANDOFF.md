@@ -8,7 +8,7 @@ Current version: 0.2.2
 
 ## Current Goal
 
-Add project-level documentation state gates so the repository can be continued safely from the repository itself, without relying on chat history.
+Keep repository state, handoff information, and required evidence current before starting the next functional feature branch.
 
 ## Current Repository State
 
@@ -20,13 +20,12 @@ Important completed work:
 - v0.2.1 fixed generated CI so it installs agentic-project-kit from the package index instead of a private GitHub repository.
 - v0.2.2 added --kit-source for generated CI with pypi, testpypi, and none.
 - v0.2.2 was tagged, released on GitHub, uploaded to TestPyPI, installed from TestPyPI in a fresh virtual environment, and used to generate a test project.
+- Project-level state documentation is now present in docs/STATUS.md, docs/TEST_GATES.md, and docs/handoff/CURRENT_HANDOFF.md.
 
 Current branch work:
 
-- Add docs/STATUS.md.
-- Add docs/TEST_GATES.md.
-- Add docs/handoff/CURRENT_HANDOFF.md.
-- Make documentation-state maintenance explicit.
+- None on main.
+- New functional work should start from main on a fresh feature branch.
 
 ## Source of Truth
 
@@ -59,7 +58,7 @@ For package validation, also run:
 
 ## Latest Known Evidence
 
-Last known successful checks before this branch:
+Last known successful checks:
 
 - python -m pytest -q -> 11 passed
 - ruff check . -> passed
@@ -74,8 +73,7 @@ Last known successful checks before this branch:
 ## Current Open Work
 
 - None.
-- Next functional work should start from main with a fresh feature branch.
 
 ## Next Safe Step
 
-Run the local gate, inspect the diff, then commit the documentation-state update.
+Start a new feature branch from main. Recommended next feature: make the documentation state gates machine-checkable through the CLI and tests.

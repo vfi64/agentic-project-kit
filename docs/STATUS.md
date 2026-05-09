@@ -10,7 +10,7 @@ Current version: 0.2.2
 
 agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, TODO tracking, test gates, and handoff files.
 
-The project itself also needs a current state layer so work can be continued safely in a new chat or by another agent without relying on memory.
+The project itself now has a current state layer so work can be continued from the repository state files.
 
 ## Current State
 
@@ -19,6 +19,12 @@ Released versions:
 - v0.2.0: first GitHub release workflow with build artifacts.
 - v0.2.1: fixed generated CI to install agentic-project-kit from the package index instead of a private GitHub repository.
 - v0.2.2: added --kit-source for generated CI with pypi, testpypi, and none.
+
+Project-level state documentation is present on main:
+
+- docs/STATUS.md
+- docs/TEST_GATES.md
+- docs/handoff/CURRENT_HANDOFF.md
 
 Current validated gates:
 
@@ -32,15 +38,11 @@ Current validated gates:
 
 ## Current Goal
 
-Add project-level documentation state gates so repository state, handoff information, and required evidence stay current.
+Keep repository state, handoff information, and required evidence current before starting the next functional feature branch.
 
 ## Current Blockers
 
-- Project-level docs were missing before this branch:
-  - docs/STATUS.md
-  - docs/TEST_GATES.md
-  - docs/handoff/CURRENT_HANDOFF.md
-- Generated project templates already contain similar files, but the root project itself did not.
+- None known.
 
 ## Live Status Commands
 
@@ -55,4 +57,4 @@ twine check dist/*
 
 ## Next Safe Step
 
-Create project-level docs, add checks/tests if useful, run all gates, commit the documentation-state update, and open a pull request into main.
+Start the next functional change from main on a fresh feature branch. The most useful next feature is to make the documentation state gates machine-checkable through the CLI and tests.
