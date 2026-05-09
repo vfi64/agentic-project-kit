@@ -26,12 +26,19 @@ Project-level state documentation is present on main:
 - docs/TEST_GATES.md
 - docs/handoff/CURRENT_HANDOFF.md
 
+Project-level state documentation is now machine-checkable:
+
+- agentic-kit check-docs checks the state gate documents.
+- sentinel.yaml is optional for check-docs, so the kit repository root can be checked directly.
+- stale handoff markers are detected in docs/handoff/CURRENT_HANDOFF.md.
+
 Current validated gates:
 
-- python -m pytest -q -> 11 passed
+- python -m pytest -q -> 15 passed
 - ruff check . -> passed
-- python -m build -> wheel and sdist built
-- twine check dist/* -> passed
+- agentic-kit check-docs -> passed
+- python -m build -> wheel and sdist built before v0.2.2 release
+- twine check dist/* -> passed before v0.2.2 release
 - TestPyPI upload for 0.2.2 -> passed
 - TestPyPI installation of 0.2.2 -> passed
 - Generated project smoke test with --kit-source testpypi -> passed
@@ -52,9 +59,13 @@ git status --short
 git branch --show-current
 python -m pytest -q
 ruff check .
+agentic-kit check-docs
+
+For package validation, also run:
+
 python -m build
 twine check dist/*
 
 ## Next Safe Step
 
-Start the next functional change from main on a fresh feature branch. The most useful next feature is to make the documentation state gates machine-checkable through the CLI and tests.
+Start the next functional change from main on a fresh feature branch. Recommended next feature: add a release preparation command or checklist that updates status, changelog, package build checks, and tag readiness in one documented flow.
