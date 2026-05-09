@@ -4,6 +4,11 @@ All notable changes to this project are documented here.
 
 This project uses a pragmatic semantic versioning scheme while it is in early MVP development.
 
+## 0.2.1
+
+- Fix generated CI to install `agentic-project-kit` from the package index instead of a private GitHub repository.
+- Keep generated project CI usable without repository-specific GitHub credentials.
+
 ## 0.2.0 - 2026-05-09
 
 ### Added
