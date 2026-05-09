@@ -25,6 +25,9 @@ Important completed work:
 - check-docs can run in the kit repository root without sentinel.yaml.
 - PR #9 added agentic-kit release-plan for release preparation.
 - release-plan includes local gates, package validation, version checks, tag lookup, and release verification commands.
+- PR #11 added agentic-kit release-check for release state validation.
+- release-check validates semantic version shape, CHANGELOG version text, STATUS version text, CURRENT_HANDOFF version text, and local tag availability.
+- release-check exits with code 1 when a required release-state check fails.
 
 Current branch work:
 
@@ -53,6 +56,7 @@ Run:
     ruff check .
     agentic-kit check-docs
     agentic-kit release-plan
+    agentic-kit release-check --version <target-version>
 
 For package validation, also run:
 
@@ -66,10 +70,12 @@ For package validation, also run:
 
 Last known successful checks:
 
-- python -m pytest -q -> 19 passed
+- python -m pytest -q -> 24 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
 - agentic-kit release-plan -> passed
+- agentic-kit release-check --version 0.2.3 -> failed as expected because state files are not prepared for 0.2.3
+- agentic-kit release-check --version 0.2.2 -> failed as expected because tag v0.2.2 already exists and CHANGELOG lacks the exact searched heading text
 - python -m build -> passed before v0.2.2 release
 - twine check dist/* -> passed before v0.2.2 release
 - GitHub CI for v0.2.2 commit -> passed
@@ -84,4 +90,4 @@ Last known successful checks:
 
 ## Next Safe Step
 
-Start a new feature branch from main. Recommended next feature: improve release-plan so it can validate the target release state instead of only printing a checklist.
+Start a new feature branch from main. Recommended next feature: improve release-check so it can validate GitHub remote tag and GitHub release existence or absence in addition to the local tag check.
