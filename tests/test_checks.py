@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from agentic_project_kit.checks import check_docs, check_todo
+from agentic_project_kit.checks import check_docs, check_state_gate_docs, check_todo
 
 
 def test_check_docs_reports_missing_section(tmp_path: Path):
@@ -14,6 +14,7 @@ documents:
         encoding="utf-8",
     )
     (tmp_path / "README.md").write_text("# Title\n", encoding="utf-8")
+    _write_valid_state_gate_docs(tmp_path)
 
     errors = check_docs(tmp_path)
 
@@ -44,3 +45,58 @@ items:
     )
 
     assert check_todo(tmp_path) == []
+
+
+def test_check_state_gate_docs_accepts_valid_docs(tmp_path: Path):
+    _write_valid_state_gate_docs(tmp_path)
+
+    assert check_state_gate_docs(tmp_path) == []
+
+
+def test_check_state_gate_docs_reports_missing_file(tmp_path: Path):
+    (tmp_path / "docs/handoff").mkdir(parents=True)
+    (tmp_path / "docs/STATUS.md").write_text(
+        "# Project Status\n\n## Current State\n\n## Current Goal\n\n## Next Safe Step\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "docs/handoff/CURRENT_HANDOFF.md").write_text(
+        "# Current Handoff\n\n## Current Repository State\n\n## Source of Truth\n\n## Next Safe Step\n",
+        encoding="utf-8",
+    )
+
+    errors = check_state_gate_docs(tmp_path)
+
+    assert "Missing state gate document: docs/TEST_GATES.md" in errors
+
+
+def test_check_state_gate_docs_reports_stale_handoff_marker(tmp_path: Path):
+    _write_valid_state_gate_docs(tmp_path)
+    handoff_path = tmp_path / "docs/handoff/CURRENT_HANDOFF.md"
+    handoff_path.write_text(
+        handoff_path.read_text(encoding="utf-8")
+        + "\nRun the local gate, inspect the diff, then commit the documentation-state update.\n",
+        encoding="utf-8",
+    )
+
+    errors = check_state_gate_docs(tmp_path)
+
+    assert errors == [
+        "docs/handoff/CURRENT_HANDOFF.md: stale handoff marker "
+        "'Run the local gate, inspect the diff, then commit the documentation-state update'"
+    ]
+
+
+def _write_valid_state_gate_docs(project_root: Path) -> None:
+    (project_root / "docs/handoff").mkdir(parents=True)
+    (project_root / "docs/STATUS.md").write_text(
+        "# Project Status\n\n## Current State\n\n## Current Goal\n\n## Next Safe Step\n",
+        encoding="utf-8",
+    )
+    (project_root / "docs/TEST_GATES.md").write_text(
+        "# Test Gates\n\n## Gate Matrix\n\n## Standard Local Gate\n\n## Maintenance Rule\n",
+        encoding="utf-8",
+    )
+    (project_root / "docs/handoff/CURRENT_HANDOFF.md").write_text(
+        "# Current Handoff\n\n## Current Repository State\n\n## Source of Truth\n\n## Next Safe Step\n",
+        encoding="utf-8",
+    )
