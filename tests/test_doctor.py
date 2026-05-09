@@ -53,9 +53,9 @@ def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
         DoctorStatus.PASS,
         DoctorStatus.WARN,
         DoctorStatus.WARN,
-        DoctorStatus.FAIL,
+        DoctorStatus.WARN,
     ]
-    assert "Overall: FAIL" in render_doctor_report(report)
+    assert "Overall: PASS" in render_doctor_report(report)
 
 
 def test_doctor_report_fails_without_required_readme(tmp_path: Path):
@@ -109,6 +109,21 @@ def test_doctor_report_fails_on_version_drift(tmp_path: Path):
     assert "docs/handoff/CURRENT_HANDOFF.md" in version_check.detail
 
 
+def test_doctor_report_warns_when_citation_metadata_is_absent(tmp_path: Path):
+    (tmp_path / "README.md").write_text("# Demo\n", encoding="utf-8")
+    _write_state_docs(tmp_path, "1.2.3")
+    (tmp_path / "pyproject.toml").write_text('[project]\nversion = "1.2.3"\n', encoding="utf-8")
+    (tmp_path / "CHANGELOG.md").write_text("# Changelog\n\n## v1.2.3\n", encoding="utf-8")
+
+    report = build_doctor_report(tmp_path)
+
+    assert report.ok
+    citation_check = report.checks[-1]
+    assert citation_check.name == "citation drift"
+    assert citation_check.status == DoctorStatus.WARN
+    assert "citation metadata absent" in citation_check.detail
+
+
 def test_doctor_report_passes_when_citation_metadata_matches(tmp_path: Path):
     _write_citation_files(tmp_path)
     _write_state_docs(tmp_path, "1.2.3")
@@ -123,8 +138,11 @@ def test_doctor_report_passes_when_citation_metadata_matches(tmp_path: Path):
     assert "10.5281/zenodo.20101359" in citation_check.detail
 
 
-def test_doctor_report_fails_on_missing_citation_metadata(tmp_path: Path):
-    (tmp_path / "README.md").write_text("# Demo\n", encoding="utf-8")
+def test_doctor_report_fails_on_partial_citation_metadata(tmp_path: Path):
+    (tmp_path / "README.md").write_text(
+        "# Demo\n\nhttps://doi.org/10.5281/zenodo.20101359\n",
+        encoding="utf-8",
+    )
     _write_state_docs(tmp_path, "1.2.3")
     _write_version_files(tmp_path, "1.2.3")
 
@@ -134,6 +152,5 @@ def test_doctor_report_fails_on_missing_citation_metadata(tmp_path: Path):
     citation_check = report.checks[-1]
     assert citation_check.name == "citation drift"
     assert citation_check.status == DoctorStatus.FAIL
-    assert "README.md DOI" in citation_check.detail
     assert "README.md Zenodo badge" in citation_check.detail
     assert ".zenodo.json" in citation_check.detail
