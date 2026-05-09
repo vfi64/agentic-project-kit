@@ -68,7 +68,7 @@ def init(
     console.print(f"  cd {target}")
     console.print("  python -m venv .venv")
     console.print("  source .venv/bin/activate")
-    console.print('  pip install -e ".[dev]"')
+    console.print('  pip install -e ".[dev]"', markup=False)
     console.print("  pytest -q")
     console.print("  agentic-kit check")
 
