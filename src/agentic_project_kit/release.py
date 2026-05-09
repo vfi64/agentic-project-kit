@@ -121,8 +121,9 @@ def build_release_plan(project_root: Path, version: str | None = None) -> Releas
 def build_release_state_report(
     project_root: Path,
     version: str | None = None,
-    command_runner: CommandRunner = run_command,
+    command_runner: CommandRunner | None = None,
 ) -> ReleaseStateReport:
+    resolved_command_runner = command_runner or run_command
     resolved_version = version or read_project_version(project_root)
     checks = [
         check_semantic_version(resolved_version),
@@ -133,9 +134,9 @@ def build_release_state_report(
             f"Current version: {resolved_version}",
             "CURRENT_HANDOFF version",
         ),
-        check_local_tag_absent(project_root, resolved_version, command_runner),
-        check_remote_tag_absent(project_root, resolved_version, command_runner),
-        check_github_release_absent(project_root, resolved_version, command_runner),
+        check_local_tag_absent(project_root, resolved_version, resolved_command_runner),
+        check_remote_tag_absent(project_root, resolved_version, resolved_command_runner),
+        check_github_release_absent(project_root, resolved_version, resolved_command_runner),
     ]
     return ReleaseStateReport(version=resolved_version, checks=tuple(checks))
 
@@ -156,9 +157,14 @@ def check_file_contains(path: Path, needle: str, name: str) -> ReleaseCheckResul
     return ReleaseCheckResult(name, ReleaseCheckStatus.PASS, f"found text: {needle}")
 
 
-def check_local_tag_absent(project_root: Path, version: str, command_runner: CommandRunner = run_command) -> ReleaseCheckResult:
+def check_local_tag_absent(
+    project_root: Path,
+    version: str,
+    command_runner: CommandRunner | None = None,
+) -> ReleaseCheckResult:
+    resolved_command_runner = command_runner or run_command
     tag = f"v{version}"
-    result = command_runner(project_root, ["git", "tag", "-l", tag])
+    result = resolved_command_runner(project_root, ["git", "tag", "-l", tag])
     if result.returncode != 0:
         return ReleaseCheckResult("local tag unused", ReleaseCheckStatus.WARN, result.stderr.strip() or "git tag failed")
     if result.stdout.strip():
@@ -166,9 +172,14 @@ def check_local_tag_absent(project_root: Path, version: str, command_runner: Com
     return ReleaseCheckResult("local tag unused", ReleaseCheckStatus.PASS, f"tag is unused: {tag}")
 
 
-def check_remote_tag_absent(project_root: Path, version: str, command_runner: CommandRunner = run_command) -> ReleaseCheckResult:
+def check_remote_tag_absent(
+    project_root: Path,
+    version: str,
+    command_runner: CommandRunner | None = None,
+) -> ReleaseCheckResult:
+    resolved_command_runner = command_runner or run_command
     tag = f"v{version}"
-    result = command_runner(project_root, ["git", "ls-remote", "--tags", "origin", tag])
+    result = resolved_command_runner(project_root, ["git", "ls-remote", "--tags", "origin", tag])
     if result.returncode != 0:
         return ReleaseCheckResult(
             "remote tag unused",
@@ -180,9 +191,14 @@ def check_remote_tag_absent(project_root: Path, version: str, command_runner: Co
     return ReleaseCheckResult("remote tag unused", ReleaseCheckStatus.PASS, f"remote tag is unused: {tag}")
 
 
-def check_github_release_absent(project_root: Path, version: str, command_runner: CommandRunner = run_command) -> ReleaseCheckResult:
+def check_github_release_absent(
+    project_root: Path,
+    version: str,
+    command_runner: CommandRunner | None = None,
+) -> ReleaseCheckResult:
+    resolved_command_runner = command_runner or run_command
     tag = f"v{version}"
-    result = command_runner(project_root, ["gh", "release", "view", tag])
+    result = resolved_command_runner(project_root, ["gh", "release", "view", tag])
     output = "\n".join(part for part in (result.stdout.strip(), result.stderr.strip()) if part)
     if result.returncode == 0:
         return ReleaseCheckResult("GitHub release unused", ReleaseCheckStatus.FAIL, f"GitHub release already exists: {tag}")
