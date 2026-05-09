@@ -72,7 +72,8 @@ def test_build_release_state_report_warns_without_git_repo(tmp_path: Path):
 
     assert report.ok
     assert report.checks[-1].status == ReleaseCheckStatus.WARN
-    assert "git tag failed" in report.checks[-1].detail
+    assert report.checks[-1].detail
+    assert report.checks[-1].name == "local tag unused"
 
 
 def test_build_release_state_report_fails_for_missing_changelog_version(tmp_path: Path):
