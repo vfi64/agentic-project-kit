@@ -3,7 +3,7 @@
 Status-date: 2026-05-09
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: feature/documentation-state-gates
+Current work branch: main
 Current version: 0.2.2
 
 ## Purpose
