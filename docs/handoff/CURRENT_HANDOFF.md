@@ -2,17 +2,17 @@
 
 Status-date: 2026-05-10
 Project: agentic-project-kit
-Branch: feature/prepare-v0.2.4-zenodo-release
+Branch: docs/add-zenodo-doi
 Base branch: main
 Current version: 0.2.4
 
 ## Current Goal
 
-Prepare and validate v0.2.4 so the next tag can trigger GitHub Release automation and Zenodo archival.
+Record the assigned Zenodo DOI in README.md, CITATION.cff, STATUS, and CURRENT_HANDOFF.
 
 ## Current Repository State
 
-The project has released version 0.2.3. The current branch prepares version 0.2.4.
+The project has released version 0.2.4. GitHub release automation and Zenodo archival are both working.
 
 Important completed work:
 
@@ -27,26 +27,31 @@ Important completed work:
 - PR #13 extended release-check and release-plan with remote release state validation.
 - PR #15 prepared v0.2.3.
 - v0.2.3 was tagged and released successfully.
-- Release workflow for v0.2.3 passed.
-- CI workflow for v0.2.3 passed.
-- GitHub Release v0.2.3 exists with wheel and source distribution assets.
 - PR #16 added Zenodo and citation metadata after v0.2.3 had already been released.
+- PR #17 prepared v0.2.4 as the first Zenodo-backed release.
+- v0.2.4 was tagged and released successfully.
+- Release workflow for v0.2.4 passed.
+- CI workflow for v0.2.4 passed.
+- GitHub Release v0.2.4 exists with wheel and source distribution assets.
+- Zenodo archived v0.2.4.
+- PR #18 fixed README status drift after v0.2.4.
 
 Zenodo state:
 
 - Zenodo GitHub integration is enabled for vfi64/agentic-project-kit.
-- v0.2.3 was released before Zenodo integration was enabled, so v0.2.4 is expected to be the first automatically archived Zenodo release.
-- CITATION.cff is present.
+- Zenodo archived v0.2.4.
+- All-versions DOI: 10.5281/zenodo.20101359.
+- v0.2.4 version DOI: 10.5281/zenodo.20101360.
+- CITATION.cff contains the all-versions DOI.
 - .zenodo.json is present.
-- README.md documents citation and archiving notes, but no DOI badge yet.
+- README.md contains a Zenodo DOI badge and citation guidance.
 
 Current branch work:
 
-- pyproject.toml bumped to 0.2.4.
-- CITATION.cff bumped to 0.2.4.
-- CHANGELOG.md documents v0.2.4.
-- docs/STATUS.md updated for v0.2.4.
-- docs/handoff/CURRENT_HANDOFF.md updated for v0.2.4.
+- README.md adds the Zenodo DOI badge and citation guidance.
+- CITATION.cff adds the all-versions Zenodo DOI.
+- docs/STATUS.md records the v0.2.4 Zenodo archival evidence.
+- docs/handoff/CURRENT_HANDOFF.md records the current citation/archive state.
 
 ## Source of Truth
 
@@ -71,16 +76,6 @@ Run:
     python -m pytest -q
     ruff check .
     agentic-kit check-docs
-    agentic-kit release-plan
-    agentic-kit release-check --version 0.2.4
-
-For package validation, also run:
-
-    rm -rf dist build
-    find . -maxdepth 3 -name "*.egg-info" -type d -prune -exec rm -rf {} +
-    python -m build
-    twine check dist/*
-    ls -lh dist/
 
 ## Latest Known Evidence
 
@@ -89,22 +84,21 @@ Last known successful checks before this branch:
 - python -m pytest -q -> 28 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
-- python -m build -> passed for v0.2.3
-- twine check dist/* -> passed for v0.2.3
-- GitHub Release workflow for v0.2.3 -> passed
-- GitHub CI workflow for v0.2.3 -> passed
-- GitHub Release v0.2.3 -> exists with wheel and source distribution assets
+- python -m build -> passed for v0.2.4
+- twine check dist/* -> passed for v0.2.4
+- GitHub Release workflow for v0.2.4 -> passed
+- GitHub CI workflow for v0.2.4 -> passed
+- GitHub Release v0.2.4 -> exists with wheel and source distribution assets
+- Zenodo archival for v0.2.4 -> completed
 
 ## Current Open Work
 
-- Pull feature/prepare-v0.2.4-zenodo-release locally.
+- Pull docs/add-zenodo-doi locally.
 - Run the required local gate.
 - Merge the branch after validation.
-- Tag v0.2.4.
-- Verify GitHub Release v0.2.4.
-- Verify Zenodo archival and DOI assignment.
-- Add the DOI badge only after Zenodo has assigned the DOI.
 
 ## Next Safe Step
 
-Pull feature/prepare-v0.2.4-zenodo-release locally and run the required local gate. If it passes, open and merge the release preparation PR.
+Pull docs/add-zenodo-doi locally and run the required local gate. If it passes, open and merge the DOI documentation PR.
+
+After this branch is merged, the next functional development block should likely be agentic-kit doctor.
