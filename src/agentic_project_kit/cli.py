@@ -7,7 +7,12 @@ from rich.prompt import Confirm, Prompt
 
 from agentic_project_kit.checks import check_all, check_docs, check_todo
 from agentic_project_kit.github import create_github_repo
-from agentic_project_kit.release import build_release_plan, render_release_plan
+from agentic_project_kit.release import (
+    build_release_plan,
+    build_release_state_report,
+    render_release_plan,
+    render_release_state_report,
+)
 from agentic_project_kit.todo import complete_item, list_items, load_todo, render_markdown
 from agentic_project_kit.models import ProjectOptions
 from agentic_project_kit.templates import create_project
@@ -157,6 +162,18 @@ def release_plan_command(
     """Print a release preparation checklist for the current project."""
     plan = build_release_plan(project_root.resolve(), version=version)
     console.print(render_release_plan(plan), markup=False)
+
+
+@app.command("release-check")
+def release_check_command(
+    project_root: Path = typer.Option(Path("."), "--root"),
+    version: str | None = typer.Option(None, "--version", help="Release version without leading v."),
+) -> None:
+    """Validate release state for a target version."""
+    report = build_release_state_report(project_root.resolve(), version=version)
+    console.print(render_release_state_report(report), markup=False)
+    if not report.ok:
+        raise typer.Exit(code=1)
 
 
 @app.command("github-create")
