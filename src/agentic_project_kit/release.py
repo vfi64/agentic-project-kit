@@ -55,7 +55,16 @@ def build_release_plan(project_root: Path, version: str | None = None) -> Releas
                         version=resolved_version
                     ),
                 ),
-                evidence="CHANGELOG, STATUS, and CURRENT_HANDOFF mention the release version.",
+                evidence="CHANGELOG, STATUS, and CURRENT_HANDOFF mention the target release version.",
+            ),
+            ReleaseStep(
+                name="Verify target tag is unused",
+                commands=(
+                    "git fetch --tags",
+                    "git tag -l v{version}".format(version=resolved_version),
+                    "gh release view v{version}".format(version=resolved_version),
+                ),
+                evidence="The tag lookup prints no tag and the GitHub release lookup reports no existing release.",
             ),
             ReleaseStep(
                 name="Create and verify tag",
@@ -91,7 +100,7 @@ def validate_version(version: str) -> list[str]:
 
 
 def render_release_plan(plan: ReleasePlan) -> str:
-    lines = [f"# Release preparation plan for v{plan.version}", ""]
+    lines = [f"# Release preparation plan for target v{plan.version}", ""]
 
     if plan.warnings:
         lines.append("## Warnings")
