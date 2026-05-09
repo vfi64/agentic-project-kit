@@ -1,6 +1,13 @@
 from pathlib import Path
 
-from agentic_project_kit.release import build_release_plan, render_release_plan, validate_version
+from agentic_project_kit.release import (
+    ReleaseCheckStatus,
+    build_release_plan,
+    build_release_state_report,
+    render_release_plan,
+    render_release_state_report,
+    validate_version,
+)
 
 
 def test_build_release_plan_reads_pyproject_version(tmp_path: Path):
@@ -46,3 +53,65 @@ def test_render_release_plan_contains_commands_and_evidence(tmp_path: Path):
 
 def test_validate_version_warns_for_non_semantic_version():
     assert validate_version("1.2") == ["Version '1.2' is not a simple semantic version like 1.2.3."]
+
+
+def test_build_release_state_report_passes_for_unused_version(tmp_path: Path):
+    _write_release_files(tmp_path, "1.2.3")
+
+    report = build_release_state_report(tmp_path)
+
+    assert report.ok
+    assert [check.status for check in report.checks] == [ReleaseCheckStatus.PASS] * 5
+
+
+def test_build_release_state_report_fails_for_missing_changelog_version(tmp_path: Path):
+    _write_release_files(tmp_path, "1.2.3")
+    (tmp_path / "CHANGELOG.md").write_text("# Changelog\n", encoding="utf-8")
+
+    report = build_release_state_report(tmp_path)
+
+    assert not report.ok
+    assert report.checks[1].status == ReleaseCheckStatus.FAIL
+    assert "missing text: v1.2.3" in report.checks[1].detail
+
+
+def test_build_release_state_report_fails_for_existing_local_tag(tmp_path: Path):
+    _write_release_files(tmp_path, "1.2.3")
+    _run_git(tmp_path, "init")
+    _run_git(tmp_path, "config", "user.email", "test@example.invalid")
+    _run_git(tmp_path, "config", "user.name", "Test User")
+    _run_git(tmp_path, "add", ".")
+    _run_git(tmp_path, "commit", "-m", "initial")
+    _run_git(tmp_path, "tag", "v1.2.3")
+
+    report = build_release_state_report(tmp_path)
+
+    assert not report.ok
+    assert report.checks[-1].status == ReleaseCheckStatus.FAIL
+    assert report.checks[-1].detail == "tag already exists: v1.2.3"
+
+
+def test_render_release_state_report_shows_overall_status(tmp_path: Path):
+    _write_release_files(tmp_path, "1.2.3")
+
+    rendered = render_release_state_report(build_release_state_report(tmp_path))
+
+    assert "Release state check for target v1.2.3" in rendered
+    assert "[PASS] semantic version" in rendered
+    assert "Overall: PASS" in rendered
+
+
+def _write_release_files(project_root: Path, version: str) -> None:
+    (project_root / "docs/handoff").mkdir(parents=True)
+    (project_root / "pyproject.toml").write_text(f'version = "{version}"\n', encoding="utf-8")
+    (project_root / "CHANGELOG.md").write_text(f"# Changelog\n\n## v{version}\n", encoding="utf-8")
+    (project_root / "docs/STATUS.md").write_text(f"Current version: {version}\n", encoding="utf-8")
+    (project_root / "docs/handoff/CURRENT_HANDOFF.md").write_text(
+        f"Current version: {version}\n", encoding="utf-8"
+    )
+
+
+def _run_git(project_root: Path, *args: str) -> None:
+    import subprocess
+
+    subprocess.run(["git", *args], cwd=project_root, check=True, capture_output=True, text=True)
