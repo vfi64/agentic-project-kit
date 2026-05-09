@@ -2,7 +2,7 @@
 
 Status-date: 2026-05-09
 Project: agentic-project-kit
-Branch: feature/documentation-state-gates
+Branch: main
 Base branch: main
 Current version: 0.2.2
 
@@ -73,12 +73,8 @@ Last known successful checks before this branch:
 
 ## Current Open Work
 
-- Review project-level documentation files.
-- Run local gates.
-- Commit documentation-state files.
-- Push branch.
-- Open pull request into main.
-- Merge only after CI passes.
+- None.
+- Next functional work should start from main with a fresh feature branch.
 
 ## Next Safe Step
 
