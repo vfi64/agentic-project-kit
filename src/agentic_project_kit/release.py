@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
@@ -44,6 +45,16 @@ class ReleaseStateReport:
         return all(check.status != ReleaseCheckStatus.FAIL for check in self.checks)
 
 
+@dataclass(frozen=True)
+class CommandResult:
+    returncode: int
+    stdout: str
+    stderr: str
+
+
+CommandRunner = Callable[[Path, Sequence[str]], CommandResult]
+
+
 def build_release_plan(project_root: Path, version: str | None = None) -> ReleasePlan:
     resolved_version = version or read_project_version(project_root)
     warnings = tuple(validate_version(resolved_version))
@@ -83,13 +94,14 @@ def build_release_plan(project_root: Path, version: str | None = None) -> Releas
                 evidence="CHANGELOG, STATUS, and CURRENT_HANDOFF mention the target release version.",
             ),
             ReleaseStep(
-                name="Verify target tag is unused",
+                name="Verify target tag and release are unused",
                 commands=(
                     "git fetch --tags",
                     "git tag -l v{version}".format(version=resolved_version),
+                    "git ls-remote --tags origin v{version}".format(version=resolved_version),
                     "gh release view v{version}".format(version=resolved_version),
                 ),
-                evidence="The tag lookup prints no tag and the GitHub release lookup reports no existing release.",
+                evidence="Local tag, remote tag, and GitHub release lookups show no existing target release.",
             ),
             ReleaseStep(
                 name="Create and verify tag",
@@ -106,7 +118,11 @@ def build_release_plan(project_root: Path, version: str | None = None) -> Releas
     )
 
 
-def build_release_state_report(project_root: Path, version: str | None = None) -> ReleaseStateReport:
+def build_release_state_report(
+    project_root: Path,
+    version: str | None = None,
+    command_runner: CommandRunner = run_command,
+) -> ReleaseStateReport:
     resolved_version = version or read_project_version(project_root)
     checks = [
         check_semantic_version(resolved_version),
@@ -117,7 +133,9 @@ def build_release_state_report(project_root: Path, version: str | None = None) -
             f"Current version: {resolved_version}",
             "CURRENT_HANDOFF version",
         ),
-        check_local_tag_absent(project_root, resolved_version),
+        check_local_tag_absent(project_root, resolved_version, command_runner),
+        check_remote_tag_absent(project_root, resolved_version, command_runner),
+        check_github_release_absent(project_root, resolved_version, command_runner),
     ]
     return ReleaseStateReport(version=resolved_version, checks=tuple(checks))
 
@@ -138,24 +156,58 @@ def check_file_contains(path: Path, needle: str, name: str) -> ReleaseCheckResul
     return ReleaseCheckResult(name, ReleaseCheckStatus.PASS, f"found text: {needle}")
 
 
-def check_local_tag_absent(project_root: Path, version: str) -> ReleaseCheckResult:
+def check_local_tag_absent(project_root: Path, version: str, command_runner: CommandRunner = run_command) -> ReleaseCheckResult:
     tag = f"v{version}"
+    result = command_runner(project_root, ["git", "tag", "-l", tag])
+    if result.returncode != 0:
+        return ReleaseCheckResult("local tag unused", ReleaseCheckStatus.WARN, result.stderr.strip() or "git tag failed")
+    if result.stdout.strip():
+        return ReleaseCheckResult("local tag unused", ReleaseCheckStatus.FAIL, f"tag already exists: {tag}")
+    return ReleaseCheckResult("local tag unused", ReleaseCheckStatus.PASS, f"tag is unused: {tag}")
+
+
+def check_remote_tag_absent(project_root: Path, version: str, command_runner: CommandRunner = run_command) -> ReleaseCheckResult:
+    tag = f"v{version}"
+    result = command_runner(project_root, ["git", "ls-remote", "--tags", "origin", tag])
+    if result.returncode != 0:
+        return ReleaseCheckResult(
+            "remote tag unused",
+            ReleaseCheckStatus.WARN,
+            result.stderr.strip() or "git ls-remote failed",
+        )
+    if result.stdout.strip():
+        return ReleaseCheckResult("remote tag unused", ReleaseCheckStatus.FAIL, f"remote tag already exists: {tag}")
+    return ReleaseCheckResult("remote tag unused", ReleaseCheckStatus.PASS, f"remote tag is unused: {tag}")
+
+
+def check_github_release_absent(project_root: Path, version: str, command_runner: CommandRunner = run_command) -> ReleaseCheckResult:
+    tag = f"v{version}"
+    result = command_runner(project_root, ["gh", "release", "view", tag])
+    output = "\n".join(part for part in (result.stdout.strip(), result.stderr.strip()) if part)
+    if result.returncode == 0:
+        return ReleaseCheckResult("GitHub release unused", ReleaseCheckStatus.FAIL, f"GitHub release already exists: {tag}")
+    if _looks_like_missing_github_release(output):
+        return ReleaseCheckResult("GitHub release unused", ReleaseCheckStatus.PASS, f"GitHub release is absent: {tag}")
+    return ReleaseCheckResult("GitHub release unused", ReleaseCheckStatus.WARN, output or "gh release view failed")
+
+
+def _looks_like_missing_github_release(output: str) -> bool:
+    normalized = output.lower()
+    return any(fragment in normalized for fragment in ("not found", "release not found", "http 404"))
+
+
+def run_command(project_root: Path, command: Sequence[str]) -> CommandResult:
     try:
         result = subprocess.run(
-            ["git", "tag", "-l", tag],
+            list(command),
             cwd=project_root,
             check=False,
             capture_output=True,
             text=True,
         )
     except OSError as exc:
-        return ReleaseCheckResult("local tag unused", ReleaseCheckStatus.WARN, f"could not run git: {exc}")
-
-    if result.returncode != 0:
-        return ReleaseCheckResult("local tag unused", ReleaseCheckStatus.WARN, result.stderr.strip() or "git tag failed")
-    if result.stdout.strip():
-        return ReleaseCheckResult("local tag unused", ReleaseCheckStatus.FAIL, f"tag already exists: {tag}")
-    return ReleaseCheckResult("local tag unused", ReleaseCheckStatus.PASS, f"tag is unused: {tag}")
+        return CommandResult(returncode=127, stdout="", stderr=f"could not run {command[0]}: {exc}")
+    return CommandResult(returncode=result.returncode, stdout=result.stdout, stderr=result.stderr)
 
 
 def read_project_version(project_root: Path) -> str:
