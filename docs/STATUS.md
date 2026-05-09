@@ -32,18 +32,26 @@ Project-level state documentation is machine-checkable:
 - sentinel.yaml is optional for check-docs, so the kit repository root can be checked directly.
 - stale handoff markers are detected in docs/handoff/CURRENT_HANDOFF.md.
 
-Release preparation is now CLI-supported:
+Release preparation is CLI-supported:
 
 - agentic-kit release-plan prints a release preparation checklist for the target version.
 - The plan includes local gates, package validation, state-file checks, tag lookup, and release verification commands.
 - The plan checks for an existing target tag before suggesting tag creation.
 
+Release state validation is CLI-supported:
+
+- agentic-kit release-check validates release state for a target version.
+- It checks semantic version shape, CHANGELOG version text, STATUS version text, CURRENT_HANDOFF version text, and local tag availability.
+- It exits with code 1 when a required release-state check fails.
+
 Current validated gates:
 
-- python -m pytest -q -> 19 passed
+- python -m pytest -q -> 24 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
 - agentic-kit release-plan -> passed
+- agentic-kit release-check --version 0.2.3 -> failed as expected because state files are not prepared for 0.2.3
+- agentic-kit release-check --version 0.2.2 -> failed as expected because tag v0.2.2 already exists and CHANGELOG lacks the exact searched heading text
 - python -m build -> wheel and sdist built before v0.2.2 release
 - twine check dist/* -> passed before v0.2.2 release
 - TestPyPI upload for 0.2.2 -> passed
@@ -68,6 +76,7 @@ python -m pytest -q
 ruff check .
 agentic-kit check-docs
 agentic-kit release-plan
+agentic-kit release-check --version <target-version>
 
 For package validation, also run:
 
@@ -76,4 +85,4 @@ twine check dist/*
 
 ## Next Safe Step
 
-Start the next functional change from main on a fresh feature branch. Recommended next feature: improve release-plan so it can validate the target release state instead of only printing a checklist.
+Start the next functional change from main on a fresh feature branch. Recommended next feature: improve release-check so it can validate GitHub remote tag and GitHub release existence or absence in addition to the local tag check.
