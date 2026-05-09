@@ -4,6 +4,13 @@ All notable changes to this project are documented here.
 
 This project uses a pragmatic semantic versioning scheme while it is in early MVP development.
 
+## v0.2.3
+
+- Add machine-checkable release-state validation for local tags, remote tags, and GitHub releases.
+- Extend `agentic-kit release-plan` with remote tag and GitHub release checks before tag creation.
+- Keep unavailable remote or GitHub tooling as WARN while treating existing release artifacts as FAIL.
+- Update repository state and handoff documentation after remote release validation.
+
 ## 0.2.2
 
 - Add `--kit-source` option for generated CI.
