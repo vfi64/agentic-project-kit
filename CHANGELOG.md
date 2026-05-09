@@ -4,6 +4,13 @@ All notable changes to this project are documented here.
 
 This project uses a pragmatic semantic versioning scheme while it is in early MVP development.
 
+## v0.2.4
+
+- Add citation metadata through `CITATION.cff`.
+- Add Zenodo deposit metadata through `.zenodo.json`.
+- Document citation and archiving setup in `README.md`.
+- Prepare the first release after Zenodo GitHub integration was enabled so Zenodo can archive the project and assign a DOI.
+
 ## v0.2.3
 
 - Add machine-checkable release-state validation for local tags, remote tags, and GitHub releases.
