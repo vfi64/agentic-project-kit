@@ -22,6 +22,12 @@ documents:
     assert "missing required section" in errors[0]
 
 
+def test_check_docs_accepts_state_gate_docs_without_sentinel(tmp_path: Path):
+    _write_valid_state_gate_docs(tmp_path)
+
+    assert check_docs(tmp_path) == []
+
+
 def test_check_todo_accepts_valid_items(tmp_path: Path):
     (tmp_path / "sentinel.yaml").write_text(
         '''
@@ -93,7 +99,7 @@ def _write_valid_state_gate_docs(project_root: Path) -> None:
         encoding="utf-8",
     )
     (project_root / "docs/TEST_GATES.md").write_text(
-        "# Test Gates\n\n## Gate Matrix\n\n## Standard Local Gate\n\n## Maintenance Rule\n",
+        "# Test Gates\n\n## Gate Matrix\n\n## Standard Local Gate\n\n## Maintenance Rule\n\n## Outcome Reporting\n",
         encoding="utf-8",
     )
     (project_root / "docs/handoff/CURRENT_HANDOFF.md").write_text(
