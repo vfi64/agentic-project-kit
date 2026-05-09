@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import Enum
 from pathlib import Path
 import re
+import subprocess
 
 
 @dataclass(frozen=True)
@@ -17,6 +19,29 @@ class ReleasePlan:
     version: str
     steps: tuple[ReleaseStep, ...]
     warnings: tuple[str, ...]
+
+
+class ReleaseCheckStatus(str, Enum):
+    PASS = "PASS"
+    FAIL = "FAIL"
+    WARN = "WARN"
+
+
+@dataclass(frozen=True)
+class ReleaseCheckResult:
+    name: str
+    status: ReleaseCheckStatus
+    detail: str
+
+
+@dataclass(frozen=True)
+class ReleaseStateReport:
+    version: str
+    checks: tuple[ReleaseCheckResult, ...]
+
+    @property
+    def ok(self) -> bool:
+        return all(check.status != ReleaseCheckStatus.FAIL for check in self.checks)
 
 
 def build_release_plan(project_root: Path, version: str | None = None) -> ReleasePlan:
@@ -81,6 +106,58 @@ def build_release_plan(project_root: Path, version: str | None = None) -> Releas
     )
 
 
+def build_release_state_report(project_root: Path, version: str | None = None) -> ReleaseStateReport:
+    resolved_version = version or read_project_version(project_root)
+    checks = [
+        check_semantic_version(resolved_version),
+        check_file_contains(project_root / "CHANGELOG.md", f"v{resolved_version}", "CHANGELOG version"),
+        check_file_contains(project_root / "docs/STATUS.md", f"Current version: {resolved_version}", "STATUS version"),
+        check_file_contains(
+            project_root / "docs/handoff/CURRENT_HANDOFF.md",
+            f"Current version: {resolved_version}",
+            "CURRENT_HANDOFF version",
+        ),
+        check_local_tag_absent(project_root, resolved_version),
+    ]
+    return ReleaseStateReport(version=resolved_version, checks=tuple(checks))
+
+
+def check_semantic_version(version: str) -> ReleaseCheckResult:
+    warnings = validate_version(version)
+    if warnings:
+        return ReleaseCheckResult("semantic version", ReleaseCheckStatus.FAIL, warnings[0])
+    return ReleaseCheckResult("semantic version", ReleaseCheckStatus.PASS, f"{version} is valid")
+
+
+def check_file_contains(path: Path, needle: str, name: str) -> ReleaseCheckResult:
+    if not path.exists():
+        return ReleaseCheckResult(name, ReleaseCheckStatus.FAIL, f"missing file: {path}")
+    content = path.read_text(encoding="utf-8")
+    if needle not in content:
+        return ReleaseCheckResult(name, ReleaseCheckStatus.FAIL, f"missing text: {needle}")
+    return ReleaseCheckResult(name, ReleaseCheckStatus.PASS, f"found text: {needle}")
+
+
+def check_local_tag_absent(project_root: Path, version: str) -> ReleaseCheckResult:
+    tag = f"v{version}"
+    try:
+        result = subprocess.run(
+            ["git", "tag", "-l", tag],
+            cwd=project_root,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    except OSError as exc:
+        return ReleaseCheckResult("local tag unused", ReleaseCheckStatus.WARN, f"could not run git: {exc}")
+
+    if result.returncode != 0:
+        return ReleaseCheckResult("local tag unused", ReleaseCheckStatus.WARN, result.stderr.strip() or "git tag failed")
+    if result.stdout.strip():
+        return ReleaseCheckResult("local tag unused", ReleaseCheckStatus.FAIL, f"tag already exists: {tag}")
+    return ReleaseCheckResult("local tag unused", ReleaseCheckStatus.PASS, f"tag is unused: {tag}")
+
+
 def read_project_version(project_root: Path) -> str:
     pyproject = project_root / "pyproject.toml"
     if not pyproject.exists():
@@ -124,3 +201,12 @@ def render_release_plan(plan: ReleasePlan) -> str:
         lines.append("")
 
     return "\n".join(lines).rstrip() + "\n"
+
+
+def render_release_state_report(report: ReleaseStateReport) -> str:
+    lines = [f"Release state check for target v{report.version}", ""]
+    for check in report.checks:
+        lines.append(f"[{check.status.value}] {check.name}: {check.detail}")
+    lines.append("")
+    lines.append("Overall: PASS" if report.ok else "Overall: FAIL")
+    return "\n".join(lines) + "\n"
