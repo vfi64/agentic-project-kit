@@ -6,6 +6,7 @@ from rich.console import Console
 from rich.prompt import Confirm, Prompt
 
 from agentic_project_kit.checks import check_all, check_docs, check_todo
+from agentic_project_kit.doctor import build_doctor_report, render_doctor_report
 from agentic_project_kit.github import create_github_repo
 from agentic_project_kit.release import (
     build_release_plan,
@@ -152,6 +153,15 @@ def check_docs_command(project_root: Path = typer.Option(Path("."), "--root")) -
 def check_todo_command(project_root: Path = typer.Option(Path("."), "--root")) -> None:
     errors = check_todo(project_root.resolve())
     _print_result(errors)
+
+
+@app.command("doctor")
+def doctor_command(project_root: Path = typer.Option(Path("."), "--root")) -> None:
+    """Run a compact project health check."""
+    report = build_doctor_report(project_root.resolve())
+    console.print(render_doctor_report(report), markup=False)
+    if not report.ok:
+        raise typer.Exit(code=1)
 
 
 @app.command("release-plan")
