@@ -7,6 +7,7 @@ from rich.prompt import Confirm, Prompt
 
 from agentic_project_kit.checks import check_all, check_docs, check_todo
 from agentic_project_kit.github import create_github_repo
+from agentic_project_kit.release import build_release_plan, render_release_plan
 from agentic_project_kit.todo import complete_item, list_items, load_todo, render_markdown
 from agentic_project_kit.models import ProjectOptions
 from agentic_project_kit.templates import create_project
@@ -146,6 +147,16 @@ def check_docs_command(project_root: Path = typer.Option(Path("."), "--root")) -
 def check_todo_command(project_root: Path = typer.Option(Path("."), "--root")) -> None:
     errors = check_todo(project_root.resolve())
     _print_result(errors)
+
+
+@app.command("release-plan")
+def release_plan_command(
+    project_root: Path = typer.Option(Path("."), "--root"),
+    version: str | None = typer.Option(None, "--version", help="Release version without leading v."),
+) -> None:
+    """Print a release preparation checklist for the current project."""
+    plan = build_release_plan(project_root.resolve(), version=version)
+    console.print(render_release_plan(plan), markup=False)
 
 
 @app.command("github-create")
