@@ -26,17 +26,24 @@ Project-level state documentation is present on main:
 - docs/TEST_GATES.md
 - docs/handoff/CURRENT_HANDOFF.md
 
-Project-level state documentation is now machine-checkable:
+Project-level state documentation is machine-checkable:
 
 - agentic-kit check-docs checks the state gate documents.
 - sentinel.yaml is optional for check-docs, so the kit repository root can be checked directly.
 - stale handoff markers are detected in docs/handoff/CURRENT_HANDOFF.md.
 
+Release preparation is now CLI-supported:
+
+- agentic-kit release-plan prints a release preparation checklist for the target version.
+- The plan includes local gates, package validation, state-file checks, tag lookup, and release verification commands.
+- The plan checks for an existing target tag before suggesting tag creation.
+
 Current validated gates:
 
-- python -m pytest -q -> 15 passed
+- python -m pytest -q -> 19 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
+- agentic-kit release-plan -> passed
 - python -m build -> wheel and sdist built before v0.2.2 release
 - twine check dist/* -> passed before v0.2.2 release
 - TestPyPI upload for 0.2.2 -> passed
@@ -60,6 +67,7 @@ git branch --show-current
 python -m pytest -q
 ruff check .
 agentic-kit check-docs
+agentic-kit release-plan
 
 For package validation, also run:
 
@@ -68,4 +76,4 @@ twine check dist/*
 
 ## Next Safe Step
 
-Start the next functional change from main on a fresh feature branch. Recommended next feature: add a release preparation command or checklist that updates status, changelog, package build checks, and tag readiness in one documented flow.
+Start the next functional change from main on a fresh feature branch. Recommended next feature: improve release-plan so it can validate the target release state instead of only printing a checklist.
