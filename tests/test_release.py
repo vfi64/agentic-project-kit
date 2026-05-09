@@ -57,11 +57,22 @@ def test_validate_version_warns_for_non_semantic_version():
 
 def test_build_release_state_report_passes_for_unused_version(tmp_path: Path):
     _write_release_files(tmp_path, "1.2.3")
+    _init_git_repo(tmp_path)
 
     report = build_release_state_report(tmp_path)
 
     assert report.ok
     assert [check.status for check in report.checks] == [ReleaseCheckStatus.PASS] * 5
+
+
+def test_build_release_state_report_warns_without_git_repo(tmp_path: Path):
+    _write_release_files(tmp_path, "1.2.3")
+
+    report = build_release_state_report(tmp_path)
+
+    assert report.ok
+    assert report.checks[-1].status == ReleaseCheckStatus.WARN
+    assert "git tag failed" in report.checks[-1].detail
 
 
 def test_build_release_state_report_fails_for_missing_changelog_version(tmp_path: Path):
@@ -77,11 +88,7 @@ def test_build_release_state_report_fails_for_missing_changelog_version(tmp_path
 
 def test_build_release_state_report_fails_for_existing_local_tag(tmp_path: Path):
     _write_release_files(tmp_path, "1.2.3")
-    _run_git(tmp_path, "init")
-    _run_git(tmp_path, "config", "user.email", "test@example.invalid")
-    _run_git(tmp_path, "config", "user.name", "Test User")
-    _run_git(tmp_path, "add", ".")
-    _run_git(tmp_path, "commit", "-m", "initial")
+    _init_git_repo(tmp_path)
     _run_git(tmp_path, "tag", "v1.2.3")
 
     report = build_release_state_report(tmp_path)
@@ -93,6 +100,7 @@ def test_build_release_state_report_fails_for_existing_local_tag(tmp_path: Path)
 
 def test_render_release_state_report_shows_overall_status(tmp_path: Path):
     _write_release_files(tmp_path, "1.2.3")
+    _init_git_repo(tmp_path)
 
     rendered = render_release_state_report(build_release_state_report(tmp_path))
 
@@ -109,6 +117,14 @@ def _write_release_files(project_root: Path, version: str) -> None:
     (project_root / "docs/handoff/CURRENT_HANDOFF.md").write_text(
         f"Current version: {version}\n", encoding="utf-8"
     )
+
+
+def _init_git_repo(project_root: Path) -> None:
+    _run_git(project_root, "init")
+    _run_git(project_root, "config", "user.email", "test@example.invalid")
+    _run_git(project_root, "config", "user.name", "Test User")
+    _run_git(project_root, "add", ".")
+    _run_git(project_root, "commit", "-m", "initial")
 
 
 def _run_git(project_root: Path, *args: str) -> None:
