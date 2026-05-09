@@ -51,7 +51,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f pyproject.toml ]; then pip install -e ".[dev]" || pip install -e .; fi
-          pip install agentic-project-kit
+$kit_install_command
       - name: Run tests
         run: |
           if [ -d tests ]; then pytest -q; fi
@@ -59,6 +59,18 @@ jobs:
         run: |
           agentic-kit check
 '''
+
+KIT_INSTALL_COMMANDS = {
+    "pypi": "          pip install agentic-project-kit",
+    "testpypi": (
+        "          pip install "
+        "--index-url https://test.pypi.org/simple/ "
+        "--extra-index-url https://pypi.org/simple/ "
+        "agentic-project-kit"
+    ),
+    "none": "          # agentic-project-kit install intentionally skipped",
+}
+
 
 PRECOMMIT = '''
 repos:
@@ -88,6 +100,7 @@ def create_project(options: ProjectOptions, overwrite: bool = False) -> None:
     target.mkdir(parents=True, exist_ok=True)
 
     context = {k: str(v) for k, v in asdict(options).items()}
+    context["kit_install_command"] = KIT_INSTALL_COMMANDS[options.kit_source]
     files = dict(BASE_FILES)
 
     if options.project_type in {"python-cli", "python-lib"}:

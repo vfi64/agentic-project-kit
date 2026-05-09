@@ -76,6 +76,11 @@ def init(
     github: bool = typer.Option(False, "--github/--no-github"),
     github_owner: str | None = typer.Option(None, "--owner"),
     visibility: str = typer.Option("private", "--visibility", help="private or public"),
+    kit_source: str = typer.Option(
+        "pypi",
+        "--kit-source",
+        help="agentic-kit install source for generated CI: pypi, testpypi, or none",
+    ),
 ) -> None:
     if name is None:
         name = Prompt.ask("Project name")
@@ -85,6 +90,8 @@ def init(
         raise typer.BadParameter("project type must be python-cli, python-lib, or generic")
     if visibility not in {"private", "public"}:
         raise typer.BadParameter("visibility must be private or public")
+    if kit_source not in {"pypi", "testpypi", "none"}:
+        raise typer.BadParameter("kit source must be pypi, testpypi, or none")
 
     target = Path(name).resolve()
     options = ProjectOptions(
@@ -97,6 +104,7 @@ def init(
         agent_docs=agent_docs,
         logging_evidence=logging_evidence,
         target_dir=target,
+        kit_source=kit_source,
     )
 
     create_project(options)
