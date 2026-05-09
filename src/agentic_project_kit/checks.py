@@ -31,12 +31,18 @@ def load_yaml(path: Path) -> dict[str, Any]:
     return data
 
 
+def load_optional_yaml(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    return load_yaml(path)
+
+
 def count_words(text: str) -> int:
     return len(text.split())
 
 
 def check_docs(project_root: Path) -> list[str]:
-    config = load_yaml(project_root / "sentinel.yaml")
+    config = load_optional_yaml(project_root / "sentinel.yaml")
     errors: list[str] = []
 
     for doc in config.get("documents", []):
