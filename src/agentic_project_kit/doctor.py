@@ -110,6 +110,13 @@ def _version_drift_check(project_root: Path) -> DoctorCheck:
 
 
 def _citation_drift_check(project_root: Path) -> DoctorCheck:
+    if not _has_citation_metadata(project_root):
+        return DoctorCheck(
+            "citation drift",
+            DoctorStatus.WARN,
+            "citation metadata absent; skipped DOI validation until a DOI/archive is configured",
+        )
+
     missing: list[str] = []
 
     readme_path = project_root / "README.md"
@@ -135,6 +142,18 @@ def _citation_drift_check(project_root: Path) -> DoctorCheck:
     if missing:
         return DoctorCheck("citation drift", DoctorStatus.FAIL, "citation metadata mismatch in: " + ", ".join(missing))
     return DoctorCheck("citation drift", DoctorStatus.PASS, f"Zenodo DOI metadata matches {ZENODO_ALL_VERSIONS_DOI}")
+
+
+def _has_citation_metadata(project_root: Path) -> bool:
+    readme_path = project_root / "README.md"
+    citation_path = project_root / "CITATION.cff"
+    zenodo_path = project_root / ".zenodo.json"
+    return (
+        _file_contains(readme_path, ZENODO_ALL_VERSIONS_DOI)
+        or _file_contains(readme_path, ZENODO_BADGE_FRAGMENT)
+        or _file_contains(citation_path, f"doi: {ZENODO_ALL_VERSIONS_DOI}")
+        or zenodo_path.exists()
+    )
 
 
 def _read_pyproject_version(path: Path) -> str | None:
