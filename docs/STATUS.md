@@ -1,10 +1,10 @@
 # Project Status
 
-Status-date: 2026-05-09
+Status-date: 2026-05-10
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: feature/zenodo-metadata
-Current version: 0.2.3
+Current work branch: feature/prepare-v0.2.4-zenodo-release
+Current version: 0.2.4
 
 ## Purpose
 
@@ -21,6 +21,14 @@ Released versions:
 - v0.2.2: added --kit-source for generated CI with pypi, testpypi, and none.
 - v0.2.3: added release-state validation for local tags, remote tags, and GitHub releases.
 
+Prepared release:
+
+- v0.2.4 prepares the first release after Zenodo GitHub integration was enabled.
+- v0.2.4 includes CITATION.cff.
+- v0.2.4 includes .zenodo.json.
+- v0.2.4 documents citation and archiving setup in README.md.
+- No DOI badge is present yet. Add it only after Zenodo archives a release and assigns the DOI.
+
 v0.2.3 release evidence:
 
 - Git tag v0.2.3 was pushed.
@@ -32,9 +40,9 @@ v0.2.3 release evidence:
 Zenodo preparation:
 
 - Zenodo GitHub integration is enabled for vfi64/agentic-project-kit.
-- v0.2.3 was released before Zenodo integration was enabled, so the next release is expected to be the first automatically archived Zenodo release.
-- CITATION.cff is being added for citation metadata.
-- .zenodo.json is being added for Zenodo deposit metadata.
+- v0.2.3 was released before Zenodo integration was enabled, so v0.2.4 is expected to be the first automatically archived Zenodo release.
+- CITATION.cff provides citation metadata.
+- .zenodo.json provides Zenodo deposit metadata.
 - README documents the citation and archiving setup without a DOI badge yet.
 
 Project-level state documentation is present on main:
@@ -62,13 +70,12 @@ Release state validation is CLI-supported:
 - It treats unavailable remote/GitHub tooling as WARN, while existing local tags, remote tags, or GitHub releases are FAIL.
 - It exits with code 1 when a required release-state check fails.
 
-Current validated gates before this Zenodo metadata branch:
+Current validated gates before this branch:
 
 - python -m pytest -q -> 28 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
-- agentic-kit release-plan -> target v0.2.3 before tagging
-- agentic-kit release-check --version 0.2.3 -> PASS before tagging
+- agentic-kit release-plan -> target v0.2.3 after metadata branch
 - python -m build -> built wheel and source distribution for v0.2.3
 - twine check dist/* -> passed for v0.2.3 artifacts
 - GitHub Release workflow for v0.2.3 -> passed
@@ -76,7 +83,7 @@ Current validated gates before this Zenodo metadata branch:
 
 ## Current Goal
 
-Add citation and Zenodo metadata, then validate the branch locally before merging. The next release after this branch should be used to trigger Zenodo archival and DOI assignment.
+Prepare and validate v0.2.4 so the next tag can trigger GitHub Release automation and Zenodo archival.
 
 ## Current Blockers
 
@@ -92,6 +99,7 @@ python -m pytest -q
 ruff check .
 agentic-kit check-docs
 agentic-kit release-plan
+agentic-kit release-check --version 0.2.4
 
 For package validation, also run:
 
@@ -100,4 +108,4 @@ twine check dist/*
 
 ## Next Safe Step
 
-Pull feature/zenodo-metadata locally and run the local gate. If it passes, merge the branch. Then prepare the next small release to trigger Zenodo archival.
+Pull feature/prepare-v0.2.4-zenodo-release locally and run the local gate. If it passes, merge the branch. Then tag v0.2.4 and verify that GitHub and Zenodo create the release records.
