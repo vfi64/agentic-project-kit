@@ -7,6 +7,9 @@ from pathlib import Path
 
 from agentic_project_kit.checks import check_docs, check_todo
 
+ZENODO_ALL_VERSIONS_DOI = "10.5281/zenodo.20101359"
+ZENODO_BADGE_FRAGMENT = "zenodo.20101359.svg"
+
 
 class DoctorStatus(str, Enum):
     PASS = "PASS"
@@ -42,6 +45,7 @@ def build_doctor_report(project_root: Path) -> DoctorReport:
         _docs_check(root),
         _todo_check(root),
         _version_drift_check(root),
+        _citation_drift_check(root),
     ]
     return DoctorReport(project_root=root, checks=checks)
 
@@ -103,6 +107,34 @@ def _version_drift_check(project_root: Path) -> DoctorCheck:
     if missing:
         return DoctorCheck("version drift", DoctorStatus.FAIL, "version mismatch in: " + ", ".join(missing))
     return DoctorCheck("version drift", DoctorStatus.PASS, f"project state matches version {version}")
+
+
+def _citation_drift_check(project_root: Path) -> DoctorCheck:
+    missing: list[str] = []
+
+    readme_path = project_root / "README.md"
+    if not _file_contains(readme_path, ZENODO_ALL_VERSIONS_DOI):
+        missing.append("README.md DOI")
+    if not _file_contains(readme_path, ZENODO_BADGE_FRAGMENT):
+        missing.append("README.md Zenodo badge")
+
+    citation_path = project_root / "CITATION.cff"
+    if not _file_contains(citation_path, f"doi: {ZENODO_ALL_VERSIONS_DOI}"):
+        missing.append("CITATION.cff DOI")
+
+    zenodo_path = project_root / ".zenodo.json"
+    if not zenodo_path.exists():
+        missing.append(".zenodo.json")
+    else:
+        zenodo_text = zenodo_path.read_text(encoding="utf-8")
+        if "agentic-project-kit" not in zenodo_text:
+            missing.append(".zenodo.json title")
+        if "agentic" not in zenodo_text.lower():
+            missing.append(".zenodo.json keywords")
+
+    if missing:
+        return DoctorCheck("citation drift", DoctorStatus.FAIL, "citation metadata mismatch in: " + ", ".join(missing))
+    return DoctorCheck("citation drift", DoctorStatus.PASS, f"Zenodo DOI metadata matches {ZENODO_ALL_VERSIONS_DOI}")
 
 
 def _read_pyproject_version(path: Path) -> str | None:
