@@ -20,6 +20,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | GitHub workflow change | Local workflow review plus GitHub Actions run |
 | Packaging/release change | python -m build, twine check dist/*, release workflow result |
 | Release planning change | Unit tests plus agentic-kit release-plan CLI smoke command |
+| Release state validation change | Unit tests plus agentic-kit release-check CLI smoke command |
 | TestPyPI validation | TestPyPI upload, fresh venv install, CLI smoke command |
 | Handoff/state change | Update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md |
 
@@ -48,6 +49,10 @@ Run these commands:
 Plan first:
 
     agentic-kit release-plan
+
+Validate release state before tagging:
+
+    agentic-kit release-check --version <version>
 
 Before tagging:
 
