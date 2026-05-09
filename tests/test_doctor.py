@@ -20,7 +20,22 @@ def _write_version_files(root: Path, version: str = "1.2.3", *, quoted_citation:
     (root / "pyproject.toml").write_text(f"[project]\nversion = \"{version}\"\n", encoding="utf-8")
     (root / "CHANGELOG.md").write_text(f"# Changelog\n\n## v{version}\n", encoding="utf-8")
     citation_version = f'"{version}"' if quoted_citation else version
-    (root / "CITATION.cff").write_text(f"cff-version: 1.2.0\nversion: {citation_version}\n", encoding="utf-8")
+    (root / "CITATION.cff").write_text(
+        f"cff-version: 1.2.0\nversion: {citation_version}\ndoi: 10.5281/zenodo.20101359\n",
+        encoding="utf-8",
+    )
+
+
+def _write_citation_files(root: Path) -> None:
+    (root / "README.md").write_text(
+        "# Demo\n\n[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)]"
+        "(https://doi.org/10.5281/zenodo.20101359)\n",
+        encoding="utf-8",
+    )
+    (root / ".zenodo.json").write_text(
+        '{"title": "agentic-project-kit", "keywords": ["agentic", "workflow"]}\n',
+        encoding="utf-8",
+    )
 
 
 def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
@@ -38,8 +53,9 @@ def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
         DoctorStatus.PASS,
         DoctorStatus.WARN,
         DoctorStatus.WARN,
+        DoctorStatus.FAIL,
     ]
-    assert "Overall: PASS" in render_doctor_report(report)
+    assert "Overall: FAIL" in render_doctor_report(report)
 
 
 def test_doctor_report_fails_without_required_readme(tmp_path: Path):
@@ -54,40 +70,70 @@ def test_doctor_report_fails_without_required_readme(tmp_path: Path):
 
 
 def test_doctor_report_passes_when_versions_match(tmp_path: Path):
-    (tmp_path / "README.md").write_text("# Demo\n", encoding="utf-8")
+    _write_citation_files(tmp_path)
     _write_state_docs(tmp_path, "1.2.3")
     _write_version_files(tmp_path, "1.2.3")
 
     report = build_doctor_report(tmp_path)
 
     assert report.ok
-    version_check = report.checks[-1]
+    version_check = report.checks[-2]
     assert version_check.name == "version drift"
     assert version_check.status == DoctorStatus.PASS
     assert "1.2.3" in version_check.detail
 
 
 def test_doctor_report_accepts_quoted_citation_versions(tmp_path: Path):
-    (tmp_path / "README.md").write_text("# Demo\n", encoding="utf-8")
+    _write_citation_files(tmp_path)
     _write_state_docs(tmp_path, "1.2.3")
     _write_version_files(tmp_path, "1.2.3", quoted_citation=True)
 
     report = build_doctor_report(tmp_path)
 
     assert report.ok
-    assert report.checks[-1].status == DoctorStatus.PASS
+    assert report.checks[-2].status == DoctorStatus.PASS
 
 
 def test_doctor_report_fails_on_version_drift(tmp_path: Path):
-    (tmp_path / "README.md").write_text("# Demo\n", encoding="utf-8")
+    _write_citation_files(tmp_path)
     _write_state_docs(tmp_path, "1.2.2")
     _write_version_files(tmp_path, "1.2.3")
 
     report = build_doctor_report(tmp_path)
 
     assert not report.ok
-    version_check = report.checks[-1]
+    version_check = report.checks[-2]
     assert version_check.name == "version drift"
     assert version_check.status == DoctorStatus.FAIL
     assert "docs/STATUS.md" in version_check.detail
     assert "docs/handoff/CURRENT_HANDOFF.md" in version_check.detail
+
+
+def test_doctor_report_passes_when_citation_metadata_matches(tmp_path: Path):
+    _write_citation_files(tmp_path)
+    _write_state_docs(tmp_path, "1.2.3")
+    _write_version_files(tmp_path, "1.2.3")
+
+    report = build_doctor_report(tmp_path)
+
+    assert report.ok
+    citation_check = report.checks[-1]
+    assert citation_check.name == "citation drift"
+    assert citation_check.status == DoctorStatus.PASS
+    assert "10.5281/zenodo.20101359" in citation_check.detail
+
+
+def test_doctor_report_fails_on_missing_citation_metadata(tmp_path: Path):
+    (tmp_path / "README.md").write_text("# Demo\n", encoding="utf-8")
+    _write_state_docs(tmp_path, "1.2.3")
+    _write_version_files(tmp_path, "1.2.3")
+
+    report = build_doctor_report(tmp_path)
+
+    assert not report.ok
+    citation_check = report.checks[-1]
+    assert citation_check.name == "citation drift"
+    assert citation_check.status == DoctorStatus.FAIL
+    assert "README.md DOI" in citation_check.detail
+    assert "README.md Zenodo badge" in citation_check.detail
+    assert ".zenodo.json" in citation_check.detail
