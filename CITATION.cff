@@ -7,6 +7,7 @@ authors:
     given-names: "Volker"
 repository-code: "https://github.com/vfi64/agentic-project-kit"
 url: "https://github.com/vfi64/agentic-project-kit"
+doi: "10.5281/zenodo.20101359"
 abstract: "Generate GitHub-ready project templates for human-AI software development workflows."
 keywords:
   - agentic development
@@ -16,4 +17,4 @@ keywords:
   - assisted development
 license: MIT
 version: "0.2.4"
-date-released: "2026-05-09"
+date-released: "2026-05-10"
