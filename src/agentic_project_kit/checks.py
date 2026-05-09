@@ -3,6 +3,30 @@ from typing import Any
 import yaml
 
 
+STATE_GATE_DOCUMENTS = (
+    "docs/STATUS.md",
+    "docs/TEST_GATES.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+)
+
+STATE_GATE_SECTIONS = {
+    "docs/STATUS.md": ("## Current State", "## Current Goal", "## Next Safe Step"),
+    "docs/TEST_GATES.md": ("## Gate Matrix", "## Standard Local Gate", "## Maintenance Rule"),
+    "docs/handoff/CURRENT_HANDOFF.md": (
+        "## Current Repository State",
+        "## Source of Truth",
+        "## Next Safe Step",
+    ),
+}
+
+STALE_HANDOFF_MARKERS = (
+    "Create project-level docs",
+    "Commit documentation-state files",
+    "Open pull request into main",
+    "Run the local gate, inspect the diff, then commit the documentation-state update",
+)
+
+
 def load_yaml(path: Path) -> dict[str, Any]:
     if not path.exists():
         raise FileNotFoundError(f"Missing config file: {path}")
@@ -42,6 +66,31 @@ def check_docs(project_root: Path) -> list[str]:
             words = count_words(content)
             if words < int(min_words):
                 errors.append(f"{doc['path']}: too short ({words}/{min_words} words)")
+
+    errors.extend(check_state_gate_docs(project_root))
+    return errors
+
+
+def check_state_gate_docs(project_root: Path) -> list[str]:
+    errors: list[str] = []
+
+    for relative_path in STATE_GATE_DOCUMENTS:
+        path = project_root / relative_path
+        if not path.exists():
+            errors.append(f"Missing state gate document: {relative_path}")
+            continue
+
+        content = path.read_text(encoding="utf-8")
+        for section in STATE_GATE_SECTIONS.get(relative_path, ()):  # defensive for future docs
+            if section not in content:
+                errors.append(f"{relative_path}: missing state gate section {section!r}")
+
+    handoff_path = project_root / "docs/handoff/CURRENT_HANDOFF.md"
+    if handoff_path.exists():
+        handoff = handoff_path.read_text(encoding="utf-8")
+        for marker in STALE_HANDOFF_MARKERS:
+            if marker in handoff:
+                errors.append(f"docs/handoff/CURRENT_HANDOFF.md: stale handoff marker {marker!r}")
 
     return errors
 
