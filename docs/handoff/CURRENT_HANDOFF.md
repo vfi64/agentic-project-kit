@@ -20,7 +20,9 @@ Important completed work:
 - v0.2.1 fixed generated CI so it installs agentic-project-kit from the package index instead of a private GitHub repository.
 - v0.2.2 added --kit-source for generated CI with pypi, testpypi, and none.
 - v0.2.2 was tagged, released on GitHub, uploaded to TestPyPI, installed from TestPyPI in a fresh virtual environment, and used to generate a test project.
-- Project-level state documentation is now present in docs/STATUS.md, docs/TEST_GATES.md, and docs/handoff/CURRENT_HANDOFF.md.
+- Project-level state documentation is present in docs/STATUS.md, docs/TEST_GATES.md, and docs/handoff/CURRENT_HANDOFF.md.
+- PR #7 made project-level state documentation machine-checkable through agentic-kit check-docs.
+- check-docs can run in the kit repository root without sentinel.yaml.
 
 Current branch work:
 
@@ -47,6 +49,7 @@ Run:
     git branch --show-current
     python -m pytest -q
     ruff check .
+    agentic-kit check-docs
 
 For package validation, also run:
 
@@ -60,10 +63,11 @@ For package validation, also run:
 
 Last known successful checks:
 
-- python -m pytest -q -> 11 passed
+- python -m pytest -q -> 15 passed
 - ruff check . -> passed
-- python -m build -> passed
-- twine check dist/* -> passed
+- agentic-kit check-docs -> passed
+- python -m build -> passed before v0.2.2 release
+- twine check dist/* -> passed before v0.2.2 release
 - GitHub CI for v0.2.2 commit -> passed
 - GitHub Release workflow for v0.2.2 tag -> passed
 - TestPyPI upload of 0.2.2 -> passed
@@ -76,4 +80,4 @@ Last known successful checks:
 
 ## Next Safe Step
 
-Start a new feature branch from main. Recommended next feature: make the documentation state gates machine-checkable through the CLI and tests.
+Start a new feature branch from main. Recommended next feature: add a release preparation command or checklist that updates status, changelog, package build checks, and tag readiness in one documented flow.
