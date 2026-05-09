@@ -3,12 +3,12 @@
 Status-date: 2026-05-10
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/update-state-after-doctor-mvp
+Current work branch: docs/update-state-after-doctor-version-drift
 Current version: 0.2.4
 
 ## Purpose
 
-agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, TODO tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, and a first project-health diagnostic command.
+agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, TODO tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, and project-health diagnostics.
 
 The project itself has a current state layer so work can be continued from the repository state files.
 
@@ -69,18 +69,20 @@ Project health diagnostics are CLI-supported:
 
 - PR #20 added agentic-kit doctor.
 - The first doctor MVP checks required README.md, optional pyproject.toml, optional sentinel.yaml, optional .github/workflows/ci.yml, documentation gates, and TODO gates when sentinel.yaml is present.
+- PR #22 extended doctor with version-drift detection across project state and citation files.
 - The doctor command reports PASS, WARN, and FAIL entries and exits non-zero only when required checks fail.
 
-Latest validated gates after PR #20:
+Latest validated gates after PR #22:
 
-- python -m pytest -q -> 30 passed
+- python -m pytest -q -> 33 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
 - agentic-kit doctor -> Overall PASS
+- agentic-kit doctor version drift -> project state matches version 0.2.4
 
 ## Current Goal
 
-Record the merged doctor MVP in STATUS and CURRENT_HANDOFF.
+Record the merged doctor version-drift detection in STATUS and CURRENT_HANDOFF.
 
 ## Current Blockers
 
@@ -99,6 +101,6 @@ agentic-kit doctor
 
 ## Next Safe Step
 
-Pull docs/update-state-after-doctor-mvp locally and run the local gate. If it passes, merge the branch.
+Pull docs/update-state-after-doctor-version-drift locally and run the local gate. If it passes, merge the branch.
 
-After the state update is merged, the next functional development block should extend agentic-kit doctor to detect version drift, README/status drift, citation metadata drift, TODO render staleness, and generated-project health issues.
+After the state update is merged, the next functional development block should extend agentic-kit doctor toward README/status drift, citation metadata drift, TODO render staleness, and generated-project health issues.
