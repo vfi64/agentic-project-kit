@@ -51,13 +51,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f pyproject.toml ]; then pip install -e ".[dev]" || pip install -e .; fi
-          pip install agentic-project-kit || true
+          pip install "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"
       - name: Run tests
         run: |
           if [ -d tests ]; then pytest -q; fi
       - name: Run agentic checks
         run: |
-          agentic-kit check || python -m agentic_project_kit.cli check
+          agentic-kit check
 '''
 
 PRECOMMIT = '''
