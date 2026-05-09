@@ -2,13 +2,13 @@
 
 Status-date: 2026-05-10
 Project: agentic-project-kit
-Branch: docs/add-zenodo-doi
+Branch: docs/update-state-after-doctor-mvp
 Base branch: main
 Current version: 0.2.4
 
 ## Current Goal
 
-Record the assigned Zenodo DOI in README.md, CITATION.cff, STATUS, and CURRENT_HANDOFF.
+Record the merged doctor MVP in STATUS and CURRENT_HANDOFF.
 
 ## Current Repository State
 
@@ -35,6 +35,8 @@ Important completed work:
 - GitHub Release v0.2.4 exists with wheel and source distribution assets.
 - Zenodo archived v0.2.4.
 - PR #18 fixed README status drift after v0.2.4.
+- PR #19 added the assigned Zenodo DOI to README.md, CITATION.cff, STATUS, and CURRENT_HANDOFF.
+- PR #20 added the first agentic-kit doctor MVP.
 
 Zenodo state:
 
@@ -46,12 +48,17 @@ Zenodo state:
 - .zenodo.json is present.
 - README.md contains a Zenodo DOI badge and citation guidance.
 
+Doctor state:
+
+- agentic-kit doctor exists on main after PR #20.
+- It checks required README.md, optional pyproject.toml, optional sentinel.yaml, optional .github/workflows/ci.yml, documentation gates, and TODO gates when sentinel.yaml is present.
+- In the kit repository root, sentinel.yaml is currently absent and therefore reported as WARN, not FAIL.
+- The latest validated doctor run reported Overall: PASS.
+
 Current branch work:
 
-- README.md adds the Zenodo DOI badge and citation guidance.
-- CITATION.cff adds the all-versions Zenodo DOI.
-- docs/STATUS.md records the v0.2.4 Zenodo archival evidence.
-- docs/handoff/CURRENT_HANDOFF.md records the current citation/archive state.
+- docs/STATUS.md records the merged doctor MVP and latest validation evidence.
+- docs/handoff/CURRENT_HANDOFF.md records the current doctor state and next safe step.
 
 ## Source of Truth
 
@@ -76,29 +83,25 @@ Run:
     python -m pytest -q
     ruff check .
     agentic-kit check-docs
+    agentic-kit doctor
 
 ## Latest Known Evidence
 
-Last known successful checks before this branch:
+Last known successful checks after PR #20:
 
-- python -m pytest -q -> 28 passed
+- python -m pytest -q -> 30 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
-- python -m build -> passed for v0.2.4
-- twine check dist/* -> passed for v0.2.4
-- GitHub Release workflow for v0.2.4 -> passed
-- GitHub CI workflow for v0.2.4 -> passed
-- GitHub Release v0.2.4 -> exists with wheel and source distribution assets
-- Zenodo archival for v0.2.4 -> completed
+- agentic-kit doctor -> Overall PASS
 
 ## Current Open Work
 
-- Pull docs/add-zenodo-doi locally.
+- Pull docs/update-state-after-doctor-mvp locally.
 - Run the required local gate.
 - Merge the branch after validation.
 
 ## Next Safe Step
 
-Pull docs/add-zenodo-doi locally and run the required local gate. If it passes, open and merge the DOI documentation PR.
+Pull docs/update-state-after-doctor-mvp locally and run the required local gate. If it passes, open and merge the state update PR.
 
-After this branch is merged, the next functional development block should likely be agentic-kit doctor.
+After this branch is merged, the next functional development block should extend agentic-kit doctor to detect version drift, README/status drift, citation metadata drift, TODO render staleness, and generated-project health issues.
