@@ -47,6 +47,33 @@ Before adding or changing any public command, generated file, workflow, gate, pr
 
 Do not add implementation-only features that are invisible to new users, maintainers, or coding agents.
 
+## Remote Work Authorization
+
+For `agentic-project-kit`, an assistant or coding agent may work without additional confirmation on remote feature or documentation branches when the task fits the current request and architecture contract.
+
+Allowed without additional confirmation:
+
+- create new feature or documentation branches;
+- edit files on those branches;
+- repair follow-up failures from tests, `ruff`, `agentic-kit check-docs`, `agentic-kit doctor`, documentation coverage, or fixture drift;
+- keep tests, documentation, status, handoff, `AGENTS.md`, PR templates, architecture files, and coverage files consistent;
+- create or update pull requests;
+- add small correction commits to the same work branch;
+- fix obvious fixture, documentation, or drift problems.
+
+Not allowed without explicit maintainer approval:
+
+- write directly to `main`;
+- merge pull requests;
+- create or push release tags;
+- create release or publication artifacts;
+- raise project versions for release preparation;
+- change repository visibility, access rights, or private configuration;
+- make irreversible history changes;
+- change architecture direction when multiple plausible options exist.
+
+Remote branch commits are allowed under this rule, but publication, release, and merge decisions remain maintainer-owned.
+
 ## Evidence Requirements
 
 Keep evidence requirements explicit and bounded. Do not commit broad logs, credentials, private runtime state, or unreviewed generated evidence.
