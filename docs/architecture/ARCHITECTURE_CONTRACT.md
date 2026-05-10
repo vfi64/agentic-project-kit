@@ -7,35 +7,22 @@ Audience: maintainers, human developers, AI coding agents
 Related planning input: `docs/architecture/AGENTIC_CODING_RESEARCH_INPUTS.md`  
 Bibliography: `docs/architecture/references.bib`
 
-## 1. Purpose
+## 1. Executive Summary
 
 `agentic-project-kit` is a language- and toolchain-open governance and development assistance system for Git-based software and documentation repositories.
 
-The project must not be defined as a Python-only repository generator. Python remains the first reference implementation because it provides a concrete, testable toolchain for validating the core architecture.
+It is not another autonomous code-writing agent. Its purpose is to make repositories suitable for human-AI development by providing explicit context, project contracts, deterministic checks, review infrastructure, drift detection, and auditability.
 
-The long-term product boundary is:
-
-- create and maintain repository skeletons;
-- encode project contracts and development rules;
-- check architecture, documentation, tests, release state, and workflow health;
-- detect drift between code, documentation, metadata, and project state;
-- guide human and AI-assisted development iterations with explicit evidence;
-- propose controlled changes instead of silently applying architectural rewrites.
-
-## 2. Strategic Product Position
-
-`agentic-project-kit` must not become another autonomous code-writing agent. Its strategic role is to make repositories agent-ready without transferring responsibility for architecture, evidence, and review to the agent.
-
-The product position is:
+The most important architectural decision is:
 
 ```text
-agentic-kit makes repositories suitable for human-AI development by providing governance, context, deterministic checks, review infrastructure, and auditability.
+Python support is a reference profile, not the core identity of the project.
 ```
 
-The product non-goal is:
+The most important product boundary is:
 
 ```text
-agentic-kit is not a system for letting an LLM rewrite a repository and judge its own work.
+agentic-kit may help agents propose changes, but it must not let an LLM rewrite a repository and judge its own work.
 ```
 
 The intended responsibility split is:
@@ -46,48 +33,156 @@ agentic-kit doctor      -> check contracts, drift, evidence, gates, and reposito
 human / maintainer      -> decide, approve, reject, merge, and own architectural judgment
 ```
 
-This distinction is central. The project should improve the conditions under which coding agents work, rather than trying to replace engineering process with unconstrained generation.
+## 2. How to Use This Document
 
-Consequences:
+Read this file as the governing architecture contract for `agentic-project-kit`.
 
-- reviewability is a first-class quality target, not a cosmetic PR-template concern;
-- deterministic checks outrank model self-assessment;
-- specifications and acceptance criteria should precede non-trivial implementation work in stricter policy packs;
-- evidence must be explicit, bounded, and inspectable;
-- architecture changes require a visible plan and approval path;
-- agent speed must not be allowed to hide context loss, stale documentation, missing tests, or uncontrolled drift.
+### 2.1 For Human Maintainers
 
-## 3. Research-Informed Design Position
+Use this document to decide whether a feature, refactoring, policy, or generated-file change fits the project direction.
 
-External work on repository-level coding agents, SWE benchmarks, code-graph context, GitHub coding-agent workflows, and vibe-coding practice supports the same conservative conclusion:
+Before approving substantial work, check whether the change:
+
+1. preserves the language-neutral core;
+2. keeps Python-specific logic inside Python profiles or adapters;
+3. improves or preserves reviewability;
+4. has deterministic checks where possible;
+5. updates project contracts, state files, and documentation when behavior changes;
+6. avoids silent high-risk automation.
+
+### 2.2 For AI Coding Agents
+
+Treat this file as high-priority project context.
+
+When editing the repository:
+
+1. do not introduce Python-only assumptions into the core;
+2. do not move concrete tool execution into generic policy or diagnostic code;
+3. do not weaken tests, gates, or evidence requirements to make a task pass;
+4. do not implement autonomous architecture rewrites without a reviewable plan;
+5. separate diagnosis, recommendation, and action;
+6. prefer explicit, small, reviewable changes;
+7. update documentation and tests when behavior changes.
+
+If uncertain, preserve architecture boundaries and ask for a smaller, reviewable step.
+
+### 2.3 For New Feature Work
+
+Every non-trivial feature should identify:
+
+- affected profile or policy pack;
+- affected command or generated template;
+- required checks or tests;
+- documentation updates;
+- review and rollback risks.
+
+For strict policy packs, implementation should follow a brief spec or acceptance checklist rather than starting directly from code.
+
+## 3. Glossary
+
+**Project contract**  
+A machine-readable description of the repository type, active profiles, policy packs, commands, and governance expectations. A future file such as `agentic.toml` or `.agentic/project.toml` should provide this.
+
+**Profile**  
+A repository or toolchain capability, such as `python-library`, `markdown-docs`, `git-github`, `release-managed`, or a future `typescript-webapp` profile. A project may have multiple profiles.
+
+**Policy pack**  
+A selectable group of governance principles and checks, such as `starter`, `prototype`, `solo-maintainer`, `agentic-development`, or `release-managed`.
+
+**Doctor**  
+The diagnostic command family responsible for repository health checks: documentation state, drift, active policies, evidence, release state, and eventually architecture fitness checks.
+
+**Diagnostic**  
+A structured finding with severity, location, rule, rationale, recommendation, and automation safety level.
+
+**Reviewability**  
+The degree to which a human maintainer can understand, verify, and safely accept or reject a change.
+
+**Evidence**  
+Bounded, inspectable proof that a check was run or a claim was validated. Evidence is not a raw log dump and must not contain secrets.
+
+**Architecture fitness function**  
+A check that turns an architecture rule into an executable or semi-executable diagnostic, for example an import-boundary check or README/CLI drift check.
+
+## 4. Decision Rules
+
+When rules or design goals conflict, use this priority order:
+
+1. preserve repository safety and secret hygiene;
+2. preserve architecture boundaries;
+3. preserve deterministic checks and evidence;
+4. preserve reviewability;
+5. prefer profile-specific behavior over hard-coded global behavior;
+6. prefer warnings over blocking failures for `starter` and `prototype` projects;
+7. prefer failing diagnostics for `release-managed`, `research-reproducible`, and stricter `agentic-development` projects;
+8. prefer explicit user approval over hidden automation;
+9. prefer small reversible changes over large speculative refactors.
+
+These rules are intentionally conservative. The project should support agentic speed without allowing speed to hide context loss, stale documentation, missing tests, or uncontrolled drift.
+
+## 5. Strategic Product Position
+
+`agentic-project-kit` exists to improve the conditions under which humans and coding agents work together.
+
+It should provide:
+
+- stable repository context;
+- explicit project contracts;
+- profile and policy selection;
+- deterministic checks;
+- evidence and audit trails;
+- reviewable generated files and changes;
+- drift detection between documentation, metadata, commands, tests, and repository state.
+
+It should not provide:
+
+- unconstrained autonomous repository rewriting;
+- LLM-only merge readiness decisions;
+- hidden architecture changes;
+- production claims for prototype repositories;
+- broad log staging or secret-prone evidence collection;
+- a Python-only product identity.
+
+The long-term product boundary is:
+
+- create and maintain repository skeletons;
+- encode project contracts and development rules;
+- check architecture, documentation, tests, release state, and workflow health;
+- detect drift between code, documentation, metadata, and project state;
+- guide human and AI-assisted development iterations with explicit evidence;
+- propose controlled changes instead of silently applying architectural rewrites.
+
+## 6. Research-Informed Design Position
+
+External work on repository-level coding agents, SWE benchmarks, code-graph context, GitHub coding-agent workflows, and vibe-coding practice supports this conservative conclusion:
 
 ```text
 Agentic coding needs less unconstrained autonomy and more explicit context, deterministic checks, review infrastructure, and auditability.
 ```
 
-The architecture therefore adopts these research-informed constraints:
+The architecture therefore adopts these constraints:
 
 - repository context is first-class, not a prompt afterthought;
 - generated projects must expose stable commands for tests, diagnostics, evidence, and release checks;
 - agent-facing instructions are useful but insufficient unless backed by machine-checkable contracts;
 - reviewability is a quality dimension alongside correctness;
-- benchmark success is not treated as proof that an agent can safely rewrite project architecture;
+- benchmark success is not proof that an agent can safely rewrite project architecture;
 - policy packs must distinguish prototypes from release-managed or research-reproducible projects;
-- secret hygiene and bounded evidence staging are part of the core governance problem.
+- secret hygiene and bounded evidence staging are part of the governance problem.
 
 Detailed source notes are kept in `AGENTIC_CODING_RESEARCH_INPUTS.md`; bibliographic records are kept in `references.bib`.
 
-## 4. Architectural Contract
+## 7. Architectural Contract
 
-### 4.1 Core Principle
+### 7.1 Core Principle
 
 The core of `agentic-project-kit` must be independent of any specific programming language, test runner, package manager, hosting provider, or user interface.
 
 The core may know that checks exist. It must not need to know that a Python project uses `pytest`, a TypeScript project uses `tsc`, or a Rust project uses `cargo`.
 
-### 4.2 Required Layering
+### 7.2 Required Layering
 
-The architecture shall be organized around the following conceptual layers:
+The architecture shall be organized around these conceptual layers:
 
 ```text
 Interfaces
@@ -118,17 +213,57 @@ adapters   -> application services -> core engine -> policy model
 
 The core must not import concrete adapters, UI code, or language-specific tooling.
 
-### 4.3 Forbidden Couplings
+### 7.3 Forbidden Couplings
 
-The following couplings are architectural violations:
+The following couplings are architecture violations:
 
-- core modules importing concrete GitHub, CLI, filesystem, or subprocess implementations;
+- core modules importing concrete GitHub, CLI, filesystem, subprocess, or UI implementations;
 - generic diagnostics depending directly on `pytest`, `ruff`, `mypy`, `npm`, `cargo`, or similar tools;
 - project-type decisions hard-coded across unrelated modules;
 - policy behavior hidden in prose-only documentation without a machine-checkable representation;
 - automatic structural rewrites without a visible plan, rationale, risk note, and explicit approval path.
 
-## 5. Project Contract Model
+### 7.4 Good and Bad Examples
+
+Good:
+
+```text
+Add a Python-specific pytest check inside the python profile.
+Expose its result through the generic diagnostic model.
+```
+
+Bad:
+
+```text
+Add pytest-specific branching directly to the generic doctor engine.
+```
+
+Good:
+
+```text
+Generate an ADR stub when a structural change is detected.
+Let the maintainer decide whether to accept and complete it.
+```
+
+Bad:
+
+```text
+Rewrite the architecture automatically because an LLM recommends it.
+```
+
+Good:
+
+```text
+Add release-version drift checks to a release-managed policy pack.
+```
+
+Bad:
+
+```text
+Make every starter project fail because it has no release metadata.
+```
+
+## 8. Project Contract Model
 
 Generated and maintained repositories should converge on a machine-readable project contract, for example `agentic.toml` or an equivalent future format.
 
@@ -165,11 +300,11 @@ pull_request_template_required = true
 
 The exact format may evolve, but the separation between universal governance and profile-specific checks is mandatory.
 
-## 6. Profile and Policy Pack Model
+## 9. Profile and Policy Pack Model
 
-### 6.1 Profiles
+### 9.1 Profiles
 
-A profile describes a repository kind, not merely a programming language.
+A profile describes a repository kind or toolchain capability, not merely a programming language.
 
 Examples:
 
@@ -184,7 +319,7 @@ Examples:
 
 Profiles may be combined. A Python library with Markdown documentation and GitHub release automation is a multi-profile project.
 
-### 6.2 Policy Packs
+### 9.2 Policy Packs
 
 A policy pack is a selectable group of development principles and checks. Policy packs should be recommended by the system during `agentic-kit init` and during substantial project extensions.
 
@@ -208,11 +343,11 @@ The `safety-critical-inspired` pack may draw on ideas such as NASA/JPL Power of 
 
 The `prototype` pack exists so fast experimentation can be supported honestly without pretending that the repository is production-governed.
 
-### 6.3 Principle Categories
+### 9.3 Principle Categories
 
-Policy packs may combine principles from these categories:
+Policy packs may combine principles from these categories.
 
-#### Universal governance principles
+Universal governance:
 
 - explicit project purpose;
 - explicit current status;
@@ -222,7 +357,7 @@ Policy packs may combine principles from these categories:
 - bounded diagnostic logs;
 - no secrets in generated or staged artifacts.
 
-#### Architecture principles
+Architecture:
 
 - small modules with clear responsibility;
 - controlled dependency direction;
@@ -231,7 +366,7 @@ Policy packs may combine principles from these categories:
 - structural changes require an architecture note or ADR;
 - core logic separated from UI and provider-specific integration.
 
-#### Reliability principles
+Reliability:
 
 - small functions where practical;
 - explicit error handling;
@@ -241,7 +376,7 @@ Policy packs may combine principles from these categories:
 - reproducible local gate commands;
 - failure severity must be visible.
 
-#### Documentation principles
+Documentation:
 
 - generated project state must remain current;
 - command examples in documentation should match implemented CLI behavior;
@@ -249,7 +384,7 @@ Policy packs may combine principles from these categories:
 - TODO state must have one machine-readable source of truth;
 - release/citation metadata must be consistent.
 
-#### Agentic workflow principles
+Agentic workflow:
 
 - agents start from stable rules and current state files, not memory;
 - every substantial change has intended outcome, changed files, tests, and remaining risks;
@@ -258,18 +393,18 @@ Policy packs may combine principles from these categories:
 - diagnosis, recommendation, and action are separate concepts;
 - review burden and reviewability are explicit design concerns.
 
-#### Security and secret-hygiene principles
+Security and secret hygiene:
 
 - generated projects must not encourage committing credentials, unbounded logs, or private runtime state;
 - staged evidence must remain bounded and inspectable;
 - future diagnostics should detect common secret-file patterns and risky evidence folders;
 - automation should operate with the least practical authority.
 
-## 7. Advisory Selection Dialog
+## 10. Advisory Selection Dialog
 
-`agentic-kit init` should eventually guide the user through profile and policy selection instead of asking only for a project type.
+`agentic-kit init` should guide the user through profile and policy selection instead of asking only for a project type.
 
-The dialog should ask for practical intent, then recommend a profile set and policy pack.
+The dialog should ask for practical intent, then recommend profiles and policy packs.
 
 Example questions:
 
@@ -333,7 +468,7 @@ It needs test gates, documentation state checks, release-state validation, drift
 
 The user may accept, modify, or reject the recommendation. The final selection must be recorded in the project contract.
 
-## 8. Extension and Change Dialog
+## 11. Extension and Change Dialog
 
 For significant changes after initialization, the system should re-open a focused advisory dialog.
 
@@ -341,18 +476,18 @@ Trigger examples:
 
 - adding a new programming language;
 - adding release automation;
-- adding citation/archival metadata;
+- adding citation or archival metadata;
 - adding a web UI or service mode;
 - enabling multiuser workflows;
 - changing architecture style;
-- introducing LLM/agent automation that writes files;
+- introducing LLM or agent automation that writes files;
 - adding a repository map, dependency graph, or architecture-fitness layer.
 
-The dialog should ask:
+The dialog should ask whether the project contract should be updated.
+
+Example:
 
 ```text
-This change expands the project boundary. Should the project contract be updated?
-
 Detected change:
 - new profile candidate: release-managed
 - affected files: CHANGELOG.md, CITATION.cff, .zenodo.json, GitHub workflow
@@ -365,7 +500,7 @@ Recommended action:
 
 A structural change without contract update should at least produce a warning. For strict policy packs it may be a failing diagnostic.
 
-## 9. Diagnostics and Severity Model
+## 12. Diagnostics and Severity Model
 
 All checks should return a structured diagnostic model:
 
@@ -389,7 +524,7 @@ Severity expectations:
 
 Diagnostics should include reviewability findings where relevant, for example missing PR intent, missing test evidence, missing architecture-impact notes, or broad unbounded evidence dumps.
 
-## 10. Automation Boundary
+## 13. Automation Boundary
 
 The system may automatically perform low-risk mechanical actions after explicit user command, such as:
 
@@ -411,7 +546,7 @@ The system must not silently perform high-risk actions, such as:
 
 High-risk actions require a proposed plan, reviewable diff, test evidence, and explicit approval path.
 
-## 11. Single-User Now, Multiuser Later
+## 14. Single-User Now, Multiuser Later
 
 The first implementation may assume a single local maintainer and no rights management.
 
@@ -432,7 +567,7 @@ Potential future roles:
 - `owner`
 - `automation-agent`
 
-## 12. Roadmap
+## 15. Roadmap
 
 ### Phase 1: Contract and Profile Foundation
 
@@ -481,13 +616,13 @@ Potential future roles:
 ### Phase 7: Security and Secret Hygiene
 
 - add common secret-file checks;
-- warn on broad committed/staged evidence folders;
+- warn on broad committed or staged evidence folders;
 - check generated templates for unsafe credential handling;
 - document least-authority expectations for automation agents.
 
-## 13. Acceptance Criteria for Future Work
+## 16. Acceptance Criteria for Future Work
 
-Future implementation work must preserve the following invariants:
+Future implementation work must preserve these invariants:
 
 - Python support is a profile, not the core identity of the project.
 - The core does not import concrete language tool runners.
@@ -499,7 +634,9 @@ Future implementation work must preserve the following invariants:
 - LLMs and coding agents may propose changes, but must not be the final authority for repository health or merge readiness.
 - Multiuser support is not implemented prematurely, but future roles and attribution are not blocked.
 
-## 14. Open Questions
+A change that violates one of these invariants needs an explicit architecture decision record before implementation.
+
+## 17. Open Questions
 
 - Should the project contract be named `agentic.toml`, `.agentic/project.toml`, or another path?
 - Should policy packs be built into the package, loaded from files, or both?
