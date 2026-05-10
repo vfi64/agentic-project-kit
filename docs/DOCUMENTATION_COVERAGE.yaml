@@ -30,6 +30,7 @@ rules:
         terms:
           - Installation for local development
           - Quick start
+          - Project contract, profiles, and policy packs
           - Project health check
           - Release planning and validation
           - TODO workflow
@@ -40,6 +41,23 @@ rules:
           - Citation and archiving
           - Safety rule
           - Current status
+
+  - id: project-contract-readme-coverage
+    description: Project contract, profiles, and policy packs must remain visible to users.
+    documents:
+      - path: README.md
+        terms:
+          - .agentic/project.yaml
+          - project contract
+          - project profiles
+          - policy packs
+          - --profiles
+          - --policy-packs
+          - generic-git-repo
+          - markdown-docs
+          - python-cli
+          - agentic-development
+          - documentation-governed
 
   - id: gate-document-command-coverage
     description: Gate documentation must mention the commands used as evidence.
