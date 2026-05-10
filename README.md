@@ -6,11 +6,21 @@
 
 It creates not only files, but a reusable development process: agent onboarding, project contract, profile and policy pack selection, status discipline, test gates, TODO tracking, bounded logging conventions, and optional GitHub automation.
 
+In one sentence: `agentic-project-kit` is an early, dogfooded attempt to make AI-assisted repository work more reproducible through project contracts, documentation gates, release-state checks, TODO gates, policy expectations, and bounded evidence.
+
 ## Why this exists
 
 AI-assisted development works best when project context is explicit, current, and machine-checkable. Without that, agents tend to rely on stale handoffs, copied project history, unclear branch rules, missing test evidence, and unstructured logs.
 
 This kit turns those lessons into a reusable starter system for new repositories.
+
+The goal is not to make an LLM write code better by itself. The goal is to make repository state, handoffs, documentation coverage, TODOs, release state, and policy expectations visible enough that humans and coding agents can work with less context drift.
+
+## Why not just Cookiecutter?
+
+Cookiecutter-style generators are useful for creating initial files. `agentic-project-kit` is aimed at a narrower problem: keeping AI-assisted repository work reviewable after the first commit.
+
+A generated project therefore includes machine-readable state, current handoff files, documentation coverage expectations, TODO gates, local health checks, release-state validation, policy-pack fixtures, and evidence conventions. These are governance aids, not a claim that the repository is semantically complete or production-ready.
 
 ## What it generates
 
@@ -236,6 +246,37 @@ Do not generate a public project from a private repository history.
 
 This kit creates a fresh repository from generic templates. It does not copy a private `.git` history.
 
+## Project scope boundary
+
+`agentic-project-kit` is a generic open repository governance and agentic-development kit. It is not tied to a specific private legacy refactoring project, and examples should stay generic unless they describe generated files or this repository itself.
+
+## GitHub discovery suggestions
+
+Suggested GitHub description:
+
+```text
+Reproducible AI-assisted repository work through project contracts, documentation gates, release checks, TODO gates, and policy packs.
+```
+
+Suggested topics:
+
+```text
+agentic-development
+ai-agents
+developer-tools
+github
+project-template
+software-engineering
+documentation
+release-management
+python
+cli
+```
+
+These repository settings are maintainer-owned and are not changed by the package.
+
 ## Current status
 
 Version `0.2.4` is an early MVP with release-state validation, project-health diagnostics, policy-pack doctor checks, deterministic document-quality heuristics, documentation coverage checks, generated project contracts, project profiles, policy packs, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
+
+The current repository state is ready for a maintainer-owned v0.2.5 release-preparation review once CHANGELOG, README, STATUS, and handoff wording describe the post-v0.2.4 health-check and visibility work consistently.
