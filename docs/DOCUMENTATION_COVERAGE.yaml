@@ -74,11 +74,11 @@ rules:
       - path: docs/STATUS.md
         terms:
           - policy-pack doctor checks
-          - Policy-pack checks
+          - policy packs
       - path: docs/handoff/CURRENT_HANDOFF.md
         terms:
-          - policy-pack doctor checks
-          - policy pack checks
+          - policy-pack checks
+          - policy packs
 
   - id: semantic-quality-boundary-coverage
     description: Semantic quality limits must remain explicit so deterministic checks are not oversold.
