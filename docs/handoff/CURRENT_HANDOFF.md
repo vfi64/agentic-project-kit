@@ -2,32 +2,35 @@
 
 Status-date: 2026-05-10
 Project: agentic-project-kit
-Branch: feature/semantic-quality-boundary
+Branch: feature/release-visibility-v025
 Base branch: main
 Current version: 0.2.4
 
 ## Current Goal
 
-Encode the semantic quality boundary and add deterministic document-quality heuristics without pretending to prove semantic perfection.
+Prepare a small release-visibility and positioning cut for a maintainer-owned v0.2.5 release decision. The branch should make the post-v0.2.4 health-check, policy-pack, documentation-coverage, machine-readable task-gate, and semantic-boundary work visible without performing release-owned actions.
 
 ## Current Repository State
 
 The project has released version 0.2.4. GitHub release automation and Zenodo archival are both working.
 
-Important completed work:
+Important released work:
 
 - v0.2.0 added GitHub release workflow and release artifacts.
 - v0.2.1 fixed generated CI so it installs agentic-project-kit from the package index instead of a private GitHub repository.
 - v0.2.2 added --kit-source for generated CI with pypi, testpypi, and none.
-- PR #20 added the first agentic-kit doctor MVP.
-- PR #22 extended agentic-kit doctor with version-drift detection.
-- PR #25 added research-informed architecture planning inputs, the architecture contract, and bibliography.
+- v0.2.3 added release-state validation for local tags, remote tags, and GitHub releases.
+- v0.2.4 added Zenodo-backed citation and archival metadata.
+
+Important merged post-v0.2.4 work on main:
+
 - PR #26 enforced architecture contract review gates.
 - PR #27 documented agentic-kit doctor in README.md.
 - PR #28 added documentation coverage drift checks and Remote Work Authorization.
 - PR #29 added project contract, profiles, and policy packs.
-- PR #30 added self sentinel and TODO gates.
+- PR #30 added self sentinel and machine-readable task gates.
 - PR #31 activated policy-pack checks in doctor.
+- PR #32 defined the semantic quality boundary and added deterministic document-quality heuristics.
 
 Zenodo state:
 
@@ -41,15 +44,20 @@ Zenodo state:
 
 Current branch work:
 
-- docs/architecture/ARCHITECTURE_CONTRACT.md now defines the semantic quality boundary.
-- The architecture contract states that deterministic gates cannot prove semantic perfection.
-- LLM-based or human semantic review is reserved for advisory review, not hard doctor failures.
-- src/agentic_project_kit/checks.py adds deterministic document-quality heuristics for unresolved placeholder markers.
-- sentinel-configured documents run these quality checks by default and may opt out with `quality_checks: false`.
-- README.md documents deterministic document-quality heuristics and advisory review boundaries.
-- docs/TEST_GATES.md documents the document quality heuristic gate.
-- docs/DOCUMENTATION_COVERAGE.yaml protects the semantic quality boundary language.
-- tests/test_checks.py covers placeholder detection and per-document opt-out.
+- CHANGELOG.md has an Unreleased section preparing the v0.2.5 release narrative without raising the package version.
+- README.md now foregrounds the purpose, the difference from a simple skeleton generator, the doctor/check-docs workflow, project scope boundary, and GitHub discovery suggestions.
+- docs/STATUS.md and this handoff now point to feature/release-visibility-v025 instead of the old semantic-boundary branch.
+- The branch explicitly avoids version bumps, tags, release artifacts, publication artifacts, merges, direct main writes, and repository setting changes.
+
+## Positioning Notes
+
+Useful external-review signals to preserve:
+
+- The most important near-term issue is release visibility: post-v0.2.4 governance work exists on main but is not yet represented by a published v0.2.5 release.
+- The strongest value proposition is reproducible AI-assisted repository work through explicit context, machine-checkable gates, bounded evidence, handoff discipline, release-state validation, and dogfooding.
+- Avoid overclaims such as production ready, de-facto standard, semantic perfection, or LLM-proven quality.
+- Treat mechanized trust as a useful concept, but express it through concrete checked project state rather than marketing claims.
+- Do not let examples or wording blur agentic-project-kit with Comm-SCI-Control-private or any private legacy refactoring project.
 
 ## Remote Work Authorization
 
@@ -84,23 +92,34 @@ Run:
     agentic-kit check-docs
     agentic-kit doctor
 
+Optional release-preparation smoke command before a later release branch or release PR:
+
+    agentic-kit release-plan --version 0.2.5
+
 ## Latest Known Evidence
 
-Last known successful checks before this branch:
+Branch creation baseline:
 
-- python -m pytest -q -> 48 passed
+- git branch --show-current -> feature/release-visibility-v025
+- python -m pytest -q -> 52 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
-- agentic-kit doctor -> Overall PASS
+- agentic-kit doctor -> Overall PASS; project state matches version 0.2.4
 
-Branch evidence still required locally after pulling feature/semantic-quality-boundary.
+Evidence still required after the documentation updates on this branch:
+
+- python -m pytest -q
+- ruff check .
+- agentic-kit check-docs
+- agentic-kit doctor
 
 ## Current Open Work
 
-- Pull feature/semantic-quality-boundary locally.
+- Pull feature/release-visibility-v025 locally.
 - Run the required local gate.
-- If the gate passes, open/merge the PR after maintainer approval.
+- If the gate passes, open a PR for README, CHANGELOG, STATUS, and handoff visibility updates.
+- After merge, a separate maintainer-approved release-preparation step may update version metadata, CHANGELOG release heading, tags, release artifacts, and publication state.
 
 ## Next Safe Step
 
-Pull feature/semantic-quality-boundary locally and run the required local gate. Expected result: tests, ruff, check-docs, and doctor pass.
+Pull feature/release-visibility-v025 locally and run the required local gate. Expected result: tests, ruff, check-docs, and doctor pass. Do not merge or release without maintainer approval.
