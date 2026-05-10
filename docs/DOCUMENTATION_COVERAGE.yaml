@@ -31,6 +31,7 @@ rules:
           - Installation for local development
           - Quick start
           - Project contract, profiles, and policy packs
+          - Policy-pack doctor checks
           - Project health check
           - Release planning and validation
           - TODO workflow
@@ -58,6 +59,26 @@ rules:
           - python-cli
           - agentic-development
           - documentation-governed
+
+  - id: policy-pack-doctor-coverage
+    description: Policy-pack-driven doctor checks must remain visible to users.
+    documents:
+      - path: README.md
+        terms:
+          - Policy-pack doctor checks
+          - policy-pack checks
+          - solo-maintainer
+          - release-managed
+          - documentation-governed
+          - structural prerequisites
+      - path: docs/STATUS.md
+        terms:
+          - policy-pack doctor checks
+          - Policy-pack checks
+      - path: docs/handoff/CURRENT_HANDOFF.md
+        terms:
+          - policy-pack doctor checks
+          - policy pack checks
 
   - id: gate-document-command-coverage
     description: Gate documentation must mention the commands used as evidence.
