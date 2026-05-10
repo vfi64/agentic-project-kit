@@ -71,6 +71,7 @@ Current branch work:
 - ProjectOptions now carries profiles and policy_packs.
 - agentic-kit init now writes `.agentic/project.yaml`.
 - agentic-kit init now accepts `--profiles` and `--policy-packs`.
+- The repository now contains its own `.agentic/project.yaml` so doctor can validate the kit's active profiles and policy packs instead of warning that the contract is absent.
 - Generated README, AGENTS, PROJECT_START, STATUS, TEST_GATES, and handoff files point to `.agentic/project.yaml`.
 - agentic-kit doctor reports project contract WARN when absent, PASS when valid, FAIL when invalid.
 - README documents project contract, profiles, and policy packs.
@@ -134,4 +135,4 @@ Branch evidence still required locally after pulling feature/project-contract-po
 
 ## Next Safe Step
 
-Pull feature/project-contract-policy-packs locally and run the required local gate. If it passes, review README and generated `.agentic/project.yaml` behavior.
+Pull feature/project-contract-policy-packs locally and run the required local gate. If it passes, review README, the repository's own `.agentic/project.yaml`, and generated `.agentic/project.yaml` behavior.
