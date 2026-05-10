@@ -2,13 +2,13 @@
 
 Status-date: 2026-05-10
 Project: agentic-project-kit
-Branch: docs/post-release-v025
+Branch: docs/roadmap-after-grok-review
 Base branch: main
 Current version: 0.2.5
 
 ## Current Goal
 
-Update the repository state files after the v0.2.5 GitHub release so future agents no longer treat the release as pending.
+Record the post-v0.2.5 planning implications from external review without changing code or release metadata.
 
 ## Current Repository State
 
@@ -43,12 +43,38 @@ Zenodo state:
 - README.md contains a Zenodo DOI badge and citation guidance.
 - The v0.2.5 version-specific DOI has not been verified in this branch. Do not add it to README.md or CITATION.cff by guessing.
 
+Post-v0.2.5 external review signal:
+
+- External review characterizes v0.2.5 as a useful late-early MVP with unusually strong dogfooding and machine-checkable repository state.
+- Treat that as a planning signal, not as proof of production readiness.
+- Preserve the conservative positioning: strong early governance tooling, not a de-facto standard, not production-ready, and not proof of semantic perfection.
+- Keep agentic-project-kit generic. Do not rename generic roadmap items after private projects or private legacy-refactoring work.
+
+Post-v0.2.5 roadmap:
+
+1. Add a post-release Zenodo verification command.
+   - Candidate command names: `agentic-kit post-release-check --version X.Y.Z` or `agentic-kit zenodo-check --version X.Y.Z`.
+   - The command must check GitHub release state and Zenodo archive state after publication.
+   - It must only recommend or prepare README.md or CITATION.cff DOI follow-up when a verified Zenodo record for the requested release version exists.
+   - If no version-specific DOI exists yet, it must report WAITING or WARN and leave DOI metadata unchanged.
+   - This must remain separate from `release-check`, because `release-check` is a pre-release gate.
+2. Add advisory review commands after the post-release check exists.
+   - Candidate commands: `agentic-kit review-docs` and `agentic-kit review-architecture`.
+   - These should be advisory only and must not become merge authority.
+   - They may flag clarity, audience fit, missing rationale, overclaims, architecture drift, or review questions.
+3. Add generic output-contract-oriented scaffolding after the advisory review layer is stable.
+   - Prefer generic names such as `structured-output`, `governed-output`, `response-contracts`, `repairable-output`, and `audit-evidence`.
+   - Avoid private-project-specific names in the open kit.
+   - Start with fixtures, documentation, and minimal gates before adding any large enforcement pipeline.
+4. Consider a later v0.3.0 milestone for minimal response-contract gates.
+   - This should be based on generic structured-output needs, not on a single private wrapper implementation.
+
 Current branch work:
 
-- docs/STATUS.md marks v0.2.5 as released.
-- This handoff marks v0.2.5 as released.
+- docs/STATUS.md records the post-v0.2.5 external-review planning signal and roadmap.
+- This handoff points future agents to the same roadmap.
 - README.md and CITATION.cff are not changed on this branch because the v0.2.5 version-specific Zenodo DOI has not been verified in this branch.
-- The branch explicitly avoids tags, release artifacts, publication artifacts, merges, direct main writes, and repository setting changes.
+- The branch explicitly avoids code changes, tags, release artifacts, publication artifacts, merges, direct main writes, and repository setting changes.
 
 ## Positioning Notes
 
@@ -113,7 +139,7 @@ Latest validated release evidence:
 - Release workflow for v0.2.5 -> success
 - gh release view v0.2.5 -> release exists with wheel and sdist assets
 
-Evidence still required after the post-release status updates on this branch:
+Evidence still required after the roadmap status updates on this branch:
 
 - python -m pytest -q
 - ruff check .
@@ -123,11 +149,12 @@ Evidence still required after the post-release status updates on this branch:
 
 ## Current Open Work
 
-- Pull docs/post-release-v025 locally.
+- Pull docs/roadmap-after-grok-review locally.
 - Run the required local gate.
-- If the gates pass, open a PR for the post-release state update.
+- If the gates pass, open a PR for the roadmap-only update.
+- After merge, the next implementation branch should be feature/post-release-zenodo-check.
 - Verify Zenodo separately. Only after the v0.2.5 version-specific DOI is known should README.md or CITATION.cff be updated.
 
 ## Next Safe Step
 
-Pull docs/post-release-v025 locally and run the required local gate. Expected result: tests, ruff, check-docs, and doctor pass; GitHub release v0.2.5 exists. Do not update DOI metadata by guessing.
+Pull docs/roadmap-after-grok-review locally and run the required local gate. Expected result: tests, ruff, check-docs, and doctor pass; GitHub release v0.2.5 exists. Do not update DOI metadata by guessing.
