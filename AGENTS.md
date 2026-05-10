@@ -7,10 +7,11 @@ This repository uses explicit project-state and architecture governance. Do not 
 Before making non-trivial changes, read these files in order:
 
 1. `docs/architecture/ARCHITECTURE_CONTRACT.md`
-2. `docs/STATUS.md`
-3. `docs/TEST_GATES.md`
-4. `docs/handoff/CURRENT_HANDOFF.md`
-5. relevant source and test files
+2. `docs/DOCUMENTATION_COVERAGE.yaml`
+3. `docs/STATUS.md`
+4. `docs/TEST_GATES.md`
+5. `docs/handoff/CURRENT_HANDOFF.md`
+6. relevant source and test files
 
 ## Architecture Contract Rule
 
@@ -32,6 +33,19 @@ If a change conflicts with the architecture contract, do not silently implement 
 1. state the conflict;
 2. propose either a smaller implementation or an architecture-contract update;
 3. make the contract update explicit and reviewable.
+
+## Documentation Coverage Rule
+
+`docs/DOCUMENTATION_COVERAGE.yaml` is the source of truth for required documentation coverage across README, gate docs, state docs, agent instructions, release/citation docs, safety notes, and architecture concepts.
+
+Before adding or changing any public command, generated file, workflow, gate, profile, policy pack, release process, safety rule, evidence convention, or architecture concept:
+
+1. check whether the change is already covered by the documentation coverage matrix;
+2. update the matrix when a new public concept must remain visible;
+3. update the affected documentation in the same change;
+4. run `agentic-kit check-docs` so missing coverage is detected.
+
+Do not add implementation-only features that are invisible to new users, maintainers, or coding agents.
 
 ## Responsibility Split
 
