@@ -30,6 +30,7 @@ v0.2.5 release evidence:
 - Tag v0.2.5 was pushed.
 - GitHub Release v0.2.5 was created successfully by the Release workflow.
 - Release assets were attached: `agentic_project_kit-0.2.5-py3-none-any.whl` and `agentic_project_kit-0.2.5.tar.gz`.
+- `agentic-kit post-release-check --version 0.2.5` verified the v0.2.5 Zenodo version DOI: `10.5281/zenodo.20111119`.
 - `agentic-kit release-check --version 0.2.5` now fails as expected because the local tag, remote tag, and GitHub release already exist. That command is a pre-release gate, not a post-release success check.
 
 Project-level state documentation is present on main:
@@ -105,12 +106,12 @@ Latest validated release gates:
 
 ## Current Goal
 
-Record the post-v0.2.5 planning implications from external review without changing code or release metadata.
+Record the verified v0.2.5 Zenodo DOI in documentation and citation guidance without changing code, tags, releases, or package metadata.
 
 ## Current Blockers
 
-- Local gate must be rerun after the roadmap status updates on docs/roadmap-after-grok-review.
-- The v0.2.5 version-specific Zenodo DOI has not been verified in this branch. Do not add it to README.md or CITATION.cff by guessing.
+- Local gate must be rerun after documenting the verified v0.2.5 Zenodo DOI.
+- The v0.2.5 version-specific Zenodo DOI has been verified by `agentic-kit post-release-check --version 0.2.5`: `10.5281/zenodo.20111119`.
 - Maintainer approval is required before merge, publication changes, or GitHub repository setting changes.
 
 ## Live Status Commands

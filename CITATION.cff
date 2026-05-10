@@ -8,6 +8,7 @@ authors:
 repository-code: "https://github.com/vfi64/agentic-project-kit"
 url: "https://github.com/vfi64/agentic-project-kit"
 doi: "10.5281/zenodo.20101359"
+# Verified v0.2.5 version DOI: 10.5281/zenodo.20111119
 abstract: "Generate GitHub-ready project templates for human-AI software development workflows."
 keywords:
   - agentic development

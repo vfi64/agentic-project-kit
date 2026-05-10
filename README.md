@@ -246,9 +246,9 @@ Citation metadata is provided in `CITATION.cff`.
 
 Zenodo metadata is provided in `.zenodo.json`. The project is archived through the Zenodo GitHub integration.
 
-For citation, prefer the all-versions DOI: `10.5281/zenodo.20101359`.
+For citation across versions, prefer the all-versions DOI: `10.5281/zenodo.20101359`.
 
-The latest prepared release in this repository is `v0.2.5`. Zenodo assigns the version-specific DOI after the GitHub release is published and archived.
+The archived v0.2.5 release has the verified version-specific DOI: `10.5281/zenodo.20111119`.
 
 ## Safety rule
 
@@ -287,6 +287,6 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.2.5` is an early MVP release candidate with release-state validation, post-release Zenodo verification, project-health diagnostics, policy-pack doctor checks, deterministic document-quality heuristics, documentation coverage checks, generated project contracts, project profiles, policy packs, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, checking post-release Zenodo archive state, and archiving releases through the Zenodo GitHub integration.
+Version `0.2.5` is an early MVP release with release-state validation, post-release Zenodo verification, project-health diagnostics, policy-pack doctor checks, deterministic document-quality heuristics, documentation coverage checks, generated project contracts, project profiles, policy packs, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, checking post-release Zenodo archive state, and archiving releases through the Zenodo GitHub integration.
 
-This repository is prepared for maintainer-owned v0.2.5 release validation. Tag creation, GitHub release publication, package publication, and Zenodo archival remain separate maintainer-approved steps.
+This repository has a maintainer-owned v0.2.5 GitHub release and a verified Zenodo archive record for v0.2.5: `10.5281/zenodo.20111119`.

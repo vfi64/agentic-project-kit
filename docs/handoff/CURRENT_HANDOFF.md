@@ -38,10 +38,11 @@ Zenodo state:
 - Zenodo archived v0.2.4.
 - All-versions DOI: 10.5281/zenodo.20101359.
 - v0.2.4 version DOI: 10.5281/zenodo.20101360.
+- v0.2.5 version DOI: 10.5281/zenodo.20111119.
 - CITATION.cff contains the all-versions DOI.
 - .zenodo.json is present.
 - README.md contains a Zenodo DOI badge and citation guidance.
-- The v0.2.5 version-specific DOI has not been verified in this branch. Do not add it to README.md or CITATION.cff by guessing.
+- The v0.2.5 version-specific DOI has been verified by `agentic-kit post-release-check --version 0.2.5`: 10.5281/zenodo.20111119.
 
 Post-v0.2.5 external review signal:
 
@@ -73,7 +74,7 @@ Current branch work:
 
 - docs/STATUS.md records the post-v0.2.5 external-review planning signal and roadmap.
 - This handoff points future agents to the same roadmap.
-- README.md and CITATION.cff are not changed on this branch because the v0.2.5 version-specific Zenodo DOI has not been verified in this branch.
+- README.md and CITATION.cff may now mention the verified v0.2.5 version DOI: 10.5281/zenodo.20111119.
 - The branch explicitly avoids code changes, tags, release artifacts, publication artifacts, merges, direct main writes, and repository setting changes.
 
 ## Positioning Notes
@@ -153,8 +154,8 @@ Evidence still required after the roadmap status updates on this branch:
 - Run the required local gate.
 - If the gates pass, open a PR for the roadmap-only update.
 - After merge, the next implementation branch should be feature/post-release-zenodo-check.
-- Verify Zenodo separately. Only after the v0.2.5 version-specific DOI is known should README.md or CITATION.cff be updated.
+- The v0.2.5 version-specific DOI is known and verified: 10.5281/zenodo.20111119.
 
 ## Next Safe Step
 
-Pull docs/roadmap-after-grok-review locally and run the required local gate. Expected result: tests, ruff, check-docs, and doctor pass; GitHub release v0.2.5 exists. Do not update DOI metadata by guessing.
+Run the required local gate on docs/update-v025-zenodo-doi. Expected result: tests, ruff, check-docs, doctor, and post-release-check pass.
