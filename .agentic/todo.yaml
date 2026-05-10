@@ -1,0 +1,7 @@
+items:
+  - id: SELF-GATE-001
+    title: Keep repository self gates active
+    owner: maintainer
+    priority: normal
+    status: done
+    evidence_required: sentinel.yaml and .agentic/todo.yaml are present so agentic-kit doctor can validate TODO gates
