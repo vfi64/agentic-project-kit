@@ -8,7 +8,7 @@ Current version: 0.2.4
 
 ## Current Goal
 
-Prepare a small release-visibility and positioning cut for a maintainer-owned v0.2.5 release decision. The branch should make the post-v0.2.4 health-check, policy-pack, documentation-coverage, TODO-gate, and semantic-boundary work visible without performing release-owned actions.
+Prepare a small release-visibility and positioning cut for a maintainer-owned v0.2.5 release decision. The branch should make the post-v0.2.4 health-check, policy-pack, documentation-coverage, machine-readable task-gate, and semantic-boundary work visible without performing release-owned actions.
 
 ## Current Repository State
 
@@ -28,7 +28,7 @@ Important merged post-v0.2.4 work on main:
 - PR #27 documented agentic-kit doctor in README.md.
 - PR #28 added documentation coverage drift checks and Remote Work Authorization.
 - PR #29 added project contract, profiles, and policy packs.
-- PR #30 added self sentinel and TODO gates.
+- PR #30 added self sentinel and machine-readable task gates.
 - PR #31 activated policy-pack checks in doctor.
 - PR #32 defined the semantic quality boundary and added deterministic document-quality heuristics.
 
