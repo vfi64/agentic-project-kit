@@ -8,7 +8,7 @@ Current version: 0.2.4
 
 ## Purpose
 
-agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, TODO tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, architecture-contract governance, documentation coverage checks, generated project contracts, project profiles, policy packs, policy-pack doctor checks, and deterministic document-quality heuristics.
+agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, task tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, architecture-contract governance, documentation coverage checks, generated project contracts, project profiles, policy packs, policy-pack doctor checks, and deterministic document-quality heuristics.
 
 The project itself has a current state layer so work can be continued from the repository state files.
 
@@ -28,7 +28,7 @@ Merged post-v0.2.4 work on main includes:
 - PR #27 documented agentic-kit doctor in README.md.
 - PR #28 added documentation coverage drift checks and Remote Work Authorization.
 - PR #29 added project contract, profiles, and policy packs.
-- PR #30 added self sentinel and TODO gates.
+- PR #30 added self sentinel and machine-readable task gates.
 - PR #31 activated policy-pack checks in doctor.
 - PR #32 defined the semantic quality boundary and added deterministic document-quality heuristics.
 
@@ -51,11 +51,11 @@ Project-level state documentation is machine-checkable:
 - docs/architecture/ARCHITECTURE_CONTRACT.md is a required state gate document.
 - docs/DOCUMENTATION_COVERAGE.yaml is a documentation coverage matrix.
 - Documentation coverage checks that public commands, workflows, governance concepts, release topics, evidence conventions, state-doc expectations, policy-pack doctor checks, and semantic quality boundary language remain visible.
-- sentinel.yaml and .agentic/todo.yaml are present so the repository validates its own TODO gate configuration.
+- sentinel.yaml and .agentic/todo.yaml are present so the repository validates its own machine-readable task gate configuration.
 
 Project health diagnostics are CLI-supported:
 
-- agentic-kit doctor checks required project files, project contract status, policy-pack checks, documentation gates, TODO gates, and version drift.
+- agentic-kit doctor checks required project files, project contract status, policy-pack checks, documentation gates, machine-readable task gates, and version drift.
 - agentic-kit check-docs checks documentation coverage and deterministic document-quality heuristics.
 - agentic-kit release-plan and agentic-kit release-check support release-state validation before maintainer-owned tagging and publication.
 
@@ -76,7 +76,7 @@ Latest validated local gates at branch creation:
 
 ## Current Goal
 
-Prepare a small release-visibility and positioning cut for a maintainer-owned v0.2.5 release decision. The branch should make the post-v0.2.4 health-check, policy-pack, documentation-coverage, TODO-gate, and semantic-boundary work visible without performing release-owned actions.
+Prepare a small release-visibility and positioning cut for a maintainer-owned v0.2.5 release decision. The branch should make the post-v0.2.4 health-check, policy-pack, documentation-coverage, machine-readable task-gate, and semantic-boundary work visible without performing release-owned actions.
 
 ## Current Blockers
 
