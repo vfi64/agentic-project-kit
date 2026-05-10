@@ -31,10 +31,11 @@ STALE_HANDOFF_MARKERS = (
     "Run the local gate, inspect the diff, then commit the documentation-state update",
 )
 
+OPEN_MARKER_BOUNDARY = r"(?:^|[\s\[{(<]){marker}(?:\s*[:\-]|[\]}>)])"
 QUALITY_PLACEHOLDER_PATTERNS = {
-    "TODO": re.compile(r"(^|[\s\[{(<])TODO([\s\]}>)?:-]|$)"),
-    "TBD": re.compile(r"(^|[\s\[{(<])TBD([\s\]}>)?:-]|$)"),
-    "FIXME": re.compile(r"(^|[\s\[{(<])FIXME([\s\]}>)?:-]|$)"),
+    "TODO": re.compile(OPEN_MARKER_BOUNDARY.format(marker="TODO")),
+    "TBD": re.compile(OPEN_MARKER_BOUNDARY.format(marker="TBD")),
+    "FIXME": re.compile(OPEN_MARKER_BOUNDARY.format(marker="FIXME")),
     "Lorem ipsum": re.compile(r"Lorem ipsum", re.IGNORECASE),
     "coming soon": re.compile(r"coming soon", re.IGNORECASE),
     "to be written": re.compile(r"to be written", re.IGNORECASE),
