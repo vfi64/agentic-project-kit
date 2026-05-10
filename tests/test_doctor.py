@@ -5,6 +5,7 @@ from agentic_project_kit.doctor import DoctorStatus, build_doctor_report, render
 
 def _write_state_docs(root: Path, version: str = "1.2.3") -> None:
     (root / "docs/handoff").mkdir(parents=True)
+    (root / "docs/architecture").mkdir(parents=True)
     (root / "docs/STATUS.md").write_text(
         f"Current version: {version}\n\n## Current Goal\nMaintain project state.\n\n## Next Safe Step\nRun gates.\n",
         encoding="utf-8",
@@ -12,6 +13,15 @@ def _write_state_docs(root: Path, version: str = "1.2.3") -> None:
     (root / "docs/TEST_GATES.md").write_text("## Gate Matrix\npytest\n\n## Outcome Reporting\nreport exits\n", encoding="utf-8")
     (root / "docs/handoff/CURRENT_HANDOFF.md").write_text(
         f"# Current Handoff\n\nCurrent version: {version}\n\n## Current\nClean.\n\n## Next\nContinue.\n",
+        encoding="utf-8",
+    )
+    (root / "docs/architecture/ARCHITECTURE_CONTRACT.md").write_text(
+        "# Architecture Contract and Roadmap\n\n"
+        "## 1. Executive Summary\n\n"
+        "## 2. How to Use This Document\n\n"
+        "## 4. Decision Rules\n\n"
+        "## 7. Architectural Contract\n\n"
+        "## 16. Acceptance Criteria for Future Work\n",
         encoding="utf-8",
     )
 

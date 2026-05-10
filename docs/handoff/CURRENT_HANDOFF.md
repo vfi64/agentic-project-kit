@@ -2,13 +2,13 @@
 
 Status-date: 2026-05-10
 Project: agentic-project-kit
-Branch: docs/update-state-after-doctor-version-drift
+Branch: feature/enforce-architecture-contract-review
 Base branch: main
 Current version: 0.2.4
 
 ## Current Goal
 
-Record the merged doctor version-drift detection in STATUS and CURRENT_HANDOFF.
+Make the architecture contract hard to ignore by adding agent instructions, a pull request template, documentation-gate validation for docs/architecture/ARCHITECTURE_CONTRACT.md, and explicit architecture-contract evidence requirements.
 
 ## Current Repository State
 
@@ -38,6 +38,7 @@ Important completed work:
 - PR #19 added the assigned Zenodo DOI to README.md, CITATION.cff, STATUS, and CURRENT_HANDOFF.
 - PR #20 added the first agentic-kit doctor MVP.
 - PR #22 extended agentic-kit doctor with version-drift detection.
+- PR #25 added research-informed architecture planning inputs, the architecture contract, and bibliography.
 
 Zenodo state:
 
@@ -60,22 +61,28 @@ Doctor state:
 
 Current branch work:
 
-- docs/STATUS.md records the merged doctor version-drift detection and latest validation evidence.
-- docs/handoff/CURRENT_HANDOFF.md records the current doctor state and next safe step.
+- AGENTS.md added for repository-local agent instructions.
+- .github/pull_request_template.md added with an architecture-contract checkbox and evidence block.
+- src/agentic_project_kit/checks.py updated so docs/architecture/ARCHITECTURE_CONTRACT.md is a required state gate document for check-docs.
+- tests/test_checks.py updated to cover the architecture contract gate.
+- docs/TEST_GATES.md updated with an explicit Architecture Contract Gate.
+- docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md updated for this branch.
 
 ## Source of Truth
 
 Read in this order:
 
-1. README.md
-2. CITATION.cff
-3. .zenodo.json
-4. CHANGELOG.md
-5. docs/STATUS.md
-6. docs/TEST_GATES.md
-7. docs/handoff/CURRENT_HANDOFF.md
-8. src/agentic_project_kit/
-9. tests/
+1. docs/architecture/ARCHITECTURE_CONTRACT.md
+2. AGENTS.md
+3. README.md
+4. CITATION.cff
+5. .zenodo.json
+6. CHANGELOG.md
+7. docs/STATUS.md
+8. docs/TEST_GATES.md
+9. docs/handoff/CURRENT_HANDOFF.md
+10. src/agentic_project_kit/
+11. tests/
 
 ## Required Local Gate
 
@@ -90,7 +97,7 @@ Run:
 
 ## Latest Known Evidence
 
-Last known successful checks after PR #22:
+Last known successful checks before this branch:
 
 - python -m pytest -q -> 33 passed
 - ruff check . -> passed
@@ -98,14 +105,17 @@ Last known successful checks after PR #22:
 - agentic-kit doctor -> Overall PASS
 - agentic-kit doctor version drift -> project state matches version 0.2.4
 
+Branch evidence still required locally after pulling feature/enforce-architecture-contract-review.
+
 ## Current Open Work
 
-- Pull docs/update-state-after-doctor-version-drift locally.
+- Pull feature/enforce-architecture-contract-review locally.
 - Run the required local gate.
+- Inspect the architecture-contract enforcement changes.
 - Merge the branch after validation.
 
 ## Next Safe Step
 
-Pull docs/update-state-after-doctor-version-drift locally and run the required local gate. If it passes, open and merge the state update PR.
+Pull feature/enforce-architecture-contract-review locally and run the required local gate. If it passes, open and merge the architecture-contract enforcement PR.
 
-After this branch is merged, the next functional development block should extend agentic-kit doctor toward README/status drift, citation metadata drift, TODO render staleness, and generated-project health issues.
+After this branch is merged, the next functional development block can start the project-contract and policy-pack implementation.
