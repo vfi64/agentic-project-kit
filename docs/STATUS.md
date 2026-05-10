@@ -3,12 +3,12 @@
 Status-date: 2026-05-10
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: feature/documentation-coverage-drift
+Current work branch: feature/project-contract-policy-packs
 Current version: 0.2.4
 
 ## Purpose
 
-agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, TODO tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, architecture-contract governance, and documentation coverage checks.
+agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, TODO tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, architecture-contract governance, documentation coverage checks, generated project contracts, project profiles, and policy packs.
 
 The project itself has a current state layer so work can be continued from the repository state files.
 
@@ -48,6 +48,7 @@ Project-level state documentation is present on main:
 - docs/architecture/ARCHITECTURE_CONTRACT.md
 - docs/architecture/AGENTIC_CODING_RESEARCH_INPUTS.md
 - docs/architecture/references.bib
+- docs/DOCUMENTATION_COVERAGE.yaml
 
 Project-level state documentation is machine-checkable:
 
@@ -55,8 +56,8 @@ Project-level state documentation is machine-checkable:
 - sentinel.yaml is optional for check-docs, so the kit repository root can be checked directly.
 - stale handoff markers are detected in docs/handoff/CURRENT_HANDOFF.md.
 - docs/architecture/ARCHITECTURE_CONTRACT.md is a required state gate document.
-- docs/DOCUMENTATION_COVERAGE.yaml is being added as a documentation coverage matrix on branch feature/documentation-coverage-drift.
-- documentation coverage will check that public commands, workflows, governance concepts, safety rules, release/citation topics, evidence conventions, and state-doc expectations remain visible in the expected documents.
+- docs/DOCUMENTATION_COVERAGE.yaml is a documentation coverage matrix.
+- documentation coverage checks that public commands, workflows, governance concepts, safety rules, release/citation topics, evidence conventions, and state-doc expectations remain visible in the expected documents.
 
 Release preparation is CLI-supported:
 
@@ -78,11 +79,23 @@ Project health diagnostics are CLI-supported:
 - PR #22 extended doctor with version-drift detection across project state and citation files.
 - PR #26 enforced architecture contract review gates.
 - PR #27 documented agentic-kit doctor in README.md.
+- PR #28 added documentation coverage drift checks.
+- On this branch, doctor reports and validates `.agentic/project.yaml` when it is present.
 - The doctor command reports PASS, WARN, and FAIL entries and exits non-zero only when required checks fail.
+
+Project contract and policy-pack work on this branch:
+
+- `src/agentic_project_kit/contract.py` defines the project contract schema helpers, known profiles, known policy packs, defaults, recommendations, validation, and summary rendering.
+- `agentic-kit init` now writes `.agentic/project.yaml`.
+- `agentic-kit init` accepts `--profiles` and `--policy-packs` for explicit selection.
+- The repository now contains its own `.agentic/project.yaml` so doctor can validate the kit's active profiles and policy packs instead of warning that the contract is absent.
+- Generated projects point agents to `.agentic/project.yaml` in README, AGENTS, PROJECT_START, STATUS, TEST_GATES, and handoff files.
+- README.md documents project contract, profiles, and policy packs.
+- docs/DOCUMENTATION_COVERAGE.yaml now protects project contract, profile, and policy-pack visibility.
 
 Latest validated gates before this branch:
 
-- python -m pytest -q -> 33 passed
+- python -m pytest -q -> 37 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
 - agentic-kit doctor -> Overall PASS
@@ -90,11 +103,11 @@ Latest validated gates before this branch:
 
 ## Current Goal
 
-Add a comprehensive documentation coverage drift check so public commands, workflows, governance concepts, safety rules, release/citation topics, and evidence expectations cannot silently disappear from the documentation set.
+Implement the first project-contract/profile/policy-pack MVP without turning the kit into a Python-only system. The first cut must stay language-neutral at the architecture level and treat Python as one selectable profile.
 
 ## Current Blockers
 
-- None known.
+- Local gate still required after pulling this branch.
 
 ## Live Status Commands
 
@@ -109,6 +122,4 @@ agentic-kit doctor
 
 ## Next Safe Step
 
-Pull feature/documentation-coverage-drift locally and run the local gate. If it passes, review docs/DOCUMENTATION_COVERAGE.yaml for useful coverage without overfitting and merge the branch.
-
-After this branch is merged, the next functional development block can start the project-contract and policy-pack implementation.
+Pull feature/project-contract-policy-packs locally and run the local gate. If it passes, review the generated `.agentic/project.yaml` behavior and open/merge the PR after maintainer approval.

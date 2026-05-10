@@ -1,0 +1,21 @@
+version: 1
+project:
+  name: agentic-project-kit
+  description: Agent-friendly project skeleton generator with architecture governance, documentation gates, project health diagnostics, release-state validation, and project contract support.
+  type: python-cli
+profiles:
+  - generic-git-repo
+  - markdown-docs
+  - python-cli
+  - git-github
+  - release-managed
+policy_packs:
+  - solo-maintainer
+  - agentic-development
+  - release-managed
+  - documentation-governed
+governance:
+  architecture_contract_required: true
+  documentation_coverage_required: true
+  doctor_before_merge: true
+  human_owns_merge_release_and_publication: true

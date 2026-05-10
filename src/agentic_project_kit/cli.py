@@ -6,6 +6,13 @@ from rich.console import Console
 from rich.prompt import Confirm, Prompt
 
 from agentic_project_kit.checks import check_all, check_docs, check_todo
+from agentic_project_kit.contract import (
+    default_profiles,
+    recommended_policy_packs,
+    validate_ids,
+    PROFILE_DEFINITIONS,
+    POLICY_PACK_DEFINITIONS,
+)
 from agentic_project_kit.doctor import build_doctor_report, render_doctor_report
 from agentic_project_kit.github import create_github_repo
 from agentic_project_kit.release import (
@@ -80,6 +87,16 @@ def init(
     pre_commit: bool = typer.Option(True, "--pre-commit/--no-pre-commit"),
     agent_docs: bool = typer.Option(True, "--agent-docs/--no-agent-docs"),
     logging_evidence: bool = typer.Option(True, "--logging-evidence/--no-logging-evidence"),
+    profiles: str | None = typer.Option(
+        None,
+        "--profiles",
+        help="Comma-separated profile ids. Defaults are recommended from project type.",
+    ),
+    policy_packs: str | None = typer.Option(
+        None,
+        "--policy-packs",
+        help="Comma-separated policy pack ids. Defaults are recommended from project type.",
+    ),
     github: bool = typer.Option(False, "--github/--no-github"),
     github_owner: str | None = typer.Option(None, "--owner"),
     visibility: str = typer.Option("private", "--visibility", help="private or public"),
@@ -100,6 +117,20 @@ def init(
     if kit_source not in {"pypi", "testpypi", "none"}:
         raise typer.BadParameter("kit source must be pypi, testpypi, or none")
 
+    selected_profiles = _parse_csv(profiles) or default_profiles(
+        project_type,
+        github_actions=github_actions,
+    )
+    selected_policy_packs = _parse_csv(policy_packs) or recommended_policy_packs(
+        project_type,
+        github_actions=github_actions,
+        logging_evidence=logging_evidence,
+    )
+    errors = validate_ids("profile", selected_profiles, PROFILE_DEFINITIONS)
+    errors.extend(validate_ids("policy pack", selected_policy_packs, POLICY_PACK_DEFINITIONS))
+    if errors:
+        raise typer.BadParameter("; ".join(errors))
+
     target = Path(name).resolve()
     options = ProjectOptions(
         name=name,
@@ -112,10 +143,14 @@ def init(
         logging_evidence=logging_evidence,
         target_dir=target,
         kit_source=kit_source,
+        profiles=selected_profiles,
+        policy_packs=selected_policy_packs,
     )
 
     create_project(options)
     console.print(f"[green]Created project:[/green] {target}")
+    console.print("Recommended profiles: " + ", ".join(selected_profiles))
+    console.print("Recommended policy packs: " + ", ".join(selected_policy_packs))
 
     subprocess.run(["git", "add", "."], cwd=target, check=False)
     subprocess.run(["git", "commit", "-m", "Initialize agentic project"], cwd=target, check=False)
@@ -135,6 +170,7 @@ def init(
     console.print('  pip install -e ".[dev]"', markup=False)
     console.print("  pytest -q")
     console.print("  agentic-kit check")
+    console.print("  agentic-kit doctor")
 
 
 @app.command("check")
@@ -210,6 +246,12 @@ def _print_result(errors: list[str]) -> None:
             console.print(f"[red]- {error}[/red]")
         raise typer.Exit(code=1)
     console.print("[bold green]Agentic project check passed[/bold green]")
+
+
+def _parse_csv(value: str | None) -> tuple[str, ...]:
+    if value is None:
+        return ()
+    return tuple(item.strip() for item in value.split(",") if item.strip())
 
 
 if __name__ == "__main__":

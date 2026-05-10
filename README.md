@@ -4,7 +4,7 @@
 
 `agentic-project-kit` is a local Python package for generating GitHub-ready project skeletons for human-AI software development workflows.
 
-It creates not only files, but a reusable development process: agent onboarding, status discipline, test gates, TODO tracking, bounded logging conventions, and optional GitHub automation.
+It creates not only files, but a reusable development process: agent onboarding, project contract, profile and policy pack selection, status discipline, test gates, TODO tracking, bounded logging conventions, and optional GitHub automation.
 
 ## Why this exists
 
@@ -17,6 +17,8 @@ This kit turns those lessons into a reusable starter system for new repositories
 A generated project includes:
 
 - professional GitHub repository structure
+- `.agentic/project.yaml` as a machine-readable project contract
+- recommended project profiles and policy packs
 - `AGENTS.md` with stable agent rules and closeout expectations
 - `docs/PROJECT_START.md` for first-run decisions
 - `docs/STATUS.md` as compact current-state dashboard
@@ -82,6 +84,25 @@ agentic-kit check
 agentic-kit doctor
 ```
 
+## Project contract, profiles, and policy packs
+
+Generated projects contain `.agentic/project.yaml` as a machine-readable project contract. It records the project name, description, project type, selected profiles, selected policy packs, and basic governance expectations.
+
+Profiles describe what kind of repository the project is, for example `generic-git-repo`, `markdown-docs`, `python-cli`, `python-lib`, `git-github`, or `release-managed`.
+
+Policy packs describe which development rules are recommended for the project goal, for example `starter`, `prototype`, `solo-maintainer`, `agentic-development`, `release-managed`, or `documentation-governed`.
+
+By default, `agentic-kit init` recommends profiles and policy packs from the selected project type and enabled features. You can override them explicitly:
+
+```bash
+agentic-kit init my-docs-project \
+  --type generic \
+  --profiles generic-git-repo,markdown-docs \
+  --policy-packs starter,documentation-governed
+```
+
+`agentic-kit doctor` validates the project contract when `.agentic/project.yaml` is present and reports selected profiles and policy packs.
+
 ## Project health check
 
 Use `agentic-kit doctor` as the compact repository health check:
@@ -90,7 +111,7 @@ Use `agentic-kit doctor` as the compact repository health check:
 agentic-kit doctor
 ```
 
-It reports required project files, documentation gates, TODO validation when configured, and version-drift checks. The command exits non-zero only when required checks fail.
+It reports required project files, project contract status, documentation gates, TODO validation when configured, and version-drift checks. The command exits non-zero only when required checks fail.
 
 Example output shape:
 
@@ -100,6 +121,7 @@ Agentic project doctor report for /path/to/project
 [PASS] pyproject.toml: present
 [PASS] README.md: present
 [WARN] sentinel.yaml: missing optional project file
+[PASS] project contract: my-project; profiles: generic-git-repo, python-cli; policy packs: starter, solo-maintainer
 [PASS] documentation gates: passed
 [WARN] todo gates: sentinel.yaml absent; skipped TODO validation
 [PASS] version drift: project state matches version 0.2.4
@@ -157,8 +179,9 @@ Generated projects separate:
 - output from outcome
 - logs from committed source state
 - agent instructions from project overview
+- project profiles from policy packs
 
-Agents should start with `AGENTS.md`, `docs/PROJECT_START.md`, `docs/STATUS.md`, and `docs/TEST_GATES.md`. They should not infer current state from memory or stale prose.
+Agents should start with `AGENTS.md`, `.agentic/project.yaml`, `docs/PROJECT_START.md`, `docs/STATUS.md`, and `docs/TEST_GATES.md`. They should not infer current state from memory or stale prose.
 
 ## Documentation coverage and drift checks
 
@@ -192,4 +215,4 @@ This kit creates a fresh repository from generic templates. It does not copy a p
 
 ## Current status
 
-Version `0.2.4` is an early MVP with release-state validation, project-health diagnostics, documentation coverage checks, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
+Version `0.2.4` is an early MVP with release-state validation, project-health diagnostics, documentation coverage checks, generated project contracts, project profiles, policy packs, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.

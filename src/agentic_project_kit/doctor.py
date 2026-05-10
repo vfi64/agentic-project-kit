@@ -6,6 +6,12 @@ from enum import Enum
 from pathlib import Path
 
 from agentic_project_kit.checks import check_docs, check_todo
+from agentic_project_kit.contract import (
+    CONTRACT_PATH,
+    contract_summary,
+    load_project_contract,
+    validate_project_contract,
+)
 
 
 class DoctorStatus(str, Enum):
@@ -39,6 +45,7 @@ def build_doctor_report(project_root: Path) -> DoctorReport:
         _path_check(root, "README.md", required=True),
         _path_check(root, "sentinel.yaml", required=False),
         _path_check(root, ".github/workflows/ci.yml", required=False),
+        _project_contract_check(root),
         _docs_check(root),
         _todo_check(root),
         _version_drift_check(root),
@@ -61,6 +68,19 @@ def _path_check(project_root: Path, relative_path: str, *, required: bool) -> Do
     if required:
         return DoctorCheck(relative_path, DoctorStatus.FAIL, "missing")
     return DoctorCheck(relative_path, DoctorStatus.WARN, "missing optional project file")
+
+
+def _project_contract_check(project_root: Path) -> DoctorCheck:
+    try:
+        data = load_project_contract(project_root)
+    except ValueError as exc:
+        return DoctorCheck("project contract", DoctorStatus.FAIL, str(exc))
+    if data is None:
+        return DoctorCheck("project contract", DoctorStatus.WARN, f"{CONTRACT_PATH} absent")
+    errors = validate_project_contract(data)
+    if errors:
+        return DoctorCheck("project contract", DoctorStatus.FAIL, "; ".join(errors))
+    return DoctorCheck("project contract", DoctorStatus.PASS, contract_summary(data))
 
 
 def _docs_check(project_root: Path) -> DoctorCheck:
