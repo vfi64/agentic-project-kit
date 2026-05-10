@@ -3,12 +3,12 @@
 Status-date: 2026-05-10
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: feature/enforce-architecture-contract-review
+Current work branch: feature/documentation-coverage-drift
 Current version: 0.2.4
 
 ## Purpose
 
-agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, TODO tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, and architecture-contract governance.
+agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, TODO tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, architecture-contract governance, and documentation coverage checks.
 
 The project itself has a current state layer so work can be continued from the repository state files.
 
@@ -54,7 +54,9 @@ Project-level state documentation is machine-checkable:
 - agentic-kit check-docs checks the state gate documents.
 - sentinel.yaml is optional for check-docs, so the kit repository root can be checked directly.
 - stale handoff markers are detected in docs/handoff/CURRENT_HANDOFF.md.
-- The architecture contract is being promoted to a required state gate document on branch feature/enforce-architecture-contract-review.
+- docs/architecture/ARCHITECTURE_CONTRACT.md is a required state gate document.
+- docs/DOCUMENTATION_COVERAGE.yaml is being added as a documentation coverage matrix on branch feature/documentation-coverage-drift.
+- documentation coverage will check that public commands, workflows, governance concepts, safety rules, release/citation topics, evidence conventions, and state-doc expectations remain visible in the expected documents.
 
 Release preparation is CLI-supported:
 
@@ -74,6 +76,8 @@ Project health diagnostics are CLI-supported:
 - PR #20 added agentic-kit doctor.
 - The first doctor MVP checks required README.md, optional pyproject.toml, optional sentinel.yaml, optional .github/workflows/ci.yml, documentation gates, and TODO gates when sentinel.yaml is present.
 - PR #22 extended doctor with version-drift detection across project state and citation files.
+- PR #26 enforced architecture contract review gates.
+- PR #27 documented agentic-kit doctor in README.md.
 - The doctor command reports PASS, WARN, and FAIL entries and exits non-zero only when required checks fail.
 
 Latest validated gates before this branch:
@@ -86,7 +90,7 @@ Latest validated gates before this branch:
 
 ## Current Goal
 
-Make the architecture contract hard to ignore by adding agent instructions, a pull request template, documentation-gate validation for docs/architecture/ARCHITECTURE_CONTRACT.md, and explicit architecture-contract evidence requirements.
+Add a comprehensive documentation coverage drift check so public commands, workflows, governance concepts, safety rules, release/citation topics, and evidence expectations cannot silently disappear from the documentation set.
 
 ## Current Blockers
 
@@ -105,6 +109,6 @@ agentic-kit doctor
 
 ## Next Safe Step
 
-Pull feature/enforce-architecture-contract-review locally and run the local gate. If it passes, open and merge the branch.
+Pull feature/documentation-coverage-drift locally and run the local gate. If it passes, review docs/DOCUMENTATION_COVERAGE.yaml for useful coverage without overfitting and merge the branch.
 
 After this branch is merged, the next functional development block can start the project-contract and policy-pack implementation.
