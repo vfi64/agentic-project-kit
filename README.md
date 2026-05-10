@@ -44,6 +44,8 @@ Run the local gate:
 ```bash
 pytest -q
 ruff check .
+agentic-kit check-docs
+agentic-kit doctor
 agentic-kit --help
 ```
 
@@ -77,6 +79,32 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 pytest -q
 agentic-kit check
+agentic-kit doctor
+```
+
+## Project health check
+
+Use `agentic-kit doctor` as the compact repository health check:
+
+```bash
+agentic-kit doctor
+```
+
+It reports required project files, documentation gates, TODO validation when configured, and version-drift checks. The command exits non-zero only when required checks fail.
+
+Example output shape:
+
+```text
+Agentic project doctor report for /path/to/project
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[WARN] sentinel.yaml: missing optional project file
+[PASS] documentation gates: passed
+[WARN] todo gates: sentinel.yaml absent; skipped TODO validation
+[PASS] version drift: project state matches version 0.2.4
+
+Overall: PASS
 ```
 
 ## TODO workflow
@@ -140,4 +168,4 @@ This kit creates a fresh repository from generic templates. It does not copy a p
 
 ## Current status
 
-Version `0.2.4` is an early MVP with release-state validation and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
+Version `0.2.4` is an early MVP with release-state validation, project-health diagnostics, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
