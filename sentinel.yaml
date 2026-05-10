@@ -1,0 +1,43 @@
+documents:
+  - path: README.md
+    required_sections:
+      - "## Why this exists"
+      - "## Quick start"
+      - "## Project contract, profiles, and policy packs"
+      - "## Project health check"
+      - "## Documentation coverage and drift checks"
+      - "## Current status"
+    max_words: 3500
+  - path: AGENTS.md
+    required_sections:
+      - "## Required Reading Order"
+      - "## Architecture Contract Rule"
+      - "## Documentation Coverage Rule"
+      - "## Remote Work Authorization"
+      - "## Required Local Gate"
+    max_words: 2500
+  - path: docs/STATUS.md
+    required_sections:
+      - "## Current State"
+      - "## Current Goal"
+      - "## Live Status Commands"
+      - "## Next Safe Step"
+    max_words: 3500
+  - path: docs/TEST_GATES.md
+    required_sections:
+      - "## Gate Matrix"
+      - "## Architecture Contract Gate"
+      - "## Documentation Coverage Gate"
+      - "## Standard Local Gate"
+      - "## Outcome Reporting"
+    max_words: 2500
+  - path: docs/handoff/CURRENT_HANDOFF.md
+    required_sections:
+      - "## Current Goal"
+      - "## Current Repository State"
+      - "## Source of Truth"
+      - "## Required Local Gate"
+      - "## Next Safe Step"
+    max_words: 4000
+todo:
+  path: .agentic/todo.yaml
