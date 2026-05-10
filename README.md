@@ -178,6 +178,14 @@ agentic-kit release-check --version 0.2.5
 
 These commands help prevent release-state drift between `pyproject.toml`, `CHANGELOG.md`, project state files, local tags, remote tags, GitHub releases, and citation metadata.
 
+Use `agentic-kit post-release-check` after publishing a GitHub release:
+
+```bash
+agentic-kit post-release-check --version 0.2.5
+```
+
+This command checks that the GitHub release exists and then looks for a verified Zenodo version record derived from the DOI in `CITATION.cff`. If Zenodo has not archived the release yet, the command reports `WAITING` and leaves README/CITATION DOI metadata unchanged. It is intentionally separate from `release-check`, because `release-check` is a pre-release gate that expects the tag and GitHub release to be unused.
+
 ## TODO workflow
 
 Generated projects contain a machine-readable TODO file and a rendered Markdown view.
@@ -277,6 +285,6 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.2.5` is an early MVP release candidate with release-state validation, project-health diagnostics, policy-pack doctor checks, deterministic document-quality heuristics, documentation coverage checks, generated project contracts, project profiles, policy packs, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
+Version `0.2.5` is an early MVP release candidate with release-state validation, post-release Zenodo verification, project-health diagnostics, policy-pack doctor checks, deterministic document-quality heuristics, documentation coverage checks, generated project contracts, project profiles, policy packs, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, checking post-release Zenodo archive state, and archiving releases through the Zenodo GitHub integration.
 
 This repository is prepared for maintainer-owned v0.2.5 release validation. Tag creation, GitHub release publication, package publication, and Zenodo archival remain separate maintainer-approved steps.
