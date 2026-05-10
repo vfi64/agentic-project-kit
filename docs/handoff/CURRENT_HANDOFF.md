@@ -2,13 +2,13 @@
 
 Status-date: 2026-05-10
 Project: agentic-project-kit
-Branch: feature/enforce-architecture-contract-review
+Branch: feature/documentation-coverage-drift
 Base branch: main
 Current version: 0.2.4
 
 ## Current Goal
 
-Make the architecture contract hard to ignore by adding agent instructions, a pull request template, documentation-gate validation for docs/architecture/ARCHITECTURE_CONTRACT.md, and explicit architecture-contract evidence requirements.
+Add a comprehensive documentation coverage drift check so public commands, workflows, governance concepts, safety rules, release/citation topics, and evidence expectations cannot silently disappear from the documentation set.
 
 ## Current Repository State
 
@@ -39,6 +39,8 @@ Important completed work:
 - PR #20 added the first agentic-kit doctor MVP.
 - PR #22 extended agentic-kit doctor with version-drift detection.
 - PR #25 added research-informed architecture planning inputs, the architecture contract, and bibliography.
+- PR #26 enforced architecture contract review gates.
+- PR #27 documented agentic-kit doctor in README.md.
 
 Zenodo state:
 
@@ -55,17 +57,21 @@ Doctor state:
 - agentic-kit doctor exists on main after PR #20.
 - It checks required README.md, optional pyproject.toml, optional sentinel.yaml, optional .github/workflows/ci.yml, documentation gates, and TODO gates when sentinel.yaml is present.
 - It now also detects version drift across project state and citation files.
+- PR #26 made docs/architecture/ARCHITECTURE_CONTRACT.md a required state gate document and added agent/PR contract-review rules.
+- On this branch, docs/DOCUMENTATION_COVERAGE.yaml is added as a required state gate document.
+- On this branch, agentic-kit check-docs validates coverage terms across README, AGENTS.md, TEST_GATES, STATUS, CURRENT_HANDOFF, and architecture docs.
 - In the kit repository root, sentinel.yaml is currently absent and therefore reported as WARN, not FAIL.
-- The latest validated doctor run reported Overall: PASS.
+- The latest validated doctor run before this branch reported Overall: PASS.
 - Version-drift validation reports: project state matches version 0.2.4.
 
 Current branch work:
 
-- AGENTS.md added for repository-local agent instructions.
-- .github/pull_request_template.md added with an architecture-contract checkbox and evidence block.
-- src/agentic_project_kit/checks.py updated so docs/architecture/ARCHITECTURE_CONTRACT.md is a required state gate document for check-docs.
-- tests/test_checks.py updated to cover the architecture contract gate.
-- docs/TEST_GATES.md updated with an explicit Architecture Contract Gate.
+- docs/DOCUMENTATION_COVERAGE.yaml added as a documentation coverage matrix.
+- src/agentic_project_kit/checks.py updated to validate documentation coverage terms.
+- tests/test_checks.py updated to cover documentation coverage validation.
+- README.md updated with release planning and documentation coverage sections.
+- AGENTS.md updated with a Documentation Coverage Rule.
+- docs/TEST_GATES.md updated with a Documentation Coverage Gate and doctor in the Standard Local Gate.
 - docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md updated for this branch.
 
 ## Source of Truth
@@ -73,16 +79,17 @@ Current branch work:
 Read in this order:
 
 1. docs/architecture/ARCHITECTURE_CONTRACT.md
-2. AGENTS.md
-3. README.md
-4. CITATION.cff
-5. .zenodo.json
-6. CHANGELOG.md
-7. docs/STATUS.md
-8. docs/TEST_GATES.md
-9. docs/handoff/CURRENT_HANDOFF.md
-10. src/agentic_project_kit/
-11. tests/
+2. docs/DOCUMENTATION_COVERAGE.yaml
+3. AGENTS.md
+4. README.md
+5. CITATION.cff
+6. .zenodo.json
+7. CHANGELOG.md
+8. docs/STATUS.md
+9. docs/TEST_GATES.md
+10. docs/handoff/CURRENT_HANDOFF.md
+11. src/agentic_project_kit/
+12. tests/
 
 ## Required Local Gate
 
@@ -105,17 +112,17 @@ Last known successful checks before this branch:
 - agentic-kit doctor -> Overall PASS
 - agentic-kit doctor version drift -> project state matches version 0.2.4
 
-Branch evidence still required locally after pulling feature/enforce-architecture-contract-review.
+Branch evidence still required locally after pulling feature/documentation-coverage-drift.
 
 ## Current Open Work
 
-- Pull feature/enforce-architecture-contract-review locally.
+- Pull feature/documentation-coverage-drift locally.
 - Run the required local gate.
-- Inspect the architecture-contract enforcement changes.
+- Inspect docs/DOCUMENTATION_COVERAGE.yaml for useful coverage without overfitting.
 - Merge the branch after validation.
 
 ## Next Safe Step
 
-Pull feature/enforce-architecture-contract-review locally and run the required local gate. If it passes, open and merge the architecture-contract enforcement PR.
+Pull feature/documentation-coverage-drift locally and run the required local gate. If it passes, review docs/DOCUMENTATION_COVERAGE.yaml and merge the documentation coverage drift PR.
 
 After this branch is merged, the next functional development block can start the project-contract and policy-pack implementation.
