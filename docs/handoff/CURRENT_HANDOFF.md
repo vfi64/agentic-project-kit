@@ -2,13 +2,13 @@
 
 Status-date: 2026-05-10
 Project: agentic-project-kit
-Branch: feature/policy-pack-doctor-checks
+Branch: feature/semantic-quality-boundary
 Base branch: main
 Current version: 0.2.4
 
 ## Current Goal
 
-Make selected policy packs operational in doctor by activating structural policy-pack checks from `.agentic/project.yaml`.
+Encode the semantic quality boundary and add deterministic document-quality heuristics without pretending to prove semantic perfection.
 
 ## Current Repository State
 
@@ -27,6 +27,7 @@ Important completed work:
 - PR #28 added documentation coverage drift checks and Remote Work Authorization.
 - PR #29 added project contract, profiles, and policy packs.
 - PR #30 added self sentinel and TODO gates.
+- PR #31 activated policy-pack checks in doctor.
 
 Zenodo state:
 
@@ -40,14 +41,15 @@ Zenodo state:
 
 Current branch work:
 
-- Doctor now reads selected policy packs from `.agentic/project.yaml`.
-- Doctor now emits a `policy pack checks` row.
-- Policy pack checks currently verify structural prerequisites for starter, prototype, solo-maintainer, agentic-development, release-managed, and documentation-governed.
-- README.md documents policy-pack doctor checks.
-- docs/DOCUMENTATION_COVERAGE.yaml protects visibility of policy-pack doctor checks.
-- docs/STATUS.md updated for this branch.
-- docs/handoff/CURRENT_HANDOFF.md updated for this branch.
-- tests/test_doctor.py covers passing and failing policy-pack checks.
+- docs/architecture/ARCHITECTURE_CONTRACT.md now defines the semantic quality boundary.
+- The architecture contract states that deterministic gates cannot prove semantic perfection.
+- LLM-based or human semantic review is reserved for advisory review, not hard doctor failures.
+- src/agentic_project_kit/checks.py adds deterministic document-quality heuristics for unresolved placeholder markers.
+- sentinel-configured documents run these quality checks by default and may opt out with `quality_checks: false`.
+- README.md documents deterministic document-quality heuristics and advisory review boundaries.
+- docs/TEST_GATES.md documents the document quality heuristic gate.
+- docs/DOCUMENTATION_COVERAGE.yaml protects the semantic quality boundary language.
+- tests/test_checks.py covers placeholder detection and per-document opt-out.
 
 ## Remote Work Authorization
 
@@ -86,19 +88,19 @@ Run:
 
 Last known successful checks before this branch:
 
-- python -m pytest -q -> 46 passed
+- python -m pytest -q -> 48 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
 - agentic-kit doctor -> Overall PASS
 
-Branch evidence still required locally after pulling feature/policy-pack-doctor-checks.
+Branch evidence still required locally after pulling feature/semantic-quality-boundary.
 
 ## Current Open Work
 
-- Pull feature/policy-pack-doctor-checks locally.
+- Pull feature/semantic-quality-boundary locally.
 - Run the required local gate.
 - If the gate passes, open/merge the PR after maintainer approval.
 
 ## Next Safe Step
 
-Pull feature/policy-pack-doctor-checks locally and run the required local gate. Expected result: tests, ruff, check-docs, and doctor pass with policy pack checks active.
+Pull feature/semantic-quality-boundary locally and run the required local gate. Expected result: tests, ruff, check-docs, and doctor pass.

@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Any
+import re
 import yaml
 
 
@@ -20,7 +21,7 @@ STATE_GATE_SECTIONS = {
         "## 2. How to Use This Document",
         "## 4. Decision Rules",
         "## 7. Architectural Contract",
-        "## 16. Acceptance Criteria for Future Work",
+        "## 17. Acceptance Criteria for Future Work",
     ),
 }
 
@@ -28,6 +29,30 @@ STALE_HANDOFF_MARKERS = (
     "Create project-level docs",
     "Commit documentation-state files",
     "Run the local gate, inspect the diff, then commit the documentation-state update",
+)
+
+
+def _open_marker_pattern(marker: str) -> re.Pattern[str]:
+    escaped_marker = re.escape(marker)
+    return re.compile(rf"(?:^|[\s\[{{(<]){escaped_marker}(?:\s*[:\-]|[\]}}>)])")
+
+
+QUALITY_PLACEHOLDER_PATTERNS = {
+    "TODO": _open_marker_pattern("TODO"),
+    "TBD": _open_marker_pattern("TBD"),
+    "FIXME": _open_marker_pattern("FIXME"),
+    "Lorem ipsum": re.compile(r"Lorem ipsum", re.IGNORECASE),
+    "coming soon": re.compile(r"coming soon", re.IGNORECASE),
+    "to be written": re.compile(r"to be written", re.IGNORECASE),
+    "to be defined": re.compile(r"to be defined", re.IGNORECASE),
+    "placeholder marker": re.compile(r"placeholder\s+(text|section|content|value)", re.IGNORECASE),
+}
+
+
+SEMANTIC_QUALITY_BOUNDARY = (
+    "Deterministic checks can detect placeholders, stale markers, coverage gaps, "
+    "and structural drift. They cannot prove semantic perfection. LLM review, "
+    "if added later, must remain advisory and separate from hard doctor gates."
 )
 
 
@@ -77,8 +102,24 @@ def check_docs(project_root: Path) -> list[str]:
             if words < int(min_words):
                 errors.append(f"{doc['path']}: too short ({words}/{min_words} words)")
 
+        if bool(doc.get("quality_checks", True)):
+            errors.extend(check_document_quality(doc["path"], content))
+
     errors.extend(check_state_gate_docs(project_root))
     errors.extend(check_documentation_coverage(project_root))
+    return errors
+
+
+def check_document_quality(relative_path: str, content: str) -> list[str]:
+    """Return deterministic document-quality findings.
+
+    These checks intentionally cover only machine-checkable quality signals.
+    They are not a claim of semantic perfection.
+    """
+    errors: list[str] = []
+    for marker, pattern in QUALITY_PLACEHOLDER_PATTERNS.items():
+        if pattern.search(content):
+            errors.append(f"{relative_path}: unresolved placeholder marker {marker!r}")
     return errors
 
 

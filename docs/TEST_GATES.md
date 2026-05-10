@@ -16,6 +16,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Documentation only | git diff, content review, and agentic-kit check-docs |
 | Architecture-relevant change | Read docs/architecture/ARCHITECTURE_CONTRACT.md; state whether the contract remains valid or is updated; run the standard local gate |
 | Documentation coverage change | Update docs/DOCUMENTATION_COVERAGE.yaml and run agentic-kit check-docs |
+| Document quality heuristic change | Unit tests plus agentic-kit check-docs; confirm that deterministic quality heuristics do not claim semantic perfection |
 | Python code | python -m pytest -q and ruff check . |
 | CLI behavior | Unit tests plus CLI smoke command; update docs/DOCUMENTATION_COVERAGE.yaml when public command visibility changes |
 | Generator behavior | Generator test plus generated-project file inspection |
@@ -69,6 +70,14 @@ Update it when adding or changing:
 - architecture concepts, profiles, or policy packs.
 
 `agentic-kit check-docs` must fail if a required term from the coverage matrix is missing from its target document.
+
+## Document Quality Heuristic Gate
+
+`agentic-kit check-docs` may use deterministic quality heuristics as hard checks for known machine-checkable problems, including unresolved placeholder markers, stale handoff markers, missing required sections, and missing coverage terms.
+
+These checks are useful drift indicators. They must not be described as proof of semantic perfection.
+
+Advisory review may later evaluate clarity, didactic quality, audience fit, missing rationale, and possible architecture drift. Such advisory review must remain separate from hard gates unless it is converted into a deterministic rule with a clear failure condition.
 
 ## Remote Work Authorization Gate
 

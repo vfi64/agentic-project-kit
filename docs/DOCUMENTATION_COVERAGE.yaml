@@ -74,11 +74,32 @@ rules:
       - path: docs/STATUS.md
         terms:
           - policy-pack doctor checks
-          - Policy-pack checks
+          - policy packs
       - path: docs/handoff/CURRENT_HANDOFF.md
         terms:
-          - policy-pack doctor checks
-          - policy pack checks
+          - policy-pack checks
+          - policy packs
+
+  - id: semantic-quality-boundary-coverage
+    description: Semantic quality limits must remain explicit so deterministic checks are not oversold.
+    documents:
+      - path: docs/architecture/ARCHITECTURE_CONTRACT.md
+        terms:
+          - Semantic quality boundary
+          - semantic perfection
+          - advisory review
+          - hard deterministic gates
+          - LLM-based semantic review
+      - path: docs/TEST_GATES.md
+        terms:
+          - semantic perfection
+          - deterministic quality heuristics
+          - advisory review
+      - path: README.md
+        terms:
+          - deterministic document-quality heuristics
+          - semantic perfection
+          - advisory review
 
   - id: gate-document-command-coverage
     description: Gate documentation must mention the commands used as evidence.

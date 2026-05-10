@@ -22,7 +22,7 @@ def _write_state_docs(root: Path, version: str = "1.2.3") -> None:
         "## 2. How to Use This Document\n\n"
         "## 4. Decision Rules\n\n"
         "## 7. Architectural Contract\n\n"
-        "## 16. Acceptance Criteria for Future Work\n",
+        "## 17. Acceptance Criteria for Future Work\n",
         encoding="utf-8",
     )
     (root / "docs/DOCUMENTATION_COVERAGE.yaml").write_text(
