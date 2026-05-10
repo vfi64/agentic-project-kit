@@ -2,6 +2,7 @@ from pathlib import Path
 
 from agentic_project_kit.checks import (
     check_docs,
+    check_document_quality,
     check_documentation_coverage,
     check_state_gate_docs,
     check_todo,
@@ -32,6 +33,47 @@ def test_check_docs_accepts_state_gate_docs_without_sentinel(tmp_path: Path):
     _write_valid_state_gate_docs(tmp_path)
 
     assert check_docs(tmp_path) == []
+
+
+def test_check_docs_reports_unresolved_placeholder_markers(tmp_path: Path):
+    (tmp_path / "sentinel.yaml").write_text(
+        '''
+documents:
+  - path: README.md
+    required_sections:
+      - "# Demo"
+''',
+        encoding="utf-8",
+    )
+    (tmp_path / "README.md").write_text("# Demo\n\nTODO: finish this.\nrequired-term\n", encoding="utf-8")
+    _write_valid_state_gate_docs(tmp_path)
+
+    errors = check_docs(tmp_path)
+
+    assert "README.md: unresolved placeholder marker 'TODO'" in errors
+
+
+def test_check_docs_can_disable_quality_checks_per_document(tmp_path: Path):
+    (tmp_path / "sentinel.yaml").write_text(
+        '''
+documents:
+  - path: README.md
+    required_sections:
+      - "# Demo"
+    quality_checks: false
+''',
+        encoding="utf-8",
+    )
+    (tmp_path / "README.md").write_text("# Demo\n\nTODO: accepted fixture text.\nrequired-term\n", encoding="utf-8")
+    _write_valid_state_gate_docs(tmp_path)
+
+    assert check_docs(tmp_path) == []
+
+
+def test_check_document_quality_reports_placeholder_markers():
+    errors = check_document_quality("README.md", "# Demo\n\nFIXME later\n")
+
+    assert errors == ["README.md: unresolved placeholder marker 'FIXME'"]
 
 
 def test_check_todo_accepts_valid_items(tmp_path: Path):
