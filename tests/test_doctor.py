@@ -76,6 +76,10 @@ def _write_readme(root: Path) -> None:
     (root / "README.md").write_text("# Demo\n\ndoctor-fixture-term\n", encoding="utf-8")
 
 
+def _write_agent_docs(root: Path) -> None:
+    (root / "AGENTS.md").write_text("# AGENTS\n\nFixture agent instructions.\n", encoding="utf-8")
+
+
 def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
     _write_readme(tmp_path)
     _write_state_docs(tmp_path)
@@ -123,6 +127,7 @@ def test_doctor_report_reports_valid_project_contract(tmp_path: Path):
 
 def test_doctor_policy_pack_checks_pass_when_required_files_exist(tmp_path: Path):
     _write_readme(tmp_path)
+    _write_agent_docs(tmp_path)
     _write_state_docs(tmp_path)
     _write_sentinel_and_todo(tmp_path)
     _write_release_docs(tmp_path)
