@@ -47,6 +47,12 @@ Before adding or changing any public command, generated file, workflow, gate, pr
 
 Do not add implementation-only features that are invisible to new users, maintainers, or coding agents.
 
+## Evidence Requirements
+
+Keep evidence requirements explicit and bounded. Do not commit broad logs, credentials, private runtime state, or unreviewed generated evidence.
+
+Do not weaken tests, documentation gates, architecture checks, release checks, or coverage checks to make a task pass. If a rule is wrong, propose a reviewable rule change instead.
+
 ## Responsibility Split
 
 Use this responsibility model from the architecture contract:
