@@ -144,6 +144,14 @@ Agentic project doctor report for /path/to/project
 Overall: PASS
 ```
 
+## Deterministic quality heuristics
+
+`agentic-kit check-docs` includes deterministic document-quality heuristics for machine-checkable problems such as unresolved placeholder markers, stale handoff markers, missing required sections, missing coverage terms, and documentation drift.
+
+These checks are intentionally limited. They are useful hard gates for known bad patterns, but they do not prove semantic perfection. A passing check does not prove that an architecture is globally optimal, a README is persuasive for every audience, or a handoff is sufficient for every future agent.
+
+Future commands such as `review-docs` or `review-architecture` may provide advisory review for clarity, didactic quality, audience fit, missing rationale, or possible architecture drift. Such advisory review must remain separate from `doctor` and must not be treated as merge authority.
+
 ## Release planning and validation
 
 Use `agentic-kit release-plan` before preparing a release:
@@ -230,4 +238,4 @@ This kit creates a fresh repository from generic templates. It does not copy a p
 
 ## Current status
 
-Version `0.2.4` is an early MVP with release-state validation, project-health diagnostics, policy-pack doctor checks, documentation coverage checks, generated project contracts, project profiles, policy packs, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
+Version `0.2.4` is an early MVP with release-state validation, project-health diagnostics, policy-pack doctor checks, deterministic document-quality heuristics, documentation coverage checks, generated project contracts, project profiles, policy packs, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
