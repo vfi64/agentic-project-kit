@@ -3,12 +3,12 @@
 Status-date: 2026-05-10
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: feature/policy-pack-doctor-checks
+Current work branch: feature/semantic-quality-boundary
 Current version: 0.2.4
 
 ## Purpose
 
-agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, TODO tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, architecture-contract governance, documentation coverage checks, generated project contracts, project profiles, policy packs, and policy-pack doctor checks.
+agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, TODO tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, architecture-contract governance, documentation coverage checks, generated project contracts, project profiles, policy packs, policy-pack doctor checks, and deterministic document-quality heuristics.
 
 The project itself has a current state layer so work can be continued from the repository state files.
 
@@ -40,7 +40,7 @@ Project-level state documentation is machine-checkable:
 - agentic-kit check-docs checks the state gate documents.
 - docs/architecture/ARCHITECTURE_CONTRACT.md is a required state gate document.
 - docs/DOCUMENTATION_COVERAGE.yaml is a documentation coverage matrix.
-- Documentation coverage checks that public commands, workflows, governance concepts, release topics, evidence conventions, state-doc expectations, and policy-pack doctor checks remain visible.
+- Documentation coverage checks that public commands, workflows, governance concepts, release topics, evidence conventions, state-doc expectations, policy-pack doctor checks, and semantic quality boundary language remain visible.
 - sentinel.yaml and .agentic/todo.yaml are present so the repository validates its own TODO gate configuration.
 
 Project health diagnostics are CLI-supported:
@@ -52,19 +52,20 @@ Project health diagnostics are CLI-supported:
 - PR #28 added documentation coverage drift checks.
 - PR #29 added project contract, profiles, and policy packs.
 - PR #30 added self sentinel and TODO gates.
-- On this branch, Policy-pack checks are activated in doctor.
-- Policy-pack checks currently verify structural prerequisites for starter, prototype, solo-maintainer, agentic-development, release-managed, and documentation-governed.
+- PR #31 activated policy-pack checks in doctor.
+- On this branch, the architecture contract now defines the semantic quality boundary.
+- On this branch, check-docs adds deterministic document-quality heuristics for unresolved placeholder markers.
 
 Latest validated gates before this branch:
 
-- python -m pytest -q -> 46 passed
+- python -m pytest -q -> 48 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
 - agentic-kit doctor -> Overall PASS
 
 ## Current Goal
 
-Make selected policy packs operational in doctor by activating structural policy-pack checks from .agentic/project.yaml.
+Encode the semantic quality boundary and add deterministic document-quality heuristics without pretending to prove semantic perfection.
 
 ## Current Blockers
 
@@ -83,4 +84,4 @@ agentic-kit doctor
 
 ## Next Safe Step
 
-Pull feature/policy-pack-doctor-checks locally and run the local gate. Expected result: tests, ruff, check-docs, and doctor pass with policy pack checks active.
+Pull feature/semantic-quality-boundary locally and run the local gate. Expected result: tests, ruff, check-docs, and doctor pass.
