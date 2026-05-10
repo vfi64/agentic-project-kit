@@ -3,7 +3,7 @@
 Status-date: 2026-05-10
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: feature/semantic-quality-boundary
+Current work branch: feature/release-visibility-v025
 Current version: 0.2.4
 
 ## Purpose
@@ -21,6 +21,16 @@ Released versions:
 - v0.2.2: added --kit-source for generated CI with pypi, testpypi, and none.
 - v0.2.3: added release-state validation for local tags, remote tags, and GitHub releases.
 - v0.2.4: added Zenodo-backed citation and archival metadata.
+
+Merged post-v0.2.4 work on main includes:
+
+- PR #26 enforced architecture contract review gates.
+- PR #27 documented agentic-kit doctor in README.md.
+- PR #28 added documentation coverage drift checks and Remote Work Authorization.
+- PR #29 added project contract, profiles, and policy packs.
+- PR #30 added self sentinel and TODO gates.
+- PR #31 activated policy-pack checks in doctor.
+- PR #32 defined the semantic quality boundary and added deterministic document-quality heuristics.
 
 Project-level state documentation is present on main:
 
@@ -45,31 +55,33 @@ Project-level state documentation is machine-checkable:
 
 Project health diagnostics are CLI-supported:
 
-- PR #20 added agentic-kit doctor.
-- PR #22 extended doctor with version-drift detection across project state and citation files.
-- PR #26 enforced architecture contract review gates.
-- PR #27 documented agentic-kit doctor in README.md.
-- PR #28 added documentation coverage drift checks.
-- PR #29 added project contract, profiles, and policy packs.
-- PR #30 added self sentinel and TODO gates.
-- PR #31 activated policy-pack checks in doctor.
-- On this branch, the architecture contract now defines the semantic quality boundary.
-- On this branch, check-docs adds deterministic document-quality heuristics for unresolved placeholder markers.
+- agentic-kit doctor checks required project files, project contract status, policy-pack checks, documentation gates, TODO gates, and version drift.
+- agentic-kit check-docs checks documentation coverage and deterministic document-quality heuristics.
+- agentic-kit release-plan and agentic-kit release-check support release-state validation before maintainer-owned tagging and publication.
 
-Latest validated gates before this branch:
+Current release visibility branch work:
 
-- python -m pytest -q -> 48 passed
+- CHANGELOG.md has an Unreleased section preparing the v0.2.5 release narrative without raising the package version.
+- README.md now foregrounds the purpose, the difference from a simple skeleton generator, the doctor/check-docs workflow, project scope boundary, and GitHub discovery suggestions.
+- STATUS.md and CURRENT_HANDOFF.md now point to feature/release-visibility-v025 instead of the old semantic-boundary branch.
+- No tag, release artifact, publication artifact, version bump, merge, or direct main write is part of this branch.
+
+Latest validated local gates at branch creation:
+
+- git branch --show-current -> feature/release-visibility-v025
+- python -m pytest -q -> 52 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
-- agentic-kit doctor -> Overall PASS
+- agentic-kit doctor -> Overall PASS; project state matches version 0.2.4
 
 ## Current Goal
 
-Encode the semantic quality boundary and add deterministic document-quality heuristics without pretending to prove semantic perfection.
+Prepare a small release-visibility and positioning cut for a maintainer-owned v0.2.5 release decision. The branch should make the post-v0.2.4 health-check, policy-pack, documentation-coverage, TODO-gate, and semantic-boundary work visible without performing release-owned actions.
 
 ## Current Blockers
 
-- Local gate still required after pulling this branch.
+- Local gate must be rerun after the documentation updates on feature/release-visibility-v025.
+- Maintainer approval is required before merge, version bump, tag creation, release artifacts, publication artifacts, or GitHub repository setting changes.
 
 ## Live Status Commands
 
@@ -82,6 +94,10 @@ ruff check .
 agentic-kit check-docs
 agentic-kit doctor
 
+Optional release-preparation smoke command before a later release branch or release PR:
+
+agentic-kit release-plan --version 0.2.5
+
 ## Next Safe Step
 
-Pull feature/semantic-quality-boundary locally and run the local gate. Expected result: tests, ruff, check-docs, and doctor pass.
+Pull feature/release-visibility-v025 locally and run the standard local gate. If it passes, open a PR for README, CHANGELOG, STATUS, and handoff visibility updates. Do not merge or release without maintainer approval.
