@@ -24,6 +24,16 @@ def _write_state_docs(root: Path, version: str = "1.2.3") -> None:
         "## 16. Acceptance Criteria for Future Work\n",
         encoding="utf-8",
     )
+    (root / "docs/DOCUMENTATION_COVERAGE.yaml").write_text(
+        "version: 1\n"
+        "rules:\n"
+        "  - id: doctor-test-minimal\n"
+        "    documents:\n"
+        "      - path: README.md\n"
+        "        terms:\n"
+        "          - doctor-fixture-term\n",
+        encoding="utf-8",
+    )
 
 
 def _write_version_files(root: Path, version: str = "1.2.3", *, quoted_citation: bool = False) -> None:
@@ -33,8 +43,12 @@ def _write_version_files(root: Path, version: str = "1.2.3", *, quoted_citation:
     (root / "CITATION.cff").write_text(f"cff-version: 1.2.0\nversion: {citation_version}\n", encoding="utf-8")
 
 
+def _write_readme(root: Path) -> None:
+    (root / "README.md").write_text("# Demo\n\ndoctor-fixture-term\n", encoding="utf-8")
+
+
 def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
-    (tmp_path / "README.md").write_text("# Demo\n", encoding="utf-8")
+    _write_readme(tmp_path)
     _write_state_docs(tmp_path)
 
     report = build_doctor_report(tmp_path)
@@ -64,7 +78,7 @@ def test_doctor_report_fails_without_required_readme(tmp_path: Path):
 
 
 def test_doctor_report_passes_when_versions_match(tmp_path: Path):
-    (tmp_path / "README.md").write_text("# Demo\n", encoding="utf-8")
+    _write_readme(tmp_path)
     _write_state_docs(tmp_path, "1.2.3")
     _write_version_files(tmp_path, "1.2.3")
 
@@ -78,7 +92,7 @@ def test_doctor_report_passes_when_versions_match(tmp_path: Path):
 
 
 def test_doctor_report_accepts_quoted_citation_versions(tmp_path: Path):
-    (tmp_path / "README.md").write_text("# Demo\n", encoding="utf-8")
+    _write_readme(tmp_path)
     _write_state_docs(tmp_path, "1.2.3")
     _write_version_files(tmp_path, "1.2.3", quoted_citation=True)
 
@@ -89,7 +103,7 @@ def test_doctor_report_accepts_quoted_citation_versions(tmp_path: Path):
 
 
 def test_doctor_report_fails_on_version_drift(tmp_path: Path):
-    (tmp_path / "README.md").write_text("# Demo\n", encoding="utf-8")
+    _write_readme(tmp_path)
     _write_state_docs(tmp_path, "1.2.2")
     _write_version_files(tmp_path, "1.2.3")
 

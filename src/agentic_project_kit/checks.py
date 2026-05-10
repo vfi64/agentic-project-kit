@@ -8,6 +8,7 @@ STATE_GATE_DOCUMENTS = (
     "docs/TEST_GATES.md",
     "docs/handoff/CURRENT_HANDOFF.md",
     "docs/architecture/ARCHITECTURE_CONTRACT.md",
+    "docs/DOCUMENTATION_COVERAGE.yaml",
 )
 
 STATE_GATE_SECTIONS = {
@@ -77,6 +78,7 @@ def check_docs(project_root: Path) -> list[str]:
                 errors.append(f"{doc['path']}: too short ({words}/{min_words} words)")
 
     errors.extend(check_state_gate_docs(project_root))
+    errors.extend(check_documentation_coverage(project_root))
     return errors
 
 
@@ -100,6 +102,58 @@ def check_state_gate_docs(project_root: Path) -> list[str]:
         for marker in STALE_HANDOFF_MARKERS:
             if marker in handoff:
                 errors.append(f"docs/handoff/CURRENT_HANDOFF.md: stale handoff marker {marker!r}")
+
+    return errors
+
+
+def check_documentation_coverage(project_root: Path) -> list[str]:
+    matrix_path = project_root / "docs/DOCUMENTATION_COVERAGE.yaml"
+    if not matrix_path.exists():
+        return ["Missing state gate document: docs/DOCUMENTATION_COVERAGE.yaml"]
+
+    try:
+        matrix = load_yaml(matrix_path)
+    except (FileNotFoundError, ValueError, yaml.YAMLError) as exc:
+        return [f"docs/DOCUMENTATION_COVERAGE.yaml: invalid coverage matrix ({exc})"]
+
+    errors: list[str] = []
+    rules = matrix.get("rules", [])
+    if not isinstance(rules, list) or not rules:
+        return ["docs/DOCUMENTATION_COVERAGE.yaml: rules must be a non-empty list"]
+
+    for rule_index, rule in enumerate(rules, start=1):
+        if not isinstance(rule, dict):
+            errors.append(f"docs/DOCUMENTATION_COVERAGE.yaml: rule {rule_index} must be a mapping")
+            continue
+        rule_id = str(rule.get("id") or f"rule-{rule_index}")
+        documents = rule.get("documents", [])
+        if not isinstance(documents, list) or not documents:
+            errors.append(f"docs/DOCUMENTATION_COVERAGE.yaml: {rule_id} documents must be a non-empty list")
+            continue
+
+        for doc_index, doc in enumerate(documents, start=1):
+            if not isinstance(doc, dict):
+                errors.append(f"docs/DOCUMENTATION_COVERAGE.yaml: {rule_id} document {doc_index} must be a mapping")
+                continue
+            relative_path = str(doc.get("path") or "").strip()
+            if not relative_path:
+                errors.append(f"docs/DOCUMENTATION_COVERAGE.yaml: {rule_id} document {doc_index} missing path")
+                continue
+            path = project_root / relative_path
+            if not path.exists():
+                errors.append(f"documentation coverage {rule_id}: missing document {relative_path}")
+                continue
+
+            terms = doc.get("terms", [])
+            if not isinstance(terms, list) or not terms:
+                errors.append(f"docs/DOCUMENTATION_COVERAGE.yaml: {rule_id} {relative_path} terms must be a non-empty list")
+                continue
+
+            content = path.read_text(encoding="utf-8")
+            for term in terms:
+                needle = str(term)
+                if needle not in content:
+                    errors.append(f"documentation coverage {rule_id}: {relative_path} missing term {needle!r}")
 
     return errors
 

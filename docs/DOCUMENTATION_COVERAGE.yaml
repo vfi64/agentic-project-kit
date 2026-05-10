@@ -1,0 +1,138 @@
+version: 1
+purpose: >-
+  Machine-checkable documentation coverage matrix for public commands,
+  governance concepts, user workflows, and project-state files.
+  This file prevents implemented capabilities from becoming invisible in the
+  documentation set.
+
+rules:
+  - id: public-command-readme-coverage
+    description: Public CLI commands must be discoverable from README.md.
+    documents:
+      - path: README.md
+        terms:
+          - agentic-kit init
+          - agentic-kit check
+          - agentic-kit check-docs
+          - agentic-kit check-todo
+          - agentic-kit doctor
+          - agentic-kit release-plan
+          - agentic-kit release-check
+          - agentic-kit github-create
+          - agentic-kit todo list
+          - agentic-kit todo complete
+          - agentic-kit todo render
+
+  - id: workflow-readme-coverage
+    description: Main user workflows must have README-level entry points.
+    documents:
+      - path: README.md
+        terms:
+          - Installation for local development
+          - Quick start
+          - Project health check
+          - Release planning and validation
+          - TODO workflow
+          - GitHub integration
+          - Agentic development model
+          - Documentation coverage and drift checks
+          - Logging and evidence
+          - Citation and archiving
+          - Safety rule
+          - Current status
+
+  - id: gate-document-command-coverage
+    description: Gate documentation must mention the commands used as evidence.
+    documents:
+      - path: docs/TEST_GATES.md
+        terms:
+          - agentic-kit check-docs
+          - agentic-kit doctor
+          - agentic-kit release-plan
+          - agentic-kit release-check
+          - agentic-kit check-todo
+          - docs/DOCUMENTATION_COVERAGE.yaml
+          - Architecture Contract Gate
+          - Documentation Coverage Gate
+          - Standard Local Gate
+          - Doctor Gate
+          - Release Gate
+          - Outcome Reporting
+
+  - id: agent-instruction-coverage
+    description: Agent instructions must point agents to architecture and documentation coverage duties.
+    documents:
+      - path: AGENTS.md
+        terms:
+          - docs/architecture/ARCHITECTURE_CONTRACT.md
+          - docs/DOCUMENTATION_COVERAGE.yaml
+          - agentic-kit check-docs
+          - agentic-kit doctor
+          - Architecture Contract Rule
+          - Documentation Coverage Rule
+          - Required Local Gate
+
+  - id: architecture-contract-coverage
+    description: The architecture contract must define the concepts that govern new checks.
+    documents:
+      - path: docs/architecture/ARCHITECTURE_CONTRACT.md
+        terms:
+          - Project contract
+          - Profile
+          - Policy pack
+          - Doctor
+          - Diagnostic
+          - Reviewability
+          - Evidence
+          - Architecture fitness function
+          - documentation gates
+          - deterministic checks
+          - review infrastructure
+
+  - id: state-doc-coverage
+    description: State and handoff files must mention the current documentation coverage gate.
+    documents:
+      - path: docs/STATUS.md
+        terms:
+          - documentation coverage
+          - docs/DOCUMENTATION_COVERAGE.yaml
+          - agentic-kit check-docs
+          - agentic-kit doctor
+      - path: docs/handoff/CURRENT_HANDOFF.md
+        terms:
+          - documentation coverage
+          - docs/DOCUMENTATION_COVERAGE.yaml
+          - agentic-kit check-docs
+          - agentic-kit doctor
+
+  - id: citation-release-coverage
+    description: Release, citation, and archival workflows must be visible in README and gates.
+    documents:
+      - path: README.md
+        terms:
+          - CITATION.cff
+          - .zenodo.json
+          - Zenodo
+          - DOI
+          - agentic-kit release-plan
+          - agentic-kit release-check
+      - path: docs/TEST_GATES.md
+        terms:
+          - Packaging Gate
+          - Release Gate
+          - agentic-kit release-plan
+          - agentic-kit release-check
+
+  - id: safety-evidence-coverage
+    description: Safety and evidence constraints must be visible to users and agents.
+    documents:
+      - path: README.md
+        terms:
+          - Do not generate a public project from a private repository history
+          - Logs are diagnostic evidence
+          - Do not commit secrets
+      - path: AGENTS.md
+        terms:
+          - do not weaken tests
+          - evidence requirements
+          - architecture-contract update

@@ -15,13 +15,15 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 |---|---|
 | Documentation only | git diff, content review, and agentic-kit check-docs |
 | Architecture-relevant change | Read docs/architecture/ARCHITECTURE_CONTRACT.md; state whether the contract remains valid or is updated; run the standard local gate |
+| Documentation coverage change | Update docs/DOCUMENTATION_COVERAGE.yaml and run agentic-kit check-docs |
 | Python code | python -m pytest -q and ruff check . |
-| CLI behavior | Unit tests plus CLI smoke command |
+| CLI behavior | Unit tests plus CLI smoke command; update docs/DOCUMENTATION_COVERAGE.yaml when public command visibility changes |
 | Generator behavior | Generator test plus generated-project file inspection |
 | GitHub workflow change | Local workflow review plus GitHub Actions run |
 | Packaging/release change | python -m build, twine check dist/*, release workflow result |
 | Release planning change | Unit tests plus agentic-kit release-plan CLI smoke command |
 | Release state validation change | Unit tests plus agentic-kit release-check CLI smoke command |
+| TODO validation change | Unit tests plus agentic-kit check-todo CLI smoke command |
 | Project health check change | Unit tests plus agentic-kit doctor CLI smoke command |
 | TestPyPI validation | TestPyPI upload, fresh venv install, CLI smoke command |
 | Handoff/state change | Update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md |
@@ -49,6 +51,39 @@ For such changes, report one of these outcomes:
 
 `agentic-kit check-docs` must fail if the architecture contract file is missing or loses required anchor sections.
 
+## Documentation Coverage Gate
+
+`docs/DOCUMENTATION_COVERAGE.yaml` is a required project gate document.
+
+It lists public commands, workflows, governance concepts, safety rules, release/citation topics, evidence conventions, and state-doc expectations that must remain visible in the documentation set.
+
+Update it when adding or changing:
+
+- public CLI commands;
+- generated project files;
+- user workflows;
+- test gates;
+- doctor or check-docs behavior;
+- release, citation, or archival behavior;
+- safety or evidence rules;
+- architecture concepts, profiles, or policy packs.
+
+`agentic-kit check-docs` must fail if a required term from the coverage matrix is missing from its target document.
+
+## Remote Work Authorization Gate
+
+Agents may create remote feature branches, edit files on those branches, repair follow-up gate failures, and open or update pull requests without additional confirmation when the work fits the current request and the architecture contract.
+
+The following decisions remain maintainer-owned and require explicit approval:
+
+- merge pull requests;
+- write directly to `main`;
+- create release tags;
+- create release or publication artifacts;
+- raise release versions;
+- change repository visibility, access rights, or private configuration;
+- change architecture direction when multiple plausible options exist.
+
 ## Standard Local Gate
 
 Run these commands:
@@ -58,6 +93,7 @@ Run these commands:
     python -m pytest -q
     ruff check .
     agentic-kit check-docs
+    agentic-kit doctor
 
 ## Doctor Gate
 
@@ -106,6 +142,7 @@ Use this shape:
     - Intended outcome:
     - Required evidence:
     - Architecture contract checked: yes / no / not relevant
+    - Documentation coverage checked: yes / no / not relevant
     - Outcome achieved: yes / no / partial
     - Changed files:
     - Tests run:
@@ -115,4 +152,4 @@ Use this shape:
 
 ## Maintenance Rule
 
-Whenever the current branch, version, release state, test status, architecture contract status, or next safe step changes, update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md.
+Whenever the current branch, version, release state, test status, architecture contract status, documentation coverage status, or next safe step changes, update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md.

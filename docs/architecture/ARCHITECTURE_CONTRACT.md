@@ -90,7 +90,7 @@ A repository or toolchain capability, such as `python-library`, `markdown-docs`,
 A selectable group of governance principles and checks, such as `starter`, `prototype`, `solo-maintainer`, `agentic-development`, or `release-managed`.
 
 **Doctor**  
-The diagnostic command family responsible for repository health checks: documentation state, drift, active policies, evidence, release state, and eventually architecture fitness checks.
+The diagnostic command family responsible for repository health checks: documentation state, documentation gates, drift, active policies, evidence, release state, and eventually architecture fitness checks.
 
 **Diagnostic**  
 A structured finding with severity, location, rule, rationale, recommendation, and automation safety level.
@@ -380,6 +380,7 @@ Documentation:
 
 - generated project state must remain current;
 - command examples in documentation should match implemented CLI behavior;
+- documentation gates should check both required state files and coverage of important public concepts;
 - handoff documents must not contain stale placeholder markers;
 - TODO state must have one machine-readable source of truth;
 - release/citation metadata must be consistent.
