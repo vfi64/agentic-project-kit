@@ -4,6 +4,7 @@ import tomllib
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
+from typing import Any
 
 from agentic_project_kit.checks import check_docs, check_todo
 from agentic_project_kit.contract import (
@@ -40,12 +41,14 @@ class DoctorReport:
 def build_doctor_report(project_root: Path) -> DoctorReport:
     """Build a compact health report for an agentic project checkout."""
     root = project_root.resolve()
+    contract_data = _load_contract_for_doctor(root)
     checks = [
         _path_check(root, "pyproject.toml", required=False),
         _path_check(root, "README.md", required=True),
         _path_check(root, "sentinel.yaml", required=False),
         _path_check(root, ".github/workflows/ci.yml", required=False),
-        _project_contract_check(root),
+        _project_contract_check(root, contract_data),
+        _policy_pack_check(root, contract_data),
         _docs_check(root),
         _todo_check(root),
         _version_drift_check(root),
@@ -70,17 +73,76 @@ def _path_check(project_root: Path, relative_path: str, *, required: bool) -> Do
     return DoctorCheck(relative_path, DoctorStatus.WARN, "missing optional project file")
 
 
-def _project_contract_check(project_root: Path) -> DoctorCheck:
+def _load_contract_for_doctor(project_root: Path) -> dict[str, Any] | None | ValueError:
     try:
-        data = load_project_contract(project_root)
+        return load_project_contract(project_root)
     except ValueError as exc:
-        return DoctorCheck("project contract", DoctorStatus.FAIL, str(exc))
+        return exc
+
+
+def _project_contract_check(project_root: Path, data: dict[str, Any] | None | ValueError) -> DoctorCheck:
+    if isinstance(data, ValueError):
+        return DoctorCheck("project contract", DoctorStatus.FAIL, str(data))
     if data is None:
         return DoctorCheck("project contract", DoctorStatus.WARN, f"{CONTRACT_PATH} absent")
     errors = validate_project_contract(data)
     if errors:
         return DoctorCheck("project contract", DoctorStatus.FAIL, "; ".join(errors))
     return DoctorCheck("project contract", DoctorStatus.PASS, contract_summary(data))
+
+
+def _policy_pack_check(project_root: Path, data: dict[str, Any] | None | ValueError) -> DoctorCheck:
+    if isinstance(data, ValueError):
+        return DoctorCheck("policy pack checks", DoctorStatus.WARN, "skipped because project contract is invalid")
+    if data is None:
+        return DoctorCheck("policy pack checks", DoctorStatus.WARN, f"skipped because {CONTRACT_PATH} is absent")
+
+    contract_errors = validate_project_contract(data)
+    if contract_errors:
+        return DoctorCheck("policy pack checks", DoctorStatus.WARN, "skipped because project contract failed validation")
+
+    policy_packs = _contract_string_list(data, "policy_packs")
+    failures: list[str] = []
+    passed: list[str] = []
+
+    for policy_pack in policy_packs:
+        errors = _policy_pack_errors(project_root, policy_pack)
+        if errors:
+            failures.extend(f"{policy_pack}: {error}" for error in errors)
+        else:
+            passed.append(policy_pack)
+
+    if failures:
+        return DoctorCheck("policy pack checks", DoctorStatus.FAIL, "; ".join(failures))
+    if not passed:
+        return DoctorCheck("policy pack checks", DoctorStatus.WARN, "no policy packs selected")
+    return DoctorCheck("policy pack checks", DoctorStatus.PASS, "active: " + ", ".join(passed))
+
+
+def _policy_pack_errors(project_root: Path, policy_pack: str) -> list[str]:
+    checks: dict[str, tuple[str, ...]] = {
+        "starter": ("README.md", "AGENTS.md", "docs/STATUS.md"),
+        "prototype": ("README.md", "docs/STATUS.md"),
+        "solo-maintainer": (
+            "docs/STATUS.md",
+            "docs/handoff/CURRENT_HANDOFF.md",
+            "sentinel.yaml",
+            ".agentic/todo.yaml",
+        ),
+        "agentic-development": (
+            "AGENTS.md",
+            "docs/TEST_GATES.md",
+            "docs/handoff/CURRENT_HANDOFF.md",
+            "docs/architecture/ARCHITECTURE_CONTRACT.md",
+        ),
+        "release-managed": ("CHANGELOG.md", "CITATION.cff", ".zenodo.json"),
+        "documentation-governed": (
+            "docs/DOCUMENTATION_COVERAGE.yaml",
+            "docs/architecture/ARCHITECTURE_CONTRACT.md",
+        ),
+    }
+    required_paths = checks.get(policy_pack, ())
+    return [f"missing {path}" for path in required_paths if not (project_root / path).exists()]
 
 
 def _docs_check(project_root: Path) -> DoctorCheck:
@@ -148,3 +210,10 @@ def _citation_version_matches(path: Path, version: str) -> bool:
         f"version: '{version}'",
     )
     return any(item in text for item in accepted)
+
+
+def _contract_string_list(data: dict[str, Any], field_name: str) -> tuple[str, ...]:
+    value = data.get(field_name)
+    if not isinstance(value, list):
+        return ()
+    return tuple(item for item in value if isinstance(item, str) and item.strip())
