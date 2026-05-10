@@ -2,17 +2,17 @@
 
 Status-date: 2026-05-10
 Project: agentic-project-kit
-Branch: feature/release-v025
+Branch: docs/post-release-v025
 Base branch: main
 Current version: 0.2.5
 
 ## Current Goal
 
-Prepare the v0.2.5 release metadata and state files so a maintainer can review, merge, and then perform the separate tag and publication steps.
+Update the repository state files after the v0.2.5 GitHub release so future agents no longer treat the release as pending.
 
 ## Current Repository State
 
-The project has released version 0.2.4. GitHub release automation and Zenodo archival are both working.
+The project has released version 0.2.5. GitHub release automation worked and attached the expected release assets.
 
 Important released work:
 
@@ -21,18 +21,16 @@ Important released work:
 - v0.2.2 added --kit-source for generated CI with pypi, testpypi, and none.
 - v0.2.3 added release-state validation for local tags, remote tags, and GitHub releases.
 - v0.2.4 added Zenodo-backed citation and archival metadata.
+- v0.2.5 released the post-v0.2.4 repository-health and visibility work, including project contracts, profiles, policy packs, policy-pack checks, policy-pack doctor checks, documentation coverage drift checks, machine-readable task gates, and the semantic quality boundary.
 
-Important work prepared for v0.2.5:
+v0.2.5 release evidence:
 
-- PR #26 enforced architecture contract review gates.
-- PR #27 documented agentic-kit doctor in README.md.
-- PR #28 added documentation coverage drift checks and Remote Work Authorization.
-- PR #29 added project contract, profiles, and policy packs.
-- PR #30 added self sentinel and machine-readable task gates.
-- PR #31 activated policy-pack checks in doctor.
-- PR #32 defined the semantic quality boundary and added deterministic document-quality heuristics.
 - PR #33 improved release visibility and README positioning for v0.2.5.
-- This branch raises package and citation metadata to 0.2.5 and finalizes the changelog heading.
+- PR #34 raised package and citation metadata to 0.2.5 and finalized the changelog heading.
+- Tag v0.2.5 was pushed.
+- GitHub Release v0.2.5 was created successfully by the Release workflow.
+- Release assets were attached: `agentic_project_kit-0.2.5-py3-none-any.whl` and `agentic_project_kit-0.2.5.tar.gz`.
+- `agentic-kit release-check --version 0.2.5` now fails as expected because the local tag, remote tag, and GitHub release already exist. That command is a pre-release gate, not a post-release success check.
 
 Zenodo state:
 
@@ -43,22 +41,19 @@ Zenodo state:
 - CITATION.cff contains the all-versions DOI.
 - .zenodo.json is present.
 - README.md contains a Zenodo DOI badge and citation guidance.
-- The v0.2.5 version-specific DOI must not be stated until the v0.2.5 GitHub release has been published and archived by Zenodo.
+- The v0.2.5 version-specific DOI has not been verified in this branch. Do not add it to README.md or CITATION.cff by guessing.
 
 Current branch work:
 
-- pyproject.toml version is set to 0.2.5.
-- CITATION.cff version is set to 0.2.5.
-- CHANGELOG.md has a v0.2.5 section.
-- README.md current status describes v0.2.5 as a release candidate and avoids promising a version-specific Zenodo DOI before publication.
-- docs/STATUS.md and this handoff now point to feature/release-v025.
+- docs/STATUS.md marks v0.2.5 as released.
+- This handoff marks v0.2.5 as released.
+- README.md and CITATION.cff are not changed on this branch because the v0.2.5 version-specific Zenodo DOI has not been verified in this branch.
 - The branch explicitly avoids tags, release artifacts, publication artifacts, merges, direct main writes, and repository setting changes.
 
 ## Positioning Notes
 
 Useful external-review signals to preserve:
 
-- The most important near-term issue is release visibility: post-v0.2.4 governance work exists on main but is not yet represented by a published v0.2.5 release.
 - The strongest value proposition is reproducible AI-assisted repository work through explicit context, machine-checkable gates, bounded evidence, handoff discipline, release-state validation, and dogfooding.
 - Avoid overclaims such as production ready, de-facto standard, semantic perfection, or LLM-proven quality.
 - Treat mechanized trust as a useful concept, but express it through concrete checked project state rather than marketing claims.
@@ -96,35 +91,43 @@ Run:
     ruff check .
     agentic-kit check-docs
     agentic-kit doctor
-    agentic-kit release-plan --version 0.2.5
+    gh release view v0.2.5
+
+Expected note:
+
     agentic-kit release-check --version 0.2.5
+
+is expected to fail after publication because it verifies that the target tag and GitHub release are still unused.
 
 ## Latest Known Evidence
 
-Latest validated main gate before this branch:
+Latest validated release evidence:
 
-- git branch --show-current -> main
 - python -m pytest -q -> 52 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
-- agentic-kit doctor -> Overall PASS; project state matches version 0.2.4
+- agentic-kit doctor -> Overall PASS; project state matches version 0.2.5
+- agentic-kit release-check --version 0.2.5 -> PASS before tag creation
+- python -m build -> successfully built the 0.2.5 wheel and sdist
+- twine check dist/* -> passed for the 0.2.5 wheel and sdist
+- Release workflow for v0.2.5 -> success
+- gh release view v0.2.5 -> release exists with wheel and sdist assets
 
-Evidence still required after the release-preparation updates on this branch:
+Evidence still required after the post-release status updates on this branch:
 
 - python -m pytest -q
 - ruff check .
 - agentic-kit check-docs
 - agentic-kit doctor
-- agentic-kit release-plan --version 0.2.5
-- agentic-kit release-check --version 0.2.5
+- gh release view v0.2.5
 
 ## Current Open Work
 
-- Pull feature/release-v025 locally.
-- Run the required local gate and release-state checks.
-- If the gates pass, open a PR for the v0.2.5 release-preparation changes.
-- After merge, separate maintainer-approved release steps may create the tag, trigger release artifacts, publish package artifacts, and allow Zenodo archival.
+- Pull docs/post-release-v025 locally.
+- Run the required local gate.
+- If the gates pass, open a PR for the post-release state update.
+- Verify Zenodo separately. Only after the v0.2.5 version-specific DOI is known should README.md or CITATION.cff be updated.
 
 ## Next Safe Step
 
-Pull feature/release-v025 locally and run the required local gate plus release-plan and release-check for 0.2.5. Expected result: tests, ruff, check-docs, doctor, and release-check pass, with release-plan printing the intended release commands. Do not tag or publish without maintainer approval.
+Pull docs/post-release-v025 locally and run the required local gate. Expected result: tests, ruff, check-docs, and doctor pass; GitHub release v0.2.5 exists. Do not update DOI metadata by guessing.
