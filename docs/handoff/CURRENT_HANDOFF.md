@@ -70,9 +70,15 @@ Current branch work:
 - src/agentic_project_kit/checks.py updated to validate documentation coverage terms.
 - tests/test_checks.py updated to cover documentation coverage validation.
 - README.md updated with release planning and documentation coverage sections.
-- AGENTS.md updated with a Documentation Coverage Rule.
-- docs/TEST_GATES.md updated with a Documentation Coverage Gate and doctor in the Standard Local Gate.
+- AGENTS.md updated with a Documentation Coverage Rule and Remote Work Authorization.
+- docs/TEST_GATES.md updated with a Documentation Coverage Gate, Remote Work Authorization Gate, and doctor in the Standard Local Gate.
 - docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md updated for this branch.
+
+## Remote Work Authorization
+
+For this repository, assistants and coding agents may create remote feature branches, edit files on those branches, repair follow-up gate failures, and open or update pull requests without additional confirmation when the work fits the current request and the architecture contract.
+
+Maintainer approval is still required before merging pull requests, writing directly to main, creating release tags, creating release or publication artifacts, raising release versions, changing repository access settings, or choosing a new architecture direction when multiple plausible options exist.
 
 ## Source of Truth
 
