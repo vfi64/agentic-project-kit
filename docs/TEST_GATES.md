@@ -1,6 +1,6 @@
 # Test Gates
 
-Status-date: 2026-05-09
+Status-date: 2026-05-10
 Project: agentic-project-kit
 
 ## Purpose
@@ -13,7 +13,8 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 
 | Change type | Required evidence |
 |---|---|
-| Documentation only | git diff, content review, and if possible agentic-kit check-docs on a generated project |
+| Documentation only | git diff, content review, and agentic-kit check-docs |
+| Architecture-relevant change | Read docs/architecture/ARCHITECTURE_CONTRACT.md; state whether the contract remains valid or is updated; run the standard local gate |
 | Python code | python -m pytest -q and ruff check . |
 | CLI behavior | Unit tests plus CLI smoke command |
 | Generator behavior | Generator test plus generated-project file inspection |
@@ -24,6 +25,29 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Project health check change | Unit tests plus agentic-kit doctor CLI smoke command |
 | TestPyPI validation | TestPyPI upload, fresh venv install, CLI smoke command |
 | Handoff/state change | Update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md |
+
+## Architecture Contract Gate
+
+`docs/architecture/ARCHITECTURE_CONTRACT.md` is a required project gate document.
+
+Architecture-relevant changes include changes to:
+
+- project purpose or product boundary;
+- CLI command behavior;
+- generated project structure;
+- profiles or policy packs;
+- doctor, check-docs, check-todo, release checks, or other gates;
+- repository state files or handoff conventions;
+- agent instructions, PR templates, evidence staging, or review workflow;
+- automation boundaries, GitHub integration, or future multiuser assumptions.
+
+For such changes, report one of these outcomes:
+
+- architecture contract reviewed; no update needed;
+- architecture contract updated in the change;
+- architecture conflict found; implementation deferred or narrowed.
+
+`agentic-kit check-docs` must fail if the architecture contract file is missing or loses required anchor sections.
 
 ## Standard Local Gate
 
@@ -81,6 +105,7 @@ Use this shape:
 
     - Intended outcome:
     - Required evidence:
+    - Architecture contract checked: yes / no / not relevant
     - Outcome achieved: yes / no / partial
     - Changed files:
     - Tests run:
@@ -90,4 +115,4 @@ Use this shape:
 
 ## Maintenance Rule
 
-Whenever the current branch, version, release state, test status, or next safe step changes, update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md.
+Whenever the current branch, version, release state, test status, architecture contract status, or next safe step changes, update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md.
