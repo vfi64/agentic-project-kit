@@ -53,6 +53,12 @@ documents:
     assert "README.md: unresolved placeholder marker 'TODO'" in errors
 
 
+def test_check_docs_accepts_documented_todo_workflow_text(tmp_path: Path):
+    errors = check_document_quality("README.md", "# Demo\n\nTODO workflow is documented.\n")
+
+    assert errors == []
+
+
 def test_check_docs_can_disable_quality_checks_per_document(tmp_path: Path):
     (tmp_path / "sentinel.yaml").write_text(
         '''
@@ -71,7 +77,7 @@ documents:
 
 
 def test_check_document_quality_reports_placeholder_markers():
-    errors = check_document_quality("README.md", "# Demo\n\nFIXME later\n")
+    errors = check_document_quality("README.md", "# Demo\n\nFIXME: later\n")
 
     assert errors == ["README.md: unresolved placeholder marker 'FIXME'"]
 
@@ -206,7 +212,7 @@ def _write_valid_state_gate_docs(project_root: Path) -> None:
         "## 2. How to Use This Document\n\n"
         "## 4. Decision Rules\n\n"
         "## 7. Architectural Contract\n\n"
-        "## 16. Acceptance Criteria for Future Work\n",
+        "## 17. Acceptance Criteria for Future Work\n",
         encoding="utf-8",
     )
     _write_valid_coverage_matrix(project_root)
