@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from agentic_project_kit.contract import build_contract_data, render_contract_yaml
 from agentic_project_kit.doctor import DoctorStatus, build_doctor_report, render_doctor_report
 
 
@@ -36,6 +37,18 @@ def _write_state_docs(root: Path, version: str = "1.2.3") -> None:
     )
 
 
+def _write_project_contract(root: Path) -> None:
+    (root / ".agentic").mkdir(parents=True)
+    data = build_contract_data(
+        name="demo",
+        description="Demo project",
+        project_type="python-cli",
+        profiles=("generic-git-repo", "python-cli"),
+        policy_packs=("starter", "solo-maintainer"),
+    )
+    (root / ".agentic/project.yaml").write_text(render_contract_yaml(data), encoding="utf-8")
+
+
 def _write_version_files(root: Path, version: str = "1.2.3", *, quoted_citation: bool = False) -> None:
     (root / "pyproject.toml").write_text(f"[project]\nversion = \"{version}\"\n", encoding="utf-8")
     (root / "CHANGELOG.md").write_text(f"# Changelog\n\n## v{version}\n", encoding="utf-8")
@@ -59,6 +72,7 @@ def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
         DoctorStatus.PASS,
         DoctorStatus.WARN,
         DoctorStatus.WARN,
+        DoctorStatus.WARN,
         DoctorStatus.PASS,
         DoctorStatus.WARN,
         DoctorStatus.WARN,
@@ -75,6 +89,38 @@ def test_doctor_report_fails_without_required_readme(tmp_path: Path):
     assert report.checks[1].name == "README.md"
     assert report.checks[1].status == DoctorStatus.FAIL
     assert "Overall: FAIL" in render_doctor_report(report)
+
+
+def test_doctor_report_reports_valid_project_contract(tmp_path: Path):
+    _write_readme(tmp_path)
+    _write_state_docs(tmp_path)
+    _write_project_contract(tmp_path)
+
+    report = build_doctor_report(tmp_path)
+
+    contract_check = report.checks[4]
+    assert contract_check.name == "project contract"
+    assert contract_check.status == DoctorStatus.PASS
+    assert "profiles: generic-git-repo, python-cli" in contract_check.detail
+
+
+def test_doctor_report_fails_on_invalid_project_contract(tmp_path: Path):
+    _write_readme(tmp_path)
+    _write_state_docs(tmp_path)
+    (tmp_path / ".agentic").mkdir()
+    (tmp_path / ".agentic/project.yaml").write_text(
+        "version: 1\nproject: {}\nprofiles: [missing]\npolicy_packs: [starter]\ngovernance: {}\n",
+        encoding="utf-8",
+    )
+
+    report = build_doctor_report(tmp_path)
+
+    assert not report.ok
+    contract_check = report.checks[4]
+    assert contract_check.name == "project contract"
+    assert contract_check.status == DoctorStatus.FAIL
+    assert "project.name is required" in contract_check.detail
+    assert "unknown profile: missing" in contract_check.detail
 
 
 def test_doctor_report_passes_when_versions_match(tmp_path: Path):
