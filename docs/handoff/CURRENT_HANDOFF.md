@@ -2,13 +2,13 @@
 
 Status-date: 2026-05-10
 Project: agentic-project-kit
-Branch: feature/release-visibility-v025
+Branch: feature/release-v025
 Base branch: main
-Current version: 0.2.4
+Current version: 0.2.5
 
 ## Current Goal
 
-Prepare a small release-visibility and positioning cut for a maintainer-owned v0.2.5 release decision. The branch should make the post-v0.2.4 health-check, policy-pack, documentation-coverage, machine-readable task-gate, and semantic-boundary work visible without performing release-owned actions.
+Prepare the v0.2.5 release metadata and state files so a maintainer can review, merge, and then perform the separate tag and publication steps.
 
 ## Current Repository State
 
@@ -22,7 +22,7 @@ Important released work:
 - v0.2.3 added release-state validation for local tags, remote tags, and GitHub releases.
 - v0.2.4 added Zenodo-backed citation and archival metadata.
 
-Important merged post-v0.2.4 work on main:
+Important work prepared for v0.2.5:
 
 - PR #26 enforced architecture contract review gates.
 - PR #27 documented agentic-kit doctor in README.md.
@@ -31,6 +31,8 @@ Important merged post-v0.2.4 work on main:
 - PR #30 added self sentinel and machine-readable task gates.
 - PR #31 activated policy-pack checks in doctor.
 - PR #32 defined the semantic quality boundary and added deterministic document-quality heuristics.
+- PR #33 improved release visibility and README positioning for v0.2.5.
+- This branch raises package and citation metadata to 0.2.5 and finalizes the changelog heading.
 
 Zenodo state:
 
@@ -41,13 +43,16 @@ Zenodo state:
 - CITATION.cff contains the all-versions DOI.
 - .zenodo.json is present.
 - README.md contains a Zenodo DOI badge and citation guidance.
+- The v0.2.5 version-specific DOI must not be stated until the v0.2.5 GitHub release has been published and archived by Zenodo.
 
 Current branch work:
 
-- CHANGELOG.md has an Unreleased section preparing the v0.2.5 release narrative without raising the package version.
-- README.md now foregrounds the purpose, the difference from a simple skeleton generator, the doctor/check-docs workflow, project scope boundary, and GitHub discovery suggestions.
-- docs/STATUS.md and this handoff now point to feature/release-visibility-v025 instead of the old semantic-boundary branch.
-- The branch explicitly avoids version bumps, tags, release artifacts, publication artifacts, merges, direct main writes, and repository setting changes.
+- pyproject.toml version is set to 0.2.5.
+- CITATION.cff version is set to 0.2.5.
+- CHANGELOG.md has a v0.2.5 section.
+- README.md current status describes v0.2.5 as a release candidate and avoids promising a version-specific Zenodo DOI before publication.
+- docs/STATUS.md and this handoff now point to feature/release-v025.
+- The branch explicitly avoids tags, release artifacts, publication artifacts, merges, direct main writes, and repository setting changes.
 
 ## Positioning Notes
 
@@ -91,35 +96,35 @@ Run:
     ruff check .
     agentic-kit check-docs
     agentic-kit doctor
-
-Optional release-preparation smoke command before a later release branch or release PR:
-
     agentic-kit release-plan --version 0.2.5
+    agentic-kit release-check --version 0.2.5
 
 ## Latest Known Evidence
 
-Branch creation baseline:
+Latest validated main gate before this branch:
 
-- git branch --show-current -> feature/release-visibility-v025
+- git branch --show-current -> main
 - python -m pytest -q -> 52 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
 - agentic-kit doctor -> Overall PASS; project state matches version 0.2.4
 
-Evidence still required after the documentation updates on this branch:
+Evidence still required after the release-preparation updates on this branch:
 
 - python -m pytest -q
 - ruff check .
 - agentic-kit check-docs
 - agentic-kit doctor
+- agentic-kit release-plan --version 0.2.5
+- agentic-kit release-check --version 0.2.5
 
 ## Current Open Work
 
-- Pull feature/release-visibility-v025 locally.
-- Run the required local gate.
-- If the gate passes, open a PR for README, CHANGELOG, STATUS, and handoff visibility updates.
-- After merge, a separate maintainer-approved release-preparation step may update version metadata, CHANGELOG release heading, tags, release artifacts, and publication state.
+- Pull feature/release-v025 locally.
+- Run the required local gate and release-state checks.
+- If the gates pass, open a PR for the v0.2.5 release-preparation changes.
+- After merge, separate maintainer-approved release steps may create the tag, trigger release artifacts, publish package artifacts, and allow Zenodo archival.
 
 ## Next Safe Step
 
-Pull feature/release-visibility-v025 locally and run the required local gate. Expected result: tests, ruff, check-docs, and doctor pass. Do not merge or release without maintainer approval.
+Pull feature/release-v025 locally and run the required local gate plus release-plan and release-check for 0.2.5. Expected result: tests, ruff, check-docs, doctor, and release-check pass, with release-plan printing the intended release commands. Do not tag or publish without maintainer approval.
