@@ -65,6 +65,10 @@ def test_check_state_gate_docs_reports_missing_file(tmp_path: Path):
         "# Project Status\n\n## Current State\n\n## Current Goal\n\n## Next Safe Step\n",
         encoding="utf-8",
     )
+    (tmp_path / "docs/TEST_GATES.md").write_text(
+        "# Test Gates\n\n## Gate Matrix\n\n## Outcome Reporting\n",
+        encoding="utf-8",
+    )
     (tmp_path / "docs/handoff/CURRENT_HANDOFF.md").write_text(
         "# Current Handoff\n\n## Current Repository State\n\n## Source of Truth\n\n## Next Safe Step\n",
         encoding="utf-8",
@@ -72,7 +76,23 @@ def test_check_state_gate_docs_reports_missing_file(tmp_path: Path):
 
     errors = check_state_gate_docs(tmp_path)
 
-    assert "Missing state gate document: docs/TEST_GATES.md" in errors
+    assert "Missing state gate document: docs/architecture/ARCHITECTURE_CONTRACT.md" in errors
+
+
+def test_check_state_gate_docs_reports_missing_architecture_contract_section(tmp_path: Path):
+    _write_valid_state_gate_docs(tmp_path)
+    contract_path = tmp_path / "docs/architecture/ARCHITECTURE_CONTRACT.md"
+    contract_path.write_text(
+        "# Architecture Contract and Roadmap\n\n## 1. Executive Summary\n",
+        encoding="utf-8",
+    )
+
+    errors = check_state_gate_docs(tmp_path)
+
+    assert (
+        "docs/architecture/ARCHITECTURE_CONTRACT.md: missing state gate section "
+        "'## 7. Architectural Contract'"
+    ) in errors
 
 
 def test_check_state_gate_docs_reports_stale_handoff_marker(tmp_path: Path):
@@ -94,6 +114,7 @@ def test_check_state_gate_docs_reports_stale_handoff_marker(tmp_path: Path):
 
 def _write_valid_state_gate_docs(project_root: Path) -> None:
     (project_root / "docs/handoff").mkdir(parents=True)
+    (project_root / "docs/architecture").mkdir(parents=True)
     (project_root / "docs/STATUS.md").write_text(
         "# Project Status\n\n## Current State\n\n## Current Goal\n\n## Next Safe Step\n",
         encoding="utf-8",
@@ -104,5 +125,14 @@ def _write_valid_state_gate_docs(project_root: Path) -> None:
     )
     (project_root / "docs/handoff/CURRENT_HANDOFF.md").write_text(
         "# Current Handoff\n\n## Current Repository State\n\n## Source of Truth\n\n## Next Safe Step\n",
+        encoding="utf-8",
+    )
+    (project_root / "docs/architecture/ARCHITECTURE_CONTRACT.md").write_text(
+        "# Architecture Contract and Roadmap\n\n"
+        "## 1. Executive Summary\n\n"
+        "## 2. How to Use This Document\n\n"
+        "## 4. Decision Rules\n\n"
+        "## 7. Architectural Contract\n\n"
+        "## 16. Acceptance Criteria for Future Work\n",
         encoding="utf-8",
     )
