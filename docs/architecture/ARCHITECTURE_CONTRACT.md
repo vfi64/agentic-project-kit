@@ -22,7 +22,42 @@ The long-term product boundary is:
 - guide human and AI-assisted development iterations with explicit evidence;
 - propose controlled changes instead of silently applying architectural rewrites.
 
-## 2. Research-Informed Design Position
+## 2. Strategic Product Position
+
+`agentic-project-kit` must not become another autonomous code-writing agent. Its strategic role is to make repositories agent-ready without transferring responsibility for architecture, evidence, and review to the agent.
+
+The product position is:
+
+```text
+agentic-kit makes repositories suitable for human-AI development by providing governance, context, deterministic checks, review infrastructure, and auditability.
+```
+
+The product non-goal is:
+
+```text
+agentic-kit is not a system for letting an LLM rewrite a repository and judge its own work.
+```
+
+The intended responsibility split is:
+
+```text
+LLM / coding agent      -> propose, explain, draft, inspect, and prepare changes
+agentic-kit doctor      -> check contracts, drift, evidence, gates, and repository health
+human / maintainer      -> decide, approve, reject, merge, and own architectural judgment
+```
+
+This distinction is central. The project should improve the conditions under which coding agents work, rather than trying to replace engineering process with unconstrained generation.
+
+Consequences:
+
+- reviewability is a first-class quality target, not a cosmetic PR-template concern;
+- deterministic checks outrank model self-assessment;
+- specifications and acceptance criteria should precede non-trivial implementation work in stricter policy packs;
+- evidence must be explicit, bounded, and inspectable;
+- architecture changes require a visible plan and approval path;
+- agent speed must not be allowed to hide context loss, stale documentation, missing tests, or uncontrolled drift.
+
+## 3. Research-Informed Design Position
 
 External work on repository-level coding agents, SWE benchmarks, code-graph context, GitHub coding-agent workflows, and vibe-coding practice supports the same conservative conclusion:
 
@@ -42,15 +77,15 @@ The architecture therefore adopts these research-informed constraints:
 
 Detailed source notes are kept in `AGENTIC_CODING_RESEARCH_INPUTS.md`; bibliographic records are kept in `references.bib`.
 
-## 3. Architectural Contract
+## 4. Architectural Contract
 
-### 3.1 Core Principle
+### 4.1 Core Principle
 
 The core of `agentic-project-kit` must be independent of any specific programming language, test runner, package manager, hosting provider, or user interface.
 
 The core may know that checks exist. It must not need to know that a Python project uses `pytest`, a TypeScript project uses `tsc`, or a Rust project uses `cargo`.
 
-### 3.2 Required Layering
+### 4.2 Required Layering
 
 The architecture shall be organized around the following conceptual layers:
 
@@ -83,7 +118,7 @@ adapters   -> application services -> core engine -> policy model
 
 The core must not import concrete adapters, UI code, or language-specific tooling.
 
-### 3.3 Forbidden Couplings
+### 4.3 Forbidden Couplings
 
 The following couplings are architectural violations:
 
@@ -93,7 +128,7 @@ The following couplings are architectural violations:
 - policy behavior hidden in prose-only documentation without a machine-checkable representation;
 - automatic structural rewrites without a visible plan, rationale, risk note, and explicit approval path.
 
-## 4. Project Contract Model
+## 5. Project Contract Model
 
 Generated and maintained repositories should converge on a machine-readable project contract, for example `agentic.toml` or an equivalent future format.
 
@@ -130,9 +165,9 @@ pull_request_template_required = true
 
 The exact format may evolve, but the separation between universal governance and profile-specific checks is mandatory.
 
-## 5. Profile and Policy Pack Model
+## 6. Profile and Policy Pack Model
 
-### 5.1 Profiles
+### 6.1 Profiles
 
 A profile describes a repository kind, not merely a programming language.
 
@@ -149,7 +184,7 @@ Examples:
 
 Profiles may be combined. A Python library with Markdown documentation and GitHub release automation is a multi-profile project.
 
-### 5.2 Policy Packs
+### 6.2 Policy Packs
 
 A policy pack is a selectable group of development principles and checks. Policy packs should be recommended by the system during `agentic-kit init` and during substantial project extensions.
 
@@ -173,7 +208,7 @@ The `safety-critical-inspired` pack may draw on ideas such as NASA/JPL Power of 
 
 The `prototype` pack exists so fast experimentation can be supported honestly without pretending that the repository is production-governed.
 
-### 5.3 Principle Categories
+### 6.3 Principle Categories
 
 Policy packs may combine principles from these categories:
 
@@ -230,7 +265,7 @@ Policy packs may combine principles from these categories:
 - future diagnostics should detect common secret-file patterns and risky evidence folders;
 - automation should operate with the least practical authority.
 
-## 6. Advisory Selection Dialog
+## 7. Advisory Selection Dialog
 
 `agentic-kit init` should eventually guide the user through profile and policy selection instead of asking only for a project type.
 
@@ -298,7 +333,7 @@ It needs test gates, documentation state checks, release-state validation, drift
 
 The user may accept, modify, or reject the recommendation. The final selection must be recorded in the project contract.
 
-## 7. Extension and Change Dialog
+## 8. Extension and Change Dialog
 
 For significant changes after initialization, the system should re-open a focused advisory dialog.
 
@@ -330,7 +365,7 @@ Recommended action:
 
 A structural change without contract update should at least produce a warning. For strict policy packs it may be a failing diagnostic.
 
-## 8. Diagnostics and Severity Model
+## 9. Diagnostics and Severity Model
 
 All checks should return a structured diagnostic model:
 
@@ -354,7 +389,7 @@ Severity expectations:
 
 Diagnostics should include reviewability findings where relevant, for example missing PR intent, missing test evidence, missing architecture-impact notes, or broad unbounded evidence dumps.
 
-## 9. Automation Boundary
+## 10. Automation Boundary
 
 The system may automatically perform low-risk mechanical actions after explicit user command, such as:
 
@@ -376,7 +411,7 @@ The system must not silently perform high-risk actions, such as:
 
 High-risk actions require a proposed plan, reviewable diff, test evidence, and explicit approval path.
 
-## 10. Single-User Now, Multiuser Later
+## 11. Single-User Now, Multiuser Later
 
 The first implementation may assume a single local maintainer and no rights management.
 
@@ -397,7 +432,7 @@ Potential future roles:
 - `owner`
 - `automation-agent`
 
-## 11. Roadmap
+## 12. Roadmap
 
 ### Phase 1: Contract and Profile Foundation
 
@@ -450,7 +485,7 @@ Potential future roles:
 - check generated templates for unsafe credential handling;
 - document least-authority expectations for automation agents.
 
-## 12. Acceptance Criteria for Future Work
+## 13. Acceptance Criteria for Future Work
 
 Future implementation work must preserve the following invariants:
 
@@ -461,9 +496,10 @@ Future implementation work must preserve the following invariants:
 - Init and major extension flows recommend policies instead of silently choosing strictness.
 - Automatic changes remain bounded, reviewable, and reversible.
 - Reviewability is treated as a first-class quality dimension.
+- LLMs and coding agents may propose changes, but must not be the final authority for repository health or merge readiness.
 - Multiuser support is not implemented prematurely, but future roles and attribution are not blocked.
 
-## 13. Open Questions
+## 14. Open Questions
 
 - Should the project contract be named `agentic.toml`, `.agentic/project.toml`, or another path?
 - Should policy packs be built into the package, loaded from files, or both?
