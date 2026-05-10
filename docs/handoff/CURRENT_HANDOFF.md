@@ -21,7 +21,7 @@ Important released work:
 - v0.2.2 added --kit-source for generated CI with pypi, testpypi, and none.
 - v0.2.3 added release-state validation for local tags, remote tags, and GitHub releases.
 - v0.2.4 added Zenodo-backed citation and archival metadata.
-- v0.2.5 released the post-v0.2.4 repository-health and visibility work, including project contracts, profiles, policy packs, policy-pack doctor checks, documentation coverage drift checks, machine-readable task gates, and the semantic quality boundary.
+- v0.2.5 released the post-v0.2.4 repository-health and visibility work, including project contracts, profiles, policy packs, policy-pack checks, policy-pack doctor checks, documentation coverage drift checks, machine-readable task gates, and the semantic quality boundary.
 
 v0.2.5 release evidence:
 
