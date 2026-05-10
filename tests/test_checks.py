@@ -1,6 +1,11 @@
 from pathlib import Path
 
-from agentic_project_kit.checks import check_docs, check_state_gate_docs, check_todo
+from agentic_project_kit.checks import (
+    check_docs,
+    check_documentation_coverage,
+    check_state_gate_docs,
+    check_todo,
+)
 
 
 def test_check_docs_reports_missing_section(tmp_path: Path):
@@ -13,7 +18,7 @@ documents:
 ''',
         encoding="utf-8",
     )
-    (tmp_path / "README.md").write_text("# Title\n", encoding="utf-8")
+    (tmp_path / "README.md").write_text("# Title\nrequired-term\n", encoding="utf-8")
     _write_valid_state_gate_docs(tmp_path)
 
     errors = check_docs(tmp_path)
@@ -23,6 +28,7 @@ documents:
 
 
 def test_check_docs_accepts_state_gate_docs_without_sentinel(tmp_path: Path):
+    (tmp_path / "README.md").write_text("# Demo\nrequired-term\n", encoding="utf-8")
     _write_valid_state_gate_docs(tmp_path)
 
     assert check_docs(tmp_path) == []
@@ -77,6 +83,7 @@ def test_check_state_gate_docs_reports_missing_file(tmp_path: Path):
     errors = check_state_gate_docs(tmp_path)
 
     assert "Missing state gate document: docs/architecture/ARCHITECTURE_CONTRACT.md" in errors
+    assert "Missing state gate document: docs/DOCUMENTATION_COVERAGE.yaml" in errors
 
 
 def test_check_state_gate_docs_reports_missing_architecture_contract_section(tmp_path: Path):
@@ -112,6 +119,30 @@ def test_check_state_gate_docs_reports_stale_handoff_marker(tmp_path: Path):
     ]
 
 
+def test_check_documentation_coverage_accepts_valid_matrix(tmp_path: Path):
+    (tmp_path / "README.md").write_text("# Demo\nrequired-term\n", encoding="utf-8")
+    _write_valid_coverage_matrix(tmp_path)
+
+    assert check_documentation_coverage(tmp_path) == []
+
+
+def test_check_documentation_coverage_reports_missing_term(tmp_path: Path):
+    (tmp_path / "README.md").write_text("# Demo\n", encoding="utf-8")
+    _write_valid_coverage_matrix(tmp_path)
+
+    errors = check_documentation_coverage(tmp_path)
+
+    assert errors == [
+        "documentation coverage demo-rule: README.md missing term 'required-term'",
+    ]
+
+
+def test_check_documentation_coverage_reports_missing_matrix(tmp_path: Path):
+    errors = check_documentation_coverage(tmp_path)
+
+    assert errors == ["Missing state gate document: docs/DOCUMENTATION_COVERAGE.yaml"]
+
+
 def _write_valid_state_gate_docs(project_root: Path) -> None:
     (project_root / "docs/handoff").mkdir(parents=True)
     (project_root / "docs/architecture").mkdir(parents=True)
@@ -134,5 +165,22 @@ def _write_valid_state_gate_docs(project_root: Path) -> None:
         "## 4. Decision Rules\n\n"
         "## 7. Architectural Contract\n\n"
         "## 16. Acceptance Criteria for Future Work\n",
+        encoding="utf-8",
+    )
+    _write_valid_coverage_matrix(project_root)
+
+
+def _write_valid_coverage_matrix(project_root: Path) -> None:
+    (project_root / "docs").mkdir(parents=True, exist_ok=True)
+    (project_root / "docs/DOCUMENTATION_COVERAGE.yaml").write_text(
+        '''
+version: 1
+rules:
+  - id: demo-rule
+    documents:
+      - path: README.md
+        terms:
+          - required-term
+''',
         encoding="utf-8",
     )
