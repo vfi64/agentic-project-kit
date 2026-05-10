@@ -4,15 +4,14 @@ All notable changes to this project are documented here.
 
 This project uses a pragmatic semantic versioning scheme while it is in early MVP development.
 
-## Unreleased
+## v0.2.5
 
-Release-preparation notes for the next maintainer-approved release candidate, currently expected as v0.2.5:
-
-- Document the post-v0.2.4 repository-health work as a visible release candidate instead of leaving it only in merged pull requests.
+- Document the post-v0.2.4 repository-health work as a visible release instead of leaving it only in merged pull requests.
 - Emphasize `agentic-kit doctor` and `agentic-kit check-docs` as the main user-facing health and documentation gates.
-- Clarify that project contracts, profiles, policy packs, documentation coverage, TODO gates, version-drift checks, and deterministic document-quality heuristics are machine-checkable governance aids.
+- Clarify that project contracts, profiles, policy packs, documentation coverage, machine-readable task gates, version-drift checks, and deterministic document-quality heuristics are machine-checkable governance aids.
 - Preserve the semantic quality boundary: deterministic gates are hard checks for known structural and drift problems, not proof of semantic perfection.
-- Prepare README, status, and handoff wording for a later maintainer-owned v0.2.5 release without changing package version, creating tags, or publishing artifacts.
+- Improve README positioning with a clearer purpose statement, generator-boundary explanation, project scope boundary, and maintainer-owned GitHub discovery suggestions.
+- Update project state and handoff documents for the v0.2.5 release-preparation branch.
 
 ## v0.2.4
 
