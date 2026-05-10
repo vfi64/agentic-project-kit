@@ -6,7 +6,6 @@ from enum import Enum
 from pathlib import Path
 import json
 import re
-import subprocess
 import urllib.parse
 import urllib.request
 

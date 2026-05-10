@@ -24,6 +24,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Packaging/release change | python -m build, twine check dist/*, release workflow result |
 | Release planning change | Unit tests plus agentic-kit release-plan CLI smoke command |
 | Release state validation change | Unit tests plus agentic-kit release-check CLI smoke command |
+| Post-release archive check | Unit tests plus agentic-kit post-release-check CLI smoke command |
 | TODO validation change | Unit tests plus agentic-kit check-todo CLI smoke command |
 | Project health check change | Unit tests plus agentic-kit doctor CLI smoke command |
 | TestPyPI validation | TestPyPI upload, fresh venv install, CLI smoke command |
@@ -131,6 +132,10 @@ Plan first:
 Validate release state before tagging:
 
     agentic-kit release-check --version <version>
+
+Check post-release archive state after publishing:
+
+    agentic-kit post-release-check --version <version>
 
 Before tagging:
 

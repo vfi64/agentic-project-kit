@@ -178,6 +178,8 @@ agentic-kit release-check --version 0.2.5
 
 These commands help prevent release-state drift between `pyproject.toml`, `CHANGELOG.md`, project state files, local tags, remote tags, GitHub releases, and citation metadata.
 
+This post-release command is separate from release-check: `release-check` is the pre-release gate, while `post-release-check` verifies the already-published release and its Zenodo archive state.
+
 Use `agentic-kit post-release-check` after publishing a GitHub release:
 
 ```bash
