@@ -4,9 +4,9 @@
 
 `agentic-project-kit` is a local Python package for generating GitHub-ready project skeletons for human-AI software development workflows.
 
-It creates not only files, but a reusable development process: agent onboarding, project contract, profile and policy pack selection, status discipline, test gates, TODO tracking, bounded logging conventions, and optional GitHub automation.
+It creates not only files, but a reusable development process: agent onboarding, project contract, profile and policy pack selection, status discipline, test gates, task tracking, bounded logging conventions, and optional GitHub automation.
 
-In one sentence: `agentic-project-kit` is an early, dogfooded attempt to make AI-assisted repository work more reproducible through project contracts, documentation gates, release-state checks, TODO gates, policy expectations, and bounded evidence.
+In one sentence: `agentic-project-kit` is an early, dogfooded attempt to make AI-assisted repository work more reproducible through project contracts, documentation gates, release-state checks, task gates, policy expectations, and bounded evidence.
 
 ## Why this exists
 
@@ -14,13 +14,13 @@ AI-assisted development works best when project context is explicit, current, an
 
 This kit turns those lessons into a reusable starter system for new repositories.
 
-The goal is not to make an LLM write code better by itself. The goal is to make repository state, handoffs, documentation coverage, TODOs, release state, and policy expectations visible enough that humans and coding agents can work with less context drift.
+The goal is not to make an LLM write code better by itself. The goal is to make repository state, handoffs, documentation coverage, task state, release state, and policy expectations visible enough that humans and coding agents can work with less context drift.
 
 ## Why not just Cookiecutter?
 
 Cookiecutter-style generators are useful for creating initial files. `agentic-project-kit` is aimed at a narrower problem: keeping AI-assisted repository work reviewable after the first commit.
 
-A generated project therefore includes machine-readable state, current handoff files, documentation coverage expectations, TODO gates, local health checks, release-state validation, policy-pack fixtures, and evidence conventions. These are governance aids, not a claim that the repository is semantically complete or production-ready.
+A generated project therefore includes machine-readable state, current handoff files, documentation coverage expectations, task gates, local health checks, release-state validation, policy-pack fixtures, and evidence conventions. These are governance aids, not a claim that the repository is semantically complete or production-ready.
 
 ## What it generates
 
@@ -40,7 +40,7 @@ A generated project includes:
 - GitHub Copilot instruction file
 - pre-commit configuration
 - bounded diagnostic log staging script
-- `sentinel.yaml` for document and TODO checks
+- `sentinel.yaml` for document and task checks
 - minimal package/test skeleton for Python projects
 
 ## Installation for local development
@@ -119,7 +119,7 @@ agentic-kit init my-docs-project \
 
 These checks currently verify structural prerequisites:
 
-- `solo-maintainer` expects status, handoff, sentinel, and TODO gate files.
+- `solo-maintainer` expects status, handoff, sentinel, and task gate files.
 - `agentic-development` expects agent instructions, test gates, handoff, and the architecture contract.
 - `release-managed` expects changelog, citation metadata, and Zenodo metadata.
 - `documentation-governed` expects the documentation coverage matrix and architecture contract.
@@ -135,7 +135,7 @@ Use `agentic-kit doctor` as the compact repository health check:
 agentic-kit doctor
 ```
 
-It reports required project files, project contract status, policy-pack checks, documentation gates, TODO validation when configured, and version-drift checks. The command exits non-zero only when required checks fail.
+It reports required project files, project contract status, policy-pack checks, documentation gates, task validation when configured, and version-drift checks. The command exits non-zero only when required checks fail.
 
 Example output shape:
 
@@ -149,7 +149,7 @@ Agentic project doctor report for /path/to/project
 [PASS] policy pack checks: active: starter, solo-maintainer
 [PASS] documentation gates: passed
 [PASS] todo gates: passed
-[PASS] version drift: project state matches version 0.2.4
+[PASS] version drift: project state matches version 0.2.5
 
 Overall: PASS
 ```
@@ -238,7 +238,7 @@ Zenodo metadata is provided in `.zenodo.json`. The project is archived through t
 
 For citation, prefer the all-versions DOI: `10.5281/zenodo.20101359`.
 
-The version-specific DOI for `v0.2.4` is `10.5281/zenodo.20101360`.
+The latest prepared release in this repository is `v0.2.5`. Zenodo assigns the version-specific DOI after the GitHub release is published and archived.
 
 ## Safety rule
 
@@ -255,7 +255,7 @@ This kit creates a fresh repository from generic templates. It does not copy a p
 Suggested GitHub description:
 
 ```text
-Reproducible AI-assisted repository work through project contracts, documentation gates, release checks, TODO gates, and policy packs.
+Reproducible AI-assisted repository work through project contracts, documentation gates, release checks, task gates, and policy packs.
 ```
 
 Suggested topics:
@@ -277,6 +277,6 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.2.4` is an early MVP with release-state validation, project-health diagnostics, policy-pack doctor checks, deterministic document-quality heuristics, documentation coverage checks, generated project contracts, project profiles, policy packs, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
+Version `0.2.5` is an early MVP release candidate with release-state validation, project-health diagnostics, policy-pack doctor checks, deterministic document-quality heuristics, documentation coverage checks, generated project contracts, project profiles, policy packs, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
 
-The current repository state is ready for a maintainer-owned v0.2.5 release-preparation review once CHANGELOG, README, STATUS, and handoff wording describe the post-v0.2.4 health-check and visibility work consistently.
+This repository is prepared for maintainer-owned v0.2.5 release validation. Tag creation, GitHub release publication, package publication, and Zenodo archival remain separate maintainer-approved steps.
