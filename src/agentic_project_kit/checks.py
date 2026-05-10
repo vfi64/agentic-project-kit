@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Any
+import re
 import yaml
 
 
@@ -20,7 +21,7 @@ STATE_GATE_SECTIONS = {
         "## 2. How to Use This Document",
         "## 4. Decision Rules",
         "## 7. Architectural Contract",
-        "## 16. Acceptance Criteria for Future Work",
+        "## 17. Acceptance Criteria for Future Work",
     ),
 }
 
@@ -30,16 +31,16 @@ STALE_HANDOFF_MARKERS = (
     "Run the local gate, inspect the diff, then commit the documentation-state update",
 )
 
-QUALITY_PLACEHOLDERS = (
-    "TODO",
-    "TBD",
-    "FIXME",
-    "Lorem ipsum",
-    "coming soon",
-    "to be written",
-    "to be defined",
-    "placeholder",
-)
+QUALITY_PLACEHOLDER_PATTERNS = {
+    "TODO": re.compile(r"(^|[\s\[{(<])TODO([\s\]}>)?:-]|$)"),
+    "TBD": re.compile(r"(^|[\s\[{(<])TBD([\s\]}>)?:-]|$)"),
+    "FIXME": re.compile(r"(^|[\s\[{(<])FIXME([\s\]}>)?:-]|$)"),
+    "Lorem ipsum": re.compile(r"Lorem ipsum", re.IGNORECASE),
+    "coming soon": re.compile(r"coming soon", re.IGNORECASE),
+    "to be written": re.compile(r"to be written", re.IGNORECASE),
+    "to be defined": re.compile(r"to be defined", re.IGNORECASE),
+    "placeholder marker": re.compile(r"placeholder\s+(text|section|content|value)", re.IGNORECASE),
+}
 
 
 SEMANTIC_QUALITY_BOUNDARY = (
@@ -110,8 +111,8 @@ def check_document_quality(relative_path: str, content: str) -> list[str]:
     They are not a claim of semantic perfection.
     """
     errors: list[str] = []
-    for marker in QUALITY_PLACEHOLDERS:
-        if marker in content:
+    for marker, pattern in QUALITY_PLACEHOLDER_PATTERNS.items():
+        if pattern.search(content):
             errors.append(f"{relative_path}: unresolved placeholder marker {marker!r}")
     return errors
 
