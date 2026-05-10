@@ -16,12 +16,19 @@ def _write_state_docs(root: Path, version: str = "1.2.3") -> None:
     )
 
 
-def _write_version_files(root: Path, version: str = "1.2.3", *, quoted_citation: bool = False) -> None:
+def _write_version_files(
+    root: Path,
+    version: str = "1.2.3",
+    *,
+    quoted_citation: bool = False,
+    quoted_doi: bool = False,
+) -> None:
     (root / "pyproject.toml").write_text(f"[project]\nversion = \"{version}\"\n", encoding="utf-8")
     (root / "CHANGELOG.md").write_text(f"# Changelog\n\n## v{version}\n", encoding="utf-8")
     citation_version = f'"{version}"' if quoted_citation else version
+    citation_doi = '"10.5281/zenodo.20101359"' if quoted_doi else "10.5281/zenodo.20101359"
     (root / "CITATION.cff").write_text(
-        f"cff-version: 1.2.0\nversion: {citation_version}\ndoi: 10.5281/zenodo.20101359\n",
+        f"cff-version: 1.2.0\nversion: {citation_version}\ndoi: {citation_doi}\n",
         encoding="utf-8",
     )
 
@@ -136,6 +143,18 @@ def test_doctor_report_passes_when_citation_metadata_matches(tmp_path: Path):
     assert citation_check.name == "citation drift"
     assert citation_check.status == DoctorStatus.PASS
     assert "10.5281/zenodo.20101359" in citation_check.detail
+
+
+def test_doctor_report_accepts_quoted_citation_doi(tmp_path: Path):
+    _write_citation_files(tmp_path)
+    _write_state_docs(tmp_path, "1.2.3")
+    _write_version_files(tmp_path, "1.2.3", quoted_doi=True)
+
+    report = build_doctor_report(tmp_path)
+
+    assert report.ok
+    citation_check = report.checks[-1]
+    assert citation_check.status == DoctorStatus.PASS
 
 
 def test_doctor_report_fails_on_partial_citation_metadata(tmp_path: Path):
