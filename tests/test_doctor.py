@@ -42,7 +42,7 @@ def _write_project_contract(
     *,
     policy_packs: tuple[str, ...] = ("starter", "solo-maintainer"),
 ) -> None:
-    (root / ".agentic").mkdir(parents=True)
+    (root / ".agentic").mkdir(parents=True, exist_ok=True)
     data = build_contract_data(
         name="demo",
         description="Demo project",
