@@ -14,3 +14,5 @@ class ProjectOptions:
     logging_evidence: bool
     target_dir: Path
     kit_source: str = "pypi"
+    profiles: tuple[str, ...] = ()
+    policy_packs: tuple[str, ...] = ()
