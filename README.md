@@ -107,6 +107,22 @@ Agentic project doctor report for /path/to/project
 Overall: PASS
 ```
 
+## Release planning and validation
+
+Use `agentic-kit release-plan` before preparing a release:
+
+```bash
+agentic-kit release-plan --version 0.2.5
+```
+
+Use `agentic-kit release-check` before tagging:
+
+```bash
+agentic-kit release-check --version 0.2.5
+```
+
+These commands help prevent release-state drift between `pyproject.toml`, `CHANGELOG.md`, project state files, local tags, remote tags, GitHub releases, and citation metadata.
+
 ## TODO workflow
 
 Generated projects contain a machine-readable TODO file and a rendered Markdown view.
@@ -144,6 +160,14 @@ Generated projects separate:
 
 Agents should start with `AGENTS.md`, `docs/PROJECT_START.md`, `docs/STATUS.md`, and `docs/TEST_GATES.md`. They should not infer current state from memory or stale prose.
 
+## Documentation coverage and drift checks
+
+The repository uses `docs/DOCUMENTATION_COVERAGE.yaml` as a machine-checkable documentation coverage matrix.
+
+`agentic-kit check-docs` validates that important public commands, workflows, governance concepts, safety rules, release commands, and evidence expectations remain visible in the expected documents. This prevents features such as `agentic-kit doctor` from being implemented but invisible to new users.
+
+When adding a public command, workflow, gate, profile, policy pack, generated file, or architecture concept, update the coverage matrix and the affected documentation in the same change.
+
 ## Logging and evidence
 
 The generated `scripts/stage_recent_logs.py` script is intentionally bounded. It stages only a recent diagnostic window from known log folders into `tmp/agent-evidence`.
@@ -168,4 +192,4 @@ This kit creates a fresh repository from generic templates. It does not copy a p
 
 ## Current status
 
-Version `0.2.4` is an early MVP with release-state validation, project-health diagnostics, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
+Version `0.2.4` is an early MVP with release-state validation, project-health diagnostics, documentation coverage checks, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
