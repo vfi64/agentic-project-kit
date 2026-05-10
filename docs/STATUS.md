@@ -3,12 +3,12 @@
 Status-date: 2026-05-10
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/update-state-after-doctor-version-drift
+Current work branch: feature/enforce-architecture-contract-review
 Current version: 0.2.4
 
 ## Purpose
 
-agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, TODO tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, and project-health diagnostics.
+agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, TODO tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, and architecture-contract governance.
 
 The project itself has a current state layer so work can be continued from the repository state files.
 
@@ -45,12 +45,16 @@ Project-level state documentation is present on main:
 - docs/STATUS.md
 - docs/TEST_GATES.md
 - docs/handoff/CURRENT_HANDOFF.md
+- docs/architecture/ARCHITECTURE_CONTRACT.md
+- docs/architecture/AGENTIC_CODING_RESEARCH_INPUTS.md
+- docs/architecture/references.bib
 
 Project-level state documentation is machine-checkable:
 
 - agentic-kit check-docs checks the state gate documents.
 - sentinel.yaml is optional for check-docs, so the kit repository root can be checked directly.
 - stale handoff markers are detected in docs/handoff/CURRENT_HANDOFF.md.
+- The architecture contract is being promoted to a required state gate document on branch feature/enforce-architecture-contract-review.
 
 Release preparation is CLI-supported:
 
@@ -72,7 +76,7 @@ Project health diagnostics are CLI-supported:
 - PR #22 extended doctor with version-drift detection across project state and citation files.
 - The doctor command reports PASS, WARN, and FAIL entries and exits non-zero only when required checks fail.
 
-Latest validated gates after PR #22:
+Latest validated gates before this branch:
 
 - python -m pytest -q -> 33 passed
 - ruff check . -> passed
@@ -82,7 +86,7 @@ Latest validated gates after PR #22:
 
 ## Current Goal
 
-Record the merged doctor version-drift detection in STATUS and CURRENT_HANDOFF.
+Make the architecture contract hard to ignore by adding agent instructions, a pull request template, documentation-gate validation for docs/architecture/ARCHITECTURE_CONTRACT.md, and explicit architecture-contract evidence requirements.
 
 ## Current Blockers
 
@@ -101,6 +105,6 @@ agentic-kit doctor
 
 ## Next Safe Step
 
-Pull docs/update-state-after-doctor-version-drift locally and run the local gate. If it passes, merge the branch.
+Pull feature/enforce-architecture-contract-review locally and run the local gate. If it passes, open and merge the branch.
 
-After the state update is merged, the next functional development block should extend agentic-kit doctor toward README/status drift, citation metadata drift, TODO render staleness, and generated-project health issues.
+After this branch is merged, the next functional development block can start the project-contract and policy-pack implementation.
