@@ -18,6 +18,7 @@ rules:
           - agentic-kit doctor
           - agentic-kit release-plan
           - agentic-kit release-check
+          - agentic-kit post-release-check
           - agentic-kit github-create
           - agentic-kit todo list
           - agentic-kit todo complete
@@ -110,6 +111,7 @@ rules:
           - agentic-kit doctor
           - agentic-kit release-plan
           - agentic-kit release-check
+          - agentic-kit post-release-check
           - agentic-kit check-todo
           - docs/DOCUMENTATION_COVERAGE.yaml
           - Architecture Contract Gate
@@ -118,6 +120,25 @@ rules:
           - Doctor Gate
           - Release Gate
           - Outcome Reporting
+
+  - id: post-release-zenodo-coverage
+    description: Post-release Zenodo checks must remain visible and separate from pre-release gates.
+    documents:
+      - path: README.md
+        terms:
+          - agentic-kit post-release-check
+          - verified Zenodo version record
+          - WAITING
+          - README/CITATION DOI metadata unchanged
+          - separate from release-check
+      - path: docs/STATUS.md
+        terms:
+          - post-release Zenodo
+          - agentic-kit post-release-check
+      - path: docs/handoff/CURRENT_HANDOFF.md
+        terms:
+          - post-release Zenodo
+          - agentic-kit post-release-check
 
   - id: agent-instruction-coverage
     description: Agent instructions must point agents to architecture and documentation coverage duties.
@@ -176,12 +197,14 @@ rules:
           - DOI
           - agentic-kit release-plan
           - agentic-kit release-check
+          - agentic-kit post-release-check
       - path: docs/TEST_GATES.md
         terms:
           - Packaging Gate
           - Release Gate
           - agentic-kit release-plan
           - agentic-kit release-check
+          - agentic-kit post-release-check
 
   - id: safety-evidence-coverage
     description: Safety and evidence constraints must be visible to users and agents.
