@@ -126,7 +126,7 @@ def _citation_drift_check(project_root: Path) -> DoctorCheck:
         missing.append("README.md Zenodo badge")
 
     citation_path = project_root / "CITATION.cff"
-    if not _file_contains(citation_path, f"doi: {ZENODO_ALL_VERSIONS_DOI}"):
+    if not _citation_doi_matches(citation_path):
         missing.append("CITATION.cff DOI")
 
     zenodo_path = project_root / ".zenodo.json"
@@ -151,7 +151,7 @@ def _has_citation_metadata(project_root: Path) -> bool:
     return (
         _file_contains(readme_path, ZENODO_ALL_VERSIONS_DOI)
         or _file_contains(readme_path, ZENODO_BADGE_FRAGMENT)
-        or _file_contains(citation_path, f"doi: {ZENODO_ALL_VERSIONS_DOI}")
+        or _citation_doi_matches(citation_path)
         or zenodo_path.exists()
     )
 
@@ -177,5 +177,17 @@ def _citation_version_matches(path: Path, version: str) -> bool:
         f"version: {version}",
         f'version: "{version}"',
         f"version: '{version}'",
+    )
+    return any(item in text for item in accepted)
+
+
+def _citation_doi_matches(path: Path) -> bool:
+    if not path.exists():
+        return False
+    text = path.read_text(encoding="utf-8")
+    accepted = (
+        f"doi: {ZENODO_ALL_VERSIONS_DOI}",
+        f'doi: "{ZENODO_ALL_VERSIONS_DOI}"',
+        f"doi: '{ZENODO_ALL_VERSIONS_DOI}'",
     )
     return any(item in text for item in accepted)
