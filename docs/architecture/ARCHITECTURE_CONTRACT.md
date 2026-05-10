@@ -104,6 +104,12 @@ Bounded, inspectable proof that a check was run or a claim was validated. Eviden
 **Architecture fitness function**  
 A check that turns an architecture rule into an executable or semi-executable diagnostic, for example an import-boundary check or README/CLI drift check.
 
+**Semantic quality boundary**  
+The explicit limit that deterministic checks can verify only structure, consistency, coverage, placeholder absence, and selected drift indicators. They cannot prove architectural excellence, didactic optimality, future handoff sufficiency, or the complete correctness of all implicit assumptions.
+
+**Advisory review**  
+A non-blocking review signal, potentially produced by a human or a later LLM-assisted command, that may critique clarity, didactic quality, target-audience fit, missing rationale, or architecture drift. Advisory review is not a hard proof and must not be treated as merge authority.
+
 ## 4. Decision Rules
 
 When rules or design goals conflict, use this priority order:
@@ -263,7 +269,42 @@ Bad:
 Make every starter project fail because it has no release metadata.
 ```
 
-## 8. Project Contract Model
+## 8. Semantic Quality Boundary
+
+`agentic-project-kit` must not claim that machine checks prove semantic perfection.
+
+Deterministic checks can and should verify strong approximations, including:
+
+- required files, sections, terms, and workflows;
+- formal validity of the project contract;
+- known profiles and policy packs;
+- policy-pack fixture availability;
+- version consistency across project metadata and state files;
+- absence of known stale handoff markers;
+- absence of unresolved placeholder markers;
+- documentation coverage for public commands and governance concepts;
+- reproducible local gate evidence.
+
+Deterministic checks cannot reliably prove:
+
+- that an architecture is globally optimal;
+- that documentation is didactically ideal;
+- that a policy-pack recommendation is perfect for every project;
+- that a handoff is sufficient for every future agent;
+- that all implicit assumptions are correct;
+- that public-facing prose is persuasive for every audience.
+
+Therefore:
+
+```text
+doctor and check-docs are hard deterministic gates.
+review-docs, review-architecture, or critique-style commands may be added later only as advisory review signals.
+human maintainers remain responsible for architecture, merge, release, and public positioning decisions.
+```
+
+LLM-based semantic review must not become a required `doctor` failure gate. It may produce findings, suggestions, uncertainty notes, or review prompts, but not a false proof of repository quality.
+
+## 9. Project Contract Model
 
 Generated and maintained repositories should converge on a machine-readable project contract, for example `agentic.toml` or an equivalent future format.
 
@@ -300,9 +341,9 @@ pull_request_template_required = true
 
 The exact format may evolve, but the separation between universal governance and profile-specific checks is mandatory.
 
-## 9. Profile and Policy Pack Model
+## 10. Profile and Policy Pack Model
 
-### 9.1 Profiles
+### 10.1 Profiles
 
 A profile describes a repository kind or toolchain capability, not merely a programming language.
 
@@ -319,7 +360,7 @@ Examples:
 
 Profiles may be combined. A Python library with Markdown documentation and GitHub release automation is a multi-profile project.
 
-### 9.2 Policy Packs
+### 10.2 Policy Packs
 
 A policy pack is a selectable group of development principles and checks. Policy packs should be recommended by the system during `agentic-kit init` and during substantial project extensions.
 
@@ -343,7 +384,7 @@ The `safety-critical-inspired` pack may draw on ideas such as NASA/JPL Power of 
 
 The `prototype` pack exists so fast experimentation can be supported honestly without pretending that the repository is production-governed.
 
-### 9.3 Principle Categories
+### 10.3 Principle Categories
 
 Policy packs may combine principles from these categories.
 
@@ -401,7 +442,7 @@ Security and secret hygiene:
 - future diagnostics should detect common secret-file patterns and risky evidence folders;
 - automation should operate with the least practical authority.
 
-## 10. Advisory Selection Dialog
+## 11. Advisory Selection Dialog
 
 `agentic-kit init` should guide the user through profile and policy selection instead of asking only for a project type.
 
@@ -469,7 +510,7 @@ It needs test gates, documentation state checks, release-state validation, drift
 
 The user may accept, modify, or reject the recommendation. The final selection must be recorded in the project contract.
 
-## 11. Extension and Change Dialog
+## 12. Extension and Change Dialog
 
 For significant changes after initialization, the system should re-open a focused advisory dialog.
 
@@ -501,7 +542,7 @@ Recommended action:
 
 A structural change without contract update should at least produce a warning. For strict policy packs it may be a failing diagnostic.
 
-## 12. Diagnostics and Severity Model
+## 13. Diagnostics and Severity Model
 
 All checks should return a structured diagnostic model:
 
@@ -525,7 +566,7 @@ Severity expectations:
 
 Diagnostics should include reviewability findings where relevant, for example missing PR intent, missing test evidence, missing architecture-impact notes, or broad unbounded evidence dumps.
 
-## 13. Automation Boundary
+## 14. Automation Boundary
 
 The system may automatically perform low-risk mechanical actions after explicit user command, such as:
 
@@ -547,7 +588,7 @@ The system must not silently perform high-risk actions, such as:
 
 High-risk actions require a proposed plan, reviewable diff, test evidence, and explicit approval path.
 
-## 14. Single-User Now, Multiuser Later
+## 15. Single-User Now, Multiuser Later
 
 The first implementation may assume a single local maintainer and no rights management.
 
@@ -568,7 +609,7 @@ Potential future roles:
 - `owner`
 - `automation-agent`
 
-## 15. Roadmap
+## 16. Roadmap
 
 ### Phase 1: Contract and Profile Foundation
 
@@ -621,7 +662,14 @@ Potential future roles:
 - check generated templates for unsafe credential handling;
 - document least-authority expectations for automation agents.
 
-## 16. Acceptance Criteria for Future Work
+### Phase 8: Advisory Semantic Review
+
+- define `review-docs` and `review-architecture` as advisory command concepts;
+- keep advisory review separate from `doctor` hard gates;
+- report uncertainty, audience-fit issues, unclear rationale, and possible architecture drift;
+- never treat LLM review as proof of semantic perfection or merge readiness.
+
+## 17. Acceptance Criteria for Future Work
 
 Future implementation work must preserve these invariants:
 
@@ -633,11 +681,13 @@ Future implementation work must preserve these invariants:
 - Automatic changes remain bounded, reviewable, and reversible.
 - Reviewability is treated as a first-class quality dimension.
 - LLMs and coding agents may propose changes, but must not be the final authority for repository health or merge readiness.
+- Deterministic gates must not claim semantic perfection.
+- Advisory semantic review must remain separate from hard `doctor` failure gates.
 - Multiuser support is not implemented prematurely, but future roles and attribution are not blocked.
 
 A change that violates one of these invariants needs an explicit architecture decision record before implementation.
 
-## 17. Open Questions
+## 18. Open Questions
 
 - Should the project contract be named `agentic.toml`, `.agentic/project.toml`, or another path?
 - Should policy packs be built into the package, loaded from files, or both?
@@ -646,3 +696,5 @@ A change that violates one of these invariants needs an explicit architecture de
 - Should baseline mode be implemented before or after the first policy pack MVP?
 - Should reviewability diagnostics live in `doctor`, PR tooling, or both?
 - How much repository-map functionality is useful before adding non-Python profiles?
+- What deterministic document-quality heuristics should be enabled by default?
+- Which semantic review workflows can be useful without becoming false hard gates?
