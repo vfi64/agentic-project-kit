@@ -7,12 +7,20 @@ STATE_GATE_DOCUMENTS = (
     "docs/STATUS.md",
     "docs/TEST_GATES.md",
     "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/architecture/ARCHITECTURE_CONTRACT.md",
 )
 
 STATE_GATE_SECTIONS = {
     "docs/STATUS.md": ("## Current Goal", "## Next Safe Step"),
     "docs/TEST_GATES.md": ("## Gate Matrix", "## Outcome Reporting"),
     "docs/handoff/CURRENT_HANDOFF.md": ("# Current Handoff", "## Current", "## Next"),
+    "docs/architecture/ARCHITECTURE_CONTRACT.md": (
+        "## 1. Executive Summary",
+        "## 2. How to Use This Document",
+        "## 4. Decision Rules",
+        "## 7. Architectural Contract",
+        "## 16. Acceptance Criteria for Future Work",
+    ),
 }
 
 STALE_HANDOFF_MARKERS = (
