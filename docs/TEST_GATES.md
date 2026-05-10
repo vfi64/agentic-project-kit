@@ -70,6 +70,20 @@ Update it when adding or changing:
 
 `agentic-kit check-docs` must fail if a required term from the coverage matrix is missing from its target document.
 
+## Remote Work Authorization Gate
+
+Agents may create remote feature branches, edit files on those branches, repair follow-up gate failures, and open or update pull requests without additional confirmation when the work fits the current request and the architecture contract.
+
+The following decisions remain maintainer-owned and require explicit approval:
+
+- merge pull requests;
+- write directly to `main`;
+- create release tags;
+- create release or publication artifacts;
+- raise release versions;
+- change repository visibility, access rights, or private configuration;
+- change architecture direction when multiple plausible options exist.
+
 ## Standard Local Gate
 
 Run these commands:
