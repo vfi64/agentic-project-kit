@@ -88,6 +88,7 @@ Project contract and policy-pack work on this branch:
 - `src/agentic_project_kit/contract.py` defines the project contract schema helpers, known profiles, known policy packs, defaults, recommendations, validation, and summary rendering.
 - `agentic-kit init` now writes `.agentic/project.yaml`.
 - `agentic-kit init` accepts `--profiles` and `--policy-packs` for explicit selection.
+- The repository now contains its own `.agentic/project.yaml` so doctor can validate the kit's active profiles and policy packs instead of warning that the contract is absent.
 - Generated projects point agents to `.agentic/project.yaml` in README, AGENTS, PROJECT_START, STATUS, TEST_GATES, and handoff files.
 - README.md documents project contract, profiles, and policy packs.
 - docs/DOCUMENTATION_COVERAGE.yaml now protects project contract, profile, and policy-pack visibility.
