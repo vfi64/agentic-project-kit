@@ -37,16 +37,32 @@ def _write_state_docs(root: Path, version: str = "1.2.3") -> None:
     )
 
 
-def _write_project_contract(root: Path) -> None:
-    (root / ".agentic").mkdir(parents=True)
+def _write_project_contract(
+    root: Path,
+    *,
+    policy_packs: tuple[str, ...] = ("starter", "solo-maintainer"),
+) -> None:
+    (root / ".agentic").mkdir(parents=True, exist_ok=True)
     data = build_contract_data(
         name="demo",
         description="Demo project",
         project_type="python-cli",
         profiles=("generic-git-repo", "python-cli"),
-        policy_packs=("starter", "solo-maintainer"),
+        policy_packs=policy_packs,
     )
     (root / ".agentic/project.yaml").write_text(render_contract_yaml(data), encoding="utf-8")
+
+
+def _write_sentinel_and_todo(root: Path) -> None:
+    (root / ".agentic").mkdir(exist_ok=True)
+    (root / "sentinel.yaml").write_text("todo:\n  path: .agentic/todo.yaml\n", encoding="utf-8")
+    (root / ".agentic/todo.yaml").write_text("items: []\n", encoding="utf-8")
+
+
+def _write_release_docs(root: Path, version: str = "1.2.3") -> None:
+    (root / "CHANGELOG.md").write_text(f"# Changelog\n\n## v{version}\n", encoding="utf-8")
+    (root / "CITATION.cff").write_text(f"cff-version: 1.2.0\nversion: {version}\n", encoding="utf-8")
+    (root / ".zenodo.json").write_text("{}\n", encoding="utf-8")
 
 
 def _write_version_files(root: Path, version: str = "1.2.3", *, quoted_citation: bool = False) -> None:
@@ -60,6 +76,10 @@ def _write_readme(root: Path) -> None:
     (root / "README.md").write_text("# Demo\n\ndoctor-fixture-term\n", encoding="utf-8")
 
 
+def _write_agent_docs(root: Path) -> None:
+    (root / "AGENTS.md").write_text("# AGENTS\n\nFixture agent instructions.\n", encoding="utf-8")
+
+
 def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
     _write_readme(tmp_path)
     _write_state_docs(tmp_path)
@@ -70,6 +90,7 @@ def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
     assert [check.status for check in report.checks] == [
         DoctorStatus.WARN,
         DoctorStatus.PASS,
+        DoctorStatus.WARN,
         DoctorStatus.WARN,
         DoctorStatus.WARN,
         DoctorStatus.WARN,
@@ -102,6 +123,42 @@ def test_doctor_report_reports_valid_project_contract(tmp_path: Path):
     assert contract_check.name == "project contract"
     assert contract_check.status == DoctorStatus.PASS
     assert "profiles: generic-git-repo, python-cli" in contract_check.detail
+
+
+def test_doctor_policy_pack_checks_pass_when_required_files_exist(tmp_path: Path):
+    _write_readme(tmp_path)
+    _write_agent_docs(tmp_path)
+    _write_state_docs(tmp_path)
+    _write_sentinel_and_todo(tmp_path)
+    _write_release_docs(tmp_path)
+    _write_project_contract(
+        tmp_path,
+        policy_packs=("solo-maintainer", "agentic-development", "release-managed", "documentation-governed"),
+    )
+
+    report = build_doctor_report(tmp_path)
+
+    policy_check = report.checks[5]
+    assert policy_check.name == "policy pack checks"
+    assert policy_check.status == DoctorStatus.PASS
+    assert "solo-maintainer" in policy_check.detail
+    assert "release-managed" in policy_check.detail
+
+
+def test_doctor_policy_pack_checks_fail_when_required_files_are_missing(tmp_path: Path):
+    _write_readme(tmp_path)
+    _write_state_docs(tmp_path)
+    _write_project_contract(tmp_path, policy_packs=("solo-maintainer", "release-managed"))
+
+    report = build_doctor_report(tmp_path)
+
+    assert not report.ok
+    policy_check = report.checks[5]
+    assert policy_check.name == "policy pack checks"
+    assert policy_check.status == DoctorStatus.FAIL
+    assert "solo-maintainer: missing sentinel.yaml" in policy_check.detail
+    assert "release-managed: missing CHANGELOG.md" in policy_check.detail
+    assert "release-managed: missing CITATION.cff" in policy_check.detail
 
 
 def test_doctor_report_fails_on_invalid_project_contract(tmp_path: Path):

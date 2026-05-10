@@ -2,13 +2,13 @@
 
 Status-date: 2026-05-10
 Project: agentic-project-kit
-Branch: chore/self-sentinel-todo-gates
+Branch: feature/policy-pack-doctor-checks
 Base branch: main
 Current version: 0.2.4
 
 ## Current Goal
 
-Make the kit repository validate its own sentinel and TODO gates so `agentic-kit doctor` can report a clean project state.
+Make selected policy packs operational in doctor by activating structural policy-pack checks from `.agentic/project.yaml`.
 
 ## Current Repository State
 
@@ -26,6 +26,7 @@ Important completed work:
 - PR #27 documented agentic-kit doctor in README.md.
 - PR #28 added documentation coverage drift checks and Remote Work Authorization.
 - PR #29 added project contract, profiles, and policy packs.
+- PR #30 added self sentinel and TODO gates.
 
 Zenodo state:
 
@@ -39,10 +40,14 @@ Zenodo state:
 
 Current branch work:
 
-- sentinel.yaml added for the kit repository itself.
-- .agentic/todo.yaml added as the kit repository TODO gate source.
-- docs/STATUS.md updated for this self-gate branch.
-- docs/handoff/CURRENT_HANDOFF.md updated for this self-gate branch.
+- Doctor now reads selected policy packs from `.agentic/project.yaml`.
+- Doctor now emits a `policy pack checks` row.
+- Policy pack checks currently verify structural prerequisites for starter, prototype, solo-maintainer, agentic-development, release-managed, and documentation-governed.
+- README.md documents policy-pack doctor checks.
+- docs/DOCUMENTATION_COVERAGE.yaml protects visibility of policy-pack doctor checks.
+- docs/STATUS.md updated for this branch.
+- docs/handoff/CURRENT_HANDOFF.md updated for this branch.
+- tests/test_doctor.py covers passing and failing policy-pack checks.
 
 ## Remote Work Authorization
 
@@ -84,16 +89,16 @@ Last known successful checks before this branch:
 - python -m pytest -q -> 46 passed
 - ruff check . -> passed
 - agentic-kit check-docs -> passed
-- agentic-kit doctor -> Overall PASS, with sentinel/TODO warnings before this branch
+- agentic-kit doctor -> Overall PASS
 
-Branch evidence still required locally after pulling chore/self-sentinel-todo-gates.
+Branch evidence still required locally after pulling feature/policy-pack-doctor-checks.
 
 ## Current Open Work
 
-- Pull chore/self-sentinel-todo-gates locally.
+- Pull feature/policy-pack-doctor-checks locally.
 - Run the required local gate.
 - If the gate passes, open/merge the PR after maintainer approval.
 
 ## Next Safe Step
 
-Pull chore/self-sentinel-todo-gates locally and run the required local gate. Expected result: tests, ruff, check-docs, and doctor pass with a clean report.
+Pull feature/policy-pack-doctor-checks locally and run the required local gate. Expected result: tests, ruff, check-docs, and doctor pass with policy pack checks active.

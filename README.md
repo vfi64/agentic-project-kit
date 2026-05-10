@@ -103,6 +103,20 @@ agentic-kit init my-docs-project \
 
 `agentic-kit doctor` validates the project contract when `.agentic/project.yaml` is present and reports selected profiles and policy packs.
 
+## Policy-pack doctor checks
+
+`agentic-kit doctor` also activates lightweight policy-pack checks from `.agentic/project.yaml`.
+
+These checks currently verify structural prerequisites:
+
+- `solo-maintainer` expects status, handoff, sentinel, and TODO gate files.
+- `agentic-development` expects agent instructions, test gates, handoff, and the architecture contract.
+- `release-managed` expects changelog, citation metadata, and Zenodo metadata.
+- `documentation-governed` expects the documentation coverage matrix and architecture contract.
+- `starter` and `prototype` expect basic README/status scaffolding.
+
+The policy-pack checks are deliberately structural. They prove that the selected policy pack has its required repository fixtures. They do not prove that the prose is complete or that release readiness has already been achieved.
+
 ## Project health check
 
 Use `agentic-kit doctor` as the compact repository health check:
@@ -111,7 +125,7 @@ Use `agentic-kit doctor` as the compact repository health check:
 agentic-kit doctor
 ```
 
-It reports required project files, project contract status, documentation gates, TODO validation when configured, and version-drift checks. The command exits non-zero only when required checks fail.
+It reports required project files, project contract status, policy-pack checks, documentation gates, TODO validation when configured, and version-drift checks. The command exits non-zero only when required checks fail.
 
 Example output shape:
 
@@ -120,10 +134,11 @@ Agentic project doctor report for /path/to/project
 
 [PASS] pyproject.toml: present
 [PASS] README.md: present
-[WARN] sentinel.yaml: missing optional project file
+[PASS] sentinel.yaml: present
 [PASS] project contract: my-project; profiles: generic-git-repo, python-cli; policy packs: starter, solo-maintainer
+[PASS] policy pack checks: active: starter, solo-maintainer
 [PASS] documentation gates: passed
-[WARN] todo gates: sentinel.yaml absent; skipped TODO validation
+[PASS] todo gates: passed
 [PASS] version drift: project state matches version 0.2.4
 
 Overall: PASS
@@ -215,4 +230,4 @@ This kit creates a fresh repository from generic templates. It does not copy a p
 
 ## Current status
 
-Version `0.2.4` is an early MVP with release-state validation, project-health diagnostics, documentation coverage checks, generated project contracts, project profiles, policy packs, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
+Version `0.2.4` is an early MVP with release-state validation, project-health diagnostics, policy-pack doctor checks, documentation coverage checks, generated project contracts, project profiles, policy packs, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, and archiving releases through the Zenodo GitHub integration.
