@@ -30,6 +30,24 @@ STALE_HANDOFF_MARKERS = (
     "Run the local gate, inspect the diff, then commit the documentation-state update",
 )
 
+QUALITY_PLACEHOLDERS = (
+    "TODO",
+    "TBD",
+    "FIXME",
+    "Lorem ipsum",
+    "coming soon",
+    "to be written",
+    "to be defined",
+    "placeholder",
+)
+
+
+SEMANTIC_QUALITY_BOUNDARY = (
+    "Deterministic checks can detect placeholders, stale markers, coverage gaps, "
+    "and structural drift. They cannot prove semantic perfection. LLM review, "
+    "if added later, must remain advisory and separate from hard doctor gates."
+)
+
 
 def load_yaml(path: Path) -> dict[str, Any]:
     if not path.exists():
@@ -77,8 +95,24 @@ def check_docs(project_root: Path) -> list[str]:
             if words < int(min_words):
                 errors.append(f"{doc['path']}: too short ({words}/{min_words} words)")
 
+        if bool(doc.get("quality_checks", True)):
+            errors.extend(check_document_quality(doc["path"], content))
+
     errors.extend(check_state_gate_docs(project_root))
     errors.extend(check_documentation_coverage(project_root))
+    return errors
+
+
+def check_document_quality(relative_path: str, content: str) -> list[str]:
+    """Return deterministic document-quality findings.
+
+    These checks intentionally cover only machine-checkable quality signals.
+    They are not a claim of semantic perfection.
+    """
+    errors: list[str] = []
+    for marker in QUALITY_PLACEHOLDERS:
+        if marker in content:
+            errors.append(f"{relative_path}: unresolved placeholder marker {marker!r}")
     return errors
 
 
