@@ -15,6 +15,7 @@ from agentic_project_kit.contract import (
 )
 from agentic_project_kit.doctor import build_doctor_report, render_doctor_report
 from agentic_project_kit.github import create_github_repo
+from agentic_project_kit.post_release import build_post_release_report, render_post_release_report
 from agentic_project_kit.release import (
     build_release_plan,
     build_release_state_report,
@@ -218,6 +219,18 @@ def release_check_command(
     """Validate release state for a target version."""
     report = build_release_state_report(project_root.resolve(), version=version)
     console.print(render_release_state_report(report), markup=False)
+    if not report.ok:
+        raise typer.Exit(code=1)
+
+
+@app.command("post-release-check")
+def post_release_check_command(
+    project_root: Path = typer.Option(Path("."), "--root"),
+    version: str | None = typer.Option(None, "--version", help="Release version without leading v."),
+) -> None:
+    """Validate post-release GitHub and Zenodo state without guessing DOI metadata."""
+    report = build_post_release_report(project_root.resolve(), version=version)
+    console.print(render_post_release_report(report), markup=False)
     if not report.ok:
         raise typer.Exit(code=1)
 
