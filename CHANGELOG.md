@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.2.7 - 2026-05-11
 
 - Document the runtime validation workflow in `README.md`.
 - Surface `validate-sections`, `validate-contract`, and `validate-output-contract` as deterministic structural validation commands.
