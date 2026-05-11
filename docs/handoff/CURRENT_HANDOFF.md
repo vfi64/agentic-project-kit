@@ -214,5 +214,7 @@ Governance-wrapper generated-project guidance:
 - PR #72 updated generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance so `validate-output-contract` is shown next to the lower-level `validate-sections` command.
 - PR #74 documented the runtime validation workflow in `README.md` and `CHANGELOG.md`, including `validate-sections`, `validate-contract`, and `validate-output-contract`.
 - v0.2.7 GitHub Release has been created for the completed runtime-validation workflow.
-- v0.2.7 Zenodo version DOI has been verified: 10.5281/zenodo.20125518.
-- Next safe step: run final post-release checks, then commit/push the DOI metadata update and open a PR.
+- PR #78 updated release metadata/docs with the verified v0.2.7 Zenodo version DOI: 10.5281/zenodo.20125518.
+- PR #79 split the README version-specific DOI summary into separate bullet lines to avoid false-positive consistency checks.
+- v0.2.7 post-release verification is complete: GitHub Release, Zenodo concept DOI, Zenodo version DOI, doctor, and screen-control gate pass.
+- Next safe step: start the next development slice from a fresh branch; do not modify v0.2.7 release metadata unless a real post-release correction is needed.
