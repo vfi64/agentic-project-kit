@@ -100,3 +100,18 @@ def test_init_rejects_unknown_profile(tmp_path):
 
     assert result.exit_code != 0
     assert "unknown profile: does-not-exist" in result.output
+
+
+def test_profile_explain_lists_profiles_and_policy_packs():
+    runner = CliRunner()
+
+    result = runner.invoke(app, ["profile-explain"])
+
+    assert result.exit_code == 0
+    assert "Project profiles:" in result.output
+    assert "generic-git-repo" in result.output
+    assert "python-cli" in result.output
+    assert "Policy packs:" in result.output
+    assert "starter" in result.output
+    assert "agentic-development" in result.output
+

@@ -235,6 +235,21 @@ def post_release_check_command(
         raise typer.Exit(code=1)
 
 
+@app.command("profile-explain")
+def profile_explain_command() -> None:
+    """List available project profiles and policy packs."""
+    console.print("Project profiles:")
+    for profile_id, definition in PROFILE_DEFINITIONS.items():
+        description = getattr(definition, "description", str(definition))
+        console.print(f"- {profile_id}: {description}")
+
+    console.print("")
+    console.print("Policy packs:")
+    for policy_pack_id, definition in POLICY_PACK_DEFINITIONS.items():
+        description = getattr(definition, "description", str(definition))
+        console.print(f"- {policy_pack_id}: {description}")
+
+
 @app.command("github-create")
 def github_create_command(
     project_root: Path = typer.Option(Path("."), "--root"),
