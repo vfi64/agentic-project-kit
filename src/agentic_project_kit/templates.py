@@ -28,6 +28,8 @@ This document defines the expected structure of generated or model-produced outp
 - [ ] Add tests for accepted and rejected outputs.
 """
 
+VALIDATION_REPORT_SCHEMA_JSON = '{\n  "$schema": "https://json-schema.org/draft/2020-12/schema",\n  "additionalProperties": false,\n  "properties": {\n    "checked_file": {\n      "minLength": 1,\n      "type": "string"\n    },\n    "contract": {\n      "minLength": 1,\n      "type": "string"\n    },\n    "contract_version": {\n      "minimum": 1,\n      "type": "integer"\n    },\n    "findings": {\n      "items": {\n        "additionalProperties": false,\n        "properties": {\n          "code": {\n            "minLength": 1,\n            "type": "string"\n          },\n          "message": {\n            "minLength": 1,\n            "type": "string"\n          },\n          "severity": {\n            "enum": [\n              "info",\n              "warning",\n              "error"\n            ],\n            "type": "string"\n          }\n        },\n        "required": [\n          "severity",\n          "code",\n          "message"\n        ],\n        "type": "object"\n      },\n      "type": "array"\n    },\n    "ok": {\n      "type": "boolean"\n    }\n  },\n  "required": [\n    "ok",\n    "contract",\n    "contract_version",\n    "checked_file",\n    "findings"\n  ],\n  "title": "agentic-project-kit validation report",\n  "type": "object"\n}\n'
+
 OUTPUT_CONTRACT_SAMPLE_YAML = """version: 1
 name: default-answer
 required_sections:
@@ -81,6 +83,8 @@ Report shape:
     }
 
 The report shape is intentionally small and structural so CI, wrappers, and review scripts can consume it without parsing human console output.
+
+Generated governance-wrapper projects also include `docs/schemas/validation-report.schema.json` as the machine-readable schema for this report shape.
 
 Use agentic-kit validate-sections as a lower-level check when you only need to verify literal section markers directly.
 
@@ -227,6 +231,7 @@ def create_project(options: ProjectOptions, overwrite: bool = False) -> None:
         files["docs/OUTPUT_CONTRACTS.md"] = OUTPUT_CONTRACTS
         files["docs/VALIDATION_AND_REPAIR.md"] = VALIDATION_AND_REPAIR
         files["docs/output-contracts/default-answer.yaml"] = OUTPUT_CONTRACT_SAMPLE_YAML
+        files["docs/schemas/validation-report.schema.json"] = VALIDATION_REPORT_SCHEMA_JSON
 
     if options.project_type in {"python-cli", "python-lib"}:
         files["pyproject.toml"] = PYPROJECT_PYTHON
