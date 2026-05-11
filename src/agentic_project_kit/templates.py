@@ -58,6 +58,12 @@ Example:
 
     agentic-kit validate-output-contract output.md --contract docs/output-contracts/default-answer.yaml
 
+For audit evidence, write a machine-readable JSON report:
+
+    agentic-kit validate-output-contract output.md --contract docs/output-contracts/default-answer.yaml --report validation-report.json
+
+The JSON report contains `ok`, `contract`, `contract_version`, `checked_file`, and `findings`.
+
 Use agentic-kit validate-sections as a lower-level check when you only need to verify literal section markers directly.
 
 Example:
