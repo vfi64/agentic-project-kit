@@ -143,3 +143,27 @@ def test_init_accepts_governance_wrapper_type(tmp_path):
     assert "governance-wrapper" in data["profiles"]
     assert "output-contracts" in data["policy_packs"]
 
+
+
+def test_init_governance_wrapper_next_steps_do_not_claim_python_install(tmp_path):
+    runner = CliRunner()
+
+    result = runner.invoke(
+        app,
+        [
+            "init",
+            str(tmp_path / "gov-project"),
+            "--type",
+            "governance-wrapper",
+            "--description",
+            "Governance wrapper project",
+            "--license",
+            "MIT",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "agentic-kit check-docs" in result.output
+    assert "agentic-kit doctor" in result.output
+    assert "pip install -e" not in result.output
+    assert "pytest -q" not in result.output
