@@ -104,3 +104,23 @@ agentic-kit doctor
 ```
 
 If a command was not run, say so explicitly and explain why.
+
+## Chat-assisted terminal workflow
+
+When work is coordinated through a chat-based LLM without Codex CLI, Claude CLI, or another local agent runtime, prefer copy-pasteable terminal blocks that are easy to audit from the terminal output.
+
+Recommended command-block shape:
+
+```bash
+printf "\n========== START: short-run-name ==========\n"
+# commands follow here
+```
+
+Rules:
+
+- Put the visual separator as the first command in longer terminal blocks so the start of the current run is visible in scrollback.
+- Use descriptive separator labels, for example `START: local-gate`, `START: create-feature-branch`, or `START: release-check`.
+- Do not paste raw decorative separator lines such as `----------`, `++++++++++`, or `##########` as standalone shell commands.
+- For local validation runs, prefer `./tools/screen_control_gate.sh` so the output is mirrored to `Screen-Control_Output.txt`.
+- `Screen-Control_Output.txt` is local evidence for human/LLM review and must not be committed.
+```

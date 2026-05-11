@@ -173,3 +173,8 @@ Current v0.2.6 release-preparation work:
 - v0.2.6 version DOI: 10.5281/zenodo.20119102.
 - The v0.2.6 version-specific DOI has been verified by `agentic-kit post-release-check --version 0.2.6`: 10.5281/zenodo.20119102.
 - Next safe step: run the full local release gate and inspect the diff before opening the release PR.
+
+Current collaboration workflow update:
+
+- Document the chat-assisted terminal workflow: visual separator first, no raw decorative separator commands, and `./tools/screen_control_gate.sh` for local evidence capture.
+- This is intended for LLM collaboration without Codex CLI, Claude CLI, or another local coding-agent runtime.
