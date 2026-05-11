@@ -68,3 +68,23 @@ def test_contract_validation_rejects_unknown_ids():
 
     assert "unknown profile: unknown-profile" in errors
     assert "unknown policy pack: unknown-policy" in errors
+
+def test_governance_wrapper_profile_defaults_and_policy_packs():
+    assert default_profiles("governance-wrapper", github_actions=True) == (
+        "generic-git-repo",
+        "markdown-docs",
+        "governance-wrapper",
+        "git-github",
+    )
+    assert recommended_policy_packs(
+        "governance-wrapper",
+        github_actions=True,
+        logging_evidence=True,
+    ) == (
+        "starter",
+        "solo-maintainer",
+        "agentic-development",
+        "documentation-governed",
+        "output-contracts",
+    )
+

@@ -81,7 +81,7 @@ console = Console()
 @app.command()
 def init(
     name: str | None = typer.Argument(None, help="Project directory/name."),
-    project_type: str = typer.Option("python-cli", "--type", help="python-cli, python-lib, generic"),
+    project_type: str = typer.Option("python-cli", "--type", help="python-cli, python-lib, generic, governance-wrapper"),
     description: str | None = typer.Option(None, "--description"),
     license_name: str = typer.Option("MIT", "--license"),
     github_actions: bool = typer.Option(True, "--github-actions/--no-github-actions"),
@@ -111,8 +111,8 @@ def init(
         name = Prompt.ask("Project name")
     if description is None:
         description = Prompt.ask("Project description", default=f"{name} project")
-    if project_type not in {"python-cli", "python-lib", "generic"}:
-        raise typer.BadParameter("project type must be python-cli, python-lib, or generic")
+    if project_type not in {"python-cli", "python-lib", "generic", "governance-wrapper"}:
+        raise typer.BadParameter("project type must be python-cli, python-lib, generic, or governance-wrapper")
     if visibility not in {"private", "public"}:
         raise typer.BadParameter("visibility must be private or public")
     if kit_source not in {"pypi", "testpypi", "none"}:

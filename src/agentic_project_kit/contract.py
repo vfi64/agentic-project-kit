@@ -72,6 +72,13 @@ PROFILE_DEFINITIONS: dict[str, ProfileDefinition] = {
         required_files=("CHANGELOG.md",),
         recommended_commands=("agentic-kit release-plan", "agentic-kit release-check"),
     ),
+    "governance-wrapper": ProfileDefinition(
+        id="governance-wrapper",
+        title="Governance wrapper",
+        description="Strict human-AI wrapper project with output contracts, validation, repair boundaries, and auditability.",
+        required_files=("AGENTS.md", "docs/architecture/ARCHITECTURE_CONTRACT.md", "docs/TEST_GATES.md"),
+        recommended_commands=("agentic-kit check-docs", "agentic-kit doctor", "python -m pytest -q"),
+    ),
 }
 
 
@@ -118,12 +125,19 @@ POLICY_PACK_DEFINITIONS: dict[str, PolicyPackDefinition] = {
         strictness="medium-high",
         recommended_for=("docs repositories", "architecture-governed repositories"),
     ),
+    "output-contracts": PolicyPackDefinition(
+        id="output-contracts",
+        title="Output contracts",
+        description="Strict response/output governance with schemas, validators, bounded repair, and evidence-oriented failure handling.",
+        strictness="high",
+        recommended_for=("LLM wrappers", "governance-heavy assistants", "auditable output pipelines"),
+    ),
 }
 
 
 def default_profiles(project_type: str, *, github_actions: bool) -> tuple[str, ...]:
     profiles = ["generic-git-repo", "markdown-docs"]
-    if project_type in {"python-cli", "python-lib"}:
+    if project_type in {"python-cli", "python-lib", "governance-wrapper"}:
         profiles.append(project_type)
     if github_actions:
         profiles.append("git-github")
@@ -141,6 +155,9 @@ def recommended_policy_packs(
         packs.append("agentic-development")
     if project_type == "generic":
         packs.append("documentation-governed")
+    if project_type == "governance-wrapper":
+        packs.append("documentation-governed")
+        packs.append("output-contracts")
     return tuple(dict.fromkeys(packs))
 
 
