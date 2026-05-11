@@ -4,7 +4,7 @@ Status-date: 2026-05-10
 Project: agentic-project-kit
 Primary branch: main
 Current work branch: docs/roadmap-after-grok-review
-Current version: 0.2.6
+Current version: 0.2.7
 
 ## Purpose
 
@@ -175,4 +175,5 @@ Governance-wrapper generated-project guidance:
 - PR #70 added `agentic-kit validate-output-contract`, which loads an output-contract YAML file and validates an output text file using existing required-section semantics.
 - PR #72 updated generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance so `validate-output-contract` is shown next to the lower-level `validate-sections` command.
 - PR #74 documented the runtime validation workflow in `README.md` and `CHANGELOG.md`, including `validate-sections`, `validate-contract`, and `validate-output-contract`.
-- Next safe step: prepare a small v0.2.7 release/state update for the completed runtime-validation workflow.
+- Release preparation in progress for v0.2.7: runtime-validation workflow documentation and metadata are being prepared before tagging.
+- Next safe step: run release gates for v0.2.7, then commit/push this release-preparation branch and open a PR.
