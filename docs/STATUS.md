@@ -161,10 +161,10 @@ Current governance-wrapper profile work:
 
 Governance-wrapper generated-project guidance:
 
-- `agentic-kit init --type governance-wrapper` now generates output-contract skeleton documentation.
-- Generated governance-wrapper projects include `docs/OUTPUT_CONTRACTS.md` and `docs/VALIDATION_AND_REPAIR.md`.
-- The init next-step guidance for governance-wrapper projects is documentation/doctor-oriented and no longer suggests Python venv/install/pytest steps for non-Python projects.
+- PR #51 added generated output-contract skeleton docs for governance-wrapper projects.
+- PR #52 fixed `agentic-kit init --type governance-wrapper` next-step guidance so non-Python governance projects are directed to `agentic-kit check-docs`, `agentic-kit check`, and `agentic-kit doctor`.
 - PR #54 tightened generated validation/repair guidance so repair wording is singular, bounded, and auditable.
 - PR #55 added a small deterministic runtime-validator skeleton in `src/agentic_project_kit/runtime_validator.py` with tests in `tests/test_runtime_validator.py`.
 - PR #57 wired the runtime-validator skeleton into a separate `agentic-kit validate-sections` CLI command without changing `doctor` or `check` behavior.
-- Next safe step: decide whether generated governance-wrapper projects should document or scaffold `validate-sections` usage, or keep the command as an opt-in validation primitive.
+- PR #59 added optional `validate-sections` guidance to generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` files.
+- Next safe step: decide whether to add a higher-level contract validator command beyond literal section checks, or keep the current runtime validator deliberately small.
