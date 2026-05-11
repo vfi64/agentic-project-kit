@@ -168,4 +168,5 @@ Governance-wrapper generated-project guidance:
 - PR #57 wired the runtime-validator skeleton into a separate `agentic-kit validate-sections` CLI command without changing `doctor` or `check` behavior.
 - PR #59 added optional `validate-sections` guidance to generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` files.
 - PR #61 added a separate `agentic-kit validate-contract` CLI command for the existing `.agentic/project.yaml` machine-readable project contract without changing `doctor` or `check` behavior.
-- Next safe step: decide whether output-contract validation should become a separate `validate-output-contract` command or remain documented through `validate-sections` plus generated governance-wrapper guidance.
+- Decision: do not add `validate-output-contract` yet because generated `docs/OUTPUT_CONTRACTS.md` is still a Markdown skeleton, not a machine-readable contract format.
+- Next safe step: define a minimal machine-readable output-contract format before adding a validator command beyond `validate-sections`.
