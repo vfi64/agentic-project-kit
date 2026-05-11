@@ -10,6 +10,8 @@ url: "https://github.com/vfi64/agentic-project-kit"
 doi: "10.5281/zenodo.20101359"
 # Verified v0.2.5 version DOI: 10.5281/zenodo.20111119
 # Verified v0.2.6 version DOI: 10.5281/zenodo.20119102
+# Verified v0.2.7 version DOI: 10.5281/zenodo.20125518
+# Verified v0.2.8 version DOI: 10.5281/zenodo.20126270
 abstract: "Generate GitHub-ready project templates for human-AI software development workflows."
 keywords:
   - agentic development
@@ -19,5 +21,5 @@ keywords:
   - assisted development
 license: MIT
 version: "0.2.8"
-doi: 10.5281/zenodo.20125518
+doi: 10.5281/zenodo.20126270
 date-released: "2026-05-11"

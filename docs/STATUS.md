@@ -183,4 +183,5 @@ Governance-wrapper generated-project guidance:
 - PR #83 documented the `validate-output-contract --report` workflow in `README.md` and generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance.
 - PR #85 documented validation reports from `validate-output-contract --report` as bounded audit evidence in generated `docs/LOGGING_AND_EVIDENCE.md` guidance, while keeping report creation explicit and warning against auto-staging by default.
 - v0.2.8 GitHub Release has been created for the validation-report JSON export and bounded audit-evidence guidance workflow.
-- Next safe step: verify whether Zenodo has minted a version DOI for v0.2.8, then update release metadata/docs if a DOI is available.
+- v0.2.8 Zenodo version DOI has been verified: 10.5281/zenodo.20126270.
+- Next safe step: run final post-release checks, then commit/push the DOI metadata update and open a PR.
