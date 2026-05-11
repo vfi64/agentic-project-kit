@@ -111,7 +111,35 @@ def test_profile_explain_lists_profiles_and_policy_packs():
     assert "Project profiles:" in result.output
     assert "generic-git-repo" in result.output
     assert "python-cli" in result.output
+    assert "governance-wrapper" in result.output
     assert "Policy packs:" in result.output
     assert "starter" in result.output
     assert "agentic-development" in result.output
+    assert "output-contracts" in result.output
+
+def test_init_accepts_governance_wrapper_type(tmp_path):
+    runner = CliRunner()
+    target = tmp_path / "demo-governance"
+
+    result = runner.invoke(
+        app,
+        [
+            "init",
+            str(target),
+            "--type",
+            "governance-wrapper",
+            "--description",
+            "Governance wrapper demo",
+            "--license",
+            "MIT",
+            "--github-actions",
+            "--logging-evidence",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    data = yaml.safe_load((target / ".agentic" / "project.yaml").read_text(encoding="utf-8"))
+    assert data["project"]["type"] == "governance-wrapper"
+    assert "governance-wrapper" in data["profiles"]
+    assert "output-contracts" in data["policy_packs"]
 
