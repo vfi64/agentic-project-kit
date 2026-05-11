@@ -150,3 +150,11 @@ Current profile explain work:
 
 - `agentic-kit profile-explain` is available and lists project profiles and policy packs with descriptions.
 - This makes profile/policy selection more inspectable before adding specialized governance-wrapper profiles.
+
+Current governance-wrapper profile work:
+
+- `agentic-kit profile-explain` lists project profiles and policy packs.
+- `governance-wrapper` is available as a project profile for strict human-AI wrapper projects.
+- `output-contracts` is available as a policy pack for schema/validator/repair-boundary oriented projects.
+- `agentic-kit init --type governance-wrapper` generates a project whose initial doctor gate passes.
+- Next safe step: add generated output-contract skeleton files only after documenting the intended contract shape and acceptance tests.
