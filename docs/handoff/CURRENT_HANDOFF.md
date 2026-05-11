@@ -213,5 +213,5 @@ Governance-wrapper generated-project guidance:
 - PR #70 added `agentic-kit validate-output-contract`, which loads an output-contract YAML file and validates an output text file using existing required-section semantics.
 - PR #72 updated generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance so `validate-output-contract` is shown next to the lower-level `validate-sections` command.
 - PR #74 documented the runtime validation workflow in `README.md` and `CHANGELOG.md`, including `validate-sections`, `validate-contract`, and `validate-output-contract`.
-- Release preparation in progress for v0.2.7: runtime-validation workflow documentation and metadata are being prepared before tagging.
-- Next safe step: run release gates for v0.2.7, then commit/push this release-preparation branch and open a PR.
+- v0.2.7 GitHub Release has been created for the completed runtime-validation workflow.
+- Next safe step: verify whether Zenodo has minted a version DOI for v0.2.7, then update release metadata/docs if a DOI is available.
