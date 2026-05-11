@@ -189,4 +189,5 @@ Governance-wrapper generated-project guidance:
 - v0.2.9 GitHub Release has been created for the validation-report JSON schema documentation / contract-stability slice.
 - PR #95 updated release metadata/docs with the verified v0.2.9 Zenodo version DOI: 10.5281/zenodo.20126490.
 - v0.2.9 post-release verification is complete: GitHub Release, Zenodo concept DOI, Zenodo version DOI, doctor, and screen-control gate pass.
-- Next safe step: start the next development slice from a fresh branch; do not modify v0.2.9 release metadata unless a real post-release correction is needed.
+- PR #97 added generated governance-wrapper support for `docs/schemas/validation-report.schema.json`, making the validation-report JSON shape available as a machine-readable schema file.
+- Next safe step: decide whether this schema-file addition should be released as a small v0.2.10 contract-stability release, or whether one more narrowly scoped validation/report usability slice should be completed first.
