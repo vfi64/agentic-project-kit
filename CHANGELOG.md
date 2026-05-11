@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.10 - 2026-05-11
+
+- Generate `docs/schemas/validation-report.schema.json` for governance-wrapper projects.
+- Reference the validation-report schema file from generated validation guidance so wrappers and CI can consume a stable machine-readable contract.
+
 ## v0.2.9 - 2026-05-11
 
 - Document the validation-report JSON schema in `README.md` and generated governance-wrapper validation guidance.
