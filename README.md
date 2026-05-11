@@ -182,6 +182,26 @@ agentic-kit validate-output-contract output.md --contract docs/output-contracts/
 
 The optional `--report` flag writes machine-readable validation evidence as JSON with `ok`, `contract`, `contract_version`, `checked_file`, and `findings`.
 
+Validation report schema:
+
+```json
+{
+  "ok": false,
+  "contract": "default-answer",
+  "contract_version": 1,
+  "checked_file": "output.md",
+  "findings": [
+    {
+      "severity": "error",
+      "code": "missing_required_section",
+      "message": "Missing required section: Solution"
+    }
+  ]
+}
+```
+
+The report schema is intentionally small and structural. `findings` entries use stable string fields so CI, wrappers, and review scripts can consume them without parsing human console output.
+
 What these commands do:
 
 - `validate-sections` checks literal required section markers in a text file.

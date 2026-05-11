@@ -64,6 +64,24 @@ For audit evidence, write a machine-readable JSON report:
 
 The JSON report contains `ok`, `contract`, `contract_version`, `checked_file`, and `findings`.
 
+Report shape:
+
+    {
+      "ok": false,
+      "contract": "default-answer",
+      "contract_version": 1,
+      "checked_file": "output.md",
+      "findings": [
+        {
+          "severity": "error",
+          "code": "missing_required_section",
+          "message": "Missing required section: Solution"
+        }
+      ]
+    }
+
+The report shape is intentionally small and structural so CI, wrappers, and review scripts can consume it without parsing human console output.
+
 Use agentic-kit validate-sections as a lower-level check when you only need to verify literal section markers directly.
 
 Example:
