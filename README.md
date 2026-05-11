@@ -94,6 +94,10 @@ agentic-kit check
 agentic-kit doctor
 ```
 
+## Example workflow
+
+See `docs/examples/minimal-python-cli.md` for a small end-to-end example showing how a generated Python CLI project gets project state files, agent instructions, documentation gates, task gates, and a local doctor check.
+
 ## Project contract, profiles, and policy packs
 
 Generated projects contain `.agentic/project.yaml` as a machine-readable project contract. It records the project name, description, project type, selected profiles, selected policy packs, and basic governance expectations.

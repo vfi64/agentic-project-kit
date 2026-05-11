@@ -133,3 +133,8 @@ agentic-kit release-check --version 0.2.5 is expected to fail after publication 
 ## Next Safe Step
 
 Pull docs/roadmap-after-grok-review locally and run the standard local gate. If it passes, open a PR for the roadmap-only update. After that, the next implementation branch should be feature/post-release-zenodo-check.
+
+Current documentation usability work:
+
+- docs/examples/minimal-python-cli.md documents a small end-to-end generated-project workflow.
+- README.md points new users to the example workflow.

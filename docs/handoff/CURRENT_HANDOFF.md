@@ -159,3 +159,9 @@ Evidence still required after the roadmap status updates on this branch:
 ## Next Safe Step
 
 Run the required local gate on docs/update-v025-zenodo-doi. Expected result: tests, ruff, check-docs, doctor, and post-release-check pass.
+
+Current documentation usability work:
+
+- Add `docs/examples/minimal-python-cli.md` as a small end-to-end generated-project demo.
+- Keep the example documentation-only; do not add generated fixture trees yet.
+- README.md should point users to the example workflow.
