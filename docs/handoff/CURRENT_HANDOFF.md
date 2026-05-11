@@ -225,4 +225,5 @@ Governance-wrapper generated-project guidance:
 - v0.2.8 post-release verification is complete: GitHub Release, Zenodo concept DOI, Zenodo version DOI, doctor, and screen-control gate pass.
 - PR #91 documented the validation-report JSON schema in `README.md` and generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance.
 - v0.2.9 GitHub Release has been created for the validation-report JSON schema documentation / contract-stability slice.
-- Next safe step: verify whether Zenodo has minted a version DOI for v0.2.9, then update release metadata/docs if a DOI is available.
+- v0.2.9 Zenodo version DOI has been verified: 10.5281/zenodo.20126490.
+- Next safe step: run final post-release checks, then commit/push the DOI metadata update and open a PR.
