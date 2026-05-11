@@ -149,4 +149,4 @@ def test_governance_wrapper_generates_output_contract_skeleton(tmp_path: Path):
 
     assert (target / "docs/OUTPUT_CONTRACTS.md").exists()
     assert (target / "docs/VALIDATION_AND_REPAIR.md").exists()
-    assert "Repair should be bounded" in (target / "docs/VALIDATION_AND_REPAIR.md").read_text(encoding="utf-8")
+    assert "Repair attempts must be bounded" in (target / "docs/VALIDATION_AND_REPAIR.md").read_text(encoding="utf-8")

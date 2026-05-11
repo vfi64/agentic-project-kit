@@ -43,8 +43,7 @@ This document records validation and bounded repair rules for governance-wrapper
 
 ## Repair rules
 
-- Repair should be bounded and auditable.
-- Repairs must be bounded and auditable.
+- Repair attempts must be bounded and auditable.
 - Repairs must not invent missing domain facts.
 - Repairs must not rewrite valid final content unnecessarily.
 - If repair fails, report a clear contract failure.
