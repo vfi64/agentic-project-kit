@@ -309,6 +309,33 @@ def validate_contract(
     typer.echo(contract_summary(contract_data))
 
 
+@app.command("validate-output-contract")
+def validate_output_contract(
+    output_path: Path = typer.Argument(..., help="Output text file to validate."),
+    contract_path: Path = typer.Option(..., "--contract", "-c", help="Output contract YAML file."),
+) -> None:
+    """Validate an output file against a machine-readable output contract."""
+    from agentic_project_kit.output_contract import load_output_contract, validate_output_against_contract
+
+    try:
+        contract = load_output_contract(contract_path)
+    except ValueError as exc:
+        typer.echo(f"Output contract invalid: {exc}", err=True)
+        raise typer.Exit(1) from exc
+
+    report = validate_output_against_contract(output_path.read_text(encoding="utf-8"), contract)
+    if report.ok:
+        typer.echo("Output contract validation passed.")
+        raise typer.Exit(0)
+
+    for finding in report.findings:
+        typer.echo(
+            f"[{finding.severity.value}] {finding.code}: {finding.message}",
+            err=True,
+        )
+    raise typer.Exit(1)
+
+
 @app.command("validate-sections")
 def validate_sections(
     path: Path = typer.Argument(..., help="Text file to validate."),
