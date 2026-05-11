@@ -100,3 +100,32 @@ def test_generated_ci_can_skip_kit_install(tmp_path):
     assert "agentic-project-kit install intentionally skipped" in ci
     assert "pip install agentic-project-kit" not in ci
     assert "test.pypi.org" not in ci
+
+
+def test_generated_project_passes_documentation_and_doctor_gates(tmp_path: Path):
+    from agentic_project_kit.checks import check_docs
+    from agentic_project_kit.doctor import build_doctor_report
+
+    target = tmp_path / "demo-gates"
+    create_project(
+        ProjectOptions(
+            name="demo-gates",
+            description="Demo gates",
+            project_type="python-cli",
+            license_name="MIT",
+            github_actions=True,
+            pre_commit=True,
+            agent_docs=True,
+            logging_evidence=True,
+            target_dir=target,
+        )
+    )
+
+    assert (target / "docs/architecture/ARCHITECTURE_CONTRACT.md").exists()
+    assert (target / "docs/DOCUMENTATION_COVERAGE.yaml").exists()
+    assert (target / "CHANGELOG.md").exists()
+    assert "TODO" not in (target / "docs/STATUS.md").read_text(encoding="utf-8")
+    assert "TODO" not in (target / "docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
+    assert check_docs(target) == []
+    assert build_doctor_report(target).ok
+
