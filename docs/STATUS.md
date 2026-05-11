@@ -182,5 +182,5 @@ Governance-wrapper generated-project guidance:
 - PR #81 added deterministic JSON report export for `agentic-kit validate-output-contract --report`, including `ok`, `contract`, `contract_version`, `checked_file`, and `findings`.
 - PR #83 documented the `validate-output-contract --report` workflow in `README.md` and generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance.
 - PR #85 documented validation reports from `validate-output-contract --report` as bounded audit evidence in generated `docs/LOGGING_AND_EVIDENCE.md` guidance, while keeping report creation explicit and warning against auto-staging by default.
-- Release preparation in progress for v0.2.8: validation-report JSON export and bounded audit-evidence guidance are complete and being prepared for tagging.
-- Next safe step: run release gates for v0.2.8, then commit/push this release-preparation branch and open a PR.
+- v0.2.8 GitHub Release has been created for the validation-report JSON export and bounded audit-evidence guidance workflow.
+- Next safe step: verify whether Zenodo has minted a version DOI for v0.2.8, then update release metadata/docs if a DOI is available.
