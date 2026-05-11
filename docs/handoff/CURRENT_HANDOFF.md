@@ -212,4 +212,5 @@ Governance-wrapper generated-project guidance:
 - PR #68 added a generated sample output-contract file for governance-wrapper projects at `docs/output-contracts/default-answer.yaml`.
 - PR #70 added `agentic-kit validate-output-contract`, which loads an output-contract YAML file and validates an output text file using existing required-section semantics.
 - PR #72 updated generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance so `validate-output-contract` is shown next to the lower-level `validate-sections` command.
-- Next safe step: decide whether this runtime-validation slice is ready for a small release/state update, or whether README/CHANGELOG should first document the new validator workflow.
+- PR #74 documented the runtime validation workflow in `README.md` and `CHANGELOG.md`, including `validate-sections`, `validate-contract`, and `validate-output-contract`.
+- Next safe step: prepare a small v0.2.7 release/state update for the completed runtime-validation workflow.
