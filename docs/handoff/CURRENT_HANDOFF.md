@@ -191,3 +191,8 @@ Current governance-wrapper profile work:
 - The merged implementation includes CLI defaults, `profile-explain` visibility, and tests for contract/default/init behavior.
 - Smoke result: generated `--type governance-wrapper` project passes `agentic-kit doctor`.
 - Next safe step: document and then implement generated output-contract skeleton files, without touching Comm-SCI-Control directly.
+
+## No-heredoc screen-control workflow rule
+
+Current collaboration rule: for chat-assisted terminal work, avoid heredocs in copy-paste command blocks when possible. Use a visible `printf` separator as the first command, prefer `./tools/screen_control_gate.sh` for evidence capture, and recover from `heredoc>` or `quote>` hangs with `Ctrl-C` followed by `git status --short`.
+
