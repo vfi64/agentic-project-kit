@@ -4,7 +4,7 @@ Status-date: 2026-05-10
 Project: agentic-project-kit
 Primary branch: main
 Current work branch: docs/roadmap-after-grok-review
-Current version: 0.2.8
+Current version: 0.2.9
 
 ## Purpose
 
@@ -186,4 +186,5 @@ Governance-wrapper generated-project guidance:
 - PR #89 updated release metadata/docs with the verified v0.2.8 Zenodo version DOI: 10.5281/zenodo.20126270.
 - v0.2.8 post-release verification is complete: GitHub Release, Zenodo concept DOI, Zenodo version DOI, doctor, and screen-control gate pass.
 - PR #91 documented the validation-report JSON schema in `README.md` and generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance.
-- Next safe step: decide whether to prepare a small v0.2.9 documentation/contract-stability release, or continue with a narrowly scoped implementation slice before releasing.
+- Release preparation in progress for v0.2.9: validation-report JSON schema documentation and generated governance-wrapper guidance are complete and being prepared for tagging.
+- Next safe step: run release gates for v0.2.9, then commit/push this release-preparation branch and open a PR.

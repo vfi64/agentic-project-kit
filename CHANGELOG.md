@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.9 - 2026-05-11
+
+- Document the validation-report JSON schema in `README.md` and generated governance-wrapper validation guidance.
+- Clarify that report findings use stable string fields so CI, wrappers, and review scripts can consume them without parsing human console output.
+
 ## v0.2.8 - 2026-05-11
 
 - Add deterministic JSON report export for `agentic-kit validate-output-contract --report`.
