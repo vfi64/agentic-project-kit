@@ -184,3 +184,10 @@ Current profile explain work:
 - PR #46 added `agentic-kit profile-explain`.
 - The command prints available project profiles and policy packs with descriptions.
 - Next safe feature step: design a specialized governance-wrapper/profile contract only after documenting the current command.
+
+Current governance-wrapper profile work:
+
+- PR #48 added `governance-wrapper` and `output-contracts`.
+- The merged implementation includes CLI defaults, `profile-explain` visibility, and tests for contract/default/init behavior.
+- Smoke result: generated `--type governance-wrapper` project passes `agentic-kit doctor`.
+- Next safe step: document and then implement generated output-contract skeleton files, without touching Comm-SCI-Control directly.

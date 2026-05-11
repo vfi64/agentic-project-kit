@@ -256,6 +256,28 @@ The archived v0.2.5 release has the verified version-specific DOI: `10.5281/zeno
 
 The archived v0.2.6 release has the verified version-specific DOI: `10.5281/zenodo.20119102`.
 
+
+### Governance wrapper projects
+
+Use the `governance-wrapper` profile for strict human-AI wrapper projects that need explicit output contracts, validation, bounded repair, and auditability.
+
+```bash
+agentic-kit init demo-governance \
+  --type governance-wrapper \
+  --description "Governance wrapper demo" \
+  --github-actions \
+  --agent-docs \
+  --logging-evidence
+```
+
+This profile is intended for projects where generated answers or tool outputs must be checked against explicit contracts before they are accepted. The related `output-contracts` policy pack emphasizes schemas, validators, repair boundaries, and evidence-oriented failure handling.
+
+To inspect available profiles and policy packs, run:
+
+```bash
+agentic-kit profile-explain
+```
+
 ## Safety rule
 
 Do not generate a public project from a private repository history.
