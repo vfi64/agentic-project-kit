@@ -2,6 +2,7 @@ from pathlib import Path
 import subprocess
 
 import typer
+from .runtime_validator import validate_required_sections
 from rich.console import Console
 from rich.prompt import Confirm, Prompt
 
@@ -284,6 +285,29 @@ def _parse_csv(value: str | None) -> tuple[str, ...]:
         return ()
     return tuple(item.strip() for item in value.split(",") if item.strip())
 
+
+@app.command("validate-sections")
+def validate_sections(
+    path: Path = typer.Argument(..., help="Text file to validate."),
+    required_section: list[str] = typer.Option(
+        ...,
+        "--required-section",
+        "-s",
+        help="Required literal section marker. Repeat the option for multiple sections.",
+    ),
+) -> None:
+    """Validate that a text file contains required literal section markers."""
+    report = validate_required_sections(path.read_text(encoding="utf-8"), tuple(required_section))
+    if report.ok:
+        typer.echo("Runtime validation passed.")
+        raise typer.Exit(0)
+
+    for finding in report.findings:
+        typer.echo(
+            f"[{finding.severity.value}] {finding.code}: {finding.message}",
+            err=True,
+        )
+    raise typer.Exit(1)
 
 if __name__ == "__main__":
     app()
