@@ -124,3 +124,15 @@ Rules:
 - For local validation runs, prefer `./tools/screen_control_gate.sh` so the output is mirrored to `Screen-Control_Output.txt`.
 - `Screen-Control_Output.txt` is local evidence for human/LLM review and must not be committed.
 ```
+## Shell command safety for chat-assisted work
+
+When working through a chat-only LLM workflow without a local coding-agent runtime, prefer copy-pasteable terminal blocks that are robust in zsh.
+
+Rules:
+
+- Start longer terminal blocks with a visible separator command as the first command.
+- Do not use raw decorative separator lines as standalone shell commands.
+- Avoid heredocs in chat-delivered terminal blocks unless they are strictly necessary.
+- Prefer checked-in helper scripts, python3 -c commands, or small patch files over multiline heredocs.
+- If the terminal shows heredoc> or quote>, stop the unfinished input with Ctrl-C and run git status --short before continuing.
+- Use ./tools/screen_control_gate.sh to capture local evidence in Screen-Control_Output.txt when local validation output should be shared.
