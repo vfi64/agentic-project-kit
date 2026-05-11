@@ -11,3 +11,6 @@ build/
 .env
 .env.*
 tmp/
+
+# Local screen-control gate output
+Screen-Control_Output.txt
