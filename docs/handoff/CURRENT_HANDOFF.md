@@ -210,4 +210,5 @@ Governance-wrapper generated-project guidance:
 - PR #64 added a minimal machine-readable output-contract format skeleton in `src/agentic_project_kit/output_contract.py` with tests in `tests/test_output_contract.py`.
 - PR #66 wired the minimal output-contract format into the runtime validator path via `validate_output_against_contract(...)`, reusing required-section semantics without claiming semantic validation.
 - PR #68 added a generated sample output-contract file for governance-wrapper projects at `docs/output-contracts/default-answer.yaml`.
-- Next safe step: expose output-contract YAML validation through a CLI path that loads a contract file and validates an output file using the existing required-section semantics.
+- PR #70 added `agentic-kit validate-output-contract`, which loads an output-contract YAML file and validates an output text file using existing required-section semantics.
+- Next safe step: update generated governance-wrapper validation/repair guidance so users see the new `validate-output-contract` command next to the lower-level `validate-sections` command.
