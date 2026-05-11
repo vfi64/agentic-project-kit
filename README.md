@@ -177,7 +177,10 @@ The current workflow is intentionally narrow:
 agentic-kit validate-sections output.md -s "Plan" -s "Solution" -s "Check" -s "Final Answer"
 agentic-kit validate-contract --root .
 agentic-kit validate-output-contract output.md --contract docs/output-contracts/default-answer.yaml
+agentic-kit validate-output-contract output.md --contract docs/output-contracts/default-answer.yaml --report validation-report.json
 ```
+
+The optional `--report` flag writes machine-readable validation evidence as JSON with `ok`, `contract`, `contract_version`, `checked_file`, and `findings`.
 
 What these commands do:
 
