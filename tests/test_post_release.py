@@ -146,3 +146,20 @@ def _runner(*, github_release: CommandResult):
         raise AssertionError(f"unexpected command: {command}")
 
     return run
+
+
+def test_post_release_report_warns_when_zenodo_lookup_times_out(tmp_path: Path):
+    _write_project_files(tmp_path, version="1.2.3", doi="10.5281/zenodo.1000")
+
+    def timeout_getter(_url: str) -> tuple[int, str]:
+        raise TimeoutError("read operation timed out")
+
+    report = build_post_release_report(
+        tmp_path,
+        command_runner=_runner(github_release=CommandResult(0, "v1.2.3\n", "")),
+        http_getter=timeout_getter,
+    )
+
+    assert report.ok
+    assert report.checks[-1].status == PostReleaseStatus.WARN
+    assert report.checks[-1].detail == "Zenodo lookup failed: read operation timed out"

@@ -11,6 +11,8 @@ import urllib.request
 
 from agentic_project_kit.release import CommandResult, read_project_version, run_command
 
+ZENODO_HTTP_TIMEOUT_SECONDS = 5
+
 
 class PostReleaseStatus(str, Enum):
     PASS = "PASS"
@@ -188,7 +190,7 @@ def render_post_release_report(report: PostReleaseReport) -> str:
 
 def urlopen_text(url: str) -> tuple[int, str]:
     request = urllib.request.Request(url, headers={"User-Agent": "agentic-project-kit"})
-    with urllib.request.urlopen(request, timeout=15) as response:  # noqa: S310
+    with urllib.request.urlopen(request, timeout=ZENODO_HTTP_TIMEOUT_SECONDS) as response:  # noqa: S310
         status = getattr(response, "status", 200)
         body = response.read().decode("utf-8")
     return status, body
