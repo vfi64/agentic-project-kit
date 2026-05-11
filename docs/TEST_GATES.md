@@ -149,6 +149,18 @@ After tagging:
     gh run watch $(gh run list --workflow Release --limit 1 --json databaseId --jq '.[0].databaseId')
     gh release view <tag>
 
+
+## Screen-Control Local Gate
+
+For chat-assisted development without a local coding agent CLI, run the bundled screen-control gate when a full local evidence capture is useful:
+
+```bash
+printf "\n========== START: screen-control-gate ==========\n"
+./tools/screen_control_gate.sh
+```
+
+This mirrors the standard local validation output to the terminal and to `Screen-Control_Output.txt`. The output file is intentionally ignored by Git and is meant for local review or temporary sharing, not for commits.
+
 ## Outcome Reporting
 
 Use this shape:
