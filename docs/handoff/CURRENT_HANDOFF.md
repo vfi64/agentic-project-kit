@@ -218,4 +218,5 @@ Governance-wrapper generated-project guidance:
 - PR #79 split the README version-specific DOI summary into separate bullet lines to avoid false-positive consistency checks.
 - v0.2.7 post-release verification is complete: GitHub Release, Zenodo concept DOI, Zenodo version DOI, doctor, and screen-control gate pass.
 - PR #81 added deterministic JSON report export for `agentic-kit validate-output-contract --report`, including `ok`, `contract`, `contract_version`, `checked_file`, and `findings`.
-- Next safe step: document the JSON report workflow in README and generated governance-wrapper validation guidance, then decide whether report files should be staged as audit evidence.
+- PR #83 documented the `validate-output-contract --report` workflow in `README.md` and generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance.
+- Next safe step: decide whether validation reports should be staged as audit evidence by generated projects, or whether the current explicit `--report` workflow is sufficient for v0.2.8.
