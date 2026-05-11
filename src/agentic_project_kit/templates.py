@@ -50,15 +50,21 @@ This document records validation and bounded repair rules for governance-wrapper
 - Keep validation deterministic where possible.
 - Record evidence for failed validations.
 
-## Runtime section validation
+## Runtime output-contract validation
 
-Use agentic-kit validate-sections as a small deterministic first check when an output contract requires literal section markers.
+Use agentic-kit validate-output-contract when an output should be checked against a machine-readable output-contract YAML file.
+
+Example:
+
+    agentic-kit validate-output-contract output.md --contract docs/output-contracts/default-answer.yaml
+
+Use agentic-kit validate-sections as a lower-level check when you only need to verify literal section markers directly.
 
 Example:
 
     agentic-kit validate-sections output.md -s "Plan" -s "Solution" -s "Check" -s "Final Answer"
 
-This command only checks required literal sections. It does not repair content, infer missing facts, or validate semantic correctness.
+Both commands only check required literal sections. They do not repair content, infer missing facts, or validate semantic correctness.
 
 ## Repair rules
 
