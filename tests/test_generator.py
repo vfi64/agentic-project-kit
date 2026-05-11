@@ -147,6 +147,9 @@ def test_governance_wrapper_generates_output_contract_skeleton(tmp_path: Path):
         )
     )
 
+    evidence = (target / "docs/LOGGING_AND_EVIDENCE.md").read_text(encoding="utf-8")
+    assert "Validation reports from `agentic-kit validate-output-contract --report`" in evidence
+    assert "Do not auto-stage validation reports by default" in evidence
     assert (target / "docs/OUTPUT_CONTRACTS.md").exists()
     assert (target / "docs/VALIDATION_AND_REPAIR.md").exists()
     sample = target / "docs/output-contracts/default-answer.yaml"
