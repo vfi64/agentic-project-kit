@@ -149,6 +149,13 @@ def test_governance_wrapper_generates_output_contract_skeleton(tmp_path: Path):
 
     assert (target / "docs/OUTPUT_CONTRACTS.md").exists()
     assert (target / "docs/VALIDATION_AND_REPAIR.md").exists()
+    sample = target / "docs/output-contracts/default-answer.yaml"
+    assert sample.exists()
+    sample_text = sample.read_text(encoding="utf-8")
+    assert "version: 1" in sample_text
+    assert "name: default-answer" in sample_text
+    assert "required_sections:" in sample_text
+    assert "  - Final Answer" in sample_text
     validation = (target / "docs/VALIDATION_AND_REPAIR.md").read_text(encoding="utf-8")
     assert "Use agentic-kit validate-sections" in validation
     assert "This command only checks required literal sections" in validation

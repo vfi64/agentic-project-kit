@@ -28,6 +28,15 @@ This document defines the expected structure of generated or model-produced outp
 - [ ] Add tests for accepted and rejected outputs.
 """
 
+OUTPUT_CONTRACT_SAMPLE_YAML = """version: 1
+name: default-answer
+required_sections:
+  - Plan
+  - Solution
+  - Check
+  - Final Answer
+"""
+
 VALIDATION_AND_REPAIR = """# Validation and Repair
 
 ## Purpose
@@ -187,6 +196,7 @@ def create_project(options: ProjectOptions, overwrite: bool = False) -> None:
     if options.project_type == "governance-wrapper":
         files["docs/OUTPUT_CONTRACTS.md"] = OUTPUT_CONTRACTS
         files["docs/VALIDATION_AND_REPAIR.md"] = VALIDATION_AND_REPAIR
+        files["docs/output-contracts/default-answer.yaml"] = OUTPUT_CONTRACT_SAMPLE_YAML
 
     if options.project_type in {"python-cli", "python-lib"}:
         files["pyproject.toml"] = PYPROJECT_PYTHON
