@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from typer.testing import CliRunner
@@ -62,3 +63,73 @@ def test_validate_output_contract_cli_fails_for_invalid_contract(tmp_path: Path)
 
     assert result.exit_code == 1
     assert "Output contract invalid: output contract version must be 1" in result.output
+
+
+def test_validate_output_contract_cli_writes_json_report_for_failure(tmp_path: Path) -> None:
+    contract_path = tmp_path / "contract.yaml"
+    output_path = tmp_path / "output.md"
+    report_path = tmp_path / "validation-report.json"
+    _write_contract(contract_path)
+    output_path.write_text("Plan\nFinal Answer", encoding="utf-8")
+
+    result = runner.invoke(
+        app,
+        [
+            "validate-output-contract",
+            str(output_path),
+            "--contract",
+            str(contract_path),
+            "--report",
+            str(report_path),
+        ],
+    )
+
+    assert result.exit_code == 1
+    payload = json.loads(report_path.read_text(encoding="utf-8"))
+    assert payload == {
+        "checked_file": str(output_path),
+        "contract": "default-answer",
+        "contract_version": 1,
+        "findings": [
+            {
+                "code": "missing_required_section",
+                "message": "Missing required section: Solution",
+                "severity": "error",
+            },
+            {
+                "code": "missing_required_section",
+                "message": "Missing required section: Check",
+                "severity": "error",
+            },
+        ],
+        "ok": False,
+    }
+
+
+def test_validate_output_contract_cli_writes_json_report_for_success(tmp_path: Path) -> None:
+    contract_path = tmp_path / "contract.yaml"
+    output_path = tmp_path / "output.md"
+    report_path = tmp_path / "validation-report.json"
+    _write_contract(contract_path)
+    output_path.write_text("Plan\nSolution\nCheck", encoding="utf-8")
+
+    result = runner.invoke(
+        app,
+        [
+            "validate-output-contract",
+            str(output_path),
+            "--contract",
+            str(contract_path),
+            "--report",
+            str(report_path),
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert json.loads(report_path.read_text(encoding="utf-8")) == {
+        "checked_file": str(output_path),
+        "contract": "default-answer",
+        "contract_version": 1,
+        "findings": [],
+        "ok": True,
+    }

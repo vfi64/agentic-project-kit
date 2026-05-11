@@ -1,4 +1,5 @@
 from pathlib import Path
+import json
 import subprocess
 
 import typer
@@ -313,6 +314,7 @@ def validate_contract(
 def validate_output_contract(
     output_path: Path = typer.Argument(..., help="Output text file to validate."),
     contract_path: Path = typer.Option(..., "--contract", "-c", help="Output contract YAML file."),
+    report_path: Path | None = typer.Option(None, "--report", help="Write a JSON validation report."),
 ) -> None:
     """Validate an output file against a machine-readable output contract."""
     from agentic_project_kit.output_contract import load_output_contract, validate_output_against_contract
@@ -324,6 +326,16 @@ def validate_output_contract(
         raise typer.Exit(1) from exc
 
     report = validate_output_against_contract(output_path.read_text(encoding="utf-8"), contract)
+    if report_path is not None:
+        payload = {
+            "ok": report.ok,
+            "contract": contract.name,
+            "contract_version": contract.version,
+            "checked_file": str(output_path),
+            "findings": report.to_dict()["findings"],
+        }
+        report_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
     if report.ok:
         typer.echo("Output contract validation passed.")
         raise typer.Exit(0)
