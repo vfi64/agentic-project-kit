@@ -13,6 +13,8 @@ from typing import Any
 
 import yaml
 
+from agentic_project_kit.runtime_validator import ValidationReport, validate_required_sections
+
 
 @dataclass(frozen=True)
 class OutputContract:
@@ -55,6 +57,15 @@ def parse_output_contract(data: Any) -> OutputContract:
         name=name,
         required_sections=tuple(required_sections),
     )
+
+
+def validate_output_against_contract(text: str, contract: OutputContract) -> ValidationReport:
+    """Validate output text against a minimal OutputContract.
+
+    The current contract format only defines required literal section markers.
+    Semantic validation remains intentionally out of scope.
+    """
+    return validate_required_sections(text, contract.required_sections)
 
 
 def render_output_contract_yaml(contract: OutputContract) -> str:
