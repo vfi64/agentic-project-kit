@@ -205,4 +205,5 @@ Governance-wrapper generated-project guidance:
 - PR #55 added a small deterministic runtime-validator skeleton in `src/agentic_project_kit/runtime_validator.py` with tests in `tests/test_runtime_validator.py`.
 - PR #57 wired the runtime-validator skeleton into a separate `agentic-kit validate-sections` CLI command without changing `doctor` or `check` behavior.
 - PR #59 added optional `validate-sections` guidance to generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` files.
-- Next safe step: decide whether to add a higher-level contract validator command beyond literal section checks, or keep the current runtime validator deliberately small.
+- PR #61 added a separate `agentic-kit validate-contract` CLI command for the existing `.agentic/project.yaml` machine-readable project contract without changing `doctor` or `check` behavior.
+- Next safe step: decide whether output-contract validation should become a separate `validate-output-contract` command or remain documented through `validate-sections` plus generated governance-wrapper guidance.
