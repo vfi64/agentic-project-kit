@@ -178,3 +178,9 @@ Current collaboration workflow update:
 
 - Document the chat-assisted terminal workflow: visual separator first, no raw decorative separator commands, and `./tools/screen_control_gate.sh` for local evidence capture.
 - This is intended for LLM collaboration without Codex CLI, Claude CLI, or another local coding-agent runtime.
+
+Current profile explain work:
+
+- PR #46 added `agentic-kit profile-explain`.
+- The command prints available project profiles and policy packs with descriptions.
+- Next safe feature step: design a specialized governance-wrapper/profile contract only after documenting the current command.

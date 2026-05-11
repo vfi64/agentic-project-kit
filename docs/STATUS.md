@@ -145,3 +145,8 @@ Current v0.2.6 release-preparation work:
 
 - `agentic-kit post-release-check --version 0.2.6` verified the v0.2.6 Zenodo version DOI: `10.5281/zenodo.20119102`.
 - Local release preparation must verify tests, ruff, documentation gates, doctor, release-check, build, and twine check before tagging.
+
+Current profile explain work:
+
+- `agentic-kit profile-explain` is available and lists project profiles and policy packs with descriptions.
+- This makes profile/policy selection more inspectable before adding specialized governance-wrapper profiles.
