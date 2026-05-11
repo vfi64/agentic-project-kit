@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.8 - 2026-05-11
+
+- Add deterministic JSON report export for `agentic-kit validate-output-contract --report`.
+- Document validation reports as bounded audit evidence while keeping report creation explicit and avoiding auto-staging by default.
+
 ## v0.2.7 - 2026-05-11
 
 - Document the runtime validation workflow in `README.md`.

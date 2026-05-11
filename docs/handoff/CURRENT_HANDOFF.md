@@ -4,7 +4,7 @@ Status-date: 2026-05-10
 Project: agentic-project-kit
 Branch: docs/roadmap-after-grok-review
 Base branch: main
-Current version: 0.2.7
+Current version: 0.2.8
 
 ## Current Goal
 
@@ -220,4 +220,5 @@ Governance-wrapper generated-project guidance:
 - PR #81 added deterministic JSON report export for `agentic-kit validate-output-contract --report`, including `ok`, `contract`, `contract_version`, `checked_file`, and `findings`.
 - PR #83 documented the `validate-output-contract --report` workflow in `README.md` and generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance.
 - PR #85 documented validation reports from `validate-output-contract --report` as bounded audit evidence in generated `docs/LOGGING_AND_EVIDENCE.md` guidance, while keeping report creation explicit and warning against auto-staging by default.
-- Next safe step: decide whether the completed validation-report/evidence slice is enough for v0.2.8 release preparation, or whether one more small CLI/report usability improvement is needed first.
+- Release preparation in progress for v0.2.8: validation-report JSON export and bounded audit-evidence guidance are complete and being prepared for tagging.
+- Next safe step: run release gates for v0.2.8, then commit/push this release-preparation branch and open a PR.
