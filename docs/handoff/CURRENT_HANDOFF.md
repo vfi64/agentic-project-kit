@@ -207,4 +207,5 @@ Governance-wrapper generated-project guidance:
 - PR #59 added optional `validate-sections` guidance to generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` files.
 - PR #61 added a separate `agentic-kit validate-contract` CLI command for the existing `.agentic/project.yaml` machine-readable project contract without changing `doctor` or `check` behavior.
 - Decision: do not add `validate-output-contract` yet because generated `docs/OUTPUT_CONTRACTS.md` is still a Markdown skeleton, not a machine-readable contract format.
-- Next safe step: define a minimal machine-readable output-contract format before adding a validator command beyond `validate-sections`.
+- PR #64 added a minimal machine-readable output-contract format skeleton in `src/agentic_project_kit/output_contract.py` with tests in `tests/test_output_contract.py`.
+- Next safe step: wire the output-contract format into a validator path, preferably by reusing `validate-sections` semantics before adding broader semantic validation.
