@@ -157,6 +157,8 @@ def test_governance_wrapper_generates_output_contract_skeleton(tmp_path: Path):
     assert "required_sections:" in sample_text
     assert "  - Final Answer" in sample_text
     validation = (target / "docs/VALIDATION_AND_REPAIR.md").read_text(encoding="utf-8")
-    assert "Use agentic-kit validate-sections" in validation
-    assert "This command only checks required literal sections" in validation
+    assert "Use agentic-kit validate-output-contract" in validation
+    assert "docs/output-contracts/default-answer.yaml" in validation
+    assert "Use agentic-kit validate-sections as a lower-level check" in validation
+    assert "Both commands only check required literal sections" in validation
     assert "Repair attempts must be bounded" in validation
