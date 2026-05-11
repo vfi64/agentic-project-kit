@@ -4,7 +4,7 @@ Status-date: 2026-05-10
 Project: agentic-project-kit
 Primary branch: main
 Current work branch: docs/roadmap-after-grok-review
-Current version: 0.2.5
+Current version: 0.2.6
 
 ## Purpose
 
@@ -138,3 +138,8 @@ Current documentation usability work:
 
 - docs/examples/minimal-python-cli.md documents a small end-to-end generated-project workflow.
 - README.md points new users to the example workflow.
+
+Current v0.2.6 release-preparation work:
+
+- v0.2.6 prepares the post-v0.2.5 documentation usability, generated-project doctor-gate, and Zenodo timeout improvements for release.
+- Local release preparation must verify tests, ruff, documentation gates, doctor, release-check, build, and twine check before tagging.

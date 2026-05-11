@@ -4,7 +4,7 @@ Status-date: 2026-05-10
 Project: agentic-project-kit
 Branch: docs/roadmap-after-grok-review
 Base branch: main
-Current version: 0.2.5
+Current version: 0.2.6
 
 ## Current Goal
 
@@ -165,3 +165,9 @@ Current documentation usability work:
 - Add `docs/examples/minimal-python-cli.md` as a small end-to-end generated-project demo.
 - Keep the example documentation-only; do not add generated fixture trees yet.
 - README.md should point users to the example workflow.
+
+Current v0.2.6 release-preparation work:
+
+- Prepare v0.2.6 from main after PRs #39, #40, and #41.
+- Do not invent a v0.2.6 Zenodo version DOI before GitHub release publication and Zenodo archival.
+- Next safe step: run the full local release gate and inspect the diff before opening the release PR.

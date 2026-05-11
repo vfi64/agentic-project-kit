@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.6
+
+- Add a minimal generated-project example workflow.
+- Fix generated Python CLI projects so their initial state passes documentation and doctor gates.
+- Reduce Zenodo post-release lookup timeout and keep timeout failures non-fatal.
+
 All notable changes to this project are documented here.
 
 This project uses a pragmatic semantic versioning scheme while it is in early MVP development.
