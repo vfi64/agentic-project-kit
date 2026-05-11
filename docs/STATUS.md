@@ -158,3 +158,9 @@ Current governance-wrapper profile work:
 - `output-contracts` is available as a policy pack for schema/validator/repair-boundary oriented projects.
 - `agentic-kit init --type governance-wrapper` generates a project whose initial doctor gate passes.
 - Next safe step: add generated output-contract skeleton files only after documenting the intended contract shape and acceptance tests.
+
+Governance-wrapper generated-project guidance:
+
+- `agentic-kit init --type governance-wrapper` now generates output-contract skeleton documentation.
+- Generated governance-wrapper projects include `docs/OUTPUT_CONTRACTS.md` and `docs/VALIDATION_AND_REPAIR.md`.
+- The init next-step guidance for governance-wrapper projects is documentation/doctor-oriented and no longer suggests Python venv/install/pytest steps for non-Python projects.

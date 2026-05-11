@@ -196,3 +196,9 @@ Current governance-wrapper profile work:
 
 Current collaboration rule: for chat-assisted terminal work, avoid heredocs in copy-paste command blocks when possible. Use a visible `printf` separator as the first command, prefer `./tools/screen_control_gate.sh` for evidence capture, and recover from `heredoc>` or `quote>` hangs with `Ctrl-C` followed by `git status --short`.
 
+
+Governance-wrapper generated-project guidance:
+
+- PR #51 added generated output-contract skeleton docs for governance-wrapper projects.
+- PR #52 fixed `agentic-kit init --type governance-wrapper` next-step guidance so non-Python governance projects are directed to `agentic-kit check-docs`, `agentic-kit check`, and `agentic-kit doctor`.
+- Next safe step: add a machine-checkable runtime-validator skeleton only after the generated documentation contract is stable.
