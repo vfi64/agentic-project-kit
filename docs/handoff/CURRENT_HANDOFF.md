@@ -203,4 +203,5 @@ Governance-wrapper generated-project guidance:
 - PR #52 fixed `agentic-kit init --type governance-wrapper` next-step guidance so non-Python governance projects are directed to `agentic-kit check-docs`, `agentic-kit check`, and `agentic-kit doctor`.
 - PR #54 tightened generated validation/repair guidance so repair wording is singular, bounded, and auditable.
 - PR #55 added a small deterministic runtime-validator skeleton in `src/agentic_project_kit/runtime_validator.py` with tests in `tests/test_runtime_validator.py`.
-- Next safe step: decide whether to wire the runtime validator into generated governance-wrapper fixtures/docs or keep it package-only until a concrete CLI/check command is designed.
+- PR #57 wired the runtime-validator skeleton into a separate `agentic-kit validate-sections` CLI command without changing `doctor` or `check` behavior.
+- Next safe step: decide whether generated governance-wrapper projects should document or scaffold `validate-sections` usage, or keep the command as an opt-in validation primitive.
