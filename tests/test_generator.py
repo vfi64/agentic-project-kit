@@ -149,4 +149,7 @@ def test_governance_wrapper_generates_output_contract_skeleton(tmp_path: Path):
 
     assert (target / "docs/OUTPUT_CONTRACTS.md").exists()
     assert (target / "docs/VALIDATION_AND_REPAIR.md").exists()
-    assert "Repair attempts must be bounded" in (target / "docs/VALIDATION_AND_REPAIR.md").read_text(encoding="utf-8")
+    validation = (target / "docs/VALIDATION_AND_REPAIR.md").read_text(encoding="utf-8")
+    assert "Use agentic-kit validate-sections" in validation
+    assert "This command only checks required literal sections" in validation
+    assert "Repair attempts must be bounded" in validation
