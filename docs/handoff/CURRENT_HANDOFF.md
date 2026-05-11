@@ -228,5 +228,5 @@ Governance-wrapper generated-project guidance:
 - PR #95 updated release metadata/docs with the verified v0.2.9 Zenodo version DOI: 10.5281/zenodo.20126490.
 - v0.2.9 post-release verification is complete: GitHub Release, Zenodo concept DOI, Zenodo version DOI, doctor, and screen-control gate pass.
 - PR #97 added generated governance-wrapper support for `docs/schemas/validation-report.schema.json`, making the validation-report JSON shape available as a machine-readable schema file.
-- Release preparation in progress for v0.2.10: generated `docs/schemas/validation-report.schema.json` support is complete and being prepared for tagging.
-- Next safe step: run release gates for v0.2.10, then commit/push this release-preparation branch and open a PR.
+- v0.2.10 GitHub Release has been created for the validation-report schema-file contract-stability slice.
+- Next safe step: verify whether Zenodo has minted a version DOI for v0.2.10, then update release metadata/docs if a DOI is available.
