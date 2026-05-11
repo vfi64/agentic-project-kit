@@ -310,6 +310,8 @@ The archived v0.2.7 release has the verified version-specific DOI: `10.5281/zeno
 
 The archived v0.2.8 release has the verified version-specific DOI: `10.5281/zenodo.20126270`.
 
+The archived v0.2.9 release has the verified version-specific DOI: `10.5281/zenodo.20126490`.
+
 
 ### Governance wrapper projects
 
@@ -377,3 +379,4 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - v0.2.6: `10.5281/zenodo.20119102`
 - v0.2.7: `10.5281/zenodo.20125518`
 - v0.2.8: `10.5281/zenodo.20126270`
+- v0.2.9: `10.5281/zenodo.20126490`
