@@ -13,6 +13,7 @@ doi: "10.5281/zenodo.20101359"
 # Verified v0.2.7 version DOI: 10.5281/zenodo.20125518
 # Verified v0.2.8 version DOI: 10.5281/zenodo.20126270
 # Verified v0.2.9 version DOI: 10.5281/zenodo.20126490
+# Verified v0.2.10 version DOI: 10.5281/zenodo.20127028
 abstract: "Generate GitHub-ready project templates for human-AI software development workflows."
 keywords:
   - agentic development
@@ -22,5 +23,5 @@ keywords:
   - assisted development
 license: MIT
 version: "0.2.10"
-doi: 10.5281/zenodo.20126490
+doi: 10.5281/zenodo.20127028
 date-released: "2026-05-11"
