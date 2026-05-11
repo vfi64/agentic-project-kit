@@ -64,3 +64,26 @@ def test_validate_required_sections_reports_missing_sections_deterministically()
         "Missing required section: Solution",
         "Missing required section: Check",
     ]
+
+
+def test_validation_report_to_dict_is_json_safe_and_deterministic() -> None:
+    report = ValidationReport(
+        findings=(
+            ValidationFinding(
+                severity=ValidationSeverity.ERROR,
+                code="missing_required_section",
+                message="Missing required section: Solution",
+            ),
+        )
+    )
+
+    assert report.to_dict() == {
+        "ok": False,
+        "findings": [
+            {
+                "severity": "error",
+                "code": "missing_required_section",
+                "message": "Missing required section: Solution",
+            }
+        ],
+    }

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 
 class ValidationSeverity(str, Enum):
@@ -28,15 +29,25 @@ class ValidationFinding:
 
 @dataclass(frozen=True)
 class ValidationReport:
-    """Deterministic validation report."""
-
-    findings: tuple[ValidationFinding, ...]
+    findings: tuple[ValidationFinding, ...] = ()
 
     @property
     def ok(self) -> bool:
-        """Return True when no error findings are present."""
-        return not any(finding.severity == ValidationSeverity.ERROR for finding in self.findings)
+        return not any(finding.severity is ValidationSeverity.ERROR for finding in self.findings)
 
+    def to_dict(self) -> dict[str, Any]:
+        """Return a deterministic JSON-safe representation."""
+        return {
+            "ok": self.ok,
+            "findings": [
+                {
+                    "severity": finding.severity.value,
+                    "code": finding.code,
+                    "message": finding.message,
+                }
+                for finding in self.findings
+            ],
+        }
 
 def validate_required_sections(text: str, required_sections: tuple[str, ...]) -> ValidationReport:
     """Validate that required section markers are present in text.
