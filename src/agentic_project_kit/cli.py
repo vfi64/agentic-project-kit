@@ -286,6 +286,29 @@ def _parse_csv(value: str | None) -> tuple[str, ...]:
     return tuple(item.strip() for item in value.split(",") if item.strip())
 
 
+@app.command("validate-contract")
+def validate_contract(
+    project_root: Path = typer.Option(Path("."), "--root", help="Project root containing .agentic/project.yaml."),
+) -> None:
+    """Validate the machine-readable project contract."""
+    from agentic_project_kit.contract import contract_summary, load_project_contract, validate_project_contract
+
+    contract_data = load_project_contract(project_root.resolve())
+    if contract_data is None:
+        typer.echo("Project contract not found: .agentic/project.yaml", err=True)
+        raise typer.Exit(1)
+
+    errors = validate_project_contract(contract_data)
+    if errors:
+        typer.echo("Project contract validation failed", err=True)
+        for error in errors:
+            typer.echo(f"- {error}", err=True)
+        raise typer.Exit(1)
+
+    typer.echo("Project contract valid.")
+    typer.echo(contract_summary(contract_data))
+
+
 @app.command("validate-sections")
 def validate_sections(
     path: Path = typer.Argument(..., help="Text file to validate."),
