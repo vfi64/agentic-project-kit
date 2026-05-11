@@ -164,6 +164,9 @@ def test_governance_wrapper_generates_output_contract_skeleton(tmp_path: Path):
     assert "docs/output-contracts/default-answer.yaml" in validation
     assert "--report validation-report.json" in validation
     assert "The JSON report contains `ok`, `contract`, `contract_version`, `checked_file`, and `findings`." in validation
+    assert "Report shape:" in validation
+    assert "missing_required_section" in validation
+    assert "consume it without parsing human console output" in validation
     assert "Use agentic-kit validate-sections as a lower-level check" in validation
     assert "Both commands only check required literal sections" in validation
     assert "Repair attempts must be bounded" in validation
