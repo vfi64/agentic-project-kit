@@ -166,10 +166,13 @@ def init(
 
     console.print("Next:")
     console.print(f"  cd {target}")
-    console.print("  python -m venv .venv")
-    console.print("  source .venv/bin/activate")
-    console.print('  pip install -e ".[dev]"', markup=False)
-    console.print("  pytest -q")
+    if project_type in {"python-cli", "python-lib"}:
+        console.print("  python -m venv .venv")
+        console.print("  source .venv/bin/activate")
+        console.print('  pip install -e ".[dev]"', markup=False)
+        console.print("  pytest -q")
+    else:
+        console.print("  agentic-kit check-docs")
     console.print("  agentic-kit check")
     console.print("  agentic-kit doctor")
 
