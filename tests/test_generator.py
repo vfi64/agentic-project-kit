@@ -129,3 +129,24 @@ def test_generated_project_passes_documentation_and_doctor_gates(tmp_path: Path)
     assert check_docs(target) == []
     assert build_doctor_report(target).ok
 
+
+
+def test_governance_wrapper_generates_output_contract_skeleton(tmp_path: Path):
+    target = tmp_path / "demo-governance"
+    create_project(
+        ProjectOptions(
+            name="demo-governance",
+            description="Demo governance wrapper",
+            project_type="governance-wrapper",
+            license_name="MIT",
+            github_actions=True,
+            pre_commit=True,
+            agent_docs=True,
+            logging_evidence=True,
+            target_dir=target,
+        )
+    )
+
+    assert (target / "docs/OUTPUT_CONTRACTS.md").exists()
+    assert (target / "docs/VALIDATION_AND_REPAIR.md").exists()
+    assert "Repair should be bounded" in (target / "docs/VALIDATION_AND_REPAIR.md").read_text(encoding="utf-8")
