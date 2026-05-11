@@ -176,4 +176,5 @@ Governance-wrapper generated-project guidance:
 - PR #72 updated generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance so `validate-output-contract` is shown next to the lower-level `validate-sections` command.
 - PR #74 documented the runtime validation workflow in `README.md` and `CHANGELOG.md`, including `validate-sections`, `validate-contract`, and `validate-output-contract`.
 - v0.2.7 GitHub Release has been created for the completed runtime-validation workflow.
-- Next safe step: verify whether Zenodo has minted a version DOI for v0.2.7, then update release metadata/docs if a DOI is available.
+- v0.2.7 Zenodo version DOI has been verified: 10.5281/zenodo.20125518.
+- Next safe step: run final post-release checks, then commit/push the DOI metadata update and open a PR.

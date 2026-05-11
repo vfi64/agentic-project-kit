@@ -283,6 +283,8 @@ The archived v0.2.5 release has the verified version-specific DOI: `10.5281/zeno
 
 The archived v0.2.6 release has the verified version-specific DOI: `10.5281/zenodo.20119102`.
 
+The archived v0.2.7 release has the verified version-specific DOI: `10.5281/zenodo.20125518`.
+
 
 ### Governance wrapper projects
 
@@ -344,4 +346,4 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 Version `0.2.5` is an early MVP release with release-state validation, post-release Zenodo verification, project-health diagnostics, policy-pack doctor checks, deterministic document-quality heuristics, documentation coverage checks, generated project contracts, project profiles, policy packs, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, checking post-release Zenodo archive state, and archiving releases through the Zenodo GitHub integration.
 
-This repository has maintainer-owned GitHub releases and verified Zenodo archive records. The v0.2.5 version-specific DOI is `10.5281/zenodo.20111119`; the v0.2.6 version-specific DOI is `10.5281/zenodo.20119102`.
+This repository has maintainer-owned GitHub releases and verified Zenodo archive records. The v0.2.5 version-specific DOI is `10.5281/zenodo.20111119`; the v0.2.6 version-specific DOI is `10.5281/zenodo.20119102`; the v0.2.7 version-specific DOI is `10.5281/zenodo.20125518`.
