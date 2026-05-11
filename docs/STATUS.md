@@ -141,5 +141,7 @@ Current documentation usability work:
 
 Current v0.2.6 release-preparation work:
 
-- v0.2.6 prepares the post-v0.2.5 documentation usability, generated-project doctor-gate, and Zenodo timeout improvements for release.
+- v0.2.6 released the post-v0.2.5 documentation usability, generated-project doctor-gate, and Zenodo timeout improvements.
+
+- `agentic-kit post-release-check --version 0.2.6` verified the v0.2.6 Zenodo version DOI: `10.5281/zenodo.20119102`.
 - Local release preparation must verify tests, ruff, documentation gates, doctor, release-check, build, and twine check before tagging.

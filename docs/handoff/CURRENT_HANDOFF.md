@@ -168,6 +168,8 @@ Current documentation usability work:
 
 Current v0.2.6 release-preparation work:
 
-- Prepare v0.2.6 from main after PRs #39, #40, and #41.
-- Do not invent a v0.2.6 Zenodo version DOI before GitHub release publication and Zenodo archival.
+- v0.2.6 has been released from main after PRs #39, #40, #41, and #42.
+
+- v0.2.6 version DOI: 10.5281/zenodo.20119102.
+- The v0.2.6 version-specific DOI has been verified by `agentic-kit post-release-check --version 0.2.6`: 10.5281/zenodo.20119102.
 - Next safe step: run the full local release gate and inspect the diff before opening the release PR.
