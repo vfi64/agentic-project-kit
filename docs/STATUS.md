@@ -164,3 +164,6 @@ Governance-wrapper generated-project guidance:
 - `agentic-kit init --type governance-wrapper` now generates output-contract skeleton documentation.
 - Generated governance-wrapper projects include `docs/OUTPUT_CONTRACTS.md` and `docs/VALIDATION_AND_REPAIR.md`.
 - The init next-step guidance for governance-wrapper projects is documentation/doctor-oriented and no longer suggests Python venv/install/pytest steps for non-Python projects.
+- PR #54 tightened generated validation/repair guidance so repair wording is singular, bounded, and auditable.
+- PR #55 added a small deterministic runtime-validator skeleton in `src/agentic_project_kit/runtime_validator.py` with tests in `tests/test_runtime_validator.py`.
+- Next safe step: decide whether to wire the runtime validator into generated governance-wrapper fixtures/docs or keep it package-only until a concrete CLI/check command is designed.
