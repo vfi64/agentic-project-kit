@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Document the runtime validation workflow in `README.md`.
+- Surface `validate-sections`, `validate-contract`, and `validate-output-contract` as deterministic structural validation commands.
+- Clarify that output-contract validation currently checks required literal sections and does not claim semantic validation or repair.
+
 ## v0.2.6
 
 - Add a minimal generated-project example workflow.

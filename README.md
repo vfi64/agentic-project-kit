@@ -166,6 +166,33 @@ These checks are intentionally limited. They are useful hard gates for known bad
 
 Future commands such as `review-docs` or `review-architecture` may provide advisory review for clarity, didactic quality, audience fit, missing rationale, or possible architecture drift. Such advisory review must remain separate from `doctor` and must not be treated as merge authority.
 
+
+## Runtime validation workflow
+
+`agentic-project-kit` includes a small deterministic validation path for generated governance artifacts.
+
+The current workflow is intentionally narrow:
+
+```bash
+agentic-kit validate-sections output.md -s "Plan" -s "Solution" -s "Check" -s "Final Answer"
+agentic-kit validate-contract --root .
+agentic-kit validate-output-contract output.md --contract docs/output-contracts/default-answer.yaml
+```
+
+What these commands do:
+
+- `validate-sections` checks literal required section markers in a text file.
+- `validate-contract` checks the machine-readable `.agentic/project.yaml` project contract.
+- `validate-output-contract` loads a machine-readable output-contract YAML file and validates an output text file using the same required-section semantics.
+
+Boundary: these checks do not repair content, infer missing facts, or prove semantic correctness. They are deterministic structural gates for known contract requirements.
+
+Generated `governance-wrapper` projects include a sample output contract at:
+
+```text
+docs/output-contracts/default-answer.yaml
+```
+
 ## Release planning and validation
 
 Use `agentic-kit release-plan` before preparing a release:
