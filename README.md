@@ -178,6 +178,7 @@ agentic-kit validate-sections output.md -s "Plan" -s "Solution" -s "Check" -s "F
 agentic-kit validate-contract --root .
 agentic-kit validate-output-contract output.md --contract docs/output-contracts/default-answer.yaml
 agentic-kit validate-output-contract output.md --contract docs/output-contracts/default-answer.yaml --report validation-report.json
+agentic-kit validate-output-contract output.md --contract docs/output-contracts/default-answer.yaml --repair-output output.repaired.md --repair-report repair-report.json
 ```
 
 The optional `--report` flag writes machine-readable validation evidence as JSON with `ok`, `contract`, `contract_version`, `checked_file`, and `findings`.
@@ -207,6 +208,7 @@ What these commands do:
 - `validate-sections` checks literal required section markers in a text file.
 - `validate-contract` checks the machine-readable `.agentic/project.yaml` project contract.
 - `validate-output-contract` loads a machine-readable output-contract YAML file and validates an output text file using the same required-section semantics.
+- `validate-output-contract --repair-output ... --repair-report ...` can write a deterministic structural repair for missing required sections and a machine-readable repair report. The repair inserts missing section markers with explicit TODO text only; it does not invent semantic content.
 
 Boundary: these checks do not repair content, infer missing facts, or prove semantic correctness. They are deterministic structural gates for known contract requirements.
 
