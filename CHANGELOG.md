@@ -2,6 +2,10 @@
 
 ## v0.2.11 - 2026-05-12
 
+Zenodo v0.2.11 DOI: 10.5281/zenodo.20139103
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
+
 ### Added
 
 - Added optional `--report-schema` support to `agentic-kit validate-output-contract` so generated JSON validation reports can be checked against `docs/schemas/validation-report.schema.json` before they are written.
