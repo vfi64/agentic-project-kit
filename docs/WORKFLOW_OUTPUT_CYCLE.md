@@ -2,15 +2,34 @@
 
 ## Purpose
 
-Use the workflow CLI as the normal local entrypoint for bounded workflow-output handoff between a local checkout, the user, and an LLM with GitHub access.
+Use the workflow CLI or compatibility entrypoint as the normal local entrypoint for bounded workflow-output handoff between a local checkout, the user, and an LLM with GitHub access.
 
 ## Current safe default
 
 - `IDLE`: do nothing and report that no workflow action was requested.
 
+## Standard next-step terminal workflow
+
+For app-based ChatGPT workflows, the normal local command is:
+
+```bash
+cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+python tools/next-step.py
+```
+
+After the command finishes, the user can usually reply in chat with only:
+
+```text
+done
+```
+
+The short acknowledgement `d` is also valid. The assistant then evaluates the workflow state, evidence pointer, or copied terminal output and proposes the next safe step.
+
+This keeps routine work out of long manual Copy-and-Paste blocks. Use full copied terminal output only when the local workflow did not provide enough bounded evidence for review.
+
 ## Primary workflow CLI
 
-Use these commands for normal operation:
+Use these commands for explicit operation:
 
 ```text
 agentic-kit workflow request
@@ -40,7 +59,7 @@ docs/reports/CURRENT_WORKFLOW_OUTPUT.md
 python tools/next-step.py
 ```
 
-Do not expand `tools/next-step.py` indefinitely. New user-facing workflow behavior should move toward `agentic-kit workflow ...` commands.
+Keep `tools/next-step.py` available for the standard chat-assisted terminal workflow. Do not expand it indefinitely. New user-facing workflow behavior should move toward `agentic-kit workflow ...` commands while preserving this compatibility bridge.
 
 ## Legacy state cycle
 
@@ -88,7 +107,8 @@ After the `REQUESTED` step succeeds, the state becomes `UPLOADED`. The LLM can i
 
 ## Rules for agents
 
-- Prefer this workflow over manual Copy-and-Paste when complete terminal output matters.
+- Prefer the standard next-step terminal workflow over manual Copy-and-Paste when complete terminal output matters.
+- Accept `done` or `d` as the normal user acknowledgement after `python tools/next-step.py` finishes.
 - Prefer declarative YAML workflow requests over executable ad-hoc scripts.
 - Treat evidence as temporary and bounded.
 - Do not keep raw workflow evidence permanently in `main`.
