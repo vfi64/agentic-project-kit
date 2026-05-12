@@ -16,6 +16,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Documentation only | git diff, content review, and agentic-kit check-docs |
 | Architecture-relevant change | Read docs/architecture/ARCHITECTURE_CONTRACT.md; state whether the contract remains valid or is updated; run the standard local gate |
 | Documentation coverage change | Update docs/DOCUMENTATION_COVERAGE.yaml and run agentic-kit check-docs |
+| Governance rule change | Rule Hardening Gate: add or update a deterministic test, coverage check, doctor check, release check, or documented review-only exception |
 | Document quality heuristic change | Unit tests plus agentic-kit check-docs; confirm that deterministic quality heuristics do not claim semantic perfection |
 | Python code | python -m pytest -q and ruff check . |
 | CLI behavior | Unit tests plus CLI smoke command; update docs/DOCUMENTATION_COVERAGE.yaml when public command visibility changes |
@@ -71,6 +72,20 @@ Update it when adding or changing:
 - architecture concepts, profiles, or policy packs.
 
 `agentic-kit check-docs` must fail if a required term from the coverage matrix is missing from its target document.
+
+## Rule Hardening Gate
+
+Every new or changed governance rule must be backed by at least one explicit hardening mechanism in the same change.
+
+Accepted hardening mechanisms:
+
+- a deterministic unit or integration test;
+- a documentation coverage requirement in `docs/DOCUMENTATION_COVERAGE.yaml`;
+- a doctor, check-docs, release-check, or check-todo gate;
+- a generator fixture test when the rule affects generated projects;
+- a documented review-only exception when the rule is intentionally not machine-checkable.
+
+Do not add normative rules that exist only as prose without a matching test, gate, coverage requirement, or explicit exception. Review-only exceptions must name why the rule cannot currently be enforced deterministically and what evidence reviewers should inspect.
 
 ## Document Quality Heuristic Gate
 

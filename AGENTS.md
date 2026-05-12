@@ -47,6 +47,18 @@ Before adding or changing any public command, generated file, workflow, gate, pr
 
 Do not add implementation-only features that are invisible to new users, maintainers, or coding agents.
 
+## Rule Hardening Rule
+
+Every new or changed governance rule must be hardened in the same change by one of these mechanisms:
+
+- deterministic unit or integration test;
+- documentation coverage requirement in `docs/DOCUMENTATION_COVERAGE.yaml`;
+- `doctor`, `check-docs`, `release-check`, or `check-todo` gate;
+- generator fixture test when generated projects are affected;
+- explicit review-only exception when deterministic enforcement is not currently possible.
+
+Do not add a normative project rule as prose only. If a rule is intentionally review-only, state why it cannot currently be machine-checked and what evidence reviewers should inspect.
+
 ## Remote Work Authorization
 
 For `agentic-project-kit`, an assistant or coding agent may work without additional confirmation on remote feature or documentation branches when the task fits the current request and architecture contract.
