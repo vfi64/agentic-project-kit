@@ -87,9 +87,9 @@ rules:
     documents:
       - path: README.md
         terms:
-          - Version `0.3.1`
-          - v0.3.0
-          - 10.5281/zenodo.20140467
+          - Version `0.3.2`
+          - v0.3.1
+          - 10.5281/zenodo.20144969
 
   - id: example-workflow-coverage
     description: README must point users to the minimal generated-project example.

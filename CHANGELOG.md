@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.3.1 - 2026-05-12
+## v0.3.2 - 2026-05-12
 
 Zenodo Concept DOI: 10.5281/zenodo.20101359
 
