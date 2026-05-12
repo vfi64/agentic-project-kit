@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from typer.testing import CliRunner
 import yaml
 
@@ -185,7 +187,6 @@ def test_init_accepts_governance_wrapper_type(tmp_path):
     assert "output-contracts" in data["policy_packs"]
 
 
-
 def test_init_governance_wrapper_next_steps_do_not_claim_python_install(tmp_path):
     runner = CliRunner()
 
@@ -208,3 +209,14 @@ def test_init_governance_wrapper_next_steps_do_not_claim_python_install(tmp_path
     assert "agentic-kit doctor" in result.output
     assert "pip install -e" not in result.output
     assert "pytest -q" not in result.output
+
+
+def test_cli_py_stays_as_root_registry() -> None:
+    cli_text = Path("src/agentic_project_kit/cli.py").read_text(encoding="utf-8")
+    assert len(cli_text.splitlines()) < 220
+    assert "register_check_commands(app)" in cli_text
+    assert "register_release_commands(app)" in cli_text
+    assert "register_validation_commands(app)" in cli_text
+    assert "def validate_output_contract" not in cli_text
+    assert "def release_check_command" not in cli_text
+    assert "def todo_complete" not in cli_text
