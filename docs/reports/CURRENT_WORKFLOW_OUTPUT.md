@@ -1,35 +1,60 @@
 # Current workflow output
 
 Date: 2026-05-12
-Branch: feature/current-workflow-output-rule
+Branch: main
 
 ## Purpose
 
-This file is the volatile current handoff bridge for longer terminal, diagnostic, inspection, or gate outputs.
+Cleanup of transient report files before potential v0.2.11 release metadata work.
 
-## This slice
+## Removed transient reports
 
-- Added the Current Workflow Output rule to AGENTS.md.
-- Established docs/reports/CURRENT_WORKFLOW_OUTPUT.md as the overwriteable working dump.
-- No permanent historical raw dump is created for this slice.
+- output_transfer_rule_pr_status_20260512.md
+- validate_report_schema_option_gate_20260512.md
+- validate_report_schema_option_pr_status_20260512.md
+- validate_report_schema_usability_code_inspection_20260512.md
+- validate_report_schema_usability_source_snippets_20260512.md
+- validate_report_schema_usability_start_20260512.md
+- validation_report_schema_usability_inspection_20260512.md
+
+## Kept reports
+
+docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+docs/reports/report_schema_docs_slice_20260512.md
+docs/reports/report_schema_e2e_and_collab_rules_20260512.md
+docs/reports/status_roadmap_summary_after_pr105_20260512.md
 
 ## Diff stat
- AGENTS.md | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ docs/reports/CURRENT_WORKFLOW_OUTPUT.md            |  85 +--
+ .../output_transfer_rule_pr_status_20260512.md     |  14 -
+ .../validate_report_schema_option_gate_20260512.md |  81 ---
+ ...date_report_schema_option_pr_status_20260512.md |  22 -
+ ...rt_schema_usability_code_inspection_20260512.md | 792 ---------------------
+ ...rt_schema_usability_source_snippets_20260512.md | 751 -------------------
+ ...idate_report_schema_usability_start_20260512.md | 268 -------
+ ..._report_schema_usability_inspection_20260512.md | 196 -----
+ 8 files changed, 16 insertions(+), 2193 deletions(-)
 
 ## Gate
 === Screen-Control Gate Output ===
-Timestamp: 2026-05-12 12:59:03
+Timestamp: 2026-05-12 13:05:49
 PWD: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
 
 === git branch ===
-feature/current-workflow-output-rule
+main
 
 === git status --short ===
- M AGENTS.md
-?? docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+ M docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+ D docs/reports/output_transfer_rule_pr_status_20260512.md
+ D docs/reports/validate_report_schema_option_gate_20260512.md
+ D docs/reports/validate_report_schema_option_pr_status_20260512.md
+ D docs/reports/validate_report_schema_usability_code_inspection_20260512.md
+ D docs/reports/validate_report_schema_usability_source_snippets_20260512.md
+ D docs/reports/validate_report_schema_usability_start_20260512.md
+ D docs/reports/validation_report_schema_usability_inspection_20260512.md
 
 === git log --oneline -8 ===
+cc57509 Document current workflow output handoff file (#108)
 ee6d088 Document report schema option in generated wrapper docs (#107)
 89b7408 Record status roadmap after PR 105 (#106)
 92a0a02 Document collaboration rules and report schema E2E (#105)
@@ -37,12 +62,11 @@ ee6d088 Document report schema option in generated wrapper docs (#107)
 399dd4f Document output transfer rule for agent workflows (#103)
 6c27019 Finalize docs after v0.2.10 release (#102)
 81ffe39 Update docs with v0.2.10 Zenodo DOI (#101)
-4a9b91b Update docs after v0.2.10 GitHub release (#100)
 
 === python -m pytest -q ===
 ........................................................................ [ 76%]
 ......................                                                   [100%]
-94 passed in 0.91s
+94 passed in 0.85s
 pytest exit code: 0
 
 === ruff check . ===
