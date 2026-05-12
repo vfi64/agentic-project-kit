@@ -136,3 +136,32 @@ Rules:
 - Prefer checked-in helper scripts, python3 -c commands, or small patch files over multiline heredocs.
 - If the terminal shows heredoc> or quote>, stop the unfinished input with Ctrl-C and run git status --short before continuing.
 - Use ./tools/screen_control_gate.sh to capture local evidence in Screen-Control_Output.txt when local validation output should be shared.
+
+## Diagnose-/Output-Transfer-Regel
+
+Wenn der arbeitende LLM/Agent keinen direkten Zugriff auf die lokale Kommandozeile, lokale Dateien oder die lokale Repo-Kopie hat, müssen relevante Diagnose-, Test-, Inspektions- und Gate-Ausgaben automatisch in Dateien geschrieben werden.
+
+Diese Dateien sollen am Ende eines Arbeitsblocks oder Slices in einen geeigneten versionierten oder remote zugänglichen Pfad übernommen und gepusht werden, sofern sie für die weitere Auswertung nützlich sind.
+
+Ziel:
+- keine manuelle Copy-&-Paste-Abhängigkeit,
+- reproduzierbare Auswertung,
+- bessere Anschlussfähigkeit in neuen Chats,
+- auditierbare Entwicklungsschritte.
+
+Bevorzugte Pfade:
+- docs/reports/
+- artifacts/
+- Logs/SharedManualTestRuns/
+- ein projektspezifischer Diagnose-/Report-Pfad
+
+Nicht geeignet:
+- ignorierte tmp-Dateien als alleinige Informationsquelle,
+- nur Terminalausgabe ohne gespeicherte Datei,
+- Screenshots als primäre Diagnosequelle.
+
+Weiterhin gilt:
+- Terminalblöcke müssen quoting-sicher bleiben.
+- Keine heredocs.
+- Keine riskanten mehrzeiligen python -c-Kommandos.
+- Längere Blöcke beginnen mit printf-Titelzeile.
