@@ -174,3 +174,62 @@ def test_validate_output_contract_cli_fails_when_report_schema_rejects_payload(t
     assert "Validation report schema check failed:" in result.output
     assert "report payload missing required key: missing" in result.output
     assert not report_path.exists()
+
+
+def test_validate_output_contract_cli_repairs_missing_required_sections(tmp_path: Path) -> None:
+    contract_path = tmp_path / "contract.yaml"
+    output_path = tmp_path / "output.md"
+    repaired_path = tmp_path / "output.repaired.md"
+    repair_report_path = tmp_path / "repair-report.json"
+    _write_contract(contract_path)
+    output_path.write_text("Plan\nFinal Answer", encoding="utf-8")
+
+    result = runner.invoke(
+        app,
+        [
+            "validate-output-contract",
+            str(output_path),
+            "--contract",
+            str(contract_path),
+            "--repair-output",
+            str(repaired_path),
+            "--repair-report",
+            str(repair_report_path),
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert "deterministic repair output written" in result.output
+    assert "Repaired output contract validation passed." in result.output
+    repaired_text = repaired_path.read_text(encoding="utf-8")
+    assert "Solution\nTODO: fill this section." in repaired_text
+    assert "Check\nTODO: fill this section." in repaired_text
+    payload = json.loads(repair_report_path.read_text(encoding="utf-8"))
+    assert payload["ok"] is True
+    assert payload["repair_attempted"] is True
+    assert [operation["target"] for operation in payload["operations"]] == ["Solution", "Check"]
+    assert payload["final_validation"] == {"findings": [], "ok": True}
+
+
+def test_validate_output_contract_cli_repair_report_requires_repair_output(tmp_path: Path) -> None:
+    contract_path = tmp_path / "contract.yaml"
+    output_path = tmp_path / "output.md"
+    repair_report_path = tmp_path / "repair-report.json"
+    _write_contract(contract_path)
+    output_path.write_text("Plan\nFinal Answer", encoding="utf-8")
+
+    result = runner.invoke(
+        app,
+        [
+            "validate-output-contract",
+            str(output_path),
+            "--contract",
+            str(contract_path),
+            "--repair-report",
+            str(repair_report_path),
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "--repair-report requires --repair-output." in result.output
+    assert not repair_report_path.exists()
