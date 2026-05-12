@@ -2,6 +2,9 @@
 
 ## v0.3.0
 
+Zenodo v0.3.0 DOI: 10.5281/zenodo.20140467
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
 - Added generated repair-report schema support for governance-wrapper projects.
 - Added a repair report model for machine-readable bounded repair evidence.
 - Added a minimal deterministic output repairer for missing required section markers.
