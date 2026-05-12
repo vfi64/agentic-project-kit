@@ -321,9 +321,23 @@ def validate_output_contract(
         "--report-schema",
         help="Validate the JSON report against a generated validation-report.schema.json file.",
     ),
+    repair_output_path: Path | None = typer.Option(
+        None,
+        "--repair-output",
+        help="Write a deterministically repaired output file when supported.",
+    ),
+    repair_report_path: Path | None = typer.Option(
+        None,
+        "--repair-report",
+        help="Write a JSON repair report. Requires --repair-output.",
+    ),
 ) -> None:
     """Validate an output file against a machine-readable output contract."""
     from agentic_project_kit.output_contract import load_output_contract, validate_output_against_contract
+
+    if repair_report_path is not None and repair_output_path is None:
+        typer.echo("--repair-report requires --repair-output.", err=True)
+        raise typer.Exit(1)
 
     try:
         contract = load_output_contract(contract_path)
@@ -331,7 +345,8 @@ def validate_output_contract(
         typer.echo(f"Output contract invalid: {exc}", err=True)
         raise typer.Exit(1) from exc
 
-    report = validate_output_against_contract(output_path.read_text(encoding="utf-8"), contract)
+    output_text = output_path.read_text(encoding="utf-8")
+    report = validate_output_against_contract(output_text, contract)
     payload = {
         "ok": report.ok,
         "contract": contract.name,
@@ -357,6 +372,22 @@ def validate_output_contract(
     if report.ok:
         typer.echo("Output contract validation passed.")
         raise typer.Exit(0)
+
+    if repair_output_path is not None:
+        from agentic_project_kit.output_repair import append_missing_required_sections
+        repair_result = append_missing_required_sections(output_text, contract)
+        repair_output_path.write_text(repair_result.text, encoding="utf-8")
+        if repair_report_path is not None:
+            repair_report_path.write_text(
+                json.dumps(repair_result.report.to_dict(), indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+        typer.echo("Output contract validation failed; deterministic repair output written.")
+        if repair_result.report.ok:
+            typer.echo("Repaired output contract validation passed.")
+            raise typer.Exit(0)
+        typer.echo("Repaired output contract validation failed.", err=True)
+        raise typer.Exit(1)
 
     for finding in report.findings:
         typer.echo(
