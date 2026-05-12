@@ -213,10 +213,29 @@ def test_init_governance_wrapper_next_steps_do_not_claim_python_install(tmp_path
 
 def test_cli_py_stays_as_root_registry() -> None:
     cli_text = Path("src/agentic_project_kit/cli.py").read_text(encoding="utf-8")
-    assert len(cli_text.splitlines()) < 220
+    assert len(cli_text.splitlines()) < 100
+    assert "register_init_command(app)" in cli_text
+    assert "register_profile_commands(app)" in cli_text
+    assert "register_github_commands(app)" in cli_text
     assert "register_check_commands(app)" in cli_text
     assert "register_release_commands(app)" in cli_text
     assert "register_validation_commands(app)" in cli_text
-    assert "def validate_output_contract" not in cli_text
-    assert "def release_check_command" not in cli_text
-    assert "def todo_complete" not in cli_text
+    assert "def " not in cli_text
+    assert "typer.Option" not in cli_text
+    assert "typer.Argument" not in cli_text
+
+
+def test_cli_commands_package_contains_command_groups() -> None:
+    command_dir = Path("src/agentic_project_kit/cli_commands")
+    expected = {
+        "__init__.py",
+        "init.py",
+        "github.py",
+        "profiles.py",
+        "checks.py",
+        "release.py",
+        "todo.py",
+        "validation.py",
+        "workflow.py",
+    }
+    assert expected.issubset({path.name for path in command_dir.iterdir()})
