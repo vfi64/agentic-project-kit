@@ -176,6 +176,22 @@ rules:
           - Release Gate
           - Outcome Reporting
 
+  - id: rule-hardening-coverage
+    description: Governance rules must be backed by tests, gates, coverage checks, or explicit review-only exceptions.
+    documents:
+      - path: AGENTS.md
+        terms:
+          - Rule Hardening Rule
+          - deterministic unit or integration test
+          - documentation coverage requirement
+          - explicit review-only exception
+      - path: docs/TEST_GATES.md
+        terms:
+          - Rule Hardening Gate
+          - Governance rule change
+          - deterministic unit or integration test
+          - documented review-only exception
+
   - id: post-release-zenodo-coverage
     description: Post-release Zenodo checks must remain visible and separate from pre-release gates.
     documents:
