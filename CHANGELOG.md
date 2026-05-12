@@ -1,5 +1,24 @@
 # Changelog
 
+## v0.2.11 - 2026-05-12
+
+### Added
+
+- Added optional `--report-schema` support to `agentic-kit validate-output-contract` so generated JSON validation reports can be checked against `docs/schemas/validation-report.schema.json` before they are written.
+- Added an end-to-end smoke-test report for the `--report --report-schema` governance-wrapper workflow.
+- Added `docs/reports/CURRENT_WORKFLOW_OUTPUT.md` as an overwriteable current workflow handoff bridge for app-based agent workflows.
+
+### Changed
+
+- Documented terminal feedback, diagnostic-output transfer, and diagnostic-report hygiene rules in `AGENTS.md`.
+- Updated generated governance-wrapper validation documentation to show `--report-schema` usage.
+- Recorded a concise post-v0.2.10 roadmap summary for the v0.2.11 direction.
+
+### Removed
+
+- Removed transient raw workflow reports from `docs/reports/`, keeping only the overwriteable current workflow output and concise longer-term reports.
+
+
 ## v0.2.10 - 2026-05-11
 
 - Generate `docs/schemas/validation-report.schema.json` for governance-wrapper projects.
