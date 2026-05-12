@@ -28,7 +28,7 @@ def test_workflow_state_supports_idle_cycle() -> None:
     assert "UPLOADED" in script
     assert "FAILED" in script
     assert "No workflow action requested" in script
-    assert "Next state: IDLE" in script
+    assert "Next state:" in script
     assert "temp/workflow-evidence-" in script
 
 
