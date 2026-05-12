@@ -28,8 +28,12 @@ from agentic_project_kit.release import (
 from agentic_project_kit.todo import complete_item, list_items, load_todo, render_markdown
 from agentic_project_kit.models import ProjectOptions
 from agentic_project_kit.templates import create_project
+from agentic_project_kit.workflow_cli import workflow_app
 
 app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
+
+workflow_app_registered = workflow_app
+app.add_typer(workflow_app_registered, name="workflow")
 
 todo_app = typer.Typer(help="Manage generated project TODO items.")
 app.add_typer(todo_app, name="todo")
