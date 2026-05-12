@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import tomllib
 from dataclasses import dataclass
 from enum import Enum
@@ -182,6 +183,11 @@ def _version_drift_check(project_root: Path) -> DoctorCheck:
     if citation_path.exists() and not _citation_version_matches(citation_path, version):
         missing.append("CITATION.cff")
 
+    init_path = project_root / "src/agentic_project_kit/__init__.py"
+    init_version = _read_package_init_version(init_path)
+    if init_path.exists() and init_version != version:
+        missing.append("src/agentic_project_kit/__init__.py")
+
     if missing:
         return DoctorCheck("version drift", DoctorStatus.FAIL, "version mismatch in: " + ", ".join(missing))
     return DoctorCheck("version drift", DoctorStatus.PASS, f"project state matches version {version}")
@@ -195,6 +201,15 @@ def _read_pyproject_version(path: Path) -> str | None:
     version = project.get("version")
     if isinstance(version, str) and version:
         return version
+    return None
+
+
+def _read_package_init_version(path: Path) -> str | None:
+    if not path.exists():
+        return None
+    match = re.search(r'^__version__\s*=\s*["\']([^"\']+)["\']', path.read_text(encoding="utf-8"), re.MULTILINE)
+    if match:
+        return match.group(1)
     return None
 
 
