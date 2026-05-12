@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.1 - 2026-05-12
+
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
+- Added `IDLE` as the safe no-op workflow state.
+- Added declarative workflow runner support for bounded local evidence capture.
+- Added `agentic-kit workflow request`, `agentic-kit workflow run`, `agentic-kit workflow status`, and `agentic-kit workflow cleanup`.
+- Updated v0.3.0 Zenodo DOI metadata.
+- Documented `done` and `d` as local terminal acknowledgement wording.
+- Modularized CLI command registration and moved command groups into `src/agentic_project_kit/cli_commands/`.
+- Added boundary tests to keep `cli.py` as a thin root command registry.
+
 ## v0.3.0
 
 Zenodo v0.3.0 DOI: 10.5281/zenodo.20140467
