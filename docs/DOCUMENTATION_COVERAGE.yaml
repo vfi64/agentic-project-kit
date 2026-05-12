@@ -71,6 +71,28 @@ rules:
           - .agentic/current_work.yaml
           - docs/reports/CURRENT_WORKFLOW_OUTPUT.md
 
+  - id: next-step-terminal-workflow-coverage
+    description: Standard chat-assisted next-step workflow must remain visible to agents and workflow docs.
+    documents:
+      - path: AGENTS.md
+        terms:
+          - Standard next-step terminal workflow
+          - cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+          - python tools/next-step.py
+          - done
+          - The short acknowledgement `d` is also valid
+          - instead of long manual Copy-and-Paste terminal blocks
+          - agentic-kit workflow request
+          - agentic-kit workflow cleanup
+      - path: docs/WORKFLOW_OUTPUT_CYCLE.md
+        terms:
+          - Standard next-step terminal workflow
+          - python tools/next-step.py
+          - done
+          - The short acknowledgement `d` is also valid
+          - manual Copy-and-Paste blocks
+          - compatibility bridge
+
   - id: cli-package-readme-coverage
     description: CLI package modularization must remain visible after the monolith split.
     documents:
