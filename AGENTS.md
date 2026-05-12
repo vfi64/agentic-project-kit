@@ -188,6 +188,21 @@ Wenn Terminalausgabe benötigt wird:
 
 Die Markierung verhindert, dass Shell-Kommandos, Prompts, Diagnoseausgaben und Chattext vermischt werden.
 
+
+
+## Current Workflow Output
+
+When the working LLM/agent cannot directly access the local shell or local repository state, longer terminal, diagnostic, inspection, or gate outputs should be written to:
+
+`docs/reports/CURRENT_WORKFLOW_OUTPUT.md`
+
+This file is a volatile handoff bridge for the current working slice. It may be overwritten in later slices and is not a historical archive.
+
+Use it to speed up app-based ChatGPT workflows and reduce manual copy-and-paste.
+
+Only create additional permanent report files when the result has long-term audit, release, or decision value.
+
+
 ## Diagnosebericht-Hygiene
 
 Diagnose-, Inspektions- und Gate-Ausgaben sollen bei fehlendem direktem Shell-Zugriff des Agents in Dateien geschrieben werden.
