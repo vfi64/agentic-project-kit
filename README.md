@@ -387,5 +387,5 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - v0.2.10: `10.5281/zenodo.20127028`
 ## Workflow Output Cycle
 
-For local LLM handoff, use `python tools/next-step.py`. It cycles through `TEST`, `UPLOAD`, and `CLEANUP` using `.agentic/workflow_state`. Details are documented in `docs/WORKFLOW_OUTPUT_CYCLE.md`.
+For local LLM handoff, use `python tools/next-step.py`. It uses `.agentic/workflow_state` with `IDLE`, `TEST`, `UPLOAD`, and `CLEANUP`; `IDLE` is the safe default and a new cycle is started explicitly by writing `TEST`. Details are documented in `docs/WORKFLOW_OUTPUT_CYCLE.md`.
 
