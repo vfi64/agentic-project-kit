@@ -155,7 +155,9 @@ def test_governance_wrapper_generates_output_contract_skeleton(tmp_path: Path):
     sample = target / "docs/output-contracts/default-answer.yaml"
     assert sample.exists()
     schema_path = target / "docs/schemas/validation-report.schema.json"
+    repair_schema_path = target / "docs/schemas/repair-report.schema.json"
     assert schema_path.exists()
+    assert repair_schema_path.exists()
     schema_text = schema_path.read_text(encoding="utf-8")
     assert "agentic-project-kit validation report" in schema_text
     assert "checked_file" in schema_text
@@ -174,6 +176,7 @@ def test_governance_wrapper_generates_output_contract_skeleton(tmp_path: Path):
     assert "missing_required_section" in validation
     assert "consume it without parsing human console output" in validation
     assert "docs/schemas/validation-report.schema.json" in validation
+    assert "docs/schemas/repair-report.schema.json" in validation
     assert "machine-readable schema for this report shape" in validation
     assert "Use agentic-kit validate-sections as a lower-level check" in validation
     assert "Both commands only check required literal sections" in validation
