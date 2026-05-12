@@ -120,15 +120,18 @@ def step_cleanup(next_state: str = "IDLE") -> None:
 def step_requested() -> None:
     if not WORKFLOW_FILE.exists():
         raise SystemExit("Missing .agentic/current_work.yaml")
+    control_branch = current_branch()
     write_state("RUNNING")
     evidence = timestamped_evidence_path()
     try:
         run([sys.executable, "tools/workflow_runner.py", str(WORKFLOW_FILE), str(evidence)])
     except subprocess.CalledProcessError:
+        run(["git", "switch", control_branch], check=False)
         write_current_report(evidence, "Declarative workflow failed. Evidence preserved for diagnosis.")
         write_state("FAILED")
         print("Next state: FAILED")
         return
+    run(["git", "switch", control_branch])
     write_current_report(evidence, "Declarative workflow completed and evidence was uploaded for handoff.")
     branch = create_evidence_branch("UPLOADED")
     print(f"Uploaded temporary workflow evidence branch: {branch}")
