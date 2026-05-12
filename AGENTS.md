@@ -117,9 +117,39 @@ agentic-kit doctor
 
 If a command was not run, say so explicitly and explain why.
 
+## Standard next-step terminal workflow
+
+For app-based ChatGPT workflows, use the compatibility entrypoint as the normal local command unless a more explicit workflow command is needed:
+
+```bash
+cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+python tools/next-step.py
+```
+
+After the command finishes, the expected chat reply is usually only:
+
+```text
+done
+```
+
+The short acknowledgement `d` is also valid. The assistant must then inspect the available workflow state or copied output and propose the next safe step.
+
+This next-step workflow is the preferred normal path instead of long manual Copy-and-Paste terminal blocks. Long terminal-output blocks are still allowed when a local command did not write enough bounded evidence for review.
+
+The explicit CLI variant remains supported for targeted operation:
+
+```text
+agentic-kit workflow request
+agentic-kit workflow run
+agentic-kit workflow status
+agentic-kit workflow cleanup
+```
+
+See `docs/WORKFLOW_OUTPUT_CYCLE.md` for state-machine details, evidence pointers, and cleanup rules.
+
 ## Chat-assisted terminal workflow
 
-When work is coordinated through a chat-based LLM without Codex CLI, Claude CLI, or another local agent runtime, prefer copy-pasteable terminal blocks that are easy to audit from the terminal output.
+When work is coordinated through a chat-based LLM without Codex CLI, Claude CLI, or another local agent runtime, prefer the standard next-step terminal workflow above. Use longer copy-pasteable terminal blocks only when a bounded local workflow command is not sufficient.
 
 Recommended command-block shape:
 
@@ -135,7 +165,7 @@ Rules:
 - Do not paste raw decorative separator lines such as `----------`, `++++++++++`, or `##########` as standalone shell commands.
 - For local validation runs, prefer `./tools/screen_control_gate.sh` so the output is mirrored to `Screen-Control_Output.txt`.
 - `Screen-Control_Output.txt` is local evidence for human/LLM review and must not be committed.
-```
+
 ## Shell command safety for chat-assisted work
 
 When working through a chat-only LLM workflow without a local coding-agent runtime, prefer copy-pasteable terminal blocks that are robust in zsh.
@@ -146,8 +176,8 @@ Rules:
 - Do not use raw decorative separator lines as standalone shell commands.
 - Avoid heredocs in chat-delivered terminal blocks unless they are strictly necessary.
 - Prefer checked-in helper scripts, python3 -c commands, or small patch files over multiline heredocs.
-- If the terminal shows heredoc> or quote>, stop the unfinished input with Ctrl-C and run git status --short before continuing.
-- Use ./tools/screen_control_gate.sh to capture local evidence in Screen-Control_Output.txt when local validation output should be shared.
+- If the terminal shows heredoc> or quote>, stop the unfinished input with Ctrl-C and run `git status --short` and `git branch --show-current` before continuing.
+- Use `./tools/screen_control_gate.sh` to capture local evidence in `Screen-Control_Output.txt` when local validation output should be shared.
 
 ## Diagnose-/Output-Transfer-Regel
 
@@ -178,7 +208,6 @@ Weiterhin gilt:
 - Keine riskanten mehrzeiligen python -c-Kommandos.
 - Längere Blöcke beginnen mit printf-Titelzeile.
 
-
 ## Terminal-Rückmelde-Regel
 
 Jeder vorgeschlagene Terminalblock muss am Ende klar markieren, welche Rückmeldung erwartet wird.
@@ -200,8 +229,6 @@ Wenn Terminalausgabe benötigt wird:
 
 Die Markierung verhindert, dass Shell-Kommandos, Prompts, Diagnoseausgaben und Chattext vermischt werden.
 
-
-
 ## Current Workflow Output
 
 When the working LLM/agent cannot directly access the local shell or local repository state, longer terminal, diagnostic, inspection, or gate outputs should be written to:
@@ -213,7 +240,6 @@ This file is a volatile handoff bridge for the current working slice. It may be 
 Use it to speed up app-based ChatGPT workflows and reduce manual copy-and-paste.
 
 Only create additional permanent report files when the result has long-term audit, release, or decision value.
-
 
 ## Diagnosebericht-Hygiene
 
@@ -227,7 +253,7 @@ Bevorzugt wird:
 - plus gezielte Gate-, Release- oder Audit-Berichte, wenn sie langfristigen Evidenzwert haben.
 
 Temporäre Rohberichte sollen gelöscht oder uncommitted bleiben, sobald sie ihren Zweck erfüllt haben.
+
 ## Workflow output handoff
 
 When complete local terminal evidence is needed, prefer `python tools/next-step.py` over manual Copy-and-Paste. The script cycles through `TEST`, `UPLOAD`, and `CLEANUP`; see `docs/WORKFLOW_OUTPUT_CYCLE.md`. Evidence branches are temporary and must be cleaned up.
-
