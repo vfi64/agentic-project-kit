@@ -4,9 +4,9 @@
 
 `agentic-project-kit` is a local Python package for generating GitHub-ready project skeletons for human-AI software development workflows.
 
-It creates not only files, but a reusable development process: agent onboarding, project contract, profile and policy pack selection, status discipline, test gates, task tracking, bounded logging conventions, and optional GitHub automation.
+It creates not only files, but a reusable development process: agent onboarding, project contract, profile and policy pack selection, status discipline, test gates, task tracking, bounded logging conventions, optional GitHub automation, workflow evidence capture, and release-state validation.
 
-In one sentence: `agentic-project-kit` is an early, dogfooded attempt to make AI-assisted repository work more reproducible through project contracts, documentation gates, release-state checks, task gates, policy expectations, and bounded evidence.
+In one sentence: `agentic-project-kit` is an early, dogfooded attempt to make AI-assisted repository work more reproducible through project contracts, documentation gates, release-state checks, task gates, policy expectations, workflow evidence, and bounded auditability.
 
 ## Why this exists
 
@@ -153,7 +153,7 @@ Agentic project doctor report for /path/to/project
 [PASS] policy pack checks: active: starter, solo-maintainer
 [PASS] documentation gates: passed
 [PASS] todo gates: passed
-[PASS] version drift: project state matches version 0.2.5
+[PASS] version drift: project state matches version 0.3.1
 
 Overall: PASS
 ```
@@ -165,7 +165,6 @@ Overall: PASS
 These checks are intentionally limited. They are useful hard gates for known bad patterns, but they do not prove semantic perfection. A passing check does not prove that an architecture is globally optimal, a README is persuasive for every audience, or a handoff is sufficient for every future agent.
 
 Future commands such as `review-docs` or `review-architecture` may provide advisory review for clarity, didactic quality, audience fit, missing rationale, or possible architecture drift. Such advisory review must remain separate from `doctor` and must not be treated as merge authority.
-
 
 ## Runtime validation workflow
 
@@ -223,13 +222,13 @@ docs/output-contracts/default-answer.yaml
 Use `agentic-kit release-plan` before preparing a release:
 
 ```bash
-agentic-kit release-plan --version 0.2.5
+agentic-kit release-plan --version 0.3.1
 ```
 
 Use `agentic-kit release-check` before tagging:
 
 ```bash
-agentic-kit release-check --version 0.2.5
+agentic-kit release-check --version 0.3.1
 ```
 
 These commands help prevent release-state drift between `pyproject.toml`, `CHANGELOG.md`, project state files, local tags, remote tags, GitHub releases, and citation metadata.
@@ -239,7 +238,7 @@ This post-release command is separate from release-check: `release-check` is the
 Use `agentic-kit post-release-check` after publishing a GitHub release:
 
 ```bash
-agentic-kit post-release-check --version 0.2.5
+agentic-kit post-release-check --version 0.3.1
 ```
 
 This command checks that the GitHub release exists and then looks for a verified Zenodo version record derived from the DOI in `CITATION.cff`. If Zenodo has not archived the release yet, the command reports `WAITING` and leaves README/CITATION DOI metadata unchanged. It is intentionally separate from `release-check`, because `release-check` is a pre-release gate that expects the tag and GitHub release to be unused.
@@ -256,6 +255,47 @@ agentic-kit check-todo
 ```
 
 The intended pattern is simple: bootstrap tasks are explicit, evidence is recorded, and the human-readable TODO file is regenerated from the YAML source.
+
+## Workflow Output Cycle
+
+For local LLM handoff, prefer the package CLI:
+
+```bash
+agentic-kit workflow status
+agentic-kit workflow request
+agentic-kit workflow run
+agentic-kit workflow cleanup
+```
+
+The workflow uses `.agentic/workflow_state`. `IDLE` is the safe default and means that no workflow action is requested. A requested run captures bounded local evidence from `.agentic/current_work.yaml`, updates `docs/reports/CURRENT_WORKFLOW_OUTPUT.md`, uploads a temporary evidence branch, and waits for explicit cleanup.
+
+Legacy compatibility remains available through:
+
+```bash
+python tools/next-step.py
+```
+
+The legacy cycle uses `IDLE`, `TEST`, `UPLOAD`, and `CLEANUP`. Details are documented in `docs/WORKFLOW_OUTPUT_CYCLE.md`.
+
+## CLI command package structure
+
+The root CLI module is intentionally a thin root command registry. Command implementations live under `src/agentic_project_kit/cli_commands/`.
+
+```text
+src/agentic_project_kit/
+  cli.py
+  cli_commands/
+    checks.py
+    github.py
+    init.py
+    profiles.py
+    release.py
+    todo.py
+    validation.py
+    workflow.py
+```
+
+Boundary tests keep `cli.py` from regrowing into a monolith.
 
 ## GitHub integration
 
@@ -288,7 +328,7 @@ The repository uses `docs/DOCUMENTATION_COVERAGE.yaml` as a machine-checkable do
 
 `agentic-kit check-docs` validates that important public commands, workflows, governance concepts, safety rules, release commands, and evidence expectations remain visible in the expected documents. This prevents features such as `agentic-kit doctor` from being implemented but invisible to new users.
 
-When adding a public command, workflow, gate, profile, policy pack, generated file, or architecture concept, update the coverage matrix and the affected documentation in the same change.
+When adding a public command, workflow, gate, profile, policy pack, generated file, architecture concept, or release-visible feature, update the coverage matrix and the affected documentation in the same change.
 
 ## Logging and evidence
 
@@ -316,8 +356,9 @@ The archived v0.2.9 release has the verified version-specific DOI: `10.5281/zeno
 
 The archived v0.2.10 release has the verified version-specific DOI: `10.5281/zenodo.20127028`.
 
+The archived v0.3.0 release has the verified version-specific DOI: `10.5281/zenodo.20140467`.
 
-### Governance wrapper projects
+## Governance wrapper projects
 
 Use the `governance-wrapper` profile for strict human-AI wrapper projects that need explicit output contracts, validation, bounded repair, and auditability.
 
@@ -375,7 +416,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.2.5` is an early MVP release with release-state validation, post-release Zenodo verification, project-health diagnostics, policy-pack doctor checks, deterministic document-quality heuristics, documentation coverage checks, generated project contracts, project profiles, policy packs, and Zenodo-backed citation metadata. It is suitable for local use, generating new starter repositories, validating repository health, validating documentation coverage, validating release state before tagging, checking post-release Zenodo archive state, and archiving releases through the Zenodo GitHub integration.
+Version `0.3.1` is a patch release candidate covering workflow CLI usability, the safe `IDLE` workflow default, declarative workflow evidence capture, updated v0.3.0 Zenodo DOI metadata, and CLI command package modularization.
 
 This repository has maintainer-owned GitHub releases and verified Zenodo archive records. Verified version-specific DOIs:
 
@@ -385,7 +426,4 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - v0.2.8: `10.5281/zenodo.20126270`
 - v0.2.9: `10.5281/zenodo.20126490`
 - v0.2.10: `10.5281/zenodo.20127028`
-## Workflow Output Cycle
-
-For local LLM handoff, use `python tools/next-step.py`. It uses `.agentic/workflow_state` with `IDLE`, `TEST`, `UPLOAD`, and `CLEANUP`; `IDLE` is the safe default and a new cycle is started explicitly by writing `TEST`. Details are documented in `docs/WORKFLOW_OUTPUT_CYCLE.md`.
-
+- v0.3.0: `10.5281/zenodo.20140467`
