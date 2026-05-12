@@ -173,7 +173,7 @@ Jeder vorgeschlagene Terminalblock muss am Ende klar markieren, welche Rückmeld
 
 Wenn keine Terminalausgabe benötigt wird:
 
-- Rückmeldung danach: Nur `e` reicht.
+- Rückmeldung danach: Nur `done` reicht; die Kurzform `d` ist ebenfalls zulässig.
 
 Wenn Terminalausgabe benötigt wird:
 
