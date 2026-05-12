@@ -117,6 +117,47 @@ def test_profile_explain_lists_profiles_and_policy_packs():
     assert "agentic-development" in result.output
     assert "output-contracts" in result.output
 
+
+def test_workflow_status_reports_idle(tmp_path):
+    runner = CliRunner()
+    root = tmp_path / "repo"
+    (root / ".agentic").mkdir(parents=True)
+    (root / ".agentic" / "workflow_state").write_text("IDLE\n", encoding="utf-8")
+
+    result = runner.invoke(app, ["workflow", "status", "--root", str(root)])
+
+    assert result.exit_code == 0, result.output
+    assert "workflow_state=IDLE" in result.output
+    assert "current_work=missing" in result.output
+
+
+def test_workflow_request_sets_requested_from_idle(tmp_path):
+    runner = CliRunner()
+    root = tmp_path / "repo"
+    (root / ".agentic").mkdir(parents=True)
+    (root / ".agentic" / "workflow_state").write_text("IDLE\n", encoding="utf-8")
+    (root / ".agentic" / "current_work.yaml").write_text("name: demo\nsteps: []\n", encoding="utf-8")
+
+    result = runner.invoke(app, ["workflow", "request", "--root", str(root)])
+
+    assert result.exit_code == 0, result.output
+    assert "workflow_state=REQUESTED" in result.output
+    assert (root / ".agentic" / "workflow_state").read_text(encoding="utf-8") == "REQUESTED\n"
+
+
+def test_workflow_cleanup_noops_from_idle(tmp_path):
+    runner = CliRunner()
+    root = tmp_path / "repo"
+    (root / ".agentic").mkdir(parents=True)
+    (root / ".agentic" / "workflow_state").write_text("IDLE\n", encoding="utf-8")
+
+    result = runner.invoke(app, ["workflow", "cleanup", "--root", str(root)])
+
+    assert result.exit_code == 0, result.output
+    assert "workflow_state=IDLE" in result.output
+    assert "No cleanup action available" in result.output
+
+
 def test_init_accepts_governance_wrapper_type(tmp_path):
     runner = CliRunner()
     target = tmp_path / "demo-governance"
