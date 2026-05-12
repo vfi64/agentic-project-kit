@@ -153,7 +153,7 @@ Agentic project doctor report for /path/to/project
 [PASS] policy pack checks: active: starter, solo-maintainer
 [PASS] documentation gates: passed
 [PASS] todo gates: passed
-[PASS] version drift: project state matches version 0.3.1
+[PASS] version drift: project state matches version 0.3.2
 
 Overall: PASS
 ```
@@ -222,13 +222,13 @@ docs/output-contracts/default-answer.yaml
 Use `agentic-kit release-plan` before preparing a release:
 
 ```bash
-agentic-kit release-plan --version 0.3.1
+agentic-kit release-plan --version 0.3.2
 ```
 
 Use `agentic-kit release-check` before tagging:
 
 ```bash
-agentic-kit release-check --version 0.3.1
+agentic-kit release-check --version 0.3.2
 ```
 
 These commands help prevent release-state drift between `pyproject.toml`, `CHANGELOG.md`, project state files, local tags, remote tags, GitHub releases, and citation metadata.
@@ -238,7 +238,7 @@ This post-release command is separate from release-check: `release-check` is the
 Use `agentic-kit post-release-check` after publishing a GitHub release:
 
 ```bash
-agentic-kit post-release-check --version 0.3.1
+agentic-kit post-release-check --version 0.3.2
 ```
 
 This command checks that the GitHub release exists and then looks for a verified Zenodo version record derived from the DOI in `CITATION.cff`. If Zenodo has not archived the release yet, the command reports `WAITING` and leaves README/CITATION DOI metadata unchanged. It is intentionally separate from `release-check`, because `release-check` is a pre-release gate that expects the tag and GitHub release to be unused.
@@ -358,6 +358,8 @@ The archived v0.2.10 release has the verified version-specific DOI: `10.5281/zen
 
 The archived v0.3.0 release has the verified version-specific DOI: `10.5281/zenodo.20140467`.
 
+The archived v0.3.1 release has the verified version-specific DOI: `10.5281/zenodo.20144969`.
+
 ## Governance wrapper projects
 
 Use the `governance-wrapper` profile for strict human-AI wrapper projects that need explicit output contracts, validation, bounded repair, and auditability.
@@ -416,7 +418,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.1` is a patch release candidate covering workflow CLI usability, the safe `IDLE` workflow default, declarative workflow evidence capture, updated v0.3.0 Zenodo DOI metadata, and CLI command package modularization.
+Version `0.3.2` is a patch release candidate covering workflow CLI usability, the safe `IDLE` workflow default, declarative workflow evidence capture, updated v0.3.0 Zenodo DOI metadata, and CLI command package modularization.
 
 This repository has maintainer-owned GitHub releases and verified Zenodo archive records. Verified version-specific DOIs:
 
@@ -427,3 +429,4 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - v0.2.9: `10.5281/zenodo.20126490`
 - v0.2.10: `10.5281/zenodo.20127028`
 - v0.3.0: `10.5281/zenodo.20140467`
+- v0.3.1: `10.5281/zenodo.20144969`
