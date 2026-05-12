@@ -73,25 +73,22 @@ def build_release_plan(project_root: Path, version: str | None = None) -> Releas
             ),
             ReleaseStep(
                 name="Validate package artifacts",
-                commands=(
-                    "rm -rf dist build",
-                    "find . -maxdepth 3 -name '*.egg-info' -type d -prune -exec rm -rf {} +",
-                    "python -m build",
-                    "twine check dist/*",
-                    "ls -lh dist/",
-                ),
+                commands=("python -m build", "twine check dist/*", "ls -lh dist/"),
                 evidence="Wheel and sdist build successfully and pass twine validation.",
             ),
             ReleaseStep(
                 name="Check release notes and state files",
                 commands=(
+                    "grep -n 'version = \"{version}\"' pyproject.toml".format(version=resolved_version),
                     "grep -n 'v{version}' CHANGELOG.md".format(version=resolved_version),
+                    "grep -n 'Version `{version}`' README.md".format(version=resolved_version),
+                    "grep -n 'version: {version}' CITATION.cff".format(version=resolved_version),
                     "grep -n 'Current version: {version}' docs/STATUS.md".format(version=resolved_version),
                     "grep -n 'Current version: {version}' docs/handoff/CURRENT_HANDOFF.md".format(
                         version=resolved_version
                     ),
                 ),
-                evidence="CHANGELOG, STATUS, and CURRENT_HANDOFF mention the target release version.",
+                evidence="pyproject, CHANGELOG, README, CITATION, STATUS, and CURRENT_HANDOFF mention the target release version.",
             ),
             ReleaseStep(
                 name="Verify target tag and release are unused",
@@ -127,7 +124,10 @@ def build_release_state_report(
     resolved_version = version or read_project_version(project_root)
     checks = [
         check_semantic_version(resolved_version),
+        check_file_contains(project_root / "pyproject.toml", f'version = "{resolved_version}"', "pyproject version"),
         check_file_contains(project_root / "CHANGELOG.md", f"v{resolved_version}", "CHANGELOG version"),
+        check_file_contains(project_root / "README.md", f"Version `{resolved_version}`", "README version"),
+        check_file_contains(project_root / "CITATION.cff", f"version: {resolved_version}", "CITATION version"),
         check_file_contains(project_root / "docs/STATUS.md", f"Current version: {resolved_version}", "STATUS version"),
         check_file_contains(
             project_root / "docs/handoff/CURRENT_HANDOFF.md",
