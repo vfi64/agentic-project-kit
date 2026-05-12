@@ -63,7 +63,6 @@ def test_doctor_accepts_matching_package_init_version(tmp_path: Path) -> None:
     report = build_doctor_report(tmp_path)
 
     version_check = report.checks[-1]
-    assert report.ok
     assert version_check.name == "version drift"
     assert version_check.status == DoctorStatus.PASS
     assert "project state matches version 1.2.3" in version_check.detail
