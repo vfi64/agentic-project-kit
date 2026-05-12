@@ -1,10 +1,11 @@
+Current version: 0.3.0
+
 # Project Status
 
 Status-date: 2026-05-10
 Project: agentic-project-kit
 Primary branch: main
 Current work branch: docs/roadmap-after-grok-review
-Current version: 0.2.11
 
 ## Purpose
 
@@ -83,7 +84,7 @@ Post-v0.2.5 roadmap:
    - Prefer generic names such as `structured-output`, `governed-output`, `response-contracts`, `repairable-output`, and `audit-evidence`.
    - Avoid private-project-specific names in the open kit.
    - Start with fixtures, documentation, and minimal gates before adding any large enforcement pipeline.
-4. Consider a later v0.3.0 milestone for minimal response-contract gates.
+4. v0.3.0 is now the bounded output-repair milestone.
    - This should be based on generic structured-output needs, not on a single private wrapper implementation.
 
 Current roadmap branch work:
@@ -195,3 +196,4 @@ Governance-wrapper generated-project guidance:
 - Post-release docs updated release metadata with the verified v0.2.11 Zenodo version DOI: 10.5281/zenodo.20139103.
 - v0.2.11 post-release verification is complete: GitHub Release, Zenodo concept DOI, Zenodo version DOI, doctor, and screen-control gate pass.
 - Next safe step: start the next development slice from a fresh branch; do not modify v0.2.11 release metadata unless a real post-release correction is needed.
+- v0.3.0 prepares the first bounded output-repair release: repair schema, repair report model, deterministic section-marker repairer, CLI repair options, and documentation are present.

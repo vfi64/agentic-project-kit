@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.3.0
+
+- Added generated repair-report schema support for governance-wrapper projects.
+- Added a repair report model for machine-readable bounded repair evidence.
+- Added a minimal deterministic output repairer for missing required section markers.
+- Added validate-output-contract --repair-output and --repair-report CLI support.
+- Documented bounded structural repair behavior with explicit TODO text and without invented semantic content.
+
+
 ## v0.2.11 - 2026-05-12
 
 Zenodo v0.2.11 DOI: 10.5281/zenodo.20139103
