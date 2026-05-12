@@ -62,9 +62,9 @@ Example:
 
 For audit evidence, write a machine-readable JSON report:
 
-    agentic-kit validate-output-contract output.md --contract docs/output-contracts/default-answer.yaml --report validation-report.json
+    agentic-kit validate-output-contract output.md --contract docs/output-contracts/default-answer.yaml --report validation-report.json --report-schema docs/schemas/validation-report.schema.json
 
-The JSON report contains `ok`, `contract`, `contract_version`, `checked_file`, and `findings`.
+The JSON report contains `ok`, `contract`, `contract_version`, `checked_file`, and `findings`. Use `--report-schema docs/schemas/validation-report.schema.json` to validate the generated report shape before the report file is written.
 
 Report shape:
 
