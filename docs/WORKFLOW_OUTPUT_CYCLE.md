@@ -2,11 +2,39 @@
 
 ## Purpose
 
-Use `tools/next-step.py` as the single local entrypoint for bounded workflow-output handoff between a local checkout, the user, and an LLM with GitHub access.
+Use the workflow CLI as the normal local entrypoint for bounded workflow-output handoff between a local checkout, the user, and an LLM with GitHub access.
 
 ## Current safe default
 
 - `IDLE`: do nothing and report that no workflow action was requested.
+
+## Primary workflow CLI
+
+Use these commands for normal operation:
+
+```text
+agentic-kit workflow request
+agentic-kit workflow run
+agentic-kit workflow status
+agentic-kit workflow cleanup
+```
+
+The commands operate on `.agentic/workflow_state` and `.agentic/current_work.yaml`.
+
+- `workflow request`: marks an IDLE or FAILED declarative workflow as REQUESTED.
+- `workflow run`: runs exactly one bounded state-machine step through the existing local entrypoint.
+- `workflow status`: prints the current state and bounded evidence pointers.
+- `workflow cleanup`: cleans an UPLOADED/CLEANUP evidence branch, otherwise no-ops with a status message.
+
+## Compatibility entrypoint
+
+`tools/next-step.py` remains supported as the compatibility entrypoint while the CLI path stabilizes:
+
+```bash
+python tools/next-step.py
+```
+
+Do not expand `tools/next-step.py` indefinitely. New user-facing workflow behavior should move toward `agentic-kit workflow ...` commands.
 
 ## Legacy state cycle
 
@@ -28,12 +56,6 @@ A newer, safer workflow uses a declarative allowlisted request file:
 
 Allowed declarative steps are implemented in `tools/workflow_runner.py`. The runner executes command lists directly and does not use shell snippets.
 
-## Command
-
-```bash
-python tools/next-step.py
-```
-
 The current state is stored in `.agentic/workflow_state`. `IDLE` is the safe default and never starts a run.
 
 ## Starting a legacy cycle intentionally
@@ -42,34 +64,21 @@ Set the state to `TEST`, then run the entrypoint:
 
 ```bash
 printf 'TEST\n' > .agentic/workflow_state
-python tools/next-step.py
+agentic-kit workflow run
 ```
 
 After the `TEST`, `UPLOAD`, and `CLEANUP` steps complete, the script returns the repository to `IDLE`.
 
 ## Starting a declarative workflow intentionally
 
-Set `.agentic/current_work.yaml` to the desired allowlisted task, then set:
+Set `.agentic/current_work.yaml` to the desired allowlisted task, then run:
 
 ```bash
-printf 'REQUESTED\n' > .agentic/workflow_state
-python tools/next-step.py
-```
-
-After the `REQUESTED` step succeeds, the state becomes `UPLOADED`. The LLM can inspect the remote temporary evidence branch. A later `python tools/next-step.py` call cleans up and returns to `IDLE`.
-
-## Future CLI direction
-
-The long-term target is to expose this through first-class commands:
-
-```text
 agentic-kit workflow request
 agentic-kit workflow run
-agentic-kit workflow status
-agentic-kit workflow cleanup
 ```
 
-Keep this as a planned follow-up rather than expanding `tools/next-step.py` indefinitely.
+After the `REQUESTED` step succeeds, the state becomes `UPLOADED`. The LLM can inspect the remote temporary evidence branch. A later `agentic-kit workflow cleanup` call cleans up and returns to `IDLE`.
 
 ## Rules for agents
 
