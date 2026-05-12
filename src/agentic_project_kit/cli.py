@@ -1,6 +1,7 @@
 from pathlib import Path
 import json
 import subprocess
+from typing import Any
 
 import typer
 from .runtime_validator import validate_required_sections
@@ -315,6 +316,11 @@ def validate_output_contract(
     output_path: Path = typer.Argument(..., help="Output text file to validate."),
     contract_path: Path = typer.Option(..., "--contract", "-c", help="Output contract YAML file."),
     report_path: Path | None = typer.Option(None, "--report", help="Write a JSON validation report."),
+    report_schema_path: Path | None = typer.Option(
+        None,
+        "--report-schema",
+        help="Validate the JSON report against a generated validation-report.schema.json file.",
+    ),
 ) -> None:
     """Validate an output file against a machine-readable output contract."""
     from agentic_project_kit.output_contract import load_output_contract, validate_output_against_contract
@@ -326,14 +332,26 @@ def validate_output_contract(
         raise typer.Exit(1) from exc
 
     report = validate_output_against_contract(output_path.read_text(encoding="utf-8"), contract)
+    payload = {
+        "ok": report.ok,
+        "contract": contract.name,
+        "contract_version": contract.version,
+        "checked_file": str(output_path),
+        "findings": report.to_dict()["findings"],
+    }
+    if report_schema_path is not None:
+        if report_path is None:
+            typer.echo("--report-schema requires --report.", err=True)
+            raise typer.Exit(1)
+        schema_payload = json.loads(report_schema_path.read_text(encoding="utf-8"))
+        schema_errors = _validate_report_payload_against_schema(payload, schema_payload)
+        if schema_errors:
+            typer.echo("Validation report schema check failed:", err=True)
+            for error in schema_errors:
+                typer.echo(f"- {error}", err=True)
+            raise typer.Exit(1)
+
     if report_path is not None:
-        payload = {
-            "ok": report.ok,
-            "contract": contract.name,
-            "contract_version": contract.version,
-            "checked_file": str(output_path),
-            "findings": report.to_dict()["findings"],
-        }
         report_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     if report.ok:
@@ -346,6 +364,60 @@ def validate_output_contract(
             err=True,
         )
     raise typer.Exit(1)
+
+
+def _validate_report_payload_against_schema(
+    payload: dict[str, Any],
+    schema_payload: dict[str, Any],
+) -> list[str]:
+    errors: list[str] = []
+    if schema_payload.get("type") != "object":
+        errors.append("report schema root type must be object")
+        return errors
+    required = schema_payload.get("required", [])
+    if not isinstance(required, list):
+        errors.append("report schema required field must be a list")
+        return errors
+    for key in required:
+        if not isinstance(key, str):
+            errors.append("report schema required entries must be strings")
+        elif key not in payload:
+            errors.append(f"report payload missing required key: {key}")
+    properties = schema_payload.get("properties", {})
+    if not isinstance(properties, dict):
+        errors.append("report schema properties field must be an object")
+        return errors
+    if schema_payload.get("additionalProperties") is False:
+        allowed = set(properties)
+        for key in sorted(set(payload) - allowed):
+            errors.append(f"report payload contains unexpected key: {key}")
+    for key, value in payload.items():
+        spec = properties.get(key)
+        if isinstance(spec, dict):
+            expected_type = spec.get("type")
+            if expected_type and not _json_schema_type_matches(value, expected_type):
+                errors.append(f"report payload key has wrong type: {key}")
+    return errors
+
+
+def _json_schema_type_matches(value: Any, expected_type: Any) -> bool:
+    if isinstance(expected_type, list):
+        return any(_json_schema_type_matches(value, item) for item in expected_type)
+    if expected_type == "boolean":
+        return isinstance(value, bool)
+    if expected_type == "integer":
+        return isinstance(value, int) and not isinstance(value, bool)
+    if expected_type == "number":
+        return (isinstance(value, int) or isinstance(value, float)) and not isinstance(value, bool)
+    if expected_type == "string":
+        return isinstance(value, str)
+    if expected_type == "array":
+        return isinstance(value, list)
+    if expected_type == "object":
+        return isinstance(value, dict)
+    if expected_type == "null":
+        return value is None
+    return True
 
 
 @app.command("validate-sections")
