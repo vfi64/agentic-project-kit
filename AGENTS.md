@@ -165,3 +165,39 @@ Weiterhin gilt:
 - Keine heredocs.
 - Keine riskanten mehrzeiligen python -c-Kommandos.
 - Längere Blöcke beginnen mit printf-Titelzeile.
+
+
+## Terminal-Rückmelde-Regel
+
+Jeder vorgeschlagene Terminalblock muss am Ende klar markieren, welche Rückmeldung erwartet wird.
+
+Wenn keine Terminalausgabe benötigt wird:
+
+- Rückmeldung danach: Nur `e` reicht.
+
+Wenn Terminalausgabe benötigt wird:
+
+- Rückmeldung danach: Terminalausgabe notwendig.
+- Die relevante Ausgabe soll exakt zwischen folgenden Markern kopiert werden:
+
+```text
+################### Begin Copy Terminal #####################
+... Terminalausgabe ...
+################### End Copy Terminal #####################
+```
+
+Die Markierung verhindert, dass Shell-Kommandos, Prompts, Diagnoseausgaben und Chattext vermischt werden.
+
+## Diagnosebericht-Hygiene
+
+Diagnose-, Inspektions- und Gate-Ausgaben sollen bei fehlendem direktem Shell-Zugriff des Agents in Dateien geschrieben werden.
+
+Es sollen aber nicht alle Zwischenberichte dauerhaft versioniert werden.
+
+Bevorzugt wird:
+
+- ein finaler, zusammenfassender Slice-Report pro Arbeitsabschnitt,
+- plus gezielte Gate-, Release- oder Audit-Berichte, wenn sie langfristigen Evidenzwert haben.
+
+Temporäre Rohberichte sollen gelöscht oder uncommitted bleiben, sobald sie ihren Zweck erfüllt haben.
+
