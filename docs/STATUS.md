@@ -197,3 +197,4 @@ Governance-wrapper generated-project guidance:
 - v0.2.11 post-release verification is complete: GitHub Release, Zenodo concept DOI, Zenodo version DOI, doctor, and screen-control gate pass.
 - Next safe step: start the next development slice from a fresh branch; do not modify v0.2.11 release metadata unless a real post-release correction is needed.
 - v0.3.0 prepares the first bounded output-repair release: repair schema, repair report model, deterministic section-marker repairer, CLI repair options, and documentation are present.
+- PR pending: add `tools/next-step.py` as a three-state TEST/UPLOAD/CLEANUP workflow-output handoff helper.
