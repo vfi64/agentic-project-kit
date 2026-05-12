@@ -23,6 +23,10 @@ rules:
           - agentic-kit todo list
           - agentic-kit todo complete
           - agentic-kit todo render
+          - agentic-kit workflow request
+          - agentic-kit workflow run
+          - agentic-kit workflow status
+          - agentic-kit workflow cleanup
 
   - id: workflow-readme-coverage
     description: Main user workflows must have README-level entry points.
@@ -36,6 +40,8 @@ rules:
           - Project health check
           - Release planning and validation
           - TODO workflow
+          - Workflow Output Cycle
+          - CLI command package structure
           - GitHub integration
           - Agentic development model
           - Documentation coverage and drift checks
@@ -43,6 +49,47 @@ rules:
           - Citation and archiving
           - Safety rule
           - Current status
+
+  - id: workflow-cli-readme-coverage
+    description: Workflow CLI, state machine, and legacy entry point must remain visible.
+    documents:
+      - path: README.md
+        terms:
+          - agentic-kit workflow request
+          - agentic-kit workflow run
+          - agentic-kit workflow status
+          - agentic-kit workflow cleanup
+          - .agentic/workflow_state
+          - IDLE
+          - python tools/next-step.py
+      - path: docs/WORKFLOW_OUTPUT_CYCLE.md
+        terms:
+          - agentic-kit workflow request
+          - agentic-kit workflow run
+          - agentic-kit workflow status
+          - agentic-kit workflow cleanup
+          - .agentic/current_work.yaml
+          - docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+
+  - id: cli-package-readme-coverage
+    description: CLI package modularization must remain visible after the monolith split.
+    documents:
+      - path: README.md
+        terms:
+          - CLI command package structure
+          - src/agentic_project_kit/cli_commands/
+          - thin root command registry
+          - cli.py
+          - Boundary tests
+
+  - id: release-version-readme-coverage
+    description: README must mention the current release candidate and latest verified DOI state.
+    documents:
+      - path: README.md
+        terms:
+          - Version `0.3.1`
+          - v0.3.0
+          - 10.5281/zenodo.20140467
 
   - id: example-workflow-coverage
     description: README must point users to the minimal generated-project example.

@@ -50,6 +50,9 @@ def test_render_release_plan_contains_commands_and_evidence(tmp_path: Path):
     assert "ruff check ." in rendered
     assert "agentic-kit check-docs" in rendered
     assert "twine check dist/*" in rendered
+    assert "grep -n 'version = \"1.2.3\"' pyproject.toml" in rendered
+    assert "grep -n 'Version `1.2.3`' README.md" in rendered
+    assert "grep -n 'version: 1.2.3' CITATION.cff" in rendered
     assert "git tag -l v1.2.3" in rendered
     assert "git ls-remote --tags origin v1.2.3" in rendered
     assert "gh release view v1.2.3" in rendered
@@ -66,7 +69,7 @@ def test_build_release_state_report_passes_for_unused_version(tmp_path: Path):
     report = build_release_state_report(tmp_path, command_runner=_runner())
 
     assert report.ok
-    assert [check.status for check in report.checks] == [ReleaseCheckStatus.PASS] * 7
+    assert [check.status for check in report.checks] == [ReleaseCheckStatus.PASS] * 10
 
 
 def test_build_release_state_report_warns_without_git_repo(tmp_path: Path):
@@ -113,8 +116,41 @@ def test_build_release_state_report_fails_for_missing_changelog_version(tmp_path
     report = build_release_state_report(tmp_path, command_runner=_runner())
 
     assert not report.ok
+    assert report.checks[2].status == ReleaseCheckStatus.FAIL
+    assert "missing text: v1.2.3" in report.checks[2].detail
+
+
+def test_build_release_state_report_fails_for_missing_readme_version(tmp_path: Path):
+    _write_release_files(tmp_path, "1.2.3")
+    (tmp_path / "README.md").write_text("# Project\n", encoding="utf-8")
+
+    report = build_release_state_report(tmp_path, command_runner=_runner())
+
+    assert not report.ok
+    assert report.checks[3].status == ReleaseCheckStatus.FAIL
+    assert "missing text: Version `1.2.3`" in report.checks[3].detail
+
+
+def test_build_release_state_report_fails_for_missing_citation_version(tmp_path: Path):
+    _write_release_files(tmp_path, "1.2.3")
+    (tmp_path / "CITATION.cff").write_text("cff-version: 1.2.0\n", encoding="utf-8")
+
+    report = build_release_state_report(tmp_path, command_runner=_runner())
+
+    assert not report.ok
+    assert report.checks[4].status == ReleaseCheckStatus.FAIL
+    assert "missing text: version: 1.2.3" in report.checks[4].detail
+
+
+def test_build_release_state_report_fails_for_missing_pyproject_version(tmp_path: Path):
+    _write_release_files(tmp_path, "1.2.3")
+    (tmp_path / "pyproject.toml").write_text('version = "1.2.2"\n', encoding="utf-8")
+
+    report = build_release_state_report(tmp_path, version="1.2.3", command_runner=_runner())
+
+    assert not report.ok
     assert report.checks[1].status == ReleaseCheckStatus.FAIL
-    assert "missing text: v1.2.3" in report.checks[1].detail
+    assert 'missing text: version = "1.2.3"' in report.checks[1].detail
 
 
 def test_build_release_state_report_fails_for_existing_local_tag(tmp_path: Path):
@@ -157,6 +193,9 @@ def test_render_release_state_report_shows_overall_status(tmp_path: Path):
 
     assert "Release state check for target v1.2.3" in rendered
     assert "[PASS] semantic version" in rendered
+    assert "[PASS] pyproject version" in rendered
+    assert "[PASS] README version" in rendered
+    assert "[PASS] CITATION version" in rendered
     assert "[PASS] remote tag unused" in rendered
     assert "[PASS] GitHub release unused" in rendered
     assert "Overall: PASS" in rendered
@@ -166,6 +205,8 @@ def _write_release_files(project_root: Path, version: str) -> None:
     (project_root / "docs/handoff").mkdir(parents=True)
     (project_root / "pyproject.toml").write_text(f'version = "{version}"\n', encoding="utf-8")
     (project_root / "CHANGELOG.md").write_text(f"# Changelog\n\n## v{version}\n", encoding="utf-8")
+    (project_root / "README.md").write_text(f"## Current status\n\nVersion `{version}`\n", encoding="utf-8")
+    (project_root / "CITATION.cff").write_text(f"cff-version: 1.2.0\nversion: {version}\n", encoding="utf-8")
     (project_root / "docs/STATUS.md").write_text(f"Current version: {version}\n", encoding="utf-8")
     (project_root / "docs/handoff/CURRENT_HANDOFF.md").write_text(
         f"Current version: {version}\n", encoding="utf-8"

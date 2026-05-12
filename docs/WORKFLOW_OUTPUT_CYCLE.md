@@ -21,6 +21,12 @@ agentic-kit workflow cleanup
 
 The commands operate on `.agentic/workflow_state` and `.agentic/current_work.yaml`.
 
+`agentic-kit workflow status` also reports the current workflow-output pointer when present:
+
+```text
+docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+```
+
 - `workflow request`: marks an IDLE or FAILED declarative workflow as REQUESTED.
 - `workflow run`: runs exactly one bounded state-machine step through the existing local entrypoint.
 - `workflow status`: prints the current state and bounded evidence pointers.
