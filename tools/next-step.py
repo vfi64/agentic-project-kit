@@ -3,13 +3,16 @@ from __future__ import annotations
 
 import datetime as dt
 import subprocess
+import sys
 from pathlib import Path
 
 STATE_FILE = Path(".agentic/workflow_state")
+WORKFLOW_FILE = Path(".agentic/current_work.yaml")
 BRANCH_FILE = Path("tmp/agent-evidence/latest-branch.txt")
 EVIDENCE_DIR = Path("tmp/agent-evidence")
+REPORT_FILE = Path("docs/reports/CURRENT_WORKFLOW_OUTPUT.md")
 TEMP_PREFIX = "temp/workflow-evidence-"
-VALID_STATES = {"IDLE", "TEST", "UPLOAD", "CLEANUP"}
+VALID_STATES = {"IDLE", "TEST", "UPLOAD", "CLEANUP", "REQUESTED", "RUNNING", "UPLOADED", "FAILED"}
 
 
 def run(args: list[str], check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -40,8 +43,43 @@ def current_branch() -> str:
 def latest_evidence() -> Path:
     files = sorted(EVIDENCE_DIR.glob("workflow-output-*.md"))
     if not files:
-        raise SystemExit("No workflow evidence file found. Run TEST state first.")
+        raise SystemExit("No workflow evidence file found. Run TEST or REQUESTED state first.")
     return files[-1]
+
+
+def timestamped_evidence_path() -> Path:
+    timestamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+    return EVIDENCE_DIR / f"workflow-output-{timestamp}.md"
+
+
+def write_current_report(evidence: Path, purpose: str) -> None:
+    REPORT_FILE.parent.mkdir(parents=True, exist_ok=True)
+    REPORT_FILE.write_text(
+        "# Current workflow output\n\n"
+        f"Date: {dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+        f"Branch: {current_branch()}\n\n"
+        "## Purpose\n\n"
+        f"{purpose}\n\n"
+        "## Evidence file\n\n"
+        f"{evidence}\n",
+        encoding="utf-8",
+    )
+
+
+def create_evidence_branch(next_state: str) -> str:
+    EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
+    timestamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+    branch = TEMP_PREFIX + timestamp
+    evidence = latest_evidence()
+    run(["git", "switch", "-c", branch])
+    run(["git", "add", ".agentic/workflow_state", "docs/reports/CURRENT_WORKFLOW_OUTPUT.md"])
+    run(["git", "add", "-f", str(evidence)])
+    run(["git", "commit", "-m", "Add temporary workflow evidence"])
+    run(["git", "push", "-u", "origin", branch])
+    BRANCH_FILE.parent.mkdir(parents=True, exist_ok=True)
+    BRANCH_FILE.write_text(branch + "\n", encoding="utf-8")
+    write_state(next_state)
+    return branch
 
 
 def step_test() -> None:
@@ -53,25 +91,14 @@ def step_test() -> None:
 
 
 def step_upload() -> None:
-    EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
-    timestamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
-    branch = TEMP_PREFIX + timestamp
-    evidence = latest_evidence()
     if current_branch() != "main":
         raise SystemExit("UPLOAD must start from main to keep temporary evidence isolated.")
-    run(["git", "switch", "-c", branch])
-    run(["git", "add", ".agentic/workflow_state", "docs/reports/CURRENT_WORKFLOW_OUTPUT.md"])
-    run(["git", "add", "-f", str(evidence)])
-    run(["git", "commit", "-m", "Add temporary workflow evidence"])
-    run(["git", "push", "-u", "origin", branch])
-    BRANCH_FILE.parent.mkdir(parents=True, exist_ok=True)
-    BRANCH_FILE.write_text(branch + "\n", encoding="utf-8")
-    write_state("CLEANUP")
+    branch = create_evidence_branch("CLEANUP")
     print(f"Uploaded temporary workflow evidence branch: {branch}")
     print("Next state: CLEANUP")
 
 
-def step_cleanup() -> None:
+def step_cleanup(next_state: str = "IDLE") -> None:
     if not BRANCH_FILE.exists():
         raise SystemExit("Missing tmp/agent-evidence/latest-branch.txt")
     branch = BRANCH_FILE.read_text(encoding="utf-8").strip()
@@ -85,9 +112,37 @@ def step_cleanup() -> None:
     for path in EVIDENCE_DIR.glob("workflow-output-*.md"):
         path.unlink()
     BRANCH_FILE.unlink(missing_ok=True)
-    write_state("IDLE")
+    write_state(next_state)
     print("Cleaned temporary workflow evidence.")
-    print("Next state: IDLE")
+    print(f"Next state: {next_state}")
+
+
+def step_requested() -> None:
+    if not WORKFLOW_FILE.exists():
+        raise SystemExit("Missing .agentic/current_work.yaml")
+    write_state("RUNNING")
+    evidence = timestamped_evidence_path()
+    try:
+        run([sys.executable, "tools/workflow_runner.py", str(WORKFLOW_FILE), str(evidence)])
+    except subprocess.CalledProcessError:
+        write_current_report(evidence, "Declarative workflow failed. Evidence preserved for diagnosis.")
+        write_state("FAILED")
+        print("Next state: FAILED")
+        return
+    write_current_report(evidence, "Declarative workflow completed and evidence was uploaded for handoff.")
+    branch = create_evidence_branch("UPLOADED")
+    print(f"Uploaded temporary workflow evidence branch: {branch}")
+    print("Next state: UPLOADED")
+
+
+def step_running() -> None:
+    print("Previous workflow is marked RUNNING.")
+    print("No new workflow will be started automatically. Inspect local output and set FAILED or recover explicitly.")
+
+
+def step_failed() -> None:
+    print("Previous workflow failed. Evidence is preserved if it could be written.")
+    print("No automatic cleanup is performed from FAILED.")
 
 
 def main() -> int:
@@ -101,6 +156,14 @@ def main() -> int:
         step_upload()
     elif state == "CLEANUP":
         step_cleanup()
+    elif state == "REQUESTED":
+        step_requested()
+    elif state == "RUNNING":
+        step_running()
+    elif state == "UPLOADED":
+        step_cleanup()
+    elif state == "FAILED":
+        step_failed()
     return 0
 
 
