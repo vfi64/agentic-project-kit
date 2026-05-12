@@ -186,6 +186,7 @@ Governance-wrapper generated-project guidance:
 - PR #89 updated release metadata/docs with the verified v0.2.8 Zenodo version DOI: 10.5281/zenodo.20126270.
 - v0.2.8 post-release verification is complete: GitHub Release, Zenodo concept DOI, Zenodo version DOI, doctor, and screen-control gate pass.
 - PR #91 documented the validation-report JSON schema in `README.md` and generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance.
+- PR #118 added `--repair-output` and `--repair-report` to `agentic-kit validate-output-contract`, enabling deterministic structural repair for missing required sections while recording a machine-readable repair report. Repair remains bounded: it appends missing section markers with explicit TODO text and does not invent semantic content.
 - v0.2.9 GitHub Release has been created for the validation-report JSON schema documentation / contract-stability slice.
 - PR #95 updated release metadata/docs with the verified v0.2.9 Zenodo version DOI: 10.5281/zenodo.20126490.
 - v0.2.9 post-release verification is complete: GitHub Release, Zenodo concept DOI, Zenodo version DOI, doctor, and screen-control gate pass.

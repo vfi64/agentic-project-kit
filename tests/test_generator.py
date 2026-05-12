@@ -177,6 +177,8 @@ def test_governance_wrapper_generates_output_contract_skeleton(tmp_path: Path):
     assert "consume it without parsing human console output" in validation
     assert "docs/schemas/validation-report.schema.json" in validation
     assert "docs/schemas/repair-report.schema.json" in validation
+    assert "--repair-output output.repaired.md --repair-report repair-report.json" in validation
+    assert "does not create or infer the missing substantive content" in validation
     assert "machine-readable schema for this report shape" in validation
     assert "Use agentic-kit validate-sections as a lower-level check" in validation
     assert "Both commands only check required literal sections" in validation
