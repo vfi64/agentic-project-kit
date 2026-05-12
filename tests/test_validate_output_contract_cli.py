@@ -133,3 +133,44 @@ def test_validate_output_contract_cli_writes_json_report_for_success(tmp_path: P
         "findings": [],
         "ok": True,
     }
+
+
+
+def test_validate_output_contract_cli_validates_json_report_against_schema(tmp_path: Path) -> None:
+    contract_path = tmp_path / "contract.yaml"
+    output_path = tmp_path / "output.md"
+    report_path = tmp_path / "validation-report.json"
+    schema_path = tmp_path / "validation-report.schema.json"
+    _write_contract(contract_path)
+    output_path.write_text("Plan\nSolution\nCheck", encoding="utf-8")
+    schema_path.write_text(json.dumps({"type": "object", "additionalProperties": False, "required": ["checked_file", "contract", "contract_version", "findings", "ok"], "properties": {"checked_file": {"type": "string"}, "contract": {"type": "string"}, "contract_version": {"type": "integer"}, "findings": {"type": "array"}, "ok": {"type": "boolean"}}}), encoding="utf-8")
+    result = runner.invoke(app, ["validate-output-contract", str(output_path), "--contract", str(contract_path), "--report", str(report_path), "--report-schema", str(schema_path)])
+    assert result.exit_code == 0
+    assert json.loads(report_path.read_text(encoding="utf-8"))["ok"] is True
+
+
+def test_validate_output_contract_cli_report_schema_requires_report(tmp_path: Path) -> None:
+    contract_path = tmp_path / "contract.yaml"
+    output_path = tmp_path / "output.md"
+    schema_path = tmp_path / "validation-report.schema.json"
+    _write_contract(contract_path)
+    output_path.write_text("Plan\nSolution\nCheck", encoding="utf-8")
+    schema_path.write_text(json.dumps({"type": "object", "required": ["ok"], "properties": {"ok": {"type": "boolean"}}}), encoding="utf-8")
+    result = runner.invoke(app, ["validate-output-contract", str(output_path), "--contract", str(contract_path), "--report-schema", str(schema_path)])
+    assert result.exit_code == 1
+    assert "--report-schema requires --report." in result.output
+
+
+def test_validate_output_contract_cli_fails_when_report_schema_rejects_payload(tmp_path: Path) -> None:
+    contract_path = tmp_path / "contract.yaml"
+    output_path = tmp_path / "output.md"
+    report_path = tmp_path / "validation-report.json"
+    schema_path = tmp_path / "validation-report.schema.json"
+    _write_contract(contract_path)
+    output_path.write_text("Plan\nSolution\nCheck", encoding="utf-8")
+    schema_path.write_text(json.dumps({"type": "object", "required": ["ok", "missing"], "properties": {"ok": {"type": "boolean"}, "missing": {"type": "string"}}}), encoding="utf-8")
+    result = runner.invoke(app, ["validate-output-contract", str(output_path), "--contract", str(contract_path), "--report", str(report_path), "--report-schema", str(schema_path)])
+    assert result.exit_code == 1
+    assert "Validation report schema check failed:" in result.output
+    assert "report payload missing required key: missing" in result.output
+    assert not report_path.exists()
