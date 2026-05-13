@@ -5,7 +5,12 @@ import pytest
 import typer
 
 from agentic_project_kit.cli_commands.checks import doc_mesh_audit_command
-from agentic_project_kit.doc_mesh import build_doc_mesh_report, write_doc_mesh_json_report
+from agentic_project_kit.doc_mesh import (
+    build_doc_mesh_repair_plan,
+    build_doc_mesh_report,
+    write_doc_mesh_json_report,
+    write_doc_mesh_repair_plan,
+)
 
 
 def _write(path: Path, content: str) -> None:
@@ -112,6 +117,47 @@ def test_doc_mesh_json_report_output_contains_stable_shape(tmp_path: Path) -> No
     ]
 
 
+def test_doc_mesh_repair_plan_maps_safe_and_manual_repairs(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path, historical_banner=False)
+    _write(tmp_path / "src/agentic_project_kit/__init__.py", '__version__ = "9.9.9"\n')
+
+    report = build_doc_mesh_report(tmp_path)
+    plan = build_doc_mesh_repair_plan(report)
+
+    assert not plan.ok
+    repairs = {repair.code: repair for repair in plan.repairs}
+    assert repairs["historical-banner-missing"].action == "insert_historical_banner"
+    assert repairs["historical-banner-missing"].safe is True
+    assert repairs["historical-banner-missing"].mode == "automatic"
+    assert repairs["version-mismatch"].action == "align_version_marker"
+    assert repairs["version-mismatch"].safe is False
+    assert repairs["version-mismatch"].mode == "manual"
+
+
+def test_doc_mesh_repair_plan_json_output_contains_stable_shape(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path, historical_banner=False)
+    report = build_doc_mesh_report(tmp_path)
+    plan = build_doc_mesh_repair_plan(report)
+    output_path = tmp_path / "reports" / "doc-mesh-repair-plan.json"
+
+    write_doc_mesh_repair_plan(plan, output_path)
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload == {
+        "ok": False,
+        "repairs": [
+            {
+                "action": "insert_historical_banner",
+                "code": "historical-banner-missing",
+                "mode": "automatic",
+                "path": "docs/reports/status_roadmap_summary_after_pr105_20260512.md",
+                "reason": "Historical banner insertion is mechanical and does not alter semantic content.",
+                "safe": True,
+            }
+        ],
+    }
+
+
 def test_doc_mesh_command_writes_report_on_failure(tmp_path: Path) -> None:
     _write_minimal_mesh(tmp_path, historical_banner=False)
     output_path = tmp_path / "doc-mesh-report.json"
@@ -123,6 +169,19 @@ def test_doc_mesh_command_writes_report_on_failure(tmp_path: Path) -> None:
     payload = json.loads(output_path.read_text(encoding="utf-8"))
     assert payload["ok"] is False
     assert payload["findings"][0]["code"] == "historical-banner-missing"
+
+
+def test_doc_mesh_command_writes_repair_plan_on_failure(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path, historical_banner=False)
+    output_path = tmp_path / "doc-mesh-repair-plan.json"
+
+    with pytest.raises(typer.Exit) as exc_info:
+        doc_mesh_audit_command(tmp_path, repair_plan_path=output_path)
+
+    assert exc_info.value.exit_code == 1
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload["ok"] is False
+    assert payload["repairs"][0]["action"] == "insert_historical_banner"
 
 
 def test_doc_mesh_command_reports_failure(tmp_path: Path) -> None:
