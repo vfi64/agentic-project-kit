@@ -1,15 +1,15 @@
-Current version: 0.3.4
+Current version: 0.3.5
 
 # Current Handoff
 
 Status-date: 2026-05-13
 Project: agentic-project-kit
-Branch: release/prepare-v0.3.4
+Branch: release/prepare-v0.3.5
 Base branch: main
 
 ## Current Goal
 
-Prepare v0.3.4 release metadata for the documentation-mesh audit line of work:
+Prepare v0.3.5 release metadata for the documentation-mesh release-history classification and explicit next-step request workflow hardening:
 
 - `agentic-kit doc-mesh-audit` as targeted documentation mesh drift audit;
 - JSON report output for machine-readable audit evidence;
@@ -17,7 +17,7 @@ Prepare v0.3.4 release metadata for the documentation-mesh audit line of work:
 - `agentic-kit doc-mesh-repair` for the first safe automatic repair class: inserting missing historical-source-of-truth banners;
 - documented adoption policy: targeted special gate first, possible later promotion to `doctor`, then possible default `ns` integration only after stabilization.
 
-No v0.3.4 version DOI should be inserted before Zenodo post-release verification.
+No v0.3.5 version DOI should be inserted before Zenodo post-release verification.
 
 ## Current Repository State
 
@@ -31,7 +31,7 @@ Completed changes included in the v0.3.3 scope:
 - PR #140 documented explicit `FAILED` next-step handling as a stop-and-diagnose state and added documentation coverage.
 - PR #141 prepared and released v0.3.3.
 
-Post-v0.3.3 completed work prepared for v0.3.4:
+Post-v0.3.3 completed work prepared for v0.3.5:
 
 - PR #143 added the first bounded `agentic-kit doc-mesh-audit` slice with modular core logic, CLI adapter, tests, README/TEST_GATES/DOCUMENTATION_COVERAGE coverage, README v0.3.2 DOI restoration, and the modular implementation rule.
 - PR #144 documented the targeted-gate adoption policy for `doc-mesh-audit`.
@@ -39,7 +39,7 @@ Post-v0.3.3 completed work prepared for v0.3.4:
 - PR #146 added bounded repair-plan output for `agentic-kit doc-mesh-audit --repair-plan`.
 - PR #147 added `agentic-kit doc-mesh-repair` for missing historical-source-of-truth banners.
 
-Release evidence available before v0.3.4:
+Release evidence available before v0.3.5:
 
 - GitHub Release v0.3.3 exists.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
@@ -112,7 +112,7 @@ ruff check .
 agentic-kit check-docs
 agentic-kit doctor
 agentic-kit doc-mesh-audit
-agentic-kit release-check --version 0.3.4
+agentic-kit release-check --version 0.3.5
 ```
 
 The normal local workflow shortcut remains:
@@ -127,13 +127,13 @@ Then reply in chat with `d` after evidence upload. If the workflow enters `FAILE
 
 Prepared files should include:
 
-- `pyproject.toml` and package `__version__` bumped to 0.3.4.
-- `CHANGELOG.md` with v0.3.4 release notes.
-- `README.md` updated for doc-mesh reports, repair planning, and current v0.3.4 release-candidate wording.
-- `CITATION.cff` version bumped to 0.3.4 and v0.3.2/v0.3.3 DOI comments preserved.
+- `pyproject.toml` and package `__version__` bumped to 0.3.5.
+- `CHANGELOG.md` with v0.3.5 release notes.
+- `README.md` updated for doc-mesh reports, repair planning, and current v0.3.5 release-candidate wording.
+- `CITATION.cff` version bumped to 0.3.5 and v0.3.2/v0.3.3 DOI comments preserved.
 - `docs/STATUS.md` and this handoff updated for the release branch.
-- `docs/DOCUMENTATION_COVERAGE.yaml` updated to cover v0.3.4 and `agentic-kit doc-mesh-repair` visibility.
+- `docs/DOCUMENTATION_COVERAGE.yaml` updated to cover v0.3.5 and `agentic-kit doc-mesh-repair` visibility.
 
 ## Next Safe Step
 
-Run the standard local gate on `release/prepare-v0.3.4`. Because this branch changes release metadata and documentation-mesh documentation, also run `agentic-kit doc-mesh-audit` and `agentic-kit release-check --version 0.3.4`. If green, open and merge the focused release metadata PR.
+Run the standard local gate on `release/prepare-v0.3.5`. Because this branch changes release metadata and documentation-mesh documentation, also run `agentic-kit doc-mesh-audit` and `agentic-kit release-check --version 0.3.5`. If green, open and merge the focused release metadata PR.
