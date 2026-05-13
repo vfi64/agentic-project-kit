@@ -4,8 +4,10 @@ from pathlib import Path
 import pytest
 import typer
 
-from agentic_project_kit.cli_commands.checks import doc_mesh_audit_command
+from agentic_project_kit.cli_commands.checks import doc_mesh_audit_command, doc_mesh_repair_command
 from agentic_project_kit.doc_mesh import (
+    HISTORICAL_BANNER,
+    apply_doc_mesh_repair_plan,
     build_doc_mesh_repair_plan,
     build_doc_mesh_report,
     write_doc_mesh_json_report,
@@ -33,7 +35,7 @@ def _write_minimal_mesh(root: Path, *, version: str = "1.2.3", historical_banner
     _write(root / ".agentic/project.yaml", "name: demo\n")
     _write(root / "docs/architecture/ARCHITECTURE_CONTRACT.md", "Architecture contract.\n")
     _write(root / "docs/WORKFLOW_OUTPUT_CYCLE.md", "Workflow cycle.\n")
-    banner = "This file is historical audit evidence, not the current source of truth.\n\n" if historical_banner else ""
+    banner = f"{HISTORICAL_BANNER}\n\n" if historical_banner else ""
     _write(
         root / "docs/reports/status_roadmap_summary_after_pr105_20260512.md",
         banner + "# Status and roadmap summary after PR 105\n",
@@ -156,6 +158,64 @@ def test_doc_mesh_repair_plan_json_output_contains_stable_shape(tmp_path: Path) 
             }
         ],
     }
+
+
+def test_doc_mesh_repair_inserts_historical_banner(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path, historical_banner=False)
+    target = tmp_path / "docs/reports/status_roadmap_summary_after_pr105_20260512.md"
+
+    report = build_doc_mesh_report(tmp_path)
+    plan = build_doc_mesh_repair_plan(report)
+    result = apply_doc_mesh_repair_plan(tmp_path, plan)
+
+    assert result.changed is True
+    assert result.actions[0].changed is True
+    assert target.read_text(encoding="utf-8").startswith(f"{HISTORICAL_BANNER}\n\n# Status")
+    assert build_doc_mesh_report(tmp_path).ok
+
+
+def test_doc_mesh_repair_does_not_duplicate_existing_banner(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path, historical_banner=True)
+    target = tmp_path / "docs/reports/status_roadmap_summary_after_pr105_20260512.md"
+    before = target.read_text(encoding="utf-8")
+
+    report = build_doc_mesh_report(tmp_path)
+    plan = build_doc_mesh_repair_plan(report)
+    result = apply_doc_mesh_repair_plan(tmp_path, plan)
+
+    assert result.changed is False
+    assert target.read_text(encoding="utf-8") == before
+    assert before.count(HISTORICAL_BANNER) == 1
+
+
+def test_doc_mesh_repair_skips_manual_findings(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path, historical_banner=False)
+    init_path = tmp_path / "src/agentic_project_kit/__init__.py"
+    _write(init_path, '__version__ = "9.9.9"\n')
+
+    report = build_doc_mesh_report(tmp_path)
+    plan = build_doc_mesh_repair_plan(report)
+    result = apply_doc_mesh_repair_plan(tmp_path, plan)
+
+    assert result.changed is True
+    assert init_path.read_text(encoding="utf-8") == '__version__ = "9.9.9"\n'
+    assert any(repair.code == "version-mismatch" for repair in result.skipped)
+    remaining_report = build_doc_mesh_report(tmp_path)
+    assert any(finding.code == "version-mismatch" for finding in remaining_report.findings)
+    assert not any(finding.code == "historical-banner-missing" for finding in remaining_report.findings)
+
+
+def test_doc_mesh_repair_command_writes_result(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path, historical_banner=False)
+    output_path = tmp_path / "doc-mesh-repair-result.json"
+
+    doc_mesh_repair_command(tmp_path, result_path=output_path)
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload["changed"] is True
+    assert payload["actions"][0]["action"] == "insert_historical_banner"
+    assert payload["actions"][0]["changed"] is True
+    assert payload["skipped"] == []
 
 
 def test_doc_mesh_command_writes_report_on_failure(tmp_path: Path) -> None:
