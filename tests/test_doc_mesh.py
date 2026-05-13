@@ -1,10 +1,11 @@
+import json
 from pathlib import Path
 
 import pytest
 import typer
 
 from agentic_project_kit.cli_commands.checks import doc_mesh_audit_command
-from agentic_project_kit.doc_mesh import build_doc_mesh_report
+from agentic_project_kit.doc_mesh import build_doc_mesh_report, write_doc_mesh_json_report
 
 
 def _write(path: Path, content: str) -> None:
@@ -90,6 +91,38 @@ def test_doc_mesh_detects_release_doi_list_drift(tmp_path: Path) -> None:
 
     assert not report.ok
     assert any(finding.code == "release-doi-list-mismatch" for finding in report.findings)
+
+
+def test_doc_mesh_json_report_output_contains_stable_shape(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path, historical_banner=False)
+    report = build_doc_mesh_report(tmp_path)
+    output_path = tmp_path / "reports" / "doc-mesh-report.json"
+
+    write_doc_mesh_json_report(report, output_path)
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload["ok"] is False
+    assert payload["documents"]
+    assert payload["findings"] == [
+        {
+            "code": "historical-banner-missing",
+            "message": "historical or roadmap document must be marked as non-current source of truth",
+            "path": "docs/reports/status_roadmap_summary_after_pr105_20260512.md",
+        }
+    ]
+
+
+def test_doc_mesh_command_writes_report_on_failure(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path, historical_banner=False)
+    output_path = tmp_path / "doc-mesh-report.json"
+
+    with pytest.raises(typer.Exit) as exc_info:
+        doc_mesh_audit_command(tmp_path, output_path)
+
+    assert exc_info.value.exit_code == 1
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload["ok"] is False
+    assert payload["findings"][0]["code"] == "historical-banner-missing"
 
 
 def test_doc_mesh_command_reports_failure(tmp_path: Path) -> None:

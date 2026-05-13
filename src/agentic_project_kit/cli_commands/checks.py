@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Annotated
 
 import typer
 from rich.console import Console
 
 from agentic_project_kit.checks import check_all, check_docs, check_todo
-from agentic_project_kit.doc_mesh import build_doc_mesh_report, render_doc_mesh_report
+from agentic_project_kit.doc_mesh import build_doc_mesh_report, render_doc_mesh_report, write_doc_mesh_json_report
 from agentic_project_kit.doctor import build_doctor_report, render_doctor_report
 
 console = Console()
@@ -35,9 +36,14 @@ def check_todo_command(project_root: Path = typer.Option(Path("."), "--root")) -
     _print_result(errors)
 
 
-def doc_mesh_audit_command(project_root: Path = typer.Option(Path("."), "--root")) -> None:
+def doc_mesh_audit_command(
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    report_path: Annotated[Path | None, typer.Option("--report")] = None,
+) -> None:
     """Audit cross-document state, governance, architecture, and historical-plan drift."""
     report = build_doc_mesh_report(project_root.resolve())
+    if report_path is not None:
+        write_doc_mesh_json_report(report, report_path)
     console.print(render_doc_mesh_report(report), markup=False)
     if not report.ok:
         raise typer.Exit(code=1)
