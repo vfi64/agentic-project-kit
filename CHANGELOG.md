@@ -2,6 +2,7 @@
 
 ## v0.3.3 - 2026-05-13
 
+Zenodo v0.3.3 DOI: 10.5281/zenodo.20151924
 Zenodo Concept DOI: 10.5281/zenodo.20101359
 
 - Fixed package `__version__` drift and extended `agentic-kit doctor` so package-version drift is detected.
@@ -9,6 +10,7 @@ Zenodo Concept DOI: 10.5281/zenodo.20101359
 - Added project-local environment bootstrap to `tools/next-step.py` so it can create `.venv` and install missing dev tools before running the workflow.
 - Documented the `ns` shell shortcut pattern while keeping shell configuration outside the normal workflow side effects.
 - Documented explicit `FAILED` next-step handling as a stop-and-diagnose workflow state and added coverage so the rule does not drift.
+- Planned a follow-up documentation-mesh drift audit for currency, redundancy, consistency, deterministic tests, and bounded repair tools.
 
 ## v0.3.2 - 2026-05-12
 
