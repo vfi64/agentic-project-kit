@@ -80,6 +80,17 @@ def test_doc_mesh_detects_stale_current_state_marker(tmp_path: Path) -> None:
     assert any(finding.code == "stale-current-state-marker" for finding in report.findings)
 
 
+def test_doc_mesh_classifies_changelog_as_release_history(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path)
+
+    report = build_doc_mesh_report(tmp_path)
+    documents = {document.path: document for document in report.documents}
+
+    assert documents["CHANGELOG.md"].category == "release-history"
+    assert documents["CHANGELOG.md"].required is True
+    assert documents["CHANGELOG.md"].historical is False
+
+
 def test_doc_mesh_ignores_historical_changelog_stale_wording(tmp_path: Path) -> None:
     _write_minimal_mesh(tmp_path)
     _write(tmp_path / "CHANGELOG.md", "## v1.2.2\n- Prepared on a release-preparation branch.\n")
