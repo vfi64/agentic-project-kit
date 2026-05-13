@@ -51,6 +51,43 @@ python3 tools/next-step.py
 
 Then reply in chat with `done` or `d`.
 
+## FAILED handling
+
+`FAILED` is a stop-and-diagnose state. Do not repeatedly run `ns` or `python3 tools/next-step.py` hoping that the same workflow will self-heal.
+
+When the workflow state is `FAILED`:
+
+1. Preserve the local terminal output and any files under `tmp/agent-evidence/`.
+2. Send the relevant terminal output to the assistant if no temporary evidence branch was uploaded.
+3. Inspect the local state with:
+
+```bash
+git status --short
+git branch --show-current
+cat .agentic/workflow_state
+ls -lt tmp/agent-evidence 2>/dev/null | head
+```
+
+4. Diagnose and fix the root cause, such as a test failure, documentation-coverage failure, missing tool, or dirty git state.
+5. Only after the cause is understood, consciously reset the workflow state and generated report:
+
+```bash
+git restore .agentic/workflow_state docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+```
+
+6. If stale local evidence files would confuse the next run, remove only the local bounded evidence pointers:
+
+```bash
+rm -f tmp/agent-evidence/workflow-output-*.md
+rm -f tmp/agent-evidence/latest-branch.txt
+```
+
+7. Run `ns` or `python3 tools/next-step.py` again.
+
+The short chat acknowledgement `d` is normally sufficient after `UPLOADED`, because the assistant can inspect the remote evidence branch. It is not sufficient for a local `FAILED` state unless the failure evidence was already uploaded or the assistant has enough copied terminal output.
+
+Never automatically clean up from `FAILED`. The failure evidence is part of the diagnostic trail.
+
 ## Environment bootstrap
 
 `tools/next-step.py` is intended to work even when the project virtual environment is not activated in the current shell.
