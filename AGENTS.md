@@ -134,6 +134,12 @@ cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
 python tools/next-step.py
 ```
 
+A plain next-step command is a no-op while `.agentic/current_work.yaml` is `READY`. Request the configured workflow explicitly first:
+
+```bash
+.venv/bin/python tools/next-step.py --request
+```
+
 After the command finishes, the expected chat reply is usually only:
 
 ```text

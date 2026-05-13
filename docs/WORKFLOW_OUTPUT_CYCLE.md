@@ -6,8 +6,8 @@ Use the workflow CLI or compatibility entrypoint as the normal local entrypoint 
 
 ## Current safe default
 
-- `IDLE`: starts `.agentic/current_work.yaml` automatically when that file exists.
-- `IDLE` without `.agentic/current_work.yaml`: does not start work.
+- `IDLE` with `.agentic/current_work.yaml` state `READY`: no-ops and stays idle.
+- `IDLE` with `.agentic/current_work.yaml` state `REQUESTED`: runs the configured declarative workflow.
 - `UPLOADED`: performs bounded cleanup of the temporary evidence branch.
 - `FAILED`: preserves evidence and never cleans up automatically.
 - `RUNNING`: refuses to start a second workflow automatically.
@@ -18,6 +18,7 @@ For app-based ChatGPT workflows, the normal local command is:
 
 ```bash
 cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+.venv/bin/python tools/next-step.py --request
 python3 tools/next-step.py
 ```
 
@@ -36,20 +37,22 @@ This keeps routine work out of long manual Copy-and-Paste blocks. Use full copie
 `tools/next-step.py` branches by `.agentic/workflow_state`:
 
 ```text
-IDLE + .agentic/current_work.yaml -> REQUESTED -> run workflow -> upload evidence -> UPLOADED
+IDLE + .agentic/current_work.yaml state READY -> no-op -> IDLE
+IDLE + .agentic/current_work.yaml state REQUESTED -> run workflow -> reset request to READY -> upload evidence -> UPLOADED
 UPLOADED -> cleanup temporary evidence branch -> IDLE
 FAILED -> preserve evidence; no automatic cleanup
 RUNNING -> refuse duplicate execution
 TEST/UPLOAD/CLEANUP -> legacy compatibility cycle
 ```
 
-This means routine work uses the same command for validation and cleanup:
+This means routine work uses an explicit request followed by the same command for validation and cleanup:
 
 ```bash
+.venv/bin/python tools/next-step.py --request
 python3 tools/next-step.py
 ```
 
-Then reply in chat with `done` or `d`.
+After `UPLOADED`, run `python3 tools/next-step.py` once more for cleanup. Then reply in chat with `done` or `d`.
 
 ## FAILED handling
 
@@ -115,13 +118,17 @@ A local zsh alias or function can shorten the command to `ns`. This is local she
 
 ```zsh
 alias ns='cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit && python3 tools/next-step.py'
+alias nsr='cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit && .venv/bin/python tools/next-step.py --request'
 ```
 
-After adding that alias to `~/.zshrc`, routine work becomes:
+After adding those aliases to `~/.zshrc`, routine work becomes:
 
 ```zsh
+nsr
 ns
 ```
+
+A plain `ns` is intentionally a no-op while `.agentic/current_work.yaml` is `READY`.
 
 ## Default current-branch local gate workflow
 
@@ -194,7 +201,7 @@ A newer, safer workflow uses a declarative allowlisted request file:
 
 Allowed declarative steps are implemented in `tools/workflow_runner.py`. The runner executes command lists directly and does not use shell snippets.
 
-The current state is stored in `.agentic/workflow_state`. `IDLE` is the safe default and only starts a run when `.agentic/current_work.yaml` exists.
+The current state is stored in `.agentic/workflow_state`. `IDLE` is the safe default and only starts a run when `.agentic/current_work.yaml` has `state: REQUESTED`.
 
 ## Starting a legacy cycle intentionally
 
@@ -209,9 +216,10 @@ After the `TEST`, `UPLOAD`, and `CLEANUP` steps complete, the script returns the
 
 ## Starting a declarative workflow intentionally
 
-Set `.agentic/current_work.yaml` to the desired allowlisted task, then run:
+Set `.agentic/current_work.yaml` to the desired allowlisted task with `state: READY`, request it explicitly, then run:
 
 ```bash
+.venv/bin/python tools/next-step.py --request
 python3 tools/next-step.py
 ```
 

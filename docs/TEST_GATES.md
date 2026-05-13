@@ -74,6 +74,17 @@ Update it when adding or changing:
 
 `agentic-kit check-docs` must fail if a required term from the coverage matrix is missing from its target document.
 
+## Next-Step Workflow Gate
+
+When changing `tools/next-step.py`, `.agentic/current_work.yaml`, workflow state handling, or the local `ns` convention, run the normal Python and documentation gates plus an explicit request/no-op smoke check.
+
+Required behavior:
+
+- `.agentic/current_work.yaml` with `state: READY` and `.agentic/workflow_state` `IDLE` must no-op and stay `IDLE`.
+- `.venv/bin/python tools/next-step.py --request` must set `.agentic/current_work.yaml` to `state: REQUESTED` without changing `.agentic/workflow_state`.
+- the next normal `tools/next-step.py` / `ns` run may execute the configured workflow and must reset the request to `READY` on success.
+- `FAILED` must preserve evidence and must not automatically clean up.
+
 ## Documentation Mesh Audit Gate
 
 Use `agentic-kit doc-mesh-audit` when changing cross-document state, release metadata, documentation taxonomy, historical planning documents, or cross-document drift rules.
