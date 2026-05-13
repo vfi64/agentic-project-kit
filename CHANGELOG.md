@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.3.3 - 2026-05-13
+
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
+- Fixed package `__version__` drift and extended `agentic-kit doctor` so package-version drift is detected.
+- Documented the standard `python tools/next-step.py` / `done` / `d` terminal workflow for chat-assisted local gates.
+- Added project-local environment bootstrap to `tools/next-step.py` so it can create `.venv` and install missing dev tools before running the workflow.
+- Documented the `ns` shell shortcut pattern while keeping shell configuration outside the normal workflow side effects.
+- Documented explicit `FAILED` next-step handling as a stop-and-diagnose workflow state and added coverage so the rule does not drift.
+
 ## v0.3.2 - 2026-05-12
 
 Zenodo Concept DOI: 10.5281/zenodo.20101359
@@ -109,7 +119,7 @@ This project uses a pragmatic semantic versioning scheme while it is in early MV
 
 ## 0.2.1
 
-- Fix generated CI to install `agentic-project-kit` from the package index instead of a private GitHub repository.
+- Fix generated CI to install agentic-project-kit from the package index instead of a private GitHub repository.
 - Keep generated project CI usable without repository-specific GitHub credentials.
 
 ## 0.2.0 - 2026-05-09

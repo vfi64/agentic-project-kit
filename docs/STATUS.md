@@ -1,38 +1,42 @@
-Current version: 0.3.2
+Current version: 0.3.3
 
 # Project Status
 
-Status-date: 2026-05-10
+Status-date: 2026-05-13
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/roadmap-after-grok-review
+Current work branch: release/prepare-v0.3.3
 
 ## Purpose
 
-agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, task tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, architecture-contract governance, documentation coverage checks, generated project contracts, project profiles, policy packs, policy-pack doctor checks, and deterministic document-quality heuristics.
+agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, task tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, architecture-contract governance, documentation coverage checks, generated project contracts, project profiles, policy packs, policy-pack doctor checks, deterministic document-quality heuristics, output-contract validation, bounded structural repair, and workflow evidence capture.
 
 The project itself has a current state layer so work can be continued from the repository state files.
 
 ## Current State
 
-Released versions:
+Released versions through v0.3.2 are complete. The current branch prepares v0.3.3 as a patch release for workflow usability and drift hardening.
 
-- v0.2.0: first GitHub release workflow with build artifacts.
-- v0.2.1: fixed generated CI to install agentic-project-kit from the package index instead of a private GitHub repository.
-- v0.2.2: added --kit-source for generated CI with pypi, testpypi, and none.
-- v0.2.3: added release-state validation for local tags, remote tags, and GitHub releases.
-- v0.2.4: added Zenodo-backed citation and archival metadata.
-- v0.2.5: released the post-v0.2.4 repository-health and visibility work, including project contracts, profiles, policy packs, policy-pack doctor checks, documentation coverage drift checks, machine-readable task gates, and the semantic quality boundary.
+Recent completed work since v0.3.2:
 
-v0.2.5 release evidence:
+- PR #134 documented the standard `python tools/next-step.py` terminal workflow and `done` / `d` acknowledgement pattern.
+- PR #136 fixed package `__version__` drift and extended `agentic-kit doctor` so package-version drift is detected.
+- PR #139 added project-local environment bootstrap to `tools/next-step.py` so `.venv` and missing dev tools are created before running local workflow gates.
+- PR #140 documented explicit `FAILED` next-step handling as a stop-and-diagnose state and added documentation coverage for it.
 
-- PR #33 improved release visibility and README positioning for v0.2.5.
-- PR #34 raised package and citation metadata to 0.2.5 and finalized the changelog heading.
-- Tag v0.2.5 was pushed.
-- GitHub Release v0.2.5 was created successfully by the Release workflow.
-- Release assets were attached: `agentic_project_kit-0.2.5-py3-none-any.whl` and `agentic_project_kit-0.2.5.tar.gz`.
-- `agentic-kit post-release-check --version 0.2.5` verified the v0.2.5 Zenodo version DOI: `10.5281/zenodo.20111119`.
-- `agentic-kit release-check --version 0.2.5` now fails as expected because the local tag, remote tag, and GitHub release already exist. That command is a pre-release gate, not a post-release success check.
+v0.3.3 release scope:
+
+- Package-version drift detection.
+- `ns` / `next-step.py` workflow usability.
+- Project-local workflow environment bootstrap.
+- Explicit `FAILED` workflow-state handling.
+
+Release discipline:
+
+- Do not add a v0.3.3 version-specific DOI before the GitHub release exists and Zenodo has archived it.
+- Use the Zenodo concept DOI `10.5281/zenodo.20101359` during release preparation.
+- Run `agentic-kit post-release-check --version 0.3.3` only after the GitHub Release is published.
+- The post-release Zenodo verification step is intentionally separate from pre-release validation.
 
 Project-level state documentation is present on main:
 
@@ -46,155 +50,52 @@ Project-level state documentation is present on main:
 - docs/architecture/AGENTIC_CODING_RESEARCH_INPUTS.md
 - docs/architecture/references.bib
 - docs/DOCUMENTATION_COVERAGE.yaml
+- docs/WORKFLOW_OUTPUT_CYCLE.md
 
 Project-level state documentation is machine-checkable:
 
-- agentic-kit check-docs checks the state gate documents.
-- docs/architecture/ARCHITECTURE_CONTRACT.md is a required state gate document.
-- docs/DOCUMENTATION_COVERAGE.yaml is a documentation coverage matrix.
-- Documentation coverage checks that public commands, workflows, governance concepts, release topics, evidence conventions, state-doc expectations, policy-pack doctor checks, and semantic quality boundary language remain visible.
+- `agentic-kit check-docs` checks the state gate documents.
+- `docs/architecture/ARCHITECTURE_CONTRACT.md` is a required state gate document.
+- `docs/DOCUMENTATION_COVERAGE.yaml` is a documentation coverage matrix.
+- Documentation coverage checks that public commands, workflows, governance concepts, release topics, evidence conventions, state-doc expectations, policy-pack doctor checks, semantic quality boundary language, next-step workflow behavior, environment bootstrap, and `FAILED` handling remain visible.
 - sentinel.yaml and .agentic/todo.yaml are present so the repository validates its own machine-readable task gate configuration.
 
 Project health diagnostics are CLI-supported:
 
-- agentic-kit doctor checks required project files, project contract status, policy-pack checks, documentation gates, machine-readable task gates, and version drift.
-- agentic-kit check-docs checks documentation coverage and deterministic document-quality heuristics.
-- agentic-kit release-plan and agentic-kit release-check support release-state validation before maintainer-owned tagging and publication.
-
-Post-v0.2.5 external review signal:
-
-- External review characterizes v0.2.5 as a useful late-early MVP with unusually strong dogfooding and machine-checkable repository state.
-- Treat that as a planning signal, not as proof of production readiness.
-- Preserve the conservative positioning: strong early governance tooling, not a de-facto standard, not production-ready, and not proof of semantic perfection.
-- Keep agentic-project-kit generic. Do not rename generic roadmap items after private projects or private legacy-refactoring work.
-
-Post-v0.2.5 roadmap:
-
-1. Add a post-release Zenodo verification command.
-   - Candidate command names: `agentic-kit post-release-check --version X.Y.Z` or `agentic-kit zenodo-check --version X.Y.Z`.
-   - The command must check GitHub release state and Zenodo archive state after publication.
-   - It must only recommend or prepare README.md or CITATION.cff DOI follow-up when a verified Zenodo record for the requested release version exists.
-   - If no version-specific DOI exists yet, it must report WAITING or WARN and leave DOI metadata unchanged.
-   - This must remain separate from `release-check`, because `release-check` is a pre-release gate.
-2. Add advisory review commands after the post-release check exists.
-   - Candidate commands: `agentic-kit review-docs` and `agentic-kit review-architecture`.
-   - These should be advisory only and must not become merge authority.
-   - They may flag clarity, audience fit, missing rationale, overclaims, architecture drift, or review questions.
-3. Add generic output-contract-oriented scaffolding after the advisory review layer is stable.
-   - Prefer generic names such as `structured-output`, `governed-output`, `response-contracts`, `repairable-output`, and `audit-evidence`.
-   - Avoid private-project-specific names in the open kit.
-   - Start with fixtures, documentation, and minimal gates before adding any large enforcement pipeline.
-4. v0.3.0 is now the bounded output-repair milestone.
-   - This should be based on generic structured-output needs, not on a single private wrapper implementation.
-
-Current roadmap branch work:
-
-- STATUS.md records the post-v0.2.5 external-review planning signal and roadmap.
-- CURRENT_HANDOFF.md should point future agents to the same roadmap.
-- No code, README, CITATION, tag, release artifact, publication artifact, merge, or direct main write is part of this branch.
-
-Latest validated release gates:
-
-- python -m pytest -q -> 52 passed
-- ruff check . -> passed
-- agentic-kit check-docs -> passed
-- agentic-kit doctor -> Overall PASS; project state matches version 0.2.5
-- agentic-kit release-check --version 0.2.5 -> PASS before tag creation
-- python -m build -> successfully built the 0.2.5 wheel and sdist
-- twine check dist/* -> passed for the 0.2.5 wheel and sdist
-- Release workflow for v0.2.5 -> success
-- gh release view v0.2.5 -> release exists with wheel and sdist assets
+- `agentic-kit doctor` checks required project files, project contract status, policy-pack checks, documentation gates, machine-readable task gates, and version drift including package `__version__` drift.
+- `agentic-kit check-docs` checks documentation coverage and deterministic document-quality heuristics.
+- `agentic-kit release-plan` and `agentic-kit release-check` support release-state validation before maintainer-owned tagging and publication.
+- `agentic-kit post-release-check` verifies GitHub release and Zenodo archive state after publication.
 
 ## Current Goal
 
-Record the verified v0.2.5 Zenodo DOI in documentation and citation guidance without changing code, tags, releases, or package metadata.
+Prepare the v0.3.3 release metadata and state files, then validate the release candidate before tagging.
 
 ## Current Blockers
 
-- Local gate must be rerun after documenting the verified v0.2.5 Zenodo DOI.
-- The v0.2.5 version-specific Zenodo DOI has been verified by `agentic-kit post-release-check --version 0.2.5`: `10.5281/zenodo.20111119`.
-- Maintainer approval is required before merge, publication changes, or GitHub repository setting changes.
+- Local release-preparation gates must pass on `release/prepare-v0.3.3`.
+- Maintainer approval is required before merge, tag creation, GitHub release publication, or post-release DOI metadata changes.
 
 ## Live Status Commands
 
 Run:
 
+```bash
 git status --short
 git branch --show-current
 python -m pytest -q
 ruff check .
 agentic-kit check-docs
 agentic-kit doctor
-gh release view v0.2.5
+agentic-kit release-plan --version 0.3.3
+agentic-kit release-check --version 0.3.3
+```
 
-Expected note:
+Expected release-check state before tagging:
 
-agentic-kit release-check --version 0.2.5 is expected to fail after publication because it verifies that the target tag and GitHub release are still unused.
+- pyproject, CHANGELOG, README, CITATION, STATUS, and CURRENT_HANDOFF mention 0.3.3.
+- Local tag `v0.3.3`, remote tag `v0.3.3`, and GitHub Release `v0.3.3` are absent.
 
 ## Next Safe Step
 
-Pull docs/roadmap-after-grok-review locally and run the standard local gate. If it passes, open a PR for the roadmap-only update. After that, the next implementation branch should be feature/post-release-zenodo-check.
-
-Current documentation usability work:
-
-- docs/examples/minimal-python-cli.md documents a small end-to-end generated-project workflow.
-- README.md points new users to the example workflow.
-
-Current v0.2.6 release-preparation work:
-
-- v0.2.6 released the post-v0.2.5 documentation usability, generated-project doctor-gate, and Zenodo timeout improvements.
-
-- `agentic-kit post-release-check --version 0.2.6` verified the v0.2.6 Zenodo version DOI: `10.5281/zenodo.20119102`.
-- Local release preparation must verify tests, ruff, documentation gates, doctor, release-check, build, and twine check before tagging.
-
-Current profile explain work:
-
-- `agentic-kit profile-explain` is available and lists project profiles and policy packs with descriptions.
-- This makes profile/policy selection more inspectable before adding specialized governance-wrapper profiles.
-
-Current governance-wrapper profile work:
-
-- `agentic-kit profile-explain` lists project profiles and policy packs.
-- `governance-wrapper` is available as a project profile for strict human-AI wrapper projects.
-- `output-contracts` is available as a policy pack for schema/validator/repair-boundary oriented projects.
-- `agentic-kit init --type governance-wrapper` generates a project whose initial doctor gate passes.
-- Next safe step: add generated output-contract skeleton files only after documenting the intended contract shape and acceptance tests.
-
-Governance-wrapper generated-project guidance:
-
-- PR #51 added generated output-contract skeleton docs for governance-wrapper projects.
-- PR #52 fixed `agentic-kit init --type governance-wrapper` next-step guidance so non-Python governance projects are directed to `agentic-kit check-docs`, `agentic-kit check`, and `agentic-kit doctor`.
-- PR #54 tightened generated validation/repair guidance so repair wording is singular, bounded, and auditable.
-- PR #55 added a small deterministic runtime-validator skeleton in `src/agentic_project_kit/runtime_validator.py` with tests in `tests/test_runtime_validator.py`.
-- PR #57 wired the runtime-validator skeleton into a separate `agentic-kit validate-sections` CLI command without changing `doctor` or `check` behavior.
-- PR #59 added optional `validate-sections` guidance to generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` files.
-- PR #61 added a separate `agentic-kit validate-contract` CLI command for the existing `.agentic/project.yaml` machine-readable project contract without changing `doctor` or `check` behavior.
-- Decision: do not add `validate-output-contract` yet because generated `docs/OUTPUT_CONTRACTS.md` is still a Markdown skeleton, not a machine-readable contract format.
-- PR #64 added a minimal machine-readable output-contract format skeleton in `src/agentic_project_kit/output_contract.py` with tests in `tests/test_output_contract.py`.
-- PR #66 wired the minimal output-contract format into the runtime validator path via `validate_output_against_contract(...)`, reusing required-section semantics without claiming semantic validation.
-- PR #68 added a generated sample output-contract file for governance-wrapper projects at `docs/output-contracts/default-answer.yaml`.
-- PR #70 added `agentic-kit validate-output-contract`, which loads an output-contract YAML file and validates an output text file using existing required-section semantics.
-- PR #72 updated generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance so `validate-output-contract` is shown next to the lower-level `validate-sections` command.
-- PR #74 documented the runtime validation workflow in `README.md` and `CHANGELOG.md`, including `validate-sections`, `validate-contract`, and `validate-output-contract`.
-- v0.2.7 GitHub Release has been created for the completed runtime-validation workflow.
-- PR #78 updated release metadata/docs with the verified v0.2.7 Zenodo version DOI: 10.5281/zenodo.20125518.
-- PR #79 split the README version-specific DOI summary into separate bullet lines to avoid false-positive consistency checks.
-- v0.2.7 post-release verification is complete: GitHub Release, Zenodo concept DOI, Zenodo version DOI, doctor, and screen-control gate pass.
-- PR #81 added deterministic JSON report export for `agentic-kit validate-output-contract --report`, including `ok`, `contract`, `contract_version`, `checked_file`, and `findings`.
-- PR #83 documented the `validate-output-contract --report` workflow in `README.md` and generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance.
-- PR #85 documented validation reports from `validate-output-contract --report` as bounded audit evidence in generated `docs/LOGGING_AND_EVIDENCE.md` guidance, while keeping report creation explicit and warning against auto-staging by default.
-- v0.2.8 GitHub Release has been created for the validation-report JSON export and bounded audit-evidence guidance workflow.
-- PR #89 updated release metadata/docs with the verified v0.2.8 Zenodo version DOI: 10.5281/zenodo.20126270.
-- v0.2.8 post-release verification is complete: GitHub Release, Zenodo concept DOI, Zenodo version DOI, doctor, and screen-control gate pass.
-- PR #91 documented the validation-report JSON schema in `README.md` and generated governance-wrapper `docs/VALIDATION_AND_REPAIR.md` guidance.
-- PR #118 added `--repair-output` and `--repair-report` to `agentic-kit validate-output-contract`, enabling deterministic structural repair for missing required sections while recording a machine-readable repair report. Repair remains bounded: it appends missing section markers with explicit TODO text and does not invent semantic content.
-- v0.2.9 GitHub Release has been created for the validation-report JSON schema documentation / contract-stability slice.
-- PR #95 updated release metadata/docs with the verified v0.2.9 Zenodo version DOI: 10.5281/zenodo.20126490.
-- v0.2.9 post-release verification is complete: GitHub Release, Zenodo concept DOI, Zenodo version DOI, doctor, and screen-control gate pass.
-- PR #97 added generated governance-wrapper support for `docs/schemas/validation-report.schema.json`, making the validation-report JSON shape available as a machine-readable schema file.
-- v0.2.11 GitHub Release has been created for the validation-report schema-file contract-stability slice.
-- Post-release docs updated release metadata with the verified v0.2.11 Zenodo version DOI: 10.5281/zenodo.20139103.
-- v0.2.11 post-release verification is complete: GitHub Release, Zenodo concept DOI, Zenodo version DOI, doctor, and screen-control gate pass.
-- Next safe step: start the next development slice from a fresh branch; do not modify v0.2.11 release metadata unless a real post-release correction is needed.
-- v0.3.0 prepares the first bounded output-repair release: repair schema, repair report model, deterministic section-marker repairer, CLI repair options, and documentation are present.
-- PR pending: add `tools/next-step.py` as a three-state TEST/UPLOAD/CLEANUP workflow-output handoff helper.
+Run the standard local gate plus `agentic-kit release-check --version 0.3.3` on `release/prepare-v0.3.3`. If green, open and merge the release-preparation PR. After merge, tag `v0.3.3` and wait for the GitHub Release workflow before running `agentic-kit post-release-check --version 0.3.3`.

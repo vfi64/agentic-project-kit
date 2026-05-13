@@ -1,34 +1,26 @@
-Current version: 0.3.2
+Current version: 0.3.3
 
 # Current Handoff
 
-Status-date: 2026-05-12
+Status-date: 2026-05-13
 Project: agentic-project-kit
-Branch: feature/declarative-workflow-runner
+Branch: release/prepare-v0.3.3
 Base branch: main
 
 ## Current Goal
 
-Add a declarative, allowlisted local workflow runner that reduces manual terminal Copy-and-Paste while preserving bounded evidence, state safety, documentation coverage, and the existing `agentic-kit check-docs` / `agentic-kit doctor` gates.
+Prepare v0.3.3 as a patch release for workflow usability, package-version drift hardening, project-local next-step environment bootstrap, and explicit `FAILED` next-step handling.
 
 ## Current Repository State
 
-The project has released version 0.3.0. The current post-release workflow work is focused on reducing manual terminal Copy-and-Paste while keeping local execution bounded and auditable.
+The project has released v0.3.2. The current release-preparation branch updates metadata and state files for v0.3.3.
 
-Recent completed workflow work:
+Completed changes included in the v0.3.3 scope:
 
-- PR #122 added `tools/next-step.py` as the initial TEST/UPLOAD/CLEANUP evidence cycle.
-- PR #123 added `IDLE` as the safe no-op state so accidental `python tools/next-step.py` calls do not start a new run.
-- PR #124 documented `done` and `d` as the terminal acknowledgement wording.
-
-Current implementation direction:
-
-- Prefer a declarative workflow request file over executable ad-hoc local scripts.
-- Use `.agentic/current_work.yaml` for the current local task.
-- Use `tools/workflow_runner.py` as the allowlisted local runner.
-- Keep the old TEST/UPLOAD/CLEANUP states compatible while introducing REQUESTED/RUNNING/UPLOADED/FAILED.
-- Never use `shell=True` for workflow steps.
-- Preserve evidence on FAILED and do not automatically cleanup failed runs.
+- PR #134 documented the standard `python tools/next-step.py` terminal workflow and `done` / `d` acknowledgement pattern.
+- PR #136 fixed package `__version__` drift and extended `agentic-kit doctor` to detect package-version drift.
+- PR #139 added project-local environment bootstrap to `tools/next-step.py` so `.venv` and missing dev tools are created before running workflow gates.
+- PR #140 documented explicit `FAILED` next-step handling as a stop-and-diagnose state and added documentation coverage.
 
 Release and governance context:
 
@@ -37,18 +29,14 @@ Release and governance context:
 - Active policy packs include solo-maintainer, agentic-development, release-managed, and documentation-governed.
 - `agentic-kit doctor` must continue to report policy-pack checks and policy packs.
 - `agentic-kit check-docs` must continue to enforce documentation coverage.
-- The post-release Zenodo workflow remains active; use `agentic-kit post-release-check --version X.Y.Z` before updating DOI metadata.
+- `agentic-kit release-check --version 0.3.3` must pass before tagging.
+- The post-release Zenodo workflow remains active; use `agentic-kit post-release-check --version 0.3.3` only after the GitHub Release exists.
 
-Planned CLI follow-up to propose at a suitable point:
+Important release discipline:
 
-```text
-agentic-kit workflow request
-agentic-kit workflow run
-agentic-kit workflow status
-agentic-kit workflow cleanup
-```
-
-Do not let `tools/next-step.py` grow indefinitely. Once the declarative workflow runner is stable, move the workflow operations into first-class `agentic-kit workflow ...` commands.
+- Do not add a v0.3.3 version-specific DOI during release preparation.
+- Keep `CITATION.cff` on the Zenodo concept DOI during pre-release checks.
+- Add a v0.3.3 version-specific DOI only after `agentic-kit post-release-check --version 0.3.3` verifies the Zenodo record.
 
 ## Source of Truth
 
@@ -69,41 +57,37 @@ Read in this order:
 
 ## Required Local Gate
 
-For the declarative workflow runner branch, run targeted syntax/tests first, then full gates:
-
-```bash
-python -m py_compile tools/next-step.py tools/workflow_runner.py tests/test_workflow_state.py
-python -m pytest tests/test_workflow_state.py -q
-ruff check tools/next-step.py tools/workflow_runner.py tests/test_workflow_state.py
-./tools/screen_control_gate.sh
-```
-
-The full screen-control gate must include:
+For this release-preparation branch, run:
 
 ```bash
 python -m pytest -q
 ruff check .
 agentic-kit check-docs
 agentic-kit doctor
+agentic-kit release-plan --version 0.3.3
+agentic-kit release-check --version 0.3.3
 ```
 
-## Current v0.3.0 DOI Work
+The normal local workflow shortcut remains:
 
-Zenodo shows the v0.3.0 version DOI as `10.5281/zenodo.20140467`. A DOI metadata patch should update `CITATION.cff`, `CHANGELOG.md`, and, if done carefully, README/status/handoff visibility files.
+```bash
+ns
+```
 
-## Terminal Workflow Rule
+Then reply in chat with `d` after evidence upload. If the workflow enters `FAILED`, copy the relevant terminal output because `d` alone is not sufficient for local failures unless evidence was uploaded.
 
-When no terminal output is needed, the user may reply `done` or the short form `d`. When terminal output is needed, ask for a bounded Begin/End Copy Terminal block.
+## Current v0.3.3 Release Work
 
-## Next
+Prepared files should include:
 
-- Pull the latest `feature/declarative-workflow-runner` branch.
-- Run the targeted syntax/test/ruff checks.
-- Run `./tools/screen_control_gate.sh`.
-- If gates pass, inspect PR #126 and decide whether to merge or split the large handoff/documentation change.
-- After this first declarative runner lands, do not immediately remove TEST/UPLOAD/CLEANUP; keep compatibility until the new path has been smoke-tested.
+- `pyproject.toml` version `0.3.3`
+- `src/agentic_project_kit/__init__.py` version `0.3.3`
+- `CITATION.cff` version `0.3.3` and release date `2026-05-13`
+- `CHANGELOG.md` v0.3.3 section
+- `README.md` current status and release-command examples for `0.3.3`
+- `docs/STATUS.md` current version `0.3.3`
+- `docs/handoff/CURRENT_HANDOFF.md` current version `0.3.3`
 
 ## Next Safe Step
 
-Run the required local gate on `feature/declarative-workflow-runner`. If green, test the declarative path with `.agentic/current_work.yaml` and `REQUESTED` in a controlled smoke run before using it as the default workflow.
-
+Run the local gate and release-check on `release/prepare-v0.3.3`. If green, open the release-preparation PR. After merge to main, tag `v0.3.3`, wait for the GitHub Release workflow, then run post-release verification.

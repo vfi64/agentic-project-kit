@@ -153,7 +153,7 @@ Agentic project doctor report for /path/to/project
 [PASS] policy pack checks: active: starter, solo-maintainer
 [PASS] documentation gates: passed
 [PASS] todo gates: passed
-[PASS] version drift: project state matches version 0.3.2
+[PASS] version drift: project state matches version 0.3.3
 
 Overall: PASS
 ```
@@ -164,7 +164,7 @@ Overall: PASS
 
 These checks are intentionally limited. They are useful hard gates for known bad patterns, but they do not prove semantic perfection. A passing check does not prove that an architecture is globally optimal, a README is persuasive for every audience, or a handoff is sufficient for every future agent.
 
-Future commands such as `review-docs` or `review-architecture` may provide advisory review for clarity, didactic quality, audience fit, missing rationale, or possible architecture drift. Such advisory review must remain separate from `doctor` and must not be treated as merge authority.
+Future commands such as `review-docs` or `review-architecture` may provide advisory review for clarity, didactic quality, audience fit, missing rationale, overclaims, architecture drift, or review questions. Such advisory review must remain separate from `doctor` and must not be treated as merge authority.
 
 ## Runtime validation workflow
 
@@ -222,13 +222,13 @@ docs/output-contracts/default-answer.yaml
 Use `agentic-kit release-plan` before preparing a release:
 
 ```bash
-agentic-kit release-plan --version 0.3.2
+agentic-kit release-plan --version 0.3.3
 ```
 
 Use `agentic-kit release-check` before tagging:
 
 ```bash
-agentic-kit release-check --version 0.3.2
+agentic-kit release-check --version 0.3.3
 ```
 
 These commands help prevent release-state drift between `pyproject.toml`, `CHANGELOG.md`, project state files, local tags, remote tags, GitHub releases, and citation metadata.
@@ -238,7 +238,7 @@ This post-release command is separate from release-check: `release-check` is the
 Use `agentic-kit post-release-check` after publishing a GitHub release:
 
 ```bash
-agentic-kit post-release-check --version 0.3.2
+agentic-kit post-release-check --version 0.3.3
 ```
 
 This command checks that the GitHub release exists and then looks for a verified Zenodo version record derived from the DOI in `CITATION.cff`. If Zenodo has not archived the release yet, the command reports `WAITING` and leaves README/CITATION DOI metadata unchanged. It is intentionally separate from `release-check`, because `release-check` is a pre-release gate that expects the tag and GitHub release to be unused.
@@ -360,6 +360,8 @@ The archived v0.3.0 release has the verified version-specific DOI: `10.5281/zeno
 
 The archived v0.3.1 release has the verified version-specific DOI: `10.5281/zenodo.20144969`.
 
+The v0.3.3 release is prepared with the Zenodo concept DOI only. Add the version-specific DOI only after `agentic-kit post-release-check --version 0.3.3` verifies the Zenodo record.
+
 ## Governance wrapper projects
 
 Use the `governance-wrapper` profile for strict human-AI wrapper projects that need explicit output contracts, validation, bounded repair, and auditability.
@@ -418,7 +420,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.2` is a patch release candidate covering workflow CLI usability, the safe `IDLE` workflow default, declarative workflow evidence capture, updated v0.3.0 Zenodo DOI metadata, and CLI command package modularization.
+Version `0.3.3` is a patch release candidate covering package-version drift detection, the documented `ns` / `next-step.py` terminal workflow, project-local workflow environment bootstrap, and explicit `FAILED` stop-and-diagnose handling.
 
 This repository has maintainer-owned GitHub releases and verified Zenodo archive records. Verified version-specific DOIs:
 
@@ -430,3 +432,5 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - v0.2.10: `10.5281/zenodo.20127028`
 - v0.3.0: `10.5281/zenodo.20140467`
 - v0.3.1: `10.5281/zenodo.20144969`
+
+v0.3.3 is prepared with concept DOI `10.5281/zenodo.20101359`; the version-specific DOI must wait for post-release verification.
