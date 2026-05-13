@@ -18,6 +18,7 @@ doi: "10.5281/zenodo.20101359"
 # Verified v0.3.1 version DOI: 10.5281/zenodo.20144969
 # Verified v0.3.2 version DOI: 10.5281/zenodo.20145114
 # Verified v0.3.3 version DOI: 10.5281/zenodo.20151924
+# Verified v0.3.4 version DOI: 10.5281/zenodo.20162214
 abstract: "Generate GitHub-ready project templates for human-AI software development workflows."
 keywords:
   - agentic development
