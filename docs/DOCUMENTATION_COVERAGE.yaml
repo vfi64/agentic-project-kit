@@ -93,6 +93,29 @@ rules:
           - manual Copy-and-Paste blocks
           - compatibility bridge
 
+  - id: default-local-gate-workflow-coverage
+    description: Default next-step gate workflow must remain documented and bounded.
+    documents:
+      - path: docs/WORKFLOW_OUTPUT_CYCLE.md
+        terms:
+          - Default local gate workflow
+          - default-local-gate
+          - agentic-kit workflow request && python tools/next-step.py
+          - pytest
+          - ruff_check
+          - check_docs
+          - doctor
+      - path: .agentic/current_work.yaml
+        terms:
+          - default-local-gate
+          - git_fetch
+          - git_switch_main
+          - git_pull_ff_only
+          - pytest
+          - ruff_check
+          - check_docs
+          - doctor
+
   - id: cli-package-readme-coverage
     description: CLI package modularization must remain visible after the monolith split.
     documents:
