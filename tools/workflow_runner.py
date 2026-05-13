@@ -13,6 +13,7 @@ ALLOWED_SIMPLE_STEPS = {
     "git_switch_main",
     "git_switch_work_branch",
     "git_pull_ff_only",
+    "pytest",
     "ruff_check",
     "check_docs",
     "doctor",
@@ -54,6 +55,8 @@ def _step_command(step: Any, workflow: dict[str, Any]) -> list[str]:
             return ["git", "switch", branch]
         if step == "git_pull_ff_only":
             return ["git", "pull", "--ff-only"]
+        if step == "pytest":
+            return [sys.executable, "-m", "pytest", "-q"]
         if step == "ruff_check":
             return ["ruff", "check", "."]
         if step == "check_docs":
