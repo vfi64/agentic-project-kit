@@ -360,6 +360,8 @@ The archived v0.3.0 release has the verified version-specific DOI: `10.5281/zeno
 
 The archived v0.3.1 release has the verified version-specific DOI: `10.5281/zenodo.20144969`.
 
+The archived v0.3.2 release has the verified version-specific DOI: `10.5281/zenodo.20145114`.
+
 The archived v0.3.3 release has the verified version-specific DOI: `10.5281/zenodo.20151924`.
 
 ## Governance wrapper projects
@@ -432,6 +434,7 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - v0.2.10: `10.5281/zenodo.20127028`
 - v0.3.0: `10.5281/zenodo.20140467`
 - v0.3.1: `10.5281/zenodo.20144969`
+- v0.3.2: `10.5281/zenodo.20145114`
 - v0.3.3: `10.5281/zenodo.20151924`
 
 Near-term documentation-governance work: audit the full project documentation mesh for currency, redundancy, consistency, deterministic auto-update opportunities, automatic tests, and bounded repair tools. The current `check-docs` coverage matrix is useful, but it is not yet a full proof that all state, release, roadmap, handoff, README, and architecture documents agree semantically.
