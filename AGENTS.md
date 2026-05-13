@@ -34,6 +34,14 @@ If a change conflicts with the architecture contract, do not silently implement 
 2. propose either a smaller implementation or an architecture-contract update;
 3. make the contract update explicit and reviewable.
 
+## Modular Implementation Rule
+
+New non-trivial program functionality must be implemented modularly: core logic belongs in a focused, importable module; CLI files are thin adapters; tests target the core module and the CLI boundary separately.
+
+Existing monoliths must not be allowed to grow. When a touched file already mixes unrelated responsibilities, the preferred direction is incremental modularization: extract cohesive logic into a named module, keep the public command stable, and add regression tests before or with the extraction.
+
+This rule applies especially to new audit, repair, workflow, release, validation, doctor, and generated-project logic. Review-only exceptions are allowed only when extraction would be larger than the requested slice; the exception must name the monolith risk and the next safe modularization step.
+
 ## Documentation Coverage Rule
 
 `docs/DOCUMENTATION_COVERAGE.yaml` is the source of truth for required documentation coverage across README, gate docs, state docs, agent instructions, release/citation docs, safety notes, and architecture concepts.
