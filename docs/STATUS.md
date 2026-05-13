@@ -44,7 +44,7 @@ v0.3.3 release evidence remains verified:
 Documentation-mesh audit state:
 
 - `agentic-kit doc-mesh-audit` exists and currently checks machine-readable drift classes: version mismatch, stale current-state wording, missing historical-source-of-truth banners, and release DOI list mismatches.
-- The audit distinguishes current-state documents, governance documents, architecture/design documents, and historical-plan documents.
+- The audit distinguishes current-state documents, release-history documents, governance documents, architecture/design documents, and historical-plan documents.
 - The audit can write machine-readable JSON reports.
 - The audit can write bounded repair plans.
 - `agentic-kit doc-mesh-repair` can insert missing historical-source-of-truth banners into known historical-plan documents.
