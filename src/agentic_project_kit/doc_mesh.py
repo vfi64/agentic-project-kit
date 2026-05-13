@@ -118,7 +118,7 @@ class DocMeshRepairResult:
 
 DOC_MESH_DOCUMENTS: tuple[DocMeshDocument, ...] = (
     DocMeshDocument("README.md", "current-state"),
-    DocMeshDocument("CHANGELOG.md", "current-state"),
+    DocMeshDocument("CHANGELOG.md", "release-history"),
     DocMeshDocument("CITATION.cff", "current-state"),
     DocMeshDocument("pyproject.toml", "current-state"),
     DocMeshDocument("src/agentic_project_kit/__init__.py", "current-state"),
