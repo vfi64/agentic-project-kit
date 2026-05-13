@@ -41,6 +41,13 @@ Release evidence:
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified v0.3.3 version DOI: `10.5281/zenodo.20151924`.
 - `agentic-kit post-release-check --version 0.3.3` passed.
+- post-release Zenodo verification is complete for v0.3.3.
+
+Current project-health baseline:
+
+- `agentic-kit doctor` checks required project files, documentation gates, task gates, version drift, package `__version__` drift, and policy-pack checks.
+- The selected policy packs remain visible in the project contract and documentation coverage.
+- `agentic-kit doc-mesh-audit` is currently a targeted special gate, not yet a default doctor check.
 
 Documentation-mesh audit state:
 
