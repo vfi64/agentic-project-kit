@@ -166,13 +166,29 @@ def step_failed() -> None:
     print("No automatic cleanup is performed from FAILED.")
 
 
-def step_idle() -> None:
+def workflow_request_state() -> str:
     if not WORKFLOW_FILE.exists():
-        print("No workflow action requested.")
-        print("Chat reply after completion: done or d")
+        return "MISSING"
+    for line in WORKFLOW_FILE.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("state:"):
+            return stripped.split(":", 1)[1].strip().upper() or "READY"
+    return "READY"
+
+
+def step_idle() -> None:
+    request_state = workflow_request_state()
+    if request_state != "REQUESTED":
+        if request_state == "MISSING":
+            print("No workflow action requested.")
+        else:
+            print(f"Current workflow request file: {WORKFLOW_FILE}")
+            print(f"Workflow request state: {request_state}")
+            print("No active workflow request.")
+        print("Next state: IDLE")
         return
     print(f"Current workflow request file: {WORKFLOW_FILE}")
-    print("workflow_state=IDLE -> REQUESTED")
+    print("workflow_state=IDLE + current_work.state=REQUESTED -> REQUESTED")
     write_state("REQUESTED")
     step_requested()
 
