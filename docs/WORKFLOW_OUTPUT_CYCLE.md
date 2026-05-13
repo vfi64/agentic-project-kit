@@ -6,7 +6,8 @@ Use the workflow CLI or compatibility entrypoint as the normal local entrypoint 
 
 ## Current safe default
 
-- `IDLE`: do nothing and report that no workflow action was requested.
+- `IDLE`: do not start work automatically.
+- When `.agentic/current_work.yaml` exists, `python tools/next-step.py` reports the current workflow request file and the exact command needed to start it.
 
 ## Standard next-step terminal workflow
 
@@ -26,6 +27,30 @@ done
 The short acknowledgement `d` is also valid. The assistant then evaluates the workflow state, evidence pointer, or copied terminal output and proposes the next safe step.
 
 This keeps routine work out of long manual Copy-and-Paste blocks. Use full copied terminal output only when the local workflow did not provide enough bounded evidence for review.
+
+## Default local gate workflow
+
+`.agentic/current_work.yaml` defines a deterministic default local gate workflow named `default-local-gate`.
+
+The default local gate runs only allowlisted steps:
+
+```text
+git_fetch
+git_switch_main
+git_pull_ff_only
+pytest
+ruff_check
+check_docs
+doctor
+```
+
+This is the standard evidence-producing workflow for routine chat-assisted validation. To run it from `IDLE`, use:
+
+```bash
+agentic-kit workflow request && python tools/next-step.py
+```
+
+After the command finishes, reply in chat with `done` or `d`. The assistant can then inspect the workflow state and the current report pointer.
 
 ## Primary workflow CLI
 
