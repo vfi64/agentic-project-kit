@@ -15,7 +15,7 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-v0.3.4 is the current release-preparation branch.
+v0.3.4 is the current planned release line.
 
 Recent completed work since v0.3.3:
 
