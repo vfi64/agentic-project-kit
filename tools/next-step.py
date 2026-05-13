@@ -149,11 +149,14 @@ def step_failed() -> None:
 
 
 def step_idle() -> None:
-    print("No workflow action requested.")
-    if WORKFLOW_FILE.exists():
-        print(f"Current workflow request file: {WORKFLOW_FILE}")
-        print("To run it: agentic-kit workflow request && python tools/next-step.py")
-    print("Chat reply after completion: done or d")
+    if not WORKFLOW_FILE.exists():
+        print("No workflow action requested.")
+        print("Chat reply after completion: done or d")
+        return
+    print(f"Current workflow request file: {WORKFLOW_FILE}")
+    print("workflow_state=IDLE -> REQUESTED")
+    write_state("REQUESTED")
+    step_requested()
 
 
 def main() -> int:
