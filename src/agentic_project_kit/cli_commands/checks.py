@@ -8,12 +8,15 @@ from rich.console import Console
 
 from agentic_project_kit.checks import check_all, check_docs, check_todo
 from agentic_project_kit.doc_mesh import (
+    apply_doc_mesh_repair_plan,
     build_doc_mesh_repair_plan,
     build_doc_mesh_report,
     render_doc_mesh_repair_plan,
+    render_doc_mesh_repair_result,
     render_doc_mesh_report,
     write_doc_mesh_json_report,
     write_doc_mesh_repair_plan,
+    write_doc_mesh_repair_result,
 )
 from agentic_project_kit.doctor import build_doctor_report, render_doctor_report
 
@@ -25,6 +28,7 @@ def register_check_commands(app: typer.Typer) -> None:
     app.command("check-docs")(check_docs_command)
     app.command("check-todo")(check_todo_command)
     app.command("doc-mesh-audit")(doc_mesh_audit_command)
+    app.command("doc-mesh-repair")(doc_mesh_repair_command)
     app.command("doctor")(doctor_command)
 
 
@@ -59,6 +63,19 @@ def doc_mesh_audit_command(
     console.print(render_doc_mesh_report(report), markup=False)
     if not report.ok:
         raise typer.Exit(code=1)
+
+
+def doc_mesh_repair_command(
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    result_path: Annotated[Path | None, typer.Option("--result")] = None,
+) -> None:
+    """Apply safe automatic documentation mesh repairs."""
+    report = build_doc_mesh_report(project_root.resolve())
+    repair_plan = build_doc_mesh_repair_plan(report)
+    result = apply_doc_mesh_repair_plan(project_root.resolve(), repair_plan)
+    if result_path is not None:
+        write_doc_mesh_repair_result(result, result_path)
+    console.print(render_doc_mesh_repair_result(result), markup=False)
 
 
 def doctor_command(project_root: Path = typer.Option(Path("."), "--root")) -> None:
