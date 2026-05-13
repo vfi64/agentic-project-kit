@@ -36,6 +36,7 @@ Release discipline:
 - Do not add a v0.3.3 version-specific DOI before the GitHub release exists and Zenodo has archived it.
 - Use the Zenodo concept DOI `10.5281/zenodo.20101359` during release preparation.
 - Run `agentic-kit post-release-check --version 0.3.3` only after the GitHub Release is published.
+- The post-release Zenodo verification step is intentionally separate from pre-release validation.
 
 Project-level state documentation is present on main:
 
