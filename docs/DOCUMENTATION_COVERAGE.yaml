@@ -106,6 +106,24 @@ rules:
           - Optional shell shortcut
           - alias ns=
 
+  - id: failed-next-step-handling-coverage
+    description: FAILED workflow-state handling must remain explicit because it requires diagnosis, not automatic cleanup.
+    documents:
+      - path: docs/WORKFLOW_OUTPUT_CYCLE.md
+        terms:
+          - FAILED handling
+          - stop-and-diagnose state
+          - Do not repeatedly run `ns` or `python3 tools/next-step.py`
+          - Preserve the local terminal output and any files under `tmp/agent-evidence/`
+          - Send the relevant terminal output to the assistant if no temporary evidence branch was uploaded
+          - git status --short
+          - git branch --show-current
+          - cat .agentic/workflow_state
+          - git restore .agentic/workflow_state docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+          - rm -f tmp/agent-evidence/workflow-output-*.md
+          - It is not sufficient for a local `FAILED` state
+          - Never automatically clean up from `FAILED`
+
   - id: next-step-environment-bootstrap-coverage
     description: next-step.py environment bootstrap must stay documented and bounded.
     documents:
