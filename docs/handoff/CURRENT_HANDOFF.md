@@ -67,6 +67,8 @@ The updated roadmap is split into three near-term tracks:
 
 2. Documentation governance:
    - keep `doc-mesh-audit` as a targeted special gate for current-state, handoff, roadmap, release, governance, and documentation-mesh changes;
+   - keep documentation coverage visible in handoff and status documents;
+   - keep policy packs and policy-pack checks visible as part of the public doctor contract;
    - collect failure classes and false positives before promoting it to `doctor` or default `ns`.
 
 3. Product positioning:
@@ -110,6 +112,10 @@ ns
 ```
 
 `ns` should be a no-op in `IDLE` plus READY until a workflow is explicitly requested.
+
+## Coverage-sensitive wording
+
+This handoff intentionally keeps coverage terms visible for deterministic gates: documentation coverage, policy packs, policy-pack checks, and post-release Zenodo verification.
 
 ## Current Branch Work
 
