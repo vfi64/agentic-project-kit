@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import json
 import re
+from typing import Any
 
 
 @dataclass(frozen=True)
@@ -12,12 +14,27 @@ class DocMeshDocument:
     required: bool = True
     historical: bool = False
 
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "path": self.path,
+            "category": self.category,
+            "required": self.required,
+            "historical": self.historical,
+        }
+
 
 @dataclass(frozen=True)
 class DocMeshFinding:
     code: str
     path: str
     message: str
+
+    def to_dict(self) -> dict[str, str]:
+        return {
+            "code": self.code,
+            "path": self.path,
+            "message": self.message,
+        }
 
 
 @dataclass(frozen=True)
@@ -28,6 +45,13 @@ class DocMeshReport:
     @property
     def ok(self) -> bool:
         return not self.findings
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "ok": self.ok,
+            "documents": [document.to_dict() for document in self.documents],
+            "findings": [finding.to_dict() for finding in self.findings],
+        }
 
 
 DOC_MESH_DOCUMENTS: tuple[DocMeshDocument, ...] = (
@@ -127,6 +151,11 @@ def render_doc_mesh_report(report: DocMeshReport) -> str:
     lines.append("")
     lines.append("Overall: FAIL")
     return "\n".join(lines)
+
+
+def write_doc_mesh_json_report(report: DocMeshReport, output_path: Path) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(report.to_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
 def _check_historical_document(path: str, content: str) -> list[DocMeshFinding]:
