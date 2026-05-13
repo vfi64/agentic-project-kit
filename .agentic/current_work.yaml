@@ -1,10 +1,8 @@
-name: default-local-gate
+name: default-current-branch-local-gate
 state: READY
 timeout_seconds: 600
-base_branch: main
 steps:
   - git_fetch
-  - git_switch_main
   - git_pull_ff_only
   - pytest
   - ruff_check
