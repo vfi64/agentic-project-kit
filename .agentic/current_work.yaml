@@ -1,23 +1,12 @@
-name: check-v030-zenodo-doi-pr
-state: REQUESTED
+name: default-local-gate
+state: READY
 timeout_seconds: 600
 base_branch: main
-work_branch: docs/update-v030-zenodo-doi
 steps:
   - git_fetch
-  - git_switch_work_branch
+  - git_switch_main
   - git_pull_ff_only
+  - pytest
   - ruff_check
   - check_docs
   - doctor
-  - gh_pr_checks:
-      number: 125
-  - gh_pr_view:
-      number: 125
-      fields:
-        - number
-        - state
-        - mergeable
-        - mergedAt
-        - mergeCommit
-        - url
