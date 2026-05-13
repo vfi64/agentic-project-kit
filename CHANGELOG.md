@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.3.5 - 2026-05-13
+
+- Classify CHANGELOG.md as a release-history document in the documentation mesh instead of live current-state.
+- Document the release-history documentation mesh category across README, test gates, coverage, status, and handoff docs.
+- Assert the release-history category in the documentation mesh JSON report shape.
+- Make the next-step workflow safe by default: IDLE with current_work.yaml state READY now no-ops.
+- Add explicit next-step request mode through tools/next-step.py --request.
+- Document the explicit ns/request workflow and add smoke-test expectations for READY no-op and REQUESTED execution.
+
 ## v0.3.4 - 2026-05-13
 
 Zenodo Concept DOI: 10.5281/zenodo.20101359

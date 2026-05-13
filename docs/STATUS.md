@@ -1,11 +1,11 @@
-Current version: 0.3.4
+Current version: 0.3.5
 
 # Project Status
 
 Status-date: 2026-05-13
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: release/prepare-v0.3.4
+Current work branch: release/prepare-v0.3.5
 
 ## Purpose
 
@@ -15,7 +15,7 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-v0.3.4 is the current planned release line.
+v0.3.5 is the current planned release line.
 
 Recent completed work since v0.3.3:
 
@@ -25,7 +25,7 @@ Recent completed work since v0.3.3:
 - PR #146 added bounded documentation mesh repair planning through `agentic-kit doc-mesh-audit --repair-plan`.
 - PR #147 added `agentic-kit doc-mesh-repair` for the first safe automatic repair class: inserting missing historical-source-of-truth banners into historical-plan documents.
 
-v0.3.4 release scope:
+v0.3.5 release scope:
 
 - Documentation mesh audit.
 - Machine-readable doc-mesh JSON report output.
@@ -104,13 +104,13 @@ Project health diagnostics are CLI-supported:
 
 ## Current Goal
 
-Prepare v0.3.4 release metadata for the documentation-mesh audit, JSON report, repair-plan, and historical-banner repair work.
+Prepare v0.3.5 release metadata for the documentation-mesh release-history classification and explicit next-step request workflow hardening.
 
 ## Current Blockers
 
-- Local gates must pass on `release/prepare-v0.3.4`.
-- `agentic-kit release-check --version 0.3.4` must pass before tagging.
-- No v0.3.4 DOI should be inserted before Zenodo post-release verification.
+- Local gates must pass on `release/prepare-v0.3.5`.
+- `agentic-kit release-check --version 0.3.5` must pass before tagging.
+- No v0.3.5 DOI should be inserted before Zenodo post-release verification.
 
 ## Live Status Commands
 
@@ -124,9 +124,9 @@ ruff check .
 agentic-kit check-docs
 agentic-kit doctor
 agentic-kit doc-mesh-audit
-agentic-kit release-check --version 0.3.4
+agentic-kit release-check --version 0.3.5
 ```
 
 ## Next Safe Step
 
-Run the standard local gate on `release/prepare-v0.3.4`. Because this is a release and documentation-mesh metadata change, also run `agentic-kit doc-mesh-audit` and `agentic-kit release-check --version 0.3.4`. If green, open and merge the focused release metadata PR.
+Run the standard local gate on `release/prepare-v0.3.5`. Because this is a release and documentation-mesh metadata change, also run `agentic-kit doc-mesh-audit` and `agentic-kit release-check --version 0.3.5`. If green, open and merge the focused release metadata PR.
