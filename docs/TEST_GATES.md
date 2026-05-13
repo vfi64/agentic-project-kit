@@ -80,7 +80,8 @@ Use `agentic-kit doc-mesh-audit` when changing cross-document state, release met
 
 The documentation mesh is split into explicit document classes:
 
-- current-state documents such as README, CHANGELOG, CITATION, pyproject, package `__version__`, STATUS, and CURRENT_HANDOFF;
+- current-state documents such as README, CITATION, pyproject, package `__version__`, STATUS, and CURRENT_HANDOFF;
+- release-history documents such as CHANGELOG.md, which remain required and may feed release DOI synchronization without being treated as live project state;
 - governance documents such as AGENTS, TEST_GATES, DOCUMENTATION_COVERAGE, sentinel, and project contract files;
 - architecture/design documents such as ARCHITECTURE_CONTRACT, WORKFLOW_OUTPUT_CYCLE, and optional DESIGN.md;
 - historical-plan documents such as roadmap summaries, status reports, and v0.3.0 output-repair planning files.

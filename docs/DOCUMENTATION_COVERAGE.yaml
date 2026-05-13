@@ -62,6 +62,7 @@ rules:
           - agentic-kit doc-mesh-audit
           - agentic-kit doc-mesh-repair
           - current-state documents
+          - release-history documents
           - governance documents
           - architecture/design documents
           - historical-plan documents
@@ -72,6 +73,7 @@ rules:
           - Documentation Mesh Audit Gate
           - agentic-kit doc-mesh-audit
           - current-state documents
+          - release-history documents
           - governance documents
           - architecture/design documents
           - historical-plan documents

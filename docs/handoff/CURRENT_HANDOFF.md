@@ -61,7 +61,7 @@ The project now has `agentic-kit doc-mesh-audit`. It is a deterministic bounded 
 - stale current-state wording;
 - missing historical-source-of-truth banners;
 - release DOI list mismatches;
-- explicit document taxonomy across current-state, governance, architecture/design, and historical-plan documents.
+- explicit document taxonomy across current-state, release-history, governance, architecture/design, and historical-plan documents.
 
 It can write a JSON report and a bounded repair plan. `agentic-kit doc-mesh-repair` can apply only the currently safe automatic repair class: inserting historical-source-of-truth banners into known historical-plan documents. Version, DOI, stale-state, and missing-document findings remain manual review items.
 
