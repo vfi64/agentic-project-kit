@@ -1,3 +1,5 @@
+This file is historical audit evidence, not the current source of truth.
+
 # Status and roadmap summary after PR 105
 
 Date: 2026-05-12
