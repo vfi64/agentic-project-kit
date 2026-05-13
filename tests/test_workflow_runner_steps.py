@@ -4,11 +4,38 @@ from pathlib import Path
 import pytest
 import yaml
 
-from tools.workflow_runner import WorkflowFailure, _step_command, load_workflow
+from tools.workflow_runner import WorkflowFailure, _step_command, _venv_executable, load_workflow
 
 
 def test_workflow_runner_supports_pytest_step() -> None:
     assert _step_command("pytest", {}) == [sys.executable, "-m", "pytest", "-q"]
+
+
+def test_workflow_runner_prefers_venv_executable(monkeypatch, tmp_path: Path) -> None:
+    monkeypatch.chdir(tmp_path)
+    bin_dir = tmp_path / ".venv/bin"
+    bin_dir.mkdir(parents=True)
+    (bin_dir / "ruff").write_text("", encoding="utf-8")
+
+    assert _venv_executable("ruff") == ".venv/bin/ruff"
+
+
+def test_workflow_runner_falls_back_to_executable_name(monkeypatch, tmp_path: Path) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    assert _venv_executable("ruff") == "ruff"
+
+
+def test_workflow_runner_uses_venv_commands_for_local_gates(monkeypatch, tmp_path: Path) -> None:
+    monkeypatch.chdir(tmp_path)
+    bin_dir = tmp_path / ".venv/bin"
+    bin_dir.mkdir(parents=True)
+    (bin_dir / "ruff").write_text("", encoding="utf-8")
+    (bin_dir / "agentic-kit").write_text("", encoding="utf-8")
+
+    assert _step_command("ruff_check", {}) == [".venv/bin/ruff", "check", "."]
+    assert _step_command("check_docs", {}) == [".venv/bin/agentic-kit", "check-docs"]
+    assert _step_command("doctor", {}) == [".venv/bin/agentic-kit", "doctor"]
 
 
 def test_current_work_uses_default_current_branch_local_gate() -> None:
