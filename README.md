@@ -267,7 +267,7 @@ agentic-kit workflow run
 agentic-kit workflow cleanup
 ```
 
-The workflow uses `.agentic/workflow_state`. `IDLE` is the safe default and means that no workflow action is requested. A requested run captures bounded local evidence from `.agentic/current_work.yaml`, updates `docs/reports/CURRENT_WORKFLOW_OUTPUT.md`, uploads a temporary evidence branch, and waits for explicit cleanup.
+The workflow uses `.agentic/workflow_state` and `.agentic/current_work.yaml`. `IDLE` with `current_work.yaml` state `READY` is a safe no-op. A run starts only after an explicit request, for example `.venv/bin/python tools/next-step.py --request`, followed by the normal `python3 tools/next-step.py` / `ns` step. A requested run captures bounded local evidence, resets the request to `READY`, updates `docs/reports/CURRENT_WORKFLOW_OUTPUT.md`, uploads a temporary evidence branch, and waits for explicit cleanup.
 
 Legacy compatibility remains available through:
 

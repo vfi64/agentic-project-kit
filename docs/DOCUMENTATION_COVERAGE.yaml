@@ -96,6 +96,7 @@ rules:
           - .agentic/workflow_state
           - IDLE
           - python tools/next-step.py
+          - .venv/bin/python tools/next-step.py --request
       - path: docs/WORKFLOW_OUTPUT_CYCLE.md
         terms:
           - agentic-kit workflow request
@@ -113,6 +114,7 @@ rules:
           - Standard next-step terminal workflow
           - cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
           - python tools/next-step.py
+          - .venv/bin/python tools/next-step.py --request
           - done
           - The short acknowledgement `d` is also valid
           - instead of long manual Copy-and-Paste terminal blocks
@@ -133,7 +135,9 @@ rules:
       - path: docs/WORKFLOW_OUTPUT_CYCLE.md
         terms:
           - Single-command state behavior
-          - IDLE + .agentic/current_work.yaml -> REQUESTED -> run workflow -> upload evidence -> UPLOADED
+          - IDLE + .agentic/current_work.yaml state READY -> no-op -> IDLE
+          - .venv/bin/python tools/next-step.py --request
+          - IDLE + .agentic/current_work.yaml state REQUESTED -> run workflow -> reset request to READY -> upload evidence -> UPLOADED
           - UPLOADED -> cleanup temporary evidence branch -> IDLE
           - FAILED -> preserve evidence; no automatic cleanup
           - RUNNING -> refuse duplicate execution
