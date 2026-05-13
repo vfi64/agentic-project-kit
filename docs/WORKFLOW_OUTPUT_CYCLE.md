@@ -18,7 +18,7 @@ For app-based ChatGPT workflows, the normal local command is:
 
 ```bash
 cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
-python tools/next-step.py
+python3 tools/next-step.py
 ```
 
 After the command finishes, the user can usually reply in chat with only:
@@ -46,17 +46,38 @@ TEST/UPLOAD/CLEANUP -> legacy compatibility cycle
 This means routine work uses the same command for validation and cleanup:
 
 ```bash
-python tools/next-step.py
+python3 tools/next-step.py
 ```
 
 Then reply in chat with `done` or `d`.
+
+## Environment bootstrap
+
+`tools/next-step.py` is intended to work even when the project virtual environment is not activated in the current shell.
+
+Before reading the workflow state, it performs a bounded environment bootstrap:
+
+```text
+missing .venv/bin/python -> create .venv with the current Python interpreter
+missing .venv/bin/ruff or .venv/bin/agentic-kit -> run .venv/bin/python -m pip install -e .[dev]
+```
+
+The workflow runner then uses the project-local tools:
+
+```text
+.venv/bin/python
+.venv/bin/ruff
+.venv/bin/agentic-kit
+```
+
+This does not activate the virtual environment in the parent shell. It only makes the workflow command self-sufficient.
 
 ## Optional shell shortcut
 
 A local zsh alias or function can shorten the command to `ns`. This is local shell configuration, not repository state. A typical user setup is:
 
 ```zsh
-alias ns='cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit && python tools/next-step.py'
+alias ns='cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit && python3 tools/next-step.py'
 ```
 
 After adding that alias to `~/.zshrc`, routine work becomes:
@@ -111,7 +132,7 @@ docs/reports/CURRENT_WORKFLOW_OUTPUT.md
 `tools/next-step.py` remains supported as the compatibility entrypoint while the CLI path stabilizes:
 
 ```bash
-python tools/next-step.py
+python3 tools/next-step.py
 ```
 
 Keep `tools/next-step.py` available for the standard chat-assisted terminal workflow. Do not expand it indefinitely. New user-facing workflow behavior should move toward `agentic-kit workflow ...` commands while preserving this compatibility bridge.
@@ -154,15 +175,15 @@ After the `TEST`, `UPLOAD`, and `CLEANUP` steps complete, the script returns the
 Set `.agentic/current_work.yaml` to the desired allowlisted task, then run:
 
 ```bash
-python tools/next-step.py
+python3 tools/next-step.py
 ```
 
-After the `IDLE` step succeeds, the state becomes `UPLOADED`. The LLM can inspect the remote temporary evidence branch. A later `python tools/next-step.py` call cleans up and returns to `IDLE`.
+After the `IDLE` step succeeds, the state becomes `UPLOADED`. The LLM can inspect the remote temporary evidence branch. A later `python3 tools/next-step.py` call cleans up and returns to `IDLE`.
 
 ## Rules for agents
 
 - Prefer the standard next-step terminal workflow over manual Copy-and-Paste when complete terminal output matters.
-- Accept `done` or `d` as the normal user acknowledgement after `python tools/next-step.py` finishes.
+- Accept `done` or `d` as the normal user acknowledgement after `python3 tools/next-step.py` finishes.
 - Prefer declarative YAML workflow requests over executable ad-hoc scripts.
 - Treat evidence as temporary and bounded.
 - Do not keep raw workflow evidence permanently in `main`.

@@ -2,10 +2,12 @@
 from __future__ import annotations
 
 import datetime as dt
+import os
 import subprocess
 import sys
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
 STATE_FILE = Path(".agentic/workflow_state")
 WORKFLOW_FILE = Path(".agentic/current_work.yaml")
 BRANCH_FILE = Path("tmp/agent-evidence/latest-branch.txt")
@@ -13,6 +15,7 @@ EVIDENCE_DIR = Path("tmp/agent-evidence")
 REPORT_FILE = Path("docs/reports/CURRENT_WORKFLOW_OUTPUT.md")
 TEMP_PREFIX = "temp/workflow-evidence-"
 VALID_STATES = {"IDLE", "TEST", "UPLOAD", "CLEANUP", "REQUESTED", "RUNNING", "UPLOADED", "FAILED"}
+REQUIRED_VENV_TOOLS = (Path(".venv/bin/ruff"), Path(".venv/bin/agentic-kit"))
 
 
 def run(args: list[str], check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -25,6 +28,14 @@ def workflow_python() -> str:
     if venv_python.exists():
         return str(venv_python)
     return sys.executable
+
+
+def ensure_project_environment() -> None:
+    venv_python = Path(".venv/bin/python")
+    if not venv_python.exists():
+        run([sys.executable, "-m", "venv", ".venv"])
+    if any(not path.exists() for path in REQUIRED_VENV_TOOLS):
+        run([str(venv_python), "-m", "pip", "install", "-e", ".[dev]"])
 
 
 def read_state() -> str:
@@ -167,6 +178,8 @@ def step_idle() -> None:
 
 
 def main() -> int:
+    os.chdir(REPO_ROOT)
+    ensure_project_environment()
     state = read_state()
     print(f"workflow_state={state}")
     if state == "IDLE":

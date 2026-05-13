@@ -87,7 +87,7 @@ rules:
       - path: docs/WORKFLOW_OUTPUT_CYCLE.md
         terms:
           - Standard next-step terminal workflow
-          - python tools/next-step.py
+          - python3 tools/next-step.py
           - done
           - The short acknowledgement `d` is also valid
           - manual Copy-and-Paste blocks
@@ -105,6 +105,19 @@ rules:
           - RUNNING -> refuse duplicate execution
           - Optional shell shortcut
           - alias ns=
+
+  - id: next-step-environment-bootstrap-coverage
+    description: next-step.py environment bootstrap must stay documented and bounded.
+    documents:
+      - path: docs/WORKFLOW_OUTPUT_CYCLE.md
+        terms:
+          - Environment bootstrap
+          - missing .venv/bin/python -> create .venv with the current Python interpreter
+          - missing .venv/bin/ruff or .venv/bin/agentic-kit -> run .venv/bin/python -m pip install -e .[dev]
+          - .venv/bin/python
+          - .venv/bin/ruff
+          - .venv/bin/agentic-kit
+          - This does not activate the virtual environment in the parent shell
 
   - id: default-local-gate-workflow-coverage
     description: Default next-step gate workflow must remain documented and bounded.

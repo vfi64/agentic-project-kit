@@ -45,3 +45,47 @@ def test_idle_without_workflow_file_remains_idle(monkeypatch, tmp_path: Path) ->
 
     assert state_file.read_text(encoding="utf-8") == "IDLE\n"
     assert called == []
+
+
+def test_ensure_project_environment_creates_venv_when_missing(monkeypatch, tmp_path: Path) -> None:
+    module = _load_next_step_module()
+    calls = []
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(module.sys, "executable", "python3")
+    monkeypatch.setattr(module, "run", lambda args, check=True: calls.append(args))
+
+    module.ensure_project_environment()
+
+    assert calls == [
+        ["python3", "-m", "venv", ".venv"],
+        [".venv/bin/python", "-m", "pip", "install", "-e", ".[dev]"],
+    ]
+
+
+def test_ensure_project_environment_installs_missing_dev_tools(monkeypatch, tmp_path: Path) -> None:
+    module = _load_next_step_module()
+    calls = []
+    venv_bin = tmp_path / ".venv/bin"
+    venv_bin.mkdir(parents=True)
+    (venv_bin / "python").write_text("", encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(module, "run", lambda args, check=True: calls.append(args))
+
+    module.ensure_project_environment()
+
+    assert calls == [[".venv/bin/python", "-m", "pip", "install", "-e", ".[dev]"]]
+
+
+def test_ensure_project_environment_noops_when_tools_exist(monkeypatch, tmp_path: Path) -> None:
+    module = _load_next_step_module()
+    calls = []
+    venv_bin = tmp_path / ".venv/bin"
+    venv_bin.mkdir(parents=True)
+    for name in ["python", "ruff", "agentic-kit"]:
+        (venv_bin / name).write_text("", encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(module, "run", lambda args, check=True: calls.append(args))
+
+    module.ensure_project_environment()
+
+    assert calls == []
