@@ -330,6 +330,19 @@ The repository uses `docs/DOCUMENTATION_COVERAGE.yaml` as a machine-checkable do
 
 When adding a public command, workflow, gate, profile, policy pack, generated file, architecture concept, or release-visible feature, update the coverage matrix and the affected documentation in the same change.
 
+## Documentation mesh audit
+
+`agentic-kit doc-mesh-audit` checks machine-readable drift across the project documentation mesh. It is stricter than plain term coverage, but it is still deliberately bounded and does not claim semantic proof.
+
+The first audit slice distinguishes four document classes:
+
+- current-state documents, such as README, CHANGELOG, CITATION, pyproject, package `__version__`, STATUS, and CURRENT_HANDOFF;
+- governance documents, such as AGENTS, TEST_GATES, DOCUMENTATION_COVERAGE, sentinel, and project contract files;
+- architecture/design documents, such as ARCHITECTURE_CONTRACT, WORKFLOW_OUTPUT_CYCLE, and optional DESIGN.md;
+- historical-plan documents, such as roadmap summaries, status reports, and v0.3.0 output-repair planning files.
+
+The hard checks currently cover version mismatches, stale current-state wording, missing historical-source-of-truth banners, and release DOI list mismatches. Future repair tools should stay bounded to mechanical edits and must not rewrite semantics.
+
 ## Logging and evidence
 
 The generated `scripts/stage_recent_logs.py` script is intentionally bounded. It stages only a recent diagnostic window from known log folders into `tmp/agent-evidence`.
