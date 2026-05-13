@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Annotated
 
 import typer
 from rich.console import Console
@@ -36,8 +37,8 @@ def check_todo_command(project_root: Path = typer.Option(Path("."), "--root")) -
 
 
 def doc_mesh_audit_command(
-    project_root: Path = typer.Option(Path("."), "--root"),
-    report_path: Path | None = typer.Option(None, "--report"),
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    report_path: Annotated[Path | None, typer.Option("--report")] = None,
 ) -> None:
     """Audit cross-document state, governance, architecture, and historical-plan drift."""
     report = build_doc_mesh_report(project_root.resolve())
@@ -62,4 +63,4 @@ def _print_result(errors: list[str]) -> None:
         for error in errors:
             console.print(f"[red]- {error}[/red]")
         raise typer.Exit(code=1)
-    console.print("[bold green]Agentic project check passed[/bold green]")
+    console.print("[bold green]Agentic project check passed[/bold green]
