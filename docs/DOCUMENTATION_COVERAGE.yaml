@@ -16,6 +16,7 @@ rules:
           - agentic-kit check-docs
           - agentic-kit check-todo
           - agentic-kit doctor
+          - agentic-kit doc-mesh-audit
           - agentic-kit release-plan
           - agentic-kit release-check
           - agentic-kit post-release-check
@@ -45,10 +46,38 @@ rules:
           - GitHub integration
           - Agentic development model
           - Documentation coverage and drift checks
+          - Documentation mesh audit
           - Logging and evidence
           - Citation and archiving
           - Safety rule
           - Current status
+
+  - id: documentation-mesh-audit-coverage
+    description: Documentation mesh audit command and document taxonomy must remain visible.
+    documents:
+      - path: README.md
+        terms:
+          - Documentation mesh audit
+          - agentic-kit doc-mesh-audit
+          - current-state documents
+          - governance documents
+          - architecture/design documents
+          - historical-plan documents
+          - release DOI list mismatches
+      - path: docs/TEST_GATES.md
+        terms:
+          - Documentation Mesh Audit Gate
+          - agentic-kit doc-mesh-audit
+          - current-state documents
+          - governance documents
+          - architecture/design documents
+          - historical-plan documents
+          - release DOI list mismatches
+      - path: AGENTS.md
+        terms:
+          - Modular Implementation Rule
+          - Existing monoliths must not be allowed to grow
+          - incremental modularization
 
   - id: workflow-cli-readme-coverage
     description: Workflow CLI, state machine, and legacy entry point must remain visible.
@@ -254,10 +283,12 @@ rules:
           - agentic-kit release-plan
           - agentic-kit release-check
           - agentic-kit post-release-check
+          - agentic-kit doc-mesh-audit
           - agentic-kit check-todo
           - docs/DOCUMENTATION_COVERAGE.yaml
           - Architecture Contract Gate
           - Documentation Coverage Gate
+          - Documentation Mesh Audit Gate
           - Standard Local Gate
           - Doctor Gate
           - Release Gate

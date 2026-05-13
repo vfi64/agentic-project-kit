@@ -16,6 +16,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Documentation only | git diff, content review, and agentic-kit check-docs |
 | Architecture-relevant change | Read docs/architecture/ARCHITECTURE_CONTRACT.md; state whether the contract remains valid or is updated; run the standard local gate |
 | Documentation coverage change | Update docs/DOCUMENTATION_COVERAGE.yaml and run agentic-kit check-docs |
+| Documentation mesh / cross-document drift change | Unit tests plus agentic-kit doc-mesh-audit CLI smoke command; keep current-state, governance, architecture, and historical-plan document classes explicit |
 | Governance rule change | Rule Hardening Gate: add or update a deterministic test, coverage check, doctor check, release check, or documented review-only exception |
 | Document quality heuristic change | Unit tests plus agentic-kit check-docs; confirm that deterministic quality heuristics do not claim semantic perfection |
 | Python code | python -m pytest -q and ruff check . |
@@ -72,6 +73,19 @@ Update it when adding or changing:
 - architecture concepts, profiles, or policy packs.
 
 `agentic-kit check-docs` must fail if a required term from the coverage matrix is missing from its target document.
+
+## Documentation Mesh Audit Gate
+
+Use `agentic-kit doc-mesh-audit` when changing cross-document state, release metadata, documentation taxonomy, historical planning documents, or cross-document drift rules.
+
+The documentation mesh is split into explicit document classes:
+
+- current-state documents such as README, CHANGELOG, CITATION, pyproject, package `__version__`, STATUS, and CURRENT_HANDOFF;
+- governance documents such as AGENTS, TEST_GATES, DOCUMENTATION_COVERAGE, sentinel, and project contract files;
+- architecture/design documents such as ARCHITECTURE_CONTRACT, WORKFLOW_OUTPUT_CYCLE, and optional DESIGN.md;
+- historical-plan documents such as roadmap summaries, status reports, and v0.3.0 output-repair planning files.
+
+The hard audit checks only machine-checkable drift classes, including version mismatches, stale current-state wording, missing historical-source-of-truth banners, and release DOI list mismatches. It must not claim semantic proof of documentation quality.
 
 ## Rule Hardening Gate
 
