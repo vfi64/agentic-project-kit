@@ -66,6 +66,11 @@ _VERSION_PATTERNS: dict[str, re.Pattern[str]] = {
     "README.md": re.compile(r"Version `([0-9]+\.[0-9]+\.[0-9]+)`"),
 }
 
+_VERIFIED_DOI_PATTERN = re.compile(
+    r"(?:archived|Verified) v(?P<version>[0-9]+\.[0-9]+\.[0-9]+).*?(?P<doi>10\.5281/zenodo\.[0-9]+)",
+    re.IGNORECASE,
+)
+
 _STALE_CURRENT_STATE_MARKERS = (
     "release candidate",
     "release-preparation branch",
@@ -76,6 +81,7 @@ _STALE_CURRENT_STATE_MARKERS = (
 def build_doc_mesh_report(project_root: Path) -> DocMeshReport:
     findings: list[DocMeshFinding] = []
     versions: dict[str, str] = {}
+    contents: dict[str, str] = {}
 
     for document in DOC_MESH_DOCUMENTS:
         path = project_root / document.path
@@ -85,6 +91,7 @@ def build_doc_mesh_report(project_root: Path) -> DocMeshReport:
             continue
 
         content = path.read_text(encoding="utf-8")
+        contents[document.path] = content
         if document.historical:
             findings.extend(_check_historical_document(document.path, content))
         elif document.category == "current-state":
@@ -99,6 +106,7 @@ def build_doc_mesh_report(project_root: Path) -> DocMeshReport:
                 versions[document.path] = match.group(1)
 
     findings.extend(_check_version_consistency(versions))
+    findings.extend(_check_release_doi_consistency(contents))
     return DocMeshReport(documents=DOC_MESH_DOCUMENTS, findings=tuple(findings))
 
 
@@ -156,6 +164,36 @@ def _check_version_consistency(versions: dict[str, str]) -> list[DocMeshFinding]
                     "version-mismatch",
                     path,
                     f"version {version!r} does not match expected version {expected!r}",
+                )
+            )
+    return findings
+
+
+def _extract_verified_dois(content: str) -> dict[str, str]:
+    return {match.group("version"): match.group("doi") for match in _VERIFIED_DOI_PATTERN.finditer(content)}
+
+
+def _check_release_doi_consistency(contents: dict[str, str]) -> list[DocMeshFinding]:
+    findings: list[DocMeshFinding] = []
+    readme = contents.get("README.md", "")
+    sources = {
+        "CHANGELOG.md": contents.get("CHANGELOG.md", ""),
+        "CITATION.cff": contents.get("CITATION.cff", ""),
+        "docs/STATUS.md": contents.get("docs/STATUS.md", ""),
+        "docs/handoff/CURRENT_HANDOFF.md": contents.get("docs/handoff/CURRENT_HANDOFF.md", ""),
+    }
+    expected: dict[str, str] = {}
+    for content in sources.values():
+        expected.update(_extract_verified_dois(content))
+
+    readme_dois = _extract_verified_dois(readme)
+    for version, doi in sorted(expected.items()):
+        if readme_dois.get(version) != doi:
+            findings.append(
+                DocMeshFinding(
+                    "release-doi-list-mismatch",
+                    "README.md",
+                    f"README DOI list missing or mismatching v{version} -> {doi}",
                 )
             )
     return findings
