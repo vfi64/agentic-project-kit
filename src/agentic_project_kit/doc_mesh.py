@@ -163,6 +163,14 @@ _STALE_CURRENT_STATE_MARKERS = (
     "must wait for post-release verification",
 )
 
+_STALE_MARKER_DOCUMENTS = frozenset(
+    {
+        "README.md",
+        "docs/STATUS.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+    }
+)
+
 _REPAIR_POLICY: dict[str, tuple[str, bool, Literal["automatic", "manual"], str]] = {
     "historical-banner-missing": (
         "insert_historical_banner",
@@ -219,7 +227,7 @@ def build_doc_mesh_report(project_root: Path) -> DocMeshReport:
         contents[document.path] = content
         if document.historical:
             findings.extend(_check_historical_document(document.path, content))
-        elif document.category == "current-state":
+        elif document.path in _STALE_MARKER_DOCUMENTS:
             findings.extend(_check_current_state_document(document.path, content))
 
         pattern = _VERSION_PATTERNS.get(document.path)

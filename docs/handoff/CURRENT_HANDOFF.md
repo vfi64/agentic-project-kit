@@ -1,23 +1,23 @@
-Current version: 0.3.3
+Current version: 0.3.4
 
 # Current Handoff
 
 Status-date: 2026-05-13
 Project: agentic-project-kit
-Branch: docs/doc-mesh-gate-policy
+Branch: release/prepare-v0.3.4
 Base branch: main
 
 ## Current Goal
 
-Document the adoption policy for `agentic-kit doc-mesh-audit` after PR #143:
+Prepare v0.3.4 release metadata for the documentation-mesh audit line of work:
 
-- keep it as a targeted special gate first;
-- require it for documentation-mesh, release, handoff, governance, roadmap, DOI/version, documentation-coverage, and cross-document drift-rule changes;
-- do not add it immediately to every default `ns` workflow run;
-- reassess later for integration into `agentic-kit doctor` after several successful PRs without false positives;
-- reassess default `ns` integration only after the `doctor` integration decision.
+- `agentic-kit doc-mesh-audit` as targeted documentation mesh drift audit;
+- JSON report output for machine-readable audit evidence;
+- bounded repair-plan output;
+- `agentic-kit doc-mesh-repair` for the first safe automatic repair class: inserting missing historical-source-of-truth banners;
+- documented adoption policy: targeted special gate first, possible later promotion to `doctor`, then possible default `ns` integration only after stabilization.
 
-This branch must not implement a code change. It records the policy decision and the next safe evaluation path.
+No v0.3.4 version DOI should be inserted before Zenodo post-release verification.
 
 ## Current Repository State
 
@@ -31,11 +31,15 @@ Completed changes included in the v0.3.3 scope:
 - PR #140 documented explicit `FAILED` next-step handling as a stop-and-diagnose state and added documentation coverage.
 - PR #141 prepared and released v0.3.3.
 
-Post-v0.3.3 completed work:
+Post-v0.3.3 completed work prepared for v0.3.4:
 
 - PR #143 added the first bounded `agentic-kit doc-mesh-audit` slice with modular core logic, CLI adapter, tests, README/TEST_GATES/DOCUMENTATION_COVERAGE coverage, README v0.3.2 DOI restoration, and the modular implementation rule.
+- PR #144 documented the targeted-gate adoption policy for `doc-mesh-audit`.
+- PR #145 added JSON report output for `agentic-kit doc-mesh-audit --report`.
+- PR #146 added bounded repair-plan output for `agentic-kit doc-mesh-audit --repair-plan`.
+- PR #147 added `agentic-kit doc-mesh-repair` for missing historical-source-of-truth banners.
 
-Release evidence:
+Release evidence available before v0.3.4:
 
 - GitHub Release v0.3.3 exists.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
@@ -59,6 +63,8 @@ The project now has `agentic-kit doc-mesh-audit`. It is a deterministic bounded 
 - release DOI list mismatches;
 - explicit document taxonomy across current-state, governance, architecture/design, and historical-plan documents.
 
+It can write a JSON report and a bounded repair plan. `agentic-kit doc-mesh-repair` can apply only the currently safe automatic repair class: inserting historical-source-of-truth banners into known historical-plan documents. Version, DOI, stale-state, and missing-document findings remain manual review items.
+
 It does not prove semantic completeness or overall documentation quality.
 
 Adoption policy:
@@ -75,7 +81,7 @@ Do not add the audit immediately to every default current-branch local gate. It 
 
 1. targeted gate use across a few PRs;
 2. collect real failures and false positives;
-3. consider structured report output and bounded repairs;
+3. use structured reports and bounded repairs for review and maintenance;
 4. integrate into `agentic-kit doctor` if stable;
 5. only then consider unconditional default `ns` workflow integration.
 
@@ -106,6 +112,7 @@ ruff check .
 agentic-kit check-docs
 agentic-kit doctor
 agentic-kit doc-mesh-audit
+agentic-kit release-check --version 0.3.4
 ```
 
 The normal local workflow shortcut remains:
@@ -120,11 +127,13 @@ Then reply in chat with `d` after evidence upload. If the workflow enters `FAILE
 
 Prepared files should include:
 
-- `docs/STATUS.md` with the post-PR #143 documentation-mesh audit state and targeted-gate adoption policy.
-- `docs/handoff/CURRENT_HANDOFF.md` with the same next-safe-step context.
-
-No code change is intended in this slice.
+- `pyproject.toml` and package `__version__` bumped to 0.3.4.
+- `CHANGELOG.md` with v0.3.4 release notes.
+- `README.md` updated for doc-mesh reports, repair planning, and current v0.3.4 release-candidate wording.
+- `CITATION.cff` version bumped to 0.3.4 and v0.3.2/v0.3.3 DOI comments preserved.
+- `docs/STATUS.md` and this handoff updated for the release branch.
+- `docs/DOCUMENTATION_COVERAGE.yaml` updated to cover v0.3.4 and `agentic-kit doc-mesh-repair` visibility.
 
 ## Next Safe Step
 
-Run the standard local gate on `docs/doc-mesh-gate-policy`. Because this branch changes documentation-mesh policy, also run `agentic-kit doc-mesh-audit`. If green, open and merge the focused documentation policy PR.
+Run the standard local gate on `release/prepare-v0.3.4`. Because this branch changes release metadata and documentation-mesh documentation, also run `agentic-kit doc-mesh-audit` and `agentic-kit release-check --version 0.3.4`. If green, open and merge the focused release metadata PR.

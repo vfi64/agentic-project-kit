@@ -17,6 +17,7 @@ rules:
           - agentic-kit check-todo
           - agentic-kit doctor
           - agentic-kit doc-mesh-audit
+          - agentic-kit doc-mesh-repair
           - agentic-kit release-plan
           - agentic-kit release-check
           - agentic-kit post-release-check
@@ -59,11 +60,13 @@ rules:
         terms:
           - Documentation mesh audit
           - agentic-kit doc-mesh-audit
+          - agentic-kit doc-mesh-repair
           - current-state documents
           - governance documents
           - architecture/design documents
           - historical-plan documents
           - release DOI list mismatches
+          - historical-source-of-truth banners
       - path: docs/TEST_GATES.md
         terms:
           - Documentation Mesh Audit Gate
@@ -203,9 +206,9 @@ rules:
     documents:
       - path: README.md
         terms:
-          - Version `0.3.3`
-          - v0.3.1
-          - 10.5281/zenodo.20144969
+          - Version `0.3.4`
+          - v0.3.3
+          - 10.5281/zenodo.20151924
 
   - id: example-workflow-coverage
     description: README must point users to the minimal generated-project example.
