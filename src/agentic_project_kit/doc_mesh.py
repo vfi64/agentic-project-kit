@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import json
 import re
-from typing import Any
+from typing import Any, Literal
 
 
 @dataclass(frozen=True)
@@ -51,6 +51,38 @@ class DocMeshReport:
             "ok": self.ok,
             "documents": [document.to_dict() for document in self.documents],
             "findings": [finding.to_dict() for finding in self.findings],
+        }
+
+
+@dataclass(frozen=True)
+class DocMeshRepair:
+    code: str
+    path: str
+    action: str
+    safe: bool
+    mode: Literal["automatic", "manual"]
+    reason: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "code": self.code,
+            "path": self.path,
+            "action": self.action,
+            "safe": self.safe,
+            "mode": self.mode,
+            "reason": self.reason,
+        }
+
+
+@dataclass(frozen=True)
+class DocMeshRepairPlan:
+    ok: bool
+    repairs: tuple[DocMeshRepair, ...]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "ok": self.ok,
+            "repairs": [repair.to_dict() for repair in self.repairs],
         }
 
 
@@ -101,6 +133,45 @@ _STALE_CURRENT_STATE_MARKERS = (
     "must wait for post-release verification",
 )
 
+_REPAIR_POLICY: dict[str, tuple[str, bool, Literal["automatic", "manual"], str]] = {
+    "historical-banner-missing": (
+        "insert_historical_banner",
+        True,
+        "automatic",
+        "Historical banner insertion is mechanical and does not alter semantic content.",
+    ),
+    "version-mismatch": (
+        "align_version_marker",
+        False,
+        "manual",
+        "Version alignment can be mechanical later, but the authoritative source must be reviewed first.",
+    ),
+    "release-doi-list-mismatch": (
+        "sync_release_doi_list",
+        False,
+        "manual",
+        "DOI list synchronization must preserve release evidence and should be reviewed before file edits.",
+    ),
+    "stale-current-state-marker": (
+        "manual_review_required",
+        False,
+        "manual",
+        "Stale wording may require contextual rewriting rather than mechanical deletion.",
+    ),
+    "missing-document": (
+        "manual_review_required",
+        False,
+        "manual",
+        "Missing documents require a maintainer decision before creation.",
+    ),
+    "missing-version": (
+        "manual_review_required",
+        False,
+        "manual",
+        "Missing version markers require a maintainer decision about the correct source of truth.",
+    ),
+}
+
 
 def build_doc_mesh_report(project_root: Path) -> DocMeshReport:
     findings: list[DocMeshFinding] = []
@@ -134,6 +205,11 @@ def build_doc_mesh_report(project_root: Path) -> DocMeshReport:
     return DocMeshReport(documents=DOC_MESH_DOCUMENTS, findings=tuple(findings))
 
 
+def build_doc_mesh_repair_plan(report: DocMeshReport) -> DocMeshRepairPlan:
+    repairs = tuple(_repair_for_finding(finding) for finding in report.findings)
+    return DocMeshRepairPlan(ok=not repairs, repairs=repairs)
+
+
 def render_doc_mesh_report(report: DocMeshReport) -> str:
     lines = ["Documentation mesh audit", ""]
     lines.append("Documents:")
@@ -153,9 +229,51 @@ def render_doc_mesh_report(report: DocMeshReport) -> str:
     return "\n".join(lines)
 
 
+def render_doc_mesh_repair_plan(plan: DocMeshRepairPlan) -> str:
+    lines = ["Documentation mesh repair plan", ""]
+    if plan.ok:
+        lines.append("No repairs planned.")
+        lines.append("")
+        lines.append("Overall: PASS")
+        return "\n".join(lines)
+
+    lines.append("Repairs:")
+    for repair in plan.repairs:
+        safety = "safe" if repair.safe else "manual"
+        lines.append(f"- [{repair.code}] {repair.path}: {repair.action} ({safety})")
+    lines.append("")
+    lines.append("Overall: REVIEW")
+    return "\n".join(lines)
+
+
 def write_doc_mesh_json_report(report: DocMeshReport, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(report.to_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def write_doc_mesh_repair_plan(plan: DocMeshRepairPlan, output_path: Path) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(plan.to_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _repair_for_finding(finding: DocMeshFinding) -> DocMeshRepair:
+    action, safe, mode, reason = _REPAIR_POLICY.get(
+        finding.code,
+        (
+            "manual_review_required",
+            False,
+            "manual",
+            "Unknown finding code requires manual review before any repair is attempted.",
+        ),
+    )
+    return DocMeshRepair(
+        code=finding.code,
+        path=finding.path,
+        action=action,
+        safe=safe,
+        mode=mode,
+        reason=reason,
+    )
 
 
 def _check_historical_document(path: str, content: str) -> list[DocMeshFinding]:
