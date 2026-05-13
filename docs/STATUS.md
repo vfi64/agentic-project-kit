@@ -1,11 +1,11 @@
-Current version: 0.3.3
+Current version: 0.3.4
 
 # Project Status
 
 Status-date: 2026-05-13
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/doc-mesh-gate-policy
+Current work branch: release/prepare-v0.3.4
 
 ## Purpose
 
@@ -15,25 +15,25 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-v0.3.3 is released and post-release verified.
+v0.3.4 is the current release-preparation branch.
 
-Recent completed work since v0.3.2:
+Recent completed work since v0.3.3:
 
-- PR #134 documented the standard `python tools/next-step.py` terminal workflow and `done` / `d` acknowledgement pattern.
-- PR #136 fixed package `__version__` drift and extended `agentic-kit doctor` so package-version drift is detected.
-- PR #139 added project-local environment bootstrap to `tools/next-step.py` so `.venv` and missing dev tools are created before running local workflow gates.
-- PR #140 documented explicit `FAILED` next-step handling as a stop-and-diagnose state and added documentation coverage for it.
-- PR #141 prepared and released v0.3.3.
-- PR #143 added the first bounded `agentic-kit doc-mesh-audit` slice with tests, documentation coverage, and the modular implementation rule.
+- PR #143 added the first bounded `agentic-kit doc-mesh-audit` slice with tests, documentation coverage, README v0.3.2 DOI restoration, and the modular implementation rule.
+- PR #144 documented the adoption policy: targeted special gate first, possible later promotion to `doctor`, and only then possible default `ns` integration after stabilization.
+- PR #145 added JSON report output for `agentic-kit doc-mesh-audit --report`.
+- PR #146 added bounded documentation mesh repair planning through `agentic-kit doc-mesh-audit --repair-plan`.
+- PR #147 added `agentic-kit doc-mesh-repair` for the first safe automatic repair class: inserting missing historical-source-of-truth banners into historical-plan documents.
 
-v0.3.3 release scope:
+v0.3.4 release scope:
 
-- Package-version drift detection.
-- `ns` / `next-step.py` workflow usability.
-- Project-local workflow environment bootstrap.
-- Explicit `FAILED` workflow-state handling.
+- Documentation mesh audit.
+- Machine-readable doc-mesh JSON report output.
+- Bounded doc-mesh repair planning.
+- First safe automatic historical-banner repair.
+- Continued documentation of the targeted-gate adoption policy.
 
-v0.3.3 release evidence:
+v0.3.3 release evidence remains verified:
 
 - GitHub Release v0.3.3 exists.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
@@ -45,6 +45,10 @@ Documentation-mesh audit state:
 
 - `agentic-kit doc-mesh-audit` exists and currently checks machine-readable drift classes: version mismatch, stale current-state wording, missing historical-source-of-truth banners, and release DOI list mismatches.
 - The audit distinguishes current-state documents, governance documents, architecture/design documents, and historical-plan documents.
+- The audit can write machine-readable JSON reports.
+- The audit can write bounded repair plans.
+- `agentic-kit doc-mesh-repair` can insert missing historical-source-of-truth banners into known historical-plan documents.
+- Version, DOI, stale-state, and missing-document findings remain manual review items.
 - The audit is intentionally deterministic and bounded. It does not claim semantic proof of documentation quality.
 
 Adoption policy for `doc-mesh-audit`:
@@ -63,8 +67,8 @@ Near-term documentation-governance roadmap:
 
 1. Use `agentic-kit doc-mesh-audit` manually for documentation-mesh, release, handoff, governance, and roadmap changes.
 2. Collect failure classes and false positives across a few PRs.
-3. Add structured report output if needed before broad workflow integration.
-4. Add bounded repair tools only for mechanical edits, for example aligning version/DOI lists, inserting historical banners, or updating known current-state fields.
+3. Use structured JSON reports for review and CI-friendly evidence.
+4. Keep bounded repair tools limited to mechanical edits, such as historical banners or later carefully scoped version/DOI list alignment.
 5. Keep semantic review advisory and separate from hard gates unless converted into deterministic rules.
 
 Project-level state documentation is present on main:
@@ -100,12 +104,13 @@ Project health diagnostics are CLI-supported:
 
 ## Current Goal
 
-Document the adoption policy for `agentic-kit doc-mesh-audit`: targeted special gate first, possible later promotion to `doctor`, and only then possible integration into the default `ns` workflow.
+Prepare v0.3.4 release metadata for the documentation-mesh audit, JSON report, repair-plan, and historical-banner repair work.
 
 ## Current Blockers
 
-- Local gates must pass on `docs/doc-mesh-gate-policy`.
-- No code change should be introduced in this slice.
+- Local gates must pass on `release/prepare-v0.3.4`.
+- `agentic-kit release-check --version 0.3.4` must pass before tagging.
+- No v0.3.4 DOI should be inserted before Zenodo post-release verification.
 
 ## Live Status Commands
 
@@ -119,8 +124,9 @@ ruff check .
 agentic-kit check-docs
 agentic-kit doctor
 agentic-kit doc-mesh-audit
+agentic-kit release-check --version 0.3.4
 ```
 
 ## Next Safe Step
 
-Run the standard local gate on `docs/doc-mesh-gate-policy`. Because this is a documentation-mesh policy change, also run `agentic-kit doc-mesh-audit`. If green, open and merge the focused documentation policy PR.
+Run the standard local gate on `release/prepare-v0.3.4`. Because this is a release and documentation-mesh metadata change, also run `agentic-kit doc-mesh-audit` and `agentic-kit release-check --version 0.3.4`. If green, open and merge the focused release metadata PR.
