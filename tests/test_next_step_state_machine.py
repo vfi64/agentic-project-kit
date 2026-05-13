@@ -30,6 +30,30 @@ def test_idle_with_ready_workflow_file_remains_idle(monkeypatch, tmp_path: Path)
     assert called == []
 
 
+def test_request_workflow_marks_current_work_requested(monkeypatch, tmp_path: Path) -> None:
+    module = _load_next_step_module()
+    workflow_file = tmp_path / "current_work.yaml"
+    workflow_file.write_text("name: demo\nstate: READY\nsteps:\n  - doctor\n", encoding="utf-8")
+
+    monkeypatch.setattr(module, "WORKFLOW_FILE", workflow_file)
+
+    module.request_workflow()
+
+    assert workflow_file.read_text(encoding="utf-8") == "name: demo\nstate: REQUESTED\nsteps:\n  - doctor\n"
+
+
+def test_set_workflow_request_state_inserts_missing_state(monkeypatch, tmp_path: Path) -> None:
+    module = _load_next_step_module()
+    workflow_file = tmp_path / "current_work.yaml"
+    workflow_file.write_text("name: demo\nsteps:\n  - doctor\n", encoding="utf-8")
+
+    monkeypatch.setattr(module, "WORKFLOW_FILE", workflow_file)
+
+    module.set_workflow_request_state("REQUESTED")
+
+    assert workflow_file.read_text(encoding="utf-8") == "name: demo\nstate: REQUESTED\nsteps:\n  - doctor\n"
+
+
 def test_idle_with_requested_workflow_file_starts_workflow(monkeypatch, tmp_path: Path) -> None:
     module = _load_next_step_module()
     workflow_file = tmp_path / "current_work.yaml"
