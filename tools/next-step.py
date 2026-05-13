@@ -148,11 +148,19 @@ def step_failed() -> None:
     print("No automatic cleanup is performed from FAILED.")
 
 
+def step_idle() -> None:
+    print("No workflow action requested.")
+    if WORKFLOW_FILE.exists():
+        print(f"Current workflow request file: {WORKFLOW_FILE}")
+        print("To run it: agentic-kit workflow request && python tools/next-step.py")
+    print("Chat reply after completion: done or d")
+
+
 def main() -> int:
     state = read_state()
     print(f"workflow_state={state}")
     if state == "IDLE":
-        print("No workflow action requested.")
+        step_idle()
     elif state == "TEST":
         step_test()
     elif state == "UPLOAD":
