@@ -20,6 +20,13 @@ def run(args: list[str], check: bool = True) -> subprocess.CompletedProcess[str]
     return subprocess.run(args, text=True, check=check)
 
 
+def workflow_python() -> str:
+    venv_python = Path(".venv/bin/python")
+    if venv_python.exists():
+        return str(venv_python)
+    return sys.executable
+
+
 def read_state() -> str:
     if not STATE_FILE.exists():
         raise SystemExit("Missing .agentic/workflow_state")
@@ -124,7 +131,7 @@ def step_requested() -> None:
     write_state("RUNNING")
     evidence = timestamped_evidence_path()
     try:
-        run([sys.executable, "tools/workflow_runner.py", str(WORKFLOW_FILE), str(evidence)])
+        run([workflow_python(), "tools/workflow_runner.py", str(WORKFLOW_FILE), str(evidence)])
     except subprocess.CalledProcessError:
         run(["git", "switch", control_branch], check=False)
         write_current_report(evidence, "Declarative workflow failed. Evidence preserved for diagnosis.")
