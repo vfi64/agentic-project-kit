@@ -6,8 +6,11 @@ Use the workflow CLI or compatibility entrypoint as the normal local entrypoint 
 
 ## Current safe default
 
-- `IDLE`: do not start work automatically.
-- When `.agentic/current_work.yaml` exists, `python tools/next-step.py` reports the current workflow request file and the exact command needed to start it.
+- `IDLE`: starts `.agentic/current_work.yaml` automatically when that file exists.
+- `IDLE` without `.agentic/current_work.yaml`: does not start work.
+- `UPLOADED`: performs bounded cleanup of the temporary evidence branch.
+- `FAILED`: preserves evidence and never cleans up automatically.
+- `RUNNING`: refuses to start a second workflow automatically.
 
 ## Standard next-step terminal workflow
 
@@ -28,6 +31,40 @@ The short acknowledgement `d` is also valid. The assistant then evaluates the wo
 
 This keeps routine work out of long manual Copy-and-Paste blocks. Use full copied terminal output only when the local workflow did not provide enough bounded evidence for review.
 
+## Single-command state behavior
+
+`tools/next-step.py` branches by `.agentic/workflow_state`:
+
+```text
+IDLE + .agentic/current_work.yaml -> REQUESTED -> run workflow -> upload evidence -> UPLOADED
+UPLOADED -> cleanup temporary evidence branch -> IDLE
+FAILED -> preserve evidence; no automatic cleanup
+RUNNING -> refuse duplicate execution
+TEST/UPLOAD/CLEANUP -> legacy compatibility cycle
+```
+
+This means routine work uses the same command for validation and cleanup:
+
+```bash
+python tools/next-step.py
+```
+
+Then reply in chat with `done` or `d`.
+
+## Optional shell shortcut
+
+A local zsh alias or function can shorten the command to `ns`. This is local shell configuration, not repository state. A typical user setup is:
+
+```zsh
+alias ns='cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit && python tools/next-step.py'
+```
+
+After adding that alias to `~/.zshrc`, routine work becomes:
+
+```zsh
+ns
+```
+
 ## Default current-branch local gate workflow
 
 `.agentic/current_work.yaml` defines a deterministic default current-branch local gate workflow named `default-current-branch-local-gate`.
@@ -43,13 +80,7 @@ check_docs
 doctor
 ```
 
-It does not switch to `main`, so it can validate either `main` or the current PR branch. This is the standard evidence-producing workflow for routine chat-assisted validation. To run it from `IDLE`, use:
-
-```bash
-agentic-kit workflow request && python tools/next-step.py
-```
-
-After the command finishes, reply in chat with `done` or `d`. The assistant can then inspect the workflow state and the current report pointer.
+It does not switch to `main`, so it can validate either `main` or the current PR branch. This is the standard evidence-producing workflow for routine chat-assisted validation.
 
 ## Primary workflow CLI
 
@@ -105,7 +136,7 @@ A newer, safer workflow uses a declarative allowlisted request file:
 
 Allowed declarative steps are implemented in `tools/workflow_runner.py`. The runner executes command lists directly and does not use shell snippets.
 
-The current state is stored in `.agentic/workflow_state`. `IDLE` is the safe default and never starts a run.
+The current state is stored in `.agentic/workflow_state`. `IDLE` is the safe default and only starts a run when `.agentic/current_work.yaml` exists.
 
 ## Starting a legacy cycle intentionally
 
@@ -123,11 +154,10 @@ After the `TEST`, `UPLOAD`, and `CLEANUP` steps complete, the script returns the
 Set `.agentic/current_work.yaml` to the desired allowlisted task, then run:
 
 ```bash
-agentic-kit workflow request
-agentic-kit workflow run
+python tools/next-step.py
 ```
 
-After the `REQUESTED` step succeeds, the state becomes `UPLOADED`. The LLM can inspect the remote temporary evidence branch. A later `agentic-kit workflow cleanup` call cleans up and returns to `IDLE`.
+After the `IDLE` step succeeds, the state becomes `UPLOADED`. The LLM can inspect the remote temporary evidence branch. A later `python tools/next-step.py` call cleans up and returns to `IDLE`.
 
 ## Rules for agents
 

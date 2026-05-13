@@ -28,6 +28,13 @@ class WorkflowTimeout(WorkflowFailure):
     pass
 
 
+def _venv_executable(name: str) -> str:
+    candidate = Path(".venv/bin") / name
+    if candidate.exists():
+        return str(candidate)
+    return name
+
+
 def load_workflow(path: Path) -> dict[str, Any]:
     if not path.exists():
         raise WorkflowFailure(f"Missing workflow request: {path}")
@@ -58,11 +65,11 @@ def _step_command(step: Any, workflow: dict[str, Any]) -> list[str]:
         if step == "pytest":
             return [sys.executable, "-m", "pytest", "-q"]
         if step == "ruff_check":
-            return ["ruff", "check", "."]
+            return [_venv_executable("ruff"), "check", "."]
         if step == "check_docs":
-            return ["agentic-kit", "check-docs"]
+            return [_venv_executable("agentic-kit"), "check-docs"]
         if step == "doctor":
-            return ["agentic-kit", "doctor"]
+            return [_venv_executable("agentic-kit"), "doctor"]
     if isinstance(step, dict) and len(step) == 1:
         name, config = next(iter(step.items()))
         if name == "gh_pr_checks":

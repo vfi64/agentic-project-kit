@@ -93,6 +93,19 @@ rules:
           - manual Copy-and-Paste blocks
           - compatibility bridge
 
+  - id: single-command-next-step-coverage
+    description: next-step.py must document its single-command state behavior.
+    documents:
+      - path: docs/WORKFLOW_OUTPUT_CYCLE.md
+        terms:
+          - Single-command state behavior
+          - IDLE + .agentic/current_work.yaml -> REQUESTED -> run workflow -> upload evidence -> UPLOADED
+          - UPLOADED -> cleanup temporary evidence branch -> IDLE
+          - FAILED -> preserve evidence; no automatic cleanup
+          - RUNNING -> refuse duplicate execution
+          - Optional shell shortcut
+          - alias ns=
+
   - id: default-local-gate-workflow-coverage
     description: Default next-step gate workflow must remain documented and bounded.
     documents:
@@ -100,7 +113,6 @@ rules:
         terms:
           - Default current-branch local gate workflow
           - default-current-branch-local-gate
-          - agentic-kit workflow request && python tools/next-step.py
           - pytest
           - ruff_check
           - check_docs
