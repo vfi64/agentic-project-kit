@@ -4,12 +4,12 @@ Current version: 0.3.5
 
 Status-date: 2026-05-13
 Project: agentic-project-kit
-Branch: release/prepare-v0.3.5
+Branch: post-release/record-v0.3.5-doi
 Base branch: main
 
 ## Current Goal
 
-Prepare v0.3.5 release metadata for the documentation-mesh release-history classification and explicit next-step request workflow hardening:
+Record verified v0.3.5 DOI metadata after post-release Zenodo verification:
 
 - `agentic-kit doc-mesh-audit` as targeted documentation mesh drift audit;
 - JSON report output for machine-readable audit evidence;
@@ -17,7 +17,7 @@ Prepare v0.3.5 release metadata for the documentation-mesh release-history class
 - `agentic-kit doc-mesh-repair` for the first safe automatic repair class: inserting missing historical-source-of-truth banners;
 - documented adoption policy: targeted special gate first, possible later promotion to `doctor`, then possible default `ns` integration only after stabilization.
 
-No v0.3.5 version DOI should be inserted before Zenodo post-release verification.
+v0.3.5 post-release verification is complete. README and CITATION may now record the verified version DOI `10.5281/zenodo.20169965`.
 
 ## Current Repository State
 
@@ -39,13 +39,13 @@ Post-v0.3.3 completed work prepared for v0.3.5:
 - PR #146 added bounded repair-plan output for `agentic-kit doc-mesh-audit --repair-plan`.
 - PR #147 added `agentic-kit doc-mesh-repair` for missing historical-source-of-truth banners.
 
-Release evidence available before v0.3.5:
+v0.3.5 release evidence is verified:
 
-- GitHub Release v0.3.3 exists.
+- GitHub Release v0.3.5 exists.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
-- Verified v0.3.3 version DOI: `10.5281/zenodo.20151924`.
-- `agentic-kit post-release-check --version 0.3.3` passed.
-- post-release Zenodo verification is complete for v0.3.3.
+- Verified v0.3.5 version DOI: `10.5281/zenodo.20169965`.
+- `agentic-kit post-release-check --version 0.3.5` passed.
+- post-release Zenodo verification is complete for v0.3.5.
 
 Current project-health baseline:
 
@@ -112,7 +112,7 @@ ruff check .
 agentic-kit check-docs
 agentic-kit doctor
 agentic-kit doc-mesh-audit
-agentic-kit release-check --version 0.3.5
+agentic-kit post-release-check --version 0.3.5
 ```
 
 The normal local workflow shortcut remains:
@@ -128,12 +128,11 @@ Then reply in chat with `d` after evidence upload. If the workflow enters `FAILE
 Prepared files should include:
 
 - `pyproject.toml` and package `__version__` bumped to 0.3.5.
-- `CHANGELOG.md` with v0.3.5 release notes.
-- `README.md` updated for doc-mesh reports, repair planning, and current v0.3.5 release-candidate wording.
-- `CITATION.cff` version bumped to 0.3.5 and v0.3.2/v0.3.3 DOI comments preserved.
-- `docs/STATUS.md` and this handoff updated for the release branch.
-- `docs/DOCUMENTATION_COVERAGE.yaml` updated to cover v0.3.5 and `agentic-kit doc-mesh-repair` visibility.
+- `README.md` records the verified v0.3.5 version DOI.
+- `CITATION.cff` records the verified v0.3.5 version DOI comment.
+- `docs/STATUS.md` and this handoff reflect post-release verification.
+- No release version bump or tag change is part of this branch.
 
 ## Next Safe Step
 
-Run the standard local gate on `release/prepare-v0.3.5`. Because this branch changes release metadata and documentation-mesh documentation, also run `agentic-kit doc-mesh-audit` and `agentic-kit release-check --version 0.3.5`. If green, open and merge the focused release metadata PR.
+Run the standard local gate on `post-release/record-v0.3.5-doi`. Because this branch records post-release DOI metadata, also run `agentic-kit doc-mesh-audit` and `agentic-kit post-release-check --version 0.3.5`. If green, open and merge the focused post-release DOI metadata PR.
