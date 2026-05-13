@@ -153,7 +153,7 @@ Agentic project doctor report for /path/to/project
 [PASS] policy pack checks: active: starter, solo-maintainer
 [PASS] documentation gates: passed
 [PASS] todo gates: passed
-[PASS] version drift: project state matches version 0.3.3
+[PASS] version drift: project state matches version 0.3.4
 
 Overall: PASS
 ```
@@ -222,13 +222,13 @@ docs/output-contracts/default-answer.yaml
 Use `agentic-kit release-plan` before preparing a release:
 
 ```bash
-agentic-kit release-plan --version 0.3.3
+agentic-kit release-plan --version 0.3.4
 ```
 
 Use `agentic-kit release-check` before tagging:
 
 ```bash
-agentic-kit release-check --version 0.3.3
+agentic-kit release-check --version 0.3.4
 ```
 
 These commands help prevent release-state drift between `pyproject.toml`, `CHANGELOG.md`, project state files, local tags, remote tags, GitHub releases, and citation metadata.
@@ -238,7 +238,7 @@ This post-release command is separate from release-check: `release-check` is the
 Use `agentic-kit post-release-check` after publishing a GitHub release:
 
 ```bash
-agentic-kit post-release-check --version 0.3.3
+agentic-kit post-release-check --version 0.3.4
 ```
 
 This command checks that the GitHub release exists and then looks for a verified Zenodo version record derived from the DOI in `CITATION.cff`. If Zenodo has not archived the release yet, the command reports `WAITING` and leaves README/CITATION DOI metadata unchanged. It is intentionally separate from `release-check`, because `release-check` is a pre-release gate that expects the tag and GitHub release to be unused.
@@ -341,7 +341,13 @@ The first audit slice distinguishes four document classes:
 - architecture/design documents, such as ARCHITECTURE_CONTRACT, WORKFLOW_OUTPUT_CYCLE, and optional DESIGN.md;
 - historical-plan documents, such as roadmap summaries, status reports, and v0.3.0 output-repair planning files.
 
-The hard checks currently cover version mismatches, stale current-state wording, missing historical-source-of-truth banners, and release DOI list mismatches. Future repair tools should stay bounded to mechanical edits and must not rewrite semantics.
+The hard checks currently cover version mismatches, stale current-state wording, missing historical-source-of-truth banners, and release DOI list mismatches.
+
+`agentic-kit doc-mesh-audit --report doc-mesh-report.json` writes a machine-readable JSON report for CI, review tools, or later workflow evidence.
+
+`agentic-kit doc-mesh-audit --repair-plan doc-mesh-repair-plan.json` writes a bounded repair plan. `agentic-kit doc-mesh-repair` currently applies only one safe automatic repair class: inserting missing historical-source-of-truth banners into known historical-plan documents. Version, DOI, stale-state, and missing-document findings remain manual review items.
+
+Future repair tools should stay bounded to mechanical edits and must not rewrite semantics.
 
 ## Logging and evidence
 
@@ -435,7 +441,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.3` is the current patch release covering package-version drift detection, the documented `ns` / `next-step.py` terminal workflow, project-local workflow environment bootstrap, and explicit `FAILED` stop-and-diagnose handling.
+Version `0.3.4` is the current release candidate covering the documentation mesh audit, machine-readable doc-mesh reports, bounded doc-mesh repair planning, and the first safe automatic historical-banner repair.
 
 This repository has maintainer-owned GitHub releases and verified Zenodo archive records. Verified version-specific DOIs:
 
@@ -450,4 +456,4 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - v0.3.2: `10.5281/zenodo.20145114`
 - v0.3.3: `10.5281/zenodo.20151924`
 
-Near-term documentation-governance work: audit the full project documentation mesh for currency, redundancy, consistency, deterministic auto-update opportunities, automatic tests, and bounded repair tools. The current `check-docs` coverage matrix is useful, but it is not yet a full proof that all state, release, roadmap, handoff, README, and architecture documents agree semantically.
+Near-term documentation-governance work: stabilize `agentic-kit doc-mesh-audit` as a targeted special gate, collect false positives, then decide whether to promote it into `agentic-kit doctor` before any unconditional default `ns` integration.
