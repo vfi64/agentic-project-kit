@@ -441,7 +441,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.4` is the current release candidate covering the documentation mesh audit, machine-readable doc-mesh reports, bounded doc-mesh repair planning, and the first safe automatic historical-banner repair.
+Version `0.3.4` is the current release line covering the documentation mesh audit, machine-readable doc-mesh reports, bounded doc-mesh repair planning, and the first safe automatic historical-banner repair.
 
 This repository has maintainer-owned GitHub releases and verified Zenodo archive records. Verified version-specific DOIs:
 
