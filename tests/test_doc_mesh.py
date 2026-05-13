@@ -131,6 +131,10 @@ def test_doc_mesh_json_report_output_contains_stable_shape(tmp_path: Path) -> No
     payload = json.loads(output_path.read_text(encoding="utf-8"))
     assert payload["ok"] is False
     assert payload["documents"]
+    documents = {document["path"]: document for document in payload["documents"]}
+    assert documents["CHANGELOG.md"]["category"] == "release-history"
+    assert documents["CHANGELOG.md"]["required"] is True
+    assert documents["CHANGELOG.md"]["historical"] is False
     assert payload["findings"] == [
         {
             "code": "historical-banner-missing",
