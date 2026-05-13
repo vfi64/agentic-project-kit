@@ -63,4 +63,4 @@ def _print_result(errors: list[str]) -> None:
         for error in errors:
             console.print(f"[red]- {error}[/red]")
         raise typer.Exit(code=1)
-    console.print("[bold green]Agentic project check passed[/bold green]
+    console.print("[bold green]Agentic project check passed[/bold green]")
