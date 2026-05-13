@@ -5,11 +5,11 @@ Current version: 0.3.3
 Status-date: 2026-05-13
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/plan-documentation-drift-audit
+Current work branch: docs/doc-mesh-gate-policy
 
 ## Purpose
 
-agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, task tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, architecture-contract governance, documentation coverage checks, generated project contracts, project profiles, policy packs, policy-pack doctor checks, deterministic document-quality heuristics, output-contract validation, bounded structural repair, and workflow evidence capture.
+agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, task tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, architecture-contract governance, documentation coverage checks, generated project contracts, project profiles, policy packs, policy-pack doctor checks, deterministic document-quality heuristics, output-contract validation, bounded structural repair, workflow evidence capture, and documentation-mesh drift auditing.
 
 The project itself has a current state layer so work can be continued from the repository state files.
 
@@ -24,6 +24,7 @@ Recent completed work since v0.3.2:
 - PR #139 added project-local environment bootstrap to `tools/next-step.py` so `.venv` and missing dev tools are created before running local workflow gates.
 - PR #140 documented explicit `FAILED` next-step handling as a stop-and-diagnose state and added documentation coverage for it.
 - PR #141 prepared and released v0.3.3.
+- PR #143 added the first bounded `agentic-kit doc-mesh-audit` slice with tests, documentation coverage, and the modular implementation rule.
 
 v0.3.3 release scope:
 
@@ -40,25 +41,31 @@ v0.3.3 release evidence:
 - `agentic-kit post-release-check --version 0.3.3` passed.
 - The post-release Zenodo verification is complete for v0.3.3.
 
-Open planning item: documentation-mesh drift audit.
+Documentation-mesh audit state:
 
-The project has a useful `docs/DOCUMENTATION_COVERAGE.yaml` matrix and deterministic document-quality gates, but these gates mainly check required terms and structural visibility. They do not fully prove that the whole documentation mesh is current, non-redundant, and semantically consistent.
+- `agentic-kit doc-mesh-audit` exists and currently checks machine-readable drift classes: version mismatch, stale current-state wording, missing historical-source-of-truth banners, and release DOI list mismatches.
+- The audit distinguishes current-state documents, governance documents, architecture/design documents, and historical-plan documents.
+- The audit is intentionally deterministic and bounded. It does not claim semantic proof of documentation quality.
 
-Next documentation-governance work should audit the full documentation mesh for:
+Adoption policy for `doc-mesh-audit`:
 
-A. Aktualität / currency of release, roadmap, state, handoff, README, architecture, and workflow documents.
-B. Redundanzen / duplicated status, release, roadmap, DOI, workflow, and gate explanations.
-C. Konsistenz / agreement between project state, handoff, changelog, README, coverage matrix, architecture contract, and generated-project guidance.
-D. automatische Aktualisierung und sichernder automatischer Test / deterministic checks and bounded repair tools that can detect or repair known drift classes.
+- For now, `doc-mesh-audit` remains a targeted special gate.
+- It is required for changes to cross-document state, release metadata, documentation taxonomy, historical planning documents, DOI/version lists, handoff/status wording, documentation coverage, or cross-document drift rules.
+- It is not yet part of every normal `ns`/default local gate run.
+- After several successful PRs without false positives, reassess whether to integrate it into `agentic-kit doctor` as a documented project-health check.
+- Only after that stabilization step, reassess whether the default `ns` workflow should run it unconditionally.
 
-Candidate implementation direction:
+Rationale:
 
-- Add a deterministic documentation-mesh audit command before adding broad repair behavior.
-- Start with machine-checkable invariants such as current version, current release DOI list, branch/state labels, release-vs-pre-release wording, current workflow state, duplicated but inconsistent DOI/version lists, and stale release-candidate phrasing after publication.
-- Report findings as structured data before any repair command is introduced.
-- Add tests for each detected drift class.
-- Add bounded repair tools only for mechanical edits, for example replacing release-candidate wording after a verified release, aligning version/DOI lists, or updating known current-state fields.
-- Do not claim semantic proof; keep advisory review separate from deterministic gates.
+The audit is useful but still young. Adding it immediately to every standard workflow could block unrelated code changes because of documentation-taxonomy or historical-plan rules. The safer path is targeted use first, then promotion to `doctor` or the default workflow after observed stability.
+
+Near-term documentation-governance roadmap:
+
+1. Use `agentic-kit doc-mesh-audit` manually for documentation-mesh, release, handoff, governance, and roadmap changes.
+2. Collect failure classes and false positives across a few PRs.
+3. Add structured report output if needed before broad workflow integration.
+4. Add bounded repair tools only for mechanical edits, for example aligning version/DOI lists, inserting historical banners, or updating known current-state fields.
+5. Keep semantic review advisory and separate from hard gates unless converted into deterministic rules.
 
 Project-level state documentation is present on main:
 
@@ -77,26 +84,28 @@ Project-level state documentation is present on main:
 Project-level state documentation is machine-checkable:
 
 - `agentic-kit check-docs` checks the state gate documents.
+- `agentic-kit doc-mesh-audit` checks bounded cross-document drift classes for targeted documentation-mesh changes.
 - `docs/architecture/ARCHITECTURE_CONTRACT.md` is a required state gate document.
 - `docs/DOCUMENTATION_COVERAGE.yaml` is a documentation coverage matrix.
-- Documentation coverage checks that public commands, workflows, governance concepts, release topics, evidence conventions, state-doc expectations, policy-pack doctor checks, semantic quality boundary language, next-step workflow behavior, environment bootstrap, and `FAILED` handling remain visible.
+- Documentation coverage checks that public commands, workflows, governance concepts, release topics, evidence conventions, state-doc expectations, policy-pack doctor checks, semantic quality boundary language, next-step workflow behavior, environment bootstrap, `FAILED` handling, and documentation-mesh audit visibility remain visible.
 - sentinel.yaml and .agentic/todo.yaml are present so the repository validates its own machine-readable task gate configuration.
 
 Project health diagnostics are CLI-supported:
 
 - `agentic-kit doctor` checks required project files, project contract status, policy-pack checks, documentation gates, machine-readable task gates, and version drift including package `__version__` drift.
 - `agentic-kit check-docs` checks documentation coverage and deterministic document-quality heuristics.
+- `agentic-kit doc-mesh-audit` checks targeted documentation-mesh drift classes but is not yet part of the standard doctor/default workflow.
 - `agentic-kit release-plan` and `agentic-kit release-check` support release-state validation before maintainer-owned tagging and publication.
 - `agentic-kit post-release-check` verifies GitHub release and Zenodo archive state after publication.
 
 ## Current Goal
 
-Record the v0.3.3 DOI and the documentation-mesh drift audit as the next planning item without starting the large audit/refactor in this PR.
+Document the adoption policy for `agentic-kit doc-mesh-audit`: targeted special gate first, possible later promotion to `doctor`, and only then possible integration into the default `ns` workflow.
 
 ## Current Blockers
 
-- Local gates must pass on `docs/plan-documentation-drift-audit`.
-- The actual documentation-mesh audit command, tests, and repair tooling still need a separate implementation slice.
+- Local gates must pass on `docs/doc-mesh-gate-policy`.
+- No code change should be introduced in this slice.
 
 ## Live Status Commands
 
@@ -109,8 +118,9 @@ python -m pytest -q
 ruff check .
 agentic-kit check-docs
 agentic-kit doctor
+agentic-kit doc-mesh-audit
 ```
 
 ## Next Safe Step
 
-Run the standard local gate on `docs/plan-documentation-drift-audit`. If green, merge this planning/DOI update. Then start a focused implementation branch for the documentation-mesh audit command and tests.
+Run the standard local gate on `docs/doc-mesh-gate-policy`. Because this is a documentation-mesh policy change, also run `agentic-kit doc-mesh-audit`. If green, open and merge the focused documentation policy PR.
