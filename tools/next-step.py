@@ -150,6 +150,7 @@ def step_requested() -> None:
         print("Next state: FAILED")
         return
     run(["git", "switch", control_branch])
+    set_workflow_request_state("READY")
     write_current_report(evidence, "Declarative workflow completed and evidence was uploaded for handoff.")
     branch = create_evidence_branch("UPLOADED")
     print(f"Uploaded temporary workflow evidence branch: {branch}")
@@ -176,6 +177,34 @@ def workflow_request_state() -> str:
     return "READY"
 
 
+def set_workflow_request_state(request_state: str) -> None:
+    if not WORKFLOW_FILE.exists():
+        raise SystemExit(f"Missing workflow request file: {WORKFLOW_FILE}")
+    normalized = request_state.upper()
+    if normalized not in {"READY", "REQUESTED"}:
+        raise SystemExit(f"Invalid workflow request state: {request_state}")
+    lines = WORKFLOW_FILE.read_text(encoding="utf-8").splitlines()
+    replaced = False
+    output: list[str] = []
+    for line in lines:
+        if line.strip().startswith("state:") and not replaced:
+            indent = line[: len(line) - len(line.lstrip())]
+            output.append(f"{indent}state: {normalized}")
+            replaced = True
+        else:
+            output.append(line)
+    if not replaced:
+        output.insert(1 if output else 0, f"state: {normalized}")
+    WORKFLOW_FILE.write_text("\n".join(output) + "\n", encoding="utf-8")
+
+
+def request_workflow() -> None:
+    set_workflow_request_state("REQUESTED")
+    print(f"Current workflow request file: {WORKFLOW_FILE}")
+    print("Workflow request state: REQUESTED")
+    print("Next state: IDLE")
+
+
 def step_idle() -> None:
     request_state = workflow_request_state()
     if request_state != "REQUESTED":
@@ -195,6 +224,11 @@ def step_idle() -> None:
 
 def main() -> int:
     os.chdir(REPO_ROOT)
+    if sys.argv[1:] == ["--request"]:
+        request_workflow()
+        return 0
+    if sys.argv[1:]:
+        raise SystemExit("Usage: next-step.py [--request]")
     ensure_project_environment()
     state = read_state()
     print(f"workflow_state={state}")
