@@ -86,6 +86,36 @@ class DocMeshRepairPlan:
         }
 
 
+@dataclass(frozen=True)
+class DocMeshRepairAction:
+    path: str
+    action: str
+    changed: bool
+    message: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "path": self.path,
+            "action": self.action,
+            "changed": self.changed,
+            "message": self.message,
+        }
+
+
+@dataclass(frozen=True)
+class DocMeshRepairResult:
+    changed: bool
+    actions: tuple[DocMeshRepairAction, ...]
+    skipped: tuple[DocMeshRepair, ...]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "changed": self.changed,
+            "actions": [action.to_dict() for action in self.actions],
+            "skipped": [repair.to_dict() for repair in self.skipped],
+        }
+
+
 DOC_MESH_DOCUMENTS: tuple[DocMeshDocument, ...] = (
     DocMeshDocument("README.md", "current-state"),
     DocMeshDocument("CHANGELOG.md", "current-state"),
@@ -210,6 +240,23 @@ def build_doc_mesh_repair_plan(report: DocMeshReport) -> DocMeshRepairPlan:
     return DocMeshRepairPlan(ok=not repairs, repairs=repairs)
 
 
+def apply_doc_mesh_repair_plan(project_root: Path, plan: DocMeshRepairPlan) -> DocMeshRepairResult:
+    actions: list[DocMeshRepairAction] = []
+    skipped: list[DocMeshRepair] = []
+
+    for repair in plan.repairs:
+        if not (repair.safe and repair.mode == "automatic" and repair.action == "insert_historical_banner"):
+            skipped.append(repair)
+            continue
+        actions.append(_insert_historical_banner(project_root, repair.path))
+
+    return DocMeshRepairResult(
+        changed=any(action.changed for action in actions),
+        actions=tuple(actions),
+        skipped=tuple(skipped),
+    )
+
+
 def render_doc_mesh_report(report: DocMeshReport) -> str:
     lines = ["Documentation mesh audit", ""]
     lines.append("Documents:")
@@ -246,6 +293,31 @@ def render_doc_mesh_repair_plan(plan: DocMeshRepairPlan) -> str:
     return "\n".join(lines)
 
 
+def render_doc_mesh_repair_result(result: DocMeshRepairResult) -> str:
+    lines = ["Documentation mesh repair result", ""]
+    if not result.actions and not result.skipped:
+        lines.append("No repairs were needed.")
+        lines.append("")
+        lines.append("Overall: PASS")
+        return "\n".join(lines)
+
+    if result.actions:
+        lines.append("Actions:")
+        for action in result.actions:
+            changed = "changed" if action.changed else "unchanged"
+            lines.append(f"- {action.path}: {action.action} ({changed})")
+        lines.append("")
+
+    if result.skipped:
+        lines.append("Skipped manual repairs:")
+        for repair in result.skipped:
+            lines.append(f"- [{repair.code}] {repair.path}: {repair.action}")
+        lines.append("")
+
+    lines.append("Overall: PASS")
+    return "\n".join(lines)
+
+
 def write_doc_mesh_json_report(report: DocMeshReport, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(report.to_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -254,6 +326,11 @@ def write_doc_mesh_json_report(report: DocMeshReport, output_path: Path) -> None
 def write_doc_mesh_repair_plan(plan: DocMeshRepairPlan, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(plan.to_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def write_doc_mesh_repair_result(result: DocMeshRepairResult, output_path: Path) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(result.to_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
 def _repair_for_finding(finding: DocMeshFinding) -> DocMeshRepair:
@@ -274,6 +351,19 @@ def _repair_for_finding(finding: DocMeshFinding) -> DocMeshRepair:
         mode=mode,
         reason=reason,
     )
+
+
+def _insert_historical_banner(project_root: Path, relative_path: str) -> DocMeshRepairAction:
+    path = project_root / relative_path
+    if not path.exists():
+        return DocMeshRepairAction(relative_path, "insert_historical_banner", False, "file does not exist")
+
+    content = path.read_text(encoding="utf-8")
+    if HISTORICAL_BANNER in content:
+        return DocMeshRepairAction(relative_path, "insert_historical_banner", False, "historical banner already present")
+
+    path.write_text(f"{HISTORICAL_BANNER}\n\n{content}", encoding="utf-8")
+    return DocMeshRepairAction(relative_path, "insert_historical_banner", True, "historical banner inserted")
 
 
 def _check_historical_document(path: str, content: str) -> list[DocMeshFinding]:
