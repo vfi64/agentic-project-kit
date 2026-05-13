@@ -38,6 +38,7 @@ v0.3.3 release evidence:
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified v0.3.3 version DOI: `10.5281/zenodo.20151924`.
 - `agentic-kit post-release-check --version 0.3.3` passed.
+- The post-release Zenodo verification is complete for v0.3.3.
 
 Open planning item: documentation-mesh drift audit.
 
