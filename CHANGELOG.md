@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.3.4 - 2026-05-13
+
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
+- Added `agentic-kit doc-mesh-audit` as a targeted documentation mesh drift audit for current-state, governance, architecture/design, and historical-plan documents.
+- Added deterministic checks for version mismatches, stale current-state wording, missing historical-source-of-truth banners, and release DOI list mismatches.
+- Added README, TEST_GATES, AGENTS, STATUS, handoff, and documentation coverage visibility for the documentation mesh audit.
+- Documented the adoption policy: targeted special gate first, possible later promotion to `doctor`, and only then possible default `ns` integration after stabilization.
+- Added JSON report output for `agentic-kit doc-mesh-audit --report`.
+- Added bounded documentation mesh repair planning through `agentic-kit doc-mesh-audit --repair-plan`.
+- Added the first safe automatic documentation mesh repair through `agentic-kit doc-mesh-repair`, limited to inserting missing historical-source-of-truth banners.
+- Preserved the bounded repair boundary: version, DOI, stale-state, and missing-document findings remain manual review items.
+
 ## v0.3.3 - 2026-05-13
 
 Zenodo v0.3.3 DOI: 10.5281/zenodo.20151924
