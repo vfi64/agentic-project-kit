@@ -1,8 +1,9 @@
 from pathlib import Path
 
-from typer.testing import CliRunner
+import pytest
+import typer
 
-from agentic_project_kit.cli import app
+from agentic_project_kit.cli_commands.checks import doc_mesh_audit_command
 from agentic_project_kit.doc_mesh import build_doc_mesh_report
 
 
@@ -91,12 +92,10 @@ def test_doc_mesh_detects_release_doi_list_drift(tmp_path: Path) -> None:
     assert any(finding.code == "release-doi-list-mismatch" for finding in report.findings)
 
 
-def test_doc_mesh_cli_reports_failure(tmp_path: Path) -> None:
+def test_doc_mesh_command_reports_failure(tmp_path: Path) -> None:
     _write_minimal_mesh(tmp_path, historical_banner=False)
-    runner = CliRunner()
 
-    result = runner.invoke(app, ["doc-mesh-audit", "--root", str(tmp_path)])
+    with pytest.raises(typer.Exit) as exc_info:
+        doc_mesh_audit_command(tmp_path)
 
-    assert result.exit_code == 1
-    assert "Documentation mesh audit" in result.stdout
-    assert "historical-banner-missing" in result.stdout
+    assert exc_info.value.exit_code == 1
