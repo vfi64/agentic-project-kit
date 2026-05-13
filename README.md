@@ -360,7 +360,7 @@ The archived v0.3.0 release has the verified version-specific DOI: `10.5281/zeno
 
 The archived v0.3.1 release has the verified version-specific DOI: `10.5281/zenodo.20144969`.
 
-The v0.3.3 release is prepared with the Zenodo concept DOI only. Add the version-specific DOI only after `agentic-kit post-release-check --version 0.3.3` verifies the Zenodo record.
+The archived v0.3.3 release has the verified version-specific DOI: `10.5281/zenodo.20151924`.
 
 ## Governance wrapper projects
 
@@ -420,7 +420,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.3` is a patch release candidate covering package-version drift detection, the documented `ns` / `next-step.py` terminal workflow, project-local workflow environment bootstrap, and explicit `FAILED` stop-and-diagnose handling.
+Version `0.3.3` is the current patch release covering package-version drift detection, the documented `ns` / `next-step.py` terminal workflow, project-local workflow environment bootstrap, and explicit `FAILED` stop-and-diagnose handling.
 
 This repository has maintainer-owned GitHub releases and verified Zenodo archive records. Verified version-specific DOIs:
 
@@ -432,5 +432,6 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - v0.2.10: `10.5281/zenodo.20127028`
 - v0.3.0: `10.5281/zenodo.20140467`
 - v0.3.1: `10.5281/zenodo.20144969`
+- v0.3.3: `10.5281/zenodo.20151924`
 
-v0.3.3 is prepared with concept DOI `10.5281/zenodo.20101359`; the version-specific DOI must wait for post-release verification.
+Near-term documentation-governance work: audit the full project documentation mesh for currency, redundancy, consistency, deterministic auto-update opportunities, automatic tests, and bounded repair tools. The current `check-docs` coverage matrix is useful, but it is not yet a full proof that all state, release, roadmap, handoff, README, and architecture documents agree semantically.

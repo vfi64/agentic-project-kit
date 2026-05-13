@@ -5,7 +5,7 @@ Current version: 0.3.3
 Status-date: 2026-05-13
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: release/prepare-v0.3.3
+Current work branch: docs/plan-documentation-drift-audit
 
 ## Purpose
 
@@ -15,7 +15,7 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-Released versions through v0.3.2 are complete. The current branch prepares v0.3.3 as a patch release for workflow usability and drift hardening.
+v0.3.3 is released and post-release verified.
 
 Recent completed work since v0.3.2:
 
@@ -23,6 +23,7 @@ Recent completed work since v0.3.2:
 - PR #136 fixed package `__version__` drift and extended `agentic-kit doctor` so package-version drift is detected.
 - PR #139 added project-local environment bootstrap to `tools/next-step.py` so `.venv` and missing dev tools are created before running local workflow gates.
 - PR #140 documented explicit `FAILED` next-step handling as a stop-and-diagnose state and added documentation coverage for it.
+- PR #141 prepared and released v0.3.3.
 
 v0.3.3 release scope:
 
@@ -31,12 +32,33 @@ v0.3.3 release scope:
 - Project-local workflow environment bootstrap.
 - Explicit `FAILED` workflow-state handling.
 
-Release discipline:
+v0.3.3 release evidence:
 
-- Do not add a v0.3.3 version-specific DOI before the GitHub release exists and Zenodo has archived it.
-- Use the Zenodo concept DOI `10.5281/zenodo.20101359` during release preparation.
-- Run `agentic-kit post-release-check --version 0.3.3` only after the GitHub Release is published.
-- The post-release Zenodo verification step is intentionally separate from pre-release validation.
+- GitHub Release v0.3.3 exists.
+- Zenodo concept DOI: `10.5281/zenodo.20101359`.
+- Verified v0.3.3 version DOI: `10.5281/zenodo.20151924`.
+- `agentic-kit post-release-check --version 0.3.3` passed.
+- The post-release Zenodo verification is complete for v0.3.3.
+
+Open planning item: documentation-mesh drift audit.
+
+The project has a useful `docs/DOCUMENTATION_COVERAGE.yaml` matrix and deterministic document-quality gates, but these gates mainly check required terms and structural visibility. They do not fully prove that the whole documentation mesh is current, non-redundant, and semantically consistent.
+
+Next documentation-governance work should audit the full documentation mesh for:
+
+A. Aktualität / currency of release, roadmap, state, handoff, README, architecture, and workflow documents.
+B. Redundanzen / duplicated status, release, roadmap, DOI, workflow, and gate explanations.
+C. Konsistenz / agreement between project state, handoff, changelog, README, coverage matrix, architecture contract, and generated-project guidance.
+D. automatische Aktualisierung und sichernder automatischer Test / deterministic checks and bounded repair tools that can detect or repair known drift classes.
+
+Candidate implementation direction:
+
+- Add a deterministic documentation-mesh audit command before adding broad repair behavior.
+- Start with machine-checkable invariants such as current version, current release DOI list, branch/state labels, release-vs-pre-release wording, current workflow state, duplicated but inconsistent DOI/version lists, and stale release-candidate phrasing after publication.
+- Report findings as structured data before any repair command is introduced.
+- Add tests for each detected drift class.
+- Add bounded repair tools only for mechanical edits, for example replacing release-candidate wording after a verified release, aligning version/DOI lists, or updating known current-state fields.
+- Do not claim semantic proof; keep advisory review separate from deterministic gates.
 
 Project-level state documentation is present on main:
 
@@ -69,12 +91,12 @@ Project health diagnostics are CLI-supported:
 
 ## Current Goal
 
-Prepare the v0.3.3 release metadata and state files, then validate the release candidate before tagging.
+Record the v0.3.3 DOI and the documentation-mesh drift audit as the next planning item without starting the large audit/refactor in this PR.
 
 ## Current Blockers
 
-- Local release-preparation gates must pass on `release/prepare-v0.3.3`.
-- Maintainer approval is required before merge, tag creation, GitHub release publication, or post-release DOI metadata changes.
+- Local gates must pass on `docs/plan-documentation-drift-audit`.
+- The actual documentation-mesh audit command, tests, and repair tooling still need a separate implementation slice.
 
 ## Live Status Commands
 
@@ -87,15 +109,8 @@ python -m pytest -q
 ruff check .
 agentic-kit check-docs
 agentic-kit doctor
-agentic-kit release-plan --version 0.3.3
-agentic-kit release-check --version 0.3.3
 ```
-
-Expected release-check state before tagging:
-
-- pyproject, CHANGELOG, README, CITATION, STATUS, and CURRENT_HANDOFF mention 0.3.3.
-- Local tag `v0.3.3`, remote tag `v0.3.3`, and GitHub Release `v0.3.3` are absent.
 
 ## Next Safe Step
 
-Run the standard local gate plus `agentic-kit release-check --version 0.3.3` on `release/prepare-v0.3.3`. If green, open and merge the release-preparation PR. After merge, tag `v0.3.3` and wait for the GitHub Release workflow before running `agentic-kit post-release-check --version 0.3.3`.
+Run the standard local gate on `docs/plan-documentation-drift-audit`. If green, merge this planning/DOI update. Then start a focused implementation branch for the documentation-mesh audit command and tests.
