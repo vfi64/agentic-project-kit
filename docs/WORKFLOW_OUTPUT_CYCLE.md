@@ -28,15 +28,14 @@ The short acknowledgement `d` is also valid. The assistant then evaluates the wo
 
 This keeps routine work out of long manual Copy-and-Paste blocks. Use full copied terminal output only when the local workflow did not provide enough bounded evidence for review.
 
-## Default local gate workflow
+## Default current-branch local gate workflow
 
-`.agentic/current_work.yaml` defines a deterministic default local gate workflow named `default-local-gate`.
+`.agentic/current_work.yaml` defines a deterministic default current-branch local gate workflow named `default-current-branch-local-gate`.
 
-The default local gate runs only allowlisted steps:
+The default local gate runs only allowlisted steps on the currently checked-out branch:
 
 ```text
 git_fetch
-git_switch_main
 git_pull_ff_only
 pytest
 ruff_check
@@ -44,7 +43,7 @@ check_docs
 doctor
 ```
 
-This is the standard evidence-producing workflow for routine chat-assisted validation. To run it from `IDLE`, use:
+It does not switch to `main`, so it can validate either `main` or the current PR branch. This is the standard evidence-producing workflow for routine chat-assisted validation. To run it from `IDLE`, use:
 
 ```bash
 agentic-kit workflow request && python tools/next-step.py
