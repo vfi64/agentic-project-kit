@@ -71,6 +71,26 @@ def test_doc_mesh_detects_stale_current_state_marker(tmp_path: Path) -> None:
     assert any(finding.code == "stale-current-state-marker" for finding in report.findings)
 
 
+def test_doc_mesh_detects_release_doi_list_drift(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path)
+    _write(
+        tmp_path / "README.md",
+        "Version `1.2.3` is current.\n"
+        "The archived v1.2.3 release has the verified version-specific DOI: `10.5281/zenodo.111`.\n",
+    )
+    _write(
+        tmp_path / "CITATION.cff",
+        "version: 1.2.3\n"
+        "# Verified v1.2.3 version DOI: 10.5281/zenodo.111\n"
+        "# Verified v1.2.4 version DOI: 10.5281/zenodo.222\n",
+    )
+
+    report = build_doc_mesh_report(tmp_path)
+
+    assert not report.ok
+    assert any(finding.code == "release-doi-list-mismatch" for finding in report.findings)
+
+
 def test_doc_mesh_cli_reports_failure(tmp_path: Path) -> None:
     _write_minimal_mesh(tmp_path, historical_banner=False)
     runner = CliRunner()
