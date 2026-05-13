@@ -5,7 +5,7 @@ Current version: 0.3.5
 Status-date: 2026-05-13
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: release/prepare-v0.3.5
+Current work branch: post-release/record-v0.3.5-doi
 
 ## Purpose
 
@@ -15,7 +15,7 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-v0.3.5 is the current planned release line.
+v0.3.5 is released and post-release verified.
 
 Recent completed work since v0.3.3:
 
@@ -33,13 +33,13 @@ v0.3.5 release scope:
 - First safe automatic historical-banner repair.
 - Continued documentation of the targeted-gate adoption policy.
 
-v0.3.3 release evidence remains verified:
+v0.3.5 release evidence is verified:
 
-- GitHub Release v0.3.3 exists.
+- GitHub Release v0.3.5 exists.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
-- Verified v0.3.3 version DOI: `10.5281/zenodo.20151924`.
-- `agentic-kit post-release-check --version 0.3.3` passed.
-- The post-release Zenodo verification is complete for v0.3.3.
+- Verified v0.3.5 version DOI: `10.5281/zenodo.20169965`.
+- `agentic-kit post-release-check --version 0.3.5` passed.
+- The post-release Zenodo verification is complete for v0.3.5.
 
 Documentation-mesh audit state:
 
@@ -104,13 +104,13 @@ Project health diagnostics are CLI-supported:
 
 ## Current Goal
 
-Prepare v0.3.5 release metadata for the documentation-mesh release-history classification and explicit next-step request workflow hardening.
+Record verified v0.3.5 DOI metadata after post-release Zenodo verification.
 
 ## Current Blockers
 
-- Local gates must pass on `release/prepare-v0.3.5`.
-- `agentic-kit release-check --version 0.3.5` must pass before tagging.
-- No v0.3.5 DOI should be inserted before Zenodo post-release verification.
+- Local gates must pass on `post-release/record-v0.3.5-doi`.
+- `agentic-kit post-release-check --version 0.3.5` must remain PASS.
+- README and CITATION DOI lists must include the verified v0.3.5 DOI only after post-release verification.
 
 ## Live Status Commands
 
@@ -124,9 +124,9 @@ ruff check .
 agentic-kit check-docs
 agentic-kit doctor
 agentic-kit doc-mesh-audit
-agentic-kit release-check --version 0.3.5
+agentic-kit post-release-check --version 0.3.5
 ```
 
 ## Next Safe Step
 
-Run the standard local gate on `release/prepare-v0.3.5`. Because this is a release and documentation-mesh metadata change, also run `agentic-kit doc-mesh-audit` and `agentic-kit release-check --version 0.3.5`. If green, open and merge the focused release metadata PR.
+Run the standard local gate on `post-release/record-v0.3.5-doi`. Because this records post-release DOI metadata, also run `agentic-kit doc-mesh-audit` and `agentic-kit post-release-check --version 0.3.5`. If green, open and merge the focused post-release DOI metadata PR.
