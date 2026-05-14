@@ -5,7 +5,7 @@ Current version: 0.3.6
 Status-date: 2026-05-14
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/status-handoff-after-164
+Current work branch: docs/status-handoff-after-166
 
 ## Purpose
 
@@ -17,20 +17,22 @@ The project itself has a current state layer so work can be continued from the r
 
 v0.3.6 is released and post-release verified. Verified v0.3.6 version DOI: `10.5281/zenodo.20183888`. The post-release Zenodo verification is complete for v0.3.6.
 
-Post-v0.3.6 main has advanced beyond the release tag with documentation-only governance and usability notes:
+Post-v0.3.6 main has advanced beyond the release tag with governance, usability, and workflow-cleanup hardening:
 
 - PR #163 recorded the verified v0.3.6 DOI metadata on main.
 - PR #164 preserved the Deterministic Cell Orchestration idea note and introduced the Layered CLI Usability idea note.
+- PR #165 updated `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after the idea-note merge.
+- PR #166 hardened `agentic-kit workflow cleanup` so stale `temp/workflow-evidence-*` branches can be removed even when `.agentic/workflow_state` is already `IDLE`.
 
-The current main head after PR #164 is:
+The current main head after PR #166 is:
 
 ```text
-ff28c43 Preserve DCO and layered CLI usability ideas (#164)
+9c08dfc Clean stale workflow evidence branches from cleanup (#166)
 ```
 
-The latest verified post-merge gates after PR #164 were:
+The latest verified post-merge gates after PR #166 were:
 
-- `155 passed`
+- `156 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
@@ -44,10 +46,12 @@ The latest verified post-merge gates after PR #164 were:
 - PR #162 prepared v0.3.6 release metadata.
 - PR #163 recorded verified v0.3.6 DOI metadata.
 - PR #164 added `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`, `docs/ideas/LAYERED_CLI_USABILITY.md`, and small `AGENTS.md` cross-references.
+- PR #165 refreshed current-state and handoff documentation after PR #164.
+- PR #166 added stale workflow evidence cleanup from `IDLE` plus a regression test, raising the suite to 156 tests.
 
 ## Idea-note state
 
-The repository now has three related non-binding architecture idea notes:
+The repository has three related non-binding architecture idea notes:
 
 - `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md`
 - `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
@@ -77,6 +81,7 @@ No ADR has been created for these idea notes. An ADR should be considered only w
 - A normal `ns` run in `IDLE` plus `READY` is intentionally a no-op.
 - A workflow starts only by explicit request.
 - The public path is `agentic-kit workflow request`, `agentic-kit workflow run`, `agentic-kit workflow status`, and `agentic-kit workflow cleanup`.
+- `agentic-kit workflow cleanup` now also removes stale `temp/workflow-evidence-*` branches from `IDLE` when run inside a Git repository.
 - `tools/next-step.py` remains a compatibility bridge and should not grow into the long-term public API surface.
 
 ## AI-assisted development assessment
@@ -110,7 +115,7 @@ Near-term public workflow CLI roadmap:
 1. Keep `agentic-kit workflow request/run/status/cleanup` as the public path for explicit workflow operation.
 2. Keep `tools/next-step.py` as a compatibility bridge, not as the long-term public API surface.
 3. Continue hardening state, no-op, failure, cleanup, and evidence behavior through tests and documentation.
-4. Reassess workflow cleanup behavior after evidence-branch cleanup edge cases, especially when local state is already `IDLE` but stale temporary branches remain.
+4. Watch `workflow cleanup` across future evidence-branch flows to see whether remote branch deletion, missing remotes, or multi-branch cleanup need more explicit UX.
 
 Near-term usability roadmap:
 
@@ -181,11 +186,11 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Update state and handoff documentation after PR #164 so main no longer points future agents to stale pre-v0.3.6 or pre-#164 branch goals.
+Update state and handoff documentation after PR #166 so main no longer points future agents to the already completed workflow-cleanup hardening slice.
 
 ## Current Blockers
 
-- Local gates must pass on `docs/status-handoff-after-164`.
+- Local gates must pass on `docs/status-handoff-after-166`.
 - Because this changes current-state and handoff wording, include `agentic-kit doc-mesh-audit` before merge.
 
 ## Live Status Commands
@@ -204,4 +209,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `docs/status-handoff-after-164`. If green, open and merge a focused documentation PR. After merge, reassess whether the next implementation slice should harden workflow cleanup behavior, keep `doc-mesh-audit` as a special gate for more PRs, or start a small usability-oriented CLI guidance slice.
+Validate `docs/status-handoff-after-166`. If green, open and merge a focused documentation PR. After merge, reassess whether the next slice should keep `doc-mesh-audit` as a special manual gate for more PRs, improve workflow cleanup UX around remote branches, or start a small guided-usability CLI slice.
