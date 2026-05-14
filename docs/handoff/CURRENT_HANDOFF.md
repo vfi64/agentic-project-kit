@@ -4,14 +4,14 @@ Current version: 0.3.6
 
 Status-date: 2026-05-14
 Project: agentic-project-kit
-Branch: docs/status-handoff-after-164
+Branch: docs/status-handoff-after-166
 Base branch: main
 
 ## Current Goal
 
-Update `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after PR #164 so the repository state no longer points future agents to stale pre-v0.3.6 or pre-#164 branch goals.
+Update `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after PR #166 so the repository state no longer points future agents to the already completed workflow-cleanup hardening slice.
 
-This branch is documentation-only. It records the post-#164 state and does not change CLI behavior, workflow behavior, release metadata, package version, or implementation code.
+This branch is documentation-only. It records the post-#166 state and does not change CLI behavior, workflow behavior, release metadata, package version, or implementation code.
 
 ## Current Repository State
 
@@ -25,33 +25,35 @@ Verified v0.3.6 release evidence:
 - `agentic-kit post-release-check --version 0.3.6` passed.
 - PR #163 recorded the verified v0.3.6 DOI metadata on main.
 
-Post-release documentation work completed after v0.3.6:
+Post-release work completed after v0.3.6:
 
 - PR #164 preserved `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md` as a curated idea note.
 - PR #164 introduced `docs/ideas/LAYERED_CLI_USABILITY.md` as a non-binding usability-layer model.
 - PR #164 added small `AGENTS.md` cross-references to the DCO and layered CLI usability idea notes.
+- PR #165 refreshed `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after the idea-note merge.
+- PR #166 hardened `agentic-kit workflow cleanup` so stale `temp/workflow-evidence-*` branches can be removed even when `.agentic/workflow_state` is already `IDLE`.
 
 Current main head before this branch:
 
 ```text
-ff28c43 Preserve DCO and layered CLI usability ideas (#164)
+9c08dfc Clean stale workflow evidence branches from cleanup (#166)
 ```
 
-Latest verified local gates after PR #164:
+Latest verified local gates after PR #166:
 
-- `155 passed`
+- `156 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
 
 ## Workflow State
 
-Expected state after the #164 cleanup:
+Expected state after the #166 merge:
 
 - `.agentic/workflow_state` = `IDLE`
 - `.agentic/current_work.yaml` = `state: READY`
 - no active workflow request
-- no remaining `temp/workflow-evidence-*` branches from the #164 slice
+- no remaining `temp/workflow-evidence-*` branches from recent slices
 
 Normal `ns` behavior in `IDLE` plus `READY` is a no-op. A workflow starts only by explicit request.
 
@@ -63,6 +65,8 @@ agentic-kit workflow run
 agentic-kit workflow status
 agentic-kit workflow cleanup
 ```
+
+`agentic-kit workflow cleanup` now also removes stale `temp/workflow-evidence-*` branches from `IDLE` when run inside a Git repository. It keeps the existing no-op behavior for non-Git roots.
 
 Compatibility bridge:
 
@@ -159,17 +163,17 @@ This handoff intentionally keeps coverage terms visible for deterministic gates:
 
 Prepared files should include:
 
-- `docs/STATUS.md` updated with the post-#164 state, idea-note set, workflow request state, and next possible slices.
-- `docs/handoff/CURRENT_HANDOFF.md` updated with the post-#164 handoff and source-of-truth reading order.
+- `docs/STATUS.md` updated with the post-#166 state, latest test count, workflow cleanup behavior, and next possible slices.
+- `docs/handoff/CURRENT_HANDOFF.md` updated with the post-#166 handoff and source-of-truth reading order.
 
 No package version bump, release metadata change, CLI behavior change, or implementation change is part of this branch.
 
 ## Next Safe Step
 
-Run local gates on `docs/status-handoff-after-164`, including `agentic-kit doc-mesh-audit`. If green, open and merge a focused documentation PR.
+Run local gates on `docs/status-handoff-after-166`, including `agentic-kit doc-mesh-audit`. If green, open and merge a focused documentation PR.
 
 After merge, reassess the next slice. Plausible options are:
 
-1. harden `workflow cleanup` behavior for stale temporary evidence branches when local state is already `IDLE`;
-2. keep `doc-mesh-audit` as a special manual gate for more PRs before considering any promotion toward `doctor`;
+1. keep `doc-mesh-audit` as a special manual gate for more PRs before considering any promotion toward `doctor`;
+2. improve workflow cleanup UX around remote branches if real use shows confusing output or edge cases;
 3. design a small guided-usability CLI slice, such as a status or explanation command, only if it keeps the Golden Path simple.
