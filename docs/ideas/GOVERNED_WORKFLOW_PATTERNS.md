@@ -92,6 +92,8 @@ ADR means Architecture Decision Record. An ADR is a short document that records 
 
 An ADR policy defines when ADRs are required, where they live, how they are named, and what minimum fields they contain.
 
+The system or assisting agent should actively point out when a decision appears ADR-worthy. It should not silently create ADR bureaucracy for routine work, but it should tell the maintainer when a choice has long-term architectural consequences and would benefit from an ADR.
+
 Potential ADR path:
 
 ```text
@@ -127,6 +129,13 @@ Do not use ADRs for:
 - small refactors with no long-term alternative;
 - simple documentation edits;
 - decisions already captured sufficiently in code, tests, and existing docs.
+
+ADR suggestion rule:
+
+- When a proposed change affects project architecture, public CLI semantics, state-machine behavior, repair strategy, release workflow, evidence policy, capability boundaries, or long-term agent behavior, the assistant should explicitly say whether an ADR is recommended.
+- If an ADR is recommended, the assistant should explain the decision to preserve, the alternatives that matter, and whether the ADR should be created now or deferred.
+- If an ADR is not recommended, the assistant should continue with the normal documentation, tests, and implementation path without adding extra process.
+- The maintainer decides whether to create the ADR. The assistant should not treat ADR creation as automatic approval to expand scope.
 
 Guidance:
 
