@@ -2,10 +2,10 @@ Current version: 0.3.6
 
 # Project Status
 
-Status-date: 2026-05-13
+Status-date: 2026-05-14
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/dco-decision-rule
+Current work branch: docs/status-handoff-after-164
 
 ## Purpose
 
@@ -15,56 +15,73 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-v0.3.6 is released and post-release verified. Verified v0.3.6 version DOI: `10.5281/zenodo.20183888`. It covers the AI-assisted development roadmap update, DCO and governed workflow design rules, public workflow request CLI semantics, and governed workflow pattern notes.
+v0.3.6 is released and post-release verified. Verified v0.3.6 version DOI: `10.5281/zenodo.20183888`. The post-release Zenodo verification is complete for v0.3.6.
 
-v0.3.5 is released and post-release verified.
+Post-v0.3.6 main has advanced beyond the release tag with documentation-only governance and usability notes:
 
-v0.3.5 release evidence is verified:
+- PR #163 recorded the verified v0.3.6 DOI metadata on main.
+- PR #164 preserved the Deterministic Cell Orchestration idea note and introduced the Layered CLI Usability idea note.
 
-- GitHub Release v0.3.5 exists.
-- Zenodo concept DOI: `10.5281/zenodo.20101359`.
-- Verified v0.3.5 version DOI: `10.5281/zenodo.20169965`.
-- `agentic-kit post-release-check --version 0.3.5` passed.
-- The post-release Zenodo verification is complete for v0.3.5.
-- PR #157 recorded the verified v0.3.5 DOI metadata on main.
-- PR #158 updated the AI-assisted development roadmap after v0.3.5.
+The current main head after PR #164 is:
 
-Recent completed work since v0.3.3:
+```text
+ff28c43 Preserve DCO and layered CLI usability ideas (#164)
+```
 
-- PR #143 added the first bounded `agentic-kit doc-mesh-audit` slice with tests, documentation coverage, README v0.3.2 DOI restoration, and the modular implementation rule.
-- PR #144 documented the adoption policy: targeted special gate first, possible later promotion to `doctor`, and only then possible default `ns` integration after stabilization.
-- PR #145 added JSON report output for `agentic-kit doc-mesh-audit --report`.
-- PR #146 added bounded documentation mesh repair planning through `agentic-kit doc-mesh-audit --repair-plan`.
-- PR #147 added `agentic-kit doc-mesh-repair` for the first safe automatic repair class: inserting missing historical-source-of-truth banners into historical-plan documents.
-- PR #153 made the `ns` idle state require an explicit workflow request.
-- PR #154 added explicit `ns` workflow request mode.
-- PR #155 documented explicit `ns` workflow request mode.
-- PR #156 prepared v0.3.5 release metadata.
-- PR #157 recorded v0.3.5 DOI metadata.
-- PR #158 documented the post-v0.3.5 AI-assisted development roadmap.
+The latest verified post-merge gates after PR #164 were:
 
-Documentation-mesh audit state:
+- `155 passed`
+- `ruff check .` passed
+- `agentic-kit check-docs` passed
+- `agentic-kit doctor` passed
+
+## Recent completed work since v0.3.5
+
+- PR #158 updated the AI-assisted development roadmap.
+- PR #159 added the Deterministic Cell Orchestration decision rule and governed workflow design rules to `AGENTS.md` and state docs.
+- PR #160 aligned `agentic-kit workflow request` with the explicit current-work request mechanism.
+- PR #161 added `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md` as an idea note for Event-Sourcing Light, Capability Matrix, ADR Policy, State-Model Templates, and related governed workflow patterns.
+- PR #162 prepared v0.3.6 release metadata.
+- PR #163 recorded verified v0.3.6 DOI metadata.
+- PR #164 added `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`, `docs/ideas/LAYERED_CLI_USABILITY.md`, and small `AGENTS.md` cross-references.
+
+## Idea-note state
+
+The repository now has three related non-binding architecture idea notes:
+
+- `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md`
+- `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
+- `docs/ideas/LAYERED_CLI_USABILITY.md`
+
+These documents preserve architecture options without making them automatic implementation requirements.
+
+Deterministic Cell Orchestration remains optional. Use it only when typed cells, independent validation, selective repair, deterministic rendering, or auditability clearly reduce drift and overall workflow complexity.
+
+Layered CLI Usability is a review lens for keeping the public command surface manageable. The intended direction is high functionality and high automation internally while keeping the daily Golden Path simple.
+
+No ADR has been created for these idea notes. An ADR should be considered only when DCO, layered CLI usability, capability boundaries, or a guided CLI entry point become binding architecture or public CLI policy.
+
+## Documentation-mesh audit state
 
 - `agentic-kit doc-mesh-audit` exists and currently checks machine-readable drift classes: version mismatch, stale current-state wording, missing historical-source-of-truth banners, and release DOI list mismatches.
 - The audit distinguishes current-state documents, release-history documents, governance documents, architecture/design documents, and historical-plan documents.
-- The audit can write machine-readable JSON reports.
-- The audit can write bounded repair plans.
+- The audit can write machine-readable JSON reports and bounded repair plans.
 - `agentic-kit doc-mesh-repair` can insert missing historical-source-of-truth banners into known historical-plan documents.
 - Version, DOI, stale-state, and missing-document findings remain manual review items.
-- The audit is intentionally deterministic and bounded. It does not claim semantic proof of documentation quality.
+- The audit is deterministic and bounded. It does not claim semantic proof of documentation quality.
 
-Workflow request state:
+## Workflow request state
 
-- `.agentic/workflow_state` is expected to be `IDLE` after the v0.3.5 post-release cycle.
+- `.agentic/workflow_state` is expected to be `IDLE`.
 - `.agentic/current_work.yaml` may remain present with `state: READY`.
 - A normal `ns` run in `IDLE` plus `READY` is intentionally a no-op.
-- A workflow run now requires an explicit request.
-- The current internal compatibility path is `tools/next-step.py --request` followed by `ns`.
-- The next public-product step is to expose the same request behavior through `agentic-kit workflow request`.
+- A workflow starts only by explicit request.
+- The public path is `agentic-kit workflow request`, `agentic-kit workflow run`, `agentic-kit workflow status`, and `agentic-kit workflow cleanup`.
+- `tools/next-step.py` remains a compatibility bridge and should not grow into the long-term public API surface.
 
 ## AI-assisted development assessment
 
-The project is currently strongest as a governed AI-assisted software development layer, not as an autonomous coding agent. Its main design choice is to move durable project state out of the model context and into version-controlled repository files.
+The project is strongest as a governed AI-assisted software development layer, not as an autonomous coding agent. Its main design choice is to move durable project state out of the model context and into version-controlled repository files.
 
 Strengths:
 
@@ -73,13 +90,14 @@ Strengths:
 - Explicit workflow states reduce blind agent execution and make idle/no-op behavior intentional.
 - Temporary workflow evidence branches provide auditable transfer of local outputs when chat context cannot reliably carry all details.
 - Release metadata, DOI verification, and post-release checks make publication state reproducible.
+- Idea notes preserve useful architecture options without immediately expanding implementation scope.
 
 Limits:
 
 - The project is not a full agent orchestrator.
 - Semantic quality review remains advisory and human-owned unless converted into deterministic checks.
-- Some workflow affordances are still internal (`tools/next-step.py`) and should move behind public CLI commands.
-- Onboarding must stay simple despite the growing governance vocabulary.
+- Some compatibility affordances still exist under `tools/` and should remain bounded.
+- Onboarding and day-to-day CLI use must stay simple despite the growing governance vocabulary.
 
 Interpretation:
 
@@ -89,13 +107,17 @@ agentic-project-kit should be treated as a governance and state layer for AI-ass
 
 Near-term public workflow CLI roadmap:
 
-1. Add `agentic-kit workflow request` as the public equivalent of `tools/next-step.py --request`.
+1. Keep `agentic-kit workflow request/run/status/cleanup` as the public path for explicit workflow operation.
 2. Keep `tools/next-step.py` as a compatibility bridge, not as the long-term public API surface.
-3. Add tests showing that READY/IDLE plus `workflow request` activates the request state and that a normal `ns` remains a no-op without an explicit request.
-4. Add or update documentation for the public `agentic-kit workflow request/run/status/cleanup` path.
-5. Add `agentic-kit workflow status` next, so users can inspect workflow state without reading `.agentic/current_work.yaml` directly.
-6. Add `agentic-kit workflow cleanup` for explicit cleanup of uploaded temporary evidence branches.
-7. Reassess whether `agentic-kit workflow run` should call the same runner used by `ns`, or remain a safer status/request-oriented command first.
+3. Continue hardening state, no-op, failure, cleanup, and evidence behavior through tests and documentation.
+4. Reassess workflow cleanup behavior after evidence-branch cleanup edge cases, especially when local state is already `IDLE` but stale temporary branches remain.
+
+Near-term usability roadmap:
+
+1. Use `docs/ideas/LAYERED_CLI_USABILITY.md` as a review lens before adding new public CLI surface area.
+2. Keep the Golden Path close to the Daily layer: `ns`, `doctor`, `check-docs`, and `workflow status`.
+3. Place future commands or options into Daily, Guided, Maintainer, or Debug before treating them as part of the public experience.
+4. Consider an ADR only if usability layers become binding command policy or capability boundaries.
 
 Future Deterministic Cell Orchestration architecture track:
 
@@ -103,12 +125,12 @@ Future Deterministic Cell Orchestration architecture track:
 2. Use DCO when typed cells, independent validation, selective repair, deterministic rendering, or auditability clearly reduce drift.
 3. Do not use DCO when a simple Markdown document, CLI command, gate, or report is clearer and easier to maintain.
 4. Keep DCO aligned with the semantic quality boundary: it can prove structure and known rules, not broad semantic correctness unless semantics are converted into deterministic checks.
-5. Prefer a small later pilot for handoff, review, release, or report artifacts before applying DCO to more complex systems such as SCI traces.
+5. Prefer a small later pilot for handoff, review, release, or report artifacts before applying DCO to more complex systems.
 6. If a pilot is added, require schema tests, validator tests, bounded repair tests where repair exists, and renderer tests where deterministic rendering exists.
 
 Near-term documentation-governance roadmap:
 
-1. Use `agentic-kit doc-mesh-audit` manually for documentation-mesh, release, handoff, governance, and roadmap changes.
+1. Use `agentic-kit doc-mesh-audit` manually for documentation-mesh, release, handoff, governance, roadmap, and current-state changes.
 2. Collect failure classes and false positives across a few PRs.
 3. Use structured JSON reports for review and CI-friendly evidence.
 4. Keep bounded repair tools limited to mechanical edits, such as historical banners or later carefully scoped version/DOI list alignment.
@@ -117,23 +139,28 @@ Near-term documentation-governance roadmap:
 Product-positioning roadmap:
 
 1. Document the project as a governed AI-assisted development layer, not as a promise of autonomous agent correctness.
-2. Add a short problem-oriented explanation: chat context drift, branch drift, unclear handoff state, local-output transfer, and release-state drift.
+2. Explain the problem solved by the project: chat context drift, branch drift, unclear handoff state, local-output transfer, release-state drift, and unmanaged CLI complexity.
 3. Keep the first-run path simple enough for a new maintainer to understand without reading every governance document.
-4. Provide a compact example flow: request workflow, run gate, upload evidence, inspect status, cleanup evidence.
+4. Provide compact example flows for health checks, explicit workflow request/run/status/cleanup, and release verification.
+
+## Project-level state documentation
 
 Project-level state documentation is present on main:
 
-- .agentic/project.yaml
-- sentinel.yaml
-- .agentic/todo.yaml
-- docs/STATUS.md
-- docs/TEST_GATES.md
-- docs/handoff/CURRENT_HANDOFF.md
-- docs/architecture/ARCHITECTURE_CONTRACT.md
-- docs/architecture/AGENTIC_CODING_RESEARCH_INPUTS.md
-- docs/architecture/references.bib
-- docs/DOCUMENTATION_COVERAGE.yaml
-- docs/WORKFLOW_OUTPUT_CYCLE.md
+- `.agentic/project.yaml`
+- `sentinel.yaml`
+- `.agentic/todo.yaml`
+- `docs/STATUS.md`
+- `docs/TEST_GATES.md`
+- `docs/handoff/CURRENT_HANDOFF.md`
+- `docs/architecture/ARCHITECTURE_CONTRACT.md`
+- `docs/architecture/AGENTIC_CODING_RESEARCH_INPUTS.md`
+- `docs/architecture/references.bib`
+- `docs/DOCUMENTATION_COVERAGE.yaml`
+- `docs/WORKFLOW_OUTPUT_CYCLE.md`
+- `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md`
+- `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
+- `docs/ideas/LAYERED_CLI_USABILITY.md`
 
 Project-level state documentation is machine-checkable:
 
@@ -142,9 +169,9 @@ Project-level state documentation is machine-checkable:
 - `docs/architecture/ARCHITECTURE_CONTRACT.md` is a required state gate document.
 - `docs/DOCUMENTATION_COVERAGE.yaml` is a documentation coverage matrix.
 - Documentation coverage checks that public commands, workflows, governance concepts, release topics, evidence conventions, state-doc expectations, policy-pack doctor checks, semantic quality boundary language, next-step workflow behavior, environment bootstrap, `FAILED` handling, and documentation-mesh audit visibility remain visible.
-- sentinel.yaml and .agentic/todo.yaml are present so the repository validates its own machine-readable task gate configuration.
+- `sentinel.yaml` and `.agentic/todo.yaml` are present so the repository validates its own machine-readable task gate configuration.
 
-Project health diagnostics are CLI-supported:
+## Project health diagnostics
 
 - `agentic-kit doctor` checks required project files, project contract status, policy-pack checks, documentation gates, machine-readable task gates, and version drift including package `__version__` drift.
 - `agentic-kit check-docs` checks documentation coverage and deterministic document-quality heuristics.
@@ -154,13 +181,12 @@ Project health diagnostics are CLI-supported:
 
 ## Current Goal
 
-Record the DCO decision rule and architecture track so future agents must check whether cell-based structured outputs would reduce drift before choosing a simpler or more complex output shape.
+Update state and handoff documentation after PR #164 so main no longer points future agents to stale pre-v0.3.6 or pre-#164 branch goals.
 
 ## Current Blockers
 
-- Local gates must pass on the DCO decision-rule branch.
-- `agentic-kit doc-mesh-audit` should be run because this changes governance and roadmap wording.
-- DCO is not implemented yet; this branch only records the decision rule and future architecture track.
+- Local gates must pass on `docs/status-handoff-after-164`.
+- Because this changes current-state and handoff wording, include `agentic-kit doc-mesh-audit` before merge.
 
 ## Live Status Commands
 
@@ -169,13 +195,13 @@ Run:
 ```bash
 git status --short
 git branch --show-current
-python -m pytest -q
-ruff check .
-agentic-kit check-docs
-agentic-kit doctor
-agentic-kit doc-mesh-audit
+.venv/bin/python -m pytest -q
+.venv/bin/ruff check .
+.venv/bin/agentic-kit check-docs
+.venv/bin/agentic-kit doctor
+.venv/bin/agentic-kit doc-mesh-audit
 ```
 
 ## Next Safe Step
 
-Validate the focused DCO decision-rule documentation branch. If green, open and merge a documentation PR. After merge, return to `feature/workflow-request-cli` and implement `agentic-kit workflow request` as the public equivalent of `tools/next-step.py --request`, with tests and documentation updates.
+Validate `docs/status-handoff-after-164`. If green, open and merge a focused documentation PR. After merge, reassess whether the next implementation slice should harden workflow cleanup behavior, keep `doc-mesh-audit` as a special gate for more PRs, or start a small usability-oriented CLI guidance slice.
