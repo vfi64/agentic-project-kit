@@ -63,7 +63,7 @@ After `UPLOADED`, run `agentic-kit workflow cleanup` or `python3 tools/next-step
 
 ## FAILED handling
 
-`FAILED` is a stop-and-diagnose state. Do not repeatedly run `ns`, `agentic-kit workflow run`, or `python3 tools/next-step.py` hoping that the same workflow will self-heal.
+`FAILED` is a stop-and-diagnose state. Do not repeatedly run `ns` or `python3 tools/next-step.py`. Also do not repeatedly run `agentic-kit workflow run` hoping that the same workflow will self-heal.
 
 When the workflow state is `FAILED`:
 
