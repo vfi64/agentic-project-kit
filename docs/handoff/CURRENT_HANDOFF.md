@@ -1,4 +1,4 @@
-Current version: 0.3.5
+Current version: 0.3.6
 
 # Current Handoff
 
@@ -8,6 +8,8 @@ Branch: docs/ai-development-roadmap
 Base branch: main
 
 ## Current Goal
+
+Prepare v0.3.6 release metadata after PR #158, PR #159, PR #160, and PR #161.
 
 Update project roadmap and handoff after v0.3.5 so the next development slice is explicit: move the explicit workflow request mechanism from the internal `tools/next-step.py --request` path to the public `agentic-kit workflow request` CLI path.
 

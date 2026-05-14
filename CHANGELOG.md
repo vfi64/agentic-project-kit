@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.3.6 - 2026-05-14
+
+- Aligned the public `agentic-kit workflow request` command with the explicit `.agentic/current_work.yaml` request mechanism.
+- Kept `.agentic/workflow_state` at `IDLE` for workflow requests and added `current_work_state` status reporting.
+- Added governed workflow design rules, including DCO, state models, contract-first CLI design, idempotency, stop states, typed intermediate artifacts, bounded repair, capability matrices, and ADR guidance.
+- Added `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md` as an idea note for Event-Sourcing Light, capability matrices, ADR policy, and state-model templates.
+
 ## v0.3.5 - 2026-05-13
 
 - Classify CHANGELOG.md as a release-history document in the documentation mesh instead of live current-state.
