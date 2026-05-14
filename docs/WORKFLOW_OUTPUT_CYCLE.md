@@ -18,6 +18,13 @@ For app-based ChatGPT workflows, the normal local command is:
 
 ```bash
 cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+agentic-kit workflow request
+agentic-kit workflow run
+```
+
+The compatibility entrypoint remains available and has equivalent request/run behavior:
+
+```bash
 .venv/bin/python tools/next-step.py --request
 python3 tools/next-step.py
 ```
@@ -48,15 +55,15 @@ TEST/UPLOAD/CLEANUP -> legacy compatibility cycle
 This means routine work uses an explicit request followed by the same command for validation and cleanup:
 
 ```bash
-.venv/bin/python tools/next-step.py --request
-python3 tools/next-step.py
+agentic-kit workflow request
+agentic-kit workflow run
 ```
 
-After `UPLOADED`, run `python3 tools/next-step.py` once more for cleanup. Then reply in chat with `done` or `d`.
+After `UPLOADED`, run `agentic-kit workflow cleanup` or `python3 tools/next-step.py` once more for cleanup. Then reply in chat with `done` or `d`.
 
 ## FAILED handling
 
-`FAILED` is a stop-and-diagnose state. Do not repeatedly run `ns` or `python3 tools/next-step.py` hoping that the same workflow will self-heal.
+`FAILED` is a stop-and-diagnose state. Do not repeatedly run `ns` or `python3 tools/next-step.py`. Also do not repeatedly run `agentic-kit workflow run` hoping that the same workflow will self-heal.
 
 When the workflow state is `FAILED`:
 
@@ -85,7 +92,7 @@ rm -f tmp/agent-evidence/workflow-output-*.md
 rm -f tmp/agent-evidence/latest-branch.txt
 ```
 
-7. Run `ns` or `python3 tools/next-step.py` again.
+7. Run `agentic-kit workflow run`, `ns`, or `python3 tools/next-step.py` again after the failure cause has been fixed.
 
 The short chat acknowledgement `d` is normally sufficient after `UPLOADED`, because the assistant can inspect the remote evidence branch. It is not sufficient for a local `FAILED` state unless the failure evidence was already uploaded or the assistant has enough copied terminal output.
 
@@ -114,14 +121,14 @@ This does not activate the virtual environment in the parent shell. It only make
 
 ## Optional shell shortcut
 
-A local zsh alias or function can shorten the command to `ns`. This is local shell configuration, not repository state. A typical user setup is:
+A local zsh alias or function can shorten the compatibility entrypoint to `ns`. This is local shell configuration, not repository state. A typical user setup is:
 
 ```zsh
 alias ns='cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit && python3 tools/next-step.py'
 alias nsr='cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit && .venv/bin/python tools/next-step.py --request'
 ```
 
-After adding those aliases to `~/.zshrc`, routine work becomes:
+After adding those aliases to `~/.zshrc`, routine compatibility-entrypoint work becomes:
 
 ```zsh
 nsr
@@ -160,15 +167,25 @@ agentic-kit workflow cleanup
 
 The commands operate on `.agentic/workflow_state` and `.agentic/current_work.yaml`.
 
+`agentic-kit workflow request` is the public equivalent of `tools/next-step.py --request`: it sets `.agentic/current_work.yaml` to `state: REQUESTED` while leaving `.agentic/workflow_state` at `IDLE`. It does not run the workflow as a side effect. A repeated request while the workflow is already requested is idempotent.
+
+`agentic-kit workflow status` reports both state layers, for example:
+
+```text
+workflow_state=IDLE
+current_work=present
+current_work_state=REQUESTED
+```
+
 `agentic-kit workflow status` also reports the current workflow-output pointer when present:
 
 ```text
 docs/reports/CURRENT_WORKFLOW_OUTPUT.md
 ```
 
-- `workflow request`: marks an IDLE or FAILED declarative workflow as REQUESTED.
+- `workflow request`: marks the declarative workflow file as REQUESTED while the main workflow state remains IDLE.
 - `workflow run`: runs exactly one bounded state-machine step through the existing local entrypoint.
-- `workflow status`: prints the current state and bounded evidence pointers.
+- `workflow status`: prints the current state, current workflow request state, and bounded evidence pointers.
 - `workflow cleanup`: cleans an UPLOADED/CLEANUP evidence branch, otherwise no-ops with a status message.
 
 ## Compatibility entrypoint
@@ -193,15 +210,16 @@ The original evidence cycle remains supported for compatibility:
 
 A newer, safer workflow uses a declarative allowlisted request file:
 
-- `.agentic/current_work.yaml`: describes the current local task using known step names.
-- `REQUESTED`: run the declarative workflow request.
+- `.agentic/current_work.yaml`: describes the current local task using known step names and stores the request state.
+- `READY`: a safe no-op request state.
+- `REQUESTED`: the configured declarative workflow should run on the next workflow step.
 - `RUNNING`: guard state written before the local task starts.
 - `UPLOADED`: local task finished and the evidence branch was pushed for LLM review.
 - `FAILED`: local task failed or timed out; evidence is preserved when possible and no automatic cleanup is performed.
 
 Allowed declarative steps are implemented in `tools/workflow_runner.py`. The runner executes command lists directly and does not use shell snippets.
 
-The current state is stored in `.agentic/workflow_state`. `IDLE` is the safe default and only starts a run when `.agentic/current_work.yaml` has `state: REQUESTED`.
+The main workflow state is stored in `.agentic/workflow_state`. `IDLE` is the safe default and only starts a run when `.agentic/current_work.yaml` has `state: REQUESTED`.
 
 ## Starting a legacy cycle intentionally
 
@@ -219,16 +237,16 @@ After the `TEST`, `UPLOAD`, and `CLEANUP` steps complete, the script returns the
 Set `.agentic/current_work.yaml` to the desired allowlisted task with `state: READY`, request it explicitly, then run:
 
 ```bash
-.venv/bin/python tools/next-step.py --request
-python3 tools/next-step.py
+agentic-kit workflow request
+agentic-kit workflow run
 ```
 
-After the `IDLE` step succeeds, the state becomes `UPLOADED`. The LLM can inspect the remote temporary evidence branch. A later `python3 tools/next-step.py` call cleans up and returns to `IDLE`.
+After the `IDLE` step succeeds, the state becomes `UPLOADED`. The LLM can inspect the remote temporary evidence branch. A later `agentic-kit workflow cleanup` call cleans up and returns to `IDLE`.
 
 ## Rules for agents
 
-- Prefer the standard next-step terminal workflow over manual Copy-and-Paste when complete terminal output matters.
-- Accept `done` or `d` as the normal user acknowledgement after `python3 tools/next-step.py` finishes.
+- Prefer the standard workflow CLI or compatibility next-step terminal workflow over manual Copy-and-Paste when complete terminal output matters.
+- Accept `done` or `d` as the normal user acknowledgement after the workflow command finishes.
 - Prefer declarative YAML workflow requests over executable ad-hoc scripts.
 - Treat evidence as temporary and bounded.
 - Do not keep raw workflow evidence permanently in `main`.

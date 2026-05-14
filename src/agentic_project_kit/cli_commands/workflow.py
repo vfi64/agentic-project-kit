@@ -30,12 +30,37 @@ def _read_state(root: Path) -> str:
     return state
 
 
-def _write_state(root: Path, state: str) -> None:
-    if state not in VALID_STATES:
-        raise typer.BadParameter(f"invalid workflow state: {state}")
-    state_path = _rooted(STATE_FILE, root)
-    state_path.parent.mkdir(parents=True, exist_ok=True)
-    state_path.write_text(state + "\n", encoding="utf-8")
+def _workflow_request_state(root: Path) -> str:
+    work_path = _rooted(WORK_FILE, root)
+    if not work_path.exists():
+        raise typer.BadParameter(f"missing declarative workflow file: {WORK_FILE}")
+    for line in work_path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("state:"):
+            return stripped.split(":", 1)[1].strip().upper() or "READY"
+    return "READY"
+
+
+def _set_workflow_request_state(root: Path, request_state: str) -> None:
+    work_path = _rooted(WORK_FILE, root)
+    if not work_path.exists():
+        raise typer.BadParameter(f"missing declarative workflow file: {WORK_FILE}")
+    normalized = request_state.upper()
+    if normalized not in {"READY", "REQUESTED"}:
+        raise typer.BadParameter(f"invalid workflow request state: {request_state}")
+    lines = work_path.read_text(encoding="utf-8").splitlines()
+    replaced = False
+    output: list[str] = []
+    for line in lines:
+        if line.strip().startswith("state:") and not replaced:
+            indent = line[: len(line) - len(line.lstrip())]
+            output.append(f"{indent}state: {normalized}")
+            replaced = True
+        else:
+            output.append(line)
+    if not replaced:
+        output.insert(1 if output else 0, f"state: {normalized}")
+    work_path.write_text("\n".join(output) + "\n", encoding="utf-8")
 
 
 def _run_next_step(root: Path) -> int:
@@ -48,18 +73,18 @@ def _run_next_step(root: Path) -> int:
 
 @workflow_app.command("request")
 def workflow_request(
-    project_root: Path = typer.Option(Path("."), "--root", help="Project root containing .agentic/workflow_state."),
+    project_root: Path = typer.Option(Path("."), "--root", help="Project root containing .agentic/current_work.yaml."),
 ) -> None:
-    """Mark the declarative workflow request as ready to run."""
+    """Request the configured declarative workflow without running it."""
     root = project_root.resolve()
-    if not _rooted(WORK_FILE, root).exists():
-        raise typer.BadParameter(f"missing declarative workflow file: {WORK_FILE}")
     state = _read_state(root)
-    if state not in {"IDLE", "FAILED"}:
+    if state != "IDLE":
         raise typer.BadParameter(f"refusing to request workflow from state: {state}")
-    _write_state(root, "REQUESTED")
-    typer.echo("workflow_state=REQUESTED")
-    typer.echo("Next: agentic-kit workflow run")
+    _workflow_request_state(root)
+    _set_workflow_request_state(root, "REQUESTED")
+    typer.echo(f"Current workflow request file: {WORK_FILE}")
+    typer.echo("Workflow request state: REQUESTED")
+    typer.echo("Next state: IDLE")
 
 
 @workflow_app.command("run")
@@ -80,6 +105,8 @@ def workflow_status(
     typer.echo(f"workflow_state={state}")
     work_file = _rooted(WORK_FILE, root)
     typer.echo(f"current_work={'present' if work_file.exists() else 'missing'}")
+    if work_file.exists():
+        typer.echo(f"current_work_state={_workflow_request_state(root)}")
     branch_file = _rooted(BRANCH_FILE, root)
     if branch_file.exists():
         typer.echo(f"evidence_branch={branch_file.read_text(encoding='utf-8').strip()}")

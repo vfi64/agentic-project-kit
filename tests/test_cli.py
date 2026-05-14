@@ -133,7 +133,7 @@ def test_workflow_status_reports_idle(tmp_path):
     assert "current_work=missing" in result.output
 
 
-def test_workflow_request_sets_requested_from_idle(tmp_path):
+def test_workflow_request_sets_current_work_requested_from_idle(tmp_path):
     runner = CliRunner()
     root = tmp_path / "repo"
     (root / ".agentic").mkdir(parents=True)
@@ -143,8 +143,10 @@ def test_workflow_request_sets_requested_from_idle(tmp_path):
     result = runner.invoke(app, ["workflow", "request", "--root", str(root)])
 
     assert result.exit_code == 0, result.output
-    assert "workflow_state=REQUESTED" in result.output
-    assert (root / ".agentic" / "workflow_state").read_text(encoding="utf-8") == "REQUESTED\n"
+    assert "Workflow request state: REQUESTED" in result.output
+    assert "Next state: IDLE" in result.output
+    assert (root / ".agentic" / "workflow_state").read_text(encoding="utf-8") == "IDLE\n"
+    assert "state: REQUESTED" in (root / ".agentic" / "current_work.yaml").read_text(encoding="utf-8")
 
 
 def test_workflow_cleanup_noops_from_idle(tmp_path):
