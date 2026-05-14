@@ -97,6 +97,8 @@ DCO validates structure, required fields, dependencies, allowed values, and know
 
 This decision rule is currently review-only. It cannot be fully machine-checked because the decision to use DCO depends on architectural judgment. Reviewers should inspect whether the chosen output shape reduces drift and improves validation, repair, rendering, or auditability without making simple workflows harder to maintain.
 
+See `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md` for the curated idea note and lifecycle guidance. The idea note is not a binding implementation requirement.
+
 ## Governed Workflow Design Principles
 
 For non-trivial workflow, repair, release, validation, or agent-facing features, prefer explicit governed design over implicit agent behavior.
@@ -120,6 +122,8 @@ Use capability matrices when permissions or command availability become conditio
 Use Architecture Decision Records (ADRs) for durable architecture choices with real alternatives and long-term consequences. Do not create ADRs for routine implementation details.
 
 These governed workflow principles are currently review-only unless a specific feature turns them into deterministic tests, schema checks, doctor checks, documentation coverage, or CLI contracts. Reviewers should inspect whether a design reduces drift, improves restartability, preserves evidence, and keeps simple workflows simple.
+
+See `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md` for preserved workflow-pattern notes and `docs/ideas/LAYERED_CLI_USABILITY.md` for the non-binding usability-layer model that keeps the CLI Golden Path small while allowing advanced automation.
 
 ## Remote Work Authorization
 
