@@ -14,6 +14,7 @@ WORK_FILE = Path(".agentic/current_work.yaml")
 BRANCH_FILE = Path("tmp/agent-evidence/latest-branch.txt")
 REPORT_FILE = Path("docs/reports/CURRENT_WORKFLOW_OUTPUT.md")
 NEXT_STEP_SCRIPT = Path("tools/next-step.py")
+TEMP_PREFIX = "temp/workflow-evidence-"
 
 
 def _rooted(path: Path, root: Path) -> Path:
@@ -71,6 +72,62 @@ def _run_next_step(root: Path) -> int:
     return int(completed.returncode)
 
 
+def _run_git(root: Path, args: list[str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(["git", *args], cwd=root.resolve(), text=True, capture_output=True, check=False)
+
+
+def _safe_temp_branch(branch: str) -> str | None:
+    normalized = branch.strip()
+    if not normalized.startswith(TEMP_PREFIX):
+        return None
+    if ".." in normalized or normalized.endswith("/"):
+        return None
+    return normalized
+
+
+def _local_temp_branches(root: Path) -> list[str]:
+    result = _run_git(root, ["branch", "--list", f"{TEMP_PREFIX}*"])
+    if result.returncode != 0:
+        raise typer.BadParameter(result.stderr.strip() or "failed to list local workflow evidence branches")
+    branches: list[str] = []
+    for line in result.stdout.splitlines():
+        branch = _safe_temp_branch(line.replace("*", "", 1).strip())
+        if branch is not None:
+            branches.append(branch)
+    return branches
+
+
+def _remote_temp_branches(root: Path) -> list[str]:
+    result = _run_git(root, ["ls-remote", "--heads", "origin", f"{TEMP_PREFIX}*"])
+    if result.returncode != 0:
+        raise typer.BadParameter(result.stderr.strip() or "failed to list remote workflow evidence branches")
+    branches: list[str] = []
+    for line in result.stdout.splitlines():
+        ref = line.split()[-1] if line.split() else ""
+        prefix = "refs/heads/"
+        branch = ref[len(prefix) :] if ref.startswith(prefix) else ref
+        safe = _safe_temp_branch(branch)
+        if safe is not None:
+            branches.append(safe)
+    return branches
+
+
+def _cleanup_stale_temp_branches(root: Path) -> int:
+    local_branches = _local_temp_branches(root)
+    remote_branches = _remote_temp_branches(root)
+    branches = sorted(set(local_branches + remote_branches))
+    if not branches:
+        return 0
+    for branch in branches:
+        if branch in local_branches:
+            _run_git(root, ["branch", "-D", branch])
+            typer.echo(f"Deleted local stale workflow evidence branch: {branch}")
+        if branch in remote_branches:
+            _run_git(root, ["push", "origin", "--delete", branch])
+            typer.echo(f"Deleted remote stale workflow evidence branch: {branch}")
+    return len(branches)
+
+
 @workflow_app.command("request")
 def workflow_request(
     project_root: Path = typer.Option(Path("."), "--root", help="Project root containing .agentic/current_work.yaml."),
@@ -119,11 +176,15 @@ def workflow_status(
 def workflow_cleanup(
     project_root: Path = typer.Option(Path("."), "--root", help="Project root containing tools/next-step.py."),
 ) -> None:
-    """Cleanup a completed uploaded workflow evidence branch."""
+    """Cleanup completed or stale temporary workflow evidence branches."""
     root = project_root.resolve()
     state = _read_state(root)
-    if state not in {"UPLOADED", "CLEANUP"}:
-        typer.echo(f"workflow_state={state}")
+    if state in {"UPLOADED", "CLEANUP"}:
+        raise typer.Exit(code=_run_next_step(root))
+    stale_count = _cleanup_stale_temp_branches(root)
+    typer.echo(f"workflow_state={state}")
+    if stale_count:
+        typer.echo(f"Cleaned stale workflow evidence branches: {stale_count}")
+    else:
         typer.echo("No cleanup action available for current state.")
-        raise typer.Exit(code=0)
-    raise typer.Exit(code=_run_next_step(root))
+    raise typer.Exit(code=0)
