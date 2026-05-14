@@ -67,6 +67,36 @@ Every new or changed governance rule must be hardened in the same change by one 
 
 Do not add a normative project rule as prose only. If a rule is intentionally review-only, state why it cannot currently be machine-checked and what evidence reviewers should inspect.
 
+## Deterministic Cell Orchestration Decision Rule
+
+For complex, rule-bound AI-generated outputs, check whether Deterministic Cell Orchestration (DCO) would reduce drift or improve validation, repair, rendering, or auditability.
+
+DCO means that an output is split into explicit, typed cells. Each cell can be validated independently, failed cells can be repaired selectively, and the final user-facing artifact is rendered deterministically from validated cells.
+
+Use DCO when it provides a clear advantage for at least one of these cases:
+
+- complex output contracts with required sections or repeated structures;
+- outputs that need selective repair instead of full regeneration;
+- audit, handoff, review, release, or report artifacts that benefit from machine-readable intermediate structure;
+- outputs where deterministic rendering is safer than model-generated formatting;
+- workflows where failed subparts should be localized to a specific cell.
+
+Do not use DCO when a simple document, CLI command, gate, or Markdown update is clearer and easier to maintain. DCO must reduce complexity at the workflow level; it must not add schema, validator, repair, or renderer layers merely for architectural symmetry.
+
+When DCO is used, prefer a minimal architecture:
+
+- stable cell IDs;
+- explicit cell types;
+- required fields;
+- deterministic validation rules;
+- bounded repair policy, if repair is allowed;
+- deterministic renderer expectations;
+- tests for schema, validation, repair behavior, and rendering where practical.
+
+DCO validates structure, required fields, dependencies, allowed values, and known rule violations. It must not be presented as proof of semantic correctness unless the semantic property has been converted into a deterministic rule.
+
+This decision rule is currently review-only. It cannot be fully machine-checked because the decision to use DCO depends on architectural judgment. Reviewers should inspect whether the chosen output shape reduces drift and improves validation, repair, rendering, or auditability without making simple workflows harder to maintain.
+
 ## Remote Work Authorization
 
 For `agentic-project-kit`, an assistant or coding agent may work without additional confirmation on remote feature or documentation branches when the task fits the current request and architecture contract.
