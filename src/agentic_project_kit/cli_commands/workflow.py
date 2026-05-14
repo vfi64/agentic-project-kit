@@ -76,6 +76,11 @@ def _run_git(root: Path, args: list[str]) -> subprocess.CompletedProcess[str]:
     return subprocess.run(["git", *args], cwd=root.resolve(), text=True, capture_output=True, check=False)
 
 
+def _is_git_repository(root: Path) -> bool:
+    result = _run_git(root, ["rev-parse", "--is-inside-work-tree"])
+    return result.returncode == 0 and result.stdout.strip() == "true"
+
+
 def _safe_temp_branch(branch: str) -> str | None:
     normalized = branch.strip()
     if not normalized.startswith(TEMP_PREFIX):
@@ -100,7 +105,7 @@ def _local_temp_branches(root: Path) -> list[str]:
 def _remote_temp_branches(root: Path) -> list[str]:
     result = _run_git(root, ["ls-remote", "--heads", "origin", f"{TEMP_PREFIX}*"])
     if result.returncode != 0:
-        raise typer.BadParameter(result.stderr.strip() or "failed to list remote workflow evidence branches")
+        return []
     branches: list[str] = []
     for line in result.stdout.splitlines():
         ref = line.split()[-1] if line.split() else ""
@@ -113,6 +118,8 @@ def _remote_temp_branches(root: Path) -> list[str]:
 
 
 def _cleanup_stale_temp_branches(root: Path) -> int:
+    if not _is_git_repository(root):
+        return 0
     local_branches = _local_temp_branches(root)
     remote_branches = _remote_temp_branches(root)
     branches = sorted(set(local_branches + remote_branches))
