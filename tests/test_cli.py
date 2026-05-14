@@ -1,4 +1,5 @@
 from pathlib import Path
+import subprocess
 
 from typer.testing import CliRunner
 import yaml
@@ -160,6 +161,35 @@ def test_workflow_cleanup_noops_from_idle(tmp_path):
     assert result.exit_code == 0, result.output
     assert "workflow_state=IDLE" in result.output
     assert "No cleanup action available" in result.output
+
+
+def test_workflow_cleanup_deletes_stale_local_evidence_branch_from_idle(tmp_path):
+    runner = CliRunner()
+    root = tmp_path / "repo"
+    root.mkdir()
+    subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=root, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=root, check=True)
+    (root / ".agentic").mkdir(parents=True)
+    (root / ".agentic" / "workflow_state").write_text("IDLE\n", encoding="utf-8")
+    (root / "README.md").write_text("demo\n", encoding="utf-8")
+    subprocess.run(["git", "add", "."], cwd=root, check=True)
+    subprocess.run(["git", "commit", "-m", "Initial commit"], cwd=root, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "branch", "temp/workflow-evidence-test"], cwd=root, check=True)
+
+    result = runner.invoke(app, ["workflow", "cleanup", "--root", str(root)])
+
+    assert result.exit_code == 0, result.output
+    assert "workflow_state=IDLE" in result.output
+    assert "Cleaned stale workflow evidence branches: 1" in result.output
+    branches = subprocess.run(
+        ["git", "branch", "--list", "temp/workflow-evidence-*"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert branches.stdout.strip() == ""
 
 
 def test_init_accepts_governance_wrapper_type(tmp_path):
