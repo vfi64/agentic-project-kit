@@ -15,7 +15,7 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-v0.3.6 is being prepared as a patch release after PR #158, PR #159, PR #160, and PR #161. It covers the AI-assisted development roadmap update, DCO and governed workflow design rules, public workflow request CLI semantics, and governed workflow pattern notes.
+v0.3.6 is released and post-release verified. Verified v0.3.6 version DOI: `10.5281/zenodo.20183888`. It covers the AI-assisted development roadmap update, DCO and governed workflow design rules, public workflow request CLI semantics, and governed workflow pattern notes.
 
 v0.3.5 is released and post-release verified.
 
