@@ -5,7 +5,7 @@ Current version: 0.3.5
 Status-date: 2026-05-13
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/ai-development-roadmap
+Current work branch: docs/dco-decision-rule
 
 ## Purpose
 
@@ -25,6 +25,7 @@ v0.3.5 release evidence is verified:
 - `agentic-kit post-release-check --version 0.3.5` passed.
 - The post-release Zenodo verification is complete for v0.3.5.
 - PR #157 recorded the verified v0.3.5 DOI metadata on main.
+- PR #158 updated the AI-assisted development roadmap after v0.3.5.
 
 Recent completed work since v0.3.3:
 
@@ -38,6 +39,7 @@ Recent completed work since v0.3.3:
 - PR #155 documented explicit `ns` workflow request mode.
 - PR #156 prepared v0.3.5 release metadata.
 - PR #157 recorded v0.3.5 DOI metadata.
+- PR #158 documented the post-v0.3.5 AI-assisted development roadmap.
 
 Documentation-mesh audit state:
 
@@ -93,6 +95,15 @@ Near-term public workflow CLI roadmap:
 6. Add `agentic-kit workflow cleanup` for explicit cleanup of uploaded temporary evidence branches.
 7. Reassess whether `agentic-kit workflow run` should call the same runner used by `ns`, or remain a safer status/request-oriented command first.
 
+Future Deterministic Cell Orchestration architecture track:
+
+1. Treat Deterministic Cell Orchestration (DCO) as an optional decision pattern for complex, rule-bound AI-generated outputs.
+2. Use DCO when typed cells, independent validation, selective repair, deterministic rendering, or auditability clearly reduce drift.
+3. Do not use DCO when a simple Markdown document, CLI command, gate, or report is clearer and easier to maintain.
+4. Keep DCO aligned with the semantic quality boundary: it can prove structure and known rules, not broad semantic correctness unless semantics are converted into deterministic checks.
+5. Prefer a small later pilot for handoff, review, release, or report artifacts before applying DCO to more complex systems such as SCI traces.
+6. If a pilot is added, require schema tests, validator tests, bounded repair tests where repair exists, and renderer tests where deterministic rendering exists.
+
 Near-term documentation-governance roadmap:
 
 1. Use `agentic-kit doc-mesh-audit` manually for documentation-mesh, release, handoff, governance, and roadmap changes.
@@ -141,13 +152,13 @@ Project health diagnostics are CLI-supported:
 
 ## Current Goal
 
-Update project roadmap and handoff after v0.3.5 so the next development slice is explicit: move the explicit workflow request mechanism from the internal `tools/next-step.py --request` path to the public `agentic-kit workflow request` CLI path.
+Record the DCO decision rule and architecture track so future agents must check whether cell-based structured outputs would reduce drift before choosing a simpler or more complex output shape.
 
 ## Current Blockers
 
-- Local gates must pass on the roadmap update branch.
-- `agentic-kit doc-mesh-audit` should be run because this changes current state, handoff, and roadmap wording.
-- The public workflow request command is not implemented yet; this branch only records the roadmap and next safe step.
+- Local gates must pass on the DCO decision-rule branch.
+- `agentic-kit doc-mesh-audit` should be run because this changes governance and roadmap wording.
+- DCO is not implemented yet; this branch only records the decision rule and future architecture track.
 
 ## Live Status Commands
 
@@ -165,4 +176,4 @@ agentic-kit doc-mesh-audit
 
 ## Next Safe Step
 
-Open and validate this focused roadmap update. After merge, create `feature/workflow-request-cli` and implement `agentic-kit workflow request` as the public equivalent of `tools/next-step.py --request`, with tests and documentation updates.
+Validate the focused DCO decision-rule documentation branch. If green, open and merge a documentation PR. After merge, return to `feature/workflow-request-cli` and implement `agentic-kit workflow request` as the public equivalent of `tools/next-step.py --request`, with tests and documentation updates.

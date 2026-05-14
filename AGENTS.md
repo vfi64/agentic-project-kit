@@ -67,6 +67,60 @@ Every new or changed governance rule must be hardened in the same change by one 
 
 Do not add a normative project rule as prose only. If a rule is intentionally review-only, state why it cannot currently be machine-checked and what evidence reviewers should inspect.
 
+## Deterministic Cell Orchestration Decision Rule
+
+For complex, rule-bound AI-generated outputs, check whether Deterministic Cell Orchestration (DCO) would reduce drift or improve validation, repair, rendering, or auditability.
+
+DCO means that an output is split into explicit, typed cells. Each cell can be validated independently, failed cells can be repaired selectively, and the final user-facing artifact is rendered deterministically from validated cells.
+
+Use DCO when it provides a clear advantage for at least one of these cases:
+
+- complex output contracts with required sections or repeated structures;
+- outputs that need selective repair instead of full regeneration;
+- audit, handoff, review, release, or report artifacts that benefit from machine-readable intermediate structure;
+- outputs where deterministic rendering is safer than model-generated formatting;
+- workflows where failed subparts should be localized to a specific cell.
+
+Do not use DCO when a simple document, CLI command, gate, or Markdown update is clearer and easier to maintain. DCO must reduce complexity at the workflow level; it must not add schema, validator, repair, or renderer layers merely for architectural symmetry.
+
+When DCO is used, prefer a minimal architecture:
+
+- stable cell IDs;
+- explicit cell types;
+- required fields;
+- deterministic validation rules;
+- bounded repair policy, if repair is allowed;
+- deterministic renderer expectations;
+- tests for schema, validation, repair behavior, and rendering where practical.
+
+DCO validates structure, required fields, dependencies, allowed values, and known rule violations. It must not be presented as proof of semantic correctness unless the semantic property has been converted into a deterministic rule.
+
+This decision rule is currently review-only. It cannot be fully machine-checked because the decision to use DCO depends on architectural judgment. Reviewers should inspect whether the chosen output shape reduces drift and improves validation, repair, rendering, or auditability without making simple workflows harder to maintain.
+
+## Governed Workflow Design Principles
+
+For non-trivial workflow, repair, release, validation, or agent-facing features, prefer explicit governed design over implicit agent behavior.
+
+Use explicit state models when a process is persistent, resumable, multi-step, side-effecting, or failure-prone. State models should name the allowed states, allowed transitions, no-op states, stop states, and cleanup paths. Avoid adding states that do not change behavior or improve diagnostics.
+
+Use contract-first CLI design for public commands. Before implementation, define inputs, outputs, exit codes, state changes, error cases, idempotency expectations, and documentation requirements. CLI adapters should remain thin; core behavior belongs in importable modules with tests.
+
+Prefer idempotent operations where practical. Re-running a request, status, cleanup, validation, or report command should either produce the same safe result or fail with a clear diagnostic. Repeated execution must not silently corrupt state or erase evidence.
+
+Use stop-state principles for failures. Failure states such as `FAILED` must preserve evidence and require diagnosis before cleanup or continuation. Do not automatically skip, overwrite, or repair failure evidence merely to keep a workflow moving.
+
+Separate model output from runtime action. An LLM or coding agent may propose plans, commands, patches, or repairs, but deterministic project logic should validate executable actions before they change repository state, release state, workflow state, or generated artifacts.
+
+Prefer typed intermediate artifacts when they improve reliability. Machine-readable JSON or YAML reports, repair plans, workflow states, or validation results should feed deterministic renderers or summaries when that reduces parsing fragility. Do not replace clear Markdown with typed artifacts unless tests, repair, rendering, or auditability benefit.
+
+Use bounded repair instead of open-ended regeneration. Repairs should target named failure classes, keep diffs small, avoid inventing semantic content, record the repair reason, and stop after a bounded number of attempts.
+
+Use capability matrices when permissions or command availability become conditional. A capability matrix is preferred over scattered conditionals when commands depend on role, state, profile, workflow phase, or maintainer-only authority.
+
+Use Architecture Decision Records (ADRs) for durable architecture choices with real alternatives and long-term consequences. Do not create ADRs for routine implementation details.
+
+These governed workflow principles are currently review-only unless a specific feature turns them into deterministic tests, schema checks, doctor checks, documentation coverage, or CLI contracts. Reviewers should inspect whether a design reduces drift, improves restartability, preserves evidence, and keeps simple workflows simple.
+
 ## Remote Work Authorization
 
 For `agentic-project-kit`, an assistant or coding agent may work without additional confirmation on remote feature or documentation branches when the task fits the current request and architecture contract.
