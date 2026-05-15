@@ -5,7 +5,7 @@ Current version: 0.3.8
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/record-v0.3.8-doi
+Current work branch: none / main is current
 
 ## Purpose
 
@@ -211,7 +211,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Record verified v0.3.8 DOI metadata after post-release verification.
+v0.3.8 is fully released and post-release verified.
 
 ## Current Blockers
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `docs/record-v0.3.8-doi`. If green, open and merge a focused documentation PR. After merge, v0.3.8 DOI metadata is recorded on main.
+v0.3.8 is complete. Start the next concrete slice only after defining a one-paragraph user-facing goal and an explicit command-level contract. Keep Pattern Advisor non-binding unless separately approved.
