@@ -116,7 +116,7 @@ Pattern Advisor guidance:
 
 - treat `docs/ideas/PATTERN_ADVISOR.md` as advisory-only and non-binding;
 - use it as a reference when recurring problem classes suggest reusable patterns, anti-patterns, or candidate patterns;
-- do not implement `patterns suggest`, `advise`, candidate capture, promotion/deprecation, or a broad catalog before a small read-only catalog MVP has proven useful;
+- the current Pattern Advisor MVP slice adds a small read-only catalog with `patterns list` and `patterns show`; do not implement `patterns suggest`, `advise`, candidate capture, promotion/deprecation, or a broad catalog before this MVP has proven useful;
 - use `docs/reports/pattern_advisor_mvp_contract.md` as the scope boundary for any later read-only Pattern Advisor catalog slice;
 - keep wrapper-project lessons as evidence sources, not wrapper-specific behavior in the kit;
 - consider an ADR only if public Pattern Advisor CLI, binding lifecycle, or advisory behavior becomes maintained architecture.
@@ -196,7 +196,7 @@ This handoff intentionally keeps coverage terms visible for deterministic gates:
 
 Completed post-v0.3.9 work now includes PR #195, PR #197, PR #198, PR #200, PR #204, PR #207, and PR #209: didactic guidance was added as a non-binding idea note, workflow evidence shortcuts were implemented, status guidance was aligned with the shortcut path, a contract-only Pattern Advisor MVP report was added, repo-local ns shortcuts reduce Copy-and-Paste for local workflow item selection and execution, named workflow-item runs now restore current_work after bounded execution, and state documentation was refreshed after that fix.
 
-No Pattern Advisor runtime MVP, DCO implementation, public Pattern Advisor CLI command, new deterministic gate, workflow state, or runtime behavior change has been added. PR #200 is only a planning contract for a possible later read-only catalog MVP.
+The current Pattern Advisor MVP slice adds public read-only `patterns list` and `patterns show` commands backed by a local catalog. No DCO implementation, deterministic gate, workflow state, automatic advice, candidate capture, or promotion behavior has been added.
 
 ## Next Safe Step
 

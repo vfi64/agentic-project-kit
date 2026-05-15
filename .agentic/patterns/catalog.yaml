@@ -1,0 +1,12 @@
+version: 1
+patterns:
+  - id: bounded-workflow-evidence
+    title: Bounded workflow evidence
+    kind: pattern
+    summary: Capture bounded local workflow output as reviewable evidence instead of pasting long terminal logs.
+    doc: docs/patterns/bounded-workflow-evidence.md
+  - id: hidden-autopilot
+    title: Hidden autopilot
+    kind: anti-pattern
+    summary: Letting automation change workflow state or architecture decisions without explicit human review.
+    doc: docs/patterns/hidden-autopilot.md

@@ -86,7 +86,7 @@ Deterministic Cell Orchestration remains optional. Use it only when typed cells,
 
 Layered CLI Usability is a review lens for keeping the public command surface manageable. The intended direction is high functionality and high automation internally while keeping the daily Golden Path simple.
 
-Pattern Advisor remains optional and advisory. It preserves the idea of mapping recurring project evidence to reusable patterns, anti-patterns, and candidate patterns without becoming an autopilot, a gate, or a wrapper-specific subsystem. PR #200 added a contract-only MVP planning report for a possible later read-only catalog slice; it did not implement `patterns list`, `patterns show`, `patterns suggest`, candidate capture, or advisory automation.
+Pattern Advisor remains optional and advisory. It preserves the idea of mapping recurring project evidence to reusable patterns, anti-patterns, and candidate patterns without becoming an autopilot, a gate, or a wrapper-specific subsystem. PR #200 added a contract-only MVP planning report. The current Pattern Advisor MVP slice implements a small local read-only catalog with `patterns list` and `patterns show`; it still does not implement `patterns suggest`, candidate capture, promotion, gates, workflow-state changes, or advisory automation.
 
 Didactic guidance is documented in `docs/ideas/DIDACTIC_GUIDANCE.md` as a non-binding orientation layer for making project state, handoffs, gates, and safe next steps easier to understand without adding runtime behavior, gates, or automatic decisions.
 
@@ -164,7 +164,7 @@ Future Pattern Advisor architecture track:
 
 1. Treat Pattern Advisor as an optional advisory layer for recurring project problem classes.
 2. Keep any future Pattern Advisor output advisory-only, not a deterministic gate.
-3. Do not implement `patterns suggest`, `advise`, candidate capture, or pattern promotion before a small read-only catalog MVP has proven useful; use `docs/reports/pattern_advisor_mvp_contract.md` as the scope boundary for any later read-only catalog slice.
+3. Keep the read-only Pattern Advisor catalog advisory-only. Do not implement `patterns suggest`, `advise`, candidate capture, or pattern promotion until the small `patterns list` / `patterns show` MVP has proven useful.
 4. Keep wrapper-project lessons as evidence sources, not wrapper-specific kit behavior.
 5. Consider an ADR only if a public `agentic-kit patterns` / `agentic-kit advise` CLI, binding lifecycle, or advisory behavior becomes maintained architecture.
 
