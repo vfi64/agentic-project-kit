@@ -411,6 +411,7 @@ The archived v0.3.8 release has the verified version-specific DOI: `10.5281/zeno
 
 The archived v0.3.9 release has the verified version-specific DOI: `10.5281/zenodo.20210345`.
 The archived v0.3.10 release has the verified version-specific DOI: `10.5281/zenodo.20214382`.
+The archived v0.3.11 release has the verified version-specific DOI: `10.5281/zenodo.20215460`.
 
 ## Governance wrapper projects
 
@@ -493,5 +494,6 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - v0.3.8: `10.5281/zenodo.20208638`
 - v0.3.9: `10.5281/zenodo.20210345`
 - v0.3.10: `10.5281/zenodo.20214382`
+- v0.3.11: `10.5281/zenodo.20215460`
 
 Near-term documentation-governance work: stabilize `agentic-kit doc-mesh-audit` as a targeted special gate, collect false positives, then decide whether to promote it into `agentic-kit doctor` before any unconditional default `ns` integration.
