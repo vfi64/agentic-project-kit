@@ -106,6 +106,7 @@ def _status_interpretation(state: str, work_state: str | None, dirty: bool) -> t
         recommendation.append("Run: agentic-kit workflow cleanup")
     elif state == "FAILED":
         interpretation.append("The last workflow step failed.")
+        recommendation.append("Run: agentic-kit workflow fail-report")
         recommendation.append("Inspect docs/reports/CURRENT_WORKFLOW_OUTPUT.md and git status before cleanup or retry.")
         recommendation.append("Do not rerun workflow automation until the failure cause is understood.")
     elif state == "IDLE" and work_state in {None, "READY"}:

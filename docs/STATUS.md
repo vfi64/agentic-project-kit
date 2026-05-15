@@ -5,7 +5,7 @@ Current version: 0.3.8
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: none / main is current
+Current work branch: feature/failed-status-fail-report-guidance
 
 ## Purpose
 
@@ -211,7 +211,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Workflow fail-report slice is merged: FAILED states can now upload preserved bounded diagnostic evidence without cleanup or retry.
+Implement a focused FAILED status guidance slice so `workflow status --explain` recommends `workflow fail-report` before cleanup or retry.
 
 ## Current Blockers
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Start the next concrete slice only after defining a one-paragraph user-facing goal and an explicit command-level contract. Keep Pattern Advisor non-binding unless separately approved.
+Validate `feature/failed-status-fail-report-guidance`. If green, open and merge a focused FAILED status guidance PR.
