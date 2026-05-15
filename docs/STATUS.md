@@ -5,7 +5,7 @@ Current version: 0.3.6
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/status-handoff-after-168
+Current work branch: docs/status-handoff-after-170
 
 ## Purpose
 
@@ -17,7 +17,7 @@ The project itself has a current state layer so work can be continued from the r
 
 v0.3.6 is released and post-release verified. Verified v0.3.6 version DOI: `10.5281/zenodo.20183888`. The post-release Zenodo verification is complete for v0.3.6.
 
-Post-v0.3.6 main has advanced beyond the release tag with governance, usability, workflow-cleanup hardening, and Pattern Advisor concept preservation:
+Post-v0.3.6 main has advanced beyond the release tag with governance, usability, workflow-cleanup hardening, Pattern Advisor concept preservation, and a small Guided CLI usability improvement:
 
 - PR #163 recorded the verified v0.3.6 DOI metadata on main.
 - PR #164 preserved the Deterministic Cell Orchestration idea note and introduced the Layered CLI Usability idea note.
@@ -25,16 +25,19 @@ Post-v0.3.6 main has advanced beyond the release tag with governance, usability,
 - PR #166 hardened `agentic-kit workflow cleanup` so stale `temp/workflow-evidence-*` branches can be removed even when `.agentic/workflow_state` is already `IDLE`.
 - PR #167 updated current-state and handoff documentation after workflow cleanup hardening.
 - PR #168 added `docs/ideas/PATTERN_ADVISOR.md` as a non-binding idea note / architecture research track.
+- PR #170 added read-only `agentic-kit workflow status --explain` guidance for common workflow states.
 
-The current main head after PR #168 is:
+The current main head after PR #170 is:
 
 ```text
+1d0c5f4 Explain workflow status next steps (#170)
+50aa58c Update status and handoff after Pattern Advisor idea (#169)
 6a9326c Add Pattern Advisor idea note (#168)
 ```
 
-The latest verified post-merge gates after PR #168 were:
+The latest verified post-merge gates after PR #170 were:
 
-- `156 passed`
+- `160 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
@@ -53,6 +56,7 @@ The latest verified post-merge gates after PR #168 were:
 - PR #166 added stale workflow evidence cleanup from `IDLE` plus a regression test, raising the suite to 156 tests.
 - PR #167 refreshed current-state and handoff documentation after PR #166.
 - PR #168 added `docs/ideas/PATTERN_ADVISOR.md` as a curated idea note without CLI, code, ADR, release, or pattern-catalog implementation.
+- PR #170 added read-only `agentic-kit workflow status --explain`, documented it, and raised the suite to 160 tests.
 
 ## Idea-note state
 
@@ -88,7 +92,7 @@ No ADR has been created for these idea notes. An ADR should be considered only w
 - `.agentic/current_work.yaml` may remain present with `state: READY`.
 - A normal `ns` run in `IDLE` plus `READY` is intentionally a no-op.
 - A workflow starts only by explicit request.
-- The public path is `agentic-kit workflow request`, `agentic-kit workflow run`, `agentic-kit workflow status`, and `agentic-kit workflow cleanup`.
+- The public path is `agentic-kit workflow request`, `agentic-kit workflow run`, `agentic-kit workflow status`, `agentic-kit workflow status --explain`, and `agentic-kit workflow cleanup`.
 - `agentic-kit workflow cleanup` now also removes stale `temp/workflow-evidence-*` branches from `IDLE` when run inside a Git repository.
 - `tools/next-step.py` remains a compatibility bridge and should not grow into the long-term public API surface.
 
@@ -203,11 +207,11 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Update state and handoff documentation after PR #168 so main records the new Pattern Advisor idea note and future agents do not depend on expired chat uploads for that concept.
+Update state and handoff documentation after PR #170 so main records the new read-only Guided CLI workflow-status explanation.
 
 ## Current Blockers
 
-- Local gates must pass on `docs/status-handoff-after-168`.
+- Local gates must pass on `docs/status-handoff-after-170`.
 - Because this changes current-state and handoff wording, include `agentic-kit doc-mesh-audit` before merge.
 
 ## Live Status Commands
@@ -226,4 +230,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `docs/status-handoff-after-168`. If green, open and merge a focused documentation PR. After merge, the repo can return to the planned didactic simplification / Guided CLI Usability work, using `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference.
+Validate `docs/status-handoff-after-170`. If green, open and merge a focused documentation PR. After merge, the repo can continue with another small Guided CLI usability slice only if it has a concrete scope.
