@@ -5,7 +5,7 @@ Current version: 0.3.7
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: release/v0.3.7
+Current work branch: docs/finalize-v0.3.7-release-state
 
 ## Purpose
 
@@ -15,7 +15,7 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-v0.3.7 release preparation is in progress. v0.3.6 remains the latest post-release Zenodo-verified release until v0.3.7 is tagged, published, archived, and verified.
+v0.3.7 release metadata is prepared on main. v0.3.6 remains the latest post-release Zenodo-verified release until v0.3.7 is tagged, published, archived, and verified.
 
 Post-v0.3.6 main has advanced beyond the release tag with governance, usability, workflow-cleanup hardening, Pattern Advisor concept preservation, and a small Guided CLI usability improvement:
 
@@ -29,7 +29,7 @@ Post-v0.3.6 main has advanced beyond the release tag with governance, usability,
 - PR #171 updated current-state and handoff documentation after PR #170.
 - PR #172 completed Guided Workflow Usability v1 by adding read-only safety wording, `current_report` explanation, a README quick command guide, and a guided status compass.
 
-The release/v0.3.7 branch starts from:
+The v0.3.7 release-preparation PR was merged on main after:
 
 ```text
 0161838 Complete guided workflow status usability (#172)
@@ -211,7 +211,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Prepare v0.3.7 release metadata for Guided Workflow Usability v1.
+Finalize v0.3.7 release-state wording before tagging.
 
 ## Current Blockers
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `release/v0.3.7`. If green, open and merge a focused release-preparation PR. After merge, tag `v0.3.7`, verify the GitHub release, then perform post-release Zenodo verification and record the version DOI.
+Validate `docs/finalize-v0.3.7-release-state`. If green, open and merge a focused documentation PR. After merge, tag `v0.3.7`, verify the GitHub release, then perform post-release Zenodo verification and record the version DOI.
