@@ -9,13 +9,14 @@ Base branch: main
 
 ## Current Goal
 
-v0.3.10 is released and post-release verified. GitHub Release exists, Zenodo verified version DOI is `10.5281/zenodo.20214382`, and DOI metadata is being recorded on main.
+v0.3.10 is released and post-release verified. GitHub Release exists, Zenodo verified version DOI is `10.5281/zenodo.20214382`, DOI metadata is recorded on main, and PR #204 added repo-local ns command shortcuts for selecting and running local workflow items.
 
 ## Current Repository State
 
-Current main head after PR #200:
+Current main head after PR #204:
 
 ```text
+2833ded Add ns work item shortcuts (#204)
 19b2120 Refresh state after workflow shortcut merges (#199)
 4f080c9 Align workflow shortcut guidance (#198)
 4357b4a Add workflow evidence shortcut commands (#197)
@@ -39,10 +40,11 @@ Verified release and post-merge evidence:
 - PR #197 added workflow shortcut commands for request-and-run and bounded output upload.
 - PR #198 aligned status guidance with the shortcut path and clarified that `current_report` is not proof of uploadable local evidence.
 - PR #200 added `docs/reports/pattern_advisor_mvp_contract.md` as a contract-only Pattern Advisor MVP planning report. It did not add runtime code, public Pattern Advisor CLI commands, pattern catalog files, deterministic gates, workflow state changes, or advisory automation.
+- PR #204 added repo-local `./ns state`, `./ns list`, `./ns show`, `./ns run`, and `./ns upload` shortcuts, with one-word aliases `state`, `list`, `show`, `run`, and `up`.
 
-Latest verified local gates after PR #200:
+Latest verified local gates after PR #204:
 
-- `170 passed`
+- `174 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
@@ -169,10 +171,15 @@ Because this branch changes current-state and handoff wording, `agentic-kit doc-
 The normal local workflow shortcuts are:
 
 ```bash
-./ns
-./ns go
+./ns state
+./ns list
+./ns show
+./ns run
+./ns run <work-item-id>
 ./ns upload
 ```
+
+One-word aliases are available when installed locally: `state`, `list`, `show`, `run`, and `up`.
 
 `ns` should be a no-op in `IDLE` plus `READY` until a workflow is explicitly requested.
 
@@ -182,7 +189,7 @@ This handoff intentionally keeps coverage terms visible for deterministic gates:
 
 ## Current Branch Work
 
-Completed post-v0.3.9 work now includes PR #195, PR #197, PR #198, and PR #200: didactic guidance was added as a non-binding idea note, workflow evidence shortcuts were implemented, status guidance was aligned with the shortcut path, and a contract-only Pattern Advisor MVP report was added.
+Completed post-v0.3.9 work now includes PR #195, PR #197, PR #198, PR #200, and PR #204: didactic guidance was added as a non-binding idea note, workflow evidence shortcuts were implemented, status guidance was aligned with the shortcut path, a contract-only Pattern Advisor MVP report was added, and repo-local ns shortcuts now reduce Copy-and-Paste for local workflow item selection and execution.
 
 No Pattern Advisor runtime MVP, DCO implementation, public Pattern Advisor CLI command, new deterministic gate, workflow state, or runtime behavior change has been added. PR #200 is only a planning contract for a possible later read-only catalog MVP.
 

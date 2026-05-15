@@ -241,4 +241,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Start the next concrete slice only after defining a one-paragraph user-facing goal and an explicit command-level contract. Keep Pattern Advisor non-binding unless separately approved.
+Next concrete slice: use the new local workflow shortcut path instead of long patch blocks where possible. Keep Pattern Advisor non-binding unless separately approved.
