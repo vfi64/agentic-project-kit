@@ -1,11 +1,11 @@
-Current version: 0.3.7
+Current version: 0.3.8
 
 # Project Status
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: none / main is current
+Current work branch: release/v0.3.8
 
 ## Purpose
 
@@ -211,7 +211,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-First Guided CLI Usability v2 slice is merged: read-only `workflow status --explain` now gives safer recommendations for clean, dirty, requested, uploaded, and failed workflow states.
+Prepare v0.3.8 release metadata for the merged Guided CLI Usability v2 status guidance slice.
 
 ## Current Blockers
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Start the next concrete slice only after defining a one-paragraph user-facing goal and an explicit command-level contract. Keep Pattern Advisor non-binding unless separately approved.
+Validate `release/v0.3.8`. If green, open and merge a focused release metadata PR. After merge, tag `v0.3.8`, verify the GitHub release, then perform post-release Zenodo verification and record the version DOI.

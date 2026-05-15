@@ -1,15 +1,15 @@
-Current version: 0.3.7
+Current version: 0.3.8
 
 # Current Handoff
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: main
+Branch: release/v0.3.8
 Base branch: main
 
 ## Current Goal
 
-First Guided CLI Usability v2 slice is merged on main.
+Prepare v0.3.8 release metadata for the merged Guided CLI Usability v2 status guidance slice.
 
 v0.3.7 is complete. The v0.3.8 planning note is merged on main, and the first narrowly scoped Guided CLI Usability v2 slice is merged on main.
 
@@ -191,4 +191,4 @@ No Pattern Advisor MVP, DCO implementation, or additional Guided CLI runtime cha
 
 ## Next Safe Step
 
-Start the next work only from a concrete slice with a one-paragraph user-facing goal, explicit command-level contract, deterministic tests, and no hidden state mutation in read-only guidance paths. Keep `docs/ideas/PATTERN_ADVISOR.md` non-binding unless the maintainer explicitly approves a separate Pattern Advisor MVP.
+Run local gates on `release/v0.3.8`, including `agentic-kit release-check --version 0.3.8` and `agentic-kit doc-mesh-audit`. If green, open and merge a focused release metadata PR. After merge, tag `v0.3.8`, verify the GitHub release, then perform post-release Zenodo verification and record the version DOI.
