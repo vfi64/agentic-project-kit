@@ -1,21 +1,21 @@
-Current version: 0.3.6
+Current version: 0.3.7
 
 # Current Handoff
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: docs/status-handoff-after-172
+Branch: release/v0.3.7
 Base branch: main
 
 ## Current Goal
 
-Update `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after PR #172 so the repository state records completed Guided Workflow Usability v1 before the planned v0.3.7 release preparation.
+Prepare v0.3.7 release metadata for Guided Workflow Usability v1.
 
-This branch is documentation-only. It records the post-#172 state and does not change CLI behavior, workflow behavior, release metadata, package version, pattern catalog files, or implementation code.
+This branch prepares release metadata for v0.3.7. It changes package version, citation metadata, changelog, README status, STATUS, and this handoff; it does not add new runtime behavior beyond the already merged PR #172 work.
 
 ## Current Repository State
 
-v0.3.6 is released and post-release verified.
+v0.3.7 release preparation is in progress. v0.3.6 remains the latest post-release Zenodo-verified release until v0.3.7 is published and verified.
 
 Verified v0.3.6 release evidence:
 
@@ -38,7 +38,7 @@ Post-release work completed after v0.3.6:
 - PR #171 refreshed `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after PR #170.
 - PR #172 completed Guided Workflow Usability v1 with read-only safety wording, `current_report` explanation, a README quick command guide, and a guided status compass.
 
-Current main head before this branch:
+The release/v0.3.7 branch starts from:
 
 ```text
 0161838 Complete guided workflow status usability (#172)
@@ -46,7 +46,7 @@ a2d5e68 Update status and handoff after workflow status explain (#171)
 1d0c5f4 Explain workflow status next steps (#170)
 ```
 
-Latest verified local gates after PR #172:
+Latest verified local gates before v0.3.7 release preparation:
 
 - `162 passed`
 - `ruff check .` passed
@@ -183,13 +183,14 @@ This handoff intentionally keeps coverage terms visible for deterministic gates:
 
 Prepared files should include:
 
-- `docs/STATUS.md` updated with the post-#172 state, latest test count, and completed Guided Workflow Usability v1 state.
-- `docs/handoff/CURRENT_HANDOFF.md` updated with the post-#172 handoff and source-of-truth reading order.
+- `pyproject.toml` and `src/agentic_project_kit/__init__.py` bumped to 0.3.7.
+- `CITATION.cff` updated to version 0.3.7 without a version DOI placeholder.
+- `CHANGELOG.md`, `README.md`, `docs/STATUS.md`, and `docs/handoff/CURRENT_HANDOFF.md` updated for v0.3.7 release preparation.
 
-No package version bump, release metadata change, CLI behavior change, pattern catalog, or implementation change is part of this branch.
+No Pattern Advisor MVP, DCO implementation, or additional Guided CLI runtime change is part of this branch.
 
 ## Next Safe Step
 
-Run local gates on `docs/status-handoff-after-172`, including `agentic-kit doc-mesh-audit`. If green, open and merge a focused documentation PR.
+Run local release gates on `release/v0.3.7`, including `agentic-kit release-check --version 0.3.7`. If green, open and merge a focused release-preparation PR.
 
-After merge, prepare v0.3.7 as a patch release for the completed Guided Workflow Usability v1 work. Use `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference unless the maintainer explicitly chooses a later Pattern Advisor MVP.
+After merge, tag `v0.3.7`, verify the GitHub release, then perform post-release Zenodo verification and record the version DOI. Use `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference unless the maintainer explicitly chooses a later Pattern Advisor MVP.
