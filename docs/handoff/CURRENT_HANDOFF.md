@@ -4,12 +4,12 @@ Current version: 0.3.8
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: release/v0.3.8
+Branch: docs/record-v0.3.8-doi
 Base branch: main
 
 ## Current Goal
 
-Prepare v0.3.8 release metadata for the merged Guided CLI Usability v2 status guidance slice.
+Record verified v0.3.8 DOI metadata after post-release verification.
 
 v0.3.7 is complete. The v0.3.8 planning note is merged on main, and the first narrowly scoped Guided CLI Usability v2 slice is merged on main.
 
@@ -191,4 +191,4 @@ No Pattern Advisor MVP, DCO implementation, or additional Guided CLI runtime cha
 
 ## Next Safe Step
 
-Run local gates on `release/v0.3.8`, including `agentic-kit release-check --version 0.3.8` and `agentic-kit doc-mesh-audit`. If green, open and merge a focused release metadata PR. After merge, tag `v0.3.8`, verify the GitHub release, then perform post-release Zenodo verification and record the version DOI.
+Run local gates on `docs/record-v0.3.8-doi`, including `agentic-kit post-release-check --version 0.3.8` and `agentic-kit doc-mesh-audit`. If green, open and merge a focused documentation PR.

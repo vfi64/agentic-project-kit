@@ -5,7 +5,7 @@ Current version: 0.3.8
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: release/v0.3.8
+Current work branch: docs/record-v0.3.8-doi
 
 ## Purpose
 
@@ -211,7 +211,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Prepare v0.3.8 release metadata for the merged Guided CLI Usability v2 status guidance slice.
+Record verified v0.3.8 DOI metadata after post-release verification.
 
 ## Current Blockers
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `release/v0.3.8`. If green, open and merge a focused release metadata PR. After merge, tag `v0.3.8`, verify the GitHub release, then perform post-release Zenodo verification and record the version DOI.
+Validate `docs/record-v0.3.8-doi`. If green, open and merge a focused documentation PR. After merge, v0.3.8 DOI metadata is recorded on main.
