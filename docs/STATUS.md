@@ -5,7 +5,7 @@ Current version: 0.3.7
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: feature/guided-cli-v2-contract
+Current work branch: none / main is current
 
 ## Purpose
 
@@ -211,7 +211,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Implement one narrowly scoped Guided CLI Usability v2 slice: sharpen read-only `workflow status --explain` recommendations for clean, dirty, requested, uploaded, and failed workflow states.
+First Guided CLI Usability v2 slice is merged: read-only `workflow status --explain` now gives safer recommendations for clean, dirty, requested, uploaded, and failed workflow states.
 
 ## Current Blockers
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `feature/guided-cli-v2-contract`. If green, open and merge a focused Guided CLI Usability v2 implementation PR.
+Start the next concrete slice only after defining a one-paragraph user-facing goal and an explicit command-level contract. Keep Pattern Advisor non-binding unless separately approved.

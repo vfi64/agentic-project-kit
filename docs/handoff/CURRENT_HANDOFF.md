@@ -4,14 +4,14 @@ Current version: 0.3.7
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: feature/guided-cli-v2-contract
+Branch: main
 Base branch: main
 
 ## Current Goal
 
-Implement one narrowly scoped Guided CLI Usability v2 slice for clearer read-only `workflow status --explain` recommendations.
+First Guided CLI Usability v2 slice is merged on main.
 
-v0.3.7 is complete. The v0.3.8 planning note is merged on main, and this branch implements the first narrowly scoped Guided CLI Usability v2 slice.
+v0.3.7 is complete. The v0.3.8 planning note is merged on main, and the first narrowly scoped Guided CLI Usability v2 slice is merged on main.
 
 ## Current Repository State
 
@@ -191,4 +191,4 @@ No Pattern Advisor MVP, DCO implementation, or additional Guided CLI runtime cha
 
 ## Next Safe Step
 
-Run local gates on `feature/guided-cli-v2-contract`. If green, open and merge a focused implementation PR. Keep `docs/ideas/PATTERN_ADVISOR.md` non-binding unless the maintainer explicitly approves a separate Pattern Advisor MVP.
+Start the next work only from a concrete slice with a one-paragraph user-facing goal, explicit command-level contract, deterministic tests, and no hidden state mutation in read-only guidance paths. Keep `docs/ideas/PATTERN_ADVISOR.md` non-binding unless the maintainer explicitly approves a separate Pattern Advisor MVP.
