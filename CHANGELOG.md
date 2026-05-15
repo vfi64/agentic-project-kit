@@ -2,6 +2,8 @@
 
 ## v0.3.12 - 2026-05-15
 
+Zenodo v0.3.12 DOI: 10.5281/zenodo.20218213
+
 - Added the read-only Pattern Advisor catalog with stable local pattern IDs.
 - Added advisory-only `agentic-kit patterns list` and `agentic-kit patterns show <id>` commands.
 - Documented Pattern Advisor MVP boundaries: no gates, no automatic architecture decisions, no workflow-state mutation, and no candidate capture or promotion.

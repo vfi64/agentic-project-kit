@@ -481,7 +481,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.12` is the current release line covering the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands. Version `0.3.11` remains the previous archived release covering repo-local workflow-item shortcuts, stored work-item execution, and current-work isolation for named workflow-item runs.
+Version `0.3.12` is the current release line covering the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands with verified DOI `10.5281/zenodo.20218213`. Version `0.3.11` remains the previous archived release covering repo-local workflow-item shortcuts, stored work-item execution, and current-work isolation for named workflow-item runs.
 
 Version `0.3.10` remains the previous archived release covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`.
 
@@ -507,5 +507,6 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - v0.3.9: `10.5281/zenodo.20210345`
 - v0.3.10: `10.5281/zenodo.20214382`
 - v0.3.11: `10.5281/zenodo.20215460`
+- Verified v0.3.12 version DOI: `10.5281/zenodo.20218213`
 
 Near-term documentation-governance work: stabilize `agentic-kit doc-mesh-audit` as a targeted special gate, collect false positives, then decide whether to promote it into `agentic-kit doctor` before any unconditional default `ns` integration.

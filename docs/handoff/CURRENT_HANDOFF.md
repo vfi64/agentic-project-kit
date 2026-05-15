@@ -11,7 +11,7 @@ Base branch: main
 
 Current version: 0.3.12
 
-v0.3.12 is the current release line for the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands.
+v0.3.12 is released and post-release verified with version DOI `10.5281/zenodo.20218213`. It covers the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands.
 
 Previous verified release DOI: `10.5281/zenodo.20215460`.
 
@@ -40,6 +40,7 @@ Verified release and post-merge evidence:
 - Verified v0.3.9 version DOI: `10.5281/zenodo.20210345`.
 - Verified v0.3.10 version DOI: `10.5281/zenodo.20214382`.
 - Previous verified version DOI: `10.5281/zenodo.20215460`.
+- Verified v0.3.12 version DOI: `10.5281/zenodo.20218213`.
 - `agentic-kit post-release-check --version 0.3.9` passed before PR #195.
 - PR #195 added `docs/ideas/DIDACTIC_GUIDANCE.md` as a documentation-only, non-binding didactic orientation note.
 - PR #195 did not add runtime code, public CLI commands, deterministic gates, workflow states, Pattern Advisor implementation, or pattern catalog behavior.
