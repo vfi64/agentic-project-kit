@@ -9,6 +9,9 @@ Release candidate for the workflow shortcut and Pattern Advisor contract line.
 - Added repo-local `./ns go` and `./ns upload` shortcuts.
 - Aligned workflow status guidance with the shortcut path while preserving explicit request/run control.
 - Added a contract-only Pattern Advisor MVP report without introducing runtime behavior or binding gates.
+Zenodo v0.3.10 DOI: 10.5281/zenodo.20214382
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
 ## v0.3.9 - 2026-05-15
 
 Zenodo v0.3.9 DOI: 10.5281/zenodo.20210345
