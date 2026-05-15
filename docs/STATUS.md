@@ -1,11 +1,11 @@
-Current version: 0.3.6
+Current version: 0.3.7
 
 # Project Status
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/status-handoff-after-172
+Current work branch: release/v0.3.7
 
 ## Purpose
 
@@ -15,7 +15,7 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-v0.3.6 is released and post-release verified. Verified v0.3.6 version DOI: `10.5281/zenodo.20183888`. The post-release Zenodo verification is complete for v0.3.6.
+v0.3.7 release preparation is in progress. v0.3.6 remains the latest post-release Zenodo-verified release until v0.3.7 is tagged, published, archived, and verified.
 
 Post-v0.3.6 main has advanced beyond the release tag with governance, usability, workflow-cleanup hardening, Pattern Advisor concept preservation, and a small Guided CLI usability improvement:
 
@@ -29,7 +29,7 @@ Post-v0.3.6 main has advanced beyond the release tag with governance, usability,
 - PR #171 updated current-state and handoff documentation after PR #170.
 - PR #172 completed Guided Workflow Usability v1 by adding read-only safety wording, `current_report` explanation, a README quick command guide, and a guided status compass.
 
-The current main head after PR #172 is:
+The release/v0.3.7 branch starts from:
 
 ```text
 0161838 Complete guided workflow status usability (#172)
@@ -37,7 +37,7 @@ a2d5e68 Update status and handoff after workflow status explain (#171)
 1d0c5f4 Explain workflow status next steps (#170)
 ```
 
-The latest verified post-merge gates after PR #172 were:
+The latest verified gates before v0.3.7 release preparation were:
 
 - `162 passed`
 - `ruff check .` passed
@@ -211,12 +211,12 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Update state and handoff documentation after PR #172 so main records completed Guided Workflow Usability v1 before the planned v0.3.7 release preparation.
+Prepare v0.3.7 release metadata for Guided Workflow Usability v1.
 
 ## Current Blockers
 
-- Local gates must pass on `docs/status-handoff-after-172`.
-- Because this changes current-state and handoff wording, include `agentic-kit doc-mesh-audit` before merge.
+- Local release gates must pass on `release/v0.3.7`.
+- Release metadata, package version, citation metadata, changelog, status, and handoff must agree before tagging.
 
 ## Live Status Commands
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `docs/status-handoff-after-172`. If green, open and merge a focused documentation PR. After merge, prepare v0.3.7 as a patch release for the completed Guided Workflow Usability v1 work.
+Validate `release/v0.3.7`. If green, open and merge a focused release-preparation PR. After merge, tag `v0.3.7`, verify the GitHub release, then perform post-release Zenodo verification and record the version DOI.

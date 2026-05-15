@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.7 - 2026-05-15
+
+- Added read-only `agentic-kit workflow status --explain` guidance for common workflow states.
+- Completed Guided Workflow Usability v1 with explicit read-only safety wording, `current_report` explanation, a README quick command guide, and a guided status compass.
+- Preserved legacy `tools/next-step.py` command visibility while keeping the package CLI as the preferred workflow path.
+
 ## v0.3.6 - 2026-05-14
 
 - Aligned the public `agentic-kit workflow request` command with the explicit `.agentic/current_work.yaml` request mechanism.
