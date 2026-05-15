@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.12 - 2026-05-15
+
+- Added the read-only Pattern Advisor catalog with stable local pattern IDs.
+- Added advisory-only `agentic-kit patterns list` and `agentic-kit patterns show <id>` commands.
+- Documented Pattern Advisor MVP boundaries: no gates, no automatic architecture decisions, no workflow-state mutation, and no candidate capture or promotion.
+
 ## v0.3.11 - 2026-05-15
 
 - Added repo-local workflow-item shortcuts for listing, showing, running, uploading, and status checks through `./ns` aliases.

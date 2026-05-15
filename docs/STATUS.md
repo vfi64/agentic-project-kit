@@ -1,4 +1,4 @@
-Current version: 0.3.11
+Current version: 0.3.12
 
 # Project Status
 
@@ -15,7 +15,11 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-v0.3.11 is released and post-release verified with version DOI `10.5281/zenodo.20215460`; the post-release Zenodo verification is complete for v0.3.11. Post-release main includes repo-local workflow-item shortcuts, stored Pattern Advisor workflow item support, and current-work isolation for named workflow-item runs.
+Current version: 0.3.12
+
+v0.3.12 is the current release line for the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands.
+
+Previous verified release DOI: `10.5281/zenodo.20215460`; the previous post-release Zenodo verification is complete for the immediately preceding release.
 
 Post-v0.3.6 main has advanced beyond the release tag with governance, usability, workflow-cleanup hardening, Pattern Advisor concept preservation, and a small Guided CLI usability improvement:
 
@@ -222,7 +226,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-v0.3.11 is released and post-release verified. GitHub Release exists, Zenodo verified version DOI is `10.5281/zenodo.20215460`, and DOI metadata is being recorded on main.
+Previous verified release DOI: `10.5281/zenodo.20215460`; DOI metadata has been recorded on main.
 
 ## Current Blockers
 
