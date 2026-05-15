@@ -292,6 +292,16 @@ Prefer the package CLI for normal use; the legacy command is kept visible for co
 
 The legacy cycle uses `IDLE`, `TEST`, `UPLOAD`, and `CLEANUP`. Details are documented in `docs/WORKFLOW_OUTPUT_CYCLE.md`.
 
+
+## Pattern Advisor read-only catalog
+
+The Pattern Advisor MVP is a local, read-only catalog for recurring project patterns and anti-patterns. It is advisory-only: no gates, no automatic architecture choice, no workflow-state mutation, and no candidate promotion.
+
+```bash
+agentic-kit patterns list
+agentic-kit patterns show bounded-workflow-evidence
+```
+
 ## CLI command package structure
 
 The root CLI module is intentionally a thin root command registry. Command implementations live under `src/agentic_project_kit/cli_commands/`.

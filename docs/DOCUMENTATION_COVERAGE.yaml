@@ -37,6 +37,26 @@ rules:
           - agentic-kit workflow status --explain
           - agentic-kit workflow cleanup
           - agentic-kit workflow fail-report
+          - agentic-kit patterns list
+          - agentic-kit patterns show
+
+  - id: pattern-advisor-readme-coverage
+    description: Read-only Pattern Advisor MVP commands and boundaries must remain visible.
+    documents:
+      - path: README.md
+        terms:
+          - Pattern Advisor read-only catalog
+          - agentic-kit patterns list
+          - agentic-kit patterns show
+          - advisory-only
+          - no gates
+      - path: docs/STATUS.md
+        terms:
+          - Pattern Advisor
+          - read-only catalog
+          - patterns list
+          - patterns show
+          - advisory-only
 
   - id: workflow-readme-coverage
     description: Main user workflows must have README-level entry points.
