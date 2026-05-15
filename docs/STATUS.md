@@ -15,7 +15,7 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-v0.3.7 is released and post-release verified. Verified v0.3.7 version DOI: `10.5281/zenodo.20206581`. The post-release Zenodo verification is complete for v0.3.7.
+v0.3.9 is released and post-release verified. Verified v0.3.9 version DOI: `10.5281/zenodo.20210345`. The post-release Zenodo verification is complete for v0.3.9. Post-release main includes PR #195, PR #197, and PR #198.
 
 Post-v0.3.6 main has advanced beyond the release tag with governance, usability, workflow-cleanup hardening, Pattern Advisor concept preservation, and a small Guided CLI usability improvement:
 
@@ -62,6 +62,8 @@ The latest verified gates before v0.3.7 release preparation were:
 - PR #171 refreshed current-state and handoff documentation after PR #170.
 - PR #172 completed Guided Workflow Usability v1 and raised the suite to 162 tests.
 - PR #195 added `docs/ideas/DIDACTIC_GUIDANCE.md` as a documentation-only, non-binding didactic orientation note and cross-linked it from state, handoff, and agent guidance docs.
+- PR #197 added `agentic-kit workflow go`, `agentic-kit workflow upload-output`, and repo-local `./ns go` / `./ns upload` shortcuts.
+- PR #198 aligned `workflow status --explain` guidance with the new workflow shortcut path and clarified `current_report` semantics.
 
 ## Idea-note state
 
@@ -100,7 +102,7 @@ No ADR has been created for these idea notes. An ADR should be considered only w
 - `.agentic/current_work.yaml` may remain present with `state: READY`.
 - A normal `ns` run in `IDLE` plus `READY` is intentionally a no-op.
 - A workflow starts only by explicit request.
-- The public path is `agentic-kit workflow request`, `agentic-kit workflow run`, `agentic-kit workflow status`, `agentic-kit workflow status --explain`, and `agentic-kit workflow cleanup`.
+- The public path now includes `agentic-kit workflow go` for the normal request-and-run shortcut, `agentic-kit workflow upload-output` for bounded evidence upload, and the explicit commands `workflow request`, `workflow run`, `workflow status`, `workflow status --explain`, and `workflow cleanup`.
 - `agentic-kit workflow cleanup` now also removes stale `temp/workflow-evidence-*` branches from `IDLE` when run inside a Git repository.
 - `tools/next-step.py` remains a compatibility bridge and should not grow into the long-term public API surface.
 
@@ -132,7 +134,7 @@ agentic-project-kit should be treated as a governance and state layer for AI-ass
 
 Near-term public workflow CLI roadmap:
 
-1. Keep `agentic-kit workflow request/run/status/cleanup` as the public path for explicit workflow operation.
+1. Keep `agentic-kit workflow go` as the normal guided shortcut while preserving `workflow request/run/status/cleanup` as explicit control commands.
 2. Keep `tools/next-step.py` as a compatibility bridge, not as the long-term public API surface.
 3. Continue hardening state, no-op, failure, cleanup, and evidence behavior through tests and documentation.
 4. Watch `workflow cleanup` across future evidence-branch flows to see whether remote branch deletion, missing remotes, or multi-branch cleanup need more explicit UX.
@@ -215,7 +217,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-v0.3.9 is released and post-release verified. GitHub Release exists, Zenodo verified version DOI is `10.5281/zenodo.20210345`, and PR #195 has added the didactic guidance foundation note on main.
+v0.3.9 is released and post-release verified. Post-release main now includes the didactic guidance foundation note, workflow evidence shortcut commands, and aligned shortcut guidance through PR #198.
 
 ## Current Blockers
 

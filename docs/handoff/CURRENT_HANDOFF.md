@@ -9,21 +9,21 @@ Base branch: main
 
 ## Current Goal
 
-v0.3.9 is released and post-release verified. GitHub Release exists, Zenodo verified version DOI is `10.5281/zenodo.20210345`, and PR #195 has added the didactic guidance foundation note on main.
+v0.3.9 is released and post-release verified. Post-release main now includes the didactic guidance foundation note, workflow evidence shortcut commands, and aligned shortcut guidance through PR #198.
 
 ## Current Repository State
 
-Current main head after PR #195:
+Current main head after PR #198:
 
 ```text
+4f080c9 Align workflow shortcut guidance (#198)
+4357b4a Add workflow evidence shortcut commands (#197)
+5fedea4 Finalize post-didactic guidance state (#196)
 401e98d Add didactic guidance foundation note (#195)
 d877802 Finalize post-v0.3.9 DOI state (#194)
 fa386b6 Record v0.3.9 DOI metadata (#193)
 bb15d82 tag: v0.3.9, Finalize pre-v0.3.9 release state (#192)
 ef72e37 Prepare v0.3.9 release metadata (#191)
-239047d Finalize post-repo-ns-entrypoint state (#190)
-68614a3 Add repo ns compatibility entrypoint (#189)
-7660db5 Finalize post-failed-status-guidance state (#188)
 ```
 
 Verified release and post-merge evidence:
@@ -34,10 +34,12 @@ Verified release and post-merge evidence:
 - `agentic-kit post-release-check --version 0.3.9` passed before PR #195.
 - PR #195 added `docs/ideas/DIDACTIC_GUIDANCE.md` as a documentation-only, non-binding didactic orientation note.
 - PR #195 did not add runtime code, public CLI commands, deterministic gates, workflow states, Pattern Advisor implementation, or pattern catalog behavior.
+- PR #197 added workflow shortcut commands for request-and-run and bounded output upload.
+- PR #198 aligned status guidance with the shortcut path and clarified that `current_report` is not proof of uploadable local evidence.
 
-Latest verified local gates after PR #195:
+Latest verified local gates after PR #198:
 
-- `166 passed`
+- `170 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
@@ -45,7 +47,7 @@ Latest verified local gates after PR #195:
 
 ## Workflow State
 
-Expected state after the #172 merge:
+Expected state after the #198 merge:
 
 - `.agentic/workflow_state` = `IDLE`
 - `.agentic/current_work.yaml` = `state: READY`
@@ -57,12 +59,14 @@ Normal `ns` behavior in `IDLE` plus `READY` is a no-op. A workflow starts only b
 Preferred public workflow commands:
 
 ```text
-agentic-kit workflow request
-agentic-kit workflow run
+agentic-kit workflow go
+agentic-kit workflow upload-output
 agentic-kit workflow status
 agentic-kit workflow status --explain
 agentic-kit workflow cleanup
 ```
+
+Explicit two-step control remains available through `agentic-kit workflow request` followed by `agentic-kit workflow run`.
 
 `agentic-kit workflow cleanup` now also removes stale `temp/workflow-evidence-*` branches from `IDLE` when run inside a Git repository. It keeps the existing no-op behavior for non-Git roots.
 
@@ -157,10 +161,12 @@ For this branch, run:
 
 Because this branch changes current-state and handoff wording, `agentic-kit doc-mesh-audit` is required before merge even though it is not yet part of the standard `doctor` gate.
 
-The normal local workflow shortcut remains:
+The normal local workflow shortcuts are:
 
 ```bash
-ns
+./ns
+./ns go
+./ns upload
 ```
 
 `ns` should be a no-op in `IDLE` plus `READY` until a workflow is explicitly requested.
@@ -171,7 +177,7 @@ This handoff intentionally keeps coverage terms visible for deterministic gates:
 
 ## Current Branch Work
 
-Completed post-v0.3.9 work now includes PR #195, which added `docs/ideas/DIDACTIC_GUIDANCE.md` as a documentation-only, non-binding didactic orientation note and cross-linked it from state, handoff, and agent guidance docs.
+Completed post-v0.3.9 work now includes PR #195, PR #197, and PR #198: didactic guidance was added as a non-binding idea note, workflow evidence shortcuts were implemented, and status guidance was aligned with the shortcut path.
 
 No Pattern Advisor MVP, DCO implementation, public CLI command, new deterministic gate, workflow state, or runtime behavior change is part of this didactic guidance foundation work.
 
