@@ -95,7 +95,8 @@ def _status_interpretation(state: str, work_state: str | None, dirty: bool) -> t
     recommendation: list[str] = []
     if dirty:
         interpretation.append("Working tree has uncommitted changes.")
-        recommendation.append("Inspect git status before running workflow automation.")
+        recommendation.append("Run: git status --short")
+        recommendation.append("Do not start workflow automation until the working tree is clean or intentionally staged.")
         return interpretation, recommendation
     if work_state == "REQUESTED":
         interpretation.append("A workflow request is pending.")
@@ -105,10 +106,13 @@ def _status_interpretation(state: str, work_state: str | None, dirty: bool) -> t
         recommendation.append("Run: agentic-kit workflow cleanup")
     elif state == "FAILED":
         interpretation.append("The last workflow step failed.")
-        recommendation.append("Inspect evidence before cleanup or retry.")
+        recommendation.append("Inspect docs/reports/CURRENT_WORKFLOW_OUTPUT.md and git status before cleanup or retry.")
+        recommendation.append("Do not rerun workflow automation until the failure cause is understood.")
     elif state == "IDLE" and work_state in {None, "READY"}:
         interpretation.append("No active workflow request.")
-        recommendation.append("Start a workflow only if you have a concrete slice: agentic-kit workflow request; agentic-kit workflow run")
+        recommendation.append("Define one concrete slice before requesting workflow automation.")
+        recommendation.append("Run: agentic-kit workflow request")
+        recommendation.append("Then run: agentic-kit workflow run")
     else:
         interpretation.append("Workflow state requires manual review.")
         recommendation.append("Inspect workflow status and evidence before changing state.")

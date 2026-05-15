@@ -5,7 +5,7 @@ Current version: 0.3.7
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: none / main is current
+Current work branch: feature/guided-cli-v2-contract
 
 ## Purpose
 
@@ -211,7 +211,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-v0.3.8 planning is recorded. The next implementation should be one narrowly scoped Guided CLI Usability v2 slice, not a broad Pattern Advisor implementation.
+Implement one narrowly scoped Guided CLI Usability v2 slice: sharpen read-only `workflow status --explain` recommendations for clean, dirty, requested, uploaded, and failed workflow states.
 
 ## Current Blockers
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Start a concrete Guided CLI Usability v2 implementation slice only after defining a one-paragraph user-facing goal and an explicit command-level contract.
+Validate `feature/guided-cli-v2-contract`. If green, open and merge a focused Guided CLI Usability v2 implementation PR.
