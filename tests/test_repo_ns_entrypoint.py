@@ -12,3 +12,24 @@ def test_repo_ns_entrypoint_delegates_to_next_step() -> None:
     assert "tools/next-step.py" in text
     assert "\"$@\"" in text
     assert ".venv/bin/python" in text
+
+
+def test_repo_ns_menu_exists_and_is_executable() -> None:
+    menu = Path("ns-menu")
+    assert menu.exists()
+    assert menu.stat().st_mode & 0o111
+
+
+def test_repo_ns_menu_exposes_expected_shortcuts_without_heredocs() -> None:
+    text = Path("ns-menu").read_text(encoding="utf-8")
+    assert "#!/usr/bin/env zsh" in text
+    assert "./ns state" in text
+    assert "./ns list" in text
+    assert "./ns show" in text
+    assert "./ns run <work-item-name>" in text
+    assert "./ns upload" in text
+    assert "./ns fail" in text
+    assert "./ns cleanup" in text
+    assert "<<" not in text
+    assert "python -c" not in text
+

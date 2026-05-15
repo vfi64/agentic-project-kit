@@ -43,6 +43,7 @@ Verified release and post-merge evidence:
 - PR #198 aligned status guidance with the shortcut path and clarified that `current_report` is not proof of uploadable local evidence.
 - PR #200 added `docs/reports/pattern_advisor_mvp_contract.md` as a contract-only Pattern Advisor MVP planning report. It did not add runtime code, public Pattern Advisor CLI commands, pattern catalog files, deterministic gates, workflow state changes, or advisory automation.
 - PR #204 added repo-local `./ns state`, `./ns list`, `./ns show`, `./ns run`, and `./ns upload` shortcuts, with one-word aliases `state`, `list`, `show`, `run`, and `up`.
+- The current feature slice adds `./ns-menu` as an optional numbered terminal menu for the existing repo-local shortcuts.
 - PR #207 fixed named workflow-item runs so `./ns run <work-item-id>` restores the original `.agentic/current_work.yaml` after the bounded workflow step.
 - PR #209 refreshed state and handoff documentation after the current_work isolation fix.
 

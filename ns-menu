@@ -1,0 +1,108 @@
+#!/usr/bin/env zsh
+set -u
+
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+cd "$SCRIPT_DIR" || exit 1
+
+if [ ! -x "./ns" ]; then
+  echo "ERROR: ./ns not found or not executable in: $SCRIPT_DIR"
+  exit 1
+fi
+
+pause_after_run() {
+  echo
+  echo "------------------------------------------------------------"
+  echo "Befehl beendet. Drücke Enter, um zum Menü zurückzukehren."
+  read -r _
+}
+
+run_ns() {
+  echo
+  echo "------------------------------------------------------------"
+  echo "Starte: ./ns $*"
+  echo "------------------------------------------------------------"
+  echo
+  ./ns "$@"
+  code=$?
+  echo
+  echo "Exit-Code: $code"
+  pause_after_run
+}
+
+show_menu() {
+  clear
+  echo "agentic-project-kit :: ./ns Menü"
+  echo
+  echo "1)  ./ns"
+  echo "2)  ./ns state"
+  echo "3)  ./ns list"
+  echo "4)  ./ns show"
+  echo "5)  ./ns run"
+  echo "6)  ./ns run <work-item-name>"
+  echo "7)  ./ns upload"
+  echo "8)  ./ns fail"
+  echo "9)  ./ns status"
+  echo "10) ./ns cleanup"
+  echo
+  echo "0)  Beenden"
+  echo
+}
+
+while true; do
+  show_menu
+  printf "Auswahl: "
+  read -r choice
+
+  case "$choice" in
+    1)
+      run_ns
+      ;;
+    2)
+      run_ns state
+      ;;
+    3)
+      run_ns list
+      ;;
+    4)
+      run_ns show
+      ;;
+    5)
+      run_ns run
+      ;;
+    6)
+      echo
+      echo "Verfügbare Work Items:"
+      echo
+      ./ns list
+      echo
+      printf "Work-Item-Name eingeben: "
+      read -r item
+      if [ -z "$item" ]; then
+        echo "Kein Work-Item angegeben."
+        pause_after_run
+      else
+        run_ns run "$item"
+      fi
+      ;;
+    7)
+      run_ns upload
+      ;;
+    8)
+      run_ns fail
+      ;;
+    9)
+      run_ns status
+      ;;
+    10)
+      run_ns cleanup
+      ;;
+    0|q|quit|exit)
+      echo "Beendet."
+      exit 0
+      ;;
+    *)
+      echo "Ungültige Auswahl: $choice"
+      pause_after_run
+      ;;
+  esac
+done
