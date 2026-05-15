@@ -64,7 +64,9 @@ The latest verified gates before v0.3.7 release preparation were:
 - PR #195 added `docs/ideas/DIDACTIC_GUIDANCE.md` as a documentation-only, non-binding didactic orientation note and cross-linked it from state, handoff, and agent guidance docs.
 - PR #197 added `agentic-kit workflow go`, `agentic-kit workflow upload-output`, and repo-local `./ns go` / `./ns upload` shortcuts.
 - PR #198 aligned `workflow status --explain` guidance with the new workflow shortcut path and clarified `current_report` semantics.
-- PR #200 added `docs/reports/pattern_advisor_mvp_contract.md` as a contract-only Pattern Advisor MVP planning report without runtime behavior, CLI implementation, gates, or catalog files.
+- PR #200 added `docs/reports/pattern_advisor_mvp_contract.md` as a contract-only Pattern Advisor MVP planning report.
+- PR #204 added repo-local `./ns state`, `./ns list`, `./ns show`, `./ns run`, and `./ns upload` shortcuts plus one-word aliases.
+- PR #207 fixed named workflow-item runs so temporary `.agentic/current_work.yaml` replacement is restored after the bounded step.
 
 ## Idea-note state
 
@@ -135,7 +137,7 @@ agentic-project-kit should be treated as a governance and state layer for AI-ass
 
 Near-term public workflow CLI roadmap:
 
-1. Keep `agentic-kit workflow go` as the normal guided shortcut while preserving `workflow request/run/status/cleanup` as explicit control commands.
+1. Keep repo-local `./ns run` as the normal local shortcut for the current workflow item, keep `./ns run <work-item-id>` for stored workflow items, and preserve `agentic-kit workflow request/run/status/cleanup` as explicit control commands.
 2. Keep `tools/next-step.py` as a compatibility bridge, not as the long-term public API surface.
 3. Continue hardening state, no-op, failure, cleanup, and evidence behavior through tests and documentation.
 4. Watch `workflow cleanup` across future evidence-branch flows to see whether remote branch deletion, missing remotes, or multi-branch cleanup need more explicit UX.
