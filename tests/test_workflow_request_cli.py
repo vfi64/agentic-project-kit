@@ -246,7 +246,9 @@ def test_workflow_list_shows_available_work_items(tmp_path: Path) -> None:
     (work_items / "pattern-advisor-readonly-catalog-mvp.yaml").write_text(
         "name: pattern-advisor-readonly-catalog-mvp\\n"
         "state: READY\\n"
-        "timeout_seconds: 60\\n",
+        "timeout_seconds: 60\\n"
+        "steps:\\n"
+        "  - pytest\\n",
         encoding="utf-8",
     )
 
@@ -313,4 +315,32 @@ def test_workflow_run_named_item_restores_current_work_after_bounded_step(tmp_pa
 
     assert result.exit_code == 0
     assert calls == [(tmp_path.resolve(), None)]
+    assert current_work.read_text(encoding="utf-8") == original
+
+
+
+def test_workflow_run_named_item_restores_current_work_after_failure(tmp_path: Path, monkeypatch) -> None:
+    _write_workflow_files(tmp_path, request_state="READY")
+    current_work = tmp_path / ".agentic" / "current_work.yaml"
+    original = current_work.read_text(encoding="utf-8")
+    work_items = tmp_path / ".agentic" / "work_items"
+    work_items.mkdir(parents=True)
+    (work_items / "pattern-advisor-readonly-catalog-mvp.yaml").write_text(
+        "name: pattern-advisor-readonly-catalog-mvp\\n"
+        "state: READY\\n"
+        "timeout_seconds: 60\\n"
+        "steps:\\n"
+        "  - pytest\\n",
+        encoding="utf-8",
+    )
+
+    def fake_run_next_step(root: Path, extra_args: list[str] | None = None) -> int:
+        raise RuntimeError("simulated workflow failure")
+
+    import agentic_project_kit.cli_commands.workflow as workflow_module
+
+    monkeypatch.setattr(workflow_module, "_run_next_step", fake_run_next_step)
+    result = runner.invoke(app, ["workflow", "run", "pattern-advisor-readonly-catalog-mvp", "--root", str(tmp_path)])
+
+    assert result.exit_code != 0
     assert current_work.read_text(encoding="utf-8") == original

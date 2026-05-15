@@ -269,11 +269,13 @@ def workflow_run(
     typer.echo(f"Workflow item selected: {_safe_work_item_name(name)}")
     typer.echo(f"Current workflow request file: {WORK_FILE}")
     typer.echo("Workflow request state: REQUESTED")
-    exit_code = _run_next_step(root)
-    if original_current_work is None:
-        work_path.unlink(missing_ok=True)
-    else:
-        work_path.write_text(original_current_work, encoding="utf-8")
+    try:
+        exit_code = _run_next_step(root)
+    finally:
+        if original_current_work is None:
+            work_path.unlink(missing_ok=True)
+        else:
+            work_path.write_text(original_current_work, encoding="utf-8")
     raise typer.Exit(code=exit_code)
 
 @workflow_app.command("state")
