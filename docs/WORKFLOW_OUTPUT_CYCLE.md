@@ -169,7 +169,7 @@ The commands operate on `.agentic/workflow_state` and `.agentic/current_work.yam
 
 `agentic-kit workflow request` is the public equivalent of `tools/next-step.py --request`: it sets `.agentic/current_work.yaml` to `state: REQUESTED` while leaving `.agentic/workflow_state` at `IDLE`. It does not run the workflow as a side effect. A repeated request while the workflow is already requested is idempotent.
 
-`agentic-kit workflow status` reports both state layers, for example:
+`agentic-kit workflow status` reports both state layers. Add `--explain` for a read-only interpretation and recommended next step. For example:
 
 ```text
 workflow_state=IDLE

@@ -64,3 +64,43 @@ def test_workflow_status_reports_current_work_state(tmp_path: Path) -> None:
     assert "workflow_state=IDLE" in result.output
     assert "current_work=present" in result.output
     assert "current_work_state=REQUESTED" in result.output
+
+
+
+def test_workflow_status_explain_reports_idle_ready_next_step(tmp_path: Path) -> None:
+    _write_workflow_files(tmp_path, request_state="READY")
+    result = runner.invoke(app, ["workflow", "status", "--explain", "--root", str(tmp_path)])
+    assert result.exit_code == 0
+    assert "workflow_state=IDLE" in result.output
+    assert "Interpretation:" in result.output
+    assert "No active workflow request." in result.output
+    assert "Recommended next step:" in result.output
+    assert "agentic-kit workflow request" in result.output
+    assert "agentic-kit workflow run" in result.output
+
+
+def test_workflow_status_explain_reports_requested_next_step(tmp_path: Path) -> None:
+    _write_workflow_files(tmp_path, request_state="REQUESTED")
+    result = runner.invoke(app, ["workflow", "status", "--explain", "--root", str(tmp_path)])
+    assert result.exit_code == 0
+    assert "current_work_state=REQUESTED" in result.output
+    assert "A workflow request is pending." in result.output
+    assert "Run: agentic-kit workflow run" in result.output
+
+
+def test_workflow_status_explain_reports_uploaded_cleanup_next_step(tmp_path: Path) -> None:
+    _write_workflow_files(tmp_path, workflow_state="UPLOADED", request_state="READY")
+    result = runner.invoke(app, ["workflow", "status", "--explain", "--root", str(tmp_path)])
+    assert result.exit_code == 0
+    assert "workflow_state=UPLOADED" in result.output
+    assert "cleanup is pending" in result.output
+    assert "Run: agentic-kit workflow cleanup" in result.output
+
+
+def test_workflow_status_explain_reports_failed_inspection_next_step(tmp_path: Path) -> None:
+    _write_workflow_files(tmp_path, workflow_state="FAILED", request_state="READY")
+    result = runner.invoke(app, ["workflow", "status", "--explain", "--root", str(tmp_path)])
+    assert result.exit_code == 0
+    assert "workflow_state=FAILED" in result.output
+    assert "The last workflow step failed." in result.output
+    assert "Inspect evidence before cleanup or retry." in result.output

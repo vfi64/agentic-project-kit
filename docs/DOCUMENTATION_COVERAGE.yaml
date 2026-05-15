@@ -28,6 +28,7 @@ rules:
           - agentic-kit workflow request
           - agentic-kit workflow run
           - agentic-kit workflow status
+          - agentic-kit workflow status --explain
           - agentic-kit workflow cleanup
 
   - id: workflow-readme-coverage

@@ -262,6 +262,7 @@ For local LLM handoff, prefer the package CLI:
 
 ```bash
 agentic-kit workflow status
+agentic-kit workflow status --explain
 agentic-kit workflow request
 agentic-kit workflow run
 agentic-kit workflow cleanup
