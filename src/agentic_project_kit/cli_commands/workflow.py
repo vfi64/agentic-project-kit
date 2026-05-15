@@ -64,11 +64,11 @@ def _set_workflow_request_state(root: Path, request_state: str) -> None:
     work_path.write_text("\n".join(output) + "\n", encoding="utf-8")
 
 
-def _run_next_step(root: Path) -> int:
+def _run_next_step(root: Path, extra_args: list[str] | None = None) -> int:
     script = _rooted(NEXT_STEP_SCRIPT, root)
     if not script.exists():
         raise typer.BadParameter(f"missing workflow entrypoint: {NEXT_STEP_SCRIPT}")
-    completed = subprocess.run([sys.executable, str(script)], cwd=root.resolve(), check=False)
+    completed = subprocess.run([sys.executable, str(script), *(extra_args or [])], cwd=root.resolve(), check=False)
     return int(completed.returncode)
 
 
@@ -242,6 +242,18 @@ def workflow_status(
         typer.echo(f"current_report={REPORT_FILE}")
     if explain:
         _print_status_explanation(root, state, work_state, report_present)
+
+
+@workflow_app.command("fail-report")
+def workflow_fail_report(
+    project_root: Path = typer.Option(Path("."), "--root", help="Project root containing tools/next-step.py."),
+) -> None:
+    """Upload preserved FAILED workflow evidence without cleanup or retry."""
+    root = project_root.resolve()
+    state = _read_state(root)
+    if state != "FAILED":
+        raise typer.BadParameter(f"fail-report requires FAILED state, got {state}")
+    raise typer.Exit(code=_run_next_step(root, ["--fail-report"]))
 
 
 @workflow_app.command("cleanup")

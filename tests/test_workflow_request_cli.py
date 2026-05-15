@@ -124,6 +124,16 @@ def test_workflow_status_explain_dirty_tree_stops_automation(tmp_path: Path) -> 
     assert "Run: agentic-kit workflow request" not in result.output
 
 
+
+def test_workflow_fail_report_refuses_non_failed_state(tmp_path: Path) -> None:
+    _write_workflow_files(tmp_path, workflow_state="IDLE", request_state="READY")
+
+    result = runner.invoke(app, ["workflow", "fail-report", "--root", str(tmp_path)])
+
+    assert result.exit_code != 0
+    assert "fail-report requires FAILED state, got IDLE" in result.output
+
+
 def test_workflow_status_explain_states_read_only(tmp_path: Path) -> None:
     _write_workflow_files(tmp_path, request_state="READY")
     result = runner.invoke(app, ["workflow", "status", "--explain", "--root", str(tmp_path)])

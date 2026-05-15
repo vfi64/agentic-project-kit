@@ -30,6 +30,7 @@ rules:
           - agentic-kit workflow status
           - agentic-kit workflow status --explain
           - agentic-kit workflow cleanup
+          - agentic-kit workflow fail-report
 
   - id: workflow-readme-coverage
     description: Main user workflows must have README-level entry points.
@@ -162,6 +163,7 @@ rules:
           - rm -f tmp/agent-evidence/workflow-output-*.md
           - It is not sufficient for a local `FAILED` state
           - Never automatically clean up from `FAILED`
+          - agentic-kit workflow fail-report
 
   - id: next-step-environment-bootstrap-coverage
     description: next-step.py environment bootstrap must stay documented and bounded.

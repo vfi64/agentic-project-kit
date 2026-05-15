@@ -167,6 +167,16 @@ def step_failed() -> None:
     print("No automatic cleanup is performed from FAILED.")
 
 
+def step_fail_report() -> None:
+    state = read_state()
+    if state != "FAILED":
+        raise SystemExit(f"fail-report requires FAILED state, got {state}")
+    write_current_report(latest_evidence(), "Declarative workflow failed. Evidence uploaded for diagnosis without cleanup or retry.")
+    branch = create_evidence_branch("UPLOADED")
+    print(f"Uploaded failure workflow evidence branch: {branch}")
+    print("Next state: UPLOADED")
+
+
 def workflow_request_state() -> str:
     if not WORKFLOW_FILE.exists():
         return "MISSING"
@@ -227,8 +237,12 @@ def main() -> int:
     if sys.argv[1:] == ["--request"]:
         request_workflow()
         return 0
+    if sys.argv[1:] == ["--fail-report"]:
+        ensure_project_environment()
+        step_fail_report()
+        return 0
     if sys.argv[1:]:
-        raise SystemExit("Usage: next-step.py [--request]")
+        raise SystemExit("Usage: next-step.py [--request|--fail-report]")
     ensure_project_environment()
     state = read_state()
     print(f"workflow_state={state}")
