@@ -5,7 +5,7 @@ Current version: 0.3.9
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/record-v0.3.9-doi
+Current work branch: none / main is current
 
 ## Purpose
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `docs/record-v0.3.9-doi`. If green, open and merge a focused DOI metadata PR.
+Start the next concrete slice only after defining a one-paragraph user-facing goal and an explicit command-level contract. Keep Pattern Advisor non-binding unless separately approved.
