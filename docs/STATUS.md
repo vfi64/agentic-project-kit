@@ -15,7 +15,7 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-v0.3.10 release metadata is being prepared. v0.3.9 is released and post-release verified with version DOI `10.5281/zenodo.20210345`; the post-release Zenodo verification is complete for v0.3.9. Post-release main includes workflow shortcut commands, aligned shortcut guidance, and the Pattern Advisor MVP contract report.
+v0.3.10 is released and post-release verified with version DOI `10.5281/zenodo.20214382`; the post-release Zenodo verification is complete for v0.3.10. Post-release main includes workflow shortcut commands, aligned shortcut guidance, and the Pattern Advisor MVP contract report.
 
 Post-v0.3.6 main has advanced beyond the release tag with governance, usability, workflow-cleanup hardening, Pattern Advisor concept preservation, and a small Guided CLI usability improvement:
 
@@ -218,7 +218,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-v0.3.10 release metadata is being prepared for the workflow shortcut and Pattern Advisor contract line.
+v0.3.10 is released and post-release verified. GitHub Release exists, Zenodo verified version DOI is `10.5281/zenodo.20214382`, and DOI metadata is being recorded on main.
 
 ## Current Blockers
 

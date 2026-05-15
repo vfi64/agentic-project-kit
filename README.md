@@ -410,6 +410,7 @@ The archived v0.3.7 release has the verified version-specific DOI: `10.5281/zeno
 The archived v0.3.8 release has the verified version-specific DOI: `10.5281/zenodo.20208638`.
 
 The archived v0.3.9 release has the verified version-specific DOI: `10.5281/zenodo.20210345`.
+The archived v0.3.10 release has the verified version-specific DOI: `10.5281/zenodo.20214382`.
 
 ## Governance wrapper projects
 
@@ -469,7 +470,9 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.10` is the current release line covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report. Version `0.3.9` remains the last post-release verified archived release before this metadata-preparation slice.
+Version `0.3.10` is the current release line covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report. The archived v0.3.10 release has the verified version-specific DOI: `10.5281/zenodo.20214382`.
+
+Version `0.3.9` remains the previous post-release verified archived release before v0.3.10.
 
 This repository has maintainer-owned GitHub releases and verified Zenodo archive records. Verified version-specific DOIs:
 
@@ -489,5 +492,6 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - v0.3.7: `10.5281/zenodo.20206581`
 - v0.3.8: `10.5281/zenodo.20208638`
 - v0.3.9: `10.5281/zenodo.20210345`
+- v0.3.10: `10.5281/zenodo.20214382`
 
 Near-term documentation-governance work: stabilize `agentic-kit doc-mesh-audit` as a targeted special gate, collect false positives, then decide whether to promote it into `agentic-kit doctor` before any unconditional default `ns` integration.

@@ -9,7 +9,7 @@ Base branch: main
 
 ## Current Goal
 
-v0.3.10 release metadata is being prepared for the workflow shortcut and Pattern Advisor contract line.
+v0.3.10 is released and post-release verified. GitHub Release exists, Zenodo verified version DOI is `10.5281/zenodo.20214382`, and DOI metadata is being recorded on main.
 
 ## Current Repository State
 
@@ -32,6 +32,7 @@ Verified release and post-merge evidence:
 - GitHub Release v0.3.9 exists.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified v0.3.9 version DOI: `10.5281/zenodo.20210345`.
+- Verified v0.3.10 version DOI: `10.5281/zenodo.20214382`.
 - `agentic-kit post-release-check --version 0.3.9` passed before PR #195.
 - PR #195 added `docs/ideas/DIDACTIC_GUIDANCE.md` as a documentation-only, non-binding didactic orientation note.
 - PR #195 did not add runtime code, public CLI commands, deterministic gates, workflow states, Pattern Advisor implementation, or pattern catalog behavior.
