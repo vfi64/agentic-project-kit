@@ -4,18 +4,18 @@ Current version: 0.3.7
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: release/v0.3.7
+Branch: docs/finalize-v0.3.7-release-state
 Base branch: main
 
 ## Current Goal
 
-Prepare v0.3.7 release metadata for Guided Workflow Usability v1.
+Finalize v0.3.7 release-state wording before tagging.
 
 This branch prepares release metadata for v0.3.7. It changes package version, citation metadata, changelog, README status, STATUS, and this handoff; it does not add new runtime behavior beyond the already merged PR #172 work.
 
 ## Current Repository State
 
-v0.3.7 release preparation is in progress. v0.3.6 remains the latest post-release Zenodo-verified release until v0.3.7 is published and verified.
+v0.3.7 release metadata is prepared on main. v0.3.6 remains the latest post-release Zenodo-verified release until v0.3.7 is tagged, published, archived, and verified.
 
 Verified v0.3.6 release evidence:
 
@@ -38,7 +38,7 @@ Post-release work completed after v0.3.6:
 - PR #171 refreshed `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after PR #170.
 - PR #172 completed Guided Workflow Usability v1 with read-only safety wording, `current_report` explanation, a README quick command guide, and a guided status compass.
 
-The release/v0.3.7 branch starts from:
+The v0.3.7 release-preparation PR was merged on main after:
 
 ```text
 0161838 Complete guided workflow status usability (#172)
@@ -46,7 +46,7 @@ a2d5e68 Update status and handoff after workflow status explain (#171)
 1d0c5f4 Explain workflow status next steps (#170)
 ```
 
-Latest verified local gates before v0.3.7 release preparation:
+Latest verified local gates after v0.3.7 release preparation:
 
 - `162 passed`
 - `ruff check .` passed
@@ -191,6 +191,6 @@ No Pattern Advisor MVP, DCO implementation, or additional Guided CLI runtime cha
 
 ## Next Safe Step
 
-Run local release gates on `release/v0.3.7`, including `agentic-kit release-check --version 0.3.7`. If green, open and merge a focused release-preparation PR.
+Run local gates on `docs/finalize-v0.3.7-release-state`, including `agentic-kit release-check --version 0.3.7`. If green, open and merge a focused documentation PR.
 
 After merge, tag `v0.3.7`, verify the GitHub release, then perform post-release Zenodo verification and record the version DOI. Use `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference unless the maintainer explicitly chooses a later Pattern Advisor MVP.
