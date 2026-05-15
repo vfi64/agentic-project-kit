@@ -105,6 +105,7 @@ def test_workflow_status_explain_reports_failed_inspection_next_step(tmp_path: P
     assert result.exit_code == 0
     assert "workflow_state=FAILED" in result.output
     assert "The last workflow step failed." in result.output
+    assert "Run: agentic-kit workflow fail-report" in result.output
     assert "Inspect docs/reports/CURRENT_WORKFLOW_OUTPUT.md and git status before cleanup or retry." in result.output
     assert "Do not rerun workflow automation until the failure cause is understood." in result.output
 

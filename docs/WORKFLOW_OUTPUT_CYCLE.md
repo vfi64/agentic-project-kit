@@ -196,7 +196,7 @@ Guided status compass:
 - `IDLE` plus `current_work_state=READY`: no active workflow request; do nothing or request a concrete slice.
 - `IDLE` plus `current_work_state=REQUESTED`: a workflow request is pending; run `agentic-kit workflow run`.
 - `UPLOADED`: evidence was uploaded; inspect it, then run `agentic-kit workflow cleanup`.
-- `FAILED`: stop and inspect evidence before cleanup or retry.
+- `FAILED`: run `agentic-kit workflow fail-report` when bounded local evidence exists, then stop and inspect evidence before cleanup or retry.
 - dirty working tree: inspect `git status` before running workflow automation.
 
 - `workflow request`: marks the declarative workflow file as REQUESTED while the main workflow state remains IDLE.
