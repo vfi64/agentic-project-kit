@@ -5,7 +5,7 @@ Current version: 0.3.7
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/finalize-v0.3.7-release-state
+Current work branch: docs/record-v0.3.7-doi
 
 ## Purpose
 
@@ -15,7 +15,7 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-v0.3.7 release metadata is prepared on main. v0.3.6 remains the latest post-release Zenodo-verified release until v0.3.7 is tagged, published, archived, and verified.
+v0.3.7 is released and post-release verified. Verified v0.3.7 version DOI: `10.5281/zenodo.20206581`. The post-release Zenodo verification is complete for v0.3.7.
 
 Post-v0.3.6 main has advanced beyond the release tag with governance, usability, workflow-cleanup hardening, Pattern Advisor concept preservation, and a small Guided CLI usability improvement:
 
@@ -211,11 +211,11 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Finalize v0.3.7 release-state wording before tagging.
+Record verified v0.3.7 DOI metadata after post-release verification.
 
 ## Current Blockers
 
-- Local release gates must pass on `release/v0.3.7`.
+- Local gates must pass on `docs/record-v0.3.7-doi`.
 - Release metadata, package version, citation metadata, changelog, status, and handoff must agree before tagging.
 
 ## Live Status Commands
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `docs/finalize-v0.3.7-release-state`. If green, open and merge a focused documentation PR. After merge, tag `v0.3.7`, verify the GitHub release, then perform post-release Zenodo verification and record the version DOI.
+Validate `docs/record-v0.3.7-doi`. If green, open and merge a focused documentation PR. After merge, v0.3.7 DOI metadata is recorded on main.
