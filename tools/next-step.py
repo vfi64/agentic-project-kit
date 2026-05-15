@@ -9,7 +9,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 STATE_FILE = Path(".agentic/workflow_state")
-WORKFLOW_FILE = Path(".agentic/current_work.yaml")
+WORKFLOW_FILE = Path(os.environ.get("AGENTIC_WORKFLOW_FILE", ".agentic/current_work.yaml"))
 BRANCH_FILE = Path("tmp/agent-evidence/latest-branch.txt")
 EVIDENCE_DIR = Path("tmp/agent-evidence")
 REPORT_FILE = Path("docs/reports/CURRENT_WORKFLOW_OUTPUT.md")

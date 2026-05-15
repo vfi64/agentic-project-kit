@@ -301,10 +301,13 @@ def test_workflow_run_named_item_restores_current_work_after_bounded_step(tmp_pa
         "  - pytest\\n",
         encoding="utf-8",
     )
-    calls: list[tuple[Path, list[str] | None]] = []
+    calls: list[tuple[Path, list[str] | None, dict[str, str] | None]] = []
 
-    def fake_run_next_step(root: Path, extra_args: list[str] | None = None) -> int:
-        calls.append((root, extra_args))
+    def fake_run_next_step(root: Path, extra_args: list[str] | None = None, env: dict[str, str] | None = None) -> int:
+        calls.append((root, extra_args, env))
+        assert env is not None
+        run_file = Path(env["AGENTIC_WORKFLOW_FILE"])
+        assert "state: REQUESTED" in run_file.read_text(encoding="utf-8")
         current_work.write_text(current_work.read_text(encoding="utf-8").replace("state: REQUESTED", "state: READY"), encoding="utf-8")
         return 0
 
@@ -314,7 +317,11 @@ def test_workflow_run_named_item_restores_current_work_after_bounded_step(tmp_pa
     result = runner.invoke(app, ["workflow", "run", "pattern-advisor-readonly-catalog-mvp", "--root", str(tmp_path)])
 
     assert result.exit_code == 0
-    assert calls == [(tmp_path.resolve(), None)]
+    assert len(calls) == 1
+    assert calls[0][0] == tmp_path.resolve()
+    assert calls[0][1] is None
+    assert calls[0][2] is not None
+    assert calls[0][2]["AGENTIC_WORKFLOW_FILE"].endswith("tmp/agent-evidence/run-pattern-advisor-readonly-catalog-mvp.yaml")
     assert current_work.read_text(encoding="utf-8") == original
 
 
@@ -334,7 +341,7 @@ def test_workflow_run_named_item_restores_current_work_after_failure(tmp_path: P
         encoding="utf-8",
     )
 
-    def fake_run_next_step(root: Path, extra_args: list[str] | None = None) -> int:
+    def fake_run_next_step(root: Path, extra_args: list[str] | None = None, env: dict[str, str] | None = None) -> int:
         raise RuntimeError("simulated workflow failure")
 
     import agentic_project_kit.cli_commands.workflow as workflow_module
@@ -344,3 +351,42 @@ def test_workflow_run_named_item_restores_current_work_after_failure(tmp_path: P
 
     assert result.exit_code != 0
     assert current_work.read_text(encoding="utf-8") == original
+
+
+def test_workflow_run_named_item_does_not_replace_current_work_during_bounded_step(tmp_path: Path, monkeypatch) -> None:
+    _write_workflow_files(tmp_path, request_state="READY")
+    current_work = tmp_path / ".agentic" / "current_work.yaml"
+    original = current_work.read_text(encoding="utf-8")
+    work_items = tmp_path / ".agentic" / "work_items"
+    work_items.mkdir(parents=True)
+    (work_items / "pattern-advisor-readonly-catalog-mvp.yaml").write_text(
+        "name: pattern-advisor-readonly-catalog-mvp\\n"
+        "state: READY\\n"
+        "timeout_seconds: 60\\n"
+        "steps:\\n"
+        "  - pytest\\n",
+        encoding="utf-8",
+    )
+    calls: list[tuple[Path, list[str] | None, dict[str, str] | None]] = []
+
+    def fake_run_next_step(root: Path, extra_args: list[str] | None = None, env: dict[str, str] | None = None) -> int:
+        calls.append((root, extra_args, env))
+        assert env is not None
+        run_file = Path(env["AGENTIC_WORKFLOW_FILE"])
+        assert "state: REQUESTED" in run_file.read_text(encoding="utf-8")
+        assert current_work.read_text(encoding="utf-8") == original
+        return 0
+
+    import agentic_project_kit.cli_commands.workflow as workflow_module
+
+    monkeypatch.setattr(workflow_module, "_run_next_step", fake_run_next_step)
+    result = runner.invoke(app, ["workflow", "run", "pattern-advisor-readonly-catalog-mvp", "--root", str(tmp_path)])
+
+    assert result.exit_code == 0
+    assert len(calls) == 1
+    assert calls[0][0] == tmp_path.resolve()
+    assert calls[0][1] is None
+    assert calls[0][2] is not None
+    assert calls[0][2]["AGENTIC_WORKFLOW_FILE"].endswith("tmp/agent-evidence/run-pattern-advisor-readonly-catalog-mvp.yaml")
+    assert current_work.read_text(encoding="utf-8") == original
+
