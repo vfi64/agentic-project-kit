@@ -1,4 +1,4 @@
-Current version: 0.3.9
+Current version: 0.3.10
 
 # Current Handoff
 
@@ -9,7 +9,7 @@ Base branch: main
 
 ## Current Goal
 
-v0.3.9 is released and post-release verified. Post-release main now includes the didactic guidance foundation note, workflow evidence shortcut commands, aligned shortcut guidance, and the Pattern Advisor MVP contract report through PR #200.
+v0.3.10 release metadata is being prepared for the workflow shortcut and Pattern Advisor contract line.
 
 ## Current Repository State
 

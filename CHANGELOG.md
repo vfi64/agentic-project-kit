@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.3.10 - 2026-05-15
+
+Release candidate for the workflow shortcut and Pattern Advisor contract line.
+
+- Added `agentic-kit workflow go` as the normal request-and-run shortcut for one bounded workflow step.
+- Added `agentic-kit workflow upload-output` for uploading bounded local workflow evidence without pasted terminal output.
+- Added repo-local `./ns go` and `./ns upload` shortcuts.
+- Aligned workflow status guidance with the shortcut path while preserving explicit request/run control.
+- Added a contract-only Pattern Advisor MVP report without introducing runtime behavior or binding gates.
 ## v0.3.9 - 2026-05-15
 
 Zenodo v0.3.9 DOI: 10.5281/zenodo.20210345
