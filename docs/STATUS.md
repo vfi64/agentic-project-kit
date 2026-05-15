@@ -1,11 +1,11 @@
-Current version: 0.3.8
+Current version: 0.3.9
 
 # Project Status
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: none / main is current
+Current work branch: release/v0.3.9-metadata
 
 ## Purpose
 
@@ -211,7 +211,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Repo-owned `./ns` compatibility entrypoint is merged: the normal ns-d workflow no longer depends on local shell aliases.
+Prepare v0.3.9 release metadata for workflow fail-report, FAILED-state guidance, and the repo-owned `./ns` entrypoint.
 
 ## Current Blockers
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Start the next concrete slice only after defining a one-paragraph user-facing goal and an explicit command-level contract. Keep Pattern Advisor non-binding unless separately approved.
+Validate `release/v0.3.9-metadata`. If green, open and merge a focused v0.3.9 release metadata PR.
