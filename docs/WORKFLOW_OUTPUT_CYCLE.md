@@ -68,8 +68,14 @@ After `UPLOADED`, run `agentic-kit workflow cleanup` or `python3 tools/next-step
 When the workflow state is `FAILED`:
 
 1. Preserve the local terminal output and any files under `tmp/agent-evidence/`.
-2. Send the relevant terminal output to the assistant if no temporary evidence branch was uploaded.
-3. Inspect the local state with:
+2. Upload bounded failure evidence for LLM-side diagnosis if the local evidence file exists:
+
+```bash
+agentic-kit workflow fail-report
+```
+
+3. Send the relevant terminal output to the assistant if no temporary evidence branch was uploaded.
+4. Inspect the local state with:
 
 ```bash
 git status --short
@@ -78,8 +84,8 @@ cat .agentic/workflow_state
 ls -lt tmp/agent-evidence 2>/dev/null | head
 ```
 
-4. Diagnose and fix the root cause, such as a test failure, documentation-coverage failure, missing tool, or dirty git state.
-5. Only after the cause is understood, consciously reset the workflow state and generated report:
+5. Diagnose and fix the root cause, such as a test failure, documentation-coverage failure, missing tool, or dirty git state.
+6. Only after the cause is understood, consciously reset the workflow state and generated report:
 
 ```bash
 git restore .agentic/workflow_state docs/reports/CURRENT_WORKFLOW_OUTPUT.md
@@ -197,6 +203,7 @@ Guided status compass:
 - `workflow run`: runs exactly one bounded state-machine step through the existing local entrypoint.
 - `workflow status`: prints the current state, current workflow request state, and bounded evidence pointers.
 - `workflow cleanup`: cleans an UPLOADED/CLEANUP evidence branch, otherwise no-ops with a status message.
+- `workflow fail-report`: from FAILED, uploads preserved bounded evidence for diagnosis without cleanup or retry.
 
 ## Compatibility entrypoint
 

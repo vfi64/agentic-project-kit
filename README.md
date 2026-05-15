@@ -266,6 +266,7 @@ agentic-kit workflow status --explain
 agentic-kit workflow request
 agentic-kit workflow run
 agentic-kit workflow cleanup
+agentic-kit workflow fail-report
 ```
 
 Use `workflow status --explain` when you are unsure what to do next. It is read-only and explains the current state before recommending a safe command. This guided path is intentionally conservative: dirty working trees and failed workflow states point to inspection first instead of hidden state changes.
@@ -276,6 +277,7 @@ Quick command guide:
 - `workflow request`: mark a concrete local workflow slice as requested.
 - `workflow run`: run one bounded workflow state-machine step.
 - `workflow cleanup`: clean uploaded temporary evidence after review.
+- `workflow fail-report`: upload preserved FAILED-state evidence for diagnosis without cleanup or retry.
 
 The workflow uses `.agentic/workflow_state` and `.agentic/current_work.yaml`. `IDLE` with `current_work.yaml` state `READY` is a safe no-op. A run starts only after an explicit request, for example `agentic-kit workflow request`, followed by `agentic-kit workflow run`. A requested run captures bounded local evidence, resets the request to `READY`, updates `docs/reports/CURRENT_WORKFLOW_OUTPUT.md`, uploads a temporary evidence branch, and waits for explicit cleanup.
 

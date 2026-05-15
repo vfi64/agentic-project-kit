@@ -5,7 +5,7 @@ Current version: 0.3.8
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: none / main is current
+Current work branch: feature/workflow-fail-report
 
 ## Purpose
 
@@ -211,7 +211,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-v0.3.8 is fully released and post-release verified.
+Implement a focused workflow failure-report slice so FAILED states can preserve bounded diagnostic evidence without cleanup or retry.
 
 ## Current Blockers
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-v0.3.8 is complete. Start the next concrete slice only after defining a one-paragraph user-facing goal and an explicit command-level contract. Keep Pattern Advisor non-binding unless separately approved.
+Validate `feature/workflow-fail-report`. If green, open and merge a focused workflow failure-report PR.
