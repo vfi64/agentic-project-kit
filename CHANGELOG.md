@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.3.9 - 2026-05-15
+
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
+- Added `agentic-kit workflow fail-report` for FAILED workflow states so bounded diagnostic evidence can be uploaded without cleanup or retry.
+- Updated `workflow status --explain` so FAILED states recommend `workflow fail-report` before cleanup or retry.
+- Added the repo-owned `./ns` compatibility entrypoint for the normal ns-d workflow without depending on local shell aliases.
+- Updated workflow documentation, coverage terms, STATUS, and handoff for the new FAILED-state and `./ns` workflow behavior.
+
 ## v0.3.8 - 2026-05-15
 
 Zenodo v0.3.8 DOI: 10.5281/zenodo.20208638

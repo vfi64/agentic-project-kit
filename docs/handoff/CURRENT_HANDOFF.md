@@ -1,15 +1,15 @@
-Current version: 0.3.8
+Current version: 0.3.9
 
 # Current Handoff
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: main
+Branch: release/v0.3.9-metadata
 Base branch: main
 
 ## Current Goal
 
-Repo-owned `./ns` compatibility entrypoint is merged: the normal ns-d workflow no longer depends on local shell aliases.
+Prepare v0.3.9 release metadata for workflow fail-report, FAILED-state guidance, and the repo-owned `./ns` entrypoint.
 
 v0.3.7 is complete. The v0.3.8 planning note is merged on main, and the first narrowly scoped Guided CLI Usability v2 slice is merged on main.
 
@@ -191,4 +191,4 @@ No Pattern Advisor MVP, DCO implementation, or additional Guided CLI runtime cha
 
 ## Next Safe Step
 
-Start the next work only from a concrete slice with a one-paragraph user-facing goal, explicit command-level contract, deterministic tests, and no hidden state mutation in read-only guidance paths. Keep `docs/ideas/PATTERN_ADVISOR.md` non-binding unless the maintainer explicitly approves a separate Pattern Advisor MVP.
+Validate `release/v0.3.9-metadata`. If green, open and merge a focused v0.3.9 release metadata PR.

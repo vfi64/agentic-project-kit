@@ -467,7 +467,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.8` is the current release line covering Guided CLI Usability v2 status guidance, including safer read-only `agentic-kit workflow status --explain` recommendations for clean, dirty, requested, uploaded, and failed workflow states.
+Version `0.3.9` is the current release line covering FAILED-state evidence upload through `agentic-kit workflow fail-report`, FAILED-state guidance in `workflow status --explain`, and the repo-owned `./ns` compatibility entrypoint for the ns-d workflow.
 
 This repository has maintainer-owned GitHub releases and verified Zenodo archive records. Verified version-specific DOIs:
 
