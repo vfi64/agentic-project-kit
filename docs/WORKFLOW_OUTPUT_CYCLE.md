@@ -131,8 +131,25 @@ The repository provides `./ns` as the versioned compatibility entrypoint. It del
 
 ```zsh
 ./ns
-./ns --request
+./ns state
+./ns list
+./ns show
+./ns run
+./ns go
+./ns upload
+./ns up
+./ns fail
 ```
+
+Shortcut meanings:
+
+- `./ns state` / `./ns status`: show guided workflow state, equivalent to `agentic-kit workflow state`.
+- `./ns list`: list configured local workflow work items.
+- `./ns show`: show the current workflow request file.
+- `./ns run`: run one bounded workflow step for the current request.
+- `./ns go`: request the current workflow and run one bounded step.
+- `./ns upload` / `./ns up`: upload the latest bounded local workflow evidence.
+- `./ns fail`: upload preserved FAILED-state evidence without cleanup or retry.
 
 After adding those aliases to `~/.zshrc`, routine compatibility-entrypoint work becomes:
 

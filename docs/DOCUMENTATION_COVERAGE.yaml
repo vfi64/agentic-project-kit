@@ -27,6 +27,10 @@ rules:
           - agentic-kit todo render
           - agentic-kit workflow go
           - agentic-kit workflow upload-output
+          - agentic-kit workflow state
+          - agentic-kit workflow list
+          - agentic-kit workflow show
+          - agentic-kit workflow upload
           - agentic-kit workflow request
           - agentic-kit workflow run
           - agentic-kit workflow status

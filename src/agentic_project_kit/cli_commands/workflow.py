@@ -11,6 +11,7 @@ workflow_app = typer.Typer(help="Run and inspect bounded local workflow handoff 
 VALID_STATES = {"IDLE", "TEST", "UPLOAD", "CLEANUP", "REQUESTED", "RUNNING", "UPLOADED", "FAILED"}
 STATE_FILE = Path(".agentic/workflow_state")
 WORK_FILE = Path(".agentic/current_work.yaml")
+WORK_ITEMS_DIR = Path(".agentic/work_items")
 BRANCH_FILE = Path("tmp/agent-evidence/latest-branch.txt")
 REPORT_FILE = Path("docs/reports/CURRENT_WORKFLOW_OUTPUT.md")
 NEXT_STEP_SCRIPT = Path("tools/next-step.py")
@@ -29,6 +30,44 @@ def _read_state(root: Path) -> str:
     if state not in VALID_STATES:
         raise typer.BadParameter(f"invalid workflow state: {state}")
     return state
+
+
+
+def _work_items_dir(root: Path) -> Path:
+    return _rooted(WORK_ITEMS_DIR, root)
+
+
+def _safe_work_item_name(name: str) -> str:
+    normalized = name.strip()
+    if not normalized:
+        raise typer.BadParameter("missing workflow item name")
+    allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_")
+    if any(char not in allowed for char in normalized):
+        raise typer.BadParameter(f"unsafe workflow item name: {name}")
+    if normalized in {".", ".."}:
+        raise typer.BadParameter(f"unsafe workflow item name: {name}")
+    return normalized
+
+
+def _work_item_path(root: Path, name: str) -> Path:
+    return _work_items_dir(root) / f"{_safe_work_item_name(name)}.yaml"
+
+
+def _available_work_items(root: Path) -> list[str]:
+    directory = _work_items_dir(root)
+    if not directory.exists():
+        return []
+    return sorted(path.stem for path in directory.glob("*.yaml"))
+
+
+def _copy_work_item_to_current(root: Path, name: str) -> Path:
+    source = _work_item_path(root, name)
+    if not source.exists():
+        raise typer.BadParameter(f"unknown workflow item: {_safe_work_item_name(name)}")
+    target = _rooted(WORK_FILE, root)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+    return target
 
 
 def _workflow_request_state(root: Path) -> str:
@@ -213,11 +252,61 @@ def workflow_request(
 
 @workflow_app.command("run")
 def workflow_run(
+    name: str | None = typer.Argument(None, help="Optional stored workflow item name to set before running."),
     project_root: Path = typer.Option(Path("."), "--root", help="Project root containing tools/next-step.py."),
 ) -> None:
-    """Run one bounded workflow state-machine step."""
-    raise typer.Exit(code=_run_next_step(project_root.resolve()))
+    """Run the current workflow, or set a stored workflow item and run it."""
+    root = project_root.resolve()
+    if name is not None:
+        state = _read_state(root)
+        if state != "IDLE":
+            raise typer.BadParameter(f"refusing to run workflow item from state: {state}")
+        _copy_work_item_to_current(root, name)
+        _set_workflow_request_state(root, "REQUESTED")
+        typer.echo(f"Workflow item selected: {_safe_work_item_name(name)}")
+        typer.echo(f"Current workflow request file: {WORK_FILE}")
+        typer.echo("Workflow request state: REQUESTED")
+    raise typer.Exit(code=_run_next_step(root))
 
+
+@workflow_app.command("state")
+def workflow_state(
+    project_root: Path = typer.Option(Path("."), "--root", help="Project root containing .agentic/workflow_state."),
+) -> None:
+    """Show guided workflow state; shortcut for workflow status --explain."""
+    workflow_status(project_root=project_root, explain=True)
+
+
+@workflow_app.command("list")
+def workflow_list(
+    project_root: Path = typer.Option(Path("."), "--root", help="Project root containing .agentic/work_items."),
+) -> None:
+    """List stored local workflow items."""
+    root = project_root.resolve()
+    items = _available_work_items(root)
+    typer.echo(f"work_items_dir={WORK_ITEMS_DIR}")
+    if not items:
+        typer.echo("No stored workflow items found.")
+        return
+    for item in items:
+        typer.echo(f"- {item}")
+
+
+@workflow_app.command("show")
+def workflow_show(
+    name: str | None = typer.Argument(None, help="Optional stored workflow item name."),
+    project_root: Path = typer.Option(Path("."), "--root", help="Project root containing .agentic/current_work.yaml."),
+) -> None:
+    """Show the current workflow request or one stored workflow item."""
+    root = project_root.resolve()
+    path = _rooted(WORK_FILE, root) if name is None else _work_item_path(root, name)
+    if not path.exists():
+        if name is None:
+            raise typer.BadParameter(f"missing current workflow file: {WORK_FILE}")
+        raise typer.BadParameter(f"unknown workflow item: {_safe_work_item_name(name)}")
+    shown_path = WORK_FILE if name is None else WORK_ITEMS_DIR / f"{_safe_work_item_name(name)}.yaml"
+    typer.echo(f"workflow_file={shown_path}")
+    typer.echo(path.read_text(encoding="utf-8").rstrip())
 
 @workflow_app.command("go")
 def workflow_go(
@@ -275,6 +364,13 @@ def workflow_fail_report(
 
 
 @workflow_app.command("upload-output")
+@workflow_app.command("upload")
+def workflow_upload(
+    project_root: Path = typer.Option(Path("."), "--root", help="Project root containing tools/next-step.py."),
+) -> None:
+    """Alias for upload-output."""
+    workflow_upload_output(project_root=project_root)
+
 def workflow_upload_output(
     project_root: Path = typer.Option(Path("."), "--root", help="Project root containing tools/next-step.py."),
 ) -> None:
