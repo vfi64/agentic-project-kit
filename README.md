@@ -463,7 +463,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.7` is the current release line covering Guided Workflow Usability v1, including read-only `agentic-kit workflow status --explain`, explicit current-work request semantics, DCO/governed workflow design rules, and governed workflow pattern notes.
+Version `0.3.8` is the current release line covering Guided CLI Usability v2 status guidance, including safer read-only `agentic-kit workflow status --explain` recommendations for clean, dirty, requested, uploaded, and failed workflow states.
 
 This repository has maintainer-owned GitHub releases and verified Zenodo archive records. Verified version-specific DOIs:
 

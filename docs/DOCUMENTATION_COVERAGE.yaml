@@ -213,7 +213,7 @@ rules:
     documents:
       - path: README.md
         terms:
-          - Version `0.3.7`
+          - Version `0.3.8`
           - v0.3.3
           - 10.5281/zenodo.20151924
 
