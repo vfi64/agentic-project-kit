@@ -481,7 +481,9 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.11` is the current release line covering repo-local workflow-item shortcuts, stored work-item execution, and current-work isolation for named workflow-item runs. Version `0.3.10` remains the previous archived release covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`.
+Version `0.3.12` is the current release line covering the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands. Version `0.3.11` remains the previous archived release covering repo-local workflow-item shortcuts, stored work-item execution, and current-work isolation for named workflow-item runs.
+
+Version `0.3.10` remains the previous archived release covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`.
 
 Version `0.3.9` remains the previous post-release verified archived release before v0.3.10.
 

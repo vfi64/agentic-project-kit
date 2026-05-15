@@ -1,4 +1,4 @@
-Current version: 0.3.11
+Current version: 0.3.12
 
 # Current Handoff
 
@@ -9,7 +9,11 @@ Base branch: main
 
 ## Current Goal
 
-v0.3.11 is released and post-release verified. GitHub Release exists, Zenodo verified version DOI is `10.5281/zenodo.20215460`, and DOI metadata is being recorded on main. The release covers repo-local workflow-item shortcuts, stored Pattern Advisor workflow item support, and current-work isolation for named workflow-item runs.
+Current version: 0.3.12
+
+v0.3.12 is the current release line for the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands.
+
+Previous verified release DOI: `10.5281/zenodo.20215460`.
 
 ## Current Repository State
 
@@ -35,7 +39,7 @@ Verified release and post-merge evidence:
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified v0.3.9 version DOI: `10.5281/zenodo.20210345`.
 - Verified v0.3.10 version DOI: `10.5281/zenodo.20214382`.
-- Verified v0.3.11 version DOI: `10.5281/zenodo.20215460`.
+- Previous verified version DOI: `10.5281/zenodo.20215460`.
 - `agentic-kit post-release-check --version 0.3.9` passed before PR #195.
 - PR #195 added `docs/ideas/DIDACTIC_GUIDANCE.md` as a documentation-only, non-binding didactic orientation note.
 - PR #195 did not add runtime code, public CLI commands, deterministic gates, workflow states, Pattern Advisor implementation, or pattern catalog behavior.
