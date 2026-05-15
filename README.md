@@ -268,7 +268,7 @@ agentic-kit workflow run
 agentic-kit workflow cleanup
 ```
 
-Use `workflow status --explain` when you are unsure what to do next. It is read-only and explains the current state before recommending a safe command.
+Use `workflow status --explain` when you are unsure what to do next. It is read-only and explains the current state before recommending a safe command. This guided path is intentionally conservative: dirty working trees and failed workflow states point to inspection first instead of hidden state changes.
 
 Quick command guide:
 
