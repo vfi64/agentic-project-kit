@@ -5,7 +5,7 @@ Current version: 0.3.6
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/status-handoff-after-170
+Current work branch: docs/status-handoff-after-172
 
 ## Purpose
 
@@ -26,18 +26,20 @@ Post-v0.3.6 main has advanced beyond the release tag with governance, usability,
 - PR #167 updated current-state and handoff documentation after workflow cleanup hardening.
 - PR #168 added `docs/ideas/PATTERN_ADVISOR.md` as a non-binding idea note / architecture research track.
 - PR #170 added read-only `agentic-kit workflow status --explain` guidance for common workflow states.
+- PR #171 updated current-state and handoff documentation after PR #170.
+- PR #172 completed Guided Workflow Usability v1 by adding read-only safety wording, `current_report` explanation, a README quick command guide, and a guided status compass.
 
-The current main head after PR #170 is:
+The current main head after PR #172 is:
 
 ```text
+0161838 Complete guided workflow status usability (#172)
+a2d5e68 Update status and handoff after workflow status explain (#171)
 1d0c5f4 Explain workflow status next steps (#170)
-50aa58c Update status and handoff after Pattern Advisor idea (#169)
-6a9326c Add Pattern Advisor idea note (#168)
 ```
 
-The latest verified post-merge gates after PR #170 were:
+The latest verified post-merge gates after PR #172 were:
 
-- `160 passed`
+- `162 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
@@ -57,6 +59,8 @@ The latest verified post-merge gates after PR #170 were:
 - PR #167 refreshed current-state and handoff documentation after PR #166.
 - PR #168 added `docs/ideas/PATTERN_ADVISOR.md` as a curated idea note without CLI, code, ADR, release, or pattern-catalog implementation.
 - PR #170 added read-only `agentic-kit workflow status --explain`, documented it, and raised the suite to 160 tests.
+- PR #171 refreshed current-state and handoff documentation after PR #170.
+- PR #172 completed Guided Workflow Usability v1 and raised the suite to 162 tests.
 
 ## Idea-note state
 
@@ -207,11 +211,11 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Update state and handoff documentation after PR #170 so main records the new read-only Guided CLI workflow-status explanation.
+Update state and handoff documentation after PR #172 so main records completed Guided Workflow Usability v1 before the planned v0.3.7 release preparation.
 
 ## Current Blockers
 
-- Local gates must pass on `docs/status-handoff-after-170`.
+- Local gates must pass on `docs/status-handoff-after-172`.
 - Because this changes current-state and handoff wording, include `agentic-kit doc-mesh-audit` before merge.
 
 ## Live Status Commands
@@ -230,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `docs/status-handoff-after-170`. If green, open and merge a focused documentation PR. After merge, the repo can continue with another small Guided CLI usability slice only if it has a concrete scope.
+Validate `docs/status-handoff-after-172`. If green, open and merge a focused documentation PR. After merge, prepare v0.3.7 as a patch release for the completed Guided Workflow Usability v1 work.
