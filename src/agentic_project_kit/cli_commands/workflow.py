@@ -257,17 +257,24 @@ def workflow_run(
 ) -> None:
     """Run the current workflow, or set a stored workflow item and run it."""
     root = project_root.resolve()
-    if name is not None:
-        state = _read_state(root)
-        if state != "IDLE":
-            raise typer.BadParameter(f"refusing to run workflow item from state: {state}")
-        _copy_work_item_to_current(root, name)
-        _set_workflow_request_state(root, "REQUESTED")
-        typer.echo(f"Workflow item selected: {_safe_work_item_name(name)}")
-        typer.echo(f"Current workflow request file: {WORK_FILE}")
-        typer.echo("Workflow request state: REQUESTED")
-    raise typer.Exit(code=_run_next_step(root))
-
+    if name is None:
+        raise typer.Exit(code=_run_next_step(root))
+    state = _read_state(root)
+    if state != "IDLE":
+        raise typer.BadParameter(f"refusing to run workflow item from state: {state}")
+    work_path = _rooted(WORK_FILE, root)
+    original_current_work = work_path.read_text(encoding="utf-8") if work_path.exists() else None
+    _copy_work_item_to_current(root, name)
+    _set_workflow_request_state(root, "REQUESTED")
+    typer.echo(f"Workflow item selected: {_safe_work_item_name(name)}")
+    typer.echo(f"Current workflow request file: {WORK_FILE}")
+    typer.echo("Workflow request state: REQUESTED")
+    exit_code = _run_next_step(root)
+    if original_current_work is None:
+        work_path.unlink(missing_ok=True)
+    else:
+        work_path.write_text(original_current_work, encoding="utf-8")
+    raise typer.Exit(code=exit_code)
 
 @workflow_app.command("state")
 def workflow_state(
