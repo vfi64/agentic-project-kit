@@ -2,10 +2,10 @@ Current version: 0.3.6
 
 # Project Status
 
-Status-date: 2026-05-14
+Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/status-handoff-after-166
+Current work branch: docs/status-handoff-after-168
 
 ## Purpose
 
@@ -17,25 +17,28 @@ The project itself has a current state layer so work can be continued from the r
 
 v0.3.6 is released and post-release verified. Verified v0.3.6 version DOI: `10.5281/zenodo.20183888`. The post-release Zenodo verification is complete for v0.3.6.
 
-Post-v0.3.6 main has advanced beyond the release tag with governance, usability, and workflow-cleanup hardening:
+Post-v0.3.6 main has advanced beyond the release tag with governance, usability, workflow-cleanup hardening, and Pattern Advisor concept preservation:
 
 - PR #163 recorded the verified v0.3.6 DOI metadata on main.
 - PR #164 preserved the Deterministic Cell Orchestration idea note and introduced the Layered CLI Usability idea note.
 - PR #165 updated `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after the idea-note merge.
 - PR #166 hardened `agentic-kit workflow cleanup` so stale `temp/workflow-evidence-*` branches can be removed even when `.agentic/workflow_state` is already `IDLE`.
+- PR #167 updated current-state and handoff documentation after workflow cleanup hardening.
+- PR #168 added `docs/ideas/PATTERN_ADVISOR.md` as a non-binding idea note / architecture research track.
 
-The current main head after PR #166 is:
+The current main head after PR #168 is:
 
 ```text
-9c08dfc Clean stale workflow evidence branches from cleanup (#166)
+6a9326c Add Pattern Advisor idea note (#168)
 ```
 
-The latest verified post-merge gates after PR #166 were:
+The latest verified post-merge gates after PR #168 were:
 
 - `156 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
+- `agentic-kit doc-mesh-audit` passed
 
 ## Recent completed work since v0.3.5
 
@@ -48,14 +51,17 @@ The latest verified post-merge gates after PR #166 were:
 - PR #164 added `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`, `docs/ideas/LAYERED_CLI_USABILITY.md`, and small `AGENTS.md` cross-references.
 - PR #165 refreshed current-state and handoff documentation after PR #164.
 - PR #166 added stale workflow evidence cleanup from `IDLE` plus a regression test, raising the suite to 156 tests.
+- PR #167 refreshed current-state and handoff documentation after PR #166.
+- PR #168 added `docs/ideas/PATTERN_ADVISOR.md` as a curated idea note without CLI, code, ADR, release, or pattern-catalog implementation.
 
 ## Idea-note state
 
-The repository has three related non-binding architecture idea notes:
+The repository has four related non-binding architecture idea notes:
 
 - `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md`
 - `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
 - `docs/ideas/LAYERED_CLI_USABILITY.md`
+- `docs/ideas/PATTERN_ADVISOR.md`
 
 These documents preserve architecture options without making them automatic implementation requirements.
 
@@ -63,7 +69,9 @@ Deterministic Cell Orchestration remains optional. Use it only when typed cells,
 
 Layered CLI Usability is a review lens for keeping the public command surface manageable. The intended direction is high functionality and high automation internally while keeping the daily Golden Path simple.
 
-No ADR has been created for these idea notes. An ADR should be considered only when DCO, layered CLI usability, capability boundaries, or a guided CLI entry point become binding architecture or public CLI policy.
+Pattern Advisor remains optional and advisory. It preserves the idea of mapping recurring project evidence to reusable patterns, anti-patterns, and candidate patterns without becoming an autopilot, a gate, or a wrapper-specific subsystem.
+
+No ADR has been created for these idea notes. An ADR should be considered only when DCO, layered CLI usability, Pattern Advisor behavior, capability boundaries, or a guided CLI entry point become binding architecture or public CLI policy.
 
 ## Documentation-mesh audit state
 
@@ -133,6 +141,14 @@ Future Deterministic Cell Orchestration architecture track:
 5. Prefer a small later pilot for handoff, review, release, or report artifacts before applying DCO to more complex systems.
 6. If a pilot is added, require schema tests, validator tests, bounded repair tests where repair exists, and renderer tests where deterministic rendering exists.
 
+Future Pattern Advisor architecture track:
+
+1. Treat Pattern Advisor as an optional advisory layer for recurring project problem classes.
+2. Keep any future Pattern Advisor output advisory-only, not a deterministic gate.
+3. Do not implement `patterns suggest`, `advise`, candidate capture, or pattern promotion before a small read-only catalog MVP has proven useful.
+4. Keep wrapper-project lessons as evidence sources, not wrapper-specific kit behavior.
+5. Consider an ADR only if a public `agentic-kit patterns` / `agentic-kit advise` CLI, binding lifecycle, or advisory behavior becomes maintained architecture.
+
 Near-term documentation-governance roadmap:
 
 1. Use `agentic-kit doc-mesh-audit` manually for documentation-mesh, release, handoff, governance, roadmap, and current-state changes.
@@ -144,7 +160,7 @@ Near-term documentation-governance roadmap:
 Product-positioning roadmap:
 
 1. Document the project as a governed AI-assisted development layer, not as a promise of autonomous agent correctness.
-2. Explain the problem solved by the project: chat context drift, branch drift, unclear handoff state, local-output transfer, release-state drift, and unmanaged CLI complexity.
+2. Explain the problem solved by the project: chat context drift, branch drift, unclear handoff state, local-output transfer, release-state drift, unmanaged CLI complexity, and recurring architecture-pattern drift.
 3. Keep the first-run path simple enough for a new maintainer to understand without reading every governance document.
 4. Provide compact example flows for health checks, explicit workflow request/run/status/cleanup, and release verification.
 
@@ -166,6 +182,7 @@ Project-level state documentation is present on main:
 - `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md`
 - `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
 - `docs/ideas/LAYERED_CLI_USABILITY.md`
+- `docs/ideas/PATTERN_ADVISOR.md`
 
 Project-level state documentation is machine-checkable:
 
@@ -186,11 +203,11 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Update state and handoff documentation after PR #166 so main no longer points future agents to the already completed workflow-cleanup hardening slice.
+Update state and handoff documentation after PR #168 so main records the new Pattern Advisor idea note and future agents do not depend on expired chat uploads for that concept.
 
 ## Current Blockers
 
-- Local gates must pass on `docs/status-handoff-after-166`.
+- Local gates must pass on `docs/status-handoff-after-168`.
 - Because this changes current-state and handoff wording, include `agentic-kit doc-mesh-audit` before merge.
 
 ## Live Status Commands
@@ -209,4 +226,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `docs/status-handoff-after-166`. If green, open and merge a focused documentation PR. After merge, reassess whether the next slice should keep `doc-mesh-audit` as a special manual gate for more PRs, improve workflow cleanup UX around remote branches, or start a small guided-usability CLI slice.
+Validate `docs/status-handoff-after-168`. If green, open and merge a focused documentation PR. After merge, the repo can return to the planned didactic simplification / Guided CLI Usability work, using `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference.
