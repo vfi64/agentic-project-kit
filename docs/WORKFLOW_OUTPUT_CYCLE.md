@@ -200,7 +200,7 @@ current_work_state=REQUESTED
 current_report=docs/reports/CURRENT_WORKFLOW_OUTPUT.md
 ```
 
-`current_report` is a pointer to the latest local workflow-output summary. It is useful for review, but it is not a command and does not change state.
+`current_report` is a pointer to the latest workflow-output summary. It is useful for review, but it is not a command, does not change state, and does not guarantee that uploadable local evidence still exists under `tmp/agent-evidence/`.
 
 Guided status compass:
 

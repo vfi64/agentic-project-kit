@@ -112,8 +112,8 @@ def _status_interpretation(state: str, work_state: str | None, dirty: bool) -> t
     elif state == "IDLE" and work_state in {None, "READY"}:
         interpretation.append("No active workflow request.")
         recommendation.append("Define one concrete slice before requesting workflow automation.")
-        recommendation.append("Run: agentic-kit workflow request")
-        recommendation.append("Then run: agentic-kit workflow run")
+        recommendation.append("Run: agentic-kit workflow go")
+        recommendation.append("For explicit two-step control: agentic-kit workflow request, then agentic-kit workflow run")
     else:
         interpretation.append("Workflow state requires manual review.")
         recommendation.append("Inspect workflow status and evidence before changing state.")
@@ -127,7 +127,7 @@ def _print_status_explanation(root: Path, state: str, work_state: str | None, re
     typer.echo("Safety:")
     typer.echo("- This command is read-only.")
     if report_present:
-        typer.echo("- current_report points to the latest local workflow-output summary.")
+        typer.echo("- current_report points to the latest workflow-output summary, not necessarily uploadable local evidence.")
     typer.echo("")
     typer.echo("Interpretation:")
     for line in interpretation:
