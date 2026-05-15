@@ -4,14 +4,14 @@ Current version: 0.3.7
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: docs/record-v0.3.7-doi
+Branch: main
 Base branch: main
 
 ## Current Goal
 
-Record verified v0.3.7 DOI metadata after post-release verification.
+v0.3.7 is fully released and post-release verified.
 
-This branch records verified v0.3.7 DOI metadata after post-release verification. It changes citation metadata, changelog, README DOI lists, STATUS, and this handoff; it does not change runtime behavior or package version.
+No release branch is active. v0.3.7 is tagged, published, archived by Zenodo, post-release verified, and DOI metadata is recorded on main.
 
 ## Current Repository State
 
@@ -191,6 +191,4 @@ No Pattern Advisor MVP, DCO implementation, or additional Guided CLI runtime cha
 
 ## Next Safe Step
 
-Run local gates on `docs/record-v0.3.7-doi`, including `agentic-kit post-release-check --version 0.3.7`. If green, open and merge a focused documentation PR.
-
-After merge, v0.3.7 is fully released and DOI metadata is recorded on main. Use `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference unless the maintainer explicitly chooses a later Pattern Advisor MVP.
+v0.3.7 is complete. Start the next work only from a concrete new slice. Use `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference unless the maintainer explicitly chooses a later Pattern Advisor MVP.

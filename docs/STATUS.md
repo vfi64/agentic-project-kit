@@ -5,7 +5,7 @@ Current version: 0.3.7
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/record-v0.3.7-doi
+Current work branch: none / main is current
 
 ## Purpose
 
@@ -211,7 +211,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Record verified v0.3.7 DOI metadata after post-release verification.
+v0.3.7 is fully released and post-release verified.
 
 ## Current Blockers
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `docs/record-v0.3.7-doi`. If green, open and merge a focused documentation PR. After merge, v0.3.7 DOI metadata is recorded on main.
+v0.3.7 is complete. Next work should begin only from a concrete new slice, for example a narrowly scoped Guided CLI usability improvement or a separately approved Pattern Advisor MVP.
