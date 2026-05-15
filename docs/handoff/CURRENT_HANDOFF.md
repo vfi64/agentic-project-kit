@@ -4,14 +4,14 @@ Current version: 0.3.6
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: docs/status-handoff-after-168
+Branch: docs/status-handoff-after-170
 Base branch: main
 
 ## Current Goal
 
-Update `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after PR #168 so the repository state records the Pattern Advisor idea note and future agents do not depend on expired chat uploads for that concept.
+Update `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after PR #170 so the repository state records the new read-only Guided CLI workflow-status explanation.
 
-This branch is documentation-only. It records the post-#168 state and does not change CLI behavior, workflow behavior, release metadata, package version, pattern catalog files, or implementation code.
+This branch is documentation-only. It records the post-#170 state and does not change CLI behavior, workflow behavior, release metadata, package version, pattern catalog files, or implementation code.
 
 ## Current Repository State
 
@@ -34,16 +34,19 @@ Post-release work completed after v0.3.6:
 - PR #166 hardened `agentic-kit workflow cleanup` so stale `temp/workflow-evidence-*` branches can be removed even when `.agentic/workflow_state` is already `IDLE`.
 - PR #167 refreshed `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after workflow cleanup hardening.
 - PR #168 added `docs/ideas/PATTERN_ADVISOR.md` as a non-binding idea note / architecture research track.
+- PR #170 added read-only `agentic-kit workflow status --explain` guidance for common workflow states.
 
 Current main head before this branch:
 
 ```text
+1d0c5f4 Explain workflow status next steps (#170)
+50aa58c Update status and handoff after Pattern Advisor idea (#169)
 6a9326c Add Pattern Advisor idea note (#168)
 ```
 
-Latest verified local gates after PR #168:
+Latest verified local gates after PR #170:
 
-- `156 passed`
+- `160 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
@@ -51,7 +54,7 @@ Latest verified local gates after PR #168:
 
 ## Workflow State
 
-Expected state after the #168 merge:
+Expected state after the #170 merge:
 
 - `.agentic/workflow_state` = `IDLE`
 - `.agentic/current_work.yaml` = `state: READY`
@@ -66,6 +69,7 @@ Preferred public workflow commands:
 agentic-kit workflow request
 agentic-kit workflow run
 agentic-kit workflow status
+agentic-kit workflow status --explain
 agentic-kit workflow cleanup
 ```
 
@@ -99,7 +103,7 @@ DCO guidance:
 Layered CLI usability guidance:
 
 - keep the Golden Path small;
-- keep daily usage close to `ns`, `doctor`, `check-docs`, and workflow status;
+- keep daily usage close to `ns`, `doctor`, `check-docs`, `workflow status`, and read-only `workflow status --explain`;
 - classify future public commands or options as Daily, Guided, Maintainer, or Debug before making them prominent;
 - consider an ADR only if these layers become binding command policy or capability boundaries.
 
@@ -177,13 +181,13 @@ This handoff intentionally keeps coverage terms visible for deterministic gates:
 
 Prepared files should include:
 
-- `docs/STATUS.md` updated with the post-#168 state, latest test count, Pattern Advisor idea-note state, and next possible slices.
-- `docs/handoff/CURRENT_HANDOFF.md` updated with the post-#168 handoff and source-of-truth reading order.
+- `docs/STATUS.md` updated with the post-#170 state, latest test count, and read-only Guided CLI status explanation.
+- `docs/handoff/CURRENT_HANDOFF.md` updated with the post-#170 handoff and source-of-truth reading order.
 
 No package version bump, release metadata change, CLI behavior change, pattern catalog, or implementation change is part of this branch.
 
 ## Next Safe Step
 
-Run local gates on `docs/status-handoff-after-168`, including `agentic-kit doc-mesh-audit`. If green, open and merge a focused documentation PR.
+Run local gates on `docs/status-handoff-after-170`, including `agentic-kit doc-mesh-audit`. If green, open and merge a focused documentation PR.
 
-After merge, return to the planned didactic simplification / Guided CLI Usability work. Use `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference unless the maintainer explicitly chooses a later Pattern Advisor MVP.
+After merge, continue with another small Guided CLI usability slice only if it has a concrete scope. Use `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference unless the maintainer explicitly chooses a later Pattern Advisor MVP.
