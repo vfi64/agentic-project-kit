@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -60,11 +61,11 @@ def _available_work_items(root: Path) -> list[str]:
     return sorted(path.stem for path in directory.glob("*.yaml"))
 
 
-def _copy_work_item_to_current(root: Path, name: str) -> Path:
+def _copy_work_item_to_temp_run_file(root: Path, name: str) -> Path:
     source = _work_item_path(root, name)
     if not source.exists():
         raise typer.BadParameter(f"unknown workflow item: {_safe_work_item_name(name)}")
-    target = _rooted(WORK_FILE, root)
+    target = _rooted(Path("tmp/agent-evidence") / f"run-{_safe_work_item_name(name)}.yaml", root)
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
     return target
@@ -81,10 +82,9 @@ def _workflow_request_state(root: Path) -> str:
     return "READY"
 
 
-def _set_workflow_request_state(root: Path, request_state: str) -> None:
-    work_path = _rooted(WORK_FILE, root)
+def _set_workflow_file_request_state(work_path: Path, request_state: str) -> None:
     if not work_path.exists():
-        raise typer.BadParameter(f"missing declarative workflow file: {WORK_FILE}")
+        raise typer.BadParameter(f"missing declarative workflow file: {work_path}")
     normalized = request_state.upper()
     if normalized not in {"READY", "REQUESTED"}:
         raise typer.BadParameter(f"invalid workflow request state: {request_state}")
@@ -103,11 +103,18 @@ def _set_workflow_request_state(root: Path, request_state: str) -> None:
     work_path.write_text("\n".join(output) + "\n", encoding="utf-8")
 
 
-def _run_next_step(root: Path, extra_args: list[str] | None = None) -> int:
+def _set_workflow_request_state(root: Path, request_state: str) -> None:
+    _set_workflow_file_request_state(_rooted(WORK_FILE, root), request_state)
+
+
+def _run_next_step(root: Path, extra_args: list[str] | None = None, env: dict[str, str] | None = None) -> int:
     script = _rooted(NEXT_STEP_SCRIPT, root)
     if not script.exists():
         raise typer.BadParameter(f"missing workflow entrypoint: {NEXT_STEP_SCRIPT}")
-    completed = subprocess.run([sys.executable, str(script), *(extra_args or [])], cwd=root.resolve(), check=False)
+    run_env = os.environ.copy()
+    if env:
+        run_env.update(env)
+    completed = subprocess.run([sys.executable, str(script), *(extra_args or [])], cwd=root.resolve(), env=run_env, check=False)
     return int(completed.returncode)
 
 
@@ -262,20 +269,15 @@ def workflow_run(
     state = _read_state(root)
     if state != "IDLE":
         raise typer.BadParameter(f"refusing to run workflow item from state: {state}")
-    work_path = _rooted(WORK_FILE, root)
-    original_current_work = work_path.read_text(encoding="utf-8") if work_path.exists() else None
-    _copy_work_item_to_current(root, name)
-    _set_workflow_request_state(root, "REQUESTED")
+    run_file = _copy_work_item_to_temp_run_file(root, name)
+    _set_workflow_file_request_state(run_file, "REQUESTED")
     typer.echo(f"Workflow item selected: {_safe_work_item_name(name)}")
-    typer.echo(f"Current workflow request file: {WORK_FILE}")
+    typer.echo(f"Workflow run file: {run_file.relative_to(root.resolve())}")
     typer.echo("Workflow request state: REQUESTED")
     try:
-        exit_code = _run_next_step(root)
+        exit_code = _run_next_step(root, env={"AGENTIC_WORKFLOW_FILE": str(run_file)})
     finally:
-        if original_current_work is None:
-            work_path.unlink(missing_ok=True)
-        else:
-            work_path.write_text(original_current_work, encoding="utf-8")
+        run_file.unlink(missing_ok=True)
     raise typer.Exit(code=exit_code)
 
 @workflow_app.command("state")
