@@ -104,3 +104,21 @@ def test_workflow_status_explain_reports_failed_inspection_next_step(tmp_path: P
     assert "workflow_state=FAILED" in result.output
     assert "The last workflow step failed." in result.output
     assert "Inspect evidence before cleanup or retry." in result.output
+
+
+def test_workflow_status_explain_states_read_only(tmp_path: Path) -> None:
+    _write_workflow_files(tmp_path, request_state="READY")
+    result = runner.invoke(app, ["workflow", "status", "--explain", "--root", str(tmp_path)])
+    assert result.exit_code == 0
+    assert "This command is read-only." in result.output
+
+
+def test_workflow_status_explain_describes_current_report(tmp_path: Path) -> None:
+    _write_workflow_files(tmp_path, request_state="READY")
+    report = tmp_path / "docs" / "reports" / "CURRENT_WORKFLOW_OUTPUT.md"
+    report.parent.mkdir(parents=True)
+    report.write_text("# Current workflow output\n", encoding="utf-8")
+    result = runner.invoke(app, ["workflow", "status", "--explain", "--root", str(tmp_path)])
+    assert result.exit_code == 0
+    assert "current_report=docs/reports/CURRENT_WORKFLOW_OUTPUT.md" in result.output
+    assert "current_report points to the latest local workflow-output summary." in result.output
