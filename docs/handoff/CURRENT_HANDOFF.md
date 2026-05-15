@@ -4,25 +4,25 @@ Current version: 0.3.7
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: docs/finalize-v0.3.7-release-state
+Branch: docs/record-v0.3.7-doi
 Base branch: main
 
 ## Current Goal
 
-Finalize v0.3.7 release-state wording before tagging.
+Record verified v0.3.7 DOI metadata after post-release verification.
 
-This branch prepares release metadata for v0.3.7. It changes package version, citation metadata, changelog, README status, STATUS, and this handoff; it does not add new runtime behavior beyond the already merged PR #172 work.
+This branch records verified v0.3.7 DOI metadata after post-release verification. It changes citation metadata, changelog, README DOI lists, STATUS, and this handoff; it does not change runtime behavior or package version.
 
 ## Current Repository State
 
-v0.3.7 release metadata is prepared on main. v0.3.6 remains the latest post-release Zenodo-verified release until v0.3.7 is tagged, published, archived, and verified.
+v0.3.7 is released and post-release verified. Verified v0.3.7 version DOI: `10.5281/zenodo.20206581`. The post-release Zenodo verification is complete for v0.3.7.
 
-Verified v0.3.6 release evidence:
+Verified release evidence:
 
-- GitHub Release v0.3.6 exists.
+- GitHub Release v0.3.7 exists.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
-- Verified v0.3.6 version DOI: `10.5281/zenodo.20183888`.
-- `agentic-kit post-release-check --version 0.3.6` passed.
+- Verified v0.3.7 version DOI: `10.5281/zenodo.20206581`.
+- `agentic-kit post-release-check --version 0.3.7` passed.
 - PR #163 recorded the verified v0.3.6 DOI metadata on main.
 
 Post-release work completed after v0.3.6:
@@ -184,13 +184,13 @@ This handoff intentionally keeps coverage terms visible for deterministic gates:
 Prepared files should include:
 
 - `pyproject.toml` and `src/agentic_project_kit/__init__.py` bumped to 0.3.7.
-- `CITATION.cff` updated to version 0.3.7 without a version DOI placeholder.
-- `CHANGELOG.md`, `README.md`, `docs/STATUS.md`, and `docs/handoff/CURRENT_HANDOFF.md` updated for v0.3.7 release preparation.
+- `CITATION.cff` updated with the verified v0.3.7 version DOI.
+- `CHANGELOG.md`, `README.md`, `docs/STATUS.md`, and `docs/handoff/CURRENT_HANDOFF.md` updated for post-release v0.3.7 DOI metadata.
 
 No Pattern Advisor MVP, DCO implementation, or additional Guided CLI runtime change is part of this branch.
 
 ## Next Safe Step
 
-Run local gates on `docs/finalize-v0.3.7-release-state`, including `agentic-kit release-check --version 0.3.7`. If green, open and merge a focused documentation PR.
+Run local gates on `docs/record-v0.3.7-doi`, including `agentic-kit post-release-check --version 0.3.7`. If green, open and merge a focused documentation PR.
 
-After merge, tag `v0.3.7`, verify the GitHub release, then perform post-release Zenodo verification and record the version DOI. Use `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference unless the maintainer explicitly chooses a later Pattern Advisor MVP.
+After merge, v0.3.7 is fully released and DOI metadata is recorded on main. Use `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference unless the maintainer explicitly chooses a later Pattern Advisor MVP.
