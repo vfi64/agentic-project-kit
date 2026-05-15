@@ -67,6 +67,7 @@ The latest verified gates before v0.3.7 release preparation were:
 - PR #200 added `docs/reports/pattern_advisor_mvp_contract.md` as a contract-only Pattern Advisor MVP planning report.
 - PR #204 added repo-local `./ns state`, `./ns list`, `./ns show`, `./ns run`, and `./ns upload` shortcuts plus one-word aliases.
 - PR #207 fixed named workflow-item runs so temporary `.agentic/current_work.yaml` replacement is restored after the bounded step.
+- PR #209 refreshed current-state and handoff documentation after the current_work isolation fix.
 
 ## Idea-note state
 

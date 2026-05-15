@@ -9,7 +9,7 @@ Base branch: main
 
 ## Current Goal
 
-v0.3.10 is released and post-release verified. GitHub Release exists, Zenodo verified version DOI is `10.5281/zenodo.20214382`, DOI metadata is recorded on main, PR #204 added repo-local ns workflow-item shortcuts, and PR #207 fixed current_work isolation for named workflow-item runs.
+v0.3.10 is released and post-release verified. GitHub Release exists, Zenodo verified version DOI is `10.5281/zenodo.20214382`, DOI metadata is recorded on main, PR #204 added repo-local ns workflow-item shortcuts, PR #207 fixed current_work isolation for named workflow-item runs, and PR #209 refreshed the state and handoff after that fix.
 
 ## Current Repository State
 
@@ -43,10 +43,11 @@ Verified release and post-merge evidence:
 - PR #200 added `docs/reports/pattern_advisor_mvp_contract.md` as a contract-only Pattern Advisor MVP planning report. It did not add runtime code, public Pattern Advisor CLI commands, pattern catalog files, deterministic gates, workflow state changes, or advisory automation.
 - PR #204 added repo-local `./ns state`, `./ns list`, `./ns show`, `./ns run`, and `./ns upload` shortcuts, with one-word aliases `state`, `list`, `show`, `run`, and `up`.
 - PR #207 fixed named workflow-item runs so `./ns run <work-item-id>` restores the original `.agentic/current_work.yaml` after the bounded workflow step.
+- PR #209 refreshed state and handoff documentation after the current_work isolation fix.
 
-Latest verified local gates after PR #207:
+Latest verified local gates after PR #209:
 
-- `175 passed`
+- `176 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
@@ -54,7 +55,7 @@ Latest verified local gates after PR #207:
 
 ## Workflow State
 
-Expected state after the #207 merge:
+Expected state after the #209 merge:
 
 - `.agentic/workflow_state` = `IDLE`
 - `.agentic/current_work.yaml` = `state: READY`
@@ -191,7 +192,7 @@ This handoff intentionally keeps coverage terms visible for deterministic gates:
 
 ## Current Branch Work
 
-Completed post-v0.3.9 work now includes PR #195, PR #197, PR #198, PR #200, PR #204, and PR #207: didactic guidance was added as a non-binding idea note, workflow evidence shortcuts were implemented, status guidance was aligned with the shortcut path, a contract-only Pattern Advisor MVP report was added, repo-local ns shortcuts reduce Copy-and-Paste for local workflow item selection and execution, and named workflow-item runs now restore current_work after bounded execution.
+Completed post-v0.3.9 work now includes PR #195, PR #197, PR #198, PR #200, PR #204, PR #207, and PR #209: didactic guidance was added as a non-binding idea note, workflow evidence shortcuts were implemented, status guidance was aligned with the shortcut path, a contract-only Pattern Advisor MVP report was added, repo-local ns shortcuts reduce Copy-and-Paste for local workflow item selection and execution, named workflow-item runs now restore current_work after bounded execution, and state documentation was refreshed after that fix.
 
 No Pattern Advisor runtime MVP, DCO implementation, public Pattern Advisor CLI command, new deterministic gate, workflow state, or runtime behavior change has been added. PR #200 is only a planning contract for a possible later read-only catalog MVP.
 
