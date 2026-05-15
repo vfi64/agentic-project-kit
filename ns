@@ -2,6 +2,34 @@
 set -eu
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 cd "$SCRIPT_DIR"
+if [ "${1:-}" = "state" ] || [ "${1:-}" = "status" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit workflow state "$@"
+  fi
+  exec agentic-kit workflow state "$@"
+fi
+if [ "${1:-}" = "list" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit workflow list "$@"
+  fi
+  exec agentic-kit workflow list "$@"
+fi
+if [ "${1:-}" = "show" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit workflow show "$@"
+  fi
+  exec agentic-kit workflow show "$@"
+fi
+if [ "${1:-}" = "run" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit workflow run "$@"
+  fi
+  exec agentic-kit workflow run "$@"
+fi
 if [ "${1:-}" = "go" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
@@ -9,12 +37,19 @@ if [ "${1:-}" = "go" ]; then
   fi
   exec agentic-kit workflow go "$@"
 fi
-if [ "${1:-}" = "upload" ]; then
+if [ "${1:-}" = "up" ] || [ "${1:-}" = "upload" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
-    exec .venv/bin/agentic-kit workflow upload-output "$@"
+    exec .venv/bin/agentic-kit workflow upload "$@"
   fi
-  exec agentic-kit workflow upload-output "$@"
+  exec agentic-kit workflow upload "$@"
+fi
+if [ "${1:-}" = "fail" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit workflow fail-report "$@"
+  fi
+  exec agentic-kit workflow fail-report "$@"
 fi
 if [ -x ".venv/bin/python" ]; then
   exec .venv/bin/python tools/next-step.py "$@"

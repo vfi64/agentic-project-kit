@@ -226,3 +226,60 @@ def test_workflow_upload_output_refuses_already_uploaded_state(tmp_path: Path, m
     assert result.exit_code != 0
     assert "output evidence is already uploaded" in result.output
     assert calls == []
+
+
+def test_workflow_state_alias_shows_status_explain(tmp_path: Path) -> None:
+    _write_workflow_files(tmp_path, request_state="READY")
+
+    result = runner.invoke(app, ["workflow", "state", "--root", str(tmp_path)])
+
+    assert result.exit_code == 0
+    assert "workflow_state=IDLE" in result.output
+    assert "Safety:" in result.output
+    assert "Recommended next step:" in result.output
+
+
+def test_workflow_list_shows_available_work_items(tmp_path: Path) -> None:
+    _write_workflow_files(tmp_path, request_state="READY")
+    work_items = tmp_path / ".agentic" / "work_items"
+    work_items.mkdir(parents=True)
+    (work_items / "pattern-advisor-readonly-catalog-mvp.yaml").write_text(
+        "name: pattern-advisor-readonly-catalog-mvp\\n"
+        "state: READY\\n"
+        "timeout_seconds: 60\\n",
+        encoding="utf-8",
+    )
+
+    result = runner.invoke(app, ["workflow", "list", "--root", str(tmp_path)])
+
+    assert result.exit_code == 0
+    assert "work_items_dir=.agentic/work_items" in result.output
+    assert "pattern-advisor-readonly-catalog-mvp" in result.output
+
+
+def test_workflow_show_prints_current_work_file(tmp_path: Path) -> None:
+    _write_workflow_files(tmp_path, request_state="READY")
+
+    result = runner.invoke(app, ["workflow", "show", "--root", str(tmp_path)])
+
+    assert result.exit_code == 0
+    assert "name: test-workflow" in result.output
+    assert "state: READY" in result.output
+
+
+def test_workflow_upload_alias_delegates_to_upload_output(tmp_path: Path, monkeypatch) -> None:
+    _write_workflow_files(tmp_path, workflow_state="IDLE", request_state="READY")
+    calls: list[tuple[Path, list[str] | None]] = []
+
+    def fake_run_next_step(root: Path, extra_args: list[str] | None = None) -> int:
+        calls.append((root, extra_args))
+        return 0
+
+    import agentic_project_kit.cli_commands.workflow as workflow_module
+
+    monkeypatch.setattr(workflow_module, "_run_next_step", fake_run_next_step)
+    result = runner.invoke(app, ["workflow", "upload", "--root", str(tmp_path)])
+
+    assert result.exit_code == 0
+    assert calls == [(tmp_path.resolve(), ["--upload-output"])]
+
