@@ -2,6 +2,20 @@
 set -eu
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 cd "$SCRIPT_DIR"
+if [ "${1:-}" = "go" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit workflow go "$@"
+  fi
+  exec agentic-kit workflow go "$@"
+fi
+if [ "${1:-}" = "upload" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit workflow upload-output "$@"
+  fi
+  exec agentic-kit workflow upload-output "$@"
+fi
 if [ -x ".venv/bin/python" ]; then
   exec .venv/bin/python tools/next-step.py "$@"
 fi

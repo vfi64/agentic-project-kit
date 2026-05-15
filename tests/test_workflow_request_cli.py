@@ -151,3 +151,78 @@ def test_workflow_status_explain_describes_current_report(tmp_path: Path) -> Non
     assert result.exit_code == 0
     assert "current_report=docs/reports/CURRENT_WORKFLOW_OUTPUT.md" in result.output
     assert "current_report points to the latest local workflow-output summary." in result.output
+
+
+
+def test_workflow_go_requests_and_runs_one_bounded_step(tmp_path: Path, monkeypatch) -> None:
+    _write_workflow_files(tmp_path)
+    calls: list[tuple[Path, list[str] | None]] = []
+
+    def fake_run_next_step(root: Path, extra_args: list[str] | None = None) -> int:
+        calls.append((root, extra_args))
+        return 0
+
+    import agentic_project_kit.cli_commands.workflow as workflow_module
+
+    monkeypatch.setattr(workflow_module, "_run_next_step", fake_run_next_step)
+    result = runner.invoke(app, ["workflow", "go", "--root", str(tmp_path)])
+
+    assert result.exit_code == 0
+    assert "Workflow request state: REQUESTED" in result.output
+    assert "Running one bounded workflow step." in result.output
+    assert "state: REQUESTED" in (tmp_path / ".agentic" / "current_work.yaml").read_text(encoding="utf-8")
+    assert calls == [(tmp_path.resolve(), None)]
+
+
+def test_workflow_go_refuses_non_idle_workflow_state(tmp_path: Path, monkeypatch) -> None:
+    _write_workflow_files(tmp_path, workflow_state="FAILED")
+    calls: list[tuple[Path, list[str] | None]] = []
+
+    def fake_run_next_step(root: Path, extra_args: list[str] | None = None) -> int:
+        calls.append((root, extra_args))
+        return 0
+
+    import agentic_project_kit.cli_commands.workflow as workflow_module
+
+    monkeypatch.setattr(workflow_module, "_run_next_step", fake_run_next_step)
+    result = runner.invoke(app, ["workflow", "go", "--root", str(tmp_path)])
+
+    assert result.exit_code != 0
+    assert "refusing to start workflow from state: FAILED" in result.output
+    assert calls == []
+
+
+def test_workflow_upload_output_uploads_latest_bounded_output(tmp_path: Path, monkeypatch) -> None:
+    _write_workflow_files(tmp_path)
+    calls: list[tuple[Path, list[str] | None]] = []
+
+    def fake_run_next_step(root: Path, extra_args: list[str] | None = None) -> int:
+        calls.append((root, extra_args))
+        return 0
+
+    import agentic_project_kit.cli_commands.workflow as workflow_module
+
+    monkeypatch.setattr(workflow_module, "_run_next_step", fake_run_next_step)
+    result = runner.invoke(app, ["workflow", "upload-output", "--root", str(tmp_path)])
+
+    assert result.exit_code == 0
+    assert "Uploading latest bounded workflow output evidence." in result.output
+    assert calls == [(tmp_path.resolve(), ["--upload-output"])]
+
+
+def test_workflow_upload_output_refuses_already_uploaded_state(tmp_path: Path, monkeypatch) -> None:
+    _write_workflow_files(tmp_path, workflow_state="UPLOADED")
+    calls: list[tuple[Path, list[str] | None]] = []
+
+    def fake_run_next_step(root: Path, extra_args: list[str] | None = None) -> int:
+        calls.append((root, extra_args))
+        return 0
+
+    import agentic_project_kit.cli_commands.workflow as workflow_module
+
+    monkeypatch.setattr(workflow_module, "_run_next_step", fake_run_next_step)
+    result = runner.invoke(app, ["workflow", "upload-output", "--root", str(tmp_path)])
+
+    assert result.exit_code != 0
+    assert "output evidence is already uploaded" in result.output
+    assert calls == []

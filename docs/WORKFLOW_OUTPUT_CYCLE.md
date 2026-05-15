@@ -137,6 +137,13 @@ The repository provides `./ns` as the versioned compatibility entrypoint. It del
 After adding those aliases to `~/.zshrc`, routine compatibility-entrypoint work becomes:
 
 ```zsh
+./ns go
+./ns upload
+```
+
+The older compatibility form remains available when a split request/run cycle is useful:
+
+```zsh
 ./ns --request
 ./ns
 ```
@@ -165,6 +172,8 @@ It does not switch to `main`, so it can validate either `main` or the current PR
 Use these commands for explicit operation:
 
 ```text
+agentic-kit workflow go
+agentic-kit workflow upload-output
 agentic-kit workflow request
 agentic-kit workflow run
 agentic-kit workflow status
@@ -172,6 +181,8 @@ agentic-kit workflow cleanup
 ```
 
 The commands operate on `.agentic/workflow_state` and `.agentic/current_work.yaml`.
+
+`agentic-kit workflow go` is the normal shortcut for the chat-assisted workflow: it sets `.agentic/current_work.yaml` to `state: REQUESTED` and runs one bounded workflow step. It replaces the routine manual sequence `workflow request` plus `workflow run` without removing either explicit command. `agentic-kit workflow upload-output` uploads the latest bounded local workflow evidence for review, so terminal output does not need to be pasted into chat when a local evidence file exists.
 
 `agentic-kit workflow request` is the public equivalent of `tools/next-step.py --request`: it sets `.agentic/current_work.yaml` to `state: REQUESTED` while leaving `.agentic/workflow_state` at `IDLE`. It does not run the workflow as a side effect. A repeated request while the workflow is already requested is idempotent.
 
@@ -199,6 +210,8 @@ Guided status compass:
 - `FAILED`: run `agentic-kit workflow fail-report` when bounded local evidence exists, then stop and inspect evidence before cleanup or retry.
 - dirty working tree: inspect `git status` before running workflow automation.
 
+- `workflow go`: requests the configured declarative workflow and runs one bounded state-machine step.
+- `workflow upload-output`: uploads the latest bounded local workflow evidence without requiring pasted terminal output.
 - `workflow request`: marks the declarative workflow file as REQUESTED while the main workflow state remains IDLE.
 - `workflow run`: runs exactly one bounded state-machine step through the existing local entrypoint.
 - `workflow status`: prints the current state, current workflow request state, and bounded evidence pointers.

@@ -177,6 +177,17 @@ def step_fail_report() -> None:
     print("Next state: UPLOADED")
 
 
+def step_upload_output() -> None:
+    state = read_state()
+    if state in {"UPLOADED", "CLEANUP"}:
+        raise SystemExit(f"upload-output requires local evidence before upload cleanup, got {state}")
+    evidence = latest_evidence()
+    write_current_report(evidence, "Bounded local workflow output uploaded for review without pasted terminal output.")
+    branch = create_evidence_branch("UPLOADED")
+    print(f"Uploaded workflow output evidence branch: {branch}")
+    print("Next state: UPLOADED")
+
+
 def workflow_request_state() -> str:
     if not WORKFLOW_FILE.exists():
         return "MISSING"
@@ -241,8 +252,12 @@ def main() -> int:
         ensure_project_environment()
         step_fail_report()
         return 0
+    if sys.argv[1:] == ["--upload-output"]:
+        ensure_project_environment()
+        step_upload_output()
+        return 0
     if sys.argv[1:]:
-        raise SystemExit("Usage: next-step.py [--request|--fail-report]")
+        raise SystemExit("Usage: next-step.py [--request|--fail-report|--upload-output]")
     ensure_project_environment()
     state = read_state()
     print(f"workflow_state={state}")
