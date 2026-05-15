@@ -81,6 +81,56 @@ def _is_git_repository(root: Path) -> bool:
     return result.returncode == 0 and result.stdout.strip() == "true"
 
 
+
+
+def _working_tree_dirty(root: Path) -> bool:
+    if not _is_git_repository(root):
+        return False
+    result = _run_git(root, ["status", "--porcelain"])
+    return result.returncode == 0 and bool(result.stdout.strip())
+
+
+def _status_interpretation(state: str, work_state: str | None, dirty: bool) -> tuple[list[str], list[str]]:
+    interpretation: list[str] = []
+    recommendation: list[str] = []
+    if dirty:
+        interpretation.append("Working tree has uncommitted changes.")
+        recommendation.append("Inspect git status before running workflow automation.")
+        return interpretation, recommendation
+    if work_state == "REQUESTED":
+        interpretation.append("A workflow request is pending.")
+        recommendation.append("Run: agentic-kit workflow run")
+    elif state == "UPLOADED":
+        interpretation.append("Workflow evidence was uploaded and cleanup is pending.")
+        recommendation.append("Run: agentic-kit workflow cleanup")
+    elif state == "FAILED":
+        interpretation.append("The last workflow step failed.")
+        recommendation.append("Inspect evidence before cleanup or retry.")
+    elif state == "IDLE" and work_state in {None, "READY"}:
+        interpretation.append("No active workflow request.")
+        recommendation.append("Start a workflow only if you have a concrete slice: agentic-kit workflow request; agentic-kit workflow run")
+    else:
+        interpretation.append("Workflow state requires manual review.")
+        recommendation.append("Inspect workflow status and evidence before changing state.")
+    return interpretation, recommendation
+
+
+def _print_status_explanation(root: Path, state: str, work_state: str | None) -> None:
+    dirty = _working_tree_dirty(root)
+    interpretation, recommendation = _status_interpretation(state, work_state, dirty)
+    typer.echo("")
+    typer.echo("Interpretation:")
+    for line in interpretation:
+        typer.echo(f"- {line}")
+    typer.echo("")
+    typer.echo("Recommended next step:")
+    for line in recommendation:
+        typer.echo(f"- {line}")
+    typer.echo("")
+    typer.echo("Optional checks:")
+    typer.echo("- agentic-kit doctor")
+    typer.echo("- agentic-kit check-docs")
+
 def _safe_temp_branch(branch: str) -> str | None:
     normalized = branch.strip()
     if not normalized.startswith(TEMP_PREFIX):
@@ -162,6 +212,7 @@ def workflow_run(
 @workflow_app.command("status")
 def workflow_status(
     project_root: Path = typer.Option(Path("."), "--root", help="Project root containing .agentic/workflow_state."),
+    explain: bool = typer.Option(False, "--explain", help="Explain the current state and recommend a safe next step."),
 ) -> None:
     """Print the current workflow state and bounded evidence pointers."""
     root = project_root.resolve()
@@ -169,14 +220,18 @@ def workflow_status(
     typer.echo(f"workflow_state={state}")
     work_file = _rooted(WORK_FILE, root)
     typer.echo(f"current_work={'present' if work_file.exists() else 'missing'}")
+    work_state: str | None = None
     if work_file.exists():
-        typer.echo(f"current_work_state={_workflow_request_state(root)}")
+        work_state = _workflow_request_state(root)
+        typer.echo(f"current_work_state={work_state}")
     branch_file = _rooted(BRANCH_FILE, root)
     if branch_file.exists():
         typer.echo(f"evidence_branch={branch_file.read_text(encoding='utf-8').strip()}")
     report_file = _rooted(REPORT_FILE, root)
     if report_file.exists():
         typer.echo(f"current_report={REPORT_FILE}")
+    if explain:
+        _print_status_explanation(root, state, work_state)
 
 
 @workflow_app.command("cleanup")
