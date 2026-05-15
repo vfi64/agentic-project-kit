@@ -4,12 +4,12 @@ Current version: 0.3.8
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: main
+Branch: feature/repo-ns-entrypoint
 Base branch: main
 
 ## Current Goal
 
-FAILED status guidance slice is merged: `workflow status --explain` now recommends `workflow fail-report` before cleanup or retry.
+Implement a repo-owned `./ns` compatibility entrypoint so the normal ns-d workflow no longer depends on local shell aliases.
 
 v0.3.7 is complete. The v0.3.8 planning note is merged on main, and the first narrowly scoped Guided CLI Usability v2 slice is merged on main.
 
@@ -191,4 +191,4 @@ No Pattern Advisor MVP, DCO implementation, or additional Guided CLI runtime cha
 
 ## Next Safe Step
 
-Start the next work only from a concrete slice with a one-paragraph user-facing goal, explicit command-level contract, deterministic tests, and no hidden state mutation in read-only guidance paths. Keep `docs/ideas/PATTERN_ADVISOR.md` non-binding unless the maintainer explicitly approves a separate Pattern Advisor MVP.
+Validate `feature/repo-ns-entrypoint`. If green, open and merge a focused repo `./ns` entrypoint PR.

@@ -97,8 +97,8 @@ rules:
           - agentic-kit workflow cleanup
           - .agentic/workflow_state
           - IDLE
-          - python tools/next-step.py
-          - .venv/bin/python tools/next-step.py --request
+          - ./ns
+          - ./ns --request
       - path: docs/WORKFLOW_OUTPUT_CYCLE.md
         terms:
           - agentic-kit workflow request
@@ -115,8 +115,8 @@ rules:
         terms:
           - Standard next-step terminal workflow
           - cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
-          - python tools/next-step.py
-          - .venv/bin/python tools/next-step.py --request
+          - ./ns
+          - ./ns --request
           - done
           - The short acknowledgement `d` is also valid
           - instead of long manual Copy-and-Paste terminal blocks
@@ -138,13 +138,13 @@ rules:
         terms:
           - Single-command state behavior
           - IDLE + .agentic/current_work.yaml state READY -> no-op -> IDLE
-          - .venv/bin/python tools/next-step.py --request
+          - ./ns --request
           - IDLE + .agentic/current_work.yaml state REQUESTED -> run workflow -> reset request to READY -> upload evidence -> UPLOADED
           - UPLOADED -> cleanup temporary evidence branch -> IDLE
           - FAILED -> preserve evidence; no automatic cleanup
           - RUNNING -> refuse duplicate execution
           - Optional shell shortcut
-          - alias ns=
+          - ./ns
 
   - id: failed-next-step-handling-coverage
     description: FAILED workflow-state handling must remain explicit because it requires diagnosis, not automatic cleanup.

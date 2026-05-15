@@ -284,8 +284,8 @@ The workflow uses `.agentic/workflow_state` and `.agentic/current_work.yaml`. `I
 Legacy compatibility remains available through:
 
 ```bash
-.venv/bin/python tools/next-step.py --request
-python tools/next-step.py
+./ns --request
+./ns
 ```
 
 Prefer the package CLI for normal use; the legacy command is kept visible for compatibility and documentation coverage.
