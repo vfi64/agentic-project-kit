@@ -219,6 +219,23 @@ def workflow_run(
     raise typer.Exit(code=_run_next_step(project_root.resolve()))
 
 
+@workflow_app.command("go")
+def workflow_go(
+    project_root: Path = typer.Option(Path("."), "--root", help="Project root containing .agentic/current_work.yaml and tools/next-step.py."),
+) -> None:
+    """Request the configured workflow and run one bounded step."""
+    root = project_root.resolve()
+    state = _read_state(root)
+    if state != "IDLE":
+        raise typer.BadParameter(f"refusing to start workflow from state: {state}")
+    _workflow_request_state(root)
+    _set_workflow_request_state(root, "REQUESTED")
+    typer.echo(f"Current workflow request file: {WORK_FILE}")
+    typer.echo("Workflow request state: REQUESTED")
+    typer.echo("Running one bounded workflow step.")
+    raise typer.Exit(code=_run_next_step(root))
+
+
 @workflow_app.command("status")
 def workflow_status(
     project_root: Path = typer.Option(Path("."), "--root", help="Project root containing .agentic/workflow_state."),
@@ -255,6 +272,21 @@ def workflow_fail_report(
     if state != "FAILED":
         raise typer.BadParameter(f"fail-report requires FAILED state, got {state}")
     raise typer.Exit(code=_run_next_step(root, ["--fail-report"]))
+
+
+@workflow_app.command("upload-output")
+def workflow_upload_output(
+    project_root: Path = typer.Option(Path("."), "--root", help="Project root containing tools/next-step.py."),
+) -> None:
+    """Upload the latest bounded local workflow output evidence for review."""
+    root = project_root.resolve()
+    state = _read_state(root)
+    if state == "UPLOADED":
+        raise typer.BadParameter("output evidence is already uploaded; run workflow cleanup after review")
+    if state == "CLEANUP":
+        raise typer.BadParameter("workflow cleanup is already pending")
+    typer.echo("Uploading latest bounded workflow output evidence.")
+    raise typer.Exit(code=_run_next_step(root, ["--upload-output"]))
 
 
 @workflow_app.command("cleanup")
