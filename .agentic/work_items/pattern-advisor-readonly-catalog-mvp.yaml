@@ -1,0 +1,10 @@
+name: pattern-advisor-readonly-catalog-mvp
+state: READY
+timeout_seconds: 600
+steps:
+  - git_fetch
+  - git_pull_ff_only
+  - pytest
+  - ruff_check
+  - check_docs
+  - doctor
