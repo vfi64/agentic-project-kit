@@ -17,7 +17,7 @@ The project itself has a current state layer so work can be continued from the r
 
 Current version: 0.3.12
 
-v0.3.12 is the current release line for the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands.
+v0.3.12 is released and post-release verified with version DOI `10.5281/zenodo.20218213`. It covers the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands.
 
 Previous verified release DOI: `10.5281/zenodo.20215460`; the previous post-release Zenodo verification is complete for the immediately preceding release.
 
