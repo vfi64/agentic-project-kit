@@ -2,6 +2,9 @@
 
 ## v0.3.8 - 2026-05-15
 
+Zenodo v0.3.8 DOI: 10.5281/zenodo.20208638
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
 - Tightened read-only `workflow status --explain` guidance for clean, dirty, requested, uploaded, and failed workflow states.
 - Added deterministic coverage for dirty working tree guidance so workflow automation is not recommended before inspection.
 - Updated README and workflow documentation for conservative guided CLI behavior.
