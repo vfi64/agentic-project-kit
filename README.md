@@ -469,7 +469,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.9` is the current release line covering FAILED-state evidence upload through `agentic-kit workflow fail-report`, FAILED-state guidance in `workflow status --explain`, and the repo-owned `./ns` compatibility entrypoint for the ns-d workflow.
+Version `0.3.10` is the current release line covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report. Version `0.3.9` remains the last post-release verified archived release before this metadata-preparation slice.
 
 This repository has maintainer-owned GitHub releases and verified Zenodo archive records. Verified version-specific DOIs:
 
