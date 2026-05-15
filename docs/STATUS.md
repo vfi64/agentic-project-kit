@@ -5,7 +5,7 @@ Current version: 0.3.8
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: feature/repo-ns-entrypoint
+Current work branch: none / main is current
 
 ## Purpose
 
@@ -211,7 +211,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Implement a repo-owned `./ns` compatibility entrypoint so the normal ns-d workflow no longer depends on local shell aliases.
+Repo-owned `./ns` compatibility entrypoint is merged: the normal ns-d workflow no longer depends on local shell aliases.
 
 ## Current Blockers
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `feature/repo-ns-entrypoint`. If green, open and merge a focused repo `./ns` entrypoint PR.
+Start the next concrete slice only after defining a one-paragraph user-facing goal and an explicit command-level contract. Keep Pattern Advisor non-binding unless separately approved.
