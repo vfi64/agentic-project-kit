@@ -5,7 +5,7 @@ Current version: 0.3.7
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/plan-v0.3.8-guided-cli-v2
+Current work branch: none / main is current
 
 ## Purpose
 
@@ -211,7 +211,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Plan the next small post-v0.3.7 slice: v0.3.8 should preferably continue Guided CLI Usability v2 instead of starting a broad Pattern Advisor implementation.
+v0.3.8 planning is recorded. The next implementation should be one narrowly scoped Guided CLI Usability v2 slice, not a broad Pattern Advisor implementation.
 
 ## Current Blockers
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `docs/plan-v0.3.8-guided-cli-v2`. If green, open and merge a focused planning PR. After merge, implement only one narrowly scoped v0.3.8 Guided CLI usability slice.
+Start a concrete Guided CLI Usability v2 implementation slice only after defining a one-paragraph user-facing goal and an explicit command-level contract.
