@@ -268,13 +268,25 @@ agentic-kit workflow run
 agentic-kit workflow cleanup
 ```
 
-The workflow uses `.agentic/workflow_state` and `.agentic/current_work.yaml`. `IDLE` with `current_work.yaml` state `READY` is a safe no-op. A run starts only after an explicit request, for example `.venv/bin/python tools/next-step.py --request`, followed by the normal `python3 tools/next-step.py` / `ns` step. A requested run captures bounded local evidence, resets the request to `READY`, updates `docs/reports/CURRENT_WORKFLOW_OUTPUT.md`, uploads a temporary evidence branch, and waits for explicit cleanup.
+Use `workflow status --explain` when you are unsure what to do next. It is read-only and explains the current state before recommending a safe command.
+
+Quick command guide:
+
+- `workflow status --explain`: inspect the current state and next safe step.
+- `workflow request`: mark a concrete local workflow slice as requested.
+- `workflow run`: run one bounded workflow state-machine step.
+- `workflow cleanup`: clean uploaded temporary evidence after review.
+
+The workflow uses `.agentic/workflow_state` and `.agentic/current_work.yaml`. `IDLE` with `current_work.yaml` state `READY` is a safe no-op. A run starts only after an explicit request, for example `agentic-kit workflow request`, followed by `agentic-kit workflow run`. A requested run captures bounded local evidence, resets the request to `READY`, updates `docs/reports/CURRENT_WORKFLOW_OUTPUT.md`, uploads a temporary evidence branch, and waits for explicit cleanup.
 
 Legacy compatibility remains available through:
 
 ```bash
+.venv/bin/python tools/next-step.py --request
 python tools/next-step.py
 ```
+
+Prefer the package CLI for normal use; the legacy command is kept visible for compatibility and documentation coverage.
 
 The legacy cycle uses `IDLE`, `TEST`, `UPLOAD`, and `CLEANUP`. Details are documented in `docs/WORKFLOW_OUTPUT_CYCLE.md`.
 

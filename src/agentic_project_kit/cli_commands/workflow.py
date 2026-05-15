@@ -115,9 +115,14 @@ def _status_interpretation(state: str, work_state: str | None, dirty: bool) -> t
     return interpretation, recommendation
 
 
-def _print_status_explanation(root: Path, state: str, work_state: str | None) -> None:
+def _print_status_explanation(root: Path, state: str, work_state: str | None, report_present: bool) -> None:
     dirty = _working_tree_dirty(root)
     interpretation, recommendation = _status_interpretation(state, work_state, dirty)
+    typer.echo("")
+    typer.echo("Safety:")
+    typer.echo("- This command is read-only.")
+    if report_present:
+        typer.echo("- current_report points to the latest local workflow-output summary.")
     typer.echo("")
     typer.echo("Interpretation:")
     for line in interpretation:
@@ -228,10 +233,11 @@ def workflow_status(
     if branch_file.exists():
         typer.echo(f"evidence_branch={branch_file.read_text(encoding='utf-8').strip()}")
     report_file = _rooted(REPORT_FILE, root)
-    if report_file.exists():
+    report_present = report_file.exists()
+    if report_present:
         typer.echo(f"current_report={REPORT_FILE}")
     if explain:
-        _print_status_explanation(root, state, work_state)
+        _print_status_explanation(root, state, work_state, report_present)
 
 
 @workflow_app.command("cleanup")
