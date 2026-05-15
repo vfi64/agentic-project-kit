@@ -131,6 +131,7 @@ The project should continue to emphasize:
 - a clear semantic quality boundary: deterministic gates can check structure and drift, but human review owns semantic correctness unless a property is converted into a deterministic rule;
 - CLI usability discipline so growing automation does not make daily use harder;
 - advisory pattern work as optional support, not as a replacement for maintainer judgment.
+- didactic guidance as a non-binding orientation layer documented in `docs/ideas/DIDACTIC_GUIDANCE.md`, separate from runtime behavior, deterministic gates, and Pattern Advisor implementation.
 
 ## Source of Truth
 
