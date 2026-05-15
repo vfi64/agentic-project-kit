@@ -1,4 +1,4 @@
-Current version: 0.3.10
+Current version: 0.3.11
 
 # Current Handoff
 
