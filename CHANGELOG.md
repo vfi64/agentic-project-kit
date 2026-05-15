@@ -7,6 +7,8 @@
 - Fixed named workflow-item runs so temporary item selection does not permanently replace `.agentic/current_work.yaml`.
 - Refreshed state and handoff documentation after the workflow-item shortcut and current-work isolation slices.
 
+Zenodo v0.3.11 DOI: 10.5281/zenodo.20215460
+
 ## v0.3.10 - 2026-05-15
 
 Release candidate for the workflow shortcut and Pattern Advisor contract line.
