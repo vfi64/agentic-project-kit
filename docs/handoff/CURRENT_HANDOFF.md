@@ -4,14 +4,14 @@ Current version: 0.3.6
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: docs/status-handoff-after-170
+Branch: docs/status-handoff-after-172
 Base branch: main
 
 ## Current Goal
 
-Update `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after PR #170 so the repository state records the new read-only Guided CLI workflow-status explanation.
+Update `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after PR #172 so the repository state records completed Guided Workflow Usability v1 before the planned v0.3.7 release preparation.
 
-This branch is documentation-only. It records the post-#170 state and does not change CLI behavior, workflow behavior, release metadata, package version, pattern catalog files, or implementation code.
+This branch is documentation-only. It records the post-#172 state and does not change CLI behavior, workflow behavior, release metadata, package version, pattern catalog files, or implementation code.
 
 ## Current Repository State
 
@@ -35,18 +35,20 @@ Post-release work completed after v0.3.6:
 - PR #167 refreshed `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after workflow cleanup hardening.
 - PR #168 added `docs/ideas/PATTERN_ADVISOR.md` as a non-binding idea note / architecture research track.
 - PR #170 added read-only `agentic-kit workflow status --explain` guidance for common workflow states.
+- PR #171 refreshed `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after PR #170.
+- PR #172 completed Guided Workflow Usability v1 with read-only safety wording, `current_report` explanation, a README quick command guide, and a guided status compass.
 
 Current main head before this branch:
 
 ```text
+0161838 Complete guided workflow status usability (#172)
+a2d5e68 Update status and handoff after workflow status explain (#171)
 1d0c5f4 Explain workflow status next steps (#170)
-50aa58c Update status and handoff after Pattern Advisor idea (#169)
-6a9326c Add Pattern Advisor idea note (#168)
 ```
 
-Latest verified local gates after PR #170:
+Latest verified local gates after PR #172:
 
-- `160 passed`
+- `162 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
@@ -54,7 +56,7 @@ Latest verified local gates after PR #170:
 
 ## Workflow State
 
-Expected state after the #170 merge:
+Expected state after the #172 merge:
 
 - `.agentic/workflow_state` = `IDLE`
 - `.agentic/current_work.yaml` = `state: READY`
@@ -181,13 +183,13 @@ This handoff intentionally keeps coverage terms visible for deterministic gates:
 
 Prepared files should include:
 
-- `docs/STATUS.md` updated with the post-#170 state, latest test count, and read-only Guided CLI status explanation.
-- `docs/handoff/CURRENT_HANDOFF.md` updated with the post-#170 handoff and source-of-truth reading order.
+- `docs/STATUS.md` updated with the post-#172 state, latest test count, and completed Guided Workflow Usability v1 state.
+- `docs/handoff/CURRENT_HANDOFF.md` updated with the post-#172 handoff and source-of-truth reading order.
 
 No package version bump, release metadata change, CLI behavior change, pattern catalog, or implementation change is part of this branch.
 
 ## Next Safe Step
 
-Run local gates on `docs/status-handoff-after-170`, including `agentic-kit doc-mesh-audit`. If green, open and merge a focused documentation PR.
+Run local gates on `docs/status-handoff-after-172`, including `agentic-kit doc-mesh-audit`. If green, open and merge a focused documentation PR.
 
-After merge, continue with another small Guided CLI usability slice only if it has a concrete scope. Use `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference unless the maintainer explicitly chooses a later Pattern Advisor MVP.
+After merge, prepare v0.3.7 as a patch release for the completed Guided Workflow Usability v1 work. Use `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference unless the maintainer explicitly chooses a later Pattern Advisor MVP.
