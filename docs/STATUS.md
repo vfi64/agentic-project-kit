@@ -79,6 +79,8 @@ Layered CLI Usability is a review lens for keeping the public command surface ma
 
 Pattern Advisor remains optional and advisory. It preserves the idea of mapping recurring project evidence to reusable patterns, anti-patterns, and candidate patterns without becoming an autopilot, a gate, or a wrapper-specific subsystem.
 
+Didactic guidance is documented in `docs/ideas/DIDACTIC_GUIDANCE.md` as a non-binding orientation layer for making project state, handoffs, gates, and safe next steps easier to understand without adding runtime behavior, gates, or automatic decisions.
+
 No ADR has been created for these idea notes. An ADR should be considered only when DCO, layered CLI usability, Pattern Advisor behavior, capability boundaries, or a guided CLI entry point become binding architecture or public CLI policy.
 
 ## Documentation-mesh audit state

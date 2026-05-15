@@ -123,7 +123,7 @@ Use Architecture Decision Records (ADRs) for durable architecture choices with r
 
 These governed workflow principles are currently review-only unless a specific feature turns them into deterministic tests, schema checks, doctor checks, documentation coverage, or CLI contracts. Reviewers should inspect whether a design reduces drift, improves restartability, preserves evidence, and keeps simple workflows simple.
 
-See `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md` for preserved workflow-pattern notes and `docs/ideas/LAYERED_CLI_USABILITY.md` for the non-binding usability-layer model that keeps the CLI Golden Path small while allowing advanced automation.
+See `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md` for preserved workflow-pattern notes, `docs/ideas/LAYERED_CLI_USABILITY.md` for the non-binding usability-layer model that keeps the CLI Golden Path small while allowing advanced automation, and `docs/ideas/DIDACTIC_GUIDANCE.md` for the non-binding orientation layer that keeps state, handoffs, gates, and safe next steps understandable.
 
 ## Remote Work Authorization
 
