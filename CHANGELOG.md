@@ -2,6 +2,7 @@
 
 ## v0.3.9 - 2026-05-15
 
+Zenodo v0.3.9 DOI: 10.5281/zenodo.20210345
 Zenodo Concept DOI: 10.5281/zenodo.20101359
 
 - Added `agentic-kit workflow fail-report` for FAILED workflow states so bounded diagnostic evidence can be uploaded without cleanup or retry.

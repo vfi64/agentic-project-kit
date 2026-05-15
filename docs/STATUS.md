@@ -5,7 +5,7 @@ Current version: 0.3.9
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: none / main is current
+Current work branch: docs/record-v0.3.9-doi
 
 ## Purpose
 
@@ -211,7 +211,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-v0.3.9 release metadata is merged: workflow fail-report, FAILED-state guidance, and the repo-owned `./ns` entrypoint are ready for release tagging.
+v0.3.9 is released and post-release verified. GitHub Release exists, and Zenodo verified version DOI is `10.5281/zenodo.20210345`.
 
 ## Current Blockers
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Create and verify the v0.3.9 release tag only after this final state cleanup is merged and gates are green.
+Validate `docs/record-v0.3.9-doi`. If green, open and merge a focused DOI metadata PR.
