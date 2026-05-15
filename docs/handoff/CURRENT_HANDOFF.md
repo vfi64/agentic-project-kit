@@ -4,12 +4,12 @@ Current version: 0.3.8
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: feature/workflow-fail-report
+Branch: main
 Base branch: main
 
 ## Current Goal
 
-Implement a focused workflow failure-report slice so FAILED states can preserve bounded diagnostic evidence without cleanup or retry.
+Workflow fail-report slice is merged: FAILED states can now upload preserved bounded diagnostic evidence without cleanup or retry.
 
 v0.3.7 is complete. The v0.3.8 planning note is merged on main, and the first narrowly scoped Guided CLI Usability v2 slice is merged on main.
 
@@ -191,4 +191,4 @@ No Pattern Advisor MVP, DCO implementation, or additional Guided CLI runtime cha
 
 ## Next Safe Step
 
-Validate `feature/workflow-fail-report`. If green, open and merge a focused workflow failure-report PR.
+Start the next work only from a concrete slice with a one-paragraph user-facing goal, explicit command-level contract, deterministic tests, and no hidden state mutation in read-only guidance paths. Keep `docs/ideas/PATTERN_ADVISOR.md` non-binding unless the maintainer explicitly approves a separate Pattern Advisor MVP.
