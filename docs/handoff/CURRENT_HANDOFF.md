@@ -4,14 +4,14 @@ Current version: 0.3.7
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: main
+Branch: docs/plan-v0.3.8-guided-cli-v2
 Base branch: main
 
 ## Current Goal
 
-v0.3.7 is fully released and post-release verified.
+Plan v0.3.8 as a small Guided CLI Usability v2 planning slice.
 
-No release branch is active. v0.3.7 is tagged, published, archived by Zenodo, post-release verified, and DOI metadata is recorded on main.
+v0.3.7 is complete. This branch adds a planning note for the next small post-release slice and does not change runtime behavior.
 
 ## Current Repository State
 
@@ -191,4 +191,4 @@ No Pattern Advisor MVP, DCO implementation, or additional Guided CLI runtime cha
 
 ## Next Safe Step
 
-v0.3.7 is complete. Start the next work only from a concrete new slice. Use `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference unless the maintainer explicitly chooses a later Pattern Advisor MVP.
+Run local gates on `docs/plan-v0.3.8-guided-cli-v2`, including `agentic-kit doc-mesh-audit`. If green, open and merge a focused planning PR. After merge, implement only one narrowly scoped Guided CLI Usability v2 slice. Keep `docs/ideas/PATTERN_ADVISOR.md` non-binding unless the maintainer explicitly approves a separate Pattern Advisor MVP.
