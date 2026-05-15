@@ -4,12 +4,12 @@ Current version: 0.3.9
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: release/v0.3.9-metadata
+Branch: main
 Base branch: main
 
 ## Current Goal
 
-Prepare v0.3.9 release metadata for workflow fail-report, FAILED-state guidance, and the repo-owned `./ns` entrypoint.
+v0.3.9 release metadata is merged: workflow fail-report, FAILED-state guidance, and the repo-owned `./ns` entrypoint are ready for release tagging.
 
 v0.3.7 is complete. The v0.3.8 planning note is merged on main, and the first narrowly scoped Guided CLI Usability v2 slice is merged on main.
 
@@ -191,4 +191,4 @@ No Pattern Advisor MVP, DCO implementation, or additional Guided CLI runtime cha
 
 ## Next Safe Step
 
-Validate `release/v0.3.9-metadata`. If green, open and merge a focused v0.3.9 release metadata PR.
+Create and verify the v0.3.9 release tag only after this final state cleanup is merged and gates are green.

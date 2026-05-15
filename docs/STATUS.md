@@ -5,7 +5,7 @@ Current version: 0.3.9
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: release/v0.3.9-metadata
+Current work branch: none / main is current
 
 ## Purpose
 
@@ -211,7 +211,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Prepare v0.3.9 release metadata for workflow fail-report, FAILED-state guidance, and the repo-owned `./ns` entrypoint.
+v0.3.9 release metadata is merged: workflow fail-report, FAILED-state guidance, and the repo-owned `./ns` entrypoint are ready for release tagging.
 
 ## Current Blockers
 
@@ -234,4 +234,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Validate `release/v0.3.9-metadata`. If green, open and merge a focused v0.3.9 release metadata PR.
+Create and verify the v0.3.9 release tag only after this final state cleanup is merged and gates are green.
