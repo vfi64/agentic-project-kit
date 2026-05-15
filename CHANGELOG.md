@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.3.11 - 2026-05-15
+
+- Added repo-local workflow-item shortcuts for listing, showing, running, uploading, and status checks through `./ns` aliases.
+- Added stored workflow-item support for the Pattern Advisor read-only catalog MVP preparation path.
+- Fixed named workflow-item runs so temporary item selection does not permanently replace `.agentic/current_work.yaml`.
+- Refreshed state and handoff documentation after the workflow-item shortcut and current-work isolation slices.
+
 ## v0.3.10 - 2026-05-15
 
 Release candidate for the workflow shortcut and Pattern Advisor contract line.
