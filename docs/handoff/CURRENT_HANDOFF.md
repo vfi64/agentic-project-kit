@@ -9,13 +9,14 @@ Base branch: main
 
 ## Current Goal
 
-v0.3.9 is released and post-release verified. Post-release main now includes the didactic guidance foundation note, workflow evidence shortcut commands, and aligned shortcut guidance through PR #198.
+v0.3.9 is released and post-release verified. Post-release main now includes the didactic guidance foundation note, workflow evidence shortcut commands, aligned shortcut guidance, and the Pattern Advisor MVP contract report through PR #200.
 
 ## Current Repository State
 
-Current main head after PR #198:
+Current main head after PR #200:
 
 ```text
+19b2120 Refresh state after workflow shortcut merges (#199)
 4f080c9 Align workflow shortcut guidance (#198)
 4357b4a Add workflow evidence shortcut commands (#197)
 5fedea4 Finalize post-didactic guidance state (#196)
@@ -36,8 +37,9 @@ Verified release and post-merge evidence:
 - PR #195 did not add runtime code, public CLI commands, deterministic gates, workflow states, Pattern Advisor implementation, or pattern catalog behavior.
 - PR #197 added workflow shortcut commands for request-and-run and bounded output upload.
 - PR #198 aligned status guidance with the shortcut path and clarified that `current_report` is not proof of uploadable local evidence.
+- PR #200 added `docs/reports/pattern_advisor_mvp_contract.md` as a contract-only Pattern Advisor MVP planning report. It did not add runtime code, public Pattern Advisor CLI commands, pattern catalog files, deterministic gates, workflow state changes, or advisory automation.
 
-Latest verified local gates after PR #198:
+Latest verified local gates after PR #200:
 
 - `170 passed`
 - `ruff check .` passed
@@ -107,6 +109,7 @@ Pattern Advisor guidance:
 - treat `docs/ideas/PATTERN_ADVISOR.md` as advisory-only and non-binding;
 - use it as a reference when recurring problem classes suggest reusable patterns, anti-patterns, or candidate patterns;
 - do not implement `patterns suggest`, `advise`, candidate capture, promotion/deprecation, or a broad catalog before a small read-only catalog MVP has proven useful;
+- use `docs/reports/pattern_advisor_mvp_contract.md` as the scope boundary for any later read-only Pattern Advisor catalog slice;
 - keep wrapper-project lessons as evidence sources, not wrapper-specific behavior in the kit;
 - consider an ADR only if public Pattern Advisor CLI, binding lifecycle, or advisory behavior becomes maintained architecture.
 
@@ -144,8 +147,9 @@ Read in this order:
 12. `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
 13. `docs/ideas/LAYERED_CLI_USABILITY.md`
 14. `docs/ideas/PATTERN_ADVISOR.md`
-15. `src/agentic_project_kit/`
-16. `tests/`
+15. `docs/reports/pattern_advisor_mvp_contract.md`
+16. `src/agentic_project_kit/`
+17. `tests/`
 
 ## Required Local Gate
 
@@ -177,9 +181,9 @@ This handoff intentionally keeps coverage terms visible for deterministic gates:
 
 ## Current Branch Work
 
-Completed post-v0.3.9 work now includes PR #195, PR #197, and PR #198: didactic guidance was added as a non-binding idea note, workflow evidence shortcuts were implemented, and status guidance was aligned with the shortcut path.
+Completed post-v0.3.9 work now includes PR #195, PR #197, PR #198, and PR #200: didactic guidance was added as a non-binding idea note, workflow evidence shortcuts were implemented, status guidance was aligned with the shortcut path, and a contract-only Pattern Advisor MVP report was added.
 
-No Pattern Advisor MVP, DCO implementation, public CLI command, new deterministic gate, workflow state, or runtime behavior change is part of this didactic guidance foundation work.
+No Pattern Advisor runtime MVP, DCO implementation, public Pattern Advisor CLI command, new deterministic gate, workflow state, or runtime behavior change has been added. PR #200 is only a planning contract for a possible later read-only catalog MVP.
 
 ## Next Safe Step
 

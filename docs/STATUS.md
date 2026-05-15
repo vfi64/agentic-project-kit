@@ -15,7 +15,7 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-v0.3.9 is released and post-release verified. Verified v0.3.9 version DOI: `10.5281/zenodo.20210345`. The post-release Zenodo verification is complete for v0.3.9. Post-release main includes PR #195, PR #197, and PR #198.
+v0.3.9 is released and post-release verified. Verified v0.3.9 version DOI: `10.5281/zenodo.20210345`. The post-release Zenodo verification is complete for v0.3.9. Post-release main includes PR #195, PR #197, PR #198, and PR #200.
 
 Post-v0.3.6 main has advanced beyond the release tag with governance, usability, workflow-cleanup hardening, Pattern Advisor concept preservation, and a small Guided CLI usability improvement:
 
@@ -64,6 +64,7 @@ The latest verified gates before v0.3.7 release preparation were:
 - PR #195 added `docs/ideas/DIDACTIC_GUIDANCE.md` as a documentation-only, non-binding didactic orientation note and cross-linked it from state, handoff, and agent guidance docs.
 - PR #197 added `agentic-kit workflow go`, `agentic-kit workflow upload-output`, and repo-local `./ns go` / `./ns upload` shortcuts.
 - PR #198 aligned `workflow status --explain` guidance with the new workflow shortcut path and clarified `current_report` semantics.
+- PR #200 added `docs/reports/pattern_advisor_mvp_contract.md` as a contract-only Pattern Advisor MVP planning report without runtime behavior, CLI implementation, gates, or catalog files.
 
 ## Idea-note state
 
@@ -81,7 +82,7 @@ Deterministic Cell Orchestration remains optional. Use it only when typed cells,
 
 Layered CLI Usability is a review lens for keeping the public command surface manageable. The intended direction is high functionality and high automation internally while keeping the daily Golden Path simple.
 
-Pattern Advisor remains optional and advisory. It preserves the idea of mapping recurring project evidence to reusable patterns, anti-patterns, and candidate patterns without becoming an autopilot, a gate, or a wrapper-specific subsystem.
+Pattern Advisor remains optional and advisory. It preserves the idea of mapping recurring project evidence to reusable patterns, anti-patterns, and candidate patterns without becoming an autopilot, a gate, or a wrapper-specific subsystem. PR #200 added a contract-only MVP planning report for a possible later read-only catalog slice; it did not implement `patterns list`, `patterns show`, `patterns suggest`, candidate capture, or advisory automation.
 
 Didactic guidance is documented in `docs/ideas/DIDACTIC_GUIDANCE.md` as a non-binding orientation layer for making project state, handoffs, gates, and safe next steps easier to understand without adding runtime behavior, gates, or automatic decisions.
 
@@ -159,7 +160,7 @@ Future Pattern Advisor architecture track:
 
 1. Treat Pattern Advisor as an optional advisory layer for recurring project problem classes.
 2. Keep any future Pattern Advisor output advisory-only, not a deterministic gate.
-3. Do not implement `patterns suggest`, `advise`, candidate capture, or pattern promotion before a small read-only catalog MVP has proven useful.
+3. Do not implement `patterns suggest`, `advise`, candidate capture, or pattern promotion before a small read-only catalog MVP has proven useful; use `docs/reports/pattern_advisor_mvp_contract.md` as the scope boundary for any later read-only catalog slice.
 4. Keep wrapper-project lessons as evidence sources, not wrapper-specific kit behavior.
 5. Consider an ADR only if a public `agentic-kit patterns` / `agentic-kit advise` CLI, binding lifecycle, or advisory behavior becomes maintained architecture.
 
@@ -217,7 +218,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-v0.3.9 is released and post-release verified. Post-release main now includes the didactic guidance foundation note, workflow evidence shortcut commands, and aligned shortcut guidance through PR #198.
+v0.3.9 is released and post-release verified. Post-release main now includes the didactic guidance foundation note, workflow evidence shortcut commands, aligned shortcut guidance, and the Pattern Advisor MVP contract report through PR #200.
 
 ## Current Blockers
 
