@@ -127,21 +127,21 @@ This does not activate the virtual environment in the parent shell. It only make
 
 ## Optional shell shortcut
 
-A local zsh alias or function can shorten the compatibility entrypoint to `ns`. This is local shell configuration, not repository state. A typical user setup is:
+The repository provides `./ns` as the versioned compatibility entrypoint. It delegates to `tools/next-step.py` and prefers `.venv/bin/python` when available.
 
 ```zsh
-alias ns='cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit && python3 tools/next-step.py'
-alias nsr='cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit && .venv/bin/python tools/next-step.py --request'
+./ns
+./ns --request
 ```
 
 After adding those aliases to `~/.zshrc`, routine compatibility-entrypoint work becomes:
 
 ```zsh
-nsr
-ns
+./ns --request
+./ns
 ```
 
-A plain `ns` is intentionally a no-op while `.agentic/current_work.yaml` is `READY`.
+A plain `./ns` is intentionally a no-op while `.agentic/current_work.yaml` is `READY`.
 
 ## Default current-branch local gate workflow
 

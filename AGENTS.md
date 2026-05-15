@@ -189,13 +189,13 @@ For app-based ChatGPT workflows, use the compatibility entrypoint as the normal 
 
 ```bash
 cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
-python tools/next-step.py
+./ns
 ```
 
 A plain next-step command is a no-op while `.agentic/current_work.yaml` is `READY`. Request the configured workflow explicitly first:
 
 ```bash
-.venv/bin/python tools/next-step.py --request
+./ns --request
 ```
 
 After the command finishes, the expected chat reply is usually only:
@@ -328,4 +328,4 @@ Temporäre Rohberichte sollen gelöscht oder uncommitted bleiben, sobald sie ihr
 
 ## Workflow output handoff
 
-When complete local terminal evidence is needed, prefer `python tools/next-step.py` over manual Copy-and-Paste. The script cycles through `TEST`, `UPLOAD`, and `CLEANUP`; see `docs/WORKFLOW_OUTPUT_CYCLE.md`. Evidence branches are temporary and must be cleaned up.
+When complete local terminal evidence is needed, prefer `./ns` over manual Copy-and-Paste. The script cycles through `TEST`, `UPLOAD`, and `CLEANUP`; see `docs/WORKFLOW_OUTPUT_CYCLE.md`. Evidence branches are temporary and must be cleaned up.
