@@ -61,6 +61,7 @@ The latest verified gates before v0.3.7 release preparation were:
 - PR #170 added read-only `agentic-kit workflow status --explain`, documented it, and raised the suite to 160 tests.
 - PR #171 refreshed current-state and handoff documentation after PR #170.
 - PR #172 completed Guided Workflow Usability v1 and raised the suite to 162 tests.
+- PR #195 added `docs/ideas/DIDACTIC_GUIDANCE.md` as a documentation-only, non-binding didactic orientation note and cross-linked it from state, handoff, and agent guidance docs.
 
 ## Idea-note state
 
@@ -70,6 +71,7 @@ The repository has four related non-binding architecture idea notes:
 - `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
 - `docs/ideas/LAYERED_CLI_USABILITY.md`
 - `docs/ideas/PATTERN_ADVISOR.md`
+- `docs/ideas/DIDACTIC_GUIDANCE.md`
 
 These documents preserve architecture options without making them automatic implementation requirements.
 
@@ -213,12 +215,12 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-v0.3.9 is released and post-release verified. GitHub Release exists, and Zenodo verified version DOI is `10.5281/zenodo.20210345`.
+v0.3.9 is released and post-release verified. GitHub Release exists, Zenodo verified version DOI is `10.5281/zenodo.20210345`, and PR #195 has added the didactic guidance foundation note on main.
 
 ## Current Blockers
 
-- Local gates must pass on `docs/record-v0.3.7-doi`.
-- Release metadata, package version, citation metadata, changelog, status, and handoff must agree before tagging.
+- No current blockers are known after PR #195.
+- Next work should start from a new narrow slice with an explicit command-level contract.
 
 ## Live Status Commands
 
