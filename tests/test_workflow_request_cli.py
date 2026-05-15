@@ -77,8 +77,8 @@ def test_workflow_status_explain_reports_idle_ready_next_step(tmp_path: Path) ->
     assert "No active workflow request." in result.output
     assert "Recommended next step:" in result.output
     assert "Define one concrete slice before requesting workflow automation." in result.output
-    assert "Run: agentic-kit workflow request" in result.output
-    assert "Then run: agentic-kit workflow run" in result.output
+    assert "Run: agentic-kit workflow go" in result.output
+    assert "For explicit two-step control: agentic-kit workflow request, then agentic-kit workflow run" in result.output
 
 
 def test_workflow_status_explain_reports_requested_next_step(tmp_path: Path) -> None:
@@ -150,7 +150,7 @@ def test_workflow_status_explain_describes_current_report(tmp_path: Path) -> Non
     result = runner.invoke(app, ["workflow", "status", "--explain", "--root", str(tmp_path)])
     assert result.exit_code == 0
     assert "current_report=docs/reports/CURRENT_WORKFLOW_OUTPUT.md" in result.output
-    assert "current_report points to the latest local workflow-output summary." in result.output
+    assert "current_report points to the latest workflow-output summary, not necessarily uploadable local evidence." in result.output
 
 
 
