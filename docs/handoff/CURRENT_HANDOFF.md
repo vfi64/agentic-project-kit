@@ -2,16 +2,16 @@ Current version: 0.3.6
 
 # Current Handoff
 
-Status-date: 2026-05-14
+Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: docs/status-handoff-after-166
+Branch: docs/status-handoff-after-168
 Base branch: main
 
 ## Current Goal
 
-Update `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after PR #166 so the repository state no longer points future agents to the already completed workflow-cleanup hardening slice.
+Update `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after PR #168 so the repository state records the Pattern Advisor idea note and future agents do not depend on expired chat uploads for that concept.
 
-This branch is documentation-only. It records the post-#166 state and does not change CLI behavior, workflow behavior, release metadata, package version, or implementation code.
+This branch is documentation-only. It records the post-#168 state and does not change CLI behavior, workflow behavior, release metadata, package version, pattern catalog files, or implementation code.
 
 ## Current Repository State
 
@@ -32,23 +32,26 @@ Post-release work completed after v0.3.6:
 - PR #164 added small `AGENTS.md` cross-references to the DCO and layered CLI usability idea notes.
 - PR #165 refreshed `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after the idea-note merge.
 - PR #166 hardened `agentic-kit workflow cleanup` so stale `temp/workflow-evidence-*` branches can be removed even when `.agentic/workflow_state` is already `IDLE`.
+- PR #167 refreshed `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` after workflow cleanup hardening.
+- PR #168 added `docs/ideas/PATTERN_ADVISOR.md` as a non-binding idea note / architecture research track.
 
 Current main head before this branch:
 
 ```text
-9c08dfc Clean stale workflow evidence branches from cleanup (#166)
+6a9326c Add Pattern Advisor idea note (#168)
 ```
 
-Latest verified local gates after PR #166:
+Latest verified local gates after PR #168:
 
 - `156 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
+- `agentic-kit doc-mesh-audit` passed
 
 ## Workflow State
 
-Expected state after the #166 merge:
+Expected state after the #168 merge:
 
 - `.agentic/workflow_state` = `IDLE`
 - `.agentic/current_work.yaml` = `state: READY`
@@ -83,6 +86,7 @@ The current idea-note set is:
 - `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md`
 - `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
 - `docs/ideas/LAYERED_CLI_USABILITY.md`
+- `docs/ideas/PATTERN_ADVISOR.md`
 
 These are non-binding idea notes. They preserve useful architecture options without making them automatic implementation requirements.
 
@@ -99,6 +103,14 @@ Layered CLI usability guidance:
 - classify future public commands or options as Daily, Guided, Maintainer, or Debug before making them prominent;
 - consider an ADR only if these layers become binding command policy or capability boundaries.
 
+Pattern Advisor guidance:
+
+- treat `docs/ideas/PATTERN_ADVISOR.md` as advisory-only and non-binding;
+- use it as a reference when recurring problem classes suggest reusable patterns, anti-patterns, or candidate patterns;
+- do not implement `patterns suggest`, `advise`, candidate capture, promotion/deprecation, or a broad catalog before a small read-only catalog MVP has proven useful;
+- keep wrapper-project lessons as evidence sources, not wrapper-specific behavior in the kit;
+- consider an ADR only if public Pattern Advisor CLI, binding lifecycle, or advisory behavior becomes maintained architecture.
+
 ## AI-assisted development positioning
 
 agentic-project-kit is best understood as a governed AI-assisted development layer, not as a promise of autonomous coding-agent correctness.
@@ -111,7 +123,8 @@ The project should continue to emphasize:
 - auditable evidence transfer for local outputs;
 - release and DOI metadata that can be checked after publication;
 - a clear semantic quality boundary: deterministic gates can check structure and drift, but human review owns semantic correctness unless a property is converted into a deterministic rule;
-- CLI usability discipline so growing automation does not make daily use harder.
+- CLI usability discipline so growing automation does not make daily use harder;
+- advisory pattern work as optional support, not as a replacement for maintainer judgment.
 
 ## Source of Truth
 
@@ -130,8 +143,9 @@ Read in this order:
 11. `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md`
 12. `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
 13. `docs/ideas/LAYERED_CLI_USABILITY.md`
-14. `src/agentic_project_kit/`
-15. `tests/`
+14. `docs/ideas/PATTERN_ADVISOR.md`
+15. `src/agentic_project_kit/`
+16. `tests/`
 
 ## Required Local Gate
 
@@ -163,17 +177,13 @@ This handoff intentionally keeps coverage terms visible for deterministic gates:
 
 Prepared files should include:
 
-- `docs/STATUS.md` updated with the post-#166 state, latest test count, workflow cleanup behavior, and next possible slices.
-- `docs/handoff/CURRENT_HANDOFF.md` updated with the post-#166 handoff and source-of-truth reading order.
+- `docs/STATUS.md` updated with the post-#168 state, latest test count, Pattern Advisor idea-note state, and next possible slices.
+- `docs/handoff/CURRENT_HANDOFF.md` updated with the post-#168 handoff and source-of-truth reading order.
 
-No package version bump, release metadata change, CLI behavior change, or implementation change is part of this branch.
+No package version bump, release metadata change, CLI behavior change, pattern catalog, or implementation change is part of this branch.
 
 ## Next Safe Step
 
-Run local gates on `docs/status-handoff-after-166`, including `agentic-kit doc-mesh-audit`. If green, open and merge a focused documentation PR.
+Run local gates on `docs/status-handoff-after-168`, including `agentic-kit doc-mesh-audit`. If green, open and merge a focused documentation PR.
 
-After merge, reassess the next slice. Plausible options are:
-
-1. keep `doc-mesh-audit` as a special manual gate for more PRs before considering any promotion toward `doctor`;
-2. improve workflow cleanup UX around remote branches if real use shows confusing output or edge cases;
-3. design a small guided-usability CLI slice, such as a status or explanation command, only if it keeps the Golden Path simple.
+After merge, return to the planned didactic simplification / Guided CLI Usability work. Use `docs/ideas/PATTERN_ADVISOR.md` only as a non-binding advisory reference unless the maintainer explicitly chooses a later Pattern Advisor MVP.
