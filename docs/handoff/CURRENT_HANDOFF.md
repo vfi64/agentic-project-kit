@@ -2,7 +2,7 @@ Current version: 0.3.13
 
 # Current Handoff
 
-Status-date: 2026-05-15
+Status-date: 2026-05-16
 Project: agentic-project-kit
 Branch: main
 Base branch: main
@@ -11,15 +11,19 @@ Base branch: main
 
 Current version: 0.3.13
 
-v0.3.13 is released and post-release verified with version DOI `10.5281/zenodo.20241908`. It integrates document lifecycle auditing into `agentic-kit doctor`. PR #221 defined a documentation information architecture contract before UI and CLI polish. PR #224 added read-only lifecycle metadata checks. PR #228 integrated the document lifecycle audit into `agentic-kit doctor`.
+v0.3.13 is released and post-release verified with version DOI `10.5281/zenodo.20241908`. It integrates document lifecycle auditing into `agentic-kit doctor`. PR #232 added the Local Cockpit Foundation as the first v0.3.14 foundation slice: read-only cockpit status, structured action inventory, `./ns cockpit`, `./ns actions`, and `./ns-menu` cockpit entries.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`.
 
 ## Current Repository State
 
-Current main head after PR #228:
+Current main head after PR #232:
 
 ```text
+721b521 Add local cockpit foundation (#232)
+c40d798 Record v0.3.13 DOI metadata (#231)
+18e6427 tag: v0.3.13, Prepare v0.3.13 release metadata (#230)
+e189576 Refresh state after doctor document lifecycle integration (#229)
 ab9a46d Include document lifecycle audit in doctor (#228)
 efd0863 Refresh handoff after PR 226 (#227)
 7bcbc80 Refresh handoff after document lifecycle state merge (#226)
@@ -28,10 +32,6 @@ a4c88fb Add read-only document lifecycle audit (#224)
 a9f9091 Classify planning roadmap strategy and idea documents (#223)
 cc48093 Refresh state after documentation information architecture merge (#222)
 74e0c21 Define documentation information architecture (#221)
-1dea652 Add strategy roadmap alignment plan (#218)
-cb36773 Record v0.3.12 DOI metadata (#217)
-a760dda tag: v0.3.12, Prepare v0.3.12 release metadata (#216)
-e1ea3c5 Add read-only pattern advisor catalog (#215)
 ```
 
 Verified release and post-merge evidence:
@@ -57,15 +57,20 @@ Verified release and post-merge evidence:
 - PR #223 classified idea, planning, roadmap, and strategy documents with bounded lifecycle status headers.
 - PR #224 added read-only `agentic-kit doc-lifecycle-audit` lifecycle metadata checks and raised the suite to 194 tests.
 - PR #228 integrated the document lifecycle audit into `agentic-kit doctor` and raised the suite to 195 tests.
+- PR #232 added the Local Cockpit Foundation with `agentic-kit cockpit status`, `agentic-kit cockpit actions`, `./ns cockpit`, `./ns actions`, and `./ns-menu` cockpit entries. The suite is now 202 tests.
 
-Latest verified local gates after PR #228:
+Latest verified local gates after PR #232:
 
-- `195 passed`
+- `202 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
 - `agentic-kit doc-mesh-audit` passed
 - `agentic-kit doc-lifecycle-audit` passed
+- `agentic-kit cockpit status` passed
+- `agentic-kit cockpit actions` passed
+- `./ns cockpit` passed
+- `./ns actions` passed
 
 ## Workflow State
 
@@ -158,12 +163,13 @@ Read in this order:
 3. `docs/architecture/ARCHITECTURE_CONTRACT.md`
 4. `docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md`
 5. `docs/DOCUMENTATION_COVERAGE.yaml`
-6. `AGENTS.md`
-7. `README.md`
-8. `docs/STATUS.md`
-9. `docs/TEST_GATES.md`
-10. `docs/WORKFLOW_OUTPUT_CYCLE.md`
-11. `docs/handoff/CURRENT_HANDOFF.md`
+6. `docs/architecture/LOCAL_COCKPIT_FOUNDATION.md`
+7. `AGENTS.md`
+8. `README.md`
+9. `docs/STATUS.md`
+10. `docs/TEST_GATES.md`
+11. `docs/WORKFLOW_OUTPUT_CYCLE.md`
+12. `docs/handoff/CURRENT_HANDOFF.md`
 12. `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md`
 13. `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
 14. `docs/ideas/LAYERED_CLI_USABILITY.md`
@@ -212,8 +218,8 @@ This handoff intentionally keeps coverage terms visible for deterministic gates:
 
 Completed post-v0.3.9 work now includes PR #195, PR #197, PR #198, PR #200, PR #204, PR #207, and PR #209: didactic guidance was added as a non-binding idea note, workflow evidence shortcuts were implemented, status guidance was aligned with the shortcut path, a contract-only Pattern Advisor MVP report was added, repo-local ns shortcuts reduce Copy-and-Paste for local workflow item selection and execution, named workflow-item runs now restore current_work after bounded execution, and state documentation was refreshed after that fix.
 
-The current Pattern Advisor MVP slice adds public read-only `patterns list` and `patterns show` commands backed by a local catalog. No DCO implementation, deterministic gate, workflow state, automatic advice, candidate capture, or promotion behavior has been added.
+The Local Cockpit Foundation slice has been merged on main. It adds public read-only `cockpit status` and `cockpit actions` commands backed by a structured action inventory. No destructive Git, release, tag, merge, cleanup, or remote cockpit execution has been added.
 
 ## Next Safe Step
 
-Start the next work only from a concrete slice with a one-paragraph user-facing goal, explicit command-level contract, deterministic tests, and no hidden state mutation in read-only guidance paths. Keep `docs/ideas/PATTERN_ADVISOR.md` non-binding unless the maintainer explicitly approves a separate Pattern Advisor MVP.
+Next safe step: prepare the v0.3.14 release metadata only after this state and coverage refresh is merged and all gates are green. Keep the cockpit action layer read-only by default until a separate explicit execution contract is approved.

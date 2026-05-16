@@ -135,6 +135,22 @@ The following decisions remain maintainer-owned and require explicit approval:
 - change repository visibility, access rights, or private configuration;
 - change architecture direction when multiple plausible options exist.
 
+
+## Local Cockpit Gate
+
+When changing the local cockpit, cockpit action registry, cockpit CLI adapter, `./ns cockpit` shortcuts, or `./ns-menu` cockpit entries, run unit tests plus explicit CLI smoke commands.
+
+Required evidence:
+
+    python -m pytest -q tests/test_cockpit.py tests/test_repo_ns_entrypoint.py
+    ruff check .
+    agentic-kit cockpit status
+    agentic-kit cockpit actions
+    ./ns cockpit
+    ./ns actions
+
+The action registry must preserve explicit safety classification. Read-only cockpit commands must not execute destructive Git, release, tag, merge, cleanup, or remote operations. Bounded actions may be listed as action metadata, but cockpit status/actions must not run them.
+
 ## Standard Local Gate
 
 Run these commands:

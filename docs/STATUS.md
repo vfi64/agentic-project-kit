@@ -2,10 +2,10 @@ Current version: 0.3.13
 
 # Project Status
 
-Status-date: 2026-05-15
+Status-date: 2026-05-16
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: none / main is current
+Current work branch: docs/refresh-after-local-cockpit-foundation
 
 ## Purpose
 
@@ -17,7 +17,7 @@ The project itself has a current state layer so work can be continued from the r
 
 Current version: 0.3.13
 
-v0.3.13 is released and post-release verified with version DOI `10.5281/zenodo.20241908`. It integrates document lifecycle auditing into `agentic-kit doctor`.
+v0.3.13 is released and post-release verified with version DOI `10.5281/zenodo.20241908`. It integrates document lifecycle auditing into `agentic-kit doctor`. Main has advanced beyond v0.3.13 with PR #232, which added the Local Cockpit Foundation for read-only cockpit status, structured action inventory, and `./ns` cockpit shortcuts.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`; the previous post-release Zenodo verification is complete for the immediately preceding release.
 
@@ -73,6 +73,7 @@ The latest verified gates before v0.3.7 release preparation were:
 - The current feature slice adds `./ns-menu` as an optional numbered terminal menu for the existing repo-local `./ns` shortcuts.
 - PR #207 fixed named workflow-item runs so temporary `.agentic/current_work.yaml` replacement is restored after the bounded step.
 - PR #209 refreshed current-state and handoff documentation after the current_work isolation fix.
+- PR #232 added the Local Cockpit Foundation with `agentic-kit cockpit status`, `agentic-kit cockpit actions`, `./ns cockpit`, `./ns actions`, and a read-only structured action inventory.
 
 ## Idea-note state
 
@@ -87,6 +88,8 @@ The repository has four related non-binding architecture idea notes:
 These documents preserve architecture options without making them automatic implementation requirements.
 
 Deterministic Cell Orchestration remains optional. Use it only when typed cells, independent validation, selective repair, deterministic rendering, or auditability clearly reduce drift and overall workflow complexity.
+
+Local Cockpit Foundation is now the v0.3.14 foundation line for reducing copy-and-paste through a shared action layer. It is read-only by default and does not execute destructive Git, release, tag, merge, cleanup, or remote operations.
 
 Layered CLI Usability is a review lens for keeping the public command surface manageable. The intended direction is high functionality and high automation internally while keeping the daily Golden Path simple.
 
@@ -230,11 +233,13 @@ Project-level state documentation is machine-checkable:
 
 PR #228 integrated the read-only document lifecycle audit into `agentic-kit doctor`, so lifecycle metadata findings now fail the standard project health check.
 
+PR #232 added the Local Cockpit Foundation on main. Verified post-merge gates after PR #232: `202 passed`, `ruff check .` passed, `agentic-kit check-docs` passed, `agentic-kit doc-mesh-audit` passed, `agentic-kit doc-lifecycle-audit` passed, `agentic-kit doctor` passed, and cockpit smokes passed for `agentic-kit cockpit status`, `agentic-kit cockpit actions`, `./ns cockpit`, and `./ns actions`.
+
 Previous verified release DOI: `10.5281/zenodo.20218213`; DOI metadata has been recorded on main.
 
 ## Current Blockers
 
-- No current blockers are known after PR #228.
+- No current blockers are known after PR #232.
 - Next work should start from a new narrow slice with an explicit command-level contract.
 
 ## Live Status Commands

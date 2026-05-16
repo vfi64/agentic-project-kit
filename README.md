@@ -302,6 +302,17 @@ agentic-kit patterns list
 agentic-kit patterns show bounded-workflow-evidence
 ```
 
+
+## Local Cockpit Foundation
+
+The local cockpit foundation exposes a read-only control surface for local project operation. Use `agentic-kit cockpit status` to inspect the current project root, Git branch, dirty-tree state, workflow state, and current-work request state. Use `agentic-kit cockpit actions` to list the structured action inventory.
+
+The cockpit action inventory classifies actions by category and safety, including `read_only`, `bounded`, and future `destructive` classes. In the v0.3.14 foundation, cockpit commands inspect status and action metadata only; they do not execute destructive Git, release, tag, merge, cleanup, or remote operations.
+
+Repo-local shortcuts are available through `./ns cockpit` and `./ns actions`. The optional `./ns-menu` helper includes the same cockpit entries. The long-term direction is a shared action layer that can be reused by CLI, shell/menu adapters, and a later Tkinter cockpit without assembling fragile shell snippets.
+
+Architecture details are documented in `docs/architecture/LOCAL_COCKPIT_FOUNDATION.md`.
+
 ## CLI command package structure
 
 The root CLI module is intentionally a thin root command registry. Command implementations live under `src/agentic_project_kit/cli_commands/`.
