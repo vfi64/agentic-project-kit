@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.3.16 - 2026-05-16
+
+- Added `./ns cockpit-run <action-id>` as a conservative repo-local shortcut to the existing cockpit action layer.
+- Added a read-only `./ns cockpit-run git.status` entry to `./ns-menu`.
+- Kept bounded and destructive cockpit actions out of the menu path; safety decisions remain centralized in `run_cockpit_action(...)`.
+- Added regression coverage for shortcut routing, menu visibility, and shell-safety constraints.
+
 ## v0.3.15 - 2026-05-16
 
 Zenodo v0.3.15 DOI: 10.5281/zenodo.20244397

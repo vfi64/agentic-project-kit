@@ -4,38 +4,30 @@ Current version: 0.3.15
 
 Status-date: 2026-05-16
 Project: agentic-project-kit
-Branch: main
+Branch: docs/refresh-v0.3.16-state
 Base branch: main
 
 ## Current Goal
 
 Current version: 0.3.15
 
-v0.3.15 is released and post-release verified with version DOI `10.5281/zenodo.20244397`. It adds the Local Cockpit Action Layer. `agentic-kit cockpit run <action-id>` now executes registered read-only cockpit actions through the shared action layer, while bounded actions remain blocked without explicit allow and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20242582` for v0.3.14.
+v0.3.15 is released and post-release verified with version DOI `10.5281/zenodo.20244397`. Main has advanced beyond v0.3.15 with PR #240. The current v0.3.16 state-refresh line records Cockpit Adapter Hardening: `./ns cockpit-run <action-id>` delegates to `agentic-kit cockpit run <action-id>`, while `./ns-menu` exposes only the read-only `./ns cockpit-run git.status` path. Bounded actions remain blocked without explicit allow and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20242582` for v0.3.14.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`.
 
 ## Current Repository State
 
-Current main head after PR #236:
+Current main head after PR #240:
 
 ```text
+c1d1de0 Harden cockpit adapter shortcuts (#240)
+4af91ac Record v0.3.15 DOI metadata (#239)
+a3f68be tag: v0.3.15, Prepare v0.3.15 release metadata (#238)
+89740f6 Refresh state after cockpit action layer merge (#237)
 7b65e51 Add local cockpit action execution layer (#236)
 5dacfb9 Record v0.3.14 DOI metadata (#235)
 7b7ea3d tag: v0.3.14, Prepare v0.3.14 release metadata (#234)
 eaac2ac Refresh state after local cockpit foundation (#233)
-721b521 Add local cockpit foundation (#232)
-c40d798 Record v0.3.13 DOI metadata (#231)
-18e6427 tag: v0.3.13, Prepare v0.3.13 release metadata (#230)
-e189576 Refresh state after doctor document lifecycle integration (#229)
-ab9a46d Include document lifecycle audit in doctor (#228)
-efd0863 Refresh handoff after PR 226 (#227)
-7bcbc80 Refresh handoff after document lifecycle state merge (#226)
-24c7e32 Refresh state after document lifecycle audit merge (#225)
-a4c88fb Add read-only document lifecycle audit (#224)
-a9f9091 Classify planning roadmap strategy and idea documents (#223)
-cc48093 Refresh state after documentation information architecture merge (#222)
-74e0c21 Define documentation information architecture (#221)
 ```
 
 Verified release and post-merge evidence:
@@ -63,10 +55,11 @@ Verified release and post-merge evidence:
 - PR #228 integrated the document lifecycle audit into `agentic-kit doctor` and raised the suite to 195 tests.
 - PR #232 added the Local Cockpit Foundation with `agentic-kit cockpit status`, `agentic-kit cockpit actions`, `./ns cockpit`, `./ns actions`, and `./ns-menu` cockpit entries. The suite was raised to 202 tests.
 - PR #236 added the Local Cockpit Action Layer with `agentic-kit cockpit run <action-id>`, structured action results, read-only action execution, bounded-action blocking without explicit allow, and destructive-action blocking. The suite is now 210 tests.
+- PR #240 added `./ns cockpit-run <action-id>` and a read-only `./ns cockpit-run git.status` menu entry while keeping bounded and destructive cockpit actions out of the adapter menu. The suite is now 212 tests.
 
-Latest verified local gates after PR #236:
+Latest verified local gates after PR #240:
 
-- `210 passed`
+- `212 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
@@ -78,6 +71,8 @@ Latest verified local gates after PR #236:
 - `agentic-kit cockpit run workflow.go || true` blocked bounded execution as expected
 - `./ns cockpit` passed
 - `./ns actions` passed
+- `./ns cockpit-run git.status` passed
+- `./ns cockpit-run workflow.go || true` blocked bounded execution as expected
 
 ## Workflow State
 
