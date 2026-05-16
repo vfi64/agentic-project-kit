@@ -4,14 +4,14 @@ Current version: 0.3.12
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: main
+Branch: docs/documentation-information-architecture
 Base branch: main
 
 ## Current Goal
 
 Current version: 0.3.12
 
-v0.3.12 is released and post-release verified with version DOI `10.5281/zenodo.20218213`. It covers the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands.
+v0.3.12 is released and post-release verified with version DOI `10.5281/zenodo.20218213`. It covers the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands. The current branch defines a documentation information architecture contract before UI and CLI polish.
 
 Previous verified release DOI: `10.5281/zenodo.20215460`.
 
@@ -149,20 +149,21 @@ Read in this order:
 1. `.agentic/project.yaml`
 2. `sentinel.yaml`
 3. `docs/architecture/ARCHITECTURE_CONTRACT.md`
-4. `docs/DOCUMENTATION_COVERAGE.yaml`
-5. `AGENTS.md`
-6. `README.md`
-7. `docs/STATUS.md`
-8. `docs/TEST_GATES.md`
-9. `docs/WORKFLOW_OUTPUT_CYCLE.md`
-10. `docs/handoff/CURRENT_HANDOFF.md`
-11. `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md`
-12. `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
-13. `docs/ideas/LAYERED_CLI_USABILITY.md`
-14. `docs/ideas/PATTERN_ADVISOR.md`
-15. `docs/reports/pattern_advisor_mvp_contract.md`
-16. `src/agentic_project_kit/`
-17. `tests/`
+4. `docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md`
+5. `docs/DOCUMENTATION_COVERAGE.yaml`
+6. `AGENTS.md`
+7. `README.md`
+8. `docs/STATUS.md`
+9. `docs/TEST_GATES.md`
+10. `docs/WORKFLOW_OUTPUT_CYCLE.md`
+11. `docs/handoff/CURRENT_HANDOFF.md`
+12. `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md`
+13. `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
+14. `docs/ideas/LAYERED_CLI_USABILITY.md`
+15. `docs/ideas/PATTERN_ADVISOR.md`
+16. `docs/reports/pattern_advisor_mvp_contract.md`
+17. `src/agentic_project_kit/`
+18. `tests/`
 
 ## Required Local Gate
 

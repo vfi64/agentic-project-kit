@@ -5,7 +5,7 @@ Current version: 0.3.12
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: none / main is current
+Current work branch: docs/documentation-information-architecture
 
 ## Purpose
 
@@ -198,6 +198,7 @@ Project-level state documentation is present on main:
 - `docs/TEST_GATES.md`
 - `docs/handoff/CURRENT_HANDOFF.md`
 - `docs/architecture/ARCHITECTURE_CONTRACT.md`
+- `docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md`
 - `docs/architecture/AGENTIC_CODING_RESEARCH_INPUTS.md`
 - `docs/architecture/references.bib`
 - `docs/DOCUMENTATION_COVERAGE.yaml`
@@ -225,6 +226,8 @@ Project-level state documentation is machine-checkable:
 - `agentic-kit post-release-check` verifies GitHub release and Zenodo archive state after publication.
 
 ## Current Goal
+
+Current branch focus: define a documentation information architecture contract before UI and CLI polish. The new contract lives in `docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md`, is registered in documentation coverage, and is included in the documentation mesh as a required architecture document.
 
 Previous verified release DOI: `10.5281/zenodo.20215460`; DOI metadata has been recorded on main.
 

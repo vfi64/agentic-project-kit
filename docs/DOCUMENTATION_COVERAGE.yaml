@@ -397,6 +397,22 @@ rules:
           - deterministic checks
           - review infrastructure
 
+  - id: documentation-information-architecture-coverage
+    description: Documentation information architecture must remain visible as the canonical directory and lifecycle contract.
+    documents:
+      - path: docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+        terms:
+          - Directory responsibilities
+          - Lifecycle states
+          - Promotion rules
+          - Advisory alignment
+          - Automation boundaries
+          - Current classification baseline
+          - Garbage collection must not delete information before classification
+      - path: docs/architecture/ARCHITECTURE_CONTRACT.md
+        terms:
+          - DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+
   - id: state-doc-coverage
     description: State and handoff files must mention the current documentation coverage gate.
     documents:
