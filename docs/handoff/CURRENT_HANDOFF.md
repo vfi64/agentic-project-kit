@@ -11,26 +11,23 @@ Base branch: main
 
 Current version: 0.3.12
 
-v0.3.12 is released and post-release verified with version DOI `10.5281/zenodo.20218213`. It covers the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands. PR #221 defined a documentation information architecture contract before UI and CLI polish.
+v0.3.12 is released and post-release verified with version DOI `10.5281/zenodo.20218213`. It covers the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands. PR #221 defined a documentation information architecture contract before UI and CLI polish. PR #224 added a read-only `agentic-kit doc-lifecycle-audit` command for bounded lifecycle metadata checks.
 
 Previous verified release DOI: `10.5281/zenodo.20215460`.
 
 ## Current Repository State
 
-Current main head after PR #207:
+Current main head after PR #224:
 
 ```text
-5467612 Restore current work after named workflow item run (#207)
-2833ded Add ns work item shortcuts (#204)
-19b2120 Refresh state after workflow shortcut merges (#199)
-4f080c9 Align workflow shortcut guidance (#198)
-4357b4a Add workflow evidence shortcut commands (#197)
-5fedea4 Finalize post-didactic guidance state (#196)
-401e98d Add didactic guidance foundation note (#195)
-d877802 Finalize post-v0.3.9 DOI state (#194)
-fa386b6 Record v0.3.9 DOI metadata (#193)
-bb15d82 tag: v0.3.9, Finalize pre-v0.3.9 release state (#192)
-ef72e37 Prepare v0.3.9 release metadata (#191)
+a4c88fb Add read-only document lifecycle audit (#224)
+a9f9091 Classify planning roadmap strategy and idea documents (#223)
+cc48093 Refresh state after documentation information architecture merge (#222)
+74e0c21 Define documentation information architecture (#221)
+1dea652 Add strategy roadmap alignment plan (#218)
+cb36773 Record v0.3.12 DOI metadata (#217)
+a760dda tag: v0.3.12, Prepare v0.3.12 release metadata (#216)
+e1ea3c5 Add read-only pattern advisor catalog (#215)
 ```
 
 Verified release and post-merge evidence:
@@ -48,21 +45,26 @@ Verified release and post-merge evidence:
 - PR #198 aligned status guidance with the shortcut path and clarified that `current_report` is not proof of uploadable local evidence.
 - PR #200 added `docs/reports/pattern_advisor_mvp_contract.md` as a contract-only Pattern Advisor MVP planning report. It did not add runtime code, public Pattern Advisor CLI commands, pattern catalog files, deterministic gates, workflow state changes, or advisory automation.
 - PR #204 added repo-local `./ns state`, `./ns list`, `./ns show`, `./ns run`, and `./ns upload` shortcuts, with one-word aliases `state`, `list`, `show`, `run`, and `up`.
-- The current feature slice adds `./ns-menu` as an optional numbered terminal menu for the existing repo-local shortcuts.
+- PR #206 added `./ns-menu` as an optional numbered terminal menu for the existing repo-local shortcuts.
 - PR #207 fixed named workflow-item runs so `./ns run <work-item-id>` restores the original `.agentic/current_work.yaml` after the bounded workflow step.
 - PR #209 refreshed state and handoff documentation after the current_work isolation fix.
+- PR #221 defined `docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md` and registered it in documentation coverage and the documentation mesh.
+- PR #222 refreshed current-state and handoff documentation after PR #221.
+- PR #223 classified idea, planning, roadmap, and strategy documents with bounded lifecycle status headers.
+- PR #224 added read-only `agentic-kit doc-lifecycle-audit` lifecycle metadata checks and raised the suite to 194 tests.
 
-Latest verified local gates after PR #209:
+Latest verified local gates after PR #224:
 
-- `176 passed`
+- `194 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
 - `agentic-kit doc-mesh-audit` passed
+- `agentic-kit doc-lifecycle-audit` passed
 
 ## Workflow State
 
-Expected state after the #209 merge:
+Expected state after the #224 merge:
 
 - `.agentic/workflow_state` = `IDLE`
 - `.agentic/current_work.yaml` = `state: READY`
@@ -163,7 +165,9 @@ Read in this order:
 15. `docs/ideas/PATTERN_ADVISOR.md`
 16. `docs/reports/pattern_advisor_mvp_contract.md`
 17. `src/agentic_project_kit/`
-18. `tests/`
+18. `src/agentic_project_kit/doc_lifecycle.py`
+19. `tests/test_doc_lifecycle.py`
+20. `tests/`
 
 ## Required Local Gate
 
@@ -175,9 +179,10 @@ For this branch, run:
 .venv/bin/agentic-kit check-docs
 .venv/bin/agentic-kit doctor
 .venv/bin/agentic-kit doc-mesh-audit
+.venv/bin/agentic-kit doc-lifecycle-audit
 ```
 
-Because this branch changes current-state and handoff wording, `agentic-kit doc-mesh-audit` is required before merge even though it is not yet part of the standard `doctor` gate.
+Because this branch changes current-state and handoff wording after PR #224, `agentic-kit doc-mesh-audit` and `agentic-kit doc-lifecycle-audit` are required before merge even though they are not yet part of the standard `doctor` gate.
 
 The normal local workflow shortcuts are:
 
