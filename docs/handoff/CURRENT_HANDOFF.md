@@ -1,17 +1,17 @@
-Current version: 0.3.16
+Current version: 0.3.17
 
 # Current Handoff
 
 Status-date: 2026-05-16
 Project: agentic-project-kit
-Branch: docs/refresh-v0.3.17-state
+Branch: release/prepare-v0.3.17
 Base branch: main
 
 ## Current Goal
 
-Current version: 0.3.16
+Current version: 0.3.17
 
-v0.3.16 is released and post-release verified with version DOI `10.5281/zenodo.20244944`. Main has advanced beyond v0.3.16 with PR #245. The current v0.3.17 state-refresh line records Cockpit Action JSON Inventory: `agentic-kit cockpit actions --json` emits schema-versioned machine-readable action inventory output while human `cockpit actions` output remains unchanged. Cockpit action execution remains unchanged: read-only actions may run through `cockpit run`, bounded actions remain blocked without explicit allow, and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20244397` for v0.3.15.
+v0.3.17 release metadata is being prepared after PR #245 and PR #246. The release covers Cockpit Action JSON Inventory: `agentic-kit cockpit actions --json` emits schema-versioned machine-readable action inventory output while human `cockpit actions` output remains unchanged. Cockpit action execution remains unchanged: read-only actions may run through `cockpit run`, bounded actions remain blocked without explicit allow, and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20244944` for v0.3.16.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`.
 
