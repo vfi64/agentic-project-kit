@@ -2,6 +2,9 @@
 
 ## v0.3.17 - 2026-05-16
 
+Zenodo v0.3.17 DOI: 10.5281/zenodo.20245113
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
 - Added `agentic-kit cockpit actions --json` for schema-versioned machine-readable cockpit action inventory output.
 - Kept human `agentic-kit cockpit actions` output unchanged.
 - Used raw Typer output for JSON so consumers can parse it without Rich rendering artifacts.

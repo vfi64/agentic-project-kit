@@ -435,6 +435,8 @@ The archived v0.3.10 release has the verified version-specific DOI: `10.5281/zen
 The archived v0.3.11 release has the verified version-specific DOI: `10.5281/zenodo.20215460`.
 The archived v0.3.16 release has the verified version-specific DOI: `10.5281/zenodo.20244944`.
 
+The archived v0.3.17 release has the verified version-specific DOI: `10.5281/zenodo.20245113`.
+
 ## Governance wrapper projects
 
 Use the `governance-wrapper` profile for strict human-AI wrapper projects that need explicit output contracts, validation, bounded repair, and auditability.
@@ -493,7 +495,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.17` is the current release line covering Cockpit Action JSON Inventory with `agentic-kit cockpit actions --json` for schema-versioned machine-readable action metadata while keeping human cockpit output and cockpit action execution unchanged. Version `0.3.16` remains the previous archived release covering Cockpit Adapter Hardening with verified DOI `10.5281/zenodo.20244944`.
+Version `0.3.17` is the current release line covering Cockpit Action JSON Inventory with `agentic-kit cockpit actions --json` for schema-versioned machine-readable action metadata while keeping human cockpit output and cockpit action execution unchanged, with verified DOI `10.5281/zenodo.20245113`. Version `0.3.16` remains the previous archived release covering Cockpit Adapter Hardening with verified DOI `10.5281/zenodo.20244944`.
 
 Version `0.3.10` remains the previous archived release covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`.
 
@@ -521,5 +523,6 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - v0.3.11: `10.5281/zenodo.20215460`
 - Verified v0.3.12 version DOI: `10.5281/zenodo.20218213`
 - Verified v0.3.16 version DOI: `10.5281/zenodo.20244944`
+- Verified v0.3.17 version DOI: `10.5281/zenodo.20245113`
 
 Near-term documentation-governance work: stabilize `agentic-kit doc-mesh-audit` as a targeted special gate, collect false positives, then decide whether to promote it into `agentic-kit doctor` before any unconditional default `ns` integration.
