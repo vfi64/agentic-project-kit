@@ -17,7 +17,7 @@ The project itself has a current state layer so work can be continued from the r
 
 Current version: 0.3.14
 
-v0.3.14 is the current release metadata line. It adds the Local Cockpit Foundation for read-only cockpit status, structured action inventory, `./ns cockpit`, `./ns actions`, and a documented shared action-layer direction toward a later Tkinter cockpit. Previous verified release DOI: `10.5281/zenodo.20241908` for v0.3.13.
+v0.3.14 is released and post-release verified with version DOI `10.5281/zenodo.20242582`. It adds the Local Cockpit Foundation for read-only cockpit status, structured action inventory, `./ns cockpit`, `./ns actions`, and a documented shared action-layer direction toward a later Tkinter cockpit. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20241908` for v0.3.13.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`; the previous post-release Zenodo verification is complete for the immediately preceding release.
 

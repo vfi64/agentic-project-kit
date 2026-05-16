@@ -2,6 +2,9 @@
 
 ## v0.3.14 - 2026-05-16
 
+Zenodo v0.3.14 DOI: 10.5281/zenodo.20242582
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
 - Added the Local Cockpit Foundation with read-only `agentic-kit cockpit status` and `agentic-kit cockpit actions` commands.
 - Added a structured cockpit action inventory with explicit safety classification for read-only and bounded actions.
 - Added repo-local `./ns cockpit` and `./ns actions` shortcuts plus matching `./ns-menu` entries.
