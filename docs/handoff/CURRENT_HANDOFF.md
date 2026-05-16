@@ -12,7 +12,7 @@ Base branch: main
 Current released version: 0.3.18
 Current development slice: v0.3.19 Cockpit Action Selection UX
 
-v0.3.18 is released and post-release verified with version DOI `10.5281/zenodo.20245754`. Zenodo concept DOI: `10.5281/zenodo.20101359`. The final post-DOI state cleanup is merged on main at `55e37dd Finalize state after v0.3.18 DOI metadata (#254)`.
+v0.3.18 is released and post-release verified with version DOI `10.5281/zenodo.20245754`. Zenodo concept DOI: `10.5281/zenodo.20101359`. The final post-DOI state cleanup is merged on main at `55e37dd Finalize state after v0.3.18 DOI metadata (#254)`. The post-release Zenodo verification path remains covered by `agentic-kit post-release-check`.
 
 The active v0.3.19 slice adds an inspect-only cockpit action selection view. `agentic-kit cockpit select` renders a numbered action list from the central cockpit action registry without executing actions. `./ns select` delegates to that command, and `./ns-menu` exposes it as a numbered entry without adding new shell execution logic.
 
@@ -65,7 +65,9 @@ The user locally reported `d` after the sync/test blocks for:
 - targeted tests: `tests/test_cockpit.py`, `tests/test_repo_ns_entrypoint.py`, `tests/test_cli.py`
 - `ruff check .`
 
-Full pre-PR gates still need to be run after the documentation refresh:
+A later full local gate run showed `221 passed` and `ruff check .` passed. The documentation gates then failed because the STATUS/HANDOFF refresh removed deterministic documentation coverage phrases. This branch now restores the required coverage phrases for policy packs, policy-pack checks, documentation coverage, post-release Zenodo verification, `agentic-kit post-release-check`, and Pattern Advisor coverage in STATUS.
+
+Full pre-PR gates still need to be rerun after this repair:
 
 ```bash
 .venv/bin/python -m pytest -q
@@ -124,7 +126,9 @@ For this branch, run:
 .venv/bin/agentic-kit doc-lifecycle-audit
 ```
 
-Because state and handoff refreshes affect repository source-of-truth wording, `agentic-kit doc-mesh-audit` should be run before opening or merging the PR. `agentic-kit doc-lifecycle-audit` remains useful as a direct smoke check and is also covered by `agentic-kit doctor`.
+Because state and handoff refreshes affect repository source-of-truth wording and documentation coverage, `agentic-kit doc-mesh-audit` should be run before opening or merging the PR. `agentic-kit doc-lifecycle-audit` remains useful as a direct smoke check and is also covered by `agentic-kit doctor`.
+
+`agentic-kit doctor` must continue to report active policy packs and policy-pack checks for the repository contract.
 
 ## Current Branch Work
 
@@ -132,4 +136,4 @@ The v0.3.19 Cockpit Action Selection UX slice is implementation-complete at the 
 
 ## Next Safe Step
 
-Next safe step: sync this branch locally, run full gates after the documentation refresh, inspect the diff, and open a PR if all gates pass.
+Next safe step: sync this branch locally, rerun the doc gates and full gates after the documentation coverage repair, inspect the diff, and open a PR if all gates pass.
