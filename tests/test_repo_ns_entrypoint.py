@@ -49,3 +49,22 @@ def test_repo_ns_menu_exposes_cockpit_shortcuts_without_heredocs() -> None:
     assert "run_ns actions" in text
     assert "<<" not in text
     assert "python -c" not in text
+
+
+def test_repo_ns_entrypoint_exposes_cockpit_run_shortcut() -> None:
+    text = Path("ns").read_text(encoding="utf-8")
+    assert "\"cockpit-run\"" in text
+    assert "agentic-kit cockpit run" in text
+    assert ".venv/bin/agentic-kit cockpit run" in text
+    assert "<< " not in text
+    assert "python -c" not in text
+
+
+def test_repo_ns_menu_exposes_read_only_cockpit_run_shortcut_only() -> None:
+    text = Path("ns-menu").read_text(encoding="utf-8")
+    assert "./ns cockpit-run git.status" in text
+    assert "run_ns cockpit-run git.status" in text
+    assert "run_ns cockpit-run workflow.go" not in text
+    assert "workflow.go" not in text
+    assert "<< " not in text
+    assert "python -c" not in text
