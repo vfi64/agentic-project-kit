@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.3.15 - Unreleased
+
+- Added `agentic-kit cockpit run <action-id>` for registered read-only cockpit actions.
+- Added a structured cockpit action result and execution layer with argument-vector command execution.
+- Kept bounded cockpit actions blocked without explicit allow and destructive cockpit actions blocked.
+- Updated cockpit safety documentation and gate expectations for the action execution layer.
+
 ## v0.3.14 - 2026-05-16
 
 Zenodo v0.3.14 DOI: 10.5281/zenodo.20242582
@@ -10,6 +17,7 @@ Zenodo Concept DOI: 10.5281/zenodo.20101359
 - Added repo-local `./ns cockpit` and `./ns actions` shortcuts plus matching `./ns-menu` entries.
 - Documented the future shared action-layer direction for CLI, shell/menu adapters, and a later Tkinter cockpit without shell-quoting based command synthesis.
 - Refreshed README, documentation coverage, TEST_GATES, STATUS, and CURRENT_HANDOFF after the Local Cockpit Foundation merge.
+
 ## v0.3.13 - 2026-05-16
 
 Zenodo v0.3.13 DOI: 10.5281/zenodo.20241908
