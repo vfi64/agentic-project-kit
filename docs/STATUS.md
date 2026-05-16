@@ -1,4 +1,4 @@
-Current version: 0.3.12
+Current version: 0.3.13
 
 # Project Status
 
@@ -15,9 +15,9 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-Current version: 0.3.12
+Current version: 0.3.13
 
-v0.3.12 is released and post-release verified with version DOI `10.5281/zenodo.20218213`. It covers the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands.
+v0.3.13 is being prepared as a release after integrating document lifecycle auditing into `agentic-kit doctor`. v0.3.12 remains the latest post-release verified release with version DOI `10.5281/zenodo.20218213`.
 
 Previous verified release DOI: `10.5281/zenodo.20215460`; the previous post-release Zenodo verification is complete for the immediately preceding release.
 
