@@ -1,4 +1,4 @@
-Current version: 0.3.12
+Current version: 0.3.13
 
 # Current Handoff
 
@@ -9,9 +9,9 @@ Base branch: main
 
 ## Current Goal
 
-Current version: 0.3.12
+Current version: 0.3.13
 
-v0.3.12 is released and post-release verified with version DOI `10.5281/zenodo.20218213`. It covers the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands. PR #221 defined a documentation information architecture contract before UI and CLI polish. PR #224 added read-only lifecycle metadata checks. PR #228 integrated the document lifecycle audit into `agentic-kit doctor`.
+v0.3.13 is being prepared as a release after integrating document lifecycle auditing into `agentic-kit doctor`. v0.3.12 remains the latest post-release verified release with version DOI `10.5281/zenodo.20218213`. PR #221 defined a documentation information architecture contract before UI and CLI polish. PR #224 added read-only lifecycle metadata checks. PR #228 integrated the document lifecycle audit into `agentic-kit doctor`.
 
 Previous verified release DOI: `10.5281/zenodo.20215460`.
 

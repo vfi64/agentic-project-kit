@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.13 - 2026-05-16
+
+- Integrated document lifecycle auditing into `agentic-kit doctor`.
+- Updated state and handoff documentation after the doctor lifecycle integration.
+- Kept `doc-lifecycle-audit` available as a direct read-only smoke check while making lifecycle findings part of the standard doctor gate.
+
 ## v0.3.12 - 2026-05-15
 
 Zenodo v0.3.12 DOI: 10.5281/zenodo.20218213
