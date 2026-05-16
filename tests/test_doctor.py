@@ -95,6 +95,7 @@ def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
         DoctorStatus.WARN,
         DoctorStatus.WARN,
         DoctorStatus.PASS,
+        DoctorStatus.PASS,
         DoctorStatus.WARN,
         DoctorStatus.WARN,
     ]
@@ -218,3 +219,18 @@ def test_doctor_report_fails_on_version_drift(tmp_path: Path):
     assert version_check.status == DoctorStatus.FAIL
     assert "docs/STATUS.md" in version_check.detail
     assert "docs/handoff/CURRENT_HANDOFF.md" in version_check.detail
+
+
+def test_doctor_report_fails_on_document_lifecycle_findings(tmp_path: Path):
+    _write_readme(tmp_path)
+    _write_state_docs(tmp_path)
+    (tmp_path / "docs/ideas").mkdir(parents=True)
+    (tmp_path / "docs/ideas/BAD.md").write_text("# Bad\n\nStatus: idea note\n", encoding="utf-8")
+
+    report = build_doctor_report(tmp_path)
+
+    assert not report.ok
+    lifecycle_check = next(check for check in report.checks if check.name == "document lifecycle audit")
+    assert lifecycle_check.status == DoctorStatus.FAIL
+    assert "docs/ideas/BAD.md" in lifecycle_check.detail
+    assert "status must be one of" in lifecycle_check.detail
