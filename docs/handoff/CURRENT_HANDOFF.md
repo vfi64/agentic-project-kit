@@ -17,9 +17,10 @@ Previous verified release DOI: `10.5281/zenodo.20215460`.
 
 ## Current Repository State
 
-Current main head after PR #225:
+Current main head after PR #226:
 
 ```text
+7bcbc80 Refresh handoff after document lifecycle state merge (#226)
 24c7e32 Refresh state after document lifecycle audit merge (#225)
 a4c88fb Add read-only document lifecycle audit (#224)
 a9f9091 Classify planning roadmap strategy and idea documents (#223)
@@ -65,7 +66,7 @@ Latest verified local gates after PR #224:
 
 ## Workflow State
 
-Expected state after the #225 merge:
+Expected state after the #226 merge:
 
 - `.agentic/workflow_state` = `IDLE`
 - `.agentic/current_work.yaml` = `state: READY`
