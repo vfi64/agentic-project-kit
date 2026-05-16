@@ -492,7 +492,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.13` is the current release line covering document lifecycle auditing in `agentic-kit doctor` with verified DOI `10.5281/zenodo.20241908`. Version `0.3.11` remains the previous archived release covering repo-local workflow-item shortcuts, stored work-item execution, and current-work isolation for named workflow-item runs.
+Version `0.3.14` is the current release line covering the Local Cockpit Foundation with read-only `agentic-kit cockpit status`, `agentic-kit cockpit actions`, structured action inventory, and repo-local `./ns cockpit` / `./ns actions` shortcuts. Version `0.3.13` remains the previous archived release covering document lifecycle auditing in `agentic-kit doctor` with verified DOI `10.5281/zenodo.20241908`.
 
 Version `0.3.10` remains the previous archived release covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`.
 
