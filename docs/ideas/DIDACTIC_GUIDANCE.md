@@ -1,5 +1,7 @@
 # Didactic Guidance
 
+Status: idea-note
+Decision status: not implemented as a binding architecture or CLI policy
 Review policy: keep while didactic guidance is an active architecture option
 Next review: before adding public advisory review commands or before v0.4.0
 

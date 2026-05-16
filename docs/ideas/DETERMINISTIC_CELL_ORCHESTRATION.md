@@ -1,7 +1,7 @@
 # Deterministic Cell Orchestration
 
-Status: idea-note / deferred
-Decision status: not implemented as a binding architecture
+Status: idea-note
+Decision status: deferred; not implemented as a binding architecture
 Review policy: keep while DCO is an active architecture option
 Next review: before v0.4.0 or when workflow, repair, validation, rendering, or audit architecture changes
 Removal rule: delete or archive if DCO is no longer useful, superseded, or fully absorbed into implemented docs
