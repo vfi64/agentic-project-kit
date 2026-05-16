@@ -5,7 +5,7 @@ Current version: 0.3.12
 Status-date: 2026-05-15
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/documentation-information-architecture
+Current work branch: none / main is current
 
 ## Purpose
 
@@ -227,7 +227,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Goal
 
-Current branch focus: define a documentation information architecture contract before UI and CLI polish. The new contract lives in `docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md`, is registered in documentation coverage, and is included in the documentation mesh as a required architecture document.
+PR #221 defined a documentation information architecture contract before UI and CLI polish. The new contract lives in `docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md`, is registered in documentation coverage, and is included in the documentation mesh as a required architecture document.
 
 Previous verified release DOI: `10.5281/zenodo.20215460`; DOI metadata has been recorded on main.
 
