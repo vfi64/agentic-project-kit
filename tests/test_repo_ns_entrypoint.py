@@ -51,6 +51,24 @@ def test_repo_ns_menu_exposes_cockpit_shortcuts_without_heredocs() -> None:
     assert "python -c" not in text
 
 
+def test_repo_ns_entrypoint_exposes_cockpit_select_shortcut() -> None:
+    text = Path("ns").read_text(encoding="utf-8")
+    assert "\"select\"" in text
+    assert "agentic-kit cockpit select" in text
+    assert ".venv/bin/agentic-kit cockpit select" in text
+    assert "<< " not in text
+    assert "python -c" not in text
+
+
+def test_repo_ns_menu_exposes_cockpit_select_shortcut_without_heredocs() -> None:
+    text = Path("ns-menu").read_text(encoding="utf-8")
+    assert "./ns select" in text
+    assert "run_ns select" in text
+    assert "15)" in text
+    assert "<< " not in text
+    assert "python -c" not in text
+
+
 def test_repo_ns_entrypoint_exposes_cockpit_run_shortcut() -> None:
     text = Path("ns").read_text(encoding="utf-8")
     assert "\"cockpit-run\"" in text
