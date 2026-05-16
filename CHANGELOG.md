@@ -2,7 +2,7 @@
 
 ## v0.3.19 - 2026-05-16
 
-Unreleased.
+Release prepared.
 
 - Added `agentic-kit cockpit select` as an inspect-only numbered action-selection view backed by the cockpit action registry.
 - Added repo-local `./ns select` as a thin adapter to `agentic-kit cockpit select`.
