@@ -5,7 +5,7 @@ Current version: 0.3.18
 Status-date: 2026-05-16
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: release/prepare-v0.3.18
+Current work branch: main
 
 ## Purpose
 
