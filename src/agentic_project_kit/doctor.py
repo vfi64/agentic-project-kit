@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from agentic_project_kit.checks import check_docs, check_todo
+from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_report
 from agentic_project_kit.contract import (
     CONTRACT_PATH,
     contract_summary,
@@ -51,6 +52,7 @@ def build_doctor_report(project_root: Path) -> DoctorReport:
         _project_contract_check(root, contract_data),
         _policy_pack_check(root, contract_data),
         _docs_check(root),
+        _doc_lifecycle_check(root),
         _todo_check(root),
         _version_drift_check(root),
     ]
@@ -151,6 +153,14 @@ def _docs_check(project_root: Path) -> DoctorCheck:
     if errors:
         return DoctorCheck("documentation gates", DoctorStatus.FAIL, "; ".join(errors))
     return DoctorCheck("documentation gates", DoctorStatus.PASS, "passed")
+
+
+def _doc_lifecycle_check(project_root: Path) -> DoctorCheck:
+    report = build_doc_lifecycle_report(project_root)
+    if report.findings:
+        details = "; ".join(f"{finding.path}: {finding.message}" for finding in report.findings)
+        return DoctorCheck("document lifecycle audit", DoctorStatus.FAIL, details)
+    return DoctorCheck("document lifecycle audit", DoctorStatus.PASS, "passed")
 
 
 def _todo_check(project_root: Path) -> DoctorCheck:
