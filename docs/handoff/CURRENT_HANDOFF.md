@@ -4,14 +4,14 @@ Current version: 0.3.12
 
 Status-date: 2026-05-15
 Project: agentic-project-kit
-Branch: docs/documentation-information-architecture
+Branch: main
 Base branch: main
 
 ## Current Goal
 
 Current version: 0.3.12
 
-v0.3.12 is released and post-release verified with version DOI `10.5281/zenodo.20218213`. It covers the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands. The current branch defines a documentation information architecture contract before UI and CLI polish.
+v0.3.12 is released and post-release verified with version DOI `10.5281/zenodo.20218213`. It covers the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands. PR #221 defined a documentation information architecture contract before UI and CLI polish.
 
 Previous verified release DOI: `10.5281/zenodo.20215460`.
 
