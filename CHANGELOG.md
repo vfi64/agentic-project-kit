@@ -2,6 +2,9 @@
 
 ## v0.3.15 - 2026-05-16
 
+Zenodo v0.3.15 DOI: 10.5281/zenodo.20244397
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
 - Added `agentic-kit cockpit run <action-id>` for registered read-only cockpit actions.
 - Added a structured cockpit action result and execution layer with argument-vector command execution.
 - Kept bounded cockpit actions blocked without explicit allow and destructive cockpit actions blocked.
