@@ -1,7 +1,7 @@
 # Pattern Advisor
 
-Status: idea-note / architecture research track
-Decision status: not implemented
+Status: idea-note
+Decision status: architecture research track; broader concept not implemented as binding architecture
 Review policy: keep while advisory pattern guidance is an active architecture option
 Next review: before v0.4.0 or before adding a public `agentic-kit patterns` / `agentic-kit advise` CLI
 Removal rule: delete, archive, or convert into implemented documentation if superseded, rejected, or fully implemented

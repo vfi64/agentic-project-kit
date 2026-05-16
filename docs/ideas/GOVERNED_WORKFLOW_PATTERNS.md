@@ -1,7 +1,9 @@
 # Governed Workflow Patterns
 
-Status: idea note / architecture research track
-Decision status: not implemented as a single feature
+Status: idea-note
+Decision status: architecture research track; not implemented as a single feature
+Review policy: keep while workflow governance patterns are active architecture options
+Next review: before v0.4.0 or when workflow, release, repair, validation, audit, or agent-facing behavior changes
 Rule location: `AGENTS.md` (`Governed Workflow Design Principles`)
 Roadmap relation: future hardening of workflow, release, repair, validation, and agent-facing features
 
