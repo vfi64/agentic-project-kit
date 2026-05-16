@@ -5,6 +5,7 @@ Date: 2026-05-10
 Project: agentic-project-kit  
 Audience: maintainers, human developers, AI coding agents  
 Related planning input: `docs/architecture/AGENTIC_CODING_RESEARCH_INPUTS.md`  
+Documentation information architecture: `docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md`  
 Bibliography: `docs/architecture/references.bib`
 
 ## 1. Executive Summary

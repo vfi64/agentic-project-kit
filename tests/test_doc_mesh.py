@@ -34,6 +34,7 @@ def _write_minimal_mesh(root: Path, *, version: str = "1.2.3", historical_banner
     _write(root / "sentinel.yaml", "documents: []\n")
     _write(root / ".agentic/project.yaml", "name: demo\n")
     _write(root / "docs/architecture/ARCHITECTURE_CONTRACT.md", "Architecture contract.\n")
+    _write(root / "docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md", "Documentation information architecture.\n")
     _write(root / "docs/WORKFLOW_OUTPUT_CYCLE.md", "Workflow cycle.\n")
     banner = f"{HISTORICAL_BANNER}\n\n" if historical_banner else ""
     _write(

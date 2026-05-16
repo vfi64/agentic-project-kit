@@ -130,6 +130,7 @@ DOC_MESH_DOCUMENTS: tuple[DocMeshDocument, ...] = (
     DocMeshDocument("sentinel.yaml", "governance"),
     DocMeshDocument(".agentic/project.yaml", "governance"),
     DocMeshDocument("docs/architecture/ARCHITECTURE_CONTRACT.md", "architecture"),
+    DocMeshDocument("docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md", "architecture"),
     DocMeshDocument("docs/WORKFLOW_OUTPUT_CYCLE.md", "architecture"),
     DocMeshDocument("DESIGN.md", "architecture", required=False),
     DocMeshDocument(
