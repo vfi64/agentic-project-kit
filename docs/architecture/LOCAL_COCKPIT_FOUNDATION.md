@@ -10,12 +10,12 @@ The local cockpit is the planned control layer for professional single-user proj
 
 ## Foundation scope
 
-The v0.3.14 foundation is intentionally read-only by default. It introduces a shared action inventory and a central cockpit status command. It does not yet execute destructive git, release, or cleanup actions.
+The v0.3.14 foundation introduced a shared action inventory and a central cockpit status command. The v0.3.15 action layer adds explicit execution for registered `read_only` actions while keeping bounded actions blocked unless explicitly allowed and destructive actions blocked. It does not execute destructive git, release, or cleanup actions.
 
 ## Adapter model
 
 - Core actions: stable metadata and status builders in Python modules.
-- CLI adapter: Typer commands expose status and action inventory.
+- CLI adapter: Typer commands expose status, action inventory, and read-only action execution.
 - Shell adapter: existing `./ns` entrypoints remain available and can later migrate toward the shared action layer.
 - Tkinter adapter: future UI should consume the same action layer instead of assembling shell snippets.
 
@@ -33,3 +33,4 @@ Actions are classified by safety:
 - No automatic PR merge, tag, release, or remote deletion flow.
 - No shell-quoting based command synthesis.
 - No replacement of `./ns`; migration should be incremental.
+- No default execution of bounded or destructive cockpit actions.

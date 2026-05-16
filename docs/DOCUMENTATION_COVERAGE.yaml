@@ -472,6 +472,7 @@ rules:
           - Local Cockpit Foundation
           - agentic-kit cockpit status
           - agentic-kit cockpit actions
+          - agentic-kit cockpit run
           - structured action inventory
           - read_only
           - bounded
@@ -493,5 +494,6 @@ rules:
           - Local Cockpit Gate
           - agentic-kit cockpit status
           - agentic-kit cockpit actions
+          - agentic-kit cockpit run
           - action registry
           - safety classification
