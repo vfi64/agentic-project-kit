@@ -492,7 +492,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.15` is the current release line covering the Local Cockpit Action Layer with `agentic-kit cockpit run <action-id>` for registered read-only actions, structured action results, bounded-action blocking without explicit allow, and destructive-action blocking with verified DOI `10.5281/zenodo.20244397`. Version `0.3.14` remains the previous archived release covering the Local Cockpit Foundation with verified DOI `10.5281/zenodo.20242582`.
+Version `0.3.16` is the current release line covering Cockpit Adapter Hardening with `./ns cockpit-run <action-id>` delegating to the existing cockpit action layer and `./ns-menu` exposing only the read-only `./ns cockpit-run git.status` path. Version `0.3.15` remains the previous archived release covering the Local Cockpit Action Layer with verified DOI `10.5281/zenodo.20244397`.
 
 Version `0.3.10` remains the previous archived release covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`.
 
