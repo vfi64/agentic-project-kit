@@ -2,7 +2,8 @@
 
 ## v0.3.19 - 2026-05-16
 
-Release prepared.
+Zenodo v0.3.19 DOI: 10.5281/zenodo.20246121
+Zenodo Concept DOI: 10.5281/zenodo.20101359
 
 - Added `agentic-kit cockpit select` as an inspect-only numbered action-selection view backed by the cockpit action registry.
 - Added repo-local `./ns select` as a thin adapter to `agentic-kit cockpit select`.
