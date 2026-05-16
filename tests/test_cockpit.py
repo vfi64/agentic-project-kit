@@ -1,9 +1,10 @@
+import json
 from pathlib import Path
 
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
-from agentic_project_kit.cockpit import BOUNDED, DESTRUCTIVE, READ_ONLY, CockpitAction, action_by_id, cockpit_actions, run_cockpit_action
+from agentic_project_kit.cockpit import BOUNDED, DESTRUCTIVE, READ_ONLY, CockpitAction, action_by_id, action_inventory_as_json_data, cockpit_actions, run_cockpit_action
 
 
 runner = CliRunner()
@@ -164,3 +165,45 @@ def test_cockpit_run_cli_blocks_bounded_action_without_allow_flag() -> None:
     assert "allowed=false" in result.output
     assert "executed=false" in result.output
     assert "Blocked bounded cockpit action" in result.output
+
+
+def test_cockpit_action_inventory_json_data_has_stable_schema() -> None:
+    action = CockpitAction("demo.action", "Demo", "demo", ("demo", "run"), READ_ONLY, "Demo action.")
+    data = action_inventory_as_json_data([action])
+
+    assert data == {
+        "schema_version": 1,
+        "actions": [
+            {
+                "action_id": "demo.action",
+                "label": "Demo",
+                "category": "demo",
+                "safety": READ_ONLY,
+                "command": ["demo", "run"],
+                "description": "Demo action.",
+            }
+        ],
+    }
+
+
+def test_cockpit_actions_json_cli_outputs_machine_readable_inventory() -> None:
+    result = runner.invoke(app, ["cockpit", "actions", "--json"])
+
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.output)
+    assert data["schema_version"] == 1
+    assert "actions" in data
+    git_status = next(action for action in data["actions"] if action["action_id"] == "git.status")
+    assert git_status["category"] == "git"
+    assert git_status["safety"] == READ_ONLY
+    assert git_status["command"] == ["git", "status", "--short"]
+    workflow_go = next(action for action in data["actions"] if action["action_id"] == "workflow.go")
+    assert workflow_go["safety"] == BOUNDED
+
+
+def test_cockpit_actions_json_cli_does_not_execute_actions() -> None:
+    result = runner.invoke(app, ["cockpit", "actions", "--json"])
+
+    assert result.exit_code == 0, result.output
+    assert "allowed=true" not in result.output
+    assert "executed=true" not in result.output
