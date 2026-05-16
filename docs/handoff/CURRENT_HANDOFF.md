@@ -4,166 +4,88 @@ Current version: 0.3.18
 
 Status-date: 2026-05-16
 Project: agentic-project-kit
-Branch: main
+Branch: feature/cockpit-action-selection-ux
 Base branch: main
 
 ## Current Goal
 
-Current version: 0.3.18
+Current released version: 0.3.18
+Current development slice: v0.3.19 Cockpit Action Selection UX
 
-v0.3.18 is released and post-release verified with version DOI `10.5281/zenodo.20245754`. The release covers the `./ns-menu` cockpit JSON consumer update: the menu no longer clears the terminal by default, `NS_MENU_CLEAR=1` restores clearing when desired, and a numbered `./ns actions --json` entry exposes the schema-versioned cockpit action inventory. Cockpit action execution remains unchanged: read-only actions may run through `cockpit run`, bounded actions remain blocked without explicit allow, and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20245113` for v0.3.17.
+v0.3.18 is released and post-release verified with version DOI `10.5281/zenodo.20245754`. Zenodo concept DOI: `10.5281/zenodo.20101359`. The final post-DOI state cleanup is merged on main at `55e37dd Finalize state after v0.3.18 DOI metadata (#254)`.
 
-Previous verified release DOI: `10.5281/zenodo.20218213`.
+The active v0.3.19 slice adds an inspect-only cockpit action selection view. `agentic-kit cockpit select` renders a numbered action list from the central cockpit action registry without executing actions. `./ns select` delegates to that command, and `./ns-menu` exposes it as a numbered entry without adding new shell execution logic.
 
 ## Current Repository State
 
-Current main head after PR #250:
+Current main head before this feature branch:
 
 ```text
+55e37dd Finalize state after v0.3.18 DOI metadata (#254)
+d86491b Record v0.3.18 DOI metadata (#253)
+da14f8b tag: v0.3.18, Prepare v0.3.18 release metadata (#252)
+9f05474 Refresh state after ns-menu cockpit JSON consumer (#251)
 844501e Expose cockpit JSON inventory in ns-menu (#250)
 85bd859 Finalize state after v0.3.17 DOI metadata (#249)
 76d4af8 Record v0.3.17 DOI metadata (#248)
 1e4bae9 tag: v0.3.17, Prepare v0.3.17 release metadata (#247)
-09fec92 Refresh state after cockpit action JSON inventory (#246)
-c28a937 Add cockpit action JSON inventory (#245)
-a7b614a Finalize state after v0.3.16 DOI metadata (#244)
-a8c37e6 Record v0.3.16 DOI metadata (#243)
-018652c tag: v0.3.16, Prepare v0.3.16 release metadata (#242)
-f4fe329 Refresh state after cockpit adapter hardening (#241)
-c1d1de0 Harden cockpit adapter shortcuts (#240)
-4af91ac Record v0.3.15 DOI metadata (#239)
-a3f68be tag: v0.3.15, Prepare v0.3.15 release metadata (#238)
 ```
 
-Verified release and post-merge evidence:
+Feature branch:
 
-- GitHub Release v0.3.9 exists.
-- Zenodo concept DOI: `10.5281/zenodo.20101359`.
-- Verified v0.3.9 version DOI: `10.5281/zenodo.20210345`.
-- Verified v0.3.10 version DOI: `10.5281/zenodo.20214382`.
-- Previous verified version DOI: `10.5281/zenodo.20215460`.
-- Verified v0.3.12 version DOI: `10.5281/zenodo.20218213`.
-- `agentic-kit post-release-check --version 0.3.9` passed before PR #195.
-- PR #195 added `docs/ideas/DIDACTIC_GUIDANCE.md` as a documentation-only, non-binding didactic orientation note.
-- PR #195 did not add runtime code, public CLI commands, deterministic gates, workflow states, Pattern Advisor implementation, or pattern catalog behavior.
-- PR #197 added workflow shortcut commands for request-and-run and bounded output upload.
-- PR #198 aligned status guidance with the shortcut path and clarified that `current_report` is not proof of uploadable local evidence.
-- PR #200 added `docs/reports/pattern_advisor_mvp_contract.md` as a contract-only Pattern Advisor MVP planning report. It did not add runtime code, public Pattern Advisor CLI commands, pattern catalog files, deterministic gates, workflow state changes, or advisory automation.
-- PR #204 added repo-local `./ns state`, `./ns list`, `./ns show`, `./ns run`, and `./ns upload` shortcuts, with one-word aliases `state`, `list`, `show`, `run`, and `up`.
-- PR #206 added `./ns-menu` as an optional numbered terminal menu for the existing repo-local shortcuts.
-- PR #207 fixed named workflow-item runs so `./ns run <work-item-id>` restores the original `.agentic/current_work.yaml` after the bounded workflow step.
-- PR #209 refreshed state and handoff documentation after the current_work isolation fix.
-- PR #221 defined `docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md` and registered it in documentation coverage and the documentation mesh.
-- PR #222 refreshed current-state and handoff documentation after PR #221.
-- PR #223 classified idea, planning, roadmap, and strategy documents with bounded lifecycle status headers.
-- PR #224 added read-only `agentic-kit doc-lifecycle-audit` lifecycle metadata checks and raised the suite to 194 tests.
-- PR #228 integrated the document lifecycle audit into `agentic-kit doctor` and raised the suite to 195 tests.
-- PR #232 added the Local Cockpit Foundation with `agentic-kit cockpit status`, `agentic-kit cockpit actions`, `./ns cockpit`, `./ns actions`, and `./ns-menu` cockpit entries. The suite was raised to 202 tests.
-- PR #236 added the Local Cockpit Action Layer with `agentic-kit cockpit run <action-id>`, structured action results, read-only action execution, bounded-action blocking without explicit allow, and destructive-action blocking. The suite is now 210 tests.
-- PR #240 added `./ns cockpit-run <action-id>` and a read-only `./ns cockpit-run git.status` menu entry while keeping bounded and destructive cockpit actions out of the adapter menu. The suite is now 212 tests.
-- PR #245 added `agentic-kit cockpit actions --json` as schema-versioned machine-readable cockpit action inventory output while keeping human output unchanged. The suite was raised to 215 tests.
-- PR #250 updated `./ns-menu` so it no longer clears the terminal by default, added `NS_MENU_CLEAR=1` as the opt-in clearing path, and exposed `./ns actions --json` as a numbered menu entry. The suite is now 217 tests.
+```text
+feature/cockpit-action-selection-ux
+```
 
-Latest verified local gates after PR #250:
+Implemented in this branch:
 
-- `217 passed`
-- `ruff check .` passed
-- `agentic-kit check-docs` passed
-- `agentic-kit doctor` passed
-- `agentic-kit doc-mesh-audit` passed
-- `agentic-kit doc-lifecycle-audit` passed
-- `agentic-kit cockpit status` passed
-- `agentic-kit cockpit actions` passed
-- `agentic-kit cockpit actions --json | python -m json.tool` passed
-- `agentic-kit cockpit run git.status` passed
-- `agentic-kit cockpit run workflow.go || true` blocked bounded execution as expected
-- `./ns cockpit` passed
-- `./ns actions` passed
-- `./ns actions --json | python -m json.tool` passed
-- `./ns cockpit-run git.status` passed
-- `./ns cockpit-run workflow.go || true` blocked bounded execution as expected
+- `render_action_selection(...)` in the cockpit domain layer.
+- `agentic-kit cockpit select` as an inspect-only numbered action-selection command.
+- `./ns select` as a thin repo-local adapter.
+- `./ns-menu` entry `15) ./ns select`.
+- Regression coverage for the selection renderer, CLI command, and `ns` / `ns-menu` adapter wiring.
+- CHANGELOG, STATUS, and handoff refresh for the unreleased v0.3.19 slice.
+
+## Safety Contract
+
+The action registry remains the source of truth.
+
+`cockpit select` and `./ns select` are inspect-only. They must not execute actions and must not introduce a second execution path.
+
+`cockpit run` remains the execution path. Read-only actions may run through the existing safety logic. Bounded actions remain blocked unless `cockpit run` receives an explicit allow flag. Destructive actions remain blocked.
+
+No release, tag, merge, push, cleanup, or remote mutation actions are added by this slice.
+
+## Latest verified local gates for this slice
+
+The user locally reported `d` after the sync/test blocks for:
+
+- `agentic-kit cockpit select`
+- `./ns select`
+- targeted tests: `tests/test_cockpit.py`, `tests/test_repo_ns_entrypoint.py`, `tests/test_cli.py`
+- `ruff check .`
+
+Full pre-PR gates still need to be run after the documentation refresh:
+
+```bash
+.venv/bin/python -m pytest -q
+.venv/bin/ruff check .
+.venv/bin/agentic-kit check-docs
+.venv/bin/agentic-kit doctor
+.venv/bin/agentic-kit doc-mesh-audit
+.venv/bin/agentic-kit doc-lifecycle-audit
+```
 
 ## Workflow State
 
-Expected state after the #236 merge:
+Expected state:
 
 - `.agentic/workflow_state` = `IDLE`
-- `.agentic/current_work.yaml` = `state: READY`
+- `.agentic/current_work.yaml` may remain present with `state: READY`
 - no active workflow request
 - no remaining `temp/workflow-evidence-*` branches from recent slices
 
 Normal `ns` behavior in `IDLE` plus `READY` is a no-op. A workflow starts only by explicit request.
-
-Preferred public workflow commands:
-
-```text
-agentic-kit workflow go
-agentic-kit workflow upload-output
-agentic-kit workflow status
-agentic-kit workflow status --explain
-agentic-kit workflow cleanup
-```
-
-Explicit two-step control remains available through `agentic-kit workflow request` followed by `agentic-kit workflow run`.
-
-`agentic-kit workflow cleanup` now also removes stale `temp/workflow-evidence-*` branches from `IDLE` when run inside a Git repository. It keeps the existing no-op behavior for non-Git roots.
-
-Compatibility bridge:
-
-```text
-tools/next-step.py
-```
-
-The compatibility bridge should remain bounded and should not grow into the long-term public API surface.
-
-## Idea Notes and Architecture Options
-
-The current idea-note set is:
-
-- `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md`
-- `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
-- `docs/ideas/LAYERED_CLI_USABILITY.md`
-- `docs/ideas/PATTERN_ADVISOR.md`
-
-These are non-binding idea notes. They preserve useful architecture options without making them automatic implementation requirements.
-
-DCO guidance:
-
-- consider DCO for complex, rule-bound generated outputs when typed cells, validation, selective repair, deterministic rendering, or auditability reduce drift;
-- do not use DCO for simple Markdown, small CLI changes, or documents where direct implementation is clearer;
-- no ADR is required while DCO remains an idea note.
-
-Layered CLI usability guidance:
-
-- keep the Golden Path small;
-- keep daily usage close to `ns`, `doctor`, `check-docs`, `workflow status`, and read-only `workflow status --explain`;
-- classify future public commands or options as Daily, Guided, Maintainer, or Debug before making them prominent;
-- consider an ADR only if these layers become binding command policy or capability boundaries.
-
-Pattern Advisor guidance:
-
-- treat `docs/ideas/PATTERN_ADVISOR.md` as advisory-only and non-binding;
-- use it as a reference when recurring problem classes suggest reusable patterns, anti-patterns, or candidate patterns;
-- the current Pattern Advisor MVP slice adds a small read-only catalog with `patterns list` and `patterns show`; do not implement `patterns suggest`, `advise`, candidate capture, promotion/deprecation, or a broad catalog before this MVP has proven useful;
-- use `docs/reports/pattern_advisor_mvp_contract.md` as the scope boundary for any later read-only Pattern Advisor catalog slice;
-- keep wrapper-project lessons as evidence sources, not wrapper-specific behavior in the kit;
-- consider an ADR only if public Pattern Advisor CLI, binding lifecycle, or advisory behavior becomes maintained architecture.
-
-## AI-assisted development positioning
-
-agentic-project-kit is best understood as a governed AI-assisted development layer, not as a promise of autonomous coding-agent correctness.
-
-The project should continue to emphasize:
-
-- repository state as the durable source of truth instead of chat memory;
-- deterministic gates rather than model trust;
-- explicit workflow states instead of blind execution;
-- auditable evidence transfer for local outputs;
-- release and DOI metadata that can be checked after publication;
-- a clear semantic quality boundary: deterministic gates can check structure and drift, but human review owns semantic correctness unless a property is converted into a deterministic rule;
-- CLI usability discipline so growing automation does not make daily use harder;
-- advisory pattern work as optional support, not as a replacement for maintainer judgment.
-- didactic guidance as a non-binding orientation layer documented in `docs/ideas/DIDACTIC_GUIDANCE.md`, separate from runtime behavior, deterministic gates, and Pattern Advisor implementation.
 
 ## Source of Truth
 
@@ -173,23 +95,21 @@ Read in this order:
 2. `sentinel.yaml`
 3. `docs/architecture/ARCHITECTURE_CONTRACT.md`
 4. `docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md`
-5. `docs/DOCUMENTATION_COVERAGE.yaml`
-6. `docs/architecture/LOCAL_COCKPIT_FOUNDATION.md`
+5. `docs/architecture/LOCAL_COCKPIT_FOUNDATION.md`
+6. `docs/DOCUMENTATION_COVERAGE.yaml`
 7. `AGENTS.md`
 8. `README.md`
 9. `docs/STATUS.md`
 10. `docs/TEST_GATES.md`
 11. `docs/WORKFLOW_OUTPUT_CYCLE.md`
 12. `docs/handoff/CURRENT_HANDOFF.md`
-12. `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md`
-13. `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
-14. `docs/ideas/LAYERED_CLI_USABILITY.md`
-15. `docs/ideas/PATTERN_ADVISOR.md`
-16. `docs/reports/pattern_advisor_mvp_contract.md`
-17. `src/agentic_project_kit/`
-18. `src/agentic_project_kit/doc_lifecycle.py`
-19. `tests/test_doc_lifecycle.py`
-20. `tests/`
+13. `src/agentic_project_kit/cockpit.py`
+14. `src/agentic_project_kit/cli_commands/cockpit.py`
+15. `ns`
+16. `ns-menu`
+17. `tests/test_cockpit.py`
+18. `tests/test_repo_ns_entrypoint.py`
+19. `tests/`
 
 ## Required Local Gate
 
@@ -204,33 +124,12 @@ For this branch, run:
 .venv/bin/agentic-kit doc-lifecycle-audit
 ```
 
-Because state and handoff refreshes can affect repository source-of-truth wording, `agentic-kit doc-mesh-audit` should be run for post-merge state-refresh branches even though it is not yet part of the standard `doctor` gate. `agentic-kit doc-lifecycle-audit` remains useful as a direct smoke check, but it is now also covered by `agentic-kit doctor`.
-
-The normal local workflow shortcuts are:
-
-```bash
-./ns state
-./ns list
-./ns show
-./ns run
-./ns run <work-item-id>
-./ns upload
-```
-
-One-word aliases are available when installed locally: `state`, `list`, `show`, `run`, and `up`.
-
-`ns` should be a no-op in `IDLE` plus `READY` until a workflow is explicitly requested.
-
-## Coverage-sensitive wording
-
-This handoff intentionally keeps coverage terms visible for deterministic gates: documentation coverage, policy packs, policy-pack checks, post-release Zenodo verification, workflow evidence, and semantic quality boundary.
+Because state and handoff refreshes affect repository source-of-truth wording, `agentic-kit doc-mesh-audit` should be run before opening or merging the PR. `agentic-kit doc-lifecycle-audit` remains useful as a direct smoke check and is also covered by `agentic-kit doctor`.
 
 ## Current Branch Work
 
-Completed post-v0.3.9 work now includes PR #195, PR #197, PR #198, PR #200, PR #204, PR #207, and PR #209: didactic guidance was added as a non-binding idea note, workflow evidence shortcuts were implemented, status guidance was aligned with the shortcut path, a contract-only Pattern Advisor MVP report was added, repo-local ns shortcuts reduce Copy-and-Paste for local workflow item selection and execution, named workflow-item runs now restore current_work after bounded execution, and state documentation was refreshed after that fix.
-
-The Local Cockpit Foundation slice has been merged on main. It adds public read-only `cockpit status` and `cockpit actions` commands backed by a structured action inventory. No destructive Git, release, tag, merge, cleanup, or remote cockpit execution has been added.
+The v0.3.19 Cockpit Action Selection UX slice is implementation-complete at the feature-branch level. It should now receive full local gates, then a narrow PR.
 
 ## Next Safe Step
 
-Next safe step: continue from a clean main branch with the Local Cockpit Foundation released and DOI metadata recorded. Keep the cockpit action layer read-only by default until a separate explicit execution contract is approved. Keep the cockpit action layer read-only by default until a separate explicit execution contract is approved.
+Next safe step: sync this branch locally, run full gates after the documentation refresh, inspect the diff, and open a PR if all gates pass.
