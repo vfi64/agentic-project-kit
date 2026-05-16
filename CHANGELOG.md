@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.18 - 2026-05-16
+
+- Updated `./ns-menu` so it no longer clears the terminal by default; screen clearing is now opt-in via `NS_MENU_CLEAR=1`.
+- Added a numbered `./ns actions --json` entry so the menu can consume the schema-versioned cockpit action inventory.
+- Added regression coverage for non-clearing menu behavior and the cockpit JSON menu entry, raising the suite to 217 tests.
+
 ## v0.3.17 - 2026-05-16
 
 Zenodo v0.3.17 DOI: 10.5281/zenodo.20245113

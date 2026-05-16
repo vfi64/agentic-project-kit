@@ -4,22 +4,27 @@ Current version: 0.3.17
 
 Status-date: 2026-05-16
 Project: agentic-project-kit
-Branch: main
+Branch: docs/refresh-v0.3.18-state
 Base branch: main
 
 ## Current Goal
 
 Current version: 0.3.17
 
-v0.3.17 is released and post-release verified with version DOI `10.5281/zenodo.20245113`. The release covers Cockpit Action JSON Inventory: `agentic-kit cockpit actions --json` emits schema-versioned machine-readable action inventory output while human `cockpit actions` output remains unchanged. Cockpit action execution remains unchanged: read-only actions may run through `cockpit run`, bounded actions remain blocked without explicit allow, and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20244944` for v0.3.16.
+v0.3.17 is released and post-release verified with version DOI `10.5281/zenodo.20245113`. Main has advanced beyond v0.3.17 with PR #250. The current v0.3.18 state-refresh line records the `./ns-menu` cockpit JSON consumer update: the menu no longer clears the terminal by default, `NS_MENU_CLEAR=1` restores clearing when desired, and a numbered `./ns actions --json` entry exposes the schema-versioned cockpit action inventory. Cockpit action execution remains unchanged: read-only actions may run through `cockpit run`, bounded actions remain blocked without explicit allow, and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20244944` for v0.3.16.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`.
 
 ## Current Repository State
 
-Current main head after PR #245:
+Current main head after PR #250:
 
 ```text
+844501e Expose cockpit JSON inventory in ns-menu (#250)
+85bd859 Finalize state after v0.3.17 DOI metadata (#249)
+76d4af8 Record v0.3.17 DOI metadata (#248)
+1e4bae9 tag: v0.3.17, Prepare v0.3.17 release metadata (#247)
+09fec92 Refresh state after cockpit action JSON inventory (#246)
 c28a937 Add cockpit action JSON inventory (#245)
 a7b614a Finalize state after v0.3.16 DOI metadata (#244)
 a8c37e6 Record v0.3.16 DOI metadata (#243)
@@ -56,11 +61,12 @@ Verified release and post-merge evidence:
 - PR #232 added the Local Cockpit Foundation with `agentic-kit cockpit status`, `agentic-kit cockpit actions`, `./ns cockpit`, `./ns actions`, and `./ns-menu` cockpit entries. The suite was raised to 202 tests.
 - PR #236 added the Local Cockpit Action Layer with `agentic-kit cockpit run <action-id>`, structured action results, read-only action execution, bounded-action blocking without explicit allow, and destructive-action blocking. The suite is now 210 tests.
 - PR #240 added `./ns cockpit-run <action-id>` and a read-only `./ns cockpit-run git.status` menu entry while keeping bounded and destructive cockpit actions out of the adapter menu. The suite is now 212 tests.
-- PR #245 added `agentic-kit cockpit actions --json` as schema-versioned machine-readable cockpit action inventory output while keeping human output unchanged. The suite is now 215 tests.
+- PR #245 added `agentic-kit cockpit actions --json` as schema-versioned machine-readable cockpit action inventory output while keeping human output unchanged. The suite was raised to 215 tests.
+- PR #250 updated `./ns-menu` so it no longer clears the terminal by default, added `NS_MENU_CLEAR=1` as the opt-in clearing path, and exposed `./ns actions --json` as a numbered menu entry. The suite is now 217 tests.
 
-Latest verified local gates after PR #245:
+Latest verified local gates after PR #250:
 
-- `215 passed`
+- `217 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
@@ -73,6 +79,7 @@ Latest verified local gates after PR #245:
 - `agentic-kit cockpit run workflow.go || true` blocked bounded execution as expected
 - `./ns cockpit` passed
 - `./ns actions` passed
+- `./ns actions --json | python -m json.tool` passed
 - `./ns cockpit-run git.status` passed
 - `./ns cockpit-run workflow.go || true` blocked bounded execution as expected
 
