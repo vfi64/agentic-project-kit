@@ -11,7 +11,7 @@ Base branch: main
 
 Current version: 0.3.15
 
-v0.3.15 is prepared for release. It adds the Local Cockpit Action Layer. `agentic-kit cockpit run <action-id>` now executes registered read-only cockpit actions through the shared action layer, while bounded actions remain blocked without explicit allow and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20242582` for v0.3.14.
+v0.3.15 is released and post-release verified with version DOI `10.5281/zenodo.20244397`. It adds the Local Cockpit Action Layer. `agentic-kit cockpit run <action-id>` now executes registered read-only cockpit actions through the shared action layer, while bounded actions remain blocked without explicit allow and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20242582` for v0.3.14.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`.
 
