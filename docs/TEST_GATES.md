@@ -146,12 +146,13 @@ Required evidence:
     ruff check .
     agentic-kit cockpit status
     agentic-kit cockpit actions
+    agentic-kit cockpit actions --json | python -m json.tool
     agentic-kit cockpit run git.status
     agentic-kit cockpit run workflow.go || true
     ./ns cockpit
     ./ns actions
 
-The action registry must preserve explicit safety classification. Read-only cockpit commands must not execute destructive Git, release, tag, merge, cleanup, or remote operations. `cockpit run` may execute registered `read_only` actions through argument-vector execution. Bounded actions may be listed as action metadata, but they must be blocked unless an explicit bounded-action allow path is used. Destructive actions must remain blocked.
+The action registry must preserve explicit safety classification. Machine-readable inventory output must remain parseable JSON and must not execute actions. Read-only cockpit commands must not execute destructive Git, release, tag, merge, cleanup, or remote operations. `cockpit run` may execute registered `read_only` actions through argument-vector execution. Bounded actions may be listed as action metadata, but they must be blocked unless an explicit bounded-action allow path is used. Destructive actions must remain blocked.
 
 ## Standard Local Gate
 

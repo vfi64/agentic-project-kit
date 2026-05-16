@@ -4,30 +4,30 @@ Current version: 0.3.16
 
 Status-date: 2026-05-16
 Project: agentic-project-kit
-Branch: main
+Branch: docs/refresh-v0.3.17-state
 Base branch: main
 
 ## Current Goal
 
 Current version: 0.3.16
 
-v0.3.16 is released and post-release verified with version DOI `10.5281/zenodo.20244944`. The release covers Cockpit Adapter Hardening: `./ns cockpit-run <action-id>` delegates to `agentic-kit cockpit run <action-id>`, while `./ns-menu` exposes only the read-only `./ns cockpit-run git.status` path. Bounded actions remain blocked without explicit allow and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20244397` for v0.3.15.
+v0.3.16 is released and post-release verified with version DOI `10.5281/zenodo.20244944`. Main has advanced beyond v0.3.16 with PR #245. The current v0.3.17 state-refresh line records Cockpit Action JSON Inventory: `agentic-kit cockpit actions --json` emits schema-versioned machine-readable action inventory output while human `cockpit actions` output remains unchanged. Cockpit action execution remains unchanged: read-only actions may run through `cockpit run`, bounded actions remain blocked without explicit allow, and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20244397` for v0.3.15.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`.
 
 ## Current Repository State
 
-Current main head after PR #240:
+Current main head after PR #245:
 
 ```text
+c28a937 Add cockpit action JSON inventory (#245)
+a7b614a Finalize state after v0.3.16 DOI metadata (#244)
+a8c37e6 Record v0.3.16 DOI metadata (#243)
+018652c tag: v0.3.16, Prepare v0.3.16 release metadata (#242)
+f4fe329 Refresh state after cockpit adapter hardening (#241)
 c1d1de0 Harden cockpit adapter shortcuts (#240)
 4af91ac Record v0.3.15 DOI metadata (#239)
 a3f68be tag: v0.3.15, Prepare v0.3.15 release metadata (#238)
-89740f6 Refresh state after cockpit action layer merge (#237)
-7b65e51 Add local cockpit action execution layer (#236)
-5dacfb9 Record v0.3.14 DOI metadata (#235)
-7b7ea3d tag: v0.3.14, Prepare v0.3.14 release metadata (#234)
-eaac2ac Refresh state after local cockpit foundation (#233)
 ```
 
 Verified release and post-merge evidence:
@@ -56,10 +56,11 @@ Verified release and post-merge evidence:
 - PR #232 added the Local Cockpit Foundation with `agentic-kit cockpit status`, `agentic-kit cockpit actions`, `./ns cockpit`, `./ns actions`, and `./ns-menu` cockpit entries. The suite was raised to 202 tests.
 - PR #236 added the Local Cockpit Action Layer with `agentic-kit cockpit run <action-id>`, structured action results, read-only action execution, bounded-action blocking without explicit allow, and destructive-action blocking. The suite is now 210 tests.
 - PR #240 added `./ns cockpit-run <action-id>` and a read-only `./ns cockpit-run git.status` menu entry while keeping bounded and destructive cockpit actions out of the adapter menu. The suite is now 212 tests.
+- PR #245 added `agentic-kit cockpit actions --json` as schema-versioned machine-readable cockpit action inventory output while keeping human output unchanged. The suite is now 215 tests.
 
-Latest verified local gates after PR #240:
+Latest verified local gates after PR #245:
 
-- `212 passed`
+- `215 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
@@ -67,6 +68,7 @@ Latest verified local gates after PR #240:
 - `agentic-kit doc-lifecycle-audit` passed
 - `agentic-kit cockpit status` passed
 - `agentic-kit cockpit actions` passed
+- `agentic-kit cockpit actions --json | python -m json.tool` passed
 - `agentic-kit cockpit run git.status` passed
 - `agentic-kit cockpit run workflow.go || true` blocked bounded execution as expected
 - `./ns cockpit` passed
