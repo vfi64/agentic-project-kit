@@ -1,4 +1,4 @@
-Current version: 0.3.14
+Current version: 0.3.15
 
 # Project Status
 
@@ -15,9 +15,9 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current State
 
-Current version: 0.3.14
+Current version: 0.3.15
 
-v0.3.14 is released and post-release verified with version DOI `10.5281/zenodo.20242582`. Main has advanced beyond v0.3.14 with PR #236, which adds the Local Cockpit Action Layer: `agentic-kit cockpit run <action-id>` executes registered read-only cockpit actions through a structured result contract, while bounded actions remain blocked without explicit allow and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20241908` for v0.3.13.
+v0.3.15 is prepared for release. It adds the Local Cockpit Action Layer: `agentic-kit cockpit run <action-id>` executes registered read-only cockpit actions through a structured result contract, while bounded actions remain blocked without explicit allow and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20242582` for v0.3.14.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`; the previous post-release Zenodo verification is complete for the immediately preceding release.
 
