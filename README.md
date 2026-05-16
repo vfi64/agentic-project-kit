@@ -305,7 +305,7 @@ agentic-kit patterns show bounded-workflow-evidence
 
 ## Local Cockpit Foundation
 
-The local cockpit foundation exposes a conservative control surface for local project operation. Use `agentic-kit cockpit status` to inspect the current project root, Git branch, dirty-tree state, workflow state, and current-work request state. Use `agentic-kit cockpit actions` to list the structured action inventory. Use `agentic-kit cockpit run <action-id>` to execute explicitly registered read-only cockpit actions through the shared action layer.
+The local cockpit foundation exposes a conservative control surface for local project operation. Use `agentic-kit cockpit status` to inspect the current project root, Git branch, dirty-tree state, workflow state, and current-work request state. Use `agentic-kit cockpit actions` to list the structured action inventory, or `agentic-kit cockpit actions --json` to print the schema-versioned machine-readable action inventory. Use `agentic-kit cockpit run <action-id>` to execute explicitly registered read-only cockpit actions through the shared action layer.
 
 The cockpit action inventory classifies actions by category and safety, including `read_only`, `bounded`, and future `destructive` classes. Cockpit action execution allows `read_only` actions by default, blocks `bounded` actions unless explicitly allowed by the action layer, and blocks `destructive` actions. It does not execute destructive Git, release, tag, merge, cleanup, or remote operations.
 
