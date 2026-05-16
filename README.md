@@ -495,7 +495,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.17` is the current release line covering Cockpit Action JSON Inventory with `agentic-kit cockpit actions --json` for schema-versioned machine-readable action metadata while keeping human cockpit output and cockpit action execution unchanged, with verified DOI `10.5281/zenodo.20245113`. Version `0.3.16` remains the previous archived release covering Cockpit Adapter Hardening with verified DOI `10.5281/zenodo.20244944`.
+Version `0.3.18` is the current release line covering the `./ns-menu` cockpit JSON consumer update: the menu no longer clears the terminal by default, `NS_MENU_CLEAR=1` restores clearing when desired, and `./ns actions --json` exposes the schema-versioned cockpit action inventory from the menu. Version `0.3.17` remains the previous archived release covering Cockpit Action JSON Inventory with verified DOI `10.5281/zenodo.20245113`.
 
 Version `0.3.10` remains the previous archived release covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`.
 
