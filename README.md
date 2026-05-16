@@ -433,6 +433,7 @@ The archived v0.3.8 release has the verified version-specific DOI: `10.5281/zeno
 The archived v0.3.9 release has the verified version-specific DOI: `10.5281/zenodo.20210345`.
 The archived v0.3.10 release has the verified version-specific DOI: `10.5281/zenodo.20214382`.
 The archived v0.3.11 release has the verified version-specific DOI: `10.5281/zenodo.20215460`.
+The archived v0.3.16 release has the verified version-specific DOI: `10.5281/zenodo.20244944`.
 
 ## Governance wrapper projects
 
@@ -492,7 +493,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.16` is the current release line covering Cockpit Adapter Hardening with `./ns cockpit-run <action-id>` delegating to the existing cockpit action layer and `./ns-menu` exposing only the read-only `./ns cockpit-run git.status` path. Version `0.3.15` remains the previous archived release covering the Local Cockpit Action Layer with verified DOI `10.5281/zenodo.20244397`.
+Version `0.3.16` is the current release line covering Cockpit Adapter Hardening with `./ns cockpit-run <action-id>` delegating to the existing cockpit action layer and `./ns-menu` exposing only the read-only `./ns cockpit-run git.status` path, with verified DOI `10.5281/zenodo.20244944`. Version `0.3.15` remains the previous archived release covering the Local Cockpit Action Layer with verified DOI `10.5281/zenodo.20244397`.
 
 Version `0.3.10` remains the previous archived release covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`.
 
@@ -519,5 +520,6 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - v0.3.10: `10.5281/zenodo.20214382`
 - v0.3.11: `10.5281/zenodo.20215460`
 - Verified v0.3.12 version DOI: `10.5281/zenodo.20218213`
+- Verified v0.3.16 version DOI: `10.5281/zenodo.20244944`
 
 Near-term documentation-governance work: stabilize `agentic-kit doc-mesh-audit` as a targeted special gate, collect false positives, then decide whether to promote it into `agentic-kit doctor` before any unconditional default `ns` integration.
