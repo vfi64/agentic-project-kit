@@ -13,12 +13,18 @@ agentic-project-kit generates agent-friendly project skeletons with documentatio
 
 The project itself has a current state layer so work can be continued from the repository state files. Its development model treats the repository, not the chat transcript, as the durable source of truth for current state, gates, handoff, evidence, and release metadata.
 
+## Current Goal
+
+Finish the narrow v0.3.19 Cockpit Action Selection UX slice on `feature/cockpit-action-selection-ux`, then open a PR after full local gates pass.
+
+The slice must stay inspect-only: it may improve action discovery through `agentic-kit cockpit select`, `./ns select`, and a numbered `./ns-menu` entry, but it must not add a new execution path or loosen bounded/destructive action blocking.
+
 ## Current State
 
 Current released version: 0.3.18
 Current development slice: v0.3.19 Cockpit Action Selection UX
 
-v0.3.18 is released and post-release verified with version DOI `10.5281/zenodo.20245754`. The release covers the `./ns-menu` cockpit JSON consumer update: the menu no longer clears the terminal by default, `NS_MENU_CLEAR=1` restores clearing when desired, and a numbered `./ns actions --json` entry exposes the schema-versioned cockpit action inventory. Cockpit action execution remains unchanged: read-only actions may run through `cockpit run`, bounded actions remain blocked without explicit allow, and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`.
+v0.3.18 is released and post-release verified with version DOI `10.5281/zenodo.20245754`. The release covers the `./ns-menu` cockpit JSON consumer update: the menu no longer clears the terminal by default, `NS_MENU_CLEAR=1` restores clearing when desired, and a numbered `./ns actions --json` entry exposes the schema-versioned cockpit action inventory. Cockpit action execution remains unchanged: read-only actions may run through `cockpit run`, bounded actions remain blocked without explicit allow, and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. The post-release Zenodo verification for v0.3.18 is complete.
 
 The active v0.3.19 slice adds an inspect-only cockpit action selection view. `agentic-kit cockpit select` renders a numbered action list from the central cockpit action registry without executing actions. `./ns select` delegates to that command, and `./ns-menu` exposes it as a numbered entry without adding new shell execution logic.
 
@@ -57,6 +63,8 @@ The repository has five related non-binding architecture idea notes:
 - `docs/ideas/DIDACTIC_GUIDANCE.md`
 
 These documents preserve architecture options without making them automatic implementation requirements.
+
+Pattern Advisor remains optional and advisory-only. The current read-only catalog exposes `patterns list` and `patterns show`; it remains a read-only catalog, not an autopilot, a gate, or an automatic architecture decision layer.
 
 ## Documentation-mesh audit state
 
