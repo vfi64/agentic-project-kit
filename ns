@@ -2,6 +2,20 @@
 set -eu
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 cd "$SCRIPT_DIR"
+if [ "${1:-}" = "cockpit" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit cockpit status "$@"
+  fi
+  exec agentic-kit cockpit status "$@"
+fi
+if [ "${1:-}" = "actions" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit cockpit actions "$@"
+  fi
+  exec agentic-kit cockpit actions "$@"
+fi
 if [ "${1:-}" = "state" ] || [ "${1:-}" = "status" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
