@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.3.14 - 2026-05-16
+
+- Added the Local Cockpit Foundation with read-only `agentic-kit cockpit status` and `agentic-kit cockpit actions` commands.
+- Added a structured cockpit action inventory with explicit safety classification for read-only and bounded actions.
+- Added repo-local `./ns cockpit` and `./ns actions` shortcuts plus matching `./ns-menu` entries.
+- Documented the future shared action-layer direction for CLI, shell/menu adapters, and a later Tkinter cockpit without shell-quoting based command synthesis.
+- Refreshed README, documentation coverage, TEST_GATES, STATUS, and CURRENT_HANDOFF after the Local Cockpit Foundation merge.
 ## v0.3.13 - 2026-05-16
 
 Zenodo v0.3.13 DOI: 10.5281/zenodo.20241908
