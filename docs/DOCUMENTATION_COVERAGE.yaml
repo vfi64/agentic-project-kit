@@ -462,3 +462,36 @@ rules:
           - do not weaken tests
           - evidence requirements
           - architecture-contract update
+
+
+  - id: local-cockpit-readme-coverage
+    description: Local cockpit commands, action inventory, safety classes, and adapter direction must remain visible.
+    documents:
+      - path: README.md
+        terms:
+          - Local Cockpit Foundation
+          - agentic-kit cockpit status
+          - agentic-kit cockpit actions
+          - structured action inventory
+          - read_only
+          - bounded
+          - destructive
+          - ./ns cockpit
+          - ./ns actions
+          - Tkinter cockpit
+      - path: docs/architecture/LOCAL_COCKPIT_FOUNDATION.md
+        terms:
+          - Local Cockpit Foundation
+          - shared action inventory
+          - central cockpit status command
+          - CLI adapter
+          - Shell adapter
+          - Tkinter adapter
+          - No shell-quoting based command synthesis
+      - path: docs/TEST_GATES.md
+        terms:
+          - Local Cockpit Gate
+          - agentic-kit cockpit status
+          - agentic-kit cockpit actions
+          - action registry
+          - safety classification
