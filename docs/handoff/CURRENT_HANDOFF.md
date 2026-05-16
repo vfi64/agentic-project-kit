@@ -4,7 +4,7 @@ Current version: 0.3.17
 
 Status-date: 2026-05-16
 Project: agentic-project-kit
-Branch: docs/record-v0.3.17-doi
+Branch: main
 Base branch: main
 
 ## Current Goal
