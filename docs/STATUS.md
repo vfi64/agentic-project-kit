@@ -15,14 +15,14 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current Goal
 
-v0.3.19 Cockpit Action Selection UX is merged on main via PR #255. Next step is release preparation for v0.3.19 after a final main-state verification.
+v0.3.19 Cockpit Action Selection UX is merged on main via PR #255. v0.3.19 is released, post-release verified, and DOI metadata is recorded on main.
 
 The slice must stay inspect-only: it may improve action discovery through `agentic-kit cockpit select`, `./ns select`, and a numbered `./ns-menu` entry, but it must not add a new execution path or loosen bounded/destructive action blocking.
 
 ## Current State
 
 Current released version: 0.3.19
-Current development slice: v0.3.19 Cockpit Action Selection UX
+Completed slice: v0.3.19 Cockpit Action Selection UX
 
 v0.3.19 is released and post-release verified with version DOI `10.5281/zenodo.20246121`. The release covers the `./ns-menu` cockpit JSON consumer update: the menu no longer clears the terminal by default, `NS_MENU_CLEAR=1` restores clearing when desired, and a numbered `./ns actions --json` entry exposes the schema-versioned cockpit action inventory. Cockpit action execution remains unchanged: read-only actions may run through `cockpit run`, bounded actions remain blocked without explicit allow, and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. The post-release Zenodo verification for v0.3.19 is complete.
 
@@ -136,4 +136,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Next safe step: verify main after PR #255 and prepare v0.3.19 release metadata if gates remain green.
+Next safe step: choose the next post-v0.3.19 development slice from the local cockpit/GUI roadmap.
