@@ -11,7 +11,7 @@ Base branch: main
 
 Current version: 0.3.14
 
-v0.3.14 is the current release metadata line. It adds the Local Cockpit Foundation as a read-only cockpit status and action inventory layer, with `agentic-kit cockpit status`, `agentic-kit cockpit actions`, `./ns cockpit`, `./ns actions`, and `./ns-menu` cockpit entries. Previous verified release DOI: `10.5281/zenodo.20241908` for v0.3.13.
+v0.3.14 is released and post-release verified with version DOI `10.5281/zenodo.20242582`. It adds the Local Cockpit Foundation as a read-only cockpit status and action inventory layer, with `agentic-kit cockpit status`, `agentic-kit cockpit actions`, `./ns cockpit`, `./ns actions`, and `./ns-menu` cockpit entries. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20241908` for v0.3.13.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`.
 
@@ -222,4 +222,4 @@ The Local Cockpit Foundation slice has been merged on main. It adds public read-
 
 ## Next Safe Step
 
-Next safe step: run full release gates for v0.3.14, merge the release metadata PR, tag v0.3.14, verify the GitHub release, then record the Zenodo DOI metadata in a follow-up PR. Keep the cockpit action layer read-only by default until a separate explicit execution contract is approved.
+Next safe step: continue from a clean main branch with the Local Cockpit Foundation released and DOI metadata recorded. Keep the cockpit action layer read-only by default until a separate explicit execution contract is approved. Keep the cockpit action layer read-only by default until a separate explicit execution contract is approved.
