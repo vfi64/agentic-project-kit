@@ -43,6 +43,8 @@ show_menu() {
   echo "8)  ./ns fail"
   echo "9)  ./ns status"
   echo "10) ./ns cleanup"
+  echo "11) ./ns cockpit"
+  echo "12) ./ns actions"
   echo
   echo "0)  Beenden"
   echo
@@ -95,6 +97,12 @@ while true; do
       ;;
     10)
       run_ns cleanup
+      ;;
+    11)
+      run_ns cockpit
+      ;;
+    12)
+      run_ns actions
       ;;
     0|q|quit|exit)
       echo "Beendet."

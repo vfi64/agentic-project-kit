@@ -33,3 +33,19 @@ def test_repo_ns_menu_exposes_expected_shortcuts_without_heredocs() -> None:
     assert "<<" not in text
     assert "python -c" not in text
 
+
+
+def test_repo_ns_entrypoint_exposes_cockpit_shortcuts() -> None:
+    text = Path("ns").read_text(encoding="utf-8")
+    assert "agentic-kit cockpit status" in text
+    assert "agentic-kit cockpit actions" in text
+
+
+def test_repo_ns_menu_exposes_cockpit_shortcuts_without_heredocs() -> None:
+    text = Path("ns-menu").read_text(encoding="utf-8")
+    assert "./ns cockpit" in text
+    assert "./ns actions" in text
+    assert "run_ns cockpit" in text
+    assert "run_ns actions" in text
+    assert "<<" not in text
+    assert "python -c" not in text

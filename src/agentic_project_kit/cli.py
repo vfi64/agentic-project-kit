@@ -1,6 +1,7 @@
 import typer
 
 from agentic_project_kit.cli_commands.checks import register_check_commands
+from agentic_project_kit.cli_commands.cockpit import cockpit_app
 from agentic_project_kit.cli_commands.github import register_github_commands
 from agentic_project_kit.cli_commands.init import register_init_command
 from agentic_project_kit.cli_commands.patterns import patterns_app
@@ -19,6 +20,7 @@ register_check_commands(app)
 register_release_commands(app)
 register_validation_commands(app)
 app.add_typer(workflow_app, name="workflow")
+app.add_typer(cockpit_app, name="cockpit")
 app.add_typer(patterns_app, name="patterns")
 app.add_typer(todo_app, name="todo")
 
