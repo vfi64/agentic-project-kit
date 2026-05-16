@@ -17,9 +17,9 @@ The project itself has a current state layer so work can be continued from the r
 
 Current version: 0.3.13
 
-v0.3.13 is being prepared as a release after integrating document lifecycle auditing into `agentic-kit doctor`. v0.3.12 remains the latest post-release verified release with version DOI `10.5281/zenodo.20218213`.
+v0.3.13 is released and post-release verified with version DOI `10.5281/zenodo.20241908`. It integrates document lifecycle auditing into `agentic-kit doctor`.
 
-Previous verified release DOI: `10.5281/zenodo.20215460`; the previous post-release Zenodo verification is complete for the immediately preceding release.
+Previous verified release DOI: `10.5281/zenodo.20218213`; the previous post-release Zenodo verification is complete for the immediately preceding release.
 
 Post-v0.3.6 main has advanced beyond the release tag with governance, usability, workflow-cleanup hardening, Pattern Advisor concept preservation, and a small Guided CLI usability improvement:
 
@@ -230,7 +230,7 @@ Project-level state documentation is machine-checkable:
 
 PR #228 integrated the read-only document lifecycle audit into `agentic-kit doctor`, so lifecycle metadata findings now fail the standard project health check.
 
-Previous verified release DOI: `10.5281/zenodo.20215460`; DOI metadata has been recorded on main.
+Previous verified release DOI: `10.5281/zenodo.20218213`; DOI metadata has been recorded on main.
 
 ## Current Blockers
 
