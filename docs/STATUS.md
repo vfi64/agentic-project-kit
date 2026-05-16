@@ -17,7 +17,7 @@ The project itself has a current state layer so work can be continued from the r
 
 Current version: 0.3.18
 
-v0.3.18 release metadata is being prepared after PR #250 and PR #251. The release covers the `./ns-menu` cockpit JSON consumer update: the menu no longer clears the terminal by default, `NS_MENU_CLEAR=1` restores clearing when desired, and a numbered `./ns actions --json` entry exposes the schema-versioned cockpit action inventory. Cockpit action execution remains unchanged: read-only actions may run through `cockpit run`, bounded actions remain blocked without explicit allow, and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20245113` for v0.3.17.
+v0.3.18 is released and post-release verified with version DOI `10.5281/zenodo.20245754`. The release covers the `./ns-menu` cockpit JSON consumer update: the menu no longer clears the terminal by default, `NS_MENU_CLEAR=1` restores clearing when desired, and a numbered `./ns actions --json` entry exposes the schema-versioned cockpit action inventory. Cockpit action execution remains unchanged: read-only actions may run through `cockpit run`, bounded actions remain blocked without explicit allow, and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20245113` for v0.3.17.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`; the previous post-release Zenodo verification is complete for the immediately preceding release.
 
