@@ -12,7 +12,7 @@ Base branch: main
 Current released version: 0.3.19
 Current completed slice: v0.3.19 Cockpit Action Selection UX
 
-v0.3.19 is released and post-release verified with version DOI `10.5281/zenodo.20246121`. Zenodo concept DOI: `10.5281/zenodo.20101359`. The v0.3.19 DOI metadata is being recorded in PR #259 after `agentic-kit post-release-check --version 0.3.19` passed. The post-release Zenodo verification path remains covered by `agentic-kit post-release-check`.
+v0.3.19 is released and post-release verified with version DOI `10.5281/zenodo.20246121`. Zenodo concept DOI: `10.5281/zenodo.20101359`. The v0.3.19 DOI metadata is recorded on main via PR #259 after `agentic-kit post-release-check --version 0.3.19` passed. The post-release Zenodo verification path remains covered by `agentic-kit post-release-check`.
 
 PR #255 added an inspect-only cockpit action selection view. `agentic-kit cockpit select` renders a numbered action list from the central cockpit action registry without executing actions. `./ns select` delegates to that command, and `./ns-menu` exposes it as a numbered entry without adding new shell execution logic.
 
@@ -132,8 +132,8 @@ Because state and handoff refreshes affect repository source-of-truth wording an
 
 ## Current Branch Work
 
-The v0.3.19 Cockpit Action Selection UX slice is merged on main via PR #255.
+The v0.3.19 Cockpit Action Selection UX slice is released, post-release verified, and DOI metadata is recorded on main.
 
 ## Next Safe Step
 
-Next safe step: verify main after PR #255 and prepare v0.3.19 release metadata if gates remain green.
+Next safe step: choose the next post-v0.3.19 development slice from the local cockpit/GUI roadmap.
