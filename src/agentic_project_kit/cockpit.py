@@ -137,6 +137,24 @@ def render_cockpit_status(status: CockpitStatus) -> str:
     return "\n".join(lines)
 
 
+def action_inventory_as_json_data(actions: list[CockpitAction] | None = None) -> dict[str, object]:
+    selected = actions if actions is not None else cockpit_actions()
+    return {
+        "schema_version": 1,
+        "actions": [
+            {
+                "action_id": action.action_id,
+                "label": action.label,
+                "category": action.category,
+                "safety": action.safety,
+                "command": list(action.command),
+                "description": action.description,
+            }
+            for action in selected
+        ],
+    }
+
+
 def render_action_inventory(actions: list[CockpitAction] | None = None) -> str:
     selected = actions if actions is not None else cockpit_actions()
     lines = ["Local cockpit actions"]

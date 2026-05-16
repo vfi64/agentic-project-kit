@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Annotated
 
@@ -7,6 +8,7 @@ import typer
 from rich.console import Console
 
 from agentic_project_kit.cockpit import (
+    action_inventory_as_json_data,
     build_cockpit_status,
     cockpit_actions,
     render_action_inventory,
@@ -26,8 +28,17 @@ def cockpit_status_command(project_root: Annotated[Path, typer.Option("--root")]
 
 
 @cockpit_app.command("actions")
-def cockpit_actions_command() -> None:
-    console.print(render_action_inventory(cockpit_actions()), markup=False)
+def cockpit_actions_command(
+    json_output: Annotated[
+        bool,
+        typer.Option("--json", help="Print machine-readable JSON action inventory."),
+    ] = False,
+) -> None:
+    actions = cockpit_actions()
+    if json_output:
+        typer.echo(json.dumps(action_inventory_as_json_data(actions), indent=2, sort_keys=True))
+        return
+    console.print(render_action_inventory(actions), markup=False)
 
 
 @cockpit_app.command("run")
