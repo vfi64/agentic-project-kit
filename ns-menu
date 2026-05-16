@@ -30,7 +30,9 @@ run_ns() {
 }
 
 show_menu() {
-  clear
+  if [ "${NS_MENU_CLEAR:-0}" = "1" ]; then
+    clear
+  fi
   echo "agentic-project-kit :: ./ns Menü"
   echo
   echo "1)  ./ns"
@@ -46,6 +48,7 @@ show_menu() {
   echo "11) ./ns cockpit"
   echo "12) ./ns actions"
   echo "13) ./ns cockpit-run git.status"
+  echo "14) ./ns actions --json"
   echo
   echo "0)  Beenden"
   echo
@@ -107,6 +110,9 @@ while true; do
       ;;
     13)
       run_ns cockpit-run git.status
+      ;;
+    14)
+      run_ns actions --json
       ;;
     0|q|quit|exit)
       echo "Beendet."
