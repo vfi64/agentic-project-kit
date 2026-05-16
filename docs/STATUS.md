@@ -5,7 +5,7 @@ Current version: 0.3.18
 Status-date: 2026-05-16
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: feature/cockpit-action-selection-ux
+Current work branch: main
 
 ## Purpose
 
@@ -15,7 +15,7 @@ The project itself has a current state layer so work can be continued from the r
 
 ## Current Goal
 
-Finish the narrow v0.3.19 Cockpit Action Selection UX slice on `feature/cockpit-action-selection-ux`, then open a PR after full local gates pass.
+v0.3.19 Cockpit Action Selection UX is merged on main via PR #255. Next step is release preparation for v0.3.19 after a final main-state verification.
 
 The slice must stay inspect-only: it may improve action discovery through `agentic-kit cockpit select`, `./ns select`, and a numbered `./ns-menu` entry, but it must not add a new execution path or loosen bounded/destructive action blocking.
 
@@ -26,7 +26,7 @@ Current development slice: v0.3.19 Cockpit Action Selection UX
 
 v0.3.18 is released and post-release verified with version DOI `10.5281/zenodo.20245754`. The release covers the `./ns-menu` cockpit JSON consumer update: the menu no longer clears the terminal by default, `NS_MENU_CLEAR=1` restores clearing when desired, and a numbered `./ns actions --json` entry exposes the schema-versioned cockpit action inventory. Cockpit action execution remains unchanged: read-only actions may run through `cockpit run`, bounded actions remain blocked without explicit allow, and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. The post-release Zenodo verification for v0.3.18 is complete.
 
-The active v0.3.19 slice adds an inspect-only cockpit action selection view. `agentic-kit cockpit select` renders a numbered action list from the central cockpit action registry without executing actions. `./ns select` delegates to that command, and `./ns-menu` exposes it as a numbered entry without adding new shell execution logic.
+PR #255 added an inspect-only cockpit action selection view. `agentic-kit cockpit select` renders a numbered action list from the central cockpit action registry without executing actions. `./ns select` delegates to that command, and `./ns-menu` exposes it as a numbered entry without adding new shell execution logic.
 
 ## Recent completed work since v0.3.14
 
@@ -36,7 +36,7 @@ The active v0.3.19 slice adds an inspect-only cockpit action selection view. `ag
 - PR #245 added `agentic-kit cockpit actions --json` as schema-versioned machine-readable cockpit action inventory output while keeping human output unchanged, raising the suite to 215 tests.
 - PR #250 updated `./ns-menu` so it no longer clears the terminal by default, added the `NS_MENU_CLEAR=1` opt-in path, and exposed `./ns actions --json` as a numbered menu entry, raising the suite to 217 tests.
 - PR #254 finalized repository state after v0.3.18 DOI metadata, leaving main clean at `55e37dd`.
-- The current v0.3.19 feature branch adds `agentic-kit cockpit select`, `./ns select`, a numbered `./ns-menu` entry, and regression coverage for the inspect-only action selection UX.
+- PR #255 added `agentic-kit cockpit select`, `./ns select`, a numbered `./ns-menu` entry, and regression coverage for the inspect-only action selection UX.
 
 ## Local Cockpit state
 
@@ -117,7 +117,7 @@ Project-level state documentation is machine-checkable:
 
 ## Current Blockers
 
-No current blockers are known for the v0.3.19 Cockpit Action Selection UX branch.
+No current blockers are known after PR #255.
 
 ## Live Status Commands
 
@@ -136,4 +136,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Next safe step: finish local gates on `feature/cockpit-action-selection-ux`, open a narrow PR for the inspect-only cockpit action selection UX, and keep all action execution semantics unchanged.
+Next safe step: verify main after PR #255 and prepare v0.3.19 release metadata if gates remain green.

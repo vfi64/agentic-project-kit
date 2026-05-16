@@ -4,17 +4,17 @@ Current version: 0.3.18
 
 Status-date: 2026-05-16
 Project: agentic-project-kit
-Branch: feature/cockpit-action-selection-ux
+Branch: main
 Base branch: main
 
 ## Current Goal
 
 Current released version: 0.3.18
-Current development slice: v0.3.19 Cockpit Action Selection UX
+Current completed slice: v0.3.19 Cockpit Action Selection UX
 
 v0.3.18 is released and post-release verified with version DOI `10.5281/zenodo.20245754`. Zenodo concept DOI: `10.5281/zenodo.20101359`. The final post-DOI state cleanup is merged on main at `55e37dd Finalize state after v0.3.18 DOI metadata (#254)`. The post-release Zenodo verification path remains covered by `agentic-kit post-release-check`.
 
-The active v0.3.19 slice adds an inspect-only cockpit action selection view. `agentic-kit cockpit select` renders a numbered action list from the central cockpit action registry without executing actions. `./ns select` delegates to that command, and `./ns-menu` exposes it as a numbered entry without adding new shell execution logic.
+PR #255 added an inspect-only cockpit action selection view. `agentic-kit cockpit select` renders a numbered action list from the central cockpit action registry without executing actions. `./ns select` delegates to that command, and `./ns-menu` exposes it as a numbered entry without adding new shell execution logic.
 
 ## Current Repository State
 
@@ -31,13 +31,13 @@ da14f8b tag: v0.3.18, Prepare v0.3.18 release metadata (#252)
 1e4bae9 tag: v0.3.17, Prepare v0.3.17 release metadata (#247)
 ```
 
-Feature branch:
+Merged PR:
 
 ```text
-feature/cockpit-action-selection-ux
+#255 Add cockpit action selection UX
 ```
 
-Implemented in this branch:
+Implemented by PR #255:
 
 - `render_action_selection(...)` in the cockpit domain layer.
 - `agentic-kit cockpit select` as an inspect-only numbered action-selection command.
@@ -132,8 +132,8 @@ Because state and handoff refreshes affect repository source-of-truth wording an
 
 ## Current Branch Work
 
-The v0.3.19 Cockpit Action Selection UX slice is implementation-complete at the feature-branch level. It should now receive full local gates, then a narrow PR.
+The v0.3.19 Cockpit Action Selection UX slice is merged on main via PR #255.
 
 ## Next Safe Step
 
-Next safe step: sync this branch locally, rerun the doc gates and full gates after the documentation coverage repair, inspect the diff, and open a PR if all gates pass.
+Next safe step: verify main after PR #255 and prepare v0.3.19 release metadata if gates remain green.
