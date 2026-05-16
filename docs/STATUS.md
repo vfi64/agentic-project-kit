@@ -5,7 +5,7 @@ Current version: 0.3.17
 Status-date: 2026-05-16
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: main
+Current work branch: docs/refresh-v0.3.18-state
 
 ## Purpose
 
@@ -17,7 +17,7 @@ The project itself has a current state layer so work can be continued from the r
 
 Current version: 0.3.17
 
-v0.3.17 is released and post-release verified with version DOI `10.5281/zenodo.20245113`. The release covers Cockpit Action JSON Inventory: `agentic-kit cockpit actions --json` emits schema-versioned machine-readable action inventory output while human `cockpit actions` output remains unchanged. Cockpit action execution remains unchanged: read-only actions may run through `cockpit run`, bounded actions remain blocked without explicit allow, and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20244944` for v0.3.16.
+v0.3.17 is released and post-release verified with version DOI `10.5281/zenodo.20245113`. Main has advanced beyond v0.3.17 with PR #250, which updates `./ns-menu` so it no longer clears the terminal by default and adds a numbered `./ns actions --json` menu entry for the schema-versioned cockpit action inventory. Cockpit action execution remains unchanged: read-only actions may run through `cockpit run`, bounded actions remain blocked without explicit allow, and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20244944` for v0.3.16.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`; the previous post-release Zenodo verification is complete for the immediately preceding release.
 
@@ -77,6 +77,7 @@ The latest verified gates before v0.3.7 release preparation were:
 - PR #236 added the Local Cockpit Action Layer with `agentic-kit cockpit run <action-id>`, structured action results, read-only action execution, bounded-action blocking without explicit allow, and destructive-action blocking.
 - PR #240 added `./ns cockpit-run <action-id>` as a repo-local adapter shortcut and exposed only the read-only `./ns cockpit-run git.status` path in `./ns-menu`, raising the suite to 212 tests.
 - PR #245 added `agentic-kit cockpit actions --json` as schema-versioned machine-readable cockpit action inventory output while keeping human output unchanged, raising the suite to 215 tests.
+- PR #250 updated `./ns-menu` so it no longer clears the terminal by default, added the `NS_MENU_CLEAR=1` opt-in path, and exposed `./ns actions --json` as a numbered menu entry, raising the suite to 217 tests.
 
 ## Idea-note state
 
@@ -92,7 +93,7 @@ These documents preserve architecture options without making them automatic impl
 
 Deterministic Cell Orchestration remains optional. Use it only when typed cells, independent validation, selective repair, deterministic rendering, or auditability clearly reduce drift and overall workflow complexity.
 
-Local Cockpit Foundation is now extended by the v0.3.15 action-layer line, the v0.3.16 adapter-hardening line, and the v0.3.17 JSON-inventory line for reducing copy-and-paste through a shared action API. `cockpit actions --json` exposes the action registry as schema-versioned machine-readable metadata without executing actions. `cockpit run` executes registered read-only actions by default, `./ns cockpit-run <action-id>` delegates to that same layer, and bounded or destructive Git, release, tag, merge, cleanup, or remote operations remain blocked by default.
+Local Cockpit Foundation is now extended by the v0.3.15 action-layer line, the v0.3.16 adapter-hardening line, the v0.3.17 JSON-inventory line, and the v0.3.18 menu-consumer line for reducing copy-and-paste through a shared action API. `cockpit actions --json` exposes the action registry as schema-versioned machine-readable metadata without executing actions. `cockpit run` executes registered read-only actions by default, `./ns cockpit-run <action-id>` delegates to that same layer, and bounded or destructive Git, release, tag, merge, cleanup, or remote operations remain blocked by default.
 
 Layered CLI Usability is a review lens for keeping the public command surface manageable. The intended direction is high functionality and high automation internally while keeping the daily Golden Path simple.
 
