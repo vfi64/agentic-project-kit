@@ -68,3 +68,19 @@ def test_repo_ns_menu_exposes_read_only_cockpit_run_shortcut_only() -> None:
     assert "workflow.go" not in text
     assert "<< " not in text
     assert "python -c" not in text
+
+
+def test_ns_menu_does_not_clear_screen_by_default() -> None:
+    menu = Path("ns-menu").read_text(encoding="utf-8")
+
+    assert "show_menu()" in menu
+    assert "NS_MENU_CLEAR:-0" in menu
+    assert "\n  clear\n" not in menu
+
+
+def test_ns_menu_exposes_cockpit_json_inventory_entry() -> None:
+    menu = Path("ns-menu").read_text(encoding="utf-8")
+
+    assert "./ns actions --json" in menu
+    assert "run_ns actions --json" in menu
+    assert "14)" in menu
