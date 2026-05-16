@@ -1,17 +1,17 @@
-Current version: 0.3.15
+Current version: 0.3.16
 
 # Current Handoff
 
 Status-date: 2026-05-16
 Project: agentic-project-kit
-Branch: docs/refresh-v0.3.16-state
+Branch: release/prepare-v0.3.16
 Base branch: main
 
 ## Current Goal
 
-Current version: 0.3.15
+Current version: 0.3.16
 
-v0.3.15 is released and post-release verified with version DOI `10.5281/zenodo.20244397`. Main has advanced beyond v0.3.15 with PR #240. The current v0.3.16 state-refresh line records Cockpit Adapter Hardening: `./ns cockpit-run <action-id>` delegates to `agentic-kit cockpit run <action-id>`, while `./ns-menu` exposes only the read-only `./ns cockpit-run git.status` path. Bounded actions remain blocked without explicit allow and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20242582` for v0.3.14.
+v0.3.16 release metadata is being prepared after PR #240 and PR #241. The release covers Cockpit Adapter Hardening: `./ns cockpit-run <action-id>` delegates to `agentic-kit cockpit run <action-id>`, while `./ns-menu` exposes only the read-only `./ns cockpit-run git.status` path. Bounded actions remain blocked without explicit allow and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20244397` for v0.3.15.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`.
 
