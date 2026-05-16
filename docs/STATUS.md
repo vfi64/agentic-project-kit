@@ -5,7 +5,7 @@ Current version: 0.3.14
 Status-date: 2026-05-16
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/refresh-after-local-cockpit-foundation
+Current work branch: docs/refresh-after-cockpit-action-layer
 
 ## Purpose
 
@@ -17,7 +17,7 @@ The project itself has a current state layer so work can be continued from the r
 
 Current version: 0.3.14
 
-v0.3.14 is released and post-release verified with version DOI `10.5281/zenodo.20242582`. It adds the Local Cockpit Foundation for read-only cockpit status, structured action inventory, `./ns cockpit`, `./ns actions`, and a documented shared action-layer direction toward a later Tkinter cockpit. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20241908` for v0.3.13.
+v0.3.14 is released and post-release verified with version DOI `10.5281/zenodo.20242582`. Main has advanced beyond v0.3.14 with PR #236, which adds the Local Cockpit Action Layer: `agentic-kit cockpit run <action-id>` executes registered read-only cockpit actions through a structured result contract, while bounded actions remain blocked without explicit allow and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20241908` for v0.3.13.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`; the previous post-release Zenodo verification is complete for the immediately preceding release.
 
@@ -74,10 +74,11 @@ The latest verified gates before v0.3.7 release preparation were:
 - PR #207 fixed named workflow-item runs so temporary `.agentic/current_work.yaml` replacement is restored after the bounded step.
 - PR #209 refreshed current-state and handoff documentation after the current_work isolation fix.
 - PR #232 added the Local Cockpit Foundation with `agentic-kit cockpit status`, `agentic-kit cockpit actions`, `./ns cockpit`, `./ns actions`, and a read-only structured action inventory.
+- PR #236 added the Local Cockpit Action Layer with `agentic-kit cockpit run <action-id>`, structured action results, read-only action execution, bounded-action blocking without explicit allow, and destructive-action blocking.
 
 ## Idea-note state
 
-The repository has four related non-binding architecture idea notes:
+The repository has five related non-binding architecture idea notes:
 
 - `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md`
 - `docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md`
@@ -89,7 +90,7 @@ These documents preserve architecture options without making them automatic impl
 
 Deterministic Cell Orchestration remains optional. Use it only when typed cells, independent validation, selective repair, deterministic rendering, or auditability clearly reduce drift and overall workflow complexity.
 
-Local Cockpit Foundation is now the v0.3.14 foundation line for reducing copy-and-paste through a shared action layer. It is read-only by default and does not execute destructive Git, release, tag, merge, cleanup, or remote operations.
+Local Cockpit Foundation is now extended by the v0.3.15 action-layer line for reducing copy-and-paste through a shared action API. `cockpit run` executes registered read-only actions by default, blocks bounded actions without explicit allow, and blocks destructive Git, release, tag, merge, cleanup, or remote operations.
 
 Layered CLI Usability is a review lens for keeping the public command surface manageable. The intended direction is high functionality and high automation internally while keeping the daily Golden Path simple.
 

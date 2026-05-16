@@ -11,15 +11,19 @@ Base branch: main
 
 Current version: 0.3.14
 
-v0.3.14 is released and post-release verified with version DOI `10.5281/zenodo.20242582`. It adds the Local Cockpit Foundation as a read-only cockpit status and action inventory layer, with `agentic-kit cockpit status`, `agentic-kit cockpit actions`, `./ns cockpit`, `./ns actions`, and `./ns-menu` cockpit entries. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20241908` for v0.3.13.
+v0.3.14 is released and post-release verified with version DOI `10.5281/zenodo.20242582`. Main has advanced beyond v0.3.14 with PR #236, adding the Local Cockpit Action Layer. `agentic-kit cockpit run <action-id>` now executes registered read-only cockpit actions through the shared action layer, while bounded actions remain blocked without explicit allow and destructive actions remain blocked. Zenodo concept DOI: `10.5281/zenodo.20101359`. Previous verified release DOI: `10.5281/zenodo.20241908` for v0.3.13.
 
 Previous verified release DOI: `10.5281/zenodo.20218213`.
 
 ## Current Repository State
 
-Current main head after PR #232:
+Current main head after PR #236:
 
 ```text
+7b65e51 Add local cockpit action execution layer (#236)
+5dacfb9 Record v0.3.14 DOI metadata (#235)
+7b7ea3d tag: v0.3.14, Prepare v0.3.14 release metadata (#234)
+eaac2ac Refresh state after local cockpit foundation (#233)
 721b521 Add local cockpit foundation (#232)
 c40d798 Record v0.3.13 DOI metadata (#231)
 18e6427 tag: v0.3.13, Prepare v0.3.13 release metadata (#230)
@@ -57,11 +61,12 @@ Verified release and post-merge evidence:
 - PR #223 classified idea, planning, roadmap, and strategy documents with bounded lifecycle status headers.
 - PR #224 added read-only `agentic-kit doc-lifecycle-audit` lifecycle metadata checks and raised the suite to 194 tests.
 - PR #228 integrated the document lifecycle audit into `agentic-kit doctor` and raised the suite to 195 tests.
-- PR #232 added the Local Cockpit Foundation with `agentic-kit cockpit status`, `agentic-kit cockpit actions`, `./ns cockpit`, `./ns actions`, and `./ns-menu` cockpit entries. The suite is now 202 tests.
+- PR #232 added the Local Cockpit Foundation with `agentic-kit cockpit status`, `agentic-kit cockpit actions`, `./ns cockpit`, `./ns actions`, and `./ns-menu` cockpit entries. The suite was raised to 202 tests.
+- PR #236 added the Local Cockpit Action Layer with `agentic-kit cockpit run <action-id>`, structured action results, read-only action execution, bounded-action blocking without explicit allow, and destructive-action blocking. The suite is now 210 tests.
 
-Latest verified local gates after PR #232:
+Latest verified local gates after PR #236:
 
-- `202 passed`
+- `210 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
@@ -69,12 +74,14 @@ Latest verified local gates after PR #232:
 - `agentic-kit doc-lifecycle-audit` passed
 - `agentic-kit cockpit status` passed
 - `agentic-kit cockpit actions` passed
+- `agentic-kit cockpit run git.status` passed
+- `agentic-kit cockpit run workflow.go || true` blocked bounded execution as expected
 - `./ns cockpit` passed
 - `./ns actions` passed
 
 ## Workflow State
 
-Expected state after the #228 merge:
+Expected state after the #236 merge:
 
 - `.agentic/workflow_state` = `IDLE`
 - `.agentic/current_work.yaml` = `state: READY`
