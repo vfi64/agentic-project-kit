@@ -9,7 +9,7 @@ Current work branch: none / main is current
 
 ## Purpose
 
-agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, task tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, architecture-contract governance, documentation coverage checks, generated project contracts, project profiles, policy packs, policy-pack doctor checks, deterministic document-quality heuristics, output-contract validation, bounded structural repair, workflow evidence capture, and documentation-mesh drift auditing.
+agentic-project-kit generates agent-friendly project skeletons with documentation, GitHub workflow templates, task tracking, test gates, handoff files, release-state validation, citation metadata, Zenodo-backed archival, project-health diagnostics, architecture-contract governance, documentation coverage checks, generated project contracts, project profiles, policy packs, policy-pack doctor checks, deterministic document-quality heuristics, output-contract validation, bounded structural repair, workflow evidence capture, documentation-mesh drift auditing, and document lifecycle auditing.
 
 The project itself has a current state layer so work can be continued from the repository state files. Its development model treats the repository, not the chat transcript, as the durable source of truth for current state, gates, handoff, evidence, and release metadata.
 
@@ -222,18 +222,19 @@ Project-level state documentation is machine-checkable:
 - `agentic-kit doctor` checks required project files, project contract status, policy-pack checks, documentation gates, machine-readable task gates, and version drift including package `__version__` drift.
 - `agentic-kit check-docs` checks documentation coverage and deterministic document-quality heuristics.
 - `agentic-kit doc-mesh-audit` checks targeted documentation-mesh drift classes but is not yet part of the standard doctor/default workflow.
+- `agentic-kit doc-lifecycle-audit` checks bounded lifecycle metadata for idea, planning, roadmap, and strategy documents but is not yet part of the standard doctor/default workflow.
 - `agentic-kit release-plan` and `agentic-kit release-check` support release-state validation before maintainer-owned tagging and publication.
 - `agentic-kit post-release-check` verifies GitHub release and Zenodo archive state after publication.
 
 ## Current Goal
 
-PR #221 defined a documentation information architecture contract before UI and CLI polish. The new contract lives in `docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md`, is registered in documentation coverage, and is included in the documentation mesh as a required architecture document.
+PR #221 defined a documentation information architecture contract before UI and CLI polish. PR #224 added a read-only `agentic-kit doc-lifecycle-audit` command for bounded lifecycle metadata checks across idea, planning, roadmap, and strategy documents.
 
 Previous verified release DOI: `10.5281/zenodo.20215460`; DOI metadata has been recorded on main.
 
 ## Current Blockers
 
-- No current blockers are known after PR #195.
+- No current blockers are known after PR #224.
 - Next work should start from a new narrow slice with an explicit command-level contract.
 
 ## Live Status Commands
