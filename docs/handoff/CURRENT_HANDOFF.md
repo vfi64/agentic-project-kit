@@ -11,15 +11,17 @@ Base branch: main
 
 Current version: 0.3.12
 
-v0.3.12 is released and post-release verified with version DOI `10.5281/zenodo.20218213`. It covers the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands. PR #221 defined a documentation information architecture contract before UI and CLI polish. PR #224 added a read-only `agentic-kit doc-lifecycle-audit` command for bounded lifecycle metadata checks.
+v0.3.12 is released and post-release verified with version DOI `10.5281/zenodo.20218213`. It covers the read-only Pattern Advisor catalog and advisory-only `patterns list` / `patterns show` commands. PR #221 defined a documentation information architecture contract before UI and CLI polish. PR #224 added read-only lifecycle metadata checks. PR #228 integrated the document lifecycle audit into `agentic-kit doctor`.
 
 Previous verified release DOI: `10.5281/zenodo.20215460`.
 
 ## Current Repository State
 
-Current main head after PR #226:
+Current main head after PR #228:
 
 ```text
+ab9a46d Include document lifecycle audit in doctor (#228)
+efd0863 Refresh handoff after PR 226 (#227)
 7bcbc80 Refresh handoff after document lifecycle state merge (#226)
 24c7e32 Refresh state after document lifecycle audit merge (#225)
 a4c88fb Add read-only document lifecycle audit (#224)
@@ -54,10 +56,11 @@ Verified release and post-merge evidence:
 - PR #222 refreshed current-state and handoff documentation after PR #221.
 - PR #223 classified idea, planning, roadmap, and strategy documents with bounded lifecycle status headers.
 - PR #224 added read-only `agentic-kit doc-lifecycle-audit` lifecycle metadata checks and raised the suite to 194 tests.
+- PR #228 integrated the document lifecycle audit into `agentic-kit doctor` and raised the suite to 195 tests.
 
-Latest verified local gates after PR #224:
+Latest verified local gates after PR #228:
 
-- `194 passed`
+- `195 passed`
 - `ruff check .` passed
 - `agentic-kit check-docs` passed
 - `agentic-kit doctor` passed
@@ -66,7 +69,7 @@ Latest verified local gates after PR #224:
 
 ## Workflow State
 
-Expected state after the #226 merge:
+Expected state after the #228 merge:
 
 - `.agentic/workflow_state` = `IDLE`
 - `.agentic/current_work.yaml` = `state: READY`
@@ -184,7 +187,7 @@ For this branch, run:
 .venv/bin/agentic-kit doc-lifecycle-audit
 ```
 
-Because state and handoff refreshes can affect repository source-of-truth wording, `agentic-kit doc-mesh-audit` and `agentic-kit doc-lifecycle-audit` should be run for post-merge state-refresh branches even though they are not yet part of the standard `doctor` gate.
+Because state and handoff refreshes can affect repository source-of-truth wording, `agentic-kit doc-mesh-audit` should be run for post-merge state-refresh branches even though it is not yet part of the standard `doctor` gate. `agentic-kit doc-lifecycle-audit` remains useful as a direct smoke check, but it is now also covered by `agentic-kit doctor`.
 
 The normal local workflow shortcuts are:
 
