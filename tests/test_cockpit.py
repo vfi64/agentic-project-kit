@@ -3,7 +3,7 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
-from agentic_project_kit.cockpit import BOUNDED, READ_ONLY, action_by_id, cockpit_actions
+from agentic_project_kit.cockpit import BOUNDED, DESTRUCTIVE, READ_ONLY, CockpitAction, action_by_id, cockpit_actions, run_cockpit_action
 
 
 runner = CliRunner()
@@ -46,7 +46,7 @@ def test_cockpit_status_command_is_read_only(tmp_path: Path) -> None:
     assert "current_work=present" in result.output
     assert "current_work_state=READY" in result.output
     assert "This command is read-only." in result.output
-    assert "does not execute git, release, or workflow actions yet" in result.output
+    assert "Cockpit action execution allows read-only actions only by default." in result.output
 
 
 def test_cockpit_actions_command_lists_structured_actions() -> None:
@@ -57,3 +57,110 @@ def test_cockpit_actions_command_lists_structured_actions() -> None:
     assert "workflow.state [workflow/read_only]" in result.output
     assert "workflow.go [workflow/bounded]" in result.output
     assert "release.plan [release/read_only]" in result.output
+
+
+def test_cockpit_run_allows_read_only_action_with_argument_vector(tmp_path: Path) -> None:
+    calls = []
+
+    class Completed:
+        returncode = 0
+        stdout = "ok\n"
+        stderr = ""
+
+    def executor(command: tuple[str, ...], root: Path):
+        calls.append((command, root))
+        return Completed()
+
+    result = run_cockpit_action("git.status", tmp_path, executor=executor)
+
+    assert result.allowed is True
+    assert result.executed is True
+    assert result.returncode == 0
+    assert result.stdout == "ok"
+    assert calls == [(("git", "status", "--short"), tmp_path.resolve())]
+
+
+def test_cockpit_run_blocks_unknown_action(tmp_path: Path) -> None:
+    result = run_cockpit_action("missing.action", tmp_path)
+
+    assert result.allowed is False
+    assert result.executed is False
+    assert result.returncode is None
+    assert "Unknown cockpit action" in result.message
+
+
+def test_cockpit_run_blocks_bounded_without_explicit_allow_flag(tmp_path: Path) -> None:
+    result = run_cockpit_action("workflow.go", tmp_path)
+
+    assert result.allowed is False
+    assert result.executed is False
+    assert "Blocked bounded cockpit action" in result.message
+
+
+def test_cockpit_run_blocks_destructive_actions(tmp_path: Path) -> None:
+    actions = [CockpitAction("git.push", "Git push", "git", ("git", "push"), DESTRUCTIVE, "Push changes.")]
+
+    result = run_cockpit_action("git.push", tmp_path, actions=actions)
+
+    assert result.allowed is False
+    assert result.executed is False
+    assert "Blocked destructive cockpit action" in result.message
+
+
+def test_cockpit_run_does_not_use_shell_string_assembly(tmp_path: Path) -> None:
+    observed = []
+
+    class Completed:
+        returncode = 0
+        stdout = ""
+        stderr = ""
+
+    def executor(command: tuple[str, ...], root: Path):
+        observed.append(command)
+        return Completed()
+
+    result = run_cockpit_action("git.status", tmp_path, executor=executor)
+
+    assert result.allowed is True
+    assert isinstance(observed[0], tuple)
+    assert observed[0] == ("git", "status", "--short")
+    assert "git status --short" != observed[0]
+
+
+def test_cockpit_run_read_only_does_not_mutate_hidden_state(tmp_path: Path) -> None:
+    agentic_dir = tmp_path / ".agentic"
+    agentic_dir.mkdir()
+    state_file = agentic_dir / "workflow_state"
+    work_file = agentic_dir / "current_work.yaml"
+    state_file.write_text("IDLE\n", encoding="utf-8")
+    work_file.write_text("name: demo\nstate: READY\nsteps: []\n", encoding="utf-8")
+    before = {path.name: path.read_text(encoding="utf-8") for path in agentic_dir.iterdir()}
+
+    class Completed:
+        returncode = 0
+        stdout = ""
+        stderr = ""
+
+    result = run_cockpit_action("git.status", tmp_path, executor=lambda command, root: Completed())
+    after = {path.name: path.read_text(encoding="utf-8") for path in agentic_dir.iterdir()}
+
+    assert result.allowed is True
+    assert after == before
+
+
+def test_cockpit_run_cli_executes_read_only_action() -> None:
+    result = runner.invoke(app, ["cockpit", "run", "git.status"])
+
+    assert result.exit_code == 0, result.output
+    assert "action_id=git.status" in result.output
+    assert "allowed=true" in result.output
+    assert "executed=true" in result.output
+
+
+def test_cockpit_run_cli_blocks_bounded_action_without_allow_flag() -> None:
+    result = runner.invoke(app, ["cockpit", "run", "workflow.go"])
+
+    assert result.exit_code == 2
+    assert "allowed=false" in result.output
+    assert "executed=false" in result.output
+    assert "Blocked bounded cockpit action" in result.output

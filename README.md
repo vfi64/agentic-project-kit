@@ -305,9 +305,9 @@ agentic-kit patterns show bounded-workflow-evidence
 
 ## Local Cockpit Foundation
 
-The local cockpit foundation exposes a read-only control surface for local project operation. Use `agentic-kit cockpit status` to inspect the current project root, Git branch, dirty-tree state, workflow state, and current-work request state. Use `agentic-kit cockpit actions` to list the structured action inventory.
+The local cockpit foundation exposes a conservative control surface for local project operation. Use `agentic-kit cockpit status` to inspect the current project root, Git branch, dirty-tree state, workflow state, and current-work request state. Use `agentic-kit cockpit actions` to list the structured action inventory. Use `agentic-kit cockpit run <action-id>` to execute explicitly registered read-only cockpit actions through the shared action layer.
 
-The cockpit action inventory classifies actions by category and safety, including `read_only`, `bounded`, and future `destructive` classes. In the v0.3.14 foundation, cockpit commands inspect status and action metadata only; they do not execute destructive Git, release, tag, merge, cleanup, or remote operations.
+The cockpit action inventory classifies actions by category and safety, including `read_only`, `bounded`, and future `destructive` classes. Cockpit action execution allows `read_only` actions by default, blocks `bounded` actions unless explicitly allowed by the action layer, and blocks `destructive` actions. It does not execute destructive Git, release, tag, merge, cleanup, or remote operations.
 
 Repo-local shortcuts are available through `./ns cockpit` and `./ns actions`. The optional `./ns-menu` helper includes the same cockpit entries. The long-term direction is a shared action layer that can be reused by CLI, shell/menu adapters, and a later Tkinter cockpit without assembling fragile shell snippets.
 

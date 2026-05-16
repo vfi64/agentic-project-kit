@@ -6,7 +6,13 @@ from typing import Annotated
 import typer
 from rich.console import Console
 
-from agentic_project_kit.cockpit import build_cockpit_status, cockpit_actions, render_action_inventory, render_cockpit_status
+from agentic_project_kit.cockpit import (
+    build_cockpit_status,
+    cockpit_actions,
+    render_action_inventory,
+    render_cockpit_status,
+    run_cockpit_action,
+)
 
 
 cockpit_app = typer.Typer(help="Inspect local cockpit status and structured project actions.")
@@ -22,3 +28,26 @@ def cockpit_status_command(project_root: Annotated[Path, typer.Option("--root")]
 @cockpit_app.command("actions")
 def cockpit_actions_command() -> None:
     console.print(render_action_inventory(cockpit_actions()), markup=False)
+
+
+@cockpit_app.command("run")
+def cockpit_run_command(
+    action_id: str,
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    allow_bounded: Annotated[bool, typer.Option("--allow-bounded")] = False,
+) -> None:
+    result = run_cockpit_action(action_id, project_root.resolve(), allow_bounded=allow_bounded)
+    console.print(f"action_id={result.action_id}", markup=False)
+    console.print(f"allowed={str(result.allowed).lower()}", markup=False)
+    console.print(f"executed={str(result.executed).lower()}", markup=False)
+    if result.returncode is not None:
+        console.print(f"returncode={result.returncode}", markup=False)
+    console.print(result.message, markup=False)
+    if result.stdout:
+        console.print(result.stdout, markup=False)
+    if result.stderr:
+        console.print(result.stderr, markup=False)
+    if not result.allowed:
+        raise typer.Exit(code=2)
+    if result.returncode not in (None, 0):
+        raise typer.Exit(code=result.returncode)

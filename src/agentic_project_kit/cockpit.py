@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 import subprocess
+from typing import Callable
 
 
 @dataclass(frozen=True)
@@ -25,9 +26,22 @@ class CockpitStatus:
     current_work_state: str | None
 
 
+@dataclass(frozen=True)
+class CockpitActionResult:
+    action_id: str
+    allowed: bool
+    executed: bool
+    returncode: int | None
+    stdout: str
+    stderr: str
+    message: str
+
+
 READ_ONLY = "read_only"
 BOUNDED = "bounded"
 DESTRUCTIVE = "destructive"
+
+CommandExecutor = Callable[[tuple[str, ...], Path], subprocess.CompletedProcess[str]]
 
 
 def cockpit_actions() -> list[CockpitAction]:
@@ -46,11 +60,44 @@ def cockpit_actions() -> list[CockpitAction]:
     ]
 
 
-def action_by_id(action_id: str) -> CockpitAction | None:
-    for action in cockpit_actions():
+def action_by_id(action_id: str, actions: list[CockpitAction] | None = None) -> CockpitAction | None:
+    selected = actions if actions is not None else cockpit_actions()
+    for action in selected:
         if action.action_id == action_id:
             return action
     return None
+
+
+def run_cockpit_action(
+    action_id: str,
+    project_root: Path,
+    *,
+    allow_bounded: bool = False,
+    actions: list[CockpitAction] | None = None,
+    executor: CommandExecutor | None = None,
+) -> CockpitActionResult:
+    action = action_by_id(action_id, actions)
+    if action is None:
+        return CockpitActionResult(action_id, False, False, None, "", "", f"Unknown cockpit action: {action_id}")
+    if action.safety == DESTRUCTIVE:
+        return CockpitActionResult(action.action_id, False, False, None, "", "", f"Blocked destructive cockpit action: {action.action_id}")
+    if action.safety == BOUNDED and not allow_bounded:
+        return CockpitActionResult(action.action_id, False, False, None, "", "", f"Blocked bounded cockpit action without explicit allow flag: {action.action_id}")
+    if action.safety not in {READ_ONLY, BOUNDED}:
+        return CockpitActionResult(action.action_id, False, False, None, "", "", f"Blocked cockpit action with unknown safety class: {action.safety}")
+
+    runner = executor if executor is not None else _run_command
+    completed = runner(action.command, project_root.resolve())
+
+    return CockpitActionResult(
+        action.action_id,
+        True,
+        True,
+        completed.returncode,
+        completed.stdout.strip(),
+        completed.stderr.strip(),
+        "Cockpit action executed.",
+    )
 
 
 def build_cockpit_status(project_root: Path) -> CockpitStatus:
@@ -82,7 +129,7 @@ def render_cockpit_status(status: CockpitStatus) -> str:
         "",
         "Safety:",
         "- This command is read-only.",
-        "- Cockpit foundation does not execute git, release, or workflow actions yet.",
+        "- Cockpit action execution allows read-only actions only by default.",
         "",
         "Next:",
         "- Use cockpit actions to inspect the available action inventory.",
@@ -119,6 +166,10 @@ def _git_stdout(root: Path, args: list[str], default: str) -> str:
     if completed.returncode != 0:
         return default
     return completed.stdout.strip() or default
+
+
+def _run_command(command: tuple[str, ...], root: Path) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(list(command), cwd=root, text=True, capture_output=True, check=False)
 
 
 def _present(value: bool) -> str:
