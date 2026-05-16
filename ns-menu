@@ -45,6 +45,7 @@ show_menu() {
   echo "10) ./ns cleanup"
   echo "11) ./ns cockpit"
   echo "12) ./ns actions"
+  echo "13) ./ns cockpit-run git.status"
   echo
   echo "0)  Beenden"
   echo
@@ -103,6 +104,9 @@ while true; do
       ;;
     12)
       run_ns actions
+      ;;
+    13)
+      run_ns cockpit-run git.status
       ;;
     0|q|quit|exit)
       echo "Beendet."
