@@ -17,9 +17,10 @@ Previous verified release DOI: `10.5281/zenodo.20215460`.
 
 ## Current Repository State
 
-Current main head after PR #224:
+Current main head after PR #225:
 
 ```text
+24c7e32 Refresh state after document lifecycle audit merge (#225)
 a4c88fb Add read-only document lifecycle audit (#224)
 a9f9091 Classify planning roadmap strategy and idea documents (#223)
 cc48093 Refresh state after documentation information architecture merge (#222)
@@ -64,7 +65,7 @@ Latest verified local gates after PR #224:
 
 ## Workflow State
 
-Expected state after the #224 merge:
+Expected state after the #225 merge:
 
 - `.agentic/workflow_state` = `IDLE`
 - `.agentic/current_work.yaml` = `state: READY`
@@ -182,7 +183,7 @@ For this branch, run:
 .venv/bin/agentic-kit doc-lifecycle-audit
 ```
 
-Because this branch changes current-state and handoff wording after PR #224, `agentic-kit doc-mesh-audit` and `agentic-kit doc-lifecycle-audit` are required before merge even though they are not yet part of the standard `doctor` gate.
+Because state and handoff refreshes can affect repository source-of-truth wording, `agentic-kit doc-mesh-audit` and `agentic-kit doc-lifecycle-audit` should be run for post-merge state-refresh branches even though they are not yet part of the standard `doctor` gate.
 
 The normal local workflow shortcuts are:
 
