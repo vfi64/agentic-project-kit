@@ -219,22 +219,22 @@ Project-level state documentation is machine-checkable:
 
 ## Project health diagnostics
 
-- `agentic-kit doctor` checks required project files, project contract status, policy-pack checks, documentation gates, machine-readable task gates, and version drift including package `__version__` drift.
+- `agentic-kit doctor` checks required project files, project contract status, policy-pack checks, documentation gates, document lifecycle metadata, machine-readable task gates, and version drift including package `__version__` drift.
 - `agentic-kit check-docs` checks documentation coverage and deterministic document-quality heuristics.
 - `agentic-kit doc-mesh-audit` checks targeted documentation-mesh drift classes but is not yet part of the standard doctor/default workflow.
-- `agentic-kit doc-lifecycle-audit` checks bounded lifecycle metadata for idea, planning, roadmap, and strategy documents but is not yet part of the standard doctor/default workflow.
+- `agentic-kit doc-lifecycle-audit` checks bounded lifecycle metadata for idea, planning, roadmap, and strategy documents and is now included in `agentic-kit doctor`.
 - `agentic-kit release-plan` and `agentic-kit release-check` support release-state validation before maintainer-owned tagging and publication.
 - `agentic-kit post-release-check` verifies GitHub release and Zenodo archive state after publication.
 
 ## Current Goal
 
-PR #221 defined a documentation information architecture contract before UI and CLI polish. PR #224 added a read-only `agentic-kit doc-lifecycle-audit` command for bounded lifecycle metadata checks across idea, planning, roadmap, and strategy documents.
+PR #228 integrated the read-only document lifecycle audit into `agentic-kit doctor`, so lifecycle metadata findings now fail the standard project health check.
 
 Previous verified release DOI: `10.5281/zenodo.20215460`; DOI metadata has been recorded on main.
 
 ## Current Blockers
 
-- No current blockers are known after PR #224.
+- No current blockers are known after PR #228.
 - Next work should start from a new narrow slice with an explicit command-level contract.
 
 ## Live Status Commands
