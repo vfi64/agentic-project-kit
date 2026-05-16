@@ -165,6 +165,28 @@ def render_action_inventory(actions: list[CockpitAction] | None = None) -> str:
     return "\n".join(lines)
 
 
+def render_action_selection(actions: list[CockpitAction] | None = None) -> str:
+    selected = actions if actions is not None else cockpit_actions()
+    lines = [
+        "Local cockpit action selection",
+        "Safety: selection is inspect-only; no action is executed.",
+        "",
+    ]
+    for index, action in enumerate(selected, start=1):
+        command = " ".join(action.command)
+        lines.append(f"{index:2d}) {action.action_id} [{action.category}/{action.safety}]")
+        lines.append(f"    label: {action.label}")
+        lines.append(f"    command: {command}")
+        lines.append(f"    {action.description}")
+    lines.extend([
+        "",
+        "Next:",
+        "- Run read-only actions explicitly with: agentic-kit cockpit run <action-id>",
+        "- Bounded actions remain blocked unless the run command receives an explicit allow flag.",
+    ])
+    return "\n".join(lines)
+
+
 def _read_text(path: Path, default: str) -> str:
     if not path.exists():
         return default

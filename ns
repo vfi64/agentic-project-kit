@@ -16,6 +16,13 @@ if [ "${1:-}" = "actions" ]; then
   fi
   exec agentic-kit cockpit actions "$@"
 fi
+if [ "${1:-}" = "select" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit cockpit select "$@"
+  fi
+  exec agentic-kit cockpit select "$@"
+fi
 if [ "${1:-}" = "cockpit-run" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then

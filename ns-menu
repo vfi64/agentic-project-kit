@@ -49,6 +49,7 @@ show_menu() {
   echo "12) ./ns actions"
   echo "13) ./ns cockpit-run git.status"
   echo "14) ./ns actions --json"
+  echo "15) ./ns select"
   echo
   echo "0)  Beenden"
   echo
@@ -113,6 +114,9 @@ while true; do
       ;;
     14)
       run_ns actions --json
+      ;;
+    15)
+      run_ns select
       ;;
     0|q|quit|exit)
       echo "Beendet."

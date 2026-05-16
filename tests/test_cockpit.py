@@ -4,7 +4,7 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
-from agentic_project_kit.cockpit import BOUNDED, DESTRUCTIVE, READ_ONLY, CockpitAction, action_by_id, action_inventory_as_json_data, cockpit_actions, run_cockpit_action
+from agentic_project_kit.cockpit import BOUNDED, DESTRUCTIVE, READ_ONLY, CockpitAction, action_by_id, action_inventory_as_json_data, cockpit_actions, render_action_selection, run_cockpit_action
 
 
 runner = CliRunner()
@@ -58,6 +58,31 @@ def test_cockpit_actions_command_lists_structured_actions() -> None:
     assert "workflow.state [workflow/read_only]" in result.output
     assert "workflow.go [workflow/bounded]" in result.output
     assert "release.plan [release/read_only]" in result.output
+
+
+def test_cockpit_select_renderer_lists_numbered_actions_without_execution_contract() -> None:
+    action = CockpitAction("demo.action", "Demo", "demo", ("demo", "run"), READ_ONLY, "Demo action.")
+
+    output = render_action_selection([action])
+
+    assert "Local cockpit action selection" in output
+    assert "Safety: selection is inspect-only; no action is executed." in output
+    assert " 1) demo.action [demo/read_only]" in output
+    assert "label: Demo" in output
+    assert "command: demo run" in output
+    assert "agentic-kit cockpit run <action-id>" in output
+
+
+def test_cockpit_select_cli_is_inspect_only_and_does_not_execute_actions() -> None:
+    result = runner.invoke(app, ["cockpit", "select"])
+
+    assert result.exit_code == 0, result.output
+    assert "Local cockpit action selection" in result.output
+    assert "git.status [git/read_only]" in result.output
+    assert "workflow.go [workflow/bounded]" in result.output
+    assert "allowed=true" not in result.output
+    assert "executed=true" not in result.output
+    assert "Cockpit action executed." not in result.output
 
 
 def test_cockpit_run_allows_read_only_action_with_argument_vector(tmp_path: Path) -> None:

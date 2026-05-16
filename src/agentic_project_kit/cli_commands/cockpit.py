@@ -12,6 +12,7 @@ from agentic_project_kit.cockpit import (
     build_cockpit_status,
     cockpit_actions,
     render_action_inventory,
+    render_action_selection,
     render_cockpit_status,
     run_cockpit_action,
 )
@@ -39,6 +40,12 @@ def cockpit_actions_command(
         typer.echo(json.dumps(action_inventory_as_json_data(actions), indent=2, sort_keys=True))
         return
     console.print(render_action_inventory(actions), markup=False)
+
+
+@cockpit_app.command("select")
+def cockpit_select_command() -> None:
+    actions = cockpit_actions()
+    console.print(render_action_selection(actions), markup=False)
 
 
 @cockpit_app.command("run")
