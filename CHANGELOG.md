@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.3.15 - Unreleased
+## v0.3.15 - 2026-05-16
 
 - Added `agentic-kit cockpit run <action-id>` for registered read-only cockpit actions.
 - Added a structured cockpit action result and execution layer with argument-vector command execution.
