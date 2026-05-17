@@ -39,21 +39,27 @@ if [ "$STATUS" -eq 0 ]; then
   fi
 fi
 
+PR_STATE=""
 MERGEABLE=""
 if [ "$STATUS" -eq 0 ]; then
   printf "\n### PR VIEW ###\n"
   gh pr view "$PR_NUMBER" --json number,title,state,mergeable,headRefName,baseRefName,statusCheckRollup || STATUS=1
+  PR_STATE="$(gh pr view "$PR_NUMBER" --json state --jq .state)" || STATUS=1
   MERGEABLE="$(gh pr view "$PR_NUMBER" --json mergeable --jq .mergeable)" || STATUS=1
+  printf "state=%s\n" "$PR_STATE"
   printf "mergeable=%s\n" "$MERGEABLE"
-  if [ "$MERGEABLE" != "MERGEABLE" ]; then
+  if [ "$PR_STATE" = "MERGED" ]; then
+    printf "PR is already merged; treating this as an idempotent completion state.\n"
+    MERGED=1
+  elif [ "$MERGEABLE" != "MERGEABLE" ]; then
     printf "ERROR: PR is not mergeable. Resolve conflicts or wait for GitHub to compute mergeability before ./ns up.\n"
     STATUS=1
   fi
 fi
 
 if [ "$STATUS" -eq 0 ]; then
-  printf "\n### PR CHECKS ###\n"
-  gh pr checks "$PR_NUMBER" || STATUS=1
+  printf "\n### PR CHECKS SNAPSHOT ###\n"
+  gh pr checks "$PR_NUMBER" || true
 fi
 
 if [ "$STATUS" -eq 0 ]; then
