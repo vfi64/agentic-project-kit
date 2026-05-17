@@ -556,3 +556,4 @@ agentic-kit scaffold planning-doc "GUI i18n Foundation" \
 ```
 
 The command writes a document under `docs/planning/` by default, includes `Status`, `Decision status`, `Scope`, and `Review policy`, and refuses to overwrite an existing file unless `--overwrite` is passed.
+Version `0.3.23` is the current release line prepared by `./ns release-prep 0.3.23`.
