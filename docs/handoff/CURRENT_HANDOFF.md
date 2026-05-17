@@ -154,12 +154,12 @@ Important local workflow note: do not repurpose `.agentic/current_work.yaml` as 
 
 Next safe step: choose the next implementation slice. Good candidates are GUI i18n foundation, localized tooltips, or Instruction Bridge.
 
-## Current implementation slice: no-copy ns workflow control
+## Latest completed implementation slice: no-copy ns workflow control
 
-Branch: `feature/no-copy-ns-workflow-control`
+Merged PR: #281
 
-Implemented locally: governed planning document `docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md`, `./ns dev` for local feature gates, and a protective `./ns go` guard for dirty feature branches when `.agentic/current_work.yaml` includes `git_pull_ff_only`.
+Implemented on main: governed planning document `docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md`, `./ns dev` for local feature gates, and a protective `./ns go` guard for dirty feature branches when `.agentic/current_work.yaml` includes `git_pull_ff_only`.
 
 Important workflow note: prefer `./ns dev` for active feature-branch local gates. Use `./ns go` for the governed workflow path only when the branch state is clean and suitable for the default workflow. Long chat-to-terminal blocks remain fallback only and must start with three separator lines and end with PASS/FAIL markers.
 
-Next safe step: run `./ns dev`, commit, push, open PR, verify CI, merge, and verify main.
+Next safe step: choose the next GUI-compatible cockpit/i18n or instruction-bridge implementation slice.

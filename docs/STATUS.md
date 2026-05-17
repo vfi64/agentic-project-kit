@@ -152,6 +152,6 @@ Next safe step: choose the next implementation slice from GUI i18n foundation, l
 
 ## Latest completed implementation slice: no-copy ns workflow control
 
-The active no-copy workflow slice adds `./ns dev` as a local feature-branch gate without `git pull --ff-only`, adds a guard for risky `./ns go` use on dirty feature branches, and records the design in `docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md`.
+PR #281 added `./ns dev` as a local feature-branch gate without `git pull --ff-only`, added a guard for risky `./ns go` use on dirty feature branches, and recorded the design in `docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md`.
 
-Next safe step: commit the slice, open a PR, verify CI, merge, and then choose the next GUI-compatible cockpit/i18n or instruction-bridge slice.
+Next safe step: choose the next GUI-compatible cockpit/i18n or instruction-bridge implementation slice.
