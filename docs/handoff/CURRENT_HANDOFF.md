@@ -171,3 +171,13 @@ Merged PR: #285
 The ./ns up PR completion workflow is now hardened for safer no-copy operation. It refuses main or dirty-branch use, checks mergeability before merge, updates main only after a successful merge, uses portable separator printing, and remains compatible with the future GUI Cockpit action model.
 
 Next safe step: choose the next GUI-compatible cockpit/i18n or instruction-bridge implementation slice.
+
+## Latest completed release slice: v0.3.21 DOI metadata
+
+Merged release DOI metadata for v0.3.21.
+
+Verified state:
+- GitHub release v0.3.21 exists.
+- Zenodo concept DOI: 10.5281/zenodo.20101359.
+- Zenodo version DOI for v0.3.21: 10.5281/zenodo.20258057.
+- `./ns release-verify 0.3.21` passes.
