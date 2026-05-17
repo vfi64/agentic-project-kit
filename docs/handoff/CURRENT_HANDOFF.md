@@ -136,4 +136,4 @@ The v0.3.19 Cockpit Action Selection UX slice is released, post-release verified
 
 ## Next Safe Step
 
-Current slice: GUI cockpit read-only polish on `feature/gui-cockpit-readonly-polish`. The slice improves action details, blocked-action explanations, and manual launch documentation while keeping the GUI read-only by default and without adding write-capable behavior.
+Completed slice: GUI cockpit read-only polish. The GUI now shows clearer action details, explicit safety explanations for read-only and blocked actions, and README launch guidance for `.venv/bin/agentic-kit-gui`. The GUI remains read-only by default: bounded and destructive actions are still blocked through the shared cockpit action layer. Next safe step: decide whether to cut a v0.3.20 release for the GUI cockpit skeleton plus read-only polish, or add one more small GUI usability slice before release.
