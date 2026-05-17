@@ -163,3 +163,11 @@ def test_release_publish_requires_confirmation_token() -> None:
     text = Path("tools/ns_release_publish.sh").read_text(encoding="utf-8")
     assert "publish-$TAG" in text
     assert "refusing release publish" in text
+
+
+def test_release_publish_creates_and_pushes_tag() -> None:
+    text = Path("tools/ns_release_publish.sh").read_text(encoding="utf-8")
+    assert "git tag \"$TAG\"" in text
+    assert "git push origin \"$TAG\"" in text
+    assert "./ns release-gate \"$VERSION\"" in text
+    assert "Publishing implementation is intentionally deferred" not in text
