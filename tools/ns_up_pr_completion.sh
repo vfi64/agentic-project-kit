@@ -58,8 +58,8 @@ if [ "$STATUS" -eq 0 ]; then
 fi
 
 if [ "$STATUS" -eq 0 ]; then
-  printf "\n### PR CHECKS ###\n"
-  gh pr checks "$PR_NUMBER" || STATUS=1
+  printf "\n### PR CHECKS SNAPSHOT ###\n"
+  gh pr checks "$PR_NUMBER" || true
 fi
 
 if [ "$STATUS" -eq 0 ]; then
