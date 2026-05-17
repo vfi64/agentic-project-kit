@@ -267,3 +267,16 @@ def test_idempotent_finalization_guard_is_documented() -> None:
     assert "no commits between base and head" in text
     assert "Never commit directly to main" in text
     assert "quote-fragile inline Python" in text
+
+def test_finalize_guard_command_is_wired() -> None:
+    text = Path("ns").read_text(encoding="utf-8")
+    assert "finalize-guard" in text
+    assert "tools/ns_finalize_guard.sh" in text
+
+def test_finalize_guard_handles_existing_or_completed_branches() -> None:
+    text = Path("tools/ns_finalize_guard.sh").read_text(encoding="utf-8")
+    assert "marker_already_on_main=true" in text
+    assert "local_branch_exists" in text
+    assert "remote_branch_exists" in text
+    assert "commits_ahead_of_main" in text
+    assert "Idempotent completion" in text
