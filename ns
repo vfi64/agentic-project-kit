@@ -109,13 +109,19 @@ fi
   fi
   exec agentic-kit workflow go "$@"
 fi
-if [ "${1:-}" = "up" ] || [ "${1:-}" = "upload" ]; then
+if [ "${1:-}" = "up" ]; then
+  shift
+  exec tools/ns_up_pr_completion.sh "$@"
+fi
+
+if [ "${1:-}" = "upload" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
     exec .venv/bin/agentic-kit workflow upload "$@"
   fi
   exec agentic-kit workflow upload "$@"
 fi
+
 if [ "${1:-}" = "fail" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
@@ -123,6 +129,7 @@ if [ "${1:-}" = "fail" ]; then
   fi
   exec agentic-kit workflow fail-report "$@"
 fi
+
 if [ -x ".venv/bin/python" ]; then
   exec .venv/bin/python tools/next-step.py "$@"
 fi

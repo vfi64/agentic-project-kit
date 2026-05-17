@@ -118,3 +118,18 @@ def test_repo_ns_go_guard_protects_dirty_feature_branch() -> None:
     assert "./ns dev" in text
     assert "dirty feature branch" in text
     assert "### RESULT: FAIL ###" in text
+
+
+def test_repo_ns_up_invokes_pr_completion_tool() -> None:
+    text = Path("ns").read_text(encoding="utf-8")
+    assert "tools/ns_up_pr_completion.sh" in text
+    assert "${1:-}" in text
+
+
+def test_ns_up_pr_completion_tool_has_pass_fail_markers() -> None:
+    text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")
+    assert "NS UP PR COMPLETION CYCLE" in text
+    assert "### RESULT: PASS ###" in text
+    assert "### RESULT: FAIL ###" in text
+    assert "gh pr merge" in text
+    assert "./ns dev" in text
