@@ -223,3 +223,8 @@ The repository now provides `./ns finalize-guard <branch> [marker-text]` as a de
 ## Latest completed implementation slice: safe diagnostic cleanup guard
 
 PR completed the safe diagnostic cleanup guard. Diagnostic evidence cleanup is now handled deterministically so removing untracked reports does not leave tracked deletions or dirty main states that create false FAIL cycles.
+
+## Latest completed release slice: v0.3.22 DOI metadata
+
+v0.3.22 is released and post-release DOI metadata has been recorded. The GitHub release exists, release verification passes, and the verified Zenodo version DOI is 10.5281/zenodo.20258186.
+
