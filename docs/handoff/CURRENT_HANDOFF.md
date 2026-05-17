@@ -223,3 +223,10 @@ Candidate command shape:
 
 This work is prioritized because repeated non-semantic FAIL states have been slowing down the development and release cycle. The goal is to remove these recurring standard errors deterministically and elegantly before adding larger GUI/Cockpit capabilities.
 
+
+## Latest completed implementation slice: no direct main commit guard
+
+Merged slice: no direct main commit guard.
+
+The ./ns workflow now includes a commit-guard helper that prevents accidental direct commits and PR attempts from main. If invoked on main, it stops with an instructional failure instead of allowing a non-PR direct-main path. This is part of the current standard-error cleanup before larger GUI/Cockpit work.
+
