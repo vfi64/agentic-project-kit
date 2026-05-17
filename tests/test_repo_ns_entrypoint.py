@@ -300,3 +300,10 @@ def test_ns_clean_evidence_is_wired_and_safe() -> None:
     assert "docs/reports/CURRENT_WORKFLOW_OUTPUT.md" in script_text
     assert "does not delete arbitrary docs/reports files" in script_text
     assert "NEEDS_HUMAN_REVIEW" in script_text
+
+def test_ns_up_dirty_tree_mentions_clean_evidence() -> None:
+    text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")
+    assert "working tree is dirty" in text
+    assert "./ns clean-evidence" in text
+    assert "docs/reports/CURRENT_WORKFLOW_OUTPUT.md" in text
+    assert "git status --short" in text

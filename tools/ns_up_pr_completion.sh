@@ -25,6 +25,8 @@ fi
 
 if [ -n "$(git status --porcelain)" ]; then
   printf "ERROR: working tree is dirty. Commit or restore changes before ./ns up.\n"
+  printf "Hint: run ./ns clean-evidence if the dirtiness is only workflow evidence under tmp/agent-evidence or docs/reports/CURRENT_WORKFLOW_OUTPUT.md.\n"
+  printf "Then rerun ./ns up after reviewing git status --short.\n"
   STATUS=1
 fi
 
