@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from agentic_project_kit.cockpit import BOUNDED, READ_ONLY, CockpitAction, CockpitActionResult
-from agentic_project_kit.gui_cockpit import build_gui_action_views, format_action_result, main
+from agentic_project_kit.gui_cockpit import build_gui_action_views, explain_safety, format_action_details, format_action_result, main
 
 
 def test_gui_action_views_reuse_cockpit_action_metadata() -> None:
@@ -83,3 +83,28 @@ def test_gui_tests_do_not_require_project_root_mutation(tmp_path: Path) -> None:
 
     assert after == before
 
+
+
+
+def test_explain_safety_distinguishes_default_and_blocked_actions() -> None:
+    assert "Safe default" in explain_safety(READ_ONLY)
+    assert "Blocked by default" in explain_safety(BOUNDED)
+    assert "Blocked" in explain_safety("destructive")
+    assert "unknown safety class" in explain_safety("mystery")
+
+
+def test_format_action_details_includes_clear_safety_explanation() -> None:
+    action = CockpitAction("demo.go", "Demo go", "demo", ("demo", "go"), BOUNDED, "Run bounded demo step.")
+    view = build_gui_action_views([action])[0]
+    text = format_action_details(view)
+    assert "action_id=demo.go" in text
+    assert "can_run_by_default=false" in text
+    assert "safety_explanation=Blocked by default" in text
+
+
+def test_format_action_result_marks_blocked_status_explicitly() -> None:
+    result = CockpitActionResult("workflow.go", False, False, None, "", "", "Blocked bounded cockpit action without explicit allow flag: workflow.go")
+    text = format_action_result(result)
+    assert "status=blocked" in text
+    assert "allowed=false" in text
+    assert "executed=false" in text
