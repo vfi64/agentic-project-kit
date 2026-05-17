@@ -136,4 +136,4 @@ The v0.3.19 Cockpit Action Selection UX slice is released, post-release verified
 
 ## Next Safe Step
 
-Current slice: document GUI Tk setup after successful local launch. The GUI cockpit starts with a Python 3.13 environment that has Tk support installed, but this is a system dependency rather than a pip dependency. Next safe step: document the Homebrew/macOS Tk requirement and reproducible GUI venv setup before deciding on a v0.3.20 release.
+Completed slice: GUI Tk setup documentation. PR #267 documented that the experimental Tkinter GUI requires a Python build with Tk support, recorded the Homebrew/macOS `python-tk@3.13` requirement, and added a GUI launch smoke expectation to the test gates. Next safe step: prepare the v0.3.20 release for the GUI cockpit skeleton, read-only polish, and Tk setup documentation.
