@@ -230,3 +230,9 @@ Merged slice: no direct main commit guard.
 
 The ./ns workflow now includes a commit-guard helper that prevents accidental direct commits and PR attempts from main. If invoked on main, it stops with an instructional failure instead of allowing a non-PR direct-main path. This is part of the current standard-error cleanup before larger GUI/Cockpit work.
 
+
+
+## Latest completed implementation slice: deterministic ns slice runner
+
+The deterministic `./ns` slice runner is now implemented and documented as the next workflow automation layer. It supports bounded multi-step execution, advances automatically after PASS states, stops on FAIL states, and records the intended direction toward less copy-and-paste and fewer non-semantic workflow failures.
+

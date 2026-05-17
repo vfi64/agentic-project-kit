@@ -204,3 +204,9 @@ This work is prioritized because repeated non-semantic FAIL states have been slo
 
 The repository workflow now has an explicit ./ns commit-guard path that refuses commit/PR workflow on main and instructs the user to create a feature or docs branch first. This closes the recurring accidental direct-main commit failure mode and supports the upcoming deterministic ns slice runner.
 
+
+
+## Latest completed implementation slice: deterministic ns slice runner
+
+The deterministic `./ns` slice runner is now implemented and documented as the next workflow automation layer. It supports bounded multi-step execution, advances automatically after PASS states, stops on FAIL states, and records the intended direction toward less copy-and-paste and fewer non-semantic workflow failures.
+
