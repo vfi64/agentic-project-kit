@@ -184,3 +184,19 @@ def test_release_verify_waits_for_github_release() -> None:
     assert "gh release view" in text
     assert "sleep 10" in text
     assert "post-release-check" in text
+
+
+def test_release_gate_cleans_dist_before_build() -> None:
+    text = Path("tools/ns_release_gate.sh").read_text(encoding="utf-8")
+    assert "rm -rf dist build *.egg-info" in text
+    assert "VERIFY DIST ONLY CONTAINS TARGET VERSION" in text
+    assert "grep -v" in text
+
+
+def test_release_publish_waits_for_github_release_and_verifies() -> None:
+    text = Path("tools/ns_release_publish.sh").read_text(encoding="utf-8")
+    assert "WAIT FOR RELEASE WORKFLOW AND GITHUB RELEASE" in text
+    assert "sleep 10" in text
+    assert "while [ \"$i\" -lt 30 ]" in text
+    assert "./ns release-verify \"$VERSION\"" in text
+    assert "publish-$TAG" in text
