@@ -199,3 +199,8 @@ Candidate command shape:
 
 This work is prioritized because repeated non-semantic FAIL states have been slowing down the development and release cycle. The goal is to remove these recurring standard errors deterministically and elegantly before adding larger GUI/Cockpit capabilities.
 
+
+## Latest completed implementation slice: no direct main commit guard
+
+The repository workflow now has an explicit ./ns commit-guard path that refuses commit/PR workflow on main and instructs the user to create a feature or docs branch first. This closes the recurring accidental direct-main commit failure mode and supports the upcoming deterministic ns slice runner.
+
