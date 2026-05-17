@@ -29,7 +29,14 @@ printf "\n### LOCAL GATE ###\n"
 ./ns dev || STATUS=1
 
 printf "\n### RELEASE CHECK ###\n"
-PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli release-check --version "$VERSION" || STATUS=1
+if ! PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli release-check --version "$VERSION"; then
+  printf "%s\n" "ERROR: release metadata check failed for $VERSION. Build was skipped."
+  printf "\n### FINAL STATE ###\n"
+  git branch --show-current || true
+  git status --short || true
+  printf "\n### RESULT: FAIL ###\n"
+  exit 1
+fi
 
 printf "\n### CLEAN DIST ###\n"
 rm -rf dist build *.egg-info || STATUS=1
