@@ -544,3 +544,15 @@ agentic-kit pr-hygiene --json
 ```
 
 The command reports similar open PRs, open PRs without a detectable main delta, stale sibling signals, and local branches whose upstream branch is gone. It does not close PRs, delete branches, push, merge, tag, or release.
+
+## Planning Document Scaffolding
+
+Use `agentic-kit scaffold planning-doc` to create governed planning documents with lifecycle-valid metadata from the start.
+
+```bash
+agentic-kit scaffold planning-doc "GUI i18n Foundation" \
+  --scope "post-v0.3.20 GUI localization foundation" \
+  --review-policy "review before implementation and after each milestone"
+```
+
+The command writes a document under `docs/planning/` by default, includes `Status`, `Decision status`, `Scope`, and `Review policy`, and refuses to overwrite an existing file unless `--overwrite` is passed.

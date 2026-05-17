@@ -329,3 +329,21 @@ Temporäre Rohberichte sollen gelöscht oder uncommitted bleiben, sobald sie ihr
 ## Workflow output handoff
 
 When complete local terminal evidence is needed, prefer `./ns` over manual Copy-and-Paste. The script cycles through `TEST`, `UPLOAD`, and `CLEANUP`; see `docs/WORKFLOW_OUTPUT_CYCLE.md`. Evidence branches are temporary and must be cleaned up.
+
+## Terminal result markers
+
+Long or multi-step terminal instruction blocks should end with exactly one explicit result marker:
+
+```text
+### RESULT: PASS ###
+```
+
+or:
+
+```text
+### RESULT: FAIL ###
+```
+
+When the marker is `PASS`, the human can reply with a short acknowledgement such as `d`. When the marker is `FAIL`, the relevant output should be shared for diagnosis.
+
+Terminal blocks must avoid heredocs and risky multi-line `python -c` strings. Prefer small script files under `tmp/`, explicit virtualenv paths such as `.venv/bin/python`, and quote-safe one-line shell operations.
