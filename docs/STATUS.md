@@ -210,3 +210,7 @@ The repository workflow now has an explicit ./ns commit-guard path that refuses 
 
 The deterministic `./ns` slice runner is now implemented and documented as the next workflow automation layer. It supports bounded multi-step execution, advances automatically after PASS states, stops on FAIL states, and records the intended direction toward less copy-and-paste and fewer non-semantic workflow failures.
 
+
+## Latest completed implementation slice: idempotent PR create guard
+
+PR #297 added an idempotent PR creation guard. The finalization path now treats already-completed documentation branches as a completed no-op instead of attempting to create an empty PR. This removes a recurring false FAIL in the release and finalization cycle.
