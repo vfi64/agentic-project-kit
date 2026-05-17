@@ -266,6 +266,7 @@ def test_cli_commands_package_contains_command_groups() -> None:
         "profiles.py",
         "checks.py",
         "release.py",
+        "pr_hygiene.py",
         "todo.py",
         "validation.py",
         "workflow.py",

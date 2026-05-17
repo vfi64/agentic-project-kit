@@ -6,6 +6,7 @@ from agentic_project_kit.cli_commands.github import register_github_commands
 from agentic_project_kit.cli_commands.init import register_init_command
 from agentic_project_kit.cli_commands.patterns import patterns_app
 from agentic_project_kit.cli_commands.profiles import register_profile_commands
+from agentic_project_kit.cli_commands.pr_hygiene import register_pr_hygiene_command
 from agentic_project_kit.cli_commands.release import register_release_commands
 from agentic_project_kit.cli_commands.todo import todo_app
 from agentic_project_kit.cli_commands.validation import register_validation_commands
@@ -15,6 +16,7 @@ app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
 
 register_init_command(app)
 register_profile_commands(app)
+register_pr_hygiene_command(app)
 register_github_commands(app)
 register_check_commands(app)
 register_release_commands(app)

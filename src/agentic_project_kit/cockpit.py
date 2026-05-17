@@ -53,6 +53,7 @@ def cockpit_actions() -> list[CockpitAction]:
         CockpitAction("gate.doctor", "Doctor", "gate", ("agentic-kit", "doctor"), READ_ONLY, "Run compact project health checks."),
         CockpitAction("audit.doc-mesh", "Document mesh audit", "audit", ("agentic-kit", "doc-mesh-audit"), READ_ONLY, "Audit cross-document state and governance drift."),
         CockpitAction("audit.doc-lifecycle", "Document lifecycle audit", "audit", ("agentic-kit", "doc-lifecycle-audit"), READ_ONLY, "Audit lifecycle metadata for governed planning documents."),
+        CockpitAction("audit.pr-hygiene", "PR hygiene", "audit", ("agentic-kit", "pr-hygiene"), READ_ONLY, "Diagnose stale, duplicate, or empty pull-request and branch hygiene signals."),
         CockpitAction("release.plan", "Release plan", "release", ("agentic-kit", "release-plan"), READ_ONLY, "Print release preparation checklist."),
         CockpitAction("release.check", "Release check", "release", ("agentic-kit", "release-check"), READ_ONLY, "Validate release state for a target version."),
         CockpitAction("release.post-check", "Post-release check", "release", ("agentic-kit", "post-release-check"), READ_ONLY, "Validate GitHub and Zenodo post-release state."),
