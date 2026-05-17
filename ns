@@ -79,6 +79,11 @@ if [ "${1:-}" = "finalize-guard" ]; then
   exec tools/ns_finalize_guard.sh "$@"
 fi
 
+if [ "${1:-}" = "clean-evidence" ]; then
+  shift
+  exec tools/ns_clean_evidence.sh "$@"
+fi
+
 if [ "${1:-}" = "commit-guard" ]; then
   shift
   exec tools/ns_commit_pr_guard.sh "$@"
