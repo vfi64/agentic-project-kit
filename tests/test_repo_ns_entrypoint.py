@@ -238,3 +238,10 @@ def test_ns_up_handles_noop_branches_idempotently() -> None:
     assert "git rev-list --count main.." in text
     assert "exit \"$STATUS\"" in text
 
+
+def test_repo_ns_refuses_direct_main_commit_helper() -> None:
+    text = Path("tools/ns_commit_pr_guard.sh").read_text(encoding="utf-8")
+    assert "refusing commit/PR workflow on main" in text
+    assert "git branch --show-current" in text
+    assert "exit 1" in text
+    assert "create a feature or docs branch first" in text
