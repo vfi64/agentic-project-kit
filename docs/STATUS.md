@@ -155,3 +155,9 @@ Next safe step: choose the next implementation slice from GUI i18n foundation, l
 PR #281 added `./ns dev` as a local feature-branch gate without `git pull --ff-only`, added a guard for risky `./ns go` use on dirty feature branches, and recorded the design in `docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md`.
 
 Next safe step: choose the next GUI-compatible cockpit/i18n or instruction-bridge implementation slice.
+
+## Latest completed implementation slice: ns up safety hardening
+
+PR #285 hardened the ./ns up PR completion workflow. The command now refuses unsafe main or dirty-branch use, checks mergeability before merge, updates main only after a successful merge, keeps separator output portable, and preserves the GUI-compatible no-copy workflow direction.
+
+Next safe step: choose the next GUI-compatible cockpit/i18n or instruction-bridge implementation slice.

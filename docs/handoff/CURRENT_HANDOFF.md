@@ -163,3 +163,11 @@ Implemented on main: governed planning document `docs/planning/NO_COPY_NS_WORKFL
 Important workflow note: prefer `./ns dev` for active feature-branch local gates. Use `./ns go` for the governed workflow path only when the branch state is clean and suitable for the default workflow. Long chat-to-terminal blocks remain fallback only and must start with three separator lines and end with PASS/FAIL markers.
 
 Next safe step: choose the next GUI-compatible cockpit/i18n or instruction-bridge implementation slice.
+
+## Latest completed implementation slice: ns up safety hardening
+
+Merged PR: #285
+
+The ./ns up PR completion workflow is now hardened for safer no-copy operation. It refuses main or dirty-branch use, checks mergeability before merge, updates main only after a successful merge, uses portable separator printing, and remains compatible with the future GUI Cockpit action model.
+
+Next safe step: choose the next GUI-compatible cockpit/i18n or instruction-bridge implementation slice.
