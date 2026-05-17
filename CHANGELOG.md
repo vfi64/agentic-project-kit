@@ -1,3 +1,7 @@
+## v0.3.23
+
+- Prepare release metadata for v0.3.23.
+
 # Changelog
 
 ## v0.3.22
