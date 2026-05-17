@@ -89,6 +89,10 @@ if [ "${1:-}" = "commit-guard" ]; then
   exec tools/ns_commit_pr_guard.sh "$@"
 fi
 
+if [ "${1:-}" = "pr-cleanup" ]; then
+  shift
+  exec tools/ns_pr_cleanup.sh "$@"
+fi
 if [ "${1:-}" = "slice-runner" ]; then
   shift
   exec tools/ns_slice_runner.sh "$@"
