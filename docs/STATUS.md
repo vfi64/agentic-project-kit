@@ -136,4 +136,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Completed slice: GUI cockpit read-only polish. The GUI now shows clearer action details, explicit safety explanations for read-only and blocked actions, and README launch guidance for `.venv/bin/agentic-kit-gui`. The GUI remains read-only by default: bounded and destructive actions are still blocked through the shared cockpit action layer. Next safe step: decide whether to cut a v0.3.20 release for the GUI cockpit skeleton plus read-only polish, or add one more small GUI usability slice before release.
+Current slice: document GUI Tk setup after successful local launch. The GUI cockpit starts with a Python 3.13 environment that has Tk support installed, but this is a system dependency rather than a pip dependency. Next safe step: document the Homebrew/macOS Tk requirement and reproducible GUI venv setup before deciding on a v0.3.20 release.
