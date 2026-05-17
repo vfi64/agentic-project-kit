@@ -506,6 +506,7 @@ Version `0.3.10` remains the previous archived release covering workflow shortcu
 Version `0.3.9` remains the previous post-release verified archived release before v0.3.10.
 
 This repository has maintainer-owned GitHub releases and verified Zenodo archive records. Verified version-specific DOIs:
+- Verified v0.3.23 version DOI: `10.5281/zenodo.20261956`
 
 - v0.2.5: `10.5281/zenodo.20111119`
 - v0.2.6: `10.5281/zenodo.20119102`

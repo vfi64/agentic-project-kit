@@ -1,4 +1,6 @@
 ## v0.3.23
+Zenodo v0.3.23 DOI: 10.5281/zenodo.20261956
+Zenodo Concept DOI: 10.5281/zenodo.20101359
 
 - Prepare release metadata for v0.3.23.
 
