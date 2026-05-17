@@ -133,3 +133,18 @@ def test_ns_up_pr_completion_tool_has_pass_fail_markers() -> None:
     assert "### RESULT: FAIL ###" in text
     assert "gh pr merge" in text
     assert "./ns dev" in text
+
+def test_ns_up_tool_updates_main_only_after_successful_merge() -> None:
+    text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")
+    assert "MERGED=0" in text
+    assert "MERGED=1" in text
+    assert 'if [ "$MERGED" -eq 1 ]; then' in text
+    assert "UPDATE MAIN SKIPPED" in text
+    assert "PR is not mergeable" in text
+    assert "working tree is dirty" in text
+
+def test_ns_up_tool_is_valid_shell_syntax() -> None:
+    import subprocess
+
+    result = subprocess.run(["sh", "-n", "tools/ns_up_pr_completion.sh"], text=True, capture_output=True, check=False)
+    assert result.returncode == 0, result.stderr
