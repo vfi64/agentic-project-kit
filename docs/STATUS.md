@@ -136,4 +136,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Next safe step: document the post-v0.3.19 GUI cockpit direction: future Tkinter cockpit output widget, action-selection layer, init assistant, and report-first migration assistant.
+Next safe step: specify the first GUI cockpit implementation slice: a Tkinter skeleton that reuses the existing cockpit action registry, displays command output in a persistent output widget, and remains read-only/inspect-only by default.
