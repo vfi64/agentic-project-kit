@@ -58,6 +58,18 @@ if [ "${1:-}" = "run" ]; then
   fi
   exec agentic-kit workflow run "$@"
 fi
+if [ "${1:-}" = "release-prep" ]; then
+  shift
+  exec tools/ns_release_prep.sh "$@"
+fi
+if [ "${1:-}" = "release-gate" ]; then
+  shift
+  exec tools/ns_release_gate.sh "$@"
+fi
+if [ "${1:-}" = "release-publish" ]; then
+  shift
+  exec tools/ns_release_publish.sh "$@"
+fi
 if [ "${1:-}" = "dev" ]; then
   shift
   STATUS=0

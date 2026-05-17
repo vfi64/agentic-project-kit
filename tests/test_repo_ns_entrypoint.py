@@ -148,3 +148,18 @@ def test_ns_up_tool_is_valid_shell_syntax() -> None:
 
     result = subprocess.run(["sh", "-n", "tools/ns_up_pr_completion.sh"], text=True, capture_output=True, check=False)
     assert result.returncode == 0, result.stderr
+
+
+def test_repo_ns_release_shortcuts_are_wired() -> None:
+    text = Path("ns").read_text(encoding="utf-8")
+    assert "release-prep" in text
+    assert "release-gate" in text
+    assert "release-publish" in text
+    assert "tools/ns_release_prep.sh" in text
+    assert "tools/ns_release_gate.sh" in text
+    assert "tools/ns_release_publish.sh" in text
+
+def test_release_publish_requires_confirmation_token() -> None:
+    text = Path("tools/ns_release_publish.sh").read_text(encoding="utf-8")
+    assert "publish-$TAG" in text
+    assert "refusing release publish" in text
