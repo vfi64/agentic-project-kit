@@ -254,7 +254,9 @@ def test_ns_slice_runner_is_wired() -> None:
 
 def test_ns_slice_runner_has_step_stop_semantics() -> None:
     text = Path("tools/ns_slice_runner.sh").read_text(encoding="utf-8")
-    assert "advances only after PASS" in text
+    assert "advances only after target-state PASS" in text
+    assert "### RESULT: PENDING ###" in text
+    assert "ALREADY_MERGED" in text
     assert "Stopping slice runner at first failing step." in text
     assert "sh -c" in text
 
