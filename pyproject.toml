@@ -27,6 +27,7 @@ dev = [
 
 [project.scripts]
 agentic-kit = "agentic_project_kit.cli:app"
+agentic-kit-gui = "agentic_project_kit.gui_cockpit:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

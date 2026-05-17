@@ -136,4 +136,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Next safe step: specify the first GUI cockpit implementation slice: a Tkinter skeleton that reuses the existing cockpit action registry, displays command output in a persistent output widget, and remains read-only/inspect-only by default.
+Current slice: first GUI cockpit skeleton on `feature/gui-cockpit-skeleton`. The skeleton must reuse the cockpit action registry, provide a persistent output widget, expose only explicit read-only execution by default, and keep bounded/destructive actions blocked.
