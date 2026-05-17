@@ -161,3 +161,7 @@ Next safe step: choose the next GUI-compatible cockpit/i18n or instruction-bridg
 PR #285 hardened the ./ns up PR completion workflow. The command now refuses unsafe main or dirty-branch use, checks mergeability before merge, updates main only after a successful merge, keeps separator output portable, and preserves the GUI-compatible no-copy workflow direction.
 
 Next safe step: choose the next GUI-compatible cockpit/i18n or instruction-bridge implementation slice.
+
+## Latest completed release slice: v0.3.21 DOI metadata
+
+v0.3.21 is released and post-release DOI metadata has been recorded. The GitHub release exists, the release verification command passes, and the verified Zenodo version DOI is 10.5281/zenodo.20258057.
