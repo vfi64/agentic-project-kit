@@ -219,3 +219,7 @@ PR #297 added an idempotent PR creation guard. The finalization path now treats 
 
 The repository now provides `./ns finalize-guard <branch> [marker-text]` as a deterministic guard for stale, already-completed, or conflicting finalization branches. This reduces repeated false FAIL states around documentation finalization and keeps the release/development cycle moving without unsafe manual guessing.
 
+
+## Latest completed implementation slice: safe diagnostic cleanup guard
+
+PR completed the safe diagnostic cleanup guard. Diagnostic evidence cleanup is now handled deterministically so removing untracked reports does not leave tracked deletions or dirty main states that create false FAIL cycles.

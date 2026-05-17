@@ -245,3 +245,7 @@ The workflow now avoids failing when a finalization branch contains no commits b
 
 `./ns finalize-guard <branch> [marker-text]` is now available to inspect finalization branches before attempting PR creation or cleanup. Use it when a docs finalization branch may already be merged, superseded, conflicting, or effectively represented on main. This is part of the standard-error cleanup path before larger GUI/Cockpit work.
 
+
+## Latest completed implementation slice: safe diagnostic cleanup guard
+
+The workflow now includes a safe cleanup path for diagnostic evidence files. Use it before PR completion when temporary reports or copied evidence files appear in the working tree. This prevents accidental tracked deletions and avoids another recurring non-semantic FAIL state.
