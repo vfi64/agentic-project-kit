@@ -136,4 +136,4 @@ The v0.3.19 Cockpit Action Selection UX slice is released, post-release verified
 
 ## Next Safe Step
 
-Completed slice: first GUI cockpit skeleton. PR #263 added the experimental `agentic-kit-gui` Tkinter entry point, reused the existing cockpit action registry, added a persistent output widget for command output and blocked-action messages, and kept bounded/destructive actions blocked by default. Next safe step: improve the GUI cockpit usability with a small read-only polish slice: better action details, clearer blocked-action explanation, and a first manual launch note, without adding write-capable GUI behavior.
+Current slice: GUI cockpit read-only polish on `feature/gui-cockpit-readonly-polish`. The slice improves action details, blocked-action explanations, and manual launch documentation while keeping the GUI read-only by default and without adding write-capable behavior.

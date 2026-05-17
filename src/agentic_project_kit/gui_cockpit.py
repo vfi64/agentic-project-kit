@@ -34,9 +34,35 @@ def build_gui_action_views(actions: list[CockpitAction] | None = None) -> list[G
     ]
 
 
+SAFETY_EXPLANATIONS = {
+    "read_only": "Safe default: this action may be executed from the GUI through the shared cockpit layer.",
+    "bounded": "Blocked by default: bounded workflow actions require an explicit non-GUI allow path.",
+    "destructive": "Blocked: destructive actions are not executable from the GUI cockpit.",
+}
+
+
+def explain_safety(safety: str) -> str:
+    return SAFETY_EXPLANATIONS.get(safety, f"Blocked: unknown safety class {safety}.")
+
+
+def format_action_details(action: GuiActionView) -> str:
+    lines = [
+        f"action_id={action.action_id}",
+        f"label={action.label}",
+        f"category={action.category}",
+        f"safety={action.safety}",
+        f"can_run_by_default={str(action.can_run_by_default).lower()}",
+        "command=" + " ".join(action.command),
+        f"description={action.description}",
+        f"safety_explanation={explain_safety(action.safety)}",
+    ]
+    return "\n".join(lines)
+
+
 def format_action_result(result: CockpitActionResult) -> str:
     lines = [
         f"action_id={result.action_id}",
+        "status=" + ("completed" if result.executed else "blocked"),
         f"allowed={str(result.allowed).lower()}",
         f"executed={str(result.executed).lower()}",
         f"returncode={result.returncode}",
@@ -59,7 +85,7 @@ class CockpitGui:
         self.project_root = (project_root or Path(".")).resolve()
         self.actions = build_gui_action_views()
         self.root.title("agentic-project-kit cockpit")
-        self.root.geometry("920x620")
+        self.root.geometry("1040x700")
 
         frame = ttk.Frame(root, padding=10)
         frame.pack(fill=tk.BOTH, expand=True)
@@ -69,7 +95,7 @@ class CockpitGui:
 
         info = ttk.Label(
             frame,
-            text="Read-only actions may run through the shared cockpit layer. Bounded and destructive actions remain blocked by default.",
+            text="Read-only actions may run through the shared cockpit layer. Bounded and destructive actions remain blocked by default. Select an action to inspect its command, safety class, and explanation before running it.",
             wraplength=860,
         )
         info.pack(anchor=tk.W, pady=(4, 10))
@@ -83,7 +109,7 @@ class CockpitGui:
         self.tree.column("label", width=190)
         self.tree.column("category", width=100)
         self.tree.column("safety", width=100)
-        self.tree.column("command", width=500)
+        self.tree.column("command", width=610)
         self.tree.pack(fill=tk.BOTH, expand=False)
 
         for action in self.actions:
@@ -99,7 +125,7 @@ class CockpitGui:
         output_label.pack(anchor=tk.W)
         self.output = tk.Text(frame, height=16, wrap=tk.WORD)
         self.output.pack(fill=tk.BOTH, expand=True)
-        self.write_output("GUI cockpit skeleton ready. Select an action to inspect it.\n")
+        self.write_output("GUI cockpit ready. Select an action, inspect its details, then run read-only actions explicitly. Bounded and destructive actions stay blocked here.\n")
 
     def selected_action_id(self) -> str | None:
         selected = self.tree.selection()
@@ -129,7 +155,7 @@ class CockpitGui:
         if action is None:
             self.write_output(f"Unknown cockpit action: {action_id}\n")
             return
-        lines = [
+        [
             "",
             f"action_id={action.action_id}",
             f"label={action.label}",
@@ -140,7 +166,7 @@ class CockpitGui:
             f"description={action.description}",
             "",
         ]
-        self.write_output("\n".join(lines))
+        self.write_output("\n\n" + format_action_details(action) + "\n")
 
     def run_selected_read_only(self) -> None:
         action_id = self.selected_action_id()
