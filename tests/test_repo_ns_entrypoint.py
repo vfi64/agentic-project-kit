@@ -257,3 +257,13 @@ def test_ns_slice_runner_has_step_stop_semantics() -> None:
     assert "advances only after PASS" in text
     assert "Stopping slice runner at first failing step." in text
     assert "sh -c" in text
+
+def test_idempotent_finalization_guard_is_documented() -> None:
+    text = Path("docs/planning/IDEMPOTENT_FINALIZATION_GUARD.md").read_text(encoding="utf-8")
+    assert "Status: proposed" in text
+    assert "Decision status: Proposed" in text
+    assert "branch already exists" in text
+    assert "target documentation marker already exists" in text
+    assert "no commits between base and head" in text
+    assert "Never commit directly to main" in text
+    assert "quote-fragile inline Python" in text
