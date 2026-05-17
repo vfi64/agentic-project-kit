@@ -136,4 +136,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Current slice: prepare v0.3.20 release metadata for the GUI cockpit skeleton, read-only polish, and Tk setup documentation. Next safe step: run full release gates, build artifacts, open the v0.3.20 release PR, and verify CI.
+Current slice: record v0.3.20 DOI metadata after successful GitHub release and Zenodo verification. Verified v0.3.20 DOI: `10.5281/zenodo.20256637`. Zenodo concept DOI: `10.5281/zenodo.20101359`. Next safe step: run metadata gates, open the DOI metadata PR, merge it, and then finalize repository state after v0.3.20.
