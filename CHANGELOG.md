@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.20 - 2026-05-17
+
+Release focus: experimental local Tkinter GUI cockpit.
+
+- Add the experimental `agentic-kit-gui` entry point.
+- Reuse the existing cockpit action registry instead of creating a second GUI command system.
+- Show registered cockpit actions with action details, safety status, and command metadata.
+- Add a persistent GUI output widget for command output and blocked-action messages.
+- Keep the GUI read-only by default: bounded and destructive actions remain blocked by the shared cockpit action layer.
+- Document Tk setup requirements for macOS/Homebrew, including `python-tk@3.13`.
+- Add GUI/Tk smoke expectations to the test gates.
+
 ## v0.3.19 - 2026-05-16
 
 Zenodo v0.3.19 DOI: 10.5281/zenodo.20246121

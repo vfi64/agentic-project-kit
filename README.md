@@ -499,7 +499,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.19` is the current release line covering the `./ns-menu` cockpit JSON consumer update: the menu no longer clears the terminal by default, `NS_MENU_CLEAR=1` restores clearing when desired, and `./ns actions --json` exposes the schema-versioned cockpit action inventory from the menu, with verified DOI `10.5281/zenodo.20246121`. Version `0.3.17` remains the previous archived release covering Cockpit Action JSON Inventory with verified DOI `10.5281/zenodo.20245113`.
+Version `0.3.20` is the current release line covering the experimental local Tkinter GUI cockpit: `agentic-kit-gui` presents registered cockpit actions, reuses the shared cockpit action layer, shows command output in a persistent output widget, documents Tk setup requirements, and keeps bounded/destructive actions blocked by default. Version `0.3.19` remains the previous archived release covering the `./ns-menu` cockpit JSON consumer update with verified DOI `10.5281/zenodo.20246121`.
 
 Version `0.3.10` remains the previous archived release covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`.
 

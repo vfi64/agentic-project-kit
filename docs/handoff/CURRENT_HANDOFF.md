@@ -1,4 +1,4 @@
-Current version: 0.3.19
+Current version: 0.3.20
 
 # Current Handoff
 
@@ -10,7 +10,7 @@ Base branch: main
 ## Current Goal
 
 Current released version: 0.3.19
-Current completed slice: v0.3.19 Cockpit Action Selection UX
+Current completed slice: GUI Tk setup documentation
 
 v0.3.19 is released and post-release verified with version DOI `10.5281/zenodo.20246121`. Zenodo concept DOI: `10.5281/zenodo.20101359`. The v0.3.19 DOI metadata is recorded on main via PR #259 after `agentic-kit post-release-check --version 0.3.19` passed. The post-release Zenodo verification path remains covered by `agentic-kit post-release-check`.
 
@@ -136,4 +136,4 @@ The v0.3.19 Cockpit Action Selection UX slice is released, post-release verified
 
 ## Next Safe Step
 
-Completed slice: GUI Tk setup documentation. PR #267 documented that the experimental Tkinter GUI requires a Python build with Tk support, recorded the Homebrew/macOS `python-tk@3.13` requirement, and added a GUI launch smoke expectation to the test gates. Next safe step: prepare the v0.3.20 release for the GUI cockpit skeleton, read-only polish, and Tk setup documentation.
+Current slice: prepare v0.3.20 release metadata for the GUI cockpit skeleton, read-only polish, and Tk setup documentation. Next safe step: run full release gates, build artifacts, open the v0.3.20 release PR, and verify CI.
