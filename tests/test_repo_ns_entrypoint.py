@@ -102,3 +102,19 @@ def test_ns_menu_exposes_cockpit_json_inventory_entry() -> None:
     assert "./ns actions --json" in menu
     assert "run_ns actions --json" in menu
     assert "14)" in menu
+
+def test_repo_ns_entrypoint_exposes_no_copy_dev_gate() -> None:
+    text = Path("ns").read_text(encoding="utf-8")
+    assert "./ns dev" in text or "${1:-}" in text
+    assert "NS DEV LOCAL FEATURE GATE" in text
+    assert "no git pull" in text
+    assert "### RESULT: PASS ###" in text
+    assert "### RESULT: FAIL ###" in text
+
+def test_repo_ns_go_guard_protects_dirty_feature_branch() -> None:
+    text = Path("ns").read_text(encoding="utf-8")
+    assert "NS GO GUARD" in text
+    assert "git_pull_ff_only" in text
+    assert "./ns dev" in text
+    assert "dirty feature branch" in text
+    assert "### RESULT: FAIL ###" in text

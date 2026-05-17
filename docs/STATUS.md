@@ -149,3 +149,9 @@ Next safe step: choose the next implementation slice from the GUI/i18n, planning
 The merged planning-doc scaffold slice added `agentic-kit scaffold planning-doc`, a deterministic command for creating lifecycle-valid governed planning documents with `Status`, `Decision status`, `Scope`, and `Review policy` metadata. The slice also recorded the terminal result marker rule in `AGENTS.md`.
 
 Next safe step: choose the next implementation slice from GUI i18n foundation, localized tooltips, or Instruction Bridge.
+
+## Latest completed implementation slice: no-copy ns workflow control
+
+The active no-copy workflow slice adds `./ns dev` as a local feature-branch gate without `git pull --ff-only`, adds a guard for risky `./ns go` use on dirty feature branches, and records the design in `docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md`.
+
+Next safe step: commit the slice, open a PR, verify CI, merge, and then choose the next GUI-compatible cockpit/i18n or instruction-bridge slice.
