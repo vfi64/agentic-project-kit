@@ -249,3 +249,14 @@ The workflow now avoids failing when a finalization branch contains no commits b
 ## Latest completed implementation slice: safe diagnostic cleanup guard
 
 The workflow now includes a safe cleanup path for diagnostic evidence files. Use it before PR completion when temporary reports or copied evidence files appear in the working tree. This prevents accidental tracked deletions and avoids another recurring non-semantic FAIL state.
+
+## Latest completed release slice: v0.3.22 DOI metadata
+
+Completed release state:
+
+- v0.3.22 is published.
+- GitHub release v0.3.22 exists.
+- Zenodo concept DOI remains 10.5281/zenodo.20101359.
+- Zenodo version DOI for v0.3.22: 10.5281/zenodo.20258186.
+- `./ns release-verify 0.3.22` passes.
+
