@@ -235,3 +235,5 @@ PR #316 added safe evidence cleanup for the deterministic ./ns workflow. The rep
 PR #318 classified ./ns finalize-guard outcomes with machine-readable target states. The guard now distinguishes PASS_ALREADY_ON_MAIN, PASS_NOOP_BRANCH, PASS_SUPERSEDED, PASS_NEEDS_PR, FAIL_CONFLICT_RELEVANT, and FAIL_NEEDS_HUMAN_REVIEW while remaining read-only. This reduces false FAIL cycles for stale, already-completed, or conflicting finalization branches.
 
 PR #320 added read-only `./ns pr-cleanup` classification for stale and relevant open PRs. The command classifies Dependabot PRs, active feature PRs, release-prep PRs, stale docs finalization PRs, superseded docs finalization PRs, conflicting relevant PRs, and safe-to-close PRs without mutating GitHub or Git state.
+
+PR #322 added a safe patch script helper in `src/agentic_project_kit/safe_patch.py` with regression tests. The helper validates generated patch scripts against recurring failure patterns such as heredocs, risky inline Python, shell continuation prompts, and nested shell parameter expansion. This gives future no-copy slices a reusable checked pattern instead of repeating fragile ad-hoc patch construction.
