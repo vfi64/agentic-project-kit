@@ -31,8 +31,14 @@ if git show-ref --verify --quiet "refs/heads/$BRANCH"; then
 else
   git switch -c "$BRANCH" || STATUS=1
 fi
+printf "\n### PATCH RELEASE METADATA ###\n"
+.venv/bin/python tools/ns_release_metadata_prep.py "$PLAIN_VERSION" || STATUS=1
+
+printf "\n### RELEASE CHECK AFTER METADATA PATCH ###\n"
+PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli release-check --version "$PLAIN_VERSION" || STATUS=1
+
 printf "\n### CURRENT VERSION REFERENCES ###\n"
-grep -R "$PLAIN_VERSION" -n pyproject.toml CITATION.cff CHANGELOG.md README.md docs/STATUS.md docs/handoff/CURRENT_HANDOFF.md || true
+grep -R "$PLAIN_VERSION" -n pyproject.toml src/agentic_project_kit/__init__.py CITATION.cff CHANGELOG.md README.md docs/STATUS.md docs/handoff/CURRENT_HANDOFF.md || true
 printf "\n### FINAL STATE ###\n"
 git branch --show-current || STATUS=1
 git status --short || STATUS=1
