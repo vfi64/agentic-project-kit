@@ -143,3 +143,9 @@ Current slice: document GUI i18n, localized tooltips, and Instruction Bridge roa
 PR #277 added the read-only `agentic-kit pr-hygiene` diagnostic command, optional JSON output, shared cockpit read-only action `audit.pr-hygiene`, and tests for deterministic PR and branch hygiene analysis. The command performs no GitHub or Git mutations.
 
 Next safe step: choose the next implementation slice from the GUI/i18n, planning-doc scaffolding, or instruction-bridge roadmap.
+
+## Latest implementation slice: planning document scaffold
+
+The active branch `feature/planning-doc-scaffold` adds `agentic-kit scaffold planning-doc`, a deterministic command for creating lifecycle-valid governed planning documents with `Status`, `Decision status`, `Scope`, and `Review policy` metadata. The slice also records the terminal result marker rule in `AGENTS.md`.
+
+Next safe step: commit the scaffold command, docs, and tests; open a PR; verify CI.

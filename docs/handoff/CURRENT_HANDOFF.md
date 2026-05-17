@@ -145,3 +145,13 @@ PR #277 is merged on `main`. It added a read-only PR hygiene model, CLI command 
 Important local workflow note: prefer `./ns` over bare `ns`, and prefer `.venv/bin/python -m pytest`, `.venv/bin/ruff`, and `PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli ...` over bare `python`, `ruff`, or `agentic-kit`.
 
 Next safe step: choose the next implementation slice. Good candidates are planning-doc scaffolding, GUI i18n foundation, or the Instruction Bridge.
+
+## Current implementation slice: planning document scaffold
+
+Branch: `feature/planning-doc-scaffold`
+
+Implemented locally: `agentic-kit scaffold planning-doc`, lifecycle-valid planning document rendering, overwrite protection, CLI tests, and the terminal result marker rule in `AGENTS.md`.
+
+Important local workflow note: do not repurpose `.agentic/current_work.yaml` as a free-form scratch file; it is covered by workflow tests and documentation coverage. Use branch-specific docs or temporary files under `tmp/` for transient coordination.
+
+Next safe step: run full gates, commit, push, open PR, and verify CI.

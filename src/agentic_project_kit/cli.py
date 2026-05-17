@@ -8,6 +8,7 @@ from agentic_project_kit.cli_commands.patterns import patterns_app
 from agentic_project_kit.cli_commands.profiles import register_profile_commands
 from agentic_project_kit.cli_commands.pr_hygiene import register_pr_hygiene_command
 from agentic_project_kit.cli_commands.release import register_release_commands
+from agentic_project_kit.cli_commands.scaffold import scaffold_app
 from agentic_project_kit.cli_commands.todo import todo_app
 from agentic_project_kit.cli_commands.validation import register_validation_commands
 from agentic_project_kit.cli_commands.workflow import workflow_app
@@ -24,6 +25,7 @@ register_validation_commands(app)
 app.add_typer(workflow_app, name="workflow")
 app.add_typer(cockpit_app, name="cockpit")
 app.add_typer(patterns_app, name="patterns")
+app.add_typer(scaffold_app, name="scaffold")
 app.add_typer(todo_app, name="todo")
 
 
