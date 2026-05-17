@@ -1,6 +1,7 @@
 # GUI Cockpit Expansion Roadmap
 
-Status: active planning
+Status: active
+Decision status: accepted
 Scope: post-v0.3.20 local GUI cockpit expansion
 
 ## Purpose
