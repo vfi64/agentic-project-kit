@@ -58,8 +58,52 @@ if [ "${1:-}" = "run" ]; then
   fi
   exec agentic-kit workflow run "$@"
 fi
-if [ "${1:-}" = "go" ]; then
+if [ "${1:-}" = "dev" ]; then
   shift
+  STATUS=0
+  printf '\n### NS DEV LOCAL FEATURE GATE ###\n'
+  printf 'Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.\n'
+  printf '\n### BRANCH / STATUS ###\n'
+  git branch --show-current || STATUS=1
+  git status --short || STATUS=1
+  printf '\n### PYTEST ###\n'
+  .venv/bin/python -m pytest -q "$@" || STATUS=1
+  printf '\n### RUFF ###\n'
+  .venv/bin/ruff check . || STATUS=1
+  printf '\n### CHECK DOCS ###\n'
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli check-docs || STATUS=1
+  printf '\n### DOCTOR ###\n'
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli doctor || STATUS=1
+  printf '\n### PR HYGIENE ###\n'
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli pr-hygiene || STATUS=1
+  printf '\n### FINAL STATE ###\n'
+  git branch --show-current || STATUS=1
+  git status --short || STATUS=1
+  if [ "$STATUS" -eq 0 ]; then
+    printf '\n### RESULT: PASS ###\n'
+    exit 0
+  fi
+  printf '\n### RESULT: FAIL ###\n'
+  exit 1
+fi
+
+ if [ "${1:-}" = "go" ]; then
+  shift
+  BRANCH="$(git branch --show-current 2>/dev/null)"
+  DIRTY="$(git status --short 2>/dev/null)"
+  if [ "$BRANCH" != "main" ] && [ -n "$DIRTY" ] && grep -q "git_pull_ff_only" .agentic/current_work.yaml 2>/dev/null; then
+    printf '
+### NS GO GUARD ###
+'
+    printf 'Refusing governed workflow go on a dirty feature branch because current_work includes git_pull_ff_only.
+'
+    printf 'Use ./ns dev for local feature gates, or clean the branch before ./ns go.
+'
+    printf '
+### RESULT: FAIL ###
+'
+    exit 2
+  fi
   if [ -x ".venv/bin/agentic-kit" ]; then
     exec .venv/bin/agentic-kit workflow go "$@"
   fi
@@ -83,3 +127,5 @@ if [ -x ".venv/bin/python" ]; then
   exec .venv/bin/python tools/next-step.py "$@"
 fi
 exec python3 tools/next-step.py "$@"
+
+# no-copy workflow shortcuts: ./ns dev, ./ns go, ./ns up
