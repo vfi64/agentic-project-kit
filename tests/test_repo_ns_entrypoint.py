@@ -215,3 +215,18 @@ def test_ns_up_treats_pending_checks_as_wait_state_not_fail_state() -> None:
     assert "### PR CHECKS SNAPSHOT ###" in text
     assert "gh pr checks \"$PR_NUMBER\" || true" in text
     assert "gh pr checks \"$PR_NUMBER\" --watch" in text
+
+
+def test_ns_pr_create_or_skip_handles_no_delta_idempotently() -> None:
+    text = Path("tools/ns_pr_create_or_skip.sh").read_text(encoding="utf-8")
+    assert "DELTA" in text
+    assert "No PR needed" in text
+    assert "idempotent already-completed state" in text
+    assert "origin/$BASE..HEAD" in text
+
+
+def test_ns_pr_create_or_skip_reuses_existing_pr_before_create() -> None:
+    text = Path("tools/ns_pr_create_or_skip.sh").read_text(encoding="utf-8")
+    assert "gh pr view --json number,title,state,url" in text
+    assert "Existing PR found" in text
+    assert "gh pr create --base" in text
