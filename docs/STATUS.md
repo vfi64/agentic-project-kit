@@ -144,8 +144,8 @@ PR #277 added the read-only `agentic-kit pr-hygiene` diagnostic command, optiona
 
 Next safe step: choose the next implementation slice from the GUI/i18n, planning-doc scaffolding, or instruction-bridge roadmap.
 
-## Latest implementation slice: planning document scaffold
+## Latest completed implementation slice: planning document scaffold
 
-The active branch `feature/planning-doc-scaffold` adds `agentic-kit scaffold planning-doc`, a deterministic command for creating lifecycle-valid governed planning documents with `Status`, `Decision status`, `Scope`, and `Review policy` metadata. The slice also records the terminal result marker rule in `AGENTS.md`.
+The merged planning-doc scaffold slice added `agentic-kit scaffold planning-doc`, a deterministic command for creating lifecycle-valid governed planning documents with `Status`, `Decision status`, `Scope`, and `Review policy` metadata. The slice also recorded the terminal result marker rule in `AGENTS.md`.
 
-Next safe step: commit the scaffold command, docs, and tests; open a PR; verify CI.
+Next safe step: choose the next implementation slice from GUI i18n foundation, localized tooltips, or Instruction Bridge.
