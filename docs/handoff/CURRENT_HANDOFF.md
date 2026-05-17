@@ -202,3 +202,24 @@ Merged PR: #297
 
 `./ns up` now handles no-op branches idempotently: if no PR exists and the branch has no commits ahead of main, the command reports a clean completion state instead of failing. This is part of the deterministic cleanup of recurring workflow false failures.
 
+
+
+## Next prioritized work step: deterministic ns slice runner
+
+The next implementation priority is a deterministic `./ns` slice runner that can execute recurring patch and release-cycle subtasks as a bounded batch workflow. The runner should advance automatically from one step to the next on PASS, stop or enter a defined repair path on FAIL, and treat already-reached target states idempotently instead of producing artificial failures.
+
+Target behavior:
+
+- `PASS` means the requested target state was reached or was safely detected as already reached.
+- `FAIL` means the requested target state was not reached and no safe idempotent interpretation or repair path is available.
+- Pending CI checks, existing PRs, already-merged PRs, no-op branches, empty commits, stale `dist/` artifacts, delayed GitHub releases, delayed Zenodo DOI visibility, and previously completed documentation finalization must be handled deterministically.
+- Shell scripts must be checked with shell syntax checks such as `sh -n`; Python linters must not be run on shell scripts.
+- Longer patch operations should be implemented through robust generated script files, not heredocs, fragile inline `python -c`, or complex shell quoting.
+
+Candidate command shape:
+
+- `./ns slice <name>` for named, bounded workflows.
+- Initial target workflow: `./ns slice ns-up-noop-branch-idempotence` or an equivalent first hardening slice.
+
+This work is prioritized because repeated non-semantic FAIL states have been slowing down the development and release cycle. The goal is to remove these recurring standard errors deterministically and elegantly before adding larger GUI/Cockpit capabilities.
+
