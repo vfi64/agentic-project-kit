@@ -181,3 +181,11 @@ Verified state:
 - Zenodo concept DOI: 10.5281/zenodo.20101359.
 - Zenodo version DOI for v0.3.21: 10.5281/zenodo.20258057.
 - `./ns release-verify 0.3.21` passes.
+
+## Latest completed implementation slice: deterministic release cycle hardening
+
+Merged PR: #293
+
+The release workflow has been hardened against recurring deterministic failures. The important fixes are: stale dist artifacts are removed before release builds, publish waits for the asynchronous GitHub Release workflow instead of failing immediately, completed releases are verified through ./ns release-verify VERSION, and repeated release checks should no longer treat an already published version as a normal release-gate target.
+
+Next priority: continue reducing repeated workflow friction by making already-completed release/finalization states idempotent rather than producing artificial FAIL results.
