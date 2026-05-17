@@ -174,3 +174,7 @@ PR #293 hardened the release cycle by removing recurring false failures: release
 
 PR #295 hardened `./ns up` so pending PR checks are treated as a wait state and already merged PRs are handled idempotently instead of causing false FAIL states. This removes another recurring release/development-cycle friction point.
 
+## Latest completed implementation slice: ns up no-op branch idempotence
+
+PR #297 hardened `./ns up` so branches without a current PR and without commits ahead of main are treated as an idempotent no-op state instead of causing a spurious failure. This removes another recurring release/finalization workflow irritant.
+

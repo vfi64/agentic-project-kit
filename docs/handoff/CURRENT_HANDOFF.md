@@ -196,3 +196,9 @@ Merged PR: #295
 
 `./ns up` now handles two recurring workflow edge cases more deterministically: pending checks are waited on instead of causing an immediate false failure, and already merged PRs are accepted as an idempotent completion state.
 
+## Latest completed implementation slice: ns up no-op branch idempotence
+
+Merged PR: #297
+
+`./ns up` now handles no-op branches idempotently: if no PR exists and the branch has no commits ahead of main, the command reports a clean completion state instead of failing. This is part of the deterministic cleanup of recurring workflow false failures.
+
