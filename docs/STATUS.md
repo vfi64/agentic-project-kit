@@ -136,4 +136,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Completed slice: v0.3.20 GUI cockpit release. v0.3.20 is released, GitHub release verification passed, release workflow succeeded, and the verified Zenodo version DOI `10.5281/zenodo.20256637` is recorded. The release covers the experimental local Tkinter GUI cockpit, read-only GUI polish, Tk setup documentation, and build excludes for local virtual environments. Next safe step: continue with a small GUI usability slice only if needed, otherwise plan the next v0.3.x cockpit milestone from `docs/handoff/CURRENT_HANDOFF.md` and `docs/STATUS.md`.
+Current slice: document GUI i18n, localized tooltips, and Instruction Bridge roadmap. This planning slice records a future i18n system for GUI labels/help/tooltips and a safe human-to-terminal-or-GUI-to-LLM instruction file mechanism. Next safe step: run documentation gates, open the roadmap PR, and then choose the first implementation slice.
