@@ -240,3 +240,8 @@ The deterministic `./ns` slice runner is now implemented and documented as the n
 ## Latest completed implementation slice: idempotent PR create guard
 
 The workflow now avoids failing when a finalization branch contains no commits beyond main because the intended state is already present. Treat this as a completed idempotent state, not as an error requiring another PR.
+
+## Latest completed implementation slice: idempotent finalization branch guard command
+
+`./ns finalize-guard <branch> [marker-text]` is now available to inspect finalization branches before attempting PR creation or cleanup. Use it when a docs finalization branch may already be merged, superseded, conflicting, or effectively represented on main. This is part of the standard-error cleanup path before larger GUI/Cockpit work.
+

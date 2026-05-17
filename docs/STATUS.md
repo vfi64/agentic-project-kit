@@ -214,3 +214,8 @@ The deterministic `./ns` slice runner is now implemented and documented as the n
 ## Latest completed implementation slice: idempotent PR create guard
 
 PR #297 added an idempotent PR creation guard. The finalization path now treats already-completed documentation branches as a completed no-op instead of attempting to create an empty PR. This removes a recurring false FAIL in the release and finalization cycle.
+
+## Latest completed implementation slice: idempotent finalization branch guard command
+
+The repository now provides `./ns finalize-guard <branch> [marker-text]` as a deterministic guard for stale, already-completed, or conflicting finalization branches. This reduces repeated false FAIL states around documentation finalization and keeps the release/development cycle moving without unsafe manual guessing.
+
