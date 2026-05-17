@@ -174,3 +174,7 @@ PR #293 hardened the release cycle by removing recurring false failures: release
 
 PR #295 hardened `./ns up` so pending PR checks are treated as a wait state and already merged PRs are handled idempotently instead of causing false FAIL states. This removes another recurring release/development-cycle friction point.
 
+## Latest completed implementation slice: idempotent PR create guard
+
+The PR creation/finalization path now treats already-completed documentation branches as an idempotent no-op instead of attempting to create an empty PR. This removes another recurring false FAIL in the release and finalization cycle.
+

@@ -196,3 +196,7 @@ Merged PR: #295
 
 `./ns up` now handles two recurring workflow edge cases more deterministically: pending checks are waited on instead of causing an immediate false failure, and already merged PRs are accepted as an idempotent completion state.
 
+## Latest completed implementation slice: idempotent PR create guard
+
+The workflow now avoids failing when a finalization branch contains no commits beyond main because the intended state is already present. Treat this as a completed idempotent state, not as an error requiring another PR.
+
