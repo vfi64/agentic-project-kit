@@ -138,12 +138,10 @@ The v0.3.19 Cockpit Action Selection UX slice is released, post-release verified
 
 Current slice: document GUI i18n, localized tooltips, and Instruction Bridge roadmap. This planning slice records a future i18n system for GUI labels/help/tooltips and a safe human-to-terminal-or-GUI-to-LLM instruction file mechanism. Next safe step: run documentation gates, open the roadmap PR, and then choose the first implementation slice.
 
-## Current implementation slice: PR hygiene guard
+## Latest completed implementation slice: PR hygiene guard
 
-Branch: `feature/pr-hygiene-guard`
-
-Implemented locally: read-only PR hygiene model, CLI command `agentic-kit pr-hygiene`, `--json` output, cockpit registry action `audit.pr-hygiene`, and regression tests. The command intentionally performs no GitHub or Git mutations.
+PR #277 is merged on `main`. It added a read-only PR hygiene model, CLI command `agentic-kit pr-hygiene`, `--json` output, cockpit registry action `audit.pr-hygiene`, and regression tests. The command intentionally performs no GitHub or Git mutations.
 
 Important local workflow note: prefer `./ns` over bare `ns`, and prefer `.venv/bin/python -m pytest`, `.venv/bin/ruff`, and `PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli ...` over bare `python`, `ruff`, or `agentic-kit`.
 
-Next safe step: run full gates, commit, push, open PR, and verify CI.
+Next safe step: choose the next implementation slice. Good candidates are planning-doc scaffolding, GUI i18n foundation, or the Instruction Bridge.
