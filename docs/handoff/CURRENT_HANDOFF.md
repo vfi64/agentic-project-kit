@@ -136,4 +136,4 @@ The v0.3.19 Cockpit Action Selection UX slice is released, post-release verified
 
 ## Next Safe Step
 
-Current slice: record v0.3.20 DOI metadata after successful GitHub release and Zenodo verification. Verified v0.3.20 DOI: `10.5281/zenodo.20256637`. Zenodo concept DOI: `10.5281/zenodo.20101359`. Next safe step: run metadata gates, open the DOI metadata PR, merge it, and then finalize repository state after v0.3.20.
+Completed release: v0.3.20. The release is published, the GitHub Release workflow passed, the Zenodo concept DOI remains `10.5281/zenodo.20101359`, and the verified v0.3.20 version DOI is `10.5281/zenodo.20256637`. The release covers the experimental local Tkinter GUI cockpit, read-only GUI polish, Homebrew/macOS Tk setup documentation, and packaging excludes for local virtual environments. Next safe step: decide between a small v0.3.21 GUI usability slice and the broader v0.4 professional single-user cockpit line. Do not add write-capable GUI behavior without a separate bounded-action design slice.
