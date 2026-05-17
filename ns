@@ -70,6 +70,10 @@ if [ "${1:-}" = "release-publish" ]; then
   shift
   exec tools/ns_release_publish.sh "$@"
 fi
+if [ "${1:-}" = "release-verify" ]; then
+  shift
+  exec tools/ns_release_verify.sh "$@"
+fi
 if [ "${1:-}" = "dev" ]; then
   shift
   STATUS=0
