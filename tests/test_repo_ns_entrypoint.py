@@ -200,3 +200,11 @@ def test_release_publish_waits_for_github_release_and_verifies() -> None:
     assert "while [ \"$i\" -lt 30 ]" in text
     assert "./ns release-verify \"$VERSION\"" in text
     assert "publish-$TAG" in text
+
+
+def test_ns_up_handles_already_merged_pr_idempotently() -> None:
+    text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")
+    assert "PR_STATE" in text
+    assert "MERGED" in text
+    assert "idempotent completion state" in text
+    assert "MERGEABLE" in text
