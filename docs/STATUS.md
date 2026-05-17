@@ -228,3 +228,4 @@ PR completed the safe diagnostic cleanup guard. Diagnostic evidence cleanup is n
 
 v0.3.22 is released and post-release DOI metadata has been recorded. The GitHub release exists, release verification passes, and the verified Zenodo version DOI is 10.5281/zenodo.20258186.
 
+v0.3.23 control workflow consolidation is integrated on main. The release/PR/finalization workflow now has a shared deterministic control model with machine-readable target states, a stop-on-fail slice runner core, documented control-state semantics, a target-state-aware `./ns slice-runner`, early-stop release-gate behavior when release metadata is missing, and automated release metadata preparation in `./ns release-prep`. This addresses the recurring standard-error class where already reached target states, retryable pending states, or failed core patches caused misleading follow-up failures.

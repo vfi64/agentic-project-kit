@@ -260,3 +260,4 @@ Completed release state:
 - Zenodo version DOI for v0.3.22: 10.5281/zenodo.20258186.
 - `./ns release-verify 0.3.22` passes.
 
+v0.3.23 control workflow consolidation is complete and merged on main. The important completed fixes are: shared `control_state` model, stop-on-fail Python slice-runner core, documented workflow control contract, target-state-aware `./ns slice-runner`, early-stop `./ns release-gate` when release metadata is missing, and automated `./ns release-prep` metadata updates for pyproject, package `__version__`, CITATION, CHANGELOG, README, STATUS, and CURRENT_HANDOFF. Next safe direction: use the new control model to harden dirty-evidence cleanup, finalize-guard machine-readable outcomes, and stale PR cleanup classification before any GUI/Cockpit expansion.
