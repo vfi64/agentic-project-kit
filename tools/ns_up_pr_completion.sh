@@ -28,6 +28,30 @@ if [ -n "$(git status --porcelain)" ]; then
   STATUS=1
 fi
 
+printf "\n### NO-OP BRANCH CHECK ###\n"
+if [ "$BRANCH" != "main" ]; then
+  BASE_DIFF="$(git rev-list --count main.."$BRANCH" 2>/dev/null || printf "unknown")"
+  printf "commits_ahead_of_main=%s\n" "$BASE_DIFF"
+  if [ "$BASE_DIFF" = "0" ]; then
+    printf "Branch has no commits ahead of main; treating as idempotent no-op completion.\n"
+    git switch main || STATUS=1
+    git pull --ff-only origin main || STATUS=1
+    printf "\n### VERIFY MAIN ###\n"
+    ./ns dev || STATUS=1
+    PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli pr-hygiene || STATUS=1
+    printf "\n### FINAL STATE ###\n"
+    git branch --show-current || STATUS=1
+    git log --oneline -8 || STATUS=1
+    git status --short || STATUS=1
+    if [ "$STATUS" -eq 0 ]; then
+      printf "\n### RESULT: PASS ###\n"
+    else
+      printf "\n### RESULT: FAIL ###\n"
+    fi
+    exit "$STATUS"
+  fi
+fi
+
 printf "\n### IDENTIFY CURRENT PR ###\n"
 PR_NUMBER=""
 if [ "$STATUS" -eq 0 ]; then
