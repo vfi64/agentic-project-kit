@@ -1,7 +1,9 @@
 # GUI Cockpit Expansion Roadmap
 
-Status: active planning
+Status: active
+Decision status: proposed
 Scope: post-v0.3.20 local GUI cockpit expansion
+Review policy: review before implementation, after each GUI milestone, and before any write-capable GUI behavior is added.
 
 ## Purpose
 
@@ -93,3 +95,7 @@ The GUI may show branch, dirty state, open PRs, release checks, tag state, and C
 - No release, merge, tag, cleanup, or force-push buttons.
 - No separate GUI-only command system.
 - No hidden state outside governed files.
+
+## Scaffolding follow-up
+
+Future governed planning documents should be created through a small `agentic-kit` scaffolding command instead of hand-written headers. The scaffold should emit valid lifecycle metadata from the beginning, including `Status`, `Decision status`, `Scope`, and `Review policy`, so documentation gates fail less often for predictable metadata mistakes.
