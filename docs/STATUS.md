@@ -233,3 +233,5 @@ v0.3.23 control workflow consolidation is integrated on main. The release/PR/fin
 PR #316 added safe evidence cleanup for the deterministic ./ns workflow. The repository now provides `./ns clean-evidence`, which restores known tracked workflow evidence, removes ignored `tmp/agent-evidence` data, and refuses to delete arbitrary untracked `docs/reports` files without human review. `./ns up` now points users to this repair path when workflow evidence dirties the worktree.
 
 PR #318 classified ./ns finalize-guard outcomes with machine-readable target states. The guard now distinguishes PASS_ALREADY_ON_MAIN, PASS_NOOP_BRANCH, PASS_SUPERSEDED, PASS_NEEDS_PR, FAIL_CONFLICT_RELEVANT, and FAIL_NEEDS_HUMAN_REVIEW while remaining read-only. This reduces false FAIL cycles for stale, already-completed, or conflicting finalization branches.
+
+PR #320 added read-only `./ns pr-cleanup` classification for stale and relevant open PRs. The command classifies Dependabot PRs, active feature PRs, release-prep PRs, stale docs finalization PRs, superseded docs finalization PRs, conflicting relevant PRs, and safe-to-close PRs without mutating GitHub or Git state.
