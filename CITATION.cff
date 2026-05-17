@@ -37,6 +37,6 @@ license: MIT
 # Verified v0.3.16 version DOI: 10.5281/zenodo.20244944
 # Verified v0.3.17 version DOI: 10.5281/zenodo.20245113
 # Verified v0.3.18 version DOI: 10.5281/zenodo.20245754
-# Verified v0.3.20 version DOI: 10.5281/zenodo.20256637
-version: 0.3.20
+# v0.3.21 version DOI: pending post-release Zenodo verification
+version: 0.3.21
 date-released: "2026-05-17"
