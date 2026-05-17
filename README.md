@@ -529,7 +529,7 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - Verified v0.3.16 version DOI: `10.5281/zenodo.20244944`
 - Verified v0.3.17 version DOI: `10.5281/zenodo.20245113`
 - Verified v0.3.19 version DOI: `10.5281/zenodo.20246121`
-- Verified v0.3.21 version DOI: `10.5281/zenodo.20256637`
+- Verified v0.3.21 DOI: 10.5281/zenodo.20258057 version DOI: `10.5281/zenodo.20256637`
 - Verified v0.3.18 version DOI: `10.5281/zenodo.20245754`
 
 Near-term documentation-governance work: stabilize `agentic-kit doc-mesh-audit` as a targeted special gate, collect false positives, then decide whether to promote it into `agentic-kit doctor` before any unconditional default `ns` integration.
