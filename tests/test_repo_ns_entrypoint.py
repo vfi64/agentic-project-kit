@@ -171,3 +171,16 @@ def test_release_publish_creates_and_pushes_tag() -> None:
     assert "git push origin \"$TAG\"" in text
     assert "./ns release-gate \"$VERSION\"" in text
     assert "Publishing implementation is intentionally deferred" not in text
+
+
+def test_repo_ns_release_verify_is_wired() -> None:
+    text = Path("ns").read_text(encoding="utf-8")
+    assert "release-verify" in text
+    assert "tools/ns_release_verify.sh" in text
+
+
+def test_release_verify_waits_for_github_release() -> None:
+    text = Path("tools/ns_release_verify.sh").read_text(encoding="utf-8")
+    assert "gh release view" in text
+    assert "sleep 10" in text
+    assert "post-release-check" in text
