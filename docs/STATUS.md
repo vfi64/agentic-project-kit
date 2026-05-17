@@ -169,3 +169,8 @@ v0.3.21 is released and post-release DOI metadata has been recorded. The GitHub 
 ## Latest completed implementation slice: deterministic release cycle hardening
 
 PR #293 hardened the release cycle by removing recurring false failures: release-gate now cleans stale build artifacts before building, release-publish waits for the asynchronous GitHub Release workflow and verifies the completed release state, and release verification is available as a dedicated no-copy command.
+
+## Latest completed implementation slice: ns up idempotence hardening
+
+PR #295 hardened `./ns up` so pending PR checks are treated as a wait state and already merged PRs are handled idempotently instead of causing false FAIL states. This removes another recurring release/development-cycle friction point.
+
