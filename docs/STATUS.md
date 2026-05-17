@@ -174,3 +174,6 @@ PR #293 hardened the release cycle by removing recurring false failures: release
 
 PR #295 hardened `./ns up` so pending PR checks are treated as a wait state and already merged PRs are handled idempotently instead of causing false FAIL states. This removes another recurring release/development-cycle friction point.
 
+## Latest completed implementation slice: ns up idempotence and pending-check handling
+
+PR #295 hardened `./ns up` so already-merged PRs are treated as idempotent completion states and pending PR checks are handled as a wait state before merge. This removes another recurring false-fail pattern in the no-copy PR completion workflow.

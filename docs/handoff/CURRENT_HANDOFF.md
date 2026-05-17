@@ -196,3 +196,8 @@ Merged PR: #295
 
 `./ns up` now handles two recurring workflow edge cases more deterministically: pending checks are waited on instead of causing an immediate false failure, and already merged PRs are accepted as an idempotent completion state.
 
+## Latest completed implementation slice: ns up idempotence and pending-check handling
+
+Merged PR: #295
+
+`./ns up` now handles two previously recurring false-fail cases: PRs that are already merged are accepted as an idempotent completion state, and pending checks are treated as a wait-before-merge state rather than an immediate hard failure.
