@@ -99,3 +99,18 @@ The GUI may show branch, dirty state, open PRs, release checks, tag state, and C
 ## Scaffolding follow-up
 
 Future governed planning documents should be created through a small `agentic-kit` scaffolding command instead of hand-written headers. The scaffold should emit valid lifecycle metadata from the beginning, including `Status`, `Decision status`, `Scope`, and `Review policy`, so documentation gates fail less often for predictable metadata mistakes.
+
+## PR and branch hygiene follow-up
+
+The GUI and CLI workflow should gain a deterministic PR hygiene guard before more cockpit expansion work is implemented.
+
+The guard should be exposed first as a read-only diagnostic command, for example `agentic-kit pr-hygiene`, and later as a GUI read-only action. It should detect:
+
+- open non-Dependabot PRs before starting a new slice;
+- stale sibling branches with the same slice prefix;
+- remote branches without an open PR;
+- PRs with no commits ahead of `main`;
+- branches with uncommitted changes before PR creation;
+- duplicate or near-duplicate roadmap/state repair PRs.
+
+The first implementation must not close PRs, delete branches, merge, tag, or push. It should only report findings and suggest the next safe manual action. This prevents another case where a failed repair attempt leaves a stale PR next to the actually merged repair PR.
