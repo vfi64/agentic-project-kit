@@ -307,3 +307,13 @@ def test_ns_up_dirty_tree_mentions_clean_evidence() -> None:
     assert "./ns clean-evidence" in text
     assert "docs/reports/CURRENT_WORKFLOW_OUTPUT.md" in text
     assert "git status --short" in text
+
+def test_finalize_guard_declares_machine_readable_outcomes() -> None:
+    text = Path("tools/ns_finalize_guard.sh").read_text(encoding="utf-8")
+    assert "STATUS: PASS_ALREADY_ON_MAIN" in text
+    assert "STATUS: PASS_NOOP_BRANCH" in text
+    assert "STATUS: PASS_SUPERSEDED" in text
+    assert "STATUS: PASS_NEEDS_PR" in text
+    assert "STATUS: FAIL_CONFLICT_RELEVANT" in text
+    assert "STATUS: FAIL_NEEDS_HUMAN_REVIEW" in text
+    assert "no commit, push, PR, merge, tag, release, branch deletion, or file mutation" in text
