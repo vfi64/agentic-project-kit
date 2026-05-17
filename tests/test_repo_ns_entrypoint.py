@@ -280,3 +280,11 @@ def test_finalize_guard_handles_existing_or_completed_branches() -> None:
     assert "remote_branch_exists" in text
     assert "commits_ahead_of_main" in text
     assert "Idempotent completion" in text
+
+
+def test_safe_remove_diagnostic_guard_distinguishes_tracked_files() -> None:
+    script = Path("tools/ns_safe_remove_diagnostic.sh").read_text(encoding="utf-8")
+    assert "git ls-files --error-unmatch" in script
+    assert "git restore" in script
+    assert "rm -f" in script
+    assert "Tracked file detected" in script
