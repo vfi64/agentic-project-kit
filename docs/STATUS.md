@@ -165,3 +165,7 @@ Next safe step: choose the next GUI-compatible cockpit/i18n or instruction-bridg
 ## Latest completed release slice: v0.3.21 DOI metadata
 
 v0.3.21 is released and post-release DOI metadata has been recorded. The GitHub release exists, the release verification command passes, and the verified Zenodo version DOI is 10.5281/zenodo.20258057.
+
+## Latest completed implementation slice: deterministic release cycle hardening
+
+PR #293 hardened the release cycle by removing recurring false failures: release-gate now cleans stale build artifacts before building, release-publish waits for the asynchronous GitHub Release workflow and verifies the completed release state, and release verification is available as a dedicated no-copy command.
