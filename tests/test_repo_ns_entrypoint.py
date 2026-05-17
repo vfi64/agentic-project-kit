@@ -245,3 +245,15 @@ def test_repo_ns_refuses_direct_main_commit_helper() -> None:
     assert "git branch --show-current" in text
     assert "exit 1" in text
     assert "create a feature or docs branch first" in text
+
+
+def test_ns_slice_runner_is_wired() -> None:
+    text = Path("ns").read_text(encoding="utf-8")
+    assert "slice-runner" in text
+    assert "tools/ns_slice_runner.sh" in text
+
+def test_ns_slice_runner_has_step_stop_semantics() -> None:
+    text = Path("tools/ns_slice_runner.sh").read_text(encoding="utf-8")
+    assert "advances only after PASS" in text
+    assert "Stopping slice runner at first failing step." in text
+    assert "sh -c" in text
