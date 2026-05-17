@@ -236,3 +236,7 @@ The ./ns workflow now includes a commit-guard helper that prevents accidental di
 
 The deterministic `./ns` slice runner is now implemented and documented as the next workflow automation layer. It supports bounded multi-step execution, advances automatically after PASS states, stops on FAIL states, and records the intended direction toward less copy-and-paste and fewer non-semantic workflow failures.
 
+
+## Latest completed implementation slice: idempotent PR create guard
+
+The workflow now avoids failing when a finalization branch contains no commits beyond main because the intended state is already present. Treat this as a completed idempotent state, not as an error requiring another PR.
