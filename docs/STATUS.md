@@ -1,4 +1,4 @@
-Current version: 0.3.19
+Current version: 0.3.20
 
 # Project Status
 
@@ -136,4 +136,4 @@ git branch --show-current
 
 ## Next Safe Step
 
-Completed slice: GUI Tk setup documentation. PR #267 documented that the experimental Tkinter GUI requires a Python build with Tk support, recorded the Homebrew/macOS `python-tk@3.13` requirement, and added a GUI launch smoke expectation to the test gates. Next safe step: prepare the v0.3.20 release for the GUI cockpit skeleton, read-only polish, and Tk setup documentation.
+Current slice: prepare v0.3.20 release metadata for the GUI cockpit skeleton, read-only polish, and Tk setup documentation. Next safe step: run full release gates, build artifacts, open the v0.3.20 release PR, and verify CI.
