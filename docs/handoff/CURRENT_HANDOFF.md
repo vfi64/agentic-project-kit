@@ -189,3 +189,10 @@ Merged PR: #293
 The release workflow has been hardened against recurring deterministic failures. The important fixes are: stale dist artifacts are removed before release builds, publish waits for the asynchronous GitHub Release workflow instead of failing immediately, completed releases are verified through ./ns release-verify VERSION, and repeated release checks should no longer treat an already published version as a normal release-gate target.
 
 Next priority: continue reducing repeated workflow friction by making already-completed release/finalization states idempotent rather than producing artificial FAIL results.
+
+## Latest completed implementation slice: ns up idempotence hardening
+
+Merged PR: #295
+
+`./ns up` now handles two recurring workflow edge cases more deterministically: pending checks are waited on instead of causing an immediate false failure, and already merged PRs are accepted as an idempotent completion state.
+
