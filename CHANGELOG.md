@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3.22
+
+- Continue hardening deterministic no-copy release and finalization workflows.
+- Add safeguards for recurring non-semantic release-cycle failure modes.
+
 ## v0.3.21 DOI: 10.5281/zenodo.20258057
 
 - Add no-copy release shortcut commands for release preparation, release gating, and confirmation-gated release publishing.

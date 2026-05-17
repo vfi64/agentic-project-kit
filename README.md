@@ -499,7 +499,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.21` is the current release line covering the experimental local Tkinter GUI cockpit: `agentic-kit-gui` presents registered cockpit actions, reuses the shared cockpit action layer, shows command output in a persistent output widget, documents Tk setup requirements, and keeps bounded/destructive actions blocked by default, with verified DOI `10.5281/zenodo.20256637`. Version `0.3.19` remains the previous archived release covering the `./ns-menu` cockpit JSON consumer update with verified DOI `10.5281/zenodo.20246121`.
+Version `0.3.22` is the current release line covering the experimental local Tkinter GUI cockpit: `agentic-kit-gui` presents registered cockpit actions, reuses the shared cockpit action layer, shows command output in a persistent output widget, documents Tk setup requirements, and keeps bounded/destructive actions blocked by default, with verified DOI `10.5281/zenodo.20256637`. Version `0.3.19` remains the previous archived release covering the `./ns-menu` cockpit JSON consumer update with verified DOI `10.5281/zenodo.20246121`.
 
 Version `0.3.10` remains the previous archived release covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`.
 
