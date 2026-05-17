@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3.21
+
+- Add no-copy release shortcut commands for release preparation, release gating, and confirmation-gated release publishing.
+- Harden `./ns up` PR completion for safer no-copy workflows.
+
 ## v0.3.20 - 2026-05-17
 
 Zenodo v0.3.20 DOI: 10.5281/zenodo.20256637
