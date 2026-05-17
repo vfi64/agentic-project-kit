@@ -230,3 +230,11 @@ def test_ns_pr_create_or_skip_reuses_existing_pr_before_create() -> None:
     assert "gh pr view --json number,title,state,url" in text
     assert "Existing PR found" in text
     assert "gh pr create --base" in text
+
+def test_ns_up_handles_noop_branches_idempotently() -> None:
+    text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")
+    assert "commits_ahead_of_main" in text
+    assert "idempotent no-op completion" in text
+    assert "git rev-list --count main.." in text
+    assert "exit \"$STATUS\"" in text
+
