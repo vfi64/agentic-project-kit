@@ -162,6 +162,21 @@ Review questions:
 
 Features that only make sense in the Debug layer must not become default behavior.
 
+## Relationship to a future local GUI cockpit
+
+A later Tkinter cockpit should not become a separate command system. It should be a presentation and selection layer over the same explicit cockpit action registry used by `agentic-kit cockpit actions`, `agentic-kit cockpit actions --json`, and `agentic-kit cockpit run <action-id>`.
+
+The GUI direction should include:
+
+- an action-selection layer that groups available actions by safety, category, and workflow relevance;
+- a persistent output widget for command output, return codes, blocked-action messages, and copied diagnostics;
+- explicit visibility for whether an action is read-only, bounded, or destructive;
+- no hidden execution path that suppresses terminal evidence;
+- a later init assistant for guided project creation;
+- a later migration assistant that starts as report-only before any write-capable adoption path is considered.
+
+The GUI should make the Golden Path easier to choose. It must not weaken the existing command safety model.
+
 ## Relationship to capability matrices
 
 This idea overlaps with the `Capability Matrix` pattern in `docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md`.

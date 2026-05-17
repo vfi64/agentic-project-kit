@@ -136,4 +136,4 @@ The v0.3.19 Cockpit Action Selection UX slice is released, post-release verified
 
 ## Next Safe Step
 
-Next safe step: choose the next post-v0.3.19 development slice from the local cockpit/GUI roadmap.
+Next safe step: document the post-v0.3.19 GUI cockpit direction: future Tkinter cockpit output widget, action-selection layer, init assistant, and report-first migration assistant.
