@@ -2,6 +2,8 @@
 
 ## v0.3.20 - 2026-05-17
 
+Zenodo v0.3.20 DOI: 10.5281/zenodo.20256637
+
 Release focus: experimental local Tkinter GUI cockpit.
 
 - Add the experimental `agentic-kit-gui` entry point.

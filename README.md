@@ -499,7 +499,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Version `0.3.20` is the current release line covering the experimental local Tkinter GUI cockpit: `agentic-kit-gui` presents registered cockpit actions, reuses the shared cockpit action layer, shows command output in a persistent output widget, documents Tk setup requirements, and keeps bounded/destructive actions blocked by default. Version `0.3.19` remains the previous archived release covering the `./ns-menu` cockpit JSON consumer update with verified DOI `10.5281/zenodo.20246121`.
+Version `0.3.20` is the current release line covering the experimental local Tkinter GUI cockpit: `agentic-kit-gui` presents registered cockpit actions, reuses the shared cockpit action layer, shows command output in a persistent output widget, documents Tk setup requirements, and keeps bounded/destructive actions blocked by default, with verified DOI `10.5281/zenodo.20256637`. Version `0.3.19` remains the previous archived release covering the `./ns-menu` cockpit JSON consumer update with verified DOI `10.5281/zenodo.20246121`.
 
 Version `0.3.10` remains the previous archived release covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`.
 
@@ -529,6 +529,7 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - Verified v0.3.16 version DOI: `10.5281/zenodo.20244944`
 - Verified v0.3.17 version DOI: `10.5281/zenodo.20245113`
 - Verified v0.3.19 version DOI: `10.5281/zenodo.20246121`
+- Verified v0.3.20 version DOI: `10.5281/zenodo.20256637`
 - Verified v0.3.18 version DOI: `10.5281/zenodo.20245754`
 
 Near-term documentation-governance work: stabilize `agentic-kit doc-mesh-audit` as a targeted special gate, collect false positives, then decide whether to promote it into `agentic-kit doctor` before any unconditional default `ns` integration.
