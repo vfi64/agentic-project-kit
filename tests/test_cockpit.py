@@ -18,6 +18,7 @@ def test_cockpit_action_registry_contains_core_read_only_actions() -> None:
     assert "gate.check-docs" in action_ids
     assert "release.plan" in action_ids
     assert "audit.doc-lifecycle" in action_ids
+    assert "audit.pr-hygiene" in action_ids
 
 
 def test_cockpit_action_registry_classifies_bounded_workflow_go() -> None:
@@ -58,6 +59,7 @@ def test_cockpit_actions_command_lists_structured_actions() -> None:
     assert "workflow.state [workflow/read_only]" in result.output
     assert "workflow.go [workflow/bounded]" in result.output
     assert "release.plan [release/read_only]" in result.output
+    assert "audit.pr-hygiene [audit/read_only]" in result.output
 
 
 def test_cockpit_select_renderer_lists_numbered_actions_without_execution_contract() -> None:

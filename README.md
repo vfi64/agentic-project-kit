@@ -533,3 +533,14 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - Verified v0.3.18 version DOI: `10.5281/zenodo.20245754`
 
 Near-term documentation-governance work: stabilize `agentic-kit doc-mesh-audit` as a targeted special gate, collect false positives, then decide whether to promote it into `agentic-kit doctor` before any unconditional default `ns` integration.
+
+## PR Hygiene Diagnostics
+
+Use `agentic-kit pr-hygiene` as a read-only diagnostic guard for pull-request and branch drift.
+
+```bash
+agentic-kit pr-hygiene
+agentic-kit pr-hygiene --json
+```
+
+The command reports similar open PRs, open PRs without a detectable main delta, stale sibling signals, and local branches whose upstream branch is gone. It does not close PRs, delete branches, push, merge, tag, or release.

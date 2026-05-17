@@ -137,3 +137,9 @@ git branch --show-current
 ## Next Safe Step
 
 Current slice: document GUI i18n, localized tooltips, and Instruction Bridge roadmap. This planning slice records a future i18n system for GUI labels/help/tooltips and a safe human-to-terminal-or-GUI-to-LLM instruction file mechanism. Next safe step: run documentation gates, open the roadmap PR, and then choose the first implementation slice.
+
+## Current implementation slice: PR hygiene guard
+
+The active branch `feature/pr-hygiene-guard` adds a read-only `agentic-kit pr-hygiene` diagnostic command, optional JSON output, a shared cockpit read-only action, and tests for deterministic PR and branch hygiene analysis.
+
+Next safe step: commit the completed slice, open a PR, and verify CI.
