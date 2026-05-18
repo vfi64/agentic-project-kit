@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-201159_publish-v0_3_26.log
+docs/reports/terminal/20260518-201325_pr395-merge-verification.log

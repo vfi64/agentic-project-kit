@@ -1,0 +1,116 @@
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK ###
+main
+7b5d105 Prepare v0.3.26 release metadata (#394)
+922c50c Preserve clean main verification after local branch cleanup (#393)
+aaa1e77 Preserve rule governance verification log (#392)
+e4ba146 Record rule governance contract merge closeout log
+d86f538 Add test-backed rule governance contract (#391)
+6eb5458 Record ns interpreter no-exec repair terminal log
+6361551 Record mandatory remote evidence bootstrap log
+3490c15 Add ns interpreter discovery and no-exec guard (#390)
+
+### PR SUMMARY ###
+{"baseRefName":"main","headRefName":"docs/preserve-publish-v0.3.26-log-20260518-201159","mergeStateStatus":"CLEAN","mergeable":"MERGEABLE","number":395,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-18T18:12:38Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26051691581/job/76589608369","name":"test","startedAt":"2026-05-18T18:12:20Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-18T18:12:47Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26051696110/job/76589622172","name":"test","startedAt":"2026-05-18T18:12:24Z","status":"COMPLETED","workflowName":"CI"}],"title":"Preserve v0.3.26 publish terminal log","url":"https://github.com/vfi64/agentic-project-kit/pull/395"}
+
+### BOUNDED CHECK POLL ###
+
+--- poll 1/30 ---
+test	pass	18s	https://github.com/vfi64/agentic-project-kit/actions/runs/26051691581/job/76589608369	
+test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26051696110/job/76589622172	
+
+### MERGE PR ###
+
+### VERIFY MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   7b5d105..b56eb31  main       -> origin/main
+Updating 7b5d105..b56eb31
+Fast-forward
+ .../terminal/20260518-201159_publish-v0_3_26.log   | 186 +++++++++++++++++++++
+ docs/reports/terminal/LATEST_TERMINAL_LOG.txt      |   2 +-
+ 2 files changed, 187 insertions(+), 1 deletion(-)
+ create mode 100644 docs/reports/terminal/20260518-201159_publish-v0_3_26.log
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 18%]
+........................................................................ [ 36%]
+........................................................................ [ 55%]
+........................................................................ [ 73%]
+........................................................................ [ 91%]
+................................                                         [100%]
+392 passed in 2.21s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.26
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=67
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### OPEN PRS AFTER ###
+
+### FINAL STATE ###
+main
+b56eb31 Preserve v0.3.26 publish terminal log (#395)
+7b5d105 Prepare v0.3.26 release metadata (#394)
+922c50c Preserve clean main verification after local branch cleanup (#393)
+aaa1e77 Preserve rule governance verification log (#392)
+e4ba146 Record rule governance contract merge closeout log
+d86f538 Add test-backed rule governance contract (#391)
+6eb5458 Record ns interpreter no-exec repair terminal log
+6361551 Record mandatory remote evidence bootstrap log
+3490c15 Add ns interpreter discovery and no-exec guard (#390)
+99a175a Preserve standard error cleanup final snapshot (#389)
+
+### RESULT: PASS ###
+
+No exit was called; the interactive shell should remain open.
