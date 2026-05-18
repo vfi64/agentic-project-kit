@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-18'
-  reason: Refresh handoff state safe_state from current git HEAD
-  source: agentic-kit handoff refresh
+  reason: Record handoff state after handoff state commit semantics merge
+  source: remote-repo-update
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -10,11 +10,12 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: aa09831
-  commit_subject: Add parameterized action specs MVP (#348)
+  commit: 7c1ce60
+  commit_subject: Add handoff state commit semantics (#350)
   semantics: last_substantive_work_state
   administrative_refresh_prs:
-    - 349
+  - 347
+  - 349
   working_tree_expected_clean: true
 release:
   current_version: 0.3.24
@@ -31,6 +32,9 @@ completed_since_previous_handoff:
 - 'PR #342 finalized v0.3.24 DOI metadata state and recorded persistent handoff planning.'
 - 'PR #343 added the active no-copy terminal evidence policy.'
 - 'PR #344 added the read-only persistent handoff state MVP.'
+- 'PR #346 added handoff refresh automation.'
+- 'PR #348 added parameterized action specs MVP.'
+- 'PR #350 added explicit handoff state commit semantics.'
 current_capabilities:
   ns_actions:
   - agent-next
@@ -42,6 +46,9 @@ current_capabilities:
   - handoff-show
   - handoff-check
   - handoff-prompt
+  - handoff-refresh
+  - action-list
+  - action-show
   artifact_dirs:
     terminal_logs: docs/reports/terminal
     command_runs: docs/reports/command_runs
@@ -59,6 +66,10 @@ rules:
   status: active
   text: Chat-end lessons must be curated into YAML and generated prompts without redundant,
     contradictory, or obsolete rules.
+- id: last-substantive-safe-state
+  status: active
+  text: safe_state records the last substantive work state; administrative handoff refresh
+    PRs are tracked separately to avoid refresh loops.
 - id: manual-copy-terminal-by-default
   status: superseded
   text: Manual copy-and-paste terminal output was formerly used for routine handoff.
@@ -71,19 +82,22 @@ recent_failure_patterns:
     updates.
 - id: missing-project-venv-tooling
   prevention: Prefer project-local .venv commands over global python, ruff, or agentic-kit.
+- id: stale-handoff-after-administrative-refresh
+  prevention: Keep safe_state tied to the last substantive commit and list administrative
+    refresh PRs separately.
 next_allowed_tasks:
-- id: parametrized-git-release-actions
-  title: Add checked parameterized Git, PR, release, DOI, and finalize actions.
+- id: repo-backed-work-order-automation
+  title: Automate long work orders as repo-backed command/action artifacts.
   priority: 1
-- id: handoff-update-automation
-  title: Add safe update command for .agentic/handoff_state.yaml after merges.
+- id: action-dry-run-validators
+  title: Add deterministic dry-run validators for parameterized Git, PR, release, DOI, and finalize actions.
   priority: 2
 blocked_until_closeout:
 - GUI mutation controls
 - new release cycle automation
-first_instruction: Work first on the checked parameterized Git, PR, release, DOI,
-  and finalize action layer. Keep this next slice focused on safe action objects and
-  repository-backed evidence.
+first_instruction: Work first on repo-backed work-order automation so long implementation
+  work orders are generated, stored, pulled, and executed through checked repository artifacts.
+  Keep remote mutations out of scope unless an explicit checked action contract exists.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
