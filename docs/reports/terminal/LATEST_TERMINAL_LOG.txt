@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-215317_add-visible-agent-next-result-footer.log
+docs/reports/terminal/20260518-215619_agent-next-smoke-003.log
