@@ -1,0 +1,169 @@
+REFRESH STALE STATUS AND CURRENT_HANDOFF AFTER V0.3.26 AND PR400
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+
+### CREATE DOC BRANCH ###
+Switched to a new branch 'docs/refresh-status-handoff-after-pr400'
+
+### WRITE REFRESHED STATUS ###
+
+### WRITE REFRESHED CURRENT_HANDOFF ###
+
+### VERIFY NO OLD CURRENT-STATE CLAIMS REMAIN ###
+
+### LOCAL GATES ###
+FAIL_DIRTY_WORKTREE_BEFORE_REMOTE_MUTATION
+docs/STATUS.md
+docs/handoff/CURRENT_HANDOFF.md
+Persistent handoff state check passed
+Governance check passed
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+docs/refresh-status-handoff-after-pr400
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+
+### PYTEST ###
+........................................................................ [ 18%]
+........................................................................ [ 36%]
+........................................................................ [ 54%]
+........................................................................ [ 72%]
+........................................................................ [ 91%]
+...................................                                      [100%]
+395 passed in 2.23s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check failed
+- docs/STATUS.md: missing required section '## Live Status Commands'
+- docs/handoff/CURRENT_HANDOFF.md: missing required section '## Source of Truth'
+- docs/handoff/CURRENT_HANDOFF.md: missing required section '## Required Local Gate'
+- documentation coverage pattern-advisor-readme-coverage: docs/STATUS.md missing term 'Pattern
+Advisor'
+- documentation coverage pattern-advisor-readme-coverage: docs/STATUS.md missing term 
+'read-only catalog'
+- documentation coverage pattern-advisor-readme-coverage: docs/STATUS.md missing term 
+'patterns list'
+- documentation coverage pattern-advisor-readme-coverage: docs/STATUS.md missing term 
+'patterns show'
+- documentation coverage pattern-advisor-readme-coverage: docs/STATUS.md missing term 
+'advisory-only'
+- documentation coverage policy-pack-doctor-coverage: docs/handoff/CURRENT_HANDOFF.md missing 
+term 'policy-pack checks'
+- documentation coverage policy-pack-doctor-coverage: docs/handoff/CURRENT_HANDOFF.md missing 
+term 'policy packs'
+- documentation coverage post-release-zenodo-coverage: docs/STATUS.md missing term 
+'post-release Zenodo'
+- documentation coverage post-release-zenodo-coverage: docs/STATUS.md missing term 
+'agentic-kit post-release-check'
+- documentation coverage post-release-zenodo-coverage: docs/handoff/CURRENT_HANDOFF.md missing
+term 'post-release Zenodo'
+- documentation coverage post-release-zenodo-coverage: docs/handoff/CURRENT_HANDOFF.md missing
+term 'agentic-kit post-release-check'
+- documentation coverage state-doc-coverage: docs/STATUS.md missing term 
+'docs/DOCUMENTATION_COVERAGE.yaml'
+- documentation coverage state-doc-coverage: docs/STATUS.md missing term 'agentic-kit 
+check-docs'
+- documentation coverage state-doc-coverage: docs/STATUS.md missing term 'agentic-kit doctor'
+- documentation coverage state-doc-coverage: docs/handoff/CURRENT_HANDOFF.md missing term 
+'documentation coverage'
+- documentation coverage state-doc-coverage: docs/handoff/CURRENT_HANDOFF.md missing term 
+'docs/DOCUMENTATION_COVERAGE.yaml'
+- documentation coverage state-doc-coverage: docs/handoff/CURRENT_HANDOFF.md missing term 
+'agentic-kit check-docs'
+- documentation coverage state-doc-coverage: docs/handoff/CURRENT_HANDOFF.md missing term 
+'agentic-kit doctor'
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[FAIL] documentation gates: docs/STATUS.md: missing required section '## Live Status 
+Commands'; docs/handoff/CURRENT_HANDOFF.md: missing required section '## Source of Truth'; 
+docs/handoff/CURRENT_HANDOFF.md: missing required section '## Required Local Gate'; 
+documentation coverage pattern-advisor-readme-coverage: docs/STATUS.md missing term 'Pattern 
+Advisor'; documentation coverage pattern-advisor-readme-coverage: docs/STATUS.md missing term 
+'read-only catalog'; documentation coverage pattern-advisor-readme-coverage: docs/STATUS.md 
+missing term 'patterns list'; documentation coverage pattern-advisor-readme-coverage: 
+docs/STATUS.md missing term 'patterns show'; documentation coverage 
+pattern-advisor-readme-coverage: docs/STATUS.md missing term 'advisory-only'; documentation 
+coverage policy-pack-doctor-coverage: docs/handoff/CURRENT_HANDOFF.md missing term 
+'policy-pack checks'; documentation coverage policy-pack-doctor-coverage: 
+docs/handoff/CURRENT_HANDOFF.md missing term 'policy packs'; documentation coverage 
+post-release-zenodo-coverage: docs/STATUS.md missing term 'post-release Zenodo'; documentation
+coverage post-release-zenodo-coverage: docs/STATUS.md missing term 'agentic-kit 
+post-release-check'; documentation coverage post-release-zenodo-coverage: 
+docs/handoff/CURRENT_HANDOFF.md missing term 'post-release Zenodo'; documentation coverage 
+post-release-zenodo-coverage: docs/handoff/CURRENT_HANDOFF.md missing term 'agentic-kit 
+post-release-check'; documentation coverage state-doc-coverage: docs/STATUS.md missing term 
+'docs/DOCUMENTATION_COVERAGE.yaml'; documentation coverage state-doc-coverage: docs/STATUS.md 
+missing term 'agentic-kit check-docs'; documentation coverage state-doc-coverage: 
+docs/STATUS.md missing term 'agentic-kit doctor'; documentation coverage state-doc-coverage: 
+docs/handoff/CURRENT_HANDOFF.md missing term 'documentation coverage'; documentation coverage 
+state-doc-coverage: docs/handoff/CURRENT_HANDOFF.md missing term 
+'docs/DOCUMENTATION_COVERAGE.yaml'; documentation coverage state-doc-coverage: 
+docs/handoff/CURRENT_HANDOFF.md missing term 'agentic-kit check-docs'; documentation coverage 
+state-doc-coverage: docs/handoff/CURRENT_HANDOFF.md missing term 'agentic-kit doctor'
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.26
+
+Overall: FAIL
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=69
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+docs/refresh-status-handoff-after-pr400
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+
+### RESULT: FAIL ###
+
+### COMMIT REFRESH ###
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+[docs/refresh-status-handoff-after-pr400 0228529] Refresh status and handoff after rule evidence governance
+ 2 files changed, 82 insertions(+), 524 deletions(-)
+remote: 
+remote: Create a pull request for 'docs/refresh-status-handoff-after-pr400' on GitHub by visiting:        
+remote:      https://github.com/vfi64/agentic-project-kit/pull/new/docs/refresh-status-handoff-after-pr400        
+remote: 
+To github.com:vfi64/agentic-project-kit.git
+ * [new branch]      docs/refresh-status-handoff-after-pr400 -> docs/refresh-status-handoff-after-pr400
+branch 'docs/refresh-status-handoff-after-pr400' set up to track 'origin/docs/refresh-status-handoff-after-pr400'.
+
+### CREATE PR ###
+https://github.com/vfi64/agentic-project-kit/pull/401
+
+### RESULT MARKER BEFORE LOG FINALIZATION ###
+### RESULT: FAIL ###
