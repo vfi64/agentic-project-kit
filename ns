@@ -1,5 +1,22 @@
 #!/usr/bin/env sh
 
+if [ "${1:-}" = "run-logged" ]; then
+  shift
+  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging run-logged "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-status" ]; then
+  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging terminal-status
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-upload" ]; then
+  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging terminal-upload
+  exit $?
+fi
+
+
 if [ "${1:-}" = "cockpit-readiness" ]; then
   PYTHONPATH=src python3 tools/cockpit_readiness.py
   exit $?

@@ -97,6 +97,32 @@ ACTIONS: tuple[ActionMetadata, ...] = (
         outcome_contract=("PASS", "FAIL"),
         summary="Render static cockpit readiness metadata without executing actions.",
     ),
+
+    ActionMetadata(
+        name="run-logged",
+        safety_class=SafetyClass.LOCAL_ONLY,
+        mutation_scope="docs/reports/terminal",
+        dry_run_supported=False,
+        outcome_contract=("PASS", "FAIL", "FAIL_NO_COMMAND", "FAIL_MISSING_SEPARATOR"),
+        summary="Run a local command while teeing output to a terminal log.",
+    ),
+    ActionMetadata(
+        name="terminal-status",
+        safety_class=SafetyClass.READ_ONLY,
+        mutation_scope="none",
+        dry_run_supported=True,
+        outcome_contract=("PASS_LOG_READY", "PASS_NO_LOG", "FAIL_INVALID_POINTER"),
+        summary="Inspect the latest terminal log pointer without mutating state.",
+    ),
+    ActionMetadata(
+        name="terminal-upload",
+        safety_class=SafetyClass.REMOTE_MUTATION,
+        mutation_scope="docs/reports/terminal only",
+        dry_run_supported=False,
+        outcome_contract=("PASS_UPLOADED", "PASS_ALREADY_UPLOADED", "FAIL_NO_LOG", "FAIL_DIRTY_NON_LOG_FILES", "FAIL_PUSH_FAILED"),
+        summary="Commit and push only terminal-log artifacts for failure handoff.",
+    ),
+
 )
 
 
