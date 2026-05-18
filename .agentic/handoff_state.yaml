@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 22a0d3a
-  commit_subject: Add handoff refresh command (#346)
+  commit: aa09831
+  commit_subject: Add parameterized action specs MVP (#348)
   working_tree_expected_clean: true
 release:
   current_version: 0.3.24
