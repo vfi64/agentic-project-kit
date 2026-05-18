@@ -282,3 +282,4 @@ Post-release Dependabot cleanup is complete. PR #327 and PR #328 resolved the re
 - Current slice: `feature/repo-command-runner` introduces repo-backed command files plus `./ns agent-run`; goal is to replace routine copy-and-paste terminal blocks with committed command-run reports.
 - Completed: PR #334 merged repo command runner MVP. Routine local instructions should move toward committed agent command files and ./ns agent-run; manual terminal copy-and-paste is recovery-only.
 - Current slice: `feature/agent-command-inbox` adds inbox-based `./ns agent-next`; prefer one pending command pair under `.agentic/commands/inbox/` instead of transient current files.
+- Completed: PR #336 merged agent-next inbox mode. Preferred routine workflow is now: commit one command pair under .agentic/commands/inbox/, run ./ns agent-next locally, and use committed command-run/terminal artifacts instead of pasted terminal output.
