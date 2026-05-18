@@ -1,3 +1,4 @@
+
 import typer
 
 from agentic_project_kit.cli_commands.checks import register_check_commands
@@ -5,7 +6,7 @@ from agentic_project_kit.cli_commands.cockpit import cockpit_app
 from agentic_project_kit.cli_commands.github import register_github_commands
 from agentic_project_kit.cli_commands.handoff import handoff_app
 from agentic_project_kit.cli_commands.governance import governance_app
-from agentic_project_kit.cli_commands.pr import pr_app
+from agentic_project_kit.cli_commands.pr import pr_app, register_pr_closeout_alias
 from agentic_project_kit.cli_commands.actions import actions_app
 from agentic_project_kit.cli_commands.work_orders import work_orders_app
 from agentic_project_kit.cli_commands.init import register_init_command
@@ -33,11 +34,12 @@ app.add_typer(actions_app, name="actions")
 app.add_typer(work_orders_app, name="work-order")
 app.add_typer(governance_app, name="governance")
 app.add_typer(pr_app, name="pr")
+register_pr_closeout_alias(app)
 app.add_typer(cockpit_app, name="cockpit")
 app.add_typer(patterns_app, name="patterns")
 app.add_typer(scaffold_app, name="scaffold")
 app.add_typer(todo_app, name="todo")
 
-
 if __name__ == "__main__":
     app()
+

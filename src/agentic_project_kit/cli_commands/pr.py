@@ -16,3 +16,13 @@ def closeout_check(json_file: Path) -> None:
     typer.echo(render_pr_closeout(result))
     if result.outcome == BLOCKED:
         raise typer.Exit(code=1)
+
+
+def register_pr_closeout_alias(app: typer.Typer) -> None:
+    @app.command("pr-closeout")
+    def pr_closeout_alias(json_file: Path) -> None:
+        data = json.loads(json_file.read_text(encoding="utf-8"))
+        result = evaluate_pr_closeout(data)
+        typer.echo(render_pr_closeout(result))
+        if result.outcome == BLOCKED:
+            raise typer.Exit(code=1)
