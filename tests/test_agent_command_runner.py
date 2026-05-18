@@ -262,3 +262,48 @@ def test_agent_next_fail_prints_f_footer(tmp_path, monkeypatch, capsys):
     out = capsys.readouterr().out
     assert "### AGENT-NEXT RESULT: FAIL ###" in out
     assert "reply=f" in out
+
+
+def test_agent_next_pull_failure_prints_hard_fail_footer(tmp_path, monkeypatch, capsys):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(acr, "git_pull_ff_only", lambda: 9)
+    assert acr.agent_next() == 9
+    out = capsys.readouterr().out
+    assert acr.OUTCOME_FAIL_PULL in out
+    assert "### AGENT-NEXT RESULT: HARD-FAIL ###" in out
+    assert "reply=paste-output" in out
+    assert "reason=FAIL_PULL" in out
+
+
+def test_agent_next_ambiguous_commands_prints_hard_fail_footer(tmp_path, monkeypatch, capsys):
+    monkeypatch.chdir(tmp_path)
+    inbox = acr.INBOX_DIR
+    inbox.mkdir(parents=True)
+    (inbox / "a.yaml").write_text("command_id: a\ntitle: A\nsafety_class: local-only\n", encoding="utf-8")
+    (inbox / "a.sh").write_text("printf a\n", encoding="utf-8")
+    (inbox / "b.yaml").write_text("command_id: b\ntitle: B\nsafety_class: local-only\n", encoding="utf-8")
+    (inbox / "b.sh").write_text("printf b\n", encoding="utf-8")
+    monkeypatch.setattr(acr, "git_pull_ff_only", lambda: 0)
+    assert acr.agent_next() == 1
+    out = capsys.readouterr().out
+    assert acr.OUTCOME_FAIL_AMBIGUOUS_COMMANDS in out
+    assert "### AGENT-NEXT RESULT: HARD-FAIL ###" in out
+    assert "reply=paste-output" in out
+    assert "reason=FAIL_AMBIGUOUS_COMMANDS" in out
+
+
+def test_agent_next_postcondition_failure_prints_hard_fail_footer(tmp_path, monkeypatch, capsys):
+    monkeypatch.chdir(tmp_path)
+    inbox = acr.INBOX_DIR
+    inbox.mkdir(parents=True)
+    (inbox / "cmd.yaml").write_text("command_id: cmd-post\ntitle: Cmd Post\nsafety_class: local-only\n", encoding="utf-8")
+    (inbox / "cmd.sh").write_text("printf cmd-post\n", encoding="utf-8")
+    monkeypatch.setattr(acr, "git_pull_ff_only", lambda: 0)
+    monkeypatch.setattr(acr, "agent_run", lambda extra_upload_paths=None: 0)
+    monkeypatch.setattr(acr, "remove_current_files", lambda: None)
+    assert acr.agent_next() == 1
+    out = capsys.readouterr().out
+    assert acr.OUTCOME_FAIL_POSTCONDITION in out
+    assert "### AGENT-NEXT RESULT: HARD-FAIL ###" in out
+    assert "reply=paste-output" in out
+    assert "reason=FAIL_POSTCONDITION" in out

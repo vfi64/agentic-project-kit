@@ -261,3 +261,7 @@ Before terminal workflows perform remote mutations or merge/sync verification, t
 ## Visible agent-next result footer
 
 `tests/test_agent_command_runner.py` verifies that `agent_next` prints visible terminal footers for no-command, pass, and normal fail outcomes. The footer tells the user whether to reply with `d`, `f`, `ask-agent-to-queue-command`, or paste output for hard failures.
+
+## Agent-next hard-fail result contract
+
+`tests/test_agent_command_runner.py` verifies that `agent_next` prints `HARD-FAIL` with `reply=paste-output` for pull failure, ambiguous command inbox, and postcondition failure. This separates workflow-level hard failures from normal command `FAIL` cases that can be handled with `f` and remote evidence.
