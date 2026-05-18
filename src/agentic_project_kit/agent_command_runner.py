@@ -265,6 +265,18 @@ def agent_run(extra_upload_paths: list[Path] | None = None) -> int:
 
 
 
+
+def print_agent_next_footer(outcome: str, reply: str, reason: str = "") -> None:
+    print("")
+    print(f"### AGENT-NEXT RESULT: {outcome} ###")
+    print(f"reply={reply}")
+    if reason:
+        print(f"reason={reason}")
+    if LATEST_COMMAND_RUN_POINTER.exists():
+        print(f"latest_command_run={LATEST_COMMAND_RUN_POINTER.as_posix()}")
+    print("### END AGENT-NEXT RESULT ###")
+
+
 def git_porcelain_paths() -> list[str]:
     proc = subprocess.run(["git", "status", "--porcelain"], text=True, capture_output=True, check=False)
     paths: list[str] = []
@@ -301,16 +313,19 @@ def agent_next() -> int:
     pulled = git_pull_ff_only()
     if pulled != 0:
         print(OUTCOME_FAIL_PULL)
+        print_agent_next_footer("HARD-FAIL", "paste-output", OUTCOME_FAIL_PULL)
         return pulled
     try:
         consumed_paths = list(prepare_current_from_inbox())
     except FileNotFoundError as exc:
         print(OUTCOME_FAIL_NO_COMMAND)
         print(str(exc))
+        print_agent_next_footer("NO-COMMAND", "ask-agent-to-queue-command", str(exc))
         return 1
     except RuntimeError as exc:
         print(OUTCOME_FAIL_AMBIGUOUS_COMMANDS)
         print(str(exc))
+        print_agent_next_footer("HARD-FAIL", "paste-output", OUTCOME_FAIL_AMBIGUOUS_COMMANDS)
         return 1
     try:
         result = agent_run(extra_upload_paths=consumed_paths)
@@ -321,7 +336,12 @@ def agent_next() -> int:
         print(OUTCOME_FAIL_POSTCONDITION)
         for item in failures:
             print(item)
+        print_agent_next_footer("HARD-FAIL", "paste-output", OUTCOME_FAIL_POSTCONDITION)
         return 1
+    if result == 0:
+        print_agent_next_footer("PASS", "d")
+    else:
+        print_agent_next_footer("FAIL", "f")
     return result
 
 def main(argv: list[str] | None = None) -> int:

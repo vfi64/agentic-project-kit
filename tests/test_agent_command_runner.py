@@ -225,3 +225,40 @@ def test_agent_run_uploads_latest_command_run_pointer(tmp_path, monkeypatch):
     monkeypatch.setattr(acr, "stage_commit_push", fake_stage_commit_push)
     assert acr.agent_run() == 0
     assert "docs/reports/command_runs/LATEST_COMMAND_RUN.txt" in pushed_paths
+
+
+def test_agent_next_no_command_prints_visible_footer(tmp_path, monkeypatch, capsys):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(acr, "git_pull_ff_only", lambda: 0)
+    assert acr.agent_next() == 1
+    out = capsys.readouterr().out
+    assert "### AGENT-NEXT RESULT: NO-COMMAND ###" in out
+    assert "reply=ask-agent-to-queue-command" in out
+
+
+def test_agent_next_pass_prints_d_footer(tmp_path, monkeypatch, capsys):
+    monkeypatch.chdir(tmp_path)
+    inbox = acr.INBOX_DIR
+    inbox.mkdir(parents=True)
+    (inbox / "cmd.yaml").write_text("command_id: cmd-footer\ntitle: Cmd Footer\nsafety_class: local-only\n", encoding="utf-8")
+    (inbox / "cmd.sh").write_text("printf cmd-footer\n", encoding="utf-8")
+    monkeypatch.setattr(acr, "git_pull_ff_only", lambda: 0)
+    monkeypatch.setattr(acr, "agent_run", lambda extra_upload_paths=None: 0)
+    assert acr.agent_next() == 0
+    out = capsys.readouterr().out
+    assert "### AGENT-NEXT RESULT: PASS ###" in out
+    assert "reply=d" in out
+
+
+def test_agent_next_fail_prints_f_footer(tmp_path, monkeypatch, capsys):
+    monkeypatch.chdir(tmp_path)
+    inbox = acr.INBOX_DIR
+    inbox.mkdir(parents=True)
+    (inbox / "cmd.yaml").write_text("command_id: cmd-footer-fail\ntitle: Cmd Footer Fail\nsafety_class: local-only\n", encoding="utf-8")
+    (inbox / "cmd.sh").write_text("printf cmd-footer-fail\n", encoding="utf-8")
+    monkeypatch.setattr(acr, "git_pull_ff_only", lambda: 0)
+    monkeypatch.setattr(acr, "agent_run", lambda extra_upload_paths=None: 7)
+    assert acr.agent_next() == 7
+    out = capsys.readouterr().out
+    assert "### AGENT-NEXT RESULT: FAIL ###" in out
+    assert "reply=f" in out
