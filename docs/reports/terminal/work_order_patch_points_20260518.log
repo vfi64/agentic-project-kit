@@ -1,0 +1,1759 @@
+### STATE ###
+feature/repo-backed-work-orders
+b2eac3f Refresh handoff state after commit semantics (#352)
+7c1ce60 Add handoff state commit semantics (#350)
+0543ba8 Refresh handoff state after parameterized action specs (#349)
+aa09831 Add parameterized action specs MVP (#348)
+793a15f Refresh handoff state after handoff update automation (#347)
+22a0d3a Add handoff refresh command (#346)
+edf318b Update handoff state after persistent handoff MVP (#345)
+144016d Add persistent handoff state MVP (#344)
+40291a1 Add no-copy terminal evidence policy (#343)
+c628954 Finalize state after v0.3.24 DOI metadata (#342)
+
+### NS WORKFLOW COMMANDS ###
+#!/usr/bin/env sh
+
+
+
+
+if [ "${1:-}" = "action-list" ]; then
+  shift
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli actions list "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "action-show" ]; then
+  shift
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli actions show "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-refresh" ]; then
+  shift
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff refresh "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-show" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff show
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-check" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff check
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-prompt" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff prompt
+  exit $?
+fi
+
+if [ "${1:-}" = "run-logged" ]; then
+  shift
+  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging run-logged "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-status" ]; then
+  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging terminal-status
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-upload" ]; then
+  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging terminal-upload
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-clean-check" ]; then
+  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging terminal-clean-check
+  exit $?
+fi
+
+if [ "${1:-}" = "agent-next" ]; then
+  PYTHONPATH=src python3 -m agentic_project_kit.agent_command_runner next
+  exit $?
+fi
+
+if [ "${1:-}" = "agent-run" ]; then
+  PYTHONPATH=src python3 -m agentic_project_kit.agent_command_runner
+  exit $?
+fi
+
+
+if [ "${1:-}" = "cockpit-readiness" ]; then
+  PYTHONPATH=src python3 tools/cockpit_readiness.py
+  exit $?
+fi
+
+set -eu
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+cd "$SCRIPT_DIR"
+if [ "${1:-}" = "cockpit" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit cockpit status "$@"
+  fi
+  exec agentic-kit cockpit status "$@"
+fi
+if [ "${1:-}" = "actions" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit cockpit actions "$@"
+  fi
+  exec agentic-kit cockpit actions "$@"
+fi
+if [ "${1:-}" = "select" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit cockpit select "$@"
+  fi
+  exec agentic-kit cockpit select "$@"
+fi
+if [ "${1:-}" = "cockpit-run" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit cockpit run "$@"
+  fi
+  exec agentic-kit cockpit run "$@"
+fi
+if [ "${1:-}" = "state" ] || [ "${1:-}" = "status" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit workflow state "$@"
+  fi
+  exec agentic-kit workflow state "$@"
+fi
+if [ "${1:-}" = "list" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit workflow list "$@"
+  fi
+  exec agentic-kit workflow list "$@"
+fi
+if [ "${1:-}" = "show" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit workflow show "$@"
+  fi
+  exec agentic-kit workflow show "$@"
+fi
+if [ "${1:-}" = "run" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit workflow run "$@"
+  fi
+  exec agentic-kit workflow run "$@"
+fi
+if [ "${1:-}" = "release-prep" ]; then
+  shift
+  exec tools/ns_release_prep.sh "$@"
+fi
+if [ "${1:-}" = "release-gate" ]; then
+  shift
+  exec tools/ns_release_gate.sh "$@"
+fi
+if [ "${1:-}" = "release-publish" ]; then
+  shift
+  exec tools/ns_release_publish.sh "$@"
+fi
+if [ "${1:-}" = "release-verify" ]; then
+  shift
+  exec tools/ns_release_verify.sh "$@"
+fi
+if [ "${1:-}" = "finalize-guard" ]; then
+  shift
+  exec tools/ns_finalize_guard.sh "$@"
+fi
+
+if [ "${1:-}" = "clean-evidence" ]; then
+  shift
+  exec tools/ns_clean_evidence.sh "$@"
+fi
+
+if [ "${1:-}" = "commit-guard" ]; then
+  shift
+  exec tools/ns_commit_pr_guard.sh "$@"
+fi
+
+if [ "${1:-}" = "pr-cleanup" ]; then
+  shift
+  exec tools/ns_pr_cleanup.sh "$@"
+fi
+if [ "${1:-}" = "slice-runner" ]; then
+  shift
+  exec tools/ns_slice_runner.sh "$@"
+fi
+
+if [ "${1:-}" = "dev" ]; then
+  shift
+  STATUS=0
+  printf '\n### NS DEV LOCAL FEATURE GATE ###\n'
+  printf 'Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.\n'
+  printf '\n### BRANCH / STATUS ###\n'
+  git branch --show-current || STATUS=1
+  git status --short || STATUS=1
+  printf '\n### PYTEST ###\n'
+  .venv/bin/python -m pytest -q "$@" || STATUS=1
+  printf '\n### RUFF ###\n'
+  .venv/bin/ruff check . || STATUS=1
+  printf '\n### CHECK DOCS ###\n'
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli check-docs || STATUS=1
+  printf '\n### DOCTOR ###\n'
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli doctor || STATUS=1
+  printf '\n### PR HYGIENE ###\n'
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli pr-hygiene || STATUS=1
+  printf '\n### FINAL STATE ###\n'
+  git branch --show-current || STATUS=1
+  git status --short || STATUS=1
+  if [ "$STATUS" -eq 0 ]; then
+    printf '\n### RESULT: PASS ###\n'
+    exit 0
+  fi
+  printf '\n### RESULT: FAIL ###\n'
+  exit 1
+fi
+
+ if [ "${1:-}" = "go" ]; then
+  shift
+  BRANCH="$(git branch --show-current 2>/dev/null)"
+  DIRTY="$(git status --short 2>/dev/null)"
+  if [ "$BRANCH" != "main" ] && [ -n "$DIRTY" ] && grep -q "git_pull_ff_only" .agentic/current_work.yaml 2>/dev/null; then
+    printf '
+### NS GO GUARD ###
+'
+    printf 'Refusing governed workflow go on a dirty feature branch because current_work includes git_pull_ff_only.
+'
+    printf 'Use ./ns dev for local feature gates, or clean the branch before ./ns go.
+'
+    printf '
+### RESULT: FAIL ###
+'
+    exit 2
+  fi
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit workflow go "$@"
+  fi
+  exec agentic-kit workflow go "$@"
+fi
+if [ "${1:-}" = "up" ]; then
+  shift
+  exec tools/ns_up_pr_completion.sh "$@"
+fi
+
+if [ "${1:-}" = "upload" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit workflow upload "$@"
+  fi
+  exec agentic-kit workflow upload "$@"
+fi
+
+if [ "${1:-}" = "fail" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    exec .venv/bin/agentic-kit workflow fail-report "$@"
+  fi
+  exec agentic-kit workflow fail-report "$@"
+fi
+
+if [ -x ".venv/bin/python" ]; then
+  exec .venv/bin/python tools/next-step.py "$@"
+fi
+exec python3 tools/next-step.py "$@"
+
+# no-copy workflow shortcuts: ./ns dev, ./ns go, ./ns up
+
+### CLI ROOT ###
+import typer
+
+from agentic_project_kit.cli_commands.checks import register_check_commands
+from agentic_project_kit.cli_commands.cockpit import cockpit_app
+from agentic_project_kit.cli_commands.github import register_github_commands
+from agentic_project_kit.cli_commands.handoff import handoff_app
+from agentic_project_kit.cli_commands.actions import actions_app
+from agentic_project_kit.cli_commands.init import register_init_command
+from agentic_project_kit.cli_commands.patterns import patterns_app
+from agentic_project_kit.cli_commands.profiles import register_profile_commands
+from agentic_project_kit.cli_commands.pr_hygiene import register_pr_hygiene_command
+from agentic_project_kit.cli_commands.release import register_release_commands
+from agentic_project_kit.cli_commands.scaffold import scaffold_app
+from agentic_project_kit.cli_commands.todo import todo_app
+from agentic_project_kit.cli_commands.validation import register_validation_commands
+from agentic_project_kit.cli_commands.workflow import workflow_app
+
+app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
+
+register_init_command(app)
+register_profile_commands(app)
+register_pr_hygiene_command(app)
+register_github_commands(app)
+register_check_commands(app)
+register_release_commands(app)
+register_validation_commands(app)
+app.add_typer(workflow_app, name="workflow")
+app.add_typer(handoff_app, name="handoff")
+app.add_typer(actions_app, name="actions")
+app.add_typer(cockpit_app, name="cockpit")
+app.add_typer(patterns_app, name="patterns")
+app.add_typer(scaffold_app, name="scaffold")
+app.add_typer(todo_app, name="todo")
+
+
+if __name__ == "__main__":
+    app()
+
+### ACTION SPECS ###
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from enum import Enum
+
+class SafetyClass(str, Enum):
+    READ_ONLY = "read_only"
+    LOCAL_ONLY = "local_only"
+    REMOTE_MUTATION = "remote_mutation"
+    DESTRUCTIVE = "destructive"
+
+@dataclass(frozen=True)
+class ParameterSpec:
+    name: str
+    description: str
+    required: bool = True
+    example: str = ""
+
+@dataclass(frozen=True)
+class ActionSpec:
+    action_id: str
+    title: str
+    safety_class: SafetyClass
+    purpose: str
+    parameters: tuple[ParameterSpec, ...] = field(default_factory=tuple)
+    allowed_mutations: tuple[str, ...] = field(default_factory=tuple)
+    preconditions: tuple[str, ...] = field(default_factory=tuple)
+    postconditions: tuple[str, ...] = field(default_factory=tuple)
+    evidence: tuple[str, ...] = field(default_factory=tuple)
+    dry_run_default: bool = True
+
+def built_in_action_specs() -> dict[str, ActionSpec]:
+    specs = [
+        ActionSpec(
+            action_id="pr-check-merge",
+            title="Check and optionally merge a pull request",
+            safety_class=SafetyClass.REMOTE_MUTATION,
+            purpose="Replace ad-hoc PR check/merge terminal blocks with a parameterized action contract.",
+            parameters=(ParameterSpec("pr_number", "GitHub pull request number.", example="346"),),
+            allowed_mutations=("squash merge selected PR when explicit execute mode is later added", "delete merged branch when GitHub merge action does so"),
+            preconditions=("state OPEN", "mergeStateStatus CLEAN", "pending_count 0", "non_success_count 0", "expected CI checks present"),
+            postconditions=("main fast-forwards to merge commit", "local gates pass after sync", "repo-backed evidence log exists"),
+            evidence=("gh pr JSON state", "CI rollup", "terminal log", "post-merge local gate report"),
+        ),
+        ActionSpec(
+            action_id="release-verify",
+            title="Verify an already published release",
+            safety_class=SafetyClass.READ_ONLY,
+            purpose="Verify tag, GitHub Release, Release workflow, assets, and Zenodo DOI state.",
+            parameters=(ParameterSpec("version", "Release version without leading v.", example="0.3.24"),),
+            preconditions=("version is present", "local repository is on a clean branch"),
+            postconditions=("GitHub Release exists", "release assets exist", "post-release check passes"),
+            evidence=("release-verify terminal log", "post-release-check output"),
+        ),
+        ActionSpec(
+            action_id="doi-record",
+            title="Record verified DOI metadata",
+            safety_class=SafetyClass.LOCAL_ONLY,
+            purpose="Prepare DOI metadata changes after release verification.",
+            parameters=(ParameterSpec("version", "Release version.", example="0.3.24"), ParameterSpec("doi", "Verified Zenodo version DOI.", example="10.5281/zenodo.20270197")),
+            allowed_mutations=("update CHANGELOG.md", "update docs/STATUS.md", "update docs/handoff/CURRENT_HANDOFF.md", "write terminal evidence log"),
+            preconditions=("post-release check PASS", "DOI belongs to requested version"),
+            postconditions=("docs mention DOI once", "local gates pass", "PR is opened for DOI metadata"),
+            evidence=("post-release-check output", "DOI metadata terminal log"),
+        ),
+        ActionSpec(
+            action_id="finalize-release",
+            title="Finalize repository state after release closeout",
+            safety_class=SafetyClass.LOCAL_ONLY,
+            purpose="Update state and handoff after release and DOI metadata are complete.",
+            parameters=(ParameterSpec("version", "Release version.", example="0.3.24"),),
+            allowed_mutations=("update docs/STATUS.md", "update docs/handoff/CURRENT_HANDOFF.md", "update .agentic/handoff_state.yaml", "write terminal evidence log"),
+            preconditions=("release metadata PR merged", "main gates pass", "handoff state has no obsolete next instruction"),
+            postconditions=("state docs point to next allowed task", "handoff prompt is current", "local gates pass"),
+            evidence=("finalize terminal log", "handoff-check output", "doctor output"),
+        ),
+    ]
+    return {spec.action_id: spec for spec in specs}
+
+def get_action_spec(action_id: str) -> ActionSpec:
+    specs = built_in_action_specs()
+    if action_id not in specs:
+        known = ", ".join(sorted(specs))
+        raise KeyError(f"unknown action spec: {action_id}; known: {known}")
+    return specs[action_id]
+
+def render_action_spec(spec: ActionSpec) -> str:
+    lines = [
+        f"Action: {spec.action_id}",
+        f"Title: {spec.title}",
+        f"Safety: {spec.safety_class.value}",
+        f"Dry-run default: {spec.dry_run_default}",
+        "",
+        "Purpose:",
+        spec.purpose,
+        "",
+        "Parameters:",
+    ]
+    for parameter in spec.parameters:
+        required = "required" if parameter.required else "optional"
+        example = f"; example: {parameter.example}" if parameter.example else ""
+        lines.append(f"- {parameter.name} ({required}): {parameter.description}{example}")
+    sections = [
+        ("Allowed mutations", spec.allowed_mutations),
+        ("Preconditions", spec.preconditions),
+        ("Postconditions", spec.postconditions),
+        ("Evidence", spec.evidence),
+    ]
+    for title, items in sections:
+        lines.extend(["", f"{title}:"])
+        if items:
+            lines.extend(f"- {item}" for item in items)
+        else:
+            lines.append("- none")
+    return "\n".join(lines)
+
+### CLI COMMAND MODULES ###
+src/agentic_project_kit/cli_commands/__init__.py
+src/agentic_project_kit/cli_commands/actions.py
+src/agentic_project_kit/cli_commands/checks.py
+src/agentic_project_kit/cli_commands/cockpit.py
+src/agentic_project_kit/cli_commands/github.py
+src/agentic_project_kit/cli_commands/handoff.py
+src/agentic_project_kit/cli_commands/init.py
+src/agentic_project_kit/cli_commands/patterns.py
+src/agentic_project_kit/cli_commands/pr_hygiene.py
+src/agentic_project_kit/cli_commands/profiles.py
+src/agentic_project_kit/cli_commands/release.py
+src/agentic_project_kit/cli_commands/scaffold.py
+src/agentic_project_kit/cli_commands/todo.py
+src/agentic_project_kit/cli_commands/validation.py
+src/agentic_project_kit/cli_commands/workflow.py
+
+--- src/agentic_project_kit/cli_commands/__init__.py ---
+"""Command modules for the agentic-kit CLI."""
+
+--- src/agentic_project_kit/cli_commands/actions.py ---
+from __future__ import annotations
+
+import typer
+
+from agentic_project_kit.action_specs import built_in_action_specs, get_action_spec, render_action_spec
+
+actions_app = typer.Typer(help="Inspect parameterized action specifications.")
+
+@actions_app.command("list")
+def list_actions() -> None:
+    for spec in built_in_action_specs().values():
+        typer.echo(f"{spec.action_id}\t{spec.safety_class.value}\t{spec.title}")
+
+@actions_app.command("show")
+def show_action(action_id: str) -> None:
+    try:
+        spec = get_action_spec(action_id)
+    except KeyError as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+    typer.echo(render_action_spec(spec))
+
+--- src/agentic_project_kit/cli_commands/checks.py ---
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Annotated
+
+import typer
+from rich.console import Console
+
+from agentic_project_kit.checks import check_all, check_docs, check_todo
+from agentic_project_kit.doc_mesh import (
+    apply_doc_mesh_repair_plan,
+    build_doc_mesh_repair_plan,
+    build_doc_mesh_report,
+    render_doc_mesh_repair_plan,
+    render_doc_mesh_repair_result,
+    render_doc_mesh_report,
+    write_doc_mesh_json_report,
+    write_doc_mesh_repair_plan,
+    write_doc_mesh_repair_result,
+)
+from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_report, render_doc_lifecycle_report, write_doc_lifecycle_json_report
+from agentic_project_kit.doctor import build_doctor_report, render_doctor_report
+
+console = Console()
+
+
+def register_check_commands(app: typer.Typer) -> None:
+    app.command("check")(check_command)
+    app.command("check-docs")(check_docs_command)
+    app.command("check-todo")(check_todo_command)
+    app.command("doc-mesh-audit")(doc_mesh_audit_command)
+    app.command("doc-lifecycle-audit")(doc_lifecycle_audit_command)
+    app.command("doc-mesh-repair")(doc_mesh_repair_command)
+    app.command("doctor")(doctor_command)
+
+
+def check_command(project_root: Path = typer.Option(Path("."), "--root")) -> None:
+    errors = check_all(project_root.resolve())
+    _print_result(errors)
+
+
+def check_docs_command(project_root: Path = typer.Option(Path("."), "--root")) -> None:
+    errors = check_docs(project_root.resolve())
+    _print_result(errors)
+
+
+def check_todo_command(project_root: Path = typer.Option(Path("."), "--root")) -> None:
+    errors = check_todo(project_root.resolve())
+    _print_result(errors)
+
+
+def doc_lifecycle_audit_command(
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    report_path: Annotated[Path | None, typer.Option("--report")] = None,
+) -> None:
+    """Audit lifecycle status headers for planning, roadmap, strategy, and idea documents."""
+    report = build_doc_lifecycle_report(project_root.resolve())
+    if report_path is not None:
+        write_doc_lifecycle_json_report(report, report_path)
+    console.print(render_doc_lifecycle_report(report), markup=False)
+    if not report.ok:
+        raise typer.Exit(code=1)
+
+
+def doc_mesh_audit_command(
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    report_path: Annotated[Path | None, typer.Option("--report")] = None,
+    repair_plan_path: Annotated[Path | None, typer.Option("--repair-plan")] = None,
+) -> None:
+    """Audit cross-document state, governance, architecture, and historical-plan drift."""
+    report = build_doc_mesh_report(project_root.resolve())
+    if report_path is not None:
+        write_doc_mesh_json_report(report, report_path)
+    if repair_plan_path is not None:
+        repair_plan = build_doc_mesh_repair_plan(report)
+        write_doc_mesh_repair_plan(repair_plan, repair_plan_path)
+        console.print(render_doc_mesh_repair_plan(repair_plan), markup=False)
+    console.print(render_doc_mesh_report(report), markup=False)
+    if not report.ok:
+        raise typer.Exit(code=1)
+
+
+def doc_mesh_repair_command(
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    result_path: Annotated[Path | None, typer.Option("--result")] = None,
+) -> None:
+    """Apply safe automatic documentation mesh repairs."""
+    report = build_doc_mesh_report(project_root.resolve())
+    repair_plan = build_doc_mesh_repair_plan(report)
+    result = apply_doc_mesh_repair_plan(project_root.resolve(), repair_plan)
+    if result_path is not None:
+        write_doc_mesh_repair_result(result, result_path)
+    console.print(render_doc_mesh_repair_result(result), markup=False)
+
+
+def doctor_command(project_root: Path = typer.Option(Path("."), "--root")) -> None:
+    """Run a compact project health check."""
+    report = build_doctor_report(project_root.resolve())
+    console.print(render_doctor_report(report), markup=False)
+    if not report.ok:
+        raise typer.Exit(code=1)
+
+
+def _print_result(errors: list[str]) -> None:
+    if errors:
+        console.print("[bold red]Agentic project check failed[/bold red]")
+        for error in errors:
+            console.print(f"[red]- {error}[/red]")
+        raise typer.Exit(code=1)
+    console.print("[bold green]Agentic project check passed[/bold green]")
+
+--- src/agentic_project_kit/cli_commands/cockpit.py ---
+from __future__ import annotations
+
+import json
+from pathlib import Path
+from typing import Annotated
+
+import typer
+from rich.console import Console
+
+from agentic_project_kit.cockpit import (
+    action_inventory_as_json_data,
+    build_cockpit_status,
+    cockpit_actions,
+    render_action_inventory,
+    render_action_selection,
+    render_cockpit_status,
+    run_cockpit_action,
+)
+
+
+cockpit_app = typer.Typer(help="Inspect local cockpit status and structured project actions.")
+console = Console()
+
+
+@cockpit_app.command("status")
+def cockpit_status_command(project_root: Annotated[Path, typer.Option("--root")] = Path(".")) -> None:
+    status = build_cockpit_status(project_root.resolve())
+    console.print(render_cockpit_status(status), markup=False)
+
+
+@cockpit_app.command("actions")
+def cockpit_actions_command(
+    json_output: Annotated[
+        bool,
+        typer.Option("--json", help="Print machine-readable JSON action inventory."),
+    ] = False,
+) -> None:
+    actions = cockpit_actions()
+    if json_output:
+        typer.echo(json.dumps(action_inventory_as_json_data(actions), indent=2, sort_keys=True))
+        return
+    console.print(render_action_inventory(actions), markup=False)
+
+
+@cockpit_app.command("select")
+def cockpit_select_command() -> None:
+    actions = cockpit_actions()
+    console.print(render_action_selection(actions), markup=False)
+
+
+@cockpit_app.command("run")
+def cockpit_run_command(
+    action_id: str,
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    allow_bounded: Annotated[bool, typer.Option("--allow-bounded")] = False,
+) -> None:
+    result = run_cockpit_action(action_id, project_root.resolve(), allow_bounded=allow_bounded)
+    console.print(f"action_id={result.action_id}", markup=False)
+    console.print(f"allowed={str(result.allowed).lower()}", markup=False)
+    console.print(f"executed={str(result.executed).lower()}", markup=False)
+    if result.returncode is not None:
+        console.print(f"returncode={result.returncode}", markup=False)
+    console.print(result.message, markup=False)
+    if result.stdout:
+        console.print(result.stdout, markup=False)
+    if result.stderr:
+        console.print(result.stderr, markup=False)
+    if not result.allowed:
+        raise typer.Exit(code=2)
+    if result.returncode not in (None, 0):
+        raise typer.Exit(code=result.returncode)
+
+--- src/agentic_project_kit/cli_commands/github.py ---
+from __future__ import annotations
+
+from pathlib import Path
+
+import typer
+from rich.console import Console
+from rich.prompt import Confirm
+
+from agentic_project_kit.github import create_github_repo
+
+console = Console()
+
+
+def register_github_commands(app: typer.Typer) -> None:
+    app.command("github-create")(github_create_command)
+
+
+def github_create_command(
+    project_root: Path = typer.Option(Path("."), "--root"),
+    owner: str | None = typer.Option(None, "--owner"),
+    visibility: str = typer.Option("private", "--visibility"),
+) -> None:
+    if visibility not in {"private", "public"}:
+        raise typer.BadParameter("visibility must be private or public")
+    if visibility == "public":
+        console.print("[bold yellow]Public repository selected. Check for secrets before continuing.[/bold yellow]")
+        if not Confirm.ask("Continue?", default=False):
+            raise typer.Exit(code=1)
+
+    create_github_repo(project_root.resolve(), owner=owner, visibility=visibility, push=True)
+    console.print("[green]GitHub repository created and pushed.[/green]")
+
+--- src/agentic_project_kit/cli_commands/handoff.py ---
+from __future__ import annotations
+
+from typing import Annotated
+
+import typer
+
+from agentic_project_kit.handoff_prompt import render_handoff_prompt
+from agentic_project_kit.handoff_state import current_git_safe_state, load_handoff_state, refresh_handoff_safe_state, save_handoff_state, summarize_handoff_state, validate_handoff_state
+
+handoff_app = typer.Typer(help="Read-only persistent handoff state commands.")
+
+@handoff_app.command("show")
+def show(path: str = ".agentic/handoff_state.yaml") -> None:
+    data = load_handoff_state(path)
+    typer.echo(summarize_handoff_state(data))
+
+@handoff_app.command("check")
+def check(path: str = ".agentic/handoff_state.yaml") -> None:
+    data = load_handoff_state(path)
+    errors = validate_handoff_state(data)
+    if errors:
+        for error in errors:
+            typer.echo(f"[FAIL] {error}")
+        raise typer.Exit(code=1)
+    typer.echo("Persistent handoff state check passed")
+
+@handoff_app.command("prompt")
+def prompt(path: str = ".agentic/handoff_state.yaml") -> None:
+    data = load_handoff_state(path)
+    errors = validate_handoff_state(data)
+    if errors:
+        for error in errors:
+            typer.echo(f"[FAIL] {error}")
+        raise typer.Exit(code=1)
+    typer.echo(render_handoff_prompt(data))
+
+
+@handoff_app.command("refresh")
+def refresh(
+    path: Annotated[str, typer.Argument()] = ".agentic/handoff_state.yaml",
+    write: bool = typer.Option(False, "--write", help="Write refreshed safe_state to YAML."),
+) -> None:
+    data = load_handoff_state(path)
+    git_state = current_git_safe_state()
+    refreshed = refresh_handoff_safe_state(
+        data,
+        git_state["commit"],
+        git_state["commit_subject"],
+    )
+    errors = validate_handoff_state(refreshed)
+    if errors:
+        for error in errors:
+            typer.echo(f"[FAIL] {error}")
+        raise typer.Exit(code=1)
+    current = data.get("safe_state", {})
+    updated = refreshed.get("safe_state", {})
+    typer.echo(f"Current safe_state: {current.get('commit')} {current.get('commit_subject')}")
+    typer.echo(f"Refreshed safe_state: {updated.get('commit')} {updated.get('commit_subject')}")
+    if write:
+        save_handoff_state(refreshed, path)
+        typer.echo(f"Updated {path}")
+    else:
+        typer.echo("Dry run only. Use --write to update the YAML file.")
+
+--- src/agentic_project_kit/cli_commands/init.py ---
+from __future__ import annotations
+
+from pathlib import Path
+import subprocess
+
+import typer
+from rich.console import Console
+from rich.prompt import Confirm, Prompt
+
+from agentic_project_kit.contract import (
+    PROFILE_DEFINITIONS,
+    POLICY_PACK_DEFINITIONS,
+    default_profiles,
+    recommended_policy_packs,
+    validate_ids,
+)
+from agentic_project_kit.github import create_github_repo
+from agentic_project_kit.models import ProjectOptions
+from agentic_project_kit.templates import create_project
+
+console = Console()
+
+
+def register_init_command(app: typer.Typer) -> None:
+    app.command("init")(init_command)
+
+
+def init_command(
+    name: str | None = typer.Argument(None, help="Project directory/name."),
+    project_type: str = typer.Option("python-cli", "--type", help="python-cli, python-lib, generic, governance-wrapper"),
+    description: str | None = typer.Option(None, "--description"),
+    license_name: str = typer.Option("MIT", "--license"),
+    github_actions: bool = typer.Option(True, "--github-actions/--no-github-actions"),
+    pre_commit: bool = typer.Option(True, "--pre-commit/--no-pre-commit"),
+    agent_docs: bool = typer.Option(True, "--agent-docs/--no-agent-docs"),
+    logging_evidence: bool = typer.Option(True, "--logging-evidence/--no-logging-evidence"),
+    profiles: str | None = typer.Option(
+        None,
+        "--profiles",
+        help="Comma-separated profile ids. Defaults are recommended from project type.",
+    ),
+    policy_packs: str | None = typer.Option(
+        None,
+        "--policy-packs",
+        help="Comma-separated policy pack ids. Defaults are recommended from project type.",
+    ),
+    github: bool = typer.Option(False, "--github/--no-github"),
+    github_owner: str | None = typer.Option(None, "--owner"),
+    visibility: str = typer.Option("private", "--visibility", help="private or public"),
+    kit_source: str = typer.Option(
+        "pypi",
+        "--kit-source",
+        help="agentic-kit install source for generated CI: pypi, testpypi, or none",
+    ),
+) -> None:
+    if name is None:
+        name = Prompt.ask("Project name")
+    if description is None:
+        description = Prompt.ask("Project description", default=f"{name} project")
+    if project_type not in {"python-cli", "python-lib", "generic", "governance-wrapper"}:
+        raise typer.BadParameter("project type must be python-cli, python-lib, generic, or governance-wrapper")
+    if visibility not in {"private", "public"}:
+        raise typer.BadParameter("visibility must be private or public")
+    if kit_source not in {"pypi", "testpypi", "none"}:
+        raise typer.BadParameter("kit source must be pypi, testpypi, or none")
+
+    selected_profiles = _parse_csv(profiles) or default_profiles(
+        project_type,
+        github_actions=github_actions,
+    )
+    selected_policy_packs = _parse_csv(policy_packs) or recommended_policy_packs(
+        project_type,
+        github_actions=github_actions,
+        logging_evidence=logging_evidence,
+    )
+    errors = validate_ids("profile", selected_profiles, PROFILE_DEFINITIONS)
+    errors.extend(validate_ids("policy pack", selected_policy_packs, POLICY_PACK_DEFINITIONS))
+    if errors:
+        raise typer.BadParameter("; ".join(errors))
+
+    target = Path(name).resolve()
+    options = ProjectOptions(
+        name=name,
+        description=description,
+        project_type=project_type,
+        license_name=license_name,
+        github_actions=github_actions,
+        pre_commit=pre_commit,
+        agent_docs=agent_docs,
+        logging_evidence=logging_evidence,
+        target_dir=target,
+        kit_source=kit_source,
+        profiles=selected_profiles,
+        policy_packs=selected_policy_packs,
+    )
+
+    create_project(options)
+    console.print(f"[green]Created project:[/green] {target}")
+    console.print("Recommended profiles: " + ", ".join(selected_profiles))
+    console.print("Recommended policy packs: " + ", ".join(selected_policy_packs))
+
+    subprocess.run(["git", "add", "."], cwd=target, check=False)
+    subprocess.run(["git", "commit", "-m", "Initialize agentic project"], cwd=target, check=False)
+
+    if github:
+        if visibility == "public":
+            console.print("[bold yellow]Public repository selected. Check for secrets before continuing.[/bold yellow]")
+            if not Confirm.ask("Continue with public GitHub repository creation?", default=False):
+                raise typer.Exit(code=1)
+        create_github_repo(target, owner=github_owner, visibility=visibility, push=True)
+        console.print("[green]GitHub repository created and pushed.[/green]")
+
+    console.print("Next:")
+    console.print(f"  cd {target}")
+    if project_type in {"python-cli", "python-lib"}:
+        console.print("  python -m venv .venv")
+        console.print("  source .venv/bin/activate")
+        console.print('  pip install -e ".[dev]"', markup=False)
+        console.print("  pytest -q")
+    else:
+        console.print("  agentic-kit check-docs")
+    console.print("  agentic-kit check")
+    console.print("  agentic-kit doctor")
+
+
+def _parse_csv(value: str | None) -> tuple[str, ...]:
+    if value is None:
+        return ()
+    return tuple(item.strip() for item in value.split(",") if item.strip())
+
+--- src/agentic_project_kit/cli_commands/patterns.py ---
+from __future__ import annotations
+
+from pathlib import Path
+
+import typer
+
+from agentic_project_kit.patterns import (
+    PatternCatalogError,
+    find_pattern,
+    load_pattern_catalog,
+    load_pattern_detail,
+)
+
+patterns_app = typer.Typer(help="Inspect the local read-only pattern catalog.")
+
+
+@patterns_app.command("list")
+def patterns_list() -> None:
+    """List known local patterns and anti-patterns."""
+    try:
+        catalog = load_pattern_catalog(Path("."))
+    except PatternCatalogError as exc:
+        raise typer.BadParameter(str(exc)) from exc
+
+    for entry in catalog.patterns:
+        typer.echo(f"{entry.id}\t{entry.kind}\t{entry.title}")
+        typer.echo(f"  {entry.summary}")
+
+
+@patterns_app.command("show")
+def patterns_show(pattern_id: str) -> None:
+    """Show one local pattern catalog entry by stable ID."""
+    try:
+        catalog = load_pattern_catalog(Path("."))
+        entry = find_pattern(catalog, pattern_id)
+        detail = load_pattern_detail(Path("."), entry)
+    except PatternCatalogError as exc:
+        raise typer.BadParameter(str(exc)) from exc
+
+    typer.echo(detail.markdown)
+
+--- src/agentic_project_kit/cli_commands/pr_hygiene.py ---
+from __future__ import annotations
+
+from pathlib import Path
+import json
+
+import typer
+from rich.console import Console
+
+from agentic_project_kit.pr_hygiene import analyze_pr_hygiene, collect_pr_hygiene_inputs, render_pr_hygiene_report, report_as_json_data
+
+console = Console()
+
+
+def register_pr_hygiene_command(app: typer.Typer) -> None:
+    app.command("pr-hygiene")(pr_hygiene_command)
+
+
+def pr_hygiene_command(
+    project_root: Path = typer.Option(Path("."), "--root"),
+    json_output: bool = typer.Option(False, "--json"),
+) -> None:
+    open_prs, local_branches = collect_pr_hygiene_inputs(project_root.resolve())
+    report = analyze_pr_hygiene(open_prs, local_branches)
+    if json_output:
+        console.print(json.dumps(report_as_json_data(report), indent=2), markup=False)
+        return
+    console.print(render_pr_hygiene_report(report), markup=False)
+
+--- src/agentic_project_kit/cli_commands/profiles.py ---
+from __future__ import annotations
+
+import typer
+from rich.console import Console
+
+from agentic_project_kit.contract import PROFILE_DEFINITIONS, POLICY_PACK_DEFINITIONS
+
+console = Console()
+
+
+def register_profile_commands(app: typer.Typer) -> None:
+    app.command("profile-explain")(profile_explain_command)
+
+
+def profile_explain_command() -> None:
+    """List available project profiles and policy packs."""
+    console.print("Project profiles:")
+    for profile_id, definition in PROFILE_DEFINITIONS.items():
+        description = getattr(definition, "description", str(definition))
+        console.print(f"- {profile_id}: {description}")
+
+    console.print("")
+    console.print("Policy packs:")
+    for policy_pack_id, definition in POLICY_PACK_DEFINITIONS.items():
+        description = getattr(definition, "description", str(definition))
+        console.print(f"- {policy_pack_id}: {description}")
+
+--- src/agentic_project_kit/cli_commands/release.py ---
+from __future__ import annotations
+
+from pathlib import Path
+
+import typer
+from rich.console import Console
+
+from agentic_project_kit.post_release import build_post_release_report, render_post_release_report
+from agentic_project_kit.release import (
+    build_release_plan,
+    build_release_state_report,
+    render_release_plan,
+    render_release_state_report,
+)
+
+console = Console()
+
+
+def register_release_commands(app: typer.Typer) -> None:
+    app.command("release-plan")(release_plan_command)
+    app.command("release-check")(release_check_command)
+    app.command("post-release-check")(post_release_check_command)
+
+
+def release_plan_command(
+    project_root: Path = typer.Option(Path("."), "--root"),
+    version: str | None = typer.Option(None, "--version", help="Release version without leading v."),
+) -> None:
+    """Print a release preparation checklist for the current project."""
+    plan = build_release_plan(project_root.resolve(), version=version)
+    console.print(render_release_plan(plan), markup=False)
+
+
+def release_check_command(
+    project_root: Path = typer.Option(Path("."), "--root"),
+    version: str | None = typer.Option(None, "--version", help="Release version without leading v."),
+) -> None:
+    """Validate release state for a target version."""
+    report = build_release_state_report(project_root.resolve(), version=version)
+    console.print(render_release_state_report(report), markup=False)
+    if not report.ok:
+        raise typer.Exit(code=1)
+
+
+def post_release_check_command(
+    project_root: Path = typer.Option(Path("."), "--root"),
+    version: str | None = typer.Option(None, "--version", help="Release version without leading v."),
+) -> None:
+    """Validate post-release GitHub and Zenodo state without guessing DOI metadata."""
+    report = build_post_release_report(project_root.resolve(), version=version)
+    console.print(render_post_release_report(report), markup=False)
+    if not report.ok:
+        raise typer.Exit(code=1)
+
+--- src/agentic_project_kit/cli_commands/scaffold.py ---
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Annotated
+
+import typer
+from rich.console import Console
+
+from agentic_project_kit.scaffold import PlanningDocSpec, planning_doc_path, write_planning_doc
+
+
+console = Console()
+scaffold_app = typer.Typer(help="Create governed repository scaffolding artifacts.")
+
+
+@scaffold_app.command("planning-doc")
+def planning_doc_command(
+    title: Annotated[str, typer.Argument(help="Planning document title")],
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    status: Annotated[str, typer.Option("--status")] = "active",
+    decision_status: Annotated[str, typer.Option("--decision-status")] = "proposed",
+    scope: Annotated[str, typer.Option("--scope")] = "planning",
+    review_policy: Annotated[str, typer.Option("--review-policy")] = "review before implementation and after each milestone",
+    output: Annotated[Path | None, typer.Option("--output")] = None,
+    overwrite: Annotated[bool, typer.Option("--overwrite")] = False,
+) -> None:
+    spec = PlanningDocSpec(
+        title=title,
+        status=status,
+        decision_status=decision_status,
+        scope=scope,
+        review_policy=review_policy,
+    )
+    root = project_root.resolve()
+    target = output.resolve() if output is not None else planning_doc_path(root, title)
+    try:
+        written = write_planning_doc(target, spec, overwrite=overwrite)
+    except FileExistsError as exc:
+        console.print(str(exc), markup=False)
+        raise typer.Exit(code=2) from exc
+    except ValueError as exc:
+        console.print(str(exc), markup=False)
+        raise typer.Exit(code=2) from exc
+    console.print("Planning document scaffolded", markup=False)
+    console.print(f"path={written}", markup=False)
+    console.print("Safety: created or updated only the requested planning document path.", markup=False)
+
+--- src/agentic_project_kit/cli_commands/todo.py ---
+from __future__ import annotations
+
+import typer
+from rich.console import Console
+
+from agentic_project_kit.todo import complete_item, list_items, load_todo, render_markdown
+
+console = Console()
+todo_app = typer.Typer(help="Manage generated project TODO items.")
+
+
+@todo_app.command("list")
+def todo_list(
+    all_items: bool = typer.Option(False, "--all", help="Show completed items too."),
+) -> None:
+    """List project TODO items from .agentic/todo.yaml."""
+    data = load_todo()
+    items = list_items(data, include_done=all_items)
+
+    if not items:
+        console.print("[green]No open TODO items.[/green]")
+        return
+
+    for item in items:
+        status = item.get("status", "open")
+        item_id = item.get("id", "UNKNOWN")
+        title = item.get("title", "")
+        owner = item.get("owner", "unknown")
+        priority = item.get("priority", "normal")
+        marker = "✓" if status == "done" else "•"
+        console.print(f"{marker} [bold]{item_id}[/bold] [{status}] {title} ({owner}, {priority})")
+
+
+@todo_app.command("complete")
+def todo_complete(
+    item_id: str,
+    evidence: str = typer.Option(..., "--evidence", help="Evidence for completing the item."),
+    render: bool = typer.Option(True, "--render/--no-render", help="Regenerate docs/TODO.md."),
+) -> None:
+    """Mark a TODO item as done and store evidence."""
+    item = complete_item(item_id, evidence=evidence)
+    console.print(f"[green]Completed TODO item:[/green] {item.get('id')}")
+
+    if render:
+        render_markdown()
+        console.print("[green]Rendered docs/TODO.md[/green]")
+
+
+@todo_app.command("render")
+def todo_render() -> None:
+    """Regenerate docs/TODO.md from .agentic/todo.yaml."""
+    render_markdown()
+    console.print("[green]Rendered docs/TODO.md[/green]")
+
+--- src/agentic_project_kit/cli_commands/validation.py ---
+from __future__ import annotations
+
+import json
+from pathlib import Path
+from typing import Any
+
+import typer
+
+from agentic_project_kit.runtime_validator import validate_required_sections
+
+
+def register_validation_commands(app: typer.Typer) -> None:
+    app.command("validate-contract")(validate_contract)
+    app.command("validate-output-contract")(validate_output_contract)
+    app.command("validate-sections")(validate_sections)
+
+
+def validate_contract(
+    project_root: Path = typer.Option(Path("."), "--root", help="Project root containing .agentic/project.yaml."),
+) -> None:
+    """Validate the machine-readable project contract."""
+    from agentic_project_kit.contract import contract_summary, load_project_contract, validate_project_contract
+
+    contract_data = load_project_contract(project_root.resolve())
+    if contract_data is None:
+        typer.echo("Project contract not found: .agentic/project.yaml", err=True)
+        raise typer.Exit(1)
+
+    errors = validate_project_contract(contract_data)
+    if errors:
+        typer.echo("Project contract validation failed", err=True)
+        for error in errors:
+            typer.echo(f"- {error}", err=True)
+        raise typer.Exit(1)
+
+    typer.echo("Project contract valid.")
+    typer.echo(contract_summary(contract_data))
+
+
+def validate_output_contract(
+    output_path: Path = typer.Argument(..., help="Output text file to validate."),
+    contract_path: Path = typer.Option(..., "--contract", "-c", help="Output contract YAML file."),
+    report_path: Path | None = typer.Option(None, "--report", help="Write a JSON validation report."),
+    report_schema_path: Path | None = typer.Option(
+        None,
+        "--report-schema",
+        help="Validate the JSON report against a generated validation-report.schema.json file.",
+    ),
+    repair_output_path: Path | None = typer.Option(
+        None,
+        "--repair-output",
+        help="Write a deterministically repaired output file when supported.",
+    ),
+    repair_report_path: Path | None = typer.Option(
+        None,
+        "--repair-report",
+        help="Write a JSON repair report. Requires --repair-output.",
+    ),
+) -> None:
+    """Validate an output file against a machine-readable output contract."""
+    from agentic_project_kit.output_contract import load_output_contract, validate_output_against_contract
+
+    if repair_report_path is not None and repair_output_path is None:
+        typer.echo("--repair-report requires --repair-output.", err=True)
+        raise typer.Exit(1)
+
+    try:
+        contract = load_output_contract(contract_path)
+    except ValueError as exc:
+        typer.echo(f"Output contract invalid: {exc}", err=True)
+        raise typer.Exit(1) from exc
+
+    output_text = output_path.read_text(encoding="utf-8")
+    report = validate_output_against_contract(output_text, contract)
+    payload = {
+        "ok": report.ok,
+        "contract": contract.name,
+        "contract_version": contract.version,
+        "checked_file": str(output_path),
+        "findings": report.to_dict()["findings"],
+    }
+    if report_schema_path is not None:
+        if report_path is None:
+            typer.echo("--report-schema requires --report.", err=True)
+            raise typer.Exit(1)
+        schema_payload = json.loads(report_schema_path.read_text(encoding="utf-8"))
+        schema_errors = _validate_report_payload_against_schema(payload, schema_payload)
+        if schema_errors:
+            typer.echo("Validation report schema check failed:", err=True)
+            for error in schema_errors:
+                typer.echo(f"- {error}", err=True)
+            raise typer.Exit(1)
+
+    if report_path is not None:
+        report_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    if report.ok:
+        typer.echo("Output contract validation passed.")
+        raise typer.Exit(0)
+
+    if repair_output_path is not None:
+        from agentic_project_kit.output_repair import append_missing_required_sections
+
+        repair_result = append_missing_required_sections(output_text, contract)
+        repair_output_path.write_text(repair_result.text, encoding="utf-8")
+        if repair_report_path is not None:
+            repair_report_path.write_text(
+                json.dumps(repair_result.report.to_dict(), indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+        typer.echo("Output contract validation failed; deterministic repair output written.")
+        if repair_result.report.ok:
+            typer.echo("Repaired output contract validation passed.")
+            raise typer.Exit(0)
+        typer.echo("Repaired output contract validation failed.", err=True)
+        raise typer.Exit(1)
+
+    for finding in report.findings:
+        typer.echo(
+            f"[{finding.severity.value}] {finding.code}: {finding.message}",
+            err=True,
+        )
+    raise typer.Exit(1)
+
+
+def _validate_report_payload_against_schema(
+    payload: dict[str, Any],
+    schema_payload: dict[str, Any],
+) -> list[str]:
+    errors: list[str] = []
+    if schema_payload.get("type") != "object":
+        errors.append("report schema root type must be object")
+        return errors
+    required = schema_payload.get("required", [])
+    if not isinstance(required, list):
+        errors.append("report schema required field must be a list")
+        return errors
+    for key in required:
+        if not isinstance(key, str):
+            errors.append("report schema required entries must be strings")
+        elif key not in payload:
+            errors.append(f"report payload missing required key: {key}")
+    properties = schema_payload.get("properties", {})
+    if not isinstance(properties, dict):
+        errors.append("report schema properties field must be an object")
+        return errors
+    if schema_payload.get("additionalProperties") is False:
+        allowed = set(properties)
+        for key in sorted(set(payload) - allowed):
+            errors.append(f"report payload contains unexpected key: {key}")
+    for key, value in payload.items():
+        spec = properties.get(key)
+        if isinstance(spec, dict):
+            expected_type = spec.get("type")
+            if expected_type and not _json_schema_type_matches(value, expected_type):
+                errors.append(f"report payload key has wrong type: {key}")
+    return errors
+
+
+def _json_schema_type_matches(value: Any, expected_type: Any) -> bool:
+    if isinstance(expected_type, list):
+        return any(_json_schema_type_matches(value, item) for item in expected_type)
+    if expected_type == "boolean":
+        return isinstance(value, bool)
+    if expected_type == "integer":
+        return isinstance(value, int) and not isinstance(value, bool)
+    if expected_type == "number":
+        return (isinstance(value, int) or isinstance(value, float)) and not isinstance(value, bool)
+    if expected_type == "string":
+        return isinstance(value, str)
+    if expected_type == "array":
+        return isinstance(value, list)
+    if expected_type == "object":
+        return isinstance(value, dict)
+    if expected_type == "null":
+        return value is None
+    return True
+
+
+def validate_sections(
+    path: Path = typer.Argument(..., help="Text file to validate."),
+    required_section: list[str] = typer.Option(
+        ...,
+        "--required-section",
+        "-s",
+        help="Required literal section marker. Repeat the option for multiple sections.",
+    ),
+) -> None:
+    """Validate that a text file contains required literal section markers."""
+    report = validate_required_sections(path.read_text(encoding="utf-8"), tuple(required_section))
+    if report.ok:
+        typer.echo("Runtime validation passed.")
+        raise typer.Exit(0)
+
+    for finding in report.findings:
+        typer.echo(
+            f"[{finding.severity.value}] {finding.code}: {finding.message}",
+            err=True,
+        )
+    raise typer.Exit(1)
+
+--- src/agentic_project_kit/cli_commands/workflow.py ---
+from __future__ import annotations
+
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+import typer
+
+workflow_app = typer.Typer(help="Run and inspect bounded local workflow handoff states.")
+
+VALID_STATES = {"IDLE", "TEST", "UPLOAD", "CLEANUP", "REQUESTED", "RUNNING", "UPLOADED", "FAILED"}
+STATE_FILE = Path(".agentic/workflow_state")
+WORK_FILE = Path(".agentic/current_work.yaml")
+WORK_ITEMS_DIR = Path(".agentic/work_items")
+BRANCH_FILE = Path("tmp/agent-evidence/latest-branch.txt")
+REPORT_FILE = Path("docs/reports/CURRENT_WORKFLOW_OUTPUT.md")
+NEXT_STEP_SCRIPT = Path("tools/next-step.py")
+TEMP_PREFIX = "temp/workflow-evidence-"
+
+
+def _rooted(path: Path, root: Path) -> Path:
+    return root.resolve() / path
+
+
+def _read_state(root: Path) -> str:
+    state_path = _rooted(STATE_FILE, root)
+    if not state_path.exists():
+        raise typer.BadParameter(f"missing state file: {STATE_FILE}")
+    state = state_path.read_text(encoding="utf-8").strip()
+    if state not in VALID_STATES:
+        raise typer.BadParameter(f"invalid workflow state: {state}")
+    return state
+
+
+
+def _work_items_dir(root: Path) -> Path:
+    return _rooted(WORK_ITEMS_DIR, root)
+
+
+def _safe_work_item_name(name: str) -> str:
+    normalized = name.strip()
+    if not normalized:
+        raise typer.BadParameter("missing workflow item name")
+    allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_")
+    if any(char not in allowed for char in normalized):
+        raise typer.BadParameter(f"unsafe workflow item name: {name}")
+    if normalized in {".", ".."}:
+        raise typer.BadParameter(f"unsafe workflow item name: {name}")
+    return normalized
+
+
+def _work_item_path(root: Path, name: str) -> Path:
+    return _work_items_dir(root) / f"{_safe_work_item_name(name)}.yaml"
+
+
+def _available_work_items(root: Path) -> list[str]:
+    directory = _work_items_dir(root)
+    if not directory.exists():
+        return []
+    return sorted(path.stem for path in directory.glob("*.yaml"))
+
+
+def _copy_work_item_to_temp_run_file(root: Path, name: str) -> Path:
+    source = _work_item_path(root, name)
+    if not source.exists():
+        raise typer.BadParameter(f"unknown workflow item: {_safe_work_item_name(name)}")
+    target = _rooted(Path("tmp/agent-evidence") / f"run-{_safe_work_item_name(name)}.yaml", root)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+    return target
+
+
+def _workflow_request_state(root: Path) -> str:
+    work_path = _rooted(WORK_FILE, root)
+    if not work_path.exists():
+        raise typer.BadParameter(f"missing declarative workflow file: {WORK_FILE}")
+    for line in work_path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("state:"):
+            return stripped.split(":", 1)[1].strip().upper() or "READY"
+    return "READY"
+
+
+def _set_workflow_file_request_state(work_path: Path, request_state: str) -> None:
+    if not work_path.exists():
+        raise typer.BadParameter(f"missing declarative workflow file: {work_path}")
+    normalized = request_state.upper()
+    if normalized not in {"READY", "REQUESTED"}:
+        raise typer.BadParameter(f"invalid workflow request state: {request_state}")
+    lines = work_path.read_text(encoding="utf-8").splitlines()
+    replaced = False
+    output: list[str] = []
+    for line in lines:
+        if line.strip().startswith("state:") and not replaced:
+            indent = line[: len(line) - len(line.lstrip())]
+            output.append(f"{indent}state: {normalized}")
+            replaced = True
+        else:
+            output.append(line)
+    if not replaced:
+        output.insert(1 if output else 0, f"state: {normalized}")
+    work_path.write_text("\n".join(output) + "\n", encoding="utf-8")
+
+
+def _set_workflow_request_state(root: Path, request_state: str) -> None:
+    _set_workflow_file_request_state(_rooted(WORK_FILE, root), request_state)
+
+
+def _run_next_step(root: Path, extra_args: list[str] | None = None, env: dict[str, str] | None = None) -> int:
+    script = _rooted(NEXT_STEP_SCRIPT, root)
+    if not script.exists():
+        raise typer.BadParameter(f"missing workflow entrypoint: {NEXT_STEP_SCRIPT}")
+    run_env = os.environ.copy()
+    if env:
+        run_env.update(env)
+    completed = subprocess.run([sys.executable, str(script), *(extra_args or [])], cwd=root.resolve(), env=run_env, check=False)
+    return int(completed.returncode)
+
+
+def _run_git(root: Path, args: list[str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(["git", *args], cwd=root.resolve(), text=True, capture_output=True, check=False)
+
+
+def _is_git_repository(root: Path) -> bool:
+    result = _run_git(root, ["rev-parse", "--is-inside-work-tree"])
+    return result.returncode == 0 and result.stdout.strip() == "true"
+
+
+
+
+def _working_tree_dirty(root: Path) -> bool:
+    if not _is_git_repository(root):
+        return False
+    result = _run_git(root, ["status", "--porcelain"])
+    return result.returncode == 0 and bool(result.stdout.strip())
+
+
+def _status_interpretation(state: str, work_state: str | None, dirty: bool) -> tuple[list[str], list[str]]:
+    interpretation: list[str] = []
+    recommendation: list[str] = []
+    if dirty:
+        interpretation.append("Working tree has uncommitted changes.")
+        recommendation.append("Run: git status --short")
+        recommendation.append("Do not start workflow automation until the working tree is clean or intentionally staged.")
+        return interpretation, recommendation
+    if work_state == "REQUESTED":
+        interpretation.append("A workflow request is pending.")
+        recommendation.append("Run: agentic-kit workflow run")
+    elif state == "UPLOADED":
+        interpretation.append("Workflow evidence was uploaded and cleanup is pending.")
+        recommendation.append("Run: agentic-kit workflow cleanup")
+    elif state == "FAILED":
+        interpretation.append("The last workflow step failed.")
+        recommendation.append("Run: agentic-kit workflow fail-report")
+        recommendation.append("Inspect docs/reports/CURRENT_WORKFLOW_OUTPUT.md and git status before cleanup or retry.")
+        recommendation.append("Do not rerun workflow automation until the failure cause is understood.")
+    elif state == "IDLE" and work_state in {None, "READY"}:
+        interpretation.append("No active workflow request.")
+        recommendation.append("Define one concrete slice before requesting workflow automation.")
+        recommendation.append("Run: agentic-kit workflow go")
+        recommendation.append("For explicit two-step control: agentic-kit workflow request, then agentic-kit workflow run")
+    else:
+        interpretation.append("Workflow state requires manual review.")
+        recommendation.append("Inspect workflow status and evidence before changing state.")
+    return interpretation, recommendation
+
+
+def _print_status_explanation(root: Path, state: str, work_state: str | None, report_present: bool) -> None:
+    dirty = _working_tree_dirty(root)
+    interpretation, recommendation = _status_interpretation(state, work_state, dirty)
+    typer.echo("")
+    typer.echo("Safety:")
+    typer.echo("- This command is read-only.")
+    if report_present:
+        typer.echo("- current_report points to the latest workflow-output summary, not necessarily uploadable local evidence.")
+    typer.echo("")
+    typer.echo("Interpretation:")
+    for line in interpretation:
+        typer.echo(f"- {line}")
+    typer.echo("")
+    typer.echo("Recommended next step:")
+    for line in recommendation:
+        typer.echo(f"- {line}")
+    typer.echo("")
+    typer.echo("Optional checks:")
+    typer.echo("- agentic-kit doctor")
+    typer.echo("- agentic-kit check-docs")
+
+def _safe_temp_branch(branch: str) -> str | None:
+    normalized = branch.strip()
+    if not normalized.startswith(TEMP_PREFIX):
+        return None
+    if ".." in normalized or normalized.endswith("/"):
+        return None
+    return normalized
+
+
+def _local_temp_branches(root: Path) -> list[str]:
+    result = _run_git(root, ["branch", "--list", f"{TEMP_PREFIX}*"])
+    if result.returncode != 0:
+        raise typer.BadParameter(result.stderr.strip() or "failed to list local workflow evidence branches")
+    branches: list[str] = []
+    for line in result.stdout.splitlines():
+        branch = _safe_temp_branch(line.replace("*", "", 1).strip())
+        if branch is not None:
+            branches.append(branch)
+    return branches
+
+
+def _remote_temp_branches(root: Path) -> list[str]:
+    result = _run_git(root, ["ls-remote", "--heads", "origin", f"{TEMP_PREFIX}*"])
+    if result.returncode != 0:
+        return []
+    branches: list[str] = []
+    for line in result.stdout.splitlines():
+        ref = line.split()[-1] if line.split() else ""
+        prefix = "refs/heads/"
+        branch = ref[len(prefix) :] if ref.startswith(prefix) else ref
+        safe = _safe_temp_branch(branch)
+
+### COMMAND / INBOX FILES ###
+.agentic/commands/executed.jsonl
+
+### WORKFLOW DOCS ###
+# Repo Command Runner
+
+`./ns agent-run` is the intended no-copy handoff path for local agent work.
+
+Instead of pasting terminal blocks into the shell, the repository stores the current command in:
+
+- `.agentic/commands/current.yaml`
+- `.agentic/commands/current.sh`
+
+The runner:
+
+1. reads the current command metadata,
+2. refuses already executed `command_id` values,
+3. validates `current.sh` with `sh -n`,
+4. executes the script through the terminal log wrapper,
+5. writes a report under `docs/reports/command_runs/`,
+6. appends `.agentic/commands/executed.jsonl`,
+7. commits and pushes the command report and terminal log.
+
+Outcomes:
+
+- `PASS_EXECUTED`
+- `FAIL_NO_COMMAND`
+- `FAIL_ALREADY_EXECUTED`
+- `FAIL_INVALID_COMMAND`
+- `FAIL_SHELL_SYNTAX`
+- `FAIL_COMMAND`
+- `FAIL_UPLOAD`
+
+Safety boundary:
+
+- This is repository-backed local execution.
+- Command files must stay small, auditable, and deterministic.
+- Mutating/release/merge workflows require explicit command metadata and later confirmation-token hardening.
+- Manual copy-and-paste terminal blocks are now a recovery path, not the default workflow.
+
+## Inbox mode
+
+`./ns agent-next` is the preferred command for routine no-copy handoff. It pulls the current branch, expects exactly one complete pending command pair under `.agentic/commands/inbox/`, copies that pair to the transient `current.yaml` and `current.sh` compatibility path, executes it through `agent-run`, then removes the transient current files.
+
+Pending command files use matching names, for example `.agentic/commands/inbox/example.yaml` and `.agentic/commands/inbox/example.sh`. Multiple complete pending commands are refused with `FAIL_AMBIGUOUS_COMMANDS`.
+
+Manual terminal copy-and-paste blocks remain recovery-only.
+
+## Agent-next postconditions
+
+A successful `PASS_EXECUTED` is intended to mean that the command script succeeded and the handoff state was cleaned up. The runner therefore checks postconditions after `agent-next`:
+
+- no transient `.agentic/commands/current.yaml`
+- no transient `.agentic/commands/current.sh`
+- no complete pending inbox command pair left behind
+- no dirty inbox command paths after upload
+
+If any of these checks fail, `agent-next` reports `FAIL_POSTCONDITION`.
+# Parameterized Actions
+
+Status: active
+Decision status: accepted
+
+## Purpose
+
+Parameterized actions define auditable action objects before the project adds more mutating Git, PR, release, DOI, and finalize automation.
+
+The MVP is intentionally read-only. It exposes action metadata through `agentic-kit actions list`, `agentic-kit actions show <id>`, `./ns action-list`, and `./ns action-show <id>`.
+
+## Safety Boundary
+
+- Action specs are metadata, not executors.
+- Dry-run is the default posture.
+- Mutating variants require later explicit execute flags, machine-readable preconditions, postconditions, and repo-backed evidence.
+- GUI/Cockpit controls should consume these action specs instead of assembling raw shell snippets.
+
+## Initial Specs
+
+- `pr-check-merge`
+- `release-verify`
+- `doi-record`
+- `finalize-release`
+
+## Next Step
+
+The next slice may add dry-run validators for individual specs. Actual remote mutation remains out of scope until those validators are deterministic and covered by tests.
+# Persistent Handoff State
+
+Status: active
+Decision status: accepted
+
+## Purpose
+
+`.agentic/handoff_state.yaml` is the structured, repo-backed source for handoff state. It prevents future chats and agents from reconstructing current state only from conversation memory.
+
+## Commands
+
+- `./ns handoff-show` prints a compact summary.
+- `./ns handoff-check` validates required fields, active rule ids, superseded rule metadata, and failure-pattern prevention notes.
+- `./ns handoff-prompt` renders a copy-ready handoff prompt from YAML.
+
+## Rule lifecycle hygiene
+
+Rules use `active`, `superseded`, or `historical` status. Generated handoff prompts include active rules by default and must not present superseded or historical rules as binding instructions.
+
+## No-copy integration
+
+The handoff state references `.agentic/no_copy_terminal_policy.yaml`. A normal PASS handoff should therefore rely on committed/pushed logs and reports; manual terminal paste is reserved for failure or unavailable evidence.
+
+## Commit Semantics
+
+`safe_state.commit` records the last substantive work state by default, not necessarily the newest administrative refresh merge on `main`.
+
+This prevents endless refresh loops: a PR that only refreshes `.agentic/handoff_state.yaml` does not require another refresh PR just because it produced a newer merge commit.
+
+Use `safe_state.semantics: last_substantive_work_state` for this mode. Administrative refresh PR numbers may be recorded under `safe_state.administrative_refresh_prs`.
+
+### RELEVANT TESTS ###
+test_action_registry.py
+test_action_specs.py
+test_agent_command_runner.py
+test_handoff_prompt.py
+test_handoff_refresh.py
+test_handoff_state.py
+test_workflow_request_cli.py
+test_workflow_runner_steps.py
+test_workflow_state.py
+from typer.testing import CliRunner
+
+from agentic_project_kit.action_specs import SafetyClass, built_in_action_specs, get_action_spec, render_action_spec
+from agentic_project_kit.cli import app
+
+def test_builtin_action_specs_include_expected_actions():
+    specs = built_in_action_specs()
+    assert set(specs) >= {"pr-check-merge", "release-verify", "doi-record", "finalize-release"}
+    assert specs["release-verify"].safety_class == SafetyClass.READ_ONLY
+    assert specs["pr-check-merge"].safety_class == SafetyClass.REMOTE_MUTATION
+
+def test_all_action_specs_have_parameters_and_evidence():
+    for spec in built_in_action_specs().values():
+        assert spec.action_id
+        assert spec.title
+        assert spec.parameters
+        assert spec.preconditions
+        assert spec.postconditions
+        assert spec.evidence
+        assert spec.dry_run_default is True
+
+def test_render_action_spec_contains_safety_and_preconditions():
+    rendered = render_action_spec(get_action_spec("pr-check-merge"))
+    assert "Safety: remote_mutation" in rendered
+    assert "Preconditions:" in rendered
+    assert "mergeStateStatus CLEAN" in rendered
+
+def test_actions_list_cli_is_read_only():
+    result = CliRunner().invoke(app, ["actions", "list"])
+    assert result.exit_code == 0
+    assert "pr-check-merge" in result.output
+    assert "release-verify" in result.output
+
+def test_actions_show_cli_displays_spec():
+    result = CliRunner().invoke(app, ["actions", "show", "release-verify"])
+    assert result.exit_code == 0
+    assert "Action: release-verify" in result.output
+    assert "Safety: read_only" in result.output
+
+def test_actions_show_unknown_fails():
+    result = CliRunner().invoke(app, ["actions", "show", "missing-action"])
+    assert result.exit_code == 1
+    assert "unknown action spec" in result.output
+from pathlib import Path
+
+import yaml
+
+from agentic_project_kit.handoff_state import load_handoff_state, validate_handoff_state
+
+def test_handoff_state_yaml_is_parseable_and_valid():
+    data = load_handoff_state()
+    assert data["schema_version"] == 1
+    assert validate_handoff_state(data) == []
+
+def test_no_copy_policy_is_referenced():
+    data = yaml.safe_load(Path(".agentic/handoff_state.yaml").read_text(encoding="utf-8"))
+    assert data["policies"]["no_copy_terminal_policy"] == ".agentic/no_copy_terminal_policy.yaml"
+    active_rule_ids = {rule["id"] for rule in data["rules"] if rule["status"] == "active"}
+    assert "no-copy-terminal-evidence" in active_rule_ids
+
+def test_superseded_rules_have_successor():
+    data = load_handoff_state()
+    for rule in data["rules"]:
+        if rule["status"] == "superseded":
+            assert rule.get("superseded_by") or rule.get("reason")
+
+### BASELINE TARGETED TESTS ###
+...............                                                          [100%]
+15 passed in 0.16s
+
+### RESULT: PASS ###
