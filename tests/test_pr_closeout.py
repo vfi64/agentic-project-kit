@@ -1,4 +1,6 @@
 import json
+import subprocess
+import sys
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
@@ -51,3 +53,27 @@ def test_pr_closeout_cli_returns_nonzero_when_blocked(tmp_path):
     result = CliRunner().invoke(app, ["pr", "closeout-check", str(path)])
     assert result.exit_code == 1
     assert "BLOCKED" in result.output
+
+def test_pr_closeout_top_level_alias_returns_zero_when_ready(tmp_path):
+    path = tmp_path / "pr.json"
+    path.write_text(json.dumps(clean_pr()), encoding="utf-8")
+    result = CliRunner().invoke(app, ["pr-closeout", str(path)])
+    assert result.exit_code == 0
+    assert "READY_TO_MERGE" in result.output
+
+def test_pr_closeout_top_level_alias_returns_nonzero_when_blocked(tmp_path):
+    pr = clean_pr()
+    pr["statusCheckRollup"][0]["status"] = "IN_PROGRESS"
+    pr["statusCheckRollup"][0]["conclusion"] = ""
+    path = tmp_path / "pr.json"
+    path.write_text(json.dumps(pr), encoding="utf-8")
+    result = CliRunner().invoke(app, ["pr-closeout", str(path)])
+    assert result.exit_code == 1
+    assert "BLOCKED" in result.output
+
+def test_pr_closeout_top_level_alias_subprocess_smoke(tmp_path):
+    path = tmp_path / "pr.json"
+    path.write_text(json.dumps(clean_pr()), encoding="utf-8")
+    result = subprocess.run([sys.executable, "-m", "agentic_project_kit.cli", "pr-closeout", str(path)], text=True, capture_output=True, check=False)
+    assert result.returncode == 0
+    assert "READY_TO_MERGE" in result.stdout

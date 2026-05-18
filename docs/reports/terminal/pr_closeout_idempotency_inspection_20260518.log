@@ -1,0 +1,193 @@
+### PRECHECK ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+Already up to date.
+main
+ef27fad Record PR closeout pending-state terminal log (#367)
+dfd1d0c Refresh handoff state after work order prepare (#366)
+6928c12 Add work order prepare MVP (#365)
+87f1424 Refresh handoff state after PR closeout gate (#364)
+02eb154 Add PR closeout gate MVP (#363)
+34b2c50 Enforce governance before work order execution (#362)
+5b13b4e Refresh handoff state after governance check (#361)
+be61760 Add governance check MVP (#360)
+4445f9e Refresh handoff state after work order templates (#359)
+b95e8d7 Add read-only work order templates (#358)
+6619f59 Refresh handoff state after work order contract enforcement (#357)
+d8aa032 Enforce work order constitutional contract (#356)
+
+### FIND PR CLOSEOUT FILES ###
+docs/reports/terminal/pr_closeout_gate_ruff_repair_20260518.log
+docs/reports/terminal/pr_closeout_pending_state_inspection_20260518.log
+src/agentic_project_kit/__pycache__/pr_closeout.cpython-314.pyc
+src/agentic_project_kit/pr_closeout.py
+tests/__pycache__/test_pr_closeout.cpython-314-pytest-9.0.3.pyc
+tests/test_pr_closeout.py
+
+### CLI REGISTRATION ###
+src/agentic_project_kit/cli.py:30:app.add_typer(workflow_app, name="workflow")
+src/agentic_project_kit/cli.py:31:app.add_typer(handoff_app, name="handoff")
+src/agentic_project_kit/cli.py:32:app.add_typer(actions_app, name="actions")
+src/agentic_project_kit/cli.py:33:app.add_typer(work_orders_app, name="work-order")
+src/agentic_project_kit/cli.py:34:app.add_typer(governance_app, name="governance")
+src/agentic_project_kit/cli.py:35:app.add_typer(pr_app, name="pr")
+src/agentic_project_kit/cli.py:36:app.add_typer(cockpit_app, name="cockpit")
+src/agentic_project_kit/cli.py:37:app.add_typer(patterns_app, name="patterns")
+src/agentic_project_kit/cli.py:38:app.add_typer(scaffold_app, name="scaffold")
+src/agentic_project_kit/cli.py:39:app.add_typer(todo_app, name="todo")
+Binary file src/agentic_project_kit/cli_commands/__pycache__/pr.cpython-314.pyc matches
+src/agentic_project_kit/cli_commands/pr.py:8:from agentic_project_kit.pr_closeout import BLOCKED, evaluate_pr_closeout, render_pr_closeout
+src/agentic_project_kit/cli_commands/pr.py:10:pr_app = typer.Typer(help="Evaluate deterministic PR closeout state.")
+src/agentic_project_kit/cli_commands/pr.py:12:@pr_app.command("closeout-check")
+src/agentic_project_kit/cli_commands/pr.py:13:def closeout_check(json_file: Path) -> None:
+src/agentic_project_kit/cli_commands/pr.py:15:    result = evaluate_pr_closeout(data)
+src/agentic_project_kit/cli_commands/pr.py:16:    typer.echo(render_pr_closeout(result))
+
+### SOURCE MATCHES ###
+src/agentic_project_kit/action_specs.py:41:            preconditions=("state OPEN", "mergeStateStatus CLEAN", "pending_count 0", "non_success_count 0", "expected CI checks present"),
+src/agentic_project_kit/control_state.py:21:    ALREADY_MERGED = "ALREADY_MERGED"
+src/agentic_project_kit/control_state.py:25:    PENDING = "PENDING"
+src/agentic_project_kit/control_state.py:36:    ControlStatus.ALREADY_MERGED,
+src/agentic_project_kit/control_state.py:43:    ControlStatus.PENDING,
+Binary file src/agentic_project_kit/__pycache__/action_specs.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/slice_runner.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/control_state.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/pr_closeout.cpython-314.pyc matches
+src/agentic_project_kit/slice_runner.py:42:        return self.status in {ControlStatus.PENDING, ControlStatus.WAIT}
+src/agentic_project_kit/pr_closeout.py:21:    if pr.get("mergeStateStatus") != "CLEAN":
+src/agentic_project_kit/pr_closeout.py:22:        reasons.append("mergeStateStatus is not CLEAN")
+src/agentic_project_kit/pr_closeout.py:23:    if pr.get("mergeable") not in ("MERGEABLE", True):
+src/agentic_project_kit/pr_closeout.py:24:        reasons.append("PR is not mergeable")
+src/agentic_project_kit/pr_closeout.py:25:    checks = pr.get("statusCheckRollup") or []
+tests/test_control_state.py:10:        ControlStatus.ALREADY_MERGED,
+tests/test_control_state.py:24:    result = StepResult(status=ControlStatus.PENDING, message="checks pending")
+tests/test_control_state.py:41:    assert normalize_status("already-merged") == ControlStatus.ALREADY_MERGED
+tests/test_slice_runner.py:21:        make_step("gate", ControlStatus.ALREADY_MERGED),
+tests/test_slice_runner.py:57:        return result(ControlStatus.PENDING)
+tests/test_slice_runner.py:69:    assert run.status == ControlStatus.PENDING
+Binary file tests/__pycache__/test_pr_closeout.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_action_specs.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_slice_runner.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_slice_runner.cpython-314.pyc matches
+Binary file tests/__pycache__/test_slice_runner.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_control_state.cpython-314.pyc matches
+Binary file tests/__pycache__/test_control_state.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_control_state.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_repo_ns_entrypoint.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_repo_ns_entrypoint.cpython-314-pytest-9.0.2.pyc matches
+tests/test_repo_ns_entrypoint.py:139:    assert "MERGED=0" in text
+tests/test_repo_ns_entrypoint.py:140:    assert "MERGED=1" in text
+tests/test_repo_ns_entrypoint.py:141:    assert 'if [ "$MERGED" -eq 1 ]; then' in text
+tests/test_repo_ns_entrypoint.py:143:    assert "PR is not mergeable" in text
+tests/test_repo_ns_entrypoint.py:208:    assert "MERGED" in text
+tests/test_repo_ns_entrypoint.py:258:    assert "### RESULT: PENDING ###" in text
+tests/test_repo_ns_entrypoint.py:259:    assert "ALREADY_MERGED" in text
+tests/test_action_specs.py:26:    assert "mergeStateStatus CLEAN" in rendered
+tests/test_pr_closeout.py:10:        "mergeStateStatus": "CLEAN",
+tests/test_pr_closeout.py:11:        "mergeable": "MERGEABLE",
+tests/test_pr_closeout.py:12:        "statusCheckRollup": [{
+tests/test_pr_closeout.py:26:    pr["statusCheckRollup"][0]["status"] = "IN_PROGRESS"
+tests/test_pr_closeout.py:27:    pr["statusCheckRollup"][0]["conclusion"] = ""
+tests/test_pr_closeout.py:34:    pr["statusCheckRollup"] = []
+tests/test_pr_closeout.py:48:    pr["mergeStateStatus"] = "UNSTABLE"
+
+### COMMAND HELP ###
+                                                                                              
+ Usage: python -m agentic_project_kit.cli [OPTIONS] COMMAND [ARGS]...                         
+                                                                                              
+ Generate and check agentic GitHub project skeletons.                                         
+                                                                                              
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.                    │
+│ --show-completion             Show completion for the current shell, to copy it or         │
+│                               customize the installation.                                  │
+│ --help                        Show this message and exit.                                  │
+╰────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ─────────────────────────────────────────────────────────────────────────────────╮
+│ init                                                                                       │
+│ profile-explain           List available project profiles and policy packs.                │
+│ pr-hygiene                                                                                 │
+│ github-create                                                                              │
+│ check                                                                                      │
+│ check-docs                                                                                 │
+│ check-todo                                                                                 │
+│ doc-mesh-audit            Audit cross-document state, governance, architecture, and        │
+│                           historical-plan drift.                                           │
+│ doc-lifecycle-audit       Audit lifecycle status headers for planning, roadmap, strategy,  │
+│                           and idea documents.                                              │
+│ doc-mesh-repair           Apply safe automatic documentation mesh repairs.                 │
+│ doctor                    Run a compact project health check.                              │
+│ release-plan              Print a release preparation checklist for the current project.   │
+│ release-check             Validate release state for a target version.                     │
+│ post-release-check        Validate post-release GitHub and Zenodo state without guessing   │
+│                           DOI metadata.                                                    │
+│ validate-contract         Validate the machine-readable project contract.                  │
+│ validate-output-contract  Validate an output file against a machine-readable output        │
+│                           contract.                                                        │
+│ validate-sections         Validate that a text file contains required literal section      │
+│                           markers.                                                         │
+│ workflow                  Run and inspect bounded local workflow handoff states.           │
+│ handoff                   Read-only persistent handoff state commands.                     │
+│ actions                   Inspect parameterized action specifications.                     │
+│ work-order                Inspect and run repo-backed work orders.                         │
+│ governance                Run deterministic project governance checks.                     │
+│ pr                        Evaluate deterministic PR closeout state.                        │
+│ cockpit                   Inspect local cockpit status and structured project actions.     │
+│ patterns                  Inspect the local read-only pattern catalog.                     │
+│ scaffold                  Create governed repository scaffolding artifacts.                │
+│ todo                      Manage generated project TODO items.                             │
+╰────────────────────────────────────────────────────────────────────────────────────────────╯
+
+Usage: python -m agentic_project_kit.cli [OPTIONS] COMMAND [ARGS]...
+Try 'python -m agentic_project_kit.cli --help' for help.
+╭─ Error ────────────────────────────────────────────────────────────────────────────────────╮
+│ No such command 'pr-closeout'.                                                             │
+╰────────────────────────────────────────────────────────────────────────────────────────────╯
+
+### CURRENT GATES ###
+........................................................................ [ 19%]
+........................................................................ [ 39%]
+........................................................................ [ 58%]
+........................................................................ [ 78%]
+........................................................................ [ 97%]
+........                                                                 [100%]
+368 passed in 2.29s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.24
+
+Overall: PASS
+Governance check passed
+Work order contract check passed
+Persistent handoff state check passed
+
+### FINAL STATUS ###
+main
+ef27fad Record PR closeout pending-state terminal log (#367)
+dfd1d0c Refresh handoff state after work order prepare (#366)
+6928c12 Add work order prepare MVP (#365)
+87f1424 Refresh handoff state after PR closeout gate (#364)
+02eb154 Add PR closeout gate MVP (#363)
+34b2c50 Enforce governance before work order execution (#362)
+5b13b4e Refresh handoff state after governance check (#361)
+be61760 Add governance check MVP (#360)
+4445f9e Refresh handoff state after work order templates (#359)
+b95e8d7 Add read-only work order templates (#358)
+6619f59 Refresh handoff state after work order contract enforcement (#357)
+d8aa032 Enforce work order constitutional contract (#356)
+
+### INNER RESULT PASS ###
