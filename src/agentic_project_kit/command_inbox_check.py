@@ -36,7 +36,7 @@ def completed_command_ids(report_dir: Path = REPORT_DIR, executed_jsonl: Path = 
         for line in executed_jsonl.read_text(encoding="utf-8").splitlines():
             if "\"command_id\"" not in line:
                 continue
-            before, _, after = line.partition("\"command_id\"")
+            _, _, after = line.partition("\"command_id\"")
             _, _, tail = after.partition(":")
             value = tail.strip().lstrip("\"").split("\"", 1)[0]
             if value:
@@ -55,7 +55,7 @@ def check_command_inbox(inbox_dir: Path = INBOX_DIR) -> InboxCheckResult:
     complete = sorted(yaml_stems & script_stems)
     if len(complete) > 1:
         findings.append("multiple complete pending commands: " + ", ".join(complete))
-    completed_ids = completed_command_ids()
+    completed_ids = completed_command_ids(report_dir=REPORT_DIR, executed_jsonl=EXECUTED_JSONL)
     seen_ids: set[str] = set()
     for stem in complete:
         yaml_path = inbox_dir / f"{stem}.yaml"
