@@ -24,6 +24,7 @@ REQUIRED_TOP_LEVEL_FIELDS = [
     "handoff_maintenance",
 ]
 VALID_RULE_STATUSES = {"active", "superseded", "historical"}
+VALID_SAFE_STATE_SEMANTICS = {"last_substantive_work_state", "current_main_head"}
 
 def load_handoff_state(path: str | Path = DEFAULT_HANDOFF_STATE_PATH) -> dict[str, Any]:
     state_path = Path(path)
@@ -68,6 +69,20 @@ def validate_handoff_state(data: dict[str, Any]) -> list[str]:
             active_ids.add(rule_id)
         if status == "superseded" and not (rule.get("superseded_by") or rule.get("reason")):
             errors.append(f"superseded rule {rule_id or index} needs superseded_by or reason")
+    safe_state = data.get("safe_state", {})
+    if isinstance(safe_state, dict):
+        semantics = safe_state.get("semantics", "last_substantive_work_state")
+        if semantics not in VALID_SAFE_STATE_SEMANTICS:
+            errors.append(f"safe_state.semantics must be one of: {sorted(VALID_SAFE_STATE_SEMANTICS)}")
+        refresh_prs = safe_state.get("administrative_refresh_prs", [])
+        if refresh_prs is None:
+            refresh_prs = []
+        if not isinstance(refresh_prs, list):
+            errors.append("safe_state.administrative_refresh_prs must be a list when present")
+        else:
+            for pr in refresh_prs:
+                if not isinstance(pr, int):
+                    errors.append("safe_state.administrative_refresh_prs entries must be integers")
     for pattern in data.get("recent_failure_patterns", []) or []:
         if isinstance(pattern, dict) and not pattern.get("prevention"):
             pattern_id = pattern.get("id", "<unknown>")
@@ -116,14 +131,27 @@ def current_git_safe_state() -> dict[str, str]:
     ], text=True).strip()
     return {"commit": commit, "commit_subject": subject}
 
+def is_administrative_refresh_subject(commit_subject: str) -> bool:
+    return commit_subject.lower().startswith("refresh handoff state")
+
+
 def refresh_handoff_safe_state(
     data: dict[str, Any],
     commit: str,
     commit_subject: str,
-    reason: str = "Refresh handoff state safe_state from current git HEAD",
+    reason: str = "Refresh handoff state to last substantive work commit",
 ) -> dict[str, Any]:
     refreshed = dict(data)
     safe_state = dict(refreshed.get("safe_state", {}))
+    safe_state.setdefault("semantics", "last_substantive_work_state")
+    if is_administrative_refresh_subject(commit_subject):
+        refreshed["safe_state"] = safe_state
+        refreshed["updated"] = {
+            "date": "2026-05-18",
+            "reason": "Current HEAD is an administrative handoff refresh; safe_state remains on last substantive work commit",
+            "source": "agentic-kit handoff refresh",
+        }
+        return refreshed
     safe_state["branch"] = "main"
     safe_state["commit"] = commit
     safe_state["commit_subject"] = commit_subject

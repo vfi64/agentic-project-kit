@@ -12,6 +12,9 @@ safe_state:
   branch: main
   commit: aa09831
   commit_subject: Add parameterized action specs MVP (#348)
+  semantics: last_substantive_work_state
+  administrative_refresh_prs:
+    - 349
   working_tree_expected_clean: true
 release:
   current_version: 0.3.24

@@ -32,6 +32,7 @@ def render_handoff_prompt(data: dict[str, Any]) -> str:
         f"Branch: `{safe_state.get('branch', '')}`",
         f"Commit: `{safe_state.get('commit', '')}`",
         f"Subject: {safe_state.get('commit_subject', '')}",
+        f"Semantics: `{safe_state.get('semantics', 'last_substantive_work_state')}`",
     ])
     lines.extend([
         "",

@@ -39,3 +39,29 @@ def test_handoff_refresh_write_updates_file(tmp_path, monkeypatch):
     data = yaml.safe_load(target.read_text(encoding="utf-8"))
     assert data["safe_state"]["commit"] == "write01"
     assert data["safe_state"]["commit_subject"] == "Write subject"
+
+def test_refresh_preserves_substantive_commit_for_administrative_refresh_head():
+    data = {
+        "updated": {"reason": "old"},
+        "safe_state": {
+            "branch": "main",
+            "commit": "sub1234",
+            "commit_subject": "Add parameterized action specs MVP (#348)",
+            "semantics": "last_substantive_work_state",
+            "administrative_refresh_prs": [349],
+        },
+        "release": {"current_version": "0.3.24"},
+        "repo": {"name": "agentic-project-kit", "local_path": ".", "remote": "remote"},
+        "next_allowed_tasks": [{"id": "next", "title": "Next", "priority": 1}],
+        "recent_failure_patterns": [{"id": "x", "prevention": "y"}],
+        "rules": [],
+        "first_instruction": "Continue substantive work.",
+    }
+    refreshed = refresh_handoff_safe_state(
+        data,
+        "adm9999",
+        "Refresh handoff state after parameterized action specs (#349)",
+    )
+    assert refreshed["safe_state"]["commit"] == "sub1234"
+    assert refreshed["safe_state"]["semantics"] == "last_substantive_work_state"
+    assert "administrative handoff refresh" in refreshed["updated"]["reason"]
