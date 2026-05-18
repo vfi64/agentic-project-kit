@@ -1,3 +1,7 @@
+## v0.3.26
+
+- Prepare release metadata for v0.3.26.
+
 ## v0.3.25
 - Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.25 DOI `10.5281/zenodo.20273989`.
 
