@@ -102,3 +102,43 @@ docs/record-v0.3.24-doi
 ### RESULT: PASS ###
 
 ### STAGE INCLUDING LOG ###
+
+### STATUS BEFORE COMMIT ###
+M  CHANGELOG.md
+M  docs/STATUS.md
+M  docs/handoff/CURRENT_HANDOFF.md
+AM docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log
+
+### COMMIT DOI METADATA ###
+[docs/record-v0.3.24-doi 08dfe2e] Record v0.3.24 DOI metadata
+ 4 files changed, 107 insertions(+)
+ create mode 100644 docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log
+
+### PUSH DOI BRANCH ###
+remote: 
+remote: Create a pull request for 'docs/record-v0.3.24-doi' on GitHub by visiting:        
+remote:      https://github.com/vfi64/agentic-project-kit/pull/new/docs/record-v0.3.24-doi        
+remote: 
+To github.com:vfi64/agentic-project-kit.git
+ * [new branch]      docs/record-v0.3.24-doi -> docs/record-v0.3.24-doi
+branch 'docs/record-v0.3.24-doi' set up to track 'origin/docs/record-v0.3.24-doi'.
+
+### OPEN PR ###
+https://github.com/vfi64/agentic-project-kit/pull/341
+
+### PR VIEW ###
+{"baseRefName":"main","headRefName":"docs/record-v0.3.24-doi","mergeStateStatus":"UNKNOWN","number":341,"state":"OPEN","title":"Record v0.3.24 DOI metadata","url":"https://github.com/vfi64/agentic-project-kit/pull/341"}
+
+### FINAL STATE ###
+docs/record-v0.3.24-doi
+ M docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log
+08dfe2e Record v0.3.24 DOI metadata
+39603bf Prepare v0.3.24 release metadata (#340)
+9e00830 Harden agent-next workflow postconditions (#339)
+c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+b247224 Finalize state after agent-next inbox runner (#337)
+c63da03 Add agent command inbox runner (#336)
+c437f81 Finalize state after repo command runner (#335)
+5f51ceb Add repo command runner MVP (#334)
+
+### RESULT: PASS ###
