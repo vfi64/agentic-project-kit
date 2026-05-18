@@ -562,3 +562,4 @@ The command writes a document under `docs/planning/` by default, includes `Statu
 Version `0.3.23` is the current release line prepared by `./ns release-prep 0.3.23`.
 Version `0.3.24` is the current release line prepared by `./ns release-prep 0.3.24`.
 Version `0.3.25` is the current release line prepared by `./ns release-prep 0.3.25`.
+Version `0.3.26` is the current release line prepared by `./ns release-prep 0.3.26`.
