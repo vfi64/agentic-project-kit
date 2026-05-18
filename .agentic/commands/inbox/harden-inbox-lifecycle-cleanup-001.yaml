@@ -1,0 +1,3 @@
+command_id: harden-inbox-lifecycle-cleanup-001
+title: Harden command inbox lifecycle cleanup after completed runs
+safety_class: remote-mutation
