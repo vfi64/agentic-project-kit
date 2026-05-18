@@ -1,0 +1,228 @@
+"""Repository-backed command runner for agent handoff.
+
+The runner executes exactly one repo-local command file described by
+.agentic/commands/current.yaml and .agentic/commands/current.sh.
+
+It is intentionally conservative:
+- no command file means no-op failure,
+- duplicate command_id is refused,
+- shell syntax is checked before execution,
+- execution is delegated to terminal_logging.run_logged(),
+- reports are written under docs/reports/command_runs/,
+- executed command ids are tracked in .agentic/commands/executed.jsonl.
+"""
+
+from __future__ import annotations
+
+import dataclasses
+import datetime as _dt
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+
+from agentic_project_kit import terminal_logging
+
+COMMAND_DIR = Path(".agentic/commands")
+CURRENT_YAML = COMMAND_DIR / "current.yaml"
+CURRENT_SCRIPT = COMMAND_DIR / "current.sh"
+EXECUTED_JSONL = COMMAND_DIR / "executed.jsonl"
+REPORT_DIR = Path("docs/reports/command_runs")
+
+ALLOWED_SAFETY_CLASSES = {
+    "read-only",
+    "local-only",
+    "remote-mutation",
+}
+
+OUTCOME_PASS_EXECUTED = "PASS_EXECUTED"
+OUTCOME_FAIL_NO_COMMAND = "FAIL_NO_COMMAND"
+OUTCOME_FAIL_ALREADY_EXECUTED = "FAIL_ALREADY_EXECUTED"
+OUTCOME_FAIL_INVALID_COMMAND = "FAIL_INVALID_COMMAND"
+OUTCOME_FAIL_SHELL_SYNTAX = "FAIL_SHELL_SYNTAX"
+OUTCOME_FAIL_COMMAND = "FAIL_COMMAND"
+OUTCOME_FAIL_UPLOAD = "FAIL_UPLOAD"
+
+
+@dataclasses.dataclass(frozen=True)
+class AgentCommand:
+    command_id: str
+    title: str
+    safety_class: str
+    expected_branch: str | None = None
+    description: str = ""
+
+
+def _parse_simple_yaml(path: Path) -> dict[str, str]:
+    data: dict[str, str] = {}
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if ":" not in line:
+            raise ValueError(f"Invalid YAML line without colon: {raw}")
+        key, value = line.split(":", 1)
+        key = key.strip()
+        value = value.strip()
+        if not key:
+            raise ValueError(f"Invalid YAML line without key: {raw}")
+        if (value.startswith("\'") and value.endswith("\'")) or (value.startswith(chr(34)) and value.endswith(chr(34))):
+            value = value[1:-1]
+        data[key] = value
+    return data
+
+
+def load_current_command() -> AgentCommand:
+    if not CURRENT_YAML.exists() or not CURRENT_SCRIPT.exists():
+        raise FileNotFoundError("Missing .agentic/commands/current.yaml or current.sh")
+    data = _parse_simple_yaml(CURRENT_YAML)
+    required = ("command_id", "title", "safety_class")
+    missing = [key for key in required if not data.get(key)]
+    if missing:
+        raise ValueError("Missing required command fields: " + ", ".join(missing))
+    safety = data["safety_class"]
+    if safety not in ALLOWED_SAFETY_CLASSES:
+        raise ValueError(f"Unsupported safety_class: {safety}")
+    return AgentCommand(
+        command_id=data["command_id"],
+        title=data["title"],
+        safety_class=safety,
+        expected_branch=data.get("expected_branch") or None,
+        description=data.get("description", ""),
+    )
+
+
+def read_executed_ids() -> set[str]:
+    if not EXECUTED_JSONL.exists():
+        return set()
+    ids: set[str] = set()
+    for raw in EXECUTED_JSONL.read_text(encoding="utf-8").splitlines():
+        if not raw.strip():
+            continue
+        try:
+            item = json.loads(raw)
+        except json.JSONDecodeError:
+            continue
+        command_id = item.get("command_id")
+        if isinstance(command_id, str):
+            ids.add(command_id)
+    return ids
+
+
+def script_sha256(path: Path = CURRENT_SCRIPT) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def current_branch() -> str:
+    proc = subprocess.run(["git", "branch", "--show-current"], text=True, capture_output=True, check=False)
+    if proc.returncode != 0:
+        return "unknown"
+    return proc.stdout.strip() or "unknown"
+
+
+def validate_command(command: AgentCommand) -> tuple[str, str]:
+    if command.command_id in read_executed_ids():
+        return OUTCOME_FAIL_ALREADY_EXECUTED, command.command_id
+    if command.expected_branch and command.expected_branch != current_branch():
+        return OUTCOME_FAIL_INVALID_COMMAND, f"Expected branch {command.expected_branch}, got {current_branch()}"
+    syntax = subprocess.run(["sh", "-n", CURRENT_SCRIPT.as_posix()], text=True, capture_output=True, check=False)
+    if syntax.returncode != 0:
+        return OUTCOME_FAIL_SHELL_SYNTAX, syntax.stderr.strip() or syntax.stdout.strip()
+    return OUTCOME_PASS_EXECUTED, "valid"
+
+
+def report_path(command_id: str) -> Path:
+    safe = "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in command_id)
+    return REPORT_DIR / f"{safe}.md"
+
+
+def write_report(command: AgentCommand, outcome: str, exit_code: int, log_path: Path | None, detail: str = "") -> Path:
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    path = report_path(command.command_id)
+    lines = [
+        f"# Agent command run: {command.command_id}",
+        "",
+        f"- Title: {command.title}",
+        f"- Safety class: {command.safety_class}",
+        f"- Outcome: {outcome}",
+        f"- Exit code: {exit_code}",
+        f"- Branch: {current_branch()}",
+        f"- Script SHA256: {script_sha256()}",
+    ]
+    if log_path is not None:
+        lines.append(f"- Terminal log: {log_path.as_posix()}")
+    if detail:
+        lines.extend(["", "## Detail", "", detail])
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return path
+
+
+def append_executed(command: AgentCommand, outcome: str, exit_code: int) -> None:
+    COMMAND_DIR.mkdir(parents=True, exist_ok=True)
+    entry = {
+        "command_id": command.command_id,
+        "outcome": outcome,
+        "exit_code": exit_code,
+        "script_sha256": script_sha256(),
+        "timestamp_utc": _dt.datetime.now(_dt.UTC).isoformat(),
+    }
+    with EXECUTED_JSONL.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(entry, sort_keys=True) + "\n")
+
+
+def stage_commit_push(paths: list[Path], message: str) -> int:
+    subprocess.run(["git", "add", *[path.as_posix() for path in paths]], check=True)
+    diff = subprocess.run(["git", "diff", "--cached", "--quiet"], check=False)
+    if diff.returncode == 0:
+        return 0
+    subprocess.run(["git", "commit", "-m", message], check=True)
+    pushed = subprocess.run(["git", "push"], check=False)
+    return pushed.returncode
+
+
+def agent_run() -> int:
+    try:
+        command = load_current_command()
+    except (FileNotFoundError, ValueError) as exc:
+        print(OUTCOME_FAIL_NO_COMMAND if isinstance(exc, FileNotFoundError) else OUTCOME_FAIL_INVALID_COMMAND)
+        print(str(exc))
+        return 1
+
+    validation_outcome, validation_detail = validate_command(command)
+    if validation_outcome != OUTCOME_PASS_EXECUTED:
+        print(validation_outcome)
+        print(validation_detail)
+        write_report(command, validation_outcome, 1, None, validation_detail)
+        return 1
+
+    print(f"COMMAND_ID={command.command_id}")
+    print(f"TITLE={command.title}")
+    print(f"SAFETY_CLASS={command.safety_class}")
+
+    exit_code = terminal_logging.run_logged(command.command_id, ["sh", CURRENT_SCRIPT.as_posix()])
+    log_path = terminal_logging.read_latest_pointer()
+    outcome = OUTCOME_PASS_EXECUTED if exit_code == 0 else OUTCOME_FAIL_COMMAND
+
+    report = write_report(command, outcome, exit_code, log_path)
+    append_executed(command, outcome, exit_code)
+
+    upload_paths = [report, EXECUTED_JSONL]
+    if log_path is not None:
+        upload_paths.append(log_path)
+    upload_paths.append(terminal_logging.LATEST_POINTER)
+
+    pushed = stage_commit_push(upload_paths, f"Record agent command run {command.command_id}")
+    if pushed != 0:
+        print(OUTCOME_FAIL_UPLOAD)
+        return pushed
+
+    print(outcome)
+    return 0 if outcome == OUTCOME_PASS_EXECUTED else exit_code or 1
+
+
+def main(argv: list[str] | None = None) -> int:
+    return agent_run()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
