@@ -1,0 +1,72 @@
+REPAIR PR 399 REMOTE MUTATION PREFLIGHT IMPLEMENTATION
+
+### SYNC PR BRANCH ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+ * branch            fix/remote-mutation-preflight-dirty-state-guard -> FETCH_HEAD
+Already on 'fix/remote-mutation-preflight-dirty-state-guard'
+Your branch is up to date with 'origin/fix/remote-mutation-preflight-dirty-state-guard'.
+HEAD is now at ef6b640 Preserve remote mutation preflight guard terminal log
+
+### WRITE SAFE PATCH SCRIPT ###
+
+### APPLY REPAIR PATCH ###
+
+### VERIFY PATCH PRESENCE ###
+ns:97:if [ "${1:-}" = "terminal-remote-preflight" ]; then
+ns:98:  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-remote-preflight
+src/agentic_project_kit/terminal_logging.py:75:def remote_mutation_preflight() -> tuple[str, str]:
+src/agentic_project_kit/terminal_logging.py:188:    if mode == "terminal-remote-preflight":
+src/agentic_project_kit/terminal_logging.py:189:        outcome, message = remote_mutation_preflight()
+tests/test_terminal_remote_preflight.py:6:def test_remote_mutation_preflight_passes_on_clean_worktree(monkeypatch):
+tests/test_terminal_remote_preflight.py:8:    outcome, message = terminal_logging.remote_mutation_preflight()
+tests/test_terminal_remote_preflight.py:13:def test_remote_mutation_preflight_fails_on_any_dirty_file(monkeypatch):
+tests/test_terminal_remote_preflight.py:15:    outcome, message = terminal_logging.remote_mutation_preflight()
+tests/test_terminal_remote_preflight.py:22:    code = terminal_logging.main(["terminal-remote-preflight"])
+docs/TEST_GATES.md:247:Before terminal workflows perform remote mutations or merge/sync verification, the working tree must be fully clean. Terminal-log dirtiness is not allowed for this preflight because it can block branch switching, fast-forward pulls, PR merges, and verification. Use `./ns terminal-remote-preflight` before `gh pr merge`, release publication, tag creation, or any merge-verification block.
+
+### LOCAL GATES ###
+...                                                                      [100%]
+3 passed in 0.01s
+........................................................................ [ 18%]
+........................................................................ [ 36%]
+........................................................................ [ 54%]
+........................................................................ [ 72%]
+........................................................................ [ 91%]
+...................................                                      [100%]
+395 passed in 2.23s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.26
+
+Overall: PASS
+
+### CLEAN TEMP PATCH SCRIPT ###
+
+### COMMIT REPAIR ###
+ M ns
+ M src/agentic_project_kit/terminal_logging.py
+[fix/remote-mutation-preflight-dirty-state-guard 929bfc6] Implement remote mutation dirty-state preflight guard
+ 2 files changed, 19 insertions(+)
+To github.com:vfi64/agentic-project-kit.git
+   ef6b640..929bfc6  fix/remote-mutation-preflight-dirty-state-guard -> fix/remote-mutation-preflight-dirty-state-guard
+
+### PR STATUS ###
+{"headRefName":"fix/remote-mutation-preflight-dirty-state-guard","headRefOid":"ef6b640763aa7847585407a83d85c43e0eaec8a6","mergeable":"MERGEABLE","number":399,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-18T18:59:24Z","conclusion":"FAILURE","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26054087839/job/76597714457","name":"test","startedAt":"2026-05-18T18:59:05Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-18T18:59:32Z","conclusion":"FAILURE","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26054097609/job/76597745839","name":"test","startedAt":"2026-05-18T18:59:16Z","status":"COMPLETED","workflowName":"CI"}],"title":"Add remote mutation dirty-state preflight guard"}
+
+### RESULT MARKER BEFORE LOG FINALIZATION ###
+### RESULT: PASS ###
