@@ -1,0 +1,5 @@
+command_id: agent-next-smoke-001
+title: Agent-next smoke test
+safety_class: remote-mutation
+expected_branch: agent-command/agent-next-smoke
+description: Smoke-test the inbox-based no-copy agent-next workflow before v0.3.24 release.
