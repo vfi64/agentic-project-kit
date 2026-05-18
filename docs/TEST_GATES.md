@@ -253,3 +253,7 @@ Before terminal workflows perform remote mutations or merge/sync verification, t
 ## Communication artifact garbage collector
 
 `./ns artifact-gc` reports transient communication artifacts without deleting them. `./ns artifact-gc --execute` removes only registered transient `.agentic/commands/current.yaml` and `.agentic/commands/current.sh` compatibility files. It must not delete `docs/reports/terminal/LATEST_TERMINAL_LOG.txt`, because that file is part of the committed terminal-evidence pointer chain.
+
+## Latest command-run pointer
+
+`tests/test_agent_command_runner.py` verifies that command reports update `docs/reports/command_runs/LATEST_COMMAND_RUN.txt` and that `agent_run` includes that pointer in the uploaded evidence paths. This backs the no-copy `d`/`f` handoff contract.

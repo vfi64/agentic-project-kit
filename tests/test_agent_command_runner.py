@@ -199,3 +199,29 @@ def test_agent_next_postcondition_failure_blocks_success(tmp_path, monkeypatch):
     monkeypatch.setattr(acr, "agent_run", lambda extra_upload_paths=None: 0)
     monkeypatch.setattr(acr, "remove_current_files", lambda: None)
     assert acr.agent_next() == 1
+
+
+def test_write_report_updates_latest_command_run_pointer(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    write_command(tmp_path, command_id="cmd-pointer")
+    command = acr.load_current_command()
+    report = acr.write_report(command, acr.OUTCOME_PASS_EXECUTED, 0, Path("docs/reports/terminal/cmd-pointer.log"))
+    assert acr.LATEST_COMMAND_RUN_POINTER.exists()
+    assert acr.LATEST_COMMAND_RUN_POINTER.read_text(encoding="utf-8").strip() == report.as_posix()
+
+
+def test_agent_run_uploads_latest_command_run_pointer(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    write_command(tmp_path, command_id="cmd-upload-pointer")
+    log_path = Path("docs/reports/terminal/cmd-upload-pointer.log")
+    log_path.parent.mkdir(parents=True)
+    log_path.write_text("log\n", encoding="utf-8")
+    monkeypatch.setattr(acr.terminal_logging, "run_logged", lambda name, command: 0)
+    monkeypatch.setattr(acr.terminal_logging, "read_latest_pointer", lambda: log_path)
+    pushed_paths = []
+    def fake_stage_commit_push(paths, message):
+        pushed_paths.extend(path.as_posix() for path in paths)
+        return 0
+    monkeypatch.setattr(acr, "stage_commit_push", fake_stage_commit_push)
+    assert acr.agent_run() == 0
+    assert "docs/reports/command_runs/LATEST_COMMAND_RUN.txt" in pushed_paths
