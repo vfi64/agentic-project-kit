@@ -4,3 +4,4 @@
 {"command_id": "agent-next-smoke-002", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "cc966414905a6e6afbefbda6cc531334ec7c741c34689ce02c05864bdf9f5221", "timestamp_utc": "2026-05-18T11:11:12.552392+00:00"}
 {"command_id": "no-copy-e2e-protocol-001", "exit_code": 1, "outcome": "FAIL_COMMAND", "script_sha256": "63453072c42c692b31a54228afd8d26a60af925a52a1f92a73b9f7792b2f5a4f", "timestamp_utc": "2026-05-18T19:39:54.312564+00:00"}
 {"command_id": "agent-next-smoke-003", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "b98ee13f4c1f935ab896c27ba90bdbfccc602cf548cf0cff5d88d20fcce2f487", "timestamp_utc": "2026-05-18T19:56:19.402272+00:00"}
+{"command_id": "agent-next-fail-smoke-004", "exit_code": 7, "outcome": "FAIL_COMMAND", "script_sha256": "25fc6bd2fc9afdc6ad3d485db86f00fb859e7cba5a70cf107250f866d5ed6d49", "timestamp_utc": "2026-05-18T19:59:10.313796+00:00"}
