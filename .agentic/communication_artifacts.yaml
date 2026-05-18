@@ -1,0 +1,45 @@
+schema_version: 1
+purpose: "Central allowlist and retention policy for communication, handoff, terminal, and command-run artifacts."
+principle: "Classify first, delete only through deterministic garbage collector rules."
+rules:
+  - id: tmp-agentic-project-kit-logs
+    status: active
+    path_glob: "/tmp/agentic-project-kit-*.log"
+    class: local-temp-log
+    default_action: dry-run
+    delete_allowed: true
+    min_age_days: 7
+    notes: "Local temporary communication logs created before finalization into repo-backed terminal logs."
+  - id: repo-terminal-logs
+    status: active
+    path_glob: "docs/reports/terminal/*.log"
+    class: repo-backed-terminal-evidence
+    default_action: keep
+    delete_allowed: false
+    notes: "Committed terminal logs are review evidence and must not be removed by default."
+  - id: terminal-latest-pointer
+    status: active
+    path_glob: "docs/reports/terminal/LATEST_TERMINAL_LOG.txt"
+    class: pointer
+    default_action: keep-or-repair
+    delete_allowed: false
+  - id: command-run-reports
+    status: active
+    path_glob: "docs/reports/command_runs/*.md"
+    class: repo-backed-command-run-evidence
+    default_action: keep
+    delete_allowed: false
+  - id: agent-command-inbox
+    status: active
+    path_glob: ".agentic/commands/inbox/*"
+    class: pending-or-consumable-command
+    default_action: keep
+    delete_allowed: false
+    notes: "Inbox files may be pending work orders; never delete them as generic temp files."
+  - id: agent-command-current
+    status: active
+    path_glob: ".agentic/commands/current.*"
+    class: transient-runner-state
+    default_action: inspect
+    delete_allowed: conditional
+    notes: "May only be removed when command runner state proves it is stale and no command is running."

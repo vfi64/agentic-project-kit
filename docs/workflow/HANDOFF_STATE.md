@@ -29,6 +29,10 @@ A new chat or workflow must not assume that global `agentic-kit`, `python`, `ruf
 
 Terminal blocks pasted into an interactive shell must never terminate that shell. Do not use `exit`, `logout`, `kill`, or top-level `exec` in chat-pasted blocks. A pasted block must report `### RESULT: PASS ###`, `### RESULT: FAIL ###`, or `### RESULT: PENDING ###` and then return to the prompt. Use exit codes only inside saved scripts executed as child processes.
 
+## Communication artifact cleanup rule
+
+Temporary communication files must be centrally classified before cleanup. Use `.agentic/communication_artifacts.yaml` as the allowlist and policy source. Do not use ad-hoc `rm` on `docs/reports`, `.agentic/commands`, handoff files, terminal logs, command-run reports, or pointer files. A garbage collector must start with dry-run behavior and must write a cleanup report before any deletion.
+
 ## Commit Semantics
 
 `safe_state.commit` records the last substantive work state by default, not necessarily the newest administrative refresh merge on `main`.

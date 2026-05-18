@@ -1,0 +1,68 @@
+
+### PRECHECK ###
+feature/evidence-registry-gc-dry-run
+ M .agentic/handoff_state.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+ M docs/workflow/HANDOFF_STATE.md
+?? .agentic/communication_artifacts.yaml
+?? docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log
+?? docs/workflow/COMMUNICATION_ARTIFACT_GC.md
+
+### REQUIRED GATES ###
+Persistent handoff state check passed
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.25
+
+Overall: PASS
+
+### DIFF SUMMARY ###
+ .agentic/handoff_state.yaml                   | 2 ++
+ docs/reports/terminal/LATEST_TERMINAL_LOG.txt | 2 +-
+ docs/workflow/HANDOFF_STATE.md                | 4 ++++
+ 3 files changed, 7 insertions(+), 1 deletion(-)
+diff --git a/.agentic/handoff_state.yaml b/.agentic/handoff_state.yaml
+index 5e5ade0..6ff1658 100644
+--- a/.agentic/handoff_state.yaml
++++ b/.agentic/handoff_state.yaml
+@@ -92,6 +92,8 @@ recent_failure_patterns:
+   prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and agentic-kit before using command names. Treat missing global agentic-kit or missing .venv as bootstrap/environment state, not as product failure.
+ - id: interactive-terminal-exit
+   prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit codes belong inside saved scripts, not interactive paste blocks.
++- id: unclassified-communication-artifact-cleanup
++  prevention: Never delete communication, handoff, terminal, or command-run artifacts with ad-hoc rm. Use the central communication artifact registry and a deterministic garbage collector with dry-run, allowlist, age/status checks, tests, and a cleanup report.
+ - id: stale-handoff-after-administrative-refresh
+   prevention: Keep safe_state tied to the last substantive commit and list administrative
+     refresh PRs separately.
+diff --git a/docs/workflow/HANDOFF_STATE.md b/docs/workflow/HANDOFF_STATE.md
+index 8b41c8e..edff142 100644
+--- a/docs/workflow/HANDOFF_STATE.md
++++ b/docs/workflow/HANDOFF_STATE.md
+@@ -29,6 +29,10 @@ A new chat or workflow must not assume that global `agentic-kit`, `python`, `ruf
+ 
+ Terminal blocks pasted into an interactive shell must never terminate that shell. Do not use `exit`, `logout`, `kill`, or top-level `exec` in chat-pasted blocks. A pasted block must report `### RESULT: PASS ###`, `### RESULT: FAIL ###`, or `### RESULT: PENDING ###` and then return to the prompt. Use exit codes only inside saved scripts executed as child processes.
+ 
++## Communication artifact cleanup rule
++
++Temporary communication files must be centrally classified before cleanup. Use `.agentic/communication_artifacts.yaml` as the allowlist and policy source. Do not use ad-hoc `rm` on `docs/reports`, `.agentic/commands`, handoff files, terminal logs, command-run reports, or pointer files. A garbage collector must start with dry-run behavior and must write a cleanup report before any deletion.
++
+ ## Commit Semantics
+ 
+ `safe_state.commit` records the last substantive work state by default, not necessarily the newest administrative refresh merge on `main`.
+
+### FINALIZE TMP LOG INTO REPO LOG ###
+
+### RESULT: PASS ###
