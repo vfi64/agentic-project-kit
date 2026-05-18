@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-185357_communication-artifact-gc-mvp-commit.log
+docs/reports/terminal/20260518-185518_communication-artifact-gc-pr380-closeout.log
