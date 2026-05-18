@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-183223_pr376-closeout.log
+docs/reports/terminal/20260518-183936_no-interactive-exit-terminal-rule.log

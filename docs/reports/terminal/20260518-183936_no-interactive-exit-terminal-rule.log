@@ -1,0 +1,75 @@
+
+### PRECHECK ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+Switched to a new branch 'docs/record-no-interactive-exit-terminal-rule'
+docs/record-no-interactive-exit-terminal-rule
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+patched .agentic/handoff_state.yaml
+patched docs/workflow/HANDOFF_STATE.md
+
+### REMOVE PATCH SCRIPT ###
+
+### DIFF ###
+diff --git a/.agentic/handoff_state.yaml b/.agentic/handoff_state.yaml
+index 533de7e..5e5ade0 100644
+--- a/.agentic/handoff_state.yaml
++++ b/.agentic/handoff_state.yaml
+@@ -90,6 +90,8 @@ recent_failure_patterns:
+   prevention: Prefer project-local .venv commands over global python, ruff, or agentic-kit.
+ - id: global-cli-or-venv-assumption
+   prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and agentic-kit before using command names. Treat missing global agentic-kit or missing .venv as bootstrap/environment state, not as product failure.
++- id: interactive-terminal-exit
++  prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit codes belong inside saved scripts, not interactive paste blocks.
+ - id: stale-handoff-after-administrative-refresh
+   prevention: Keep safe_state tied to the last substantive commit and list administrative
+     refresh PRs separately.
+diff --git a/docs/workflow/HANDOFF_STATE.md b/docs/workflow/HANDOFF_STATE.md
+index c555810..8b41c8e 100644
+--- a/docs/workflow/HANDOFF_STATE.md
++++ b/docs/workflow/HANDOFF_STATE.md
+@@ -25,6 +25,10 @@ The handoff state references `.agentic/no_copy_terminal_policy.yaml`. A normal P
+ 
+ A new chat or workflow must not assume that global `agentic-kit`, `python`, `ruff`, or `.venv` already exist. First verify the local environment. Prefer project-local commands such as `.venv/bin/python -m agentic_project_kit.cli ...` after `.venv` has been created. If global `agentic-kit` is missing or `.venv` is absent, classify this as bootstrap/environment state, not as a product failure.
+ 
++## Interactive terminal safety rule
++
++Terminal blocks pasted into an interactive shell must never terminate that shell. Do not use `exit`, `logout`, `kill`, or top-level `exec` in chat-pasted blocks. A pasted block must report `### RESULT: PASS ###`, `### RESULT: FAIL ###`, or `### RESULT: PENDING ###` and then return to the prompt. Use exit codes only inside saved scripts executed as child processes.
++
+ ## Commit Semantics
+ 
+ `safe_state.commit` records the last substantive work state by default, not necessarily the newest administrative refresh merge on `main`.
+
+### TARGETED GATES ###
+Persistent handoff state check passed
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.25
+
+Overall: PASS
+
+### FINAL STATE ###
+docs/record-no-interactive-exit-terminal-rule
+ M .agentic/handoff_state.yaml
+ M docs/workflow/HANDOFF_STATE.md
+
+### RESULT: PASS ###
