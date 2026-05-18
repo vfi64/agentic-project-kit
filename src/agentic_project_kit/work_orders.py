@@ -1,7 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+import subprocess
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -16,13 +18,27 @@ class WorkOrder:
     command: str
     log_path: str
     description: str = ""
+    preconditions: tuple[str, ...] = field(default_factory=tuple)
+    postconditions: tuple[str, ...] = field(default_factory=tuple)
+    expected_outputs: tuple[str, ...] = field(default_factory=tuple)
 
 
 def work_order_path(work_order_id: str, project_root: Path = Path(".")) -> Path:
     return project_root / WORK_ORDERS_DIR / f"{work_order_id}.yaml"
 
 
-def parse_work_order(data: dict, path: Path | None = None) -> WorkOrder:
+def _string_tuple(data: dict[str, Any], key: str) -> tuple[str, ...]:
+    value = data.get(key, [])
+    if value is None:
+        return ()
+    if isinstance(value, str):
+        return (value,)
+    if isinstance(value, list):
+        return tuple(str(item) for item in value)
+    raise ValueError(f"work order field {key!r} must be a string or list of strings")
+
+
+def parse_work_order(data: dict[str, Any], path: Path | None = None) -> WorkOrder:
     required = ["id", "title", "safety", "command", "log_path"]
     missing = [key for key in required if not data.get(key)]
     if missing:
@@ -31,13 +47,19 @@ def parse_work_order(data: dict, path: Path | None = None) -> WorkOrder:
     command = str(data["command"])
     if "exit" in command.split():
         raise ValueError("work order command must not contain a bare exit token")
+    log_path = str(data["log_path"])
+    if not log_path.startswith("docs/reports/terminal/"):
+        raise ValueError("work order log_path must be under docs/reports/terminal/")
     return WorkOrder(
         work_order_id=str(data["id"]),
         title=str(data["title"]),
         safety=str(data["safety"]),
         command=command,
-        log_path=str(data["log_path"]),
+        log_path=log_path,
         description=str(data.get("description", "")),
+        preconditions=_string_tuple(data, "preconditions"),
+        postconditions=_string_tuple(data, "postconditions"),
+        expected_outputs=_string_tuple(data, "expected_outputs"),
     )
 
 
@@ -56,6 +78,14 @@ def list_work_orders(project_root: Path = Path(".")) -> list[WorkOrder]:
     return [parse_work_order(yaml.safe_load(path.read_text(encoding="utf-8")) or {}, path) for path in sorted(directory.glob("*.yaml"))]
 
 
+def _append_section(lines: list[str], title: str, items: tuple[str, ...]) -> None:
+    lines.extend(["", f"{title}:"])
+    if items:
+        lines.extend(f"- {item}" for item in items)
+    else:
+        lines.append("- none")
+
+
 def render_work_order(order: WorkOrder) -> str:
     lines = [
         f"Work order: {order.work_order_id}",
@@ -65,5 +95,39 @@ def render_work_order(order: WorkOrder) -> str:
     ]
     if order.description:
         lines.extend(["", "Description:", order.description])
+    _append_section(lines, "Preconditions", order.preconditions)
+    _append_section(lines, "Postconditions", order.postconditions)
+    _append_section(lines, "Expected outputs", order.expected_outputs)
     lines.extend(["", "Command:", order.command])
     return "\n".join(lines)
+
+
+def run_work_order(order: WorkOrder, project_root: Path = Path(".")) -> int:
+    log_file = project_root / order.log_path
+    log_file.parent.mkdir(parents=True, exist_ok=True)
+    header = [
+        f"Work order: {order.work_order_id}",
+        f"Title: {order.title}",
+        f"Safety: {order.safety}",
+        "",
+        "### COMMAND ###",
+        order.command,
+        "",
+        "### OUTPUT ###",
+    ]
+    result = subprocess.run(
+        order.command,
+        shell=True,
+        cwd=project_root,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    status = "PASS" if result.returncode == 0 else "FAIL"
+    body = "\n".join(header) + "\n" + result.stdout
+    body += f"\n### RESULT: {status} ###\n"
+    body += f"Return code: {result.returncode}\n"
+    body += "Terminal bleibt offen. Kein exit am Blockende.\n"
+    log_file.write_text(body, encoding="utf-8")
+    return result.returncode
