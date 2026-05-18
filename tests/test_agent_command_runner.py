@@ -236,7 +236,7 @@ def test_agent_next_no_command_prints_visible_footer(tmp_path, monkeypatch, caps
     assert "reply=ask-agent-to-queue-command" in out
 
 
-def test_agent_next_pass_prints_d_footer(tmp_path, monkeypatch, capsys):
+def test_agent_next_pass_prints_p_footer(tmp_path, monkeypatch, capsys):
     monkeypatch.chdir(tmp_path)
     inbox = acr.INBOX_DIR
     inbox.mkdir(parents=True)
@@ -247,7 +247,8 @@ def test_agent_next_pass_prints_d_footer(tmp_path, monkeypatch, capsys):
     assert acr.agent_next() == 0
     out = capsys.readouterr().out
     assert "### AGENT-NEXT RESULT: PASS ###" in out
-    assert "reply=d" in out
+    assert "reply=p" in out
+    assert "### NEXT CHAT REPLY: PASS -> p ###" in out
 
 
 def test_agent_next_fail_prints_f_footer(tmp_path, monkeypatch, capsys):
@@ -262,6 +263,7 @@ def test_agent_next_fail_prints_f_footer(tmp_path, monkeypatch, capsys):
     out = capsys.readouterr().out
     assert "### AGENT-NEXT RESULT: FAIL ###" in out
     assert "reply=f" in out
+    assert "### NEXT CHAT REPLY: FAIL -> f ###" in out
 
 
 def test_agent_next_pull_failure_prints_hard_fail_footer(tmp_path, monkeypatch, capsys):
@@ -273,6 +275,7 @@ def test_agent_next_pull_failure_prints_hard_fail_footer(tmp_path, monkeypatch, 
     assert "### AGENT-NEXT RESULT: HARD-FAIL ###" in out
     assert "reply=paste-output" in out
     assert "reason=FAIL_PULL" in out
+    assert "### NEXT CHAT REPLY: HARD-FAIL -> paste output ###" in out
 
 
 def test_agent_next_ambiguous_commands_prints_hard_fail_footer(tmp_path, monkeypatch, capsys):

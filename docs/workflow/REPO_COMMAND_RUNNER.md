@@ -59,7 +59,7 @@ Every `./ns agent-run` or `./ns agent-next` run writes `docs/reports/command_run
 
 ## Visible agent-next result footer
 
-`./ns agent-next` must end with a visible result footer. `PASS` prints `reply=d`; a normal command failure prints `reply=f`; `NO-COMMAND` prints `reply=ask-agent-to-queue-command`; hard failures such as pull/upload/postcondition problems print `reply=paste-output`. This terminal footer is part of the no-copy workflow contract.
+`./ns agent-next` must end with a visible result footer. `PASS` prints `reply=p` and `### NEXT CHAT REPLY: PASS -> p ###`; a normal command failure prints `reply=f` and `### NEXT CHAT REPLY: FAIL -> f ###`; `NO-COMMAND` prints `reply=ask-agent-to-queue-command`; hard failures such as pull/upload/postcondition problems print `reply=paste-output` and `### NEXT CHAT REPLY: HARD-FAIL -> paste output ###`. This terminal footer is part of the no-copy workflow contract.
 
 ## Hard-fail result contract
 
