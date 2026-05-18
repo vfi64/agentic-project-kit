@@ -253,3 +253,11 @@ Dependabot cleanup after v0.3.23 is complete. PR #327 updated the GitHub release
 - In progress: agent command inbox slice adds `./ns agent-next` so routine local handoff can pull and execute exactly one pending repo-backed command.
 - Completed: PR #336 added inbox-based ./ns agent-next so routine local handoff can pull and execute exactly one pending repo-backed command pair.
 - In progress: agent workflow hardening adds postcondition checks so PASS_EXECUTED cannot leave current files, complete inbox pairs, or dirty inbox paths behind.
+
+## v0.3.24 DOI Closeout and Next Planning Direction
+
+- PR #341 `Record v0.3.24 DOI metadata` has been merged into `main` at `17a2e8e`.
+- v0.3.24 is fully released, DOI-recorded, and post-release verified.
+- Local validation after the DOI metadata merge: `319 passed`, ruff PASS, `agentic-kit check-docs` PASS, `agentic-kit doctor` PASS.
+- The next planned slice is `feature/persistent-handoff-state` before parameterized Git/PR/release actions and before further GUI/Cockpit mutation controls.
+- The persistent handoff state must curate chat-end lessons without accumulating redundant, contradictory, or obsolete rules.

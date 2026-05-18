@@ -285,3 +285,11 @@ Post-release Dependabot cleanup is complete. PR #327 and PR #328 resolved the re
 - Current slice: `feature/agent-command-inbox` adds inbox-based `./ns agent-next`; prefer one pending command pair under `.agentic/commands/inbox/` instead of transient current files.
 - Completed: PR #336 merged agent-next inbox mode. Preferred routine workflow is now: commit one command pair under .agentic/commands/inbox/, run ./ns agent-next locally, and use committed command-run/terminal artifacts instead of pasted terminal output.
 - Current hardening: agent-next postconditions are being made explicit and test-covered to prevent stale current files, unconsumed inbox commands, and hidden dirty state after PASS_EXECUTED.
+
+## v0.3.24 DOI Closeout Update
+
+- PR #341 has been merged; `main` now contains v0.3.24 DOI metadata at `17a2e8e`.
+- Verified state: `319 passed`, ruff PASS, `agentic-kit check-docs` PASS, `agentic-kit doctor` PASS, and `./ns release-verify 0.3.24` PASS.
+- Next safe feature slice after this finalize PR: `feature/persistent-handoff-state`.
+- That slice must add `.agentic/handoff_state.yaml`, read-only handoff commands, and rule lifecycle hygiene with `active`, `superseded`, and `historical` statuses.
+- Chat-end lessons must be folded into the YAML state and generated handoff prompt only after curation; obsolete or duplicate rules must be removed or marked superseded/historical.
