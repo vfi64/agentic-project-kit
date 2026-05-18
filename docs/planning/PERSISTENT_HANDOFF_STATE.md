@@ -1,6 +1,6 @@
 # Persistent Handoff State and Rule Lifecycle Plan
 
-Status: Draft
+Status: proposed
 Decision status: Planned
 
 ## Purpose
