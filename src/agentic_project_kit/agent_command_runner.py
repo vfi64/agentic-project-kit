@@ -223,6 +223,15 @@ def stage_commit_push(paths: list[Path], message: str) -> int:
     return pushed.returncode
 
 
+def logged_script_has_fail_result_marker(log_path: Path | None) -> bool:
+    if log_path is None or not log_path.exists():
+        return False
+    text = log_path.read_text(encoding="utf-8", errors="replace")
+    fail_pos = text.rfind("### RESULT: FAIL ###")
+    pass_pos = text.rfind("### RESULT: PASS ###")
+    return fail_pos != -1 and fail_pos > pass_pos
+
+
 def agent_run(extra_upload_paths: list[Path] | None = None) -> int:
     extra_upload_paths = list(extra_upload_paths or [])
     try:
@@ -245,7 +254,10 @@ def agent_run(extra_upload_paths: list[Path] | None = None) -> int:
 
     exit_code = terminal_logging.run_logged(command.command_id, ["sh", CURRENT_SCRIPT.as_posix()])
     log_path = terminal_logging.read_latest_pointer()
-    outcome = OUTCOME_PASS_EXECUTED if exit_code == 0 else OUTCOME_FAIL_COMMAND
+    fail_marker = logged_script_has_fail_result_marker(log_path)
+    outcome = OUTCOME_PASS_EXECUTED if exit_code == 0 and not fail_marker else OUTCOME_FAIL_COMMAND
+    if fail_marker and exit_code == 0:
+        exit_code = 1
 
     report = write_report(command, outcome, exit_code, log_path)
     append_executed(command, outcome, exit_code)

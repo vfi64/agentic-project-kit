@@ -310,3 +310,12 @@ def test_agent_next_postcondition_failure_prints_hard_fail_footer(tmp_path, monk
     assert "### AGENT-NEXT RESULT: HARD-FAIL ###" in out
     assert "reply=paste-output" in out
     assert "reason=FAIL_POSTCONDITION" in out
+
+
+def test_logged_script_has_fail_result_marker(tmp_path):
+    from agentic_project_kit.agent_command_runner import logged_script_has_fail_result_marker
+    log = tmp_path / "run.log"
+    log.write_text("### RESULT: FAIL ###\n### EXIT: 0\n", encoding="utf-8")
+    assert logged_script_has_fail_result_marker(log)
+    log.write_text("### RESULT: FAIL ###\n### RESULT: PASS ###\n", encoding="utf-8")
+    assert not logged_script_has_fail_result_marker(log)
