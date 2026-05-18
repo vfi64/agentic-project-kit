@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-184640_communication-artifact-gc-registry-commit.log
+docs/reports/terminal/20260518-185313_communication-artifact-gc-finalize.log
