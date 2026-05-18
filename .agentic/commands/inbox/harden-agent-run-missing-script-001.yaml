@@ -1,3 +1,0 @@
-command_id: harden-agent-run-missing-script-001
-title: Harden agent-run report creation when current script is missing
-safety_class: remote-mutation
