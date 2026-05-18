@@ -1,5 +1,0 @@
-command_id: finalize-after-repo-command-runner-001
-title: Finalize state after repo command runner MVP
-safety_class: remote-mutation
-expected_branch: agent-command/finalize-after-repo-command-runner
-description: Finalize STATUS and HANDOFF after PR 334 using agent-run.
