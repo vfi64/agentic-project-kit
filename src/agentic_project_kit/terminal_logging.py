@@ -70,6 +70,15 @@ def terminal_clean_check() -> tuple[str, str]:
     if forbidden:
         return "FAIL_DIRTY_NON_LOG_FILES", chr(10).join(forbidden)
     return "PASS_ONLY_TERMINAL_LOG_DIRTY", chr(10).join(dirty)
+
+
+def remote_mutation_preflight() -> tuple[str, str]:
+    """Require a fully clean worktree before remote mutations or merge/sync verification."""
+
+    dirty = git_dirty_paths()
+    if dirty:
+        return "FAIL_DIRTY_WORKTREE_BEFORE_REMOTE_MUTATION", chr(10).join(dirty)
+    return "PASS_CLEAN_FOR_REMOTE_MUTATION", "Working tree is clean for remote mutation or merge verification."
 def terminal_status() -> tuple[str, str]:
     latest = read_latest_pointer()
     if latest is None:
@@ -173,6 +182,11 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if outcome.startswith("PASS") else 1
     if mode == "terminal-clean-check":
         outcome, message = terminal_clean_check()
+        print(outcome)
+        print(message)
+        return 0 if outcome.startswith("PASS") else 1
+    if mode == "terminal-remote-preflight":
+        outcome, message = remote_mutation_preflight()
         print(outcome)
         print(message)
         return 0 if outcome.startswith("PASS") else 1
