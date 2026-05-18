@@ -1,0 +1,13 @@
+title: Standard local verification gates
+safety: read_only
+command: pytest && ruff check . && check-docs && doctor && governance check && work-order check && handoff check
+log_path: docs/reports/terminal/{work_order_id}.log
+postconditions:
+  - pytest passes
+  - ruff passes
+  - check-docs passes
+  - doctor passes
+  - log exists
+  - no false pass
+expected_outputs:
+  - docs/reports/terminal/{work_order_id}.log

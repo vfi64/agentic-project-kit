@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import typer
 
-from agentic_project_kit.work_orders import check_work_orders, load_work_order, list_work_orders, render_work_order, run_work_order
+from agentic_project_kit.work_orders import check_work_orders, list_work_order_templates, load_work_order, list_work_orders, prepare_work_order, render_work_order, run_work_order
 
 work_orders_app = typer.Typer(help="Inspect and run repo-backed work orders.")
 
@@ -48,3 +48,18 @@ def run_command(work_order_id: str, execute: bool = typer.Option(False, "--execu
     typer.echo(f"Work order log written: {order.log_path}")
     if result_code != 0:
         raise typer.Exit(code=result_code)
+
+
+@work_orders_app.command("templates")
+def templates() -> None:
+    for template_id in list_work_order_templates():
+        typer.echo(template_id)
+
+@work_orders_app.command("prepare")
+def prepare(template_id: str, work_order_id: str, expected_branch: str) -> None:
+    try:
+        path = prepare_work_order(template_id, work_order_id, expected_branch)
+    except (FileNotFoundError, ValueError) as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+    typer.echo(f"Prepared work order: {path}")
