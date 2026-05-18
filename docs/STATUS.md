@@ -1,4 +1,4 @@
-Current version: 0.3.24
+Current version: 0.3.25
 - Completed: v0.3.24 is released and post-release verified. GitHub Release exists; Zenodo concept DOI `10.5281/zenodo.20101359`; verified version DOI `10.5281/zenodo.20270197`.
 v0.3.23 is released and post-release verified with version DOI `10.5281/zenodo.20261956`. Zenodo concept DOI: `10.5281/zenodo.20101359`.
 
