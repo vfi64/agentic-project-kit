@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: b95e8d7
-  commit_subject: Add read-only work order templates (#358)
+  commit: be61760
+  commit_subject: Add governance check MVP (#360)
   semantics: last_substantive_work_state
   administrative_refresh_prs:
   - 347
