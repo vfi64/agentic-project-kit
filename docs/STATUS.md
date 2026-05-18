@@ -242,3 +242,5 @@ PR #322 added a safe patch script helper in `src/agentic_project_kit/safe_patch.
 v0.3.23 is released and post-release verified with Zenodo version DOI `10.5281/zenodo.20261956`. DOI metadata is recorded on main via PR #325. The release completed the deterministic control-workflow hardening line: shared control states, target-state-aware slice runner, safer release-prep/gate/publish flow, evidence cleanup, finalize-guard outcome classification, PR cleanup classification, and the safe patch script helper.
 
 Dependabot cleanup after v0.3.23 is complete. PR #327 updated the GitHub release action to v3 and PR #328 updated upload-artifact to v7 on current main. Local gates, documentation gates, doctor, release verification, PR hygiene, and PR cleanup classification passed after the cleanup.
+- In progress: v0.3.24 GUI/Cockpit readiness slice adds read-only action metadata and `./ns cockpit-readiness` as a non-mutating cockpit readiness report.
+- Workflow rule added: larger terminal runs should write committed logs under `docs/reports/terminal/`, allowing `d` to mean seen-and-continue after PASS without pasting terminal output.
