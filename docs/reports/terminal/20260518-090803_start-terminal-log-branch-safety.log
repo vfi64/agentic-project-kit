@@ -1,0 +1,43 @@
+terminal_log=docs/reports/terminal/20260518-090803_start-terminal-log-branch-safety.log
+### RUN: sh -c 
+set -eu
+
+printf "### UPDATE MAIN ###\n"
+git switch main
+git pull --ff-only origin main
+
+printf "\n### VERIFY MAIN CLEAN ###\n"
+git status --short
+test -z "$(git status --short)"
+
+printf "\n### CURRENT MAIN ###\n"
+git log --oneline -8
+
+printf "\n### VERIFY WRAPPER COMMANDS ON MAIN ###\n"
+./ns terminal-status || true
+./ns cockpit-readiness | sed -n "1,220p"
+
+printf "\n### CREATE FEATURE BRANCH ###\n"
+git switch -c feature/terminal-log-wrapper-branch-safety
+
+printf "\n### INSPECT TERMINAL LOGGING MODULE ###\n"
+sed -n "1,260p" src/agentic_project_kit/terminal_logging.py
+
+printf "\n### INSPECT TESTS ###\n"
+sed -n "1,260p" tests/test_terminal_logging.py
+
+printf "\n### RESULT: PASS ###\n"
+
+### UPDATE MAIN ###
+Already on 'main'
+M	docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### VERIFY MAIN CLEAN ###
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? docs/reports/terminal/20260518-090803_start-terminal-log-branch-safety.log
+### EXIT: 1
+### RESULT: FAIL ###
