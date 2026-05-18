@@ -1,0 +1,101 @@
+### PREPARE BRANCH ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+Already up to date.
+Switched to a new branch 'docs/fix-handoff-semantics-reason'
+
+### APPLY PATCH ###
+completed_since_previous_handoff marker not found
+
+### HANDOFF CHECKS ###
+Persistent handoff state check passed
+Repo: agentic-project-kit
+Path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.3.24
+Safe state: main @ aa09831
+Next: Work first on the checked parameterized Git, PR, release, DOI, and finalize action layer. Keep this next slice focused on safe action objects and repository-backed evidence.
+# Übergabeprompt
+
+## Repo
+
+Local path: `/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit`
+Remote: `github.com:vfi64/agentic-project-kit`
+Default branch: `main`
+
+## Sicherer Stand
+
+Branch: `main`
+Commit: `aa09831`
+Subject: Add parameterized action specs MVP (#348)
+Semantics: `last_substantive_work_state`
+
+## Release
+
+Current version: `0.3.24`
+Tag: `v0.3.24`
+Zenodo version DOI: `10.5281/zenodo.20270197`
+Post-release check: `PASS`
+
+## Offene Punkte
+
+- Keine offenen PRs im handoff_state.
+
+## Abgeschlossen seit letzter Übergabe
+
+- PR #341 recorded v0.3.24 DOI metadata.
+- PR #342 finalized v0.3.24 DOI metadata state and recorded persistent handoff planning.
+- PR #343 added the active no-copy terminal evidence policy.
+- PR #344 added the read-only persistent handoff state MVP.
+
+## Aktive Regeln
+
+- `no-copy-terminal-evidence`: Routine PASS handoffs must be backed by repo evidence; manual terminal paste is only for failure or unavailable evidence.
+- `no-unconditional-pass`: Do not print PASS after a failed required command.
+- `curate-chat-end-lessons`: Chat-end lessons must be curated into YAML and generated prompts without redundant, contradictory, or obsolete rules.
+
+## Nächste erlaubte Aufgaben
+
+- 1. `parametrized-git-release-actions` — Add checked parameterized Git, PR, release, DOI, and finalize actions.
+- 2. `handoff-update-automation` — Add safe update command for .agentic/handoff_state.yaml after merges.
+
+## Gesperrte Aufgaben
+
+- GUI mutation controls
+- new release cycle automation
+
+## Erste Arbeitsanweisung
+
+Work first on the checked parameterized Git, PR, release, DOI, and finalize action layer. Keep this next slice focused on safe action objects and repository-backed evidence.
+
+
+### LOCAL GATES ###
+........................................................................ [ 21%]
+........................................................................ [ 42%]
+........................................................................ [ 64%]
+........................................................................ [ 85%]
+...............................................                          [100%]
+335 passed in 1.99s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.24
+
+Overall: PASS
+
+### DIFF ###
+
+### RESULT: PASS ###
