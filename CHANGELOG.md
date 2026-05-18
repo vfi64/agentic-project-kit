@@ -1,4 +1,5 @@
 ## v0.3.24
+- Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.24 DOI `10.5281/zenodo.20270197`.
 
 - Prepare release metadata for v0.3.24.
 
