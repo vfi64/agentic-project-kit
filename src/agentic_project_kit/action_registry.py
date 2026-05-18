@@ -113,6 +113,7 @@ ACTIONS: tuple[ActionMetadata, ...] = (
             "FAIL_SHELL_SYNTAX",
             "FAIL_COMMAND",
             "FAIL_UPLOAD",
+            "FAIL_POSTCONDITION",
         ),
         summary="Pull and execute exactly one pending repo-backed agent command.",
     ),

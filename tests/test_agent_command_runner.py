@@ -172,3 +172,30 @@ def test_agent_run_includes_extra_upload_paths(tmp_path, monkeypatch):
     monkeypatch.setattr(acr, "stage_commit_push", fake_stage_commit_push)
     assert acr.agent_run(extra_upload_paths=[extra]) == 0
     assert ".agentic/commands/inbox/cmd-extra.yaml" in pushed_paths
+
+def test_agent_next_postconditions_detect_current_files(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    acr.CURRENT_YAML.parent.mkdir(parents=True)
+    acr.CURRENT_YAML.write_text("command_id: stale" + chr(10), encoding="utf-8")
+    failures = acr.agent_next_postcondition_failures()
+    assert any("current.yaml" in item for item in failures)
+
+
+def test_agent_next_postconditions_detect_complete_inbox_pair(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    acr.INBOX_DIR.mkdir(parents=True)
+    (acr.INBOX_DIR / "left.yaml").write_text("command_id: left" + chr(10), encoding="utf-8")
+    (acr.INBOX_DIR / "left.sh").write_text("printf left" + chr(10), encoding="utf-8")
+    failures = acr.agent_next_postcondition_failures()
+    assert any("complete inbox command remains" in item for item in failures)
+
+
+def test_agent_next_postcondition_failure_blocks_success(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    acr.INBOX_DIR.mkdir(parents=True)
+    (acr.INBOX_DIR / "cmd.yaml").write_text("command_id: cmd" + chr(10) + "title: Cmd" + chr(10) + "safety_class: local-only" + chr(10), encoding="utf-8")
+    (acr.INBOX_DIR / "cmd.sh").write_text("printf cmd" + chr(10), encoding="utf-8")
+    monkeypatch.setattr(acr, "git_pull_ff_only", lambda: 0)
+    monkeypatch.setattr(acr, "agent_run", lambda extra_upload_paths=None: 0)
+    monkeypatch.setattr(acr, "remove_current_files", lambda: None)
+    assert acr.agent_next() == 1

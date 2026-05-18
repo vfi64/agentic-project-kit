@@ -251,3 +251,4 @@ Dependabot cleanup after v0.3.23 is complete. PR #327 updated the GitHub release
 - Completed: PR #334 added repo command runner MVP and ./ns agent-run as the intended no-copy local agent handoff path.
 - In progress: agent command inbox slice adds `./ns agent-next` so routine local handoff can pull and execute exactly one pending repo-backed command.
 - Completed: PR #336 added inbox-based ./ns agent-next so routine local handoff can pull and execute exactly one pending repo-backed command pair.
+- In progress: agent workflow hardening adds postcondition checks so PASS_EXECUTED cannot leave current files, complete inbox pairs, or dirty inbox paths behind.
