@@ -7,6 +7,7 @@ from typing import Any
 
 import yaml
 
+
 WORK_ORDERS_DIR = Path(".agentic/work_orders")
 CONSTITUTIONAL_GATES = ("pytest", "ruff check", "check-docs", "doctor")
 FORBIDDEN_COMMAND_FRAGMENTS = ("<<", "python" + " -c", "python3" + " -c")
@@ -160,7 +161,11 @@ def _write_log(order: WorkOrder, project_root: Path, body: str) -> None:
 
 def run_work_order(order: WorkOrder, project_root: Path = Path(".")) -> int:
     branch = current_git_branch(project_root)
-    contract_errors = check_work_order(order)
+    from agentic_project_kit.governance import governance_check
+
+    governance_errors = governance_check()
+    contract_errors = [f"governance: {error}" for error in governance_errors]
+    contract_errors.extend(check_work_order(order))
     header = [
         f"Work order: {order.work_order_id}",
         f"Title: {order.title}",
