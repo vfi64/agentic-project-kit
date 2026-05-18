@@ -128,7 +128,7 @@ def check_work_order(order: WorkOrder) -> list[str]:
         errors.append("expected_branch must name the non-main branch for the current slice")
     if order.log_path not in order.expected_outputs:
         errors.append("expected_outputs must include the work order log_path")
-    required_postconditions = ("pytest", "ruff", "check-docs", "doctor", "log exists", "no false PASS")
+    required_postconditions = ("pytest", "ruff", "check-docs", "doctor", "log exists", "no false pass")
     joined_postconditions = "\n".join(order.postconditions).lower()
     for item in required_postconditions:
         if item not in joined_postconditions:
