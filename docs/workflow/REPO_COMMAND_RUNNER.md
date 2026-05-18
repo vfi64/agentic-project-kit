@@ -56,3 +56,7 @@ If any of these checks fail, `agent-next` reports `FAIL_POSTCONDITION`.
 ## Result handoff pointer
 
 Every `./ns agent-run` or `./ns agent-next` run writes `docs/reports/command_runs/LATEST_COMMAND_RUN.txt`. The file points to the newest command-run report under `docs/reports/command_runs/`. After the user replies `d` for PASS or `f` for normal FAIL, the next agent must read this pointer first, then the referenced report, then the terminal log referenced by that report. Copy-and-paste is reserved for terminal crashes, authentication/network failure, or missing remote evidence.
+
+## Visible agent-next result footer
+
+`./ns agent-next` must end with a visible result footer. `PASS` prints `reply=d`; a normal command failure prints `reply=f`; `NO-COMMAND` prints `reply=ask-agent-to-queue-command`; hard failures such as pull/upload/postcondition problems print `reply=paste-output`. This terminal footer is part of the no-copy workflow contract.

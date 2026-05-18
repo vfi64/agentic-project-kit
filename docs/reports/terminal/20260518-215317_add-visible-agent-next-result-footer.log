@@ -1,0 +1,136 @@
+ADD VISIBLE AGENT-NEXT RESULT FOOTER
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+PASS_NOTHING_TO_COLLECT
+
+### CREATE OR RESET FEATURE BRANCH ###
+Switched to a new branch 'fix/visible-agent-next-result-footer'
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+
+### VERIFY PATCH CONTENT ###
+src/agentic_project_kit/agent_command_runner.py:271:    print(f"### AGENT-NEXT RESULT: {outcome} ###")
+src/agentic_project_kit/agent_command_runner.py:277:    print("### END AGENT-NEXT RESULT ###")
+src/agentic_project_kit/agent_command_runner.py:323:        print_agent_next_footer("NO-COMMAND", "ask-agent-to-queue-command", str(exc))
+tests/test_agent_command_runner.py:235:    assert "### AGENT-NEXT RESULT: NO-COMMAND ###" in out
+tests/test_agent_command_runner.py:236:    assert "reply=ask-agent-to-queue-command" in out
+tests/test_agent_command_runner.py:249:    assert "### AGENT-NEXT RESULT: PASS ###" in out
+tests/test_agent_command_runner.py:250:    assert "reply=d" in out
+tests/test_agent_command_runner.py:263:    assert "### AGENT-NEXT RESULT: FAIL ###" in out
+tests/test_agent_command_runner.py:264:    assert "reply=f" in out
+docs/workflow/REPO_COMMAND_RUNNER.md:60:## Visible agent-next result footer
+docs/workflow/REPO_COMMAND_RUNNER.md:62:`./ns agent-next` must end with a visible result footer. `PASS` prints `reply=d`; a normal command failure prints `reply=f`; `NO-COMMAND` prints `reply=ask-agent-to-queue-command`; hard failures such as pull/upload/postcondition problems print `reply=paste-output`. This terminal footer is part of the no-copy workflow contract.
+docs/TEST_GATES.md:261:## Visible agent-next result footer
+docs/TEST_GATES.md:263:`tests/test_agent_command_runner.py` verifies that `agent_next` prints visible terminal footers for no-command, pass, and normal fail outcomes. The footer tells the user whether to reply with `d`, `f`, `ask-agent-to-queue-command`, or paste output for hard failures.
+
+### LOCAL GATES ###
+......................                                                   [100%]
+22 passed in 0.18s
+FAIL_DIRTY_WORKTREE_BEFORE_REMOTE_MUTATION
+docs/TEST_GATES.md
+docs/workflow/REPO_COMMAND_RUNNER.md
+src/agentic_project_kit/agent_command_runner.py
+tests/test_agent_command_runner.py
+PASS: no stale STATUS/HANDOFF current-state fragments found
+PASS_NOTHING_TO_COLLECT
+Persistent handoff state check passed
+Governance check passed
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+fix/visible-agent-next-result-footer
+ M docs/TEST_GATES.md
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+
+### PYTEST ###
+........................................................................ [ 17%]
+........................................................................ [ 35%]
+........................................................................ [ 53%]
+........................................................................ [ 71%]
+........................................................................ [ 89%]
+...........................................                              [100%]
+403 passed in 2.34s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.26
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=71
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+fix/visible-agent-next-result-footer
+ M docs/TEST_GATES.md
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+
+### RESULT: PASS ###
+
+### COMMIT PATCH ###
+ M docs/TEST_GATES.md
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+[fix/visible-agent-next-result-footer cb7eaa0] Add visible agent-next result footer
+ 4 files changed, 65 insertions(+)
+
+### REMOTE MUTATION PREFLIGHT BEFORE PUSH ###
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+
+### PUSH AND CREATE PR ###
+remote: 
+remote: Create a pull request for 'fix/visible-agent-next-result-footer' on GitHub by visiting:        
+remote:      https://github.com/vfi64/agentic-project-kit/pull/new/fix/visible-agent-next-result-footer        
+remote: 
+To github.com:vfi64/agentic-project-kit.git
+ * [new branch]      fix/visible-agent-next-result-footer -> fix/visible-agent-next-result-footer
+branch 'fix/visible-agent-next-result-footer' set up to track 'origin/fix/visible-agent-next-result-footer'.
+https://github.com/vfi64/agentic-project-kit/pull/413
+
+### RESULT MARKER BEFORE LOG FINALIZATION ###
+### RESULT: FAIL ###
