@@ -64,3 +64,7 @@ Every `./ns agent-run` or `./ns agent-next` run writes `docs/reports/command_run
 ## Hard-fail result contract
 
 `./ns agent-next` distinguishes normal command failure from workflow-level hard failures. Pull failures, ambiguous pending commands, upload/postcondition failures, authentication/network problems, and missing remote evidence are hard failures. The visible footer must print `### AGENT-NEXT RESULT: HARD-FAIL ###` and `reply=paste-output` for these cases. A normal command exit failure remains `FAIL` with `reply=f`, and no pending command remains `NO-COMMAND` with `reply=ask-agent-to-queue-command`.
+
+## Command inbox check
+
+`./ns command-inbox-check` validates the repo-backed queue before local execution. It accepts an empty inbox or exactly one complete `.yaml`/`.sh` pair, rejects orphan files, rejects multiple complete pending commands, validates required metadata and safety classes, runs `sh -n`, and blocks known unsafe command-script fragments such as heredocs, branch switches, pull commands, logout, kill, and top-level exec usage.

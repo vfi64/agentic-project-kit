@@ -110,6 +110,10 @@ if [ "${1:-}" = "artifact-gc" ]; then
   exit $?
 fi
 
+if [ "${1:-}" = "command-inbox-check" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.command_inbox_check
+  exit $?
+fi
 if [ "${1:-}" = "agent-next" ]; then
   PYTHONPATH=src "$PY" -m agentic_project_kit.agent_command_runner next
   exit $?
