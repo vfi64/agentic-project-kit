@@ -115,6 +115,14 @@ ACTIONS: tuple[ActionMetadata, ...] = (
         summary="Inspect the latest terminal log pointer without mutating state.",
     ),
     ActionMetadata(
+        name="terminal-clean-check",
+        safety_class=SafetyClass.READ_ONLY,
+        mutation_scope="none",
+        dry_run_supported=True,
+        outcome_contract=("PASS_CLEAN", "PASS_ONLY_TERMINAL_LOG_DIRTY", "FAIL_DIRTY_NON_LOG_FILES"),
+        summary="Check whether only terminal-log artifacts are dirty during logged runs.",
+    ),
+    ActionMetadata(
         name="terminal-upload",
         safety_class=SafetyClass.REMOTE_MUTATION,
         mutation_scope="docs/reports/terminal only",

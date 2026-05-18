@@ -1,0 +1,127 @@
+TERMINAL CLEAN CHECK FINALIZE VERIFY
+verify_log=docs/reports/terminal/terminal_clean_check_finalize_20260518-091938.log
+
+### BRANCH ###
+feature/terminal-log-wrapper-branch-safety
+
+### STATUS BEFORE FINAL GATE ###
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md
+ M ns
+ M src/agentic_project_kit/action_registry.py
+ M src/agentic_project_kit/terminal_logging.py
+ M tests/test_terminal_logging.py
+?? docs/reports/terminal/terminal_clean_check_finalize_20260518-091938.log
+
+### PATCH PRESENCE ###
+63:def terminal_clean_check() -> tuple[str, str]:
+19:if [ "${1:-}" = "terminal-clean-check" ]; then
+20:  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging terminal-clean-check
+118:        name="terminal-clean-check",
+54:def test_terminal_clean_check_accepts_only_terminal_logs(monkeypatch):
+61:def test_terminal_clean_check_rejects_non_log_dirty_files(monkeypatch):
+68:def test_terminal_clean_check_is_registered():
+38:## Clean checks inside logged runs
+248:- In progress: terminal-log branch-safety patch adds `./ns terminal-clean-check`, the canonical clean-state check for commands executed inside `./ns run-logged`.
+280:- Current slice: `feature/terminal-log-wrapper-branch-safety` adds `./ns terminal-clean-check`; logged runs should use it instead of plain `git status --short` emptiness checks.
+
+### SHELL CHECK ###
+
+### TARGETED TESTS ###
+................                                                         [100%]
+16 passed in 0.02s
+
+### COMMAND SMOKE ###
+FAIL_DIRTY_NON_LOG_FILES
+docs/STATUS.md
+docs/handoff/CURRENT_HANDOFF.md
+docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md
+ns
+src/agentic_project_kit/action_registry.py
+src/agentic_project_kit/terminal_logging.py
+tests/test_terminal_logging.py
+
+### FULL LOCAL GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+feature/terminal-log-wrapper-branch-safety
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md
+ M ns
+ M src/agentic_project_kit/action_registry.py
+ M src/agentic_project_kit/terminal_logging.py
+ M tests/test_terminal_logging.py
+?? docs/reports/terminal/terminal_clean_check_finalize_20260518-091938.log
+
+### PYTEST ###
+........................................................................ [ 23%]
+........................................................................ [ 47%]
+........................................................................ [ 71%]
+........................................................................ [ 95%]
+..............                                                           [100%]
+302 passed in 2.02s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.23
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=45
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+feature/terminal-log-wrapper-branch-safety
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md
+ M ns
+ M src/agentic_project_kit/action_registry.py
+ M src/agentic_project_kit/terminal_logging.py
+ M tests/test_terminal_logging.py
+?? docs/reports/terminal/terminal_clean_check_finalize_20260518-091938.log
+
+### RESULT: PASS ###
+
+### DIFF STAT ###
+ docs/STATUS.md                              |  1 +
+ docs/handoff/CURRENT_HANDOFF.md             |  1 +
+ docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md  |  9 +++++++++
+ ns                                          |  5 +++++
+ src/agentic_project_kit/action_registry.py  |  8 ++++++++
+ src/agentic_project_kit/terminal_logging.py | 17 +++++++++++++++++
+ tests/test_terminal_logging.py              | 19 +++++++++++++++++++
+ 7 files changed, 60 insertions(+)
+
+### RESULT: PASS ###

@@ -58,6 +58,18 @@ def git_dirty_paths() -> list[str]:
     return paths
 
 
+
+
+def terminal_clean_check() -> tuple[str, str]:
+    """Classify dirty state while allowing terminal-log artifacts."""
+
+    dirty = git_dirty_paths()
+    if not dirty:
+        return "PASS_CLEAN", "Working tree is clean."
+    forbidden = [path for path in dirty if not _is_allowed_terminal_artifact(path)]
+    if forbidden:
+        return "FAIL_DIRTY_NON_LOG_FILES", chr(10).join(forbidden)
+    return "PASS_ONLY_TERMINAL_LOG_DIRTY", chr(10).join(dirty)
 def terminal_status() -> tuple[str, str]:
     latest = read_latest_pointer()
     if latest is None:
@@ -130,6 +142,11 @@ def main(argv: list[str] | None = None) -> int:
     mode = args.pop(0)
     if mode == "terminal-status":
         outcome, message = terminal_status()
+        print(outcome)
+        print(message)
+        return 0 if outcome.startswith("PASS") else 1
+    if mode == "terminal-clean-check":
+        outcome, message = terminal_clean_check()
         print(outcome)
         print(message)
         return 0 if outcome.startswith("PASS") else 1

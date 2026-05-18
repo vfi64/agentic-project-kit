@@ -245,3 +245,4 @@ Dependabot cleanup after v0.3.23 is complete. PR #327 updated the GitHub release
 - In progress: v0.3.24 GUI/Cockpit readiness slice adds read-only action metadata and `./ns cockpit-readiness` as a non-mutating cockpit readiness report.
 - Workflow rule added: larger terminal runs should write committed logs under `docs/reports/terminal/`, allowing `d` to mean seen-and-continue after PASS without pasting terminal output.
 - In progress: terminal-log wrapper slice adds `./ns run-logged`, `./ns terminal-status`, and `./ns terminal-upload` so PASS/FAIL handoff can avoid copy-and-paste.
+- In progress: terminal-log branch-safety patch adds `./ns terminal-clean-check`, the canonical clean-state check for commands executed inside `./ns run-logged`.

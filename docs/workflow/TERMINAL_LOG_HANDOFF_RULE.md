@@ -35,3 +35,12 @@ The terminal-log handoff workflow is supported by:
 - `./ns terminal-upload`: failure-handoff helper that commits and pushes only terminal-log artifacts.
 
 For PASS handoff, prefer `run-logged` for larger local runs. For FAIL handoff, run `./ns terminal-upload` and then answer `f` or `fail` in the chat.
+## Clean checks inside logged runs
+
+Commands executed through `./ns run-logged` must not use plain `test -z "$(git status --short)"` as a cleanliness gate, because `run-logged` necessarily updates `docs/reports/terminal/LATEST_TERMINAL_LOG.txt` and creates a terminal log.
+
+Use `./ns terminal-clean-check` instead. It returns:
+
+- `PASS_CLEAN` when the working tree is clean.
+- `PASS_ONLY_TERMINAL_LOG_DIRTY` when only terminal-log artifacts are dirty.
+- `FAIL_DIRTY_NON_LOG_FILES` when any non-terminal-log file is dirty.
