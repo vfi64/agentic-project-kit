@@ -1,0 +1,135 @@
+ADD LATEST COMMAND RUN POINTER FOR D/F NO-COPY HANDOFF
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+PASS_NOTHING_TO_COLLECT
+
+### CREATE OR RESET FEATURE BRANCH ###
+Switched to a new branch 'fix/latest-command-run-pointer'
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+
+### VERIFY PATCH CONTENT ###
+src/agentic_project_kit/agent_command_runner.py:33:LATEST_COMMAND_RUN_POINTER = REPORT_DIR / "LATEST_COMMAND_RUN.txt"
+src/agentic_project_kit/agent_command_runner.py:199:    LATEST_COMMAND_RUN_POINTER.write_text(path.as_posix() + "\n", encoding="utf-8")
+src/agentic_project_kit/agent_command_runner.py:253:    upload_paths = [report, LATEST_COMMAND_RUN_POINTER, EXECUTED_JSONL, *extra_upload_paths]
+tests/test_agent_command_runner.py:209:    assert acr.LATEST_COMMAND_RUN_POINTER.exists()
+tests/test_agent_command_runner.py:210:    assert acr.LATEST_COMMAND_RUN_POINTER.read_text(encoding="utf-8").strip() == report.as_posix()
+tests/test_agent_command_runner.py:227:    assert "docs/reports/command_runs/LATEST_COMMAND_RUN.txt" in pushed_paths
+docs/workflow/REPO_COMMAND_RUNNER.md:56:## Result handoff pointer
+docs/workflow/REPO_COMMAND_RUNNER.md:58:Every `./ns agent-run` or `./ns agent-next` run writes `docs/reports/command_runs/LATEST_COMMAND_RUN.txt`. The file points to the newest command-run report under `docs/reports/command_runs/`. After the user replies `d` for PASS or `f` for normal FAIL, the next agent must read this pointer first, then the referenced report, then the terminal log referenced by that report. Copy-and-paste is reserved for terminal crashes, authentication/network failure, or missing remote evidence.
+docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md:18:## `d`/`f` command-result handoff
+docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md:20:For repo-backed agent commands, `docs/reports/command_runs/LATEST_COMMAND_RUN.txt` is the canonical first read after `d` or `f`. The referenced command report records the outcome, exit code, branch, script hash, and terminal-log path. A normal FAIL must still leave remote evidence; otherwise the workflow is broken and must be repaired.
+docs/TEST_GATES.md:257:## Latest command-run pointer
+docs/TEST_GATES.md:259:`tests/test_agent_command_runner.py` verifies that command reports update `docs/reports/command_runs/LATEST_COMMAND_RUN.txt` and that `agent_run` includes that pointer in the uploaded evidence paths. This backs the no-copy `d`/`f` handoff contract.
+
+### LOCAL GATES ###
+...................                                                      [100%]
+19 passed in 0.17s
+FAIL_DIRTY_WORKTREE_BEFORE_REMOTE_MUTATION
+docs/TEST_GATES.md
+docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md
+docs/workflow/REPO_COMMAND_RUNNER.md
+src/agentic_project_kit/agent_command_runner.py
+tests/test_agent_command_runner.py
+PASS: no stale STATUS/HANDOFF current-state fragments found
+PASS_NOTHING_TO_COLLECT
+Persistent handoff state check passed
+Governance check passed
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+fix/latest-command-run-pointer
+ M docs/TEST_GATES.md
+ M docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+
+### PYTEST ###
+........................................................................ [ 18%]
+........................................................................ [ 36%]
+........................................................................ [ 54%]
+........................................................................ [ 72%]
+........................................................................ [ 90%]
+........................................                                 [100%]
+400 passed in 2.28s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.26
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=71
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+fix/latest-command-run-pointer
+ M docs/TEST_GATES.md
+ M docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+
+### RESULT: PASS ###
+
+### COMMIT PATCH ###
+ M docs/TEST_GATES.md
+ M docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+[fix/latest-command-run-pointer 6a7814e] Add latest command-run pointer for no-copy handoff
+ 5 files changed, 41 insertions(+), 1 deletion(-)
+
+### REMOTE MUTATION PREFLIGHT BEFORE PUSH ###
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+
+### PUSH AND CREATE PR ###
+To github.com:vfi64/agentic-project-kit.git
+   ed04819..6a7814e  fix/latest-command-run-pointer -> fix/latest-command-run-pointer
+branch 'fix/latest-command-run-pointer' set up to track 'origin/fix/latest-command-run-pointer'.
+https://github.com/vfi64/agentic-project-kit/pull/412
+
+### RESULT MARKER BEFORE LOG FINALIZATION ###
+### RESULT: FAIL ###

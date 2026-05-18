@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-213956_capture-failed-no-copy-agent-next.log
+docs/reports/terminal/20260518-214750_add-latest-command-run-pointer.log
