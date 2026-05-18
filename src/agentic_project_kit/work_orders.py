@@ -196,3 +196,42 @@ def run_work_order(order: WorkOrder, project_root: Path = Path(".")) -> int:
     body += "Terminal bleibt offen. Kein exit am Blockende.\n"
     _write_log(order, project_root, body)
     return result.returncode
+
+TEMPLATE_DIR = Path(".agentic/work_order_templates")
+
+def template_path(template_id: str, project_root: Path | str = Path(".")) -> Path:
+    return Path(project_root) / TEMPLATE_DIR / f"{template_id}.yaml"
+
+def load_work_order_template(template_id: str, project_root: Path | str = Path(".")) -> dict[str, object]:
+    path = template_path(template_id, project_root)
+    if not path.exists():
+        raise FileNotFoundError(f"work order template not found: {path}")
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    if not isinstance(data, dict):
+        raise ValueError(f"work order template must be a mapping: {path}")
+    return data
+
+def list_work_order_templates(project_root: Path | str = Path(".")) -> list[str]:
+    directory = Path(project_root) / TEMPLATE_DIR
+    if not directory.exists():
+        return []
+    return sorted(path.stem for path in directory.glob("*.yaml"))
+
+def prepare_work_order(template_id: str, work_order_id: str, expected_branch: str, project_root: Path | str = Path(".")) -> Path:
+    template = load_work_order_template(template_id, project_root)
+    output_path = Path(project_root) / WORK_ORDERS_DIR / f"{work_order_id}.yaml"
+    data = dict(template)
+    data["id"] = work_order_id
+    data["expected_branch"] = expected_branch
+    if "log_path" in data:
+        data["log_path"] = str(data["log_path"]).replace("{work_order_id}", work_order_id)
+    if "expected_outputs" in data and isinstance(data["expected_outputs"], list):
+        data["expected_outputs"] = [str(item).replace("{work_order_id}", work_order_id) for item in data["expected_outputs"]]
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True), encoding="utf-8")
+    order = load_work_order(work_order_id, project_root)
+    errors = check_work_order(order)
+    if errors:
+        output_path.unlink(missing_ok=True)
+        raise ValueError("; ".join(errors))
+    return output_path

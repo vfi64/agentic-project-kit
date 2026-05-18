@@ -1,0 +1,79 @@
+### PRECHECK ###
+Already on 'feature/work-order-prepare'
+M	src/agentic_project_kit/cli_commands/work_orders.py
+M	src/agentic_project_kit/work_orders.py
+ M src/agentic_project_kit/cli_commands/work_orders.py
+ M src/agentic_project_kit/work_orders.py
+?? .agentic/work_order_templates/
+?? docs/workflow/WORK_ORDER_PREPARE.md
+?? tests/test_work_order_prepare.py
+
+### APPLY REPAIR PATCH ###
+
+### TARGETED TESTS ###
+....                                                                     [100%]
+4 passed in 0.08s
+
+### CLI SMOKE ###
+standard-local-gates
+Prepared work order: .agentic/work_orders/smoke-work-order.yaml
+Work order: smoke-work-order
+Title: Standard local verification gates
+Safety: read_only
+Expected branch: feature/work-order-prepare
+Log path: docs/reports/terminal/smoke-work-order.log
+
+Preconditions:
+- none
+
+Postconditions:
+- pytest passes
+- ruff passes
+- check-docs passes
+- doctor passes
+- log exists
+- no false pass
+
+Expected outputs:
+- docs/reports/terminal/smoke-work-order.log
+
+Command:
+pytest && ruff check . && check-docs && doctor && governance check && work-order check && handoff check
+
+### LOCAL GATES ###
+........................................................................ [ 19%]
+........................................................................ [ 39%]
+........................................................................ [ 58%]
+........................................................................ [ 78%]
+........................................................................ [ 97%]
+........                                                                 [100%]
+368 passed in 2.02s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.24
+
+Overall: PASS
+Governance check passed
+Work order contract check passed
+Persistent handoff state check passed
+
+### DIFF STAT ###
+ .../cli_commands/work_orders.py                    | 17 +++++++++-
+ src/agentic_project_kit/work_orders.py             | 39 ++++++++++++++++++++++
+ 2 files changed, 55 insertions(+), 1 deletion(-)
+
+### INNER RESULT PASS ###
