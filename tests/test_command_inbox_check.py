@@ -41,3 +41,17 @@ def test_command_inbox_check_rejects_bad_metadata_and_forbidden_fragments(tmp_pa
     assert not result.ok
     assert "unsupported safety_class" in joined
     assert "forbidden fragment: git switch " in joined
+
+
+def test_command_inbox_check_rejects_completed_pending_command(tmp_path, monkeypatch):
+    import agentic_project_kit.command_inbox_check as cic
+    inbox = tmp_path / ".agentic/commands/inbox"
+    write_pair(inbox, "done")
+    reports = tmp_path / "docs/reports/command_runs"
+    reports.mkdir(parents=True)
+    (reports / "done.md").write_text("# done\n", encoding="utf-8")
+    monkeypatch.setattr(cic, "REPORT_DIR", reports)
+    monkeypatch.setattr(cic, "EXECUTED_JSONL", tmp_path / "executed.jsonl")
+    result = cic.check_command_inbox(inbox)
+    assert not result.ok
+    assert any("completed command still pending: done" in item for item in result.findings)
