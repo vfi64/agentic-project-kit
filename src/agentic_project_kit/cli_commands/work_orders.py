@@ -1,0 +1,41 @@
+from __future__ import annotations
+
+import subprocess
+
+import typer
+
+from agentic_project_kit.work_orders import load_work_order, list_work_orders, render_work_order
+
+work_orders_app = typer.Typer(help="Inspect and run repo-backed work orders.")
+
+
+@work_orders_app.command("list")
+def list_command() -> None:
+    for order in list_work_orders():
+        typer.echo(f"{order.work_order_id}\t{order.safety}\t{order.title}")
+
+
+@work_orders_app.command("show")
+def show_command(work_order_id: str) -> None:
+    try:
+        order = load_work_order(work_order_id)
+    except (FileNotFoundError, ValueError) as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+    typer.echo(render_work_order(order))
+
+
+@work_orders_app.command("run")
+def run_command(work_order_id: str, execute: bool = typer.Option(False, "--execute", help="Actually run the work order. Omit for dry-run.")) -> None:
+    try:
+        order = load_work_order(work_order_id)
+    except (FileNotFoundError, ValueError) as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+    typer.echo(render_work_order(order))
+    if not execute:
+        typer.echo("Dry run only. Re-run with --execute to run the command.")
+        return
+    result = subprocess.run(order.command, shell=True, check=False)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
