@@ -1,0 +1,153 @@
+REFRESH HANDOFF AFTER STANDARD ERROR PREVENTION CONTRACT -- NO EXIT
+
+
+### PRECHECK ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+2a2de28 Add communication artifact garbage collector (#380)
+e735eea Add communication artifact GC registry (#379)
+e47bf17 Record no interactive exit PR closeout log
+29d9427 Record no interactive terminal exit rule (#378)
+f7655dc Record PR 376 closeout terminal log (#377)
+40cb56d Refresh state after terminal log finalization guard (#376)
+43d6c18 Add terminal log finalization guard (#375)
+0baa7e7 Record environment bootstrap drift lesson (#374)
+1a5596b Refresh handoff state after v0.3.25 DOI metadata (#373)
+74d9bca Record v0.3.25 DOI metadata (#372)
+
+### HANDOFF CHECK BEFORE REFRESH ###
+Persistent handoff state check passed
+Repo: agentic-project-kit
+Path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.3.25
+Safe state: main @ 74d9bca
+Next: Work first on deterministic command-contract and environment-bootstrap drift prevention. Verify real CLI commands, .venv availability, ns shortcuts, docs, and work-order command references before extending work-order execution or GUI controls.
+
+### CREATE REFRESH BRANCH ###
+Switched to a new branch 'docs/refresh-handoff-after-standard-error-prevention'
+
+### REFRESH HANDOFF STATE ###
+Current safe_state: 74d9bca Record v0.3.25 DOI metadata (#372)
+Refreshed safe_state: 2a2de28 Add communication artifact garbage collector (#380)
+Updated .agentic/handoff_state.yaml
+
+### VERIFY REQUIRED STANDARD ERROR RULES ###
+.agentic/handoff_state.yaml:- id: interactive-terminal-exit
+.agentic/handoff_state.yaml:- id: global-cli-or-venv-assumption
+.agentic/handoff_state.yaml:    with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo
+docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md:Do not commit a repository log file while the current process is still writing to it. Long scripts must tee into a temporary log outside `docs/reports/terminal/`, then finalize the completed log into `docs/reports/terminal/*.log` with `./ns terminal-finalize <tmp-log> <name>` before staging, committing, and pushing. The finalized log must contain an explicit `### RESULT: PASS ###`, `### RESULT: FAIL ###`, or `### RESULT: PENDING ###` marker.
+.agentic/handoff_state.yaml:  commit_subject: Add communication artifact garbage collector (#380)
+.agentic/handoff_state.yaml:- id: unclassified-communication-artifact-cleanup
+.agentic/handoff_state.yaml:  prevention: Never delete communication, handoff, terminal, or command-run artifacts
+.agentic/handoff_state.yaml:    with ad-hoc rm. Use the central communication artifact registry and a deterministic
+docs/workflow/HANDOFF_STATE.md:Temporary communication files must be centrally classified before cleanup. Use `.agentic/communication_artifacts.yaml` as the allowlist and policy source. Do not use ad-hoc `rm` on `docs/reports`, `.agentic/commands`, handoff files, terminal logs, command-run reports, or pointer files. A garbage collector must start with dry-run behavior and must write a cleanup report before any deletion.
+docs/workflow/HANDOFF_STATE.md:Temporary communication artifacts must be centrally recognizable and removable only through registered safe paths. Use `./ns artifact-gc` for a dry-run plan and `./ns artifact-gc --execute` only after reviewing the plan. The collector must not delete arbitrary `docs/reports` files, release evidence, handoff state, source files, or unregistered paths.
+.agentic/communication_artifacts.yaml:purpose: "Central allowlist and retention policy for communication, handoff, terminal, and command-run artifacts."
+.agentic/communication_artifacts.yaml:    notes: "Local temporary communication logs created before finalization into repo-backed terminal logs."
+
+### GATES ###
+ERROR: file or directory not found: tests/test_standard_error_prevention_contract.py
+
+
+no tests ran in 0.00s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.25
+
+Overall: PASS
+
+### DIFF ###
+ .agentic/handoff_state.yaml | 29 +++++++++++++++++++++--------
+ 1 file changed, 21 insertions(+), 8 deletions(-)
+diff --git a/.agentic/handoff_state.yaml b/.agentic/handoff_state.yaml
+index 6ff1658..2215df0 100644
+--- a/.agentic/handoff_state.yaml
++++ b/.agentic/handoff_state.yaml
+@@ -10,8 +10,8 @@ repo:
+   default_branch: main
+ safe_state:
+   branch: main
+-  commit: 74d9bca
+-  commit_subject: Record v0.3.25 DOI metadata (#372)
++  commit: 2a2de28
++  commit_subject: Add communication artifact garbage collector (#380)
+   semantics: last_substantive_work_state
+   administrative_refresh_prs:
+   - 347
+@@ -58,7 +58,9 @@ policies:
+ rules:
+ - id: deterministic-quality-before-speed
+   status: active
+-  text: Prefer technically robust, testable, repeatable solutions over fast workarounds. Repeated workflow failures are product defects to fix with helpers, guards, tests, and documentation.
++  text: Prefer technically robust, testable, repeatable solutions over fast workarounds.
++    Repeated workflow failures are product defects to fix with helpers, guards, tests,
++    and documentation.
+ - id: no-copy-terminal-evidence
+   status: active
+   text: Routine PASS handoffs must be backed by repo evidence; manual terminal paste
+@@ -80,7 +82,9 @@ rules:
+   superseded_by: no-copy-terminal-evidence
+ recent_failure_patterns:
+ - id: repo-log-written-while-committing
+-  prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo terminal log while the current process is still writing to it.
++  prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize
++    with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo
++    terminal log while the current process is still writing to it.
+ - id: unconditional-pass-after-failure
+   prevention: Use set -e or explicit status handling and require log-backed PASS.
+ - id: overwriting-required-state-docs
+@@ -89,11 +93,18 @@ recent_failure_patterns:
+ - id: missing-project-venv-tooling
+   prevention: Prefer project-local .venv commands over global python, ruff, or agentic-kit.
+ - id: global-cli-or-venv-assumption
+-  prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and agentic-kit before using command names. Treat missing global agentic-kit or missing .venv as bootstrap/environment state, not as product failure.
++  prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and
++    agentic-kit before using command names. Treat missing global agentic-kit or missing
++    .venv as bootstrap/environment state, not as product failure.
+ - id: interactive-terminal-exit
+-  prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit codes belong inside saved scripts, not interactive paste blocks.
++  prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace
++    the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit
++    codes belong inside saved scripts, not interactive paste blocks.
+ - id: unclassified-communication-artifact-cleanup
+-  prevention: Never delete communication, handoff, terminal, or command-run artifacts with ad-hoc rm. Use the central communication artifact registry and a deterministic garbage collector with dry-run, allowlist, age/status checks, tests, and a cleanup report.
++  prevention: Never delete communication, handoff, terminal, or command-run artifacts
++    with ad-hoc rm. Use the central communication artifact registry and a deterministic
++    garbage collector with dry-run, allowlist, age/status checks, tests, and a cleanup
++    report.
+ - id: stale-handoff-after-administrative-refresh
+   prevention: Keep safe_state tied to the last substantive commit and list administrative
+     refresh PRs separately.
+@@ -108,7 +119,9 @@ next_allowed_tasks:
+ blocked_until_closeout:
+ - GUI mutation controls
+ - new release cycle automation
+-first_instruction: Work first on deterministic command-contract and environment-bootstrap drift prevention. Verify real CLI commands, .venv availability, ns shortcuts, docs, and work-order command references before extending work-order execution or GUI controls.
++first_instruction: Work first on deterministic command-contract and environment-bootstrap
++  drift prevention. Verify real CLI commands, .venv availability, ns shortcuts, docs,
++  and work-order command references before extending work-order execution or GUI controls.
+ handoff_maintenance:
+   principle: curated-not-accumulated
+   update_required_at_chat_end: true
+
+### RESULT MARKER ###
+### RESULT: FAIL ###
