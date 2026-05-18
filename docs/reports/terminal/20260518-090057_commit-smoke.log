@@ -1,0 +1,5 @@
+terminal_log=docs/reports/terminal/20260518-090057_commit-smoke.log
+### RUN: python3 -c print("commit smoke")
+commit smoke
+### EXIT: 0
+### RESULT: PASS ###

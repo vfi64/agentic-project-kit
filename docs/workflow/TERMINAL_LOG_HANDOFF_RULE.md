@@ -26,3 +26,12 @@ git status --short
 ```
 
 If the final `git status --short` shows a modified terminal log, the commit is incomplete.
+## Wrapper commands
+
+The terminal-log handoff workflow is supported by:
+
+- `./ns run-logged <name> -- <command...>`: runs a local command while teeing output into `docs/reports/terminal/*.log` and updates `LATEST_TERMINAL_LOG.txt`.
+- `./ns terminal-status`: read-only inspection of the latest terminal log pointer.
+- `./ns terminal-upload`: failure-handoff helper that commits and pushes only terminal-log artifacts.
+
+For PASS handoff, prefer `run-logged` for larger local runs. For FAIL handoff, run `./ns terminal-upload` and then answer `f` or `fail` in the chat.

@@ -1,0 +1,5 @@
+terminal_log=docs/reports/terminal/20260518-090016_smoke-pass.log
+### RUN: python3 -c print("hello from run-logged")
+hello from run-logged
+### EXIT: 0
+### RESULT: PASS ###
