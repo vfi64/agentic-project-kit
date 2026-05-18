@@ -265,3 +265,7 @@ Before terminal workflows perform remote mutations or merge/sync verification, t
 ## Agent-next hard-fail result contract
 
 `tests/test_agent_command_runner.py` verifies that `agent_next` prints `HARD-FAIL` with `reply=paste-output` for pull failure, ambiguous command inbox, and postcondition failure. This separates workflow-level hard failures from normal command `FAIL` cases that can be handled with `f` and remote evidence.
+
+## Command inbox check
+
+`tests/test_command_inbox_check.py` verifies the repo-backed command queue validator behind `./ns command-inbox-check`: empty inbox, one valid pair, orphan detection, multiple-command refusal, invalid safety class detection, and forbidden-fragment detection.

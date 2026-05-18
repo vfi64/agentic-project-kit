@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-220830_capture-command-inbox-check-missing-evidence.log
+docs/reports/terminal/20260518-221540_repair-pr418-command-inbox-check.log
