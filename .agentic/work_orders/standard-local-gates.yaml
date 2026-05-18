@@ -1,0 +1,20 @@
+id: standard-local-gates
+title: Standard local constitutional gates for the current slice
+safety: read_only
+expected_branch: feature/read-only-work-order-templates
+log_path: docs/reports/terminal/standard_local_gates_work_order.log
+description: Run the standard local constitutional gates through the repo-backed work-order runner.
+preconditions:
+  - repository is on the expected non-main feature branch
+  - project virtual environment exists
+  - command is executed through the work-order runner, which owns result markers
+postconditions:
+  - pytest gate completed successfully
+  - ruff gate completed successfully
+  - check-docs gate completed successfully
+  - doctor gate completed successfully
+  - log exists under docs/reports/terminal
+  - no false PASS is printed by the work-order command itself
+expected_outputs:
+  - docs/reports/terminal/standard_local_gates_work_order.log
+command: ".venv/bin/python -m pytest -q && .venv/bin/ruff check . && PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli check-docs && PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli doctor"

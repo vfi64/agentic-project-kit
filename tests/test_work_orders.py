@@ -135,9 +135,10 @@ def test_work_order_cli_show_missing_fails():
     assert "work order not found" in result.output
 
 
-def test_work_order_check_cli_passes_without_work_orders():
+def test_work_order_check_cli_passes_for_repository_work_orders():
     result = CliRunner().invoke(app, ["work-order", "check"])
     assert result.exit_code == 0
+    assert "Work order contract check passed" in result.output
 
 
 def test_work_order_run_dry_run_does_not_create_log():

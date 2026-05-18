@@ -1,0 +1,74 @@
+### PRECHECK ###
+Already on 'feature/read-only-work-order-templates'
+M	src/agentic_project_kit/work_orders.py
+M	tests/test_work_orders.py
+Your branch is up to date with 'origin/feature/read-only-work-order-templates'.
+Already up to date.
+ M src/agentic_project_kit/work_orders.py
+ M tests/test_work_orders.py
+
+### APPLY PATCH ###
+diff --git a/src/agentic_project_kit/work_orders.py b/src/agentic_project_kit/work_orders.py
+index e35352e..9fbf374 100644
+--- a/src/agentic_project_kit/work_orders.py
++++ b/src/agentic_project_kit/work_orders.py
+@@ -128,7 +128,7 @@ def check_work_order(order: WorkOrder) -> list[str]:
+         errors.append("expected_branch must name the non-main branch for the current slice")
+     if order.log_path not in order.expected_outputs:
+         errors.append("expected_outputs must include the work order log_path")
+-    required_postconditions = ("pytest", "ruff", "check-docs", "doctor", "log exists", "no false PASS")
++    required_postconditions = ("pytest", "ruff", "check-docs", "doctor", "log exists", "no false pass")
+     joined_postconditions = "\n".join(order.postconditions).lower()
+     for item in required_postconditions:
+         if item not in joined_postconditions:
+diff --git a/tests/test_work_orders.py b/tests/test_work_orders.py
+index 08b4a34..76c14e4 100644
+--- a/tests/test_work_orders.py
++++ b/tests/test_work_orders.py
+@@ -135,9 +135,10 @@ def test_work_order_cli_show_missing_fails():
+     assert "work order not found" in result.output
+ 
+ 
+-def test_work_order_check_cli_passes_without_work_orders():
++def test_work_order_check_cli_passes_for_repository_work_orders():
+     result = CliRunner().invoke(app, ["work-order", "check"])
+     assert result.exit_code == 0
++    assert "Work order contract check passed" in result.output
+ 
+ 
+ def test_work_order_run_dry_run_does_not_create_log():
+
+### TARGETED TESTS ###
+....................                                                     [100%]
+20 passed in 0.13s
+
+### LOCAL GATES ###
+........................................................................ [ 20%]
+........................................................................ [ 40%]
+........................................................................ [ 60%]
+........................................................................ [ 81%]
+...................................................................      [100%]
+355 passed in 1.87s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.24
+
+Overall: PASS
+Work order contract check passed
+Persistent handoff state check passed
+
+### INNER RESULT PASS ###
