@@ -1,0 +1,4 @@
+command_id: agent-next-fail-smoke-004
+title: Verify visible no-copy agent-next fail footer and latest report pointer
+safety_class: remote-mutation
+description: Minimal intentionally failing smoke command for end-to-end no-copy f handoff verification.
