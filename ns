@@ -1,4 +1,10 @@
 #!/usr/bin/env sh
+
+if [ "${1:-}" = "cockpit-readiness" ]; then
+  PYTHONPATH=src python3 tools/cockpit_readiness.py
+  exit $?
+fi
+
 set -eu
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 cd "$SCRIPT_DIR"
