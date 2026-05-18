@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: d5228a1
-  commit_subject: Add top-level PR closeout alias (#368)
+  commit: 74d9bca
+  commit_subject: Record v0.3.25 DOI metadata (#372)
   semantics: last_substantive_work_state
   administrative_refresh_prs:
   - 347

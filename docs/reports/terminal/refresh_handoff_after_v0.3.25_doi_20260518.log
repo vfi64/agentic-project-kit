@@ -1,0 +1,97 @@
+### PRECHECK ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+Already up to date.
+main
+74d9bca Record v0.3.25 DOI metadata (#372)
+3a1876d Record v0.3.25 release verification log (#371)
+31158ec Prepare v0.3.25 release metadata (#370)
+0b09d0b Refresh handoff state after PR closeout alias (#369)
+d5228a1 Add top-level PR closeout alias (#368)
+ef27fad Record PR closeout pending-state terminal log (#367)
+dfd1d0c Refresh handoff state after work order prepare (#366)
+6928c12 Add work order prepare MVP (#365)
+87f1424 Refresh handoff state after PR closeout gate (#364)
+02eb154 Add PR closeout gate MVP (#363)
+
+### RELEASE VERIFY ###
+Post-release check for target v0.3.25
+
+[PASS] GitHub release: GitHub release exists: v0.3.25
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.3.25: 10.5281/zenodo.20273989
+
+Overall: PASS
+
+
+### HANDOFF REFRESH DRY RUN ###
+Current safe_state: d5228a1 Add top-level PR closeout alias (#368)
+Refreshed safe_state: 74d9bca Record v0.3.25 DOI metadata (#372)
+Dry run only. Use --write to update the YAML file.
+
+### HANDOFF REFRESH WRITE ###
+Current safe_state: d5228a1 Add top-level PR closeout alias (#368)
+Refreshed safe_state: 74d9bca Record v0.3.25 DOI metadata (#372)
+Updated .agentic/handoff_state.yaml
+
+### HANDOFF CHECK ###
+Persistent handoff state check passed
+Repo: agentic-project-kit
+Path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.3.24
+Safe state: main @ 74d9bca
+Next: Work first on repo-backed work-order automation so long implementation work orders are generated, stored, pulled, and executed through checked repository artifacts. Keep remote mutations out of scope unless an explicit checked action contract exists.
+
+### GOVERNANCE GATES ###
+Governance check passed
+Work order contract check passed
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.25
+
+Overall: PASS
+
+### LOCAL TEST GATES ###
+........................................................................ [ 19%]
+........................................................................ [ 38%]
+........................................................................ [ 58%]
+........................................................................ [ 77%]
+........................................................................ [ 97%]
+...........                                                              [100%]
+371 passed in 2.09s
+All checks passed!
+
+### DIFF ###
+diff --git a/.agentic/handoff_state.yaml b/.agentic/handoff_state.yaml
+index 43ee025..c9daa74 100644
+--- a/.agentic/handoff_state.yaml
++++ b/.agentic/handoff_state.yaml
+@@ -10,8 +10,8 @@ repo:
+   default_branch: main
+ safe_state:
+   branch: main
+-  commit: d5228a1
+-  commit_subject: Add top-level PR closeout alias (#368)
++  commit: 74d9bca
++  commit_subject: Record v0.3.25 DOI metadata (#372)
+   semantics: last_substantive_work_state
+   administrative_refresh_prs:
+   - 347
+ .agentic/handoff_state.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+### INNER RESULT PASS ###
