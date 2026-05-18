@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-18'
-  reason: 'Refresh persistent handoff state after PR #344 merge'
-  source: post-merge local verification
+  reason: Refresh handoff state safe_state from current git HEAD
+  source: agentic-kit handoff refresh
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 144016d
-  commit_subject: Add persistent handoff state MVP (#344)
+  commit: 22a0d3a
+  commit_subject: Add handoff refresh command (#346)
   working_tree_expected_clean: true
 release:
   current_version: 0.3.24
