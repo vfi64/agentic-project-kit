@@ -7,3 +7,4 @@
 {"command_id": "agent-next-fail-smoke-004", "exit_code": 7, "outcome": "FAIL_COMMAND", "script_sha256": "25fc6bd2fc9afdc6ad3d485db86f00fb859e7cba5a70cf107250f866d5ed6d49", "timestamp_utc": "2026-05-18T19:59:10.313796+00:00"}
 {"command_id": "verify-agent-next-footer-pf-001", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "9eeeb55a7d055569ce2d96f72df6ffb68ed3b90a5a048562b13d7565c4372adc", "timestamp_utc": "2026-05-18T20:30:01.398520+00:00"}
 {"command_id": "harden-agent-run-fail-marker-001", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "cff56eaba9f45e49ba63bf5128be10b1262902e4945c4fc4660274fa29ae2b90", "timestamp_utc": "2026-05-18T20:32:36.593794+00:00"}
+{"command_id": "smoke-agent-run-missing-script-001", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "missing", "timestamp_utc": "2026-05-18T20:48:09.310898+00:00"}

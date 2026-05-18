@@ -1,3 +1,0 @@
-command_id: smoke-agent-run-missing-script-001
-title: Smoke test agent-run when current script is removed during execution
-safety_class: remote-mutation

@@ -1,1 +1,1 @@
-docs/reports/command_runs/harden-agent-run-fail-marker-001.md
+docs/reports/command_runs/smoke-agent-run-missing-script-001.md
