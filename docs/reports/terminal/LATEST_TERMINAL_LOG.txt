@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
