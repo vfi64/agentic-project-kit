@@ -68,3 +68,7 @@ Every `./ns agent-run` or `./ns agent-next` run writes `docs/reports/command_run
 ## Command inbox check
 
 `./ns command-inbox-check` validates the repo-backed queue before local execution. It accepts an empty inbox or exactly one complete `.yaml`/`.sh` pair, rejects orphan files, rejects multiple complete pending commands, validates required metadata and safety classes, runs `sh -n`, and blocks known unsafe command-script fragments such as heredocs, branch switches, pull commands, logout, kill, and top-level exec usage.
+
+## Inner fail marker detection
+
+`agent-run` treats a terminal log whose last result marker is `### RESULT: FAIL ###` as `FAIL_COMMAND`, even if the shell process exits with code 0. This prevents evidence finalization or wrapper layers from masking failed command scripts as `PASS_EXECUTED`.
