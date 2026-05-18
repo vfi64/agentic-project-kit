@@ -102,8 +102,10 @@ def prepare_current_from_inbox() -> tuple[Path, Path]:
     COMMAND_DIR.mkdir(parents=True, exist_ok=True)
     CURRENT_YAML.write_text(yaml_path.read_text(encoding="utf-8"), encoding="utf-8")
     CURRENT_SCRIPT.write_text(script_path.read_text(encoding="utf-8"), encoding="utf-8")
+    CURRENT_SCRIPT.chmod(0o755)
+    yaml_path.unlink()
+    script_path.unlink()
     return yaml_path, script_path
-
 
 def remove_current_files() -> None:
     for item in (CURRENT_YAML, CURRENT_SCRIPT):
