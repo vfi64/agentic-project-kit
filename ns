@@ -34,6 +34,11 @@ if [ "${1:-}" = "governance-check" ]; then
   exit $?
 fi
 
+if [ "${1:-}" = "state-freshness-check" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli state freshness-check
+  exit $?
+fi
+
 if [ "${1:-}" = "action-list" ]; then
   shift
   PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli actions list "$@"

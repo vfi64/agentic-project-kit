@@ -245,3 +245,7 @@ Whenever the current branch, version, release state, test status, architecture c
 ## Remote mutation preflight guard
 
 Before terminal workflows perform remote mutations or merge/sync verification, the working tree must be fully clean. Terminal-log dirtiness is not allowed for this preflight because it can block branch switching, fast-forward pulls, PR merges, and verification. Use `./ns terminal-remote-preflight` before `gh pr merge`, release publication, tag creation, or any merge-verification block.
+
+## State freshness guard
+
+`./ns state-freshness-check` detects known stale current-state fragments in `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md`. It is intentionally narrow and deterministic: it catches recurring obsolete state fragments such as old released-version claims, old status dates, and stale slice descriptions without trying to prove full semantic freshness.
