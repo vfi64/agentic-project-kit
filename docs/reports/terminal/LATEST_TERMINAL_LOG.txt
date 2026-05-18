@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log
+docs/reports/terminal/20260518-213816_no-copy-e2e-protocol-001.log
