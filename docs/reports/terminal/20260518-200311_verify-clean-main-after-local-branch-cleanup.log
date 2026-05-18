@@ -1,0 +1,106 @@
+VERIFY CLEAN MAIN AFTER LOCAL BRANCH CLEANUP
+
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### CURRENT STATE ###
+main
+aaa1e77 Preserve rule governance verification log (#392)
+e4ba146 Record rule governance contract merge closeout log
+d86f538 Add test-backed rule governance contract (#391)
+6eb5458 Record ns interpreter no-exec repair terminal log
+6361551 Record mandatory remote evidence bootstrap log
+3490c15 Add ns interpreter discovery and no-exec guard (#390)
+99a175a Preserve standard error cleanup final snapshot (#389)
+c0a5154 Add obsolete branch cleanup plan (#388)
+
+### OPEN PRS ###
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=67
+ok=true
+
+Findings:
+- none
+
+### ARTIFACT GC DRY RUN ###
+PENDING_COMMUNICATION_ARTIFACTS
+terminal-latest-pointer	pointer	docs/reports/terminal/LATEST_TERMINAL_LOG.txt	derived pointer to the latest terminal log
+
+### FAST MAIN GATES ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 18%]
+........................................................................ [ 36%]
+........................................................................ [ 55%]
+........................................................................ [ 73%]
+........................................................................ [ 91%]
+................................                                         [100%]
+392 passed in 2.14s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.25
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=67
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### FINAL STATE BEFORE LOG FINALIZATION ###
+main
+aaa1e77 Preserve rule governance verification log (#392)
+e4ba146 Record rule governance contract merge closeout log
+d86f538 Add test-backed rule governance contract (#391)
+6eb5458 Record ns interpreter no-exec repair terminal log
+6361551 Record mandatory remote evidence bootstrap log
+3490c15 Add ns interpreter discovery and no-exec guard (#390)
+99a175a Preserve standard error cleanup final snapshot (#389)
+c0a5154 Add obsolete branch cleanup plan (#388)
+
+### RESULT: PASS ###
