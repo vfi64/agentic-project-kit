@@ -21,6 +21,11 @@ if [ "${1:-}" = "terminal-clean-check" ]; then
   exit $?
 fi
 
+if [ "${1:-}" = "agent-next" ]; then
+  PYTHONPATH=src python3 -m agentic_project_kit.agent_command_runner next
+  exit $?
+fi
+
 if [ "${1:-}" = "agent-run" ]; then
   PYTHONPATH=src python3 -m agentic_project_kit.agent_command_runner
   exit $?

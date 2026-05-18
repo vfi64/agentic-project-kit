@@ -249,3 +249,4 @@ Dependabot cleanup after v0.3.23 is complete. PR #327 updated the GitHub release
 - Completed: PR #332 added `./ns terminal-clean-check` for logged runs. Terminal-log handoff now supports `run-logged`, `terminal-status`, `terminal-clean-check`, and `terminal-upload`; the normal FAIL handoff can be uploaded without copy-and-paste.
 - In progress: repo command runner slice adds `./ns agent-run` as the intended no-copy handoff path for local agent work.
 - Completed: PR #334 added repo command runner MVP and ./ns agent-run as the intended no-copy local agent handoff path.
+- In progress: agent command inbox slice adds `./ns agent-next` so routine local handoff can pull and execute exactly one pending repo-backed command.

@@ -281,3 +281,4 @@ Post-release Dependabot cleanup is complete. PR #327 and PR #328 resolved the re
 - Completed: PR #332 merged terminal branch-safety handling. Logged runs should use `./ns terminal-clean-check` instead of plain `git status --short` emptiness checks. Normal FAIL handoff is now: run fails under `run-logged`, execute `./ns terminal-upload`, then answer `f`/`fail`.
 - Current slice: `feature/repo-command-runner` introduces repo-backed command files plus `./ns agent-run`; goal is to replace routine copy-and-paste terminal blocks with committed command-run reports.
 - Completed: PR #334 merged repo command runner MVP. Routine local instructions should move toward committed agent command files and ./ns agent-run; manual terminal copy-and-paste is recovery-only.
+- Current slice: `feature/agent-command-inbox` adds inbox-based `./ns agent-next`; prefer one pending command pair under `.agentic/commands/inbox/` instead of transient current files.
