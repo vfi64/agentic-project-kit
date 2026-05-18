@@ -94,6 +94,11 @@ if [ "${1:-}" = "terminal-clean-check" ]; then
   exit $?
 fi
 
+if [ "${1:-}" = "terminal-remote-preflight" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-remote-preflight
+  exit $?
+fi
+
 if [ "${1:-}" = "artifact-gc" ]; then
   shift
   PYTHONPATH=src "$PY" -m agentic_project_kit.communication_artifact_gc "$@"
