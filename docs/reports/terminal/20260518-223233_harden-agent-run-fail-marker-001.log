@@ -1,0 +1,66 @@
+terminal_log=docs/reports/terminal/20260518-223233_harden-agent-run-fail-marker-001.log
+### RUN: sh .agentic/commands/current.sh
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+HARDEN AGENT RUN FAIL MARKER DETECTION
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+D	.agentic/commands/inbox/harden-agent-run-fail-marker-001.sh
+D	.agentic/commands/inbox/harden-agent-run-fail-marker-001.yaml
+M	docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### CURRENT GAP ###
+The previous verification log showed an inner FAIL marker followed by EXIT 0 and PASS_EXECUTED.
+This command preserves that gap as the next repo-backed work item; implementation should patch agent_command_runner to treat the last RESULT FAIL marker as FAIL_COMMAND.
+
+### EVIDENCE POINTERS ###
+# Agent command run: verify-agent-next-footer-pf-001
+
+- Title: Verify agent-next p/f footer contract on main
+- Safety class: remote-mutation
+- Outcome: PASS_EXECUTED
+- Exit code: 0
+- Branch: main
+- Script SHA256: 9eeeb55a7d055569ce2d96f72df6ffb68ed3b90a5a048562b13d7565c4372adc
+- Terminal log: docs/reports/terminal/20260518-222953_verify-agent-next-footer-pf-001.log
+
+44:src/agentic_project_kit/agent_command_runner.py:274:        print("### NEXT CHAT REPLY: PASS -> p ###")
+45:src/agentic_project_kit/agent_command_runner.py:276:        print("### NEXT CHAT REPLY: FAIL -> f ###")
+46:src/agentic_project_kit/agent_command_runner.py:278:        print("### NEXT CHAT REPLY: HARD-FAIL -> paste output ###")
+48:tests/test_agent_command_runner.py:251:    assert "### NEXT CHAT REPLY: PASS -> p ###" in out
+49:tests/test_agent_command_runner.py:266:    assert "### NEXT CHAT REPLY: FAIL -> f ###" in out
+50:tests/test_agent_command_runner.py:278:    assert "### NEXT CHAT REPLY: HARD-FAIL -> paste output ###" in out
+51:docs/workflow/REPO_COMMAND_RUNNER.md:62:`./ns agent-next` must end with a visible result footer. `PASS` prints `reply=p` and `### NEXT CHAT REPLY: PASS -> p ###`; a normal command failure prints `reply=f` and `### NEXT CHAT REPLY: FAIL -> f ###`; `NO-COMMAND` prints `reply=ask-agent-to-queue-command`; hard failures such as pull/upload/postcondition problems print `reply=paste-output` and `### NEXT CHAT REPLY: HARD-FAIL -> paste output ###`. This terminal footer is part of the no-copy workflow contract.
+157:### RESULT: FAIL ###
+158:### EXIT: 0
+
+### READONLY GATES ###
+PASS_COMMAND_INBOX_CHECK
+PASS: no stale STATUS/HANDOFF current-state fragments found
+PENDING_COMMUNICATION_ARTIFACTS
+agent-current-yaml	stale-transient-command	.agentic/commands/current.yaml	transient compatibility file after agent-next or agent-run
+agent-current-sh	stale-transient-command	.agentic/commands/current.sh	transient compatibility file after agent-next or agent-run
+Persistent handoff state check passed
+Governance check passed
+
+### CLASSIFICATION ###
+next_patch=agent_run_fail_marker_detection
+expected_contract=inner_RESULT_FAIL_dominates_EXIT_0
+
+### RESULT: PASS ###
+### EXIT: 0
+### RESULT: PASS ###

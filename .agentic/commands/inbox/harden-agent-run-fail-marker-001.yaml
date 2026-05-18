@@ -1,3 +1,0 @@
-command_id: harden-agent-run-fail-marker-001
-title: Harden agent-run against inner FAIL result markers
-safety_class: remote-mutation
