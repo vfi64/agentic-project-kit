@@ -1,0 +1,138 @@
+HARDEN AGENT RUN REPORT CREATION WHEN CURRENT SCRIPT IS MISSING
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+D	.agentic/commands/inbox/harden-agent-run-missing-script-001.sh
+D	.agentic/commands/inbox/harden-agent-run-missing-script-001.yaml
+M	docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+PASS_COLLECTED
+.agentic/commands/current.yaml
+.agentic/commands/current.sh
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'fix/agent-run-missing-script-report'
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+
+### VERIFY PATCH CONTENT ###
+src/agentic_project_kit/agent_command_runner.py:122:    missing = [key for key in required if not data.get(key)]
+src/agentic_project_kit/agent_command_runner.py:123:    if missing:
+src/agentic_project_kit/agent_command_runner.py:124:        raise ValueError("Missing required command fields: " + ", ".join(missing))
+src/agentic_project_kit/agent_command_runner.py:156:        return "missing"
+tests/test_agent_command_runner.py:22:def test_load_current_command_missing_files(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:324:def test_script_sha256_returns_missing_when_current_script_is_gone(tmp_path):
+tests/test_agent_command_runner.py:326:    missing = tmp_path / "missing.sh"
+tests/test_agent_command_runner.py:327:    assert script_sha256(missing) == "missing"
+docs/workflow/REPO_COMMAND_RUNNER.md:58:Every `./ns agent-run` or `./ns agent-next` run writes `docs/reports/command_runs/LATEST_COMMAND_RUN.txt`. The file points to the newest command-run report under `docs/reports/command_runs/`. After the user replies `d` for PASS or `f` for normal FAIL, the next agent must read this pointer first, then the referenced report, then the terminal log referenced by that report. Copy-and-paste is reserved for terminal crashes, authentication/network failure, or missing remote evidence.
+docs/workflow/REPO_COMMAND_RUNNER.md:66:`./ns agent-next` distinguishes normal command failure from workflow-level hard failures. Pull failures, ambiguous pending commands, upload/postcondition failures, authentication/network problems, and missing remote evidence are hard failures. The visible footer must print `### AGENT-NEXT RESULT: HARD-FAIL ###` and `reply=paste-output` for these cases. A normal command exit failure remains `FAIL` with `reply=f`, and no pending command remains `NO-COMMAND` with `reply=ask-agent-to-queue-command`.
+docs/workflow/REPO_COMMAND_RUNNER.md:76:## Missing script report robustness
+docs/workflow/REPO_COMMAND_RUNNER.md:78:`agent-run` report creation must not crash if `.agentic/commands/current.sh` is removed during command execution. In that case the script SHA256 field is recorded as `missing` so the runner can still write durable command-run evidence and return a deterministic outcome.
+
+### LOCAL GATES ###
+...............................                                          [100%]
+31 passed in 0.22s
+PASS_COMMAND_INBOX_CHECK
+PASS: no stale STATUS/HANDOFF current-state fragments found
+PASS_NOTHING_TO_COLLECT
+Persistent handoff state check passed
+Governance check passed
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+fix/agent-run-missing-script-report
+ D .agentic/commands/inbox/harden-agent-run-missing-script-001.sh
+ D .agentic/commands/inbox/harden-agent-run-missing-script-001.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+?? docs/reports/terminal/20260518-224118_harden-agent-run-missing-script-001.log
+
+### PYTEST ###
+........................................................................ [ 17%]
+........................................................................ [ 34%]
+........................................................................ [ 52%]
+........................................................................ [ 69%]
+........................................................................ [ 87%]
+....................................................                     [100%]
+412 passed in 2.23s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.26
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=74
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+fix/agent-run-missing-script-report
+ D .agentic/commands/inbox/harden-agent-run-missing-script-001.sh
+ D .agentic/commands/inbox/harden-agent-run-missing-script-001.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+?? docs/reports/terminal/20260518-224118_harden-agent-run-missing-script-001.log
+
+### RESULT: PASS ###
+
+### COMMIT PATCH ###
+ D .agentic/commands/inbox/harden-agent-run-missing-script-001.sh
+ D .agentic/commands/inbox/harden-agent-run-missing-script-001.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+?? docs/reports/terminal/20260518-224118_harden-agent-run-missing-script-001.log
+[fix/agent-run-missing-script-report 0ffd45d] Harden agent-run missing script report handling
+ 3 files changed, 12 insertions(+)
+
+### PUSH AND CREATE PR ###
+remote: 
+remote: Create a pull request for 'fix/agent-run-missing-script-report' on GitHub by visiting:        
+remote:      https://github.com/vfi64/agentic-project-kit/pull/new/fix/agent-run-missing-script-report        
+remote: 
+To github.com:vfi64/agentic-project-kit.git
+ * [new branch]      fix/agent-run-missing-script-report -> fix/agent-run-missing-script-report
+branch 'fix/agent-run-missing-script-report' set up to track 'origin/fix/agent-run-missing-script-report'.
+https://github.com/vfi64/agentic-project-kit/pull/422
+
+### RESULT: PASS ###
