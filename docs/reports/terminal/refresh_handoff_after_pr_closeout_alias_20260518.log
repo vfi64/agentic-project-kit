@@ -1,20 +1,11 @@
-### PRECHECK ###
+### PREPARE BRANCH ###
 Already on 'main'
 Your branch is up to date with 'origin/main'.
 Already up to date.
 Switched to a new branch 'docs/refresh-handoff-state-after-pr-closeout-alias'
-docs/refresh-handoff-state-after-pr-closeout-alias
-d5228a1 Add top-level PR closeout alias (#368)
-ef27fad Record PR closeout pending-state terminal log (#367)
-dfd1d0c Refresh handoff state after work order prepare (#366)
-6928c12 Add work order prepare MVP (#365)
-87f1424 Refresh handoff state after PR closeout gate (#364)
-02eb154 Add PR closeout gate MVP (#363)
-34b2c50 Enforce governance before work order execution (#362)
-5b13b4e Refresh handoff state after governance check (#361)
 
-### REFRESH HANDOFF STATE ###
-Current safe_state: 6928c12 Add work order prepare MVP (#365)
+### REFRESH HANDOFF ###
+Current safe_state: d5228a1 Add top-level PR closeout alias (#368)
 Refreshed safe_state: d5228a1 Add top-level PR closeout alias (#368)
 Updated .agentic/handoff_state.yaml
 Persistent handoff state check passed
@@ -32,7 +23,7 @@ Next: Work first on repo-backed work-order automation so long implementation wor
 ........................................................................ [ 77%]
 ........................................................................ [ 97%]
 ...........                                                              [100%]
-371 passed in 2.12s
+371 passed in 2.35s
 All checks passed!
 Agentic project check passed
 Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -57,19 +48,18 @@ Work order contract check passed
 
 ### DIFF ###
 diff --git a/.agentic/handoff_state.yaml b/.agentic/handoff_state.yaml
-index 6d9657a..43ee025 100644
+index 43ee025..ff46b28 100644
 --- a/.agentic/handoff_state.yaml
 +++ b/.agentic/handoff_state.yaml
-@@ -10,8 +10,8 @@ repo:
-   default_branch: main
- safe_state:
-   branch: main
--  commit: 6928c12
--  commit_subject: Add work order prepare MVP (#365)
-+  commit: d5228a1
-+  commit_subject: Add top-level PR closeout alias (#368)
-   semantics: last_substantive_work_state
-   administrative_refresh_prs:
-   - 347
+@@ -1,7 +1,8 @@
+ schema_version: 1
+ updated:
+   date: '2026-05-18'
+-  reason: Refresh handoff state to last substantive work commit
++  reason: Current HEAD is an administrative handoff refresh; safe_state remains on
++    last substantive work commit
+   source: agentic-kit handoff refresh
+ repo:
+   name: agentic-project-kit
 
 ### INNER RESULT PASS ###

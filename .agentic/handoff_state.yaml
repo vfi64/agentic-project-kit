@@ -1,7 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-18'
-  reason: Refresh handoff state to last substantive work commit
+  reason: Current HEAD is an administrative handoff refresh; safe_state remains on
+    last substantive work commit
   source: agentic-kit handoff refresh
 repo:
   name: agentic-project-kit
