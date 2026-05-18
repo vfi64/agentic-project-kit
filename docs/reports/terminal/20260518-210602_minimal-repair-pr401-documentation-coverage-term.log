@@ -1,0 +1,94 @@
+MINIMAL REPAIR PR 401 DOCUMENTATION COVERAGE TERM
+
+### SYNC PR BRANCH ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+ * branch            docs/refresh-status-handoff-after-pr400 -> FETCH_HEAD
+Already on 'docs/refresh-status-handoff-after-pr400'
+Your branch is up to date with 'origin/docs/refresh-status-handoff-after-pr400'.
+HEAD is now at 6c00a0b Preserve PR 401 repair terminal log
+
+### PATCH EXACT REQUIRED TERM ###
+
+### TARGETED VERIFY TERM ###
+91:The exact lowercase phrase `documentation coverage` is intentionally present here because `docs/DOCUMENTATION_COVERAGE.yaml`, `agentic-kit check-docs`, and `agentic-kit doctor` enforce required state-document coverage terms deterministically.
+
+### LOCAL GATES ON DIRTY DOC BRANCH ###
+Persistent handoff state check passed
+Governance check passed
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+docs/refresh-status-handoff-after-pr400
+ M docs/handoff/CURRENT_HANDOFF.md
+
+### PYTEST ###
+........................................................................ [ 18%]
+........................................................................ [ 36%]
+........................................................................ [ 54%]
+........................................................................ [ 72%]
+........................................................................ [ 91%]
+...................................                                      [100%]
+395 passed in 2.29s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.26
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=1
+local_branch_count=69
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+docs/refresh-status-handoff-after-pr400
+ M docs/handoff/CURRENT_HANDOFF.md
+
+### RESULT: PASS ###
+
+### COMMIT MINIMAL REPAIR ###
+ M docs/handoff/CURRENT_HANDOFF.md
+[docs/refresh-status-handoff-after-pr400 5b7ecba] Repair handoff documentation coverage term
+ 1 file changed, 2 insertions(+)
+
+### REMOTE MUTATION PREFLIGHT BEFORE PUSH ###
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+
+### PUSH MINIMAL REPAIR ###
+To github.com:vfi64/agentic-project-kit.git
+   6c00a0b..5b7ecba  docs/refresh-status-handoff-after-pr400 -> docs/refresh-status-handoff-after-pr400
+
+### PR STATUS ###
+{"headRefName":"docs/refresh-status-handoff-after-pr400","headRefOid":"6c00a0b2a63497385659d93f72fa2b28ff498b06","mergeable":"MERGEABLE","number":401,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-18T19:05:34Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26054409907/job/76598782102","name":"test","startedAt":"2026-05-18T19:05:14Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-18T19:05:36Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26054413803/job/76598785805","name":"test","startedAt":"2026-05-18T19:05:18Z","status":"COMPLETED","workflowName":"CI"}],"title":"Refresh status and handoff after rule evidence governance"}
+
+### RESULT MARKER BEFORE LOG FINALIZATION ###
+### RESULT: PASS ###
