@@ -1,5 +1,7 @@
 # Agent Instructions
 
+Deterministic quality rule: prefer the technically robust, testable, and repeatable solution over the fastest workaround. Do not take shortcuts that create dirty state, false PASS, drift, incomplete logs, manual repair, or unclear handoff evidence.
+
 This repository uses explicit project-state and architecture governance. Do not rely on chat history or memory as the source of truth.
 
 ## Required Reading Order
@@ -347,3 +349,4 @@ or:
 When the marker is `PASS`, the human can reply with a short acknowledgement such as `d`. When the marker is `FAIL`, the relevant output should be shared for diagnosis.
 
 Terminal blocks must avoid heredocs and risky multi-line `python -c` strings. Prefer small script files under `tmp/`, explicit virtualenv paths such as `.venv/bin/python`, and quote-safe one-line shell operations.
+

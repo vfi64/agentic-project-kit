@@ -317,3 +317,10 @@ def test_finalize_guard_declares_machine_readable_outcomes() -> None:
     assert "STATUS: FAIL_CONFLICT_RELEVANT" in text
     assert "STATUS: FAIL_NEEDS_HUMAN_REVIEW" in text
     assert "no commit, push, PR, merge, tag, release, branch deletion, or file mutation" in text
+
+
+
+def test_ns_exposes_terminal_finalize_shortcut():
+    text = Path("ns").read_text(encoding="utf-8")
+    assert "\"terminal-finalize\"" in text
+    assert "terminal_logging terminal-finalize" in text
