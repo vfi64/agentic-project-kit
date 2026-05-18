@@ -164,3 +164,35 @@ def test_work_order_execute_wrong_branch_writes_fail_log(tmp_path, monkeypatch):
     assert "Branch assertion failed" in log_text
     assert "### RESULT: FAIL ###" in log_text
     assert "### RESULT: PASS ###" not in log_text
+
+
+def test_work_order_run_blocks_when_governance_fails(tmp_path, monkeypatch):
+    from agentic_project_kit import work_orders
+
+    order = work_orders.WorkOrder(
+        work_order_id="blocked-governance",
+        title="Blocked governance",
+        safety="read_only",
+        expected_branch="feature/test-branch",
+        command="pytest && ruff check . && agentic-kit check-docs && agentic-kit doctor",
+        log_path="docs/reports/terminal/blocked_governance.log",
+        postconditions=(
+            "pytest passes",
+            "ruff passes",
+            "check-docs passes",
+            "doctor passes",
+            "log exists",
+            "no false pass",
+        ),
+        expected_outputs=("docs/reports/terminal/blocked_governance.log",),
+    )
+    monkeypatch.setattr(work_orders, "current_git_branch", lambda project_root=tmp_path: "feature/test-branch")
+    import agentic_project_kit.governance as governance
+
+    monkeypatch.setattr(governance, "governance_check", lambda: ["constitution broken"])
+    code = work_orders.run_work_order(order, tmp_path)
+    assert code == 98
+    log_text = (tmp_path / order.log_path).read_text(encoding="utf-8")
+    assert "governance: constitution broken" in log_text
+    assert "### RESULT: FAIL ###" in log_text
+
