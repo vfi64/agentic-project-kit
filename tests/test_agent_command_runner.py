@@ -95,3 +95,53 @@ def test_agent_run_executes_and_records_report(tmp_path, monkeypatch):
     assert acr.report_path("cmd-1").exists()
     assert "docs/reports/command_runs/cmd-1.md" in pushed_paths
     assert "docs/reports/terminal/cmd-1.log" in pushed_paths
+
+
+def test_pending_inbox_command_pair_requires_exactly_one_pair(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    inbox = acr.INBOX_DIR
+    inbox.mkdir(parents=True)
+    (inbox / "a.yaml").write_text("command_id: a" + chr(10), encoding="utf-8")
+    (inbox / "a.sh").write_text("printf a" + chr(10), encoding="utf-8")
+    assert acr.pending_inbox_command_pair()[0].name == "a.yaml"
+    (inbox / "b.yaml").write_text("command_id: b" + chr(10), encoding="utf-8")
+    (inbox / "b.sh").write_text("printf b" + chr(10), encoding="utf-8")
+    try:
+        acr.pending_inbox_command_pair()
+    except RuntimeError as exc:
+        assert "Multiple pending commands" in str(exc)
+    else:
+        raise AssertionError("expected RuntimeError")
+
+
+def test_prepare_current_from_inbox_copies_and_removes_pair(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    inbox = acr.INBOX_DIR
+    inbox.mkdir(parents=True)
+    (inbox / "cmd.yaml").write_text("command_id: cmd" + chr(10), encoding="utf-8")
+    (inbox / "cmd.sh").write_text("printf cmd" + chr(10), encoding="utf-8")
+    acr.prepare_current_from_inbox()
+    assert acr.CURRENT_YAML.exists()
+    assert acr.CURRENT_SCRIPT.exists()
+    acr.remove_current_files()
+    assert not acr.CURRENT_YAML.exists()
+    assert not acr.CURRENT_SCRIPT.exists()
+
+
+def test_agent_next_pulls_prepares_runs_and_cleans_current(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    inbox = acr.INBOX_DIR
+    inbox.mkdir(parents=True)
+    (inbox / "cmd.yaml").write_text("command_id: cmd" + chr(10) + "title: Cmd" + chr(10) + "safety_class: local-only" + chr(10), encoding="utf-8")
+    (inbox / "cmd.sh").write_text("printf cmd" + chr(10), encoding="utf-8")
+    monkeypatch.setattr(acr, "git_pull_ff_only", lambda: 0)
+    monkeypatch.setattr(acr, "agent_run", lambda: 0)
+    assert acr.agent_next() == 0
+    assert not acr.CURRENT_YAML.exists()
+    assert not acr.CURRENT_SCRIPT.exists()
+
+
+def test_agent_next_is_registered():
+    action = get_action("agent-next")
+    assert action.safety_class is SafetyClass.REMOTE_MUTATION
+    assert "FAIL_AMBIGUOUS_COMMANDS" in action.outcome_contract

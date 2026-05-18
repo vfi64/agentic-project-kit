@@ -26,6 +26,7 @@ from agentic_project_kit import terminal_logging
 COMMAND_DIR = Path(".agentic/commands")
 CURRENT_YAML = COMMAND_DIR / "current.yaml"
 CURRENT_SCRIPT = COMMAND_DIR / "current.sh"
+INBOX_DIR = COMMAND_DIR / "inbox"
 EXECUTED_JSONL = COMMAND_DIR / "executed.jsonl"
 REPORT_DIR = Path("docs/reports/command_runs")
 
@@ -42,6 +43,8 @@ OUTCOME_FAIL_INVALID_COMMAND = "FAIL_INVALID_COMMAND"
 OUTCOME_FAIL_SHELL_SYNTAX = "FAIL_SHELL_SYNTAX"
 OUTCOME_FAIL_COMMAND = "FAIL_COMMAND"
 OUTCOME_FAIL_UPLOAD = "FAIL_UPLOAD"
+OUTCOME_FAIL_AMBIGUOUS_COMMANDS = "FAIL_AMBIGUOUS_COMMANDS"
+OUTCOME_FAIL_PULL = "FAIL_PULL"
 
 
 @dataclasses.dataclass(frozen=True)
@@ -71,6 +74,40 @@ def _parse_simple_yaml(path: Path) -> dict[str, str]:
         data[key] = value
     return data
 
+
+
+def inbox_yaml_files() -> list[Path]:
+    if not INBOX_DIR.exists():
+        return []
+    return sorted(INBOX_DIR.glob("*.yaml"))
+
+
+def pending_inbox_command_pair() -> tuple[Path, Path]:
+    pairs: list[tuple[Path, Path]] = []
+    for yaml_path in inbox_yaml_files():
+        script_path = yaml_path.with_suffix(".sh")
+        if script_path.exists():
+            pairs.append((yaml_path, script_path))
+    if not pairs:
+        raise FileNotFoundError("No complete pending command pair in .agentic/commands/inbox")
+    if len(pairs) > 1:
+        names = ", ".join(path.name for path, _ in pairs)
+        raise RuntimeError("Multiple pending commands: " + names)
+    return pairs[0]
+
+
+def prepare_current_from_inbox() -> tuple[Path, Path]:
+    yaml_path, script_path = pending_inbox_command_pair()
+    COMMAND_DIR.mkdir(parents=True, exist_ok=True)
+    CURRENT_YAML.write_text(yaml_path.read_text(encoding="utf-8"), encoding="utf-8")
+    CURRENT_SCRIPT.write_text(script_path.read_text(encoding="utf-8"), encoding="utf-8")
+    return yaml_path, script_path
+
+
+def remove_current_files() -> None:
+    for item in (CURRENT_YAML, CURRENT_SCRIPT):
+        if item.exists():
+            item.unlink()
 
 def load_current_command() -> AgentCommand:
     if not CURRENT_YAML.exists() or not CURRENT_SCRIPT.exists():
@@ -220,7 +257,35 @@ def agent_run() -> int:
     return 0 if outcome == OUTCOME_PASS_EXECUTED else exit_code or 1
 
 
+
+def git_pull_ff_only() -> int:
+    branch = current_branch()
+    return subprocess.run(["git", "pull", "--ff-only", "origin", branch], check=False).returncode
+
+
+def agent_next() -> int:
+    pulled = git_pull_ff_only()
+    if pulled != 0:
+        print(OUTCOME_FAIL_PULL)
+        return pulled
+    try:
+        prepare_current_from_inbox()
+    except FileNotFoundError as exc:
+        print(OUTCOME_FAIL_NO_COMMAND)
+        print(str(exc))
+        return 1
+    except RuntimeError as exc:
+        print(OUTCOME_FAIL_AMBIGUOUS_COMMANDS)
+        print(str(exc))
+        return 1
+    try:
+        return agent_run()
+    finally:
+        remove_current_files()
+
 def main(argv: list[str] | None = None) -> int:
+    if argv and argv[0] == "next":
+        return agent_next()
     return agent_run()
 
 

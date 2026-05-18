@@ -99,6 +99,25 @@ ACTIONS: tuple[ActionMetadata, ...] = (
     ),
 
     ActionMetadata(
+        name="agent-next",
+        safety_class=SafetyClass.REMOTE_MUTATION,
+        mutation_scope="docs/reports/command_runs and docs/reports/terminal",
+        dry_run_supported=False,
+        outcome_contract=(
+            "PASS_EXECUTED",
+            "FAIL_NO_COMMAND",
+            "FAIL_AMBIGUOUS_COMMANDS",
+            "FAIL_PULL",
+            "FAIL_ALREADY_EXECUTED",
+            "FAIL_INVALID_COMMAND",
+            "FAIL_SHELL_SYNTAX",
+            "FAIL_COMMAND",
+            "FAIL_UPLOAD",
+        ),
+        summary="Pull and execute exactly one pending repo-backed agent command.",
+    ),
+
+    ActionMetadata(
         name="agent-run",
         safety_class=SafetyClass.REMOTE_MUTATION,
         mutation_scope="docs/reports/command_runs and docs/reports/terminal",

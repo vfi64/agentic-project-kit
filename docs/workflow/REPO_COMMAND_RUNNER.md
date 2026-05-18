@@ -33,3 +33,11 @@ Safety boundary:
 - Command files must stay small, auditable, and deterministic.
 - Mutating/release/merge workflows require explicit command metadata and later confirmation-token hardening.
 - Manual copy-and-paste terminal blocks are now a recovery path, not the default workflow.
+
+## Inbox mode
+
+`./ns agent-next` is the preferred command for routine no-copy handoff. It pulls the current branch, expects exactly one complete pending command pair under `.agentic/commands/inbox/`, copies that pair to the transient `current.yaml` and `current.sh` compatibility path, executes it through `agent-run`, then removes the transient current files.
+
+Pending command files use matching names, for example `.agentic/commands/inbox/example.yaml` and `.agentic/commands/inbox/example.sh`. Multiple complete pending commands are refused with `FAIL_AMBIGUOUS_COMMANDS`.
+
+Manual terminal copy-and-paste blocks remain recovery-only.

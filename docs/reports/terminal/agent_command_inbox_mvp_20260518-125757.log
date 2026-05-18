@@ -1,0 +1,144 @@
+AGENT COMMAND INBOX MVP FINAL VERIFY
+verify_log=docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log
+
+### BRANCH ###
+feature/agent-command-inbox
+
+### STATUS ###
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M ns
+ M src/agentic_project_kit/action_registry.py
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+?? docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log
+
+### COMMAND PRESENCE ###
+24:if [ "${1:-}" = "agent-next" ]; then
+102:        name="agent-next",
+266:def agent_next() -> int:
+37:## Inbox mode
+131:def test_agent_next_pulls_prepares_runs_and_cleans_current(tmp_path, monkeypatch):
+144:def test_agent_next_is_registered():
+
+### SHELL CHECK ###
+
+### TARGETED TESTS ###
+............................                                             [100%]
+28 passed in 0.07s
+
+### COCKPIT READINESS ###
+# Cockpit Readiness
+
+This report is read-only and derived from static action metadata.
+
+## Summary
+
+- Action count: 14
+- Ready for read-only cockpit: True
+- Missing outcomes: []
+- Read-only actions with mutation scope: []
+
+## Actions
+
+| Action | Safety class | Mutation scope | Dry-run | Outcomes |
+|---|---|---|---|---|
+| `dev` | read-only | none | True | PASS, FAIL |
+| `pr-cleanup` | read-only | none | True | PASS, FAIL |
+| `release-verify` | read-only | none | True | PASS, FAIL |
+| `clean-evidence` | local-only | working-tree-files | False | PASS, FAIL |
+| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+| `release-gate` | read-only | none | True | PASS, FAIL |
+| `finalize-guard` | read-only | none | True | PASS_ALREADY_ON_MAIN, PASS_NOOP_BRANCH, PASS_SUPERSEDED, PASS_NEEDS_PR, FAIL_CONFLICT_RELEVANT, FAIL_NEEDS_HUMAN_REVIEW |
+| `cockpit-readiness` | read-only | none | True | PASS, FAIL |
+| `agent-next` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_AMBIGUOUS_COMMANDS, FAIL_PULL, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD |
+| `agent-run` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD |
+| `run-logged` | local-only | docs/reports/terminal | False | PASS, FAIL, FAIL_NO_COMMAND, FAIL_MISSING_SEPARATOR |
+| `terminal-status` | read-only | none | True | PASS_LOG_READY, PASS_NO_LOG, FAIL_INVALID_POINTER |
+| `terminal-clean-check` | read-only | none | True | PASS_CLEAN, PASS_ONLY_TERMINAL_LOG_DIRTY, FAIL_DIRTY_NON_LOG_FILES |
+| `terminal-upload` | remote-mutation | docs/reports/terminal only | False | PASS_UPLOADED, PASS_ALREADY_UPLOADED, FAIL_NO_LOG, FAIL_DIRTY_NON_LOG_FILES, FAIL_PUSH_FAILED |
+
+### LOCAL GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+feature/agent-command-inbox
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M ns
+ M src/agentic_project_kit/action_registry.py
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+?? docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log
+
+### PYTEST ###
+........................................................................ [ 22%]
+........................................................................ [ 45%]
+........................................................................ [ 68%]
+........................................................................ [ 91%]
+..........................                                               [100%]
+314 passed in 1.76s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.23
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=45
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+feature/agent-command-inbox
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M ns
+ M src/agentic_project_kit/action_registry.py
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+?? docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log
+
+### RESULT: PASS ###
+
+### DIFF STAT ###
+ docs/STATUS.md                                  |  1 +
+ docs/handoff/CURRENT_HANDOFF.md                 |  1 +
+ docs/workflow/REPO_COMMAND_RUNNER.md            |  8 +++
+ ns                                              |  5 ++
+ src/agentic_project_kit/action_registry.py      | 19 ++++++++
+ src/agentic_project_kit/agent_command_runner.py | 65 +++++++++++++++++++++++++
+ tests/test_agent_command_runner.py              | 50 +++++++++++++++++++
+ 7 files changed, 149 insertions(+)
+
+### RESULT: PASS ###
