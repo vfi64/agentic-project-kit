@@ -1,5 +1,21 @@
 #!/usr/bin/env sh
 
+
+if [ "${1:-}" = "handoff-show" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff show
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-check" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff check
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-prompt" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff prompt
+  exit $?
+fi
+
 if [ "${1:-}" = "run-logged" ]; then
   shift
   PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging run-logged "$@"

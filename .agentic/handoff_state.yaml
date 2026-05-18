@@ -1,0 +1,88 @@
+schema_version: 1
+updated:
+  date: "2026-05-18"
+  reason: "Persistent handoff state MVP after v0.3.24 closeout and no-copy policy"
+  source: "repo-documented planning and logged implementation slice"
+repo:
+  name: "agentic-project-kit"
+  local_path: "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit"
+  remote: "github.com:vfi64/agentic-project-kit"
+  default_branch: "main"
+safe_state:
+  branch: "main"
+  commit: "40291a1"
+  commit_subject: "Add no-copy terminal evidence policy (#343)"
+  working_tree_expected_clean: true
+release:
+  current_version: "0.3.24"
+  previous_version: "0.3.23"
+  tag: "v0.3.24"
+  github_release_exists: true
+  zenodo_concept_doi: "10.5281/zenodo.20101359"
+  zenodo_version_doi: "10.5281/zenodo.20270197"
+  post_release_check: "PASS"
+open_items:
+  prs: []
+completed_since_previous_handoff:
+  - "PR #341 recorded v0.3.24 DOI metadata."
+  - "PR #342 finalized v0.3.24 DOI metadata state and recorded persistent handoff planning."
+  - "PR #343 added the active no-copy terminal evidence policy."
+current_capabilities:
+  ns_actions:
+    - "agent-next"
+    - "agent-run"
+    - "run-logged"
+    - "terminal-clean-check"
+    - "terminal-upload"
+    - "release-verify"
+    - "handoff-show"
+    - "handoff-check"
+    - "handoff-prompt"
+  artifact_dirs:
+    terminal_logs: "docs/reports/terminal"
+    command_runs: "docs/reports/command_runs"
+policies:
+  no_copy_terminal_policy: ".agentic/no_copy_terminal_policy.yaml"
+rules:
+  - id: "no-copy-terminal-evidence"
+    status: "active"
+    text: "Routine PASS handoffs must be backed by repo evidence; manual terminal paste is only for failure or unavailable evidence."
+  - id: "no-unconditional-pass"
+    status: "active"
+    text: "Do not print PASS after a failed required command."
+  - id: "curate-chat-end-lessons"
+    status: "active"
+    text: "Chat-end lessons must be curated into YAML and generated prompts without redundant, contradictory, or obsolete rules."
+  - id: "manual-copy-terminal-by-default"
+    status: "superseded"
+    text: "Manual copy-and-paste terminal output was formerly used for routine handoff."
+    superseded_by: "no-copy-terminal-evidence"
+recent_failure_patterns:
+  - id: "unconditional-pass-after-failure"
+    prevention: "Use set -e or explicit status handling and require log-backed PASS."
+  - id: "overwriting-required-state-docs"
+    prevention: "Patch state docs minimally or restore required sections before appending updates."
+  - id: "missing-project-venv-tooling"
+    prevention: "Prefer project-local .venv commands over global python, ruff, or agentic-kit."
+next_allowed_tasks:
+  - id: "merge-persistent-handoff-state"
+    title: "Merge the read-only persistent handoff state MVP."
+    priority: 1
+  - id: "parametrized-git-release-actions"
+    title: "Add checked parameterized Git, PR, release, DOI, and finalize actions."
+    priority: 2
+blocked_until_closeout:
+  - "GUI mutation controls"
+  - "new release cycle automation"
+first_instruction: "Work first on merging the read-only persistent handoff state MVP. Keep the next implementation read-only and defer later mutation automation until the required state and action layers exist."
+handoff_maintenance:
+  principle: "curated-not-accumulated"
+  update_required_at_chat_end: true
+  no_redundant_rules: true
+  no_contradictory_rules: true
+  remove_obsolete_rules_when_system_changes: true
+  active_statuses:
+    - "active"
+  non_binding_statuses:
+    - "superseded"
+    - "historical"

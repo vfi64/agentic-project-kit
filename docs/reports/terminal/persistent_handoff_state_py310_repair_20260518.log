@@ -1,0 +1,110 @@
+### PRECHECK ###
+Already on 'feature/persistent-handoff-state'
+M	ns
+M	src/agentic_project_kit/cli.py
+Your branch is up to date with 'origin/feature/persistent-handoff-state'.
+ M ns
+ M src/agentic_project_kit/cli.py
+?? .agentic/handoff_state.yaml
+?? docs/workflow/HANDOFF_STATE.md
+?? src/agentic_project_kit/cli_commands/handoff.py
+?? src/agentic_project_kit/handoff_prompt.py
+?? src/agentic_project_kit/handoff_state.py
+?? tests/test_handoff_prompt.py
+?? tests/test_handoff_state.py
+
+### REPAIR PYTHON FILES ###
+
+### HANDOFF COMMAND SMOKE ###
+Persistent handoff state check passed
+Repo: agentic-project-kit
+Path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.3.24
+Safe state: main @ 40291a1
+Next: Work first on merging the read-only persistent handoff state MVP. Keep the next implementation read-only and defer later mutation automation until the required state and action layers exist.
+# Übergabeprompt
+
+## Repo
+
+Local path: `/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit`
+Remote: `github.com:vfi64/agentic-project-kit`
+Default branch: `main`
+
+## Sicherer Stand
+
+Branch: `main`
+Commit: `40291a1`
+Subject: Add no-copy terminal evidence policy (#343)
+
+## Release
+
+Current version: `0.3.24`
+Tag: `v0.3.24`
+Zenodo version DOI: `10.5281/zenodo.20270197`
+Post-release check: `PASS`
+
+## Offene Punkte
+
+- Keine offenen PRs im handoff_state.
+
+## Abgeschlossen seit letzter Übergabe
+
+- PR #341 recorded v0.3.24 DOI metadata.
+- PR #342 finalized v0.3.24 DOI metadata state and recorded persistent handoff planning.
+- PR #343 added the active no-copy terminal evidence policy.
+
+## Aktive Regeln
+
+- `no-copy-terminal-evidence`: Routine PASS handoffs must be backed by repo evidence; manual terminal paste is only for failure or unavailable evidence.
+- `no-unconditional-pass`: Do not print PASS after a failed required command.
+- `curate-chat-end-lessons`: Chat-end lessons must be curated into YAML and generated prompts without redundant, contradictory, or obsolete rules.
+
+## Nächste erlaubte Aufgaben
+
+- 1. `merge-persistent-handoff-state` — Merge the read-only persistent handoff state MVP.
+- 2. `parametrized-git-release-actions` — Add checked parameterized Git, PR, release, DOI, and finalize actions.
+
+## Gesperrte Aufgaben
+
+- GUI mutation controls
+- new release cycle automation
+
+## Erste Arbeitsanweisung
+
+Work first on merging the read-only persistent handoff state MVP. Keep the next implementation read-only and defer later mutation automation until the required state and action layers exist.
+
+
+### LOCAL GATES ###
+........................................................................ [ 22%]
+........................................................................ [ 44%]
+........................................................................ [ 66%]
+........................................................................ [ 88%]
+.....................................                                    [100%]
+325 passed in 1.89s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.24
+
+Overall: PASS
+
+### DIFF STAT ###
+ ns                             | 16 ++++++++++++++++
+ src/agentic_project_kit/cli.py |  2 ++
+ 2 files changed, 18 insertions(+)
+
+### INNER RESULT PASS ###
