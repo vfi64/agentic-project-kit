@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import subprocess
 from typing import Any
 
 import yaml
@@ -98,3 +99,42 @@ def summarize_handoff_state(data: dict[str, Any]) -> str:
         f"Next: {data.get('first_instruction', '<none>')}",
     ]
     return "\n".join(lines)
+
+
+def current_git_safe_state() -> dict[str, str]:
+    commit = subprocess.check_output([
+        "git",
+        "rev-parse",
+        "--short",
+        "HEAD",
+    ], text=True).strip()
+    subject = subprocess.check_output([
+        "git",
+        "log",
+        "-1",
+        "--pretty=%s",
+    ], text=True).strip()
+    return {"commit": commit, "commit_subject": subject}
+
+def refresh_handoff_safe_state(
+    data: dict[str, Any],
+    commit: str,
+    commit_subject: str,
+    reason: str = "Refresh handoff state safe_state from current git HEAD",
+) -> dict[str, Any]:
+    refreshed = dict(data)
+    safe_state = dict(refreshed.get("safe_state", {}))
+    safe_state["branch"] = "main"
+    safe_state["commit"] = commit
+    safe_state["commit_subject"] = commit_subject
+    refreshed["safe_state"] = safe_state
+    refreshed["updated"] = {
+        "date": "2026-05-18",
+        "reason": reason,
+        "source": "agentic-kit handoff refresh",
+    }
+    return refreshed
+
+def save_handoff_state(data: dict[str, Any], path: str | Path = DEFAULT_HANDOFF_STATE_PATH) -> None:
+    state_path = Path(path)
+    state_path.write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True), encoding="utf-8")
