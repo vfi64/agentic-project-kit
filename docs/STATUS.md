@@ -266,3 +266,9 @@ Dependabot cleanup after v0.3.23 is complete. PR #327 updated the GitHub release
 
 - Planned and now enforced as YAML policy: routine PASS handoff must be backed by committed/pushed terminal or command-run evidence, so d does not require copy-and-paste.
 - Manual terminal paste is reserved for FAIL, broken logging, process abort, terminal loss, kill -9, or unavailable pushed evidence.
+
+## Latest completed implementation slice: terminal log finalization guard
+
+PR #375 added the terminal log finalization guard. Long terminal runs should tee into a temporary log outside `docs/reports/terminal/`, then finalize the completed log with `./ns terminal-finalize <tmp-log> <name>` before staging, committing, and pushing. Finalization rejects active repo-log sources and logs without an explicit PASS, FAIL, or PENDING result marker.
+
+This closes the recurring standard error where a repo-tracked terminal log was committed while the running process was still appending to it, leaving a dirty tracked log that could block checkout, merge, or PR closeout. The binding project principle is deterministic quality before speed: repeated workflow failures must be fixed with helpers, guards, tests, and documentation rather than manual discipline.

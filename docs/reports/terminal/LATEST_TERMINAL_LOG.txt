@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-182435_terminal-log-finalization-guard.log
+docs/reports/terminal/20260518-183055_refresh-state-after-terminal-log-finalization-guard.log

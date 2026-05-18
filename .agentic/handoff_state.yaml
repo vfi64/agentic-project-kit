@@ -56,6 +56,9 @@ current_capabilities:
 policies:
   no_copy_terminal_policy: .agentic/no_copy_terminal_policy.yaml
 rules:
+- id: deterministic-quality-before-speed
+  status: active
+  text: Prefer technically robust, testable, repeatable solutions over fast workarounds. Repeated workflow failures are product defects to fix with helpers, guards, tests, and documentation.
 - id: no-copy-terminal-evidence
   status: active
   text: Routine PASS handoffs must be backed by repo evidence; manual terminal paste
@@ -76,6 +79,8 @@ rules:
   text: Manual copy-and-paste terminal output was formerly used for routine handoff.
   superseded_by: no-copy-terminal-evidence
 recent_failure_patterns:
+- id: repo-log-written-while-committing
+  prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo terminal log while the current process is still writing to it.
 - id: unconditional-pass-after-failure
   prevention: Use set -e or explicit status handling and require log-backed PASS.
 - id: overwriting-required-state-docs
