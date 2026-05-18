@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: d8aa032
-  commit_subject: Enforce work order constitutional contract (#356)
+  commit: b95e8d7
+  commit_subject: Add read-only work order templates (#358)
   semantics: last_substantive_work_state
   administrative_refresh_prs:
   - 347
