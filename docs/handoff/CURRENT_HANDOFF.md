@@ -293,3 +293,8 @@ Post-release Dependabot cleanup is complete. PR #327 and PR #328 resolved the re
 - Next safe feature slice after this finalize PR: `feature/persistent-handoff-state`.
 - That slice must add `.agentic/handoff_state.yaml`, read-only handoff commands, and rule lifecycle hygiene with `active`, `superseded`, and `historical` statuses.
 - Chat-end lessons must be folded into the YAML state and generated handoff prompt only after curation; obsolete or duplicate rules must be removed or marked superseded/historical.
+
+## No-Copy Terminal Evidence Update
+
+- Before persistent handoff state, add the no-copy terminal evidence policy so future d responses rely on repo-backed logs rather than pasted terminal output.
+- The next YAML handoff state must reference .agentic/no_copy_terminal_policy.yaml and preserve obsolete-rule cleanup.

@@ -261,3 +261,8 @@ Dependabot cleanup after v0.3.23 is complete. PR #327 updated the GitHub release
 - Local validation after the DOI metadata merge: `319 passed`, ruff PASS, `agentic-kit check-docs` PASS, `agentic-kit doctor` PASS.
 - The next planned slice is `feature/persistent-handoff-state` before parameterized Git/PR/release actions and before further GUI/Cockpit mutation controls.
 - The persistent handoff state must curate chat-end lessons without accumulating redundant, contradictory, or obsolete rules.
+
+## No-Copy Terminal Evidence Policy
+
+- Planned and now enforced as YAML policy: routine PASS handoff must be backed by committed/pushed terminal or command-run evidence, so d does not require copy-and-paste.
+- Manual terminal paste is reserved for FAIL, broken logging, process abort, terminal loss, kill -9, or unavailable pushed evidence.
