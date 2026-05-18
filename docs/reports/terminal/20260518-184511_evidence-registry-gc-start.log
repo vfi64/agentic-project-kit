@@ -1,0 +1,1027 @@
+START EVIDENCE REGISTRY AND GC DRY-RUN SLICE -- NO DELETE, NO EXIT
+
+
+### PRECHECK ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'feature/evidence-registry-gc-dry-run'
+feature/evidence-registry-gc-dry-run
+
+### EXISTING EVIDENCE INVENTORY ###
+
+-- docs/reports top-level --
+docs/reports/command_runs/agent-next-smoke-001.md
+docs/reports/command_runs/agent-next-smoke-002.md
+docs/reports/command_runs/finalize-after-agent-next-001.md
+docs/reports/command_runs/finalize-after-repo-command-runner-001.md
+docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+docs/reports/didactic_guidance_diff.md
+docs/reports/didactic_guidance_inspection.md
+docs/reports/evidence_upload_shortcuts_mvp_contract.md
+docs/reports/evidence_upload_shortcuts_mvp_diff.md
+docs/reports/GUI_COCKPIT_ACTION_READINESS_INVENTORY.md
+docs/reports/idempotent_finalization_guard_inspection.md
+docs/reports/pattern_advisor_mvp_contract.md
+docs/reports/post_didactic_guidance_state_diff.md
+docs/reports/report_schema_docs_slice_20260512.md
+docs/reports/report_schema_e2e_and_collab_rules_20260512.md
+docs/reports/status_roadmap_summary_after_pr105_20260512.md
+docs/reports/terminal/2026-05-18-environment-bootstrap-drift-state.log
+docs/reports/terminal/20260518-090016_smoke-pass.log
+docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log
+docs/reports/terminal/20260518-090513_open-terminal-log-wrapper-pr-fixed.log
+docs/reports/terminal/20260518-090803_start-terminal-log-branch-safety.log
+docs/reports/terminal/20260518-092057_intentional-fail-upload-test.log
+docs/reports/terminal/20260518-124633_finalize-after-repo-command-runner-001.log
+docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/20260518-182435_terminal-log-finalization-guard.log
+docs/reports/terminal/20260518-183055_refresh-state-after-terminal-log-finalization-guard.log
+docs/reports/terminal/20260518-183223_pr376-closeout.log
+docs/reports/terminal/20260518-183936_no-interactive-exit-terminal-rule.log
+docs/reports/terminal/20260518-184027_no-interactive-exit-pr-closeout.log
+docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log
+docs/reports/terminal/agent_workflow_hardening_20260518-131856.log
+docs/reports/terminal/finalize_after_terminal_clean_check_20260518-121906.log
+docs/reports/terminal/finalize_v0.3.24_doi_state_20260518.log
+docs/reports/terminal/governance_check_mvp_20260518.log
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log
+docs/reports/terminal/handoff_commit_semantics_patch_20260518.log
+docs/reports/terminal/handoff_refresh_after_pr346_20260518.log
+docs/reports/terminal/handoff_refresh_after_pr348_20260518.log
+docs/reports/terminal/handoff_refresh_path_argument_repair_20260518.log
+docs/reports/terminal/handoff_semantics_patch_points_20260518.log
+docs/reports/terminal/handoff_state_commit_semantics_start_20260518.log
+docs/reports/terminal/handoff_update_automation_inspection_20260518.log
+docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+docs/reports/terminal/no_copy_terminal_evidence_policy_20260518.log
+docs/reports/terminal/parameterized_action_specs_mvp_20260518.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log
+docs/reports/terminal/persistent_handoff_state_inspection_20260518.log
+docs/reports/terminal/persistent_handoff_state_py310_repair_20260518.log
+docs/reports/terminal/pr_closeout_alias_module_registration_repair_20260518.log
+docs/reports/terminal/pr_closeout_gate_ruff_repair_20260518.log
+docs/reports/terminal/pr_closeout_idempotency_inspection_20260518.log
+docs/reports/terminal/pr_closeout_pending_state_inspection_20260518.log
+docs/reports/terminal/read_only_work_order_templates_20260518.log
+docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log
+docs/reports/terminal/record_v0.3.25_doi_20260518.log
+docs/reports/terminal/refresh_handoff_after_pr_closeout_alias_20260518.log
+docs/reports/terminal/refresh_handoff_after_v0.3.25_doi_20260518.log
+docs/reports/terminal/refresh_handoff_after_work_order_prepare_20260518.log
+docs/reports/terminal/refresh_handoff_state_after_pr356_20260518.log
+docs/reports/terminal/refresh_handoff_state_after_pr358_20260518.log
+docs/reports/terminal/refresh_handoff_state_after_pr360_20260518.log
+docs/reports/terminal/refresh_handoff_state_after_pr363_20260518.log
+docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log
+docs/reports/terminal/release_prep_v0.3.25_20260518.log
+docs/reports/terminal/release_verify_v0.3.25_20260518.log
+docs/reports/terminal/repair_finalize_v0.3.24_doi_state_20260518.log
+docs/reports/terminal/repair_handoff_state_after_pr344_20260518.log
+docs/reports/terminal/repair_pr358_work_order_check_test_expectation_20260518.log
+docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log
+docs/reports/terminal/repo_command_runner_mvp_20260518-123924.log
+docs/reports/terminal/terminal_clean_check_finalize_20260518-091938.log
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log
+docs/reports/terminal/terminal_log_wrapper_impl_20260518-090015.log
+docs/reports/terminal/work_order_execution_hardening_remote_patch_20260518.log
+docs/reports/terminal/work_order_governance_gate_test_repair_20260518.log
+docs/reports/terminal/work_order_patch_points_20260518.log
+docs/reports/terminal/work_order_prepare_model_cli_repair_20260518.log
+
+-- docs/reports/terminal --
+docs/reports/terminal/2026-05-18-environment-bootstrap-drift-state.log
+docs/reports/terminal/20260518-090016_smoke-pass.log
+docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log
+docs/reports/terminal/20260518-090513_open-terminal-log-wrapper-pr-fixed.log
+docs/reports/terminal/20260518-090803_start-terminal-log-branch-safety.log
+docs/reports/terminal/20260518-092057_intentional-fail-upload-test.log
+docs/reports/terminal/20260518-124633_finalize-after-repo-command-runner-001.log
+docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/20260518-182435_terminal-log-finalization-guard.log
+docs/reports/terminal/20260518-183055_refresh-state-after-terminal-log-finalization-guard.log
+docs/reports/terminal/20260518-183223_pr376-closeout.log
+docs/reports/terminal/20260518-183936_no-interactive-exit-terminal-rule.log
+docs/reports/terminal/20260518-184027_no-interactive-exit-pr-closeout.log
+docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log
+docs/reports/terminal/agent_workflow_hardening_20260518-131856.log
+docs/reports/terminal/finalize_after_terminal_clean_check_20260518-121906.log
+docs/reports/terminal/finalize_v0.3.24_doi_state_20260518.log
+docs/reports/terminal/governance_check_mvp_20260518.log
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log
+docs/reports/terminal/handoff_commit_semantics_patch_20260518.log
+docs/reports/terminal/handoff_refresh_after_pr346_20260518.log
+docs/reports/terminal/handoff_refresh_after_pr348_20260518.log
+docs/reports/terminal/handoff_refresh_path_argument_repair_20260518.log
+docs/reports/terminal/handoff_semantics_patch_points_20260518.log
+docs/reports/terminal/handoff_state_commit_semantics_start_20260518.log
+docs/reports/terminal/handoff_update_automation_inspection_20260518.log
+docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+docs/reports/terminal/no_copy_terminal_evidence_policy_20260518.log
+docs/reports/terminal/parameterized_action_specs_mvp_20260518.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log
+docs/reports/terminal/persistent_handoff_state_inspection_20260518.log
+docs/reports/terminal/persistent_handoff_state_py310_repair_20260518.log
+docs/reports/terminal/pr_closeout_alias_module_registration_repair_20260518.log
+docs/reports/terminal/pr_closeout_gate_ruff_repair_20260518.log
+docs/reports/terminal/pr_closeout_idempotency_inspection_20260518.log
+docs/reports/terminal/pr_closeout_pending_state_inspection_20260518.log
+docs/reports/terminal/read_only_work_order_templates_20260518.log
+docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log
+docs/reports/terminal/record_v0.3.25_doi_20260518.log
+docs/reports/terminal/refresh_handoff_after_pr_closeout_alias_20260518.log
+docs/reports/terminal/refresh_handoff_after_v0.3.25_doi_20260518.log
+docs/reports/terminal/refresh_handoff_after_work_order_prepare_20260518.log
+docs/reports/terminal/refresh_handoff_state_after_pr356_20260518.log
+docs/reports/terminal/refresh_handoff_state_after_pr358_20260518.log
+docs/reports/terminal/refresh_handoff_state_after_pr360_20260518.log
+docs/reports/terminal/refresh_handoff_state_after_pr363_20260518.log
+docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log
+docs/reports/terminal/release_prep_v0.3.25_20260518.log
+docs/reports/terminal/release_verify_v0.3.25_20260518.log
+docs/reports/terminal/repair_finalize_v0.3.24_doi_state_20260518.log
+docs/reports/terminal/repair_handoff_state_after_pr344_20260518.log
+docs/reports/terminal/repair_pr358_work_order_check_test_expectation_20260518.log
+docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log
+docs/reports/terminal/repo_command_runner_mvp_20260518-123924.log
+docs/reports/terminal/terminal_clean_check_finalize_20260518-091938.log
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log
+docs/reports/terminal/terminal_log_wrapper_impl_20260518-090015.log
+docs/reports/terminal/work_order_execution_hardening_remote_patch_20260518.log
+docs/reports/terminal/work_order_governance_gate_test_repair_20260518.log
+docs/reports/terminal/work_order_patch_points_20260518.log
+docs/reports/terminal/work_order_prepare_model_cli_repair_20260518.log
+
+-- command run reports --
+docs/reports/command_runs/agent-next-smoke-001.md
+docs/reports/command_runs/agent-next-smoke-002.md
+docs/reports/command_runs/finalize-after-agent-next-001.md
+docs/reports/command_runs/finalize-after-repo-command-runner-001.md
+
+-- tmp agent/evidence paths, if present --
+tmp/__pycache__/prepare_v030_release.cpython-314.pyc
+tmp/__pycache__/write_workflow_cycle_files.cpython-314.pyc
+tmp/.DS_Store
+tmp/add_idempotent_finalization_guard_tests.py
+tmp/add_no_direct_main_commit_guard_test.py
+tmp/add_ns_slice_runner_tests.py
+tmp/add_output_repair_cli_tests.py
+tmp/add_pr_create_guard_tests.py
+tmp/add_safe_remove_diagnostic_test.py
+tmp/add_terminal_log_rule_notes.py
+tmp/agent_next_registry_block.txt
+tmp/apply_pr_hygiene.py
+tmp/apply_state_coverage_refresh.py
+tmp/classify_ns_commands.py
+tmp/cleanup_post_current_work_isolation_state.py
+tmp/cleanup_post_current_work_isolation_wording.py
+tmp/doc-mesh-repair-plan.json
+tmp/doc-mesh-repair-result.json
+tmp/doc-mesh-report.json
+tmp/document_next_ns_slice_runner.py
+tmp/final_repair_release_0312.py
+tmp/finalize_cockpit_readiness.py
+tmp/finalize_dependabot_cleanup_state.py
+tmp/finalize_evidence_cleanup_guard.py
+tmp/finalize_finalize_guard_outcomes_state.py
+tmp/finalize_idempotent_finalization_guard_command.py
+tmp/finalize_idempotent_pr_create_guard.py
+tmp/finalize_no_direct_main_commit_guard.py
+tmp/finalize_ns_slice_runner_state.py
+tmp/finalize_ns_up_idempotence_state.py
+tmp/finalize_ns_up_noop_idempotence.py
+tmp/finalize_pr_hygiene_state_docs.py
+tmp/finalize_release_cycle_hardening_state.py
+tmp/finalize_release_cycle_hardening.py
+tmp/finalize_safe_diagnostic_cleanup_guard.py
+tmp/finalize_safe_patch_script_helper_state.py
+tmp/finalize_terminal_clean_check_state.py
+tmp/finalize_v0320_state.py
+tmp/finalize_v0321_doi_state.py
+tmp/finalize_v0321_state.py
+tmp/finalize_v0322_doi_state.py
+tmp/finalize_v0323_doi_state.py
+tmp/finalize_v0324_handoff_planning.py
+tmp/fix_handoff_semantics_reason_20260518.log
+tmp/fix_handoff_semantics_reason.py
+tmp/fix_literal_newlines_after_agent_run.py
+tmp/fix_planning_doc_scaffold.py
+tmp/fix_pr_hygiene_newlines.py
+tmp/fix_repair_schema_constant_stable.py
+tmp/fix_v0314_candidate_wording.py
+tmp/governance_check_mvp_20260518.log
+tmp/governance_check_mvp_run.sh
+tmp/gui_cockpit_inventory.py
+tmp/handoff_commit_semantics_patch_20260518.log
+tmp/handoff_refresh_after_pr346_20260518.log
+tmp/handoff_refresh_after_pr346_run.sh
+tmp/handoff_refresh_after_pr348_20260518.log
+tmp/handoff_refresh_after_pr348_run.sh
+tmp/handoff_refresh_path_argument_repair_20260518.log
+tmp/handoff_refresh_path_argument_repair_run.sh
+tmp/handoff_semantics_patch_points_20260518.log
+tmp/handoff_state_commit_semantics_start_20260518.log
+tmp/handoff_state_commit_semantics_start_run.sh
+tmp/handoff_update_automation_inspection_20260518.log
+tmp/handoff_update_automation_inspection_run.sh
+tmp/handoff_update_automation_mvp_20260518.log
+tmp/handoff_update_automation_mvp_run.sh
+tmp/harden_ns_up_pr_completion.py
+tmp/harden_repair_report_schema.py
+tmp/harden_repair_schema_safe.py
+tmp/harden_work_item_restore.py
+tmp/implement_ns_release_shortcuts.py
+tmp/implement_ns_up_pr_completion.py
+tmp/implement_planning_doc_scaffold.py
+tmp/insert_agent_next_registry.py
+tmp/inspect_validation_report_cli.txt
+tmp/inspect_zenodo_concept_v0211.py
+tmp/inspect_zenodo_v0211.py
+tmp/line_patch_ns_terminal_clean_check.py
+tmp/line_patch_registry_tests_clean_check.py
+tmp/line_patch_terminal_clean_check.py
+tmp/merge_handoff_refresh_after_work_order_prepare_20260518.log
+tmp/no_copy_terminal_evidence_policy_20260518.log
+tmp/no_copy_terminal_evidence_policy_run.sh
+tmp/ns_slice_runner_smoke.plan
+tmp/ns.before.go-guard
+tmp/ns.before.no-copy-dev
+tmp/parameterized_action_specs_mvp_20260518.log
+tmp/parameterized_action_specs_mvp_run.sh
+tmp/parametrized_git_release_actions_inspection_20260518.log
+tmp/parametrized_git_release_actions_inspection_run.sh
+tmp/patch_action_gh_release_v3.py
+tmp/patch_action_registry_cockpit_command.py
+tmp/patch_action_registry_terminal_logging.py
+tmp/patch_agent_command_inbox.py
+tmp/patch_agent_inbox_core.py
+tmp/patch_agent_next_cli_dispatch_boundary.py
+tmp/patch_agent_next_cli_dispatch.py
+tmp/patch_agent_next_consumed_paths.py
+tmp/patch_agent_next_consumption_robust.py
+tmp/patch_agent_next_consumption_tests_robust.py
+tmp/patch_agent_next_consumption.py
+tmp/patch_agent_next_postconditions.py
+tmp/patch_agent_next_registry.py
+tmp/patch_agent_next_upload_consumed_robust.py
+tmp/patch_agent_run_success_test.py
+tmp/patch_agent_runner_current_branch.py
+tmp/patch_cockpit_action_layer.py
+tmp/patch_cockpit_tests.py
+tmp/patch_collab_rules.py
+tmp/patch_current_workflow_output_rule.py
+tmp/patch_doc_terminal_clean_check_robust.py
+tmp/patch_document_output_repair_cli.py
+tmp/patch_finalize_ns_up_state.py
+tmp/patch_handoff_commit_semantics.py
+tmp/patch_init_version_0_3_21.py
+tmp/patch_ns_clean_evidence_wiring_safe.py
+tmp/patch_ns_clean_evidence_wiring.py
+tmp/patch_ns_cockpit_readiness.py
+tmp/patch_ns_commit_guard_wiring.py
+tmp/patch_ns_early_cockpit_readiness.py
+tmp/patch_ns_finalize_guard.py
+tmp/patch_ns_go_guard.py
+tmp/patch_ns_menu_cockpit.py
+tmp/patch_ns_pr_cleanup_wiring.py
+tmp/patch_ns_release_shortcuts.py
+tmp/patch_ns_release_tests.py
+tmp/patch_ns_release_verify_tests.py
+tmp/patch_ns_release_verify.py
+tmp/patch_ns_release_wiring.py
+tmp/patch_ns_slice_runner.py
+tmp/patch_ns_terminal_logging.py
+tmp/patch_ns_up_dirty_guidance.py
+tmp/patch_ns_up_merged_guard.py
+tmp/patch_ns_up_noop_branch_idempotence.py
+tmp/patch_ns_up_noop_branch_test.py
+tmp/patch_ns_up_pending_checks_test.py
+tmp/patch_ns_up_pending_checks.py
+tmp/patch_ns_up_tests.py
+tmp/patch_ns_up_wiring_linebased.py
+tmp/patch_ns_up_wiring.py
+tmp/patch_output_repair_cli_safe.py
+tmp/patch_post_current_work_isolation_state.py
+tmp/patch_pr_cleanup_tests.py
+tmp/patch_pr_closeout_alias_root_registry.py
+tmp/patch_registry_terminal_clean_check_robust.py
+tmp/patch_release_0_3_21.py
+tmp/patch_release_cycle_tests.py
+tmp/patch_release_publish_tests.py
+tmp/patch_report_schema_docs.py
+tmp/patch_terminal_clean_check.py
+tmp/patch_tests_terminal_clean_check_robust.py
+tmp/patch_upload_artifact_v7.py
+tmp/patch_v0211_release_metadata.py
+tmp/patch_v0211_zenodo_doi.py
+tmp/patch_v0311_doi_metadata.py
+tmp/patch_v0320_release_metadata.py
+tmp/patch_v0322_release_metadata.py
+tmp/patch_v0323_doi_metadata.py
+tmp/patch_validate_report_schema_option.py
+tmp/patch_work_item_restore.py
+tmp/patch_workflow_run_restore.py
+tmp/persistent_handoff_state_inspection_20260518.log
+tmp/persistent_handoff_state_inspection_run.sh
+tmp/persistent_handoff_state_mvp_20260518.log
+tmp/persistent_handoff_state_mvp_repair_20260518.log
+tmp/persistent_handoff_state_mvp_repair_run.sh
+tmp/persistent_handoff_state_mvp_run.sh
+tmp/persistent_handoff_state_py310_repair_20260518.log
+tmp/persistent_handoff_state_py310_repair_run.sh
+tmp/pr_closeout_alias_20260518.log
+tmp/pr_closeout_alias_module_registration_repair_20260518.log
+tmp/pr_closeout_alias_module_registration_repair_run.sh
+tmp/pr_closeout_alias_pr_state.json
+tmp/pr_closeout_alias_registration_order_repair_20260518.log
+tmp/pr_closeout_alias_registration_order_repair_run.sh
+tmp/pr_closeout_alias_repair_20260518.log
+tmp/pr_closeout_alias_repair_run.sh
+tmp/pr_closeout_alias_root_registry_repair_20260518.log
+tmp/pr_closeout_alias_root_registry_repair_run.sh
+tmp/pr_closeout_alias_run.sh
+tmp/pr_closeout_alias_smoke_json_repair_20260518.log
+tmp/pr_closeout_alias_smoke_json_repair_run.sh
+tmp/pr_closeout_gate_mvp_20260518.log
+tmp/pr_closeout_gate_mvp_run.sh
+tmp/pr_closeout_gate_ruff_repair_20260518.log
+tmp/pr_closeout_gate_ruff_repair_run.sh
+tmp/pr_closeout_idempotency_inspection_20260518.log
+tmp/pr_closeout_pending_state_inspection_20260518.log
+tmp/pr_closeout_ready_after_merge.json
+tmp/pr_closeout_ready_smoke.json
+tmp/pr_v0.3.25_doi_metadata.json
+tmp/pr298.diff
+tmp/prepare_release_0312.py
+tmp/prepare_v030_release.py
+tmp/prepare_v0311_release.py
+tmp/prepare_v0314_metadata.py
+tmp/read_only_work_order_templates_20260518.log
+tmp/rebuild_ns_up_upload_fail.py
+tmp/record_0312_doi_metadata.py
+tmp/record_v0.3.25_doi_20260518.log
+tmp/record_v0.3.25_doi_patch.py
+tmp/record_v0.3.25_doi_run.sh
+tmp/record_v0.3.25_doi.py
+tmp/record_v0320_doi.py
+tmp/record_v0321_doi.py
+tmp/record_v0322_doi.py
+tmp/record_v0324_doi.py
+tmp/recreate_pr298_docs.py
+tmp/refresh_handoff_after_pr_closeout_alias_20260518.log
+tmp/refresh_handoff_after_pr_closeout_alias_run.sh
+tmp/refresh_handoff_after_v0.3.25_doi_20260518.log
+tmp/refresh_handoff_after_v0.3.25_doi_run.sh
+tmp/refresh_handoff_after_work_order_prepare_20260518.log
+tmp/refresh_handoff_state_after_pr356_20260518.log
+tmp/refresh_handoff_state_after_pr356_run.sh
+tmp/refresh_handoff_state_after_pr358_20260518.log
+tmp/refresh_handoff_state_after_pr358_run.sh
+tmp/refresh_handoff_state_after_pr360_20260518.log
+tmp/refresh_handoff_state_after_pr360_run.sh
+tmp/refresh_handoff_state_after_pr363_20260518.log
+tmp/refresh_handoff_state_after_pr363_run.sh
+tmp/register_planning_doc_scaffold_work.py
+tmp/release_prep_v0.3.25_20260518.log
+tmp/release_prep_v0.3.25_run.sh
+tmp/release_verify_v0.3.22.txt
+tmp/release_verify_v0.3.25_20260518.log
+tmp/release_verify_v0.3.25_run.sh
+tmp/release-v0.3.21-body.txt
+tmp/release-v0.3.21-doi.txt
+tmp/release-v0.3.21-view.json
+tmp/remove_old_version_pattern_0312.py
+tmp/repair_agent_command_runner_tests.py
+tmp/repair_broken_test_strings.py
+tmp/repair_current_state_version_markers_0312.py
+tmp/repair_finalize_v0324_docs.py
+tmp/repair_gui_roadmap_lifecycle_metadata.py
+tmp/repair_handoff_py310_files.py
+tmp/repair_handoff_refresh_path_argument.py
+tmp/repair_handoff_state_after_pr344_20260518.log
+tmp/repair_handoff_state_after_pr344_run.sh
+tmp/repair_handoff_state_after_pr344.py
+tmp/repair_idempotent_finalization_guard_status.py
+tmp/repair_ns_duplicate_upload_tail.py
+tmp/repair_ns_up_merged_guard.py
+tmp/repair_ns_up_noop_branch_idempotence.py
+tmp/repair_pr_closeout_alias_module_registration.py
+tmp/repair_pr_closeout_alias_registration_order.py
+tmp/repair_pr_closeout_alias.py
+tmp/repair_pr_closeout_gate_ruff.py
+tmp/repair_pr351_handoff_semantics_reason_20260518.log
+tmp/repair_pr351_handoff_semantics_reason.py
+tmp/repair_pr358_work_order_check_normalization_20260518.log
+tmp/repair_pr358_work_order_check_normalization_run.sh
+tmp/repair_pr358_work_order_check_normalization.py
+tmp/repair_pr358_work_order_check_test_expectation_20260518.log
+tmp/repair_pr358_work_order_check_test_expectation_run.sh
+tmp/repair_pr358_work_order_check_test_expectation.py
+tmp/repair_pr358_work_order_template_postcondition_2_20260518.log
+tmp/repair_pr358_work_order_template_postcondition_2_run.sh
+tmp/repair_pr358_work_order_template_postcondition_2.py
+tmp/repair_pr358_work_order_template_postcondition_20260518.log
+tmp/repair_pr358_work_order_template_postcondition_run.sh
+tmp/repair_pr358_work_order_template_postcondition.py
+tmp/repair_release_0312.py
+tmp/repair_safe_patch_newline_by_lines.py
+tmp/repair_safe_patch_newline.py
+tmp/repair_terminal_clean_check_patch.py
+tmp/repair_v0320_release_metadata.py
+tmp/repair_work_order_governance_gate.py
+tmp/repair_work_order_governance_test.py
+tmp/repair_work_order_prepare_cli_name.py
+tmp/repair_work_order_prepare_model_cli.py
+tmp/repair_work_order_prepare_quoting.py
+tmp/report-schema-e2e-demo/.agentic/project.yaml
+tmp/report-schema-e2e-demo/.agentic/todo.yaml
+tmp/report-schema-e2e-demo/.git/COMMIT_EDITMSG
+tmp/report-schema-e2e-demo/.git/config
+tmp/report-schema-e2e-demo/.git/description
+tmp/report-schema-e2e-demo/.git/HEAD
+tmp/report-schema-e2e-demo/.git/index
+tmp/report-schema-e2e-demo/.github/copilot-instructions.md
+tmp/report-schema-e2e-demo/.github/pull_request_template.md
+tmp/report-schema-e2e-demo/.pre-commit-config.yaml
+tmp/report-schema-e2e-demo/AGENTS.md
+tmp/report-schema-e2e-demo/CHANGELOG.md
+tmp/report-schema-e2e-demo/docs/DOCUMENTATION_COVERAGE.yaml
+tmp/report-schema-e2e-demo/docs/LOGGING_AND_EVIDENCE.md
+tmp/report-schema-e2e-demo/docs/OUTPUT_CONTRACTS.md
+tmp/report-schema-e2e-demo/docs/PROJECT_START.md
+tmp/report-schema-e2e-demo/docs/STATUS.md
+tmp/report-schema-e2e-demo/docs/TEST_GATES.md
+tmp/report-schema-e2e-demo/docs/TODO.md
+tmp/report-schema-e2e-demo/docs/VALIDATION_AND_REPAIR.md
+tmp/report-schema-e2e-demo/README.md
+tmp/report-schema-e2e-demo/sample-output.md
+tmp/report-schema-e2e-demo/scripts/stage_recent_logs.py
+tmp/report-schema-e2e-demo/sentinel.yaml
+tmp/report-schema-e2e-demo/validation-report.json
+tmp/terminal_log_wrapper_start_20260518-083950.log
+tmp/update_agent_next_docs_simple.py
+tmp/update_cockpit_docs.py
+tmp/update_handoff_state_after_pr344_20260518.log
+tmp/update_handoff_state_after_pr344_run.sh
+tmp/update_handoff_state_after_pr344.py
+tmp/update_pr_hygiene_docs.py
+tmp/update_terminal_clean_check_status_handoff.py
+tmp/update_terminal_wrapper_docs.py
+tmp/v0.3.23-control-model/failure-patterns.txt
+tmp/v0.3.23-control-model/files.txt
+tmp/v0.3.23-control-model/ns-help.txt
+tmp/v0.3.23-control-model/ns-implementation-inspection.txt
+tmp/v0.3.23-control-model/ns-status.txt
+tmp/v0.3.23-control-model/patch_ns_slice_runner.py
+tmp/v0.3.23-control-model/patch_release_gate_early_stop.py
+tmp/v0.3.23-control-model/patch_release_prep_wiring.py
+tmp/v0.3.23-control-model/patch_slice_runner_test.py
+tmp/v0.3.23-control-model/release-prep-helper-smoke/CHANGELOG.md
+tmp/v0.3.23-control-model/release-prep-helper-smoke/CITATION.cff
+tmp/v0.3.23-control-model/release-prep-helper-smoke/pyproject.toml
+tmp/v0.3.23-control-model/release-prep-helper-smoke/README.md
+tmp/v0.3.23-control-model/repair_release_gate_early_stop.py
+tmp/v0.3.23-control-model/repair_slice_runner_test_assertion.py
+tmp/v0.3.23-control-model/slice-fail-3.out
+tmp/v0.3.23-control-model/slice-fail.out
+tmp/v0.3.23-control-model/slice-fail.plan
+tmp/v0.3.23-control-model/slice-pass.plan
+tmp/v0.3.23-control-model/slice-pending-3.out
+tmp/v0.3.23-control-model/slice-pending.out
+tmp/v0.3.23-control-model/slice-pending.plan
+tmp/v0.3.23-finalize-control-workflow.py
+tmp/v0.3.23-finalize-pr-cleanup/patch_state.py
+tmp/wait_merge_pr366_handoff_refresh_20260518.log
+tmp/work_order_governance_gate_20260518.log
+tmp/work_order_governance_gate_repair_20260518.log
+tmp/work_order_governance_gate_repair_run.sh
+tmp/work_order_governance_gate_run.sh
+tmp/work_order_governance_gate_test_repair_20260518.log
+tmp/work_order_governance_gate_test_repair_run.sh
+tmp/work_order_patch_points_20260518.log
+tmp/work_order_prepare_cli_name_repair_20260518.log
+tmp/work_order_prepare_cli_name_repair_run.sh
+tmp/work_order_prepare_model_cli_repair_20260518.log
+tmp/work_order_prepare_model_cli_repair_run.sh
+tmp/work_order_prepare_mvp_20260518.log
+tmp/work_order_prepare_mvp_run.sh
+tmp/work_order_prepare_pr_closeout_20260518.log
+tmp/work_order_prepare_pr_closeout_fixed_20260518.log
+tmp/work_order_prepare_quoting_repair_20260518.log
+tmp/work_order_prepare_quoting_repair_run.sh
+tmp/write_agent_command_runner.py
+tmp/write_cockpit_inventory_report.py
+tmp/write_governance_check_mvp.py
+tmp/write_handoff_update_automation_mvp.py
+tmp/write_parameterized_action_specs_mvp.py
+tmp/write_persistent_handoff_state_mvp.py
+tmp/write_pr_closeout_alias.py
+tmp/write_pr_closeout_gate_mvp.py
+tmp/write_work_order_governance_gate.py
+tmp/write_work_order_prepare_mvp.py
+tmp/write_workflow_cycle_files.py
+
+### EXISTING REFERENCES TO REPORT PATHS ###
+AGENTS.md:269:- docs/reports/
+AGENTS.md:310:`docs/reports/CURRENT_WORKFLOW_OUTPUT.md`
+README.md:282:The workflow uses `.agentic/workflow_state` and `.agentic/current_work.yaml`. `IDLE` with `current_work.yaml` state `READY` is a safe no-op. A run starts only after an explicit request. The explicit two-step form is `agentic-kit workflow request`, followed by `agentic-kit workflow run`. The shortcut `agentic-kit workflow go` performs the same request-and-run handoff for one bounded workflow step. Guided inspection commands include `agentic-kit workflow state`, `agentic-kit workflow list`, and `agentic-kit workflow show`. A requested run captures bounded local evidence, resets the request to `READY`, updates `docs/reports/CURRENT_WORKFLOW_OUTPUT.md`, uploads a temporary evidence branch, and waits for explicit cleanup. When bounded local output already exists and should be uploaded without pasted terminal output, use `agentic-kit workflow upload-output`, `agentic-kit workflow upload`, or the repo-local shortcut `./ns upload` / `./ns up`. For daily local use, `./ns state`, `./ns list`, `./ns show`, `./ns run`, `./ns go`, `./ns up`, and `./ns fail` provide the short workflow surface. The optional `./ns-menu` helper wraps the same repo-local shortcuts in a simple numbered terminal menu for interactive local use. By default it no longer clears the terminal between menu renders; set `NS_MENU_CLEAR=1` to restore screen clearing. The menu also exposes `./ns actions --json` for the schema-versioned cockpit action inventory.
+docs/handoff/CURRENT_HANDOFF.md:279:- Terminal handoff rule: future larger runs should commit and push `docs/reports/terminal/*.log`; after PASS, `d` is sufficient unless the run failed or the final status is dirty.
+docs/handoff/CURRENT_HANDOFF.md:304:Merged PR #375 added `./ns terminal-finalize`, backed by `agentic_project_kit.terminal_logging.finalize_terminal_log(...)`, plus tests and documentation. The safe terminal evidence pattern is now `/tmp` log first, finalize into `docs/reports/terminal/*.log`, then stage, commit, and push. Do not commit a repo terminal log while the current process is still writing to it.
+docs/handoff/CURRENT_HANDOFF.md:306:The implementation evidence log is committed and remotely readable at `docs/reports/terminal/20260518-182435_terminal-log-finalization-guard.log`. It records targeted tests, ruff, check-docs, doctor, and `### RESULT: PASS ###`.
+docs/DOCUMENTATION_COVERAGE.yaml:135:          - docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+docs/DOCUMENTATION_COVERAGE.yaml:188:          - git restore .agentic/workflow_state docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+docs/STATUS.md:247:- Workflow rule added: larger terminal runs should write committed logs under `docs/reports/terminal/`, allowing `d` to mean seen-and-continue after PASS without pasting terminal output.
+docs/STATUS.md:272:PR #375 added the terminal log finalization guard. Long terminal runs should tee into a temporary log outside `docs/reports/terminal/`, then finalize the completed log with `./ns terminal-finalize <tmp-log> <name>` before staging, committing, and pushing. Finalization rejects active repo-log sources and logs without an explicit PASS, FAIL, or PENDING result marker.
+docs/workflow/WORK_ORDERS.md:45:The expected branch must be a non-main slice branch. The log path must be under `docs/reports/terminal/` and must be listed in `expected_outputs`.
+docs/workflow/WORK_ORDER_TEMPLATES.md:17:- Logs must be written under `docs/reports/terminal/`.
+docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md:15:- Every larger workflow block must write its complete terminal output to `docs/reports/terminal/*.log`.
+docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md:37:- `./ns run-logged <name> -- <command...>`: runs a local command while teeing output into `docs/reports/terminal/*.log` and updates `LATEST_TERMINAL_LOG.txt`.
+docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md:44:Commands executed through `./ns run-logged` must not use plain `test -z "$(git status --short)"` as a cleanliness gate, because `run-logged` necessarily updates `docs/reports/terminal/LATEST_TERMINAL_LOG.txt` and creates a terminal log.
+docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md:54:Do not commit a repository log file while the current process is still writing to it. Long scripts must tee into a temporary log outside `docs/reports/terminal/`, then finalize the completed log into `docs/reports/terminal/*.log` with `./ns terminal-finalize <tmp-log> <name>` before staging, committing, and pushing. The finalized log must contain an explicit `### RESULT: PASS ###`, `### RESULT: FAIL ###`, or `### RESULT: PENDING ###` marker.
+docs/workflow/REPO_COMMAND_RUNNER.md:16:5. writes a report under `docs/reports/command_runs/`,
+docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md:12:- Relevant terminal actions must write durable evidence under docs/reports/terminal or docs/reports/command_runs.
+docs/WORKFLOW_OUTPUT_CYCLE.md:91:git restore .agentic/workflow_state docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+docs/WORKFLOW_OUTPUT_CYCLE.md:217:current_report=docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+docs/reports/evidence_upload_shortcuts_mvp_contract.md:9:?? docs/reports/evidence_upload_shortcuts_mvp_contract.md
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:420:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:7:patched action registry with cockpit-readiness
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:421:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:35:| `pr-cleanup` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:422:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:36:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:423:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:38:| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:424:docs/reports/terminal/repo_command_runner_mvp_20260518-123924.log:38:| `pr-cleanup` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:425:docs/reports/terminal/repo_command_runner_mvp_20260518-123924.log:39:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:426:docs/reports/terminal/repo_command_runner_mvp_20260518-123924.log:41:| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:427:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:32:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:428:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:33:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:429:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:34:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:430:docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log:30:- Action Registry metadata for terminal-log commands
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:431:docs/reports/terminal/finalize_after_terminal_clean_check_20260518-121906.log:46:| `pr-cleanup` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:432:docs/reports/terminal/finalize_after_terminal_clean_check_20260518-121906.log:47:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:433:docs/reports/terminal/finalize_after_terminal_clean_check_20260518-121906.log:49:| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:434:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:18:24:if [ "${1:-}" = "agent-next" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:435:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:19:102:        name="agent-next",
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:436:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:48:| `pr-cleanup` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:437:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:49:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:438:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:51:| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:439:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:55:| `agent-next` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_AMBIGUOUS_COMMANDS, FAIL_PULL, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:440:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:17:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:441:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:18:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:442:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:19:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:443:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:31:README.md:Version `0.3.24` is the current release line prepared by `./ns release-prep 0.3.24`.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:444:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:35:docs/handoff/CURRENT_HANDOFF.md:v0.3.23 is fully closed: GitHub Release v0.3.23 exists, Zenodo version DOI `10.5281/zenodo.20261956` is verified, and DOI metadata is recorded on main via PR #325. Current main is a clean post-release state. Recommended next direction: start v0.3.24 only if it improves the same no-copy/GUI cockpit path; otherwise cut a new planning slice for how `./ns pr-cleanup`, `./ns finalize-guard`, `./ns clean-evidence`, release controls, and safe patch helpers should appear in the local Tkinter cockpit without enabling unsafe destructive defaults.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:445:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:446:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:6:253:- Completed: PR #336 added inbox-based ./ns agent-next so routine local handoff can pull and execute exactly one pending repo-backed command pair.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:447:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:7:285:- Completed: PR #336 merged agent-next inbox mode. Preferred routine workflow is now: commit one command pair under .agentic/commands/inbox/, run ./ns agent-next locally, and use committed command-run/terminal artifacts instead of pasted terminal output.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:448:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:15:agent-command/finalize-after-agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:449:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:16: D .agentic/commands/inbox/finalize-after-agent-next-001.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:450:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:17: D .agentic/commands/inbox/finalize-after-agent-next-001.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:451:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:23:?? docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:452:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:69:agent-command/finalize-after-agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:453:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:70: D .agentic/commands/inbox/finalize-after-agent-next-001.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:454:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:71: D .agentic/commands/inbox/finalize-after-agent-next-001.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:455:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:77:?? docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:456:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:80:[agent-command/finalize-after-agent-next a7ac1d9] Finalize state after agent-next inbox runner
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:457:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:82: delete mode 100755 .agentic/commands/inbox/finalize-after-agent-next-001.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:458:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:83: delete mode 100644 .agentic/commands/inbox/finalize-after-agent-next-001.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:459:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:13:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:460:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:14:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:461:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:15:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:462:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:163:if [ "${1:-}" = "agent-next" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:463:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:238:if [ "${1:-}" = "release-prep" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:464:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:250:if [ "${1:-}" = "release-verify" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:465:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:269:if [ "${1:-}" = "pr-cleanup" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:466:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:431:./ns:24:if [ "${1:-}" = "agent-next" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:467:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:433:./ns:111:if [ "${1:-}" = "release-verify" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:468:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:434:src/agentic_project_kit/action_registry.py:53:        name="release-verify",
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:469:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:436:src/agentic_project_kit/action_registry.py:102:        name="agent-next",
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:470:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:483:tests/test_cockpit_readiness.py:11:    assert {row["name"] for row in rows} >= {"cockpit-readiness", "dev", "pr-cleanup", "release-verify", "finalize-guard"}
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:471:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:485:tests/test_repo_ns_entrypoint.py:178:    assert "release-verify" in text
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:472:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:486:tests/test_repo_ns_entrypoint.py:201:    assert "./ns release-verify \"$VERSION\"" in text
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:473:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:487:tests/test_agent_command_runner.py:147:    action = get_action("agent-next")
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:474:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:490:docs/handoff/CURRENT_HANDOFF.md:185:- `./ns release-verify 0.3.21` passes.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:475:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:491:docs/handoff/CURRENT_HANDOFF.md:191:The release workflow has been hardened against recurring deterministic failures. The important fixes are: stale dist artifacts are removed before release builds, publish waits for the asynchronous GitHub Release workflow instead of failing immediately, completed releases are verified through ./ns release-verify VERSION, and repeated release checks should no longer treat an already published version as a normal release-gate target.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:476:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:492:docs/handoff/CURRENT_HANDOFF.md:263:- `./ns release-verify 0.3.22` passes.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:477:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:495:docs/handoff/CURRENT_HANDOFF.md:285:- Current slice: `feature/agent-command-inbox` adds inbox-based `./ns agent-next`; prefer one pending command pair under `.agentic/commands/inbox/` instead of transient current files.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:478:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:496:docs/handoff/CURRENT_HANDOFF.md:286:- Completed: PR #336 merged agent-next inbox mode. Preferred routine workflow is now: commit one command pair under .agentic/commands/inbox/, run ./ns agent-next locally, and use committed command-run/terminal artifacts instead of pasted terminal output.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:479:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:497:docs/handoff/CURRENT_HANDOFF.md:287:- Current hardening: agent-next postconditions are being made explicit and test-covered to prevent stale current files, unconsumed inbox commands, and hidden dirty state after PASS_EXECUTED.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:480:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:498:docs/handoff/CURRENT_HANDOFF.md:292:- Verified state: `319 passed`, ruff PASS, `agentic-kit check-docs` PASS, `agentic-kit doctor` PASS, and `./ns release-verify 0.3.24` PASS.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:481:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:503:docs/STATUS.md:253:- In progress: agent command inbox slice adds `./ns agent-next` so routine local handoff can pull and execute exactly one pending repo-backed command.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:482:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:504:docs/STATUS.md:254:- Completed: PR #336 added inbox-based ./ns agent-next so routine local handoff can pull and execute exactly one pending repo-backed command pair.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:483:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:510:docs/workflow/REPO_COMMAND_RUNNER.md:39:`./ns agent-next` is the preferred command for routine no-copy handoff. It pulls the current branch, expects exactly one complete pending command pair under `.agentic/commands/inbox/`, copies that pair to the transient `current.yaml` and `current.sh` compatibility path, executes it through `agent-run`, then removes the transient current files.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:484:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:511:docs/workflow/REPO_COMMAND_RUNNER.md:47:A successful `PASS_EXECUTED` is intended to mean that the command script succeeded and the handoff state was cleaned up. The runner therefore checks postconditions after `agent-next`:
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:485:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:512:docs/workflow/REPO_COMMAND_RUNNER.md:54:If any of these checks fail, `agent-next` reports `FAIL_POSTCONDITION`.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:486:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:513:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:7:patched action registry with cockpit-readiness
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:487:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:515:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:36:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:488:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:517:docs/reports/terminal/repo_command_runner_mvp_20260518-123924.log:39:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:489:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:521:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:32:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:490:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:522:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:33:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:491:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:523:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:34:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:492:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:527:docs/reports/terminal/finalize_after_terminal_clean_check_20260518-121906.log:47:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:493:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:539:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:18:24:if [ "${1:-}" = "agent-next" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:494:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:540:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:19:102:        name="agent-next",
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:495:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:541:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:49:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:496:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:543:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:55:| `agent-next` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_AMBIGUOUS_COMMANDS, FAIL_PULL, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:497:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:546:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:17:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:498:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:547:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:18:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:499:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:548:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:19:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:500:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:555:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:501:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:556:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:6:253:- Completed: PR #336 added inbox-based ./ns agent-next so routine local handoff can pull and execute exactly one pending repo-backed command pair.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:502:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:557:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:7:285:- Completed: PR #336 merged agent-next inbox mode. Preferred routine workflow is now: commit one command pair under .agentic/commands/inbox/, run ./ns agent-next locally, and use committed command-run/terminal artifacts instead of pasted terminal output.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:503:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:558:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:15:agent-command/finalize-after-agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:504:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:559:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:16: D .agentic/commands/inbox/finalize-after-agent-next-001.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:505:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:560:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:17: D .agentic/commands/inbox/finalize-after-agent-next-001.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:506:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:561:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:23:?? docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:507:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:562:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:69:agent-command/finalize-after-agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:508:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:563:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:70: D .agentic/commands/inbox/finalize-after-agent-next-001.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:509:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:564:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:71: D .agentic/commands/inbox/finalize-after-agent-next-001.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:510:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:565:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:77:?? docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:511:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:566:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:80:[agent-command/finalize-after-agent-next a7ac1d9] Finalize state after agent-next inbox runner
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:512:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:567:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:82: delete mode 100755 .agentic/commands/inbox/finalize-after-agent-next-001.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:513:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:568:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:83: delete mode 100644 .agentic/commands/inbox/finalize-after-agent-next-001.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:514:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:569:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:515:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:570:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:14:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:516:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:571:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:15: D .agentic/commands/inbox/agent-next-smoke-002.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:517:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:572:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:16: D .agentic/commands/inbox/agent-next-smoke-002.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:518:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:573:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:20:?? docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:519:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:574:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:66:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:520:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:575:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:67: D .agentic/commands/inbox/agent-next-smoke-002.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:521:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:576:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:68: D .agentic/commands/inbox/agent-next-smoke-002.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:522:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:577:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:72:?? docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:523:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:579:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:524:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:580:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:6:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:525:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:581:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:26:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:526:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:582:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:31:| `cockpit-readiness` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:527:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:583:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:32:| `agent-next` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_AMBIGUOUS_COMMANDS, FAIL_PULL, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:528:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:584:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:34:| `run-logged` | local-only | docs/reports/terminal | False | PASS, FAIL, FAIL_NO_COMMAND, FAIL_MISSING_SEPARATOR |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:529:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:585:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:36:| `terminal-clean-check` | read-only | none | True | PASS_CLEAN, PASS_ONLY_TERMINAL_LOG_DIRTY, FAIL_DIRTY_NON_LOG_FILES |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:530:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:586:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:45:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:531:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:587:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:49:?? docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:532:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:588:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:95:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:533:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:589:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:99:?? docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:534:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:592:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:137:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:535:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:593:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:138:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:536:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:594:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:139:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:537:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:599:docs/reports/terminal/LATEST_TERMINAL_LOG.txt:1:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:538:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:600:docs/reports/terminal/agent_workflow_hardening_20260518-131856.log:48:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:539:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:602:docs/reports/terminal/agent_workflow_hardening_20260518-131856.log:54:| `agent-next` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_AMBIGUOUS_COMMANDS, FAIL_PULL, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD, FAIL_POSTCONDITION |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:540:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:605:docs/reports/command_runs/agent-next-smoke-001.md:1:# Agent command run: agent-next-smoke-001
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:541:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:606:docs/reports/command_runs/agent-next-smoke-001.md:7:- Branch: agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:542:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:607:docs/reports/command_runs/agent-next-smoke-001.md:9:- Terminal log: docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:543:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:608:docs/reports/command_runs/finalize-after-agent-next-001.md:1:# Agent command run: finalize-after-agent-next-001
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:544:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:609:docs/reports/command_runs/finalize-after-agent-next-001.md:3:- Title: Finalize state after agent-next inbox runner
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:545:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:610:docs/reports/command_runs/finalize-after-agent-next-001.md:7:- Branch: agent-command/finalize-after-agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:546:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:611:docs/reports/command_runs/finalize-after-agent-next-001.md:9:- Terminal log: docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:547:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:612:docs/reports/command_runs/agent-next-smoke-002.md:1:# Agent command run: agent-next-smoke-002
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:548:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:613:docs/reports/command_runs/agent-next-smoke-002.md:7:- Branch: agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:549:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:614:docs/reports/command_runs/agent-next-smoke-002.md:9:- Terminal log: docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:550:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:617:.agentic/commands/executed.jsonl:2:{"command_id": "finalize-after-agent-next-001", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "38ff3b91f9fc0426a8a95acab701b4697a7877b44e2364dc6abb0321ba986018", "timestamp_utc": "2026-05-18T11:02:23.137057+00:00"}
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:551:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:618:.agentic/commands/executed.jsonl:3:{"command_id": "agent-next-smoke-001", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "dd091aaf9051cbc339c43751e67f4110cfddc7dae619978776b541cb470740ac", "timestamp_utc": "2026-05-18T11:07:12.602078+00:00"}
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:552:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:619:.agentic/commands/executed.jsonl:4:{"command_id": "agent-next-smoke-002", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "cc966414905a6e6afbefbda6cc531334ec7c741c34689ce02c05864bdf9f5221", "timestamp_utc": "2026-05-18T11:11:12.552392+00:00"}
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:553:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:554:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:14:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:555:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:15: D .agentic/commands/inbox/agent-next-smoke-002.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:556:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:16: D .agentic/commands/inbox/agent-next-smoke-002.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:557:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:20:?? docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:558:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:66:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:559:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:67: D .agentic/commands/inbox/agent-next-smoke-002.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:560:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:68: D .agentic/commands/inbox/agent-next-smoke-002.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:561:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:72:?? docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:562:docs/reports/terminal/handoff_update_automation_inspection_20260518.log:15:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:563:docs/reports/terminal/handoff_update_automation_inspection_20260518.log:16:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:564:docs/reports/terminal/handoff_update_automation_inspection_20260518.log:17:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:565:docs/reports/terminal/handoff_update_automation_inspection_20260518.log:65:  - agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:566:docs/reports/terminal/handoff_update_automation_inspection_20260518.log:70:  - release-verify
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:567:docs/reports/terminal/handoff_update_automation_inspection_20260518.log:450:- ns command: ./ns handoff-refresh.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:568:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:569:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:6:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:570:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:25:| `pr-cleanup` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:571:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:26:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:572:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:28:| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:573:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:32:| `agent-next` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_AMBIGUOUS_COMMANDS, FAIL_PULL, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:574:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:45:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:575:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:49:?? docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:576:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:95:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:577:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:99:?? docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:578:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:137:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:579:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:138:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:580:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:139:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:581:docs/reports/terminal/20260518-090513_open-terminal-log-wrapper-pr-fixed.log:33:- Action Registry metadata for terminal-log commands
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:582:docs/reports/terminal/20260518-090513_open-terminal-log-wrapper-pr-fixed.log:111:- Action Registry metadata for terminal-log commands
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:583:docs/reports/terminal/handoff_refresh_after_pr346_20260518.log:25:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:584:docs/reports/terminal/LATEST_TERMINAL_LOG.txt:1:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:585:docs/reports/terminal/agent_workflow_hardening_20260518-131856.log:47:| `pr-cleanup` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:586:docs/reports/terminal/agent_workflow_hardening_20260518-131856.log:48:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:587:docs/reports/terminal/agent_workflow_hardening_20260518-131856.log:50:| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:588:docs/reports/terminal/agent_workflow_hardening_20260518-131856.log:54:| `agent-next` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_AMBIGUOUS_COMMANDS, FAIL_PULL, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD, FAIL_POSTCONDITION |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:589:docs/reports/command_runs/agent-next-smoke-001.md:1:# Agent command run: agent-next-smoke-001
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:590:docs/reports/command_runs/agent-next-smoke-001.md:7:- Branch: agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:591:docs/reports/command_runs/agent-next-smoke-001.md:9:- Terminal log: docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:592:docs/reports/command_runs/finalize-after-agent-next-001.md:1:# Agent command run: finalize-after-agent-next-001
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:593:docs/reports/command_runs/finalize-after-agent-next-001.md:3:- Title: Finalize state after agent-next inbox runner
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:594:docs/reports/command_runs/finalize-after-agent-next-001.md:7:- Branch: agent-command/finalize-after-agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:595:docs/reports/command_runs/finalize-after-agent-next-001.md:9:- Terminal log: docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:596:docs/reports/command_runs/agent-next-smoke-002.md:1:# Agent command run: agent-next-smoke-002
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:597:docs/reports/command_runs/agent-next-smoke-002.md:7:- Branch: agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:598:docs/reports/command_runs/agent-next-smoke-002.md:9:- Terminal log: docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:599:docs/reports/post_didactic_guidance_state_diff.md:75:-The v0.3.7 release-preparation PR was merged on main after:
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:600:docs/reports/post_didactic_guidance_state_diff.md:205:+-The v0.3.7 release-preparation PR was merged on main after:
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:705:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:36:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:706:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:38:| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:707:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:39:| `release-gate` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:708:docs/reports/terminal/repo_command_runner_mvp_20260518-123924.log:39:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:709:docs/reports/terminal/repo_command_runner_mvp_20260518-123924.log:41:| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:710:docs/reports/terminal/repo_command_runner_mvp_20260518-123924.log:42:| `release-gate` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:711:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:21:{"baseRefName":"main","headRefName":"docs/record-v0.3.24-doi","mergeStateStatus":"CLEAN","number":341,"state":"OPEN","title":"Record v0.3.24 DOI metadata"}
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:712:docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log:16:gh pr create \
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:713:docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log:59:gh pr view --web=false
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:714:docs/reports/terminal/finalize_after_terminal_clean_check_20260518-121906.log:47:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:715:docs/reports/terminal/finalize_after_terminal_clean_check_20260518-121906.log:49:| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:716:docs/reports/terminal/finalize_after_terminal_clean_check_20260518-121906.log:50:| `release-gate` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:717:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:49:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:718:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:51:| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:719:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:52:| `release-gate` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:720:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:31:README.md:Version `0.3.24` is the current release line prepared by `./ns release-prep 0.3.24`.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:721:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:238:if [ "${1:-}" = "release-prep" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:722:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:242:if [ "${1:-}" = "release-gate" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:723:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:250:if [ "${1:-}" = "release-verify" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:724:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:433:./ns:111:if [ "${1:-}" = "release-verify" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:725:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:434:src/agentic_project_kit/action_registry.py:53:        name="release-verify",
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:726:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:483:tests/test_cockpit_readiness.py:11:    assert {row["name"] for row in rows} >= {"cockpit-readiness", "dev", "pr-cleanup", "release-verify", "finalize-guard"}
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:727:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:485:tests/test_repo_ns_entrypoint.py:178:    assert "release-verify" in text
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:728:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:486:tests/test_repo_ns_entrypoint.py:201:    assert "./ns release-verify \"$VERSION\"" in text
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:729:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:490:docs/handoff/CURRENT_HANDOFF.md:185:- `./ns release-verify 0.3.21` passes.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:730:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:491:docs/handoff/CURRENT_HANDOFF.md:191:The release workflow has been hardened against recurring deterministic failures. The important fixes are: stale dist artifacts are removed before release builds, publish waits for the asynchronous GitHub Release workflow instead of failing immediately, completed releases are verified through ./ns release-verify VERSION, and repeated release checks should no longer treat an already published version as a normal release-gate target.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:731:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:492:docs/handoff/CURRENT_HANDOFF.md:263:- `./ns release-verify 0.3.22` passes.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:732:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:498:docs/handoff/CURRENT_HANDOFF.md:292:- Verified state: `319 passed`, ruff PASS, `agentic-kit check-docs` PASS, `agentic-kit doctor` PASS, and `./ns release-verify 0.3.24` PASS.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:733:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:515:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:36:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:734:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:517:docs/reports/terminal/repo_command_runner_mvp_20260518-123924.log:39:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:735:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:527:docs/reports/terminal/finalize_after_terminal_clean_check_20260518-121906.log:47:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:736:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:541:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:49:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:737:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:581:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:26:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:738:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:600:docs/reports/terminal/agent_workflow_hardening_20260518-131856.log:48:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:739:docs/reports/terminal/handoff_update_automation_inspection_20260518.log:70:  - release-verify
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:740:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:26:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:741:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:28:| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:742:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:29:| `release-gate` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:743:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:36:docs/handoff/CURRENT_HANDOFF.md:v0.3.19 is released and post-release verified with version DOI `10.5281/zenodo.20246121`. Zenodo concept DOI: `10.5281/zenodo.20101359`. The v0.3.19 DOI metadata is recorded on main via PR #259 after `agentic-kit post-release-check --version 0.3.19` passed. The post-release Zenodo verification path remains covered by `agentic-kit post-release-check`.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:744:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:130:{"baseRefName":"main","headRefName":"docs/record-v0.3.24-doi","mergeStateStatus":"UNKNOWN","number":341,"state":"OPEN","title":"Record v0.3.24 DOI metadata","url":"https://github.com/vfi64/agentic-project-kit/pull/341"}
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:745:docs/reports/terminal/20260518-090513_open-terminal-log-wrapper-pr-fixed.log:19:gh pr create \
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:746:docs/reports/terminal/20260518-090513_open-terminal-log-wrapper-pr-fixed.log:62:gh pr view --web=false
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:747:docs/reports/terminal/agent_workflow_hardening_20260518-131856.log:48:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:748:docs/reports/terminal/agent_workflow_hardening_20260518-131856.log:50:| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:749:docs/reports/terminal/agent_workflow_hardening_20260518-131856.log:51:| `release-gate` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:750:docs/reports/idempotent_finalization_guard_inspection.md:28:tools/ns_pr_create_or_skip.sh:50:  gh pr create --base "$BASE" --title "$TITLE" --body "$BODY" || STATUS=1
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:751:docs/reports/idempotent_finalization_guard_inspection.md:29:tests/test_repo_ns_entrypoint.py:232:    assert "gh pr create --base" in text
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:752:docs/reports/post_didactic_guidance_state_diff.md:59:-- `agentic-kit post-release-check --version 0.3.7` passed.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:753:docs/reports/post_didactic_guidance_state_diff.md:75:-The v0.3.7 release-preparation PR was merged on main after:
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:754:docs/reports/post_didactic_guidance_state_diff.md:98:+- `agentic-kit post-release-check --version 0.3.9` passed before PR #195.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:755:docs/reports/post_didactic_guidance_state_diff.md:189:+-- `agentic-kit post-release-check --version 0.3.7` passed.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:756:docs/reports/post_didactic_guidance_state_diff.md:205:+-The v0.3.7 release-preparation PR was merged on main after:
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:757:docs/reports/post_didactic_guidance_state_diff.md:228:++- `agentic-kit post-release-check --version 0.3.9` passed before PR #195.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:778:5. writes a report under `docs/reports/command_runs/`,
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:819:docs/reports/command_runs/agent-next-smoke-001.md
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:820:docs/reports/command_runs/agent-next-smoke-002.md
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:821:docs/reports/command_runs/finalize-after-agent-next-001.md
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:822:docs/reports/command_runs/finalize-after-repo-command-runner-001.md
+docs/reports/terminal/pr_closeout_idempotency_inspection_20260518.log:20:docs/reports/terminal/pr_closeout_gate_ruff_repair_20260518.log
+docs/reports/terminal/pr_closeout_idempotency_inspection_20260518.log:21:docs/reports/terminal/pr_closeout_pending_state_inspection_20260518.log
+docs/reports/terminal/2026-05-18-environment-bootstrap-drift-state.log:6:?? docs/reports/terminal/2026-05-18-environment-bootstrap-drift-state.log
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:2:terminal_log=docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:54:?? docs/reports/GUI_COCKPIT_ACTION_READINESS_INVENTORY.md
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:55:?? docs/reports/terminal/
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:110:?? docs/reports/GUI_COCKPIT_ACTION_READINESS_INVENTORY.md
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:111:?? docs/reports/terminal/
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:132:?? docs/reports/GUI_COCKPIT_ACTION_READINESS_INVENTORY.md
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:133:?? docs/reports/terminal/
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:141:### RUN: git add ns src/agentic_project_kit/action_registry.py src/agentic_project_kit/cockpit_readiness.py tools/cockpit_readiness.py tests/test_action_registry.py tests/test_cockpit_readiness.py docs/reports/GUI_COCKPIT_ACTION_READINESS_INVENTORY.md docs/STATUS.md docs/handoff/CURRENT_HANDOFF.md docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:147:A  docs/reports/GUI_COCKPIT_ACTION_READINESS_INVENTORY.md
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:148:AM docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:160: create mode 100644 docs/reports/GUI_COCKPIT_ACTION_READINESS_INVENTORY.md
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:161: create mode 100644 docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:180: M docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log
+docs/reports/terminal/work_order_prepare_model_cli_repair_20260518.log:24:Log path: docs/reports/terminal/smoke-work-order.log
+docs/reports/terminal/work_order_prepare_model_cli_repair_20260518.log:38:- docs/reports/terminal/smoke-work-order.log
+docs/reports/terminal/pr_closeout_pending_state_inspection_20260518.log:20:docs/reports/terminal/governance_check_mvp_20260518.log
+docs/reports/terminal/pr_closeout_pending_state_inspection_20260518.log:21:docs/reports/terminal/pr_closeout_gate_ruff_repair_20260518.log
+docs/reports/terminal/pr_closeout_pending_state_inspection_20260518.log:22:docs/reports/terminal/read_only_work_order_templates_20260518.log
+docs/reports/terminal/pr_closeout_pending_state_inspection_20260518.log:23:docs/reports/terminal/refresh_handoff_after_work_order_prepare_20260518.log
+docs/reports/terminal/pr_closeout_pending_state_inspection_20260518.log:24:docs/reports/terminal/repair_pr358_work_order_check_test_expectation_20260518.log
+docs/reports/terminal/pr_closeout_pending_state_inspection_20260518.log:25:docs/reports/terminal/work_order_execution_hardening_remote_patch_20260518.log
+docs/reports/terminal/pr_closeout_pending_state_inspection_20260518.log:26:docs/reports/terminal/work_order_governance_gate_test_repair_20260518.log
+docs/reports/terminal/pr_closeout_pending_state_inspection_20260518.log:27:docs/reports/terminal/work_order_patch_points_20260518.log
+docs/reports/terminal/pr_closeout_pending_state_inspection_20260518.log:28:docs/reports/terminal/work_order_prepare_model_cli_repair_20260518.log
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:2:run_log=docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:10:?? docs/reports/terminal/20260518-090016_smoke-pass.log
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:11:?? docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:12:?? docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:13:?? docs/reports/terminal/terminal_log_wrapper_impl_20260518-090015.log
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:19:Latest terminal log: docs/reports/terminal/20260518-090016_smoke-pass.log
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:20:terminal_log=docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:26:Latest terminal log: docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:41:?? docs/reports/terminal/20260518-090016_smoke-pass.log
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:42:?? docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:43:?? docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:44:?? docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:45:?? docs/reports/terminal/terminal_log_wrapper_impl_20260518-090015.log
+
+### EXISTING GC / CLEANUP HELPERS ###
+./.agentic/no_copy_terminal_policy.yaml
+./docs/patterns/bounded-workflow-evidence.md
+./docs/reports/command_runs/agent-next-smoke-001.md
+./docs/reports/command_runs/agent-next-smoke-002.md
+./docs/reports/command_runs/finalize-after-agent-next-001.md
+./docs/reports/command_runs/finalize-after-repo-command-runner-001.md
+./docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+./docs/reports/didactic_guidance_diff.md
+./docs/reports/didactic_guidance_inspection.md
+./docs/reports/evidence_upload_shortcuts_mvp_contract.md
+./docs/reports/evidence_upload_shortcuts_mvp_diff.md
+./docs/reports/GUI_COCKPIT_ACTION_READINESS_INVENTORY.md
+./docs/reports/idempotent_finalization_guard_inspection.md
+./docs/reports/pattern_advisor_mvp_contract.md
+./docs/reports/post_didactic_guidance_state_diff.md
+./docs/reports/report_schema_docs_slice_20260512.md
+./docs/reports/report_schema_e2e_and_collab_rules_20260512.md
+./docs/reports/status_roadmap_summary_after_pr105_20260512.md
+./docs/reports/terminal/2026-05-18-environment-bootstrap-drift-state.log
+./docs/reports/terminal/20260518-090016_smoke-pass.log
+./docs/reports/terminal/20260518-090057_commit-smoke.log
+./docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log
+./docs/reports/terminal/20260518-090513_open-terminal-log-wrapper-pr-fixed.log
+./docs/reports/terminal/20260518-090803_start-terminal-log-branch-safety.log
+./docs/reports/terminal/20260518-092057_intentional-fail-upload-test.log
+./docs/reports/terminal/20260518-124633_finalize-after-repo-command-runner-001.log
+./docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+./docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+./docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+./docs/reports/terminal/20260518-182435_terminal-log-finalization-guard.log
+./docs/reports/terminal/20260518-183055_refresh-state-after-terminal-log-finalization-guard.log
+./docs/reports/terminal/20260518-183223_pr376-closeout.log
+./docs/reports/terminal/20260518-183936_no-interactive-exit-terminal-rule.log
+./docs/reports/terminal/20260518-184027_no-interactive-exit-pr-closeout.log
+./docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log
+./docs/reports/terminal/agent_workflow_hardening_20260518-131856.log
+./docs/reports/terminal/finalize_after_terminal_clean_check_20260518-121906.log
+./docs/reports/terminal/finalize_v0.3.24_doi_state_20260518.log
+./docs/reports/terminal/governance_check_mvp_20260518.log
+./docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log
+./docs/reports/terminal/handoff_commit_semantics_patch_20260518.log
+./docs/reports/terminal/handoff_refresh_after_pr346_20260518.log
+./docs/reports/terminal/handoff_refresh_after_pr348_20260518.log
+./docs/reports/terminal/handoff_refresh_path_argument_repair_20260518.log
+./docs/reports/terminal/handoff_semantics_patch_points_20260518.log
+./docs/reports/terminal/handoff_state_commit_semantics_start_20260518.log
+./docs/reports/terminal/handoff_update_automation_inspection_20260518.log
+./docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+./docs/reports/terminal/no_copy_terminal_evidence_policy_20260518.log
+./docs/reports/terminal/parameterized_action_specs_mvp_20260518.log
+./docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log
+./docs/reports/terminal/persistent_handoff_state_inspection_20260518.log
+./docs/reports/terminal/persistent_handoff_state_py310_repair_20260518.log
+./docs/reports/terminal/pr_closeout_alias_module_registration_repair_20260518.log
+./docs/reports/terminal/pr_closeout_gate_ruff_repair_20260518.log
+./docs/reports/terminal/pr_closeout_idempotency_inspection_20260518.log
+./docs/reports/terminal/pr_closeout_pending_state_inspection_20260518.log
+./docs/reports/terminal/read_only_work_order_templates_20260518.log
+./docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log
+./docs/reports/terminal/record_v0.3.25_doi_20260518.log
+./docs/reports/terminal/refresh_handoff_after_pr_closeout_alias_20260518.log
+./docs/reports/terminal/refresh_handoff_after_v0.3.25_doi_20260518.log
+./docs/reports/terminal/refresh_handoff_after_work_order_prepare_20260518.log
+./docs/reports/terminal/refresh_handoff_state_after_pr356_20260518.log
+./docs/reports/terminal/refresh_handoff_state_after_pr358_20260518.log
+./docs/reports/terminal/refresh_handoff_state_after_pr360_20260518.log
+./docs/reports/terminal/refresh_handoff_state_after_pr363_20260518.log
+./docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log
+./docs/reports/terminal/release_prep_v0.3.25_20260518.log
+./docs/reports/terminal/release_verify_v0.3.25_20260518.log
+./docs/reports/terminal/repair_finalize_v0.3.24_doi_state_20260518.log
+./docs/reports/terminal/repair_handoff_state_after_pr344_20260518.log
+./docs/reports/terminal/repair_pr358_work_order_check_test_expectation_20260518.log
+./docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log
+./docs/reports/terminal/repo_command_runner_mvp_20260518-123924.log
+./docs/reports/terminal/terminal_clean_check_finalize_20260518-091938.log
+./docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log
+./docs/reports/terminal/terminal_log_wrapper_impl_20260518-090015.log
+./docs/reports/terminal/work_order_execution_hardening_remote_patch_20260518.log
+./docs/reports/terminal/work_order_governance_gate_test_repair_20260518.log
+./docs/reports/terminal/work_order_patch_points_20260518.log
+./docs/reports/terminal/work_order_prepare_model_cli_repair_20260518.log
+./src/agentic_project_kit/__pycache__/repair_report.cpython-314.pyc
+./src/agentic_project_kit/__pycache__/terminal_logging.cpython-314.pyc
+./src/agentic_project_kit/repair_report.py
+./src/agentic_project_kit/terminal_logging.py
+./tests/__pycache__/test_no_copy_terminal_policy.cpython-314-pytest-9.0.3.pyc
+./tests/__pycache__/test_repair_report.cpython-314-pytest-9.0.2.pyc
+./tests/__pycache__/test_repair_report.cpython-314-pytest-9.0.3.pyc
+./tests/__pycache__/test_terminal_logging.cpython-314-pytest-9.0.2.pyc
+./tests/__pycache__/test_terminal_logging.cpython-314-pytest-9.0.3.pyc
+./tests/test_no_copy_terminal_policy.py
+./tests/test_repair_report.py
+./tests/test_terminal_logging.py
+./tmp/add_terminal_log_rule_notes.py
+./tmp/cleanup_post_current_work_isolation_state.py
+./tmp/cleanup_post_current_work_isolation_wording.py
+./tmp/doc-mesh-report.json
+./tmp/finalize_dependabot_cleanup_state.py
+./tmp/finalize_evidence_cleanup_guard.py
+./tmp/finalize_safe_diagnostic_cleanup_guard.py
+./tmp/finalize_terminal_clean_check_state.py
+./tmp/harden_repair_report_schema.py
+./tmp/inspect_validation_report_cli.txt
+./tmp/line_patch_ns_terminal_clean_check.py
+./tmp/line_patch_registry_tests_clean_check.py
+./tmp/line_patch_terminal_clean_check.py
+./tmp/no_copy_terminal_evidence_policy_20260518.log
+./tmp/no_copy_terminal_evidence_policy_run.sh
+./tmp/patch_action_registry_terminal_logging.py
+./tmp/patch_doc_terminal_clean_check_robust.py
+./tmp/patch_ns_clean_evidence_wiring_safe.py
+./tmp/patch_ns_clean_evidence_wiring.py
+./tmp/patch_ns_pr_cleanup_wiring.py
+./tmp/patch_ns_terminal_logging.py
+./tmp/patch_pr_cleanup_tests.py
+./tmp/patch_registry_terminal_clean_check_robust.py
+./tmp/patch_report_schema_docs.py
+./tmp/patch_terminal_clean_check.py
+./tmp/patch_tests_terminal_clean_check_robust.py
+./tmp/patch_validate_report_schema_option.py
+./tmp/repair_terminal_clean_check_patch.py
+./tmp/report-schema-e2e-demo/.agentic/project.yaml
+./tmp/report-schema-e2e-demo/.agentic/todo.yaml
+./tmp/report-schema-e2e-demo/.git/COMMIT_EDITMSG
+./tmp/report-schema-e2e-demo/.git/config
+./tmp/report-schema-e2e-demo/.git/description
+./tmp/report-schema-e2e-demo/.git/HEAD
+./tmp/report-schema-e2e-demo/.git/index
+./tmp/report-schema-e2e-demo/.github/copilot-instructions.md
+./tmp/report-schema-e2e-demo/.github/pull_request_template.md
+./tmp/report-schema-e2e-demo/.pre-commit-config.yaml
+./tmp/report-schema-e2e-demo/AGENTS.md
+./tmp/report-schema-e2e-demo/CHANGELOG.md
+./tmp/report-schema-e2e-demo/docs/DOCUMENTATION_COVERAGE.yaml
+./tmp/report-schema-e2e-demo/docs/LOGGING_AND_EVIDENCE.md
+./tmp/report-schema-e2e-demo/docs/OUTPUT_CONTRACTS.md
+./tmp/report-schema-e2e-demo/docs/PROJECT_START.md
+./tmp/report-schema-e2e-demo/docs/STATUS.md
+./tmp/report-schema-e2e-demo/docs/TEST_GATES.md
+./tmp/report-schema-e2e-demo/docs/TODO.md
+./tmp/report-schema-e2e-demo/docs/VALIDATION_AND_REPAIR.md
+./tmp/report-schema-e2e-demo/README.md
+./tmp/report-schema-e2e-demo/sample-output.md
+./tmp/report-schema-e2e-demo/scripts/stage_recent_logs.py
+./tmp/report-schema-e2e-demo/sentinel.yaml
+./tmp/report-schema-e2e-demo/validation-report.json
+./tmp/terminal_log_wrapper_start_20260518-083950.log
+./tmp/update_terminal_clean_check_status_handoff.py
+./tmp/update_terminal_wrapper_docs.py
+./tmp/v0.3.23-finalize-pr-cleanup/patch_state.py
+./tmp/write_cockpit_inventory_report.py
+./tools/ns_clean_evidence.sh
+./tools/ns_pr_cleanup.sh
+
+### COMMAND SURFACE CHECK ###
+pr-check-merge	remote_mutation	Check and optionally merge a pull request
+release-verify	read_only	Verify an already published release
+doi-record	local_only	Record verified DOI metadata
+finalize-release	local_only	Finalize repository state after release closeout
+Repo: agentic-project-kit
+Path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.3.25
+Safe state: main @ 74d9bca
+Next: Work first on deterministic command-contract and environment-bootstrap drift prevention. Verify real CLI commands, .venv availability, ns shortcuts, docs, and work-order command references before extending work-order execution or GUI controls.
+
+### TARGETED BASE GATES ###
+Persistent handoff state check passed
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.25
+
+Overall: PASS
+
+### RESULT ###
+### RESULT: PASS ###
