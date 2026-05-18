@@ -1,0 +1,48 @@
+terminal_log=docs/reports/terminal/20260518-225016_harden-inbox-lifecycle-cleanup-001.log
+### RUN: sh .agentic/commands/current.sh
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+HARDEN COMMAND INBOX LIFECYCLE CLEANUP AFTER COMPLETED RUNS
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+D	.agentic/commands/inbox/harden-inbox-lifecycle-cleanup-001.sh
+D	.agentic/commands/inbox/harden-inbox-lifecycle-cleanup-001.yaml
+M	docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### DIAGNOSE CURRENT INBOX STATE ###
+
+### VERIFY COMPLETED RUNS CONSUME THEIR INBOX PAIRS ###
+completed_smoke_report=present
+PASS_NO_STALE_COMPLETED_SMOKE_PAIR
+
+### REQUIRED GATES ###
+PASS_COMMAND_INBOX_CHECK
+PASS: no stale STATUS/HANDOFF current-state fragments found
+PENDING_COMMUNICATION_ARTIFACTS
+agent-current-yaml	stale-transient-command	.agentic/commands/current.yaml	transient compatibility file after agent-next or agent-run
+agent-current-sh	stale-transient-command	.agentic/commands/current.sh	transient compatibility file after agent-next or agent-run
+Persistent handoff state check passed
+Governance check passed
+
+### CLASSIFICATION ###
+next_patch_needed=make_completed_inbox_pair_absence_machine_checked
+reason=completed commands should not remain pending on main and cause FAIL_AMBIGUOUS_COMMANDS
+suggested_gate=command-inbox-check should reject pending files whose command_id already appears in executed.jsonl or docs/reports/command_runs
+
+### RESULT: PASS ###
+### EXIT: 0
+### RESULT: PASS ###
