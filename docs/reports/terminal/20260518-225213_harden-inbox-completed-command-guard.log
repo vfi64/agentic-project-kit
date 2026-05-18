@@ -1,0 +1,177 @@
+REJECT COMPLETED COMMAND IDS IN COMMAND INBOX CHECK
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+D	.agentic/commands/inbox/harden-inbox-completed-command-guard-001.sh
+D	.agentic/commands/inbox/harden-inbox-completed-command-guard-001.yaml
+M	docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+PASS_COLLECTED
+.agentic/commands/current.yaml
+.agentic/commands/current.sh
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'fix/command-inbox-completed-command-guard'
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+
+### VERIFY PATCH CONTENT ###
+src/agentic_project_kit/command_inbox_check.py:29:def completed_command_ids(report_dir: Path = REPORT_DIR, executed_jsonl: Path = EXECUTED_JSONL) -> set[str]:
+src/agentic_project_kit/command_inbox_check.py:58:    completed_ids = completed_command_ids()
+src/agentic_project_kit/command_inbox_check.py:76:            findings.append(f"completed command still pending: {command_id}")
+tests/test_command_inbox_check.py:57:    assert any("completed command still pending: done" in item for item in result.findings)
+docs/workflow/REPO_COMMAND_RUNNER.md:80:## Completed command inbox guard
+
+### LOCAL GATES ###
+....F...........................                                         [100%]
+=================================== FAILURES ===================================
+__________ test_command_inbox_check_rejects_completed_pending_command __________
+
+tmp_path = PosixPath('/private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pytest-of-hof/pytest-1756/test_command_inbox_check_rejec2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10ad46060>
+
+    def test_command_inbox_check_rejects_completed_pending_command(tmp_path, monkeypatch):
+        import agentic_project_kit.command_inbox_check as cic
+        inbox = tmp_path / ".agentic/commands/inbox"
+        write_pair(inbox, "done")
+        reports = tmp_path / "docs/reports/command_runs"
+        reports.mkdir(parents=True)
+        (reports / "done.md").write_text("# done\n", encoding="utf-8")
+        monkeypatch.setattr(cic, "REPORT_DIR", reports)
+        monkeypatch.setattr(cic, "EXECUTED_JSONL", tmp_path / "executed.jsonl")
+        result = cic.check_command_inbox(inbox)
+>       assert not result.ok
+E       assert not True
+E        +  where True = InboxCheckResult(ok=True, findings=()).ok
+
+tests/test_command_inbox_check.py:56: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_command_inbox_check.py::test_command_inbox_check_rejects_completed_pending_command
+1 failed, 31 passed in 0.23s
+PASS_COMMAND_INBOX_CHECK
+PASS: no stale STATUS/HANDOFF current-state fragments found
+PASS_NOTHING_TO_COLLECT
+Persistent handoff state check passed
+Governance check passed
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+fix/command-inbox-completed-command-guard
+ D .agentic/commands/inbox/harden-inbox-completed-command-guard-001.sh
+ D .agentic/commands/inbox/harden-inbox-completed-command-guard-001.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/command_inbox_check.py
+ M tests/test_command_inbox_check.py
+?? docs/reports/terminal/20260518-225201_harden-inbox-completed-command-guard-001.log
+
+### PYTEST ###
+........................................................................ [ 17%]
+.................F...................................................... [ 34%]
+........................................................................ [ 52%]
+........................................................................ [ 69%]
+........................................................................ [ 87%]
+.....................................................                    [100%]
+=================================== FAILURES ===================================
+__________ test_command_inbox_check_rejects_completed_pending_command __________
+
+tmp_path = PosixPath('/private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pytest-of-hof/pytest-1757/test_command_inbox_check_rejec2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1074a8ad0>
+
+    def test_command_inbox_check_rejects_completed_pending_command(tmp_path, monkeypatch):
+        import agentic_project_kit.command_inbox_check as cic
+        inbox = tmp_path / ".agentic/commands/inbox"
+        write_pair(inbox, "done")
+        reports = tmp_path / "docs/reports/command_runs"
+        reports.mkdir(parents=True)
+        (reports / "done.md").write_text("# done\n", encoding="utf-8")
+        monkeypatch.setattr(cic, "REPORT_DIR", reports)
+        monkeypatch.setattr(cic, "EXECUTED_JSONL", tmp_path / "executed.jsonl")
+        result = cic.check_command_inbox(inbox)
+>       assert not result.ok
+E       assert not True
+E        +  where True = InboxCheckResult(ok=True, findings=()).ok
+
+tests/test_command_inbox_check.py:56: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_command_inbox_check.py::test_command_inbox_check_rejects_completed_pending_command
+1 failed, 412 passed in 2.46s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.26
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=74
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+fix/command-inbox-completed-command-guard
+ D .agentic/commands/inbox/harden-inbox-completed-command-guard-001.sh
+ D .agentic/commands/inbox/harden-inbox-completed-command-guard-001.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/command_inbox_check.py
+ M tests/test_command_inbox_check.py
+?? docs/reports/terminal/20260518-225201_harden-inbox-completed-command-guard-001.log
+
+### RESULT: FAIL ###
+
+### COMMIT PATCH ###
+ D .agentic/commands/inbox/harden-inbox-completed-command-guard-001.sh
+ D .agentic/commands/inbox/harden-inbox-completed-command-guard-001.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/command_inbox_check.py
+ M tests/test_command_inbox_check.py
+?? docs/reports/terminal/20260518-225201_harden-inbox-completed-command-guard-001.log
+[fix/command-inbox-completed-command-guard 7425503] Reject completed commands in inbox check
+ 3 files changed, 39 insertions(+), 1 deletion(-)
+
+### PUSH AND CREATE PR ###
+remote: 
+remote: Create a pull request for 'fix/command-inbox-completed-command-guard' on GitHub by visiting:        
+remote:      https://github.com/vfi64/agentic-project-kit/pull/new/fix/command-inbox-completed-command-guard        
+remote: 
+To github.com:vfi64/agentic-project-kit.git
+ * [new branch]      fix/command-inbox-completed-command-guard -> fix/command-inbox-completed-command-guard
+branch 'fix/command-inbox-completed-command-guard' set up to track 'origin/fix/command-inbox-completed-command-guard'.
+https://github.com/vfi64/agentic-project-kit/pull/423
+
+### RESULT: FAIL ###

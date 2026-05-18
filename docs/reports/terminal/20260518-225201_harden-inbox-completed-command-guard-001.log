@@ -1,0 +1,2 @@
+terminal_log=docs/reports/terminal/20260518-225201_harden-inbox-completed-command-guard-001.log
+### RUN: sh .agentic/commands/current.sh
