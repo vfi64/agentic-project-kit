@@ -1,0 +1,118 @@
+ADD COMMAND INBOX CHECK FOR REPO-BACKED QUEUING
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+PASS_NOTHING_TO_COLLECT
+
+### CREATE OR RESET FEATURE BRANCH ###
+Switched to a new branch 'fix/command-inbox-check'
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tmp/add_command_inbox_check.py", line 134
+    marker = "if [ \\"${1:-}\\" = \\"agent-next\\" ]; then\\n  PYTHONPATH=src \\"$PY\\" -m agentic_project_kit.agent_command_runner next\\n  exit $?\\nfi\\n"
+                      ^
+SyntaxError: invalid syntax
+
+### VERIFY PATCH CONTENT ###
+grep: src/agentic_project_kit/command_inbox_check.py: No such file or directory
+grep: tests/test_command_inbox_check.py: No such file or directory
+
+### LOCAL GATES ###
+ERROR: file or directory not found: tests/test_command_inbox_check.py
+
+
+no tests ran in 0.00s
+Usage: next-step.py [--request|--fail-report|--upload-output]
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+PASS: no stale STATUS/HANDOFF current-state fragments found
+PASS_NOTHING_TO_COLLECT
+Persistent handoff state check passed
+Governance check passed
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+fix/command-inbox-check
+
+### PYTEST ###
+........................................................................ [ 17%]
+........................................................................ [ 35%]
+........................................................................ [ 53%]
+........................................................................ [ 70%]
+........................................................................ [ 88%]
+..............................................                           [100%]
+406 passed in 2.30s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.26
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=71
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+fix/command-inbox-check
+
+### RESULT: PASS ###
+
+### COMMIT PATCH ###
+fatal: pathspec 'src/agentic_project_kit/command_inbox_check.py' did not match any files
+On branch fix/command-inbox-check
+nothing to commit, working tree clean
+
+### REMOTE MUTATION PREFLIGHT BEFORE PUSH ###
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+
+### PUSH AND CREATE PR ###
+remote: 
+remote: Create a pull request for 'fix/command-inbox-check' on GitHub by visiting:        
+remote:      https://github.com/vfi64/agentic-project-kit/pull/new/fix/command-inbox-check        
+remote: 
+To github.com:vfi64/agentic-project-kit.git
+ * [new branch]      fix/command-inbox-check -> fix/command-inbox-check
+branch 'fix/command-inbox-check' set up to track 'origin/fix/command-inbox-check'.
+pull request create failed: GraphQL: No commits between main and fix/command-inbox-check (createPullRequest)
+
+### RESULT MARKER BEFORE LOG FINALIZATION ###
+### RESULT: FAIL ###

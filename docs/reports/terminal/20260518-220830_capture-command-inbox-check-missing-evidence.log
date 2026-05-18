@@ -1,0 +1,56 @@
+CAPTURE COMMAND INBOX CHECK MISSING REMOTE EVIDENCE
+
+### LOCAL STATE ###
+fix/command-inbox-check
+5417bad Preserve command inbox check terminal log
+d8324f5 Harden agent-next hard-fail result contract (#416)
+3c94d25 Record agent command run agent-next-fail-smoke-004
+291e24d Queue agent-next fail smoke command (#415)
+0d2c1d0 Record agent command run agent-next-smoke-003
+b6368d0 Queue agent-next smoke command (#414)
+4e1c667 Add visible agent-next result footer (#413)
+31703ac Add latest command-run pointer for no-copy handoff (#412)
+ed04819 Preserve failed no-copy agent-next capture log (#411)
+2e664e7 Record agent command run no-copy-e2e-protocol-001
+7fed209 Queue no-copy result handoff pointer command (#409)
+428fcd0 Preserve remote inbox command protocol diagnosis log (#408)
+
+### LOCAL BRANCHES MATCHING COMMAND INBOX ###
+* fix/command-inbox-check
+
+### REMOTE BRANCHES MATCHING COMMAND INBOX ###
+5417badcb67a8d283250e11da23a29f3946debb4	refs/heads/fix/command-inbox-check
+
+### OPEN PRS ###
+
+### LOCAL PATCH PRESENCE ###
+docs/reports/terminal/LATEST_TERMINAL_LOG.txt:1:docs/reports/terminal/20260518-220700_add-command-inbox-check.log
+docs/reports/terminal/20260518-220700_add-command-inbox-check.log:16:Switched to a new branch 'fix/command-inbox-check'
+docs/reports/terminal/20260518-220700_add-command-inbox-check.log:47:fix/command-inbox-check
+docs/reports/terminal/20260518-220700_add-command-inbox-check.log:94:fix/command-inbox-check
+docs/reports/terminal/20260518-220700_add-command-inbox-check.log:100:On branch fix/command-inbox-check
+docs/reports/terminal/20260518-220700_add-command-inbox-check.log:109:remote: Create a pull request for 'fix/command-inbox-check' on GitHub by visiting:        
+docs/reports/terminal/20260518-220700_add-command-inbox-check.log:110:remote:      https://github.com/vfi64/agentic-project-kit/pull/new/fix/command-inbox-check        
+docs/reports/terminal/20260518-220700_add-command-inbox-check.log:113: * [new branch]      fix/command-inbox-check -> fix/command-inbox-check
+docs/reports/terminal/20260518-220700_add-command-inbox-check.log:114:branch 'fix/command-inbox-check' set up to track 'origin/fix/command-inbox-check'.
+docs/reports/terminal/20260518-220700_add-command-inbox-check.log:115:pull request create failed: GraphQL: No commits between main and fix/command-inbox-check (createPullRequest)
+
+### LOCAL TERMINAL LOG POINTER ###
+docs/reports/terminal/20260518-220700_add-command-inbox-check.log
+
+### LOCAL COMMAND RUN POINTER ###
+docs/reports/command_runs/agent-next-fail-smoke-004.md
+
+### GATES READONLY WHERE POSSIBLE ###
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+PASS: no stale STATUS/HANDOFF current-state fragments found
+PASS_NOTHING_TO_COLLECT
+Persistent handoff state check passed
+Governance check passed
+
+### CLASSIFICATION ###
+remote_evidence_for_command_inbox_check=missing
+next_step=repair_or_rerun_command_inbox_check_slice_from_observed_local_state
+
+### RESULT: PASS ###

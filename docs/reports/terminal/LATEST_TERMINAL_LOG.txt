@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-220415_harden-agent-next-hard-fail-result-contract.log
+docs/reports/terminal/20260518-220830_capture-command-inbox-check-missing-evidence.log
