@@ -1,0 +1,101 @@
+REPAIR PR 401 STATUS/HANDOFF COVERAGE REQUIREMENTS
+
+### SYNC PR BRANCH ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+ * branch            docs/refresh-status-handoff-after-pr400 -> FETCH_HEAD
+Already on 'docs/refresh-status-handoff-after-pr400'
+Your branch is up to date with 'origin/docs/refresh-status-handoff-after-pr400'.
+HEAD is now at d0c0565 Preserve status handoff refresh terminal log
+
+### PATCH STATUS REQUIRED SECTIONS AND COVERAGE TERMS ###
+
+### PATCH HANDOFF REQUIRED SECTIONS AND COVERAGE TERMS ###
+
+### VERIFY OLD CURRENT-STATE CLAIMS ARE STILL ABSENT ###
+
+### LOCAL GATES ON DIRTY DOC BRANCH ###
+Persistent handoff state check passed
+Governance check passed
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+docs/refresh-status-handoff-after-pr400
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+
+### PYTEST ###
+........................................................................ [ 18%]
+........................................................................ [ 36%]
+........................................................................ [ 54%]
+........................................................................ [ 72%]
+........................................................................ [ 91%]
+...................................                                      [100%]
+395 passed in 2.31s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check failed
+- documentation coverage state-doc-coverage: docs/handoff/CURRENT_HANDOFF.md missing term 
+'documentation coverage'
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[FAIL] documentation gates: documentation coverage state-doc-coverage: 
+docs/handoff/CURRENT_HANDOFF.md missing term 'documentation coverage'
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.26
+
+Overall: FAIL
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=1
+local_branch_count=69
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+docs/refresh-status-handoff-after-pr400
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+
+### RESULT: FAIL ###
+
+### COMMIT REPAIR ###
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+[docs/refresh-status-handoff-after-pr400 4c49960] Repair status handoff documentation coverage
+ 2 files changed, 45 insertions(+)
+
+### REMOTE MUTATION PREFLIGHT BEFORE PUSH ###
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+
+### PUSH REPAIR ###
+To github.com:vfi64/agentic-project-kit.git
+   d0c0565..4c49960  docs/refresh-status-handoff-after-pr400 -> docs/refresh-status-handoff-after-pr400
+
+### PR STATUS ###
+{"headRefName":"docs/refresh-status-handoff-after-pr400","headRefOid":"d0c05650be5b8a6c033fddc05b2078f60b5be2c3","mergeable":"MERGEABLE","number":401,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-18T19:04:44Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26054361725/job/76598616451","name":"test","startedAt":"2026-05-18T19:04:21Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-18T19:04:35Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26054355484/job/76598602494","name":"test","startedAt":"2026-05-18T19:04:12Z","status":"COMPLETED","workflowName":"CI"}],"title":"Refresh status and handoff after rule evidence governance"}
+
+### RESULT MARKER BEFORE LOG FINALIZATION ###
+### RESULT: FAIL ###
