@@ -3,6 +3,12 @@
 
 
 
+
+if [ "${1:-}" = "governance-check" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli governance check
+  exit $?
+fi
+
 if [ "${1:-}" = "action-list" ]; then
   shift
   PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli actions list "$@"
