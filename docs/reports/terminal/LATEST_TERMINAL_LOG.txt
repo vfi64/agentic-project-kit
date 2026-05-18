@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-185806_standard-error-prevention-contract-commit.log
+docs/reports/terminal/20260518-185924_standard-error-prevention-pr-closeout.log
