@@ -1,0 +1,4 @@
+command_id: agent-next-smoke-003
+title: Verify visible no-copy agent-next footer and latest report pointer
+safety_class: remote-mutation
+description: Minimal smoke command for end-to-end no-copy d/f handoff verification.
