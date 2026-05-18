@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import typer
 
-from agentic_project_kit.work_orders import load_work_order, list_work_orders, render_work_order, run_work_order
+from agentic_project_kit.work_orders import check_work_orders, load_work_order, list_work_orders, render_work_order, run_work_order
 
 work_orders_app = typer.Typer(help="Inspect and run repo-backed work orders.")
 
@@ -21,6 +21,16 @@ def show_command(work_order_id: str) -> None:
         typer.echo(str(exc))
         raise typer.Exit(code=1) from exc
     typer.echo(render_work_order(order))
+
+
+@work_orders_app.command("check")
+def check_command() -> None:
+    errors = check_work_orders()
+    if errors:
+        for error in errors:
+            typer.echo(f"[FAIL] {error}")
+        raise typer.Exit(code=1)
+    typer.echo("Work order contract check passed")
 
 
 @work_orders_app.command("run")
