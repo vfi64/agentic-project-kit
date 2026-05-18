@@ -137,7 +137,7 @@ def test_agent_next_pulls_prepares_runs_and_cleans_current(tmp_path, monkeypatch
     (inbox / "cmd.yaml").write_text("command_id: cmd" + chr(10) + "title: Cmd" + chr(10) + "safety_class: local-only" + chr(10), encoding="utf-8")
     (inbox / "cmd.sh").write_text("printf cmd" + chr(10), encoding="utf-8")
     monkeypatch.setattr(acr, "git_pull_ff_only", lambda: 0)
-    monkeypatch.setattr(acr, "agent_run", lambda: 0)
+    monkeypatch.setattr(acr, "agent_run", lambda extra_upload_paths=None: 0)
     assert acr.agent_next() == 0
     assert not acr.CURRENT_YAML.exists()
     assert not acr.CURRENT_SCRIPT.exists()
@@ -154,3 +154,21 @@ def test_main_dispatches_next_to_agent_next(monkeypatch):
     monkeypatch.setattr(acr, "agent_next", lambda: called.append("next") or 0)
     assert acr.main(["next"]) == 0
     assert called == ["next"]
+
+
+def test_agent_run_includes_extra_upload_paths(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    write_command(tmp_path, command_id="cmd-extra")
+    extra = Path(".agentic/commands/inbox/cmd-extra.yaml")
+    log_path = Path("docs/reports/terminal/cmd-extra.log")
+    log_path.parent.mkdir(parents=True)
+    log_path.write_text("log" + chr(10), encoding="utf-8")
+    monkeypatch.setattr(acr.terminal_logging, "run_logged", lambda name, command: 0)
+    monkeypatch.setattr(acr.terminal_logging, "read_latest_pointer", lambda: log_path)
+    pushed_paths = []
+    def fake_stage_commit_push(paths, message):
+        pushed_paths.extend(path.as_posix() for path in paths)
+        return 0
+    monkeypatch.setattr(acr, "stage_commit_push", fake_stage_commit_push)
+    assert acr.agent_run(extra_upload_paths=[extra]) == 0
+    assert ".agentic/commands/inbox/cmd-extra.yaml" in pushed_paths

@@ -220,7 +220,8 @@ def stage_commit_push(paths: list[Path], message: str) -> int:
     return pushed.returncode
 
 
-def agent_run() -> int:
+def agent_run(extra_upload_paths: list[Path] | None = None) -> int:
+    extra_upload_paths = list(extra_upload_paths or [])
     try:
         command = load_current_command()
     except (FileNotFoundError, ValueError) as exc:
@@ -246,7 +247,7 @@ def agent_run() -> int:
     report = write_report(command, outcome, exit_code, log_path)
     append_executed(command, outcome, exit_code)
 
-    upload_paths = [report, EXECUTED_JSONL]
+    upload_paths = [report, EXECUTED_JSONL, *extra_upload_paths]
     if log_path is not None:
         upload_paths.append(log_path)
     upload_paths.append(terminal_logging.LATEST_POINTER)
@@ -272,7 +273,7 @@ def agent_next() -> int:
         print(OUTCOME_FAIL_PULL)
         return pulled
     try:
-        prepare_current_from_inbox()
+        consumed_paths = list(prepare_current_from_inbox())
     except FileNotFoundError as exc:
         print(OUTCOME_FAIL_NO_COMMAND)
         print(str(exc))
@@ -282,7 +283,7 @@ def agent_next() -> int:
         print(str(exc))
         return 1
     try:
-        return agent_run()
+        return agent_run(extra_upload_paths=consumed_paths)
     finally:
         remove_current_files()
 
