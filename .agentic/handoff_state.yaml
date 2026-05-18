@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 8b1256e
-  commit_subject: Add repo-backed work order MVP (#353)
+  commit: d8aa032
+  commit_subject: Enforce work order constitutional contract (#356)
   semantics: last_substantive_work_state
   administrative_refresh_prs:
   - 347
