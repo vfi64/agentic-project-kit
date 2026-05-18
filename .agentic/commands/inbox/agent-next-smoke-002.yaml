@@ -1,0 +1,5 @@
+command_id: agent-next-smoke-002
+title: Agent-next consumption smoke test
+safety_class: remote-mutation
+expected_branch: agent-command/agent-next-smoke
+description: Verify that agent-next consumes inbox command files before running.
