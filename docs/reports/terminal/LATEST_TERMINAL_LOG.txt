@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-220415_harden-agent-next-hard-fail-result-contract.log
+docs/reports/terminal/20260518-220700_add-command-inbox-check.log
