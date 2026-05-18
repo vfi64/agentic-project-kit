@@ -1,1 +1,1 @@
-docs/reports/command_runs/agent-next-fail-smoke-004.md
+docs/reports/command_runs/verify-agent-next-footer-pf-001.md

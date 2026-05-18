@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-222607_repair-agent-next-footer-pf-minimal.log
+docs/reports/terminal/20260518-222953_verify-agent-next-footer-pf-001.log
