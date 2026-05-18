@@ -1,0 +1,133 @@
+terminal_log=docs/reports/terminal/20260518-090624_merge-terminal-log-wrapper-pr.log
+### RUN: sh -c 
+set -eu
+
+printf "### VERIFY BRANCH ###\n"
+git branch --show-current
+test "$(git branch --show-current)" = "feature/terminal-log-wrapper"
+
+printf "\n### VERIFY ONLY TERMINAL LOG ARTIFACTS MAY BE DIRTY ###\n"
+git status --short
+non_log_dirty="$(git status --short | grep -v "docs/reports/terminal/" || true)"
+test -z "$non_log_dirty"
+
+printf "\n### UPLOAD CURRENT LOG ARTIFACTS BEFORE MERGE CHECK IF NEEDED ###\n"
+printf "Note: merge check itself is logged; terminal artifacts may be dirty during this run.\n"
+
+printf "\n### PR VIEW ###\n"
+gh pr view 331 --json number,state,mergeStateStatus,headRefName,baseRefName,title
+
+printf "\n### PR CHECKS ###\n"
+gh pr checks 331
+
+printf "\n### LOCAL TARGETED TESTS ###\n"
+PYTHONPATH=src python3 -m pytest -q tests/test_terminal_logging.py tests/test_action_registry.py tests/test_cockpit_readiness.py
+
+printf "\n### LOCAL FULL GATE ###\n"
+./ns dev
+
+printf "\n### MERGE PR 331 ###\n"
+gh pr merge 331 --squash --delete-branch
+
+printf "\n### UPDATE MAIN ###\n"
+git switch main
+git pull --ff-only origin main
+
+printf "\n### VERIFY MAIN AFTER MERGE ###\n"
+git status --short
+git log --oneline -8
+./ns dev
+./ns cockpit-readiness | sed -n "1,180p"
+./ns terminal-status || true
+
+printf "\n### RESULT: PASS ###\n"
+
+### VERIFY BRANCH ###
+feature/terminal-log-wrapper
+
+### VERIFY ONLY TERMINAL LOG ARTIFACTS MAY BE DIRTY ###
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? docs/reports/terminal/20260518-090624_merge-terminal-log-wrapper-pr.log
+
+### UPLOAD CURRENT LOG ARTIFACTS BEFORE MERGE CHECK IF NEEDED ###
+Note: merge check itself is logged; terminal artifacts may be dirty during this run.
+
+### PR VIEW ###
+{"baseRefName":"main","headRefName":"feature/terminal-log-wrapper","mergeStateStatus":"CLEAN","number":331,"state":"OPEN","title":"Add terminal log wrapper commands"}
+
+### PR CHECKS ###
+test	pass	18s	https://github.com/vfi64/agentic-project-kit/actions/runs/26018717218/job/76474682988	
+test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26018719409/job/76474690272	
+
+### LOCAL TARGETED TESTS ###
+.............                                                            [100%]
+13 passed in 0.02s
+
+### LOCAL FULL GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+feature/terminal-log-wrapper
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? docs/reports/terminal/20260518-090624_merge-terminal-log-wrapper-pr.log
+
+### PYTEST ###
+........................................................................ [ 24%]
+........................................................................ [ 48%]
+........................................................................ [ 72%]
+........................................................................ [ 96%]
+...........                                                              [100%]
+299 passed in 1.63s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.23
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=1
+local_branch_count=44
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+feature/terminal-log-wrapper
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? docs/reports/terminal/20260518-090624_merge-terminal-log-wrapper-pr.log
+
+### RESULT: PASS ###
+
+### MERGE PR 331 ###
+failed to run git: error: Your local changes to the following files would be overwritten by checkout:
+	docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+Please commit your changes or stash them before you switch branches.
+Aborting
+
+### EXIT: 1
+### RESULT: FAIL ###
