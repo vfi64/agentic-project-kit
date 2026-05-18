@@ -1,0 +1,3 @@
+command_id: harden-inbox-completed-command-guard-001
+title: Reject completed command ids in command inbox check
+safety_class: remote-mutation
