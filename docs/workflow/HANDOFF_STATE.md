@@ -21,6 +21,10 @@ Rules use `active`, `superseded`, or `historical` status. Generated handoff prom
 
 The handoff state references `.agentic/no_copy_terminal_policy.yaml`. A normal PASS handoff should therefore rely on committed/pushed logs and reports; manual terminal paste is reserved for failure or unavailable evidence.
 
+## Environment bootstrap rule
+
+A new chat or workflow must not assume that global `agentic-kit`, `python`, `ruff`, or `.venv` already exist. First verify the local environment. Prefer project-local commands such as `.venv/bin/python -m agentic_project_kit.cli ...` after `.venv` has been created. If global `agentic-kit` is missing or `.venv` is absent, classify this as bootstrap/environment state, not as a product failure.
+
 ## Commit Semantics
 
 `safe_state.commit` records the last substantive work state by default, not necessarily the newest administrative refresh merge on `main`.

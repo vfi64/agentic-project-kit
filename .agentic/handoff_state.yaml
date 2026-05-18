@@ -16,14 +16,15 @@ safe_state:
   administrative_refresh_prs:
   - 347
   - 349
+  - 373
   working_tree_expected_clean: true
 release:
-  current_version: 0.3.24
-  previous_version: 0.3.23
-  tag: v0.3.24
+  current_version: 0.3.25
+  previous_version: 0.3.24
+  tag: v0.3.25
   github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
-  zenodo_version_doi: 10.5281/zenodo.20270197
+  zenodo_version_doi: 10.5281/zenodo.20273989
   post_release_check: PASS
 open_items:
   prs: []
@@ -82,6 +83,8 @@ recent_failure_patterns:
     updates.
 - id: missing-project-venv-tooling
   prevention: Prefer project-local .venv commands over global python, ruff, or agentic-kit.
+- id: global-cli-or-venv-assumption
+  prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and agentic-kit before using command names. Treat missing global agentic-kit or missing .venv as bootstrap/environment state, not as product failure.
 - id: stale-handoff-after-administrative-refresh
   prevention: Keep safe_state tied to the last substantive commit and list administrative
     refresh PRs separately.
@@ -96,10 +99,7 @@ next_allowed_tasks:
 blocked_until_closeout:
 - GUI mutation controls
 - new release cycle automation
-first_instruction: Work first on repo-backed work-order automation so long implementation
-  work orders are generated, stored, pulled, and executed through checked repository
-  artifacts. Keep remote mutations out of scope unless an explicit checked action
-  contract exists.
+first_instruction: Work first on deterministic command-contract and environment-bootstrap drift prevention. Verify real CLI commands, .venv availability, ns shortcuts, docs, and work-order command references before extending work-order execution or GUI controls.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
