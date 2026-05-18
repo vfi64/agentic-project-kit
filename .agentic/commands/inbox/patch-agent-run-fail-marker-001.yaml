@@ -1,0 +1,3 @@
+command_id: patch-agent-run-fail-marker-001
+title: Patch agent-run fail marker detection
+safety_class: remote-mutation
