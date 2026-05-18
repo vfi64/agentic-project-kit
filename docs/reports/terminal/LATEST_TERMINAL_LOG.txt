@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-212123_final-clean-main-handoff-review.log
+docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log

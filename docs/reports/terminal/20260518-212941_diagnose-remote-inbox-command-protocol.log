@@ -1,0 +1,368 @@
+DIAGNOSE REMOTE INBOX COMMAND PROTOCOL FOR NO-COPY WORKFLOW
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### CURRENT STATE ###
+main
+5378df9 Preserve final clean main handoff review log (#407)
+5e4b4d3 Preserve PR 405 merge verification log (#406)
+0bcc86e Finish communication artifact garbage collector (#405)
+6877e57 Preserve PR 403 merge verification log (#404)
+922e4ea Add stale state fragment guard (#403)
+5e03fdc Preserve PR 401 merge verification log (#402)
+0843257 Refresh status and handoff after rule evidence governance (#401)
+b09b65e Preserve PR 399 merge verification log (#400)
+171bdfc Add remote mutation dirty-state preflight guard (#399)
+f978096 Preserve PR 397 merge verification log (#398)
+2e1e81c Preserve sync diagnosis for rule evidence governance (#397)
+7b59312 Preserve PR 395 merge verification log (#396)
+
+### REQUIRED GOVERNANCE GATES ###
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+PASS: no stale STATUS/HANDOFF current-state fragments found
+PASS_NOTHING_TO_COLLECT
+Persistent handoff state check passed
+Governance check passed
+
+### AGENT COMMAND RUNNER INVENTORY ###
+ns:113:if [ "${1:-}" = "agent-next" ]; then
+ns:118:if [ "${1:-}" = "agent-run" ]; then
+src/agentic_project_kit/action_registry.py:102:        name="agent-next",
+src/agentic_project_kit/action_registry.py:104:        mutation_scope="docs/reports/command_runs and docs/reports/terminal",
+src/agentic_project_kit/action_registry.py:122:        name="agent-run",
+src/agentic_project_kit/action_registry.py:124:        mutation_scope="docs/reports/command_runs and docs/reports/terminal",
+src/agentic_project_kit/agent_command_runner.py:4:.agentic/commands/current.yaml and .agentic/commands/current.sh.
+src/agentic_project_kit/agent_command_runner.py:11:- reports are written under docs/reports/command_runs/,
+src/agentic_project_kit/agent_command_runner.py:12:- executed command ids are tracked in .agentic/commands/executed.jsonl.
+src/agentic_project_kit/agent_command_runner.py:28:CURRENT_YAML = COMMAND_DIR / "current.yaml"
+src/agentic_project_kit/agent_command_runner.py:29:CURRENT_SCRIPT = COMMAND_DIR / "current.sh"
+src/agentic_project_kit/agent_command_runner.py:30:INBOX_DIR = COMMAND_DIR / "inbox"
+src/agentic_project_kit/agent_command_runner.py:31:EXECUTED_JSONL = COMMAND_DIR / "executed.jsonl"
+src/agentic_project_kit/agent_command_runner.py:32:REPORT_DIR = Path("docs/reports/command_runs")
+src/agentic_project_kit/agent_command_runner.py:81:def inbox_yaml_files() -> list[Path]:
+src/agentic_project_kit/agent_command_runner.py:87:def pending_inbox_command_pair() -> tuple[Path, Path]:
+src/agentic_project_kit/agent_command_runner.py:89:    for yaml_path in inbox_yaml_files():
+src/agentic_project_kit/agent_command_runner.py:94:        raise FileNotFoundError("No complete pending command pair in .agentic/commands/inbox")
+src/agentic_project_kit/agent_command_runner.py:101:def prepare_current_from_inbox() -> tuple[Path, Path]:
+src/agentic_project_kit/agent_command_runner.py:102:    yaml_path, script_path = pending_inbox_command_pair()
+src/agentic_project_kit/agent_command_runner.py:118:        raise FileNotFoundError("Missing .agentic/commands/current.yaml or current.sh")
+src/agentic_project_kit/agent_command_runner.py:282:        for yaml_path in inbox_yaml_files():
+src/agentic_project_kit/agent_command_runner.py:286:        failures.append("complete inbox command remains: " + ", ".join(complete_pairs))
+src/agentic_project_kit/agent_command_runner.py:287:    unstaged_deletions = [path for path in git_porcelain_paths() if path.startswith(".agentic/commands/inbox/")]
+src/agentic_project_kit/agent_command_runner.py:289:        failures.append("inbox path still dirty after run: " + ", ".join(unstaged_deletions))
+src/agentic_project_kit/agent_command_runner.py:304:        consumed_paths = list(prepare_current_from_inbox())
+Binary file src/agentic_project_kit/__pycache__/communication_artifact_gc.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/action_registry.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/agent_command_runner.cpython-314.pyc matches
+src/agentic_project_kit/communication_artifact_gc.py:17:    ArtifactRule("agent-current-yaml", ".agentic/commands/current.yaml", "stale-transient-command", "transient compatibility file after agent-next or agent-run"),
+src/agentic_project_kit/communication_artifact_gc.py:18:    ArtifactRule("agent-current-sh", ".agentic/commands/current.sh", "stale-transient-command", "transient compatibility file after agent-next or agent-run"),
+tests/test_communication_artifact_gc.py:15:    current_yaml = commands / "current.yaml"
+tests/test_communication_artifact_gc.py:16:    current_sh = commands / "current.sh"
+tests/test_communication_artifact_gc.py:17:    current_yaml.write_text("stale", encoding="utf-8")
+tests/test_communication_artifact_gc.py:18:    current_sh.write_text("stale", encoding="utf-8")
+tests/test_communication_artifact_gc.py:21:    assert ".agentic/commands/current.yaml" in message
+tests/test_communication_artifact_gc.py:22:    assert ".agentic/commands/current.sh" in message
+tests/test_communication_artifact_gc.py:23:    assert not current_yaml.exists()
+tests/test_communication_artifact_gc.py:24:    assert not current_sh.exists()
+Binary file tests/__pycache__/test_communication_artifact_gc.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_agent_command_runner.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_agent_command_runner.cpython-314-pytest-9.0.2.pyc matches
+tests/test_agent_command_runner.py:16:    (command_dir / "current.yaml").write_text(chr(10).join(yaml_lines), encoding="utf-8")
+tests/test_agent_command_runner.py:19:    (command_dir / "current.sh").write_text(script, encoding="utf-8")
+tests/test_agent_command_runner.py:70:    action = get_action("agent-run")
+tests/test_agent_command_runner.py:96:    assert "docs/reports/command_runs/cmd-1.md" in pushed_paths
+tests/test_agent_command_runner.py:100:def test_pending_inbox_command_pair_requires_exactly_one_pair(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:102:    inbox = acr.INBOX_DIR
+tests/test_agent_command_runner.py:103:    inbox.mkdir(parents=True)
+tests/test_agent_command_runner.py:104:    (inbox / "a.yaml").write_text("command_id: a" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:105:    (inbox / "a.sh").write_text("printf a" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:106:    assert acr.pending_inbox_command_pair()[0].name == "a.yaml"
+tests/test_agent_command_runner.py:107:    (inbox / "b.yaml").write_text("command_id: b" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:108:    (inbox / "b.sh").write_text("printf b" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:110:        acr.pending_inbox_command_pair()
+tests/test_agent_command_runner.py:117:def test_prepare_current_from_inbox_copies_and_removes_pair(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:119:    inbox = acr.INBOX_DIR
+tests/test_agent_command_runner.py:120:    inbox.mkdir(parents=True)
+tests/test_agent_command_runner.py:121:    (inbox / "cmd.yaml").write_text("command_id: cmd" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:122:    (inbox / "cmd.sh").write_text("printf cmd" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:123:    yaml_path, script_path = acr.prepare_current_from_inbox()
+tests/test_agent_command_runner.py:135:    inbox = acr.INBOX_DIR
+tests/test_agent_command_runner.py:136:    inbox.mkdir(parents=True)
+tests/test_agent_command_runner.py:137:    (inbox / "cmd.yaml").write_text("command_id: cmd" + chr(10) + "title: Cmd" + chr(10) + "safety_class: local-only" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:138:    (inbox / "cmd.sh").write_text("printf cmd" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:147:    action = get_action("agent-next")
+tests/test_agent_command_runner.py:162:    extra = Path(".agentic/commands/inbox/cmd-extra.yaml")
+tests/test_agent_command_runner.py:174:    assert ".agentic/commands/inbox/cmd-extra.yaml" in pushed_paths
+tests/test_agent_command_runner.py:181:    assert any("current.yaml" in item for item in failures)
+tests/test_agent_command_runner.py:184:def test_agent_next_postconditions_detect_complete_inbox_pair(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:190:    assert any("complete inbox command remains" in item for item in failures)
+docs/TEST_GATES.md:255:`./ns artifact-gc` reports transient communication artifacts without deleting them. `./ns artifact-gc --execute` removes only registered transient `.agentic/commands/current.yaml` and `.agentic/commands/current.sh` compatibility files. It must not delete `docs/reports/terminal/LATEST_TERMINAL_LOG.txt`, because that file is part of the committed terminal-evidence pointer chain.
+docs/workflow/COMMUNICATION_ARTIFACT_GC.md:16:- never delete `.agentic/commands/inbox/*` as generic temporary files;
+docs/workflow/COMMUNICATION_ARTIFACT_GC.md:24:The registry covers the existing temporary and communication artifact classes currently used by the repository: `/tmp/agentic-project-kit-*.log`, `docs/reports/terminal/*.log`, `docs/reports/terminal/LATEST_TERMINAL_LOG.txt`, `docs/reports/command_runs/*.md`, `.agentic/commands/inbox/*`, and `.agentic/commands/current.*`.
+docs/workflow/REPO_COMMAND_RUNNER.md:3:`./ns agent-run` is the intended no-copy handoff path for local agent work.
+docs/workflow/REPO_COMMAND_RUNNER.md:7:- `.agentic/commands/current.yaml`
+docs/workflow/REPO_COMMAND_RUNNER.md:8:- `.agentic/commands/current.sh`
+docs/workflow/REPO_COMMAND_RUNNER.md:14:3. validates `current.sh` with `sh -n`,
+docs/workflow/REPO_COMMAND_RUNNER.md:16:5. writes a report under `docs/reports/command_runs/`,
+docs/workflow/REPO_COMMAND_RUNNER.md:17:6. appends `.agentic/commands/executed.jsonl`,
+docs/workflow/REPO_COMMAND_RUNNER.md:39:`./ns agent-next` is the preferred command for routine no-copy handoff. It pulls the current branch, expects exactly one complete pending command pair under `.agentic/commands/inbox/`, copies that pair to the transient `current.yaml` and `current.sh` compatibility path, executes it through `agent-run`, then removes the transient current files.
+docs/workflow/REPO_COMMAND_RUNNER.md:41:Pending command files use matching names, for example `.agentic/commands/inbox/example.yaml` and `.agentic/commands/inbox/example.sh`. Multiple complete pending commands are refused with `FAIL_AMBIGUOUS_COMMANDS`.
+docs/workflow/REPO_COMMAND_RUNNER.md:47:A successful `PASS_EXECUTED` is intended to mean that the command script succeeded and the handoff state was cleaned up. The runner therefore checks postconditions after `agent-next`:
+docs/workflow/REPO_COMMAND_RUNNER.md:49:- no transient `.agentic/commands/current.yaml`
+docs/workflow/REPO_COMMAND_RUNNER.md:50:- no transient `.agentic/commands/current.sh`
+docs/workflow/REPO_COMMAND_RUNNER.md:51:- no complete pending inbox command pair left behind
+docs/workflow/REPO_COMMAND_RUNNER.md:52:- no dirty inbox command paths after upload
+docs/workflow/REPO_COMMAND_RUNNER.md:54:If any of these checks fail, `agent-next` reports `FAIL_POSTCONDITION`.
+docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md:12:- Relevant terminal actions must write durable evidence under docs/reports/terminal or docs/reports/command_runs.
+docs/WORKFLOW_OUTPUT_CYCLE.md:109:`tools/next-step.py` is intended to work even when the project virtual environment is not activated in the current shell.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:17:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:18:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:19:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:20:c63da03 Add agent command inbox runner (#336)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:138:if [ "${1:-}" = "agent-next" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:143:if [ "${1:-}" = "agent-run" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:386:.agentic/handoff_state.yaml:33:  - agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:388:.agentic/commands/executed.jsonl:2:{"command_id": "finalize-after-agent-next-001", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "38ff3b91f9fc0426a8a95acab701b4697a7877b44e2364dc6abb0321ba986018", "timestamp_utc": "2026-05-18T11:02:23.137057+00:00"}
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:389:.agentic/commands/executed.jsonl:3:{"command_id": "agent-next-smoke-001", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "dd091aaf9051cbc339c43751e67f4110cfddc7dae619978776b541cb470740ac", "timestamp_utc": "2026-05-18T11:07:12.602078+00:00"}
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:390:.agentic/commands/executed.jsonl:4:{"command_id": "agent-next-smoke-002", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "cc966414905a6e6afbefbda6cc531334ec7c741c34689ce02c05864bdf9f5221", "timestamp_utc": "2026-05-18T11:11:12.552392+00:00"}
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:399:docs/handoff/CURRENT_HANDOFF.md:285:- Current slice: `feature/agent-command-inbox` adds inbox-based `./ns agent-next`; prefer one pending command pair under `.agentic/commands/inbox/` instead of transient current files.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:400:docs/handoff/CURRENT_HANDOFF.md:286:- Completed: PR #336 merged agent-next inbox mode. Preferred routine workflow is now: commit one command pair under .agentic/commands/inbox/, run ./ns agent-next locally, and use committed command-run/terminal artifacts instead of pasted terminal output.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:401:docs/handoff/CURRENT_HANDOFF.md:287:- Current hardening: agent-next postconditions are being made explicit and test-covered to prevent stale current files, unconsumed inbox commands, and hidden dirty state after PASS_EXECUTED.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:411:docs/STATUS.md:253:- In progress: agent command inbox slice adds `./ns agent-next` so routine local handoff can pull and execute exactly one pending repo-backed command.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:412:docs/STATUS.md:254:- Completed: PR #336 added inbox-based ./ns agent-next so routine local handoff can pull and execute exactly one pending repo-backed command pair.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:416:docs/workflow/REPO_COMMAND_RUNNER.md:39:`./ns agent-next` is the preferred command for routine no-copy handoff. It pulls the current branch, expects exactly one complete pending command pair under `.agentic/commands/inbox/`, copies that pair to the transient `current.yaml` and `current.sh` compatibility path, executes it through `agent-run`, then removes the transient current files.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:417:docs/workflow/REPO_COMMAND_RUNNER.md:47:A successful `PASS_EXECUTED` is intended to mean that the command script succeeded and the handoff state was cleaned up. The runner therefore checks postconditions after `agent-next`:
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:418:docs/workflow/REPO_COMMAND_RUNNER.md:54:If any of these checks fail, `agent-next` reports `FAIL_POSTCONDITION`.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:427:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:32:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:428:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:33:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:429:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:34:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:434:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:18:24:if [ "${1:-}" = "agent-next" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:435:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:19:102:        name="agent-next",
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:436:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:48:| `pr-cleanup` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:437:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:49:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:438:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:51:| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:439:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:55:| `agent-next` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_AMBIGUOUS_COMMANDS, FAIL_PULL, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:440:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:17:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:441:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:18:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:442:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:19:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:445:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:446:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:6:253:- Completed: PR #336 added inbox-based ./ns agent-next so routine local handoff can pull and execute exactly one pending repo-backed command pair.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:447:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:7:285:- Completed: PR #336 merged agent-next inbox mode. Preferred routine workflow is now: commit one command pair under .agentic/commands/inbox/, run ./ns agent-next locally, and use committed command-run/terminal artifacts instead of pasted terminal output.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:448:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:15:agent-command/finalize-after-agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:449:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:16: D .agentic/commands/inbox/finalize-after-agent-next-001.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:450:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:17: D .agentic/commands/inbox/finalize-after-agent-next-001.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:451:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:23:?? docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:452:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:69:agent-command/finalize-after-agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:453:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:70: D .agentic/commands/inbox/finalize-after-agent-next-001.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:454:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:71: D .agentic/commands/inbox/finalize-after-agent-next-001.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:455:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:77:?? docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:456:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:80:[agent-command/finalize-after-agent-next a7ac1d9] Finalize state after agent-next inbox runner
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:457:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:82: delete mode 100755 .agentic/commands/inbox/finalize-after-agent-next-001.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:458:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:83: delete mode 100644 .agentic/commands/inbox/finalize-after-agent-next-001.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:459:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:13:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:460:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:14:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:461:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:15:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:462:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:163:if [ "${1:-}" = "agent-next" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:466:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:431:./ns:24:if [ "${1:-}" = "agent-next" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:469:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:436:src/agentic_project_kit/action_registry.py:102:        name="agent-next",
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:473:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:487:tests/test_agent_command_runner.py:147:    action = get_action("agent-next")
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:477:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:495:docs/handoff/CURRENT_HANDOFF.md:285:- Current slice: `feature/agent-command-inbox` adds inbox-based `./ns agent-next`; prefer one pending command pair under `.agentic/commands/inbox/` instead of transient current files.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:478:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:496:docs/handoff/CURRENT_HANDOFF.md:286:- Completed: PR #336 merged agent-next inbox mode. Preferred routine workflow is now: commit one command pair under .agentic/commands/inbox/, run ./ns agent-next locally, and use committed command-run/terminal artifacts instead of pasted terminal output.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:479:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:497:docs/handoff/CURRENT_HANDOFF.md:287:- Current hardening: agent-next postconditions are being made explicit and test-covered to prevent stale current files, unconsumed inbox commands, and hidden dirty state after PASS_EXECUTED.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:481:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:503:docs/STATUS.md:253:- In progress: agent command inbox slice adds `./ns agent-next` so routine local handoff can pull and execute exactly one pending repo-backed command.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:482:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:504:docs/STATUS.md:254:- Completed: PR #336 added inbox-based ./ns agent-next so routine local handoff can pull and execute exactly one pending repo-backed command pair.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:483:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:510:docs/workflow/REPO_COMMAND_RUNNER.md:39:`./ns agent-next` is the preferred command for routine no-copy handoff. It pulls the current branch, expects exactly one complete pending command pair under `.agentic/commands/inbox/`, copies that pair to the transient `current.yaml` and `current.sh` compatibility path, executes it through `agent-run`, then removes the transient current files.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:484:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:511:docs/workflow/REPO_COMMAND_RUNNER.md:47:A successful `PASS_EXECUTED` is intended to mean that the command script succeeded and the handoff state was cleaned up. The runner therefore checks postconditions after `agent-next`:
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:485:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:512:docs/workflow/REPO_COMMAND_RUNNER.md:54:If any of these checks fail, `agent-next` reports `FAIL_POSTCONDITION`.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:489:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:521:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:32:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:490:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:522:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:33:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:491:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:523:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:34:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:493:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:539:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:18:24:if [ "${1:-}" = "agent-next" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:494:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:540:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:19:102:        name="agent-next",
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:495:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:541:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:49:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:496:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:543:docs/reports/terminal/agent_command_inbox_mvp_20260518-125757.log:55:| `agent-next` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_AMBIGUOUS_COMMANDS, FAIL_PULL, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:497:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:546:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:17:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:498:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:547:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:18:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:499:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:548:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:19:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:500:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:555:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:501:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:556:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:6:253:- Completed: PR #336 added inbox-based ./ns agent-next so routine local handoff can pull and execute exactly one pending repo-backed command pair.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:502:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:557:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:7:285:- Completed: PR #336 merged agent-next inbox mode. Preferred routine workflow is now: commit one command pair under .agentic/commands/inbox/, run ./ns agent-next locally, and use committed command-run/terminal artifacts instead of pasted terminal output.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:503:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:558:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:15:agent-command/finalize-after-agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:504:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:559:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:16: D .agentic/commands/inbox/finalize-after-agent-next-001.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:505:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:560:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:17: D .agentic/commands/inbox/finalize-after-agent-next-001.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:506:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:561:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:23:?? docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:507:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:562:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:69:agent-command/finalize-after-agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:508:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:563:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:70: D .agentic/commands/inbox/finalize-after-agent-next-001.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:509:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:564:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:71: D .agentic/commands/inbox/finalize-after-agent-next-001.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:510:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:565:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:77:?? docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:511:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:566:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:80:[agent-command/finalize-after-agent-next a7ac1d9] Finalize state after agent-next inbox runner
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:512:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:567:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:82: delete mode 100755 .agentic/commands/inbox/finalize-after-agent-next-001.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:513:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:568:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:83: delete mode 100644 .agentic/commands/inbox/finalize-after-agent-next-001.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:514:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:569:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:515:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:570:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:14:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:516:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:571:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:15: D .agentic/commands/inbox/agent-next-smoke-002.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:517:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:572:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:16: D .agentic/commands/inbox/agent-next-smoke-002.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:518:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:573:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:20:?? docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:519:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:574:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:66:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:520:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:575:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:67: D .agentic/commands/inbox/agent-next-smoke-002.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:521:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:576:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:68: D .agentic/commands/inbox/agent-next-smoke-002.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:522:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:577:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:72:?? docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:523:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:579:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:524:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:580:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:6:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:525:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:581:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:26:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:526:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:582:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:31:| `cockpit-readiness` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:527:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:583:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:32:| `agent-next` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_AMBIGUOUS_COMMANDS, FAIL_PULL, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:528:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:584:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:34:| `run-logged` | local-only | docs/reports/terminal | False | PASS, FAIL, FAIL_NO_COMMAND, FAIL_MISSING_SEPARATOR |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:529:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:585:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:36:| `terminal-clean-check` | read-only | none | True | PASS_CLEAN, PASS_ONLY_TERMINAL_LOG_DIRTY, FAIL_DIRTY_NON_LOG_FILES |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:530:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:586:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:45:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:531:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:587:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:49:?? docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:532:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:588:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:95:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:533:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:589:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:99:?? docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:534:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:592:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:137:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:535:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:593:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:138:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:536:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:594:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:139:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:537:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:599:docs/reports/terminal/LATEST_TERMINAL_LOG.txt:1:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:539:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:602:docs/reports/terminal/agent_workflow_hardening_20260518-131856.log:54:| `agent-next` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_AMBIGUOUS_COMMANDS, FAIL_PULL, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD, FAIL_POSTCONDITION |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:540:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:605:docs/reports/command_runs/agent-next-smoke-001.md:1:# Agent command run: agent-next-smoke-001
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:541:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:606:docs/reports/command_runs/agent-next-smoke-001.md:7:- Branch: agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:542:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:607:docs/reports/command_runs/agent-next-smoke-001.md:9:- Terminal log: docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:543:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:608:docs/reports/command_runs/finalize-after-agent-next-001.md:1:# Agent command run: finalize-after-agent-next-001
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:544:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:609:docs/reports/command_runs/finalize-after-agent-next-001.md:3:- Title: Finalize state after agent-next inbox runner
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:545:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:610:docs/reports/command_runs/finalize-after-agent-next-001.md:7:- Branch: agent-command/finalize-after-agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:546:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:611:docs/reports/command_runs/finalize-after-agent-next-001.md:9:- Terminal log: docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:547:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:612:docs/reports/command_runs/agent-next-smoke-002.md:1:# Agent command run: agent-next-smoke-002
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:548:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:613:docs/reports/command_runs/agent-next-smoke-002.md:7:- Branch: agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:549:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:614:docs/reports/command_runs/agent-next-smoke-002.md:9:- Terminal log: docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:550:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:617:.agentic/commands/executed.jsonl:2:{"command_id": "finalize-after-agent-next-001", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "38ff3b91f9fc0426a8a95acab701b4697a7877b44e2364dc6abb0321ba986018", "timestamp_utc": "2026-05-18T11:02:23.137057+00:00"}
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:551:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:618:.agentic/commands/executed.jsonl:3:{"command_id": "agent-next-smoke-001", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "dd091aaf9051cbc339c43751e67f4110cfddc7dae619978776b541cb470740ac", "timestamp_utc": "2026-05-18T11:07:12.602078+00:00"}
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:552:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:619:.agentic/commands/executed.jsonl:4:{"command_id": "agent-next-smoke-002", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "cc966414905a6e6afbefbda6cc531334ec7c741c34689ce02c05864bdf9f5221", "timestamp_utc": "2026-05-18T11:11:12.552392+00:00"}
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:553:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:554:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:14:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:555:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:15: D .agentic/commands/inbox/agent-next-smoke-002.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:556:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:16: D .agentic/commands/inbox/agent-next-smoke-002.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:557:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:20:?? docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:558:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:66:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:559:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:67: D .agentic/commands/inbox/agent-next-smoke-002.sh
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:560:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:68: D .agentic/commands/inbox/agent-next-smoke-002.yaml
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:561:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:72:?? docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:562:docs/reports/terminal/handoff_update_automation_inspection_20260518.log:15:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:563:docs/reports/terminal/handoff_update_automation_inspection_20260518.log:16:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:564:docs/reports/terminal/handoff_update_automation_inspection_20260518.log:17:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:565:docs/reports/terminal/handoff_update_automation_inspection_20260518.log:65:  - agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:568:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:569:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:6:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:570:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:25:| `pr-cleanup` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:571:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:26:| `release-verify` | read-only | none | True | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:572:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:28:| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:573:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:32:| `agent-next` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_AMBIGUOUS_COMMANDS, FAIL_PULL, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:574:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:45:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:575:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:49:?? docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:576:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:95:agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:577:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:99:?? docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:578:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:137:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:579:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:138:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:580:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:139:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:583:docs/reports/terminal/handoff_refresh_after_pr346_20260518.log:25:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:584:docs/reports/terminal/LATEST_TERMINAL_LOG.txt:1:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:588:docs/reports/terminal/agent_workflow_hardening_20260518-131856.log:54:| `agent-next` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_AMBIGUOUS_COMMANDS, FAIL_PULL, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD, FAIL_POSTCONDITION |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:589:docs/reports/command_runs/agent-next-smoke-001.md:1:# Agent command run: agent-next-smoke-001
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:590:docs/reports/command_runs/agent-next-smoke-001.md:7:- Branch: agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:591:docs/reports/command_runs/agent-next-smoke-001.md:9:- Terminal log: docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:592:docs/reports/command_runs/finalize-after-agent-next-001.md:1:# Agent command run: finalize-after-agent-next-001
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:593:docs/reports/command_runs/finalize-after-agent-next-001.md:3:- Title: Finalize state after agent-next inbox runner
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:594:docs/reports/command_runs/finalize-after-agent-next-001.md:7:- Branch: agent-command/finalize-after-agent-next
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:595:docs/reports/command_runs/finalize-after-agent-next-001.md:9:- Terminal log: docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:596:docs/reports/command_runs/agent-next-smoke-002.md:1:# Agent command run: agent-next-smoke-002
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:597:docs/reports/command_runs/agent-next-smoke-002.md:7:- Branch: agent-command/agent-next-smoke
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:598:docs/reports/command_runs/agent-next-smoke-002.md:9:- Terminal log: docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+
+### CURRENT COMMAND DIRECTORIES ###
+.agentic/commands/executed.jsonl
+
+### EXISTING COMMAND REPORTS ###
+docs/reports/command_runs/agent-next-smoke-001.md
+docs/reports/command_runs/agent-next-smoke-002.md
+docs/reports/command_runs/finalize-after-agent-next-001.md
+docs/reports/command_runs/finalize-after-repo-command-runner-001.md
+
+### LATEST TERMINAL POINTER ###
+docs/reports/terminal/20260518-212123_final-clean-main-handoff-review.log
+
+### TARGETED TESTS ###
+...................................                                      [100%]
+35 passed, 363 deselected in 0.20s
+
+### FULL LOCAL GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 18%]
+........................................................................ [ 36%]
+........................................................................ [ 54%]
+........................................................................ [ 72%]
+........................................................................ [ 90%]
+......................................                                   [100%]
+398 passed in 2.25s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.26
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=68
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### GAP CLASSIFICATION ###
+desired_protocol=LLM_to_remote_inbox_to_local_agent_next_to_remote_logs_to_LLM
+normal_success_response=d_only
+normal_failure_response=f_only
+exception_requires_copy_paste=terminal_crash_or_no_remote_evidence
+next_patch_expected=make_remote_inbox_command_protocol_documented_test_backed_and_machine_checkable
+
+### RESULT MARKER BEFORE LOG FINALIZATION ###
+### RESULT: PASS ###
