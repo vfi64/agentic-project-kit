@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-225016_harden-inbox-lifecycle-cleanup-001.log
+docs/reports/terminal/20260518-225213_harden-inbox-completed-command-guard.log

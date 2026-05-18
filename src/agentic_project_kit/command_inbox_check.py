@@ -4,7 +4,7 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from agentic_project_kit.agent_command_runner import ALLOWED_SAFETY_CLASSES, INBOX_DIR, _parse_simple_yaml
+from agentic_project_kit.agent_command_runner import ALLOWED_SAFETY_CLASSES, EXECUTED_JSONL, INBOX_DIR, REPORT_DIR, _parse_simple_yaml
 
 FORBIDDEN_SCRIPT_FRAGMENTS = (
     "<<",
@@ -26,6 +26,23 @@ def _pending_files(inbox_dir: Path) -> tuple[list[Path], list[Path]]:
         return [], []
     return sorted(inbox_dir.glob("*.yaml")), sorted(inbox_dir.glob("*.sh"))
 
+def completed_command_ids(report_dir: Path = REPORT_DIR, executed_jsonl: Path = EXECUTED_JSONL) -> set[str]:
+    ids: set[str] = set()
+    if report_dir.exists():
+        for path in report_dir.glob("*.md"):
+            if path.name != "LATEST_COMMAND_RUN.txt":
+                ids.add(path.stem)
+    if executed_jsonl.exists():
+        for line in executed_jsonl.read_text(encoding="utf-8").splitlines():
+            if "\"command_id\"" not in line:
+                continue
+            _, _, after = line.partition("\"command_id\"")
+            _, _, tail = after.partition(":")
+            value = tail.strip().lstrip("\"").split("\"", 1)[0]
+            if value:
+                ids.add(value)
+    return ids
+
 def check_command_inbox(inbox_dir: Path = INBOX_DIR) -> InboxCheckResult:
     findings: list[str] = []
     yaml_files, script_files = _pending_files(inbox_dir)
@@ -38,6 +55,7 @@ def check_command_inbox(inbox_dir: Path = INBOX_DIR) -> InboxCheckResult:
     complete = sorted(yaml_stems & script_stems)
     if len(complete) > 1:
         findings.append("multiple complete pending commands: " + ", ".join(complete))
+    completed_ids = completed_command_ids(report_dir=REPORT_DIR, executed_jsonl=EXECUTED_JSONL)
     seen_ids: set[str] = set()
     for stem in complete:
         yaml_path = inbox_dir / f"{stem}.yaml"
@@ -54,6 +72,8 @@ def check_command_inbox(inbox_dir: Path = INBOX_DIR) -> InboxCheckResult:
             findings.append(f"duplicate command_id: {command_id}")
         else:
             seen_ids.add(command_id)
+        if command_id in completed_ids:
+            findings.append(f"completed command still pending: {command_id}")
         if not data.get("title", ""):
             findings.append(f"{yaml_path.as_posix()}: missing title")
         safety_class = data.get("safety_class", "")

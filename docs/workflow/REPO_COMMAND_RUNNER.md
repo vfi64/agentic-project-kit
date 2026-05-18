@@ -76,3 +76,7 @@ Every `./ns agent-run` or `./ns agent-next` run writes `docs/reports/command_run
 ## Missing script report robustness
 
 `agent-run` report creation must not crash if `.agentic/commands/current.sh` is removed during command execution. In that case the script SHA256 field is recorded as `missing` so the runner can still write durable command-run evidence and return a deterministic outcome.
+
+## Completed command inbox guard
+
+`./ns command-inbox-check` rejects a pending inbox pair if its `command_id` already has durable command-run evidence. This prevents completed remote commands from remaining on `main` as stale queue artifacts and causing later `FAIL_AMBIGUOUS_COMMANDS` runs.
