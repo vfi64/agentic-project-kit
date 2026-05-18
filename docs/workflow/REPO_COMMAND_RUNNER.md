@@ -72,3 +72,7 @@ Every `./ns agent-run` or `./ns agent-next` run writes `docs/reports/command_run
 ## Inner fail marker detection
 
 `agent-run` treats a terminal log whose last result marker is `### RESULT: FAIL ###` as `FAIL_COMMAND`, even if the shell process exits with code 0. This prevents evidence finalization or wrapper layers from masking failed command scripts as `PASS_EXECUTED`.
+
+## Missing script report robustness
+
+`agent-run` report creation must not crash if `.agentic/commands/current.sh` is removed during command execution. In that case the script SHA256 field is recorded as `missing` so the runner can still write durable command-run evidence and return a deterministic outcome.

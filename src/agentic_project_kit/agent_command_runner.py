@@ -152,6 +152,8 @@ def read_executed_ids() -> set[str]:
 
 
 def script_sha256(path: Path = CURRENT_SCRIPT) -> str:
+    if not path.exists():
+        return "missing"
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
