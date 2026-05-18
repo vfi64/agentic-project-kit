@@ -1,0 +1,246 @@
+FINAL SESSION STATE SNAPSHOT AFTER STANDARD-ERROR CLEANUP
+
+### MAIN STATE ###
+Your branch is up to date with 'origin/main'.
+Already up to date.
+main
+c0a5154 Add obsolete branch cleanup plan (#388)
+544b9e4 Add interpreter discovery failure guard (#387)
+56b6234 Record normalization after diverged main repair (#386)
+0836a05 Add standard error guard documentation and tests (#383)
+ac5734f Record standard error guard inspection log
+2a2de28 Add communication artifact garbage collector (#380)
+e735eea Add communication artifact GC registry (#379)
+e47bf17 Record no interactive exit PR closeout log
+29d9427 Record no interactive terminal exit rule (#378)
+f7655dc Record PR 376 closeout terminal log (#377)
+40cb56d Refresh state after terminal log finalization guard (#376)
+43d6c18 Add terminal log finalization guard (#375)
+0baa7e7 Record environment bootstrap drift lesson (#374)
+1a5596b Refresh handoff state after v0.3.25 DOI metadata (#373)
+74d9bca Record v0.3.25 DOI metadata (#372)
+
+### OPEN PRS ###
+
+### TAG / VERSION STATE ###
+7:version = "0.3.25"
+1:__version__ = "0.3.25"
+v0.3.25
+v0.3.24
+v0.3.23
+v0.3.22
+v0.3.21
+v0.3.20
+v0.3.19
+v0.3.18
+v0.3.17
+v0.3.16
+
+### GC DRY RUN ###
+PENDING_COMMUNICATION_ARTIFACTS
+terminal-latest-pointer	pointer	docs/reports/terminal/LATEST_TERMINAL_LOG.txt	derived pointer to the latest terminal log
+
+### KEY COMMAND SHORTCUTS PRESENT ###
+30:if [ "${1:-}" = "handoff-show" ]; then
+35:if [ "${1:-}" = "handoff-check" ]; then
+61:if [ "${1:-}" = "terminal-finalize" ]; then
+63:  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging terminal-finalize "$@"
+67:if [ "${1:-}" = "terminal-clean-check" ]; then
+68:  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging terminal-clean-check
+72:if [ "${1:-}" = "artifact-gc" ]; then
+169:if [ "${1:-}" = "finalize-guard" ]; then
+184:if [ "${1:-}" = "pr-cleanup" ]; then
+193:if [ "${1:-}" = "dev" ]; then
+224:  BRANCH="$(git branch --show-current 2>/dev/null)"
+225:  DIRTY="$(git status --short 2>/dev/null)"
+226:  if [ "$BRANCH" != "main" ] && [ -n "$DIRTY" ] && grep -q "git_pull_ff_only" .agentic/current_work.yaml 2>/dev/null; then
+232:    printf 'Use ./ns dev for local feature gates, or clean the branch before ./ns go.
+270:# no-copy workflow shortcuts: ./ns dev, ./ns go, ./ns up
+
+### STANDARD ERROR GUARD TESTS ###
+PY=.venv/bin/python
+.............................................................            [100%]
+61 passed in 0.06s
+
+### DOC GATES ###
+AK=.venv/bin/agentic-kit
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.25
+
+Overall: PASS
+
+### LOCAL BRANCH SUMMARY ###
+      67
+    backup/local-diverged-main-20260518-191223
+    dependabot/github_actions/softprops/action-gh-release-3
+    docs/add-zenodo-doi
+    docs/doc-mesh-gate-policy
+    docs/document-failed-next-step-handling
+    docs/fix-readme-version-after-v0.2.4
+    docs/fix-v031-doc-drift
+    docs/plan-documentation-drift-audit
+    docs/preserve-standard-error-closeout-logs
+    docs/record-environment-bootstrap-drift
+    docs/record-v0.3.25-doi
+    docs/record-v034-doi-and-roadmap
+    docs/refresh-handoff-after-pr346
+    docs/refresh-handoff-after-pr348
+    docs/refresh-handoff-after-standard-error-prevention
+    docs/refresh-handoff-state-after-pr-closeout-alias
+    docs/refresh-handoff-state-after-pr353
+    docs/refresh-handoff-state-after-pr356
+    docs/refresh-handoff-state-after-pr358
+    docs/refresh-handoff-state-after-pr360
+    docs/refresh-handoff-state-after-pr363
+    docs/standard-error-prevention-contract
+    docs/update-handoff-state-after-pr344
+    docs/update-state-after-doctor-mvp
+    docs/update-v030-zenodo-doi
+    docs/update-v031-zenodo-doi
+    docs/use-done-terminal-ack
+    feature/declarative-workflow-runner
+    feature/doc-mesh-historical-banner-repair
+    feature/doc-mesh-json-report
+    feature/doc-mesh-repair-plan
+    feature/doctor-citation-drift
+    feature/doctor-mvp
+    feature/doctor-version-drift
+    feature/governance-check-mvp
+    feature/handoff-state-commit-semantics
+    feature/handoff-update-automation
+    feature/idle-workflow-state
+    feature/machine-checkable-state-gates
+    feature/no-copy-terminal-evidence-policy
+    feature/parametrized-git-release-actions
+    feature/persistent-handoff-state
+    feature/pr-closeout-gate
+    feature/prepare-v0.2.3-release
+    feature/prepare-v0.2.4-zenodo-release
+    feature/read-only-work-order-templates
+    feature/release-preparation-flow
+    feature/release-remote-validation
+    feature/release-state-validation
+    feature/repo-backed-work-orders
+    feature/terminal-log-wrapper
+    feature/work-order-contract-enforcement
+    feature/work-order-governance-gate
+    feature/workflow-cli
+    feature/zenodo-metadata
+    fix/init-version-drift-doctor
+    governance/doc-mesh-audit
+    governance/rule-hardening-rule
+  * main
+    refactor/cli-commands-package
+    refactor/modularize-cli-commands
+    release/prepare-v0.3.3
+    release/prepare-v0.3.4
+    release/v0.3.1
+    workflow/auto-start-next-step
+    workflow/bootstrap-next-step-shell-env
+    workflow/harden-next-step-default-gate
+
+### REMOTE BRANCH SUMMARY ###
+      76
+    origin/docs/add-zenodo-doi
+    origin/docs/branch-cleanup-plan-20260518-193335
+    origin/docs/doc-mesh-gate-policy
+    origin/docs/document-failed-next-step-handling
+    origin/docs/finalize-ns-up-idempotence-state
+    origin/docs/fix-handoff-after-merge
+    origin/docs/fix-handoff-semantics-reason
+    origin/docs/fix-readme-version-after-v0.2.4
+    origin/docs/fix-v031-doc-drift
+    origin/docs/plan-documentation-drift-audit
+    origin/docs/preserve-diverged-main-repair-log
+    origin/docs/preserve-standard-error-closeout-logs
+    origin/docs/record-environment-bootstrap-drift
+    origin/docs/record-v0.3.25-doi
+    origin/docs/record-v034-doi-and-roadmap
+    origin/docs/refresh-handoff-after-pr346
+    origin/docs/refresh-handoff-after-pr348
+    origin/docs/refresh-handoff-after-standard-error-prevention
+    origin/docs/refresh-handoff-state-after-pr-closeout-alias
+    origin/docs/refresh-handoff-state-after-pr353
+    origin/docs/refresh-handoff-state-after-pr356
+    origin/docs/refresh-handoff-state-after-pr358
+    origin/docs/refresh-handoff-state-after-pr360
+    origin/docs/refresh-handoff-state-after-pr363
+    origin/docs/standard-error-prevention-contract
+    origin/docs/update-handoff-state-after-pr344
+    origin/docs/update-state-after-doctor-mvp
+    origin/docs/update-state-after-pr11
+    origin/docs/update-state-after-pr7
+    origin/docs/update-state-after-pr9
+    origin/docs/update-v030-zenodo-doi
+    origin/docs/update-v031-zenodo-doi
+    origin/docs/use-done-terminal-ack
+    origin/feature/communication-artifact-gc-mvp
+    origin/feature/declarative-workflow-runner
+    origin/feature/doc-mesh-historical-banner-repair
+    origin/feature/doc-mesh-json-report
+    origin/feature/doc-mesh-repair-plan
+    origin/feature/doctor-citation-drift
+    origin/feature/doctor-mvp
+    origin/feature/doctor-version-drift
+    origin/feature/governance-check-mvp
+    origin/feature/handoff-state-commit-semantics
+    origin/feature/handoff-update-automation
+    origin/feature/idle-workflow-state
+    origin/feature/machine-checkable-state-gates
+    origin/feature/no-copy-terminal-evidence-policy
+    origin/feature/parametrized-git-release-actions
+    origin/feature/persistent-handoff-state
+    origin/feature/pr-closeout-gate
+    origin/feature/prepare-v0.2.3-release
+    origin/feature/prepare-v0.2.4-zenodo-release
+    origin/feature/profile-explain-command
+    origin/feature/read-only-work-order-templates
+    origin/feature/release-preparation-flow
+    origin/feature/release-remote-validation
+    origin/feature/release-state-validation
+    origin/feature/repo-backed-work-orders
+    origin/feature/terminal-log-wrapper
+    origin/feature/work-order-contract-enforcement
+    origin/feature/work-order-governance-gate
+    origin/feature/workflow-cli
+    origin/feature/zenodo-metadata
+    origin/fix/init-version-drift-doctor
+    origin/governance/doc-mesh-audit
+    origin/governance/rule-hardening-rule
+    origin/main
+    origin/refactor/cli-commands-package
+    origin/refactor/modularize-cli-commands
+    origin/release/prepare-v0.3.3
+    origin/release/prepare-v0.3.4
+    origin/release/v0.3.1
+    origin/strategy-v0-4-professional-single-user
+    origin/workflow/auto-start-next-step
+    origin/workflow/bootstrap-next-step-shell-env
+    origin/workflow/harden-next-step-default-gate
+
+### FINAL STATE ###
+main
+c0a5154 Add obsolete branch cleanup plan (#388)
+544b9e4 Add interpreter discovery failure guard (#387)
+56b6234 Record normalization after diverged main repair (#386)
+0836a05 Add standard error guard documentation and tests (#383)
+ac5734f Record standard error guard inspection log
+2a2de28 Add communication artifact garbage collector (#380)
+e735eea Add communication artifact GC registry (#379)
+e47bf17 Record no interactive exit PR closeout log
+
+### RESULT: PASS ###
