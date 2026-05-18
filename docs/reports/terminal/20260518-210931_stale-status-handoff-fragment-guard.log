@@ -1,0 +1,134 @@
+ADD STALE STATUS HANDOFF FRAGMENT GUARD
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'fix/stale-status-handoff-fragment-guard'
+
+### ADD GUARD MODULE ###
+
+### ADD CLI COMMAND ###
+
+### WIRE CLI ###
+
+### ADD NS ADAPTER ###
+
+### ADD TESTS ###
+
+### DOCUMENT GUARD ###
+
+### VERIFY PATCH PRESENCE ###
+src/agentic_project_kit/cli_commands/state.py:10:@state_app.command("freshness-check")
+src/agentic_project_kit/state_freshness.py:43:        return "PASS: no stale STATUS/HANDOFF current-state fragments found"
+src/agentic_project_kit/state_freshness.py:44:    lines = ["FAIL: stale STATUS/HANDOFF current-state fragments found"]
+docs/TEST_GATES.md:251:`./ns state-freshness-check` detects known stale current-state fragments in `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md`. It is intentionally narrow and deterministic: it catches recurring obsolete state fragments such as old released-version claims, old status dates, and stale slice descriptions without trying to prove full semantic freshness.
+
+### LOCAL GATES ###
+Usage: next-step.py [--request|--fail-report|--upload-output]
+...                                                                      [100%]
+3 passed in 0.01s
+Persistent handoff state check passed
+Governance check passed
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+fix/stale-status-handoff-fragment-guard
+ M docs/TEST_GATES.md
+ M src/agentic_project_kit/cli.py
+?? src/agentic_project_kit/cli_commands/state.py
+?? src/agentic_project_kit/state_freshness.py
+?? tests/test_state_freshness.py
+
+### PYTEST ###
+........................................................................ [ 18%]
+........................................................................ [ 36%]
+........................................................................ [ 54%]
+........................................................................ [ 72%]
+........................................................................ [ 90%]
+......................................                                   [100%]
+398 passed in 2.19s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.26
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=69
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+fix/stale-status-handoff-fragment-guard
+ M docs/TEST_GATES.md
+ M src/agentic_project_kit/cli.py
+?? src/agentic_project_kit/cli_commands/state.py
+?? src/agentic_project_kit/state_freshness.py
+?? tests/test_state_freshness.py
+
+### RESULT: PASS ###
+
+### COMMIT PATCH ###
+ M docs/TEST_GATES.md
+ M src/agentic_project_kit/cli.py
+?? src/agentic_project_kit/cli_commands/state.py
+?? src/agentic_project_kit/state_freshness.py
+?? tests/test_state_freshness.py
+[fix/stale-status-handoff-fragment-guard 21aeb38] Add stale state fragment guard
+ 5 files changed, 95 insertions(+)
+ create mode 100644 src/agentic_project_kit/cli_commands/state.py
+ create mode 100644 src/agentic_project_kit/state_freshness.py
+ create mode 100644 tests/test_state_freshness.py
+
+### REMOTE MUTATION PREFLIGHT BEFORE PUSH ###
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+
+### PUSH AND CREATE PR ###
+remote: 
+remote: Create a pull request for 'fix/stale-status-handoff-fragment-guard' on GitHub by visiting:        
+remote:      https://github.com/vfi64/agentic-project-kit/pull/new/fix/stale-status-handoff-fragment-guard        
+remote: 
+To github.com:vfi64/agentic-project-kit.git
+ * [new branch]      fix/stale-status-handoff-fragment-guard -> fix/stale-status-handoff-fragment-guard
+branch 'fix/stale-status-handoff-fragment-guard' set up to track 'origin/fix/stale-status-handoff-fragment-guard'.
+https://github.com/vfi64/agentic-project-kit/pull/403
+
+### RESULT MARKER BEFORE LOG FINALIZATION ###
+### RESULT: FAIL ###
