@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-185313_communication-artifact-gc-finalize.log
+docs/reports/terminal/20260518-185357_communication-artifact-gc-mvp-commit.log
