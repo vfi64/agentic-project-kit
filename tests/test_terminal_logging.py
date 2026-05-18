@@ -50,3 +50,22 @@ def test_terminal_actions_are_registered_with_safety_classes():
     assert get_action("run-logged").safety_class is SafetyClass.LOCAL_ONLY
     assert get_action("terminal-status").safety_class is SafetyClass.READ_ONLY
     assert get_action("terminal-upload").safety_class is SafetyClass.REMOTE_MUTATION
+
+def test_terminal_clean_check_accepts_only_terminal_logs(monkeypatch):
+    monkeypatch.setattr(tl, "git_dirty_paths", lambda: ["docs/reports/terminal/x.log", "docs/reports/terminal/LATEST_TERMINAL_LOG.txt"])
+    outcome, message = tl.terminal_clean_check()
+    assert outcome == "PASS_ONLY_TERMINAL_LOG_DIRTY"
+    assert "x.log" in message
+
+
+def test_terminal_clean_check_rejects_non_log_dirty_files(monkeypatch):
+    monkeypatch.setattr(tl, "git_dirty_paths", lambda: ["src/agentic_project_kit/terminal_logging.py"])
+    outcome, message = tl.terminal_clean_check()
+    assert outcome == "FAIL_DIRTY_NON_LOG_FILES"
+    assert "terminal_logging.py" in message
+
+
+def test_terminal_clean_check_is_registered():
+    action = get_action("terminal-clean-check")
+    assert action.safety_class is SafetyClass.READ_ONLY
+    assert "PASS_ONLY_TERMINAL_LOG_DIRTY" in action.outcome_contract

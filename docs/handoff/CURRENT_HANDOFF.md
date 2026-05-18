@@ -277,3 +277,4 @@ Post-release Dependabot cleanup is complete. PR #327 and PR #328 resolved the re
 - Current slice: `feature/gui-cockpit-action-readiness` introduces read-only cockpit readiness metadata/reporting. Continue with tests, PR, and merge; do not add mutating GUI actions in this slice.
 - Terminal handoff rule: future larger runs should commit and push `docs/reports/terminal/*.log`; after PASS, `d` is sufficient unless the run failed or the final status is dirty.
 - Current slice: `feature/terminal-log-wrapper` adds terminal-log wrapper commands. Use `d` after committed PASS logs and `f` after `./ns terminal-upload` for FAIL logs.
+- Current slice: `feature/terminal-log-wrapper-branch-safety` adds `./ns terminal-clean-check`; logged runs should use it instead of plain `git status --short` emptiness checks.

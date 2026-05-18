@@ -16,6 +16,11 @@ if [ "${1:-}" = "terminal-upload" ]; then
   exit $?
 fi
 
+if [ "${1:-}" = "terminal-clean-check" ]; then
+  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging terminal-clean-check
+  exit $?
+fi
+
 
 if [ "${1:-}" = "cockpit-readiness" ]; then
   PYTHONPATH=src python3 tools/cockpit_readiness.py
