@@ -1,3 +1,0 @@
-command_id: no-copy-e2e-protocol-001
-title: Finish no-copy result handoff pointers
-safety_class: remote-mutation
