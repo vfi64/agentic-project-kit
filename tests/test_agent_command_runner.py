@@ -319,3 +319,9 @@ def test_logged_script_has_fail_result_marker(tmp_path):
     assert logged_script_has_fail_result_marker(log)
     log.write_text("### RESULT: FAIL ###\n### RESULT: PASS ###\n", encoding="utf-8")
     assert not logged_script_has_fail_result_marker(log)
+
+
+def test_script_sha256_returns_missing_when_current_script_is_gone(tmp_path):
+    from agentic_project_kit.agent_command_runner import script_sha256
+    missing = tmp_path / "missing.sh"
+    assert script_sha256(missing) == "missing"
