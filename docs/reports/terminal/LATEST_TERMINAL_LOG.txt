@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log

@@ -1,0 +1,68 @@
+terminal_log=docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log
+### RUN: sh -c 
+set -eu
+
+printf "### VERIFY BRANCH AND CLEAN STATE ###\n"
+git branch --show-current
+git status --short
+test "$(git branch --show-current)" = "feature/terminal-log-wrapper"
+test -z "$(git status --short)"
+
+printf "\n### VERIFY REMOTE BRANCH ###\n"
+git status -sb
+git log --oneline -5
+
+printf "\n### CREATE PR ###\n"
+gh pr create \
+  --base main \
+  --head feature/terminal-log-wrapper \
+  --title "Add terminal log wrapper commands" \
+  --body "## Summary
+
+Adds a deterministic terminal-log wrapper workflow for agent handoff without copy-and-paste.
+
+Implemented:
+- ./ns run-logged <name> -- <command...>
+- ./ns terminal-status
+- ./ns terminal-upload
+- terminal log pointer: docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+- terminal log module and tests
+- Action Registry metadata for terminal-log commands
+- documentation for PASS/FAIL handoff semantics
+
+Workflow semantics:
+- d = PASS seen, continue using committed/pushed terminal log
+- f/fail = FAIL seen, terminal log uploaded, analyze committed log
+- manual copy-and-paste is only required if terminal-upload itself fails
+
+Safety boundary:
+- terminal-status is read-only
+- run-logged is local-only and writes terminal logs
+- terminal-upload may commit/push only docs/reports/terminal artifacts
+- terminal-upload refuses dirty non-log files
+
+## Gates
+
+- targeted tests: passed
+- ./ns dev: passed
+- pytest: passed
+- ruff: passed
+- check-docs: passed
+- doctor: passed
+- PR hygiene: passed
+
+## Terminal logs
+
+See committed logs under docs/reports/terminal/."
+
+printf "\n### PR VIEW ###\n"
+gh pr view --web=false
+
+printf "\n### RESULT: PASS ###\n"
+
+### VERIFY BRANCH AND CLEAN STATE ###
+feature/terminal-log-wrapper
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log
+### EXIT: 1
+### RESULT: FAIL ###
