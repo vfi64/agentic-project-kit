@@ -145,3 +145,10 @@ def test_agent_next_is_registered():
     action = get_action("agent-next")
     assert action.safety_class is SafetyClass.REMOTE_MUTATION
     assert "FAIL_AMBIGUOUS_COMMANDS" in action.outcome_contract
+
+
+def test_main_dispatches_next_to_agent_next(monkeypatch):
+    called = []
+    monkeypatch.setattr(acr, "agent_next", lambda: called.append("next") or 0)
+    assert acr.main(["next"]) == 0
+    assert called == ["next"]

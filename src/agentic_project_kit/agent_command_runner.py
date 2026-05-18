@@ -19,6 +19,7 @@ import datetime as _dt
 import hashlib
 import json
 import subprocess
+import sys
 from pathlib import Path
 
 from agentic_project_kit import terminal_logging
@@ -284,7 +285,8 @@ def agent_next() -> int:
         remove_current_files()
 
 def main(argv: list[str] | None = None) -> int:
-    if argv and argv[0] == "next":
+    args = list(sys.argv[1:] if argv is None else argv)
+    if args and args[0] == "next":
         return agent_next()
     return agent_run()
 
