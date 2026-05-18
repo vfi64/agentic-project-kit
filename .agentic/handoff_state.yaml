@@ -80,7 +80,9 @@ rules:
   superseded_by: no-copy-terminal-evidence
 recent_failure_patterns:
 - id: standard-error-guards
-  prevention: Recurring workflow failures must be represented twice: in handoff prompts for human continuity and in repository guards/tests for deterministic prevention. Prefer durable helpers over fast manual workarounds.
+  prevention: >-
+    Recurring workflow failures must be represented twice: in handoff prompts for human continuity
+    and in repository guards/tests for deterministic prevention. Prefer durable helpers over fast manual workarounds.
 - id: repo-log-written-while-committing
   prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo terminal log while the current process is still writing to it.
 - id: unconditional-pass-after-failure
