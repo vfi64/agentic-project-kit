@@ -33,6 +33,10 @@ Terminal blocks pasted into an interactive shell must never terminate that shell
 
 Temporary communication files must be centrally classified before cleanup. Use `.agentic/communication_artifacts.yaml` as the allowlist and policy source. Do not use ad-hoc `rm` on `docs/reports`, `.agentic/commands`, handoff files, terminal logs, command-run reports, or pointer files. A garbage collector must start with dry-run behavior and must write a cleanup report before any deletion.
 
+## Communication artifact garbage collection
+
+Temporary communication artifacts must be centrally recognizable and removable only through registered safe paths. Use `./ns artifact-gc` for a dry-run plan and `./ns artifact-gc --execute` only after reviewing the plan. The collector must not delete arbitrary `docs/reports` files, release evidence, handoff state, source files, or unregistered paths.
+
 ## Commit Semantics
 
 `safe_state.commit` records the last substantive work state by default, not necessarily the newest administrative refresh merge on `main`.

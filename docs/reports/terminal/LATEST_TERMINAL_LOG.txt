@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-184640_communication-artifact-gc-registry-commit.log
+docs/reports/terminal/20260518-185518_communication-artifact-gc-pr380-closeout.log
