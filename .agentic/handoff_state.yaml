@@ -1,7 +1,7 @@
 schema_version: 1
 updated:
   date: '2026-05-18'
-  reason: Refresh handoff state safe_state from current git HEAD
+  reason: Handoff safe_state tracks the last substantive work commit; administrative refresh PRs do not require another refresh.
   source: agentic-kit handoff refresh
 repo:
   name: agentic-project-kit
@@ -30,7 +30,8 @@ completed_since_previous_handoff:
 - 'PR #341 recorded v0.3.24 DOI metadata.'
 - 'PR #342 finalized v0.3.24 DOI metadata state and recorded persistent handoff planning.'
 - 'PR #343 added the active no-copy terminal evidence policy.'
-- 'PR #344 added the read-only persistent handoff state MVP.'
+- 'PR #344 added the read-only persistent handoff state MVP.'  - PR #350 added explicit handoff safe_state commit semantics to distinguish substantive work from administrative refresh PRs.
+
 current_capabilities:
   ns_actions:
   - agent-next

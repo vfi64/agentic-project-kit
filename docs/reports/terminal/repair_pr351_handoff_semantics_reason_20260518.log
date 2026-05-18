@@ -1,0 +1,933 @@
+### PRECHECK ###
+Already on 'docs/fix-handoff-semantics-reason'
+Your branch is up to date with 'origin/docs/fix-handoff-semantics-reason'.
+Already up to date.
+
+### APPLY REPAIR PATCH ###
+
+### VERIFY PATCH CONTENT ###
+4:  reason: Handoff safe_state tracks the last substantive work commit; administrative refresh PRs do not require another refresh.
+33:- 'PR #344 added the read-only persistent handoff state MVP.'  - PR #350 added explicit handoff safe_state commit semantics to distinguish substantive work from administrative refresh PRs.
+
+### HANDOFF CHECKS ###
+╭──────────────────────────── Traceback (most recent call last) ─────────────────────────────╮
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/cli_commands/ │
+│ handoff.py:19 in check                                                                     │
+│                                                                                            │
+│   16                                                                                       │
+│   17 @handoff_app.command("check")                                                         │
+│   18 def check(path: str = ".agentic/handoff_state.yaml") -> None:                         │
+│ ❱ 19 │   data = load_handoff_state(path)                                                   │
+│   20 │   errors = validate_handoff_state(data)                                             │
+│   21 │   if errors:                                                                        │
+│   22 │   │   for error in errors:                                                          │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/handoff_state │
+│ .py:33 in load_handoff_state                                                               │
+│                                                                                            │
+│    30 │   state_path = Path(path)                                                          │
+│    31 │   if not state_path.exists():                                                      │
+│    32 │   │   raise FileNotFoundError(f"handoff state file not found: {state_path}")       │
+│ ❱  33 │   data = yaml.safe_load(state_path.read_text(encoding="utf-8"))                    │
+│    34 │   if not isinstance(data, dict):                                                   │
+│    35 │   │   raise ValueError("handoff state must be a YAML mapping")                     │
+│    36 │   return data                                                                      │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/__init__.py:125 in safe_load                                                            │
+│                                                                                            │
+│   122 │   Resolve only basic YAML tags. This is known                                      │
+│   123 │   to be safe for untrusted input.                                                  │
+│   124 │   """                                                                              │
+│ ❱ 125 │   return load(stream, SafeLoader)                                                  │
+│   126                                                                                      │
+│   127 def safe_load_all(stream):                                                           │
+│   128 │   """                                                                              │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/__init__.py:81 in load                                                                  │
+│                                                                                            │
+│    78 │   """                                                                              │
+│    79 │   loader = Loader(stream)                                                          │
+│    80 │   try:                                                                             │
+│ ❱  81 │   │   return loader.get_single_data()                                              │
+│    82 │   finally:                                                                         │
+│    83 │   │   loader.dispose()                                                             │
+│    84                                                                                      │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/constructor.py:49 in get_single_data                                                    │
+│                                                                                            │
+│    46 │                                                                                    │
+│    47 │   def get_single_data(self):                                                       │
+│    48 │   │   # Ensure that the stream contains a single document and construct it.        │
+│ ❱  49 │   │   node = self.get_single_node()                                                │
+│    50 │   │   if node is not None:                                                         │
+│    51 │   │   │   return self.construct_document(node)                                     │
+│    52 │   │   return None                                                                  │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:36 in get_single_node                                                       │
+│                                                                                            │
+│    33 │   │   # Compose a document if the stream is not empty.                             │
+│    34 │   │   document = None                                                              │
+│    35 │   │   if not self.check_event(StreamEndEvent):                                     │
+│ ❱  36 │   │   │   document = self.compose_document()                                       │
+│    37 │   │                                                                                │
+│    38 │   │   # Ensure that the stream contains no more documents.                         │
+│    39 │   │   if not self.check_event(StreamEndEvent):                                     │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:55 in compose_document                                                      │
+│                                                                                            │
+│    52 │   │   self.get_event()                                                             │
+│    53 │   │                                                                                │
+│    54 │   │   # Compose the root node.                                                     │
+│ ❱  55 │   │   node = self.compose_node(None, None)                                         │
+│    56 │   │                                                                                │
+│    57 │   │   # Drop the DOCUMENT-END event.                                               │
+│    58 │   │   self.get_event()                                                             │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:84 in compose_node                                                          │
+│                                                                                            │
+│    81 │   │   elif self.check_event(SequenceStartEvent):                                   │
+│    82 │   │   │   node = self.compose_sequence_node(anchor)                                │
+│    83 │   │   elif self.check_event(MappingStartEvent):                                    │
+│ ❱  84 │   │   │   node = self.compose_mapping_node(anchor)                                 │
+│    85 │   │   self.ascend_resolver()                                                       │
+│    86 │   │   return node                                                                  │
+│    87                                                                                      │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:133 in compose_mapping_node                                                 │
+│                                                                                            │
+│   130 │   │   │   #if item_key in node.value:                                              │
+│   131 │   │   │   #    raise ComposerError("while composing a mapping",                    │
+│       start_event.start_mark,                                                              │
+│   132 │   │   │   #            "found duplicate key", key_event.start_mark)                │
+│ ❱ 133 │   │   │   item_value = self.compose_node(node, item_key)                           │
+│   134 │   │   │   #node.value[item_key] = item_value                                       │
+│   135 │   │   │   node.value.append((item_key, item_value))                                │
+│   136 │   │   end_event = self.get_event()                                                 │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:82 in compose_node                                                          │
+│                                                                                            │
+│    79 │   │   if self.check_event(ScalarEvent):                                            │
+│    80 │   │   │   node = self.compose_scalar_node(anchor)                                  │
+│    81 │   │   elif self.check_event(SequenceStartEvent):                                   │
+│ ❱  82 │   │   │   node = self.compose_sequence_node(anchor)                                │
+│    83 │   │   elif self.check_event(MappingStartEvent):                                    │
+│    84 │   │   │   node = self.compose_mapping_node(anchor)                                 │
+│    85 │   │   self.ascend_resolver()                                                       │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:110 in compose_sequence_node                                                │
+│                                                                                            │
+│   107 │   │   if anchor is not None:                                                       │
+│   108 │   │   │   self.anchors[anchor] = node                                              │
+│   109 │   │   index = 0                                                                    │
+│ ❱ 110 │   │   while not self.check_event(SequenceEndEvent):                                │
+│   111 │   │   │   node.value.append(self.compose_node(node, index))                        │
+│   112 │   │   │   index += 1                                                               │
+│   113 │   │   end_event = self.get_event()                                                 │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/parser.py:98 in check_event                                                             │
+│                                                                                            │
+│    95 │   │   # Check the type of the next event.                                          │
+│    96 │   │   if self.current_event is None:                                               │
+│    97 │   │   │   if self.state:                                                           │
+│ ❱  98 │   │   │   │   self.current_event = self.state()                                    │
+│    99 │   │   if self.current_event is not None:                                           │
+│   100 │   │   │   if not choices:                                                          │
+│   101 │   │   │   │   return True                                                          │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/parser.py:405 in parse_indentless_sequence_entry                                        │
+│                                                                                            │
+│   402 │   def parse_indentless_sequence_entry(self):                                       │
+│   403 │   │   if self.check_token(BlockEntryToken):                                        │
+│   404 │   │   │   token = self.get_token()                                                 │
+│ ❱ 405 │   │   │   if not self.check_token(BlockEntryToken,                                 │
+│   406 │   │   │   │   │   KeyToken, ValueToken, BlockEndToken):                            │
+│   407 │   │   │   │   self.states.append(self.parse_indentless_sequence_entry)             │
+│   408 │   │   │   │   return self.parse_block_node()                                       │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/scanner.py:116 in check_token                                                           │
+│                                                                                            │
+│    113 │   def check_token(self, *choices):                                                │
+│    114 │   │   # Check if the next token is one of the given types.                        │
+│    115 │   │   while self.need_more_tokens():                                              │
+│ ❱  116 │   │   │   self.fetch_more_tokens()                                                │
+│    117 │   │   if self.tokens:                                                             │
+│    118 │   │   │   if not choices:                                                         │
+│    119 │   │   │   │   return True                                                         │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/scanner.py:215 in fetch_more_tokens                                                     │
+│                                                                                            │
+│    212 │   │                                                                               │
+│    213 │   │   # Is it the block entry indicator?                                          │
+│    214 │   │   if ch == '-' and self.check_block_entry():                                  │
+│ ❱  215 │   │   │   return self.fetch_block_entry()                                         │
+│    216 │   │                                                                               │
+│    217 │   │   # Is it the key indicator?                                                  │
+│    218 │   │   if ch == '?' and self.check_key():                                          │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/scanner.py:491 in fetch_block_entry                                                     │
+│                                                                                            │
+│    488 │   │   │                                                                           │
+│    489 │   │   │   # Are we allowed to start a new entry?                                  │
+│    490 │   │   │   if not self.allow_simple_key:                                           │
+│ ❱  491 │   │   │   │   raise ScannerError(None, None,                                      │
+│    492 │   │   │   │   │   │   "sequence entries are not allowed here",                    │
+│    493 │   │   │   │   │   │   self.get_mark())                                            │
+│    494                                                                                     │
+╰────────────────────────────────────────────────────────────────────────────────────────────╯
+ScannerError: sequence entries are not allowed here
+  in "<unicode string>", line 33, column 64:
+     ... persistent handoff state MVP.'  - PR #350 added explicit handoff ... 
+                                         ^
+╭──────────────────────────── Traceback (most recent call last) ─────────────────────────────╮
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/cli_commands/ │
+│ handoff.py:14 in show                                                                      │
+│                                                                                            │
+│   11                                                                                       │
+│   12 @handoff_app.command("show")                                                          │
+│   13 def show(path: str = ".agentic/handoff_state.yaml") -> None:                          │
+│ ❱ 14 │   data = load_handoff_state(path)                                                   │
+│   15 │   typer.echo(summarize_handoff_state(data))                                         │
+│   16                                                                                       │
+│   17 @handoff_app.command("check")                                                         │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/handoff_state │
+│ .py:33 in load_handoff_state                                                               │
+│                                                                                            │
+│    30 │   state_path = Path(path)                                                          │
+│    31 │   if not state_path.exists():                                                      │
+│    32 │   │   raise FileNotFoundError(f"handoff state file not found: {state_path}")       │
+│ ❱  33 │   data = yaml.safe_load(state_path.read_text(encoding="utf-8"))                    │
+│    34 │   if not isinstance(data, dict):                                                   │
+│    35 │   │   raise ValueError("handoff state must be a YAML mapping")                     │
+│    36 │   return data                                                                      │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/__init__.py:125 in safe_load                                                            │
+│                                                                                            │
+│   122 │   Resolve only basic YAML tags. This is known                                      │
+│   123 │   to be safe for untrusted input.                                                  │
+│   124 │   """                                                                              │
+│ ❱ 125 │   return load(stream, SafeLoader)                                                  │
+│   126                                                                                      │
+│   127 def safe_load_all(stream):                                                           │
+│   128 │   """                                                                              │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/__init__.py:81 in load                                                                  │
+│                                                                                            │
+│    78 │   """                                                                              │
+│    79 │   loader = Loader(stream)                                                          │
+│    80 │   try:                                                                             │
+│ ❱  81 │   │   return loader.get_single_data()                                              │
+│    82 │   finally:                                                                         │
+│    83 │   │   loader.dispose()                                                             │
+│    84                                                                                      │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/constructor.py:49 in get_single_data                                                    │
+│                                                                                            │
+│    46 │                                                                                    │
+│    47 │   def get_single_data(self):                                                       │
+│    48 │   │   # Ensure that the stream contains a single document and construct it.        │
+│ ❱  49 │   │   node = self.get_single_node()                                                │
+│    50 │   │   if node is not None:                                                         │
+│    51 │   │   │   return self.construct_document(node)                                     │
+│    52 │   │   return None                                                                  │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:36 in get_single_node                                                       │
+│                                                                                            │
+│    33 │   │   # Compose a document if the stream is not empty.                             │
+│    34 │   │   document = None                                                              │
+│    35 │   │   if not self.check_event(StreamEndEvent):                                     │
+│ ❱  36 │   │   │   document = self.compose_document()                                       │
+│    37 │   │                                                                                │
+│    38 │   │   # Ensure that the stream contains no more documents.                         │
+│    39 │   │   if not self.check_event(StreamEndEvent):                                     │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:55 in compose_document                                                      │
+│                                                                                            │
+│    52 │   │   self.get_event()                                                             │
+│    53 │   │                                                                                │
+│    54 │   │   # Compose the root node.                                                     │
+│ ❱  55 │   │   node = self.compose_node(None, None)                                         │
+│    56 │   │                                                                                │
+│    57 │   │   # Drop the DOCUMENT-END event.                                               │
+│    58 │   │   self.get_event()                                                             │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:84 in compose_node                                                          │
+│                                                                                            │
+│    81 │   │   elif self.check_event(SequenceStartEvent):                                   │
+│    82 │   │   │   node = self.compose_sequence_node(anchor)                                │
+│    83 │   │   elif self.check_event(MappingStartEvent):                                    │
+│ ❱  84 │   │   │   node = self.compose_mapping_node(anchor)                                 │
+│    85 │   │   self.ascend_resolver()                                                       │
+│    86 │   │   return node                                                                  │
+│    87                                                                                      │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:133 in compose_mapping_node                                                 │
+│                                                                                            │
+│   130 │   │   │   #if item_key in node.value:                                              │
+│   131 │   │   │   #    raise ComposerError("while composing a mapping",                    │
+│       start_event.start_mark,                                                              │
+│   132 │   │   │   #            "found duplicate key", key_event.start_mark)                │
+│ ❱ 133 │   │   │   item_value = self.compose_node(node, item_key)                           │
+│   134 │   │   │   #node.value[item_key] = item_value                                       │
+│   135 │   │   │   node.value.append((item_key, item_value))                                │
+│   136 │   │   end_event = self.get_event()                                                 │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:82 in compose_node                                                          │
+│                                                                                            │
+│    79 │   │   if self.check_event(ScalarEvent):                                            │
+│    80 │   │   │   node = self.compose_scalar_node(anchor)                                  │
+│    81 │   │   elif self.check_event(SequenceStartEvent):                                   │
+│ ❱  82 │   │   │   node = self.compose_sequence_node(anchor)                                │
+│    83 │   │   elif self.check_event(MappingStartEvent):                                    │
+│    84 │   │   │   node = self.compose_mapping_node(anchor)                                 │
+│    85 │   │   self.ascend_resolver()                                                       │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:110 in compose_sequence_node                                                │
+│                                                                                            │
+│   107 │   │   if anchor is not None:                                                       │
+│   108 │   │   │   self.anchors[anchor] = node                                              │
+│   109 │   │   index = 0                                                                    │
+│ ❱ 110 │   │   while not self.check_event(SequenceEndEvent):                                │
+│   111 │   │   │   node.value.append(self.compose_node(node, index))                        │
+│   112 │   │   │   index += 1                                                               │
+│   113 │   │   end_event = self.get_event()                                                 │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/parser.py:98 in check_event                                                             │
+│                                                                                            │
+│    95 │   │   # Check the type of the next event.                                          │
+│    96 │   │   if self.current_event is None:                                               │
+│    97 │   │   │   if self.state:                                                           │
+│ ❱  98 │   │   │   │   self.current_event = self.state()                                    │
+│    99 │   │   if self.current_event is not None:                                           │
+│   100 │   │   │   if not choices:                                                          │
+│   101 │   │   │   │   return True                                                          │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/parser.py:405 in parse_indentless_sequence_entry                                        │
+│                                                                                            │
+│   402 │   def parse_indentless_sequence_entry(self):                                       │
+│   403 │   │   if self.check_token(BlockEntryToken):                                        │
+│   404 │   │   │   token = self.get_token()                                                 │
+│ ❱ 405 │   │   │   if not self.check_token(BlockEntryToken,                                 │
+│   406 │   │   │   │   │   KeyToken, ValueToken, BlockEndToken):                            │
+│   407 │   │   │   │   self.states.append(self.parse_indentless_sequence_entry)             │
+│   408 │   │   │   │   return self.parse_block_node()                                       │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/scanner.py:116 in check_token                                                           │
+│                                                                                            │
+│    113 │   def check_token(self, *choices):                                                │
+│    114 │   │   # Check if the next token is one of the given types.                        │
+│    115 │   │   while self.need_more_tokens():                                              │
+│ ❱  116 │   │   │   self.fetch_more_tokens()                                                │
+│    117 │   │   if self.tokens:                                                             │
+│    118 │   │   │   if not choices:                                                         │
+│    119 │   │   │   │   return True                                                         │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/scanner.py:215 in fetch_more_tokens                                                     │
+│                                                                                            │
+│    212 │   │                                                                               │
+│    213 │   │   # Is it the block entry indicator?                                          │
+│    214 │   │   if ch == '-' and self.check_block_entry():                                  │
+│ ❱  215 │   │   │   return self.fetch_block_entry()                                         │
+│    216 │   │                                                                               │
+│    217 │   │   # Is it the key indicator?                                                  │
+│    218 │   │   if ch == '?' and self.check_key():                                          │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/scanner.py:491 in fetch_block_entry                                                     │
+│                                                                                            │
+│    488 │   │   │                                                                           │
+│    489 │   │   │   # Are we allowed to start a new entry?                                  │
+│    490 │   │   │   if not self.allow_simple_key:                                           │
+│ ❱  491 │   │   │   │   raise ScannerError(None, None,                                      │
+│    492 │   │   │   │   │   │   "sequence entries are not allowed here",                    │
+│    493 │   │   │   │   │   │   self.get_mark())                                            │
+│    494                                                                                     │
+╰────────────────────────────────────────────────────────────────────────────────────────────╯
+ScannerError: sequence entries are not allowed here
+  in "<unicode string>", line 33, column 64:
+     ... persistent handoff state MVP.'  - PR #350 added explicit handoff ... 
+                                         ^
+╭──────────────────────────── Traceback (most recent call last) ─────────────────────────────╮
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/cli_commands/ │
+│ handoff.py:29 in prompt                                                                    │
+│                                                                                            │
+│   26                                                                                       │
+│   27 @handoff_app.command("prompt")                                                        │
+│   28 def prompt(path: str = ".agentic/handoff_state.yaml") -> None:                        │
+│ ❱ 29 │   data = load_handoff_state(path)                                                   │
+│   30 │   errors = validate_handoff_state(data)                                             │
+│   31 │   if errors:                                                                        │
+│   32 │   │   for error in errors:                                                          │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/handoff_state │
+│ .py:33 in load_handoff_state                                                               │
+│                                                                                            │
+│    30 │   state_path = Path(path)                                                          │
+│    31 │   if not state_path.exists():                                                      │
+│    32 │   │   raise FileNotFoundError(f"handoff state file not found: {state_path}")       │
+│ ❱  33 │   data = yaml.safe_load(state_path.read_text(encoding="utf-8"))                    │
+│    34 │   if not isinstance(data, dict):                                                   │
+│    35 │   │   raise ValueError("handoff state must be a YAML mapping")                     │
+│    36 │   return data                                                                      │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/__init__.py:125 in safe_load                                                            │
+│                                                                                            │
+│   122 │   Resolve only basic YAML tags. This is known                                      │
+│   123 │   to be safe for untrusted input.                                                  │
+│   124 │   """                                                                              │
+│ ❱ 125 │   return load(stream, SafeLoader)                                                  │
+│   126                                                                                      │
+│   127 def safe_load_all(stream):                                                           │
+│   128 │   """                                                                              │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/__init__.py:81 in load                                                                  │
+│                                                                                            │
+│    78 │   """                                                                              │
+│    79 │   loader = Loader(stream)                                                          │
+│    80 │   try:                                                                             │
+│ ❱  81 │   │   return loader.get_single_data()                                              │
+│    82 │   finally:                                                                         │
+│    83 │   │   loader.dispose()                                                             │
+│    84                                                                                      │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/constructor.py:49 in get_single_data                                                    │
+│                                                                                            │
+│    46 │                                                                                    │
+│    47 │   def get_single_data(self):                                                       │
+│    48 │   │   # Ensure that the stream contains a single document and construct it.        │
+│ ❱  49 │   │   node = self.get_single_node()                                                │
+│    50 │   │   if node is not None:                                                         │
+│    51 │   │   │   return self.construct_document(node)                                     │
+│    52 │   │   return None                                                                  │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:36 in get_single_node                                                       │
+│                                                                                            │
+│    33 │   │   # Compose a document if the stream is not empty.                             │
+│    34 │   │   document = None                                                              │
+│    35 │   │   if not self.check_event(StreamEndEvent):                                     │
+│ ❱  36 │   │   │   document = self.compose_document()                                       │
+│    37 │   │                                                                                │
+│    38 │   │   # Ensure that the stream contains no more documents.                         │
+│    39 │   │   if not self.check_event(StreamEndEvent):                                     │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:55 in compose_document                                                      │
+│                                                                                            │
+│    52 │   │   self.get_event()                                                             │
+│    53 │   │                                                                                │
+│    54 │   │   # Compose the root node.                                                     │
+│ ❱  55 │   │   node = self.compose_node(None, None)                                         │
+│    56 │   │                                                                                │
+│    57 │   │   # Drop the DOCUMENT-END event.                                               │
+│    58 │   │   self.get_event()                                                             │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:84 in compose_node                                                          │
+│                                                                                            │
+│    81 │   │   elif self.check_event(SequenceStartEvent):                                   │
+│    82 │   │   │   node = self.compose_sequence_node(anchor)                                │
+│    83 │   │   elif self.check_event(MappingStartEvent):                                    │
+│ ❱  84 │   │   │   node = self.compose_mapping_node(anchor)                                 │
+│    85 │   │   self.ascend_resolver()                                                       │
+│    86 │   │   return node                                                                  │
+│    87                                                                                      │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:133 in compose_mapping_node                                                 │
+│                                                                                            │
+│   130 │   │   │   #if item_key in node.value:                                              │
+│   131 │   │   │   #    raise ComposerError("while composing a mapping",                    │
+│       start_event.start_mark,                                                              │
+│   132 │   │   │   #            "found duplicate key", key_event.start_mark)                │
+│ ❱ 133 │   │   │   item_value = self.compose_node(node, item_key)                           │
+│   134 │   │   │   #node.value[item_key] = item_value                                       │
+│   135 │   │   │   node.value.append((item_key, item_value))                                │
+│   136 │   │   end_event = self.get_event()                                                 │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:82 in compose_node                                                          │
+│                                                                                            │
+│    79 │   │   if self.check_event(ScalarEvent):                                            │
+│    80 │   │   │   node = self.compose_scalar_node(anchor)                                  │
+│    81 │   │   elif self.check_event(SequenceStartEvent):                                   │
+│ ❱  82 │   │   │   node = self.compose_sequence_node(anchor)                                │
+│    83 │   │   elif self.check_event(MappingStartEvent):                                    │
+│    84 │   │   │   node = self.compose_mapping_node(anchor)                                 │
+│    85 │   │   self.ascend_resolver()                                                       │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/composer.py:110 in compose_sequence_node                                                │
+│                                                                                            │
+│   107 │   │   if anchor is not None:                                                       │
+│   108 │   │   │   self.anchors[anchor] = node                                              │
+│   109 │   │   index = 0                                                                    │
+│ ❱ 110 │   │   while not self.check_event(SequenceEndEvent):                                │
+│   111 │   │   │   node.value.append(self.compose_node(node, index))                        │
+│   112 │   │   │   index += 1                                                               │
+│   113 │   │   end_event = self.get_event()                                                 │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/parser.py:98 in check_event                                                             │
+│                                                                                            │
+│    95 │   │   # Check the type of the next event.                                          │
+│    96 │   │   if self.current_event is None:                                               │
+│    97 │   │   │   if self.state:                                                           │
+│ ❱  98 │   │   │   │   self.current_event = self.state()                                    │
+│    99 │   │   if self.current_event is not None:                                           │
+│   100 │   │   │   if not choices:                                                          │
+│   101 │   │   │   │   return True                                                          │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/parser.py:405 in parse_indentless_sequence_entry                                        │
+│                                                                                            │
+│   402 │   def parse_indentless_sequence_entry(self):                                       │
+│   403 │   │   if self.check_token(BlockEntryToken):                                        │
+│   404 │   │   │   token = self.get_token()                                                 │
+│ ❱ 405 │   │   │   if not self.check_token(BlockEntryToken,                                 │
+│   406 │   │   │   │   │   KeyToken, ValueToken, BlockEndToken):                            │
+│   407 │   │   │   │   self.states.append(self.parse_indentless_sequence_entry)             │
+│   408 │   │   │   │   return self.parse_block_node()                                       │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/scanner.py:116 in check_token                                                           │
+│                                                                                            │
+│    113 │   def check_token(self, *choices):                                                │
+│    114 │   │   # Check if the next token is one of the given types.                        │
+│    115 │   │   while self.need_more_tokens():                                              │
+│ ❱  116 │   │   │   self.fetch_more_tokens()                                                │
+│    117 │   │   if self.tokens:                                                             │
+│    118 │   │   │   if not choices:                                                         │
+│    119 │   │   │   │   return True                                                         │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/scanner.py:215 in fetch_more_tokens                                                     │
+│                                                                                            │
+│    212 │   │                                                                               │
+│    213 │   │   # Is it the block entry indicator?                                          │
+│    214 │   │   if ch == '-' and self.check_block_entry():                                  │
+│ ❱  215 │   │   │   return self.fetch_block_entry()                                         │
+│    216 │   │                                                                               │
+│    217 │   │   # Is it the key indicator?                                                  │
+│    218 │   │   if ch == '?' and self.check_key():                                          │
+│                                                                                            │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.14/site-packages/ya │
+│ ml/scanner.py:491 in fetch_block_entry                                                     │
+│                                                                                            │
+│    488 │   │   │                                                                           │
+│    489 │   │   │   # Are we allowed to start a new entry?                                  │
+│    490 │   │   │   if not self.allow_simple_key:                                           │
+│ ❱  491 │   │   │   │   raise ScannerError(None, None,                                      │
+│    492 │   │   │   │   │   │   "sequence entries are not allowed here",                    │
+│    493 │   │   │   │   │   │   self.get_mark())                                            │
+│    494                                                                                     │
+╰────────────────────────────────────────────────────────────────────────────────────────────╯
+ScannerError: sequence entries are not allowed here
+  in "<unicode string>", line 33, column 64:
+     ... persistent handoff state MVP.'  - PR #350 added explicit handoff ... 
+                                         ^
+
+### LOCAL GATES ###
+........................................................................ [ 21%]
+..................................................................FF.FF. [ 42%]
+FFF..................................................................... [ 64%]
+........................................................................ [ 85%]
+...............................................                          [100%]
+=================================== FAILURES ===================================
+_____ test_handoff_prompt_contains_required_sections_and_active_rules_only _____
+
+    def test_handoff_prompt_contains_required_sections_and_active_rules_only():
+>       data = load_handoff_state()
+               ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_handoff_prompt.py:8: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/agentic_project_kit/handoff_state.py:33: in load_handoff_state
+    data = yaml.safe_load(state_path.read_text(encoding="utf-8"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/__init__.py:125: in safe_load
+    return load(stream, SafeLoader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/__init__.py:81: in load
+    return loader.get_single_data()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/constructor.py:49: in get_single_data
+    node = self.get_single_node()
+           ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:36: in get_single_node
+    document = self.compose_document()
+               ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:55: in compose_document
+    node = self.compose_node(None, None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:84: in compose_node
+    node = self.compose_mapping_node(anchor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:133: in compose_mapping_node
+    item_value = self.compose_node(node, item_key)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:82: in compose_node
+    node = self.compose_sequence_node(anchor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:110: in compose_sequence_node
+    while not self.check_event(SequenceEndEvent):
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/parser.py:98: in check_event
+    self.current_event = self.state()
+                         ^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/parser.py:405: in parse_indentless_sequence_entry
+    if not self.check_token(BlockEntryToken,
+.venv/lib/python3.14/site-packages/yaml/scanner.py:116: in check_token
+    self.fetch_more_tokens()
+.venv/lib/python3.14/site-packages/yaml/scanner.py:215: in fetch_more_tokens
+    return self.fetch_block_entry()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <yaml.loader.SafeLoader object at 0x1072bc050>
+
+    def fetch_block_entry(self):
+    
+        # Block context needs additional checks.
+        if not self.flow_level:
+    
+            # Are we allowed to start a new entry?
+            if not self.allow_simple_key:
+>               raise ScannerError(None, None,
+                        "sequence entries are not allowed here",
+                        self.get_mark())
+E               yaml.scanner.ScannerError: sequence entries are not allowed here
+E                 in "<unicode string>", line 33, column 64:
+E                    ... persistent handoff state MVP.'  - PR #350 added explicit handoff ... 
+E                                                        ^
+
+.venv/lib/python3.14/site-packages/yaml/scanner.py:491: ScannerError
+__________________________ test_handoff_cli_commands ___________________________
+
+    def test_handoff_cli_commands():
+        runner = CliRunner()
+        check_result = runner.invoke(app, ["handoff", "check"])
+>       assert check_result.exit_code == 0
+E       AssertionError: assert 1 == 0
+E        +  where 1 = <Result ScannerError(None, None, 'sequence entries are not allowed here', <yaml.error.Mark object at 0x107605250>)>.exit_code
+
+tests/test_handoff_prompt.py:19: AssertionError
+______________ test_handoff_refresh_dry_run_does_not_mutate_file _______________
+
+tmp_path = PosixPath('/private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pytest-of-hof/pytest-1538/test_handoff_refresh_dry_run_d0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1078caaf0>
+
+    def test_handoff_refresh_dry_run_does_not_mutate_file(tmp_path, monkeypatch):
+        source = Path(".agentic/handoff_state.yaml")
+        target = tmp_path / "handoff_state.yaml"
+        target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+        before = target.read_text(encoding="utf-8")
+        monkeypatch.setattr("agentic_project_kit.cli_commands.handoff.current_git_safe_state", lambda: {"commit": "dryrun1", "commit_subject": "Dry run subject"})
+        result = CliRunner().invoke(app, ["handoff", "refresh", str(target)])
+>       assert result.exit_code == 0
+E       AssertionError: assert 1 == 0
+E        +  where 1 = <Result ScannerError(None, None, 'sequence entries are not allowed here', <yaml.error.Mark object at 0x107a2a1d0>)>.exit_code
+
+tests/test_handoff_refresh.py:27: AssertionError
+___________________ test_handoff_refresh_write_updates_file ____________________
+
+tmp_path = PosixPath('/private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pytest-of-hof/pytest-1538/test_handoff_refresh_write_upd0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x107621f90>
+
+    def test_handoff_refresh_write_updates_file(tmp_path, monkeypatch):
+        source = Path(".agentic/handoff_state.yaml")
+        target = tmp_path / "handoff_state.yaml"
+        target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+        monkeypatch.setattr("agentic_project_kit.cli_commands.handoff.current_git_safe_state", lambda: {"commit": "write01", "commit_subject": "Write subject"})
+        result = CliRunner().invoke(app, ["handoff", "refresh", str(target), "--write"])
+>       assert result.exit_code == 0
+E       AssertionError: assert 1 == 0
+E        +  where 1 = <Result ScannerError(None, None, 'sequence entries are not allowed here', <yaml.error.Mark object at 0x1076173d0>)>.exit_code
+
+tests/test_handoff_refresh.py:37: AssertionError
+________________ test_handoff_state_yaml_is_parseable_and_valid ________________
+
+    def test_handoff_state_yaml_is_parseable_and_valid():
+>       data = load_handoff_state()
+               ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_handoff_state.py:8: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/agentic_project_kit/handoff_state.py:33: in load_handoff_state
+    data = yaml.safe_load(state_path.read_text(encoding="utf-8"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/__init__.py:125: in safe_load
+    return load(stream, SafeLoader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/__init__.py:81: in load
+    return loader.get_single_data()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/constructor.py:49: in get_single_data
+    node = self.get_single_node()
+           ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:36: in get_single_node
+    document = self.compose_document()
+               ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:55: in compose_document
+    node = self.compose_node(None, None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:84: in compose_node
+    node = self.compose_mapping_node(anchor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:133: in compose_mapping_node
+    item_value = self.compose_node(node, item_key)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:82: in compose_node
+    node = self.compose_sequence_node(anchor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:110: in compose_sequence_node
+    while not self.check_event(SequenceEndEvent):
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/parser.py:98: in check_event
+    self.current_event = self.state()
+                         ^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/parser.py:405: in parse_indentless_sequence_entry
+    if not self.check_token(BlockEntryToken,
+.venv/lib/python3.14/site-packages/yaml/scanner.py:116: in check_token
+    self.fetch_more_tokens()
+.venv/lib/python3.14/site-packages/yaml/scanner.py:215: in fetch_more_tokens
+    return self.fetch_block_entry()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <yaml.loader.SafeLoader object at 0x10760cf50>
+
+    def fetch_block_entry(self):
+    
+        # Block context needs additional checks.
+        if not self.flow_level:
+    
+            # Are we allowed to start a new entry?
+            if not self.allow_simple_key:
+>               raise ScannerError(None, None,
+                        "sequence entries are not allowed here",
+                        self.get_mark())
+E               yaml.scanner.ScannerError: sequence entries are not allowed here
+E                 in "<unicode string>", line 33, column 64:
+E                    ... persistent handoff state MVP.'  - PR #350 added explicit handoff ... 
+E                                                        ^
+
+.venv/lib/python3.14/site-packages/yaml/scanner.py:491: ScannerError
+______________________ test_no_copy_policy_is_referenced _______________________
+
+    def test_no_copy_policy_is_referenced():
+>       data = yaml.safe_load(Path(".agentic/handoff_state.yaml").read_text(encoding="utf-8"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_handoff_state.py:13: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.14/site-packages/yaml/__init__.py:125: in safe_load
+    return load(stream, SafeLoader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/__init__.py:81: in load
+    return loader.get_single_data()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/constructor.py:49: in get_single_data
+    node = self.get_single_node()
+           ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:36: in get_single_node
+    document = self.compose_document()
+               ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:55: in compose_document
+    node = self.compose_node(None, None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:84: in compose_node
+    node = self.compose_mapping_node(anchor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:133: in compose_mapping_node
+    item_value = self.compose_node(node, item_key)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:82: in compose_node
+    node = self.compose_sequence_node(anchor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:110: in compose_sequence_node
+    while not self.check_event(SequenceEndEvent):
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/parser.py:98: in check_event
+    self.current_event = self.state()
+                         ^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/parser.py:405: in parse_indentless_sequence_entry
+    if not self.check_token(BlockEntryToken,
+.venv/lib/python3.14/site-packages/yaml/scanner.py:116: in check_token
+    self.fetch_more_tokens()
+.venv/lib/python3.14/site-packages/yaml/scanner.py:215: in fetch_more_tokens
+    return self.fetch_block_entry()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <yaml.loader.SafeLoader object at 0x10760d310>
+
+    def fetch_block_entry(self):
+    
+        # Block context needs additional checks.
+        if not self.flow_level:
+    
+            # Are we allowed to start a new entry?
+            if not self.allow_simple_key:
+>               raise ScannerError(None, None,
+                        "sequence entries are not allowed here",
+                        self.get_mark())
+E               yaml.scanner.ScannerError: sequence entries are not allowed here
+E                 in "<unicode string>", line 33, column 64:
+E                    ... persistent handoff state MVP.'  - PR #350 added explicit handoff ... 
+E                                                        ^
+
+.venv/lib/python3.14/site-packages/yaml/scanner.py:491: ScannerError
+_____________________ test_superseded_rules_have_successor _____________________
+
+    def test_superseded_rules_have_successor():
+>       data = load_handoff_state()
+               ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_handoff_state.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/agentic_project_kit/handoff_state.py:33: in load_handoff_state
+    data = yaml.safe_load(state_path.read_text(encoding="utf-8"))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/__init__.py:125: in safe_load
+    return load(stream, SafeLoader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/__init__.py:81: in load
+    return loader.get_single_data()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/constructor.py:49: in get_single_data
+    node = self.get_single_node()
+           ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:36: in get_single_node
+    document = self.compose_document()
+               ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:55: in compose_document
+    node = self.compose_node(None, None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:84: in compose_node
+    node = self.compose_mapping_node(anchor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:133: in compose_mapping_node
+    item_value = self.compose_node(node, item_key)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:82: in compose_node
+    node = self.compose_sequence_node(anchor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:110: in compose_sequence_node
+    while not self.check_event(SequenceEndEvent):
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/parser.py:98: in check_event
+    self.current_event = self.state()
+                         ^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/parser.py:405: in parse_indentless_sequence_entry
+    if not self.check_token(BlockEntryToken,
+.venv/lib/python3.14/site-packages/yaml/scanner.py:116: in check_token
+    self.fetch_more_tokens()
+.venv/lib/python3.14/site-packages/yaml/scanner.py:215: in fetch_more_tokens
+    return self.fetch_block_entry()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <yaml.loader.SafeLoader object at 0x10760d6d0>
+
+    def fetch_block_entry(self):
+    
+        # Block context needs additional checks.
+        if not self.flow_level:
+    
+            # Are we allowed to start a new entry?
+            if not self.allow_simple_key:
+>               raise ScannerError(None, None,
+                        "sequence entries are not allowed here",
+                        self.get_mark())
+E               yaml.scanner.ScannerError: sequence entries are not allowed here
+E                 in "<unicode string>", line 33, column 64:
+E                    ... persistent handoff state MVP.'  - PR #350 added explicit handoff ... 
+E                                                        ^
+
+.venv/lib/python3.14/site-packages/yaml/scanner.py:491: ScannerError
+=========================== short test summary info ============================
+FAILED tests/test_handoff_prompt.py::test_handoff_prompt_contains_required_sections_and_active_rules_only
+FAILED tests/test_handoff_prompt.py::test_handoff_cli_commands - AssertionErr...
+FAILED tests/test_handoff_refresh.py::test_handoff_refresh_dry_run_does_not_mutate_file
+FAILED tests/test_handoff_refresh.py::test_handoff_refresh_write_updates_file
+FAILED tests/test_handoff_state.py::test_handoff_state_yaml_is_parseable_and_valid
+FAILED tests/test_handoff_state.py::test_no_copy_policy_is_referenced - yaml....
+FAILED tests/test_handoff_state.py::test_superseded_rules_have_successor - ya...
+7 failed, 328 passed in 2.00s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.24
+
+Overall: PASS
+
+### DIFF ###
+diff --git a/.agentic/handoff_state.yaml b/.agentic/handoff_state.yaml
+index 3bfd61e..e38e93d 100644
+--- a/.agentic/handoff_state.yaml
++++ b/.agentic/handoff_state.yaml
+@@ -1,7 +1,7 @@
+ schema_version: 1
+ updated:
+   date: '2026-05-18'
+-  reason: Refresh handoff state safe_state from current git HEAD
++  reason: Handoff safe_state tracks the last substantive work commit; administrative refresh PRs do not require another refresh.
+   source: agentic-kit handoff refresh
+ repo:
+   name: agentic-project-kit
+@@ -30,7 +30,8 @@ completed_since_previous_handoff:
+ - 'PR #341 recorded v0.3.24 DOI metadata.'
+ - 'PR #342 finalized v0.3.24 DOI metadata state and recorded persistent handoff planning.'
+ - 'PR #343 added the active no-copy terminal evidence policy.'
+-- 'PR #344 added the read-only persistent handoff state MVP.'
++- 'PR #344 added the read-only persistent handoff state MVP.'  - PR #350 added explicit handoff safe_state commit semantics to distinguish substantive work from administrative refresh PRs.
++
+ current_capabilities:
+   ns_actions:
+   - agent-next
+
+### RESULT: PASS ###
