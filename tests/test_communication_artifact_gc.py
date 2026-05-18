@@ -1,25 +1,35 @@
-from agentic_project_kit import communication_artifact_gc as gc
+from __future__ import annotations
 
-def test_gc_plan_lists_registered_transient_files(tmp_path):
-    current = tmp_path / ".agentic/commands/current.yaml"
-    current.parent.mkdir(parents=True)
-    current.write_text("id: stale\n", encoding="utf-8")
-    plan = gc.render_plan(gc.collect_candidates(tmp_path))
-    assert "PENDING_COMMUNICATION_ARTIFACTS" in plan
-    assert ".agentic/commands/current.yaml" in plan
+from pathlib import Path
 
-def test_gc_execute_removes_only_registered_files(tmp_path):
-    current = tmp_path / ".agentic/commands/current.sh"
-    current.parent.mkdir(parents=True)
-    current.write_text("echo stale\n", encoding="utf-8")
-    outcome, message = gc.execute_gc(tmp_path)
+from agentic_project_kit.communication_artifact_gc import collect_candidates, execute_gc, render_plan
+
+
+def test_gc_plan_reports_nothing_for_clean_tree(tmp_path: Path) -> None:
+    assert render_plan(collect_candidates(tmp_path)) == "PASS_NOTHING_TO_COLLECT"
+
+
+def test_gc_collects_only_transient_agent_command_files(tmp_path: Path) -> None:
+    commands = tmp_path / ".agentic" / "commands"
+    commands.mkdir(parents=True)
+    current_yaml = commands / "current.yaml"
+    current_sh = commands / "current.sh"
+    current_yaml.write_text("stale", encoding="utf-8")
+    current_sh.write_text("stale", encoding="utf-8")
+    outcome, message = execute_gc(tmp_path)
     assert outcome == "PASS_COLLECTED"
+    assert ".agentic/commands/current.yaml" in message
     assert ".agentic/commands/current.sh" in message
-    assert not current.exists()
+    assert not current_yaml.exists()
+    assert not current_sh.exists()
 
-def test_gc_empty_state_is_pass(tmp_path):
-    assert gc.collect_candidates(tmp_path) == []
-    assert gc.render_plan([]) == "PASS_NOTHING_TO_COLLECT"
-    outcome, message = gc.execute_gc(tmp_path)
+
+def test_gc_does_not_collect_latest_terminal_log_pointer(tmp_path: Path) -> None:
+    terminal = tmp_path / "docs" / "reports" / "terminal"
+    terminal.mkdir(parents=True)
+    pointer = terminal / "LATEST_TERMINAL_LOG.txt"
+    pointer.write_text("docs/reports/terminal/example.log\n", encoding="utf-8")
+    outcome, message = execute_gc(tmp_path)
     assert outcome == "PASS_NOTHING_TO_COLLECT"
     assert message == ""
+    assert pointer.exists()
