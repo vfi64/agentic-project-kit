@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-18'
-  reason: Record handoff state after handoff state commit semantics merge
-  source: remote-repo-update
+  reason: Refresh handoff state to last substantive work commit
+  source: agentic-kit handoff refresh
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 7c1ce60
-  commit_subject: Add handoff state commit semantics (#350)
+  commit: 8b1256e
+  commit_subject: Add repo-backed work order MVP (#353)
   semantics: last_substantive_work_state
   administrative_refresh_prs:
   - 347
@@ -68,8 +68,8 @@ rules:
     contradictory, or obsolete rules.
 - id: last-substantive-safe-state
   status: active
-  text: safe_state records the last substantive work state; administrative handoff refresh
-    PRs are tracked separately to avoid refresh loops.
+  text: safe_state records the last substantive work state; administrative handoff
+    refresh PRs are tracked separately to avoid refresh loops.
 - id: manual-copy-terminal-by-default
   status: superseded
   text: Manual copy-and-paste terminal output was formerly used for routine handoff.
@@ -90,14 +90,16 @@ next_allowed_tasks:
   title: Automate long work orders as repo-backed command/action artifacts.
   priority: 1
 - id: action-dry-run-validators
-  title: Add deterministic dry-run validators for parameterized Git, PR, release, DOI, and finalize actions.
+  title: Add deterministic dry-run validators for parameterized Git, PR, release,
+    DOI, and finalize actions.
   priority: 2
 blocked_until_closeout:
 - GUI mutation controls
 - new release cycle automation
 first_instruction: Work first on repo-backed work-order automation so long implementation
-  work orders are generated, stored, pulled, and executed through checked repository artifacts.
-  Keep remote mutations out of scope unless an explicit checked action contract exists.
+  work orders are generated, stored, pulled, and executed through checked repository
+  artifacts. Keep remote mutations out of scope unless an explicit checked action
+  contract exists.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
