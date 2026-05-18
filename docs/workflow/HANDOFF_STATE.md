@@ -20,3 +20,11 @@ Rules use `active`, `superseded`, or `historical` status. Generated handoff prom
 ## No-copy integration
 
 The handoff state references `.agentic/no_copy_terminal_policy.yaml`. A normal PASS handoff should therefore rely on committed/pushed logs and reports; manual terminal paste is reserved for failure or unavailable evidence.
+
+## Commit Semantics
+
+`safe_state.commit` records the last substantive work state by default, not necessarily the newest administrative refresh merge on `main`.
+
+This prevents endless refresh loops: a PR that only refreshes `.agentic/handoff_state.yaml` does not require another refresh PR just because it produced a newer merge commit.
+
+Use `safe_state.semantics: last_substantive_work_state` for this mode. Administrative refresh PR numbers may be recorded under `safe_state.administrative_refresh_prs`.
