@@ -270,6 +270,14 @@ def print_agent_next_footer(outcome: str, reply: str, reason: str = "") -> None:
     print("")
     print(f"### AGENT-NEXT RESULT: {outcome} ###")
     print(f"reply={reply}")
+    if reply == "p":
+        print("### NEXT CHAT REPLY: PASS -> p ###")
+    elif reply == "f":
+        print("### NEXT CHAT REPLY: FAIL -> f ###")
+    elif reply == "paste-output":
+        print("### NEXT CHAT REPLY: HARD-FAIL -> paste output ###")
+    else:
+        print("### NEXT CHAT REPLY: NO-COMMAND -> ask agent to queue command ###")
     if reason:
         print(f"reason={reason}")
     if LATEST_COMMAND_RUN_POINTER.exists():
@@ -339,7 +347,7 @@ def agent_next() -> int:
         print_agent_next_footer("HARD-FAIL", "paste-output", OUTCOME_FAIL_POSTCONDITION)
         return 1
     if result == 0:
-        print_agent_next_footer("PASS", "d")
+        print_agent_next_footer("PASS", "p")
     else:
         print_agent_next_footer("FAIL", "f")
     return result
