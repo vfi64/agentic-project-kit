@@ -52,3 +52,7 @@ A successful `PASS_EXECUTED` is intended to mean that the command script succeed
 - no dirty inbox command paths after upload
 
 If any of these checks fail, `agent-next` reports `FAIL_POSTCONDITION`.
+
+## Result handoff pointer
+
+Every `./ns agent-run` or `./ns agent-next` run writes `docs/reports/command_runs/LATEST_COMMAND_RUN.txt`. The file points to the newest command-run report under `docs/reports/command_runs/`. After the user replies `d` for PASS or `f` for normal FAIL, the next agent must read this pointer first, then the referenced report, then the terminal log referenced by that report. Copy-and-paste is reserved for terminal crashes, authentication/network failure, or missing remote evidence.

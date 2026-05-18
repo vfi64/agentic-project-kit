@@ -30,6 +30,7 @@ CURRENT_SCRIPT = COMMAND_DIR / "current.sh"
 INBOX_DIR = COMMAND_DIR / "inbox"
 EXECUTED_JSONL = COMMAND_DIR / "executed.jsonl"
 REPORT_DIR = Path("docs/reports/command_runs")
+LATEST_COMMAND_RUN_POINTER = REPORT_DIR / "LATEST_COMMAND_RUN.txt"
 
 ALLOWED_SAFETY_CLASSES = {
     "read-only",
@@ -195,6 +196,7 @@ def write_report(command: AgentCommand, outcome: str, exit_code: int, log_path: 
     if detail:
         lines.extend(["", "## Detail", "", detail])
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    LATEST_COMMAND_RUN_POINTER.write_text(path.as_posix() + "\n", encoding="utf-8")
     return path
 
 
@@ -248,7 +250,7 @@ def agent_run(extra_upload_paths: list[Path] | None = None) -> int:
     report = write_report(command, outcome, exit_code, log_path)
     append_executed(command, outcome, exit_code)
 
-    upload_paths = [report, EXECUTED_JSONL, *extra_upload_paths]
+    upload_paths = [report, LATEST_COMMAND_RUN_POINTER, EXECUTED_JSONL, *extra_upload_paths]
     if log_path is not None:
         upload_paths.append(log_path)
     upload_paths.append(terminal_logging.LATEST_POINTER)
