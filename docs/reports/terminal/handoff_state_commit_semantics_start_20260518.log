@@ -1,0 +1,139 @@
+### PREPARE FEATURE BRANCH ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+Already up to date.
+Switched to a new branch 'feature/handoff-state-commit-semantics'
+
+### CURRENT STATE ###
+feature/handoff-state-commit-semantics
+0543ba8 Refresh handoff state after parameterized action specs (#349)
+aa09831 Add parameterized action specs MVP (#348)
+793a15f Refresh handoff state after handoff update automation (#347)
+22a0d3a Add handoff refresh command (#346)
+edf318b Update handoff state after persistent handoff MVP (#345)
+144016d Add persistent handoff state MVP (#344)
+40291a1 Add no-copy terminal evidence policy (#343)
+c628954 Finalize state after v0.3.24 DOI metadata (#342)
+17a2e8e Record v0.3.24 DOI metadata (#341)
+39603bf Prepare v0.3.24 release metadata (#340)
+9e00830 Harden agent-next workflow postconditions (#339)
+c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+
+### HANDOFF STATE SNAPSHOT ###
+Persistent handoff state check passed
+Repo: agentic-project-kit
+Path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.3.24
+Safe state: main @ aa09831
+Next: Work first on the checked parameterized Git, PR, release, DOI, and finalize action layer. Keep this next slice focused on safe action objects and repository-backed evidence.
+11:safe_state:
+13:  commit: aa09831
+14:  commit_subject: Add parameterized action specs MVP (#348)
+
+### CURRENT IMPLEMENTATION POINTS ###
+src/agentic_project_kit/cli_commands/handoff.py:8:from agentic_project_kit.handoff_state import current_git_safe_state, load_handoff_state, refresh_handoff_safe_state, save_handoff_state, summarize_handoff_state, validate_handoff_state
+src/agentic_project_kit/cli_commands/handoff.py:41:    write: bool = typer.Option(False, "--write", help="Write refreshed safe_state to YAML."),
+src/agentic_project_kit/cli_commands/handoff.py:44:    git_state = current_git_safe_state()
+src/agentic_project_kit/cli_commands/handoff.py:45:    refreshed = refresh_handoff_safe_state(
+src/agentic_project_kit/cli_commands/handoff.py:55:    current = data.get("safe_state", {})
+src/agentic_project_kit/cli_commands/handoff.py:56:    updated = refreshed.get("safe_state", {})
+src/agentic_project_kit/cli_commands/handoff.py:57:    typer.echo(f"Current safe_state: {current.get('commit')} {current.get('commit_subject')}")
+src/agentic_project_kit/cli_commands/handoff.py:58:    typer.echo(f"Refreshed safe_state: {updated.get('commit')} {updated.get('commit_subject')}")
+Binary file src/agentic_project_kit/cli_commands/__pycache__/handoff.cpython-314.pyc matches
+src/agentic_project_kit/handoff_state.py:14:    "safe_state",
+src/agentic_project_kit/handoff_state.py:92:    safe_state = data.get("safe_state", {})
+src/agentic_project_kit/handoff_state.py:98:        f"Safe state: {safe_state.get('branch', '<unknown>')} @ {safe_state.get('commit', '<unknown>')}",
+src/agentic_project_kit/handoff_state.py:104:def current_git_safe_state() -> dict[str, str]:
+src/agentic_project_kit/handoff_state.py:119:def refresh_handoff_safe_state(
+src/agentic_project_kit/handoff_state.py:123:    reason: str = "Refresh handoff state safe_state from current git HEAD",
+src/agentic_project_kit/handoff_state.py:126:    safe_state = dict(refreshed.get("safe_state", {}))
+src/agentic_project_kit/handoff_state.py:127:    safe_state["branch"] = "main"
+src/agentic_project_kit/handoff_state.py:128:    safe_state["commit"] = commit
+src/agentic_project_kit/handoff_state.py:129:    safe_state["commit_subject"] = commit_subject
+src/agentic_project_kit/handoff_state.py:130:    refreshed["safe_state"] = safe_state
+Binary file src/agentic_project_kit/__pycache__/handoff_state.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/handoff_prompt.cpython-314.pyc matches
+src/agentic_project_kit/handoff_prompt.py:12:    safe_state = data.get("safe_state", {})
+src/agentic_project_kit/handoff_prompt.py:32:        f"Branch: `{safe_state.get('branch', '')}`",
+src/agentic_project_kit/handoff_prompt.py:33:        f"Commit: `{safe_state.get('commit', '')}`",
+src/agentic_project_kit/handoff_prompt.py:34:        f"Subject: {safe_state.get('commit_subject', '')}",
+tests/test_handoff_refresh.py:7:from agentic_project_kit.handoff_state import refresh_handoff_safe_state
+tests/test_handoff_refresh.py:9:def test_refresh_handoff_safe_state_updates_commit_without_mutating_input():
+tests/test_handoff_refresh.py:12:        "safe_state": {"branch": "main", "commit": "old", "commit_subject": "old subject"},
+tests/test_handoff_refresh.py:14:    refreshed = refresh_handoff_safe_state(data, "abc1234", "New subject")
+tests/test_handoff_refresh.py:15:    assert data["safe_state"]["commit"] == "old"
+tests/test_handoff_refresh.py:16:    assert refreshed["safe_state"]["commit"] == "abc1234"
+tests/test_handoff_refresh.py:17:    assert refreshed["safe_state"]["commit_subject"] == "New subject"
+tests/test_handoff_refresh.py:25:    monkeypatch.setattr("agentic_project_kit.cli_commands.handoff.current_git_safe_state", lambda: {"commit": "dryrun1", "commit_subject": "Dry run subject"})
+tests/test_handoff_refresh.py:35:    monkeypatch.setattr("agentic_project_kit.cli_commands.handoff.current_git_safe_state", lambda: {"commit": "write01", "commit_subject": "Write subject"})
+tests/test_handoff_refresh.py:40:    assert data["safe_state"]["commit"] == "write01"
+tests/test_handoff_refresh.py:41:    assert data["safe_state"]["commit_subject"] == "Write subject"
+Binary file tests/__pycache__/test_handoff_refresh.cpython-314-pytest-9.0.3.pyc matches
+docs/planning/PERSISTENT_HANDOFF_STATE.md:57:- `safe_state`
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:87:Current safe_state: 22a0d3a Add handoff refresh command (#346)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:88:Refreshed safe_state: 793a15f Refresh handoff state after handoff update automation (#347)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:96:if [ "${1:-}" = "handoff-refresh" ]; then
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:567:docs/reports/terminal/handoff_update_automation_inspection_20260518.log:450:- ns command: ./ns handoff-refresh.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:625:./ns:5:if [ "${1:-}" = "handoff-refresh" ]; then
+docs/reports/terminal/handoff_refresh_after_pr348_20260518.log:107:Current safe_state: 22a0d3a Add handoff refresh command (#346)
+docs/reports/terminal/handoff_refresh_after_pr348_20260518.log:108:Refreshed safe_state: aa09831 Add parameterized action specs MVP (#348)
+docs/reports/terminal/handoff_refresh_after_pr348_20260518.log:206: safe_state:
+docs/reports/terminal/handoff_refresh_path_argument_repair_20260518.log:17:Current safe_state: 144016d Add persistent handoff state MVP (#344)
+docs/reports/terminal/handoff_refresh_path_argument_repair_20260518.log:18:Refreshed safe_state: 2dc76cf Inspect handoff update automation points
+docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:111:- `safe_state`
+docs/reports/terminal/handoff_update_automation_inspection_20260518.log:43:safe_state:
+docs/reports/terminal/handoff_update_automation_inspection_20260518.log:141:    "safe_state",
+docs/reports/terminal/handoff_update_automation_inspection_20260518.log:219:    safe_state = data.get("safe_state", {})
+docs/reports/terminal/handoff_update_automation_inspection_20260518.log:225:        f"Safe state: {safe_state.get('branch', '<unknown>')} @ {safe_state.get('commit', '<unknown>')}",
+docs/reports/terminal/handoff_update_automation_inspection_20260518.log:242:    safe_state = data.get("safe_state", {})
+docs/reports/terminal/handoff_update_automation_inspection_20260518.log:262:        f"Branch: `{safe_state.get('branch', '')}`",
+docs/reports/terminal/handoff_update_automation_inspection_20260518.log:263:        f"Commit: `{safe_state.get('commit', '')}`",
+docs/reports/terminal/handoff_update_automation_inspection_20260518.log:264:        f"Subject: {safe_state.get('commit_subject', '')}",
+docs/reports/terminal/handoff_update_automation_inspection_20260518.log:448:- handoff refresh data model updates safe_state.commit and subject from current git HEAD.
+docs/reports/terminal/handoff_update_automation_inspection_20260518.log:450:- ns command: ./ns handoff-refresh.
+docs/reports/terminal/handoff_update_automation_inspection_20260518.log:451:- Tests ensure dry-run does not mutate and write updates stale safe_state.
+docs/reports/terminal/handoff_refresh_after_pr346_20260518.log:31:Current safe_state: 144016d Add persistent handoff state MVP (#344)
+docs/reports/terminal/handoff_refresh_after_pr346_20260518.log:32:Refreshed safe_state: 22a0d3a Add handoff refresh command (#346)
+docs/reports/terminal/handoff_refresh_after_pr346_20260518.log:134:+  reason: Refresh handoff state safe_state from current git HEAD
+docs/reports/terminal/handoff_refresh_after_pr346_20260518.log:141: safe_state:
+.agentic/handoff_state.yaml:4:  reason: Refresh handoff state safe_state from current git HEAD
+.agentic/handoff_state.yaml:11:safe_state:
+./ns:18:if [ "${1:-}" = "handoff-refresh" ]; then
+
+### BASELINE GATES ###
+........................................................................ [ 21%]
+........................................................................ [ 43%]
+........................................................................ [ 64%]
+........................................................................ [ 86%]
+..............................................                           [100%]
+334 passed in 2.01s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.24
+
+Overall: PASS
+
+### SEMANTICS PLAN ###
+Goal: stop endless handoff refreshes by distinguishing substantive work commits from administrative refresh commits.
+- Add safe_state.semantics with default last_substantive_work_state.
+- Add optional safe_state.administrative_refresh_prs.
+- Validator accepts intentional lag behind administrative refresh merges.
+- Document that refresh PRs do not require another refresh PR.
+- Keep handoff-refresh read-only by default and write only with explicit --write.
+
+### INNER RESULT PASS ###
