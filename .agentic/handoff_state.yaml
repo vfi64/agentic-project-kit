@@ -83,6 +83,11 @@ recent_failure_patterns:
   prevention: >-
     Recurring workflow failures must be represented twice: in handoff prompts for human continuity
     and in repository guards/tests for deterministic prevention. Prefer durable helpers over fast manual workarounds.
+- id: interpreter-discovery-before-python
+  prevention: >-
+    Terminal/workflow blocks must discover a usable interpreter first and prefer .venv/bin/python,
+    then .venv/bin/python3, then python3, and only then python. Do not combine naked python with set -e
+    because a missing interpreter can close the interactive terminal before diagnostics are preserved.
 - id: repo-log-written-while-committing
   prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo terminal log while the current process is still writing to it.
 - id: unconditional-pass-after-failure
