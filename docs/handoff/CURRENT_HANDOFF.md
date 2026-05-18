@@ -298,3 +298,11 @@ Post-release Dependabot cleanup is complete. PR #327 and PR #328 resolved the re
 
 - Before persistent handoff state, add the no-copy terminal evidence policy so future d responses rely on repo-backed logs rather than pasted terminal output.
 - The next YAML handoff state must reference .agentic/no_copy_terminal_policy.yaml and preserve obsolete-rule cleanup.
+
+## Latest completed implementation slice: terminal log finalization guard
+
+Merged PR #375 added `./ns terminal-finalize`, backed by `agentic_project_kit.terminal_logging.finalize_terminal_log(...)`, plus tests and documentation. The safe terminal evidence pattern is now `/tmp` log first, finalize into `docs/reports/terminal/*.log`, then stage, commit, and push. Do not commit a repo terminal log while the current process is still writing to it.
+
+The implementation evidence log is committed and remotely readable at `docs/reports/terminal/20260518-182435_terminal-log-finalization-guard.log`. It records targeted tests, ruff, check-docs, doctor, and `### RESULT: PASS ###`.
+
+Next safe step: continue the deterministic command-contract/environment-bootstrap drift slice. Verify real CLI commands, `.venv`, `./ns` shortcuts, docs, and work-order command references before extending work-order execution or GUI controls.
