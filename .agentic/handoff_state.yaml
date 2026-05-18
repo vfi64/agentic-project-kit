@@ -58,7 +58,9 @@ policies:
 rules:
 - id: deterministic-quality-before-speed
   status: active
-  text: Prefer technically robust, testable, repeatable solutions over fast workarounds. Repeated workflow failures are product defects to fix with helpers, guards, tests, and documentation.
+  text: Prefer technically robust, testable, repeatable solutions over fast workarounds.
+    Repeated workflow failures are product defects to fix with helpers, guards, tests,
+    and documentation.
 - id: no-copy-terminal-evidence
   status: active
   text: Routine PASS handoffs must be backed by repo evidence; manual terminal paste
@@ -78,18 +80,26 @@ rules:
   status: superseded
   text: Manual copy-and-paste terminal output was formerly used for routine handoff.
   superseded_by: no-copy-terminal-evidence
+- id: rules-must-be-test-backed
+  status: active
+  text: Workflow rules are not complete when they only exist in chat, prose, or handoff
+    memory. Every durable rule must have a stable repository home, a rule id, documentation,
+    and at least one deterministic test that fails when the rule disappears or is
+    weakened.
 recent_failure_patterns:
 - id: standard-error-guards
-  prevention: >-
-    Recurring workflow failures must be represented twice: in handoff prompts for human continuity
-    and in repository guards/tests for deterministic prevention. Prefer durable helpers over fast manual workarounds.
+  prevention: 'Recurring workflow failures must be represented twice: in handoff prompts
+    for human continuity and in repository guards/tests for deterministic prevention.
+    Prefer durable helpers over fast manual workarounds.'
 - id: interpreter-discovery-before-python
-  prevention: >-
-    Terminal/workflow blocks must discover a usable interpreter first and prefer .venv/bin/python,
-    then .venv/bin/python3, then python3, and only then python. Do not combine naked python with set -e
-    because a missing interpreter can close the interactive terminal before diagnostics are preserved.
+  prevention: Terminal/workflow blocks must discover a usable interpreter first and
+    prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python.
+    Do not combine naked python with set -e because a missing interpreter can close
+    the interactive terminal before diagnostics are preserved.
 - id: repo-log-written-while-committing
-  prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo terminal log while the current process is still writing to it.
+  prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize
+    with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo
+    terminal log while the current process is still writing to it.
 - id: unconditional-pass-after-failure
   prevention: Use set -e or explicit status handling and require log-backed PASS.
 - id: overwriting-required-state-docs
@@ -98,11 +108,18 @@ recent_failure_patterns:
 - id: missing-project-venv-tooling
   prevention: Prefer project-local .venv commands over global python, ruff, or agentic-kit.
 - id: global-cli-or-venv-assumption
-  prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and agentic-kit before using command names. Treat missing global agentic-kit or missing .venv as bootstrap/environment state, not as product failure.
+  prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and
+    agentic-kit before using command names. Treat missing global agentic-kit or missing
+    .venv as bootstrap/environment state, not as product failure.
 - id: interactive-terminal-exit
-  prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit codes belong inside saved scripts, not interactive paste blocks.
+  prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace
+    the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit
+    codes belong inside saved scripts, not interactive paste blocks.
 - id: unclassified-communication-artifact-cleanup
-  prevention: Never delete communication, handoff, terminal, or command-run artifacts with ad-hoc rm. Use the central communication artifact registry and a deterministic garbage collector with dry-run, allowlist, age/status checks, tests, and a cleanup report.
+  prevention: Never delete communication, handoff, terminal, or command-run artifacts
+    with ad-hoc rm. Use the central communication artifact registry and a deterministic
+    garbage collector with dry-run, allowlist, age/status checks, tests, and a cleanup
+    report.
 - id: stale-handoff-after-administrative-refresh
   prevention: Keep safe_state tied to the last substantive commit and list administrative
     refresh PRs separately.
@@ -117,7 +134,9 @@ next_allowed_tasks:
 blocked_until_closeout:
 - GUI mutation controls
 - new release cycle automation
-first_instruction: Work first on deterministic command-contract and environment-bootstrap drift prevention. Verify real CLI commands, .venv availability, ns shortcuts, docs, and work-order command references before extending work-order execution or GUI controls.
+first_instruction: Work first on deterministic command-contract and environment-bootstrap
+  drift prevention. Verify real CLI commands, .venv availability, ns shortcuts, docs,
+  and work-order command references before extending work-order execution or GUI controls.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
