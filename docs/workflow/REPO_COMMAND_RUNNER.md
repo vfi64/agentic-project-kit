@@ -41,3 +41,14 @@ Safety boundary:
 Pending command files use matching names, for example `.agentic/commands/inbox/example.yaml` and `.agentic/commands/inbox/example.sh`. Multiple complete pending commands are refused with `FAIL_AMBIGUOUS_COMMANDS`.
 
 Manual terminal copy-and-paste blocks remain recovery-only.
+
+## Agent-next postconditions
+
+A successful `PASS_EXECUTED` is intended to mean that the command script succeeded and the handoff state was cleaned up. The runner therefore checks postconditions after `agent-next`:
+
+- no transient `.agentic/commands/current.yaml`
+- no transient `.agentic/commands/current.sh`
+- no complete pending inbox command pair left behind
+- no dirty inbox command paths after upload
+
+If any of these checks fail, `agent-next` reports `FAIL_POSTCONDITION`.

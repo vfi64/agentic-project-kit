@@ -46,6 +46,7 @@ OUTCOME_FAIL_COMMAND = "FAIL_COMMAND"
 OUTCOME_FAIL_UPLOAD = "FAIL_UPLOAD"
 OUTCOME_FAIL_AMBIGUOUS_COMMANDS = "FAIL_AMBIGUOUS_COMMANDS"
 OUTCOME_FAIL_PULL = "FAIL_PULL"
+OUTCOME_FAIL_POSTCONDITION = "FAIL_POSTCONDITION"
 
 
 @dataclasses.dataclass(frozen=True)
@@ -262,6 +263,33 @@ def agent_run(extra_upload_paths: list[Path] | None = None) -> int:
 
 
 
+def git_porcelain_paths() -> list[str]:
+    proc = subprocess.run(["git", "status", "--porcelain"], text=True, capture_output=True, check=False)
+    paths: list[str] = []
+    for raw in proc.stdout.splitlines():
+        if raw.strip():
+            paths.append(raw[3:])
+    return paths
+
+
+def agent_next_postcondition_failures() -> list[str]:
+    failures: list[str] = []
+    for item in (CURRENT_YAML, CURRENT_SCRIPT):
+        if item.exists():
+            failures.append("active current file remains: " + item.as_posix())
+    complete_pairs: list[str] = []
+    if INBOX_DIR.exists():
+        for yaml_path in inbox_yaml_files():
+            if yaml_path.with_suffix(".sh").exists():
+                complete_pairs.append(yaml_path.name)
+    if complete_pairs:
+        failures.append("complete inbox command remains: " + ", ".join(complete_pairs))
+    unstaged_deletions = [path for path in git_porcelain_paths() if path.startswith(".agentic/commands/inbox/")]
+    if unstaged_deletions:
+        failures.append("inbox path still dirty after run: " + ", ".join(unstaged_deletions))
+    return failures
+
+
 def git_pull_ff_only() -> int:
     branch = current_branch()
     return subprocess.run(["git", "pull", "--ff-only", "origin", branch], check=False).returncode
@@ -283,9 +311,16 @@ def agent_next() -> int:
         print(str(exc))
         return 1
     try:
-        return agent_run(extra_upload_paths=consumed_paths)
+        result = agent_run(extra_upload_paths=consumed_paths)
     finally:
         remove_current_files()
+    failures = agent_next_postcondition_failures()
+    if failures:
+        print(OUTCOME_FAIL_POSTCONDITION)
+        for item in failures:
+            print(item)
+        return 1
+    return result
 
 def main(argv: list[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
