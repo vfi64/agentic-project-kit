@@ -1,5 +1,30 @@
 #!/usr/bin/env sh
 
+resolve_python() {
+  if [ -x ".venv/bin/python" ]; then
+    printf "%s
+" ".venv/bin/python"
+  elif [ -x ".venv/bin/python3" ]; then
+    printf "%s
+" ".venv/bin/python3"
+  elif command -v python3 >/dev/null 2>&1; then
+    command -v python3
+  elif command -v python >/dev/null 2>&1; then
+    command -v python
+  else
+    return 1
+  fi
+}
+
+PY="$(resolve_python || true)"
+if [ -z "$PY" ]; then
+  printf "%s
+" "ERROR: no usable Python interpreter found. Expected .venv/bin/python, .venv/bin/python3, python3, or python."
+  printf "%s
+" "### RESULT: FAIL ###"
+  return 127 2>/dev/null || exit 127
+fi
+
 
 
 
@@ -44,50 +69,50 @@ fi
 
 if [ "${1:-}" = "run-logged" ]; then
   shift
-  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging run-logged "$@"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging run-logged "$@"
   exit $?
 fi
 
 if [ "${1:-}" = "terminal-status" ]; then
-  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging terminal-status
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-status
   exit $?
 fi
 
 if [ "${1:-}" = "terminal-upload" ]; then
-  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging terminal-upload
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-upload
   exit $?
 fi
 
 if [ "${1:-}" = "terminal-finalize" ]; then
   shift
-  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging terminal-finalize "$@"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-finalize "$@"
   exit $?
 fi
 
 if [ "${1:-}" = "terminal-clean-check" ]; then
-  PYTHONPATH=src python3 -m agentic_project_kit.terminal_logging terminal-clean-check
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-clean-check
   exit $?
 fi
 
 if [ "${1:-}" = "artifact-gc" ]; then
   shift
-  PYTHONPATH=src python3 -m agentic_project_kit.communication_artifact_gc "$@"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.communication_artifact_gc "$@"
   exit $?
 fi
 
 if [ "${1:-}" = "agent-next" ]; then
-  PYTHONPATH=src python3 -m agentic_project_kit.agent_command_runner next
+  PYTHONPATH=src "$PY" -m agentic_project_kit.agent_command_runner next
   exit $?
 fi
 
 if [ "${1:-}" = "agent-run" ]; then
-  PYTHONPATH=src python3 -m agentic_project_kit.agent_command_runner
+  PYTHONPATH=src "$PY" -m agentic_project_kit.agent_command_runner
   exit $?
 fi
 
 
 if [ "${1:-}" = "cockpit-readiness" ]; then
-  PYTHONPATH=src python3 tools/cockpit_readiness.py
+  PYTHONPATH=src "$PY" tools/cockpit_readiness.py
   exit $?
 fi
 
@@ -97,97 +122,122 @@ cd "$SCRIPT_DIR"
 if [ "${1:-}" = "cockpit" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
-    exec .venv/bin/agentic-kit cockpit status "$@"
+    .venv/bin/agentic-kit cockpit status "$@"
+    exit $?
   fi
-  exec agentic-kit cockpit status "$@"
+  agentic-kit cockpit status "$@"
+  exit $?
 fi
 if [ "${1:-}" = "actions" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
-    exec .venv/bin/agentic-kit cockpit actions "$@"
+    .venv/bin/agentic-kit cockpit actions "$@"
+    exit $?
   fi
-  exec agentic-kit cockpit actions "$@"
+  agentic-kit cockpit actions "$@"
+  exit $?
 fi
 if [ "${1:-}" = "select" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
-    exec .venv/bin/agentic-kit cockpit select "$@"
+    .venv/bin/agentic-kit cockpit select "$@"
+    exit $?
   fi
-  exec agentic-kit cockpit select "$@"
+  agentic-kit cockpit select "$@"
+  exit $?
 fi
 if [ "${1:-}" = "cockpit-run" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
-    exec .venv/bin/agentic-kit cockpit run "$@"
+    .venv/bin/agentic-kit cockpit run "$@"
+    exit $?
   fi
-  exec agentic-kit cockpit run "$@"
+  agentic-kit cockpit run "$@"
+  exit $?
 fi
 if [ "${1:-}" = "state" ] || [ "${1:-}" = "status" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
-    exec .venv/bin/agentic-kit workflow state "$@"
+    .venv/bin/agentic-kit workflow state "$@"
+    exit $?
   fi
-  exec agentic-kit workflow state "$@"
+  agentic-kit workflow state "$@"
+  exit $?
 fi
 if [ "${1:-}" = "list" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
-    exec .venv/bin/agentic-kit workflow list "$@"
+    .venv/bin/agentic-kit workflow list "$@"
+    exit $?
   fi
-  exec agentic-kit workflow list "$@"
+  agentic-kit workflow list "$@"
+  exit $?
 fi
 if [ "${1:-}" = "show" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
-    exec .venv/bin/agentic-kit workflow show "$@"
+    .venv/bin/agentic-kit workflow show "$@"
+    exit $?
   fi
-  exec agentic-kit workflow show "$@"
+  agentic-kit workflow show "$@"
+  exit $?
 fi
 if [ "${1:-}" = "run" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
-    exec .venv/bin/agentic-kit workflow run "$@"
+    .venv/bin/agentic-kit workflow run "$@"
+    exit $?
   fi
-  exec agentic-kit workflow run "$@"
+  agentic-kit workflow run "$@"
+  exit $?
 fi
 if [ "${1:-}" = "release-prep" ]; then
   shift
-  exec tools/ns_release_prep.sh "$@"
+  tools/ns_release_prep.sh "$@"
+  exit $?
 fi
 if [ "${1:-}" = "release-gate" ]; then
   shift
-  exec tools/ns_release_gate.sh "$@"
+  tools/ns_release_gate.sh "$@"
+  exit $?
 fi
 if [ "${1:-}" = "release-publish" ]; then
   shift
-  exec tools/ns_release_publish.sh "$@"
+  tools/ns_release_publish.sh "$@"
+  exit $?
 fi
 if [ "${1:-}" = "release-verify" ]; then
   shift
-  exec tools/ns_release_verify.sh "$@"
+  tools/ns_release_verify.sh "$@"
+  exit $?
 fi
 if [ "${1:-}" = "finalize-guard" ]; then
   shift
-  exec tools/ns_finalize_guard.sh "$@"
+  tools/ns_finalize_guard.sh "$@"
+  exit $?
 fi
 
 if [ "${1:-}" = "clean-evidence" ]; then
   shift
-  exec tools/ns_clean_evidence.sh "$@"
+  tools/ns_clean_evidence.sh "$@"
+  exit $?
 fi
 
 if [ "${1:-}" = "commit-guard" ]; then
   shift
-  exec tools/ns_commit_pr_guard.sh "$@"
+  tools/ns_commit_pr_guard.sh "$@"
+  exit $?
 fi
 
 if [ "${1:-}" = "pr-cleanup" ]; then
   shift
-  exec tools/ns_pr_cleanup.sh "$@"
+  tools/ns_pr_cleanup.sh "$@"
+  exit $?
 fi
 if [ "${1:-}" = "slice-runner" ]; then
   shift
-  exec tools/ns_slice_runner.sh "$@"
+  tools/ns_slice_runner.sh "$@"
+  exit $?
 fi
 
 if [ "${1:-}" = "dev" ]; then
@@ -237,34 +287,41 @@ fi
     exit 2
   fi
   if [ -x ".venv/bin/agentic-kit" ]; then
-    exec .venv/bin/agentic-kit workflow go "$@"
+    .venv/bin/agentic-kit workflow go "$@"
+    exit $?
   fi
-  exec agentic-kit workflow go "$@"
+  agentic-kit workflow go "$@"
+  exit $?
 fi
 if [ "${1:-}" = "up" ]; then
   shift
-  exec tools/ns_up_pr_completion.sh "$@"
+  tools/ns_up_pr_completion.sh "$@"
+  exit $?
 fi
 
 if [ "${1:-}" = "upload" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
-    exec .venv/bin/agentic-kit workflow upload "$@"
+    .venv/bin/agentic-kit workflow upload "$@"
+    exit $?
   fi
-  exec agentic-kit workflow upload "$@"
+  agentic-kit workflow upload "$@"
+  exit $?
 fi
 
 if [ "${1:-}" = "fail" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
-    exec .venv/bin/agentic-kit workflow fail-report "$@"
+    .venv/bin/agentic-kit workflow fail-report "$@"
+    exit $?
   fi
-  exec agentic-kit workflow fail-report "$@"
+  agentic-kit workflow fail-report "$@"
+  exit $?
 fi
 
 if [ -x ".venv/bin/python" ]; then
-  exec .venv/bin/python tools/next-step.py "$@"
+  "$PY" tools/next-step.py "$@"
 fi
-exec python3 tools/next-step.py "$@"
+"$PY" tools/next-step.py "$@"
 
 # no-copy workflow shortcuts: ./ns dev, ./ns go, ./ns up
