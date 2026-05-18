@@ -4,12 +4,14 @@ Your branch is up to date with 'origin/main'.
 Already up to date.
 Switched to a new branch 'docs/record-v0.3.25-doi'
 
-### APPLY PATCH ###
-recorded v0.3.25 DOI metadata
+### APPLY DOI PATCH ###
 
-### VERIFY DOI REFERENCES ###
+### DOI REFERENCES ###
+CHANGELOG.md:1:## v0.3.25
 CHANGELOG.md:2:- Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.25 DOI `10.5281/zenodo.20273989`.
+CHANGELOG.md:4:- Prepare release metadata for v0.3.25.
 README.md:403:The archived v0.3.25 release has the verified version-specific DOI: `10.5281/zenodo.20273989`.
+README.md:512:- Verified v0.3.25 version DOI: `10.5281/zenodo.20273989`
 CITATION.cff:41:# Verified v0.3.25 version DOI: 10.5281/zenodo.20273989
 docs/STATUS.md:2:- Completed: v0.3.25 is released and post-release verified. GitHub Release exists; Zenodo concept DOI `10.5281/zenodo.20101359`; verified version DOI `10.5281/zenodo.20273989`.
 docs/handoff/CURRENT_HANDOFF.md:2:v0.3.25 is released and post-release verified. GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, and verified version DOI `10.5281/zenodo.20273989`. DOI metadata has been recorded in this branch.
@@ -21,7 +23,7 @@ docs/handoff/CURRENT_HANDOFF.md:2:v0.3.25 is released and post-release verified.
 ........................................................................ [ 77%]
 ........................................................................ [ 97%]
 ...........                                                              [100%]
-371 passed in 2.11s
+371 passed in 2.21s
 All checks passed!
 Agentic project check passed
 Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -41,6 +43,9 @@ documentation-governed
 [PASS] version drift: project state matches version 0.3.25
 
 Overall: PASS
+Governance check passed
+Work order contract check passed
+Persistent handoff state check passed
 Post-release check for target v0.3.25
 
 [PASS] GitHub release: GitHub release exists: v0.3.25
@@ -51,11 +56,7 @@ Overall: PASS
 
 
 ### DIFF STAT ###
- CHANGELOG.md                    | 3 ++-
- CITATION.cff                    | 1 +
- README.md                       | 2 ++
- docs/STATUS.md                  | 2 +-
- docs/handoff/CURRENT_HANDOFF.md | 2 +-
- 5 files changed, 7 insertions(+), 3 deletions(-)
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)
 
 ### INNER RESULT PASS ###
