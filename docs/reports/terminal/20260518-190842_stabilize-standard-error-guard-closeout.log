@@ -1,0 +1,117 @@
+
+### PRECHECK ###
+main
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? docs/reports/terminal/20260518-190643_close-standard-error-pr-state.log
+?? docs/reports/terminal/20260518-190733_repair-standard-error-guards-pr383.log
+ac5734f Record standard error guard inspection log
+2a2de28 Add communication artifact garbage collector (#380)
+e735eea Add communication artifact GC registry (#379)
+e47bf17 Record no interactive exit PR closeout log
+29d9427 Record no interactive terminal exit rule (#378)
+f7655dc Record PR 376 closeout terminal log (#377)
+40cb56d Refresh state after terminal log finalization guard (#376)
+43d6c18 Add terminal log finalization guard (#375)
+
+### CLASSIFY LOCAL DIRTY STATE ###
+PENDING_COMMUNICATION_ARTIFACTS
+terminal-latest-pointer	pointer	docs/reports/terminal/LATEST_TERMINAL_LOG.txt	derived pointer to the latest terminal log
+PASS_ONLY_TERMINAL_LOG_DIRTY
+docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+docs/reports/terminal/20260518-190643_close-standard-error-pr-state.log
+docs/reports/terminal/20260518-190733_repair-standard-error-guards-pr383.log
+
+### STAGE ONLY TERMINAL EVIDENCE IF PRESENT ###
+ ...260518-190643_close-standard-error-pr-state.log | 72 +++++++++++++++++++++
+ ...8-190733_repair-standard-error-guards-pr383.log | 73 ++++++++++++++++++++++
+ docs/reports/terminal/LATEST_TERMINAL_LOG.txt      |  2 +-
+ 3 files changed, 146 insertions(+), 1 deletion(-)
+[main b6d9ec0] Record standard error guard closeout diagnostics
+ 3 files changed, 146 insertions(+), 1 deletion(-)
+ create mode 100644 docs/reports/terminal/20260518-190643_close-standard-error-pr-state.log
+ create mode 100644 docs/reports/terminal/20260518-190733_repair-standard-error-guards-pr383.log
+To github.com:vfi64/agentic-project-kit.git
+ ! [rejected]        HEAD -> main (fetch first)
+error: failed to push some refs to 'github.com:vfi64/agentic-project-kit.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+### SYNC MAIN CLEANLY ###
+Already on 'main'
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   ac5734f..0836a05  main       -> origin/main
+hint: Diverging branches can't be fast-forwarded, you need to either:
+hint:
+hint: 	git merge --no-ff
+hint:
+hint: or:
+hint:
+hint: 	git rebase
+hint:
+hint: Disable this message with "git config set advice.diverging false"
+fatal: Not possible to fast-forward, aborting.
+main
+b6d9ec0 Record standard error guard closeout diagnostics
+ac5734f Record standard error guard inspection log
+2a2de28 Add communication artifact garbage collector (#380)
+e735eea Add communication artifact GC registry (#379)
+e47bf17 Record no interactive exit PR closeout log
+29d9427 Record no interactive terminal exit rule (#378)
+f7655dc Record PR 376 closeout terminal log (#377)
+40cb56d Refresh state after terminal log finalization guard (#376)
+43d6c18 Add terminal log finalization guard (#375)
+0baa7e7 Record environment bootstrap drift lesson (#374)
+
+### RECLASSIFY STANDARD ERROR PRS ###
+
+--- PR 381 ---
+{"baseRefName":"main","headRefName":"docs/standard-error-prevention-contract","mergeStateStatus":"UNKNOWN","mergeable":"UNKNOWN","number":381,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-18T17:00:01Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26047965047/job/76576997935","name":"test","startedAt":"2026-05-18T16:59:44Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-18T16:59:57Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26047958948/job/76576977354","name":"test","startedAt":"2026-05-18T16:59:37Z","status":"COMPLETED","workflowName":"CI"}],"title":"Record standard error prevention contract","url":"https://github.com/vfi64/agentic-project-kit/pull/381"}
+
+--- PR 382 ---
+{"baseRefName":"main","headRefName":"docs/refresh-handoff-after-standard-error-prevention","mergeStateStatus":"UNKNOWN","mergeable":"UNKNOWN","number":382,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-18T17:01:16Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26048027855/job/76577216013","name":"test","startedAt":"2026-05-18T17:00:53Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-18T17:01:17Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26048031127/job/76577226959","name":"test","startedAt":"2026-05-18T17:00:56Z","status":"COMPLETED","workflowName":"CI"}],"title":"Refresh handoff after standard error prevention","url":"https://github.com/vfi64/agentic-project-kit/pull/382"}
+
+--- PR 383 ---
+{"baseRefName":"main","headRefName":"feature/standard-error-guards","mergeStateStatus":"UNKNOWN","mergeable":"UNKNOWN","number":383,"state":"MERGED","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-18T17:05:43Z","conclusion":"FAILURE","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26048265437/job/76578025690","name":"test","startedAt":"2026-05-18T17:05:25Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-18T17:05:43Z","conclusion":"FAILURE","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26048263683/job/76578017517","name":"test","startedAt":"2026-05-18T17:05:21Z","status":"COMPLETED","workflowName":"CI"}],"title":"Add standard error guard documentation and tests","url":"https://github.com/vfi64/agentic-project-kit/pull/383"}
+
+### MAIN GATES ###
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.25
+
+Overall: PASS
+All checks passed!
+
+### TEST DISCOVERY FOR STANDARD ERROR GUARDS ###
+tests/test_standard_error_guards.py is not present on synced main.
+
+### FINAL STATE BEFORE FINALIZE ###
+main
+b6d9ec0 Record standard error guard closeout diagnostics
+ac5734f Record standard error guard inspection log
+2a2de28 Add communication artifact garbage collector (#380)
+e735eea Add communication artifact GC registry (#379)
+e47bf17 Record no interactive exit PR closeout log
+29d9427 Record no interactive terminal exit rule (#378)
+f7655dc Record PR 376 closeout terminal log (#377)
+40cb56d Refresh state after terminal log finalization guard (#376)
+
+### RESULT: FAIL ###
