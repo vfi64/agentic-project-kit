@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-190842_stabilize-standard-error-guard-closeout.log
+docs/reports/terminal/20260518-190923_finalize-standard-error-state.log
