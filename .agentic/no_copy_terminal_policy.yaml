@@ -1,0 +1,30 @@
+schema_version: 1
+policy_id: no-copy-terminal-evidence
+status: active
+purpose: Require repo-backed evidence for terminal runs so normal workflow does not depend on chat copy-and-paste.
+rules:
+  - id: full-output-log-required
+    status: active
+    requirement: Every relevant terminal action must produce a durable log file under docs/reports/terminal or docs/reports/command_runs.
+  - id: d-means-log-backed-pass
+    status: active
+    requirement: The user response d is valid only after a PASS result whose relevant evidence was written to a repo-backed log or report.
+  - id: no-unconditional-pass
+    status: active
+    requirement: Terminal actions must not print PASS after a failed required command.
+  - id: manual-copy-only-on-failure
+    status: active
+    requirement: Manual copy-and-paste of terminal output is reserved for FAIL, broken logging, aborted process, terminal loss, or unavailable pushed evidence.
+  - id: obsolete-rules-must-not-accumulate
+    status: active
+    requirement: If system improvements replace a workaround, the old instruction must be removed from active handoff text or marked superseded or historical.
+exceptions:
+  - fail
+  - logging-failure
+  - process-abort
+  - terminal-loss
+  - kill-9
+  - pushed-evidence-unavailable
+handoff_integration:
+  persistent_handoff_state_must_include_policy: true
+  generated_handoff_prompt_must_not_request_copy_paste_on_pass: true
