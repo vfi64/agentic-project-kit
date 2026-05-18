@@ -25,6 +25,10 @@ The handoff state references `.agentic/no_copy_terminal_policy.yaml`. A normal P
 
 A new chat or workflow must not assume that global `agentic-kit`, `python`, `ruff`, or `.venv` already exist. First verify the local environment. Prefer project-local commands such as `.venv/bin/python -m agentic_project_kit.cli ...` after `.venv` has been created. If global `agentic-kit` is missing or `.venv` is absent, classify this as bootstrap/environment state, not as a product failure.
 
+## Interactive terminal safety rule
+
+Terminal blocks pasted into an interactive shell must never terminate that shell. Do not use `exit`, `logout`, `kill`, or top-level `exec` in chat-pasted blocks. A pasted block must report `### RESULT: PASS ###`, `### RESULT: FAIL ###`, or `### RESULT: PENDING ###` and then return to the prompt. Use exit codes only inside saved scripts executed as child processes.
+
 ## Commit Semantics
 
 `safe_state.commit` records the last substantive work state by default, not necessarily the newest administrative refresh merge on `main`.
