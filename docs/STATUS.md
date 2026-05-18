@@ -69,3 +69,28 @@ Latest terminal evidence pointer: `docs/reports/terminal/20260518-210113_pr399-m
 After this STATUS/HANDOFF refresh is merged and verified, continue rule/evidence-governance cleanup only if gates reveal remaining drift. Do not start GUI or release-automation expansion until the state files, evidence path, and rule lifecycle are clean and current.
 
 Recommended next implementation candidate after this refresh: add a deterministic guard that detects stale accumulated STATUS/HANDOFF historical fragments so this drift cannot silently recur.
+
+## Live Status Commands
+
+Run these from the repository root with project-local tooling:
+
+```bash
+git status --short
+git branch --show-current
+./ns terminal-remote-preflight
+./ns handoff-check
+./ns governance-check
+./ns dev
+PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli check-docs
+PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli doctor
+```
+
+The equivalent public command names remain `agentic-kit check-docs` and `agentic-kit doctor`; the project-local module form is preferred when global executables are not guaranteed.
+
+## Documentation Coverage Notes
+
+`docs/DOCUMENTATION_COVERAGE.yaml` is the documentation coverage source for required terms and state-doc coverage. `agentic-kit check-docs` and `agentic-kit doctor` enforce this coverage through deterministic gates.
+
+Pattern Advisor remains an advisory-only, read-only catalog. The current coverage terms intentionally preserve that it exposes `patterns list` and `patterns show` style inspection, but it is not an autopilot, not a gate, and not an automatic architecture decision layer.
+
+Release verification remains covered by the post-release Zenodo path and `agentic-kit post-release-check` after publication. The current Zenodo concept DOI remains `10.5281/zenodo.20101359`.

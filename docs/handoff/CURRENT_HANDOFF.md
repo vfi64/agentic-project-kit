@@ -67,3 +67,23 @@ Latest terminal evidence pointer: `docs/reports/terminal/20260518-210113_pr399-m
 ## Next Safe Step
 
 Merge this STATUS/HANDOFF refresh only after local and CI gates pass. After that, consider a small deterministic guard that detects stale accumulated STATUS/HANDOFF historical fragments. Do not start GUI or release-automation expansion until this state refresh is merged and verified.
+
+## Source of Truth
+
+The repository is the source of truth, not the chat transcript. Current state is maintained through `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, `docs/TEST_GATES.md`, `docs/DOCUMENTATION_COVERAGE.yaml`, `.agentic/project.yaml`, `sentinel.yaml`, and committed terminal evidence under `docs/reports/terminal/`.
+
+Documentation coverage is enforced by `agentic-kit check-docs` and `agentic-kit doctor`. The doctor also reports project contract, policy packs, policy-pack checks, document lifecycle, TODO gates, and version drift status.
+
+Release verification remains covered by the post-release Zenodo path and `agentic-kit post-release-check` after publication.
+
+## Required Local Gate
+
+Before merge or handoff, run:
+
+```bash
+./ns handoff-check
+./ns governance-check
+./ns dev
+```
+
+Before any remote mutation, merge verification, release publication, tag creation, or clean-tree sync workflow, additionally run `./ns terminal-remote-preflight`.
