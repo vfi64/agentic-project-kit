@@ -1,0 +1,100 @@
+ADD STANDARD ERROR PREVENTION CONTRACT -- NO EXIT
+
+
+### PRECHECK ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+2a2de28 Add communication artifact garbage collector (#380)
+e735eea Add communication artifact GC registry (#379)
+e47bf17 Record no interactive exit PR closeout log
+29d9427 Record no interactive terminal exit rule (#378)
+f7655dc Record PR 376 closeout terminal log (#377)
+40cb56d Refresh state after terminal log finalization guard (#376)
+43d6c18 Add terminal log finalization guard (#375)
+0baa7e7 Record environment bootstrap drift lesson (#374)
+
+### CREATE BRANCH ###
+Switched to a new branch 'docs/standard-error-prevention-contract'
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+
+### REMOVE PATCH SCRIPT ###
+
+### TARGETED TESTS ###
+..................                                                       [100%]
+18 passed in 0.06s
+
+### RUFF ###
+All checks passed!
+
+### DOC GATES ###
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.25
+
+Overall: PASS
+
+### DIFF ###
+ .agentic/handoff_state.yaml    | 4 ++++
+ docs/workflow/HANDOFF_STATE.md | 7 +++++++
+ 2 files changed, 11 insertions(+)
+diff --git a/.agentic/handoff_state.yaml b/.agentic/handoff_state.yaml
+index 6ff1658..37d013d 100644
+--- a/.agentic/handoff_state.yaml
++++ b/.agentic/handoff_state.yaml
+@@ -92,6 +92,10 @@ recent_failure_patterns:
+   prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and agentic-kit before using command names. Treat missing global agentic-kit or missing .venv as bootstrap/environment state, not as product failure.
+ - id: interactive-terminal-exit
+   prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit codes belong inside saved scripts, not interactive paste blocks.
++- id: post-push-pr-mergeability-reset
++  prevention: After pushing any commit to an open PR, re-check PR state and wait for checks/mergeability again before merge. Treat existing matching PRs and already reached target states as idempotent states, not failures.
++- id: standard-error-memory-only
++  prevention: Recurring workflow failures must be captured both in the handoff prompt and in repository-backed deterministic guards, tests, or documented contracts. Prompt memory alone is insufficient.
+ - id: unclassified-communication-artifact-cleanup
+   prevention: Never delete communication, handoff, terminal, or command-run artifacts with ad-hoc rm. Use the central communication artifact registry and a deterministic garbage collector with dry-run, allowlist, age/status checks, tests, and a cleanup report.
+ - id: stale-handoff-after-administrative-refresh
+diff --git a/docs/workflow/HANDOFF_STATE.md b/docs/workflow/HANDOFF_STATE.md
+index fbba7db..527e20a 100644
+--- a/docs/workflow/HANDOFF_STATE.md
++++ b/docs/workflow/HANDOFF_STATE.md
+@@ -37,6 +37,13 @@ Temporary communication files must be centrally classified before cleanup. Use `
+ 
+ Temporary communication artifacts must be centrally recognizable and removable only through registered safe paths. Use `./ns artifact-gc` for a dry-run plan and `./ns artifact-gc --execute` only after reviewing the plan. The collector must not delete arbitrary `docs/reports` files, release evidence, handoff state, source files, or unregistered paths.
+ 
++
++## Standard-error prevention rule
++
++Recurring workflow errors are not solved by prompt reminders alone. Each recurring error must be represented twice: first in the generated handoff prompt so a new chat sees it, and second in repository-backed deterministic form such as a guard, test, contract file, or documented command rule. Prefer the technically deterministic and elegant fix over the quickest workaround. A fast workaround that creates hidden dirty state, false PASS/PENDING/FAIL states, terminal loss, stale PR mergeability, or later repair work is not acceptable.
++
++After pushing a new commit to an open PR, mergeability and checks must be considered invalidated until refreshed. A closeout workflow must wait again before merging and must treat an existing matching PR as an idempotent target state, not as a failure.
++
+ ## Commit Semantics
+ 
+ `safe_state.commit` records the last substantive work state by default, not necessarily the newest administrative refresh merge on `main`.
+
+### FINAL STATE BEFORE FINALIZE ###
+docs/standard-error-prevention-contract
+ M .agentic/handoff_state.yaml
+ M docs/workflow/HANDOFF_STATE.md
+?? tests/test_standard_error_prevention_contract.py
+
+### RESULT: PASS ###

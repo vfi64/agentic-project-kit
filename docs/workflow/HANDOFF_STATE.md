@@ -37,6 +37,13 @@ Temporary communication files must be centrally classified before cleanup. Use `
 
 Temporary communication artifacts must be centrally recognizable and removable only through registered safe paths. Use `./ns artifact-gc` for a dry-run plan and `./ns artifact-gc --execute` only after reviewing the plan. The collector must not delete arbitrary `docs/reports` files, release evidence, handoff state, source files, or unregistered paths.
 
+
+## Standard-error prevention rule
+
+Recurring workflow errors are not solved by prompt reminders alone. Each recurring error must be represented twice: first in the generated handoff prompt so a new chat sees it, and second in repository-backed deterministic form such as a guard, test, contract file, or documented command rule. Prefer the technically deterministic and elegant fix over the quickest workaround. A fast workaround that creates hidden dirty state, false PASS/PENDING/FAIL states, terminal loss, stale PR mergeability, or later repair work is not acceptable.
+
+After pushing a new commit to an open PR, mergeability and checks must be considered invalidated until refreshed. A closeout workflow must wait again before merging and must treat an existing matching PR as an idempotent target state, not as a failure.
+
 ## Commit Semantics
 
 `safe_state.commit` records the last substantive work state by default, not necessarily the newest administrative refresh merge on `main`.

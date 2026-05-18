@@ -1,0 +1,46 @@
+COMMIT STANDARD ERROR PREVENTION CONTRACT -- NO EXIT
+
+
+### PRECHECK ###
+docs/standard-error-prevention-contract
+ M .agentic/handoff_state.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+ M docs/workflow/HANDOFF_STATE.md
+?? docs/reports/terminal/20260518-185733_standard-error-prevention-contract.log
+?? tests/test_standard_error_prevention_contract.py
+2a2de28 Add communication artifact garbage collector (#380)
+e735eea Add communication artifact GC registry (#379)
+e47bf17 Record no interactive exit PR closeout log
+29d9427 Record no interactive terminal exit rule (#378)
+f7655dc Record PR 376 closeout terminal log (#377)
+
+### REQUIRED GATES ###
+..................                                                       [100%]
+18 passed in 0.05s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.25
+
+Overall: PASS
+
+### DIFF BEFORE FINALIZE ###
+ .agentic/handoff_state.yaml                   | 4 ++++
+ docs/reports/terminal/LATEST_TERMINAL_LOG.txt | 2 +-
+ docs/workflow/HANDOFF_STATE.md                | 7 +++++++
+ 3 files changed, 12 insertions(+), 1 deletion(-)
+
+### RESULT: PASS ###

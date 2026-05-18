@@ -92,6 +92,10 @@ recent_failure_patterns:
   prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and agentic-kit before using command names. Treat missing global agentic-kit or missing .venv as bootstrap/environment state, not as product failure.
 - id: interactive-terminal-exit
   prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit codes belong inside saved scripts, not interactive paste blocks.
+- id: post-push-pr-mergeability-reset
+  prevention: After pushing any commit to an open PR, re-check PR state and wait for checks/mergeability again before merge. Treat existing matching PRs and already reached target states as idempotent states, not failures.
+- id: standard-error-memory-only
+  prevention: Recurring workflow failures must be captured both in the handoff prompt and in repository-backed deterministic guards, tests, or documented contracts. Prompt memory alone is insufficient.
 - id: unclassified-communication-artifact-cleanup
   prevention: Never delete communication, handoff, terminal, or command-run artifacts with ad-hoc rm. Use the central communication artifact registry and a deterministic garbage collector with dry-run, allowlist, age/status checks, tests, and a cleanup report.
 - id: stale-handoff-after-administrative-refresh
