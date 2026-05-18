@@ -1,0 +1,133 @@
+PATCH AGENT RUN FAIL MARKER DETECTION
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+D	.agentic/commands/inbox/patch-agent-run-fail-marker-001.sh
+D	.agentic/commands/inbox/patch-agent-run-fail-marker-001.yaml
+M	docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+PASS_COLLECTED
+.agentic/commands/current.yaml
+.agentic/commands/current.sh
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'fix/agent-run-fail-marker-detection'
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+
+### VERIFY PATCH CONTENT ###
+src/agentic_project_kit/agent_command_runner.py:226:def logged_script_has_fail_result_marker(log_path: Path | None) -> bool:
+src/agentic_project_kit/agent_command_runner.py:257:    fail_marker = logged_script_has_fail_result_marker(log_path)
+tests/test_agent_command_runner.py:315:def test_logged_script_has_fail_result_marker(tmp_path):
+tests/test_agent_command_runner.py:316:    from agentic_project_kit.agent_command_runner import logged_script_has_fail_result_marker
+tests/test_agent_command_runner.py:319:    assert logged_script_has_fail_result_marker(log)
+tests/test_agent_command_runner.py:321:    assert not logged_script_has_fail_result_marker(log)
+docs/workflow/REPO_COMMAND_RUNNER.md:72:## Inner fail marker detection
+
+### LOCAL GATES ###
+..............................                                           [100%]
+30 passed in 0.22s
+PASS_COMMAND_INBOX_CHECK
+PASS: no stale STATUS/HANDOFF current-state fragments found
+PASS_NOTHING_TO_COLLECT
+Persistent handoff state check passed
+Governance check passed
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+fix/agent-run-fail-marker-detection
+ D .agentic/commands/inbox/patch-agent-run-fail-marker-001.sh
+ D .agentic/commands/inbox/patch-agent-run-fail-marker-001.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+?? docs/reports/terminal/20260518-223501_patch-agent-run-fail-marker-001.log
+
+### PYTEST ###
+........................................................................ [ 17%]
+........................................................................ [ 35%]
+........................................................................ [ 52%]
+........................................................................ [ 70%]
+........................................................................ [ 87%]
+...................................................                      [100%]
+411 passed in 2.25s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.26
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=73
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+fix/agent-run-fail-marker-detection
+ D .agentic/commands/inbox/patch-agent-run-fail-marker-001.sh
+ D .agentic/commands/inbox/patch-agent-run-fail-marker-001.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+?? docs/reports/terminal/20260518-223501_patch-agent-run-fail-marker-001.log
+
+### RESULT: PASS ###
+
+### COMMIT PATCH ###
+ D .agentic/commands/inbox/patch-agent-run-fail-marker-001.sh
+ D .agentic/commands/inbox/patch-agent-run-fail-marker-001.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+ M docs/workflow/REPO_COMMAND_RUNNER.md
+ M src/agentic_project_kit/agent_command_runner.py
+ M tests/test_agent_command_runner.py
+?? docs/reports/terminal/20260518-223501_patch-agent-run-fail-marker-001.log
+[fix/agent-run-fail-marker-detection 8465c1e] Harden agent-run fail marker detection
+ 3 files changed, 26 insertions(+), 1 deletion(-)
+
+### PUSH AND CREATE PR ###
+remote: 
+remote: Create a pull request for 'fix/agent-run-fail-marker-detection' on GitHub by visiting:        
+remote:      https://github.com/vfi64/agentic-project-kit/pull/new/fix/agent-run-fail-marker-detection        
+remote: 
+To github.com:vfi64/agentic-project-kit.git
+ * [new branch]      fix/agent-run-fail-marker-detection -> fix/agent-run-fail-marker-detection
+branch 'fix/agent-run-fail-marker-detection' set up to track 'origin/fix/agent-run-fail-marker-detection'.
+https://github.com/vfi64/agentic-project-kit/pull/421
+
+### RESULT: PASS ###
