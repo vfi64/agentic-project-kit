@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: be61760
-  commit_subject: Add governance check MVP (#360)
+  commit: 02eb154
+  commit_subject: Add PR closeout gate MVP (#363)
   semantics: last_substantive_work_state
   administrative_refresh_prs:
   - 347
