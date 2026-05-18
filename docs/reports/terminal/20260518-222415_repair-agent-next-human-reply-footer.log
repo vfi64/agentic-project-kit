@@ -1,0 +1,119 @@
+REPAIR AGENT NEXT HUMAN REPLY FOOTER TO P/F CONTRACT
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+PASS_NOTHING_TO_COLLECT
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'fix/agent-next-human-reply-footer-pf'
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tmp/repair_agent_next_human_reply_footer.py", line 5
+    old = "    print(f\\"reply={reply}\\")\\n"
+                         ^^^^^
+SyntaxError: invalid syntax
+
+### VERIFY PATCH CONTENT ###
+tests/test_agent_command_runner.py:274:    assert "reply=paste-output" in out
+tests/test_agent_command_runner.py:291:    assert "reply=paste-output" in out
+tests/test_agent_command_runner.py:308:    assert "reply=paste-output" in out
+docs/workflow/REPO_COMMAND_RUNNER.md:62:`./ns agent-next` must end with a visible result footer. `PASS` prints `reply=d`; a normal command failure prints `reply=f`; `NO-COMMAND` prints `reply=ask-agent-to-queue-command`; hard failures such as pull/upload/postcondition problems print `reply=paste-output`. This terminal footer is part of the no-copy workflow contract.
+docs/workflow/REPO_COMMAND_RUNNER.md:66:`./ns agent-next` distinguishes normal command failure from workflow-level hard failures. Pull failures, ambiguous pending commands, upload/postcondition failures, authentication/network problems, and missing remote evidence are hard failures. The visible footer must print `### AGENT-NEXT RESULT: HARD-FAIL ###` and `reply=paste-output` for these cases. A normal command exit failure remains `FAIL` with `reply=f`, and no pending command remains `NO-COMMAND` with `reply=ask-agent-to-queue-command`.
+
+### LOCAL GATES ###
+.............................                                            [100%]
+29 passed in 0.19s
+PASS_COMMAND_INBOX_CHECK
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+PASS: no stale STATUS/HANDOFF current-state fragments found
+PASS_NOTHING_TO_COLLECT
+Persistent handoff state check passed
+Governance check passed
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+fix/agent-next-human-reply-footer-pf
+
+### PYTEST ###
+........................................................................ [ 17%]
+........................................................................ [ 35%]
+........................................................................ [ 52%]
+........................................................................ [ 70%]
+........................................................................ [ 87%]
+..................................................                       [100%]
+410 passed in 2.25s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.26
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=72
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+fix/agent-next-human-reply-footer-pf
+
+### RESULT: PASS ###
+
+### COMMIT PATCH ###
+On branch fix/agent-next-human-reply-footer-pf
+nothing to commit, working tree clean
+
+### REMOTE MUTATION PREFLIGHT BEFORE PUSH ###
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+
+### PUSH AND CREATE PR ###
+remote: 
+remote: Create a pull request for 'fix/agent-next-human-reply-footer-pf' on GitHub by visiting:        
+remote:      https://github.com/vfi64/agentic-project-kit/pull/new/fix/agent-next-human-reply-footer-pf        
+remote: 
+To github.com:vfi64/agentic-project-kit.git
+ * [new branch]      fix/agent-next-human-reply-footer-pf -> fix/agent-next-human-reply-footer-pf
+branch 'fix/agent-next-human-reply-footer-pf' set up to track 'origin/fix/agent-next-human-reply-footer-pf'.
+pull request create failed: GraphQL: No commits between main and fix/agent-next-human-reply-footer-pf (createPullRequest)
+
+### RESULT MARKER BEFORE LOG FINALIZATION ###
+### RESULT: FAIL ###
+### NEXT CHAT REPLY: FAIL -> f ###
