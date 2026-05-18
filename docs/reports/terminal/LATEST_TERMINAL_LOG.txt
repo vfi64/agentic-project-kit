@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-194221_ns-interpreter-no-exec-guard-commit-retry.log
+docs/reports/terminal/20260518-194929_mandatory-remote-evidence-bootstrap.log
