@@ -79,6 +79,32 @@ def terminal_status() -> tuple[str, str]:
     return "PASS_LOG_READY", f"Latest terminal log: {latest.as_posix()}"
 
 
+def _has_result_marker(text: str) -> bool:
+    return "### RESULT: PASS ###" in text or "### RESULT: FAIL ###" in text or "### RESULT: PENDING ###" in text
+
+
+def finalize_terminal_log(tmp_log: Path, name: str) -> tuple[str, str]:
+    source = Path(tmp_log)
+    if not source.exists():
+        return "FAIL_SOURCE_MISSING", source.as_posix()
+    source_text = source.read_text(encoding="utf-8")
+    if not _has_result_marker(source_text):
+        return "FAIL_MISSING_RESULT_MARKER", source.as_posix()
+    source_resolved = source.resolve()
+    terminal_resolved = TERMINAL_DIR.resolve()
+    try:
+        source_resolved.relative_to(terminal_resolved)
+    except ValueError:
+        pass
+    else:
+        return "FAIL_SOURCE_INSIDE_TERMINAL_DIR", source.as_posix()
+    TERMINAL_DIR.mkdir(parents=True, exist_ok=True)
+    target = make_log_path(name)
+    target.write_text(source_text, encoding="utf-8")
+    write_latest_pointer(target)
+    return "PASS_FINALIZED", target.as_posix()
+
+
 def run_logged(name: str, command: list[str]) -> int:
     if not command:
         print("FAIL_NO_COMMAND")
@@ -152,6 +178,15 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if outcome.startswith("PASS") else 1
     if mode == "terminal-upload":
         return upload_terminal_output()
+    if mode == "terminal-finalize":
+        if len(args) != 2:
+            print("FAIL_USAGE")
+            print("Usage: terminal-finalize <tmp-log> <name>")
+            return 2
+        outcome, message = finalize_terminal_log(Path(args[0]), args[1])
+        print(outcome)
+        print(message)
+        return 0 if outcome == "PASS_FINALIZED" else 1
     if mode == "run-logged":
         if "--" not in args:
             print("FAIL_MISSING_SEPARATOR")

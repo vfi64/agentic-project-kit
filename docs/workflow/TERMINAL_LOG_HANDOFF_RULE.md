@@ -1,5 +1,9 @@
 # Terminal Log Handoff Rule
 
+## Quality principle
+
+The terminal-log workflow must optimize for deterministic quality, not speed. Repeated logging, dirty-state, false-PASS, or handoff failures are product defects and must be addressed with helpers, guards, tests, and documentation instead of relying on manual discipline.
+
 Status: active workflow rule.
 
 ## Purpose
@@ -44,3 +48,9 @@ Use `./ns terminal-clean-check` instead. It returns:
 - `PASS_CLEAN` when the working tree is clean.
 - `PASS_ONLY_TERMINAL_LOG_DIRTY` when only terminal-log artifacts are dirty.
 - `FAIL_DIRTY_NON_LOG_FILES` when any non-terminal-log file is dirty.
+
+## Finalized log rule
+
+Do not commit a repository log file while the current process is still writing to it. Long scripts must tee into a temporary log outside `docs/reports/terminal/`, then finalize the completed log into `docs/reports/terminal/*.log` with `./ns terminal-finalize <tmp-log> <name>` before staging, committing, and pushing. The finalized log must contain an explicit `### RESULT: PASS ###`, `### RESULT: FAIL ###`, or `### RESULT: PENDING ###` marker.
+
+This rule exists because committing a log file while `tee` is still appending to it creates a dirty tracked log after commit and can block checkout, merge, or PR closeout.

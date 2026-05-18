@@ -69,3 +69,35 @@ def test_terminal_clean_check_is_registered():
     action = get_action("terminal-clean-check")
     assert action.safety_class is SafetyClass.READ_ONLY
     assert "PASS_ONLY_TERMINAL_LOG_DIRTY" in action.outcome_contract
+
+
+
+def test_finalize_terminal_log_copies_tmp_log_to_terminal_dir(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    source = tmp_path / "run.log"
+    source.write_text("hello\n### RESULT: PASS ###\n", encoding="utf-8")
+    outcome, message = tl.finalize_terminal_log(source, "Final Run")
+    assert outcome == "PASS_FINALIZED"
+    target = Path(message)
+    assert target.parent == tl.TERMINAL_DIR
+    assert target.read_text(encoding="utf-8") == "hello\n### RESULT: PASS ###\n"
+    assert tl.read_latest_pointer() == target
+
+
+def test_finalize_terminal_log_rejects_terminal_dir_source(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    source = tl.TERMINAL_DIR / "active.log"
+    source.parent.mkdir(parents=True)
+    source.write_text("### RESULT: PASS ###\n", encoding="utf-8")
+    outcome, message = tl.finalize_terminal_log(source, "bad")
+    assert outcome == "FAIL_SOURCE_INSIDE_TERMINAL_DIR"
+    assert "active.log" in message
+
+
+def test_finalize_terminal_log_requires_result_marker(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    source = tmp_path / "run.log"
+    source.write_text("no marker\n", encoding="utf-8")
+    outcome, message = tl.finalize_terminal_log(source, "missing-marker")
+    assert outcome == "FAIL_MISSING_RESULT_MARKER"
+    assert "run.log" in message
