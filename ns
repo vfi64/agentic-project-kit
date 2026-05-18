@@ -2,6 +2,19 @@
 
 
 
+
+if [ "${1:-}" = "action-list" ]; then
+  shift
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli actions list "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "action-show" ]; then
+  shift
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli actions show "$@"
+  exit $?
+fi
+
 if [ "${1:-}" = "handoff-refresh" ]; then
   shift
   PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff refresh "$@"
