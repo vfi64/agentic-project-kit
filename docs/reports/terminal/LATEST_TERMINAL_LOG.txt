@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-213944_no-copy-e2e-protocol-001.log
+docs/reports/terminal/20260518-213956_capture-failed-no-copy-agent-next.log
