@@ -1,0 +1,108 @@
+terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+### RUN: sh .agentic/commands/current.sh
+### AGENT-NEXT SMOKE TEST ###
+
+### BRANCH ###
+agent-command/agent-next-smoke
+
+### VERIFY AGENT-NEXT COMMANDS ###
+# Cockpit Readiness
+
+This report is read-only and derived from static action metadata.
+
+## Summary
+
+- Action count: 14
+- Ready for read-only cockpit: True
+- Missing outcomes: []
+- Read-only actions with mutation scope: []
+
+## Actions
+
+| Action | Safety class | Mutation scope | Dry-run | Outcomes |
+|---|---|---|---|---|
+| `dev` | read-only | none | True | PASS, FAIL |
+| `pr-cleanup` | read-only | none | True | PASS, FAIL |
+| `release-verify` | read-only | none | True | PASS, FAIL |
+| `clean-evidence` | local-only | working-tree-files | False | PASS, FAIL |
+| `release-prep` | local-only | version-and-release-metadata-files | False | PASS, FAIL |
+| `release-gate` | read-only | none | True | PASS, FAIL |
+| `finalize-guard` | read-only | none | True | PASS_ALREADY_ON_MAIN, PASS_NOOP_BRANCH, PASS_SUPERSEDED, PASS_NEEDS_PR, FAIL_CONFLICT_RELEVANT, FAIL_NEEDS_HUMAN_REVIEW |
+| `cockpit-readiness` | read-only | none | True | PASS, FAIL |
+| `agent-next` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_AMBIGUOUS_COMMANDS, FAIL_PULL, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD |
+| `agent-run` | remote-mutation | docs/reports/command_runs and docs/reports/terminal | False | PASS_EXECUTED, FAIL_NO_COMMAND, FAIL_ALREADY_EXECUTED, FAIL_INVALID_COMMAND, FAIL_SHELL_SYNTAX, FAIL_COMMAND, FAIL_UPLOAD |
+| `run-logged` | local-only | docs/reports/terminal | False | PASS, FAIL, FAIL_NO_COMMAND, FAIL_MISSING_SEPARATOR |
+| `terminal-status` | read-only | none | True | PASS_LOG_READY, PASS_NO_LOG, FAIL_INVALID_POINTER |
+| `terminal-clean-check` | read-only | none | True | PASS_CLEAN, PASS_ONLY_TERMINAL_LOG_DIRTY, FAIL_DIRTY_NON_LOG_FILES |
+| `terminal-upload` | remote-mutation | docs/reports/terminal only | False | PASS_UPLOADED, PASS_ALREADY_UPLOADED, FAIL_NO_LOG, FAIL_DIRTY_NON_LOG_FILES, FAIL_PUSH_FAILED |
+
+### LOCAL GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+agent-command/agent-next-smoke
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+
+### PYTEST ###
+........................................................................ [ 22%]
+........................................................................ [ 45%]
+........................................................................ [ 68%]
+........................................................................ [ 91%]
+...........................                                              [100%]
+315 passed in 1.84s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.23
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=45
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+agent-command/agent-next-smoke
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+
+### RESULT: PASS ###
+
+### RECORD CONSUMED INBOX COMMAND ###
+No inbox deletion to commit.
+
+### RESULT: PASS ###
+### EXIT: 0
+### RESULT: PASS ###
