@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-210931_stale-status-handoff-fragment-guard.log
+docs/reports/terminal/20260518-211041_repair-pr403-ns-state-freshness-adapter.log
