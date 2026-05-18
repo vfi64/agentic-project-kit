@@ -1,0 +1,73 @@
+
+### PRECHECK ###
+fatal: couldn't find remote ref feature/standard-error-guards
+error: Your local changes to the following files would be overwritten by checkout:
+	docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+Please commit your changes or stash them before you switch branches.
+Aborting
+fatal: couldn't find remote ref feature/standard-error-guards
+main
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? docs/reports/terminal/20260518-190643_close-standard-error-pr-state.log
+ac5734f Record standard error guard inspection log
+2a2de28 Add communication artifact garbage collector (#380)
+e735eea Add communication artifact GC registry (#379)
+e47bf17 Record no interactive exit PR closeout log
+29d9427 Record no interactive terminal exit rule (#378)
+f7655dc Record PR 376 closeout terminal log (#377)
+40cb56d Refresh state after terminal log finalization guard (#376)
+43d6c18 Add terminal log finalization guard (#375)
+
+### PR 383 CHECK SUMMARY ###
+{"mergeStateStatus":"UNKNOWN","mergeable":"UNKNOWN","number":383,"state":"MERGED","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-18T17:05:43Z","conclusion":"FAILURE","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26048265437/job/76578025690","name":"test","startedAt":"2026-05-18T17:05:25Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-18T17:05:43Z","conclusion":"FAILURE","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26048263683/job/76578017517","name":"test","startedAt":"2026-05-18T17:05:21Z","status":"COMPLETED","workflowName":"CI"}],"title":"Add standard error guard documentation and tests","url":"https://github.com/vfi64/agentic-project-kit/pull/383"}
+test	fail	22s	https://github.com/vfi64/agentic-project-kit/actions/runs/26048263683/job/76578017517	
+test	fail	18s	https://github.com/vfi64/agentic-project-kit/actions/runs/26048265437/job/76578025690	
+
+### FAILED CI LOGS ###
+
+--- failed run 26048265437
+26048263683 ---
+failed to get run: parse "https://api.github.com/repos/vfi64/agentic-project-kit/actions/runs/26048265437\n26048263683?exclude_pull_requests=true": net/url: invalid control character in URL
+
+### LOCAL FULL TARGETED GATE ###
+ERROR: file or directory not found: tests/test_standard_error_guards.py
+
+
+no tests ran in 0.00s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.25
+
+Overall: PASS
+
+### DIFF ###
+ docs/reports/terminal/LATEST_TERMINAL_LOG.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/docs/reports/terminal/LATEST_TERMINAL_LOG.txt b/docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+index ca8a906..0ff4899 100644
+--- a/docs/reports/terminal/LATEST_TERMINAL_LOG.txt
++++ b/docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+@@ -1 +1 @@
+-docs/reports/terminal/20260518-190206_standard-error-guard-inspection.log
++docs/reports/terminal/20260518-190643_close-standard-error-pr-state.log
+
+### FINAL STATE BEFORE FINALIZE ###
+main
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? docs/reports/terminal/20260518-190643_close-standard-error-pr-state.log
+
+### RESULT: FAIL ###

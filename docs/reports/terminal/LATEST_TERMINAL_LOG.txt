@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-190206_standard-error-guard-inspection.log
+docs/reports/terminal/20260518-190733_repair-standard-error-guards-pr383.log

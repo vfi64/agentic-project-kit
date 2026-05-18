@@ -1,0 +1,72 @@
+
+### PRECHECK ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+ac5734f Record standard error guard inspection log
+2a2de28 Add communication artifact garbage collector (#380)
+e735eea Add communication artifact GC registry (#379)
+e47bf17 Record no interactive exit PR closeout log
+29d9427 Record no interactive terminal exit rule (#378)
+f7655dc Record PR 376 closeout terminal log (#377)
+40cb56d Refresh state after terminal log finalization guard (#376)
+43d6c18 Add terminal log finalization guard (#375)
+
+### VERIFY LOCAL ENVIRONMENT ###
+Python 3.14.3
+ruff 0.15.12
+
+### OPEN PR CLASSIFICATION ###
+{"baseRefName":"main","headRefName":"docs/standard-error-prevention-contract","mergeStateStatus":"DIRTY","mergeable":"CONFLICTING","number":381,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-18T17:00:01Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26047965047/job/76576997935","name":"test","startedAt":"2026-05-18T16:59:44Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-18T16:59:57Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26047958948/job/76576977354","name":"test","startedAt":"2026-05-18T16:59:37Z","status":"COMPLETED","workflowName":"CI"}],"title":"Record standard error prevention contract","url":"https://github.com/vfi64/agentic-project-kit/pull/381"}
+{"baseRefName":"main","headRefName":"docs/refresh-handoff-after-standard-error-prevention","mergeStateStatus":"DIRTY","mergeable":"CONFLICTING","number":382,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-18T17:01:16Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26048027855/job/76577216013","name":"test","startedAt":"2026-05-18T17:00:53Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-18T17:01:17Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26048031127/job/76577226959","name":"test","startedAt":"2026-05-18T17:00:56Z","status":"COMPLETED","workflowName":"CI"}],"title":"Refresh handoff after standard error prevention","url":"https://github.com/vfi64/agentic-project-kit/pull/382"}
+{"baseRefName":"main","headRefName":"feature/standard-error-guards","mergeStateStatus":"UNSTABLE","mergeable":"MERGEABLE","number":383,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-18T17:05:43Z","conclusion":"FAILURE","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26048265437/job/76578025690","name":"test","startedAt":"2026-05-18T17:05:25Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-18T17:05:43Z","conclusion":"FAILURE","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26048263683/job/76578017517","name":"test","startedAt":"2026-05-18T17:05:21Z","status":"COMPLETED","workflowName":"CI"}],"title":"Add standard error guard documentation and tests","url":"https://github.com/vfi64/agentic-project-kit/pull/383"}
+
+### LOCAL MAIN GATES BEFORE ANY MERGE ###
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.25
+
+Overall: PASS
+
+### PR 383 CHECKS ###
+test	fail	22s	https://github.com/vfi64/agentic-project-kit/actions/runs/26048263683/job/76578017517	
+test	fail	18s	https://github.com/vfi64/agentic-project-kit/actions/runs/26048265437/job/76578025690	
+
+### MERGE PR 383 IF STILL MERGEABLE ###
+PR383_STATE=OPEN
+PR383_MERGEABLE=MERGEABLE
+
+### SYNC MAIN AFTER PR 383 ###
+
+### RECLASSIFY PR 381 AND PR 382 AFTER PR 383 ###
+
+### FINAL MAIN GATES ###
+
+### FINAL STATE BEFORE FINALIZE ###
+main
+ac5734f Record standard error guard inspection log
+2a2de28 Add communication artifact garbage collector (#380)
+e735eea Add communication artifact GC registry (#379)
+e47bf17 Record no interactive exit PR closeout log
+29d9427 Record no interactive terminal exit rule (#378)
+f7655dc Record PR 376 closeout terminal log (#377)
+40cb56d Refresh state after terminal log finalization guard (#376)
+43d6c18 Add terminal log finalization guard (#375)
+
+### RESULT: FAIL ###
