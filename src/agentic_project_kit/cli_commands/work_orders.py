@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import subprocess
-
 import typer
 
-from agentic_project_kit.work_orders import load_work_order, list_work_orders, render_work_order
+from agentic_project_kit.work_orders import load_work_order, list_work_orders, render_work_order, run_work_order
 
 work_orders_app = typer.Typer(help="Inspect and run repo-backed work orders.")
 
@@ -36,6 +34,7 @@ def run_command(work_order_id: str, execute: bool = typer.Option(False, "--execu
     if not execute:
         typer.echo("Dry run only. Re-run with --execute to run the command.")
         return
-    result = subprocess.run(order.command, shell=True, check=False)
-    if result.returncode != 0:
-        raise typer.Exit(code=result.returncode)
+    result_code = run_work_order(order)
+    typer.echo(f"Work order log written: {order.log_path}")
+    if result_code != 0:
+        raise typer.Exit(code=result_code)
