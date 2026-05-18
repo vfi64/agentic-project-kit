@@ -1,5 +1,8 @@
 # Persistent Handoff State and Rule Lifecycle Plan
 
+Status: Draft
+Decision status: Planned
+
 ## Purpose
 
 The project needs a persistent handoff state so future chats, agents, and the local cockpit no longer reconstruct project state from conversation memory. The repository must contain the current handoff truth in a structured file.
