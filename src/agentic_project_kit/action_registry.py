@@ -99,6 +99,14 @@ ACTIONS: tuple[ActionMetadata, ...] = (
     ),
 
     ActionMetadata(
+        name="agent-run",
+        safety_class=SafetyClass.REMOTE_MUTATION,
+        mutation_scope="docs/reports/command_runs and docs/reports/terminal",
+        dry_run_supported=False,
+        outcome_contract=("PASS_EXECUTED", "FAIL_NO_COMMAND", "FAIL_ALREADY_EXECUTED", "FAIL_INVALID_COMMAND", "FAIL_SHELL_SYNTAX", "FAIL_COMMAND", "FAIL_UPLOAD"),
+        summary="Pull-safe repo command runner for agent handoff without copy-and-paste terminal blocks.",
+    ),
+    ActionMetadata(
         name="run-logged",
         safety_class=SafetyClass.LOCAL_ONLY,
         mutation_scope="docs/reports/terminal",
