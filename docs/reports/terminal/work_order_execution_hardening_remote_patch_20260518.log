@@ -1,0 +1,17 @@
+Remote patch log for work order execution hardening.
+
+Changes created through the GitHub connector:
+- hardened WorkOrder metadata parsing with preconditions, postconditions, and expected outputs
+- rejected work-order logs outside docs/reports/terminal/
+- added execution logging through work_order run --execute
+- added tests for metadata, log-path safety, and logged execution
+
+Local verification still required after pulling this branch:
+- .venv/bin/python -m pytest tests/test_work_orders.py -q
+- .venv/bin/python -m pytest -q
+- .venv/bin/ruff check .
+- .venv/bin/python -m agentic_project_kit.cli check-docs
+- .venv/bin/python -m agentic_project_kit.cli doctor
+
+### RESULT: PENDING_LOCAL_VERIFY ###
+Terminal bleibt offen. Kein exit am Blockende.
