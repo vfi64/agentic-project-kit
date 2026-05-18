@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-205333_sync-diagnose-rule-evidence-governance.log
+docs/reports/terminal/20260518-205518_pr397-merge-verification.log
