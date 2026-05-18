@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 02eb154
-  commit_subject: Add PR closeout gate MVP (#363)
+  commit: 6928c12
+  commit_subject: Add work order prepare MVP (#365)
   semantics: last_substantive_work_state
   administrative_refresh_prs:
   - 347
