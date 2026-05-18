@@ -1,308 +1,69 @@
 Current version: 0.3.26
-v0.3.25 is released and post-release verified. GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, and verified version DOI `10.5281/zenodo.20273989`. DOI metadata has been recorded in this branch.
-v0.3.23 is released and post-release verified with version DOI `10.5281/zenodo.20261956`. Zenodo concept DOI: `10.5281/zenodo.20101359`. The DOI metadata recording PR is the next final release-closeout step.
 
 # Current Handoff
 
-Status-date: 2026-05-16
+Status-date: 2026-05-18
 Project: agentic-project-kit
 Branch: main
 Base branch: main
 
 ## Current Goal
 
-Current released version: 0.3.19
-Current completed slice: GUI Tk setup documentation
-
-v0.3.19 is released and post-release verified with version DOI `10.5281/zenodo.20246121`. Zenodo concept DOI: `10.5281/zenodo.20101359`. The v0.3.19 DOI metadata is recorded on main via PR #259 after `agentic-kit post-release-check --version 0.3.19` passed. The post-release Zenodo verification path remains covered by `agentic-kit post-release-check`.
-
-PR #255 added an inspect-only cockpit action selection view. `agentic-kit cockpit select` renders a numbered action list from the central cockpit action registry without executing actions. `./ns select` delegates to that command, and `./ns-menu` exposes it as a numbered entry without adding new shell execution logic.
+Stabilize rule governance and terminal/evidence governance before GUI, release automation, or new feature work. The repository must remain the durable memory: rules are durable only when documented, test-backed, and enforced by repo tooling or gates.
 
 ## Current Repository State
 
-Current main head before this feature branch:
+Current released version: 0.3.26
+Current branch after PR #400 merge: main
+Open PRs after PR #400 verification: none observed in remote check
+
+Recent main history after v0.3.26 includes:
 
 ```text
-55e37dd Finalize state after v0.3.18 DOI metadata (#254)
-d86491b Record v0.3.18 DOI metadata (#253)
-da14f8b tag: v0.3.18, Prepare v0.3.18 release metadata (#252)
-9f05474 Refresh state after ns-menu cockpit JSON consumer (#251)
-844501e Expose cockpit JSON inventory in ns-menu (#250)
-85bd859 Finalize state after v0.3.17 DOI metadata (#249)
-76d4af8 Record v0.3.17 DOI metadata (#248)
-1e4bae9 tag: v0.3.17, Prepare v0.3.17 release metadata (#247)
+b09b65e Preserve PR 399 merge verification log (#400)
+171bdfc Add remote mutation dirty-state preflight guard (#399)
+f978096 Preserve PR 397 merge verification log (#398)
+2e1e81c Preserve sync diagnosis for rule evidence governance (#397)
+7b59312 Preserve PR 395 merge verification log (#396)
+b56eb31 Preserve v0.3.26 publish terminal log (#395)
+7b5d105 Prepare v0.3.26 release metadata (#394)
+922c50c Preserve clean main verification after local branch cleanup (#393)
+aaa1e77 Preserve rule governance verification log (#392)
+d86f538 Add test-backed rule governance contract (#391)
+3490c15 Add ns interpreter discovery and no-exec guard (#390)
 ```
 
-Merged PR:
+## Completed Most Recent Slice
 
-```text
-#255 Add cockpit action selection UX
-```
+PR #399 added `./ns terminal-remote-preflight`, `remote_mutation_preflight()` in `terminal_logging.py`, tests in `tests/test_terminal_remote_preflight.py`, and documentation in `docs/TEST_GATES.md`. This guard requires a fully clean worktree before remote mutations or merge/sync verification. It intentionally fails even for terminal-log dirtiness because dirty logs can block branch switching, fast-forward pulls, PR merges, and verification.
 
-Implemented by PR #255:
+PR #400 preserved the successful PR #399 merge verification log. The log records that PR #399 checks passed, the new preflight guard passed before merge, PR #399 merged, main synchronized, `./ns terminal-remote-preflight` worked on main, and `./ns dev` passed with 395 tests.
 
-- `render_action_selection(...)` in the cockpit domain layer.
-- `agentic-kit cockpit select` as an inspect-only numbered action-selection command.
-- `./ns select` as a thin repo-local adapter.
-- `./ns-menu` entry `15) ./ns select`.
-- Regression coverage for the selection renderer, CLI command, and `ns` / `ns-menu` adapter wiring.
-- CHANGELOG, STATUS, and handoff refresh for the unreleased v0.3.19 slice.
+## Latest Verified Gates
 
-## Safety Contract
+- `./ns terminal-remote-preflight`: PASS
+- `./ns handoff-check`: PASS
+- `./ns governance-check`: PASS
+- `./ns dev`: PASS
+- pytest: 395 passed
+- ruff: PASS
+- check-docs: PASS
+- doctor: PASS; version drift check reports project state matches version 0.3.26
 
-The action registry remains the source of truth.
+Latest terminal evidence pointer: `docs/reports/terminal/20260518-210113_pr399-merge-verification.log`.
 
-`cockpit select` and `./ns select` are inspect-only. They must not execute actions and must not introduce a second execution path.
+## Active Rules For The Next Chat Or Slice
 
-`cockpit run` remains the execution path. Read-only actions may run through the existing safety logic. Bounded actions remain blocked unless `cockpit run` receives an explicit allow flag. Destructive actions remain blocked.
-
-No release, tag, merge, push, cleanup, or remote mutation actions are added by this slice.
-
-## Latest verified local gates for this slice
-
-The user locally reported `d` after the sync/test blocks for:
-
-- `agentic-kit cockpit select`
-- `./ns select`
-- targeted tests: `tests/test_cockpit.py`, `tests/test_repo_ns_entrypoint.py`, `tests/test_cli.py`
-- `ruff check .`
-
-A later full local gate run showed `221 passed` and `ruff check .` passed. The documentation gates then failed because the STATUS/HANDOFF refresh removed deterministic documentation coverage phrases. This branch now restores the required coverage phrases for policy packs, policy-pack checks, documentation coverage, post-release Zenodo verification, `agentic-kit post-release-check`, and Pattern Advisor coverage in STATUS.
-
-Full pre-PR gates still need to be rerun after this repair:
-
-```bash
-.venv/bin/python -m pytest -q
-.venv/bin/ruff check .
-.venv/bin/agentic-kit check-docs
-.venv/bin/agentic-kit doctor
-.venv/bin/agentic-kit doc-mesh-audit
-.venv/bin/agentic-kit doc-lifecycle-audit
-```
-
-## Workflow State
-
-Expected state:
-
-- `.agentic/workflow_state` = `IDLE`
-- `.agentic/current_work.yaml` may remain present with `state: READY`
-- no active workflow request
-- no remaining `temp/workflow-evidence-*` branches from recent slices
-
-Normal `ns` behavior in `IDLE` plus `READY` is a no-op. A workflow starts only by explicit request.
-
-## Source of Truth
-
-Read in this order:
-
-1. `.agentic/project.yaml`
-2. `sentinel.yaml`
-3. `docs/architecture/ARCHITECTURE_CONTRACT.md`
-4. `docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md`
-5. `docs/architecture/LOCAL_COCKPIT_FOUNDATION.md`
-6. `docs/DOCUMENTATION_COVERAGE.yaml`
-7. `AGENTS.md`
-8. `README.md`
-9. `docs/STATUS.md`
-10. `docs/TEST_GATES.md`
-11. `docs/WORKFLOW_OUTPUT_CYCLE.md`
-12. `docs/handoff/CURRENT_HANDOFF.md`
-13. `src/agentic_project_kit/cockpit.py`
-14. `src/agentic_project_kit/cli_commands/cockpit.py`
-15. `ns`
-16. `ns-menu`
-17. `tests/test_cockpit.py`
-18. `tests/test_repo_ns_entrypoint.py`
-19. `tests/`
-
-## Required Local Gate
-
-For this branch, run:
-
-```bash
-.venv/bin/python -m pytest -q
-.venv/bin/ruff check .
-.venv/bin/agentic-kit check-docs
-.venv/bin/agentic-kit doctor
-.venv/bin/agentic-kit doc-mesh-audit
-.venv/bin/agentic-kit doc-lifecycle-audit
-```
-
-Because state and handoff refreshes affect repository source-of-truth wording and documentation coverage, `agentic-kit doc-mesh-audit` should be run before opening or merging the PR. `agentic-kit doc-lifecycle-audit` remains useful as a direct smoke check and is also covered by `agentic-kit doctor`.
-
-`agentic-kit doctor` must continue to report active policy packs and policy-pack checks for the repository contract.
-
-## Current Branch Work
-
-The v0.3.19 Cockpit Action Selection UX slice is released, post-release verified, and DOI metadata is recorded on main.
+- Start from repo state, not memory.
+- First verify branch, status, log, open PRs, latest terminal log, handoff state, interpreter/tooling state, and gates.
+- Do not assume global `python`, `python3`, `agentic-kit`, `ruff`, `pytest`, or `.venv`.
+- Use project-local commands and resolved interpreters.
+- Use `./ns terminal-remote-preflight` before remote mutation, merge verification, release publication, tag creation, or workflows that need a clean tree.
+- Preserve relevant PASS and FAIL terminal output remotely under `docs/reports/terminal/*.log` whenever technically possible.
+- If a PASS/FAIL handoff lacks remote-readable evidence, treat that as a workflow bug.
+- Do not use heredocs, top-level `exit`, top-level `exec`, risky multiline `python -c`, or quote-prone shell constructs in chat-pasted terminal blocks.
+- Larger terminal blocks must begin with three long separator lines and end with a clear `### RESULT: ... ###` marker.
 
 ## Next Safe Step
 
-Current slice: document GUI i18n, localized tooltips, and Instruction Bridge roadmap. This planning slice records a future i18n system for GUI labels/help/tooltips and a safe human-to-terminal-or-GUI-to-LLM instruction file mechanism. Next safe step: run documentation gates, open the roadmap PR, and then choose the first implementation slice.
-
-## Latest completed implementation slice: PR hygiene guard
-
-PR #277 is merged on `main`. It added a read-only PR hygiene model, CLI command `agentic-kit pr-hygiene`, `--json` output, cockpit registry action `audit.pr-hygiene`, and regression tests. The command intentionally performs no GitHub or Git mutations.
-
-Important local workflow note: prefer `./ns` over bare `ns`, and prefer `.venv/bin/python -m pytest`, `.venv/bin/ruff`, and `PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli ...` over bare `python`, `ruff`, or `agentic-kit`.
-
-Next safe step: choose the next implementation slice. Good candidates are planning-doc scaffolding, GUI i18n foundation, or the Instruction Bridge.
-
-## Latest completed implementation slice: planning document scaffold
-
-The merged planning-doc scaffold slice added `agentic-kit scaffold planning-doc`, lifecycle-valid planning document rendering, overwrite protection, CLI tests, and the terminal result marker rule in `AGENTS.md`.
-
-Important local workflow note: do not repurpose `.agentic/current_work.yaml` as a free-form scratch file; it is covered by workflow tests and documentation coverage. Use branch-specific docs or temporary files under `tmp/` for transient coordination.
-
-Next safe step: choose the next implementation slice. Good candidates are GUI i18n foundation, localized tooltips, or Instruction Bridge.
-
-## Latest completed implementation slice: no-copy ns workflow control
-
-Merged PR: #281
-
-Implemented on main: governed planning document `docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md`, `./ns dev` for local feature gates, and a protective `./ns go` guard for dirty feature branches when `.agentic/current_work.yaml` includes `git_pull_ff_only`.
-
-Important workflow note: prefer `./ns dev` for active feature-branch local gates. Use `./ns go` for the governed workflow path only when the branch state is clean and suitable for the default workflow. Long chat-to-terminal blocks remain fallback only and must start with three separator lines and end with PASS/FAIL markers.
-
-Next safe step: choose the next GUI-compatible cockpit/i18n or instruction-bridge implementation slice.
-
-## Latest completed implementation slice: ns up safety hardening
-
-Merged PR: #285
-
-The ./ns up PR completion workflow is now hardened for safer no-copy operation. It refuses main or dirty-branch use, checks mergeability before merge, updates main only after a successful merge, uses portable separator printing, and remains compatible with the future GUI Cockpit action model.
-
-Next safe step: choose the next GUI-compatible cockpit/i18n or instruction-bridge implementation slice.
-
-## Latest completed release slice: v0.3.21 DOI metadata
-
-Merged release DOI metadata for v0.3.21.
-
-Verified state:
-- GitHub release v0.3.21 exists.
-- Zenodo concept DOI: 10.5281/zenodo.20101359.
-- Zenodo version DOI for v0.3.21: 10.5281/zenodo.20258057.
-- `./ns release-verify 0.3.21` passes.
-
-## Latest completed implementation slice: deterministic release cycle hardening
-
-Merged PR: #293
-
-The release workflow has been hardened against recurring deterministic failures. The important fixes are: stale dist artifacts are removed before release builds, publish waits for the asynchronous GitHub Release workflow instead of failing immediately, completed releases are verified through ./ns release-verify VERSION, and repeated release checks should no longer treat an already published version as a normal release-gate target.
-
-Next priority: continue reducing repeated workflow friction by making already-completed release/finalization states idempotent rather than producing artificial FAIL results.
-
-## Latest completed implementation slice: ns up idempotence hardening
-
-Merged PR: #295
-
-`./ns up` now handles two recurring workflow edge cases more deterministically: pending checks are waited on instead of causing an immediate false failure, and already merged PRs are accepted as an idempotent completion state.
-
-## Latest completed implementation slice: ns up no-op branch idempotence
-
-Merged PR: #297
-
-`./ns up` now handles no-op branches idempotently: if no PR exists and the branch has no commits ahead of main, the command reports a clean completion state instead of failing. This is part of the deterministic cleanup of recurring workflow false failures.
-
-
-
-## Next prioritized work step: deterministic ns slice runner
-
-The next implementation priority is a deterministic `./ns` slice runner that can execute recurring patch and release-cycle subtasks as a bounded batch workflow. The runner should advance automatically from one step to the next on PASS, stop or enter a defined repair path on FAIL, and treat already-reached target states idempotently instead of producing artificial failures.
-
-Target behavior:
-
-- `PASS` means the requested target state was reached or was safely detected as already reached.
-- `FAIL` means the requested target state was not reached and no safe idempotent interpretation or repair path is available.
-- Pending CI checks, existing PRs, already-merged PRs, no-op branches, empty commits, stale `dist/` artifacts, delayed GitHub releases, delayed Zenodo DOI visibility, and previously completed documentation finalization must be handled deterministically.
-- Shell scripts must be checked with shell syntax checks such as `sh -n`; Python linters must not be run on shell scripts.
-- Longer patch operations should be implemented through robust generated script files, not heredocs, fragile inline `python -c`, or complex shell quoting.
-
-Candidate command shape:
-
-- `./ns slice <name>` for named, bounded workflows.
-- Initial target workflow: `./ns slice ns-up-noop-branch-idempotence` or an equivalent first hardening slice.
-
-This work is prioritized because repeated non-semantic FAIL states have been slowing down the development and release cycle. The goal is to remove these recurring standard errors deterministically and elegantly before adding larger GUI/Cockpit capabilities.
-
-
-## Latest completed implementation slice: no direct main commit guard
-
-Merged slice: no direct main commit guard.
-
-The ./ns workflow now includes a commit-guard helper that prevents accidental direct commits and PR attempts from main. If invoked on main, it stops with an instructional failure instead of allowing a non-PR direct-main path. This is part of the current standard-error cleanup before larger GUI/Cockpit work.
-
-
-
-## Latest completed implementation slice: deterministic ns slice runner
-
-The deterministic `./ns` slice runner is now implemented and documented as the next workflow automation layer. It supports bounded multi-step execution, advances automatically after PASS states, stops on FAIL states, and records the intended direction toward less copy-and-paste and fewer non-semantic workflow failures.
-
-
-## Latest completed implementation slice: idempotent PR create guard
-
-The workflow now avoids failing when a finalization branch contains no commits beyond main because the intended state is already present. Treat this as a completed idempotent state, not as an error requiring another PR.
-
-## Latest completed implementation slice: idempotent finalization branch guard command
-
-`./ns finalize-guard <branch> [marker-text]` is now available to inspect finalization branches before attempting PR creation or cleanup. Use it when a docs finalization branch may already be merged, superseded, conflicting, or effectively represented on main. This is part of the standard-error cleanup path before larger GUI/Cockpit work.
-
-
-## Latest completed implementation slice: safe diagnostic cleanup guard
-
-The workflow now includes a safe cleanup path for diagnostic evidence files. Use it before PR completion when temporary reports or copied evidence files appear in the working tree. This prevents accidental tracked deletions and avoids another recurring non-semantic FAIL state.
-
-## Latest completed release slice: v0.3.22 DOI metadata
-
-Completed release state:
-
-- v0.3.22 is published.
-- GitHub release v0.3.22 exists.
-- Zenodo concept DOI remains 10.5281/zenodo.20101359.
-- Zenodo version DOI for v0.3.22: 10.5281/zenodo.20258186.
-- `./ns release-verify 0.3.22` passes.
-
-v0.3.23 control workflow consolidation is complete and merged on main. The important completed fixes are: shared `control_state` model, stop-on-fail Python slice-runner core, documented workflow control contract, target-state-aware `./ns slice-runner`, early-stop `./ns release-gate` when release metadata is missing, and automated `./ns release-prep` metadata updates for pyproject, package `__version__`, CITATION, CHANGELOG, README, STATUS, and CURRENT_HANDOFF. Next safe direction: use the new control model to harden dirty-evidence cleanup, finalize-guard machine-readable outcomes, and stale PR cleanup classification before any GUI/Cockpit expansion.
-
-Evidence-cleanup guard is merged on main via PR #316. `./ns clean-evidence` is available and `./ns up` now gives a concrete repair hint for workflow-evidence dirtiness. Next safe standard-error hardening target: make `./ns finalize-guard` return clear machine-readable outcomes such as PASS_ALREADY_ON_MAIN, PASS_NOOP_BRANCH, PASS_SUPERSEDED, FAIL_CONFLICT_RELEVANT, and FAIL_NEEDS_HUMAN_REVIEW.
-
-Finalize-guard outcome classification is merged on main via PR #318. ./ns finalize-guard now reports machine-readable target states: PASS_ALREADY_ON_MAIN, PASS_NOOP_BRANCH, PASS_SUPERSEDED, PASS_NEEDS_PR, FAIL_CONFLICT_RELEVANT, and FAIL_NEEDS_HUMAN_REVIEW. Next safe standard-error hardening target: classify stale open PRs deterministically before any GUI/Cockpit expansion.
-
-PR cleanup classification is merged on main via PR #320. `./ns pr-cleanup` is available as a read-only stale/open PR classifier. It does not close PRs automatically; it provides deterministic labels so stale or superseded PR noise can be handled deliberately. Remaining v0.3.23 hardening direction: integrate the control-state vocabulary deeper into `./ns up` and release verification, then prepare the v0.3.23 release.
-
-Safe patch script helper is merged on main via PR #322. `src/agentic_project_kit/safe_patch.py` now provides reusable validation/rendering support for quote-safe generated patch scripts, with tests covering heredoc avoidance, risky inline Python rejection, prompt-marker rejection, nested shell parameter expansion rejection, and exact content preservation. Next safe direction: integrate this helper into documented slice-runner or patch-generation workflows so future terminal instructions use the checked pattern by default.
-
-v0.3.23 is fully closed: GitHub Release v0.3.23 exists, Zenodo version DOI `10.5281/zenodo.20261956` is verified, and DOI metadata is recorded on main via PR #325. Current main is a clean post-release state. Recommended next direction: start v0.3.24 only if it improves the same no-copy/GUI cockpit path; otherwise cut a new planning slice for how `./ns pr-cleanup`, `./ns finalize-guard`, `./ns clean-evidence`, release controls, and safe patch helpers should appear in the local Tkinter cockpit without enabling unsafe destructive defaults.
-
-Post-release Dependabot cleanup is complete. PR #327 and PR #328 resolved the remaining GitHub Actions dependency PRs on current main. The next safe step is not more cleanup; move to the next planned hardening or GUI/Cockpit slice from a clean main branch.
-- Current slice: `feature/gui-cockpit-action-readiness` introduces read-only cockpit readiness metadata/reporting. Continue with tests, PR, and merge; do not add mutating GUI actions in this slice.
-- Terminal handoff rule: future larger runs should commit and push `docs/reports/terminal/*.log`; after PASS, `d` is sufficient unless the run failed or the final status is dirty.
-- Current slice: `feature/terminal-log-wrapper` adds terminal-log wrapper commands. Use `d` after committed PASS logs and `f` after `./ns terminal-upload` for FAIL logs.
-- Current slice: `feature/terminal-log-wrapper-branch-safety` adds `./ns terminal-clean-check`; logged runs should use it instead of plain `git status --short` emptiness checks.
-- Completed: PR #332 merged terminal branch-safety handling. Logged runs should use `./ns terminal-clean-check` instead of plain `git status --short` emptiness checks. Normal FAIL handoff is now: run fails under `run-logged`, execute `./ns terminal-upload`, then answer `f`/`fail`.
-- Current slice: `feature/repo-command-runner` introduces repo-backed command files plus `./ns agent-run`; goal is to replace routine copy-and-paste terminal blocks with committed command-run reports.
-- Completed: PR #334 merged repo command runner MVP. Routine local instructions should move toward committed agent command files and ./ns agent-run; manual terminal copy-and-paste is recovery-only.
-- Current slice: `feature/agent-command-inbox` adds inbox-based `./ns agent-next`; prefer one pending command pair under `.agentic/commands/inbox/` instead of transient current files.
-- Completed: PR #336 merged agent-next inbox mode. Preferred routine workflow is now: commit one command pair under .agentic/commands/inbox/, run ./ns agent-next locally, and use committed command-run/terminal artifacts instead of pasted terminal output.
-- Current hardening: agent-next postconditions are being made explicit and test-covered to prevent stale current files, unconsumed inbox commands, and hidden dirty state after PASS_EXECUTED.
-
-## v0.3.24 DOI Closeout Update
-
-- PR #341 has been merged; `main` now contains v0.3.24 DOI metadata at `17a2e8e`.
-- Verified state: `319 passed`, ruff PASS, `agentic-kit check-docs` PASS, `agentic-kit doctor` PASS, and `./ns release-verify 0.3.24` PASS.
-- Next safe feature slice after this finalize PR: `feature/persistent-handoff-state`.
-- That slice must add `.agentic/handoff_state.yaml`, read-only handoff commands, and rule lifecycle hygiene with `active`, `superseded`, and `historical` statuses.
-- Chat-end lessons must be folded into the YAML state and generated handoff prompt only after curation; obsolete or duplicate rules must be removed or marked superseded/historical.
-
-## No-Copy Terminal Evidence Update
-
-- Before persistent handoff state, add the no-copy terminal evidence policy so future d responses rely on repo-backed logs rather than pasted terminal output.
-- The next YAML handoff state must reference .agentic/no_copy_terminal_policy.yaml and preserve obsolete-rule cleanup.
-
-## Latest completed implementation slice: terminal log finalization guard
-
-Merged PR #375 added `./ns terminal-finalize`, backed by `agentic_project_kit.terminal_logging.finalize_terminal_log(...)`, plus tests and documentation. The safe terminal evidence pattern is now `/tmp` log first, finalize into `docs/reports/terminal/*.log`, then stage, commit, and push. Do not commit a repo terminal log while the current process is still writing to it.
-
-The implementation evidence log is committed and remotely readable at `docs/reports/terminal/20260518-182435_terminal-log-finalization-guard.log`. It records targeted tests, ruff, check-docs, doctor, and `### RESULT: PASS ###`.
-
-Next safe step: continue the deterministic command-contract/environment-bootstrap drift slice. Verify real CLI commands, `.venv`, `./ns` shortcuts, docs, and work-order command references before extending work-order execution or GUI controls.
+Merge this STATUS/HANDOFF refresh only after local and CI gates pass. After that, consider a small deterministic guard that detects stale accumulated STATUS/HANDOFF historical fragments. Do not start GUI or release-automation expansion until this state refresh is merged and verified.
