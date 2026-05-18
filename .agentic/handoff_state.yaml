@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 6928c12
-  commit_subject: Add work order prepare MVP (#365)
+  commit: d5228a1
+  commit_subject: Add top-level PR closeout alias (#368)
   semantics: last_substantive_work_state
   administrative_refresh_prs:
   - 347
