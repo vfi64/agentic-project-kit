@@ -400,6 +400,8 @@ Zenodo metadata is provided in `.zenodo.json`. The project is archived through t
 
 For citation across versions, prefer the all-versions DOI: `10.5281/zenodo.20101359`.
 
+The archived v0.3.25 release has the verified version-specific DOI: `10.5281/zenodo.20273989`.
+
 The archived v0.2.5 release has the verified version-specific DOI: `10.5281/zenodo.20111119`.
 
 The archived v0.2.6 release has the verified version-specific DOI: `10.5281/zenodo.20119102`.
