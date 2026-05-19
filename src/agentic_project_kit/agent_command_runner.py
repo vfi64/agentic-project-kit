@@ -35,8 +35,15 @@ LATEST_COMMAND_RUN_POINTER = REPORT_DIR / "LATEST_COMMAND_RUN.txt"
 ALLOWED_SAFETY_CLASSES = {
     "read-only",
     "local-only",
-    "remote-mutation",
+    "remote-mutation", "local-verification",
 }
+
+
+def normalize_safety_class(value: str) -> str:
+    if value == "local-verification":
+        return "local-only"
+    return value
+
 
 OUTCOME_PASS_EXECUTED = "PASS_EXECUTED"
 OUTCOME_FAIL_NO_COMMAND = "FAIL_NO_COMMAND"
@@ -123,6 +130,7 @@ def load_current_command() -> AgentCommand:
     if missing:
         raise ValueError("Missing required command fields: " + ", ".join(missing))
     safety = data["safety_class"]
+    safety = normalize_safety_class(safety)
     if safety not in ALLOWED_SAFETY_CLASSES:
         raise ValueError(f"Unsupported safety_class: {safety}")
     return AgentCommand(
