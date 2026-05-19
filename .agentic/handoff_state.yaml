@@ -49,43 +49,64 @@ policies:
 rules:
   - id: deterministic-quality-before-speed
     status: active
-    text: Prefer technically robust, testable, repeatable solutions over fast workarounds.
+    text: "Prefer technically robust, testable, repeatable solutions over fast workarounds."
   - id: no-copy-terminal-evidence
     status: active
-    text: Routine PASS handoffs must be backed by repo evidence; manual terminal paste is only for hard failure or unavailable evidence.
+    text: "Routine PASS handoffs must be backed by repo evidence; manual terminal paste is only for hard failure or unavailable evidence."
   - id: planning-state-freshness
     status: active
-    text: Current planning files must be curated and mutually consistent; stale released-version claims or obsolete next-step fragments are guard failures.
+    text: "Current planning files must be curated and mutually consistent; stale released-version claims or obsolete next-step fragments are guard failures."
   - id: shell-to-python-portability
     status: active
-    text: Prefer portable Python-backed helpers and argument-vector execution over fragile shell quoting, heredocs, or multiline python -c snippets.
+    text: "Prefer portable Python-backed helpers and argument-vector execution over fragile shell quoting, heredocs, or multiline python -c snippets."
   - id: rules-must-be-test-backed
     status: active
-    text: Workflow rules are not complete when they only exist in chat, prose, or handoff memory. Every durable rule must have a stable repository home, a rule id, documentation, and at least one deterministic test that fails when the rule disappears or is weakened.
+    text: "Workflow rules are not complete when they only exist in chat, prose, or handoff memory. Every durable rule must have a stable repository home, a rule id, documentation, and at least one deterministic test that fails when the rule disappears or is weakened."
   - id: no-unconditional-pass
     status: active
-    text: Do not print PASS after a failed required command.
+    text: "Do not print PASS after a failed required command."
   - id: curate-chat-end-lessons
     status: active
-    text: Chat-end lessons must be curated into YAML and generated prompts without redundant, contradictory, or obsolete rules.
+    text: "Chat-end lessons must be curated into YAML and generated prompts without redundant, contradictory, or obsolete rules."
   - id: last-substantive-safe-state
     status: active
-    text: safe_state records the last substantive work state; administrative handoff refresh PRs are tracked separately to avoid refresh loops.
+    text: "safe_state records the last substantive work state; administrative handoff refresh PRs are tracked separately to avoid refresh loops."
+  - id: quality-first-no-shortcuts
+    status: active
+    text: "Always choose the technically best deterministic solution for recurring workflow problems; do not use shortcut patches that merely get the current block past the gate."
+  - id: patch-artifact-preflight-before-application
+    status: active
+    text: "Complex patches must be treated as patch artifacts and checked before application: syntax, YAML structure, generated Python compileability, documentation coverage terms, and final-summary validity."
+  - id: generated-code-syntax-first
+    status: active
+    text: "Generated or newly added Python files must pass py_compile before full gates or commit attempts; nested string-generation mistakes are product defects, not acceptable manual errors."
+  - id: coverage-yaml-terms-must-be-strings
+    status: active
+    text: "Documentation coverage terms must be strings; terms containing colons must be quoted so YAML cannot reinterpret them as mappings."
+  - id: final-summary-self-validation
+    status: active
+    text: "Terminal workflows must validate their mandatory final SUMMARY block before asking the user to reply p."
 recent_failure_patterns:
   - id: stale-planning-documents
-    prevention: State freshness checks must compare STATUS, CURRENT_HANDOFF, handoff_state.yaml, release metadata, and strategy baselines before GUI or release-automation work starts.
+    prevention: "State freshness checks must compare STATUS, CURRENT_HANDOFF, handoff_state.yaml, release metadata, and strategy baselines before GUI or release-automation work starts."
   - id: standard-error-guards
-    prevention: Recurring workflow failures must become guards, tests, and documented contracts.
+    prevention: "Recurring workflow failures must become guards, tests, and documented contracts."
   - id: interpreter-discovery-before-python
-    prevention: Terminal/workflow blocks must discover a usable interpreter first and prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python. Do not combine naked python with set -e because a missing interpreter can close the interactive terminal before diagnostics are preserved.
+    prevention: "Terminal/workflow blocks must discover a usable interpreter first and prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python. Do not combine naked python with set -e because a missing interpreter can close the interactive terminal before diagnostics are preserved."
   - id: global-cli-or-venv-assumption
-    prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and agentic-kit before using command names. Treat missing global agentic-kit or missing .venv as bootstrap/environment state, not as product failure.
+    prevention: "At chat or workflow start, verify .venv, python3, ruff, pytest, and agentic-kit before using command names. Treat missing global agentic-kit or missing .venv as bootstrap/environment state, not as product failure."
   - id: interactive-terminal-exit
-    prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit codes belong inside saved scripts, not interactive paste blocks.
+    prevention: "Chat-pasted terminal blocks must not call exit, logout, kill, or replace the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit codes belong inside saved scripts, not interactive paste blocks."
   - id: repo-log-written-while-committing
-    prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo terminal log while the current process is still writing to it.
+    prevention: "Tee long runs into a temporary log outside docs/reports/terminal, finalize with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo terminal log while the current process is still writing to it."
   - id: unconditional-pass-after-failure
-    prevention: Use explicit status handling and require log-backed PASS. Avoid shell-specific status variables such as PIPESTATUS in zsh-pasted blocks unless the shell is explicitly controlled.
+    prevention: "Use explicit status handling and require log-backed PASS. Avoid shell-specific status variables such as PIPESTATUS in zsh-pasted blocks unless the shell is explicitly controlled."
+  - id: nested-triple-quote-code-generator
+    prevention: "Do not generate Python source through nested triple-quoted string literals inside another generated Python script. Prefer line-list generation, existing patch tools, or checked patch artifacts plus py_compile before application."
+  - id: yaml-colon-term-reinterpreted-as-mapping
+    prevention: "Quote every documentation coverage term containing a colon, and keep the coverage-term string guard in the test suite."
+  - id: final-pass-after-inner-fail
+    prevention: "Final summaries must distinguish work result from evidence result. A later successful evidence push must not relabel failed work as PASS."
 next_allowed_tasks:
   - id: planning-state-freshness-guard-hardening
     title: Strengthen deterministic guards for stale planning documents.
