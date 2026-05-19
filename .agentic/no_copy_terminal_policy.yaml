@@ -30,6 +30,6 @@ handoff_integration:
   generated_handoff_prompt_must_not_request_copy_paste_on_pass: true
 
 mandatory_remote_evidence_contract:
-  requirement: Long-running local workflows must finalize terminal evidence into committed and pushed repo artifacts before telling the user that no copy-and-paste is needed.
-  failure_rule: If the final summary cannot prove REMOTE_EVIDENCE: PASS, the user must be told that paste-output is still required.
-  self_modifying_log_rule: A terminal log must not be written again after it has been committed as final evidence.
+  requirement: "Long-running local workflows must finalize terminal evidence into committed and pushed repo artifacts before telling the user that no copy-and-paste is needed."
+  failure_rule: "If the final summary cannot prove REMOTE_EVIDENCE: PASS, the user must be told that paste-output is still required."
+  self_modifying_log_rule: "A terminal log must not be written again after it has been committed as final evidence."
