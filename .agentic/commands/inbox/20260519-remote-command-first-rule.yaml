@@ -1,5 +1,0 @@
-command_id: 20260519-remote-command-first-rule
-title: Add remote command first fallback rule
-safety_class: remote-mutation
-expected_branch: main
-description: Add a narrow governance rule preventing chat-pasted long terminal blocks when repo-backed agent commands are available, without blocking future GUI execution paths.
