@@ -1,4 +1,0 @@
-command_id: 20260519-idempotent-already-executed-inbox
-title: Make already-executed inbox commands idempotent
-safety_class: remote-mutation
-expected_branch: main
