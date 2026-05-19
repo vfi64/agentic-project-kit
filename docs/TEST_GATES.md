@@ -307,3 +307,7 @@ The regression test `tests/test_yaml_governance_integrity.py` records the rule a
 ## Remote-first no-guess rule
 
 Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
+
+## Compiled Agent Context YAML
+
+`.agentic/compiled_agent_context.yaml` is the compact machine-readable companion to the human governance docs. New durable rules must be reflected in the human docs, the compiled YAML, and deterministic tests.
