@@ -213,6 +213,10 @@ def _write_release_files(project_root: Path, version: str) -> None:
     )
 
 
+    package_dir = project_root / "src/agentic_project_kit"
+    package_dir.mkdir(parents=True, exist_ok=True)
+    (package_dir / "__init__.py").write_text(f'__version__ = "{version}"\\n', encoding="utf-8")
+
 def _runner(
     *,
     local_tag: CommandResult = CommandResult(0, "", ""),
