@@ -1,0 +1,243 @@
+REPAIR PR 439 DOI METADATA SEMANTICS AND README GATE
+timestamp=20260519-113340
+
+### SYNC PR BRANCH ###
+From github.com:vfi64/agentic-project-kit
+ * branch            docs/record-v0.3.27-doi-metadata-20260519-112522 -> FETCH_HEAD
+Already on 'docs/record-v0.3.27-doi-metadata-20260519-112522'
+Your branch is up to date with 'origin/docs/record-v0.3.27-doi-metadata-20260519-112522'.
+From github.com:vfi64/agentic-project-kit
+ * branch            docs/record-v0.3.27-doi-metadata-20260519-112522 -> FETCH_HEAD
+Already up to date.
+
+### PREFLIGHT ###
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+
+### VERIFY DOI SEMANTICS ###
+10:doi: "10.5281/zenodo.20101359"
+11:# Verified v0.3.27 version DOI: 10.5281/zenodo.20283414
+CITATION.cff:# Verified v0.3.27 version DOI: 10.5281/zenodo.20283414
+docs/STATUS.md:- v0.3.27 verified Zenodo version DOI: `10.5281/zenodo.20283414`
+docs/handoff/CURRENT_HANDOFF.md:- v0.3.27 verified Zenodo version DOI: `10.5281/zenodo.20283414`
+
+### DIFF ###
+diff --git a/CITATION.cff b/CITATION.cff
+index 37fb8a9..ad490d0 100644
+--- a/CITATION.cff
++++ b/CITATION.cff
+@@ -7,7 +7,8 @@ authors:
+     given-names: "Volker"
+ repository-code: "https://github.com/vfi64/agentic-project-kit"
+ url: "https://github.com/vfi64/agentic-project-kit"
+-doi: 10.5281/zenodo.20283414
++doi: "10.5281/zenodo.20101359"
++# Verified v0.3.27 version DOI: 10.5281/zenodo.20283414
+ # Verified v0.2.5 version DOI: 10.5281/zenodo.20111119
+ # Verified v0.2.6 version DOI: 10.5281/zenodo.20119102
+ # Verified v0.2.7 version DOI: 10.5281/zenodo.20125518
+diff --git a/README.md b/README.md
+index 4634043..cf9aaff 100644
+--- a/README.md
++++ b/README.md
+@@ -564,4 +564,3 @@ Version `0.3.24` is the current release line prepared by `./ns release-prep 0.3.
+ Version `0.3.25` is the current release line prepared by `./ns release-prep 0.3.25`.
+ Version `0.3.26` is the current release line prepared by `./ns release-prep 0.3.26`.
+ Version `0.3.27` is the current release line prepared by `./ns release-prep 0.3.27`.
+-Release DOI for v0.3.27: `10.5281/zenodo.20283414`
+
+### LOCAL GATES ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+docs/record-v0.3.27-doi-metadata-20260519-112522
+ M CITATION.cff
+ M README.md
+
+### PYTEST ###
+........................................................................ [ 17%]
+........................................................................ [ 34%]
+........................................................................ [ 51%]
+........................................................................ [ 68%]
+........................................................................ [ 85%]
+...........................................................              [100%]
+419 passed in 2.38s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; policy packs: 
+solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.27
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=1
+local_branch_count=75
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+docs/record-v0.3.27-doi-metadata-20260519-112522
+ M CITATION.cff
+ M README.md
+
+### RESULT: PASS ###
+
+### RELEASE VERIFY ###
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+NS RELEASE VERIFY CYCLE v0.3.27
+
+
+### SAFETY ###
+Safety: verifies completed release state only; no tag, release, merge, push, or publish action.
+
+### BRANCH / STATUS ###
+docs/record-v0.3.27-doi-metadata-20260519-112522
+ M CITATION.cff
+ M README.md
+
+### VERIFY LOCAL TAG ###
+811c846e3a49d58fd388fed3f40f124297cd94b9
+
+### VERIFY REMOTE TAG ###
+811c846e3a49d58fd388fed3f40f124297cd94b9	refs/tags/v0.3.27
+
+### WAIT FOR GITHUB RELEASE ###
+title:	v0.3.27
+tag:	v0.3.27
+draft:	false
+prerelease:	false
+immutable:	false
+author:	github-actions[bot]
+created:	2026-05-19T09:21:53Z
+published:	2026-05-19T09:23:13Z
+url:	https://github.com/vfi64/agentic-project-kit/releases/tag/v0.3.27
+asset:	agentic_project_kit-0.3.27-py3-none-any.whl
+asset:	agentic_project_kit-0.3.27.tar.gz
+--
+## What's Changed
+* Preserve v0.3.26 publish terminal log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/395
+* Preserve PR 395 merge verification log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/396
+* Preserve sync diagnosis for rule evidence governance by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/397
+* Preserve failed PR 397 local merge verification evidence by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/398
+* Add remote mutation dirty-state preflight guard by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/399
+* Preserve PR 399 merge verification log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/400
+* Refresh status and handoff after rule evidence governance by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/401
+* Preserve PR 401 merge verification log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/402
+* Add stale state fragment guard by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/403
+* Preserve PR 403 merge verification log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/404
+* Finish communication artifact garbage collector by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/405
+* Preserve PR 405 merge verification log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/406
+* Preserve final clean main handoff review log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/407
+* Preserve remote inbox command protocol diagnosis log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/408
+* Queue no-copy result handoff pointer command by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/409
+* Preserve failed no-copy agent-next capture log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/411
+* Add latest command-run pointer for no-copy handoff by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/412
+* Add visible agent-next result footer by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/413
+* Queue agent-next smoke command by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/414
+* Queue agent-next fail smoke command by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/415
+* Harden agent-next hard-fail result contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/416
+* Preserve command inbox check missing evidence diagnosis log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/417
+* Add command inbox check for repo-backed queuing by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/418
+* Preserve failed human reply footer contract terminal log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/419
+* Repair agent-next p/f human reply footer contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/420
+* Harden agent-run fail marker detection by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/421
+* Harden agent-run missing script report handling by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/422
+* Reject completed commands in inbox check by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/423
+* Finalize no-copy workflow handoff after PR 423 by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/424
+* Add framed SUMMARY footer for no-copy workflow by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/427
+* Preserve release readiness after PR 427 log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/428
+* Prepare v0.3.27 release metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/429
+* Fix v0.3.27 package version drift by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/430
+* Preserve release version source hardening diagnosis log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/431
+* Queue release version source contract hardening by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/432
+* Require package init version in release check by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/433
+* Remove stale release version source inbox command by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/434
+* Diagnose mandatory terminal evidence capture by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/435
+* Start mandatory terminal evidence capture fix by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/437
+* Preserve v0.3.27 release publish log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/438
+
+
+**Full Changelog**: https://github.com/vfi64/agentic-project-kit/compare/v0.3.26...v0.3.27
+
+### RELEASE WORKFLOW STATUS ###
+completed	success	Preserve v0.3.27 release publish log (#438)	Release	v0.3.27	push	26088265573	28s	2026-05-19T09:22:50Z
+completed	success	Prepare v0.3.26 release metadata (#394)	Release	v0.3.26	push	26051567456	23s	2026-05-18T18:09:48Z
+completed	success	Prepare v0.3.25 release metadata (#370)	Release	v0.3.25	push	26044168477	29s	2026-05-18T15:45:58Z
+completed	success	Prepare v0.3.24 release metadata (#340)	Release	v0.3.24	push	26031141877	19s	2026-05-18T11:38:37Z
+completed	success	Prepare v0.3.23 release metadata (#324)	Release	v0.3.23	push	26002746413	20s	2026-05-17T21:07:33Z
+completed	success	Prepare v0.3.22 release metadata (#311)	Release	v0.3.22	push	26001427208	17s	2026-05-17T20:10:06Z
+completed	success	Implement ns release publish command (#289)	Release	v0.3.21	push	25992490817	16s	2026-05-17T13:41:23Z
+completed	success	Prepare v0.3.20 release metadata (#269)	Release	v0.3.20	push	25988874178	22s	2026-05-17T10:54:48Z
+
+### POST RELEASE CHECK ###
+Post-release check for target v0.3.27
+
+[PASS] GitHub release: GitHub release exists: v0.3.27
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.3.27: 10.5281/zenodo.20283414
+
+Overall: PASS
+
+
+### FINAL STATE ###
+docs/record-v0.3.27-doi-metadata-20260519-112522
+7223933 Repair v0.3.27 DOI metadata content
+7188a08 Record v0.3.27 DOI metadata
+811c846 Preserve v0.3.27 release publish log (#438)
+36f7434 Start mandatory terminal evidence capture fix (#437)
+616fb19 Diagnose mandatory terminal evidence capture (#435)
+45e51d1 Remove stale release version source inbox command (#434)
+90b8160 Require package init version in release check (#433)
+6925192 Queue release version source contract hardening (#432)
+ M CITATION.cff
+ M README.md
+
+### RESULT: PASS ###
+
+### PREPARE FINAL EVIDENCE LOG ###
+
+================================================================
+SUMMARY
+WORK RESULT: PASS
+EVIDENCE RESULT: PASS
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PASS
+terminal_log=docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log
+NEXT_CHAT_REPLY: p
+### RESULT: PASS ###
+================================================================
