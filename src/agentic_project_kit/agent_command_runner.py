@@ -297,7 +297,31 @@ def print_agent_next_footer(outcome: str, reply: str, reason: str = "") -> None:
     if LATEST_COMMAND_RUN_POINTER.exists():
         print(f"latest_command_run={LATEST_COMMAND_RUN_POINTER.as_posix()}")
     print("### END AGENT-NEXT RESULT ###")
-
+    if outcome == "PASS":
+        work_result = "PASS"
+        evidence_result = "PASS"
+        overall_result = "PASS"
+    elif outcome == "FAIL":
+        work_result = "FAIL"
+        evidence_result = "PASS"
+        overall_result = "FAIL"
+    elif outcome == "NO-COMMAND":
+        work_result = "NO-COMMAND"
+        evidence_result = "PASS"
+        overall_result = "NO-COMMAND"
+    else:
+        work_result = "HARD-FAIL"
+        evidence_result = "FAIL"
+        overall_result = "HARD-FAIL"
+    print("================================================================")
+    print("SUMMARY")
+    print(f"WORK RESULT: {work_result}")
+    print(f"EVIDENCE RESULT: {evidence_result}")
+    print(f"OVERALL RESULT: {overall_result}")
+    if reason:
+        print(f"REASON: {reason}")
+    print(f"NEXT CHAT REPLY: {reply}")
+    print("================================================================")
 
 def git_porcelain_paths() -> list[str]:
     proc = subprocess.run(["git", "status", "--porcelain"], text=True, capture_output=True, check=False)
