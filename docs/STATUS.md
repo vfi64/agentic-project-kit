@@ -1,4 +1,4 @@
-Current version: 0.3.26
+Current version: 0.3.27
 
 # Project Status
 

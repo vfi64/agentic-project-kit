@@ -1,3 +1,7 @@
+## v0.3.27
+
+- Prepare release metadata for v0.3.27.
+
 ## v0.3.26
 
 - Prepare release metadata for v0.3.26.
