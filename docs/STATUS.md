@@ -94,3 +94,9 @@ The equivalent public command names remain `agentic-kit check-docs` and `agentic
 Pattern Advisor remains an advisory-only, read-only catalog. The current coverage terms intentionally preserve that it exposes `patterns list` and `patterns show` style inspection, but it is not an autopilot, not a gate, and not an automatic architecture decision layer.
 
 Release verification remains covered by the post-release Zenodo path and `agentic-kit post-release-check` after publication. The current Zenodo concept DOI remains `10.5281/zenodo.20101359`.
+
+## No-Copy Workflow Status
+
+As of PR #423, the repo-backed no-copy workflow is the active bridge toward the local GUI. Remote tasks are queued under `.agentic/commands/inbox/`, local execution runs through `./ns agent-next`, and durable evidence is written under `docs/reports/command_runs/` and `docs/reports/terminal/`. The current hardening includes command-run pointers, terminal-log pointers, result-footers for `p`/`f`/paste-output decisions, missing-current-script report robustness, inner fail-marker detection, communication artifact garbage collection, and `./ns command-inbox-check` rejecting completed command ids that remain pending.
+
+The next planned release is `v0.3.27`, intended to preserve this no-copy/runner-hardening baseline before the first local GUI slice. After that release, the next feature direction is a thin local Tkinter cockpit over `git pull && ./ns agent-next`, status display, latest command-run report, latest terminal log, and gate buttons. Pattern work is intentionally deferred until after the GUI foundation.

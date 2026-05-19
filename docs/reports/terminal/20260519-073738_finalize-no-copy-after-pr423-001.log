@@ -1,0 +1,2 @@
+terminal_log=docs/reports/terminal/20260519-073738_finalize-no-copy-after-pr423-001.log
+### RUN: sh .agentic/commands/current.sh

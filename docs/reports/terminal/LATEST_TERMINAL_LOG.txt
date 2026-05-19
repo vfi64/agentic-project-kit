@@ -1,1 +1,1 @@
-docs/reports/terminal/20260518-225213_harden-inbox-completed-command-guard.log
+docs/reports/terminal/20260519-073752_finalize-no-copy-after-pr423.log
