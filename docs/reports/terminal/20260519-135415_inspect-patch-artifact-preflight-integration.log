@@ -1,0 +1,1100 @@
+INSPECT PATCH ARTIFACT PREFLIGHT INTEGRATION POINTS
+
+### BRANCH AND STATUS ###
+feature/patch-artifact-preflight
+
+### TOP LEVEL FILES ###
+.agentic/communication_artifacts.yaml
+.agentic/current_work.yaml
+.agentic/handoff_state.yaml
+.agentic/no_copy_terminal_policy.yaml
+.agentic/project.yaml
+.agentic/todo.yaml
+.agentic/workflow_state
+.DS_Store
+.git/COMMIT_EDITMSG
+.git/config
+.git/description
+.git/FETCH_HEAD
+.git/HEAD
+.git/index
+.git/ORIG_HEAD
+.git/packed-refs
+.github/dependabot.yml
+.github/pull_request_template.md
+.gitignore
+.pytest_cache/.gitignore
+.pytest_cache/CACHEDIR.TAG
+.pytest_cache/README.md
+.ruff_cache/.gitignore
+.ruff_cache/CACHEDIR.TAG
+.venv/.gitignore
+.venv/pyvenv.cfg
+.venv313-gui/.gitignore
+.venv313-gui/pyvenv.cfg
+.zenodo.json
+AGENTS.md
+CHANGELOG.md
+CITATION.cff
+CONTRIBUTING.md
+dist/agentic_project_kit-0.3.27-py3-none-any.whl
+dist/agentic_project_kit-0.3.27.tar.gz
+docs/.DS_Store
+docs/DESIGN.md
+docs/DOCUMENTATION_COVERAGE.yaml
+docs/STATUS.md
+docs/TEST_GATES.md
+docs/WORKFLOW_OUTPUT_CYCLE.md
+LICENSE
+ns
+ns-menu
+pyproject.toml
+README.md
+Screen-Control_Output.txt
+SECURITY.md
+sentinel.yaml
+tests/test_action_registry.py
+tests/test_action_specs.py
+tests/test_agent_command_runner_summary_footer.py
+tests/test_agent_command_runner.py
+tests/test_checks.py
+tests/test_cli.py
+tests/test_cockpit_readiness.py
+tests/test_cockpit.py
+tests/test_command_inbox_check.py
+tests/test_communication_artifact_gc.py
+tests/test_contract.py
+tests/test_control_state.py
+tests/test_doc_lifecycle.py
+tests/test_doc_mesh.py
+tests/test_doctor_package_version.py
+tests/test_doctor.py
+tests/test_documentation_coverage_terms.py
+tests/test_final_summary_contract.py
+tests/test_generator.py
+tests/test_governance_check.py
+tests/test_governance_rules.py
+tests/test_gui_cockpit.py
+tests/test_handoff_prompt.py
+tests/test_handoff_refresh.py
+tests/test_handoff_state.py
+tests/test_interpreter_discovery_guard.py
+tests/test_next_step_state_machine.py
+tests/test_no_copy_terminal_policy.py
+tests/test_ns_interpreter_and_no_exec_guard.py
+tests/test_output_contract.py
+tests/test_output_repair.py
+tests/test_patterns.py
+tests/test_post_release.py
+tests/test_pr_closeout.py
+tests/test_pr_hygiene.py
+tests/test_quality_first_workflow_lessons.py
+tests/test_release_version_source_contract.py
+tests/test_release.py
+tests/test_repair_report.py
+tests/test_repo_ns_entrypoint.py
+tests/test_rule_governance_contract.py
+tests/test_runtime_validator_cli.py
+tests/test_runtime_validator.py
+tests/test_safe_patch.py
+tests/test_scaffold.py
+tests/test_slice_runner.py
+tests/test_standard_error_guards.py
+tests/test_state_freshness.py
+tests/test_terminal_logging.py
+tests/test_terminal_remote_preflight.py
+tests/test_todo.py
+tests/test_validate_contract_cli.py
+tests/test_validate_output_contract_cli.py
+tests/test_work_order_prepare.py
+tests/test_work_order_templates.py
+tests/test_work_orders.py
+tests/test_workflow_request_cli.py
+tests/test_workflow_runner_steps.py
+tests/test_workflow_state.py
+tests/test_yaml_governance_integrity.py
+tmp/.DS_Store
+tmp/20260518-192532_interpreter-discovery-guard-full-gates.log
+tmp/20260518-192609_interpreter-discovery-guard-full-gates-retry.log
+tmp/20260519-111444_publish-v0.3.27.log
+tmp/20260519-130349_trust-repair-verify-planning-state-v0.3.27.log
+tmp/20260519-131236_final-summary-contract-pr440.log
+tmp/20260519-131724_repair-final-summary-coverage-terms.log
+tmp/20260519-131845_quality-first-lessons-pr440.log
+tmp/20260519-134201_repair-quality-first-yaml-quoting.log
+tmp/20260519-135132_repair-yaml-integrity-test-syntax.log
+tmp/20260519-135233_pr440-main-verification.log
+tmp/20260519-135332_start-patch-artifact-preflight-slice.log
+tmp/20260519-135415_inspect-patch-artifact-preflight-integration.log
+tmp/add_final_summary_contract_repaired.py
+tmp/add_idempotent_finalization_guard_tests.py
+tmp/add_no_direct_main_commit_guard_test.py
+tmp/add_ns_slice_runner_tests.py
+tmp/add_output_repair_cli_tests.py
+tmp/add_pr_create_guard_tests.py
+tmp/add_quality_first_lessons.py
+tmp/add_safe_remove_diagnostic_test.py
+tmp/add_terminal_log_rule_notes.py
+tmp/add_yaml_integrity_lesson.py
+tmp/agent_next_registry_block.txt
+tmp/apply_pr_hygiene.py
+tmp/apply_state_coverage_refresh.py
+tmp/classify_ns_commands.py
+tmp/cleanup_post_current_work_isolation_state.py
+tmp/cleanup_post_current_work_isolation_wording.py
+tmp/doc-mesh-repair-plan.json
+tmp/doc-mesh-repair-result.json
+tmp/doc-mesh-report.json
+tmp/document_next_ns_slice_runner.py
+tmp/final_repair_release_0312.py
+tmp/finalize_cockpit_readiness.py
+tmp/finalize_dependabot_cleanup_state.py
+tmp/finalize_evidence_cleanup_guard.py
+tmp/finalize_finalize_guard_outcomes_state.py
+tmp/finalize_idempotent_finalization_guard_command.py
+tmp/finalize_idempotent_pr_create_guard.py
+tmp/finalize_no_direct_main_commit_guard.py
+tmp/finalize_ns_slice_runner_state.py
+tmp/finalize_ns_up_idempotence_state.py
+tmp/finalize_ns_up_noop_idempotence.py
+tmp/finalize_pr_hygiene_state_docs.py
+tmp/finalize_release_cycle_hardening_state.py
+tmp/finalize_release_cycle_hardening.py
+tmp/finalize_safe_diagnostic_cleanup_guard.py
+tmp/finalize_safe_patch_script_helper_state.py
+tmp/finalize_terminal_clean_check_state.py
+tmp/finalize_v0320_state.py
+tmp/finalize_v0321_doi_state.py
+tmp/finalize_v0321_state.py
+tmp/finalize_v0322_doi_state.py
+tmp/finalize_v0323_doi_state.py
+tmp/finalize_v0324_handoff_planning.py
+tmp/fix_handoff_semantics_reason_20260518.log
+tmp/fix_handoff_semantics_reason.py
+tmp/fix_literal_newlines_after_agent_run.py
+tmp/fix_planning_doc_scaffold.py
+tmp/fix_pr_hygiene_newlines.py
+tmp/fix_repair_schema_constant_stable.py
+tmp/fix_v0314_candidate_wording.py
+tmp/governance_check_mvp_20260518.log
+tmp/governance_check_mvp_run.sh
+tmp/gui_cockpit_inventory.py
+tmp/handoff_commit_semantics_patch_20260518.log
+tmp/handoff_refresh_after_pr346_20260518.log
+tmp/handoff_refresh_after_pr346_run.sh
+tmp/handoff_refresh_after_pr348_20260518.log
+tmp/handoff_refresh_after_pr348_run.sh
+tmp/handoff_refresh_path_argument_repair_20260518.log
+tmp/handoff_refresh_path_argument_repair_run.sh
+tmp/handoff_semantics_patch_points_20260518.log
+tmp/handoff_state_commit_semantics_start_20260518.log
+tmp/handoff_state_commit_semantics_start_run.sh
+tmp/handoff_update_automation_inspection_20260518.log
+tmp/handoff_update_automation_inspection_run.sh
+tmp/handoff_update_automation_mvp_20260518.log
+tmp/handoff_update_automation_mvp_run.sh
+tmp/hard_repair_mandatory_terminal_evidence_contract.py
+tmp/hard-repair-mandatory-terminal-evidence-contract.log
+tmp/harden_ns_up_pr_completion.py
+tmp/harden_repair_report_schema.py
+tmp/harden_repair_schema_safe.py
+tmp/harden_work_item_restore.py
+tmp/implement_ns_release_shortcuts.py
+tmp/implement_ns_up_pr_completion.py
+tmp/implement_planning_doc_scaffold.py
+tmp/insert_agent_next_registry.py
+tmp/inspect_validation_report_cli.txt
+tmp/inspect_zenodo_concept_v0211.py
+tmp/inspect_zenodo_v0211.py
+tmp/line_patch_ns_terminal_clean_check.py
+tmp/line_patch_registry_tests_clean_check.py
+tmp/line_patch_terminal_clean_check.py
+tmp/mandatory-terminal-evidence-contract-work.log
+tmp/merge_handoff_refresh_after_work_order_prepare_20260518.log
+tmp/no_copy_terminal_evidence_policy_20260518.log
+tmp/no_copy_terminal_evidence_policy_run.sh
+tmp/ns_interpreter_no_exec_guard_commit_20260518-194148.log
+tmp/ns_interpreter_no_exec_guard_commit_retry_20260518-194218.log
+tmp/ns_slice_runner_smoke.plan
+tmp/ns.before.go-guard
+tmp/ns.before.no-copy-dev
+tmp/obsolete_remote_branch_cleanup_plan_20260518-193042.txt
+tmp/parameterized_action_specs_mvp_20260518.log
+tmp/parameterized_action_specs_mvp_run.sh
+tmp/parametrized_git_release_actions_inspection_20260518.log
+tmp/parametrized_git_release_actions_inspection_run.sh
+tmp/patch_action_gh_release_v3.py
+
+### CLI COMMAND FILES ###
+src/agentic_project_kit/__init__.py
+src/agentic_project_kit/__pycache__/__init__.cpython-313.pyc
+src/agentic_project_kit/__pycache__/__init__.cpython-314.pyc
+src/agentic_project_kit/__pycache__/action_registry.cpython-314.pyc
+src/agentic_project_kit/__pycache__/action_specs.cpython-314.pyc
+src/agentic_project_kit/__pycache__/agent_command_runner.cpython-314.pyc
+src/agentic_project_kit/__pycache__/checks_cli.cpython-314.pyc
+src/agentic_project_kit/__pycache__/checks.cpython-314.pyc
+src/agentic_project_kit/__pycache__/cli.cpython-314.pyc
+src/agentic_project_kit/__pycache__/cockpit_readiness.cpython-314.pyc
+src/agentic_project_kit/__pycache__/cockpit.cpython-313.pyc
+src/agentic_project_kit/__pycache__/cockpit.cpython-314.pyc
+src/agentic_project_kit/__pycache__/command_inbox_check.cpython-314.pyc
+src/agentic_project_kit/__pycache__/communication_artifact_gc.cpython-314.pyc
+src/agentic_project_kit/__pycache__/contract.cpython-314.pyc
+src/agentic_project_kit/__pycache__/control_state.cpython-314.pyc
+src/agentic_project_kit/__pycache__/doc_lifecycle.cpython-314.pyc
+src/agentic_project_kit/__pycache__/doc_mesh.cpython-314.pyc
+src/agentic_project_kit/__pycache__/doctor.cpython-314.pyc
+src/agentic_project_kit/__pycache__/final_summary_contract.cpython-314.pyc
+src/agentic_project_kit/__pycache__/github.cpython-314.pyc
+src/agentic_project_kit/__pycache__/governance.cpython-314.pyc
+src/agentic_project_kit/__pycache__/gui_cockpit.cpython-313.pyc
+src/agentic_project_kit/__pycache__/gui_cockpit.cpython-314.pyc
+src/agentic_project_kit/__pycache__/handoff_prompt.cpython-314.pyc
+src/agentic_project_kit/__pycache__/handoff_state.cpython-314.pyc
+src/agentic_project_kit/__pycache__/models.cpython-314.pyc
+src/agentic_project_kit/__pycache__/output_contract.cpython-314.pyc
+src/agentic_project_kit/__pycache__/output_repair.cpython-314.pyc
+src/agentic_project_kit/__pycache__/patterns.cpython-314.pyc
+src/agentic_project_kit/__pycache__/post_release.cpython-314.pyc
+src/agentic_project_kit/__pycache__/pr_closeout.cpython-314.pyc
+src/agentic_project_kit/__pycache__/pr_hygiene.cpython-314.pyc
+src/agentic_project_kit/__pycache__/release_cli.cpython-314.pyc
+src/agentic_project_kit/__pycache__/release.cpython-314.pyc
+src/agentic_project_kit/__pycache__/rendering.cpython-314.pyc
+src/agentic_project_kit/__pycache__/repair_report.cpython-314.pyc
+src/agentic_project_kit/__pycache__/runtime_validator.cpython-314.pyc
+src/agentic_project_kit/__pycache__/safe_patch.cpython-314.pyc
+src/agentic_project_kit/__pycache__/scaffold.cpython-314.pyc
+src/agentic_project_kit/__pycache__/slice_runner.cpython-314.pyc
+src/agentic_project_kit/__pycache__/state_freshness.cpython-314.pyc
+src/agentic_project_kit/__pycache__/templates.cpython-314.pyc
+src/agentic_project_kit/__pycache__/terminal_logging.cpython-314.pyc
+src/agentic_project_kit/__pycache__/todo_cli.cpython-314.pyc
+src/agentic_project_kit/__pycache__/todo.cpython-314.pyc
+src/agentic_project_kit/__pycache__/validation_cli.cpython-314.pyc
+src/agentic_project_kit/__pycache__/work_orders.cpython-314.pyc
+src/agentic_project_kit/__pycache__/workflow_cli.cpython-314.pyc
+src/agentic_project_kit/action_registry.py
+src/agentic_project_kit/action_specs.py
+src/agentic_project_kit/agent_command_runner.py
+src/agentic_project_kit/checks.py
+src/agentic_project_kit/cli_commands/__init__.py
+src/agentic_project_kit/cli_commands/__pycache__/__init__.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/actions.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/checks.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/cockpit.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/github.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/governance.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/handoff.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/init.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/patterns.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/pr_hygiene.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/pr.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/profiles.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/release.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/scaffold.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/state.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/todo.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/validation.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/work_orders.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/workflow.cpython-314.pyc
+src/agentic_project_kit/cli_commands/actions.py
+src/agentic_project_kit/cli_commands/checks.py
+src/agentic_project_kit/cli_commands/cockpit.py
+src/agentic_project_kit/cli_commands/github.py
+src/agentic_project_kit/cli_commands/governance.py
+src/agentic_project_kit/cli_commands/handoff.py
+src/agentic_project_kit/cli_commands/init.py
+src/agentic_project_kit/cli_commands/patterns.py
+src/agentic_project_kit/cli_commands/pr_hygiene.py
+src/agentic_project_kit/cli_commands/pr.py
+src/agentic_project_kit/cli_commands/profiles.py
+src/agentic_project_kit/cli_commands/release.py
+src/agentic_project_kit/cli_commands/scaffold.py
+src/agentic_project_kit/cli_commands/state.py
+src/agentic_project_kit/cli_commands/todo.py
+src/agentic_project_kit/cli_commands/validation.py
+src/agentic_project_kit/cli_commands/work_orders.py
+src/agentic_project_kit/cli_commands/workflow.py
+src/agentic_project_kit/cli.py
+src/agentic_project_kit/cockpit_readiness.py
+src/agentic_project_kit/cockpit.py
+src/agentic_project_kit/command_inbox_check.py
+src/agentic_project_kit/communication_artifact_gc.py
+src/agentic_project_kit/contract.py
+src/agentic_project_kit/control_state.py
+src/agentic_project_kit/doc_lifecycle.py
+src/agentic_project_kit/doc_mesh.py
+src/agentic_project_kit/doctor.py
+src/agentic_project_kit/final_summary_contract.py
+src/agentic_project_kit/github.py
+src/agentic_project_kit/governance.py
+src/agentic_project_kit/gui_cockpit.py
+src/agentic_project_kit/handoff_prompt.py
+src/agentic_project_kit/handoff_state.py
+src/agentic_project_kit/models.py
+src/agentic_project_kit/output_contract.py
+src/agentic_project_kit/output_repair.py
+src/agentic_project_kit/patterns.py
+src/agentic_project_kit/post_release.py
+src/agentic_project_kit/pr_closeout.py
+src/agentic_project_kit/pr_hygiene.py
+src/agentic_project_kit/release.py
+src/agentic_project_kit/rendering.py
+src/agentic_project_kit/repair_report.py
+src/agentic_project_kit/runtime_validator.py
+src/agentic_project_kit/safe_patch.py
+src/agentic_project_kit/scaffold.py
+src/agentic_project_kit/slice_runner.py
+src/agentic_project_kit/state_freshness.py
+src/agentic_project_kit/templates.py
+src/agentic_project_kit/terminal_logging.py
+src/agentic_project_kit/todo.py
+src/agentic_project_kit/work_orders.py
+
+### NS FILE ###
+#!/usr/bin/env sh
+
+resolve_python() {
+  if [ -x ".venv/bin/python" ]; then
+    printf "%s
+" ".venv/bin/python"
+  elif [ -x ".venv/bin/python3" ]; then
+    printf "%s
+" ".venv/bin/python3"
+  elif command -v python3 >/dev/null 2>&1; then
+    command -v python3
+  elif command -v python >/dev/null 2>&1; then
+    command -v python
+  else
+    return 1
+  fi
+}
+
+PY="$(resolve_python || true)"
+if [ -z "$PY" ]; then
+  printf "%s
+" "ERROR: no usable Python interpreter found. Expected .venv/bin/python, .venv/bin/python3, python3, or python."
+  printf "%s
+" "### RESULT: FAIL ###"
+  return 127 2>/dev/null || exit 127
+fi
+
+
+
+
+
+if [ "${1:-}" = "governance-check" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli governance check
+  exit $?
+fi
+
+if [ "${1:-}" = "state-freshness-check" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli state freshness-check
+  exit $?
+fi
+
+if [ "${1:-}" = "action-list" ]; then
+  shift
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli actions list "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "action-show" ]; then
+  shift
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli actions show "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-refresh" ]; then
+  shift
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff refresh "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-show" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff show
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-check" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff check
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-prompt" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff prompt
+  exit $?
+fi
+
+if [ "${1:-}" = "run-logged" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging run-logged "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-status" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-status
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-upload" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-upload
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-finalize" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-finalize "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-clean-check" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-clean-check
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-remote-preflight" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-remote-preflight
+  exit $?
+fi
+
+if [ "${1:-}" = "artifact-gc" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.communication_artifact_gc "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "command-inbox-check" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.command_inbox_check
+  exit $?
+fi
+if [ "${1:-}" = "agent-next" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.agent_command_runner next
+  exit $?
+fi
+
+if [ "${1:-}" = "agent-run" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.agent_command_runner
+  exit $?
+fi
+
+
+if [ "${1:-}" = "cockpit-readiness" ]; then
+  PYTHONPATH=src "$PY" tools/cockpit_readiness.py
+  exit $?
+fi
+
+set -eu
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+cd "$SCRIPT_DIR"
+if [ "${1:-}" = "cockpit" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit cockpit status "$@"
+    exit $?
+  fi
+  agentic-kit cockpit status "$@"
+  exit $?
+fi
+if [ "${1:-}" = "actions" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit cockpit actions "$@"
+    exit $?
+  fi
+  agentic-kit cockpit actions "$@"
+  exit $?
+fi
+if [ "${1:-}" = "select" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit cockpit select "$@"
+    exit $?
+  fi
+  agentic-kit cockpit select "$@"
+  exit $?
+fi
+if [ "${1:-}" = "cockpit-run" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit cockpit run "$@"
+    exit $?
+  fi
+  agentic-kit cockpit run "$@"
+  exit $?
+fi
+if [ "${1:-}" = "state" ] || [ "${1:-}" = "status" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow state "$@"
+    exit $?
+  fi
+  agentic-kit workflow state "$@"
+  exit $?
+fi
+if [ "${1:-}" = "list" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow list "$@"
+    exit $?
+  fi
+  agentic-kit workflow list "$@"
+  exit $?
+fi
+if [ "${1:-}" = "show" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow show "$@"
+    exit $?
+  fi
+  agentic-kit workflow show "$@"
+  exit $?
+fi
+if [ "${1:-}" = "run" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow run "$@"
+    exit $?
+  fi
+  agentic-kit workflow run "$@"
+  exit $?
+fi
+if [ "${1:-}" = "release-prep" ]; then
+  shift
+  tools/ns_release_prep.sh "$@"
+  exit $?
+fi
+if [ "${1:-}" = "release-gate" ]; then
+  shift
+  tools/ns_release_gate.sh "$@"
+  exit $?
+fi
+if [ "${1:-}" = "release-publish" ]; then
+  shift
+  tools/ns_release_publish.sh "$@"
+  exit $?
+fi
+if [ "${1:-}" = "release-verify" ]; then
+  shift
+  tools/ns_release_verify.sh "$@"
+  exit $?
+fi
+if [ "${1:-}" = "finalize-guard" ]; then
+  shift
+  tools/ns_finalize_guard.sh "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "clean-evidence" ]; then
+  shift
+  tools/ns_clean_evidence.sh "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "commit-guard" ]; then
+  shift
+  tools/ns_commit_pr_guard.sh "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "pr-cleanup" ]; then
+  shift
+  tools/ns_pr_cleanup.sh "$@"
+  exit $?
+fi
+if [ "${1:-}" = "slice-runner" ]; then
+  shift
+  tools/ns_slice_runner.sh "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "dev" ]; then
+  shift
+  STATUS=0
+  printf '\n### NS DEV LOCAL FEATURE GATE ###\n'
+
+### CLI APP REFERENCES ###
+src/agentic_project_kit/cockpit.py:52:        CockpitAction("gate.check-docs", "Documentation gate", "gate", ("agentic-kit", "check-docs"), READ_ONLY, "Run deterministic documentation gates."),
+src/agentic_project_kit/cockpit.py:53:        CockpitAction("gate.doctor", "Doctor", "gate", ("agentic-kit", "doctor"), READ_ONLY, "Run compact project health checks."),
+src/agentic_project_kit/safe_patch.py:40:def validate_safe_patch_script(script: str) -> None:
+src/agentic_project_kit/action_specs.py:75:            evidence=("finalize terminal log", "handoff-check output", "doctor output"),
+src/agentic_project_kit/release.py:71:                commands=("python -m pytest -q", "ruff check .", "agentic-kit check-docs"),
+src/agentic_project_kit/cli_commands/cockpit.py:21:cockpit_app = typer.Typer(help="Inspect local cockpit status and structured project actions.")
+src/agentic_project_kit/cli_commands/cockpit.py:25:@cockpit_app.command("status")
+src/agentic_project_kit/cli_commands/cockpit.py:31:@cockpit_app.command("actions")
+src/agentic_project_kit/cli_commands/cockpit.py:45:@cockpit_app.command("select")
+src/agentic_project_kit/cli_commands/cockpit.py:51:@cockpit_app.command("run")
+src/agentic_project_kit/cli_commands/release.py:19:def register_release_commands(app: typer.Typer) -> None:
+src/agentic_project_kit/cli_commands/release.py:20:    app.command("release-plan")(release_plan_command)
+src/agentic_project_kit/cli_commands/release.py:21:    app.command("release-check")(release_check_command)
+src/agentic_project_kit/cli_commands/release.py:22:    app.command("post-release-check")(post_release_check_command)
+src/agentic_project_kit/cli_commands/patterns.py:14:patterns_app = typer.Typer(help="Inspect the local read-only pattern catalog.")
+src/agentic_project_kit/cli_commands/patterns.py:17:@patterns_app.command("list")
+src/agentic_project_kit/cli_commands/patterns.py:30:@patterns_app.command("show")
+src/agentic_project_kit/cli_commands/handoff.py:10:handoff_app = typer.Typer(help="Read-only persistent handoff state commands.")
+src/agentic_project_kit/cli_commands/handoff.py:12:@handoff_app.command("show")
+src/agentic_project_kit/cli_commands/handoff.py:17:@handoff_app.command("check")
+src/agentic_project_kit/cli_commands/handoff.py:27:@handoff_app.command("prompt")
+src/agentic_project_kit/cli_commands/handoff.py:38:@handoff_app.command("refresh")
+src/agentic_project_kit/cli_commands/checks.py:22:from agentic_project_kit.doctor import build_doctor_report, render_doctor_report
+src/agentic_project_kit/cli_commands/checks.py:27:def register_check_commands(app: typer.Typer) -> None:
+src/agentic_project_kit/cli_commands/checks.py:28:    app.command("check")(check_command)
+src/agentic_project_kit/cli_commands/checks.py:29:    app.command("check-docs")(check_docs_command)
+src/agentic_project_kit/cli_commands/checks.py:30:    app.command("check-todo")(check_todo_command)
+src/agentic_project_kit/cli_commands/checks.py:31:    app.command("doc-mesh-audit")(doc_mesh_audit_command)
+src/agentic_project_kit/cli_commands/checks.py:32:    app.command("doc-lifecycle-audit")(doc_lifecycle_audit_command)
+src/agentic_project_kit/cli_commands/checks.py:33:    app.command("doc-mesh-repair")(doc_mesh_repair_command)
+src/agentic_project_kit/cli_commands/checks.py:34:    app.command("doctor")(doctor_command)
+src/agentic_project_kit/cli_commands/checks.py:96:def doctor_command(project_root: Path = typer.Option(Path("."), "--root")) -> None:
+src/agentic_project_kit/cli_commands/checks.py:98:    report = build_doctor_report(project_root.resolve())
+src/agentic_project_kit/cli_commands/checks.py:99:    console.print(render_doctor_report(report), markup=False)
+src/agentic_project_kit/cli_commands/pr_hygiene.py:14:def register_pr_hygiene_command(app: typer.Typer) -> None:
+src/agentic_project_kit/cli_commands/pr_hygiene.py:15:    app.command("pr-hygiene")(pr_hygiene_command)
+src/agentic_project_kit/cli_commands/actions.py:7:actions_app = typer.Typer(help="Inspect parameterized action specifications.")
+src/agentic_project_kit/cli_commands/actions.py:9:@actions_app.command("list")
+src/agentic_project_kit/cli_commands/actions.py:14:@actions_app.command("show")
+Binary file src/agentic_project_kit/cli_commands/__pycache__/init.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/workflow.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/patterns.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/scaffold.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/todo.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/actions.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/work_orders.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/release.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/pr_hygiene.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/checks.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/cockpit.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/pr.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/handoff.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/profiles.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/governance.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/validation.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/state.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/github.cpython-314.pyc matches
+src/agentic_project_kit/cli_commands/work_orders.py:7:work_orders_app = typer.Typer(help="Inspect and run repo-backed work orders.")
+src/agentic_project_kit/cli_commands/work_orders.py:10:@work_orders_app.command("list")
+src/agentic_project_kit/cli_commands/work_orders.py:16:@work_orders_app.command("show")
+src/agentic_project_kit/cli_commands/work_orders.py:26:@work_orders_app.command("check")
+src/agentic_project_kit/cli_commands/work_orders.py:36:@work_orders_app.command("run")
+src/agentic_project_kit/cli_commands/work_orders.py:53:@work_orders_app.command("templates")
+src/agentic_project_kit/cli_commands/work_orders.py:58:@work_orders_app.command("prepare")
+src/agentic_project_kit/cli_commands/pr.py:10:pr_app = typer.Typer(help="Evaluate deterministic PR closeout state.")
+src/agentic_project_kit/cli_commands/pr.py:12:@pr_app.command("closeout-check")
+src/agentic_project_kit/cli_commands/pr.py:21:def register_pr_closeout_alias(app: typer.Typer) -> None:
+src/agentic_project_kit/cli_commands/pr.py:22:    @app.command("pr-closeout")
+src/agentic_project_kit/cli_commands/scaffold.py:13:scaffold_app = typer.Typer(help="Create governed repository scaffolding artifacts.")
+src/agentic_project_kit/cli_commands/scaffold.py:16:@scaffold_app.command("planning-doc")
+src/agentic_project_kit/cli_commands/workflow.py:10:workflow_app = typer.Typer(help="Run and inspect bounded local workflow handoff states.")
+src/agentic_project_kit/cli_commands/workflow.py:187:    typer.echo("- agentic-kit doctor")
+src/agentic_project_kit/cli_commands/workflow.py:188:    typer.echo("- agentic-kit check-docs")
+src/agentic_project_kit/cli_commands/workflow.py:244:@workflow_app.command("request")
+src/agentic_project_kit/cli_commands/workflow.py:260:@workflow_app.command("run")
+src/agentic_project_kit/cli_commands/workflow.py:283:@workflow_app.command("state")
+src/agentic_project_kit/cli_commands/workflow.py:291:@workflow_app.command("list")
+src/agentic_project_kit/cli_commands/workflow.py:306:@workflow_app.command("show")
+src/agentic_project_kit/cli_commands/workflow.py:322:@workflow_app.command("go")
+src/agentic_project_kit/cli_commands/workflow.py:339:@workflow_app.command("status")
+src/agentic_project_kit/cli_commands/workflow.py:365:@workflow_app.command("fail-report")
+src/agentic_project_kit/cli_commands/workflow.py:377:@workflow_app.command("upload-output")
+src/agentic_project_kit/cli_commands/workflow.py:378:@workflow_app.command("upload")
+src/agentic_project_kit/cli_commands/workflow.py:399:@workflow_app.command("cleanup")
+src/agentic_project_kit/cli_commands/github.py:14:def register_github_commands(app: typer.Typer) -> None:
+src/agentic_project_kit/cli_commands/github.py:15:    app.command("github-create")(github_create_command)
+src/agentic_project_kit/cli_commands/init.py:24:def register_init_command(app: typer.Typer) -> None:
+src/agentic_project_kit/cli_commands/init.py:25:    app.command("init")(init_command)
+src/agentic_project_kit/cli_commands/init.py:121:        console.print("  agentic-kit check-docs")
+src/agentic_project_kit/cli_commands/init.py:123:    console.print("  agentic-kit doctor")
+src/agentic_project_kit/cli_commands/todo.py:9:todo_app = typer.Typer(help="Manage generated project TODO items.")
+src/agentic_project_kit/cli_commands/todo.py:12:@todo_app.command("list")
+src/agentic_project_kit/cli_commands/todo.py:34:@todo_app.command("complete")
+src/agentic_project_kit/cli_commands/todo.py:49:@todo_app.command("render")
+src/agentic_project_kit/cli_commands/profiles.py:11:def register_profile_commands(app: typer.Typer) -> None:
+src/agentic_project_kit/cli_commands/profiles.py:12:    app.command("profile-explain")(profile_explain_command)
+src/agentic_project_kit/cli_commands/state.py:7:state_app = typer.Typer(help="Check repository state freshness.")
+src/agentic_project_kit/cli_commands/state.py:10:@state_app.command("freshness-check")
+src/agentic_project_kit/cli_commands/governance.py:7:governance_app = typer.Typer(help="Run deterministic project governance checks.")
+src/agentic_project_kit/cli_commands/governance.py:9:@governance_app.command("check")
+src/agentic_project_kit/cli_commands/validation.py:12:def register_validation_commands(app: typer.Typer) -> None:
+src/agentic_project_kit/cli_commands/validation.py:13:    app.command("validate-contract")(validate_contract)
+src/agentic_project_kit/cli_commands/validation.py:14:    app.command("validate-output-contract")(validate_output_contract)
+src/agentic_project_kit/cli_commands/validation.py:15:    app.command("validate-sections")(validate_sections)
+src/agentic_project_kit/checks.py:55:    "if added later, must remain advisory and separate from hard doctor gates."
+Binary file src/agentic_project_kit/__pycache__/action_specs.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/validation_cli.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/templates.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/workflow_cli.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/work_orders.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/release.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/gui_cockpit.cpython-313.pyc matches
+Binary file src/agentic_project_kit/__pycache__/cockpit.cpython-313.pyc matches
+Binary file src/agentic_project_kit/__pycache__/gui_cockpit.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/cli.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/checks.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/cockpit.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/checks_cli.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/todo_cli.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/release_cli.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/contract.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/doctor.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/agent_command_runner.cpython-314.pyc matches
+src/agentic_project_kit/templates.py:8:BASE_FILES = {'README.md': '# $name\n\n$description\n\n## Purpose\n\nDescribe the purpose of the project here.\n\n## Quick Start\n\n```bash\npython -m venv .venv\nsource .venv/bin/activate\npip install -e ".[dev]"\npytest -q\nagentic-kit check\n```\n\n## Agentic Development\n\nThis project uses agent-facing documentation and local quality gates.\n\nStart with:\n\n1. `AGENTS.md`\n2. `.agentic/project.yaml`\n3. `docs/PROJECT_START.md`\n4. `docs/STATUS.md`\n5. `docs/TEST_GATES.md`\n6. `docs/handoff/CURRENT_HANDOFF.md`\n\n## Status\n\nDo not store volatile status in this README. Use `docs/STATUS.md`.\n', 'AGENTS.md': '# AGENTS.md\n\n## Mission\n\nPreserve correctness, traceability, testability, and maintainability.\n\nDo not only satisfy the immediate request. Prefer the best technically sound solution within project constraints.\n\n## Source-of-truth hierarchy\n\n1. `.agentic/project.yaml`\n2. normative project specification, if present\n3. current code and tests\n4. `docs/STATUS.md`\n5. `docs/handoff/CURRENT_HANDOFF.md`\n6. historical archive files\n\nIf documentation, code, and tests disagree, report the discrepancy instead of guessing.\n\n## Agent read order\n\n1. `AGENTS.md`\n2. `.agentic/project.yaml`\n3. `docs/PROJECT_START.md`\n4. `docs/STATUS.md`\n5. `docs/TEST_GATES.md`\n6. `docs/LOGGING_AND_EVIDENCE.md`\n7. `docs/handoff/CURRENT_HANDOFF.md`\n8. relevant source files and tests\n\n## Work rules\n\n- Keep stable rules separate from volatile status.\n- Add or update tests for meaningful behavior changes.\n- Prefer outcome evidence over output claims.\n- Do not claim success without running the relevant gates.\n- Do not commit secrets, local credentials, or broad raw logs.\n- Use bounded diagnostic logs only when needed for troubleshooting.\n\n## Closeout template\n\n```text\n- Intended outcome:\n- Required evidence:\n- Outcome achieved: yes / no / partial\n- Changed files:\n- Tests run:\n- Tests not run:\n- Remaining risks:\n- Next safe step:\n```\n', 'docs/PROJECT_START.md': '# Project Start\n\n## Purpose\n\nThis file guides the initial setup after repository generation.\n\n## Generated Structure\n\nThis project was generated with agent-facing documentation, a machine-readable project contract, status and handoff files, a test-gate matrix, bootstrap task items, logging/evidence conventions, and optional GitHub workflow/pre-commit templates.\n\n## Required First Decisions\n\n- [ ] Review `.agentic/project.yaml` profiles and policy packs.\n- [ ] Choose or confirm project license.\n- [ ] Define the primary runtime entrypoint.\n- [ ] Define supported runtime versions.\n- [ ] Decide whether bounded diagnostic logs may be committed.\n- [ ] Define protected branches.\n- [ ] Define release strategy.\n- [ ] Review agent instructions.\n\n## First Local Commands\n\n```bash\npython -m venv .venv\nsource .venv/bin/activate\npip install -e ".[dev]"\npytest -q\nagentic-kit check\nagentic-kit doctor\n```\n\n## First GitHub Setup\n\n- [ ] Create GitHub repository.\n- [ ] Push initial commit.\n- [ ] Enable branch protection for `main`.\n- [ ] Enable GitHub Actions.\n- [ ] Enable secret scanning if available.\n- [ ] Review `.github/copilot-instructions.md`.\n\n## Agent Onboarding\n\nA new agent should read:\n\n1. `AGENTS.md`\n2. `.agentic/project.yaml`\n3. `.github/copilot-instructions.md`\n4. `docs/PROJECT_START.md`\n5. `docs/STATUS.md`\n6. `docs/TEST_GATES.md`\n7. `docs/handoff/CURRENT_HANDOFF.md`\n\n## Before First Feature\n\n- [ ] Update `README.md` with the real project goal.\n- [ ] Update `docs/STATUS.md`.\n- [ ] Update `docs/TEST_GATES.md`.\n- [ ] Add first meaningful tests.\n- [ ] Run all checks.\n', 'docs/STATUS.md': '# Project Status\n\nStatus-date: TODO\nProject: $name\nPrimary branch: main\nRuntime entrypoint: TODO\nProject contract: `.agentic/project.yaml`\n\n## Purpose\n\nThis is the compact current-state dashboard.\n\nIt must not become a long history file.\n\n## Current Goal\n\nTODO: define the current project goal.\n\n## Current Blockers\n\n- TODO\n\n## Live Status Commands\n\n```bash\ngit status --short\npytest -q\nagentic-kit check\nagentic-kit doctor\n```\n\n## Next Safe Step\n\nTODO\n', 'docs/TEST_GATES.md': '# Test Gates\n\n## Purpose\n\nThis file maps task types to required evidence.\n\n## Gate Matrix\n\n| Change type | Required evidence |\n|---|---|\n| Documentation only | `agentic-kit check-docs` |\n| task/status change | `agentic-kit check-todo` |\n| Project contract/profile change | `agentic-kit doctor` |\n| Python code | `pytest -q` and `ruff check .` if enabled |\n| CLI behavior | CLI tests plus local command smoke test |\n| Logging/evidence change | check generated logs for secrets and size |\n| GitHub workflow change | local syntax review and CI run |\n| Agent workflow change | docs check and handoff review |\n\n## Outcome Reporting\n\nUse this closeout shape:\n\n```text\n- Intended outcome:\n- Required evidence:\n- Outcome achieved: yes / no / partial\n- Evidence:\n- Remaining gap:\n- Tests run:\n- Tests not run:\n```\n', 'docs/LOGGING_AND_EVIDENCE.md': '# Logging and Evidence\n\n## Purpose\n\nLogs are diagnostic evidence, not automatic source material.\n\n## Recommended Layout\n\n```text\nLogs/\n  Audit/\n  ManualTests/\n  TestRuns/\ntmp/\n  agent-evidence/\n```\n\n## Rules\n\n- Do not commit secrets.\n- Do not commit broad raw logs by default.\n- Commit only bounded recent evidence when needed.\n- Inspect staged logs before committing.\n- Validation reports from `agentic-kit validate-output-contract --report` are bounded audit evidence when they are intentionally written to a reviewed path such as `tmp/agent-evidence/` or a PR-specific evidence folder.\n- Do not auto-stage validation reports by default; inspect them before committing.\n\n## Agent Use\n\nAgents should use logs to diagnose failures, not to infer undocumented project rules.\n', 'docs/handoff/CURRENT_HANDOFF.md': '# Current Handoff\n\nStatus-date: TODO\nProject: $name\nBranch: main\nProject contract: `.agentic/project.yaml`\n\n## Current goal\n\nTODO\n\n## Current source of truth\n\n1. `.agentic/project.yaml`\n2. `AGENTS.md`\n3. `docs/STATUS.md`\n4. current code and tests\n\n## Latest closeout\n\nNo closeout yet.\n\n## Next step\n\nTODO\n', 'docs/handoff/STANDARD_AGENT_PROMPT.md': '# Standard Agent Prompt\n\n```text\nYou are working in this repository.\n\nStart by reading:\n\n1. AGENTS.md\n2. .agentic/project.yaml\n3. docs/PROJECT_START.md\n4. docs/STATUS.md\n5. docs/TEST_GATES.md\n6. docs/handoff/CURRENT_HANDOFF.md\n\nDo not infer current state from memory.\nRun or request:\n\ngit status --short\npytest -q\nagentic-kit check\nagentic-kit doctor\n\nFor substantial work, close with:\n\n- Intended outcome:\n- Required evidence:\n- Outcome achieved:\n- Changed files:\n- Tests run:\n- Remaining risks:\n```\n', 'docs/TODO.md': '# TODO\n\nThis file is generated from `.agentic/todo.yaml`.\n\n## Bootstrap\n\n- [ ] **BOOT-001** Choose or confirm license  \n  Owner: human  \n  Priority: high  \n  Evidence required: `LICENSE` reviewed\n\n- [ ] **BOOT-002** Define runtime entrypoint  \n  Owner: human  \n  Priority: high  \n  Evidence required: `README.md` and `docs/STATUS.md` updated\n\n- [ ] **BOOT-003** Run initial local quality gate  \n  Owner: agent  \n  Priority: high  \n  Evidence required: `pytest -q` and `agentic-kit check` passed\n\n- [ ] **BOOT-004** Review project contract profiles and policy packs  \n  Owner: human  \n  Priority: high  \n  Evidence required: `.agentic/project.yaml` reviewed\n\n- [ ] **BOOT-005** Enable branch protection on GitHub  \n  Owner: human  \n  Priority: medium  \n  Evidence required: branch protection enabled\n', '.agentic/todo.yaml': 'items:\n  - id: BOOT-001\n    title: Choose or confirm license\n    owner: human\n    priority: high\n    status: open\n    blocking: true\n    evidence_required: LICENSE reviewed\n  - id: BOOT-002\n    title: Define runtime entrypoint\n    owner: human\n    priority: high\n    status: open\n    blocking: true\n    evidence_required: README.md and docs/STATUS.md updated\n  - id: BOOT-003\n    title: Run initial local quality gate\n    owner: agent\n    priority: high\n    status: open\n    blocking: true\n    evidence_required: pytest -q and agentic-kit check passed\n  - id: BOOT-004\n    title: Review project contract profiles and policy packs\n    owner: human\n    priority: high\n    status: open\n    blocking: true\n    evidence_required: .agentic/project.yaml reviewed\n  - id: BOOT-005\n    title: Enable branch protection on GitHub\n    owner: human\n    priority: medium\n    status: open\n    blocking: false\n    evidence_required: branch protection enabled\n', 'sentinel.yaml': 'documents:\n  - path: README.md\n    required_sections:\n      - "## Purpose"\n      - "## Quick Start"\n    max_words: 2000\n  - path: AGENTS.md\n    required_sections:\n      - "## Mission"\n      - "## Agent read order"\n      - "## Closeout template"\n    max_words: 2500\n  - path: docs/STATUS.md\n    required_sections:\n      - "## Current Goal"\n      - "## Next Safe Step"\n    max_words: 1200\n  - path: docs/TEST_GATES.md\n    required_sections:\n      - "## Gate Matrix"\n      - "## Outcome Reporting"\n    max_words: 1600\ntodo:\n  path: .agentic/todo.yaml\n', '.github/copilot-instructions.md': '# Copilot Instructions\n\nFollow the repository rules in `AGENTS.md`.\n\nBefore claiming completion, run or request the relevant commands from `docs/TEST_GATES.md`.\n\nDo not commit secrets, broad raw logs, virtual environments, or local-only configuration.\n', '.github/pull_request_template.md': '## Intended outcome\n\n## Required evidence\n\n## Outcome achieved\n\n- [ ] yes\n- [ ] no\n- [ ] partial\n\n## Tests run\n\n## Risks / remaining gaps\n', '.github/ISSUE_TEMPLATE/agent_regression.yml': 'name: Agent regression\ndescription: Report an agent workflow or handoff regression\ntitle: "[Agent Regression]: "\nlabels: ["agent", "regression"]\nbody:\n  - type: textarea\n    id: observed\n    attributes:\n      label: Observed behavior\n    validations:\n      required: true\n  - type: textarea\n    id: expected\n    attributes:\n      label: Expected behavior\n    validations:\n      required: true\n  - type: textarea\n    id: evidence\n    attributes:\n      label: Evidence / logs\n    validations:\n      required: false\n', 'scripts/stage_recent_logs.py': 'from pathlib import Path\nimport shutil\n\nLOG_ROOTS = [Path("Logs/Audit"), Path("Logs/ManualTests"), Path("Logs/TestRuns")]\nTARGET = Path("tmp/agent-evidence")\n\n\ndef main(max_files: int = 10) -> None:\n    TARGET.mkdir(parents=True, exist_ok=True)\n    for root in LOG_ROOTS:\n        if not root.exists():\n            continue\n        files = sorted((p for p in root.rglob("*") if p.is_file()), key=lambda p: p.stat().st_mtime)\n        for src in files[-max_files:]:\n            rel = src.relative_to(root)\n            dst = TARGET / root.name / rel\n            dst.parent.mkdir(parents=True, exist_ok=True)\n            shutil.copy2(src, dst)\n    print(f"Staged bounded evidence in {TARGET}")\n\n\nif __name__ == "__main__":\n    main()\n'}
+src/agentic_project_kit/templates.py:121:GENERATED_STATUS = '# Project Status\n\nCurrent version: 0.1.0\nProject: $name\nPrimary branch: main\nRuntime entrypoint: Python package import\nProject contract: `.agentic/project.yaml`\n\n## Purpose\n\nThis is the compact current-state dashboard.\n\nIt must not become a long history file.\n\n## Current Goal\n\nEstablish the initial generated repository state and run the first local quality gate.\n\n## Current Blockers\n\n- No blockers recorded at generation time.\n\n## Live Status Commands\n\n```bash\ngit status --short\npytest -q\nagentic-kit check\nagentic-kit doctor\n```\n\n## Next Safe Step\n\nRun the generated local quality gate, review the initial project contract, and replace bootstrap decisions with project-specific decisions.\n'
+src/agentic_project_kit/cli.py:23:app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
+src/agentic_project_kit/work_orders.py:12:CONSTITUTIONAL_GATES = ("pytest", "ruff check", "check-docs", "doctor")
+src/agentic_project_kit/work_orders.py:132:    required_postconditions = ("pytest", "ruff", "check-docs", "doctor", "log exists", "no false pass")
+src/agentic_project_kit/contract.py:38:        recommended_commands=("agentic-kit check-docs", "agentic-kit doctor"),
+src/agentic_project_kit/contract.py:59:        recommended_commands=("agentic-kit check-docs",),
+src/agentic_project_kit/contract.py:80:        recommended_commands=("agentic-kit check-docs", "agentic-kit doctor", "python -m pytest -q"),
+src/agentic_project_kit/contract.py:110:        description="Human-AI development workflow with architecture review, documentation coverage, and doctor checks.",
+src/agentic_project_kit/contract.py:188:            "doctor_before_merge": True,
+src/agentic_project_kit/doctor.py:43:def build_doctor_report(project_root: Path) -> DoctorReport:
+src/agentic_project_kit/doctor.py:46:    contract_data = _load_contract_for_doctor(root)
+src/agentic_project_kit/doctor.py:62:def render_doctor_report(report: DoctorReport) -> str:
+src/agentic_project_kit/doctor.py:63:    lines = [f"Agentic project doctor report for {report.project_root}", ""]
+src/agentic_project_kit/doctor.py:79:def _load_contract_for_doctor(project_root: Path) -> dict[str, Any] | None | ValueError:
+tests/test_release.py:53:    assert "agentic-kit check-docs" in rendered
+tests/test_handoff_refresh.py:20:def test_handoff_refresh_dry_run_does_not_mutate_file(tmp_path, monkeypatch):
+tests/test_handoff_refresh.py:31:def test_handoff_refresh_write_updates_file(tmp_path, monkeypatch):
+tests/test_generator.py:105:def test_generated_project_passes_documentation_and_doctor_gates(tmp_path: Path):
+tests/test_generator.py:107:    from agentic_project_kit.doctor import build_doctor_report
+tests/test_generator.py:130:    assert build_doctor_report(target).ok
+tests/test_cockpit.py:17:    assert "gate.doctor" in action_ids
+tests/test_cockpit.py:18:    assert "gate.check-docs" in action_ids
+tests/test_ns_interpreter_and_no_exec_guard.py:20:def test_ns_has_no_top_level_exec_dispatches() -> None:
+tests/test_command_inbox_check.py:46:def test_command_inbox_check_rejects_completed_pending_command(tmp_path, monkeypatch):
+tests/test_doctor.py:4:from agentic_project_kit.doctor import DoctorStatus, build_doctor_report, render_doctor_report
+tests/test_doctor.py:31:        "  - id: doctor-test-minimal\n"
+tests/test_doctor.py:35:        "          - doctor-fixture-term\n",
+tests/test_doctor.py:76:    (root / "README.md").write_text("# Demo\n\ndoctor-fixture-term\n", encoding="utf-8")
+tests/test_doctor.py:83:def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
+tests/test_doctor.py:87:    report = build_doctor_report(tmp_path)
+tests/test_doctor.py:102:    assert "Overall: PASS" in render_doctor_report(report)
+tests/test_doctor.py:105:def test_doctor_report_fails_without_required_readme(tmp_path: Path):
+tests/test_doctor.py:108:    report = build_doctor_report(tmp_path)
+tests/test_doctor.py:113:    assert "Overall: FAIL" in render_doctor_report(report)
+tests/test_doctor.py:116:def test_doctor_report_reports_valid_project_contract(tmp_path: Path):
+tests/test_doctor.py:121:    report = build_doctor_report(tmp_path)
+tests/test_doctor.py:129:def test_doctor_policy_pack_checks_pass_when_required_files_exist(tmp_path: Path):
+tests/test_doctor.py:140:    report = build_doctor_report(tmp_path)
+tests/test_doctor.py:149:def test_doctor_policy_pack_checks_fail_when_required_files_are_missing(tmp_path: Path):
+tests/test_doctor.py:154:    report = build_doctor_report(tmp_path)
+tests/test_doctor.py:165:def test_doctor_report_fails_on_invalid_project_contract(tmp_path: Path):
+tests/test_doctor.py:174:    report = build_doctor_report(tmp_path)
+tests/test_doctor.py:184:def test_doctor_report_passes_when_versions_match(tmp_path: Path):
+tests/test_doctor.py:189:    report = build_doctor_report(tmp_path)
+tests/test_doctor.py:198:def test_doctor_report_accepts_quoted_citation_versions(tmp_path: Path):
+tests/test_doctor.py:203:    report = build_doctor_report(tmp_path)
+tests/test_doctor.py:209:def test_doctor_report_fails_on_version_drift(tmp_path: Path):
+tests/test_doctor.py:214:    report = build_doctor_report(tmp_path)
+tests/test_doctor.py:224:def test_doctor_report_fails_on_document_lifecycle_findings(tmp_path: Path):
+tests/test_doctor.py:230:    report = build_doctor_report(tmp_path)
+tests/test_slice_runner.py:33:    def failed_patch():
+tests/test_work_order_templates.py:29:    assert "doctor" in result.output
+Binary file tests/__pycache__/test_agent_command_runner_summary_footer.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_cockpit.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_generator.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_generator.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_cockpit.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_release.cpython-314.pyc matches
+Binary file tests/__pycache__/test_communication_artifact_gc.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_gui_cockpit.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_workflow_request_cli.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_work_order_prepare.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_workflow_request_cli.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_gui_cockpit.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_doctor.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_cli.cpython-314.pyc matches
+Binary file tests/__pycache__/test_doctor.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_doc_lifecycle.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_doc_lifecycle.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_agent_command_runner.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_doctor_package_version.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_next_step_state_machine.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_next_step_state_machine.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_doctor_package_version.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_agent_command_runner.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_workflow_runner_steps.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_workflow_runner_steps.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_command_inbox_check.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_work_orders.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_cli.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_cli.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_release.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_handoff_prompt.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_release.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_work_order_templates.cpython-314-pytest-9.0.3.pyc matches
+tests/test_doctor_package_version.py:3:from agentic_project_kit.doctor import DoctorStatus, build_doctor_report
+tests/test_doctor_package_version.py:8:    (root / "README.md").write_text("# Demo\n\ndoctor-fixture-term\n", encoding="utf-8")
+tests/test_doctor_package_version.py:35:        "  - id: doctor-test-minimal\n"
+tests/test_doctor_package_version.py:39:        "          - doctor-fixture-term\n",
+tests/test_doctor_package_version.py:48:def test_doctor_detects_package_init_version_drift(tmp_path: Path) -> None:
+tests/test_doctor_package_version.py:51:    report = build_doctor_report(tmp_path)
+tests/test_doctor_package_version.py:60:def test_doctor_accepts_matching_package_init_version(tmp_path: Path) -> None:
+tests/test_doctor_package_version.py:63:    report = build_doctor_report(tmp_path)
+tests/test_terminal_remote_preflight.py:6:def test_remote_mutation_preflight_passes_on_clean_worktree(monkeypatch):
+tests/test_terminal_remote_preflight.py:13:def test_remote_mutation_preflight_fails_on_any_dirty_file(monkeypatch):
+tests/test_terminal_remote_preflight.py:20:def test_terminal_remote_preflight_cli_returns_failure_for_dirty_worktree(monkeypatch, capsys):
+tests/test_workflow_runner_steps.py:14:def test_workflow_runner_prefers_venv_executable(monkeypatch, tmp_path: Path) -> None:
+tests/test_workflow_runner_steps.py:23:def test_workflow_runner_falls_back_to_executable_name(monkeypatch, tmp_path: Path) -> None:
+tests/test_workflow_runner_steps.py:29:def test_workflow_runner_uses_venv_commands_for_local_gates(monkeypatch, tmp_path: Path) -> None:
+tests/test_workflow_runner_steps.py:37:    assert _step_command("check_docs", {}) == [".venv/bin/agentic-kit", "check-docs"]
+tests/test_workflow_runner_steps.py:38:    assert _step_command("doctor", {}) == [".venv/bin/agentic-kit", "doctor"]
+tests/test_workflow_runner_steps.py:51:        "doctor",
+tests/test_pr_hygiene.py:55:def test_pr_hygiene_cli_json_runs_without_network_when_collectors_empty(monkeypatch) -> None:
+tests/test_workflow_request_cli.py:157:def test_workflow_go_requests_and_runs_one_bounded_step(tmp_path: Path, monkeypatch) -> None:
+tests/test_workflow_request_cli.py:177:def test_workflow_go_refuses_non_idle_workflow_state(tmp_path: Path, monkeypatch) -> None:
+tests/test_workflow_request_cli.py:195:def test_workflow_upload_output_uploads_latest_bounded_output(tmp_path: Path, monkeypatch) -> None:
+tests/test_workflow_request_cli.py:213:def test_workflow_upload_output_refuses_already_uploaded_state(tmp_path: Path, monkeypatch) -> None:
+tests/test_workflow_request_cli.py:272:def test_workflow_upload_alias_delegates_to_upload_output(tmp_path: Path, monkeypatch) -> None:
+tests/test_workflow_request_cli.py:290:def test_workflow_run_named_item_restores_current_work_after_bounded_step(tmp_path: Path, monkeypatch) -> None:
+tests/test_workflow_request_cli.py:329:def test_workflow_run_named_item_restores_current_work_after_failure(tmp_path: Path, monkeypatch) -> None:
+tests/test_workflow_request_cli.py:356:def test_workflow_run_named_item_does_not_replace_current_work_during_bounded_step(tmp_path: Path, monkeypatch) -> None:
+tests/test_safe_patch.py:29:def test_validate_safe_patch_script_rejects_heredoc() -> None:
+tests/test_safe_patch.py:34:def test_validate_safe_patch_script_rejects_python_c() -> None:
+tests/test_safe_patch.py:39:def test_validate_safe_patch_script_rejects_shell_parameter_expansion() -> None:
+tests/test_agent_command_runner.py:22:def test_load_current_command_missing_files(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:32:def test_load_current_command(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:41:def test_reject_duplicate_command_id(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:50:def test_reject_shell_syntax_error(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:58:def test_write_report(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:75:def test_current_branch_falls_back_outside_git_repo(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:79:def test_agent_run_executes_and_records_report(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:100:def test_pending_inbox_command_pair_requires_exactly_one_pair(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:117:def test_prepare_current_from_inbox_copies_and_removes_pair(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:133:def test_agent_next_pulls_prepares_runs_and_cleans_current(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:152:def test_main_dispatches_next_to_agent_next(monkeypatch):
+tests/test_agent_command_runner.py:159:def test_agent_run_includes_extra_upload_paths(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:176:def test_agent_next_postconditions_detect_current_files(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:184:def test_agent_next_postconditions_detect_complete_inbox_pair(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:193:def test_agent_next_postcondition_failure_blocks_success(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:204:def test_write_report_updates_latest_command_run_pointer(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:213:def test_agent_run_uploads_latest_command_run_pointer(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:230:def test_agent_next_no_command_prints_visible_footer(tmp_path, monkeypatch, capsys):
+tests/test_agent_command_runner.py:239:def test_agent_next_pass_prints_p_footer(tmp_path, monkeypatch, capsys):
+tests/test_agent_command_runner.py:254:def test_agent_next_fail_prints_f_footer(tmp_path, monkeypatch, capsys):
+tests/test_agent_command_runner.py:269:def test_agent_next_pull_failure_prints_hard_fail_footer(tmp_path, monkeypatch, capsys):
+tests/test_agent_command_runner.py:281:def test_agent_next_ambiguous_commands_prints_hard_fail_footer(tmp_path, monkeypatch, capsys):
+tests/test_agent_command_runner.py:298:def test_agent_next_postcondition_failure_prints_hard_fail_footer(tmp_path, monkeypatch, capsys):
+tests/test_next_step_state_machine.py:15:def test_idle_with_ready_workflow_file_remains_idle(monkeypatch, tmp_path: Path) -> None:
+tests/test_next_step_state_machine.py:19:    workflow_file.write_text("name: demo\nstate: READY\nsteps:\n  - doctor\n", encoding="utf-8")
+tests/test_next_step_state_machine.py:33:def test_request_workflow_marks_current_work_requested(monkeypatch, tmp_path: Path) -> None:
+tests/test_next_step_state_machine.py:36:    workflow_file.write_text("name: demo\nstate: READY\nsteps:\n  - doctor\n", encoding="utf-8")
+tests/test_next_step_state_machine.py:42:    assert workflow_file.read_text(encoding="utf-8") == "name: demo\nstate: REQUESTED\nsteps:\n  - doctor\n"
+tests/test_next_step_state_machine.py:45:def test_set_workflow_request_state_inserts_missing_state(monkeypatch, tmp_path: Path) -> None:
+tests/test_next_step_state_machine.py:48:    workflow_file.write_text("name: demo\nsteps:\n  - doctor\n", encoding="utf-8")
+tests/test_next_step_state_machine.py:54:    assert workflow_file.read_text(encoding="utf-8") == "name: demo\nstate: REQUESTED\nsteps:\n  - doctor\n"
+tests/test_next_step_state_machine.py:57:def test_idle_with_requested_workflow_file_starts_workflow(monkeypatch, tmp_path: Path) -> None:
+tests/test_next_step_state_machine.py:61:    workflow_file.write_text("name: demo\nstate: REQUESTED\nsteps:\n  - doctor\n", encoding="utf-8")
+tests/test_next_step_state_machine.py:75:def test_idle_without_workflow_file_remains_idle(monkeypatch, tmp_path: Path) -> None:
+tests/test_next_step_state_machine.py:92:def test_ensure_project_environment_creates_venv_when_missing(monkeypatch, tmp_path: Path) -> None:
+tests/test_next_step_state_machine.py:107:def test_ensure_project_environment_installs_missing_dev_tools(monkeypatch, tmp_path: Path) -> None:
+tests/test_next_step_state_machine.py:121:def test_ensure_project_environment_noops_when_tools_exist(monkeypatch, tmp_path: Path) -> None:
+tests/test_cli.py:60:    assert data["governance"]["doctor_before_merge"] is True
+tests/test_cli.py:240:    assert "agentic-kit check-docs" in result.output
+tests/test_cli.py:241:    assert "agentic-kit doctor" in result.output
+tests/test_work_orders.py:13:        "command": ".venv/bin/python -m pytest -q && .venv/bin/ruff check . && PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli check-docs && PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli doctor",
+tests/test_work_orders.py:16:        "postconditions": ["pytest passes", "ruff passes", "check-docs passes", "doctor passes", "log exists", "no false PASS"],
+tests/test_work_orders.py:78:    assert any("check-docs" in error for error in errors)
+tests/test_work_orders.py:79:    assert any("doctor" in error for error in errors)
+tests/test_work_orders.py:83:    order = parse_work_order(valid_order_data(command=".venv/bin/python -m pytest -q && .venv/bin/ruff check . && check-docs && doctor && printf '### RESULT: PASS ###'"))
+tests/test_work_orders.py:120:        "id: demo\ntitle: Demo\nsafety: read_only\nexpected_branch: feature/demo\ncommand: pytest && ruff check . && check-docs && doctor\nlog_path: docs/reports/terminal/demo.log\npostconditions:\n  - pytest ruff check-docs doctor log exists no false PASS\nexpected_outputs:\n  - docs/reports/terminal/demo.log\n",
+tests/test_work_orders.py:149:def test_work_order_execute_wrong_branch_writes_fail_log(tmp_path, monkeypatch):
+tests/test_work_orders.py:156:        "id: demo\ntitle: Demo\nsafety: read_only\nexpected_branch: feature/demo\ncommand: pytest && ruff check . && check-docs && doctor\nlog_path: docs/reports/terminal/demo.log\npostconditions:\n  - pytest passes\n  - ruff passes\n  - check-docs passes\n  - doctor passes\n  - log exists\n  - no false PASS\nexpected_outputs:\n  - docs/reports/terminal/demo.log\n",
+tests/test_work_orders.py:169:def test_work_order_run_blocks_when_governance_fails(tmp_path, monkeypatch):
+tests/test_work_orders.py:177:        command="pytest && ruff check . && agentic-kit check-docs && agentic-kit doctor",
+tests/test_work_orders.py:182:            "check-docs passes",
+tests/test_work_orders.py:183:            "doctor passes",
+tests/test_terminal_logging.py:14:def test_latest_pointer_roundtrip(tmp_path, monkeypatch):
+tests/test_terminal_logging.py:26:def test_terminal_status_without_pointer(tmp_path, monkeypatch):
+tests/test_terminal_logging.py:33:def test_terminal_status_rejects_missing_pointer_target(tmp_path, monkeypatch):
+tests/test_terminal_logging.py:54:def test_terminal_clean_check_accepts_only_terminal_logs(monkeypatch):
+tests/test_terminal_logging.py:61:def test_terminal_clean_check_rejects_non_log_dirty_files(monkeypatch):
+tests/test_terminal_logging.py:75:def test_finalize_terminal_log_copies_tmp_log_to_terminal_dir(tmp_path, monkeypatch):
+tests/test_terminal_logging.py:87:def test_finalize_terminal_log_rejects_terminal_dir_source(tmp_path, monkeypatch):
+tests/test_terminal_logging.py:97:def test_finalize_terminal_log_requires_result_marker(tmp_path, monkeypatch):
+tests/test_work_order_prepare.py:6:BASIC_TEMPLATE = """title: Basic gates\nsafety: read_only\ncommand: pytest && ruff check . && check-docs && doctor\nlog_path: docs/reports/terminal/{work_order_id}.log\npostconditions:\n  - pytest passes\n  - ruff passes\n  - check-docs passes\n  - doctor passes\n  - log exists\n  - no false pass\nexpected_outputs:\n  - docs/reports/terminal/{work_order_id}.log\n"""
+tests/test_work_order_prepare.py:27:def test_work_order_prepare_cli_creates_order(tmp_path, monkeypatch):
+tests/test_todo.py:8:def test_complete_item_updates_status_and_evidence(tmp_path, monkeypatch):
+tests/test_todo.py:49:def test_render_markdown_from_todo_yaml(tmp_path, monkeypatch):
+tests/test_quality_first_workflow_lessons.py:14:def test_recent_patch_failure_patterns_are_recorded() -> None:
+./ns:270:  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli check-docs || STATUS=1
+./ns:272:  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli doctor || STATUS=1
+
+### FINAL SUMMARY CONTRACT MODULE ###
+from __future__ import annotations
+
+import re
+
+SUMMARY_FIELDS = (
+    "WORK RESULT",
+    "EVIDENCE RESULT",
+    "OVERALL RESULT",
+    "REMOTE_EVIDENCE",
+    "terminal_log",
+    "command_report",
+    "NEXT_CHAT_REPLY",
+)
+
+VALID_WORK = {"PASS", "FAIL", "PENDING", "HARD-FAIL"}
+VALID_EVIDENCE = {"PASS", "FAIL", "PARTIAL", "CHAT_ONLY", "NOT_REQUIRED"}
+VALID_REMOTE = {"PASS", "FAIL", "PARTIAL", "NOT_REQUIRED"}
+VALID_REPLY = {"p", "f", "paste-output", "continue", "stop"}
+
+BLOCK_RE = re.compile(r"(?ms)^={64}\nSUMMARY\n(?P<body>.*?)^={64}\s*$")
+RESULT_RE = re.compile(r"^### RESULT: (PASS|FAIL|PENDING|HARD-FAIL) ###$")
+
+def parse_final_summary(text: str) -> dict[str, str]:
+    matches = list(BLOCK_RE.finditer(text.rstrip()))
+    if len(matches) != 1:
+        raise ValueError("expected exactly one final SUMMARY block at end of text")
+    body = matches[0].group("body").strip().splitlines()
+    values: dict[str, str] = {}
+    for line in body:
+        if line.startswith("### RESULT:"):
+            if not RESULT_RE.match(line):
+                raise ValueError("invalid final result marker")
+            values["RESULT_MARKER"] = line.removeprefix("### RESULT: ").removesuffix(" ###")
+        elif "=" in line:
+            key, value = line.split("=", 1)
+            values[key.strip()] = value.strip()
+        elif ":" in line:
+            key, value = line.split(":", 1)
+            values[key.strip()] = value.strip()
+    missing = [field for field in SUMMARY_FIELDS if field not in values]
+    if missing:
+        raise ValueError(f"missing summary fields: {missing}")
+    if "RESULT_MARKER" not in values:
+        raise ValueError("missing final result marker")
+    return values
+
+def validate_final_summary(text: str) -> list[str]:
+    errors: list[str] = []
+    try:
+        values = parse_final_summary(text)
+    except ValueError as exc:
+        return [str(exc)]
+    work = values["WORK RESULT"]
+    evidence = values["EVIDENCE RESULT"]
+    overall = values["OVERALL RESULT"]
+    remote = values["REMOTE_EVIDENCE"]
+    reply = values["NEXT_CHAT_REPLY"]
+    marker = values["RESULT_MARKER"]
+    if work not in VALID_WORK:
+        errors.append("invalid WORK RESULT")
+    if evidence not in VALID_EVIDENCE:
+        errors.append("invalid EVIDENCE RESULT")
+    if overall not in VALID_WORK:
+        errors.append("invalid OVERALL RESULT")
+    if remote not in VALID_REMOTE:
+        errors.append("invalid REMOTE_EVIDENCE")
+    if reply not in VALID_REPLY:
+        errors.append("invalid NEXT_CHAT_REPLY")
+    if marker != overall:
+        errors.append("final result marker must match OVERALL RESULT")
+    if overall == "PASS" and work != "PASS":
+        errors.append("OVERALL RESULT: PASS requires WORK RESULT: PASS")
+    if overall == "PASS" and evidence not in {"PASS", "NOT_REQUIRED"}:
+        errors.append("OVERALL RESULT: PASS requires sufficient evidence")
+    if overall == "PASS" and remote not in {"PASS", "NOT_REQUIRED"}:
+        errors.append("OVERALL RESULT: PASS requires REMOTE_EVIDENCE: PASS or NOT_REQUIRED")
+    if remote != "PASS" and reply == "p":
+        errors.append("NEXT_CHAT_REPLY: p requires REMOTE_EVIDENCE: PASS")
+    final_start = text.rstrip().rfind("================================================================\nSUMMARY")
+    previous = text[:final_start]
+    if "### RESULT: FAIL ###" in previous and overall == "PASS":
+        errors.append("previous inner FAIL cannot be relabeled as OVERALL RESULT: PASS")
+    if "### RESULT: HARD-FAIL ###" in previous and overall == "PASS":
+        errors.append("previous inner HARD-FAIL cannot be relabeled as OVERALL RESULT: PASS")
+    return errors
+
+### EXISTING COVERAGE TERM TEST ###
+from pathlib import Path
+
+import yaml
+
+
+def test_documentation_coverage_terms_are_strings() -> None:
+    data = yaml.safe_load(Path("docs/DOCUMENTATION_COVERAGE.yaml").read_text(encoding="utf-8"))
+    offenders = []
+    for rule in data.get("rules", []):
+        rule_id = rule.get("id", "<unknown>")
+        for document in rule.get("documents", []):
+            doc_path = document.get("path", "<unknown>")
+            for term in document.get("terms", []):
+                if not isinstance(term, str):
+                    offenders.append((rule_id, doc_path, term))
+    assert offenders == []
+
+### YAML GOVERNANCE TEST ###
+from pathlib import Path
+
+import yaml
+
+YAML_GOVERNANCE_FILES = [
+    ".agentic/handoff_state.yaml",
+    ".agentic/no_copy_terminal_policy.yaml",
+    "docs/DOCUMENTATION_COVERAGE.yaml",
+]
+
+
+def test_yaml_governance_files_are_parseable() -> None:
+    for path in YAML_GOVERNANCE_FILES:
+        loaded = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+        assert loaded is not None, path
+
+
+def test_yaml_integrity_rule_is_recorded() -> None:
+    data = yaml.safe_load(Path(".agentic/handoff_state.yaml").read_text(encoding="utf-8"))
+    rule_ids = {item.get("id") for item in data.get("rules", []) if isinstance(item, dict)}
+    pattern_ids = {
+        item.get("id")
+        for item in data.get("recent_failure_patterns", [])
+        if isinstance(item, dict)
+    }
+    assert "yaml-structured-mutation-only" in rule_ids
+    assert "repeated-yaml-governance-file-corruption" in pattern_ids
+
+### PLANNING NOTE ###
+# Patch Artifact Preflight Slice
+
+Purpose: stop complex shell-generated patch blocks from damaging Python, YAML, Markdown, coverage files, or terminal result contracts.
+
+This slice must prefer deterministic preflight over fast patching.
+
+Required checks:
+
+- patch scripts must pass Python syntax checks before execution
+- generated or changed Python files must pass py_compile before full gates
+- governance YAML files must parse before and after mutation
+- documentation coverage terms must remain strings
+- terminal logs must satisfy the mandatory final SUMMARY contract
+- gh CLI JSON fields must not be guessed; use supported fields such as state, mergedAt, mergeCommit, url
+- no inner FAIL may be relabeled as OVERALL RESULT: PASS
+
+Non-goals:
+
+- no GUI work in this slice
+- no release work in this slice
+- no broad workflow rewrite in this slice
+
+Acceptance:
+
+- add a small CLI or ./ns-accessible preflight command
+- add regression tests for YAML parse, coverage-term types, py_compile detection, final-summary validation, and unsupported shortcut patterns
+- keep implementation small and deterministic
+
+### LIGHT GATES ###
+
+### STATE FRESHNESS CHECK ###
+PASS: no stale STATUS/HANDOFF current-state fragments found
+
+### HANDOFF CHECK ###
+Persistent handoff state check passed
+
+### GOVERNANCE CHECK ###
+Governance check passed
+
+### CHECK DOCS ###
+Agentic project check passed
