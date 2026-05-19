@@ -96,3 +96,7 @@ The no-copy/evidence workflow now requires a mandatory final SUMMARY block for r
 The project now treats repeated assistant/workflow mistakes as product defects. The target is not to get a block through quickly; the target is the best deterministic solution for the recurring problem.
 
 Current lessons: avoid nested triple-quote code generators, quote YAML coverage terms containing colons, compile generated Python before relying on gates, validate final SUMMARY blocks before asking for `p`, and never allow a later evidence push to convert failed work into PASS.
+
+## YAML Governance Integrity Lesson
+
+YAML governance files have been damaged more than once by text-style patching. The project now treats this as a recurring workflow defect. `.agentic/handoff_state.yaml`, `.agentic/no_copy_terminal_policy.yaml`, `docs/DOCUMENTATION_COVERAGE.yaml`, and similar control files must be mutated through parse-modify-dump or an equivalent structured path, then parsed again before gates.

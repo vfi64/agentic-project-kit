@@ -65,3 +65,7 @@ Relevant terminal blocks must end with the mandatory final SUMMARY block. Use `N
 ## Quality-First Workflow Lessons
 
 Use the best deterministic fix, not the shortest patch. New recurring problems must be recorded as rules, failure patterns, tests, or tooling. Specifically: no nested triple-quote code generators, no unquoted YAML coverage terms with colons, no uncompiled generated Python, and no final PASS after an inner FAIL.
+
+## YAML Governance Integrity Lesson
+
+Do not patch YAML governance files by injecting unquoted text. Use structured YAML mutation and parse checks before gate runs. Repeated YAML corruption is tracked as `repeated-yaml-governance-file-corruption` and the active rule is `yaml-structured-mutation-only`.
