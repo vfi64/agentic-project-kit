@@ -12,3 +12,4 @@
 {"command_id": "harden-inbox-completed-command-guard-001", "exit_code": 1, "outcome": "FAIL_COMMAND", "script_sha256": "missing", "timestamp_utc": "2026-05-18T20:52:15.911886+00:00"}
 {"command_id": "finalize-no-copy-after-pr423-001", "exit_code": 1, "outcome": "FAIL_COMMAND", "script_sha256": "missing", "timestamp_utc": "2026-05-19T05:37:54.907531+00:00"}
 {"command_id": "20260519-remote-command-first-rule", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "a8ea8da10562cc1d65567a773e1bce821f269c1132838d5cda944e14c3ee39c1", "timestamp_utc": "2026-05-19T12:45:10.286050+00:00"}
+{"command_id": "20260519-merge-pr444-remote-first-no-guess", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "51805c5fc6e797604173dd99d756ed0924b0b6a7122ed2eb5ddbcd1c3da5c28b", "timestamp_utc": "2026-05-19T14:52:29.110169+00:00"}
