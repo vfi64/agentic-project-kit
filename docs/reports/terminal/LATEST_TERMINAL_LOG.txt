@@ -1,1 +1,1 @@
-docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log
+docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log

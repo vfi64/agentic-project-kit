@@ -1,0 +1,339 @@
+terminal_log=docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log
+### RUN: sh .agentic/commands/current.sh
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+INSPECT FINAL SUMMARY RUNNER ENFORCEMENT
+### PRECHECK ###
+main
+ D .agentic/commands/inbox/20260519-final-summary-runner-inspection.sh
+ D .agentic/commands/inbox/20260519-final-summary-runner-inspection.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log
+883629e Queue final summary runner inspection command
+46c1e3e Queue final summary runner inspection metadata
+a222790 Add persistent final summary contract (#449)
+f2264f4 Complete final summary contract command pair
+afa6abf Queue final summary contract command
+9474718 Guard agent-next staging against missing paths (#448)
+b9a628c Record agent command run 20260519-agent-next-queue-health
+31ee564 Queue agent-next queue health metadata
+
+### SYNC MAIN ###
+Already on 'main'
+D	.agentic/commands/inbox/20260519-final-summary-runner-inspection.sh
+D	.agentic/commands/inbox/20260519-final-summary-runner-inspection.yaml
+M	docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### FINAL SUMMARY CONTRACT EVIDENCE ###
+.agentic/no_copy_terminal_policy.yaml:34:  failure_rule: "If the final summary cannot prove REMOTE_EVIDENCE: PASS, the user must be told that paste-output is still required."
+.agentic/no_copy_terminal_policy.yaml:38:  requirement: "Every relevant terminal work block must end with the exact SUMMARY block containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, and the final result marker."
+.agentic/no_copy_terminal_policy.yaml:42:  next_reply_rule: "NEXT_CHAT_REPLY: p is allowed only when OVERALL RESULT: PASS and REMOTE_EVIDENCE: PASS."
+.agentic/commands/executed.jsonl:21:{"command_id": "20260519-final-summary-contract", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "fdaca813f779798acc766a0e40d11c4cd2405e0f15617a782aea7b0de0cf16ea", "timestamp_utc": "2026-05-19T19:01:46.267273+00:00"}
+.agentic/commands/current.sh:18:grep -R "final-summary-contract\|framed SUMMARY\|WORK RESULT:\|REMOTE_EVIDENCE:\|NEXT_CHAT_REPLY" -n .agentic docs src tests | head -160
+.agentic/commands/current.sh:32:printf '%s\n' 'WORK RESULT: PASS'
+.agentic/commands/current.sh:35:printf '%s\n' 'REMOTE_EVIDENCE: PARTIAL'
+.agentic/commands/current.sh:38:printf '%s\n' 'NEXT_CHAT_REPLY: p'
+.agentic/compiled_agent_context.yaml:26:- id: final-summary-contract
+.agentic/compiled_agent_context.yaml:27:  summary: Preserve the framed SUMMARY contract in every final block.
+docs/handoff/CURRENT_HANDOFF.md:64:Relevant terminal blocks must end with the mandatory final SUMMARY block. Use `NEXT_CHAT_REPLY: p` only when `OVERALL RESULT: PASS` and `REMOTE_EVIDENCE: PASS`. Use `NEXT_CHAT_REPLY: f` when the work failed but remote evidence is available. Use `NEXT_CHAT_REPLY: paste-output` when remote evidence is missing or incomplete.
+docs/handoff/CURRENT_HANDOFF.md:89:- Final summary contract: relevant workflow blocks must end with the framed SUMMARY contract containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, and final result marker.
+docs/DOCUMENTATION_COVERAGE.yaml:527:  - id: final-summary-contract-coverage
+docs/DOCUMENTATION_COVERAGE.yaml:549:          - 'NEXT_CHAT_REPLY: p'
+docs/DOCUMENTATION_COVERAGE.yaml:550:          - 'REMOTE_EVIDENCE: PASS'
+docs/TEST_GATES.md:276:Long-running workflows must not leave the user guessing whether copy-and-paste is required. A run may claim no-copy completion only when its final summary includes `REMOTE_EVIDENCE: PASS` and the relevant terminal log or command-run report has been committed and pushed. If that proof is unavailable, the final summary must say that remote evidence is incomplete and paste-output is required.
+docs/TEST_GATES.md:288:Every relevant terminal work block must end with a machine-readable SUMMARY block containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, and the final result marker.
+docs/TEST_GATES.md:290:A final `### RESULT: PASS ###` is valid only when `WORK RESULT: PASS`, `OVERALL RESULT: PASS`, and, for relevant workflows, `REMOTE_EVIDENCE: PASS` are all true. A previous inner FAIL must not be converted into a final PASS by a later commit or push of evidence. Evidence success and work success are separate outcomes.
+docs/TEST_GATES.md:321:- Final summary contract: relevant workflow blocks must end with the framed SUMMARY contract containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, and final result marker.
+docs/STATUS.md:93:The no-copy/evidence workflow now requires a mandatory final SUMMARY block for relevant terminal work. `WORK RESULT`, `EVIDENCE RESULT`, `OVERALL RESULT`, `REMOTE_EVIDENCE`, `terminal_log`, `command_report`, and `NEXT_CHAT_REPLY` must be reported separately. A final PASS requires work success and evidence success; a pushed log can prove a failure without turning that failure into success.
+docs/STATUS.md:120:- Final summary contract: relevant workflow blocks must end with the framed SUMMARY contract containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, and final result marker.
+docs/governance/FINAL_SUMMARY_CONTRACT.md:3:Every relevant workflow block must end with the framed SUMMARY contract. This contract is durable and must not disappear across chats, handoffs, or command-generation paths.
+docs/governance/FINAL_SUMMARY_CONTRACT.md:10:WORK RESULT: PASS|FAIL|PENDING|HARD-FAIL|NO-COMMAND
+docs/governance/FINAL_SUMMARY_CONTRACT.md:13:REMOTE_EVIDENCE: PASS|FAIL|PARTIAL|NOT_REQUIRED
+docs/governance/FINAL_SUMMARY_CONTRACT.md:16:NEXT_CHAT_REPLY: p|paste-output|ask-agent-to-queue-command|continue|stop
+docs/governance/FINAL_SUMMARY_CONTRACT.md:21:This is the preferred end marker for agent-directed terminal blocks, remote command reports, release work, merge verification, and handoff-sensitive work. Short local experiments may use a smaller marker, but any state-changing or evidence-bearing workflow must use the framed SUMMARY.
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:182:* Add framed SUMMARY footer for no-copy workflow by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/427
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:236:WORK RESULT: PASS
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:239:REMOTE_EVIDENCE: PASS
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:241:NEXT_CHAT_REPLY: p
+docs/reports/terminal/20260519-125752_planning-state-drift-diagnosis-v0.3.27.log:339:docs/TEST_GATES.md:276:Long-running workflows must not leave the user guessing whether copy-and-paste is required. A run may claim no-copy completion only when its final summary includes `REMOTE_EVIDENCE: PASS` and the relevant terminal log or command-run report has been committed and pushed. If that proof is unavailable, the final summary must say that remote evidence is incomplete and paste-output is required.
+docs/reports/terminal/20260519-144503_20260519-remote-command-first-rule.log:153:WORK RESULT: PASS
+docs/reports/terminal/20260519-144503_20260519-remote-command-first-rule.log:156:REMOTE_EVIDENCE: PASS
+docs/reports/terminal/20260519-144503_20260519-remote-command-first-rule.log:159:NEXT_CHAT_REPLY: p
+docs/reports/terminal/20260519-110401_mandatory-terminal-evidence-capture-fix-start.log:51:318:    print(f"WORK RESULT: {work_result}")
+docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log:261:src/agentic_project_kit/agent_command_runner.py:318:    print(f"WORK RESULT: {work_result}")
+docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log:282:tests/test_agent_command_runner_summary_footer.py:9:    assert "WORK RESULT: PASS" in out
+docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log:284:tests/test_agent_command_runner_summary_footer.py:19:    assert "WORK RESULT: FAIL" in out
+docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log:286:tests/test_agent_command_runner_summary_footer.py:30:    assert "WORK RESULT: HARD-FAIL" in out
+docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log:648:WORK RESULT: FAIL
+docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log:652:REMOTE_EVIDENCE: UNKNOWN_OR_PARTIAL
+docs/reports/terminal/20260519-192233_20260519-compiled-context-fast-path.log:8:WORK RESULT: PENDING
+docs/reports/terminal/20260519-192233_20260519-compiled-context-fast-path.log:11:REMOTE_EVIDENCE: NOT_REQUIRED
+docs/reports/terminal/20260519-192233_20260519-compiled-context-fast-path.log:14:NEXT_CHAT_REPLY: continue
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:1:terminal_log=docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:16: D .agentic/commands/inbox/20260519-final-summary-contract.sh
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:17: D .agentic/commands/inbox/20260519-final-summary-contract.yaml
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:21:?? docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:23:D	.agentic/commands/inbox/20260519-final-summary-contract.sh
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:24:D	.agentic/commands/inbox/20260519-final-summary-contract.yaml
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:30:Switched to a new branch 'feature/final-summary-contract'
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:37:        assert "id: final-summary-contract" in text
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:38:>       assert "framed SUMMARY contract" in text
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:39:E       assert 'framed SUMMARY contract' in "schema_version: 1\nupdated:\n  date: '2026-05-19'\n  reason: compiled machine-readable agent context baseline\npurpos... queuing a complete command pair or exactly one minimal fallback command. Do not loop on ask-agent-to-queue-command.\n"
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:51:feature/final-summary-contract
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:52: D .agentic/commands/inbox/20260519-final-summary-contract.sh
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:53: D .agentic/commands/inbox/20260519-final-summary-contract.yaml
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:62:?? docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:77:        assert "id: final-summary-contract" in text
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:78:>       assert "framed SUMMARY contract" in text
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:79:E       assert 'framed SUMMARY contract' in "schema_version: 1\nupdated:\n  date: '2026-05-19'\n  reason: compiled machine-readable agent context baseline\npurpos... queuing a complete command pair or exactly one minimal fallback command. Do not loop on ask-agent-to-queue-command.\n"
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:122:feature/final-summary-contract
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:123: D .agentic/commands/inbox/20260519-final-summary-contract.sh
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:124: D .agentic/commands/inbox/20260519-final-summary-contract.yaml
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:133:?? docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:136: D .agentic/commands/inbox/20260519-final-summary-contract.sh
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:137: D .agentic/commands/inbox/20260519-final-summary-contract.yaml
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:146:?? docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:147:[feature/final-summary-contract 11a7ec3] Add persistent final summary contract
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:151:remote: Create a pull request for 'feature/final-summary-contract' on GitHub by visiting:        
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:152:remote:      https://github.com/vfi64/agentic-project-kit/pull/new/feature/final-summary-contract        
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:155: * [new branch]      feature/final-summary-contract -> feature/final-summary-contract
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:156:branch 'feature/final-summary-contract' set up to track 'origin/feature/final-summary-contract'.
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:176:WORK RESULT: PASS
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:179:REMOTE_EVIDENCE: PASS
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:181:command_report=docs/reports/command_runs/20260519-final-summary-contract.md
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:182:NEXT_CHAT_REPLY: p
+docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log:152:WORK RESULT: PASS
+docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log:155:REMOTE_EVIDENCE: PASS
+docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log:158:NEXT_CHAT_REPLY: p
+docs/reports/terminal/20260519-113208_repair-pr439-v0.3.27-doi-metadata.log:211:* Add framed SUMMARY footer for no-copy workflow by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/427
+docs/reports/terminal/20260519-113208_repair-pr439-v0.3.27-doi-metadata.log:267:WORK RESULT: PASS
+docs/reports/terminal/20260519-113208_repair-pr439-v0.3.27-doi-metadata.log:270:REMOTE_EVIDENCE: PASS
+docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:165:WORK RESULT: PASS
+docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:168:REMOTE_EVIDENCE: PASS
+docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:171:NEXT_CHAT_REPLY: p
+docs/reports/terminal/20260519-112522_record-v0.3.27-doi-metadata.log:161:* Add framed SUMMARY footer for no-copy workflow by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/427
+docs/reports/terminal/20260519-112522_record-v0.3.27-doi-metadata.log:213:WORK RESULT: PASS
+docs/reports/terminal/20260519-112522_record-v0.3.27-doi-metadata.log:216:REMOTE_EVIDENCE: PASS
+docs/reports/terminal/20260519-165218_20260519-merge-pr444-remote-first-no-guess.log:121:WORK RESULT: PASS
+docs/reports/terminal/20260519-165218_20260519-merge-pr444-remote-first-no-guess.log:124:REMOTE_EVIDENCE: PASS
+docs/reports/terminal/20260519-165218_20260519-merge-pr444-remote-first-no-guess.log:127:NEXT_CHAT_REPLY: p
+docs/reports/terminal/20260519-135415_inspect-patch-artifact-preflight-integration.log:121:tmp/20260519-131236_final-summary-contract-pr440.log
+docs/reports/terminal/20260519-135415_inspect-patch-artifact-preflight-integration.log:937:    "NEXT_CHAT_REPLY",
+docs/reports/terminal/20260519-135415_inspect-patch-artifact-preflight-integration.log:982:    reply = values["NEXT_CHAT_REPLY"]
+docs/reports/terminal/20260519-135415_inspect-patch-artifact-preflight-integration.log:993:        errors.append("invalid NEXT_CHAT_REPLY")
+docs/reports/terminal/20260519-135415_inspect-patch-artifact-preflight-integration.log:997:        errors.append("OVERALL RESULT: PASS requires WORK RESULT: PASS")
+docs/reports/terminal/20260519-135415_inspect-patch-artifact-preflight-integration.log:1001:        errors.append("OVERALL RESULT: PASS requires REMOTE_EVIDENCE: PASS or NOT_REQUIRED")
+docs/reports/terminal/20260519-135415_inspect-patch-artifact-preflight-integration.log:1003:        errors.append("NEXT_CHAT_REPLY: p requires REMOTE_EVIDENCE: PASS")
+docs/reports/terminal/20260519-201837_20260519-agent-next-queue-health.log:80:- id: final-summary-contract
+docs/reports/terminal/20260519-201837_20260519-agent-next-queue-health.log:182:WORK RESULT: PASS
+docs/reports/terminal/20260519-201837_20260519-agent-next-queue-health.log:185:REMOTE_EVIDENCE: PASS
+docs/reports/terminal/20260519-201837_20260519-agent-next-queue-health.log:188:NEXT_CHAT_REPLY: p
+docs/reports/terminal/20260519-110522_mandatory-terminal-evidence-contract-work.log:30:+  failure_rule: If the final summary cannot prove REMOTE_EVIDENCE: PASS, the user must be told that paste-output is still required.
+docs/reports/terminal/20260519-110522_mandatory-terminal-evidence-contract-work.log:44:+Long-running workflows must not leave the user guessing whether copy-and-paste is required. A run may claim no-copy completion only when its final summary includes `REMOTE_EVIDENCE: PASS` and the relevant terminal log or command-run report has been committed and pushed. If that proof is unavailable, the final summary must say that remote evidence is incomplete and paste-output is required.
+docs/reports/terminal/20260519-110522_mandatory-terminal-evidence-contract-work.log:60:+    assert "REMOTE_EVIDENCE: PASS" in text
+docs/reports/terminal/20260519-110522_mandatory-terminal-evidence-contract-work.log:185:E                        ... ary cannot prove REMOTE_EVIDENCE: PASS, the user must be told th ... 
+docs/reports/terminal/20260519-110522_mandatory-terminal-evidence-contract-work.log:383:E                        ... ary cannot prove REMOTE_EVIDENCE: PASS, the user must be told th ... 
+docs/reports/terminal/20260519-111444_publish-v0.3.27.log:267:Correct classification: WORK RESULT: FAIL; REMOTE_EVIDENCE: PASS_FOR_FAILED_ATTEMPT_ONLY.
+docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log:231:WORK RESULT: FAIL
+docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log:234:REMOTE_EVIDENCE: FAIL
+docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log:235:NEXT_CHAT_REPLY: paste-output
+docs/reports/terminal/20260518-222028_human-reply-footer-contract.log:22:    "print(\\"PASS_EXECUTED\\")": "print(\\"PASS_EXECUTED\\")\\n        print(NEXT_CHAT_REPLY_PASS)",
+docs/reports/command_runs/20260519-final-summary-contract.md:1:# Agent command run: 20260519-final-summary-contract
+docs/reports/command_runs/20260519-final-summary-contract.md:7:- Branch: feature/final-summary-contract
+docs/reports/command_runs/20260519-final-summary-contract.md:9:- Terminal log: docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log
+docs/reports/command_runs/LATEST_COMMAND_RUN.txt:1:docs/reports/command_runs/20260519-final-summary-contract.md
+src/agentic_project_kit/agent_command_runner.py:336:    print(f"WORK RESULT: {work_result}")
+Binary file src/agentic_project_kit/__pycache__/final_summary_contract.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/agent_command_runner.cpython-314.pyc matches
+src/agentic_project_kit/final_summary_contract.py:12:    "NEXT_CHAT_REPLY",
+src/agentic_project_kit/final_summary_contract.py:57:    reply = values["NEXT_CHAT_REPLY"]
+src/agentic_project_kit/final_summary_contract.py:68:        errors.append("invalid NEXT_CHAT_REPLY")
+src/agentic_project_kit/final_summary_contract.py:72:        errors.append("OVERALL RESULT: PASS requires WORK RESULT: PASS")
+src/agentic_project_kit/final_summary_contract.py:76:        errors.append("OVERALL RESULT: PASS requires REMOTE_EVIDENCE: PASS or NOT_REQUIRED")
+src/agentic_project_kit/final_summary_contract.py:78:        errors.append("NEXT_CHAT_REPLY: p requires REMOTE_EVIDENCE: PASS")
+tests/test_final_summary_contract.py:5:    "WORK RESULT:",
+tests/test_final_summary_contract.py:8:    "REMOTE_EVIDENCE:",
+tests/test_final_summary_contract.py:11:    "NEXT_CHAT_REPLY:",
+tests/test_final_summary_contract.py:25:    assert "id: final-summary-contract" in text
+tests/test_final_summary_contract.py:26:    assert "framed SUMMARY contract" in text
+tests/test_no_copy_terminal_policy.py:19:    assert "REMOTE_EVIDENCE: PASS" in text
+Binary file tests/__pycache__/test_agent_command_runner_summary_footer.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_final_summary_contract.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_final_summary_contract.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_compiled_agent_context.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_no_copy_terminal_policy.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_no_copy_terminal_policy.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_final_summary_contract.cpython-314.pyc matches
+tests/test_compiled_agent_context.py:15:    required = {"remote-first-no-guess", "final-summary-contract", "patch-artifact-preflight", "rules-must-be-test-backed"}
+tests/test_agent_command_runner_summary_footer.py:9:    assert "WORK RESULT: PASS" in out
+tests/test_agent_command_runner_summary_footer.py:19:    assert "WORK RESULT: FAIL" in out
+tests/test_agent_command_runner_summary_footer.py:30:    assert "WORK RESULT: HARD-FAIL" in out
+
+### AGENT RUNNER FOOTER LOCATIONS ###
+src/agentic_project_kit/agent_command_runner.py:191:def write_report(command: AgentCommand, outcome: str, exit_code: int, log_path: Path | None, detail: str = "") -> Path:
+src/agentic_project_kit/agent_command_runner.py:268:        write_report(command, validation_outcome, 1, None, validation_detail)
+src/agentic_project_kit/agent_command_runner.py:282:    report = write_report(command, outcome, exit_code, log_path)
+src/agentic_project_kit/agent_command_runner.py:301:def print_agent_next_footer(outcome: str, reply: str, reason: str = "") -> None:
+src/agentic_project_kit/agent_command_runner.py:303:    print(f"### AGENT-NEXT RESULT: {outcome} ###")
+src/agentic_project_kit/agent_command_runner.py:306:        print("### NEXT CHAT REPLY: PASS -> p ###")
+src/agentic_project_kit/agent_command_runner.py:308:        print("### NEXT CHAT REPLY: FAIL -> f ###")
+src/agentic_project_kit/agent_command_runner.py:310:        print("### NEXT CHAT REPLY: HARD-FAIL -> paste output ###")
+src/agentic_project_kit/agent_command_runner.py:312:        print("### NEXT CHAT REPLY: NO-COMMAND -> ask agent to queue command ###")
+src/agentic_project_kit/agent_command_runner.py:317:    print("### END AGENT-NEXT RESULT ###")
+src/agentic_project_kit/agent_command_runner.py:335:    print("SUMMARY")
+src/agentic_project_kit/agent_command_runner.py:341:    print(f"NEXT CHAT REPLY: {reply}")
+src/agentic_project_kit/agent_command_runner.py:380:        print_agent_next_footer("HARD-FAIL", "paste-output", OUTCOME_FAIL_PULL)
+src/agentic_project_kit/agent_command_runner.py:387:        print_agent_next_footer("NO-COMMAND", "ask-agent-to-queue-command", str(exc))
+src/agentic_project_kit/agent_command_runner.py:392:        print_agent_next_footer("HARD-FAIL", "paste-output", OUTCOME_FAIL_AMBIGUOUS_COMMANDS)
+src/agentic_project_kit/agent_command_runner.py:403:        print_agent_next_footer("HARD-FAIL", "paste-output", OUTCOME_FAIL_POSTCONDITION)
+src/agentic_project_kit/agent_command_runner.py:406:        print_agent_next_footer("PASS", "p")
+src/agentic_project_kit/agent_command_runner.py:408:        print_agent_next_footer("FAIL", "f")
+src/agentic_project_kit/patch_artifact_preflight.py:68:        if "SUMMARY" not in text:
+Binary file src/agentic_project_kit/__pycache__/patch_artifact_preflight.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/final_summary_contract.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/agent_command_runner.cpython-314.pyc matches
+src/agentic_project_kit/final_summary_contract.py:5:SUMMARY_FIELDS = (
+src/agentic_project_kit/final_summary_contract.py:20:BLOCK_RE = re.compile(r"(?ms)^={64}\nSUMMARY\n(?P<body>.*?)^={64}\s*$")
+src/agentic_project_kit/final_summary_contract.py:26:        raise ValueError("expected exactly one final SUMMARY block at end of text")
+src/agentic_project_kit/final_summary_contract.py:40:    missing = [field for field in SUMMARY_FIELDS if field not in values]
+src/agentic_project_kit/final_summary_contract.py:79:    final_start = text.rstrip().rfind("================================================================\nSUMMARY")
+tests/test_final_summary_contract.py:17:    text = Path("docs/governance/FINAL_SUMMARY_CONTRACT.md").read_text(encoding="utf-8")
+tests/test_final_summary_contract.py:26:    assert "framed SUMMARY contract" in text
+Binary file tests/__pycache__/test_agent_command_runner_summary_footer.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_final_summary_contract.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_final_summary_contract.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_agent_command_runner.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_agent_command_runner.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_final_summary_contract.cpython-314.pyc matches
+tests/test_agent_command_runner_summary_footer.py:1:from agentic_project_kit.agent_command_runner import print_agent_next_footer
+tests/test_agent_command_runner_summary_footer.py:4:def test_print_agent_next_footer_frames_pass_reply(capsys):
+tests/test_agent_command_runner_summary_footer.py:5:    print_agent_next_footer("PASS", "p")
+tests/test_agent_command_runner_summary_footer.py:8:    assert "SUMMARY" in out
+tests/test_agent_command_runner_summary_footer.py:12:    assert "NEXT CHAT REPLY: p" in out
+tests/test_agent_command_runner_summary_footer.py:15:def test_print_agent_next_footer_frames_fail_reply(capsys):
+tests/test_agent_command_runner_summary_footer.py:16:    print_agent_next_footer("FAIL", "f", "normal command failure")
+tests/test_agent_command_runner_summary_footer.py:18:    assert "SUMMARY" in out
+tests/test_agent_command_runner_summary_footer.py:23:    assert "NEXT CHAT REPLY: f" in out
+tests/test_agent_command_runner_summary_footer.py:26:def test_print_agent_next_footer_frames_hard_fail_reply(capsys):
+tests/test_agent_command_runner_summary_footer.py:27:    print_agent_next_footer("HARD-FAIL", "paste-output", "FAIL_PULL")
+tests/test_agent_command_runner_summary_footer.py:29:    assert "SUMMARY" in out
+tests/test_agent_command_runner_summary_footer.py:33:    assert "NEXT CHAT REPLY: paste-output" in out
+tests/test_agent_command_runner.py:58:def test_write_report(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:62:    report = acr.write_report(command, acr.OUTCOME_PASS_EXECUTED, 0, Path("docs/reports/terminal/x.log"))
+tests/test_agent_command_runner.py:204:def test_write_report_updates_latest_command_run_pointer(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:208:    report = acr.write_report(command, acr.OUTCOME_PASS_EXECUTED, 0, Path("docs/reports/terminal/cmd-pointer.log"))
+tests/test_agent_command_runner.py:235:    assert "### AGENT-NEXT RESULT: NO-COMMAND ###" in out
+tests/test_agent_command_runner.py:249:    assert "### AGENT-NEXT RESULT: PASS ###" in out
+tests/test_agent_command_runner.py:251:    assert "### NEXT CHAT REPLY: PASS -> p ###" in out
+tests/test_agent_command_runner.py:264:    assert "### AGENT-NEXT RESULT: FAIL ###" in out
+tests/test_agent_command_runner.py:266:    assert "### NEXT CHAT REPLY: FAIL -> f ###" in out
+tests/test_agent_command_runner.py:275:    assert "### AGENT-NEXT RESULT: HARD-FAIL ###" in out
+tests/test_agent_command_runner.py:278:    assert "### NEXT CHAT REPLY: HARD-FAIL -> paste output ###" in out
+tests/test_agent_command_runner.py:293:    assert "### AGENT-NEXT RESULT: HARD-FAIL ###" in out
+tests/test_agent_command_runner.py:310:    assert "### AGENT-NEXT RESULT: HARD-FAIL ###" in out
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+ D .agentic/commands/inbox/20260519-final-summary-runner-inspection.sh
+ D .agentic/commands/inbox/20260519-final-summary-runner-inspection.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log
+
+### PYTEST ###
+........................................................................ [ 16%]
+........................................................................ [ 32%]
+........................................................................ [ 48%]
+........................................................................ [ 64%]
+........................................................................ [ 81%]
+........................................................................ [ 97%]
+............                                                             [100%]
+444 passed in 2.55s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.28
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=76
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+ D .agentic/commands/inbox/20260519-final-summary-runner-inspection.sh
+ D .agentic/commands/inbox/20260519-final-summary-runner-inspection.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log
+
+### RESULT: PASS ###
+
+### FINAL STATE ###
+main
+ D .agentic/commands/inbox/20260519-final-summary-runner-inspection.sh
+ D .agentic/commands/inbox/20260519-final-summary-runner-inspection.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log
+
+================================================================
+SUMMARY
+WORK RESULT: PASS
+EVIDENCE RESULT: CHAT_ONLY
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PARTIAL
+terminal_log=NONE
+command_report=NONE
+NEXT_CHAT_REPLY: p
+### RESULT: PASS ###
+================================================================
+### EXIT: 0
+### RESULT: PASS ###
