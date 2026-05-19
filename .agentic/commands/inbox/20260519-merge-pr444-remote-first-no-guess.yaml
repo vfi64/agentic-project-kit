@@ -1,0 +1,3 @@
+command_id: 20260519-merge-pr444-remote-first-no-guess
+title: Merge PR 444 remote-first no-guess governance
+safety_class: remote-mutation
