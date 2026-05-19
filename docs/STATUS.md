@@ -101,3 +101,8 @@ Current lessons: avoid nested triple-quote code generators, quote YAML coverage 
 ## YAML Governance Integrity Lesson
 
 YAML governance files have been damaged more than once by text-style patching. The project now treats this as a recurring workflow defect. `.agentic/handoff_state.yaml`, `.agentic/no_copy_terminal_policy.yaml`, `docs/DOCUMENTATION_COVERAGE.yaml`, and similar control files must be mutated through parse-modify-dump or an equivalent structured path, then parsed again before gates.
+
+
+## Remote-first no-guess rule
+
+Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.

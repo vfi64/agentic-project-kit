@@ -49,6 +49,11 @@ current_capabilities:
 policies:
   no_copy_terminal_policy: .agentic/no_copy_terminal_policy.yaml
 rules:
+- id: remote-first-no-guess
+  status: active
+  text: Do not guess repository state, command syntax, file locations, release phase,
+    GitHub JSON fields, or available evidence. Inspect the remote repository and authoritative
+    command help or repo files first, then act on the verified result.
 - id: deterministic-quality-before-speed
   status: active
   text: Prefer technically robust, testable, repeatable solutions over fast workarounds.
@@ -110,6 +115,10 @@ rules:
     structured mutation path, then parsed again before gates. Text injection into
     YAML is forbidden for complex values.
 recent_failure_patterns:
+- id: guessing-before-inspection
+  prevention: Before choosing commands, paths, JSON fields, release checks, or DOI
+    sources, inspect the remote repository and command help. Treat memory and chat
+    summaries as hypotheses until verified.
 - id: stale-planning-documents
   prevention: State freshness checks must compare STATUS, CURRENT_HANDOFF, handoff_state.yaml,
     release metadata, and strategy baselines before GUI or release-automation work
