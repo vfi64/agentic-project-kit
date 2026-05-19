@@ -223,15 +223,24 @@ def append_executed(command: AgentCommand, outcome: str, exit_code: int) -> None
         handle.write(json.dumps(entry, sort_keys=True) + "\n")
 
 
-def stage_commit_push(paths: list[Path], message: str) -> int:
-    subprocess.run(["git", "add", *[path.as_posix() for path in paths]], check=True)
-    diff = subprocess.run(["git", "diff", "--cached", "--quiet"], check=False)
-    if diff.returncode == 0:
-        return 0
-    subprocess.run(["git", "commit", "-m", message], check=True)
-    pushed = subprocess.run(["git", "push"], check=False)
-    return pushed.returncode
 
+def _git_path_is_tracked(path: Path) -> bool:
+    result = subprocess.run(
+        ["git", "ls-files", "--error-unmatch", path.as_posix()],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    )
+    return result.returncode == 0
+
+
+def stage_commit_push(paths: list[Path], message: str) -> int:
+    add_paths = [path for path in paths if path.exists() or _git_path_is_tracked(path)]
+    if add_paths:
+        subprocess.run(["git", "add", *[path.as_posix() for path in add_paths]], check=True)
+    subprocess.run(["git", "commit", "-m", message], check=True)
+    push = subprocess.run(["git", "push"], check=False)
+    return push.returncode
 
 def logged_script_has_fail_result_marker(log_path: Path | None) -> bool:
     if log_path is None or not log_path.exists():
