@@ -1,0 +1,968 @@
+VERIFY V0.3.28 POST-RELEASE DOI SOURCE WITHOUT PRE-RELEASE CHECK
+
+### STATUS BEFORE CHECKS ###
+
+### RECENT HISTORY ###
+e43009b Verify v0.3.28 release publication
+ab9d778 Preserve v0.3.28 release tag preflight
+554416e Verify main after PR 442 v0.3.28 release prep
+6380b3f Prepare v0.3.28 release metadata (#442)
+ff82aaf Verify main after PR 441 patch preflight MVP
+fe1dcc9 Add patch artifact preflight MVP (#441)
+920d883 Verify main after PR 440 planning refresh
+7c84db9 Refresh planning state after v0.3.27 (#440)
+28c7ab7 Record v0.3.27 DOI metadata (#439)
+811c846 Preserve v0.3.27 release publish log (#438)
+36f7434 Start mandatory terminal evidence capture fix (#437)
+616fb19 Diagnose mandatory terminal evidence capture (#435)
+45e51d1 Remove stale release version source inbox command (#434)
+90b8160 Require package init version in release check (#433)
+
+### PRESERVE PREVIOUS FAILED DOI INSPECTION LOG IF PRESENT ###
+tmp/20260519-141726_inspect-v0.3.28-doi-metadata-path.log
+INSPECT V0.3.28 DOI METADATA PATH BEFORE PATCHING
+
+### STATUS BEFORE INSPECTION ###
+
+### RECENT HISTORY ###
+e43009b Verify v0.3.28 release publication
+ab9d778 Preserve v0.3.28 release tag preflight
+554416e Verify main after PR 442 v0.3.28 release prep
+6380b3f Prepare v0.3.28 release metadata (#442)
+ff82aaf Verify main after PR 441 patch preflight MVP
+fe1dcc9 Add patch artifact preflight MVP (#441)
+920d883 Verify main after PR 440 planning refresh
+7c84db9 Refresh planning state after v0.3.27 (#440)
+28c7ab7 Record v0.3.27 DOI metadata (#439)
+811c846 Preserve v0.3.27 release publish log (#438)
+36f7434 Start mandatory terminal evidence capture fix (#437)
+616fb19 Diagnose mandatory terminal evidence capture (#435)
+45e51d1 Remove stale release version source inbox command (#434)
+90b8160 Require package init version in release check (#433)
+6925192 Queue release version source contract hardening (#432)
+592a11f Preserve release version source hardening diagnosis log (#431)
+
+### RELEASE VIEW ###
+title:	v0.3.28
+tag:	v0.3.28
+draft:	false
+prerelease:	false
+immutable:	false
+author:	github-actions[bot]
+created:	2026-05-19T12:14:40Z
+published:	2026-05-19T12:15:06Z
+url:	https://github.com/vfi64/agentic-project-kit/releases/tag/v0.3.28
+asset:	agentic_project_kit-0.3.28-py3-none-any.whl
+asset:	agentic_project_kit-0.3.28.tar.gz
+--
+## What's Changed
+* Record v0.3.27 DOI metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/439
+* Refresh planning state after v0.3.27 by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/440
+* Add patch artifact preflight MVP by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/441
+* Prepare v0.3.28 release metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/442
+
+
+**Full Changelog**: https://github.com/vfi64/agentic-project-kit/compare/v0.3.27...v0.3.28
+
+### AVAILABLE CLI COMMANDS ###
+                                                                                              
+ Usage: python -m agentic_project_kit.cli [OPTIONS] COMMAND [ARGS]...                         
+                                                                                              
+ Generate and check agentic GitHub project skeletons.                                         
+                                                                                              
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.                    │
+│ --show-completion             Show completion for the current shell, to copy it or         │
+│                               customize the installation.                                  │
+│ --help                        Show this message and exit.                                  │
+╰────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ─────────────────────────────────────────────────────────────────────────────────╮
+│ init                                                                                       │
+│ profile-explain           List available project profiles and policy packs.                │
+│ pr-hygiene                                                                                 │
+│ github-create                                                                              │
+│ check                                                                                      │
+│ check-docs                                                                                 │
+│ check-todo                                                                                 │
+│ doc-mesh-audit            Audit cross-document state, governance, architecture, and        │
+│                           historical-plan drift.                                           │
+│ doc-lifecycle-audit       Audit lifecycle status headers for planning, roadmap, strategy,  │
+│                           and idea documents.                                              │
+│ doc-mesh-repair           Apply safe automatic documentation mesh repairs.                 │
+│ doctor                    Run a compact project health check.                              │
+│ release-plan              Print a release preparation checklist for the current project.   │
+│ release-check             Validate release state for a target version.                     │
+│ post-release-check        Validate post-release GitHub and Zenodo state without guessing   │
+│                           DOI metadata.                                                    │
+│ validate-contract         Validate the machine-readable project contract.                  │
+│ validate-output-contract  Validate an output file against a machine-readable output        │
+│                           contract.                                                        │
+│ validate-sections         Validate that a text file contains required literal section      │
+│                           markers.                                                         │
+│ patch-preflight                                                                            │
+│ pr-closeout                                                                                │
+│ workflow                  Run and inspect bounded local workflow handoff states.           │
+│ handoff                   Read-only persistent handoff state commands.                     │
+│ actions                   Inspect parameterized action specifications.                     │
+│ work-order                Inspect and run repo-backed work orders.                         │
+│ governance                Run deterministic project governance checks.                     │
+│ pr                        Evaluate deterministic PR closeout state.                        │
+│ cockpit                   Inspect local cockpit status and structured project actions.     │
+│ patterns                  Inspect the local read-only pattern catalog.                     │
+│ scaffold                  Create governed repository scaffolding artifacts.                │
+│ state                     Check repository state freshness.                                │
+│ todo                      Manage generated project TODO items.                             │
+╰────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+### NS COMMAND SURFACE ###
+#!/usr/bin/env sh
+
+resolve_python() {
+  if [ -x ".venv/bin/python" ]; then
+    printf "%s
+" ".venv/bin/python"
+  elif [ -x ".venv/bin/python3" ]; then
+    printf "%s
+" ".venv/bin/python3"
+  elif command -v python3 >/dev/null 2>&1; then
+    command -v python3
+  elif command -v python >/dev/null 2>&1; then
+    command -v python
+  else
+    return 1
+  fi
+}
+
+PY="$(resolve_python || true)"
+if [ -z "$PY" ]; then
+  printf "%s
+" "ERROR: no usable Python interpreter found. Expected .venv/bin/python, .venv/bin/python3, python3, or python."
+  printf "%s
+" "### RESULT: FAIL ###"
+  return 127 2>/dev/null || exit 127
+fi
+
+
+
+
+
+if [ "${1:-}" = "governance-check" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli governance check
+  exit $?
+fi
+
+if [ "${1:-}" = "state-freshness-check" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli state freshness-check
+  exit $?
+fi
+
+if [ "${1:-}" = "action-list" ]; then
+  shift
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli actions list "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "action-show" ]; then
+  shift
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli actions show "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-refresh" ]; then
+  shift
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff refresh "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-show" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff show
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-check" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff check
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-prompt" ]; then
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff prompt
+  exit $?
+fi
+
+if [ "${1:-}" = "run-logged" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging run-logged "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-status" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-status
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-upload" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-upload
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-finalize" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-finalize "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-clean-check" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-clean-check
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-remote-preflight" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-remote-preflight
+  exit $?
+fi
+
+
+if [ "${1:-}" = "patch-preflight" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli patch-preflight "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "artifact-gc" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.communication_artifact_gc "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "command-inbox-check" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.command_inbox_check
+  exit $?
+fi
+if [ "${1:-}" = "agent-next" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.agent_command_runner next
+  exit $?
+fi
+
+if [ "${1:-}" = "agent-run" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.agent_command_runner
+  exit $?
+fi
+
+
+if [ "${1:-}" = "cockpit-readiness" ]; then
+  PYTHONPATH=src "$PY" tools/cockpit_readiness.py
+  exit $?
+fi
+
+set -eu
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+cd "$SCRIPT_DIR"
+if [ "${1:-}" = "cockpit" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit cockpit status "$@"
+    exit $?
+  fi
+  agentic-kit cockpit status "$@"
+  exit $?
+fi
+if [ "${1:-}" = "actions" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit cockpit actions "$@"
+    exit $?
+  fi
+  agentic-kit cockpit actions "$@"
+  exit $?
+fi
+if [ "${1:-}" = "select" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit cockpit select "$@"
+    exit $?
+  fi
+  agentic-kit cockpit select "$@"
+  exit $?
+fi
+if [ "${1:-}" = "cockpit-run" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit cockpit run "$@"
+    exit $?
+  fi
+  agentic-kit cockpit run "$@"
+  exit $?
+fi
+if [ "${1:-}" = "state" ] || [ "${1:-}" = "status" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow state "$@"
+    exit $?
+  fi
+  agentic-kit workflow state "$@"
+  exit $?
+fi
+if [ "${1:-}" = "list" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow list "$@"
+    exit $?
+  fi
+  agentic-kit workflow list "$@"
+  exit $?
+fi
+if [ "${1:-}" = "show" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow show "$@"
+    exit $?
+  fi
+  agentic-kit workflow show "$@"
+  exit $?
+fi
+if [ "${1:-}" = "run" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow run "$@"
+    exit $?
+  fi
+  agentic-kit workflow run "$@"
+  exit $?
+fi
+if [ "${1:-}" = "release-prep" ]; then
+  shift
+  tools/ns_release_prep.sh "$@"
+  exit $?
+fi
+if [ "${1:-}" = "release-gate" ]; then
+  shift
+  tools/ns_release_gate.sh "$@"
+  exit $?
+fi
+if [ "${1:-}" = "release-publish" ]; then
+  shift
+  tools/ns_release_publish.sh "$@"
+  exit $?
+fi
+if [ "${1:-}" = "release-verify" ]; then
+  shift
+  tools/ns_release_verify.sh "$@"
+  exit $?
+fi
+if [ "${1:-}" = "finalize-guard" ]; then
+  shift
+  tools/ns_finalize_guard.sh "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "clean-evidence" ]; then
+  shift
+  tools/ns_clean_evidence.sh "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "commit-guard" ]; then
+  shift
+  tools/ns_commit_pr_guard.sh "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "pr-cleanup" ]; then
+  shift
+  tools/ns_pr_cleanup.sh "$@"
+  exit $?
+fi
+if [ "${1:-}" = "slice-runner" ]; then
+  shift
+  tools/ns_slice_runner.sh "$@"
+
+### DOI RELATED SOURCE REFERENCES ###
+src/agentic_project_kit/cockpit.py:59:        CockpitAction("release.post-check", "Post-release check", "release", ("agentic-kit", "post-release-check"), READ_ONLY, "Validate GitHub and Zenodo post-release state."),
+src/agentic_project_kit/action_specs.py:49:            purpose="Verify tag, GitHub Release, Release workflow, assets, and Zenodo DOI state.",
+src/agentic_project_kit/action_specs.py:52:            postconditions=("GitHub Release exists", "release assets exist", "post-release check passes"),
+src/agentic_project_kit/action_specs.py:53:            evidence=("release-verify terminal log", "post-release-check output"),
+src/agentic_project_kit/action_specs.py:56:            action_id="doi-record",
+src/agentic_project_kit/action_specs.py:57:            title="Record verified DOI metadata",
+src/agentic_project_kit/action_specs.py:59:            purpose="Prepare DOI metadata changes after release verification.",
+src/agentic_project_kit/action_specs.py:60:            parameters=(ParameterSpec("version", "Release version.", example="0.3.24"), ParameterSpec("doi", "Verified Zenodo version DOI.", example="10.5281/zenodo.20270197")),
+src/agentic_project_kit/action_specs.py:62:            preconditions=("post-release check PASS", "DOI belongs to requested version"),
+src/agentic_project_kit/action_specs.py:63:            postconditions=("docs mention DOI once", "local gates pass", "PR is opened for DOI metadata"),
+src/agentic_project_kit/action_specs.py:64:            evidence=("post-release-check output", "DOI metadata terminal log"),
+src/agentic_project_kit/action_specs.py:70:            purpose="Update state and handoff after release and DOI metadata are complete.",
+src/agentic_project_kit/doc_mesh.py:156:_VERIFIED_DOI_PATTERN = re.compile(
+src/agentic_project_kit/doc_mesh.py:157:    r"(?:archived|Verified) v(?P<version>[0-9]+\.[0-9]+\.[0-9]+).*?(?P<doi>10\.5281/zenodo\.[0-9]+)",
+src/agentic_project_kit/doc_mesh.py:164:    "must wait for post-release verification",
+src/agentic_project_kit/doc_mesh.py:188:    "release-doi-list-mismatch": (
+src/agentic_project_kit/doc_mesh.py:189:        "sync_release_doi_list",
+src/agentic_project_kit/doc_mesh.py:192:        "DOI list synchronization must preserve release evidence and should be reviewed before file edits.",
+src/agentic_project_kit/doc_mesh.py:243:    findings.extend(_check_release_doi_consistency(contents))
+src/agentic_project_kit/doc_mesh.py:418:def _extract_verified_dois(content: str) -> dict[str, str]:
+src/agentic_project_kit/doc_mesh.py:419:    return {match.group("version"): match.group("doi") for match in _VERIFIED_DOI_PATTERN.finditer(content)}
+src/agentic_project_kit/doc_mesh.py:422:def _check_release_doi_consistency(contents: dict[str, str]) -> list[DocMeshFinding]:
+src/agentic_project_kit/doc_mesh.py:433:        expected.update(_extract_verified_dois(content))
+src/agentic_project_kit/doc_mesh.py:435:    readme_dois = _extract_verified_dois(readme)
+src/agentic_project_kit/doc_mesh.py:436:    for version, doi in sorted(expected.items()):
+src/agentic_project_kit/doc_mesh.py:437:        if readme_dois.get(version) != doi:
+src/agentic_project_kit/doc_mesh.py:440:                    "release-doi-list-mismatch",
+src/agentic_project_kit/doc_mesh.py:442:                    f"README DOI list missing or mismatching v{version} -> {doi}",
+src/agentic_project_kit/cli_commands/release.py:22:    app.command("post-release-check")(post_release_check_command)
+src/agentic_project_kit/cli_commands/release.py:49:    """Validate post-release GitHub and Zenodo state without guessing DOI metadata."""
+Binary file src/agentic_project_kit/cli_commands/__pycache__/release.cpython-314.pyc matches
+src/agentic_project_kit/control_state.py:23:    DOI_VERIFIED = "DOI_VERIFIED"
+src/agentic_project_kit/control_state.py:38:    ControlStatus.DOI_VERIFIED,
+Binary file src/agentic_project_kit/__pycache__/action_specs.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/state_freshness.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/doc_mesh.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/cockpit.cpython-313.pyc matches
+Binary file src/agentic_project_kit/__pycache__/control_state.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/cockpit.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/release_cli.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/governance.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/post_release.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/handoff_prompt.cpython-314.pyc matches
+src/agentic_project_kit/state_freshness.py:19:    "v0.3.23 is released and post-release verified",
+src/agentic_project_kit/state_freshness.py:20:    "v0.3.25 is released and post-release verified",
+src/agentic_project_kit/state_freshness.py:21:    "v0.3.19 is released and post-release verified",
+src/agentic_project_kit/post_release.py:56:    concept_doi = read_citation_doi(project_root)
+src/agentic_project_kit/post_release.py:57:    concept_doi_check = check_concept_doi(concept_doi)
+src/agentic_project_kit/post_release.py:58:    zenodo_check = check_zenodo_version_record(resolved_version, concept_doi, resolved_http_getter)
+src/agentic_project_kit/post_release.py:62:        checks=(github_release, concept_doi_check, zenodo_check),
+src/agentic_project_kit/post_release.py:84:def check_concept_doi(concept_doi: str | None) -> PostReleaseCheckResult:
+src/agentic_project_kit/post_release.py:85:    if not concept_doi:
+src/agentic_project_kit/post_release.py:87:            "Zenodo concept DOI",
+src/agentic_project_kit/post_release.py:89:            "no DOI found in CITATION.cff; Zenodo lookup skipped",
+src/agentic_project_kit/post_release.py:91:    if not concept_doi.startswith("10.5281/zenodo."):
+src/agentic_project_kit/post_release.py:93:            "Zenodo concept DOI",
+src/agentic_project_kit/post_release.py:95:            f"DOI does not look like a Zenodo DOI: {concept_doi}",
+src/agentic_project_kit/post_release.py:97:    return PostReleaseCheckResult("Zenodo concept DOI", PostReleaseStatus.PASS, f"found DOI: {concept_doi}")
+src/agentic_project_kit/post_release.py:102:    concept_doi: str | None,
+src/agentic_project_kit/post_release.py:105:    if not concept_doi:
+src/agentic_project_kit/post_release.py:107:            "Zenodo version DOI",
+src/agentic_project_kit/post_release.py:109:            "Zenodo lookup skipped because no concept DOI was found",
+src/agentic_project_kit/post_release.py:113:    url = build_zenodo_records_url(concept_doi)
+src/agentic_project_kit/post_release.py:117:        return PostReleaseCheckResult("Zenodo version DOI", PostReleaseStatus.WARN, f"Zenodo lookup failed: {exc}")
+src/agentic_project_kit/post_release.py:121:            "Zenodo version DOI",
+src/agentic_project_kit/post_release.py:123:            f"Zenodo lookup returned HTTP {status_code}",
+src/agentic_project_kit/post_release.py:129:        return PostReleaseCheckResult("Zenodo version DOI", PostReleaseStatus.WARN, f"Zenodo JSON parse failed: {exc}")
+src/agentic_project_kit/post_release.py:131:    version_doi = find_version_doi(payload, version)
+src/agentic_project_kit/post_release.py:132:    if version_doi:
+src/agentic_project_kit/post_release.py:134:            "Zenodo version DOI",
+src/agentic_project_kit/post_release.py:136:            f"verified version DOI for v{version}: {version_doi}",
+src/agentic_project_kit/post_release.py:140:        "Zenodo version DOI",
+src/agentic_project_kit/post_release.py:142:        f"no verified Zenodo record found yet for v{version}; leave README/CITATION unchanged",
+src/agentic_project_kit/post_release.py:146:def build_zenodo_records_url(concept_doi: str) -> str:
+src/agentic_project_kit/post_release.py:147:    query = f'conceptdoi:"{concept_doi}"'
+src/agentic_project_kit/post_release.py:153:def find_version_doi(payload: object, version: str) -> str | None:
+src/agentic_project_kit/post_release.py:164:        doi = str(record.get("doi") or metadata.get("doi") or "").strip()
+src/agentic_project_kit/post_release.py:165:        if not doi:
+src/agentic_project_kit/post_release.py:168:            return doi
+src/agentic_project_kit/post_release.py:172:def read_citation_doi(project_root: Path) -> str | None:
+src/agentic_project_kit/post_release.py:176:    match = re.search(r"^doi:\s*['\"]?([^'\"\s]+)", citation.read_text(encoding="utf-8"), re.MULTILINE)
+src/agentic_project_kit/handoff_prompt.py:43:        f"Zenodo version DOI: `{release.get('zenodo_version_doi', '')}`",
+src/agentic_project_kit/governance.py:36:    for required in ("pr-check-merge", "release-verify", "doi-record", "finalize-release"):
+tests/test_doc_mesh.py:105:def test_doc_mesh_detects_release_doi_list_drift(tmp_path: Path) -> None:
+tests/test_doc_mesh.py:110:        "The archived v1.2.3 release has the verified version-specific DOI: `10.5281/zenodo.111`.\n",
+tests/test_doc_mesh.py:115:        "# Verified v1.2.3 version DOI: 10.5281/zenodo.111\n"
+tests/test_doc_mesh.py:116:        "# Verified v1.2.4 version DOI: 10.5281/zenodo.222\n",
+tests/test_doc_mesh.py:122:    assert any(finding.code == "release-doi-list-mismatch" for finding in report.findings)
+tests/test_control_state.py:12:        ControlStatus.DOI_VERIFIED,
+Binary file tests/__pycache__/test_action_specs.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_control_state.cpython-314.pyc matches
+Binary file tests/__pycache__/test_control_state.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_control_state.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_doc_mesh.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_doc_mesh.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_post_release.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_repo_ns_entrypoint.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_repo_ns_entrypoint.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_post_release.cpython-314-pytest-9.0.3.pyc matches
+tests/test_post_release.py:8:    find_version_doi,
+tests/test_post_release.py:15:    _write_project_files(tmp_path, version="1.2.3", doi="10.5281/zenodo.1000")
+tests/test_post_release.py:20:        http_getter=_http_getter(_zenodo_payload(version="1.2.3", doi="10.5281/zenodo.1001")),
+tests/test_post_release.py:33:    _write_project_files(tmp_path, version="1.2.3", doi="10.5281/zenodo.1000")
+tests/test_post_release.py:38:        http_getter=_http_getter(_zenodo_payload(version="1.2.2", doi="10.5281/zenodo.999")),
+tests/test_post_release.py:47:    _write_project_files(tmp_path, version="1.2.3", doi="10.5281/zenodo.1000")
+tests/test_post_release.py:52:        http_getter=_http_getter(_zenodo_payload(version="1.2.3", doi="10.5281/zenodo.1001")),
+tests/test_post_release.py:60:def test_post_release_report_warns_and_skips_zenodo_without_citation_doi(tmp_path: Path):
+tests/test_post_release.py:61:    _write_project_files(tmp_path, version="1.2.3", doi=None)
+tests/test_post_release.py:66:        http_getter=_http_getter(_zenodo_payload(version="1.2.3", doi="10.5281/zenodo.1001")),
+tests/test_post_release.py:75:def test_find_version_doi_accepts_v_prefixed_metadata_version():
+tests/test_post_release.py:76:    payload = _zenodo_payload(version="v1.2.3", doi="10.5281/zenodo.1001")
+tests/test_post_release.py:78:    assert find_version_doi(json.loads(payload), "1.2.3") == "10.5281/zenodo.1001"
+tests/test_post_release.py:81:def test_find_version_doi_accepts_title_when_metadata_version_is_absent():
+tests/test_post_release.py:86:                    "doi": "10.5281/zenodo.1001",
+tests/test_post_release.py:93:    assert find_version_doi(payload, "1.2.3") == "10.5281/zenodo.1001"
+tests/test_post_release.py:97:    _write_project_files(tmp_path, version="1.2.3", doi="10.5281/zenodo.1000")
+tests/test_post_release.py:101:        http_getter=_http_getter(_zenodo_payload(version="1.2.2", doi="10.5281/zenodo.999")),
+tests/test_post_release.py:107:    assert "[WAITING] Zenodo version DOI" in rendered
+tests/test_post_release.py:111:def _write_project_files(project_root: Path, *, version: str, doi: str | None) -> None:
+tests/test_post_release.py:113:    if doi is not None:
+tests/test_post_release.py:114:        (project_root / "CITATION.cff").write_text(f"cff-version: 1.2.0\ndoi: {doi}\n", encoding="utf-8")
+tests/test_post_release.py:117:def _zenodo_payload(*, version: str, doi: str) -> str:
+tests/test_post_release.py:123:                        "doi": doi,
+tests/test_post_release.py:152:    _write_project_files(tmp_path, version="1.2.3", doi="10.5281/zenodo.1000")
+tests/test_post_release.py:165:    assert report.checks[-1].detail == "Zenodo lookup failed: read operation timed out"
+tests/test_repo_ns_entrypoint.py:186:    assert "post-release-check" in text
+tests/test_action_specs.py:8:    assert set(specs) >= {"pr-check-merge", "release-verify", "doi-record", "finalize-release"}
+tools/ns_slice_runner.sh:62:  if grep -Eq "### RESULT: (PASS|DONE|NOOP|ALREADY_ON_MAIN|ALREADY_MERGED|ALREADY_RELEASED|DOI_VERIFIED|SUPERSEDED) ###|STATUS: (PASS|DONE|NOOP|ALREADY_ON_MAIN|ALREADY_MERGED|ALREADY_RELEASED|DOI_VERIFIED|SUPERSEDED)|RESULT: (PASS|DONE|NOOP|ALREADY_ON_MAIN|ALREADY_MERGED|ALREADY_RELEASED|DOI_VERIFIED|SUPERSEDED)" "$FILE"; then
+tools/ns_release_verify.sh:68:  .venv/bin/agentic-kit post-release-check --version "$VERSION" || STATUS=1
+tools/ns_release_verify.sh:70:  agentic-kit post-release-check --version "$VERSION" || STATUS=1
+.agentic/handoff_state.yaml:14:  commit_subject: Record v0.3.27 DOI metadata (#439)
+.agentic/handoff_state.yaml:23:  zenodo_concept_doi: 10.5281/zenodo.20101359
+.agentic/handoff_state.yaml:24:  zenodo_version_doi: 10.5281/zenodo.20283414
+.agentic/handoff_state.yaml:29:- v0.3.27 released and post-release DOI verified.
+docs/handoff/CURRENT_HANDOFF.md:18:Verified Zenodo version DOI: `10.5281/zenodo.20283414`
+docs/handoff/CURRENT_HANDOFF.md:59:The exact phrases `policy-pack checks`, `policy packs`, `post-release Zenodo`, `agentic-kit post-release-check`, `documentation coverage`, and no-copy/evidence are intentionally present because deterministic coverage gates enforce them.
+docs/DOCUMENTATION_COVERAGE.yaml:23:          - agentic-kit post-release-check
+docs/DOCUMENTATION_COVERAGE.yaml:97:          - release DOI list mismatches
+docs/DOCUMENTATION_COVERAGE.yaml:108:          - release DOI list mismatches
+docs/DOCUMENTATION_COVERAGE.yaml:240:    description: README must mention the current release candidate and latest verified DOI state.
+docs/DOCUMENTATION_COVERAGE.yaml:323:          - agentic-kit post-release-check
+docs/DOCUMENTATION_COVERAGE.yaml:351:  - id: post-release-zenodo-coverage
+docs/DOCUMENTATION_COVERAGE.yaml:352:    description: Post-release Zenodo checks must remain visible and separate from pre-release gates.
+docs/DOCUMENTATION_COVERAGE.yaml:356:          - agentic-kit post-release-check
+docs/DOCUMENTATION_COVERAGE.yaml:357:          - verified Zenodo version record
+docs/DOCUMENTATION_COVERAGE.yaml:359:          - README/CITATION DOI metadata unchanged
+docs/DOCUMENTATION_COVERAGE.yaml:363:          - post-release Zenodo
+docs/DOCUMENTATION_COVERAGE.yaml:364:          - agentic-kit post-release-check
+docs/DOCUMENTATION_COVERAGE.yaml:367:          - post-release Zenodo
+docs/DOCUMENTATION_COVERAGE.yaml:368:          - agentic-kit post-release-check
+docs/DOCUMENTATION_COVERAGE.yaml:439:          - Zenodo
+docs/DOCUMENTATION_COVERAGE.yaml:440:          - DOI
+docs/DOCUMENTATION_COVERAGE.yaml:443:          - agentic-kit post-release-check
+docs/DOCUMENTATION_COVERAGE.yaml:450:          - agentic-kit post-release-check
+docs/TEST_GATES.md:29:| Post-release archive check | Unit tests plus agentic-kit post-release-check CLI smoke command |
+docs/TEST_GATES.md:95:- release-history documents such as CHANGELOG.md, which remain required and may feed release DOI synchronization without being treated as live project state;
+docs/TEST_GATES.md:100:The hard audit checks only machine-checkable drift classes, including version mismatches, stale current-state wording, missing historical-source-of-truth banners, and release DOI list mismatches. It must not claim semantic proof of documentation quality.
+docs/TEST_GATES.md:198:Check post-release archive state after publishing:
+docs/TEST_GATES.md:200:    agentic-kit post-release-check --version <version>
+docs/TEST_GATES.md:284:The freshness gate must reject contradictory current-state claims across `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, and `.agentic/handoff_state.yaml`, including mismatched current release versions, stale DOI baselines, obsolete next-step instructions, and strategy documents that present old baselines as current without a historical marker.
+docs/STATUS.md:24:Zenodo concept DOI: `10.5281/zenodo.20101359`
+docs/STATUS.md:25:Verified Zenodo version DOI: `10.5281/zenodo.20283414`
+docs/STATUS.md:80:The equivalent public command names remain `agentic-kit check-docs`, `agentic-kit doctor`, and `agentic-kit post-release-check`; the project-local module form is preferred when global executables are not guaranteed.
+docs/STATUS.md:88:Release verification remains covered by the post-release Zenodo path and `agentic-kit post-release-check`. Current no-copy/evidence status is the bridge toward the thin local Tkinter cockpit.
+docs/workflow/WORK_ORDERS.md:49:Add checked work-order templates for common read-only gates first. Mutating Git, PR, release, DOI, and finalize flows should use parameterized action specs plus deterministic validators before execution.
+docs/workflow/PARAMETERIZED_ACTIONS.md:8:Parameterized actions define auditable action objects before the project adds more mutating Git, PR, release, DOI, and finalize automation.
+docs/workflow/PARAMETERIZED_ACTIONS.md:23:- `doi-record`
+docs/workflow/CONTROL_MODEL.md:32:- `DOI_VERIFIED`
+docs/workflow/GOVERNANCE_CHECK.md:13:- It does not run Git mutation, PR merge, release, tag, or DOI actions.
+docs/ideas/LAYERED_CLI_USABILITY.md:102:agentic-kit post-release-check
+docs/reports/terminal/release_verify_v0.3.25_20260518.log:33:* Record v0.3.24 DOI metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/341
+docs/reports/terminal/release_verify_v0.3.25_20260518.log:34:* Finalize state after v0.3.24 DOI metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/342
+docs/reports/terminal/release_verify_v0.3.25_20260518.log:80:[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+docs/reports/terminal/release_verify_v0.3.25_20260518.log:81:[PASS] Zenodo version DOI: verified version DOI for v0.3.25: 10.5281/zenodo.20273989
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:1:REPAIR PR 439 DOI METADATA SEMANTICS AND README GATE
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:6: * branch            docs/record-v0.3.27-doi-metadata-20260519-112522 -> FETCH_HEAD
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:7:Already on 'docs/record-v0.3.27-doi-metadata-20260519-112522'
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:8:Your branch is up to date with 'origin/docs/record-v0.3.27-doi-metadata-20260519-112522'.
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:10: * branch            docs/record-v0.3.27-doi-metadata-20260519-112522 -> FETCH_HEAD
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:21:### VERIFY DOI SEMANTICS ###
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:22:10:doi: "10.5281/zenodo.20101359"
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:23:11:# Verified v0.3.27 version DOI: 10.5281/zenodo.20283414
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:24:CITATION.cff:# Verified v0.3.27 version DOI: 10.5281/zenodo.20283414
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:25:docs/STATUS.md:- v0.3.27 verified Zenodo version DOI: `10.5281/zenodo.20283414`
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:26:docs/handoff/CURRENT_HANDOFF.md:- v0.3.27 verified Zenodo version DOI: `10.5281/zenodo.20283414`
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:37:-doi: 10.5281/zenodo.20283414
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:38:+doi: "10.5281/zenodo.20101359"
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:39:+# Verified v0.3.27 version DOI: 10.5281/zenodo.20283414
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:40: # Verified v0.2.5 version DOI: 10.5281/zenodo.20111119
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:41: # Verified v0.2.6 version DOI: 10.5281/zenodo.20119102
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:42: # Verified v0.2.7 version DOI: 10.5281/zenodo.20125518
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:51:-Release DOI for v0.3.27: `10.5281/zenodo.20283414`
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:59:docs/record-v0.3.27-doi-metadata-20260519-112522
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:106:docs/record-v0.3.27-doi-metadata-20260519-112522
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:129:docs/record-v0.3.27-doi-metadata-20260519-112522
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:211:[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:212:[PASS] Zenodo version DOI: verified version DOI for v0.3.27: 10.5281/zenodo.20283414
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:218:docs/record-v0.3.27-doi-metadata-20260519-112522
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:219:7223933 Repair v0.3.27 DOI metadata content
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:220:7188a08 Record v0.3.27 DOI metadata
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:240:terminal_log=docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:14:c628954 Finalize state after v0.3.24 DOI metadata (#342)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:15:17a2e8e Record v0.3.24 DOI metadata (#341)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:34:Next: Work first on the checked parameterized Git, PR, release, DOI, and finalize action layer. Keep this next slice focused on safe action objects and repository-backed evidence.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:53:Zenodo version DOI: `10.5281/zenodo.20270197`
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:62:- PR #341 recorded v0.3.24 DOI metadata.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:63:- PR #342 finalized v0.3.24 DOI metadata state and recorded persistent handoff planning.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:75:- 1. `parametrized-git-release-actions` — Add checked parameterized Git, PR, release, DOI, and finalize actions.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:85:Work first on the checked parameterized Git, PR, release, DOI, and finalize action layer. Keep this next slice focused on safe action objects and repository-backed evidence.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:398:docs/handoff/CURRENT_HANDOFF.md:275:v0.3.23 is fully closed: GitHub Release v0.3.23 exists, Zenodo version DOI `10.5281/zenodo.20261956` is verified, and DOI metadata is recorded on main via PR #325. Current main is a clean post-release state. Recommended next direction: start v0.3.24 only if it improves the same no-copy/GUI cockpit path; otherwise cut a new planning slice for how `./ns pr-cleanup`, `./ns finalize-guard`, `./ns clean-evidence`, release controls, and safe patch helpers should appear in the local Tkinter cockpit without enabling unsafe destructive defaults.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:410:docs/STATUS.md:243:v0.3.23 is released and post-release verified with Zenodo version DOI `10.5281/zenodo.20261956`. DOI metadata is recorded on main via PR #325. The release completed the deterministic control-workflow hardening line: shared control states, target-state-aware slice runner, safer release-prep/gate/publish flow, evidence cleanup, finalize-guard outcome classification, PR cleanup classification, and the safe patch script helper.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:427:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:32:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:428:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:33:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:429:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:34:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:444:docs/reports/terminal/release_prep_v0.3.24_20260518-132722.log:35:docs/handoff/CURRENT_HANDOFF.md:v0.3.23 is fully closed: GitHub Release v0.3.23 exists, Zenodo version DOI `10.5281/zenodo.20261956` is verified, and DOI metadata is recorded on main via PR #325. Current main is a clean post-release state. Recommended next direction: start v0.3.24 only if it improves the same no-copy/GUI cockpit path; otherwise cut a new planning slice for how `./ns pr-cleanup`, `./ns finalize-guard`, `./ns clean-evidence`, release controls, and safe patch helpers should appear in the local Tkinter cockpit without enabling unsafe destructive defaults.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:489:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:521:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:32:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:490:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:522:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:33:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:491:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:523:docs/reports/terminal/repair_v0.3.24_doi_log_20260518-135114.log:34:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:534:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:592:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:137:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:535:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:593:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:138:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:536:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:594:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:139:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:578:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:137:9e00830 Harden agent-next workflow postconditions (#339)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:579:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:138:c9ca7f4 Harden agent-next smoke and inbox consumption (#338)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:580:docs/reports/terminal/record_v0.3.24_doi_20260518-134914.log:139:b247224 Finalize state after agent-next inbox runner (#337)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:641:tools/ns_release_verify.sh:68:  .venv/bin/agentic-kit post-release-check --version "$VERSION" || STATUS=1
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:642:tools/ns_release_verify.sh:70:  agentic-kit post-release-check --version "$VERSION" || STATUS=1
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:648:src/agentic_project_kit/cockpit.py:59:        CockpitAction("release.post-check", "Post-release check", "release", ("agentic-kit", "post-release-check"), READ_ONLY, "Validate GitHub and Zenodo post-release state."),
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:653:src/agentic_project_kit/cli_commands/release.py:22:    app.command("post-release-check")(post_release_check_command)
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:676:tests/test_repo_ns_entrypoint.py:186:    assert "post-release-check" in text
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:682:docs/handoff/CURRENT_HANDOFF.md:17:v0.3.19 is released and post-release verified with version DOI `10.5281/zenodo.20246121`. Zenodo concept DOI: `10.5281/zenodo.20101359`. The v0.3.19 DOI metadata is recorded on main via PR #259 after `agentic-kit post-release-check --version 0.3.19` passed. The post-release Zenodo verification path remains covered by `agentic-kit post-release-check`.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:683:docs/handoff/CURRENT_HANDOFF.md:70:A later full local gate run showed `221 passed` and `ruff check .` passed. The documentation gates then failed because the STATUS/HANDOFF refresh removed deterministic documentation coverage phrases. This branch now restores the required coverage phrases for policy packs, policy-pack checks, documentation coverage, post-release Zenodo verification, `agentic-kit post-release-check`, and Pattern Advisor coverage in STATUS.
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:689:docs/DOCUMENTATION_COVERAGE.yaml:23:          - agentic-kit post-release-check
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:690:docs/DOCUMENTATION_COVERAGE.yaml:323:          - agentic-kit post-release-check
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:691:docs/DOCUMENTATION_COVERAGE.yaml:356:          - agentic-kit post-release-check
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:692:docs/DOCUMENTATION_COVERAGE.yaml:364:          - agentic-kit post-release-check
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:693:docs/DOCUMENTATION_COVERAGE.yaml:368:          - agentic-kit post-release-check
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:694:docs/DOCUMENTATION_COVERAGE.yaml:443:          - agentic-kit post-release-check
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:695:docs/DOCUMENTATION_COVERAGE.yaml:450:          - agentic-kit post-release-check
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:696:docs/TEST_GATES.md:29:| Post-release archive check | Unit tests plus agentic-kit post-release-check CLI smoke command |
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:697:docs/TEST_GATES.md:200:    agentic-kit post-release-check --version <version>
+
+### PREVIOUS V0.3.27 DOI REFERENCES ###
+README.md:3:[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/zenodo.20101359)
+README.md:399:Zenodo metadata is provided in `.zenodo.json`. The project is archived through the Zenodo GitHub integration.
+README.md:401:For citation across versions, prefer the all-versions DOI: `10.5281/zenodo.20101359`.
+README.md:403:The archived v0.3.25 release has the verified version-specific DOI: `10.5281/zenodo.20273989`.
+README.md:405:The archived v0.2.5 release has the verified version-specific DOI: `10.5281/zenodo.20111119`.
+README.md:407:The archived v0.2.6 release has the verified version-specific DOI: `10.5281/zenodo.20119102`.
+README.md:409:The archived v0.2.7 release has the verified version-specific DOI: `10.5281/zenodo.20125518`.
+README.md:411:The archived v0.2.8 release has the verified version-specific DOI: `10.5281/zenodo.20126270`.
+README.md:413:The archived v0.2.9 release has the verified version-specific DOI: `10.5281/zenodo.20126490`.
+README.md:415:The archived v0.2.10 release has the verified version-specific DOI: `10.5281/zenodo.20127028`.
+README.md:417:The archived v0.3.0 release has the verified version-specific DOI: `10.5281/zenodo.20140467`.
+README.md:419:The archived v0.3.1 release has the verified version-specific DOI: `10.5281/zenodo.20144969`.
+README.md:421:The archived v0.3.2 release has the verified version-specific DOI: `10.5281/zenodo.20145114`.
+README.md:423:The archived v0.3.3 release has the verified version-specific DOI: `10.5281/zenodo.20151924`.
+README.md:425:The archived v0.3.4 release has the verified version-specific DOI: `10.5281/zenodo.20162214`.
+README.md:427:The archived v0.3.5 release has the verified version-specific DOI: `10.5281/zenodo.20169965`.
+README.md:429:The archived v0.3.6 release has the verified version-specific DOI: `10.5281/zenodo.20183888`.
+README.md:431:The archived v0.3.7 release has the verified version-specific DOI: `10.5281/zenodo.20206581`.
+README.md:433:The archived v0.3.8 release has the verified version-specific DOI: `10.5281/zenodo.20208638`.
+README.md:435:The archived v0.3.9 release has the verified version-specific DOI: `10.5281/zenodo.20210345`.
+README.md:436:The archived v0.3.10 release has the verified version-specific DOI: `10.5281/zenodo.20214382`.
+README.md:437:The archived v0.3.11 release has the verified version-specific DOI: `10.5281/zenodo.20215460`.
+README.md:438:The archived v0.3.16 release has the verified version-specific DOI: `10.5281/zenodo.20244944`.
+README.md:440:The archived v0.3.17 release has the verified version-specific DOI: `10.5281/zenodo.20245113`.
+README.md:442:The archived v0.3.19 release has the verified version-specific DOI: `10.5281/zenodo.20246121`.
+README.md:444:The archived v0.3.18 release has the verified version-specific DOI: `10.5281/zenodo.20245754`.
+README.md:504:Archived GUI/cockpit release notes: v0.3.22 verified DOI `10.5281/zenodo.20256637`; v0.3.19 verified DOI `10.5281/zenodo.20246121`.
+README.md:506:Version `0.3.10` remains the previous archived release covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`.
+README.md:511:- Verified v0.3.23 version DOI: `10.5281/zenodo.20261956`
+README.md:513:- v0.2.5: `10.5281/zenodo.20111119`
+README.md:514:- v0.2.6: `10.5281/zenodo.20119102`
+README.md:515:- v0.2.7: `10.5281/zenodo.20125518`
+README.md:516:- v0.2.8: `10.5281/zenodo.20126270`
+README.md:517:- v0.2.9: `10.5281/zenodo.20126490`
+README.md:518:- v0.2.10: `10.5281/zenodo.20127028`
+README.md:519:- v0.3.0: `10.5281/zenodo.20140467`
+README.md:520:- v0.3.1: `10.5281/zenodo.20144969`
+README.md:521:- v0.3.2: `10.5281/zenodo.20145114`
+README.md:522:- v0.3.3: `10.5281/zenodo.20151924`
+README.md:523:- v0.3.4: `10.5281/zenodo.20162214`
+README.md:524:- v0.3.5: `10.5281/zenodo.20169965`
+README.md:525:- v0.3.6: `10.5281/zenodo.20183888`
+README.md:526:- v0.3.7: `10.5281/zenodo.20206581`
+README.md:527:- v0.3.8: `10.5281/zenodo.20208638`
+README.md:528:- v0.3.9: `10.5281/zenodo.20210345`
+README.md:529:- v0.3.10: `10.5281/zenodo.20214382`
+README.md:530:- v0.3.11: `10.5281/zenodo.20215460`
+README.md:531:- Verified v0.3.12 version DOI: `10.5281/zenodo.20218213`
+README.md:532:- Verified v0.3.16 version DOI: `10.5281/zenodo.20244944`
+README.md:533:- Verified v0.3.17 version DOI: `10.5281/zenodo.20245113`
+README.md:534:- Verified v0.3.19 version DOI: `10.5281/zenodo.20246121`
+README.md:535:- Verified v0.3.21 DOI: 10.5281/zenodo.20258057 version DOI: `10.5281/zenodo.20256637`
+README.md:536:- Verified v0.3.18 version DOI: `10.5281/zenodo.20245754`
+README.md:566:Version `0.3.27` is the current release line prepared by `./ns release-prep 0.3.27`.
+CHANGELOG.md:5:## v0.3.27
+CHANGELOG.md:7:- Prepare release metadata for v0.3.27.
+CHANGELOG.md:14:- Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.25 DOI `10.5281/zenodo.20273989`.
+CHANGELOG.md:19:- Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.24 DOI `10.5281/zenodo.20270197`.
+CHANGELOG.md:24:Zenodo v0.3.23 DOI: 10.5281/zenodo.20261956
+CHANGELOG.md:25:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:36:## v0.3.21 DOI: 10.5281/zenodo.20258057
+CHANGELOG.md:43:Zenodo v0.3.20 DOI: 10.5281/zenodo.20256637
+CHANGELOG.md:57:Zenodo v0.3.19 DOI: 10.5281/zenodo.20246121
+CHANGELOG.md:58:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:68:Zenodo v0.3.18 DOI: 10.5281/zenodo.20245754
+CHANGELOG.md:69:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:77:Zenodo v0.3.17 DOI: 10.5281/zenodo.20245113
+CHANGELOG.md:78:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:87:Zenodo v0.3.16 DOI: 10.5281/zenodo.20244944
+CHANGELOG.md:88:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:97:Zenodo v0.3.15 DOI: 10.5281/zenodo.20244397
+CHANGELOG.md:98:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:107:Zenodo v0.3.14 DOI: 10.5281/zenodo.20242582
+CHANGELOG.md:108:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:118:Zenodo v0.3.13 DOI: 10.5281/zenodo.20241908
+CHANGELOG.md:126:Zenodo v0.3.12 DOI: 10.5281/zenodo.20218213
+CHANGELOG.md:139:Zenodo v0.3.11 DOI: 10.5281/zenodo.20215460
+CITATION.cff:10:doi: "10.5281/zenodo.20101359"
+CITATION.cff:11:# Verified v0.3.27 version DOI: 10.5281/zenodo.20283414
+CITATION.cff:12:# Verified v0.2.5 version DOI: 10.5281/zenodo.20111119
+CITATION.cff:13:# Verified v0.2.6 version DOI: 10.5281/zenodo.20119102
+CITATION.cff:14:# Verified v0.2.7 version DOI: 10.5281/zenodo.20125518
+CITATION.cff:15:# Verified v0.2.8 version DOI: 10.5281/zenodo.20126270
+CITATION.cff:16:# Verified v0.2.9 version DOI: 10.5281/zenodo.20126490
+CITATION.cff:17:# Verified v0.2.10 version DOI: 10.5281/zenodo.20127028
+CITATION.cff:18:# Verified v0.3.0 version DOI: 10.5281/zenodo.20140467
+CITATION.cff:19:# Verified v0.3.1 version DOI: 10.5281/zenodo.20144969
+CITATION.cff:20:# Verified v0.3.2 version DOI: 10.5281/zenodo.20145114
+CITATION.cff:21:# Verified v0.3.3 version DOI: 10.5281/zenodo.20151924
+CITATION.cff:22:# Verified v0.3.4 version DOI: 10.5281/zenodo.20162214
+CITATION.cff:23:# Verified v0.3.5 version DOI: 10.5281/zenodo.20169965
+CITATION.cff:24:# Verified v0.3.6 version DOI: 10.5281/zenodo.20183888
+CITATION.cff:25:# Verified v0.3.7 version DOI: 10.5281/zenodo.20206581
+CITATION.cff:26:# Verified v0.3.8 version DOI: 10.5281/zenodo.20208638
+CITATION.cff:27:# Verified v0.3.9 version DOI: 10.5281/zenodo.20210345
+CITATION.cff:28:# Verified v0.3.10 version DOI: 10.5281/zenodo.20214382
+CITATION.cff:29:# Verified v0.3.11 version DOI: 10.5281/zenodo.20215460
+CITATION.cff:38:# Verified v0.3.16 version DOI: 10.5281/zenodo.20244944
+CITATION.cff:39:# Verified v0.3.17 version DOI: 10.5281/zenodo.20245113
+CITATION.cff:40:# Verified v0.3.18 version DOI: 10.5281/zenodo.20245754
+CITATION.cff:41:# Verified v0.3.22 version DOI: 10.5281/zenodo.20261634
+CITATION.cff:42:# Verified v0.3.25 version DOI: 10.5281/zenodo.20273989
+CITATION.cff:45:# Verified v0.3.23 version DOI: 10.5281/zenodo.20261956
+docs/STATUS.md:18:The immediate goal after v0.3.27 is to refresh the planning state and harden documentation freshness guards before GUI, release-automation, or Pattern Advisor expansion. Planning files must be curated current-state documents, not accumulated historical fragments.
+docs/STATUS.md:22:Current released version: 0.3.27
+docs/STATUS.md:23:Current release tag: v0.3.27
+docs/STATUS.md:24:Zenodo concept DOI: `10.5281/zenodo.20101359`
+docs/STATUS.md:25:Verified Zenodo version DOI: `10.5281/zenodo.20283414`
+docs/STATUS.md:27:v0.3.27 is the current released and verified baseline. It preserves the hardened repo-backed no-copy workflow: remote tasks are queued under `.agentic/commands/inbox/`, local execution runs through `./ns agent-next`, durable command evidence is written under `docs/reports/command_runs/`, and terminal evidence is written under `docs/reports/terminal/`.
+docs/handoff/CURRENT_HANDOFF.md:12:Refresh the planning state after v0.3.27 and harden documentation freshness guards. The repository must remain the durable memory: rules are durable only when documented, test-backed, and enforced by repo tooling or gates.
+docs/handoff/CURRENT_HANDOFF.md:16:Current released version: 0.3.27
+docs/handoff/CURRENT_HANDOFF.md:17:Current release tag: v0.3.27
+docs/handoff/CURRENT_HANDOFF.md:18:Verified Zenodo version DOI: `10.5281/zenodo.20283414`
+docs/handoff/CURRENT_HANDOFF.md:19:Current branch after v0.3.27: main
+docs/handoff/CURRENT_HANDOFF.md:21:v0.3.27 is the current verified no-copy/evidence baseline. The normal operator path is `git pull --ff-only origin main` followed by `./ns agent-next`. Normal command PASS/FAIL should be handled through remote-readable command reports and terminal logs, not manual copy-and-paste.
+.agentic/handoff_state.yaml:4:  reason: Refresh planning state after v0.3.27 no-copy baseline
+.agentic/handoff_state.yaml:14:  commit_subject: Record v0.3.27 DOI metadata (#439)
+.agentic/handoff_state.yaml:19:  current_version: 0.3.27
+.agentic/handoff_state.yaml:21:  tag: v0.3.27
+.agentic/handoff_state.yaml:23:  zenodo_concept_doi: 10.5281/zenodo.20101359
+.agentic/handoff_state.yaml:24:  zenodo_version_doi: 10.5281/zenodo.20283414
+.agentic/handoff_state.yaml:29:- v0.3.27 released and post-release DOI verified.
+
+### RELEASE CHECK CURRENT VERSION ###
+Release state check for target v0.3.28
+
+[PASS] semantic version: 0.3.28 is valid
+[PASS] pyproject version: found text: version = "0.3.28"
+[PASS] package __version__: found text: __version__ = "0.3.28"
+[PASS] CHANGELOG version: found text: v0.3.28
+[PASS] README version: found text: Version `0.3.28`
+[PASS] CITATION version: found text: version: 0.3.28
+[PASS] STATUS version: found text: Current version: 0.3.28
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.28
+[FAIL] local tag unused: tag already exists: v0.3.28
+[FAIL] remote tag unused: remote tag already exists: v0.3.28
+[FAIL] GitHub release unused: GitHub release already exists: v0.3.28
+
+Overall: FAIL
+
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 16%]
+........................................................................ [ 33%]
+........................................................................ [ 49%]
+........................................................................ [ 66%]
+........................................................................ [ 82%]
+........................................................................ [ 99%]
+...                                                                      [100%]
+435 passed in 2.53s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.28
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=74
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### POST-RELEASE-CHECK HELP CONTRACT ###
+                                                                                              
+ Usage: python -m agentic_project_kit.cli post-release-check                                  
+            [OPTIONS]                                                                         
+                                                                                              
+ Validate post-release GitHub and Zenodo state without guessing DOI metadata.                 
+                                                                                              
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────╮
+│ --root           PATH  [default: .]                                                        │
+│ --version        TEXT  Release version without leading v.                                  │
+│ --help                 Show this message and exit.                                         │
+╰────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+### TAG AND RELEASE VIEW ###
+v0.3.28
+ab9d778ffe7489ac7a5eb7e9444283f723ad4850	refs/tags/v0.3.28
+title:	v0.3.28
+tag:	v0.3.28
+draft:	false
+prerelease:	false
+immutable:	false
+author:	github-actions[bot]
+created:	2026-05-19T12:14:40Z
+published:	2026-05-19T12:15:06Z
+url:	https://github.com/vfi64/agentic-project-kit/releases/tag/v0.3.28
+asset:	agentic_project_kit-0.3.28-py3-none-any.whl
+asset:	agentic_project_kit-0.3.28.tar.gz
+--
+## What's Changed
+* Record v0.3.27 DOI metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/439
+* Refresh planning state after v0.3.27 by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/440
+* Add patch artifact preflight MVP by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/441
+* Prepare v0.3.28 release metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/442
+
+
+**Full Changelog**: https://github.com/vfi64/agentic-project-kit/compare/v0.3.27...v0.3.28
+
+### POST-RELEASE CHECK ###
+Post-release check for target v0.3.28
+
+[PASS] GitHub release: GitHub release exists: v0.3.28
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.3.28: 10.5281/zenodo.20286394
+
+Overall: PASS
+
+
+### DOI CANDIDATES FROM VERIFIED OUTPUT ###
+10.5281/zenodo.1000
+10.5281/zenodo.1001
+10.5281/zenodo.111
+10.5281/zenodo.20101359
+10.5281/zenodo.20111119
+10.5281/zenodo.20119102
+10.5281/zenodo.20125518
+10.5281/zenodo.20126270
+10.5281/zenodo.20126490
+10.5281/zenodo.20127028
+10.5281/zenodo.20140467
+10.5281/zenodo.20144969
+10.5281/zenodo.20145114
+10.5281/zenodo.20151924
+10.5281/zenodo.20162214
+10.5281/zenodo.20169965
+10.5281/zenodo.20183888
+10.5281/zenodo.20206581
+10.5281/zenodo.20208638
+10.5281/zenodo.20210345
+10.5281/zenodo.20214382
+10.5281/zenodo.20215460
+10.5281/zenodo.20218213
+10.5281/zenodo.20241908
+10.5281/zenodo.20242582
+10.5281/zenodo.20244397
+10.5281/zenodo.20244944
+10.5281/zenodo.20245113
+10.5281/zenodo.20245754
+10.5281/zenodo.20246121
+10.5281/zenodo.20256637
+10.5281/zenodo.20258057
+10.5281/zenodo.20261634
+10.5281/zenodo.20261956
+10.5281/zenodo.20270197
+10.5281/zenodo.20273989
+10.5281/zenodo.20283414
+10.5281/zenodo.20286394
+10.5281/zenodo.222
+10.5281/zenodo.999
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 16%]
+........................................................................ [ 33%]
+........................................................................ [ 49%]
+........................................................................ [ 66%]
+........................................................................ [ 82%]
+........................................................................ [ 99%]
+...                                                                      [100%]
+435 passed in 2.51s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.28
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=74
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
