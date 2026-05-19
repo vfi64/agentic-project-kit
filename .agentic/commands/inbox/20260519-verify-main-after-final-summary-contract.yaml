@@ -1,4 +1,0 @@
-command_id: 20260519-verify-main-after-final-summary-contract
-title: Verify main after final summary contract
-safety_class: remote-mutation
-expected_branch: main
