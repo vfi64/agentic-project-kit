@@ -1,4 +1,0 @@
-command_id: 20260519-agent-next-queue-health
-title: Agent-next queue health and next development slice
-safety_class: local-verification
-expected_branch: main
