@@ -1,0 +1,661 @@
+DIAGNOSE MANDATORY TERMINAL EVIDENCE CAPTURE
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PREFLIGHT ###
+FAIL_DIRTY_WORKTREE_BEFORE_REMOTE_MUTATION
+docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+PASS_COMMAND_INBOX_CHECK
+PASS_NOTHING_TO_COLLECT
+
+### CREATE DIAGNOSIS BRANCH ###
+Switched to a new branch 'docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311'
+
+### CURRENT COMMAND AND RUNNER INVENTORY ###
+--- ns entrypoint ---
+10:  elif command -v python3 >/dev/null 2>&1; then
+12:  elif command -v python >/dev/null 2>&1; then
+25:  return 127 2>/dev/null || exit 127
+102:if [ "${1:-}" = "terminal-remote-preflight" ]; then
+103:  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-remote-preflight
+107:if [ "${1:-}" = "artifact-gc" ]; then
+113:if [ "${1:-}" = "command-inbox-check" ]; then
+117:if [ "${1:-}" = "agent-next" ]; then
+122:if [ "${1:-}" = "agent-run" ]; then
+213:if [ "${1:-}" = "release-gate" ]; then
+257:if [ "${1:-}" = "dev" ]; then
+288:  BRANCH="$(git branch --show-current 2>/dev/null)"
+289:  DIRTY="$(git status --short 2>/dev/null)"
+290:  if [ "$BRANCH" != "main" ] && [ -n "$DIRTY" ] && grep -q "git_pull_ff_only" .agentic/current_work.yaml 2>/dev/null; then
+296:    printf 'Use ./ns dev for local feature gates, or clean the branch before ./ns go.
+341:# no-copy workflow shortcuts: ./ns dev, ./ns go, ./ns up
+
+--- tools inventory ---
+tools/__pycache__/ns_release_metadata_prep.cpython-314.pyc
+tools/__pycache__/workflow_runner.cpython-314.pyc
+tools/ns_clean_evidence.sh
+tools/ns_commit_pr_guard.sh
+tools/ns_finalize_guard.sh
+tools/ns_pr_cleanup.sh
+tools/ns_pr_create_or_skip.sh
+tools/ns_release_gate.sh
+tools/ns_release_metadata_prep.py
+tools/ns_release_prep.sh
+tools/ns_release_publish.sh
+tools/ns_release_verify.sh
+tools/ns_safe_remove_diagnostic.sh
+tools/ns_slice_runner.sh
+tools/ns_up_pr_completion.sh
+tools/workflow_runner.py
+
+--- source inventory ---
+src/agentic_project_kit/__init__.py
+src/agentic_project_kit/__pycache__/__init__.cpython-313.pyc
+src/agentic_project_kit/__pycache__/__init__.cpython-314.pyc
+src/agentic_project_kit/__pycache__/action_registry.cpython-314.pyc
+src/agentic_project_kit/__pycache__/action_specs.cpython-314.pyc
+src/agentic_project_kit/__pycache__/agent_command_runner.cpython-314.pyc
+src/agentic_project_kit/__pycache__/checks_cli.cpython-314.pyc
+src/agentic_project_kit/__pycache__/checks.cpython-314.pyc
+src/agentic_project_kit/__pycache__/cli.cpython-314.pyc
+src/agentic_project_kit/__pycache__/cockpit_readiness.cpython-314.pyc
+src/agentic_project_kit/__pycache__/cockpit.cpython-313.pyc
+src/agentic_project_kit/__pycache__/cockpit.cpython-314.pyc
+src/agentic_project_kit/__pycache__/command_inbox_check.cpython-314.pyc
+src/agentic_project_kit/__pycache__/communication_artifact_gc.cpython-314.pyc
+src/agentic_project_kit/__pycache__/contract.cpython-314.pyc
+src/agentic_project_kit/__pycache__/control_state.cpython-314.pyc
+src/agentic_project_kit/__pycache__/doc_lifecycle.cpython-314.pyc
+src/agentic_project_kit/__pycache__/doc_mesh.cpython-314.pyc
+src/agentic_project_kit/__pycache__/doctor.cpython-314.pyc
+src/agentic_project_kit/__pycache__/github.cpython-314.pyc
+src/agentic_project_kit/__pycache__/governance.cpython-314.pyc
+src/agentic_project_kit/__pycache__/gui_cockpit.cpython-313.pyc
+src/agentic_project_kit/__pycache__/gui_cockpit.cpython-314.pyc
+src/agentic_project_kit/__pycache__/handoff_prompt.cpython-314.pyc
+src/agentic_project_kit/__pycache__/handoff_state.cpython-314.pyc
+src/agentic_project_kit/__pycache__/models.cpython-314.pyc
+src/agentic_project_kit/__pycache__/output_contract.cpython-314.pyc
+src/agentic_project_kit/__pycache__/output_repair.cpython-314.pyc
+src/agentic_project_kit/__pycache__/patterns.cpython-314.pyc
+src/agentic_project_kit/__pycache__/post_release.cpython-314.pyc
+src/agentic_project_kit/__pycache__/pr_closeout.cpython-314.pyc
+src/agentic_project_kit/__pycache__/pr_hygiene.cpython-314.pyc
+src/agentic_project_kit/__pycache__/release_cli.cpython-314.pyc
+src/agentic_project_kit/__pycache__/release.cpython-314.pyc
+src/agentic_project_kit/__pycache__/rendering.cpython-314.pyc
+src/agentic_project_kit/__pycache__/repair_report.cpython-314.pyc
+src/agentic_project_kit/__pycache__/runtime_validator.cpython-314.pyc
+src/agentic_project_kit/__pycache__/safe_patch.cpython-314.pyc
+src/agentic_project_kit/__pycache__/scaffold.cpython-314.pyc
+src/agentic_project_kit/__pycache__/slice_runner.cpython-314.pyc
+src/agentic_project_kit/__pycache__/state_freshness.cpython-314.pyc
+src/agentic_project_kit/__pycache__/templates.cpython-314.pyc
+src/agentic_project_kit/__pycache__/terminal_logging.cpython-314.pyc
+src/agentic_project_kit/__pycache__/todo_cli.cpython-314.pyc
+src/agentic_project_kit/__pycache__/todo.cpython-314.pyc
+src/agentic_project_kit/__pycache__/validation_cli.cpython-314.pyc
+src/agentic_project_kit/__pycache__/work_orders.cpython-314.pyc
+src/agentic_project_kit/__pycache__/workflow_cli.cpython-314.pyc
+src/agentic_project_kit/action_registry.py
+src/agentic_project_kit/action_specs.py
+src/agentic_project_kit/agent_command_runner.py
+src/agentic_project_kit/checks.py
+src/agentic_project_kit/cli_commands/__init__.py
+src/agentic_project_kit/cli_commands/__pycache__/__init__.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/actions.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/checks.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/cockpit.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/github.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/governance.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/handoff.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/init.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/patterns.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/pr_hygiene.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/pr.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/profiles.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/release.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/scaffold.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/state.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/todo.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/validation.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/work_orders.cpython-314.pyc
+src/agentic_project_kit/cli_commands/__pycache__/workflow.cpython-314.pyc
+src/agentic_project_kit/cli_commands/actions.py
+src/agentic_project_kit/cli_commands/checks.py
+src/agentic_project_kit/cli_commands/cockpit.py
+src/agentic_project_kit/cli_commands/github.py
+src/agentic_project_kit/cli_commands/governance.py
+src/agentic_project_kit/cli_commands/handoff.py
+src/agentic_project_kit/cli_commands/init.py
+src/agentic_project_kit/cli_commands/patterns.py
+src/agentic_project_kit/cli_commands/pr_hygiene.py
+src/agentic_project_kit/cli_commands/pr.py
+src/agentic_project_kit/cli_commands/profiles.py
+src/agentic_project_kit/cli_commands/release.py
+src/agentic_project_kit/cli_commands/scaffold.py
+src/agentic_project_kit/cli_commands/state.py
+src/agentic_project_kit/cli_commands/todo.py
+src/agentic_project_kit/cli_commands/validation.py
+src/agentic_project_kit/cli_commands/work_orders.py
+src/agentic_project_kit/cli_commands/workflow.py
+src/agentic_project_kit/cli.py
+src/agentic_project_kit/cockpit_readiness.py
+src/agentic_project_kit/cockpit.py
+src/agentic_project_kit/command_inbox_check.py
+src/agentic_project_kit/communication_artifact_gc.py
+src/agentic_project_kit/contract.py
+src/agentic_project_kit/control_state.py
+src/agentic_project_kit/doc_lifecycle.py
+src/agentic_project_kit/doc_mesh.py
+src/agentic_project_kit/doctor.py
+src/agentic_project_kit/github.py
+src/agentic_project_kit/governance.py
+src/agentic_project_kit/gui_cockpit.py
+src/agentic_project_kit/handoff_prompt.py
+src/agentic_project_kit/handoff_state.py
+src/agentic_project_kit/models.py
+src/agentic_project_kit/output_contract.py
+src/agentic_project_kit/output_repair.py
+src/agentic_project_kit/patterns.py
+src/agentic_project_kit/post_release.py
+src/agentic_project_kit/pr_closeout.py
+src/agentic_project_kit/pr_hygiene.py
+src/agentic_project_kit/release.py
+src/agentic_project_kit/rendering.py
+src/agentic_project_kit/repair_report.py
+src/agentic_project_kit/runtime_validator.py
+src/agentic_project_kit/safe_patch.py
+src/agentic_project_kit/scaffold.py
+src/agentic_project_kit/slice_runner.py
+src/agentic_project_kit/state_freshness.py
+src/agentic_project_kit/templates.py
+src/agentic_project_kit/terminal_logging.py
+src/agentic_project_kit/todo.py
+src/agentic_project_kit/work_orders.py
+
+--- tests inventory ---
+tests/__pycache__/test_agent_command_runner_summary_footer.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_agent_command_runner.cpython-314-pytest-9.0.2.pyc
+tests/__pycache__/test_agent_command_runner.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_command_inbox_check.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_communication_artifact_gc.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_no_copy_terminal_policy.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_ns_interpreter_and_no_exec_guard.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_patterns.cpython-314-pytest-9.0.2.pyc
+tests/__pycache__/test_patterns.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_post_release.cpython-314-pytest-9.0.2.pyc
+tests/__pycache__/test_post_release.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_release_version_source_contract.cpython-314-pytest-9.0.2.pyc
+tests/__pycache__/test_release_version_source_contract.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_release.cpython-314-pytest-9.0.2.pyc
+tests/__pycache__/test_release.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_release.cpython-314.pyc
+tests/__pycache__/test_repo_ns_entrypoint.cpython-314-pytest-9.0.2.pyc
+tests/__pycache__/test_repo_ns_entrypoint.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_runtime_validator_cli.cpython-314-pytest-9.0.2.pyc
+tests/__pycache__/test_runtime_validator_cli.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_runtime_validator.cpython-314-pytest-9.0.2.pyc
+tests/__pycache__/test_runtime_validator.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_slice_runner.cpython-314-pytest-9.0.2.pyc
+tests/__pycache__/test_slice_runner.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_slice_runner.cpython-314.pyc
+tests/__pycache__/test_terminal_logging.cpython-314-pytest-9.0.2.pyc
+tests/__pycache__/test_terminal_logging.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_terminal_remote_preflight.cpython-314-pytest-9.0.3.pyc
+tests/__pycache__/test_workflow_runner_steps.cpython-314-pytest-9.0.2.pyc
+tests/__pycache__/test_workflow_runner_steps.cpython-314-pytest-9.0.3.pyc
+tests/test_agent_command_runner_summary_footer.py
+tests/test_agent_command_runner.py
+tests/test_command_inbox_check.py
+tests/test_communication_artifact_gc.py
+tests/test_no_copy_terminal_policy.py
+tests/test_ns_interpreter_and_no_exec_guard.py
+tests/test_patterns.py
+tests/test_post_release.py
+tests/test_release_version_source_contract.py
+tests/test_release.py
+tests/test_repo_ns_entrypoint.py
+tests/test_runtime_validator_cli.py
+tests/test_runtime_validator.py
+tests/test_slice_runner.py
+tests/test_terminal_logging.py
+tests/test_terminal_remote_preflight.py
+tests/test_workflow_runner_steps.py
+
+### EVIDENCE / LOGGING REFERENCES ###
+.agentic/handoff_state.yaml:54:    terminal_logs: docs/reports/terminal
+.agentic/handoff_state.yaml:55:    command_runs: docs/reports/command_runs
+.agentic/handoff_state.yaml:100:  prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize
+.agentic/work_order_templates/standard-local-gates.yaml:4:log_path: docs/reports/terminal/{work_order_id}.log
+.agentic/work_order_templates/standard-local-gates.yaml:13:  - docs/reports/terminal/{work_order_id}.log
+.agentic/communication_artifacts.yaml:15:    path_glob: "docs/reports/terminal/*.log"
+.agentic/communication_artifacts.yaml:22:    path_glob: "docs/reports/terminal/LATEST_TERMINAL_LOG.txt"
+.agentic/communication_artifacts.yaml:28:    path_glob: "docs/reports/command_runs/*.md"
+.agentic/work_orders/standard-local-gates.yaml:5:log_path: docs/reports/terminal/standard_local_gates_work_order.log
+.agentic/work_orders/standard-local-gates.yaml:16:  - log exists under docs/reports/terminal
+.agentic/work_orders/standard-local-gates.yaml:19:  - docs/reports/terminal/standard_local_gates_work_order.log
+.agentic/no_copy_terminal_policy.yaml:8:    requirement: Every relevant terminal action must produce a durable log file under docs/reports/terminal or docs/reports/command_runs.
+tools/screen_control_gate.sh:74:} 2>&1 | tee "$OUT"
+src/agentic_project_kit/action_registry.py:104:        mutation_scope="docs/reports/command_runs and docs/reports/terminal",
+src/agentic_project_kit/action_registry.py:124:        mutation_scope="docs/reports/command_runs and docs/reports/terminal",
+src/agentic_project_kit/action_registry.py:132:        mutation_scope="docs/reports/terminal",
+src/agentic_project_kit/action_registry.py:135:        summary="Run a local command while teeing output to a terminal log.",
+src/agentic_project_kit/action_registry.py:156:        mutation_scope="docs/reports/terminal only",
+src/agentic_project_kit/terminal_logging.py:4:- run a command while teeing stdout/stderr to a terminal log,
+src/agentic_project_kit/terminal_logging.py:18:TERMINAL_DIR = Path("docs/reports/terminal")
+src/agentic_project_kit/terminal_logging.py:19:LATEST_POINTER = TERMINAL_DIR / "LATEST_TERMINAL_LOG.txt"
+src/agentic_project_kit/agent_command_runner.py:4:.agentic/commands/current.yaml and .agentic/commands/current.sh.
+src/agentic_project_kit/agent_command_runner.py:11:- reports are written under docs/reports/command_runs/,
+src/agentic_project_kit/agent_command_runner.py:28:CURRENT_YAML = COMMAND_DIR / "current.yaml"
+src/agentic_project_kit/agent_command_runner.py:29:CURRENT_SCRIPT = COMMAND_DIR / "current.sh"
+src/agentic_project_kit/agent_command_runner.py:32:REPORT_DIR = Path("docs/reports/command_runs")
+src/agentic_project_kit/agent_command_runner.py:119:        raise FileNotFoundError("Missing .agentic/commands/current.yaml or current.sh")
+src/agentic_project_kit/agent_command_runner.py:318:    print(f"WORK RESULT: {work_result}")
+src/agentic_project_kit/agent_command_runner.py:319:    print(f"EVIDENCE RESULT: {evidence_result}")
+src/agentic_project_kit/work_orders.py:58:    if not log_path.startswith("docs/reports/terminal/"):
+src/agentic_project_kit/work_orders.py:59:        raise ValueError("work order log_path must be under docs/reports/terminal/")
+src/agentic_project_kit/communication_artifact_gc.py:17:    ArtifactRule("agent-current-yaml", ".agentic/commands/current.yaml", "stale-transient-command", "transient compatibility file after agent-next or agent-run"),
+src/agentic_project_kit/communication_artifact_gc.py:18:    ArtifactRule("agent-current-sh", ".agentic/commands/current.sh", "stale-transient-command", "transient compatibility file after agent-next or agent-run"),
+src/agentic_project_kit/communication_artifact_gc.py:22:    "docs/reports/terminal/LATEST_TERMINAL_LOG.txt",
+tests/test_communication_artifact_gc.py:15:    current_yaml = commands / "current.yaml"
+tests/test_communication_artifact_gc.py:16:    current_sh = commands / "current.sh"
+tests/test_communication_artifact_gc.py:17:    current_yaml.write_text("stale", encoding="utf-8")
+tests/test_communication_artifact_gc.py:18:    current_sh.write_text("stale", encoding="utf-8")
+tests/test_communication_artifact_gc.py:21:    assert ".agentic/commands/current.yaml" in message
+tests/test_communication_artifact_gc.py:22:    assert ".agentic/commands/current.sh" in message
+tests/test_communication_artifact_gc.py:23:    assert not current_yaml.exists()
+tests/test_communication_artifact_gc.py:24:    assert not current_sh.exists()
+tests/test_communication_artifact_gc.py:30:    pointer = terminal / "LATEST_TERMINAL_LOG.txt"
+tests/test_communication_artifact_gc.py:31:    pointer.write_text("docs/reports/terminal/example.log\n", encoding="utf-8")
+tests/test_standard_error_guards.py:24:    assert "tee into a temporary log outside `docs/reports/terminal/`" in rule
+tests/test_command_inbox_check.py:50:    reports = tmp_path / "docs/reports/command_runs"
+tests/test_terminal_remote_preflight.py:14:    monkeypatch.setattr(terminal_logging, "git_dirty_paths", lambda: ["docs/reports/terminal/current.log"])
+tests/test_terminal_remote_preflight.py:17:    assert "docs/reports/terminal/current.log" in message
+tests/test_agent_command_runner_summary_footer.py:9:    assert "WORK RESULT: PASS" in out
+tests/test_agent_command_runner_summary_footer.py:10:    assert "EVIDENCE RESULT: PASS" in out
+tests/test_agent_command_runner_summary_footer.py:19:    assert "WORK RESULT: FAIL" in out
+tests/test_agent_command_runner_summary_footer.py:20:    assert "EVIDENCE RESULT: PASS" in out
+tests/test_agent_command_runner_summary_footer.py:30:    assert "WORK RESULT: HARD-FAIL" in out
+tests/test_agent_command_runner_summary_footer.py:31:    assert "EVIDENCE RESULT: FAIL" in out
+tests/test_agent_command_runner.py:16:    (command_dir / "current.yaml").write_text(chr(10).join(yaml_lines), encoding="utf-8")
+tests/test_agent_command_runner.py:19:    (command_dir / "current.sh").write_text(script, encoding="utf-8")
+tests/test_agent_command_runner.py:62:    report = acr.write_report(command, acr.OUTCOME_PASS_EXECUTED, 0, Path("docs/reports/terminal/x.log"))
+tests/test_agent_command_runner.py:82:    log_path = Path("docs/reports/terminal/cmd-1.log")
+tests/test_agent_command_runner.py:96:    assert "docs/reports/command_runs/cmd-1.md" in pushed_paths
+tests/test_agent_command_runner.py:97:    assert "docs/reports/terminal/cmd-1.log" in pushed_paths
+tests/test_agent_command_runner.py:163:    log_path = Path("docs/reports/terminal/cmd-extra.log")
+tests/test_agent_command_runner.py:181:    assert any("current.yaml" in item for item in failures)
+tests/test_agent_command_runner.py:208:    report = acr.write_report(command, acr.OUTCOME_PASS_EXECUTED, 0, Path("docs/reports/terminal/cmd-pointer.log"))
+tests/test_agent_command_runner.py:216:    log_path = Path("docs/reports/terminal/cmd-upload-pointer.log")
+tests/test_agent_command_runner.py:227:    assert "docs/reports/command_runs/LATEST_COMMAND_RUN.txt" in pushed_paths
+tests/test_work_orders.py:14:        "log_path": "docs/reports/terminal/demo.log",
+tests/test_work_orders.py:17:        "expected_outputs": ["docs/reports/terminal/demo.log"],
+tests/test_work_orders.py:68:        assert "log_path must be under docs/reports/terminal" in str(exc)
+tests/test_work_orders.py:101:    order = parse_work_order(valid_order_data(preconditions=["clean tree"], expected_outputs=["docs/reports/terminal/demo.log"]))
+tests/test_work_orders.py:104:    assert order.expected_outputs == ("docs/reports/terminal/demo.log",)
+tests/test_work_orders.py:120:        "id: demo\ntitle: Demo\nsafety: read_only\nexpected_branch: feature/demo\ncommand: pytest && ruff check . && check-docs && doctor\nlog_path: docs/reports/terminal/demo.log\npostconditions:\n  - pytest ruff check-docs doctor log exists no false PASS\nexpected_outputs:\n  - docs/reports/terminal/demo.log\n",
+tests/test_work_orders.py:156:        "id: demo\ntitle: Demo\nsafety: read_only\nexpected_branch: feature/demo\ncommand: pytest && ruff check . && check-docs && doctor\nlog_path: docs/reports/terminal/demo.log\npostconditions:\n  - pytest passes\n  - ruff passes\n  - check-docs passes\n  - doctor passes\n  - log exists\n  - no false PASS\nexpected_outputs:\n  - docs/reports/terminal/demo.log\n",
+tests/test_work_orders.py:161:    log_file = tmp_path / "docs/reports/terminal/demo.log"
+tests/test_work_orders.py:178:        log_path="docs/reports/terminal/blocked_governance.log",
+tests/test_work_orders.py:187:        expected_outputs=("docs/reports/terminal/blocked_governance.log",),
+tests/test_terminal_logging.py:10:    assert path.parent.as_posix() == "docs/reports/terminal"
+tests/test_terminal_logging.py:16:    log = Path("docs/reports/terminal/example.log")
+tests/test_terminal_logging.py:36:    tl.LATEST_POINTER.write_text("docs/reports/terminal/missing.log\n", encoding="utf-8")
+tests/test_terminal_logging.py:43:    assert tl._is_allowed_terminal_artifact("docs/reports/terminal/x.log") is True
+tests/test_terminal_logging.py:44:    assert tl._is_allowed_terminal_artifact("docs/reports/terminal/LATEST_TERMINAL_LOG.txt") is True
+tests/test_terminal_logging.py:46:    assert tl._is_allowed_terminal_artifact("docs/reports/terminal/x.txt") is False
+tests/test_terminal_logging.py:55:    monkeypatch.setattr(tl, "git_dirty_paths", lambda: ["docs/reports/terminal/x.log", "docs/reports/terminal/LATEST_TERMINAL_LOG.txt"])
+tests/test_work_order_prepare.py:6:BASIC_TEMPLATE = """title: Basic gates\nsafety: read_only\ncommand: pytest && ruff check . && check-docs && doctor\nlog_path: docs/reports/terminal/{work_order_id}.log\npostconditions:\n  - pytest passes\n  - ruff passes\n  - check-docs passes\n  - doctor passes\n  - log exists\n  - no false pass\nexpected_outputs:\n  - docs/reports/terminal/{work_order_id}.log\n"""
+tests/test_work_order_prepare.py:20:    assert order.log_path == "docs/reports/terminal/demo-order.log"
+docs/TEST_GATES.md:255:`./ns artifact-gc` reports transient communication artifacts without deleting them. `./ns artifact-gc --execute` removes only registered transient `.agentic/commands/current.yaml` and `.agentic/commands/current.sh` compatibility files. It must not delete `docs/reports/terminal/LATEST_TERMINAL_LOG.txt`, because that file is part of the committed terminal-evidence pointer chain.
+docs/TEST_GATES.md:259:`tests/test_agent_command_runner.py` verifies that command reports update `docs/reports/command_runs/LATEST_COMMAND_RUN.txt` and that `agent_run` includes that pointer in the uploaded evidence paths. This backs the no-copy `d`/`f` handoff contract.
+docs/STATUS.md:47:- Use `./ns terminal-finalize` to preserve relevant terminal output under `docs/reports/terminal/*.log` and update `docs/reports/terminal/LATEST_TERMINAL_LOG.txt`.
+docs/STATUS.md:65:Latest terminal evidence pointer: `docs/reports/terminal/20260518-210113_pr399-merge-verification.log`.
+docs/STATUS.md:88:The equivalent public command names remain `agentic-kit check-docs` and `agentic-kit doctor`; the project-local module form is preferred when global executables are not guaranteed.
+docs/STATUS.md:100:As of PR #423, the repo-backed no-copy workflow is the active bridge toward the local GUI. Remote tasks are queued under `.agentic/commands/inbox/`, local execution runs through `./ns agent-next`, and durable evidence is written under `docs/reports/command_runs/` and `docs/reports/terminal/`. The current hardening includes command-run pointers, terminal-log pointers, result-footers for `p`/`f`/paste-output decisions, missing-current-script report robustness, inner fail-marker detection, communication artifact garbage collection, and `./ns command-inbox-check` rejecting completed command ids that remain pending.
+docs/handoff/CURRENT_HANDOFF.md:53:Latest terminal evidence pointer: `docs/reports/terminal/20260518-210113_pr399-merge-verification.log`.
+docs/handoff/CURRENT_HANDOFF.md:62:- Preserve relevant PASS and FAIL terminal output remotely under `docs/reports/terminal/*.log` whenever technically possible.
+docs/handoff/CURRENT_HANDOFF.md:73:The repository is the source of truth, not the chat transcript. Current state is maintained through `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, `docs/TEST_GATES.md`, `docs/DOCUMENTATION_COVERAGE.yaml`, `.agentic/project.yaml`, `sentinel.yaml`, and committed terminal evidence under `docs/reports/terminal/`.
+
+### COMMAND INBOX RULE REFERENCES ###
+.agentic/communication_artifacts.yaml:32:  - id: agent-command-inbox
+.agentic/communication_artifacts.yaml:34:    path_glob: ".agentic/commands/inbox/*"
+.agentic/commands/executed.jsonl:11:{"command_id": "harden-inbox-lifecycle-cleanup-001", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "496a9c25eed87f1af8b1d4b0f82fabd29a9ab82f1460498f2c1e9afd9ad41522", "timestamp_utc": "2026-05-18T20:50:20.452515+00:00"}
+.agentic/commands/executed.jsonl:12:{"command_id": "harden-inbox-completed-command-guard-001", "exit_code": 1, "outcome": "FAIL_COMMAND", "script_sha256": "missing", "timestamp_utc": "2026-05-18T20:52:15.911886+00:00"}
+src/agentic_project_kit/command_inbox_check.py:12:    "git checkout ",
+src/agentic_project_kit/command_inbox_check.py:24:def _pending_files(inbox_dir: Path) -> tuple[list[Path], list[Path]]:
+src/agentic_project_kit/command_inbox_check.py:25:    if not inbox_dir.exists():
+src/agentic_project_kit/command_inbox_check.py:27:    return sorted(inbox_dir.glob("*.yaml")), sorted(inbox_dir.glob("*.sh"))
+src/agentic_project_kit/command_inbox_check.py:46:def check_command_inbox(inbox_dir: Path = INBOX_DIR) -> InboxCheckResult:
+src/agentic_project_kit/command_inbox_check.py:48:    yaml_files, script_files = _pending_files(inbox_dir)
+src/agentic_project_kit/command_inbox_check.py:61:        yaml_path = inbox_dir / f"{stem}.yaml"
+src/agentic_project_kit/command_inbox_check.py:62:        script_path = inbox_dir / f"{stem}.sh"
+src/agentic_project_kit/command_inbox_check.py:89:                findings.append(f"{script_path.as_posix()}: forbidden fragment: {fragment}")
+src/agentic_project_kit/command_inbox_check.py:93:    result = check_command_inbox()
+src/agentic_project_kit/agent_command_runner.py:30:INBOX_DIR = COMMAND_DIR / "inbox"
+src/agentic_project_kit/agent_command_runner.py:82:def inbox_yaml_files() -> list[Path]:
+src/agentic_project_kit/agent_command_runner.py:88:def pending_inbox_command_pair() -> tuple[Path, Path]:
+src/agentic_project_kit/agent_command_runner.py:90:    for yaml_path in inbox_yaml_files():
+src/agentic_project_kit/agent_command_runner.py:95:        raise FileNotFoundError("No complete pending command pair in .agentic/commands/inbox")
+src/agentic_project_kit/agent_command_runner.py:102:def prepare_current_from_inbox() -> tuple[Path, Path]:
+src/agentic_project_kit/agent_command_runner.py:103:    yaml_path, script_path = pending_inbox_command_pair()
+src/agentic_project_kit/agent_command_runner.py:342:        for yaml_path in inbox_yaml_files():
+src/agentic_project_kit/agent_command_runner.py:346:        failures.append("complete inbox command remains: " + ", ".join(complete_pairs))
+src/agentic_project_kit/agent_command_runner.py:347:    unstaged_deletions = [path for path in git_porcelain_paths() if path.startswith(".agentic/commands/inbox/")]
+src/agentic_project_kit/agent_command_runner.py:349:        failures.append("inbox path still dirty after run: " + ", ".join(unstaged_deletions))
+src/agentic_project_kit/agent_command_runner.py:365:        consumed_paths = list(prepare_current_from_inbox())
+src/agentic_project_kit/work_orders.py:56:            raise ValueError(f"work order command must not contain forbidden fragment: {fragment}")
+tests/test_command_inbox_check.py:3:from agentic_project_kit.command_inbox_check import check_command_inbox
+tests/test_command_inbox_check.py:15:def test_command_inbox_check_passes_empty_inbox(tmp_path):
+tests/test_command_inbox_check.py:16:    assert check_command_inbox(tmp_path / ".agentic/commands/inbox").ok
+tests/test_command_inbox_check.py:18:def test_command_inbox_check_passes_one_complete_pair(tmp_path):
+tests/test_command_inbox_check.py:19:    inbox = tmp_path / ".agentic/commands/inbox"
+tests/test_command_inbox_check.py:20:    write_pair(inbox, "cmd")
+tests/test_command_inbox_check.py:21:    assert check_command_inbox(inbox).ok
+tests/test_command_inbox_check.py:23:def test_command_inbox_check_rejects_orphans_and_multiple_pairs(tmp_path):
+tests/test_command_inbox_check.py:24:    inbox = tmp_path / ".agentic/commands/inbox"
+tests/test_command_inbox_check.py:25:    write_pair(inbox, "a")
+tests/test_command_inbox_check.py:26:    write_pair(inbox, "b")
+tests/test_command_inbox_check.py:27:    (inbox / "orphan.yaml").write_text("command_id: orphan" + chr(10), encoding="utf-8")
+tests/test_command_inbox_check.py:28:    result = check_command_inbox(inbox)
+tests/test_command_inbox_check.py:34:def test_command_inbox_check_rejects_bad_metadata_and_forbidden_fragments(tmp_path):
+tests/test_command_inbox_check.py:35:    inbox = tmp_path / ".agentic/commands/inbox"
+tests/test_command_inbox_check.py:36:    write_pair(inbox, "bad", script="git switch main" + chr(10))
+tests/test_command_inbox_check.py:38:    (inbox / "bad.yaml").write_text(metadata, encoding="utf-8")
+tests/test_command_inbox_check.py:39:    result = check_command_inbox(inbox)
+tests/test_command_inbox_check.py:43:    assert "forbidden fragment: git switch " in joined
+tests/test_command_inbox_check.py:46:def test_command_inbox_check_rejects_completed_pending_command(tmp_path, monkeypatch):
+tests/test_command_inbox_check.py:47:    import agentic_project_kit.command_inbox_check as cic
+tests/test_command_inbox_check.py:48:    inbox = tmp_path / ".agentic/commands/inbox"
+tests/test_command_inbox_check.py:49:    write_pair(inbox, "done")
+tests/test_command_inbox_check.py:55:    result = cic.check_command_inbox(inbox)
+tests/test_agent_command_runner.py:100:def test_pending_inbox_command_pair_requires_exactly_one_pair(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:102:    inbox = acr.INBOX_DIR
+tests/test_agent_command_runner.py:103:    inbox.mkdir(parents=True)
+tests/test_agent_command_runner.py:104:    (inbox / "a.yaml").write_text("command_id: a" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:105:    (inbox / "a.sh").write_text("printf a" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:106:    assert acr.pending_inbox_command_pair()[0].name == "a.yaml"
+tests/test_agent_command_runner.py:107:    (inbox / "b.yaml").write_text("command_id: b" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:108:    (inbox / "b.sh").write_text("printf b" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:110:        acr.pending_inbox_command_pair()
+tests/test_agent_command_runner.py:117:def test_prepare_current_from_inbox_copies_and_removes_pair(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:119:    inbox = acr.INBOX_DIR
+tests/test_agent_command_runner.py:120:    inbox.mkdir(parents=True)
+tests/test_agent_command_runner.py:121:    (inbox / "cmd.yaml").write_text("command_id: cmd" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:122:    (inbox / "cmd.sh").write_text("printf cmd" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:123:    yaml_path, script_path = acr.prepare_current_from_inbox()
+tests/test_agent_command_runner.py:135:    inbox = acr.INBOX_DIR
+tests/test_agent_command_runner.py:136:    inbox.mkdir(parents=True)
+tests/test_agent_command_runner.py:137:    (inbox / "cmd.yaml").write_text("command_id: cmd" + chr(10) + "title: Cmd" + chr(10) + "safety_class: local-only" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:138:    (inbox / "cmd.sh").write_text("printf cmd" + chr(10), encoding="utf-8")
+tests/test_agent_command_runner.py:162:    extra = Path(".agentic/commands/inbox/cmd-extra.yaml")
+tests/test_agent_command_runner.py:174:    assert ".agentic/commands/inbox/cmd-extra.yaml" in pushed_paths
+tests/test_agent_command_runner.py:184:def test_agent_next_postconditions_detect_complete_inbox_pair(tmp_path, monkeypatch):
+tests/test_agent_command_runner.py:190:    assert any("complete inbox command remains" in item for item in failures)
+tests/test_agent_command_runner.py:241:    inbox = acr.INBOX_DIR
+tests/test_agent_command_runner.py:242:    inbox.mkdir(parents=True)
+tests/test_agent_command_runner.py:243:    (inbox / "cmd.yaml").write_text("command_id: cmd-footer\ntitle: Cmd Footer\nsafety_class: local-only\n", encoding="utf-8")
+tests/test_agent_command_runner.py:244:    (inbox / "cmd.sh").write_text("printf cmd-footer\n", encoding="utf-8")
+tests/test_agent_command_runner.py:256:    inbox = acr.INBOX_DIR
+tests/test_agent_command_runner.py:257:    inbox.mkdir(parents=True)
+tests/test_agent_command_runner.py:258:    (inbox / "cmd.yaml").write_text("command_id: cmd-footer-fail\ntitle: Cmd Footer Fail\nsafety_class: local-only\n", encoding="utf-8")
+tests/test_agent_command_runner.py:259:    (inbox / "cmd.sh").write_text("printf cmd-footer-fail\n", encoding="utf-8")
+tests/test_agent_command_runner.py:283:    inbox = acr.INBOX_DIR
+tests/test_agent_command_runner.py:284:    inbox.mkdir(parents=True)
+tests/test_agent_command_runner.py:285:    (inbox / "a.yaml").write_text("command_id: a\ntitle: A\nsafety_class: local-only\n", encoding="utf-8")
+tests/test_agent_command_runner.py:286:    (inbox / "a.sh").write_text("printf a\n", encoding="utf-8")
+tests/test_agent_command_runner.py:287:    (inbox / "b.yaml").write_text("command_id: b\ntitle: B\nsafety_class: local-only\n", encoding="utf-8")
+tests/test_agent_command_runner.py:288:    (inbox / "b.sh").write_text("printf b\n", encoding="utf-8")
+tests/test_agent_command_runner.py:300:    inbox = acr.INBOX_DIR
+tests/test_agent_command_runner.py:301:    inbox.mkdir(parents=True)
+tests/test_agent_command_runner.py:302:    (inbox / "cmd.yaml").write_text("command_id: cmd-post\ntitle: Cmd Post\nsafety_class: local-only\n", encoding="utf-8")
+tests/test_agent_command_runner.py:303:    (inbox / "cmd.sh").write_text("printf cmd-post\n", encoding="utf-8")
+tests/test_work_orders.py:58:        assert "forbidden fragment" in str(exc)
+
+### CURRENT GATES ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311
+?? docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+
+### PYTEST ###
+........................................................................ [ 17%]
+........................................................................ [ 34%]
+........................................................................ [ 51%]
+........................................................................ [ 69%]
+........................................................................ [ 86%]
+.........................................................                [100%]
+417 passed in 2.35s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.27
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=75
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311
+?? docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+
+### RESULT: PASS ###
+
+### RELEASE GATE STILL READ-ONLY CHECK ###
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+NS RELEASE GATE CYCLE v0.3.27
+
+
+### SAFETY ###
+Safety: verifies release readiness only; no tag, release, merge, or publish action.
+
+### BRANCH / STATUS ###
+docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311
+?? docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+
+### LOCAL GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311
+?? docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+
+### PYTEST ###
+........................................................................ [ 17%]
+........................................................................ [ 34%]
+........................................................................ [ 51%]
+........................................................................ [ 69%]
+........................................................................ [ 86%]
+.........................................................                [100%]
+417 passed in 2.35s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.27
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=75
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311
+?? docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+
+### RESULT: PASS ###
+
+### RELEASE CHECK ###
+Release state check for target v0.3.27
+
+[PASS] semantic version: 0.3.27 is valid
+[PASS] pyproject version: found text: version = "0.3.27"
+[PASS] package __version__: found text: __version__ = "0.3.27"
+[PASS] CHANGELOG version: found text: v0.3.27
+[PASS] README version: found text: Version `0.3.27`
+[PASS] CITATION version: found text: version: 0.3.27
+[PASS] STATUS version: found text: Current version: 0.3.27
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.27
+[PASS] local tag unused: tag is unused: v0.3.27
+[PASS] remote tag unused: remote tag is unused: v0.3.27
+[PASS] GitHub release unused: GitHub release is absent: v0.3.27
+
+Overall: PASS
+
+
+### CLEAN DIST ###
+
+### BUILD CHECK ###
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for sdist...
+* Building sdist...
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for wheel...
+* Building wheel...
+Successfully built agentic_project_kit-0.3.27.tar.gz and agentic_project_kit-0.3.27-py3-none-any.whl
+Checking dist/agentic_project_kit-0.3.27-py3-none-any.whl: [32mPASSED[0m
+Checking dist/agentic_project_kit-0.3.27.tar.gz: [32mPASSED[0m
+
+### VERIFY DIST ONLY CONTAINS TARGET VERSION ###
+total 968
+drwxr-xr-x@  4 hof  staff     128 19 Mai  09:13 .
+drwxr-xr-x@ 30 hof  staff     960 19 Mai  09:13 ..
+-rw-r--r--@  1 hof  staff  100485 19 Mai  09:13 agentic_project_kit-0.3.27-py3-none-any.whl
+-rw-r--r--@  1 hof  staff  390016 19 Mai  09:13 agentic_project_kit-0.3.27.tar.gz
+
+### FINAL STATE ###
+docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311
+?? docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+
+### RESULT: PASS ###
+
+### CLASSIFICATION ###
+required_next_patch=mandatory_terminal_evidence_capture_contract
+release_blocked_until_fixed=yes
+must_remove_user_uncertainty=yes
+normal_failures_must_have_remote_log=yes
+final_summary_must_say_REMOTE_EVIDENCE_PASS_or_FAIL=yes
+all_long_runner_paths_must_start_logging_before_work=yes
+
+### PRESERVE DIAGNOSIS LOG ###
+?? docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+[docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311 04ce418] Diagnose mandatory terminal evidence capture
+ 1 file changed, 619 insertions(+)
+ create mode 100644 docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+
+### PUSH AND CREATE PR ###
+FAIL_DIRTY_WORKTREE_BEFORE_REMOTE_MUTATION
+docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+remote: 
+remote: Create a pull request for 'docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311' on GitHub by visiting:        
+remote:      https://github.com/vfi64/agentic-project-kit/pull/new/docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311        
+remote: 
+To github.com:vfi64/agentic-project-kit.git
+ * [new branch]      docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311 -> docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311
+branch 'docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311' set up to track 'origin/docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311'.
+Warning: 1 uncommitted change
+https://github.com/vfi64/agentic-project-kit/pull/435
+
+### FINAL STATE ###
+docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311
+ M docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+04ce418 Diagnose mandatory terminal evidence capture
+45e51d1 Remove stale release version source inbox command (#434)
+90b8160 Require package init version in release check (#433)
+6925192 Queue release version source contract hardening (#432)
+592a11f Preserve release version source hardening diagnosis log (#431)
+
+================================================================
+SUMMARY
+WORK RESULT: FAIL
+EVIDENCE RESULT: CHECK_LOG_PUSH
+OVERALL RESULT: FAIL
+NEXT CHAT REPLY: f
+REMOTE_EVIDENCE: UNKNOWN_OR_PARTIAL
+terminal_log=docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+### RESULT: FAIL ###
+================================================================
+
+Saving session...
+...copying shared history...
+...saving history...truncating history files...
+...completed.
+Deleting expired sessions...      44 completed.
