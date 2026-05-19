@@ -282,3 +282,11 @@ Terminal logs must be finalized before commit and must not be written again afte
 When changing planning files, handoff state, release state, no-copy evidence policy, GUI roadmap, or next safe step, run `./ns state-freshness-check` plus `./ns handoff-check` and `./ns governance-check`.
 
 The freshness gate must reject contradictory current-state claims across `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, and `.agentic/handoff_state.yaml`, including mismatched current release versions, stale DOI baselines, obsolete next-step instructions, and strategy documents that present old baselines as current without a historical marker.
+
+## Mandatory Final Summary Contract Gate
+
+Every relevant terminal work block must end with a machine-readable SUMMARY block containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, and the final result marker.
+
+A final `### RESULT: PASS ###` is valid only when `WORK RESULT: PASS`, `OVERALL RESULT: PASS`, and, for relevant workflows, `REMOTE_EVIDENCE: PASS` are all true. A previous inner FAIL must not be converted into a final PASS by a later commit or push of evidence. Evidence success and work success are separate outcomes.
+
+Contract tests live in `tests/test_final_summary_contract.py` and validate the parser in `src/agentic_project_kit/final_summary_contract.py`.

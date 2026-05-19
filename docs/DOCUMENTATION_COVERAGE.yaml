@@ -523,3 +523,28 @@ rules:
         terms:
           - Planning State Freshness Gate
           - ./ns state-freshness-check
+
+  - id: final-summary-contract-coverage
+    description: Mandatory final terminal summaries must remain documented and test-backed.
+    documents:
+      - path: .agentic/no_copy_terminal_policy.yaml
+        terms:
+          - mandatory_final_summary_contract
+          - WORK RESULT
+          - REMOTE_EVIDENCE
+      - path: docs/TEST_GATES.md
+        terms:
+          - Mandatory Final Summary Contract Gate
+          - WORK RESULT
+          - REMOTE_EVIDENCE
+          - tests/test_final_summary_contract.py
+      - path: docs/STATUS.md
+        terms:
+          - Mandatory Final Summary Contract
+          - WORK RESULT
+          - REMOTE_EVIDENCE
+      - path: docs/handoff/CURRENT_HANDOFF.md
+        terms:
+          - Mandatory Final Summary Contract
+          - 'NEXT_CHAT_REPLY: p'
+          - 'REMOTE_EVIDENCE: PASS'
