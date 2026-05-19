@@ -1,4 +1,0 @@
-command_id: 20260519-verify-main-after-pr449
-title: Verify main after final summary contract merge
-safety_class: local-verification
-expected_branch: main
