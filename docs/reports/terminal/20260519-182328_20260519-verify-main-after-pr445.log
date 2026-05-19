@@ -1,0 +1,162 @@
+terminal_log=docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log
+### RUN: sh .agentic/commands/current.sh
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+VERIFY MAIN AFTER PR 445 COMPILED AGENT CONTEXT YAML
+
+### PRECHECK ###
+main
+ D .agentic/commands/inbox/20260519-verify-main-after-pr445.sh
+ D .agentic/commands/inbox/20260519-verify-main-after-pr445.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log
+?? docs/reports/terminal/20260519-remote-command-first-rule.log
+da8a405 Fix queued PR 445 verification command schema
+921551d Queue main verification after PR 445 script
+8585b5f Queue main verification after PR 445 metadata
+1bdcd62 Add compiled agent context YAML (#445)
+776b9ea Queue compiled agent context script
+5e53b6c Queue compiled agent context command
+436b848 Record agent command run 20260519-merge-pr444-remote-first-no-guess
+0c26e94 Queue PR 444 merge script
+
+### SYNC MAIN ###
+Already on 'main'
+D	.agentic/commands/inbox/20260519-verify-main-after-pr445.sh
+D	.agentic/commands/inbox/20260519-verify-main-after-pr445.yaml
+M	docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+Your branch is up to date with 'origin/main'.
+switch main PASS
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+pull main PASS
+
+### VERIFY PR 445 MERGE IN HISTORY ###
+1bdcd62 Add compiled agent context YAML (#445)
+pr445 history PASS
+
+### VERIFY COMPILED CONTEXT FILES ###
+compiled context files PASS
+
+### TARGETED PYTEST ###
+..                                                                       [100%]
+2 passed in 0.02s
+targeted pytest PASS
+
+### PATCH PREFLIGHT ###
+Patch artifact preflight passed
+patch-preflight PASS
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+ D .agentic/commands/inbox/20260519-verify-main-after-pr445.sh
+ D .agentic/commands/inbox/20260519-verify-main-after-pr445.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log
+?? docs/reports/terminal/20260519-remote-command-first-rule.log
+
+### PYTEST ###
+........................................................................ [ 16%]
+........................................................................ [ 32%]
+........................................................................ [ 49%]
+........................................................................ [ 65%]
+........................................................................ [ 81%]
+........................................................................ [ 98%]
+........                                                                 [100%]
+440 passed in 2.66s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.28
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=75
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+ D .agentic/commands/inbox/20260519-verify-main-after-pr445.sh
+ D .agentic/commands/inbox/20260519-verify-main-after-pr445.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log
+?? docs/reports/terminal/20260519-remote-command-first-rule.log
+
+### RESULT: PASS ###
+dev PASS
+
+### FINAL STATE ###
+main
+ D .agentic/commands/inbox/20260519-verify-main-after-pr445.sh
+ D .agentic/commands/inbox/20260519-verify-main-after-pr445.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log
+?? docs/reports/terminal/20260519-remote-command-first-rule.log
+da8a405 Fix queued PR 445 verification command schema
+921551d Queue main verification after PR 445 script
+8585b5f Queue main verification after PR 445 metadata
+1bdcd62 Add compiled agent context YAML (#445)
+776b9ea Queue compiled agent context script
+5e53b6c Queue compiled agent context command
+436b848 Record agent command run 20260519-merge-pr444-remote-first-no-guess
+0c26e94 Queue PR 444 merge script
+================================================================
+SUMMARY
+WORK RESULT: PASS
+EVIDENCE RESULT: PASS
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PASS
+terminal_log=docs/reports/terminal/20260519-verify-main-after-pr445.log
+command_report=docs/reports/command_runs/20260519-verify-main-after-pr445.md
+NEXT_CHAT_REPLY: p
+### RESULT: PASS ###
+================================================================
+### EXIT: 0
+### RESULT: PASS ###

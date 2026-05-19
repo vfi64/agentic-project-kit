@@ -1,5 +1,0 @@
-command_id: 20260519-verify-main-after-pr445
-title: Verify main after PR 445 compiled agent context YAML
-safety_class: local-verification
-expected_branch: main
-next_reply_on_pass: p
