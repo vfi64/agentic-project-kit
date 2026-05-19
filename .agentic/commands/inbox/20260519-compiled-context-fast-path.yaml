@@ -1,0 +1,3 @@
+command_id: 20260519-compiled-context-fast-path
+title: Relax compiled context mandatory read policy
+safety_class: remote-mutation
