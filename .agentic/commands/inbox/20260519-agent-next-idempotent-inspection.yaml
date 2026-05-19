@@ -1,0 +1,4 @@
+command_id: 20260519-agent-next-idempotent-inspection
+title: Inspect agent-next already executed inbox idempotency
+safety_class: local-verification
+expected_branch: main
