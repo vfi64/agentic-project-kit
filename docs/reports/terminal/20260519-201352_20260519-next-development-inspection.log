@@ -1,0 +1,239 @@
+terminal_log=docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log
+### RUN: sh .agentic/commands/current.sh
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+INSPECT NEXT DEVELOPMENT SLICE AFTER FLOW REPAIR
+
+### PRECHECK ###
+main
+ D .agentic/commands/inbox/20260519-next-development-inspection.sh
+ D .agentic/commands/inbox/20260519-next-development-inspection.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log
+fd8ad52 Queue next development inspection metadata
+562668e Queue next development inspection command
+535c03b Support local verification agent command envelopes (#447)
+b760dc2 Record agent command run 20260519-compiled-context-fast-path
+938779c Complete compiled context fast path command pair
+48a7245 Queue compiled context fast path command
+a4b5688 Add no remote command deadlock rule (#446)
+1c020a2 Record agent command run 20260519-verify-main-after-pr445
+
+### SYNC MAIN ###
+Already on 'main'
+D	.agentic/commands/inbox/20260519-next-development-inspection.sh
+D	.agentic/commands/inbox/20260519-next-development-inspection.yaml
+M	docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### FLOW-REPAIR BASELINE EVIDENCE ###
+fd8ad52 Queue next development inspection metadata
+562668e Queue next development inspection command
+535c03b Support local verification agent command envelopes (#447)
+b760dc2 Record agent command run 20260519-compiled-context-fast-path
+938779c Complete compiled context fast path command pair
+48a7245 Queue compiled context fast path command
+a4b5688 Add no remote command deadlock rule (#446)
+1c020a2 Record agent command run 20260519-verify-main-after-pr445
+da8a405 Fix queued PR 445 verification command schema
+921551d Queue main verification after PR 445 script
+8585b5f Queue main verification after PR 445 metadata
+1bdcd62 Add compiled agent context YAML (#445)
+.agentic/commands/current.sh:23:grep -R "no remote command deadlock\|remote-first no-guess\|compiled_agent_context\|local-verification\|No complete pending command pair" -n .agentic docs src tests 2>/dev/null | head -120
+.agentic/compiled_agent_context.yaml:13:- .agentic/compiled_agent_context.yaml
+docs/handoff/CURRENT_HANDOFF.md:77:Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
+docs/handoff/CURRENT_HANDOFF.md:81:`.agentic/compiled_agent_context.yaml` is the compact machine-readable companion to the human governance docs. New durable rules must be reflected in the human docs, the compiled YAML, and deterministic tests.
+docs/TEST_GATES.md:309:Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
+docs/TEST_GATES.md:313:`.agentic/compiled_agent_context.yaml` is the compact machine-readable companion to the human governance docs. New durable rules must be reflected in the human docs, the compiled YAML, and deterministic tests.
+docs/STATUS.md:108:Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
+docs/STATUS.md:112:`.agentic/compiled_agent_context.yaml` is the compact machine-readable companion to the human governance docs. New durable rules must be reflected in the human docs, the compiled YAML, and deterministic tests.
+docs/governance/COMPILED_AGENT_CONTEXT.md:7:This document defines the human-facing contract for `.agentic/compiled_agent_context.yaml`.
+docs/governance/COMPILED_AGENT_CONTEXT.md:11:Every durable rule must be maintained in three places: human documentation, `.agentic/compiled_agent_context.yaml`, and deterministic tests.
+docs/governance/COMPILED_AGENT_CONTEXT.md:13:The remote-first no-guess rule remains first: inspect the remote repository, authoritative files, and command help before acting on repository state or command syntax.
+docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log:347:src/agentic_project_kit/agent_command_runner.py:95:        raise FileNotFoundError("No complete pending command pair in .agentic/commands/inbox")
+docs/reports/terminal/20260519-143036_remote-first-no-guess-governance.log:13:docs/TEST_GATES.md:309:Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
+docs/reports/terminal/20260519-143036_remote-first-no-guess-governance.log:14:docs/STATUS.md:108:Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
+docs/reports/terminal/20260519-143036_remote-first-no-guess-governance.log:15:docs/handoff/CURRENT_HANDOFF.md:77:Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
+docs/reports/terminal/20260519-143036_remote-first-no-guess-governance.log:17:tests/test_remote_first_no_guess_rule.py:20:        assert "remote-first no-guess" in text
+docs/reports/terminal/20260519-143337_open-pr-remote-first-no-guess-governance.log:6:7d21c35 Add remote-first no-guess governance rule
+docs/reports/terminal/20260519-143337_open-pr-remote-first-no-guess-governance.log:24:docs/TEST_GATES.md:309:Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
+docs/reports/terminal/20260519-143337_open-pr-remote-first-no-guess-governance.log:25:docs/STATUS.md:108:Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
+docs/reports/terminal/20260519-143337_open-pr-remote-first-no-guess-governance.log:26:docs/handoff/CURRENT_HANDOFF.md:77:Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
+docs/reports/terminal/20260519-143337_open-pr-remote-first-no-guess-governance.log:28:tests/test_remote_first_no_guess_rule.py:20:        assert "remote-first no-guess" in text
+docs/reports/terminal/20260519-143456_pr444-main-verification.log:6:20e4b9b Add remote-first no-guess governance rule (#444)
+docs/reports/terminal/20260519-143456_pr444-main-verification.log:24:docs/TEST_GATES.md:309:Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
+docs/reports/terminal/20260519-143456_pr444-main-verification.log:25:docs/STATUS.md:108:Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
+docs/reports/terminal/20260519-143456_pr444-main-verification.log:26:docs/handoff/CURRENT_HANDOFF.md:77:Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
+docs/reports/terminal/20260519-143456_pr444-main-verification.log:28:tests/test_remote_first_no_guess_rule.py:20:        assert "remote-first no-guess" in text
+docs/reports/terminal/20260519-143456_pr444-main-verification.log:97:{"mergeCommit":{"oid":"20e4b9b2e15e0403d7212caa57cafe67202e0157"},"mergedAt":"2026-05-19T12:34:51Z","number":444,"state":"MERGED","title":"Add remote-first no-guess governance rule","url":"https://github.com/vfi64/agentic-project-kit/pull/444"}
+docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:53:src/agentic_project_kit/agent_command_runner.py:94:        raise FileNotFoundError("No complete pending command pair in .agentic/commands/inbox")
+docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:57:?? .agentic/compiled_agent_context.yaml
+docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:61:?? tests/test_compiled_agent_context.py
+docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:118:?? .agentic/compiled_agent_context.yaml
+docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:122:?? tests/test_compiled_agent_context.py
+docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:135:?? .agentic/compiled_agent_context.yaml
+docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:139:?? tests/test_compiled_agent_context.py
+docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:151: create mode 100644 .agentic/compiled_agent_context.yaml
+docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:153: create mode 100644 tests/test_compiled_agent_context.py
+docs/reports/terminal/20260519-165218_20260519-merge-pr444-remote-first-no-guess.log:115:1df7371 Verify main after remote-first no-guess governance
+docs/reports/terminal/20260519-165218_20260519-merge-pr444-remote-first-no-guess.log:116:20e4b9b Add remote-first no-guess governance rule (#444)
+docs/reports/command_runs/20260519-merge-pr444-remote-first-no-guess.md:3:- Title: Merge PR 444 remote-first no-guess governance
+src/agentic_project_kit/agent_command_runner.py:38:    "remote-mutation", "local-verification",
+src/agentic_project_kit/agent_command_runner.py:43:    if value == "local-verification":
+src/agentic_project_kit/agent_command_runner.py:102:        raise FileNotFoundError("No complete pending command pair in .agentic/commands/inbox")
+Binary file src/agentic_project_kit/__pycache__/agent_command_runner.cpython-314.pyc matches
+tests/test_agent_command_envelope_fallback.py:8:    assert normalize_safety_class("local-verification") == "local-only"
+tests/test_agent_command_envelope_fallback.py:16:        "command_id: cmd\ntitle: Local verification\nsafety_class: local-verification\n",
+tests/test_remote_first_no_guess_rule.py:20:        assert "remote-first no-guess" in text
+Binary file tests/__pycache__/test_no_remote_command_deadlock_rule.cpython-314.pyc matches
+Binary file tests/__pycache__/test_remote_first_no_guess_rule.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_remote_first_no_guess_rule.cpython-314.pyc matches
+Binary file tests/__pycache__/test_compiled_agent_context.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_agent_command_envelope_fallback.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_agent_command_envelope_fallback.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_no_remote_command_deadlock_rule.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_agent_command_envelope_fallback.cpython-314.pyc matches
+tests/test_compiled_agent_context.py:5:def test_compiled_agent_context_yaml_is_valid_and_prioritized():
+tests/test_compiled_agent_context.py:6:    data = yaml.safe_load(Path(".agentic/compiled_agent_context.yaml").read_text(encoding="utf-8"))
+tests/test_compiled_agent_context.py:10:    assert data["priority_order"][0] == ".agentic/compiled_agent_context.yaml"
+tests/test_compiled_agent_context.py:12:def test_compiled_agent_context_contains_active_hard_rules():
+tests/test_compiled_agent_context.py:13:    data = yaml.safe_load(Path(".agentic/compiled_agent_context.yaml").read_text(encoding="utf-8"))
+tests/test_no_remote_command_deadlock_rule.py:5:    text = Path(".agentic/compiled_agent_context.yaml").read_text(encoding="utf-8")
+
+### AGENT COMMAND QUEUE STATE ###
+.agentic/commands/current.sh
+.agentic/commands/current.yaml
+.agentic/commands/executed.jsonl
+
+### AVAILABLE NS / ACTION ENTRYPOINTS ###
+Local cockpit actions
+- git.status [git/read_only] git status --short
+  Show uncommitted local changes.
+- workflow.state [workflow/read_only] agentic-kit workflow state
+  Show guided workflow state and recommended next step.
+- workflow.list [workflow/read_only] agentic-kit workflow list
+  List stored local workflow items.
+- gate.check-docs [gate/read_only] agentic-kit check-docs
+  Run deterministic documentation gates.
+- gate.doctor [gate/read_only] agentic-kit doctor
+  Run compact project health checks.
+- audit.doc-mesh [audit/read_only] agentic-kit doc-mesh-audit
+  Audit cross-document state and governance drift.
+- audit.doc-lifecycle [audit/read_only] agentic-kit doc-lifecycle-audit
+  Audit lifecycle metadata for governed planning documents.
+- audit.pr-hygiene [audit/read_only] agentic-kit pr-hygiene
+  Diagnose stale, duplicate, or empty pull-request and branch hygiene signals.
+- release.plan [release/read_only] agentic-kit release-plan
+  Print release preparation checklist.
+- release.check [release/read_only] agentic-kit release-check
+  Validate release state for a target version.
+- release.post-check [release/read_only] agentic-kit post-release-check
+  Validate GitHub and Zenodo post-release state.
+- workflow.go [workflow/bounded] agentic-kit workflow go
+  Request and run one bounded workflow step.
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+ D .agentic/commands/inbox/20260519-next-development-inspection.sh
+ D .agentic/commands/inbox/20260519-next-development-inspection.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log
+
+### PYTEST ###
+........................................................................ [ 16%]
+........................................................................ [ 32%]
+........................................................................ [ 48%]
+........................................................................ [ 64%]
+........................................................................ [ 81%]
+........................................................................ [ 97%]
+............                                                             [100%]
+444 passed in 2.62s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for 
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, 
+markdown-docs, python-cli, git-github, release-managed; policy packs: 
+solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.28
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are 
+changed.
+open_pr_count=0
+local_branch_count=75
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+ D .agentic/commands/inbox/20260519-next-development-inspection.sh
+ D .agentic/commands/inbox/20260519-next-development-inspection.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log
+
+### RESULT: PASS ###
+
+### FINAL STATE ###
+main
+ D .agentic/commands/inbox/20260519-next-development-inspection.sh
+ D .agentic/commands/inbox/20260519-next-development-inspection.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log
+
+### RESULT: FAIL ###
+================================================================
+SUMMARY
+WORK RESULT: FAIL
+EVIDENCE RESULT: CHAT_ONLY
+OVERALL RESULT: FAIL
+REMOTE_EVIDENCE: FAIL
+NEXT_CHAT_REPLY: paste-output
+### RESULT: FAIL ###
+================================================================
+### EXIT: 0
+### RESULT: PASS ###

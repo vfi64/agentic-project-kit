@@ -1,1 +1,1 @@
-docs/reports/terminal/20260519-192233_20260519-compiled-context-fast-path.log
+docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log
