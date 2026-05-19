@@ -1,0 +1,4 @@
+command_id: 20260519-verify-main-after-pr449-summary-contract
+title: Verify main after PR 449 final summary contract
+safety_class: local-verification
+expected_branch: main
