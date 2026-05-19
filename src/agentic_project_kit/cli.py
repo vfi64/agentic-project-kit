@@ -19,6 +19,7 @@ from agentic_project_kit.cli_commands.state import state_app
 from agentic_project_kit.cli_commands.todo import todo_app
 from agentic_project_kit.cli_commands.validation import register_validation_commands
 from agentic_project_kit.cli_commands.workflow import workflow_app
+from agentic_project_kit.patch_artifact_preflight import register_patch_preflight_command
 
 app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
 
@@ -29,6 +30,7 @@ register_github_commands(app)
 register_check_commands(app)
 register_release_commands(app)
 register_validation_commands(app)
+register_patch_preflight_command(app)
 app.add_typer(workflow_app, name="workflow")
 app.add_typer(handoff_app, name="handoff")
 app.add_typer(actions_app, name="actions")
