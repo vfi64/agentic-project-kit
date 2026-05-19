@@ -1,0 +1,3 @@
+command_id: finalize-no-copy-after-pr423-001
+title: Finalize no-copy workflow state after PR 423
+safety_class: remote-mutation
