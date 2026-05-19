@@ -125,6 +125,7 @@ def build_release_state_report(
     checks = [
         check_semantic_version(resolved_version),
         check_file_contains(project_root / "pyproject.toml", f'version = "{resolved_version}"', "pyproject version"),
+        check_file_contains(project_root / "src/agentic_project_kit/__init__.py", f"__version__ = \"{resolved_version}\"", "package __version__"),
         check_file_contains(project_root / "CHANGELOG.md", f"v{resolved_version}", "CHANGELOG version"),
         check_file_contains(project_root / "README.md", f"Version `{resolved_version}`", "README version"),
         check_file_contains(project_root / "CITATION.cff", f"version: {resolved_version}", "CITATION version"),

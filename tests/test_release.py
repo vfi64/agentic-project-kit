@@ -2,6 +2,8 @@ from pathlib import Path
 from collections.abc import Sequence
 
 from agentic_project_kit.release import (
+    ReleaseCheckResult,
+    ReleaseStateReport,
     CommandResult,
     ReleaseCheckStatus,
     build_release_plan,
@@ -69,7 +71,7 @@ def test_build_release_state_report_passes_for_unused_version(tmp_path: Path):
     report = build_release_state_report(tmp_path, command_runner=_runner())
 
     assert report.ok
-    assert [check.status for check in report.checks] == [ReleaseCheckStatus.PASS] * 10
+    assert [check.status for check in report.checks] == [ReleaseCheckStatus.PASS] * 11
 
 
 def test_build_release_state_report_warns_without_git_repo(tmp_path: Path):
@@ -116,8 +118,9 @@ def test_build_release_state_report_fails_for_missing_changelog_version(tmp_path
     report = build_release_state_report(tmp_path, command_runner=_runner())
 
     assert not report.ok
-    assert report.checks[2].status == ReleaseCheckStatus.FAIL
-    assert "missing text: v1.2.3" in report.checks[2].detail
+    check = _check_by_name(report, "CHANGELOG version")
+    assert check.status == ReleaseCheckStatus.FAIL
+    assert "missing text: v1.2.3" in check.detail
 
 
 def test_build_release_state_report_fails_for_missing_readme_version(tmp_path: Path):
@@ -127,8 +130,9 @@ def test_build_release_state_report_fails_for_missing_readme_version(tmp_path: P
     report = build_release_state_report(tmp_path, command_runner=_runner())
 
     assert not report.ok
-    assert report.checks[3].status == ReleaseCheckStatus.FAIL
-    assert "missing text: Version `1.2.3`" in report.checks[3].detail
+    check = _check_by_name(report, "README version")
+    assert check.status == ReleaseCheckStatus.FAIL
+    assert "missing text: Version `1.2.3`" in check.detail
 
 
 def test_build_release_state_report_fails_for_missing_citation_version(tmp_path: Path):
@@ -138,8 +142,9 @@ def test_build_release_state_report_fails_for_missing_citation_version(tmp_path:
     report = build_release_state_report(tmp_path, command_runner=_runner())
 
     assert not report.ok
-    assert report.checks[4].status == ReleaseCheckStatus.FAIL
-    assert "missing text: version: 1.2.3" in report.checks[4].detail
+    check = _check_by_name(report, "CITATION version")
+    assert check.status == ReleaseCheckStatus.FAIL
+    assert "missing text: version: 1.2.3" in check.detail
 
 
 def test_build_release_state_report_fails_for_missing_pyproject_version(tmp_path: Path):
@@ -211,6 +216,19 @@ def _write_release_files(project_root: Path, version: str) -> None:
     (project_root / "docs/handoff/CURRENT_HANDOFF.md").write_text(
         f"Current version: {version}\n", encoding="utf-8"
     )
+
+
+    package_dir = project_root / "src/agentic_project_kit"
+    package_dir.mkdir(parents=True, exist_ok=True)
+    (package_dir / "__init__.py").write_text(f'__version__ = "{version}"\\n', encoding="utf-8")
+
+
+
+def _check_by_name(report: ReleaseStateReport, name: str) -> ReleaseCheckResult:
+    for check in report.checks:
+        if check.name == name:
+            return check
+    raise AssertionError(f"missing release check: {name}")
 
 
 def _runner(
