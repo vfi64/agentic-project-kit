@@ -276,3 +276,9 @@ Before terminal workflows perform remote mutations or merge/sync verification, t
 Long-running workflows must not leave the user guessing whether copy-and-paste is required. A run may claim no-copy completion only when its final summary includes `REMOTE_EVIDENCE: PASS` and the relevant terminal log or command-run report has been committed and pushed. If that proof is unavailable, the final summary must say that remote evidence is incomplete and paste-output is required.
 
 Terminal logs must be finalized before commit and must not be written again after they have been committed. This prevents self-modifying log artifacts from producing dirty worktrees after the evidence commit.
+
+## Planning State Freshness Gate
+
+When changing planning files, handoff state, release state, no-copy evidence policy, GUI roadmap, or next safe step, run `./ns state-freshness-check` plus `./ns handoff-check` and `./ns governance-check`.
+
+The freshness gate must reject contradictory current-state claims across `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, and `.agentic/handoff_state.yaml`, including mismatched current release versions, stale DOI baselines, obsolete next-step instructions, and strategy documents that present old baselines as current without a historical marker.

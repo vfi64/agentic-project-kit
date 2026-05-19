@@ -497,3 +497,29 @@ rules:
           - agentic-kit cockpit run
           - action registry
           - safety classification
+
+
+  - id: planning-state-freshness-coverage
+    description: Planning state documents must remain current, mutually consistent, and guarded against stale historical fragments.
+    documents:
+      - path: docs/STATUS.md
+        terms:
+          - Current released version: 0.3.27
+          - Planning-state freshness
+          - no-copy/evidence
+          - Tkinter cockpit
+      - path: docs/handoff/CURRENT_HANDOFF.md
+        terms:
+          - Current released version: 0.3.27
+          - curated
+          - no-copy/evidence
+          - Tkinter cockpit
+      - path: docs/workflow/HANDOFF_STATE.md
+        terms:
+          - Planning-state freshness rule
+          - curated, not accumulated
+          - ./ns state-freshness-check
+      - path: docs/TEST_GATES.md
+        terms:
+          - Planning State Freshness Gate
+          - ./ns state-freshness-check
