@@ -1,1 +1,1 @@
-docs/reports/command_runs/20260519-agent-next-idempotent-inspection.md
+docs/reports/command_runs/20260519-idempotent-already-executed-command.md

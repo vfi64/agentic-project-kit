@@ -1,4 +1,0 @@
-command_id: 20260519-idempotent-already-executed-command
-title: Make already executed agent-next commands idempotent
-safety_class: remote-mutation
-expected_branch: main

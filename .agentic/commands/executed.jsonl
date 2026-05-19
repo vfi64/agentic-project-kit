@@ -24,3 +24,4 @@
 {"command_id": "20260519-verify-main-after-final-summary-contract", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "9cedb028eafea866a21681ed4aa1621e2cca032c8895a942b818769dcaecc80a", "timestamp_utc": "2026-05-19T19:22:58.489952+00:00"}
 {"command_id": "20260519-verify-main-after-pr449", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "a0a06aed63a52c3d49bc562ae18c060d7de9b0d9ff4c7e85ffb54d5ea5eb8483", "timestamp_utc": "2026-05-19T19:25:43.073115+00:00"}
 {"command_id": "20260519-agent-next-idempotent-inspection", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "93293f232b4fe6c16e4d2cd1d3cfe47edb00d5ff6ab3bffff5b38c090d1d4b7a", "timestamp_utc": "2026-05-19T19:57:56.914801+00:00"}
+{"command_id": "20260519-idempotent-already-executed-command", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "d73c5f0797c1cd17792853aadd92741dc72d5b0c3f0a8e27218f3730a6f7659d", "timestamp_utc": "2026-05-19T20:05:55.532716+00:00"}
