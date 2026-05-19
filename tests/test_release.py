@@ -2,6 +2,8 @@ from pathlib import Path
 from collections.abc import Sequence
 
 from agentic_project_kit.release import (
+    ReleaseCheckResult,
+    ReleaseStateReport,
     CommandResult,
     ReleaseCheckStatus,
     build_release_plan,
