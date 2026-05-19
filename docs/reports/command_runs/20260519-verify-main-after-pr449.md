@@ -1,9 +1,12 @@
 # Agent command run: 20260519-verify-main-after-pr449
 
-- Title: Verify main after PR 449
+- Title: Verify main after final summary contract merge
 - Safety class: local-only
-- Outcome: PASS_EXECUTED
-- Exit code: 0
+- Outcome: FAIL_ALREADY_EXECUTED
+- Exit code: 1
 - Branch: main
-- Script SHA256: a0a06aed63a52c3d49bc562ae18c060d7de9b0d9ff4c7e85ffb54d5ea5eb8483
-- Terminal log: docs/reports/terminal/20260519-212536_20260519-verify-main-after-pr449.log
+- Script SHA256: c9141dc80f4499b3c380e94822e92fd3774ad02a43e6f9c6f3f89312bef4f431
+
+## Detail
+
+20260519-verify-main-after-pr449
