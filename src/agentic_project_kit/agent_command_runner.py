@@ -262,6 +262,11 @@ def agent_run(extra_upload_paths: list[Path] | None = None) -> int:
         return 1
 
     validation_outcome, validation_detail = validate_command(command)
+    if validation_outcome == OUTCOME_FAIL_ALREADY_EXECUTED:
+        print(validation_outcome)
+        print(validation_detail)
+        write_report(command, validation_outcome, 0, None, validation_detail)
+        return 0
     if validation_outcome != OUTCOME_PASS_EXECUTED:
         print(validation_outcome)
         print(validation_detail)
