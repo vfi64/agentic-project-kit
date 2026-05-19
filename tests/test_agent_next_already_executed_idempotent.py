@@ -8,7 +8,6 @@ def test_agent_run_treats_already_executed_as_idempotent(tmp_path: Path, monkeyp
     monkeypatch.setattr(acr, "CURRENT_SCRIPT", tmp_path / "current.sh")
     monkeypatch.setattr(acr, "EXECUTED_JSONL", tmp_path / "executed.jsonl")
     monkeypatch.setattr(acr, "REPORT_DIR", tmp_path / "reports")
-    monkeypatch.setattr(acr, "LATEST_COMMAND_RUN", tmp_path / "latest_command_run.txt")
     acr.CURRENT_SCRIPT.write_text("#!/usr/bin/env sh\nprintf ok\n", encoding="utf-8")
     acr.CURRENT_YAML.write_text("command_id: cmd\ntitle: Cmd\nsafety_class: local-only\n", encoding="utf-8")
     acr.EXECUTED_JSONL.write_text("{\"command_id\": \"cmd\"}\n", encoding="utf-8")
