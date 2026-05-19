@@ -104,6 +104,13 @@ if [ "${1:-}" = "terminal-remote-preflight" ]; then
   exit $?
 fi
 
+
+if [ "${1:-}" = "patch-preflight" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli patch-preflight "$@"
+  exit $?
+fi
+
 if [ "${1:-}" = "artifact-gc" ]; then
   shift
   PYTHONPATH=src "$PY" -m agentic_project_kit.communication_artifact_gc "$@"
