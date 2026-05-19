@@ -1,0 +1,38 @@
+schema_version: 1
+updated:
+  date: '2026-05-19'
+  reason: compiled machine-readable agent context baseline
+purpose: Fast, redundant-free, machine-readable companion to the human governance
+  docs.
+source_policy:
+  remote_first_no_guess: true
+  human_docs_remain_authoritative: true
+  compiled_yaml_must_match_docs: true
+  new_rules_need_docs_yaml_tests: true
+priority_order:
+- .agentic/compiled_agent_context.yaml
+- .agentic/handoff_state.yaml
+- .agentic/no_copy_terminal_policy.yaml
+- docs/STATUS.md
+- docs/handoff/CURRENT_HANDOFF.md
+- docs/TEST_GATES.md
+- docs/DOCUMENTATION_COVERAGE.yaml
+hard_rules:
+- id: remote-first-no-guess
+  rule: Inspect remote repo files, authoritative docs, and command help before acting.
+- id: no-long-manual-command-blocks
+  rule: Queue repo-backed commands for agent-next instead of returning long local
+    shell blocks.
+- id: final-summary-contract
+  rule: Use the mandatory SUMMARY block and never relabel inner failures as PASS.
+- id: patch-artifact-preflight
+  rule: Generated patch artifacts must pass syntax, YAML, coverage-term, and final-summary
+    checks before use.
+- id: rules-must-be-test-backed
+  rule: Durable rules require human docs, compiled YAML, and deterministic tests.
+normal_operator_path:
+- git switch main
+- git pull --ff-only origin main
+- ./ns agent-next
+quality_goal: Prefer the best deterministic solution over shortcuts; quality is the
+  target.
