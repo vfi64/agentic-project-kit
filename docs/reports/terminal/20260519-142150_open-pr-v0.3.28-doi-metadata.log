@@ -1,0 +1,175 @@
+OPEN PR FOR V0.3.28 DOI METADATA
+
+### STATUS BEFORE GATES ###
+
+### RECENT HISTORY ###
+40a4f42 Record v0.3.28 DOI metadata
+cdc04db Verify v0.3.28 post-release DOI source
+e43009b Verify v0.3.28 release publication
+ab9d778 Preserve v0.3.28 release tag preflight
+554416e Verify main after PR 442 v0.3.28 release prep
+6380b3f Prepare v0.3.28 release metadata (#442)
+ff82aaf Verify main after PR 441 patch preflight MVP
+fe1dcc9 Add patch artifact preflight MVP (#441)
+920d883 Verify main after PR 440 planning refresh
+7c84db9 Refresh planning state after v0.3.27 (#440)
+28c7ab7 Record v0.3.27 DOI metadata (#439)
+811c846 Preserve v0.3.27 release publish log (#438)
+36f7434 Start mandatory terminal evidence capture fix (#437)
+616fb19 Diagnose mandatory terminal evidence capture (#435)
+
+### DOI SOURCE EVIDENCE ###
+512:.agentic/handoff_state.yaml:23:  zenodo_concept_doi: 10.5281/zenodo.20101359
+541:docs/STATUS.md:24:Zenodo concept DOI: `10.5281/zenodo.20101359`
+553:docs/reports/terminal/release_verify_v0.3.25_20260518.log:80:[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+561:docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:22:10:doi: "10.5281/zenodo.20101359"
+567:docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:38:+doi: "10.5281/zenodo.20101359"
+576:docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:211:[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+610:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:682:docs/handoff/CURRENT_HANDOFF.md:17:v0.3.19 is released and post-release verified with version DOI `10.5281/zenodo.20246121`. Zenodo concept DOI: `10.5281/zenodo.20101359`. The v0.3.19 DOI metadata is recorded on main via PR #259 after `agentic-kit post-release-check --version 0.3.19` passed. The post-release Zenodo verification path remains covered by `agentic-kit post-release-check`.
+623:README.md:3:[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/zenodo.20101359)
+625:README.md:401:For citation across versions, prefer the all-versions DOI: `10.5281/zenodo.20101359`.
+679:CHANGELOG.md:14:- Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.25 DOI `10.5281/zenodo.20273989`.
+680:CHANGELOG.md:19:- Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.24 DOI `10.5281/zenodo.20270197`.
+682:CHANGELOG.md:25:Zenodo Concept DOI: 10.5281/zenodo.20101359
+686:CHANGELOG.md:58:Zenodo Concept DOI: 10.5281/zenodo.20101359
+688:CHANGELOG.md:69:Zenodo Concept DOI: 10.5281/zenodo.20101359
+690:CHANGELOG.md:78:Zenodo Concept DOI: 10.5281/zenodo.20101359
+692:CHANGELOG.md:88:Zenodo Concept DOI: 10.5281/zenodo.20101359
+694:CHANGELOG.md:98:Zenodo Concept DOI: 10.5281/zenodo.20101359
+696:CHANGELOG.md:108:Zenodo Concept DOI: 10.5281/zenodo.20101359
+700:CITATION.cff:10:doi: "10.5281/zenodo.20101359"
+729:docs/STATUS.md:24:Zenodo concept DOI: `10.5281/zenodo.20101359`
+742:.agentic/handoff_state.yaml:23:  zenodo_concept_doi: 10.5281/zenodo.20101359
+864:[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+865:[PASS] Zenodo version DOI: verified version DOI for v0.3.28: 10.5281/zenodo.20286394
+874:10.5281/zenodo.20101359
+908:10.5281/zenodo.20286394
+
+### DOI REFERENCES ###
+CHANGELOG.md:1:## v0.3.28
+CHANGELOG.md:3:- Prepare release metadata for v0.3.28.
+CHANGELOG.md:4:- Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.28 DOI `10.5281/zenodo.20286394`.
+CHANGELOG.md:6:Zenodo v0.3.28 DOI: 10.5281/zenodo.20286394
+CHANGELOG.md:7:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:18:- Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.25 DOI `10.5281/zenodo.20273989`.
+CHANGELOG.md:23:- Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.24 DOI `10.5281/zenodo.20270197`.
+CHANGELOG.md:29:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:62:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:73:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:82:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:92:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:102:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:112:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CITATION.cff:10:doi: "10.5281/zenodo.20101359"
+CITATION.cff:11:# Verified v0.3.28 version DOI: 10.5281/zenodo.20286394
+CITATION.cff:44:version: 0.3.28
+README.md:3:[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/zenodo.20101359)
+README.md:401:For citation across versions, prefer the all-versions DOI: `10.5281/zenodo.20101359`.
+README.md:511:- Verified v0.3.28 version DOI: `10.5281/zenodo.20286394`
+README.md:568:Version `0.3.28` is the current verified release; Zenodo version DOI `10.5281/zenodo.20286394`.
+docs/STATUS.md:1:Current version: 0.3.28
+docs/STATUS.md:22:Current released version: 0.3.28
+docs/STATUS.md:23:Current release tag: v0.3.28
+docs/STATUS.md:24:Zenodo concept DOI: `10.5281/zenodo.20101359`
+docs/STATUS.md:25:Verified Zenodo version DOI: `10.5281/zenodo.20286394`
+docs/STATUS.md:26:Post-release evidence: `docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log`
+docs/STATUS.md:28:v0.3.28 is the current released and verified baseline. It includes the patch-artifact preflight MVP and the hardened planning-state/no-copy evidence workflow.
+docs/handoff/CURRENT_HANDOFF.md:1:Current version: 0.3.28
+docs/handoff/CURRENT_HANDOFF.md:16:Current released version: 0.3.28
+docs/handoff/CURRENT_HANDOFF.md:17:Current release tag: v0.3.28
+docs/handoff/CURRENT_HANDOFF.md:18:Verified Zenodo version DOI: `10.5281/zenodo.20286394`
+docs/handoff/CURRENT_HANDOFF.md:19:Post-release evidence: `docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log`
+docs/handoff/CURRENT_HANDOFF.md:20:Current branch after v0.3.28: main
+docs/handoff/CURRENT_HANDOFF.md:22:v0.3.28 is the current verified no-copy/evidence baseline. It includes patch-artifact preflight, mandatory final-summary validation, and post-release DOI evidence.
+docs/DOCUMENTATION_COVERAGE.yaml:507:          - 'Current released version: 0.3.28'
+docs/DOCUMENTATION_COVERAGE.yaml:513:          - 'Current released version: 0.3.28'
+.agentic/handoff_state.yaml:4:  reason: Record v0.3.28 DOI metadata
+.agentic/handoff_state.yaml:14:  commit_subject: Verify v0.3.28 post-release DOI source
+.agentic/handoff_state.yaml:19:  current_version: 0.3.28
+.agentic/handoff_state.yaml:21:  tag: v0.3.28
+.agentic/handoff_state.yaml:23:  zenodo_concept_doi: 10.5281/zenodo.20101359
+.agentic/handoff_state.yaml:24:  zenodo_version_doi: 10.5281/zenodo.20286394
+.agentic/handoff_state.yaml:26:  post_release_evidence: docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log
+.agentic/handoff_state.yaml:175:- v0.3.28 released and post-release DOI verified.
+
+### POST-RELEASE-CHECK HELP CONTRACT ###
+                                                                                              
+ Usage: python -m agentic_project_kit.cli post-release-check                                  
+            [OPTIONS]                                                                         
+                                                                                              
+ Validate post-release GitHub and Zenodo state without guessing DOI metadata.                 
+                                                                                              
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────╮
+│ --root           PATH  [default: .]                                                        │
+│ --version        TEXT  Release version without leading v.                                  │
+│ --help                 Show this message and exit.                                         │
+╰────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+### POST-RELEASE CHECK ###
+Post-release check for target v0.3.28
+
+[PASS] GitHub release: GitHub release exists: v0.3.28
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.3.28: 10.5281/zenodo.20286394
+
+Overall: PASS
+
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+docs/record-v0.3.28-doi
+
+### PYTEST ###
+........................................................................ [ 16%]
+........................................................................ [ 33%]
+........................................................................ [ 49%]
+........................................................................ [ 66%]
+........................................................................ [ 82%]
+........................................................................ [ 99%]
+...                                                                      [100%]
+435 passed in 2.56s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.28
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=75
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+docs/record-v0.3.28-doi
+
+### RESULT: PASS ###
