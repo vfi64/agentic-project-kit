@@ -617,3 +617,45 @@ all_long_runner_paths_must_start_logging_before_work=yes
 
 ### PRESERVE DIAGNOSIS LOG ###
 ?? docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+[docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311 04ce418] Diagnose mandatory terminal evidence capture
+ 1 file changed, 619 insertions(+)
+ create mode 100644 docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+
+### PUSH AND CREATE PR ###
+FAIL_DIRTY_WORKTREE_BEFORE_REMOTE_MUTATION
+docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+remote: 
+remote: Create a pull request for 'docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311' on GitHub by visiting:        
+remote:      https://github.com/vfi64/agentic-project-kit/pull/new/docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311        
+remote: 
+To github.com:vfi64/agentic-project-kit.git
+ * [new branch]      docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311 -> docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311
+branch 'docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311' set up to track 'origin/docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311'.
+Warning: 1 uncommitted change
+https://github.com/vfi64/agentic-project-kit/pull/435
+
+### FINAL STATE ###
+docs/diagnose-mandatory-terminal-evidence-capture-20260519-091311
+ M docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+04ce418 Diagnose mandatory terminal evidence capture
+45e51d1 Remove stale release version source inbox command (#434)
+90b8160 Require package init version in release check (#433)
+6925192 Queue release version source contract hardening (#432)
+592a11f Preserve release version source hardening diagnosis log (#431)
+
+================================================================
+SUMMARY
+WORK RESULT: FAIL
+EVIDENCE RESULT: CHECK_LOG_PUSH
+OVERALL RESULT: FAIL
+NEXT CHAT REPLY: f
+REMOTE_EVIDENCE: UNKNOWN_OR_PARTIAL
+terminal_log=docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+### RESULT: FAIL ###
+================================================================
+
+Saving session...
+...copying shared history...
+...saving history...truncating history files...
+...completed.
+Deleting expired sessions...      44 completed.
