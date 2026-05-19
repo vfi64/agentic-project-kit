@@ -1,0 +1,114 @@
+MANDATORY TERMINAL EVIDENCE CAPTURE FIX START
+
+### BRANCH ###
+fix/mandatory-terminal-evidence-capture-contract
+
+### STATUS ###
+?? docs/reports/terminal/20260519-110401_mandatory-terminal-evidence-capture-fix-start.log
+
+### TARGET FILES ###
+ns
+src/agentic_project_kit/terminal_logging.py
+src/agentic_project_kit/agent_command_runner.py
+tests/test_terminal_logging.py
+tests/test_repo_ns_entrypoint.py
+tests/test_no_copy_terminal_policy.py
+
+### CURRENT NS TERMINAL COMMANDS ###
+81:if [ "${1:-}" = "terminal-status" ]; then
+82:  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-status
+86:if [ "${1:-}" = "terminal-upload" ]; then
+87:  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-upload
+91:if [ "${1:-}" = "terminal-finalize" ]; then
+93:  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-finalize "$@"
+97:if [ "${1:-}" = "terminal-clean-check" ]; then
+98:  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-clean-check
+102:if [ "${1:-}" = "terminal-remote-preflight" ]; then
+103:  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-remote-preflight
+
+### CURRENT TERMINAL LOGGING API ###
+22:def _safe_name(name: str) -> str:
+27:def make_log_path(name: str, now: _dt.datetime | None = None) -> Path:
+33:def write_latest_pointer(log_path: Path) -> None:
+38:def read_latest_pointer() -> Path | None:
+47:def _is_allowed_terminal_artifact(path_text: str) -> bool:
+51:def git_dirty_paths() -> list[str]:
+63:def terminal_clean_check() -> tuple[str, str]:
+75:def remote_mutation_preflight() -> tuple[str, str]:
+82:def terminal_status() -> tuple[str, str]:
+91:def _has_result_marker(text: str) -> bool:
+95:def finalize_terminal_log(tmp_log: Path, name: str) -> tuple[str, str]:
+117:def run_logged(name: str, command: list[str]) -> int:
+125:        def emit(line: str) -> None:
+143:def upload_terminal_output() -> int:
+172:def main(argv: list[str] | None = None) -> int:
+
+### CURRENT AGENT RUNNER FINAL SUMMARY ###
+288:        print("### NEXT CHAT REPLY: PASS -> p ###")
+290:        print("### NEXT CHAT REPLY: FAIL -> f ###")
+292:        print("### NEXT CHAT REPLY: HARD-FAIL -> paste output ###")
+294:        print("### NEXT CHAT REPLY: NO-COMMAND -> ask agent to queue command ###")
+318:    print(f"WORK RESULT: {work_result}")
+319:    print(f"EVIDENCE RESULT: {evidence_result}")
+323:    print(f"NEXT CHAT REPLY: {reply}")
+
+### GATES ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+fix/mandatory-terminal-evidence-capture-contract
+?? docs/reports/terminal/20260519-110401_mandatory-terminal-evidence-capture-fix-start.log
+
+### PYTEST ###
+........................................................................ [ 17%]
+........................................................................ [ 34%]
+........................................................................ [ 51%]
+........................................................................ [ 69%]
+........................................................................ [ 86%]
+.........................................................                [100%]
+417 passed in 2.40s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.27
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=1
+local_branch_count=76
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+fix/mandatory-terminal-evidence-capture-contract
+?? docs/reports/terminal/20260519-110401_mandatory-terminal-evidence-capture-fix-start.log
+
+### RESULT: PASS ###
+
+### RESULT: PASS ###
