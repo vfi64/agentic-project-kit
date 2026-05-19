@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-19'
-  reason: Refresh planning state after v0.3.27 no-copy baseline
-  source: planning-state refresh and freshness guard hardening
+  reason: Record v0.3.28 DOI metadata
+  source: post-release DOI verification evidence
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -10,19 +10,20 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 28c7ab7
-  commit_subject: Record v0.3.27 DOI metadata (#439)
+  commit: cdc04db
+  commit_subject: Verify v0.3.28 post-release DOI source
   semantics: last_substantive_work_state
   administrative_refresh_prs: []
   working_tree_expected_clean: true
 release:
-  current_version: 0.3.27
-  previous_version: 0.3.26
-  tag: v0.3.27
+  current_version: 0.3.28
+  previous_version: 0.3.27
+  tag: v0.3.28
   github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
-  zenodo_version_doi: 10.5281/zenodo.20283414
+  zenodo_version_doi: 10.5281/zenodo.20286394
   post_release_check: PASS
+  post_release_evidence: docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log
 open_items:
   prs: []
 completed_since_previous_handoff:
@@ -170,3 +171,5 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
+current_notes:
+- v0.3.28 released and post-release DOI verified.

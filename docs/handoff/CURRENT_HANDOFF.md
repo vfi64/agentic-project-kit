@@ -13,12 +13,13 @@ Refresh the planning state after v0.3.27 and harden documentation freshness guar
 
 ## Current Repository State
 
-Current released version: 0.3.27
-Current release tag: v0.3.27
-Verified Zenodo version DOI: `10.5281/zenodo.20283414`
-Current branch after v0.3.27: main
+Current released version: 0.3.28
+Current release tag: v0.3.28
+Verified Zenodo version DOI: `10.5281/zenodo.20286394`
+Post-release evidence: `docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log`
+Current branch after v0.3.28: main
 
-v0.3.27 is the current verified no-copy/evidence baseline. The normal operator path is `git pull --ff-only origin main` followed by `./ns agent-next`. Normal command PASS/FAIL should be handled through remote-readable command reports and terminal logs, not manual copy-and-paste.
+v0.3.28 is the current verified no-copy/evidence baseline. It includes patch-artifact preflight, mandatory final-summary validation, and post-release DOI evidence.
 
 ## Active Rules For The Next Chat Or Slice
 

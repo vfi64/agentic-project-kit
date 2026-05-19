@@ -19,12 +19,13 @@ The immediate goal after v0.3.27 is to refresh the planning state and harden doc
 
 ## Current State
 
-Current released version: 0.3.27
-Current release tag: v0.3.27
+Current released version: 0.3.28
+Current release tag: v0.3.28
 Zenodo concept DOI: `10.5281/zenodo.20101359`
-Verified Zenodo version DOI: `10.5281/zenodo.20283414`
+Verified Zenodo version DOI: `10.5281/zenodo.20286394`
+Post-release evidence: `docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log`
 
-v0.3.27 is the current released and verified baseline. It preserves the hardened repo-backed no-copy workflow: remote tasks are queued under `.agentic/commands/inbox/`, local execution runs through `./ns agent-next`, durable command evidence is written under `docs/reports/command_runs/`, and terminal evidence is written under `docs/reports/terminal/`.
+v0.3.28 is the current released and verified baseline. It includes the patch-artifact preflight MVP and the hardened planning-state/no-copy evidence workflow.
 
 The active bridge toward the local GUI is no-copy/evidence governance, not hidden automation. Normal PASS/FAIL handoff should rely on committed and pushed reports. Manual paste-output is reserved for hard failures such as authentication problems, network failures, terminal crashes, missing remote evidence, or workflow-level ambiguity.
 
