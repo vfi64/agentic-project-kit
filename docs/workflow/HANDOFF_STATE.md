@@ -46,3 +46,9 @@ Temporary communication artifacts must be centrally recognizable and removable o
 This prevents endless refresh loops: a PR that only refreshes `.agentic/handoff_state.yaml` does not require another refresh PR just because it produced a newer merge commit.
 
 Use `safe_state.semantics: last_substantive_work_state` for this mode. Administrative refresh PR numbers may be recorded under `safe_state.administrative_refresh_prs`.
+
+## Planning-state freshness rule
+
+Current planning files must be curated, not accumulated. `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, and `.agentic/handoff_state.yaml` must agree on the active release, next safe step, evidence policy, and blocked work. Historical fragments may remain only in explicitly historical documents or clearly marked strategy retrospectives.
+
+`./ns state-freshness-check` must reject stale current-state fragments such as obsolete released-version claims, outdated next-step instructions, or a handoff YAML version that disagrees with current status documents. This rule exists because stale planning files caused repeated wrong-command, wrong-path, and wrong-priority drift.

@@ -1,0 +1,99 @@
+REPAIR FINAL SUMMARY CONTRACT COVERAGE TERMS AND ADD STRING GUARD
+
+### STATUS BEFORE GATES ###
+ M .agentic/no_copy_terminal_policy.yaml
+ M docs/DOCUMENTATION_COVERAGE.yaml
+ M docs/STATUS.md
+ M docs/TEST_GATES.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? src/agentic_project_kit/final_summary_contract.py
+?? tests/test_documentation_coverage_terms.py
+?? tests/test_final_summary_contract.py
+
+### PY COMPILE ###
+
+### TARGETED PYTEST ###
+.....                                                                    [100%]
+5 passed in 0.04s
+
+### STATE FRESHNESS CHECK ###
+PASS: no stale STATUS/HANDOFF current-state fragments found
+
+### HANDOFF CHECK ###
+Persistent handoff state check passed
+
+### GOVERNANCE CHECK ###
+Governance check passed
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+docs/refresh-planning-state-v0.3.27
+ M .agentic/no_copy_terminal_policy.yaml
+ M docs/DOCUMENTATION_COVERAGE.yaml
+ M docs/STATUS.md
+ M docs/TEST_GATES.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? src/agentic_project_kit/final_summary_contract.py
+?? tests/test_documentation_coverage_terms.py
+?? tests/test_final_summary_contract.py
+
+### PYTEST ###
+........................................................................ [ 16%]
+........................................................................ [ 33%]
+........................................................................ [ 50%]
+........................................................................ [ 67%]
+........................................................................ [ 84%]
+................................................................         [100%]
+424 passed in 2.46s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.27
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=1
+local_branch_count=75
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+docs/refresh-planning-state-v0.3.27
+ M .agentic/no_copy_terminal_policy.yaml
+ M docs/DOCUMENTATION_COVERAGE.yaml
+ M docs/STATUS.md
+ M docs/TEST_GATES.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? src/agentic_project_kit/final_summary_contract.py
+?? tests/test_documentation_coverage_terms.py
+?? tests/test_final_summary_contract.py
+
+### RESULT: PASS ###

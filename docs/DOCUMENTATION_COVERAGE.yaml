@@ -497,3 +497,54 @@ rules:
           - agentic-kit cockpit run
           - action registry
           - safety classification
+
+
+  - id: planning-state-freshness-coverage
+    description: Planning state documents must remain current, mutually consistent, and guarded against stale historical fragments.
+    documents:
+      - path: docs/STATUS.md
+        terms:
+          - 'Current released version: 0.3.27'
+          - Planning-state freshness
+          - no-copy/evidence
+          - Tkinter cockpit
+      - path: docs/handoff/CURRENT_HANDOFF.md
+        terms:
+          - 'Current released version: 0.3.27'
+          - curated
+          - no-copy/evidence
+          - Tkinter cockpit
+      - path: docs/workflow/HANDOFF_STATE.md
+        terms:
+          - Planning-state freshness rule
+          - curated, not accumulated
+          - ./ns state-freshness-check
+      - path: docs/TEST_GATES.md
+        terms:
+          - Planning State Freshness Gate
+          - ./ns state-freshness-check
+
+  - id: final-summary-contract-coverage
+    description: Mandatory final terminal summaries must remain documented and test-backed.
+    documents:
+      - path: .agentic/no_copy_terminal_policy.yaml
+        terms:
+          - mandatory_final_summary_contract
+          - WORK RESULT
+          - REMOTE_EVIDENCE
+      - path: docs/TEST_GATES.md
+        terms:
+          - Mandatory Final Summary Contract Gate
+          - WORK RESULT
+          - REMOTE_EVIDENCE
+          - tests/test_final_summary_contract.py
+      - path: docs/STATUS.md
+        terms:
+          - Mandatory Final Summary Contract
+          - WORK RESULT
+          - REMOTE_EVIDENCE
+      - path: docs/handoff/CURRENT_HANDOFF.md
+        terms:
+          - Mandatory Final Summary Contract
+          - 'NEXT_CHAT_REPLY: p'
+          - 'REMOTE_EVIDENCE: PASS'

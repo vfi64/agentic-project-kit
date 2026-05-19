@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
-  date: '2026-05-18'
-  reason: Refresh handoff state to last substantive work commit
-  source: agentic-kit handoff refresh
+  date: '2026-05-19'
+  reason: Refresh planning state after v0.3.27 no-copy baseline
+  source: planning-state refresh and freshness guard hardening
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -10,46 +10,38 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 74d9bca
-  commit_subject: Record v0.3.25 DOI metadata (#372)
+  commit: 28c7ab7
+  commit_subject: Record v0.3.27 DOI metadata (#439)
   semantics: last_substantive_work_state
-  administrative_refresh_prs:
-  - 347
-  - 349
-  - 373
+  administrative_refresh_prs: []
   working_tree_expected_clean: true
 release:
-  current_version: 0.3.25
-  previous_version: 0.3.24
-  tag: v0.3.25
+  current_version: 0.3.27
+  previous_version: 0.3.26
+  tag: v0.3.27
   github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
-  zenodo_version_doi: 10.5281/zenodo.20273989
+  zenodo_version_doi: 10.5281/zenodo.20283414
   post_release_check: PASS
 open_items:
   prs: []
 completed_since_previous_handoff:
-- 'PR #341 recorded v0.3.24 DOI metadata.'
-- 'PR #342 finalized v0.3.24 DOI metadata state and recorded persistent handoff planning.'
-- 'PR #343 added the active no-copy terminal evidence policy.'
-- 'PR #344 added the read-only persistent handoff state MVP.'
-- 'PR #346 added handoff refresh automation.'
-- 'PR #348 added parameterized action specs MVP.'
-- 'PR #350 added explicit handoff state commit semantics.'
+- v0.3.27 released and post-release DOI verified.
+- Repo-backed no-copy workflow hardened as the active bridge toward the local GUI.
+- Command inbox, command-run reports, terminal evidence pointers, and normal PASS/FAIL
+  footers established.
 current_capabilities:
   ns_actions:
   - agent-next
   - agent-run
-  - run-logged
-  - terminal-clean-check
-  - terminal-upload
-  - release-verify
+  - command-inbox-check
+  - state-freshness-check
+  - terminal-remote-preflight
+  - terminal-finalize
   - handoff-show
   - handoff-check
-  - handoff-prompt
-  - handoff-refresh
-  - action-list
-  - action-show
+  - governance-check
+  - dev
   artifact_dirs:
     terminal_logs: docs/reports/terminal
     command_runs: docs/reports/command_runs
@@ -59,12 +51,24 @@ rules:
 - id: deterministic-quality-before-speed
   status: active
   text: Prefer technically robust, testable, repeatable solutions over fast workarounds.
-    Repeated workflow failures are product defects to fix with helpers, guards, tests,
-    and documentation.
 - id: no-copy-terminal-evidence
   status: active
   text: Routine PASS handoffs must be backed by repo evidence; manual terminal paste
-    is only for failure or unavailable evidence.
+    is only for hard failure or unavailable evidence.
+- id: planning-state-freshness
+  status: active
+  text: Current planning files must be curated and mutually consistent; stale released-version
+    claims or obsolete next-step fragments are guard failures.
+- id: shell-to-python-portability
+  status: active
+  text: Prefer portable Python-backed helpers and argument-vector execution over fragile
+    shell quoting, heredocs, or multiline python -c snippets.
+- id: rules-must-be-test-backed
+  status: active
+  text: Workflow rules are not complete when they only exist in chat, prose, or handoff
+    memory. Every durable rule must have a stable repository home, a rule id, documentation,
+    and at least one deterministic test that fails when the rule disappears or is
+    weakened.
 - id: no-unconditional-pass
   status: active
   text: Do not print PASS after a failed required command.
@@ -76,37 +80,47 @@ rules:
   status: active
   text: safe_state records the last substantive work state; administrative handoff
     refresh PRs are tracked separately to avoid refresh loops.
-- id: manual-copy-terminal-by-default
-  status: superseded
-  text: Manual copy-and-paste terminal output was formerly used for routine handoff.
-  superseded_by: no-copy-terminal-evidence
-- id: rules-must-be-test-backed
+- id: quality-first-no-shortcuts
   status: active
-  text: Workflow rules are not complete when they only exist in chat, prose, or handoff
-    memory. Every durable rule must have a stable repository home, a rule id, documentation,
-    and at least one deterministic test that fails when the rule disappears or is
-    weakened.
+  text: Always choose the technically best deterministic solution for recurring workflow
+    problems; do not use shortcut patches that merely get the current block past the
+    gate.
+- id: patch-artifact-preflight-before-application
+  status: active
+  text: 'Complex patches must be treated as patch artifacts and checked before application:
+    syntax, YAML structure, generated Python compileability, documentation coverage
+    terms, and final-summary validity.'
+- id: generated-code-syntax-first
+  status: active
+  text: Generated or newly added Python files must pass py_compile before full gates
+    or commit attempts; nested string-generation mistakes are product defects, not
+    acceptable manual errors.
+- id: coverage-yaml-terms-must-be-strings
+  status: active
+  text: Documentation coverage terms must be strings; terms containing colons must
+    be quoted so YAML cannot reinterpret them as mappings.
+- id: final-summary-self-validation
+  status: active
+  text: Terminal workflows must validate their mandatory final SUMMARY block before
+    asking the user to reply p.
+- id: yaml-structured-mutation-only
+  status: active
+  text: YAML governance files must be changed through parse-modify-dump or an equivalent
+    structured mutation path, then parsed again before gates. Text injection into
+    YAML is forbidden for complex values.
 recent_failure_patterns:
+- id: stale-planning-documents
+  prevention: State freshness checks must compare STATUS, CURRENT_HANDOFF, handoff_state.yaml,
+    release metadata, and strategy baselines before GUI or release-automation work
+    starts.
 - id: standard-error-guards
-  prevention: 'Recurring workflow failures must be represented twice: in handoff prompts
-    for human continuity and in repository guards/tests for deterministic prevention.
-    Prefer durable helpers over fast manual workarounds.'
+  prevention: Recurring workflow failures must become guards, tests, and documented
+    contracts.
 - id: interpreter-discovery-before-python
   prevention: Terminal/workflow blocks must discover a usable interpreter first and
     prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python.
     Do not combine naked python with set -e because a missing interpreter can close
     the interactive terminal before diagnostics are preserved.
-- id: repo-log-written-while-committing
-  prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize
-    with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo
-    terminal log while the current process is still writing to it.
-- id: unconditional-pass-after-failure
-  prevention: Use set -e or explicit status handling and require log-backed PASS.
-- id: overwriting-required-state-docs
-  prevention: Patch state docs minimally or restore required sections before appending
-    updates.
-- id: missing-project-venv-tooling
-  prevention: Prefer project-local .venv commands over global python, ruff, or agentic-kit.
 - id: global-cli-or-venv-assumption
   prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and
     agentic-kit before using command names. Treat missing global agentic-kit or missing
@@ -115,36 +129,44 @@ recent_failure_patterns:
   prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace
     the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit
     codes belong inside saved scripts, not interactive paste blocks.
-- id: unclassified-communication-artifact-cleanup
-  prevention: Never delete communication, handoff, terminal, or command-run artifacts
-    with ad-hoc rm. Use the central communication artifact registry and a deterministic
-    garbage collector with dry-run, allowlist, age/status checks, tests, and a cleanup
-    report.
-- id: stale-handoff-after-administrative-refresh
-  prevention: Keep safe_state tied to the last substantive commit and list administrative
-    refresh PRs separately.
+- id: repo-log-written-while-committing
+  prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize
+    with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo
+    terminal log while the current process is still writing to it.
+- id: unconditional-pass-after-failure
+  prevention: Use explicit status handling and require log-backed PASS. Avoid shell-specific
+    status variables such as PIPESTATUS in zsh-pasted blocks unless the shell is explicitly
+    controlled.
+- id: nested-triple-quote-code-generator
+  prevention: Do not generate Python source through nested triple-quoted string literals
+    inside another generated Python script. Prefer line-list generation, existing
+    patch tools, or checked patch artifacts plus py_compile before application.
+- id: yaml-colon-term-reinterpreted-as-mapping
+  prevention: Quote every documentation coverage term containing a colon, and keep
+    the coverage-term string guard in the test suite.
+- id: final-pass-after-inner-fail
+  prevention: Final summaries must distinguish work result from evidence result. A
+    later successful evidence push must not relabel failed work as PASS.
+- id: repeated-yaml-governance-file-corruption
+  prevention: Patch scripts must parse YAML before and after mutation, use safe_dump
+    or an equivalent structured writer, and run a YAML integrity test before handoff,
+    governance, or dev gates.
 next_allowed_tasks:
-- id: repo-backed-work-order-automation
-  title: Automate long work orders as repo-backed command/action artifacts.
+- id: planning-state-freshness-guard-hardening
+  title: Strengthen deterministic guards for stale planning documents.
   priority: 1
-- id: action-dry-run-validators
-  title: Add deterministic dry-run validators for parameterized Git, PR, release,
-    DOI, and finalize actions.
+- id: thin-local-tkinter-cockpit
+  title: Build the first thin local GUI over explicit cockpit action metadata.
   priority: 2
 blocked_until_closeout:
-- GUI mutation controls
-- new release cycle automation
-first_instruction: Work first on deterministic command-contract and environment-bootstrap
-  drift prevention. Verify real CLI commands, .venv availability, ns shortcuts, docs,
-  and work-order command references before extending work-order execution or GUI controls.
+- Pattern Advisor expansion
+- release automation expansion
+- hidden command planning
+first_instruction: Refresh planning state, run freshness guards, and only then begin
+  the thin local Tkinter cockpit foundation.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  active_statuses:
-  - active
-  non_binding_statuses:
-  - superseded
-  - historical

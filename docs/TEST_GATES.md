@@ -276,3 +276,29 @@ Before terminal workflows perform remote mutations or merge/sync verification, t
 Long-running workflows must not leave the user guessing whether copy-and-paste is required. A run may claim no-copy completion only when its final summary includes `REMOTE_EVIDENCE: PASS` and the relevant terminal log or command-run report has been committed and pushed. If that proof is unavailable, the final summary must say that remote evidence is incomplete and paste-output is required.
 
 Terminal logs must be finalized before commit and must not be written again after they have been committed. This prevents self-modifying log artifacts from producing dirty worktrees after the evidence commit.
+
+## Planning State Freshness Gate
+
+When changing planning files, handoff state, release state, no-copy evidence policy, GUI roadmap, or next safe step, run `./ns state-freshness-check` plus `./ns handoff-check` and `./ns governance-check`.
+
+The freshness gate must reject contradictory current-state claims across `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, and `.agentic/handoff_state.yaml`, including mismatched current release versions, stale DOI baselines, obsolete next-step instructions, and strategy documents that present old baselines as current without a historical marker.
+
+## Mandatory Final Summary Contract Gate
+
+Every relevant terminal work block must end with a machine-readable SUMMARY block containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, and the final result marker.
+
+A final `### RESULT: PASS ###` is valid only when `WORK RESULT: PASS`, `OVERALL RESULT: PASS`, and, for relevant workflows, `REMOTE_EVIDENCE: PASS` are all true. A previous inner FAIL must not be converted into a final PASS by a later commit or push of evidence. Evidence success and work success are separate outcomes.
+
+Contract tests live in `tests/test_final_summary_contract.py` and validate the parser in `src/agentic_project_kit/final_summary_contract.py`.
+
+## Patch Artifact Preflight Gate
+
+Complex generated patches must be checked before application or commit. Required preflight checks include Python syntax for patch scripts, `py_compile` for generated Python files, YAML parse and coverage-term string validation for coverage files, and final SUMMARY contract validation for terminal logs.
+
+Known forbidden shortcut patterns include nested triple-quote Python generators, unquoted YAML terms containing colons, shell-specific pipeline status tricks, and final PASS summaries after an earlier required-step FAIL.
+
+## YAML Governance Integrity Gate
+
+Any patch touching governance YAML must parse the file before and after mutation. Complex YAML changes should use parse-modify-dump instead of raw text injection. Required files include `.agentic/handoff_state.yaml`, `.agentic/no_copy_terminal_policy.yaml`, and `docs/DOCUMENTATION_COVERAGE.yaml`.
+
+The regression test `tests/test_yaml_governance_integrity.py` records the rule and verifies that core YAML governance files remain parseable.

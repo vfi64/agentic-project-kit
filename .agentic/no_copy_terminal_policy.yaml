@@ -33,3 +33,10 @@ mandatory_remote_evidence_contract:
   requirement: "Long-running local workflows must finalize terminal evidence into committed and pushed repo artifacts before telling the user that no copy-and-paste is needed."
   failure_rule: "If the final summary cannot prove REMOTE_EVIDENCE: PASS, the user must be told that paste-output is still required."
   self_modifying_log_rule: "A terminal log must not be written again after it has been committed as final evidence."
+
+mandatory_final_summary_contract:
+  requirement: "Every relevant terminal work block must end with the exact SUMMARY block containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, and the final result marker."
+  pass_rule: "A final PASS is allowed only when WORK RESULT and OVERALL RESULT are PASS and required remote evidence is PASS."
+  fail_rule: "A previous inner FAIL or HARD-FAIL must not be relabeled as OVERALL RESULT: PASS by later log commit, push, or cleanup."
+  evidence_rule: "Successful evidence preservation can produce EVIDENCE RESULT: PASS while WORK RESULT and OVERALL RESULT remain FAIL."
+  next_reply_rule: "NEXT_CHAT_REPLY: p is allowed only when OVERALL RESULT: PASS and REMOTE_EVIDENCE: PASS."
