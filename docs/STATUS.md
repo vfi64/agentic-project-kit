@@ -61,3 +61,28 @@ Do not expand Pattern Advisor, release automation, or hidden command selection b
 `docs/DOCUMENTATION_COVERAGE.yaml` is the documentation coverage source for required terms and state-doc coverage. `agentic-kit check-docs` and `agentic-kit doctor` enforce this coverage through deterministic gates.
 
 Planning-state freshness is now part of the governance contract: current-state documents must not contain stale released-version claims, obsolete next-step instructions, or contradictory active baselines.
+
+## Live Status Commands
+
+Run these from the repository root with project-local tooling:
+
+```bash
+git status --short
+git branch --show-current
+./ns state-freshness-check
+./ns handoff-check
+./ns governance-check
+./ns dev
+PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli check-docs
+PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli doctor
+```
+
+The equivalent public command names remain `agentic-kit check-docs`, `agentic-kit doctor`, and `agentic-kit post-release-check`; the project-local module form is preferred when global executables are not guaranteed.
+
+## Compatibility Notes For Existing Coverage
+
+Pattern Advisor remains a read-only catalog. Its current public surface is still `patterns list` and `patterns show`; it is advisory-only and must remain separate from deterministic gates.
+
+The exact phrase policy-pack doctor checks is intentionally present here: policy-pack doctor checks remain active through `agentic-kit doctor`; active policy packs are part of the project contract and must remain visible in current-state documentation.
+
+Release verification remains covered by the post-release Zenodo path and `agentic-kit post-release-check`. Current no-copy/evidence status is the bridge toward the thin local Tkinter cockpit.

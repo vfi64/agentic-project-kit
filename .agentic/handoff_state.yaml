@@ -10,9 +10,10 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: main-after-v0.3.27
-  commit_subject: v0.3.27 no-copy/evidence baseline verified
-  semantics: current_verified_release_baseline
+  commit: 28c7ab7
+  commit_subject: Record v0.3.27 DOI metadata (#439)
+  semantics: last_substantive_work_state
+  administrative_refresh_prs: []
   working_tree_expected_clean: true
 release:
   current_version: 0.3.27
@@ -58,11 +59,33 @@ rules:
   - id: shell-to-python-portability
     status: active
     text: Prefer portable Python-backed helpers and argument-vector execution over fragile shell quoting, heredocs, or multiline python -c snippets.
+  - id: rules-must-be-test-backed
+    status: active
+    text: Workflow rules are not complete when they only exist in chat, prose, or handoff memory. Every durable rule must have a stable repository home, a rule id, documentation, and at least one deterministic test that fails when the rule disappears or is weakened.
+  - id: no-unconditional-pass
+    status: active
+    text: Do not print PASS after a failed required command.
+  - id: curate-chat-end-lessons
+    status: active
+    text: Chat-end lessons must be curated into YAML and generated prompts without redundant, contradictory, or obsolete rules.
+  - id: last-substantive-safe-state
+    status: active
+    text: safe_state records the last substantive work state; administrative handoff refresh PRs are tracked separately to avoid refresh loops.
 recent_failure_patterns:
   - id: stale-planning-documents
     prevention: State freshness checks must compare STATUS, CURRENT_HANDOFF, handoff_state.yaml, release metadata, and strategy baselines before GUI or release-automation work starts.
   - id: standard-error-guards
     prevention: Recurring workflow failures must become guards, tests, and documented contracts.
+  - id: interpreter-discovery-before-python
+    prevention: Terminal/workflow blocks must discover a usable interpreter first and prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python. Do not combine naked python with set -e because a missing interpreter can close the interactive terminal before diagnostics are preserved.
+  - id: global-cli-or-venv-assumption
+    prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and agentic-kit before using command names. Treat missing global agentic-kit or missing .venv as bootstrap/environment state, not as product failure.
+  - id: interactive-terminal-exit
+    prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit codes belong inside saved scripts, not interactive paste blocks.
+  - id: repo-log-written-while-committing
+    prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo terminal log while the current process is still writing to it.
+  - id: unconditional-pass-after-failure
+    prevention: Use explicit status handling and require log-backed PASS. Avoid shell-specific status variables such as PIPESTATUS in zsh-pasted blocks unless the shell is explicitly controlled.
 next_allowed_tasks:
   - id: planning-state-freshness-guard-hardening
     title: Strengthen deterministic guards for stale planning documents.
