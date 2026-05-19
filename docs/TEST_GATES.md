@@ -269,3 +269,10 @@ Before terminal workflows perform remote mutations or merge/sync verification, t
 ## Command inbox check
 
 `tests/test_command_inbox_check.py` verifies the repo-backed command queue validator behind `./ns command-inbox-check`: empty inbox, one valid pair, orphan detection, multiple-command refusal, invalid safety class detection, and forbidden-fragment detection.
+
+
+### Mandatory terminal evidence capture gate
+
+Long-running workflows must not leave the user guessing whether copy-and-paste is required. A run may claim no-copy completion only when its final summary includes `REMOTE_EVIDENCE: PASS` and the relevant terminal log or command-run report has been committed and pushed. If that proof is unavailable, the final summary must say that remote evidence is incomplete and paste-output is required.
+
+Terminal logs must be finalized before commit and must not be written again after they have been committed. This prevents self-modifying log artifacts from producing dirty worktrees after the evidence commit.

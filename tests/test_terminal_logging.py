@@ -101,3 +101,9 @@ def test_finalize_terminal_log_requires_result_marker(tmp_path, monkeypatch):
     outcome, message = tl.finalize_terminal_log(source, "missing-marker")
     assert outcome == "FAIL_MISSING_RESULT_MARKER"
     assert "run.log" in message
+
+
+def test_terminal_log_finalize_contract_words_are_stable():
+    text = Path(".agentic/no_copy_terminal_policy.yaml").read_text(encoding="utf-8")
+    assert "finalize terminal evidence" in text
+    assert "committed and pushed repo artifacts" in text

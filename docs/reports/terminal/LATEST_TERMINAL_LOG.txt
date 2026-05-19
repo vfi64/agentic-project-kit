@@ -1,1 +1,1 @@
-docs/reports/terminal/20260519-083856_diagnose-release-version-source-hardening.log
+docs/reports/terminal/20260519-110951_hard-repair-mandatory-terminal-evidence-contract.log

@@ -1,0 +1,485 @@
+IMPLEMENT MANDATORY TERMINAL EVIDENCE CONTRACT
+
+### CURRENT STATE ###
+fix/mandatory-terminal-evidence-capture-contract
+d4c22d1 Start mandatory terminal evidence capture fix
+616fb19 Diagnose mandatory terminal evidence capture (#435)
+45e51d1 Remove stale release version source inbox command (#434)
+90b8160 Require package init version in release check (#433)
+6925192 Queue release version source contract hardening (#432)
+
+### VERIFY FEATURE BRANCH ###
+PASS_EXPECTED_BRANCH
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+
+### PATCH DIFF ###
+diff --git a/.agentic/no_copy_terminal_policy.yaml b/.agentic/no_copy_terminal_policy.yaml
+index c073853..25e11a7 100644
+--- a/.agentic/no_copy_terminal_policy.yaml
++++ b/.agentic/no_copy_terminal_policy.yaml
+@@ -28,3 +28,8 @@ exceptions:
+ handoff_integration:
+   persistent_handoff_state_must_include_policy: true
+   generated_handoff_prompt_must_not_request_copy_paste_on_pass: true
++
++mandatory_remote_evidence_contract:
++  requirement: Long-running local workflows must finalize terminal evidence into committed and pushed repo artifacts before telling the user that no copy-and-paste is needed.
++  failure_rule: If the final summary cannot prove REMOTE_EVIDENCE: PASS, the user must be told that paste-output is still required.
++  self_modifying_log_rule: A terminal log must not be written again after it has been committed as final evidence.
+diff --git a/docs/TEST_GATES.md b/docs/TEST_GATES.md
+index 531c00c..df9321b 100644
+--- a/docs/TEST_GATES.md
++++ b/docs/TEST_GATES.md
+@@ -269,3 +269,10 @@ Before terminal workflows perform remote mutations or merge/sync verification, t
+ ## Command inbox check
+ 
+ `tests/test_command_inbox_check.py` verifies the repo-backed command queue validator behind `./ns command-inbox-check`: empty inbox, one valid pair, orphan detection, multiple-command refusal, invalid safety class detection, and forbidden-fragment detection.
++
++
++### Mandatory terminal evidence capture gate
++
++Long-running workflows must not leave the user guessing whether copy-and-paste is required. A run may claim no-copy completion only when its final summary includes `REMOTE_EVIDENCE: PASS` and the relevant terminal log or command-run report has been committed and pushed. If that proof is unavailable, the final summary must say that remote evidence is incomplete and paste-output is required.
++
++Terminal logs must be finalized before commit and must not be written again after they have been committed. This prevents self-modifying log artifacts from producing dirty worktrees after the evidence commit.
+diff --git a/tests/test_no_copy_terminal_policy.py b/tests/test_no_copy_terminal_policy.py
+index 2a44eb7..bbc2770 100644
+--- a/tests/test_no_copy_terminal_policy.py
++++ b/tests/test_no_copy_terminal_policy.py
+@@ -11,3 +11,11 @@ def test_no_copy_terminal_policy_is_active_and_log_backed():
+     assert "d-means-log-backed-pass" in rule_ids
+     assert "no-unconditional-pass" in rule_ids
+     assert data["handoff_integration"]["generated_handoff_prompt_must_not_request_copy_paste_on_pass"] is True
++
++
++def test_no_copy_policy_requires_remote_evidence_summary():
++    text = Path(".agentic/no_copy_terminal_policy.yaml").read_text(encoding="utf-8")
++    assert "mandatory_remote_evidence_contract" in text
++    assert "REMOTE_EVIDENCE: PASS" in text
++    assert "paste-output is still required" in text
++    assert "must not be written again after it has been committed" in text
+diff --git a/tests/test_terminal_logging.py b/tests/test_terminal_logging.py
+index 56e41bf..daaf8d5 100644
+--- a/tests/test_terminal_logging.py
++++ b/tests/test_terminal_logging.py
+@@ -101,3 +101,9 @@ def test_finalize_terminal_log_requires_result_marker(tmp_path, monkeypatch):
+     outcome, message = tl.finalize_terminal_log(source, "missing-marker")
+     assert outcome == "FAIL_MISSING_RESULT_MARKER"
+     assert "run.log" in message
++
++
++def test_terminal_log_finalize_contract_words_are_stable():
++    text = Path(".agentic/no_copy_terminal_policy.yaml").read_text(encoding="utf-8")
++    assert "finalize terminal evidence" in text
++    assert "committed and pushed repo artifacts" in text
+
+### LOCAL GATES ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+fix/mandatory-terminal-evidence-capture-contract
+ M .agentic/no_copy_terminal_policy.yaml
+ M docs/TEST_GATES.md
+ M tests/test_no_copy_terminal_policy.py
+ M tests/test_terminal_logging.py
+
+### PYTEST ###
+........................................................................ [ 17%]
+........................................................................ [ 34%]
+....................................F................................... [ 51%]
+........................................................................ [ 68%]
+........................................................................ [ 85%]
+...........................................................              [100%]
+=================================== FAILURES ===================================
+____________ test_no_copy_terminal_policy_is_active_and_log_backed _____________
+
+    def test_no_copy_terminal_policy_is_active_and_log_backed():
+>       data = yaml.safe_load(Path(".agentic/no_copy_terminal_policy.yaml").read_text(encoding="utf-8"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_no_copy_terminal_policy.py:7: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.14/site-packages/yaml/__init__.py:125: in safe_load
+    return load(stream, SafeLoader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/__init__.py:81: in load
+    return loader.get_single_data()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/constructor.py:49: in get_single_data
+    node = self.get_single_node()
+           ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:36: in get_single_node
+    document = self.compose_document()
+               ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:55: in compose_document
+    node = self.compose_node(None, None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:84: in compose_node
+    node = self.compose_mapping_node(anchor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:133: in compose_mapping_node
+    item_value = self.compose_node(node, item_key)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:84: in compose_node
+    node = self.compose_mapping_node(anchor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:127: in compose_mapping_node
+    while not self.check_event(MappingEndEvent):
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/parser.py:98: in check_event
+    self.current_event = self.state()
+                         ^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/parser.py:428: in parse_block_mapping_key
+    if self.check_token(KeyToken):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/scanner.py:116: in check_token
+    self.fetch_more_tokens()
+.venv/lib/python3.14/site-packages/yaml/scanner.py:223: in fetch_more_tokens
+    return self.fetch_value()
+           ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <yaml.loader.SafeLoader object at 0x108225450>
+
+    def fetch_value(self):
+    
+        # Do we determine a simple key?
+        if self.flow_level in self.possible_simple_keys:
+    
+            # Add KEY.
+            key = self.possible_simple_keys[self.flow_level]
+            del self.possible_simple_keys[self.flow_level]
+            self.tokens.insert(key.token_number-self.tokens_taken,
+                    KeyToken(key.mark, key.mark))
+    
+            # If this key starts a new block mapping, we need to add
+            # BLOCK-MAPPING-START.
+            if not self.flow_level:
+                if self.add_indent(key.column):
+                    self.tokens.insert(key.token_number-self.tokens_taken,
+                            BlockMappingStartToken(key.mark, key.mark))
+    
+            # There cannot be two simple keys one after another.
+            self.allow_simple_key = False
+    
+        # It must be a part of a complex key.
+        else:
+    
+            # Block context needs additional checks.
+            # (Do we really need them? They will be caught by the parser
+            # anyway.)
+            if not self.flow_level:
+    
+                # We are allowed to start a complex value if and only if
+                # we can start a simple key.
+                if not self.allow_simple_key:
+>                   raise ScannerError(None, None,
+                            "mapping values are not allowed here",
+                            self.get_mark())
+E                   yaml.scanner.ScannerError: mapping values are not allowed here
+E                     in "<unicode string>", line 34, column 66:
+E                        ... ary cannot prove REMOTE_EVIDENCE: PASS, the user must be told th ... 
+E                                                            ^
+
+.venv/lib/python3.14/site-packages/yaml/scanner.py:577: ScannerError
+=========================== short test summary info ============================
+FAILED tests/test_no_copy_terminal_policy.py::test_no_copy_terminal_policy_is_active_and_log_backed
+1 failed, 418 passed in 2.41s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; policy packs: 
+solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.27
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=2
+local_branch_count=76
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+fix/mandatory-terminal-evidence-capture-contract
+ M .agentic/no_copy_terminal_policy.yaml
+ M docs/TEST_GATES.md
+ M tests/test_no_copy_terminal_policy.py
+ M tests/test_terminal_logging.py
+
+### RESULT: FAIL ###
+
+### TARGETED TESTS ###
+
+==================================== ERRORS ====================================
+____________ ERROR collecting tests/test_no_copy_terminal_policy.py ____________
+ImportError while importing test module '/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_no_copy_terminal_policy.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_no_copy_terminal_policy.py:3: in <module>
+    import yaml
+E   ModuleNotFoundError: No module named 'yaml'
+=========================== short test summary info ============================
+ERROR tests/test_no_copy_terminal_policy.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.07s
+
+### RELEASE GATE READ-ONLY CHECK ###
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+NS RELEASE GATE CYCLE v0.3.27
+
+
+### SAFETY ###
+Safety: verifies release readiness only; no tag, release, merge, or publish action.
+
+### BRANCH / STATUS ###
+fix/mandatory-terminal-evidence-capture-contract
+ M .agentic/no_copy_terminal_policy.yaml
+ M docs/TEST_GATES.md
+ M tests/test_no_copy_terminal_policy.py
+ M tests/test_terminal_logging.py
+
+### LOCAL GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+fix/mandatory-terminal-evidence-capture-contract
+ M .agentic/no_copy_terminal_policy.yaml
+ M docs/TEST_GATES.md
+ M tests/test_no_copy_terminal_policy.py
+ M tests/test_terminal_logging.py
+
+### PYTEST ###
+........................................................................ [ 17%]
+........................................................................ [ 34%]
+....................................F................................... [ 51%]
+........................................................................ [ 68%]
+........................................................................ [ 85%]
+...........................................................              [100%]
+=================================== FAILURES ===================================
+____________ test_no_copy_terminal_policy_is_active_and_log_backed _____________
+
+    def test_no_copy_terminal_policy_is_active_and_log_backed():
+>       data = yaml.safe_load(Path(".agentic/no_copy_terminal_policy.yaml").read_text(encoding="utf-8"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_no_copy_terminal_policy.py:7: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.14/site-packages/yaml/__init__.py:125: in safe_load
+    return load(stream, SafeLoader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/__init__.py:81: in load
+    return loader.get_single_data()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/constructor.py:49: in get_single_data
+    node = self.get_single_node()
+           ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:36: in get_single_node
+    document = self.compose_document()
+               ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:55: in compose_document
+    node = self.compose_node(None, None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:84: in compose_node
+    node = self.compose_mapping_node(anchor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:133: in compose_mapping_node
+    item_value = self.compose_node(node, item_key)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:84: in compose_node
+    node = self.compose_mapping_node(anchor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/composer.py:127: in compose_mapping_node
+    while not self.check_event(MappingEndEvent):
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/parser.py:98: in check_event
+    self.current_event = self.state()
+                         ^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/parser.py:428: in parse_block_mapping_key
+    if self.check_token(KeyToken):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/yaml/scanner.py:116: in check_token
+    self.fetch_more_tokens()
+.venv/lib/python3.14/site-packages/yaml/scanner.py:223: in fetch_more_tokens
+    return self.fetch_value()
+           ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <yaml.loader.SafeLoader object at 0x10c694690>
+
+    def fetch_value(self):
+    
+        # Do we determine a simple key?
+        if self.flow_level in self.possible_simple_keys:
+    
+            # Add KEY.
+            key = self.possible_simple_keys[self.flow_level]
+            del self.possible_simple_keys[self.flow_level]
+            self.tokens.insert(key.token_number-self.tokens_taken,
+                    KeyToken(key.mark, key.mark))
+    
+            # If this key starts a new block mapping, we need to add
+            # BLOCK-MAPPING-START.
+            if not self.flow_level:
+                if self.add_indent(key.column):
+                    self.tokens.insert(key.token_number-self.tokens_taken,
+                            BlockMappingStartToken(key.mark, key.mark))
+    
+            # There cannot be two simple keys one after another.
+            self.allow_simple_key = False
+    
+        # It must be a part of a complex key.
+        else:
+    
+            # Block context needs additional checks.
+            # (Do we really need them? They will be caught by the parser
+            # anyway.)
+            if not self.flow_level:
+    
+                # We are allowed to start a complex value if and only if
+                # we can start a simple key.
+                if not self.allow_simple_key:
+>                   raise ScannerError(None, None,
+                            "mapping values are not allowed here",
+                            self.get_mark())
+E                   yaml.scanner.ScannerError: mapping values are not allowed here
+E                     in "<unicode string>", line 34, column 66:
+E                        ... ary cannot prove REMOTE_EVIDENCE: PASS, the user must be told th ... 
+E                                                            ^
+
+.venv/lib/python3.14/site-packages/yaml/scanner.py:577: ScannerError
+=========================== short test summary info ============================
+FAILED tests/test_no_copy_terminal_policy.py::test_no_copy_terminal_policy_is_active_and_log_backed
+1 failed, 418 passed in 2.33s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; policy packs: 
+solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.27
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=2
+local_branch_count=76
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+fix/mandatory-terminal-evidence-capture-contract
+ M .agentic/no_copy_terminal_policy.yaml
+ M docs/TEST_GATES.md
+ M tests/test_no_copy_terminal_policy.py
+ M tests/test_terminal_logging.py
+
+### RESULT: FAIL ###
+
+### RELEASE CHECK ###
+Release state check for target v0.3.27
+
+[PASS] semantic version: 0.3.27 is valid
+[PASS] pyproject version: found text: version = "0.3.27"
+[PASS] package __version__: found text: __version__ = "0.3.27"
+[PASS] CHANGELOG version: found text: v0.3.27
+[PASS] README version: found text: Version `0.3.27`
+[PASS] CITATION version: found text: version: 0.3.27
+[PASS] STATUS version: found text: Current version: 0.3.27
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.27
+[PASS] local tag unused: tag is unused: v0.3.27
+[PASS] remote tag unused: remote tag is unused: v0.3.27
+[PASS] GitHub release unused: GitHub release is absent: v0.3.27
+
+Overall: PASS
+
+
+### CLEAN DIST ###
+
+### BUILD CHECK ###
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for sdist...
+* Building sdist...
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for wheel...
+* Building wheel...
+Successfully built agentic_project_kit-0.3.27.tar.gz and agentic_project_kit-0.3.27-py3-none-any.whl
+Checking dist/agentic_project_kit-0.3.27-py3-none-any.whl: [32mPASSED[0m
+Checking dist/agentic_project_kit-0.3.27.tar.gz: [32mPASSED[0m
+
+### VERIFY DIST ONLY CONTAINS TARGET VERSION ###
+total 968
+drwxr-xr-x@  4 hof  staff     128 19 Mai  11:05 .
+drwxr-xr-x@ 30 hof  staff     960 19 Mai  11:05 ..
+-rw-r--r--@  1 hof  staff  100485 19 Mai  11:05 agentic_project_kit-0.3.27-py3-none-any.whl
+-rw-r--r--@  1 hof  staff  392227 19 Mai  11:05 agentic_project_kit-0.3.27.tar.gz
+
+### FINAL STATE ###
+fix/mandatory-terminal-evidence-capture-contract
+ M .agentic/no_copy_terminal_policy.yaml
+ M docs/TEST_GATES.md
+ M tests/test_no_copy_terminal_policy.py
+ M tests/test_terminal_logging.py
+
+### RESULT: FAIL ###
+
+### RESULT: PASS ###
