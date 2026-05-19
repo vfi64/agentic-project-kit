@@ -1,0 +1,116 @@
+OPEN PR FOR V0.3.28 RELEASE PREP
+
+### STATUS BEFORE GATES ###
+
+### RECENT HISTORY ###
+1489cc9 Prepare v0.3.28 release metadata
+ff82aaf Verify main after PR 441 patch preflight MVP
+fe1dcc9 Add patch artifact preflight MVP (#441)
+920d883 Verify main after PR 440 planning refresh
+7c84db9 Refresh planning state after v0.3.27 (#440)
+28c7ab7 Record v0.3.27 DOI metadata (#439)
+811c846 Preserve v0.3.27 release publish log (#438)
+36f7434 Start mandatory terminal evidence capture fix (#437)
+616fb19 Diagnose mandatory terminal evidence capture (#435)
+45e51d1 Remove stale release version source inbox command (#434)
+90b8160 Require package init version in release check (#433)
+6925192 Queue release version source contract hardening (#432)
+
+### RELEASE-CHECK HELP CONTRACT ###
+                                                                                              
+ Usage: python -m agentic_project_kit.cli release-check [OPTIONS]                             
+                                                                                              
+ Validate release state for a target version.                                                 
+                                                                                              
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────╮
+│ --root           PATH  [default: .]                                                        │
+│ --version        TEXT  Release version without leading v.                                  │
+│ --help                 Show this message and exit.                                         │
+╰────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+### VERSION REFERENCES ###
+pyproject.toml:7:version = "0.3.28"
+src/agentic_project_kit/__init__.py:1:__version__ = "0.3.28"
+CITATION.cff:43:version: 0.3.28
+CHANGELOG.md:1:## v0.3.28
+CHANGELOG.md:3:- Prepare release metadata for v0.3.28.
+README.md:567:Version `0.3.28` is the current release line prepared by `./ns release-prep 0.3.28`.
+docs/STATUS.md:1:Current version: 0.3.28
+docs/handoff/CURRENT_HANDOFF.md:1:Current version: 0.3.28
+
+### RELEASE CHECK ###
+Release state check for target v0.3.28
+
+[PASS] semantic version: 0.3.28 is valid
+[PASS] pyproject version: found text: version = "0.3.28"
+[PASS] package __version__: found text: __version__ = "0.3.28"
+[PASS] CHANGELOG version: found text: v0.3.28
+[PASS] README version: found text: Version `0.3.28`
+[PASS] CITATION version: found text: version: 0.3.28
+[PASS] STATUS version: found text: Current version: 0.3.28
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.28
+[PASS] local tag unused: tag is unused: v0.3.28
+[PASS] remote tag unused: remote tag is unused: v0.3.28
+[PASS] GitHub release unused: GitHub release is absent: v0.3.28
+
+Overall: PASS
+
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+release/prepare-v0.3.28
+
+### PYTEST ###
+........................................................................ [ 16%]
+........................................................................ [ 33%]
+........................................................................ [ 49%]
+........................................................................ [ 66%]
+........................................................................ [ 82%]
+........................................................................ [ 99%]
+...                                                                      [100%]
+435 passed in 2.60s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.28
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=75
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+release/prepare-v0.3.28
+
+### RESULT: PASS ###
