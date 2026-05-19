@@ -10,3 +10,4 @@
 {"command_id": "smoke-agent-run-missing-script-001", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "missing", "timestamp_utc": "2026-05-18T20:48:09.310898+00:00"}
 {"command_id": "harden-inbox-lifecycle-cleanup-001", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "496a9c25eed87f1af8b1d4b0f82fabd29a9ab82f1460498f2c1e9afd9ad41522", "timestamp_utc": "2026-05-18T20:50:20.452515+00:00"}
 {"command_id": "harden-inbox-completed-command-guard-001", "exit_code": 1, "outcome": "FAIL_COMMAND", "script_sha256": "missing", "timestamp_utc": "2026-05-18T20:52:15.911886+00:00"}
+{"command_id": "finalize-no-copy-after-pr423-001", "exit_code": 1, "outcome": "FAIL_COMMAND", "script_sha256": "missing", "timestamp_utc": "2026-05-19T05:37:54.907531+00:00"}

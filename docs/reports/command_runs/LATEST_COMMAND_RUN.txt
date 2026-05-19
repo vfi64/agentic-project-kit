@@ -1,1 +1,1 @@
-docs/reports/command_runs/harden-inbox-completed-command-guard-001.md
+docs/reports/command_runs/finalize-no-copy-after-pr423-001.md
