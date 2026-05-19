@@ -1,4 +1,0 @@
-command_id: 20260519-final-summary-contract
-title: Add persistent final summary contract
-safety_class: remote-mutation
-expected_branch: main
