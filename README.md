@@ -563,3 +563,4 @@ Version `0.3.23` is the current release line prepared by `./ns release-prep 0.3.
 Version `0.3.24` is the current release line prepared by `./ns release-prep 0.3.24`.
 Version `0.3.25` is the current release line prepared by `./ns release-prep 0.3.25`.
 Version `0.3.26` is the current release line prepared by `./ns release-prep 0.3.26`.
+Version `0.3.27` is the current release line prepared by `./ns release-prep 0.3.27`.
