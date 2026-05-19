@@ -24,6 +24,7 @@ hard_rules:
   rule: Queue repo-backed commands for agent-next instead of returning long local
     shell blocks.
 - id: final-summary-contract
+  summary: Preserve the framed SUMMARY contract in every final block.
   rule: Use the mandatory SUMMARY block and never relabel inner failures as PASS.
 - id: patch-artifact-preflight
   rule: Generated patch artifacts must pass syntax, YAML, coverage-term, and final-summary
