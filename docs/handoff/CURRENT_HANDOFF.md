@@ -70,3 +70,8 @@ Use the best deterministic fix, not the shortest patch. New recurring problems m
 ## YAML Governance Integrity Lesson
 
 Do not patch YAML governance files by injecting unquoted text. Use structured YAML mutation and parse checks before gate runs. Repeated YAML corruption is tracked as `repeated-yaml-governance-file-corruption` and the active rule is `yaml-structured-mutation-only`.
+
+
+## Remote-first no-guess rule
+
+Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
