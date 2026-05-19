@@ -1,0 +1,268 @@
+PUBLISH V0.3.27 WITH MANDATORY REMOTE EVIDENCE
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PREFLIGHT ###
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+PASS_COMMAND_INBOX_CHECK
+PASS_NOTHING_TO_COLLECT
+
+### VERIFY NO OPEN PRS ###
+[]
+
+### RELEASE GATE ###
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+NS RELEASE GATE CYCLE v0.3.27
+
+
+### SAFETY ###
+Safety: verifies release readiness only; no tag, release, merge, or publish action.
+
+### BRANCH / STATUS ###
+main
+
+### LOCAL GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 17%]
+........................................................................ [ 34%]
+........................................................................ [ 51%]
+........................................................................ [ 68%]
+........................................................................ [ 85%]
+...........................................................              [100%]
+419 passed in 2.36s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; policy packs: 
+solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.27
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=74
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### RELEASE CHECK ###
+Release state check for target v0.3.27
+
+[PASS] semantic version: 0.3.27 is valid
+[PASS] pyproject version: found text: version = "0.3.27"
+[PASS] package __version__: found text: __version__ = "0.3.27"
+[PASS] CHANGELOG version: found text: v0.3.27
+[PASS] README version: found text: Version `0.3.27`
+[PASS] CITATION version: found text: version: 0.3.27
+[PASS] STATUS version: found text: Current version: 0.3.27
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.27
+[PASS] local tag unused: tag is unused: v0.3.27
+[PASS] remote tag unused: remote tag is unused: v0.3.27
+[PASS] GitHub release unused: GitHub release is absent: v0.3.27
+
+Overall: PASS
+
+
+### CLEAN DIST ###
+
+### BUILD CHECK ###
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for sdist...
+* Building sdist...
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for wheel...
+* Building wheel...
+Successfully built agentic_project_kit-0.3.27.tar.gz and agentic_project_kit-0.3.27-py3-none-any.whl
+Checking dist/agentic_project_kit-0.3.27-py3-none-any.whl: [32mPASSED[0m
+Checking dist/agentic_project_kit-0.3.27.tar.gz: [32mPASSED[0m
+
+### VERIFY DIST ONLY CONTAINS TARGET VERSION ###
+total 976
+drwxr-xr-x@  4 hof  staff     128 19 Mai  11:14 .
+drwxr-xr-x@ 30 hof  staff     960 19 Mai  11:14 ..
+-rw-r--r--@  1 hof  staff  100485 19 Mai  11:14 agentic_project_kit-0.3.27-py3-none-any.whl
+-rw-r--r--@  1 hof  staff  395617 19 Mai  11:14 agentic_project_kit-0.3.27.tar.gz
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### RELEASE PUBLISH ###
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+NS RELEASE PUBLISH CYCLE v0.3.27
+
+
+### SAFETY ###
+Safety: publishes only with exact confirmation token: publish-v0.3.27
+ERROR: refusing release publish without exact confirmation token.
+Run: ./ns release-publish 0.3.27 publish-v0.3.27
+
+### RESULT: FAIL ###
+
+### RELEASE VERIFY ###
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+NS RELEASE VERIFY CYCLE v0.3.27
+
+
+### SAFETY ###
+Safety: verifies completed release state only; no tag, release, merge, push, or publish action.
+
+### BRANCH / STATUS ###
+main
+
+### VERIFY LOCAL TAG ###
+ERROR: local tag missing: v0.3.27
+
+### VERIFY REMOTE TAG ###
+ERROR: remote tag missing: v0.3.27
+
+### WAIT FOR GITHUB RELEASE ###
+Release not visible yet for v0.3.27; retry 1/24 after 10s.
+Release not visible yet for v0.3.27; retry 2/24 after 10s.
+Release not visible yet for v0.3.27; retry 3/24 after 10s.
+Release not visible yet for v0.3.27; retry 4/24 after 10s.
+Release not visible yet for v0.3.27; retry 5/24 after 10s.
+Release not visible yet for v0.3.27; retry 6/24 after 10s.
+Release not visible yet for v0.3.27; retry 7/24 after 10s.
+Release not visible yet for v0.3.27; retry 8/24 after 10s.
+Release not visible yet for v0.3.27; retry 9/24 after 10s.
+Release not visible yet for v0.3.27; retry 10/24 after 10s.
+Release not visible yet for v0.3.27; retry 11/24 after 10s.
+Release not visible yet for v0.3.27; retry 12/24 after 10s.
+Release not visible yet for v0.3.27; retry 13/24 after 10s.
+Release not visible yet for v0.3.27; retry 14/24 after 10s.
+Release not visible yet for v0.3.27; retry 15/24 after 10s.
+Release not visible yet for v0.3.27; retry 16/24 after 10s.
+Release not visible yet for v0.3.27; retry 17/24 after 10s.
+Release not visible yet for v0.3.27; retry 18/24 after 10s.
+Release not visible yet for v0.3.27; retry 19/24 after 10s.
+Release not visible yet for v0.3.27; retry 20/24 after 10s.
+Release not visible yet for v0.3.27; retry 21/24 after 10s.
+Release not visible yet for v0.3.27; retry 22/24 after 10s.
+Release not visible yet for v0.3.27; retry 23/24 after 10s.
+Release not visible yet for v0.3.27; retry 24/24 after 10s.
+ERROR: GitHub release still missing after wait: v0.3.27
+release not found
+
+### RELEASE WORKFLOW STATUS ###
+completed	success	Prepare v0.3.26 release metadata (#394)	Release	v0.3.26	push	26051567456	23s	2026-05-18T18:09:48Z
+completed	success	Prepare v0.3.25 release metadata (#370)	Release	v0.3.25	push	26044168477	29s	2026-05-18T15:45:58Z
+completed	success	Prepare v0.3.24 release metadata (#340)	Release	v0.3.24	push	26031141877	19s	2026-05-18T11:38:37Z
+completed	success	Prepare v0.3.23 release metadata (#324)	Release	v0.3.23	push	26002746413	20s	2026-05-17T21:07:33Z
+completed	success	Prepare v0.3.22 release metadata (#311)	Release	v0.3.22	push	26001427208	17s	2026-05-17T20:10:06Z
+completed	success	Implement ns release publish command (#289)	Release	v0.3.21	push	25992490817	16s	2026-05-17T13:41:23Z
+completed	success	Prepare v0.3.20 release metadata (#269)	Release	v0.3.20	push	25988874178	22s	2026-05-17T10:54:48Z
+completed	success	Fix README version for v0.3.19 release (#258)	Release	v0.3.19	push	25973720733	24s	2026-05-16T21:43:51Z
+
+### POST RELEASE CHECK ###
+Post-release check for target v0.3.27
+
+[FAIL] GitHub release: GitHub release is absent: v0.3.27
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[WAITING] Zenodo version DOI: no verified Zenodo record found yet for v0.3.27; leave README/CITATION unchanged
+
+Overall: FAIL
+
+
+### FINAL STATE ###
+main
+36f7434 Start mandatory terminal evidence capture fix (#437)
+616fb19 Diagnose mandatory terminal evidence capture (#435)
+45e51d1 Remove stale release version source inbox command (#434)
+90b8160 Require package init version in release check (#433)
+6925192 Queue release version source contract hardening (#432)
+592a11f Preserve release version source hardening diagnosis log (#431)
+6e02f19 Fix v0.3.27 package version drift (#430)
+cf51a2a Prepare v0.3.27 release metadata (#429)
+
+### RESULT: FAIL ###
+
+### FINAL MAIN STATE BEFORE LOG BRANCH ###
+main
+36f7434 Start mandatory terminal evidence capture fix (#437)
+616fb19 Diagnose mandatory terminal evidence capture (#435)
+45e51d1 Remove stale release version source inbox command (#434)
+90b8160 Require package init version in release check (#433)
+6925192 Queue release version source contract hardening (#432)
+592a11f Preserve release version source hardening diagnosis log (#431)
+6e02f19 Fix v0.3.27 package version drift (#430)
+cf51a2a Prepare v0.3.27 release metadata (#429)
+
+### RESULT: PASS ###
+
+
+### CORRECTION: FALSE PASS DETECTED ###
+The release publish command refused execution because the exact confirmation token was missing.
+Therefore v0.3.27 was not published in this run.
+The final PASS summary in the original run is invalid for release publication status.
+Correct classification: WORK RESULT: FAIL; REMOTE_EVIDENCE: PASS_FOR_FAILED_ATTEMPT_ONLY.
+### RESULT: FAIL ###
