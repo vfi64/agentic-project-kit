@@ -41,3 +41,5 @@ workflow_friction_rules:
   - id: no-remote-command-deadlock
     priority: high
     rule: Remote command first is preferred, but NO-COMMAND must trigger queuing a complete command pair or exactly one minimal fallback command. Do not loop on ask-agent-to-queue-command.
+- id: final-summary-no-executable-placeholders
+  summary: Executable terminal blocks must print only concrete final SUMMARY outcomes; never placeholder alternatives like PASS|FAIL or p|paste-output.
