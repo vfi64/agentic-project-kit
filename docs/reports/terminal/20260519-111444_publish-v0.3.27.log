@@ -258,3 +258,11 @@ main
 cf51a2a Prepare v0.3.27 release metadata (#429)
 
 ### RESULT: PASS ###
+
+
+### CORRECTION: FALSE PASS DETECTED ###
+The release publish command refused execution because the exact confirmation token was missing.
+Therefore v0.3.27 was not published in this run.
+The final PASS summary in the original run is invalid for release publication status.
+Correct classification: WORK RESULT: FAIL; REMOTE_EVIDENCE: PASS_FOR_FAILED_ATTEMPT_ONLY.
+### RESULT: FAIL ###
