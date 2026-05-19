@@ -4,7 +4,7 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from agentic_project_kit.agent_command_runner import ALLOWED_SAFETY_CLASSES, EXECUTED_JSONL, INBOX_DIR, REPORT_DIR, _parse_simple_yaml
+from agentic_project_kit.agent_command_runner import ALLOWED_SAFETY_CLASSES, EXECUTED_JSONL, INBOX_DIR, REPORT_DIR, _parse_simple_yaml, normalize_safety_class
 
 FORBIDDEN_SCRIPT_FRAGMENTS = (
     "<<",
@@ -76,7 +76,7 @@ def check_command_inbox(inbox_dir: Path = INBOX_DIR) -> InboxCheckResult:
             findings.append(f"completed command still pending: {command_id}")
         if not data.get("title", ""):
             findings.append(f"{yaml_path.as_posix()}: missing title")
-        safety_class = data.get("safety_class", "")
+        safety_class = normalize_safety_class(data.get("safety_class", ""))
         if safety_class not in ALLOWED_SAFETY_CLASSES:
             findings.append(f"{yaml_path.as_posix()}: unsupported safety_class: {safety_class}")
         syntax = subprocess.run(["sh", "-n", script_path.as_posix()], text=True, capture_output=True, check=False)
