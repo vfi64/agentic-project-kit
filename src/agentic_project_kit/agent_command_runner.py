@@ -239,7 +239,8 @@ def stage_commit_push(paths: list[Path], message: str) -> int:
     if add_paths:
         subprocess.run(["git", "add", *[path.as_posix() for path in add_paths]], check=True)
     subprocess.run(["git", "commit", "-m", message], check=True)
-    push = subprocess.run(["git", "push"], check=False)
+    branch = current_branch()
+    push = subprocess.run(["git", "push", "-u", "origin", branch], check=False)
     return push.returncode
 
 def logged_script_has_fail_result_marker(log_path: Path | None) -> bool:
