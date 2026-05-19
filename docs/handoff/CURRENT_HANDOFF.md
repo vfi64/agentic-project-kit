@@ -79,3 +79,10 @@ Before acting on repository state, command syntax, release phase, file locations
 ## Compiled Agent Context YAML
 
 `.agentic/compiled_agent_context.yaml` is the compact machine-readable companion to the human governance docs. New durable rules must be reflected in the human docs, the compiled YAML, and deterministic tests.
+
+## No remote-command deadlock
+
+Rule id: no-remote-command-deadlock
+
+Remote command first is a delivery preference, not a blocking rule. If `./ns agent-next` reports `NO-COMMAND`, the next assistant response must either queue a complete command pair remotely or give exactly one minimal fallback command. The user must not be kept in an `ask-agent-to-queue-command` loop. Long ad-hoc terminal blocks are only allowed when the remote command path is unavailable or broken.
+

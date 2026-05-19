@@ -36,3 +36,7 @@ normal_operator_path:
 - ./ns agent-next
 quality_goal: Prefer the best deterministic solution over shortcuts; quality is the
   target.
+workflow_friction_rules:
+  - id: no-remote-command-deadlock
+    priority: high
+    rule: Remote command first is preferred, but NO-COMMAND must trigger queuing a complete command pair or exactly one minimal fallback command. Do not loop on ask-agent-to-queue-command.
