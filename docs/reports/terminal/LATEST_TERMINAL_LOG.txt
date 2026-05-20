@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-repair-pr460-release-wording.log
+docs/reports/terminal/20260520-merge-pr-460-v0.3.29-release-metadata.log

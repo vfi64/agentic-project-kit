@@ -1,0 +1,135 @@
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRE-MERGE STATUS ###
+
+### PR 460 MACHINE STATE ###
+{"isDraft":false,"mergeStateStatus":"CLEAN","state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-20T06:25:26Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26145372700/job/76899603376","name":"test","startedAt":"2026-05-20T06:25:04Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-20T06:25:22Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26145371015/job/76899598580","name":"test","startedAt":"2026-05-20T06:25:01Z","status":"COMPLETED","workflowName":"CI"}]}
+PR_STATE=OPEN CLEAN draft=false
+PR_STATE_ACCEPTED_FOR_MERGE
+
+### MERGE PR 460 ###
+
+### PULL MAIN AFTER MERGE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   f6b6ed6..c66c3b0  main       -> origin/main
+Updating f6b6ed6..c66c3b0
+Fast-forward
+ CHANGELOG.md                                       |   6 +
+ CITATION.cff                                       |   2 +-
+ README.md                                          |   2 +-
+ docs/STATUS.md                                     |   2 +-
+ docs/handoff/CURRENT_HANDOFF.md                    |   2 +-
+ ...0260520-prepare-v0.3.29-release-metadata-v2.log | 196 +++++++++++++++++++++
+ .../20260520-repair-pr460-release-wording.log      |  96 ++++++++++
+ docs/reports/terminal/LATEST_TERMINAL_LOG.txt      |   2 +-
+ pyproject.toml                                     |   2 +-
+ src/agentic_project_kit/__init__.py                |   2 +-
+ 10 files changed, 305 insertions(+), 7 deletions(-)
+ create mode 100644 docs/reports/terminal/20260520-prepare-v0.3.29-release-metadata-v2.log
+ create mode 100644 docs/reports/terminal/20260520-repair-pr460-release-wording.log
+
+### ACTIVATE VENV ###
+Python 3.14.3
+
+### RELEASE CHECK V0.3.29 ON MAIN ###
+Release state check for target v0.3.29
+
+[PASS] semantic version: 0.3.29 is valid
+[PASS] pyproject version: found text: version = "0.3.29"
+[PASS] package __version__: found text: __version__ = "0.3.29"
+[PASS] CHANGELOG version: found text: v0.3.29
+[PASS] README version: found text: Version `0.3.29`
+[PASS] CITATION version: found text: version: 0.3.29
+[PASS] STATUS version: found text: Current version: 0.3.29
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.29
+[PASS] local tag unused: tag is unused: v0.3.29
+[PASS] remote tag unused: remote tag is unused: v0.3.29
+[PASS] GitHub release unused: GitHub release is absent: v0.3.29
+
+Overall: PASS
+
+
+### VERIFY README PRE-RELEASE WORDING ###
+568:Version `0.3.29` is the current prepared release line; Zenodo verification is pending until the GitHub release and post-release DOI metadata are recorded.
+PASS_README_PRERELEASE_WORDING
+PASS_NO_FALSE_VERIFIED_RELEASE_CLAIM
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 15%]
+........................................................................ [ 31%]
+........................................................................ [ 46%]
+........................................................................ [ 62%]
+........................................................................ [ 77%]
+........................................................................ [ 93%]
+..............................                                           [100%]
+462 passed in 2.89s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.29
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=79
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### FINAL MAIN STATE ###
+main
+c66c3b0 Prepare v0.3.29 release metadata (#460)
+f6b6ed6 Record v0.3.29 release tooling recheck failure log
+fd8e2bc Record v0.3.29 release preflight log
+b658dc3 Record PR 459 merge verification log
+5de0545 Document communication artifact GC hardening closeout (#459)
+64dcdab Record PR 458 merge verification log
+39605d3 Add GC TTL handling for local tmp logs (#458)
+ba086e2 Record PR 457 merge verification log
+5f69340 Add safe file replacement helper (#457)
+1eeec4f Record PR 456 merge verification log
+
+### FINALIZE REMOTE EVIDENCE ###
