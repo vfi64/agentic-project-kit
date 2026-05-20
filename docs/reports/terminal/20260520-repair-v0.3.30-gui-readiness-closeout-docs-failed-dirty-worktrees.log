@@ -1,0 +1,75 @@
+
+### CHECK BRANCH ###
+CURRENT_BRANCH=docs/v0.3.30-gui-readiness-closeout-20260520
+
+### STATUS BEFORE REPAIR ###
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? tests/test_v0_3_30_gui_readiness_closeout_docs.py
+
+### RECORD FAILED CLOSEOUT LOG IF PRESENT ###
+RECORDED_FAILED_CLOSEOUT_LOG=docs/reports/terminal/20260520-v0.3.30-gui-readiness-closeout-docs-failed-planning-invariant.log
+
+### PATCH HANDOFF TEST INVARIANT ###
+
+### VERIFY REQUIRED DOC TERMS ###
+101:Compatibility invariant for planning gates: v0.3.30 remains GUI readiness hardening, not a Tkinter implementation.
+128:## v0.3.30 GUI Readiness Hardening Closeout
+97:## v0.3.30 GUI Readiness Hardening Closeout
+140:The release closeout criterion is a clean full gate plus release metadata for v0.3.30. Tkinter remains explicitly deferred until after this contract baseline is released.
+
+### TARGETED TESTS ###
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+_________________ test_v0_3_30_gui_readiness_is_before_tkinter _________________
+
+    def test_v0_3_30_gui_readiness_is_before_tkinter() -> None:
+        status = Path("docs/STATUS.md").read_text(encoding="utf-8")
+        handoff = Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
+        combined = status + "\n" + handoff
+        assert "v0.3.30 GUI Readiness Hardening Plan" in combined
+        assert "GUI readiness hardening, not a Tkinter implementation" in handoff
+        assert "Action Registry is the single source of allowed GUI actions" in combined
+        assert "remote evidence present" in combined
+        assert "already executed command" in combined
+>       assert "dirty worktrees" in combined
+E       AssertionError: assert 'dirty worktrees' in 'Current version: 0.3.29\n\n# Project Status\n\nStatus-date: 2026-05-19\nProject: agentic-project-kit\nPrimary branch:...gs in tested Python cores.\n- The thin Tkinter cockpit remains explicitly deferred until these contracts pass gates.\n'
+
+tests/test_gui_readiness_planning.py:13: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_gui_readiness_planning.py::test_v0_3_30_gui_readiness_is_before_tkinter
+1 failed, 1 passed in 0.02s
+
+================================================================
+SUMMARY
+WORK RESULT: FAIL
+EVIDENCE RESULT: CHAT_ONLY_OR_LOCAL_TMP
+OVERALL RESULT: FAIL
+REMOTE_EVIDENCE: FAIL
+terminal_log=/tmp/agentic-project-kit-20260520-repair-v0.3.30-gui-readiness-closeout-docs.log
+command_report=NONE
+NEXT_CHAT_REPLY: paste-output
+### RESULT: FAIL ###
+================================================================
+]7;file://MBP.fritz.box/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit]7;file://MBP.fritz.box/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit[3J[H[2J]7;file://MBP.fritz.box/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit]7;file://MBP.fritz.box/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit]7;file://MBP.fritz.box/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit]7;file://MBP.fritz.box/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit]7;file://MBP.fritz.box/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit]7;file://MBP.fritz.box/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit]7;file://MBP.fritz.box/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit]7;file://MBP.fritz.box/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+REPAIR V0.3.30 CLOSEOUT DIRTY WORKTREES INVARIANT AND FINALIZE PR
+
+
+### CHECK BRANCH ###
+CURRENT_BRANCH=docs/v0.3.30-gui-readiness-closeout-20260520
+
+### STATUS BEFORE REPAIR ###
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? docs/reports/terminal/20260520-v0.3.30-gui-readiness-closeout-docs-failed-planning-invariant.log
+?? tests/test_v0_3_30_gui_readiness_closeout_docs.py
+
+### RECORD FAILED REPAIR LOG IF PRESENT ###

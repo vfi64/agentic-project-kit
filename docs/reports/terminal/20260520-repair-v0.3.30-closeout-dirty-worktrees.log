@@ -1,0 +1,105 @@
+
+### CHECK BRANCH ###
+CURRENT_BRANCH=docs/v0.3.30-gui-readiness-closeout-20260520
+
+### STATUS BEFORE REPAIR ###
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? docs/reports/terminal/20260520-v0.3.30-gui-readiness-closeout-docs-failed-planning-invariant.log
+?? tests/test_v0_3_30_gui_readiness_closeout_docs.py
+
+### RECORD FAILED REPAIR LOG IF PRESENT ###
+RECORDED_FAILED_REPAIR_LOG=docs/reports/terminal/20260520-repair-v0.3.30-gui-readiness-closeout-docs-failed-dirty-worktrees.log
+
+### PATCH DIRTY WORKTREES TEST INVARIANT ###
+
+### VERIFY REQUIRED DOC TERMS ###
+101:Compatibility invariant for planning gates: v0.3.30 remains GUI readiness hardening, not a Tkinter implementation.
+102:Compatibility invariant for planning gates: GUI readiness also covers dirty worktrees, dirty inboxes, failed commands, and postcondition failures.
+128:## v0.3.30 GUI Readiness Hardening Closeout
+97:## v0.3.30 GUI Readiness Hardening Closeout
+140:The release closeout criterion is a clean full gate plus release metadata for v0.3.30. Tkinter remains explicitly deferred until after this contract baseline is released.
+
+### TARGETED TESTS ###
+..                                                                       [100%]
+2 passed in 0.01s
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+docs/v0.3.30-gui-readiness-closeout-20260520
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? docs/reports/terminal/20260520-repair-v0.3.30-gui-readiness-closeout-docs-failed-dirty-worktrees.log
+?? docs/reports/terminal/20260520-v0.3.30-gui-readiness-closeout-docs-failed-planning-invariant.log
+?? tests/test_v0_3_30_gui_readiness_closeout_docs.py
+
+### PYTEST ###
+........................................................................ [ 14%]
+........................................................................ [ 29%]
+........................................................................ [ 44%]
+........................................................................ [ 59%]
+........................................................................ [ 73%]
+........................................................................ [ 88%]
+.......................................................                  [100%]
+487 passed in 3.46s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.29
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=80
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+docs/v0.3.30-gui-readiness-closeout-20260520
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? docs/reports/terminal/20260520-repair-v0.3.30-gui-readiness-closeout-docs-failed-dirty-worktrees.log
+?? docs/reports/terminal/20260520-v0.3.30-gui-readiness-closeout-docs-failed-planning-invariant.log
+?? tests/test_v0_3_30_gui_readiness_closeout_docs.py
+
+### RESULT: PASS ###
+
+### FINAL DIFF SUMMARY ###
+ docs/STATUS.md                  | 18 ++++++++++++++++--
+ docs/handoff/CURRENT_HANDOFF.md | 21 +++++++++++++++++++--
+ 2 files changed, 35 insertions(+), 4 deletions(-)
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? docs/reports/terminal/20260520-repair-v0.3.30-gui-readiness-closeout-docs-failed-dirty-worktrees.log
+?? docs/reports/terminal/20260520-v0.3.30-gui-readiness-closeout-docs-failed-planning-invariant.log
+?? tests/test_v0_3_30_gui_readiness_closeout_docs.py
+
+### FINALIZE REMOTE EVIDENCE ###

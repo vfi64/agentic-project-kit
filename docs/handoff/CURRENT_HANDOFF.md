@@ -9,7 +9,7 @@ Base branch: main
 
 ## Current Goal
 
-Refresh the planning state after v0.3.27 and harden documentation freshness guards. The repository must remain the durable memory: rules are durable only when documented, test-backed, and enforced by repo tooling or gates.
+Close out v0.3.30 GUI readiness hardening. This slice is not a Tkinter implementation. It records and gates the machine-readable contracts that a later thin Tkinter cockpit will consume: action results, cockpit JSON output, registry-only actions, queue state, and evidence state.
 
 ## Current Repository State
 
@@ -36,7 +36,7 @@ Communication artifact GC hardening is now part of the pre-GUI baseline: symlink
 
 ## Next Safe Step
 
-Begin v0.3.30 with GUI readiness hardening, not a Tkinter implementation. The first GUI must remain deferred until the repo has hard, tested contracts for Action Registry execution, final SUMMARY parsing, remote/local/missing evidence, queue states, no-command, already-executed commands, dirty worktrees, failed commands, and postcondition failures. The GUI should later be only a presentation layer over those explicit safe action results.
+Finish v0.3.30 by documenting the completed GUI readiness contracts, running the full local gates, and preparing the v0.3.30 release metadata. Do not start Tkinter in this slice; the thin Tkinter cockpit remains the next release line after v0.3.30 is released and verified.
 
 Pattern Advisor expansion, release-automation expansion, and hidden command planning are intentionally deferred.
 
@@ -93,6 +93,23 @@ Remote command first is a delivery preference, not a blocking rule. If `./ns age
 ## No executable placeholder summaries
 
 Executable terminal blocks must never print final SUMMARY fields with placeholder alternatives such as `PASS|FAIL`, `p|paste-output`, or ellipsis markers. A copied block must end with one concrete outcome only. Placeholder examples are allowed only in prose documents when clearly marked as non-executable examples.
+
+## v0.3.30 GUI Readiness Hardening Closeout
+
+v0.3.30 is the GUI readiness contract release, not the Tkinter cockpit release.
+
+Compatibility invariant for planning gates: v0.3.30 remains GUI readiness hardening, not a Tkinter implementation.
+Compatibility invariant for planning gates: GUI readiness also covers dirty worktrees, dirty inboxes, failed commands, and postcondition failures.
+
+Completed contract slices:
+
+- PR #463: ActionResult core contract.
+- PR #464: `cockpit run --json` machine-readable action result output.
+- PR #465: Registry-only action contract.
+- PR #466: Queue-State contract for no command, exactly one command, multiple commands, already executed command, dirty inbox, missing command metadata, and incomplete command pairs.
+- PR #467: Evidence-State contract for remote evidence present, local tmp only, missing evidence, stale latest pointer, and command report availability.
+
+Next safe step: run the final v0.3.30 gate and prepare release metadata. Tkinter remains deferred until after the v0.3.30 release is verified.
 
 ## v0.3.30 GUI Readiness Hardening Plan
 

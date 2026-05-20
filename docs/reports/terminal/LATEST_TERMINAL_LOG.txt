@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-merge-pr467-evidence-state-contract.log
+docs/reports/terminal/20260520-repair-v0.3.30-closeout-dirty-worktrees.log
