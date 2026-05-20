@@ -288,11 +288,14 @@ def test_finalize_guard_command_is_wired() -> None:
 
 def test_finalize_guard_handles_existing_or_completed_branches() -> None:
     text = Path("tools/ns_finalize_guard.sh").read_text(encoding="utf-8")
+    core = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
     assert "marker_already_on_main=true" in text
     assert "local_branch_exists" in text
     assert "remote_branch_exists" in text
     assert "commits_ahead_of_main" in text
-    assert "Idempotent completion" in text
+    assert "python -m agentic_project_kit.finalize_guard" in text
+    assert "Idempotent completion" in core
+
 
 
 def test_safe_remove_diagnostic_guard_distinguishes_tracked_files() -> None:
@@ -321,13 +324,20 @@ def test_ns_up_dirty_tree_mentions_clean_evidence() -> None:
 
 def test_finalize_guard_declares_machine_readable_outcomes() -> None:
     text = Path("tools/ns_finalize_guard.sh").read_text(encoding="utf-8")
-    assert "STATUS: PASS_ALREADY_ON_MAIN" in text
-    assert "STATUS: PASS_NOOP_BRANCH" in text
-    assert "STATUS: PASS_SUPERSEDED" in text
-    assert "STATUS: PASS_NEEDS_PR" in text
-    assert "STATUS: FAIL_CONFLICT_RELEVANT" in text
-    assert "STATUS: FAIL_NEEDS_HUMAN_REVIEW" in text
-    assert "no commit, push, PR, merge, tag, release, branch deletion, or file mutation" in text
+    core = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
+    assert "python -m agentic_project_kit.finalize_guard" in text
+    assert "STATUS: PASS_ALREADY_ON_MAIN" not in text
+    assert "STATUS: PASS_NEEDS_PR" not in text
+    assert "STATUS: PASS_SUPERSEDED" not in text
+    assert "STATUS: FAIL_CONFLICT_RELEVANT" not in text
+    assert "PASS_ALREADY_ON_MAIN" in core
+    assert "PASS_NOOP_BRANCH" in core
+    assert "PASS_NEEDS_PR" in core
+    assert "PASS_SUPERSEDED" in core
+    assert "FAIL_CONFLICT_RELEVANT" in core
+    assert "FAIL_NEEDS_HUMAN_REVIEW" in core
+    assert "### RESULT: {decision.result} ###" in core
+
 
 
 
