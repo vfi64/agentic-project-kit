@@ -1,0 +1,11 @@
+schema_version: 1
+id: example.evidence-terminal-log
+kind: typed_work_order
+operation: run_registered_action
+description: Example typed Work Order declaring terminal-log evidence validation.
+evidence:
+  type: terminal_log
+  path: docs/reports/terminal/example.log
+  guard_required: true
+  expected_final_result: PASS
+  on_guard_fail: FAIL
