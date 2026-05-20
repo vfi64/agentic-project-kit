@@ -9,6 +9,7 @@ from rich.console import Console
 
 from agentic_project_kit.cockpit import (
     action_inventory_as_json_data,
+    action_result_as_json_data,
     build_cockpit_status,
     cockpit_actions,
     render_action_inventory,
@@ -53,11 +54,22 @@ def cockpit_run_command(
     action_id: str,
     project_root: Annotated[Path, typer.Option("--root")] = Path("."),
     allow_bounded: Annotated[bool, typer.Option("--allow-bounded")] = False,
+    json_output: Annotated[bool, typer.Option("--json", help="Print machine-readable JSON action result.")] = False,
 ) -> None:
     result = run_cockpit_action(action_id, project_root.resolve(), allow_bounded=allow_bounded)
+    if json_output:
+        typer.echo(json.dumps(action_result_as_json_data(result), indent=2, sort_keys=True))
+        if not result.allowed:
+            raise typer.Exit(code=2)
+        if result.returncode not in (None, 0):
+            raise typer.Exit(code=result.returncode)
+        return
     console.print(f"action_id={result.action_id}", markup=False)
     console.print(f"allowed={str(result.allowed).lower()}", markup=False)
     console.print(f"executed={str(result.executed).lower()}", markup=False)
+    console.print(f"result_status={result.result_status}", markup=False)
+    console.print(f"safety={result.safety}", markup=False)
+    console.print(f"dirty_state={result.dirty_state}", markup=False)
     if result.returncode is not None:
         console.print(f"returncode={result.returncode}", markup=False)
     console.print(result.message, markup=False)
