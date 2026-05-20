@@ -246,3 +246,5 @@ The architectural rule is: chat describes intent; repo-owned tools execute typed
 - Completed v0.3.34 finalize-guard core contract hardening: `PASS_SUPERSEDED` is now reachable for a conflicting branch whose marker is already represented on main, and `src/agentic_project_kit/finalize_guard.py` exposes a module CLI/render contract for future shell/GUI/Cockpit integration.
 - Evidence: `docs/reports/terminal/v0.3.34_finalize_guard_core_contract_verification.log` records recent main CI, targeted regression, module CLI smoke, and targeted local feature gate evidence.
 - Next recommended step before release: run a final release-readiness check; if only version metadata remains, update the release metadata to `0.3.34`.
+
+- v0.3.34 is published and verified with Zenodo version DOI `10.5281/zenodo.20315568`.
