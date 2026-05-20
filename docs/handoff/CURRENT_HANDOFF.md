@@ -250,3 +250,16 @@ The architectural rule is: chat describes intent; repo-owned tools execute typed
 - v0.3.34 is published and verified with Zenodo version DOI `10.5281/zenodo.20315568`.
 
 - v0.3.34 is fully closed: release metadata, GitHub release, assets, Zenodo DOI metadata, post-release check, and DOI documentation are complete. Next planning state is v0.3.35 or the first bounded Tkinter cockpit slice, but only after a fresh readiness check.
+
+
+## v0.3.35 Pre-GUI Core and CLI Consolidation Plan
+
+Next recommended line: v0.3.35 should consolidate the Python core and layered CLI before the Tkinter cockpit MVP. Do not start GUI implementation as the next slice.
+
+Immediate priorities:
+
+1. Expand tests for `finalize_guard`, `local_feature_gate`, and `release_doi_safety`.
+2. Continue migrating high-risk `tools/ns_*.sh` logic into Python cores, especially release, DOI, evidence, and dirty-state paths.
+3. Encode release phase boundaries clearly: pre-publish `release-check`; post-publish `post-release-check`; no DOI guessing.
+4. Surface the layered CLI model in entry points: Daily, Guided, Maintainer, Debug.
+5. Start the Tkinter MVP only after the above risks are either fixed or explicitly deferred with tests/docs.
