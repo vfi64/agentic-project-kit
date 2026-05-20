@@ -530,3 +530,4 @@ Version `0.3.31` is the current verified release; Zenodo version DOI `10.5281/ze
 v0.3.32 DOI: `10.5281/zenodo.20314341`.
 Version `0.3.34` is the current verified release; Zenodo version DOI `10.5281/zenodo.20315568`.
 Version `0.3.35` is the current release line prepared by `./ns release-prep 0.3.35`.
+Version `0.3.35` is the current verified release; Zenodo version DOI `10.5281/zenodo.20316280`.
