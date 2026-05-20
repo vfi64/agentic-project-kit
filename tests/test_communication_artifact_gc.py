@@ -83,3 +83,65 @@ def test_gc_does_not_collect_command_inbox_files(tmp_path: Path) -> None:
     assert message == ""
     assert metadata.exists()
     assert script.exists()
+
+
+def test_tmp_log_gc_collects_only_expired_local_tmp_logs(tmp_path: Path) -> None:
+    import os
+    from agentic_project_kit.communication_artifact_gc import collect_expired_tmp_logs
+    expired = tmp_path / "agentic-project-kit-expired.log"
+    fresh = tmp_path / "agentic-project-kit-fresh.log"
+    other = tmp_path / "other.log"
+    expired.write_text("old", encoding="utf-8")
+    fresh.write_text("new", encoding="utf-8")
+    other.write_text("other", encoding="utf-8")
+    now = 1_000_000.0
+    old_time = now - (2 * 24 * 60 * 60)
+    fresh_time = now - 60
+    os.utime(expired, (old_time, old_time))
+    os.utime(fresh, (fresh_time, fresh_time))
+    found = collect_expired_tmp_logs(tmp_path, now=now)
+    assert found == [expired]
+
+
+def test_tmp_log_gc_dry_run_does_not_delete_expired_log(tmp_path: Path) -> None:
+    import os
+    from agentic_project_kit.communication_artifact_gc import execute_tmp_log_gc
+    expired = tmp_path / "agentic-project-kit-expired.log"
+    expired.write_text("old", encoding="utf-8")
+    now = 1_000_000.0
+    old_time = now - (2 * 24 * 60 * 60)
+    os.utime(expired, (old_time, old_time))
+    outcome, message = execute_tmp_log_gc(tmp_path, execute=False, now=now)
+    assert outcome == "PENDING_EXPIRED_TMP_LOGS"
+    assert expired.as_posix() in message
+    assert expired.exists()
+
+
+def test_tmp_log_gc_execute_deletes_only_expired_log(tmp_path: Path) -> None:
+    import os
+    from agentic_project_kit.communication_artifact_gc import execute_tmp_log_gc
+    expired = tmp_path / "agentic-project-kit-expired.log"
+    fresh = tmp_path / "agentic-project-kit-fresh.log"
+    expired.write_text("old", encoding="utf-8")
+    fresh.write_text("new", encoding="utf-8")
+    now = 1_000_000.0
+    old_time = now - (2 * 24 * 60 * 60)
+    fresh_time = now - 60
+    os.utime(expired, (old_time, old_time))
+    os.utime(fresh, (fresh_time, fresh_time))
+    outcome, message = execute_tmp_log_gc(tmp_path, execute=True, now=now)
+    assert outcome == "PASS_COLLECTED"
+    assert expired.as_posix() in message
+    assert not expired.exists()
+    assert fresh.exists()
+
+
+def test_tmp_log_gc_ignores_symlink(tmp_path: Path) -> None:
+    from agentic_project_kit.communication_artifact_gc import collect_expired_tmp_logs
+    target = tmp_path / "target.log"
+    target.write_text("keep", encoding="utf-8")
+    link = tmp_path / "agentic-project-kit-link.log"
+    link.symlink_to(target)
+    assert collect_expired_tmp_logs(tmp_path, now=1_000_000.0) == []
+    assert link.is_symlink()
+    assert target.exists()

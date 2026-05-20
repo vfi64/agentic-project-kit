@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -23,6 +24,7 @@ PROTECTED_ARTIFACTS = (
 )
 
 ALLOWED_PREFIXES = (".agentic/commands/",)
+DEFAULT_TMP_LOG_TTL_SECONDS = 24 * 60 * 60
 
 
 def _is_allowed(path: Path) -> bool:
@@ -68,9 +70,61 @@ def execute_gc(root: Path | str = ".") -> tuple[str, str]:
     return "PASS_COLLECTED", "\n".join(removed)
 
 
+def collect_expired_tmp_logs(
+    tmp_root: Path | str = "/tmp",
+    now: float | None = None,
+    ttl_seconds: int = DEFAULT_TMP_LOG_TTL_SECONDS,
+) -> list[Path]:
+    root = Path(tmp_root)
+    if not root.exists() or not root.is_dir():
+        return []
+    now_value = time.time() if now is None else now
+    expired: list[Path] = []
+    for path in sorted(root.glob("agentic-project-kit-*.log")):
+        if path.is_symlink() or not path.is_file():
+            continue
+        age_seconds = now_value - path.stat().st_mtime
+        if age_seconds >= ttl_seconds:
+            expired.append(path)
+    return expired
+
+
+def execute_tmp_log_gc(
+    tmp_root: Path | str = "/tmp",
+    execute: bool = False,
+    now: float | None = None,
+    ttl_seconds: int = DEFAULT_TMP_LOG_TTL_SECONDS,
+) -> tuple[str, str]:
+    candidates = collect_expired_tmp_logs(tmp_root, now=now, ttl_seconds=ttl_seconds)
+    if not candidates:
+        return "PASS_NOTHING_TO_COLLECT", ""
+    message = "\n".join(path.as_posix() for path in candidates)
+    if not execute:
+        return "PENDING_EXPIRED_TMP_LOGS", message
+    removed: list[str] = []
+    root = Path(tmp_root)
+    for path in candidates:
+        if path.is_symlink():
+            return "FAIL_SYMLINK_ARTIFACT", path.as_posix()
+        if path.parent != root:
+            return "FAIL_UNREGISTERED_PATH", path.as_posix()
+        if not path.is_file():
+            return "FAIL_NOT_A_FILE", path.as_posix()
+        path.unlink()
+        removed.append(path.as_posix())
+    return "PASS_COLLECTED", "\n".join(removed)
+
+
 def main(argv: list[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
-    if "--execute" in args:
+    execute = "--execute" in args
+    if "--tmp-logs" in args:
+        outcome, message = execute_tmp_log_gc("/tmp", execute=execute)
+        print(outcome)
+        if message:
+            print(message)
+        return 0 if outcome.startswith("PASS") or outcome.startswith("PENDING") else 1
+    if execute:
         outcome, message = execute_gc(".")
         print(outcome)
         if message:

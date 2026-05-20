@@ -1,0 +1,134 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK STATUS ###
+
+### CREATE BRANCH ###
+Switched to a new branch 'fix/gc-tmp-log-ttl-safe-replace-20260520'
+
+### WRITE REPLACEMENT GC FILE ###
+
+### SAFE REPLACE GC FILE ###
+
+### APPEND TMP LOG TTL TESTS ###
+
+### TARGETED TEST ###
+...........                                                              [100%]
+11 passed in 0.02s
+
+### NS ARTIFACT GC TMP LOGS DRY RUN ###
+PENDING_EXPIRED_TMP_LOGS
+/tmp/agentic-project-kit-close-normalization-log-pr.log
+/tmp/agentic-project-kit-close-standard-error-pr-state.log
+/tmp/agentic-project-kit-command-contract-bootstrap-inspection.log
+/tmp/agentic-project-kit-commit-diverged-main-repair-log.log
+/tmp/agentic-project-kit-communication-artifact-gc-commit.log
+/tmp/agentic-project-kit-communication-artifact-gc-finalize.log
+/tmp/agentic-project-kit-communication-artifact-gc-mvp.log
+/tmp/agentic-project-kit-communication-artifact-gc-pr380-closeout.log
+/tmp/agentic-project-kit-communication-artifact-gc-registry-commit.log
+/tmp/agentic-project-kit-communication-artifact-gc-registry-pr-closeout-recheck.log
+/tmp/agentic-project-kit-communication-artifact-gc-registry-pr-closeout.log
+/tmp/agentic-project-kit-communication-artifact-gc-registry.log
+/tmp/agentic-project-kit-communication-artifact-gc-repair.log
+/tmp/agentic-project-kit-evidence-registry-gc-start.log
+/tmp/agentic-project-kit-finalize-standard-error-state.log
+/tmp/agentic-project-kit-gc-mvp-start.log
+/tmp/agentic-project-kit-inspect-pr386-failed-ci.log
+/tmp/agentic-project-kit-no-interactive-exit-pr-closeout.log
+/tmp/agentic-project-kit-no-interactive-exit-rule.log
+/tmp/agentic-project-kit-normalize-after-diverged-main-repair.log
+/tmp/agentic-project-kit-pr375-closeout.log
+/tmp/agentic-project-kit-pr376-closeout.log
+/tmp/agentic-project-kit-pr377-closeout.log
+/tmp/agentic-project-kit-pr380-closeout-after-guard.log
+/tmp/agentic-project-kit-preserve-normalization-log.log
+/tmp/agentic-project-kit-readonly-startcheck-v0.3.25.log
+/tmp/agentic-project-kit-refresh-handoff-after-standard-error-prevention.log
+/tmp/agentic-project-kit-refresh-handoff-standard-error-pr-closeout.log
+/tmp/agentic-project-kit-refresh-state-after-terminal-log-finalization-guard.log
+/tmp/agentic-project-kit-repair-dirty-terminal-logs.log
+/tmp/agentic-project-kit-repair-diverged-main-standard-error-logs.log
+/tmp/agentic-project-kit-repair-pr386-yaml.log
+/tmp/agentic-project-kit-repair-standard-error-guards-pr383.log
+/tmp/agentic-project-kit-reset-diverged-main-after-standard-error.log
+/tmp/agentic-project-kit-stabilize-standard-error-guard-closeout.log
+/tmp/agentic-project-kit-standard-error-guard-inspection.log
+/tmp/agentic-project-kit-standard-error-guards-commit.log
+/tmp/agentic-project-kit-standard-error-guards-pr-closeout.log
+/tmp/agentic-project-kit-standard-error-guards-repair.log
+/tmp/agentic-project-kit-standard-error-guards.log
+/tmp/agentic-project-kit-standard-error-prevention-contract-commit.log
+/tmp/agentic-project-kit-standard-error-prevention-contract.log
+/tmp/agentic-project-kit-standard-error-prevention-pr-closeout.log
+/tmp/agentic-project-kit-terminal-log-finalization-guard.log
+/tmp/agentic-project-kit-wait-normalization-log-pr.log
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+fix/gc-tmp-log-ttl-safe-replace-20260520
+ M src/agentic_project_kit/communication_artifact_gc.py
+ M tests/test_communication_artifact_gc.py
+
+### PYTEST ###
+........................................................................ [ 15%]
+........................................................................ [ 31%]
+........................................................................ [ 46%]
+........................................................................ [ 62%]
+........................................................................ [ 78%]
+........................................................................ [ 93%]
+............................                                             [100%]
+460 passed in 2.59s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.28
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=80
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+fix/gc-tmp-log-ttl-safe-replace-20260520
+ M src/agentic_project_kit/communication_artifact_gc.py
+ M tests/test_communication_artifact_gc.py
+
+### RESULT: PASS ###
+
+### FINALIZE REMOTE EVIDENCE ###
