@@ -228,3 +228,10 @@ The architectural rule is: chat describes intent; repo-owned tools execute typed
 - Regression coverage: `tests/test_v034_ns_dev_gate_routing.py` verifies shortcut existence, ordering before fallback, required gate commands, and absence of `tools/next-step.py` inside the shortcut block.
 - Evidence: `docs/reports/terminal/v0.3.34_ns_dev_gate_routing_merge_verification.log` records targeted regression and local gate smoke verification on main.
 - Next recommended v0.3.34 slice: continue portable-core hardening by identifying the next high-value shell-heavy `ns` path to move behind a tested Python core function before starting any Tkinter GUI work.
+
+
+- Completed v0.3.34 core hardening slice: local feature gate execution now lives in `src/agentic_project_kit/local_feature_gate.py`; `./ns dev-local-feature-gate` and `./ns dev` are thin dispatchers to the Python core.
+- Regression coverage: `tests/test_v034_local_feature_gate_core.py`, `tests/test_v034_ns_dev_gate_routing.py`, and the repaired `tests/test_repo_ns_entrypoint.py` cover the core commands and shell dispatcher contract.
+- CI note: a red main CI run for #525 is historical. It was caused by a stale test expecting old shell text. #526 fixed the test contract, and the latest main CI after #526 is green.
+- Evidence: `docs/reports/terminal/v0.3.34_local_feature_gate_core_merge_verification.log` records #525/#526 interpretation, latest successful main CI, targeted sanity, and full local gate.
+- Next recommended v0.3.34 slice: identify the next `ns` route that should become a thin dispatcher around a tested Python core. Avoid GUI work until these common workflow paths are stable.

@@ -273,3 +273,8 @@ The architectural rule is: chat describes intent; repo-owned tools execute typed
 
 - v0.3.34 pre-GUI portable-core hardening continued with an explicit `./ns dev-local-feature-gate` routing fix. The shortcut now runs the local feature gate directly before the `tools/next-step.py` fallback and is covered by `tests/test_v034_ns_dev_gate_routing.py`.
 - Remote merge evidence for the routing fix is recorded in `docs/reports/terminal/v0.3.34_ns_dev_gate_routing_merge_verification.log`.
+
+
+- v0.3.34 pre-GUI portable-core hardening continued by extracting local feature gate execution into `src/agentic_project_kit/local_feature_gate.py`. The `./ns dev-local-feature-gate` and `./ns dev` routes now dispatch through this tested Python core instead of embedding the full gate in shell.
+- PR #525 initially caused a historical red main CI run because `tests/test_repo_ns_entrypoint.py` still expected the old shell-embedded `NS DEV LOCAL FEATURE GATE` text. PR #526 repaired the stale regression to assert the new dispatcher/core contract, and the latest main CI is green.
+- Remote evidence is recorded in `docs/reports/terminal/v0.3.34_local_feature_gate_core_merge_verification.log`.
