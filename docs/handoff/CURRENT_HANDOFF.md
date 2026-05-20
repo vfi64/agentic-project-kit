@@ -235,3 +235,9 @@ The architectural rule is: chat describes intent; repo-owned tools execute typed
 - CI note: a red main CI run for #525 is historical. It was caused by a stale test expecting old shell text. #526 fixed the test contract, and the latest main CI after #526 is green.
 - Evidence: `docs/reports/terminal/v0.3.34_local_feature_gate_core_merge_verification.log` records #525/#526 interpretation, latest successful main CI, targeted sanity, and full local gate.
 - Next recommended v0.3.34 slice: identify the next `ns` route that should become a thin dispatcher around a tested Python core. Avoid GUI work until these common workflow paths are stable.
+
+
+- Completed v0.3.34 core hardening slice: `src/agentic_project_kit/finalize_guard.py` now contains a pure decision core for finalize-guard classification, covered by `tests/test_v034_finalize_guard_core.py`.
+- The shell runner `tools/ns_finalize_guard.sh` has not yet been replaced; this was intentional. The next safe slice can either wire the shell runner to the Python core or choose another bounded `ns` route.
+- Evidence: `docs/reports/terminal/v0.3.34_finalize_guard_core_merge_verification.log` records recent main CI, targeted regression, and targeted local feature gate evidence.
+- Next recommended v0.3.34 slice: either integrate `tools/ns_finalize_guard.sh` with the new Python decision core or extract another small read-only/safety-critical wrapper. Avoid GUI work until these command paths are stable.
