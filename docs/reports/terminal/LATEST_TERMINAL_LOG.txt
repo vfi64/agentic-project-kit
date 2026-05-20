@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-gc-protected-evidence-tests.log
+docs/reports/terminal/20260520-merge-pr-456-gc-protected-evidence.log
