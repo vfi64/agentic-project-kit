@@ -23,8 +23,8 @@ Current released version: 0.3.30
 Previous release compatibility literal for planning-state freshness coverage: Current released version: 0.3.29
 Current release tag: v0.3.30
 Zenodo concept DOI: `10.5281/zenodo.20101359`
-Verified Zenodo version DOI: pending for v0.3.30; previous v0.3.29 DOI `10.5281/zenodo.20303218`
-Post-release evidence: pending for v0.3.30; previous evidence `docs/reports/terminal/20260520-v0.3.29-post-release-discovery-v2.log`
+Verified Zenodo version DOI: `10.5281/zenodo.20308526`
+Post-release evidence: `docs/reports/terminal/20260520-v0.3.30-post-release-doi.log`
 
 v0.3.30 is the current prepared release line; GitHub Release and Zenodo version DOI verification are pending until post-release closeout. It includes the patch-artifact preflight MVP and the hardened planning-state/no-copy evidence workflow.
 
