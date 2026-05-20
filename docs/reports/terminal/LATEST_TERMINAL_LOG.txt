@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-merge-pr-455-gc-symlink.log
+docs/reports/terminal/20260520-gc-protected-evidence-tests.log
