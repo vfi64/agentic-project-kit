@@ -1,3 +1,9 @@
+## v0.3.34 - 2026-05-20
+
+- Hardened the pre-GUI portable Python core by adding typed work-order unit-test coverage, explicit `./ns dev-local-feature-gate` routing, and a shared local feature gate core.
+- Added a tested finalize-guard decision core with module CLI/render contract and reachable superseded-branch handling.
+- Recorded remote terminal evidence for the v0.3.34 hardening slices before the Tkinter cockpit work starts.
+
 ## v0.3.33 - 2026-05-20
 
 - Prepare release metadata for v0.3.33.
