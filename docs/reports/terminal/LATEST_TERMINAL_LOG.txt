@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-repair-pr461-remaining-handoff-stale-text.log
+docs/reports/terminal/20260520-merge-pr461-v0.3.29-doi-metadata.log
