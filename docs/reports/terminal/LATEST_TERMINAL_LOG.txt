@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-create-v0.3.30-release.log
+docs/reports/terminal/20260520-v0.3.30-post-release-doi.log
