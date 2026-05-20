@@ -1,0 +1,122 @@
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRE-MERGE STATUS ###
+
+### PR 478 MACHINE STATE ###
+{"isDraft":false,"mergeStateStatus":"CLEAN","state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-20T15:53:51Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26173988072/job/76999124760","name":"test","startedAt":"2026-05-20T15:53:30Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-20T15:53:47Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26173985643/job/76999117538","name":"test","startedAt":"2026-05-20T15:53:27Z","status":"COMPLETED","workflowName":"CI"}]}
+PR_STATE=OPEN CLEAN draft=false
+PR_STATE_ACCEPTED_FOR_MERGE
+
+### MERGE PR 478 ###
+
+### PULL MAIN AFTER MERGE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   3d5d2a0..aac15cc  main       -> origin/main
+Updating 3d5d2a0..aac15cc
+Fast-forward
+ docs/STATUS.md                                     |  22 +++++
+ docs/handoff/CURRENT_HANDOFF.md                    |  14 +++
+ ...ers-pre-gui-path-failed-empty-heading-check.log |  49 ++++++++++
+ ...60520-repair-typed-work-orders-pre-gui-docs.log | 107 +++++++++++++++++++++
+ docs/reports/terminal/LATEST_TERMINAL_LOG.txt      |   2 +-
+ tests/test_typed_work_orders_pre_gui_docs.py       |  19 ++++
+ 6 files changed, 212 insertions(+), 1 deletion(-)
+ create mode 100644 docs/reports/terminal/20260520-document-typed-work-orders-pre-gui-path-failed-empty-heading-check.log
+ create mode 100644 docs/reports/terminal/20260520-repair-typed-work-orders-pre-gui-docs.log
+ create mode 100644 tests/test_typed_work_orders_pre_gui_docs.py
+
+### VERIFY DOC TERMS ON MAIN ###
+157:## Typed Work Orders Pre-GUI Execution Path
+131:## Typed Work Orders Pre-GUI Execution Path
+137:- `./ns typed-run <path>` executes a specific typed Work Order.
+138:- `./ns typed-queue-status --json` reports queue state.
+139:- `./ns typed-next --json` executes exactly one queued Work Order from `.agentic/typed_work_orders/inbox`.
+166:- PR #477: `typed-next` already-executed guard with `queue_status=already_executed` and no duplicate execution.
+175:- `already_executed`: block duplicate execution with PENDING and exit code 2 while preserving both queued and executed YAML files.
+141:Queue contract now covers `no_command`, `exactly_one_command`, `multiple_commands`, and `already_executed`. `typed-next` must refuse duplicate execution when a matching file already exists in `.agentic/typed_work_orders/executed`.
+177:The thin Tkinter cockpit must consume these typed contracts instead of inventing hidden command planning or ad-hoc shell execution.
+
+### TARGETED TESTS ###
+.............                                                            [100%]
+13 passed in 0.17s
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 14%]
+........................................................................ [ 28%]
+........................................................................ [ 42%]
+........................................................................ [ 56%]
+........................................................................ [ 70%]
+........................................................................ [ 84%]
+........................................................................ [ 98%]
+........                                                                 [100%]
+512 passed in 3.45s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.30
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=79
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### FINAL MAIN STATE ###
+main
+aac15cc Document typed work orders as pre-GUI execution path (#478)
+3d5d2a0 Record PR 477 merge verification log
+29e15ec Guard typed-next against already executed work orders (#477)
+33451cb Record PR 476 merge verification log
+fb2a2ef Add typed-next queue execution (#476)
+7dab7af Record PR 475 merge verification log
+545889e Add typed work order queue status contract (#475)
+745c81c Record PR 474 merge verification log
+89efdbf Add typed work order example and ns shortcut (#474)
+8da93ed Record PR 473 merge verification log
+
+### FINALIZE REMOTE EVIDENCE ###
