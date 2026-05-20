@@ -1,0 +1,124 @@
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRE-MERGE STATUS ###
+
+### PR 474 MACHINE STATE ###
+{"isDraft":false,"mergeStateStatus":"CLEAN","state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-20T12:16:29Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26161902327/job/76955653683","name":"test","startedAt":"2026-05-20T12:16:13Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-20T12:16:31Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26161899927/job/76955645691","name":"test","startedAt":"2026-05-20T12:16:11Z","status":"COMPLETED","workflowName":"CI"}]}
+PR_STATE=OPEN CLEAN draft=false
+PR_STATE_ACCEPTED_FOR_MERGE
+
+### MERGE PR 474 ###
+
+### PULL MAIN AFTER MERGE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   8da93ed..89efdbf  main       -> origin/main
+Updating 8da93ed..89efdbf
+Fast-forward
+ .../typed_work_orders/read_only_status_check.yaml  |  21 +++
+ ...260520-repair-typed-work-order-example-test.log | 165 +++++++++++++++++++++
+ ...er-example-and-ns-shortcut-failed-path-type.log |  71 +++++++++
+ docs/reports/terminal/LATEST_TERMINAL_LOG.txt      |   2 +-
+ .../typed-work-order-read-only-status-check.log    |  68 +++++++++
+ ns                                                 |   7 +
+ ...est_typed_work_order_example_and_ns_shortcut.py |  22 +++
+ 7 files changed, 355 insertions(+), 1 deletion(-)
+ create mode 100644 .agentic/typed_work_orders/read_only_status_check.yaml
+ create mode 100644 docs/reports/terminal/20260520-repair-typed-work-order-example-test.log
+ create mode 100644 docs/reports/terminal/20260520-typed-work-order-example-and-ns-shortcut-failed-path-type.log
+ create mode 100644 docs/reports/terminal/typed-work-order-read-only-status-check.log
+ create mode 100644 tests/test_typed_work_order_example_and_ns_shortcut.py
+
+### VERIFY TYPED WORK ORDER EXAMPLE AND NS SHORTCUT ON MAIN ###
+1:id: read-only-status-check
+7:  - kind: command_argv
+13:  - kind: command_argv
+19:  - kind: cockpit_action
+123:  PYTHONPATH=src "$PY" -m agentic_project_kit.cli work-order typed-run "$@"
+
+### TARGETED TESTS ###
+...........                                                              [100%]
+11 passed in 0.20s
+
+### NS SHORTCUT DRY RUN CHECK ###
+1:Typed work order: read-only-status-check
+4:Dry run only. Re-run with --execute to run the typed work order.
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 14%]
+........................................................................ [ 28%]
+........................................................................ [ 43%]
+........................................................................ [ 57%]
+........................................................................ [ 72%]
+........................................................................ [ 86%]
+...................................................................      [100%]
+499 passed in 3.51s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.30
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=79
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### FINAL MAIN STATE ###
+main
+89efdbf Add typed work order example and ns shortcut (#474)
+8da93ed Record PR 473 merge verification log
+a04bf60 Add CLI entrypoint for typed work order runner (#473)
+db9683b Record PR 472 merge verification log
+fb60d21 Add minimal typed work order runner core (#472)
+6429fa6 Record PR 471 merge verification log
+bf8b8c0 Record pre-GUI execution hardening plan (#471)
+74a80ee Record PR 470 merge verification log
+d0a3f0a Record v0.3.30 DOI metadata (#470)
+4e9b260 Record v0.3.30 release verification log
+
+### FINALIZE REMOTE EVIDENCE ###

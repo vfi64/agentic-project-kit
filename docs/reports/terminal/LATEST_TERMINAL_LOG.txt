@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-repair-typed-work-order-example-test.log
+docs/reports/terminal/20260520-merge-pr474-typed-work-order-example-ns-shortcut.log
