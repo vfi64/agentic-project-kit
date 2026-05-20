@@ -1,0 +1,97 @@
+RECORD V0.3.31 EVIDENCE GUARD USAGE DOCS MERGE VERIFICATION LOG
+
+
+### MAIN STATE ###
+main
+?? docs/reports/terminal/20260520-v0.3.31-evidence-guard-usage-docs-merge-verification.log
+8093890 Document v0.3.31 evidence guard usage (#491)
+c35a630 Record v0.3.31 evidence guard negative smoke merge verification log (#490)
+3680bd2 Allow expected negative smoke evidence logs (#489)
+5f45175 Record v0.3.31 ns evidence guard shortcut merge verification log (#488)
+3000598 Add ns shortcut for evidence guard (#487)
+3bd1635 Record v0.3.31 evidence guard CLI merge verification log (#486)
+5eeba92 Wire evidence guard CLI command (#485)
+45fd664 Record v0.3.31 evidence guard merge verification log (#484)
+
+### VERIFY TARGETED DOC AND GUARD TESTS ###
+.........                                                                [100%]
+9 passed in 0.13s
+
+### VERIFY STATUS / HANDOFF TERMS ###
+docs/STATUS.md:75:## v0.3.31 Evidence Guard Usage
+docs/STATUS.md:77:- `agentic-kit evidence guard LOGFILE` validates terminal evidence logs for contradictory final state.
+docs/STATUS.md:78:- `./ns evidence-guard LOGFILE` is the preferred local shortcut before using terminal evidence in closeout work.
+docs/handoff/CURRENT_HANDOFF.md:58:## v0.3.31 Evidence Guard Usage
+docs/handoff/CURRENT_HANDOFF.md:60:- Before committing or citing a terminal evidence log, run `./ns evidence-guard LOGFILE`.
+docs/handoff/CURRENT_HANDOFF.md:62:- Expected negative-smoke logs are allowed only when the log explicitly records that the false-PASS case was rejected.
+tests/test_v031_evidence_guard_usage_docs.py:8:        "v0.3.31 Evidence Guard Usage",
+tests/test_v031_evidence_guard_usage_docs.py:9:        "`agentic-kit evidence guard LOGFILE`",
+tests/test_v031_evidence_guard_usage_docs.py:10:        "`./ns evidence-guard LOGFILE`",
+tests/test_v031_evidence_guard_usage_docs.py:13:        "Expected negative-smoke logs are allowed only when the log explicitly records that the false-PASS case was rejected.",
+
+### VERIFY EVIDENCE GUARD SMOKE ###
+PASS: tmp/evidence_guard_usage_docs_closeout_smoke.log final_result=PASS
+
+### VERIFY FULL DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+?? docs/reports/terminal/20260520-v0.3.31-evidence-guard-usage-docs-merge-verification.log
+
+### PYTEST ###
+........................................................................ [ 13%]
+........................................................................ [ 27%]
+........................................................................ [ 41%]
+........................................................................ [ 55%]
+........................................................................ [ 68%]
+........................................................................ [ 82%]
+........................................................................ [ 96%]
+...................                                                      [100%]
+523 passed in 3.69s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for 
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, 
+markdown-docs, python-cli, git-github, release-managed; policy packs: 
+solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.30
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=79
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+?? docs/reports/terminal/20260520-v0.3.31-evidence-guard-usage-docs-merge-verification.log
+
+### RESULT: PASS ###
+
+### RESULT: PASS ###
