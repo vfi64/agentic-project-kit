@@ -1,0 +1,113 @@
+REPAIR V0.3.30 STATE CLEANUP BRANCH AFTER FALSE PASS COMMIT
+
+
+### CONFIRM BRANCH ###
+docs/cleanup-v0.3.30-post-release-state
+ M docs/reports/terminal/20260520-v0.3.30-state-cleanup-local-gate-v2.log
+?? docs/reports/terminal/20260520-v0.3.30-state-cleanup-repair-gate.log
+fb79a32 Clean v0.3.30 post-release state wording
+3d0d9fc Record v0.3.30 post-release state repair log
+9cad01a Record PR 478 merge verification log
+
+### INSPECT DOI LINES ###
+docs/STATUS.md:26:Verified Zenodo version DOI: `10.5281/zenodo.20308526`
+docs/STATUS.md:29:v0.3.30 is the current released and post-release verified line; GitHub Release and Zenodo version DOI verification are pending until post-release closeout. It includes the patch-artifact preflight MVP and the hardened planning-state/no-copy evidence workflow.
+docs/handoff/CURRENT_HANDOFF.md:19:Verified Zenodo version DOI: `10.5281/zenodo.20308526`
+README.md:244:This command checks that the GitHub release exists and then looks for a verified Zenodo version record derived from the DOI in `CITATION.cff`. If Zenodo has not archived the release yet, the command reports `WAITING` and leaves README/CITATION DOI metadata unchanged. It is intentionally separate from `release-check`, because `release-check` is a pre-release gate that expects the tag and GitHub release to be unused.
+README.md:510:This repository has maintainer-owned GitHub releases and verified Zenodo archive records. Verified version-specific DOIs:
+README.md:511:- Verified v0.3.29 version DOI: `10.5281/zenodo.20303218`
+README.md:512:- Verified v0.3.30 version DOI: `10.5281/zenodo.20308526`
+README.md:513:- Verified v0.3.28 version DOI: `10.5281/zenodo.20286394`
+README.md:514:- Verified v0.3.23 version DOI: `10.5281/zenodo.20261956`
+README.md:534:- Verified v0.3.12 version DOI: `10.5281/zenodo.20218213`
+README.md:535:- Verified v0.3.16 version DOI: `10.5281/zenodo.20244944`
+README.md:536:- Verified v0.3.17 version DOI: `10.5281/zenodo.20245113`
+README.md:537:- Verified v0.3.19 version DOI: `10.5281/zenodo.20246121`
+README.md:538:- Verified v0.3.21 DOI: 10.5281/zenodo.20258057 version DOI: `10.5281/zenodo.20256637`
+README.md:539:- Verified v0.3.18 version DOI: `10.5281/zenodo.20245754`
+README.md:570:Version `0.3.29` is the current verified release; Zenodo version DOI `10.5281/zenodo.20303218`.
+README.md:571:Version `0.3.30` is the current released line with verified version-specific DOI `10.5281/zenodo.20308526`.
+CITATION.cff:11:# Verified v0.3.29 version DOI: 10.5281/zenodo.20303218
+CITATION.cff:12:# Verified v0.3.28 version DOI: 10.5281/zenodo.20286394
+CITATION.cff:13:# Verified v0.3.27 version DOI: 10.5281/zenodo.20283414
+CITATION.cff:14:# Verified v0.2.5 version DOI: 10.5281/zenodo.20111119
+CITATION.cff:15:# Verified v0.2.6 version DOI: 10.5281/zenodo.20119102
+CITATION.cff:16:# Verified v0.2.7 version DOI: 10.5281/zenodo.20125518
+CITATION.cff:17:# Verified v0.2.8 version DOI: 10.5281/zenodo.20126270
+CITATION.cff:18:# Verified v0.2.9 version DOI: 10.5281/zenodo.20126490
+CITATION.cff:19:# Verified v0.2.10 version DOI: 10.5281/zenodo.20127028
+CITATION.cff:20:# Verified v0.3.0 version DOI: 10.5281/zenodo.20140467
+CITATION.cff:21:# Verified v0.3.1 version DOI: 10.5281/zenodo.20144969
+CITATION.cff:22:# Verified v0.3.2 version DOI: 10.5281/zenodo.20145114
+CITATION.cff:23:# Verified v0.3.3 version DOI: 10.5281/zenodo.20151924
+CITATION.cff:24:# Verified v0.3.4 version DOI: 10.5281/zenodo.20162214
+CITATION.cff:25:# Verified v0.3.5 version DOI: 10.5281/zenodo.20169965
+CITATION.cff:26:# Verified v0.3.6 version DOI: 10.5281/zenodo.20183888
+CITATION.cff:27:# Verified v0.3.7 version DOI: 10.5281/zenodo.20206581
+CITATION.cff:28:# Verified v0.3.8 version DOI: 10.5281/zenodo.20208638
+CITATION.cff:29:# Verified v0.3.9 version DOI: 10.5281/zenodo.20210345
+CITATION.cff:30:# Verified v0.3.10 version DOI: 10.5281/zenodo.20214382
+CITATION.cff:31:# Verified v0.3.11 version DOI: 10.5281/zenodo.20215460
+CITATION.cff:40:# Verified v0.3.16 version DOI: 10.5281/zenodo.20244944
+CITATION.cff:41:# Verified v0.3.17 version DOI: 10.5281/zenodo.20245113
+CITATION.cff:42:# Verified v0.3.18 version DOI: 10.5281/zenodo.20245754
+CITATION.cff:43:# Verified v0.3.22 version DOI: 10.5281/zenodo.20261634
+CITATION.cff:44:# Verified v0.3.25 version DOI: 10.5281/zenodo.20273989
+CITATION.cff:46:# Verified v0.3.30 version DOI: 10.5281/zenodo.20308526
+CITATION.cff:48:# Verified v0.3.23 version DOI: 10.5281/zenodo.20261956
+CHANGELOG.md:3:Zenodo v0.3.30 DOI: 10.5281/zenodo.20308526
+
+### PATCH TESTS SAFELY ###
+  File "tmp/repair_v030_state_tests.py", line 6
+    "Verified Zenodo version DOI: 10.5281/zenodo.20308526",,
+                                                           ^
+SyntaxError: invalid syntax
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tmp/repair_v030_state_tests.py", line 6
+    "Verified Zenodo version DOI: 10.5281/zenodo.20308526",,
+                                                           ^
+SyntaxError: invalid syntax
+
+### TARGETED TESTS ###
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+______ test_v030_post_release_state_has_no_stale_release_pending_language ______
+
+    def test_v030_post_release_state_has_no_stale_release_pending_language():
+        combined = "\n".join(path.read_text(encoding="utf-8") for path in DOCS)
+        missing = [needle for needle in REQUIRED if needle not in combined]
+        forbidden = [needle for needle in FORBIDDEN if needle in combined]
+>       assert not missing, f"missing required post-release state markers: {missing}"
+E       AssertionError: missing required post-release state markers: ['Verified Zenodo version DOI: 10.5281/zenodo.20308526']
+E       assert not ['Verified Zenodo version DOI: 10.5281/zenodo.20308526']
+
+tests/test_v030_post_release_state_cleanup.py:29: AssertionError
+______________ test_v0_3_30_gui_readiness_closeout_is_documented _______________
+
+    def test_v0_3_30_gui_readiness_closeout_is_documented() -> None:
+        status = Path("docs/STATUS.md").read_text(encoding="utf-8")
+        handoff = Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
+        combined = status + "\n" + handoff
+        assert "v0.3.30 GUI Readiness Hardening Closeout" in combined
+        assert "not the Tkinter GUI release" in status
+        assert "not the Tkinter cockpit release" in handoff
+        assert "PR #463: ActionResult core contract" in combined
+        assert "PR #464: `cockpit run --json`" in combined
+        assert "PR #465: Registry-only" in combined
+        assert "PR #466: Queue-State contract" in combined
+        assert "PR #467: Evidence-State contract" in combined
+        assert "Tkinter remains explicitly deferred" in status
+>       assert "prepare release metadata" in handoff
+E       AssertionError: assert 'prepare release metadata' in 'Current version: 0.3.30\n\n# Current Handoff\n\nStatus-date: 2026-05-19\nProject: agentic-project-kit\nBranch: main\n...ed operations; Markdown is a projection, not the primary source of truth; shell is a runner, not a patch language.\n\n'
+
+tests/test_v0_3_30_gui_readiness_closeout_docs.py:16: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v030_post_release_state_cleanup.py::test_v030_post_release_state_has_no_stale_release_pending_language
+FAILED tests/test_v0_3_30_gui_readiness_closeout_docs.py::test_v0_3_30_gui_readiness_closeout_is_documented
+2 failed in 0.02s
+FAIL: targeted tests failed
+
+### RESULT: FAIL ###
+
+Saving session...
+...saving history...truncating history files...
+...completed.

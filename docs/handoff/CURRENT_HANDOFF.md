@@ -112,7 +112,7 @@ Completed contract slices:
 - PR #466: Queue-State contract for no command, exactly one command, multiple commands, already executed command, dirty inbox, missing command metadata, and incomplete command pairs.
 - PR #467: Evidence-State contract for remote evidence present, local tmp only, missing evidence, stale latest pointer, and command report availability.
 
-Next safe step: run the final v0.3.30 gate and prepare release metadata. Tkinter remains deferred until after the v0.3.30 release is verified.
+Next safe step: run the start v0.3.31 Pre-GUI Execution Hardening after this post-release state cleanup. Tkinter remains deferred until after the v0.3.30 release is verified.
 
 ## v0.3.30 GUI Readiness Hardening Plan
 
