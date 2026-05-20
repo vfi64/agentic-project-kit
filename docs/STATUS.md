@@ -286,3 +286,5 @@ The architectural rule is: chat describes intent; repo-owned tools execute typed
 
 - v0.3.34 finalize-guard hardening continued by making the Python decision core contract executable via `python -m agentic_project_kit.finalize_guard` and by making `PASS_SUPERSEDED` reachable for conflicting but already-represented finalization branches.
 - Regression coverage remains in `tests/test_v034_finalize_guard_core.py`. Remote evidence is recorded in `docs/reports/terminal/v0.3.34_finalize_guard_core_contract_verification.log`.
+
+- v0.3.34 is published and verified with Zenodo version DOI `10.5281/zenodo.20315568`.
