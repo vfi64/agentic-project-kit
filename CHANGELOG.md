@@ -1,3 +1,10 @@
+## v0.3.30 - 2026-05-20
+
+- Prepare release metadata for v0.3.30.
+- GUI readiness hardening closeout: ActionResult core contract, `cockpit run --json`, registry-only action contract, Queue-State contract, and Evidence-State contract.
+- Tkinter implementation remains explicitly deferred until after this contract baseline is released and post-release verified.
+- Zenodo verification pending until the GitHub Release exists and the version-specific DOI is recorded.
+
 ## v0.3.29 - 2026-05-20
 
 - Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.29 DOI `10.5281/zenodo.20303218`.

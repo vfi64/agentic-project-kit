@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-merge-pr468-v0.3.30-gui-readiness-closeout.log
+docs/reports/terminal/20260520-repair-v0.3.30-release-metadata-coverage.log
