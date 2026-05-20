@@ -24,6 +24,20 @@ v0.3.29 is the current verified no-copy/evidence and GC-hardening baseline. It i
 
 Communication artifact GC hardening is now part of the pre-GUI baseline: symlinked transient artifacts are rejected, repo evidence and command inbox files are protected, and local /tmp/agentic-project-kit-*.log cleanup is TTL-based and dry-run-first via ./ns artifact-gc --tmp-logs.
 
+## v0.3.32 Release Phase and Evidence Closeout
+
+Current safe state: v0.3.32 release-phase-semantics and evidence-closeout hardening is complete enough for release preparation.
+
+Completed v0.3.32 capabilities:
+
+- `release-preflight` is the correct before-metadata release gate.
+- `release-check` is the correct after-metadata release gate.
+- `post-release-check` is the correct after-release verification gate.
+- `evidence clean-check` is the repo-owned guard for in-progress terminal evidence logs.
+- The old self-dirty failure pattern is now guarded: an expected in-progress log may be the only dirty path.
+
+Next safe step: prepare and release v0.3.32. Tkinter remains deferred until after v0.3.32 release and post-release verification are complete.
+
 ## Active Rules For The Next Chat Or Slice
 
 - Start from repo state, not memory.
