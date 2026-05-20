@@ -266,3 +266,6 @@ Immediate priorities:
 
 - Completed first v0.3.35 consolidation slice: core-test-matrix coverage was expanded for `finalize_guard`, `local_feature_gate`, and `release_doi_safety` with no runtime change.
 - Next recommended v0.3.35 slice: either wire `tools/ns_finalize_guard.sh` to the Python finalize-guard module CLI, or extract the release-gate/build-check shell path into a tested Python core. Prefer the smaller, lower-risk slice first.
+
+- Completed v0.3.35 finalize-guard shell/core integration: `tools/ns_finalize_guard.sh` now delegates final status classification to `python -m agentic_project_kit.finalize_guard`.
+- Evidence should include the PR merge verification and targeted shell/core routing tests. Next v0.3.35 candidate: either extract release-gate/build-check into a Python core or surface the Daily/Guided/Maintainer/Debug CLI layers in practical entry points.
