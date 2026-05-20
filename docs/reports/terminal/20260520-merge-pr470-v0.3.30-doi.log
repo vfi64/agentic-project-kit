@@ -1,0 +1,125 @@
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRE-MERGE STATUS ###
+
+### PR 470 MACHINE STATE ###
+{"isDraft":false,"mergeStateStatus":"CLEAN","state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-20T11:51:56Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26160689189/job/76951496467","name":"test","startedAt":"2026-05-20T11:51:37Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-20T11:51:53Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26160686986/job/76951487976","name":"test","startedAt":"2026-05-20T11:51:33Z","status":"COMPLETED","workflowName":"CI"}]}
+PR_STATE=OPEN CLEAN draft=false
+PR_STATE_ACCEPTED_FOR_MERGE
+
+### MERGE PR 470 ###
+
+### PULL MAIN AFTER MERGE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   4e9b260..d0a3f0a  main       -> origin/main
+Updating 4e9b260..d0a3f0a
+Fast-forward
+ CHANGELOG.md                                       |   3 +
+ CITATION.cff                                       |   1 +
+ README.md                                          |   3 +-
+ docs/STATUS.md                                     |   4 +-
+ docs/handoff/CURRENT_HANDOFF.md                    |   4 +-
+ .../terminal/20260520-v0.3.30-post-release-doi.log | 148 +++++++++++++++++++++
+ docs/reports/terminal/LATEST_TERMINAL_LOG.txt      |   2 +-
+ 7 files changed, 159 insertions(+), 6 deletions(-)
+ create mode 100644 docs/reports/terminal/20260520-v0.3.30-post-release-doi.log
+
+### VERIFY DOI METADATA ON MAIN ###
+512:- Verified v0.3.30 version DOI: `10.5281/zenodo.20308526`
+571:Version `0.3.30` is the current released line with verified version-specific DOI `10.5281/zenodo.20308526`.
+46:# Verified v0.3.30 version DOI: 10.5281/zenodo.20308526
+3:Zenodo v0.3.30 DOI: 10.5281/zenodo.20308526
+26:Verified Zenodo version DOI: `10.5281/zenodo.20308526`
+19:Verified Zenodo version DOI: `10.5281/zenodo.20308526`
+27:Post-release evidence: `docs/reports/terminal/20260520-v0.3.30-post-release-doi.log`
+20:Post-release evidence: `docs/reports/terminal/20260520-v0.3.30-post-release-doi.log`
+
+### POST-RELEASE CHECK V0.3.30 ###
+Post-release check for target v0.3.30
+
+[PASS] GitHub release: GitHub release exists: v0.3.30
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.3.30: 10.5281/zenodo.20308526
+
+Overall: PASS
+
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 14%]
+........................................................................ [ 29%]
+........................................................................ [ 44%]
+........................................................................ [ 59%]
+........................................................................ [ 73%]
+........................................................................ [ 88%]
+.......................................................                  [100%]
+487 passed in 3.37s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.30
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=79
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### FINAL MAIN STATE ###
+main
+d0a3f0a Record v0.3.30 DOI metadata (#470)
+4e9b260 Record v0.3.30 release verification log
+10559b7 Record PR 469 merge verification log
+221fbb6 Prepare v0.3.30 release metadata (#469)
+2c666bb Record PR 468 merge verification log
+a6c52da Document v0.3.30 GUI readiness hardening closeout (#468)
+0fdc621 Record PR 467 merge verification log
+aa1a17f Add GUI readiness evidence state contract (#467)
+eac2729 Record PR 466 merge verification log
+36e2521 Add GUI readiness queue state contract (#466)
+
+### FINALIZE REMOTE EVIDENCE ###

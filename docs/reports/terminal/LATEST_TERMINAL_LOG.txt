@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-v0.3.30-post-release-doi.log
+docs/reports/terminal/20260520-merge-pr470-v0.3.30-doi.log
