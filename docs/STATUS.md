@@ -29,7 +29,9 @@ v0.3.28 is the current released and verified baseline. It includes the patch-art
 
 The active bridge toward the local GUI is no-copy/evidence governance and communication artifact GC hardening, not hidden automation. Normal PASS/FAIL handoff should rely on committed and pushed reports. Manual paste-output is reserved for hard failures such as authentication problems, network failures, terminal crashes, missing remote evidence, or workflow-level ambiguity.
 
-Communication artifact GC hardening is now part of the pre-GUI baseline: symlinked transient artifacts are rejected, repo evidence and command inbox files are protected, and local /tmp/agentic-project-kit-*.log cleanup is TTL-based and dry-run-first via ./ns artifact-gc --tmp-logs.\n\n## Active Workflow Rules
+Communication artifact GC hardening is now part of the pre-GUI baseline: symlinked transient artifacts are rejected, repo evidence and command inbox files are protected, and local /tmp/agentic-project-kit-*.log cleanup is TTL-based and dry-run-first via ./ns artifact-gc --tmp-logs.
+
+## Active Workflow Rules
 
 - Use repo state as source of truth; do not reconstruct current state from chat memory.
 - Treat repeated workflow errors as product defects to be fixed with guards, tests, and documentation.
