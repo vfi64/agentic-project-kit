@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-discover-communication-artifact-gc.log
+docs/reports/terminal/20260520-harden-quote-guard-contract.log

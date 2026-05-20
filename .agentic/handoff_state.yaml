@@ -70,7 +70,7 @@ rules:
 - id: shell-to-python-portability
   status: active
   text: Prefer portable Python-backed helpers and argument-vector execution over fragile
-    shell quoting, heredocs, or multiline python -c snippets.
+    shell quoting, heredocs, multiline python -c snippets, or nested quote-based code generation.
 - id: rules-must-be-test-backed
   status: active
   text: Workflow rules are not complete when they only exist in chat, prose, or handoff
@@ -150,7 +150,7 @@ recent_failure_patterns:
     status variables such as PIPESTATUS in zsh-pasted blocks unless the shell is explicitly
     controlled.
 - id: nested-triple-quote-code-generator
-  prevention: Do not generate Python source through nested triple-quoted string literals
+  prevention: Do not generate source files through nested shell/Python quote layers or nested triple-quoted string literals
     inside another generated Python script. Prefer line-list generation, existing
     patch tools, or checked patch artifacts plus py_compile before application.
 - id: yaml-colon-term-reinterpreted-as-mapping
