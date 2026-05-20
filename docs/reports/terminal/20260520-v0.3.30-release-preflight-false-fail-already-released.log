@@ -1,0 +1,211 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK STATUS ###
+
+### RECENT MAIN COMMITS ###
+9cad01a Record PR 478 merge verification log
+aac15cc Document typed work orders as pre-GUI execution path (#478)
+3d5d2a0 Record PR 477 merge verification log
+29e15ec Guard typed-next against already executed work orders (#477)
+33451cb Record PR 476 merge verification log
+fb2a2ef Add typed-next queue execution (#476)
+7dab7af Record PR 475 merge verification log
+545889e Add typed work order queue status contract (#475)
+745c81c Record PR 474 merge verification log
+89efdbf Add typed work order example and ns shortcut (#474)
+8da93ed Record PR 473 merge verification log
+a04bf60 Add CLI entrypoint for typed work order runner (#473)
+db9683b Record PR 472 merge verification log
+fb60d21 Add minimal typed work order runner core (#472)
+
+### OPEN PRS ###
+
+### RELEASE CHECK V0.3.30 ###
+Release state check for target v0.3.30
+
+[PASS] semantic version: 0.3.30 is valid
+[PASS] pyproject version: found text: version = "0.3.30"
+[PASS] package __version__: found text: __version__ = "0.3.30"
+[PASS] CHANGELOG version: found text: v0.3.30
+[PASS] README version: found text: Version `0.3.30`
+[PASS] CITATION version: found text: version: 0.3.30
+[PASS] STATUS version: found text: Current version: 0.3.30
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.30
+[FAIL] local tag unused: tag already exists: v0.3.30
+[FAIL] remote tag unused: remote tag already exists: v0.3.30
+[FAIL] GitHub release unused: GitHub release already exists: v0.3.30
+
+Overall: FAIL
+
+
+### VERIFY TAG AND GITHUB RELEASE UNUSED ###
+LOCAL_TAG=v0.3.30
+REMOTE_TAG=10559b7dde17fe934b32b641ceeeeb56ab18bf73	refs/tags/v0.3.30
+FAIL_LOCAL_TAG_ALREADY_EXISTS
+FAIL_REMOTE_TAG_ALREADY_EXISTS
+FAIL_GITHUB_RELEASE_ALREADY_EXISTS
+title:	v0.3.30
+tag:	v0.3.30
+draft:	false
+prerelease:	false
+immutable:	false
+author:	github-actions[bot]
+created:	2026-05-20T11:45:19Z
+published:	2026-05-20T11:49:47Z
+url:	https://github.com/vfi64/agentic-project-kit/releases/tag/v0.3.30
+asset:	agentic_project_kit-0.3.30-py3-none-any.whl
+asset:	agentic_project_kit-0.3.30.tar.gz
+--
+## What's Changed
+* Record v0.3.29 DOI metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/461
+* Record v0.3.30 GUI readiness hardening plan by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/462
+* Add GUI readiness action result core contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/463
+* Add cockpit run JSON action result output by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/464
+* Add cockpit registry-only contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/465
+* Add GUI readiness queue state contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/466
+* Add GUI readiness evidence state contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/467
+* Document v0.3.30 GUI readiness hardening closeout by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/468
+* Prepare v0.3.30 release metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/469
+
+
+**Full Changelog**: https://github.com/vfi64/agentic-project-kit/compare/v0.3.29...v0.3.30
+
+### VERIFY RELEASE CONTENT TERMS ###
+571:Version `0.3.30` is the current released line with verified version-specific DOI `10.5281/zenodo.20308526`.
+1:## v0.3.30 - 2026-05-20
+7:- GUI readiness hardening closeout: ActionResult core contract, `cockpit run --json`, registry-only action contract, Queue-State contract, and Evidence-State contract.
+18:- Hardened communication artifact GC before GUI readiness: symlink rejection, protected evidence coverage, TTL-based local tmp-log cleanup, and GC closeout documentation.
+1:Current version: 0.3.30
+1:Current version: 0.3.30
+157:## Typed Work Orders Pre-GUI Execution Path
+131:## Typed Work Orders Pre-GUI Execution Path
+
+### CLEAN DIST ###
+zsh: no matches found: *.egg-info
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 14%]
+........................................................................ [ 28%]
+........................................................................ [ 42%]
+........................................................................ [ 56%]
+........................................................................ [ 70%]
+........................................................................ [ 84%]
+........................................................................ [ 98%]
+........                                                                 [100%]
+512 passed in 3.50s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.30
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=79
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### BUILD ARTIFACTS ###
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for sdist...
+* Building sdist...
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for wheel...
+* Building wheel...
+Successfully built agentic_project_kit-0.3.30.tar.gz and agentic_project_kit-0.3.30-py3-none-any.whl
+
+### TWINE CHECK ###
+Checking dist/agentic_project_kit-0.3.30-py3-none-any.whl: [32mPASSED[0m
+Checking dist/agentic_project_kit-0.3.30.tar.gz: [32mPASSED[0m
+
+### DIST CONTENTS ###
+total 1328
+-rw-r--r--@ 1 hof  staff   110K 20 Mai  17:55 agentic_project_kit-0.3.30-py3-none-any.whl
+-rw-r--r--@ 1 hof  staff   549K 20 Mai  17:55 agentic_project_kit-0.3.30.tar.gz
+
+### FINAL CLEANUP DIST ###
+zsh: no matches found: *.egg-info
+
+### STATUS AFTER PREFLIGHT ###
+
+================================================================
+SUMMARY
+WORK RESULT: FAIL
+EVIDENCE RESULT: CHAT_ONLY_OR_LOCAL_TMP
+OVERALL RESULT: FAIL
+REMOTE_EVIDENCE: FAIL
+terminal_log=/tmp/agentic-project-kit-20260520-v0.3.30-release-preflight.log
+command_report=NONE
+NEXT_CHAT_REPLY: paste-output
+### RESULT: FAIL ###
+================================================================
+]7;file://MBP.local/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+REPAIR V0.3.30 RELEASE PREFLIGHT FALSE-FAIL AND VERIFY POST-RELEASE STATE
+
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK STATUS ###
+
+### RECORD FALSE PREFLIGHT FAIL LOG IF PRESENT ###
