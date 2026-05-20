@@ -248,3 +248,5 @@ The architectural rule is: chat describes intent; repo-owned tools execute typed
 - Next recommended step before release: run a final release-readiness check; if only version metadata remains, update the release metadata to `0.3.34`.
 
 - v0.3.34 is published and verified with Zenodo version DOI `10.5281/zenodo.20315568`.
+
+- v0.3.34 is fully closed: release metadata, GitHub release, assets, Zenodo DOI metadata, post-release check, and DOI documentation are complete. Next planning state is v0.3.35 or the first bounded Tkinter cockpit slice, but only after a fresh readiness check.
