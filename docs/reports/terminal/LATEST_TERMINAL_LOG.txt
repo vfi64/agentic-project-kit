@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-minimal-typed-work-order-runner-core.log
+docs/reports/terminal/20260520-merge-pr472-minimal-typed-work-order-runner-core.log
