@@ -22,7 +22,7 @@ The immediate goal after v0.3.27 is to refresh the planning state and harden doc
 Current released version: 0.3.28
 Current release tag: v0.3.28
 Zenodo concept DOI: `10.5281/zenodo.20101359`
-Verified Zenodo version DOI: `10.5281/zenodo.20286394`
+Verified Zenodo version DOI: `10.5281/zenodo.20303218`
 Post-release evidence: `docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log`
 
 v0.3.28 is the current released and verified baseline. It includes the patch-artifact preflight MVP and the hardened planning-state/no-copy evidence workflow.
