@@ -1,0 +1,123 @@
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRE-MERGE STATUS ###
+
+### PR 468 MACHINE STATE ###
+{"isDraft":false,"mergeStateStatus":"CLEAN","state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-20T11:39:52Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26160111623/job/76949520600","name":"test","startedAt":"2026-05-20T11:39:33Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-20T11:39:50Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26160109661/job/76949514435","name":"test","startedAt":"2026-05-20T11:39:32Z","status":"COMPLETED","workflowName":"CI"}]}
+PR_STATE=OPEN CLEAN draft=false
+PR_STATE_ACCEPTED_FOR_MERGE
+
+### MERGE PR 468 ###
+
+### PULL MAIN AFTER MERGE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   0fdc621..a6c52da  main       -> origin/main
+Updating 0fdc621..a6c52da
+Fast-forward
+ docs/STATUS.md                                     |  18 ++-
+ docs/handoff/CURRENT_HANDOFF.md                    |  21 +++-
+ ...520-repair-v0.3.30-closeout-dirty-worktrees.log | 105 +++++++++++++++++
+ ...diness-closeout-docs-failed-dirty-worktrees.log |  75 ++++++++++++
+ ...ess-closeout-docs-failed-planning-invariant.log | 131 +++++++++++++++++++++
+ docs/reports/terminal/LATEST_TERMINAL_LOG.txt      |   2 +-
+ tests/test_v0_3_30_gui_readiness_closeout_docs.py  |  16 +++
+ 7 files changed, 363 insertions(+), 5 deletions(-)
+ create mode 100644 docs/reports/terminal/20260520-repair-v0.3.30-closeout-dirty-worktrees.log
+ create mode 100644 docs/reports/terminal/20260520-repair-v0.3.30-gui-readiness-closeout-docs-failed-dirty-worktrees.log
+ create mode 100644 docs/reports/terminal/20260520-v0.3.30-gui-readiness-closeout-docs-failed-planning-invariant.log
+ create mode 100644 tests/test_v0_3_30_gui_readiness_closeout_docs.py
+
+### VERIFY CLOSEOUT DOCS ON MAIN ###
+128:## v0.3.30 GUI Readiness Hardening Closeout
+97:## v0.3.30 GUI Readiness Hardening Closeout
+134:- PR #463: ActionResult core contract exposes PASS, FAIL, PENDING, HARD-FAIL, terminal_log, command_report, dirty_state, safety_class, and next_allowed_actions.
+135:- PR #464: `cockpit run --json` exposes machine-readable action results for read-only and blocked bounded actions.
+136:- PR #465: Cockpit Registry is the only allowed action source and validates action ids, safety classes, commands, labels, categories, and descriptions.
+137:- PR #466: Queue-State contract covers NO_COMMAND, EXACTLY_ONE_COMMAND, MULTIPLE_COMMANDS, ALREADY_EXECUTED_COMMAND, DIRTY_INBOX, MISSING_COMMAND_METADATA, and INCOMPLETE_COMMAND.
+138:- PR #467: Evidence-State contract covers REMOTE_EVIDENCE_PRESENT, LOCAL_TMP_ONLY, MISSING_EVIDENCE, STALE_LATEST_POINTER, and command_report_available.
+102:Compatibility invariant for planning gates: GUI readiness also covers dirty worktrees, dirty inboxes, failed commands, and postcondition failures.
+140:The release closeout criterion is a clean full gate plus release metadata for v0.3.30. Tkinter remains explicitly deferred until after this contract baseline is released.
+
+### TARGETED TESTS ###
+..                                                                       [100%]
+2 passed in 0.01s
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 14%]
+........................................................................ [ 29%]
+........................................................................ [ 44%]
+........................................................................ [ 59%]
+........................................................................ [ 73%]
+........................................................................ [ 88%]
+.......................................................                  [100%]
+487 passed in 3.47s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.29
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=79
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### FINAL MAIN STATE ###
+main
+a6c52da Document v0.3.30 GUI readiness hardening closeout (#468)
+0fdc621 Record PR 467 merge verification log
+aa1a17f Add GUI readiness evidence state contract (#467)
+eac2729 Record PR 466 merge verification log
+36e2521 Add GUI readiness queue state contract (#466)
+080c7cd Record PR 465 merge verification log
+6a3cef6 Add cockpit registry-only contract (#465)
+49cea16 Record PR 464 merge verification log
+89b3792 Add cockpit run JSON action result output (#464)
+4991c1b Record PR 463 merge verification log
+
+### FINALIZE REMOTE EVIDENCE ###
