@@ -66,6 +66,12 @@ Do not expand Pattern Advisor, release automation, or hidden command selection b
 
 Planning-state freshness is now part of the governance contract: current-state documents must not contain stale released-version claims, obsolete next-step instructions, or contradictory active baselines.
 
+## v0.3.31 Pre-GUI Execution Hardening Contract
+
+- v0.3.31 starts with the pre-GUI execution hardening contract.
+- The contract is documented in `docs/workflow/PRE_GUI_EXECUTION_HARDENING.md`.
+- The first hardened invariants are: no false PASS after failed gate, clean base before log creation, no nested quote patch generator, evidence finalization, and a strict GUI boundary.
+
 ## Live Status Commands
 
 Run these from the repository root with project-local tooling:

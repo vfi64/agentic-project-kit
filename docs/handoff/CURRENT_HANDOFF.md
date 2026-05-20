@@ -49,6 +49,12 @@ The exact lowercase phrase `documentation coverage` is intentionally present her
 
 Begin v0.3.31 with minimal typed Work Order Runner work before further Tkinter GUI expansion. Do not start broad Tkinter implementation until the runner plan has a tested first slice.
 
+## v0.3.31 Pre-GUI Execution Hardening Contract
+
+- v0.3.31 begins with a contract slice before any Tkinter work.
+- Use `docs/workflow/PRE_GUI_EXECUTION_HARDENING.md` as the execution-hardening source.
+- Next implementation work should turn these invariants into runner/tooling behavior, not another chat-only rule.
+
 ## Required Local Gate
 
 Before merge or handoff, run:
