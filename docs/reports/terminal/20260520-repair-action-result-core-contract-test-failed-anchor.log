@@ -1,0 +1,48 @@
+
+### CHECK BRANCH ###
+CURRENT_BRANCH=feature/gui-readiness-action-result-contract-20260520
+
+### STATUS BEFORE REPAIR ###
+ M src/agentic_project_kit/cockpit.py
+?? docs/reports/terminal/20260520-action-result-core-contract-escape-safe-failed-system-python.log
+?? tests/test_gui_readiness_action_result_core_contract.py
+
+### RECORD FAILED VENV LOG IF PRESENT ###
+RECORDED_FAILED_FINALIZE_LOG=docs/reports/terminal/20260520-finalize-action-result-core-contract-after-venv-fail.log
+
+### PATCH TEST STRING LITERAL ###
+missing literal stderr target
+
+================================================================
+SUMMARY
+WORK RESULT: FAIL
+EVIDENCE RESULT: CHAT_ONLY_OR_LOCAL_TMP
+OVERALL RESULT: FAIL
+REMOTE_EVIDENCE: FAIL
+terminal_log=/tmp/agentic-project-kit-20260520-repair-action-result-core-contract-test.log
+command_report=NONE
+NEXT_CHAT_REPLY: paste-output
+### RESULT: FAIL ###
+================================================================
+]7;file://MBP.fritz.box/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+REPAIR ACTION RESULT CORE CONTRACT TEST LINE-BASED AND FINALIZE PR
+
+
+### CHECK BRANCH ###
+CURRENT_BRANCH=feature/gui-readiness-action-result-contract-20260520
+
+### STATUS BEFORE LINE-BASED REPAIR ###
+ M src/agentic_project_kit/cockpit.py
+?? docs/reports/terminal/20260520-action-result-core-contract-escape-safe-failed-system-python.log
+?? docs/reports/terminal/20260520-finalize-action-result-core-contract-after-venv-fail.log
+?? tests/test_gui_readiness_action_result_core_contract.py
+
+### RECORD FAILED ANCHOR LOG IF PRESENT ###
