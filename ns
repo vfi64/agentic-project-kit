@@ -29,6 +29,43 @@ fi
 
 
 
+if [ "${1:-}" = "dev-local-feature-gate" ]; then
+  printf "%s
+" ""
+  printf "%s
+" "### NS DEV LOCAL FEATURE GATE ###"
+  printf "%s
+" "Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion."
+  printf "%s
+" ""
+  printf "%s
+" "### BRANCH / STATUS ###"
+  git branch --show-current
+  git status --short
+  printf "%s
+" ""
+  printf "%s
+" "### PYTEST ###"
+  PYTHONPATH=src "$PY" -m pytest -q || exit $?
+  printf "%s
+" ""
+  printf "%s
+" "### RUFF ###"
+  PYTHONPATH=src "$PY" -m ruff check . || exit $?
+  printf "%s
+" ""
+  printf "%s
+" "### CHECK DOCS ###"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli check-docs || exit $?
+  printf "%s
+" ""
+  printf "%s
+" "### DOCTOR ###"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli doctor || exit $?
+  exit 0
+fi
+
+
 if [ "${1:-}" = "governance-check" ]; then
   PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli governance check
   exit $?
