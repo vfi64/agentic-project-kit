@@ -1,5 +1,7 @@
 ## v0.3.32 - 2026-05-20
 
+Zenodo v0.3.32 DOI: 10.5281/zenodo.20314341
+
 - Prepare release metadata for v0.3.32.
 - Add release-preflight for before-metadata release phase validation.
 - Add evidence clean-check to prevent self-dirty terminal log false failures.

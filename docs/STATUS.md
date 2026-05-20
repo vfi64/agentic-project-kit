@@ -19,11 +19,11 @@ The immediate goal after v0.3.29 is to close out v0.3.30 GUI readiness hardening
 
 ## Current State
 
-Current released version: 0.3.31
+Current released version: 0.3.32
 Previous release compatibility literal for planning-state freshness coverage: Current released version: 0.3.29
-Current release tag: v0.3.31
+Current release tag: v0.3.32
 Zenodo concept DOI: `10.5281/zenodo.20101359`
-Verified Zenodo version DOI: `10.5281/zenodo.20313834`
+Verified Zenodo version DOI: `10.5281/zenodo.20314341`
 Post-release evidence: `docs/reports/terminal/20260520-v0.3.30-post-release-doi.log`
 
 v0.3.30 is the current released and post-release verified line; GitHub Release and Zenodo version DOI verification are complete after post-release closeout. It includes the patch-artifact preflight MVP and the hardened planning-state/no-copy evidence workflow.
