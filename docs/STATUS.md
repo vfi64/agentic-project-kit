@@ -19,6 +19,32 @@ The immediate goal after v0.3.29 is to close out v0.3.30 GUI readiness hardening
 
 ## Current State
 
+## v0.3.34 Portable Core Hardening Plan
+
+v0.3.34 is planned as the final pre-GUI portable-core hardening line before starting the thin Tkinter cockpit implementation.
+
+Goal: move the remaining risky release, DOI, evidence, PR-closeout, and typed-work-order control logic out of large shell blocks and into tested Python core functions that can be called by CLI, `./ns`, typed work orders, and the later Tkinter cockpit.
+
+Required v0.3.34 scope:
+
+- Expand systematic unit and contract tests for typed work orders, including valid work orders, missing fields, invalid types, unknown actions, queue cardinality, already-executed guards, evidence requirements, and negative runtime validation.
+- Encapsulate release-phase semantics in Python core APIs: before-metadata `release-preflight`, after-metadata `release-check`, after-publication `post-release-check`, and DOI metadata recording.
+- Prevent the Zenodo concept DOI from being accepted as a version-specific DOI when `post-release-check` reports WAITING.
+- Reduce `./ns` and shell scripts to thin delegation layers for standard workflows; no new large shell control blocks for release, DOI, evidence, or PR-closeout logic.
+- Provide machine-readable results or stable action result objects for GUI-relevant actions.
+- Keep README release history extracted into `docs/releases/VERIFIED_RELEASES.md` and avoid reintroducing README length pressure.
+- Preserve evidence-log consistency guards, including expected in-progress log handling and final-result contradiction checks.
+
+Tkinter remains explicitly deferred until this portable-core hardening baseline is released and post-release verified.
+
+Acceptance criteria for starting the Tkinter cockpit after v0.3.34:
+
+- Typed work order core behavior is covered by systematic unit tests, not only dogfooding logs.
+- Release and DOI workflows expose Python-callable, tested actions with clear phase boundaries.
+- The concept DOI versus version DOI WAITING case is guarded.
+- GUI-facing actions can be invoked without composing fragile multi-step shell scripts.
+
+
 Current released version: 0.3.32
 Previous release compatibility literal for planning-state freshness coverage: Current released version: 0.3.29
 Current release tag: v0.3.32
