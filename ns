@@ -119,6 +119,13 @@ fi
 
 
 
+
+if [ "${1:-}" = "typed-next" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli work-order typed-next "$@"
+  exit $?
+fi
+
 if [ "${1:-}" = "typed-queue-status" ]; then
   shift
   PYTHONPATH=src "$PY" -m agentic_project_kit.cli work-order typed-queue-status "$@"
