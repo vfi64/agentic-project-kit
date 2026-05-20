@@ -1,0 +1,21 @@
+id: read-only-status-check
+title: Read-only status check
+safety: read_only
+log_path: docs/reports/terminal/typed-work-order-read-only-status-check.log
+block_dirty_worktree: false
+steps:
+  - kind: command_argv
+    label: branch
+    argv:
+      - git
+      - branch
+      - --show-current
+  - kind: command_argv
+    label: status
+    argv:
+      - git
+      - status
+      - --short
+  - kind: cockpit_action
+    label: cockpit git status
+    action_id: git.status

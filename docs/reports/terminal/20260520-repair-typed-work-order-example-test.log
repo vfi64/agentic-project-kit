@@ -1,0 +1,165 @@
+
+### CHECK BRANCH ###
+CURRENT_BRANCH=feature/typed-work-order-example-ns-shortcut-20260520
+
+### STATUS BEFORE REPAIR ###
+ M ns
+?? .agentic/typed_work_orders/
+?? tests/test_typed_work_order_example_and_ns_shortcut.py
+
+### RECORD FAILED LOG IF PRESENT ###
+RECORDED_FAILED_LOG=docs/reports/terminal/20260520-typed-work-order-example-and-ns-shortcut-failed-path-type.log
+
+### PATCH TEST STRING EXPECTATION ###
+
+### TARGETED TESTS ###
+...........                                                              [100%]
+11 passed in 0.19s
+
+### NS SHORTCUT DRY RUN CHECK ###
+1:Typed work order: read-only-status-check
+4:Dry run only. Re-run with --execute to run the typed work order.
+
+### EXECUTE EXAMPLE THROUGH NS SHORTCUT ###
+{
+  "command_report": null,
+  "dirty_state": "dirty",
+  "message": "Typed work order executed.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "safety": "read_only",
+  "schema_version": 1,
+  "step_results": [
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "kind": "command_argv",
+      "label": "branch",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "feature/typed-work-order-example-ns-shortcut-20260520\n"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "kind": "command_argv",
+      "label": "status",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": " M ns\n?? .agentic/typed_work_orders/\n?? docs/reports/terminal/20260520-typed-work-order-example-and-ns-shortcut-failed-path-type.log\n?? tests/test_typed_work_order_example_and_ns_shortcut.py\n"
+    },
+    {
+      "action_result": {
+        "action_id": "git.status",
+        "allowed": true,
+        "command_report": null,
+        "dirty_state": "unknown",
+        "executed": true,
+        "message": "Cockpit action executed.",
+        "next_allowed_actions": [
+          "cockpit.actions"
+        ],
+        "result_status": "PASS",
+        "returncode": 0,
+        "safety": "read_only",
+        "schema_version": 1,
+        "stderr": "",
+        "stdout": "M ns\n?? .agentic/typed_work_orders/\n?? docs/reports/terminal/20260520-typed-work-order-example-and-ns-shortcut-failed-path-type.log\n?? tests/test_typed_work_order_example_and_ns_shortcut.py",
+        "terminal_log": null
+      },
+      "kind": "cockpit_action",
+      "label": "cockpit git status"
+    }
+  ],
+  "terminal_log": "docs/reports/terminal/typed-work-order-read-only-status-check.log",
+  "work_order_id": "read-only-status-check"
+}
+
+### VERIFY EXAMPLE LOG ###
+5:### JSON RESULT ###
+66:### RESULT: PASS ###
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+feature/typed-work-order-example-ns-shortcut-20260520
+ M ns
+?? .agentic/typed_work_orders/
+?? docs/reports/terminal/20260520-typed-work-order-example-and-ns-shortcut-failed-path-type.log
+?? docs/reports/terminal/typed-work-order-read-only-status-check.log
+?? tests/test_typed_work_order_example_and_ns_shortcut.py
+
+### PYTEST ###
+........................................................................ [ 14%]
+........................................................................ [ 28%]
+........................................................................ [ 43%]
+........................................................................ [ 57%]
+........................................................................ [ 72%]
+........................................................................ [ 86%]
+...................................................................      [100%]
+499 passed in 3.58s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.30
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=80
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+feature/typed-work-order-example-ns-shortcut-20260520
+ M ns
+?? .agentic/typed_work_orders/
+?? docs/reports/terminal/20260520-typed-work-order-example-and-ns-shortcut-failed-path-type.log
+?? docs/reports/terminal/typed-work-order-read-only-status-check.log
+?? tests/test_typed_work_order_example_and_ns_shortcut.py
+
+### RESULT: PASS ###
+
+### FINAL DIFF SUMMARY ###
+ ns | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ M ns
+?? .agentic/typed_work_orders/
+?? docs/reports/terminal/20260520-typed-work-order-example-and-ns-shortcut-failed-path-type.log
+?? docs/reports/terminal/typed-work-order-read-only-status-check.log
+?? tests/test_typed_work_order_example_and_ns_shortcut.py
+
+### FINALIZE REMOTE EVIDENCE ###

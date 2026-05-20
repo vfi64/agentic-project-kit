@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-merge-pr473-typed-work-order-runner-cli.log
+docs/reports/terminal/20260520-repair-typed-work-order-example-test.log

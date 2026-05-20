@@ -1,0 +1,68 @@
+Typed work order: read-only-status-check
+Title: Read-only status check
+Safety: read_only
+
+### JSON RESULT ###
+{
+  "command_report": null,
+  "dirty_state": "dirty",
+  "message": "Typed work order executed.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "safety": "read_only",
+  "schema_version": 1,
+  "step_results": [
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "kind": "command_argv",
+      "label": "branch",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "feature/typed-work-order-example-ns-shortcut-20260520\n"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "kind": "command_argv",
+      "label": "status",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": " M ns\n?? .agentic/typed_work_orders/\n?? docs/reports/terminal/20260520-typed-work-order-example-and-ns-shortcut-failed-path-type.log\n?? tests/test_typed_work_order_example_and_ns_shortcut.py\n"
+    },
+    {
+      "action_result": {
+        "action_id": "git.status",
+        "allowed": true,
+        "command_report": null,
+        "dirty_state": "unknown",
+        "executed": true,
+        "message": "Cockpit action executed.",
+        "next_allowed_actions": [
+          "cockpit.actions"
+        ],
+        "result_status": "PASS",
+        "returncode": 0,
+        "safety": "read_only",
+        "schema_version": 1,
+        "stderr": "",
+        "stdout": "M ns\n?? .agentic/typed_work_orders/\n?? docs/reports/terminal/20260520-typed-work-order-example-and-ns-shortcut-failed-path-type.log\n?? tests/test_typed_work_order_example_and_ns_shortcut.py",
+        "terminal_log": null
+      },
+      "kind": "cockpit_action",
+      "label": "cockpit git status"
+    }
+  ],
+  "terminal_log": "docs/reports/terminal/typed-work-order-read-only-status-check.log",
+  "work_order_id": "read-only-status-check"
+}
+
+### RESULT: PASS ###
+Return code: 0
+Terminal bleibt offen. Kein exit am Blockende.

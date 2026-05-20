@@ -1,0 +1,71 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK STATUS ###
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'feature/typed-work-order-example-ns-shortcut-20260520'
+
+### ADD TYPED WORK ORDER EXAMPLE ###
+
+### PATCH NS TYPED-RUN SHORTCUT ###
+
+### ADD EXAMPLE AND NS SHORTCUT TESTS ###
+
+### TARGETED TESTS ###
+F..........                                                              [100%]
+=================================== FAILURES ===================================
+________________ test_read_only_typed_work_order_example_loads _________________
+
+    def test_read_only_typed_work_order_example_loads() -> None:
+        path = Path(".agentic/typed_work_orders/read_only_status_check.yaml")
+        order = load_typed_work_order(path)
+        assert order.work_order_id == "read-only-status-check"
+        assert order.safety == "read_only"
+>       assert order.log_path == Path("docs/reports/terminal/typed-work-order-read-only-status-check.log")
+E       AssertionError: assert 'docs/reports/terminal/typed-work-order-read-only-status-check.log' == PosixPath('docs/reports/terminal/typed-work-order-read-only-status-check.log')
+E        +  where 'docs/reports/terminal/typed-work-order-read-only-status-check.log' = TypedWorkOrder(work_order_id='read-only-status-check', title='Read-only status check', safety='read_only', log_path='d...ction', label='cockpit git status', argv=(), action_id='git.status', allow_bounded=False)), block_dirty_worktree=False).log_path
+E        +  and   PosixPath('docs/reports/terminal/typed-work-order-read-only-status-check.log') = Path('docs/reports/terminal/typed-work-order-read-only-status-check.log')
+
+tests/test_typed_work_order_example_and_ns_shortcut.py:11: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_typed_work_order_example_and_ns_shortcut.py::test_read_only_typed_work_order_example_loads
+1 failed, 10 passed in 0.22s
+
+================================================================
+SUMMARY
+WORK RESULT: FAIL
+EVIDENCE RESULT: CHAT_ONLY_OR_LOCAL_TMP
+OVERALL RESULT: FAIL
+REMOTE_EVIDENCE: FAIL
+terminal_log=/tmp/agentic-project-kit-20260520-typed-work-order-example-and-ns-shortcut.log
+command_report=NONE
+NEXT_CHAT_REPLY: paste-output
+### RESULT: FAIL ###
+================================================================
+]7;file://MBP.local/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+REPAIR TYPED WORK ORDER EXAMPLE TEST AND FINALIZE PR
+
+
+### CHECK BRANCH ###
+CURRENT_BRANCH=feature/typed-work-order-example-ns-shortcut-20260520
+
+### STATUS BEFORE REPAIR ###
+ M ns
+?? .agentic/typed_work_orders/
+?? tests/test_typed_work_order_example_and_ns_shortcut.py
+
+### RECORD FAILED LOG IF PRESENT ###
