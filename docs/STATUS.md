@@ -72,6 +72,23 @@ Planning-state freshness is now part of the governance contract: current-state d
 - The contract is documented in `docs/workflow/PRE_GUI_EXECUTION_HARDENING.md`.
 - The first hardened invariants are: no false PASS after failed gate, clean base before log creation, no nested quote patch generator, evidence finalization, and a strict GUI boundary.
 
+## v0.3.31 Pre-GUI Execution Hardening Closeout
+
+v0.3.31 is the current pre-GUI execution hardening line. It does not ship the Tkinter GUI.
+
+Completed v0.3.31 capabilities:
+
+- Pre-GUI Execution Hardening Contract.
+- Terminal Evidence Guard with CLI command `agentic-kit evidence guard LOGFILE`.
+- Local shortcut `./ns evidence-guard LOGFILE`.
+- Expected negative-smoke evidence handling.
+- Typed Work Order Evidence Contract.
+- Typed Work Order Evidence Runtime Check.
+
+Release readiness: v0.3.31 is ready for release metadata preparation after the final local gate and release preflight pass.
+
+Tkinter remains explicitly deferred until the pre-GUI typed Work Order and evidence contracts are release-stable.
+
 ## v0.3.31 Evidence Guard Usage
 
 - `agentic-kit evidence guard LOGFILE` validates terminal evidence logs for contradictory final state.

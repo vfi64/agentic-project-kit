@@ -55,6 +55,19 @@ Begin v0.3.31 with minimal typed Work Order Runner work before further Tkinter G
 - Use `docs/workflow/PRE_GUI_EXECUTION_HARDENING.md` as the execution-hardening source.
 - Next implementation work should turn these invariants into runner/tooling behavior, not another chat-only rule.
 
+## v0.3.31 Pre-GUI Execution Hardening Closeout
+
+Current safe state: v0.3.31 pre-GUI execution hardening is complete enough for release preparation.
+
+Use these capabilities before any future GUI slice:
+
+- `./ns evidence-guard LOGFILE` before committing or citing terminal evidence.
+- Typed Work Orders as the preferred pre-GUI execution path.
+- Typed Work Order evidence metadata for terminal-log evidence and guard validation.
+- `validate_typed_work_order_evidence` for minimal runtime validation.
+
+Next safe step: prepare and release v0.3.31. Do not start Tkinter before v0.3.31 is released and post-release verified.
+
 ## v0.3.31 Evidence Guard Usage
 
 - Before committing or citing a terminal evidence log, run `./ns evidence-guard LOGFILE`.
