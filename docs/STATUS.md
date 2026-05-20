@@ -312,3 +312,6 @@ Acceptance criteria before GUI work resumes:
 - No GUI slice starts until the remaining shell/Python boundary is intentionally classified.
 
 - v0.3.35 core-test-matrix consolidation started by expanding regression coverage for `finalize_guard`, `local_feature_gate`, and `release_doi_safety` without changing runtime behavior.
+
+- v0.3.35 consolidation continued by wiring `tools/ns_finalize_guard.sh` to the tested Python `agentic_project_kit.finalize_guard` decision core.
+- The shell path now acts as a git-state collector and delegates machine-readable finalization classification to the Python core while preserving `STATUS:` lines and `### RESULT:` markers.
