@@ -1,0 +1,118 @@
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRE-MERGE STATUS ###
+
+### PR 464 MACHINE STATE ###
+{"isDraft":false,"mergeStateStatus":"CLEAN","state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-20T10:08:12Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26155749502/job/76934526596","name":"test","startedAt":"2026-05-20T10:07:44Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-20T10:08:05Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26155747102/job/76934518422","name":"test","startedAt":"2026-05-20T10:07:41Z","status":"COMPLETED","workflowName":"CI"}]}
+PR_STATE=OPEN CLEAN draft=false
+PR_STATE_ACCEPTED_FOR_MERGE
+
+### MERGE PR 464 ###
+
+### PULL MAIN AFTER MERGE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   4991c1b..89b3792  main       -> origin/main
+Updating 4991c1b..89b3792
+Fast-forward
+ .../20260520-cockpit-run-json-action-result.log    | 90 ++++++++++++++++++++++
+ docs/reports/terminal/LATEST_TERMINAL_LOG.txt      |  2 +-
+ src/agentic_project_kit/cli_commands/cockpit.py    | 12 +++
+ tests/test_cockpit_run_json_action_result.py       | 33 ++++++++
+ 4 files changed, 136 insertions(+), 1 deletion(-)
+ create mode 100644 docs/reports/terminal/20260520-cockpit-run-json-action-result.log
+ create mode 100644 tests/test_cockpit_run_json_action_result.py
+
+### VERIFY JSON CONTRACT ON MAIN ###
+12:    action_result_as_json_data,
+61:        typer.echo(json.dumps(action_result_as_json_data(result), indent=2, sort_keys=True))
+34:    json_output: Annotated[
+40:    if json_output:
+57:    json_output: Annotated[bool, typer.Option("--json", help="Print machine-readable JSON action result.")] = False,
+60:    if json_output:
+70:    console.print(f"result_status={result.result_status}", markup=False)
+
+### CLI JSON SMOKE ###
+
+### TARGETED TESTS ###
+........................                                                 [100%]
+24 passed in 0.20s
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 15%]
+........................................................................ [ 30%]
+........................................................................ [ 46%]
+........................................................................ [ 61%]
+........................................................................ [ 76%]
+........................................................................ [ 92%]
+.....................................                                    [100%]
+469 passed in 2.77s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.29
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=79
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### FINAL MAIN STATE ###
+main
+89b3792 Add cockpit run JSON action result output (#464)
+4991c1b Record PR 463 merge verification log
+3e00e0e Add GUI readiness action result core contract (#463)
+cf333f9 Record PR 462 merge verification log
+b999f9f Record v0.3.30 GUI readiness hardening plan (#462)
+b03b305 Record PR 461 merge verification log
+3d2cf42 Record v0.3.29 DOI metadata (#461)
+c9be6b1 Record v0.3.29 post-release DOI discovery log
+78e1db2 Record v0.3.29 post-release discovery false-fail log
+09a312c Record v0.3.29 release verification log
+
+### FINALIZE REMOTE EVIDENCE ###
