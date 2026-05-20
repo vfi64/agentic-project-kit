@@ -223,3 +223,8 @@ Recommended sequencing:
 
 The architectural rule is: chat describes intent; repo-owned tools execute typed operations; Markdown is a projection, not the primary source of truth; shell is a runner, not a patch language.
 
+
+- Completed v0.3.34 routing slice: `./ns dev-local-feature-gate` is now an explicit `ns` shortcut before the `tools/next-step.py` fallback. It prints branch/status and runs pytest, ruff, check-docs, and doctor through the project Python environment.
+- Regression coverage: `tests/test_v034_ns_dev_gate_routing.py` verifies shortcut existence, ordering before fallback, required gate commands, and absence of `tools/next-step.py` inside the shortcut block.
+- Evidence: `docs/reports/terminal/v0.3.34_ns_dev_gate_routing_merge_verification.log` records targeted regression and local gate smoke verification on main.
+- Next recommended v0.3.34 slice: continue portable-core hardening by identifying the next high-value shell-heavy `ns` path to move behind a tested Python core function before starting any Tkinter GUI work.

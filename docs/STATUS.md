@@ -270,3 +270,6 @@ Recommended sequencing:
 
 The architectural rule is: chat describes intent; repo-owned tools execute typed operations; Markdown is a projection, not the primary source of truth; shell is a runner, not a patch language.
 
+
+- v0.3.34 pre-GUI portable-core hardening continued with an explicit `./ns dev-local-feature-gate` routing fix. The shortcut now runs the local feature gate directly before the `tools/next-step.py` fallback and is covered by `tests/test_v034_ns_dev_gate_routing.py`.
+- Remote merge evidence for the routing fix is recorded in `docs/reports/terminal/v0.3.34_ns_dev_gate_routing_merge_verification.log`.
