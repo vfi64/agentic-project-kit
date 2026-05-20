@@ -508,6 +508,7 @@ Version `0.3.10` remains the previous archived release covering workflow shortcu
 Version `0.3.9` remains the previous post-release verified archived release before v0.3.10.
 
 This repository has maintainer-owned GitHub releases and verified Zenodo archive records. Verified version-specific DOIs:
+- Verified v0.3.29 version DOI: `10.5281/zenodo.20303218`
 - Verified v0.3.28 version DOI: `10.5281/zenodo.20286394`
 - Verified v0.3.23 version DOI: `10.5281/zenodo.20261956`
 
@@ -565,4 +566,4 @@ Version `0.3.24` is the current release line prepared by `./ns release-prep 0.3.
 Version `0.3.25` is the current release line prepared by `./ns release-prep 0.3.25`.
 Version `0.3.26` is the current release line prepared by `./ns release-prep 0.3.26`.
 Version `0.3.27` is the current release line prepared by `./ns release-prep 0.3.27`.
-Version `0.3.29` is the current prepared release line; Zenodo verification is pending until the GitHub release and post-release DOI metadata are recorded.
+Version `0.3.29` is the current verified release; Zenodo version DOI `10.5281/zenodo.20303218`.

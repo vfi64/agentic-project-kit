@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-v0.3.29-post-release-discovery-v2.log
+docs/reports/terminal/20260520-repair-pr461-remaining-handoff-stale-text.log

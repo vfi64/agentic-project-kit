@@ -1,0 +1,88 @@
+
+### CHECKOUT DOI BRANCH ###
+Already on 'docs/record-v0.3.29-doi'
+Your branch is up to date with 'origin/docs/record-v0.3.29-doi'.
+From github.com:vfi64/agentic-project-kit
+ * branch            docs/record-v0.3.29-doi -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK STATUS ###
+
+### PATCH REMAINING HANDOFF STALE TEXT ###
+
+### VERIFY NO STALE CURRENT-HANDOFF RELEASE TEXT ###
+PASS_NO_STALE_HANDOFF_V0.3.28_TEXT
+20:Current branch after v0.3.29: main
+22:v0.3.29 is the current verified no-copy/evidence and GC-hardening baseline. It includes patch-artifact preflight, mandatory final-summary validation, communication artifact GC hardening, and post-release DOI evidence.
+
+### POST-RELEASE CHECK V0.3.29 ###
+Post-release check for target v0.3.29
+
+[PASS] GitHub release: GitHub release exists: v0.3.29
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.3.29: 10.5281/zenodo.20303218
+
+Overall: PASS
+
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+docs/record-v0.3.29-doi
+ M docs/handoff/CURRENT_HANDOFF.md
+
+### PYTEST ###
+........................................................................ [ 15%]
+........................................................................ [ 31%]
+........................................................................ [ 46%]
+........................................................................ [ 62%]
+........................................................................ [ 77%]
+........................................................................ [ 93%]
+..............................                                           [100%]
+462 passed in 2.62s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.29
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=1
+local_branch_count=80
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+docs/record-v0.3.29-doi
+ M docs/handoff/CURRENT_HANDOFF.md
+
+### RESULT: PASS ###
+
+### FINALIZE REMOTE EVIDENCE ###

@@ -1,0 +1,158 @@
+
+### CHECKOUT DOI BRANCH ###
+Already on 'docs/record-v0.3.29-doi'
+M	docs/STATUS.md
+M	docs/handoff/CURRENT_HANDOFF.md
+Your branch is up to date with 'origin/docs/record-v0.3.29-doi'.
+
+### PRECHECK STATUS ###
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+
+### PATCH DOCUMENTATION COVERAGE VERSION TERMS ###
+
+### VERIFY COVERAGE PATCH ###
+507:          - 'Current released version: 0.3.29'
+513:          - 'Current released version: 0.3.29'
+PASS_NO_STALE_COVERAGE_VERSION
+
+### POST-RELEASE CHECK V0.3.29 ###
+Post-release check for target v0.3.29
+
+[PASS] GitHub release: GitHub release exists: v0.3.29
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[WARN] Zenodo version DOI: Zenodo lookup failed: The read operation timed out
+
+Overall: PASS
+
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+docs/record-v0.3.29-doi
+ M docs/DOCUMENTATION_COVERAGE.yaml
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+
+### PYTEST ###
+........................................................................ [ 15%]
+........................................................................ [ 31%]
+........................................................................ [ 46%]
+........................................................................ [ 62%]
+........................................................................ [ 77%]
+........................................................................ [ 93%]
+..............................                                           [100%]
+462 passed in 2.81s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.29
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=1
+local_branch_count=80
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+docs/record-v0.3.29-doi
+ M docs/DOCUMENTATION_COVERAGE.yaml
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+
+### RESULT: PASS ###
+
+### FINAL STATUS BEFORE COMMIT ###
+ M docs/DOCUMENTATION_COVERAGE.yaml
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+diff --git a/docs/DOCUMENTATION_COVERAGE.yaml b/docs/DOCUMENTATION_COVERAGE.yaml
+index 1546fde..a0b00e9 100644
+--- a/docs/DOCUMENTATION_COVERAGE.yaml
++++ b/docs/DOCUMENTATION_COVERAGE.yaml
+@@ -504,13 +504,13 @@ rules:
+     documents:
+       - path: docs/STATUS.md
+         terms:
+-          - 'Current released version: 0.3.28'
++          - 'Current released version: 0.3.29'
+           - Planning-state freshness
+           - no-copy/evidence
+           - Tkinter cockpit
+       - path: docs/handoff/CURRENT_HANDOFF.md
+         terms:
+-          - 'Current released version: 0.3.28'
++          - 'Current released version: 0.3.29'
+           - curated
+           - no-copy/evidence
+           - Tkinter cockpit
+diff --git a/docs/STATUS.md b/docs/STATUS.md
+index ce94398..09c0955 100644
+--- a/docs/STATUS.md
++++ b/docs/STATUS.md
+@@ -19,13 +19,13 @@ The immediate goal after v0.3.27 is to refresh the planning state and harden doc
+ 
+ ## Current State
+ 
+-Current released version: 0.3.28
+-Current release tag: v0.3.28
++Current released version: 0.3.29
++Current release tag: v0.3.29
+ Zenodo concept DOI: `10.5281/zenodo.20101359`
+ Verified Zenodo version DOI: `10.5281/zenodo.20303218`
+-Post-release evidence: `docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log`
++Post-release evidence: `docs/reports/terminal/20260520-v0.3.29-post-release-discovery-v2.log`
+ 
+-v0.3.28 is the current released and verified baseline. It includes the patch-artifact preflight MVP and the hardened planning-state/no-copy evidence workflow.
++v0.3.29 is the current released and verified baseline. It includes the patch-artifact preflight MVP and the hardened planning-state/no-copy evidence workflow.
+ 
+ The active bridge toward the local GUI is no-copy/evidence governance and communication artifact GC hardening, not hidden automation. Normal PASS/FAIL handoff should rely on committed and pushed reports. Manual paste-output is reserved for hard failures such as authentication problems, network failures, terminal crashes, missing remote evidence, or workflow-level ambiguity.
+ 
+diff --git a/docs/handoff/CURRENT_HANDOFF.md b/docs/handoff/CURRENT_HANDOFF.md
+index de42a25..7a08538 100644
+--- a/docs/handoff/CURRENT_HANDOFF.md
++++ b/docs/handoff/CURRENT_HANDOFF.md
+@@ -13,10 +13,10 @@ Refresh the planning state after v0.3.27 and harden documentation freshness guar
+ 
+ ## Current Repository State
+ 
+-Current released version: 0.3.28
+-Current release tag: v0.3.28
++Current released version: 0.3.29
++Current release tag: v0.3.29
+ Verified Zenodo version DOI: `10.5281/zenodo.20303218`
+-Post-release evidence: `docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log`
++Post-release evidence: `docs/reports/terminal/20260520-v0.3.29-post-release-discovery-v2.log`
+ Current branch after v0.3.28: main
+ 
+ v0.3.28 is the current verified no-copy/evidence baseline. It includes patch-artifact preflight, mandatory final-summary validation, and post-release DOI evidence.
+
+### FINALIZE REMOTE EVIDENCE ###

@@ -504,13 +504,13 @@ rules:
     documents:
       - path: docs/STATUS.md
         terms:
-          - 'Current released version: 0.3.28'
+          - 'Current released version: 0.3.29'
           - Planning-state freshness
           - no-copy/evidence
           - Tkinter cockpit
       - path: docs/handoff/CURRENT_HANDOFF.md
         terms:
-          - 'Current released version: 0.3.28'
+          - 'Current released version: 0.3.29'
           - curated
           - no-copy/evidence
           - Tkinter cockpit

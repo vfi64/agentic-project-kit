@@ -1,5 +1,10 @@
 ## v0.3.29 - 2026-05-20
 
+- Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.29 DOI `10.5281/zenodo.20303218`.
+
+Zenodo v0.3.29 DOI: 10.5281/zenodo.20303218
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
 - Hardened communication artifact GC before GUI readiness: symlink rejection, protected evidence coverage, TTL-based local tmp-log cleanup, and GC closeout documentation.
 - Added a safe file replacement helper to prevent malformed generated Python replacements from corrupting source files.
 - Recorded quote-guard hardening for nested shell/Python quote-layer failures.

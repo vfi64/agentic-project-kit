@@ -13,13 +13,13 @@ Refresh the planning state after v0.3.27 and harden documentation freshness guar
 
 ## Current Repository State
 
-Current released version: 0.3.28
-Current release tag: v0.3.28
-Verified Zenodo version DOI: `10.5281/zenodo.20286394`
-Post-release evidence: `docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log`
-Current branch after v0.3.28: main
+Current released version: 0.3.29
+Current release tag: v0.3.29
+Verified Zenodo version DOI: `10.5281/zenodo.20303218`
+Post-release evidence: `docs/reports/terminal/20260520-v0.3.29-post-release-discovery-v2.log`
+Current branch after v0.3.29: main
 
-v0.3.28 is the current verified no-copy/evidence baseline. It includes patch-artifact preflight, mandatory final-summary validation, and post-release DOI evidence.
+v0.3.29 is the current verified no-copy/evidence and GC-hardening baseline. It includes patch-artifact preflight, mandatory final-summary validation, communication artifact GC hardening, and post-release DOI evidence.
 
 Communication artifact GC hardening is now part of the pre-GUI baseline: symlinked transient artifacts are rejected, repo evidence and command inbox files are protected, and local /tmp/agentic-project-kit-*.log cleanup is TTL-based and dry-run-first via ./ns artifact-gc --tmp-logs.
 
