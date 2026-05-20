@@ -1,0 +1,262 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK STATUS ###
+
+### RECORD FAILED POST-RELEASE DISCOVERY LOG IF PRESENT ###
+[main 78e1db2] Record v0.3.29 post-release discovery false-fail log
+ 2 files changed, 65 insertions(+), 1 deletion(-)
+ create mode 100644 docs/reports/terminal/20260520-v0.3.29-post-release-discovery-failed-release-check.log
+To github.com:vfi64/agentic-project-kit.git
+   09a312c..78e1db2  main -> main
+
+### ACTIVATE VENV ###
+Python 3.14.3
+
+### VERIFY GITHUB RELEASE EXISTS ###
+title:	v0.3.29
+tag:	v0.3.29
+draft:	false
+prerelease:	false
+immutable:	false
+author:	github-actions[bot]
+created:	2026-05-20T06:25:43Z
+published:	2026-05-20T06:27:09Z
+url:	https://github.com/vfi64/agentic-project-kit/releases/tag/v0.3.29
+asset:	agentic_project_kit-0.3.29-py3-none-any.whl
+asset:	agentic_project_kit-0.3.29.tar.gz
+--
+## What's Changed
+* Record v0.3.28 DOI metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/443
+* Add remote-first no-guess governance rule by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/444
+* Add compiled agent context YAML by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/445
+* Add no remote command deadlock rule by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/446
+* Support local verification agent command envelopes by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/447
+* Guard agent-next staging against missing paths by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/448
+* Add persistent final summary contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/449
+* Forbid executable placeholder final summaries by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/450
+* Clarify no-copy FAIL evidence policy by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/453
+* Harden quote guard contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/454
+* Harden communication artifact GC symlink safety by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/455
+* Add GC protected evidence regression tests by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/456
+* Add safe file replacement helper by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/457
+* Add GC TTL handling for local tmp logs by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/458
+* Document communication artifact GC hardening closeout by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/459
+* Prepare v0.3.29 release metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/460
+
+
+**Full Changelog**: https://github.com/vfi64/agentic-project-kit/compare/v0.3.28...v0.3.29
+{"assets":[{"apiUrl":"https://api.github.com/repos/vfi64/agentic-project-kit/releases/assets/424921580","contentType":"application/octet-stream","createdAt":"2026-05-20T06:27:08Z","digest":"sha256:b642426700efdb87f5f8c7350b96c941b27d3d6f985ee70cd1d057bd83058b24","downloadCount":0,"id":"RA_kwDOSYo5m84ZU8ns","label":"","name":"agentic_project_kit-0.3.29-py3-none-any.whl","size":104317,"state":"uploaded","updatedAt":"2026-05-20T06:27:08Z","url":"https://github.com/vfi64/agentic-project-kit/releases/download/v0.3.29/agentic_project_kit-0.3.29-py3-none-any.whl"},{"apiUrl":"https://api.github.com/repos/vfi64/agentic-project-kit/releases/assets/424921581","contentType":"application/gzip","createdAt":"2026-05-20T06:27:08Z","digest":"sha256:c48fe2c79dd893425df2886e4e07cade040dc61be0e9be1e2b4be62d77d1ee05","downloadCount":0,"id":"RA_kwDOSYo5m84ZU8nt","label":"","name":"agentic_project_kit-0.3.29.tar.gz","size":509147,"state":"uploaded","updatedAt":"2026-05-20T06:27:09Z","url":"https://github.com/vfi64/agentic-project-kit/releases/download/v0.3.29/agentic_project_kit-0.3.29.tar.gz"}],"createdAt":"2026-05-20T06:25:43Z","isDraft":false,"isPrerelease":false,"name":"v0.3.29","publishedAt":"2026-05-20T06:27:09Z","tagName":"v0.3.29","url":"https://github.com/vfi64/agentic-project-kit/releases/tag/v0.3.29"}
+
+### VERIFY RELEASE ASSETS ###
+agentic_project_kit-0.3.29-py3-none-any.whl
+agentic_project_kit-0.3.29.tar.gz
+PASS_WHEEL_ASSET_PRESENT
+PASS_SDIST_ASSET_PRESENT
+
+### POST-RELEASE CHECK DIAGNOSTIC WITHOUT DOI GUESSING ###
+Post-release check for target v0.3.29
+
+[PASS] GitHub release: GitHub release exists: v0.3.29
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.3.29: 10.5281/zenodo.20303218
+
+Overall: PASS
+
+
+### CURRENT DOI REFERENCES ###
+README.md:3:[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/zenodo.20101359)
+README.md:401:For citation across versions, prefer the all-versions DOI: `10.5281/zenodo.20101359`.
+README.md:403:The archived v0.3.25 release has the verified version-specific DOI: `10.5281/zenodo.20273989`.
+README.md:405:The archived v0.2.5 release has the verified version-specific DOI: `10.5281/zenodo.20111119`.
+README.md:407:The archived v0.2.6 release has the verified version-specific DOI: `10.5281/zenodo.20119102`.
+README.md:409:The archived v0.2.7 release has the verified version-specific DOI: `10.5281/zenodo.20125518`.
+README.md:411:The archived v0.2.8 release has the verified version-specific DOI: `10.5281/zenodo.20126270`.
+README.md:413:The archived v0.2.9 release has the verified version-specific DOI: `10.5281/zenodo.20126490`.
+README.md:415:The archived v0.2.10 release has the verified version-specific DOI: `10.5281/zenodo.20127028`.
+README.md:417:The archived v0.3.0 release has the verified version-specific DOI: `10.5281/zenodo.20140467`.
+README.md:419:The archived v0.3.1 release has the verified version-specific DOI: `10.5281/zenodo.20144969`.
+README.md:421:The archived v0.3.2 release has the verified version-specific DOI: `10.5281/zenodo.20145114`.
+README.md:423:The archived v0.3.3 release has the verified version-specific DOI: `10.5281/zenodo.20151924`.
+README.md:425:The archived v0.3.4 release has the verified version-specific DOI: `10.5281/zenodo.20162214`.
+README.md:427:The archived v0.3.5 release has the verified version-specific DOI: `10.5281/zenodo.20169965`.
+README.md:429:The archived v0.3.6 release has the verified version-specific DOI: `10.5281/zenodo.20183888`.
+README.md:431:The archived v0.3.7 release has the verified version-specific DOI: `10.5281/zenodo.20206581`.
+README.md:433:The archived v0.3.8 release has the verified version-specific DOI: `10.5281/zenodo.20208638`.
+README.md:435:The archived v0.3.9 release has the verified version-specific DOI: `10.5281/zenodo.20210345`.
+README.md:436:The archived v0.3.10 release has the verified version-specific DOI: `10.5281/zenodo.20214382`.
+README.md:437:The archived v0.3.11 release has the verified version-specific DOI: `10.5281/zenodo.20215460`.
+README.md:438:The archived v0.3.16 release has the verified version-specific DOI: `10.5281/zenodo.20244944`.
+README.md:440:The archived v0.3.17 release has the verified version-specific DOI: `10.5281/zenodo.20245113`.
+README.md:442:The archived v0.3.19 release has the verified version-specific DOI: `10.5281/zenodo.20246121`.
+README.md:444:The archived v0.3.18 release has the verified version-specific DOI: `10.5281/zenodo.20245754`.
+README.md:504:Archived GUI/cockpit release notes: v0.3.22 verified DOI `10.5281/zenodo.20256637`; v0.3.19 verified DOI `10.5281/zenodo.20246121`.
+README.md:506:Version `0.3.10` remains the previous archived release covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`.
+README.md:511:- Verified v0.3.28 version DOI: `10.5281/zenodo.20286394`
+README.md:512:- Verified v0.3.23 version DOI: `10.5281/zenodo.20261956`
+README.md:514:- v0.2.5: `10.5281/zenodo.20111119`
+README.md:515:- v0.2.6: `10.5281/zenodo.20119102`
+README.md:516:- v0.2.7: `10.5281/zenodo.20125518`
+README.md:517:- v0.2.8: `10.5281/zenodo.20126270`
+README.md:518:- v0.2.9: `10.5281/zenodo.20126490`
+README.md:519:- v0.2.10: `10.5281/zenodo.20127028`
+README.md:520:- v0.3.0: `10.5281/zenodo.20140467`
+README.md:521:- v0.3.1: `10.5281/zenodo.20144969`
+README.md:522:- v0.3.2: `10.5281/zenodo.20145114`
+README.md:523:- v0.3.3: `10.5281/zenodo.20151924`
+README.md:524:- v0.3.4: `10.5281/zenodo.20162214`
+README.md:525:- v0.3.5: `10.5281/zenodo.20169965`
+README.md:526:- v0.3.6: `10.5281/zenodo.20183888`
+README.md:527:- v0.3.7: `10.5281/zenodo.20206581`
+README.md:528:- v0.3.8: `10.5281/zenodo.20208638`
+README.md:529:- v0.3.9: `10.5281/zenodo.20210345`
+README.md:530:- v0.3.10: `10.5281/zenodo.20214382`
+README.md:531:- v0.3.11: `10.5281/zenodo.20215460`
+README.md:532:- Verified v0.3.12 version DOI: `10.5281/zenodo.20218213`
+README.md:533:- Verified v0.3.16 version DOI: `10.5281/zenodo.20244944`
+README.md:534:- Verified v0.3.17 version DOI: `10.5281/zenodo.20245113`
+README.md:535:- Verified v0.3.19 version DOI: `10.5281/zenodo.20246121`
+README.md:536:- Verified v0.3.21 DOI: 10.5281/zenodo.20258057 version DOI: `10.5281/zenodo.20256637`
+README.md:537:- Verified v0.3.18 version DOI: `10.5281/zenodo.20245754`
+README.md:568:Version `0.3.29` is the current prepared release line; Zenodo verification is pending until the GitHub release and post-release DOI metadata are recorded.
+CITATION.cff:10:doi: "10.5281/zenodo.20101359"
+CITATION.cff:11:# Verified v0.3.28 version DOI: 10.5281/zenodo.20286394
+CITATION.cff:12:# Verified v0.3.27 version DOI: 10.5281/zenodo.20283414
+CITATION.cff:13:# Verified v0.2.5 version DOI: 10.5281/zenodo.20111119
+CITATION.cff:14:# Verified v0.2.6 version DOI: 10.5281/zenodo.20119102
+CITATION.cff:15:# Verified v0.2.7 version DOI: 10.5281/zenodo.20125518
+CITATION.cff:16:# Verified v0.2.8 version DOI: 10.5281/zenodo.20126270
+CITATION.cff:17:# Verified v0.2.9 version DOI: 10.5281/zenodo.20126490
+CITATION.cff:18:# Verified v0.2.10 version DOI: 10.5281/zenodo.20127028
+CITATION.cff:19:# Verified v0.3.0 version DOI: 10.5281/zenodo.20140467
+CITATION.cff:20:# Verified v0.3.1 version DOI: 10.5281/zenodo.20144969
+CITATION.cff:21:# Verified v0.3.2 version DOI: 10.5281/zenodo.20145114
+CITATION.cff:22:# Verified v0.3.3 version DOI: 10.5281/zenodo.20151924
+CITATION.cff:23:# Verified v0.3.4 version DOI: 10.5281/zenodo.20162214
+CITATION.cff:24:# Verified v0.3.5 version DOI: 10.5281/zenodo.20169965
+CITATION.cff:25:# Verified v0.3.6 version DOI: 10.5281/zenodo.20183888
+CITATION.cff:26:# Verified v0.3.7 version DOI: 10.5281/zenodo.20206581
+CITATION.cff:27:# Verified v0.3.8 version DOI: 10.5281/zenodo.20208638
+CITATION.cff:28:# Verified v0.3.9 version DOI: 10.5281/zenodo.20210345
+CITATION.cff:29:# Verified v0.3.10 version DOI: 10.5281/zenodo.20214382
+CITATION.cff:30:# Verified v0.3.11 version DOI: 10.5281/zenodo.20215460
+CITATION.cff:39:# Verified v0.3.16 version DOI: 10.5281/zenodo.20244944
+CITATION.cff:40:# Verified v0.3.17 version DOI: 10.5281/zenodo.20245113
+CITATION.cff:41:# Verified v0.3.18 version DOI: 10.5281/zenodo.20245754
+CITATION.cff:42:# Verified v0.3.22 version DOI: 10.5281/zenodo.20261634
+CITATION.cff:43:# Verified v0.3.25 version DOI: 10.5281/zenodo.20273989
+CITATION.cff:44:version: 0.3.29
+CITATION.cff:46:# Verified v0.3.23 version DOI: 10.5281/zenodo.20261956
+CHANGELOG.md:1:## v0.3.29 - 2026-05-20
+CHANGELOG.md:10:- Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.28 DOI `10.5281/zenodo.20286394`.
+CHANGELOG.md:12:Zenodo v0.3.28 DOI: 10.5281/zenodo.20286394
+CHANGELOG.md:13:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:24:- Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.25 DOI `10.5281/zenodo.20273989`.
+CHANGELOG.md:29:- Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.24 DOI `10.5281/zenodo.20270197`.
+CHANGELOG.md:34:Zenodo v0.3.23 DOI: 10.5281/zenodo.20261956
+CHANGELOG.md:35:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:46:## v0.3.21 DOI: 10.5281/zenodo.20258057
+CHANGELOG.md:53:Zenodo v0.3.20 DOI: 10.5281/zenodo.20256637
+CHANGELOG.md:67:Zenodo v0.3.19 DOI: 10.5281/zenodo.20246121
+CHANGELOG.md:68:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:78:Zenodo v0.3.18 DOI: 10.5281/zenodo.20245754
+CHANGELOG.md:79:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:87:Zenodo v0.3.17 DOI: 10.5281/zenodo.20245113
+CHANGELOG.md:88:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:97:Zenodo v0.3.16 DOI: 10.5281/zenodo.20244944
+CHANGELOG.md:98:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:107:Zenodo v0.3.15 DOI: 10.5281/zenodo.20244397
+CHANGELOG.md:108:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:117:Zenodo v0.3.14 DOI: 10.5281/zenodo.20242582
+CHANGELOG.md:118:Zenodo Concept DOI: 10.5281/zenodo.20101359
+CHANGELOG.md:128:Zenodo v0.3.13 DOI: 10.5281/zenodo.20241908
+CHANGELOG.md:136:Zenodo v0.3.12 DOI: 10.5281/zenodo.20218213
+CHANGELOG.md:149:Zenodo v0.3.11 DOI: 10.5281/zenodo.20215460
+docs/STATUS.md:1:Current version: 0.3.29
+docs/STATUS.md:24:Zenodo concept DOI: `10.5281/zenodo.20101359`
+docs/STATUS.md:25:Verified Zenodo version DOI: `10.5281/zenodo.20286394`
+docs/handoff/CURRENT_HANDOFF.md:1:Current version: 0.3.29
+docs/handoff/CURRENT_HANDOFF.md:18:Verified Zenodo version DOI: `10.5281/zenodo.20286394`
+
+### DOI STATUS ###
+DOI_NOT_RECORDED_YET
+Need authoritative Zenodo version DOI for v0.3.29 before metadata PR.
+Do not reuse v0.3.28 DOI. Do not guess.
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 15%]
+........................................................................ [ 31%]
+........................................................................ [ 46%]
+........................................................................ [ 62%]
+........................................................................ [ 77%]
+........................................................................ [ 93%]
+..............................                                           [100%]
+462 passed in 2.77s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.29
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=79
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### FINAL MAIN STATE ###
+main
+78e1db2 Record v0.3.29 post-release discovery false-fail log
+09a312c Record v0.3.29 release verification log
+eaf6bba Record PR 460 merge verification log
+c66c3b0 Prepare v0.3.29 release metadata (#460)
+f6b6ed6 Record v0.3.29 release tooling recheck failure log
+fd8e2bc Record v0.3.29 release preflight log
+b658dc3 Record PR 459 merge verification log
+5de0545 Document communication artifact GC hardening closeout (#459)
+64dcdab Record PR 458 merge verification log
+39605d3 Add GC TTL handling for local tmp logs (#458)
+
+### FINALIZE REMOTE EVIDENCE ###
