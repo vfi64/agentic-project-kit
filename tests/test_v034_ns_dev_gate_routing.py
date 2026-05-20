@@ -9,8 +9,24 @@ def test_ns_has_dev_local_feature_gate_shortcut_before_next_step_fallback() -> N
     assert fallback in text
     assert text.index(shortcut) < text.index(fallback)
     block = text[text.index(shortcut):text.index(fallback)]
-    assert "-m pytest -q" in block
-    assert "-m ruff check ." in block
-    assert "agentic_project_kit.cli check-docs" in block
-    assert "agentic_project_kit.cli doctor" in block
+    assert "agentic_project_kit.local_feature_gate" in block
     assert "tools/next-step.py" not in block
+    assert "git pull" not in block
+    assert "git push" not in block
+    assert "gh pr" not in block
+    assert "-m pytest -q" not in block
+    assert "-m ruff check ." not in block
+
+
+def test_ns_dev_routes_to_local_feature_gate_core() -> None:
+    text = Path("ns").read_text(encoding="utf-8")
+    dev = "if [ \"${1:-}\" = \"dev\" ]; then"
+    go = " if [ \"${1:-}\" = \"go\" ]; then"
+    assert dev in text
+    assert go in text
+    block = text[text.index(dev):text.index(go)]
+    assert "agentic_project_kit.local_feature_gate --include-pr-hygiene" in block
+    assert "tools/next-step.py" not in block
+    assert "git pull" not in block
+    assert "git push" not in block
+    assert "gh pr" not in block
