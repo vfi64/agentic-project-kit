@@ -1,0 +1,149 @@
+
+### CHECK BRANCH ###
+CURRENT_BRANCH=feature/gui-readiness-action-result-contract-20260520
+
+### STATUS BEFORE LINE-BASED REPAIR ###
+ M src/agentic_project_kit/cockpit.py
+?? docs/reports/terminal/20260520-action-result-core-contract-escape-safe-failed-system-python.log
+?? docs/reports/terminal/20260520-finalize-action-result-core-contract-after-venv-fail.log
+?? tests/test_gui_readiness_action_result_core_contract.py
+
+### RECORD FAILED ANCHOR LOG IF PRESENT ###
+RECORDED_FAILED_REPAIR_LOG=docs/reports/terminal/20260520-repair-action-result-core-contract-test-failed-anchor.log
+
+### LINE-BASED PATCH COMPLETEDFAIL STDERR ###
+
+### SHOW TEST SNIPPET ###
+from pathlib import Path
+
+from agentic_project_kit.cockpit import (
+    CockpitAction,
+    RESULT_FAIL,
+    RESULT_HARD_FAIL,
+    RESULT_PASS,
+    RESULT_PENDING,
+    action_result_as_json_data,
+    run_cockpit_action,
+)
+
+class CompletedOk:
+    returncode = 0
+    stdout = "ok\\n"
+    stderr = ""
+
+class CompletedFail:
+    returncode = 7
+    stdout = ""
+    stderr = "boom"
+
+def test_read_only_action_result_contract_pass(tmp_path: Path) -> None:
+    result = run_cockpit_action("git.status", tmp_path, executor=lambda command, root: CompletedOk())
+    data = action_result_as_json_data(result)
+    assert data["schema_version"] == 1
+    assert data["result_status"] == RESULT_PASS
+    assert data["allowed"] is True
+    assert data["executed"] is True
+    assert data["returncode"] == 0
+    assert data["safety"] == "read_only"
+    assert data["dirty_state"] == "unknown"
+    assert data["terminal_log"] is None
+    assert data["command_report"] is None
+    assert data["next_allowed_actions"] == ["cockpit.actions"]
+
+def test_read_only_action_result_contract_fail(tmp_path: Path) -> None:
+    result = run_cockpit_action("git.status", tmp_path, executor=lambda command, root: CompletedFail())
+    assert result.result_status == RESULT_FAIL
+    assert result.returncode == 7
+    assert result.stderr == "boom"
+
+def test_bounded_action_without_allow_is_pending_contract(tmp_path: Path) -> None:
+    result = run_cockpit_action("workflow.go", tmp_path)
+    assert result.allowed is False
+    assert result.executed is False
+    assert result.result_status == RESULT_PENDING
+    assert result.safety == "bounded"
+
+def test_destructive_action_is_hard_fail_contract(tmp_path: Path) -> None:
+    actions = [CockpitAction("git.push", "Git push", "git", ("git", "push"), "destructive", "Push changes.")]
+    result = run_cockpit_action("git.push", tmp_path, actions=actions)
+    assert result.allowed is False
+    assert result.executed is False
+    assert result.result_status == RESULT_HARD_FAIL
+
+### TARGETED TESTS WITH VENV PYTHON ###
+......................                                                   [100%]
+22 passed in 0.20s
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+feature/gui-readiness-action-result-contract-20260520
+ M src/agentic_project_kit/cockpit.py
+?? docs/reports/terminal/20260520-action-result-core-contract-escape-safe-failed-system-python.log
+?? docs/reports/terminal/20260520-finalize-action-result-core-contract-after-venv-fail.log
+?? docs/reports/terminal/20260520-repair-action-result-core-contract-test-failed-anchor.log
+?? tests/test_gui_readiness_action_result_core_contract.py
+
+### PYTEST ###
+........................................................................ [ 15%]
+........................................................................ [ 30%]
+........................................................................ [ 46%]
+........................................................................ [ 61%]
+........................................................................ [ 77%]
+........................................................................ [ 92%]
+...................................                                      [100%]
+467 passed in 2.70s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.29
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=80
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+feature/gui-readiness-action-result-contract-20260520
+ M src/agentic_project_kit/cockpit.py
+?? docs/reports/terminal/20260520-action-result-core-contract-escape-safe-failed-system-python.log
+?? docs/reports/terminal/20260520-finalize-action-result-core-contract-after-venv-fail.log
+?? docs/reports/terminal/20260520-repair-action-result-core-contract-test-failed-anchor.log
+?? tests/test_gui_readiness_action_result_core_contract.py
+
+### RESULT: PASS ###
+
+### FINAL DIFF SUMMARY ###
+ src/agentic_project_kit/cockpit.py | 43 ++++++++++++++++++++++++++++++++++----
+ 1 file changed, 39 insertions(+), 4 deletions(-)
+
+### FINALIZE REMOTE EVIDENCE ###

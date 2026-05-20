@@ -1,0 +1,80 @@
+
+### CHECK BRANCH ###
+CURRENT_BRANCH=feature/gui-readiness-action-result-contract-20260520
+
+### STATUS AFTER FAILED SYSTEM PYTHON RUN ###
+ M src/agentic_project_kit/cockpit.py
+?? tests/test_gui_readiness_action_result_core_contract.py
+
+### RECORD FAILED LOCAL LOG IF PRESENT ###
+RECORDED_FAILED_LOG=docs/reports/terminal/20260520-action-result-core-contract-escape-safe-failed-system-python.log
+
+### VERIFY VENV ###
+Python 3.14.3
+typer ok
+
+### VERIFY PATCHED CONTRACT SHAPE ###
+38:    result_status: str = "PENDING"
+53:RESULT_HARD_FAIL = "HARD-FAIL"
+176:def action_result_as_json_data(result: CockpitActionResult) -> dict[str, object]:
+93:        return CockpitActionResult(action_id, False, False, None, "", "", f"Unknown cockpit action: {action_id}", RESULT_FAIL, "unknown", next_allowed_actions=("cockpit.actions",))
+95:        return CockpitActionResult(action.action_id, False, False, None, "", "", f"Blocked destructive cockpit action: {action.action_id}", RESULT_HARD_FAIL, action.safety, next_allowed_actions=("cockpit.actions",))
+97:        return CockpitActionResult(action.action_id, False, False, None, "", "", f"Blocked bounded cockpit action without explicit allow flag: {action.action_id}", RESULT_PENDING, action.safety, next_allowed_actions=("cockpit.actions",))
+99:        return CockpitActionResult(action.action_id, False, False, None, "", "", f"Blocked cockpit action with unknown safety class: {action.safety}", RESULT_HARD_FAIL, action.safety, next_allowed_actions=("cockpit.actions",))
+114:        next_allowed_actions=("cockpit.actions",),
+
+### TARGETED TESTS WITH VENV PYTHON ###
+...................F..                                                   [100%]
+=================================== FAILURES ===================================
+__________________ test_read_only_action_result_contract_fail __________________
+
+tmp_path = PosixPath('/private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pytest-of-hof/pytest-2015/test_read_only_action_result_c1')
+
+    def test_read_only_action_result_contract_fail(tmp_path: Path) -> None:
+        result = run_cockpit_action("git.status", tmp_path, executor=lambda command, root: CompletedFail())
+        assert result.result_status == RESULT_FAIL
+        assert result.returncode == 7
+>       assert result.stderr == "boom"
+E       AssertionError: assert 'boom\\n' == 'boom'
+E         
+E         - boom
+E         + boom\n
+E         ?     ++
+
+tests/test_gui_readiness_action_result_core_contract.py:41: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_gui_readiness_action_result_core_contract.py::test_read_only_action_result_contract_fail
+1 failed, 21 passed in 0.21s
+
+================================================================
+SUMMARY
+WORK RESULT: FAIL
+EVIDENCE RESULT: CHAT_ONLY_OR_LOCAL_TMP
+OVERALL RESULT: FAIL
+REMOTE_EVIDENCE: FAIL
+terminal_log=/tmp/agentic-project-kit-20260520-finalize-action-result-core-contract-after-venv-fail.log
+command_report=NONE
+NEXT_CHAT_REPLY: paste-output
+### RESULT: FAIL ###
+================================================================
+]7;file://MBP.fritz.box/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+REPAIR ACTION RESULT CORE CONTRACT TEST AND FINALIZE PR
+
+
+### CHECK BRANCH ###
+CURRENT_BRANCH=feature/gui-readiness-action-result-contract-20260520
+
+### STATUS BEFORE REPAIR ###
+ M src/agentic_project_kit/cockpit.py
+?? docs/reports/terminal/20260520-action-result-core-contract-escape-safe-failed-system-python.log
+?? tests/test_gui_readiness_action_result_core_contract.py
+
+### RECORD FAILED VENV LOG IF PRESENT ###

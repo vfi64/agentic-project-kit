@@ -35,11 +35,22 @@ class CockpitActionResult:
     stdout: str
     stderr: str
     message: str
+    result_status: str = "PENDING"
+    safety: str = "unknown"
+    terminal_log: str | None = None
+    command_report: str | None = None
+    dirty_state: str = "unknown"
+    next_allowed_actions: tuple[str, ...] = ()
 
 
 READ_ONLY = "read_only"
 BOUNDED = "bounded"
 DESTRUCTIVE = "destructive"
+
+RESULT_PASS = "PASS"
+RESULT_FAIL = "FAIL"
+RESULT_PENDING = "PENDING"
+RESULT_HARD_FAIL = "HARD-FAIL"
 
 CommandExecutor = Callable[[tuple[str, ...], Path], subprocess.CompletedProcess[str]]
 
@@ -79,13 +90,13 @@ def run_cockpit_action(
 ) -> CockpitActionResult:
     action = action_by_id(action_id, actions)
     if action is None:
-        return CockpitActionResult(action_id, False, False, None, "", "", f"Unknown cockpit action: {action_id}")
+        return CockpitActionResult(action_id, False, False, None, "", "", f"Unknown cockpit action: {action_id}", RESULT_FAIL, "unknown", next_allowed_actions=("cockpit.actions",))
     if action.safety == DESTRUCTIVE:
-        return CockpitActionResult(action.action_id, False, False, None, "", "", f"Blocked destructive cockpit action: {action.action_id}")
+        return CockpitActionResult(action.action_id, False, False, None, "", "", f"Blocked destructive cockpit action: {action.action_id}", RESULT_HARD_FAIL, action.safety, next_allowed_actions=("cockpit.actions",))
     if action.safety == BOUNDED and not allow_bounded:
-        return CockpitActionResult(action.action_id, False, False, None, "", "", f"Blocked bounded cockpit action without explicit allow flag: {action.action_id}")
+        return CockpitActionResult(action.action_id, False, False, None, "", "", f"Blocked bounded cockpit action without explicit allow flag: {action.action_id}", RESULT_PENDING, action.safety, next_allowed_actions=("cockpit.actions",))
     if action.safety not in {READ_ONLY, BOUNDED}:
-        return CockpitActionResult(action.action_id, False, False, None, "", "", f"Blocked cockpit action with unknown safety class: {action.safety}")
+        return CockpitActionResult(action.action_id, False, False, None, "", "", f"Blocked cockpit action with unknown safety class: {action.safety}", RESULT_HARD_FAIL, action.safety, next_allowed_actions=("cockpit.actions",))
 
     runner = executor if executor is not None else _run_command
     completed = runner(action.command, project_root.resolve())
@@ -98,6 +109,9 @@ def run_cockpit_action(
         completed.stdout.strip(),
         completed.stderr.strip(),
         "Cockpit action executed.",
+        RESULT_PASS if completed.returncode == 0 else RESULT_FAIL,
+        action.safety,
+        next_allowed_actions=("cockpit.actions",),
     )
 
 
@@ -155,6 +169,27 @@ def action_inventory_as_json_data(actions: list[CockpitAction] | None = None) ->
         ],
     }
 
+
+
+
+
+def action_result_as_json_data(result: CockpitActionResult) -> dict[str, object]:
+    return {
+        "schema_version": 1,
+        "action_id": result.action_id,
+        "result_status": result.result_status,
+        "allowed": result.allowed,
+        "executed": result.executed,
+        "returncode": result.returncode,
+        "safety": result.safety,
+        "dirty_state": result.dirty_state,
+        "terminal_log": result.terminal_log,
+        "command_report": result.command_report,
+        "next_allowed_actions": list(result.next_allowed_actions),
+        "message": result.message,
+        "stdout": result.stdout,
+        "stderr": result.stderr,
+    }
 
 def render_action_inventory(actions: list[CockpitAction] | None = None) -> str:
     selected = actions if actions is not None else cockpit_actions()
