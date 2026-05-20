@@ -77,3 +77,23 @@ def test_pr_closeout_top_level_alias_subprocess_smoke(tmp_path):
     result = subprocess.run([sys.executable, "-m", "agentic_project_kit.cli", "pr-closeout", str(path)], text=True, capture_output=True, check=False)
     assert result.returncode == 0
     assert "READY_TO_MERGE" in result.stdout
+
+
+def test_already_merged_pr_with_unknown_merge_state_is_idempotent_pass():
+    pr = clean_pr()
+    pr["state"] = "MERGED"
+    pr["mergeStateStatus"] = "UNKNOWN"
+    result = evaluate_pr_closeout(pr)
+    assert result.outcome == READY_TO_MERGE
+    assert not result.reasons
+
+
+def test_already_merged_pr_still_fails_with_pending_checks():
+    pr = clean_pr()
+    pr["state"] = "MERGED"
+    pr["mergeStateStatus"] = "UNKNOWN"
+    pr["statusCheckRollup"][0]["status"] = "IN_PROGRESS"
+    pr["statusCheckRollup"][0]["conclusion"] = ""
+    result = evaluate_pr_closeout(pr)
+    assert result.outcome == BLOCKED
+    assert result.reasons
