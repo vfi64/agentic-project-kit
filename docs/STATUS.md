@@ -55,7 +55,7 @@ The current required gate set for this planning refresh is:
 
 ## Next Safe Step
 
-Finish the planning-state refresh and documentation-freshness guard hardening. After that is merged and verified, start the first thin local Tkinter cockpit slice over the existing safe action layer: pull-and-run-next, status display, latest command-run report, latest terminal log, clean-state checks, and gate buttons.
+Start v0.3.30 as a GUI readiness hardening slice, not a Tkinter slice. The next work must harden the action/result/evidence/queue/failure contracts that a later GUI will consume: Action Registry as the only allowed action source, machine-readable final SUMMARY results, remote evidence states, no-command, already-executed, dirty-state, multiple-command, missing-evidence, and postcondition-failure handling. Only after those contracts are documented, tested, and gated should the first thin Tkinter cockpit be built.
 
 Do not expand Pattern Advisor, release automation, or hidden command selection before the GUI foundation and planning freshness guards are stable.
 
@@ -125,3 +125,15 @@ Remote command first is a delivery preference, not a blocking rule. If `./ns age
 
 Executable terminal blocks must never print final SUMMARY fields with placeholder alternatives such as `PASS|FAIL`, `p|paste-output`, or ellipsis markers. A copied block must end with one concrete outcome only. Placeholder examples are allowed only in prose documents when clearly marked as non-executable examples.
 
+## v0.3.30 GUI Readiness Hardening Plan
+
+The v0.3.29 review confirms that GC hardening and release hygiene were the right pre-GUI baseline. The useful planning takeaway is not to start Tkinter immediately, but to make the GUI-consumable contracts deterministic first.
+
+Required v0.3.30 scope:
+
+- Action Registry is the single source of allowed GUI actions.
+- Action results expose PASS, FAIL, PENDING, HARD-FAIL, terminal_log, command_report, dirty_state, safety_class, and next_allowed_actions in a machine-readable form.
+- Queue contracts cover no command, exactly one command, multiple commands, already executed command, dirty inbox, missing command metadata, and failed postconditions.
+- Evidence contracts distinguish remote evidence present, local tmp evidence only, missing evidence, stale latest pointer, and command report availability.
+- Shell shortcuts remain adapters; durable behavior belongs in tested Python cores.
+- Tkinter is explicitly deferred until these contracts pass gates.
