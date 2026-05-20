@@ -117,6 +117,13 @@ if [ "${1:-}" = "artifact-gc" ]; then
   exit $?
 fi
 
+
+if [ "${1:-}" = "typed-run" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli work-order typed-run "$@"
+  exit $?
+fi
+
 if [ "${1:-}" = "command-inbox-check" ]; then
   PYTHONPATH=src "$PY" -m agentic_project_kit.command_inbox_check
   exit $?
