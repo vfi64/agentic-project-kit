@@ -55,6 +55,12 @@ Begin v0.3.31 with minimal typed Work Order Runner work before further Tkinter G
 - Use `docs/workflow/PRE_GUI_EXECUTION_HARDENING.md` as the execution-hardening source.
 - Next implementation work should turn these invariants into runner/tooling behavior, not another chat-only rule.
 
+## v0.3.31 Evidence Guard Usage
+
+- Before committing or citing a terminal evidence log, run `./ns evidence-guard LOGFILE`.
+- A non-zero guard exit means the log has contradictory final-state evidence or is missing a final result marker.
+- Expected negative-smoke logs are allowed only when the log explicitly records that the false-PASS case was rejected.
+
 ## Required Local Gate
 
 Before merge or handoff, run:
