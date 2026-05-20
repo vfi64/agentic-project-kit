@@ -105,6 +105,12 @@ if [ "${1:-}" = "terminal-remote-preflight" ]; then
 fi
 
 
+if [ "${1:-}" = "evidence-guard" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli evidence guard "$@"
+  exit $?
+fi
+
 if [ "${1:-}" = "patch-preflight" ]; then
   shift
   PYTHONPATH=src "$PY" -m agentic_project_kit.cli patch-preflight "$@"
