@@ -47,3 +47,39 @@ def test_gc_refuses_to_delete_symlinked_transient_file(tmp_path: Path) -> None:
     assert ".agentic/commands/current.yaml" in message
     assert current_yaml.is_symlink()
     assert target.read_text(encoding="utf-8") == "keep"
+
+
+def test_gc_does_not_collect_repo_terminal_logs(tmp_path: Path) -> None:
+    terminal = tmp_path / "docs" / "reports" / "terminal"
+    terminal.mkdir(parents=True)
+    log_file = terminal / "example.log"
+    log_file.write_text("evidence", encoding="utf-8")
+    outcome, message = execute_gc(tmp_path)
+    assert outcome == "PASS_NOTHING_TO_COLLECT"
+    assert message == ""
+    assert log_file.read_text(encoding="utf-8") == "evidence"
+
+
+def test_gc_does_not_collect_command_run_reports(tmp_path: Path) -> None:
+    reports = tmp_path / "docs" / "reports" / "command_runs"
+    reports.mkdir(parents=True)
+    report = reports / "example.md"
+    report.write_text("# evidence", encoding="utf-8")
+    outcome, message = execute_gc(tmp_path)
+    assert outcome == "PASS_NOTHING_TO_COLLECT"
+    assert message == ""
+    assert report.read_text(encoding="utf-8") == "# evidence"
+
+
+def test_gc_does_not_collect_command_inbox_files(tmp_path: Path) -> None:
+    inbox = tmp_path / ".agentic" / "commands" / "inbox"
+    inbox.mkdir(parents=True)
+    metadata = inbox / "queued.yaml"
+    script = inbox / "queued.sh"
+    metadata.write_text("name: queued", encoding="utf-8")
+    script.write_text("printf queued\n", encoding="utf-8")
+    outcome, message = execute_gc(tmp_path)
+    assert outcome == "PASS_NOTHING_TO_COLLECT"
+    assert message == ""
+    assert metadata.exists()
+    assert script.exists()
