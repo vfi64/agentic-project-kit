@@ -118,6 +118,13 @@ if [ "${1:-}" = "artifact-gc" ]; then
 fi
 
 
+
+if [ "${1:-}" = "typed-queue-status" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli work-order typed-queue-status "$@"
+  exit $?
+fi
+
 if [ "${1:-}" = "typed-run" ]; then
   shift
   PYTHONPATH=src "$PY" -m agentic_project_kit.cli work-order typed-run "$@"
