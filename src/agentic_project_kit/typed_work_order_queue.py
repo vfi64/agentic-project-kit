@@ -1,14 +1,24 @@
 from __future__ import annotations
 
+import shutil
 from dataclasses import dataclass
 from pathlib import Path
+
+from agentic_project_kit.typed_work_order_runner import (
+    RESULT_FAIL,
+    RESULT_PASS,
+    RESULT_PENDING,
+    TypedWorkOrderResult,
+    load_typed_work_order,
+    run_typed_work_order,
+)
 
 STATUS_NO_COMMAND = "no_command"
 STATUS_EXACTLY_ONE_COMMAND = "exactly_one_command"
 STATUS_MULTIPLE_COMMANDS = "multiple_commands"
 
 DEFAULT_TYPED_WORK_ORDER_INBOX = Path(".agentic/typed_work_orders/inbox")
-
+DEFAULT_TYPED_WORK_ORDER_EXECUTED = Path(".agentic/typed_work_orders/executed")
 
 @dataclass(frozen=True)
 class TypedWorkOrderQueueStatus:
@@ -20,6 +30,16 @@ class TypedWorkOrderQueueStatus:
     def pending_count(self) -> int:
         return len(self.pending_paths)
 
+@dataclass(frozen=True)
+class TypedNextResult:
+    queue_status: str
+    result_status: str
+    returncode: int
+    source_path: str | None
+    executed_path: str | None
+    terminal_log: str | None
+    message: str
+    work_order_result: TypedWorkOrderResult | None = None
 
 def inspect_typed_work_order_queue(inbox_path: Path = DEFAULT_TYPED_WORK_ORDER_INBOX) -> TypedWorkOrderQueueStatus:
     inbox = inbox_path
@@ -36,7 +56,6 @@ def inspect_typed_work_order_queue(inbox_path: Path = DEFAULT_TYPED_WORK_ORDER_I
         status = STATUS_MULTIPLE_COMMANDS
     return TypedWorkOrderQueueStatus(inbox, status, pending)
 
-
 def typed_work_order_queue_status_as_json_data(status: TypedWorkOrderQueueStatus) -> dict[str, object]:
     return {
         "schema_version": 1,
@@ -46,6 +65,17 @@ def typed_work_order_queue_status_as_json_data(status: TypedWorkOrderQueueStatus
         "pending_paths": [str(path) for path in status.pending_paths],
     }
 
+def typed_next_result_as_json_data(result: TypedNextResult) -> dict[str, object]:
+    return {
+        "schema_version": 1,
+        "queue_status": result.queue_status,
+        "result_status": result.result_status,
+        "returncode": result.returncode,
+        "source_path": result.source_path,
+        "executed_path": result.executed_path,
+        "terminal_log": result.terminal_log,
+        "message": result.message,
+    }
 
 def render_typed_work_order_queue_status(status: TypedWorkOrderQueueStatus) -> str:
     lines = [
@@ -57,3 +87,27 @@ def render_typed_work_order_queue_status(status: TypedWorkOrderQueueStatus) -> s
     for path in status.pending_paths:
         lines.append(f"pending={path}")
     return "\n".join(lines)
+
+def run_typed_next(
+    project_root: Path = Path("."),
+    inbox_path: Path = DEFAULT_TYPED_WORK_ORDER_INBOX,
+    executed_dir: Path = DEFAULT_TYPED_WORK_ORDER_EXECUTED,
+) -> TypedNextResult:
+    root = project_root.resolve()
+    status = inspect_typed_work_order_queue(root / inbox_path)
+    if status.status == STATUS_NO_COMMAND:
+        return TypedNextResult(status.status, RESULT_PENDING, 2, None, None, None, "No typed work order queued.")
+    if status.status == STATUS_MULTIPLE_COMMANDS:
+        return TypedNextResult(status.status, RESULT_FAIL, 2, None, None, None, "Multiple typed work orders queued; refusing ambiguous execution.")
+    source = status.pending_paths[0]
+    order = load_typed_work_order(source)
+    result = run_typed_work_order(order, root)
+    if result.result_status == RESULT_PASS:
+        target_dir = root / executed_dir
+        target_dir.mkdir(parents=True, exist_ok=True)
+        target = target_dir / source.name
+        if target.exists():
+            target = target_dir / f"{source.stem}.again{source.suffix}"
+        shutil.move(str(source), str(target))
+        return TypedNextResult(status.status, result.result_status, result.returncode, str(source.relative_to(root)), str(target.relative_to(root)), result.terminal_log, "Typed work order executed and moved to executed queue.", result)
+    return TypedNextResult(status.status, result.result_status, result.returncode, str(source.relative_to(root)), None, result.terminal_log, result.message, result)

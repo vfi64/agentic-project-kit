@@ -8,6 +8,8 @@ import typer
 from agentic_project_kit.typed_work_order_queue import (
     inspect_typed_work_order_queue,
     render_typed_work_order_queue_status,
+    run_typed_next,
+    typed_next_result_as_json_data,
     typed_work_order_queue_status_as_json_data,
 )
 from agentic_project_kit.typed_work_order_runner import (
@@ -70,6 +72,25 @@ def run_command(work_order_id: str, execute: bool = typer.Option(False, "--execu
     if result_code != 0:
         raise typer.Exit(code=result_code)
 
+
+
+
+@work_orders_app.command("typed-next")
+def typed_next_command(
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON result."),
+) -> None:
+    result = run_typed_next(Path("."))
+    data = typed_next_result_as_json_data(result)
+    if json_output:
+        typer.echo(json.dumps(data, indent=2, sort_keys=True))
+    else:
+        typer.echo(f"typed_next_status={result.result_status}")
+        typer.echo(f"queue_status={result.queue_status}")
+        typer.echo(f"message={result.message}")
+        if result.terminal_log:
+            typer.echo(f"terminal_log={result.terminal_log}")
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
 
 
 @work_orders_app.command("typed-queue-status")
