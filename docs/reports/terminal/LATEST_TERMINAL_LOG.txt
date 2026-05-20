@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-merge-pr465-cockpit-registry-only-contract.log
+docs/reports/terminal/20260520-queue-state-contract.log
