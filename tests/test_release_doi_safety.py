@@ -24,3 +24,29 @@ def test_verified_version_specific_doi_is_extracted() -> None:
 def test_wrong_version_doi_is_not_extracted() -> None:
     output = "Zenodo version DOI: verified version DOI for v0.3.32: 10.5281/zenodo.20314341"
     assert extract_verified_version_doi(output, "0.3.33") is None
+
+
+def test_multiple_version_dois_extracts_requested_version_only() -> None:
+    output = "\n".join((
+        "Zenodo version DOI: verified version DOI for v0.3.32: 10.5281/zenodo.20314341",
+        "Zenodo version DOI: verified version DOI for v0.3.34: 10.5281/zenodo.20315568",
+    ))
+    assert extract_verified_version_doi(output, "0.3.34") == "10.5281/zenodo.20315568"
+
+
+def test_malformed_verified_doi_line_is_rejected() -> None:
+    output = "Zenodo version DOI: verified version DOI for v0.3.34: not-a-doi"
+    assert extract_verified_version_doi(output, "0.3.34") is None
+
+
+def test_waiting_output_wins_over_later_verified_text() -> None:
+    output = "\n".join((
+        "[WAITING] Zenodo version DOI: no verified Zenodo record found yet for v0.3.34",
+        "Zenodo version DOI: verified version DOI for v0.3.34: 10.5281/zenodo.20315568",
+    ))
+    assert extract_verified_version_doi(output, "0.3.34") is None
+
+
+def test_concept_doi_in_verified_version_slot_is_rejected() -> None:
+    output = "Zenodo version DOI: verified version DOI for v0.3.34: 10.5281/zenodo.20101359"
+    assert extract_verified_version_doi(output, "0.3.34") is None

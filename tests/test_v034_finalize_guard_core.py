@@ -1,3 +1,4 @@
+import pytest
 from agentic_project_kit.finalize_guard import FinalizeGuardStatus, classify_finalize_guard_state, main, render_finalize_guard_decision
 
 
@@ -107,3 +108,39 @@ def test_finalize_guard_cli_returns_one_for_fail(capsys):
     assert code == 1
     assert "STATUS: FAIL_CONFLICT_RELEVANT" in capsys.readouterr().out
 
+
+def test_finalize_guard_cli_rejects_invalid_boolean(capsys):
+    with pytest.raises(SystemExit) as excinfo:
+        main([
+            "--marker-requested", "maybe",
+            "--marker-on-main", "false",
+            "--local-branch-exists", "true",
+            "--remote-branch-exists", "false",
+            "--commits-ahead-of-main", "0",
+            "--merge-conflict", "none",
+        ])
+    assert excinfo.value.code == 2
+    assert "expected boolean value" in capsys.readouterr().err
+
+
+def test_finalize_guard_cli_accepts_unknown_optional_values(capsys):
+    code = main([
+        "--marker-requested", "false",
+        "--marker-on-main", "false",
+        "--local-branch-exists", "true",
+        "--remote-branch-exists", "false",
+        "--commits-ahead-of-main", "unknown",
+        "--merge-conflict", "unknown",
+    ])
+    assert code == 1
+    out = capsys.readouterr().out
+    assert "STATUS: FAIL_NEEDS_HUMAN_REVIEW" in out
+    assert "### RESULT: FAIL ###" in out
+
+
+def test_render_finalize_guard_decision_has_three_line_contract():
+    decision = classify(commits_ahead_of_main=2, merge_conflict=True)
+    lines = render_finalize_guard_decision(decision).splitlines()
+    assert lines[0] == "STATUS: FAIL_CONFLICT_RELEVANT"
+    assert lines[-1] == "### RESULT: FAIL ###"
+    assert len(lines) == 3
