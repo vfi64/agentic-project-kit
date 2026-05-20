@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-merge-pr470-v0.3.30-doi.log
+docs/reports/terminal/20260520-record-work-order-before-gui-plan.log

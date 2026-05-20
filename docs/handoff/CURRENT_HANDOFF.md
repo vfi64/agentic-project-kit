@@ -47,6 +47,8 @@ The repository is the source of truth, not the chat transcript. Current state is
 
 The exact lowercase phrase `documentation coverage` is intentionally present here because `docs/DOCUMENTATION_COVERAGE.yaml`, `agentic-kit check-docs`, and `agentic-kit doctor` enforce required state-document coverage terms deterministically.
 
+Begin v0.3.31 with minimal typed Work Order Runner work before further Tkinter GUI expansion. Do not start broad Tkinter implementation until the runner plan has a tested first slice.
+
 ## Required Local Gate
 
 Before merge or handoff, run:
@@ -124,3 +126,30 @@ Required v0.3.30 scope:
 - Evidence contracts distinguish remote evidence present, local tmp evidence only, missing evidence, stale latest pointer, and command report availability.
 - Shell shortcuts remain adapters; durable behavior belongs in tested Python cores.
 - The thin Tkinter cockpit remains explicitly deferred until these contracts pass gates.
+
+
+## v0.3.31 Pre-GUI Execution Hardening Plan
+
+The GUI expansion is intentionally paused before further Tkinter development. The next slice must reduce the two remaining workflow risks before the GUI becomes the primary interface:
+
+1. Shell and quote errors from generated terminal patch blocks.
+2. Drift from literal Markdown state checks and scattered current/previous release facts.
+
+Required near-term scope before continuing GUI expansion:
+
+- Add a minimal typed Work Order Runner that can execute repo-backed, schema-checked work orders without chat-generated patch scripts.
+- Keep the first runner small: read-only command execution, existing cockpit action execution, evidence/log finalization, deterministic PASS/FAIL/PENDING/HARD-FAIL summaries, and dirty-state blocking.
+- Forbid new long chat-generated Python or shell patch scripts for standard work once the runner exists; chat should describe intent and repo tools should execute typed operations.
+- Defer the full Patch DSL until after the minimal runner exists. The later DSL should support safe operations such as replace_once, insert_after, append_unique, ensure_line, dry-run, and atomic writes through safe_file_replace.
+- Defer the full structured State Source of Truth until after the minimal runner and thin GUI foundation. The later state source should move current release, previous release, DOI, evidence, GUI readiness, and next-slice facts into machine-readable YAML and render or validate Markdown from that state.
+- Resume Tkinter only after this pre-GUI hardening plan is recorded and the next work begins with the minimal Work Order Runner. The next GUI must remain a thin presentation layer over registry actions and machine-readable results.
+
+Recommended sequencing:
+
+- v0.3.31 Slice 1: minimal typed Work Order Runner for GUI-safe execution and quote-risk reduction.
+- v0.3.31 Slice 2: thin Tkinter MVP over Action Registry and cockpit JSON results.
+- v0.3.32: typed Patch DSL to eliminate quote-heavy chat patches for standard file edits.
+- v0.3.33: structured State Source of Truth to reduce literal-document drift.
+
+The architectural rule is: chat describes intent; repo-owned tools execute typed operations; Markdown is a projection, not the primary source of truth; shell is a runner, not a patch language.
+
