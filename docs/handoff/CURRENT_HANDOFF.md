@@ -275,3 +275,5 @@ Immediate priorities:
 - Completed v0.3.35 release-gate core extraction: `tools/ns_release_gate.sh` now delegates to `python -m agentic_project_kit.release_gate_core`, with regression coverage in `tests/test_v035_release_gate_core.py` and adapter checks in `tests/test_repo_ns_entrypoint.py`.
 
 - v0.3.35 is published and verified with Zenodo version DOI `10.5281/zenodo.20316280`.
+
+- v0.3.35 is fully closed: release-gate core extraction, PR closeout idempotency, DOI metadata, and post-release verification are complete. Next recommended line: start the first bounded Tkinter cockpit MVP readiness slice only after a fresh read-only readiness check.
