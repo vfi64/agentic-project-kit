@@ -1,0 +1,104 @@
+RECORD V0.3.31 TYPED WORK ORDER EVIDENCE RUNTIME CHECK MERGE VERIFICATION LOG
+
+
+### MAIN STATE ###
+main
+?? docs/reports/terminal/20260520-v0.3.31-typed-work-order-evidence-runtime-check-merge-verification.log
+1734098 Add typed work order evidence runtime check (#495)
+3bdf52d Record v0.3.31 typed work order evidence contract merge verification log (#494)
+00f19a9 Document typed work order evidence contract (#493)
+4d6b561 Record v0.3.31 evidence guard usage docs merge verification log (#492)
+8093890 Document v0.3.31 evidence guard usage (#491)
+c35a630 Record v0.3.31 evidence guard negative smoke merge verification log (#490)
+3680bd2 Allow expected negative smoke evidence logs (#489)
+5f45175 Record v0.3.31 ns evidence guard shortcut merge verification log (#488)
+
+### VERIFY TARGETED TESTS ###
+..............                                                           [100%]
+14 passed in 0.15s
+
+### VERIFY RUNTIME TERMS ###
+src/agentic_project_kit/typed_work_order_evidence.py:7:from agentic_project_kit.evidence_guard import check_terminal_log
+src/agentic_project_kit/typed_work_order_evidence.py:9:SUPPORTED_EVIDENCE_TYPES = {"terminal_log"}
+src/agentic_project_kit/typed_work_order_evidence.py:20:def validate_typed_work_order_evidence(work_order: dict[str, Any], *, repo_root: Path = Path(".")) -> TypedWorkOrderEvidenceResult:
+src/agentic_project_kit/typed_work_order_evidence.py:35:        findings.append(f"unsupported evidence type: {evidence_type!r}")
+src/agentic_project_kit/typed_work_order_evidence.py:51:        guard_result = check_terminal_log(evidence_path)
+src/agentic_project_kit/typed_work_order_evidence.py:53:            return TypedWorkOrderEvidenceResult(False, "GUARD_FAILED", evidence_type, evidence_path, guard_result.findings)
+src/agentic_project_kit/typed_work_order_evidence.py:55:            return TypedWorkOrderEvidenceResult(False, "UNEXPECTED_FINAL_RESULT", evidence_type, evidence_path, (f"expected {expected_final_result}, got {guard_result.final_result}",))
+tests/test_typed_work_order_evidence_runtime.py:3:from agentic_project_kit.typed_work_order_evidence import validate_typed_work_order_evidence
+tests/test_typed_work_order_evidence_runtime.py:9:            "type": "terminal_log",
+tests/test_typed_work_order_evidence_runtime.py:20:    result = validate_typed_work_order_evidence(_work_order(log.name), repo_root=tmp_path)
+tests/test_typed_work_order_evidence_runtime.py:27:    result = validate_typed_work_order_evidence(_work_order(log.name), repo_root=tmp_path)
+tests/test_typed_work_order_evidence_runtime.py:29:    assert result.status == "GUARD_FAILED"
+tests/test_typed_work_order_evidence_runtime.py:31:def test_typed_work_order_evidence_rejects_unexpected_final_result(tmp_path: Path) -> None:
+tests/test_typed_work_order_evidence_runtime.py:34:    result = validate_typed_work_order_evidence(_work_order(log.name, expected="PASS"), repo_root=tmp_path)
+tests/test_typed_work_order_evidence_runtime.py:36:    assert result.status == "UNEXPECTED_FINAL_RESULT"
+tests/test_typed_work_order_evidence_runtime.py:39:    result = validate_typed_work_order_evidence({"evidence": {"type": "html_report", "path": "x", "guard_required": True, "expected_final_result": "PASS", "on_guard_fail": "FAIL"}})
+tests/test_typed_work_order_evidence_runtime.py:42:    assert "unsupported evidence type" in result.findings[0]
+
+### VERIFY EVIDENCE GUARD SMOKE ###
+PASS: tmp/typed_work_order_evidence_runtime_closeout_smoke.log final_result=PASS
+
+### VERIFY FULL DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+?? docs/reports/terminal/20260520-v0.3.31-typed-work-order-evidence-runtime-check-merge-verification.log
+
+### PYTEST ###
+........................................................................ [ 13%]
+........................................................................ [ 27%]
+........................................................................ [ 40%]
+........................................................................ [ 54%]
+........................................................................ [ 68%]
+........................................................................ [ 81%]
+........................................................................ [ 95%]
+.........................                                                [100%]
+529 passed in 3.75s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for 
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, 
+markdown-docs, python-cli, git-github, release-managed; policy packs: 
+solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.30
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=79
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+?? docs/reports/terminal/20260520-v0.3.31-typed-work-order-evidence-runtime-check-merge-verification.log
+
+### RESULT: PASS ###
+
+### RESULT: PASS ###
