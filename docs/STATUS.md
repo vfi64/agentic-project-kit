@@ -310,3 +310,5 @@ Acceptance criteria before GUI work resumes:
 - `./ns`, `./ns-menu`, Cockpit action metadata, and CLI help do not contradict the layered usability model.
 - Release and post-release flows distinguish expected post-publish states from real failures without requiring manual interpretation.
 - No GUI slice starts until the remaining shell/Python boundary is intentionally classified.
+
+- v0.3.35 core-test-matrix consolidation started by expanding regression coverage for `finalize_guard`, `local_feature_gate`, and `release_doi_safety` without changing runtime behavior.
