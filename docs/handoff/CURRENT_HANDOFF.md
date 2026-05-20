@@ -241,3 +241,8 @@ The architectural rule is: chat describes intent; repo-owned tools execute typed
 - The shell runner `tools/ns_finalize_guard.sh` has not yet been replaced; this was intentional. The next safe slice can either wire the shell runner to the Python core or choose another bounded `ns` route.
 - Evidence: `docs/reports/terminal/v0.3.34_finalize_guard_core_merge_verification.log` records recent main CI, targeted regression, and targeted local feature gate evidence.
 - Next recommended v0.3.34 slice: either integrate `tools/ns_finalize_guard.sh` with the new Python decision core or extract another small read-only/safety-critical wrapper. Avoid GUI work until these command paths are stable.
+
+
+- Completed v0.3.34 finalize-guard core contract hardening: `PASS_SUPERSEDED` is now reachable for a conflicting branch whose marker is already represented on main, and `src/agentic_project_kit/finalize_guard.py` exposes a module CLI/render contract for future shell/GUI/Cockpit integration.
+- Evidence: `docs/reports/terminal/v0.3.34_finalize_guard_core_contract_verification.log` records recent main CI, targeted regression, module CLI smoke, and targeted local feature gate evidence.
+- Next recommended step before release: run a final release-readiness check; if only version metadata remains, prepare release metadata for `0.3.34`.

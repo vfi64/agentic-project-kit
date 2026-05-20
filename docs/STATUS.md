@@ -282,3 +282,7 @@ The architectural rule is: chat describes intent; repo-owned tools execute typed
 
 - v0.3.34 pre-GUI portable-core hardening continued with a pure Python finalize-guard decision core in `src/agentic_project_kit/finalize_guard.py`. This models idempotent completion, noop branches, PR-needed branches, superseded branches, and relevant conflict failures before replacing the shell runner.
 - Regression coverage is in `tests/test_v034_finalize_guard_core.py`. Remote evidence is recorded in `docs/reports/terminal/v0.3.34_finalize_guard_core_merge_verification.log`.
+
+
+- v0.3.34 finalize-guard hardening continued by making the Python decision core contract executable via `python -m agentic_project_kit.finalize_guard` and by making `PASS_SUPERSEDED` reachable for conflicting but already-represented finalization branches.
+- Regression coverage remains in `tests/test_v034_finalize_guard_core.py`. Remote evidence is recorded in `docs/reports/terminal/v0.3.34_finalize_guard_core_contract_verification.log`.
