@@ -154,6 +154,28 @@ Required v0.3.30 scope:
 - Tkinter is explicitly deferred until these contracts pass gates.
 
 
+## Typed Work Orders Pre-GUI Execution Path
+
+Typed Work Orders are now the preferred pre-GUI execution path for standard safe workflow actions. The current implementation covers:
+
+- PR #472: minimal typed Work Order Runner core.
+- PR #473: CLI entrypoint for typed Work Order execution.
+- PR #474: repo-owned read-only typed Work Order example and `./ns typed-run` shortcut.
+- PR #475: typed queue status contract for `no_command`, `exactly_one_command`, and `multiple_commands`.
+- PR #476: `typed-next` queue execution for exactly one queued YAML Work Order.
+- PR #477: `typed-next` already-executed guard with `queue_status=already_executed` and no duplicate execution.
+
+Operational rule: for repeatable safe work, prefer repo-owned typed Work Orders over long chat-generated shell or Python patch blocks. Shell shortcuts such as `./ns typed-run`, `./ns typed-queue-status`, and `./ns typed-next` are adapters only; durable behavior belongs in the tested Python runner and queue contracts.
+
+Current typed queue semantics for GUI readiness:
+
+- `no_command`: block with PENDING and exit code 2.
+- `multiple_commands`: block ambiguous execution with FAIL and exit code 2.
+- `exactly_one_command`: execute through the typed runner.
+- `already_executed`: block duplicate execution with PENDING and exit code 2 while preserving both queued and executed YAML files.
+
+The thin Tkinter cockpit must consume these typed contracts instead of inventing hidden command planning or ad-hoc shell execution.
+
 ## v0.3.31 Pre-GUI Execution Hardening Plan
 
 The GUI expansion is intentionally paused before further Tkinter development. The next slice must reduce the two remaining workflow risks before the GUI becomes the primary interface:

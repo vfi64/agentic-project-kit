@@ -1,0 +1,107 @@
+
+### CHECK BRANCH ###
+CURRENT_BRANCH=docs/typed-work-orders-pre-gui-path-20260520
+
+### STATUS BEFORE REPAIR ###
+?? tests/test_typed_work_orders_pre_gui_docs.py
+
+### RECORD FAILED DOC PATCH LOG IF PRESENT ###
+RECORDED_FAILED_LOG=docs/reports/terminal/20260520-document-typed-work-orders-pre-gui-path-failed-empty-heading-check.log
+
+### REPAIR DOC INSERTION ###
+
+### ENSURE DOC TEST EXISTS ###
+
+### VERIFY DOC TERMS ###
+157:## Typed Work Orders Pre-GUI Execution Path
+131:## Typed Work Orders Pre-GUI Execution Path
+165:- PR #476: `typed-next` queue execution for exactly one queued YAML Work Order.
+166:- PR #477: `typed-next` already-executed guard with `queue_status=already_executed` and no duplicate execution.
+168:Operational rule: for repeatable safe work, prefer repo-owned typed Work Orders over long chat-generated shell or Python patch blocks. Shell shortcuts such as `./ns typed-run`, `./ns typed-queue-status`, and `./ns typed-next` are adapters only; durable behavior belongs in the tested Python runner and queue contracts.
+139:- `./ns typed-next --json` executes exactly one queued Work Order from `.agentic/typed_work_orders/inbox`.
+141:Queue contract now covers `no_command`, `exactly_one_command`, `multiple_commands`, and `already_executed`. `typed-next` must refuse duplicate execution when a matching file already exists in `.agentic/typed_work_orders/executed`.
+166:- PR #477: `typed-next` already-executed guard with `queue_status=already_executed` and no duplicate execution.
+175:- `already_executed`: block duplicate execution with PENDING and exit code 2 while preserving both queued and executed YAML files.
+141:Queue contract now covers `no_command`, `exactly_one_command`, `multiple_commands`, and `already_executed`. `typed-next` must refuse duplicate execution when a matching file already exists in `.agentic/typed_work_orders/executed`.
+
+### TARGETED TESTS ###
+.                                                                        [100%]
+1 passed in 0.01s
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+docs/typed-work-orders-pre-gui-path-20260520
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? docs/reports/terminal/20260520-document-typed-work-orders-pre-gui-path-failed-empty-heading-check.log
+?? tests/test_typed_work_orders_pre_gui_docs.py
+
+### PYTEST ###
+........................................................................ [ 14%]
+........................................................................ [ 28%]
+........................................................................ [ 42%]
+........................................................................ [ 56%]
+........................................................................ [ 70%]
+........................................................................ [ 84%]
+........................................................................ [ 98%]
+........                                                                 [100%]
+512 passed in 3.69s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.30
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=80
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+docs/typed-work-orders-pre-gui-path-20260520
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? docs/reports/terminal/20260520-document-typed-work-orders-pre-gui-path-failed-empty-heading-check.log
+?? tests/test_typed_work_orders_pre_gui_docs.py
+
+### RESULT: PASS ###
+
+### FINAL DIFF SUMMARY ###
+ docs/STATUS.md                  | 22 ++++++++++++++++++++++
+ docs/handoff/CURRENT_HANDOFF.md | 14 ++++++++++++++
+ 2 files changed, 36 insertions(+)
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? docs/reports/terminal/20260520-document-typed-work-orders-pre-gui-path-failed-empty-heading-check.log
+?? tests/test_typed_work_orders_pre_gui_docs.py
+
+### FINALIZE REMOTE EVIDENCE ###

@@ -128,6 +128,20 @@ Required v0.3.30 scope:
 - The thin Tkinter cockpit remains explicitly deferred until these contracts pass gates.
 
 
+## Typed Work Orders Pre-GUI Execution Path
+
+The active pre-GUI path is now typed Work Orders, not long chat-generated shell patch blocks. Use repo-owned YAML Work Orders and the tested Python runner wherever possible.
+
+Available path:
+
+- `./ns typed-run <path>` executes a specific typed Work Order.
+- `./ns typed-queue-status --json` reports queue state.
+- `./ns typed-next --json` executes exactly one queued Work Order from `.agentic/typed_work_orders/inbox`.
+
+Queue contract now covers `no_command`, `exactly_one_command`, `multiple_commands`, and `already_executed`. `typed-next` must refuse duplicate execution when a matching file already exists in `.agentic/typed_work_orders/executed`.
+
+Next chat rule: before creating another long terminal patch block, first consider whether the work can be represented as a typed Work Order or a small repo-owned runner extension. GUI work remains deferred until the typed path is documented, gated, and released.
+
 ## v0.3.31 Pre-GUI Execution Hardening Plan
 
 The GUI expansion is intentionally paused before further Tkinter development. The next slice must reduce the two remaining workflow risks before the GUI becomes the primary interface:
