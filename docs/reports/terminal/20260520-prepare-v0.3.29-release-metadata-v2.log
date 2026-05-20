@@ -1,0 +1,196 @@
+
+### CHECKOUT RELEASE BRANCH ###
+Already on 'release/prepare-v0.3.29'
+
+### PRECHECK STATUS ###
+
+### WRITE SIMPLE RELEASE METADATA PATCH ###
+
+### VERSION PATCH DIFF ###
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 72a8164..656d21c 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -1,3 +1,9 @@
++## v0.3.29 - 2026-05-20
++
++- Hardened communication artifact GC before GUI readiness: symlink rejection, protected evidence coverage, TTL-based local tmp-log cleanup, and GC closeout documentation.
++- Added a safe file replacement helper to prevent malformed generated Python replacements from corrupting source files.
++- Recorded quote-guard hardening for nested shell/Python quote-layer failures.
++
+ ## v0.3.28
+ 
+ - Prepare release metadata for v0.3.28.
+diff --git a/CITATION.cff b/CITATION.cff
+index 6928f33..c61c680 100644
+--- a/CITATION.cff
++++ b/CITATION.cff
+@@ -41,6 +41,6 @@ license: MIT
+ # Verified v0.3.18 version DOI: 10.5281/zenodo.20245754
+ # Verified v0.3.22 version DOI: 10.5281/zenodo.20261634
+ # Verified v0.3.25 version DOI: 10.5281/zenodo.20273989
+-version: 0.3.28
++version: 0.3.29
+ date-released: "2026-05-17"
+ # Verified v0.3.23 version DOI: 10.5281/zenodo.20261956
+diff --git a/README.md b/README.md
+index ee8d26b..82ef8bf 100644
+--- a/README.md
++++ b/README.md
+@@ -565,4 +565,4 @@ Version `0.3.24` is the current release line prepared by `./ns release-prep 0.3.
+ Version `0.3.25` is the current release line prepared by `./ns release-prep 0.3.25`.
+ Version `0.3.26` is the current release line prepared by `./ns release-prep 0.3.26`.
+ Version `0.3.27` is the current release line prepared by `./ns release-prep 0.3.27`.
+-Version `0.3.28` is the current verified release; Zenodo version DOI `10.5281/zenodo.20286394`.
++Version `0.3.29` is the current verified release; Zenodo version DOI `10.5281/zenodo.20286394`.
+diff --git a/docs/STATUS.md b/docs/STATUS.md
+index c742fc6..01673a7 100644
+--- a/docs/STATUS.md
++++ b/docs/STATUS.md
+@@ -1,4 +1,4 @@
+-Current version: 0.3.28
++Current version: 0.3.29
+ 
+ # Project Status
+ 
+diff --git a/docs/handoff/CURRENT_HANDOFF.md b/docs/handoff/CURRENT_HANDOFF.md
+index 55d4d78..d63b0b6 100644
+--- a/docs/handoff/CURRENT_HANDOFF.md
++++ b/docs/handoff/CURRENT_HANDOFF.md
+@@ -1,4 +1,4 @@
+-Current version: 0.3.28
++Current version: 0.3.29
+ 
+ # Current Handoff
+ 
+diff --git a/pyproject.toml b/pyproject.toml
+index 6dac6ff..12eaccb 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
+ 
+ [project]
+ name = "agentic-project-kit"
+-version = "0.3.28"
++version = "0.3.29"
+ description = "Generate GitHub-ready project templates for human-AI software development workflows."
+ readme = "README.md"
+ requires-python = ">=3.10"
+diff --git a/src/agentic_project_kit/__init__.py b/src/agentic_project_kit/__init__.py
+index 818ad96..d91d094 100644
+--- a/src/agentic_project_kit/__init__.py
++++ b/src/agentic_project_kit/__init__.py
+@@ -1 +1 @@
+-__version__ = "0.3.28"
++__version__ = "0.3.29"
+
+### ACTIVATE VENV ###
+Python 3.14.3
+
+### RELEASE CHECK V0.3.29 AFTER PATCH ###
+Release state check for target v0.3.29
+
+[PASS] semantic version: 0.3.29 is valid
+[PASS] pyproject version: found text: version = "0.3.29"
+[PASS] package __version__: found text: __version__ = "0.3.29"
+[PASS] CHANGELOG version: found text: v0.3.29
+[PASS] README version: found text: Version `0.3.29`
+[PASS] CITATION version: found text: version: 0.3.29
+[PASS] STATUS version: found text: Current version: 0.3.29
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.29
+[PASS] local tag unused: tag is unused: v0.3.29
+[PASS] remote tag unused: remote tag is unused: v0.3.29
+[PASS] GitHub release unused: GitHub release is absent: v0.3.29
+
+Overall: PASS
+
+
+### PACKAGE BUILD CHECK ###
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for sdist...
+* Building sdist...
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for wheel...
+* Building wheel...
+Successfully built agentic_project_kit-0.3.29.tar.gz and agentic_project_kit-0.3.29-py3-none-any.whl
+Checking dist/agentic_project_kit-0.3.29-py3-none-any.whl: [32mPASSED[0m
+Checking dist/agentic_project_kit-0.3.29.tar.gz: [32mPASSED[0m
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+release/prepare-v0.3.29
+ M CHANGELOG.md
+ M CITATION.cff
+ M README.md
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M pyproject.toml
+ M src/agentic_project_kit/__init__.py
+
+### PYTEST ###
+........................................................................ [ 15%]
+........................................................................ [ 31%]
+........................................................................ [ 46%]
+........................................................................ [ 62%]
+........................................................................ [ 77%]
+........................................................................ [ 93%]
+..............................                                           [100%]
+462 passed in 2.82s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.29
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=80
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+release/prepare-v0.3.29
+ M CHANGELOG.md
+ M CITATION.cff
+ M README.md
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M pyproject.toml
+ M src/agentic_project_kit/__init__.py
+
+### RESULT: PASS ###
+
+### FINALIZE REMOTE EVIDENCE ###

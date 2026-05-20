@@ -1,3 +1,9 @@
+## v0.3.29 - 2026-05-20
+
+- Hardened communication artifact GC before GUI readiness: symlink rejection, protected evidence coverage, TTL-based local tmp-log cleanup, and GC closeout documentation.
+- Added a safe file replacement helper to prevent malformed generated Python replacements from corrupting source files.
+- Recorded quote-guard hardening for nested shell/Python quote-layer failures.
+
 ## v0.3.28
 
 - Prepare release metadata for v0.3.28.

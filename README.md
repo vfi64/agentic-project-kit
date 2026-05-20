@@ -565,4 +565,4 @@ Version `0.3.24` is the current release line prepared by `./ns release-prep 0.3.
 Version `0.3.25` is the current release line prepared by `./ns release-prep 0.3.25`.
 Version `0.3.26` is the current release line prepared by `./ns release-prep 0.3.26`.
 Version `0.3.27` is the current release line prepared by `./ns release-prep 0.3.27`.
-Version `0.3.28` is the current verified release; Zenodo version DOI `10.5281/zenodo.20286394`.
+Version `0.3.29` is the current verified release; Zenodo version DOI `10.5281/zenodo.20286394`.
