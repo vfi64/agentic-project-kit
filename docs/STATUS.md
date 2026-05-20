@@ -290,3 +290,23 @@ The architectural rule is: chat describes intent; repo-owned tools execute typed
 - v0.3.34 is published and verified with Zenodo version DOI `10.5281/zenodo.20315568`.
 
 - v0.3.34 release cycle is closed: GitHub release, release assets, Zenodo concept DOI, Zenodo version DOI, DOI metadata, and post-release verification are complete.
+
+
+## v0.3.35 Pre-GUI Core and CLI Consolidation Plan
+
+v0.3.35 is planned as a consolidation line before starting the Tkinter cockpit MVP. The release should not add the GUI itself. Its purpose is to remove remaining pre-GUI weaknesses that would otherwise become visible or harder to fix once a GUI calls into the project workflows.
+
+Required v0.3.35 scope:
+
+- Expand the unit-test matrix for the new Python core modules, especially `finalize_guard`, `local_feature_gate`, and `release_doi_safety`.
+- Continue reducing shell scripts to thin delegators around tested Python cores, prioritizing release, DOI, evidence, and dirty-state paths before comfort wrappers.
+- Harden the release and DOI phase as explicit contracts: `release-check` is the pre-publish gate, while `post-release-check` is the post-publish DOI-aware gate.
+- Make evidence and dirty-log checks visible as stable action contracts instead of ad-hoc terminal interpretation.
+- Make the documented layered CLI usability model visible in practical entry points: Daily, Guided, Maintainer, and Debug.
+
+Acceptance criteria before GUI work resumes:
+
+- The high-risk pre-GUI command paths have Python core tests or explicit documented deferrals.
+- `./ns`, `./ns-menu`, Cockpit action metadata, and CLI help do not contradict the layered usability model.
+- Release and post-release flows distinguish expected post-publish states from real failures without requiring manual interpretation.
+- No GUI slice starts until the remaining shell/Python boundary is intentionally classified.
