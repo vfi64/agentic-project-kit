@@ -46,6 +46,19 @@ Completed v0.3.32 capabilities:
 
 Release readiness: v0.3.32 is ready for release metadata preparation after the final local gate and release preflight pass.
 
+## v0.3.33 README DOI Archive Closeout
+
+v0.3.33 is the README release-history extraction line. It does not ship the Tkinter GUI.
+
+Completed v0.3.33 capabilities:
+
+- Verified release DOI history was extracted from `README.md` into `docs/releases/VERIFIED_RELEASES.md`.
+- `README.md` remains concise while still linking to the archived release DOI record.
+- Regression coverage keeps the README from regrowing the long DOI archive.
+- Documentation coverage remains green after the archive split.
+
+Release readiness: v0.3.33 is ready for release metadata preparation after the final local gate and release preflight pass.
+
 ## Active Workflow Rules
 
 - Use repo state as source of truth; do not reconstruct current state from chat memory.

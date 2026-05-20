@@ -38,6 +38,19 @@ Completed v0.3.32 capabilities:
 
 Next safe step: prepare and release v0.3.32. Tkinter remains deferred until after v0.3.32 release and post-release verification are complete.
 
+## v0.3.33 README DOI Archive Closeout
+
+Current safe state: v0.3.33 README DOI archive extraction is complete enough for release preparation.
+
+Completed v0.3.33 capabilities:
+
+- The long verified release DOI list now lives in `docs/releases/VERIFIED_RELEASES.md`.
+- `README.md` stays below the documentation word-limit gate.
+- `tests/test_readme_release_history_extraction.py` guards the split.
+- PR #514 merged the archive extraction and passed the full local gate.
+
+Next safe step: prepare and release v0.3.33. Tkinter remains deferred until after this release is verified.
+
 ## Active Rules For The Next Chat Or Slice
 
 - Start from repo state, not memory.
