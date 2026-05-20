@@ -1,0 +1,96 @@
+
+### CHECKOUT RELEASE BRANCH ###
+From github.com:vfi64/agentic-project-kit
+ * branch            release/prepare-v0.3.29 -> FETCH_HEAD
+Already on 'release/prepare-v0.3.29'
+Your branch is up to date with 'origin/release/prepare-v0.3.29'.
+From github.com:vfi64/agentic-project-kit
+ * branch            release/prepare-v0.3.29 -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK STATUS ###
+
+### PATCH README RELEASE WORDING ###
+
+### RELEASE CHECK V0.3.29 ###
+Release state check for target v0.3.29
+
+[PASS] semantic version: 0.3.29 is valid
+[PASS] pyproject version: found text: version = "0.3.29"
+[PASS] package __version__: found text: __version__ = "0.3.29"
+[PASS] CHANGELOG version: found text: v0.3.29
+[PASS] README version: found text: Version `0.3.29`
+[PASS] CITATION version: found text: version: 0.3.29
+[PASS] STATUS version: found text: Current version: 0.3.29
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.29
+[PASS] local tag unused: tag is unused: v0.3.29
+[PASS] remote tag unused: remote tag is unused: v0.3.29
+[PASS] GitHub release unused: GitHub release is absent: v0.3.29
+
+Overall: PASS
+
+
+### VERIFY NO FALSE VERIFIED DOI CLAIM ###
+PASS_NO_FALSE_VERIFIED_RELEASE_CLAIM
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+release/prepare-v0.3.29
+ M README.md
+
+### PYTEST ###
+........................................................................ [ 15%]
+........................................................................ [ 31%]
+........................................................................ [ 46%]
+........................................................................ [ 62%]
+........................................................................ [ 77%]
+........................................................................ [ 93%]
+..............................                                           [100%]
+462 passed in 2.73s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.29
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=1
+local_branch_count=80
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+release/prepare-v0.3.29
+ M README.md
+
+### RESULT: PASS ###
+
+### FINALIZE REMOTE EVIDENCE ###
