@@ -273,3 +273,5 @@ Immediate priorities:
 - v0.3.35 release-gate core extraction prep evidence is now repo-backed in `docs/reports/terminal/v0.3.35_release_gate_core_extraction_prep.log`; do not proceed to v0.3.35 release until the release-gate/build-check path is either extracted into a tested Python core or explicitly deferred with evidence.
 
 - Completed v0.3.35 release-gate core extraction: `tools/ns_release_gate.sh` now delegates to `python -m agentic_project_kit.release_gate_core`, with regression coverage in `tests/test_v035_release_gate_core.py` and adapter checks in `tests/test_repo_ns_entrypoint.py`.
+
+- v0.3.35 is published and verified with Zenodo version DOI `10.5281/zenodo.20316280`.

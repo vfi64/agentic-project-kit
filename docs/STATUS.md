@@ -319,3 +319,5 @@ Acceptance criteria before GUI work resumes:
 - v0.3.35 release-gate core extraction prep evidence is now repo-backed in `docs/reports/terminal/v0.3.35_release_gate_core_extraction_prep.log`; this replaces the earlier chat-only diagnostic and records the grep hygiene rule: prefer `git grep` or exclude `__pycache__` from diagnostics.
 
 - v0.3.35 consolidation continued by extracting `tools/ns_release_gate.sh` behavior into the tested Python core `src/agentic_project_kit/release_gate_core.py`. The shell entry point is now a thin adapter. Release-gate behavior remains pre-publish only: no tag, no release, no DOI mutation, and no GUI work.
+
+- v0.3.35 is published and verified with Zenodo version DOI `10.5281/zenodo.20316280`.
