@@ -321,3 +321,5 @@ Acceptance criteria before GUI work resumes:
 - v0.3.35 consolidation continued by extracting `tools/ns_release_gate.sh` behavior into the tested Python core `src/agentic_project_kit/release_gate_core.py`. The shell entry point is now a thin adapter. Release-gate behavior remains pre-publish only: no tag, no release, no DOI mutation, and no GUI work.
 
 - v0.3.35 is published and verified with Zenodo version DOI `10.5281/zenodo.20316280`.
+
+- v0.3.35 release-gate/core consolidation is released and DOI metadata is recorded; v0.3.35 is closed for pre-GUI core consolidation.
