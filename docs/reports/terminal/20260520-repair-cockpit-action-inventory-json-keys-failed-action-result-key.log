@@ -1,0 +1,197 @@
+
+### CHECK BRANCH ###
+CURRENT_BRANCH=feature/cockpit-registry-only-contract-20260520
+
+### STATUS BEFORE REPAIR ###
+ M src/agentic_project_kit/cockpit.py
+?? docs/reports/terminal/20260520-cockpit-registry-only-contract-failed-json-keys.log
+?? docs/reports/terminal/20260520-repair-cockpit-registry-json-keys-failed-grep.log
+?? tests/test_cockpit_registry_only_contract.py
+
+### RECORD FAILED FINALIZE LOG IF PRESENT ###
+RECORDED_FAILED_FINALIZE_LOG=docs/reports/terminal/20260520-finalize-cockpit-registry-only-contract-failed-inventory-keys.log
+
+### PATCH ONLY ACTION INVENTORY JSON HELPER ###
+
+### VERIFY INVENTORY AND REGISTRY HELPERS ###
+198:        "schema_version": 1,
+199:        "actions": [
+115:        'schema_version': 1,
+116:        'registry_only': True,
+
+### TARGETED TESTS ###
+......................                                                   [100%]
+22 passed in 0.19s
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+feature/cockpit-registry-only-contract-20260520
+ M src/agentic_project_kit/cockpit.py
+?? docs/reports/terminal/20260520-cockpit-registry-only-contract-failed-json-keys.log
+?? docs/reports/terminal/20260520-finalize-cockpit-registry-only-contract-failed-inventory-keys.log
+?? docs/reports/terminal/20260520-repair-cockpit-registry-json-keys-failed-grep.log
+?? tests/test_cockpit_registry_only_contract.py
+
+### PYTEST ###
+........................................................................ [ 15%]
+........................FF.............................................. [ 30%]
+.............................................F.......................... [ 45%]
+........................................................................ [ 60%]
+........................................................................ [ 76%]
+........................................................................ [ 91%]
+.........................................                                [100%]
+=================================== FAILURES ===================================
+_________ test_cockpit_run_json_outputs_machine_readable_action_result _________
+
+    def test_cockpit_run_json_outputs_machine_readable_action_result() -> None:
+        result = runner.invoke(app, ["cockpit", "run", "git.status", "--json"])
+>       assert result.exit_code == 0, result.output
+E       AssertionError: 
+E       assert 1 == 0
+E        +  where 1 = <Result NameError("name 'schema_version' is not defined")>.exit_code
+
+tests/test_cockpit_run_json_action_result.py:12: AssertionError
+____ test_cockpit_run_json_preserves_blocked_bounded_contract_and_exit_code ____
+
+    def test_cockpit_run_json_preserves_blocked_bounded_contract_and_exit_code() -> None:
+        result = runner.invoke(app, ["cockpit", "run", "workflow.go", "--json"])
+>       assert result.exit_code == 2
+E       assert 1 == 2
+E        +  where 1 = <Result NameError("name 'schema_version' is not defined")>.exit_code
+
+tests/test_cockpit_run_json_action_result.py:28: AssertionError
+__________________ test_read_only_action_result_contract_pass __________________
+
+tmp_path = PosixPath('/private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pytest-of-hof/pytest-2029/test_read_only_action_result_c0')
+
+    def test_read_only_action_result_contract_pass(tmp_path: Path) -> None:
+        result = run_cockpit_action("git.status", tmp_path, executor=lambda command, root: CompletedOk())
+>       data = action_result_as_json_data(result)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_gui_readiness_action_result_core_contract.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+result = CockpitActionResult(action_id='git.status', allowed=True, executed=True, returncode=0, stdout='ok\\n', stderr='', mess...='read_only', terminal_log=None, command_report=None, dirty_state='unknown', next_allowed_actions=('cockpit.actions',))
+
+    def action_result_as_json_data(result: CockpitActionResult) -> dict[str, object]:
+        return {
+>           schema_version: 1,
+            ^^^^^^^^^^^^^^
+            "action_id": result.action_id,
+            "result_status": result.result_status,
+            "allowed": result.allowed,
+            "executed": result.executed,
+            "returncode": result.returncode,
+            "safety": result.safety,
+            "dirty_state": result.dirty_state,
+            "terminal_log": result.terminal_log,
+            "command_report": result.command_report,
+            "next_allowed_actions": list(result.next_allowed_actions),
+            "message": result.message,
+            "stdout": result.stdout,
+            "stderr": result.stderr,
+        }
+E       NameError: name 'schema_version' is not defined
+
+src/agentic_project_kit/cockpit.py:218: NameError
+=========================== short test summary info ============================
+FAILED tests/test_cockpit_run_json_action_result.py::test_cockpit_run_json_outputs_machine_readable_action_result
+FAILED tests/test_cockpit_run_json_action_result.py::test_cockpit_run_json_preserves_blocked_bounded_contract_and_exit_code
+FAILED tests/test_gui_readiness_action_result_core_contract.py::test_read_only_action_result_contract_pass
+3 failed, 470 passed in 2.84s
+
+### RUFF ###
+F821 Undefined name `schema_version`
+   --> src/agentic_project_kit/cockpit.py:218:9
+    |
+216 | def action_result_as_json_data(result: CockpitActionResult) -> dict[str, object]:
+217 |     return {
+218 |         schema_version: 1,
+    |         ^^^^^^^^^^^^^^
+219 |         "action_id": result.action_id,
+220 |         "result_status": result.result_status,
+    |
+
+Found 1 error.
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.29
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=80
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+feature/cockpit-registry-only-contract-20260520
+ M src/agentic_project_kit/cockpit.py
+?? docs/reports/terminal/20260520-cockpit-registry-only-contract-failed-json-keys.log
+?? docs/reports/terminal/20260520-finalize-cockpit-registry-only-contract-failed-inventory-keys.log
+?? docs/reports/terminal/20260520-repair-cockpit-registry-json-keys-failed-grep.log
+?? tests/test_cockpit_registry_only_contract.py
+
+### RESULT: FAIL ###
+
+================================================================
+SUMMARY
+WORK RESULT: FAIL
+EVIDENCE RESULT: CHAT_ONLY_OR_LOCAL_TMP
+OVERALL RESULT: FAIL
+REMOTE_EVIDENCE: FAIL
+terminal_log=/tmp/agentic-project-kit-20260520-repair-cockpit-action-inventory-json-keys.log
+command_report=NONE
+NEXT_CHAT_REPLY: paste-output
+### RESULT: FAIL ###
+================================================================
+]7;file://MBP.fritz.box/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+REPAIR ACTION RESULT JSON KEY AFTER REGISTRY PATCH AND FINALIZE PR
+
+
+### CHECK BRANCH ###
+CURRENT_BRANCH=feature/cockpit-registry-only-contract-20260520
+
+### STATUS BEFORE REPAIR ###
+ M src/agentic_project_kit/cockpit.py
+?? docs/reports/terminal/20260520-cockpit-registry-only-contract-failed-json-keys.log
+?? docs/reports/terminal/20260520-finalize-cockpit-registry-only-contract-failed-inventory-keys.log
+?? docs/reports/terminal/20260520-repair-cockpit-registry-json-keys-failed-grep.log
+?? tests/test_cockpit_registry_only_contract.py
+
+### RECORD FAILED REPAIR LOG IF PRESENT ###
