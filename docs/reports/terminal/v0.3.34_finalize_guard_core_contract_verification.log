@@ -1,0 +1,92 @@
+V0.3.34 FINALIZE GUARD CORE CONTRACT VERIFICATION
+
+Date: 2026-05-20
+Repository: agentic-project-kit
+Purpose: record remote evidence for the finalize guard core contract hardening slice.
+
+Main state:
+docs/record-finalize-guard-core-contract-verification
+?? docs/reports/terminal/v0.3.34_finalize_guard_core_contract_verification.log
+994b021 Harden finalize guard core contract (#532)
+29c4a53 Update status after finalize guard core (#531)
+546abd7 Record finalize guard core verification log (#530)
+0285407 Add finalize guard decision core (#529)
+e9e125c Update status after local feature gate core extraction (#528)
+418d473 Record local feature gate core verification log (#527)
+ace6f04 Fix ns entrypoint test after local gate core extraction (#526)
+51c5295 Extract local feature gate core (#525)
+abfea73 Update status after ns dev gate routing fix (#524)
+edc4161 Record ns dev gate routing merge verification log (#523)
+f5b1491 Fix ns dev local feature gate routing (#522)
+265bd1a Add typed work order unit test baseline (#521)
+3d12791 Record v0.3.34 portable core hardening plan merge verification log (#520)
+0538354 Plan v0.3.34 portable core hardening before GUI (#519)
+
+Relevant artifacts:
+- src/agentic_project_kit/finalize_guard.py
+- tests/test_v034_finalize_guard_core.py
+
+Recent main CI runs:
+completed	success	Harden finalize guard core contract (#532)	CI	main	push	26184908491	25s	2026-05-20T19:25:57Z
+completed	success	Update status after finalize guard core (#531)	CI	main	push	26184355694	23s	2026-05-20T19:15:00Z
+completed	success	Record finalize guard core verification log (#530)	CI	main	push	26184271402	27s	2026-05-20T19:13:16Z
+completed	success	Add finalize guard decision core (#529)	CI	main	push	26184151496	27s	2026-05-20T19:10:47Z
+completed	success	Update status after local feature gate core extraction (#528)	CI	main	push	26184006146	31s	2026-05-20T19:07:51Z
+completed	success	Record local feature gate core verification log (#527)	CI	main	push	26183928643	29s	2026-05-20T19:06:17Z
+completed	success	Fix ns entrypoint test after local gate core extraction (#526)	CI	main	push	26183759281	29s	2026-05-20T19:02:58Z
+completed	failure	Extract local feature gate core (#525)	CI	main	push	26183567775	25s	2026-05-20T18:59:14Z
+
+Targeted regression:
+............                                                             [100%]
+12 passed in 0.01s
+
+Module CLI smoke for PASS_SUPERSEDED:
+STATUS: PASS_SUPERSEDED
+Finalization branch conflicts but requested marker is already represented on main.
+### RESULT: PASS ###
+
+Targeted local feature gate:
+docs/record-finalize-guard-core-contract-verification
+?? docs/reports/terminal/v0.3.34_finalize_guard_core_contract_verification.log
+.................                                                        [100%]
+17 passed in 0.02s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for 
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, 
+markdown-docs, python-cli, git-github, release-managed; policy packs: 
+solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.33
+
+Overall: PASS
+docs/record-finalize-guard-core-contract-verification
+?? docs/reports/terminal/v0.3.34_finalize_guard_core_contract_verification.log
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+
+### PYTEST ###
+
+### RUFF ###
+
+### CHECK DOCS ###
+
+### DOCTOR ###
+
+### FINAL STATUS ###
+Local feature gate passed.
+
+RESULT: PASS
