@@ -13,10 +13,10 @@ Refresh the planning state after v0.3.27 and harden documentation freshness guar
 
 ## Current Repository State
 
-Current released version: 0.3.28
-Current release tag: v0.3.28
+Current released version: 0.3.29
+Current release tag: v0.3.29
 Verified Zenodo version DOI: `10.5281/zenodo.20303218`
-Post-release evidence: `docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log`
+Post-release evidence: `docs/reports/terminal/20260520-v0.3.29-post-release-discovery-v2.log`
 Current branch after v0.3.28: main
 
 v0.3.28 is the current verified no-copy/evidence baseline. It includes patch-artifact preflight, mandatory final-summary validation, and post-release DOI evidence.

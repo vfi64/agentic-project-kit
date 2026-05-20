@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-record-v0.3.29-doi-metadata.log
+docs/reports/terminal/20260520-repair-pr461-doc-coverage-version.log

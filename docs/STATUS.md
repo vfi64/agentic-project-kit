@@ -19,13 +19,13 @@ The immediate goal after v0.3.27 is to refresh the planning state and harden doc
 
 ## Current State
 
-Current released version: 0.3.28
-Current release tag: v0.3.28
+Current released version: 0.3.29
+Current release tag: v0.3.29
 Zenodo concept DOI: `10.5281/zenodo.20101359`
 Verified Zenodo version DOI: `10.5281/zenodo.20303218`
-Post-release evidence: `docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log`
+Post-release evidence: `docs/reports/terminal/20260520-v0.3.29-post-release-discovery-v2.log`
 
-v0.3.28 is the current released and verified baseline. It includes the patch-artifact preflight MVP and the hardened planning-state/no-copy evidence workflow.
+v0.3.29 is the current released and verified baseline. It includes the patch-artifact preflight MVP and the hardened planning-state/no-copy evidence workflow.
 
 The active bridge toward the local GUI is no-copy/evidence governance and communication artifact GC hardening, not hidden automation. Normal PASS/FAIL handoff should rely on committed and pushed reports. Manual paste-output is reserved for hard failures such as authentication problems, network failures, terminal crashes, missing remote evidence, or workflow-level ambiguity.
 
