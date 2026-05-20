@@ -72,6 +72,12 @@ Planning-state freshness is now part of the governance contract: current-state d
 - The contract is documented in `docs/workflow/PRE_GUI_EXECUTION_HARDENING.md`.
 - The first hardened invariants are: no false PASS after failed gate, clean base before log creation, no nested quote patch generator, evidence finalization, and a strict GUI boundary.
 
+## v0.3.31 Evidence Guard Usage
+
+- `agentic-kit evidence guard LOGFILE` validates terminal evidence logs for contradictory final state.
+- `./ns evidence-guard LOGFILE` is the preferred local shortcut before using terminal evidence in closeout work.
+- The guard rejects genuine final-PASS-after-failure logs while allowing explicitly expected negative-smoke checks.
+
 ## Live Status Commands
 
 Run these from the repository root with project-local tooling:
