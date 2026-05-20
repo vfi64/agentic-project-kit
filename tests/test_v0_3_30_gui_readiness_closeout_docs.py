@@ -1,5 +1,6 @@
 from pathlib import Path
 
+
 def test_v0_3_30_gui_readiness_closeout_is_documented() -> None:
     status = Path("docs/STATUS.md").read_text(encoding="utf-8")
     handoff = Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
@@ -13,4 +14,5 @@ def test_v0_3_30_gui_readiness_closeout_is_documented() -> None:
     assert "PR #466: Queue-State contract" in combined
     assert "PR #467: Evidence-State contract" in combined
     assert "Tkinter remains explicitly deferred" in status
-    assert "prepare release metadata" in handoff
+    assert "v0.3.31 Pre-GUI Execution Hardening Plan" in handoff
+    assert "prepare release metadata" not in handoff
