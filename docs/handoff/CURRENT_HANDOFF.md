@@ -13,6 +13,23 @@ Close out v0.3.30 GUI readiness hardening. This slice is not a Tkinter implement
 
 ## Current Repository State
 
+## v0.3.34 Portable Core Hardening Plan
+
+Next safe planning state: v0.3.34 should harden the portable Python core before the first real Tkinter implementation slice.
+
+Do not start the Tkinter cockpit yet. First remove the remaining structural risk: large shell-driven release, DOI, evidence, PR-closeout, and typed-work-order workflows must be converted into tested Python-callable core actions where practical.
+
+Required next slices:
+
+1. Typed work order unit-test matrix.
+2. Release and DOI core action extraction.
+3. Concept-DOI versus version-DOI WAITING guard.
+4. Evidence and PR-closeout action result normalization.
+5. `./ns` remains a thin delegator; no new large shell control blocks for standard workflows.
+
+The Tkinter cockpit may begin only after this baseline is released and post-release verified.
+
+
 Current released version: 0.3.32
 Previous release compatibility literal for planning-state freshness coverage: Current released version: 0.3.29
 Current release tag: v0.3.32
