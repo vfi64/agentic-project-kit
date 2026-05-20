@@ -21,6 +21,8 @@ Current branch after v0.3.28: main
 
 v0.3.28 is the current verified no-copy/evidence baseline. It includes patch-artifact preflight, mandatory final-summary validation, and post-release DOI evidence.
 
+Communication artifact GC hardening is now part of the pre-GUI baseline: symlinked transient artifacts are rejected, repo evidence and command inbox files are protected, and local /tmp/agentic-project-kit-*.log cleanup is TTL-based and dry-run-first via ./ns artifact-gc --tmp-logs.
+
 ## Active Rules For The Next Chat Or Slice
 
 - Start from repo state, not memory.
