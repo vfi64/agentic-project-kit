@@ -16,6 +16,7 @@ from agentic_project_kit.typed_work_order_runner import (
 STATUS_NO_COMMAND = "no_command"
 STATUS_EXACTLY_ONE_COMMAND = "exactly_one_command"
 STATUS_MULTIPLE_COMMANDS = "multiple_commands"
+STATUS_ALREADY_EXECUTED = "already_executed"
 
 DEFAULT_TYPED_WORK_ORDER_INBOX = Path(".agentic/typed_work_orders/inbox")
 DEFAULT_TYPED_WORK_ORDER_EXECUTED = Path(".agentic/typed_work_orders/executed")
@@ -100,14 +101,14 @@ def run_typed_next(
     if status.status == STATUS_MULTIPLE_COMMANDS:
         return TypedNextResult(status.status, RESULT_FAIL, 2, None, None, None, "Multiple typed work orders queued; refusing ambiguous execution.")
     source = status.pending_paths[0]
+    target_dir = root / executed_dir
+    target = target_dir / source.name
+    if target.exists():
+        return TypedNextResult(STATUS_ALREADY_EXECUTED, RESULT_PENDING, 2, str(source.relative_to(root)), str(target.relative_to(root)), None, "Typed work order was already executed; refusing duplicate execution.")
     order = load_typed_work_order(source)
     result = run_typed_work_order(order, root)
     if result.result_status == RESULT_PASS:
-        target_dir = root / executed_dir
         target_dir.mkdir(parents=True, exist_ok=True)
-        target = target_dir / source.name
-        if target.exists():
-            target = target_dir / f"{source.stem}.again{source.suffix}"
         shutil.move(str(source), str(target))
         return TypedNextResult(status.status, result.result_status, result.returncode, str(source.relative_to(root)), str(target.relative_to(root)), result.terminal_log, "Typed work order executed and moved to executed queue.", result)
     return TypedNextResult(status.status, result.result_status, result.returncode, str(source.relative_to(root)), None, result.terminal_log, result.message, result)
