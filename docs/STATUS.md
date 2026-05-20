@@ -288,3 +288,5 @@ The architectural rule is: chat describes intent; repo-owned tools execute typed
 - Regression coverage remains in `tests/test_v034_finalize_guard_core.py`. Remote evidence is recorded in `docs/reports/terminal/v0.3.34_finalize_guard_core_contract_verification.log`.
 
 - v0.3.34 is published and verified with Zenodo version DOI `10.5281/zenodo.20315568`.
+
+- v0.3.34 release cycle is closed: GitHub release, release assets, Zenodo concept DOI, Zenodo version DOI, DOI metadata, and post-release verification are complete.
