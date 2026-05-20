@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-repair-pr461-doc-coverage-version.log
+docs/reports/terminal/20260520-repair-pr461-remaining-handoff-stale-text.log
