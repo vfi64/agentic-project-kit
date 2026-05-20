@@ -28,3 +28,17 @@ def test_evidence_guard_rejects_missing_final_marker(tmp_path: Path) -> None:
     result = check_terminal_log(log)
     assert not result.ok
     assert result.final_result == "UNKNOWN"
+
+
+def test_evidence_guard_accepts_expected_negative_smoke_log(tmp_path: Path) -> None:
+    log = tmp_path / "expected-negative-smoke.log"
+    log.write_text(
+        "FAIL: targeted tests failed\n"
+        "### RESULT: PASS ###\n"
+        "PASS: false-pass log was rejected with exit 1\n"
+        "### RESULT: PASS ###\n",
+        encoding="utf-8",
+    )
+    result = check_terminal_log(log)
+    assert result.ok
+    assert result.final_result == "PASS"

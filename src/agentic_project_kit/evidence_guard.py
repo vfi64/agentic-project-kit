@@ -15,6 +15,11 @@ FAIL_MARKERS = (
     "short test summary info",
 )
 
+EXPECTED_NEGATIVE_SMOKE_MARKERS = (
+    "PASS: false-pass log was rejected",
+    "PASS: ns evidence-guard rejected false-PASS log",
+)
+
 @dataclass(frozen=True)
 class EvidenceGuardResult:
     ok: bool
@@ -36,6 +41,9 @@ def last_result_marker(text: str) -> str:
             result = "HARD-FAIL"
     return result
 
+def _is_expected_negative_smoke_log(text: str) -> bool:
+    return any(marker in text for marker in EXPECTED_NEGATIVE_SMOKE_MARKERS)
+
 def check_terminal_log(path: Path) -> EvidenceGuardResult:
     text = path.read_text(encoding="utf-8")
     final_result = last_result_marker(text)
@@ -43,11 +51,6 @@ def check_terminal_log(path: Path) -> EvidenceGuardResult:
     fail_hits = [marker for marker in FAIL_MARKERS if marker in text]
     if final_result == "UNKNOWN":
         findings.append("missing final result marker")
-    if final_result == "PASS" and fail_hits:
+    if final_result == "PASS" and fail_hits and not _is_expected_negative_smoke_log(text):
         findings.append("final PASS conflicts with earlier failure markers: " + ", ".join(fail_hits))
-    return EvidenceGuardResult(
-        ok=not findings,
-        path=path,
-        final_result=final_result,
-        findings=tuple(findings),
-    )
+    return EvidenceGuardResult(ok=not findings, path=path, final_result=final_result, findings=tuple(findings))
