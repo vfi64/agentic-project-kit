@@ -1,0 +1,128 @@
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRE-MERGE STATUS ###
+
+### PR 467 MACHINE STATE ###
+{"isDraft":false,"mergeStateStatus":"CLEAN","state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-20T11:35:42Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26159908998/job/76948840827","name":"test","startedAt":"2026-05-20T11:35:19Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-20T11:35:35Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26159905205/job/76948827531","name":"test","startedAt":"2026-05-20T11:35:14Z","status":"COMPLETED","workflowName":"CI"}]}
+PR_STATE=OPEN CLEAN draft=false
+PR_STATE_ACCEPTED_FOR_MERGE
+
+### MERGE PR 467 ###
+
+### PULL MAIN AFTER MERGE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   eac2729..aa1a17f  main       -> origin/main
+Updating eac2729..aa1a17f
+Fast-forward
+ .../terminal/20260520-evidence-state-contract.log  | 88 ++++++++++++++++++++
+ docs/reports/terminal/LATEST_TERMINAL_LOG.txt      |  2 +-
+ src/agentic_project_kit/evidence_state_contract.py | 94 ++++++++++++++++++++++
+ tests/test_evidence_state_contract.py              | 68 ++++++++++++++++
+ 4 files changed, 251 insertions(+), 1 deletion(-)
+ create mode 100644 docs/reports/terminal/20260520-evidence-state-contract.log
+ create mode 100644 src/agentic_project_kit/evidence_state_contract.py
+ create mode 100644 tests/test_evidence_state_contract.py
+
+### VERIFY EVIDENCE CONTRACT ON MAIN ###
+13:EVIDENCE_REMOTE_PRESENT = "REMOTE_EVIDENCE_PRESENT"
+75:        return EvidenceState(1, EVIDENCE_REMOTE_PRESENT, True, False, False, False, effective_terminal, latest, effective_report, command_report_available, "repo-backed evidence is present", ("d", "f"))
+14:EVIDENCE_LOCAL_TMP_ONLY = "LOCAL_TMP_ONLY"
+77:        return EvidenceState(1, EVIDENCE_LOCAL_TMP_ONLY, False, True, False, False, effective_terminal, latest, effective_report, command_report_available, "only local tmp evidence is available", ("terminal-upload", "paste-output"))
+15:EVIDENCE_MISSING = "MISSING_EVIDENCE"
+68:        return EvidenceState(1, EVIDENCE_MISSING, False, False, True, False, None, latest, effective_report, command_report_available, "no terminal evidence path is available", ("paste-output",))
+78:    return EvidenceState(1, EVIDENCE_MISSING, False, False, True, False, effective_terminal, latest, effective_report, command_report_available, "evidence path is missing or not repo-backed", ("paste-output",))
+16:EVIDENCE_STALE_LATEST_POINTER = "STALE_LATEST_POINTER"
+73:        return EvidenceState(1, EVIDENCE_STALE_LATEST_POINTER, repo_path and terminal_exists, False, not terminal_exists, True, effective_terminal, latest, effective_report, command_report_available, "latest terminal pointer does not match requested terminal log", ("terminal-upload", "paste-output"))
+34:    command_report_available: bool
+66:    command_report_available = _exists(root, effective_report)
+68:        return EvidenceState(1, EVIDENCE_MISSING, False, False, True, False, None, latest, effective_report, command_report_available, "no terminal evidence path is available", ("paste-output",))
+73:        return EvidenceState(1, EVIDENCE_STALE_LATEST_POINTER, repo_path and terminal_exists, False, not terminal_exists, True, effective_terminal, latest, effective_report, command_report_available, "latest terminal pointer does not match requested terminal log", ("terminal-upload", "paste-output"))
+75:        return EvidenceState(1, EVIDENCE_REMOTE_PRESENT, True, False, False, False, effective_terminal, latest, effective_report, command_report_available, "repo-backed evidence is present", ("d", "f"))
+77:        return EvidenceState(1, EVIDENCE_LOCAL_TMP_ONLY, False, True, False, False, effective_terminal, latest, effective_report, command_report_available, "only local tmp evidence is available", ("terminal-upload", "paste-output"))
+78:    return EvidenceState(1, EVIDENCE_MISSING, False, False, True, False, effective_terminal, latest, effective_report, command_report_available, "evidence path is missing or not repo-backed", ("paste-output",))
+91:        "command_report_available": state.command_report_available,
+80:def evidence_state_as_json_data(state: EvidenceState) -> dict[str, object]:
+
+### TARGETED TESTS ###
+......                                                                   [100%]
+6 passed in 0.02s
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 14%]
+........................................................................ [ 29%]
+........................................................................ [ 44%]
+........................................................................ [ 59%]
+........................................................................ [ 74%]
+........................................................................ [ 88%]
+......................................................                   [100%]
+486 passed in 3.39s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.29
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=79
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### FINAL MAIN STATE ###
+main
+aa1a17f Add GUI readiness evidence state contract (#467)
+eac2729 Record PR 466 merge verification log
+36e2521 Add GUI readiness queue state contract (#466)
+080c7cd Record PR 465 merge verification log
+6a3cef6 Add cockpit registry-only contract (#465)
+49cea16 Record PR 464 merge verification log
+89b3792 Add cockpit run JSON action result output (#464)
+4991c1b Record PR 463 merge verification log
+3e00e0e Add GUI readiness action result core contract (#463)
+cf333f9 Record PR 462 merge verification log
+
+### FINALIZE REMOTE EVIDENCE ###

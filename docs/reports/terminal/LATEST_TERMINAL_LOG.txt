@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-evidence-state-contract.log
+docs/reports/terminal/20260520-merge-pr467-evidence-state-contract.log
