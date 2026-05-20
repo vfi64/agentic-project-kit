@@ -317,3 +317,5 @@ Acceptance criteria before GUI work resumes:
 - The shell path now acts as a git-state collector and delegates machine-readable finalization classification to the Python core while preserving `STATUS:` lines and `### RESULT:` markers.
 
 - v0.3.35 release-gate core extraction prep evidence is now repo-backed in `docs/reports/terminal/v0.3.35_release_gate_core_extraction_prep.log`; this replaces the earlier chat-only diagnostic and records the grep hygiene rule: prefer `git grep` or exclude `__pycache__` from diagnostics.
+
+- v0.3.35 consolidation continued by extracting `tools/ns_release_gate.sh` behavior into the tested Python core `src/agentic_project_kit/release_gate_core.py`. The shell entry point is now a thin adapter. Release-gate behavior remains pre-publish only: no tag, no release, no DOI mutation, and no GUI work.

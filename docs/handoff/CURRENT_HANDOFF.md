@@ -271,3 +271,5 @@ Immediate priorities:
 - Evidence should include the PR merge verification and targeted shell/core routing tests. Next v0.3.35 candidate: either extract release-gate/build-check into a Python core or surface the Daily/Guided/Maintainer/Debug CLI layers in practical entry points.
 
 - v0.3.35 release-gate core extraction prep evidence is now repo-backed in `docs/reports/terminal/v0.3.35_release_gate_core_extraction_prep.log`; do not proceed to v0.3.35 release until the release-gate/build-check path is either extracted into a tested Python core or explicitly deferred with evidence.
+
+- Completed v0.3.35 release-gate core extraction: `tools/ns_release_gate.sh` now delegates to `python -m agentic_project_kit.release_gate_core`, with regression coverage in `tests/test_v035_release_gate_core.py` and adapter checks in `tests/test_repo_ns_entrypoint.py`.
