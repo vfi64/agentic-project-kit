@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-fix-gui-readiness-plan-coverage-term.log
+docs/reports/terminal/20260520-merge-pr462-gui-readiness-plan.log
