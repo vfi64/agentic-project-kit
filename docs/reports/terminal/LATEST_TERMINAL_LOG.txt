@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-merge-pr464-cockpit-run-json.log
+docs/reports/terminal/20260520-repair-action-result-json-key-and-finalize-registry.log

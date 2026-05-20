@@ -80,6 +80,46 @@ def action_by_id(action_id: str, actions: list[CockpitAction] | None = None) -> 
     return None
 
 
+
+
+def validate_cockpit_action_registry(actions: list[CockpitAction] | None = None) -> list[str]:
+    selected = actions if actions is not None else cockpit_actions()
+    errors: list[str] = []
+    seen: set[str] = set()
+    allowed_safety = {READ_ONLY, BOUNDED, DESTRUCTIVE}
+    for action in selected:
+        if not action.action_id.strip():
+            errors.append('empty action_id')
+        if action.action_id in seen:
+            errors.append(f'duplicate action_id: {action.action_id}')
+        seen.add(action.action_id)
+        if action.safety not in allowed_safety:
+            errors.append(f'invalid safety for {action.action_id}: {action.safety}')
+        if not action.command:
+            errors.append(f'empty command for {action.action_id}')
+        if any(not part for part in action.command):
+            errors.append(f'empty command part for {action.action_id}')
+        if not action.category.strip():
+            errors.append(f'empty category for {action.action_id}')
+        if not action.label.strip():
+            errors.append(f'empty label for {action.action_id}')
+        if not action.description.strip():
+            errors.append(f'empty description for {action.action_id}')
+    return errors
+
+
+def cockpit_registry_contract_as_json_data(actions: list[CockpitAction] | None = None) -> dict[str, object]:
+    selected = actions if actions is not None else cockpit_actions()
+    errors = validate_cockpit_action_registry(selected)
+    return {
+        'schema_version': 1,
+        'registry_only': True,
+        'valid': not errors,
+        'errors': errors,
+        'allowed_action_ids': [action.action_id for action in selected],
+        'allowed_safety_classes': [READ_ONLY, BOUNDED, DESTRUCTIVE],
+    }
+
 def run_cockpit_action(
     action_id: str,
     project_root: Path,
