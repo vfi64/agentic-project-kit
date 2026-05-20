@@ -33,3 +33,17 @@ def test_gc_does_not_collect_latest_terminal_log_pointer(tmp_path: Path) -> None
     assert outcome == "PASS_NOTHING_TO_COLLECT"
     assert message == ""
     assert pointer.exists()
+
+
+def test_gc_refuses_to_delete_symlinked_transient_file(tmp_path: Path) -> None:
+    commands = tmp_path / ".agentic" / "commands"
+    commands.mkdir(parents=True)
+    target = tmp_path / "outside.txt"
+    target.write_text("keep", encoding="utf-8")
+    current_yaml = commands / "current.yaml"
+    current_yaml.symlink_to(target)
+    outcome, message = execute_gc(tmp_path)
+    assert outcome == "FAIL_SYMLINK_ARTIFACT"
+    assert ".agentic/commands/current.yaml" in message
+    assert current_yaml.is_symlink()
+    assert target.read_text(encoding="utf-8") == "keep"

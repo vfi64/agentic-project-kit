@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-merge-pr-454-quote-guard.log
+docs/reports/terminal/20260520-harden-gc-symlink-safety.log
