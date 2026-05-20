@@ -1,5 +1,7 @@
 ## v0.3.31 - 2026-05-20
 
+Zenodo v0.3.31 DOI: 10.5281/zenodo.20313834
+
 - Prepare release metadata for v0.3.31.
 - Close out pre-GUI execution hardening with terminal evidence guard support.
 - Add typed Work Order evidence contract and runtime validation.

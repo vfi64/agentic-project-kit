@@ -13,10 +13,10 @@ Close out v0.3.30 GUI readiness hardening. This slice is not a Tkinter implement
 
 ## Current Repository State
 
-Current released version: 0.3.30
+Current released version: 0.3.31
 Previous release compatibility literal for planning-state freshness coverage: Current released version: 0.3.29
-Current release tag: v0.3.30
-Verified Zenodo version DOI: `10.5281/zenodo.20308526`
+Current release tag: v0.3.31
+Verified Zenodo version DOI: `10.5281/zenodo.20313834`
 Post-release evidence: `docs/reports/terminal/20260520-v0.3.30-post-release-doi.log`
 Current branch after v0.3.29: main
 
