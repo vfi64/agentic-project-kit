@@ -1,0 +1,98 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK STATUS ###
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'feature/typed-next-already-executed-guard-20260520'
+
+### PATCH TYPED-NEXT ALREADY EXECUTED GUARD ###
+
+### WRITE ALREADY EXECUTED TESTS ###
+
+### VERIFY PATCH SHAPE ###
+19:STATUS_ALREADY_EXECUTED = "already_executed"
+107:        return TypedNextResult(STATUS_ALREADY_EXECUTED, RESULT_PENDING, 2, str(source.relative_to(root)), str(target.relative_to(root)), None, "Typed work order was already executed; refusing duplicate execution.")
+
+### TARGETED TESTS ###
+.....................                                                    [100%]
+21 passed in 0.33s
+
+### NS TYPED-NEXT NO COMMAND CHECK ###
+4:  "queue_status": "no_command",
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+feature/typed-next-already-executed-guard-20260520
+ M src/agentic_project_kit/typed_work_order_queue.py
+?? tests/test_typed_next_already_executed_guard.py
+
+### PYTEST ###
+........................................................................ [ 14%]
+........................................................................ [ 28%]
+........................................................................ [ 42%]
+........................................................................ [ 56%]
+........................................................................ [ 70%]
+........................................................................ [ 84%]
+........................................................................ [ 98%]
+.......                                                                  [100%]
+511 passed in 3.91s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.30
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=80
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+feature/typed-next-already-executed-guard-20260520
+ M src/agentic_project_kit/typed_work_order_queue.py
+?? tests/test_typed_next_already_executed_guard.py
+
+### RESULT: PASS ###
+
+### FINAL DIFF SUMMARY ###
+ src/agentic_project_kit/typed_work_order_queue.py | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+ M src/agentic_project_kit/typed_work_order_queue.py
+?? tests/test_typed_next_already_executed_guard.py
+
+### FINALIZE REMOTE EVIDENCE ###
