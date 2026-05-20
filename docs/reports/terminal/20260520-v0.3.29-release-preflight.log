@@ -1,0 +1,169 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### STATUS ###
+
+### BRANCH ###
+main
+
+### RECENT COMMITS ###
+b658dc3 Record PR 459 merge verification log
+5de0545 Document communication artifact GC hardening closeout (#459)
+64dcdab Record PR 458 merge verification log
+39605d3 Add GC TTL handling for local tmp logs (#458)
+ba086e2 Record PR 457 merge verification log
+5f69340 Add safe file replacement helper (#457)
+1eeec4f Record PR 456 merge verification log
+e958778 Add GC protected evidence regression tests (#456)
+379265a Record PR 455 merge verification log
+6e5281d Harden communication artifact GC symlink safety (#455)
+9bd5e7b Record PR 454 merge verification log
+aaf0dee Harden quote guard contract (#454)
+
+### OPEN PRS ###
+
+### TAG CHECK ###
+PASS_TAG_V0.3.29_NOT_PRESENT
+
+### VERSION FILES ###
+7:version = "0.3.28"
+51:target-version = "py310"
+pyproject.toml:7:version = "0.3.28"
+README.md:511:- Verified v0.3.28 version DOI: `10.5281/zenodo.20286394`
+README.md:568:Version `0.3.28` is the current verified release; Zenodo version DOI `10.5281/zenodo.20286394`.
+CHANGELOG.md:1:## v0.3.28
+CHANGELOG.md:3:- Prepare release metadata for v0.3.28.
+CHANGELOG.md:4:- Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.3.28 DOI `10.5281/zenodo.20286394`.
+CHANGELOG.md:6:Zenodo v0.3.28 DOI: 10.5281/zenodo.20286394
+CITATION.cff:11:# Verified v0.3.28 version DOI: 10.5281/zenodo.20286394
+CITATION.cff:44:version: 0.3.28
+docs/STATUS.md:1:Current version: 0.3.28
+docs/STATUS.md:22:Current released version: 0.3.28
+docs/STATUS.md:23:Current release tag: v0.3.28
+docs/STATUS.md:26:Post-release evidence: `docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log`
+docs/STATUS.md:28:v0.3.28 is the current released and verified baseline. It includes the patch-artifact preflight MVP and the hardened planning-state/no-copy evidence workflow.
+docs/handoff/CURRENT_HANDOFF.md:1:Current version: 0.3.28
+docs/handoff/CURRENT_HANDOFF.md:16:Current released version: 0.3.28
+docs/handoff/CURRENT_HANDOFF.md:17:Current release tag: v0.3.28
+docs/handoff/CURRENT_HANDOFF.md:19:Post-release evidence: `docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log`
+docs/handoff/CURRENT_HANDOFF.md:20:Current branch after v0.3.28: main
+docs/handoff/CURRENT_HANDOFF.md:22:v0.3.28 is the current verified no-copy/evidence baseline. It includes patch-artifact preflight, mandatory final-summary validation, and post-release DOI evidence.
+
+### RELEASE COMMAND DISCOVERY ###
+Usage: next-step.py [--request|--fail-report|--upload-output]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/cli.py", line 2, in <module>
+    import typer
+ModuleNotFoundError: No module named 'typer'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/cli.py", line 2, in <module>
+    import typer
+ModuleNotFoundError: No module named 'typer'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/cli.py", line 2, in <module>
+    import typer
+ModuleNotFoundError: No module named 'typer'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/cli.py", line 2, in <module>
+    import typer
+ModuleNotFoundError: No module named 'typer'
+
+### RELEASE PLAN DRY RUN / READINESS ###
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/cli.py", line 2, in <module>
+    import typer
+ModuleNotFoundError: No module named 'typer'
+
+### LOCAL DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+
+### PYTEST ###
+........................................................................ [ 15%]
+........................................................................ [ 31%]
+........................................................................ [ 46%]
+........................................................................ [ 62%]
+........................................................................ [ 77%]
+........................................................................ [ 93%]
+..............................                                           [100%]
+462 passed in 2.62s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.28
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=79
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+
+### RESULT: PASS ###
+
+### RELEASE CHECK IF AVAILABLE ###
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/cli.py", line 2, in <module>
+    import typer
+ModuleNotFoundError: No module named 'typer'
+
+### FINAL MAIN STATE ###
+main
+b658dc3 Record PR 459 merge verification log
+5de0545 Document communication artifact GC hardening closeout (#459)
+64dcdab Record PR 458 merge verification log
+39605d3 Add GC TTL handling for local tmp logs (#458)
+ba086e2 Record PR 457 merge verification log
+5f69340 Add safe file replacement helper (#457)
+1eeec4f Record PR 456 merge verification log
+e958778 Add GC protected evidence regression tests (#456)
+
+### FINALIZE REMOTE EVIDENCE ###
