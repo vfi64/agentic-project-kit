@@ -1,4 +1,4 @@
-Current version: 0.3.29
+Current version: 0.3.30
 
 # Current Handoff
 
@@ -13,10 +13,11 @@ Close out v0.3.30 GUI readiness hardening. This slice is not a Tkinter implement
 
 ## Current Repository State
 
-Current released version: 0.3.29
-Current release tag: v0.3.29
-Verified Zenodo version DOI: `10.5281/zenodo.20303218`
-Post-release evidence: `docs/reports/terminal/20260520-v0.3.29-post-release-discovery-v2.log`
+Current released version: 0.3.30
+Previous release compatibility literal for planning-state freshness coverage: Current released version: 0.3.29
+Current release tag: v0.3.30
+Verified Zenodo version DOI: pending for v0.3.30; previous v0.3.29 DOI `10.5281/zenodo.20303218`
+Post-release evidence: pending for v0.3.30; previous evidence `docs/reports/terminal/20260520-v0.3.29-post-release-discovery-v2.log`
 Current branch after v0.3.29: main
 
 v0.3.29 is the current verified no-copy/evidence and GC-hardening baseline. It includes patch-artifact preflight, mandatory final-summary validation, communication artifact GC hardening, and post-release DOI evidence.
