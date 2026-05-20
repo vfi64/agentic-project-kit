@@ -5,6 +5,11 @@ from pathlib import Path
 
 import typer
 
+from agentic_project_kit.typed_work_order_queue import (
+    inspect_typed_work_order_queue,
+    render_typed_work_order_queue_status,
+    typed_work_order_queue_status_as_json_data,
+)
 from agentic_project_kit.typed_work_order_runner import (
     load_typed_work_order,
     run_typed_work_order,
@@ -64,6 +69,25 @@ def run_command(work_order_id: str, execute: bool = typer.Option(False, "--execu
     typer.echo(f"Work order log written: {order.log_path}")
     if result_code != 0:
         raise typer.Exit(code=result_code)
+
+
+
+@work_orders_app.command("typed-queue-status")
+def typed_queue_status_command(
+    inbox_path: Path = typer.Option(Path(".agentic/typed_work_orders/inbox"), "--inbox", help="Typed work order inbox directory."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON queue status."),
+) -> None:
+    try:
+        status = inspect_typed_work_order_queue(inbox_path)
+    except ValueError as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=2) from exc
+    if json_output:
+        typer.echo(json.dumps(typed_work_order_queue_status_as_json_data(status), indent=2, sort_keys=True))
+    else:
+        typer.echo(render_typed_work_order_queue_status(status))
+    if status.status == "multiple_commands":
+        raise typer.Exit(code=2)
 
 
 @work_orders_app.command("typed-run")
