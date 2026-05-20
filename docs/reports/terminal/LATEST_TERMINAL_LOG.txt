@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-merge-pr-453-no-copy-fail-policy.log
+docs/reports/terminal/20260520-discover-communication-artifact-gc.log
