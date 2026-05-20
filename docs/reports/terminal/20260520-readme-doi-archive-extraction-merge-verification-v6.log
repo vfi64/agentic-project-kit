@@ -1,0 +1,37 @@
+README DOI ARCHIVE EXTRACTION MERGE VERIFICATION LOG CLEAN V6
+
+### VERIFIED MAIN STATE ###
+main contains PR #514: Extract verified release DOI archive from README.
+README release history was shortened and the verified release DOI archive was moved to docs/releases/VERIFIED_RELEASES.md.
+Regression test exists: tests/test_readme_release_history_extraction.py.
+
+### VERIFIED LOCAL GATES FROM MERGE BLOCK ###
+targeted test: 3 passed
+full pytest: 546 passed
+ruff: passed
+check-docs: passed
+doctor: passed
+pr hygiene: passed
+
+### CURRENT MAIN CONFIRMATION ###
+main
+26e2ac2 Extract verified release DOI archive from README (#514)
+ab2cbf8 Record v0.3.32 DOI metadata merge verification log (#513)
+f33ce26 Record v0.3.32 DOI metadata (#512)
+20dad0a Record v0.3.32 release verification log (#511)
+3b14ca3 Record v0.3.32 release metadata merge verification log (#510)
+b6235f4 Prepare v0.3.32 release metadata (#509)
+439889f Record v0.3.32 status handoff closeout merge verification log (#508)
+5058825 Document v0.3.32 status and handoff closeout (#507)
+
+================================================================
+SUMMARY
+WORK RESULT: PASS
+EVIDENCE RESULT: PASS
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PENDING
+terminal_log=docs/reports/terminal/20260520-readme-doi-archive-extraction-merge-verification-v6.log
+command_report=NONE
+NEXT_CHAT_REPLY: d
+### RESULT: PASS ###
+================================================================
