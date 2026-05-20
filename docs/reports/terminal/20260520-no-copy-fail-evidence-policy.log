@@ -1,0 +1,93 @@
+PATCH NO-COPY FAIL EVIDENCE POLICY -- LOG-BACKED
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+
+### PULL MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK STATUS ###
+
+error: branch 'docs/no-copy-fail-evidence-policy' not found
+
+### CREATE BRANCH ###
+Switched to a new branch 'docs/no-copy-fail-evidence-policy'
+
+### PATCH POLICY DOC ###
+
+### PATCH HANDOFF STATE RULE ###
+
+### ADD REGRESSION TEST ###
+
+### TARGETED TEST ###
+..                                                                       [100%]
+2 passed in 0.01s
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+docs/no-copy-fail-evidence-policy
+ M .agentic/handoff_state.yaml
+ M docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md
+?? tests/test_no_copy_fail_evidence_policy.py
+
+### PYTEST ###
+........................................................................ [ 16%]
+........................................................................ [ 32%]
+........................................................................ [ 48%]
+........................................................................ [ 64%]
+........................................................................ [ 80%]
+........................................................................ [ 96%]
+................                                                         [100%]
+448 passed in 2.69s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.28
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=80
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+docs/no-copy-fail-evidence-policy
+ M .agentic/handoff_state.yaml
+ M docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md
+?? tests/test_no_copy_fail_evidence_policy.py
+
+### RESULT: PASS ###
+
+### FINALIZE TERMINAL LOG FILE ###
