@@ -1,0 +1,88 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK STATUS ###
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'feature/minimal-typed-work-order-runner-core-20260520'
+
+### WRITE MINIMAL TYPED WORK ORDER RUNNER CORE ###
+
+### WRITE TYPED WORK ORDER RUNNER TESTS ###
+
+### TARGETED TESTS ###
+......                                                                   [100%]
+6 passed in 0.08s
+
+### DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+feature/minimal-typed-work-order-runner-core-20260520
+?? src/agentic_project_kit/typed_work_order_runner.py
+?? tests/test_typed_work_order_runner.py
+
+### PYTEST ###
+........................................................................ [ 14%]
+........................................................................ [ 29%]
+........................................................................ [ 43%]
+........................................................................ [ 58%]
+........................................................................ [ 72%]
+........................................................................ [ 87%]
+..............................................................           [100%]
+494 passed in 3.74s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.30
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=80
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+feature/minimal-typed-work-order-runner-core-20260520
+?? src/agentic_project_kit/typed_work_order_runner.py
+?? tests/test_typed_work_order_runner.py
+
+### RESULT: PASS ###
+
+### FINAL DIFF SUMMARY ###
+?? src/agentic_project_kit/typed_work_order_runner.py
+?? tests/test_typed_work_order_runner.py
+
+### FINALIZE REMOTE EVIDENCE ###

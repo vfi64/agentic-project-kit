@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-merge-pr471-pre-gui-execution-hardening-plan.log
+docs/reports/terminal/20260520-minimal-typed-work-order-runner-core.log
