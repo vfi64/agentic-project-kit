@@ -126,6 +126,12 @@ fi
 
 
 
+if [ "${1:-}" = "evidence-clean-check" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli evidence clean-check "$@"
+  exit $?
+fi
+
 if [ "${1:-}" = "typed-next" ]; then
   shift
   PYTHONPATH=src "$PY" -m agentic_project_kit.cli work-order typed-next "$@"
