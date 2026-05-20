@@ -32,6 +32,20 @@ The active bridge toward the local GUI is no-copy/evidence governance and commun
 
 Communication artifact GC hardening is now part of the pre-GUI baseline: symlinked transient artifacts are rejected, repo evidence and command inbox files are protected, and local /tmp/agentic-project-kit-*.log cleanup is TTL-based and dry-run-first via ./ns artifact-gc --tmp-logs.
 
+## v0.3.32 Release Phase and Evidence Closeout
+
+v0.3.32 is the release-phase-semantics and evidence-closeout hardening line. It does not ship the Tkinter GUI.
+
+Completed v0.3.32 capabilities:
+
+- `release-preflight` validates the before-metadata release phase without requiring target version markers in project files.
+- `release-check` remains the after-metadata gate.
+- `post-release-check` remains the after-release GitHub and Zenodo verification gate.
+- `evidence clean-check` and `./ns evidence-clean-check` allow exactly one expected in-progress terminal log while rejecting every other dirty path.
+- Merge verification logs for both v0.3.32 slices are remote evidence under `docs/reports/terminal/`.
+
+Release readiness: v0.3.32 is ready for release metadata preparation after the final local gate and release preflight pass.
+
 ## Active Workflow Rules
 
 - Use repo state as source of truth; do not reconstruct current state from chat memory.
