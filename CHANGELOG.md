@@ -1,3 +1,10 @@
+## v0.3.33 - 2026-05-20
+
+- Prepare release metadata for v0.3.33.
+- Extract verified release DOI archive from README into docs/releases/VERIFIED_RELEASES.md.
+- Keep README within documentation gate limits while preserving DOI history.
+- Keep Tkinter explicitly deferred until after this release is verified.
+
 ## v0.3.32 - 2026-05-20
 
 Zenodo v0.3.32 DOI: 10.5281/zenodo.20314341
