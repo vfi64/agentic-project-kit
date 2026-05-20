@@ -1,0 +1,109 @@
+RECORD V0.3.32 STATUS HANDOFF CLOSEOUT MERGE VERIFICATION LOG
+
+
+### MAIN STATE ###
+main
+?? docs/reports/terminal/20260520-v0.3.32-status-handoff-closeout-merge-verification.log
+5058825 Document v0.3.32 status and handoff closeout (#507)
+7563dba Record v0.3.32 self-dirty log guard merge verification log (#506)
+0b0de58 Add evidence clean check for in-progress logs (#505)
+6f81125 Record v0.3.32 release preflight merge verification log (#504)
+4706780 Add release preflight phase check (#503)
+25c3e06 Repair v0.3.31 DOI metadata merge verification evidence (#502)
+d7b1904 Record v0.3.31 DOI metadata merge verification log (#501)
+28bad58 Record v0.3.31 DOI metadata (#500)
+bd5e2b1 Prepare v0.3.31 release metadata (#499)
+2421b14 Record v0.3.31 status handoff closeout merge verification log (#498)
+9e8a813 Document v0.3.31 status and handoff closeout (#497)
+b32693c Record v0.3.31 typed work order evidence runtime check merge verification log (#496)
+1734098 Add typed work order evidence runtime check (#495)
+3bdf52d Record v0.3.31 typed work order evidence contract merge verification log (#494)
+
+### VERIFY CLOSEOUT TEXT ###
+docs/STATUS.md:35:## v0.3.32 Release Phase and Evidence Closeout
+docs/handoff/CURRENT_HANDOFF.md:27:## v0.3.32 Release Phase and Evidence Closeout
+docs/STATUS.md:41:- `release-preflight` validates the before-metadata release phase without requiring target version markers in project files.
+docs/handoff/CURRENT_HANDOFF.md:33:- `release-preflight` is the correct before-metadata release gate.
+docs/STATUS.md:44:- `evidence clean-check` and `./ns evidence-clean-check` allow exactly one expected in-progress terminal log while rejecting every other dirty path.
+docs/handoff/CURRENT_HANDOFF.md:36:- `evidence clean-check` is the repo-owned guard for in-progress terminal evidence logs.
+
+### VERIFY TARGETED TESTS ###
+..........                                                               [100%]
+10 passed in 0.17s
+
+### VERIFY RELEASE PREFLIGHT SMOKE ###
+Release preflight for target v0.3.32
+
+[PASS] semantic version: 0.3.32 is valid
+[PASS] local tag unused: tag is unused: v0.3.32
+[PASS] remote tag unused: remote tag is unused: v0.3.32
+[PASS] GitHub release unused: GitHub release is absent: v0.3.32
+
+Overall: PASS
+
+### VERIFY FULL DEV GATE ###
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+main
+?? docs/reports/terminal/20260520-v0.3.32-status-handoff-closeout-merge-verification.log
+
+### PYTEST ###
+........................................................................ [ 13%]
+........................................................................ [ 26%]
+........................................................................ [ 39%]
+........................................................................ [ 53%]
+........................................................................ [ 66%]
+........................................................................ [ 79%]
+........................................................................ [ 92%]
+......................................                                   [100%]
+542 passed in 3.71s
+
+### RUFF ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
+
+### DOCTOR ###
+Agentic project doctor report for 
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, 
+markdown-docs, python-cli, git-github, release-managed; policy packs: 
+solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.31
+
+Overall: PASS
+
+### PR HYGIENE ###
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=79
+ok=true
+
+Findings:
+- none
+
+### FINAL STATE ###
+main
+?? docs/reports/terminal/20260520-v0.3.32-status-handoff-closeout-merge-verification.log
+
+### RESULT: PASS ###
+
+### FINAL CLEAN CHECK INSIDE LOG USING EXPECTED LOG ###
+PASS: worktree clean except expected log: docs/reports/terminal/20260520-v0.3.32-status-handoff-closeout-merge-verification.log
+
+### RESULT: PASS ###
