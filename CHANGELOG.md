@@ -1,3 +1,7 @@
+## v0.3.35
+
+- Prepare release metadata for v0.3.35.
+
 ## v0.3.34 - 2026-05-20
 
 - Hardened the pre-GUI portable Python core by adding typed work-order unit-test coverage, explicit `./ns dev-local-feature-gate` routing, and a shared local feature gate core.
