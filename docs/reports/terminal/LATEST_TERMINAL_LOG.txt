@@ -1,1 +1,1 @@
-docs/reports/terminal/20260520-repair-v0.3.30-release-metadata-coverage.log
+docs/reports/terminal/20260520-merge-pr469-v0.3.30-release-metadata.log
