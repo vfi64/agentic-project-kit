@@ -106,10 +106,21 @@ def test_ns_menu_exposes_cockpit_json_inventory_entry() -> None:
 def test_repo_ns_entrypoint_exposes_no_copy_dev_gate() -> None:
     text = Path("ns").read_text(encoding="utf-8")
     assert "./ns dev" in text or "${1:-}" in text
-    assert "NS DEV LOCAL FEATURE GATE" in text
-    assert "no git pull" in text
-    assert "### RESULT: PASS ###" in text
-    assert "### RESULT: FAIL ###" in text
+    assert "agentic_project_kit.local_feature_gate" in text
+    assert "agentic_project_kit.local_feature_gate --include-pr-hygiene" in text
+    assert "tools/next-step.py" in text
+    dev = "if [ \"${1:-}\" = \"dev\" ]; then"
+    go = " if [ \"${1:-}\" = \"go\" ]; then"
+    assert dev in text
+    assert go in text
+    block = text[text.index(dev):text.index(go)]
+    assert "pytest -q" not in block
+    assert "ruff check ." not in block
+    assert "git pull" not in block
+    assert "git push" not in block
+    assert "### RESULT: PASS ###" not in block
+    assert "### RESULT: FAIL ###" not in block
+
 
 def test_repo_ns_go_guard_protects_dirty_feature_branch() -> None:
     text = Path("ns").read_text(encoding="utf-8")
