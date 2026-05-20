@@ -59,6 +59,8 @@ def execute_gc(root: Path | str = ".") -> tuple[str, str]:
         if not _is_allowed(rel):
             return "FAIL_UNREGISTERED_PATH", rel.as_posix()
         target = base / rel
+        if target.is_symlink():
+            return "FAIL_SYMLINK_ARTIFACT", rel.as_posix()
         if not target.is_file():
             return "FAIL_NOT_A_FILE", rel.as_posix()
         target.unlink()
