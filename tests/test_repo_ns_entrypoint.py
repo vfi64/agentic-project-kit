@@ -197,11 +197,11 @@ def test_release_verify_waits_for_github_release() -> None:
     assert "post-release-check" in text
 
 
-def test_release_gate_cleans_dist_before_build() -> None:
+def test_release_gate_shell_is_thin_python_core_adapter() -> None:
     text = Path("tools/ns_release_gate.sh").read_text(encoding="utf-8")
-    assert "rm -rf dist build *.egg-info" in text
-    assert "VERIFY DIST ONLY CONTAINS TARGET VERSION" in text
-    assert "grep -v" in text
+    assert "agentic_project_kit.release_gate_core" in text
+    assert "rm -rf dist build *.egg-info" not in text
+    assert "python -m build" not in text
 
 
 def test_release_publish_waits_for_github_release_and_verifies() -> None:
