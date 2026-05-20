@@ -16,11 +16,13 @@ def _check_success(entry: dict[str, Any]) -> bool:
 
 def evaluate_pr_closeout(pr: dict[str, Any], expected_check_names: tuple[str, ...] = ("test",)) -> PrCloseoutResult:
     reasons: list[str] = []
-    if pr.get("state") != "OPEN":
-        reasons.append("state is not OPEN")
-    if pr.get("mergeStateStatus") != "CLEAN":
+    state = pr.get("state")
+    already_merged = state == "MERGED"
+    if state not in ("OPEN", "MERGED"):
+        reasons.append("state is not OPEN or MERGED")
+    if not already_merged and pr.get("mergeStateStatus") != "CLEAN":
         reasons.append("mergeStateStatus is not CLEAN")
-    if pr.get("mergeable") not in ("MERGEABLE", True):
+    if not already_merged and pr.get("mergeable") not in ("MERGEABLE", True):
         reasons.append("PR is not mergeable")
     checks = pr.get("statusCheckRollup") or []
     if not checks:
@@ -37,6 +39,8 @@ def evaluate_pr_closeout(pr: dict[str, Any], expected_check_names: tuple[str, ..
             reasons.append(f"check not successful: {name} status={status} conclusion={conclusion}")
     if reasons:
         return PrCloseoutResult(BLOCKED, tuple(reasons))
+    if already_merged:
+        return PrCloseoutResult(READY_TO_MERGE, ())
     return PrCloseoutResult(READY_TO_MERGE, ("merge required; do not continue without merge or explicit block",))
 
 def render_pr_closeout(result: PrCloseoutResult) -> str:
