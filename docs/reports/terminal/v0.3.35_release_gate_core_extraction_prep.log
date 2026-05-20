@@ -1,0 +1,220 @@
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+V0.3.35 RELEASE GATE CORE EXTRACTION PREP EVIDENCE -- LOGGED READ ONLY
+
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### CLEAN PRECHECK ###
+main
+?? docs/reports/terminal/v0.3.35_release_gate_core_extraction_prep.log.tmp
+862188b Update status after finalize guard shell core integration (#543)
+bd48a1f Wire finalize guard shell adapter to Python core (#542)
+d17ed55 Update status after v0.3.35 core test matrix (#541)
+45bc2de Expand v0.3.35 core test matrix (#540)
+c4e02ee Plan v0.3.35 pre-GUI core and CLI consolidation (#539)
+9a09319 Finalize state after v0.3.34 DOI metadata (#538)
+c7c10da Record v0.3.34 DOI metadata (#537)
+332be34 Prepare v0.3.34 release metadata (#536)
+ba6e51c Fix handoff release wording after status update (#535)
+778e849 Update status after finalize guard core contract (#534)
+f832302 Record finalize guard core contract verification log (#533)
+994b021 Harden finalize guard core contract (#532)
+
+### CURRENT HEAD CI SNAPSHOT ###
+HEAD_SHA=862188bcc459fd5188406fdee28020d68858a609
+HEAD_SHORT=862188b
+26187478597	completed	success	862188b	push	Update status after finalize guard shell core integration (#543)
+26187366638	completed	success	bd48a1f	push	Wire finalize guard shell adapter to Python core (#542)
+26187072950	completed	success	d17ed55	push	Update status after v0.3.35 core test matrix (#541)
+26186953353	completed	success	45bc2de	push	Expand v0.3.35 core test matrix (#540)
+26186518767	completed	success	c4e02ee	push	Plan v0.3.35 pre-GUI core and CLI consolidation (#539)
+26186103326	completed	success	9a09319	push	Finalize state after v0.3.34 DOI metadata (#538)
+26185974470	completed	success	c7c10da	push	Record v0.3.34 DOI metadata (#537)
+26185396762	completed	success	332be34	push	Prepare v0.3.34 release metadata (#536)
+26185232902	completed	success	ba6e51c	push	Fix handoff release wording after status update (#535)
+26185101768	completed	failure	778e849	push	Update status after finalize guard core contract (#534)
+26185006339	completed	success	f832302	push	Record finalize guard core contract verification log (#533)
+26184908491	completed	success	994b021	push	Harden finalize guard core contract (#532)
+26184355694	completed	success	29c4a53	push	Update status after finalize guard core (#531)
+26184271402	completed	success	546abd7	push	Record finalize guard core verification log (#530)
+26184151496	completed	success	0285407	push	Add finalize guard decision core (#529)
+
+### V0.3.35 STATUS MARKERS ###
+docs/STATUS.md:295:## v0.3.35 Pre-GUI Core and CLI Consolidation Plan
+docs/STATUS.md:297:v0.3.35 is planned as a consolidation line before starting the Tkinter cockpit MVP. The release should not add the GUI itself. Its purpose is to remove remaining pre-GUI weaknesses that would otherwise become visible or harder to fix once a GUI calls into the project workflows.
+docs/STATUS.md:299:Required v0.3.35 scope:
+docs/STATUS.md:314:- v0.3.35 core-test-matrix consolidation started by expanding regression coverage for `finalize_guard`, `local_feature_gate`, and `release_doi_safety` without changing runtime behavior.
+docs/STATUS.md:316:- v0.3.35 consolidation continued by wiring `tools/ns_finalize_guard.sh` to the tested Python `agentic_project_kit.finalize_guard` decision core.
+docs/handoff/CURRENT_HANDOFF.md:50:- `release-preflight` is the correct before-metadata release gate.
+docs/handoff/CURRENT_HANDOFF.md:51:- `release-check` is the correct after-metadata release gate.
+docs/handoff/CURRENT_HANDOFF.md:252:- v0.3.34 is fully closed: release metadata, GitHub release, assets, Zenodo DOI metadata, post-release check, and DOI documentation are complete. Next planning state is v0.3.35 or the first bounded Tkinter cockpit slice, but only after a fresh readiness check.
+docs/handoff/CURRENT_HANDOFF.md:255:## v0.3.35 Pre-GUI Core and CLI Consolidation Plan
+docs/handoff/CURRENT_HANDOFF.md:257:Next recommended line: v0.3.35 should consolidate the Python core and layered CLI before the Tkinter cockpit MVP. Do not start GUI implementation as the next slice.
+docs/handoff/CURRENT_HANDOFF.md:267:- Completed first v0.3.35 consolidation slice: core-test-matrix coverage was expanded for `finalize_guard`, `local_feature_gate`, and `release_doi_safety` with no runtime change.
+docs/handoff/CURRENT_HANDOFF.md:268:- Next recommended v0.3.35 slice: either wire `tools/ns_finalize_guard.sh` to the Python finalize-guard module CLI, or extract the release-gate/build-check shell path into a tested Python core. Prefer the smaller, lower-risk slice first.
+docs/handoff/CURRENT_HANDOFF.md:270:- Completed v0.3.35 finalize-guard shell/core integration: `tools/ns_finalize_guard.sh` now delegates final status classification to `python -m agentic_project_kit.finalize_guard`.
+docs/handoff/CURRENT_HANDOFF.md:271:- Evidence should include the PR merge verification and targeted shell/core routing tests. Next v0.3.35 candidate: either extract release-gate/build-check into a Python core or surface the Daily/Guided/Maintainer/Debug CLI layers in practical entry points.
+
+### RELEASE GATE SHELL HOTSPOT ###
+      67 tools/ns_release_gate.sh
+tools/ns_release_gate.sh:3:STATUS=0
+tools/ns_release_gate.sh:8:  printf "%s\n" "### RESULT: FAIL ###"
+tools/ns_release_gate.sh:24:printf "\n### BRANCH / STATUS ###\n"
+tools/ns_release_gate.sh:25:git branch --show-current || STATUS=1
+tools/ns_release_gate.sh:26:git status --short || STATUS=1
+tools/ns_release_gate.sh:29:./ns dev || STATUS=1
+tools/ns_release_gate.sh:32:if ! PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli release-check --version "$VERSION"; then
+tools/ns_release_gate.sh:37:  printf "\n### RESULT: FAIL ###\n"
+tools/ns_release_gate.sh:42:rm -rf dist build *.egg-info || STATUS=1
+tools/ns_release_gate.sh:43:mkdir -p dist || STATUS=1
+tools/ns_release_gate.sh:46:.venv/bin/python -m build || STATUS=1
+tools/ns_release_gate.sh:47:.venv/bin/python -m twine check dist/* || STATUS=1
+tools/ns_release_gate.sh:50:ls -la dist || STATUS=1
+tools/ns_release_gate.sh:51:if ls dist | grep -v "$VERSION" >/dev/null 2>&1; then
+tools/ns_release_gate.sh:54:  STATUS=1
+tools/ns_release_gate.sh:58:git branch --show-current || STATUS=1
+tools/ns_release_gate.sh:59:git status --short || STATUS=1
+tools/ns_release_gate.sh:61:if [ "$STATUS" -eq 0 ]; then
+tools/ns_release_gate.sh:62:  printf "\n### RESULT: PASS ###\n"
+tools/ns_release_gate.sh:64:  printf "\n### RESULT: FAIL ###\n"
+tools/ns_release_gate.sh:67:exit "$STATUS"
+
+### RELEASE MODULE PUBLIC SURFACE ###
+src/agentic_project_kit/release.py:12:class ReleaseStep:
+src/agentic_project_kit/release.py:19:class ReleasePlan:
+src/agentic_project_kit/release.py:25:class ReleaseCheckStatus(str, Enum):
+src/agentic_project_kit/release.py:32:class ReleaseCheckResult:
+src/agentic_project_kit/release.py:39:class ReleaseStateReport:
+src/agentic_project_kit/release.py:58:def build_release_plan(project_root: Path, version: str | None = None) -> ReleasePlan:
+src/agentic_project_kit/release.py:118:def build_release_state_report(
+src/agentic_project_kit/release.py:223:def run_command(project_root: Path, command: Sequence[str]) -> CommandResult:
+src/agentic_project_kit/release.py:255:def render_release_plan(plan: ReleasePlan) -> str:
+src/agentic_project_kit/release.py:282:def render_release_state_report(report: ReleaseStateReport) -> str:
+
+### EXISTING RELEASE TESTS ###
+tests/test_post_release.py
+tests/test_readme_release_history_extraction.py
+tests/test_release_doi_safety.py
+tests/test_release_preflight_phase.py
+tests/test_release_version_source_contract.py
+tests/test_release.py
+tests/test_v030_post_release_state_cleanup.py
+src/agentic_project_kit/action_registry.py:77:        name="release-gate",
+src/agentic_project_kit/action_specs.py:53:            evidence=("release-verify terminal log", "post-release-check output"),
+src/agentic_project_kit/action_specs.py:64:            evidence=("post-release-check output", "DOI metadata terminal log"),
+src/agentic_project_kit/cli_commands/release.py:12:    build_release_plan,
+src/agentic_project_kit/cli_commands/release.py:13:    build_release_state_report,
+src/agentic_project_kit/cli_commands/release.py:36:    app.command("release-check")(release_check_command)
+src/agentic_project_kit/cli_commands/release.py:37:    app.command("post-release-check")(post_release_check_command)
+src/agentic_project_kit/cli_commands/release.py:45:    plan = build_release_plan(project_root.resolve(), version=version)
+src/agentic_project_kit/cli_commands/release.py:60:    target version. That is the job of release-check after metadata is patched.
+src/agentic_project_kit/cli_commands/release.py:108:    report = build_release_state_report(project_root.resolve(), version=version)
+src/agentic_project_kit/cockpit.py:69:        CockpitAction("release.check", "Release check", "release", ("agentic-kit", "release-check"), READ_ONLY, "Validate release state for a target version."),
+src/agentic_project_kit/cockpit.py:70:        CockpitAction("release.post-check", "Post-release check", "release", ("agentic-kit", "post-release-check"), READ_ONLY, "Validate GitHub and Zenodo post-release state."),
+src/agentic_project_kit/contract.py:73:        recommended_commands=("agentic-kit release-plan", "agentic-kit release-check"),
+src/agentic_project_kit/release.py:58:def build_release_plan(project_root: Path, version: str | None = None) -> ReleasePlan:
+src/agentic_project_kit/release.py:76:                commands=("python -m build", "twine check dist/*", "ls -lh dist/"),
+src/agentic_project_kit/release.py:77:                evidence="Wheel and sdist build successfully and pass twine validation.",
+src/agentic_project_kit/release.py:118:def build_release_state_report(
+src/agentic_project_kit/release_doi_safety.py:11:    successful post-release-check output. WAITING output must not be treated
+tests/test_gui_cockpit.py:89:def test_explain_safety_distinguishes_default_and_blocked_actions() -> None:
+tests/test_pr_hygiene.py:65:def test_analyze_pr_hygiene_does_not_group_distinct_dependabot_updates() -> None:
+tests/test_release.py:9:    build_release_plan,
+tests/test_release.py:10:    build_release_state_report,
+tests/test_release.py:17:def test_build_release_plan_reads_pyproject_version(tmp_path: Path):
+tests/test_release.py:20:    plan = build_release_plan(tmp_path)
+tests/test_release.py:33:def test_build_release_plan_accepts_explicit_version(tmp_path: Path):
+tests/test_release.py:36:    plan = build_release_plan(tmp_path, version="2.0.0")
+tests/test_release.py:48:    rendered = render_release_plan(build_release_plan(tmp_path))
+tests/test_release.py:54:    assert "twine check dist/*" in rendered
+tests/test_release.py:68:def test_build_release_state_report_passes_for_unused_version(tmp_path: Path):
+tests/test_release.py:71:    report = build_release_state_report(tmp_path, command_runner=_runner())
+tests/test_release.py:77:def test_build_release_state_report_warns_without_git_repo(tmp_path: Path):
+tests/test_release.py:80:    report = build_release_state_report(tmp_path)
+tests/test_release.py:88:def test_build_release_state_report_warns_when_remote_tag_check_is_unavailable(tmp_path: Path):
+tests/test_release.py:91:    report = build_release_state_report(
+tests/test_release.py:101:def test_build_release_state_report_warns_when_github_release_check_is_unavailable(tmp_path: Path):
+tests/test_release.py:104:    report = build_release_state_report(
+tests/test_release.py:114:def test_build_release_state_report_fails_for_missing_changelog_version(tmp_path: Path):
+tests/test_release.py:118:    report = build_release_state_report(tmp_path, command_runner=_runner())
+tests/test_release.py:126:def test_build_release_state_report_fails_for_missing_readme_version(tmp_path: Path):
+tests/test_release.py:130:    report = build_release_state_report(tmp_path, command_runner=_runner())
+tests/test_release.py:138:def test_build_release_state_report_fails_for_missing_citation_version(tmp_path: Path):
+tests/test_release.py:142:    report = build_release_state_report(tmp_path, command_runner=_runner())
+tests/test_release.py:150:def test_build_release_state_report_fails_for_missing_pyproject_version(tmp_path: Path):
+tests/test_release.py:154:    report = build_release_state_report(tmp_path, version="1.2.3", command_runner=_runner())
+tests/test_release.py:161:def test_build_release_state_report_fails_for_existing_local_tag(tmp_path: Path):
+tests/test_release.py:164:    report = build_release_state_report(tmp_path, command_runner=_runner(local_tag=CommandResult(0, "v1.2.3\n", "")))
+tests/test_release.py:171:def test_build_release_state_report_fails_for_existing_remote_tag(tmp_path: Path):
+tests/test_release.py:174:    report = build_release_state_report(
+tests/test_release.py:184:def test_build_release_state_report_fails_for_existing_github_release(tmp_path: Path):
+tests/test_release.py:187:    report = build_release_state_report(tmp_path, command_runner=_runner(github_release=CommandResult(0, "title: v1.2.3\n", "")))
+tests/test_release.py:197:    rendered = render_release_state_report(build_release_state_report(tmp_path, command_runner=_runner()))
+tests/test_repo_ns_entrypoint.py:167:    assert "release-gate" in text
+tests/test_repo_ns_entrypoint.py:183:    assert "./ns release-gate \"$VERSION\"" in text
+tests/test_repo_ns_entrypoint.py:197:    assert "post-release-check" in text
+tests/test_repo_ns_entrypoint.py:200:def test_release_gate_cleans_dist_before_build() -> None:
+tests/test_repo_ns_entrypoint.py:202:    assert "rm -rf dist build *.egg-info" in text
+tests/test_repo_ns_entrypoint.py:301:def test_safe_remove_diagnostic_guard_distinguishes_tracked_files() -> None:
+tests/test_v032_status_handoff_closeout.py:13:        "`release-check` remains the after-metadata gate",
+tests/test_v032_status_handoff_closeout.py:14:        "`post-release-check` remains the after-release GitHub and Zenodo verification gate",
+
+### CURRENT POST-PUBLISH RELEASE SANITY ###
+Release state check for target v0.3.34
+
+[PASS] semantic version: 0.3.34 is valid
+[PASS] pyproject version: found text: version = "0.3.34"
+[PASS] package __version__: found text: __version__ = "0.3.34"
+[PASS] CHANGELOG version: found text: v0.3.34
+[PASS] README version: found text: Version `0.3.34`
+[PASS] CITATION version: found text: version: 0.3.34
+[PASS] STATUS version: found text: Current version: 0.3.34
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.34
+[FAIL] local tag unused: tag already exists: v0.3.34
+[FAIL] remote tag unused: remote tag already exists: v0.3.34
+[FAIL] GitHub release unused: GitHub release already exists: v0.3.34
+
+Overall: FAIL
+
+INFO: release-check is expected to fail after publication because tag/release already exist.
+Post-release check for target v0.3.34
+
+[PASS] GitHub release: GitHub release exists: v0.3.34
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.3.34: 10.5281/zenodo.20315568
+
+Overall: PASS
+
+
+### TARGETED EXISTING TESTS ###
+........................................................................ [ 94%]
+....                                                                     [100%]
+76 passed in 0.22s
+
+### EXTRACTION CANDIDATE CONTRACT ###
+Candidate: extract tools/ns_release_gate.sh behavior into a tested Python core.
+Keep shell as a thin adapter.
+Core should model: local gate command sequence, release-check before build, dist cleanup/build/twine check, target-version dist validation, and final PASS/FAIL rendering.
+No tag, no release, no DOI mutation, no GUI.
+First implementation should use injected command runner tests, not real build/twine in unit tests.
+Risk to avoid: post-publish release-check must not be reused as a DOI/verified-release gate.
+Search hygiene: use git grep or exclude __pycache__; do not let binary cache files pollute diagnostics.
+
+### FINAL CLEAN VERIFY BEFORE DOC BRANCH ###
+main
+?? docs/reports/terminal/v0.3.35_release_gate_core_extraction_prep.log.tmp
+
+### RESULT: PASS ###

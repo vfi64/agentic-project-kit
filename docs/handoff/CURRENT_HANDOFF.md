@@ -269,3 +269,5 @@ Immediate priorities:
 
 - Completed v0.3.35 finalize-guard shell/core integration: `tools/ns_finalize_guard.sh` now delegates final status classification to `python -m agentic_project_kit.finalize_guard`.
 - Evidence should include the PR merge verification and targeted shell/core routing tests. Next v0.3.35 candidate: either extract release-gate/build-check into a Python core or surface the Daily/Guided/Maintainer/Debug CLI layers in practical entry points.
+
+- v0.3.35 release-gate core extraction prep evidence is now repo-backed in `docs/reports/terminal/v0.3.35_release_gate_core_extraction_prep.log`; do not proceed to v0.3.35 release until the release-gate/build-check path is either extracted into a tested Python core or explicitly deferred with evidence.

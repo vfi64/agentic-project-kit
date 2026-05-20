@@ -315,3 +315,5 @@ Acceptance criteria before GUI work resumes:
 
 - v0.3.35 consolidation continued by wiring `tools/ns_finalize_guard.sh` to the tested Python `agentic_project_kit.finalize_guard` decision core.
 - The shell path now acts as a git-state collector and delegates machine-readable finalization classification to the Python core while preserving `STATUS:` lines and `### RESULT:` markers.
+
+- v0.3.35 release-gate core extraction prep evidence is now repo-backed in `docs/reports/terminal/v0.3.35_release_gate_core_extraction_prep.log`; this replaces the earlier chat-only diagnostic and records the grep hygiene rule: prefer `git grep` or exclude `__pycache__` from diagnostics.
