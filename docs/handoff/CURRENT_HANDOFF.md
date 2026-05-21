@@ -314,4 +314,9 @@ Verification anchors:
 - Direct `ns` references to `tools/ns_*.sh`: `0`.
 - Regression guard: `tests/test_v036_zero_ns_shell_adapter_contract.py`.
 - Continue with deterministic rule/evidence/state hardening or release planning; do not reopen shell-adapter removal unless a regression test fails.
+## Terminal acknowledgement audit
+
+A short chat reply such as `d`, `D`, `f`, or `F` is not sufficient evidence by itself. Before continuing after such an acknowledgement, the last terminal output must be checked for contradictions. The check must treat any earlier `### RESULT: FAIL ###`, `Overall: FAIL`, renderer usage error, accidental branch creation, missing committed remote log, or PASS summary after a failed step as blocking until repaired or explicitly explained. This is mandatory even when the final visible summary says PASS.
+
+The terminal output audit is part of the workflow contract: read the body of the last run, not only the final summary block.
 

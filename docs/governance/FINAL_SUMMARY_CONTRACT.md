@@ -96,4 +96,9 @@ New local mutation runbooks must render final summaries through `./ns summary`, 
 Handwritten multi-line `printf` summary blocks are deprecated for new runbooks because they repeatedly caused drift between WORK, EVIDENCE, OVERALL, remote-log, and next-reply fields.
 A local failure may reference a tmp log only as `terminal_log_local`; it must not claim remote evidence unless a `docs/reports/terminal/` log was committed and pushed.
 The accepted terminal block pattern is: collect results in variables, persist the remote log when gates pass, then call `./ns summary` once.
+## No legacy handwritten summary fallback
+
+All relevant workflow blocks must produce their final framed summary through the deterministic renderer route `./ns summary` or the Python module `agentic_project_kit.run_summary_renderer`. Handwritten multi-line `printf` summary blocks are not an acceptable fallback after the renderer exists. A block that mixes old `WORK RESULT:` / `NEXT_CHAT_REPLY:` output with the newer structured renderer format is a contract failure, even if the final line says `### RESULT: PASS ###`.
+
+Every summary invocation must provide at least `--slice`, `--scope`, `--branch`, `--work`, `--evidence`, `--overall`, and `--terminal-log`. For logged local mutation blocks, both `--terminal-log-remote` and `--terminal-log-local` must be set honestly. If no remote log was committed, the summary must say `REMOTE_EVIDENCE: FAIL` or `CHAT_ONLY` as appropriate and must not claim remote evidence.
 
