@@ -1,0 +1,703 @@
+
+### VERIFY DIRTY REPAIR CONTEXT ###
+fix/v0.3.36-release-route-help-safety
+ M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? docs/reports/terminal/v036-release-route-help-safety-fix.log
+?? docs/reports/terminal/v036-release-route-help-safety-regex-repair.log
+?? tests/test_v036_release_route_help_safety.py
+
+### WRITE ROBUST REGEX REPAIR SCRIPT ###
+
+### APPLY ROBUST REGEX REPAIR ###
+repaired_regex_files=src/agentic_project_kit/release_prep_core.py,src/agentic_project_kit/release_gate_core.py,src/agentic_project_kit/release_publish_core.py,src/agentic_project_kit/release_verify_core.py
+
+### VERIFY REPAIRED REGEX ###
+src/agentic_project_kit/release_prep_core.py:1:from __future__ import annotations\n\nfrom dataclasses import dataclass\nfrom pathlib import Path\nimport re\nimport subprocess\n\n\n@dataclass(frozen=True)\nclass CommandResult:\n    returncode: int\n    output: str\n\n\nSEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")\n\n\ndef usage() -> str:\n    return "usage: ./ns release-prep <version>"\n\n\ndef is_help_arg(value: str) -> bool:\n    return value in {"-h", "--help"}\n\n\ndef normalize_version(version: str) -> tuple[str, str]:\n    raw = version.strip()\n    if not raw:\n        raise ValueError("missing version")\n    plain = raw[1:] if raw.startswith("v") else raw\n    if not SEMVER_RE.fullmatch(plain):\n        raise ValueError(f"invalid semantic version: {raw}")\n    return plain, "v" + plain\n\n\ndef run_command(repo_root: Path, args: list[str]) -> CommandResult:\n    completed = subprocess.run(\n        args,\n        cwd=repo_root,\n        text=True,\n        stdout=subprocess.PIPE,\n        stderr=subprocess.STDOUT,\n        check=False,\n    )\n    return CommandResult(completed.returncode, completed.stdout.strip())\n\n\ndef python_tool(repo_root: Path) -> str:\n    local = repo_root / ".venv" / "bin" / "python"\n    return str(local) if local.exists() else "python3"\n\n\ndef render_header(tag: str) -> list[str]:\n    return [\n        "",\n        "",\n        "",\n        "-------------------------------------------------------------------------",\n        "-------------------------------------------------------------------------",\n        "-------------------------------------------------------------------------",\n        "",\n        "",\n        "",\n        f"NS RELEASE PREP CYCLE {tag}",\n        "",\n        "### SAFETY ###",\n        "Safety: prepares a release branch only; no tag, release, merge, or publish action.",\n    ]\n\n\ndef prepare_release(version: str, repo_root: Path) -> int:\n    try:\n        plain_version, tag = normalize_version(version)\n    except ValueError:\n        print("ERROR: missing version argument. Example: ./ns release-prep 0.3.21")\n        print("\n### RESULT: FAIL ###")\n        return 2\n\n    status = 0\n    lines = render_header(tag)\n    py = python_tool(repo_root)\n\n    def section(title: str) -> None:\n        lines.extend(["", f"### {title} ###"])\n\n    def append_command(args: list[str], env_prefix: str | None = None) -> CommandResult:\n        nonlocal status\n        result = run_command(repo_root, args)\n        if env_prefix:\n            lines.append(env_prefix + " " + " ".join(args))\n        if result.output:\n            lines.append(result.output)\n        if result.returncode != 0:\n            status = 1\n        return result\n\n    section("UPDATE MAIN")\n    append_command(["git", "switch", "main"])\n    append_command(["git", "pull", "--ff-only", "origin", "main"])\n\n    section("VERIFY MAIN BEFORE RELEASE BRANCH")\n    append_command(["./ns", "dev"])\n    append_command([py, "-m", "agentic_project_kit.cli", "pr-hygiene"], env_prefix="PYTHONPATH=src")\n\n    section("CREATE RELEASE PREP BRANCH")\n    branch = f"release/prepare-{tag}"\n    branch_check = run_command(repo_root, ["git", "show-ref", "--verify", "--quiet", f"refs/heads/{branch}"])\n    if branch_check.returncode == 0:\n        append_command(["git", "switch", branch])\n    else:\n        append_command(["git", "switch", "-c", branch])\n\n    section("PATCH RELEASE METADATA")\n    append_command([py, "tools/ns_release_metadata_prep.py", plain_version])\n\n    section("RELEASE CHECK AFTER METADATA PATCH")\n    append_command([py, "-m", "agentic_project_kit.cli", "release-check", "--version", plain_version], env_prefix="PYTHONPATH=src")\n\n    section("CURRENT VERSION REFERENCES")\n    append_command([\n        "grep",\n        "-R",\n        plain_version,\n        "-n",\n        "pyproject.toml",\n        "src/agentic_project_kit/__init__.py",\n        "CITATION.cff",\n        "CHANGELOG.md",\n        "README.md",\n        "docs/STATUS.md",\n        "docs/handoff/CURRENT_HANDOFF.md",\n    ])\n\n    section("FINAL STATE")\n    append_command(["git", "branch", "--show-current"])\n    append_command(["git", "status", "--short"])\n    append_command(["git", "log", "--oneline", "-8"])\n\n    lines.append("\n### RESULT: PASS ###" if status == 0 else "\n### RESULT: FAIL ###")\n    print("\n".join(lines))\n    return status\n\n\ndef main(argv: list[str] | None = None) -> int:\n    args = argv if argv is not None else []\n    if not args:\n        print("ERROR: missing version argument. Example: ./ns release-prep 0.3.21")\n        print("\n### RESULT: FAIL ###")\n        return 2\n    if is_help_arg(args[0]):\n        print(usage())\n        return 0\n    try:\n        normalize_version(args[0])\n    except ValueError as exc:\n        print(f"ERROR: {exc}")\n        print("\n### RESULT: FAIL ###")\n        return 2\n    return prepare_release(args[0], Path(".").resolve())\n\n\nif __name__ == "__main__":\n    import sys\n\n    raise SystemExit(main(sys.argv[1:]))\n
+src/agentic_project_kit/release_gate_core.py:1:from __future__ import annotations\n\nimport shutil\nimport subprocess\nimport sys\nfrom collections.abc import Callable, Sequence\nfrom dataclasses import dataclass\nfrom pathlib import Path\nimport re\n\n\nSEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")\n\n\ndef usage() -> str:\n    return "usage: ./ns release-gate <version>"\n\n\ndef is_help_arg(value: str) -> bool:\n    return value in {"-h", "--help"}\n\n\ndef is_valid_semver(value: str) -> bool:\n    plain = value[1:] if value.startswith("v") else value\n    return bool(SEMVER_RE.fullmatch(plain))\n\n\nCommandRunner = Callable[[Sequence[str]], int]\n\n\n@dataclass(frozen=True)\nclass ReleaseGateResult:\n    ok: bool\n    version: str\n    failed_step: str | None = None\n\n    @property\n    def exit_code(self) -> int:\n        return 0 if self.ok else 1\n\n\ndef default_runner(command: Sequence[str]) -> int:\n    completed = subprocess.run(list(command), check=False)\n    return int(completed.returncode)\n\n\ndef _section(title: str) -> None:\n    print()\n    print(title)\n\n\ndef _run_step(name: str, command: Sequence[str], runner: CommandRunner) -> str | None:\n    _section(name)\n    code = runner(command)\n    if code != 0:\n        return name\n    return None\n\n\ndef _validate_dist_only_contains_version(dist_dir: Path, version: str) -> bool:\n    if not dist_dir.exists():\n        return False\n    artifacts = [path.name for path in dist_dir.iterdir() if path.is_file()]\n    if not artifacts:\n        return False\n    return all(version in name for name in artifacts)\n\n\ndef run_release_gate(\n    version: str,\n    *,\n    project_root: Path | None = None,\n    runner: CommandRunner = default_runner,\n    remove_tree: Callable[[Path], None] = shutil.rmtree,\n    make_dir: Callable[[Path], None] | None = None,\n) -> ReleaseGateResult:\n    root = Path.cwd() if project_root is None else project_root\n    dist_dir = root / "dist"\n    build_dir = root / "build"\n\n    print(f"NS RELEASE GATE CYCLE v{version}")\n    print()\n    print("Safety: verifies release readiness only; no tag, release, merge, or publish action.")\n\n    for name, command in (\n        ("### BRANCH ###", ("git", "branch", "--show-current")),\n        ("### STATUS ###", ("git", "status", "--short")),\n        ("### LOCAL GATE ###", ("./ns", "dev")),\n        (\n            "### RELEASE CHECK ###",\n            (\n                sys.executable,\n                "-m",\n                "agentic_project_kit.cli",\n                "release-check",\n                "--version",\n                version,\n            ),\n        ),\n    ):\n        failed = _run_step(name, command, runner)\n        if failed:\n            print(f"FAILED_STEP={failed}")\n            print("### RESULT: FAIL ###")\n            return ReleaseGateResult(False, version, failed)\n\n    _section("### CLEAN DIST ###")\n    for path in (dist_dir, build_dir):\n        if path.exists():\n            remove_tree(path)\n    for egg_info in root.glob("*.egg-info"):\n        if egg_info.is_dir():\n            remove_tree(egg_info)\n    if make_dir is None:\n        dist_dir.mkdir(parents=True, exist_ok=True)\n    else:\n        make_dir(dist_dir)\n\n    for name, command in (\n        ("### BUILD CHECK ###", (sys.executable, "-m", "build")),\n        ("### TWINE CHECK ###", (sys.executable, "-m", "twine", "check", "dist/*")),\n        ("### DIST LIST ###", ("ls", "-la", "dist")),\n    ):\n        failed = _run_step(name, command, runner)\n        if failed:\n            print(f"FAILED_STEP={failed}")\n            print("### RESULT: FAIL ###")\n            return ReleaseGateResult(False, version, failed)\n\n    _section("### VERIFY DIST ONLY CONTAINS TARGET VERSION ###")\n    if not _validate_dist_only_contains_version(dist_dir, version):\n        print(f"ERROR: dist contains artifacts that do not match {version}, or no artifacts exist.")\n        print("### RESULT: FAIL ###")\n        return ReleaseGateResult(False, version, "dist-version-validation")\n\n    for name, command in (\n        ("### FINAL BRANCH ###", ("git", "branch", "--show-current")),\n        ("### FINAL STATUS ###", ("git", "status", "--short")),\n    ):\n        failed = _run_step(name, command, runner)\n        if failed:\n            print(f"FAILED_STEP={failed}")\n            print("### RESULT: FAIL ###")\n            return ReleaseGateResult(False, version, failed)\n\n    print("### RESULT: PASS ###")\n    return ReleaseGateResult(True, version)\n\n\ndef main(argv: Sequence[str] | None = None) -> int:\n    args = list(sys.argv[1:] if argv is None else argv)\n    if not args:\n        print("ERROR: usage: python -m agentic_project_kit.release_gate_core <version>")\n        print("### RESULT: FAIL ###")\n        return 2\n    if is_help_arg(args[0]):\n        print(usage())\n        return 0\n    if not is_valid_semver(args[0]):\n        print(f"ERROR: invalid semantic version: {args[0]}")\n        print("### RESULT: FAIL ###")\n        return 2\n    return run_release_gate(args[0]).exit_code\n\n\nif __name__ == "__main__":\n    raise SystemExit(main())\n
+src/agentic_project_kit/release_publish_core.py:1:from __future__ import annotations\n\nfrom dataclasses import dataclass\nfrom pathlib import Path\nimport re\nimport subprocess\nimport time\n\n\n@dataclass(frozen=True)\nclass CommandResult:\n    returncode: int\n    output: str\n\n\nSEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")\n\n\ndef usage() -> str:\n    return "usage: ./ns release-publish <version> publish-v<version>"\n\n\ndef is_help_arg(value: str) -> bool:\n    return value in {"-h", "--help"}\n\n\ndef normalize_version(version: str) -> tuple[str, str]:\n    raw = version.strip()\n    if not raw:\n        raise ValueError("missing version")\n    plain = raw[1:] if raw.startswith("v") else raw\n    if not SEMVER_RE.fullmatch(plain):\n        raise ValueError(f"invalid semantic version: {raw}")\n    return plain, "v" + plain\n\n\ndef expected_confirmation(tag: str) -> str:\n    return "publish-" + tag\n\n\ndef run_command(repo_root: Path, args: list[str]) -> CommandResult:\n    completed = subprocess.run(\n        args,\n        cwd=repo_root,\n        text=True,\n        stdout=subprocess.PIPE,\n        stderr=subprocess.STDOUT,\n        check=False,\n    )\n    return CommandResult(completed.returncode, completed.stdout.strip())\n\n\ndef render_header(tag: str, expected: str) -> list[str]:\n    return [\n        "",\n        "",\n        "",\n        "-------------------------------------------------------------------------",\n        "-------------------------------------------------------------------------",\n        "-------------------------------------------------------------------------",\n        "",\n        "",\n        "",\n        f"NS RELEASE PUBLISH CYCLE {tag}",\n        "",\n        "### SAFETY ###",\n        f"Safety: publishes only with exact confirmation token: {expected}",\n    ]\n\n\ndef publish_release(\n    version: str,\n    confirmation: str,\n    repo_root: Path,\n    release_wait_attempts: int = 30,\n    sleep_seconds: float = 10.0,\n) -> int:\n    try:\n        plain_version, tag = normalize_version(version)\n    except ValueError:\n        print("ERROR: usage: ./ns release-publish <version> publish-v<version>")\n        print("\n### RESULT: FAIL ###")\n        return 2\n\n    expected = expected_confirmation(tag)\n    lines = render_header(tag, expected)\n    if confirmation != expected:\n        lines.append("ERROR: refusing release publish without exact confirmation token.")\n        lines.append(f"Run: ./ns release-publish {plain_version} {expected}")\n        lines.append("\n### RESULT: FAIL ###")\n        print("\n".join(lines))\n        return 2\n\n    status = 0\n\n    def section(title: str) -> None:\n        lines.extend(["", f"### {title} ###"])\n\n    def append_command(args: list[str]) -> CommandResult:\n        nonlocal status\n        result = run_command(repo_root, args)\n        if result.output:\n            lines.append(result.output)\n        if result.returncode != 0:\n            status = 1\n        return result\n\n    section("BRANCH / STATUS")\n    branch = append_command(["git", "branch", "--show-current"])\n    current_branch = branch.output.splitlines()[-1] if branch.output else ""\n    append_command(["git", "status", "--short"])\n    porcelain = run_command(repo_root, ["git", "status", "--porcelain"])\n    if current_branch != "main":\n        lines.append("ERROR: release publish must run from main.")\n        status = 1\n    if porcelain.output:\n        lines.append("ERROR: working tree is dirty. Commit or restore changes before publish.")\n        status = 1\n\n    section("UPDATE MAIN")\n    if status == 0:\n        append_command(["git", "pull", "--ff-only", "origin", "main"])\n\n    section("RELEASE GATE")\n    if status == 0:\n        append_command(["./ns", "release-gate", plain_version])\n\n    section("VERIFY TAG IS UNUSED")\n    if status == 0:\n        local_tag = run_command(repo_root, ["git", "rev-parse", tag])\n        if local_tag.returncode == 0:\n            lines.append(f"ERROR: local tag already exists: {tag}")\n            status = 1\n        remote_tag = run_command(repo_root, ["git", "ls-remote", "--tags", "origin", tag])\n        if remote_tag.returncode == 0 and tag in remote_tag.output:\n            lines.append(f"ERROR: remote tag already exists: {tag}")\n            status = 1\n        github_release = run_command(repo_root, ["gh", "release", "view", tag])\n        if github_release.returncode == 0:\n            lines.append(f"ERROR: GitHub release already exists: {tag}")\n            status = 1\n\n    section("CREATE AND PUSH TAG")\n    if status == 0:\n        append_command(["git", "tag", tag])\n        if status == 0:\n            append_command(["git", "push", "origin", tag])\n\n    section("WAIT FOR RELEASE WORKFLOW AND GITHUB RELEASE")\n    if status == 0:\n        found = False\n        for attempt in range(release_wait_attempts):\n            release = run_command(repo_root, ["gh", "release", "view", tag])\n            if release.returncode == 0:\n                found = True\n                if release.output:\n                    lines.append(release.output)\n                break\n            current_attempt = attempt + 1\n            lines.append(f"Waiting for GitHub release {tag} ({current_attempt}/{release_wait_attempts})")\n            if sleep_seconds:\n                time.sleep(sleep_seconds)\n        if not found:\n            lines.append(f"ERROR: GitHub release did not appear before timeout: {tag}")\n            status = 1\n\n    section("RELEASE WORKFLOW STATUS")\n    append_command(["gh", "run", "list", "--workflow", "Release", "--limit", "8"])\n\n    section("VERIFY COMPLETED RELEASE")\n    if status == 0:\n        append_command(["./ns", "release-verify", plain_version])\n\n    section("FINAL STATE")\n    append_command(["git", "branch", "--show-current"])\n    append_command(["git", "log", "--oneline", "-8"])\n    append_command(["git", "status", "--short"])\n\n    lines.append("\n### RESULT: PASS ###" if status == 0 else "\n### RESULT: FAIL ###")\n    print("\n".join(lines))\n    return status\n\n\ndef main(argv: list[str] | None = None) -> int:\n    args = argv if argv is not None else []\n    if len(args) < 1:\n        print("ERROR: usage: ./ns release-publish <version> publish-v<version>")\n        print("\n### RESULT: FAIL ###")\n        return 2\n    if is_help_arg(args[0]):\n        print(usage())\n        return 0\n    try:\n        normalize_version(args[0])\n    except ValueError as exc:\n        print(f"ERROR: {exc}")\n        print("\n### RESULT: FAIL ###")\n        return 2\n    confirmation = args[1] if len(args) > 1 else ""\n    return publish_release(args[0], confirmation, Path(".").resolve())\n\n\nif __name__ == "__main__":\n    import sys\n\n    raise SystemExit(main(sys.argv[1:]))\n
+src/agentic_project_kit/release_verify_core.py:1:from __future__ import annotations\n\nfrom dataclasses import dataclass\nfrom pathlib import Path\nimport re\nimport subprocess\nimport time\n\n\nSEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")\n\n\ndef usage() -> str:\n    return "usage: ./ns release-verify <version>"\n\n\ndef is_help_arg(value: str) -> bool:\n    return value in {"-h", "--help"}\n\n\ndef is_valid_semver(value: str) -> bool:\n    plain = value[1:] if value.startswith("v") else value\n    return bool(SEMVER_RE.fullmatch(plain))\n\n\n@dataclass(frozen=True)\nclass CommandResult:\n    returncode: int\n    output: str\n\n\ndef normalize_version(version: str) -> tuple[str, str]:\n    raw = version.strip()\n    if not raw:\n        raise ValueError("missing version")\n    if raw.startswith("v"):\n        return raw[1:], raw\n    return raw, "v" + raw\n\n\ndef run_command(repo_root: Path, args: list[str]) -> CommandResult:\n    completed = subprocess.run(\n        args,\n        cwd=repo_root,\n        text=True,\n        stdout=subprocess.PIPE,\n        stderr=subprocess.STDOUT,\n        check=False,\n    )\n    return CommandResult(completed.returncode, completed.stdout.strip())\n\n\ndef agentic_kit_command(repo_root: Path) -> list[str]:\n    local = repo_root / ".venv" / "bin" / "agentic-kit"\n    if local.exists():\n        return [str(local)]\n    return ["agentic-kit"]\n\n\ndef render_header(tag: str) -> list[str]:\n    return [\n        "",\n        "",\n        "",\n        "-------------------------------------------------------------------------",\n        "-------------------------------------------------------------------------",\n        "-------------------------------------------------------------------------",\n        "",\n        "",\n        "",\n        f"NS RELEASE VERIFY CYCLE {tag}",\n        "",\n        "### SAFETY ###",\n        "Safety: verifies completed release state only; no tag, release, merge, push, or publish action.",\n    ]\n\n\ndef verify_release(version: str, repo_root: Path, release_wait_attempts: int = 24, sleep_seconds: float = 10.0) -> int:\n    try:\n        plain_version, tag = normalize_version(version)\n    except ValueError:\n        print("ERROR: usage: ./ns release-verify <version>")\n        print("\n### RESULT: FAIL ###")\n        return 2\n\n    status = 0\n    lines = render_header(tag)\n\n    def section(title: str) -> None:\n        lines.extend(["", f"### {title} ###"])\n\n    def append_command(args: list[str], fail_message: str | None = None) -> CommandResult:\n        nonlocal status\n        result = run_command(repo_root, args)\n        if result.output:\n            lines.append(result.output)\n        if result.returncode != 0:\n            if fail_message:\n                lines.append(fail_message)\n            status = 1\n        return result\n\n    section("BRANCH / STATUS")\n    append_command(["git", "branch", "--show-current"])\n    append_command(["git", "status", "--short"])\n\n    section("VERIFY LOCAL TAG")\n    local_tag = append_command(["git", "rev-parse", "-q", "--verify", f"refs/tags/{tag}"])\n    if local_tag.returncode != 0:\n        lines.append(f"ERROR: local tag missing: {tag}")\n\n    section("VERIFY REMOTE TAG")\n    remote_tag = append_command(["git", "ls-remote", "--tags", "origin", tag])\n    if remote_tag.returncode != 0 or tag not in remote_tag.output:\n        lines.append(f"ERROR: remote tag missing: {tag}")\n        status = 1\n\n    section("WAIT FOR GITHUB RELEASE")\n    found = False\n    last_release_output = ""\n    for attempt in range(release_wait_attempts + 1):\n        release = run_command(repo_root, ["gh", "release", "view", tag])\n        last_release_output = release.output\n        if release.returncode == 0:\n            found = True\n            if release.output:\n                lines.append(release.output)\n            break\n        if attempt < release_wait_attempts:\n            next_count = attempt + 1\n            lines.append(f"Release not visible yet for {tag}; retry {next_count}/{release_wait_attempts} after {int(sleep_seconds)}s.")\n            if sleep_seconds:\n                time.sleep(sleep_seconds)\n    if not found:\n        lines.append(f"ERROR: GitHub release still missing after wait: {tag}")\n        if last_release_output:\n            lines.append(last_release_output)\n        status = 1\n\n    section("RELEASE WORKFLOW STATUS")\n    append_command(["gh", "run", "list", "--workflow", "Release", "--limit", "8"])\n\n    section("POST RELEASE CHECK")\n    append_command([*agentic_kit_command(repo_root), "post-release-check", "--version", plain_version])\n\n    section("FINAL STATE")\n    append_command(["git", "branch", "--show-current"])\n    append_command(["git", "log", "--oneline", "-8"])\n    append_command(["git", "status", "--short"])\n\n    lines.append("\n### RESULT: PASS ###" if status == 0 else "\n### RESULT: FAIL ###")\n    print("\n".join(lines))\n    return status\n\n\ndef main(argv: list[str] | None = None) -> int:\n    args = argv if argv is not None else []\n    if not args:\n        print("ERROR: usage: ./ns release-verify <version>")\n        print("\n### RESULT: FAIL ###")\n        return 2\n    if is_help_arg(args[0]):\n        print(usage())\n        return 0\n    if not is_valid_semver(args[0]):\n        print(f"ERROR: invalid semantic version: {args[0]}")\n        print("\n### RESULT: FAIL ###")\n        return 2\n    return verify_release(args[0], Path(".").resolve())\n\n\nif __name__ == "__main__":\n    import sys\n\n    raise SystemExit(main(sys.argv[1:]))\n
+
+### VERIFY NORMALIZATION DIRECTLY ###
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from agentic_project_kit.release_prep_core import normalize_version as n; assert n("0.3.37")==("0.3.37","v0.3.37"); assert n("v0.3.37")==("0.3.37","v0.3.37"); print("release_prep_normalize_ok")
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/release_prep_core.py", line 1
+    from __future__ import annotations\n\nfrom dataclasses import dataclass\nfrom pathlib import Path\nimport re\nimport subprocess\n\n\n@dataclass(frozen=True)\nclass CommandResult:\n    returncode: int\n    output: str\n\n\nSEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")\n\n\ndef usage() -> str:\n    return "usage: ./ns release-prep <version>"\n\n\ndef is_help_arg(value: str) -> bool:\n    return value in {"-h", "--help"}\n\n\ndef normalize_version(version: str) -> tuple[str, str]:\n    raw = version.strip()\n    if not raw:\n        raise ValueError("missing version")\n    plain = raw[1:] if raw.startswith("v") else raw\n    if not SEMVER_RE.fullmatch(plain):\n        raise ValueError(f"invalid semantic version: {raw}")\n    return plain, "v" + plain\n\n\ndef run_command(repo_root: Path, args: list[str]) -> CommandResult:\n    completed = subprocess.run(\n        args,\n        cwd=repo_root,\n        text=True,\n        stdout=subprocess.PIPE,\n        stderr=subprocess.STDOUT,\n        ch
+                                       ^
+SyntaxError: unexpected character after line continuation character
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from agentic_project_kit.release_publish_core import normalize_version as n; assert n("0.3.37")==("0.3.37","v0.3.37"); assert n("v0.3.37")==("0.3.37","v0.3.37"); print("release_publish_normalize_ok")
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/release_publish_core.py", line 1
+    from __future__ import annotations\n\nfrom dataclasses import dataclass\nfrom pathlib import Path\nimport re\nimport subprocess\nimport time\n\n\n@dataclass(frozen=True)\nclass CommandResult:\n    returncode: int\n    output: str\n\n\nSEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")\n\n\ndef usage() -> str:\n    return "usage: ./ns release-publish <version> publish-v<version>"\n\n\ndef is_help_arg(value: str) -> bool:\n    return value in {"-h", "--help"}\n\n\ndef normalize_version(version: str) -> tuple[str, str]:\n    raw = version.strip()\n    if not raw:\n        raise ValueError("missing version")\n    plain = raw[1:] if raw.startswith("v") else raw\n    if not SEMVER_RE.fullmatch(plain):\n        raise ValueError(f"invalid semantic version: {raw}")\n    return plain, "v" + plain\n\n\ndef expected_confirmation(tag: str) -> str:\n    return "publish-" + tag\n\n\ndef run_command(repo_root: Path, args: list[str]) -> CommandResult:\n    completed = subprocess.run(\n        args,\n        c
+                                       ^
+SyntaxError: unexpected character after line continuation character
+
+### DIFF AFTER ROBUST REPAIR ###
+diff --git a/src/agentic_project_kit/release_gate_core.py b/src/agentic_project_kit/release_gate_core.py
+index df24cb3..96c9833 100644
+--- a/src/agentic_project_kit/release_gate_core.py
++++ b/src/agentic_project_kit/release_gate_core.py
+@@ -1,143 +1 @@
+-from __future__ import annotations
+-
+-import shutil
+-import subprocess
+-import sys
+-from collections.abc import Callable, Sequence
+-from dataclasses import dataclass
+-from pathlib import Path
+-
+-
+-CommandRunner = Callable[[Sequence[str]], int]
+-
+-
+-@dataclass(frozen=True)
+-class ReleaseGateResult:
+-    ok: bool
+-    version: str
+-    failed_step: str | None = None
+-
+-    @property
+-    def exit_code(self) -> int:
+-        return 0 if self.ok else 1
+-
+-
+-def default_runner(command: Sequence[str]) -> int:
+-    completed = subprocess.run(list(command), check=False)
+-    return int(completed.returncode)
+-
+-
+-def _section(title: str) -> None:
+-    print()
+-    print(title)
+-
+-
+-def _run_step(name: str, command: Sequence[str], runner: CommandRunner) -> str | None:
+-    _section(name)
+-    code = runner(command)
+-    if code != 0:
+-        return name
+-    return None
+-
+-
+-def _validate_dist_only_contains_version(dist_dir: Path, version: str) -> bool:
+-    if not dist_dir.exists():
+-        return False
+-    artifacts = [path.name for path in dist_dir.iterdir() if path.is_file()]
+-    if not artifacts:
+-        return False
+-    return all(version in name for name in artifacts)
+-
+-
+-def run_release_gate(
+-    version: str,
+-    *,
+-    project_root: Path | None = None,
+-    runner: CommandRunner = default_runner,
+-    remove_tree: Callable[[Path], None] = shutil.rmtree,
+-    make_dir: Callable[[Path], None] | None = None,
+-) -> ReleaseGateResult:
+-    root = Path.cwd() if project_root is None else project_root
+-    dist_dir = root / "dist"
+-    build_dir = root / "build"
+-
+-    print(f"NS RELEASE GATE CYCLE v{version}")
+-    print()
+-    print("Safety: verifies release readiness only; no tag, release, merge, or publish action.")
+-
+-    for name, command in (
+-        ("### BRANCH ###", ("git", "branch", "--show-current")),
+-        ("### STATUS ###", ("git", "status", "--short")),
+-        ("### LOCAL GATE ###", ("./ns", "dev")),
+-        (
+-            "### RELEASE CHECK ###",
+-            (
+-                sys.executable,
+-                "-m",
+-                "agentic_project_kit.cli",
+-                "release-check",
+-                "--version",
+-                version,
+-            ),
+-        ),
+-    ):
+-        failed = _run_step(name, command, runner)
+-        if failed:
+-            print(f"FAILED_STEP={failed}")
+-            print("### RESULT: FAIL ###")
+-            return ReleaseGateResult(False, version, failed)
+-
+-    _section("### CLEAN DIST ###")
+-    for path in (dist_dir, build_dir):
+-        if path.exists():
+-            remove_tree(path)
+-    for egg_info in root.glob("*.egg-info"):
+-        if egg_info.is_dir():
+-            remove_tree(egg_info)
+-    if make_dir is None:
+-        dist_dir.mkdir(parents=True, exist_ok=True)
+-    else:
+-        make_dir(dist_dir)
+-
+-    for name, command in (
+-        ("### BUILD CHECK ###", (sys.executable, "-m", "build")),
+-        ("### TWINE CHECK ###", (sys.executable, "-m", "twine", "check", "dist/*")),
+-        ("### DIST LIST ###", ("ls", "-la", "dist")),
+-    ):
+-        failed = _run_step(name, command, runner)
+-        if failed:
+-            print(f"FAILED_STEP={failed}")
+-            print("### RESULT: FAIL ###")
+-            return ReleaseGateResult(False, version, failed)
+-
+-    _section("### VERIFY DIST ONLY CONTAINS TARGET VERSION ###")
+-    if not _validate_dist_only_contains_version(dist_dir, version):
+-        print(f"ERROR: dist contains artifacts that do not match {version}, or no artifacts exist.")
+-        print("### RESULT: FAIL ###")
+-        return ReleaseGateResult(False, version, "dist-version-validation")
+-
+-    for name, command in (
+-        ("### FINAL BRANCH ###", ("git", "branch", "--show-current")),
+-        ("### FINAL STATUS ###", ("git", "status", "--short")),
+-    ):
+-        failed = _run_step(name, command, runner)
+-        if failed:
+-            print(f"FAILED_STEP={failed}")
+-            print("### RESULT: FAIL ###")
+-            return ReleaseGateResult(False, version, failed)
+-
+-    print("### RESULT: PASS ###")
+-    return ReleaseGateResult(True, version)
+-
+-
+-def main(argv: Sequence[str] | None = None) -> int:
+-    args = list(sys.argv[1:] if argv is None else argv)
+-    if not args:
+-        print("ERROR: usage: python -m agentic_project_kit.release_gate_core <version>")
+-        print("### RESULT: FAIL ###")
+-        return 2
+-    return run_release_gate(args[0]).exit_code
+-
+-
+-if __name__ == "__main__":
+-    raise SystemExit(main())
++from __future__ import annotations\n\nimport shutil\nimport subprocess\nimport sys\nfrom collections.abc import Callable, Sequence\nfrom dataclasses import dataclass\nfrom pathlib import Path\nimport re\n\n\nSEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")\n\n\ndef usage() -> str:\n    return "usage: ./ns release-gate <version>"\n\n\ndef is_help_arg(value: str) -> bool:\n    return value in {"-h", "--help"}\n\n\ndef is_valid_semver(value: str) -> bool:\n    plain = value[1:] if value.startswith("v") else value\n    return bool(SEMVER_RE.fullmatch(plain))\n\n\nCommandRunner = Callable[[Sequence[str]], int]\n\n\n@dataclass(frozen=True)\nclass ReleaseGateResult:\n    ok: bool\n    version: str\n    failed_step: str | None = None\n\n    @property\n    def exit_code(self) -> int:\n        return 0 if self.ok else 1\n\n\ndef default_runner(command: Sequence[str]) -> int:\n    completed = subprocess.run(list(command), check=False)\n    return int(completed.returncode)\n\n\ndef _section(title: str) -> None:\n    print()\n    print(title)\n\n\ndef _run_step(name: str, command: Sequence[str], runner: CommandRunner) -> str | None:\n    _section(name)\n    code = runner(command)\n    if code != 0:\n        return name\n    return None\n\n\ndef _validate_dist_only_contains_version(dist_dir: Path, version: str) -> bool:\n    if not dist_dir.exists():\n        return False\n    artifacts = [path.name for path in dist_dir.iterdir() if path.is_file()]\n    if not artifacts:\n        return False\n    return all(version in name for name in artifacts)\n\n\ndef run_release_gate(\n    version: str,\n    *,\n    project_root: Path | None = None,\n    runner: CommandRunner = default_runner,\n    remove_tree: Callable[[Path], None] = shutil.rmtree,\n    make_dir: Callable[[Path], None] | None = None,\n) -> ReleaseGateResult:\n    root = Path.cwd() if project_root is None else project_root\n    dist_dir = root / "dist"\n    build_dir = root / "build"\n\n    print(f"NS RELEASE GATE CYCLE v{version}")\n    print()\n    print("Safety: verifies release readiness only; no tag, release, merge, or publish action.")\n\n    for name, command in (\n        ("### BRANCH ###", ("git", "branch", "--show-current")),\n        ("### STATUS ###", ("git", "status", "--short")),\n        ("### LOCAL GATE ###", ("./ns", "dev")),\n        (\n            "### RELEASE CHECK ###",\n            (\n                sys.executable,\n                "-m",\n                "agentic_project_kit.cli",\n                "release-check",\n                "--version",\n                version,\n            ),\n        ),\n    ):\n        failed = _run_step(name, command, runner)\n        if failed:\n            print(f"FAILED_STEP={failed}")\n            print("### RESULT: FAIL ###")\n            return ReleaseGateResult(False, version, failed)\n\n    _section("### CLEAN DIST ###")\n    for path in (dist_dir, build_dir):\n        if path.exists():\n            remove_tree(path)\n    for egg_info in root.glob("*.egg-info"):\n        if egg_info.is_dir():\n            remove_tree(egg_info)\n    if make_dir is None:\n        dist_dir.mkdir(parents=True, exist_ok=True)\n    else:\n        make_dir(dist_dir)\n\n    for name, command in (\n        ("### BUILD CHECK ###", (sys.executable, "-m", "build")),\n        ("### TWINE CHECK ###", (sys.executable, "-m", "twine", "check", "dist/*")),\n        ("### DIST LIST ###", ("ls", "-la", "dist")),\n    ):\n        failed = _run_step(name, command, runner)\n        if failed:\n            print(f"FAILED_STEP={failed}")\n            print("### RESULT: FAIL ###")\n            return ReleaseGateResult(False, version, failed)\n\n    _section("### VERIFY DIST ONLY CONTAINS TARGET VERSION ###")\n    if not _validate_dist_only_contains_version(dist_dir, version):\n        print(f"ERROR: dist contains artifacts that do not match {version}, or no artifacts exist.")\n        print("### RESULT: FAIL ###")\n        return ReleaseGateResult(False, version, "dist-version-validation")\n\n    for name, command in (\n        ("### FINAL BRANCH ###", ("git", "branch", "--show-current")),\n        ("### FINAL STATUS ###", ("git", "status", "--short")),\n    ):\n        failed = _run_step(name, command, runner)\n        if failed:\n            print(f"FAILED_STEP={failed}")\n            print("### RESULT: FAIL ###")\n            return ReleaseGateResult(False, version, failed)\n\n    print("### RESULT: PASS ###")\n    return ReleaseGateResult(True, version)\n\n\ndef main(argv: Sequence[str] | None = None) -> int:\n    args = list(sys.argv[1:] if argv is None else argv)\n    if not args:\n        print("ERROR: usage: python -m agentic_project_kit.release_gate_core <version>")\n        print("### RESULT: FAIL ###")\n        return 2\n    if is_help_arg(args[0]):\n        print(usage())\n        return 0\n    if not is_valid_semver(args[0]):\n        print(f"ERROR: invalid semantic version: {args[0]}")\n        print("### RESULT: FAIL ###")\n        return 2\n    return run_release_gate(args[0]).exit_code\n\n\nif __name__ == "__main__":\n    raise SystemExit(main())\n
+\ No newline at end of file
+diff --git a/src/agentic_project_kit/release_prep_core.py b/src/agentic_project_kit/release_prep_core.py
+index 28a37bc..0a3ad04 100644
+--- a/src/agentic_project_kit/release_prep_core.py
++++ b/src/agentic_project_kit/release_prep_core.py
+@@ -1,143 +1 @@
+-from __future__ import annotations
+-
+-from dataclasses import dataclass
+-from pathlib import Path
+-import subprocess
+-
+-
+-@dataclass(frozen=True)
+-class CommandResult:
+-    returncode: int
+-    output: str
+-
+-
+-def normalize_version(version: str) -> tuple[str, str]:
+-    raw = version.strip()
+-    if not raw:
+-        raise ValueError("missing version")
+-    if raw.startswith("v"):
+-        return raw[1:], raw
+-    return raw, "v" + raw
+-
+-
+-def run_command(repo_root: Path, args: list[str]) -> CommandResult:
+-    completed = subprocess.run(
+-        args,
+-        cwd=repo_root,
+-        text=True,
+-        stdout=subprocess.PIPE,
+-        stderr=subprocess.STDOUT,
+-        check=False,
+-    )
+-    return CommandResult(completed.returncode, completed.stdout.strip())
+-
+-
+-def python_tool(repo_root: Path) -> str:
+-    local = repo_root / ".venv" / "bin" / "python"
+-    return str(local) if local.exists() else "python3"
+-
+-
+-def render_header(tag: str) -> list[str]:
+-    return [
+-        "",
+-        "",
+-        "",
+-        "-------------------------------------------------------------------------",
+-        "-------------------------------------------------------------------------",
+-        "-------------------------------------------------------------------------",
+-        "",
+-        "",
+-        "",
+-        f"NS RELEASE PREP CYCLE {tag}",
+-        "",
+-        "### SAFETY ###",
+-        "Safety: prepares a release branch only; no tag, release, merge, or publish action.",
+-    ]
+-
+-
+-def prepare_release(version: str, repo_root: Path) -> int:
+-    try:
+-        plain_version, tag = normalize_version(version)
+-    except ValueError:
+-        print("ERROR: missing version argument. Example: ./ns release-prep 0.3.21")
+-        print("\n### RESULT: FAIL ###")
+-        return 2
+-
+-    status = 0
+-    lines = render_header(tag)
+-    py = python_tool(repo_root)
+-
+-    def section(title: str) -> None:
+-        lines.extend(["", f"### {title} ###"])
+-
+-    def append_command(args: list[str], env_prefix: str | None = None) -> CommandResult:
+-        nonlocal status
+-        result = run_command(repo_root, args)
+-        if env_prefix:
+-            lines.append(env_prefix + " " + " ".join(args))
+-        if result.output:
+-            lines.append(result.output)
+-        if result.returncode != 0:
+-            status = 1
+-        return result
+-
+-    section("UPDATE MAIN")
+-    append_command(["git", "switch", "main"])
+-    append_command(["git", "pull", "--ff-only", "origin", "main"])
+-
+-    section("VERIFY MAIN BEFORE RELEASE BRANCH")
+-    append_command(["./ns", "dev"])
+-    append_command([py, "-m", "agentic_project_kit.cli", "pr-hygiene"], env_prefix="PYTHONPATH=src")
+-
+-    section("CREATE RELEASE PREP BRANCH")
+-    branch = f"release/prepare-{tag}"
+-    branch_check = run_command(repo_root, ["git", "show-ref", "--verify", "--quiet", f"refs/heads/{branch}"])
+-    if branch_check.returncode == 0:
+-        append_command(["git", "switch", branch])
+-    else:
+-        append_command(["git", "switch", "-c", branch])
+-
+-    section("PATCH RELEASE METADATA")
+-    append_command([py, "tools/ns_release_metadata_prep.py", plain_version])
+-
+-    section("RELEASE CHECK AFTER METADATA PATCH")
+-    append_command([py, "-m", "agentic_project_kit.cli", "release-check", "--version", plain_version], env_prefix="PYTHONPATH=src")
+-
+-    section("CURRENT VERSION REFERENCES")
+-    append_command([
+-        "grep",
+-        "-R",
+-        plain_version,
+-        "-n",
+-        "pyproject.toml",
+-        "src/agentic_project_kit/__init__.py",
+-        "CITATION.cff",
+-        "CHANGELOG.md",
+-        "README.md",
+-        "docs/STATUS.md",
+-        "docs/handoff/CURRENT_HANDOFF.md",
+-    ])
+-
+-    section("FINAL STATE")
+-    append_command(["git", "branch", "--show-current"])
+-    append_command(["git", "status", "--short"])
+-    append_command(["git", "log", "--oneline", "-8"])
+-
+-    lines.append("\n### RESULT: PASS ###" if status == 0 else "\n### RESULT: FAIL ###")
+-    print("\n".join(lines))
+-    return status
+-
+-
+-def main(argv: list[str] | None = None) -> int:
+-    args = argv if argv is not None else []
+-    if not args:
+-        print("ERROR: missing version argument. Example: ./ns release-prep 0.3.21")
+-        print("\n### RESULT: FAIL ###")
+-        return 2
+-    return prepare_release(args[0], Path(".").resolve())
+-
+-
+-if __name__ == "__main__":
+-    import sys
+-
+-    raise SystemExit(main(sys.argv[1:]))
++from __future__ import annotations\n\nfrom dataclasses import dataclass\nfrom pathlib import Path\nimport re\nimport subprocess\n\n\n@dataclass(frozen=True)\nclass CommandResult:\n    returncode: int\n    output: str\n\n\nSEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")\n\n\ndef usage() -> str:\n    return "usage: ./ns release-prep <version>"\n\n\ndef is_help_arg(value: str) -> bool:\n    return value in {"-h", "--help"}\n\n\ndef normalize_version(version: str) -> tuple[str, str]:\n    raw = version.strip()\n    if not raw:\n        raise ValueError("missing version")\n    plain = raw[1:] if raw.startswith("v") else raw\n    if not SEMVER_RE.fullmatch(plain):\n        raise ValueError(f"invalid semantic version: {raw}")\n    return plain, "v" + plain\n\n\ndef run_command(repo_root: Path, args: list[str]) -> CommandResult:\n    completed = subprocess.run(\n        args,\n        cwd=repo_root,\n        text=True,\n        stdout=subprocess.PIPE,\n        stderr=subprocess.STDOUT,\n        check=False,\n    )\n    return CommandResult(completed.returncode, completed.stdout.strip())\n\n\ndef python_tool(repo_root: Path) -> str:\n    local = repo_root / ".venv" / "bin" / "python"\n    return str(local) if local.exists() else "python3"\n\n\ndef render_header(tag: str) -> list[str]:\n    return [\n        "",\n        "",\n        "",\n        "-------------------------------------------------------------------------",\n        "-------------------------------------------------------------------------",\n        "-------------------------------------------------------------------------",\n        "",\n        "",\n        "",\n        f"NS RELEASE PREP CYCLE {tag}",\n        "",\n        "### SAFETY ###",\n        "Safety: prepares a release branch only; no tag, release, merge, or publish action.",\n    ]\n\n\ndef prepare_release(version: str, repo_root: Path) -> int:\n    try:\n        plain_version, tag = normalize_version(version)\n    except ValueError:\n        print("ERROR: missing version argument. Example: ./ns release-prep 0.3.21")\n        print("\n### RESULT: FAIL ###")\n        return 2\n\n    status = 0\n    lines = render_header(tag)\n    py = python_tool(repo_root)\n\n    def section(title: str) -> None:\n        lines.extend(["", f"### {title} ###"])\n\n    def append_command(args: list[str], env_prefix: str | None = None) -> CommandResult:\n        nonlocal status\n        result = run_command(repo_root, args)\n        if env_prefix:\n            lines.append(env_prefix + " " + " ".join(args))\n        if result.output:\n            lines.append(result.output)\n        if result.returncode != 0:\n            status = 1\n        return result\n\n    section("UPDATE MAIN")\n    append_command(["git", "switch", "main"])\n    append_command(["git", "pull", "--ff-only", "origin", "main"])\n\n    section("VERIFY MAIN BEFORE RELEASE BRANCH")\n    append_command(["./ns", "dev"])\n    append_command([py, "-m", "agentic_project_kit.cli", "pr-hygiene"], env_prefix="PYTHONPATH=src")\n\n    section("CREATE RELEASE PREP BRANCH")\n    branch = f"release/prepare-{tag}"\n    branch_check = run_command(repo_root, ["git", "show-ref", "--verify", "--quiet", f"refs/heads/{branch}"])\n    if branch_check.returncode == 0:\n        append_command(["git", "switch", branch])\n    else:\n        append_command(["git", "switch", "-c", branch])\n\n    section("PATCH RELEASE METADATA")\n    append_command([py, "tools/ns_release_metadata_prep.py", plain_version])\n\n    section("RELEASE CHECK AFTER METADATA PATCH")\n    append_command([py, "-m", "agentic_project_kit.cli", "release-check", "--version", plain_version], env_prefix="PYTHONPATH=src")\n\n    section("CURRENT VERSION REFERENCES")\n    append_command([\n        "grep",\n        "-R",\n        plain_version,\n        "-n",\n        "pyproject.toml",\n        "src/agentic_project_kit/__init__.py",\n        "CITATION.cff",\n        "CHANGELOG.md",\n        "README.md",\n        "docs/STATUS.md",\n        "docs/handoff/CURRENT_HANDOFF.md",\n    ])\n\n    section("FINAL STATE")\n    append_command(["git", "branch", "--show-current"])\n    append_command(["git", "status", "--short"])\n    append_command(["git", "log", "--oneline", "-8"])\n\n    lines.append("\n### RESULT: PASS ###" if status == 0 else "\n### RESULT: FAIL ###")\n    print("\n".join(lines))\n    return status\n\n\ndef main(argv: list[str] | None = None) -> int:\n    args = argv if argv is not None else []\n    if not args:\n        print("ERROR: missing version argument. Example: ./ns release-prep 0.3.21")\n        print("\n### RESULT: FAIL ###")\n        return 2\n    if is_help_arg(args[0]):\n        print(usage())\n        return 0\n    try:\n        normalize_version(args[0])\n    except ValueError as exc:\n        print(f"ERROR: {exc}")\n        print("\n### RESULT: FAIL ###")\n        return 2\n    return prepare_release(args[0], Path(".").resolve())\n\n\nif __name__ == "__main__":\n    import sys\n\n    raise SystemExit(main(sys.argv[1:]))\n
+\ No newline at end of file
+diff --git a/src/agentic_project_kit/release_publish_core.py b/src/agentic_project_kit/release_publish_core.py
+index c2d47e2..24f5a1b 100644
+--- a/src/agentic_project_kit/release_publish_core.py
++++ b/src/agentic_project_kit/release_publish_core.py
+@@ -1,184 +1 @@
+-from __future__ import annotations
+-
+-from dataclasses import dataclass
+-from pathlib import Path
+-import subprocess
+-import time
+-
+-
+-@dataclass(frozen=True)
+-class CommandResult:
+-    returncode: int
+-    output: str
+-
+-
+-def normalize_version(version: str) -> tuple[str, str]:
+-    raw = version.strip()
+-    if not raw:
+-        raise ValueError("missing version")
+-    if raw.startswith("v"):
+-        return raw[1:], raw
+-    return raw, "v" + raw
+-
+-
+-def expected_confirmation(tag: str) -> str:
+-    return "publish-" + tag
+-
+-
+-def run_command(repo_root: Path, args: list[str]) -> CommandResult:
+-    completed = subprocess.run(
+-        args,
+-        cwd=repo_root,
+-        text=True,
+-        stdout=subprocess.PIPE,
+-        stderr=subprocess.STDOUT,
+-        check=False,
+-    )
+-    return CommandResult(completed.returncode, completed.stdout.strip())
+-
+-
+-def render_header(tag: str, expected: str) -> list[str]:
+-    return [
+-        "",
+-        "",
+-        "",
+-        "-------------------------------------------------------------------------",
+-        "-------------------------------------------------------------------------",
+-        "-------------------------------------------------------------------------",
+-        "",
+-        "",
+-        "",
+-        f"NS RELEASE PUBLISH CYCLE {tag}",
+-        "",
+-        "### SAFETY ###",
+-        f"Safety: publishes only with exact confirmation token: {expected}",
+-    ]
+-
+-
+-def publish_release(
+-    version: str,
+-    confirmation: str,
+-    repo_root: Path,
+-    release_wait_attempts: int = 30,
+-    sleep_seconds: float = 10.0,
+-) -> int:
+-    try:
+-        plain_version, tag = normalize_version(version)
+-    except ValueError:
+-        print("ERROR: usage: ./ns release-publish <version> publish-v<version>")
+-        print("\n### RESULT: FAIL ###")
+-        return 2
+-
+-    expected = expected_confirmation(tag)
+-    lines = render_header(tag, expected)
+-    if confirmation != expected:
+-        lines.append("ERROR: refusing release publish without exact confirmation token.")
+-        lines.append(f"Run: ./ns release-publish {plain_version} {expected}")
+-        lines.append("\n### RESULT: FAIL ###")
+-        print("\n".join(lines))
+-        return 2
+-
+-    status = 0
+-
+-    def section(title: str) -> None:
+-        lines.extend(["", f"### {title} ###"])
+-
+-    def append_command(args: list[str]) -> CommandResult:
+-        nonlocal status
+-        result = run_command(repo_root, args)
+-        if result.output:
+-            lines.append(result.output)
+-        if result.returncode != 0:
+-            status = 1
+-        return result
+-
+-    section("BRANCH / STATUS")
+-    branch = append_command(["git", "branch", "--show-current"])
+-    current_branch = branch.output.splitlines()[-1] if branch.output else ""
+-    append_command(["git", "status", "--short"])
+-    porcelain = run_command(repo_root, ["git", "status", "--porcelain"])
+-    if current_branch != "main":
+-        lines.append("ERROR: release publish must run from main.")
+-        status = 1
+-    if porcelain.output:
+-        lines.append("ERROR: working tree is dirty. Commit or restore changes before publish.")
+-        status = 1
+-
+-    section("UPDATE MAIN")
+-    if status == 0:
+-        append_command(["git", "pull", "--ff-only", "origin", "main"])
+-
+-    section("RELEASE GATE")
+-    if status == 0:
+-        append_command(["./ns", "release-gate", plain_version])
+-
+-    section("VERIFY TAG IS UNUSED")
+-    if status == 0:
+-        local_tag = run_command(repo_root, ["git", "rev-parse", tag])
+-        if local_tag.returncode == 0:
+-            lines.append(f"ERROR: local tag already exists: {tag}")
+-            status = 1
+-        remote_tag = run_command(repo_root, ["git", "ls-remote", "--tags", "origin", tag])
+-        if remote_tag.returncode == 0 and tag in remote_tag.output:
+-            lines.append(f"ERROR: remote tag already exists: {tag}")
+-            status = 1
+-        github_release = run_command(repo_root, ["gh", "release", "view", tag])
+-        if github_release.returncode == 0:
+-            lines.append(f"ERROR: GitHub release already exists: {tag}")
+-            status = 1
+-
+-    section("CREATE AND PUSH TAG")
+-    if status == 0:
+-        append_command(["git", "tag", tag])
+-        if status == 0:
+-            append_command(["git", "push", "origin", tag])
+-
+-    section("WAIT FOR RELEASE WORKFLOW AND GITHUB RELEASE")
+-    if status == 0:
+-        found = False
+-        for attempt in range(release_wait_attempts):
+-            release = run_command(repo_root, ["gh", "release", "view", tag])
+-            if release.returncode == 0:
+-                found = True
+-                if release.output:
+-                    lines.append(release.output)
+-                break
+-            current_attempt = attempt + 1
+-            lines.append(f"Waiting for GitHub release {tag} ({current_attempt}/{release_wait_attempts})")
+-            if sleep_seconds:
+-                time.sleep(sleep_seconds)
+-        if not found:
+-            lines.append(f"ERROR: GitHub release did not appear before timeout: {tag}")
+-            status = 1
+-
+-    section("RELEASE WORKFLOW STATUS")
+-    append_command(["gh", "run", "list", "--workflow", "Release", "--limit", "8"])
+-
+-    section("VERIFY COMPLETED RELEASE")
+-    if status == 0:
+-        append_command(["./ns", "release-verify", plain_version])
+-
+-    section("FINAL STATE")
+-    append_command(["git", "branch", "--show-current"])
+-    append_command(["git", "log", "--oneline", "-8"])
+-    append_command(["git", "status", "--short"])
+-
+-    lines.append("\n### RESULT: PASS ###" if status == 0 else "\n### RESULT: FAIL ###")
+-    print("\n".join(lines))
+-    return status
+-
+-
+-def main(argv: list[str] | None = None) -> int:
+-    args = argv if argv is not None else []
+-    if len(args) < 1:
+-        print("ERROR: usage: ./ns release-publish <version> publish-v<version>")
+-        print("\n### RESULT: FAIL ###")
+-        return 2
+-    confirmation = args[1] if len(args) > 1 else ""
+-    return publish_release(args[0], confirmation, Path(".").resolve())
+-
+-
+-if __name__ == "__main__":
+-    import sys
+-
+-    raise SystemExit(main(sys.argv[1:]))
++from __future__ import annotations\n\nfrom dataclasses import dataclass\nfrom pathlib import Path\nimport re\nimport subprocess\nimport time\n\n\n@dataclass(frozen=True)\nclass CommandResult:\n    returncode: int\n    output: str\n\n\nSEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")\n\n\ndef usage() -> str:\n    return "usage: ./ns release-publish <version> publish-v<version>"\n\n\ndef is_help_arg(value: str) -> bool:\n    return value in {"-h", "--help"}\n\n\ndef normalize_version(version: str) -> tuple[str, str]:\n    raw = version.strip()\n    if not raw:\n        raise ValueError("missing version")\n    plain = raw[1:] if raw.startswith("v") else raw\n    if not SEMVER_RE.fullmatch(plain):\n        raise ValueError(f"invalid semantic version: {raw}")\n    return plain, "v" + plain\n\n\ndef expected_confirmation(tag: str) -> str:\n    return "publish-" + tag\n\n\ndef run_command(repo_root: Path, args: list[str]) -> CommandResult:\n    completed = subprocess.run(\n        args,\n        cwd=repo_root,\n        text=True,\n        stdout=subprocess.PIPE,\n        stderr=subprocess.STDOUT,\n        check=False,\n    )\n    return CommandResult(completed.returncode, completed.stdout.strip())\n\n\ndef render_header(tag: str, expected: str) -> list[str]:\n    return [\n        "",\n        "",\n        "",\n        "-------------------------------------------------------------------------",\n        "-------------------------------------------------------------------------",\n        "-------------------------------------------------------------------------",\n        "",\n        "",\n        "",\n        f"NS RELEASE PUBLISH CYCLE {tag}",\n        "",\n        "### SAFETY ###",\n        f"Safety: publishes only with exact confirmation token: {expected}",\n    ]\n\n\ndef publish_release(\n    version: str,\n    confirmation: str,\n    repo_root: Path,\n    release_wait_attempts: int = 30,\n    sleep_seconds: float = 10.0,\n) -> int:\n    try:\n        plain_version, tag = normalize_version(version)\n    except ValueError:\n        print("ERROR: usage: ./ns release-publish <version> publish-v<version>")\n        print("\n### RESULT: FAIL ###")\n        return 2\n\n    expected = expected_confirmation(tag)\n    lines = render_header(tag, expected)\n    if confirmation != expected:\n        lines.append("ERROR: refusing release publish without exact confirmation token.")\n        lines.append(f"Run: ./ns release-publish {plain_version} {expected}")\n        lines.append("\n### RESULT: FAIL ###")\n        print("\n".join(lines))\n        return 2\n\n    status = 0\n\n    def section(title: str) -> None:\n        lines.extend(["", f"### {title} ###"])\n\n    def append_command(args: list[str]) -> CommandResult:\n        nonlocal status\n        result = run_command(repo_root, args)\n        if result.output:\n            lines.append(result.output)\n        if result.returncode != 0:\n            status = 1\n        return result\n\n    section("BRANCH / STATUS")\n    branch = append_command(["git", "branch", "--show-current"])\n    current_branch = branch.output.splitlines()[-1] if branch.output else ""\n    append_command(["git", "status", "--short"])\n    porcelain = run_command(repo_root, ["git", "status", "--porcelain"])\n    if current_branch != "main":\n        lines.append("ERROR: release publish must run from main.")\n        status = 1\n    if porcelain.output:\n        lines.append("ERROR: working tree is dirty. Commit or restore changes before publish.")\n        status = 1\n\n    section("UPDATE MAIN")\n    if status == 0:\n        append_command(["git", "pull", "--ff-only", "origin", "main"])\n\n    section("RELEASE GATE")\n    if status == 0:\n        append_command(["./ns", "release-gate", plain_version])\n\n    section("VERIFY TAG IS UNUSED")\n    if status == 0:\n        local_tag = run_command(repo_root, ["git", "rev-parse", tag])\n        if local_tag.returncode == 0:\n            lines.append(f"ERROR: local tag already exists: {tag}")\n            status = 1\n        remote_tag = run_command(repo_root, ["git", "ls-remote", "--tags", "origin", tag])\n        if remote_tag.returncode == 0 and tag in remote_tag.output:\n            lines.append(f"ERROR: remote tag already exists: {tag}")\n            status = 1\n        github_release = run_command(repo_root, ["gh", "release", "view", tag])\n        if github_release.returncode == 0:\n            lines.append(f"ERROR: GitHub release already exists: {tag}")\n            status = 1\n\n    section("CREATE AND PUSH TAG")\n    if status == 0:\n        append_command(["git", "tag", tag])\n        if status == 0:\n            append_command(["git", "push", "origin", tag])\n\n    section("WAIT FOR RELEASE WORKFLOW AND GITHUB RELEASE")\n    if status == 0:\n        found = False\n        for attempt in range(release_wait_attempts):\n            release = run_command(repo_root, ["gh", "release", "view", tag])\n            if release.returncode == 0:\n                found = True\n                if release.output:\n                    lines.append(release.output)\n                break\n            current_attempt = attempt + 1\n            lines.append(f"Waiting for GitHub release {tag} ({current_attempt}/{release_wait_attempts})")\n            if sleep_seconds:\n                time.sleep(sleep_seconds)\n        if not found:\n            lines.append(f"ERROR: GitHub release did not appear before timeout: {tag}")\n            status = 1\n\n    section("RELEASE WORKFLOW STATUS")\n    append_command(["gh", "run", "list", "--workflow", "Release", "--limit", "8"])\n\n    section("VERIFY COMPLETED RELEASE")\n    if status == 0:\n        append_command(["./ns", "release-verify", plain_version])\n\n    section("FINAL STATE")\n    append_command(["git", "branch", "--show-current"])\n    append_command(["git", "log", "--oneline", "-8"])\n    append_command(["git", "status", "--short"])\n\n    lines.append("\n### RESULT: PASS ###" if status == 0 else "\n### RESULT: FAIL ###")\n    print("\n".join(lines))\n    return status\n\n\ndef main(argv: list[str] | None = None) -> int:\n    args = argv if argv is not None else []\n    if len(args) < 1:\n        print("ERROR: usage: ./ns release-publish <version> publish-v<version>")\n        print("\n### RESULT: FAIL ###")\n        return 2\n    if is_help_arg(args[0]):\n        print(usage())\n        return 0\n    try:\n        normalize_version(args[0])\n    except ValueError as exc:\n        print(f"ERROR: {exc}")\n        print("\n### RESULT: FAIL ###")\n        return 2\n    confirmation = args[1] if len(args) > 1 else ""\n    return publish_release(args[0], confirmation, Path(".").resolve())\n\n\nif __name__ == "__main__":\n    import sys\n\n    raise SystemExit(main(sys.argv[1:]))\n
+\ No newline at end of file
+diff --git a/src/agentic_project_kit/release_verify_core.py b/src/agentic_project_kit/release_verify_core.py
+index 735ae1c..f5c95bb 100644
+--- a/src/agentic_project_kit/release_verify_core.py
++++ b/src/agentic_project_kit/release_verify_core.py
+@@ -1,151 +1 @@
+-from __future__ import annotations
+-
+-from dataclasses import dataclass
+-from pathlib import Path
+-import subprocess
+-import time
+-
+-
+-@dataclass(frozen=True)
+-class CommandResult:
+-    returncode: int
+-    output: str
+-
+-
+-def normalize_version(version: str) -> tuple[str, str]:
+-    raw = version.strip()
+-    if not raw:
+-        raise ValueError("missing version")
+-    if raw.startswith("v"):
+-        return raw[1:], raw
+-    return raw, "v" + raw
+-
+-
+-def run_command(repo_root: Path, args: list[str]) -> CommandResult:
+-    completed = subprocess.run(
+-        args,
+-        cwd=repo_root,
+-        text=True,
+-        stdout=subprocess.PIPE,
+-        stderr=subprocess.STDOUT,
+-        check=False,
+-    )
+-    return CommandResult(completed.returncode, completed.stdout.strip())
+-
+-
+-def agentic_kit_command(repo_root: Path) -> list[str]:
+-    local = repo_root / ".venv" / "bin" / "agentic-kit"
+-    if local.exists():
+-        return [str(local)]
+-    return ["agentic-kit"]
+-
+-
+-def render_header(tag: str) -> list[str]:
+-    return [
+-        "",
+-        "",
+-        "",
+-        "-------------------------------------------------------------------------",
+-        "-------------------------------------------------------------------------",
+-        "-------------------------------------------------------------------------",
+-        "",
+-        "",
+-        "",
+-        f"NS RELEASE VERIFY CYCLE {tag}",
+-        "",
+-        "### SAFETY ###",
+-        "Safety: verifies completed release state only; no tag, release, merge, push, or publish action.",
+-    ]
+-
+-
+-def verify_release(version: str, repo_root: Path, release_wait_attempts: int = 24, sleep_seconds: float = 10.0) -> int:
+-    try:
+-        plain_version, tag = normalize_version(version)
+-    except ValueError:
+-        print("ERROR: usage: ./ns release-verify <version>")
+-        print("\n### RESULT: FAIL ###")
+-        return 2
+-
+-    status = 0
+-    lines = render_header(tag)
+-
+-    def section(title: str) -> None:
+-        lines.extend(["", f"### {title} ###"])
+-
+-    def append_command(args: list[str], fail_message: str | None = None) -> CommandResult:
+-        nonlocal status
+-        result = run_command(repo_root, args)
+-        if result.output:
+-            lines.append(result.output)
+-        if result.returncode != 0:
+-            if fail_message:
+-                lines.append(fail_message)
+-            status = 1
+-        return result
+-
+-    section("BRANCH / STATUS")
+-    append_command(["git", "branch", "--show-current"])
+-    append_command(["git", "status", "--short"])
+-
+-    section("VERIFY LOCAL TAG")
+-    local_tag = append_command(["git", "rev-parse", "-q", "--verify", f"refs/tags/{tag}"])
+-    if local_tag.returncode != 0:
+-        lines.append(f"ERROR: local tag missing: {tag}")
+-
+-    section("VERIFY REMOTE TAG")
+-    remote_tag = append_command(["git", "ls-remote", "--tags", "origin", tag])
+-    if remote_tag.returncode != 0 or tag not in remote_tag.output:
+-        lines.append(f"ERROR: remote tag missing: {tag}")
+-        status = 1
+-
+-    section("WAIT FOR GITHUB RELEASE")
+-    found = False
+-    last_release_output = ""
+-    for attempt in range(release_wait_attempts + 1):
+-        release = run_command(repo_root, ["gh", "release", "view", tag])
+-        last_release_output = release.output
+-        if release.returncode == 0:
+-            found = True
+-            if release.output:
+-                lines.append(release.output)
+-            break
+-        if attempt < release_wait_attempts:
+-            next_count = attempt + 1
+-            lines.append(f"Release not visible yet for {tag}; retry {next_count}/{release_wait_attempts} after {int(sleep_seconds)}s.")
+-            if sleep_seconds:
+-                time.sleep(sleep_seconds)
+-    if not found:
+-        lines.append(f"ERROR: GitHub release still missing after wait: {tag}")
+-        if last_release_output:
+-            lines.append(last_release_output)
+-        status = 1
+-
+-    section("RELEASE WORKFLOW STATUS")
+-    append_command(["gh", "run", "list", "--workflow", "Release", "--limit", "8"])
+-
+-    section("POST RELEASE CHECK")
+-    append_command([*agentic_kit_command(repo_root), "post-release-check", "--version", plain_version])
+-
+-    section("FINAL STATE")
+-    append_command(["git", "branch", "--show-current"])
+-    append_command(["git", "log", "--oneline", "-8"])
+-    append_command(["git", "status", "--short"])
+-
+-    lines.append("\n### RESULT: PASS ###" if status == 0 else "\n### RESULT: FAIL ###")
+-    print("\n".join(lines))
+-    return status
+-
+-
+-def main(argv: list[str] | None = None) -> int:
+-    args = argv if argv is not None else []
+-    if not args:
+-        print("ERROR: usage: ./ns release-verify <version>")
+-        print("\n### RESULT: FAIL ###")
+-        return 2
+-    return verify_release(args[0], Path(".").resolve())
+-
+-
+-if __name__ == "__main__":
+-    import sys
+-
+-    raise SystemExit(main(sys.argv[1:]))
++from __future__ import annotations\n\nfrom dataclasses import dataclass\nfrom pathlib import Path\nimport re\nimport subprocess\nimport time\n\n\nSEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")\n\n\ndef usage() -> str:\n    return "usage: ./ns release-verify <version>"\n\n\ndef is_help_arg(value: str) -> bool:\n    return value in {"-h", "--help"}\n\n\ndef is_valid_semver(value: str) -> bool:\n    plain = value[1:] if value.startswith("v") else value\n    return bool(SEMVER_RE.fullmatch(plain))\n\n\n@dataclass(frozen=True)\nclass CommandResult:\n    returncode: int\n    output: str\n\n\ndef normalize_version(version: str) -> tuple[str, str]:\n    raw = version.strip()\n    if not raw:\n        raise ValueError("missing version")\n    if raw.startswith("v"):\n        return raw[1:], raw\n    return raw, "v" + raw\n\n\ndef run_command(repo_root: Path, args: list[str]) -> CommandResult:\n    completed = subprocess.run(\n        args,\n        cwd=repo_root,\n        text=True,\n        stdout=subprocess.PIPE,\n        stderr=subprocess.STDOUT,\n        check=False,\n    )\n    return CommandResult(completed.returncode, completed.stdout.strip())\n\n\ndef agentic_kit_command(repo_root: Path) -> list[str]:\n    local = repo_root / ".venv" / "bin" / "agentic-kit"\n    if local.exists():\n        return [str(local)]\n    return ["agentic-kit"]\n\n\ndef render_header(tag: str) -> list[str]:\n    return [\n        "",\n        "",\n        "",\n        "-------------------------------------------------------------------------",\n        "-------------------------------------------------------------------------",\n        "-------------------------------------------------------------------------",\n        "",\n        "",\n        "",\n        f"NS RELEASE VERIFY CYCLE {tag}",\n        "",\n        "### SAFETY ###",\n        "Safety: verifies completed release state only; no tag, release, merge, push, or publish action.",\n    ]\n\n\ndef verify_release(version: str, repo_root: Path, release_wait_attempts: int = 24, sleep_seconds: float = 10.0) -> int:\n    try:\n        plain_version, tag = normalize_version(version)\n    except ValueError:\n        print("ERROR: usage: ./ns release-verify <version>")\n        print("\n### RESULT: FAIL ###")\n        return 2\n\n    status = 0\n    lines = render_header(tag)\n\n    def section(title: str) -> None:\n        lines.extend(["", f"### {title} ###"])\n\n    def append_command(args: list[str], fail_message: str | None = None) -> CommandResult:\n        nonlocal status\n        result = run_command(repo_root, args)\n        if result.output:\n            lines.append(result.output)\n        if result.returncode != 0:\n            if fail_message:\n                lines.append(fail_message)\n            status = 1\n        return result\n\n    section("BRANCH / STATUS")\n    append_command(["git", "branch", "--show-current"])\n    append_command(["git", "status", "--short"])\n\n    section("VERIFY LOCAL TAG")\n    local_tag = append_command(["git", "rev-parse", "-q", "--verify", f"refs/tags/{tag}"])\n    if local_tag.returncode != 0:\n        lines.append(f"ERROR: local tag missing: {tag}")\n\n    section("VERIFY REMOTE TAG")\n    remote_tag = append_command(["git", "ls-remote", "--tags", "origin", tag])\n    if remote_tag.returncode != 0 or tag not in remote_tag.output:\n        lines.append(f"ERROR: remote tag missing: {tag}")\n        status = 1\n\n    section("WAIT FOR GITHUB RELEASE")\n    found = False\n    last_release_output = ""\n    for attempt in range(release_wait_attempts + 1):\n        release = run_command(repo_root, ["gh", "release", "view", tag])\n        last_release_output = release.output\n        if release.returncode == 0:\n            found = True\n            if release.output:\n                lines.append(release.output)\n            break\n        if attempt < release_wait_attempts:\n            next_count = attempt + 1\n            lines.append(f"Release not visible yet for {tag}; retry {next_count}/{release_wait_attempts} after {int(sleep_seconds)}s.")\n            if sleep_seconds:\n                time.sleep(sleep_seconds)\n    if not found:\n        lines.append(f"ERROR: GitHub release still missing after wait: {tag}")\n        if last_release_output:\n            lines.append(last_release_output)\n        status = 1\n\n    section("RELEASE WORKFLOW STATUS")\n    append_command(["gh", "run", "list", "--workflow", "Release", "--limit", "8"])\n\n    section("POST RELEASE CHECK")\n    append_command([*agentic_kit_command(repo_root), "post-release-check", "--version", plain_version])\n\n    section("FINAL STATE")\n    append_command(["git", "branch", "--show-current"])\n    append_command(["git", "log", "--oneline", "-8"])\n    append_command(["git", "status", "--short"])\n\n    lines.append("\n### RESULT: PASS ###" if status == 0 else "\n### RESULT: FAIL ###")\n    print("\n".join(lines))\n    return status\n\n\ndef main(argv: list[str] | None = None) -> int:\n    args = argv if argv is not None else []\n    if not args:\n        print("ERROR: usage: ./ns release-verify <version>")\n        print("\n### RESULT: FAIL ###")\n        return 2\n    if is_help_arg(args[0]):\n        print(usage())\n        return 0\n    if not is_valid_semver(args[0]):\n        print(f"ERROR: invalid semantic version: {args[0]}")\n        print("\n### RESULT: FAIL ###")\n        return 2\n    return verify_release(args[0], Path(".").resolve())\n\n\nif __name__ == "__main__":\n    import sys\n\n    raise SystemExit(main(sys.argv[1:]))\n
+\ No newline at end of file
+
+### TARGETED TESTS ###
+
+### REAL HELP SAFETY SMOKE ###
+
+### INVALID VERSION SAFETY SMOKE ###
+
+### ACCIDENTAL BRANCH ABSENCE ###
+accidental_help_branch_count=0
+
+### FULL LOCAL GATES ###
+
+### COPY ROBUST REPAIR LOG FOR COMMIT ###

@@ -1,11 +1,28 @@
 from __future__ import annotations
 
+import re
 import shutil
 import subprocess
 import sys
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
+
+
+SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
+
+
+def usage() -> str:
+    return "usage: ./ns release-gate <version>"
+
+
+def is_help_arg(value: str) -> bool:
+    return value in {"-h", "--help"}
+
+
+def is_valid_semver(value: str) -> bool:
+    plain = value[1:] if value.startswith("v") else value
+    return bool(SEMVER_RE.fullmatch(plain))
 
 
 CommandRunner = Callable[[Sequence[str]], int]
@@ -134,6 +151,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
     if not args:
         print("ERROR: usage: python -m agentic_project_kit.release_gate_core <version>")
+        print("### RESULT: FAIL ###")
+        return 2
+    if is_help_arg(args[0]):
+        print(usage())
+        return 0
+    if not is_valid_semver(args[0]):
+        print(f"ERROR: invalid semantic version: {args[0]}")
         print("### RESULT: FAIL ###")
         return 2
     return run_release_gate(args[0]).exit_code

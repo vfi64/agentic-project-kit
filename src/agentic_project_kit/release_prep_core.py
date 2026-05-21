@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import re
 import subprocess
 
 
@@ -11,13 +12,25 @@ class CommandResult:
     output: str
 
 
+SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
+
+
+def usage() -> str:
+    return "usage: ./ns release-prep <version>"
+
+
+def is_help_arg(value: str) -> bool:
+    return value in {"-h", "--help"}
+
+
 def normalize_version(version: str) -> tuple[str, str]:
     raw = version.strip()
     if not raw:
         raise ValueError("missing version")
-    if raw.startswith("v"):
-        return raw[1:], raw
-    return raw, "v" + raw
+    plain = raw[1:] if raw.startswith("v") else raw
+    if not SEMVER_RE.fullmatch(plain):
+        raise ValueError(f"invalid semantic version: {raw}")
+    return plain, "v" + plain
 
 
 def run_command(repo_root: Path, args: list[str]) -> CommandResult:
@@ -132,6 +145,15 @@ def main(argv: list[str] | None = None) -> int:
     args = argv if argv is not None else []
     if not args:
         print("ERROR: missing version argument. Example: ./ns release-prep 0.3.21")
+        print("\n### RESULT: FAIL ###")
+        return 2
+    if is_help_arg(args[0]):
+        print(usage())
+        return 0
+    try:
+        normalize_version(args[0])
+    except ValueError as exc:
+        print(f"ERROR: {exc}")
         print("\n### RESULT: FAIL ###")
         return 2
     return prepare_release(args[0], Path(".").resolve())

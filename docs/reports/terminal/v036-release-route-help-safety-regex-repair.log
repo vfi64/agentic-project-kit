@@ -1,0 +1,47 @@
+
+### VERIFY DIRTY REPAIR CONTEXT ###
+fix/v0.3.36-release-route-help-safety
+ M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? docs/reports/terminal/v036-release-route-help-safety-fix.log
+?? tests/test_v036_release_route_help_safety.py
+
+### INSPECT CURRENT SEMVER REGEX ###
+src/agentic_project_kit/release_prep_core.py:15:SEMVER_RE = re.compile(r"^\\d+\\.\\d+\\.\\d+$")
+src/agentic_project_kit/release_prep_core.py:31:    if not SEMVER_RE.fullmatch(plain):
+src/agentic_project_kit/release_gate_core.py:12:SEMVER_RE = re.compile(r"^\\d+\\.\\d+\\.\\d+$")
+src/agentic_project_kit/release_gate_core.py:25:    return bool(SEMVER_RE.fullmatch(plain))
+src/agentic_project_kit/release_publish_core.py:16:SEMVER_RE = re.compile(r"^\\d+\\.\\d+\\.\\d+$")
+src/agentic_project_kit/release_publish_core.py:32:    if not SEMVER_RE.fullmatch(plain):
+src/agentic_project_kit/release_verify_core.py:10:SEMVER_RE = re.compile(r"^\\d+\\.\\d+\\.\\d+$")
+src/agentic_project_kit/release_verify_core.py:23:    return bool(SEMVER_RE.fullmatch(plain))
+
+### WRITE REGEX REPAIR SCRIPT ###
+
+### APPLY REGEX REPAIR ###
+expected 4 regex repairs, got 0: []
+
+### VERIFY REPAIRED REGEX AND NORMALIZE DIRECTLY ###
+src/agentic_project_kit/release_prep_core.py:15:SEMVER_RE = re.compile(r"^\\d+\\.\\d+\\.\\d+$")
+src/agentic_project_kit/release_prep_core.py:31:    if not SEMVER_RE.fullmatch(plain):
+src/agentic_project_kit/release_gate_core.py:12:SEMVER_RE = re.compile(r"^\\d+\\.\\d+\\.\\d+$")
+src/agentic_project_kit/release_gate_core.py:25:    return bool(SEMVER_RE.fullmatch(plain))
+src/agentic_project_kit/release_publish_core.py:16:SEMVER_RE = re.compile(r"^\\d+\\.\\d+\\.\\d+$")
+src/agentic_project_kit/release_publish_core.py:32:    if not SEMVER_RE.fullmatch(plain):
+src/agentic_project_kit/release_verify_core.py:10:SEMVER_RE = re.compile(r"^\\d+\\.\\d+\\.\\d+$")
+src/agentic_project_kit/release_verify_core.py:23:    return bool(SEMVER_RE.fullmatch(plain))
+
+### TARGETED TESTS ###
+
+### REAL HELP SAFETY SMOKE ###
+
+### INVALID VERSION SAFETY SMOKE ###
+
+### ACCIDENTAL BRANCH ABSENCE ###
+accidental_help_branch_count=0
+
+### FULL LOCAL GATES ###
+
+### COPY REPAIR LOG FOR COMMIT ###

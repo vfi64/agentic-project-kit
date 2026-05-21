@@ -1,0 +1,391 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK ###
+main
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=main
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'fix/v0.3.36-release-route-help-safety'
+
+### WRITE PATCH SCRIPT ###
+
+### APPLY PATCH ###
+
+### DIFF ###
+diff --git a/src/agentic_project_kit/release_gate_core.py b/src/agentic_project_kit/release_gate_core.py
+index df24cb3..158e704 100644
+--- a/src/agentic_project_kit/release_gate_core.py
++++ b/src/agentic_project_kit/release_gate_core.py
+@@ -6,6 +6,23 @@ import sys
+ from collections.abc import Callable, Sequence
+ from dataclasses import dataclass
+ from pathlib import Path
++import re
++
++
++SEMVER_RE = re.compile(r"^\\d+\\.\\d+\\.\\d+$")
++
++
++def usage() -> str:
++    return "usage: ./ns release-gate <version>"
++
++
++def is_help_arg(value: str) -> bool:
++    return value in {"-h", "--help"}
++
++
++def is_valid_semver(value: str) -> bool:
++    plain = value[1:] if value.startswith("v") else value
++    return bool(SEMVER_RE.fullmatch(plain))
+ 
+ 
+ CommandRunner = Callable[[Sequence[str]], int]
+@@ -136,6 +153,13 @@ def main(argv: Sequence[str] | None = None) -> int:
+         print("ERROR: usage: python -m agentic_project_kit.release_gate_core <version>")
+         print("### RESULT: FAIL ###")
+         return 2
++    if is_help_arg(args[0]):
++        print(usage())
++        return 0
++    if not is_valid_semver(args[0]):
++        print(f"ERROR: invalid semantic version: {args[0]}")
++        print("### RESULT: FAIL ###")
++        return 2
+     return run_release_gate(args[0]).exit_code
+ 
+ 
+diff --git a/src/agentic_project_kit/release_prep_core.py b/src/agentic_project_kit/release_prep_core.py
+index 28a37bc..9f95e0d 100644
+--- a/src/agentic_project_kit/release_prep_core.py
++++ b/src/agentic_project_kit/release_prep_core.py
+@@ -2,6 +2,7 @@ from __future__ import annotations
+ 
+ from dataclasses import dataclass
+ from pathlib import Path
++import re
+ import subprocess
+ 
+ 
+@@ -11,13 +12,25 @@ class CommandResult:
+     output: str
+ 
+ 
++SEMVER_RE = re.compile(r"^\\d+\\.\\d+\\.\\d+$")
++
++
++def usage() -> str:
++    return "usage: ./ns release-prep <version>"
++
++
++def is_help_arg(value: str) -> bool:
++    return value in {"-h", "--help"}
++
++
+ def normalize_version(version: str) -> tuple[str, str]:
+     raw = version.strip()
+     if not raw:
+         raise ValueError("missing version")
+-    if raw.startswith("v"):
+-        return raw[1:], raw
+-    return raw, "v" + raw
++    plain = raw[1:] if raw.startswith("v") else raw
++    if not SEMVER_RE.fullmatch(plain):
++        raise ValueError(f"invalid semantic version: {raw}")
++    return plain, "v" + plain
+ 
+ 
+ def run_command(repo_root: Path, args: list[str]) -> CommandResult:
+@@ -134,6 +147,15 @@ def main(argv: list[str] | None = None) -> int:
+         print("ERROR: missing version argument. Example: ./ns release-prep 0.3.21")
+         print("\n### RESULT: FAIL ###")
+         return 2
++    if is_help_arg(args[0]):
++        print(usage())
++        return 0
++    try:
++        normalize_version(args[0])
++    except ValueError as exc:
++        print(f"ERROR: {exc}")
++        print("\n### RESULT: FAIL ###")
++        return 2
+     return prepare_release(args[0], Path(".").resolve())
+ 
+ 
+diff --git a/src/agentic_project_kit/release_publish_core.py b/src/agentic_project_kit/release_publish_core.py
+index c2d47e2..c9325cc 100644
+--- a/src/agentic_project_kit/release_publish_core.py
++++ b/src/agentic_project_kit/release_publish_core.py
+@@ -2,6 +2,7 @@ from __future__ import annotations
+ 
+ from dataclasses import dataclass
+ from pathlib import Path
++import re
+ import subprocess
+ import time
+ 
+@@ -12,13 +13,25 @@ class CommandResult:
+     output: str
+ 
+ 
++SEMVER_RE = re.compile(r"^\\d+\\.\\d+\\.\\d+$")
++
++
++def usage() -> str:
++    return "usage: ./ns release-publish <version> publish-v<version>"
++
++
++def is_help_arg(value: str) -> bool:
++    return value in {"-h", "--help"}
++
++
+ def normalize_version(version: str) -> tuple[str, str]:
+     raw = version.strip()
+     if not raw:
+         raise ValueError("missing version")
+-    if raw.startswith("v"):
+-        return raw[1:], raw
+-    return raw, "v" + raw
++    plain = raw[1:] if raw.startswith("v") else raw
++    if not SEMVER_RE.fullmatch(plain):
++        raise ValueError(f"invalid semantic version: {raw}")
++    return plain, "v" + plain
+ 
+ 
+ def expected_confirmation(tag: str) -> str:
+@@ -174,6 +187,15 @@ def main(argv: list[str] | None = None) -> int:
+         print("ERROR: usage: ./ns release-publish <version> publish-v<version>")
+         print("\n### RESULT: FAIL ###")
+         return 2
++    if is_help_arg(args[0]):
++        print(usage())
++        return 0
++    try:
++        normalize_version(args[0])
++    except ValueError as exc:
++        print(f"ERROR: {exc}")
++        print("\n### RESULT: FAIL ###")
++        return 2
+     confirmation = args[1] if len(args) > 1 else ""
+     return publish_release(args[0], confirmation, Path(".").resolve())
+ 
+diff --git a/src/agentic_project_kit/release_verify_core.py b/src/agentic_project_kit/release_verify_core.py
+index 735ae1c..0742e73 100644
+--- a/src/agentic_project_kit/release_verify_core.py
++++ b/src/agentic_project_kit/release_verify_core.py
+@@ -2,10 +2,27 @@ from __future__ import annotations
+ 
+ from dataclasses import dataclass
+ from pathlib import Path
++import re
+ import subprocess
+ import time
+ 
+ 
++SEMVER_RE = re.compile(r"^\\d+\\.\\d+\\.\\d+$")
++
++
++def usage() -> str:
++    return "usage: ./ns release-verify <version>"
++
++
++def is_help_arg(value: str) -> bool:
++    return value in {"-h", "--help"}
++
++
++def is_valid_semver(value: str) -> bool:
++    plain = value[1:] if value.startswith("v") else value
++    return bool(SEMVER_RE.fullmatch(plain))
++
++
+ @dataclass(frozen=True)
+ class CommandResult:
+     returncode: int
+@@ -142,6 +159,13 @@ def main(argv: list[str] | None = None) -> int:
+         print("ERROR: usage: ./ns release-verify <version>")
+         print("\n### RESULT: FAIL ###")
+         return 2
++    if is_help_arg(args[0]):
++        print(usage())
++        return 0
++    if not is_valid_semver(args[0]):
++        print(f"ERROR: invalid semantic version: {args[0]}")
++        print("\n### RESULT: FAIL ###")
++        return 2
+     return verify_release(args[0], Path(".").resolve())
+ 
+ 
+
+### TARGETED TESTS ###
+................................................                         [100%]
+48 passed in 0.05s
+
+### REAL HELP SAFETY SMOKE ###
+
+--- ./ns release-prep --help ---
+usage: ./ns release-prep <version>
+after_branch_release-prep=fix/v0.3.36-release-route-help-safety
+after_status_release-prep= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? tests/test_v036_release_route_help_safety.py
+
+--- ./ns release-gate --help ---
+usage: ./ns release-gate <version>
+after_branch_release-gate=fix/v0.3.36-release-route-help-safety
+after_status_release-gate= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? tests/test_v036_release_route_help_safety.py
+
+--- ./ns release-publish --help ---
+usage: ./ns release-publish <version> publish-v<version>
+after_branch_release-publish=fix/v0.3.36-release-route-help-safety
+after_status_release-publish= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? tests/test_v036_release_route_help_safety.py
+
+--- ./ns release-verify --help ---
+usage: ./ns release-verify <version>
+after_branch_release-verify=fix/v0.3.36-release-route-help-safety
+after_status_release-verify= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? tests/test_v036_release_route_help_safety.py
+
+### INVALID VERSION SAFETY SMOKE ###
+
+--- ./ns release-prep --help-like ---
+ERROR: invalid semantic version: --help-like
+
+### RESULT: FAIL ###
+invalid_status_release-prep=2
+after_invalid_branch_release-prep=fix/v0.3.36-release-route-help-safety
+after_invalid_status_release-prep= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? tests/test_v036_release_route_help_safety.py
+
+--- ./ns release-gate --help-like ---
+ERROR: invalid semantic version: --help-like
+### RESULT: FAIL ###
+invalid_status_release-gate=2
+after_invalid_branch_release-gate=fix/v0.3.36-release-route-help-safety
+after_invalid_status_release-gate= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? tests/test_v036_release_route_help_safety.py
+
+--- ./ns release-publish --help-like ---
+ERROR: invalid semantic version: --help-like
+
+### RESULT: FAIL ###
+invalid_status_release-publish=2
+after_invalid_branch_release-publish=fix/v0.3.36-release-route-help-safety
+after_invalid_status_release-publish= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? tests/test_v036_release_route_help_safety.py
+
+--- ./ns release-verify --help-like ---
+ERROR: invalid semantic version: --help-like
+
+### RESULT: FAIL ###
+invalid_status_release-verify=2
+after_invalid_branch_release-verify=fix/v0.3.36-release-route-help-safety
+after_invalid_status_release-verify= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? tests/test_v036_release_route_help_safety.py
+
+### ACCIDENTAL BRANCH ABSENCE ###
+accidental_help_branch_count=0
+
+### FULL LOCAL GATES ###
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+........................................................................ [ 30%]
+........................................................................ [ 41%]
+........................................................................ [ 51%]
+.........F.F............................................................ [ 61%]
+........................................................................ [ 72%]
+........................................................................ [ 82%]
+........................................................................ [ 92%]
+..................................................                       [100%]
+=================================== FAILURES ===================================
+_________________ test_normalize_version_accepts_plain_and_tag _________________
+
+    def test_normalize_version_accepts_plain_and_tag():
+>       assert normalize_version("0.3.37") == ("0.3.37", "v0.3.37")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_release_prep_core.py:5: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+version = '0.3.37'
+
+    def normalize_version(version: str) -> tuple[str, str]:
+        raw = version.strip()
+        if not raw:
+            raise ValueError("missing version")
+        plain = raw[1:] if raw.startswith("v") else raw
+        if not SEMVER_RE.fullmatch(plain):
+>           raise ValueError(f"invalid semantic version: {raw}")
+E           ValueError: invalid semantic version: 0.3.37
+
+src/agentic_project_kit/release_prep_core.py:32: ValueError
+_________________ test_normalize_version_accepts_plain_and_tag _________________
+
+    def test_normalize_version_accepts_plain_and_tag():
+>       assert normalize_version("0.3.37") == ("0.3.37", "v0.3.37")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_release_publish_core.py:5: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+version = '0.3.37'
+
+    def normalize_version(version: str) -> tuple[str, str]:
+        raw = version.strip()
+        if not raw:
+            raise ValueError("missing version")
+        plain = raw[1:] if raw.startswith("v") else raw
+        if not SEMVER_RE.fullmatch(plain):
+>           raise ValueError(f"invalid semantic version: {raw}")
+E           ValueError: invalid semantic version: 0.3.37
+
+src/agentic_project_kit/release_publish_core.py:33: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_release_prep_core.py::test_normalize_version_accepts_plain_and_tag
+FAILED tests/test_release_publish_core.py::test_normalize_version_accepts_plain_and_tag
+2 failed, 696 passed in 4.06s
+
+### COPY LOG FOR COMMIT ###
