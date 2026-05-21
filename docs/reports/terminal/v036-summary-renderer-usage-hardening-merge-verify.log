@@ -1,0 +1,95 @@
+
+### PRECHECK ###
+feature/v036-summary-renderer-usage-hardening
+075f075 Harden summary renderer CLI usage contract
+c320448 Record communication summary slice guard merge verification log
+2bdfb0f Require explicit slice name for communication summaries (#603)
+7dca545 Record communication state after run summary merge
+36def19 Record run summary renderer merge verification log
+
+### PR VIEW ###
+{"baseRefName":"main","headRefName":"feature/v036-summary-renderer-usage-hardening","mergeStateStatus":"CLEAN","number":604,"state":"OPEN","title":"Harden summary renderer CLI usage contract","url":"https://github.com/vfi64/agentic-project-kit/pull/604"}
+
+### PR CHECKS ###
+test	pass	24s	https://github.com/vfi64/agentic-project-kit/actions/runs/26234320284/job/77203084074	
+test	pass	24s	https://github.com/vfi64/agentic-project-kit/actions/runs/26234324314/job/77203099823	
+test	pass	24s	https://github.com/vfi64/agentic-project-kit/actions/runs/26234320284/job/77203084074	
+test	pass	24s	https://github.com/vfi64/agentic-project-kit/actions/runs/26234324314/job/77203099823	
+
+### MERGE PR ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   c320448..de8d5b1  main       -> origin/main
+Updating c320448..de8d5b1
+Fast-forward
+ docs/governance/FINAL_SUMMARY_CONTRACT.md          |   9 +
+ .../v036-summary-renderer-legacy-compat-repair.log | 104 +++++++++++
+ docs/workflow/V0.3.36_REMAINING_WORKPLAN.md        |   9 +
+ src/agentic_project_kit/run_summary_renderer.py    | 198 ++++++++++++++-------
+ .../test_v036_summary_renderer_usage_hardening.py  |  64 +++++++
+ 5 files changed, 324 insertions(+), 60 deletions(-)
+ create mode 100644 docs/reports/terminal/v036-summary-renderer-legacy-compat-repair.log
+ create mode 100644 tests/test_v036_summary_renderer_usage_hardening.py
+
+### UPDATE MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### VERIFY MAIN ###
+main
+de8d5b1 Harden summary renderer CLI usage contract (#604)
+c320448 Record communication summary slice guard merge verification log
+2bdfb0f Require explicit slice name for communication summaries (#603)
+7dca545 Record communication state after run summary merge
+36def19 Record run summary renderer merge verification log
+286c65c Add deterministic run summary renderer (#602)
+81ed316 Record v0.3.36 shell removal closeout merge verification
+4f65e4d Record v0.3.36 shell removal closeout merge verification
+================================================================
+SUMMARY COMM-SMOKE | 2026-05-21 17:03:48 +0200
+
+SLICE
+  NAME: POST MERGE SUMMARY SMOKE
+  SCOPE: READ ONLY
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: not_recorded
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: NONE
+  HEAD_SHA: NONE
+  CI: NONE
+  MERGE: NONE
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/v036-summary-renderer-legacy-compat-repair.log
+  terminal_log_remote: docs/reports/terminal/v036-summary-renderer-legacy-compat-repair.log
+  terminal_log_local: /tmp/smoke.log
+  command_report: NONE
+
+INTERPRETATION
+  No interpretation recorded.
+
+NEXT
+  SAFE_STEP: not_recorded
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
+
+### SAVE MERGE VERIFY LOG IF GREEN ###
