@@ -1,0 +1,88 @@
+
+### SYNC FEATURE AND PR STATE ###
+Already on 'feature/v0.4.0-gui-bounded-readonly-action-execution'
+Your branch is up to date with 'origin/feature/v0.4.0-gui-bounded-readonly-action-execution'.
+{"baseRefName":"main","headRefName":"feature/v0.4.0-gui-bounded-readonly-action-execution","isDraft":false,"mergeStateStatus":"CLEAN","number":636,"state":"OPEN","title":"Add bounded read-only GUI action execution contract","url":"https://github.com/vfi64/agentic-project-kit/pull/636"}
+test	pass	20s	https://github.com/vfi64/agentic-project-kit/actions/runs/26247055655/job/77248031903	
+test	pass	22s	https://github.com/vfi64/agentic-project-kit/actions/runs/26247057764/job/77248038760	
+
+### MERGE PR ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   a4c5828..eb4cca6  main       -> origin/main
+Updating a4c5828..eb4cca6
+Fast-forward
+ ...-bounded-readonly-action-execution-contract.log |  71 ++++++++++++++
+ src/agentic_project_kit/gui_action_execution.py    | 105 +++++++++++++++++++++
+ ...t_v040_gui_bounded_readonly_action_execution.py |  68 +++++++++++++
+ 3 files changed, 244 insertions(+)
+ create mode 100644 docs/reports/terminal/v040-gui-bounded-readonly-action-execution-contract.log
+ create mode 100644 src/agentic_project_kit/gui_action_execution.py
+ create mode 100644 tests/test_v040_gui_bounded_readonly_action_execution.py
+
+### UPDATE MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### VERIFY MAIN STATE ###
+main
+eb4cca6 Add bounded read-only GUI action execution contract (#636)
+a4c5828 Record GUI action execution boundary discovery log
+7ec8857 Record GUI remote mutation safety merge verification log
+ef65764 Block remote-mutation GUI actions by default (#635)
+301b8f9 Add GUI action run intent contract (#634)
+949603f Integrate GUI output status panel into dry run (#633)
+51d7532 Add GUI output log status panel contract (#632)
+bc7b8d9 Record GUI action detail panel merge log verification (#631)
+2391b84 Record GUI action detail panel merge verification log (#630)
+eba2e8f Add GUI action detail panel ViewModel contract (#629)
+0fd9a4b Record v0.4.0 GUI menu toolbar contract merge verification log
+3a2e896 Add GUI menu toolbar tooltip icon contract (#628)
+
+### VERIFY EXECUTION CORE ON MAIN ###
+64:def run_bounded_read_only_action(
+7:BLOCKED_SAFETY_CLASSES = frozenset({
+76:    if safety in BLOCKED_SAFETY_CLASSES or safety != "read-only":
+13:    "remote-mutation",
+
+### TARGETED TESTS ###
+...................................                                      [100%]
+35 passed in 0.26s
+
+### FULL LOCAL GATES ###
+........................................................................ [  9%]
+........................................................................ [ 18%]
+........................................................................ [ 27%]
+........................................................................ [ 36%]
+........................................................................ [ 46%]
+........................................................................ [ 55%]
+........................................................................ [ 64%]
+........................................................................ [ 73%]
+........................................................................ [ 83%]
+........................................................................ [ 92%]
+...........................................................              [100%]
+779 passed in 4.27s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COPY MERGE VERIFY LOG FOR COMMIT ###
