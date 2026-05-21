@@ -1,0 +1,230 @@
+
+### PRECHECK DIRTY REPAIR STATE ###
+feature/v0.4.0-gui-dry-run-entrypoint
+ M ns
+?? docs/reports/terminal/v040-gui-dry-run-entrypoint.log
+?? docs/reports/terminal/v040-gui-dry-run-false-grep-guard-repair.log
+?? docs/reports/terminal/v040-gui-dry-run-mode-guard-repair.log
+?? docs/reports/terminal/v040-gui-dry-run-tkinter-nonblocking-repair.log
+?? src/agentic_project_kit/gui_dry_run.py
+?? tests/test_v040_gui_dry_run.py
+b59be68 Add v0.4.0 GUI action readiness contract (#617)
+019053d Add v0.4.0 GUI MVP roadmap (#616)
+2ecf2c2 Record v0.3.37 DOI metadata (#615)
+a9035ad Record v0.3.37 release publish log
+69dc873 Prepare v0.3.37 release metadata (#614)
+c64eadd Record v0.3.37 final GUI preparation closeout contract (#613)
+6ae66ba Record v0.3.36 DOI metadata merge verification log
+613cf9e Record v0.3.36 DOI metadata (#612)
+369e920 Record v0.3.36 release publish log
+45ffd3f Record v0.3.36 release gate log
+0fb4d18 Record v0.3.36 release metadata merge verification log
+f9f5c41 Prepare v0.3.36 release metadata after audit runner hardening (#611)
+76f528a Record audit runner standard-error fix merge verification log
+9f9134f Add deterministic audit test matrix runner (#610)
+
+### PATCH TEST TO INSPECT ONLY OK BLOCK ###
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tmp/patch_v040_gui_dry_run_test_ok_block.py", line 10
+    )
+    ^
+SyntaxError: unmatched ')'
+
+### VERIFY TARGETED OK BLOCK ###
+
+### CURRENT FILES ###
+from __future__ import annotations
+
+from dataclasses import dataclass
+import importlib
+from pathlib import Path
+from typing import Sequence
+
+
+@dataclass(frozen=True)
+class GuiDryRunResult:
+    ok: bool
+    tkinter_available: bool
+    action_registry_available: bool
+    action_specs_available: bool
+    mode_guard_available: bool
+    shell_adapters_absent: bool
+    message: str
+
+    @property
+    def exit_code(self) -> int:
+        return 0 if self.ok else 1
+
+
+def _can_import(module_name: str) -> bool:
+    try:
+        importlib.import_module(module_name)
+    except Exception:
+        return False
+    return True
+
+
+def run_gui_dry_run(project_root: Path | None = None) -> GuiDryRunResult:
+    root = Path.cwd() if project_root is None else project_root
+    tkinter_available = _can_import("tkinter")
+    action_registry_available = _can_import("agentic_project_kit.action_registry")
+    action_specs_available = _can_import("agentic_project_kit.action_specs")
+    ns_path = root / "ns"
+    ns_text = ns_path.read_text(encoding="utf-8") if ns_path.exists() else ""
+    mode_guard_available = "mode-check" in ns_text and "mode-write" in ns_text
+    tools_dir = root / "tools"
+    shell_adapters_absent = not any(tools_dir.glob("ns_*.sh")) if tools_dir.exists() else True
+    ok = all((
+        action_registry_available,
+        action_specs_available,
+        mode_guard_available,
+        shell_adapters_absent,
+    ))
+    message = "GUI dry-run passed without opening a window." if ok else "GUI dry-run failed before window launch."
+    return GuiDryRunResult(
+        ok=ok,
+        tkinter_available=tkinter_available,
+        action_registry_available=action_registry_available,
+        action_specs_available=action_specs_available,
+        mode_guard_available=mode_guard_available,
+        shell_adapters_absent=shell_adapters_absent,
+        message=message,
+    )
+
+
+def render_result(result: GuiDryRunResult) -> str:
+    lines = [
+        "GUI DRY RUN",
+        "Safety: no window is opened; no files, branches, tags, releases, PRs, or remote state are changed.",
+        f"tkinter_available={str(result.tkinter_available).lower()}",
+        f"window_launch_ready={str(result.tkinter_available).lower()}",
+        "tkinter_note=nonblocking for --dry-run; required only for real window launch",
+        f"action_registry_available={str(result.action_registry_available).lower()}",
+        f"action_specs_available={str(result.action_specs_available).lower()}",
+        f"mode_guard_available={str(result.mode_guard_available).lower()}",
+        f"shell_adapters_absent={str(result.shell_adapters_absent).lower()}",
+        f"message={result.message}",
+        "### RESULT: PASS ###" if result.ok else "### RESULT: FAIL ###",
+    ]
+    return "\n".join(lines)
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    args = list(argv or [])
+    if args and args != ["--dry-run"]:
+        print("ERROR: usage: python -m agentic_project_kit.gui_dry_run --dry-run")
+        print("### RESULT: FAIL ###")
+        return 2
+    result = run_gui_dry_run()
+    print(render_result(result))
+    return result.exit_code
+
+
+if __name__ == "__main__":
+    import sys
+    raise SystemExit(main(sys.argv[1:]))
+from pathlib import Path
+import subprocess
+import sys
+
+from agentic_project_kit.gui_dry_run import render_result, run_gui_dry_run
+
+
+def test_gui_dry_run_module_reports_required_checks():
+    result = run_gui_dry_run(Path.cwd())
+    output = render_result(result)
+    assert "GUI DRY RUN" in output
+    assert "no window is opened" in output
+    assert "tkinter_available=" in output
+    assert "window_launch_ready=" in output
+    assert "tkinter_note=nonblocking for --dry-run" in output
+    assert "action_registry_available=true" in output
+    assert "action_specs_available=true" in output
+    assert "mode_guard_available=true" in output
+    assert "shell_adapters_absent=true" in output
+
+
+def test_gui_dry_run_module_cli_has_deterministic_output():
+    result = subprocess.run(
+        [sys.executable, "-m", "agentic_project_kit.gui_dry_run", "--dry-run"],
+        cwd=Path.cwd(),
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    assert result.returncode == 0
+    assert "GUI DRY RUN" in result.stdout
+    assert "### RESULT:" in result.stdout
+    assert "Traceback" not in result.stdout
+
+
+def test_ns_gui_dry_run_route_is_python_backed():
+    text = Path("ns").read_text(encoding="utf-8")
+    assert 'if [ "${1:-}" = "gui" ]' in text
+    assert "agentic_project_kit.gui_dry_run" in text
+    assert "tools/ns_gui" not in text
+
+
+def test_ns_gui_dry_run_executes_without_shell_adapter():
+    result = subprocess.run(
+        ["./ns", "gui", "--dry-run"],
+        cwd=Path.cwd(),
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    assert result.returncode == 0
+    assert "GUI DRY RUN" in result.stdout
+    assert "no window is opened" in result.stdout
+    assert "tools/ns_gui" not in result.stdout
+
+
+
+def test_gui_dry_run_mode_guard_detection_uses_existing_ns_routes():
+    module = Path("src/agentic_project_kit/gui_dry_run.py").read_text(encoding="utf-8")
+    assert "agentic_project_kit.mode_guard" not in module
+    assert "\"mode-check\" in ns_text" in module
+    assert "\"mode-write\" in ns_text" in module
+
+
+
+def test_gui_dry_run_does_not_require_tkinter_for_no_window_contract():
+    module = Path("src/agentic_project_kit/gui_dry_run.py").read_text(encoding="utf-8")
+    assert "tkinter_available,\n        action_registry_available" not in module
+    assert "tkinter_note=nonblocking for --dry-run" in module
+    assert "window_launch_ready=" in module
+
+### DIFF ###
+ M ns
+?? docs/reports/terminal/v040-gui-dry-run-entrypoint.log
+?? docs/reports/terminal/v040-gui-dry-run-false-grep-guard-repair.log
+?? docs/reports/terminal/v040-gui-dry-run-mode-guard-repair.log
+?? docs/reports/terminal/v040-gui-dry-run-tkinter-nonblocking-repair.log
+?? src/agentic_project_kit/gui_dry_run.py
+?? tests/test_v040_gui_dry_run.py
+diff --git a/ns b/ns
+index dbd8814..ed245d4 100755
+--- a/ns
++++ b/ns
+@@ -51,6 +51,12 @@ if [ "${1:-}" = "state-freshness-check" ]; then
+   exit $?
+ fi
+ 
++if [ "${1:-}" = "gui" ]; then
++  shift
++  PYTHONPATH=src "$PY" -m agentic_project_kit.gui_dry_run "$@"
++  exit $?
++fi
++
+ if [ "${1:-}" = "comm-check" ]; then
+   shift
+   PYTHONPATH=src "$PY" -m agentic_project_kit.communication_state check "$@"
+
+### TARGETED TESTS ###
+
+### DRY RUN SMOKE MUST PASS EVEN WITHOUT TKINTER ###
+
+### FULL LOCAL GATES ###
+
+### COPY TERMINAL LOG FOR COMMIT ###

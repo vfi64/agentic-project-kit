@@ -51,6 +51,12 @@ if [ "${1:-}" = "state-freshness-check" ]; then
   exit $?
 fi
 
+if [ "${1:-}" = "gui" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.gui_dry_run "$@"
+  exit $?
+fi
+
 if [ "${1:-}" = "comm-check" ]; then
   shift
   PYTHONPATH=src "$PY" -m agentic_project_kit.communication_state check "$@"
