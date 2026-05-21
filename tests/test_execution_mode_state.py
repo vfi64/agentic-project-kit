@@ -92,7 +92,10 @@ def test_mode_check_accepts_ruff_from_local_venv(monkeypatch, tmp_path):
     (venv_bin / "python").write_text("", encoding="utf-8")
 
     monkeypatch.setattr("agentic_project_kit.execution_mode_state._run_git", fake_git)
-    monkeypatch.setattr("agentic_project_kit.execution_mode_state.shutil.which", lambda tool: None)
+    monkeypatch.setattr(
+        "agentic_project_kit.execution_mode_state.shutil.which",
+        lambda tool: "/usr/bin/" + tool if tool in {"git", "gh"} else None,
+    )
 
     result = evaluate_mode_switch(tmp_path, "local", expected_branch="feature/x")
 
