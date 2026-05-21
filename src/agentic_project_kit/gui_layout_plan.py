@@ -15,6 +15,7 @@ class LayoutNode:
     tooltip: str = ""
     command_id: str = ""
     safety_class: str = ""
+    icon_id: str = ""
 
 @dataclass(frozen=True)
 class LayoutPlan:
@@ -29,8 +30,8 @@ class LayoutPlan:
     def nodes_by_kind(self, kind: str) -> tuple[LayoutNode, ...]:
         return tuple(node for node in self.nodes if node.kind == kind)
 
-def _append(nodes: list[LayoutNode], node_id: str, kind: str, label: str, parent: str, enabled: bool = True, tooltip: str = "", command_id: str = "", safety_class: str = "") -> None:
-    nodes.append(LayoutNode(node_id=node_id, kind=kind, label=label, parent=parent, order=len(nodes), enabled=enabled, tooltip=tooltip, command_id=command_id, safety_class=safety_class))
+def _append(nodes: list[LayoutNode], node_id: str, kind: str, label: str, parent: str, enabled: bool = True, tooltip: str = "", command_id: str = "", safety_class: str = "", icon_id: str = "") -> None:
+    nodes.append(LayoutNode(node_id=node_id, kind=kind, label=label, parent=parent, order=len(nodes), enabled=enabled, tooltip=tooltip, command_id=command_id, safety_class=safety_class, icon_id=icon_id))
 
 def build_layout_plan(spec: TkinterShellSpec | None = None) -> LayoutPlan:
     shell = build_tkinter_shell_spec() if spec is None else spec
@@ -41,14 +42,14 @@ def build_layout_plan(spec: TkinterShellSpec | None = None) -> LayoutPlan:
         menu_id = "menu-" + menu.label.lower().replace(" ", "-")
         _append(nodes, menu_id, "menu", menu.label, "menu-bar")
         for item in menu.items:
-            _append(nodes, menu_id + "-" + item.command_id, "menu_item", item.label, menu_id, item.enabled, command_id=item.command_id)
+            _append(nodes, menu_id + "-" + item.command_id, "menu_item", item.label, menu_id, item.enabled, item.tooltip, item.command_id)
     _append(nodes, "toolbar", "toolbar", "Toolbar", "root")
     for button in shell.design.toolbar:
-        _append(nodes, "toolbar-" + button.command_id, "toolbar_button", button.label, "toolbar", button.enabled, button.tooltip, button.command_id, button.safety_class)
+        _append(nodes, "toolbar-" + button.command_id, "toolbar_button", button.label, "toolbar", button.enabled, button.tooltip, button.command_id, button.safety_class, button.icon_id)
     _append(nodes, "main", "main_area", "Main", "root")
     _append(nodes, "actions", "action_panel", "Actions", "main")
     for button in shell.design.action_buttons:
-        _append(nodes, "action-" + button.command_id, "action_button", button.label, "actions", button.enabled, button.tooltip, button.command_id, button.safety_class)
+        _append(nodes, "action-" + button.command_id, "action_button", button.label, "actions", button.enabled, button.tooltip, button.command_id, button.safety_class, button.icon_id)
     _append(nodes, "details", "details_panel", "Details / Parameters", "main")
     _append(nodes, "output", "output_panel", "Output / Log", "root")
     _append(nodes, "summary", "summary_bar", "Last Summary", "root")

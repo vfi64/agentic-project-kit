@@ -1,0 +1,223 @@
+
+### RECOVER FEATURE BRANCH ###
+Already on 'feature/v0.4.0-gui-menu-toolbar-button-tooltip-icon-contract'
+M	src/agentic_project_kit/gui_layout_plan.py
+M	src/agentic_project_kit/gui_tkinter_renderer.py
+M	src/agentic_project_kit/gui_tkinter_shell.py
+feature/v0.4.0-gui-menu-toolbar-button-tooltip-icon-contract
+ M src/agentic_project_kit/gui_layout_plan.py
+ M src/agentic_project_kit/gui_tkinter_renderer.py
+ M src/agentic_project_kit/gui_tkinter_shell.py
+?? docs/reports/terminal/v040-gui-menu-toolbar-contract-restore-view-menu.log
+?? tests/test_v040_gui_menu_toolbar_tooltip_icon_contract.py
+
+### REMOVE FAILED LOG ARTIFACTS FROM WORKTREE ###
+
+### INSPECT TEST AND EXISTING CONTRACTS ###
+from agentic_project_kit.gui_layout_plan import build_layout_plan
+from agentic_project_kit.gui_tkinter_renderer import render_layout_to_tkinter
+from agentic_project_kit.gui_tkinter_shell import build_tkinter_shell_spec
+
+class DummyRoot:
+    def __init__(self):
+        self.title_value = ""
+        self.geometry_value = ""
+    def title(self, value: str) -> None:
+        self.title_value = value
+    def geometry(self, value: str) -> None:
+        self.geometry_value = value
+
+def test_shell_spec_has_windows_style_menu_toolbar_and_action_buttons():
+    spec = build_tkinter_shell_spec()
+    assert [menu.label for menu in spec.design.menu_bar] == ["File", "Actions", "Help"]
+    assert len(spec.design.toolbar) >= 4
+    assert len(spec.design.action_buttons) >= 5
+    assert all(button.tooltip for button in spec.design.toolbar)
+    assert all(button.icon_id for button in spec.design.toolbar)
+    assert all(button.tooltip for button in spec.design.action_buttons)
+    assert all(button.icon_id for button in spec.design.action_buttons)
+
+def test_layout_plan_preserves_tooltips_icons_and_disabled_destructive_release_publish():
+    plan = build_layout_plan()
+    toolbar = plan.nodes_by_kind("toolbar_button")
+    actions = plan.nodes_by_kind("action_button")
+    assert toolbar
+    assert actions
+    assert all(node.tooltip for node in toolbar + actions)
+    assert all(node.icon_id for node in toolbar + actions)
+    release_nodes = [node for node in actions if node.command_id == "release-publish"]
+    assert len(release_nodes) == 1
+    assert release_nodes[0].enabled is False
+    assert release_nodes[0].safety_class == "destructive"
+    assert release_nodes[0].icon_id == "lock"
+
+def test_tkinter_renderer_preserves_button_tooltip_and_icon_metadata():
+    result = render_layout_to_tkinter(DummyRoot())
+    widgets = result.widgets_by_kind("toolbar_button") + result.widgets_by_kind("action_button")
+    assert widgets
+    assert all(widget.tooltip for widget in widgets)
+    assert all(widget.icon_id for widget in widgets)
+    assert result.destructive_enabled is False
+tests/test_v040_gui_layout_plan.py:22:    assert "menu_count=4" in output
+tests/test_v040_gui_tkinter_renderer.py:32:    assert "menu_count=4" in output
+tests/test_v040_gui_tkinter_shell.py:49:    assert "menu_count=4" in output
+tests/test_v040_gui_tkinter_shell.py:64:    assert [menu.label for menu in design.menu_bar] == ["File", "Actions", "View", "Help"]
+tests/test_v040_gui_dry_run_renderer_integration.py:22:    assert "menu_count=4" in output
+
+### ALIGN NEW TEST WITH EXISTING FOUR-MENU CONTRACT ###
+
+### VERIFY TEST ALIGNMENT ###
+from agentic_project_kit.gui_layout_plan import build_layout_plan
+from agentic_project_kit.gui_tkinter_renderer import render_layout_to_tkinter
+from agentic_project_kit.gui_tkinter_shell import build_tkinter_shell_spec
+
+class DummyRoot:
+    def __init__(self):
+        self.title_value = ""
+        self.geometry_value = ""
+    def title(self, value: str) -> None:
+        self.title_value = value
+    def geometry(self, value: str) -> None:
+        self.geometry_value = value
+
+def test_shell_spec_has_windows_style_menu_toolbar_and_action_buttons():
+    spec = build_tkinter_shell_spec()
+    assert [menu.label for menu in spec.design.menu_bar] == ["File", "Actions", "View", "Help"]
+    assert len(spec.design.toolbar) >= 4
+    assert len(spec.design.action_buttons) >= 5
+    assert all(button.tooltip for button in spec.design.toolbar)
+    assert all(button.icon_id for button in spec.design.toolbar)
+    assert all(button.tooltip for button in spec.design.action_buttons)
+    assert all(button.icon_id for button in spec.design.action_buttons)
+
+def test_layout_plan_preserves_tooltips_icons_and_disabled_destructive_release_publish():
+    plan = build_layout_plan()
+    toolbar = plan.nodes_by_kind("toolbar_button")
+    actions = plan.nodes_by_kind("action_button")
+    assert toolbar
+    assert actions
+    assert all(node.tooltip for node in toolbar + actions)
+    assert all(node.icon_id for node in toolbar + actions)
+    release_nodes = [node for node in actions if node.command_id == "release-publish"]
+    assert len(release_nodes) == 1
+    assert release_nodes[0].enabled is False
+    assert release_nodes[0].safety_class == "destructive"
+    assert release_nodes[0].icon_id == "lock"
+
+def test_tkinter_renderer_preserves_button_tooltip_and_icon_metadata():
+    result = render_layout_to_tkinter(DummyRoot())
+    widgets = result.widgets_by_kind("toolbar_button") + result.widgets_by_kind("action_button")
+    assert widgets
+    assert all(widget.tooltip for widget in widgets)
+    assert all(widget.icon_id for widget in widgets)
+    assert result.destructive_enabled is False
+16:    assert [menu.label for menu in spec.design.menu_bar] == ["File", "Actions", "View", "Help"]
+
+### HARD SYNTAX GATE FIRST ###
+
+### TARGETED GUI CONTRACT TESTS ###
+.................                                                        [100%]
+17 passed in 0.06s
+
+### GUI DRY RUN SMOKE ###
+GUI DRY RUN
+Safety: no window is opened; no files, branches, tags, releases, PRs, or remote state are changed.
+tkinter_available=false
+window_launch_ready=false
+tkinter_note=nonblocking for --dry-run; required only for real window launch
+action_registry_available=true
+action_specs_available=true
+presenter_available=true
+presenter_action_count=14
+presenter_preview_begin
+agentic-project-kit Cockpit
+status=dry-run-ready
+action_count=14
+destructive_actions_enabled=false
+actions:
+01. dev [read-only; enabled; no-confirm] - Run local deterministic development gates.
+02. pr-cleanup [read-only; enabled; no-confirm] - Classify open pull requests without mutating them.
+03. release-verify [read-only; enabled; no-confirm] - Verify an existing release and metadata state.
+04. clean-evidence [local-only; enabled; no-confirm] - Clean local evidence or generated files according to repo policy.
+05. release-prep [local-only; enabled; no-confirm] - Prepare local release metadata before a release PR.
+06. release-gate [read-only; enabled; no-confirm] - Verify release readiness without tagging or publishing.
+07. finalize-guard [read-only; enabled; no-confirm] - Classify branch finalization state without merging or deleting.
+08. cockpit-readiness [read-only; enabled; no-confirm] - Render static cockpit readiness metadata without executing actions.
+09. agent-next [remote-mutation; enabled; no-confirm] - Pull and execute exactly one pending repo-backed agent command.
+10. agent-run [remote-mutation; enabled; no-confirm] - Pull-safe repo command runner for agent handoff without copy-and-paste terminal blocks.
+11. run-logged [local-only; enabled; no-confirm] - Run a local command while teeing output to a terminal log.
+12. terminal-status [read-only; enabled; no-confirm] - Inspect the latest terminal log pointer without mutating state.
+13. terminal-clean-check [read-only; enabled; no-confirm] - Check whether only terminal-log artifacts are dirty during logged runs.
+14. terminal-upload [remote-mutation; enabled; no-confirm] - Commit and push only terminal-log artifacts for failure handoff.
+presenter_preview_end
+mode_guard_available=true
+shell_adapters_absent=true
+message=GUI dry-run passed without opening a window.
+layout_plan_begin
+GUI LAYOUT PLAN
+title=agentic-project-kit Cockpit
+geometry=1000x650
+node_count=32
+menu_count=4
+toolbar_button_count=4
+action_button_count=6
+output_panel_count=1
+summary_bar_count=1
+disabled_commands=release-publish
+layout_plan_end
+tkinter_render_begin
+TKINTER RENDER RESULT
+title=agentic-project-kit Cockpit
+geometry=1000x650
+widget_count=32
+menu_count=4
+toolbar_button_count=4
+action_button_count=6
+output_panel_count=1
+summary_bar_count=1
+disabled_commands=release-publish
+destructive_enabled=false
+tkinter_render_end
+window_guard_begin
+GUI WINDOW GUARD
+window_launch_ready=false
+tkinter_importable=false
+native_tkinter_importable=false
+message=tkinter import failed: No module named '_tkinter'
+window_guard_status=BLOCKED
+window_guard_end
+real_window_opened=false
+### RESULT: PASS ###
+
+### FULL LOCAL GATES ###
+........................................................................ [  9%]
+........................................................................ [ 19%]
+........................................................................ [ 28%]
+........................................................................ [ 38%]
+........................................................................ [ 47%]
+........................................................................ [ 57%]
+........................................................................ [ 66%]
+........................................................................ [ 76%]
+........................................................................ [ 85%]
+........................................................................ [ 95%]
+..................................                                       [100%]
+754 passed in 4.28s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COPY TERMINAL LOG FOR COMMIT ###
