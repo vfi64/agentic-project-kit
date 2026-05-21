@@ -350,3 +350,4 @@ When the marker is `PASS`, the human can reply with a short acknowledgement such
 
 Terminal blocks must avoid heredocs and risky multi-line `python -c` strings. Prefer small script files under `tmp/`, explicit virtualenv paths such as `.venv/bin/python`, and quote-safe one-line shell operations.
 
+Portable-first rule: unless a user explicitly requires a specific operating system, new operational behavior must be implemented in importable Python core modules with argument-vector execution. Shell scripts are compatibility shims only and must not contain core workflow logic.

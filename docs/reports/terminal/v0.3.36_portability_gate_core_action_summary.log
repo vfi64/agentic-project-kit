@@ -1,0 +1,100 @@
+ACTION=V0.3.36 ADD PORTABILITY GATE CORE AND ACTION SUMMARY CONTRACT -- LOGGED -- NO GUI NO RELEASE
+
+### CREATE BRANCH ###
+Switched to a new branch 'feature/v0.3.36-portability-gate-core-action-summary'
+
+### WRITE PYTHON PATCH SCRIPT ###
+
+### APPLY PATCH SCRIPT ###
+
+### PATCH DOCS FOR PORTABILITY META RULE ###
+
+### TARGETED TESTS ###
+..............................................                           [100%]
+46 passed in 0.05s
+
+### LOCAL DOC GATES ###
+Agentic project check failed
+- AGENTS.md: too long (2512/2500 words)
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[FAIL] documentation gates: AGENTS.md: too long (2512/2500 words)
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: FAIL
+
+### CURRENT PORTABILITY GATE OUTPUT ###
+Portability shell gate report
+shell_file_count=63
+blocking_shell_file_count=15
+Blocking shell files:
+- tools/capture_workflow_output.sh
+- tools/local_workflow_cycle.sh
+- tools/ns_clean_evidence.sh
+- tools/ns_commit_pr_guard.sh
+- tools/ns_finalize_guard.sh
+- tools/ns_pr_cleanup.sh
+- tools/ns_pr_create_or_skip.sh
+- tools/ns_release_gate.sh
+- tools/ns_release_prep.sh
+- tools/ns_release_publish.sh
+- tools/ns_release_verify.sh
+- tools/ns_safe_remove_diagnostic.sh
+- tools/ns_slice_runner.sh
+- tools/ns_up_pr_completion.sh
+- tools/screen_control_gate.sh
+### RESULT: FAIL ###
+
+### DIFF ###
+diff --git a/AGENTS.md b/AGENTS.md
+index 116b710..bd806e1 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -350,3 +350,4 @@ When the marker is `PASS`, the human can reply with a short acknowledgement such
+ 
+ Terminal blocks must avoid heredocs and risky multi-line `python -c` strings. Prefer small script files under `tmp/`, explicit virtualenv paths such as `.venv/bin/python`, and quote-safe one-line shell operations.
+ 
++Portable-first rule: unless a user explicitly requires a specific operating system, new operational behavior must be implemented in importable Python core modules with argument-vector execution. Shell scripts are compatibility shims only and must not contain core workflow logic.
+diff --git a/docs/STATUS.md b/docs/STATUS.md
+index 5dbd2ad..283938a 100644
+--- a/docs/STATUS.md
++++ b/docs/STATUS.md
+@@ -327,4 +327,6 @@ Acceptance criteria before GUI work resumes:
+ - v0.3.36 current-state cleanup started as a documentation-only line: normalize README current-release wording, make the v0.3.35 CHANGELOG entry describe the actual delivered work, clarify GUI/cockpit status, and lock release-phase semantics in tests before any bounded Tkinter MVP work.\n\n- v0.3.36 standard-error hardening started: Remote-log evidence is mandatory for standard-error hardening slices; summaries must include `terminal_log=docs/reports/terminal/...`, `command_report=...`, and `NEXT_CHAT_REPLY`. FAIL without terminal kill uses NEXT_CHAT_REPLY: f so the next step reconstructs from the remote log before asking for pasted terminal output.\n
+ 
+ - v0.3.36 standard-error hardening slice 1 is remote-evidence backed: merge/local-gate output is recorded in `docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log`. This explicitly restores the rule that FAIL recovery starts from committed/pushed logs before asking for pasted terminal output.
+-- v0.3.36 run-summary contract evidence is repo-backed in `docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log`; run summaries must expose `terminal_log`, `REMOTE_EVIDENCE`, `STANDARD_ERROR_REDUCTION`, and `GUI_PREPARATION` so standard-error reduction and GUI readiness stay visible after each slice.\n\n- v0.3.36 portability shell-removal inventory is repo-backed in `docs/reports/terminal/v0.3.36_portability_shell_removal_inventory.log`. Tracked shell file count at inventory time: 15. The GUI baseline is not complete until tracked shell adapters are removed or explicitly replaced by Python entry points and a portability gate is active.\n
+\ No newline at end of file
++- v0.3.36 run-summary contract evidence is repo-backed in `docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log`; run summaries must expose `terminal_log`, `REMOTE_EVIDENCE`, `STANDARD_ERROR_REDUCTION`, and `GUI_PREPARATION` so standard-error reduction and GUI readiness stay visible after each slice.\n\n- v0.3.36 portability shell-removal inventory is repo-backed in `docs/reports/terminal/v0.3.36_portability_shell_removal_inventory.log`. Tracked shell file count at inventory time: 15. The GUI baseline is not complete until tracked shell adapters are removed or explicitly replaced by Python entry points and a portability gate is active.\n
++
++- v0.3.36 adds the portability meta-rule and begins enforcing shell-removal through a Python portability gate core; GUI readiness requires Python-backed operational control surfaces rather than shell-first workflows.
+diff --git a/docs/handoff/CURRENT_HANDOFF.md b/docs/handoff/CURRENT_HANDOFF.md
+index 3c24f88..586002f 100644
+--- a/docs/handoff/CURRENT_HANDOFF.md
++++ b/docs/handoff/CURRENT_HANDOFF.md
+@@ -281,4 +281,6 @@ Immediate priorities:
+ - v0.3.36 documentation cleanup is now the active preparation step before the Tkinter MVP: README current-state wording and CHANGELOG release semantics must be cleaned up and tested first. Do not start GUI implementation in this slice.\n\n- v0.3.36 standard-error hardening started: Remote-log evidence is mandatory for standard-error hardening slices; summaries must include `terminal_log=docs/reports/terminal/...`, `command_report=...`, and `NEXT_CHAT_REPLY`. FAIL without terminal kill uses NEXT_CHAT_REPLY: f so the next step reconstructs from the remote log before asking for pasted terminal output.\n
+ 
+ - v0.3.36 standard-error hardening slice 1 evidence is committed under `docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log`; on future FAIL without terminal kill, request only `f` first and reconstruct from remote evidence before asking for paste-output.
+-- v0.3.36 run-summary contract evidence is repo-backed in `docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log`; future slices must keep remote terminal evidence visible in the final summary and report standard-error reduction plus GUI preparation after each slice.\n\n- v0.3.36 portability shell-removal inventory is repo-backed in `docs/reports/terminal/v0.3.36_portability_shell_removal_inventory.log`. Tracked shell file count at inventory time: 15. The GUI baseline is not complete until tracked shell adapters are removed or explicitly replaced by Python entry points and a portability gate is active.\n
+\ No newline at end of file
++- v0.3.36 run-summary contract evidence is repo-backed in `docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log`; future slices must keep remote terminal evidence visible in the final summary and report standard-error reduction plus GUI preparation after each slice.\n\n- v0.3.36 portability shell-removal inventory is repo-backed in `docs/reports/terminal/v0.3.36_portability_shell_removal_inventory.log`. Tracked shell file count at inventory time: 15. The GUI baseline is not complete until tracked shell adapters are removed or explicitly replaced by Python entry points and a portability gate is active.\n
++
++- v0.3.36 portability rule: new operational behavior must be Python-core first and OS-independent by default; shell files are temporary compatibility shims until removed or explicitly allowlisted by the portability gate.
+
+### COMMIT AND PUSH ###
+ M AGENTS.md
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? docs/reports/terminal/v0.3.36_portability_gate_core_action_summary.log
+?? src/agentic_project_kit/portability_shell_gate.py
+?? tests/test_v036_portability_shell_gate.py
