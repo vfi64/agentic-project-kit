@@ -286,3 +286,13 @@ Immediate priorities:
 - v0.3.36 portability rule: new operational behavior must be Python-core first and OS-independent by default; shell files are temporary compatibility shims until removed or explicitly allowlisted by the portability gate.
 
 - Remote inspection evidence contract: future long read-only inspection/classification blocks should store temporary evidence remotely, register it for GC, and allow `d`/`done` continuation when the final summary points to usable remote evidence.
+
+## v0.3.36 Direct `ns` Shell-Adapter Removal Handoff Note
+
+Known direct `./ns` workflow routes to tracked `tools/ns_*.sh` adapters have been removed and replaced by Python module or CLI routes.
+
+Direct `ns` shell-adapter count for the known workflow adapter class: 0.
+
+The detailed remaining workplan is `docs/workflow/V0.3.36_REMAINING_WORKPLAN.md`.
+
+Next safe step: deterministic rule hardening before GUI or release work. v0.3.36 is not released yet.

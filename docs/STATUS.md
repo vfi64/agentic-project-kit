@@ -332,3 +332,15 @@ Acceptance criteria before GUI work resumes:
 - v0.3.36 adds the portability meta-rule and begins enforcing shell-removal through a Python portability gate core; GUI readiness requires Python-backed operational control surfaces rather than shell-first workflows.
 
 - v0.3.36 adds a remote inspection evidence contract: long inspect/classify outputs should be written to remote temporary evidence, registered for later GC, and referenced from final summaries so chat can continue with `d` instead of pasted terminal output.
+
+## v0.3.36 Direct `ns` Shell-Adapter Removal Baseline
+
+Known `./ns` workflow routes to tracked `tools/ns_*.sh` adapters now use Python module or CLI routes.
+
+Invariant: `./ns` may remain a small bootstrap/dispatcher; durable workflow behavior belongs in tested Python modules or CLI commands. New direct `ns -> tools/ns_*.sh` workflow adapters require an explicit temporary exception, tests, and removal plan.
+
+Known direct `ns` shell-adapter count: 0.
+
+Workplan: `docs/workflow/V0.3.36_REMAINING_WORKPLAN.md`.
+
+Next safe step: deterministic rule hardening before GUI or release. v0.3.36 is unreleased.
