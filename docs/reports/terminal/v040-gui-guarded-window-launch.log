@@ -1,0 +1,429 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK MAIN ###
+main
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=main
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'feature/v0.4.0-gui-guarded-window-launch'
+
+### INSPECT GUI ROUTES BEFORE PATCH ###
+50-  PYTHONPATH=src "$PY" -m agentic_project_kit.cli state freshness-check
+51-  exit $?
+52-fi
+53-
+54:if [ "${1:-}" = "gui" ]; then
+55-  shift
+56:  PYTHONPATH=src "$PY" -m agentic_project_kit.gui_dry_run "$@"
+57-  exit $?
+58-fi
+59-
+60-if [ "${1:-}" = "comm-check" ]; then
+     1	from __future__ import annotations
+     2	
+     3	from dataclasses import dataclass
+     4	import importlib
+     5	from pathlib import Path
+     6	from typing import Sequence
+     7	
+     8	from agentic_project_kit.action_registry import list_actions
+     9	from agentic_project_kit.gui_presenter import build_no_window_presenter_result
+    10	from agentic_project_kit.gui_layout_plan import build_layout_plan, render_layout_plan
+    11	from agentic_project_kit.gui_tkinter_renderer import render_layout_to_tkinter, render_tkinter_result_summary
+    12	
+    13	
+    14	@dataclass(frozen=True)
+    15	class GuiDryRunResult:
+    16	    ok: bool
+    17	    tkinter_available: bool
+    18	    action_registry_available: bool
+    19	    action_specs_available: bool
+    20	    presenter_available: bool
+    21	    presenter_action_count: int
+    22	    presenter_preview: str
+    23	    mode_guard_available: bool
+    24	    shell_adapters_absent: bool
+    25	    message: str
+    26	
+    27	    @property
+    28	    def exit_code(self) -> int:
+    29	        return 0 if self.ok else 1
+    30	
+    31	
+    32	class DryRunRoot:
+    33	    def __init__(self) -> None:
+    34	        self.title_value = ""
+    35	        self.geometry_value = ""
+    36	
+    37	    def title(self, value: str) -> None:
+    38	        self.title_value = value
+    39	
+    40	    def geometry(self, value: str) -> None:
+    41	        self.geometry_value = value
+    42	
+    43	
+    44	def _module_available(name: str) -> bool:
+    45	    try:
+    46	        importlib.import_module(name)
+    47	    except Exception:
+    48	        return False
+    49	    return True
+    50	
+    51	
+    52	def _mode_guard_available(project_root: Path) -> bool:
+    53	    ns_path = project_root / "ns"
+    54	    if not ns_path.exists():
+    55	        return False
+    56	    ns_text = ns_path.read_text(encoding="utf-8")
+    57	    return "mode-check" in ns_text and "mode-write" in ns_text
+    58	
+    59	
+    60	def _shell_adapters_absent(project_root: Path) -> bool:
+    61	    return not any((project_root / "tools").glob("ns_*.sh"))
+    62	
+    63	
+    64	def run_gui_dry_run(project_root: Path | None = None) -> GuiDryRunResult:
+    65	    root = Path.cwd() if project_root is None else project_root
+    66	    tkinter_available = _module_available("tkinter")
+    67	    action_registry_available = _module_available("agentic_project_kit.action_registry")
+    68	    action_specs_available = _module_available("agentic_project_kit.action_specs")
+    69	    mode_guard_available = _mode_guard_available(root)
+    70	    shell_adapters_absent = _shell_adapters_absent(root)
+    71	    presenter = build_no_window_presenter_result(list_actions())
+    72	    ok = all((
+    73	        action_registry_available,
+    74	        action_specs_available,
+    75	        mode_guard_available,
+    76	        shell_adapters_absent,
+    77	        presenter.ok,
+    78	    ))
+    79	    message = "GUI dry-run passed without opening a window." if ok else "GUI dry-run failed."
+    80	    return GuiDryRunResult(
+    81	        ok=ok,
+    82	        tkinter_available=tkinter_available,
+    83	        action_registry_available=action_registry_available,
+    84	        action_specs_available=action_specs_available,
+    85	        presenter_available=presenter.ok,
+    86	        presenter_action_count=presenter.action_count,
+    87	        presenter_preview=presenter.rendered,
+    88	        mode_guard_available=mode_guard_available,
+    89	        shell_adapters_absent=shell_adapters_absent,
+    90	        message=message,
+    91	    )
+    92	
+    93	
+    94	def render_result(result: GuiDryRunResult) -> str:
+    95	    lines = [
+    96	        "GUI DRY RUN",
+    97	        "Safety: no window is opened; no files, branches, tags, releases, PRs, or remote state are changed.",
+    98	        f"tkinter_available={str(result.tkinter_available).lower()}",
+    99	        f"window_launch_ready={str(result.tkinter_available).lower()}",
+   100	        "tkinter_note=nonblocking for --dry-run; required only for real window launch",
+   101	        f"action_registry_available={str(result.action_registry_available).lower()}",
+   102	        f"action_specs_available={str(result.action_specs_available).lower()}",
+   103	        f"presenter_available={str(result.presenter_available).lower()}",
+   104	        f"presenter_action_count={result.presenter_action_count}",
+   105	        "presenter_preview_begin",
+   106	        result.presenter_preview,
+   107	        "presenter_preview_end",
+   108	        f"mode_guard_available={str(result.mode_guard_available).lower()}",
+   109	        f"shell_adapters_absent={str(result.shell_adapters_absent).lower()}",
+   110	        f"message={result.message}",
+   111	    ]
+   112	    plan = build_layout_plan()
+   113	    rendered = render_layout_to_tkinter(DryRunRoot(), plan)
+   114	    lines.extend([
+   115	        "layout_plan_begin",
+   116	        render_layout_plan(plan),
+   117	        "layout_plan_end",
+   118	        "tkinter_render_begin",
+   119	        render_tkinter_result_summary(rendered),
+   120	        "tkinter_render_end",
+   121	        "real_window_opened=false",
+   122	        "### RESULT: PASS ###" if result.ok else "### RESULT: FAIL ###",
+   123	    ])
+   124	    return "\n".join(lines)
+   125	
+   126	
+   127	def main(argv: Sequence[str] | None = None) -> int:
+   128	    args = list(argv or [])
+   129	    if args and args != ["--dry-run"]:
+   130	        print("ERROR: usage: python -m agentic_project_kit.gui_dry_run --dry-run")
+   131	        print("### RESULT: FAIL ###")
+   132	        return 2
+   133	    result = run_gui_dry_run()
+   134	    print(render_result(result))
+   135	    return result.exit_code
+   136	
+   137	
+   138	if __name__ == "__main__":
+   139	    import sys
+   140	
+   141	    raise SystemExit(main(sys.argv[1:]))
+     1	from __future__ import annotations
+     2	
+     3	from dataclasses import dataclass
+     4	from typing import Callable, Sequence
+     5	
+     6	from agentic_project_kit.action_registry import list_actions
+     7	from agentic_project_kit.gui_presenter import build_no_window_presenter_result
+     8	
+     9	@dataclass(frozen=True)
+    10	class MenuItemSpec:
+    11	    label: str
+    12	    command_id: str
+    13	    enabled: bool = True
+    14	
+    15	@dataclass(frozen=True)
+    16	class MenuSpec:
+    17	    label: str
+    18	    items: tuple[MenuItemSpec, ...]
+    19	
+    20	@dataclass(frozen=True)
+    21	class ButtonSpec:
+    22	    command_id: str
+    23	    label: str
+    24	    tooltip: str
+    25	    icon_text: str
+    26	    safety_class: str
+    27	    enabled: bool
+    28	
+    29	@dataclass(frozen=True)
+    30	class TkinterShellDesignSpec:
+    31	    menu_bar: tuple[MenuSpec, ...]
+    32	    toolbar: tuple[ButtonSpec, ...]
+    33	    action_buttons: tuple[ButtonSpec, ...]
+    34	
+    35	@dataclass(frozen=True)
+    36	class TkinterShellSpec:
+    37	    title: str
+    38	    status: str
+    39	    action_count: int
+    40	    destructive_actions_enabled: bool
+    41	    preview: str
+    42	    design: TkinterShellDesignSpec
+    43	
+    44	def _button(command_id: str, label: str, tooltip: str, icon_text: str, safety_class: str, enabled: bool = True) -> ButtonSpec:
+    45	    return ButtonSpec(command_id, label, tooltip, icon_text, safety_class, enabled)
+    46	
+    47	def build_windows_style_design_spec() -> TkinterShellDesignSpec:
+    48	    menu_bar = (
+    49	        MenuSpec("File", (MenuItemSpec("Refresh status", "refresh-status"), MenuItemSpec("Open latest log", "open-latest-log"), MenuItemSpec("Exit", "exit"))),
+    50	        MenuSpec("Actions", (MenuItemSpec("Doctor", "doctor"), MenuItemSpec("Check docs", "check-docs"), MenuItemSpec("GUI dry-run", "gui-dry-run"))),
+    51	        MenuSpec("View", (MenuItemSpec("Show output log", "show-output-log"), MenuItemSpec("Show last summary", "show-last-summary"))),
+    52	        MenuSpec("Help", (MenuItemSpec("GUI help", "gui-help"), MenuItemSpec("About", "about"))),
+    53	    )
+    54	    toolbar = (
+    55	        _button("refresh-status", "Refresh", "Refresh repository status without changing files.", "Refresh", "read_only"),
+    56	        _button("doctor", "Doctor", "Run the deterministic project doctor.", "Check", "read_only"),
+    57	        _button("check-docs", "Docs", "Run documentation gates.", "Docs", "read_only"),
+    58	        _button("gui-dry-run", "Dry Run", "Validate GUI readiness without opening a window.", "Run", "read_only"),
+    59	    )
+    60	    action_buttons = (
+    61	        _button("status", "Status", "Show branch, dirty state, and latest summary.", "S", "read_only"),
+    62	        _button("actions-list", "Actions", "List registered actions and their safety classes.", "A", "read_only"),
+    63	        _button("doctor", "Doctor", "Run project doctor; no repository mutation.", "D", "read_only"),
+    64	        _button("check-docs", "Check Docs", "Validate documentation coverage and lifecycle rules.", "C", "read_only"),
+    65	        _button("release-verify", "Release Verify", "Verify an already published release. Requires a version parameter.", "R", "read_only"),
+    66	        _button("release-publish", "Release Publish", "Disabled in the initial GUI until explicit release guards exist.", "!", "destructive", False),
+    67	    )
+    68	    return TkinterShellDesignSpec(menu_bar, toolbar, action_buttons)
+    69	
+    70	def build_tkinter_shell_spec() -> TkinterShellSpec:
+    71	    presenter = build_no_window_presenter_result(list_actions())
+    72	    return TkinterShellSpec("agentic-project-kit Cockpit", "tkinter-shell-ready" if presenter.ok else "tkinter-shell-blocked", presenter.action_count, False, presenter.rendered, build_windows_style_design_spec())
+    73	
+    74	def create_tkinter_root(tk_factory: Callable[[], object] | None = None) -> object:
+    75	    if tk_factory is not None:
+    76	        return tk_factory()
+    77	    import tkinter as tk
+    78	    return tk.Tk()
+    79	
+    80	def configure_tkinter_root(root: object, spec: TkinterShellSpec) -> None:
+    81	    if hasattr(root, "title"):
+    82	        root.title(spec.title)
+    83	    if hasattr(root, "geometry"):
+    84	        root.geometry("1000x650")
+    85	
+    86	def render_tkinter_shell_summary(spec: TkinterShellSpec) -> str:
+    87	    return "\n".join(("TKINTER SHELL", f"title={spec.title}", f"status={spec.status}", f"action_count={spec.action_count}", f"menu_count={len(spec.design.menu_bar)}", f"toolbar_button_count={len(spec.design.toolbar)}", f"action_button_count={len(spec.design.action_buttons)}", f"destructive_actions_enabled={str(spec.destructive_actions_enabled).lower()}"))
+    88	
+    89	def main(argv: Sequence[str] | None = None) -> int:
+    90	    args = list(argv or [])
+    91	    if args == ["--no-window-smoke"]:
+    92	        print(render_tkinter_shell_summary(build_tkinter_shell_spec()))
+    93	        print("### RESULT: PASS ###")
+    94	        return 0
+    95	    print("ERROR: usage: python -m agentic_project_kit.gui_tkinter_shell --no-window-smoke")
+    96	    print("### RESULT: FAIL ###")
+    97	    return 2
+    98	
+    99	if __name__ == "__main__":
+   100	    import sys
+   101	    raise SystemExit(main(sys.argv[1:]))
+
+### PATCH GUI WINDOW GUARD MODULE ###
+
+### PATCH GUI DRY RUN TO USE STRICT WINDOW GUARD ###
+
+### WRITE TESTS ###
+
+### DIFF ###
+diff --git a/src/agentic_project_kit/gui_dry_run.py b/src/agentic_project_kit/gui_dry_run.py
+index e532039..5f96448 100644
+--- a/src/agentic_project_kit/gui_dry_run.py
++++ b/src/agentic_project_kit/gui_dry_run.py
+@@ -9,6 +9,7 @@ from agentic_project_kit.action_registry import list_actions
+ from agentic_project_kit.gui_presenter import build_no_window_presenter_result
+ from agentic_project_kit.gui_layout_plan import build_layout_plan, render_layout_plan
+ from agentic_project_kit.gui_tkinter_renderer import render_layout_to_tkinter, render_tkinter_result_summary
++from agentic_project_kit.gui_window_guard import check_window_launch_ready, render_window_guard_result
+ 
+ 
+ @dataclass(frozen=True)
+@@ -96,7 +97,7 @@ def render_result(result: GuiDryRunResult) -> str:
+         "GUI DRY RUN",
+         "Safety: no window is opened; no files, branches, tags, releases, PRs, or remote state are changed.",
+         f"tkinter_available={str(result.tkinter_available).lower()}",
+-        f"window_launch_ready={str(result.tkinter_available).lower()}",
++        f"window_launch_ready={str(check_window_launch_ready().ok).lower()}",
+         "tkinter_note=nonblocking for --dry-run; required only for real window launch",
+         f"action_registry_available={str(result.action_registry_available).lower()}",
+         f"action_specs_available={str(result.action_specs_available).lower()}",
+@@ -118,6 +119,9 @@ def render_result(result: GuiDryRunResult) -> str:
+         "tkinter_render_begin",
+         render_tkinter_result_summary(rendered),
+         "tkinter_render_end",
++        "window_guard_begin",
++        render_window_guard_result(check_window_launch_ready()),
++        "window_guard_end",
+         "real_window_opened=false",
+         "### RESULT: PASS ###" if result.ok else "### RESULT: FAIL ###",
+     ])
+
+### TARGETED TESTS ###
+...................                                                      [100%]
+19 passed in 0.14s
+
+### GUI DRY RUN SMOKE ###
+GUI DRY RUN
+Safety: no window is opened; no files, branches, tags, releases, PRs, or remote state are changed.
+tkinter_available=false
+window_launch_ready=false
+tkinter_note=nonblocking for --dry-run; required only for real window launch
+action_registry_available=true
+action_specs_available=true
+presenter_available=true
+presenter_action_count=14
+presenter_preview_begin
+agentic-project-kit Cockpit
+status=dry-run-ready
+action_count=14
+destructive_actions_enabled=false
+actions:
+01. dev [read-only; enabled; no-confirm] - Run local deterministic development gates.
+02. pr-cleanup [read-only; enabled; no-confirm] - Classify open pull requests without mutating them.
+03. release-verify [read-only; enabled; no-confirm] - Verify an existing release and metadata state.
+04. clean-evidence [local-only; enabled; no-confirm] - Clean local evidence or generated files according to repo policy.
+05. release-prep [local-only; enabled; no-confirm] - Prepare local release metadata before a release PR.
+06. release-gate [read-only; enabled; no-confirm] - Verify release readiness without tagging or publishing.
+07. finalize-guard [read-only; enabled; no-confirm] - Classify branch finalization state without merging or deleting.
+08. cockpit-readiness [read-only; enabled; no-confirm] - Render static cockpit readiness metadata without executing actions.
+09. agent-next [remote-mutation; enabled; no-confirm] - Pull and execute exactly one pending repo-backed agent command.
+10. agent-run [remote-mutation; enabled; no-confirm] - Pull-safe repo command runner for agent handoff without copy-and-paste terminal blocks.
+11. run-logged [local-only; enabled; no-confirm] - Run a local command while teeing output to a terminal log.
+12. terminal-status [read-only; enabled; no-confirm] - Inspect the latest terminal log pointer without mutating state.
+13. terminal-clean-check [read-only; enabled; no-confirm] - Check whether only terminal-log artifacts are dirty during logged runs.
+14. terminal-upload [remote-mutation; enabled; no-confirm] - Commit and push only terminal-log artifacts for failure handoff.
+presenter_preview_end
+mode_guard_available=true
+shell_adapters_absent=true
+message=GUI dry-run passed without opening a window.
+layout_plan_begin
+GUI LAYOUT PLAN
+title=agentic-project-kit Cockpit
+geometry=1000x650
+node_count=32
+menu_count=4
+toolbar_button_count=4
+action_button_count=6
+output_panel_count=1
+summary_bar_count=1
+disabled_commands=release-publish
+layout_plan_end
+tkinter_render_begin
+TKINTER RENDER RESULT
+title=agentic-project-kit Cockpit
+geometry=1000x650
+widget_count=32
+menu_count=4
+toolbar_button_count=4
+action_button_count=6
+output_panel_count=1
+summary_bar_count=1
+disabled_commands=release-publish
+destructive_enabled=false
+tkinter_render_end
+window_guard_begin
+GUI WINDOW GUARD
+window_launch_ready=false
+tkinter_importable=false
+native_tkinter_importable=false
+message=tkinter import failed: No module named '_tkinter'
+### RESULT: FAIL ###
+window_guard_end
+real_window_opened=false
+### RESULT: PASS ###
+
+### FULL LOCAL GATES ###
+........................................................................ [  9%]
+........................................................................ [ 19%]
+........................................................................ [ 28%]
+........................................................................ [ 38%]
+........................................................................ [ 48%]
+........................................................................ [ 57%]
+........................................................................ [ 67%]
+........................................................................ [ 76%]
+........................................................................ [ 86%]
+........................................................................ [ 96%]
+.............................                                            [100%]
+749 passed in 4.23s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COPY TERMINAL LOG FOR COMMIT ###
