@@ -1,0 +1,590 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK MAIN ###
+main
+69dc873 Prepare v0.3.37 release metadata (#614)
+c64eadd Record v0.3.37 final GUI preparation closeout contract (#613)
+6ae66ba Record v0.3.36 DOI metadata merge verification log
+613cf9e Record v0.3.36 DOI metadata (#612)
+369e920 Record v0.3.36 release publish log
+45ffd3f Record v0.3.36 release gate log
+0fb4d18 Record v0.3.36 release metadata merge verification log
+f9f5c41 Prepare v0.3.36 release metadata after audit runner hardening (#611)
+76f528a Record audit runner standard-error fix merge verification log
+9f9134f Add deterministic audit test matrix runner (#610)
+b8d9642 Record release route help safety merge verification log
+c8b20d5 Harden release route help and version safety (#609)
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=main
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### RELEASE CHECK BEFORE GATE ###
+Release state check for target v0.3.37
+
+[PASS] semantic version: 0.3.37 is valid
+[PASS] pyproject version: found text: version = "0.3.37"
+[PASS] package __version__: found text: __version__ = "0.3.37"
+[PASS] CHANGELOG version: found text: v0.3.37
+[PASS] README version: found text: Version `0.3.37`
+[PASS] CITATION version: found text: version: 0.3.37
+[PASS] STATUS version: found text: Current version: 0.3.37
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.37
+[PASS] local tag unused: tag is unused: v0.3.37
+[PASS] remote tag unused: remote tag is unused: v0.3.37
+[PASS] GitHub release unused: GitHub release is absent: v0.3.37
+
+Overall: PASS
+
+
+### VERIFY TAG AND RELEASE UNUSED BEFORE PUBLISH ###
+
+### RELEASE GATE ###
+main
+main
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+........................................................................ [ 30%]
+........................................................................ [ 40%]
+........................................................................ [ 51%]
+........................................................................ [ 61%]
+........................................................................ [ 71%]
+........................................................................ [ 81%]
+........................................................................ [ 91%]
+.........................................................                [100%]
+705 passed in 3.88s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=3
+local_branch_count=107
+ok=false
+
+Findings:
+- [warning] similar-open-prs: 2 open PRs share slice prefix v0-3-36.
+  - #568 docs/v0.3.36-shell-port-classification: Record v0.3.36 shell port classification
+  - #562 docs/v0.3.36-portability-baseline-verify: Record v0.3.36 portability baseline verification
+
+Next:
+- Review findings manually before closing PRs or deleting branches.
+main
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+
+### PYTEST ###
+
+### RUFF ###
+
+### CHECK DOCS ###
+
+### DOCTOR ###
+
+### PR HYGIENE ###
+
+### FINAL STATUS ###
+Local feature gate passed.
+Release state check for target v0.3.37
+
+[PASS] semantic version: 0.3.37 is valid
+[PASS] pyproject version: found text: version = "0.3.37"
+[PASS] package __version__: found text: __version__ = "0.3.37"
+[PASS] CHANGELOG version: found text: v0.3.37
+[PASS] README version: found text: Version `0.3.37`
+[PASS] CITATION version: found text: version: 0.3.37
+[PASS] STATUS version: found text: Current version: 0.3.37
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.37
+[PASS] local tag unused: tag is unused: v0.3.37
+[PASS] remote tag unused: remote tag is unused: v0.3.37
+[PASS] GitHub release unused: GitHub release is absent: v0.3.37
+
+Overall: PASS
+
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for sdist...
+* Building sdist...
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for wheel...
+* Building wheel...
+Successfully built agentic_project_kit-0.3.37.tar.gz and agentic_project_kit-0.3.37-py3-none-any.whl
+Checking dist/agentic_project_kit-0.3.37-py3-none-any.whl: [32mPASSED[0m
+Checking dist/agentic_project_kit-0.3.37.tar.gz: [32mPASSED[0m
+total 3416
+drwxr-xr-x@  4 hof  staff      128 21 Mai  18:46 .
+drwxr-xr-x@ 30 hof  staff      960 21 Mai  18:46 ..
+-rw-r--r--@  1 hof  staff   148489 21 Mai  18:46 agentic_project_kit-0.3.37-py3-none-any.whl
+-rw-r--r--@  1 hof  staff  1593583 21 Mai  18:46 agentic_project_kit-0.3.37.tar.gz
+main
+NS RELEASE GATE CYCLE v0.3.37
+
+Safety: verifies release readiness only; no tag, release, merge, or publish action.
+
+### BRANCH ###
+
+### STATUS ###
+
+### LOCAL GATE ###
+
+### RELEASE CHECK ###
+
+### CLEAN DIST ###
+
+### BUILD CHECK ###
+
+### TWINE CHECK ###
+
+### DIST LIST ###
+
+### VERIFY DIST ONLY CONTAINS TARGET VERSION ###
+
+### FINAL BRANCH ###
+
+### FINAL STATUS ###
+### RESULT: PASS ###
+
+### RELEASE PUBLISH ###
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+NS RELEASE PUBLISH CYCLE v0.3.37
+
+### SAFETY ###
+Safety: publishes only with exact confirmation token: publish-v0.3.37
+
+### BRANCH / STATUS ###
+main
+
+### UPDATE MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### RELEASE GATE ###
+main
+main
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+........................................................................ [ 30%]
+........................................................................ [ 40%]
+........................................................................ [ 51%]
+........................................................................ [ 61%]
+........................................................................ [ 71%]
+........................................................................ [ 81%]
+........................................................................ [ 91%]
+.........................................................                [100%]
+705 passed in 3.79s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=3
+local_branch_count=107
+ok=false
+
+Findings:
+- [warning] similar-open-prs: 2 open PRs share slice prefix v0-3-36.
+  - #568 docs/v0.3.36-shell-port-classification: Record v0.3.36 shell port classification
+  - #562 docs/v0.3.36-portability-baseline-verify: Record v0.3.36 portability baseline verification
+
+Next:
+- Review findings manually before closing PRs or deleting branches.
+main
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+
+### PYTEST ###
+
+### RUFF ###
+
+### CHECK DOCS ###
+
+### DOCTOR ###
+
+### PR HYGIENE ###
+
+### FINAL STATUS ###
+Local feature gate passed.
+Release state check for target v0.3.37
+
+[PASS] semantic version: 0.3.37 is valid
+[PASS] pyproject version: found text: version = "0.3.37"
+[PASS] package __version__: found text: __version__ = "0.3.37"
+[PASS] CHANGELOG version: found text: v0.3.37
+[PASS] README version: found text: Version `0.3.37`
+[PASS] CITATION version: found text: version: 0.3.37
+[PASS] STATUS version: found text: Current version: 0.3.37
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.37
+[PASS] local tag unused: tag is unused: v0.3.37
+[PASS] remote tag unused: remote tag is unused: v0.3.37
+[PASS] GitHub release unused: GitHub release is absent: v0.3.37
+
+Overall: PASS
+
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for sdist...
+* Building sdist...
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for wheel...
+* Building wheel...
+Successfully built agentic_project_kit-0.3.37.tar.gz and agentic_project_kit-0.3.37-py3-none-any.whl
+Checking dist/agentic_project_kit-0.3.37-py3-none-any.whl: [32mPASSED[0m
+Checking dist/agentic_project_kit-0.3.37.tar.gz: [32mPASSED[0m
+total 3416
+drwxr-xr-x@  4 hof  staff      128 21 Mai  18:46 .
+drwxr-xr-x@ 30 hof  staff      960 21 Mai  18:46 ..
+-rw-r--r--@  1 hof  staff   148489 21 Mai  18:46 agentic_project_kit-0.3.37-py3-none-any.whl
+-rw-r--r--@  1 hof  staff  1593583 21 Mai  18:46 agentic_project_kit-0.3.37.tar.gz
+main
+NS RELEASE GATE CYCLE v0.3.37
+
+Safety: verifies release readiness only; no tag, release, merge, or publish action.
+
+### BRANCH ###
+
+### STATUS ###
+
+### LOCAL GATE ###
+
+### RELEASE CHECK ###
+
+### CLEAN DIST ###
+
+### BUILD CHECK ###
+
+### TWINE CHECK ###
+
+### DIST LIST ###
+
+### VERIFY DIST ONLY CONTAINS TARGET VERSION ###
+
+### FINAL BRANCH ###
+
+### FINAL STATUS ###
+### RESULT: PASS ###
+
+### VERIFY TAG IS UNUSED ###
+
+### CREATE AND PUSH TAG ###
+To github.com:vfi64/agentic-project-kit.git
+ * [new tag]         v0.3.37 -> v0.3.37
+
+### WAIT FOR RELEASE WORKFLOW AND GITHUB RELEASE ###
+Waiting for GitHub release v0.3.37 (1/30)
+Waiting for GitHub release v0.3.37 (2/30)
+title:	v0.3.37
+tag:	v0.3.37
+draft:	true
+prerelease:	false
+immutable:	false
+author:	github-actions[bot]
+created:	2026-05-21T16:45:34Z
+url:	https://github.com/vfi64/agentic-project-kit/releases/tag/untagged-c9bc099c099f4676e0c4
+--
+## What's Changed
+* Record v0.3.36 DOI metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/612
+* Record v0.3.37 final GUI preparation closeout contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/613
+* Prepare v0.3.37 release metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/614
+
+
+**Full Changelog**: https://github.com/vfi64/agentic-project-kit/compare/v0.3.36...v0.3.37
+
+### RELEASE WORKFLOW STATUS ###
+in_progress		Prepare v0.3.37 release metadata (#614)	Release	v0.3.37	push	26240022486	19s	2026-05-21T16:46:59Z
+completed	success	Record v0.3.36 release gate log	Release	v0.3.36	push	26238742306	24s	2026-05-21T16:22:42Z
+completed	success	Prepare v0.3.35 release metadata (#548)	Release	v0.3.35	push	26188849844	26s	2026-05-20T20:43:46Z
+completed	success	Prepare v0.3.34 release metadata (#536)	Release	v0.3.34	push	26185657969	28s	2026-05-20T19:40:39Z
+completed	success	Prepare v0.3.33 release metadata (#516)	Release	v0.3.33	push	26181018016	21s	2026-05-20T18:09:46Z
+completed	success	Record v0.3.32 release metadata merge verification log (#510)	Release	v0.3.32	push	26179554250	24s	2026-05-20T17:41:17Z
+completed	success	Prepare v0.3.31 release metadata (#499)	Release	v0.3.31	push	26177373810	54s	2026-05-20T16:58:13Z
+completed	success	Record PR 469 merge verification log	Release	v0.3.30	push	26160587033	27s	2026-05-20T11:49:24Z
+
+### VERIFY COMPLETED RELEASE ###
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+NS RELEASE VERIFY CYCLE v0.3.37
+
+### SAFETY ###
+Safety: verifies completed release state only; no tag, release, merge, push, or publish action.
+
+### BRANCH / STATUS ###
+main
+
+### VERIFY LOCAL TAG ###
+69dc87373271724a6c4abe96793ae0bd9a1a1e2b
+
+### VERIFY REMOTE TAG ###
+69dc87373271724a6c4abe96793ae0bd9a1a1e2b	refs/tags/v0.3.37
+
+### WAIT FOR GITHUB RELEASE ###
+title:	v0.3.37
+tag:	v0.3.37
+draft:	false
+prerelease:	false
+immutable:	false
+author:	github-actions[bot]
+created:	2026-05-21T16:45:34Z
+published:	2026-05-21T16:47:20Z
+url:	https://github.com/vfi64/agentic-project-kit/releases/tag/v0.3.37
+asset:	agentic_project_kit-0.3.37-py3-none-any.whl
+asset:	agentic_project_kit-0.3.37.tar.gz
+--
+## What's Changed
+* Record v0.3.36 DOI metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/612
+* Record v0.3.37 final GUI preparation closeout contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/613
+* Prepare v0.3.37 release metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/614
+
+
+**Full Changelog**: https://github.com/vfi64/agentic-project-kit/compare/v0.3.36...v0.3.37
+
+### RELEASE WORKFLOW STATUS ###
+completed	success	Prepare v0.3.37 release metadata (#614)	Release	v0.3.37	push	26240022486	23s	2026-05-21T16:46:59Z
+completed	success	Record v0.3.36 release gate log	Release	v0.3.36	push	26238742306	24s	2026-05-21T16:22:42Z
+completed	success	Prepare v0.3.35 release metadata (#548)	Release	v0.3.35	push	26188849844	26s	2026-05-20T20:43:46Z
+completed	success	Prepare v0.3.34 release metadata (#536)	Release	v0.3.34	push	26185657969	28s	2026-05-20T19:40:39Z
+completed	success	Prepare v0.3.33 release metadata (#516)	Release	v0.3.33	push	26181018016	21s	2026-05-20T18:09:46Z
+completed	success	Record v0.3.32 release metadata merge verification log (#510)	Release	v0.3.32	push	26179554250	24s	2026-05-20T17:41:17Z
+completed	success	Prepare v0.3.31 release metadata (#499)	Release	v0.3.31	push	26177373810	54s	2026-05-20T16:58:13Z
+completed	success	Record PR 469 merge verification log	Release	v0.3.30	push	26160587033	27s	2026-05-20T11:49:24Z
+
+### POST RELEASE CHECK ###
+Post-release check for target v0.3.37
+
+[PASS] GitHub release: GitHub release exists: v0.3.37
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[WAITING] Zenodo version DOI: no verified Zenodo record found yet for v0.3.37; leave README/CITATION unchanged
+
+Overall: PASS
+
+### FINAL STATE ###
+main
+69dc873 Prepare v0.3.37 release metadata (#614)
+c64eadd Record v0.3.37 final GUI preparation closeout contract (#613)
+6ae66ba Record v0.3.36 DOI metadata merge verification log
+613cf9e Record v0.3.36 DOI metadata (#612)
+369e920 Record v0.3.36 release publish log
+45ffd3f Record v0.3.36 release gate log
+0fb4d18 Record v0.3.36 release metadata merge verification log
+f9f5c41 Prepare v0.3.36 release metadata after audit runner hardening (#611)
+
+### RESULT: PASS ###
+
+### FINAL STATE ###
+main
+69dc873 Prepare v0.3.37 release metadata (#614)
+c64eadd Record v0.3.37 final GUI preparation closeout contract (#613)
+6ae66ba Record v0.3.36 DOI metadata merge verification log
+613cf9e Record v0.3.36 DOI metadata (#612)
+369e920 Record v0.3.36 release publish log
+45ffd3f Record v0.3.36 release gate log
+0fb4d18 Record v0.3.36 release metadata merge verification log
+f9f5c41 Prepare v0.3.36 release metadata after audit runner hardening (#611)
+
+### RESULT: PASS ###
+
+### RELEASE VERIFY ###
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+NS RELEASE VERIFY CYCLE v0.3.37
+
+### SAFETY ###
+Safety: verifies completed release state only; no tag, release, merge, push, or publish action.
+
+### BRANCH / STATUS ###
+main
+
+### VERIFY LOCAL TAG ###
+69dc87373271724a6c4abe96793ae0bd9a1a1e2b
+
+### VERIFY REMOTE TAG ###
+69dc87373271724a6c4abe96793ae0bd9a1a1e2b	refs/tags/v0.3.37
+
+### WAIT FOR GITHUB RELEASE ###
+title:	v0.3.37
+tag:	v0.3.37
+draft:	false
+prerelease:	false
+immutable:	false
+author:	github-actions[bot]
+created:	2026-05-21T16:45:34Z
+published:	2026-05-21T16:47:20Z
+url:	https://github.com/vfi64/agentic-project-kit/releases/tag/v0.3.37
+asset:	agentic_project_kit-0.3.37-py3-none-any.whl
+asset:	agentic_project_kit-0.3.37.tar.gz
+--
+## What's Changed
+* Record v0.3.36 DOI metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/612
+* Record v0.3.37 final GUI preparation closeout contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/613
+* Prepare v0.3.37 release metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/614
+
+
+**Full Changelog**: https://github.com/vfi64/agentic-project-kit/compare/v0.3.36...v0.3.37
+
+### RELEASE WORKFLOW STATUS ###
+completed	success	Prepare v0.3.37 release metadata (#614)	Release	v0.3.37	push	26240022486	23s	2026-05-21T16:46:59Z
+completed	success	Record v0.3.36 release gate log	Release	v0.3.36	push	26238742306	24s	2026-05-21T16:22:42Z
+completed	success	Prepare v0.3.35 release metadata (#548)	Release	v0.3.35	push	26188849844	26s	2026-05-20T20:43:46Z
+completed	success	Prepare v0.3.34 release metadata (#536)	Release	v0.3.34	push	26185657969	28s	2026-05-20T19:40:39Z
+completed	success	Prepare v0.3.33 release metadata (#516)	Release	v0.3.33	push	26181018016	21s	2026-05-20T18:09:46Z
+completed	success	Record v0.3.32 release metadata merge verification log (#510)	Release	v0.3.32	push	26179554250	24s	2026-05-20T17:41:17Z
+completed	success	Prepare v0.3.31 release metadata (#499)	Release	v0.3.31	push	26177373810	54s	2026-05-20T16:58:13Z
+completed	success	Record PR 469 merge verification log	Release	v0.3.30	push	26160587033	27s	2026-05-20T11:49:24Z
+
+### POST RELEASE CHECK ###
+Post-release check for target v0.3.37
+
+[PASS] GitHub release: GitHub release exists: v0.3.37
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.3.37: 10.5281/zenodo.20329450
+
+Overall: PASS
+
+### FINAL STATE ###
+main
+69dc873 Prepare v0.3.37 release metadata (#614)
+c64eadd Record v0.3.37 final GUI preparation closeout contract (#613)
+6ae66ba Record v0.3.36 DOI metadata merge verification log
+613cf9e Record v0.3.36 DOI metadata (#612)
+369e920 Record v0.3.36 release publish log
+45ffd3f Record v0.3.36 release gate log
+0fb4d18 Record v0.3.36 release metadata merge verification log
+f9f5c41 Prepare v0.3.36 release metadata after audit runner hardening (#611)
+
+### RESULT: PASS ###
+
+### POST RELEASE CHECK ###
+Post-release check for target v0.3.37
+
+[PASS] GitHub release: GitHub release exists: v0.3.37
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.3.37: 10.5281/zenodo.20329450
+
+Overall: PASS
+
+
+### RELEASE WORKFLOW STATUS ###
+completed	success	Prepare v0.3.37 release metadata (#614)	Release	v0.3.37	push	26240022486	23s	2026-05-21T16:46:59Z
+completed	success	Record v0.3.36 release gate log	Release	v0.3.36	push	26238742306	24s	2026-05-21T16:22:42Z
+completed	success	Prepare v0.3.35 release metadata (#548)	Release	v0.3.35	push	26188849844	26s	2026-05-20T20:43:46Z
+completed	success	Prepare v0.3.34 release metadata (#536)	Release	v0.3.34	push	26185657969	28s	2026-05-20T19:40:39Z
+completed	success	Prepare v0.3.33 release metadata (#516)	Release	v0.3.33	push	26181018016	21s	2026-05-20T18:09:46Z
+completed	success	Record v0.3.32 release metadata merge verification log (#510)	Release	v0.3.32	push	26179554250	24s	2026-05-20T17:41:17Z
+completed	success	Prepare v0.3.31 release metadata (#499)	Release	v0.3.31	push	26177373810	54s	2026-05-20T16:58:13Z
+completed	success	Record PR 469 merge verification log	Release	v0.3.30	push	26160587033	27s	2026-05-20T11:49:24Z
+
+### GITHUB RELEASE VIEW ###
+title:	v0.3.37
+tag:	v0.3.37
+draft:	false
+prerelease:	false
+immutable:	false
+author:	github-actions[bot]
+created:	2026-05-21T16:45:34Z
+published:	2026-05-21T16:47:20Z
+url:	https://github.com/vfi64/agentic-project-kit/releases/tag/v0.3.37
+asset:	agentic_project_kit-0.3.37-py3-none-any.whl
+asset:	agentic_project_kit-0.3.37.tar.gz
+--
+## What's Changed
+* Record v0.3.36 DOI metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/612
+* Record v0.3.37 final GUI preparation closeout contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/613
+* Prepare v0.3.37 release metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/614
+
+
+**Full Changelog**: https://github.com/vfi64/agentic-project-kit/compare/v0.3.36...v0.3.37
+
+### FINAL LOCAL STATE BEFORE LOG COMMIT ###
+main
+69dc873 Prepare v0.3.37 release metadata (#614)
+c64eadd Record v0.3.37 final GUI preparation closeout contract (#613)
+6ae66ba Record v0.3.36 DOI metadata merge verification log
+613cf9e Record v0.3.36 DOI metadata (#612)
+369e920 Record v0.3.36 release publish log
+45ffd3f Record v0.3.36 release gate log
+0fb4d18 Record v0.3.36 release metadata merge verification log
+f9f5c41 Prepare v0.3.36 release metadata after audit runner hardening (#611)
+76f528a Record audit runner standard-error fix merge verification log
+9f9134f Add deterministic audit test matrix runner (#610)
+b8d9642 Record release route help safety merge verification log
+c8b20d5 Harden release route help and version safety (#609)
+
+### COPY RELEASE LOG FOR COMMIT ###
