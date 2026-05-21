@@ -1,0 +1,84 @@
+
+### RECOVER FEATURE BRANCH ###
+Already on 'feature/v0.4.0-gui-presenter-remote-mutation-safety'
+feature/v0.4.0-gui-presenter-remote-mutation-safety
+
+### CLEAN FAILED LOCAL ARTIFACTS FROM PRIOR ATTEMPTS ###
+
+### PRE-PATCH EXACT LINE VERIFY ###
+51:    destructive = safety_class.lower() in {"destructive", "release", "remote", "mutation"}
+
+### WRITE SAFE LINE PATCH SCRIPT ###
+
+### APPLY SAFE LINE PATCH SCRIPT ###
+
+### WRITE REGRESSION TEST ###
+
+### DIFF ###
+diff --git a/src/agentic_project_kit/gui_viewmodel.py b/src/agentic_project_kit/gui_viewmodel.py
+index 27802b8..539deb8 100644
+--- a/src/agentic_project_kit/gui_viewmodel.py
++++ b/src/agentic_project_kit/gui_viewmodel.py
+@@ -48,7 +48,8 @@ def action_to_view_model(action: object, *, destructive_actions_enabled: bool =
+     name = _value(_field(action, "name", "action_id", "id"))
+     safety_class = _value(_field(action, "safety_class", "safety", default="unknown"))
+     description = _value(_field(action, "description", "summary", default=""))
+-    destructive = safety_class.lower() in {"destructive", "release", "remote", "mutation"}
++    normalized_safety_class = safety_class.lower().replace("_", "-")
++    destructive = normalized_safety_class in {"destructive", "release", "remote", "mutation", "remote-mutation"}
+     return GuiActionViewModel(
+         name=name,
+         safety_class=safety_class,
+
+### TARGETED TESTS ###
+.......................                                                  [100%]
+23 passed in 0.23s
+
+### GUI DRY RUN SAFETY SMOKE ###
+16:01. dev [read-only; enabled; no-confirm] - Run local deterministic development gates.
+17:02. pr-cleanup [read-only; enabled; no-confirm] - Classify open pull requests without mutating them.
+18:03. release-verify [read-only; enabled; no-confirm] - Verify an existing release and metadata state.
+19:04. clean-evidence [local-only; enabled; no-confirm] - Clean local evidence or generated files according to repo policy.
+20:05. release-prep [local-only; enabled; no-confirm] - Prepare local release metadata before a release PR.
+21:06. release-gate [read-only; enabled; no-confirm] - Verify release readiness without tagging or publishing.
+22:07. finalize-guard [read-only; enabled; no-confirm] - Classify branch finalization state without merging or deleting.
+23:08. cockpit-readiness [read-only; enabled; no-confirm] - Render static cockpit readiness metadata without executing actions.
+24:09. agent-next [remote-mutation; disabled; confirm] - Pull and execute exactly one pending repo-backed agent command.
+25:10. agent-run [remote-mutation; disabled; confirm] - Pull-safe repo command runner for agent handoff without copy-and-paste terminal blocks.
+26:11. run-logged [local-only; enabled; no-confirm] - Run a local command while teeing output to a terminal log.
+27:12. terminal-status [read-only; enabled; no-confirm] - Inspect the latest terminal log pointer without mutating state.
+28:13. terminal-clean-check [read-only; enabled; no-confirm] - Check whether only terminal-log artifacts are dirty during logged runs.
+29:14. terminal-upload [remote-mutation; disabled; confirm] - Commit and push only terminal-log artifacts for failure handoff.
+
+### FULL LOCAL GATES ###
+........................................................................ [  9%]
+........................................................................ [ 18%]
+........................................................................ [ 27%]
+........................................................................ [ 37%]
+........................................................................ [ 46%]
+........................................................................ [ 55%]
+........................................................................ [ 65%]
+........................................................................ [ 74%]
+........................................................................ [ 83%]
+........................................................................ [ 93%]
+.....................................................                    [100%]
+773 passed in 4.45s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COPY LOG FOR COMMIT ###

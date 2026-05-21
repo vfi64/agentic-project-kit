@@ -48,7 +48,8 @@ def action_to_view_model(action: object, *, destructive_actions_enabled: bool = 
     name = _value(_field(action, "name", "action_id", "id"))
     safety_class = _value(_field(action, "safety_class", "safety", default="unknown"))
     description = _value(_field(action, "description", "summary", default=""))
-    destructive = safety_class.lower() in {"destructive", "release", "remote", "mutation"}
+    normalized_safety_class = safety_class.lower().replace("_", "-")
+    destructive = normalized_safety_class in {"destructive", "release", "remote", "mutation", "remote-mutation"}
     return GuiActionViewModel(
         name=name,
         safety_class=safety_class,
