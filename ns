@@ -36,7 +36,7 @@ if [ "${1:-}" = "dev-local-feature-gate" ]; then
 fi
 
 if [ "${1:-}" = "governance-check" ]; then
-  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli governance check
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli governance check
   exit $?
 fi
 
@@ -59,34 +59,34 @@ fi
 
 if [ "${1:-}" = "action-list" ]; then
   shift
-  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli actions list "$@"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli actions list "$@"
   exit $?
 fi
 
 if [ "${1:-}" = "action-show" ]; then
   shift
-  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli actions show "$@"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli actions show "$@"
   exit $?
 fi
 
 if [ "${1:-}" = "handoff-refresh" ]; then
   shift
-  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff refresh "$@"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli handoff refresh "$@"
   exit $?
 fi
 
 if [ "${1:-}" = "handoff-show" ]; then
-  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff show
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli handoff show
   exit $?
 fi
 
 if [ "${1:-}" = "handoff-check" ]; then
-  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff check
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli handoff check
   exit $?
 fi
 
 if [ "${1:-}" = "handoff-prompt" ]; then
-  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli handoff prompt
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli handoff prompt
   exit $?
 fi
 
@@ -285,7 +285,7 @@ if [ "${1:-}" = "release-verify" ]; then
 fi
 if [ "${1:-}" = "finalize-guard" ]; then
   shift
-  agentic_project_kit.finalize_guard "$@"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.finalize_guard "$@"
   exit $?
 fi
 
