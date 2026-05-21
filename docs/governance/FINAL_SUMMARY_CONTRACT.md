@@ -7,13 +7,41 @@ Required block:
 ```text
 ================================================================
 SUMMARY
-WORK RESULT: PASS|FAIL|PENDING|HARD-FAIL|NO-COMMAND
-EVIDENCE RESULT: PASS|FAIL|PARTIAL|CHAT_ONLY|NOT_REQUIRED
-OVERALL RESULT: PASS|FAIL|PENDING|HARD-FAIL|NO-COMMAND
-REMOTE_EVIDENCE: PASS|FAIL|PARTIAL|NOT_REQUIRED
-terminal_log=<repo-path-or-NONE>
-command_report=<repo-path-or-NONE>
-NEXT_CHAT_REPLY: p|paste-output|ask-agent-to-queue-command|continue|stop
+
+SLICE
+  NAME: <slice-name>
+  SCOPE: <short scope>
+  BRANCH: <branch-or-NONE>
+
+EXECUTION
+  ORIGIN: local|remote|mixed
+  STATE_MODE: local|remote|unknown
+  MODE_CHECK: pass|fail|not_run
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS|FAIL|PENDING|HARD-FAIL|NO-COMMAND
+  EVIDENCE: PASS|FAIL|PARTIAL|CHAT_ONLY|NOT_REQUIRED
+  OVERALL: PASS|FAIL|PENDING|HARD-FAIL|NO-COMMAND
+
+REMOTE
+  REMOTE_EVIDENCE: PASS|FAIL|PARTIAL|NOT_REQUIRED
+  PR: #<number> open|merged|none
+  HEAD_SHA: <sha-or-NONE>
+  CI: pass|fail|in_progress|not_started|unknown
+  MERGE: done|not_done|blocked|not_required
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/<file>.log|NONE
+  command_report: docs/reports/command_runs/<file>.md|NONE
+
+INTERPRETATION
+  <one short sentence explaining what the result really means>
+
+NEXT
+  SAFE_STEP: <next concrete action>
+  CHAT_REPLY: d|f|w|paste-output|stop
+
 ### RESULT: PASS|FAIL|PENDING|HARD-FAIL|NO-COMMAND ###
 ================================================================
 ```
