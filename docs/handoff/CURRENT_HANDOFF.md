@@ -238,9 +238,9 @@ The architectural rule is: chat describes intent; repo-owned tools execute typed
 
 
 - Completed v0.3.34 core hardening slice: `src/agentic_project_kit/finalize_guard.py` now contains a pure decision core for finalize-guard classification, covered by `tests/test_v034_finalize_guard_core.py`.
-- The shell runner `tools/ns_finalize_guard.sh` has not yet been replaced; this was intentional. The next safe slice can either wire the shell runner to the Python core or choose another bounded `ns` route.
+- The shell runner `python -m agentic_project_kit.finalize_guard` has not yet been replaced; this was intentional. The next safe slice can either wire the shell runner to the Python core or choose another bounded `ns` route.
 - Evidence: `docs/reports/terminal/v0.3.34_finalize_guard_core_merge_verification.log` records recent main CI, targeted regression, and targeted local feature gate evidence.
-- Next recommended v0.3.34 slice: either integrate `tools/ns_finalize_guard.sh` with the new Python decision core or extract another small read-only/safety-critical wrapper. Avoid GUI work until these command paths are stable.
+- Next recommended v0.3.34 slice: either integrate `python -m agentic_project_kit.finalize_guard` with the new Python decision core or extract another small read-only/safety-critical wrapper. Avoid GUI work until these command paths are stable.
 
 
 - Completed v0.3.34 finalize-guard core contract hardening: `PASS_SUPERSEDED` is now reachable for a conflicting branch whose marker is already represented on main, and `src/agentic_project_kit/finalize_guard.py` exposes a module CLI/render contract for future shell/GUI/Cockpit integration.
@@ -265,9 +265,9 @@ Immediate priorities:
 5. Start the Tkinter MVP only after the above risks are either fixed or explicitly deferred with tests/docs.
 
 - Completed first v0.3.35 consolidation slice: core-test-matrix coverage was expanded for `finalize_guard`, `local_feature_gate`, and `release_doi_safety` with no runtime change.
-- Next recommended v0.3.35 slice: either wire `tools/ns_finalize_guard.sh` to the Python finalize-guard module CLI, or extract the release-gate/build-check shell path into a tested Python core. Prefer the smaller, lower-risk slice first.
+- Next recommended v0.3.35 slice: either wire `python -m agentic_project_kit.finalize_guard` to the Python finalize-guard module CLI, or extract the release-gate/build-check shell path into a tested Python core. Prefer the smaller, lower-risk slice first.
 
-- Completed v0.3.35 finalize-guard shell/core integration: `tools/ns_finalize_guard.sh` now delegates final status classification to `python -m agentic_project_kit.finalize_guard`.
+- Completed v0.3.35 finalize-guard shell/core integration: `python -m agentic_project_kit.finalize_guard` now delegates final status classification to `python -m agentic_project_kit.finalize_guard`.
 - Evidence should include the PR merge verification and targeted shell/core routing tests. Next v0.3.35 candidate: either extract release-gate/build-check into a Python core or surface the Daily/Guided/Maintainer/Debug CLI layers in practical entry points.
 
 - v0.3.35 release-gate core extraction prep evidence is now repo-backed in `docs/reports/terminal/v0.3.35_release_gate_core_extraction_prep.log`; do not proceed to v0.3.35 release until the release-gate/build-check path is either extracted into a tested Python core or explicitly deferred with evidence.
