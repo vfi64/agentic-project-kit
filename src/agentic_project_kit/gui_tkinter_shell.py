@@ -162,31 +162,53 @@ def run_window_smoke() -> tuple[bool, str]:
 
 
 
+def _theme_color(style: object, style_name: str, option: str, fallback: str) -> str:
+    try:
+        value = style.lookup(style_name, option)
+    except Exception:
+        value = ""
+    return str(value or fallback)
+
+
 def render_manual_launch_content(root: object) -> None:
     import tkinter as tk
-    root.configure(bg="#f2f2f2")
-    header = tk.Label(root, text="agentic-project-kit Cockpit", anchor="w", font=("TkDefaultFont", 18, "bold"), bg="#f2f2f2")
+    from tkinter import ttk
+
+    style = ttk.Style(root)
+    frame_bg = _theme_color(style, "TFrame", "background", root.cget("bg"))
+    label_fg = _theme_color(style, "TLabel", "foreground", "black")
+    root.configure(bg=frame_bg)
+
+    header = ttk.Label(root, text="agentic-project-kit Cockpit", anchor="w", font=("TkDefaultFont", 18, "bold"))
     header.pack(fill="x", padx=12, pady=(12, 6))
-    safety = tk.Label(root, text="Safety: manual launch only; actions disabled; no git, release, PR, tag, or remote mutation is executed.", anchor="w", bg="#f2f2f2")
+    safety = ttk.Label(root, text="Safety: manual launch only; actions disabled; no git, release, PR, tag, or remote mutation is executed.", anchor="w")
     safety.pack(fill="x", padx=12, pady=(0, 10))
-    toolbar = tk.Frame(root, bg="#e6e6e6", bd=1, relief="solid")
+
+    toolbar = ttk.Frame(root, padding=4)
     toolbar.pack(fill="x", padx=12, pady=(0, 8))
     for label in ("Refresh status", "Doctor", "Check docs", "GUI dry-run"):
-        button = tk.Button(toolbar, text=label, state="disabled")
-        button.pack(side="left", padx=4, pady=4)
-    body = tk.Frame(root, bg="#f2f2f2")
-    body.pack(fill="both", expand=True, padx=12, pady=(0, 12))
-    actions = tk.LabelFrame(body, text="Actions disabled", bg="#f2f2f2")
+        ttk.Button(toolbar, text=label, state="disabled").pack(side="left", padx=4, pady=4)
+
+    body = ttk.Frame(root, padding=(12, 0, 12, 12))
+    body.pack(fill="both", expand=True)
+    actions = ttk.LabelFrame(body, text="Actions disabled", padding=6)
     actions.pack(side="left", fill="y", padx=(0, 8))
     for label in ("cockpit-readiness", "doctor", "check-docs", "agent-run"):
-        tk.Button(actions, text=label, state="disabled", width=22).pack(fill="x", padx=6, pady=3)
-    output = tk.LabelFrame(body, text="Output / Status", bg="#f2f2f2")
+        ttk.Button(actions, text=label, state="disabled", width=22).pack(fill="x", pady=3)
+
+    output = ttk.LabelFrame(body, text="Output / Status", padding=6)
     output.pack(side="left", fill="both", expand=True)
     text = tk.Text(output, height=12, wrap="word")
+    text_bg = str(text.cget("bg"))
+    text_fg = str(text.cget("fg"))
+    if text_fg == text_bg:
+        text_fg = label_fg
+    text.configure(bg=text_bg, fg=text_fg, insertbackground=text_fg)
     text.insert("1.0", "GUI manual launch ready. Actions are disabled in this MVP safety slice.\nNext slice: connect visible widgets to read-only action output.")
     text.configure(state="disabled")
-    text.pack(fill="both", expand=True, padx=6, pady=6)
-    status = tk.Label(root, text="Status: ready | branch: main | actions: disabled", anchor="w", bg="#dddddd")
+    text.pack(fill="both", expand=True)
+
+    status = ttk.Label(root, text="Status: ready | branch: main | actions: disabled", anchor="w")
     status.pack(fill="x", side="bottom")
 def run_manual_launch() -> tuple[bool, str]:
     guard = check_window_launch_ready()

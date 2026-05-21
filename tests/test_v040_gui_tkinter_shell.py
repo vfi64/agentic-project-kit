@@ -173,3 +173,17 @@ def test_manual_launch_ready_path_renders_visible_content(monkeypatch, capsys):
     assert "manual_launch_status=READY" in printed
     assert "actions_enabled=false" in printed
 
+
+def test_manual_launch_content_uses_ttk_theme_defaults():
+    from pathlib import Path
+
+    source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
+    manual_source = source[source.index("def render_manual_launch_content"):source.index("def run_manual_launch")]
+    assert "from tkinter import ttk" in manual_source
+    assert "ttk.Label(" in manual_source
+    assert "ttk.Button(" in manual_source
+    assert "ttk.LabelFrame(" in manual_source
+    assert "#f2f2f2" not in manual_source
+    assert "#e6e6e6" not in manual_source
+    assert "#dddddd" not in manual_source
+
