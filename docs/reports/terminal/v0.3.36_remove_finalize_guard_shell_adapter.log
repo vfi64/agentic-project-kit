@@ -1,0 +1,409 @@
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### CLEAN PRECHECK BEFORE LOG CREATION ###
+main
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'feature/v0.3.36-remove-finalize-guard-shell'
+
+### INSPECT FINALIZE GUARD ROUTES ###
+CHANGELOG.md:9:- Expanded regression coverage for finalize-guard, local-feature-gate, and release-DOI safety behavior.
+CHANGELOG.md:10:- Wired finalize-guard shell classification to the tested Python decision core.
+CHANGELOG.md:17:- Added a tested finalize-guard decision core with module CLI/render contract and reachable superseded-branch handling.
+docs/STATUS.md:283:- v0.3.34 pre-GUI portable-core hardening continued with a pure Python finalize-guard decision core in `src/agentic_project_kit/finalize_guard.py`. This models idempotent completion, noop branches, PR-needed branches, superseded branches, and relevant conflict failures before replacing the shell runner.
+docs/STATUS.md:284:- Regression coverage is in `tests/test_v034_finalize_guard_core.py`. Remote evidence is recorded in `docs/reports/terminal/v0.3.34_finalize_guard_core_merge_verification.log`.
+docs/STATUS.md:287:- v0.3.34 finalize-guard hardening continued by making the Python decision core contract executable via `python -m agentic_project_kit.finalize_guard` and by making `PASS_SUPERSEDED` reachable for conflicting but already-represented finalization branches.
+docs/STATUS.md:288:- Regression coverage remains in `tests/test_v034_finalize_guard_core.py`. Remote evidence is recorded in `docs/reports/terminal/v0.3.34_finalize_guard_core_contract_verification.log`.
+docs/STATUS.md:301:- Expand the unit-test matrix for the new Python core modules, especially `finalize_guard`, `local_feature_gate`, and `release_doi_safety`.
+docs/STATUS.md:314:- v0.3.35 core-test-matrix consolidation started by expanding regression coverage for `finalize_guard`, `local_feature_gate`, and `release_doi_safety` without changing runtime behavior.
+docs/STATUS.md:316:- v0.3.35 consolidation continued by wiring `tools/ns_finalize_guard.sh` to the tested Python `agentic_project_kit.finalize_guard` decision core.
+docs/handoff/CURRENT_HANDOFF.md:240:- Completed v0.3.34 core hardening slice: `src/agentic_project_kit/finalize_guard.py` now contains a pure decision core for finalize-guard classification, covered by `tests/test_v034_finalize_guard_core.py`.
+docs/handoff/CURRENT_HANDOFF.md:241:- The shell runner `tools/ns_finalize_guard.sh` has not yet been replaced; this was intentional. The next safe slice can either wire the shell runner to the Python core or choose another bounded `ns` route.
+docs/handoff/CURRENT_HANDOFF.md:242:- Evidence: `docs/reports/terminal/v0.3.34_finalize_guard_core_merge_verification.log` records recent main CI, targeted regression, and targeted local feature gate evidence.
+docs/handoff/CURRENT_HANDOFF.md:243:- Next recommended v0.3.34 slice: either integrate `tools/ns_finalize_guard.sh` with the new Python decision core or extract another small read-only/safety-critical wrapper. Avoid GUI work until these command paths are stable.
+docs/handoff/CURRENT_HANDOFF.md:246:- Completed v0.3.34 finalize-guard core contract hardening: `PASS_SUPERSEDED` is now reachable for a conflicting branch whose marker is already represented on main, and `src/agentic_project_kit/finalize_guard.py` exposes a module CLI/render contract for future shell/GUI/Cockpit integration.
+docs/handoff/CURRENT_HANDOFF.md:247:- Evidence: `docs/reports/terminal/v0.3.34_finalize_guard_core_contract_verification.log` records recent main CI, targeted regression, module CLI smoke, and targeted local feature gate evidence.
+docs/handoff/CURRENT_HANDOFF.md:261:1. Expand tests for `finalize_guard`, `local_feature_gate`, and `release_doi_safety`.
+docs/handoff/CURRENT_HANDOFF.md:267:- Completed first v0.3.35 consolidation slice: core-test-matrix coverage was expanded for `finalize_guard`, `local_feature_gate`, and `release_doi_safety` with no runtime change.
+docs/handoff/CURRENT_HANDOFF.md:268:- Next recommended v0.3.35 slice: either wire `tools/ns_finalize_guard.sh` to the Python finalize-guard module CLI, or extract the release-gate/build-check shell path into a tested Python core. Prefer the smaller, lower-risk slice first.
+docs/handoff/CURRENT_HANDOFF.md:270:- Completed v0.3.35 finalize-guard shell/core integration: `tools/ns_finalize_guard.sh` now delegates final status classification to `python -m agentic_project_kit.finalize_guard`.
+ns:274:if [ "${1:-}" = "finalize-guard" ]; then
+ns:276:  tools/ns_finalize_guard.sh "$@"
+src/agentic_project_kit/action_registry.py:85:        name="finalize-guard",
+src/agentic_project_kit/finalize_guard.py:26:def classify_finalize_guard_state(
+src/agentic_project_kit/finalize_guard.py:86:def render_finalize_guard_decision(decision: FinalizeGuardDecision) -> str:
+src/agentic_project_kit/finalize_guard.py:118:    parser = argparse.ArgumentParser(description="Classify finalize-guard state.")
+src/agentic_project_kit/finalize_guard.py:126:    decision = classify_finalize_guard_state(
+src/agentic_project_kit/finalize_guard.py:134:    print(render_finalize_guard_decision(decision))
+tests/test_action_registry.py:26:def test_finalize_guard_documents_machine_readable_outcomes():
+tests/test_action_registry.py:27:    action = get_action("finalize-guard")
+tests/test_cockpit_readiness.py:11:    assert {row["name"] for row in rows} >= {"cockpit-readiness", "dev", "pr-cleanup", "release-verify", "finalize-guard"}
+tests/test_cockpit_readiness.py:28:    assert "`finalize-guard`" in rendered
+tests/test_repo_ns_entrypoint.py:284:def test_finalize_guard_command_is_wired() -> None:
+tests/test_repo_ns_entrypoint.py:286:    assert "finalize-guard" in text
+tests/test_repo_ns_entrypoint.py:287:    assert "tools/ns_finalize_guard.sh" in text
+tests/test_repo_ns_entrypoint.py:289:def test_finalize_guard_handles_existing_or_completed_branches() -> None:
+tests/test_repo_ns_entrypoint.py:290:    text = Path("tools/ns_finalize_guard.sh").read_text(encoding="utf-8")
+tests/test_repo_ns_entrypoint.py:291:    core = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
+tests/test_repo_ns_entrypoint.py:296:    assert "python -m agentic_project_kit.finalize_guard" in text
+tests/test_repo_ns_entrypoint.py:325:def test_finalize_guard_declares_machine_readable_outcomes() -> None:
+tests/test_repo_ns_entrypoint.py:326:    text = Path("tools/ns_finalize_guard.sh").read_text(encoding="utf-8")
+tests/test_repo_ns_entrypoint.py:327:    core = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
+tests/test_repo_ns_entrypoint.py:328:    assert "python -m agentic_project_kit.finalize_guard" in text
+tests/test_v034_finalize_guard_core.py:2:from agentic_project_kit.finalize_guard import FinalizeGuardStatus, classify_finalize_guard_state, main, render_finalize_guard_decision
+tests/test_v034_finalize_guard_core.py:15:    return classify_finalize_guard_state(**state)
+tests/test_v034_finalize_guard_core.py:79:def test_render_finalize_guard_decision_contract():
+tests/test_v034_finalize_guard_core.py:81:    rendered = render_finalize_guard_decision(decision)
+tests/test_v034_finalize_guard_core.py:86:def test_finalize_guard_cli_returns_zero_for_pass(capsys):
+tests/test_v034_finalize_guard_core.py:99:def test_finalize_guard_cli_returns_one_for_fail(capsys):
+tests/test_v034_finalize_guard_core.py:112:def test_finalize_guard_cli_rejects_invalid_boolean(capsys):
+tests/test_v034_finalize_guard_core.py:126:def test_finalize_guard_cli_accepts_unknown_optional_values(capsys):
+tests/test_v034_finalize_guard_core.py:141:def test_render_finalize_guard_decision_has_three_line_contract():
+tests/test_v034_finalize_guard_core.py:143:    lines = render_finalize_guard_decision(decision).splitlines()
+tests/test_v035_finalize_guard_shell_core_routing.py:4:def test_finalize_guard_shell_delegates_status_classification_to_python_core() -> None:
+tests/test_v035_finalize_guard_shell_core_routing.py:5:    script = Path("tools/ns_finalize_guard.sh").read_text(encoding="utf-8")
+tests/test_v035_finalize_guard_shell_core_routing.py:6:    assert "python -m agentic_project_kit.finalize_guard" in script
+tests/test_v035_finalize_guard_shell_core_routing.py:12:def test_ns_finalize_guard_route_keeps_shell_adapter() -> None:
+tests/test_v035_finalize_guard_shell_core_routing.py:14:    assert "tools/ns_finalize_guard.sh" in ns
+tests/test_v035_finalize_guard_shell_core_routing.py:15:    assert "finalize-guard" in ns
+tools/ns_finalize_guard.sh:8:  printf "%s\n" "ERROR: missing finalization branch. Usage: ./ns finalize-guard <branch> [marker-text]"
+tools/ns_finalize_guard.sh:15:  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.finalize_guard \
+tools/ns_finalize_guard.sh:110:TMP_BRANCH="tmp-finalize-guard-check-$$"
+tools/ns_finalize_guard.sh:120:git merge --no-commit --no-ff "$COMPARE_REF" >/tmp/ns_finalize_guard_merge.out 2>/tmp/ns_finalize_guard_merge.err
+tools/ns_pr_cleanup.sh:56:      ACTION="run_finalize_guard_before_closing_or_recreating"
+tools/ns_pr_cleanup.sh:67:      ACTION="run_finalize_guard_then_human_decide_safe_close"
+
+### WRITE SAFE PATCH SCRIPT ###
+
+### APPLY PATCH ###
+
+### SHOW DIFF ###
+diff --git a/docs/STATUS.md b/docs/STATUS.md
+index 283938a..010b9be 100644
+--- a/docs/STATUS.md
++++ b/docs/STATUS.md
+@@ -313,7 +313,7 @@ Acceptance criteria before GUI work resumes:
+ 
+ - v0.3.35 core-test-matrix consolidation started by expanding regression coverage for `finalize_guard`, `local_feature_gate`, and `release_doi_safety` without changing runtime behavior.
+ 
+-- v0.3.35 consolidation continued by wiring `tools/ns_finalize_guard.sh` to the tested Python `agentic_project_kit.finalize_guard` decision core.
++- v0.3.35 consolidation continued by wiring `python -m agentic_project_kit.finalize_guard` to the tested Python `agentic_project_kit.finalize_guard` decision core.
+ - The shell path now acts as a git-state collector and delegates machine-readable finalization classification to the Python core while preserving `STATUS:` lines and `### RESULT:` markers.
+ 
+ - v0.3.35 release-gate core extraction prep evidence is now repo-backed in `docs/reports/terminal/v0.3.35_release_gate_core_extraction_prep.log`; this replaces the earlier chat-only diagnostic and records the grep hygiene rule: prefer `git grep` or exclude `__pycache__` from diagnostics.
+diff --git a/docs/handoff/CURRENT_HANDOFF.md b/docs/handoff/CURRENT_HANDOFF.md
+index 586002f..56aa6a6 100644
+--- a/docs/handoff/CURRENT_HANDOFF.md
++++ b/docs/handoff/CURRENT_HANDOFF.md
+@@ -238,9 +238,9 @@ The architectural rule is: chat describes intent; repo-owned tools execute typed
+ 
+ 
+ - Completed v0.3.34 core hardening slice: `src/agentic_project_kit/finalize_guard.py` now contains a pure decision core for finalize-guard classification, covered by `tests/test_v034_finalize_guard_core.py`.
+-- The shell runner `tools/ns_finalize_guard.sh` has not yet been replaced; this was intentional. The next safe slice can either wire the shell runner to the Python core or choose another bounded `ns` route.
++- The shell runner `python -m agentic_project_kit.finalize_guard` has not yet been replaced; this was intentional. The next safe slice can either wire the shell runner to the Python core or choose another bounded `ns` route.
+ - Evidence: `docs/reports/terminal/v0.3.34_finalize_guard_core_merge_verification.log` records recent main CI, targeted regression, and targeted local feature gate evidence.
+-- Next recommended v0.3.34 slice: either integrate `tools/ns_finalize_guard.sh` with the new Python decision core or extract another small read-only/safety-critical wrapper. Avoid GUI work until these command paths are stable.
++- Next recommended v0.3.34 slice: either integrate `python -m agentic_project_kit.finalize_guard` with the new Python decision core or extract another small read-only/safety-critical wrapper. Avoid GUI work until these command paths are stable.
+ 
+ 
+ - Completed v0.3.34 finalize-guard core contract hardening: `PASS_SUPERSEDED` is now reachable for a conflicting branch whose marker is already represented on main, and `src/agentic_project_kit/finalize_guard.py` exposes a module CLI/render contract for future shell/GUI/Cockpit integration.
+@@ -265,9 +265,9 @@ Immediate priorities:
+ 5. Start the Tkinter MVP only after the above risks are either fixed or explicitly deferred with tests/docs.
+ 
+ - Completed first v0.3.35 consolidation slice: core-test-matrix coverage was expanded for `finalize_guard`, `local_feature_gate`, and `release_doi_safety` with no runtime change.
+-- Next recommended v0.3.35 slice: either wire `tools/ns_finalize_guard.sh` to the Python finalize-guard module CLI, or extract the release-gate/build-check shell path into a tested Python core. Prefer the smaller, lower-risk slice first.
++- Next recommended v0.3.35 slice: either wire `python -m agentic_project_kit.finalize_guard` to the Python finalize-guard module CLI, or extract the release-gate/build-check shell path into a tested Python core. Prefer the smaller, lower-risk slice first.
+ 
+-- Completed v0.3.35 finalize-guard shell/core integration: `tools/ns_finalize_guard.sh` now delegates final status classification to `python -m agentic_project_kit.finalize_guard`.
++- Completed v0.3.35 finalize-guard shell/core integration: `python -m agentic_project_kit.finalize_guard` now delegates final status classification to `python -m agentic_project_kit.finalize_guard`.
+ - Evidence should include the PR merge verification and targeted shell/core routing tests. Next v0.3.35 candidate: either extract release-gate/build-check into a Python core or surface the Daily/Guided/Maintainer/Debug CLI layers in practical entry points.
+ 
+ - v0.3.35 release-gate core extraction prep evidence is now repo-backed in `docs/reports/terminal/v0.3.35_release_gate_core_extraction_prep.log`; do not proceed to v0.3.35 release until the release-gate/build-check path is either extracted into a tested Python core or explicitly deferred with evidence.
+diff --git a/ns b/ns
+index 4ba1c34..240874b 100755
+--- a/ns
++++ b/ns
+@@ -273,7 +273,7 @@ if [ "${1:-}" = "release-verify" ]; then
+ fi
+ if [ "${1:-}" = "finalize-guard" ]; then
+   shift
+-  tools/ns_finalize_guard.sh "$@"
++  agentic_project_kit.finalize_guard "$@"
+   exit $?
+ fi
+ 
+diff --git a/tests/test_repo_ns_entrypoint.py b/tests/test_repo_ns_entrypoint.py
+index d05e369..836a2e5 100644
+--- a/tests/test_repo_ns_entrypoint.py
++++ b/tests/test_repo_ns_entrypoint.py
+@@ -284,10 +284,10 @@ def test_idempotent_finalization_guard_is_documented() -> None:
+ def test_finalize_guard_command_is_wired() -> None:
+     text = Path("ns").read_text(encoding="utf-8")
+     assert "finalize-guard" in text
+-    assert "tools/ns_finalize_guard.sh" in text
++    assert "python -m agentic_project_kit.finalize_guard" in text
+ 
+ def test_finalize_guard_handles_existing_or_completed_branches() -> None:
+-    text = Path("tools/ns_finalize_guard.sh").read_text(encoding="utf-8")
++    text = Path("python -m agentic_project_kit.finalize_guard").read_text(encoding="utf-8")
+     core = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
+     assert "marker_already_on_main=true" in text
+     assert "local_branch_exists" in text
+@@ -323,7 +323,7 @@ def test_ns_up_dirty_tree_mentions_clean_evidence() -> None:
+     assert "git status --short" in text
+ 
+ def test_finalize_guard_declares_machine_readable_outcomes() -> None:
+-    text = Path("tools/ns_finalize_guard.sh").read_text(encoding="utf-8")
++    text = Path("python -m agentic_project_kit.finalize_guard").read_text(encoding="utf-8")
+     core = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
+     assert "python -m agentic_project_kit.finalize_guard" in text
+     assert "STATUS: PASS_ALREADY_ON_MAIN" not in text
+diff --git a/tools/ns_finalize_guard.sh b/tools/ns_finalize_guard.sh
+deleted file mode 100755
+index 072522b..0000000
+--- a/tools/ns_finalize_guard.sh
++++ /dev/null
+@@ -1,133 +0,0 @@
+-#!/usr/bin/env sh
+-set -eu
+-STATUS=0
+-
+-BRANCH="${1:-}"
+-MARKER="${2:-}"
+-if [ -z "$BRANCH" ]; then
+-  printf "%s\n" "ERROR: missing finalization branch. Usage: ./ns finalize-guard <branch> [marker-text]"
+-  printf "%s\n" "STATUS: FAIL_NEEDS_HUMAN_REVIEW"
+-  printf "%s\n" "### RESULT: FAIL ###"
+-  exit 1
+-fi
+-
+-run_core() {
+-  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.finalize_guard \
+-    --marker-requested "$1" \
+-    --marker-on-main "$2" \
+-    --local-branch-exists "$3" \
+-    --remote-branch-exists "$4" \
+-    --commits-ahead-of-main "$5" \
+-    --merge-conflict "$6"
+-}
+-
+-printf "\n\n\n"
+-printf "%s\n" "-------------------------------------------------------------------------"
+-printf "%s\n" "-------------------------------------------------------------------------"
+-printf "%s\n" "-------------------------------------------------------------------------"
+-printf "\n\n\n"
+-printf "NS FINALIZATION GUARD\n\n"
+-printf "Safety: idempotent finalization branch guard; no commit, push, PR, merge, tag, release, branch deletion, or file mutation.\n"
+-
+-printf "\n### UPDATE MAIN REFERENCES ###\n"
+-if ! git fetch origin main >/dev/null 2>&1; then
+-  printf "Could not fetch origin/main.\n"
+-  run_core false false false false unknown unknown
+-  exit $?
+-fi
+-
+-printf "\n### CURRENT STATE ###\n"
+-CURRENT_BRANCH="$(git branch --show-current)" || STATUS=1
+-printf "current_branch=%s\n" "$CURRENT_BRANCH"
+-printf "target_branch=%s\n" "$BRANCH"
+-git status --short || STATUS=1
+-if [ "$STATUS" -ne 0 ]; then
+-  run_core false false false false unknown unknown
+-  exit $?
+-fi
+-
+-printf "\n### MARKER CHECK ON MAIN ###\n"
+-MARKER_REQUESTED=false
+-MARKER_ON_MAIN_BOOL=false
+-if [ -n "$MARKER" ]; then
+-  MARKER_REQUESTED=true
+-  if git grep -F "$MARKER" origin/main -- docs/STATUS.md docs/handoff/CURRENT_HANDOFF.md >/dev/null 2>&1; then
+-    MARKER_ON_MAIN_BOOL=true
+-    printf "marker_already_on_main=true\n"
+-  else
+-    printf "marker_already_on_main=false\n"
+-  fi
+-else
+-  printf "marker_check=skipped\n"
+-fi
+-
+-printf "\n### BRANCH EXISTENCE CHECK ###\n"
+-LOCAL_EXISTS=0
+-REMOTE_EXISTS=0
+-git show-ref --verify --quiet "refs/heads/$BRANCH" && LOCAL_EXISTS=1 || true
+-git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1 && REMOTE_EXISTS=1 || true
+-printf "local_branch_exists=%s\n" "$LOCAL_EXISTS"
+-printf "remote_branch_exists=%s\n" "$REMOTE_EXISTS"
+-LOCAL_EXISTS_BOOL=false
+-REMOTE_EXISTS_BOOL=false
+-if [ "$LOCAL_EXISTS" -eq 1 ]; then LOCAL_EXISTS_BOOL=true; fi
+-if [ "$REMOTE_EXISTS" -eq 1 ]; then REMOTE_EXISTS_BOOL=true; fi
+-
+-if [ "$LOCAL_EXISTS" -eq 0 ] && [ "$REMOTE_EXISTS" -eq 0 ]; then
+-  run_core "$MARKER_REQUESTED" "$MARKER_ON_MAIN_BOOL" false false unknown unknown
+-  exit $?
+-fi
+-
+-if [ "$REMOTE_EXISTS" -eq 1 ]; then
+-  git fetch origin "$BRANCH" >/dev/null 2>&1 || STATUS=1
+-fi
+-if [ "$STATUS" -ne 0 ]; then
+-  run_core "$MARKER_REQUESTED" "$MARKER_ON_MAIN_BOOL" "$LOCAL_EXISTS_BOOL" "$REMOTE_EXISTS_BOOL" unknown unknown
+-  exit $?
+-fi
+-
+-printf "\n### AHEAD / BEHIND CHECK ###\n"
+-COMPARE_REF="$BRANCH"
+-if [ "$LOCAL_EXISTS" -eq 0 ] && [ "$REMOTE_EXISTS" -eq 1 ]; then
+-  COMPARE_REF="origin/$BRANCH"
+-fi
+-COUNTS="$(git rev-list --left-right --count origin/main..."$COMPARE_REF")" || STATUS=1
+-if [ "$STATUS" -ne 0 ]; then
+-  run_core "$MARKER_REQUESTED" "$MARKER_ON_MAIN_BOOL" "$LOCAL_EXISTS_BOOL" "$REMOTE_EXISTS_BOOL" unknown unknown
+-  exit $?
+-fi
+-BEHIND="$(printf "%s" "$COUNTS" | awk "{print \$1}")"
+-AHEAD="$(printf "%s" "$COUNTS" | awk "{print \$2}")"
+-printf "commits_behind_main=%s\n" "$BEHIND"
+-printf "commits_ahead_of_main=%s\n" "$AHEAD"
+-
+-if [ "$AHEAD" = "0" ]; then
+-  run_core "$MARKER_REQUESTED" "$MARKER_ON_MAIN_BOOL" "$LOCAL_EXISTS_BOOL" "$REMOTE_EXISTS_BOOL" 0 unknown
+-  exit $?
+-fi
+-
+-printf "\n### CONFLICT CLASSIFICATION ###\n"
+-TMP_BRANCH="tmp-finalize-guard-check-$$"
+-git switch --quiet --detach origin/main || STATUS=1
+-git switch --quiet -c "$TMP_BRANCH" || STATUS=1
+-if [ "$STATUS" -ne 0 ]; then
+-  git switch --quiet "$CURRENT_BRANCH" >/dev/null 2>&1 || true
+-  git branch -D "$TMP_BRANCH" >/dev/null 2>&1 || true
+-  run_core "$MARKER_REQUESTED" "$MARKER_ON_MAIN_BOOL" "$LOCAL_EXISTS_BOOL" "$REMOTE_EXISTS_BOOL" "$AHEAD" unknown
+-  exit $?
+-fi
+-set +e
+-git merge --no-commit --no-ff "$COMPARE_REF" >/tmp/ns_finalize_guard_merge.out 2>/tmp/ns_finalize_guard_merge.err
+-MERGE_STATUS="$?"
+-set -e
+-git merge --abort >/dev/null 2>&1 || true
+-git switch --quiet "$CURRENT_BRANCH" >/dev/null 2>&1 || true
+-git branch -D "$TMP_BRANCH" >/dev/null 2>&1 || true
+-if [ "$MERGE_STATUS" = "0" ]; then
+-  printf "merge_conflict=false\n"
+-  run_core "$MARKER_REQUESTED" "$MARKER_ON_MAIN_BOOL" "$LOCAL_EXISTS_BOOL" "$REMOTE_EXISTS_BOOL" "$AHEAD" false
+-  exit $?
+-fi
+-printf "merge_conflict=true\n"
+-run_core "$MARKER_REQUESTED" "$MARKER_ON_MAIN_BOOL" "$LOCAL_EXISTS_BOOL" "$REMOTE_EXISTS_BOOL" "$AHEAD" true
+-exit $?
+
+### TARGETED TEST DISCOVERY ###
+docs/STATUS.md:283:- v0.3.34 pre-GUI portable-core hardening continued with a pure Python finalize-guard decision core in `src/agentic_project_kit/finalize_guard.py`. This models idempotent completion, noop branches, PR-needed branches, superseded branches, and relevant conflict failures before replacing the shell runner.
+docs/STATUS.md:284:- Regression coverage is in `tests/test_v034_finalize_guard_core.py`. Remote evidence is recorded in `docs/reports/terminal/v0.3.34_finalize_guard_core_merge_verification.log`.
+docs/STATUS.md:287:- v0.3.34 finalize-guard hardening continued by making the Python decision core contract executable via `python -m agentic_project_kit.finalize_guard` and by making `PASS_SUPERSEDED` reachable for conflicting but already-represented finalization branches.
+docs/STATUS.md:288:- Regression coverage remains in `tests/test_v034_finalize_guard_core.py`. Remote evidence is recorded in `docs/reports/terminal/v0.3.34_finalize_guard_core_contract_verification.log`.
+docs/STATUS.md:301:- Expand the unit-test matrix for the new Python core modules, especially `finalize_guard`, `local_feature_gate`, and `release_doi_safety`.
+docs/STATUS.md:314:- v0.3.35 core-test-matrix consolidation started by expanding regression coverage for `finalize_guard`, `local_feature_gate`, and `release_doi_safety` without changing runtime behavior.
+docs/STATUS.md:316:- v0.3.35 consolidation continued by wiring `python -m agentic_project_kit.finalize_guard` to the tested Python `agentic_project_kit.finalize_guard` decision core.
+docs/handoff/CURRENT_HANDOFF.md:240:- Completed v0.3.34 core hardening slice: `src/agentic_project_kit/finalize_guard.py` now contains a pure decision core for finalize-guard classification, covered by `tests/test_v034_finalize_guard_core.py`.
+docs/handoff/CURRENT_HANDOFF.md:241:- The shell runner `python -m agentic_project_kit.finalize_guard` has not yet been replaced; this was intentional. The next safe slice can either wire the shell runner to the Python core or choose another bounded `ns` route.
+docs/handoff/CURRENT_HANDOFF.md:242:- Evidence: `docs/reports/terminal/v0.3.34_finalize_guard_core_merge_verification.log` records recent main CI, targeted regression, and targeted local feature gate evidence.
+docs/handoff/CURRENT_HANDOFF.md:243:- Next recommended v0.3.34 slice: either integrate `python -m agentic_project_kit.finalize_guard` with the new Python decision core or extract another small read-only/safety-critical wrapper. Avoid GUI work until these command paths are stable.
+docs/handoff/CURRENT_HANDOFF.md:246:- Completed v0.3.34 finalize-guard core contract hardening: `PASS_SUPERSEDED` is now reachable for a conflicting branch whose marker is already represented on main, and `src/agentic_project_kit/finalize_guard.py` exposes a module CLI/render contract for future shell/GUI/Cockpit integration.
+docs/handoff/CURRENT_HANDOFF.md:247:- Evidence: `docs/reports/terminal/v0.3.34_finalize_guard_core_contract_verification.log` records recent main CI, targeted regression, module CLI smoke, and targeted local feature gate evidence.
+docs/handoff/CURRENT_HANDOFF.md:261:1. Expand tests for `finalize_guard`, `local_feature_gate`, and `release_doi_safety`.
+docs/handoff/CURRENT_HANDOFF.md:267:- Completed first v0.3.35 consolidation slice: core-test-matrix coverage was expanded for `finalize_guard`, `local_feature_gate`, and `release_doi_safety` with no runtime change.
+docs/handoff/CURRENT_HANDOFF.md:268:- Next recommended v0.3.35 slice: either wire `python -m agentic_project_kit.finalize_guard` to the Python finalize-guard module CLI, or extract the release-gate/build-check shell path into a tested Python core. Prefer the smaller, lower-risk slice first.
+docs/handoff/CURRENT_HANDOFF.md:270:- Completed v0.3.35 finalize-guard shell/core integration: `python -m agentic_project_kit.finalize_guard` now delegates final status classification to `python -m agentic_project_kit.finalize_guard`.
+ns:274:if [ "${1:-}" = "finalize-guard" ]; then
+ns:276:  agentic_project_kit.finalize_guard "$@"
+tests/test_action_registry.py:26:def test_finalize_guard_documents_machine_readable_outcomes():
+tests/test_action_registry.py:27:    action = get_action("finalize-guard")
+tests/test_cockpit_readiness.py:11:    assert {row["name"] for row in rows} >= {"cockpit-readiness", "dev", "pr-cleanup", "release-verify", "finalize-guard"}
+tests/test_cockpit_readiness.py:28:    assert "`finalize-guard`" in rendered
+tests/test_repo_ns_entrypoint.py:284:def test_finalize_guard_command_is_wired() -> None:
+tests/test_repo_ns_entrypoint.py:286:    assert "finalize-guard" in text
+tests/test_repo_ns_entrypoint.py:287:    assert "python -m agentic_project_kit.finalize_guard" in text
+tests/test_repo_ns_entrypoint.py:289:def test_finalize_guard_handles_existing_or_completed_branches() -> None:
+tests/test_repo_ns_entrypoint.py:290:    text = Path("python -m agentic_project_kit.finalize_guard").read_text(encoding="utf-8")
+tests/test_repo_ns_entrypoint.py:291:    core = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
+tests/test_repo_ns_entrypoint.py:296:    assert "python -m agentic_project_kit.finalize_guard" in text
+tests/test_repo_ns_entrypoint.py:325:def test_finalize_guard_declares_machine_readable_outcomes() -> None:
+tests/test_repo_ns_entrypoint.py:326:    text = Path("python -m agentic_project_kit.finalize_guard").read_text(encoding="utf-8")
+tests/test_repo_ns_entrypoint.py:327:    core = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
+tests/test_repo_ns_entrypoint.py:328:    assert "python -m agentic_project_kit.finalize_guard" in text
+tests/test_v034_finalize_guard_core.py:2:from agentic_project_kit.finalize_guard import FinalizeGuardStatus, classify_finalize_guard_state, main, render_finalize_guard_decision
+tests/test_v034_finalize_guard_core.py:15:    return classify_finalize_guard_state(**state)
+tests/test_v034_finalize_guard_core.py:79:def test_render_finalize_guard_decision_contract():
+tests/test_v034_finalize_guard_core.py:81:    rendered = render_finalize_guard_decision(decision)
+tests/test_v034_finalize_guard_core.py:86:def test_finalize_guard_cli_returns_zero_for_pass(capsys):
+tests/test_v034_finalize_guard_core.py:99:def test_finalize_guard_cli_returns_one_for_fail(capsys):
+tests/test_v034_finalize_guard_core.py:112:def test_finalize_guard_cli_rejects_invalid_boolean(capsys):
+tests/test_v034_finalize_guard_core.py:126:def test_finalize_guard_cli_accepts_unknown_optional_values(capsys):
+tests/test_v034_finalize_guard_core.py:141:def test_render_finalize_guard_decision_has_three_line_contract():
+tests/test_v034_finalize_guard_core.py:143:    lines = render_finalize_guard_decision(decision).splitlines()
+tests/test_v035_finalize_guard_shell_core_routing.py:4:def test_finalize_guard_shell_delegates_status_classification_to_python_core() -> None:
+tests/test_v035_finalize_guard_shell_core_routing.py:5:    script = Path("tools/ns_finalize_guard.sh").read_text(encoding="utf-8")
+tests/test_v035_finalize_guard_shell_core_routing.py:6:    assert "python -m agentic_project_kit.finalize_guard" in script
+tests/test_v035_finalize_guard_shell_core_routing.py:12:def test_ns_finalize_guard_route_keeps_shell_adapter() -> None:
+tests/test_v035_finalize_guard_shell_core_routing.py:14:    assert "tools/ns_finalize_guard.sh" in ns
+tests/test_v035_finalize_guard_shell_core_routing.py:15:    assert "finalize-guard" in ns
+
+### TARGETED TESTS ###
+ERROR: file or directory not found: tests/test_finalize_guard.py
+
+
+no tests ran in 0.00s
+
+### RUFF ###
+All checks passed!
+
+### DOC GATES ###
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### PORTABILITY GATE EXPECTED STATUS ###
+
+### TRACKED SHELL COUNT OUTSIDE TMP ###
+tools/capture_workflow_output.sh
+tools/local_workflow_cycle.sh
+tools/ns_clean_evidence.sh
+tools/ns_commit_pr_guard.sh
+tools/ns_finalize_guard.sh
+tools/ns_pr_cleanup.sh
+tools/ns_pr_create_or_skip.sh
+tools/ns_release_gate.sh
+tools/ns_release_prep.sh
+tools/ns_release_publish.sh
+tools/ns_release_verify.sh
+tools/ns_safe_remove_diagnostic.sh
+tools/ns_slice_runner.sh
+tools/ns_up_pr_completion.sh
+tools/screen_control_gate.sh
+tracked_shell_file_count_outside_tmp=15
+
+### FINAL RESULT MARKER ###
+### RESULT: FAIL ###

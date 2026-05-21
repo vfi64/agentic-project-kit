@@ -273,7 +273,7 @@ if [ "${1:-}" = "release-verify" ]; then
 fi
 if [ "${1:-}" = "finalize-guard" ]; then
   shift
-  tools/ns_finalize_guard.sh "$@"
+  agentic_project_kit.finalize_guard "$@"
   exit $?
 fi
 

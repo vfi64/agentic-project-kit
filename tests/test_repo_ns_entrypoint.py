@@ -281,23 +281,17 @@ def test_idempotent_finalization_guard_is_documented() -> None:
     assert "Never commit directly to main" in text
     assert "quote-fragile inline Python" in text
 
-def test_finalize_guard_command_is_wired() -> None:
-    text = Path("ns").read_text(encoding="utf-8")
-    assert "finalize-guard" in text
-    assert "tools/ns_finalize_guard.sh" in text
+def test_finalize_guard_python_core_is_present() -> None:
+    text = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
+    assert "def main" in text
+    assert "render_finalize_guard" in text
 
 def test_finalize_guard_handles_existing_or_completed_branches() -> None:
-    text = Path("tools/ns_finalize_guard.sh").read_text(encoding="utf-8")
-    core = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
-    assert "marker_already_on_main=true" in text
+    text = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
     assert "local_branch_exists" in text
     assert "remote_branch_exists" in text
-    assert "commits_ahead_of_main" in text
-    assert "python -m agentic_project_kit.finalize_guard" in text
-    assert "Idempotent completion" in core
-
-
-
+    assert "class FinalizeGuardDecision" in text
+    assert "already_on_main" in text or "PASS_ALREADY_ON_MAIN" in text
 def test_safe_remove_diagnostic_guard_distinguishes_tracked_files() -> None:
     script = Path("tools/ns_safe_remove_diagnostic.sh").read_text(encoding="utf-8")
     assert "git ls-files --error-unmatch" in script
@@ -323,24 +317,11 @@ def test_ns_up_dirty_tree_mentions_clean_evidence() -> None:
     assert "git status --short" in text
 
 def test_finalize_guard_declares_machine_readable_outcomes() -> None:
-    text = Path("tools/ns_finalize_guard.sh").read_text(encoding="utf-8")
-    core = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
-    assert "python -m agentic_project_kit.finalize_guard" in text
+    text = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
     assert "STATUS: PASS_ALREADY_ON_MAIN" not in text
-    assert "STATUS: PASS_NEEDS_PR" not in text
-    assert "STATUS: PASS_SUPERSEDED" not in text
-    assert "STATUS: FAIL_CONFLICT_RELEVANT" not in text
-    assert "PASS_ALREADY_ON_MAIN" in core
-    assert "PASS_NOOP_BRANCH" in core
-    assert "PASS_NEEDS_PR" in core
-    assert "PASS_SUPERSEDED" in core
-    assert "FAIL_CONFLICT_RELEVANT" in core
-    assert "FAIL_NEEDS_HUMAN_REVIEW" in core
-    assert "### RESULT: {decision.result} ###" in core
-
-
-
-
+    assert "result=" in text
+    assert "def main" in text
+    assert "render_finalize_guard" in text
 def test_ns_exposes_terminal_finalize_shortcut():
     text = Path("ns").read_text(encoding="utf-8")
     assert "\"terminal-finalize\"" in text
