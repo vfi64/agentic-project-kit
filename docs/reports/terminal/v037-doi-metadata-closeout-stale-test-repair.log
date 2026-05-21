@@ -1,0 +1,125 @@
+
+### STALE TEST REPAIR PRECHECK ###
+docs/record-v0.3.37-doi
+ M CITATION.cff
+ M README.md
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M docs/releases/VERIFIED_RELEASES.md
+?? docs/reports/terminal/v037-doi-metadata-closeout-repair.log
+?? docs/reports/terminal/v037-doi-metadata-closeout-robust-repair.log
+?? docs/reports/terminal/v037-doi-metadata-closeout.log
+a9035ad Record v0.3.37 release publish log
+69dc873 Prepare v0.3.37 release metadata (#614)
+c64eadd Record v0.3.37 final GUI preparation closeout contract (#613)
+6ae66ba Record v0.3.36 DOI metadata merge verification log
+613cf9e Record v0.3.36 DOI metadata (#612)
+369e920 Record v0.3.36 release publish log
+45ffd3f Record v0.3.36 release gate log
+0fb4d18 Record v0.3.36 release metadata merge verification log
+f9f5c41 Prepare v0.3.36 release metadata after audit runner hardening (#611)
+76f528a Record audit runner standard-error fix merge verification log
+9f9134f Add deterministic audit test matrix runner (#610)
+b8d9642 Record release route help safety merge verification log
+c8b20d5 Harden release route help and version safety (#609)
+aba41cd Record doc rules contract hardening merge verification log
+
+### INSPECT STALE TEST ###
+from pathlib import Path
+
+
+def test_readme_has_single_current_verified_release_statement():
+    text = Path("README.md").read_text(encoding="utf-8")
+    assert "Current verified release: version `0.3.36`" in text
+    assert "Version `0.3.35` is the current release line prepared" not in text
+    assert "Earlier verified version-specific DOIs are intentionally maintained in `docs/releases/VERIFIED_RELEASES.md`" in text
+
+
+def test_changelog_v035_describes_actual_delivered_work():
+    text = Path("CHANGELOG.md").read_text(encoding="utf-8")
+    head = text.split("## v0.3.34", 1)[0]
+    assert "## v0.3.36 - 2026-05-21" in head
+    assert "## v0.3.35 - 2026-05-20" in head
+    assert "release_gate_core" in head
+    assert "Prepare release metadata for v0.3.35." not in head
+
+
+def test_gui_status_is_documented_as_existing_skeleton_not_mvp_start():
+    readme = Path("README.md").read_text(encoding="utf-8")
+    status = Path("docs/STATUS.md").read_text(encoding="utf-8")
+    assert "experimental `agentic-kit-gui` entry point starts a local Tkinter cockpit skeleton" in readme
+    assert "v0.3.36 current-state cleanup started as a documentation-only line" in status
+    assert "before any bounded Tkinter MVP work" in status
+
+
+def test_release_phase_semantics_are_explicit_in_readme_and_handoff():
+    readme = Path("README.md").read_text(encoding="utf-8")
+    handoff = Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
+    assert "release-check is a pre-release gate" in readme
+    assert "post-release-check verifies the already-published release" in readme
+    assert "Do not start GUI implementation in this slice." in handoff
+
+### PATCH STALE CURRENT-RELEASE TEST TO DYNAMIC CONTRACT ###
+expected stale v0.3.36 README current-release test block not found
+
+### VERIFY PATCHED TEST CONTENT ###
+from pathlib import Path
+
+
+def test_readme_has_single_current_verified_release_statement():
+    text = Path("README.md").read_text(encoding="utf-8")
+    assert "Current verified release: version `0.3.36`" in text
+    assert "Version `0.3.35` is the current release line prepared" not in text
+    assert "Earlier verified version-specific DOIs are intentionally maintained in `docs/releases/VERIFIED_RELEASES.md`" in text
+
+
+def test_changelog_v035_describes_actual_delivered_work():
+    text = Path("CHANGELOG.md").read_text(encoding="utf-8")
+    head = text.split("## v0.3.34", 1)[0]
+    assert "## v0.3.36 - 2026-05-21" in head
+    assert "## v0.3.35 - 2026-05-20" in head
+    assert "release_gate_core" in head
+    assert "Prepare release metadata for v0.3.35." not in head
+
+
+def test_gui_status_is_documented_as_existing_skeleton_not_mvp_start():
+    readme = Path("README.md").read_text(encoding="utf-8")
+    status = Path("docs/STATUS.md").read_text(encoding="utf-8")
+    assert "experimental `agentic-kit-gui` entry point starts a local Tkinter cockpit skeleton" in readme
+    assert "v0.3.36 current-state cleanup started as a documentation-only line" in status
+    assert "before any bounded Tkinter MVP work" in status
+
+
+def test_release_phase_semantics_are_explicit_in_readme_and_handoff():
+    readme = Path("README.md").read_text(encoding="utf-8")
+    handoff = Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
+    assert "release-check is a pre-release gate" in readme
+    assert "post-release-check verifies the already-published release" in readme
+    assert "Do not start GUI implementation in this slice." in handoff
+6:    assert "Current verified release: version `0.3.36`" in text
+14:    assert "## v0.3.36 - 2026-05-21" in head
+24:    assert "v0.3.36 current-state cleanup started as a documentation-only line" in status
+6:    assert "Current verified release: version `0.3.36`" in text
+
+### VERIFY DOI REFERENCES STILL PRESENT ###
+CITATION.cff:48:# Verified v0.3.37 version DOI: 10.5281/zenodo.20329450
+README.md:522:Current verified release: version `0.3.37`, Zenodo version DOI `10.5281/zenodo.20329450`.
+README.md:526:Version `0.3.37` is released and post-release verified with Zenodo version DOI `10.5281/zenodo.20329450`.
+docs/STATUS.md:221:- v0.3.37 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329450`.
+docs/handoff/CURRENT_HANDOFF.md:324:- v0.3.37 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329450`. Next line: start v0.4.0 bounded GUI MVP from a clean main.
+docs/releases/VERIFIED_RELEASES.md:56:- `v0.3.37` / `0.3.37`: Zenodo version DOI `10.5281/zenodo.20329450`; concept DOI `10.5281/zenodo.20101359`.
+docs/STATUS.md:33:Zenodo concept DOI: `10.5281/zenodo.20101359`
+docs/STATUS.md:220:- v0.3.36 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329180`. Release publish evidence is recorded in `docs/reports/terminal/v036-release-publish.log`.
+docs/STATUS.md:221:- v0.3.37 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329450`.
+docs/handoff/CURRENT_HANDOFF.md:323:- v0.3.36 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329180`. Next planned line: v0.3.37 final GUI-preparation closeout before GUI MVP implementation.
+docs/handoff/CURRENT_HANDOFF.md:324:- v0.3.37 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329450`. Next line: start v0.4.0 bounded GUI MVP from a clean main.
+docs/releases/VERIFIED_RELEASES.md:11:For citation across versions, prefer the all-versions DOI: `10.5281/zenodo.20101359`.
+docs/releases/VERIFIED_RELEASES.md:55:- `v0.3.36` / `0.3.36`: Zenodo version DOI `10.5281/zenodo.20329180`; concept DOI `10.5281/zenodo.20101359`.
+docs/releases/VERIFIED_RELEASES.md:56:- `v0.3.37` / `0.3.37`: Zenodo version DOI `10.5281/zenodo.20329450`; concept DOI `10.5281/zenodo.20101359`.
+526:Version `0.3.37` is released and post-release verified with Zenodo version DOI `10.5281/zenodo.20329450`.
+
+### TARGETED TESTS ###
+
+### LOCAL GATES ###
+
+### COPY STALE TEST REPAIR LOG FOR COMMIT ###
