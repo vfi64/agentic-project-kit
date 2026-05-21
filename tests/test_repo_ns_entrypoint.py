@@ -250,12 +250,15 @@ def test_ns_up_handles_noop_branches_idempotently() -> None:
     assert "exit \"$STATUS\"" in text
 
 
-def test_repo_ns_refuses_direct_main_commit_helper() -> None:
-    text = Path("tools/ns_commit_pr_guard.sh").read_text(encoding="utf-8")
-    assert "refusing commit/PR workflow on main" in text
-    assert "git branch --show-current" in text
-    assert "exit 1" in text
-    assert "create a feature or docs branch first" in text
+def test_repo_ns_commit_guard_routes_to_python_core() -> None:
+    ns_text = Path("ns").read_text(encoding="utf-8")
+    core_text = Path("src/agentic_project_kit/commit_guard.py").read_text(encoding="utf-8")
+    assert "commit-guard" in ns_text
+    assert "agentic_project_kit.commit_guard" in ns_text
+    assert "tools/ns_commit_pr_guard.sh" not in ns_text
+    assert not Path("tools/ns_commit_pr_guard.sh").exists()
+    assert "refusing commit/PR workflow on main" in core_text
+    assert "branch" in core_text
 
 
 def test_ns_slice_runner_is_wired() -> None:

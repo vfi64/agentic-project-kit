@@ -297,7 +297,7 @@ fi
 
 if [ "${1:-}" = "commit-guard" ]; then
   shift
-  tools/ns_commit_pr_guard.sh "$@"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.commit_guard "$@"
   exit $?
 fi
 
