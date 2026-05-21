@@ -32,3 +32,11 @@ A final `PASS` is invalid when any required inner work result, required gate, or
 `REMOTE_EVIDENCE: PASS` requires committed and pushed evidence or an equivalent remote-readable report. A local-only transcript, chat paste, queued CI run, or unpushed temporary log is not remote evidence.
 
 A successful evidence upload can prove a failed run; it must not relabel failed work as `WORK RESULT: PASS`.
+
+## Terminal-log mandate for local mutation blocks
+
+A non-trivial local mutation block must not claim `REMOTE_EVIDENCE: PASS` with `terminal_log=NONE`.
+
+For local mutation work, `terminal_log=docs/reports/terminal/` is the expected repo-readable evidence path. A chat-only transcript can explain a failed local run, but it is not remote evidence.
+
+If a block mutates files, creates commits, pushes branches, opens PRs, or merges PRs, the final summary must either name a repo-readable terminal log or explicitly downgrade evidence to `CHAT_ONLY`, `PARTIAL`, or `FAIL`.
