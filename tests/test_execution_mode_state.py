@@ -96,6 +96,7 @@ def test_mode_check_accepts_ruff_from_local_venv(monkeypatch, tmp_path):
 
     result = evaluate_mode_switch(tmp_path, "local", expected_branch="feature/x")
 
-    assert result.ok is False
+    assert result.ok is True
+    assert result.state == "LOCAL_READY"
     assert "missing_tool=ruff" not in result.findings
     assert result.required_tools["ruff"] == "ok"
