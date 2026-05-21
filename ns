@@ -45,6 +45,18 @@ if [ "${1:-}" = "state-freshness-check" ]; then
   exit $?
 fi
 
+if [ "${1:-}" = "comm-check" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.communication_state check "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "comm-next-summary" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.communication_state next-summary "$@"
+  exit $?
+fi
+
 if [ "${1:-}" = "mode-check" ]; then
   shift
   PYTHONPATH=src "$PY" -m agentic_project_kit.cli state mode-check "$@"
