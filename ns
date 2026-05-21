@@ -275,7 +275,7 @@ if [ "${1:-}" = "release-gate" ]; then
 fi
 if [ "${1:-}" = "release-publish" ]; then
   shift
-  tools/ns_release_publish.sh "$@"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.release_publish_core "$@"
   exit $?
 fi
 if [ "${1:-}" = "release-verify" ]; then
