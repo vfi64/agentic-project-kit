@@ -1,0 +1,106 @@
+
+### CURRENT STATE ###
+feature/v036-run-summary-renderer
+ M .agentic/communication_state.json
+
+### PR STATUS ###
+{"mergeStateStatus":"CLEAN","number":602,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-21T14:43:25Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26233185184/job/77198978663","name":"test","startedAt":"2026-05-21T14:43:07Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-21T14:43:27Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26233181547/job/77198966235","name":"test","startedAt":"2026-05-21T14:43:04Z","status":"COMPLETED","workflowName":"CI"}],"title":"Add deterministic run summary renderer","url":"https://github.com/vfi64/agentic-project-kit/pull/602"}
+
+### WAIT FOR CI ###
+test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26233181547/job/77198966235	
+test	pass	18s	https://github.com/vfi64/agentic-project-kit/actions/runs/26233185184/job/77198978663	
+test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26233181547/job/77198966235	
+test	pass	18s	https://github.com/vfi64/agentic-project-kit/actions/runs/26233185184/job/77198978663	
+
+### VERIFY PR CLEAN ###
+state= OPEN
+mergeStateStatus= CLEAN
+pending_count= 0
+bad_count= 0
+
+### MERGE PR ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   81ed316..286c65c  main       -> origin/main
+Updating 81ed316..286c65c
+Fast-forward
+ ...run-summary-renderer-inventory-count-repair.log | 75 +++++++++++++++++
+ .../V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md    |  3 +-
+ ns                                                 |  5 ++
+ src/agentic_project_kit/run_summary_renderer.py    | 94 ++++++++++++++++++++++
+ tests/test_run_summary_renderer.py                 | 58 +++++++++++++
+ 5 files changed, 234 insertions(+), 1 deletion(-)
+ create mode 100644 docs/reports/terminal/v036-run-summary-renderer-inventory-count-repair.log
+ create mode 100644 src/agentic_project_kit/run_summary_renderer.py
+ create mode 100644 tests/test_run_summary_renderer.py
+
+### UPDATE MAIN ###
+Already on 'main'
+M	.agentic/communication_state.json
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### MAIN VERIFY ###
+main
+ M .agentic/communication_state.json
+68:  PYTHONPATH=src "$PY" -m agentic_project_kit.run_summary_renderer "$@"
+================================================================
+SUMMARY COMM-SMOKE | 2026-05-21 16:40:00 +0200
+
+SLICE
+  NAME: SMOKE
+  SCOPE: READ ONLY
+  BRANCH: feature/v036-run-summary-renderer
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: not_recorded
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: NONE
+  PR: NONE
+  HEAD_SHA: NONE
+  CI: NONE
+  MERGE: NONE
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/smoke.log
+  command_report: NONE
+
+INTERPRETATION
+  No interpretation recorded.
+
+NEXT
+  SAFE_STEP: not_recorded
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
+......                                                                   [100%]
+6 passed in 0.07s
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### SAVE MERGE VERIFY LOG IF GREEN ###
