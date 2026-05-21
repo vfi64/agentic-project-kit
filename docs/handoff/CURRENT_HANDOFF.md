@@ -306,3 +306,12 @@ Verification anchors:
 - `grep -n "tools/ns_.*\.sh" ns` remains empty.
 - Inventory baseline records `tracked_shell_adapter_count: 0`.
 - Merge evidence: `docs/reports/terminal/v036-remove-final-pr-create-shell-adapter-merge.log`, COMM-00004.
+
+## v0.3.36 shell adapter removal closeout
+
+- Direct `./ns` shell adapter removal is complete on `main`.
+- `tools/ns_*.sh` tracked adapter count: `0`.
+- Direct `ns` references to `tools/ns_*.sh`: `0`.
+- Regression guard: `tests/test_v036_zero_ns_shell_adapter_contract.py`.
+- Continue with deterministic rule/evidence/state hardening or release planning; do not reopen shell-adapter removal unless a regression test fails.
+
