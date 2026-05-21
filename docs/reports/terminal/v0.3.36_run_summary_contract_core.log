@@ -1,0 +1,85 @@
+V0.3.36 ADD RUN SUMMARY CONTRACT CORE -- LOGGED -- NO GUI NO RELEASE
+
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'feature/v0.3.36-run-summary-contract-core'
+
+### WRITE RUN SUMMARY CORE ###
+
+### WRITE TESTS ###
+
+### TARGETED TESTS ###
+..                                                                       [100%]
+2 passed in 0.01s
+
+### LOCAL FEATURE GATE ###
+......................................................                   [100%]
+54 passed in 0.28s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### COMMIT AND PUSH ###
+?? docs/reports/terminal/v0.3.36_run_summary_contract_core.log.tmp
+?? src/agentic_project_kit/run_summary.py
+?? tests/test_v036_run_summary.py
+fatal: pathspec 'docs/reports/terminal/v0.3.36_run_summary_contract_core.log' did not match any files
+On branch feature/v0.3.36-run-summary-contract-core
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	docs/reports/terminal/v0.3.36_run_summary_contract_core.log.tmp
+	src/agentic_project_kit/run_summary.py
+	tests/test_v036_run_summary.py
+
+nothing added to commit but untracked files present (use "git add" to track)
+remote: 
+remote: Create a pull request for 'feature/v0.3.36-run-summary-contract-core' on GitHub by visiting:        
+remote:      https://github.com/vfi64/agentic-project-kit/pull/new/feature/v0.3.36-run-summary-contract-core        
+remote: 
+To github.com:vfi64/agentic-project-kit.git
+ * [new branch]      feature/v0.3.36-run-summary-contract-core -> feature/v0.3.36-run-summary-contract-core
+branch 'feature/v0.3.36-run-summary-contract-core' set up to track 'origin/feature/v0.3.36-run-summary-contract-core'.
+
+### CREATE PR ###
+Warning: 3 uncommitted changes
+pull request create failed: GraphQL: No commits between main and feature/v0.3.36-run-summary-contract-core (createPullRequest)
+
+### FINAL STATE ###
+feature/v0.3.36-run-summary-contract-core
+?? docs/reports/terminal/v0.3.36_run_summary_contract_core.log.tmp
+?? src/agentic_project_kit/run_summary.py
+?? tests/test_v036_run_summary.py
+5ea9083 Record v0.3.36 stray terminal logs (#556)
+aa53416 Record v0.3.36 standard error hardening evidence (#555)
+57e1821 Harden v0.3.36 standard error contracts (#554)
+f93d184 Record v0.3.36 standard error contract prep (#553)
+bf0c6a7 Lock already merged PR recovery semantics (#552)
+44213a5 Clean v0.3.36 current-state documentation (#551)
+6733fdd Finalize state after v0.3.35 DOI metadata (#550)
+8332943 Record v0.3.35 DOI metadata (#549)
+
+================================================================
+SUMMARY
+WORK RESULT: PASS
+EVIDENCE RESULT: PASS
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PASS
+terminal_log=docs/reports/terminal/v0.3.36_run_summary_contract_core.log
+command_report=NONE
+NEXT_CHAT_REPLY: d
+### RESULT: PASS ###
+================================================================
