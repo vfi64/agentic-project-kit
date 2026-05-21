@@ -1,0 +1,48 @@
+
+### CURRENT MAIN STATE ###
+main
+36def19 Record run summary renderer merge verification log
+286c65c Add deterministic run summary renderer (#602)
+81ed316 Record v0.3.36 shell removal closeout merge verification
+4f65e4d Record v0.3.36 shell removal closeout merge verification
+6fb9466 Document v0.3.36 shell adapter removal closeout (#601)
+ M .agentic/communication_state.json
+
+### COMMUNICATION STATE DIFF ###
+diff --git a/.agentic/communication_state.json b/.agentic/communication_state.json
+index 72929ca..a8ea112 100644
+--- a/.agentic/communication_state.json
++++ b/.agentic/communication_state.json
+@@ -1,8 +1,8 @@
+ {
+   "last_branch": "main",
+   "last_origin": "local",
+-  "last_slice": "V0.3.36 SHELL ADAPTER REMOVAL CLOSEOUT MERGE VERIFY",
+-  "last_summary_id": 7,
++  "last_slice": "unknown",
++  "last_summary_id": 9,
+   "schema_version": 1,
+-  "updated_at": "2026-05-21T16:30:16+02:00"
++  "updated_at": "2026-05-21T16:44:09+02:00"
+ }
+
+### GATES FOR STATE-ONLY CLOSEOUT ###
+......                                                                   [100%]
+6 passed in 0.07s
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### SAVE LOG AND COMMIT STATE IF ONLY EXPECTED FILES ARE DIRTY ###
