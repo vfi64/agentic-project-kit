@@ -4,7 +4,7 @@ From github.com:vfi64/agentic-project-kit
  * branch            main       -> FETCH_HEAD
 
 ### PR STATE ###
-{"mergeStateStatus":"CLEAN","number":601,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-21T14:29:10Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26232369351/job/77196015189","name":"test","startedAt":"2026-05-21T14:28:47Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-21T14:29:03Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26232361237/job/77195984831","name":"test","startedAt":"2026-05-21T14:28:38Z","status":"COMPLETED","workflowName":"CI"}],"title":"Document v0.3.36 shell adapter removal closeout","url":"https://github.com/vfi64/agentic-project-kit/pull/601"}
+{"mergeStateStatus":"UNKNOWN","number":601,"state":"MERGED","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-21T14:29:10Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26232369351/job/77196015189","name":"test","startedAt":"2026-05-21T14:28:47Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-21T14:29:03Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26232361237/job/77195984831","name":"test","startedAt":"2026-05-21T14:28:38Z","status":"COMPLETED","workflowName":"CI"}],"title":"Document v0.3.36 shell adapter removal closeout","url":"https://github.com/vfi64/agentic-project-kit/pull/601"}
 
 ### PR CHECKS ###
 test	pass	25s	https://github.com/vfi64/agentic-project-kit/actions/runs/26232361237/job/77195984831	
@@ -13,17 +13,7 @@ test	pass	25s	https://github.com/vfi64/agentic-project-kit/actions/runs/26232361
 test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26232369351/job/77196015189	
 
 ### MERGE PR ###
-From github.com:vfi64/agentic-project-kit
- * branch            main       -> FETCH_HEAD
-   cec9e59..6fb9466  main       -> origin/main
-Updating cec9e59..6fb9466
-Fast-forward
- .agentic/communication_state.json                  |  8 +--
- .agentic/handoff_state.yaml                        | 30 +++++++---
- docs/handoff/CURRENT_HANDOFF.md                    | 10 ++++
- ...oval-closeout-quote-guard-prevention-repair.log | 69 ++++++++++++++++++++++
- 4 files changed, 105 insertions(+), 12 deletions(-)
- create mode 100644 docs/reports/terminal/v036-shell-removal-closeout-quote-guard-prevention-repair.log
+! Pull request vfi64/agentic-project-kit#601 was already merged
 
 ### UPDATE MAIN ###
 Already on 'main'
@@ -33,6 +23,7 @@ From github.com:vfi64/agentic-project-kit
 Already up to date.
 
 ### FINAL MAIN VERIFICATION ###
+4f65e4d Record v0.3.36 shell removal closeout merge verification
 6fb9466 Document v0.3.36 shell adapter removal closeout (#601)
 cec9e59 Record final shell adapter removal merge verification log
 7d5e704 Remove final pr-create shell adapter (#600)
@@ -40,7 +31,6 @@ cec9e59 Record final shell adapter removal merge verification log
 3ea01f3 Record shell adapter inventory baseline (#599)
 69567d7 Record communication summary id merge verification log
 b79a6a2 Add communication summary id contract (#598)
-538c086 Record PR 597 merge verification log
 PASS: no tracked tools/ns_*.sh remain.
 PASS: ns has no tools/ns_*.sh references.
 docs/handoff/CURRENT_HANDOFF.md:300:## v0.3.36 Shell Adapter Removal Closeout
@@ -59,7 +49,7 @@ docs/handoff/CURRENT_HANDOFF.md:308:- Merge evidence: `docs/reports/terminal/v03
 ........................................................................ [ 85%]
 ........................................................................ [ 96%]
 .........................                                                [100%]
-673 passed in 3.78s
+673 passed in 3.79s
 All checks passed!
 Agentic project check passed
 Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
