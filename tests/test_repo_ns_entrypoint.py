@@ -300,15 +300,16 @@ def test_safe_remove_diagnostic_python_core_replaces_shell_adapter() -> None:
     assert "Tracked file detected" in core
     assert not Path("tools/ns_safe_remove_diagnostic.sh").exists()
 
-def test_ns_clean_evidence_is_wired_and_safe() -> None:
+def test_ns_clean_evidence_routes_to_python_cli() -> None:
     ns_text = Path("ns").read_text(encoding="utf-8")
-    script_text = Path("tools/ns_clean_evidence.sh").read_text(encoding="utf-8")
+    evidence_text = Path("src/agentic_project_kit/cli_commands/evidence.py").read_text(encoding="utf-8")
     assert "clean-evidence" in ns_text
-    assert "tools/ns_clean_evidence.sh" in ns_text
-    assert "tmp/agent-evidence" in script_text
-    assert "docs/reports/CURRENT_WORKFLOW_OUTPUT.md" in script_text
-    assert "does not delete arbitrary docs/reports files" in script_text
-    assert "NEEDS_HUMAN_REVIEW" in script_text
+    assert "agentic_project_kit.cli evidence clean" in ns_text
+    assert "tools/ns_clean_evidence.sh" not in ns_text
+    assert not Path("tools/ns_clean_evidence.sh").exists()
+    assert "tmp/agent-evidence" in evidence_text
+    assert "does not delete arbitrary docs/reports files" in evidence_text
+    assert "NEEDS_HUMAN_REVIEW" in evidence_text
 
 def test_ns_up_dirty_tree_mentions_clean_evidence() -> None:
     text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")

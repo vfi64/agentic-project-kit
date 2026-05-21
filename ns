@@ -279,7 +279,7 @@ fi
 
 if [ "${1:-}" = "clean-evidence" ]; then
   shift
-  tools/ns_clean_evidence.sh "$@"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli evidence clean "$@"
   exit $?
 fi
 
