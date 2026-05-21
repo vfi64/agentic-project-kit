@@ -1,0 +1,56 @@
+
+### CURRENT STATE ###
+feature/v036-summary-format-execution-origin
+ M docs/governance/FINAL_SUMMARY_CONTRACT.md
+ M docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
+?? docs/reports/terminal/v036-summary-format-execution-origin-repair.log
+?? docs/reports/terminal/v036-summary-format-execution-origin-repair2.log
+?? docs/reports/terminal/v036-summary-format-execution-origin.log
+?? tests/test_v036_summary_format_execution_origin.py
+
+### WRITE LINEWISE TEST REPAIR SCRIPT ###
+
+### RUN LINEWISE REPAIR ###
+
+### TARGETED TESTS ###
+.........                                                                [100%]
+9 passed in 0.03s
+
+### FULL LOCAL GATES ###
+........................................................................ [ 10%]
+........................................................................ [ 21%]
+........................................................................ [ 32%]
+........................................................................ [ 43%]
+........................................................................ [ 54%]
+........................................................................ [ 65%]
+........................................................................ [ 76%]
+........................................................................ [ 86%]
+........................................................................ [ 97%]
+...............                                                          [100%]
+663 passed in 3.97s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### COMMIT PUSH PR IF GREEN ###
+ M docs/governance/FINAL_SUMMARY_CONTRACT.md
+ M docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
+ M tests/test_final_summary_contract.py
+?? docs/reports/terminal/v036-summary-format-execution-origin-repair.log
+?? docs/reports/terminal/v036-summary-format-execution-origin-repair2.log
+?? docs/reports/terminal/v036-summary-format-execution-origin.log
+?? tests/test_v036_summary_format_execution_origin.py
