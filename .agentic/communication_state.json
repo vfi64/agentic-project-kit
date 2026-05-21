@@ -1,8 +1,8 @@
 {
-  "last_branch": "main",
+  "last_branch": "docs/v036-shell-removal-closeout",
   "last_origin": "local",
-  "last_slice": "V0.3.36 FINAL PR CREATE SHELL ADAPTER MERGE VERIFICATION",
-  "last_summary_id": 4,
+  "last_slice": "V0.3.36 SHELL ADAPTER REMOVAL CLOSEOUT DOC REFRESH",
+  "last_summary_id": 5,
   "schema_version": 1,
-  "updated_at": "2026-05-21T16:17:10+02:00"
+  "updated_at": "2026-05-21T16:28:29+02:00"
 }

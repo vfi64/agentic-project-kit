@@ -31,6 +31,8 @@ completed_since_previous_handoff:
 - Repo-backed no-copy workflow hardened as the active bridge toward the local GUI.
 - Command inbox, command-run reports, terminal evidence pointers, and normal PASS/FAIL
   footers established.
+- v0.3.36 shell adapter removal closeout complete; tracked tools/ns_*.sh count is
+  zero; COMM-00004 records merge verification.
 current_capabilities:
   ns_actions:
   - agent-next
@@ -59,10 +61,10 @@ rules:
   text: Prefer technically robust, testable, repeatable solutions over fast workarounds.
 - id: no-copy-terminal-evidence
   status: active
-  text: Routine PASS handoffs and normal FAIL handoffs must be backed by repo
-    evidence; use d for log-backed PASS and f for log-backed FAIL. Manual terminal
-    paste is only for hard failure, broken logging, blocked or aborted runs, unavailable
-    pushed evidence, or explicit user request.
+  text: Routine PASS handoffs and normal FAIL handoffs must be backed by repo evidence;
+    use d for log-backed PASS and f for log-backed FAIL. Manual terminal paste is
+    only for hard failure, broken logging, blocked or aborted runs, unavailable pushed
+    evidence, or explicit user request.
 - id: planning-state-freshness
   status: active
   text: Current planning files must be curated and mutually consistent; stale released-version
@@ -70,7 +72,8 @@ rules:
 - id: shell-to-python-portability
   status: active
   text: Prefer portable Python-backed helpers and argument-vector execution over fragile
-    shell quoting, heredocs, multiline python -c snippets, or nested quote-based code generation.
+    shell quoting, heredocs, multiline python -c snippets, or nested quote-based code
+    generation.
 - id: rules-must-be-test-backed
   status: active
   text: Workflow rules are not complete when they only exist in chat, prose, or handoff
@@ -116,6 +119,10 @@ rules:
   text: YAML governance files must be changed through parse-modify-dump or an equivalent
     structured mutation path, then parsed again before gates. Text injection into
     YAML is forbidden for complex values.
+- id: quote-guard-no-nested-generation
+  status: active
+  text: Avoid nested quote-based code generation; use file-based patch helpers or
+    simple printf line generation.
 recent_failure_patterns:
 - id: guessing-before-inspection
   prevention: Before choosing commands, paths, JSON fields, release checks, or DOI
@@ -150,9 +157,10 @@ recent_failure_patterns:
     status variables such as PIPESTATUS in zsh-pasted blocks unless the shell is explicitly
     controlled.
 - id: nested-triple-quote-code-generator
-  prevention: Do not generate source files through nested shell/Python quote layers or nested triple-quoted string literals
-    inside another generated Python script. Prefer line-list generation, existing
-    patch tools, or checked patch artifacts plus py_compile before application.
+  prevention: Do not generate source files through nested shell/Python quote layers
+    or nested triple-quoted string literals inside another generated Python script.
+    Prefer line-list generation, existing patch tools, or checked patch artifacts
+    plus py_compile before application.
 - id: yaml-colon-term-reinterpreted-as-mapping
   prevention: Quote every documentation coverage term containing a colon, and keep
     the coverage-term string guard in the test suite.
@@ -163,6 +171,12 @@ recent_failure_patterns:
   prevention: Patch scripts must parse YAML before and after mutation, use safe_dump
     or an equivalent structured writer, and run a YAML integrity test before handoff,
     governance, or dev gates.
+- id: nested-quote-based-code-generation
+  status: active
+  description: nested quote-based code generation caused fragile generated repair
+    scripts and must be blocked by deterministic patch helpers
+  prevention: Use file-based patch helpers or simple printf line generation; avoid
+    nested quote-based code generation.
 next_allowed_tasks:
 - id: planning-state-freshness-guard-hardening
   title: Strengthen deterministic guards for stale planning documents.
