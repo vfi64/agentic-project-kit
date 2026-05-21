@@ -158,6 +158,39 @@ def run_window_smoke() -> tuple[bool, str]:
             root.destroy()
 
 
+
+
+def run_manual_launch() -> tuple[bool, str]:
+    guard = check_window_launch_ready()
+    lines = ["TKINTER MANUAL LAUNCH", render_window_guard_result(guard)]
+    if not guard.ok:
+        lines.extend([
+            "manual_launch_status=BLOCKED",
+            "real_window_opened=false",
+            "actions_enabled=false",
+        ])
+        return True, chr(10).join(lines)
+    try:
+        root = create_tkinter_root()
+    except Exception as exc:
+        lines.extend([
+            "manual_launch_status=BLOCKED",
+            "real_window_opened=false",
+            "actions_enabled=false",
+            "manual_launch_block_reason=" + str(exc).replace(chr(10), " "),
+        ])
+        return True, chr(10).join(lines)
+    configure_tkinter_root(root, build_tkinter_shell_spec())
+    lines.extend([
+        "manual_launch_status=READY",
+        "real_window_opened=true",
+        "actions_enabled=false",
+        "manual_close_required=true",
+    ])
+    print(chr(10).join(lines))
+    print("### RESULT: PASS ###")
+    root.mainloop()
+    return True, "manual_launch_closed=true"
 def main(argv: Sequence[str] | None = None) -> int:
     args = list(argv or [])
     if args == ["--no-window-smoke"]:
@@ -169,7 +202,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(output)
         print("### RESULT: PASS ###" if ok else "### RESULT: FAIL ###")
         return 0 if ok else 1
-    print("ERROR: usage: python -m agentic_project_kit.gui_tkinter_shell --no-window-smoke|--window-smoke")
+    if args == ["--manual-launch"]:
+        ok, output = run_manual_launch()
+        if output:
+            print(output)
+        return 0 if ok else 1
+    print("ERROR: usage: python -m agentic_project_kit.gui_tkinter_shell --no-window-smoke|--window-smoke|--manual-launch")
     print("### RESULT: FAIL ###")
     return 2
 
