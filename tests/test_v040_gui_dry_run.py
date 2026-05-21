@@ -15,6 +15,10 @@ def test_gui_dry_run_module_reports_required_checks():
     assert "tkinter_note=nonblocking for --dry-run" in output
     assert "action_registry_available=true" in output
     assert "action_specs_available=true" in output
+    assert "presenter_available=true" in output
+    assert "presenter_action_count=" in output
+    assert "presenter_preview_begin" in output
+    assert "presenter_preview_end" in output
     assert "mode_guard_available=true" in output
     assert "shell_adapters_absent=true" in output
 
@@ -29,9 +33,10 @@ def test_gui_dry_run_module_cli_has_deterministic_output():
         check=False,
     )
     assert result.returncode == 0
-    assert "GUI DRY RUN" in result.stdout
-    assert "### RESULT:" in result.stdout
-    assert "Traceback" not in result.stdout
+    output = result.stdout
+    assert "GUI DRY RUN" in output
+    assert "### RESULT:" in output
+    assert "Traceback" not in output
 
 
 def test_ns_gui_dry_run_route_is_python_backed():
@@ -51,9 +56,10 @@ def test_ns_gui_dry_run_executes_without_shell_adapter():
         check=False,
     )
     assert result.returncode == 0
-    assert "GUI DRY RUN" in result.stdout
-    assert "no window is opened" in result.stdout
-    assert "tools/ns_gui" not in result.stdout
+    output = result.stdout
+    assert "GUI DRY RUN" in output
+    assert "no window is opened" in output
+    assert "tools/ns_gui" not in output
 
 
 
