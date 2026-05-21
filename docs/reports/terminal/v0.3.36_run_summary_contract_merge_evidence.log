@@ -1,0 +1,439 @@
+V0.3.36 RUN SUMMARY CONTRACT MERGE EVIDENCE
+
+### BRANCH ###
+docs/record-v0.3.36-run-summary-contract-evidence
+
+### HEAD ###
+c4dcb7c Add run summary contract core (#557)
+5ea9083 Record v0.3.36 stray terminal logs (#556)
+aa53416 Record v0.3.36 standard error hardening evidence (#555)
+57e1821 Harden v0.3.36 standard error contracts (#554)
+f93d184 Record v0.3.36 standard error contract prep (#553)
+bf0c6a7 Lock already merged PR recovery semantics (#552)
+44213a5 Clean v0.3.36 current-state documentation (#551)
+6733fdd Finalize state after v0.3.35 DOI metadata (#550)
+8332943 Record v0.3.35 DOI metadata (#549)
+59e1673 Prepare v0.3.35 release metadata (#548)
+800340e Update status after v0.3.35 release gate core extraction (#547)
+ea87e0e Extract release gate core (#546)
+
+### STATUS ###
+?? docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log
+
+### RUN SUMMARY SURFACES ###
+docs/STATUS.md:327:- v0.3.36 current-state cleanup started as a documentation-only line: normalize README current-release wording, make the v0.3.35 CHANGELOG entry describe the actual delivered work, clarify GUI/cockpit status, and lock release-phase semantics in tests before any bounded Tkinter MVP work.\n\n- v0.3.36 standard-error hardening started: Remote-log evidence is mandatory for standard-error hardening slices; summaries must include `terminal_log=docs/reports/terminal/...`, `command_report=...`, and `NEXT_CHAT_REPLY`. FAIL without terminal kill uses NEXT_CHAT_REPLY: f so the next step reconstructs from the remote log before asking for pasted terminal output.\n
+docs/governance/FINAL_SUMMARY_CONTRACT.md:14:terminal_log=<repo-path-or-NONE>
+docs/handoff/CURRENT_HANDOFF.md:281:- v0.3.36 documentation cleanup is now the active preparation step before the Tkinter MVP: README current-state wording and CHANGELOG release semantics must be cleaned up and tested first. Do not start GUI implementation in this slice.\n\n- v0.3.36 standard-error hardening started: Remote-log evidence is mandatory for standard-error hardening slices; summaries must include `terminal_log=docs/reports/terminal/...`, `command_report=...`, and `NEXT_CHAT_REPLY`. FAIL without terminal kill uses NEXT_CHAT_REPLY: f so the next step reconstructs from the remote log before asking for pasted terminal output.\n
+docs/reports/terminal/20260518-090016_smoke-pass.log:1:terminal_log=docs/reports/terminal/20260518-090016_smoke-pass.log
+docs/reports/terminal/20260518-090057_commit-smoke.log:1:terminal_log=docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log:1:terminal_log=docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log
+docs/reports/terminal/20260518-090513_open-terminal-log-wrapper-pr-fixed.log:1:terminal_log=docs/reports/terminal/20260518-090513_open-terminal-log-wrapper-pr-fixed.log
+docs/reports/terminal/20260518-090803_start-terminal-log-branch-safety.log:1:terminal_log=docs/reports/terminal/20260518-090803_start-terminal-log-branch-safety.log
+docs/reports/terminal/20260518-092057_intentional-fail-upload-test.log:1:terminal_log=docs/reports/terminal/20260518-092057_intentional-fail-upload-test.log
+docs/reports/terminal/20260518-124633_finalize-after-repo-command-runner-001.log:1:terminal_log=docs/reports/terminal/20260518-124633_finalize-after-repo-command-runner-001.log
+docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:582:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:445:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:637:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:500:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:555:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:651:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:514:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:569:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:660:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:523:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:579:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:690:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:553:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:705:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:568:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:799:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:2:terminal_log=docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log
+docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:829:docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:20:terminal_log=docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:156:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:445:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:195:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:500:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:555:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:209:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:514:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:569:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:218:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:523:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:579:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:247:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:553:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:260:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:568:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/20260518-213944_no-copy-e2e-protocol-001.log:1:terminal_log=docs/reports/terminal/20260518-213944_no-copy-e2e-protocol-001.log
+docs/reports/terminal/20260518-213956_capture-failed-no-copy-agent-next.log:34:terminal_log=docs/reports/terminal/20260518-213944_no-copy-e2e-protocol-001.log
+docs/reports/terminal/20260518-215619_agent-next-smoke-003.log:1:terminal_log=docs/reports/terminal/20260518-215619_agent-next-smoke-003.log
+docs/reports/terminal/20260518-215910_agent-next-fail-smoke-004.log:1:terminal_log=docs/reports/terminal/20260518-215910_agent-next-fail-smoke-004.log
+docs/reports/terminal/20260518-222953_verify-agent-next-footer-pf-001.log:1:terminal_log=docs/reports/terminal/20260518-222953_verify-agent-next-footer-pf-001.log
+docs/reports/terminal/20260518-223233_harden-agent-run-fail-marker-001.log:1:terminal_log=docs/reports/terminal/20260518-223233_harden-agent-run-fail-marker-001.log
+docs/reports/terminal/20260518-223501_patch-agent-run-fail-marker-001.log:1:terminal_log=docs/reports/terminal/20260518-223501_patch-agent-run-fail-marker-001.log
+docs/reports/terminal/20260518-224118_harden-agent-run-missing-script-001.log:1:terminal_log=docs/reports/terminal/20260518-224118_harden-agent-run-missing-script-001.log
+docs/reports/terminal/20260518-224808_smoke-agent-run-missing-script-001.log:1:terminal_log=docs/reports/terminal/20260518-224808_smoke-agent-run-missing-script-001.log
+docs/reports/terminal/20260518-225016_harden-inbox-lifecycle-cleanup-001.log:1:terminal_log=docs/reports/terminal/20260518-225016_harden-inbox-lifecycle-cleanup-001.log
+docs/reports/terminal/20260518-225201_harden-inbox-completed-command-guard-001.log:1:terminal_log=docs/reports/terminal/20260518-225201_harden-inbox-completed-command-guard-001.log
+docs/reports/terminal/20260519-073738_finalize-no-copy-after-pr423-001.log:1:terminal_log=docs/reports/terminal/20260519-073738_finalize-no-copy-after-pr423-001.log
+docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log:653:terminal_log=docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+docs/reports/terminal/20260519-112522_record-v0.3.27-doi-metadata.log:217:terminal_log=docs/reports/terminal/20260519-112522_record-v0.3.27-doi-metadata.log
+docs/reports/terminal/20260519-113208_repair-pr439-v0.3.27-doi-metadata.log:271:terminal_log=docs/reports/terminal/20260519-113208_repair-pr439-v0.3.27-doi-metadata.log
+docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:240:terminal_log=docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log
+docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log:581:docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:240:terminal_log=docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log
+docs/reports/terminal/20260519-144503_20260519-remote-command-first-rule.log:1:terminal_log=docs/reports/terminal/20260519-144503_20260519-remote-command-first-rule.log
+docs/reports/terminal/20260519-144503_20260519-remote-command-first-rule.log:157:terminal_log=docs/reports/terminal/20260519-remote-command-first-rule.log
+docs/reports/terminal/20260519-165218_20260519-merge-pr444-remote-first-no-guess.log:1:terminal_log=docs/reports/terminal/20260519-165218_20260519-merge-pr444-remote-first-no-guess.log
+docs/reports/terminal/20260519-165218_20260519-merge-pr444-remote-first-no-guess.log:125:terminal_log=SEE_COMMAND_REPORT
+docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:1:terminal_log=docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log
+docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:169:terminal_log=NONE
+docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log:1:terminal_log=docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log
+docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log:156:terminal_log=docs/reports/terminal/20260519-verify-main-after-pr445.log
+docs/reports/terminal/20260519-192233_20260519-compiled-context-fast-path.log:1:terminal_log=docs/reports/terminal/20260519-192233_20260519-compiled-context-fast-path.log
+docs/reports/terminal/20260519-192233_20260519-compiled-context-fast-path.log:12:terminal_log=NONE
+docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log:1:terminal_log=docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log
+docs/reports/terminal/20260519-201837_20260519-agent-next-queue-health.log:1:terminal_log=docs/reports/terminal/20260519-201837_20260519-agent-next-queue-health.log
+docs/reports/terminal/20260519-201837_20260519-agent-next-queue-health.log:186:terminal_log=AUTO_BY_AGENT_NEXT
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:1:terminal_log=docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log
+docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:180:terminal_log=NONE
+docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log:1:terminal_log=docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log
+docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log:85:docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:1:terminal_log=docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log
+docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log:333:terminal_log=NONE
+docs/reports/terminal/20260519-211945_20260519-verify-main-after-pr449-summary-contract.log:1:terminal_log=docs/reports/terminal/20260519-211945_20260519-verify-main-after-pr449-summary-contract.log
+docs/reports/terminal/20260519-211945_20260519-verify-main-after-pr449-summary-contract.log:115:terminal_log=AGENT_NEXT
+docs/reports/terminal/20260519-212252_20260519-verify-main-after-final-summary-contract.log:1:terminal_log=docs/reports/terminal/20260519-212252_20260519-verify-main-after-final-summary-contract.log
+docs/reports/terminal/20260519-212252_20260519-verify-main-after-final-summary-contract.log:148:terminal_log=auto
+docs/reports/terminal/20260519-212536_20260519-verify-main-after-pr449.log:1:terminal_log=docs/reports/terminal/20260519-212536_20260519-verify-main-after-pr449.log
+docs/reports/terminal/20260519-212536_20260519-verify-main-after-pr449.log:167:terminal_log=auto-by-agent-next
+docs/reports/terminal/20260519-215752_20260519-agent-next-idempotent-inspection.log:1:terminal_log=docs/reports/terminal/20260519-215752_20260519-agent-next-idempotent-inspection.log
+docs/reports/terminal/20260519-215752_20260519-agent-next-idempotent-inspection.log:132:terminal_log=auto-by-agent-next
+docs/reports/terminal/20260519-222153_20260519-idempotent-already-executed-inbox.log:1:terminal_log=docs/reports/terminal/20260519-222153_20260519-idempotent-already-executed-inbox.log
+docs/reports/terminal/20260519-222153_20260519-idempotent-already-executed-inbox.log:329:terminal_log=auto-by-agent-next
+docs/reports/terminal/20260520-action-result-core-contract-escape-safe-failed-system-python.log:33:terminal_log=/tmp/agentic-project-kit-20260520-action-result-core-contract-escape-safe.log
+docs/reports/terminal/20260520-cockpit-registry-only-contract-failed-json-keys.log:41:terminal_log=/tmp/agentic-project-kit-20260520-cockpit-registry-only-contract.log
+docs/reports/terminal/20260520-discover-communication-artifact-gc.log:701:docs/reports/terminal/20260518-225016_harden-inbox-lifecycle-cleanup-001.log:1:terminal_log=docs/reports/terminal/20260518-225016_harden-inbox-lifecycle-cleanup-001.log
+docs/reports/terminal/20260520-document-typed-work-orders-pre-gui-path-failed-empty-heading-check.log:26:terminal_log=/tmp/agentic-project-kit-20260520-document-typed-work-orders-pre-gui-path.log
+docs/reports/terminal/20260520-finalize-action-result-core-contract-after-venv-fail.log:55:terminal_log=/tmp/agentic-project-kit-20260520-finalize-action-result-core-contract-after-venv-fail.log
+docs/reports/terminal/20260520-finalize-cockpit-registry-only-contract-failed-inventory-keys.log:89:terminal_log=/tmp/agentic-project-kit-20260520-finalize-cockpit-registry-only-contract.log
+docs/reports/terminal/20260520-prepare-v0.3.30-release-metadata-failed-coverage-literal.log:134:terminal_log=/tmp/agentic-project-kit-20260520-prepare-v0.3.30-release-metadata.log
+docs/reports/terminal/20260520-readme-doi-archive-extraction-merge-verification-v6.log:33:terminal_log=docs/reports/terminal/20260520-readme-doi-archive-extraction-merge-verification-v6.log
+docs/reports/terminal/20260520-repair-action-result-core-contract-test-failed-anchor.log:22:terminal_log=/tmp/agentic-project-kit-20260520-repair-action-result-core-contract-test.log
+docs/reports/terminal/20260520-repair-cockpit-action-inventory-json-keys-failed-action-result-key.log:79:result = CockpitActionResult(action_id='git.status', allowed=True, executed=True, returncode=0, stdout='ok\\n', stderr='', mess...='read_only', terminal_log=None, command_report=None, dirty_state='unknown', next_allowed_actions=('cockpit.actions',))
+docs/reports/terminal/20260520-repair-cockpit-action-inventory-json-keys-failed-action-result-key.log:170:terminal_log=/tmp/agentic-project-kit-20260520-repair-cockpit-action-inventory-json-keys.log
+docs/reports/terminal/20260520-repair-cockpit-registry-json-keys-failed-grep.log:22:terminal_log=/tmp/agentic-project-kit-20260520-repair-cockpit-registry-json-keys.log
+docs/reports/terminal/20260520-repair-cockpit-registry-json-keys-failed-grep.log:72:terminal_log=/tmp/agentic-project-kit-20260520-repair-cockpit-registry-json-keys.log
+docs/reports/terminal/20260520-repair-cockpit-registry-json-keys-failed-grep.log:387:terminal_log=/tmp/agentic-project-kit-20260520-repair-cockpit-registry-json-keys.log
+docs/reports/terminal/20260520-repair-cockpit-registry-json-keys-failed-grep.log:437:terminal_log=/tmp/agentic-project-kit-20260520-repair-cockpit-registry-json-keys.log
+docs/reports/terminal/20260520-repair-v0.3.30-gui-readiness-closeout-docs-failed-dirty-worktrees.log:49:terminal_log=/tmp/agentic-project-kit-20260520-repair-v0.3.30-gui-readiness-closeout-docs.log
+docs/reports/terminal/20260520-typed-work-order-example-and-ns-shortcut-failed-path-type.log:46:terminal_log=/tmp/agentic-project-kit-20260520-typed-work-order-example-and-ns-shortcut.log
+docs/reports/terminal/20260520-v0.3.29-post-release-discovery-failed-release-check.log:38:terminal_log=/tmp/agentic-project-kit-20260520-v0.3.29-post-release-discovery.log
+docs/reports/terminal/20260520-v0.3.29-release-tooling-recheck-v2.log:211:terminal_log=/tmp/agentic-project-kit-20260520-v0.3.29-release-tooling-recheck-v2.log
+docs/reports/terminal/20260520-v0.3.30-gui-readiness-closeout-docs-failed-planning-invariant.log:106:terminal_log=/tmp/agentic-project-kit-20260520-v0.3.30-gui-readiness-closeout-docs.log
+docs/reports/terminal/20260520-v0.3.30-release-preflight-false-fail-already-released.log:185:terminal_log=/tmp/agentic-project-kit-20260520-v0.3.30-release-preflight.log
+docs/reports/terminal/20260520-v0.3.30-state-cleanup-local-gate-v2.log:168:terminal_log=docs/reports/terminal/20260520-v0.3.30-state-cleanup-local-gate-v2.log
+docs/reports/terminal/20260520-v0.3.30-state-cleanup-pr-merge.log:44:terminal_log=docs/reports/terminal/20260520-v0.3.30-state-cleanup-pr-merge.log
+docs/reports/terminal/20260520-v0.3.30-state-cleanup-repair-gate-v2.log:40:terminal_log=docs/reports/terminal/20260520-v0.3.30-state-cleanup-repair-gate-v2.log
+docs/reports/terminal/20260520-v0.3.30-state-cleanup-repair-gate-v3.log:145:terminal_log=docs/reports/terminal/20260520-v0.3.30-state-cleanup-repair-gate-v3.log
+docs/reports/terminal/20260520-v0.3.31-pre-gui-execution-hardening-contract.log:115:terminal_log=docs/reports/terminal/20260520-v0.3.31-pre-gui-execution-hardening-contract.log
+docs/reports/terminal/20260520-v0.3.33-doi-waiting-safety-guard-merge-verification.log:94:terminal_log=docs/reports/terminal/20260520-v0.3.33-doi-waiting-safety-guard-merge-verification.log
+docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:2:terminal_log=docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:445:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:500:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:555:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:514:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:569:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:523:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:579:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:553:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:568:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:555:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:569:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:579:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:20:terminal_log=docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/terminal_log_wrapper_impl_20260518-090015.log:21:terminal_log=docs/reports/terminal/20260518-090016_smoke-pass.log
+docs/reports/terminal/v0.3.36_fix_ns_dev_include_pr_hygiene.log:22:terminal_log=docs/reports/terminal/v0.3.36_fix_ns_dev_include_pr_hygiene.log
+docs/reports/terminal/v0.3.36_fix_ns_dev_include_pr_hygiene.log:25:STANDARD_ERROR_REDUCTION: 79% unchanged; dirty tree blocks safe patch
+docs/reports/terminal/v0.3.36_fix_ns_dev_include_pr_hygiene.log:26:GUI_PREPARATION: 85% unchanged; CLI gate still not reliable enough for GUI
+docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log:131:terminal_log=docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log
+docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log:134:STANDARD_ERROR_REDUCTION: 72% -> 76%; fixed/verified: PR merge idempotency path for this slice, local gate flag routing on main
+docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log:135:GUI_PREPARATION: 82% -> 84%; GUI-safe gate invocation verified on main
+docs/reports/terminal/v0.3.36_record_standard_error_hardening_1_evidence.log:176:terminal_log=docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log
+docs/reports/terminal/v0.3.36_record_standard_error_hardening_1_evidence.log:179:STANDARD_ERROR_REDUCTION: 76% -> 79%; remote-log evidence for slice 1 is now committed/pushed/merged
+docs/reports/terminal/v0.3.36_record_standard_error_hardening_1_evidence.log:180:GUI_PREPARATION: 84% -> 85%; GUI-prep benefits from reconstructable gate evidence
+docs/reports/terminal/v0.3.36_run_summary_contract_core.log:37:?? docs/reports/terminal/v0.3.36_run_summary_contract_core.log.tmp
+docs/reports/terminal/v0.3.36_run_summary_contract_core.log:38:?? src/agentic_project_kit/run_summary.py
+docs/reports/terminal/v0.3.36_run_summary_contract_core.log:39:?? tests/test_v036_run_summary.py
+docs/reports/terminal/v0.3.36_run_summary_contract_core.log:40:fatal: pathspec 'docs/reports/terminal/v0.3.36_run_summary_contract_core.log' did not match any files
+docs/reports/terminal/v0.3.36_run_summary_contract_core.log:44:	docs/reports/terminal/v0.3.36_run_summary_contract_core.log.tmp
+docs/reports/terminal/v0.3.36_run_summary_contract_core.log:45:	src/agentic_project_kit/run_summary.py
+docs/reports/terminal/v0.3.36_run_summary_contract_core.log:46:	tests/test_v036_run_summary.py
+docs/reports/terminal/v0.3.36_run_summary_contract_core.log:63:?? docs/reports/terminal/v0.3.36_run_summary_contract_core.log.tmp
+docs/reports/terminal/v0.3.36_run_summary_contract_core.log:64:?? src/agentic_project_kit/run_summary.py
+docs/reports/terminal/v0.3.36_run_summary_contract_core.log:65:?? tests/test_v036_run_summary.py
+docs/reports/terminal/v0.3.36_run_summary_contract_core.log:81:terminal_log=docs/reports/terminal/v0.3.36_run_summary_contract_core.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:121:docs/governance/FINAL_SUMMARY_CONTRACT.md:14:terminal_log=<repo-path-or-NONE>
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:122:docs/reports/terminal/20260518-090016_smoke-pass.log:1:terminal_log=docs/reports/terminal/20260518-090016_smoke-pass.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:123:docs/reports/terminal/20260518-090057_commit-smoke.log:1:terminal_log=docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:124:docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log:1:terminal_log=docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:125:docs/reports/terminal/20260518-090513_open-terminal-log-wrapper-pr-fixed.log:1:terminal_log=docs/reports/terminal/20260518-090513_open-terminal-log-wrapper-pr-fixed.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:126:docs/reports/terminal/20260518-090803_start-terminal-log-branch-safety.log:1:terminal_log=docs/reports/terminal/20260518-090803_start-terminal-log-branch-safety.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:127:docs/reports/terminal/20260518-092057_intentional-fail-upload-test.log:1:terminal_log=docs/reports/terminal/20260518-092057_intentional-fail-upload-test.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:128:docs/reports/terminal/20260518-124633_finalize-after-repo-command-runner-001.log:1:terminal_log=docs/reports/terminal/20260518-124633_finalize-after-repo-command-runner-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:129:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:130:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:131:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:132:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:582:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:445:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:133:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:637:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:500:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:555:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:134:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:651:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:514:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:569:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:135:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:660:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:523:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:579:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:136:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:690:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:553:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:137:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:705:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:568:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:138:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:799:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:2:terminal_log=docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:139:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:829:docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:20:terminal_log=docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:140:docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:156:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:445:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:141:docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:195:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:500:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:555:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:142:docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:209:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:514:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:569:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:143:docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:218:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:523:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:579:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:144:docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:247:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:553:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:145:docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:260:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:568:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:146:docs/reports/terminal/20260518-213944_no-copy-e2e-protocol-001.log:1:terminal_log=docs/reports/terminal/20260518-213944_no-copy-e2e-protocol-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:147:docs/reports/terminal/20260518-213956_capture-failed-no-copy-agent-next.log:34:terminal_log=docs/reports/terminal/20260518-213944_no-copy-e2e-protocol-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:148:docs/reports/terminal/20260518-215619_agent-next-smoke-003.log:1:terminal_log=docs/reports/terminal/20260518-215619_agent-next-smoke-003.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:149:docs/reports/terminal/20260518-215910_agent-next-fail-smoke-004.log:1:terminal_log=docs/reports/terminal/20260518-215910_agent-next-fail-smoke-004.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:150:docs/reports/terminal/20260518-222953_verify-agent-next-footer-pf-001.log:1:terminal_log=docs/reports/terminal/20260518-222953_verify-agent-next-footer-pf-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:151:docs/reports/terminal/20260518-223233_harden-agent-run-fail-marker-001.log:1:terminal_log=docs/reports/terminal/20260518-223233_harden-agent-run-fail-marker-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:152:docs/reports/terminal/20260518-223501_patch-agent-run-fail-marker-001.log:1:terminal_log=docs/reports/terminal/20260518-223501_patch-agent-run-fail-marker-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:153:docs/reports/terminal/20260518-224118_harden-agent-run-missing-script-001.log:1:terminal_log=docs/reports/terminal/20260518-224118_harden-agent-run-missing-script-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:154:docs/reports/terminal/20260518-224808_smoke-agent-run-missing-script-001.log:1:terminal_log=docs/reports/terminal/20260518-224808_smoke-agent-run-missing-script-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:155:docs/reports/terminal/20260518-225016_harden-inbox-lifecycle-cleanup-001.log:1:terminal_log=docs/reports/terminal/20260518-225016_harden-inbox-lifecycle-cleanup-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:156:docs/reports/terminal/20260518-225201_harden-inbox-completed-command-guard-001.log:1:terminal_log=docs/reports/terminal/20260518-225201_harden-inbox-completed-command-guard-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:157:docs/reports/terminal/20260519-073738_finalize-no-copy-after-pr423-001.log:1:terminal_log=docs/reports/terminal/20260519-073738_finalize-no-copy-after-pr423-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:158:docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log:653:terminal_log=docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:159:docs/reports/terminal/20260519-112522_record-v0.3.27-doi-metadata.log:217:terminal_log=docs/reports/terminal/20260519-112522_record-v0.3.27-doi-metadata.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:160:docs/reports/terminal/20260519-113208_repair-pr439-v0.3.27-doi-metadata.log:271:terminal_log=docs/reports/terminal/20260519-113208_repair-pr439-v0.3.27-doi-metadata.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:161:docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:240:terminal_log=docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:162:docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log:581:docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:240:terminal_log=docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:163:docs/reports/terminal/20260519-144503_20260519-remote-command-first-rule.log:1:terminal_log=docs/reports/terminal/20260519-144503_20260519-remote-command-first-rule.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:164:docs/reports/terminal/20260519-144503_20260519-remote-command-first-rule.log:157:terminal_log=docs/reports/terminal/20260519-remote-command-first-rule.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:165:docs/reports/terminal/20260519-165218_20260519-merge-pr444-remote-first-no-guess.log:1:terminal_log=docs/reports/terminal/20260519-165218_20260519-merge-pr444-remote-first-no-guess.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:166:docs/reports/terminal/20260519-165218_20260519-merge-pr444-remote-first-no-guess.log:125:terminal_log=SEE_COMMAND_REPORT
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:167:docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:1:terminal_log=docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:168:docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:169:terminal_log=NONE
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:169:docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log:1:terminal_log=docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:170:docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log:156:terminal_log=docs/reports/terminal/20260519-verify-main-after-pr445.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:171:docs/reports/terminal/20260519-192233_20260519-compiled-context-fast-path.log:1:terminal_log=docs/reports/terminal/20260519-192233_20260519-compiled-context-fast-path.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:172:docs/reports/terminal/20260519-192233_20260519-compiled-context-fast-path.log:12:terminal_log=NONE
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:173:docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log:1:terminal_log=docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:174:docs/reports/terminal/20260519-201837_20260519-agent-next-queue-health.log:1:terminal_log=docs/reports/terminal/20260519-201837_20260519-agent-next-queue-health.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:175:docs/reports/terminal/20260519-201837_20260519-agent-next-queue-health.log:186:terminal_log=AUTO_BY_AGENT_NEXT
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:176:docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:1:terminal_log=docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:177:docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:180:terminal_log=NONE
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:178:docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log:1:terminal_log=docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:179:docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log:85:docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:1:terminal_log=docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:180:docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log:333:terminal_log=NONE
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:181:docs/reports/terminal/20260519-211945_20260519-verify-main-after-pr449-summary-contract.log:1:terminal_log=docs/reports/terminal/20260519-211945_20260519-verify-main-after-pr449-summary-contract.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:182:docs/reports/terminal/20260519-211945_20260519-verify-main-after-pr449-summary-contract.log:115:terminal_log=AGENT_NEXT
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:183:docs/reports/terminal/20260519-212252_20260519-verify-main-after-final-summary-contract.log:1:terminal_log=docs/reports/terminal/20260519-212252_20260519-verify-main-after-final-summary-contract.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:184:docs/reports/terminal/20260519-212252_20260519-verify-main-after-final-summary-contract.log:148:terminal_log=auto
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:185:docs/reports/terminal/20260519-212536_20260519-verify-main-after-pr449.log:1:terminal_log=docs/reports/terminal/20260519-212536_20260519-verify-main-after-pr449.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:186:docs/reports/terminal/20260519-212536_20260519-verify-main-after-pr449.log:167:terminal_log=auto-by-agent-next
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:187:docs/reports/terminal/20260519-215752_20260519-agent-next-idempotent-inspection.log:1:terminal_log=docs/reports/terminal/20260519-215752_20260519-agent-next-idempotent-inspection.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:188:docs/reports/terminal/20260519-215752_20260519-agent-next-idempotent-inspection.log:132:terminal_log=auto-by-agent-next
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:189:docs/reports/terminal/20260519-222153_20260519-idempotent-already-executed-inbox.log:1:terminal_log=docs/reports/terminal/20260519-222153_20260519-idempotent-already-executed-inbox.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:190:docs/reports/terminal/20260519-222153_20260519-idempotent-already-executed-inbox.log:329:terminal_log=auto-by-agent-next
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:191:docs/reports/terminal/20260520-action-result-core-contract-escape-safe-failed-system-python.log:33:terminal_log=/tmp/agentic-project-kit-20260520-action-result-core-contract-escape-safe.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:192:docs/reports/terminal/20260520-cockpit-registry-only-contract-failed-json-keys.log:41:terminal_log=/tmp/agentic-project-kit-20260520-cockpit-registry-only-contract.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:193:docs/reports/terminal/20260520-discover-communication-artifact-gc.log:701:docs/reports/terminal/20260518-225016_harden-inbox-lifecycle-cleanup-001.log:1:terminal_log=docs/reports/terminal/20260518-225016_harden-inbox-lifecycle-cleanup-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:194:docs/reports/terminal/20260520-document-typed-work-orders-pre-gui-path-failed-empty-heading-check.log:26:terminal_log=/tmp/agentic-project-kit-20260520-document-typed-work-orders-pre-gui-path.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:195:docs/reports/terminal/20260520-finalize-action-result-core-contract-after-venv-fail.log:55:terminal_log=/tmp/agentic-project-kit-20260520-finalize-action-result-core-contract-after-venv-fail.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:196:docs/reports/terminal/20260520-finalize-cockpit-registry-only-contract-failed-inventory-keys.log:89:terminal_log=/tmp/agentic-project-kit-20260520-finalize-cockpit-registry-only-contract.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:197:docs/reports/terminal/20260520-prepare-v0.3.30-release-metadata-failed-coverage-literal.log:134:terminal_log=/tmp/agentic-project-kit-20260520-prepare-v0.3.30-release-metadata.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:198:docs/reports/terminal/20260520-readme-doi-archive-extraction-merge-verification-v6.log:33:terminal_log=docs/reports/terminal/20260520-readme-doi-archive-extraction-merge-verification-v6.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:199:docs/reports/terminal/20260520-repair-action-result-core-contract-test-failed-anchor.log:22:terminal_log=/tmp/agentic-project-kit-20260520-repair-action-result-core-contract-test.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:200:docs/reports/terminal/20260520-repair-cockpit-action-inventory-json-keys-failed-action-result-key.log:79:result = CockpitActionResult(action_id='git.status', allowed=True, executed=True, returncode=0, stdout='ok\\n', stderr='', mess...='read_only', terminal_log=None, command_report=None, dirty_state='unknown', next_allowed_actions=('cockpit.actions',))
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:201:docs/reports/terminal/20260520-repair-cockpit-action-inventory-json-keys-failed-action-result-key.log:170:terminal_log=/tmp/agentic-project-kit-20260520-repair-cockpit-action-inventory-json-keys.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:202:docs/reports/terminal/20260520-repair-cockpit-registry-json-keys-failed-grep.log:22:terminal_log=/tmp/agentic-project-kit-20260520-repair-cockpit-registry-json-keys.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:203:docs/reports/terminal/20260520-repair-cockpit-registry-json-keys-failed-grep.log:72:terminal_log=/tmp/agentic-project-kit-20260520-repair-cockpit-registry-json-keys.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:204:docs/reports/terminal/20260520-repair-cockpit-registry-json-keys-failed-grep.log:387:terminal_log=/tmp/agentic-project-kit-20260520-repair-cockpit-registry-json-keys.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:205:docs/reports/terminal/20260520-repair-cockpit-registry-json-keys-failed-grep.log:437:terminal_log=/tmp/agentic-project-kit-20260520-repair-cockpit-registry-json-keys.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:206:docs/reports/terminal/20260520-repair-v0.3.30-gui-readiness-closeout-docs-failed-dirty-worktrees.log:49:terminal_log=/tmp/agentic-project-kit-20260520-repair-v0.3.30-gui-readiness-closeout-docs.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:207:docs/reports/terminal/20260520-typed-work-order-example-and-ns-shortcut-failed-path-type.log:46:terminal_log=/tmp/agentic-project-kit-20260520-typed-work-order-example-and-ns-shortcut.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:208:docs/reports/terminal/20260520-v0.3.29-post-release-discovery-failed-release-check.log:38:terminal_log=/tmp/agentic-project-kit-20260520-v0.3.29-post-release-discovery.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:209:docs/reports/terminal/20260520-v0.3.29-release-tooling-recheck-v2.log:211:terminal_log=/tmp/agentic-project-kit-20260520-v0.3.29-release-tooling-recheck-v2.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:210:docs/reports/terminal/20260520-v0.3.30-gui-readiness-closeout-docs-failed-planning-invariant.log:106:terminal_log=/tmp/agentic-project-kit-20260520-v0.3.30-gui-readiness-closeout-docs.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:211:docs/reports/terminal/20260520-v0.3.30-release-preflight-false-fail-already-released.log:185:terminal_log=/tmp/agentic-project-kit-20260520-v0.3.30-release-preflight.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:212:docs/reports/terminal/20260520-v0.3.30-state-cleanup-local-gate-v2.log:168:terminal_log=docs/reports/terminal/20260520-v0.3.30-state-cleanup-local-gate-v2.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:213:docs/reports/terminal/20260520-v0.3.30-state-cleanup-pr-merge.log:44:terminal_log=docs/reports/terminal/20260520-v0.3.30-state-cleanup-pr-merge.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:214:docs/reports/terminal/20260520-v0.3.30-state-cleanup-repair-gate-v2.log:40:terminal_log=docs/reports/terminal/20260520-v0.3.30-state-cleanup-repair-gate-v2.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:215:docs/reports/terminal/20260520-v0.3.30-state-cleanup-repair-gate-v3.log:145:terminal_log=docs/reports/terminal/20260520-v0.3.30-state-cleanup-repair-gate-v3.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:216:docs/reports/terminal/20260520-v0.3.31-pre-gui-execution-hardening-contract.log:115:terminal_log=docs/reports/terminal/20260520-v0.3.31-pre-gui-execution-hardening-contract.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:217:docs/reports/terminal/20260520-v0.3.33-doi-waiting-safety-guard-merge-verification.log:94:terminal_log=docs/reports/terminal/20260520-v0.3.33-doi-waiting-safety-guard-merge-verification.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:218:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:2:terminal_log=docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:219:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:445:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:220:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:500:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:555:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:221:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:514:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:569:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:222:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:523:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:579:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:223:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:553:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:224:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:568:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:225:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:555:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:226:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:569:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:227:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:579:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:228:docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:20:terminal_log=docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:229:docs/reports/terminal/terminal_log_wrapper_impl_20260518-090015.log:21:terminal_log=docs/reports/terminal/20260518-090016_smoke-pass.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:230:src/agentic_project_kit/cli_commands/work_orders.py:91:            typer.echo(f"terminal_log={result.terminal_log}")
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:231:src/agentic_project_kit/terminal_logging.py:129:        emit(f"terminal_log={log_path.as_posix()}")
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:232:tests/test_evidence_state_contract.py:32:    state = inspect_evidence_state(tmp_path, terminal_log=str(local))
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:233:tests/test_evidence_state_contract.py:44:    state = inspect_evidence_state(tmp_path, terminal_log="docs/reports/terminal/missing.log")
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:234:tests/test_evidence_state_contract.py:54:    state = inspect_evidence_state(tmp_path, terminal_log=requested_rel)
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:235:tests/test_final_summary_contract.py:9:    "terminal_log=",
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:351:docs/reports/terminal/20260518-090016_smoke-pass.log:1:terminal_log=docs/reports/terminal/20260518-090016_smoke-pass.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:352:docs/reports/terminal/20260518-090057_commit-smoke.log:1:terminal_log=docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:353:docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log:1:terminal_log=docs/reports/terminal/20260518-090352_open-terminal-log-wrapper-pr.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:359:docs/reports/terminal/20260518-090513_open-terminal-log-wrapper-pr-fixed.log:1:terminal_log=docs/reports/terminal/20260518-090513_open-terminal-log-wrapper-pr-fixed.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:371:docs/reports/terminal/20260518-090803_start-terminal-log-branch-safety.log:1:terminal_log=docs/reports/terminal/20260518-090803_start-terminal-log-branch-safety.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:375:docs/reports/terminal/20260518-092057_intentional-fail-upload-test.log:1:terminal_log=docs/reports/terminal/20260518-092057_intentional-fail-upload-test.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:376:docs/reports/terminal/20260518-124633_finalize-after-repo-command-runner-001.log:1:terminal_log=docs/reports/terminal/20260518-124633_finalize-after-repo-command-runner-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:381:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:386:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:395:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:570:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:582:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:445:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:625:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:637:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:500:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:555:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:639:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:651:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:514:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:569:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:648:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:660:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:523:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:579:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:678:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:690:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:553:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:693:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:705:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:568:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:787:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:799:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:2:terminal_log=docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:817:docs/reports/terminal/20260518-184511_evidence-registry-gc-start.log:829:docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:20:terminal_log=docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1000:docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:156:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:445:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1039:docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:195:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:500:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:555:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1053:docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:209:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:514:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:569:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1062:docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:218:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:523:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:579:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1091:docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:247:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:553:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1104:docs/reports/terminal/20260518-212941_diagnose-remote-inbox-command-protocol.log:260:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:568:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1131:docs/reports/terminal/20260518-213944_no-copy-e2e-protocol-001.log:1:terminal_log=docs/reports/terminal/20260518-213944_no-copy-e2e-protocol-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1146:docs/reports/terminal/20260518-213956_capture-failed-no-copy-agent-next.log:34:terminal_log=docs/reports/terminal/20260518-213944_no-copy-e2e-protocol-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1161:docs/reports/terminal/20260518-215619_agent-next-smoke-003.log:1:terminal_log=docs/reports/terminal/20260518-215619_agent-next-smoke-003.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1162:docs/reports/terminal/20260518-215910_agent-next-fail-smoke-004.log:1:terminal_log=docs/reports/terminal/20260518-215910_agent-next-fail-smoke-004.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1174:docs/reports/terminal/20260518-222953_verify-agent-next-footer-pf-001.log:1:terminal_log=docs/reports/terminal/20260518-222953_verify-agent-next-footer-pf-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1186:docs/reports/terminal/20260518-223233_harden-agent-run-fail-marker-001.log:1:terminal_log=docs/reports/terminal/20260518-223233_harden-agent-run-fail-marker-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1189:docs/reports/terminal/20260518-223501_patch-agent-run-fail-marker-001.log:1:terminal_log=docs/reports/terminal/20260518-223501_patch-agent-run-fail-marker-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1197:docs/reports/terminal/20260518-224118_harden-agent-run-missing-script-001.log:1:terminal_log=docs/reports/terminal/20260518-224118_harden-agent-run-missing-script-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1205:docs/reports/terminal/20260518-224808_smoke-agent-run-missing-script-001.log:1:terminal_log=docs/reports/terminal/20260518-224808_smoke-agent-run-missing-script-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1208:docs/reports/terminal/20260518-225016_harden-inbox-lifecycle-cleanup-001.log:1:terminal_log=docs/reports/terminal/20260518-225016_harden-inbox-lifecycle-cleanup-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1210:docs/reports/terminal/20260518-225201_harden-inbox-completed-command-guard-001.log:1:terminal_log=docs/reports/terminal/20260518-225201_harden-inbox-completed-command-guard-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1218:docs/reports/terminal/20260519-073738_finalize-no-copy-after-pr423-001.log:1:terminal_log=docs/reports/terminal/20260519-073738_finalize-no-copy-after-pr423-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1463:docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log:653:terminal_log=docs/reports/terminal/20260519-091311_mandatory-terminal-evidence-capture-diagnosis.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1467:docs/reports/terminal/20260519-112522_record-v0.3.27-doi-metadata.log:217:terminal_log=docs/reports/terminal/20260519-112522_record-v0.3.27-doi-metadata.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1469:docs/reports/terminal/20260519-113208_repair-pr439-v0.3.27-doi-metadata.log:271:terminal_log=docs/reports/terminal/20260519-113208_repair-pr439-v0.3.27-doi-metadata.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1470:docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:240:terminal_log=docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1521:docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log:581:docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log:240:terminal_log=docs/reports/terminal/20260519-113340_repair-pr439-doi-semantics-and-readme-gate.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1581:docs/reports/terminal/20260519-144503_20260519-remote-command-first-rule.log:1:terminal_log=docs/reports/terminal/20260519-144503_20260519-remote-command-first-rule.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1597:docs/reports/terminal/20260519-144503_20260519-remote-command-first-rule.log:157:terminal_log=docs/reports/terminal/20260519-remote-command-first-rule.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1598:docs/reports/terminal/20260519-165218_20260519-merge-pr444-remote-first-no-guess.log:1:terminal_log=docs/reports/terminal/20260519-165218_20260519-merge-pr444-remote-first-no-guess.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1609:docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log:1:terminal_log=docs/reports/terminal/20260519-171339_20260519-compiled-agent-context-v1.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1623:docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log:1:terminal_log=docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1637:docs/reports/terminal/20260519-182328_20260519-verify-main-after-pr445.log:156:terminal_log=docs/reports/terminal/20260519-verify-main-after-pr445.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1638:docs/reports/terminal/20260519-192233_20260519-compiled-context-fast-path.log:1:terminal_log=docs/reports/terminal/20260519-192233_20260519-compiled-context-fast-path.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1639:docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log:1:terminal_log=docs/reports/terminal/20260519-201352_20260519-next-development-inspection.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1676:docs/reports/terminal/20260519-201837_20260519-agent-next-queue-health.log:1:terminal_log=docs/reports/terminal/20260519-201837_20260519-agent-next-queue-health.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1686:docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:1:terminal_log=docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1696:docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log:1:terminal_log=docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1718:docs/reports/terminal/20260519-211235_20260519-final-summary-runner-inspection.log:85:docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log:1:terminal_log=docs/reports/terminal/20260519-210102_20260519-final-summary-contract.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1796:docs/reports/terminal/20260519-211945_20260519-verify-main-after-pr449-summary-contract.log:1:terminal_log=docs/reports/terminal/20260519-211945_20260519-verify-main-after-pr449-summary-contract.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1803:docs/reports/terminal/20260519-212252_20260519-verify-main-after-final-summary-contract.log:1:terminal_log=docs/reports/terminal/20260519-212252_20260519-verify-main-after-final-summary-contract.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1813:docs/reports/terminal/20260519-212536_20260519-verify-main-after-pr449.log:1:terminal_log=docs/reports/terminal/20260519-212536_20260519-verify-main-after-pr449.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1823:docs/reports/terminal/20260519-215752_20260519-agent-next-idempotent-inspection.log:1:terminal_log=docs/reports/terminal/20260519-215752_20260519-agent-next-idempotent-inspection.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:1833:docs/reports/terminal/20260519-222153_20260519-idempotent-already-executed-inbox.log:1:terminal_log=docs/reports/terminal/20260519-222153_20260519-idempotent-already-executed-inbox.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:2480:docs/reports/terminal/20260520-discover-communication-artifact-gc.log:701:docs/reports/terminal/20260518-225016_harden-inbox-lifecycle-cleanup-001.log:1:terminal_log=docs/reports/terminal/20260518-225016_harden-inbox-lifecycle-cleanup-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:2938:docs/reports/terminal/20260520-readme-doi-archive-extraction-merge-verification-v6.log:33:terminal_log=docs/reports/terminal/20260520-readme-doi-archive-extraction-merge-verification-v6.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3043:docs/reports/terminal/20260520-v0.3.30-state-cleanup-local-gate-v2.log:168:terminal_log=docs/reports/terminal/20260520-v0.3.30-state-cleanup-local-gate-v2.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3049:docs/reports/terminal/20260520-v0.3.30-state-cleanup-pr-merge.log:44:terminal_log=docs/reports/terminal/20260520-v0.3.30-state-cleanup-pr-merge.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3056:docs/reports/terminal/20260520-v0.3.30-state-cleanup-repair-gate-v2.log:40:terminal_log=docs/reports/terminal/20260520-v0.3.30-state-cleanup-repair-gate-v2.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3078:docs/reports/terminal/20260520-v0.3.30-state-cleanup-repair-gate-v3.log:145:terminal_log=docs/reports/terminal/20260520-v0.3.30-state-cleanup-repair-gate-v3.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3115:docs/reports/terminal/20260520-v0.3.31-pre-gui-execution-hardening-contract.log:115:terminal_log=docs/reports/terminal/20260520-v0.3.31-pre-gui-execution-hardening-contract.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3149:docs/reports/terminal/20260520-v0.3.33-doi-waiting-safety-guard-merge-verification.log:94:terminal_log=docs/reports/terminal/20260520-v0.3.33-doi-waiting-safety-guard-merge-verification.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3177:docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log:2:terminal_log=docs/reports/terminal/gui_cockpit_readiness_finalize_20260518-081336.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3242:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:445:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3297:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:500:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:555:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3311:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:514:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:569:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3320:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:523:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:579:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3350:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:553:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3365:docs/reports/terminal/parametrized_git_release_actions_inspection_20260518.log:568:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3479:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:555:docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log:1:terminal_log=docs/reports/terminal/20260518-130220_finalize-after-agent-next-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3493:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:569:docs/reports/terminal/20260518-131109_agent-next-smoke-002.log:1:terminal_log=docs/reports/terminal/20260518-131109_agent-next-smoke-002.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3503:docs/reports/terminal/persistent_handoff_state_inspection_20260518.log:579:docs/reports/terminal/20260518-130709_agent-next-smoke-001.log:1:terminal_log=docs/reports/terminal/20260518-130709_agent-next-smoke-001.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3584:docs/reports/terminal/terminal_log_wrapper_commit_20260518-090057.log:20:terminal_log=docs/reports/terminal/20260518-090057_commit-smoke.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3618:docs/reports/terminal/terminal_log_wrapper_impl_20260518-090015.log:21:terminal_log=docs/reports/terminal/20260518-090016_smoke-pass.log
+docs/reports/terminal/v0.3.36_standard_error_contract_prep.log:3689:tests/test_evidence_state_contract.py:44:    state = inspect_evidence_state(tmp_path, terminal_log="docs/reports/terminal/missing.log")
+docs/reports/terminal/v0.3.36_standard_error_hardening_1.log:96:+- v0.3.36 current-state cleanup started as a documentation-only line: normalize README current-release wording, make the v0.3.35 CHANGELOG entry describe the actual delivered work, clarify GUI/cockpit status, and lock release-phase semantics in tests before any bounded Tkinter MVP work.\n\n- v0.3.36 standard-error hardening started: Remote-log evidence is mandatory for standard-error hardening slices; summaries must include `terminal_log=docs/reports/terminal/...`, `command_report=...`, and `NEXT_CHAT_REPLY`. FAIL without terminal kill uses NEXT_CHAT_REPLY: f so the next step reconstructs from the remote log before asking for pasted terminal output.\n
+docs/reports/terminal/v0.3.36_standard_error_hardening_1.log:107:+- v0.3.36 documentation cleanup is now the active preparation step before the Tkinter MVP: README current-state wording and CHANGELOG release semantics must be cleaned up and tested first. Do not start GUI implementation in this slice.\n\n- v0.3.36 standard-error hardening started: Remote-log evidence is mandatory for standard-error hardening slices; summaries must include `terminal_log=docs/reports/terminal/...`, `command_report=...`, and `NEXT_CHAT_REPLY`. FAIL without terminal kill uses NEXT_CHAT_REPLY: f so the next step reconstructs from the remote log before asking for pasted terminal output.\n
+docs/reports/terminal/v0.3.36_standard_error_hardening_1.log:201:terminal_log=docs/reports/terminal/v0.3.36_standard_error_hardening_1.log
+docs/reports/terminal/v0.3.36_standard_error_hardening_1.log:204:STANDARD_ERROR_REDUCTION: 65% -> 72%; fixed/locked: local-feature-gate flag routing, remote-log summary contract baseline
+docs/reports/terminal/v0.3.36_standard_error_hardening_1.log:205:GUI_PREPARATION: 80% -> 82%; improved: GUI callers can rely on hardened local gate contract
+src/agentic_project_kit/cli_commands/work_orders.py:91:            typer.echo(f"terminal_log={result.terminal_log}")
+src/agentic_project_kit/run_summary.py:38:class RunSummary:
+src/agentic_project_kit/run_summary.py:48:def render_run_summary(summary: RunSummary) -> str:
+src/agentic_project_kit/run_summary.py:56:        f"terminal_log={summary.terminal_log}",
+src/agentic_project_kit/run_summary.py:65:def summary_for_status(status: int, terminal_log: str = "NONE", command_report: str = "NONE", remote_evidence: RemoteEvidence = RemoteEvidence.PARTIAL) -> RunSummary:
+src/agentic_project_kit/run_summary.py:67:        return RunSummary(WorkResult.PASS, EvidenceResult.PASS, WorkResult.PASS, remote_evidence, terminal_log, command_report, NextChatReply.D)
+src/agentic_project_kit/run_summary.py:68:    return RunSummary(WorkResult.FAIL, EvidenceResult.PARTIAL, WorkResult.FAIL, remote_evidence, terminal_log, command_report, NextChatReply.F)
+src/agentic_project_kit/terminal_logging.py:129:        emit(f"terminal_log={log_path.as_posix()}")
+tests/test_evidence_state_contract.py:32:    state = inspect_evidence_state(tmp_path, terminal_log=str(local))
+tests/test_evidence_state_contract.py:44:    state = inspect_evidence_state(tmp_path, terminal_log="docs/reports/terminal/missing.log")
+tests/test_evidence_state_contract.py:54:    state = inspect_evidence_state(tmp_path, terminal_log=requested_rel)
+tests/test_final_summary_contract.py:9:    "terminal_log=",
+tests/test_v036_run_summary.py:1:from agentic_project_kit.run_summary import EvidenceResult, NextChatReply, RemoteEvidence, RunSummary, WorkResult, render_run_summary, summary_for_status
+tests/test_v036_run_summary.py:4:def test_render_run_summary_contains_required_contract_fields():
+tests/test_v036_run_summary.py:5:    rendered = render_run_summary(RunSummary(WorkResult.PASS, EvidenceResult.PASS, WorkResult.PASS, RemoteEvidence.PASS, "docs/reports/terminal/example.log", "NONE", NextChatReply.D))
+tests/test_v036_run_summary.py:11:    assert "terminal_log=docs/reports/terminal/example.log" in rendered
+tests/test_v036_run_summary.py:18:    rendered = render_run_summary(summary_for_status(1, terminal_log="docs/reports/terminal/fail.log"))
+tests/test_v036_run_summary.py:22:    assert "terminal_log=docs/reports/terminal/fail.log" in rendered
+tests/test_v036_standard_error_hardening.py:23:    assert "terminal_log=docs/reports/terminal/" in combined
+
+### LOCAL FEATURE GATE ###
+docs/record-v0.3.36-run-summary-contract-evidence
+?? docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log
+........................................................................ [ 12%]
+........................................................................ [ 24%]
+........................................................................ [ 36%]
+........................................................................ [ 48%]
+........................................................................ [ 60%]
+........................................................................ [ 72%]
+........................................................................ [ 84%]
+........................................................................ [ 96%]
+.......................                                                  [100%]
+599 passed in 3.97s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=82
+ok=true
+
+Findings:
+- none
+docs/record-v0.3.36-run-summary-contract-evidence
+?? docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+
+### PYTEST ###
+
+### RUFF ###
+
+### CHECK DOCS ###
+
+### DOCTOR ###
+
+### PR HYGIENE ###
+
+### FINAL STATUS ###
+Local feature gate passed.
+
+### MAIN CI SNAPSHOT ###
+HEAD_SHA=c4dcb7c5019892b435fb6b21a71c47160ec58344
+completed	success	Add run summary contract core (#557)	CI	main	push	26209243388	27s	2026-05-21T06:22:47Z
+
+### FINAL STATUS ###
+docs/record-v0.3.36-run-summary-contract-evidence
+?? docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log
