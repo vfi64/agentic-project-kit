@@ -63,6 +63,11 @@ if [ "${1:-}" = "comm-next-summary" ]; then
   exit $?
 fi
 
+if [ "${1:-}" = "summary" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.run_summary_renderer "$@"
+  exit $?
+fi
 if [ "${1:-}" = "mode-check" ]; then
   shift
   PYTHONPATH=src "$PY" -m agentic_project_kit.cli state mode-check "$@"
