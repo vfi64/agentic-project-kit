@@ -1,0 +1,13 @@
+ACTION: MERGE V0.3.36 AGENTS RULE SPLIT SUMMARY CONTRACT PR AND VERIFY MAIN -- NO EXIT
+42ead76 Split portability rule out of AGENTS and lock summary fail contract (#566)
+b4bb05d Record v0.3.36 portability gate fail recovery evidence (#563)
+ed5aa54 Record v0.3.36 portability shell removal inventory (#561)
+ad5ef19 Record v0.3.36 portable core baseline inventory (#560)
+da954ae Record v0.3.36 final pre-release readiness evidence
+d9324e8 Record v0.3.36 run summary evidence merge verification (#559)
+858ba24 Record v0.3.36 run summary contract evidence (#558)
+c4dcb7c Add run summary contract core (#557)
+
+..                                                                       [100%]
+2 passed in 0.01s
+RESULT: PASS
