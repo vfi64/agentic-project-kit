@@ -97,3 +97,14 @@ def test_already_merged_pr_still_fails_with_pending_checks():
     result = evaluate_pr_closeout(pr)
     assert result.outcome == BLOCKED
     assert result.reasons
+
+
+def test_already_merged_pr_with_deleted_branch_unknown_mergeability_is_idempotent(): 
+    pr = clean_pr()
+    pr["state"] = "MERGED"
+    pr["mergeStateStatus"] = "UNKNOWN"
+    pr["mergeable"] = "UNKNOWN"
+    result = evaluate_pr_closeout(pr)
+    assert result.outcome == READY_TO_MERGE
+    assert result.reasons == ()
+
