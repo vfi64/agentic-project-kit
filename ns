@@ -303,7 +303,7 @@ fi
 
 if [ "${1:-}" = "pr-cleanup" ]; then
   shift
-  tools/ns_pr_cleanup.sh "$@"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.pr_cleanup "$@"
   exit $?
 fi
 if [ "${1:-}" = "slice-runner" ]; then

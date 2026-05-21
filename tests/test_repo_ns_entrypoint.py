@@ -340,3 +340,12 @@ def test_repo_ns_exposes_mode_state_shortcuts() -> None:
     assert "agentic_project_kit.cli state mode-write" in text
     assert "execution_mode_state" not in text
 
+def test_repo_ns_pr_cleanup_routes_to_python_core() -> None:
+    ns_text = Path("ns").read_text(encoding="utf-8")
+    core_text = Path("src/agentic_project_kit/pr_cleanup.py").read_text(encoding="utf-8")
+    assert "\"pr-cleanup\"" in ns_text
+    assert "agentic_project_kit.pr_cleanup" in ns_text
+    assert "tools/ns_pr_cleanup.sh" not in ns_text
+    assert not Path("tools/ns_pr_cleanup.sh").exists()
+    assert "NS PR CLEANUP CLASSIFICATION" in core_text
+
