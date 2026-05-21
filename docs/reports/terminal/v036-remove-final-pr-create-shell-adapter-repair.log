@@ -1,0 +1,78 @@
+
+### CURRENT STATE ###
+feature/v036-remove-final-pr-create-shell-adapter
+?? src/agentic_project_kit/pr_create_or_skip.py
+
+### CLEAN FAILED ARTIFACT ONLY ###
+
+### MODE GUARD ###
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=feature/v036-remove-final-pr-create-shell-adapter
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### WRITE PYTHON CORE ###
+
+### WRITE REPAIR SCRIPT ###
+
+### RUN REPAIR SCRIPT ###
+rm 'tools/ns_pr_create_or_skip.sh'
+
+### PATCH STATUS ###
+ M docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md
+ M ns
+ M tests/test_repo_ns_entrypoint.py
+D  tools/ns_pr_create_or_skip.sh
+?? src/agentic_project_kit/pr_create_or_skip.py
+PASS: tools/ns_pr_create_or_skip.sh is no longer tracked.
+ns:21:if [ "${1:-}" = "pr-create-or-skip" ]; then
+ns:23:  PYTHONPATH=src "$PY" -m agentic_project_kit.pr_create_or_skip "$@"
+src/agentic_project_kit/pr_create_or_skip.py:27:        print("Usage: python -m agentic_project_kit.pr_create_or_skip TITLE BODY [BASE]")
+tests/test_repo_ns_entrypoint.py:227:    text = Path("src/agentic_project_kit/pr_create_or_skip.py").read_text(encoding="utf-8")
+tests/test_repo_ns_entrypoint.py:229:    assert "agentic_project_kit.pr_create_or_skip" in ns_text
+tests/test_repo_ns_entrypoint.py:238:    text = Path("src/agentic_project_kit/pr_create_or_skip.py").read_text(encoding="utf-8")
+
+### TARGETED TESTS ###
+..........................................                               [100%]
+42 passed in 0.09s
+
+### FULL LOCAL GATES ###
+........................................................................ [ 10%]
+........................................................................ [ 21%]
+........................................................................ [ 32%]
+........................................................................ [ 42%]
+........................................................................ [ 53%]
+........................................................................ [ 64%]
+........................................................................ [ 74%]
+........................................................................ [ 85%]
+........................................................................ [ 96%]
+.........................                                                [100%]
+673 passed in 3.85s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### CREATE COMM HEADER AND COPY LOG AFTER GATES ###

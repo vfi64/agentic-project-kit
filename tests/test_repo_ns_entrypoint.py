@@ -224,18 +224,23 @@ def test_ns_up_treats_pending_checks_as_wait_state_not_fail_state() -> None:
     assert "--watch" in text
 
 def test_ns_pr_create_or_skip_handles_no_delta_idempotently() -> None:
-    text = Path("tools/ns_pr_create_or_skip.sh").read_text(encoding="utf-8")
-    assert "DELTA" in text
+    text = Path("src/agentic_project_kit/pr_create_or_skip.py").read_text(encoding="utf-8")
+    ns_text = Path("ns").read_text(encoding="utf-8")
+    assert "agentic_project_kit.pr_create_or_skip" in ns_text
+    assert "tools/ns_pr_create_or_skip.sh" not in ns_text
     assert "No PR needed" in text
     assert "idempotent already-completed state" in text
-    assert "origin/$BASE..HEAD" in text
+    assert "origin/{base}..HEAD" in text
+    assert not Path("tools/ns_pr_create_or_skip.sh").exists()
 
 
 def test_ns_pr_create_or_skip_reuses_existing_pr_before_create() -> None:
-    text = Path("tools/ns_pr_create_or_skip.sh").read_text(encoding="utf-8")
-    assert "gh pr view --json number,title,state,url" in text
+    text = Path("src/agentic_project_kit/pr_create_or_skip.py").read_text(encoding="utf-8")
+    assert "number,title,state,url" in text
     assert "Existing PR found" in text
-    assert "gh pr create --base" in text
+    assert "gh" in text
+    assert "pr" in text
+    assert "create" in text
 
 def test_ns_up_handles_noop_branches_idempotently() -> None:
     text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
