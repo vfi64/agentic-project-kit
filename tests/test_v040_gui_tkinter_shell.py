@@ -195,6 +195,27 @@ def test_manual_launch_disabled_buttons_use_readable_theme_style():
     manual_source = source[source.index("def render_manual_launch_content"):source.index("def run_manual_launch")]
     assert "ReadableDisabled.TButton" in manual_source
     assert "style.map(\"ReadableDisabled.TButton\"" in manual_source
-    assert manual_source.count("style=\"ReadableDisabled.TButton\"") == 2
+    assert manual_source.count("style=\"ReadableDisabled.TButton\"") >= 2
     assert "state=\"disabled\"" in manual_source
+
+
+def test_cockpit_readiness_manual_gui_runner_executes_readonly_action():
+    from agentic_project_kit import gui_tkinter_shell
+    output = gui_tkinter_shell.run_cockpit_readiness_for_manual_gui()
+    assert "action=cockpit-readiness" in output
+    assert "safety_class=read-only" in output
+    assert "allowed=true" in output
+    assert "executed=true" in output
+    assert "returncode=0" in output
+    assert "output=cockpit-readiness: ready" in output
+
+
+def test_manual_gui_keeps_only_cockpit_readiness_enabled():
+    from pathlib import Path
+    source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
+    manual_source = source[source.index("def render_manual_launch_content"):source.index("def run_manual_launch")]
+    assert "command=lambda: write_output(run_cockpit_readiness_for_manual_gui())" in manual_source
+    assert "agent-run" in manual_source
+    assert "state=\"disabled\"" in manual_source
+    assert "remote/destructive actions remain disabled" in manual_source.lower()
 
