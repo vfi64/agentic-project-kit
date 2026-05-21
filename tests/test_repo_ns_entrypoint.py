@@ -170,21 +170,21 @@ def test_repo_ns_release_shortcuts_are_wired() -> None:
     assert "tools/ns_release_prep.sh" not in text
     assert "agentic_project_kit.release_gate_core" in text
     assert "tools/ns_release_gate.sh" not in text
-    assert "tools/ns_release_publish.sh" in text
+    assert "agentic_project_kit.release_publish_core" in text
+    assert "tools/ns_release_publish.sh" not in text
 
 def test_release_publish_requires_confirmation_token() -> None:
-    text = Path("tools/ns_release_publish.sh").read_text(encoding="utf-8")
-    assert "publish-$TAG" in text
+    text = Path("src/agentic_project_kit/release_publish_core.py").read_text(encoding="utf-8")
+    assert "publish-" in text
     assert "refusing release publish" in text
 
-
 def test_release_publish_creates_and_pushes_tag() -> None:
-    text = Path("tools/ns_release_publish.sh").read_text(encoding="utf-8")
-    assert "git tag \"$TAG\"" in text
-    assert "git push origin \"$TAG\"" in text
-    assert "./ns release-gate \"$VERSION\"" in text
+    text = Path("src/agentic_project_kit/release_publish_core.py").read_text(encoding="utf-8")
+    assert "git" in text
+    assert "tag" in text
+    assert "push" in text
+    assert "release-gate" in text
     assert "Publishing implementation is intentionally deferred" not in text
-
 
 def test_repo_ns_release_verify_is_wired() -> None:
     text = Path("ns").read_text(encoding="utf-8")
@@ -210,13 +210,12 @@ def test_release_gate_routes_to_python_core_directly() -> None:
     assert "run_release_gate" in core_text
 
 def test_release_publish_waits_for_github_release_and_verifies() -> None:
-    text = Path("tools/ns_release_publish.sh").read_text(encoding="utf-8")
+    text = Path("src/agentic_project_kit/release_publish_core.py").read_text(encoding="utf-8")
     assert "WAIT FOR RELEASE WORKFLOW AND GITHUB RELEASE" in text
-    assert "sleep 10" in text
-    assert "while [ \"$i\" -lt 30 ]" in text
-    assert "./ns release-verify \"$VERSION\"" in text
-    assert "publish-$TAG" in text
-
+    assert "sleep_seconds" in text
+    assert "release_wait_attempts" in text
+    assert "release-verify" in text
+    assert "publish-" in text
 
 def test_ns_up_handles_already_merged_pr_idempotently() -> None:
     text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")
