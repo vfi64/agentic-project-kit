@@ -68,3 +68,13 @@ A non-trivial local mutation block must not claim `REMOTE_EVIDENCE: PASS` with `
 For local mutation work, `terminal_log=docs/reports/terminal/` is the expected repo-readable evidence path. A chat-only transcript can explain a failed local run, but it is not remote evidence.
 
 If a block mutates files, creates commits, pushes branches, opens PRs, or merges PRs, the final summary must either name a repo-readable terminal log or explicitly downgrade evidence to `CHAT_ONLY`, `PARTIAL`, or `FAIL`.
+
+## Logged-block status propagation guard
+
+A log-backed local mutation block must not control final PASS or FAIL through `STATUS` mutations inside a pipeline/subshell logging construct such as `{ ... } | tee "$LOG"`.
+
+Reason: POSIX shells may run the left side of a pipeline in a subshell, so `STATUS=1` set inside the logged block can be lost and a false PASS can be printed.
+
+Allowed routes are a dedicated runner, a command-report path, or direct file-descriptor redirection to a temporary log followed by copying the log into `docs/reports/terminal/` only after gates pass.
+
+If a block detects a failed test, failed gate, failed mode check, or failed remote mutation, the final `RESULT` section must report `WORK: FAIL` and must not be overwritten by logging plumbing.
