@@ -1,0 +1,362 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK MAIN ###
+main
+76f528a Record audit runner standard-error fix merge verification log
+9f9134f Add deterministic audit test matrix runner (#610)
+b8d9642 Record release route help safety merge verification log
+c8b20d5 Harden release route help and version safety (#609)
+aba41cd Record doc rules contract hardening merge verification log
+09aa3a7 Document v0.3.36 workflow safety rules (#608)
+0de7d27 Record summary and ack audit hardening merge verification log
+b572c9b Harden summary renderer and terminal acknowledgement audit contract (#607)
+cf85240 Record v0.3.36 shell removal closeout merge verification log
+4d6fff9 Refresh v0.3.36 shell removal closeout status (#606)
+6e5e127 Record zero ns shell adapter contract merge verification log
+0d4b3fa Add zero ns shell adapter regression contract (#605)
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=main
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### DELETE OLD LOCAL RELEASE BRANCH IF PRESENT ###
+Deleted branch release/prepare-v0.3.36 (was 991d2ea).
+
+### RECREATE RELEASE BRANCH FROM UPDATED MAIN ###
+Switched to a new branch 'release/prepare-v0.3.36'
+
+### RUN RELEASE PREP FROM UPDATED MAIN ###
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+NS RELEASE PREP CYCLE v0.3.36
+
+### SAFETY ###
+Safety: prepares a release branch only; no tag, release, merge, or publish action.
+
+### UPDATE MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### VERIFY MAIN BEFORE RELEASE BRANCH ###
+main
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+........................................................................ [ 30%]
+........................................................................ [ 41%]
+........................................................................ [ 51%]
+........................................................................ [ 61%]
+........................................................................ [ 71%]
+........................................................................ [ 82%]
+........................................................................ [ 92%]
+.....................................................                    [100%]
+701 passed in 3.96s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=3
+local_branch_count=108
+ok=false
+
+Findings:
+- [warning] similar-open-prs: 2 open PRs share slice prefix v0-3-36.
+  - #568 docs/v0.3.36-shell-port-classification: Record v0.3.36 shell port classification
+  - #562 docs/v0.3.36-portability-baseline-verify: Record v0.3.36 portability baseline verification
+
+Next:
+- Review findings manually before closing PRs or deleting branches.
+main
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+
+### PYTEST ###
+
+### RUFF ###
+
+### CHECK DOCS ###
+
+### DOCTOR ###
+
+### PR HYGIENE ###
+
+### FINAL STATUS ###
+Local feature gate passed.
+PYTHONPATH=src /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/python -m agentic_project_kit.cli pr-hygiene
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=3
+local_branch_count=108
+ok=false
+
+Findings:
+- [warning] similar-open-prs: 2 open PRs share slice prefix v0-3-36.
+  - #568 docs/v0.3.36-shell-port-classification: Record v0.3.36 shell port classification
+  - #562 docs/v0.3.36-portability-baseline-verify: Record v0.3.36 portability baseline verification
+
+Next:
+- Review findings manually before closing PRs or deleting branches.
+
+### CREATE RELEASE PREP BRANCH ###
+Switched to branch 'release/prepare-v0.3.36'
+
+### PATCH RELEASE METADATA ###
+Prepared release metadata for v0.3.36
+
+### RELEASE CHECK AFTER METADATA PATCH ###
+PYTHONPATH=src /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/python -m agentic_project_kit.cli release-check --version 0.3.36
+Release state check for target v0.3.36
+
+[PASS] semantic version: 0.3.36 is valid
+[PASS] pyproject version: found text: version = "0.3.36"
+[PASS] package __version__: found text: __version__ = "0.3.36"
+[PASS] CHANGELOG version: found text: v0.3.36
+[PASS] README version: found text: Version `0.3.36`
+[PASS] CITATION version: found text: version: 0.3.36
+[PASS] STATUS version: found text: Current version: 0.3.36
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.36
+[PASS] local tag unused: tag is unused: v0.3.36
+[PASS] remote tag unused: remote tag is unused: v0.3.36
+[PASS] GitHub release unused: GitHub release is absent: v0.3.36
+
+Overall: PASS
+
+### CURRENT VERSION REFERENCES ###
+pyproject.toml:7:version = "0.3.36"
+src/agentic_project_kit/__init__.py:1:__version__ = "0.3.36"
+CITATION.cff:47:version: 0.3.36
+CHANGELOG.md:1:## v0.3.36 - Unreleased
+README.md:525:Version `0.3.36` is the current release line prepared by `./ns release-prep 0.3.36`.
+docs/STATUS.md:1:Current version: 0.3.36
+docs/STATUS.md:203:- v0.3.36 current-state cleanup started as a documentation-only line: normalize README current-release wording, make the v0.3.35 CHANGELOG entry describe the actual delivered work, clarify GUI/cockpit status, and lock release-phase semantics in tests before any bounded Tkinter MVP work.\n\n- v0.3.36 standard-error hardening started: Remote-log evidence is mandatory for standard-error hardening slices; summaries must include `terminal_log=docs/reports/terminal/...`, `command_report=...`, and `NEXT_CHAT_REPLY`. FAIL without terminal kill uses NEXT_CHAT_REPLY: f so the next step reconstructs from the remote log before asking for pasted terminal output.\n
+docs/STATUS.md:204:- v0.3.36 standard-error hardening slice 1 is remote-evidence backed: merge/local-gate output is recorded in `docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log`. This explicitly restores the rule that FAIL recovery starts from committed/pushed logs before asking for pasted terminal output.
+docs/STATUS.md:205:- v0.3.36 run-summary contract evidence is repo-backed in `docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log`; run summaries must expose `terminal_log`, `REMOTE_EVIDENCE`, `STANDARD_ERROR_REDUCTION`, and `GUI_PREPARATION` so standard-error reduction and GUI readiness stay visible after each slice.\n\n- v0.3.36 portability shell-removal inventory is repo-backed in `docs/reports/terminal/v0.3.36_portability_shell_removal_inventory.log`. Tracked shell file count at inventory time: 15. The GUI baseline is not complete until tracked shell adapters are removed or explicitly replaced by Python entry points and a portability gate is active.\n
+docs/STATUS.md:206:- v0.3.36 adds the portability meta-rule and begins enforcing shell-removal through a Python portability gate core; GUI readiness requires Python-backed operational control surfaces rather than shell-first workflows.
+docs/STATUS.md:207:- v0.3.36 adds a remote inspection evidence contract: long inspect/classify outputs should be written to remote temporary evidence, registered for later GC, and referenced from final summaries so chat can continue with `d` instead of pasted terminal output.
+docs/STATUS.md:208:## v0.3.36 Direct `ns` Shell-Adapter Removal Baseline
+docs/STATUS.md:212:Workplan: `docs/workflow/V0.3.36_REMAINING_WORKPLAN.md`.
+docs/STATUS.md:213:Next safe step: deterministic rule hardening before GUI or release. v0.3.36 is unreleased.
+docs/STATUS.md:214:## v0.3.36 shell adapter removal closeout
+docs/STATUS.md:215:- v0.3.36 shell-removal baseline is closed for direct `./ns` shell adapters.
+docs/handoff/CURRENT_HANDOFF.md:1:Current version: 0.3.36
+docs/handoff/CURRENT_HANDOFF.md:281:- v0.3.36 documentation cleanup is now the active preparation step before the Tkinter MVP: README current-state wording and CHANGELOG release semantics must be cleaned up and tested first. Do not start GUI implementation in this slice.\n\n- v0.3.36 standard-error hardening started: Remote-log evidence is mandatory for standard-error hardening slices; summaries must include `terminal_log=docs/reports/terminal/...`, `command_report=...`, and `NEXT_CHAT_REPLY`. FAIL without terminal kill uses NEXT_CHAT_REPLY: f so the next step reconstructs from the remote log before asking for pasted terminal output.\n
+docs/handoff/CURRENT_HANDOFF.md:283:- v0.3.36 standard-error hardening slice 1 evidence is committed under `docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log`; on future FAIL without terminal kill, request only `f` first and reconstruct from remote evidence before asking for paste-output.
+docs/handoff/CURRENT_HANDOFF.md:284:- v0.3.36 run-summary contract evidence is repo-backed in `docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log`; future slices must keep remote terminal evidence visible in the final summary and report standard-error reduction plus GUI preparation after each slice.\n\n- v0.3.36 portability shell-removal inventory is repo-backed in `docs/reports/terminal/v0.3.36_portability_shell_removal_inventory.log`. Tracked shell file count at inventory time: 15. The GUI baseline is not complete until tracked shell adapters are removed or explicitly replaced by Python entry points and a portability gate is active.\n
+docs/handoff/CURRENT_HANDOFF.md:286:- v0.3.36 portability rule: new operational behavior must be Python-core first and OS-independent by default; shell files are temporary compatibility shims until removed or explicitly allowlisted by the portability gate.
+docs/handoff/CURRENT_HANDOFF.md:290:## v0.3.36 Direct `ns` Shell-Adapter Removal Handoff Note
+docs/handoff/CURRENT_HANDOFF.md:296:The detailed remaining workplan is `docs/workflow/V0.3.36_REMAINING_WORKPLAN.md`.
+docs/handoff/CURRENT_HANDOFF.md:298:Next safe step: deterministic rule hardening before GUI or release work. v0.3.36 is not released yet.
+docs/handoff/CURRENT_HANDOFF.md:300:## v0.3.36 Shell Adapter Removal Closeout
+docs/handoff/CURRENT_HANDOFF.md:302:The v0.3.36 shell-removal baseline is complete: no tracked `tools/ns_*.sh` files remain, `./ns` has no direct `tools/ns_*.sh` references, and PR create-or-skip routes through `agentic_project_kit.pr_create_or_skip`.
+docs/handoff/CURRENT_HANDOFF.md:310:## v0.3.36 shell adapter removal closeout
+
+### FINAL STATE ###
+release/prepare-v0.3.36
+M CITATION.cff
+ M README.md
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M pyproject.toml
+ M src/agentic_project_kit/__init__.py
+76f528a Record audit runner standard-error fix merge verification log
+9f9134f Add deterministic audit test matrix runner (#610)
+b8d9642 Record release route help safety merge verification log
+c8b20d5 Harden release route help and version safety (#609)
+aba41cd Record doc rules contract hardening merge verification log
+09aa3a7 Document v0.3.36 workflow safety rules (#608)
+0de7d27 Record summary and ack audit hardening merge verification log
+b572c9b Harden summary renderer and terminal acknowledgement audit contract (#607)
+
+### RESULT: PASS ###
+
+### VERIFY RELEASE BRANCH ###
+release/prepare-v0.3.36
+ M CITATION.cff
+ M README.md
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M pyproject.toml
+ M src/agentic_project_kit/__init__.py
+76f528a Record audit runner standard-error fix merge verification log
+9f9134f Add deterministic audit test matrix runner (#610)
+b8d9642 Record release route help safety merge verification log
+c8b20d5 Harden release route help and version safety (#609)
+aba41cd Record doc rules contract hardening merge verification log
+09aa3a7 Document v0.3.36 workflow safety rules (#608)
+0de7d27 Record summary and ack audit hardening merge verification log
+b572c9b Harden summary renderer and terminal acknowledgement audit contract (#607)
+cf85240 Record v0.3.36 shell removal closeout merge verification log
+4d6fff9 Refresh v0.3.36 shell removal closeout status (#606)
+6e5e127 Record zero ns shell adapter contract merge verification log
+0d4b3fa Add zero ns shell adapter regression contract (#605)
+
+### RELEASE CHECK ###
+Release state check for target v0.3.36
+
+[PASS] semantic version: 0.3.36 is valid
+[PASS] pyproject version: found text: version = "0.3.36"
+[PASS] package __version__: found text: __version__ = "0.3.36"
+[PASS] CHANGELOG version: found text: v0.3.36
+[PASS] README version: found text: Version `0.3.36`
+[PASS] CITATION version: found text: version: 0.3.36
+[PASS] STATUS version: found text: Current version: 0.3.36
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.3.36
+[PASS] local tag unused: tag is unused: v0.3.36
+[PASS] remote tag unused: remote tag is unused: v0.3.36
+[PASS] GitHub release unused: GitHub release is absent: v0.3.36
+
+Overall: PASS
+
+
+### AUDIT MATRIX RUNNER VERIFY ON RELEASE BRANCH ###
+gui-entry_test_file_count=20
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_action_registry.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_action_specs.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit_readiness.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit_registry_only_contract.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit_run_json_action_result.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_gui_cockpit.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_next_already_executed_guard.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_next_queue_execution.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_cli.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_evidence_contract.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_evidence_runtime.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_example_and_ns_shortcut.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_queue_status.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_runner.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_orders_pre_gui_docs.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_v034_typed_work_order_unit_baseline.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_work_order_prepare.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_work_order_templates.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_work_orders.py
+contracts_test_file_count=10
+tests/test_run_summary_renderer.py
+tests/test_v036_summary_and_ack_audit_hardening.py
+tests/test_v036_summary_renderer_usage_hardening.py
+tests/test_v036_doc_rules_contract_hardening.py
+tests/test_v036_zero_ns_shell_adapter_contract.py
+tests/test_v036_shell_adapter_inventory_baseline.py
+tests/test_v036_release_route_help_safety.py
+tests/test_terminal_logging.py
+tests/test_evidence_clean.py
+tests/test_evidence_clean_cli.py
+........................................................................ [ 69%]
+................................                                         [100%]
+104 passed in 0.63s
+..............................................                           [100%]
+46 passed in 0.27s
+gui-entry_test_file_count=20
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_action_registry.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_action_specs.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit_readiness.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit_registry_only_contract.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit_run_json_action_result.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_gui_cockpit.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_next_already_executed_guard.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_next_queue_execution.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_cli.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_evidence_contract.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_evidence_runtime.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_example_and_ns_shortcut.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_queue_status.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_runner.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_orders_pre_gui_docs.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_v034_typed_work_order_unit_baseline.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_work_order_prepare.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_work_order_templates.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_work_orders.py
+contracts_test_file_count=10
+tests/test_run_summary_renderer.py
+tests/test_v036_summary_and_ack_audit_hardening.py
+tests/test_v036_summary_renderer_usage_hardening.py
+tests/test_v036_doc_rules_contract_hardening.py
+tests/test_v036_zero_ns_shell_adapter_contract.py
+tests/test_v036_shell_adapter_inventory_baseline.py
+tests/test_v036_release_route_help_safety.py
+tests/test_terminal_logging.py
+tests/test_evidence_clean.py
+tests/test_evidence_clean_cli.py
+
+### ZERO NS SHELL ADAPTER VERIFY ###
+tracked_ns_shell_adapters=0
+direct_ns_shell_references=0
+
+### WRITE FINAL GUI CONTRACT READINESS AUDIT REPORT ###
+
+### FULL RELEASE BRANCH GATES ###
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+........................................................................ [ 30%]
+........................................................................ [ 41%]
+........................................................................ [ 51%]
+........................................................................ [ 61%]
+........................................................................ [ 71%]
+........................................................................ [ 82%]
+........................................................................ [ 92%]
+.....................................................                    [100%]
+701 passed in 3.97s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.36
+
+Overall: PASS
+
+### COPY RELEASE BRANCH REBUILD LOG FOR COMMIT ###

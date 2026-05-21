@@ -522,3 +522,4 @@ The command writes a document under `docs/planning/` by default, includes `Statu
 Current verified release: version `0.3.35`, Zenodo version DOI `10.5281/zenodo.20316280`.
 
 Earlier verified version-specific DOIs are intentionally maintained in `docs/releases/VERIFIED_RELEASES.md` instead of duplicating a long and drift-prone release ledger in the README.
+Version `0.3.36` is the current release line prepared by `./ns release-prep 0.3.36`.
