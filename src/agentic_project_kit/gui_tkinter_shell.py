@@ -1,21 +1,25 @@
 from __future__ import annotations
 
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
-from typing import Callable, Sequence
 
 from agentic_project_kit.action_registry import list_actions
 from agentic_project_kit.gui_presenter import build_no_window_presenter_result
+
 
 @dataclass(frozen=True)
 class MenuItemSpec:
     label: str
     command_id: str
     enabled: bool = True
+    tooltip: str = ""
+
 
 @dataclass(frozen=True)
 class MenuSpec:
     label: str
     items: tuple[MenuItemSpec, ...]
+
 
 @dataclass(frozen=True)
 class ButtonSpec:
@@ -24,13 +28,22 @@ class ButtonSpec:
     tooltip: str
     icon_text: str
     safety_class: str
-    enabled: bool
+    enabled: bool = True
+
+    @property
+    def icon_id(self) -> str:
+        return self.icon_text
+
 
 @dataclass(frozen=True)
 class TkinterShellDesignSpec:
     menu_bar: tuple[MenuSpec, ...]
     toolbar: tuple[ButtonSpec, ...]
     action_buttons: tuple[ButtonSpec, ...]
+
+
+GuiDesignSpec = TkinterShellDesignSpec
+
 
 @dataclass(frozen=True)
 class TkinterShellSpec:
@@ -41,35 +54,46 @@ class TkinterShellSpec:
     preview: str
     design: TkinterShellDesignSpec
 
+
 def _button(command_id: str, label: str, tooltip: str, icon_text: str, safety_class: str, enabled: bool = True) -> ButtonSpec:
     return ButtonSpec(command_id, label, tooltip, icon_text, safety_class, enabled)
 
+
 def build_windows_style_design_spec() -> TkinterShellDesignSpec:
     menu_bar = (
-        MenuSpec("File", (MenuItemSpec("Refresh status", "refresh-status"), MenuItemSpec("Open latest log", "open-latest-log"), MenuItemSpec("Exit", "exit"))),
-        MenuSpec("Actions", (MenuItemSpec("Doctor", "doctor"), MenuItemSpec("Check docs", "check-docs"), MenuItemSpec("GUI dry-run", "gui-dry-run"))),
-        MenuSpec("View", (MenuItemSpec("Show output log", "show-output-log"), MenuItemSpec("Show last summary", "show-last-summary"))),
-        MenuSpec("Help", (MenuItemSpec("GUI help", "gui-help"), MenuItemSpec("About", "about"))),
+        MenuSpec("File", (MenuItemSpec("Refresh status", "refresh-status", tooltip="Refresh repository status."), MenuItemSpec("Open latest log", "open-latest-log", tooltip="Open the latest committed or local terminal log."), MenuItemSpec("Exit", "exit", tooltip="Close the local cockpit."))),
+        MenuSpec("Actions", (MenuItemSpec("Doctor", "doctor", tooltip="Run deterministic project doctor checks."), MenuItemSpec("Check docs", "check-docs", tooltip="Run documentation coverage gates."), MenuItemSpec("GUI dry-run", "gui-dry-run", tooltip="Validate GUI readiness without opening a window."))),
+        MenuSpec("View", (MenuItemSpec("Show output log", "show-output-log", tooltip="Show the current output log."), MenuItemSpec("Show last summary", "show-last-summary", tooltip="Show the last run summary."))),
+        MenuSpec("Help", (MenuItemSpec("GUI help", "gui-help", tooltip="Show cockpit help and safety notes."), MenuItemSpec("About", "about", tooltip="Show project and version information."))),
     )
     toolbar = (
-        _button("refresh-status", "Refresh", "Refresh repository status without changing files.", "Refresh", "read_only"),
-        _button("doctor", "Doctor", "Run the deterministic project doctor.", "Check", "read_only"),
-        _button("check-docs", "Docs", "Run documentation gates.", "Docs", "read_only"),
-        _button("gui-dry-run", "Dry Run", "Validate GUI readiness without opening a window.", "Run", "read_only"),
+        _button("refresh-status", "Refresh", "Refresh repository status without changing files.", "refresh", "read_only"),
+        _button("doctor", "Doctor", "Run the deterministic project doctor.", "stethoscope", "read_only"),
+        _button("check-docs", "Docs", "Run documentation gates.", "document-check", "read_only"),
+        _button("gui-dry-run", "Dry Run", "Validate GUI readiness without opening a window.", "play", "read_only"),
     )
     action_buttons = (
-        _button("status", "Status", "Show branch, dirty state, and latest summary.", "S", "read_only"),
-        _button("actions-list", "Actions", "List registered actions and their safety classes.", "A", "read_only"),
-        _button("doctor", "Doctor", "Run project doctor; no repository mutation.", "D", "read_only"),
-        _button("check-docs", "Check Docs", "Validate documentation coverage and lifecycle rules.", "C", "read_only"),
-        _button("release-verify", "Release Verify", "Verify an already published release. Requires a version parameter.", "R", "read_only"),
-        _button("release-publish", "Release Publish", "Disabled in the initial GUI until explicit release guards exist.", "!", "destructive", False),
+        _button("status", "Status", "Show branch, dirty state, and latest summary.", "status", "read_only"),
+        _button("actions-list", "Actions", "List registered actions and their safety classes.", "list", "read_only"),
+        _button("doctor", "Doctor", "Run project doctor; no repository mutation.", "stethoscope", "read_only"),
+        _button("check-docs", "Check Docs", "Validate documentation coverage and lifecycle rules.", "document-check", "read_only"),
+        _button("release-verify", "Release Verify", "Verify an already published release. Requires a version parameter.", "release-verify", "read_only"),
+        _button("release-publish", "Release Publish", "Disabled in the initial GUI until explicit release guards exist.", "lock", "destructive", False),
     )
     return TkinterShellDesignSpec(menu_bar, toolbar, action_buttons)
 
+
 def build_tkinter_shell_spec() -> TkinterShellSpec:
     presenter = build_no_window_presenter_result(list_actions())
-    return TkinterShellSpec("agentic-project-kit Cockpit", "tkinter-shell-ready" if presenter.ok else "tkinter-shell-blocked", presenter.action_count, False, presenter.rendered, build_windows_style_design_spec())
+    return TkinterShellSpec(
+        "agentic-project-kit Cockpit",
+        "tkinter-shell-ready" if presenter.ok else "tkinter-shell-blocked",
+        presenter.action_count,
+        False,
+        presenter.rendered,
+        build_windows_style_design_spec(),
+    )
+
 
 def create_tkinter_root(tk_factory: Callable[[], object] | None = None) -> object:
     if tk_factory is not None:
@@ -77,14 +101,27 @@ def create_tkinter_root(tk_factory: Callable[[], object] | None = None) -> objec
     import tkinter as tk
     return tk.Tk()
 
+
 def configure_tkinter_root(root: object, spec: TkinterShellSpec) -> None:
     if hasattr(root, "title"):
         root.title(spec.title)
     if hasattr(root, "geometry"):
         root.geometry("1000x650")
 
+
 def render_tkinter_shell_summary(spec: TkinterShellSpec) -> str:
-    return "\n".join(("TKINTER SHELL", f"title={spec.title}", f"status={spec.status}", f"action_count={spec.action_count}", f"menu_count={len(spec.design.menu_bar)}", f"toolbar_button_count={len(spec.design.toolbar)}", f"action_button_count={len(spec.design.action_buttons)}", f"destructive_actions_enabled={str(spec.destructive_actions_enabled).lower()}"))
+    return "\n".join((
+        "TKINTER SHELL",
+        f"title={spec.title}",
+        f"status={spec.status}",
+        f"action_count={spec.action_count}",
+        f"menu_count={len(spec.design.menu_bar)}",
+        f"toolbar_button_count={len(spec.design.toolbar)}",
+        f"action_button_count={len(spec.design.action_buttons)}",
+        f"destructive_actions_enabled={str(spec.destructive_actions_enabled).lower()}",
+        f"toolbar_icons={chr(44).join(button.icon_id for button in spec.design.toolbar)}",
+    ))
+
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = list(argv or [])
@@ -95,6 +132,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     print("ERROR: usage: python -m agentic_project_kit.gui_tkinter_shell --no-window-smoke")
     print("### RESULT: FAIL ###")
     return 2
+
 
 if __name__ == "__main__":
     import sys

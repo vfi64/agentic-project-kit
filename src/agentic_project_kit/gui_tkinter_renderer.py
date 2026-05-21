@@ -14,6 +14,7 @@ class RenderedWidget:
     enabled: bool
     command_id: str
     tooltip: str
+    icon_id: str
 
 @dataclass(frozen=True)
 class TkinterRenderResult:
@@ -30,7 +31,7 @@ class TkRootLike(Protocol):
     def geometry(self, value: str) -> Any: ...
 
 def _as_widget(node: LayoutNode) -> RenderedWidget:
-    return RenderedWidget(node.node_id, node.kind, node.label, node.parent, node.enabled, node.command_id, node.tooltip)
+    return RenderedWidget(node.node_id, node.kind, node.label, node.parent, node.enabled, node.command_id, node.tooltip, node.icon_id)
 
 def render_layout_to_tkinter(root: TkRootLike, plan: LayoutPlan | None = None) -> TkinterRenderResult:
     current_plan = build_layout_plan() if plan is None else plan
