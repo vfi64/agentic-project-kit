@@ -1,0 +1,96 @@
+
+### CURRENT STATE ###
+feature/v036-comm-summary-requires-slice
+ M src/agentic_project_kit/communication_state.py
+?? tests/test_communication_state.py
+
+### MODE GUARD NOTE ###
+EXECUTION MODE STATE CHECK
+target=local
+state=DIRTY_LOCAL_BLOCKED
+branch=feature/v036-comm-summary-requires-slice
+dirty=true
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - dirty_worktree
+### RESULT: FAIL ###
+NOTE: DIRTY_LOCAL_BLOCKED is acceptable here because this repairs the already dirty current feature slice.
+
+### WRITE MINIMAL GUARD REPAIR SCRIPT ###
+
+### RUN MINIMAL GUARD REPAIR SCRIPT ###
+removed_guard_lines 2
+
+### VERIFY GUARD SHAPE ###
+61-def next_summary_header(
+62-    path: Path = DEFAULT_STATE_PATH,
+63-    origin: str = "local",
+64-    branch: str | None = None,
+65:    slice_name: str = "",
+66-    write: bool = True,
+67-) -> str:
+68-    if origin not in VALID_ORIGINS:
+69-        raise ValueError(f"invalid origin: {origin}")
+70:    if write and not slice_name.strip():
+71:        raise ValueError("slice_name must not be empty when writing communication summary state")
+72-    state = load_state(path)
+73-    next_id = int(state.get("last_summary_id", 0)) + 1
+74-    now = datetime.now().astimezone()
+75-    branch_name = branch or current_branch()
+
+### TARGETED TESTS ###
+...                                                                      [100%]
+3 passed in 0.01s
+
+### CLI BEHAVIOR CHECKS ###
+SUMMARY COMM-00010 | 2026-05-21 16:51:19 +0200
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/communication_state.py", line 115, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/communication_state.py", line 110, in main
+    print(next_summary_header(path, args.origin, args.branch, args.slice, not args.no_write))
+          ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/communication_state.py", line 71, in next_summary_header
+    raise ValueError("slice_name must not be empty when writing communication summary state")
+ValueError: slice_name must not be empty when writing communication summary state
+PASS: writing comm-next-summary without --slice fails as expected.
+SUMMARY COMM-00010 | 2026-05-21 16:51:19 +0200
+
+### FULL LOCAL GATES ###
+........................................................................ [ 10%]
+........................................................................ [ 21%]
+........................................................................ [ 31%]
+........................................................................ [ 42%]
+........................................................................ [ 52%]
+........................................................................ [ 63%]
+........................................................................ [ 74%]
+........................................................................ [ 84%]
+........................................................................ [ 95%]
+................................                                         [100%]
+680 passed in 4.07s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### SAVE LOG AND COMMIT IF GREEN ###
