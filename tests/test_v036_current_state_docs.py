@@ -1,9 +1,22 @@
 from pathlib import Path
+import re
+import tomllib
+
+
+def _project_version() -> str:
+    data = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
+    return str(data["project"]["version"])
 
 
 def test_readme_has_single_current_verified_release_statement():
     text = Path("README.md").read_text(encoding="utf-8")
-    assert "Current verified release: version `0.3.36`" in text
+    version = _project_version()
+    assert text.count("Current verified release:") == 1
+    assert f"Current verified release: version `{version}`" in text
+    assert re.search(
+        rf"Current verified release: version `{re.escape(version)}`, Zenodo version DOI `10\.5281/zenodo\.[0-9]+`\.",
+        text,
+    )
     assert "Version `0.3.35` is the current release line prepared" not in text
     assert "Earlier verified version-specific DOIs are intentionally maintained in `docs/releases/VERIFIED_RELEASES.md`" in text
 

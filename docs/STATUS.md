@@ -218,3 +218,4 @@ Next safe step: deterministic rule hardening before GUI or release. v0.3.36 is u
 - The zero state is protected by `tests/test_v036_zero_ns_shell_adapter_contract.py`.
 - Remote evidence: `docs/reports/terminal/v036-zero-ns-shell-adapter-contract-merge-verify.log`.
 - v0.3.36 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329180`. Release publish evidence is recorded in `docs/reports/terminal/v036-release-publish.log`.
+- v0.3.37 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329450`.
