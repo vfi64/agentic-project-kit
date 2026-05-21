@@ -1,0 +1,90 @@
+
+### START ###
+Merge existing communication summary id PR only after machine-readable PR and CI checks pass.
+
+### FETCH AND SWITCH FEATURE BRANCH ###
+Already on 'feature/v036-communication-summary-id-contract'
+Your branch is up to date with 'origin/feature/v036-communication-summary-id-contract'.
+From github.com:vfi64/agentic-project-kit
+ * branch            feature/v036-communication-summary-id-contract -> FETCH_HEAD
+Already up to date.
+
+### MODE GUARD ###
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=feature/v036-communication-summary-id-contract
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### DISCOVER PR ###
+PR_NUMBER=598
+
+### PR STATUS CHECK ###
+{"baseRefName":"main","headRefOid":"d0dea7ed7683040be6e5ee058b3c59a5fb6860f7","mergeStateStatus":"CLEAN","state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-21T14:03:44Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26230934782/job/77190804942","name":"test","startedAt":"2026-05-21T14:03:22Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-21T14:03:40Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26230931456/job/77190794016","name":"test","startedAt":"2026-05-21T14:03:20Z","status":"COMPLETED","workflowName":"CI"}],"title":"Add communication summary id contract"}
+PR_STATE=OPEN
+MERGE_STATE=CLEAN
+HEAD_SHA=d0dea7ed7683040be6e5ee058b3c59a5fb6860f7
+PENDING_COUNT=0
+NON_SUCCESS_COUNT=0
+
+### MERGE IF CLEAN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   538c086..b79a6a2  main       -> origin/main
+Updating 538c086..b79a6a2
+Fast-forward
+ .agentic/communication_state.json                  |   8 ++
+ docs/governance/FINAL_SUMMARY_CONTRACT.md          |  10 ++
+ .../v036-communication-summary-id-contract.log     |  75 ++++++++++++++
+ ...6-communication-summary-id-header-repair-v2.log |  78 ++++++++++++++
+ ns                                                 |  12 +++
+ src/agentic_project_kit/communication_state.py     | 113 +++++++++++++++++++++
+ tests/test_v036_communication_summary_id.py        |  59 +++++++++++
+ 7 files changed, 355 insertions(+)
+ create mode 100644 .agentic/communication_state.json
+ create mode 100644 docs/reports/terminal/v036-communication-summary-id-contract.log
+ create mode 100644 docs/reports/terminal/v036-communication-summary-id-header-repair-v2.log
+ create mode 100644 src/agentic_project_kit/communication_state.py
+ create mode 100644 tests/test_v036_communication_summary_id.py
+
+### UPDATE MAIN AND VERIFY ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+COMMUNICATION STATE CHECK
+state_path=.agentic/communication_state.json
+state=PASS
+findings:
+  - none
+### RESULT: PASS ###
+SUMMARY COMM-00001 | 2026-05-21 16:04:20 +0200
+................................................                         [100%]
+48 passed in 0.05s
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### COPY TMP LOG INTO REPO ONLY AFTER MERGE VERIFICATION ###
