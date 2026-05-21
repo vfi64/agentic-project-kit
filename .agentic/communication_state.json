@@ -1,8 +1,8 @@
 {
-  "last_branch": null,
-  "last_origin": null,
-  "last_slice": null,
-  "last_summary_id": 0,
+  "last_branch": "feature/v036-shell-adapter-inventory-baseline",
+  "last_origin": "local",
+  "last_slice": "V0.3.36 SHELL ADAPTER INVENTORY BASELINE",
+  "last_summary_id": 1,
   "schema_version": 1,
-  "updated_at": null
+  "updated_at": "2026-05-21T16:07:25+02:00"
 }

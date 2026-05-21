@@ -1,0 +1,192 @@
+
+### START ###
+Create deterministic shell-adapter inventory baseline after communication summary id contract.
+
+### SYNC MAIN AND CREATE FEATURE BRANCH ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+Switched to a new branch 'feature/v036-shell-adapter-inventory-baseline'
+
+### MODE GUARD ###
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=feature/v036-shell-adapter-inventory-baseline
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### WRITE INVENTORY SCRIPT ###
+
+### RUN INVENTORY SCRIPT ###
+
+### INVENTORY PREVIEW ###
+# V0.3.36 Shell Adapter Inventory Baseline
+
+Status: active baseline
+Scope: no GUI, no release
+
+## Purpose
+
+This document records the deterministic post-communication-id baseline for remaining `tools/ns_*.sh` shell adapters and direct `./ns` shell references.
+
+It is intentionally an inventory baseline, not a removal slice. Later shell-removal slices must update this baseline and keep the matching regression test green.
+
+## Counts
+
+- tracked_shell_adapter_count: 1
+- direct_ns_shell_reference_count: 0
+- python_route_count: 40
+
+## Tracked shell adapters
+
+- `tools/ns_pr_create_or_skip.sh`
+
+## Direct `./ns` shell references
+
+- none
+
+## Python routes in `./ns`
+
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.agent_command_runner`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.agent_command_runner next`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli actions list "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli actions show "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli evidence clean "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli evidence clean-check "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli evidence guard "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli governance check`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli handoff check`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli handoff prompt`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli handoff refresh "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli handoff show`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli patch-preflight "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli state freshness-check`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli state mode-check "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli state mode-write "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli work-order typed-next "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli work-order typed-queue-status "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.cli work-order typed-run "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.command_inbox_check`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.commit_guard "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.communication_artifact_gc "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.communication_state check "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.communication_state next-summary "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.finalize_guard "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.local_feature_gate "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.local_feature_gate --include-pr-hygiene "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.ns_slice_runner "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.ns_up_pr_completion "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.pr_cleanup "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.release_gate_core "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.release_prep_core "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.release_publish_core "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.release_verify_core "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging run-logged "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-clean-check`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-finalize "$@"`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-remote-preflight`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-status`
+- `PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-upload`
+
+## Machine-readable baseline
+
+```json
+{
+  "direct_ns_shell_reference_count": 0,
+  "direct_ns_shell_references": [],
+  "python_route_count": 40,
+  "python_routes": [
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.agent_command_runner",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.agent_command_runner next",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli actions list \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli actions show \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli evidence clean \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli evidence clean-check \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli evidence guard \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli governance check",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli handoff check",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli handoff prompt",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli handoff refresh \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli handoff show",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli patch-preflight \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli state freshness-check",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli state mode-check \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli state mode-write \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli work-order typed-next \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli work-order typed-queue-status \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli work-order typed-run \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.command_inbox_check",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.commit_guard \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.communication_artifact_gc \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.communication_state check \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.communication_state next-summary \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.finalize_guard \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.local_feature_gate \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.local_feature_gate --include-pr-hygiene \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.ns_slice_runner \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.ns_up_pr_completion \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.pr_cleanup \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.release_gate_core \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.release_prep_core \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.release_publish_core \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.release_verify_core \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.terminal_logging run-logged \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.terminal_logging terminal-clean-check",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.terminal_logging terminal-finalize \"$@\"",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.terminal_logging terminal-remote-preflight",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.terminal_logging terminal-status",
+    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.terminal_logging terminal-upload"
+  ],
+  "tracked_shell_adapter_count": 1,
+  "tracked_shell_adapters": [
+    "tools/ns_pr_create_or_skip.sh"
+  ]
+}
+```
+
+
+### TARGETED TESTS ###
+...............................................                          [100%]
+47 passed in 0.05s
+
+### FULL LOCAL GATES ###
+........................................................................ [ 10%]
+........................................................................ [ 21%]
+........................................................................ [ 32%]
+........................................................................ [ 42%]
+........................................................................ [ 53%]
+........................................................................ [ 64%]
+........................................................................ [ 74%]
+........................................................................ [ 85%]
+........................................................................ [ 96%]
+.........................                                                [100%]
+673 passed in 3.87s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### CREATE COMM HEADER AND COPY LOG AFTER GATES ###
