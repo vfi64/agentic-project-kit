@@ -325,3 +325,5 @@ Acceptance criteria before GUI work resumes:
 - v0.3.35 release-gate/core consolidation is released and DOI metadata is recorded; v0.3.35 is closed for pre-GUI core consolidation.
 
 - v0.3.36 current-state cleanup started as a documentation-only line: normalize README current-release wording, make the v0.3.35 CHANGELOG entry describe the actual delivered work, clarify GUI/cockpit status, and lock release-phase semantics in tests before any bounded Tkinter MVP work.\n\n- v0.3.36 standard-error hardening started: Remote-log evidence is mandatory for standard-error hardening slices; summaries must include `terminal_log=docs/reports/terminal/...`, `command_report=...`, and `NEXT_CHAT_REPLY`. FAIL without terminal kill uses NEXT_CHAT_REPLY: f so the next step reconstructs from the remote log before asking for pasted terminal output.\n
+
+- v0.3.36 standard-error hardening slice 1 is remote-evidence backed: merge/local-gate output is recorded in `docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log`. This explicitly restores the rule that FAIL recovery starts from committed/pushed logs before asking for pasted terminal output.

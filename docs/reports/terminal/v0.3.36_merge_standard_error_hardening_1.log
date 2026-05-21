@@ -1,0 +1,137 @@
+
+### CURRENT STATE ###
+feature/v0.3.36-standard-error-hardening-1
+38447c4 Harden v0.3.36 standard error contracts
+f93d184 Record v0.3.36 standard error contract prep (#553)
+bf0c6a7 Lock already merged PR recovery semantics (#552)
+44213a5 Clean v0.3.36 current-state documentation (#551)
+6733fdd Finalize state after v0.3.35 DOI metadata (#550)
+8332943 Record v0.3.35 DOI metadata (#549)
+59e1673 Prepare v0.3.35 release metadata (#548)
+800340e Update status after v0.3.35 release gate core extraction (#547)
+?? docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log
+?? docs/reports/terminal/v0.3.36_standard_error_hardening_1.log
+
+### ENSURE FEATURE BRANCH OR MAIN IDEMPOTENCY ###
+
+### CREATE OR REUSE PR ###
+https://github.com/vfi64/agentic-project-kit/pull/554
+PR_NUMBER=554
+
+### PR STATE BEFORE WATCH ###
+{"baseRefName":"main","headRefName":"feature/v0.3.36-standard-error-hardening-1","mergeStateStatus":"UNKNOWN","mergeable":"UNKNOWN","number":554,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-21T06:12:53Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26208867813/job/77114737264","name":"test","startedAt":"2026-05-21T06:12:30Z","status":"COMPLETED","workflowName":"CI"}],"title":"Harden v0.3.36 standard error contracts"}
+
+### PR CHECKS SNAPSHOT ###
+test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26208867813/job/77114737264	
+
+### WAIT FOR PR CHECKS ###
+test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26208867813/job/77114737264	
+test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26208867813/job/77114737264	
+PR_CHECKS_WATCH_RESULT=PASS
+
+### MACHINE READABLE PR STATE ###
+{"baseRefName":"main","headRefName":"feature/v0.3.36-standard-error-hardening-1","mergeStateStatus":"UNSTABLE","mergeable":"MERGEABLE","number":554,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"0001-01-01T00:00:00Z","conclusion":"","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26208892901/job/77114818977","name":"test","startedAt":"2026-05-21T06:13:09Z","status":"QUEUED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-21T06:12:53Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26208867813/job/77114737264","name":"test","startedAt":"2026-05-21T06:12:30Z","status":"COMPLETED","workflowName":"CI"}],"title":"Harden v0.3.36 standard error contracts"}
+
+### MERGE PR ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   f93d184..57e1821  main       -> origin/main
+Updating f93d184..57e1821
+Fast-forward
+ docs/STATUS.md                              |  2 +-
+ docs/handoff/CURRENT_HANDOFF.md             |  2 +-
+ tests/test_v036_standard_error_hardening.py | 23 +++++++++++++++++++++++
+ 3 files changed, 25 insertions(+), 2 deletions(-)
+ create mode 100644 tests/test_v036_standard_error_hardening.py
+
+### FINAL MAIN SYNC ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### VERIFY MAIN LOCAL GATE ###
+main
+?? docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log
+?? docs/reports/terminal/v0.3.36_standard_error_hardening_1.log
+ERROR: usage: python -m pytest [options] [file_or_dir] [file_or_dir] [...]
+python -m pytest: error: unrecognized arguments: --include-pr-hygiene
+  inifile: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/pyproject.toml
+  rootdir: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=81
+ok=true
+
+Findings:
+- none
+main
+?? docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log
+?? docs/reports/terminal/v0.3.36_standard_error_hardening_1.log
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+
+### PYTEST ###
+
+### RUFF ###
+
+### CHECK DOCS ###
+
+### DOCTOR ###
+
+### PR HYGIENE ###
+
+### FINAL STATUS ###
+Local feature gate failed.
+
+### FINAL STATE ###
+main
+57e1821 Harden v0.3.36 standard error contracts (#554)
+f93d184 Record v0.3.36 standard error contract prep (#553)
+bf0c6a7 Lock already merged PR recovery semantics (#552)
+44213a5 Clean v0.3.36 current-state documentation (#551)
+6733fdd Finalize state after v0.3.35 DOI metadata (#550)
+8332943 Record v0.3.35 DOI metadata (#549)
+59e1673 Prepare v0.3.35 release metadata (#548)
+800340e Update status after v0.3.35 release gate core extraction (#547)
+ea87e0e Extract release gate core (#546)
+ced3908 Treat already merged PR closeout as idempotent (#545)
+?? docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log
+?? docs/reports/terminal/v0.3.36_standard_error_hardening_1.log
+
+================================================================
+SUMMARY
+WORK RESULT: PASS
+EVIDENCE RESULT: PASS
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PARTIAL
+terminal_log=docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log
+command_report=NONE
+NEXT_CHAT_REPLY: d
+STANDARD_ERROR_REDUCTION: 72% -> 76%; fixed/verified: PR merge idempotency path for this slice, local gate flag routing on main
+GUI_PREPARATION: 82% -> 84%; GUI-safe gate invocation verified on main
+### RESULT: PASS ###
+================================================================
