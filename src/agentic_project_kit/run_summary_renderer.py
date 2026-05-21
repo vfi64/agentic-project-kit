@@ -2,93 +2,171 @@ from __future__ import annotations
 
 import argparse
 import json
+from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-REQUIRED_FIELDS = (
-    "comm_header",
-    "slice_name",
-    "scope",
-    "branch",
-    "work",
-    "evidence",
-    "overall",
-    "terminal_log",
-    "chat_reply",
-)
 
-def _value(data: dict[str, Any], key: str, default: str = "NONE") -> str:
-    value = data.get(key, default)
-    if value is None:
-        return default
-    return str(value)
+VALID_RESULTS = {"PASS", "FAIL", "PENDING", "HARD-FAIL"}
+VALID_EVIDENCE_RESULTS = {"PASS", "FAIL", "PARTIAL", "CHAT_ONLY", "NOT_REQUIRED", "NONE"}
 
-def validate_summary_data(data: dict[str, Any]) -> list[str]:
-    errors: list[str] = []
-    for field in REQUIRED_FIELDS:
-        if not str(data.get(field, "")).strip():
-            errors.append(f"missing field: {field}")
-    if data.get("overall") == "PASS" and data.get("work") != "PASS":
-        errors.append("overall PASS requires work PASS")
-    if data.get("overall") == "PASS" and data.get("evidence") == "FAIL":
-        errors.append("overall PASS cannot use evidence FAIL")
-    return errors
 
-def render_summary(data: dict[str, Any]) -> str:
-    errors = validate_summary_data(data)
-    if errors:
-        raise ValueError("; ".join(errors))
-    result_marker = _value(data, "overall")
+@dataclass(frozen=True)
+class SummaryPayload:
+    comm_id: str = "COMM-PENDING"
+    comm_header: str = ""
+    slice: str = ""
+    slice_name: str = ""
+    scope: str = ""
+    branch: str = "current"
+    origin: str = "local"
+    state_mode: str = "local"
+    mode_check: str = "not_recorded"
+    work: str = "PENDING"
+    evidence: str = "CHAT_ONLY"
+    overall: str = "PENDING"
+    remote_evidence: str = "NONE"
+    pr: str = "NONE"
+    head_sha: str = "NONE"
+    ci: str = "NONE"
+    merge: str = "NONE"
+    terminal_log: str = "NONE"
+    terminal_log_remote: str = "NONE"
+    terminal_log_local: str = "NONE"
+    command_report: str = "NONE"
+    interpretation: str = "No interpretation recorded."
+    safe_step: str = "not_recorded"
+    next: str = "d"
+    chat_reply: str = ""
+    timestamp: str = ""
+
+
+RunSummaryPayload = SummaryPayload
+
+
+def _payload_from_mapping(data: dict[str, Any]) -> SummaryPayload:
+    normalized = {str(key).replace("-", "_"): value for key, value in data.items()}
+    allowed = SummaryPayload.__dataclass_fields__.keys()
+    return SummaryPayload(**{key: str(normalized[key]) for key in allowed if key in normalized and normalized[key] is not None})
+
+
+def validate_summary_data(data: SummaryPayload | dict[str, Any]) -> list[str]:
+    payload = data if isinstance(data, SummaryPayload) else _payload_from_mapping(data)
+    findings: list[str] = []
+    if not payload.terminal_log.strip() or payload.terminal_log == "NONE":
+        findings.append("missing field: terminal_log")
+    if payload.work not in VALID_RESULTS:
+        findings.append("invalid field: work")
+    if payload.overall not in VALID_RESULTS:
+        findings.append("invalid field: overall")
+    if payload.evidence not in VALID_EVIDENCE_RESULTS:
+        findings.append("invalid field: evidence")
+    if payload.remote_evidence not in VALID_EVIDENCE_RESULTS:
+        findings.append("invalid field: remote_evidence")
+    if payload.overall == "PASS" and payload.work != "PASS":
+        findings.append("invalid pass: work is not PASS")
+    if payload.overall == "PASS" and payload.evidence == "FAIL":
+        findings.append("invalid pass: evidence is FAIL")
+    if payload.remote_evidence == "PASS" and not payload.terminal_log_remote.startswith("docs/reports/terminal/"):
+        findings.append("invalid remote evidence: missing remote terminal log")
+    return findings
+
+
+def _header(payload: SummaryPayload) -> str:
+    if payload.comm_header.strip():
+        return payload.comm_header
+    timestamp = payload.timestamp or datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %z")
+    return f"SUMMARY {payload.comm_id} | {timestamp}"
+
+
+def render_summary(payload: SummaryPayload | dict[str, Any]) -> str:
+    if isinstance(payload, dict):
+        payload = _payload_from_mapping(payload)
+    findings = validate_summary_data(payload)
+    if findings:
+        raise ValueError("; ".join(findings))
+    slice_name = payload.slice or payload.slice_name or "UNKNOWN"
+    next_reply = payload.next if payload.next else payload.chat_reply
     lines = [
         "================================================================",
-        _value(data, "comm_header"),
+        _header(payload),
         "",
         "SLICE",
-        f"  NAME: {_value(data, 'slice_name')}",
-        f"  SCOPE: {_value(data, 'scope')}",
-        f"  BRANCH: {_value(data, 'branch')}",
+        f"  NAME: {slice_name}",
+        f"  SCOPE: {payload.scope}",
+        f"  BRANCH: {payload.branch}",
         "",
         "EXECUTION",
-        f"  ORIGIN: {_value(data, 'origin', 'local')}",
-        f"  STATE_MODE: {_value(data, 'state_mode', 'local')}",
-        f"  MODE_CHECK: {_value(data, 'mode_check', 'not_recorded')}",
-        f"  SWITCH_HINT: {_value(data, 'switch_hint', './ns mode-write local|remote && ./ns mode-check local|remote')}",
+        f"  ORIGIN: {payload.origin}",
+        f"  STATE_MODE: {payload.state_mode}",
+        f"  MODE_CHECK: {payload.mode_check}",
+        "  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote",
         "",
         "RESULT",
-        f"  WORK: {_value(data, 'work')}",
-        f"  EVIDENCE: {_value(data, 'evidence')}",
-        f"  OVERALL: {_value(data, 'overall')}",
+        f"  WORK: {payload.work}",
+        f"  EVIDENCE: {payload.evidence}",
+        f"  OVERALL: {payload.overall}",
         "",
         "REMOTE",
-        f"  REMOTE_EVIDENCE: {_value(data, 'remote_evidence')}",
-        f"  PR: {_value(data, 'pr')}",
-        f"  HEAD_SHA: {_value(data, 'head_sha')}",
-        f"  CI: {_value(data, 'ci')}",
-        f"  MERGE: {_value(data, 'merge')}",
+        f"  REMOTE_EVIDENCE: {payload.remote_evidence}",
+        f"  PR: {payload.pr}",
+        f"  HEAD_SHA: {payload.head_sha}",
+        f"  CI: {payload.ci}",
+        f"  MERGE: {payload.merge}",
         "",
         "EVIDENCE FILES",
-        f"  terminal_log: {_value(data, 'terminal_log')}",
-        f"  command_report: {_value(data, 'command_report')}",
+        f"  terminal_log: {payload.terminal_log}",
+        f"  terminal_log_remote: {payload.terminal_log_remote}",
+        f"  terminal_log_local: {payload.terminal_log_local}",
+        f"  command_report: {payload.command_report}",
         "",
         "INTERPRETATION",
-        f"  {_value(data, 'interpretation', 'No interpretation recorded.')}",
+        f"  {payload.interpretation}",
         "",
         "NEXT",
-        f"  SAFE_STEP: {_value(data, 'next_safe_step', 'not_recorded')}",
-        f"  CHAT_REPLY: {_value(data, 'chat_reply')}",
+        f"  SAFE_STEP: {payload.safe_step}",
+        f"  CHAT_REPLY: {next_reply}",
         "",
-        f"### RESULT: {result_marker} ###",
+        f"### RESULT: {payload.overall} ###",
         "================================================================",
     ]
     return "\n".join(lines)
 
+
+render = render_summary
+
+
+def _load_json_argument(value: str) -> dict[str, Any]:
+    candidate = Path(value)
+    if candidate.exists():
+        return json.loads(candidate.read_text(encoding="utf-8"))
+    return json.loads(value)
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="run-summary-renderer")
+    parser.add_argument("--json", default=None)
+    for field in SummaryPayload.__dataclass_fields__:
+        parser.add_argument("--" + field.replace("_", "-"), dest=field, default=None)
+    return parser
+
+
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Render deterministic final run summaries.")
-    parser.add_argument("--json", required=True, help="Path to summary JSON input.")
+    parser = build_parser()
     args = parser.parse_args(argv)
-    data = json.loads(Path(args.json).read_text(encoding="utf-8"))
-    print(render_summary(data))
+    if args.json:
+        data = _load_json_argument(args.json)
+    else:
+        data = {field: getattr(args, field) for field in SummaryPayload.__dataclass_fields__ if getattr(args, field) is not None}
+        if data.get("terminal_log", "NONE") == "NONE":
+            data["terminal_log"] = data.get("terminal_log_remote") or data.get("terminal_log_local") or "NONE"
+    try:
+        print(render_summary(_payload_from_mapping(data)))
+    except ValueError as exc:
+        parser.error(str(exc))
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
