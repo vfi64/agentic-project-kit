@@ -1,0 +1,89 @@
+V0.3.36 RUN SUMMARY CONTRACT EVIDENCE MERGE VERIFY
+
+### MAIN HEAD ###
+main
+858ba24 Record v0.3.36 run summary contract evidence (#558)
+c4dcb7c Add run summary contract core (#557)
+5ea9083 Record v0.3.36 stray terminal logs (#556)
+aa53416 Record v0.3.36 standard error hardening evidence (#555)
+57e1821 Harden v0.3.36 standard error contracts (#554)
+f93d184 Record v0.3.36 standard error contract prep (#553)
+bf0c6a7 Lock already merged PR recovery semantics (#552)
+44213a5 Clean v0.3.36 current-state documentation (#551)
+6733fdd Finalize state after v0.3.35 DOI metadata (#550)
+8332943 Record v0.3.35 DOI metadata (#549)
+59e1673 Prepare v0.3.35 release metadata (#548)
+800340e Update status after v0.3.35 release gate core extraction (#547)
+
+### STATUS ###
+?? docs/reports/terminal/v0.3.36_run_summary_contract_evidence_merge_verify.log
+
+### PR STATE ###
+{"mergeStateStatus":"UNKNOWN","mergeable":"UNKNOWN","number":558,"state":"MERGED","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-21T06:24:23Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26209287042/job/77116117004","name":"test","startedAt":"2026-05-21T06:24:00Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-21T06:24:19Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26209284475/job/77116109192","name":"test","startedAt":"2026-05-21T06:23:56Z","status":"COMPLETED","workflowName":"CI"}],"title":"Record v0.3.36 run summary contract evidence"}
+
+### CURRENT HEAD CI SNAPSHOT ###
+HEAD_SHA=858ba24ca14330353e309ed8ee5ed5dcd75dc1cc
+in_progress		Record v0.3.36 run summary contract evidence (#558)	CI	main	push	26209315174	7s	2026-05-21T06:24:43Z
+
+### LOCAL FEATURE GATE ###
+main
+?? docs/reports/terminal/v0.3.36_run_summary_contract_evidence_merge_verify.log
+........................................................................ [ 12%]
+........................................................................ [ 24%]
+........................................................................ [ 36%]
+........................................................................ [ 48%]
+........................................................................ [ 60%]
+........................................................................ [ 72%]
+........................................................................ [ 84%]
+........................................................................ [ 96%]
+.......................                                                  [100%]
+599 passed in 3.94s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=81
+ok=true
+
+Findings:
+- none
+main
+?? docs/reports/terminal/v0.3.36_run_summary_contract_evidence_merge_verify.log
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+
+### PYTEST ###
+
+### RUFF ###
+
+### CHECK DOCS ###
+
+### DOCTOR ###
+
+### PR HYGIENE ###
+
+### FINAL STATUS ###
+Local feature gate passed.
+
+### FINAL STATUS ###
+main
+?? docs/reports/terminal/v0.3.36_run_summary_contract_evidence_merge_verify.log
