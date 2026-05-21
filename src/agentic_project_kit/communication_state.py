@@ -62,11 +62,13 @@ def next_summary_header(
     path: Path = DEFAULT_STATE_PATH,
     origin: str = "local",
     branch: str | None = None,
-    slice_name: str = "unknown",
+    slice_name: str = "",
     write: bool = True,
 ) -> str:
     if origin not in VALID_ORIGINS:
         raise ValueError(f"invalid origin: {origin}")
+    if write and not slice_name.strip():
+        raise ValueError("slice_name must not be empty when writing communication summary state")
     state = load_state(path)
     next_id = int(state.get("last_summary_id", 0)) + 1
     now = datetime.now().astimezone()
@@ -91,7 +93,7 @@ def main(argv: list[str] | None = None) -> int:
     next_parser.add_argument("--state-path", default=str(DEFAULT_STATE_PATH))
     next_parser.add_argument("--origin", choices=sorted(VALID_ORIGINS), default="local")
     next_parser.add_argument("--branch", default=None)
-    next_parser.add_argument("--slice", default="unknown")
+    next_parser.add_argument("--slice", default="")
     next_parser.add_argument("--no-write", action="store_true")
     args = parser.parse_args(argv)
     path = Path(args.state_path)
