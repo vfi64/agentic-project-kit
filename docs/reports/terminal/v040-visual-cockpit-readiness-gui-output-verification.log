@@ -1,0 +1,69 @@
+
+### MAIN STATE ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+0a5ed10 Record cockpit readiness GUI output merge verification log
+c554d31 Connect cockpit readiness GUI output (#644)
+a6b373e Record disabled Tkinter button contrast merge verification log
+dc6b7f6 Improve disabled Tkinter button contrast (#643)
+5a44c3e Record theme-aware Tkinter manual GUI merge verification log
+7868a2e Use theme-aware Tkinter manual GUI styling (#642)
+16d5270 Record visible Tkinter manual content merge verification log
+3e9219b Render visible Tkinter manual launch content (#641)
+
+### VERIFY PRODUCT STATE STILL PRESENT ###
+174:def run_cockpit_readiness_for_manual_gui() -> str:
+228:    ttk.Button(actions, text="cockpit-readiness", command=lambda: write_output(run_cockpit_readiness_for_manual_gui()), width=22).pack(fill="x", pady=3)
+245:    status = ttk.Label(root, text="Status: ready | branch: main | enabled: cockpit-readiness only", anchor="w")
+GUI ACTION EXECUTION RESULT
+action=cockpit-readiness
+safety_class=read-only
+allowed=true
+executed=true
+returncode=0
+message=Action executed through bounded read-only executor.
+output=cockpit-readiness: ready
+
+### VISUAL OBSERVATION RECORD ###
+manual_visual_result=PASS
+window_opened=true
+button_clicked=cockpit-readiness
+output_panel_updated=true
+observed_action=cockpit-readiness
+observed_safety_class=read-only
+observed_allowed=true
+observed_executed=true
+observed_returncode=0
+observed_output=cockpit-readiness: ready
+unsafe_buttons_disabled=true
+visual_evidence=screenshot provided in chat
+user_verdict=Es geht.
+
+### LIGHTWEIGHT GATES ###
+.......................                                                  [100%]
+23 passed in 0.03s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### RECORD REMOTE EVIDENCE LOG ###
