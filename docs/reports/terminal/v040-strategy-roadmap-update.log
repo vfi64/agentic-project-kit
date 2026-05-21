@@ -1,0 +1,96 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK ###
+main
+2ecf2c2 Record v0.3.37 DOI metadata (#615)
+a9035ad Record v0.3.37 release publish log
+69dc873 Prepare v0.3.37 release metadata (#614)
+c64eadd Record v0.3.37 final GUI preparation closeout contract (#613)
+6ae66ba Record v0.3.36 DOI metadata merge verification log
+613cf9e Record v0.3.36 DOI metadata (#612)
+369e920 Record v0.3.36 release publish log
+45ffd3f Record v0.3.36 release gate log
+0fb4d18 Record v0.3.36 release metadata merge verification log
+f9f5c41 Prepare v0.3.36 release metadata after audit runner hardening (#611)
+76f528a Record audit runner standard-error fix merge verification log
+9f9134f Add deterministic audit test matrix runner (#610)
+b8d9642 Record release route help safety merge verification log
+c8b20d5 Harden release route help and version safety (#609)
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=main
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+Post-release check for target v0.3.37
+
+[PASS] GitHub release: GitHub release exists: v0.3.37
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.3.37: 10.5281/zenodo.20329450
+
+Overall: PASS
+
+
+### CREATE BRANCH ###
+Switched to a new branch 'docs/v0.4.0-strategy-roadmap'
+
+### WRITE V0.4.0 ROADMAP DOCUMENT ###
+
+### WRITE ROADMAP CONTRACT TEST ###
+
+### DIFF ###
+?? docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md
+?? tests/test_v040_strategy_roadmap.py
+
+### TARGETED TESTS ###
+.....                                                                    [100%]
+5 passed in 0.01s
+
+### FULL LOCAL GATES ###
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+........................................................................ [ 30%]
+........................................................................ [ 40%]
+........................................................................ [ 50%]
+........................................................................ [ 60%]
+........................................................................ [ 70%]
+........................................................................ [ 81%]
+........................................................................ [ 91%]
+..............................................................           [100%]
+710 passed in 3.99s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[FAIL] document lifecycle audit: docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md: status must be one of: accepted, active, 
+archived, idea-note, implemented, proposed, rejected, superseded; found 'planned first v0.4.0 line after v0.3.37 
+release and DOI closeout.'; docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md: document is missing a Decision status header
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: FAIL
+
+### COPY TERMINAL LOG FOR COMMIT ###
