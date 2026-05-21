@@ -1,0 +1,168 @@
+
+### BRANCH / STATUS BEFORE TEST REPAIR ###
+feature/v040-guarded-tkinter-window-smoke
+ M src/agentic_project_kit/gui_tkinter_shell.py
+ M tests/test_v040_gui_tkinter_shell.py
+
+### VERIFY EXPECTED BRANCH ###
+
+### PATCH TEST TO FORCE GUARD-OK ROOT-CREATION FAILURE PATH ###
+
+### STRUCTURE CHECKS ###
+99:def create_tkinter_root(tk_factory: Callable[[], object] | None = None) -> object:
+127:def run_window_smoke() -> tuple[bool, str]:
+132:            "window_smoke_status=BLOCKED",
+138:        root = create_tkinter_root()
+141:            "window_smoke_status=BLOCKED",
+144:            "window_block_reason=" + str(exc).replace(chr(10), " "),
+     1	from agentic_project_kit.gui_tkinter_shell import (
+     2	    build_tkinter_shell_spec,
+     3	    build_windows_style_design_spec,
+     4	    configure_tkinter_root,
+     5	    create_tkinter_root,
+     6	    main,
+     7	    render_tkinter_shell_summary,
+     8	)
+     9	
+    10	
+    11	class FakeRoot:
+    12	    def __init__(self):
+    13	        self.title_value = None
+    14	        self.geometry_value = None
+    15	
+    16	    def title(self, value):
+    17	        self.title_value = value
+    18	
+    19	    def geometry(self, value):
+    20	        self.geometry_value = value
+    21	
+    22	
+    23	def test_build_tkinter_shell_spec_uses_presenter_contract():
+    24	    spec = build_tkinter_shell_spec()
+    25	    assert spec.title == "agentic-project-kit Cockpit"
+    26	    assert spec.status == "tkinter-shell-ready"
+    27	    assert spec.action_count >= 1
+    28	    assert spec.destructive_actions_enabled is False
+    29	    assert "agentic-project-kit Cockpit" in spec.preview
+    30	
+    31	
+    32	def test_configure_tkinter_root_is_testable_without_opening_window():
+    33	    spec = build_tkinter_shell_spec()
+    34	    root = FakeRoot()
+    35	    configure_tkinter_root(root, spec)
+    36	    assert root.title_value == "agentic-project-kit Cockpit"
+    37	    assert root.geometry_value == "1000x650"
+    38	
+    39	
+    40	def test_create_tkinter_root_accepts_factory_for_headless_tests():
+    41	    root = FakeRoot()
+    42	    assert create_tkinter_root(lambda: root) is root
+    43	
+    44	
+    45	def test_render_tkinter_shell_summary_is_deterministic():
+    46	    output = render_tkinter_shell_summary(build_tkinter_shell_spec())
+    47	    assert "TKINTER SHELL" in output
+    48	    assert "status=tkinter-shell-ready" in output
+    49	    assert "menu_count=4" in output
+    50	    assert "toolbar_button_count=" in output
+    51	    assert "action_button_count=" in output
+    52	    assert "destructive_actions_enabled=false" in output
+    53	
+    54	
+    55	def test_main_no_window_smoke(capsys):
+    56	    assert main(["--no-window-smoke"]) == 0
+    57	    output = capsys.readouterr().out
+    58	    assert "TKINTER SHELL" in output
+    59	    assert "### RESULT: PASS ###" in output
+    60	
+    61	
+    62	def test_windows_style_design_has_menu_bar_toolbar_buttons_and_tooltips():
+    63	    design = build_windows_style_design_spec()
+    64	    assert [menu.label for menu in design.menu_bar] == ["File", "Actions", "View", "Help"]
+    65	    assert all(button.tooltip for button in design.toolbar)
+    66	    assert all(button.tooltip for button in design.action_buttons)
+    67	    assert {button.command_id for button in design.toolbar} >= {"refresh-status", "doctor", "check-docs", "gui-dry-run"}
+    68	    assert any(button.command_id == "release-publish" and not button.enabled for button in design.action_buttons)
+    69	    assert any(button.icon_text for button in design.toolbar)
+    70	
+    71	def test_main_window_smoke_is_guarded_and_non_crashing(capsys):
+    72	    assert main(["--window-smoke"]) == 0
+    73	    output = capsys.readouterr().out
+    74	    assert "TKINTER WINDOW SMOKE" in output
+    75	    assert "GUI WINDOW GUARD" in output
+    76	    assert "real_window_opened=" in output
+    77	    assert "### RESULT: PASS ###" in output
+    78	
+    79	
+    80	def test_main_rejects_unknown_tkinter_shell_argument(capsys):
+    81	    assert main(["--window-smoke-like"]) == 2
+    82	    output = capsys.readouterr().out
+    83	    assert "--no-window-smoke|--window-smoke" in output
+    84	    assert "### RESULT: FAIL ###" in output
+    85	
+    86	def test_window_smoke_blocks_when_tk_root_creation_fails(monkeypatch):
+    87	    from types import SimpleNamespace
+    88	
+    89	    from agentic_project_kit import gui_tkinter_shell
+    90	
+    91	    monkeypatch.setattr(gui_tkinter_shell, "check_window_launch_ready", lambda: SimpleNamespace(ok=True))
+    92	    monkeypatch.setattr(gui_tkinter_shell, "render_window_guard_result", lambda _guard: "GUI WINDOW GUARD" + chr(10) + "window_launch_ready=true")
+    93	    monkeypatch.setattr(gui_tkinter_shell, "create_tkinter_root", lambda: (_ for _ in ()).throw(RuntimeError("no display available")))
+    94	    ok, output = gui_tkinter_shell.run_window_smoke()
+    95	
+    96	    assert ok is True
+    97	    assert "window_launch_ready=true" in output
+    98	    assert "window_smoke_status=BLOCKED" in output
+    99	    assert "real_window_opened=false" in output
+   100	    assert "window_closed=true" in output
+   101	    assert "window_block_reason=no display available" in output
+   102	
+
+### WINDOW SMOKE SMOKE TEST ###
+TKINTER WINDOW SMOKE
+GUI WINDOW GUARD
+window_launch_ready=false
+tkinter_importable=false
+native_tkinter_importable=false
+message=tkinter import failed: No module named '_tkinter'
+window_guard_status=BLOCKED
+window_smoke_status=BLOCKED
+real_window_opened=false
+window_closed=true
+### RESULT: PASS ###
+
+### TESTS / LINT / GATES ###
+........................................................................ [ 90%]
+........                                                                 [100%]
+80 passed in 0.46s
+........................................................................ [  9%]
+........................................................................ [ 18%]
+........................................................................ [ 27%]
+........................................................................ [ 36%]
+........................................................................ [ 45%]
+........................................................................ [ 54%]
+........................................................................ [ 63%]
+........................................................................ [ 72%]
+........................................................................ [ 81%]
+........................................................................ [ 90%]
+........................................................................ [100%]
+792 passed in 4.67s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### STAGE REMOTE LOG ###

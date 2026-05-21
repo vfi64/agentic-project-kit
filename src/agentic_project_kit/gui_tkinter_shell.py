@@ -134,7 +134,16 @@ def run_window_smoke() -> tuple[bool, str]:
             "window_closed=true",
         ])
         return True, chr(10).join(lines)
-    root = create_tkinter_root()
+    try:
+        root = create_tkinter_root()
+    except Exception as exc:
+        lines.extend([
+            "window_smoke_status=BLOCKED",
+            "real_window_opened=false",
+            "window_closed=true",
+            "window_block_reason=" + str(exc).replace(chr(10), " "),
+        ])
+        return True, chr(10).join(lines)
     try:
         configure_tkinter_root(root, build_tkinter_shell_spec())
         if hasattr(root, "update_idletasks"):

@@ -83,3 +83,20 @@ def test_main_rejects_unknown_tkinter_shell_argument(capsys):
     assert "--no-window-smoke|--window-smoke" in output
     assert "### RESULT: FAIL ###" in output
 
+def test_window_smoke_blocks_when_tk_root_creation_fails(monkeypatch):
+    from types import SimpleNamespace
+
+    from agentic_project_kit import gui_tkinter_shell
+
+    monkeypatch.setattr(gui_tkinter_shell, "check_window_launch_ready", lambda: SimpleNamespace(ok=True))
+    monkeypatch.setattr(gui_tkinter_shell, "render_window_guard_result", lambda _guard: "GUI WINDOW GUARD" + chr(10) + "window_launch_ready=true")
+    monkeypatch.setattr(gui_tkinter_shell, "create_tkinter_root", lambda: (_ for _ in ()).throw(RuntimeError("no display available")))
+    ok, output = gui_tkinter_shell.run_window_smoke()
+
+    assert ok is True
+    assert "window_launch_ready=true" in output
+    assert "window_smoke_status=BLOCKED" in output
+    assert "real_window_opened=false" in output
+    assert "window_closed=true" in output
+    assert "window_block_reason=no display available" in output
+
