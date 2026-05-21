@@ -9,6 +9,7 @@ from agentic_project_kit.action_registry import list_actions
 from agentic_project_kit.gui_presenter import build_no_window_presenter_result
 from agentic_project_kit.gui_layout_plan import build_layout_plan, render_layout_plan
 from agentic_project_kit.gui_tkinter_renderer import render_layout_to_tkinter, render_tkinter_result_summary
+from agentic_project_kit.gui_window_guard import check_window_launch_ready, render_window_guard_result
 
 
 @dataclass(frozen=True)
@@ -96,7 +97,7 @@ def render_result(result: GuiDryRunResult) -> str:
         "GUI DRY RUN",
         "Safety: no window is opened; no files, branches, tags, releases, PRs, or remote state are changed.",
         f"tkinter_available={str(result.tkinter_available).lower()}",
-        f"window_launch_ready={str(result.tkinter_available).lower()}",
+        f"window_launch_ready={str(check_window_launch_ready().ok).lower()}",
         "tkinter_note=nonblocking for --dry-run; required only for real window launch",
         f"action_registry_available={str(result.action_registry_available).lower()}",
         f"action_specs_available={str(result.action_specs_available).lower()}",
@@ -118,6 +119,9 @@ def render_result(result: GuiDryRunResult) -> str:
         "tkinter_render_begin",
         render_tkinter_result_summary(rendered),
         "tkinter_render_end",
+        "window_guard_begin",
+        render_window_guard_result(check_window_launch_ready()),
+        "window_guard_end",
         "real_window_opened=false",
         "### RESULT: PASS ###" if result.ok else "### RESULT: FAIL ###",
     ])
