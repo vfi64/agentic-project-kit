@@ -1,0 +1,90 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK ###
+main
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=main
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### CREATE BRANCH ###
+Switched to a new branch 'docs/v0.3.36-doc-rules-contract-hardening'
+
+### WRITE PATCH SCRIPT ###
+
+### APPLY PATCH SCRIPT ###
+
+### DIFF ###
+diff --git a/docs/TEST_GATES.md b/docs/TEST_GATES.md
+index 6eb32bb..39eda92 100644
+--- a/docs/TEST_GATES.md
++++ b/docs/TEST_GATES.md
+@@ -324,3 +324,9 @@ Remote command first is a delivery preference, not a blocking rule. If `./ns age
+ 
+ Executable terminal blocks must never print final SUMMARY fields with placeholder alternatives such as `PASS|FAIL`, `p|paste-output`, or ellipsis markers. A copied block must end with one concrete outcome only. Placeholder examples are allowed only in prose documents when clearly marked as non-executable examples.
+ 
++
++### Release route help and invalid-argument safety
++
++`./ns release-prep --help`, `./ns release-gate --help`, `./ns release-publish --help`, and `./ns release-verify --help` must be read-only. Help output, invalid arguments, and invalid versions must not create branches, tags, releases, commits, files, or dirty working trees.
++
++A release route may only mutate state after argument validation has succeeded and the route has entered its explicit release action mode. This gate exists to prevent regressions such as accidentally creating a branch from `--help`.
+diff --git a/docs/governance/FINAL_SUMMARY_CONTRACT.md b/docs/governance/FINAL_SUMMARY_CONTRACT.md
+index ee5afce..4bfd99a 100644
+--- a/docs/governance/FINAL_SUMMARY_CONTRACT.md
++++ b/docs/governance/FINAL_SUMMARY_CONTRACT.md
+@@ -102,3 +102,11 @@ All relevant workflow blocks must produce their final framed summary through the
+ 
+ Every summary invocation must provide at least `--slice`, `--scope`, `--branch`, `--work`, `--evidence`, `--overall`, and `--terminal-log`. For logged local mutation blocks, both `--terminal-log-remote` and `--terminal-log-local` must be set honestly. If no remote log was committed, the summary must say `REMOTE_EVIDENCE: FAIL` or `CHAT_ONLY` as appropriate and must not claim remote evidence.
+ 
++
++## Chat acknowledgement and renderer-terminal-log rule
++
++A short chat acknowledgement such as `d`, `D`, `f`, or `F` is not evidence. Before continuing after such an acknowledgement, the previous terminal output must be inspected for contradictions, including earlier FAIL markers, renderer errors, accidental branch creation, missing committed remote logs, PASS-after-failure contradictions, legacy summary formats, and duplicate or conflicting final anchors.
++
++Rendered summaries must provide a real `terminal_log` value. `terminal_log: NONE` is invalid even when `REMOTE_EVIDENCE` is `NOT_REQUIRED` or the evidence class is `CHAT_ONLY`. For read-only or chat-only work, use a truthful local transcript path in `terminal_log` and `terminal_log_local`, and keep `terminal_log_remote: NONE` unless the log has actually been committed and pushed.
++
++After `./ns summary`, do not append a handwritten legacy result footer. The renderer output is the final result anchor. A handmade footer may only appear inside older archived logs, not in new workflow blocks.
+diff --git a/docs/workflow/V0.3.36_REMAINING_WORKPLAN.md b/docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
+index 53eb51a..e333876 100644
+--- a/docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
++++ b/docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
+@@ -191,3 +191,10 @@ The standard-error hardening baseline now treats STATUS-losing pipeline/subshell
+ ## Closeout updates
+ 
+ - [x] Close direct `./ns` shell adapter removal with zero tracked `tools/ns_*.sh` adapters and regression protection.
++
++## Durable workflow rules added before release closeout
++
++- `d`/`f` acknowledgements are not evidence; the previous terminal output must be checked before continuing.
++- New blocks must use `./ns summary` as the final result anchor and must not append a handwritten legacy footer after it.
++- `terminal_log` must be a real log path. Use local paths for chat-only/read-only work and remote paths only after committed/pushed evidence exists.
++- Release-route help and invalid-argument paths must be read-only before the v0.3.36 release is started.
+
+### TARGETED TESTS ###
+..............                                                           [100%]
+14 passed in 0.12s
+
+### DOC GATES ###
+Usage: next-step.py [--request|--fail-report|--upload-output]
+
+### RUFF ###
+
+### COPY TERMINAL LOG FOR COMMIT ###

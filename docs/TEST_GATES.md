@@ -324,3 +324,7 @@ Remote command first is a delivery preference, not a blocking rule. If `./ns age
 
 Executable terminal blocks must never print final SUMMARY fields with placeholder alternatives such as `PASS|FAIL`, `p|paste-output`, or ellipsis markers. A copied block must end with one concrete outcome only. Placeholder examples are allowed only in prose documents when clearly marked as non-executable examples.
 
+
+### Release route help and invalid-argument safety
+
+`./ns release-prep --help`, `./ns release-gate --help`, `./ns release-publish --help`, and `./ns release-verify --help` must be read-only and must not create branches, tags, releases, commits, files, or dirty working trees.
