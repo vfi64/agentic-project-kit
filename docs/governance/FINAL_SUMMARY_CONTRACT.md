@@ -110,3 +110,11 @@ A short chat acknowledgement such as `d`, `D`, `f`, or `F` only means that the l
 Rendered summaries must provide a real `terminal_log` value. `terminal_log: NONE` is invalid even when `REMOTE_EVIDENCE` is `NOT_REQUIRED` or the evidence class is `CHAT_ONLY`. For read-only or chat-only work, use a truthful local transcript path in `terminal_log` and `terminal_log_local`, and keep `terminal_log_remote: NONE` unless the log has actually been committed and pushed.
 
 After `./ns summary`, do not append a handwritten legacy result footer. The renderer output is the final result anchor. A handmade footer may only appear inside older archived logs, not in new workflow blocks.
+
+## Stop-after-fail and post-release gate separation
+
+A workflow block must not continue into later mutation, PR creation, merge, tag, release, or post-merge verification sections after a blocking gate has failed. The final summary must report the failed gate and the branch actually reached.
+
+`release-check` verifies pre-publication readiness and intentionally fails once the target tag or GitHub Release exists. Post-publication and DOI closeout blocks must use `post-release-check`, release visibility checks, DOI text verification, and normal project gates instead.
+
+A PR state where checks are not yet reported must be represented as `CI: not_reported` or equivalent. It is not `CI: PASS`.
