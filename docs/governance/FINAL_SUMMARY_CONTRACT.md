@@ -81,8 +81,10 @@ If a block detects a failed test, failed gate, failed mode check, or failed remo
 
 ## Communication summary id contract
 
-Every final summary must include a deterministic communication id header in the form `SUMMARY COMM-xxxxx | YYYY-MM-DD HH:MM:SS +ZZZZ | origin | branch`.
+Every final summary must include a deterministic communication id header in the form `SUMMARY COMM-xxxxx | YYYY-MM-DD HH:MM:SS +ZZZZ`.
 
 The canonical counter is stored in `.agentic/communication_state.json`. The counter is incremented through `./ns comm-next-summary`; the state is checked through `./ns comm-check`.
 
 The counter provides an audit reference for local, remote, and mixed execution summaries. It must not be silently renumbered after publication.
+
+The header must not repeat branch, origin, or mode; those values belong in the structured `SLICE` and `EXECUTION` blocks.

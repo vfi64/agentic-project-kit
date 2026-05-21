@@ -71,7 +71,7 @@ def next_summary_header(
     next_id = int(state.get("last_summary_id", 0)) + 1
     now = datetime.now().astimezone()
     branch_name = branch or current_branch()
-    header = f"SUMMARY {format_summary_id(next_id)} | {now:%Y-%m-%d %H:%M:%S %z} | {origin} | {branch_name}"
+    header = f"SUMMARY {format_summary_id(next_id)} | {now:%Y-%m-%d %H:%M:%S %z}"
     if write:
         state["last_summary_id"] = next_id
         state["updated_at"] = now.isoformat(timespec="seconds")

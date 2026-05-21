@@ -29,7 +29,8 @@ def test_next_summary_increments_state(tmp_path: Path) -> None:
     write_state(state, 41)
     header = next_summary_header(state, origin="local", branch="feature/test", slice_name="unit")
     assert header.startswith("SUMMARY COMM-00042 | ")
-    assert header.endswith(" | local | feature/test")
+    assert " | local | " not in header
+    assert "feature/test" not in header
     data = json.loads(state.read_text(encoding="utf-8"))
     assert data["last_summary_id"] == 42
     assert data["last_origin"] == "local"
@@ -53,5 +54,6 @@ def test_ns_shortcuts_are_wired() -> None:
 def test_summary_contract_documents_communication_id() -> None:
     text = Path("docs/governance/FINAL_SUMMARY_CONTRACT.md").read_text(encoding="utf-8")
     assert "Communication summary id contract" in text
-    assert "SUMMARY COMM-xxxxx | YYYY-MM-DD HH:MM:SS +ZZZZ | origin | branch" in text
+    assert "SUMMARY COMM-xxxxx | YYYY-MM-DD HH:MM:SS +ZZZZ" in text
+    assert "must not repeat branch, origin, or mode" in text
     assert ".agentic/communication_state.json" in text
