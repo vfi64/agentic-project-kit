@@ -1,0 +1,1333 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### CLEAN PRECHECK BEFORE LOG CREATION ###
+main
+
+### CREATE CLASSIFICATION BRANCH ###
+Switched to a new branch 'docs/v0.3.36-shell-port-classification'
+
+### TRACKED SHELL FILES OUTSIDE TMP ###
+tools/capture_workflow_output.sh
+tools/local_workflow_cycle.sh
+tools/ns_clean_evidence.sh
+tools/ns_commit_pr_guard.sh
+tools/ns_finalize_guard.sh
+tools/ns_pr_cleanup.sh
+tools/ns_pr_create_or_skip.sh
+tools/ns_release_gate.sh
+tools/ns_release_prep.sh
+tools/ns_release_publish.sh
+tools/ns_release_verify.sh
+tools/ns_safe_remove_diagnostic.sh
+tools/ns_slice_runner.sh
+tools/ns_up_pr_completion.sh
+tools/screen_control_gate.sh
+
+### SHELL FILE CONTENT OVERVIEW ###
+
+----- tools/capture_workflow_output.sh -----
+line_count=40
+
+first_120_lines:
+#!/usr/bin/env bash
+set -u
+
+mkdir -p tmp/agent-evidence docs/reports
+STAMP="$(date +%Y%m%d-%H%M%S)"
+OUT="tmp/agent-evidence/workflow-output-${STAMP}.md"
+
+{
+  echo "# Workflow output"
+  echo
+  echo "Date: $(date "+%Y-%m-%d %H:%M:%S")"
+  echo "Branch: $(git branch --show-current)"
+  echo
+  echo "## Git status"
+  git status --short
+  echo
+  echo "## Git log"
+  git log --oneline -10
+  echo
+  echo "## Screen-control gate"
+  ./tools/screen_control_gate.sh
+} > "$OUT" 2>&1
+
+{
+  echo "# Current workflow output"
+  echo
+  echo "Date: $(date "+%Y-%m-%d %H:%M:%S")"
+  echo "Branch: $(git branch --show-current)"
+  echo
+  echo "## Purpose"
+  echo
+  echo "Captured complete workflow output for remote handoff."
+  echo
+  echo "## Evidence file"
+  echo
+  echo "$OUT"
+} > docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+
+printf "%s
+" "$OUT"
+
+----- tools/local_workflow_cycle.sh -----
+line_count=26
+
+first_120_lines:
+#!/usr/bin/env bash
+set -euo pipefail
+
+STATE_FILE=".agentic/workflow_state"
+STATE="$(tr -d "[:space:]" < "$STATE_FILE")"
+
+if [ "$STATE" = "TEST" ]; then
+  OUT="$(./tools/capture_workflow_output.sh)"
+  printf "%s\n" "UPLOAD" > "$STATE_FILE"
+  printf "Captured workflow output: %s\n" "$OUT"
+  printf "%s\n" "Next state: UPLOAD"
+  exit 0
+fi
+
+if [ "$STATE" = "UPLOAD" ]; then
+  git add .agentic/workflow_state docs/reports/CURRENT_WORKFLOW_OUTPUT.md tests/test_workflow_state.py tools/capture_workflow_output.sh tools/local_workflow_cycle.sh
+  git add -f tmp/agent-evidence/workflow-output-*.md
+  git commit -m "Add temporary workflow evidence"
+  git push -u origin "$(git branch --show-current)"
+  printf "%s\n" "TEST" > "$STATE_FILE"
+  printf "%s\n" "Uploaded workflow evidence. Local state reset to TEST; commit the reset separately if desired."
+  exit 0
+fi
+
+printf "Invalid workflow state: %s\n" "$STATE" >&2
+exit 1
+
+----- tools/ns_clean_evidence.sh -----
+line_count=60
+
+first_120_lines:
+#!/usr/bin/env sh
+set -eu
+STATUS=0
+
+printf "\n\n\n"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "\n\n\n"
+printf "NS CLEAN EVIDENCE\n\n"
+
+printf "\n### SAFETY ###\n"
+printf "%s\n" "Safety: removes ignored tmp evidence and restores known tracked workflow evidence only; does not delete arbitrary docs/reports files."
+
+printf "\n### BEFORE STATUS ###\n"
+git status --short || STATUS=1
+
+printf "\n### RESTORE KNOWN TRACKED WORKFLOW EVIDENCE ###\n"
+for path in .agentic/workflow_state docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+do
+  if git ls-files --error-unmatch "$path" >/dev/null 2>&1; then
+    if ! git diff --quiet -- "$path" 2>/dev/null || ! git diff --cached --quiet -- "$path" 2>/dev/null; then
+      printf "restore_tracked=%s\n" "$path"
+      git restore --staged --worktree "$path" || STATUS=1
+    else
+      printf "clean_tracked=%s\n" "$path"
+    fi
+  else
+    printf "skip_untracked_path=%s\n" "$path"
+  fi
+done
+
+printf "\n### REMOVE IGNORED TMP EVIDENCE ###\n"
+if [ -d tmp/agent-evidence ]; then
+  printf "%s\n" "remove_ignored_dir=tmp/agent-evidence"
+  rm -rf tmp/agent-evidence || STATUS=1
+else
+  printf "%s\n" "no_ignored_tmp_evidence=tmp/agent-evidence"
+fi
+
+printf "\n### UNTRACKED DOC REPORTS REVIEW ###\n"
+UNTRACKED_REPORTS="$(git status --short docs/reports 2>/dev/null | grep "^?? " || true)"
+if [ -n "$UNTRACKED_REPORTS" ]; then
+  printf "%s\n" "$UNTRACKED_REPORTS"
+  printf "%s\n" "NEEDS_HUMAN_REVIEW: untracked docs/reports files were not deleted automatically."
+  STATUS=1
+else
+  printf "%s\n" "No untracked docs/reports files found."
+fi
+
+printf "\n### AFTER STATUS ###\n"
+git status --short || STATUS=1
+
+if [ "$STATUS" -eq 0 ]; then
+  printf "\n### RESULT: PASS ###\n"
+else
+  printf "\n### RESULT: FAIL ###\n"
+fi
+
+exit "$STATUS"
+
+----- tools/ns_commit_pr_guard.sh -----
+line_count=16
+
+first_120_lines:
+#!/usr/bin/env sh
+set -eu
+
+BRANCH="$(git branch --show-current)"
+if [ "$BRANCH" = "main" ]; then
+  printf "%s\n" "ERROR: refusing commit/PR workflow on main."
+  printf "%s\n" "Create a feature or docs branch first, then rerun the commit/PR workflow."
+  printf "%s\n" "Expected action: create a feature or docs branch first."
+  exit 1
+fi
+
+if [ -n "$(git status --porcelain)" ]; then
+  printf "%s\n" "Commit/PR guard passed on branch: $BRANCH"
+else
+  printf "%s\n" "No local changes detected on branch: $BRANCH"
+fi
+
+----- tools/ns_finalize_guard.sh -----
+line_count=133
+
+first_120_lines:
+#!/usr/bin/env sh
+set -eu
+STATUS=0
+
+BRANCH="${1:-}"
+MARKER="${2:-}"
+if [ -z "$BRANCH" ]; then
+  printf "%s\n" "ERROR: missing finalization branch. Usage: ./ns finalize-guard <branch> [marker-text]"
+  printf "%s\n" "STATUS: FAIL_NEEDS_HUMAN_REVIEW"
+  printf "%s\n" "### RESULT: FAIL ###"
+  exit 1
+fi
+
+run_core() {
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.finalize_guard \
+    --marker-requested "$1" \
+    --marker-on-main "$2" \
+    --local-branch-exists "$3" \
+    --remote-branch-exists "$4" \
+    --commits-ahead-of-main "$5" \
+    --merge-conflict "$6"
+}
+
+printf "\n\n\n"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "\n\n\n"
+printf "NS FINALIZATION GUARD\n\n"
+printf "Safety: idempotent finalization branch guard; no commit, push, PR, merge, tag, release, branch deletion, or file mutation.\n"
+
+printf "\n### UPDATE MAIN REFERENCES ###\n"
+if ! git fetch origin main >/dev/null 2>&1; then
+  printf "Could not fetch origin/main.\n"
+  run_core false false false false unknown unknown
+  exit $?
+fi
+
+printf "\n### CURRENT STATE ###\n"
+CURRENT_BRANCH="$(git branch --show-current)" || STATUS=1
+printf "current_branch=%s\n" "$CURRENT_BRANCH"
+printf "target_branch=%s\n" "$BRANCH"
+git status --short || STATUS=1
+if [ "$STATUS" -ne 0 ]; then
+  run_core false false false false unknown unknown
+  exit $?
+fi
+
+printf "\n### MARKER CHECK ON MAIN ###\n"
+MARKER_REQUESTED=false
+MARKER_ON_MAIN_BOOL=false
+if [ -n "$MARKER" ]; then
+  MARKER_REQUESTED=true
+  if git grep -F "$MARKER" origin/main -- docs/STATUS.md docs/handoff/CURRENT_HANDOFF.md >/dev/null 2>&1; then
+    MARKER_ON_MAIN_BOOL=true
+    printf "marker_already_on_main=true\n"
+  else
+    printf "marker_already_on_main=false\n"
+  fi
+else
+  printf "marker_check=skipped\n"
+fi
+
+printf "\n### BRANCH EXISTENCE CHECK ###\n"
+LOCAL_EXISTS=0
+REMOTE_EXISTS=0
+git show-ref --verify --quiet "refs/heads/$BRANCH" && LOCAL_EXISTS=1 || true
+git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1 && REMOTE_EXISTS=1 || true
+printf "local_branch_exists=%s\n" "$LOCAL_EXISTS"
+printf "remote_branch_exists=%s\n" "$REMOTE_EXISTS"
+LOCAL_EXISTS_BOOL=false
+REMOTE_EXISTS_BOOL=false
+if [ "$LOCAL_EXISTS" -eq 1 ]; then LOCAL_EXISTS_BOOL=true; fi
+if [ "$REMOTE_EXISTS" -eq 1 ]; then REMOTE_EXISTS_BOOL=true; fi
+
+if [ "$LOCAL_EXISTS" -eq 0 ] && [ "$REMOTE_EXISTS" -eq 0 ]; then
+  run_core "$MARKER_REQUESTED" "$MARKER_ON_MAIN_BOOL" false false unknown unknown
+  exit $?
+fi
+
+if [ "$REMOTE_EXISTS" -eq 1 ]; then
+  git fetch origin "$BRANCH" >/dev/null 2>&1 || STATUS=1
+fi
+if [ "$STATUS" -ne 0 ]; then
+  run_core "$MARKER_REQUESTED" "$MARKER_ON_MAIN_BOOL" "$LOCAL_EXISTS_BOOL" "$REMOTE_EXISTS_BOOL" unknown unknown
+  exit $?
+fi
+
+printf "\n### AHEAD / BEHIND CHECK ###\n"
+COMPARE_REF="$BRANCH"
+if [ "$LOCAL_EXISTS" -eq 0 ] && [ "$REMOTE_EXISTS" -eq 1 ]; then
+  COMPARE_REF="origin/$BRANCH"
+fi
+COUNTS="$(git rev-list --left-right --count origin/main..."$COMPARE_REF")" || STATUS=1
+if [ "$STATUS" -ne 0 ]; then
+  run_core "$MARKER_REQUESTED" "$MARKER_ON_MAIN_BOOL" "$LOCAL_EXISTS_BOOL" "$REMOTE_EXISTS_BOOL" unknown unknown
+  exit $?
+fi
+BEHIND="$(printf "%s" "$COUNTS" | awk "{print \$1}")"
+AHEAD="$(printf "%s" "$COUNTS" | awk "{print \$2}")"
+printf "commits_behind_main=%s\n" "$BEHIND"
+printf "commits_ahead_of_main=%s\n" "$AHEAD"
+
+if [ "$AHEAD" = "0" ]; then
+  run_core "$MARKER_REQUESTED" "$MARKER_ON_MAIN_BOOL" "$LOCAL_EXISTS_BOOL" "$REMOTE_EXISTS_BOOL" 0 unknown
+  exit $?
+fi
+
+printf "\n### CONFLICT CLASSIFICATION ###\n"
+TMP_BRANCH="tmp-finalize-guard-check-$$"
+git switch --quiet --detach origin/main || STATUS=1
+git switch --quiet -c "$TMP_BRANCH" || STATUS=1
+if [ "$STATUS" -ne 0 ]; then
+  git switch --quiet "$CURRENT_BRANCH" >/dev/null 2>&1 || true
+  git branch -D "$TMP_BRANCH" >/dev/null 2>&1 || true
+  run_core "$MARKER_REQUESTED" "$MARKER_ON_MAIN_BOOL" "$LOCAL_EXISTS_BOOL" "$REMOTE_EXISTS_BOOL" "$AHEAD" unknown
+  exit $?
+fi
+set +e
+git merge --no-commit --no-ff "$COMPARE_REF" >/tmp/ns_finalize_guard_merge.out 2>/tmp/ns_finalize_guard_merge.err
+
+----- tools/ns_pr_cleanup.sh -----
+line_count=92
+
+first_120_lines:
+#!/usr/bin/env sh
+set -eu
+STATUS=0
+
+printf "\n\n\n"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "\n\n\n"
+printf "NS PR CLEANUP CLASSIFICATION\n\n"
+
+printf "### SAFETY ###\n"
+printf "%s\n" "Safety: read-only PR classification; no close, merge, edit, push, delete, tag, or release action."
+
+if ! command -v gh >/dev/null 2>&1; then
+  printf "%s\n" "ERROR: gh CLI is required for PR classification."
+  printf "\n### RESULT: FAIL ###\n"
+  exit 1
+fi
+
+printf "\n### OPEN PR CLASSIFICATION ###\n"
+TMP_FILE="$(mktemp "${TMPDIR:-/tmp}/ns-pr-cleanup.XXXXXX")"
+trap 'rm -f "$TMP_FILE"' EXIT HUP INT TERM
+
+if ! gh pr list --state open --limit 100 --json number,headRefName,baseRefName,mergeable,isDraft,title,author,updatedAt --jq '.[] | [.number, .headRefName, .baseRefName, .mergeable, .isDraft, .author.login, .updatedAt, .title] | @tsv' > "$TMP_FILE"; then
+  printf "%s\n" "ERROR: unable to list open PRs."
+  printf "\n### RESULT: FAIL ###\n"
+  exit 1
+fi
+
+COUNT="$(wc -l < "$TMP_FILE" | tr -d " ")"
+printf "open_pr_count=%s\n" "$COUNT"
+
+if [ "$COUNT" = "0" ]; then
+  printf "%s\n" "No open PRs found."
+  printf "\n### FINAL STATE ###\n"
+  git branch --show-current || STATUS=1
+  git status --short || STATUS=1
+  printf "\n### RESULT: PASS ###\n"
+  exit 0
+fi
+
+TAB="$(printf "\t")"
+while IFS="$TAB" read -r NUMBER HEAD BASE MERGEABLE DRAFT AUTHOR UPDATED TITLE
+do
+  CLASS="ACTIVE_FEATURE_PR"
+  ACTION="review_manually"
+
+  case "$HEAD" in
+    dependabot/*)
+      CLASS="DEPENDABOT_PR"
+      ACTION="review_dependency_update"
+      ;;
+    docs/finalize-*|docs/record-*|docs/post-*)
+      CLASS="STALE_DOCS_FINALIZATION_CANDIDATE"
+      ACTION="run_finalize_guard_before_closing_or_recreating"
+      ;;
+    release/prepare-*)
+      CLASS="RELEASE_PREP_PR"
+      ACTION="verify_release_state_before_merge_or_close"
+      ;;
+  esac
+
+  if [ "$MERGEABLE" = "CONFLICTING" ]; then
+    if [ "$CLASS" = "STALE_DOCS_FINALIZATION_CANDIDATE" ]; then
+      CLASS="SUPERSEDED_OR_CONFLICTING_DOCS_FINALIZATION"
+      ACTION="run_finalize_guard_then_human_decide_safe_close"
+    elif [ "$CLASS" = "DEPENDABOT_PR" ]; then
+      ACTION="review_dependency_conflict"
+    else
+      CLASS="CONFLICTING_RELEVANT_PR"
+      ACTION="human_review_required"
+    fi
+  fi
+
+  if [ "$DRAFT" = "true" ]; then
+    ACTION="draft_review_required"
+  fi
+
+  printf "#%s class=%s action=%s mergeable=%s draft=%s head=%s base=%s author=%s updated=%s title=%s\n" "$NUMBER" "$CLASS" "$ACTION" "$MERGEABLE" "$DRAFT" "$HEAD" "$BASE" "$AUTHOR" "$UPDATED" "$TITLE"
+done < "$TMP_FILE"
+
+printf "\n### FINAL STATE ###\n"
+git branch --show-current || STATUS=1
+git status --short || STATUS=1
+
+if [ "$STATUS" -eq 0 ]; then
+  printf "\n### RESULT: PASS ###\n"
+else
+  printf "\n### RESULT: FAIL ###\n"
+fi
+exit "$STATUS"
+
+----- tools/ns_pr_create_or_skip.sh -----
+line_count=67
+
+first_120_lines:
+#!/usr/bin/env sh
+set -eu
+STATUS=0
+
+TITLE="${1:-}"
+BODY="${2:-}"
+BASE="${3:-main}"
+
+printf "\n\n\n"
+printf "%s\n" "--------------------------------------------------------------------------------"
+printf "%s\n" "-------------------------------------------------------------------------------"
+printf "%s\n" "--------------------------------------------------------------------------------"
+printf "\n\n\n"
+printf "NS PR CREATE OR SKIP\n\n"
+
+if [ -z "$TITLE" ]; then
+  printf "ERROR: missing title argument.\n"
+  printf "Usage: tools/ns_pr_create_or_skip.sh TITLE BODY [BASE]\n"
+  exit 1
+fi
+
+BRANCH="$(git branch --show-current)" || STATUS=1
+printf "\n### BRANCH / STATUS ###\n"
+printf "branch=%s\n" "$BRANCH"
+git status --short || STATUS=1
+
+if [ "$BRANCH" = "$BASE" ]; then
+  printf "No PR needed: current branch is base branch %s.\n" "$BASE"
+  printf "\n### RESULT: PASS ###\n"
+  exit 0
+fi
+
+printf "\n### CHECK BRANCH DELTA ###\n"
+git fetch origin "$BASE" || STATUS=1
+DELTA="$(git rev-list --count "origin/$BASE..HEAD")" || STATUS=1
+printf "commits_ahead_of_%s=%s\n" "$BASE" "$DELTA"
+
+if [ "$STATUS" -eq 0 ] && [ "$DELTA" -eq 0 ]; then
+  printf "No PR needed: branch has no commits ahead of origin/%s.\n" "$BASE"
+  printf "This is an idempotent already-completed state, not a failure.\n"
+  printf "\n### RESULT: PASS ###\n"
+  exit 0
+fi
+
+printf "\n### EXISTING PR CHECK ###\n"
+if gh pr view --json number,title,state,url; then
+  printf "Existing PR found for current branch.\n"
+else
+  printf "\n### CREATE PR ###\n"
+  gh pr create --base "$BASE" --title "$TITLE" --body "$BODY" || STATUS=1
+fi
+
+printf "\n### PR STATUS ###\n"
+gh pr status || STATUS=1
+
+printf "\n### FINAL STATE ###\n"
+git branch --show-current || STATUS=1
+git log --oneline -6 || STATUS=1
+git status --short || STATUS=1
+
+if [ "$STATUS" -eq 0 ]; then
+  printf "\n### RESULT: PASS ###\n"
+else
+  printf "\n### RESULT: FAIL ###\n"
+fi
+
+exit "$STATUS"
+
+----- tools/ns_release_gate.sh -----
+line_count=12
+
+first_120_lines:
+#!/usr/bin/env sh
+set -eu
+
+VERSION="${1:-}"
+if [ -z "$VERSION" ]; then
+  printf "%s\n" "ERROR: usage: ./ns release-gate <version>"
+  printf "%s\n" "### RESULT: FAIL ###"
+  exit 2
+fi
+
+PY="${PYTHON:-.venv/bin/python}"
+PYTHONPATH=src "$PY" -m agentic_project_kit.release_gate_core "$VERSION"
+
+----- tools/ns_release_prep.sh -----
+line_count=47
+
+first_120_lines:
+#!/usr/bin/env sh
+set -eu
+STATUS=0
+VERSION="${1:-}"
+if [ -z "$VERSION" ]; then
+  printf "%s\n" "ERROR: missing version argument. Example: ./ns release-prep 0.3.21"
+  exit 2
+fi
+case "$VERSION" in
+  v*) TAG="$VERSION"; PLAIN_VERSION="${VERSION#v}" ;;
+  *) TAG="v$VERSION"; PLAIN_VERSION="$VERSION" ;;
+esac
+printf "\n\n\n"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "\n\n\n"
+printf "NS RELEASE PREP CYCLE %s\n\n" "$TAG"
+printf "\n### SAFETY ###\n"
+printf "%s\n" "Safety: prepares a release branch only; no tag, release, merge, or publish action."
+printf "\n### UPDATE MAIN ###\n"
+git switch main || STATUS=1
+git pull --ff-only origin main || STATUS=1
+printf "\n### VERIFY MAIN BEFORE RELEASE BRANCH ###\n"
+./ns dev || STATUS=1
+PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli pr-hygiene || STATUS=1
+printf "\n### CREATE RELEASE PREP BRANCH ###\n"
+BRANCH="release/prepare-$TAG"
+if git show-ref --verify --quiet "refs/heads/$BRANCH"; then
+  git switch "$BRANCH" || STATUS=1
+else
+  git switch -c "$BRANCH" || STATUS=1
+fi
+printf "\n### PATCH RELEASE METADATA ###\n"
+.venv/bin/python tools/ns_release_metadata_prep.py "$PLAIN_VERSION" || STATUS=1
+
+printf "\n### RELEASE CHECK AFTER METADATA PATCH ###\n"
+PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli release-check --version "$PLAIN_VERSION" || STATUS=1
+
+printf "\n### CURRENT VERSION REFERENCES ###\n"
+grep -R "$PLAIN_VERSION" -n pyproject.toml src/agentic_project_kit/__init__.py CITATION.cff CHANGELOG.md README.md docs/STATUS.md docs/handoff/CURRENT_HANDOFF.md || true
+printf "\n### FINAL STATE ###\n"
+git branch --show-current || STATUS=1
+git status --short || STATUS=1
+git log --oneline -8 || STATUS=1
+if [ "$STATUS" -eq 0 ]; then printf "\n### RESULT: PASS ###\n"; else printf "\n### RESULT: FAIL ###\n"; fi
+exit "$STATUS"
+
+----- tools/ns_release_publish.sh -----
+line_count=115
+
+first_120_lines:
+#!/usr/bin/env sh
+set -eu
+STATUS=0
+
+VERSION="${1:-}"
+CONFIRM="${2:-}"
+if [ -z "$VERSION" ]; then
+  printf "%s\n" "ERROR: usage: ./ns release-publish <version> publish-v<version>"
+  printf "%s\n" "### RESULT: FAIL ###"
+  exit 2
+fi
+
+TAG="v$VERSION"
+EXPECTED="publish-$TAG"
+
+printf "\n\n\n"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "\n\n\n"
+printf "NS RELEASE PUBLISH CYCLE %s\n\n" "$TAG"
+
+printf "\n### SAFETY ###\n"
+printf "Safety: publishes only with exact confirmation token: %s\n" "$EXPECTED"
+if [ "$CONFIRM" != "$EXPECTED" ]; then
+  printf "%s\n" "ERROR: refusing release publish without exact confirmation token."
+  printf "Run: ./ns release-publish %s %s\n" "$VERSION" "$EXPECTED"
+  printf "\n### RESULT: FAIL ###\n"
+  exit 2
+fi
+
+printf "\n### BRANCH / STATUS ###\n"
+BRANCH="$(git branch --show-current)" || STATUS=1
+printf "branch=%s\n" "$BRANCH"
+git status --short || STATUS=1
+if [ "$BRANCH" != "main" ]; then
+  printf "%s\n" "ERROR: release publish must run from main."
+  STATUS=1
+fi
+if [ -n "$(git status --porcelain)" ]; then
+  printf "%s\n" "ERROR: working tree is dirty. Commit or restore changes before publish."
+  STATUS=1
+fi
+
+printf "\n### UPDATE MAIN ###\n"
+if [ "$STATUS" -eq 0 ]; then
+  git pull --ff-only origin main || STATUS=1
+fi
+
+printf "\n### RELEASE GATE ###\n"
+if [ "$STATUS" -eq 0 ]; then
+  ./ns release-gate "$VERSION" || STATUS=1
+fi
+
+printf "\n### VERIFY TAG IS UNUSED ###\n"
+if [ "$STATUS" -eq 0 ]; then
+  if git rev-parse "$TAG" >/dev/null 2>&1; then
+    printf "ERROR: local tag already exists: %s\n" "$TAG"
+    STATUS=1
+  fi
+  if git ls-remote --tags origin "$TAG" | grep "$TAG" >/dev/null 2>&1; then
+    printf "ERROR: remote tag already exists: %s\n" "$TAG"
+    STATUS=1
+  fi
+  if gh release view "$TAG" >/dev/null 2>&1; then
+    printf "ERROR: GitHub release already exists: %s\n" "$TAG"
+    STATUS=1
+  fi
+fi
+
+printf "\n### CREATE AND PUSH TAG ###\n"
+if [ "$STATUS" -eq 0 ]; then
+  git tag "$TAG" || STATUS=1
+  git push origin "$TAG" || STATUS=1
+fi
+
+printf "\n### WAIT FOR RELEASE WORKFLOW AND GITHUB RELEASE ###\n"
+if [ "$STATUS" -eq 0 ]; then
+  FOUND=0
+  i=0
+  while [ "$i" -lt 30 ]; do
+    if gh release view "$TAG" >/dev/null 2>&1; then
+      FOUND=1
+      break
+    fi
+    i=$((i + 1))
+    printf "Waiting for GitHub release %s (%s/30)\n" "$TAG" "$i"
+    sleep 10
+  done
+  if [ "$FOUND" -ne 1 ]; then
+    printf "ERROR: GitHub release did not appear before timeout: %s\n" "$TAG"
+    STATUS=1
+  fi
+fi
+
+printf "\n### RELEASE WORKFLOW STATUS ###\n"
+gh run list --workflow Release --limit 8 || STATUS=1
+
+printf "\n### VERIFY COMPLETED RELEASE ###\n"
+if [ "$STATUS" -eq 0 ]; then
+  ./ns release-verify "$VERSION" || STATUS=1
+fi
+
+printf "\n### FINAL STATE ###\n"
+git branch --show-current || STATUS=1
+git log --oneline -8 || STATUS=1
+git status --short || STATUS=1
+
+if [ "$STATUS" -eq 0 ]; then
+  printf "\n### RESULT: PASS ###\n"
+else
+  printf "\n### RESULT: FAIL ###\n"
+fi
+
+exit "$STATUS"
+
+----- tools/ns_release_verify.sh -----
+line_count=84
+
+first_120_lines:
+#!/usr/bin/env sh
+set -eu
+STATUS=0
+
+VERSION="${1:-}"
+if [ -z "$VERSION" ]; then
+  printf "%s\n" "ERROR: usage: ./ns release-verify <version>"
+  exit 2
+fi
+
+TAG="v$VERSION"
+
+printf "\n\n\n"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "%s\n" "-------------------------------------------------------------------------"
+printf "\n\n\n"
+printf "NS RELEASE VERIFY CYCLE %s\n\n" "$TAG"
+
+printf "\n### SAFETY ###\n"
+printf "%s\n" "Safety: verifies completed release state only; no tag, release, merge, push, or publish action."
+
+printf "\n### BRANCH / STATUS ###\n"
+git branch --show-current || STATUS=1
+git status --short || STATUS=1
+
+printf "\n### VERIFY LOCAL TAG ###\n"
+if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+  git rev-parse "$TAG"
+else
+  printf "ERROR: local tag missing: %s\n" "$TAG"
+  STATUS=1
+fi
+
+printf "\n### VERIFY REMOTE TAG ###\n"
+if git ls-remote --tags origin "$TAG" | grep "$TAG" >/dev/null; then
+  git ls-remote --tags origin "$TAG"
+else
+  printf "ERROR: remote tag missing: %s\n" "$TAG"
+  STATUS=1
+fi
+
+printf "\n### WAIT FOR GITHUB RELEASE ###\n"
+COUNT=0
+FOUND=0
+while [ "$COUNT" -lt 24 ]; do
+  if gh release view "$TAG" >/tmp/ns_release_verify_release.txt 2>/tmp/ns_release_verify_release_err.txt; then
+    FOUND=1
+    break
+  fi
+  COUNT=$((COUNT + 1))
+  printf "Release not visible yet for %s; retry %s/24 after 10s.\n" "$TAG" "$COUNT"
+  sleep 10
+done
+if [ "$FOUND" -eq 1 ]; then
+  cat /tmp/ns_release_verify_release.txt
+else
+  printf "ERROR: GitHub release still missing after wait: %s\n" "$TAG"
+  if [ -f /tmp/ns_release_verify_release_err.txt ]; then cat /tmp/ns_release_verify_release_err.txt; fi
+  STATUS=1
+fi
+
+printf "\n### RELEASE WORKFLOW STATUS ###\n"
+gh run list --workflow Release --limit 8 || STATUS=1
+
+printf "\n### POST RELEASE CHECK ###\n"
+if [ -x ".venv/bin/agentic-kit" ]; then
+  .venv/bin/agentic-kit post-release-check --version "$VERSION" || STATUS=1
+else
+  agentic-kit post-release-check --version "$VERSION" || STATUS=1
+fi
+
+printf "\n### FINAL STATE ###\n"
+git branch --show-current || STATUS=1
+git log --oneline -8 || STATUS=1
+git status --short || STATUS=1
+
+if [ "$STATUS" -eq 0 ]; then
+  printf "\n### RESULT: PASS ###\n"
+else
+  printf "\n### RESULT: FAIL ###\n"
+fi
+
+exit "$STATUS"
+
+----- tools/ns_safe_remove_diagnostic.sh -----
+line_count=22
+
+first_120_lines:
+#!/usr/bin/env sh
+set -eu
+STATUS=0
+
+TARGET="${1:-}"
+if [ -z "$TARGET" ]; then
+  printf "%s\n" "ERROR: missing file path. Usage: tools/ns_safe_remove_diagnostic.sh <file>"
+  exit 1
+fi
+
+printf "%s\n" "Safe diagnostic cleanup target: $TARGET"
+if git ls-files --error-unmatch "$TARGET" >/dev/null 2>&1; then
+  printf "%s\n" "Tracked file detected; restoring from HEAD instead of deleting."
+  git restore "$TARGET" || STATUS=1
+elif [ -e "$TARGET" ]; then
+  printf "%s\n" "Untracked file detected; removing."
+  rm -f "$TARGET" || STATUS=1
+else
+  printf "%s\n" "File absent; no cleanup needed."
+fi
+
+exit "$STATUS"
+
+----- tools/ns_slice_runner.sh -----
+line_count=141
+
+first_120_lines:
+#!/usr/bin/env sh
+set -eu
+STATUS=0
+
+PLAN_FILE="${1:-}"
+if [ -z "$PLAN_FILE" ]; then
+  printf "%s
+" "ERROR: missing plan file. Usage: ./ns slice-runner <plan-file>"
+  printf "%s
+" "Plan format: one shell command per line; blank lines and lines starting with # are ignored."
+  exit 1
+fi
+
+if [ ! -f "$PLAN_FILE" ]; then
+  printf "ERROR: plan file not found: %s
+" "$PLAN_FILE"
+  exit 1
+fi
+
+printf "
+
+
+"
+printf "%s
+" "--------------------------------------------------------------------------------"
+printf "%s
+" "--------------------------------------------------------------------------------"
+printf "%s
+" "--------------------------------------------------------------------------------"
+printf "
+
+
+"
+printf "NS SLICE RUNNER
+
+"
+
+printf "
+### SAFETY ###
+"
+printf "%s
+" "Safety: deterministic sequential runner; advances only after target-state PASS and stops immediately on retryable or failing states."
+printf "plan=%s
+" "$PLAN_FILE"
+
+classify_step_output() {
+  FILE="$1"
+  EXIT_STATUS="$2"
+
+  if grep -Eq "### RESULT: (FAIL|NEEDS_HUMAN_REVIEW) ###|STATUS: (FAIL|NEEDS_HUMAN_REVIEW)|RESULT: (FAIL|NEEDS_HUMAN_REVIEW)" "$FILE"; then
+    printf "%s
+" "FAIL"
+    return 0
+  fi
+
+  if grep -Eq "### RESULT: (PENDING|WAIT) ###|STATUS: (PENDING|WAIT)|RESULT: (PENDING|WAIT)" "$FILE"; then
+    printf "%s
+" "PENDING"
+    return 0
+  fi
+
+  if grep -Eq "### RESULT: (PASS|DONE|NOOP|ALREADY_ON_MAIN|ALREADY_MERGED|ALREADY_RELEASED|DOI_VERIFIED|SUPERSEDED) ###|STATUS: (PASS|DONE|NOOP|ALREADY_ON_MAIN|ALREADY_MERGED|ALREADY_RELEASED|DOI_VERIFIED|SUPERSEDED)|RESULT: (PASS|DONE|NOOP|ALREADY_ON_MAIN|ALREADY_MERGED|ALREADY_RELEASED|DOI_VERIFIED|SUPERSEDED)" "$FILE"; then
+    printf "%s
+" "PASS"
+    return 0
+  fi
+
+  if [ "$EXIT_STATUS" -eq 0 ]; then
+    printf "%s
+" "PASS"
+  else
+    printf "%s
+" "FAIL"
+  fi
+}
+
+STEP=0
+while IFS= read -r COMMAND || [ -n "$COMMAND" ]; do
+  case "$COMMAND" in
+    "") continue ;;
+    \#*) continue ;;
+  esac
+  STEP=$((STEP + 1))
+  STEP_OUT="$(mktemp "${TMPDIR:-/tmp}/ns-slice-step.XXXXXX")"
+  printf "
+### STEP %s ###
+" "$STEP"
+  printf "%s
+" "$COMMAND"
+  set +e
+  sh -c "$COMMAND" > "$STEP_OUT" 2>&1
+  COMMAND_STATUS="$?"
+  set -e
+  cat "$STEP_OUT"
+  CLASSIFICATION="$(classify_step_output "$STEP_OUT" "$COMMAND_STATUS")"
+  rm -f "$STEP_OUT"
+
+  if [ "$CLASSIFICATION" = "PASS" ]; then
+    printf "STEP %s RESULT: PASS
+" "$STEP"
+    continue
+  fi
+
+  if [ "$CLASSIFICATION" = "PENDING" ]; then
+    STATUS=2
+    printf "STEP %s RESULT: PENDING
+" "$STEP"
+    printf "%s
+" "Stopping slice runner at retryable state; no dependent follow-up actions were run."
+    break
+  fi
+
+  STATUS=1
+  printf "STEP %s RESULT: FAIL
+" "$STEP"
+  printf "%s
+" "Stopping slice runner at first failing step."
+  break
+done < "$PLAN_FILE"
+
+
+----- tools/ns_up_pr_completion.sh -----
+line_count=128
+
+first_120_lines:
+#!/usr/bin/env sh
+set -eu
+STATUS=0
+MERGED=0
+
+printf "\n\n\n"
+printf "%s\n" "--------------------------------------------------------------------------------"
+printf "%s\n" "-------------------------------------------------------------------------------"
+printf "%s\n" "--------------------------------------------------------------------------------"
+printf "\n\n\n"
+printf "NS UP PR COMPLETION CYCLE\n\n"
+
+printf "\n### SAFETY ###\n"
+printf "Safety: bounded PR completion cycle; waits for checks, squash-merges the current PR only, updates main only after a successful merge, and runs local gates.\n"
+
+printf "\n### BRANCH / STATUS ###\n"
+BRANCH="$(git branch --show-current)" || STATUS=1
+printf "branch=%s\n" "$BRANCH"
+git status --short || STATUS=1
+
+if [ "$BRANCH" = "main" ]; then
+  printf "ERROR: ./ns up must run from a PR branch, not main.\n"
+  STATUS=1
+fi
+
+if [ -n "$(git status --porcelain)" ]; then
+  printf "ERROR: working tree is dirty. Commit or restore changes before ./ns up.\n"
+  printf "Hint: run ./ns clean-evidence if the dirtiness is only workflow evidence under tmp/agent-evidence or docs/reports/CURRENT_WORKFLOW_OUTPUT.md.\n"
+  printf "Then rerun ./ns up after reviewing git status --short.\n"
+  STATUS=1
+fi
+
+printf "\n### NO-OP BRANCH CHECK ###\n"
+if [ "$BRANCH" != "main" ]; then
+  BASE_DIFF="$(git rev-list --count main.."$BRANCH" 2>/dev/null || printf "unknown")"
+  printf "commits_ahead_of_main=%s\n" "$BASE_DIFF"
+  if [ "$BASE_DIFF" = "0" ]; then
+    printf "Branch has no commits ahead of main; treating as idempotent no-op completion.\n"
+    git switch main || STATUS=1
+    git pull --ff-only origin main || STATUS=1
+    printf "\n### VERIFY MAIN ###\n"
+    ./ns dev || STATUS=1
+    PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli pr-hygiene || STATUS=1
+    printf "\n### FINAL STATE ###\n"
+    git branch --show-current || STATUS=1
+    git log --oneline -8 || STATUS=1
+    git status --short || STATUS=1
+    if [ "$STATUS" -eq 0 ]; then
+      printf "\n### RESULT: PASS ###\n"
+    else
+      printf "\n### RESULT: FAIL ###\n"
+    fi
+    exit "$STATUS"
+  fi
+fi
+
+printf "\n### IDENTIFY CURRENT PR ###\n"
+PR_NUMBER=""
+if [ "$STATUS" -eq 0 ]; then
+  if PR_NUMBER="$(gh pr view --json number --jq .number)"; then
+    printf "PR_NUMBER=%s\n" "$PR_NUMBER"
+  else
+    printf "ERROR: no current PR found for this branch.\n"
+    STATUS=1
+  fi
+fi
+
+PR_STATE=""
+MERGEABLE=""
+if [ "$STATUS" -eq 0 ]; then
+  printf "\n### PR VIEW ###\n"
+  gh pr view "$PR_NUMBER" --json number,title,state,mergeable,headRefName,baseRefName,statusCheckRollup || STATUS=1
+  PR_STATE="$(gh pr view "$PR_NUMBER" --json state --jq .state)" || STATUS=1
+  MERGEABLE="$(gh pr view "$PR_NUMBER" --json mergeable --jq .mergeable)" || STATUS=1
+  printf "state=%s\n" "$PR_STATE"
+  printf "mergeable=%s\n" "$MERGEABLE"
+  if [ "$PR_STATE" = "MERGED" ]; then
+    printf "PR is already merged; treating this as an idempotent completion state.\n"
+    MERGED=1
+  elif [ "$MERGEABLE" != "MERGEABLE" ]; then
+    printf "ERROR: PR is not mergeable. Resolve conflicts or wait for GitHub to compute mergeability before ./ns up.\n"
+    STATUS=1
+  fi
+fi
+
+if [ "$STATUS" -eq 0 ]; then
+  printf "\n### PR CHECKS SNAPSHOT ###\n"
+  gh pr checks "$PR_NUMBER" || true
+fi
+
+if [ "$STATUS" -eq 0 ]; then
+  printf "\n### WAIT FOR GREEN CHECKS AND MERGE ###\n"
+  if gh pr checks "$PR_NUMBER" --watch; then
+    if gh pr merge "$PR_NUMBER" --squash --delete-branch; then
+      MERGED=1
+    else
+      STATUS=1
+    fi
+  else
+    STATUS=1
+  fi
+fi
+
+if [ "$MERGED" -eq 1 ]; then
+  printf "\n### UPDATE MAIN ###\n"
+  git switch main || STATUS=1
+  git pull --ff-only origin main || STATUS=1
+
+  printf "\n### VERIFY MAIN ###\n"
+  ./ns dev || STATUS=1
+  PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli pr-hygiene || STATUS=1
+else
+  printf "\n### UPDATE MAIN SKIPPED ###\n"
+  printf "Main update skipped because PR merge did not complete successfully.\n"
+fi
+
+printf "\n### FINAL STATE ###\n"
+git branch --show-current || STATUS=1
+git log --oneline -8 || STATUS=1
+git status --short || STATUS=1
+
+----- tools/screen_control_gate.sh -----
+line_count=76
+
+first_120_lines:
+#!/usr/bin/env bash
+set -u
+set -o pipefail
+
+OUT="Screen-Control_Output.txt"
+
+{
+  echo "=== Screen-Control Gate Output ==="
+  echo "Timestamp: $(date '+%Y-%m-%d %H:%M:%S')"
+  echo "PWD: $(pwd)"
+  echo
+
+  echo "=== git branch ==="
+  git branch --show-current
+  echo
+
+  echo "=== git status --short ==="
+  git status --short
+  echo
+
+  echo "=== git log --oneline -8 ==="
+  git log --oneline -8
+  echo
+
+  echo "=== python -m pytest -q ==="
+  python -m pytest -q
+  PYTEST_RC=$?
+  echo "pytest exit code: $PYTEST_RC"
+  echo
+
+  echo "=== ruff check . ==="
+  ruff check .
+  RUFF_RC=$?
+  echo "ruff exit code: $RUFF_RC"
+  echo
+
+  echo "=== agentic-kit check-docs ==="
+  agentic-kit check-docs
+  CHECK_DOCS_RC=$?
+  echo "check-docs exit code: $CHECK_DOCS_RC"
+  echo
+
+  echo "=== agentic-kit doctor ==="
+  agentic-kit doctor
+  DOCTOR_RC=$?
+  echo "doctor exit code: $DOCTOR_RC"
+  echo
+
+  if [ $# -gt 0 ]; then
+    echo "=== extra command(s) ==="
+    echo "$*"
+    "$@"
+    EXTRA_RC=$?
+    echo "extra command exit code: $EXTRA_RC"
+  else
+    EXTRA_RC=0
+  fi
+
+  echo
+  echo "=== Summary ==="
+  echo "pytest:      $PYTEST_RC"
+  echo "ruff:        $RUFF_RC"
+  echo "check-docs:  $CHECK_DOCS_RC"
+  echo "doctor:      $DOCTOR_RC"
+  echo "extra:       $EXTRA_RC"
+
+  if [ "$PYTEST_RC" -eq 0 ] && [ "$RUFF_RC" -eq 0 ] && [ "$CHECK_DOCS_RC" -eq 0 ] && [ "$DOCTOR_RC" -eq 0 ] && [ "$EXTRA_RC" -eq 0 ]; then
+    echo "OVERALL: PASS"
+    exit 0
+  else
+    echo "OVERALL: FAIL"
+    exit 1
+  fi
+} 2>&1 | tee "$OUT"
+
+exit "${PIPESTATUS[0]}"
+
+### PYTHON CORE MODULES THAT MAY REPLACE SHELL ENTRYPOINTS ###
+src/agentic_project_kit/__init__.py
+src/agentic_project_kit/action_registry.py
+src/agentic_project_kit/action_specs.py
+src/agentic_project_kit/agent_command_runner.py
+src/agentic_project_kit/checks.py
+src/agentic_project_kit/cli_commands/__init__.py
+src/agentic_project_kit/cli_commands/actions.py
+src/agentic_project_kit/cli_commands/checks.py
+src/agentic_project_kit/cli_commands/cockpit.py
+src/agentic_project_kit/cli_commands/evidence.py
+src/agentic_project_kit/cli_commands/github.py
+src/agentic_project_kit/cli_commands/governance.py
+src/agentic_project_kit/cli_commands/handoff.py
+src/agentic_project_kit/cli_commands/init.py
+src/agentic_project_kit/cli_commands/patterns.py
+src/agentic_project_kit/cli_commands/pr_hygiene.py
+src/agentic_project_kit/cli_commands/pr.py
+src/agentic_project_kit/cli_commands/profiles.py
+src/agentic_project_kit/cli_commands/release.py
+src/agentic_project_kit/cli_commands/scaffold.py
+src/agentic_project_kit/cli_commands/state.py
+src/agentic_project_kit/cli_commands/todo.py
+src/agentic_project_kit/cli_commands/validation.py
+src/agentic_project_kit/cli_commands/work_orders.py
+src/agentic_project_kit/cli_commands/workflow.py
+src/agentic_project_kit/cli.py
+src/agentic_project_kit/cockpit_readiness.py
+src/agentic_project_kit/cockpit.py
+src/agentic_project_kit/command_inbox_check.py
+src/agentic_project_kit/command_queue_contract.py
+src/agentic_project_kit/communication_artifact_gc.py
+src/agentic_project_kit/contract.py
+src/agentic_project_kit/control_state.py
+src/agentic_project_kit/doc_lifecycle.py
+src/agentic_project_kit/doc_mesh.py
+src/agentic_project_kit/doctor.py
+src/agentic_project_kit/evidence_clean.py
+src/agentic_project_kit/evidence_guard.py
+src/agentic_project_kit/evidence_state_contract.py
+src/agentic_project_kit/final_summary_contract.py
+src/agentic_project_kit/finalize_guard.py
+src/agentic_project_kit/github.py
+src/agentic_project_kit/governance.py
+src/agentic_project_kit/gui_cockpit.py
+src/agentic_project_kit/handoff_prompt.py
+src/agentic_project_kit/handoff_state.py
+src/agentic_project_kit/local_feature_gate.py
+src/agentic_project_kit/models.py
+src/agentic_project_kit/output_contract.py
+src/agentic_project_kit/output_repair.py
+src/agentic_project_kit/patch_artifact_preflight.py
+src/agentic_project_kit/patterns.py
+src/agentic_project_kit/portability_shell_gate.py
+src/agentic_project_kit/post_release.py
+src/agentic_project_kit/pr_closeout.py
+src/agentic_project_kit/pr_hygiene.py
+src/agentic_project_kit/release_doi_safety.py
+src/agentic_project_kit/release_gate_core.py
+src/agentic_project_kit/release.py
+src/agentic_project_kit/rendering.py
+src/agentic_project_kit/repair_report.py
+src/agentic_project_kit/run_summary.py
+src/agentic_project_kit/runtime_validator.py
+src/agentic_project_kit/safe_file_replace.py
+src/agentic_project_kit/safe_patch.py
+src/agentic_project_kit/scaffold.py
+src/agentic_project_kit/slice_runner.py
+src/agentic_project_kit/state_freshness.py
+src/agentic_project_kit/templates.py
+src/agentic_project_kit/terminal_logging.py
+src/agentic_project_kit/todo.py
+src/agentic_project_kit/typed_work_order_evidence.py
+src/agentic_project_kit/typed_work_order_queue.py
+src/agentic_project_kit/typed_work_order_runner.py
+src/agentic_project_kit/work_orders.py
+
+### EXISTING TESTS RELATED TO SHELL/NS/PORTABILITY ###
+tests/test_agent_command_runner_summary_footer.py
+tests/test_agent_command_runner.py
+tests/test_cockpit_readiness.py
+tests/test_cockpit_registry_only_contract.py
+tests/test_cockpit_run_json_action_result.py
+tests/test_cockpit.py
+tests/test_evidence_clean_cli.py
+tests/test_evidence_clean.py
+tests/test_evidence_guard_cli.py
+tests/test_evidence_guard.py
+tests/test_evidence_state_contract.py
+tests/test_final_summary_contract.py
+tests/test_final_summary_no_placeholders.py
+tests/test_gui_cockpit.py
+tests/test_handoff_prompt.py
+tests/test_interpreter_discovery_guard.py
+tests/test_no_copy_fail_evidence_policy.py
+tests/test_ns_evidence_guard_shortcut.py
+tests/test_ns_interpreter_and_no_exec_guard.py
+tests/test_patch_artifact_preflight.py
+tests/test_patterns.py
+tests/test_post_release.py
+tests/test_pr_closeout.py
+tests/test_pr_hygiene.py
+tests/test_pre_gui_execution_hardening_plan.py
+tests/test_quality_first_workflow_lessons.py
+tests/test_readme_release_history_extraction.py
+tests/test_release_doi_safety.py
+tests/test_release_preflight_phase.py
+tests/test_release_version_source_contract.py
+tests/test_release.py
+tests/test_repo_ns_entrypoint.py
+tests/test_slice_runner.py
+tests/test_terminal_remote_preflight.py
+tests/test_typed_work_order_evidence_contract.py
+tests/test_typed_work_order_evidence_runtime.py
+tests/test_typed_work_order_example_and_ns_shortcut.py
+tests/test_typed_work_order_runner.py
+tests/test_typed_work_orders_pre_gui_docs.py
+tests/test_v030_post_release_state_cleanup.py
+tests/test_v031_evidence_guard_usage_docs.py
+tests/test_v031_pre_gui_execution_hardening_contract.py
+tests/test_v034_finalize_guard_core.py
+tests/test_v034_local_feature_gate_core.py
+tests/test_v034_ns_dev_gate_routing.py
+tests/test_v035_finalize_guard_shell_core_routing.py
+tests/test_v035_release_gate_core.py
+tests/test_v036_portability_shell_gate.py
+tests/test_v036_run_summary.py
+tests/test_work_order_prepare.py
+tests/test_workflow_request_cli.py
+tests/test_workflow_runner_steps.py
+tests/test_workflow_state.py
+
+### SHELL RISK HOTSPOTS ###
+tools/local_workflow_cycle.sh:12:  exit 0
+tools/local_workflow_cycle.sh:22:  exit 0
+tools/local_workflow_cycle.sh:26:exit 1
+tools/ns_clean_evidence.sh:60:exit "$STATUS"
+tools/ns_commit_pr_guard.sh:9:  exit 1
+tools/ns_finalize_guard.sh:11:  exit 1
+tools/ns_finalize_guard.sh:36:  exit $?
+tools/ns_finalize_guard.sh:46:  exit $?
+tools/ns_finalize_guard.sh:78:  exit $?
+tools/ns_finalize_guard.sh:86:  exit $?
+tools/ns_finalize_guard.sh:97:  exit $?
+tools/ns_finalize_guard.sh:106:  exit $?
+tools/ns_finalize_guard.sh:117:  exit $?
+tools/ns_finalize_guard.sh:129:  exit $?
+tools/ns_finalize_guard.sh:133:exit $?
+tools/ns_pr_cleanup.sh:18:  exit 1
+tools/ns_pr_cleanup.sh:28:  exit 1
+tools/ns_pr_cleanup.sh:40:  exit 0
+tools/ns_pr_cleanup.sh:92:exit "$STATUS"
+tools/ns_pr_create_or_skip.sh:19:  exit 1
+tools/ns_pr_create_or_skip.sh:30:  exit 0
+tools/ns_pr_create_or_skip.sh:42:  exit 0
+tools/ns_pr_create_or_skip.sh:67:exit "$STATUS"
+tools/ns_release_gate.sh:8:  exit 2
+tools/ns_release_prep.sh:7:  exit 2
+tools/ns_release_prep.sh:47:exit "$STATUS"
+tools/ns_release_publish.sh:10:  exit 2
+tools/ns_release_publish.sh:29:  exit 2
+tools/ns_release_publish.sh:115:exit "$STATUS"
+tools/ns_release_verify.sh:8:  exit 2
+tools/ns_release_verify.sh:84:exit "$STATUS"
+tools/ns_safe_remove_diagnostic.sh:8:  exit 1
+tools/ns_safe_remove_diagnostic.sh:22:exit "$STATUS"
+tools/ns_slice_runner.sh:11:  exit 1
+tools/ns_slice_runner.sh:17:  exit 1
+tools/ns_slice_runner.sh:141:exit "$STATUS"
+tools/ns_up_pr_completion.sh:53:    exit "$STATUS"
+tools/ns_up_pr_completion.sh:128:exit "$STATUS"
+tools/screen_control_gate.sh:28:  echo "pytest exit code: $PYTEST_RC"
+tools/screen_control_gate.sh:34:  echo "ruff exit code: $RUFF_RC"
+tools/screen_control_gate.sh:40:  echo "check-docs exit code: $CHECK_DOCS_RC"
+tools/screen_control_gate.sh:46:  echo "doctor exit code: $DOCTOR_RC"
+tools/screen_control_gate.sh:54:    echo "extra command exit code: $EXTRA_RC"
+tools/screen_control_gate.sh:69:    exit 0
+tools/screen_control_gate.sh:72:    exit 1
+tools/screen_control_gate.sh:76:exit "${PIPESTATUS[0]}"
+
+### CURRENT PORTABILITY GATE ###
+
+### FAST GATES ###
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### WRITE CLASSIFICATION SUMMARY FILE ###
+
+### DIFF ###
+
+### FINAL RESULT MARKER ###
+### RESULT: PASS ###
