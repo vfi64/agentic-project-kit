@@ -181,17 +181,32 @@ def render_result(result) -> str:
         lines.extend(execution_lines)
     return chr(10).join(lines)
 
+def _render_help() -> str:
+    return chr(10).join([
+        "usage: ./ns gui [--dry-run] [--action ACTION_NAME]",
+        "Safety: help only; no window is opened and no action is executed.",
+        "options:",
+        "  --help, -h              Show this help and exit successfully.",
+        "  --dry-run               Render the no-window GUI dry-run.",
+        "  --action ACTION_NAME    Include a bounded action execution result.",
+        "### RESULT: PASS ###",
+    ])
+
+
 def main(argv: list[str] | None = None) -> int:
     import sys
     args = list(sys.argv[1:] if argv is None else argv)
     action_name = None
+    if args in (["--help"], ["-h"]):
+        print(_render_help())
+        return 0
     if args == ["--dry-run"]:
         args = []
     if args:
         if len(args) == 2 and args[0] == "--action":
             action_name = args[1]
         else:
-            print("usage: ./ns gui [--action ACTION_NAME]")
+            print("usage: ./ns gui [--dry-run] [--action ACTION_NAME]")
             print("### RESULT: FAIL ###")
             return 2
     print(render_result(run_gui_dry_run(action_name=action_name)))
