@@ -166,7 +166,8 @@ def test_repo_ns_release_shortcuts_are_wired() -> None:
     assert "release-prep" in text
     assert "release-gate" in text
     assert "release-publish" in text
-    assert "tools/ns_release_prep.sh" in text
+    assert "agentic_project_kit.release_prep_core" in text
+    assert "tools/ns_release_prep.sh" not in text
     assert "agentic_project_kit.release_gate_core" in text
     assert "tools/ns_release_gate.sh" not in text
     assert "tools/ns_release_publish.sh" in text
@@ -323,4 +324,13 @@ def test_repo_ns_release_verify_routes_to_python_core() -> None:
     assert "tools/ns_release_verify.sh" not in ns_text
     assert not Path("tools/ns_release_verify.sh").exists()
     assert "verify_release" in core_text
+
+def test_repo_ns_release_prep_routes_to_python_core() -> None:
+    ns_text = Path("ns").read_text(encoding="utf-8")
+    core_text = Path("src/agentic_project_kit/release_prep_core.py").read_text(encoding="utf-8")
+    assert "\"release-prep\"" in ns_text
+    assert "agentic_project_kit.release_prep_core" in ns_text
+    assert "tools/ns_release_prep.sh" not in ns_text
+    assert not Path("tools/ns_release_prep.sh").exists()
+    assert "prepare_release" in core_text
 
