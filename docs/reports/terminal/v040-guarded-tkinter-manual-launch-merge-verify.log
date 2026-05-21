@@ -1,0 +1,119 @@
+
+### PRE-MERGE STATE ###
+feature/v040-guarded-tkinter-manual-launch
+{"baseRefName":"main","headRefName":"feature/v040-guarded-tkinter-manual-launch","mergeStateStatus":"CLEAN","number":640,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-21T19:50:40Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26249374561/job/77256146562","name":"test","startedAt":"2026-05-21T19:50:17Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-21T19:50:39Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26249370657/job/77256133511","name":"test","startedAt":"2026-05-21T19:50:13Z","status":"COMPLETED","workflowName":"CI"}]}
+
+### CI CHECKS ###
+test	pass	26s	https://github.com/vfi64/agentic-project-kit/actions/runs/26249370657/job/77256133511	
+test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26249374561/job/77256146562	
+test	pass	26s	https://github.com/vfi64/agentic-project-kit/actions/runs/26249370657/job/77256133511	
+test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26249374561/job/77256146562	
+
+### MERGE PR ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   2bc1bbf..077e14b  main       -> origin/main
+Updating 2bc1bbf..077e14b
+Fast-forward
+ ...dd-guarded-tkinter-manual-launch-route-safe.log | 93 ++++++++++++++++++++++
+ src/agentic_project_kit/gui_tkinter_shell.py       | 40 +++++++++-
+ tests/test_v040_gui_tkinter_shell.py               | 46 +++++++++++
+ 3 files changed, 178 insertions(+), 1 deletion(-)
+ create mode 100644 docs/reports/terminal/v040-add-guarded-tkinter-manual-launch-route-safe.log
+
+### UPDATE MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### MAIN STATE ###
+main
+077e14b Add guarded Tkinter manual launch route (#640)
+2bc1bbf Record guarded Tkinter window smoke merge verification log
+02654ce Add guarded Tkinter window smoke (#639)
+0c9d5ec Record GUI help ns routing merge verification log
+b4bafc5 Fix GUI help and ns gate routing contracts (#638)
+52df6c1 Record GUI execution result wiring merge verification log
+47a602c Expose bounded GUI action execution result in dry run (#637)
+5f39a76 Record GUI bounded read-only action execution merge verification log
+eb4cca6 Add bounded read-only GUI action execution contract (#636)
+a4c5828 Record GUI action execution boundary discovery log
+7ec8857 Record GUI remote mutation safety merge verification log
+ef65764 Block remote-mutation GUI actions by default (#635)
+
+### VERIFY MANUAL LAUNCH PATCH ON MAIN ###
+163:def run_manual_launch() -> tuple[bool, str]:
+168:            "manual_launch_status=BLOCKED",
+170:            "actions_enabled=false",
+177:            "manual_launch_status=BLOCKED",
+179:            "actions_enabled=false",
+185:        "manual_launch_status=READY",
+187:        "actions_enabled=false",
+205:    if args == ["--manual-launch"]:
+210:    print("ERROR: usage: python -m agentic_project_kit.gui_tkinter_shell --no-window-smoke|--window-smoke|--manual-launch")
+104:def test_manual_launch_blocks_when_guard_blocks(monkeypatch):
+118:def test_manual_launch_ready_path_uses_mainloop_without_actions(monkeypatch, capsys):
+
+### SAFE TKINTER SMOKES ON MAIN -- NO MANUAL WINDOW ###
+TKINTER SHELL
+title=agentic-project-kit Cockpit
+status=tkinter-shell-ready
+action_count=14
+menu_count=4
+toolbar_button_count=4
+action_button_count=6
+destructive_actions_enabled=false
+toolbar_icons=refresh,stethoscope,document-check,play
+### RESULT: PASS ###
+TKINTER WINDOW SMOKE
+GUI WINDOW GUARD
+window_launch_ready=false
+tkinter_importable=false
+native_tkinter_importable=false
+message=tkinter import failed: No module named '_tkinter'
+window_guard_status=BLOCKED
+window_smoke_status=BLOCKED
+real_window_opened=false
+window_closed=true
+### RESULT: PASS ###
+
+### GATES ON MAIN ###
+........................................................................ [ 86%]
+...........                                                              [100%]
+83 passed in 0.37s
+........................................................................ [  9%]
+........................................................................ [ 18%]
+........................................................................ [ 27%]
+........................................................................ [ 36%]
+........................................................................ [ 45%]
+........................................................................ [ 54%]
+........................................................................ [ 63%]
+........................................................................ [ 72%]
+........................................................................ [ 81%]
+........................................................................ [ 90%]
+........................................................................ [ 99%]
+...                                                                      [100%]
+795 passed in 4.28s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### RECORD MERGE VERIFY LOG ###
