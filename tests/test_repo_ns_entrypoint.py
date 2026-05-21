@@ -167,7 +167,8 @@ def test_repo_ns_release_shortcuts_are_wired() -> None:
     assert "release-gate" in text
     assert "release-publish" in text
     assert "tools/ns_release_prep.sh" in text
-    assert "tools/ns_release_gate.sh" in text
+    assert "agentic_project_kit.release_gate_core" in text
+    assert "tools/ns_release_gate.sh" not in text
     assert "tools/ns_release_publish.sh" in text
 
 def test_release_publish_requires_confirmation_token() -> None:
@@ -197,12 +198,14 @@ def test_release_verify_waits_for_github_release() -> None:
     assert "post-release-check" in text
 
 
-def test_release_gate_shell_is_thin_python_core_adapter() -> None:
-    text = Path("tools/ns_release_gate.sh").read_text(encoding="utf-8")
-    assert "agentic_project_kit.release_gate_core" in text
-    assert "rm -rf dist build *.egg-info" not in text
-    assert "python -m build" not in text
-
+def test_release_gate_routes_to_python_core_directly() -> None:
+    ns_text = Path("ns").read_text(encoding="utf-8")
+    core_text = Path("src/agentic_project_kit/release_gate_core.py").read_text(encoding="utf-8")
+    assert "release-gate" in ns_text
+    assert "agentic_project_kit.release_gate_core" in ns_text
+    assert "tools/ns_release_gate.sh" not in ns_text
+    assert not Path("tools/ns_release_gate.sh").exists()
+    assert "run_release_gate" in core_text
 
 def test_release_publish_waits_for_github_release_and_verifies() -> None:
     text = Path("tools/ns_release_publish.sh").read_text(encoding="utf-8")
@@ -301,4 +304,13 @@ def test_repo_ns_slice_runner_routes_to_python_core() -> None:
     assert "tools/ns_slice_runner.sh" not in ns_text
     assert not Path("tools/ns_slice_runner.sh").exists()
     assert "NS SLICE RUNNER" in core_text
+
+def test_repo_ns_release_gate_routes_to_python_core() -> None:
+    ns_text = Path("ns").read_text(encoding="utf-8")
+    core_text = Path("src/agentic_project_kit/release_gate_core.py").read_text(encoding="utf-8")
+    assert "\"release-gate\"" in ns_text
+    assert "agentic_project_kit.release_gate_core" in ns_text
+    assert "tools/ns_release_gate.sh" not in ns_text
+    assert not Path("tools/ns_release_gate.sh").exists()
+    assert "run_release_gate" in core_text
 
