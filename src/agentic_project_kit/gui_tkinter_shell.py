@@ -178,6 +178,9 @@ def render_manual_launch_content(root: object) -> None:
     frame_bg = _theme_color(style, "TFrame", "background", root.cget("bg"))
     label_fg = _theme_color(style, "TLabel", "foreground", "black")
     root.configure(bg=frame_bg)
+    readable_disabled_fg = label_fg
+    style.configure("ReadableDisabled.TButton", foreground=readable_disabled_fg)
+    style.map("ReadableDisabled.TButton", foreground=[("disabled", readable_disabled_fg)])
 
     header = ttk.Label(root, text="agentic-project-kit Cockpit", anchor="w", font=("TkDefaultFont", 18, "bold"))
     header.pack(fill="x", padx=12, pady=(12, 6))
@@ -187,14 +190,14 @@ def render_manual_launch_content(root: object) -> None:
     toolbar = ttk.Frame(root, padding=4)
     toolbar.pack(fill="x", padx=12, pady=(0, 8))
     for label in ("Refresh status", "Doctor", "Check docs", "GUI dry-run"):
-        ttk.Button(toolbar, text=label, state="disabled").pack(side="left", padx=4, pady=4)
+        ttk.Button(toolbar, text=label, state="disabled", style="ReadableDisabled.TButton").pack(side="left", padx=4, pady=4)
 
     body = ttk.Frame(root, padding=(12, 0, 12, 12))
     body.pack(fill="both", expand=True)
     actions = ttk.LabelFrame(body, text="Actions disabled", padding=6)
     actions.pack(side="left", fill="y", padx=(0, 8))
     for label in ("cockpit-readiness", "doctor", "check-docs", "agent-run"):
-        ttk.Button(actions, text=label, state="disabled", width=22).pack(fill="x", pady=3)
+        ttk.Button(actions, text=label, state="disabled", width=22, style="ReadableDisabled.TButton").pack(fill="x", pady=3)
 
     output = ttk.LabelFrame(body, text="Output / Status", padding=6)
     output.pack(side="left", fill="both", expand=True)
