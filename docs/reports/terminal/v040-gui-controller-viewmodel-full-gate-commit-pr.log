@@ -1,0 +1,196 @@
+
+### PRECHECK LOCAL FEATURE STATE ###
+feature/v0.4.0-gui-controller-viewmodel
+?? src/agentic_project_kit/gui_viewmodel.py
+?? tests/test_v040_gui_viewmodel.py
+516847a Record v0.4.0 GUI dry-run merge verification log
+746b9b0 Add v0.4.0 GUI dry-run entry point (#618)
+b59be68 Add v0.4.0 GUI action readiness contract (#617)
+019053d Add v0.4.0 GUI MVP roadmap (#616)
+2ecf2c2 Record v0.3.37 DOI metadata (#615)
+a9035ad Record v0.3.37 release publish log
+69dc873 Prepare v0.3.37 release metadata (#614)
+c64eadd Record v0.3.37 final GUI preparation closeout contract (#613)
+6ae66ba Record v0.3.36 DOI metadata merge verification log
+613cf9e Record v0.3.36 DOI metadata (#612)
+369e920 Record v0.3.36 release publish log
+45ffd3f Record v0.3.36 release gate log
+
+### VERIFY EXPECTED FILES ###
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Iterable
+
+
+@dataclass(frozen=True)
+class GuiActionViewModel:
+    name: str
+    safety_class: str
+    description: str
+    enabled: bool
+    requires_confirmation: bool
+
+
+@dataclass(frozen=True)
+class GuiControllerViewModel:
+    title: str
+    status: str
+    actions: tuple[GuiActionViewModel, ...]
+    destructive_actions_enabled: bool = False
+
+    @property
+    def action_count(self) -> int:
+        return len(self.actions)
+
+
+def _value(value: object, default: str = "") -> str:
+    if value is None:
+        return default
+    raw = getattr(value, "value", value)
+    return str(raw)
+
+
+def _field(action: object, *names: str, default: object = "") -> object:
+    for name in names:
+        if hasattr(action, name):
+            return getattr(action, name)
+        if isinstance(action, dict) and name in action:
+            return action[name]
+    return default
+
+
+def action_to_view_model(action: object, *, destructive_actions_enabled: bool = False) -> GuiActionViewModel:
+    name = _value(_field(action, "name", "action_id", "id"))
+    safety_class = _value(_field(action, "safety_class", "safety", default="unknown"))
+    description = _value(_field(action, "description", "summary", default=""))
+    destructive = safety_class.lower() in {"destructive", "release", "remote", "mutation"}
+    return GuiActionViewModel(
+        name=name,
+        safety_class=safety_class,
+        description=description,
+        enabled=not destructive or destructive_actions_enabled,
+        requires_confirmation=destructive,
+    )
+
+
+def build_gui_controller_view_model(
+    actions: Iterable[object],
+    *,
+    title: str = "agentic-project-kit Cockpit",
+    status: str = "ready",
+    destructive_actions_enabled: bool = False,
+) -> GuiControllerViewModel:
+    view_actions = tuple(
+        action_to_view_model(action, destructive_actions_enabled=destructive_actions_enabled)
+        for action in actions
+    )
+    return GuiControllerViewModel(
+        title=title,
+        status=status,
+        actions=view_actions,
+        destructive_actions_enabled=destructive_actions_enabled,
+    )
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+from agentic_project_kit.gui_viewmodel import action_to_view_model
+from agentic_project_kit.gui_viewmodel import build_gui_controller_view_model
+
+
+@dataclass(frozen=True)
+class DummyAction:
+    name: str
+    safety_class: str
+    description: str = ""
+
+
+def test_action_to_view_model_keeps_read_only_enabled():
+    vm = action_to_view_model(DummyAction("status", "read_only", "Show status"))
+    assert vm.name == "status"
+    assert vm.safety_class == "read_only"
+    assert vm.description == "Show status"
+    assert vm.enabled is True
+    assert vm.requires_confirmation is False
+
+
+def test_action_to_view_model_disables_destructive_by_default():
+    vm = action_to_view_model(DummyAction("publish", "destructive", "Publish release"))
+    assert vm.enabled is False
+    assert vm.requires_confirmation is True
+
+
+def test_action_to_view_model_can_enable_destructive_actions_explicitly():
+    vm = action_to_view_model(
+        DummyAction("publish", "destructive", "Publish release"),
+        destructive_actions_enabled=True,
+    )
+    assert vm.enabled is True
+    assert vm.requires_confirmation is True
+
+
+def test_build_gui_controller_view_model_is_deterministic():
+    vm = build_gui_controller_view_model(
+        [
+            DummyAction("status", "read_only", "Show status"),
+            DummyAction("publish", "destructive", "Publish release"),
+        ],
+        title="Test Cockpit",
+        status="dry-run-ready",
+    )
+    assert vm.title == "Test Cockpit"
+    assert vm.status == "dry-run-ready"
+    assert vm.action_count == 2
+    assert [action.name for action in vm.actions] == ["status", "publish"]
+    assert [action.enabled for action in vm.actions] == [True, False]
+
+### TARGETED TESTS ###
+....................                                                     [100%]
+20 passed in 0.22s
+
+### GUI DRY RUN SMOKE ###
+GUI DRY RUN
+Safety: no window is opened; no files, branches, tags, releases, PRs, or remote state are changed.
+tkinter_available=false
+window_launch_ready=false
+tkinter_note=nonblocking for --dry-run; required only for real window launch
+action_registry_available=true
+action_specs_available=true
+mode_guard_available=true
+shell_adapters_absent=true
+message=GUI dry-run passed without opening a window.
+### RESULT: PASS ###
+
+### FULL LOCAL GATES ###
+........................................................................ [  9%]
+........................................................................ [ 19%]
+........................................................................ [ 29%]
+........................................................................ [ 39%]
+........................................................................ [ 49%]
+........................................................................ [ 59%]
+........................................................................ [ 69%]
+........................................................................ [ 79%]
+........................................................................ [ 89%]
+........................................................................ [ 99%]
+.......                                                                  [100%]
+727 passed in 4.20s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COPY TERMINAL LOG FOR COMMIT ###
