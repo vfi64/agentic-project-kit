@@ -3,7 +3,7 @@ from pathlib import Path
 
 def test_readme_has_single_current_verified_release_statement():
     text = Path("README.md").read_text(encoding="utf-8")
-    assert "Current verified release: version `0.3.35`" in text
+    assert "Current verified release: version `0.3.36`" in text
     assert "Version `0.3.35` is the current release line prepared" not in text
     assert "Earlier verified version-specific DOIs are intentionally maintained in `docs/releases/VERIFIED_RELEASES.md`" in text
 
@@ -11,7 +11,7 @@ def test_readme_has_single_current_verified_release_statement():
 def test_changelog_v035_describes_actual_delivered_work():
     text = Path("CHANGELOG.md").read_text(encoding="utf-8")
     head = text.split("## v0.3.34", 1)[0]
-    assert "## v0.3.36 - Unreleased" in head
+    assert "## v0.3.36 - 2026-05-21" in head
     assert "## v0.3.35 - 2026-05-20" in head
     assert "release_gate_core" in head
     assert "Prepare release metadata for v0.3.35." not in head

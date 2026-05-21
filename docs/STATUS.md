@@ -217,3 +217,4 @@ Next safe step: deterministic rule hardening before GUI or release. v0.3.36 is u
 - Direct `ns` references to `tools/ns_*.sh` are now `0`.
 - The zero state is protected by `tests/test_v036_zero_ns_shell_adapter_contract.py`.
 - Remote evidence: `docs/reports/terminal/v036-zero-ns-shell-adapter-contract-merge-verify.log`.
+- v0.3.36 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329180`. Release publish evidence is recorded in `docs/reports/terminal/v036-release-publish.log`.

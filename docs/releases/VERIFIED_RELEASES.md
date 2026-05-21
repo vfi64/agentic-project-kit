@@ -52,3 +52,4 @@ The archived v0.3.17 release has the verified version-specific DOI: `10.5281/zen
 The archived v0.3.19 release has the verified version-specific DOI: `10.5281/zenodo.20246121`.
 
 The archived v0.3.18 release has the verified version-specific DOI: `10.5281/zenodo.20245754`.
+- `v0.3.36` / `0.3.36`: Zenodo version DOI `10.5281/zenodo.20329180`; concept DOI `10.5281/zenodo.20101359`.

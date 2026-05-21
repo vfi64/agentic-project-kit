@@ -320,3 +320,4 @@ A short chat reply such as `d`, `D`, `f`, or `F` is not sufficient evidence by i
 
 The terminal output audit is part of the workflow contract: read the body of the last run, not only the final summary block.
 
+- v0.3.36 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329180`. Next planned line: v0.3.37 final GUI-preparation closeout before GUI MVP implementation.
