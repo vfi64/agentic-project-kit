@@ -296,3 +296,13 @@ Direct `ns` shell-adapter count for the known workflow adapter class: 0.
 The detailed remaining workplan is `docs/workflow/V0.3.36_REMAINING_WORKPLAN.md`.
 
 Next safe step: deterministic rule hardening before GUI or release work. v0.3.36 is not released yet.
+
+## v0.3.36 Shell Adapter Removal Closeout
+
+The v0.3.36 shell-removal baseline is complete: no tracked `tools/ns_*.sh` files remain, `./ns` has no direct `tools/ns_*.sh` references, and PR create-or-skip routes through `agentic_project_kit.pr_create_or_skip`.
+
+Verification anchors:
+- `git ls-files "tools/ns_*.sh"` remains empty.
+- `grep -n "tools/ns_.*\.sh" ns` remains empty.
+- Inventory baseline records `tracked_shell_adapter_count: 0`.
+- Merge evidence: `docs/reports/terminal/v036-remove-final-pr-create-shell-adapter-merge.log`, COMM-00004.
