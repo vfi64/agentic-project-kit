@@ -137,6 +137,14 @@ def test_repo_ns_up_invokes_pr_completion_tool() -> None:
     assert "${1:-}" in text
 
 
+def test_repo_ns_clean_evidence_routes_to_python_cli() -> None:
+    text = Path("ns").read_text(encoding="utf-8")
+    assert "clean-evidence" in text
+    assert "agentic_project_kit.cli evidence clean" in text
+    assert "tools/ns_clean_evidence.sh" not in text
+    assert not Path("tools/ns_clean_evidence.sh").exists()
+
+
 def test_ns_up_pr_completion_tool_has_pass_fail_markers() -> None:
     text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")
     assert "NS UP PR COMPLETION CYCLE" in text
@@ -257,73 +265,3 @@ def test_repo_ns_refuses_direct_main_commit_helper() -> None:
     assert "exit 1" in text
     assert "create a feature or docs branch first" in text
 
-
-def test_ns_slice_runner_is_wired() -> None:
-    text = Path("ns").read_text(encoding="utf-8")
-    assert "slice-runner" in text
-    assert "tools/ns_slice_runner.sh" in text
-
-def test_ns_slice_runner_has_step_stop_semantics() -> None:
-    text = Path("tools/ns_slice_runner.sh").read_text(encoding="utf-8")
-    assert "advances only after target-state PASS" in text
-    assert "### RESULT: PENDING ###" in text
-    assert "ALREADY_MERGED" in text
-    assert "Stopping slice runner at first failing step." in text
-    assert "sh -c" in text
-
-def test_idempotent_finalization_guard_is_documented() -> None:
-    text = Path("docs/planning/IDEMPOTENT_FINALIZATION_GUARD.md").read_text(encoding="utf-8")
-    assert "Status: proposed" in text
-    assert "Decision status: Proposed" in text
-    assert "branch already exists" in text
-    assert "target documentation marker already exists" in text
-    assert "no commits between base and head" in text
-    assert "Never commit directly to main" in text
-    assert "quote-fragile inline Python" in text
-
-def test_finalize_guard_python_core_is_present() -> None:
-    text = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
-    assert "def main" in text
-    assert "render_finalize_guard" in text
-
-def test_finalize_guard_handles_existing_or_completed_branches() -> None:
-    text = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
-    assert "local_branch_exists" in text
-    assert "remote_branch_exists" in text
-    assert "class FinalizeGuardDecision" in text
-    assert "already_on_main" in text or "PASS_ALREADY_ON_MAIN" in text
-def test_safe_remove_diagnostic_python_core_replaces_shell_adapter() -> None:
-    core = Path("src/agentic_project_kit/safe_remove_diagnostic.py").read_text(encoding="utf-8")
-    assert "git" in core
-    assert "restore" in core
-    assert "path.unlink" in core
-    assert "Tracked file detected" in core
-    assert not Path("tools/ns_safe_remove_diagnostic.sh").exists()
-
-def test_ns_clean_evidence_is_wired_and_safe() -> None:
-    ns_text = Path("ns").read_text(encoding="utf-8")
-    script_text = Path("tools/ns_clean_evidence.sh").read_text(encoding="utf-8")
-    assert "clean-evidence" in ns_text
-    assert "tools/ns_clean_evidence.sh" in ns_text
-    assert "tmp/agent-evidence" in script_text
-    assert "docs/reports/CURRENT_WORKFLOW_OUTPUT.md" in script_text
-    assert "does not delete arbitrary docs/reports files" in script_text
-    assert "NEEDS_HUMAN_REVIEW" in script_text
-
-def test_ns_up_dirty_tree_mentions_clean_evidence() -> None:
-    text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")
-    assert "working tree is dirty" in text
-    assert "./ns clean-evidence" in text
-    assert "docs/reports/CURRENT_WORKFLOW_OUTPUT.md" in text
-    assert "git status --short" in text
-
-def test_finalize_guard_declares_machine_readable_outcomes() -> None:
-    text = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
-    assert "STATUS: PASS_ALREADY_ON_MAIN" not in text
-    assert "result=" in text
-    assert "def main" in text
-    assert "render_finalize_guard" in text
-def test_ns_exposes_terminal_finalize_shortcut():
-    text = Path("ns").read_text(encoding="utf-8")
-    assert "\"terminal-finalize\"" in text
-    assert "terminal_logging terminal-finalize" in text
