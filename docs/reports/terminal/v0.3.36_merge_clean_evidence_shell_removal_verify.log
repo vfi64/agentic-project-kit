@@ -1,0 +1,67 @@
+### START ###
+V0.3.36 CREATE MERGE CLEAN EVIDENCE SHELL REMOVAL PR AND VERIFY MAIN -- LOGGED -- NO GUI NO RELEASE
+
+
+### ENSURE FEATURE BRANCH ###
+Already on 'feature/v0.3.36-remove-clean-evidence-shell'
+Your branch is up to date with 'origin/feature/v0.3.36-remove-clean-evidence-shell'.
+From github.com:vfi64/agentic-project-kit
+ * branch            feature/v0.3.36-remove-clean-evidence-shell -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            feature/v0.3.36-remove-clean-evidence-shell -> FETCH_HEAD
+Already up to date.
+
+### CLEAN PRECHECK ###
+feature/v0.3.36-remove-clean-evidence-shell
+?? docs/reports/terminal/v0.3.36_merge_clean_evidence_shell_removal_verify.log
+
+### CREATE OR REUSE PR ###
+https://github.com/vfi64/agentic-project-kit/pull/572
+pr_number=572
+{"mergeStateStatus":"CLEAN","mergeable":"MERGEABLE","number":572,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-21T09:21:35Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26217264700/job/77142752665","name":"test","startedAt":"2026-05-21T09:21:16Z","status":"COMPLETED","workflowName":"CI"}],"title":"Remove clean evidence shell adapter","url":"https://github.com/vfi64/agentic-project-kit/pull/572"}
+
+### WAIT FOR PR CHECKS ###
+test	pass	19s	https://github.com/vfi64/agentic-project-kit/actions/runs/26217264700/job/77142752665	
+test	pass	19s	https://github.com/vfi64/agentic-project-kit/actions/runs/26217264700/job/77142752665	
+
+### MERGE PR ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   e785e83..3dc15b8  main       -> origin/main
+Updating e785e83..3dc15b8
+Fast-forward
+ ...v0.3.36_remove_clean_evidence_shell_adapter.log | 135 +++++++++++++++++++++
+ 1 file changed, 135 insertions(+)
+ create mode 100644 docs/reports/terminal/v0.3.36_remove_clean_evidence_shell_adapter.log
+
+### UPDATE MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### VERIFY MAIN STATE ###
+main
+?? docs/reports/terminal/v0.3.36_merge_clean_evidence_shell_removal_verify.log
+3dc15b8 Record clean evidence shell removal evidence (#572)
+e785e83 Verify remote inspection evidence contract after false fail
+111bc23 Add remote inspection evidence contract (#571)
+a18f8b2 Record remote inspection evidence contract inventory
+147887c Record safe remove diagnostic shell removal merge verification
+129f7af Remove safe remove diagnostic shell adapter (#570)
+3562bd0 Record finalize guard shell removal merge verification
+690db15 Remove finalize guard shell adapter (#569)
+b5da5de Record v0.3.36 AGENTS rule split merge evidence (#567)
+42ead76 Split portability rule out of AGENTS and lock summary fail contract (#566)
+b4bb05d Record v0.3.36 portability gate fail recovery evidence (#563)
+ed5aa54 Record v0.3.36 portability shell removal inventory (#561)
+
+### VERIFY CLEAN EVIDENCE SHELL REMOVED ###
+FAIL: tools/ns_clean_evidence.sh is still tracked.
+
+Saving session...
+...saving history...truncating history files...
+...completed.
