@@ -187,3 +187,14 @@ def test_manual_launch_content_uses_ttk_theme_defaults():
     assert "#e6e6e6" not in manual_source
     assert "#dddddd" not in manual_source
 
+
+def test_manual_launch_disabled_buttons_use_readable_theme_style():
+    from pathlib import Path
+
+    source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
+    manual_source = source[source.index("def render_manual_launch_content"):source.index("def run_manual_launch")]
+    assert "ReadableDisabled.TButton" in manual_source
+    assert "style.map(\"ReadableDisabled.TButton\"" in manual_source
+    assert manual_source.count("style=\"ReadableDisabled.TButton\"") == 2
+    assert "state=\"disabled\"" in manual_source
+
