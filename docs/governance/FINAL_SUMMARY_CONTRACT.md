@@ -78,3 +78,11 @@ Reason: POSIX shells may run the left side of a pipeline in a subshell, so `STAT
 Allowed routes are a dedicated runner, a command-report path, or direct file-descriptor redirection to a temporary log followed by copying the log into `docs/reports/terminal/` only after gates pass.
 
 If a block detects a failed test, failed gate, failed mode check, or failed remote mutation, the final `RESULT` section must report `WORK: FAIL` and must not be overwritten by logging plumbing.
+
+## Communication summary id contract
+
+Every final summary must include a deterministic communication id header in the form `SUMMARY COMM-xxxxx | YYYY-MM-DD HH:MM:SS +ZZZZ | origin | branch`.
+
+The canonical counter is stored in `.agentic/communication_state.json`. The counter is incremented through `./ns comm-next-summary`; the state is checked through `./ns comm-check`.
+
+The counter provides an audit reference for local, remote, and mixed execution summaries. It must not be silently renumbered after publication.

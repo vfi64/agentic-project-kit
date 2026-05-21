@@ -1,0 +1,75 @@
+
+### START ###
+This slice adds a deterministic communication summary id contract before the shell-adapter inventory slice.
+
+### SYNC MAIN AND CREATE FEATURE BRANCH ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+Switched to a new branch 'feature/v036-communication-summary-id-contract'
+
+### MODE GUARD ###
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=feature/v036-communication-summary-id-contract
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+
+### QUICK COMMAND CHECKS ###
+COMMUNICATION STATE CHECK
+state_path=.agentic/communication_state.json
+state=PASS
+findings:
+  - none
+### RESULT: PASS ###
+SUMMARY COMM-00001 | 2026-05-21 15:56:09 +0200 | local | feature/v036-communication-summary-id-contract
+
+### TARGETED TESTS ###
+................................................                         [100%]
+48 passed in 0.06s
+
+### FULL LOCAL GATES ###
+........................................................................ [ 10%]
+........................................................................ [ 21%]
+........................................................................ [ 32%]
+........................................................................ [ 42%]
+........................................................................ [ 53%]
+........................................................................ [ 64%]
+........................................................................ [ 75%]
+........................................................................ [ 85%]
+........................................................................ [ 96%]
+.......................                                                  [100%]
+671 passed in 3.92s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### COPY TMP LOG INTO REPO ONLY AFTER GATES ###
