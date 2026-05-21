@@ -1,0 +1,91 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK MAIN ###
+main
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=main
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'feature/v0.4.0-gui-output-status-dry-run-integration'
+
+### WRITE PATCH SCRIPT ###
+
+### APPLY PATCH SCRIPT ###
+
+### DIFF ###
+diff --git a/src/agentic_project_kit/gui_dry_run.py b/src/agentic_project_kit/gui_dry_run.py
+index 5f96448..5c15da9 100644
+--- a/src/agentic_project_kit/gui_dry_run.py
++++ b/src/agentic_project_kit/gui_dry_run.py
+@@ -10,6 +10,7 @@ from agentic_project_kit.gui_presenter import build_no_window_presenter_result
+ from agentic_project_kit.gui_layout_plan import build_layout_plan, render_layout_plan
+ from agentic_project_kit.gui_tkinter_renderer import render_layout_to_tkinter, render_tkinter_result_summary
+ from agentic_project_kit.gui_window_guard import check_window_launch_ready, render_window_guard_result
++from agentic_project_kit.gui_output_status_panel import build_output_status_panel, render_output_status_panel
+ 
+ 
+ @dataclass(frozen=True)
+@@ -113,6 +114,20 @@ def render_result(result: GuiDryRunResult) -> str:
+     plan = build_layout_plan()
+     rendered = render_layout_to_tkinter(DryRunRoot(), plan)
+     lines.extend([
++        "output_status_panel_begin",
++        render_output_status_panel(
++            build_output_status_panel(
++                branch="dry-run",
++                dirty=False,
++                latest_output="GUI dry-run initialized without executing an action.",
++                terminal_log="NONE",
++                terminal_log_remote="NONE",
++                terminal_log_local="NONE",
++                evidence_state="not_required",
++                summary="No command summary exists in dry-run mode.",
++            )
++        ),
++        "output_status_panel_end",
+         "layout_plan_begin",
+         render_layout_plan(plan),
+         "layout_plan_end",
+
+### TARGETED TESTS ###
+
+==================================== ERRORS ====================================
+__ ERROR collecting tests/test_v040_gui_output_status_dry_run_integration.py ___
+ImportError while importing test module '/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_v040_gui_output_status_dry_run_integration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_v040_gui_output_status_dry_run_integration.py:1: in <module>
+    from agentic_project_kit.gui_dry_run import render_gui_dry_run
+E   ImportError: cannot import name 'render_gui_dry_run' from 'agentic_project_kit.gui_dry_run' (/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/gui_dry_run.py)
+=========================== short test summary info ============================
+ERROR tests/test_v040_gui_output_status_dry_run_integration.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.11s
+
+### GUI DRY RUN SMOKE ###
+
+### FULL LOCAL GATES ###
+
+### COPY TERMINAL LOG FOR COMMIT ###
