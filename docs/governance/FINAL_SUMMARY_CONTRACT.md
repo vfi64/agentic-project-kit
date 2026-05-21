@@ -88,3 +88,12 @@ The canonical counter is stored in `.agentic/communication_state.json`. The coun
 The counter provides an audit reference for local, remote, and mixed execution summaries. It must not be silently renumbered after publication.
 
 The header must not repeat branch, origin, or mode; those values belong in the structured `SLICE` and `EXECUTION` blocks.
+
+
+## \nRequired evidence fields for rendered summaries:\n\n- `terminal_log_remote`: committed/pushed log path, or `NONE` when unavailable.\n- `terminal_log_local`: local temporary log path, or `NONE` when not created.\n- `command_report`: committed command report path, or `NONE`.\n\nDeterministic renderer usage
+
+New local mutation runbooks must render final summaries through `./ns summary`, which delegates to `agentic_project_kit.run_summary_renderer`.
+Handwritten multi-line `printf` summary blocks are deprecated for new runbooks because they repeatedly caused drift between WORK, EVIDENCE, OVERALL, remote-log, and next-reply fields.
+A local failure may reference a tmp log only as `terminal_log_local`; it must not claim remote evidence unless a `docs/reports/terminal/` log was committed and pushed.
+The accepted terminal block pattern is: collect results in variables, persist the remote log when gates pass, then call `./ns summary` once.
+

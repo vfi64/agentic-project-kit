@@ -1,0 +1,104 @@
+
+### CURRENT STATE ###
+feature/v036-summary-renderer-usage-hardening
+ M docs/governance/FINAL_SUMMARY_CONTRACT.md
+ M docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
+ M src/agentic_project_kit/run_summary_renderer.py
+?? tests/test_v036_summary_renderer_usage_hardening.py
+
+### MODE GUARD NOTE ###
+EXECUTION MODE STATE CHECK
+target=local
+state=DIRTY_LOCAL_BLOCKED
+branch=feature/v036-summary-renderer-usage-hardening
+dirty=true
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - dirty_worktree
+### RESULT: FAIL ###
+NOTE: DIRTY_LOCAL_BLOCKED is acceptable here because this repairs the already dirty current feature slice.
+
+### WRITE LEGACY COMPATIBLE RENDERER MODULE ###
+
+### TARGETED TESTS ###
+........                                                                 [100%]
+8 passed in 0.10s
+
+### NS SUMMARY SMOKE ###
+================================================================
+SUMMARY COMM-SMOKE | 2026-05-21 17:02:43 +0200
+
+SLICE
+  NAME: SUMMARY USAGE SMOKE
+  SCOPE: READ ONLY
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: not_recorded
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: NONE
+  HEAD_SHA: NONE
+  CI: NONE
+  MERGE: NONE
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/smoke.log
+  terminal_log_remote: docs/reports/terminal/smoke.log
+  terminal_log_local: /tmp/smoke.log
+  command_report: NONE
+
+INTERPRETATION
+  No interpretation recorded.
+
+NEXT
+  SAFE_STEP: not_recorded
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
+
+### FULL LOCAL GATES ###
+........................................................................ [ 10%]
+........................................................................ [ 21%]
+........................................................................ [ 31%]
+........................................................................ [ 42%]
+........................................................................ [ 52%]
+........................................................................ [ 63%]
+........................................................................ [ 73%]
+........................................................................ [ 84%]
+........................................................................ [ 94%]
+....................................                                     [100%]
+684 passed in 4.21s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### SAVE LOG AND COMMIT IF GREEN ###
