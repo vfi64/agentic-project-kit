@@ -1,0 +1,143 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+from pathlib import Path
+import subprocess
+
+
+@dataclass(frozen=True)
+class CommandResult:
+    returncode: int
+    output: str
+
+
+def normalize_version(version: str) -> tuple[str, str]:
+    raw = version.strip()
+    if not raw:
+        raise ValueError("missing version")
+    if raw.startswith("v"):
+        return raw[1:], raw
+    return raw, "v" + raw
+
+
+def run_command(repo_root: Path, args: list[str]) -> CommandResult:
+    completed = subprocess.run(
+        args,
+        cwd=repo_root,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    return CommandResult(completed.returncode, completed.stdout.strip())
+
+
+def python_tool(repo_root: Path) -> str:
+    local = repo_root / ".venv" / "bin" / "python"
+    return str(local) if local.exists() else "python3"
+
+
+def render_header(tag: str) -> list[str]:
+    return [
+        "",
+        "",
+        "",
+        "-------------------------------------------------------------------------",
+        "-------------------------------------------------------------------------",
+        "-------------------------------------------------------------------------",
+        "",
+        "",
+        "",
+        f"NS RELEASE PREP CYCLE {tag}",
+        "",
+        "### SAFETY ###",
+        "Safety: prepares a release branch only; no tag, release, merge, or publish action.",
+    ]
+
+
+def prepare_release(version: str, repo_root: Path) -> int:
+    try:
+        plain_version, tag = normalize_version(version)
+    except ValueError:
+        print("ERROR: missing version argument. Example: ./ns release-prep 0.3.21")
+        print("\n### RESULT: FAIL ###")
+        return 2
+
+    status = 0
+    lines = render_header(tag)
+    py = python_tool(repo_root)
+
+    def section(title: str) -> None:
+        lines.extend(["", f"### {title} ###"])
+
+    def append_command(args: list[str], env_prefix: str | None = None) -> CommandResult:
+        nonlocal status
+        result = run_command(repo_root, args)
+        if env_prefix:
+            lines.append(env_prefix + " " + " ".join(args))
+        if result.output:
+            lines.append(result.output)
+        if result.returncode != 0:
+            status = 1
+        return result
+
+    section("UPDATE MAIN")
+    append_command(["git", "switch", "main"])
+    append_command(["git", "pull", "--ff-only", "origin", "main"])
+
+    section("VERIFY MAIN BEFORE RELEASE BRANCH")
+    append_command(["./ns", "dev"])
+    append_command([py, "-m", "agentic_project_kit.cli", "pr-hygiene"], env_prefix="PYTHONPATH=src")
+
+    section("CREATE RELEASE PREP BRANCH")
+    branch = f"release/prepare-{tag}"
+    branch_check = run_command(repo_root, ["git", "show-ref", "--verify", "--quiet", f"refs/heads/{branch}"])
+    if branch_check.returncode == 0:
+        append_command(["git", "switch", branch])
+    else:
+        append_command(["git", "switch", "-c", branch])
+
+    section("PATCH RELEASE METADATA")
+    append_command([py, "tools/ns_release_metadata_prep.py", plain_version])
+
+    section("RELEASE CHECK AFTER METADATA PATCH")
+    append_command([py, "-m", "agentic_project_kit.cli", "release-check", "--version", plain_version], env_prefix="PYTHONPATH=src")
+
+    section("CURRENT VERSION REFERENCES")
+    append_command([
+        "grep",
+        "-R",
+        plain_version,
+        "-n",
+        "pyproject.toml",
+        "src/agentic_project_kit/__init__.py",
+        "CITATION.cff",
+        "CHANGELOG.md",
+        "README.md",
+        "docs/STATUS.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+    ])
+
+    section("FINAL STATE")
+    append_command(["git", "branch", "--show-current"])
+    append_command(["git", "status", "--short"])
+    append_command(["git", "log", "--oneline", "-8"])
+
+    lines.append("\n### RESULT: PASS ###" if status == 0 else "\n### RESULT: FAIL ###")
+    print("\n".join(lines))
+    return status
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = argv if argv is not None else []
+    if not args:
+        print("ERROR: missing version argument. Example: ./ns release-prep 0.3.21")
+        print("\n### RESULT: FAIL ###")
+        return 2
+    return prepare_release(args[0], Path(".").resolve())
+
+
+if __name__ == "__main__":
+    import sys
+
+    raise SystemExit(main(sys.argv[1:]))
