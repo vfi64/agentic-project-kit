@@ -1,0 +1,90 @@
+
+### CURRENT STATE ###
+feature/v036-comm-summary-requires-slice
+9a7cf5b Require explicit slice name for communication summaries
+7dca545 Record communication state after run summary merge
+36def19 Record run summary renderer merge verification log
+286c65c Add deterministic run summary renderer (#602)
+81ed316 Record v0.3.36 shell removal closeout merge verification
+
+### PR STATUS ###
+{"mergeStateStatus":"CLEAN","number":603,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-21T14:52:00Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26233673240/job/77200741230","name":"test","startedAt":"2026-05-21T14:51:39Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-21T14:52:03Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26233671476/job/77200736412","name":"test","startedAt":"2026-05-21T14:51:39Z","status":"COMPLETED","workflowName":"CI"}],"title":"Require explicit slice name for communication summaries","url":"https://github.com/vfi64/agentic-project-kit/pull/603"}
+
+### WAIT FOR CI ###
+test	pass	24s	https://github.com/vfi64/agentic-project-kit/actions/runs/26233671476/job/77200736412	
+test	pass	21s	https://github.com/vfi64/agentic-project-kit/actions/runs/26233673240/job/77200741230	
+test	pass	24s	https://github.com/vfi64/agentic-project-kit/actions/runs/26233671476/job/77200736412	
+test	pass	21s	https://github.com/vfi64/agentic-project-kit/actions/runs/26233673240/job/77200741230	
+
+### VERIFY PR CLEAN WITH GH ONLY ###
+mergeStateStatus=CLEAN
+
+### MERGE PR ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   7dca545..2bdfb0f  main       -> origin/main
+Updating 7dca545..2bdfb0f
+Fast-forward
+ ...summary-requires-slice-nowrite-guard-repair.log | 96 ++++++++++++++++++++++
+ src/agentic_project_kit/communication_state.py     |  6 +-
+ tests/test_communication_state.py                  | 23 ++++++
+ 3 files changed, 123 insertions(+), 2 deletions(-)
+ create mode 100644 docs/reports/terminal/v036-comm-summary-requires-slice-nowrite-guard-repair.log
+ create mode 100644 tests/test_communication_state.py
+
+### UPDATE MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### MAIN VERIFY ###
+main
+62-    path: Path = DEFAULT_STATE_PATH,
+63-    origin: str = "local",
+64-    branch: str | None = None,
+65:    slice_name: str = "",
+66-    write: bool = True,
+67-) -> str:
+68-    if origin not in VALID_ORIGINS:
+69-        raise ValueError(f"invalid origin: {origin}")
+70-    if write and not slice_name.strip():
+71:        raise ValueError("slice_name must not be empty when writing communication summary state")
+72-    state = load_state(path)
+73-    next_id = int(state.get("last_summary_id", 0)) + 1
+74-    now = datetime.now().astimezone()
+SUMMARY COMM-00010 | 2026-05-21 16:53:56 +0200
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/communication_state.py", line 115, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/communication_state.py", line 110, in main
+    print(next_summary_header(path, args.origin, args.branch, args.slice, not args.no_write))
+          ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/communication_state.py", line 71, in next_summary_header
+    raise ValueError("slice_name must not be empty when writing communication summary state")
+ValueError: slice_name must not be empty when writing communication summary state
+PASS: writing comm-next-summary without --slice fails on main.
+SUMMARY COMM-00010 | 2026-05-21 16:53:56 +0200
+...                                                                      [100%]
+3 passed in 0.02s
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### SAVE MERGE VERIFY LOG IF GREEN ###
