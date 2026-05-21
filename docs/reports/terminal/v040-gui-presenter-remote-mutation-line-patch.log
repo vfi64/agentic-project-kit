@@ -1,0 +1,99 @@
+
+### RECOVER FEATURE BRANCH ###
+Already on 'feature/v0.4.0-gui-presenter-remote-mutation-safety'
+feature/v0.4.0-gui-presenter-remote-mutation-safety
+?? docs/reports/terminal/v040-gui-presenter-remote-mutation-safety-real-patch.log
+?? docs/reports/terminal/v040-gui-presenter-remote-mutation-safety-repair.log
+?? docs/reports/terminal/v040-gui-presenter-remote-mutation-safety.log
+
+### VERIFY REAL API NAMES BEFORE PATCH ###
+47:def action_to_view_model(action: object, *, destructive_actions_enabled: bool = False) -> GuiActionViewModel:
+18:def build_no_window_presenter_result(
+9:def render_action_row(action: GuiActionViewModel, index: int) -> str:
+19:def render_action_rows(actions: Iterable[GuiActionViewModel]) -> tuple[str, ...]:
+66:def run_gui_dry_run(project_root: Path | None = None) -> GuiDryRunResult:
+96:def render_result(result: GuiDryRunResult) -> str:
+
+### PATCH VIEWMODEL WITH SIMPLE LINE SCRIPT ###
+expected one enabled line replacement, got 0
+
+### WRITE REGRESSION TEST WITH REAL API NAMES ###
+
+### DIFF ###
+
+### TARGETED TESTS ###
+FFFFF........................                                            [100%]
+=================================== FAILURES ===================================
+_ test_remote_mutation_action_is_disabled_and_confirmation_required_in_viewmodel _
+
+    def test_remote_mutation_action_is_disabled_and_confirmation_required_in_viewmodel():
+        vm = action_to_view_model(Action("agent-run", "remote-mutation", "Run agent command"))
+>       assert vm.enabled is False
+E       AssertionError: assert True is False
+E        +  where True = GuiActionViewModel(name='agent-run', safety_class='remote-mutation', description='Run agent command', enabled=True, requires_confirmation=False).enabled
+
+tests/test_v040_gui_presenter_remote_mutation_safety.py:20: AssertionError
+_______ test_remote_mutation_underscore_alias_is_normalized_and_blocked ________
+
+    def test_remote_mutation_underscore_alias_is_normalized_and_blocked():
+        vm = action_to_view_model(Action("agent-run", "remote_mutation", "Run agent command"))
+>       assert vm.enabled is False
+E       AssertionError: assert True is False
+E        +  where True = GuiActionViewModel(name='agent-run', safety_class='remote_mutation', description='Run agent command', enabled=True, requires_confirmation=False).enabled
+
+tests/test_v040_gui_presenter_remote_mutation_safety.py:27: AssertionError
+______ test_remote_mutation_action_is_not_rendered_as_enabled_no_confirm _______
+
+    def test_remote_mutation_action_is_not_rendered_as_enabled_no_confirm():
+        presenter = build_no_window_presenter_result([Action("agent-run", "remote-mutation", "Run agent command")])
+>       assert "agent-run [remote-mutation; disabled; confirm]" in presenter.rendered
+E       AssertionError: assert 'agent-run [remote-mutation; disabled; confirm]' in 'agentic-project-kit Cockpit\nstatus=dry-run-ready\naction_count=1\ndestructive_actions_enabled=false\nactions:\n01. agent-run [remote-mutation; enabled; no-confirm] - Run agent command'
+E        +  where 'agentic-project-kit Cockpit\nstatus=dry-run-ready\naction_count=1\ndestructive_actions_enabled=false\nactions:\n01. agent-run [remote-mutation; enabled; no-confirm] - Run agent command' = GuiPresenterResult(ok=True, action_count=1, rendered='agentic-project-kit Cockpit\nstatus=dry-run-ready\naction_count=...\n01. agent-run [remote-mutation; enabled; no-confirm] - Run agent command', message='GUI no-window presenter passed.').rendered
+
+tests/test_v040_gui_presenter_remote_mutation_safety.py:34: AssertionError
+_______ test_remote_mutation_can_be_enabled_only_by_explicit_future_flag _______
+
+    def test_remote_mutation_can_be_enabled_only_by_explicit_future_flag():
+        vm = action_to_view_model(
+            Action("agent-run", "remote-mutation", "Run agent command"),
+            destructive_actions_enabled=True,
+        )
+        row = render_action_row(vm, 1)
+>       assert row == "01. agent-run [remote-mutation; enabled; confirm] - Run agent command"
+E       AssertionError: assert '01. agent-ru...agent command' == '01. agent-ru...agent command'
+E         
+E         - 01. agent-run [remote-mutation; enabled; confirm] - Run agent command
+E         + 01. agent-run [remote-mutation; enabled; no-confirm] - Run agent command
+E         ?                                          +++
+
+tests/test_v040_gui_presenter_remote_mutation_safety.py:44: AssertionError
+_______ test_gui_dry_run_has_no_remote_mutation_enabled_no_confirm_lines _______
+
+    def test_gui_dry_run_has_no_remote_mutation_enabled_no_confirm_lines():
+        output = render_result(run_gui_dry_run())
+>       assert "remote-mutation; enabled; no-confirm" not in output
+E       AssertionError: assert 'remote-muta...; no-confirm' not in 'GUI DRY RUN...LT: PASS ###'
+E         
+E         'remote-mutation; enabled; no-confirm' is contained here:
+E           ent-next [remote-mutation; enabled; no-confirm] - Pull and execute exactly one pending repo-backed agent command.
+E         ?           ++++++++++++++++++++++++++++++++++++
+E           10. agent-run [remote-mutation; enabled; no-confirm] - Pull-safe repo command runner for agent handoff without copy-and-paste terminal blocks.
+E           11. run-logged [local-only; enabled; no-confirm] - Run a local command while teeing output to a terminal log.
+E           12. terminal-status [read-only; enabled; no-confirm] - Inspect the latest terminal log pointer without mutating state....
+E         
+E         ...Full output truncated (57 lines hidden), use '-vv' to show
+
+tests/test_v040_gui_presenter_remote_mutation_safety.py:50: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v040_gui_presenter_remote_mutation_safety.py::test_remote_mutation_action_is_disabled_and_confirmation_required_in_viewmodel
+FAILED tests/test_v040_gui_presenter_remote_mutation_safety.py::test_remote_mutation_underscore_alias_is_normalized_and_blocked
+FAILED tests/test_v040_gui_presenter_remote_mutation_safety.py::test_remote_mutation_action_is_not_rendered_as_enabled_no_confirm
+FAILED tests/test_v040_gui_presenter_remote_mutation_safety.py::test_remote_mutation_can_be_enabled_only_by_explicit_future_flag
+FAILED tests/test_v040_gui_presenter_remote_mutation_safety.py::test_gui_dry_run_has_no_remote_mutation_enabled_no_confirm_lines
+5 failed, 24 passed in 0.25s
+
+### GUI DRY RUN SAFETY SMOKE ###
+
+### FULL LOCAL GATES ###
+
+### COPY LOG FOR COMMIT ###
