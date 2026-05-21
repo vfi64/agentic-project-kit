@@ -50,8 +50,12 @@ def _is_dirty(repo_root: Path) -> bool:
     return bool(output.strip())
 
 
-def _tool_status(tool: str) -> str:
-    return "ok" if shutil.which(tool) else "missing"
+def _tool_status(tool: str, repo_root: Path | None = None) -> str:
+    if shutil.which(tool):
+        return "ok"
+    if repo_root is not None and (repo_root / ".venv" / "bin" / tool).exists():
+        return "ok"
+    return "missing"
 
 
 def _venv_available(repo_root: Path) -> bool:
@@ -68,9 +72,9 @@ def evaluate_mode_switch(
     branch = _current_branch(repo_root)
     dirty = _is_dirty(repo_root)
     venv_available = _venv_available(repo_root)
-    required_tools = {tool: _tool_status(tool) for tool in ("git", "gh")}
+    required_tools = {tool: _tool_status(tool, repo_root) for tool in ("git", "gh")}
     if target == "local":
-        required_tools["ruff"] = _tool_status("ruff")
+        required_tools["ruff"] = _tool_status("ruff", repo_root)
     findings: list[str] = []
 
     if expected_branch and branch != expected_branch:
