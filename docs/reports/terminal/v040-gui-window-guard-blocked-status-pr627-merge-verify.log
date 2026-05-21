@@ -1,0 +1,184 @@
+
+### PRECHECK CURRENT STATE ###
+feature/v0.4.0-gui-window-guard-blocked-status
+41b4b55 Render blocked GUI window guard without inner result marker
+6a9ef48 Record v0.4.0 GUI guarded window launch merge verification log
+d9b0480 Add guarded GUI window launch readiness check (#626)
+81b7c5b Record v0.4.0 GUI dry-run renderer merge verification log
+95b6e32 Integrate Tkinter renderer into GUI dry run (#625)
+e43e4de Record v0.4.0 Tkinter renderer merge verification log
+a6a5744 Add Tkinter renderer adapter contract (#624)
+d133442 Record v0.4.0 GUI layout plan merge verification log
+a8a49f7 Add GUI layout plan assembly contract (#623)
+c9db33c Record v0.4.0 minimal Tkinter shell merge verification log
+ea98197 Add v0.4.0 minimal Tkinter shell contract (#622)
+6b1c3d0 Record v0.4.0 GUI no-window presenter merge verification log
+
+### PR VIEW ###
+{"baseRefName":"main","headRefName":"feature/v0.4.0-gui-window-guard-blocked-status","mergeStateStatus":"CLEAN","number":627,"state":"OPEN","title":"Render blocked GUI window guard without inner result marker","url":"https://github.com/vfi64/agentic-project-kit/pull/627"}
+
+### WAIT FOR PR CHECKS ###
+test	pass	20s	https://github.com/vfi64/agentic-project-kit/actions/runs/26244201387/job/77238159599	
+test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26244204821/job/77238171007	
+test	pass	20s	https://github.com/vfi64/agentic-project-kit/actions/runs/26244201387/job/77238159599	
+test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26244204821/job/77238171007	
+
+### FINAL PR CHECKS SNAPSHOT ###
+test	pass	20s	https://github.com/vfi64/agentic-project-kit/actions/runs/26244201387/job/77238159599	
+test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26244204821/job/77238171007	
+
+### MERGE PR ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   6a9ef48..d629dbe  main       -> origin/main
+Updating 6a9ef48..d629dbe
+Fast-forward
+ ...v040-gui-window-guard-blocked-status-repair.log | 215 +++++++++++++++++++++
+ src/agentic_project_kit/gui_window_guard.py        |   6 +-
+ tests/test_v040_gui_window_guard.py                |  26 ++-
+ 3 files changed, 244 insertions(+), 3 deletions(-)
+ create mode 100644 docs/reports/terminal/v040-gui-window-guard-blocked-status-repair.log
+
+### UPDATE MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### VERIFY MAIN STATE ###
+main
+d629dbe Render blocked GUI window guard without inner result marker (#627)
+6a9ef48 Record v0.4.0 GUI guarded window launch merge verification log
+d9b0480 Add guarded GUI window launch readiness check (#626)
+81b7c5b Record v0.4.0 GUI dry-run renderer merge verification log
+95b6e32 Integrate Tkinter renderer into GUI dry run (#625)
+e43e4de Record v0.4.0 Tkinter renderer merge verification log
+a6a5744 Add Tkinter renderer adapter contract (#624)
+d133442 Record v0.4.0 GUI layout plan merge verification log
+a8a49f7 Add GUI layout plan assembly contract (#623)
+c9db33c Record v0.4.0 minimal Tkinter shell merge verification log
+ea98197 Add v0.4.0 minimal Tkinter shell contract (#622)
+6b1c3d0 Record v0.4.0 GUI no-window presenter merge verification log
+22345b3 Add v0.4.0 GUI no-window presenter (#621)
+e0450d5 Record v0.4.0 GUI action list renderer merge verification log
+9b64a69 Add v0.4.0 GUI action list renderer (#620)
+7b89af6 Record v0.4.0 GUI controller view model merge verification log
+
+### TARGETED GUI WINDOW GUARD TESTS ON MAIN ###
+............                                                             [100%]
+12 passed in 0.14s
+
+### GUI DRY RUN SMOKE AND INNER RESULT CHECK ON MAIN ###
+GUI DRY RUN
+Safety: no window is opened; no files, branches, tags, releases, PRs, or remote state are changed.
+tkinter_available=false
+window_launch_ready=false
+tkinter_note=nonblocking for --dry-run; required only for real window launch
+action_registry_available=true
+action_specs_available=true
+presenter_available=true
+presenter_action_count=14
+presenter_preview_begin
+agentic-project-kit Cockpit
+status=dry-run-ready
+action_count=14
+destructive_actions_enabled=false
+actions:
+01. dev [read-only; enabled; no-confirm] - Run local deterministic development gates.
+02. pr-cleanup [read-only; enabled; no-confirm] - Classify open pull requests without mutating them.
+03. release-verify [read-only; enabled; no-confirm] - Verify an existing release and metadata state.
+04. clean-evidence [local-only; enabled; no-confirm] - Clean local evidence or generated files according to repo policy.
+05. release-prep [local-only; enabled; no-confirm] - Prepare local release metadata before a release PR.
+06. release-gate [read-only; enabled; no-confirm] - Verify release readiness without tagging or publishing.
+07. finalize-guard [read-only; enabled; no-confirm] - Classify branch finalization state without merging or deleting.
+08. cockpit-readiness [read-only; enabled; no-confirm] - Render static cockpit readiness metadata without executing actions.
+09. agent-next [remote-mutation; enabled; no-confirm] - Pull and execute exactly one pending repo-backed agent command.
+10. agent-run [remote-mutation; enabled; no-confirm] - Pull-safe repo command runner for agent handoff without copy-and-paste terminal blocks.
+11. run-logged [local-only; enabled; no-confirm] - Run a local command while teeing output to a terminal log.
+12. terminal-status [read-only; enabled; no-confirm] - Inspect the latest terminal log pointer without mutating state.
+13. terminal-clean-check [read-only; enabled; no-confirm] - Check whether only terminal-log artifacts are dirty during logged runs.
+14. terminal-upload [remote-mutation; enabled; no-confirm] - Commit and push only terminal-log artifacts for failure handoff.
+presenter_preview_end
+mode_guard_available=true
+shell_adapters_absent=true
+message=GUI dry-run passed without opening a window.
+layout_plan_begin
+GUI LAYOUT PLAN
+title=agentic-project-kit Cockpit
+geometry=1000x650
+node_count=32
+menu_count=4
+toolbar_button_count=4
+action_button_count=6
+output_panel_count=1
+summary_bar_count=1
+disabled_commands=release-publish
+layout_plan_end
+tkinter_render_begin
+TKINTER RENDER RESULT
+title=agentic-project-kit Cockpit
+geometry=1000x650
+widget_count=32
+menu_count=4
+toolbar_button_count=4
+action_button_count=6
+output_panel_count=1
+summary_bar_count=1
+disabled_commands=release-publish
+destructive_enabled=false
+tkinter_render_end
+window_guard_begin
+GUI WINDOW GUARD
+window_launch_ready=false
+tkinter_importable=false
+native_tkinter_importable=false
+message=tkinter import failed: No module named '_tkinter'
+window_guard_status=BLOCKED
+window_guard_end
+real_window_opened=false
+### RESULT: PASS ###
+window_guard_begin
+GUI WINDOW GUARD
+window_launch_ready=false
+tkinter_importable=false
+native_tkinter_importable=false
+message=tkinter import failed: No module named '_tkinter'
+window_guard_status=BLOCKED
+window_guard_end
+inner_window_guard_result_marker_absent=true
+
+### FULL MAIN GATES ###
+........................................................................ [  9%]
+........................................................................ [ 19%]
+........................................................................ [ 28%]
+........................................................................ [ 38%]
+........................................................................ [ 47%]
+........................................................................ [ 57%]
+........................................................................ [ 67%]
+........................................................................ [ 76%]
+........................................................................ [ 86%]
+........................................................................ [ 95%]
+...............................                                          [100%]
+751 passed in 4.32s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COPY MERGE VERIFY LOG ###
