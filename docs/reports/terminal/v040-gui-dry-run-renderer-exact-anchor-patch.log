@@ -1,0 +1,179 @@
+
+### RECOVER FEATURE BRANCH ###
+Already on 'feature/v0.4.0-gui-dry-run-renderer-integration'
+
+### CLEAN FAILED LOCAL PATCH ARTIFACTS ONLY ###
+
+### PRE-PATCH REAL ANCHOR CHECK ###
+9:from agentic_project_kit.gui_presenter import build_no_window_presenter_result
+80:def render_result(result: GuiDryRunResult) -> str:
+97:        "### RESULT: PASS ###" if result.ok else "### RESULT: FAIL ###",
+
+### APPLY EXACT ANCHOR PATCH ###
+
+### WRITE ADDITIVE INTEGRATION TEST ###
+
+### DIFF ###
+diff --git a/src/agentic_project_kit/gui_dry_run.py b/src/agentic_project_kit/gui_dry_run.py
+index aeaf0fa..e532039 100644
+--- a/src/agentic_project_kit/gui_dry_run.py
++++ b/src/agentic_project_kit/gui_dry_run.py
+@@ -7,6 +7,8 @@ from typing import Sequence
+ 
+ from agentic_project_kit.action_registry import list_actions
+ from agentic_project_kit.gui_presenter import build_no_window_presenter_result
++from agentic_project_kit.gui_layout_plan import build_layout_plan, render_layout_plan
++from agentic_project_kit.gui_tkinter_renderer import render_layout_to_tkinter, render_tkinter_result_summary
+ 
+ 
+ @dataclass(frozen=True)
+@@ -27,6 +29,18 @@ class GuiDryRunResult:
+         return 0 if self.ok else 1
+ 
+ 
++class DryRunRoot:
++    def __init__(self) -> None:
++        self.title_value = ""
++        self.geometry_value = ""
++
++    def title(self, value: str) -> None:
++        self.title_value = value
++
++    def geometry(self, value: str) -> None:
++        self.geometry_value = value
++
++
+ def _module_available(name: str) -> bool:
+     try:
+         importlib.import_module(name)
+@@ -94,8 +108,19 @@ def render_result(result: GuiDryRunResult) -> str:
+         f"mode_guard_available={str(result.mode_guard_available).lower()}",
+         f"shell_adapters_absent={str(result.shell_adapters_absent).lower()}",
+         f"message={result.message}",
+-        "### RESULT: PASS ###" if result.ok else "### RESULT: FAIL ###",
+     ]
++    plan = build_layout_plan()
++    rendered = render_layout_to_tkinter(DryRunRoot(), plan)
++    lines.extend([
++        "layout_plan_begin",
++        render_layout_plan(plan),
++        "layout_plan_end",
++        "tkinter_render_begin",
++        render_tkinter_result_summary(rendered),
++        "tkinter_render_end",
++        "real_window_opened=false",
++        "### RESULT: PASS ###" if result.ok else "### RESULT: FAIL ###",
++    ])
+     return "\n".join(lines)
+ 
+ 
+
+### TARGETED GUI TESTS ###
+..............................                                           [100%]
+30 passed in 0.17s
+
+### NS GUI DRY RUN SMOKE ###
+GUI DRY RUN
+Safety: no window is opened; no files, branches, tags, releases, PRs, or remote state are changed.
+tkinter_available=false
+window_launch_ready=false
+tkinter_note=nonblocking for --dry-run; required only for real window launch
+action_registry_available=true
+action_specs_available=true
+presenter_available=true
+presenter_action_count=14
+presenter_preview_begin
+agentic-project-kit Cockpit
+status=dry-run-ready
+action_count=14
+destructive_actions_enabled=false
+actions:
+01. dev [read-only; enabled; no-confirm] - Run local deterministic development gates.
+02. pr-cleanup [read-only; enabled; no-confirm] - Classify open pull requests without mutating them.
+03. release-verify [read-only; enabled; no-confirm] - Verify an existing release and metadata state.
+04. clean-evidence [local-only; enabled; no-confirm] - Clean local evidence or generated files according to repo policy.
+05. release-prep [local-only; enabled; no-confirm] - Prepare local release metadata before a release PR.
+06. release-gate [read-only; enabled; no-confirm] - Verify release readiness without tagging or publishing.
+07. finalize-guard [read-only; enabled; no-confirm] - Classify branch finalization state without merging or deleting.
+08. cockpit-readiness [read-only; enabled; no-confirm] - Render static cockpit readiness metadata without executing actions.
+09. agent-next [remote-mutation; enabled; no-confirm] - Pull and execute exactly one pending repo-backed agent command.
+10. agent-run [remote-mutation; enabled; no-confirm] - Pull-safe repo command runner for agent handoff without copy-and-paste terminal blocks.
+11. run-logged [local-only; enabled; no-confirm] - Run a local command while teeing output to a terminal log.
+12. terminal-status [read-only; enabled; no-confirm] - Inspect the latest terminal log pointer without mutating state.
+13. terminal-clean-check [read-only; enabled; no-confirm] - Check whether only terminal-log artifacts are dirty during logged runs.
+14. terminal-upload [remote-mutation; enabled; no-confirm] - Commit and push only terminal-log artifacts for failure handoff.
+presenter_preview_end
+mode_guard_available=true
+shell_adapters_absent=true
+message=GUI dry-run passed without opening a window.
+layout_plan_begin
+GUI LAYOUT PLAN
+title=agentic-project-kit Cockpit
+geometry=1000x650
+node_count=32
+menu_count=4
+toolbar_button_count=4
+action_button_count=6
+output_panel_count=1
+summary_bar_count=1
+disabled_commands=release-publish
+layout_plan_end
+tkinter_render_begin
+TKINTER RENDER RESULT
+title=agentic-project-kit Cockpit
+geometry=1000x650
+widget_count=32
+menu_count=4
+toolbar_button_count=4
+action_button_count=6
+output_panel_count=1
+summary_bar_count=1
+disabled_commands=release-publish
+destructive_enabled=false
+tkinter_render_end
+real_window_opened=false
+### RESULT: PASS ###
+
+### NO WINDOW MODULE SMOKE ###
+TKINTER SHELL
+title=agentic-project-kit Cockpit
+status=tkinter-shell-ready
+action_count=14
+menu_count=4
+toolbar_button_count=4
+action_button_count=6
+destructive_actions_enabled=false
+### RESULT: PASS ###
+
+### FULL LOCAL GATES ###
+........................................................................ [  9%]
+........................................................................ [ 19%]
+........................................................................ [ 28%]
+........................................................................ [ 38%]
+........................................................................ [ 48%]
+........................................................................ [ 57%]
+........................................................................ [ 67%]
+........................................................................ [ 77%]
+........................................................................ [ 86%]
+........................................................................ [ 96%]
+...........................                                              [100%]
+747 passed in 4.44s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COPY TERMINAL LOG FOR COMMIT ###

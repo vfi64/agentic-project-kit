@@ -7,6 +7,8 @@ from typing import Sequence
 
 from agentic_project_kit.action_registry import list_actions
 from agentic_project_kit.gui_presenter import build_no_window_presenter_result
+from agentic_project_kit.gui_layout_plan import build_layout_plan, render_layout_plan
+from agentic_project_kit.gui_tkinter_renderer import render_layout_to_tkinter, render_tkinter_result_summary
 
 
 @dataclass(frozen=True)
@@ -25,6 +27,18 @@ class GuiDryRunResult:
     @property
     def exit_code(self) -> int:
         return 0 if self.ok else 1
+
+
+class DryRunRoot:
+    def __init__(self) -> None:
+        self.title_value = ""
+        self.geometry_value = ""
+
+    def title(self, value: str) -> None:
+        self.title_value = value
+
+    def geometry(self, value: str) -> None:
+        self.geometry_value = value
 
 
 def _module_available(name: str) -> bool:
@@ -94,8 +108,19 @@ def render_result(result: GuiDryRunResult) -> str:
         f"mode_guard_available={str(result.mode_guard_available).lower()}",
         f"shell_adapters_absent={str(result.shell_adapters_absent).lower()}",
         f"message={result.message}",
-        "### RESULT: PASS ###" if result.ok else "### RESULT: FAIL ###",
     ]
+    plan = build_layout_plan()
+    rendered = render_layout_to_tkinter(DryRunRoot(), plan)
+    lines.extend([
+        "layout_plan_begin",
+        render_layout_plan(plan),
+        "layout_plan_end",
+        "tkinter_render_begin",
+        render_tkinter_result_summary(rendered),
+        "tkinter_render_end",
+        "real_window_opened=false",
+        "### RESULT: PASS ###" if result.ok else "### RESULT: FAIL ###",
+    ])
     return "\n".join(lines)
 
 
