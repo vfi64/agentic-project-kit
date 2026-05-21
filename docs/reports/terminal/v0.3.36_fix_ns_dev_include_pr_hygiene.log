@@ -1,0 +1,33 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### CLEAN PRECHECK ###
+main
+?? docs/reports/terminal/v0.3.36_fix_ns_dev_include_pr_hygiene.log
+?? docs/reports/terminal/v0.3.36_record_standard_error_hardening_1_evidence.log
+?? docs/reports/terminal/v0.3.36_standard_error_hardening_1.log
+FAIL: working tree dirty before patch.
+
+================================================================
+SUMMARY
+WORK RESULT: FAIL
+EVIDENCE RESULT: PASS
+OVERALL RESULT: FAIL
+REMOTE_EVIDENCE: PARTIAL
+terminal_log=docs/reports/terminal/v0.3.36_fix_ns_dev_include_pr_hygiene.log
+command_report=NONE
+NEXT_CHAT_REPLY: f
+STANDARD_ERROR_REDUCTION: 79% unchanged; dirty tree blocks safe patch
+GUI_PREPARATION: 85% unchanged; CLI gate still not reliable enough for GUI
+### RESULT: FAIL ###
+================================================================
+
+Saving session...
+...copying shared history...
+...saving history...truncating history files...
+...completed.
