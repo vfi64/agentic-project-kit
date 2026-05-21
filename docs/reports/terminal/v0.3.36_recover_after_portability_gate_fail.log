@@ -2069,3 +2069,32 @@ Overall: FAIL
 
 ### RECORD RECOVERY EVIDENCE ###
 Switched to a new branch 'docs/record-v0.3.36-recover-after-portability-gate-fail'
+[docs/record-v0.3.36-recover-after-portability-gate-fail b7ac05e] Record v0.3.36 portability gate fail recovery evidence
+ 1 file changed, 2071 insertions(+)
+ create mode 100644 docs/reports/terminal/v0.3.36_recover_after_portability_gate_fail.log
+remote: 
+remote: Create a pull request for 'docs/record-v0.3.36-recover-after-portability-gate-fail' on GitHub by visiting:        
+remote:      https://github.com/vfi64/agentic-project-kit/pull/new/docs/record-v0.3.36-recover-after-portability-gate-fail        
+remote: 
+To github.com:vfi64/agentic-project-kit.git
+ * [new branch]      docs/record-v0.3.36-recover-after-portability-gate-fail -> docs/record-v0.3.36-recover-after-portability-gate-fail
+branch 'docs/record-v0.3.36-recover-after-portability-gate-fail' set up to track 'origin/docs/record-v0.3.36-recover-after-portability-gate-fail'.
+
+### CREATE OR SHOW PR ###
+Warning: 2 uncommitted changes
+https://github.com/vfi64/agentic-project-kit/pull/563
+
+================================================================
+SUMMARY
+ACTION: V0.3.36 RECOVER AFTER PORTABILITY GATE FAIL -- LOGGED -- NO GUI NO RELEASE
+WORK RESULT: PASS
+EVIDENCE RESULT: PASS
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PASS
+terminal_log=docs/reports/terminal/v0.3.36_recover_after_portability_gate_fail.log
+command_report=NONE
+STANDARD_ERROR_REDUCTION: 86%; recovery evidence is now repo-backed, but the portability gate wrapper still needs hardening.
+GUI_PREPARATION: 90%; remaining blocker is shell-removal gate and portable Python control surface.
+NEXT_CHAT_REPLY: d
+### RESULT: PASS ###
+================================================================

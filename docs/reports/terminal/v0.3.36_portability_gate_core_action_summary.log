@@ -98,3 +98,30 @@ index 3c24f88..586002f 100644
 ?? docs/reports/terminal/v0.3.36_portability_gate_core_action_summary.log
 ?? src/agentic_project_kit/portability_shell_gate.py
 ?? tests/test_v036_portability_shell_gate.py
+[feature/v0.3.36-portability-gate-core-action-summary 011c07c] Add portability shell gate core and action summary rule
+ 6 files changed, 172 insertions(+), 2 deletions(-)
+ create mode 100644 docs/reports/terminal/v0.3.36_portability_gate_core_action_summary.log
+ create mode 100644 src/agentic_project_kit/portability_shell_gate.py
+ create mode 100644 tests/test_v036_portability_shell_gate.py
+remote: 
+remote: Create a pull request for 'feature/v0.3.36-portability-gate-core-action-summary' on GitHub by visiting:        
+remote:      https://github.com/vfi64/agentic-project-kit/pull/new/feature/v0.3.36-portability-gate-core-action-summary        
+remote: 
+To github.com:vfi64/agentic-project-kit.git
+ * [new branch]      feature/v0.3.36-portability-gate-core-action-summary -> feature/v0.3.36-portability-gate-core-action-summary
+branch 'feature/v0.3.36-portability-gate-core-action-summary' set up to track 'origin/feature/v0.3.36-portability-gate-core-action-summary'.
+
+================================================================
+SUMMARY
+ACTION: V0.3.36 ADD PORTABILITY GATE CORE AND ACTION SUMMARY CONTRACT -- LOGGED -- NO GUI NO RELEASE
+WORK RESULT: PASS
+EVIDENCE RESULT: PASS
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PARTIAL
+terminal_log=docs/reports/terminal/v0.3.36_portability_gate_core_action_summary.log
+command_report=NONE
+STANDARD_ERROR_REDUCTION: 84%; ACTION summary contract and portability gate core added, pending merge.
+GUI_PREPARATION: 90%; remaining blocker is replacing/allowlisting tracked shell adapters and merging gate enforcement.
+NEXT_CHAT_REPLY: d
+### RESULT: PASS ###
+================================================================
