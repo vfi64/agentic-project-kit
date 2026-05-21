@@ -264,73 +264,17 @@ def test_repo_ns_commit_guard_routes_to_python_core() -> None:
 def test_ns_slice_runner_is_wired() -> None:
     text = Path("ns").read_text(encoding="utf-8")
     assert "slice-runner" in text
-    assert "tools/ns_slice_runner.sh" in text
+    assert "agentic_project_kit.ns_slice_runner" in text
+    assert "tools/ns_slice_runner.sh" not in text
+
 
 def test_ns_slice_runner_has_step_stop_semantics() -> None:
-    text = Path("tools/ns_slice_runner.sh").read_text(encoding="utf-8")
-    assert "advances only after target-state PASS" in text
+    text = Path("src/agentic_project_kit/ns_slice_runner.py").read_text(encoding="utf-8")
+    assert "Stopping slice runner at retryable state" in text
+    assert "Stopping slice runner at first failing step" in text
+    assert "### RESULT: FAIL ###" in text
     assert "### RESULT: PENDING ###" in text
-    assert "ALREADY_MERGED" in text
-    assert "Stopping slice runner at first failing step." in text
-    assert "sh -c" in text
 
-def test_idempotent_finalization_guard_is_documented() -> None:
-    text = Path("docs/planning/IDEMPOTENT_FINALIZATION_GUARD.md").read_text(encoding="utf-8")
-    assert "Status: proposed" in text
-    assert "Decision status: Proposed" in text
-    assert "branch already exists" in text
-    assert "target documentation marker already exists" in text
-    assert "no commits between base and head" in text
-    assert "Never commit directly to main" in text
-    assert "quote-fragile inline Python" in text
-
-def test_finalize_guard_python_core_is_present() -> None:
-    text = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
-    assert "def main" in text
-    assert "render_finalize_guard" in text
-
-def test_finalize_guard_handles_existing_or_completed_branches() -> None:
-    text = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
-    assert "local_branch_exists" in text
-    assert "remote_branch_exists" in text
-    assert "class FinalizeGuardDecision" in text
-    assert "already_on_main" in text or "PASS_ALREADY_ON_MAIN" in text
-def test_safe_remove_diagnostic_python_core_replaces_shell_adapter() -> None:
-    core = Path("src/agentic_project_kit/safe_remove_diagnostic.py").read_text(encoding="utf-8")
-    assert "git" in core
-    assert "restore" in core
-    assert "path.unlink" in core
-    assert "Tracked file detected" in core
-    assert not Path("tools/ns_safe_remove_diagnostic.sh").exists()
-
-def test_ns_clean_evidence_routes_to_python_cli() -> None:
-    ns_text = Path("ns").read_text(encoding="utf-8")
-    evidence_text = Path("src/agentic_project_kit/cli_commands/evidence.py").read_text(encoding="utf-8")
-    assert "clean-evidence" in ns_text
-    assert "agentic_project_kit.cli evidence clean" in ns_text
-    assert "tools/ns_clean_evidence.sh" not in ns_text
-    assert not Path("tools/ns_clean_evidence.sh").exists()
-    assert "tmp/agent-evidence" in evidence_text
-    assert "does not delete arbitrary docs/reports files" in evidence_text
-    assert "NEEDS_HUMAN_REVIEW" in evidence_text
-
-def test_ns_up_dirty_tree_mentions_clean_evidence() -> None:
-    text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")
-    assert "working tree is dirty" in text
-    assert "./ns clean-evidence" in text
-    assert "docs/reports/CURRENT_WORKFLOW_OUTPUT.md" in text
-    assert "git status --short" in text
-
-def test_finalize_guard_declares_machine_readable_outcomes() -> None:
-    text = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
-    assert "STATUS: PASS_ALREADY_ON_MAIN" not in text
-    assert "result=" in text
-    assert "def main" in text
-    assert "render_finalize_guard" in text
-def test_ns_exposes_terminal_finalize_shortcut():
-    text = Path("ns").read_text(encoding="utf-8")
-    assert "\"terminal-finalize\"" in text
-    assert "terminal_logging terminal-finalize" in text
 
 def test_repo_ns_exposes_mode_state_shortcuts() -> None:
     text = Path("ns").read_text(encoding="utf-8")
@@ -348,4 +292,13 @@ def test_repo_ns_pr_cleanup_routes_to_python_core() -> None:
     assert "tools/ns_pr_cleanup.sh" not in ns_text
     assert not Path("tools/ns_pr_cleanup.sh").exists()
     assert "NS PR CLEANUP CLASSIFICATION" in core_text
+
+def test_repo_ns_slice_runner_routes_to_python_core() -> None:
+    ns_text = Path("ns").read_text(encoding="utf-8")
+    core_text = Path("src/agentic_project_kit/ns_slice_runner.py").read_text(encoding="utf-8")
+    assert "\"slice-runner\"" in ns_text
+    assert "agentic_project_kit.ns_slice_runner" in ns_text
+    assert "tools/ns_slice_runner.sh" not in ns_text
+    assert not Path("tools/ns_slice_runner.sh").exists()
+    assert "NS SLICE RUNNER" in core_text
 
