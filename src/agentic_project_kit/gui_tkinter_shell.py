@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 from agentic_project_kit.action_registry import list_actions
 from agentic_project_kit.gui_presenter import build_no_window_presenter_result
+from agentic_project_kit.gui_window_guard import check_window_launch_ready, render_window_guard_result
 
 
 @dataclass(frozen=True)
@@ -123,13 +124,43 @@ def render_tkinter_shell_summary(spec: TkinterShellSpec) -> str:
     ))
 
 
+def run_window_smoke() -> tuple[bool, str]:
+    guard = check_window_launch_ready()
+    lines = ["TKINTER WINDOW SMOKE", render_window_guard_result(guard)]
+    if not guard.ok:
+        lines.extend([
+            "window_smoke_status=BLOCKED",
+            "real_window_opened=false",
+            "window_closed=true",
+        ])
+        return True, chr(10).join(lines)
+    root = create_tkinter_root()
+    try:
+        configure_tkinter_root(root, build_tkinter_shell_spec())
+        if hasattr(root, "update_idletasks"):
+            root.update_idletasks()
+        lines.extend([
+            "window_smoke_status=PASS",
+            "real_window_opened=true",
+        ])
+        return True, chr(10).join(lines)
+    finally:
+        if hasattr(root, "destroy"):
+            root.destroy()
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     args = list(argv or [])
     if args == ["--no-window-smoke"]:
         print(render_tkinter_shell_summary(build_tkinter_shell_spec()))
         print("### RESULT: PASS ###")
         return 0
-    print("ERROR: usage: python -m agentic_project_kit.gui_tkinter_shell --no-window-smoke")
+    if args == ["--window-smoke"]:
+        ok, output = run_window_smoke()
+        print(output)
+        print("### RESULT: PASS ###" if ok else "### RESULT: FAIL ###")
+        return 0 if ok else 1
+    print("ERROR: usage: python -m agentic_project_kit.gui_tkinter_shell --no-window-smoke|--window-smoke")
     print("### RESULT: FAIL ###")
     return 2
 

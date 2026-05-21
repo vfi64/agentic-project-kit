@@ -67,3 +67,19 @@ def test_windows_style_design_has_menu_bar_toolbar_buttons_and_tooltips():
     assert {button.command_id for button in design.toolbar} >= {"refresh-status", "doctor", "check-docs", "gui-dry-run"}
     assert any(button.command_id == "release-publish" and not button.enabled for button in design.action_buttons)
     assert any(button.icon_text for button in design.toolbar)
+
+def test_main_window_smoke_is_guarded_and_non_crashing(capsys):
+    assert main(["--window-smoke"]) == 0
+    output = capsys.readouterr().out
+    assert "TKINTER WINDOW SMOKE" in output
+    assert "GUI WINDOW GUARD" in output
+    assert "real_window_opened=" in output
+    assert "### RESULT: PASS ###" in output
+
+
+def test_main_rejects_unknown_tkinter_shell_argument(capsys):
+    assert main(["--window-smoke-like"]) == 2
+    output = capsys.readouterr().out
+    assert "--no-window-smoke|--window-smoke" in output
+    assert "### RESULT: FAIL ###" in output
+

@@ -1,0 +1,88 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### CLEAN PRECHECK ###
+main
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'feature/v040-guarded-tkinter-window-smoke'
+
+### PATCH GUI TKINTER SHELL WINDOW SMOKE ###
+
+### ADD WINDOW SMOKE TESTS ###
+
+### STRUCTURE CHECKS ###
+8:from agentic_project_kit.gui_window_guard import check_window_launch_ready, render_window_guard_result
+127:def run_window_smoke() -> tuple[bool, str]:
+128:    guard = check_window_launch_ready()
+152:def main(argv: Sequence[str] | None = None) -> int:
+158:    if args == ["--window-smoke"]:
+163:    print("ERROR: usage: python -m agentic_project_kit.gui_tkinter_shell --no-window-smoke|--window-smoke")
+1
+71:def test_main_window_smoke_is_guarded_and_non_crashing(capsys):
+
+### SMOKES ###
+TKINTER SHELL
+title=agentic-project-kit Cockpit
+status=tkinter-shell-ready
+action_count=14
+menu_count=4
+toolbar_button_count=4
+action_button_count=6
+destructive_actions_enabled=false
+toolbar_icons=refresh,stethoscope,document-check,play
+### RESULT: PASS ###
+TKINTER WINDOW SMOKE
+GUI WINDOW GUARD
+window_launch_ready=false
+tkinter_importable=false
+native_tkinter_importable=false
+message=tkinter import failed: No module named '_tkinter'
+window_guard_status=BLOCKED
+window_smoke_status=BLOCKED
+real_window_opened=false
+window_closed=true
+### RESULT: PASS ###
+
+### TESTS / LINT / GATES ###
+........................................................................ [ 91%]
+.......                                                                  [100%]
+79 passed in 0.37s
+........................................................................ [  9%]
+........................................................................ [ 18%]
+........................................................................ [ 27%]
+........................................................................ [ 36%]
+........................................................................ [ 45%]
+........................................................................ [ 54%]
+........................................................................ [ 63%]
+........................................................................ [ 72%]
+........................................................................ [ 81%]
+........................................................................ [ 91%]
+.......................................................................  [100%]
+791 passed in 4.46s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### STAGE REMOTE LOG ###
