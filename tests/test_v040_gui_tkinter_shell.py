@@ -100,3 +100,49 @@ def test_window_smoke_blocks_when_tk_root_creation_fails(monkeypatch):
     assert "window_closed=true" in output
     assert "window_block_reason=no display available" in output
 
+
+def test_manual_launch_blocks_when_guard_blocks(monkeypatch):
+    from types import SimpleNamespace
+    from agentic_project_kit import gui_tkinter_shell
+
+    monkeypatch.setattr(gui_tkinter_shell, "check_window_launch_ready", lambda: SimpleNamespace(ok=False))
+    monkeypatch.setattr(gui_tkinter_shell, "render_window_guard_result", lambda _guard: "GUI WINDOW GUARD" + chr(10) + "window_launch_ready=false")
+    ok, output = gui_tkinter_shell.run_manual_launch()
+
+    assert ok is True
+    assert "manual_launch_status=BLOCKED" in output
+    assert "real_window_opened=false" in output
+    assert "actions_enabled=false" in output
+
+
+def test_manual_launch_ready_path_uses_mainloop_without_actions(monkeypatch, capsys):
+    from types import SimpleNamespace
+    from agentic_project_kit import gui_tkinter_shell
+
+    class FakeRoot:
+        def mainloop(self):
+            return None
+
+    monkeypatch.setattr(gui_tkinter_shell, "check_window_launch_ready", lambda: SimpleNamespace(ok=True))
+    monkeypatch.setattr(gui_tkinter_shell, "render_window_guard_result", lambda _guard: "GUI WINDOW GUARD" + chr(10) + "window_launch_ready=true")
+    monkeypatch.setattr(gui_tkinter_shell, "create_tkinter_root", lambda: FakeRoot())
+    monkeypatch.setattr(gui_tkinter_shell, "configure_tkinter_root", lambda _root, _spec: None)
+    ok, output = gui_tkinter_shell.run_manual_launch()
+    printed = capsys.readouterr().out
+
+    assert ok is True
+    assert output == "manual_launch_closed=true"
+    assert "manual_launch_status=READY" in printed
+    assert "actions_enabled=false" in printed
+    assert "manual_close_required=true" in printed
+    assert "### RESULT: PASS ###" in printed
+
+
+def test_main_manual_launch_route_uses_guarded_runner(monkeypatch, capsys):
+    from agentic_project_kit import gui_tkinter_shell
+
+    monkeypatch.setattr(gui_tkinter_shell, "run_manual_launch", lambda: (True, "manual_launch_closed=true"))
+    assert gui_tkinter_shell.main(["--manual-launch"]) == 0
+    output = capsys.readouterr().out
+    assert "manual_launch_closed=true" in output
+
