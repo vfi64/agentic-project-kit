@@ -292,12 +292,13 @@ def test_finalize_guard_handles_existing_or_completed_branches() -> None:
     assert "remote_branch_exists" in text
     assert "class FinalizeGuardDecision" in text
     assert "already_on_main" in text or "PASS_ALREADY_ON_MAIN" in text
-def test_safe_remove_diagnostic_guard_distinguishes_tracked_files() -> None:
-    script = Path("tools/ns_safe_remove_diagnostic.sh").read_text(encoding="utf-8")
-    assert "git ls-files --error-unmatch" in script
-    assert "git restore" in script
-    assert "rm -f" in script
-    assert "Tracked file detected" in script
+def test_safe_remove_diagnostic_python_core_replaces_shell_adapter() -> None:
+    core = Path("src/agentic_project_kit/safe_remove_diagnostic.py").read_text(encoding="utf-8")
+    assert "git" in core
+    assert "restore" in core
+    assert "path.unlink" in core
+    assert "Tracked file detected" in core
+    assert not Path("tools/ns_safe_remove_diagnostic.sh").exists()
 
 def test_ns_clean_evidence_is_wired_and_safe() -> None:
     ns_text = Path("ns").read_text(encoding="utf-8")
