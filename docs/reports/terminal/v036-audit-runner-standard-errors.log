@@ -1,0 +1,140 @@
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK MAIN ###
+main
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=main
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'fix/v0.3.36-audit-runner-standard-errors'
+
+### WRITE STANDARD ERROR PATCH SCRIPT ###
+
+### APPLY PATCH ###
+
+### SHOW DIFF ###
+
+### TARGETED TESTS ###
+...                                                                      [100%]
+3 passed in 0.02s
+
+### CLI LIST-ONLY SMOKE ###
+gui-entry_test_file_count=20
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_action_registry.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_action_specs.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit_readiness.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit_registry_only_contract.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit_run_json_action_result.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_gui_cockpit.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_next_already_executed_guard.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_next_queue_execution.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_cli.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_evidence_contract.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_evidence_runtime.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_example_and_ns_shortcut.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_queue_status.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_runner.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_orders_pre_gui_docs.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_v034_typed_work_order_unit_baseline.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_work_order_prepare.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_work_order_templates.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_work_orders.py
+contracts_test_file_count=10
+tests/test_run_summary_renderer.py
+tests/test_v036_summary_and_ack_audit_hardening.py
+tests/test_v036_summary_renderer_usage_hardening.py
+tests/test_v036_doc_rules_contract_hardening.py
+tests/test_v036_zero_ns_shell_adapter_contract.py
+tests/test_v036_shell_adapter_inventory_baseline.py
+tests/test_v036_release_route_help_safety.py
+tests/test_terminal_logging.py
+tests/test_evidence_clean.py
+tests/test_evidence_clean_cli.py
+
+### CLI RUN TARGETED MATRICES ###
+........................................................................ [ 69%]
+................................                                         [100%]
+104 passed in 0.65s
+..............................................                           [100%]
+46 passed in 0.29s
+gui-entry_test_file_count=20
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_action_registry.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_action_specs.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit_readiness.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit_registry_only_contract.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_cockpit_run_json_action_result.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_gui_cockpit.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_next_already_executed_guard.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_next_queue_execution.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_cli.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_evidence_contract.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_evidence_runtime.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_example_and_ns_shortcut.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_queue_status.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_order_runner.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_typed_work_orders_pre_gui_docs.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_v034_typed_work_order_unit_baseline.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_work_order_prepare.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_work_order_templates.py
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_work_orders.py
+contracts_test_file_count=10
+tests/test_run_summary_renderer.py
+tests/test_v036_summary_and_ack_audit_hardening.py
+tests/test_v036_summary_renderer_usage_hardening.py
+tests/test_v036_doc_rules_contract_hardening.py
+tests/test_v036_zero_ns_shell_adapter_contract.py
+tests/test_v036_shell_adapter_inventory_baseline.py
+tests/test_v036_release_route_help_safety.py
+tests/test_terminal_logging.py
+tests/test_evidence_clean.py
+tests/test_evidence_clean_cli.py
+
+### FULL LOCAL GATES ###
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+........................................................................ [ 30%]
+........................................................................ [ 41%]
+........................................................................ [ 51%]
+........................................................................ [ 61%]
+........................................................................ [ 71%]
+........................................................................ [ 82%]
+........................................................................ [ 92%]
+.....................................................                    [100%]
+701 passed in 3.96s
+F401 [*] `typer.testing.CliRunner` imported but unused
+ --> tests/test_v036_audit_test_matrix.py:5:27
+  |
+3 | from pathlib import Path
+4 |
+5 | from typer.testing import CliRunner
+  |                           ^^^^^^^^^
+6 |
+7 | from agentic_project_kit.audit_test_matrix import discover_gui_entry_tests, existing_contract_tests, pytest_argv_for
+  |
+help: Remove unused import: `typer.testing.CliRunner`
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.
+
+### COPY LOG FOR COMMIT ###
