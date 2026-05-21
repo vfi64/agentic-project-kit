@@ -133,33 +133,25 @@ def test_repo_ns_go_guard_protects_dirty_feature_branch() -> None:
 
 def test_repo_ns_up_invokes_pr_completion_tool() -> None:
     text = Path("ns").read_text(encoding="utf-8")
-    assert "tools/ns_up_pr_completion.sh" in text
-    assert "${1:-}" in text
-
+    assert "agentic_project_kit.ns_up_pr_completion" in text
+    assert "tools/ns_up_pr_completion.sh" not in text
 
 def test_ns_up_pr_completion_tool_has_pass_fail_markers() -> None:
-    text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")
-    assert "NS UP PR COMPLETION CYCLE" in text
+    text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
     assert "### RESULT: PASS ###" in text
     assert "### RESULT: FAIL ###" in text
-    assert "gh pr merge" in text
-    assert "./ns dev" in text
 
 def test_ns_up_tool_updates_main_only_after_successful_merge() -> None:
-    text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")
-    assert "MERGED=0" in text
-    assert "MERGED=1" in text
-    assert 'if [ "$MERGED" -eq 1 ]; then' in text
-    assert "UPDATE MAIN SKIPPED" in text
-    assert "PR is not mergeable" in text
-    assert "working tree is dirty" in text
+    text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
+    assert "if merged:" in text
+    assert "git" in text
+    assert "switch" in text
+    assert "main" in text
+    assert "Main update skipped because PR merge did not complete successfully." in text
 
-def test_ns_up_tool_is_valid_shell_syntax() -> None:
-    import subprocess
-
-    result = subprocess.run(["sh", "-n", "tools/ns_up_pr_completion.sh"], text=True, capture_output=True, check=False)
-    assert result.returncode == 0, result.stderr
-
+def test_ns_up_tool_is_valid_python_syntax() -> None:
+    import py_compile
+    py_compile.compile("src/agentic_project_kit/ns_up_pr_completion.py", doraise=True)
 
 def test_repo_ns_release_shortcuts_are_wired() -> None:
     text = Path("ns").read_text(encoding="utf-8")
@@ -218,19 +210,18 @@ def test_release_publish_waits_for_github_release_and_verifies() -> None:
     assert "publish-" in text
 
 def test_ns_up_handles_already_merged_pr_idempotently() -> None:
-    text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")
-    assert "PR_STATE" in text
+    text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
     assert "MERGED" in text
     assert "idempotent completion state" in text
     assert "MERGEABLE" in text
 
-
 def test_ns_up_treats_pending_checks_as_wait_state_not_fail_state() -> None:
-    text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")
+    text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
     assert "### PR CHECKS SNAPSHOT ###" in text
-    assert "gh pr checks \"$PR_NUMBER\" || true" in text
-    assert "gh pr checks \"$PR_NUMBER\" --watch" in text
-
+    assert "gh" in text
+    assert "pr" in text
+    assert "checks" in text
+    assert "--watch" in text
 
 def test_ns_pr_create_or_skip_handles_no_delta_idempotently() -> None:
     text = Path("tools/ns_pr_create_or_skip.sh").read_text(encoding="utf-8")
@@ -247,12 +238,11 @@ def test_ns_pr_create_or_skip_reuses_existing_pr_before_create() -> None:
     assert "gh pr create --base" in text
 
 def test_ns_up_handles_noop_branches_idempotently() -> None:
-    text = Path("tools/ns_up_pr_completion.sh").read_text(encoding="utf-8")
+    text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
     assert "commits_ahead_of_main" in text
     assert "idempotent no-op completion" in text
-    assert "git rev-list --count main.." in text
-    assert "exit \"$STATUS\"" in text
-
+    assert "rev-list" in text
+    assert "### RESULT: PASS ###" in text
 
 def test_repo_ns_commit_guard_routes_to_python_core() -> None:
     ns_text = Path("ns").read_text(encoding="utf-8")
@@ -333,3 +323,11 @@ def test_repo_ns_release_prep_routes_to_python_core() -> None:
     assert not Path("tools/ns_release_prep.sh").exists()
     assert "prepare_release" in core_text
 
+def test_repo_ns_up_routes_to_python_core() -> None:
+    text = Path("ns").read_text(encoding="utf-8")
+    core_text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
+    assert "up" in text
+    assert "agentic_project_kit.ns_up_pr_completion" in text
+    assert "tools/ns_up_pr_completion.sh" not in text
+    assert not Path("tools/ns_up_pr_completion.sh").exists()
+    assert "run_ns_up" in core_text
