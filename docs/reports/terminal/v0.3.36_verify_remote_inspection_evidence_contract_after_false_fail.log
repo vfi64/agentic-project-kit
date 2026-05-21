@@ -1,0 +1,90 @@
+### START ###
+V0.3.36 VERIFY REMOTE INSPECTION EVIDENCE CONTRACT AFTER FALSE FAIL -- LOGGED -- NO GUI NO RELEASE
+
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### CLEAN PRECHECK ###
+main
+PASS: clean before verification.
+
+### CURRENT HEAD ###
+111bc23 Add remote inspection evidence contract (#571)
+a18f8b2 Record remote inspection evidence contract inventory
+147887c Record safe remove diagnostic shell removal merge verification
+129f7af Remove safe remove diagnostic shell adapter (#570)
+3562bd0 Record finalize guard shell removal merge verification
+690db15 Remove finalize guard shell adapter (#569)
+b5da5de Record v0.3.36 AGENTS rule split merge evidence (#567)
+42ead76 Split portability rule out of AGENTS and lock summary fail contract (#566)
+b4bb05d Record v0.3.36 portability gate fail recovery evidence (#563)
+ed5aa54 Record v0.3.36 portability shell removal inventory (#561)
+
+### VERIFY PR 571 MERGED ###
+{"mergeStateStatus":"UNKNOWN","mergeable":"UNKNOWN","number":571,"state":"MERGED","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-21T09:09:47Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26216690445/job/77140769461","name":"test","startedAt":"2026-05-21T09:09:26Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-21T09:09:46Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26216688462/job/77140762126","name":"test","startedAt":"2026-05-21T09:09:25Z","status":"COMPLETED","workflowName":"CI"}],"title":"Add remote inspection evidence contract","url":"https://github.com/vfi64/agentic-project-kit/pull/571"}
+
+### VERIFY CONTRACT FILES ###
+docs/STATUS.md:334:- v0.3.36 adds a remote inspection evidence contract: long inspect/classify outputs should be written to remote temporary evidence, registered for later GC, and referenced from final summaries so chat can continue with `d` instead of pasted terminal output.
+
+### TARGETED TESTS WITH CORRECT TEST NAME ###
+...............                                                          [100%]
+15 passed in 0.17s
+
+### RUFF / DOC GATES WITH CORRECT ENTRYPOINTS ###
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### TRACKED SHELL COUNT OUTSIDE TMP ###
+tools/capture_workflow_output.sh
+tools/local_workflow_cycle.sh
+tools/ns_clean_evidence.sh
+tools/ns_commit_pr_guard.sh
+tools/ns_pr_cleanup.sh
+tools/ns_pr_create_or_skip.sh
+tools/ns_release_gate.sh
+tools/ns_release_prep.sh
+tools/ns_release_publish.sh
+tools/ns_release_verify.sh
+tools/ns_slice_runner.sh
+tools/ns_up_pr_completion.sh
+tools/screen_control_gate.sh
+tracked_shell_file_count_outside_tmp=13
+
+================================================================
+SUMMARY
+ACTION: V0.3.36 VERIFY REMOTE INSPECTION EVIDENCE CONTRACT AFTER FALSE FAIL -- LOGGED -- NO GUI NO RELEASE
+WORK RESULT: PASS
+EVIDENCE RESULT: PASS
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PARTIAL
+terminal_log=docs/reports/terminal/v0.3.36_verify_remote_inspection_evidence_contract_after_false_fail.log
+command_report=NONE
+STANDARD_ERROR_REDUCTION: 97%; PR 571 false FAIL corrected: correct test file and correct doc-gate entrypoints verified.
+GUI_PREPARATION: 96%; remote inspection evidence contract is merged and verified; remaining GUI blocker is 13 tracked shell files.
+NEXT_CHAT_REPLY: d
+### RESULT: PASS ###
+================================================================
+
+Terminal bleibt offen. Kein exit am Blockende.
