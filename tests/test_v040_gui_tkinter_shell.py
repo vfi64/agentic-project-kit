@@ -127,6 +127,7 @@ def test_manual_launch_ready_path_uses_mainloop_without_actions(monkeypatch, cap
     monkeypatch.setattr(gui_tkinter_shell, "render_window_guard_result", lambda _guard: "GUI WINDOW GUARD" + chr(10) + "window_launch_ready=true")
     monkeypatch.setattr(gui_tkinter_shell, "create_tkinter_root", lambda: FakeRoot())
     monkeypatch.setattr(gui_tkinter_shell, "configure_tkinter_root", lambda _root, _spec: None)
+    monkeypatch.setattr(gui_tkinter_shell, "render_manual_launch_content", lambda _root: None)
     ok, output = gui_tkinter_shell.run_manual_launch()
     printed = capsys.readouterr().out
 
@@ -145,4 +146,30 @@ def test_main_manual_launch_route_uses_guarded_runner(monkeypatch, capsys):
     assert gui_tkinter_shell.main(["--manual-launch"]) == 0
     output = capsys.readouterr().out
     assert "manual_launch_closed=true" in output
+
+
+def test_manual_launch_ready_path_renders_visible_content(monkeypatch, capsys):
+    from types import SimpleNamespace
+    from agentic_project_kit import gui_tkinter_shell
+
+    calls = []
+
+    class FakeRoot:
+        def mainloop(self):
+            calls.append("mainloop")
+
+    monkeypatch.setattr(gui_tkinter_shell, "check_window_launch_ready", lambda: SimpleNamespace(ok=True))
+    monkeypatch.setattr(gui_tkinter_shell, "render_window_guard_result", lambda _guard: "GUI WINDOW GUARD" + chr(10) + "window_launch_ready=true")
+    monkeypatch.setattr(gui_tkinter_shell, "create_tkinter_root", lambda: FakeRoot())
+    monkeypatch.setattr(gui_tkinter_shell, "configure_tkinter_root", lambda _root, _spec: calls.append("configure"))
+    monkeypatch.setattr(gui_tkinter_shell, "render_manual_launch_content", lambda _root: calls.append("visible-content"))
+
+    ok, output = gui_tkinter_shell.run_manual_launch()
+    printed = capsys.readouterr().out
+
+    assert ok is True
+    assert output == "manual_launch_closed=true"
+    assert calls == ["configure", "visible-content", "mainloop"]
+    assert "manual_launch_status=READY" in printed
+    assert "actions_enabled=false" in printed
 

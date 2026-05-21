@@ -160,6 +160,34 @@ def run_window_smoke() -> tuple[bool, str]:
 
 
 
+
+
+def render_manual_launch_content(root: object) -> None:
+    import tkinter as tk
+    root.configure(bg="#f2f2f2")
+    header = tk.Label(root, text="agentic-project-kit Cockpit", anchor="w", font=("TkDefaultFont", 18, "bold"), bg="#f2f2f2")
+    header.pack(fill="x", padx=12, pady=(12, 6))
+    safety = tk.Label(root, text="Safety: manual launch only; actions disabled; no git, release, PR, tag, or remote mutation is executed.", anchor="w", bg="#f2f2f2")
+    safety.pack(fill="x", padx=12, pady=(0, 10))
+    toolbar = tk.Frame(root, bg="#e6e6e6", bd=1, relief="solid")
+    toolbar.pack(fill="x", padx=12, pady=(0, 8))
+    for label in ("Refresh status", "Doctor", "Check docs", "GUI dry-run"):
+        button = tk.Button(toolbar, text=label, state="disabled")
+        button.pack(side="left", padx=4, pady=4)
+    body = tk.Frame(root, bg="#f2f2f2")
+    body.pack(fill="both", expand=True, padx=12, pady=(0, 12))
+    actions = tk.LabelFrame(body, text="Actions disabled", bg="#f2f2f2")
+    actions.pack(side="left", fill="y", padx=(0, 8))
+    for label in ("cockpit-readiness", "doctor", "check-docs", "agent-run"):
+        tk.Button(actions, text=label, state="disabled", width=22).pack(fill="x", padx=6, pady=3)
+    output = tk.LabelFrame(body, text="Output / Status", bg="#f2f2f2")
+    output.pack(side="left", fill="both", expand=True)
+    text = tk.Text(output, height=12, wrap="word")
+    text.insert("1.0", "GUI manual launch ready. Actions are disabled in this MVP safety slice.\nNext slice: connect visible widgets to read-only action output.")
+    text.configure(state="disabled")
+    text.pack(fill="both", expand=True, padx=6, pady=6)
+    status = tk.Label(root, text="Status: ready | branch: main | actions: disabled", anchor="w", bg="#dddddd")
+    status.pack(fill="x", side="bottom")
 def run_manual_launch() -> tuple[bool, str]:
     guard = check_window_launch_ready()
     lines = ["TKINTER MANUAL LAUNCH", render_window_guard_result(guard)]
@@ -181,6 +209,7 @@ def run_manual_launch() -> tuple[bool, str]:
         ])
         return True, chr(10).join(lines)
     configure_tkinter_root(root, build_tkinter_shell_spec())
+    render_manual_launch_content(root)
     lines.extend([
         "manual_launch_status=READY",
         "real_window_opened=true",
