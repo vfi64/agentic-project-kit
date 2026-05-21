@@ -1,0 +1,235 @@
+
+### PRECHECK DIRTY DOC REPAIR STATE ###
+docs/v0.4.0-strategy-roadmap
+?? docs/reports/terminal/v040-strategy-roadmap-update.log
+?? docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md
+?? tests/test_v040_strategy_roadmap.py
+2ecf2c2 Record v0.3.37 DOI metadata (#615)
+a9035ad Record v0.3.37 release publish log
+69dc873 Prepare v0.3.37 release metadata (#614)
+c64eadd Record v0.3.37 final GUI preparation closeout contract (#613)
+6ae66ba Record v0.3.36 DOI metadata merge verification log
+613cf9e Record v0.3.36 DOI metadata (#612)
+369e920 Record v0.3.36 release publish log
+45ffd3f Record v0.3.36 release gate log
+0fb4d18 Record v0.3.36 release metadata merge verification log
+f9f5c41 Prepare v0.3.36 release metadata after audit runner hardening (#611)
+76f528a Record audit runner standard-error fix merge verification log
+9f9134f Add deterministic audit test matrix runner (#610)
+b8d9642 Record release route help safety merge verification log
+c8b20d5 Harden release route help and version safety (#609)
+
+### INSPECT EXISTING LIFECYCLE HEADER EXAMPLES ###
+docs/roadmap/V0.3.0_OUTPUT_REPAIR_PLAN.md:4:Decision status: implemented by the v0.3.x output-contract validation, validation report, and bounded structural repair work
+docs/planning/V0.3.8_SCOPE.md:5:Decision status: superseded by later guided workflow, ns shortcut, Pattern Advisor catalog, v0.3.12 release, and documentation information architecture work
+docs/planning/NS_UP_PR_COMPLETION.md:4:Decision status: proposed
+docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md:4:Decision status: proposed
+docs/planning/GUI_COCKPIT_EXPANSION_ROADMAP.md:4:Decision status: proposed
+docs/planning/NS_RELEASE_SHORTCUTS.md:4:Decision status: proposed
+docs/planning/IDEMPOTENT_FINALIZATION_GUARD.md:4:Decision status: Proposed
+docs/planning/PERSISTENT_HANDOFF_STATE.md:4:Decision status: Planned
+docs/planning/PATCH_ARTIFACT_PREFLIGHT_SLICE.md:3:Decision status: proposed
+docs/workflow/WORK_ORDERS.md:4:Decision status: accepted
+docs/workflow/PR_CLOSEOUT_GATE.md:4:Decision status: accepted
+docs/workflow/WORK_ORDER_TEMPLATES.md:4:Decision status: accepted
+docs/workflow/PARAMETERIZED_ACTIONS.md:4:Decision status: accepted
+docs/workflow/WORK_ORDER_PREPARE.md:4:Decision status: accepted
+docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md:4:Decision status: accepted
+docs/workflow/GOVERNANCE_CHECK.md:4:Decision status: accepted
+docs/workflow/HANDOFF_STATE.md:6:Decision status: accepted
+docs/governance/COMPILED_AGENT_CONTEXT.md:4:Decision status: accepted
+docs/ideas/LAYERED_CLI_USABILITY.md:4:Decision status: not implemented as a binding CLI policy
+docs/ideas/DIDACTIC_GUIDANCE.md:4:Decision status: not implemented as a binding architecture or CLI policy
+docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md:3:Status: planned first v0.4.0 line after v0.3.37 release and DOI closeout.
+docs/strategy/V0.4_PROFESSIONAL_SINGLE_USER_STRATEGY.md:3:Status: active
+docs/workflow/WORK_ORDERS.md:3:Status: active
+docs/workflow/PR_CLOSEOUT_GATE.md:3:Status: active
+docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md:3:Status: active baseline
+docs/workflow/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md:3:Status: active contract for v0.3.31 pre-GUI execution hardening.
+docs/workflow/WORK_ORDER_TEMPLATES.md:3:Status: active
+docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md:7:Status: active workflow rule.
+docs/workflow/V0.3.36_REMAINING_WORKPLAN.md:33:Status: partially complete.
+docs/workflow/V0.3.36_REMAINING_WORKPLAN.md:47:Status: release-facing `ns` routes are now Python-backed; DOI metadata recording still needs a focused audit.
+docs/workflow/V0.3.36_REMAINING_WORKPLAN.md:62:Status: complete for known direct `ns -> tools/ns_*.sh` workflow adapters.
+docs/workflow/V0.3.36_REMAINING_WORKPLAN.md:76:Status: partially complete.
+docs/workflow/V0.3.36_REMAINING_WORKPLAN.md:90:Status: this document starts the update; `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, and `.agentic/handoff_state.yaml` must remain consistent.
+docs/workflow/V0.3.36_REMAINING_WORKPLAN.md:104:Status: partially complete.
+docs/workflow/V0.3.36_REMAINING_WORKPLAN.md:122:Status: improved but not final.
+docs/workflow/V0.3.36_REMAINING_WORKPLAN.md:136:Status: direct `ns` adapters removed; full repository shell inventory still open.
+docs/workflow/PARAMETERIZED_ACTIONS.md:3:Status: active
+docs/workflow/WORK_ORDER_PREPARE.md:3:Status: active
+docs/workflow/PRE_GUI_EXECUTION_HARDENING.md:3:Status: Active
+docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md:3:Status: active
+docs/workflow/GOVERNANCE_CHECK.md:3:Status: active
+docs/workflow/HANDOFF_STATE.md:5:Status: active
+docs/governance/COMPILED_AGENT_CONTEXT.md:3:Status: active
+
+### PATCH ROADMAP LIFECYCLE HEADER ###
+
+### PATCH ROADMAP TEST FOR LIFECYCLE HEADER ###
+
+### VERIFY PATCH ###
+# v0.4.0 GUI MVP Roadmap
+
+Decision status: proposed
+Lifecycle: active
+
+Planning note: first v0.4.0 line after v0.3.37 release and DOI closeout.
+
+## Purpose
+
+v0.4.0 starts the first real GUI MVP line. The goal is not to replace the existing CLI or governance workflow. The GUI must expose the existing Python action layer safely and must not introduce a second command system.
+
+## Boundary from v0.3.x
+
+- v0.3.37 closes the pre-GUI hardening phase.
+- No further general pre-GUI 0.3.x preparation loop is planned.
+- Remaining test gaps are handled as entry conditions inside the first v0.4.0 GUI slices.
+- v0.4.0 may start with contract and readiness slices before opening a real Tkinter window.
+
+## Non-negotiable GUI principles
+
+- The GUI uses the existing action registry and action specs.
+- The GUI uses the existing mode guard.
+- The GUI uses typed work orders or an equivalent typed execution contract.
+- The GUI surfaces safety classes clearly.
+- The GUI must preserve evidence and terminal-log discipline.
+- The GUI must not invent its own release, merge, push, tag, or shell workflow.
+- The GUI must not reintroduce removed shell adapters.
+
+## MVP safety scope
+
+- Read-only actions are allowed first.
+- Bounded local actions are allowed only with explicit safety metadata and deterministic evidence behavior.
+- Destructive actions are disabled in the first GUI MVP.
+- Release, publish, merge, tag, delete, and remote-mutating actions are not directly executable from the first GUI MVP.
+- Any future destructive GUI action requires a separate contract, tests, visible confirmation, and mode/evidence gates.
+
+## First v0.4.0 slices
+
+1. Strategy and roadmap update: define the v0.4.0 GUI line and lock the ordering.
+2. GUI action readiness contract: prove that GUI-visible actions have names, descriptions, safety classes, expected outcomes, parameter rules, and evidence rules.
+3. GUI dry-run entry point: provide a deterministic no-window launch check for Tkinter availability, action registry loading, safety policy loading, and mode guard availability.
+4. Minimal Tkinter MVP: show action list, safety class, status, output, and a run path for allowed read-only or bounded actions.
+5. GUI help baseline: add contextual help for actions and safety classes after the MVP execution path is stable.
+
+## Test-gap handling
+
+- Action registry and action specs are tested in the GUI action readiness slice.
+- Typed work order execution as GUI input is tested before the first real run button is trusted.
+- Evidence and dirty-log behavior are tested as action contracts, not as informal terminal habits.
+- Tkinter is tested first through a dry-run or smoke path, not through fragile pixel tests.
+- Controller and ViewModel tests are preferred over brittle GUI interaction tests.
+
+## Later roadmap lines
+
+- GUI help and guided mode.
+- Installation assistant.
+- Migration assistant.
+- Didactic assistant.
+- Documentation restructuring.
+- Automatic website generation and maintenance.
+- Public PyPI package maturity, after packaging, install, and support expectations are explicit.
+
+## Explicit non-goals for the first GUI MVP
+
+- No full release cockpit.
+- No automatic merge or publish action.
+- No installer.
+- No migration assistant.
+- No website generator.
+- No second command registry.
+from pathlib import Path
+
+
+ROADMAP = Path("docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md")
+
+
+def test_v040_gui_mvp_roadmap_exists():
+    assert ROADMAP.exists()
+
+
+def test_v040_gui_mvp_roadmap_defines_phase_boundary():
+    text = ROADMAP.read_text(encoding="utf-8")
+    assert "v0.3.37 closes the pre-GUI hardening phase" in text
+    assert "No further general pre-GUI 0.3.x preparation loop is planned" in text
+    assert "Remaining test gaps are handled as entry conditions inside the first v0.4.0 GUI slices" in text
+
+
+def test_v040_gui_mvp_roadmap_locks_safety_principles():
+    text = ROADMAP.read_text(encoding="utf-8")
+    assert "The GUI uses the existing action registry and action specs" in text
+    assert "The GUI uses the existing mode guard" in text
+    assert "The GUI must preserve evidence and terminal-log discipline" in text
+    assert "The GUI must not reintroduce removed shell adapters" in text
+
+
+def test_v040_gui_mvp_roadmap_blocks_destructive_mvp_actions():
+    text = ROADMAP.read_text(encoding="utf-8")
+    assert "Destructive actions are disabled in the first GUI MVP" in text
+    assert "Release, publish, merge, tag, delete, and remote-mutating actions are not directly executable" in text
+    assert "Any future destructive GUI action requires a separate contract" in text
+
+
+def test_v040_gui_mvp_roadmap_orders_first_slices():
+    text = ROADMAP.read_text(encoding="utf-8")
+    expected = [
+        "1. Strategy and roadmap update",
+        "2. GUI action readiness contract",
+        "3. GUI dry-run entry point",
+        "4. Minimal Tkinter MVP",
+        "5. GUI help baseline",
+    ]
+    positions = [text.index(item) for item in expected]
+    assert positions == sorted(positions)
+
+
+
+def test_v040_gui_mvp_roadmap_has_document_lifecycle_header():
+    text = ROADMAP.read_text(encoding="utf-8")
+    assert "Decision status: proposed" in text
+    assert "Status: planned first" not in text
+    assert "Planning note: first v0.4.0 line after v0.3.37 release and DOI closeout." in text
+3:Decision status: proposed
+6:Planning note: first v0.4.0 line after v0.3.37 release and DOI closeout.
+
+### DIFF ###
+?? docs/reports/terminal/v040-strategy-roadmap-update.log
+?? docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md
+?? tests/test_v040_strategy_roadmap.py
+
+### TARGETED TESTS ###
+......                                                                   [100%]
+6 passed in 0.01s
+
+### FULL LOCAL GATES ###
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+........................................................................ [ 30%]
+........................................................................ [ 40%]
+........................................................................ [ 50%]
+........................................................................ [ 60%]
+........................................................................ [ 70%]
+........................................................................ [ 81%]
+........................................................................ [ 91%]
+...............................................................          [100%]
+711 passed in 4.15s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[FAIL] document lifecycle audit: docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md: document is missing a Status header
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: FAIL
+
+### COPY TERMINAL LOGS FOR COMMIT ###
