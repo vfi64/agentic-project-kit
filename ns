@@ -343,7 +343,7 @@ fi
 fi
 if [ "${1:-}" = "up" ]; then
   shift
-  tools/ns_up_pr_completion.sh "$@"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.ns_up_pr_completion "$@"
   exit $?
 fi
 
