@@ -188,15 +188,16 @@ def test_release_publish_creates_and_pushes_tag() -> None:
 def test_repo_ns_release_verify_is_wired() -> None:
     text = Path("ns").read_text(encoding="utf-8")
     assert "release-verify" in text
-    assert "tools/ns_release_verify.sh" in text
-
+    assert "agentic_project_kit.release_verify_core" in text
+    assert "tools/ns_release_verify.sh" not in text
 
 def test_release_verify_waits_for_github_release() -> None:
-    text = Path("tools/ns_release_verify.sh").read_text(encoding="utf-8")
-    assert "gh release view" in text
-    assert "sleep 10" in text
-    assert "post-release-check" in text
-
+    text = Path("src/agentic_project_kit/release_verify_core.py").read_text(encoding="utf-8")
+    assert "gh" in text
+    assert "release" in text
+    assert "view" in text
+    assert "retry" in text
+    assert "GitHub release still missing after wait" in text
 
 def test_release_gate_routes_to_python_core_directly() -> None:
     ns_text = Path("ns").read_text(encoding="utf-8")
@@ -313,4 +314,13 @@ def test_repo_ns_release_gate_routes_to_python_core() -> None:
     assert "tools/ns_release_gate.sh" not in ns_text
     assert not Path("tools/ns_release_gate.sh").exists()
     assert "run_release_gate" in core_text
+
+def test_repo_ns_release_verify_routes_to_python_core() -> None:
+    ns_text = Path("ns").read_text(encoding="utf-8")
+    core_text = Path("src/agentic_project_kit/release_verify_core.py").read_text(encoding="utf-8")
+    assert "\"release-verify\"" in ns_text
+    assert "agentic_project_kit.release_verify_core" in ns_text
+    assert "tools/ns_release_verify.sh" not in ns_text
+    assert not Path("tools/ns_release_verify.sh").exists()
+    assert "verify_release" in core_text
 

@@ -280,7 +280,7 @@ if [ "${1:-}" = "release-publish" ]; then
 fi
 if [ "${1:-}" = "release-verify" ]; then
   shift
-  tools/ns_release_verify.sh "$@"
+  PYTHONPATH=src "$PY" -m agentic_project_kit.release_verify_core "$@"
   exit $?
 fi
 if [ "${1:-}" = "finalize-guard" ]; then
