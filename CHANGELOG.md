@@ -1,3 +1,7 @@
+## v0.3.37
+
+- Prepare release metadata for v0.3.37.
+
 ## v0.3.36 - 2026-05-21
 
 - Verified Zenodo version DOI: `10.5281/zenodo.20329180`.
