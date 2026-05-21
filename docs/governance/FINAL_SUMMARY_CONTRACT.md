@@ -102,3 +102,11 @@ All relevant workflow blocks must produce their final framed summary through the
 
 Every summary invocation must provide at least `--slice`, `--scope`, `--branch`, `--work`, `--evidence`, `--overall`, and `--terminal-log`. For logged local mutation blocks, both `--terminal-log-remote` and `--terminal-log-local` must be set honestly. If no remote log was committed, the summary must say `REMOTE_EVIDENCE: FAIL` or `CHAT_ONLY` as appropriate and must not claim remote evidence.
 
+
+## Chat acknowledgement and renderer-terminal-log rule
+
+A short chat acknowledgement such as `d`, `D`, `f`, or `F` only means that the local terminal block has finished. It is not evidence of success or failure. Before continuing, inspect the previous terminal output or available log evidence for contradictions, including earlier FAIL markers, renderer errors, accidental branch creation, missing committed remote logs, PASS-after-failure contradictions, legacy summary formats, and duplicate or conflicting final anchors.
+
+Rendered summaries must provide a real `terminal_log` value. `terminal_log: NONE` is invalid even when `REMOTE_EVIDENCE` is `NOT_REQUIRED` or the evidence class is `CHAT_ONLY`. For read-only or chat-only work, use a truthful local transcript path in `terminal_log` and `terminal_log_local`, and keep `terminal_log_remote: NONE` unless the log has actually been committed and pushed.
+
+After `./ns summary`, do not append a handwritten legacy result footer. The renderer output is the final result anchor. A handmade footer may only appear inside older archived logs, not in new workflow blocks.
