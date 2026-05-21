@@ -1,0 +1,131 @@
+
+### RECOVER FEATURE BRANCH ###
+Already on 'feature/v0.4.0-gui-action-detail-panel-viewmodel'
+M	src/agentic_project_kit/gui_viewmodel.py
+feature/v0.4.0-gui-action-detail-panel-viewmodel
+ M src/agentic_project_kit/gui_viewmodel.py
+?? docs/reports/terminal/v040-gui-action-detail-panel-viewmodel-circular-import-repair.log
+?? docs/reports/terminal/v040-gui-action-detail-panel-viewmodel.log
+?? tests/test_v040_gui_action_detail_panel_viewmodel.py
+
+### CONFIRM CURRENT FAILURE SOURCE ###
+140:    from agentic_project_kit.gui_tkinter_shell import build_gui_shell_spec
+142:    spec = build_gui_shell_spec(tkinter_available=False)
+150:    from agentic_project_kit.gui_tkinter_shell import build_gui_shell_spec
+152:    spec = build_gui_shell_spec(tkinter_available=False)
+153:    disabled = set(spec.disabled_commands)
+
+### PATCH DETAIL PANEL TO REMOVE SHELL-SPEC DEPENDENCY ###
+
+### VERIFY PATCHED DETAIL PANEL SOURCE ###
+139:def _gui_detail_button_metadata() -> dict[str, tuple[str, str]]:
+145:    result["release-publish"] = ("Publishing is disabled in the GUI until explicit release confirmation is implemented.", "release_publish_disabled")
+149:def build_gui_action_detail_panel(selected_action_name: str = "") -> GuiActionDetailPanel:
+150:    disabled = {"release-publish"}
+151:    button_metadata = _gui_detail_button_metadata()
+
+def _gui_detail_evidence_hint(safety_class: str, enabled: bool) -> str:
+    lowered = safety_class.lower()
+    if not enabled:
+        return "disabled action; no execution evidence expected"
+    if "read" in lowered:
+        return "local transcript is sufficient unless promoted to a workflow evidence slice"
+    if "local" in lowered:
+        return "local terminal log is required; remote evidence only after commit and push"
+    return "remote committed evidence is required before claiming no-copy completion"
+
+
+def _gui_detail_parameter_hint(action: object | None) -> str:
+    parameters = getattr(action, "parameters", None)
+    if parameters:
+        return ", ".join(str(parameter) for parameter in parameters)
+    return "no structured parameters registered"
+
+
+def _gui_detail_button_metadata() -> dict[str, tuple[str, str]]:
+    result: dict[str, tuple[str, str]] = {}
+    for action in list_actions():
+        name = str(getattr(action, "name", ""))
+        if name:
+            result[name] = (f"Run {name} through the governed GUI action layer.", name.replace("-", "_"))
+    result["release-publish"] = ("Publishing is disabled in the GUI until explicit release confirmation is implemented.", "release_publish_disabled")
+    return result
+
+
+def build_gui_action_detail_panel(selected_action_name: str = "") -> GuiActionDetailPanel:
+    disabled = {"release-publish"}
+    button_metadata = _gui_detail_button_metadata()
+    items: list[GuiActionDetail] = []
+    for action in list_actions():
+        name = str(getattr(action, "name", ""))
+        if not name:
+            continue
+        tooltip, icon_id = button_metadata.get(name, ("No toolbar/action button assigned yet.", "none"))
+        enabled = name not in disabled
+        safety_class = _gui_detail_value(getattr(action, "safety_class", "unknown"))
+        description = str(getattr(action, "description", ""))
+        disabled_reason = "disabled by GUI safety policy" if not enabled else ""
+        items.append(
+            GuiActionDetail(
+                name=name,
+                label=_gui_detail_label(name),
+                description=description,
+                safety_class=safety_class,
+                enabled=enabled,
+                requires_confirmation=_gui_detail_confirmation_required(safety_class, enabled),
+                disabled_reason=disabled_reason,
+                tooltip=tooltip,
+                icon_id=icon_id,
+                evidence_hint=_gui_detail_evidence_hint(safety_class, enabled),
+                parameter_hint=_gui_detail_parameter_hint(action),
+            )
+        )
+    items_tuple = tuple(sorted(items, key=lambda item: item.name))
+    selected = selected_action_name if any(item.name == selected_action_name for item in items_tuple) else ""
+    return GuiActionDetailPanel(
+        title="Action details",
+        selected_action_name=selected,
+        actions=items_tuple,
+        disabled_action_names=tuple(sorted(disabled)),
+        status_message="ready" if items_tuple else "no actions registered",
+    )
+
+### HARD IMPORT AND SYNTAX GATE ###
+
+14
+gui_detail_panel_import_ok
+
+### TARGETED GUI DETAIL PANEL TESTS ###
+FF....................                                                   [100%]
+=================================== FAILURES ===================================
+_ test_action_detail_panel_exposes_registered_actions_with_safety_and_evidence_hints _
+
+    def test_action_detail_panel_exposes_registered_actions_with_safety_and_evidence_hints():
+        panel = build_gui_action_detail_panel()
+        names = {item.name for item in panel.actions}
+    
+        assert panel.title == "Action details"
+        assert panel.status_message == "ready"
+>       assert "release-publish" in names
+E       AssertionError: assert 'release-publish' in {'agent-next', 'agent-run', 'clean-evidence', 'cockpit-readiness', 'dev', 'finalize-guard', ...}
+
+tests/test_v040_gui_action_detail_panel_viewmodel.py:10: AssertionError
+_____ test_action_detail_panel_keeps_release_publish_disabled_with_reason ______
+
+    def test_action_detail_panel_keeps_release_publish_disabled_with_reason():
+        panel = build_gui_action_detail_panel(selected_action_name="release-publish")
+>       release_publish = next(item for item in panel.actions if item.name == "release-publish")
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+tests/test_v040_gui_action_detail_panel_viewmodel.py:18: StopIteration
+=========================== short test summary info ============================
+FAILED tests/test_v040_gui_action_detail_panel_viewmodel.py::test_action_detail_panel_exposes_registered_actions_with_safety_and_evidence_hints
+FAILED tests/test_v040_gui_action_detail_panel_viewmodel.py::test_action_detail_panel_keeps_release_publish_disabled_with_reason
+2 failed, 20 passed in 0.07s
+
+### GUI DRY RUN SMOKE ###
+
+### FULL LOCAL GATES ###
+
+### COPY TERMINAL LOG FOR COMMIT ###

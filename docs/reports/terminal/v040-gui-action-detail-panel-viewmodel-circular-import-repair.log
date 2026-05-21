@@ -1,0 +1,284 @@
+
+### RECOVER FEATURE BRANCH ###
+Already on 'feature/v0.4.0-gui-action-detail-panel-viewmodel'
+M	src/agentic_project_kit/gui_viewmodel.py
+feature/v0.4.0-gui-action-detail-panel-viewmodel
+ M src/agentic_project_kit/gui_viewmodel.py
+?? docs/reports/terminal/v040-gui-action-detail-panel-viewmodel.log
+?? tests/test_v040_gui_action_detail_panel_viewmodel.py
+
+### CONFIRM CIRCULAR IMPORT SOURCE ###
+from __future__ import annotations
+
+from agentic_project_kit.gui_tkinter_shell import build_gui_shell_spec
+
+from agentic_project_kit.action_registry import list_actions
+
+from dataclasses import dataclass
+from typing import Iterable
+
+
+@dataclass(frozen=True)
+class GuiActionViewModel:
+    name: str
+    safety_class: str
+    description: str
+    enabled: bool
+    requires_confirmation: bool
+
+
+@dataclass(frozen=True)
+class GuiControllerViewModel:
+    title: str
+    status: str
+    actions: tuple[GuiActionViewModel, ...]
+    destructive_actions_enabled: bool = False
+
+    @property
+    def action_count(self) -> int:
+        return len(self.actions)
+
+
+def _value(value: object, default: str = "") -> str:
+    if value is None:
+        return default
+    raw = getattr(value, "value", value)
+    return str(raw)
+
+
+def _field(action: object, *names: str, default: object = "") -> object:
+    for name in names:
+        if hasattr(action, name):
+            return getattr(action, name)
+        if isinstance(action, dict) and name in action:
+            return action[name]
+    return default
+
+
+def action_to_view_model(action: object, *, destructive_actions_enabled: bool = False) -> GuiActionViewModel:
+    name = _value(_field(action, "name", "action_id", "id"))
+    safety_class = _value(_field(action, "safety_class", "safety", default="unknown"))
+    description = _value(_field(action, "description", "summary", default=""))
+    destructive = safety_class.lower() in {"destructive", "release", "remote", "mutation"}
+    return GuiActionViewModel(
+        name=name,
+        safety_class=safety_class,
+        description=description,
+        enabled=not destructive or destructive_actions_enabled,
+        requires_confirmation=destructive,
+    )
+
+
+def build_gui_controller_view_model(
+    actions: Iterable[object],
+    *,
+    title: str = "agentic-project-kit Cockpit",
+    status: str = "ready",
+    destructive_actions_enabled: bool = False,
+) -> GuiControllerViewModel:
+    view_actions = tuple(
+        action_to_view_model(action, destructive_actions_enabled=destructive_actions_enabled)
+        for action in actions
+    )
+    return GuiControllerViewModel(
+        title=title,
+        status=status,
+        actions=view_actions,
+        destructive_actions_enabled=destructive_actions_enabled,
+    )
+
+
+3:from agentic_project_kit.gui_tkinter_shell import build_gui_shell_spec
+141:    spec = build_gui_shell_spec(tkinter_available=False)
+149:    spec = build_gui_shell_spec(tkinter_available=False)
+
+### PATCH GUI VIEWMODEL TO AVOID TOP LEVEL TKINTER SHELL IMPORT ###
+
+### VERIFY NO TOP LEVEL TKINTER SHELL IMPORT ###
+from __future__ import annotations
+
+
+from agentic_project_kit.action_registry import list_actions
+
+from dataclasses import dataclass
+from typing import Iterable
+
+
+@dataclass(frozen=True)
+class GuiActionViewModel:
+    name: str
+    safety_class: str
+    description: str
+    enabled: bool
+    requires_confirmation: bool
+
+
+@dataclass(frozen=True)
+class GuiControllerViewModel:
+    title: str
+    status: str
+    actions: tuple[GuiActionViewModel, ...]
+    destructive_actions_enabled: bool = False
+
+    @property
+    def action_count(self) -> int:
+        return len(self.actions)
+
+
+def _value(value: object, default: str = "") -> str:
+    if value is None:
+        return default
+    raw = getattr(value, "value", value)
+    return str(raw)
+
+
+def _field(action: object, *names: str, default: object = "") -> object:
+    for name in names:
+        if hasattr(action, name):
+            return getattr(action, name)
+        if isinstance(action, dict) and name in action:
+            return action[name]
+    return default
+
+
+def action_to_view_model(action: object, *, destructive_actions_enabled: bool = False) -> GuiActionViewModel:
+    name = _value(_field(action, "name", "action_id", "id"))
+    safety_class = _value(_field(action, "safety_class", "safety", default="unknown"))
+    description = _value(_field(action, "description", "summary", default=""))
+    destructive = safety_class.lower() in {"destructive", "release", "remote", "mutation"}
+    return GuiActionViewModel(
+        name=name,
+        safety_class=safety_class,
+        description=description,
+        enabled=not destructive or destructive_actions_enabled,
+        requires_confirmation=destructive,
+    )
+
+
+def build_gui_controller_view_model(
+    actions: Iterable[object],
+    *,
+    title: str = "agentic-project-kit Cockpit",
+    status: str = "ready",
+    destructive_actions_enabled: bool = False,
+) -> GuiControllerViewModel:
+    view_actions = tuple(
+        action_to_view_model(action, destructive_actions_enabled=destructive_actions_enabled)
+        for action in actions
+    )
+    return GuiControllerViewModel(
+        title=title,
+        status=status,
+        actions=view_actions,
+        destructive_actions_enabled=destructive_actions_enabled,
+    )
+
+
+
+@dataclass(frozen=True)
+class GuiActionDetail:
+    name: str
+    label: str
+    description: str
+    safety_class: str
+    enabled: bool
+    requires_confirmation: bool
+    disabled_reason: str
+    tooltip: str
+    icon_id: str
+    evidence_hint: str
+    parameter_hint: str
+
+
+@dataclass(frozen=True)
+class GuiActionDetailPanel:
+    title: str
+    selected_action_name: str
+    actions: tuple[GuiActionDetail, ...]
+    disabled_action_names: tuple[str, ...]
+    status_message: str
+
+
+def _gui_detail_value(value: object) -> str:
+    enum_value = getattr(value, "value", None)
+    if enum_value is not None:
+        return str(enum_value)
+    return str(value)
+
+
+def _gui_detail_label(name: str) -> str:
+    return name.replace("-", " ").title()
+
+
+def _gui_detail_confirmation_required(safety_class: str, enabled: bool) -> bool:
+    lowered = safety_class.lower()
+    return enabled and any(token in lowered for token in ("remote", "mutation", "destructive", "release"))
+
+
+top_level_gui_tkinter_shell_import_count=0
+
+### HARD IMPORT AND SYNTAX GATE ###
+gui_imports_ok
+
+### TARGETED GUI DETAIL PANEL TESTS ###
+FFF...................                                                   [100%]
+=================================== FAILURES ===================================
+_ test_action_detail_panel_exposes_registered_actions_with_safety_and_evidence_hints _
+
+    def test_action_detail_panel_exposes_registered_actions_with_safety_and_evidence_hints():
+>       panel = build_gui_action_detail_panel()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v040_gui_action_detail_panel_viewmodel.py:5: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+selected_action_name = ''
+
+    def build_gui_action_detail_panel(selected_action_name: str = "") -> GuiActionDetailPanel:
+>       from agentic_project_kit.gui_tkinter_shell import build_gui_shell_spec
+E       ImportError: cannot import name 'build_gui_shell_spec' from 'agentic_project_kit.gui_tkinter_shell' (/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/gui_tkinter_shell.py)
+
+src/agentic_project_kit/gui_viewmodel.py:150: ImportError
+_____ test_action_detail_panel_keeps_release_publish_disabled_with_reason ______
+
+    def test_action_detail_panel_keeps_release_publish_disabled_with_reason():
+>       panel = build_gui_action_detail_panel(selected_action_name="release-publish")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v040_gui_action_detail_panel_viewmodel.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+selected_action_name = 'release-publish'
+
+    def build_gui_action_detail_panel(selected_action_name: str = "") -> GuiActionDetailPanel:
+>       from agentic_project_kit.gui_tkinter_shell import build_gui_shell_spec
+E       ImportError: cannot import name 'build_gui_shell_spec' from 'agentic_project_kit.gui_tkinter_shell' (/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/gui_tkinter_shell.py)
+
+src/agentic_project_kit/gui_viewmodel.py:150: ImportError
+______________ test_action_detail_panel_ignores_unknown_selection ______________
+
+    def test_action_detail_panel_ignores_unknown_selection():
+>       panel = build_gui_action_detail_panel(selected_action_name="does-not-exist")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v040_gui_action_detail_panel_viewmodel.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+selected_action_name = 'does-not-exist'
+
+    def build_gui_action_detail_panel(selected_action_name: str = "") -> GuiActionDetailPanel:
+>       from agentic_project_kit.gui_tkinter_shell import build_gui_shell_spec
+E       ImportError: cannot import name 'build_gui_shell_spec' from 'agentic_project_kit.gui_tkinter_shell' (/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/gui_tkinter_shell.py)
+
+src/agentic_project_kit/gui_viewmodel.py:150: ImportError
+=========================== short test summary info ============================
+FAILED tests/test_v040_gui_action_detail_panel_viewmodel.py::test_action_detail_panel_exposes_registered_actions_with_safety_and_evidence_hints
+FAILED tests/test_v040_gui_action_detail_panel_viewmodel.py::test_action_detail_panel_keeps_release_publish_disabled_with_reason
+FAILED tests/test_v040_gui_action_detail_panel_viewmodel.py::test_action_detail_panel_ignores_unknown_selection
+3 failed, 19 passed in 0.08s
+
+### GUI DRY RUN SMOKE ###
+
+### FULL LOCAL GATES ###
+
+### COPY TERMINAL LOG FOR COMMIT ###
