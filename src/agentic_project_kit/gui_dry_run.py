@@ -10,6 +10,7 @@ from agentic_project_kit.gui_presenter import build_no_window_presenter_result
 from agentic_project_kit.gui_layout_plan import build_layout_plan, render_layout_plan
 from agentic_project_kit.gui_tkinter_renderer import render_layout_to_tkinter, render_tkinter_result_summary
 from agentic_project_kit.gui_window_guard import check_window_launch_ready, render_window_guard_result
+from agentic_project_kit.gui_output_status_panel import build_output_status_panel, render_output_status_panel
 
 
 @dataclass(frozen=True)
@@ -113,6 +114,20 @@ def render_result(result: GuiDryRunResult) -> str:
     plan = build_layout_plan()
     rendered = render_layout_to_tkinter(DryRunRoot(), plan)
     lines.extend([
+        "output_status_panel_begin",
+        render_output_status_panel(
+            build_output_status_panel(
+                branch="dry-run",
+                dirty=False,
+                latest_output="GUI dry-run initialized without executing an action.",
+                terminal_log="NONE",
+                terminal_log_remote="NONE",
+                terminal_log_local="NONE",
+                evidence_state="not_required",
+                summary="No command summary exists in dry-run mode.",
+            )
+        ),
+        "output_status_panel_end",
         "layout_plan_begin",
         render_layout_plan(plan),
         "layout_plan_end",
