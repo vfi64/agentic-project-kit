@@ -396,6 +396,18 @@ if [ "${1:-}" = "fail" ]; then
   exit $?
 fi
 
+if [ "${1:-}" = "check-docs" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli check-docs "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "doctor" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli doctor "$@"
+  exit $?
+fi
+
 if [ -x ".venv/bin/python" ]; then
   "$PY" tools/next-step.py "$@"
 fi

@@ -44,5 +44,5 @@ def test_gui_main_accepts_action_argument(capsys) -> None:
 def test_gui_main_rejects_unknown_arguments(capsys) -> None:
     assert main(["--bad"]) == 2
     output = capsys.readouterr().out
-    assert "usage: ./ns gui [--action ACTION_NAME]" in output
+    assert "usage: ./ns gui [--dry-run] [--action ACTION_NAME]" in output
     assert "### RESULT: FAIL ###" in output
