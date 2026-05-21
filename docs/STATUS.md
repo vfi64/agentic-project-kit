@@ -1,4 +1,4 @@
-Current version: 0.3.36
+Current version: 0.3.37
 # Project Status
 Status-date: 2026-05-19
 Project: agentic-project-kit
