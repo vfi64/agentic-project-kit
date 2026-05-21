@@ -1,0 +1,85 @@
+
+### PRE-MERGE PR STATE ###
+{"headRefName":"docs/v0.4.0-gui-action-detail-panel-merge-verify","mergeStateStatus":"CLEAN","number":630,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-21T18:29:56Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26245342337/job/77242095549","name":"test","startedAt":"2026-05-21T18:29:32Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-21T18:29:51Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26245338825/job/77242083278","name":"test","startedAt":"2026-05-21T18:29:28Z","status":"COMPLETED","workflowName":"CI"}],"title":"Record GUI action detail panel merge verification log","url":"https://github.com/vfi64/agentic-project-kit/pull/630"}
+
+### WAIT FOR PR CHECKS ###
+test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26245338825/job/77242083278	
+test	pass	24s	https://github.com/vfi64/agentic-project-kit/actions/runs/26245342337/job/77242095549	
+test	pass	23s	https://github.com/vfi64/agentic-project-kit/actions/runs/26245338825/job/77242083278	
+test	pass	24s	https://github.com/vfi64/agentic-project-kit/actions/runs/26245342337/job/77242095549	
+
+### MERGE PR ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   eba2e8f..2391b84  main       -> origin/main
+Updating eba2e8f..2391b84
+Fast-forward
+ .../v040-gui-action-detail-panel-merge-verify.log  | 197 +++++++++++++++++++++
+ 1 file changed, 197 insertions(+)
+ create mode 100644 docs/reports/terminal/v040-gui-action-detail-panel-merge-verify.log
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### MAIN STATE ###
+main
+2391b84 Record GUI action detail panel merge verification log (#630)
+eba2e8f Add GUI action detail panel ViewModel contract (#629)
+0fd9a4b Record v0.4.0 GUI menu toolbar contract merge verification log
+3a2e896 Add GUI menu toolbar tooltip icon contract (#628)
+b40f9f7 Record v0.4.0 GUI window guard blocked status merge verification log
+d629dbe Render blocked GUI window guard without inner result marker (#627)
+6a9ef48 Record v0.4.0 GUI guarded window launch merge verification log
+d9b0480 Add guarded GUI window launch readiness check (#626)
+81b7c5b Record v0.4.0 GUI dry-run renderer merge verification log
+95b6e32 Integrate Tkinter renderer into GUI dry run (#625)
+e43e4de Record v0.4.0 Tkinter renderer merge verification log
+a6a5744 Add Tkinter renderer adapter contract (#624)
+
+### VERIFY MERGE LOG LANDED ###
+178:757 passed in 4.10s
+
+### MODE CHECK MAIN ###
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=main
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### TARGETED VERIFY TESTS ###
+.............                                                            [100%]
+13 passed in 0.03s
+
+### DOC/GOVERNANCE GATES ###
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COPY FINAL VERIFY LOG FOR COMMIT ###
