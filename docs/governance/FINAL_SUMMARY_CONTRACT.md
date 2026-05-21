@@ -24,3 +24,11 @@ This is the preferred end marker for agent-directed terminal blocks, remote comm
 
 Executable terminal blocks must never print final SUMMARY fields with placeholder alternatives such as `PASS|FAIL`, `p|paste-output`, or ellipsis markers. A copied block must end with one concrete outcome only. Placeholder examples are allowed only in prose documents when clearly marked as non-executable examples.
 
+
+## Deterministic failure semantics
+
+A final `PASS` is invalid when any required inner work result, required gate, or required verification is `FAIL`.
+
+`REMOTE_EVIDENCE: PASS` requires committed and pushed evidence or an equivalent remote-readable report. A local-only transcript, chat paste, queued CI run, or unpushed temporary log is not remote evidence.
+
+A successful evidence upload can prove a failed run; it must not relabel failed work as `WORK RESULT: PASS`.
