@@ -1,0 +1,47 @@
+
+### PRECHECK LOCAL BRANCH STATE ###
+feature/v0.4.0-gui-dry-run-entrypoint
+ M docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md
+ M ns
+?? docs/reports/terminal/v040-gui-dry-run-entrypoint.log
+?? docs/reports/terminal/v040-gui-dry-run-false-grep-guard-repair.log
+?? docs/reports/terminal/v040-gui-dry-run-mode-guard-repair.log
+?? docs/reports/terminal/v040-gui-dry-run-python-route-inventory-baseline-repair.log
+?? docs/reports/terminal/v040-gui-dry-run-test-function-rewrite-repair.log
+?? docs/reports/terminal/v040-gui-dry-run-test-ok-block-repair.log
+?? docs/reports/terminal/v040-gui-dry-run-tkinter-nonblocking-repair.log
+?? src/agentic_project_kit/gui_dry_run.py
+?? tests/test_v040_gui_dry_run.py
+b59be68 Add v0.4.0 GUI action readiness contract (#617)
+019053d Add v0.4.0 GUI MVP roadmap (#616)
+2ecf2c2 Record v0.3.37 DOI metadata (#615)
+a9035ad Record v0.3.37 release publish log
+69dc873 Prepare v0.3.37 release metadata (#614)
+c64eadd Record v0.3.37 final GUI preparation closeout contract (#613)
+6ae66ba Record v0.3.36 DOI metadata merge verification log
+613cf9e Record v0.3.36 DOI metadata (#612)
+369e920 Record v0.3.36 release publish log
+45ffd3f Record v0.3.36 release gate log
+
+### VERIFY REQUIRED FILES EXIST ###
+56:  PYTHONPATH=src "$PY" -m agentic_project_kit.gui_dry_run "$@"
+103:    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.gui_dry_run \"$@\"",
+
+### TARGETED VERIFY BEFORE COMMIT ###
+........                                                                 [100%]
+8 passed in 0.10s
+
+### DRY RUN SMOKE BEFORE COMMIT ###
+GUI DRY RUN
+Safety: no window is opened; no files, branches, tags, releases, PRs, or remote state are changed.
+tkinter_available=false
+window_launch_ready=false
+tkinter_note=nonblocking for --dry-run; required only for real window launch
+action_registry_available=true
+action_specs_available=true
+mode_guard_available=true
+shell_adapters_absent=true
+message=GUI dry-run passed without opening a window.
+### RESULT: PASS ###
+
+### COPY TERMINAL LOG FOR COMMIT ###

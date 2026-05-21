@@ -1,0 +1,281 @@
+
+### PRECHECK DIRTY REPAIR STATE ###
+feature/v0.4.0-gui-dry-run-entrypoint
+ M ns
+?? docs/reports/terminal/v040-gui-dry-run-entrypoint.log
+?? src/agentic_project_kit/gui_dry_run.py
+?? tests/test_v040_gui_dry_run.py
+b59be68 Add v0.4.0 GUI action readiness contract (#617)
+019053d Add v0.4.0 GUI MVP roadmap (#616)
+2ecf2c2 Record v0.3.37 DOI metadata (#615)
+a9035ad Record v0.3.37 release publish log
+69dc873 Prepare v0.3.37 release metadata (#614)
+c64eadd Record v0.3.37 final GUI preparation closeout contract (#613)
+6ae66ba Record v0.3.36 DOI metadata merge verification log
+613cf9e Record v0.3.36 DOI metadata (#612)
+369e920 Record v0.3.36 release publish log
+45ffd3f Record v0.3.36 release gate log
+0fb4d18 Record v0.3.36 release metadata merge verification log
+f9f5c41 Prepare v0.3.36 release metadata after audit runner hardening (#611)
+76f528a Record audit runner standard-error fix merge verification log
+9f9134f Add deterministic audit test matrix runner (#610)
+
+### INSPECT MODE ROUTES ###
+74-  PYTHONPATH=src "$PY" -m agentic_project_kit.run_summary_renderer "$@"
+75-  exit $?
+76-fi
+77:if [ "${1:-}" = "mode-check" ]; then
+78-  shift
+79:  PYTHONPATH=src "$PY" -m agentic_project_kit.cli state mode-check "$@"
+80-  exit $?
+81-fi
+82-
+80-  exit $?
+81-fi
+82-
+83:if [ "${1:-}" = "mode-write" ]; then
+84-  shift
+85:  PYTHONPATH=src "$PY" -m agentic_project_kit.cli state mode-write "$@"
+86-  exit $?
+87-fi
+88-
+src/agentic_project_kit/gui_dry_run.py:15:    mode_guard_available: bool
+src/agentic_project_kit/gui_dry_run.py:37:    mode_guard_available = (root / "ns").exists() and _can_import("agentic_project_kit.mode_guard")
+src/agentic_project_kit/gui_dry_run.py:44:        mode_guard_available,
+src/agentic_project_kit/gui_dry_run.py:53:        mode_guard_available=mode_guard_available,
+src/agentic_project_kit/gui_dry_run.py:66:        f"mode_guard_available={str(result.mode_guard_available).lower()}",
+src/agentic_project_kit/run_summary_renderer.py:104:        "  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote",
+Binary file src/agentic_project_kit/cli_commands/__pycache__/state.cpython-314.pyc matches
+src/agentic_project_kit/cli_commands/state.py:21:@state_app.command("mode-check")
+src/agentic_project_kit/cli_commands/state.py:36:@state_app.command("mode-write")
+Binary file src/agentic_project_kit/__pycache__/run_summary_renderer.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/gui_dry_run.cpython-314.pyc matches
+tests/test_execution_mode_state_cli.py:14:    result = runner.invoke(app, ["state", "mode-check", "remote", "--expected-branch", "main"])
+tests/test_execution_mode_state_cli.py:24:    result = runner.invoke(app, ["state", "mode-check", "local", "--expected-branch", "feature/x"])
+tests/test_execution_mode_state_cli.py:39:    result = runner.invoke(app, ["state", "mode-write", "local", "--expected-branch", "feature/x", "--reason", "test"])
+tests/test_final_summary_contract.py:13:    "SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote",
+tests/test_v040_gui_dry_run.py:16:    assert "mode_guard_available=true" in output
+Binary file tests/__pycache__/test_v040_gui_dry_run.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_final_summary_contract.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_v036_summary_format_execution_origin.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_execution_mode_state_cli.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_repo_ns_entrypoint.cpython-314-pytest-9.0.3.pyc matches
+tests/test_v036_summary_format_execution_origin.py:22:    assert "SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote" in text
+tests/test_repo_ns_entrypoint.py:280:    assert "\"mode-check\"" in text
+tests/test_repo_ns_entrypoint.py:281:    assert "\"mode-write\"" in text
+tests/test_repo_ns_entrypoint.py:282:    assert "agentic_project_kit.cli state mode-check" in text
+tests/test_repo_ns_entrypoint.py:283:    assert "agentic_project_kit.cli state mode-write" in text
+ns:77:if [ "${1:-}" = "mode-check" ]; then
+ns:79:  PYTHONPATH=src "$PY" -m agentic_project_kit.cli state mode-check "$@"
+ns:83:if [ "${1:-}" = "mode-write" ]; then
+ns:85:  PYTHONPATH=src "$PY" -m agentic_project_kit.cli state mode-write "$@"
+
+### PATCH GUI DRY RUN MODE GUARD DETECTION ###
+
+### ADD TEST FOR NS MODE GUARD ROUTE BASIS ###
+
+### VERIFY PATCH ###
+from __future__ import annotations
+
+from dataclasses import dataclass
+import importlib
+from pathlib import Path
+from typing import Sequence
+
+
+@dataclass(frozen=True)
+class GuiDryRunResult:
+    ok: bool
+    tkinter_available: bool
+    action_registry_available: bool
+    action_specs_available: bool
+    mode_guard_available: bool
+    shell_adapters_absent: bool
+    message: str
+
+    @property
+    def exit_code(self) -> int:
+        return 0 if self.ok else 1
+
+
+def _can_import(module_name: str) -> bool:
+    try:
+        importlib.import_module(module_name)
+    except Exception:
+        return False
+    return True
+
+
+def run_gui_dry_run(project_root: Path | None = None) -> GuiDryRunResult:
+    root = Path.cwd() if project_root is None else project_root
+    tkinter_available = _can_import("tkinter")
+    action_registry_available = _can_import("agentic_project_kit.action_registry")
+    action_specs_available = _can_import("agentic_project_kit.action_specs")
+    ns_path = root / "ns"
+    ns_text = ns_path.read_text(encoding="utf-8") if ns_path.exists() else ""
+    mode_guard_available = "mode-check" in ns_text and "mode-write" in ns_text
+    tools_dir = root / "tools"
+    shell_adapters_absent = not any(tools_dir.glob("ns_*.sh")) if tools_dir.exists() else True
+    ok = all((
+        tkinter_available,
+        action_registry_available,
+        action_specs_available,
+        mode_guard_available,
+        shell_adapters_absent,
+    ))
+    message = "GUI dry-run passed without opening a window." if ok else "GUI dry-run failed before window launch."
+    return GuiDryRunResult(
+        ok=ok,
+        tkinter_available=tkinter_available,
+        action_registry_available=action_registry_available,
+        action_specs_available=action_specs_available,
+        mode_guard_available=mode_guard_available,
+        shell_adapters_absent=shell_adapters_absent,
+        message=message,
+    )
+
+
+def render_result(result: GuiDryRunResult) -> str:
+    lines = [
+        "GUI DRY RUN",
+        "Safety: no window is opened; no files, branches, tags, releases, PRs, or remote state are changed.",
+        f"tkinter_available={str(result.tkinter_available).lower()}",
+        f"action_registry_available={str(result.action_registry_available).lower()}",
+        f"action_specs_available={str(result.action_specs_available).lower()}",
+        f"mode_guard_available={str(result.mode_guard_available).lower()}",
+        f"shell_adapters_absent={str(result.shell_adapters_absent).lower()}",
+        f"message={result.message}",
+        "### RESULT: PASS ###" if result.ok else "### RESULT: FAIL ###",
+    ]
+    return "\n".join(lines)
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    args = list(argv or [])
+    if args and args != ["--dry-run"]:
+        print("ERROR: usage: python -m agentic_project_kit.gui_dry_run --dry-run")
+        print("### RESULT: FAIL ###")
+        return 2
+    result = run_gui_dry_run()
+    print(render_result(result))
+    return result.exit_code
+
+
+if __name__ == "__main__":
+    import sys
+    raise SystemExit(main(sys.argv[1:]))
+from pathlib import Path
+import subprocess
+import sys
+
+from agentic_project_kit.gui_dry_run import render_result, run_gui_dry_run
+
+
+def test_gui_dry_run_module_reports_required_checks():
+    result = run_gui_dry_run(Path.cwd())
+    output = render_result(result)
+    assert "GUI DRY RUN" in output
+    assert "no window is opened" in output
+    assert "tkinter_available=" in output
+    assert "action_registry_available=true" in output
+    assert "action_specs_available=true" in output
+    assert "mode_guard_available=true" in output
+    assert "shell_adapters_absent=true" in output
+
+
+def test_gui_dry_run_module_cli_has_deterministic_output():
+    result = subprocess.run(
+        [sys.executable, "-m", "agentic_project_kit.gui_dry_run", "--dry-run"],
+        cwd=Path.cwd(),
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    assert result.returncode in (0, 1)
+    assert "GUI DRY RUN" in result.stdout
+    assert "### RESULT:" in result.stdout
+    assert "Traceback" not in result.stdout
+
+
+def test_ns_gui_dry_run_route_is_python_backed():
+    text = Path("ns").read_text(encoding="utf-8")
+    assert 'if [ "${1:-}" = "gui" ]' in text
+    assert "agentic_project_kit.gui_dry_run" in text
+    assert "tools/ns_gui" not in text
+
+
+def test_ns_gui_dry_run_executes_without_shell_adapter():
+    result = subprocess.run(
+        ["./ns", "gui", "--dry-run"],
+        cwd=Path.cwd(),
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    assert result.returncode in (0, 1)
+    assert "GUI DRY RUN" in result.stdout
+    assert "no window is opened" in result.stdout
+    assert "tools/ns_gui" not in result.stdout
+
+
+
+def test_gui_dry_run_mode_guard_detection_uses_existing_ns_routes():
+    module = Path("src/agentic_project_kit/gui_dry_run.py").read_text(encoding="utf-8")
+    assert "agentic_project_kit.mode_guard" not in module
+    assert "\"mode-check\" in ns_text" in module
+    assert "\"mode-write\" in ns_text" in module
+39:    mode_guard_available = "mode-check" in ns_text and "mode-write" in ns_text
+39:    mode_guard_available = "mode-check" in ns_text and "mode-write" in ns_text
+
+### DIFF ###
+ M ns
+?? docs/reports/terminal/v040-gui-dry-run-entrypoint.log
+?? src/agentic_project_kit/gui_dry_run.py
+?? tests/test_v040_gui_dry_run.py
+diff --git a/ns b/ns
+index dbd8814..ed245d4 100755
+--- a/ns
++++ b/ns
+@@ -51,6 +51,12 @@ if [ "${1:-}" = "state-freshness-check" ]; then
+   exit $?
+ fi
+ 
++if [ "${1:-}" = "gui" ]; then
++  shift
++  PYTHONPATH=src "$PY" -m agentic_project_kit.gui_dry_run "$@"
++  exit $?
++fi
++
+ if [ "${1:-}" = "comm-check" ]; then
+   shift
+   PYTHONPATH=src "$PY" -m agentic_project_kit.communication_state check "$@"
+
+### TARGETED TESTS ###
+.....                                                                    [100%]
+5 passed in 0.09s
+
+### DRY RUN SMOKE ###
+GUI DRY RUN
+Safety: no window is opened; no files, branches, tags, releases, PRs, or remote state are changed.
+tkinter_available=false
+action_registry_available=true
+action_specs_available=true
+mode_guard_available=true
+shell_adapters_absent=true
+message=GUI dry-run failed before window launch.
+### RESULT: FAIL ###
+GUI DRY RUN
+Safety: no window is opened; no files, branches, tags, releases, PRs, or remote state are changed.
+tkinter_available=false
+action_registry_available=true
+action_specs_available=true
+mode_guard_available=true
+shell_adapters_absent=true
+message=GUI dry-run failed before window launch.
+### RESULT: FAIL ###
+
+### FULL LOCAL GATES ###
+
+### COPY TERMINAL LOG FOR COMMIT ###
