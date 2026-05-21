@@ -1,0 +1,88 @@
+
+### FETCH AND SWITCH FEATURE BRANCH ###
+Already on 'feature/v036-remove-final-pr-create-shell-adapter'
+From github.com:vfi64/agentic-project-kit
+ * branch            feature/v036-remove-final-pr-create-shell-adapter -> FETCH_HEAD
+Already up to date.
+
+### MODE GUARD ###
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=feature/v036-remove-final-pr-create-shell-adapter
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### PR STATUS CHECK ###
+{"baseRefName":"main","headRefOid":"3b5566008af9566c53c19049bd222d23f82eb227","mergeStateStatus":"CLEAN","state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-21T14:16:05Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26231623287/job/77193334881","name":"test","startedAt":"2026-05-21T14:15:44Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-21T14:15:57Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26231613328/job/77193298043","name":"test","startedAt":"2026-05-21T14:15:33Z","status":"COMPLETED","workflowName":"CI"}],"title":"Remove final pr-create shell adapter"}
+PR_STATE=OPEN
+MERGE_STATE=CLEAN
+HEAD_SHA=3b5566008af9566c53c19049bd222d23f82eb227
+PENDING_COUNT=0
+NON_SUCCESS_COUNT=0
+
+### MERGE IF CLEAN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   9652c53..7d5e704  main       -> origin/main
+Updating 9652c53..7d5e704
+Fast-forward
+ .agentic/communication_state.json                  |  8 +--
+ ...remove-final-pr-create-shell-adapter-repair.log | 78 ++++++++++++++++++++++
+ .../V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md    | 17 +++--
+ ns                                                 |  6 ++
+ src/agentic_project_kit/pr_create_or_skip.py       | 71 ++++++++++++++++++++
+ tests/test_repo_ns_entrypoint.py                   | 17 +++--
+ tools/ns_pr_create_or_skip.sh                      | 67 -------------------
+ 7 files changed, 178 insertions(+), 86 deletions(-)
+ create mode 100644 docs/reports/terminal/v036-remove-final-pr-create-shell-adapter-repair.log
+ create mode 100644 src/agentic_project_kit/pr_create_or_skip.py
+ delete mode 100755 tools/ns_pr_create_or_skip.sh
+
+### UPDATE MAIN AND VERIFY ZERO SHELL ADAPTERS ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### VERIFY NO TRACKED NS SHELL ADAPTERS ###
+PASS: no tracked tools/ns_*.sh remain.
+
+### VERIFY NS HAS NO DIRECT SHELL ADAPTER REFERENCES ###
+PASS: ns has no tools/ns_*.sh references.
+
+### VERIFY PYTHON PR ROUTE ###
+ns:23:  PYTHONPATH=src "$PY" -m agentic_project_kit.pr_create_or_skip "$@"
+src/agentic_project_kit/pr_create_or_skip.py:27:        print("Usage: python -m agentic_project_kit.pr_create_or_skip TITLE BODY [BASE]")
+
+### TARGETED TESTS ###
+...............................................                          [100%]
+47 passed in 0.09s
+
+### DOC GATES ###
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### CREATE COMM HEADER AND COPY MERGE LOG ###

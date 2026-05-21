@@ -1,8 +1,8 @@
 {
-  "last_branch": "feature/v036-remove-final-pr-create-shell-adapter",
+  "last_branch": "main",
   "last_origin": "local",
-  "last_slice": "V0.3.36 REMOVE FINAL PR CREATE SHELL ADAPTER",
-  "last_summary_id": 3,
+  "last_slice": "V0.3.36 FINAL PR CREATE SHELL ADAPTER MERGE VERIFICATION",
+  "last_summary_id": 4,
   "schema_version": 1,
-  "updated_at": "2026-05-21T16:15:23+02:00"
+  "updated_at": "2026-05-21T16:17:10+02:00"
 }
