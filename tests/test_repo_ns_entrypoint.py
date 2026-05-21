@@ -328,3 +328,12 @@ def test_ns_exposes_terminal_finalize_shortcut():
     text = Path("ns").read_text(encoding="utf-8")
     assert "\"terminal-finalize\"" in text
     assert "terminal_logging terminal-finalize" in text
+
+def test_repo_ns_exposes_mode_state_shortcuts() -> None:
+    text = Path("ns").read_text(encoding="utf-8")
+    assert "\"mode-check\"" in text
+    assert "\"mode-write\"" in text
+    assert "agentic_project_kit.cli state mode-check" in text
+    assert "agentic_project_kit.cli state mode-write" in text
+    assert "execution_mode_state" not in text
+

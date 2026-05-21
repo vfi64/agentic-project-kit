@@ -45,6 +45,18 @@ if [ "${1:-}" = "state-freshness-check" ]; then
   exit $?
 fi
 
+if [ "${1:-}" = "mode-check" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli state mode-check "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "mode-write" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli state mode-write "$@"
+  exit $?
+fi
+
 if [ "${1:-}" = "action-list" ]; then
   shift
   PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli actions list "$@"
