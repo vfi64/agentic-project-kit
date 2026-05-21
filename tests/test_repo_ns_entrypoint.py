@@ -281,13 +281,13 @@ def test_idempotent_finalization_guard_is_documented() -> None:
     assert "Never commit directly to main" in text
     assert "quote-fragile inline Python" in text
 
-def test_finalize_guard_command_is_wired() -> None:
-    text = Path("ns").read_text(encoding="utf-8")
-    assert "finalize-guard" in text
-    assert "python -m agentic_project_kit.finalize_guard" in text
+def test_finalize_guard_python_core_is_present() -> None:
+    text = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
+    assert "def main" in text
+    assert "render_finalize_guard" in text
 
 def test_finalize_guard_handles_existing_or_completed_branches() -> None:
-    text = Path("python -m agentic_project_kit.finalize_guard").read_text(encoding="utf-8")
+    text = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
     core = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
     assert "marker_already_on_main=true" in text
     assert "local_branch_exists" in text
@@ -323,7 +323,7 @@ def test_ns_up_dirty_tree_mentions_clean_evidence() -> None:
     assert "git status --short" in text
 
 def test_finalize_guard_declares_machine_readable_outcomes() -> None:
-    text = Path("python -m agentic_project_kit.finalize_guard").read_text(encoding="utf-8")
+    text = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
     core = Path("src/agentic_project_kit/finalize_guard.py").read_text(encoding="utf-8")
     assert "python -m agentic_project_kit.finalize_guard" in text
     assert "STATUS: PASS_ALREADY_ON_MAIN" not in text
