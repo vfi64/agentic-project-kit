@@ -1,0 +1,148 @@
+### START ###
+V0.3.36 MERGE SAFE REMOVE DIAGNOSTIC SHELL REMOVAL PR AND VERIFY MAIN V2 -- LOGGED -- NO GUI NO RELEASE
+
+
+### CURRENT STATE ###
+feature/v0.3.36-remove-safe-remove-diagnostic-shell
+00213dc Record safe remove diagnostic shell removal feature repair evidence
+b9f4658 Repair safe remove diagnostic shell removal feature
+9c4ed5b Remove safe remove diagnostic shell adapter
+3562bd0 Record finalize guard shell removal merge verification
+690db15 Remove finalize guard shell adapter (#569)
+b5da5de Record v0.3.36 AGENTS rule split merge evidence (#567)
+42ead76 Split portability rule out of AGENTS and lock summary fail contract (#566)
+b4bb05d Record v0.3.36 portability gate fail recovery evidence (#563)
+ed5aa54 Record v0.3.36 portability shell removal inventory (#561)
+ad5ef19 Record v0.3.36 portable core baseline inventory (#560)
+
+### SYNC FEATURE BRANCH ###
+Already on 'feature/v0.3.36-remove-safe-remove-diagnostic-shell'
+Your branch is up to date with 'origin/feature/v0.3.36-remove-safe-remove-diagnostic-shell'.
+From github.com:vfi64/agentic-project-kit
+ * branch            feature/v0.3.36-remove-safe-remove-diagnostic-shell -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            feature/v0.3.36-remove-safe-remove-diagnostic-shell -> FETCH_HEAD
+Already up to date.
+
+### CLEAN PRECHECK FEATURE ###
+feature/v0.3.36-remove-safe-remove-diagnostic-shell
+
+### PR STATE BEFORE MERGE ###
+{"baseRefName":"main","headRefName":"feature/v0.3.36-remove-safe-remove-diagnostic-shell","mergeStateStatus":"CLEAN","mergeable":"MERGEABLE","number":570,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-21T08:57:54Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26216104184/job/77138742701","name":"test","startedAt":"2026-05-21T08:57:33Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-21T08:57:53Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26216101417/job/77138733807","name":"test","startedAt":"2026-05-21T08:57:29Z","status":"COMPLETED","workflowName":"CI"}],"title":"Remove safe remove diagnostic shell adapter"}
+
+### PR CHECKS BEFORE MERGE ###
+test	pass	24s	https://github.com/vfi64/agentic-project-kit/actions/runs/26216101417/job/77138733807	
+test	pass	21s	https://github.com/vfi64/agentic-project-kit/actions/runs/26216104184/job/77138742701	
+
+### WAIT FOR PR CHECKS ###
+test	pass	24s	https://github.com/vfi64/agentic-project-kit/actions/runs/26216101417/job/77138733807	
+test	pass	21s	https://github.com/vfi64/agentic-project-kit/actions/runs/26216104184/job/77138742701	
+test	pass	24s	https://github.com/vfi64/agentic-project-kit/actions/runs/26216101417/job/77138733807	
+test	pass	21s	https://github.com/vfi64/agentic-project-kit/actions/runs/26216104184/job/77138742701	
+PR_CHECK_STATUS=0
+
+### MERGE PR IF CHECKS PASSED ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   3562bd0..129f7af  main       -> origin/main
+Updating 3562bd0..129f7af
+Fast-forward
+ ...afe_remove_diagnostic_shell_removal_feature.log | 110 +++++++++++++++++++++
+ src/agentic_project_kit/safe_remove_diagnostic.py  |  51 ++++++++++
+ tests/test_repo_ns_entrypoint.py                   |  13 +--
+ tests/test_v036_safe_remove_diagnostic.py          |  27 +++++
+ tools/ns_safe_remove_diagnostic.sh                 |  22 -----
+ 5 files changed, 195 insertions(+), 28 deletions(-)
+ create mode 100644 docs/reports/terminal/v0.3.36_finish_safe_remove_diagnostic_shell_removal_feature.log
+ create mode 100644 src/agentic_project_kit/safe_remove_diagnostic.py
+ create mode 100644 tests/test_v036_safe_remove_diagnostic.py
+ delete mode 100755 tools/ns_safe_remove_diagnostic.sh
+
+### UPDATE MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### VERIFY MAIN STATE ###
+main
+129f7af Remove safe remove diagnostic shell adapter (#570)
+3562bd0 Record finalize guard shell removal merge verification
+690db15 Remove finalize guard shell adapter (#569)
+b5da5de Record v0.3.36 AGENTS rule split merge evidence (#567)
+42ead76 Split portability rule out of AGENTS and lock summary fail contract (#566)
+b4bb05d Record v0.3.36 portability gate fail recovery evidence (#563)
+ed5aa54 Record v0.3.36 portability shell removal inventory (#561)
+ad5ef19 Record v0.3.36 portable core baseline inventory (#560)
+da954ae Record v0.3.36 final pre-release readiness evidence
+d9324e8 Record v0.3.36 run summary evidence merge verification (#559)
+858ba24 Record v0.3.36 run summary contract evidence (#558)
+c4dcb7c Add run summary contract core (#557)
+
+### VERIFY SAFE REMOVE SHELL REMOVED ###
+PASS: tools/ns_safe_remove_diagnostic.sh is no longer tracked on main.
+
+### TRACKED SHELL FILES OUTSIDE TMP ###
+tools/capture_workflow_output.sh
+tools/local_workflow_cycle.sh
+tools/ns_clean_evidence.sh
+tools/ns_commit_pr_guard.sh
+tools/ns_pr_cleanup.sh
+tools/ns_pr_create_or_skip.sh
+tools/ns_release_gate.sh
+tools/ns_release_prep.sh
+tools/ns_release_publish.sh
+tools/ns_release_verify.sh
+tools/ns_slice_runner.sh
+tools/ns_up_pr_completion.sh
+tools/screen_control_gate.sh
+
+### TRACKED SHELL COUNT OUTSIDE TMP ###
+tracked_shell_file_count_outside_tmp=13
+PASS: shell blocker count is now 13.
+
+### TARGETED TESTS ON MAIN ###
+................................................                         [100%]
+48 passed in 0.10s
+
+### RUFF / DOC GATES ###
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### FINAL STATUS BEFORE LOG FINALIZATION ###
+main
+
+================================================================
+SUMMARY
+ACTION: V0.3.36 MERGE SAFE REMOVE DIAGNOSTIC SHELL REMOVAL PR AND VERIFY MAIN V2 -- LOGGED -- NO GUI NO RELEASE
+WORK RESULT: PASS
+EVIDENCE RESULT: PASS
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PARTIAL
+terminal_log=docs/reports/terminal/v0.3.36_merge_safe_remove_diagnostic_shell_removal_verify_v2.log
+command_report=NONE
+STANDARD_ERROR_REDUCTION: 96% if PASS; safe-remove diagnostic shell adapter removed and verified on main.
+GUI_PREPARATION: 95% if PASS; remaining tracked shell blockers should now be 13.
+NEXT_CHAT_REPLY: d
+### RESULT: PASS ###
+================================================================
+
+Terminal bleibt offen. Kein exit am Blockende.
