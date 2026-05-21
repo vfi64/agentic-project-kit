@@ -1,0 +1,579 @@
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK ###
+main
+019053d Add v0.4.0 GUI MVP roadmap (#616)
+2ecf2c2 Record v0.3.37 DOI metadata (#615)
+a9035ad Record v0.3.37 release publish log
+69dc873 Prepare v0.3.37 release metadata (#614)
+c64eadd Record v0.3.37 final GUI preparation closeout contract (#613)
+6ae66ba Record v0.3.36 DOI metadata merge verification log
+613cf9e Record v0.3.36 DOI metadata (#612)
+369e920 Record v0.3.36 release publish log
+45ffd3f Record v0.3.36 release gate log
+0fb4d18 Record v0.3.36 release metadata merge verification log
+f9f5c41 Prepare v0.3.36 release metadata after audit runner hardening (#611)
+76f528a Record audit runner standard-error fix merge verification log
+9f9134f Add deterministic audit test matrix runner (#610)
+b8d9642 Record release route help safety merge verification log
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=main
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### INSPECT ACTION SURFACE ###
+src/agentic_project_kit/__pycache__/action_registry.cpython-314.pyc
+src/agentic_project_kit/__pycache__/action_specs.cpython-314.pyc
+src/agentic_project_kit/__pycache__/agent_command_runner.cpython-314.pyc
+src/agentic_project_kit/__pycache__/cockpit_readiness.cpython-314.pyc
+src/agentic_project_kit/__pycache__/cockpit.cpython-313.pyc
+src/agentic_project_kit/__pycache__/cockpit.cpython-314.pyc
+src/agentic_project_kit/__pycache__/execution_mode_state.cpython-314.pyc
+src/agentic_project_kit/__pycache__/final_summary_contract.cpython-314.pyc
+src/agentic_project_kit/__pycache__/gui_cockpit.cpython-313.pyc
+src/agentic_project_kit/__pycache__/gui_cockpit.cpython-314.pyc
+src/agentic_project_kit/__pycache__/models.cpython-314.pyc
+src/agentic_project_kit/__pycache__/ns_slice_runner.cpython-314.pyc
+src/agentic_project_kit/__pycache__/run_summary_renderer.cpython-314.pyc
+src/agentic_project_kit/__pycache__/run_summary.cpython-314.pyc
+src/agentic_project_kit/__pycache__/slice_runner.cpython-314.pyc
+src/agentic_project_kit/__pycache__/typed_work_order_evidence.cpython-314.pyc
+src/agentic_project_kit/__pycache__/typed_work_order_queue.cpython-314.pyc
+src/agentic_project_kit/__pycache__/typed_work_order_runner.cpython-314.pyc
+src/agentic_project_kit/__pycache__/work_orders.cpython-314.pyc
+src/agentic_project_kit/action_registry.py
+src/agentic_project_kit/action_specs.py
+src/agentic_project_kit/agent_command_runner.py
+src/agentic_project_kit/cli_commands/actions.py
+src/agentic_project_kit/cli_commands/cockpit.py
+src/agentic_project_kit/cli_commands/work_orders.py
+src/agentic_project_kit/cockpit_readiness.py
+src/agentic_project_kit/cockpit.py
+src/agentic_project_kit/execution_mode_state.py
+src/agentic_project_kit/final_summary_contract.py
+src/agentic_project_kit/gui_cockpit.py
+src/agentic_project_kit/models.py
+src/agentic_project_kit/ns_slice_runner.py
+src/agentic_project_kit/run_summary_renderer.py
+src/agentic_project_kit/run_summary.py
+src/agentic_project_kit/slice_runner.py
+src/agentic_project_kit/typed_work_order_evidence.py
+src/agentic_project_kit/typed_work_order_queue.py
+src/agentic_project_kit/typed_work_order_runner.py
+src/agentic_project_kit/work_orders.py
+"""Static action metadata for local workflow and cockpit readiness.
+
+This module is intentionally read-only: it describes known local actions but
+does not execute shell commands, mutate git state, call GitHub, or publish releases.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from enum import Enum
+
+
+class SafetyClass(str, Enum):
+    """Coarse safety class for a local action."""
+
+    READ_ONLY = "read-only"
+    LOCAL_ONLY = "local-only"
+    REMOTE_MUTATION = "remote-mutation"
+    RELEASE_TAG_PUBLISH = "release-tag-publish"
+    MERGE_DELETE_CLOSE = "merge-delete-close"
+
+
+@dataclass(frozen=True)
+class ActionMetadata:
+    """Static metadata for one repo-local action."""
+
+    name: str
+    safety_class: SafetyClass
+    mutation_scope: str
+    dry_run_supported: bool
+    outcome_contract: tuple[str, ...]
+    summary: str
+
+
+ACTIONS: tuple[ActionMetadata, ...] = (
+    ActionMetadata(
+        name="dev",
+        safety_class=SafetyClass.READ_ONLY,
+        mutation_scope="none",
+        dry_run_supported=True,
+        outcome_contract=("PASS", "FAIL"),
+        summary="Run local deterministic development gates.",
+    ),
+    ActionMetadata(
+        name="pr-cleanup",
+        safety_class=SafetyClass.READ_ONLY,
+        mutation_scope="none",
+        dry_run_supported=True,
+        outcome_contract=("PASS", "FAIL"),
+        summary="Classify open pull requests without mutating them.",
+    ),
+    ActionMetadata(
+        name="release-verify",
+        safety_class=SafetyClass.READ_ONLY,
+        mutation_scope="none",
+        dry_run_supported=True,
+        outcome_contract=("PASS", "FAIL"),
+        summary="Verify an existing release and metadata state.",
+    ),
+    ActionMetadata(
+        name="clean-evidence",
+        safety_class=SafetyClass.LOCAL_ONLY,
+        mutation_scope="working-tree-files",
+        dry_run_supported=False,
+        outcome_contract=("PASS", "FAIL"),
+        summary="Clean local evidence or generated files according to repo policy.",
+    ),
+    ActionMetadata(
+        name="release-prep",
+        safety_class=SafetyClass.LOCAL_ONLY,
+        mutation_scope="version-and-release-metadata-files",
+        dry_run_supported=False,
+        outcome_contract=("PASS", "FAIL"),
+        summary="Prepare local release metadata before a release PR.",
+    ),
+    ActionMetadata(
+        name="release-gate",
+        safety_class=SafetyClass.READ_ONLY,
+        mutation_scope="none",
+        dry_run_supported=True,
+        outcome_contract=("PASS", "FAIL"),
+        summary="Verify release readiness without tagging or publishing.",
+    ),
+    ActionMetadata(
+        name="finalize-guard",
+        safety_class=SafetyClass.READ_ONLY,
+        mutation_scope="none",
+        dry_run_supported=True,
+        outcome_contract=("PASS_ALREADY_ON_MAIN", "PASS_NOOP_BRANCH", "PASS_SUPERSEDED", "PASS_NEEDS_PR", "FAIL_CONFLICT_RELEVANT", "FAIL_NEEDS_HUMAN_REVIEW"),
+        summary="Classify branch finalization state without merging or deleting.",
+    ),
+    ActionMetadata(
+        name="cockpit-readiness",
+        safety_class=SafetyClass.READ_ONLY,
+        mutation_scope="none",
+        dry_run_supported=True,
+        outcome_contract=("PASS", "FAIL"),
+        summary="Render static cockpit readiness metadata without executing actions.",
+    ),
+
+    ActionMetadata(
+        name="agent-next",
+        safety_class=SafetyClass.REMOTE_MUTATION,
+        mutation_scope="docs/reports/command_runs and docs/reports/terminal",
+        dry_run_supported=False,
+        outcome_contract=(
+            "PASS_EXECUTED",
+            "FAIL_NO_COMMAND",
+            "FAIL_AMBIGUOUS_COMMANDS",
+            "FAIL_PULL",
+            "FAIL_ALREADY_EXECUTED",
+            "FAIL_INVALID_COMMAND",
+            "FAIL_SHELL_SYNTAX",
+            "FAIL_COMMAND",
+            "FAIL_UPLOAD",
+            "FAIL_POSTCONDITION",
+        ),
+        summary="Pull and execute exactly one pending repo-backed agent command.",
+    ),
+
+    ActionMetadata(
+        name="agent-run",
+        safety_class=SafetyClass.REMOTE_MUTATION,
+        mutation_scope="docs/reports/command_runs and docs/reports/terminal",
+        dry_run_supported=False,
+        outcome_contract=("PASS_EXECUTED", "FAIL_NO_COMMAND", "FAIL_ALREADY_EXECUTED", "FAIL_INVALID_COMMAND", "FAIL_SHELL_SYNTAX", "FAIL_COMMAND", "FAIL_UPLOAD"),
+        summary="Pull-safe repo command runner for agent handoff without copy-and-paste terminal blocks.",
+    ),
+    ActionMetadata(
+        name="run-logged",
+        safety_class=SafetyClass.LOCAL_ONLY,
+        mutation_scope="docs/reports/terminal",
+        dry_run_supported=False,
+        outcome_contract=("PASS", "FAIL", "FAIL_NO_COMMAND", "FAIL_MISSING_SEPARATOR"),
+        summary="Run a local command while teeing output to a terminal log.",
+    ),
+    ActionMetadata(
+        name="terminal-status",
+        safety_class=SafetyClass.READ_ONLY,
+        mutation_scope="none",
+        dry_run_supported=True,
+        outcome_contract=("PASS_LOG_READY", "PASS_NO_LOG", "FAIL_INVALID_POINTER"),
+        summary="Inspect the latest terminal log pointer without mutating state.",
+    ),
+    ActionMetadata(
+        name="terminal-clean-check",
+        safety_class=SafetyClass.READ_ONLY,
+        mutation_scope="none",
+        dry_run_supported=True,
+        outcome_contract=("PASS_CLEAN", "PASS_ONLY_TERMINAL_LOG_DIRTY", "FAIL_DIRTY_NON_LOG_FILES"),
+        summary="Check whether only terminal-log artifacts are dirty during logged runs.",
+    ),
+    ActionMetadata(
+        name="terminal-upload",
+        safety_class=SafetyClass.REMOTE_MUTATION,
+        mutation_scope="docs/reports/terminal only",
+        dry_run_supported=False,
+        outcome_contract=("PASS_UPLOADED", "PASS_ALREADY_UPLOADED", "FAIL_NO_LOG", "FAIL_DIRTY_NON_LOG_FILES", "FAIL_PUSH_FAILED"),
+        summary="Commit and push only terminal-log artifacts for failure handoff.",
+    ),
+
+)
+
+
+def list_actions() -> tuple[ActionMetadata, ...]:
+    """Return all known action metadata entries."""
+
+    return ACTIONS
+
+
+def get_action(name: str) -> ActionMetadata | None:
+    """Return metadata for one action name, if known."""
+
+    for action in ACTIONS:
+        if action.name == name:
+            return action
+    return None
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from enum import Enum
+
+class SafetyClass(str, Enum):
+    READ_ONLY = "read_only"
+    LOCAL_ONLY = "local_only"
+    REMOTE_MUTATION = "remote_mutation"
+    DESTRUCTIVE = "destructive"
+
+@dataclass(frozen=True)
+class ParameterSpec:
+    name: str
+    description: str
+    required: bool = True
+    example: str = ""
+
+@dataclass(frozen=True)
+class ActionSpec:
+    action_id: str
+    title: str
+    safety_class: SafetyClass
+    purpose: str
+    parameters: tuple[ParameterSpec, ...] = field(default_factory=tuple)
+    allowed_mutations: tuple[str, ...] = field(default_factory=tuple)
+    preconditions: tuple[str, ...] = field(default_factory=tuple)
+    postconditions: tuple[str, ...] = field(default_factory=tuple)
+    evidence: tuple[str, ...] = field(default_factory=tuple)
+    dry_run_default: bool = True
+
+def built_in_action_specs() -> dict[str, ActionSpec]:
+    specs = [
+        ActionSpec(
+            action_id="pr-check-merge",
+            title="Check and optionally merge a pull request",
+            safety_class=SafetyClass.REMOTE_MUTATION,
+            purpose="Replace ad-hoc PR check/merge terminal blocks with a parameterized action contract.",
+            parameters=(ParameterSpec("pr_number", "GitHub pull request number.", example="346"),),
+            allowed_mutations=("squash merge selected PR when explicit execute mode is later added", "delete merged branch when GitHub merge action does so"),
+            preconditions=("state OPEN", "mergeStateStatus CLEAN", "pending_count 0", "non_success_count 0", "expected CI checks present"),
+            postconditions=("main fast-forwards to merge commit", "local gates pass after sync", "repo-backed evidence log exists"),
+            evidence=("gh pr JSON state", "CI rollup", "terminal log", "post-merge local gate report"),
+        ),
+        ActionSpec(
+            action_id="release-verify",
+            title="Verify an already published release",
+            safety_class=SafetyClass.READ_ONLY,
+            purpose="Verify tag, GitHub Release, Release workflow, assets, and Zenodo DOI state.",
+            parameters=(ParameterSpec("version", "Release version without leading v.", example="0.3.24"),),
+            preconditions=("version is present", "local repository is on a clean branch"),
+            postconditions=("GitHub Release exists", "release assets exist", "post-release check passes"),
+            evidence=("release-verify terminal log", "post-release-check output"),
+        ),
+        ActionSpec(
+            action_id="doi-record",
+            title="Record verified DOI metadata",
+            safety_class=SafetyClass.LOCAL_ONLY,
+            purpose="Prepare DOI metadata changes after release verification.",
+            parameters=(ParameterSpec("version", "Release version.", example="0.3.24"), ParameterSpec("doi", "Verified Zenodo version DOI.", example="10.5281/zenodo.20270197")),
+            allowed_mutations=("update CHANGELOG.md", "update docs/STATUS.md", "update docs/handoff/CURRENT_HANDOFF.md", "write terminal evidence log"),
+            preconditions=("post-release check PASS", "DOI belongs to requested version"),
+            postconditions=("docs mention DOI once", "local gates pass", "PR is opened for DOI metadata"),
+            evidence=("post-release-check output", "DOI metadata terminal log"),
+        ),
+        ActionSpec(
+            action_id="finalize-release",
+            title="Finalize repository state after release closeout",
+            safety_class=SafetyClass.LOCAL_ONLY,
+            purpose="Update state and handoff after release and DOI metadata are complete.",
+            parameters=(ParameterSpec("version", "Release version.", example="0.3.24"),),
+            allowed_mutations=("update docs/STATUS.md", "update docs/handoff/CURRENT_HANDOFF.md", "update .agentic/handoff_state.yaml", "write terminal evidence log"),
+            preconditions=("release metadata PR merged", "main gates pass", "handoff state has no obsolete next instruction"),
+            postconditions=("state docs point to next allowed task", "handoff prompt is current", "local gates pass"),
+            evidence=("finalize terminal log", "handoff-check output", "doctor output"),
+        ),
+    ]
+    return {spec.action_id: spec for spec in specs}
+
+def get_action_spec(action_id: str) -> ActionSpec:
+    specs = built_in_action_specs()
+    if action_id not in specs:
+        known = ", ".join(sorted(specs))
+        raise KeyError(f"unknown action spec: {action_id}; known: {known}")
+    return specs[action_id]
+
+def render_action_spec(spec: ActionSpec) -> str:
+    lines = [
+        f"Action: {spec.action_id}",
+        f"Title: {spec.title}",
+        f"Safety: {spec.safety_class.value}",
+        f"Dry-run default: {spec.dry_run_default}",
+        "",
+        "Purpose:",
+        spec.purpose,
+        "",
+        "Parameters:",
+    ]
+    for parameter in spec.parameters:
+        required = "required" if parameter.required else "optional"
+        example = f"; example: {parameter.example}" if parameter.example else ""
+        lines.append(f"- {parameter.name} ({required}): {parameter.description}{example}")
+    sections = [
+        ("Allowed mutations", spec.allowed_mutations),
+        ("Preconditions", spec.preconditions),
+        ("Postconditions", spec.postconditions),
+        ("Evidence", spec.evidence),
+    ]
+    for title, items in sections:
+        lines.extend(["", f"{title}:"])
+        if items:
+            lines.extend(f"- {item}" for item in items)
+        else:
+            lines.append("- none")
+    return "\n".join(lines)
+src/agentic_project_kit/gui_cockpit.py:38:    "read_only": "Safe default: this action may be executed from the GUI through the shared cockpit layer.",
+src/agentic_project_kit/gui_cockpit.py:39:    "bounded": "Blocked by default: bounded workflow actions require an explicit non-GUI allow path.",
+src/agentic_project_kit/gui_cockpit.py:40:    "destructive": "Blocked: destructive actions are not executable from the GUI cockpit.",
+src/agentic_project_kit/gui_cockpit.py:98:            text="Read-only actions may run through the shared cockpit layer. Bounded and destructive actions remain blocked by default. Select an action to inspect its command, safety class, and explanation before running it.",
+src/agentic_project_kit/gui_cockpit.py:121:        ttk.Button(button_row, text="Run selected read-only", command=self.run_selected_read_only).pack(side=tk.LEFT, padx=8)
+src/agentic_project_kit/gui_cockpit.py:128:        self.write_output("GUI cockpit ready. Select an action, inspect its details, then run read-only actions explicitly. Bounded and destructive actions stay blocked here.\n")
+src/agentic_project_kit/gui_cockpit.py:171:    def run_selected_read_only(self) -> None:
+src/agentic_project_kit/gui_cockpit.py:176:        result = run_cockpit_action(action_id, self.project_root, allow_bounded=False)
+src/agentic_project_kit/typed_work_order_runner.py:27:    allow_bounded: bool = False
+src/agentic_project_kit/typed_work_order_runner.py:68:        allow_bounded = bool(data.get("allow_bounded", False))
+src/agentic_project_kit/typed_work_order_runner.py:69:        return TypedWorkOrderStep(kind=kind, label=label, action_id=action_id, allow_bounded=allow_bounded)
+src/agentic_project_kit/typed_work_order_runner.py:155:            action_result = run_cockpit_action(step.action_id, root, allow_bounded=step.allow_bounded)
+src/agentic_project_kit/cockpit.py:46:READ_ONLY = "read_only"
+src/agentic_project_kit/cockpit.py:47:BOUNDED = "bounded"
+src/agentic_project_kit/cockpit.py:48:DESTRUCTIVE = "destructive"
+src/agentic_project_kit/cockpit.py:71:        CockpitAction("workflow.go", "Run one bounded workflow step", "workflow", ("agentic-kit", "workflow", "go"), BOUNDED, "Request and run one bounded workflow step."),
+src/agentic_project_kit/cockpit.py:127:    allow_bounded: bool = False,
+src/agentic_project_kit/cockpit.py:135:        return CockpitActionResult(action.action_id, False, False, None, "", "", f"Blocked destructive cockpit action: {action.action_id}", RESULT_HARD_FAIL, action.safety, next_allowed_actions=("cockpit.actions",))
+src/agentic_project_kit/cockpit.py:136:    if action.safety == BOUNDED and not allow_bounded:
+src/agentic_project_kit/cockpit.py:137:        return CockpitActionResult(action.action_id, False, False, None, "", "", f"Blocked bounded cockpit action without explicit allow flag: {action.action_id}", RESULT_PENDING, action.safety, next_allowed_actions=("cockpit.actions",))
+src/agentic_project_kit/action_specs.py:6:class SafetyClass(str, Enum):
+src/agentic_project_kit/action_specs.py:7:    READ_ONLY = "read_only"
+src/agentic_project_kit/action_specs.py:10:    DESTRUCTIVE = "destructive"
+src/agentic_project_kit/action_specs.py:23:    safety_class: SafetyClass
+src/agentic_project_kit/action_specs.py:37:            safety_class=SafetyClass.REMOTE_MUTATION,
+src/agentic_project_kit/action_specs.py:46:            action_id="release-verify",
+src/agentic_project_kit/action_specs.py:48:            safety_class=SafetyClass.READ_ONLY,
+src/agentic_project_kit/action_specs.py:53:            evidence=("release-verify terminal log", "post-release-check output"),
+src/agentic_project_kit/action_specs.py:58:            safety_class=SafetyClass.LOCAL_ONLY,
+src/agentic_project_kit/action_specs.py:69:            safety_class=SafetyClass.LOCAL_ONLY,
+src/agentic_project_kit/cockpit_readiness.py:7:from agentic_project_kit.action_registry import SafetyClass, list_actions
+src/agentic_project_kit/cockpit_readiness.py:30:    read_only_with_mutation = [
+src/agentic_project_kit/cockpit_readiness.py:33:        if row["safety_class"] == SafetyClass.READ_ONLY.value and row["mutation_scope"] != "none"
+src/agentic_project_kit/cockpit_readiness.py:39:        "read_only_with_mutation": read_only_with_mutation,
+src/agentic_project_kit/cockpit_readiness.py:40:        "ready_for_read_only_cockpit": not missing_outcomes and not read_only_with_mutation,
+src/agentic_project_kit/cockpit_readiness.py:55:        f"- Ready for read-only cockpit: {summary['ready_for_read_only_cockpit']}",
+src/agentic_project_kit/cockpit_readiness.py:57:        f"- Read-only actions with mutation scope: {summary['read_only_with_mutation']}",
+src/agentic_project_kit/action_registry.py:13:class SafetyClass(str, Enum):
+src/agentic_project_kit/action_registry.py:28:    safety_class: SafetyClass
+src/agentic_project_kit/action_registry.py:38:        safety_class=SafetyClass.READ_ONLY,
+src/agentic_project_kit/action_registry.py:46:        safety_class=SafetyClass.READ_ONLY,
+src/agentic_project_kit/action_registry.py:53:        name="release-verify",
+src/agentic_project_kit/action_registry.py:54:        safety_class=SafetyClass.READ_ONLY,
+src/agentic_project_kit/action_registry.py:62:        safety_class=SafetyClass.LOCAL_ONLY,
+src/agentic_project_kit/action_registry.py:69:        name="release-prep",
+src/agentic_project_kit/action_registry.py:70:        safety_class=SafetyClass.LOCAL_ONLY,
+src/agentic_project_kit/action_registry.py:78:        safety_class=SafetyClass.READ_ONLY,
+src/agentic_project_kit/action_registry.py:86:        safety_class=SafetyClass.READ_ONLY,
+src/agentic_project_kit/action_registry.py:94:        safety_class=SafetyClass.READ_ONLY,
+src/agentic_project_kit/action_registry.py:103:        safety_class=SafetyClass.REMOTE_MUTATION,
+src/agentic_project_kit/action_registry.py:123:        safety_class=SafetyClass.REMOTE_MUTATION,
+src/agentic_project_kit/action_registry.py:131:        safety_class=SafetyClass.LOCAL_ONLY,
+src/agentic_project_kit/action_registry.py:139:        safety_class=SafetyClass.READ_ONLY,
+src/agentic_project_kit/action_registry.py:147:        safety_class=SafetyClass.READ_ONLY,
+src/agentic_project_kit/action_registry.py:155:        safety_class=SafetyClass.REMOTE_MUTATION,
+src/agentic_project_kit/release_publish_core.py:172:        append_command(["./ns", "release-verify", plain_version])
+src/agentic_project_kit/doc_mesh.py:163:    "release-preparation branch",
+src/agentic_project_kit/cli_commands/cockpit.py:56:    allow_bounded: Annotated[bool, typer.Option("--allow-bounded")] = False,
+src/agentic_project_kit/cli_commands/cockpit.py:59:    result = run_cockpit_action(action_id, project_root.resolve(), allow_bounded=allow_bounded)
+Binary file src/agentic_project_kit/cli_commands/__pycache__/workflow.cpython-314.pyc matches
+Binary file src/agentic_project_kit/cli_commands/__pycache__/cockpit.cpython-314.pyc matches
+src/agentic_project_kit/cli_commands/workflow.py:10:workflow_app = typer.Typer(help="Run and inspect bounded local workflow handoff states.")
+src/agentic_project_kit/cli_commands/workflow.py:326:    """Request the configured workflow and run one bounded step."""
+src/agentic_project_kit/cli_commands/workflow.py:335:    typer.echo("Running one bounded workflow step.")
+src/agentic_project_kit/cli_commands/workflow.py:344:    """Print the current workflow state and bounded evidence pointers."""
+src/agentic_project_kit/cli_commands/workflow.py:388:    """Upload the latest bounded local workflow output evidence for review."""
+src/agentic_project_kit/cli_commands/workflow.py:395:    typer.echo("Uploading latest bounded workflow output evidence.")
+Binary file src/agentic_project_kit/__pycache__/action_specs.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/templates.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/workflow_cli.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/cockpit_readiness.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/action_registry.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/doc_mesh.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/gui_cockpit.cpython-313.pyc matches
+Binary file src/agentic_project_kit/__pycache__/cockpit.cpython-313.pyc matches
+Binary file src/agentic_project_kit/__pycache__/typed_work_order_runner.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/gui_cockpit.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/release_publish_core.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/cockpit.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/release_verify_core.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/output_repair.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/governance.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/release_prep_core.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/contract.cpython-314.pyc matches
+Binary file src/agentic_project_kit/__pycache__/ns_up_pr_completion.cpython-314.pyc matches
+src/agentic_project_kit/templates.py:8:BASE_FILES = {'README.md': '# $name\n\n$description\n\n## Purpose\n\nDescribe the purpose of the project here.\n\n## Quick Start\n\n```bash\npython -m venv .venv\nsource .venv/bin/activate\npip install -e ".[dev]"\npytest -q\nagentic-kit check\n```\n\n## Agentic Development\n\nThis project uses agent-facing documentation and local quality gates.\n\nStart with:\n\n1. `AGENTS.md`\n2. `.agentic/project.yaml`\n3. `docs/PROJECT_START.md`\n4. `docs/STATUS.md`\n5. `docs/TEST_GATES.md`\n6. `docs/handoff/CURRENT_HANDOFF.md`\n\n## Status\n\nDo not store volatile status in this README. Use `docs/STATUS.md`.\n', 'AGENTS.md': '# AGENTS.md\n\n## Mission\n\nPreserve correctness, traceability, testability, and maintainability.\n\nDo not only satisfy the immediate request. Prefer the best technically sound solution within project constraints.\n\n## Source-of-truth hierarchy\n\n1. `.agentic/project.yaml`\n2. normative project specification, if present\n3. current code and tests\n4. `docs/STATUS.md`\n5. `docs/handoff/CURRENT_HANDOFF.md`\n6. historical archive files\n\nIf documentation, code, and tests disagree, report the discrepancy instead of guessing.\n\n## Agent read order\n\n1. `AGENTS.md`\n2. `.agentic/project.yaml`\n3. `docs/PROJECT_START.md`\n4. `docs/STATUS.md`\n5. `docs/TEST_GATES.md`\n6. `docs/LOGGING_AND_EVIDENCE.md`\n7. `docs/handoff/CURRENT_HANDOFF.md`\n8. relevant source files and tests\n\n## Work rules\n\n- Keep stable rules separate from volatile status.\n- Add or update tests for meaningful behavior changes.\n- Prefer outcome evidence over output claims.\n- Do not claim success without running the relevant gates.\n- Do not commit secrets, local credentials, or broad raw logs.\n- Use bounded diagnostic logs only when needed for troubleshooting.\n\n## Closeout template\n\n```text\n- Intended outcome:\n- Required evidence:\n- Outcome achieved: yes / no / partial\n- Changed files:\n- Tests run:\n- Tests not run:\n- Remaining risks:\n- Next safe step:\n```\n', 'docs/PROJECT_START.md': '# Project Start\n\n## Purpose\n\nThis file guides the initial setup after repository generation.\n\n## Generated Structure\n\nThis project was generated with agent-facing documentation, a machine-readable project contract, status and handoff files, a test-gate matrix, bootstrap task items, logging/evidence conventions, and optional GitHub workflow/pre-commit templates.\n\n## Required First Decisions\n\n- [ ] Review `.agentic/project.yaml` profiles and policy packs.\n- [ ] Choose or confirm project license.\n- [ ] Define the primary runtime entrypoint.\n- [ ] Define supported runtime versions.\n- [ ] Decide whether bounded diagnostic logs may be committed.\n- [ ] Define protected branches.\n- [ ] Define release strategy.\n- [ ] Review agent instructions.\n\n## First Local Commands\n\n```bash\npython -m venv .venv\nsource .venv/bin/activate\npip install -e ".[dev]"\npytest -q\nagentic-kit check\nagentic-kit doctor\n```\n\n## First GitHub Setup\n\n- [ ] Create GitHub repository.\n- [ ] Push initial commit.\n- [ ] Enable branch protection for `main`.\n- [ ] Enable GitHub Actions.\n- [ ] Enable secret scanning if available.\n- [ ] Review `.github/copilot-instructions.md`.\n\n## Agent Onboarding\n\nA new agent should read:\n\n1. `AGENTS.md`\n2. `.agentic/project.yaml`\n3. `.github/copilot-instructions.md`\n4. `docs/PROJECT_START.md`\n5. `docs/STATUS.md`\n6. `docs/TEST_GATES.md`\n7. `docs/handoff/CURRENT_HANDOFF.md`\n\n## Before First Feature\n\n- [ ] Update `README.md` with the real project goal.\n- [ ] Update `docs/STATUS.md`.\n- [ ] Update `docs/TEST_GATES.md`.\n- [ ] Add first meaningful tests.\n- [ ] Run all checks.\n', 'docs/STATUS.md': '# Project Status\n\nStatus-date: TODO\nProject: $name\nPrimary branch: main\nRuntime entrypoint: TODO\nProject contract: `.agentic/project.yaml`\n\n## Purpose\n\nThis is the compact current-state dashboard.\n\nIt must not become a long history file.\n\n## Current Goal\n\nTODO: define the current project goal.\n\n## Current Blockers\n\n- TODO\n\n## Live Status Commands\n\n```bash\ngit status --short\npytest -q\nagentic-kit check\nagentic-kit doctor\n```\n\n## Next Safe Step\n\nTODO\n', 'docs/TEST_GATES.md': '# Test Gates\n\n## Purpose\n\nThis file maps task types to required evidence.\n\n## Gate Matrix\n\n| Change type | Required evidence |\n|---|---|\n| Documentation only | `agentic-kit check-docs` |\n| task/status change | `agentic-kit check-todo` |\n| Project contract/profile change | `agentic-kit doctor` |\n| Python code | `pytest -q` and `ruff check .` if enabled |\n| CLI behavior | CLI tests plus local command smoke test |\n| Logging/evidence change | check generated logs for secrets and size |\n| GitHub workflow change | local syntax review and CI run |\n| Agent workflow change | docs check and handoff review |\n\n## Outcome Reporting\n\nUse this closeout shape:\n\n```text\n- Intended outcome:\n- Required evidence:\n- Outcome achieved: yes / no / partial\n- Evidence:\n- Remaining gap:\n- Tests run:\n- Tests not run:\n```\n', 'docs/LOGGING_AND_EVIDENCE.md': '# Logging and Evidence\n\n## Purpose\n\nLogs are diagnostic evidence, not automatic source material.\n\n## Recommended Layout\n\n```text\nLogs/\n  Audit/\n  ManualTests/\n  TestRuns/\ntmp/\n  agent-evidence/\n```\n\n## Rules\n\n- Do not commit secrets.\n- Do not commit broad raw logs by default.\n- Commit only bounded recent evidence when needed.\n- Inspect staged logs before committing.\n- Validation reports from `agentic-kit validate-output-contract --report` are bounded audit evidence when they are intentionally written to a reviewed path such as `tmp/agent-evidence/` or a PR-specific evidence folder.\n- Do not auto-stage validation reports by default; inspect them before committing.\n\n## Agent Use\n\nAgents should use logs to diagnose failures, not to infer undocumented project rules.\n', 'docs/handoff/CURRENT_HANDOFF.md': '# Current Handoff\n\nStatus-date: TODO\nProject: $name\nBranch: main\nProject contract: `.agentic/project.yaml`\n\n## Current goal\n\nTODO\n\n## Current source of truth\n\n1. `.agentic/project.yaml`\n2. `AGENTS.md`\n3. `docs/STATUS.md`\n4. current code and tests\n\n## Latest closeout\n\nNo closeout yet.\n\n## Next step\n\nTODO\n', 'docs/handoff/STANDARD_AGENT_PROMPT.md': '# Standard Agent Prompt\n\n```text\nYou are working in this repository.\n\nStart by reading:\n\n1. AGENTS.md\n2. .agentic/project.yaml\n3. docs/PROJECT_START.md\n4. docs/STATUS.md\n5. docs/TEST_GATES.md\n6. docs/handoff/CURRENT_HANDOFF.md\n\nDo not infer current state from memory.\nRun or request:\n\ngit status --short\npytest -q\nagentic-kit check\nagentic-kit doctor\n\nFor substantial work, close with:\n\n- Intended outcome:\n- Required evidence:\n- Outcome achieved:\n- Changed files:\n- Tests run:\n- Remaining risks:\n```\n', 'docs/TODO.md': '# TODO\n\nThis file is generated from `.agentic/todo.yaml`.\n\n## Bootstrap\n\n- [ ] **BOOT-001** Choose or confirm license  \n  Owner: human  \n  Priority: high  \n  Evidence required: `LICENSE` reviewed\n\n- [ ] **BOOT-002** Define runtime entrypoint  \n  Owner: human  \n  Priority: high  \n  Evidence required: `README.md` and `docs/STATUS.md` updated\n\n- [ ] **BOOT-003** Run initial local quality gate  \n  Owner: agent  \n  Priority: high  \n  Evidence required: `pytest -q` and `agentic-kit check` passed\n\n- [ ] **BOOT-004** Review project contract profiles and policy packs  \n  Owner: human  \n  Priority: high  \n  Evidence required: `.agentic/project.yaml` reviewed\n\n- [ ] **BOOT-005** Enable branch protection on GitHub  \n  Owner: human  \n  Priority: medium  \n  Evidence required: branch protection enabled\n', '.agentic/todo.yaml': 'items:\n  - id: BOOT-001\n    title: Choose or confirm license\n    owner: human\n    priority: high\n    status: open\n    blocking: true\n    evidence_required: LICENSE reviewed\n  - id: BOOT-002\n    title: Define runtime entrypoint\n    owner: human\n    priority: high\n    status: open\n    blocking: true\n    evidence_required: README.md and docs/STATUS.md updated\n  - id: BOOT-003\n    title: Run initial local quality gate\n    owner: agent\n    priority: high\n    status: open\n    blocking: true\n    evidence_required: pytest -q and agentic-kit check passed\n  - id: BOOT-004\n    title: Review project contract profiles and policy packs\n    owner: human\n    priority: high\n    status: open\n    blocking: true\n    evidence_required: .agentic/project.yaml reviewed\n  - id: BOOT-005\n    title: Enable branch protection on GitHub\n    owner: human\n    priority: medium\n    status: open\n    blocking: false\n    evidence_required: branch protection enabled\n', 'sentinel.yaml': 'documents:\n  - path: README.md\n    required_sections:\n      - "## Purpose"\n      - "## Quick Start"\n    max_words: 2000\n  - path: AGENTS.md\n    required_sections:\n      - "## Mission"\n      - "## Agent read order"\n      - "## Closeout template"\n    max_words: 2500\n  - path: docs/STATUS.md\n    required_sections:\n      - "## Current Goal"\n      - "## Next Safe Step"\n    max_words: 1200\n  - path: docs/TEST_GATES.md\n    required_sections:\n      - "## Gate Matrix"\n      - "## Outcome Reporting"\n    max_words: 1600\ntodo:\n  path: .agentic/todo.yaml\n', '.github/copilot-instructions.md': '# Copilot Instructions\n\nFollow the repository rules in `AGENTS.md`.\n\nBefore claiming completion, run or request the relevant commands from `docs/TEST_GATES.md`.\n\nDo not commit secrets, broad raw logs, virtual environments, or local-only configuration.\n', '.github/pull_request_template.md': '## Intended outcome\n\n## Required evidence\n\n## Outcome achieved\n\n- [ ] yes\n- [ ] no\n- [ ] partial\n\n## Tests run\n\n## Risks / remaining gaps\n', '.github/ISSUE_TEMPLATE/agent_regression.yml': 'name: Agent regression\ndescription: Report an agent workflow or handoff regression\ntitle: "[Agent Regression]: "\nlabels: ["agent", "regression"]\nbody:\n  - type: textarea\n    id: observed\n    attributes:\n      label: Observed behavior\n    validations:\n      required: true\n  - type: textarea\n    id: expected\n    attributes:\n      label: Expected behavior\n    validations:\n      required: true\n  - type: textarea\n    id: evidence\n    attributes:\n      label: Evidence / logs\n    validations:\n      required: false\n', 'scripts/stage_recent_logs.py': 'from pathlib import Path\nimport shutil\n\nLOG_ROOTS = [Path("Logs/Audit"), Path("Logs/ManualTests"), Path("Logs/TestRuns")]\nTARGET = Path("tmp/agent-evidence")\n\n\ndef main(max_files: int = 10) -> None:\n    TARGET.mkdir(parents=True, exist_ok=True)\n    for root in LOG_ROOTS:\n        if not root.exists():\n            continue\n        files = sorted((p for p in root.rglob("*") if p.is_file()), key=lambda p: p.stat().st_mtime)\n        for src in files[-max_files:]:\n            rel = src.relative_to(root)\n            dst = TARGET / root.name / rel\n            dst.parent.mkdir(parents=True, exist_ok=True)\n            shutil.copy2(src, dst)\n    print(f"Staged bounded evidence in {TARGET}")\n\n\nif __name__ == "__main__":\n    main()\n'}
+src/agentic_project_kit/templates.py:47:This document records validation and bounded repair rules for governance-wrapper projects.
+src/agentic_project_kit/templates.py:96:Generated governance-wrapper projects also include `docs/schemas/validation-report.schema.json` as the machine-readable schema for this report shape. They also include `docs/schemas/repair-report.schema.json` as the planned machine-readable shape for future bounded repair reports.
+src/agentic_project_kit/templates.py:108:- Repair attempts must be bounded and auditable.
+src/agentic_project_kit/release_prep_core.py:19:    return "usage: ./ns release-prep <version>"
+src/agentic_project_kit/release_prep_core.py:75:        print("ERROR: missing version argument. Example: ./ns release-prep 0.3.21")
+src/agentic_project_kit/release_prep_core.py:147:        print("ERROR: missing version argument. Example: ./ns release-prep 0.3.21")
+src/agentic_project_kit/contract.py:131:        description="Strict response/output governance with schemas, validators, bounded repair, and evidence-oriented failure handling.",
+src/agentic_project_kit/ns_up_pr_completion.py:44:    print("Safety: bounded PR completion cycle; waits for checks, squash-merges the current PR only, updates main only after a successful merge, and runs local gates.")
+src/agentic_project_kit/output_repair.py:3:This module only performs bounded structural repair for literal required section
+src/agentic_project_kit/release_verify_core.py:14:    return "usage: ./ns release-verify <version>"
+src/agentic_project_kit/release_verify_core.py:82:        print("ERROR: usage: ./ns release-verify <version>")
+src/agentic_project_kit/release_verify_core.py:159:        print("ERROR: usage: ./ns release-verify <version>")
+src/agentic_project_kit/governance.py:36:    for required in ("pr-check-merge", "release-verify", "doi-record", "finalize-release"):
+tests/test_v037_final_gui_preparation_closeout.py:11:    assert "bounded/read-only-or-safe GUI MVP" in text
+tests/test_doc_mesh.py:97:    _write(tmp_path / "CHANGELOG.md", "## v1.2.2\n- Prepared on a release-preparation branch.\n")
+tests/test_generator.py:185:    assert "Repair attempts must be bounded" in validation
+tests/test_cockpit.py:13:def test_cockpit_action_registry_contains_core_read_only_actions() -> None:
+tests/test_cockpit.py:24:def test_cockpit_action_registry_classifies_bounded_workflow_go() -> None:
+tests/test_cockpit.py:31:def test_cockpit_foundation_does_not_mark_git_or_release_actions_destructive() -> None:
+tests/test_cockpit.py:37:def test_cockpit_status_command_is_read_only(tmp_path: Path) -> None:
+tests/test_cockpit.py:59:    assert "workflow.state [workflow/read_only]" in result.output
+tests/test_cockpit.py:60:    assert "workflow.go [workflow/bounded]" in result.output
+tests/test_cockpit.py:61:    assert "release.plan [release/read_only]" in result.output
+tests/test_cockpit.py:62:    assert "audit.pr-hygiene [audit/read_only]" in result.output
+tests/test_cockpit.py:72:    assert " 1) demo.action [demo/read_only]" in output
+tests/test_cockpit.py:83:    assert "git.status [git/read_only]" in result.output
+tests/test_cockpit.py:84:    assert "workflow.go [workflow/bounded]" in result.output
+tests/test_cockpit.py:90:def test_cockpit_run_allows_read_only_action_with_argument_vector(tmp_path: Path) -> None:
+tests/test_cockpit.py:120:def test_cockpit_run_blocks_bounded_without_explicit_allow_flag(tmp_path: Path) -> None:
+tests/test_cockpit.py:125:    assert "Blocked bounded cockpit action" in result.message
+tests/test_cockpit.py:128:def test_cockpit_run_blocks_destructive_actions(tmp_path: Path) -> None:
+tests/test_cockpit.py:135:    assert "Blocked destructive cockpit action" in result.message
+tests/test_cockpit.py:158:def test_cockpit_run_read_only_does_not_mutate_hidden_state(tmp_path: Path) -> None:
+tests/test_cockpit.py:179:def test_cockpit_run_cli_executes_read_only_action() -> None:
+tests/test_cockpit.py:188:def test_cockpit_run_cli_blocks_bounded_action_without_allow_flag() -> None:
+tests/test_cockpit.py:194:    assert "Blocked bounded cockpit action" in result.output
+tests/test_typed_work_order_example_and_ns_shortcut.py:6:def test_read_only_typed_work_order_example_loads() -> None:
+tests/test_typed_work_order_example_and_ns_shortcut.py:7:    path = Path(".agentic/typed_work_orders/read_only_status_check.yaml")
+tests/test_typed_work_order_example_and_ns_shortcut.py:10:    assert order.safety == "read_only"
+tests/test_gui_cockpit.py:10:        CockpitAction("demo.go", "Demo go", "demo", ("demo", "go"), BOUNDED, "Run bounded demo step."),
+tests/test_gui_cockpit.py:64:        message="Blocked bounded cockpit action without explicit allow flag: workflow.go",
+tests/test_gui_cockpit.py:72:    assert "Blocked bounded cockpit action" in text
+tests/test_gui_cockpit.py:92:    assert "Blocked" in explain_safety("destructive")
+tests/test_gui_cockpit.py:97:    action = CockpitAction("demo.go", "Demo go", "demo", ("demo", "go"), BOUNDED, "Run bounded demo step.")
+tests/test_gui_cockpit.py:106:    result = CockpitActionResult("workflow.go", False, False, None, "", "", "Blocked bounded cockpit action without explicit allow flag: workflow.go")
+tests/test_v040_strategy_roadmap.py:26:def test_v040_gui_mvp_roadmap_blocks_destructive_mvp_actions():
+tests/test_v040_strategy_roadmap.py:30:    assert "Any future destructive GUI action requires a separate contract" in text
+tests/test_cockpit_run_json_action_result.py:19:    assert data["safety"] == "read_only"
+tests/test_cockpit_run_json_action_result.py:26:def test_cockpit_run_json_preserves_blocked_bounded_contract_and_exit_code() -> None:
+tests/test_cockpit_run_json_action_result.py:33:    assert data["safety"] == "bounded"
+tests/test_patterns.py:14:    assert [entry.id for entry in catalog.patterns] == ["bounded-workflow-evidence", "hidden-autopilot"]
+tests/test_patterns.py:64:    assert detail.entry.id == "bounded-workflow-evidence"
+tests/test_patterns.py:75:    assert "bounded-workflow-evidence" in result.output
+tests/test_patterns.py:84:    result = runner.invoke(app, ["patterns", "show", "bounded-workflow-evidence"])
+tests/test_work_order_templates.py:13:    assert order.safety == "read_only"
+tests/test_work_order_templates.py:27:    assert "Safety: read_only" in result.output
+Binary file tests/__pycache__/test_cockpit.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_generator.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_action_specs.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_action_specs.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_generator.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_cockpit.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_typed_next_already_executed_guard.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_gui_cockpit.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_workflow_request_cli.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_work_order_prepare.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_work_order_prepare.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_workflow_request_cli.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_gui_cockpit.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_typed_next_already_executed_guard.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_typed_next_queue_execution.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_pr_hygiene.cpython-314-pytest-9.0.2.pyc matches
+Binary file tests/__pycache__/test_v037_final_gui_preparation_closeout.cpython-314-pytest-9.0.3.pyc matches
+Binary file tests/__pycache__/test_typed_work_order_example_and_ns_shortcut.cpython-314-pytest-9.0.2.pyc matches
+
+### CREATE BRANCH ###
+Switched to a new branch 'contracts/v0.4.0-gui-action-readiness'
+
+### WRITE GUI ACTION READINESS CONTRACT DOC ###
+
+### WRITE GUI ACTION READINESS TESTS ###
+
+### DIFF ###
+?? docs/gui/
+?? tests/test_v040_gui_action_readiness_contract.py
+
+### TARGETED TESTS ###
+......                                                                   [100%]
+6 passed in 0.02s
+
+### FULL LOCAL GATES ###
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+........................................................................ [ 30%]
+........................................................................ [ 40%]
+........................................................................ [ 50%]
+........................................................................ [ 60%]
+........................................................................ [ 70%]
+........................................................................ [ 80%]
+........................................................................ [ 90%]
+.....................................................................    [100%]
+717 passed in 4.09s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COPY TERMINAL LOG FOR COMMIT ###
