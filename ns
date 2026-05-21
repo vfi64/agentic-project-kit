@@ -17,6 +17,12 @@ resolve_python() {
 }
 
 PY="$(resolve_python || true)"
+
+if [ "${1:-}" = "pr-create-or-skip" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.pr_create_or_skip "$@"
+  exit $?
+fi
 if [ -z "$PY" ]; then
   printf "%s
 " "ERROR: no usable Python interpreter found. Expected .venv/bin/python, .venv/bin/python3, python3, or python."
