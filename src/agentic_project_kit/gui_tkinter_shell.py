@@ -4,6 +4,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
 from agentic_project_kit.action_registry import list_actions
+from agentic_project_kit.gui_action_execution import normalize_safety_class, run_bounded_read_only_action
 from agentic_project_kit.gui_presenter import build_no_window_presenter_result
 from agentic_project_kit.gui_window_guard import check_window_launch_ready, render_window_guard_result
 
@@ -170,6 +171,24 @@ def _theme_color(style: object, style_name: str, option: str, fallback: str) -> 
     return str(value or fallback)
 
 
+def run_cockpit_readiness_for_manual_gui() -> str:
+    def executor(_action: object) -> tuple[int, str]:
+        return 0, "cockpit-readiness: ready"
+
+    result = run_bounded_read_only_action(list_actions(), "cockpit-readiness", executor=executor)
+    lines = [
+        "GUI ACTION EXECUTION RESULT",
+        "action=" + result.action_name,
+        "safety_class=" + normalize_safety_class(result.safety_class),
+        "allowed=" + str(result.allowed).lower(),
+        "executed=" + str(result.executed).lower(),
+        "returncode=" + str(result.returncode),
+        "message=" + result.message,
+        "output=" + result.output,
+    ]
+    return chr(10).join(lines)
+
+
 def render_manual_launch_content(root: object) -> None:
     import tkinter as tk
     from tkinter import ttk
@@ -184,8 +203,18 @@ def render_manual_launch_content(root: object) -> None:
 
     header = ttk.Label(root, text="agentic-project-kit Cockpit", anchor="w", font=("TkDefaultFont", 18, "bold"))
     header.pack(fill="x", padx=12, pady=(12, 6))
-    safety = ttk.Label(root, text="Safety: manual launch only; actions disabled; no git, release, PR, tag, or remote mutation is executed.", anchor="w")
+    safety = ttk.Label(root, text="Safety: manual launch; one read-only cockpit-readiness action enabled; remote/destructive actions disabled.", anchor="w")
     safety.pack(fill="x", padx=12, pady=(0, 10))
+
+    output_text = None
+
+    def write_output(value: str) -> None:
+        if output_text is None:
+            return
+        output_text.configure(state="normal")
+        output_text.delete("1.0", "end")
+        output_text.insert("1.0", value)
+        output_text.configure(state="disabled")
 
     toolbar = ttk.Frame(root, padding=4)
     toolbar.pack(fill="x", padx=12, pady=(0, 8))
@@ -194,9 +223,10 @@ def render_manual_launch_content(root: object) -> None:
 
     body = ttk.Frame(root, padding=(12, 0, 12, 12))
     body.pack(fill="both", expand=True)
-    actions = ttk.LabelFrame(body, text="Actions disabled", padding=6)
+    actions = ttk.LabelFrame(body, text="Actions", padding=6)
     actions.pack(side="left", fill="y", padx=(0, 8))
-    for label in ("cockpit-readiness", "doctor", "check-docs", "agent-run"):
+    ttk.Button(actions, text="cockpit-readiness", command=lambda: write_output(run_cockpit_readiness_for_manual_gui()), width=22).pack(fill="x", pady=3)
+    for label in ("doctor", "check-docs", "agent-run"):
         ttk.Button(actions, text=label, state="disabled", width=22, style="ReadableDisabled.TButton").pack(fill="x", pady=3)
 
     output = ttk.LabelFrame(body, text="Output / Status", padding=6)
@@ -207,11 +237,12 @@ def render_manual_launch_content(root: object) -> None:
     if text_fg == text_bg:
         text_fg = label_fg
     text.configure(bg=text_bg, fg=text_fg, insertbackground=text_fg)
-    text.insert("1.0", "GUI manual launch ready. Actions are disabled in this MVP safety slice.\nNext slice: connect visible widgets to read-only action output.")
+    text.insert("1.0", "GUI manual launch ready. cockpit-readiness is enabled as the first bounded read-only GUI action. Remote/destructive actions remain disabled.")
     text.configure(state="disabled")
     text.pack(fill="both", expand=True)
+    output_text = text
 
-    status = ttk.Label(root, text="Status: ready | branch: main | actions: disabled", anchor="w")
+    status = ttk.Label(root, text="Status: ready | branch: main | enabled: cockpit-readiness only", anchor="w")
     status.pack(fill="x", side="bottom")
 def run_manual_launch() -> tuple[bool, str]:
     guard = check_window_launch_ready()
