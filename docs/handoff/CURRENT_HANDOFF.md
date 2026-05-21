@@ -284,3 +284,5 @@ Immediate priorities:
 - v0.3.36 run-summary contract evidence is repo-backed in `docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log`; future slices must keep remote terminal evidence visible in the final summary and report standard-error reduction plus GUI preparation after each slice.\n\n- v0.3.36 portability shell-removal inventory is repo-backed in `docs/reports/terminal/v0.3.36_portability_shell_removal_inventory.log`. Tracked shell file count at inventory time: 15. The GUI baseline is not complete until tracked shell adapters are removed or explicitly replaced by Python entry points and a portability gate is active.\n
 
 - v0.3.36 portability rule: new operational behavior must be Python-core first and OS-independent by default; shell files are temporary compatibility shims until removed or explicitly allowlisted by the portability gate.
+
+- v0.3.36 portability status: the Python shell gate is now the source of truth; remaining tracked shell files are explicit GUI-readiness blockers, not hidden TODOs.

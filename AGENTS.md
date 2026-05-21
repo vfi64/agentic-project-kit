@@ -348,6 +348,4 @@ or:
 
 When the marker is `PASS`, the human can reply with a short acknowledgement such as `d`. When the marker is `FAIL`, the relevant output should be shared for diagnosis.
 
-Terminal blocks must avoid heredocs and risky multi-line `python -c` strings. Prefer small script files under `tmp/`, explicit virtualenv paths such as `.venv/bin/python`, and quote-safe one-line shell operations.
-
-Portable-first rule: unless a user explicitly requires a specific operating system, new operational behavior must be implemented in importable Python core modules with argument-vector execution. Shell scripts are compatibility shims only and must not contain core workflow logic.
+Terminal blocks must avoid heredocs and risky multi-line `python -c` strings. Prefer small script files under `tmp/`, explicit virtualenv paths, and quote-safe operations. Operational logic is portable Python-first; shell may only be a temporary compatibility shim.

@@ -330,3 +330,5 @@ Acceptance criteria before GUI work resumes:
 - v0.3.36 run-summary contract evidence is repo-backed in `docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log`; run summaries must expose `terminal_log`, `REMOTE_EVIDENCE`, `STANDARD_ERROR_REDUCTION`, and `GUI_PREPARATION` so standard-error reduction and GUI readiness stay visible after each slice.\n\n- v0.3.36 portability shell-removal inventory is repo-backed in `docs/reports/terminal/v0.3.36_portability_shell_removal_inventory.log`. Tracked shell file count at inventory time: 15. The GUI baseline is not complete until tracked shell adapters are removed or explicitly replaced by Python entry points and a portability gate is active.\n
 
 - v0.3.36 adds the portability meta-rule and begins enforcing shell-removal through a Python portability gate core; GUI readiness requires Python-backed operational control surfaces rather than shell-first workflows.
+
+- v0.3.36 adds a tested portability shell gate core. Until blocking tracked shell files are ported or explicitly allowlisted, GUI preparation remains incomplete.

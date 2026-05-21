@@ -2,39 +2,44 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import subprocess
+import sys
 
-DEFAULT_EXCLUDED_PARTS = {".git", ".venv", "dist", "build", "__pycache__"}
 DEFAULT_ALLOWED_PREFIXES = ("tmp/",)
 
 @dataclass(frozen=True)
-class PortabilityShellGateResult:
-    ok: bool
+class PortabilityShellGateReport:
     shell_files: tuple[str, ...]
     blocking_shell_files: tuple[str, ...]
 
-def _is_excluded(path: Path) -> bool:
-    return any(part in DEFAULT_EXCLUDED_PARTS for part in path.parts)
+    @property
+    def ok(self) -> bool:
+        return not self.blocking_shell_files
 
-def _is_allowed(path_text: str, allowed_prefixes: tuple[str, ...]) -> bool:
-    normalized = path_text.removeprefix("./")
-    return any(normalized.startswith(prefix) for prefix in allowed_prefixes)
+def _tracked_shell_files(project_root: Path) -> tuple[str, ...]:
+    result = subprocess.run(("git", "ls-files", "*.sh"), cwd=project_root, text=True, capture_output=True, check=False)
+    if result.returncode != 0:
+        return ()
+    return tuple(sorted(line.strip() for line in result.stdout.splitlines() if line.strip()))
 
-def build_portability_shell_gate_report(project_root: Path, allowed_prefixes: tuple[str, ...] = DEFAULT_ALLOWED_PREFIXES) -> PortabilityShellGateResult:
-    shell_files: list[str] = []
-    for path in sorted(project_root.rglob("*.sh")):
-        rel = path.relative_to(project_root)
-        if _is_excluded(rel):
-            continue
-        shell_files.append(rel.as_posix())
-    blocking = tuple(item for item in shell_files if not _is_allowed(item, allowed_prefixes))
-    return PortabilityShellGateResult(ok=not blocking, shell_files=tuple(shell_files), blocking_shell_files=blocking)
+def build_portability_shell_gate_report(project_root: Path, allowed_prefixes: tuple[str, ...] = DEFAULT_ALLOWED_PREFIXES) -> PortabilityShellGateReport:
+    files = _tracked_shell_files(project_root)
+    blocking = tuple(path for path in files if not path.startswith(allowed_prefixes))
+    return PortabilityShellGateReport(shell_files=files, blocking_shell_files=blocking)
 
-def render_portability_shell_gate_report(result: PortabilityShellGateResult) -> str:
-    lines = ["Portability shell gate report"]
-    lines.append(f"shell_file_count={len(result.shell_files)}")
-    lines.append(f"blocking_shell_file_count={len(result.blocking_shell_files)}")
-    if result.blocking_shell_files:
+def render_portability_shell_gate_report(report: PortabilityShellGateReport) -> str:
+    lines = ["Portability shell gate report", f"shell_file_count={len(report.shell_files)}", f"blocking_shell_file_count={len(report.blocking_shell_files)}"]
+    if report.blocking_shell_files:
         lines.append("Blocking shell files:")
-        lines.extend(f"- {item}" for item in result.blocking_shell_files)
-    lines.append("### RESULT: PASS ###" if result.ok else "### RESULT: FAIL ###")
+        lines.extend(f"- {path}" for path in report.blocking_shell_files)
+    lines.append("### RESULT: PASS ###" if report.ok else "### RESULT: FAIL ###")
     return "\n".join(lines)
+
+def main(argv: list[str] | None = None) -> int:
+    root = Path.cwd()
+    report = build_portability_shell_gate_report(root)
+    print(render_portability_shell_gate_report(report))
+    return 0 if report.ok else 1
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))
