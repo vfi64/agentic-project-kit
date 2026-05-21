@@ -279,3 +279,5 @@ Immediate priorities:
 - v0.3.35 is fully closed: release-gate core extraction, PR closeout idempotency, DOI metadata, and post-release verification are complete. Next recommended line: start the first bounded Tkinter cockpit MVP readiness slice only after a fresh read-only readiness check.
 
 - v0.3.36 documentation cleanup is now the active preparation step before the Tkinter MVP: README current-state wording and CHANGELOG release semantics must be cleaned up and tested first. Do not start GUI implementation in this slice.\n\n- v0.3.36 standard-error hardening started: Remote-log evidence is mandatory for standard-error hardening slices; summaries must include `terminal_log=docs/reports/terminal/...`, `command_report=...`, and `NEXT_CHAT_REPLY`. FAIL without terminal kill uses NEXT_CHAT_REPLY: f so the next step reconstructs from the remote log before asking for pasted terminal output.\n
+
+- v0.3.36 standard-error hardening slice 1 evidence is committed under `docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log`; on future FAIL without terminal kill, request only `f` first and reconstruct from remote evidence before asking for paste-output.
