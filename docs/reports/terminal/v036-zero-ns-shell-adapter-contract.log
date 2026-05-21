@@ -1,0 +1,63 @@
+
+### SYNC MAIN AND CREATE FEATURE BRANCH ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+Switched to a new branch 'feature/v036-zero-ns-shell-adapter-contract'
+
+### MODE GUARD ###
+EXECUTION MODE STATE CHECK
+target=local
+state=LOCAL_READY
+branch=feature/v036-zero-ns-shell-adapter-contract
+dirty=false
+venv_available=true
+required_tools:
+  gh: ok
+  git: ok
+  ruff: ok
+findings:
+  - none
+### RESULT: PASS ###
+
+### WRITE REGRESSION TEST ###
+
+### TARGETED TESTS ###
+.....                                                                    [100%]
+5 passed in 0.04s
+
+### FULL LOCAL GATES ###
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+........................................................................ [ 31%]
+........................................................................ [ 41%]
+........................................................................ [ 52%]
+........................................................................ [ 62%]
+........................................................................ [ 73%]
+........................................................................ [ 83%]
+........................................................................ [ 94%]
+.......................................                                  [100%]
+687 passed in 3.98s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### SAVE LOG AND COMMIT IF GREEN ###
