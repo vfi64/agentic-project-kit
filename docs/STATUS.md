@@ -323,3 +323,5 @@ Acceptance criteria before GUI work resumes:
 - v0.3.35 is published and verified with Zenodo version DOI `10.5281/zenodo.20316280`.
 
 - v0.3.35 release-gate/core consolidation is released and DOI metadata is recorded; v0.3.35 is closed for pre-GUI core consolidation.
+
+- v0.3.36 current-state cleanup started as a documentation-only line: normalize README current-release wording, make the v0.3.35 CHANGELOG entry describe the actual delivered work, clarify GUI/cockpit status, and lock release-phase semantics in tests before any bounded Tkinter MVP work.

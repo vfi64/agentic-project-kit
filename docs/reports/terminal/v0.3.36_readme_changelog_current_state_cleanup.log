@@ -1,0 +1,96 @@
+V0.3.36 README CHANGELOG CURRENT STATE CLEANUP LOG
+
+
+### WRITE DOC PATCH SCRIPT ###
+
+### APPLY DOC PATCH ###
+
+### WRITE DOC CONTRACT TESTS ###
+
+### SHOW DIFF ###
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index fb169b2..3fed93e 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -1,6 +1,15 @@
+-## v0.3.35
++## v0.3.36 - Unreleased
+ 
+-- Prepare release metadata for v0.3.35.
++- Clean up README and CHANGELOG current-state wording before starting the first bounded Tkinter cockpit MVP slice.
++- Keep this release line documentation-only unless a separate tested implementation slice is explicitly opened.
++
++## v0.3.35 - 2026-05-20
++
++- Released the pre-GUI core and CLI consolidation line with verified Zenodo version DOI `10.5281/zenodo.20316280`.
++- Expanded regression coverage for finalize-guard, local-feature-gate, and release-DOI safety behavior.
++- Wired finalize-guard shell classification to the tested Python decision core.
++- Treated already-merged PR closeout as an idempotent completion state instead of a false failure.
++- Extracted release-gate behavior into the tested Python `release_gate_core`, leaving `tools/ns_release_gate.sh` as a thin adapter.
+ 
+ ## v0.3.34 - 2026-05-20
+ 
+diff --git a/README.md b/README.md
+index fb9702c..ae17e74 100644
+--- a/README.md
++++ b/README.md
+@@ -519,15 +519,6 @@ agentic-kit scaffold planning-doc "GUI i18n Foundation" \
+ ```
+ 
+ The command writes a document under `docs/planning/` by default, includes `Status`, `Decision status`, `Scope`, and `Review policy`, and refuses to overwrite an existing file unless `--overwrite` is passed.
+-Version `0.3.23` is the current release line prepared by `./ns release-prep 0.3.23`.
+-Version `0.3.24` is the current release line prepared by `./ns release-prep 0.3.24`.
+-Version `0.3.25` is the current release line prepared by `./ns release-prep 0.3.25`.
+-Version `0.3.26` is the current release line prepared by `./ns release-prep 0.3.26`.
+-Version `0.3.27` is the current release line prepared by `./ns release-prep 0.3.27`.
+-Version `0.3.29` is the current verified release; Zenodo version DOI `10.5281/zenodo.20303218`.
+-Version `0.3.30` is the current released line with verified version-specific DOI `10.5281/zenodo.20308526`.
+-Version `0.3.31` is the current verified release; Zenodo version DOI `10.5281/zenodo.20313834`.
+-v0.3.32 DOI: `10.5281/zenodo.20314341`.
+-Version `0.3.34` is the current verified release; Zenodo version DOI `10.5281/zenodo.20315568`.
+-Version `0.3.35` is the current release line prepared by `./ns release-prep 0.3.35`.
+-Version `0.3.35` is the current verified release; Zenodo version DOI `10.5281/zenodo.20316280`.
++Current verified release: version `0.3.35`, Zenodo version DOI `10.5281/zenodo.20316280`.
++
++Earlier verified version-specific DOIs are intentionally maintained in `docs/releases/VERIFIED_RELEASES.md` instead of duplicating a long and drift-prone release ledger in the README.
+diff --git a/docs/STATUS.md b/docs/STATUS.md
+index f94c3aa..b890e3a 100644
+--- a/docs/STATUS.md
++++ b/docs/STATUS.md
+@@ -323,3 +323,5 @@ Acceptance criteria before GUI work resumes:
+ - v0.3.35 is published and verified with Zenodo version DOI `10.5281/zenodo.20316280`.
+ 
+ - v0.3.35 release-gate/core consolidation is released and DOI metadata is recorded; v0.3.35 is closed for pre-GUI core consolidation.
++
++- v0.3.36 current-state cleanup started as a documentation-only line: normalize README current-release wording, make the v0.3.35 CHANGELOG entry describe the actual delivered work, clarify GUI/cockpit status, and lock release-phase semantics in tests before any bounded Tkinter MVP work.
+diff --git a/docs/handoff/CURRENT_HANDOFF.md b/docs/handoff/CURRENT_HANDOFF.md
+index 460eec9..7f03347 100644
+--- a/docs/handoff/CURRENT_HANDOFF.md
++++ b/docs/handoff/CURRENT_HANDOFF.md
+@@ -277,3 +277,5 @@ Immediate priorities:
+ - v0.3.35 is published and verified with Zenodo version DOI `10.5281/zenodo.20316280`.
+ 
+ - v0.3.35 is fully closed: release-gate core extraction, PR closeout idempotency, DOI metadata, and post-release verification are complete. Next recommended line: start the first bounded Tkinter cockpit MVP readiness slice only after a fresh read-only readiness check.
++
++- v0.3.36 documentation cleanup is now the active preparation step before the Tkinter MVP: README current-state wording and CHANGELOG release semantics must be cleaned up and tested first. Do not start GUI implementation in this slice.
+
+### TARGETED TESTS ###
+...F....                                                                 [100%]
+=================================== FAILURES ===================================
+_______ test_release_phase_semantics_are_explicit_in_readme_and_handoff ________
+
+    def test_release_phase_semantics_are_explicit_in_readme_and_handoff():
+        readme = Path("README.md").read_text(encoding="utf-8")
+        handoff = Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
+>       assert "release-check is a pre-release gate" in readme
+E       AssertionError: assert 'release-check is a pre-release gate' in '# Agentic Project Kit\n\n[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/z... in `docs/releases/VERIFIED_RELEASES.md` instead of duplicating a long and drift-prone release ledger in the README.\n'
+
+tests/test_v036_current_state_docs.py:31: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v036_current_state_docs.py::test_release_phase_semantics_are_explicit_in_readme_and_handoff
+1 failed, 7 passed in 0.03s
+
+Saving session...
+...copying shared history...
+...saving history...truncating history files...
+...completed.

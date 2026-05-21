@@ -233,7 +233,7 @@ agentic-kit release-check --version 0.3.4
 
 These commands help prevent release-state drift between `pyproject.toml`, `CHANGELOG.md`, project state files, local tags, remote tags, GitHub releases, and citation metadata.
 
-This post-release command is separate from release-check: `release-check` is the pre-release gate, while `post-release-check` verifies the already-published release and its Zenodo archive state.
+This post-release command is separate from release-check: release-check is a pre-release gate, while post-release-check verifies the already-published release and its Zenodo archive state.
 
 Use `agentic-kit post-release-check` after publishing a GitHub release:
 
@@ -519,15 +519,6 @@ agentic-kit scaffold planning-doc "GUI i18n Foundation" \
 ```
 
 The command writes a document under `docs/planning/` by default, includes `Status`, `Decision status`, `Scope`, and `Review policy`, and refuses to overwrite an existing file unless `--overwrite` is passed.
-Version `0.3.23` is the current release line prepared by `./ns release-prep 0.3.23`.
-Version `0.3.24` is the current release line prepared by `./ns release-prep 0.3.24`.
-Version `0.3.25` is the current release line prepared by `./ns release-prep 0.3.25`.
-Version `0.3.26` is the current release line prepared by `./ns release-prep 0.3.26`.
-Version `0.3.27` is the current release line prepared by `./ns release-prep 0.3.27`.
-Version `0.3.29` is the current verified release; Zenodo version DOI `10.5281/zenodo.20303218`.
-Version `0.3.30` is the current released line with verified version-specific DOI `10.5281/zenodo.20308526`.
-Version `0.3.31` is the current verified release; Zenodo version DOI `10.5281/zenodo.20313834`.
-v0.3.32 DOI: `10.5281/zenodo.20314341`.
-Version `0.3.34` is the current verified release; Zenodo version DOI `10.5281/zenodo.20315568`.
-Version `0.3.35` is the current release line prepared by `./ns release-prep 0.3.35`.
-Version `0.3.35` is the current verified release; Zenodo version DOI `10.5281/zenodo.20316280`.
+Current verified release: version `0.3.35`, Zenodo version DOI `10.5281/zenodo.20316280`.
+
+Earlier verified version-specific DOIs are intentionally maintained in `docs/releases/VERIFIED_RELEASES.md` instead of duplicating a long and drift-prone release ledger in the README.

@@ -1,6 +1,15 @@
-## v0.3.35
+## v0.3.36 - Unreleased
 
-- Prepare release metadata for v0.3.35.
+- Clean up README and CHANGELOG current-state wording before starting the first bounded Tkinter cockpit MVP slice.
+- Keep this release line documentation-only unless a separate tested implementation slice is explicitly opened.
+
+## v0.3.35 - 2026-05-20
+
+- Released the pre-GUI core and CLI consolidation line with verified Zenodo version DOI `10.5281/zenodo.20316280`.
+- Expanded regression coverage for finalize-guard, local-feature-gate, and release-DOI safety behavior.
+- Wired finalize-guard shell classification to the tested Python decision core.
+- Treated already-merged PR closeout as an idempotent completion state instead of a false failure.
+- Extracted release-gate behavior into the tested Python `release_gate_core`, leaving `tools/ns_release_gate.sh` as a thin adapter.
 
 ## v0.3.34 - 2026-05-20
 

@@ -277,3 +277,5 @@ Immediate priorities:
 - v0.3.35 is published and verified with Zenodo version DOI `10.5281/zenodo.20316280`.
 
 - v0.3.35 is fully closed: release-gate core extraction, PR closeout idempotency, DOI metadata, and post-release verification are complete. Next recommended line: start the first bounded Tkinter cockpit MVP readiness slice only after a fresh read-only readiness check.
+
+- v0.3.36 documentation cleanup is now the active preparation step before the Tkinter MVP: README current-state wording and CHANGELOG release semantics must be cleaned up and tested first. Do not start GUI implementation in this slice.
