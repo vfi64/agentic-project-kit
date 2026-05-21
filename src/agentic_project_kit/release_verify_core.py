@@ -2,8 +2,25 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import re
 import subprocess
 import time
+
+
+SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
+
+
+def usage() -> str:
+    return "usage: ./ns release-verify <version>"
+
+
+def is_help_arg(value: str) -> bool:
+    return value in {"-h", "--help"}
+
+
+def is_valid_semver(value: str) -> bool:
+    plain = value[1:] if value.startswith("v") else value
+    return bool(SEMVER_RE.fullmatch(plain))
 
 
 @dataclass(frozen=True)
@@ -140,6 +157,13 @@ def main(argv: list[str] | None = None) -> int:
     args = argv if argv is not None else []
     if not args:
         print("ERROR: usage: ./ns release-verify <version>")
+        print("\n### RESULT: FAIL ###")
+        return 2
+    if is_help_arg(args[0]):
+        print(usage())
+        return 0
+    if not is_valid_semver(args[0]):
+        print(f"ERROR: invalid semantic version: {args[0]}")
         print("\n### RESULT: FAIL ###")
         return 2
     return verify_release(args[0], Path(".").resolve())

@@ -1,0 +1,169 @@
+
+### VERIFY DIRTY REPAIR CONTEXT ###
+fix/v0.3.36-release-route-help-safety
+ M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? docs/reports/terminal/v036-release-route-help-safety-fix.log
+?? docs/reports/terminal/v036-release-route-help-safety-regex-repair.log
+?? docs/reports/terminal/v036-release-route-help-safety-robust-regex-repair.log
+?? tests/test_v036_release_route_help_safety.py
+
+### RESTORE BROKEN MODULE PATCHES FROM HEAD ###
+
+### REMOVE BROKEN GENERATED TEST IF PRESENT ###
+
+### WRITE CLEAN LINE-BASED PATCH SCRIPT ###
+zsh: command not found: #
+
+### APPLY CLEAN PATCH ###
+
+### SYNTAX CHECK MODULES ###
+
+### TARGETED TESTS ###
+....................................................                     [100%]
+52 passed in 0.06s
+
+### REAL HELP SAFETY SMOKE ###
+
+--- ./ns release-prep --help ---
+usage: ./ns release-prep <version>
+after_branch_release-prep=fix/v0.3.36-release-route-help-safety
+after_status_release-prep= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? docs/reports/terminal/v036-release-route-help-safety-fix.log
+?? docs/reports/terminal/v036-release-route-help-safety-regex-repair.log
+?? docs/reports/terminal/v036-release-route-help-safety-robust-regex-repair.log
+?? tests/test_v036_release_route_help_safety.py
+
+--- ./ns release-gate --help ---
+usage: ./ns release-gate <version>
+after_branch_release-gate=fix/v0.3.36-release-route-help-safety
+after_status_release-gate= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? docs/reports/terminal/v036-release-route-help-safety-fix.log
+?? docs/reports/terminal/v036-release-route-help-safety-regex-repair.log
+?? docs/reports/terminal/v036-release-route-help-safety-robust-regex-repair.log
+?? tests/test_v036_release_route_help_safety.py
+
+--- ./ns release-publish --help ---
+usage: ./ns release-publish <version> publish-v<version>
+after_branch_release-publish=fix/v0.3.36-release-route-help-safety
+after_status_release-publish= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? docs/reports/terminal/v036-release-route-help-safety-fix.log
+?? docs/reports/terminal/v036-release-route-help-safety-regex-repair.log
+?? docs/reports/terminal/v036-release-route-help-safety-robust-regex-repair.log
+?? tests/test_v036_release_route_help_safety.py
+
+--- ./ns release-verify --help ---
+usage: ./ns release-verify <version>
+after_branch_release-verify=fix/v0.3.36-release-route-help-safety
+after_status_release-verify= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? docs/reports/terminal/v036-release-route-help-safety-fix.log
+?? docs/reports/terminal/v036-release-route-help-safety-regex-repair.log
+?? docs/reports/terminal/v036-release-route-help-safety-robust-regex-repair.log
+?? tests/test_v036_release_route_help_safety.py
+
+### INVALID VERSION SAFETY SMOKE ###
+
+--- ./ns release-prep --help-like ---
+ERROR: invalid semantic version: --help-like
+
+### RESULT: FAIL ###
+invalid_status_release-prep=2
+after_invalid_branch_release-prep=fix/v0.3.36-release-route-help-safety
+after_invalid_status_release-prep= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? docs/reports/terminal/v036-release-route-help-safety-fix.log
+?? docs/reports/terminal/v036-release-route-help-safety-regex-repair.log
+?? docs/reports/terminal/v036-release-route-help-safety-robust-regex-repair.log
+?? tests/test_v036_release_route_help_safety.py
+
+--- ./ns release-gate --help-like ---
+ERROR: invalid semantic version: --help-like
+### RESULT: FAIL ###
+invalid_status_release-gate=2
+after_invalid_branch_release-gate=fix/v0.3.36-release-route-help-safety
+after_invalid_status_release-gate= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? docs/reports/terminal/v036-release-route-help-safety-fix.log
+?? docs/reports/terminal/v036-release-route-help-safety-regex-repair.log
+?? docs/reports/terminal/v036-release-route-help-safety-robust-regex-repair.log
+?? tests/test_v036_release_route_help_safety.py
+
+--- ./ns release-publish --help-like ---
+ERROR: invalid semantic version: --help-like
+
+### RESULT: FAIL ###
+invalid_status_release-publish=2
+after_invalid_branch_release-publish=fix/v0.3.36-release-route-help-safety
+after_invalid_status_release-publish= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? docs/reports/terminal/v036-release-route-help-safety-fix.log
+?? docs/reports/terminal/v036-release-route-help-safety-regex-repair.log
+?? docs/reports/terminal/v036-release-route-help-safety-robust-regex-repair.log
+?? tests/test_v036_release_route_help_safety.py
+
+--- ./ns release-verify --help-like ---
+ERROR: invalid semantic version: --help-like
+
+### RESULT: FAIL ###
+invalid_status_release-verify=2
+after_invalid_branch_release-verify=fix/v0.3.36-release-route-help-safety
+after_invalid_status_release-verify= M src/agentic_project_kit/release_gate_core.py
+ M src/agentic_project_kit/release_prep_core.py
+ M src/agentic_project_kit/release_publish_core.py
+ M src/agentic_project_kit/release_verify_core.py
+?? docs/reports/terminal/v036-release-route-help-safety-fix.log
+?? docs/reports/terminal/v036-release-route-help-safety-regex-repair.log
+?? docs/reports/terminal/v036-release-route-help-safety-robust-regex-repair.log
+?? tests/test_v036_release_route_help_safety.py
+
+### FULL LOCAL GATES ###
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+........................................................................ [ 30%]
+........................................................................ [ 41%]
+........................................................................ [ 51%]
+........................................................................ [ 61%]
+........................................................................ [ 72%]
+........................................................................ [ 82%]
+........................................................................ [ 92%]
+..................................................                       [100%]
+698 passed in 4.13s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.35
+
+Overall: PASS
+
+### COPY CLEAN REPAIR LOG FOR COMMIT ###
