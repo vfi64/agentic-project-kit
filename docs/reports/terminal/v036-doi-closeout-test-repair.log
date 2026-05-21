@@ -1,0 +1,193 @@
+
+### REPAIR PRECHECK ###
+docs/record-v0.3.36-doi
+ M CHANGELOG.md
+ M CITATION.cff
+ M README.md
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M docs/releases/VERIFIED_RELEASES.md
+?? docs/reports/terminal/v036-doi-metadata-closeout-repair.log
+?? docs/reports/terminal/v036-doi-metadata-closeout.log
+369e920 Record v0.3.36 release publish log
+45ffd3f Record v0.3.36 release gate log
+0fb4d18 Record v0.3.36 release metadata merge verification log
+f9f5c41 Prepare v0.3.36 release metadata after audit runner hardening (#611)
+76f528a Record audit runner standard-error fix merge verification log
+9f9134f Add deterministic audit test matrix runner (#610)
+b8d9642 Record release route help safety merge verification log
+c8b20d5 Harden release route help and version safety (#609)
+aba41cd Record doc rules contract hardening merge verification log
+09aa3a7 Document v0.3.36 workflow safety rules (#608)
+0de7d27 Record summary and ack audit hardening merge verification log
+b572c9b Harden summary renderer and terminal acknowledgement audit contract (#607)
+
+### EXPECTED DIRTY STATE CHECK ###
+ M CHANGELOG.md
+ M CITATION.cff
+ M README.md
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M docs/releases/VERIFIED_RELEASES.md
+?? docs/reports/terminal/v036-doi-metadata-closeout-repair.log
+?? docs/reports/terminal/v036-doi-metadata-closeout.log
+
+### PATCH STALE POST-RELEASE TESTS ###
+
+### TEST DIFF ###
+diff --git a/tests/test_v036_current_state_docs.py b/tests/test_v036_current_state_docs.py
+index ceb361d..9a80038 100644
+--- a/tests/test_v036_current_state_docs.py
++++ b/tests/test_v036_current_state_docs.py
+@@ -3,7 +3,7 @@ from pathlib import Path
+ 
+ def test_readme_has_single_current_verified_release_statement():
+     text = Path("README.md").read_text(encoding="utf-8")
+-    assert "Current verified release: version `0.3.35`" in text
++    assert "Current verified release: version `0.3.36`" in text
+     assert "Version `0.3.35` is the current release line prepared" not in text
+     assert "Earlier verified version-specific DOIs are intentionally maintained in `docs/releases/VERIFIED_RELEASES.md`" in text
+ 
+@@ -11,7 +11,7 @@ def test_readme_has_single_current_verified_release_statement():
+ def test_changelog_v035_describes_actual_delivered_work():
+     text = Path("CHANGELOG.md").read_text(encoding="utf-8")
+     head = text.split("## v0.3.34", 1)[0]
+-    assert "## v0.3.36 - Unreleased" in head
++    assert "## v0.3.36 - 2026-05-21" in head
+     assert "## v0.3.35 - 2026-05-20" in head
+     assert "release_gate_core" in head
+     assert "Prepare release metadata for v0.3.35." not in head
+
+### VERIFY DOI TEXT ###
+CITATION.cff:47:# Verified v0.3.36 version DOI: 10.5281/zenodo.20329180
+README.md:522:Current verified release: version `0.3.36`, Zenodo version DOI `10.5281/zenodo.20329180`.
+CHANGELOG.md:3:- Verified Zenodo version DOI: `10.5281/zenodo.20329180`.
+docs/STATUS.md:220:- v0.3.36 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329180`. Release publish evidence is recorded in `docs/reports/terminal/v036-release-publish.log`.
+docs/handoff/CURRENT_HANDOFF.md:323:- v0.3.36 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329180`. Next planned line: v0.3.37 final GUI-preparation closeout before GUI MVP implementation.
+docs/releases/VERIFIED_RELEASES.md:55:- `v0.3.36` / `0.3.36`: Zenodo version DOI `10.5281/zenodo.20329180`; concept DOI `10.5281/zenodo.20101359`.
+docs/STATUS.md:33:Zenodo concept DOI: `10.5281/zenodo.20101359`
+docs/STATUS.md:220:- v0.3.36 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329180`. Release publish evidence is recorded in `docs/reports/terminal/v036-release-publish.log`.
+docs/handoff/CURRENT_HANDOFF.md:323:- v0.3.36 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329180`. Next planned line: v0.3.37 final GUI-preparation closeout before GUI MVP implementation.
+docs/releases/VERIFIED_RELEASES.md:11:For citation across versions, prefer the all-versions DOI: `10.5281/zenodo.20101359`.
+docs/releases/VERIFIED_RELEASES.md:55:- `v0.3.36` / `0.3.36`: Zenodo version DOI `10.5281/zenodo.20329180`; concept DOI `10.5281/zenodo.20101359`.
+
+### POST RELEASE CHECK ###
+title:	v0.3.36
+tag:	v0.3.36
+draft:	false
+prerelease:	false
+immutable:	false
+author:	github-actions[bot]
+created:	2026-05-21T16:21:31Z
+published:	2026-05-21T16:23:02Z
+url:	https://github.com/vfi64/agentic-project-kit/releases/tag/v0.3.36
+asset:	agentic_project_kit-0.3.36-py3-none-any.whl
+asset:	agentic_project_kit-0.3.36.tar.gz
+--
+## What's Changed
+* Record v0.3.35 DOI metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/549
+* Finalize state after v0.3.35 DOI metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/550
+* Clean v0.3.36 current-state documentation by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/551
+* Lock already merged PR recovery semantics by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/552
+* Record v0.3.36 standard error contract prep by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/553
+* Harden v0.3.36 standard error contracts by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/554
+* Record v0.3.36 standard error hardening evidence by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/555
+* Record v0.3.36 stray terminal logs by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/556
+* Add run summary contract core by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/557
+* Record v0.3.36 run summary contract evidence by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/558
+* Record v0.3.36 run summary evidence merge verification by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/559
+* Record v0.3.36 portable core baseline inventory by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/560
+* Record v0.3.36 portability shell removal inventory by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/561
+* Record v0.3.36 portability gate fail recovery evidence by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/563
+* Split portability rule out of AGENTS and lock summary fail contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/566
+* Record v0.3.36 AGENTS rule split merge evidence by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/567
+* Remove finalize guard shell adapter by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/569
+* Remove safe remove diagnostic shell adapter by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/570
+* Add remote inspection evidence contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/571
+* Remove clean evidence shell adapter by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/572
+* Remove clean-evidence shell adapter by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/573
+* Add execution state guard by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/574
+* Add ns execution mode state shortcuts by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/575
+* Remove commit-guard shell adapter by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/576
+* Accept venv tools in execution mode guard by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/577
+* Add Python PR cleanup classifier by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/578
+* Remove pr-cleanup shell adapter by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/579
+* Add Python ns slice runner core by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/580
+* Remove slice-runner shell adapter by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/581
+* Remove release-gate shell adapter by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/582
+* Add Python release verify core by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/583
+* Remove release-verify shell adapter by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/584
+* Add Python release prep core by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/585
+* Remove release-prep shell adapter by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/586
+* Add Python release publish core by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/587
+* Remove release-publish shell adapter by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/588
+* Add Python ns up core by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/589
+* Remove ns up shell adapter by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/590
+* Document remaining v0.3.36 workplan after shell-adapter removal by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/591
+* Refresh status and handoff for v0.3.36 shell-removal baseline by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/592
+* Add deterministic v0.3.36 rule hardening tests by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/593
+* Harden ns Python interpreter routing by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/594
+* Harden terminal log mandate for local mutation blocks by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/595
+* Harden final summary execution origin format by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/596
+* Harden logged block status propagation by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/597
+* Add communication summary id contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/598
+* Record shell adapter inventory baseline by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/599
+* Remove final pr-create shell adapter by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/600
+* Document v0.3.36 shell adapter removal closeout by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/601
+* Add deterministic run summary renderer by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/602
+* Require explicit slice name for communication summaries by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/603
+* Harden summary renderer CLI usage contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/604
+* Add zero ns shell adapter regression contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/605
+* Refresh v0.3.36 shell removal closeout status by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/606
+* Harden summary renderer and terminal acknowledgement audit contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/607
+* Document v0.3.36 workflow safety rules by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/608
+* Harden release route help and version safety by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/609
+* Add deterministic audit test matrix runner by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/610
+* Prepare v0.3.36 release metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/611
+
+
+**Full Changelog**: https://github.com/vfi64/agentic-project-kit/compare/v0.3.35...v0.3.36
+Post-release check for target v0.3.36
+
+[PASS] GitHub release: GitHub release exists: v0.3.36
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.3.36: 10.5281/zenodo.20329180
+
+Overall: PASS
+
+
+### TARGETED TESTS ###
+....                                                                     [100%]
+4 passed in 0.02s
+
+### FULL LOCAL GATES WITHOUT RELEASE-CHECK ###
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+........................................................................ [ 30%]
+........................................................................ [ 41%]
+........................................................................ [ 51%]
+........................................................................ [ 61%]
+........................................................................ [ 71%]
+........................................................................ [ 82%]
+........................................................................ [ 92%]
+.....................................................                    [100%]
+701 passed in 4.00s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.36
+
+Overall: PASS
+
+### COPY TEST REPAIR LOG FOR COMMIT ###

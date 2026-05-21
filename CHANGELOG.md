@@ -1,4 +1,6 @@
-## v0.3.36 - Unreleased
+## v0.3.36 - 2026-05-21
+
+- Verified Zenodo version DOI: `10.5281/zenodo.20329180`.
 
 - Clean up README and CHANGELOG current-state wording before starting the first bounded Tkinter cockpit MVP slice.
 - Keep this release line documentation-only unless a separate tested implementation slice is explicitly opened.
