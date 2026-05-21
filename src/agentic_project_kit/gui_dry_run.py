@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from types import SimpleNamespace
 import importlib
 from pathlib import Path
-from typing import Sequence
 
 from agentic_project_kit.action_registry import list_actions
 from agentic_project_kit.gui_presenter import build_no_window_presenter_result
+from agentic_project_kit.gui_action_execution import run_bounded_read_only_action
 from agentic_project_kit.gui_layout_plan import build_layout_plan, render_layout_plan
 from agentic_project_kit.gui_tkinter_renderer import render_layout_to_tkinter, render_tkinter_result_summary
 from agentic_project_kit.gui_window_guard import check_window_launch_ready, render_window_guard_result
@@ -142,17 +143,60 @@ def render_result(result: GuiDryRunResult) -> str:
     ])
     return "\n".join(lines)
 
+# GUI_EXECUTION_RESULT_WIRING_OVERRIDE_BEGIN
+_run_gui_dry_run_base = run_gui_dry_run
+_render_result_base = render_result
 
-def main(argv: Sequence[str] | None = None) -> int:
-    args = list(argv or [])
-    if args and args != ["--dry-run"]:
-        print("ERROR: usage: python -m agentic_project_kit.gui_dry_run --dry-run")
-        print("### RESULT: FAIL ###")
-        return 2
-    result = run_gui_dry_run()
-    print(render_result(result))
-    return result.exit_code
+def run_gui_dry_run(project_root: Path | None = None, *, action_name: str | None = None):
+    base_result = _run_gui_dry_run_base(project_root)
+    if not action_name:
+        return base_result
+    execution_result = run_bounded_read_only_action(list_actions(), action_name)
+    return SimpleNamespace(base_result=base_result, execution_result=execution_result)
 
+def render_result(result) -> str:
+    base_result = getattr(result, "base_result", result)
+    output = _render_result_base(base_result)
+    execution = getattr(result, "execution_result", None)
+    if execution is None:
+        return output
+    lines = output.splitlines()
+    safety_class = str(getattr(execution.safety_class, "value", execution.safety_class)).strip().lower().replace("_", "-").rsplit(".", 1)[-1]
+    execution_lines = [
+        "execution_result_begin",
+        "GUI ACTION EXECUTION RESULT",
+        f"action={execution.action_name}",
+        f"safety_class={safety_class}",
+        f"allowed={str(execution.allowed).lower()}",
+        f"executed={str(execution.executed).lower()}",
+        f"returncode={execution.returncode}",
+        f"message={execution.message}",
+        f"output={execution.output}",
+        "execution_result_end",
+    ]
+    if "real_window_opened=false" in lines:
+        index = lines.index("real_window_opened=false")
+        lines[index:index] = execution_lines
+    else:
+        lines.extend(execution_lines)
+    return chr(10).join(lines)
+
+def main(argv: list[str] | None = None) -> int:
+    import sys
+    args = list(sys.argv[1:] if argv is None else argv)
+    action_name = None
+    if args == ["--dry-run"]:
+        args = []
+    if args:
+        if len(args) == 2 and args[0] == "--action":
+            action_name = args[1]
+        else:
+            print("usage: ./ns gui [--action ACTION_NAME]")
+            print("### RESULT: FAIL ###")
+            return 2
+    print(render_result(run_gui_dry_run(action_name=action_name)))
+    return 0
+# GUI_EXECUTION_RESULT_WIRING_OVERRIDE_END
 
 if __name__ == "__main__":
     import sys

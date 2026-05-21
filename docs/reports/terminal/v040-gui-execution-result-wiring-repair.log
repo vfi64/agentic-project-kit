@@ -1,0 +1,327 @@
+
+### PRECHECK DIRTY REPAIR STATE ###
+feature/v0.4.0-gui-execution-result-wiring
+?? docs/reports/terminal/v040-gui-execution-result-wiring.log
+?? tests/test_v040_gui_execution_result_wiring.py
+
+### EXACT CURRENT GUI_DRY_RUN BEFORE REPAIR ###
+     1	from __future__ import annotations
+     2	
+     3	from dataclasses import dataclass
+     4	import importlib
+     5	from pathlib import Path
+     6	from typing import Sequence
+     7	
+     8	from agentic_project_kit.action_registry import list_actions
+     9	from agentic_project_kit.gui_presenter import build_no_window_presenter_result
+    10	from agentic_project_kit.gui_layout_plan import build_layout_plan, render_layout_plan
+    11	from agentic_project_kit.gui_tkinter_renderer import render_layout_to_tkinter, render_tkinter_result_summary
+    12	from agentic_project_kit.gui_window_guard import check_window_launch_ready, render_window_guard_result
+    13	from agentic_project_kit.gui_output_status_panel import build_output_status_panel, render_output_status_panel
+    14	
+    15	
+    16	@dataclass(frozen=True)
+    17	class GuiDryRunResult:
+    18	    ok: bool
+    19	    tkinter_available: bool
+    20	    action_registry_available: bool
+    21	    action_specs_available: bool
+    22	    presenter_available: bool
+    23	    presenter_action_count: int
+    24	    presenter_preview: str
+    25	    mode_guard_available: bool
+    26	    shell_adapters_absent: bool
+    27	    message: str
+    28	
+    29	    @property
+    30	    def exit_code(self) -> int:
+    31	        return 0 if self.ok else 1
+    32	
+    33	
+    34	class DryRunRoot:
+    35	    def __init__(self) -> None:
+    36	        self.title_value = ""
+    37	        self.geometry_value = ""
+    38	
+    39	    def title(self, value: str) -> None:
+    40	        self.title_value = value
+    41	
+    42	    def geometry(self, value: str) -> None:
+    43	        self.geometry_value = value
+    44	
+    45	
+    46	def _module_available(name: str) -> bool:
+    47	    try:
+    48	        importlib.import_module(name)
+    49	    except Exception:
+    50	        return False
+    51	    return True
+    52	
+    53	
+    54	def _mode_guard_available(project_root: Path) -> bool:
+    55	    ns_path = project_root / "ns"
+    56	    if not ns_path.exists():
+    57	        return False
+    58	    ns_text = ns_path.read_text(encoding="utf-8")
+    59	    return "mode-check" in ns_text and "mode-write" in ns_text
+    60	
+    61	
+    62	def _shell_adapters_absent(project_root: Path) -> bool:
+    63	    return not any((project_root / "tools").glob("ns_*.sh"))
+    64	
+    65	
+    66	def run_gui_dry_run(project_root: Path | None = None) -> GuiDryRunResult:
+    67	    root = Path.cwd() if project_root is None else project_root
+    68	    tkinter_available = _module_available("tkinter")
+    69	    action_registry_available = _module_available("agentic_project_kit.action_registry")
+    70	    action_specs_available = _module_available("agentic_project_kit.action_specs")
+    71	    mode_guard_available = _mode_guard_available(root)
+    72	    shell_adapters_absent = _shell_adapters_absent(root)
+    73	    presenter = build_no_window_presenter_result(list_actions())
+    74	    ok = all((
+    75	        action_registry_available,
+    76	        action_specs_available,
+    77	        mode_guard_available,
+    78	        shell_adapters_absent,
+    79	        presenter.ok,
+    80	    ))
+    81	    message = "GUI dry-run passed without opening a window." if ok else "GUI dry-run failed."
+    82	    return GuiDryRunResult(
+    83	        ok=ok,
+    84	        tkinter_available=tkinter_available,
+    85	        action_registry_available=action_registry_available,
+    86	        action_specs_available=action_specs_available,
+    87	        presenter_available=presenter.ok,
+    88	        presenter_action_count=presenter.action_count,
+    89	        presenter_preview=presenter.rendered,
+    90	        mode_guard_available=mode_guard_available,
+    91	        shell_adapters_absent=shell_adapters_absent,
+    92	        message=message,
+    93	    )
+    94	
+    95	
+    96	def render_result(result: GuiDryRunResult) -> str:
+    97	    lines = [
+    98	        "GUI DRY RUN",
+    99	        "Safety: no window is opened; no files, branches, tags, releases, PRs, or remote state are changed.",
+   100	        f"tkinter_available={str(result.tkinter_available).lower()}",
+   101	        f"window_launch_ready={str(check_window_launch_ready().ok).lower()}",
+   102	        "tkinter_note=nonblocking for --dry-run; required only for real window launch",
+   103	        f"action_registry_available={str(result.action_registry_available).lower()}",
+   104	        f"action_specs_available={str(result.action_specs_available).lower()}",
+   105	        f"presenter_available={str(result.presenter_available).lower()}",
+   106	        f"presenter_action_count={result.presenter_action_count}",
+   107	        "presenter_preview_begin",
+   108	        result.presenter_preview,
+   109	        "presenter_preview_end",
+   110	        f"mode_guard_available={str(result.mode_guard_available).lower()}",
+   111	        f"shell_adapters_absent={str(result.shell_adapters_absent).lower()}",
+   112	        f"message={result.message}",
+   113	    ]
+   114	    plan = build_layout_plan()
+   115	    rendered = render_layout_to_tkinter(DryRunRoot(), plan)
+   116	    lines.extend([
+   117	        "output_status_panel_begin",
+   118	        render_output_status_panel(
+   119	            build_output_status_panel(
+   120	                branch="dry-run",
+   121	                dirty=False,
+   122	                latest_output="GUI dry-run initialized without executing an action.",
+   123	                terminal_log="NONE",
+   124	                terminal_log_remote="NONE",
+   125	                terminal_log_local="NONE",
+   126	                evidence_state="not_required",
+   127	                summary="No command summary exists in dry-run mode.",
+   128	            )
+   129	        ),
+   130	        "output_status_panel_end",
+   131	        "layout_plan_begin",
+   132	        render_layout_plan(plan),
+   133	        "layout_plan_end",
+   134	        "tkinter_render_begin",
+   135	        render_tkinter_result_summary(rendered),
+   136	        "tkinter_render_end",
+   137	        "window_guard_begin",
+   138	        render_window_guard_result(check_window_launch_ready()),
+   139	        "window_guard_end",
+   140	        "real_window_opened=false",
+   141	        "### RESULT: PASS ###" if result.ok else "### RESULT: FAIL ###",
+   142	    ])
+   143	    return "\n".join(lines)
+   144	
+   145	
+   146	def main(argv: Sequence[str] | None = None) -> int:
+   147	    args = list(argv or [])
+   148	    if args and args != ["--dry-run"]:
+   149	        print("ERROR: usage: python -m agentic_project_kit.gui_dry_run --dry-run")
+   150	        print("### RESULT: FAIL ###")
+   151	        return 2
+   152	    result = run_gui_dry_run()
+   153	    print(render_result(result))
+   154	    return result.exit_code
+   155	
+   156	
+   157	if __name__ == "__main__":
+   158	    import sys
+   159	
+   160	    raise SystemExit(main(sys.argv[1:]))
+
+### WRITE ROBUST REPAIR SCRIPT ###
+
+### APPLY REPAIR SCRIPT ###
+window_guard_status field marker not found
+
+### DIFF AFTER REPAIR ###
+
+### SMOKE OUTPUT AFTER REPAIR ###
+ERROR: usage: python -m agentic_project_kit.gui_dry_run --dry-run
+### RESULT: FAIL ###
+ERROR: usage: python -m agentic_project_kit.gui_dry_run --dry-run
+### RESULT: FAIL ###
+
+### TARGETED TESTS AFTER REPAIR ###
+FFFFF...................................                                 [100%]
+=================================== FAILURES ===================================
+________ test_gui_dry_run_can_render_allowed_read_only_execution_result ________
+
+    def test_gui_dry_run_can_render_allowed_read_only_execution_result() -> None:
+>       output = render_result(run_gui_dry_run(Path.cwd(), action_name="cockpit-readiness"))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: run_gui_dry_run() got an unexpected keyword argument 'action_name'
+
+tests/test_v040_gui_execution_result_wiring.py:9: TypeError
+____________ test_gui_dry_run_blocks_remote_mutation_action_result _____________
+
+    def test_gui_dry_run_blocks_remote_mutation_action_result() -> None:
+>       output = render_result(run_gui_dry_run(Path.cwd(), action_name="agent-run"))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: run_gui_dry_run() got an unexpected keyword argument 'action_name'
+
+tests/test_v040_gui_execution_result_wiring.py:20: TypeError
+________ test_gui_dry_run_missing_action_is_reported_without_execution _________
+
+    def test_gui_dry_run_missing_action_is_reported_without_execution() -> None:
+>       output = render_result(run_gui_dry_run(Path.cwd(), action_name="missing-action"))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: run_gui_dry_run() got an unexpected keyword argument 'action_name'
+
+tests/test_v040_gui_execution_result_wiring.py:30: TypeError
+____________________ test_gui_main_accepts_action_argument _____________________
+
+capsys = <_pytest.capture.CaptureFixture object at 0x10a6b97f0>
+
+    def test_gui_main_accepts_action_argument(capsys) -> None:
+>       assert main(["--action", "cockpit-readiness"]) == 0
+E       AssertionError: assert 2 == 0
+E        +  where 2 = main(['--action', 'cockpit-readiness'])
+
+tests/test_v040_gui_execution_result_wiring.py:38: AssertionError
+----------------------------- Captured stdout call -----------------------------
+ERROR: usage: python -m agentic_project_kit.gui_dry_run --dry-run
+### RESULT: FAIL ###
+___________________ test_gui_main_rejects_unknown_arguments ____________________
+
+capsys = <_pytest.capture.CaptureFixture object at 0x10afaac10>
+
+    def test_gui_main_rejects_unknown_arguments(capsys) -> None:
+        assert main(["--bad"]) == 2
+        output = capsys.readouterr().out
+>       assert "usage: ./ns gui [--action ACTION_NAME]" in output
+E       AssertionError: assert 'usage: ./ns gui [--action ACTION_NAME]' in 'ERROR: usage: python -m agentic_project_kit.gui_dry_run --dry-run\n### RESULT: FAIL ###\n'
+
+tests/test_v040_gui_execution_result_wiring.py:47: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v040_gui_execution_result_wiring.py::test_gui_dry_run_can_render_allowed_read_only_execution_result
+FAILED tests/test_v040_gui_execution_result_wiring.py::test_gui_dry_run_blocks_remote_mutation_action_result
+FAILED tests/test_v040_gui_execution_result_wiring.py::test_gui_dry_run_missing_action_is_reported_without_execution
+FAILED tests/test_v040_gui_execution_result_wiring.py::test_gui_main_accepts_action_argument
+FAILED tests/test_v040_gui_execution_result_wiring.py::test_gui_main_rejects_unknown_arguments
+5 failed, 35 passed in 0.26s
+
+### FULL LOCAL GATES AFTER REPAIR ###
+........................................................................ [  9%]
+........................................................................ [ 18%]
+........................................................................ [ 27%]
+........................................................................ [ 36%]
+........................................................................ [ 45%]
+........................................................................ [ 55%]
+........................................................................ [ 64%]
+........................................................................ [ 73%]
+........................................................................ [ 82%]
+..............FFFFF..................................................... [ 91%]
+................................................................         [100%]
+=================================== FAILURES ===================================
+________ test_gui_dry_run_can_render_allowed_read_only_execution_result ________
+
+    def test_gui_dry_run_can_render_allowed_read_only_execution_result() -> None:
+>       output = render_result(run_gui_dry_run(Path.cwd(), action_name="cockpit-readiness"))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: run_gui_dry_run() got an unexpected keyword argument 'action_name'
+
+tests/test_v040_gui_execution_result_wiring.py:9: TypeError
+____________ test_gui_dry_run_blocks_remote_mutation_action_result _____________
+
+    def test_gui_dry_run_blocks_remote_mutation_action_result() -> None:
+>       output = render_result(run_gui_dry_run(Path.cwd(), action_name="agent-run"))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: run_gui_dry_run() got an unexpected keyword argument 'action_name'
+
+tests/test_v040_gui_execution_result_wiring.py:20: TypeError
+________ test_gui_dry_run_missing_action_is_reported_without_execution _________
+
+    def test_gui_dry_run_missing_action_is_reported_without_execution() -> None:
+>       output = render_result(run_gui_dry_run(Path.cwd(), action_name="missing-action"))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: run_gui_dry_run() got an unexpected keyword argument 'action_name'
+
+tests/test_v040_gui_execution_result_wiring.py:30: TypeError
+____________________ test_gui_main_accepts_action_argument _____________________
+
+capsys = <_pytest.capture.CaptureFixture object at 0x10c772490>
+
+    def test_gui_main_accepts_action_argument(capsys) -> None:
+>       assert main(["--action", "cockpit-readiness"]) == 0
+E       AssertionError: assert 2 == 0
+E        +  where 2 = main(['--action', 'cockpit-readiness'])
+
+tests/test_v040_gui_execution_result_wiring.py:38: AssertionError
+----------------------------- Captured stdout call -----------------------------
+ERROR: usage: python -m agentic_project_kit.gui_dry_run --dry-run
+### RESULT: FAIL ###
+___________________ test_gui_main_rejects_unknown_arguments ____________________
+
+capsys = <_pytest.capture.CaptureFixture object at 0x10c7a2d50>
+
+    def test_gui_main_rejects_unknown_arguments(capsys) -> None:
+        assert main(["--bad"]) == 2
+        output = capsys.readouterr().out
+>       assert "usage: ./ns gui [--action ACTION_NAME]" in output
+E       AssertionError: assert 'usage: ./ns gui [--action ACTION_NAME]' in 'ERROR: usage: python -m agentic_project_kit.gui_dry_run --dry-run\n### RESULT: FAIL ###\n'
+
+tests/test_v040_gui_execution_result_wiring.py:47: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v040_gui_execution_result_wiring.py::test_gui_dry_run_can_render_allowed_read_only_execution_result
+FAILED tests/test_v040_gui_execution_result_wiring.py::test_gui_dry_run_blocks_remote_mutation_action_result
+FAILED tests/test_v040_gui_execution_result_wiring.py::test_gui_dry_run_missing_action_is_reported_without_execution
+FAILED tests/test_v040_gui_execution_result_wiring.py::test_gui_main_accepts_action_argument
+FAILED tests/test_v040_gui_execution_result_wiring.py::test_gui_main_rejects_unknown_arguments
+5 failed, 779 passed in 4.52s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COPY LOG FOR COMMIT ###

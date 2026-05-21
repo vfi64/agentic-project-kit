@@ -39,7 +39,7 @@ def _value(value: object) -> str:
 
 
 def normalize_safety_class(value: object) -> str:
-    return _value(value).strip().lower().replace("_", "-")
+    return _value(value).strip().lower().replace("_", "-").rsplit(".", 1)[-1]
 
 
 def action_identity(action: object) -> str:
