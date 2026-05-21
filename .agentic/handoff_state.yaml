@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
-  date: '2026-05-19'
-  reason: Record v0.3.28 DOI metadata
-  source: post-release DOI verification evidence
+  date: '2026-05-21'
+  reason: Refresh state after v0.3.36 direct ns shell-adapter removal baseline
+  source: docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -10,27 +10,26 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: cdc04db
-  commit_subject: Verify v0.3.28 post-release DOI source
+  commit: 6437490
+  commit_subject: Document remaining v0.3.36 workplan after shell-adapter removal
   semantics: last_substantive_work_state
   administrative_refresh_prs: []
   working_tree_expected_clean: true
 release:
-  current_version: 0.3.28
-  previous_version: 0.3.27
-  tag: v0.3.28
+  current_version: 0.3.35
+  previous_version: 0.3.34
+  tag: v0.3.35
   github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
-  zenodo_version_doi: 10.5281/zenodo.20286394
-  post_release_check: PASS
-  post_release_evidence: docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log
+  zenodo_version_doi: unknown
+  post_release_check: unknown
+  post_release_evidence: unknown
 open_items:
   prs: []
 completed_since_previous_handoff:
-- v0.3.27 released and post-release DOI verified.
-- Repo-backed no-copy workflow hardened as the active bridge toward the local GUI.
-- Command inbox, command-run reports, terminal evidence pointers, and normal PASS/FAIL
-  footers established.
+- v0.3.36 direct ns shell-adapter removal baseline documented.
+- Known direct ns-to-tools/ns_*.sh workflow adapters removed from ns routes.
+- Remaining v0.3.36 workplan recorded in docs/workflow/V0.3.36_REMAINING_WORKPLAN.md.
 current_capabilities:
   ns_actions:
   - agent-next
@@ -43,6 +42,11 @@ current_capabilities:
   - handoff-check
   - governance-check
   - dev
+  - mode-check
+  - mode-write
+  - typed-run
+  - typed-queue-status
+  - typed-next
   artifact_dirs:
     terminal_logs: docs/reports/terminal
     command_runs: docs/reports/command_runs
@@ -51,131 +55,82 @@ policies:
 rules:
 - id: remote-first-no-guess
   status: active
-  text: Do not guess repository state, command syntax, file locations, release phase,
-    GitHub JSON fields, or available evidence. Inspect the remote repository and authoritative
-    command help or repo files first, then act on the verified result.
+  text: Do not guess repository state, command syntax, file locations, release phase, GitHub JSON fields, or available evidence. Inspect the remote repository and authoritative command help or repo files first, then act on the verified result.
 - id: deterministic-quality-before-speed
   status: active
   text: Prefer technically robust, testable, repeatable solutions over fast workarounds.
 - id: no-copy-terminal-evidence
   status: active
-  text: Routine PASS handoffs and normal FAIL handoffs must be backed by repo
-    evidence; use d for log-backed PASS and f for log-backed FAIL. Manual terminal
-    paste is only for hard failure, broken logging, blocked or aborted runs, unavailable
-    pushed evidence, or explicit user request.
+  text: Routine PASS handoffs and normal FAIL handoffs should be backed by repo evidence whenever technically possible. Manual terminal paste is reserved for hard failure, broken logging, blocked or aborted runs, unavailable pushed evidence, or explicit user request.
 - id: planning-state-freshness
   status: active
-  text: Current planning files must be curated and mutually consistent; stale released-version
-    claims or obsolete next-step fragments are guard failures.
+  text: Current planning files must be curated and mutually consistent; stale released-version claims or obsolete next-step fragments are guard failures.
 - id: shell-to-python-portability
   status: active
-  text: Prefer portable Python-backed helpers and argument-vector execution over fragile
-    shell quoting, heredocs, multiline python -c snippets, or nested quote-based code generation.
+  text: Prefer portable Python-backed helpers and argument-vector execution over fragile shell quoting, heredocs, multiline python -c snippets, or nested quote-based code generation.
+- id: direct-ns-shell-adapter-ban
+  status: active
+  text: New direct ns-to-tools/ns_*.sh workflow adapters are not allowed unless explicitly documented as temporary migration exceptions with tests and a removal plan.
 - id: rules-must-be-test-backed
   status: active
-  text: Workflow rules are not complete when they only exist in chat, prose, or handoff
-    memory. Every durable rule must have a stable repository home, a rule id, documentation,
-    and at least one deterministic test that fails when the rule disappears or is
-    weakened.
+  text: Workflow rules are not complete when they only exist in chat, prose, or handoff memory. Every durable rule must have a stable repository home, a rule id, documentation, and at least one deterministic test that fails when the rule disappears or is weakened.
 - id: no-unconditional-pass
   status: active
   text: Do not print PASS after a failed required command.
-- id: curate-chat-end-lessons
+- id: final-summary-no-inner-fail-pass
   status: active
-  text: Chat-end lessons must be curated into YAML and generated prompts without redundant,
-    contradictory, or obsolete rules.
-- id: last-substantive-safe-state
+  text: A final PASS is invalid when any required inner WORK RESULT or gate result is FAIL.
+- id: remote-evidence-truthfulness
   status: active
-  text: safe_state records the last substantive work state; administrative handoff
-    refresh PRs are tracked separately to avoid refresh loops.
-- id: quality-first-no-shortcuts
+  text: REMOTE_EVIDENCE PASS requires committed and pushed evidence or an equivalent remote-readable report.
+- id: local-remote-mode-guard
   status: active
-  text: Always choose the technically best deterministic solution for recurring workflow
-    problems; do not use shortcut patches that merely get the current block past the
-    gate.
-- id: patch-artifact-preflight-before-application
-  status: active
-  text: 'Complex patches must be treated as patch artifacts and checked before application:
-    syntax, YAML structure, generated Python compileability, documentation coverage
-    terms, and final-summary validity.'
-- id: generated-code-syntax-first
-  status: active
-  text: Generated or newly added Python files must pass py_compile before full gates
-    or commit attempts; nested string-generation mistakes are product defects, not
-    acceptable manual errors.
-- id: coverage-yaml-terms-must-be-strings
-  status: active
-  text: Documentation coverage terms must be strings; terms containing colons must
-    be quoted so YAML cannot reinterpret them as mappings.
-- id: final-summary-self-validation
-  status: active
-  text: Terminal workflows must validate their mandatory final SUMMARY block before
-    asking the user to reply p.
+  text: Workflows that depend on local or remote execution mode must run the appropriate mode guard before mutating state or reporting readiness.
 - id: yaml-structured-mutation-only
   status: active
-  text: YAML governance files must be changed through parse-modify-dump or an equivalent
-    structured mutation path, then parsed again before gates. Text injection into
-    YAML is forbidden for complex values.
+  text: YAML governance files must be changed through parse-modify-dump or an equivalent structured mutation path, then parsed again before gates.
 recent_failure_patterns:
 - id: guessing-before-inspection
-  prevention: Before choosing commands, paths, JSON fields, release checks, or DOI
-    sources, inspect the remote repository and command help. Treat memory and chat
-    summaries as hypotheses until verified.
+  prevention: Inspect remote repository state and command help before choosing commands, paths, JSON fields, release checks, or DOI sources.
 - id: stale-planning-documents
-  prevention: State freshness checks must compare STATUS, CURRENT_HANDOFF, handoff_state.yaml,
-    release metadata, and strategy baselines before GUI or release-automation work
-    starts.
+  prevention: State freshness checks must compare STATUS, CURRENT_HANDOFF, handoff_state.yaml, release metadata, and strategy baselines before GUI or release-automation work starts.
 - id: standard-error-guards
-  prevention: Recurring workflow failures must become guards, tests, and documented
-    contracts.
+  prevention: Recurring workflow failures must become guards, tests, and documented contracts.
 - id: interpreter-discovery-before-python
-  prevention: Terminal/workflow blocks must discover a usable interpreter first and
-    prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python.
-    Do not combine naked python with set -e because a missing interpreter can close
-    the interactive terminal before diagnostics are preserved.
+  prevention: Terminal/workflow blocks must discover a usable interpreter first and prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python.
 - id: global-cli-or-venv-assumption
-  prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and
-    agentic-kit before using command names. Treat missing global agentic-kit or missing
-    .venv as bootstrap/environment state, not as product failure.
-- id: interactive-terminal-exit
-  prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace
-    the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit
-    codes belong inside saved scripts, not interactive paste blocks.
+  prevention: Verify .venv, python3, ruff, pytest, and project-local CLI routes before relying on global command names.
 - id: repo-log-written-while-committing
-  prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize
-    with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo
-    terminal log while the current process is still writing to it.
+  prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize evidence, then stage, commit, and push. Never commit a repo terminal log while the current process is still writing to it.
 - id: unconditional-pass-after-failure
-  prevention: Use explicit status handling and require log-backed PASS. Avoid shell-specific
-    status variables such as PIPESTATUS in zsh-pasted blocks unless the shell is explicitly
-    controlled.
+  prevention: Use explicit status handling and require final summary self-validation.
 - id: nested-triple-quote-code-generator
-  prevention: Do not generate source files through nested shell/Python quote layers or nested triple-quoted string literals
-    inside another generated Python script. Prefer line-list generation, existing
-    patch tools, or checked patch artifacts plus py_compile before application.
-- id: yaml-colon-term-reinterpreted-as-mapping
-  prevention: Quote every documentation coverage term containing a colon, and keep
-    the coverage-term string guard in the test suite.
+  prevention: Do not generate source files through nested shell/Python quote layers or nested triple-quoted string literals inside another generated Python script.
 - id: final-pass-after-inner-fail
-  prevention: Final summaries must distinguish work result from evidence result. A
-    later successful evidence push must not relabel failed work as PASS.
+  prevention: Final summaries must distinguish work result from evidence result. A later successful evidence push must not relabel failed work as PASS.
+- id: stale-shell-test-expectation-after-adapter-removal
+  prevention: Shell-adapter removal patches must update tests that previously asserted shell-file existence or shell-specific syntax.
 - id: repeated-yaml-governance-file-corruption
-  prevention: Patch scripts must parse YAML before and after mutation, use safe_dump
-    or an equivalent structured writer, and run a YAML integrity test before handoff,
-    governance, or dev gates.
+  prevention: Patch scripts must parse YAML before and after mutation and use a structured writer.
 next_allowed_tasks:
-- id: planning-state-freshness-guard-hardening
-  title: Strengthen deterministic guards for stale planning documents.
+- id: deterministic-rule-hardening
+  title: Add tests and validators for false PASS, remote evidence truthfulness, stale shell expectations, direct ns shell adapter reintroduction, and mode guards.
   priority: 1
-- id: thin-local-tkinter-cockpit
-  title: Build the first thin local GUI over explicit cockpit action metadata.
+- id: portability-audit
+  title: Audit global tool assumptions and project-local Python/module routing.
   priority: 2
+- id: typed-work-order-test-matrix
+  title: Expand typed Work Order unit-test matrix.
+  priority: 3
+- id: v0.3.36-release-prep
+  title: Prepare v0.3.36 release after state docs and gates are consistent.
+  priority: 4
 blocked_until_closeout:
+- Tkinter GUI implementation
 - Pattern Advisor expansion
 - release automation expansion
 - hidden command planning
-first_instruction: Refresh planning state, run freshness guards, and only then begin
-  the thin local Tkinter cockpit foundation.
+first_instruction: Verify current state docs, merge the status/handoff refresh, then start deterministic rule hardening before GUI or release work.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
@@ -183,4 +138,6 @@ handoff_maintenance:
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
 current_notes:
-- v0.3.28 released and post-release DOI verified.
+- v0.3.36 is not released yet.
+- The current baseline is direct ns shell-adapter removal plus remaining workplan documentation.
+- Direct ns shell-adapter count for the known workflow adapter class is zero.
