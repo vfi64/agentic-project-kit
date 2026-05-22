@@ -171,11 +171,7 @@ def _theme_color(style: object, style_name: str, option: str, fallback: str) -> 
     return str(value or fallback)
 
 
-def run_cockpit_readiness_for_manual_gui() -> str:
-    def executor(_action: object) -> tuple[int, str]:
-        return 0, "cockpit-readiness: ready"
-
-    result = run_bounded_read_only_action(list_actions(), "cockpit-readiness", executor=executor)
+def render_gui_action_execution_result(result: object) -> str:
     lines = [
         "GUI ACTION EXECUTION RESULT",
         "action=" + result.action_name,
@@ -184,32 +180,35 @@ def run_cockpit_readiness_for_manual_gui() -> str:
         "executed=" + str(result.executed).lower(),
         "returncode=" + str(result.returncode),
         "message=" + result.message,
-        "output=" + result.output,
     ]
+    output = str(result.output or "")
+    if chr(10) in output:
+        lines.extend(["output_begin", output, "output_end"])
+    else:
+        lines.append("output=" + output)
     return chr(10).join(lines)
 
 
+def run_manual_gui_read_only_action(action_name: str, executor: Callable[[object], tuple[int, str]]) -> str:
+    result = run_bounded_read_only_action(list_actions(), action_name, executor=executor)
+    return render_gui_action_execution_result(result)
+
+
+def run_cockpit_readiness_for_manual_gui() -> str:
+    def executor(_action: object) -> tuple[int, str]:
+        return 0, "cockpit-readiness: ready"
+    return run_manual_gui_read_only_action("cockpit-readiness", executor)
 
 
 def run_doctor_for_manual_gui() -> str:
     from pathlib import Path
     from agentic_project_kit.doctor import build_doctor_report, render_doctor_report
+
     def executor(_action: object) -> tuple[int, str]:
         report = build_doctor_report(Path.cwd())
         return (0 if report.ok else 1), render_doctor_report(report)
-    result = run_bounded_read_only_action(list_actions(), chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114), executor=executor)
-    return chr(10).join([
-        chr(71) + chr(85) + chr(73) + chr(32) + chr(65) + chr(67) + chr(84) + chr(73) + chr(79) + chr(78) + chr(32) + chr(69) + chr(88) + chr(69) + chr(67) + chr(85) + chr(84) + chr(73) + chr(79) + chr(78) + chr(32) + chr(82) + chr(69) + chr(83) + chr(85) + chr(76) + chr(84),
-        chr(97) + chr(99) + chr(116) + chr(105) + chr(111) + chr(110) + chr(61) + result.action_name,
-        chr(115) + chr(97) + chr(102) + chr(101) + chr(116) + chr(121) + chr(95) + chr(99) + chr(108) + chr(97) + chr(115) + chr(115) + chr(61) + normalize_safety_class(result.safety_class),
-        chr(97) + chr(108) + chr(108) + chr(111) + chr(119) + chr(101) + chr(100) + chr(61) + str(result.allowed).lower(),
-        chr(101) + chr(120) + chr(101) + chr(99) + chr(117) + chr(116) + chr(101) + chr(100) + chr(61) + str(result.executed).lower(),
-        chr(114) + chr(101) + chr(116) + chr(117) + chr(114) + chr(110) + chr(99) + chr(111) + chr(100) + chr(101) + chr(61) + str(result.returncode),
-        chr(109) + chr(101) + chr(115) + chr(115) + chr(97) + chr(103) + chr(101) + chr(61) + result.message,
-        chr(111) + chr(117) + chr(116) + chr(112) + chr(117) + chr(116) + chr(95) + chr(98) + chr(101) + chr(103) + chr(105) + chr(110),
-        result.output,
-        chr(111) + chr(117) + chr(116) + chr(112) + chr(117) + chr(116) + chr(95) + chr(101) + chr(110) + chr(100),
-    ])
+    return run_manual_gui_read_only_action("doctor", executor)
+
 def render_manual_launch_content(root: object) -> None:
     import tkinter as tk
     from tkinter import ttk

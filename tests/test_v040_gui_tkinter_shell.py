@@ -250,3 +250,21 @@ def test_manual_gui_doctor_status_transition_contract_is_present():
     manual_source = source[source.index(chr(100) + chr(101) + chr(102) + chr(32) + chr(114) + chr(101) + chr(110) + chr(100) + chr(101) + chr(114) + chr(95) + chr(109) + chr(97) + chr(110) + chr(117) + chr(97) + chr(108) + chr(95) + chr(108) + chr(97) + chr(117) + chr(110) + chr(99) + chr(104) + chr(95) + chr(99) + chr(111) + chr(110) + chr(116) + chr(101) + chr(110) + chr(116)):source.index(chr(100) + chr(101) + chr(102) + chr(32) + chr(114) + chr(117) + chr(110) + chr(95) + chr(109) + chr(97) + chr(110) + chr(117) + chr(97) + chr(108) + chr(95) + chr(108) + chr(97) + chr(117) + chr(110) + chr(99) + chr(104))]
     assert chr(100) + chr(101) + chr(102) + chr(32) + chr(114) + chr(117) + chr(110) + chr(95) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114) + chr(95) + chr(99) + chr(108) + chr(105) + chr(99) + chr(107) in manual_source
     assert chr(99) + chr(111) + chr(109) + chr(109) + chr(97) + chr(110) + chr(100) + chr(61) + chr(114) + chr(117) + chr(110) + chr(95) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114) + chr(95) + chr(99) + chr(108) + chr(105) + chr(99) + chr(107) in manual_source
+
+
+def test_manual_gui_uses_shared_readonly_runner_abstraction():
+    from pathlib import Path
+    source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
+    assert "def run_manual_gui_read_only_action(" in source
+    assert "def render_gui_action_execution_result(" in source
+    assert source.count("run_bounded_read_only_action(") == 1
+    assert "return run_manual_gui_read_only_action(\"cockpit-readiness\", executor)" in source
+    assert "return run_manual_gui_read_only_action(\"doctor\", executor)" in source
+
+def test_shared_readonly_runner_formats_single_and_multiline_output():
+    from types import SimpleNamespace
+    from agentic_project_kit.gui_tkinter_shell import render_gui_action_execution_result
+    single = render_gui_action_execution_result(SimpleNamespace(action_name="x", safety_class="read_only", allowed=True, executed=True, returncode=0, message="ok", output="one"))
+    multi = render_gui_action_execution_result(SimpleNamespace(action_name="x", safety_class="read_only", allowed=True, executed=True, returncode=0, message="ok", output="one\ntwo"))
+    assert "output=one" in single
+    assert "output_begin\none\ntwo\noutput_end" in multi
