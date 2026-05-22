@@ -1,0 +1,60 @@
+
+### BRANCH / STATUS BEFORE REPAIR ###
+feature/v040-add-doctor-action-registry-readonly
+
+### ENSURE EXPECTED BRANCH ###
+
+### CLEAN PRECHECK ###
+
+### WRITE LINE-BASED PATCH SCRIPT ###
+
+### APPLY LINE-BASED PATCH ###
+
+### STRUCTURE CHECKS ###
+90-        summary="Classify branch finalization state without merging or deleting.",
+91-    ),
+92-    ActionMetadata(
+93:        name="doctor",
+94-        safety_class=SafetyClass.READ_ONLY,
+95-        mutation_scope="none",
+96-        dry_run_supported=True,
+97-        outcome_contract=("PASS", "FAIL"),
+98-        summary="Run compact project health checks without mutating repository state.",
+99-    ),
+100-
+101-    ActionMetadata(
+33:def test_doctor_is_registered_as_read_only_action():
+
+### EXECUTOR SMOKE FOR DOCTOR ###
+action=doctor
+safety_class=read-only
+allowed=true
+executed=false
+returncode=0
+message=Action allowed but not executed: no executor was provided.
+
+### TESTS / LINT / GATES ###
+..............                                                           [100%]
+14 passed in 0.03s
+........................................................................ [ 80%]
+.................                                                        [100%]
+89 passed in 0.39s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### STAGE LOG AND COMMIT ###

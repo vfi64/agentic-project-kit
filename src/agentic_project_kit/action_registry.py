@@ -90,6 +90,15 @@ ACTIONS: tuple[ActionMetadata, ...] = (
         summary="Classify branch finalization state without merging or deleting.",
     ),
     ActionMetadata(
+        name="doctor",
+        safety_class=SafetyClass.READ_ONLY,
+        mutation_scope="none",
+        dry_run_supported=True,
+        outcome_contract=("PASS", "FAIL"),
+        summary="Run compact project health checks without mutating repository state.",
+    ),
+
+    ActionMetadata(
         name="cockpit-readiness",
         safety_class=SafetyClass.READ_ONLY,
         mutation_scope="none",
