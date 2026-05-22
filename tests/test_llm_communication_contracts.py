@@ -87,3 +87,31 @@ def test_chat_bootstrap_contract_requires_stop_on_drift_before_mutation() -> Non
     assert "avoid mutation-oriented work unless the mutation is the drift fix itself" in text
     assert "must not replace the source-reading step with memory" in text
     assert "forbidden final summary values" in text or "forbidden final values" in text
+
+
+def test_sentinel_tracks_llm_governance_contracts_with_realistic_limits() -> None:
+    text = read("sentinel.yaml")
+    required_docs = {
+        "docs/governance/CHAT_COMMUNICATION_CONTRACT.md": "max_words: 2200",
+        "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md": "max_words: 1800",
+        "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md": "max_words: 2000",
+    }
+    for path, max_words in required_docs.items():
+        assert path in text
+        assert max_words in text
+    assert "## LLM Communication and Bootstrap Gate" in text
+    assert "max_words: 3200" in text
+
+
+def test_test_gates_points_to_contracts_without_becoming_rule_book() -> None:
+    text = read("docs/TEST_GATES.md")
+    assert "## LLM Communication and Bootstrap Gate" in text
+    for path in [
+        "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
+        "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
+        "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
+        "docs/governance/FINAL_SUMMARY_CONTRACT.md",
+        ".agentic/compiled_agent_context.yaml",
+    ]:
+        assert path in text
+    assert "concise pointers, not duplicate rule books" in text
