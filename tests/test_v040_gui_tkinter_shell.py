@@ -210,7 +210,7 @@ def test_cockpit_readiness_manual_gui_runner_executes_readonly_action():
     assert "output=cockpit-readiness: ready" in output
 
 
-def test_manual_gui_keeps_only_cockpit_readiness_enabled():
+def test_manual_gui_keeps_remote_destructive_actions_disabled():
     from pathlib import Path
     source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
     manual_source = source[source.index("def render_manual_launch_content"):source.index("def run_manual_launch")]
@@ -264,6 +264,7 @@ def test_manual_gui_uses_shared_readonly_runner_abstraction():
     assert len(bounded_calls) == 1
     assert "return run_manual_gui_read_only_action(\"cockpit-readiness\", executor)" in source
     assert "return run_manual_gui_read_only_action(\"doctor\", executor)" in source
+    assert "return run_manual_gui_read_only_action(\"check-docs\", executor)" in source
 
 def test_shared_readonly_runner_formats_single_and_multiline_output():
     from types import SimpleNamespace
@@ -272,3 +273,30 @@ def test_shared_readonly_runner_formats_single_and_multiline_output():
     multi = render_gui_action_execution_result(SimpleNamespace(action_name="x", safety_class="read_only", allowed=True, executed=True, returncode=0, message="ok", output="one\ntwo"))
     assert "output=one" in single
     assert "output_begin\none\ntwo\noutput_end" in multi
+
+def test_check_docs_action_is_registered_readonly():
+    from agentic_project_kit.action_registry import get_action
+    action = get_action("check-docs")
+    assert action is not None
+    assert action.safety_class.value == "read-only"
+    assert action.mutation_scope == "none"
+
+def test_check_docs_manual_gui_runner_executes_readonly_action():
+    from agentic_project_kit.gui_tkinter_shell import run_check_docs_for_manual_gui
+    output = run_check_docs_for_manual_gui()
+    assert "action=check-docs" in output
+    assert "safety_class=read-only" in output
+    assert "allowed=true" in output
+    assert "executed=true" in output
+    assert "returncode=0" in output
+    assert "Agentic project check passed" in output
+
+def test_manual_gui_check_docs_status_transition_contract_is_present():
+    from pathlib import Path
+    source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
+    manual_source = source[source.index("def render_manual_launch_content"):source.index("def run_manual_launch")]
+    assert "def run_check_docs_click() -> None:" in manual_source
+    assert "command=run_check_docs_click" in manual_source
+    assert "Status: running | branch: main | action: check-docs" in manual_source
+    assert "Status: success | branch: main | action: check-docs" in manual_source
+    assert "Status: fail | branch: main | action: check-docs" in manual_source
