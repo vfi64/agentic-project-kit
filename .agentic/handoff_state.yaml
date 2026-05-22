@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-22'
-  reason: Finalize handoff state after PR656 GUI MVP closeout
-  source: main after PR656 merge verification and refreshed handoff recovery
+  reason: Finalize exact HEAD consistency for successor-chat handoff after PR656
+  source: main HEAD at handoff finalization
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 82d6000
-  commit_subject: Record post-PR656 handoff state refresh log
+  commit: 1333eb9
+  commit_subject: Record finalized post-PR656 handoff refresh log
   semantics: current_main_head
   administrative_refresh_prs:
   - 656
@@ -236,9 +236,9 @@ blocked_until_closeout:
 - Release work
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
-first_instruction: Read the mandatory successor-chat sources, verify main after PR656, confirm
-  the refreshed handoff prompt matches v0.3.37 and GUI MVP closeout, then continue only with
-  a small bounded next slice.
+first_instruction: Read the mandatory successor-chat sources, verify main HEAD against this
+  handoff state, confirm v0.3.37 and PR656 GUI MVP closeout, then continue only with a small
+  bounded next slice.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
@@ -250,3 +250,4 @@ current_notes:
 - A previous generated handoff prompt was stale because the handoff state had not been refreshed
   after the GUI MVP closeout.
 - This state refresh restores the handoff generator as the successor-chat source.
+- Handoff state and generated prompt must name the same current main HEAD before chat migration.
