@@ -253,7 +253,7 @@ This file intentionally keeps compact anchors for deterministic tests and human 
 
 - Final summary contract: see `docs/governance/FINAL_SUMMARY_CONTRACT.md`.
 - No executable placeholder summaries: final summaries must be rendered evidence, not runnable placeholder blocks; persistent rule id `final-summary-no-executable-placeholders`.
-- Release route safety: `release-prep --help` and `release-gate --help` and invalid argument behavior must remain documented and testable before release-route changes.
+- Release route safety: `release-prep --help` and `release-gate --help`, `release-publish --help` and invalid argument behavior must remain documented and testable before release-route changes.
 
 ## Documentation System Audit Gate
 
