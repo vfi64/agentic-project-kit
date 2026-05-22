@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-22'
-  reason: Refresh handoff state after PR663 README extractor repair
-  source: main HEAD after PR663
+  reason: Refresh handoff state after PR665 current handoff overlay merge
+  source: main HEAD after PR665
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -21,6 +21,7 @@ safe_state:
   - 660
   - 661
   - 663
+  - 665
 release:
   current_version: 0.3.37
   previous_version: 0.3.36
@@ -36,7 +37,7 @@ open_items:
   - 562
   - 564
   - 568
-  next_expected_chat_action: Repair CURRENT_HANDOFF.md non-destructively by using the PR661 overlay and preserving compatibility anchors; then verify before v0.4.0 readiness work.
+  next_expected_chat_action: Verify main after PR665, run final readiness gates, regenerate the canonical handoff prompt, and only then assess v0.4.0 release readiness.
 completed_since_previous_handoff:
 - 'PR #647 enabled the Doctor button through the bounded read-only GUI contract.'
 - 'PR #649 added LLM communication and portable execution contracts.'
@@ -52,6 +53,7 @@ completed_since_previous_handoff:
 - 'PR #660 refreshed handoff_state.yaml after PR659 while preserving existing rule and failure-pattern anchors.'
 - 'PR #661 added CURRENT_HANDOFF_OVERLAY_AFTER_PR660.md without changing CURRENT_HANDOFF.md.'
 - 'PR #663 repaired README DOI drift and changed doc_mesh README version extraction to use the explicit current verified release marker, with regression coverage for historical version anchors.'
+- 'PR #665 merged the PR661 overlay into CURRENT_HANDOFF.md non-destructively, preserving existing compatibility anchors.'
 - 'Historical PRs #562, #564, and #568 were closed without merge as superseded evidence branches.'
 - STATUS.md remains the compact live dashboard while CHANGELOG.md remains the long-term project history.
 current_capabilities:
@@ -190,17 +192,20 @@ recent_failure_patterns:
   description: README historical coverage anchors such as Version 0.3.9 must not be interpreted as the current project version by doc-mesh.
   prevention: README version extraction must use the explicit Current verified release marker and retain regression coverage for historical Version anchors.
 next_allowed_tasks:
-- id: repair-current-handoff-from-overlay
-  title: Merge PR661 overlay into CURRENT_HANDOFF.md non-destructively while preserving compatibility anchors.
+- id: final-main-verify-after-pr665
+  title: Verify main after PR665 and run final readiness gates.
   priority: 1
-- id: v040-release-readiness-check
-  title: Check v0.4.0 readiness only after CURRENT_HANDOFF.md is repaired and verified.
+- id: regenerate-canonical-handoff-prompt
+  title: Regenerate the canonical handoff prompt after final verification.
   priority: 2
+- id: v040-release-readiness-check
+  title: Check v0.4.0 readiness only after final main verification and canonical handoff prompt regeneration.
+  priority: 3
 blocked_until_closeout:
 - Release work
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
-first_instruction: Verify main at or after PR #663, read mandatory rule sources, then repair CURRENT_HANDOFF.md non-destructively from the overlay before any v0.4.0 readiness conclusion.
+first_instruction: Verify main at or after PR #665, run final readiness gates, regenerate the canonical handoff prompt, and only then assess v0.4.0 release readiness.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
@@ -208,14 +213,14 @@ handoff_maintenance:
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
 current_notes:
-- 'Current main is after PR #656 GUI MVP closeout, PR #657 administrative evidence modeling, PR #659 STATUS drift repair, PR #660 handoff_state refresh, PR #661 handoff overlay, and PR #663 README extractor repair.'
+- 'Current main is after PR #656 GUI MVP closeout, PR #657 administrative evidence modeling, PR #659 STATUS drift repair, PR #660 handoff_state refresh, PR #661 handoff overlay, PR #663 README extractor repair, and PR #665 CURRENT_HANDOFF overlay merge.'
 - 'Historical PRs #562, #564, and #568 are closed without merge as superseded evidence branches.'
 - A previous generated handoff prompt was stale because the handoff state had not been refreshed after the GUI MVP closeout and later administrative evidence work.
 - Handoff state and generated prompt must name the same current administrative evidence HEAD before chat migration.
 - use d for log-backed PASS and f for log-backed FAIL
 - nested triple-quoted string literals
 administrative_evidence_state:
-  current_head: 456a428
-  current_head_subject: Repair README version extractor and DOI drift (#663)
+  current_head: 0234800
+  current_head_subject: Merge current handoff overlay after PR664 (#665)
   allowed_after_safe_state: true
-  reason: post-PR663 README extractor, DOI, handoff-state, handoff-overlay, and administrative evidence commits after GUI MVP closeout
+  reason: post-PR665 CURRENT_HANDOFF overlay merge and administrative evidence commits after GUI MVP closeout
