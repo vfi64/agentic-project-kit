@@ -65,3 +65,12 @@ def test_human_docs_reference_final_summary_contract() -> None:
         text = Path(name).read_text(encoding="utf-8")
         assert "Final summary contract" in text
         assert "OVERALL RESULT" in text
+
+
+def test_terminal_log_finalization_rule_is_documented() -> None:
+    text = Path("docs/governance/FINAL_SUMMARY_CONTRACT.md").read_text(encoding="utf-8")
+    assert "Terminal log finalization rule" in text
+    assert "must not upload a partial running log" in text
+    assert "rendered structured SUMMARY and the FINAL STATE section" in text
+    assert "copy the completed log into `docs/reports/terminal/`" in text
+

@@ -8,7 +8,7 @@ Current work branch: main
 agentic-project-kit is a repository-backed governance and workflow kit for long-running AI-assisted software projects. Its core purpose is to move durable project memory out of chat transcripts and into versioned repository files, deterministic gates, evidence logs, and explicit handoff state.
 The project treats the repository, not the chat transcript, as the durable source of truth for current state, gates, handoff, evidence, rules, and release metadata. Chat-only rules are not durable unless they are documented, test-backed, and enforced through repo tooling or gates.
 ## Current Goal
-The immediate goal after v0.3.29 is to close out v0.3.30 GUI readiness hardening. This is not a Tkinter implementation slice. The release line hardens the machine-readable contracts a later thin Tkinter cockpit will consume: action results, cockpit JSON output, registry-only action selection, command queue state, and evidence state.
+Current focus: v0.4.0 GUI MVP over tested registry/actions, with docs-audit and communication contracts kept current.
 ## Current State
 ## v0.3.34 Portable Core Hardening Plan
 v0.3.34 is planned as the final pre-GUI portable-core hardening line before starting the thin Tkinter cockpit implementation.
@@ -28,14 +28,14 @@ Acceptance criteria for starting the Tkinter cockpit after v0.3.34:
 - The concept DOI versus version DOI WAITING case is guarded.
 - GUI-facing actions can be invoked without composing fragile multi-step shell scripts.
 Current released version: 0.3.32
-Previous release compatibility literal for planning-state freshness coverage: Current released version: 0.3.29
+Compatibility literal retained for freshness coverage: Current released version: 0.3.29
 Current release tag: v0.3.32
 Zenodo concept DOI: `10.5281/zenodo.20101359`
 Verified Zenodo version DOI: `10.5281/zenodo.20314341`
 Post-release evidence: `docs/reports/terminal/20260520-v0.3.30-post-release-doi.log`
 v0.3.30 is the current released and post-release verified line; GitHub Release and Zenodo version DOI verification are complete after post-release closeout. It includes the patch-artifact preflight MVP and the hardened planning-state/no-copy evidence workflow.
 The active bridge toward the local GUI is no-copy/evidence governance and communication artifact GC hardening, not hidden automation. Normal PASS/FAIL handoff should rely on committed and pushed reports. Manual paste-output is reserved for hard failures such as authentication problems, network failures, terminal crashes, missing remote evidence, or workflow-level ambiguity.
-Communication artifact GC hardening is now part of the pre-GUI baseline: symlinked transient artifacts are rejected, repo evidence and command inbox files are protected, and local /tmp/agentic-project-kit-*.log cleanup is TTL-based and dry-run-first via ./ns artifact-gc --tmp-logs.
+Communication artifact GC hardening is part of the pre-GUI baseline.
 ## v0.3.32 Release Phase and Evidence Closeout
 v0.3.32 is the release-phase-semantics and evidence-closeout hardening line. It does not ship the Tkinter GUI.
 Completed v0.3.32 capabilities:
@@ -73,7 +73,7 @@ Planning-state freshness is now part of the governance contract: current-state d
 - The contract is documented in `docs/workflow/PRE_GUI_EXECUTION_HARDENING.md`.
 - The first hardened invariants are: no false PASS after failed gate, clean base before log creation, no nested quote patch generator, evidence finalization, and a strict GUI boundary.
 ## v0.3.31 Pre-GUI Execution Hardening Closeout
-v0.3.31 is the current pre-GUI execution hardening line. It does not ship the Tkinter GUI.
+v0.3.31 was a pre-GUI execution hardening line.
 Completed v0.3.31 capabilities:
 - Pre-GUI Execution Hardening Contract.
 - Terminal Evidence Guard with CLI command `agentic-kit evidence guard LOGFILE`.
@@ -104,14 +104,14 @@ The equivalent public command names remain `agentic-kit check-docs`, `agentic-ki
 Pattern Advisor remains a read-only catalog. Its current public surface is still `patterns list` and `patterns show`; it is advisory-only and must remain separate from deterministic gates.
 The exact phrase policy-pack doctor checks is intentionally present here: policy-pack doctor checks remain active through `agentic-kit doctor`; active policy packs are part of the project contract and must remain visible in current-state documentation.
 Release verification remains covered by the post-release Zenodo path and `agentic-kit post-release-check`. Current no-copy/evidence status is the bridge toward the thin local Tkinter cockpit.
-## Mandatory Final Summary Contract
+## Final Summary Contract
 The no-copy/evidence workflow now requires a mandatory final SUMMARY block for relevant terminal work. `WORK RESULT`, `EVIDENCE RESULT`, `OVERALL RESULT`, `REMOTE_EVIDENCE`, `terminal_log`, `command_report`, and `NEXT_CHAT_REPLY` must be reported separately. A final PASS requires work success and evidence success; a pushed log can prove a failure without turning that failure into success.
-## Quality-First Workflow Lessons
+## Workflow Lessons
 The project now treats repeated assistant/workflow mistakes as product defects. The target is not to get a block through quickly; the target is the best deterministic solution for the recurring problem.
 Current lessons: avoid nested triple-quote code generators, quote YAML coverage terms containing colons, compile generated Python before relying on gates, validate final SUMMARY blocks before asking for `p`, and never allow a later evidence push to convert failed work into PASS.
 ## YAML Governance Integrity Lesson
 YAML governance files have been damaged more than once by text-style patching. The project now treats this as a recurring workflow defect. `.agentic/handoff_state.yaml`, `.agentic/no_copy_terminal_policy.yaml`, `docs/DOCUMENTATION_COVERAGE.yaml`, and similar control files must be mutated through parse-modify-dump or an equivalent structured path, then parsed again before gates.
-## Remote-first no-guess rule
+## Remote-first rule
 Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
 ## Compiled Agent Context YAML
 `.agentic/compiled_agent_context.yaml` is the compact machine-readable companion to the human governance docs. New durable rules must be reflected in the human docs, the compiled YAML, and deterministic tests.
@@ -140,14 +140,14 @@ Required v0.3.30 scope:
 - Shell shortcuts remain adapters; durable behavior belongs in tested Python cores.
 - Tkinter is explicitly deferred until these contracts pass gates.
 ## Typed Work Orders Pre-GUI Execution Path
-Typed Work Orders are now the preferred pre-GUI execution path for standard safe workflow actions. The current implementation covers:
+Typed Work Orders are now the preferred pre-GUI execution path for standard safe workflow actions. Implemented:
 - PR #472: minimal typed Work Order Runner core.
 - PR #473: CLI entrypoint for typed Work Order execution.
 - PR #474: repo-owned read-only typed Work Order example and `./ns typed-run` shortcut.
 - PR #475: typed queue status contract for `no_command`, `exactly_one_command`, and `multiple_commands`.
 - PR #476: `typed-next` queue execution for exactly one queued YAML Work Order.
 - PR #477: `typed-next` already-executed guard with `queue_status=already_executed` and no duplicate execution.
-Operational rule: for repeatable safe work, prefer repo-owned typed Work Orders over long chat-generated shell or Python patch blocks. Shell shortcuts such as `./ns typed-run`, `./ns typed-queue-status`, and `./ns typed-next` are adapters only; durable behavior belongs in the tested Python runner and queue contracts.
+Operational rule: prefer repo-owned typed Work Orders over long chat-generated shell/Python patch blocks.
 Current typed queue semantics for GUI readiness:
 - `no_command`: block with PENDING and exit code 2.
 - `multiple_commands`: block ambiguous execution with FAIL and exit code 2.
@@ -169,7 +169,7 @@ Recommended sequencing:
 - v0.3.31 Slice 2: thin Tkinter MVP over Action Registry and cockpit JSON results.
 - v0.3.32: typed Patch DSL to eliminate quote-heavy chat patches for standard file edits.
 - v0.3.33: structured State Source of Truth to reduce literal-document drift.
-The architectural rule is: chat describes intent; repo-owned tools execute typed operations; Markdown is a projection, not the primary source of truth; shell is a runner, not a patch language.
+Architecture rule: chat describes intent; repo tools execute typed operations; shell is a runner, not a patch language.
 - v0.3.34 pre-GUI portable-core hardening continued with an explicit `./ns dev-local-feature-gate` routing fix. The shortcut now runs the local feature gate directly before the `tools/next-step.py` fallback and is covered by `tests/test_v034_ns_dev_gate_routing.py`.
 - Remote merge evidence for the routing fix is recorded in `docs/reports/terminal/v0.3.34_ns_dev_gate_routing_merge_verification.log`.
 - v0.3.34 pre-GUI portable-core hardening continued by extracting local feature gate execution into `src/agentic_project_kit/local_feature_gate.py`. The `./ns dev-local-feature-gate` and `./ns dev` routes now dispatch through this tested Python core instead of embedding the full gate in shell.
