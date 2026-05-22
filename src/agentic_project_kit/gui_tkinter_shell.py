@@ -296,8 +296,9 @@ def render_manual_launch_content(root: object) -> None:
             set_status("Status: fail | branch: main | action: doctor")
     toolbar = ttk.Frame(root, padding=4)
     toolbar.pack(fill="x", padx=12, pady=(0, 8))
-    for label in ("Refresh status", "Check docs", "GUI dry-run"):
+    for label in ("Refresh status", "GUI dry-run"):
         ttk.Button(toolbar, text=label, state="disabled", style="ReadableDisabled.TButton").pack(side="left", padx=4, pady=4)
+    ttk.Button(toolbar, text="Check docs", command=run_check_docs_click).pack(side="left", padx=4, pady=4)
 
     body = ttk.Frame(root, padding=(12, 0, 12, 12))
     body.pack(fill="both", expand=True)
@@ -305,7 +306,8 @@ def render_manual_launch_content(root: object) -> None:
     actions.pack(side="left", fill="y", padx=(0, 8))
     ttk.Button(actions, text="cockpit-readiness", command=run_cockpit_readiness_click, width=22).pack(fill="x", pady=3)
     ttk.Button(actions, text="doctor", command=run_doctor_click, width=22).pack(fill="x", pady=3)
-    for label in ("check-docs", "agent-run"):
+    ttk.Button(actions, text="check-docs", command=run_check_docs_click, width=22).pack(fill="x", pady=3)
+    for label in ("agent-run",):
         ttk.Button(actions, text=label, state="disabled", width=22, style="ReadableDisabled.TButton").pack(fill="x", pady=3)
 
     output = ttk.LabelFrame(body, text="Output / Status", padding=6)

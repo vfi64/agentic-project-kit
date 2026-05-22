@@ -263,7 +263,8 @@ def test_manual_gui_uses_shared_readonly_runner_abstraction():
     bounded_calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == "run_bounded_read_only_action"]
     assert len(bounded_calls) == 1
     assert "return run_manual_gui_read_only_action(\"cockpit-readiness\", executor)" in source
-    assert "return run_manual_gui_read_only_action(\"doctor\", executor)" in source\n    assert "return run_manual_gui_read_only_action(\"check-docs\", executor)" in source
+    assert "return run_manual_gui_read_only_action(\"doctor\", executor)" in source
+    assert "return run_manual_gui_read_only_action(\"check-docs\", executor)" in source
 
 def test_shared_readonly_runner_formats_single_and_multiline_output():
     from types import SimpleNamespace
