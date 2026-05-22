@@ -209,6 +209,19 @@ def run_doctor_for_manual_gui() -> str:
         return (0 if report.ok else 1), render_doctor_report(report)
     return run_manual_gui_read_only_action("doctor", executor)
 
+def run_check_docs_for_manual_gui() -> str:
+    from pathlib import Path
+    from agentic_project_kit.checks import check_docs
+
+    def executor(_action: object) -> tuple[int, str]:
+        errors = check_docs(Path.cwd())
+        if errors:
+            output_lines = ["Agentic project check failed"]
+            output_lines.extend("- " + error for error in errors)
+            return 1, chr(10).join(output_lines)
+        return 0, "Agentic project check passed"
+    return run_manual_gui_read_only_action("check-docs", executor)
+
 def render_manual_launch_content(root: object) -> None:
     import tkinter as tk
     from tkinter import ttk
@@ -256,6 +269,19 @@ def render_manual_launch_content(root: object) -> None:
             set_status("Status: fail | branch: main | action: cockpit-readiness")
 
 
+    def run_check_docs_click() -> None:
+        set_status("Status: running | branch: main | action: check-docs")
+        try:
+            value = run_check_docs_for_manual_gui()
+            write_output(value)
+            if "returncode=0" in value:
+                set_status("Status: success | branch: main | action: check-docs")
+            else:
+                set_status("Status: fail | branch: main | action: check-docs")
+        except Exception as exc:
+            write_output("GUI ACTION EXECUTION RESULT\\naction=check-docs\\nreturncode=1\\nmessage=" + str(exc))
+            set_status("Status: fail | branch: main | action: check-docs")
+
     def run_doctor_click() -> None:
         set_status("Status: running | branch: main | action: doctor")
         try:
@@ -290,12 +316,12 @@ def render_manual_launch_content(root: object) -> None:
     if text_fg == text_bg:
         text_fg = label_fg
     text.configure(bg=text_bg, fg=text_fg, insertbackground=text_fg)
-    text.insert("1.0", "GUI manual launch ready. cockpit-readiness is enabled as the first bounded read-only GUI action. Remote/destructive actions remain disabled.")
+    text.insert("1.0", "GUI manual launch ready. cockpit-readiness, doctor, and check-docs are enabled as bounded read-only GUI actions. Remote/destructive actions remain disabled.")
     text.configure(state="disabled")
     text.pack(fill="both", expand=True)
     output_text = text
 
-    status_text = ttk.Label(root, text="Status: ready | branch: main | enabled: cockpit-readiness only", anchor="w")
+    status_text = ttk.Label(root, text="Status: ready | branch: main | enabled: cockpit-readiness, doctor, check-docs", anchor="w")
     status_text.pack(fill="x", side="bottom")
 def run_manual_launch() -> tuple[bool, str]:
     guard = check_window_launch_ready()
