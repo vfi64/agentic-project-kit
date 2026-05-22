@@ -28,9 +28,10 @@ documents:
       - "## Gate Matrix"
       - "## Architecture Contract Gate"
       - "## Documentation Coverage Gate"
+      - "## LLM Communication and Bootstrap Gate"
       - "## Standard Local Gate"
       - "## Outcome Reporting"
-    max_words: 2500
+    max_words: 3200
   - path: docs/handoff/CURRENT_HANDOFF.md
     required_sections:
       - "## Current Goal"
@@ -39,5 +40,39 @@ documents:
       - "## Required Local Gate"
       - "## Next Safe Step"
     max_words: 4000
+  - path: docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+    required_sections:
+      - "## Purpose"
+      - "## Required startup behavior for successor chats"
+      - "## User acknowledgements"
+      - "## LLM-to-user rules"
+      - "## LLM-to-terminal rules"
+      - "## Terminal-to-LLM rules"
+      - "## Failure communication"
+      - "## PASS communication"
+      - "## Optimization requirement"
+    max_words: 2200
+  - path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+    required_sections:
+      - "## Purpose"
+      - "## Canonical rule"
+      - "## Bootstrap principle"
+      - "## External command rule"
+      - "## Evidence rule"
+      - "## Chat block rule"
+      - "## OS independence rule"
+      - "## Optimization requirement"
+    max_words: 1800
+  - path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+    required_sections:
+      - "## Purpose"
+      - "## Mandatory startup sequence"
+      - "## Drift classes"
+      - "## Drift response"
+      - "## Handoff prompt requirements"
+      - "## Machine-readable companion"
+      - "## Deterministic check direction"
+      - "## Optimization requirement"
+    max_words: 2000
 todo:
   path: .agentic/todo.yaml
