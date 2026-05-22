@@ -10,6 +10,7 @@ From github.com:vfi64/agentic-project-kit
  * branch            feature/llm-communication-contracts -> FETCH_HEAD
 Already up to date.
 feature/llm-communication-contracts
+d3136ae Record PR649 release-publish anchor repair log
 012dd63 Record PR649 release-gate anchor repair log
 d0db4fb Record PR649 required doc-anchor repair log
 adad3bb Cover terminal summary communication requirement
@@ -17,7 +18,6 @@ adad3bb Cover terminal summary communication requirement
 a92c79f Require terminal summaries in communication contract
 d65c9d9 Require rendered summary in terminal output
 4290540 Complete PR649 docs-audit coverage and lifecycle repair
-7bff8d9 Record PR649 README repair failure log
 
 ### PATCH RELEASE-PUBLISH REQUIRED ANCHOR ONLY ###
 
@@ -56,7 +56,7 @@ E       AssertionError: assert 'release-verify --help' in '# Test Gates\n\nStatu
 tests/test_v036_doc_rules_contract_hardening.py:20: AssertionError
 =========================== short test summary info ============================
 FAILED tests/test_v036_doc_rules_contract_hardening.py::test_release_route_help_and_invalid_argument_safety_is_documented
-1 failed, 821 passed in 4.65s
+1 failed, 821 passed in 4.58s
 All checks passed!
 Agentic project check passed
 Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -76,11 +76,10 @@ policy packs: solo-maintainer, agentic-development, release-managed, documentati
 Overall: PASS
 
 ### COMMIT PATCH BEFORE FINAL SUMMARY ###
-M  docs/TEST_GATES.md
 
 ### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
 ================================================================
-SUMMARY COMM-PENDING | 2026-05-22 16:39:15 +0200
+SUMMARY COMM-PENDING | 2026-05-22 16:40:40 +0200
 
 SLICE
   NAME: PR649 RELEASE-PUBLISH DOC ANCHOR REPAIR
