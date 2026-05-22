@@ -322,3 +322,9 @@ The terminal output audit is part of the workflow contract: read the body of the
 
 - v0.3.36 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329180`. Next planned line: v0.3.37 final GUI-preparation closeout before GUI MVP implementation.
 - v0.3.37 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329450`. Next line: start v0.4.0 bounded GUI MVP from a clean main.
+
+
+- PR #649 merged and verified: successor chats must read mandatory communication/bootstrap/summary rule sources before mutation.
+- `agentic-kit handoff prompt` is the canonical structured handoff generator; do not manually invent a competing prompt format.
+- `agentic-kit docs-audit` is the umbrella documentation-system audit for Aktualität, Vollständigkeit, Korrektheit, Redundanzfreiheit, Stringenz der Dokumentenordnung, and Konsistenz.
+- Final summaries must appear in terminal output and terminal logs for relevant workflow blocks.
