@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 1333eb9
-  commit_subject: Record finalized post-PR656 handoff refresh log
+  commit: 6acf36c
+  commit_subject: Align handoff state with current main head after PR656
   semantics: current_main_head
   administrative_refresh_prs:
   - 656
