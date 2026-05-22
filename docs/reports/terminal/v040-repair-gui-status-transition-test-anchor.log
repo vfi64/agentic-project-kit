@@ -1,8 +1,6 @@
 
 ### BRANCH / STATUS BEFORE TEST REPAIR ###
 feature/v040-gui-status-transitions-cockpit-readiness
- M src/agentic_project_kit/gui_tkinter_shell.py
- M tests/test_v040_gui_tkinter_shell.py
 
 ### VERIFY EXPECTED BRANCH AND DIRTY FILES ###
 
@@ -54,7 +52,7 @@ window_closed=true
 24 passed in 0.05s
 ........................................................................ [ 80%]
 .................                                                        [100%]
-89 passed in 0.38s
+89 passed in 0.34s
 ........................................................................ [  8%]
 ........................................................................ [ 17%]
 ........................................................................ [ 26%]
@@ -67,7 +65,7 @@ window_closed=true
 ........................................................................ [ 89%]
 ........................................................................ [ 98%]
 .........                                                                [100%]
-801 passed in 4.29s
+801 passed in 4.31s
 All checks passed!
 Agentic project check passed
 Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
