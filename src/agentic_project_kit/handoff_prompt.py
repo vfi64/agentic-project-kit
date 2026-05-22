@@ -56,6 +56,7 @@ def render_handoff_prompt(data: dict[str, Any]) -> str:
     repo = data.get("repo", {})
     safe_state = data.get("safe_state", {})
     release = data.get("release", {})
+    admin_state = data.get("administrative_evidence_state", {})
     if isinstance(data.get("open_items"), dict):
         open_prs = data.get("open_items", {}).get("prs", [])
     else:
@@ -80,6 +81,18 @@ def render_handoff_prompt(data: dict[str, Any]) -> str:
         f"Semantics: `{safe_state.get('semantics', 'last_substantive_work_state')}`",
         f"Working tree expected clean: `{safe_state.get('working_tree_expected_clean', '')}`",
     ])
+    if isinstance(admin_state, dict) and admin_state:
+        lines.extend([
+            "",
+            "## 2a. Administrative Evidence State",
+            "",
+            "Administrative Evidence Commits nach dem fachlichen Safe-State sind erlaubt, wenn sie nur Logs, Handoff, Summary oder Evidence aktualisieren. Sie ändern den fachlichen Safe-State nicht.",
+            "",
+            f"Current HEAD at generation time: `{admin_state.get("current_head", "")}`",
+            f"HEAD subject: {admin_state.get("current_head_subject", "")}",
+            f"Allowed after safe state: `{admin_state.get("allowed_after_safe_state", "")}`",
+            f"Reason: {admin_state.get("reason", "")}",
+        ])
     lines.extend([
         "",
         "## 3. Release- und Produktstand",

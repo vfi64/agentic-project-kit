@@ -80,3 +80,11 @@ A drift handoff prompt must include:
 ## Optimization requirement
 
 Do not solve drift by adding more overlapping prose to every document. Prefer one canonical document per concept, compact cross-references elsewhere, compiled machine-readable anchors, and tests that catch known regressions.
+
+## Administrative Evidence State für Handoff-Prompts
+
+Ein Handoff-Prompt unterscheidet zwischen `safe_state` und `administrative_evidence_state`. `safe_state` beschreibt den letzten fachlich/substanziellen Arbeitsstand. Reine Log-, Summary-, Handoff- oder Evidence-Commits nach diesem Stand dürfen als `administrative_evidence_state` geführt werden und machen den fachlichen Safe-State nicht automatisch stale.
+
+Ein Nachfolge-Chat muss prüfen, ob spätere Commits nur administrative Evidence betreffen. Fachliche Änderungen nach dem Safe-State sind Drift und müssen vor Produktarbeit geklärt werden.
+
+Dieses Modell verhindert die Endlosschleife, bei der ein finaler Log-Commit den gerade erzeugten Handoff-Prompt sofort wieder formal veralten lässt.

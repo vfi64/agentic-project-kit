@@ -10,12 +10,12 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: ac92db8
-  commit_subject: Finalize post-PR656 handoff prompt at current main head
-  semantics: current_main_head
+  commit: adc65ac
+  commit_subject: Close out GUI MVP three read-only actions (#656)
+  semantics: last_substantive_work_state
+  working_tree_expected_clean: true
   administrative_refresh_prs:
   - 656
-  working_tree_expected_clean: true
 release:
   current_version: 0.3.37
   previous_version: 0.3.36
@@ -157,6 +157,11 @@ rules:
   text: docs/STATUS.md is the compact live dashboard; CHANGELOG.md is the long-term project
     history. Do not solve status-headroom failures by turning STATUS.md back into a historical
     log.
+- id: administrative-evidence-state-boundary
+  status: active
+  text: Separate substantive safe_state from administrative_evidence_state. Pure log, summary,
+    handoff, or evidence commits after safe_state do not invalidate the successor-chat handoff;
+    substantive code, doc, or product changes after safe_state do.
 recent_failure_patterns:
 - id: guessing-before-inspection
   prevention: Before choosing commands, paths, JSON fields, release checks, or DOI sources,
@@ -220,6 +225,10 @@ recent_failure_patterns:
   status: active
   prevention: Inspect gh pr view --json field names before using them; use mergedAt rather
     than a non-existent merged field.
+- id: handoff-moving-head-loop
+  status: active
+  prevention: Do not chase every final log commit with a new safe_state commit. Store administrative
+    evidence commits separately.
 next_allowed_tasks:
 - id: chat-switch-with-refreshed-handoff
   title: Switch to a new chat using the refreshed kit-generated handoff prompt.
@@ -251,3 +260,8 @@ current_notes:
   after the GUI MVP closeout.
 - This state refresh restores the handoff generator as the successor-chat source.
 - Handoff state and generated prompt must name the same current main HEAD before chat migration.
+administrative_evidence_state:
+  current_head: 752b9db
+  current_head_subject: Record handoff administrative evidence state V2 log
+  allowed_after_safe_state: true
+  reason: post-PR656 log, handoff, and evidence commits after GUI MVP closeout
