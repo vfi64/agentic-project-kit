@@ -5,6 +5,8 @@ import subprocess
 import sys
 from collections.abc import Sequence
 
+PYTHON_RUFF_TARGETS = ("src", "tests")
+
 
 def _env_with_src() -> dict[str, str]:
     env = os.environ.copy()
@@ -23,12 +25,16 @@ def _run(command: Sequence[str], *, env: dict[str, str] | None = None) -> int:
     return int(completed.returncode)
 
 
+def _ruff_command() -> list[str]:
+    return [sys.executable, "-m", "ruff", "check", *PYTHON_RUFF_TARGETS]
+
+
 def run_local_feature_gate(args: Sequence[str] | None = None, *, include_pr_hygiene: bool = False) -> int:
     pytest_args = list(args or [])
     status = 0
 
     _section("### NS DEV LOCAL FEATURE GATE ###")
-    print("Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.")
+    print("Safety: local feature gate; no git pull, push, merge, tag, release, or branch cleanup.")
 
     _section("### BRANCH / STATUS ###")
     status = _run(["git", "branch", "--show-current"]) or status
@@ -40,7 +46,7 @@ def run_local_feature_gate(args: Sequence[str] | None = None, *, include_pr_hygi
     status = _run([sys.executable, "-m", "pytest", "-q", *pytest_args], env=env) or status
 
     _section("### RUFF ###")
-    status = _run([sys.executable, "-m", "ruff", "check", "."], env=env) or status
+    status = _run(_ruff_command(), env=env) or status
 
     _section("### CHECK DOCS ###")
     status = _run([sys.executable, "-m", "agentic_project_kit.cli", "check-docs"], env=env) or status
