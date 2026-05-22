@@ -1,0 +1,119 @@
+
+### FEATURE BRANCH STATE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            feature/llm-communication-contracts -> FETCH_HEAD
+Already on 'feature/llm-communication-contracts'
+Your branch is up to date with 'origin/feature/llm-communication-contracts'.
+feature/llm-communication-contracts
+d0db4fb Record PR649 required doc-anchor repair log
+adad3bb Cover terminal summary communication requirement
+4b180a6 Test terminal output summary requirement
+a92c79f Require terminal summaries in communication contract
+d65c9d9 Require rendered summary in terminal output
+4290540 Complete PR649 docs-audit coverage and lifecycle repair
+7bff8d9 Record PR649 README repair failure log
+2b66753 Document docs-audit command in README
+
+### PATCH RELEASE-GATE REQUIRED ANCHOR ONLY ###
+
+### VERIFY REQUIRED ANCHORS ###
+254:- Final summary contract: see `docs/governance/FINAL_SUMMARY_CONTRACT.md`.
+255:- No executable placeholder summaries: final summaries must be rendered evidence, not runnable placeholder blocks; persistent rule id `final-summary-no-executable-placeholders`.
+256:- Release route safety: `release-prep --help` and `release-gate --help` and invalid argument behavior must remain documented and testable before release-route changes.
+256:- Release route safety: `release-prep --help` and `release-gate --help` and invalid argument behavior must remain documented and testable before release-route changes.
+56:          - a rendered final summary printed in the terminal output
+
+### FULL LOCAL GATES ###
+........................................................................ [  8%]
+........................................................................ [ 17%]
+........................................................................ [ 26%]
+........................................................................ [ 35%]
+........................................................................ [ 43%]
+........................................................................ [ 52%]
+........................................................................ [ 61%]
+........................................................................ [ 70%]
+......................F................................................. [ 78%]
+........................................................................ [ 87%]
+........................................................................ [ 96%]
+..............................                                           [100%]
+=================================== FAILURES ===================================
+______ test_release_route_help_and_invalid_argument_safety_is_documented _______
+
+    def test_release_route_help_and_invalid_argument_safety_is_documented():
+        text = read("docs/TEST_GATES.md")
+        assert "release-prep --help" in text
+        assert "release-gate --help" in text
+>       assert "release-publish --help" in text
+E       AssertionError: assert 'release-publish --help' in '# Test Gates\n\nStatus-date: 2026-05-10\nProject: agentic-project-kit\n\n## Purpose\n\nThis file defines the required...e-command` loop. Long ad-hoc terminal blocks are only allowed when the remote command path is unavailable or broken.\n'
+
+tests/test_v036_doc_rules_contract_hardening.py:19: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v036_doc_rules_contract_hardening.py::test_release_route_help_and_invalid_argument_safety_is_documented
+1 failed, 821 passed in 4.65s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COMMIT PATCH BEFORE FINAL SUMMARY ###
+M  docs/TEST_GATES.md
+
+### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-22 16:37:51 +0200
+
+SLICE
+  NAME: PR649 RELEASE-GATE DOC ANCHOR REPAIR
+  SCOPE: DOCS / TEST_GATES / REQUIRED ANCHOR / NO MERGE / NO RELEASE
+  BRANCH: feature/llm-communication-contracts
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: release-gate help anchor repair failed
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: FAIL
+  EVIDENCE: PARTIAL
+  OVERALL: FAIL
+
+REMOTE
+  REMOTE_EVIDENCE: FAIL
+  PR: 649 open
+  HEAD_SHA: SEE_OUTPUT
+  CI: fail
+  MERGE: blocked
+
+EVIDENCE FILES
+  terminal_log: /tmp/v040-repair-pr649-release-gate-help-anchor.log
+  terminal_log_remote: NONE
+  terminal_log_local: /tmp/v040-repair-pr649-release-gate-help-anchor.log
+  command_report: pytest/ruff/check-docs/doctor/release-gate-anchor-repair
+
+INTERPRETATION
+  PR649 release-gate anchor repair did not complete; inspect local log before continuing.
+
+NEXT
+  SAFE_STEP: upload local fail log or inspect failing section
+  CHAT_REPLY: f
+
+### RESULT: FAIL ###
+================================================================
+
+### UPLOAD TERMINAL LOG INCLUDING STRUCTURED SUMMARY ###
