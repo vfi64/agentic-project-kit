@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-22'
-  reason: Finalize exact HEAD consistency for successor-chat handoff after PR656
-  source: main HEAD at handoff finalization
+  reason: Refresh handoff state after PR659 status drift repair
+  source: main HEAD after PR659
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -16,6 +16,8 @@ safe_state:
   working_tree_expected_clean: true
   administrative_refresh_prs:
   - 656
+  - 657
+  - 659
 release:
   current_version: 0.3.37
   previous_version: 0.3.36
@@ -27,7 +29,11 @@ release:
   post_release_evidence: docs/STATUS.md
 open_items:
   prs: []
-  next_expected_chat_action: Start from the refreshed kit handoff prompt, read mandatory rule sources, then choose the next small GUI or workflow hardening slice.
+  historical_prs_to_classify_or_close:
+  - 562
+  - 564
+  - 568
+  next_expected_chat_action: Finish non-destructive handoff state and current handoff repair after PR659, then verify before v0.4.0 readiness work.
 completed_since_previous_handoff:
 - 'PR #647 enabled the Doctor button through the bounded read-only GUI contract.'
 - 'PR #649 added LLM communication and portable execution contracts.'
@@ -38,6 +44,8 @@ completed_since_previous_handoff:
 - 'PR #654 added the shared read-only GUI runner abstraction.'
 - 'PR #655 enabled check-docs as the third read-only GUI action.'
 - 'PR #656 closed out the GUI MVP with cockpit-readiness, doctor, and check-docs visually verified as bounded read-only GUI actions.'
+- 'PR #657 modeled administrative evidence state in generated handoff prompts.'
+- 'PR #659 repaired STATUS.md current-state drift after PR657 without changing CURRENT_HANDOFF.md or handoff_state.yaml.'
 - STATUS.md remains the compact live dashboard while CHANGELOG.md remains the long-term project history.
 current_capabilities:
   ns_actions:
@@ -171,20 +179,20 @@ recent_failure_patterns:
   status: active
   prevention: Do not chase every final log commit with a new safe_state commit. Store administrative evidence commits separately.
 next_allowed_tasks:
-- id: chat-switch-with-refreshed-handoff
-  title: Switch to a new chat using the refreshed kit-generated handoff prompt.
+- id: repair-current-handoff-after-pr659
+  title: Repair CURRENT_HANDOFF.md non-destructively after PR659 while preserving compatibility anchors.
   priority: 1
-- id: next-gui-mvp-slice
-  title: Choose the next small GUI MVP slice only after the successor chat reads mandatory rule sources.
+- id: classify-historical-open-prs
+  title: Classify or close historical PRs #562, #564, and #568.
   priority: 2
-- id: handoff-generator-route-hardening
-  title: Optionally harden ./ns handoff prompt routing so it cannot call the legacy next-step path.
+- id: v040-release-readiness-check
+  title: Check v0.4.0 readiness only after drift repair is merged and verified.
   priority: 3
 blocked_until_closeout:
 - Release work
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
-first_instruction: Read the mandatory successor-chat sources, verify main HEAD against this handoff state, confirm v0.3.37 and PR656 GUI MVP closeout, then continue only with a small bounded next slice.
+first_instruction: Verify main at or after PR #659, read mandatory rule sources, then repair CURRENT_HANDOFF.md non-destructively before any v0.4.0 readiness conclusion.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
@@ -192,14 +200,13 @@ handoff_maintenance:
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
 current_notes:
-- 'Current main is after PR #656 GUI MVP closeout.'
-- A previous generated handoff prompt was stale because the handoff state had not been refreshed after the GUI MVP closeout.
-- This state refresh restores the handoff generator as the successor-chat source.
-- Handoff state and generated prompt must name the same current main HEAD before chat migration.
+- 'Current main is after PR #656 GUI MVP closeout, PR #657 administrative evidence modeling, and PR #659 STATUS drift repair.'
+- A previous generated handoff prompt was stale because the handoff state had not been refreshed after the GUI MVP closeout and later administrative evidence work.
+- Handoff state and generated prompt must name the same current administrative evidence HEAD before chat migration.
 - use d for log-backed PASS and f for log-backed FAIL
 - nested triple-quoted string literals
 administrative_evidence_state:
-  current_head: 752b9db
-  current_head_subject: Record handoff administrative evidence state V2 log
+  current_head: 26553d6
+  current_head_subject: Repair v0.4.0 status drift after PR657 (#659)
   allowed_after_safe_state: true
-  reason: post-PR656 log, handoff, and evidence commits after GUI MVP closeout
+  reason: post-PR659 status, log, handoff, and administrative evidence commits after GUI MVP closeout
