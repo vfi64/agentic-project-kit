@@ -1,0 +1,131 @@
+
+### SYNC BRANCH ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            docs/harden-remote-log-communication -> FETCH_HEAD
+Already on 'docs/harden-remote-log-communication'
+From github.com:vfi64/agentic-project-kit
+ * branch            docs/harden-remote-log-communication -> FETCH_HEAD
+Already up to date.
+docs/harden-remote-log-communication
+b59ecc0 Record remote log communication hardening log
+95c6a04 Record doctor GUI visual verification log
+91f4ac9 Record PR651 docs robustness merge verification log
+352a74a Harden docs audit headroom and log finalization (#651)
+00b0a57 Record PR650 status handoff closeout merge verification log
+dd0fe58 Close out PR649 communication contracts in status and handoff (#650)
+64f09fa Record PR649 LLM communication contracts merge verification log
+ec3c8c3 Add LLM communication and portable execution contracts (#649)
+
+### APPLY ROBUST COMPILED CONTEXT PATCH ###
+COMPILED_CONTEXT_RULE_PRESENT=1
+
+### VERIFY ANCHORS ###
+136:## Remote log lookup rule
+138:When a workflow summary or terminal block names an expected `docs/reports/terminal/*.log` path, a successor chat must verify that exact path directly before claiming the log is missing.
+140:GitHub code search, commit search, and filename search are advisory only. They may lag behind a recent push and must not be the sole basis for saying remote evidence is unavailable.
+93:If a terminal summary names a concrete remote log path, verify that exact path directly before using search results. Search lag is not evidence that a pushed log is missing.
+52:- id: remote-log-direct-path-first
+53:  rule: If a concrete docs/reports/terminal log path is known, direct-fetch that path before relying on search results or declaring evidence missing.
+
+### TESTS AND GATES ###
+.......................                                                  [100%]
+23 passed in 0.17s
+........................................................................ [  8%]
+........................................................................ [ 17%]
+........................................................................ [ 26%]
+........................................................................ [ 34%]
+........................................................................ [ 43%]
+........................................................................ [ 52%]
+........................................................................ [ 60%]
+........................................................................ [ 69%]
+........................................................................ [ 78%]
+........................................................................ [ 86%]
+........................................................................ [ 95%]
+.....................................                                    [100%]
+829 passed in 4.41s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COMMIT PATCH ###
+M  .agentic/compiled_agent_context.yaml
+[docs/harden-remote-log-communication 522f3f2] Harden remote log communication verification rules
+ 1 file changed, 2 insertions(+)
+To github.com:vfi64/agentic-project-kit.git
+   b59ecc0..522f3f2  docs/harden-remote-log-communication -> docs/harden-remote-log-communication
+branch 'docs/harden-remote-log-communication' set up to track 'origin/docs/harden-remote-log-communication'.
+
+### CREATE OR REUSE PR ###
+https://github.com/vfi64/agentic-project-kit/pull/652
+
+### FINAL STATE BEFORE SUMMARY ###
+docs/harden-remote-log-communication
+522f3f2 Harden remote log communication verification rules
+b59ecc0 Record remote log communication hardening log
+95c6a04 Record doctor GUI visual verification log
+91f4ac9 Record PR651 docs robustness merge verification log
+352a74a Harden docs audit headroom and log finalization (#651)
+00b0a57 Record PR650 status handoff closeout merge verification log
+dd0fe58 Close out PR649 communication contracts in status and handoff (#650)
+64f09fa Record PR649 LLM communication contracts merge verification log
+
+### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-22 17:36:32 +0200
+
+SLICE
+  NAME: REPAIR REMOTE LOG DIRECT PATH COMPILED CONTEXT RULE
+  SCOPE: DOCS / COMMUNICATION CONTRACT / FINAL SUMMARY CONTRACT / COMPILED CONTEXT / TESTS / NO RELEASE / NO GUI PATCH
+  BRANCH: docs/harden-remote-log-communication
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: compiled context now contains remote-log-direct-path-first; tests and gates passed; PR exists; completed log upload follows
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PARTIAL
+  PR: created
+  HEAD_SHA: 522f3f2366336dcceb1e377586bed584c8155a02
+  CI: pending
+  MERGE: not_done
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/v040-repair-remote-log-compiled-context-rule.log
+  terminal_log_remote: docs/reports/terminal/v040-repair-remote-log-compiled-context-rule.log
+  terminal_log_local: /tmp/v040-repair-remote-log-compiled-context-rule.log
+  command_report: remote-log-direct-path-compiled-context-rule/tests/pytest/ruff/check-docs/doctor/pr-create-or-existing
+
+INTERPRETATION
+  Remote-log communication is now hardened in human docs, compiled context, and tests.
+
+NEXT
+  SAFE_STEP: wait for CI and merge if green, then repeat Doctor GUI visual verification with --manual-launch
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
+
+### RESULT: PASS ###
