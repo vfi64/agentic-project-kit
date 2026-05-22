@@ -1,0 +1,150 @@
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+3bda94d Record PR652 remote log communication merge verification log
+917d8ff Harden remote log communication verification rules (#652)
+95c6a04 Record doctor GUI visual verification log
+91f4ac9 Record PR651 docs robustness merge verification log
+352a74a Harden docs audit headroom and log finalization (#651)
+00b0a57 Record PR650 status handoff closeout merge verification log
+dd0fe58 Close out PR649 communication contracts in status and handoff (#650)
+64f09fa Record PR649 LLM communication contracts merge verification log
+ec3c8c3 Add LLM communication and portable execution contracts (#649)
+b883dac Plan portable LLM communication bootstrap hardening (#648)
+
+### VERIFY REMOTE LOG COMMUNICATION RULE IS ON MAIN ###
+136:## Remote log lookup rule
+138:When a workflow summary or terminal block names an expected `docs/reports/terminal/*.log` path, a successor chat must verify that exact path directly before claiming the log is missing.
+52:- id: remote-log-direct-path-first
+
+### VERIFY TK PYTHON ###
+TKPY_OK=1
+PYTHON=/private/tmp/agentic-project-kit-tk-venv-313/bin/python
+TK_VERSION=9.0
+
+### VERIFY DOCTOR GUI RUNNER SMOKE ###
+GUI ACTION EXECUTION RESULT
+action=doctor
+safety_class=read-only
+allowed=true
+executed=true
+returncode=0
+message=Action executed through bounded read-only executor.
+output_begin
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+output_end
+
+### LAUNCH MANUAL GUI WINDOW WITH CORRECT FLAG ###
+In the GUI: click doctor, verify output/status/disabled unsafe buttons, then close the window.
+Expected: GUI ACTION EXECUTION RESULT, action=doctor, safety_class=read-only, allowed=true, executed=true, returncode=0, Overall: PASS, Status: success | branch: main | action: doctor.
+TKINTER MANUAL LAUNCH
+GUI WINDOW GUARD
+window_launch_ready=true
+tkinter_importable=true
+native_tkinter_importable=true
+message=window launch guard passed
+window_guard_status=READY
+manual_launch_status=READY
+real_window_opened=true
+actions_enabled=false
+manual_close_required=true
+### RESULT: PASS ###
+manual_launch_closed=true
+
+### HUMAN VISUAL VERIFICATION INPUT ###
+Type PASS if doctor visual verification matched all expected points; otherwise type FAIL, then press Return: VISUAL_RESULT=printf '\n\n\n'
+
+### POST-VISUAL LIGHT GATES ###
+.........................                                                [100%]
+25 passed in 0.08s
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### FINAL STATE BEFORE LOG UPLOAD ###
+main
+3bda94d Record PR652 remote log communication merge verification log
+917d8ff Harden remote log communication verification rules (#652)
+95c6a04 Record doctor GUI visual verification log
+91f4ac9 Record PR651 docs robustness merge verification log
+352a74a Harden docs audit headroom and log finalization (#651)
+00b0a57 Record PR650 status handoff closeout merge verification log
+dd0fe58 Close out PR649 communication contracts in status and handoff (#650)
+64f09fa Record PR649 LLM communication contracts merge verification log
+
+### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-22 17:43:56 +0200
+
+SLICE
+  NAME: VISUAL VERIFY DOCTOR GUI BUTTON MANUAL LAUNCH
+  SCOPE: MANUAL GUI / DOCTOR BUTTON / VISUAL VERIFICATION / MAIN / NO PRODUCT PATCH / NO RELEASE
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: manual Tkinter visual verification failed or was not confirmed as PASS
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: FAIL
+  EVIDENCE: PARTIAL
+  OVERALL: FAIL
+
+REMOTE
+  REMOTE_EVIDENCE: PARTIAL
+  PR: none
+  HEAD_SHA: SEE_OUTPUT
+  CI: not_required
+  MERGE: not_required
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/v040-visual-verify-doctor-gui-button-manual-launch.log
+  terminal_log_remote: docs/reports/terminal/v040-visual-verify-doctor-gui-button-manual-launch.log
+  terminal_log_local: /tmp/v040-visual-verify-doctor-gui-button-manual-launch.log
+  command_report: tk-python-check/doctor-runner-smoke/manual-launch-window-visual-verification/gui-tests/doctor
+
+INTERPRETATION
+  Doctor visual verification did not complete cleanly; inspect the uploaded log by direct path before product changes.
+
+NEXT
+  SAFE_STEP: fetch the named remote log directly, then repair only the observed GUI issue or environment problem
+  CHAT_REPLY: f
+
+### RESULT: FAIL ###
+================================================================
+
+### RESULT: FAIL ###
