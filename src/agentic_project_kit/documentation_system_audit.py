@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 import json
+import re
 from typing import Any
 
 import yaml
@@ -78,7 +79,7 @@ def build_documentation_system_audit(project_root: Path) -> DocumentationSystemA
     mesh_report = build_doc_mesh_report(project_root)
     lifecycle_report = build_doc_lifecycle_report(project_root)
     dimensions = (
-        _freshness_dimension(mesh_report),
+        _freshness_dimension(project_root, mesh_report),
         _completeness_dimension(project_root, check_doc_errors),
         _correctness_dimension(check_doc_errors, mesh_report, lifecycle_report),
         _redundancy_dimension(project_root),
@@ -112,14 +113,15 @@ def write_documentation_system_audit_json(
     output_path.write_text(json.dumps(report.to_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def _freshness_dimension(mesh_report: Any) -> DocumentationAuditDimension:
+def _freshness_dimension(project_root: Path, mesh_report: Any) -> DocumentationAuditDimension:
     freshness_codes = {"stale-current-state-marker", "version-mismatch", "release-doi-list-mismatch"}
-    findings = tuple(
+    findings = [
         f"{finding.path}: {finding.message}"
         for finding in mesh_report.findings
         if finding.code in freshness_codes
-    )
-    return DocumentationAuditDimension("Aktualität", ok=not findings, findings=findings)
+    ]
+    findings.extend(_status_handoff_sync_findings(project_root))
+    return DocumentationAuditDimension("Aktualität", ok=not findings, findings=tuple(findings))
 
 
 def _completeness_dimension(project_root: Path, check_doc_errors: tuple[str, ...]) -> DocumentationAuditDimension:
@@ -165,6 +167,29 @@ def _redundancy_dimension(project_root: Path) -> DocumentationAuditDimension:
         findings=tuple(findings),
         review_only=findings == [boundary],
     )
+
+
+
+def _status_handoff_sync_findings(project_root: Path) -> tuple[str, ...]:
+    status = _read_optional(project_root / "docs/STATUS.md")
+    handoff = _read_optional(project_root / "docs/handoff/CURRENT_HANDOFF.md")
+    findings: list[str] = []
+    status_prs = set(re.findall(r"PR #\\d+ merged", status))
+    handoff_prs = set(re.findall(r"PR #\\d+ merged", handoff))
+    for item in sorted(status_prs - handoff_prs):
+        findings.append(f"docs/handoff/CURRENT_HANDOFF.md missing current closeout marker from STATUS.md: {item}")
+    for item in sorted(handoff_prs - status_prs):
+        findings.append(f"docs/STATUS.md missing current closeout marker from CURRENT_HANDOFF.md: {item}")
+    required_handoff_terms = (
+        ".agentic/compiled_agent_context.yaml",
+        "FINAL_SUMMARY_CONTRACT.md",
+        "CHAT_COMMUNICATION_CONTRACT.md",
+        "CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
+    )
+    for term in required_handoff_terms:
+        if term not in handoff:
+            findings.append(f"docs/handoff/CURRENT_HANDOFF.md missing mandatory successor-chat source pointer: {term}")
+    return tuple(findings)
 
 
 def _document_order_dimension(project_root: Path) -> DocumentationAuditDimension:

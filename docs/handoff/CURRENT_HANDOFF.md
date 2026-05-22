@@ -327,3 +327,9 @@ The terminal output audit is part of the workflow contract: read the body of the
 - PR #649 merged and verified: successor chats must read mandatory rule sources before mutation.
 - `agentic-kit handoff prompt` is canonical; `agentic-kit docs-audit` is the umbrella docs audit.
 - Final summaries must appear in terminal output and terminal logs for relevant workflow blocks.
+
+- Mandatory successor-chat source: `FINAL_SUMMARY_CONTRACT.md`.
+
+- Mandatory successor-chat source: `CHAT_COMMUNICATION_CONTRACT.md`.
+
+- Mandatory successor-chat source: `CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`.

@@ -221,4 +221,4 @@ Next safe step: deterministic rule hardening before GUI or release. v0.3.36 is u
 - v0.3.37 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329450`.
 
 
-- PR #649 merged: LLM communication/bootstrap contracts, `agentic-kit docs-audit`, handoff prompt, and Terminal output requirement are on main; canonical rule docs remain the source of truth.
+- PR #649 merged: docs-audit and Terminal output requirement.

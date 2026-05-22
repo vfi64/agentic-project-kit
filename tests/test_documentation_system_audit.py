@@ -51,3 +51,13 @@ def test_docs_audit_cli_is_registered() -> None:
     runner = CliRunner()
     result = runner.invoke(app, ["docs-audit"])
     assert "Documentation system audit" in result.output
+
+
+def test_documentation_system_audit_checks_status_handoff_closeout_sync() -> None:
+    report = build_documentation_system_audit(ROOT)
+    rendered = render_documentation_system_audit(report)
+    assert "CURRENT_HANDOFF.md missing current closeout marker" not in rendered
+    assert "STATUS.md missing current closeout marker" not in rendered
+    assert ".agentic/compiled_agent_context.yaml" in Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
+    assert "FINAL_SUMMARY_CONTRACT.md" in Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
+
