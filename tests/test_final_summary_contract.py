@@ -39,6 +39,21 @@ def test_final_summary_contract_is_documented() -> None:
         assert required in text
 
 
+def test_final_summary_must_be_printed_by_terminal_block() -> None:
+    text = Path("docs/governance/FINAL_SUMMARY_CONTRACT.md").read_text(encoding="utf-8")
+    assert "The structured SUMMARY must be printed by the terminal block itself" in text
+    assert "captured in the terminal log" in text
+    assert "A chat-only summary is not sufficient" in text
+    assert "only `### RESULT: PASS ###` or `### RESULT: FAIL ###` is incomplete" in text
+
+
+def test_chat_communication_contract_requires_terminal_summary_evidence() -> None:
+    text = Path("docs/governance/CHAT_COMMUNICATION_CONTRACT.md").read_text(encoding="utf-8")
+    assert "a rendered final summary printed in the terminal output" in text
+    assert "captured in the terminal log or command report" in text
+    assert "A chat-only structured summary is not enough for terminal-directed work" in text
+
+
 def test_compiled_context_contains_final_summary_rule() -> None:
     text = Path(".agentic/compiled_agent_context.yaml").read_text(encoding="utf-8")
     assert "id: final-summary-contract" in text

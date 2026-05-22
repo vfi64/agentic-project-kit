@@ -1,0 +1,102 @@
+
+### SYNC FEATURE BRANCH ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            feature/llm-communication-contracts -> FETCH_HEAD
+Already on 'feature/llm-communication-contracts'
+Your branch is up to date with 'origin/feature/llm-communication-contracts'.
+From github.com:vfi64/agentic-project-kit
+ * branch            feature/llm-communication-contracts -> FETCH_HEAD
+Already up to date.
+feature/llm-communication-contracts
+7bff8d9 Record PR649 README repair failure log
+2b66753 Document docs-audit command in README
+c21265e Document documentation system audit
+7f05447 Test umbrella documentation system audit command
+9e23ccc Register docs audit command
+f34f6ee Add documentation system audit report
+9b1b89e Test documentation coverage anchors for LLM communication contracts
+f24d73c Test structured handoff prompt bootstrap content
+
+### PATCH DOCS-AUDIT COVERAGE DOCS ###
+
+### VERIFY ANCHORS ###
+390:## Documentation system audit
+392:Use `agentic-kit docs-audit` as the umbrella documentation-system audit command. It reports Aktualität, Vollständigkeit, Korrektheit, Redundanzfreiheit, Stringenz der Dokumentenordnung, and Konsistenz in one ordered result.
+397:agentic-kit docs-audit
+398:agentic-kit docs-audit --report docs-audit.json
+249:## Documentation System Audit Gate
+251:`agentic-kit docs-audit` is the umbrella documentation-system audit. It reports Aktualität, Vollständigkeit, Korrektheit, Redundanzfreiheit, Stringenz der Dokumentenordnung, and Konsistenz.
+9:  - id: documentation-system-audit-coverage
+32:      - path: docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md
+
+### TARGETED TESTS AND GATES ###
+..........F.......                                                       [100%]
+=================================== FAILURES ===================================
+____ test_llm_communication_contract_files_exist_and_have_required_anchors _____
+
+    def test_llm_communication_contract_files_exist_and_have_required_anchors() -> None:
+        required = {
+            "docs/governance/CHAT_COMMUNICATION_CONTRACT.md": [
+                "User acknowledgements",
+                "LLM-to-terminal rules",
+                "Terminal-to-LLM rules",
+                "Failure communication",
+                "PASS communication",
+                "REMOTE_EVIDENCE: PENDING",
+                "paste-output",
+            ],
+            "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md": [
+                "operating-system-independent",
+                "Python modules",
+                "shell commands are adapters only",
+                "pathlib.Path",
+                "shutil",
+                "platform",
+                "subprocess.run([...]",
+                "shell=False",
+            ],
+            "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md": [
+                "Mandatory startup sequence",
+                "Drift classes",
+                "Drift response",
+                "Handoff prompt requirements",
+                "comm-rules-check",
+                "fail closed",
+            ],
+        }
+        for path, anchors in required.items():
+            text = read(path)
+            for anchor in anchors:
+>               assert anchor in text, f"missing {anchor!r} in {path}"
+E               AssertionError: missing 'shell commands are adapters only' in docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+E               assert 'shell commands are adapters only' in '# Portable Chat Execution Contract\n\nStatus-date: 2026-05-22\nStatus: normative governance contract\nScope: operatin... commands. Prefer file parsing, imports, and deterministic checks over external process execution whenever possible.\n'
+
+tests/test_llm_communication_contracts.py:43: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_llm_communication_contracts.py::test_llm_communication_contract_files_exist_and_have_required_anchors
+1 failed, 17 passed in 0.35s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; policy
+packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[FAIL] document lifecycle audit: docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md: document is missing a Status header;
+docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md: document is missing a Decision status header; 
+docs/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md: status must be one of: accepted, active, archived, idea-note, 
+implemented, proposed, rejected, superseded; found 'in progress.'; docs/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md: 
+document is missing a Decision status header
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: FAIL
+
+### COMMIT AND PUSH ###

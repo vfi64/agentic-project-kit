@@ -6,6 +6,89 @@ purpose: >-
   documentation set.
 
 rules:
+  - id: documentation-system-audit-coverage
+    description: Umbrella documentation-system audit must remain discoverable and must cover the six top-level documentation governance dimensions.
+    documents:
+      - path: README.md
+        terms:
+          - Documentation system audit
+          - agentic-kit docs-audit
+          - Aktualität
+          - Vollständigkeit
+          - Korrektheit
+          - Redundanzfreiheit
+          - Stringenz der Dokumentenordnung
+          - Konsistenz
+      - path: docs/TEST_GATES.md
+        terms:
+          - Documentation System Audit Gate
+          - agentic-kit docs-audit
+          - Aktualität
+          - Vollständigkeit
+          - Korrektheit
+          - Redundanzfreiheit
+          - Stringenz der Dokumentenordnung
+          - Konsistenz
+      - path: docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md
+        terms:
+          - Documentation System Audit Contract
+          - agentic-kit docs-audit
+          - review-only
+
+  - id: llm-communication-bootstrap-coverage
+    description: Portable LLM communication, final summary, bootstrap, drift, and handoff contracts must remain visible without turning status files into duplicate rule books.
+    documents:
+      - path: .agentic/compiled_agent_context.yaml
+        terms:
+          - mandatory_successor_chat_sources
+          - chat-communication-contract
+          - portable-chat-execution-contract
+          - chat-bootstrap-and-drift-contract
+          - forbidden_remote_evidence_values
+          - shell_role
+          - fail_closed
+      - path: docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+        terms:
+          - User acknowledgements
+          - LLM-to-user rules
+          - LLM-to-terminal rules
+          - Terminal-to-LLM rules
+          - a rendered final summary printed in the terminal output
+          - Failure communication
+          - PASS communication
+          - 'REMOTE_EVIDENCE: PENDING'
+          - paste-output
+      - path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+        terms:
+          - operating-system-independent
+          - Python modules
+          - shell=False
+          - Shell commands are adapters only
+          - pathlib.Path
+          - shutil
+          - platform
+          - subprocess.run
+      - path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+        terms:
+          - Mandatory startup sequence
+          - Drift classes
+          - Drift response
+          - Handoff prompt requirements
+          - comm-rules-check
+          - fail closed
+      - path: docs/governance/FINAL_SUMMARY_CONTRACT.md
+        terms:
+          - 'REMOTE_EVIDENCE: PASS|FAIL|PARTIAL|NOT_REQUIRED'
+          - 'WORK: PASS|FAIL|PENDING|HARD-FAIL|NO-COMMAND'
+          - No legacy handwritten summary fallback
+      - path: docs/TEST_GATES.md
+        terms:
+          - LLM Communication and Bootstrap Gate
+          - CHAT_COMMUNICATION_CONTRACT.md
+          - PORTABLE_CHAT_EXECUTION_CONTRACT.md
+          - CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+          - concise pointers, not duplicate rule books
+
   - id: public-command-readme-coverage
     description: Public CLI commands must be discoverable from README.md.
     documents:

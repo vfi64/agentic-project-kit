@@ -386,6 +386,18 @@ The hard checks currently cover version mismatches, stale current-state wording,
 
 Future repair tools should stay bounded to mechanical edits and must not rewrite semantics.
 
+
+## Documentation system audit
+
+Use `agentic-kit docs-audit` as the umbrella documentation-system audit command. It reports Aktualität, Vollständigkeit, Korrektheit, Redundanzfreiheit, Stringenz der Dokumentenordnung, and Konsistenz in one ordered result.
+
+The command aggregates deterministic findings from `agentic-kit check-docs`, `agentic-kit doc-mesh-audit`, and `agentic-kit doc-lifecycle-audit`. It also marks full semantic redundancy review as review-only instead of pretending to prove what deterministic gates cannot prove.
+
+```bash
+agentic-kit docs-audit
+agentic-kit docs-audit --report docs-audit.json
+```
+
 ## Logging and evidence
 
 The generated `scripts/stage_recent_logs.py` script is intentionally bounded. It stages only a recent diagnostic window from known log folders into `tmp/agent-evidence`.
