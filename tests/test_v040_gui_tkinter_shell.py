@@ -238,15 +238,37 @@ def test_manual_gui_status_transition_contract_is_present():
 def test_doctor_manual_gui_runner_executes_readonly_action():
     from agentic_project_kit.gui_tkinter_shell import run_doctor_for_manual_gui
     output = run_doctor_for_manual_gui()
-    assert chr(97) + chr(99) + chr(116) + chr(105) + chr(111) + chr(110) + chr(61) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114) in output
-    assert chr(115) + chr(97) + chr(102) + chr(101) + chr(116) + chr(121) + chr(95) + chr(99) + chr(108) + chr(97) + chr(115) + chr(115) + chr(61) + chr(114) + chr(101) + chr(97) + chr(100) + chr(45) + chr(111) + chr(110) + chr(108) + chr(121) in output
-    assert chr(97) + chr(108) + chr(108) + chr(111) + chr(119) + chr(101) + chr(100) + chr(61) + chr(116) + chr(114) + chr(117) + chr(101) in output
-    assert chr(101) + chr(120) + chr(101) + chr(99) + chr(117) + chr(116) + chr(101) + chr(100) + chr(61) + chr(116) + chr(114) + chr(117) + chr(101) in output
-    assert chr(65) + chr(103) + chr(101) + chr(110) + chr(116) + chr(105) + chr(99) + chr(32) + chr(112) + chr(114) + chr(111) + chr(106) + chr(101) + chr(99) + chr(116) + chr(32) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114) + chr(32) + chr(114) + chr(101) + chr(112) + chr(111) + chr(114) + chr(116) in output
+    assert "action=doctor" in output
+    assert "safety_class=read-only" in output
+    assert "allowed=true" in output
+    assert "executed=true" in output
+    assert "Agentic project doctor report" in output
 
 def test_manual_gui_doctor_status_transition_contract_is_present():
     from pathlib import Path
-    source = Path(chr(115) + chr(114) + chr(99) + chr(47) + chr(97) + chr(103) + chr(101) + chr(110) + chr(116) + chr(105) + chr(99) + chr(95) + chr(112) + chr(114) + chr(111) + chr(106) + chr(101) + chr(99) + chr(116) + chr(95) + chr(107) + chr(105) + chr(116) + chr(47) + chr(103) + chr(117) + chr(105) + chr(95) + chr(116) + chr(107) + chr(105) + chr(110) + chr(116) + chr(101) + chr(114) + chr(95) + chr(115) + chr(104) + chr(101) + chr(108) + chr(108) + chr(46) + chr(112) + chr(121)).read_text(encoding=chr(117) + chr(116) + chr(102) + chr(45) + chr(56))
-    manual_source = source[source.index(chr(100) + chr(101) + chr(102) + chr(32) + chr(114) + chr(101) + chr(110) + chr(100) + chr(101) + chr(114) + chr(95) + chr(109) + chr(97) + chr(110) + chr(117) + chr(97) + chr(108) + chr(95) + chr(108) + chr(97) + chr(117) + chr(110) + chr(99) + chr(104) + chr(95) + chr(99) + chr(111) + chr(110) + chr(116) + chr(101) + chr(110) + chr(116)):source.index(chr(100) + chr(101) + chr(102) + chr(32) + chr(114) + chr(117) + chr(110) + chr(95) + chr(109) + chr(97) + chr(110) + chr(117) + chr(97) + chr(108) + chr(95) + chr(108) + chr(97) + chr(117) + chr(110) + chr(99) + chr(104))]
-    assert chr(100) + chr(101) + chr(102) + chr(32) + chr(114) + chr(117) + chr(110) + chr(95) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114) + chr(95) + chr(99) + chr(108) + chr(105) + chr(99) + chr(107) in manual_source
-    assert chr(99) + chr(111) + chr(109) + chr(109) + chr(97) + chr(110) + chr(100) + chr(61) + chr(114) + chr(117) + chr(110) + chr(95) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114) + chr(95) + chr(99) + chr(108) + chr(105) + chr(99) + chr(107) in manual_source
+    source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
+    manual_source = source[source.index("def render_manual_launch_content"):source.index("def run_manual_launch")]
+    assert "def run_doctor_click() -> None:" in manual_source
+    assert "command=run_doctor_click" in manual_source
+    assert "Status: running | branch: main | action: doctor" in manual_source
+    assert "Status: success | branch: main | action: doctor" in manual_source
+    assert "Status: fail | branch: main | action: doctor" in manual_source
+def test_manual_gui_uses_shared_readonly_runner_abstraction():
+    from pathlib import Path
+    source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
+    assert "def run_manual_gui_read_only_action(" in source
+    assert "def render_gui_action_execution_result(" in source
+    import ast
+    tree = ast.parse(source)
+    bounded_calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == "run_bounded_read_only_action"]
+    assert len(bounded_calls) == 1
+    assert "return run_manual_gui_read_only_action(\"cockpit-readiness\", executor)" in source
+    assert "return run_manual_gui_read_only_action(\"doctor\", executor)" in source
+
+def test_shared_readonly_runner_formats_single_and_multiline_output():
+    from types import SimpleNamespace
+    from agentic_project_kit.gui_tkinter_shell import render_gui_action_execution_result
+    single = render_gui_action_execution_result(SimpleNamespace(action_name="x", safety_class="read_only", allowed=True, executed=True, returncode=0, message="ok", output="one"))
+    multi = render_gui_action_execution_result(SimpleNamespace(action_name="x", safety_class="read_only", allowed=True, executed=True, returncode=0, message="ok", output="one\ntwo"))
+    assert "output=one" in single
+    assert "output_begin\none\ntwo\noutput_end" in multi
