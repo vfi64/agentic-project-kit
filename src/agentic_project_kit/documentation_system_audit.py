@@ -174,8 +174,8 @@ def _status_handoff_sync_findings(project_root: Path) -> tuple[str, ...]:
     status = _read_optional(project_root / "docs/STATUS.md")
     handoff = _read_optional(project_root / "docs/handoff/CURRENT_HANDOFF.md")
     findings: list[str] = []
-    status_prs = set(re.findall(r"PR #\\d+ merged", status))
-    handoff_prs = set(re.findall(r"PR #\\d+ merged", handoff))
+    status_prs = set(re.findall(r"PR #\d+ merged", status))
+    handoff_prs = set(re.findall(r"PR #\d+ merged", handoff))
     for item in sorted(status_prs - handoff_prs):
         findings.append(f"docs/handoff/CURRENT_HANDOFF.md missing current closeout marker from STATUS.md: {item}")
     for item in sorted(handoff_prs - status_prs):
