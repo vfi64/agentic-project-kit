@@ -3,7 +3,7 @@ Current version: 0.3.37
 Status-date: 2026-05-22
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/closeout-v040-gui-mvp-three-readonly-actions
+Current work branch: docs/repair-v040-status-drift-after-pr657
 
 ## Purpose
 agentic-project-kit is a repository-backed governance and workflow kit for long-running AI-assisted software projects. Durable project memory belongs in versioned repository files, deterministic gates, evidence logs, and explicit handoff state rather than chat transcripts.
@@ -16,7 +16,7 @@ The repository is the source of truth; chat memory is not a source of truth. Cha
 Machine guard: `agentic-kit docs-audit` enforces the current-state headroom boundary and fails if `docs/STATUS.md` exceeds the configured word limit. This is a hard drift signal, not a stylistic preference.
 
 ## Current Goal
-Close out the v0.4.0 GUI MVP baseline: a local Tkinter cockpit with exactly three visually verified bounded read-only actions and no release, tag, or remote mutation GUI path.
+Keep the v0.4.0 GUI MVP baseline ready for the next readiness slice by repairing current-state drift after PR #657. This is a documentation-state repair only; it does not start release work or change GUI behavior.
 
 ## Current State
 Current released version: 0.3.37.
@@ -36,6 +36,12 @@ Current GUI evidence:
 - `docs/reports/terminal/v040-record-check-docs-gui-visual-pass.log`
 - `docs/reports/terminal/v040-repair-tk-venv-deps-zsh-safe-check-docs-visual.log`
 - `docs/reports/terminal/v040-record-doctor-gui-manual-launch-visual-result.log`
+- `docs/reports/terminal/v040-final-release-readiness-and-successor-handoff.log`
+
+Recent closeout anchors:
+- PR #656 closed out the GUI MVP three read-only actions.
+- PR #657 modeled administrative evidence state in generated handoff prompts.
+- Historical open PRs #562, #564, and #568 still need explicit classification or closure before a final v0.4.0 release-readiness conclusion.
 
 ## Active Workflow Rules
 - Read mandatory successor-chat sources before mutation.
@@ -84,7 +90,7 @@ These compact anchors are intentionally retained to keep existing deterministic 
 - Current released version: 0.3.29; Current released version: 0.3.32; v0.3.32 Release Phase and Evidence Closeout; `release-preflight` validates the before-metadata release phase; `release-check` remains the after-metadata gate; `post-release-check` remains the after-release GitHub and Zenodo verification gate; `evidence clean-check`; `./ns evidence-clean-check`; expected in-progress log may be the only dirty path.
 - v0.3.34 portable core hardening plan; Tkinter remains explicitly deferred.
 - v0.3.36 current-state cleanup started as a documentation-only line.
-- PR #649 merged; PR #650 merged; PR #651 merged; PR #652 merged.
+- PR #649 merged; PR #650 merged; PR #651 merged; PR #652 merged; PR #656 merged; PR #657 merged.
 
 ## Compact Legacy Test Anchors
 These anchors are deliberately compact compatibility pointers. Long narrative history belongs in `CHANGELOG.md`.
@@ -97,9 +103,9 @@ These anchors are deliberately compact compatibility pointers. Long narrative hi
 - remote inspection evidence contract: failed or diagnostic logs must be uploaded and registered for later GC.
 
 ## Next Safe Step
-Finish PR #656 by preserving the GUI MVP closeout and the current-state boundary hardening. Before merge, verify docs-audit, check-docs, doctor, targeted GUI tests, and the final structured summary/log-upload contract.
+Finish this non-destructive current-state repair slice, verify the gates, and then handle the remaining drift separately: `.agentic/handoff_state.yaml`, `docs/handoff/CURRENT_HANDOFF.md`, and historical PRs #562, #564, and #568 must be classified or closed without removing test-bound compatibility anchors.
 
-After PR #656 is merged and verified on `main`, generate the next-chat handoff through `agentic-kit handoff prompt` and switch chats.
+After the state repair is merged and verified on `main`, generate the next-chat handoff through `agentic-kit handoff prompt` before any v0.4.0 release-readiness conclusion.
 
 ## Compatibility Coverage Anchors
 These compact anchors are intentionally retained for deterministic coverage: documentation coverage, policy-pack checks, policy packs, Pattern Advisor, `patterns list`, `patterns show`, no-copy/evidence, Communication artifact GC hardening is now part of the pre-GUI baseline, long chat-generated shell or Python patch blocks, v0.3.31 is the current pre-GUI execution hardening line., Mandatory Final Summary Contract, policy-pack doctor checks, `agentic-kit post-release-check`, `.agentic/compiled_agent_context.yaml`, `CHAT_COMMUNICATION_CONTRACT.md`, `PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `FINAL_SUMMARY_CONTRACT.md`, `docs/TEST_GATES.md`.
