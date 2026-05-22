@@ -1,0 +1,199 @@
+
+### PRE-MERGE STATE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            feature/llm-communication-contracts -> FETCH_HEAD
+Switched to branch 'main'
+Your branch is behind 'origin/main' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Updating 66412fc..b883dac
+Fast-forward
+ ....0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md | 132 ++++++++++++++++++++
+ ...PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md | 134 +++++++++++++++++++++
+ 2 files changed, 266 insertions(+)
+ create mode 100644 docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md
+ create mode 100644 docs/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md
+main
+b883dac Plan portable LLM communication bootstrap hardening (#648)
+66412fc Record PR647 doctor GUI merge recovery log
+16b3037 Enable doctor button through read-only GUI contract (#647)
+7a0823c Record doctor action registry merge verification log
+b288179 Register doctor as read-only GUI action candidate (#646)
+49a627c Record visual GUI status transition verification
+5a78b3d Record GUI status transitions merge verification log
+5483b3f Add GUI status transitions for cockpit readiness (#645)
+
+### PR649 STATE ###
+{"headRefOid":"0d4fedd97f01eefbdcb47f04921c72b72b9789a3","mergeStateStatus":"CLEAN","state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-22T14:44:11Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26294448546/job/77403092517","name":"test","startedAt":"2026-05-22T14:43:47Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-22T14:44:09Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26294445903/job/77403083954","name":"test","startedAt":"2026-05-22T14:43:44Z","status":"COMPLETED","workflowName":"CI"}],"title":"Add LLM communication and portable execution contracts","url":"https://github.com/vfi64/agentic-project-kit/pull/649"}
+
+### MERGE PR649 ###
+
+### SYNC MAIN AFTER MERGE ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   b883dac..ec3c8c3  main       -> origin/main
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Updating b883dac..ec3c8c3
+Fast-forward
+ .agentic/compiled_agent_context.yaml               | 121 ++++++++++--
+ README.md                                          |  12 ++
+ docs/DOCUMENTATION_COVERAGE.yaml                   |  83 ++++++++
+ docs/TEST_GATES.md                                 |  53 +++--
+ .../CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md           |  82 ++++++++
+ docs/governance/CHAT_COMMUNICATION_CONTRACT.md     | 118 ++++++++++++
+ .../DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md         |  37 ++++
+ docs/governance/FINAL_SUMMARY_CONTRACT.md          |  10 +-
+ .../governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md |  65 +++++++
+ ....0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md |  42 +---
+ .../v040-complete-pr649-docs-audit-coverage.log    | 102 ++++++++++
+ .../v040-llm-bootstrap-summary-drift-inventory.md  |  45 +++++
+ .../v040-repair-pr649-ci-required-doc-anchors.log  | 134 +++++++++++++
+ ...0-repair-pr649-docs-audit-anchors-lifecycle.log |  68 +++++++
+ .../v040-repair-pr649-readme-truncation-fail.log   | 125 ++++++++++++
+ .../v040-repair-pr649-readme-truncation.log        | 106 ++++++++++
+ .../v040-repair-pr649-release-gate-help-anchor.log | 119 ++++++++++++
+ ...40-repair-pr649-release-publish-help-anchor.log | 123 ++++++++++++
+ ...040-repair-pr649-release-route-help-anchors.log | 129 +++++++++++++
+ ...0-repair-pr649-release-route-safety-anchors.log | 120 ++++++++++++
+ ...40-repair-pr649-test-gates-required-anchors.log |  75 ++++++++
+ ...PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md |  52 +----
+ sentinel.yaml                                      |  39 +++-
+ src/agentic_project_kit/cli_commands/checks.py     |  21 +-
+ .../documentation_system_audit.py                  | 213 +++++++++++++++++++++
+ src/agentic_project_kit/handoff_prompt.py          | 132 +++++++++++--
+ tests/test_documentation_system_audit.py           |  53 +++++
+ tests/test_final_summary_contract.py               |  17 +-
+ tests/test_handoff_prompt.py                       |  62 +++++-
+ tests/test_llm_communication_contracts.py          | 145 ++++++++++++++
+ 30 files changed, 2365 insertions(+), 138 deletions(-)
+ create mode 100644 docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+ create mode 100644 docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+ create mode 100644 docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md
+ create mode 100644 docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+ create mode 100644 docs/reports/terminal/v040-complete-pr649-docs-audit-coverage.log
+ create mode 100644 docs/reports/terminal/v040-llm-bootstrap-summary-drift-inventory.md
+ create mode 100644 docs/reports/terminal/v040-repair-pr649-ci-required-doc-anchors.log
+ create mode 100644 docs/reports/terminal/v040-repair-pr649-docs-audit-anchors-lifecycle.log
+ create mode 100644 docs/reports/terminal/v040-repair-pr649-readme-truncation-fail.log
+ create mode 100644 docs/reports/terminal/v040-repair-pr649-readme-truncation.log
+ create mode 100644 docs/reports/terminal/v040-repair-pr649-release-gate-help-anchor.log
+ create mode 100644 docs/reports/terminal/v040-repair-pr649-release-publish-help-anchor.log
+ create mode 100644 docs/reports/terminal/v040-repair-pr649-release-route-help-anchors.log
+ create mode 100644 docs/reports/terminal/v040-repair-pr649-release-route-safety-anchors.log
+ create mode 100644 docs/reports/terminal/v040-repair-pr649-test-gates-required-anchors.log
+ create mode 100644 src/agentic_project_kit/documentation_system_audit.py
+ create mode 100644 tests/test_documentation_system_audit.py
+ create mode 100644 tests/test_llm_communication_contracts.py
+main
+ec3c8c3 Add LLM communication and portable execution contracts (#649)
+b883dac Plan portable LLM communication bootstrap hardening (#648)
+66412fc Record PR647 doctor GUI merge recovery log
+16b3037 Enable doctor button through read-only GUI contract (#647)
+7a0823c Record doctor action registry merge verification log
+b288179 Register doctor as read-only GUI action candidate (#646)
+49a627c Record visual GUI status transition verification
+5a78b3d Record GUI status transitions merge verification log
+5483b3f Add GUI status transitions for cockpit readiness (#645)
+1bd9ad4 Record visual cockpit readiness GUI output verification
+d6281eb Record visual cockpit readiness GUI output verification
+0a5ed10 Record cockpit readiness GUI output merge verification log
+
+### VERIFY MAIN CONTENT ###
+390:## Documentation system audit
+392:Use `agentic-kit docs-audit` as the umbrella documentation-system audit command. It reports Aktualität, Vollständigkeit, Korrektheit, Redundanzfreiheit, Stringenz der Dokumentenordnung, and Konsistenz in one ordered result.
+397:agentic-kit docs-audit
+398:agentic-kit docs-audit --report docs-audit.json
+254:- Final summary contract: see `docs/governance/FINAL_SUMMARY_CONTRACT.md`.
+258:- Release route help anchors: `release-prep --help`, `release-gate --help`, `release-publish --help`, and `release-verify --help` and invalid-argument paths must not create branches` must remain documented and testable before release-route changes.
+260:## Documentation System Audit Gate
+9:  - id: documentation-system-audit-coverage
+56:          - a rendered final summary printed in the terminal output
+51:## Terminal output requirement
+89:A chat-only structured summary is not enough for terminal-directed work. The terminal block must render the structured summary itself, normally through `./ns summary`, so the evidence remains inspectable after chat handoff.
+
+### MAIN GATES ###
+.......................                                                  [100%]
+23 passed in 0.36s
+........................................................................ [  8%]
+........................................................................ [ 17%]
+........................................................................ [ 26%]
+........................................................................ [ 35%]
+........................................................................ [ 43%]
+........................................................................ [ 52%]
+........................................................................ [ 61%]
+........................................................................ [ 70%]
+........................................................................ [ 78%]
+........................................................................ [ 87%]
+........................................................................ [ 96%]
+..............................                                           [100%]
+822 passed in 4.41s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COMMIT MAIN MERGE VERIFICATION LOG BEFORE SUMMARY ###
+
+### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-22 16:50:30 +0200
+
+SLICE
+  NAME: MERGE PR649 LLM COMMUNICATION CONTRACTS
+  SCOPE: MERGE VERIFY / MAIN / DOCS / TESTS / NO RELEASE
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: PR649 merged; main content and gates verified; log upload follows
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PARTIAL
+  PR: 649 merged
+  HEAD_SHA: ec3c8c320b8f94a68cbe78d34c0780d20b63abe0
+  CI: pass
+  MERGE: done
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/v040-merge-pr649-llm-communication-contracts.log
+  terminal_log_remote: docs/reports/terminal/v040-merge-pr649-llm-communication-contracts.log
+  terminal_log_local: /tmp/v040-merge-pr649-llm-communication-contracts.log
+  command_report: merge-pr649/main-content-verification/pytest/ruff/check-docs/doctor
+
+INTERPRETATION
+  PR649 was merged and main now contains the LLM communication, bootstrap, docs-audit, handoff, and terminal-summary contracts.
+
+NEXT
+  SAFE_STEP: continue with the next bounded GUI-MVP slice only after confirming main is clean
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
+
+### UPLOAD TERMINAL LOG INCLUDING STRUCTURED SUMMARY ###
