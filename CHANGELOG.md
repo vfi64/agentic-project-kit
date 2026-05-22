@@ -1,6 +1,8 @@
 ## v0.3.37
 
-## v0.4.0-unreleased
+## v0.4.0
+
+- Prepare release metadata for v0.4.0.
 
 ### Documentation-order and status-boundary hardening
 - Treat `CHANGELOG.md` as the long-term project protocol and historical narrative.

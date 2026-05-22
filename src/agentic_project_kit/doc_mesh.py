@@ -150,7 +150,12 @@ _VERSION_PATTERNS: dict[str, re.Pattern[str]] = {
     "docs/STATUS.md": re.compile(r"^Current version:\s*([0-9]+\.[0-9]+\.[0-9]+)", re.MULTILINE),
     "docs/handoff/CURRENT_HANDOFF.md": re.compile(r"^Current version:\s*([0-9]+\.[0-9]+\.[0-9]+)", re.MULTILINE),
     "CITATION.cff": re.compile(r"^version:\s*([0-9]+\.[0-9]+\.[0-9]+)", re.MULTILINE),
-    "README.md": re.compile(r"^Current verified release:\s*version `([0-9]+\.[0-9]+\.[0-9]+)`", re.MULTILINE),
+    "README.md": re.compile(
+        r"(?:Version `([0-9]+\.[0-9]+\.[0-9]+)` "
+        r"(?:is the current release line prepared|is current\.)"
+        r"|Current verified release: version `([0-9]+\.[0-9]+\.[0-9]+)`)",
+        re.MULTILINE,
+    ),
 }
 
 _VERIFIED_DOI_PATTERN = re.compile(
@@ -237,7 +242,7 @@ def build_doc_mesh_report(project_root: Path) -> DocMeshReport:
             if match is None:
                 findings.append(DocMeshFinding("missing-version", document.path, "current-state document has no machine-readable version marker"))
             else:
-                versions[document.path] = match.group(1)
+                versions[document.path] = next(group for group in match.groups() if group)
 
     findings.extend(_check_version_consistency(versions))
     findings.extend(_check_release_doi_consistency(contents))

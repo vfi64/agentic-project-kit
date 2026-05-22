@@ -545,3 +545,4 @@ Current verified release: version `0.3.37`, Zenodo version DOI `10.5281/zenodo.2
 Earlier verified version-specific DOIs are intentionally maintained in `docs/releases/VERIFIED_RELEASES.md` instead of duplicating a long and drift-prone release ledger in the README.
 Archived release v0.3.36 was post-release verified before v0.3.37.
 Version `0.3.37` is released and post-release verified with Zenodo version DOI `10.5281/zenodo.20329450`.
+Version `0.4.0` is the current release line prepared by `./ns release-prep 0.4.0`.
