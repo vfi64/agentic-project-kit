@@ -1,0 +1,223 @@
+### START ###
+Fr. 22 Mai 2026 21:22:06 CEST
+
+### SYNC CLEAN MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+HEAD is now at 105d93b Prepare v0.4.0 release metadata (#668)
+main
+105d93b Prepare v0.4.0 release metadata (#668)
+bb8d4bd Record final handoff prompt after PR666 (#667)
+8198ebe Refresh handoff state after PR665 (#666)
+0234800 Merge current handoff overlay after PR664 (#665)
+9b918f6 Refresh handoff state after PR663 (#664)
+456a428 Repair README version extractor and DOI drift (#663)
+
+### VERIFY BASE FAILURE IS THE KNOWN DOC_MESH README SELECTION ###
+Documentation system audit
+
+[FAIL] Aktualität
+- README.md: version '0.3.37' does not match expected version '0.4.0'
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[FAIL] Korrektheit
+- doc-mesh:version-mismatch:README.md: version '0.3.37' does not match expected version '0.4.0'
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[FAIL] Konsistenz
+- doc-mesh:version-mismatch:README.md: version '0.3.37' does not match expected version '0.4.0'
+
+Overall: FAIL
+
+### CREATE REPAIR BRANCH ###
+Switched to a new branch 'docs/repair-readme-docmesh-current-selection-after-pr668'
+
+### WRITE STRUCTURED PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+
+### TARGETED TESTS AND DOCS AUDIT ###
+.......................                                                  [100%]
+23 passed in 0.11s
+All checks passed!
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
+
+### FULL GATES ###
+Release state check for target v0.4.0
+
+[PASS] semantic version: 0.4.0 is valid
+[PASS] pyproject version: found text: version = "0.4.0"
+[PASS] package __version__: found text: __version__ = "0.4.0"
+[PASS] CHANGELOG version: found text: v0.4.0
+[PASS] README version: found text: Version `0.4.0`
+[PASS] CITATION version: found text: version: 0.4.0
+[PASS] STATUS version: found text: Current version: 0.4.0
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.4.0
+[PASS] local tag unused: tag is unused: v0.4.0
+[PASS] remote tag unused: remote tag is unused: v0.4.0
+[PASS] GitHub release unused: GitHub release is absent: v0.4.0
+
+Overall: PASS
+
+Release preflight for target v0.4.0
+
+[PASS] semantic version: 0.4.0 is valid
+[PASS] local tag unused: tag is unused: v0.4.0
+[PASS] remote tag unused: remote tag is unused: v0.4.0
+[PASS] GitHub release unused: GitHub release is absent: v0.4.0
+
+Overall: PASS
+PASS: no stale STATUS/HANDOFF current-state fragments found
+Persistent handoff state check passed
+Governance check passed
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.0
+
+Overall: PASS
+docs/repair-readme-docmesh-current-selection-after-pr668
+ M src/agentic_project_kit/doc_mesh.py
+ M tests/test_doc_mesh.py
+........................................................................ [  8%]
+........................................................................ [ 17%]
+........................................................................ [ 25%]
+........................................................................ [ 34%]
+........................................................................ [ 42%]
+........................................................................ [ 51%]
+........................................................................ [ 59%]
+........................................................................ [ 68%]
+........................................................................ [ 76%]
+........................................................................ [ 85%]
+........................................................................ [ 94%]
+..................................................                       [100%]
+842 passed in 4.54s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.0
+
+Overall: PASS
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=117
+ok=true
+
+Findings:
+- none
+docs/repair-readme-docmesh-current-selection-after-pr668
+ M src/agentic_project_kit/doc_mesh.py
+ M tests/test_doc_mesh.py
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+
+### PYTEST ###
+
+### RUFF ###
+
+### CHECK DOCS ###
+
+### DOCTOR ###
+
+### PR HYGIENE ###
+
+### FINAL STATUS ###
+Local feature gate passed.
+
+### DIFF ###
+diff --git a/src/agentic_project_kit/doc_mesh.py b/src/agentic_project_kit/doc_mesh.py
+index 7e4a62b..00da88b 100644
+--- a/src/agentic_project_kit/doc_mesh.py
++++ b/src/agentic_project_kit/doc_mesh.py
+@@ -242,7 +242,9 @@ def build_doc_mesh_report(project_root: Path) -> DocMeshReport:
+             if match is None:
+                 findings.append(DocMeshFinding("missing-version", document.path, "current-state document has no machine-readable version marker"))
+             else:
+-                versions[document.path] = next(group for group in match.groups() if group)
++                all_matches = list(pattern.finditer(content))
++                selected_match = all_matches[-1]
++                versions[document.path] = next(group for group in selected_match.groups() if group)
+ 
+     findings.extend(_check_version_consistency(versions))
+     findings.extend(_check_release_doi_consistency(contents))
+diff --git a/tests/test_doc_mesh.py b/tests/test_doc_mesh.py
+index 7d2dbd2..7c2f9e7 100644
+--- a/tests/test_doc_mesh.py
++++ b/tests/test_doc_mesh.py
+@@ -52,6 +52,20 @@ def test_doc_mesh_accepts_consistent_minimal_project(tmp_path: Path) -> None:
+     assert not report.findings
+ 
+ 
++
++
++def test_doc_mesh_prefers_prepared_readme_release_marker_over_verified_history(tmp_path: Path) -> None:
++    _write_minimal_mesh(tmp_path, version="0.4.0")
++    _write(
++        tmp_path / "README.md",
++        "Current verified release: version `0.3.37`, Zenodo version DOI `10.5281/zenodo.20329450`.\\n"
++        "Version `0.4.0` is the current release line prepared by `./ns release-prep 0.4.0`.\\n",
++    )
++
++    report = build_doc_mesh_report(tmp_path)
++
++    assert report.ok
++
+ def test_doc_mesh_detects_version_mismatch(tmp_path: Path) -> None:
+     _write_minimal_mesh(tmp_path)
+     _write(tmp_path / "src/agentic_project_kit/__init__.py", '__version__ = "9.9.9"\n')
+
+### COPY LOG TO REPO EVIDENCE ###

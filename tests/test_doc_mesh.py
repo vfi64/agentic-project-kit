@@ -52,6 +52,20 @@ def test_doc_mesh_accepts_consistent_minimal_project(tmp_path: Path) -> None:
     assert not report.findings
 
 
+
+
+def test_doc_mesh_prefers_prepared_readme_release_marker_over_verified_history(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path, version="0.4.0")
+    _write(
+        tmp_path / "README.md",
+        "Current verified release: version `0.3.37`, Zenodo version DOI `10.5281/zenodo.20329450`.\\n"
+        "Version `0.4.0` is the current release line prepared by `./ns release-prep 0.4.0`.\\n",
+    )
+
+    report = build_doc_mesh_report(tmp_path)
+
+    assert report.ok
+
 def test_doc_mesh_detects_version_mismatch(tmp_path: Path) -> None:
     _write_minimal_mesh(tmp_path)
     _write(tmp_path / "src/agentic_project_kit/__init__.py", '__version__ = "9.9.9"\n')
