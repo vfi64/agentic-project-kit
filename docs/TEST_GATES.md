@@ -18,6 +18,8 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Documentation coverage change | Update docs/DOCUMENTATION_COVERAGE.yaml and run agentic-kit check-docs |
 | Documentation mesh / cross-document drift change | Unit tests plus agentic-kit doc-mesh-audit CLI smoke command; keep current-state, governance, architecture, and historical-plan document classes explicit |
 | Governance rule change | Rule Hardening Gate: add or update a deterministic test, coverage check, doctor check, release check, or documented review-only exception |
+| LLM communication or bootstrap rule change | Update the communication/bootstrap governance contracts, compiled agent context, coverage anchors, and `tests/test_llm_communication_contracts.py`; run agentic-kit check-docs |
+| Portable execution rule change | Update `docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md`; add or update Python-first tests; do not make POSIX shell tools canonical workflow dependencies |
 | Document quality heuristic change | Unit tests plus agentic-kit check-docs; confirm that deterministic quality heuristics do not claim semantic perfection |
 | Python code | python -m pytest -q and ruff check . |
 | CLI behavior | Unit tests plus CLI smoke command; update docs/DOCUMENTATION_COVERAGE.yaml when public command visibility changes |
@@ -73,6 +75,27 @@ Update it when adding or changing:
 - architecture concepts, profiles, or policy packs.
 
 `agentic-kit check-docs` must fail if a required term from the coverage matrix is missing from its target document.
+
+## LLM Communication and Bootstrap Gate
+
+Changes to chat communication, final summary behavior, portable execution, successor-chat bootstrap, drift detection, or handoff prompt behavior must update the canonical governance contracts instead of spreading long duplicate rules across state files.
+
+Required source documents:
+
+- `docs/governance/CHAT_COMMUNICATION_CONTRACT.md`
+- `docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md`
+- `docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`
+- `docs/governance/FINAL_SUMMARY_CONTRACT.md`
+- `.agentic/compiled_agent_context.yaml`
+
+Required hardening:
+
+- update `docs/DOCUMENTATION_COVERAGE.yaml` when anchors change;
+- update `tests/test_llm_communication_contracts.py` or the deterministic communication-rules check;
+- keep `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` as concise pointers, not duplicate rule books;
+- prefer Python-core portable checks over shell-only snippets.
+
+The gate must preserve these invariants: successor chats read mandatory sources before mutation, `d`/`f`/`w` are communication signals rather than evidence, `REMOTE_EVIDENCE` uses only final contract values, shell is only an adapter, and drift stops mutation-oriented work unless the mutation is the drift fix itself.
 
 ## Next-Step Workflow Gate
 
@@ -317,14 +340,3 @@ Before acting on repository state, command syntax, release phase, file locations
 Rule id: no-remote-command-deadlock
 
 Remote command first is a delivery preference, not a blocking rule. If `./ns agent-next` reports `NO-COMMAND`, the next assistant response must either queue a complete command pair remotely or give exactly one minimal fallback command. The user must not be kept in an `ask-agent-to-queue-command` loop. Long ad-hoc terminal blocks are only allowed when the remote command path is unavailable or broken.
-
-- Final summary contract: relevant workflow blocks must end with the framed SUMMARY contract containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, and final result marker.
-
-## No executable placeholder summaries
-
-Executable terminal blocks must never print final SUMMARY fields with placeholder alternatives such as `PASS|FAIL`, `p|paste-output`, or ellipsis markers. A copied block must end with one concrete outcome only. Placeholder examples are allowed only in prose documents when clearly marked as non-executable examples.
-
-
-### Release route help and invalid-argument safety
-
-`./ns release-prep --help`, `./ns release-gate --help`, `./ns release-publish --help`, and `./ns release-verify --help` must be read-only and must not create branches, tags, releases, commits, files, or dirty working trees.
