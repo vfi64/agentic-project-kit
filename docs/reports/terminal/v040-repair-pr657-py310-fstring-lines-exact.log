@@ -1,0 +1,153 @@
+
+### VERIFY FEATURE BRANCH AND PRESERVE DIRTY SOURCE PATCH ###
+docs/handoff-administrative-evidence-state-v2
+ M src/agentic_project_kit/handoff_prompt.py
+00b5a32 Record PR657 Python compatibility repair log
+2b70a4d Record handoff admin evidence V2 prompt key repair log
+9c3779c Model administrative evidence state in handoff prompts
+e230448 Record handoff admin evidence V2 prompt insert repair log
+fe1ee68 Record handoff admin evidence V2 prompt output repair log
+6e09d44 Record handoff admin evidence V2 test fixture repair log
+318b1dd Record import-safe handoff administrative evidence repair log
+752b9db Record handoff administrative evidence state V2 log
+97c8ecb Record final post-PR656 handoff consistency log
+ac92db8 Finalize post-PR656 handoff prompt at current main head
+6acf36c Align handoff state with current main head after PR656
+1333eb9 Record finalized post-PR656 handoff refresh log
+501155e Finalize handoff state after PR656 GUI MVP closeout
+82d6000 Record post-PR656 handoff state refresh log
+
+### WRITE EXACT LINE REPAIR SCRIPT ###
+
+### RUN EXACT LINE REPAIR ###
+EXACT_FSTRING_LINES_REPLACED=4
+
+### INSPECT PATCHED ADMIN PROMPT BLOCK ###
+        f"Working tree expected clean: `{safe_state.get('working_tree_expected_clean', '')}`",
+    ])
+    if isinstance(admin_state, dict) and admin_state:
+        admin_current_head = admin_state.get("current_head", "")
+        admin_current_head_subject = admin_state.get("current_head_subject", "")
+        admin_allowed_after_safe_state = admin_state.get("allowed_after_safe_state", "")
+        admin_reason = admin_state.get("reason", "")
+        lines.extend([
+            "",
+            "## 2a. Administrative Evidence State",
+            "",
+            "Administrative Evidence Commits nach dem fachlichen Safe-State sind erlaubt, wenn sie nur Logs, Handoff, Summary oder Evidence aktualisieren. Sie ändern den fachlichen Safe-State nicht.",
+            "",
+            f"Current HEAD at generation time: `{admin_current_head}`",
+            f"HEAD subject: {admin_current_head_subject}",
+            f"Allowed after safe state: `{admin_allowed_after_safe_state}`",
+            f"Reason: {admin_reason}",
+        ])
+    lines.extend([
+        "",
+        "## 3. Release- und Produktstand",
+
+### RUFF FIRST, THEN TESTS ###
+All checks passed!
+...................                                                      [100%]
+19 passed in 0.41s
+Persistent handoff state check passed
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### DIRECT RENDER SMOKE ###
+## 2a. Administrative Evidence State
+
+Administrative Evidence Commits nach dem fachlichen Safe-State sind erlaubt, wenn sie nur Logs, Handoff, Summary oder Evidence aktualisieren. Sie ändern den fachlichen Safe-State nicht.
+
+Current HEAD at generation time: `deadbee`
+HEAD subject: Record final post-PR656 handoff consistency log
+Allowed after safe state: `True`
+Reason: administrative evidence/log/handoff commit after substantive safe_state
+
+
+
+### COMMIT AND PUSH FEATURE BRANCH IF GATES PASSED ###
+ M src/agentic_project_kit/handoff_prompt.py
+[docs/handoff-administrative-evidence-state-v2 ea96a67] Repair handoff prompt Python compatibility
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+To github.com:vfi64/agentic-project-kit.git
+   00b5a32..ea96a67  docs/handoff-administrative-evidence-state-v2 -> docs/handoff-administrative-evidence-state-v2
+
+### VERIFY PR657 AFTER PUSH ###
+{"headRefName":"docs/handoff-administrative-evidence-state-v2","headRefOid":"00b5a328955ce9b34576bf0b77bbad41eed6ebca","isDraft":false,"mergeStateStatus":"UNSTABLE","number":657,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-22T17:39:04Z","conclusion":"FAILURE","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26302840380/job/77432114876","name":"test","startedAt":"2026-05-22T17:38:51Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-22T17:38:53Z","conclusion":"FAILURE","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26302838680/job/77432089743","name":"test","startedAt":"2026-05-22T17:38:36Z","status":"COMPLETED","workflowName":"CI"}],"url":"https://github.com/vfi64/agentic-project-kit/pull/657"}
+PR_STATE=OPEN UNKNOWN 00b5a328955ce9b34576bf0b77bbad41eed6ebca
+
+### FINAL STATE BEFORE SUMMARY ###
+docs/handoff-administrative-evidence-state-v2
+ea96a67 Repair handoff prompt Python compatibility
+00b5a32 Record PR657 Python compatibility repair log
+2b70a4d Record handoff admin evidence V2 prompt key repair log
+9c3779c Model administrative evidence state in handoff prompts
+e230448 Record handoff admin evidence V2 prompt insert repair log
+fe1ee68 Record handoff admin evidence V2 prompt output repair log
+6e09d44 Record handoff admin evidence V2 test fixture repair log
+318b1dd Record import-safe handoff administrative evidence repair log
+752b9db Record handoff administrative evidence state V2 log
+97c8ecb Record final post-PR656 handoff consistency log
+ac92db8 Finalize post-PR656 handoff prompt at current main head
+6acf36c Align handoff state with current main head after PR656
+1333eb9 Record finalized post-PR656 handoff refresh log
+501155e Finalize handoff state after PR656 GUI MVP closeout
+
+### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-22 19:39:22 +0200
+
+SLICE
+  NAME: REPAIR PR657 PY310 FSTRING LINES EXACTLY AND UPDATE PR
+  SCOPE: CI REPAIR / HANDOFF PROMPT / PYTHON 3.10 COMPATIBILITY / NO RELEASE
+  BRANCH: docs/handoff-administrative-evidence-state-v2
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: exact f-string lines replaced with helper variables; ruff and targeted gates passed; PR updated
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PARTIAL
+  PR: 657
+  HEAD_SHA: ea96a67476389c3e8ae486bbc7282646ed5f002a
+  CI: pending_after_push
+  MERGE: not_started
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/v040-repair-pr657-py310-fstring-lines-exact.log
+  terminal_log_remote: docs/reports/terminal/v040-repair-pr657-py310-fstring-lines-exact.log
+  terminal_log_local: /tmp/v040-repair-pr657-py310-fstring-lines-exact.log
+  command_report: exact-fstring-line-repair/ruff/py_compile/targeted-tests/handoff-check/check-docs/doctor/direct-render-smoke/pr-update
+
+INTERPRETATION
+  PR657 CI failure was caused by four Python-3.12-style f-string lines. They are now Python-3.10-compatible and use helper variables.
+
+NEXT
+  SAFE_STEP: upload log, then re-check PR657 CI and merge if green
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
+
+### RESULT: PASS ###
