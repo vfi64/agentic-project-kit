@@ -90,6 +90,8 @@ A chat-only structured summary is not enough for terminal-directed work. The ter
 
 A terminal log upload is evidence transport. It does not change the result of failed work.
 
+If a terminal summary names a concrete remote log path, verify that exact path directly before using search results. Search lag is not evidence that a pushed log is missing.
+
 ## Failure communication
 
 On failure, the next assistant response must choose the least lossy recovery path:

@@ -1,0 +1,153 @@
+
+### SYNC MAIN AND CREATE BRANCH ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+Switched to a new branch 'docs/harden-remote-log-communication'
+95c6a04 Record doctor GUI visual verification log
+91f4ac9 Record PR651 docs robustness merge verification log
+352a74a Harden docs audit headroom and log finalization (#651)
+00b0a57 Record PR650 status handoff closeout merge verification log
+dd0fe58 Close out PR649 communication contracts in status and handoff (#650)
+64f09fa Record PR649 LLM communication contracts merge verification log
+ec3c8c3 Add LLM communication and portable execution contracts (#649)
+b883dac Plan portable LLM communication bootstrap hardening (#648)
+66412fc Record PR647 doctor GUI merge recovery log
+16b3037 Enable doctor button through read-only GUI contract (#647)
+
+### PATCH REMOTE LOG COMMUNICATION RULES ###
+
+### PATCH TESTS ###
+
+### VERIFY ANCHORS ###
+136:## Remote log lookup rule
+138:When a workflow summary or terminal block names an expected `docs/reports/terminal/*.log` path, a successor chat must verify that exact path directly before claiming the log is missing.
+140:GitHub code search, commit search, and filename search are advisory only. They may lag behind a recent push and must not be the sole basis for saying remote evidence is unavailable.
+93:If a terminal summary names a concrete remote log path, verify that exact path directly before using search results. Search lag is not evidence that a pushed log is missing.
+
+### TESTS AND GATES ###
+........F..............                                                  [100%]
+=================================== FAILURES ===================================
+__________ test_compiled_context_contains_remote_log_direct_path_rule __________
+
+    def test_compiled_context_contains_remote_log_direct_path_rule() -> None:
+        compiled = Path(".agentic/compiled_agent_context.yaml").read_text(encoding="utf-8")
+>       assert "id: remote-log-direct-path-first" in compiled
+E       assert 'id: remote-log-direct-path-first' in "schema_version: 1\nupdated:\n  date: '2026-05-22'\n  reason: portable LLM communication, summary, bootstrap, and drif...ks must print only concrete final SUMMARY outcomes; never placeholder alternatives like PASS|FAIL or p|paste-output.\n"
+
+tests/test_final_summary_contract.py:94: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_final_summary_contract.py::test_compiled_context_contains_remote_log_direct_path_rule
+1 failed, 22 passed in 0.18s
+........................................................................ [  8%]
+........................................................................ [ 17%]
+........................................................................ [ 26%]
+......F................................................................. [ 34%]
+........................................................................ [ 43%]
+........................................................................ [ 52%]
+........................................................................ [ 60%]
+........................................................................ [ 69%]
+........................................................................ [ 78%]
+........................................................................ [ 86%]
+........................................................................ [ 95%]
+.....................................                                    [100%]
+=================================== FAILURES ===================================
+__________ test_compiled_context_contains_remote_log_direct_path_rule __________
+
+    def test_compiled_context_contains_remote_log_direct_path_rule() -> None:
+        compiled = Path(".agentic/compiled_agent_context.yaml").read_text(encoding="utf-8")
+>       assert "id: remote-log-direct-path-first" in compiled
+E       assert 'id: remote-log-direct-path-first' in "schema_version: 1\nupdated:\n  date: '2026-05-22'\n  reason: portable LLM communication, summary, bootstrap, and drif...ks must print only concrete final SUMMARY outcomes; never placeholder alternatives like PASS|FAIL or p|paste-output.\n"
+
+tests/test_final_summary_contract.py:94: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_final_summary_contract.py::test_compiled_context_contains_remote_log_direct_path_rule
+1 failed, 828 passed in 4.49s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COMMIT PATCH ###
+M  docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+M  docs/governance/FINAL_SUMMARY_CONTRACT.md
+M  tests/test_final_summary_contract.py
+
+### CREATE OR REUSE PR ###
+
+### FINAL STATE BEFORE SUMMARY ###
+docs/harden-remote-log-communication
+M  docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+M  docs/governance/FINAL_SUMMARY_CONTRACT.md
+M  tests/test_final_summary_contract.py
+95c6a04 Record doctor GUI visual verification log
+91f4ac9 Record PR651 docs robustness merge verification log
+352a74a Harden docs audit headroom and log finalization (#651)
+00b0a57 Record PR650 status handoff closeout merge verification log
+dd0fe58 Close out PR649 communication contracts in status and handoff (#650)
+64f09fa Record PR649 LLM communication contracts merge verification log
+ec3c8c3 Add LLM communication and portable execution contracts (#649)
+b883dac Plan portable LLM communication bootstrap hardening (#648)
+
+### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-22 17:35:16 +0200
+
+SLICE
+  NAME: REMOTE LOG COMMUNICATION VERIFICATION HARDENING
+  SCOPE: DOCS / COMMUNICATION CONTRACT / FINAL SUMMARY CONTRACT / COMPILED CONTEXT / TESTS / NO RELEASE / NO GUI PATCH
+  BRANCH: docs/harden-remote-log-communication
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: remote log communication hardening failed
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: FAIL
+  EVIDENCE: PARTIAL
+  OVERALL: FAIL
+
+REMOTE
+  REMOTE_EVIDENCE: FAIL
+  PR: none-or-failed
+  HEAD_SHA: SEE_OUTPUT
+  CI: not_started
+  MERGE: blocked
+
+EVIDENCE FILES
+  terminal_log: /tmp/v040-harden-remote-log-communication.log
+  terminal_log_remote: NONE
+  terminal_log_local: /tmp/v040-harden-remote-log-communication.log
+  command_report: remote-log-lookup-rule/tests/pytest/ruff/check-docs/doctor/pr-create-or-existing
+
+INTERPRETATION
+  Remote log communication hardening failed; inspect local log before continuing.
+
+NEXT
+  SAFE_STEP: upload local fail log if not remote-readable
+  CHAT_REPLY: f
+
+### RESULT: FAIL ###
+================================================================
+
+### RESULT: FAIL ###

@@ -132,3 +132,13 @@ A PR state where checks are not yet reported must be represented as `CI: not_rep
 A relevant terminal block must not upload a partial running log before the final state lines are written.
 The terminal log uploaded to `docs/reports/terminal/*.log` must include the rendered structured SUMMARY and the FINAL STATE section, or the block must explicitly mark the evidence as partial.
 Preferred implementation: write the complete output to a temporary log, append SUMMARY and FINAL STATE, stop writing to that log, then copy the completed log into `docs/reports/terminal/` and commit it.
+
+## Remote log lookup rule
+
+When a workflow summary or terminal block names an expected `docs/reports/terminal/*.log` path, a successor chat must verify that exact path directly before claiming the log is missing.
+
+GitHub code search, commit search, and filename search are advisory only. They may lag behind a recent push and must not be the sole basis for saying remote evidence is unavailable.
+
+Required order: direct fetch of the named path at the expected branch or `main`; then PR/branch metadata; then search fallback only if the path is unknown.
+
+If direct fetch succeeds, the assistant must treat the log as remote evidence even when search does not find it yet.

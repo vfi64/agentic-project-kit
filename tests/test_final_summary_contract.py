@@ -75,3 +75,22 @@ def test_terminal_log_finalization_rule_is_documented() -> None:
     assert "copy the completed log into `docs/reports/terminal/`" in text
 
 
+def test_remote_log_lookup_rule_requires_direct_path_fetch_first() -> None:
+    final = Path("docs/governance/FINAL_SUMMARY_CONTRACT.md").read_text(encoding="utf-8")
+    assert "Remote log lookup rule" in final
+    assert "verify that exact path directly before claiming the log is missing" in final
+    assert "GitHub code search, commit search, and filename search are advisory only" in final
+    assert "direct fetch succeeds" in final
+
+
+def test_chat_contract_rejects_search_only_remote_log_conclusions() -> None:
+    chat = Path("docs/governance/CHAT_COMMUNICATION_CONTRACT.md").read_text(encoding="utf-8")
+    assert "verify that exact path directly before using search results" in chat
+    assert "Search lag is not evidence that a pushed log is missing" in chat
+
+
+def test_compiled_context_contains_remote_log_direct_path_rule() -> None:
+    compiled = Path(".agentic/compiled_agent_context.yaml").read_text(encoding="utf-8")
+    assert "id: remote-log-direct-path-first" in compiled
+    assert "direct-fetch that path before relying on search results" in compiled
+
