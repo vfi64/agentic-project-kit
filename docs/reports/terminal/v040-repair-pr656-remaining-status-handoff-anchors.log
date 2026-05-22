@@ -1,0 +1,155 @@
+
+### SYNC FEATURE BRANCH ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            docs/closeout-v040-gui-mvp-three-readonly-actions -> FETCH_HEAD
+Already on 'docs/closeout-v040-gui-mvp-three-readonly-actions'
+Your branch is up to date with 'origin/docs/closeout-v040-gui-mvp-three-readonly-actions'.
+From github.com:vfi64/agentic-project-kit
+ * branch            docs/closeout-v040-gui-mvp-three-readonly-actions -> FETCH_HEAD
+Already up to date.
+docs/closeout-v040-gui-mvp-three-readonly-actions
+53e2158 Record failed status boundary changelog repair log
+17583a0 Clarify current-state boundary and move history to changelog
+576b3fc Record PR656 merge and handoff prompt log
+dd79967 Repair PR656 handoff literal newline escapes
+be72b78 Record minimal GUI MVP closeout repair log
+39ff994 Close out GUI MVP three read-only actions
+21c5953 Record GUI MVP doc closeout word-limit repair log
+b1d11e5 Record GUI MVP doc closeout failure log
+cca4a31 Record GUI MVP closeout documentation log
+d96a294 Record check-docs GUI visual pass log
+
+### WRITE SMALL ANCHOR REPAIR SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+STATUS_WORDS_AFTER=1048
+
+### TARGETED TESTS ###
+..........F............                                                  [100%]
+=================================== FAILURES ===================================
+___ test_remote_first_no_guess_rule_is_documented_in_user_facing_state_docs ____
+
+    def test_remote_first_no_guess_rule_is_documented_in_user_facing_state_docs():
+        for path in ["docs/TEST_GATES.md", "docs/STATUS.md", "docs/handoff/CURRENT_HANDOFF.md"]:
+            text = Path(path).read_text(encoding="utf-8").lower()
+            assert "remote-first no-guess" in text
+            assert "command help" in text
+>           assert "chat memory is not a source of truth" in text
+E           AssertionError: assert 'chat memory is not a source of truth' in 'current version: 0.3.37\n# project status\nstatus-date: 2026-05-22\nproject: agentic-project-kit\nprimary branch: mai...t_execution_contract.md`, `chat_bootstrap_and_drift_contract.md`, `final_summary_contract.md`, `docs/test_gates.md`.\n'
+
+tests/test_remote_first_no_guess_rule.py:22: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_remote_first_no_guess_rule.py::test_remote_first_no_guess_rule_is_documented_in_user_facing_state_docs
+1 failed, 22 passed in 0.34s
+
+### FULL GATES ###
+........................................................................ [  8%]
+........................................................................ [ 17%]
+........................................................................ [ 25%]
+........................................................................ [ 34%]
+........................................................................ [ 43%]
+............................................F........................... [ 51%]
+........................................................................ [ 60%]
+........................................................................ [ 68%]
+........................................................................ [ 77%]
+........................................................................ [ 86%]
+........................................................................ [ 94%]
+.............................................                            [100%]
+=================================== FAILURES ===================================
+___ test_remote_first_no_guess_rule_is_documented_in_user_facing_state_docs ____
+
+    def test_remote_first_no_guess_rule_is_documented_in_user_facing_state_docs():
+        for path in ["docs/TEST_GATES.md", "docs/STATUS.md", "docs/handoff/CURRENT_HANDOFF.md"]:
+            text = Path(path).read_text(encoding="utf-8").lower()
+            assert "remote-first no-guess" in text
+            assert "command help" in text
+>           assert "chat memory is not a source of truth" in text
+E           AssertionError: assert 'chat memory is not a source of truth' in 'current version: 0.3.37\n# project status\nstatus-date: 2026-05-22\nproject: agentic-project-kit\nprimary branch: mai...t_execution_contract.md`, `chat_bootstrap_and_drift_contract.md`, `final_summary_contract.md`, `docs/test_gates.md`.\n'
+
+tests/test_remote_first_no_guess_rule.py:22: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_remote_first_no_guess_rule.py::test_remote_first_no_guess_rule_is_documented_in_user_facing_state_docs
+1 failed, 836 passed in 4.57s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### COMMIT PATCH IF GATES PASSED ###
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+
+### FINAL STATE BEFORE SUMMARY ###
+docs/closeout-v040-gui-mvp-three-readonly-actions
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+53e2158 Record failed status boundary changelog repair log
+17583a0 Clarify current-state boundary and move history to changelog
+576b3fc Record PR656 merge and handoff prompt log
+dd79967 Repair PR656 handoff literal newline escapes
+be72b78 Record minimal GUI MVP closeout repair log
+39ff994 Close out GUI MVP three read-only actions
+21c5953 Record GUI MVP doc closeout word-limit repair log
+b1d11e5 Record GUI MVP doc closeout failure log
+cca4a31 Record GUI MVP closeout documentation log
+d96a294 Record check-docs GUI visual pass log
+
+### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-22 19:00:17 +0200
+
+SLICE
+  NAME: REPAIR PR656 REMAINING STATUS HANDOFF ANCHORS
+  SCOPE: DOCS / STATUS BOUNDARY / HANDOFF SYNC / CHANGELOG HISTORY / PR656 / NO RELEASE
+  BRANCH: docs/closeout-v040-gui-mvp-three-readonly-actions
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: remaining anchor repair or gates failed
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: FAIL
+  EVIDENCE: PARTIAL
+  OVERALL: FAIL
+
+REMOTE
+  REMOTE_EVIDENCE: PARTIAL
+  PR: 656
+  HEAD_SHA: SEE_OUTPUT
+  CI: not_checked_after_failure
+  MERGE: not_started
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/v040-repair-pr656-remaining-status-handoff-anchors.log
+  terminal_log_remote: docs/reports/terminal/v040-repair-pr656-remaining-status-handoff-anchors.log
+  terminal_log_local: /tmp/v040-repair-pr656-remaining-status-handoff-anchors.log
+  command_report: remaining-anchor-repair/targeted-tests/full-pytest/ruff/check-docs/doctor
+
+INTERPRETATION
+  PR656 still has a deterministic docs/test failure. Inspect uploaded log before more edits.
+
+NEXT
+  SAFE_STEP: upload this fail log, then repair only the exact failing point
+  CHAT_REPLY: f
+
+### RESULT: FAIL ###
+================================================================
+
+### RESULT: FAIL ###
