@@ -1,0 +1,207 @@
+### START ###
+Fr. 22 Mai 2026 21:23:28 CEST
+
+### VERIFY CURRENT LOCAL STATE ###
+docs/repair-readme-docmesh-current-selection-after-pr668
+8a5f869 Repair README doc mesh current version selection after PR668
+105d93b Prepare v0.4.0 release metadata (#668)
+bb8d4bd Record final handoff prompt after PR666 (#667)
+8198ebe Refresh handoff state after PR665 (#666)
+0234800 Merge current handoff overlay after PR664 (#665)
+
+### FETCH MAIN AND PR BRANCH ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+ * branch            docs/repair-readme-docmesh-current-selection-after-pr668 -> FETCH_HEAD
+
+### WRITE PR CHECK SCRIPT ###
+
+### VERIFY PR MACHINE STATE ###
+{
+  "baseRefName": "main",
+  "headRefName": "docs/repair-readme-docmesh-current-selection-after-pr668",
+  "mergeStateStatus": "CLEAN",
+  "state": "OPEN",
+  "statusCheckRollup": [
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-05-22T19:22:54Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/vfi64/agentic-project-kit/actions/runs/26307515019/job/77447893943",
+      "name": "test",
+      "startedAt": "2026-05-22T19:22:30Z",
+      "status": "COMPLETED",
+      "workflowName": "CI"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-05-22T19:22:56Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/vfi64/agentic-project-kit/actions/runs/26307512364/job/77447885991",
+      "name": "test",
+      "startedAt": "2026-05-22T19:22:27Z",
+      "status": "COMPLETED",
+      "workflowName": "CI"
+    }
+  ],
+  "title": "Repair README doc mesh current version selection after PR668",
+  "url": "https://github.com/vfi64/agentic-project-kit/pull/669"
+}
+CHECK_SUMMARY checks=2 pending=0 failed=0 mergeStateStatus=CLEAN
+PR_CHECK_RESULT=PASS
+
+### MERGE PR ONLY IF VERIFIED ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   105d93b..4b2f63a  main       -> origin/main
+Updating 105d93b..4b2f63a
+Fast-forward
+ ...eadme-docmesh-current-selection-after-pr668.log | 223 +++++++++++++++++++++
+ src/agentic_project_kit/doc_mesh.py                |   4 +-
+ tests/test_doc_mesh.py                             |  14 ++
+ 3 files changed, 240 insertions(+), 1 deletion(-)
+ create mode 100644 docs/reports/terminal/v040-repair-readme-docmesh-current-selection-after-pr668.log
+
+### VERIFY MAIN AFTER MERGE ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+HEAD is now at 4b2f63a Repair README doc mesh current version selection after PR668 (#669)
+4b2f63a Repair README doc mesh current version selection after PR668 (#669)
+105d93b Prepare v0.4.0 release metadata (#668)
+bb8d4bd Record final handoff prompt after PR666 (#667)
+8198ebe Refresh handoff state after PR665 (#666)
+0234800 Merge current handoff overlay after PR664 (#665)
+9b918f6 Refresh handoff state after PR663 (#664)
+456a428 Repair README version extractor and DOI drift (#663)
+e4d194d Refresh handoff state after PR661 (#662)
+
+### MAIN GATES AFTER MERGE ###
+.......................                                                  [100%]
+23 passed in 0.12s
+All checks passed!
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
+Release state check for target v0.4.0
+
+[PASS] semantic version: 0.4.0 is valid
+[PASS] pyproject version: found text: version = "0.4.0"
+[PASS] package __version__: found text: __version__ = "0.4.0"
+[PASS] CHANGELOG version: found text: v0.4.0
+[PASS] README version: found text: Version `0.4.0`
+[PASS] CITATION version: found text: version: 0.4.0
+[PASS] STATUS version: found text: Current version: 0.4.0
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.4.0
+[PASS] local tag unused: tag is unused: v0.4.0
+[PASS] remote tag unused: remote tag is unused: v0.4.0
+[PASS] GitHub release unused: GitHub release is absent: v0.4.0
+
+Overall: PASS
+
+Release preflight for target v0.4.0
+
+[PASS] semantic version: 0.4.0 is valid
+[PASS] local tag unused: tag is unused: v0.4.0
+[PASS] remote tag unused: remote tag is unused: v0.4.0
+[PASS] GitHub release unused: GitHub release is absent: v0.4.0
+
+Overall: PASS
+PASS: no stale STATUS/HANDOFF current-state fragments found
+Persistent handoff state check passed
+Governance check passed
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.0
+
+Overall: PASS
+main
+........................................................................ [  8%]
+........................................................................ [ 17%]
+........................................................................ [ 25%]
+........................................................................ [ 34%]
+........................................................................ [ 42%]
+........................................................................ [ 51%]
+........................................................................ [ 59%]
+........................................................................ [ 68%]
+........................................................................ [ 76%]
+........................................................................ [ 85%]
+........................................................................ [ 94%]
+..................................................                       [100%]
+842 passed in 4.56s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.0
+
+Overall: PASS
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=116
+ok=true
+
+Findings:
+- none
+main
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+
+### PYTEST ###
+
+### RUFF ###
+
+### CHECK DOCS ###
+
+### DOCTOR ###
+
+### PR HYGIENE ###
+
+### FINAL STATUS ###
+Local feature gate passed.
+
+### COPY MERGE LOG TO REPO EVIDENCE IF PASS ###
