@@ -66,6 +66,9 @@ Next safe step: prepare and release v0.3.32. Tkinter remains deferred until afte
 - Do not use heredocs, top-level `exit`, top-level `exec`, risky multiline `python -c`, or quote-prone shell constructs in chat-pasted terminal blocks.
 - Larger terminal blocks must begin with three long separator lines and end with a clear `### RESULT: ... ###` marker.
 
+## Compact Closeout Sync Anchors
+- PR #650 merged; PR #651 merged; PR #652 merged.
+
 ## Next Safe Step
 
 Finish v0.3.30 by documenting the completed GUI readiness contracts, running the full local gates, and preparing the v0.3.30 release metadata. Do not start Tkinter in this slice; the thin Tkinter cockpit remains the next release line after v0.3.30 is released and verified.
@@ -278,10 +281,16 @@ Immediate priorities:
 
 - v0.3.35 is fully closed: release-gate core extraction, PR closeout idempotency, DOI metadata, and post-release verification are complete. Next recommended line: start the first bounded Tkinter cockpit MVP readiness slice only after a fresh read-only readiness check.
 
-- v0.3.36 documentation cleanup is now the active preparation step before the Tkinter MVP: README current-state wording and CHANGELOG release semantics must be cleaned up and tested first. Do not start GUI implementation in this slice.\n\n- v0.3.36 standard-error hardening started: Remote-log evidence is mandatory for standard-error hardening slices; summaries must include `terminal_log=docs/reports/terminal/...`, `command_report=...`, and `NEXT_CHAT_REPLY`. FAIL without terminal kill uses NEXT_CHAT_REPLY: f so the next step reconstructs from the remote log before asking for pasted terminal output.\n
+- v0.3.36 documentation cleanup is now the active preparation step before the Tkinter MVP: README current-state wording and CHANGELOG release semantics must be cleaned up and tested first. Do not start GUI implementation in this slice.
+
+- v0.3.36 standard-error hardening started: Remote-log evidence is mandatory for standard-error hardening slices; summaries must include `terminal_log=docs/reports/terminal/...`, `command_report=...`, and `NEXT_CHAT_REPLY`. FAIL without terminal kill uses NEXT_CHAT_REPLY: f so the next step reconstructs from the remote log before asking for pasted terminal output.
+
 
 - v0.3.36 standard-error hardening slice 1 evidence is committed under `docs/reports/terminal/v0.3.36_merge_standard_error_hardening_1.log`; on future FAIL without terminal kill, request only `f` first and reconstruct from remote evidence before asking for paste-output.
-- v0.3.36 run-summary contract evidence is repo-backed in `docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log`; future slices must keep remote terminal evidence visible in the final summary and report standard-error reduction plus GUI preparation after each slice.\n\n- v0.3.36 portability shell-removal inventory is repo-backed in `docs/reports/terminal/v0.3.36_portability_shell_removal_inventory.log`. Tracked shell file count at inventory time: 15. The GUI baseline is not complete until tracked shell adapters are removed or explicitly replaced by Python entry points and a portability gate is active.\n
+- v0.3.36 run-summary contract evidence is repo-backed in `docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log`; future slices must keep remote terminal evidence visible in the final summary and report standard-error reduction plus GUI preparation after each slice.
+
+- v0.3.36 portability shell-removal inventory is repo-backed in `docs/reports/terminal/v0.3.36_portability_shell_removal_inventory.log`. Tracked shell file count at inventory time: 15. The GUI baseline is not complete until tracked shell adapters are removed or explicitly replaced by Python entry points and a portability gate is active.
+
 
 - v0.3.36 portability rule: new operational behavior must be Python-core first and OS-independent by default; shell files are temporary compatibility shims until removed or explicitly allowlisted by the portability gate.
 
@@ -333,3 +342,8 @@ The terminal output audit is part of the workflow contract: read the body of the
 - Mandatory successor-chat source: `CHAT_COMMUNICATION_CONTRACT.md`.
 
 - Mandatory successor-chat source: `CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`.
+
+
+## GUI MVP Handoff
+- Current baseline: `cockpit-readiness`, `doctor`, and `check-docs` visually pass as bounded read-only GUI actions on `main`; remote/destructive GUI actions stay disabled.
+- Evidence: `docs/reports/terminal/v040-record-check-docs-gui-visual-pass.log`. Verify Tk runtime imports `tkinter`, `yaml`, `typer`, `rich`, `pydantic` before diagnosing GUI failures.

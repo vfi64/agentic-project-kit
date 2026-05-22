@@ -1,0 +1,249 @@
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+d96a294 Record check-docs GUI visual pass log
+19b4fb7 Record zsh-safe Tk venv dependency repair check-docs visual log
+0123f67 Record Tk venv dependency repair check-docs visual log
+e4c4d1f Record Tk venv dependency repair check-docs visual log
+2d35ea6 Record check-docs GUI visual failure log
+0d9ec63 Record check-docs GUI visual verification phase 1 log
+9bcb5cd Record PR655 check-docs GUI merge verification log
+96f71b8 Enable check-docs as read-only GUI action (#655)
+03956a1 Record PR654 shared GUI runner merge verification log
+db607b8 Add shared read-only GUI runner abstraction (#654)
+
+### CREATE DOC CLOSEOUT BRANCH ###
+Switched to a new branch 'docs/closeout-v040-gui-mvp-three-readonly-actions'
+
+### INSPECT CURRENT STATUS/HANDOFF GUI REFERENCES ###
+docs/STATUS.md:11:Current focus: v0.4.0 GUI MVP over tested registry/actions, with docs-audit and communication contracts kept current.
+docs/STATUS.md:14:v0.3.34 is planned as the final pre-GUI portable-core hardening line before starting the thin Tkinter cockpit implementation.
+docs/STATUS.md:15:Goal: move the remaining risky release, DOI, evidence, PR-closeout, and typed-work-order control logic out of large shell blocks and into tested Python core functions that can be called by CLI, `./ns`, typed work orders, and the later Tkinter cockpit.
+docs/STATUS.md:21:- Provide machine-readable results or stable action result objects for GUI-relevant actions.
+docs/STATUS.md:24:Tkinter remains explicitly deferred until this portable-core hardening baseline is released and post-release verified.
+docs/STATUS.md:25:Acceptance criteria for starting the Tkinter cockpit after v0.3.34:
+docs/STATUS.md:29:- GUI-facing actions can be invoked without composing fragile multi-step shell scripts.
+docs/STATUS.md:37:The active bridge toward the local GUI is no-copy/evidence governance and communication artifact GC hardening, not hidden automation. Normal PASS/FAIL handoff should rely on committed and pushed reports. Manual paste-output is reserved for hard failures such as authentication problems, network failures, terminal crashes, missing remote evidence, or workflow-level ambiguity.
+docs/STATUS.md:38:Communication artifact GC hardening is part of the pre-GUI baseline.
+docs/STATUS.md:40:v0.3.32 is the release-phase-semantics and evidence-closeout hardening line. It does not ship the Tkinter GUI.
+docs/STATUS.md:63:- `agentic-kit check-docs` / project-local module equivalent
+docs/STATUS.md:64:- `agentic-kit doctor` / project-local module equivalent
+docs/STATUS.md:66:Finish v0.3.30 by documenting and gating the GUI readiness hardening baseline, then prepare the v0.3.30 release. Do not start Tkinter in this release line. The first thin Tkinter cockpit belongs after the v0.3.30 contracts are released and verified.
+docs/STATUS.md:67:Do not expand Pattern Advisor, release automation, or hidden command selection before the GUI foundation and planning freshness guards are stable.
+docs/STATUS.md:69:`docs/DOCUMENTATION_COVERAGE.yaml` is the documentation coverage source for required terms and state-doc coverage. `agentic-kit check-docs` and `agentic-kit doctor` enforce this coverage through deterministic gates.
+docs/STATUS.md:71:## v0.3.31 Pre-GUI Execution Hardening Contract
+docs/STATUS.md:72:- v0.3.31 starts with the pre-GUI execution hardening contract.
+docs/STATUS.md:73:- The contract is documented in `docs/workflow/PRE_GUI_EXECUTION_HARDENING.md`.
+docs/STATUS.md:74:- The first hardened invariants are: no false PASS after failed gate, clean base before log creation, no nested quote patch generator, evidence finalization, and a strict GUI boundary.
+docs/STATUS.md:75:## v0.3.31 Pre-GUI Execution Hardening Closeout
+docs/STATUS.md:76:v0.3.31 was a pre-GUI execution hardening line.
+docs/STATUS.md:78:- Pre-GUI Execution Hardening Contract.
+docs/STATUS.md:85:Tkinter remains explicitly deferred until the pre-GUI typed Work Order and evidence contracts are release-stable.
+docs/STATUS.md:99:PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli check-docs
+docs/STATUS.md:100:PYTHONPATH=src .venv/bin/python -m agentic_project_kit.cli doctor
+docs/STATUS.md:102:The equivalent public command names remain `agentic-kit check-docs`, `agentic-kit doctor`, and `agentic-kit post-release-check`; the project-local module form is preferred when global executables are not guaranteed.
+docs/STATUS.md:104:- Compatibility anchors: Communication artifact GC hardening is now part of the pre-GUI baseline; long chat-generated shell or Python patch blocks; v0.3.31 is the current pre-GUI execution hardening line.; Mandatory Final Summary Contract.
+docs/STATUS.md:106:The exact phrase policy-pack doctor checks is intentionally present here: policy-pack doctor checks remain active through `agentic-kit doctor`; active policy packs are part of the project contract and must remain visible in current-state documentation.
+docs/STATUS.md:107:Release verification remains covered by the post-release Zenodo path and `agentic-kit post-release-check`. Current no-copy/evidence status is the bridge toward the thin local Tkinter cockpit.
+docs/STATUS.md:125:## v0.3.30 GUI Readiness Hardening Closeout
+docs/STATUS.md:126:v0.3.30 is the GUI readiness contract release, not the Tkinter GUI release.
+docs/STATUS.md:133:The release closeout criterion is a clean full gate plus release metadata for v0.3.30. Tkinter remains explicitly deferred until after this contract baseline is released.
+docs/STATUS.md:134:## v0.3.30 GUI Readiness Hardening Plan
+docs/STATUS.md:135:The v0.3.29 review confirms that GC hardening and release hygiene were the right pre-GUI baseline. The useful planning takeaway is not to start Tkinter immediately, but to make the GUI-consumable contracts deterministic first.
+docs/STATUS.md:137:- Action Registry is the single source of allowed GUI actions.
+docs/STATUS.md:142:- Tkinter is explicitly deferred until these contracts pass gates.
+docs/STATUS.md:143:## Typed Work Orders Pre-GUI Execution Path
+docs/STATUS.md:144:Typed Work Orders are now the preferred pre-GUI execution path for standard safe workflow actions. Implemented:
+docs/STATUS.md:152:Current typed queue semantics for GUI readiness:
+docs/STATUS.md:157:The thin Tkinter cockpit must consume these typed contracts instead of inventing hidden command planning or ad-hoc shell execution.
+docs/STATUS.md:158:## v0.3.31 Pre-GUI Execution Hardening Plan
+docs/STATUS.md:159:The GUI expansion is intentionally paused before further Tkinter development. The next slice must reduce the two remaining workflow risks before the GUI becomes the primary interface:
+docs/STATUS.md:162:Required near-term scope before continuing GUI expansion:
+docs/STATUS.md:167:- Resume Tkinter only after this pre-GUI hardening plan is recorded and the next work begins with the minimal Work Order Runner. The next GUI must remain a thin presentation layer over registry actions and machine-readable results.
+docs/STATUS.md:169:- v0.3.31 Slice 1: minimal typed Work Order Runner for GUI-safe execution and quote-risk reduction.
+docs/STATUS.md:170:- v0.3.31 Slice 2: thin Tkinter MVP over Action Registry and cockpit JSON results.
+docs/STATUS.md:174:- v0.3.34 pre-GUI portable-core hardening continued with an explicit `./ns dev-local-feature-gate` routing fix. The shortcut now runs the local feature gate directly before the `tools/next-step.py` fallback and is covered by `tests/test_v034_ns_dev_gate_routing.py`.
+docs/STATUS.md:176:- v0.3.34 pre-GUI portable-core hardening continued by extracting local feature gate execution into `src/agentic_project_kit/local_feature_gate.py`. The `./ns dev-local-feature-gate` and `./ns dev` routes now dispatch through this tested Python core instead of embedding the full gate in shell.
+docs/STATUS.md:178:- v0.3.34 pre-GUI portable-core hardening continued with a pure Python finalize-guard decision core in `src/agentic_project_kit/finalize_guard.py`. This models idempotent completion, noop branches, PR-needed branches, superseded branches, and relevant conflict failures before replacing the shell runner.
+docs/STATUS.md:184:## v0.3.35 Pre-GUI Core and CLI Consolidation Plan
+docs/STATUS.md:185:v0.3.35 is planned as a consolidation line before starting the Tkinter cockpit MVP. The release should not add the GUI itself. Its purpose is to remove remaining pre-GUI weaknesses that would otherwise become visible or harder to fix once a GUI calls into the project workflows.
+docs/STATUS.md:192:Acceptance criteria before GUI work resumes:
+docs/STATUS.md:193:- The high-risk pre-GUI command paths have Python core tests or explicit documented deferrals.
+docs/STATUS.md:196:- No GUI slice starts until the remaining shell/Python boundary is intentionally classified.
+docs/STATUS.md:201:- v0.3.35 consolidation continued by extracting `tools/ns_release_gate.sh` behavior into the tested Python core `src/agentic_project_kit/release_gate_core.py`. The shell entry point is now a thin adapter. Release-gate behavior remains pre-publish only: no tag, no release, no DOI mutation, and no GUI work.
+docs/STATUS.md:203:- v0.3.35 release-gate/core consolidation is released and DOI metadata is recorded; v0.3.35 is closed for pre-GUI core consolidation.
+docs/STATUS.md:204:- v0.3.36 current-state cleanup started as a documentation-only line: normalize README current-release wording, make the v0.3.35 CHANGELOG entry describe the actual delivered work, clarify GUI/cockpit status, and lock release-phase semantics in tests before any bounded Tkinter MVP work.\n\n- v0.3.36 standard-error hardening started: Remote-log evidence is mandatory for standard-error hardening slices; summaries must include `terminal_log=docs/reports/terminal/...`, `command_report=...`, and `NEXT_CHAT_REPLY`. FAIL without terminal kill uses NEXT_CHAT_REPLY: f so the next step reconstructs from the remote log before asking for pasted terminal output.\n
+docs/STATUS.md:206:- v0.3.36 run-summary contract evidence is repo-backed in `docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log`; run summaries must expose `terminal_log`, `REMOTE_EVIDENCE`, `STANDARD_ERROR_REDUCTION`, and `GUI_PREPARATION` so standard-error reduction and GUI readiness stay visible after each slice.\n\n- v0.3.36 portability shell-removal inventory is repo-backed in `docs/reports/terminal/v0.3.36_portability_shell_removal_inventory.log`. Tracked shell file count at inventory time: 15. The GUI baseline is not complete until tracked shell adapters are removed or explicitly replaced by Python entry points and a portability gate is active.\n
+docs/STATUS.md:207:- v0.3.36 adds the portability meta-rule and begins enforcing shell-removal through a Python portability gate core; GUI readiness requires Python-backed operational control surfaces rather than shell-first workflows.
+docs/STATUS.md:214:Next safe step: deterministic rule hardening before GUI or release. v0.3.36 is unreleased.
+docs/handoff/CURRENT_HANDOFF.md:12:Close out v0.3.30 GUI readiness hardening. This slice is not a Tkinter implementation. It records and gates the machine-readable contracts that a later thin Tkinter cockpit will consume: action results, cockpit JSON output, registry-only actions, queue state, and evidence state.
+docs/handoff/CURRENT_HANDOFF.md:18:Next safe planning state: v0.3.34 should harden the portable Python core before the first real Tkinter implementation slice.
+docs/handoff/CURRENT_HANDOFF.md:20:Do not start the Tkinter cockpit yet. First remove the remaining structural risk: large shell-driven release, DOI, evidence, PR-closeout, and typed-work-order workflows must be converted into tested Python-callable core actions where practical.
+docs/handoff/CURRENT_HANDOFF.md:30:The Tkinter cockpit may begin only after this baseline is released and post-release verified.
+docs/handoff/CURRENT_HANDOFF.md:42:Communication artifact GC hardening is now part of the pre-GUI baseline: symlinked transient artifacts are rejected, repo evidence and command inbox files are protected, and local /tmp/agentic-project-kit-*.log cleanup is TTL-based and dry-run-first via ./ns artifact-gc --tmp-logs.
+docs/handoff/CURRENT_HANDOFF.md:56:Next safe step: prepare and release v0.3.32. Tkinter remains deferred until after v0.3.32 release and post-release verification are complete.
+docs/handoff/CURRENT_HANDOFF.md:71:Finish v0.3.30 by documenting the completed GUI readiness contracts, running the full local gates, and preparing the v0.3.30 release metadata. Do not start Tkinter in this slice; the thin Tkinter cockpit remains the next release line after v0.3.30 is released and verified.
+docs/handoff/CURRENT_HANDOFF.md:79:The exact lowercase phrase `documentation coverage` is intentionally present here because `docs/DOCUMENTATION_COVERAGE.yaml`, `agentic-kit check-docs`, and `agentic-kit doctor` enforce required state-document coverage terms deterministically.
+docs/handoff/CURRENT_HANDOFF.md:81:Begin v0.3.31 with minimal typed Work Order Runner work before further Tkinter GUI expansion. Do not start broad Tkinter implementation until the runner plan has a tested first slice.
+docs/handoff/CURRENT_HANDOFF.md:83:## v0.3.31 Pre-GUI Execution Hardening Contract
+docs/handoff/CURRENT_HANDOFF.md:85:- v0.3.31 begins with a contract slice before any Tkinter work.
+docs/handoff/CURRENT_HANDOFF.md:86:- Use `docs/workflow/PRE_GUI_EXECUTION_HARDENING.md` as the execution-hardening source.
+docs/handoff/CURRENT_HANDOFF.md:89:## v0.3.31 Pre-GUI Execution Hardening Closeout
+docs/handoff/CURRENT_HANDOFF.md:91:Current safe state: v0.3.31 pre-GUI execution hardening is complete enough for release preparation.
+docs/handoff/CURRENT_HANDOFF.md:93:Use these capabilities before any future GUI slice:
+docs/handoff/CURRENT_HANDOFF.md:96:- Typed Work Orders as the preferred pre-GUI execution path.
+docs/handoff/CURRENT_HANDOFF.md:100:Next safe step: prepare and release v0.3.31. Do not start Tkinter before v0.3.31 is released and post-release verified.
+docs/handoff/CURRENT_HANDOFF.md:156:## v0.3.30 GUI Readiness Hardening Closeout
+docs/handoff/CURRENT_HANDOFF.md:158:v0.3.30 is the GUI readiness contract release, not the Tkinter cockpit release.
+docs/handoff/CURRENT_HANDOFF.md:160:Compatibility invariant for planning gates: v0.3.30 remains GUI readiness hardening, not a Tkinter implementation.
+docs/handoff/CURRENT_HANDOFF.md:161:Compatibility invariant for planning gates: GUI readiness also covers dirty worktrees, dirty inboxes, failed commands, and postcondition failures.
+docs/handoff/CURRENT_HANDOFF.md:171:Next safe step: run the start v0.3.31 Pre-GUI Execution Hardening after this post-release state cleanup. Tkinter remains deferred until after the v0.3.30 release is verified.
+docs/handoff/CURRENT_HANDOFF.md:173:## v0.3.30 GUI Readiness Hardening Plan
+docs/handoff/CURRENT_HANDOFF.md:175:The v0.3.29 review confirms that GC hardening and release hygiene were the right pre-GUI baseline. The useful planning takeaway is not to start Tkinter immediately, but to make the GUI-consumable contracts deterministic first.
+docs/handoff/CURRENT_HANDOFF.md:179:- Action Registry is the single source of allowed GUI actions.
+docs/handoff/CURRENT_HANDOFF.md:184:- The thin Tkinter cockpit remains explicitly deferred until these contracts pass gates.
+docs/handoff/CURRENT_HANDOFF.md:187:## Typed Work Orders Pre-GUI Execution Path
+docs/handoff/CURRENT_HANDOFF.md:189:The active pre-GUI path is now typed Work Orders, not long chat-generated shell patch blocks. Use repo-owned YAML Work Orders and the tested Python runner wherever possible.
+docs/handoff/CURRENT_HANDOFF.md:199:Next chat rule: before creating another long terminal patch block, first consider whether the work can be represented as a typed Work Order or a small repo-owned runner extension. GUI work remains deferred until the typed path is documented, gated, and released.
+docs/handoff/CURRENT_HANDOFF.md:201:## v0.3.31 Pre-GUI Execution Hardening Plan
+docs/handoff/CURRENT_HANDOFF.md:203:The GUI expansion is intentionally paused before further Tkinter development. The next slice must reduce the two remaining workflow risks before the GUI becomes the primary interface:
+docs/handoff/CURRENT_HANDOFF.md:208:Required near-term scope before continuing GUI expansion:
+docs/handoff/CURRENT_HANDOFF.md:214:- Defer the full structured State Source of Truth until after the minimal runner and thin GUI foundation. The later state source should move current release, previous release, DOI, evidence, GUI readiness, and next-slice facts into machine-readable YAML and render or validate Markdown from that state.
+docs/handoff/CURRENT_HANDOFF.md:215:- Resume Tkinter only after this pre-GUI hardening plan is recorded and the next work begins with the minimal Work Order Runner. The next GUI must remain a thin presentation layer over registry actions and machine-readable results.
+docs/handoff/CURRENT_HANDOFF.md:219:- v0.3.31 Slice 1: minimal typed Work Order Runner for GUI-safe execution and quote-risk reduction.
+docs/handoff/CURRENT_HANDOFF.md:220:- v0.3.31 Slice 2: thin Tkinter MVP over Action Registry and cockpit JSON results.
+docs/handoff/CURRENT_HANDOFF.md:227:- Completed v0.3.34 routing slice: `./ns dev-local-feature-gate` is now an explicit `ns` shortcut before the `tools/next-step.py` fallback. It prints branch/status and runs pytest, ruff, check-docs, and doctor through the project Python environment.
+docs/handoff/CURRENT_HANDOFF.md:230:- Next recommended v0.3.34 slice: continue portable-core hardening by identifying the next high-value shell-heavy `ns` path to move behind a tested Python core function before starting any Tkinter GUI work.
+docs/handoff/CURRENT_HANDOFF.md:237:- Next recommended v0.3.34 slice: identify the next `ns` route that should become a thin dispatcher around a tested Python core. Avoid GUI work until these common workflow paths are stable.
+docs/handoff/CURRENT_HANDOFF.md:243:- Next recommended v0.3.34 slice: either integrate `python -m agentic_project_kit.finalize_guard` with the new Python decision core or extract another small read-only/safety-critical wrapper. Avoid GUI work until these command paths are stable.
+docs/handoff/CURRENT_HANDOFF.md:246:- Completed v0.3.34 finalize-guard core contract hardening: `PASS_SUPERSEDED` is now reachable for a conflicting branch whose marker is already represented on main, and `src/agentic_project_kit/finalize_guard.py` exposes a module CLI/render contract for future shell/GUI/Cockpit integration.
+docs/handoff/CURRENT_HANDOFF.md:252:- v0.3.34 is fully closed: release metadata, GitHub release, assets, Zenodo DOI metadata, post-release check, and DOI documentation are complete. Next planning state is v0.3.35 or the first bounded Tkinter cockpit slice, but only after a fresh readiness check.
+docs/handoff/CURRENT_HANDOFF.md:255:## v0.3.35 Pre-GUI Core and CLI Consolidation Plan
+docs/handoff/CURRENT_HANDOFF.md:257:Next recommended line: v0.3.35 should consolidate the Python core and layered CLI before the Tkinter cockpit MVP. Do not start GUI implementation as the next slice.
+docs/handoff/CURRENT_HANDOFF.md:265:5. Start the Tkinter MVP only after the above risks are either fixed or explicitly deferred with tests/docs.
+docs/handoff/CURRENT_HANDOFF.md:279:- v0.3.35 is fully closed: release-gate core extraction, PR closeout idempotency, DOI metadata, and post-release verification are complete. Next recommended line: start the first bounded Tkinter cockpit MVP readiness slice only after a fresh read-only readiness check.
+docs/handoff/CURRENT_HANDOFF.md:281:- v0.3.36 documentation cleanup is now the active preparation step before the Tkinter MVP: README current-state wording and CHANGELOG release semantics must be cleaned up and tested first. Do not start GUI implementation in this slice.\n\n- v0.3.36 standard-error hardening started: Remote-log evidence is mandatory for standard-error hardening slices; summaries must include `terminal_log=docs/reports/terminal/...`, `command_report=...`, and `NEXT_CHAT_REPLY`. FAIL without terminal kill uses NEXT_CHAT_REPLY: f so the next step reconstructs from the remote log before asking for pasted terminal output.\n
+docs/handoff/CURRENT_HANDOFF.md:284:- v0.3.36 run-summary contract evidence is repo-backed in `docs/reports/terminal/v0.3.36_run_summary_contract_merge_evidence.log`; future slices must keep remote terminal evidence visible in the final summary and report standard-error reduction plus GUI preparation after each slice.\n\n- v0.3.36 portability shell-removal inventory is repo-backed in `docs/reports/terminal/v0.3.36_portability_shell_removal_inventory.log`. Tracked shell file count at inventory time: 15. The GUI baseline is not complete until tracked shell adapters are removed or explicitly replaced by Python entry points and a portability gate is active.\n
+docs/handoff/CURRENT_HANDOFF.md:298:Next safe step: deterministic rule hardening before GUI or release work. v0.3.36 is not released yet.
+docs/handoff/CURRENT_HANDOFF.md:323:- v0.3.36 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329180`. Next planned line: v0.3.37 final GUI-preparation closeout before GUI MVP implementation.
+docs/handoff/CURRENT_HANDOFF.md:324:- v0.3.37 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329450`. Next line: start v0.4.0 bounded GUI MVP from a clean main.
+
+### PATCH STATUS AND HANDOFF CLOSEOUT ###
+
+### VERIFY CLOSEOUT ANCHORS ###
+226:\n\n## GUI MVP Status
+228:- The Tkinter GUI MVP is on `main` with three bounded read-only actions visually verified: `cockpit-readiness`, `doctor`, and `check-docs`.
+230:- Visual evidence is recorded in `docs/reports/terminal/v040-record-check-docs-gui-visual-pass.log`.
+231:- The earlier `check-docs` visual failure was an incomplete Tk-capable runtime dependency issue; the Tk venv was repaired with a zsh-safe `pip install -e '.[dev]'` from the repository root.
+336:\n\n## GUI MVP Handoff
+338:- Current GUI baseline: `cockpit-readiness`, `doctor`, and `check-docs` are visually verified bounded read-only actions on `main`.
+339:- Evidence log: `docs/reports/terminal/v040-record-check-docs-gui-visual-pass.log`.
+340:- Runtime lesson: the Tk-capable Python must also have project dependencies installed; verify `tkinter`, `yaml`, `typer`, `rich`, and `pydantic` before judging a manual GUI failure as product-code failure.
+
+### GATES ###
+.......................F..............                                   [100%]
+=================================== FAILURES ===================================
+__________ test_check_docs_manual_gui_runner_executes_readonly_action __________
+
+    def test_check_docs_manual_gui_runner_executes_readonly_action():
+        from agentic_project_kit.gui_tkinter_shell import run_check_docs_for_manual_gui
+        output = run_check_docs_for_manual_gui()
+        assert "action=check-docs" in output
+        assert "safety_class=read-only" in output
+        assert "allowed=true" in output
+        assert "executed=true" in output
+>       assert "returncode=0" in output
+E       AssertionError: assert 'returncode=0' in 'GUI ACTION EXECUTION RESULT\naction=check-docs\nsafety_class=read-only\nallowed=true\nexecuted=true\nreturncode=1\nme...d-only executor.\noutput_begin\nAgentic project check failed\n- docs/STATUS.md: too long (3515/3500 words)\noutput_end'
+
+tests/test_v040_gui_tkinter_shell.py:291: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v040_gui_tkinter_shell.py::test_check_docs_manual_gui_runner_executes_readonly_action
+1 failed, 37 passed in 0.15s
+Agentic project check failed
+- docs/STATUS.md: too long (3515/3500 words)
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[FAIL] documentation gates: docs/STATUS.md: too long (3515/3500 words)
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: FAIL
+All checks passed!
+
+### COMMIT AND PR ###
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+
+### FINAL STATE BEFORE SUMMARY ###
+docs/closeout-v040-gui-mvp-three-readonly-actions
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+d96a294 Record check-docs GUI visual pass log
+19b4fb7 Record zsh-safe Tk venv dependency repair check-docs visual log
+0123f67 Record Tk venv dependency repair check-docs visual log
+e4c4d1f Record Tk venv dependency repair check-docs visual log
+2d35ea6 Record check-docs GUI visual failure log
+0d9ec63 Record check-docs GUI visual verification phase 1 log
+9bcb5cd Record PR655 check-docs GUI merge verification log
+96f71b8 Enable check-docs as read-only GUI action (#655)
+no pull requests found for branch "docs/closeout-v040-gui-mvp-three-readonly-actions"
+
+### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-22 18:30:02 +0200
+
+SLICE
+  NAME: CLOSE OUT GUI MVP THREE READ-ONLY ACTIONS
+  SCOPE: DOCS / STATUS / HANDOFF / GUI MVP BASELINE / NO RELEASE / NO GUI PATCH
+  BRANCH: docs/closeout-v040-gui-mvp-three-readonly-actions
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: GUI MVP baseline documented in status and handoff; tests and docs gates passed; PR creation attempted
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: FAIL
+  EVIDENCE: PARTIAL
+  OVERALL: FAIL
+
+REMOTE
+  REMOTE_EVIDENCE: PARTIAL
+  PR: created-or-existing-see-output
+  HEAD_SHA: d96a2948ea43905ca5b3ab8170e46ec7d08d0a57
+  CI: not_started
+  MERGE: not_started
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/v040-closeout-gui-mvp-three-readonly-actions.log
+  terminal_log_remote: docs/reports/terminal/v040-closeout-gui-mvp-three-readonly-actions.log
+  terminal_log_local: /tmp/v040-closeout-gui-mvp-three-readonly-actions.log
+  command_report: status-handoff-closeout/anchor-check/gui-tests/communication-contract-tests/check-docs/doctor/ruff/commit-push-pr
+
+INTERPRETATION
+  The repo now has prominent documentation for the visually verified GUI MVP baseline and the Tk dependency lesson.
+
+NEXT
+  SAFE_STEP: check PR CI, merge if green, then verify main; no release yet
+  CHAT_REPLY: f
+
+### RESULT: FAIL ###
+================================================================
+
+### RESULT: FAIL ###
