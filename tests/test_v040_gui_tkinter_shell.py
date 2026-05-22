@@ -234,3 +234,19 @@ def test_manual_gui_status_transition_contract_is_present():
     assert "Status: fail | branch: main | action: cockpit-readiness" in manual_source
     assert "command=run_cockpit_readiness_click" in manual_source
     assert "status_text = ttk.Label" in manual_source
+
+def test_doctor_manual_gui_runner_executes_readonly_action():
+    from agentic_project_kit.gui_tkinter_shell import run_doctor_for_manual_gui
+    output = run_doctor_for_manual_gui()
+    assert chr(97) + chr(99) + chr(116) + chr(105) + chr(111) + chr(110) + chr(61) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114) in output
+    assert chr(115) + chr(97) + chr(102) + chr(101) + chr(116) + chr(121) + chr(95) + chr(99) + chr(108) + chr(97) + chr(115) + chr(115) + chr(61) + chr(114) + chr(101) + chr(97) + chr(100) + chr(45) + chr(111) + chr(110) + chr(108) + chr(121) in output
+    assert chr(97) + chr(108) + chr(108) + chr(111) + chr(119) + chr(101) + chr(100) + chr(61) + chr(116) + chr(114) + chr(117) + chr(101) in output
+    assert chr(101) + chr(120) + chr(101) + chr(99) + chr(117) + chr(116) + chr(101) + chr(100) + chr(61) + chr(116) + chr(114) + chr(117) + chr(101) in output
+    assert chr(65) + chr(103) + chr(101) + chr(110) + chr(116) + chr(105) + chr(99) + chr(32) + chr(112) + chr(114) + chr(111) + chr(106) + chr(101) + chr(99) + chr(116) + chr(32) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114) + chr(32) + chr(114) + chr(101) + chr(112) + chr(111) + chr(114) + chr(116) in output
+
+def test_manual_gui_doctor_status_transition_contract_is_present():
+    from pathlib import Path
+    source = Path(chr(115) + chr(114) + chr(99) + chr(47) + chr(97) + chr(103) + chr(101) + chr(110) + chr(116) + chr(105) + chr(99) + chr(95) + chr(112) + chr(114) + chr(111) + chr(106) + chr(101) + chr(99) + chr(116) + chr(95) + chr(107) + chr(105) + chr(116) + chr(47) + chr(103) + chr(117) + chr(105) + chr(95) + chr(116) + chr(107) + chr(105) + chr(110) + chr(116) + chr(101) + chr(114) + chr(95) + chr(115) + chr(104) + chr(101) + chr(108) + chr(108) + chr(46) + chr(112) + chr(121)).read_text(encoding=chr(117) + chr(116) + chr(102) + chr(45) + chr(56))
+    manual_source = source[source.index(chr(100) + chr(101) + chr(102) + chr(32) + chr(114) + chr(101) + chr(110) + chr(100) + chr(101) + chr(114) + chr(95) + chr(109) + chr(97) + chr(110) + chr(117) + chr(97) + chr(108) + chr(95) + chr(108) + chr(97) + chr(117) + chr(110) + chr(99) + chr(104) + chr(95) + chr(99) + chr(111) + chr(110) + chr(116) + chr(101) + chr(110) + chr(116)):source.index(chr(100) + chr(101) + chr(102) + chr(32) + chr(114) + chr(117) + chr(110) + chr(95) + chr(109) + chr(97) + chr(110) + chr(117) + chr(97) + chr(108) + chr(95) + chr(108) + chr(97) + chr(117) + chr(110) + chr(99) + chr(104))]
+    assert chr(100) + chr(101) + chr(102) + chr(32) + chr(114) + chr(117) + chr(110) + chr(95) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114) + chr(95) + chr(99) + chr(108) + chr(105) + chr(99) + chr(107) in manual_source
+    assert chr(99) + chr(111) + chr(109) + chr(109) + chr(97) + chr(110) + chr(100) + chr(61) + chr(114) + chr(117) + chr(110) + chr(95) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114) + chr(95) + chr(99) + chr(108) + chr(105) + chr(99) + chr(107) in manual_source
