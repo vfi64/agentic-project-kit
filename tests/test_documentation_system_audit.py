@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 from typer.testing import CliRunner
@@ -51,3 +52,20 @@ def test_docs_audit_cli_is_registered() -> None:
     runner = CliRunner()
     result = runner.invoke(app, ["docs-audit"])
     assert "Documentation system audit" in result.output
+
+
+def test_documentation_system_audit_checks_status_handoff_closeout_sync() -> None:
+    report = build_documentation_system_audit(ROOT)
+    rendered = render_documentation_system_audit(report)
+    assert "CURRENT_HANDOFF.md missing current closeout marker" not in rendered
+    assert "STATUS.md missing current closeout marker" not in rendered
+    assert ".agentic/compiled_agent_context.yaml" in Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
+    assert "FINAL_SUMMARY_CONTRACT.md" in Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
+
+
+def test_documentation_system_audit_pr_closeout_regex_matches_real_pr_numbers() -> None:
+    source = Path("src/agentic_project_kit/documentation_system_audit.py").read_text(encoding="utf-8")
+    assert 'r"PR #\\d+ merged"' in source
+    assert 'r"PR #\\\\d+ merged"' not in source
+    assert re.search(r"PR #\d+ merged", "PR #649 merged") is not None
+

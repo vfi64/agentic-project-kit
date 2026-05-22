@@ -1,0 +1,118 @@
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+64f09fa Record PR649 LLM communication contracts merge verification log
+ec3c8c3 Add LLM communication and portable execution contracts (#649)
+b883dac Plan portable LLM communication bootstrap hardening (#648)
+66412fc Record PR647 doctor GUI merge recovery log
+16b3037 Enable doctor button through read-only GUI contract (#647)
+7a0823c Record doctor action registry merge verification log
+b288179 Register doctor as read-only GUI action candidate (#646)
+49a627c Record visual GUI status transition verification
+5a78b3d Record GUI status transitions merge verification log
+5483b3f Add GUI status transitions for cockpit readiness (#645)
+
+### CREATE CLOSEOUT BRANCH ###
+Switched to a new branch 'docs/closeout-pr649-communication-contracts'
+
+### PATCH STATUS AND HANDOFF CLOSEOUT POINTERS ###
+
+### VERIFY CLOSEOUT ANCHORS ###
+224:- PR #649 merged: LLM communication, portable execution, bootstrap/drift, final-summary terminal-output rule, structured handoff prompt, and `agentic-kit docs-audit` are now part of main.
+226:- Terminal output requirement: relevant terminal blocks must render the structured summary in terminal output and capture it in the terminal log.
+327:- PR #649 merged and verified: successor chats must read mandatory communication/bootstrap/summary rule sources before mutation.
+328:- `agentic-kit handoff prompt` is the canonical structured handoff generator; do not manually invent a competing prompt format.
+329:- `agentic-kit docs-audit` is the umbrella documentation-system audit for Aktualität, Vollständigkeit, Korrektheit, Redundanzfreiheit, Stringenz der Dokumentenordnung, and Konsistenz.
+330:- Final summaries must appear in terminal output and terminal logs for relevant workflow blocks.
+
+### LOCAL GATES ###
+..............F........                                                  [100%]
+=================================== FAILURES ===================================
+_________ test_documentation_system_audit_renderer_exposes_boundaries __________
+
+    def test_documentation_system_audit_renderer_exposes_boundaries() -> None:
+        report = build_documentation_system_audit(ROOT)
+        rendered = render_documentation_system_audit(report)
+        assert "Documentation system audit" in rendered
+        assert "Redundanzfreiheit" in rendered
+>       assert "review-only boundary" in rendered
+E       assert 'review-only boundary' in "Documentation system audit\n\n[FAIL] Aktualität\n- README.md: version '0.3.10' does not match expected version '0.3.3...doi-list-mismatch:README.md: README DOI list missing or mismatching v0.3.9 -> 10.5281/zenodo.20210345\n\nOverall: FAIL"
+
+tests/test_documentation_system_audit.py:33: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_documentation_system_audit.py::test_documentation_system_audit_renderer_exposes_boundaries
+1 failed, 22 passed in 0.31s
+All checks passed!
+Agentic project check failed
+- docs/STATUS.md: too long (3553/3500 words)
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[FAIL] documentation gates: docs/STATUS.md: too long (3553/3500 words)
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: FAIL
+
+### COMMIT PATCH BEFORE FINAL SUMMARY ###
+M  docs/STATUS.md
+M  docs/handoff/CURRENT_HANDOFF.md
+
+### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-22 16:52:49 +0200
+
+SLICE
+  NAME: PR649 STATUS HANDOFF CLOSEOUT
+  SCOPE: DOCS / STATUS / HANDOFF / NO RELEASE / NO GUI PATCH
+  BRANCH: docs/closeout-pr649-communication-contracts
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: PR649 closeout docs update failed
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: FAIL
+  EVIDENCE: PARTIAL
+  OVERALL: FAIL
+
+REMOTE
+  REMOTE_EVIDENCE: FAIL
+  PR: none-or-failed
+  HEAD_SHA: SEE_OUTPUT
+  CI: not_started
+  MERGE: blocked
+
+EVIDENCE FILES
+  terminal_log: /tmp/v040-closeout-pr649-communication-contracts.log
+  terminal_log_remote: NONE
+  terminal_log_local: /tmp/v040-closeout-pr649-communication-contracts.log
+  command_report: status-handoff-closeout/targeted-tests/ruff/check-docs/doctor/pr-create
+
+INTERPRETATION
+  PR649 closeout update did not complete; inspect local log before continuing.
+
+NEXT
+  SAFE_STEP: upload local fail log or inspect failing section
+  CHAT_REPLY: f
+
+### RESULT: FAIL ###
+================================================================
+
+### UPLOAD TERMINAL LOG INCLUDING STRUCTURED SUMMARY ###
