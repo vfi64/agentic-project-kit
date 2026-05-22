@@ -1,0 +1,287 @@
+### START ###
+Fr. 22 Mai 2026 21:25:24 CEST
+
+### SYNC CLEAN MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+HEAD is now at 260559a Record PR669 README doc mesh repair merge log
+main
+260559a Record PR669 README doc mesh repair merge log
+4b2f63a Repair README doc mesh current version selection after PR668 (#669)
+105d93b Prepare v0.4.0 release metadata (#668)
+bb8d4bd Record final handoff prompt after PR666 (#667)
+8198ebe Refresh handoff state after PR665 (#666)
+0234800 Merge current handoff overlay after PR664 (#665)
+9b918f6 Refresh handoff state after PR663 (#664)
+456a428 Repair README version extractor and DOI drift (#663)
+
+### VERIFY PYTHON 3.13 VENV ###
+Python 3.13.13
+
+### INSTALL LOCAL BUILD TOOLING INTO VENV ###
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting build
+  Using cached build-1.5.0-py3-none-any.whl.metadata (5.7 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting twine
+  Using cached twine-6.2.0-py3-none-any.whl.metadata (3.6 kB)
+Requirement already satisfied: packaging>=24.0 in ./.venv/lib/python3.13/site-packages (from build) (26.2)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting pyproject_hooks (from build)
+  Using cached pyproject_hooks-1.2.0-py3-none-any.whl.metadata (1.3 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting readme-renderer>=35.0 (from twine)
+  Using cached readme_renderer-44.0-py3-none-any.whl.metadata (2.8 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting requests>=2.20 (from twine)
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting requests-toolbelt!=0.9.0,>=0.8.0 (from twine)
+  Using cached requests_toolbelt-1.0.0-py2.py3-none-any.whl.metadata (14 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting urllib3>=1.26.0 (from twine)
+  Using cached urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting keyring>=21.2.0 (from twine)
+  Using cached keyring-25.7.0-py3-none-any.whl.metadata (21 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting rfc3986>=1.4.0 (from twine)
+  Using cached rfc3986-2.0.0-py2.py3-none-any.whl.metadata (6.6 kB)
+Requirement already satisfied: rich>=12.0.0 in ./.venv/lib/python3.13/site-packages (from twine) (15.0.0)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting id (from twine)
+  Using cached id-1.6.1-py3-none-any.whl.metadata (5.1 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting jaraco.classes (from keyring>=21.2.0->twine)
+  Using cached jaraco.classes-3.4.0-py3-none-any.whl.metadata (2.6 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting jaraco.functools (from keyring>=21.2.0->twine)
+  Downloading jaraco_functools-4.5.0-py3-none-any.whl.metadata (2.9 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting jaraco.context (from keyring>=21.2.0->twine)
+  Using cached jaraco_context-6.1.2-py3-none-any.whl.metadata (4.2 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting nh3>=0.2.14 (from readme-renderer>=35.0->twine)
+  Using cached nh3-0.3.5-cp38-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl.metadata (2.0 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting docutils>=0.21.2 (from readme-renderer>=35.0->twine)
+  Using cached docutils-0.22.4-py3-none-any.whl.metadata (15 kB)
+Requirement already satisfied: Pygments>=2.5.1 in ./.venv/lib/python3.13/site-packages (from readme-renderer>=35.0->twine) (2.20.0)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting charset_normalizer<4,>=2 (from requests>=2.20->twine)
+  Downloading charset_normalizer-3.4.7-cp313-cp313-macosx_10_13_universal2.whl.metadata (40 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting idna<4,>=2.5 (from requests>=2.20->twine)
+  Downloading idna-3.16-py3-none-any.whl.metadata (6.4 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting certifi>=2023.5.7 (from requests>=2.20->twine)
+  Downloading certifi-2026.5.20-py3-none-any.whl.metadata (2.5 kB)
+Requirement already satisfied: markdown-it-py>=2.2.0 in ./.venv/lib/python3.13/site-packages (from rich>=12.0.0->twine) (4.2.0)
+Requirement already satisfied: mdurl~=0.1 in ./.venv/lib/python3.13/site-packages (from markdown-it-py>=2.2.0->rich>=12.0.0->twine) (0.1.2)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting more-itertools (from jaraco.classes->keyring>=21.2.0->twine)
+  Downloading more_itertools-11.1.0-py3-none-any.whl.metadata (41 kB)
+Using cached build-1.5.0-py3-none-any.whl (26 kB)
+Using cached twine-6.2.0-py3-none-any.whl (42 kB)
+Using cached keyring-25.7.0-py3-none-any.whl (39 kB)
+Using cached readme_renderer-44.0-py3-none-any.whl (13 kB)
+Using cached docutils-0.22.4-py3-none-any.whl (633 kB)
+Using cached nh3-0.3.5-cp38-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl (1.4 MB)
+Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+Downloading charset_normalizer-3.4.7-cp313-cp313-macosx_10_13_universal2.whl (309 kB)
+Downloading idna-3.16-py3-none-any.whl (74 kB)
+Using cached urllib3-2.7.0-py3-none-any.whl (131 kB)
+Downloading certifi-2026.5.20-py3-none-any.whl (134 kB)
+Using cached requests_toolbelt-1.0.0-py2.py3-none-any.whl (54 kB)
+Using cached rfc3986-2.0.0-py2.py3-none-any.whl (31 kB)
+Using cached id-1.6.1-py3-none-any.whl (14 kB)
+Using cached jaraco.classes-3.4.0-py3-none-any.whl (6.8 kB)
+Using cached jaraco_context-6.1.2-py3-none-any.whl (7.9 kB)
+Downloading jaraco_functools-4.5.0-py3-none-any.whl (10 kB)
+Downloading more_itertools-11.1.0-py3-none-any.whl (72 kB)
+Using cached pyproject_hooks-1.2.0-py3-none-any.whl (10 kB)
+Installing collected packages: urllib3, rfc3986, pyproject_hooks, nh3, more-itertools, jaraco.context, idna, docutils, charset_normalizer, certifi, requests, readme-renderer, jaraco.functools, jaraco.classes, id, build, requests-toolbelt, keyring, twine
+
+Successfully installed build-1.5.0 certifi-2026.5.20 charset_normalizer-3.4.7 docutils-0.22.4 id-1.6.1 idna-3.16 jaraco.classes-3.4.0 jaraco.context-6.1.2 jaraco.functools-4.5.0 keyring-25.7.0 more-itertools-11.1.0 nh3-0.3.5 pyproject_hooks-1.2.0 readme-renderer-44.0 requests-2.34.2 requests-toolbelt-1.0.0 rfc3986-2.0.0 twine-6.2.0 urllib3-2.7.0
+Name: build
+Version: 1.5.0
+Summary: A simple, correct Python build frontend
+Home-page: https://build.pypa.io
+Author: 
+Author-email: Filipe Laíns <lains@riseup.net>, Bernát Gábor <gaborjbernat@gmail.com>, layday <layday@protonmail.com>, Henry Schreiner <henryschreineriii@gmail.com>
+License-Expression: MIT
+Location: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.13/site-packages
+Requires: packaging, pyproject_hooks
+Required-by: 
+---
+Name: twine
+Version: 6.2.0
+Summary: Collection of utilities for publishing packages on PyPI
+Home-page: https://twine.readthedocs.io/
+Author: 
+Author-email: Donald Stufft and individual contributors <donald@stufft.io>
+License-Expression: Apache-2.0
+Location: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/lib/python3.13/site-packages
+Requires: id, keyring, packaging, readme-renderer, requests, requests-toolbelt, rfc3986, rich, urllib3
+Required-by: 
+
+### VERIFY RELEASE STATE BEFORE TAG ###
+Release state check for target v0.4.0
+
+[PASS] semantic version: 0.4.0 is valid
+[PASS] pyproject version: found text: version = "0.4.0"
+[PASS] package __version__: found text: __version__ = "0.4.0"
+[PASS] CHANGELOG version: found text: v0.4.0
+[PASS] README version: found text: Version `0.4.0`
+[PASS] CITATION version: found text: version: 0.4.0
+[PASS] STATUS version: found text: Current version: 0.4.0
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.4.0
+[PASS] local tag unused: tag is unused: v0.4.0
+[PASS] remote tag unused: remote tag is unused: v0.4.0
+[PASS] GitHub release unused: GitHub release is absent: v0.4.0
+
+Overall: PASS
+
+Release preflight for target v0.4.0
+
+[PASS] semantic version: 0.4.0 is valid
+[PASS] local tag unused: tag is unused: v0.4.0
+[PASS] remote tag unused: remote tag is unused: v0.4.0
+[PASS] GitHub release unused: GitHub release is absent: v0.4.0
+
+Overall: PASS
+release not found
+GitHub release v0.4.0 absent as expected before tag.
+
+### FULL LOCAL GATES ###
+PASS: no stale STATUS/HANDOFF current-state fragments found
+Persistent handoff state check passed
+Governance check passed
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.0
+
+Overall: PASS
+main
+........................................................................ [  8%]
+........................................................................ [ 17%]
+........................................................................ [ 25%]
+........................................................................ [ 34%]
+........................................................................ [ 42%]
+........................................................................ [ 51%]
+........................................................................ [ 59%]
+........................................................................ [ 68%]
+........................................................................ [ 76%]
+........................................................................ [ 85%]
+........................................................................ [ 94%]
+..................................................                       [100%]
+842 passed in 5.10s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.0
+
+Overall: PASS
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=116
+ok=true
+
+Findings:
+- none
+main
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch deletion.
+
+### BRANCH / STATUS ###
+
+### PYTEST ###
+
+### RUFF ###
+
+### CHECK DOCS ###
+
+### DOCTOR ###
+
+### PR HYGIENE ###
+
+### FINAL STATUS ###
+Local feature gate passed.
+
+### CLEAN DIST BEFORE BUILD ###
+
+### BUILD RELEASE ARTIFACTS ###
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for sdist...
+* Building sdist...
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for wheel...
+* Building wheel...
+Successfully built agentic_project_kit-0.4.0.tar.gz and agentic_project_kit-0.4.0-py3-none-any.whl
+Checking dist/agentic_project_kit-0.4.0-py3-none-any.whl: [32mPASSED[0m
+Checking dist/agentic_project_kit-0.4.0.tar.gz: [32mPASSED[0m
+total 4088
+-rw-r--r--@ 1 hof  staff   166K 22 Mai  21:25 agentic_project_kit-0.4.0-py3-none-any.whl
+-rw-r--r--@ 1 hof  staff   1,8M 22 Mai  21:25 agentic_project_kit-0.4.0.tar.gz
+
+### ARTIFACT VERSION SNAPSHOT ###
+7:version = "0.4.0"
+1:__version__ = "0.4.0"
+1:Current version: 0.4.0
+1:Current version: 0.4.0
+
+### CLEAN GENERATED ARTIFACTS AFTER CHECK ###
+
+### COPY READINESS LOG TO REPO EVIDENCE IF PASS ###
