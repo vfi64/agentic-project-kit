@@ -94,3 +94,23 @@ def test_compiled_context_contains_remote_log_direct_path_rule() -> None:
     assert "id: remote-log-direct-path-first" in compiled
     assert "direct-fetch that path before relying on search results" in compiled
 
+
+def test_gui_visual_evidence_workflow_rule_is_documented() -> None:
+    final = Path("docs/governance/FINAL_SUMMARY_CONTRACT.md").read_text(encoding="utf-8")
+    assert "GUI visual evidence workflow rule" in final
+    assert "two-phase workflow" in final
+    assert "must not depend on an interactive shell `read` prompt" in final
+    assert "Long shell-backslash invocations of `./ns summary` are forbidden" in final
+
+
+def test_chat_contract_contains_gui_visual_two_phase_rule() -> None:
+    chat = Path("docs/governance/CHAT_COMMUNICATION_CONTRACT.md").read_text(encoding="utf-8")
+    assert "Manual GUI verification must not hide the final result behind an interactive terminal read prompt" in chat
+    assert "non-interactive PASS or FAIL evidence record" in chat
+
+
+def test_compiled_context_contains_gui_visual_two_phase_rule() -> None:
+    compiled = Path(".agentic/compiled_agent_context.yaml").read_text(encoding="utf-8")
+    assert "id: gui-visual-two-phase-evidence" in compiled
+    assert "do not use interactive read prompts or shell-backslash summary invocations" in compiled
+

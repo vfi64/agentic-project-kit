@@ -51,6 +51,8 @@ hard_rules:
   rule: Durable rules require human docs, compiled YAML, and deterministic tests or a documented review-only exception.
 - id: remote-log-direct-path-first
   rule: If a concrete docs/reports/terminal log path is known, direct-fetch that path before relying on search results or declaring evidence missing.
+- id: gui-visual-two-phase-evidence
+  rule: GUI visual checks must separate manual window launch from non-interactive PASS/FAIL evidence recording; do not use interactive read prompts or shell-backslash summary invocations.
 final_summary_contract:
   work_values:
   - PASS

@@ -142,3 +142,13 @@ GitHub code search, commit search, and filename search are advisory only. They m
 Required order: direct fetch of the named path at the expected branch or `main`; then PR/branch metadata; then search fallback only if the path is unknown.
 
 If direct fetch succeeds, the assistant must treat the log as remote evidence even when search does not find it yet.
+
+## GUI visual evidence workflow rule
+
+Manual GUI visual verification must be a two-phase workflow.
+
+Phase A may launch the GUI and record technical launch evidence, but it must not depend on an interactive shell `read` prompt for the final result.
+
+Phase B must record the human PASS or FAIL result non-interactively, render the structured summary with a generated argument list or JSON payload, and upload the completed log.
+
+Long shell-backslash invocations of `./ns summary` are forbidden in GUI visual evidence blocks because a lost dash can corrupt the summary command. Use a generated Python argument list or JSON payload instead.
