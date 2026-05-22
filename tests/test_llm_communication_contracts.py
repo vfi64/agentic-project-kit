@@ -17,6 +17,8 @@ def test_llm_communication_contract_files_exist_and_have_required_anchors() -> N
             "PASS communication",
             "REMOTE_EVIDENCE: PENDING",
             "paste-output",
+            "a rendered final summary printed in the terminal output",
+            "captured in the terminal log or command report",
         ],
         "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md": [
             "operating-system-independent",
@@ -134,6 +136,8 @@ def test_documentation_coverage_tracks_llm_communication_contracts() -> None:
         "forbidden_remote_evidence_values",
         "User acknowledgements",
         "LLM-to-terminal rules",
+        "Terminal-to-LLM rules",
+        "a rendered final summary printed in the terminal output",
         "Shell commands are adapters only",
         "Mandatory startup sequence",
         "LLM Communication and Bootstrap Gate",
