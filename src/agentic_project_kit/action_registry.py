@@ -99,6 +99,15 @@ ACTIONS: tuple[ActionMetadata, ...] = (
     ),
 
     ActionMetadata(
+        name="check-docs",
+        safety_class=SafetyClass.READ_ONLY,
+        mutation_scope="none",
+        dry_run_supported=True,
+        outcome_contract=("PASS", "FAIL"),
+        summary="Run documentation coverage and lifecycle gates without mutating repository state.",
+    ),
+
+    ActionMetadata(
         name="cockpit-readiness",
         safety_class=SafetyClass.READ_ONLY,
         mutation_scope="none",
