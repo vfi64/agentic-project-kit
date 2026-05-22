@@ -28,3 +28,12 @@ def test_finalize_guard_documents_machine_readable_outcomes():
     assert action is not None
     assert "PASS_ALREADY_ON_MAIN" in action.outcome_contract
     assert "FAIL_NEEDS_HUMAN_REVIEW" in action.outcome_contract
+
+
+def test_doctor_is_registered_as_read_only_action():
+    action = get_action("doctor")
+    assert action is not None
+    assert action.safety_class is SafetyClass.READ_ONLY
+    assert action.mutation_scope == "none"
+    assert action.dry_run_supported is True
+    assert action.outcome_contract == ("PASS", "FAIL")
