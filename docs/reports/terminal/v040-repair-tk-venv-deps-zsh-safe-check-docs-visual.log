@@ -1,0 +1,231 @@
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+0123f67 Record Tk venv dependency repair check-docs visual log
+e4c4d1f Record Tk venv dependency repair check-docs visual log
+2d35ea6 Record check-docs GUI visual failure log
+0d9ec63 Record check-docs GUI visual verification phase 1 log
+9bcb5cd Record PR655 check-docs GUI merge verification log
+96f71b8 Enable check-docs as read-only GUI action (#655)
+03956a1 Record PR654 shared GUI runner merge verification log
+db607b8 Add shared read-only GUI runner abstraction (#654)
+df66dee Record PR653 GUI visual evidence workflow merge verification log
+a117dc5 Harden GUI visual evidence workflow rules (#653)
+
+### VERIFY TK PYTHON BEFORE DEP REPAIR ###
+TKINTER_OK=1
+TK_VERSION=9.0
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import yaml; print("YAML_ALREADY_OK=1")
+    ^^^^^^^^^^^
+ModuleNotFoundError: No module named 'yaml'
+
+### ZSH-SAFE INSTALL PROJECT DEPENDENCIES INTO TK VENV ###
+Looking in links: /var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/tmpi6svh_qj
+Requirement already satisfied: pip in /private/tmp/agentic-project-kit-tk-venv-313/lib/python3.13/site-packages (26.1.1)
+Requirement already satisfied: pip in /private/tmp/agentic-project-kit-tk-venv-313/lib/python3.13/site-packages (26.1.1)
+Obtaining file:///Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Installing backend dependencies: started
+  Installing backend dependencies: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Collecting pydantic>=2.7 (from agentic-project-kit==0.3.37)
+  Using cached pydantic-2.13.4-py3-none-any.whl.metadata (109 kB)
+Collecting pyyaml>=6.0 (from agentic-project-kit==0.3.37)
+  Using cached pyyaml-6.0.3-cp313-cp313-macosx_11_0_arm64.whl.metadata (2.4 kB)
+Collecting rich>=13.7 (from agentic-project-kit==0.3.37)
+  Using cached rich-15.0.0-py3-none-any.whl.metadata (18 kB)
+Collecting typer>=0.12 (from agentic-project-kit==0.3.37)
+  Using cached typer-0.25.1-py3-none-any.whl.metadata (15 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting pytest>=8.0 (from agentic-project-kit==0.3.37)
+  Using cached pytest-9.0.3-py3-none-any.whl.metadata (7.6 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting ruff>=0.6 (from agentic-project-kit==0.3.37)
+  Downloading ruff-0.15.14-py3-none-macosx_11_0_arm64.whl.metadata (26 kB)
+Collecting annotated-types>=0.6.0 (from pydantic>=2.7->agentic-project-kit==0.3.37)
+  Using cached annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.46.4 (from pydantic>=2.7->agentic-project-kit==0.3.37)
+  Using cached pydantic_core-2.46.4-cp313-cp313-macosx_11_0_arm64.whl.metadata (6.6 kB)
+Collecting typing-extensions>=4.14.1 (from pydantic>=2.7->agentic-project-kit==0.3.37)
+  Using cached typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting typing-inspection>=0.4.2 (from pydantic>=2.7->agentic-project-kit==0.3.37)
+  Using cached typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+WARNING: Cache entry deserialization failed, entry ignored
+Collecting iniconfig>=1.0.1 (from pytest>=8.0->agentic-project-kit==0.3.37)
+  Using cached iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting packaging>=22 (from pytest>=8.0->agentic-project-kit==0.3.37)
+  Using cached packaging-26.2-py3-none-any.whl.metadata (3.5 kB)
+Collecting pluggy<2,>=1.5 (from pytest>=8.0->agentic-project-kit==0.3.37)
+  Using cached pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Collecting pygments>=2.7.2 (from pytest>=8.0->agentic-project-kit==0.3.37)
+  Using cached pygments-2.20.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting markdown-it-py>=2.2.0 (from rich>=13.7->agentic-project-kit==0.3.37)
+  Using cached markdown_it_py-4.2.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich>=13.7->agentic-project-kit==0.3.37)
+  Using cached mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Collecting click>=8.2.1 (from typer>=0.12->agentic-project-kit==0.3.37)
+  Downloading click-8.4.1-py3-none-any.whl.metadata (2.6 kB)
+Collecting shellingham>=1.3.0 (from typer>=0.12->agentic-project-kit==0.3.37)
+  Using cached shellingham-1.5.4-py2.py3-none-any.whl.metadata (3.5 kB)
+Collecting annotated-doc>=0.0.2 (from typer>=0.12->agentic-project-kit==0.3.37)
+  Using cached annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+Using cached pydantic-2.13.4-py3-none-any.whl (472 kB)
+Using cached pydantic_core-2.46.4-cp313-cp313-macosx_11_0_arm64.whl (2.0 MB)
+Using cached annotated_types-0.7.0-py3-none-any.whl (13 kB)
+Using cached pytest-9.0.3-py3-none-any.whl (375 kB)
+Using cached pluggy-1.6.0-py3-none-any.whl (20 kB)
+Using cached iniconfig-2.3.0-py3-none-any.whl (7.5 kB)
+Using cached packaging-26.2-py3-none-any.whl (100 kB)
+Using cached pygments-2.20.0-py3-none-any.whl (1.2 MB)
+Using cached pyyaml-6.0.3-cp313-cp313-macosx_11_0_arm64.whl (173 kB)
+Using cached rich-15.0.0-py3-none-any.whl (310 kB)
+Using cached markdown_it_py-4.2.0-py3-none-any.whl (91 kB)
+Using cached mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Downloading ruff-0.15.14-py3-none-macosx_11_0_arm64.whl (10.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.5/10.5 MB 29.1 MB/s  0:00:00
+Using cached typer-0.25.1-py3-none-any.whl (58 kB)
+Using cached annotated_doc-0.0.4-py3-none-any.whl (5.3 kB)
+Downloading click-8.4.1-py3-none-any.whl (116 kB)
+Using cached shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+Using cached typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+Using cached typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+Building wheels for collected packages: agentic-project-kit
+  Building editable for agentic-project-kit (pyproject.toml): started
+  Building editable for agentic-project-kit (pyproject.toml): finished with status 'done'
+  Created wheel for agentic-project-kit: filename=agentic_project_kit-0.3.37-py3-none-any.whl size=11186 sha256=5d7473db3a6a85871b08b63ec82b10983bc0994ae331156561658a6c32214727
+  Stored in directory: /private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pip-ephem-wheel-cache-y6__q51f/wheels/b5/8f/a3/2558d63d8dae58d78c2ae9b34588082684703aa20f52453070
+Successfully built agentic-project-kit
+Installing collected packages: typing-extensions, shellingham, ruff, pyyaml, pygments, pluggy, packaging, mdurl, iniconfig, click, annotated-types, annotated-doc, typing-inspection, pytest, pydantic-core, markdown-it-py, rich, pydantic, typer, agentic-project-kit
+
+Successfully installed agentic-project-kit-0.3.37 annotated-doc-0.0.4 annotated-types-0.7.0 click-8.4.1 iniconfig-2.3.0 markdown-it-py-4.2.0 mdurl-0.1.2 packaging-26.2 pluggy-1.6.0 pydantic-2.13.4 pydantic-core-2.46.4 pygments-2.20.0 pytest-9.0.3 pyyaml-6.0.3 rich-15.0.0 ruff-0.15.14 shellingham-1.5.4 typer-0.25.1 typing-extensions-4.15.0 typing-inspection-0.4.2
+
+### VERIFY TK PYTHON AFTER DEP REPAIR ###
+TKPY_PROJECT_DEPS_OK=1
+
+### VERIFY CHECK-DOCS GUI RUNNER WITH TK PYTHON ###
+GUI ACTION EXECUTION RESULT
+action=check-docs
+safety_class=read-only
+allowed=true
+executed=true
+returncode=0
+message=Action executed through bounded read-only executor.
+output=Agentic project check passed
+
+### VERIFY MAIN GUI SHAPE ###
+212:def run_check_docs_for_manual_gui() -> str:
+272:    def run_check_docs_click() -> None:
+301:    ttk.Button(toolbar, text="Check docs", command=run_check_docs_click).pack(side="left", padx=4, pady=4)
+309:    ttk.Button(actions, text="check-docs", command=run_check_docs_click, width=22).pack(fill="x", pady=3)
+
+### LAUNCH MANUAL GUI WINDOW ###
+In the GUI: click Check docs, verify output/status/disabled unsafe buttons, then close the window.
+Expected output: GUI ACTION EXECUTION RESULT, action=check-docs, safety_class=read-only, allowed=true, executed=true, returncode=0, Agentic project check passed.
+Expected status: Status: success | branch: main | action: check-docs.
+Unsafe/remote/destructive actions must remain disabled.
+TKINTER MANUAL LAUNCH
+GUI WINDOW GUARD
+window_launch_ready=true
+tkinter_importable=true
+native_tkinter_importable=true
+message=window launch guard passed
+window_guard_status=READY
+manual_launch_status=READY
+real_window_opened=true
+actions_enabled=false
+manual_close_required=true
+### RESULT: PASS ###
+manual_launch_closed=true
+
+### POST-WINDOW LIGHT GATES ###
+..............................                                           [100%]
+30 passed in 0.13s
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### FINAL STATE BEFORE SUMMARY ###
+main
+0123f67 Record Tk venv dependency repair check-docs visual log
+e4c4d1f Record Tk venv dependency repair check-docs visual log
+2d35ea6 Record check-docs GUI visual failure log
+0d9ec63 Record check-docs GUI visual verification phase 1 log
+9bcb5cd Record PR655 check-docs GUI merge verification log
+96f71b8 Enable check-docs as read-only GUI action (#655)
+03956a1 Record PR654 shared GUI runner merge verification log
+db607b8 Add shared read-only GUI runner abstraction (#654)
+
+### WRITE ROBUST SUMMARY INVOKER ###
+
+### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-22 18:26:08 +0200
+
+SLICE
+  NAME: REPAIR TK VENV DEPS ZSH SAFE AND RE-RUN CHECK-DOCS VISUAL VERIFY
+  SCOPE: LOCAL TK VENV DEPENDENCY REPAIR / ZSH-SAFE PIP EXTRA / MANUAL GUI / CHECK-DOCS BUTTON / MAIN / NO PRODUCT PATCH / NO RELEASE
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: Tk-capable Python venv repaired with zsh-safe project dependency install; check-docs manual GUI window launched for visual verification
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PARTIAL
+  PR: none
+  HEAD_SHA: 0123f67955a76069eec6ff03cf35626ba2beb7d5
+  CI: not_required
+  MERGE: not_required
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/v040-repair-tk-venv-deps-zsh-safe-check-docs-visual.log
+  terminal_log_remote: docs/reports/terminal/v040-repair-tk-venv-deps-zsh-safe-check-docs-visual.log
+  terminal_log_local: /tmp/v040-repair-tk-venv-deps-zsh-safe-check-docs-visual.log
+  command_report: zsh-safe-tk-python-dependency-repair/tkpy-import-yaml/check-docs-runner-smoke/manual-window-launch/gui-tests/check-docs/doctor
+
+INTERPRETATION
+  The previous dependency repair failed because zsh interpreted $REPO[dev] as a subscript. This block uses pip install -e .[dev] from the repository root with single quotes.
+
+NEXT
+  SAFE_STEP: after closing the window, answer d if check-docs visually passed; answer f otherwise
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
+
+### RESULT: PASS ###
