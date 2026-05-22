@@ -257,17 +257,17 @@ def render_manual_launch_content(root: object) -> None:
 
 
     def run_doctor_click() -> None:
-        set_status(chr(83) + chr(116) + chr(97) + chr(116) + chr(117) + chr(115) + chr(58) + chr(32) + chr(114) + chr(117) + chr(110) + chr(110) + chr(105) + chr(110) + chr(103) + chr(32) + chr(124) + chr(32) + chr(98) + chr(114) + chr(97) + chr(110) + chr(99) + chr(104) + chr(58) + chr(32) + chr(109) + chr(97) + chr(105) + chr(110) + chr(32) + chr(124) + chr(32) + chr(97) + chr(99) + chr(116) + chr(105) + chr(111) + chr(110) + chr(58) + chr(32) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114))
+        set_status("Status: running | branch: main | action: doctor")
         try:
             value = run_doctor_for_manual_gui()
             write_output(value)
-            if chr(114) + chr(101) + chr(116) + chr(117) + chr(114) + chr(110) + chr(99) + chr(111) + chr(100) + chr(101) + chr(61) + chr(48) in value:
-                set_status(chr(83) + chr(116) + chr(97) + chr(116) + chr(117) + chr(115) + chr(58) + chr(32) + chr(115) + chr(117) + chr(99) + chr(99) + chr(101) + chr(115) + chr(115) + chr(32) + chr(124) + chr(32) + chr(98) + chr(114) + chr(97) + chr(110) + chr(99) + chr(104) + chr(58) + chr(32) + chr(109) + chr(97) + chr(105) + chr(110) + chr(32) + chr(124) + chr(32) + chr(97) + chr(99) + chr(116) + chr(105) + chr(111) + chr(110) + chr(58) + chr(32) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114))
+            if "returncode=0" in value:
+                set_status("Status: success | branch: main | action: doctor")
             else:
-                set_status(chr(83) + chr(116) + chr(97) + chr(116) + chr(117) + chr(115) + chr(58) + chr(32) + chr(102) + chr(97) + chr(105) + chr(108) + chr(32) + chr(124) + chr(32) + chr(98) + chr(114) + chr(97) + chr(110) + chr(99) + chr(104) + chr(58) + chr(32) + chr(109) + chr(97) + chr(105) + chr(110) + chr(32) + chr(124) + chr(32) + chr(97) + chr(99) + chr(116) + chr(105) + chr(111) + chr(110) + chr(58) + chr(32) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114))
+                set_status("Status: fail | branch: main | action: doctor")
         except Exception as exc:
-            write_output(chr(71) + chr(85) + chr(73) + chr(32) + chr(65) + chr(67) + chr(84) + chr(73) + chr(79) + chr(78) + chr(32) + chr(69) + chr(88) + chr(69) + chr(67) + chr(85) + chr(84) + chr(73) + chr(79) + chr(78) + chr(32) + chr(82) + chr(69) + chr(83) + chr(85) + chr(76) + chr(84) + chr(10) + chr(97) + chr(99) + chr(116) + chr(105) + chr(111) + chr(110) + chr(61) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114) + chr(10) + chr(114) + chr(101) + chr(116) + chr(117) + chr(114) + chr(110) + chr(99) + chr(111) + chr(100) + chr(101) + chr(61) + chr(49) + chr(10) + chr(109) + chr(101) + chr(115) + chr(115) + chr(97) + chr(103) + chr(101) + chr(61) + str(exc))
-            set_status(chr(83) + chr(116) + chr(97) + chr(116) + chr(117) + chr(115) + chr(58) + chr(32) + chr(102) + chr(97) + chr(105) + chr(108) + chr(32) + chr(124) + chr(32) + chr(98) + chr(114) + chr(97) + chr(110) + chr(99) + chr(104) + chr(58) + chr(32) + chr(109) + chr(97) + chr(105) + chr(110) + chr(32) + chr(124) + chr(32) + chr(97) + chr(99) + chr(116) + chr(105) + chr(111) + chr(110) + chr(58) + chr(32) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114))
+            write_output("GUI ACTION EXECUTION RESULT\\naction=doctor\\nreturncode=1\\nmessage=" + str(exc))
+            set_status("Status: fail | branch: main | action: doctor")
     toolbar = ttk.Frame(root, padding=4)
     toolbar.pack(fill="x", padx=12, pady=(0, 8))
     for label in ("Refresh status", "Check docs", "GUI dry-run"):
