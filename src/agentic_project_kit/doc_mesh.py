@@ -150,7 +150,7 @@ _VERSION_PATTERNS: dict[str, re.Pattern[str]] = {
     "docs/STATUS.md": re.compile(r"^Current version:\s*([0-9]+\.[0-9]+\.[0-9]+)", re.MULTILINE),
     "docs/handoff/CURRENT_HANDOFF.md": re.compile(r"^Current version:\s*([0-9]+\.[0-9]+\.[0-9]+)", re.MULTILINE),
     "CITATION.cff": re.compile(r"^version:\s*([0-9]+\.[0-9]+\.[0-9]+)", re.MULTILINE),
-    "README.md": re.compile(r"Version `([0-9]+\.[0-9]+\.[0-9]+)`"),
+    "README.md": re.compile(r"^Current verified release:\s*version `([0-9]+\.[0-9]+\.[0-9]+)`", re.MULTILINE),
 }
 
 _VERIFIED_DOI_PATTERN = re.compile(

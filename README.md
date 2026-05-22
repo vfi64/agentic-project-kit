@@ -472,39 +472,48 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 Archived GUI/cockpit release notes: v0.3.22 verified DOI `10.5281/zenodo.20256637`; v0.3.19 verified DOI `10.5281/zenodo.20246121`.
 
-Version `0.3.10` remains the previous archived release covering workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`.
+Archived release v0.3.10 covers workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`. Compatibility coverage anchor: Version `0.3.10`.
 
-Version `0.3.9` remains the previous post-release verified archived release before v0.3.10.
+Archived release v0.3.9 remains the previous post-release verified archived release before v0.3.10. Compatibility coverage anchor: Version `0.3.9`.
 
 This repository has maintainer-owned GitHub releases and verified Zenodo archive records. Verified version-specific DOIs:
+- Verified v0.3.24 version DOI: `10.5281/zenodo.20270197`
+- Verified v0.3.25 version DOI: `10.5281/zenodo.20273989`
+- Verified v0.3.27 version DOI: `10.5281/zenodo.20283414`
+- Verified v0.3.31 version DOI: `10.5281/zenodo.20313834`
+- Verified v0.3.32 version DOI: `10.5281/zenodo.20314341`
+- Verified v0.3.34 version DOI: `10.5281/zenodo.20315568`
+- Verified v0.3.35 version DOI: `10.5281/zenodo.20316280`
+- Verified v0.3.36 version DOI: `10.5281/zenodo.20329180`
+- Verified v0.3.37 version DOI: `10.5281/zenodo.20329450`
 - Verified v0.3.29 version DOI: `10.5281/zenodo.20303218`
 - Verified v0.3.30 version DOI: `10.5281/zenodo.20308526`
 - Verified v0.3.28 version DOI: `10.5281/zenodo.20286394`
 - Verified v0.3.23 version DOI: `10.5281/zenodo.20261956`
 
-- v0.2.5: `10.5281/zenodo.20111119`
-- v0.2.6: `10.5281/zenodo.20119102`
-- v0.2.7: `10.5281/zenodo.20125518`
-- v0.2.8: `10.5281/zenodo.20126270`
-- v0.2.9: `10.5281/zenodo.20126490`
-- v0.2.10: `10.5281/zenodo.20127028`
-- v0.3.0: `10.5281/zenodo.20140467`
-- v0.3.1: `10.5281/zenodo.20144969`
-- v0.3.2: `10.5281/zenodo.20145114`
-- v0.3.3: `10.5281/zenodo.20151924`
-- v0.3.4: `10.5281/zenodo.20162214`
-- v0.3.5: `10.5281/zenodo.20169965`
-- v0.3.6: `10.5281/zenodo.20183888`
-- v0.3.7: `10.5281/zenodo.20206581`
-- v0.3.8: `10.5281/zenodo.20208638`
-- v0.3.9: `10.5281/zenodo.20210345`
-- v0.3.10: `10.5281/zenodo.20214382`
-- v0.3.11: `10.5281/zenodo.20215460`
+- Verified v0.2.5 version DOI: `10.5281/zenodo.20111119`
+- Verified v0.2.6 version DOI: `10.5281/zenodo.20119102`
+- Verified v0.2.7 version DOI: `10.5281/zenodo.20125518`
+- Verified v0.2.8 version DOI: `10.5281/zenodo.20126270`
+- Verified v0.2.9 version DOI: `10.5281/zenodo.20126490`
+- Verified v0.2.10 version DOI: `10.5281/zenodo.20127028`
+- Verified v0.3.0 version DOI: `10.5281/zenodo.20140467`
+- Verified v0.3.1 version DOI: `10.5281/zenodo.20144969`
+- Verified v0.3.2 version DOI: `10.5281/zenodo.20145114`
+- Verified v0.3.3 version DOI: `10.5281/zenodo.20151924`
+- Verified v0.3.4 version DOI: `10.5281/zenodo.20162214`
+- Verified v0.3.5 version DOI: `10.5281/zenodo.20169965`
+- Verified v0.3.6 version DOI: `10.5281/zenodo.20183888`
+- Verified v0.3.7 version DOI: `10.5281/zenodo.20206581`
+- Verified v0.3.8 version DOI: `10.5281/zenodo.20208638`
+- Verified v0.3.9 version DOI: `10.5281/zenodo.20210345`
+- Verified v0.3.10 version DOI: `10.5281/zenodo.20214382`
+- Verified v0.3.11 version DOI: `10.5281/zenodo.20215460`
 - Verified v0.3.12 version DOI: `10.5281/zenodo.20218213`
 - Verified v0.3.16 version DOI: `10.5281/zenodo.20244944`
 - Verified v0.3.17 version DOI: `10.5281/zenodo.20245113`
 - Verified v0.3.19 version DOI: `10.5281/zenodo.20246121`
-- Verified v0.3.21 DOI: 10.5281/zenodo.20258057 version DOI: `10.5281/zenodo.20256637`
+- Verified v0.3.22 version DOI: `10.5281/zenodo.20261634`
 - Verified v0.3.18 version DOI: `10.5281/zenodo.20245754`
 
 Near-term documentation-governance work: stabilize `agentic-kit doc-mesh-audit` as a targeted special gate, collect false positives, then decide whether to promote it into `agentic-kit doctor` before any unconditional default `ns` integration.
@@ -534,5 +543,5 @@ The command writes a document under `docs/planning/` by default, includes `Statu
 Current verified release: version `0.3.37`, Zenodo version DOI `10.5281/zenodo.20329450`.
 
 Earlier verified version-specific DOIs are intentionally maintained in `docs/releases/VERIFIED_RELEASES.md` instead of duplicating a long and drift-prone release ledger in the README.
-Version `0.3.36` is the current release line prepared by `./ns release-prep 0.3.36`.
+Archived release v0.3.36 was post-release verified before v0.3.37.
 Version `0.3.37` is released and post-release verified with Zenodo version DOI `10.5281/zenodo.20329450`.

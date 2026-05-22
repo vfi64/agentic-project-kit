@@ -23,7 +23,7 @@ def _write(path: Path, content: str) -> None:
 def _write_minimal_mesh(root: Path, *, version: str = "1.2.3", historical_banner: bool = True) -> None:
     _write(root / "pyproject.toml", f'[project]\nversion = "{version}"\n')
     _write(root / "src/agentic_project_kit/__init__.py", f'__version__ = "{version}"\n')
-    _write(root / "README.md", f'Version `{version}` is current.\n')
+    _write(root / "README.md", f'Current verified release: version `{version}`, Zenodo version DOI `10.5281/zenodo.12345678`.\n')
     _write(root / "CHANGELOG.md", f'## v{version}\n')
     _write(root / "CITATION.cff", f'version: {version}\n')
     _write(root / "docs/STATUS.md", f'Current version: {version}\nCurrent release state.\n')
@@ -277,3 +277,19 @@ def test_doc_mesh_command_reports_failure(tmp_path: Path) -> None:
         doc_mesh_audit_command(tmp_path)
 
     assert exc_info.value.exit_code == 1
+
+def test_doc_mesh_readme_uses_current_verified_release_not_historical_version_anchor(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path)
+    _write(
+        tmp_path / "README.md",
+        "Compatibility coverage anchor: Version `0.3.9`.\n"
+        "Compatibility coverage anchor: Version `0.3.10`.\n"
+        "Current verified release: version `1.2.3`, Zenodo version DOI `10.5281/zenodo.12345678`.\n",
+    )
+
+    report = build_doc_mesh_report(tmp_path)
+
+    assert not any(
+        finding.code == "version-mismatch" and finding.path == "README.md"
+        for finding in report.findings
+    )
