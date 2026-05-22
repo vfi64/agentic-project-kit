@@ -25,6 +25,16 @@ REQUIRED_TOP_LEVEL_FIELDS = [
 ]
 VALID_RULE_STATUSES = {"active", "superseded", "historical"}
 VALID_SAFE_STATE_SEMANTICS = {"last_substantive_work_state", "current_main_head"}
+ADMINISTRATIVE_EVIDENCE_SUBJECT_PREFIXES = (
+    "record ",
+    "refresh handoff state",
+    "align handoff state",
+    "finalize handoff state",
+    "finalize post-pr",
+    "recover post-pr",
+    "record final post-pr",
+    "recover post-",
+)
 
 def load_handoff_state(path: str | Path = DEFAULT_HANDOFF_STATE_PATH) -> dict[str, Any]:
     state_path = Path(path)
@@ -83,6 +93,12 @@ def validate_handoff_state(data: dict[str, Any]) -> list[str]:
             for pr in refresh_prs:
                 if not isinstance(pr, int):
                     errors.append("safe_state.administrative_refresh_prs entries must be integers")
+    admin_state = data.get("administrative_evidence_state")
+    if admin_state is not None:
+        if not isinstance(admin_state, dict):
+            errors.append("administrative_evidence_state must be a mapping")
+        elif admin_state.get("allowed_after_safe_state") is not True:
+            errors.append("administrative_evidence_state.allowed_after_safe_state must be true")
     for pattern in data.get("recent_failure_patterns", []) or []:
         if isinstance(pattern, dict) and not pattern.get("prevention"):
             pattern_id = pattern.get("id", "<unknown>")
@@ -131,8 +147,22 @@ def current_git_safe_state() -> dict[str, str]:
     ], text=True).strip()
     return {"commit": commit, "commit_subject": subject}
 
+def is_administrative_evidence_subject(commit_subject: str) -> bool:
+    lowered = commit_subject.lower().strip()
+    return lowered.startswith(ADMINISTRATIVE_EVIDENCE_SUBJECT_PREFIXES)
+
+
 def is_administrative_refresh_subject(commit_subject: str) -> bool:
-    return commit_subject.lower().startswith("refresh handoff state")
+    return is_administrative_evidence_subject(commit_subject)
+
+
+def build_administrative_evidence_state(commit: str, commit_subject: str) -> dict[str, Any]:
+    return {
+        "current_head": commit,
+        "current_head_subject": commit_subject,
+        "allowed_after_safe_state": True,
+        "reason": "administrative evidence/log/handoff commit after substantive safe_state",
+    }
 
 
 def refresh_handoff_safe_state(
@@ -144,11 +174,13 @@ def refresh_handoff_safe_state(
     refreshed = dict(data)
     safe_state = dict(refreshed.get("safe_state", {}))
     safe_state.setdefault("semantics", "last_substantive_work_state")
-    if is_administrative_refresh_subject(commit_subject):
+    if is_administrative_evidence_subject(commit_subject):
+        safe_state["semantics"] = "last_substantive_work_state"
         refreshed["safe_state"] = safe_state
+        refreshed["administrative_evidence_state"] = build_administrative_evidence_state(commit, commit_subject)
         refreshed["updated"] = {
-            "date": "2026-05-18",
-            "reason": "Current HEAD is an administrative handoff refresh; safe_state remains on last substantive work commit",
+            "date": "2026-05-22",
+            "reason": "administrative handoff refresh: Current HEAD is administrative evidence; safe_state remains on last substantive work state",
             "source": "agentic-kit handoff refresh",
         }
         return refreshed
@@ -156,6 +188,7 @@ def refresh_handoff_safe_state(
     safe_state["commit"] = commit
     safe_state["commit_subject"] = commit_subject
     refreshed["safe_state"] = safe_state
+    refreshed.pop("administrative_evidence_state", None)
     refreshed["updated"] = {
         "date": "2026-05-18",
         "reason": reason,
