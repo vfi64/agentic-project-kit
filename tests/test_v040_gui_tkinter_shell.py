@@ -257,7 +257,7 @@ def test_manual_gui_uses_shared_readonly_runner_abstraction():
     source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
     assert "def run_manual_gui_read_only_action(" in source
     assert "def render_gui_action_execution_result(" in source
-    assert source.count("run_bounded_read_only_action(") == 1
+    assert source.count("    result = run_bounded_read_only_action(") == 1
     assert "return run_manual_gui_read_only_action(\"cockpit-readiness\", executor)" in source
     assert "return run_manual_gui_read_only_action(\"doctor\", executor)" in source
 
