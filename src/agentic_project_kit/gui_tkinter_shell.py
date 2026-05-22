@@ -207,6 +207,12 @@ def render_manual_launch_content(root: object) -> None:
     safety.pack(fill="x", padx=12, pady=(0, 10))
 
     output_text = None
+    status_text = None
+
+    def set_status(value: str) -> None:
+        if status_text is not None:
+            status_text.configure(text=value)
+            root.update_idletasks()
 
     def write_output(value: str) -> None:
         if output_text is None:
@@ -215,6 +221,19 @@ def render_manual_launch_content(root: object) -> None:
         output_text.delete("1.0", "end")
         output_text.insert("1.0", value)
         output_text.configure(state="disabled")
+
+    def run_cockpit_readiness_click() -> None:
+        set_status("Status: running | branch: main | action: cockpit-readiness")
+        try:
+            value = run_cockpit_readiness_for_manual_gui()
+            write_output(value)
+            if "returncode=0" in value:
+                set_status("Status: success | branch: main | action: cockpit-readiness")
+            else:
+                set_status("Status: fail | branch: main | action: cockpit-readiness")
+        except Exception as exc:
+            write_output("GUI ACTION EXECUTION RESULT\naction=cockpit-readiness\nreturncode=1\nmessage=" + str(exc))
+            set_status("Status: fail | branch: main | action: cockpit-readiness")
 
     toolbar = ttk.Frame(root, padding=4)
     toolbar.pack(fill="x", padx=12, pady=(0, 8))
@@ -225,7 +244,7 @@ def render_manual_launch_content(root: object) -> None:
     body.pack(fill="both", expand=True)
     actions = ttk.LabelFrame(body, text="Actions", padding=6)
     actions.pack(side="left", fill="y", padx=(0, 8))
-    ttk.Button(actions, text="cockpit-readiness", command=lambda: write_output(run_cockpit_readiness_for_manual_gui()), width=22).pack(fill="x", pady=3)
+    ttk.Button(actions, text="cockpit-readiness", command=run_cockpit_readiness_click, width=22).pack(fill="x", pady=3)
     for label in ("doctor", "check-docs", "agent-run"):
         ttk.Button(actions, text=label, state="disabled", width=22, style="ReadableDisabled.TButton").pack(fill="x", pady=3)
 
@@ -242,8 +261,8 @@ def render_manual_launch_content(root: object) -> None:
     text.pack(fill="both", expand=True)
     output_text = text
 
-    status = ttk.Label(root, text="Status: ready | branch: main | enabled: cockpit-readiness only", anchor="w")
-    status.pack(fill="x", side="bottom")
+    status_text = ttk.Label(root, text="Status: ready | branch: main | enabled: cockpit-readiness only", anchor="w")
+    status_text.pack(fill="x", side="bottom")
 def run_manual_launch() -> tuple[bool, str]:
     guard = check_window_launch_ready()
     lines = ["TKINTER MANUAL LAUNCH", render_window_guard_result(guard)]

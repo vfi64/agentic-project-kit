@@ -214,8 +214,23 @@ def test_manual_gui_keeps_only_cockpit_readiness_enabled():
     from pathlib import Path
     source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
     manual_source = source[source.index("def render_manual_launch_content"):source.index("def run_manual_launch")]
-    assert "command=lambda: write_output(run_cockpit_readiness_for_manual_gui())" in manual_source
+    assert "command=run_cockpit_readiness_click" in manual_source
     assert "agent-run" in manual_source
     assert "state=\"disabled\"" in manual_source
     assert "remote/destructive actions remain disabled" in manual_source.lower()
 
+
+
+def test_manual_gui_status_transition_contract_is_present():
+    from pathlib import Path
+
+    source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
+    manual_source = source[source.index("def render_manual_launch_content"):source.index("def run_manual_launch")]
+
+    assert "def set_status(value: str) -> None:" in manual_source
+    assert "def run_cockpit_readiness_click() -> None:" in manual_source
+    assert "Status: running | branch: main | action: cockpit-readiness" in manual_source
+    assert "Status: success | branch: main | action: cockpit-readiness" in manual_source
+    assert "Status: fail | branch: main | action: cockpit-readiness" in manual_source
+    assert "command=run_cockpit_readiness_click" in manual_source
+    assert "status_text = ttk.Label" in manual_source
