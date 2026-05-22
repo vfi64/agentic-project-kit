@@ -12,7 +12,7 @@ The observed failure mode was simple and severe: a generated block could not fin
 
 ## Canonical rule
 
-Durable workflow behavior belongs in Python modules, tests, and CLI commands. Shell commands are adapters only.
+Durable workflow behavior belongs in Python modules, tests, and CLI commands. Shell commands are adapters only (`shell commands are adapters only`).
 
 Canonical implementation must prefer:
 

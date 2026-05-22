@@ -6,6 +6,35 @@ purpose: >-
   documentation set.
 
 rules:
+  - id: documentation-system-audit-coverage
+    description: Umbrella documentation-system audit must remain discoverable and must cover the six top-level documentation governance dimensions.
+    documents:
+      - path: README.md
+        terms:
+          - Documentation system audit
+          - agentic-kit docs-audit
+          - Aktualität
+          - Vollständigkeit
+          - Korrektheit
+          - Redundanzfreiheit
+          - Stringenz der Dokumentenordnung
+          - Konsistenz
+      - path: docs/TEST_GATES.md
+        terms:
+          - Documentation System Audit Gate
+          - agentic-kit docs-audit
+          - Aktualität
+          - Vollständigkeit
+          - Korrektheit
+          - Redundanzfreiheit
+          - Stringenz der Dokumentenordnung
+          - Konsistenz
+      - path: docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md
+        terms:
+          - Documentation System Audit Contract
+          - agentic-kit docs-audit
+          - review-only
+
   - id: llm-communication-bootstrap-coverage
     description: Portable LLM communication, final summary, bootstrap, drift, and handoff contracts must remain visible without turning status files into duplicate rule books.
     documents:

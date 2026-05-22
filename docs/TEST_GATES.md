@@ -246,6 +246,14 @@ printf "\n========== START: screen-control-gate ==========\n"
 
 This mirrors the standard local validation output to the terminal and to `Screen-Control_Output.txt`. The output file is intentionally ignored by Git and is meant for local review or temporary sharing, not for commits.
 
+## Documentation System Audit Gate
+
+`agentic-kit docs-audit` is the umbrella documentation-system audit. It reports Aktualität, Vollständigkeit, Korrektheit, Redundanzfreiheit, Stringenz der Dokumentenordnung, and Konsistenz.
+
+The gate aggregates deterministic findings from `agentic-kit check-docs`, `agentic-kit doc-mesh-audit`, and `agentic-kit doc-lifecycle-audit`. Full semantic redundancy freedom remains a review-only boundary.
+
+Run this gate after changes to documentation governance, communication rules, handoff rules, summary rules, source ordering, or document lifecycle rules.
+
 ## Outcome Reporting
 
 Use this shape:
