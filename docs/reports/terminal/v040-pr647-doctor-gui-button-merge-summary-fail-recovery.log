@@ -1,0 +1,140 @@
+
+### CURRENT STATE ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+16b3037 Enable doctor button through read-only GUI contract (#647)
+7a0823c Record doctor action registry merge verification log
+b288179 Register doctor as read-only GUI action candidate (#646)
+49a627c Record visual GUI status transition verification
+5a78b3d Record GUI status transitions merge verification log
+5483b3f Add GUI status transitions for cockpit readiness (#645)
+1bd9ad4 Record visual cockpit readiness GUI output verification
+d6281eb Record visual cockpit readiness GUI output verification
+0a5ed10 Record cockpit readiness GUI output merge verification log
+c554d31 Connect cockpit readiness GUI output (#644)
+a6b373e Record disabled Tkinter button contrast merge verification log
+dc6b7f6 Improve disabled Tkinter button contrast (#643)
+
+### VERIFY PR647 MERGE RESULT STILL ON MAIN ###
+16b3037 Enable doctor button through read-only GUI contract (#647)
+7a0823c Record doctor action registry merge verification log
+b288179 Register doctor as read-only GUI action candidate (#646)
+194:def run_doctor_for_manual_gui() -> str:
+260:    def run_doctor_click() -> None:
+282:    ttk.Button(actions, text="doctor", command=run_doctor_click, width=22).pack(fill="x", pady=3)
+
+### VERIFY SUMMARY FAILURE CAUSE FROM LOCAL TMP LOGS ###
+-rw-r--r--  1 hof  wheel  1523 22 Mai  11:07 /tmp/v040-recover-pr647-doctor-gui-button-merge-summary-fail.log
+-rw-r--r--  1 hof  wheel  8789 22 Mai  10:56 /tmp/v040-doctor-gui-button-merge-verify.log
+-rw-r--r--  1 hof  wheel  8913 22 Mai  10:51 /tmp/v040-inspect-pr647-doctor-gui-button-state.log
+-rw-r--r--  1 hof  wheel  3084 22 Mai  10:00 /tmp/v040-upload-cleanup-doctor-button-gui-pr647-fail-log.log
+-rw-r--r--  1 hof  wheel  3456 22 Mai  09:59 /tmp/v040-upload-missing-doctor-gui-cleanup-fail-log.log
+-rw-r--r--  1 hof  wheel  3884 22 Mai  09:55 /tmp/v040-cleanup-doctor-button-gui-pr647.log
+-rw-r--r--  1 hof  wheel  6108 22 Mai  09:55 /tmp/v040_cleanup_doctor_button_gui.py
+-rw-r--r--  1 hof  wheel  7654 22 Mai  09:50 /tmp/v040-repair-enable-doctor-button-readonly-gui.log
+-rw-r--r--  1 hof  wheel  2792 22 Mai  09:35 /tmp/v040-enable-doctor-button-readonly-gui.log
+-rw-r--r--  1 hof  wheel  4518 21 Mai  21:32 /tmp/v040-ns-check-docs-doctor-routing-and-gui-help-finish.log
+/tmp/v040-gui-real-layout-assembly-target-discovery.log:48119:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-gui-real-layout-assembly-target-discovery.log:48486:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-gui-real-window-guard-diagnosis.log:8022:src/agentic_project_kit/run_summary_renderer.py:66:        findings.append("invalid field: remote_evidence")
+/tmp/v040-gui-real-window-guard-diagnosis.log:44792:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-gui-tkinter-renderer-adapter.log:10266:src/agentic_project_kit/run_summary_renderer.py:66:        findings.append("invalid field: remote_evidence")
+/tmp/v040-gui-tkinter-renderer-adapter.log:47036:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-gui-tkinter-renderer-pr624-merge-verify.log:10084:src/agentic_project_kit/run_summary_renderer.py:66:        findings.append("invalid field: remote_evidence")
+/tmp/v040-gui-tkinter-renderer-pr624-merge-verify.log:46854:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-gui-window-guard-blocked-status-pr627-merge-verify.log:6111:src/agentic_project_kit/run_summary_renderer.py:66:        findings.append("invalid field: remote_evidence")
+/tmp/v040-gui-window-guard-blocked-status-pr627-merge-verify.log:42881:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-gui-window-guard-blocked-status-repair.log:6413:src/agentic_project_kit/run_summary_renderer.py:66:        findings.append("invalid field: remote_evidence")
+/tmp/v040-gui-window-guard-blocked-status-repair.log:43183:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-gui-window-guard-blocked-status.log:6602:src/agentic_project_kit/run_summary_renderer.py:66:        findings.append("invalid field: remote_evidence")
+/tmp/v040-gui-window-guard-blocked-status.log:43372:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-minimal-tkinter-shell-contract-patch.log:12767:src/agentic_project_kit/run_summary_renderer.py:66:        findings.append("invalid field: remote_evidence")
+/tmp/v040-minimal-tkinter-shell-contract-patch.log:49537:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-minimal-tkinter-shell-full-gate-commit-pr.log:12652:src/agentic_project_kit/run_summary_renderer.py:66:        findings.append("invalid field: remote_evidence")
+/tmp/v040-minimal-tkinter-shell-full-gate-commit-pr.log:49422:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-minimal-tkinter-shell-pr622-merge-verify.log:12039:src/agentic_project_kit/run_summary_renderer.py:66:        findings.append("invalid field: remote_evidence")
+/tmp/v040-minimal-tkinter-shell-pr622-merge-verify.log:48809:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-strategy-roadmap-lifecycle-header-repair.log:23090:src/agentic_project_kit/run_summary_renderer.py:66:        findings.append("invalid field: remote_evidence")
+/tmp/v040-strategy-roadmap-lifecycle-header-repair.log:59860:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-strategy-roadmap-status-header-repair.log:22762:src/agentic_project_kit/run_summary_renderer.py:66:        findings.append("invalid field: remote_evidence")
+/tmp/v040-strategy-roadmap-status-header-repair.log:59532:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-strategy-roadmap-update.log:23277:src/agentic_project_kit/run_summary_renderer.py:66:        findings.append("invalid field: remote_evidence")
+/tmp/v040-strategy-roadmap-update.log:60047:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-tkinter-windows-style-design-contract-repair.log:12362:src/agentic_project_kit/run_summary_renderer.py:66:        findings.append("invalid field: remote_evidence")
+/tmp/v040-tkinter-windows-style-design-contract-repair.log:49132:run-summary-renderer: error: invalid field: remote_evidence
+/tmp/v040-tkinter-windows-style-design-contract.log:12492:src/agentic_project_kit/run_summary_renderer.py:66:        findings.append("invalid field: remote_evidence")
+/tmp/v040-tkinter-windows-style-design-contract.log:49262:run-summary-renderer: error: invalid field: remote_evidence
+
+### DOCTOR GUI RUNNER SMOKE ON MAIN ###
+GUI ACTION EXECUTION RESULT
+action=doctor
+safety_class=read-only
+allowed=true
+executed=true
+returncode=0
+message=Action executed through bounded read-only executor.
+output_begin
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+output_end
+
+### LIGHTWEIGHT GATES ON MAIN ###
+.........................                                                [100%]
+25 passed in 0.07s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### FINAL CLEAN CHECK BEFORE LOG UPLOAD ###
+main
+
+### RESULT SUMMARY BEFORE FINAL LOG COMMIT ###
+usage: run-summary-renderer [-h] [--json JSON] [--comm-id COMM_ID]
+                            [--comm-header COMM_HEADER] [--slice SLICE]
+                            [--slice-name SLICE_NAME] [--scope SCOPE]
+                            [--branch BRANCH] [--origin ORIGIN]
+                            [--state-mode STATE_MODE]
+                            [--mode-check MODE_CHECK] [--work WORK]
+                            [--evidence EVIDENCE] [--overall OVERALL]
+                            [--remote-evidence REMOTE_EVIDENCE] [--pr PR]
+                            [--head-sha HEAD_SHA] [--ci CI] [--merge MERGE]
+                            [--terminal-log TERMINAL_LOG]
+                            [--terminal-log-remote TERMINAL_LOG_REMOTE]
+                            [--terminal-log-local TERMINAL_LOG_LOCAL]
+                            [--command-report COMMAND_REPORT]
+                            [--interpretation INTERPRETATION]
+                            [--safe-step SAFE_STEP] [--next NEXT]
+                            [--chat-reply CHAT_REPLY] [--timestamp TIMESTAMP]
+run-summary-renderer: error: invalid field: remote_evidence
