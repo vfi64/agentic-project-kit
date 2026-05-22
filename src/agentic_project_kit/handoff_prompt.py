@@ -82,16 +82,20 @@ def render_handoff_prompt(data: dict[str, Any]) -> str:
         f"Working tree expected clean: `{safe_state.get('working_tree_expected_clean', '')}`",
     ])
     if isinstance(admin_state, dict) and admin_state:
+        admin_current_head = admin_state.get("current_head", "")
+        admin_current_head_subject = admin_state.get("current_head_subject", "")
+        admin_allowed_after_safe_state = admin_state.get("allowed_after_safe_state", "")
+        admin_reason = admin_state.get("reason", "")
         lines.extend([
             "",
             "## 2a. Administrative Evidence State",
             "",
             "Administrative Evidence Commits nach dem fachlichen Safe-State sind erlaubt, wenn sie nur Logs, Handoff, Summary oder Evidence aktualisieren. Sie ändern den fachlichen Safe-State nicht.",
             "",
-            f"Current HEAD at generation time: `{admin_state.get("current_head", "")}`",
-            f"HEAD subject: {admin_state.get("current_head_subject", "")}",
-            f"Allowed after safe state: `{admin_state.get("allowed_after_safe_state", "")}`",
-            f"Reason: {admin_state.get("reason", "")}",
+            f"Current HEAD at generation time: `{admin_current_head}`",
+            f"HEAD subject: {admin_current_head_subject}",
+            f"Allowed after safe state: `{admin_allowed_after_safe_state}`",
+            f"Reason: {admin_reason}",
         ])
     lines.extend([
         "",
