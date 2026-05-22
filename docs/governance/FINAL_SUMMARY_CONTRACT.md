@@ -126,3 +126,11 @@ A workflow block must not continue into later mutation, PR creation, merge, tag,
 `release-check` verifies pre-publication readiness and intentionally fails once the target tag or GitHub Release exists. Post-publication and DOI closeout blocks must use `post-release-check`, release visibility checks, DOI text verification, and normal project gates instead.
 
 A PR state where checks are not yet reported must be represented as `CI: not_reported` or equivalent. It is not `CI: PASS`.
+
+## Terminal log finalization rule
+
+A relevant terminal block must not upload a partial running log before the final state lines are written.
+
+The terminal log uploaded to `docs/reports/terminal/*.log` must include the rendered structured SUMMARY and the FINAL STATE section, or the block must explicitly mark the evidence as partial.
+
+Preferred implementation: write the complete output to a temporary log, append SUMMARY and FINAL STATE, close or stop writing to that log, then copy the completed log into `docs/reports/terminal/` and commit it.
