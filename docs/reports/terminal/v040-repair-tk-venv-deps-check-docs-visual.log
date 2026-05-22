@@ -1,0 +1,126 @@
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+2d35ea6 Record check-docs GUI visual failure log
+0d9ec63 Record check-docs GUI visual verification phase 1 log
+9bcb5cd Record PR655 check-docs GUI merge verification log
+96f71b8 Enable check-docs as read-only GUI action (#655)
+03956a1 Record PR654 shared GUI runner merge verification log
+db607b8 Add shared read-only GUI runner abstraction (#654)
+df66dee Record PR653 GUI visual evidence workflow merge verification log
+a117dc5 Harden GUI visual evidence workflow rules (#653)
+5b06eff Record canonical doctor GUI visual pass evidence
+8d32fd6 Record doctor GUI manual launch visual result
+
+### VERIFY TK PYTHON BEFORE DEP REPAIR ###
+TKINTER_OK=1
+TK_VERSION=9.0
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import yaml; print("YAML_ALREADY_OK=1")
+    ^^^^^^^^^^^
+ModuleNotFoundError: No module named 'yaml'
+
+### INSTALL PROJECT DEPENDENCIES INTO TK VENV ###
+ERROR:  is not a valid editable requirement. It should either be a path to a local project or a VCS URL (beginning with bzr+http, bzr+https, bzr+ssh, bzr+sftp, bzr+ftp, bzr+lp, bzr+file, git+http, git+https, git+ssh, git+git, git+file, hg+file, hg+http, hg+https, hg+ssh, hg+static-http, svn+ssh, svn+http, svn+https, svn+svn, svn+file).
+
+### VERIFY TK PYTHON AFTER DEP REPAIR ###
+
+### VERIFY CHECK-DOCS GUI RUNNER WITH TK PYTHON ###
+
+### VERIFY MAIN GUI SHAPE ###
+212:def run_check_docs_for_manual_gui() -> str:
+272:    def run_check_docs_click() -> None:
+301:    ttk.Button(toolbar, text="Check docs", command=run_check_docs_click).pack(side="left", padx=4, pady=4)
+309:    ttk.Button(actions, text="check-docs", command=run_check_docs_click, width=22).pack(fill="x", pady=3)
+
+### LAUNCH MANUAL GUI WINDOW ###
+In the GUI: click Check docs, verify output/status/disabled unsafe buttons, then close the window.
+Expected output: GUI ACTION EXECUTION RESULT, action=check-docs, safety_class=read-only, allowed=true, executed=true, returncode=0, Agentic project check passed.
+Expected status: Status: success | branch: main | action: check-docs.
+Unsafe/remote/destructive actions must remain disabled.
+
+### POST-WINDOW LIGHT GATES ###
+..............................                                           [100%]
+30 passed in 0.11s
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### FINAL STATE BEFORE SUMMARY ###
+main
+2d35ea6 Record check-docs GUI visual failure log
+0d9ec63 Record check-docs GUI visual verification phase 1 log
+9bcb5cd Record PR655 check-docs GUI merge verification log
+96f71b8 Enable check-docs as read-only GUI action (#655)
+03956a1 Record PR654 shared GUI runner merge verification log
+db607b8 Add shared read-only GUI runner abstraction (#654)
+df66dee Record PR653 GUI visual evidence workflow merge verification log
+a117dc5 Harden GUI visual evidence workflow rules (#653)
+
+### WRITE ROBUST SUMMARY INVOKER ###
+
+### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-22 18:21:36 +0200
+
+SLICE
+  NAME: REPAIR TK VENV DEPS AND RE-RUN CHECK-DOCS VISUAL VERIFY
+  SCOPE: LOCAL TK VENV DEPENDENCY REPAIR / MANUAL GUI / CHECK-DOCS BUTTON / MAIN / NO PRODUCT PATCH / NO RELEASE
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: Tk-capable Python venv repaired with project dependencies; check-docs manual GUI window launched for visual verification
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: FAIL
+  EVIDENCE: PARTIAL
+  OVERALL: FAIL
+
+REMOTE
+  REMOTE_EVIDENCE: PARTIAL
+  PR: none
+  HEAD_SHA: 2d35ea64692fd4910eb840931ea4edf5d319a87e
+  CI: not_required
+  MERGE: not_required
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/v040-repair-tk-venv-deps-check-docs-visual.log
+  terminal_log_remote: docs/reports/terminal/v040-repair-tk-venv-deps-check-docs-visual.log
+  terminal_log_local: /tmp/v040-repair-tk-venv-deps-check-docs-visual.log
+  command_report: tk-python-dependency-repair/tkpy-import-yaml/check-docs-runner-smoke/manual-window-launch/gui-tests/check-docs/doctor
+
+INTERPRETATION
+  The previous visual failure was an environment issue, not a product-code failure. This block repairs the Tk-capable venv and reopens the GUI for check-docs verification.
+
+NEXT
+  SAFE_STEP: after closing the window, answer d if check-docs visually passed; answer f otherwise
+  CHAT_REPLY: f
+
+### RESULT: FAIL ###
+================================================================
+
+### RESULT: FAIL ###
