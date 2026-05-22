@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
-  date: '2026-05-19'
-  reason: Record v0.3.28 DOI metadata
-  source: post-release DOI verification evidence
+  date: '2026-05-22'
+  reason: Finalize handoff state after PR656 GUI MVP closeout
+  source: main after PR656 merge verification and refreshed handoff recovery
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -10,29 +10,38 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: cdc04db
-  commit_subject: Verify v0.3.28 post-release DOI source
-  semantics: last_substantive_work_state
-  administrative_refresh_prs: []
+  commit: 82d6000
+  commit_subject: Record post-PR656 handoff state refresh log
+  semantics: current_main_head
+  administrative_refresh_prs:
+  - 656
   working_tree_expected_clean: true
 release:
-  current_version: 0.3.28
-  previous_version: 0.3.27
-  tag: v0.3.28
+  current_version: 0.3.37
+  previous_version: 0.3.36
+  tag: v0.3.37
   github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
-  zenodo_version_doi: 10.5281/zenodo.20286394
+  zenodo_version_doi: 10.5281/zenodo.20329450
   post_release_check: PASS
-  post_release_evidence: docs/reports/terminal/20260519-141830_verify-v0.3.28-post-release-doi-source.log
+  post_release_evidence: docs/STATUS.md
 open_items:
   prs: []
+  next_expected_chat_action: Start from the refreshed kit handoff prompt, read mandatory rule
+    sources, then choose the next small GUI or workflow hardening slice.
 completed_since_previous_handoff:
-- v0.3.27 released and post-release DOI verified.
-- Repo-backed no-copy workflow hardened as the active bridge toward the local GUI.
-- Command inbox, command-run reports, terminal evidence pointers, and normal PASS/FAIL
-  footers established.
-- v0.3.36 shell adapter removal closeout complete; tracked tools/ns_*.sh count is
-  zero; COMM-00004 records merge verification.
+- 'PR #647 enabled the Doctor button through the bounded read-only GUI contract.'
+- 'PR #649 added LLM communication and portable execution contracts.'
+- 'PR #650 closed out PR649 communication contracts in STATUS and CURRENT_HANDOFF.'
+- 'PR #651 hardened documentation audit headroom and log finalization.'
+- 'PR #652 hardened remote log communication verification rules.'
+- 'PR #653 hardened GUI visual evidence workflow rules.'
+- 'PR #654 added the shared read-only GUI runner abstraction.'
+- 'PR #655 enabled check-docs as the third read-only GUI action.'
+- 'PR #656 closed out the GUI MVP with cockpit-readiness, doctor, and check-docs visually
+  verified as bounded read-only GUI actions.'
+- STATUS.md remains the compact live dashboard while CHANGELOG.md remains the long-term project
+  history.
 current_capabilities:
   ns_actions:
   - agent-next
@@ -48,38 +57,49 @@ current_capabilities:
   artifact_dirs:
     terminal_logs: docs/reports/terminal
     command_runs: docs/reports/command_runs
+  gui_mvp:
+    status: closed_out_on_main
+    verified_read_only_actions:
+    - cockpit-readiness
+    - doctor
+    - check-docs
+    disabled_actions:
+    - agent-run
+    - remote_mutation
+    - destructive_actions
+    primary_evidence: docs/reports/terminal/v040-record-check-docs-gui-visual-pass.log
+    runtime_note: Manual Tk verification requires a Tk-capable Python with project dependencies
+      installed.
 policies:
   no_copy_terminal_policy: .agentic/no_copy_terminal_policy.yaml
 rules:
 - id: remote-first-no-guess
   status: active
-  text: Do not guess repository state, command syntax, file locations, release phase,
-    GitHub JSON fields, or available evidence. Inspect the remote repository and authoritative
-    command help or repo files first, then act on the verified result.
+  text: Do not guess repository state, command syntax, file locations, release phase, GitHub
+    JSON fields, or available evidence. Inspect the remote repository and authoritative command
+    help or repo files first, then act on the verified result.
 - id: deterministic-quality-before-speed
   status: active
   text: Prefer technically robust, testable, repeatable solutions over fast workarounds.
 - id: no-copy-terminal-evidence
   status: active
-  text: Routine PASS handoffs and normal FAIL handoffs must be backed by repo evidence;
-    use d for log-backed PASS and f for log-backed FAIL. Manual terminal paste is
-    only for hard failure, broken logging, blocked or aborted runs, unavailable pushed
-    evidence, or explicit user request.
+  text: Routine PASS handoffs and normal FAIL handoffs must be backed by repo evidence; use
+    d for log-backed PASS and f for log-backed FAIL. Manual terminal paste is only for hard
+    failure, broken logging, blocked or aborted runs, unavailable pushed evidence, or explicit
+    user request.
 - id: planning-state-freshness
   status: active
   text: Current planning files must be curated and mutually consistent; stale released-version
     claims or obsolete next-step fragments are guard failures.
 - id: shell-to-python-portability
   status: active
-  text: Prefer portable Python-backed helpers and argument-vector execution over fragile
-    shell quoting, heredocs, multiline python -c snippets, or nested quote-based code
-    generation.
+  text: Prefer portable Python-backed helpers and argument-vector execution over fragile shell
+    quoting, heredocs, multiline python -c snippets, or nested quote-based code generation.
 - id: rules-must-be-test-backed
   status: active
-  text: Workflow rules are not complete when they only exist in chat, prose, or handoff
-    memory. Every durable rule must have a stable repository home, a rule id, documentation,
-    and at least one deterministic test that fails when the rule disappears or is
-    weakened.
+  text: Workflow rules are not complete when they only exist in chat, prose, or handoff memory.
+    Every durable rule must have a stable repository home, a rule id, documentation, and at
+    least one deterministic test that fails when the rule disappears or is weakened.
 - id: no-unconditional-pass
   status: active
   text: Do not print PASS after a failed required command.
@@ -89,107 +109,136 @@ rules:
     contradictory, or obsolete rules.
 - id: last-substantive-safe-state
   status: active
-  text: safe_state records the last substantive work state; administrative handoff
-    refresh PRs are tracked separately to avoid refresh loops.
+  text: safe_state records the last substantive work state; administrative handoff refresh
+    PRs are tracked separately to avoid refresh loops.
 - id: quality-first-no-shortcuts
   status: active
-  text: Always choose the technically best deterministic solution for recurring workflow
-    problems; do not use shortcut patches that merely get the current block past the
-    gate.
+  text: Always choose the technically best deterministic solution for recurring workflow problems;
+    do not use shortcut patches that merely get the current block past the gate.
 - id: patch-artifact-preflight-before-application
   status: active
   text: 'Complex patches must be treated as patch artifacts and checked before application:
-    syntax, YAML structure, generated Python compileability, documentation coverage
-    terms, and final-summary validity.'
+    syntax, YAML structure, generated Python compileability, documentation coverage terms,
+    and final-summary validity.'
 - id: generated-code-syntax-first
   status: active
-  text: Generated or newly added Python files must pass py_compile before full gates
-    or commit attempts; nested string-generation mistakes are product defects, not
-    acceptable manual errors.
+  text: Generated or newly added Python files must pass py_compile before full gates or commit
+    attempts; nested string-generation mistakes are product defects, not acceptable manual
+    errors.
 - id: coverage-yaml-terms-must-be-strings
   status: active
-  text: Documentation coverage terms must be strings; terms containing colons must
-    be quoted so YAML cannot reinterpret them as mappings.
+  text: Documentation coverage terms must be strings; terms containing colons must be quoted
+    so YAML cannot reinterpret them as mappings.
 - id: final-summary-self-validation
   status: active
-  text: Terminal workflows must validate their mandatory final SUMMARY block before
-    asking the user to reply p.
+  text: Terminal workflows must validate their mandatory final SUMMARY block before asking
+    the user to reply p.
 - id: yaml-structured-mutation-only
   status: active
-  text: YAML governance files must be changed through parse-modify-dump or an equivalent
-    structured mutation path, then parsed again before gates. Text injection into
-    YAML is forbidden for complex values.
+  text: YAML governance files must be changed through parse-modify-dump or an equivalent structured
+    mutation path, then parsed again before gates. Text injection into YAML is forbidden for
+    complex values.
 - id: quote-guard-no-nested-generation
   status: active
-  text: Avoid nested quote-based code generation; use file-based patch helpers or
-    simple printf line generation.
+  text: Avoid nested quote-based code generation; use file-based patch helpers or simple printf
+    line generation.
+- id: canonical-handoff-prompt-command
+  status: active
+  text: Use agentic-kit handoff prompt or python -m agentic_project_kit.cli handoff prompt
+    as the canonical generator. Do not use ./ns handoff prompt unless ./ns explicitly routes
+    that command correctly.
+- id: handoff-state-must-not-stale
+  status: active
+  text: A chat switch handoff prompt is invalid if .agentic/handoff_state.yaml points to an
+    obsolete version, commit, or next task. Refresh handoff_state first, then regenerate the
+    prompt.
+- id: status-boundary-changelog-history
+  status: active
+  text: docs/STATUS.md is the compact live dashboard; CHANGELOG.md is the long-term project
+    history. Do not solve status-headroom failures by turning STATUS.md back into a historical
+    log.
 recent_failure_patterns:
 - id: guessing-before-inspection
-  prevention: Before choosing commands, paths, JSON fields, release checks, or DOI
-    sources, inspect the remote repository and command help. Treat memory and chat
-    summaries as hypotheses until verified.
+  prevention: Before choosing commands, paths, JSON fields, release checks, or DOI sources,
+    inspect the remote repository and command help. Treat memory and chat summaries as hypotheses
+    until verified.
 - id: stale-planning-documents
   prevention: State freshness checks must compare STATUS, CURRENT_HANDOFF, handoff_state.yaml,
-    release metadata, and strategy baselines before GUI or release-automation work
-    starts.
+    release metadata, and strategy baselines before GUI or release-automation work starts.
 - id: standard-error-guards
-  prevention: Recurring workflow failures must become guards, tests, and documented
-    contracts.
+  prevention: Recurring workflow failures must become guards, tests, and documented contracts.
 - id: interpreter-discovery-before-python
-  prevention: Terminal/workflow blocks must discover a usable interpreter first and
-    prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python.
-    Do not combine naked python with set -e because a missing interpreter can close
-    the interactive terminal before diagnostics are preserved.
+  prevention: Terminal/workflow blocks must discover a usable interpreter first and prefer
+    .venv/bin/python, then .venv/bin/python3, then python3, and only then python. Do not combine
+    naked python with set -e because a missing interpreter can close the interactive terminal
+    before diagnostics are preserved.
 - id: global-cli-or-venv-assumption
-  prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and
-    agentic-kit before using command names. Treat missing global agentic-kit or missing
-    .venv as bootstrap/environment state, not as product failure.
+  prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and agentic-kit
+    before using command names. Treat missing global agentic-kit or missing .venv as bootstrap/environment
+    state, not as product failure.
 - id: interactive-terminal-exit
-  prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace
-    the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit
-    codes belong inside saved scripts, not interactive paste blocks.
+  prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace the
+    shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit codes belong
+    inside saved scripts, not interactive paste blocks.
 - id: repo-log-written-while-committing
-  prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize
-    with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo
-    terminal log while the current process is still writing to it.
+  prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize with
+    ./ns terminal-finalize, then stage, commit, and push. Never commit a repo terminal log
+    while the current process is still writing to it.
 - id: unconditional-pass-after-failure
   prevention: Use explicit status handling and require log-backed PASS. Avoid shell-specific
     status variables such as PIPESTATUS in zsh-pasted blocks unless the shell is explicitly
     controlled.
 - id: nested-triple-quote-code-generator
-  prevention: Do not generate source files through nested shell/Python quote layers
-    or nested triple-quoted string literals inside another generated Python script.
-    Prefer line-list generation, existing patch tools, or checked patch artifacts
-    plus py_compile before application.
+  prevention: Do not generate source files through nested shell/Python quote layers or nested
+    triple-quoted string literals inside another generated Python script. Prefer line-list
+    generation, existing patch tools, or checked patch artifacts plus py_compile before application.
 - id: yaml-colon-term-reinterpreted-as-mapping
-  prevention: Quote every documentation coverage term containing a colon, and keep
-    the coverage-term string guard in the test suite.
+  prevention: Quote every documentation coverage term containing a colon, and keep the coverage-term
+    string guard in the test suite.
 - id: final-pass-after-inner-fail
-  prevention: Final summaries must distinguish work result from evidence result. A
-    later successful evidence push must not relabel failed work as PASS.
+  prevention: Final summaries must distinguish work result from evidence result. A later successful
+    evidence push must not relabel failed work as PASS.
 - id: repeated-yaml-governance-file-corruption
-  prevention: Patch scripts must parse YAML before and after mutation, use safe_dump
-    or an equivalent structured writer, and run a YAML integrity test before handoff,
-    governance, or dev gates.
+  prevention: Patch scripts must parse YAML before and after mutation, use safe_dump or an
+    equivalent structured writer, and run a YAML integrity test before handoff, governance,
+    or dev gates.
 - id: nested-quote-based-code-generation
   status: active
-  description: nested quote-based code generation caused fragile generated repair
-    scripts and must be blocked by deterministic patch helpers
-  prevention: Use file-based patch helpers or simple printf line generation; avoid
-    nested quote-based code generation.
+  description: nested quote-based code generation caused fragile generated repair scripts
+    and must be blocked by deterministic patch helpers
+  prevention: Use file-based patch helpers or simple printf line generation; avoid nested
+    quote-based code generation.
+- id: stale-handoff-state-after-main-merge
+  status: active
+  prevention: After merge verification, inspect and refresh .agentic/handoff_state.yaml before
+    generating a successor-chat prompt.
+- id: wrong-handoff-command-route
+  status: active
+  prevention: Do not assume ./ns handoff prompt works; verify command routing or call the
+    canonical agentic-kit CLI directly.
+- id: invalid-gh-pr-json-field
+  status: active
+  prevention: Inspect gh pr view --json field names before using them; use mergedAt rather
+    than a non-existent merged field.
 next_allowed_tasks:
-- id: planning-state-freshness-guard-hardening
-  title: Strengthen deterministic guards for stale planning documents.
+- id: chat-switch-with-refreshed-handoff
+  title: Switch to a new chat using the refreshed kit-generated handoff prompt.
   priority: 1
-- id: thin-local-tkinter-cockpit
-  title: Build the first thin local GUI over explicit cockpit action metadata.
+- id: next-gui-mvp-slice
+  title: Choose the next small GUI MVP slice only after the successor chat reads mandatory
+    rule sources.
   priority: 2
+- id: handoff-generator-route-hardening
+  title: Optionally harden ./ns handoff prompt routing so it cannot call the legacy next-step
+    path.
+  priority: 3
 blocked_until_closeout:
-- Pattern Advisor expansion
-- release automation expansion
-- hidden command planning
-first_instruction: Refresh planning state, run freshness guards, and only then begin
-  the thin local Tkinter cockpit foundation.
+- Release work
+- Remote/destructive GUI actions
+- Large GUI architecture expansion before successor-chat bootstrap
+first_instruction: Read the mandatory successor-chat sources, verify main after PR656, confirm
+  the refreshed handoff prompt matches v0.3.37 and GUI MVP closeout, then continue only with
+  a small bounded next slice.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
@@ -197,4 +246,7 @@ handoff_maintenance:
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
 current_notes:
-- v0.3.28 released and post-release DOI verified.
+- 'Current main is after PR #656 GUI MVP closeout.'
+- A previous generated handoff prompt was stale because the handoff state had not been refreshed
+  after the GUI MVP closeout.
+- This state refresh restores the handoff generator as the successor-chat source.
