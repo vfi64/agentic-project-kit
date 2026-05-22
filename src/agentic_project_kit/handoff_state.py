@@ -180,7 +180,7 @@ def refresh_handoff_safe_state(
         refreshed["administrative_evidence_state"] = build_administrative_evidence_state(commit, commit_subject)
         refreshed["updated"] = {
             "date": "2026-05-22",
-            "reason": "Current HEAD is administrative evidence; safe_state remains on last substantive work state",
+            "reason": "administrative handoff refresh: Current HEAD is administrative evidence; safe_state remains on last substantive work state",
             "source": "agentic-kit handoff refresh",
         }
         return refreshed
