@@ -79,11 +79,14 @@ Allowed routes:
 
 Every non-trivial terminal or remote command workflow must end in evidence that the assistant can inspect:
 
-- a rendered final summary,
+- a rendered final summary printed in the terminal output,
+- the same rendered final summary captured in the terminal log or command report,
 - a terminal log path or command report path,
 - branch and dirty-state evidence when mutation occurred,
 - PR/CI/merge state when remote mutation occurred,
 - explicit downgrade when evidence is partial, chat-only, or failed.
+
+A chat-only structured summary is not enough for terminal-directed work. The terminal block must render the structured summary itself, normally through `./ns summary`, so the evidence remains inspectable after chat handoff.
 
 A terminal log upload is evidence transport. It does not change the result of failed work.
 
@@ -107,7 +110,8 @@ A final PASS claim requires all of the following:
 - evidence exists and matches the claim,
 - remote evidence is PASS when the workflow requires no-copy continuation,
 - no earlier required inner FAIL was overwritten,
-- the final summary is rendered through the canonical renderer route.
+- the final summary is rendered through the canonical renderer route,
+- terminal-directed work printed the structured summary in the terminal output and captured it in the terminal log.
 
 ## Optimization requirement
 
