@@ -1,0 +1,154 @@
+
+### PRE-MERGE MAIN STATE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+64f09fa Record PR649 LLM communication contracts merge verification log
+ec3c8c3 Add LLM communication and portable execution contracts (#649)
+b883dac Plan portable LLM communication bootstrap hardening (#648)
+66412fc Record PR647 doctor GUI merge recovery log
+16b3037 Enable doctor button through read-only GUI contract (#647)
+7a0823c Record doctor action registry merge verification log
+b288179 Register doctor as read-only GUI action candidate (#646)
+49a627c Record visual GUI status transition verification
+5a78b3d Record GUI status transitions merge verification log
+5483b3f Add GUI status transitions for cockpit readiness (#645)
+
+### PR650 STATE ###
+{"headRefOid":"896b5c5d37f287c12cd5dfdcd43095baf7819b1c","mergeStateStatus":"CLEAN","state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-22T15:10:10Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26295769920/job/77407806608","name":"test","startedAt":"2026-05-22T15:09:43Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-22T15:10:08Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26295766925/job/77407794907","name":"test","startedAt":"2026-05-22T15:09:39Z","status":"COMPLETED","workflowName":"CI"}],"title":"Close out PR649 communication contracts in status and handoff","url":"https://github.com/vfi64/agentic-project-kit/pull/650"}
+
+### MERGE PR650 ###
+
+### SYNC MAIN AFTER MERGE ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   64f09fa..dd0fe58  main       -> origin/main
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Updating 64f09fa..dd0fe58
+Fast-forward
+ docs/STATUS.md                                     |   3 +
+ docs/handoff/CURRENT_HANDOFF.md                    |  11 ++
+ ...v040-closeout-pr649-communication-contracts.log | 118 ++++++++++++++++
+ ...-harden-docs-audit-status-handoff-freshness.log | 157 +++++++++++++++++++++
+ ...0-repair-docs-audit-pr-closeout-regex-exact.log | 120 ++++++++++++++++
+ ...r-docs-audit-status-handoff-guard-and-limit.log | 115 +++++++++++++++
+ .../v040-repair-pr649-closeout-status-length.log   | 144 +++++++++++++++++++
+ .../documentation_system_audit.py                  |  35 ++++-
+ tests/test_documentation_system_audit.py           |  18 +++
+ 9 files changed, 716 insertions(+), 5 deletions(-)
+ create mode 100644 docs/reports/terminal/v040-closeout-pr649-communication-contracts.log
+ create mode 100644 docs/reports/terminal/v040-harden-docs-audit-status-handoff-freshness.log
+ create mode 100644 docs/reports/terminal/v040-repair-docs-audit-pr-closeout-regex-exact.log
+ create mode 100644 docs/reports/terminal/v040-repair-docs-audit-status-handoff-guard-and-limit.log
+ create mode 100644 docs/reports/terminal/v040-repair-pr649-closeout-status-length.log
+main
+dd0fe58 Close out PR649 communication contracts in status and handoff (#650)
+64f09fa Record PR649 LLM communication contracts merge verification log
+ec3c8c3 Add LLM communication and portable execution contracts (#649)
+b883dac Plan portable LLM communication bootstrap hardening (#648)
+66412fc Record PR647 doctor GUI merge recovery log
+16b3037 Enable doctor button through read-only GUI contract (#647)
+7a0823c Record doctor action registry merge verification log
+b288179 Register doctor as read-only GUI action candidate (#646)
+49a627c Record visual GUI status transition verification
+5a78b3d Record GUI status transitions merge verification log
+5483b3f Add GUI status transitions for cockpit readiness (#645)
+1bd9ad4 Record visual cockpit readiness GUI output verification
+
+### VERIFY MAIN CLOSEOUT CONTENT ###
+docs/STATUS.md:224:- PR #649 merged.
+docs/handoff/CURRENT_HANDOFF.md:327:- PR #649 merged and verified: successor chats must read mandatory rule sources before mutation.
+142:`.agentic/compiled_agent_context.yaml` is the compact machine-readable companion to the human governance docs. New durable rules must be reflected in the human docs, the compiled YAML, and deterministic tests.
+331:- Mandatory successor-chat source: `FINAL_SUMMARY_CONTRACT.md`.
+333:- Mandatory successor-chat source: `CHAT_COMMUNICATION_CONTRACT.md`.
+335:- Mandatory successor-chat source: `CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`.
+177:    status_prs = set(re.findall(r"PR #\d+ merged", status))
+178:    handoff_prs = set(re.findall(r"PR #\d+ merged", handoff))
+STATUS_WORDS=3500
+
+### MAIN GATES ###
+.........................                                                [100%]
+25 passed in 0.35s
+........................................................................ [  8%]
+........................................................................ [ 17%]
+........................................................................ [ 26%]
+........................................................................ [ 34%]
+........................................................................ [ 43%]
+........................................................................ [ 52%]
+........................................................................ [ 61%]
+........................................................................ [ 69%]
+........................................................................ [ 78%]
+........................................................................ [ 87%]
+........................................................................ [ 96%]
+................................                                         [100%]
+824 passed in 4.48s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-22 17:11:30 +0200
+
+SLICE
+  NAME: MERGE PR650 STATUS HANDOFF CLOSEOUT
+  SCOPE: MERGE VERIFY / MAIN / DOCS-AUDIT / STATUS-HANDOFF / NO RELEASE / NO GUI PATCH
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: PR650 merged; main closeout content and gates verified; log upload follows
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PARTIAL
+  PR: 650 merged
+  HEAD_SHA: dd0fe584a1d0875591abb9e9655fe45988e69747
+  CI: pass
+  MERGE: done
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/v040-merge-pr650-status-handoff-closeout.log
+  terminal_log_remote: docs/reports/terminal/v040-merge-pr650-status-handoff-closeout.log
+  terminal_log_local: /tmp/v040-merge-pr650-status-handoff-closeout.log
+  command_report: merge-pr650/main-content-verification/pytest/ruff/check-docs/doctor
+
+INTERPRETATION
+  PR650 was merged and main now has compact PR649 closeout plus deterministic STATUS/HANDOFF freshness guard.
+
+NEXT
+  SAFE_STEP: continue with the next bounded GUI-MVP slice after confirming main is clean
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
+
+### UPLOAD TERMINAL LOG INCLUDING STRUCTURED SUMMARY ###
