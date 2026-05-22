@@ -8,7 +8,7 @@ Current work branch: docs/closeout-v040-gui-mvp-three-readonly-actions
 ## Purpose
 agentic-project-kit is a repository-backed governance and workflow kit for long-running AI-assisted software projects. Durable project memory belongs in versioned repository files, deterministic gates, evidence logs, and explicit handoff state rather than chat transcripts.
 
-The repository is the source of truth, not chat memory. Chat-only rules are not durable unless they are documented, test-backed, and enforced through repo tooling or gates.
+The repository is the source of truth; chat memory is not a source of truth. Chat-only rules are not durable unless they are documented, test-backed, and enforced through repo tooling or gates.
 
 ## Current-State Boundary
 `docs/STATUS.md` is the live current-state dashboard. It must stay concise and must not accumulate release history, old planning fragments, or chat transcripts. Long-term history belongs in `CHANGELOG.md`, verified release/DOI history, architecture/governance contracts, or terminal evidence logs.
@@ -85,6 +85,16 @@ These compact anchors are intentionally retained to keep existing deterministic 
 - v0.3.34 portable core hardening plan; Tkinter remains explicitly deferred.
 - v0.3.36 current-state cleanup started as a documentation-only line.
 - PR #649 merged; PR #650 merged; PR #651 merged; PR #652 merged.
+
+## Compact Legacy Test Anchors
+These anchors are deliberately compact compatibility pointers. Long narrative history belongs in `CHANGELOG.md`.
+
+- no-remote-command-deadlock: Remote command first is a delivery preference, not a requirement when it would create deadlock.
+- remote-first no-guess: inspect command help before inventing command names; command help must be checked before remote-only assumptions.
+- Typed Work Orders Pre-GUI Execution Path: preferred pre-GUI execution path; long chat-generated shell or Python patch blocks are deprecated; thin Tkinter cockpit must consume these typed contracts.
+- Historic release anchor: Current released version: 0.3.32; Verified Zenodo version DOI: `10.5281/zenodo.20314341`.
+- v0.3.36 current-state cleanup started as a documentation-only line before any bounded Tkinter MVP work.
+- remote inspection evidence contract: failed or diagnostic logs must be uploaded and registered for later GC.
 
 ## Next Safe Step
 Finish PR #656 by preserving the GUI MVP closeout and the current-state boundary hardening. Before merge, verify docs-audit, check-docs, doctor, targeted GUI tests, and the final structured summary/log-upload contract.

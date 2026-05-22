@@ -66,6 +66,9 @@ Next safe step: prepare and release v0.3.32. Tkinter remains deferred until afte
 - Do not use heredocs, top-level `exit`, top-level `exec`, risky multiline `python -c`, or quote-prone shell constructs in chat-pasted terminal blocks.
 - Larger terminal blocks must begin with three long separator lines and end with a clear `### RESULT: ... ###` marker.
 
+## Compact Closeout Sync Anchors
+- PR #650 merged; PR #651 merged; PR #652 merged.
+
 ## Next Safe Step
 
 Finish v0.3.30 by documenting the completed GUI readiness contracts, running the full local gates, and preparing the v0.3.30 release metadata. Do not start Tkinter in this slice; the thin Tkinter cockpit remains the next release line after v0.3.30 is released and verified.
