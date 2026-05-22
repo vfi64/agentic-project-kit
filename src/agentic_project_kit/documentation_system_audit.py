@@ -24,6 +24,8 @@ MANDATORY_ORDER = (
     "docs/handoff/CURRENT_HANDOFF.md",
 )
 
+STATUS_HEADROOM_WORD_LIMIT = 3450
+
 REQUIRED_DOCS = (
     "README.md",
     "AGENTS.md",
@@ -121,6 +123,7 @@ def _freshness_dimension(project_root: Path, mesh_report: Any) -> DocumentationA
         if finding.code in freshness_codes
     ]
     findings.extend(_status_handoff_sync_findings(project_root))
+    findings.extend(_status_headroom_findings(project_root))
     return DocumentationAuditDimension("Aktualität", ok=not findings, findings=tuple(findings))
 
 
@@ -168,6 +171,15 @@ def _redundancy_dimension(project_root: Path) -> DocumentationAuditDimension:
         review_only=findings == [boundary],
     )
 
+
+
+
+def _status_headroom_findings(project_root: Path) -> tuple[str, ...]:
+    status = _read_optional(project_root / "docs/STATUS.md")
+    words = len(status.split())
+    if words > STATUS_HEADROOM_WORD_LIMIT:
+        return (f"docs/STATUS.md exceeds headroom limit: {words}/{STATUS_HEADROOM_WORD_LIMIT} words",)
+    return ()
 
 
 def _status_handoff_sync_findings(project_root: Path) -> tuple[str, ...]:
