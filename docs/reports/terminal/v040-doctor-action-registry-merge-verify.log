@@ -1,0 +1,127 @@
+
+### PRE-MERGE STATE ###
+feature/v040-add-doctor-action-registry-readonly
+{"baseRefName":"main","headRefName":"feature/v040-add-doctor-action-registry-readonly","mergeStateStatus":"CLEAN","number":646,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-22T07:20:15Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26274177398/job/77334378994","name":"test","startedAt":"2026-05-22T07:19:48Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-22T07:20:08Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26274174592/job/77334370098","name":"test","startedAt":"2026-05-22T07:19:43Z","status":"COMPLETED","workflowName":"CI"}]}
+
+### CI CHECKS ###
+test	pass	25s	https://github.com/vfi64/agentic-project-kit/actions/runs/26274174592/job/77334370098	
+test	pass	27s	https://github.com/vfi64/agentic-project-kit/actions/runs/26274177398/job/77334378994	
+
+### MERGE PR ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   49a627c..b288179  main       -> origin/main
+Updating 49a627c..b288179
+Fast-forward
+ ...v040-repair-doctor-action-registry-readonly.log | 60 ++++++++++++++++++++++
+ src/agentic_project_kit/action_registry.py         |  9 ++++
+ tests/test_action_registry.py                      |  9 ++++
+ 3 files changed, 78 insertions(+)
+ create mode 100644 docs/reports/terminal/v040-repair-doctor-action-registry-readonly.log
+
+### UPDATE MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### MAIN STATE ###
+main
+b288179 Register doctor as read-only GUI action candidate (#646)
+49a627c Record visual GUI status transition verification
+5a78b3d Record GUI status transitions merge verification log
+5483b3f Add GUI status transitions for cockpit readiness (#645)
+1bd9ad4 Record visual cockpit readiness GUI output verification
+d6281eb Record visual cockpit readiness GUI output verification
+0a5ed10 Record cockpit readiness GUI output merge verification log
+c554d31 Connect cockpit readiness GUI output (#644)
+a6b373e Record disabled Tkinter button contrast merge verification log
+dc6b7f6 Improve disabled Tkinter button contrast (#643)
+
+### VERIFY DOCTOR ACTION ON MAIN ###
+90-        summary="Classify branch finalization state without merging or deleting.",
+91-    ),
+92-    ActionMetadata(
+93:        name="doctor",
+94-        safety_class=SafetyClass.READ_ONLY,
+95-        mutation_scope="none",
+96-        dry_run_supported=True,
+97-        outcome_contract=("PASS", "FAIL"),
+98-        summary="Run compact project health checks without mutating repository state.",
+99-    ),
+100-
+101-    ActionMetadata(
+33:def test_doctor_is_registered_as_read_only_action():
+
+### EXECUTOR SMOKE ON MAIN ###
+action=doctor
+safety_class=read-only
+allowed=true
+executed=false
+returncode=0
+message=Action allowed but not executed: no executor was provided.
+
+### SAFE TKINTER SMOKES ON MAIN -- NO MANUAL WINDOW ###
+TKINTER SHELL
+title=agentic-project-kit Cockpit
+status=tkinter-shell-ready
+action_count=15
+menu_count=4
+toolbar_button_count=4
+action_button_count=6
+destructive_actions_enabled=false
+toolbar_icons=refresh,stethoscope,document-check,play
+### RESULT: PASS ###
+TKINTER WINDOW SMOKE
+GUI WINDOW GUARD
+window_launch_ready=false
+tkinter_importable=false
+native_tkinter_importable=false
+message=tkinter import failed: No module named '_tkinter'
+window_guard_status=BLOCKED
+window_smoke_status=BLOCKED
+real_window_opened=false
+window_closed=true
+### RESULT: PASS ###
+
+### GATES ON MAIN ###
+..............                                                           [100%]
+14 passed in 0.03s
+........................................................................ [ 80%]
+.................                                                        [100%]
+89 passed in 0.35s
+........................................................................ [  8%]
+........................................................................ [ 17%]
+........................................................................ [ 26%]
+........................................................................ [ 35%]
+........................................................................ [ 44%]
+........................................................................ [ 53%]
+........................................................................ [ 62%]
+........................................................................ [ 71%]
+........................................................................ [ 80%]
+........................................................................ [ 89%]
+........................................................................ [ 98%]
+..........                                                               [100%]
+802 passed in 4.20s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, 
+release-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### RECORD MERGE VERIFY LOG ###
