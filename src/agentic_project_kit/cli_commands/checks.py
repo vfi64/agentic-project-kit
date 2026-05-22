@@ -19,6 +19,11 @@ from agentic_project_kit.doc_mesh import (
     write_doc_mesh_repair_result,
 )
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_report, render_doc_lifecycle_report, write_doc_lifecycle_json_report
+from agentic_project_kit.documentation_system_audit import (
+    build_documentation_system_audit,
+    render_documentation_system_audit,
+    write_documentation_system_audit_json,
+)
 from agentic_project_kit.doctor import build_doctor_report, render_doctor_report
 
 console = Console()
@@ -28,6 +33,7 @@ def register_check_commands(app: typer.Typer) -> None:
     app.command("check")(check_command)
     app.command("check-docs")(check_docs_command)
     app.command("check-todo")(check_todo_command)
+    app.command("docs-audit")(docs_audit_command)
     app.command("doc-mesh-audit")(doc_mesh_audit_command)
     app.command("doc-lifecycle-audit")(doc_lifecycle_audit_command)
     app.command("doc-mesh-repair")(doc_mesh_repair_command)
@@ -47,6 +53,19 @@ def check_docs_command(project_root: Path = typer.Option(Path("."), "--root")) -
 def check_todo_command(project_root: Path = typer.Option(Path("."), "--root")) -> None:
     errors = check_todo(project_root.resolve())
     _print_result(errors)
+
+
+def docs_audit_command(
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    report_path: Annotated[Path | None, typer.Option("--report")] = None,
+) -> None:
+    """Run the umbrella documentation-system audit."""
+    report = build_documentation_system_audit(project_root.resolve())
+    if report_path is not None:
+        write_documentation_system_audit_json(report, report_path)
+    console.print(render_documentation_system_audit(report), markup=False)
+    if not report.ok:
+        raise typer.Exit(code=1)
 
 
 def doc_lifecycle_audit_command(
