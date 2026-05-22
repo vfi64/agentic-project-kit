@@ -1,3 +1,126 @@
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+1333eb9 Record finalized post-PR656 handoff refresh log
+501155e Finalize handoff state after PR656 GUI MVP closeout
+82d6000 Record post-PR656 handoff state refresh log
+8ef8206 Recover post-PR656 handoff prompt
+ba3edb1 Record post-PR656 handoff prompt
+bcf9f0f Record PR656 merge verification and handoff prompt
+adc65ac Close out GUI MVP three read-only actions (#656)
+d96a294 Record check-docs GUI visual pass log
+19b4fb7 Record zsh-safe Tk venv dependency repair check-docs visual log
+0123f67 Record Tk venv dependency repair check-docs visual log
+e4c4d1f Record Tk venv dependency repair check-docs visual log
+2d35ea6 Record check-docs GUI visual failure log
+0d9ec63 Record check-docs GUI visual verification phase 1 log
+9bcb5cd Record PR655 check-docs GUI merge verification log
+
+### WRITE HEAD CONSISTENCY PATCH SCRIPT ###
+
+### PHASE 1: SET HANDOFF STATE TO CURRENT HEAD ###
+EXPECTED_HEAD=1333eb9
+EXPECTED_SUBJECT=Record finalized post-PR656 handoff refresh log
+
+### PHASE 1 GATES ###
+.............                                                            [100%]
+13 passed in 0.37s
+Persistent handoff state check passed
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### PHASE 1 COMMIT IF NEEDED ###
+[main 6acf36c] Align handoff state with current main head after PR656
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+To github.com:vfi64/agentic-project-kit.git
+   1333eb9..6acf36c  main -> main
+
+### PHASE 2: RESYNC AND ALIGN TO NEW HEAD AFTER COMMIT ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+EXPECTED_HEAD=6acf36c
+EXPECTED_SUBJECT=Align handoff state with current main head after PR656
+
+### GENERATE FINAL HANDOFF PROMPT ###
+
+### VERIFY HEAD CONSISTENCY ###
+HEAD7=6acf36c
+13:  commit: 6acf36c
+12:Commit: `6acf36c`
+19:Current version: `0.3.37`
+21:Tag: `v0.3.37`
+93:- PR #655 enabled check-docs as the third read-only GUI action.
+94:- PR #656 closed out the GUI MVP with cockpit-readiness, doctor, and check-docs visually verified as bounded read-only GUI actions.
+130:- 2. `next-gui-mvp-slice` — Choose the next small GUI MVP slice only after the successor chat reads mandatory rule sources.
+141:Read the mandatory successor-chat sources, verify main HEAD against this handoff state, confirm v0.3.37 and PR656 GUI MVP closeout, then continue only with a small bounded next slice.
+
+### FINAL GATES ###
+................                                                         [100%]
+16 passed in 0.39s
+Persistent handoff state check passed
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: PASS
+
+### PHASE 2 COMMIT FINAL STATE AND PROMPT IF GATES PASSED ###
+ M .agentic/handoff_state.yaml
+?? docs/reports/terminal/v040-post-pr656-handoff-prompt-final.txt
+[main ac92db8] Finalize post-PR656 handoff prompt at current main head
+ 2 files changed, 152 insertions(+), 2 deletions(-)
+ create mode 100644 docs/reports/terminal/v040-post-pr656-handoff-prompt-final.txt
+To github.com:vfi64/agentic-project-kit.git
+   6acf36c..ac92db8  main -> main
+
+### PHASE 3: FINAL CONSISTENCY CHECK AFTER COMMIT ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+FINAL_HEAD7=ac92db8
+EXPECTED_HEAD=ac92db8
+EXPECTED_SUBJECT=Finalize post-PR656 handoff prompt at current main head
+13:  commit: ac92db8
+12:Commit: `ac92db8`
+
+### FINAL HANDOFF PROMPT PREVIEW ###
 # Übergabeprompt
 
 ## 1. Arbeitsumgebung
@@ -148,3 +271,69 @@ Read the mandatory successor-chat sources, verify main HEAD against this handoff
 4. Bei Drift: warnen, keine Produktmutation, Handoff-Prompt oder Drift-Fix anbieten.
 5. Arbeite nur in kleinen, testbaren Slices mit ehrlicher Evidence.
 
+
+### FINAL STATE BEFORE SUMMARY ###
+main
+ M .agentic/handoff_state.yaml
+ M docs/reports/terminal/v040-post-pr656-handoff-prompt-final.txt
+ac92db8 Finalize post-PR656 handoff prompt at current main head
+6acf36c Align handoff state with current main head after PR656
+1333eb9 Record finalized post-PR656 handoff refresh log
+501155e Finalize handoff state after PR656 GUI MVP closeout
+82d6000 Record post-PR656 handoff state refresh log
+8ef8206 Recover post-PR656 handoff prompt
+ba3edb1 Record post-PR656 handoff prompt
+bcf9f0f Record PR656 merge verification and handoff prompt
+adc65ac Close out GUI MVP three read-only actions (#656)
+d96a294 Record check-docs GUI visual pass log
+19b4fb7 Record zsh-safe Tk venv dependency repair check-docs visual log
+0123f67 Record Tk venv dependency repair check-docs visual log
+e4c4d1f Record Tk venv dependency repair check-docs visual log
+2d35ea6 Record check-docs GUI visual failure log
+0d9ec63 Record check-docs GUI visual verification phase 1 log
+9bcb5cd Record PR655 check-docs GUI merge verification log
+
+### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-22 19:16:51 +0200
+
+SLICE
+  NAME: FINALIZE HANDOFF STATE HEAD CONSISTENCY AFTER PR656
+  SCOPE: HANDOFF STATE / HANDOFF PROMPT / HEAD CONSISTENCY / CHAT SWITCH PREP / MAIN / NO RELEASE
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: handoff state and generated prompt both name current main HEAD after PR656 closeout
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PARTIAL
+  PR: 656
+  HEAD_SHA: ac92db80ca7f9119f5177145336243e5939b69a8
+  CI: not_required_after_main_verify
+  MERGE: completed
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/v040-finalize-handoff-state-head-consistency-after-pr656.log
+  terminal_log_remote: docs/reports/terminal/v040-finalize-handoff-state-head-consistency-after-pr656.log
+  terminal_log_local: /tmp/v040-finalize-handoff-state-head-consistency-after-pr656.log
+  command_report: docs/reports/terminal/v040-post-pr656-handoff-prompt-final.txt
+
+INTERPRETATION
+  The successor-chat handoff is now generated from a handoff state aligned with current main HEAD. This removes the stale administrative commit problem.
+
+NEXT
+  SAFE_STEP: upload log and final handoff prompt, then switch chats using the final prompt
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
+
+### RESULT: PASS ###
