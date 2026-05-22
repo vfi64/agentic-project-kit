@@ -79,3 +79,4 @@ def test_documentation_system_audit_enforces_status_headroom() -> None:
     rendered = render_documentation_system_audit(report)
     assert "docs/STATUS.md exceeds headroom limit" not in rendered
 
+

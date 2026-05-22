@@ -74,3 +74,4 @@ def test_terminal_log_finalization_rule_is_documented() -> None:
     assert "rendered structured SUMMARY and the FINAL STATE section" in text
     assert "copy the completed log into `docs/reports/terminal/`" in text
 
+
