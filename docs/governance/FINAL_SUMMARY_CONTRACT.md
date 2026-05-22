@@ -48,6 +48,14 @@ NEXT
 
 This is the preferred end marker for agent-directed terminal blocks, remote command reports, release work, merge verification, and handoff-sensitive work. Short local experiments may use a smaller marker, but any state-changing or evidence-bearing workflow must use the framed SUMMARY.
 
+## Terminal output requirement
+
+The structured SUMMARY must be printed by the terminal block itself and captured in the terminal log. A chat-only summary is not sufficient for a relevant workflow block.
+
+For terminal-directed work, the final visible terminal output must contain the rendered summary block from `./ns summary` or `agentic_project_kit.run_summary_renderer`. The chat response may repeat or interpret the result, but it must not be the only place where the structured summary exists.
+
+A terminal block that ends with only `### RESULT: PASS ###` or `### RESULT: FAIL ###` is incomplete for state-changing, evidence-bearing, recovery, merge, release, CI, documentation-governance, or handoff-sensitive work.
+
 ## No executable placeholder summaries
 
 Executable terminal blocks must never print final SUMMARY fields with placeholder alternatives such as `PASS|FAIL`, `p|paste-output`, or ellipsis markers. A copied block must end with one concrete outcome only. Placeholder examples are allowed only in prose documents when clearly marked as non-executable examples.
