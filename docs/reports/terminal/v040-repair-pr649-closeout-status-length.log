@@ -1,0 +1,144 @@
+
+### SYNC CLOSEOUT BRANCH ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            docs/closeout-pr649-communication-contracts -> FETCH_HEAD
+Already on 'docs/closeout-pr649-communication-contracts'
+From github.com:vfi64/agentic-project-kit
+ * branch            docs/closeout-pr649-communication-contracts -> FETCH_HEAD
+Already up to date.
+docs/closeout-pr649-communication-contracts
+ded70cc Record PR649 status handoff closeout log
+64f09fa Record PR649 LLM communication contracts merge verification log
+ec3c8c3 Add LLM communication and portable execution contracts (#649)
+b883dac Plan portable LLM communication bootstrap hardening (#648)
+66412fc Record PR647 doctor GUI merge recovery log
+16b3037 Enable doctor button through read-only GUI contract (#647)
+7a0823c Record doctor action registry merge verification log
+b288179 Register doctor as read-only GUI action candidate (#646)
+
+### COMPACT STATUS AND HANDOFF CLOSEOUT TEXT ###
+
+### VERIFY CLOSEOUT ANCHORS AND STATUS LENGTH ###
+224:- PR #649 merged: LLM communication/bootstrap contracts, `agentic-kit docs-audit`, handoff prompt, and Terminal output requirement are on main; canonical rule docs remain the source of truth.
+327:- PR #649 merged and verified: successor chats must read mandatory rule sources before mutation.
+328:- `agentic-kit handoff prompt` is canonical; `agentic-kit docs-audit` is the umbrella docs audit.
+329:- Final summaries must appear in terminal output and terminal logs for relevant workflow blocks.
+STATUS_WORDS=3522
+
+### EXACT PREVIOUS FAILING TESTS FIRST ###
+.F.....................                                                  [100%]
+=================================== FAILURES ===================================
+_________ test_documentation_system_audit_renderer_exposes_boundaries __________
+
+    def test_documentation_system_audit_renderer_exposes_boundaries() -> None:
+        report = build_documentation_system_audit(ROOT)
+        rendered = render_documentation_system_audit(report)
+        assert "Documentation system audit" in rendered
+        assert "Redundanzfreiheit" in rendered
+>       assert "review-only boundary" in rendered
+E       assert 'review-only boundary' in "Documentation system audit\n\n[FAIL] Aktualität\n- README.md: version '0.3.10' does not match expected version '0.3.3...doi-list-mismatch:README.md: README DOI list missing or mismatching v0.3.9 -> 10.5281/zenodo.20210345\n\nOverall: FAIL"
+
+tests/test_documentation_system_audit.py:33: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_documentation_system_audit.py::test_documentation_system_audit_renderer_exposes_boundaries
+1 failed, 22 passed in 0.31s
+
+### LOCAL GATES ###
+........................................................................ [  8%]
+........................................................................ [ 17%]
+..................................F..................................... [ 26%]
+........................................................................ [ 35%]
+........................................................................ [ 43%]
+........................................................................ [ 52%]
+........................................................................ [ 61%]
+........................................................................ [ 70%]
+........................................................................ [ 78%]
+........................................................................ [ 87%]
+........................................................................ [ 96%]
+..............................                                           [100%]
+=================================== FAILURES ===================================
+_________ test_documentation_system_audit_renderer_exposes_boundaries __________
+
+    def test_documentation_system_audit_renderer_exposes_boundaries() -> None:
+        report = build_documentation_system_audit(ROOT)
+        rendered = render_documentation_system_audit(report)
+        assert "Documentation system audit" in rendered
+        assert "Redundanzfreiheit" in rendered
+>       assert "review-only boundary" in rendered
+E       assert 'review-only boundary' in "Documentation system audit\n\n[FAIL] Aktualität\n- README.md: version '0.3.10' does not match expected version '0.3.3...doi-list-mismatch:README.md: README DOI list missing or mismatching v0.3.9 -> 10.5281/zenodo.20210345\n\nOverall: FAIL"
+
+tests/test_documentation_system_audit.py:33: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_documentation_system_audit.py::test_documentation_system_audit_renderer_exposes_boundaries
+1 failed, 821 passed in 4.41s
+All checks passed!
+Agentic project check failed
+- docs/STATUS.md: too long (3522/3500 words)
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[FAIL] documentation gates: docs/STATUS.md: too long (3522/3500 words)
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.3.37
+
+Overall: FAIL
+
+### COMMIT PATCH BEFORE FINAL SUMMARY ###
+M  docs/STATUS.md
+M  docs/handoff/CURRENT_HANDOFF.md
+
+### CREATE OR REUSE CLOSEOUT PR ###
+
+### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-22 16:54:51 +0200
+
+SLICE
+  NAME: PR649 STATUS HANDOFF CLOSEOUT REPAIR
+  SCOPE: DOCS / STATUS LENGTH / HANDOFF / NO RELEASE / NO GUI PATCH
+  BRANCH: docs/closeout-pr649-communication-contracts
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: PR649 closeout repair failed
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: FAIL
+  EVIDENCE: PARTIAL
+  OVERALL: FAIL
+
+REMOTE
+  REMOTE_EVIDENCE: FAIL
+  PR: none-or-failed
+  HEAD_SHA: SEE_OUTPUT
+  CI: not_started
+  MERGE: blocked
+
+EVIDENCE FILES
+  terminal_log: /tmp/v040-repair-pr649-closeout-status-length.log
+  terminal_log_remote: NONE
+  terminal_log_local: /tmp/v040-repair-pr649-closeout-status-length.log
+  command_report: status-length-repair/exact-tests/pytest/ruff/check-docs/doctor/pr-create-or-existing
+
+INTERPRETATION
+  PR649 closeout repair did not complete; inspect local log before continuing.
+
+NEXT
+  SAFE_STEP: upload local fail log or inspect failing section
+  CHAT_REPLY: f
+
+### RESULT: FAIL ###
+================================================================
+
+### UPLOAD TERMINAL LOG INCLUDING STRUCTURED SUMMARY ###

@@ -221,6 +221,4 @@ Next safe step: deterministic rule hardening before GUI or release. v0.3.36 is u
 - v0.3.37 is released and post-release verified with Zenodo concept DOI `10.5281/zenodo.20101359` and version DOI `10.5281/zenodo.20329450`.
 
 
-- PR #649 merged: LLM communication, portable execution, bootstrap/drift, final-summary terminal-output rule, structured handoff prompt, and `agentic-kit docs-audit` are now part of main.
-- Relevant rule docs: `.agentic/compiled_agent_context.yaml`, `docs/governance/FINAL_SUMMARY_CONTRACT.md`, `CHAT_COMMUNICATION_CONTRACT.md`, `PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `docs/TEST_GATES.md`, and `docs/handoff/CURRENT_HANDOFF.md`.
-- Terminal output requirement: relevant terminal blocks must render the structured summary in terminal output and capture it in the terminal log.
+- PR #649 merged: LLM communication/bootstrap contracts, `agentic-kit docs-audit`, handoff prompt, and Terminal output requirement are on main; canonical rule docs remain the source of truth.
