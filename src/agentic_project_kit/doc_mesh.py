@@ -242,7 +242,9 @@ def build_doc_mesh_report(project_root: Path) -> DocMeshReport:
             if match is None:
                 findings.append(DocMeshFinding("missing-version", document.path, "current-state document has no machine-readable version marker"))
             else:
-                versions[document.path] = next(group for group in match.groups() if group)
+                all_matches = list(pattern.finditer(content))
+                selected_match = all_matches[-1]
+                versions[document.path] = next(group for group in selected_match.groups() if group)
 
     findings.extend(_check_version_consistency(versions))
     findings.extend(_check_release_doi_consistency(contents))
