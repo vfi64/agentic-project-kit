@@ -90,7 +90,7 @@ These compact anchors are intentionally retained to keep existing deterministic 
 - Current released version: 0.3.29; Current released version: 0.3.32; v0.3.32 Release Phase and Evidence Closeout; `release-preflight` validates the before-metadata release phase; `release-check` remains the after-metadata gate; `post-release-check` remains the after-release GitHub and Zenodo verification gate; `evidence clean-check`; `./ns evidence-clean-check`; expected in-progress log may be the only dirty path.
 - v0.3.34 portable core hardening plan; Tkinter remains explicitly deferred.
 - v0.3.36 current-state cleanup started as a documentation-only line.
-- PR #649 merged; PR #650 merged; PR #651 merged; PR #652 merged; PR #656 merged; PR #657 merged.
+- PR #649 merged; PR #650 merged; PR #651 merged; PR #652 merged.
 
 ## Compact Legacy Test Anchors
 These anchors are deliberately compact compatibility pointers. Long narrative history belongs in `CHANGELOG.md`.
