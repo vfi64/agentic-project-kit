@@ -1,5 +1,14 @@
 ## v0.3.37
 
+## v0.4.0-unreleased
+
+### Documentation-order and status-boundary hardening
+- Treat `CHANGELOG.md` as the long-term project protocol and historical narrative.
+- Treat `docs/STATUS.md` as a concise live dashboard with compact regression anchors only.
+- Preserve the v0.3.30 to v0.3.37 execution-history anchors here instead of expanding `docs/STATUS.md`.
+- Preserve release, GUI, no-copy, remote evidence, evidence guard, typed work order, Zenodo, and handoff-prompt history here as the durable long-term log.
+- v0.3.36 current-state cleanup remains historically relevant because it exposed the status-boundary failure mode.
+
 - Prepare release metadata for v0.3.37.
 
 ## v0.3.36 - 2026-05-21

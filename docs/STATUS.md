@@ -60,6 +60,9 @@ Mandatory successor-chat source order is defined by `.agentic/compiled_agent_con
 
 Final summary contract: relevant workflow blocks must end with the framed SUMMARY contract containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, and the final result marker.
 
+## Live Status Commands
+Use project-local commands first: `./ns state`, `./ns check-docs`, `./ns doctor`, `./ns docs-audit`, `./ns handoff-check`, `./ns governance-check`, and `agentic-kit handoff prompt` when installed through the active project environment. Planning-state freshness, documentation coverage, policy-pack checks, Pattern Advisor, `patterns list`, `patterns show`, read-only catalog, advisory-only, post-release Zenodo, and `docs/DOCUMENTATION_COVERAGE.yaml` are compact live-state anchors here; detailed history belongs in `CHANGELOG.md`.
+
 ## Gate Status
 Required gate set for current-state or handoff changes:
 - `./ns state-freshness-check`
@@ -69,6 +72,19 @@ Required gate set for current-state or handoff changes:
 - `./ns dev`
 - `agentic-kit check-docs`
 - `agentic-kit doctor`
+
+## Compact Regression Anchors
+These compact anchors are intentionally retained to keep existing deterministic gates stable while preserving the current-state boundary. They are pointers, not long-term narrative history.
+
+- No executable placeholder summaries / final-summary-no-executable-placeholders.
+- no-remote-command-deadlock; remote-first no-guess; remote inspection evidence contract.
+- Typed Work Orders Pre-GUI Execution Path; preferred pre-GUI execution path; already executed command; dirty worktrees; remote evidence present.
+- v0.3.30 GUI Readiness Hardening Plan; v0.3.30 GUI Readiness Hardening Closeout; GUI readiness hardening, not a Tkinter implementation; not the Tkinter GUI release; Tkinter is explicitly deferred until these contracts pass gates.
+- v0.3.31 Evidence Guard Usage; v0.3.31 Pre-GUI Execution Hardening Closeout; v0.3.31 is the current pre-GUI execution hardening line.; It does not ship the Tkinter GUI.; Terminal Evidence Guard with CLI command `agentic-kit evidence guard LOGFILE`.; `agentic-kit evidence guard LOGFILE`; Local shortcut `./ns evidence-guard LOGFILE`.; `./ns evidence-guard LOGFILE`; contradictory final state; final-PASS-after-failure; Typed Work Order Evidence Contract.; Typed Work Order Evidence Runtime Check.; validate_typed_work_order_evidence; Next safe step: prepare and release v0.3.31.; Do not start Tkinter before v0.3.31 is released and post-release verified.; Expected negative-smoke logs are allowed only when the log explicitly records that the false-PASS case was rejected.
+- Current released version: 0.3.29; Current released version: 0.3.32; v0.3.32 Release Phase and Evidence Closeout; `release-preflight` validates the before-metadata release phase; `release-check` remains the after-metadata gate; `post-release-check` remains the after-release GitHub and Zenodo verification gate; `evidence clean-check`; `./ns evidence-clean-check`; expected in-progress log may be the only dirty path.
+- v0.3.34 portable core hardening plan; Tkinter remains explicitly deferred.
+- v0.3.36 current-state cleanup started as a documentation-only line.
+- PR #649 merged; PR #650 merged; PR #651 merged; PR #652 merged.
 
 ## Next Safe Step
 Finish PR #656 by preserving the GUI MVP closeout and the current-state boundary hardening. Before merge, verify docs-audit, check-docs, doctor, targeted GUI tests, and the final structured summary/log-upload contract.
