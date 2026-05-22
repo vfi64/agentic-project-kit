@@ -53,6 +53,7 @@ rules:
           - LLM-to-user rules
           - LLM-to-terminal rules
           - Terminal-to-LLM rules
+          - a rendered final summary printed in the terminal output
           - Failure communication
           - PASS communication
           - 'REMOTE_EVIDENCE: PENDING'

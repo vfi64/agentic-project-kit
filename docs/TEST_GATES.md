@@ -246,6 +246,15 @@ printf "\n========== START: screen-control-gate ==========\n"
 
 This mirrors the standard local validation output to the terminal and to `Screen-Control_Output.txt`. The output file is intentionally ignored by Git and is meant for local review or temporary sharing, not for commits.
 
+
+## Required persistent contract anchors
+
+This file intentionally keeps compact anchors for deterministic tests and human review.
+
+- Final summary contract: see `docs/governance/FINAL_SUMMARY_CONTRACT.md`.
+- No executable placeholder summaries: final summaries must be rendered evidence, not runnable placeholder blocks; persistent rule id `final-summary-no-executable-placeholders`.
+- Release route safety: `release-prep --help` and invalid argument behavior must remain documented and testable before release-route changes.
+
 ## Documentation System Audit Gate
 
 `agentic-kit docs-audit` is the umbrella documentation-system audit. It reports Aktualität, Vollständigkeit, Korrektheit, Redundanzfreiheit, Stringenz der Dokumentenordnung, and Konsistenz.
