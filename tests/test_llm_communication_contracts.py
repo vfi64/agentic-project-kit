@@ -115,3 +115,27 @@ def test_test_gates_points_to_contracts_without_becoming_rule_book() -> None:
     ]:
         assert path in text
     assert "concise pointers, not duplicate rule books" in text
+
+
+def test_documentation_coverage_tracks_llm_communication_contracts() -> None:
+    text = read("docs/DOCUMENTATION_COVERAGE.yaml")
+    assert "llm-communication-bootstrap-coverage" in text
+    for path in [
+        ".agentic/compiled_agent_context.yaml",
+        "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
+        "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
+        "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
+        "docs/governance/FINAL_SUMMARY_CONTRACT.md",
+        "docs/TEST_GATES.md",
+    ]:
+        assert path in text
+    for term in [
+        "mandatory_successor_chat_sources",
+        "forbidden_remote_evidence_values",
+        "User acknowledgements",
+        "LLM-to-terminal rules",
+        "Shell commands are adapters only",
+        "Mandatory startup sequence",
+        "LLM Communication and Bootstrap Gate",
+    ]:
+        assert term in text
