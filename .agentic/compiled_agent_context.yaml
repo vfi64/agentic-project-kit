@@ -1,7 +1,7 @@
 schema_version: 1
 updated:
-  date: '2026-05-19'
-  reason: compiled machine-readable agent context baseline
+  date: '2026-05-22'
+  reason: portable LLM communication, summary, bootstrap, and drift contract baseline
 purpose: Fast, redundant-free, machine-readable companion to the human governance
   docs.
 source_policy:
@@ -13,33 +13,120 @@ priority_order:
 - .agentic/compiled_agent_context.yaml
 - .agentic/handoff_state.yaml
 - .agentic/no_copy_terminal_policy.yaml
+- docs/governance/FINAL_SUMMARY_CONTRACT.md
+- docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+- docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+- docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
 - docs/STATUS.md
 - docs/handoff/CURRENT_HANDOFF.md
 - docs/TEST_GATES.md
 - docs/DOCUMENTATION_COVERAGE.yaml
+mandatory_successor_chat_sources:
+- .agentic/compiled_agent_context.yaml
+- docs/governance/FINAL_SUMMARY_CONTRACT.md
+- docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+- docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+- docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+- docs/TEST_GATES.md
+- docs/STATUS.md
+- docs/handoff/CURRENT_HANDOFF.md
+- relevant source files and tests for the requested slice
 hard_rules:
 - id: remote-first-no-guess
   rule: Inspect remote repo files, authoritative docs, and command help before acting.
 - id: no-long-manual-command-blocks
-  rule: Queue repo-backed commands for agent-next instead of returning long local
-    shell blocks.
+  rule: Queue repo-backed commands or use portable Python core commands instead of returning long local shell blocks.
 - id: final-summary-contract
   summary: Preserve the framed SUMMARY contract in every final block.
   rule: Use the mandatory SUMMARY block and never relabel inner failures as PASS.
+- id: chat-communication-contract
+  rule: Interpret d/f/w/paste-output/stop as communication signals only; verify outcomes from evidence before continuing.
+- id: portable-chat-execution-contract
+  rule: Canonical workflow correctness must be Python-core-first and operating-system independent; shell is an adapter only.
+- id: chat-bootstrap-and-drift-contract
+  rule: Successor chats must read mandatory sources first, detect drift, warn, and avoid mutation except for drift fixes.
 - id: patch-artifact-preflight
-  rule: Generated patch artifacts must pass syntax, YAML, coverage-term, and final-summary
-    checks before use.
+  rule: Generated patch artifacts must pass syntax, YAML, coverage-term, and final-summary checks before use.
 - id: rules-must-be-test-backed
-  rule: Durable rules require human docs, compiled YAML, and deterministic tests.
+  rule: Durable rules require human docs, compiled YAML, and deterministic tests or a documented review-only exception.
+final_summary_contract:
+  work_values:
+  - PASS
+  - FAIL
+  - PENDING
+  - HARD-FAIL
+  - NO-COMMAND
+  evidence_values:
+  - PASS
+  - FAIL
+  - PARTIAL
+  - CHAT_ONLY
+  - NOT_REQUIRED
+  overall_values:
+  - PASS
+  - FAIL
+  - PENDING
+  - HARD-FAIL
+  - NO-COMMAND
+  remote_evidence_values:
+  - PASS
+  - FAIL
+  - PARTIAL
+  - NOT_REQUIRED
+  forbidden_remote_evidence_values:
+  - PENDING
+  - NONE
+  - CHAT_ONLY
+communication_rules:
+  d: local block appears finished; inspect evidence before treating as success
+  f: failure reported; inspect or upload evidence before asking for pasted output
+  w: continue within current governance and evidence rules
+  paste-output: manual paste only when repo-backed or local evidence is unavailable or unusable
+  stop: no further mutation or terminal instructions
+portable_execution_rules:
+  canonical_core: Python modules and CLI commands
+  shell_role: adapter only
+  python_apis:
+  - pathlib.Path
+  - shutil
+  - platform
+  - subprocess.run with shell=False
+  forbidden_canonical_dependencies:
+  - cp
+  - tail
+  - grep
+  - sed
+  - head
+  - tee
+  - find
+  - sh
+  - hard-coded Unix tool paths
+  - shell pipelines for correctness
+drift_detection:
+  fail_closed: true
+  on_drift:
+  - warn
+  - identify affected sources
+  - avoid mutation unless fixing drift
+  - offer comprehensive handoff prompt when continuation is unsafe
+  drift_classes:
+  - contract-vs-renderer value drift
+  - contract-vs-test drift
+  - missing mandatory bootstrap source
+  - stale status or handoff state
+  - forbidden final summary value
+  - no-copy claim without remote-readable evidence
+  - shell-only canonical workflow example
 normal_operator_path:
-- git switch main
-- git pull --ff-only origin main
-- ./ns agent-next
-quality_goal: Prefer the best deterministic solution over shortcuts; quality is the
-  target.
+- read mandatory successor chat sources
+- inspect current remote state
+- run or inspect deterministic checks
+- use portable Python core where available
+- render final summary through canonical renderer
+quality_goal: Prefer deterministic, portable, test-backed solutions over prompt-only conventions.
 workflow_friction_rules:
-  - id: no-remote-command-deadlock
-    priority: high
-    rule: Remote command first is preferred, but NO-COMMAND must trigger queuing a complete command pair or exactly one minimal fallback command. Do not loop on ask-agent-to-queue-command.
-  - id: final-summary-no-executable-placeholders
-    summary: Executable terminal blocks must print only concrete final SUMMARY outcomes; never placeholder alternatives like PASS|FAIL or p|paste-output.
+- id: no-remote-command-deadlock
+  priority: high
+  rule: Remote command first is preferred, but NO-COMMAND must trigger queuing a complete command pair or exactly one minimal fallback command. Do not loop on ask-agent-to-queue-command.
+- id: final-summary-no-executable-placeholders
+  summary: Executable terminal blocks must print only concrete final SUMMARY outcomes; never placeholder alternatives like PASS|FAIL or p|paste-output.
