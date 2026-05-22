@@ -8,6 +8,7 @@ From github.com:vfi64/agentic-project-kit
  * branch            main       -> FETCH_HEAD
 Already up to date.
 main
+e4c4d1f Record Tk venv dependency repair check-docs visual log
 2d35ea6 Record check-docs GUI visual failure log
 0d9ec63 Record check-docs GUI visual verification phase 1 log
 9bcb5cd Record PR655 check-docs GUI merge verification log
@@ -17,7 +18,6 @@ db607b8 Add shared read-only GUI runner abstraction (#654)
 df66dee Record PR653 GUI visual evidence workflow merge verification log
 a117dc5 Harden GUI visual evidence workflow rules (#653)
 5b06eff Record canonical doctor GUI visual pass evidence
-8d32fd6 Record doctor GUI manual launch visual result
 
 ### VERIFY TK PYTHON BEFORE DEP REPAIR ###
 TKINTER_OK=1
@@ -69,6 +69,7 @@ Overall: PASS
 
 ### FINAL STATE BEFORE SUMMARY ###
 main
+e4c4d1f Record Tk venv dependency repair check-docs visual log
 2d35ea6 Record check-docs GUI visual failure log
 0d9ec63 Record check-docs GUI visual verification phase 1 log
 9bcb5cd Record PR655 check-docs GUI merge verification log
@@ -76,13 +77,12 @@ main
 03956a1 Record PR654 shared GUI runner merge verification log
 db607b8 Add shared read-only GUI runner abstraction (#654)
 df66dee Record PR653 GUI visual evidence workflow merge verification log
-a117dc5 Harden GUI visual evidence workflow rules (#653)
 
 ### WRITE ROBUST SUMMARY INVOKER ###
 
 ### RENDER STRUCTURED SUMMARY IN TERMINAL OUTPUT ###
 ================================================================
-SUMMARY COMM-PENDING | 2026-05-22 18:21:36 +0200
+SUMMARY COMM-PENDING | 2026-05-22 18:22:10 +0200
 
 SLICE
   NAME: REPAIR TK VENV DEPS AND RE-RUN CHECK-DOCS VISUAL VERIFY
@@ -103,7 +103,7 @@ RESULT
 REMOTE
   REMOTE_EVIDENCE: PARTIAL
   PR: none
-  HEAD_SHA: 2d35ea64692fd4910eb840931ea4edf5d319a87e
+  HEAD_SHA: e4c4d1f063ed8f69f9097ef94b2fe61b1723ded9
   CI: not_required
   MERGE: not_required
 
