@@ -189,6 +189,27 @@ def run_cockpit_readiness_for_manual_gui() -> str:
     return chr(10).join(lines)
 
 
+
+
+def run_doctor_for_manual_gui() -> str:
+    from pathlib import Path
+    from agentic_project_kit.doctor import build_doctor_report, render_doctor_report
+    def executor(_action: object) -> tuple[int, str]:
+        report = build_doctor_report(Path.cwd())
+        return (0 if report.ok else 1), render_doctor_report(report)
+    result = run_bounded_read_only_action(list_actions(), chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114), executor=executor)
+    return chr(10).join([
+        chr(71) + chr(85) + chr(73) + chr(32) + chr(65) + chr(67) + chr(84) + chr(73) + chr(79) + chr(78) + chr(32) + chr(69) + chr(88) + chr(69) + chr(67) + chr(85) + chr(84) + chr(73) + chr(79) + chr(78) + chr(32) + chr(82) + chr(69) + chr(83) + chr(85) + chr(76) + chr(84),
+        chr(97) + chr(99) + chr(116) + chr(105) + chr(111) + chr(110) + chr(61) + result.action_name,
+        chr(115) + chr(97) + chr(102) + chr(101) + chr(116) + chr(121) + chr(95) + chr(99) + chr(108) + chr(97) + chr(115) + chr(115) + chr(61) + normalize_safety_class(result.safety_class),
+        chr(97) + chr(108) + chr(108) + chr(111) + chr(119) + chr(101) + chr(100) + chr(61) + str(result.allowed).lower(),
+        chr(101) + chr(120) + chr(101) + chr(99) + chr(117) + chr(116) + chr(101) + chr(100) + chr(61) + str(result.executed).lower(),
+        chr(114) + chr(101) + chr(116) + chr(117) + chr(114) + chr(110) + chr(99) + chr(111) + chr(100) + chr(101) + chr(61) + str(result.returncode),
+        chr(109) + chr(101) + chr(115) + chr(115) + chr(97) + chr(103) + chr(101) + chr(61) + result.message,
+        chr(111) + chr(117) + chr(116) + chr(112) + chr(117) + chr(116) + chr(95) + chr(98) + chr(101) + chr(103) + chr(105) + chr(110),
+        result.output,
+        chr(111) + chr(117) + chr(116) + chr(112) + chr(117) + chr(116) + chr(95) + chr(101) + chr(110) + chr(100),
+    ])
 def render_manual_launch_content(root: object) -> None:
     import tkinter as tk
     from tkinter import ttk
@@ -235,9 +256,22 @@ def render_manual_launch_content(root: object) -> None:
             write_output("GUI ACTION EXECUTION RESULT\naction=cockpit-readiness\nreturncode=1\nmessage=" + str(exc))
             set_status("Status: fail | branch: main | action: cockpit-readiness")
 
+
+    def run_doctor_click() -> None:
+        set_status(chr(83) + chr(116) + chr(97) + chr(116) + chr(117) + chr(115) + chr(58) + chr(32) + chr(114) + chr(117) + chr(110) + chr(110) + chr(105) + chr(110) + chr(103) + chr(32) + chr(124) + chr(32) + chr(98) + chr(114) + chr(97) + chr(110) + chr(99) + chr(104) + chr(58) + chr(32) + chr(109) + chr(97) + chr(105) + chr(110) + chr(32) + chr(124) + chr(32) + chr(97) + chr(99) + chr(116) + chr(105) + chr(111) + chr(110) + chr(58) + chr(32) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114))
+        try:
+            value = run_doctor_for_manual_gui()
+            write_output(value)
+            if chr(114) + chr(101) + chr(116) + chr(117) + chr(114) + chr(110) + chr(99) + chr(111) + chr(100) + chr(101) + chr(61) + chr(48) in value:
+                set_status(chr(83) + chr(116) + chr(97) + chr(116) + chr(117) + chr(115) + chr(58) + chr(32) + chr(115) + chr(117) + chr(99) + chr(99) + chr(101) + chr(115) + chr(115) + chr(32) + chr(124) + chr(32) + chr(98) + chr(114) + chr(97) + chr(110) + chr(99) + chr(104) + chr(58) + chr(32) + chr(109) + chr(97) + chr(105) + chr(110) + chr(32) + chr(124) + chr(32) + chr(97) + chr(99) + chr(116) + chr(105) + chr(111) + chr(110) + chr(58) + chr(32) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114))
+            else:
+                set_status(chr(83) + chr(116) + chr(97) + chr(116) + chr(117) + chr(115) + chr(58) + chr(32) + chr(102) + chr(97) + chr(105) + chr(108) + chr(32) + chr(124) + chr(32) + chr(98) + chr(114) + chr(97) + chr(110) + chr(99) + chr(104) + chr(58) + chr(32) + chr(109) + chr(97) + chr(105) + chr(110) + chr(32) + chr(124) + chr(32) + chr(97) + chr(99) + chr(116) + chr(105) + chr(111) + chr(110) + chr(58) + chr(32) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114))
+        except Exception as exc:
+            write_output(chr(71) + chr(85) + chr(73) + chr(32) + chr(65) + chr(67) + chr(84) + chr(73) + chr(79) + chr(78) + chr(32) + chr(69) + chr(88) + chr(69) + chr(67) + chr(85) + chr(84) + chr(73) + chr(79) + chr(78) + chr(32) + chr(82) + chr(69) + chr(83) + chr(85) + chr(76) + chr(84) + chr(10) + chr(97) + chr(99) + chr(116) + chr(105) + chr(111) + chr(110) + chr(61) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114) + chr(10) + chr(114) + chr(101) + chr(116) + chr(117) + chr(114) + chr(110) + chr(99) + chr(111) + chr(100) + chr(101) + chr(61) + chr(49) + chr(10) + chr(109) + chr(101) + chr(115) + chr(115) + chr(97) + chr(103) + chr(101) + chr(61) + str(exc))
+            set_status(chr(83) + chr(116) + chr(97) + chr(116) + chr(117) + chr(115) + chr(58) + chr(32) + chr(102) + chr(97) + chr(105) + chr(108) + chr(32) + chr(124) + chr(32) + chr(98) + chr(114) + chr(97) + chr(110) + chr(99) + chr(104) + chr(58) + chr(32) + chr(109) + chr(97) + chr(105) + chr(110) + chr(32) + chr(124) + chr(32) + chr(97) + chr(99) + chr(116) + chr(105) + chr(111) + chr(110) + chr(58) + chr(32) + chr(100) + chr(111) + chr(99) + chr(116) + chr(111) + chr(114))
     toolbar = ttk.Frame(root, padding=4)
     toolbar.pack(fill="x", padx=12, pady=(0, 8))
-    for label in ("Refresh status", "Doctor", "Check docs", "GUI dry-run"):
+    for label in ("Refresh status", "Check docs", "GUI dry-run"):
         ttk.Button(toolbar, text=label, state="disabled", style="ReadableDisabled.TButton").pack(side="left", padx=4, pady=4)
 
     body = ttk.Frame(root, padding=(12, 0, 12, 12))
@@ -245,7 +279,8 @@ def render_manual_launch_content(root: object) -> None:
     actions = ttk.LabelFrame(body, text="Actions", padding=6)
     actions.pack(side="left", fill="y", padx=(0, 8))
     ttk.Button(actions, text="cockpit-readiness", command=run_cockpit_readiness_click, width=22).pack(fill="x", pady=3)
-    for label in ("doctor", "check-docs", "agent-run"):
+    ttk.Button(actions, text="doctor", command=run_doctor_click, width=22).pack(fill="x", pady=3)
+    for label in ("check-docs", "agent-run"):
         ttk.Button(actions, text=label, state="disabled", width=22, style="ReadableDisabled.TButton").pack(fill="x", pady=3)
 
     output = ttk.LabelFrame(body, text="Output / Status", padding=6)
