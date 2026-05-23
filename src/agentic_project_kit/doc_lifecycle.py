@@ -5,6 +5,8 @@ from pathlib import Path
 import json
 from typing import Any
 
+from agentic_project_kit.documentation_registry import build_documentation_registry_summary
+
 ALLOWED_STATUS_VALUES = {
     "idea-note",
     "proposed",
@@ -56,6 +58,7 @@ class DocLifecycleFinding:
 class DocLifecycleReport:
     documents: tuple[DocLifecycleDocument, ...]
     findings: tuple[DocLifecycleFinding, ...]
+    registry_summary: dict[str, Any] | None = None
 
     @property
     def ok(self) -> bool:
@@ -66,6 +69,7 @@ class DocLifecycleReport:
             "ok": self.ok,
             "documents": [document.to_dict() for document in self.documents],
             "findings": [finding.to_dict() for finding in self.findings],
+            "registry_summary": self.registry_summary,
         }
 
 
@@ -78,7 +82,11 @@ def build_doc_lifecycle_report(project_root: Path) -> DocLifecycleReport:
         decision_status = _first_header_value(text, "Decision status")
         documents.append(DocLifecycleDocument(str(relative_path), status, decision_status))
         findings.extend(_audit_document(relative_path, text, status, decision_status))
-    return DocLifecycleReport(tuple(documents), tuple(findings))
+    return DocLifecycleReport(
+        documents=tuple(documents),
+        findings=tuple(findings),
+        registry_summary=_load_registry_summary(project_root),
+    )
 
 
 def write_doc_lifecycle_json_report(report: DocLifecycleReport, output_path: Path) -> None:
@@ -93,12 +101,33 @@ def render_doc_lifecycle_report(report: DocLifecycleReport) -> str:
     for document in report.documents:
         status = document.status if document.status is not None else "MISSING"
         lines.append(f"- {document.path}: {status}")
+    if report.registry_summary is not None:
+        lines.extend([
+            "",
+            "Documentation registry:",
+            f"- registry: {report.registry_summary['registry_path']}",
+            f"- version: {report.registry_summary['version']}",
+            f"- documents: {report.registry_summary['document_count']}",
+            "- broad_migration_allowed: "
+            f"{report.registry_summary['broad_migration_allowed']}",
+        ])
+        class_counts = report.registry_summary.get("class_counts", {})
+        if isinstance(class_counts, dict):
+            for class_name, count in class_counts.items():
+                lines.append(f"- class:{class_name}: {count}")
     if report.findings:
         lines.extend(["", "Findings:"])
         for finding in report.findings:
             lines.append(f"- [{finding.code}] {finding.path}: {finding.message}")
     lines.extend(["", f"Overall: {'PASS' if report.ok else 'FAIL'}"])
     return "\n".join(lines)
+
+
+def _load_registry_summary(project_root: Path) -> dict[str, Any] | None:
+    try:
+        return build_documentation_registry_summary(project_root)
+    except (OSError, ValueError):
+        return None
 
 
 def _iter_lifecycle_markdown_files(project_root: Path) -> tuple[Path, ...]:
