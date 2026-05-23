@@ -1,0 +1,68 @@
+from pathlib import Path
+
+from agentic_project_kit.handoff_freshness import (
+    assess_handoff_prompt_freshness,
+    render_freshness_guard,
+)
+
+
+def _write(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+
+
+def test_handoff_freshness_guard_reports_stale_successor_prompt(tmp_path: Path) -> None:
+    handoff_path = tmp_path / ".agentic" / "handoff_state.yaml"
+    prompt_path = tmp_path / "docs" / "reports" / "terminal" / "after-pr690.md"
+    _write(tmp_path / "docs" / "STATUS.md", "status for old commit abc6900\n")
+    _write(tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md", "handoff for abc6900\n")
+    _write(handoff_path, "schema_version: 1\n")
+    _write(prompt_path, "successor prompt generated for abc6900\n")
+    data = {
+        "safe_state": {"commit": "abc6900"},
+        "handoff_maintenance": {
+            "latest_successor_prompt": "docs/reports/terminal/after-pr690.md",
+        },
+    }
+
+    warnings = assess_handoff_prompt_freshness(
+        data,
+        handoff_path,
+        current_head="def7010",
+    )
+
+    assert any("not represented by handoff safe/admin state" in warning for warning in warnings)
+    assert any("does not mention current handoff commit marker" in warning for warning in warnings)
+
+
+def test_handoff_freshness_guard_accepts_current_admin_evidence_state(tmp_path: Path) -> None:
+    handoff_path = tmp_path / ".agentic" / "handoff_state.yaml"
+    prompt_path = tmp_path / "docs" / "reports" / "terminal" / "after-pr704.md"
+    _write(tmp_path / "docs" / "STATUS.md", "status for def7040\n")
+    _write(tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md", "handoff for def7040\n")
+    _write(handoff_path, "schema_version: 1\n")
+    _write(prompt_path, "successor prompt generated for def7040\n")
+    data = {
+        "safe_state": {"commit": "abc6900"},
+        "administrative_evidence_state": {"current_head": "def7040"},
+        "handoff_maintenance": {
+            "latest_successor_prompt": "docs/reports/terminal/after-pr704.md",
+        },
+    }
+
+    warnings = assess_handoff_prompt_freshness(
+        data,
+        handoff_path,
+        current_head="def7040",
+    )
+
+    assert warnings == []
+
+
+def test_handoff_freshness_guard_renders_prominent_warning() -> None:
+    guard = render_freshness_guard(["current git HEAD def7010 is not represented"])
+
+    assert "## Handoff Freshness Guard" in guard
+    assert "WARNING" in guard
+    assert "successor handoff prompt may be stale" in guard
+    assert "docs/STATUS.md" in guard

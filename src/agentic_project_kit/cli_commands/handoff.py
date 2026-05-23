@@ -6,6 +6,10 @@ from typing import Annotated, Any
 import typer
 
 from agentic_project_kit.documentation_registry import build_documentation_registry_summary
+from agentic_project_kit.handoff_freshness import (
+    assess_handoff_prompt_freshness,
+    render_freshness_guard,
+)
 from agentic_project_kit.handoff_prompt import render_handoff_prompt
 from agentic_project_kit.handoff_state import (
     current_git_safe_state,
@@ -50,6 +54,9 @@ def prompt(path: str = ".agentic/handoff_state.yaml") -> None:
         for error in errors:
             typer.echo(f"[FAIL] {error}")
         raise typer.Exit(code=1)
+    guard = render_freshness_guard(assess_handoff_prompt_freshness(data, path))
+    if guard:
+        typer.echo(guard)
     typer.echo(render_handoff_prompt(data))
 
 
