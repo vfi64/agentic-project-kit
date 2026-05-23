@@ -1,7 +1,7 @@
 schema_version: 1
 updated:
   date: '2026-05-23'
-  reason: documentation registry schema baseline and guard integration
+  reason: handoff prompt freshness guard integration
 purpose: Fast, redundant-free, machine-readable companion to the human governance
   docs.
 source_policy:
@@ -32,6 +32,12 @@ mandatory_successor_chat_sources:
 - docs/TEST_GATES.md
 - docs/STATUS.md
 - docs/handoff/CURRENT_HANDOFF.md
+- .agentic/handoff_state.yaml
+- AGENTS.md
+- CHANGELOG.md
+- README.md
+- CITATION.cff
+- docs/releases/VERIFIED_RELEASES.md
 - relevant source files and tests for the requested slice
 hard_rules:
 - id: remote-first-no-guess
@@ -47,6 +53,8 @@ hard_rules:
   rule: Canonical workflow correctness must be Python-core-first and operating-system independent; shell is an adapter only.
 - id: chat-bootstrap-and-drift-contract
   rule: Successor chats must read mandatory sources first, detect drift, warn, and avoid mutation except for drift fixes.
+- id: successor-handoff-freshness-guard
+  rule: Before presenting a successor handoff prompt as authoritative, run the freshness guard against STATUS, handoff_state, CURRENT_HANDOFF, and the latest successor prompt.
 - id: documentation-registry-first-slice
   summary: Classify documentation and artifacts through an additive, reversible registry before broad migration.
   rule: Documentation registry changes must keep the first slice structural, test-backed, and non-destructive; broad migration, deletion, or taxonomy-driven rewrites require later explicit slices.
@@ -123,12 +131,14 @@ drift_detection:
   - contract-vs-test drift
   - missing mandatory bootstrap source
   - stale status or handoff state
+  - stale successor handoff prompt after newer main merge
   - forbidden final summary value
   - no-copy claim without remote-readable evidence
   - shell-only canonical workflow example
 normal_operator_path:
 - read mandatory successor chat sources
 - inspect current remote state
+- run handoff prompt freshness guard before presenting a successor prompt
 - run or inspect deterministic checks
 - use portable Python core where available
 - render final summary through canonical renderer
