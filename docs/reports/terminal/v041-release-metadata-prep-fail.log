@@ -1,0 +1,711 @@
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+
+### FETCH MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   1c26c77..8cbed83  main       -> origin/main
+
+### PULL MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Updating 1c26c77..8cbed83
+Fast-forward
+ .agentic/handoff_state.yaml                        | 230 +++-----
+ AGENTS.md                                          |  72 +--
+ CHANGELOG.md                                       |  12 +-
+ docs/DOCUMENTATION_COVERAGE.yaml                   |   2 +-
+ docs/STATUS.md                                     |  19 +-
+ docs/governance/MERGE_READINESS_CONTRACT.md        |  76 +++
+ docs/handoff/CURRENT_HANDOFF.md                    |  28 +-
+ docs/plans/DOCUMENT_ARTIFACT_GOVERNANCE_OS_PLAN.md | 650 +++++++++++++++++++++
+ docs/plans/V040_DOCUMENTATION_FOLLOW_UP.md         |   8 +
+ .../terminal/changelog-quality-guard-remote.log    |  15 +
+ ...document-artifact-governance-os-plan-remote.log |  27 +
+ .../gui-action-execution-headless-remote.log       |  14 +
+ docs/reports/terminal/pr-ci-wait-cli-remote.log    |  17 +
+ .../terminal/pr-ci-wait-readiness-remote.log       |  27 +
+ ...e-before-doc-governance-rebuild-plan-remote.log |  13 +
+ .../terminal/state-refresh-after-pr681-remote.log  |  13 +
+ .../terminal/v040-active-docs-language-guard.log   |  22 +
+ .../terminal/v040-changelog-history-enrichment.log |  17 +
+ .../terminal/v040-guard-agents-local-paths.log     |   8 +
+ .../v040-translate-active-agents-rules.log         |  22 +
+ sentinel.yaml                                      |   2 +-
+ src/agentic_project_kit/checks.py                  | 141 +++++
+ src/agentic_project_kit/ci_readiness.py            | 211 +++++++
+ src/agentic_project_kit/cli_commands/pr.py         |  38 +-
+ tests/test_active_documentation_language.py        |  36 ++
+ tests/test_agents_local_path_guard.py              |  11 +
+ tests/test_checks.py                               |  64 ++
+ tests/test_doctor.py                               |  14 +-
+ tests/test_gui_action_execution_headless.py        | 143 +++++
+ tests/test_pr_ci_readiness.py                      | 168 ++++++
+ tests/test_recent_changelog_quality.py             |  45 ++
+ tests/test_v036_agents_rule_split.py               |   2 +-
+ 32 files changed, 1948 insertions(+), 219 deletions(-)
+ create mode 100644 docs/governance/MERGE_READINESS_CONTRACT.md
+ create mode 100644 docs/plans/DOCUMENT_ARTIFACT_GOVERNANCE_OS_PLAN.md
+ create mode 100644 docs/reports/terminal/changelog-quality-guard-remote.log
+ create mode 100644 docs/reports/terminal/document-artifact-governance-os-plan-remote.log
+ create mode 100644 docs/reports/terminal/gui-action-execution-headless-remote.log
+ create mode 100644 docs/reports/terminal/pr-ci-wait-cli-remote.log
+ create mode 100644 docs/reports/terminal/pr-ci-wait-readiness-remote.log
+ create mode 100644 docs/reports/terminal/release-before-doc-governance-rebuild-plan-remote.log
+ create mode 100644 docs/reports/terminal/state-refresh-after-pr681-remote.log
+ create mode 100644 docs/reports/terminal/v040-active-docs-language-guard.log
+ create mode 100644 docs/reports/terminal/v040-changelog-history-enrichment.log
+ create mode 100644 docs/reports/terminal/v040-guard-agents-local-paths.log
+ create mode 100644 docs/reports/terminal/v040-translate-active-agents-rules.log
+ create mode 100644 src/agentic_project_kit/ci_readiness.py
+ create mode 100644 tests/test_active_documentation_language.py
+ create mode 100644 tests/test_agents_local_path_guard.py
+ create mode 100644 tests/test_gui_action_execution_headless.py
+ create mode 100644 tests/test_pr_ci_readiness.py
+ create mode 100644 tests/test_recent_changelog_quality.py
+
+### OPEN PR CHECK ###
+
+### CLEAN PRECHECK ###
+
+### CREATE OR RESET RELEASE PREP BRANCH ###
+Switched to a new branch 'release/prepare-v0.4.1-metadata'
+branch 'release/prepare-v0.4.1-metadata' set up to track 'origin/main'.
+
+### ENSURE PYTHON 3.13 VENV ###
+
+### INSTALL DEV RELEASE TOOLING ###
+Requirement already satisfied: pip in ./.venv313/lib/python3.13/site-packages (26.1.1)
+
+### INSTALL PROJECT DEV TOOLING ###
+Obtaining file:///Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Installing backend dependencies: started
+  Installing backend dependencies: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Collecting build
+  Using cached build-1.5.0-py3-none-any.whl.metadata (5.7 kB)
+Collecting twine
+  Using cached twine-6.2.0-py3-none-any.whl.metadata (3.6 kB)
+Requirement already satisfied: pydantic>=2.7 in ./.venv313/lib/python3.13/site-packages (from agentic-project-kit==0.4.0) (2.13.4)
+Requirement already satisfied: pyyaml>=6.0 in ./.venv313/lib/python3.13/site-packages (from agentic-project-kit==0.4.0) (6.0.3)
+Requirement already satisfied: rich>=13.7 in ./.venv313/lib/python3.13/site-packages (from agentic-project-kit==0.4.0) (15.0.0)
+Requirement already satisfied: typer>=0.12 in ./.venv313/lib/python3.13/site-packages (from agentic-project-kit==0.4.0) (0.25.1)
+Requirement already satisfied: pytest>=8.0 in ./.venv313/lib/python3.13/site-packages (from agentic-project-kit==0.4.0) (9.0.3)
+Requirement already satisfied: ruff>=0.6 in ./.venv313/lib/python3.13/site-packages (from agentic-project-kit==0.4.0) (0.15.14)
+Requirement already satisfied: packaging>=24.0 in ./.venv313/lib/python3.13/site-packages (from build) (26.2)
+Collecting pyproject_hooks (from build)
+  Using cached pyproject_hooks-1.2.0-py3-none-any.whl.metadata (1.3 kB)
+Collecting readme-renderer>=35.0 (from twine)
+  Using cached readme_renderer-44.0-py3-none-any.whl.metadata (2.8 kB)
+Collecting requests>=2.20 (from twine)
+  Using cached requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting requests-toolbelt!=0.9.0,>=0.8.0 (from twine)
+  Using cached requests_toolbelt-1.0.0-py2.py3-none-any.whl.metadata (14 kB)
+Collecting urllib3>=1.26.0 (from twine)
+  Using cached urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+Collecting keyring>=21.2.0 (from twine)
+  Using cached keyring-25.7.0-py3-none-any.whl.metadata (21 kB)
+Collecting rfc3986>=1.4.0 (from twine)
+  Using cached rfc3986-2.0.0-py2.py3-none-any.whl.metadata (6.6 kB)
+Collecting id (from twine)
+  Using cached id-1.6.1-py3-none-any.whl.metadata (5.1 kB)
+Collecting jaraco.classes (from keyring>=21.2.0->twine)
+  Using cached jaraco.classes-3.4.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting jaraco.functools (from keyring>=21.2.0->twine)
+  Using cached jaraco_functools-4.5.0-py3-none-any.whl.metadata (2.9 kB)
+Collecting jaraco.context (from keyring>=21.2.0->twine)
+  Using cached jaraco_context-6.1.2-py3-none-any.whl.metadata (4.2 kB)
+Requirement already satisfied: annotated-types>=0.6.0 in ./.venv313/lib/python3.13/site-packages (from pydantic>=2.7->agentic-project-kit==0.4.0) (0.7.0)
+Requirement already satisfied: pydantic-core==2.46.4 in ./.venv313/lib/python3.13/site-packages (from pydantic>=2.7->agentic-project-kit==0.4.0) (2.46.4)
+Requirement already satisfied: typing-extensions>=4.14.1 in ./.venv313/lib/python3.13/site-packages (from pydantic>=2.7->agentic-project-kit==0.4.0) (4.15.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in ./.venv313/lib/python3.13/site-packages (from pydantic>=2.7->agentic-project-kit==0.4.0) (0.4.2)
+Requirement already satisfied: iniconfig>=1.0.1 in ./.venv313/lib/python3.13/site-packages (from pytest>=8.0->agentic-project-kit==0.4.0) (2.3.0)
+Requirement already satisfied: pluggy<2,>=1.5 in ./.venv313/lib/python3.13/site-packages (from pytest>=8.0->agentic-project-kit==0.4.0) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in ./.venv313/lib/python3.13/site-packages (from pytest>=8.0->agentic-project-kit==0.4.0) (2.20.0)
+Collecting nh3>=0.2.14 (from readme-renderer>=35.0->twine)
+  Using cached nh3-0.3.5-cp38-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl.metadata (2.0 kB)
+Collecting docutils>=0.21.2 (from readme-renderer>=35.0->twine)
+  Using cached docutils-0.22.4-py3-none-any.whl.metadata (15 kB)
+Collecting charset_normalizer<4,>=2 (from requests>=2.20->twine)
+  Using cached charset_normalizer-3.4.7-cp313-cp313-macosx_10_13_universal2.whl.metadata (40 kB)
+Collecting idna<4,>=2.5 (from requests>=2.20->twine)
+  Using cached idna-3.16-py3-none-any.whl.metadata (6.4 kB)
+Collecting certifi>=2023.5.7 (from requests>=2.20->twine)
+  Using cached certifi-2026.5.20-py3-none-any.whl.metadata (2.5 kB)
+Requirement already satisfied: markdown-it-py>=2.2.0 in ./.venv313/lib/python3.13/site-packages (from rich>=13.7->agentic-project-kit==0.4.0) (4.2.0)
+Requirement already satisfied: mdurl~=0.1 in ./.venv313/lib/python3.13/site-packages (from markdown-it-py>=2.2.0->rich>=13.7->agentic-project-kit==0.4.0) (0.1.2)
+Requirement already satisfied: click>=8.2.1 in ./.venv313/lib/python3.13/site-packages (from typer>=0.12->agentic-project-kit==0.4.0) (8.4.1)
+Requirement already satisfied: shellingham>=1.3.0 in ./.venv313/lib/python3.13/site-packages (from typer>=0.12->agentic-project-kit==0.4.0) (1.5.4)
+Requirement already satisfied: annotated-doc>=0.0.2 in ./.venv313/lib/python3.13/site-packages (from typer>=0.12->agentic-project-kit==0.4.0) (0.0.4)
+Collecting more-itertools (from jaraco.classes->keyring>=21.2.0->twine)
+  Using cached more_itertools-11.1.0-py3-none-any.whl.metadata (41 kB)
+Using cached build-1.5.0-py3-none-any.whl (26 kB)
+Using cached twine-6.2.0-py3-none-any.whl (42 kB)
+Using cached keyring-25.7.0-py3-none-any.whl (39 kB)
+Using cached readme_renderer-44.0-py3-none-any.whl (13 kB)
+Using cached docutils-0.22.4-py3-none-any.whl (633 kB)
+Using cached nh3-0.3.5-cp38-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl (1.4 MB)
+Using cached requests-2.34.2-py3-none-any.whl (73 kB)
+Using cached charset_normalizer-3.4.7-cp313-cp313-macosx_10_13_universal2.whl (309 kB)
+Using cached idna-3.16-py3-none-any.whl (74 kB)
+Using cached urllib3-2.7.0-py3-none-any.whl (131 kB)
+Using cached certifi-2026.5.20-py3-none-any.whl (134 kB)
+Using cached requests_toolbelt-1.0.0-py2.py3-none-any.whl (54 kB)
+Using cached rfc3986-2.0.0-py2.py3-none-any.whl (31 kB)
+Using cached id-1.6.1-py3-none-any.whl (14 kB)
+Using cached jaraco.classes-3.4.0-py3-none-any.whl (6.8 kB)
+Using cached jaraco_context-6.1.2-py3-none-any.whl (7.9 kB)
+Using cached jaraco_functools-4.5.0-py3-none-any.whl (10 kB)
+Using cached more_itertools-11.1.0-py3-none-any.whl (72 kB)
+Using cached pyproject_hooks-1.2.0-py3-none-any.whl (10 kB)
+Building wheels for collected packages: agentic-project-kit
+  Building editable for agentic-project-kit (pyproject.toml): started
+  Building editable for agentic-project-kit (pyproject.toml): finished with status 'done'
+  Created wheel for agentic-project-kit: filename=agentic_project_kit-0.4.0-py3-none-any.whl size=11285 sha256=47b041903eea0b4837c72461aefa60010f877ca8f5519679ff42172f588afd55
+  Stored in directory: /private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pip-ephem-wheel-cache-ms2l4x6y/wheels/b5/8f/a3/2558d63d8dae58d78c2ae9b34588082684703aa20f52453070
+Successfully built agentic-project-kit
+Installing collected packages: urllib3, rfc3986, pyproject_hooks, nh3, more-itertools, jaraco.context, idna, docutils, charset_normalizer, certifi, requests, readme-renderer, jaraco.functools, jaraco.classes, id, build, requests-toolbelt, keyring, twine, agentic-project-kit
+  Attempting uninstall: agentic-project-kit
+    Found existing installation: agentic-project-kit 0.4.0
+    Uninstalling agentic-project-kit-0.4.0:
+      Successfully uninstalled agentic-project-kit-0.4.0
+
+Successfully installed agentic-project-kit-0.4.0 build-1.5.0 certifi-2026.5.20 charset_normalizer-3.4.7 docutils-0.22.4 id-1.6.1 idna-3.16 jaraco.classes-3.4.0 jaraco.context-6.1.2 jaraco.functools-4.5.0 keyring-25.7.0 more-itertools-11.1.0 nh3-0.3.5 pyproject_hooks-1.2.0 readme-renderer-44.0 requests-2.34.2 requests-toolbelt-1.0.0 rfc3986-2.0.0 twine-6.2.0 urllib3-2.7.0
+
+### RELEASE PREP HELP ###
+usage: ./ns release-prep <version>
+
+### RELEASE PREP 0.4.1 ###
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+NS RELEASE PREP CYCLE v0.4.1
+
+### SAFETY ###
+Safety: prepares a release branch only; no tag, release, merge, or publish action.
+
+### UPDATE MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### VERIFY MAIN BEFORE RELEASE BRANCH ###
+main
+........................................................................ [  8%]
+........................................................................ [ 16%]
+........................................................................ [ 24%]
+........................................................................ [ 32%]
+........................................................................ [ 40%]
+........................................................................ [ 48%]
+........................................................................ [ 56%]
+........................................................................ [ 64%]
+........................................................................ [ 73%]
+........................................................................ [ 81%]
+........................................................................ [ 89%]
+........................................................................ [ 97%]
+.......................                                                  [100%]
+887 passed in 5.72s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.0
+
+Overall: PASS
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=123
+ok=true
+
+Findings:
+- none
+main
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch cleanup.
+
+### BRANCH / STATUS ###
+
+### PYTEST ###
+
+### RUFF ###
+
+### CHECK DOCS ###
+
+### DOCTOR ###
+
+### PR HYGIENE ###
+
+### FINAL STATUS ###
+Local feature gate passed.
+PYTHONPATH=src /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/python -m agentic_project_kit.cli pr-hygiene
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=123
+ok=true
+
+Findings:
+- none
+
+### CREATE RELEASE PREP BRANCH ###
+Switched to a new branch 'release/prepare-v0.4.1'
+
+### PATCH RELEASE METADATA ###
+Prepared release metadata for v0.4.1
+
+### RELEASE CHECK AFTER METADATA PATCH ###
+PYTHONPATH=src /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/python -m agentic_project_kit.cli release-check --version 0.4.1
+Release state check for target v0.4.1
+
+[PASS] semantic version: 0.4.1 is valid
+[PASS] pyproject version: found text: version = "0.4.1"
+[PASS] package __version__: found text: __version__ = "0.4.1"
+[PASS] CHANGELOG version: found text: v0.4.1
+[PASS] README version: found text: Version `0.4.1`
+[PASS] CITATION version: found text: version: 0.4.1
+[PASS] STATUS version: found text: Current version: 0.4.1
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.4.1
+[PASS] local tag unused: tag is unused: v0.4.1
+[PASS] remote tag unused: remote tag is unused: v0.4.1
+[PASS] GitHub release unused: GitHub release is absent: v0.4.1
+
+Overall: PASS
+
+### CURRENT VERSION REFERENCES ###
+pyproject.toml:7:version = "0.4.1"
+src/agentic_project_kit/__init__.py:1:__version__ = "0.4.1"
+CITATION.cff:22:# Verified v0.3.2 version DOI: 10.5281/zenodo.20145114
+CITATION.cff:41:# Verified v0.3.17 version DOI: 10.5281/zenodo.20245113
+CITATION.cff:50:version: 0.4.1
+CHANGELOG.md:1:## v0.4.1
+CHANGELOG.md:3:- Prepare release metadata for v0.4.1.
+CHANGELOG.md:160:Zenodo v0.3.19 DOI: 10.5281/zenodo.20246121
+CHANGELOG.md:180:Zenodo v0.3.17 DOI: 10.5281/zenodo.20245113
+README.md:473:Archived GUI/cockpit release notes: v0.3.22 verified DOI `10.5281/zenodo.20256637`; v0.3.19 verified DOI `10.5281/zenodo.20246121`.
+README.md:502:- Verified v0.3.2 version DOI: `10.5281/zenodo.20145114`
+README.md:514:- Verified v0.3.17 version DOI: `10.5281/zenodo.20245113`
+README.md:515:- Verified v0.3.19 version DOI: `10.5281/zenodo.20246121`
+README.md:549:Version `0.4.1` is the current release line prepared by `./ns release-prep 0.4.1`.
+docs/STATUS.md:1:Current version: 0.4.1
+docs/handoff/CURRENT_HANDOFF.md:1:Current version: 0.4.1
+
+### FINAL STATE ###
+release/prepare-v0.4.1
+M CHANGELOG.md
+ M CITATION.cff
+ M README.md
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M pyproject.toml
+ M src/agentic_project_kit/__init__.py
+8cbed83 Require release before documentation governance rebuild (#684)
+cb99db6 Plan document and artifact governance OS (#683)
+a33c444 Refresh state after PR681 changelog guard (#682)
+a77dbb7 Add deterministic changelog quality guard (#681)
+1058501 Add headless GUI action execution tests (#680)
+4fe1fde Add live PR CI wait command (#679)
+07bd631 Repair PR CI readiness evidence log (#678)
+49ecc00 Add deterministic PR CI readiness classifier (#677)
+
+### RESULT: PASS ###
+
+### DIFF AFTER RELEASE PREP ###
+ CHANGELOG.md                        | 4 ++++
+ CITATION.cff                        | 2 +-
+ README.md                           | 1 +
+ docs/STATUS.md                      | 2 +-
+ docs/handoff/CURRENT_HANDOFF.md     | 2 +-
+ pyproject.toml                      | 2 +-
+ src/agentic_project_kit/__init__.py | 2 +-
+ 7 files changed, 10 insertions(+), 5 deletions(-)
+
+### STATE FRESHNESS ###
+PASS: no stale STATUS/HANDOFF current-state fragments found
+
+### HANDOFF CHECK ###
+Persistent handoff state check passed
+
+### GOVERNANCE CHECK ###
+Governance check passed
+
+### DOCS AUDIT ###
+Documentation system audit
+
+[FAIL] Aktualität
+- README.md: README DOI list missing or mismatching v0.4.0 -> 10.5281/zenodo.20348382
+
+[FAIL] Vollständigkeit
+- CHANGELOG.md: v0.4.1 missing release date in heading
+- CHANGELOG.md: v0.4.1 missing Zenodo DOI or pending verification marker
+
+[FAIL] Korrektheit
+- CHANGELOG.md: v0.4.1 missing release date in heading
+- CHANGELOG.md: v0.4.1 missing Zenodo DOI or pending verification marker
+- CHANGELOG.md: v0.4.1 has no substantive release bullet beyond generic metadata
+- CHANGELOG.md: v0.4.1 lacks enough release-quality categories (found: release-evidence)
+- doc-mesh:release-doi-list-mismatch:README.md: README DOI list missing or mismatching v0.4.0 -> 10.5281/zenodo.20348382
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[FAIL] Konsistenz
+- doc-mesh:release-doi-list-mismatch:README.md: README DOI list missing or mismatching v0.4.0 -> 10.5281/zenodo.20348382
+
+Overall: FAIL
+
+### RELEASE PLAN ###
+# Release preparation plan for target v0.4.1
+
+## Steps
+
+### 1. Confirm clean repository state
+
+Commands:
+
+```bash
+git status --short
+git log --oneline -8
+```
+
+Evidence: No unexpected local changes; recent commits match intended release scope.
+
+### 2. Run local quality gates
+
+Commands:
+
+```bash
+python -m pytest -q
+ruff check .
+agentic-kit check-docs
+```
+
+Evidence: Tests, linting, and state-gate checks pass.
+
+### 3. Validate package artifacts
+
+Commands:
+
+```bash
+python -m build
+twine check dist/*
+ls -lh dist/
+```
+
+Evidence: Wheel and sdist build successfully and pass twine validation.
+
+### 4. Check release notes and state files
+
+Commands:
+
+```bash
+grep -n 'version = "0.4.1"' pyproject.toml
+grep -n 'v0.4.1' CHANGELOG.md
+grep -n 'Version `0.4.1`' README.md
+grep -n 'version: 0.4.1' CITATION.cff
+grep -n 'Current version: 0.4.1' docs/STATUS.md
+grep -n 'Current version: 0.4.1' docs/handoff/CURRENT_HANDOFF.md
+```
+
+Evidence: pyproject, CHANGELOG, README, CITATION, STATUS, and CURRENT_HANDOFF mention the target release version.
+
+### 5. Verify target tag and release are unused
+
+Commands:
+
+```bash
+git fetch --tags
+git tag -l v0.4.1
+git ls-remote --tags origin v0.4.1
+gh release view v0.4.1
+```
+
+Evidence: Local tag, remote tag, and GitHub release lookups show no existing target release.
+
+### 6. Create and verify tag
+
+Commands:
+
+```bash
+git tag v0.4.1
+git push origin v0.4.1
+gh run list --workflow Release --limit 5
+gh release view v0.4.1
+```
+
+Evidence: Release workflow succeeds and the GitHub release exists.
+
+
+### RELEASE CHECK 0.4.1 ###
+Release state check for target v0.4.1
+
+[PASS] semantic version: 0.4.1 is valid
+[PASS] pyproject version: found text: version = "0.4.1"
+[PASS] package __version__: found text: __version__ = "0.4.1"
+[PASS] CHANGELOG version: found text: v0.4.1
+[PASS] README version: found text: Version `0.4.1`
+[PASS] CITATION version: found text: version: 0.4.1
+[PASS] STATUS version: found text: Current version: 0.4.1
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.4.1
+[PASS] local tag unused: tag is unused: v0.4.1
+[PASS] remote tag unused: remote tag is unused: v0.4.1
+[PASS] GitHub release unused: GitHub release is absent: v0.4.1
+
+Overall: PASS
+
+
+### RELEASE GATE 0.4.1 ###
+release/prepare-v0.4.1
+ M CHANGELOG.md
+ M CITATION.cff
+ M README.md
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M pyproject.toml
+ M src/agentic_project_kit/__init__.py
+release/prepare-v0.4.1
+ M CHANGELOG.md
+ M CITATION.cff
+ M README.md
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M pyproject.toml
+ M src/agentic_project_kit/__init__.py
+........................................................................ [  8%]
+........................................................................ [ 16%]
+........................................................................ [ 24%]
+........................................................................ [ 32%]
+........................................................................ [ 40%]
+........................................................................ [ 48%]
+........................................................................ [ 56%]
+........................................................................ [ 64%]
+........................................................................ [ 73%]
+........................................................................ [ 81%]
+........................................................................ [ 89%]
+..F..................................................................... [ 97%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+__________ test_check_docs_manual_gui_runner_executes_readonly_action __________
+
+    def test_check_docs_manual_gui_runner_executes_readonly_action():
+        from agentic_project_kit.gui_tkinter_shell import run_check_docs_for_manual_gui
+        output = run_check_docs_for_manual_gui()
+        assert "action=check-docs" in output
+        assert "safety_class=read-only" in output
+        assert "allowed=true" in output
+        assert "executed=true" in output
+>       assert "returncode=0" in output
+E       AssertionError: assert 'returncode=0' in 'GUI ACTION EXECUTION RESULT\naction=check-docs\nsafety_class=read-only\nallowed=true\nexecuted=true\nreturncode=1\nme...generic metadata\n- CHANGELOG.md: v0.4.1 lacks enough release-quality categories (found: release-evidence)\noutput_end'
+
+tests/test_v040_gui_tkinter_shell.py:291: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v040_gui_tkinter_shell.py::test_check_docs_manual_gui_runner_executes_readonly_action
+1 failed, 886 passed in 5.00s
+All checks passed!
+Agentic project check failed
+- CHANGELOG.md: v0.4.1 missing release date in heading
+- CHANGELOG.md: v0.4.1 missing Zenodo DOI or pending verification marker
+- CHANGELOG.md: v0.4.1 has no substantive release bullet beyond generic metadata
+- CHANGELOG.md: v0.4.1 lacks enough release-quality categories (found: release-evidence)
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[FAIL] documentation gates: CHANGELOG.md: v0.4.1 missing release date in heading; CHANGELOG.md: v0.4.1 missing Zenodo DOI or pending 
+verification marker; CHANGELOG.md: v0.4.1 has no substantive release bullet beyond generic metadata; CHANGELOG.md: v0.4.1 lacks 
+enough release-quality categories (found: release-evidence)
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.1
+
+Overall: FAIL
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=124
+ok=true
+
+Findings:
+- none
+release/prepare-v0.4.1
+ M CHANGELOG.md
+ M CITATION.cff
+ M README.md
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M pyproject.toml
+ M src/agentic_project_kit/__init__.py
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch cleanup.
+
+### BRANCH / STATUS ###
+
+### PYTEST ###
+
+### RUFF ###
+
+### CHECK DOCS ###
+
+### DOCTOR ###
+
+### PR HYGIENE ###
+
+### FINAL STATUS ###
+Local feature gate failed.
+NS RELEASE GATE CYCLE v0.4.1
+
+Safety: verifies release readiness only; no tag, release, merge, or publish action.
+
+### BRANCH ###
+
+### STATUS ###
+
+### LOCAL GATE ###
+FAILED_STEP=### LOCAL GATE ###
+### RESULT: FAIL ###
+
+### FULL DEV GATE ###
+release/prepare-v0.4.1
+ M CHANGELOG.md
+ M CITATION.cff
+ M README.md
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M pyproject.toml
+ M src/agentic_project_kit/__init__.py
+........................................................................ [  8%]
+........................................................................ [ 16%]
+........................................................................ [ 24%]
+........................................................................ [ 32%]
+........................................................................ [ 40%]
+........................................................................ [ 48%]
+........................................................................ [ 56%]
+........................................................................ [ 64%]
+........................................................................ [ 73%]
+........................................................................ [ 81%]
+........................................................................ [ 89%]
+..F..................................................................... [ 97%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+__________ test_check_docs_manual_gui_runner_executes_readonly_action __________
+
+    def test_check_docs_manual_gui_runner_executes_readonly_action():
+        from agentic_project_kit.gui_tkinter_shell import run_check_docs_for_manual_gui
+        output = run_check_docs_for_manual_gui()
+        assert "action=check-docs" in output
+        assert "safety_class=read-only" in output
+        assert "allowed=true" in output
+        assert "executed=true" in output
+>       assert "returncode=0" in output
+E       AssertionError: assert 'returncode=0' in 'GUI ACTION EXECUTION RESULT\naction=check-docs\nsafety_class=read-only\nallowed=true\nexecuted=true\nreturncode=1\nme...generic metadata\n- CHANGELOG.md: v0.4.1 lacks enough release-quality categories (found: release-evidence)\noutput_end'
+
+tests/test_v040_gui_tkinter_shell.py:291: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v040_gui_tkinter_shell.py::test_check_docs_manual_gui_runner_executes_readonly_action
+1 failed, 886 passed in 5.03s
+All checks passed!
+Agentic project check failed
+- CHANGELOG.md: v0.4.1 missing release date in heading
+- CHANGELOG.md: v0.4.1 missing Zenodo DOI or pending verification marker
+- CHANGELOG.md: v0.4.1 has no substantive release bullet beyond generic metadata
+- CHANGELOG.md: v0.4.1 lacks enough release-quality categories (found: release-evidence)
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[FAIL] documentation gates: CHANGELOG.md: v0.4.1 missing release date in heading; CHANGELOG.md: v0.4.1 missing Zenodo DOI or pending 
+verification marker; CHANGELOG.md: v0.4.1 has no substantive release bullet beyond generic metadata; CHANGELOG.md: v0.4.1 lacks 
+enough release-quality categories (found: release-evidence)
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.1
+
+Overall: FAIL
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=124
+ok=true
+
+Findings:
+- none
+release/prepare-v0.4.1
+ M CHANGELOG.md
+ M CITATION.cff
+ M README.md
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M pyproject.toml
+ M src/agentic_project_kit/__init__.py
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch cleanup.
+
+### BRANCH / STATUS ###
+
+### PYTEST ###
+
+### RUFF ###
+
+### CHECK DOCS ###
+
+### DOCTOR ###
+
+### PR HYGIENE ###
+
+### FINAL STATUS ###
+Local feature gate failed.
+
+================================================================
+SUMMARY
+WORK RESULT: FAIL
+EVIDENCE RESULT: CHAT_ONLY
+OVERALL RESULT: FAIL
+REMOTE_EVIDENCE: FAIL
+terminal_log=/tmp/agentic-project-kit-v041-release-metadata-prep.log
+command_report=NONE
+NEXT_CHAT_REPLY: f
+### RESULT: FAIL ###
+================================================================
