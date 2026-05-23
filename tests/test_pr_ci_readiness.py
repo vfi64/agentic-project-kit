@@ -164,5 +164,5 @@ def test_render_pr_readiness_includes_machine_readable_outcome():
 def test_pr_wait_ci_help_is_registered_without_running_gh():
     result = CliRunner().invoke(app, ["pr", "wait-ci", "--help"])
     assert result.exit_code == 0
-    assert "expected-head-sha" in result.output
     assert "Polling interval" in result.output
+    assert "Maximum wait time" in result.output
