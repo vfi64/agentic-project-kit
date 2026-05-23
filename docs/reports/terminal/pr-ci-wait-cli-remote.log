@@ -1,0 +1,17 @@
+PR CI WAIT CLI REMOTE EVIDENCE
+
+Scope:
+- Add live `agentic-kit pr wait-ci <number>` adapter around the deterministic PR readiness classifier.
+- Poll GitHub PR snapshots through `gh pr view --json state,headRefOid,mergeStateStatus,mergeable,statusCheckRollup`.
+- Require expected-head-SHA support for safe merge preparation.
+- Keep live adapter thin and testable through injected fake snapshot providers.
+- Add tests for wait retry, provider error, render output, and CLI help registration.
+- Update merge-readiness governance contract from future adapter to live adapter.
+
+Remote execution:
+- Branch: feature/pr-ci-wait-cli
+- Prepared through GitHub connector.
+- Local Python 3.13 gates were not available inside this chat environment.
+- GitHub Actions CI must be inspected before merge.
+
+No tag. No release. No GUI behavior change.

@@ -1,13 +1,17 @@
 from __future__ import annotations
 
+import json
+import subprocess
+import time
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Callable
 
 READY_TO_MERGE = "READY_TO_MERGE"
 ALREADY_MERGED = "ALREADY_MERGED"
 WAITING = "WAITING"
 BLOCKED = "BLOCKED"
 TIMEOUT = "TIMEOUT"
+GH_ERROR = "GH_ERROR"
 
 SUCCESS_OUTCOMES = {READY_TO_MERGE, ALREADY_MERGED}
 FAILED_CONCLUSIONS = {
@@ -30,6 +34,11 @@ class ReadinessDecision:
     @property
     def success(self) -> bool:
         return self.outcome in SUCCESS_OUTCOMES
+
+
+SnapshotProvider = Callable[[], dict[str, Any]]
+Clock = Callable[[], float]
+Sleeper = Callable[[float], None]
 
 
 def normalize_status_checks(snapshot: dict[str, Any]) -> list[dict[str, str]]:
@@ -135,3 +144,68 @@ def classify_pr_readiness(
         ("all required checks passed and merge state is clean",),
         True,
     )
+
+
+def wait_for_pr_readiness(
+    snapshot_provider: SnapshotProvider,
+    *,
+    expected_head_sha: str | None = None,
+    timeout_seconds: int = 2700,
+    interval_seconds: int = 20,
+    expected_checks: tuple[str, ...] = (),
+    clock: Clock = time.monotonic,
+    sleep: Sleeper = time.sleep,
+) -> ReadinessDecision:
+    start = clock()
+    while True:
+        elapsed = int(clock() - start)
+        try:
+            snapshot = snapshot_provider()
+        except Exception as exc:
+            return ReadinessDecision(GH_ERROR, (str(exc),), True)
+        decision = classify_pr_readiness(
+            snapshot,
+            expected_head_sha=expected_head_sha,
+            elapsed_seconds=elapsed,
+            timeout_seconds=timeout_seconds,
+            expected_checks=expected_checks,
+        )
+        if decision.terminal:
+            return decision
+        remaining = timeout_seconds - elapsed
+        if remaining <= 0:
+            return ReadinessDecision(TIMEOUT, ("timeout reached while waiting for CI",), True)
+        sleep(min(interval_seconds, remaining))
+
+
+def gh_pr_snapshot_provider(pr_number: int) -> SnapshotProvider:
+    def provider() -> dict[str, Any]:
+        completed = subprocess.run(
+            [
+                "gh",
+                "pr",
+                "view",
+                str(pr_number),
+                "--json",
+                "state,headRefOid,mergeStateStatus,mergeable,statusCheckRollup",
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if completed.returncode != 0:
+            details = completed.stderr.strip() or completed.stdout.strip() or "gh pr view failed"
+            raise RuntimeError(details)
+        return json.loads(completed.stdout)
+
+    return provider
+
+
+def render_pr_readiness(decision: ReadinessDecision) -> str:
+    lines = [
+        f"PR readiness outcome: {decision.outcome}",
+        f"terminal={str(decision.terminal).lower()}",
+        f"success={str(decision.success).lower()}",
+    ]
+    lines.extend(f"- {reason}" for reason in decision.reasons)
+    return "\n".join(lines)
