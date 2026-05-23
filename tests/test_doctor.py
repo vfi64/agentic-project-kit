@@ -37,6 +37,16 @@ def _write_state_docs(root: Path, version: str = "1.2.3") -> None:
     )
 
 
+def _valid_changelog(version: str) -> str:
+    return (
+        "# Changelog\n\n"
+        f"## v{version} - 2026-01-01\n\n"
+        f"Zenodo v{version} DOI: pending post-release verification.\n\n"
+        "- Added fixture release metadata with governance evidence for doctor tests.\n"
+        "- Guarded the release scope as documentation-only without tag or release publication.\n"
+    )
+
+
 def _write_project_contract(
     root: Path,
     *,
@@ -60,14 +70,14 @@ def _write_sentinel_and_todo(root: Path) -> None:
 
 
 def _write_release_docs(root: Path, version: str = "1.2.3") -> None:
-    (root / "CHANGELOG.md").write_text(f"# Changelog\n\n## v{version}\n", encoding="utf-8")
+    (root / "CHANGELOG.md").write_text(_valid_changelog(version), encoding="utf-8")
     (root / "CITATION.cff").write_text(f"cff-version: 1.2.0\nversion: {version}\n", encoding="utf-8")
     (root / ".zenodo.json").write_text("{}\n", encoding="utf-8")
 
 
 def _write_version_files(root: Path, version: str = "1.2.3", *, quoted_citation: bool = False) -> None:
     (root / "pyproject.toml").write_text(f"[project]\nversion = \"{version}\"\n", encoding="utf-8")
-    (root / "CHANGELOG.md").write_text(f"# Changelog\n\n## v{version}\n", encoding="utf-8")
+    (root / "CHANGELOG.md").write_text(_valid_changelog(version), encoding="utf-8")
     citation_version = f'"{version}"' if quoted_citation else version
     (root / "CITATION.cff").write_text(f"cff-version: 1.2.0\nversion: {citation_version}\n", encoding="utf-8")
 
