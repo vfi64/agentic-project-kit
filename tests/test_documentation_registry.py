@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import yaml
@@ -197,6 +198,20 @@ def test_docs_registry_cli_reports_summary() -> None:
     assert "Documentation registry summary" in result.output
     assert "operational/automation" in result.output
     assert "broad_migration_allowed: False" in result.output
+
+
+def test_docs_registry_cli_writes_json_report(tmp_path: Path) -> None:
+    report_path = tmp_path / "registry-summary.json"
+    runner = CliRunner()
+    result = runner.invoke(app, ["docs-registry", "--report", str(report_path)])
+
+    assert result.exit_code == 0
+    assert "Documentation registry summary" in result.output
+    payload = json.loads(report_path.read_text(encoding="utf-8"))
+    assert payload["registry_path"] == "docs/DOCUMENTATION_REGISTRY.yaml"
+    assert payload["broad_migration_allowed"] is False
+    assert payload["class_counts"]["operational/automation"] >= 4
+    assert payload["owner_counts"]["maintainers"] >= 1
 
 
 def test_docs_audit_cli_runs_with_documentation_registry() -> None:
