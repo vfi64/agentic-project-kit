@@ -1,3 +1,27 @@
-PR CI wait readiness remote slice started.
+PR CI WAIT READINESS REMOTE EVIDENCE
 
-The GitHub connector blocked direct creation of the Python implementation file in this chat session. No repository code has been changed yet.
+Scope:
+- Added deterministic PR CI readiness classifier.
+- Added regression tests for ready, waiting, timeout, failed checks, missing expected checks, moved heads, already-merged idempotency, unclean merge state, and non-mergeable PRs.
+- Added merge-readiness governance contract.
+
+Remote execution:
+- Branch: docs/pr-ci-wait-readiness
+- PR: #677
+- Head SHA before merge: d233f2277b6d9cf7e5f6d01abf0cb3014a35aa62
+- CI run: 26336347942
+- CI result: completed / success
+- Merge method: squash
+- Merge protection: expected head SHA was supplied
+- Merge commit: 49ecc00deb39f7a3e5379e39333700a6ca339959
+
+Known limitation:
+- The chat connector could not run local Python 3.13 gates.
+- GitHub Actions CI passed before merge.
+
+Result:
+WORK RESULT: PASS
+EVIDENCE RESULT: PASS
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PASS
+### RESULT: PASS ###
