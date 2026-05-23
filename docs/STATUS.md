@@ -31,6 +31,7 @@ Documentation registry baseline on `main`:
 - PR #692 wired the structural registry guard into `agentic-kit check-docs`, and therefore into `agentic-kit docs-audit`.
 - PR #692 added targeted registry tests and YAML governance parse coverage.
 - PR #694 refreshed `docs/STATUS.md` after the registry baseline while leaving the handoff file unchanged.
+- PR #695 classified a narrow operational/artifact set and added the read-only `agentic-kit docs-registry` summary command.
 - The registry guard is intentionally structural only. It checks schema, allowed classes, required rule fields, duplicate paths, and registered path existence. It does not prove semantic documentation quality and does not authorize broad migration.
 
 GUI MVP baseline on `main`:
@@ -51,6 +52,7 @@ Current GUI, release, documentation registry, and governance evidence:
 - `docs/reports/terminal/changelog-quality-guard-remote.log`
 - PR #692 CI evidence for Ruff, tests, and CLI smoke.
 - PR #694 CI evidence for Ruff, tests, and CLI smoke.
+- PR #695 CI evidence for Ruff, tests, and CLI smoke.
 
 Recent closeout anchors:
 - PR #656 closed out the GUI MVP three read-only actions.
@@ -64,6 +66,7 @@ Recent closeout anchors:
 - PR #691 refreshed handoff state and the successor handoff prompt after final v0.4.1 verification.
 - PR #692 introduced the first documentation registry schema and guard slice.
 - PR #694 refreshed the live status after the registry baseline.
+- PR #695 added the first read-only registry consumer and operational/artifact classifications.
 - v0.4.1 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20357657`.
 
 ## Active Workflow Rules
@@ -78,7 +81,7 @@ Recent closeout anchors:
 - Ruff must run only on Python sources or Python files; shell files use shell checks, not Ruff.
 - Generated terminal blocks must avoid heredocs, risky multiline `python -c` snippets, and quote-prone constructs.
 - Recent CHANGELOG release entries from v0.3.36 onward are guarded structurally; the guard must not be reduced to a naive bullet-count rule.
-- Documentation registry changes must remain additive, modular, reversible, and test-backed. The first registry guard is structural and must not be used as a broad migration trigger.
+- Documentation registry changes must remain additive, modular, reversible, and test-backed. The registry guard is structural and must not be used as a broad migration trigger.
 
 ## Documentation and Communication Contracts
 Mandatory successor-chat source order is defined by `.agentic/compiled_agent_context.yaml` and checked by `agentic-kit docs-audit`:
@@ -98,7 +101,7 @@ Final summary contract: relevant workflow blocks must end with the framed SUMMAR
 ## Live Status Commands
 Use project-local commands first: `./ns state`, `./ns check-docs`, `./ns doctor`, `./ns docs-audit`, `./ns handoff-check`, `./ns governance-check`, and `agentic-kit handoff prompt` when installed through the active project environment. Planning-state freshness, documentation coverage, policy-pack checks, Pattern Advisor, `patterns list`, `patterns show`, read-only catalog, advisory-only, post-release Zenodo, `docs/DOCUMENTATION_COVERAGE.yaml`, and `docs/DOCUMENTATION_REGISTRY.yaml` are compact live-state anchors here; detailed history belongs in `CHANGELOG.md`.
 
-The registry can be inspected through `agentic-kit docs-registry` once the second registry slice is merged.
+The registry can be inspected through `agentic-kit docs-registry`. The next slice adds `agentic-kit docs-registry --report` as a read-only JSON handoff for later GUI, doc-mesh, lifecycle, and artifact-GC consumers.
 
 ## Gate Status
 Required gate set for current-state or handoff changes:
@@ -137,7 +140,7 @@ These anchors are deliberately compact compatibility pointers. Long narrative hi
 - remote inspection evidence contract: failed or diagnostic logs must be uploaded and registered for later GC.
 
 ## Next Safe Step
-Merge the second documentation registry slice only after CI is green. Then continue with one additional small registry consumer, such as a JSON report option or a doc-mesh/lifecycle read-only integration. Do not start a broad migration.
+Merge the registry JSON report slice only after CI is green. Then continue with one additional small registry consumer, such as doc-mesh/lifecycle read-only integration or a narrow first migration batch. Do not start a broad migration.
 
 ## Compatibility Coverage Anchors
 These compact anchors are intentionally retained for deterministic coverage: documentation coverage, policy-pack checks, policy packs, Pattern Advisor, `patterns list`, `patterns show`, no-copy/evidence, Communication artifact GC hardening is now part of the pre-GUI baseline, long chat-generated shell or Python patch blocks, v0.3.31 is the current pre-GUI execution hardening line., Mandatory Final Summary Contract, policy-pack doctor checks, `agentic-kit post-release-check`, `.agentic/compiled_agent_context.yaml`, `CHAT_COMMUNICATION_CONTRACT.md`, `PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `FINAL_SUMMARY_CONTRACT.md`, `docs/TEST_GATES.md`.
