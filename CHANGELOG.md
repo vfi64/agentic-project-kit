@@ -1,17 +1,24 @@
-## v0.3.37
+## v0.4.0 - 2026-05-20
 
-## v0.4.0
+Zenodo v0.4.0 DOI: 10.5281/zenodo.20348382
+Zenodo Concept DOI: 10.5281/zenodo.20101359
 
-- Prepare release metadata for v0.4.0.
+- Released and post-release verified the first bounded GUI MVP line.
+- Closed the GUI MVP baseline with three bounded read-only actions visually verified on `main`: `cockpit-readiness`, `doctor`, and `check-docs`.
+- Kept `agent-run`, remote mutation, destructive actions, tag creation, release publication, and cleanup actions disabled in the GUI MVP.
+- Added and hardened communication, portable execution, bootstrap/drift, terminal safety, and final-summary governance contracts so successor chats must read canonical repo sources before mutation.
+- Hardened terminal safety after recurring workflow errors: Ruff is scoped to Python sources, shell files use shell checks, heredocs and risky multiline `python -c` snippets are forbidden in generated terminal blocks, and quote-safety is covered by tests.
+- Preserved v0.4.0 release and DOI evidence through `agentic-kit post-release-check --version 0.4.0`, the verified Zenodo version DOI, and committed release metadata.
 
-### Documentation-order and status-boundary hardening
-- Treat `CHANGELOG.md` as the long-term project protocol and historical narrative.
-- Treat `docs/STATUS.md` as a concise live dashboard with compact regression anchors only.
-- Preserve the v0.3.30 to v0.3.37 execution-history anchors here instead of expanding `docs/STATUS.md`.
-- Preserve release, GUI, no-copy, remote evidence, evidence guard, typed work order, Zenodo, and handoff-prompt history here as the durable long-term log.
-- v0.3.36 current-state cleanup remains historically relevant because it exposed the status-boundary failure mode.
+## v0.3.37 - 2026-05-20
 
-- Prepare release metadata for v0.3.37.
+Zenodo v0.3.37 DOI: 10.5281/zenodo.20329450
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
+- Prepared the final GUI-preparation closeout line before the v0.4.0 bounded GUI MVP.
+- Preserved documentation-order and status-boundary hardening by keeping `CHANGELOG.md` as the long-term project protocol and `docs/STATUS.md` as the concise live dashboard.
+- Preserved release, GUI, no-copy, remote evidence, evidence guard, typed work order, Zenodo, and handoff-prompt history in long-term release/history files instead of expanding current-state docs.
+- Kept v0.3.36 current-state cleanup historically visible because it exposed the status-boundary failure mode.
 
 ## v0.3.36 - 2026-05-21
 
