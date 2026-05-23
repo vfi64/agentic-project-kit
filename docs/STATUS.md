@@ -3,7 +3,7 @@ Current version: 0.4.1
 Status-date: 2026-05-23
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/refresh-state-after-pr681
+Current work branch: docs/v041-doi-metadata-closeout
 
 ## Purpose
 agentic-project-kit is a repository-backed governance and workflow kit for long-running AI-assisted software projects. Durable project memory belongs in versioned repository files, deterministic gates, evidence logs, and explicit handoff state rather than chat transcripts.
@@ -16,14 +16,14 @@ The repository is the source of truth; chat memory is not a source of truth. Cha
 Machine guard: `agentic-kit docs-audit` enforces the current-state headroom boundary and fails if `docs/STATUS.md` exceeds the configured word limit. This is a hard drift signal, not a stylistic preference.
 
 ## Current Goal
-Refresh live state after PR #680 and PR #681. PR #680 added headless tests for bounded read-only GUI action execution. PR #681 added a deterministic CHANGELOG quality guard for recent releases. This is an administrative documentation-state refresh only; it must not create a tag, publish a release, or change GUI behavior.
+Close out v0.4.1 DOI metadata after publishing the stable pre-rebuild documentation-governance baseline. This is an administrative release-metadata closeout only; it must not create a tag, publish another release, or start the documentation registry implementation.
 
 ## Current State
-Current released version: 0.4.0.
-Current release tag: v0.4.0.
+Current released version: 0.4.1.
+Current release tag: v0.4.1.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.20348382`.
-Post-release Zenodo verification remains covered by `agentic-kit post-release-check --version 0.4.0`.
+Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
+Post-release Zenodo verification is covered by `agentic-kit post-release-check --version 0.4.1`.
 
 GUI MVP baseline on `main`:
 - `cockpit-readiness` visually passes as a bounded read-only GUI action.
@@ -49,7 +49,7 @@ Recent closeout anchors:
 - PR #671 closed v0.4.0 DOI metadata on main.
 - PR #680 added headless GUI action execution tests.
 - PR #681 added deterministic recent-release CHANGELOG quality checks to `check-docs`.
-- v0.4.0 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20348382`.
+- v0.4.1 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20357657`.
 
 ## Active Workflow Rules
 - Read mandatory successor-chat sources before mutation.

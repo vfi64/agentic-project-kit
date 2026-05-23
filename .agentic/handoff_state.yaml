@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-23'
-  reason: Refresh handoff state after PR680 headless GUI tests and PR681 CHANGELOG quality guard
-  source: main HEAD after PR681
+  reason: Refresh handoff state after v0.4.1 DOI metadata closeout
+  source: main HEAD after PR688 plus DOI closeout branch
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: a77dbb7
-  commit_subject: Add deterministic changelog quality guard (#681)
+  commit: ec0333f
+  commit_subject: Record v0.4.1 DOI wait check log (#688)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -27,22 +27,23 @@ safe_state:
   - 672
   - 680
   - 681
+  - 688
 release:
-  current_version: 0.4.0
-  previous_version: 0.3.37
-  tag: v0.4.0
+  current_version: 0.4.1
+  previous_version: 0.4.0
+  tag: v0.4.1
   github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
-  zenodo_version_doi: 10.5281/zenodo.20348382
+  zenodo_version_doi: 10.5281/zenodo.20357657
   post_release_check: PASS
-  post_release_evidence: docs/reports/terminal/v040-doi-state-closeout-local-gates.log
+  post_release_evidence: docs/reports/terminal/v041-doi-wait-check.log
 open_items:
   prs: []
   historical_prs_closed:
   - 562
   - 564
   - 568
-  next_expected_chat_action: Verify main after this state refresh, regenerate the canonical handoff prompt if needed, then continue bounded GUI work from the tested headless action-execution baseline.
+  next_expected_chat_action: Verify main after v0.4.1 DOI metadata closeout, regenerate the canonical handoff prompt if needed, then start the additive documentation-governance registry implementation.
 completed_since_previous_handoff:
 - 'PR #647 enabled the Doctor button through the bounded read-only GUI contract.'
 - 'PR #649 added LLM communication and portable execution contracts.'
@@ -67,6 +68,7 @@ completed_since_previous_handoff:
 - 'PR #679 added the live pr wait-ci adapter around deterministic merge readiness classification.'
 - 'PR #680 added headless tests for bounded read-only GUI action execution without opening a Tkinter window.'
 - 'PR #681 added deterministic recent-release CHANGELOG quality checks to check-docs and repaired doctor fixtures to satisfy the guard.'
+- 'PR #688 recorded the v0.4.1 DOI verification evidence with Zenodo version DOI 10.5281/zenodo.20357657.'
 current_capabilities:
   ns_actions:
   - agent-next

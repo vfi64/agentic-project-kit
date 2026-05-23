@@ -3,9 +3,10 @@
 - Release: freeze the current functioning documentation-governance baseline before the Document and Artifact Governance OS rebuild.
 - Governance: carry forward the release-before-rebuild rule, additive migration strategy, guard-preservation requirement, and parity-proof policy for future registry work.
 - Documentation: preserve the hardened CHANGELOG quality guard, active-document language cleanup, local-path protection, terminal-safety rules, and PR CI readiness checks as the stable pre-rebuild baseline.
-- Evidence: release metadata is prepared for v0.4.1; Zenodo version DOI verification is pending until the release is published and post-release checks complete.
+- Evidence: release metadata, GitHub Release publication, and post-release Zenodo verification are complete for v0.4.1 with version DOI `10.5281/zenodo.20357657`.
 
-Zenodo DOI: pending post-release verification.
+Zenodo v0.4.1 DOI: 10.5281/zenodo.20357657
+Zenodo Concept DOI: 10.5281/zenodo.20101359
 
 ## v0.4.0 - 2026-05-20
 
