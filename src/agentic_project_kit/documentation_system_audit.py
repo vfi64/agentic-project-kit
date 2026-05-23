@@ -11,6 +11,7 @@ import yaml
 from agentic_project_kit.checks import check_docs
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_report
 from agentic_project_kit.doc_mesh import build_doc_mesh_report
+from agentic_project_kit.documentation_registry import build_documentation_registry_summary
 
 
 MANDATORY_ORDER = (
@@ -88,6 +89,7 @@ def build_documentation_system_audit(project_root: Path) -> DocumentationSystemA
         _correctness_dimension(check_doc_errors, mesh_report, lifecycle_report),
         _redundancy_dimension(project_root),
         _document_order_dimension(project_root),
+        _registry_dimension(project_root),
         _consistency_dimension(mesh_report, lifecycle_report),
     )
     return DocumentationSystemAuditReport(dimensions=dimensions)
@@ -217,6 +219,33 @@ def _document_order_dimension(project_root: Path) -> DocumentationAuditDimension
         if not (project_root / source).exists():
             findings.append(f"mandatory successor-chat source file missing: {source}")
     return DocumentationAuditDimension("Stringenz der Dokumentenordnung", ok=not findings, findings=tuple(findings))
+
+
+def _registry_dimension(project_root: Path) -> DocumentationAuditDimension:
+    try:
+        summary = build_documentation_registry_summary(project_root)
+    except (OSError, ValueError, yaml.YAMLError) as exc:
+        return DocumentationAuditDimension(
+            "Dokumentationsregistry",
+            ok=False,
+            findings=(f"registry summary unavailable: {exc}",),
+        )
+
+    findings = [
+        f"registry={summary['registry_path']}",
+        f"version={summary['version']}",
+        f"documents={summary['document_count']}",
+        f"broad_migration_allowed={summary['broad_migration_allowed']}",
+    ]
+    class_counts = summary.get("class_counts", {})
+    if isinstance(class_counts, dict):
+        for class_name, count in class_counts.items():
+            findings.append(f"class:{class_name}={count}")
+    return DocumentationAuditDimension(
+        "Dokumentationsregistry",
+        ok=summary.get("version") == 1 and bool(summary.get("document_count")),
+        findings=tuple(findings),
+    )
 
 
 def _consistency_dimension(mesh_report: Any, lifecycle_report: Any) -> DocumentationAuditDimension:
