@@ -2,9 +2,9 @@ Current version: 0.4.1
 
 # Current Handoff
 
-<!-- CURRENT_HANDOFF_OVERLAY_AFTER_PR681 -->
+<!-- CURRENT_HANDOFF_OVERLAY_AFTER_PR701 -->
 
-# Current Handoff Overlay After PR688
+# Current Handoff Overlay After PR701
 
 Status-date: 2026-05-23
 Project: agentic-project-kit
@@ -13,7 +13,7 @@ Base branch: main
 
 ## Purpose
 
-This overlay records the current state after PR #688 and the v0.4.1 DOI verification without shortening the preserved historical anchors below. `CURRENT_HANDOFF.md` still contains old compatibility and historical anchors that must not be removed by a broad rewrite.
+This overlay records the current state after PR #701 without rewriting the preserved compatibility anchors below. `CURRENT_HANDOFF.md` still contains old compatibility and historical anchors that must not be treated as the current source-of-truth narrative.
 
 ## Current State
 
@@ -21,13 +21,27 @@ This overlay records the current state after PR #688 and the v0.4.1 DOI verifica
 - Current release tag: v0.4.1.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
-- PR #656 closed out the GUI MVP three read-only actions: `cockpit-readiness`, `doctor`, and `check-docs`.
-- PR #670 guarded Ruff scope and terminal quote safety after v0.4.0 release publication.
-- PR #671 closed v0.4.0 DOI metadata on main.
-- PR #679 added the live `pr wait-ci` adapter around deterministic merge-readiness classification.
-- PR #680 added headless tests for bounded read-only GUI action execution without opening a Tkinter window.
-- PR #681 added deterministic recent-release CHANGELOG quality checks to `check-docs` without reducing quality to a naive bullet-count rule.
-- v0.4.1 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20357657`.
+- PR #689 closed the v0.4.1 DOI metadata state on main.
+- PR #690 recorded final main verification after the v0.4.1 DOI metadata closeout.
+- PR #691 refreshed handoff state and the successor handoff prompt after final v0.4.1 verification.
+- PR #692 introduced the first documentation registry schema and guard slice.
+- PR #694 refreshed the live status after the registry baseline.
+- PR #695 added the first read-only registry consumer and operational/artifact classifications.
+- PR #696 added the read-only registry JSON report path.
+- PR #697 added docs-audit registry visibility.
+- PR #698 added doc-mesh registry visibility.
+- PR #699 added doc-lifecycle registry visibility.
+- PR #700 added handoff check/show registry visibility.
+- PR #701 added release-check and post-release-check registry visibility.
+
+## Documentation Registry Baseline
+
+- Machine-readable registry: `docs/DOCUMENTATION_REGISTRY.yaml`.
+- Registry contract: `docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md`.
+- Read-only summary command: `agentic-kit docs-registry`.
+- Read-only JSON report: `agentic-kit docs-registry --report PATH`.
+- The registry is visible in `check-docs`, `docs-audit`, `doc-mesh-audit`, `doc-lifecycle-audit`, `handoff check`, `handoff show`, `release-check`, and `post-release-check`.
+- Broad migration is still forbidden. The current registry guard is structural only and does not prove semantic documentation quality.
 
 ## Current GUI Baseline
 
@@ -39,15 +53,15 @@ This overlay records the current state after PR #688 and the v0.4.1 DOI verifica
 
 ## Remaining Drift
 
-- `docs/handoff/CURRENT_HANDOFF.md` still preserves old v0.3.30/v0.3.34 planning and compatibility anchors below this overlay.
-- Historical PRs #562, #564, and #568 are closed without merge as superseded evidence branches.
 - The preserved sections below are compatibility anchors, not the current source-of-truth narrative.
+- Historical PRs #562, #564, and #568 are closed without merge as superseded evidence branches.
+- `docs/STATUS.md` is the live dashboard; `CHANGELOG.md` is the long-term project history.
 
 ## Next Safe Step
 
-Merge this v0.4.1 DOI metadata closeout only after CI is green. Then refresh handoff state, regenerate the canonical handoff prompt if a chat switch is needed, and begin the documentation registry implementation from the released pre-rebuild baseline.
+Use `docs/reports/terminal/v041-successor-chat-handoff-after-pr701.md` for a chat switch. Then continue the documentation-management rebuild with one small, additive, reversible, test-backed registry consumer such as artifact-GC planning.
 
-Do not start remote/destructive GUI actions or broad GUI architecture expansion in the next slice; the next implementation focus is the additive documentation-governance registry.
+Do not start a broad documentation migration, create a tag, publish a release, or perform remote/destructive GUI actions in the next slice.
 
 ## Preserved Historical And Compatibility Anchors
 
