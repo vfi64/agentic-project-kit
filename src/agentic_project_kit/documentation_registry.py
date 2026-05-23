@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -47,6 +48,67 @@ def load_documentation_registry(project_root: Path) -> dict[str, Any]:
     if not isinstance(data, dict):
         raise ValueError(f"{REGISTRY_PATH}: root must be a mapping")
     return data
+
+
+def build_documentation_registry_summary(project_root: Path) -> dict[str, Any]:
+    """Build a read-only summary for the documentation registry.
+
+    This summary is intentionally non-mutating. It is a narrow second-slice
+    consumer that makes the registry inspectable without starting a broad
+    migration or changing any document lifecycle policy.
+    """
+    registry = load_documentation_registry(project_root)
+    documents = registry.get("documents", [])
+    if not isinstance(documents, list):
+        documents = []
+
+    class_counts: Counter[str] = Counter()
+    owner_counts: Counter[str] = Counter()
+    for entry in documents:
+        if not isinstance(entry, dict):
+            continue
+        document_class = str(entry.get("class", "")).strip() or "<missing>"
+        owner = str(entry.get("owner", "")).strip() or "<missing>"
+        class_counts[document_class] += 1
+        owner_counts[owner] += 1
+
+    return {
+        "registry_path": str(REGISTRY_PATH),
+        "version": registry.get("version"),
+        "lifecycle": (registry.get("status") or {}).get("lifecycle")
+        if isinstance(registry.get("status"), dict)
+        else None,
+        "broad_migration_allowed": (registry.get("status") or {}).get(
+            "broad_migration_allowed"
+        )
+        if isinstance(registry.get("status"), dict)
+        else None,
+        "document_count": len(documents),
+        "class_counts": dict(sorted(class_counts.items())),
+        "owner_counts": dict(sorted(owner_counts.items())),
+    }
+
+
+def render_documentation_registry_summary(summary: dict[str, Any]) -> str:
+    lines = [
+        "Documentation registry summary",
+        f"registry: {summary['registry_path']}",
+        f"version: {summary['version']}",
+        f"lifecycle: {summary['lifecycle']}",
+        f"broad_migration_allowed: {summary['broad_migration_allowed']}",
+        f"documents: {summary['document_count']}",
+        "classes:",
+    ]
+    class_counts = summary.get("class_counts", {})
+    if isinstance(class_counts, dict):
+        for class_name, count in class_counts.items():
+            lines.append(f"- {class_name}: {count}")
+    lines.append("owners:")
+    owner_counts = summary.get("owner_counts", {})
+    if isinstance(owner_counts, dict):
+        for owner, count in owner_counts.items():
+            lines.append(f"- {owner}: {count}")
+    return "\n".join(lines)
 
 
 def check_documentation_registry(project_root: Path) -> list[str]:

@@ -16,7 +16,7 @@ The repository is the source of truth; chat memory is not a source of truth. Cha
 Machine guard: `agentic-kit docs-audit` enforces the current-state headroom boundary and fails if `docs/STATUS.md` exceeds the configured word limit. This is a hard drift signal, not a stylistic preference.
 
 ## Current Goal
-Continue the documentation-management rebuild after the first additive registry slice. The registry baseline now exists; the next work must remain small, reversible, and test-backed. Do not start a broad documentation migration, create a release tag, publish a release, or perform destructive GUI/remote actions in the next slice.
+Continue the documentation-management rebuild through small, reversible, test-backed registry slices. The registry baseline exists and now has a narrow read-only reporting path plus initial operational/artifact classification. Do not start a broad documentation migration, create a release tag, publish a release, or perform destructive GUI/remote actions in the next slice.
 
 ## Current State
 Current released version: 0.4.1.
@@ -30,6 +30,7 @@ Documentation registry baseline on `main`:
 - PR #692 documented the registry contract in `docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md`.
 - PR #692 wired the structural registry guard into `agentic-kit check-docs`, and therefore into `agentic-kit docs-audit`.
 - PR #692 added targeted registry tests and YAML governance parse coverage.
+- PR #694 refreshed `docs/STATUS.md` after the registry baseline while leaving the handoff file unchanged.
 - The registry guard is intentionally structural only. It checks schema, allowed classes, required rule fields, duplicate paths, and registered path existence. It does not prove semantic documentation quality and does not authorize broad migration.
 
 GUI MVP baseline on `main`:
@@ -49,6 +50,7 @@ Current GUI, release, documentation registry, and governance evidence:
 - `docs/reports/terminal/gui-action-execution-headless-remote.log`
 - `docs/reports/terminal/changelog-quality-guard-remote.log`
 - PR #692 CI evidence for Ruff, tests, and CLI smoke.
+- PR #694 CI evidence for Ruff, tests, and CLI smoke.
 
 Recent closeout anchors:
 - PR #656 closed out the GUI MVP three read-only actions.
@@ -61,6 +63,7 @@ Recent closeout anchors:
 - PR #690 recorded final main verification after the v0.4.1 DOI metadata closeout.
 - PR #691 refreshed handoff state and the successor handoff prompt after final v0.4.1 verification.
 - PR #692 introduced the first documentation registry schema and guard slice.
+- PR #694 refreshed the live status after the registry baseline.
 - v0.4.1 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20357657`.
 
 ## Active Workflow Rules
@@ -88,12 +91,14 @@ Mandatory successor-chat source order is defined by `.agentic/compiled_agent_con
 7. `docs/STATUS.md`
 8. `docs/handoff/CURRENT_HANDOFF.md`
 
-Documentation registry contract: `docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md` governs the first additive registry slice. The machine-readable source is `docs/DOCUMENTATION_REGISTRY.yaml`.
+Documentation registry contract: `docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md` governs the additive registry slices. The machine-readable source is `docs/DOCUMENTATION_REGISTRY.yaml`.
 
 Final summary contract: relevant workflow blocks must end with the framed SUMMARY contract containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, and the final result marker.
 
 ## Live Status Commands
 Use project-local commands first: `./ns state`, `./ns check-docs`, `./ns doctor`, `./ns docs-audit`, `./ns handoff-check`, `./ns governance-check`, and `agentic-kit handoff prompt` when installed through the active project environment. Planning-state freshness, documentation coverage, policy-pack checks, Pattern Advisor, `patterns list`, `patterns show`, read-only catalog, advisory-only, post-release Zenodo, `docs/DOCUMENTATION_COVERAGE.yaml`, and `docs/DOCUMENTATION_REGISTRY.yaml` are compact live-state anchors here; detailed history belongs in `CHANGELOG.md`.
+
+The registry can be inspected through `agentic-kit docs-registry` once the second registry slice is merged.
 
 ## Gate Status
 Required gate set for current-state or handoff changes:
@@ -132,7 +137,7 @@ These anchors are deliberately compact compatibility pointers. Long narrative hi
 - remote inspection evidence contract: failed or diagnostic logs must be uploaded and registered for later GC.
 
 ## Next Safe Step
-Merge this administrative status refresh only after CI is green. Then continue with the next small documentation registry slice. The next substantive slice should classify a narrow set of operational/automation and artifact-GC documents or wire one additional read-only registry consumer. Do not start a broad migration.
+Merge the second documentation registry slice only after CI is green. Then continue with one additional small registry consumer, such as a JSON report option or a doc-mesh/lifecycle read-only integration. Do not start a broad migration.
 
 ## Compatibility Coverage Anchors
 These compact anchors are intentionally retained for deterministic coverage: documentation coverage, policy-pack checks, policy packs, Pattern Advisor, `patterns list`, `patterns show`, no-copy/evidence, Communication artifact GC hardening is now part of the pre-GUI baseline, long chat-generated shell or Python patch blocks, v0.3.31 is the current pre-GUI execution hardening line., Mandatory Final Summary Contract, policy-pack doctor checks, `agentic-kit post-release-check`, `.agentic/compiled_agent_context.yaml`, `CHAT_COMMUNICATION_CONTRACT.md`, `PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `FINAL_SUMMARY_CONTRACT.md`, `docs/TEST_GATES.md`.
