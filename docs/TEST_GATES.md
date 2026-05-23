@@ -1,6 +1,6 @@
 # Test Gates
 
-Status-date: 2026-05-10
+Status-date: 2026-05-23
 Project: agentic-project-kit
 
 ## Purpose
@@ -16,6 +16,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Documentation only | git diff, content review, and agentic-kit check-docs |
 | Architecture-relevant change | Read docs/architecture/ARCHITECTURE_CONTRACT.md; state whether the contract remains valid or is updated; run the standard local gate |
 | Documentation coverage change | Update docs/DOCUMENTATION_COVERAGE.yaml and run agentic-kit check-docs |
+| Documentation registry/schema change | Update docs/DOCUMENTATION_REGISTRY.yaml and docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md; run registry unit tests plus agentic-kit check-docs/docs-audit |
 | Documentation mesh / cross-document drift change | Unit tests plus agentic-kit doc-mesh-audit CLI smoke command; keep current-state, governance, architecture, and historical-plan document classes explicit |
 | Governance rule change | Rule Hardening Gate: add or update a deterministic test, coverage check, doctor check, release check, or documented review-only exception |
 | LLM communication or bootstrap rule change | Update the communication/bootstrap governance contracts, compiled agent context, coverage anchors, and `tests/test_llm_communication_contracts.py`; run agentic-kit check-docs |
@@ -75,6 +76,28 @@ Update it when adding or changing:
 - architecture concepts, profiles, or policy packs.
 
 `agentic-kit check-docs` must fail if a required term from the coverage matrix is missing from its target document.
+
+## Documentation Registry Gate
+
+`docs/DOCUMENTATION_REGISTRY.yaml` is the additive documentation-governance registry for classifying documents and artifacts before broad migration.
+
+The first slice validates only structural, machine-checkable registry rules: registry version, allowed classes, required class-rule fields, registered document fields, duplicate paths, and existence of registered files. It does not prove semantic documentation quality and must not trigger broad document migration by itself.
+
+Required class-level rule fields are ownership, freshness, language policy, redundancy boundary, machine readability, retention / GC behavior, update triggers, portability/local-path scanning, and gate coverage.
+
+Registry/schema changes must preserve these boundaries:
+
+- add classifications incrementally in small reversible slices;
+- do not delete, move, or rewrite documents merely to satisfy a taxonomy;
+- keep evidence/log and temporary artifact behavior separate;
+- keep artifact GC integration explicit and protected;
+- update tests when allowed classes, required fields, or guard semantics change.
+
+Required evidence for this first gate:
+
+    python -m pytest -q tests/test_documentation_registry.py
+    agentic-kit check-docs
+    agentic-kit docs-audit
 
 ## LLM Communication and Bootstrap Gate
 
@@ -341,7 +364,7 @@ Known forbidden shortcut patterns include nested triple-quote Python generators,
 
 ## YAML Governance Integrity Gate
 
-Any patch touching governance YAML must parse the file before and after mutation. Complex YAML changes should use parse-modify-dump instead of raw text injection. Required files include `.agentic/handoff_state.yaml`, `.agentic/no_copy_terminal_policy.yaml`, and `docs/DOCUMENTATION_COVERAGE.yaml`.
+Any patch touching governance YAML must parse the file before and after mutation. Complex YAML changes should use parse-modify-dump instead of raw text injection. Required files include `.agentic/handoff_state.yaml`, `.agentic/no_copy_terminal_policy.yaml`, `docs/DOCUMENTATION_COVERAGE.yaml`, and `docs/DOCUMENTATION_REGISTRY.yaml`.
 
 The regression test `tests/test_yaml_governance_integrity.py` records the rule and verifies that core YAML governance files remain parseable.
 
