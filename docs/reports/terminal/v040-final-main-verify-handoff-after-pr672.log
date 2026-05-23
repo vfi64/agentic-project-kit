@@ -1,0 +1,13 @@
+V0.4.0 FINAL MAIN VERIFY AND CANONICAL HANDOFF AFTER PR672
+
+HEAD: 6e4a231 Refresh handoff state after v0.4.0 DOI closeout (#672)
+Previous local gates: PASS
+Previous pytest: 852 passed
+Previous Ruff scope: src tests only
+Previous check-docs: PASS
+Previous doctor: PASS
+Previous post-release check: Overall PASS for v0.4.0
+Previous handoff check: PASS
+Canonical handoff prompt: docs/reports/terminal/v040-successor-chat-handoff-after-pr672.md
+Repair reason: previous block failed only because it required literal PR #672 inside the generated handoff prompt.
+No tag, no release publication, no merge performed in this block.
