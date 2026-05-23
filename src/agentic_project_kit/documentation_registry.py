@@ -92,7 +92,10 @@ def _check_class_rules(registry: dict[str, Any]) -> list[str]:
         for field in REQUIRED_CLASS_RULE_FIELDS:
             value = rules.get(field)
             if value in (None, "", []):
-                errors.append(f"{REGISTRY_PATH}: {class_name!r} missing class rule field {field!r}")
+                errors.append(
+                    f"{REGISTRY_PATH}: {class_name!r} "
+                    f"missing class rule field {field!r}"
+                )
 
     return errors
 
@@ -118,13 +121,18 @@ def _check_document_entries(project_root: Path, registry: dict[str, Any]) -> lis
         relative_path = str(entry.get("path", "")).strip()
         document_class = str(entry.get("class", "")).strip()
         if document_class and document_class not in allowed:
-            errors.append(f"{REGISTRY_PATH}: {relative_path or index} has unknown class {document_class!r}")
+            errors.append(
+                f"{REGISTRY_PATH}: {relative_path or index} "
+                f"has unknown class {document_class!r}"
+            )
 
         if relative_path:
             if relative_path in seen_paths:
                 errors.append(f"{REGISTRY_PATH}: duplicate document path {relative_path!r}")
             seen_paths.add(relative_path)
             if not (project_root / relative_path).exists():
-                errors.append(f"{REGISTRY_PATH}: registered document does not exist: {relative_path}")
+                errors.append(
+                    f"{REGISTRY_PATH}: registered document does not exist: {relative_path}"
+                )
 
     return errors
