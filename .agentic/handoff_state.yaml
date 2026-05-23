@@ -72,9 +72,11 @@ completed_since_previous_handoff:
   historical version anchors.'
 - 'PR #665 merged the PR661 overlay into CURRENT_HANDOFF.md non-destructively, preserving
   existing compatibility anchors.'
-- Historical PRs #562, #564, and #568 were closed without merge as superseded evidence
+- >-
+  Historical PRs #562, #564, and #568 were closed without merge as superseded evidence
   branches.
-- STATUS.md remains the compact live dashboard while CHANGELOG.md remains the long-term
+- >-
+  STATUS.md remains the compact live dashboard while CHANGELOG.md remains the long-term
   project history.
 - 'PR #666 refreshed handoff_state.yaml after PR665 and set final verification plus
   canonical handoff prompt regeneration as the next allowed tasks.'
