@@ -3,7 +3,7 @@ Current version: 0.4.1
 Status-date: 2026-05-23
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/release-registry-summary-slice
+Current work branch: main
 
 ## Purpose
 agentic-project-kit is a repository-backed governance and workflow kit for long-running AI-assisted software projects. Durable project memory belongs in versioned repository files, deterministic gates, evidence logs, and explicit handoff state rather than chat transcripts.
@@ -16,7 +16,7 @@ The repository is the source of truth; chat memory is not a source of truth. Cha
 Machine guard: `agentic-kit docs-audit` enforces the current-state headroom boundary and fails if `docs/STATUS.md` exceeds the configured word limit. This is a hard drift signal, not a stylistic preference.
 
 ## Current Goal
-Continue the documentation-management rebuild through small, reversible, test-backed registry slices. The registry baseline exists, has a read-only CLI summary, has a JSON report path, and is being connected to existing read-only audit and release-check surfaces. Do not start a broad documentation migration, create a release tag, publish a release, or perform destructive GUI/remote actions in the next slice.
+Continue the documentation-management rebuild through small, reversible, test-backed registry slices. The registry baseline exists, has a read-only CLI summary, has a JSON report path, and is connected to the current read-only audit, handoff, release-check, and post-release-check surfaces. Do not start a broad documentation migration, create a release tag, publish a release, or perform destructive GUI/remote actions in the next slice.
 
 ## Current State
 Current released version: 0.4.1.
@@ -37,7 +37,7 @@ Documentation registry baseline on `main`:
 - PR #698 surfaced registry summary data in `agentic-kit doc-mesh-audit` as read-only mesh context.
 - PR #699 surfaced registry summary data in `agentic-kit doc-lifecycle-audit` as read-only lifecycle context.
 - PR #700 surfaced registry summary data in `agentic-kit handoff check` and `agentic-kit handoff show` without changing generated handoff prompts.
-- The active slice surfaces the same read-only registry context in `agentic-kit release-check` and `agentic-kit post-release-check`.
+- PR #701 surfaced registry summary data in `agentic-kit release-check` and `agentic-kit post-release-check` as read-only release context.
 - The registry guard is intentionally structural only. It checks schema, allowed classes, required rule fields, duplicate paths, and registered path existence. It does not prove semantic documentation quality and does not authorize broad migration.
 
 GUI MVP baseline on `main`:
@@ -64,6 +64,7 @@ Current GUI, release, documentation registry, and governance evidence:
 - PR #698 CI evidence for Ruff, tests, and CLI smoke.
 - PR #699 CI evidence for Ruff, tests, and CLI smoke.
 - PR #700 CI evidence for Ruff, tests, and CLI smoke.
+- PR #701 CI evidence for Ruff, tests, and CLI smoke.
 
 Recent closeout anchors:
 - PR #656 closed out the GUI MVP three read-only actions.
@@ -83,6 +84,7 @@ Recent closeout anchors:
 - PR #698 added doc-mesh registry visibility.
 - PR #699 added doc-lifecycle registry visibility.
 - PR #700 added handoff check/show registry visibility.
+- PR #701 added release-check and post-release-check registry visibility.
 - v0.4.1 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20357657`.
 
 ## Active Workflow Rules
@@ -117,7 +119,7 @@ Final summary contract: relevant workflow blocks must end with the framed SUMMAR
 ## Live Status Commands
 Use project-local commands first: `./ns state`, `./ns check-docs`, `./ns doctor`, `./ns docs-audit`, `./ns handoff-check`, `./ns governance-check`, and `agentic-kit handoff prompt` when installed through the active project environment. Planning-state freshness, documentation coverage, policy-pack checks, Pattern Advisor, `patterns list`, `patterns show`, read-only catalog, advisory-only, post-release Zenodo, `docs/DOCUMENTATION_COVERAGE.yaml`, and `docs/DOCUMENTATION_REGISTRY.yaml` are compact live-state anchors here; detailed history belongs in `CHANGELOG.md`.
 
-The registry can be inspected through `agentic-kit docs-registry` and exported with `agentic-kit docs-registry --report PATH`. Registry summary data is visible in `agentic-kit docs-audit`, `agentic-kit doc-mesh-audit`, `agentic-kit doc-lifecycle-audit`, `agentic-kit handoff check`, and `agentic-kit handoff show`; the active slice surfaces the same read-only context in `agentic-kit release-check` and `agentic-kit post-release-check`.
+The registry can be inspected through `agentic-kit docs-registry` and exported with `agentic-kit docs-registry --report PATH`. Registry summary data is visible in `agentic-kit docs-audit`, `agentic-kit doc-mesh-audit`, `agentic-kit doc-lifecycle-audit`, `agentic-kit handoff check`, `agentic-kit handoff show`, `agentic-kit release-check`, and `agentic-kit post-release-check`.
 
 ## Gate Status
 Required gate set for current-state or handoff changes:
@@ -156,7 +158,7 @@ These anchors are deliberately compact compatibility pointers. Long narrative hi
 - remote inspection evidence contract: failed or diagnostic logs must be uploaded and registered for later GC.
 
 ## Next Safe Step
-Merge the release-check registry summary slice only after CI is green. Then continue with one additional small registry consumer, such as artifact-GC planning. Do not start a broad migration.
+Use `docs/reports/terminal/v041-successor-chat-handoff-after-pr701.md` for a chat switch, then continue with one additional small registry consumer such as artifact-GC planning. Do not start a broad migration.
 
 ## Compatibility Coverage Anchors
 These compact anchors are intentionally retained for deterministic coverage: documentation coverage, policy-pack checks, policy packs, Pattern Advisor, `patterns list`, `patterns show`, no-copy/evidence, Communication artifact GC hardening is now part of the pre-GUI baseline, long chat-generated shell or Python patch blocks, v0.3.31 is the current pre-GUI execution hardening line., Mandatory Final Summary Contract, policy-pack doctor checks, `agentic-kit post-release-check`, `.agentic/compiled_agent_context.yaml`, `CHAT_COMMUNICATION_CONTRACT.md`, `PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `FINAL_SUMMARY_CONTRACT.md`, `docs/TEST_GATES.md`.
