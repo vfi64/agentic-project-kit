@@ -1,0 +1,195 @@
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+
+### FETCH MAIN AND TAGS ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   ec0333f..7514477  main       -> origin/main
+
+### PULL MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Updating ec0333f..7514477
+Fast-forward
+ .agentic/handoff_state.yaml                        |  22 +--
+ CHANGELOG.md                                       |   5 +-
+ CITATION.cff                                       |   1 +
+ README.md                                          |   6 +-
+ docs/STATUS.md                                     |  14 +-
+ docs/handoff/CURRENT_HANDOFF.md                    |  16 +--
+ docs/releases/VERIFIED_RELEASES.md                 |   1 +
+ .../terminal/v041-doi-metadata-closeout.log        | 150 +++++++++++++++++++++
+ 8 files changed, 185 insertions(+), 30 deletions(-)
+ create mode 100644 docs/reports/terminal/v041-doi-metadata-closeout.log
+
+### VERIFY HEAD ###
+7514477 Update release metadata state (#689)
+ec0333f Record v0.4.1 DOI wait check log (#688)
+1128784 Record release evidence log (#687)
+34c9fb5 Record v0.4.1 release publish log (#686)
+71c6561 Prepare v0.4.1 release metadata (#685)
+8cbed83 Require release before documentation governance rebuild (#684)
+cb99db6 Plan document and artifact governance OS (#683)
+a33c444 Refresh state after PR681 changelog guard (#682)
+
+### CLEAN PRECHECK ###
+
+### ENSURE PYTHON 3.13 VENV ###
+
+### INSTALL PROJECT DEV ###
+Requirement already satisfied: pip in ./.venv313/lib/python3.13/site-packages (26.1.1)
+
+### INSTALL PROJECT DEV EDITABLE ###
+Obtaining file:///Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Installing backend dependencies: started
+  Installing backend dependencies: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: pydantic>=2.7 in ./.venv313/lib/python3.13/site-packages (from agentic-project-kit==0.4.1) (2.13.4)
+Requirement already satisfied: pyyaml>=6.0 in ./.venv313/lib/python3.13/site-packages (from agentic-project-kit==0.4.1) (6.0.3)
+Requirement already satisfied: rich>=13.7 in ./.venv313/lib/python3.13/site-packages (from agentic-project-kit==0.4.1) (15.0.0)
+Requirement already satisfied: typer>=0.12 in ./.venv313/lib/python3.13/site-packages (from agentic-project-kit==0.4.1) (0.25.1)
+Requirement already satisfied: pytest>=8.0 in ./.venv313/lib/python3.13/site-packages (from agentic-project-kit==0.4.1) (9.0.3)
+Requirement already satisfied: ruff>=0.6 in ./.venv313/lib/python3.13/site-packages (from agentic-project-kit==0.4.1) (0.15.14)
+Requirement already satisfied: annotated-types>=0.6.0 in ./.venv313/lib/python3.13/site-packages (from pydantic>=2.7->agentic-project-kit==0.4.1) (0.7.0)
+Requirement already satisfied: pydantic-core==2.46.4 in ./.venv313/lib/python3.13/site-packages (from pydantic>=2.7->agentic-project-kit==0.4.1) (2.46.4)
+Requirement already satisfied: typing-extensions>=4.14.1 in ./.venv313/lib/python3.13/site-packages (from pydantic>=2.7->agentic-project-kit==0.4.1) (4.15.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in ./.venv313/lib/python3.13/site-packages (from pydantic>=2.7->agentic-project-kit==0.4.1) (0.4.2)
+Requirement already satisfied: iniconfig>=1.0.1 in ./.venv313/lib/python3.13/site-packages (from pytest>=8.0->agentic-project-kit==0.4.1) (2.3.0)
+Requirement already satisfied: packaging>=22 in ./.venv313/lib/python3.13/site-packages (from pytest>=8.0->agentic-project-kit==0.4.1) (26.2)
+Requirement already satisfied: pluggy<2,>=1.5 in ./.venv313/lib/python3.13/site-packages (from pytest>=8.0->agentic-project-kit==0.4.1) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in ./.venv313/lib/python3.13/site-packages (from pytest>=8.0->agentic-project-kit==0.4.1) (2.20.0)
+Requirement already satisfied: markdown-it-py>=2.2.0 in ./.venv313/lib/python3.13/site-packages (from rich>=13.7->agentic-project-kit==0.4.1) (4.2.0)
+Requirement already satisfied: mdurl~=0.1 in ./.venv313/lib/python3.13/site-packages (from markdown-it-py>=2.2.0->rich>=13.7->agentic-project-kit==0.4.1) (0.1.2)
+Requirement already satisfied: click>=8.2.1 in ./.venv313/lib/python3.13/site-packages (from typer>=0.12->agentic-project-kit==0.4.1) (8.4.1)
+Requirement already satisfied: shellingham>=1.3.0 in ./.venv313/lib/python3.13/site-packages (from typer>=0.12->agentic-project-kit==0.4.1) (1.5.4)
+Requirement already satisfied: annotated-doc>=0.0.2 in ./.venv313/lib/python3.13/site-packages (from typer>=0.12->agentic-project-kit==0.4.1) (0.0.4)
+Building wheels for collected packages: agentic-project-kit
+  Building editable for agentic-project-kit (pyproject.toml): started
+  Building editable for agentic-project-kit (pyproject.toml): finished with status 'done'
+  Created wheel for agentic-project-kit: filename=agentic_project_kit-0.4.1-py3-none-any.whl size=11321 sha256=acf94cba48496ef207b23e5bcb7a2217326f2dc6be31dd4cf73a959899b5c350
+  Stored in directory: /private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pip-ephem-wheel-cache-mt8aoyum/wheels/b5/8f/a3/2558d63d8dae58d78c2ae9b34588082684703aa20f52453070
+Successfully built agentic-project-kit
+Installing collected packages: agentic-project-kit
+  Attempting uninstall: agentic-project-kit
+    Found existing installation: agentic-project-kit 0.4.1
+    Uninstalling agentic-project-kit-0.4.1:
+      Successfully uninstalled agentic-project-kit-0.4.1
+Successfully installed agentic-project-kit-0.4.1
+
+### POST RELEASE CHECK 0.4.1 ###
+Post-release check for target v0.4.1
+
+[PASS] GitHub release: GitHub release exists: v0.4.1
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.4.1: 10.5281/zenodo.20357657
+
+Overall: PASS
+
+
+### DOCS AUDIT ###
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
+
+### HANDOFF CHECK ###
+Persistent handoff state check passed
+
+### FULL DEV GATE ###
+main
+........................................................................ [  8%]
+........................................................................ [ 16%]
+........................................................................ [ 24%]
+........................................................................ [ 32%]
+........................................................................ [ 40%]
+........................................................................ [ 48%]
+........................................................................ [ 56%]
+........................................................................ [ 64%]
+........................................................................ [ 73%]
+........................................................................ [ 81%]
+........................................................................ [ 89%]
+........................................................................ [ 97%]
+.......................                                                  [100%]
+887 passed in 4.74s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.1
+
+Overall: PASS
+PR hygiene report
+Safety: read-only diagnosis; no branches, PRs, tags, releases, or files are changed.
+open_pr_count=0
+local_branch_count=128
+ok=true
+
+Findings:
+- none
+main
+
+### NS DEV LOCAL FEATURE GATE ###
+Safety: local feature gate; no git pull, push, merge, tag, release, or branch cleanup.
+
+### BRANCH / STATUS ###
+
+### PYTEST ###
+
+### RUFF ###
+
+### CHECK DOCS ###
+
+### DOCTOR ###
+
+### PR HYGIENE ###
+
+### FINAL STATUS ###
+Local feature gate passed.
+
+================================================================
+SUMMARY
+WORK RESULT: PASS
+EVIDENCE RESULT: LOCAL_LOG
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PARTIAL
+terminal_log=/tmp/agentic-project-kit-v041-final-main-verify-after-pr689.log
+command_report=NONE
+NEXT_CHAT_REPLY: d
+### RESULT: PASS ###
+================================================================
