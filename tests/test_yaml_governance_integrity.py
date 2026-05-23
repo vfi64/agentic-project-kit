@@ -6,6 +6,7 @@ YAML_GOVERNANCE_FILES = [
     ".agentic/handoff_state.yaml",
     ".agentic/no_copy_terminal_policy.yaml",
     "docs/DOCUMENTATION_COVERAGE.yaml",
+    "docs/DOCUMENTATION_REGISTRY.yaml",
 ]
 
 
