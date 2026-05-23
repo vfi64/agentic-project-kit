@@ -1,7 +1,7 @@
 schema_version: 1
 updated:
-  date: '2026-05-22'
-  reason: portable LLM communication, summary, bootstrap, and drift contract baseline
+  date: '2026-05-23'
+  reason: documentation registry schema baseline and guard integration
 purpose: Fast, redundant-free, machine-readable companion to the human governance
   docs.
 source_policy:
@@ -17,6 +17,8 @@ priority_order:
 - docs/governance/CHAT_COMMUNICATION_CONTRACT.md
 - docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
 - docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+- docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md
+- docs/DOCUMENTATION_REGISTRY.yaml
 - docs/STATUS.md
 - docs/handoff/CURRENT_HANDOFF.md
 - docs/TEST_GATES.md
@@ -45,6 +47,9 @@ hard_rules:
   rule: Canonical workflow correctness must be Python-core-first and operating-system independent; shell is an adapter only.
 - id: chat-bootstrap-and-drift-contract
   rule: Successor chats must read mandatory sources first, detect drift, warn, and avoid mutation except for drift fixes.
+- id: documentation-registry-first-slice
+  summary: Classify documentation and artifacts through an additive, reversible registry before broad migration.
+  rule: Documentation registry changes must keep the first slice structural, test-backed, and non-destructive; broad migration, deletion, or taxonomy-driven rewrites require later explicit slices.
 - id: patch-artifact-preflight
   rule: Generated patch artifacts must pass syntax, YAML, coverage-term, and final-summary checks before use.
 - id: rules-must-be-test-backed
