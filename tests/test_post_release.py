@@ -51,7 +51,7 @@ def test_post_release_report_includes_registry_summary_when_available(tmp_path: 
     assert "- registry: docs/DOCUMENTATION_REGISTRY.yaml" in rendered
     assert "- documents: 2" in rendered
     assert "- broad_migration_allowed: False" in rendered
-    assert "- class:release: 1" in rendered
+    assert "- class:release: 2" in rendered
     assert "Overall: PASS" in rendered
 
 
