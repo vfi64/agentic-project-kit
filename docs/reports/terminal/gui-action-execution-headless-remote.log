@@ -1,0 +1,14 @@
+GUI ACTION EXECUTION HEADLESS REMOTE EVIDENCE
+
+Scope:
+- Add unit tests for bounded read-only GUI action execution.
+- Use fake action objects only; no Tkinter window, no local command execution, no release work.
+- Cover safety normalization, action identity aliases, action lookup, strict read-only gating, missing actions, blocked destructive actions, allowed-but-not-executed read-only actions, executed read-only actions, and nonzero executor return codes.
+
+Remote execution:
+- Branch: test/gui-action-execution-headless
+- Prepared through GitHub connector.
+- Local Python 3.13 gates are not available inside this chat environment.
+- GitHub Actions CI must be inspected before merge.
+
+No tag. No release. No GUI behavior change.
