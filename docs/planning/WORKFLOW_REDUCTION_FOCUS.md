@@ -1,7 +1,9 @@
 # Workflow Reduction Focus
 
 Status-date: 2026-05-23
-Status: planning focus
+Status: active
+Decision status: accepted
+Review policy: Review after the documentation-management foundation and before expanding GUI scope or Pattern Advisor scope.
 Project: agentic-project-kit
 
 ## Purpose
