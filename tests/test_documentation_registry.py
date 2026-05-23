@@ -11,6 +11,7 @@ from agentic_project_kit.documentation_registry import (
     DOCUMENT_CLASSES,
     REGISTRY_PATH,
     REQUIRED_CLASS_RULE_FIELDS,
+    build_documentation_registry_summary,
     check_documentation_registry,
     load_documentation_registry,
 )
@@ -89,6 +90,19 @@ def _read_registry(project: Path) -> dict[str, object]:
     return registry
 
 
+def _repo_documents() -> dict[str, dict[str, object]]:
+    registry = load_documentation_registry(ROOT)
+    documents = registry["documents"]
+    assert isinstance(documents, list)
+    result: dict[str, dict[str, object]] = {}
+    for document in documents:
+        assert isinstance(document, dict)
+        path = document["path"]
+        assert isinstance(path, str)
+        result[path] = document
+    return result
+
+
 def test_documentation_registry_declares_all_required_classes_and_fields() -> None:
     registry = load_documentation_registry(ROOT)
     assert registry["version"] == 1
@@ -101,6 +115,29 @@ def test_documentation_registry_declares_all_required_classes_and_fields() -> No
 
 def test_documentation_registry_guard_passes_for_repo_baseline() -> None:
     assert check_documentation_registry(ROOT) == []
+
+
+def test_documentation_registry_classifies_operational_and_artifact_documents() -> None:
+    documents = _repo_documents()
+    expected = {
+        "docs/WORKFLOW_OUTPUT_CYCLE.md": "operational/automation",
+        "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md": "operational/automation",
+        "docs/workflow/COMMUNICATION_ARTIFACT_GC.md": "operational/automation",
+        ".agentic/communication_artifacts.yaml": "operational/automation",
+        "docs/reports/terminal/LATEST_TERMINAL_LOG.txt": "generated artifact",
+    }
+    for path, document_class in expected.items():
+        assert documents[path]["class"] == document_class
+
+
+def test_documentation_registry_summary_counts_registered_classes() -> None:
+    summary = build_documentation_registry_summary(ROOT)
+    class_counts = summary["class_counts"]
+    assert isinstance(class_counts, dict)
+    assert summary["document_count"] >= 17
+    assert class_counts["operational/automation"] >= 4
+    assert class_counts["generated artifact"] >= 1
+    assert summary["broad_migration_allowed"] is False
 
 
 def test_check_docs_includes_documentation_registry_guard(tmp_path: Path) -> None:
@@ -151,6 +188,15 @@ def test_documentation_registry_guard_reports_missing_class_rule_field(tmp_path:
     errors = check_documentation_registry(project)
 
     assert f"{REGISTRY_PATH}: 'planning' missing class rule field 'freshness'" in errors
+
+
+def test_docs_registry_cli_reports_summary() -> None:
+    runner = CliRunner()
+    result = runner.invoke(app, ["docs-registry"])
+    assert result.exit_code == 0
+    assert "Documentation registry summary" in result.output
+    assert "operational/automation" in result.output
+    assert "broad_migration_allowed: False" in result.output
 
 
 def test_docs_audit_cli_runs_with_documentation_registry() -> None:
