@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
-  date: '2026-05-22'
-  reason: Refresh handoff state after PR666 final verification preparation
-  source: main HEAD after PR666
+  date: '2026-05-23'
+  reason: Refresh handoff state after PR671 v0.4.0 DOI metadata closeout
+  source: main HEAD after PR671
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -10,9 +10,9 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: adc65ac
-  commit_subject: Close out GUI MVP three read-only actions (#656)
-  semantics: last_substantive_work_state
+  commit: 813c5d2
+  commit_subject: Close v0.4.0 DOI metadata state (#671)
+  semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
   - 656
@@ -23,23 +23,24 @@ safe_state:
   - 663
   - 665
   - 666
+  - 671
 release:
-  current_version: 0.3.37
-  previous_version: 0.3.36
-  tag: v0.3.37
+  current_version: 0.4.0
+  previous_version: 0.3.37
+  tag: v0.4.0
   github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
-  zenodo_version_doi: 10.5281/zenodo.20329450
+  zenodo_version_doi: 10.5281/zenodo.20348382
   post_release_check: PASS
-  post_release_evidence: docs/STATUS.md
+  post_release_evidence: docs/reports/terminal/v040-doi-state-closeout-local-gates.log
 open_items:
   prs: []
   historical_prs_closed:
   - 562
   - 564
   - 568
-  next_expected_chat_action: Verify main after PR666, run final readiness gates, regenerate
-    the canonical handoff prompt, and only then assess v0.4.0 release readiness.
+  next_expected_chat_action: Verify main after PR671, regenerate the canonical handoff
+    prompt, then start the separate documentation follow-up slice.
 completed_since_previous_handoff:
 - 'PR #647 enabled the Doctor button through the bounded read-only GUI contract.'
 - 'PR #649 added LLM communication and portable execution contracts.'
@@ -68,6 +69,8 @@ completed_since_previous_handoff:
   project history.
 - 'PR #666 refreshed handoff_state.yaml after PR665 and set final verification plus
   canonical handoff prompt regeneration as the next allowed tasks.'
+- 'PR #671 closed the v0.4.0 DOI metadata state on main with verified Zenodo version
+  DOI 10.5281/zenodo.20348382 and local Python 3.13 gate evidence.'
 current_capabilities:
   ns_actions:
   - agent-next
@@ -268,22 +271,19 @@ recent_failure_patterns:
   prevention: README version extraction must use the explicit Current verified release
     marker and retain regression coverage for historical Version anchors.
 next_allowed_tasks:
-- id: final-main-verify-after-pr665
-  title: Verify main after PR665 and run final readiness gates.
-  priority: 1
 - id: regenerate-canonical-handoff-prompt
-  title: Regenerate the canonical handoff prompt after final verification.
+  title: Regenerate the canonical handoff prompt after PR671.
+  priority: 1
+- id: documentation-follow-up-plan
+  title: Start the separate Claude-review and active-document English-language cleanup
+    plan.
   priority: 2
-- id: v040-release-readiness-check
-  title: Check v0.4.0 readiness only after final main verification and canonical handoff
-    prompt regeneration.
-  priority: 3
 blocked_until_closeout:
-- Release work
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
-first_instruction: 'Verify main at or after PR #666, run final readiness gates, regenerate
-  the canonical handoff prompt, and only then assess v0.4.0 release readiness.'
+first_instruction: Verify main after PR671, read mandatory successor-chat sources,
+  regenerate the canonical handoff prompt, and then start the separate documentation
+  follow-up slice.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
@@ -303,9 +303,10 @@ current_notes:
   HEAD before chat migration.
 - use d for log-backed PASS and f for log-backed FAIL
 - nested triple-quoted string literals
+- 'Current main is after PR #671 v0.4.0 DOI metadata closeout; v0.4.0 is tagged, published,
+  post-release checked, and DOI metadata is recorded on main.'
 administrative_evidence_state:
-  current_head: 8198ebe
-  current_head_subject: Refresh handoff state after PR665 (#666)
+  current_head: 813c5d2
+  current_head_subject: Close v0.4.0 DOI metadata state (#671)
   allowed_after_safe_state: true
-  reason: post-PR666 handoff_state refresh and administrative evidence commits after
-    GUI MVP closeout
+  reason: post-PR671 DOI metadata and handoff state refresh after v0.4.0 release closeout
