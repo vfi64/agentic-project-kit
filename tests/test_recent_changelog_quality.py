@@ -37,7 +37,9 @@ def test_recent_changelog_entries_record_release_context_not_only_metadata() -> 
             assert term in section, f"{heading} missing targeted changelog term: {term}"
 
 
-def test_recent_changelog_quality_guard_does_not_count_bullets() -> None:
+def test_recent_changelog_quality_guard_uses_target_terms_not_bullet_totals() -> None:
     test_text = Path(__file__).read_text(encoding="utf-8")
-    assert "count(\"- \")" not in test_text
-    assert "len(section.splitlines())" not in test_text
+    count_check = "count(" + '"- "' + ")"
+    line_total_check = "len(" + "section.splitlines())"
+    assert count_check not in test_text
+    assert line_total_check not in test_text
