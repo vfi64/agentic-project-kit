@@ -223,7 +223,7 @@ rules:
       - path: AGENTS.md
         terms:
           - Standard next-step terminal workflow
-          - cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+          - cd <your-project-root>
           - ./ns
           - ./ns --request
           - done
