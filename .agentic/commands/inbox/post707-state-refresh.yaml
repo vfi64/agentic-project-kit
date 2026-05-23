@@ -1,0 +1,5 @@
+command_id: post707-state-refresh
+title: Refresh handoff state after PR707
+safety_class: remote-mutation
+expected_branch: post707-state-refresh
+description: Structured post-PR707 state refresh for STATUS, CURRENT_HANDOFF, handoff_state, successor prompt, and evidence.
