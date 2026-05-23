@@ -1,0 +1,55 @@
+SUMMARY COMM-REMOTE | 2026-05-23 00:00:00 +0200
+
+SLICE
+  NAME: v040-doi-metadata-remote-closeout
+  SCOPE: remote DOI metadata patch after PR670
+  BRANCH: docs/v040-doi-metadata
+
+EXECUTION
+  ORIGIN: remote
+  STATE_MODE: remote
+  MODE_CHECK: not_run
+  SWITCH_HINT: not applicable for GitHub API remote-only execution
+
+RESULT
+  WORK: PARTIAL
+  EVIDENCE: PARTIAL
+  OVERALL: PENDING
+
+REMOTE
+  REMOTE_EVIDENCE: PARTIAL
+  PR: none
+  HEAD_SHA: 60a452e752b698076a2c24cb97e9df14ce2c089e
+  CI: not_started
+  MERGE: not_done
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/v040-doi-metadata-remote-closeout.log
+  command_report: NONE
+
+INTERPRETATION
+  Remote patch work recorded the verified v0.4.0 DOI in CITATION.cff and docs/releases/VERIFIED_RELEASES.md; local Python 3.13 gates and full local post-release-check were not executable from this chat environment.
+
+VERIFIED INPUTS
+  main after PR670: b1e5bc7 Guard ruff scope and terminal quote safety (#670)
+  v0.4.0 tag/package version evidence: pyproject.toml at tag v0.4.0 contains version 0.4.0
+  verified Zenodo version DOI supplied by maintainer: 10.5281/zenodo.20348382
+  Zenodo concept DOI retained: 10.5281/zenodo.20101359
+
+REMOTE CHANGES
+  CITATION.cff: added verified v0.4.0 version DOI comment.
+  docs/releases/VERIFIED_RELEASES.md: added v0.4.0 verified release DOI row.
+
+NOT RUN HERE
+  python -m pytest -q
+  ruff check on Python-only targets
+  agentic-kit check-docs
+  agentic-kit doctor
+  agentic-kit post-release-check --version 0.4.0
+  docs-audit / handoff-check / governance-check
+
+NEXT
+  SAFE_STEP: run the required local gates on Python 3.13, complete any remaining DOI metadata updates in STATUS/CURRENT_HANDOFF/CHANGELOG if needed, then open or merge the PR only if gates pass.
+  CHAT_REPLY: w
+
+### RESULT: PENDING ###
