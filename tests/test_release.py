@@ -1,6 +1,9 @@
 from pathlib import Path
 from collections.abc import Sequence
 
+import yaml
+
+from agentic_project_kit.documentation_registry import DOCUMENT_CLASSES, REGISTRY_PATH, REQUIRED_CLASS_RULE_FIELDS
 from agentic_project_kit.release import (
     ReleaseCheckResult,
     ReleaseStateReport,
@@ -72,6 +75,25 @@ def test_build_release_state_report_passes_for_unused_version(tmp_path: Path):
 
     assert report.ok
     assert [check.status for check in report.checks] == [ReleaseCheckStatus.PASS] * 11
+    assert report.registry_summary is None
+
+
+def test_build_release_state_report_includes_registry_summary_when_available(tmp_path: Path):
+    _write_release_files(tmp_path, "1.2.3")
+    _write_minimal_registry(tmp_path)
+
+    report = build_release_state_report(tmp_path, command_runner=_runner())
+    rendered = render_release_state_report(report)
+
+    assert report.ok
+    assert report.registry_summary is not None
+    assert report.registry_summary["document_count"] == 2
+    assert "Documentation registry:" in rendered
+    assert "- registry: docs/DOCUMENTATION_REGISTRY.yaml" in rendered
+    assert "- documents: 2" in rendered
+    assert "- broad_migration_allowed: False" in rendered
+    assert "- class:release: 1" in rendered
+    assert "Overall: PASS" in rendered
 
 
 def test_build_release_state_report_warns_without_git_repo(tmp_path: Path):
@@ -217,11 +239,30 @@ def _write_release_files(project_root: Path, version: str) -> None:
         f"Current version: {version}\n", encoding="utf-8"
     )
 
-
     package_dir = project_root / "src/agentic_project_kit"
     package_dir.mkdir(parents=True, exist_ok=True)
     (package_dir / "__init__.py").write_text(f'__version__ = "{version}"\\n', encoding="utf-8")
 
+
+def _class_rules() -> dict[str, dict[str, str]]:
+    return {
+        class_name: {field: f"{class_name} {field}" for field in REQUIRED_CLASS_RULE_FIELDS}
+        for class_name in DOCUMENT_CLASSES
+    }
+
+
+def _write_minimal_registry(project_root: Path) -> None:
+    registry = {
+        "version": 1,
+        "status": {"lifecycle": "initial", "broad_migration_allowed": False},
+        "class_rules": _class_rules(),
+        "documents": [
+            {"path": "CHANGELOG.md", "class": "release", "owner": "maintainers"},
+            {"path": "docs/STATUS.md", "class": "planning", "owner": "maintainers"},
+        ],
+    }
+    (project_root / REGISTRY_PATH).parent.mkdir(parents=True, exist_ok=True)
+    (project_root / REGISTRY_PATH).write_text(yaml.safe_dump(registry, sort_keys=False), encoding="utf-8")
 
 
 def _check_by_name(report: ReleaseStateReport, name: str) -> ReleaseCheckResult:
