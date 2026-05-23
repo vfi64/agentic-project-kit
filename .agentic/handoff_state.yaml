@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-23'
-  reason: Refresh handoff state after v0.4.1 DOI metadata closeout
-  source: main HEAD after PR688 plus DOI closeout branch
+  reason: Refresh handoff state after PR690 final v0.4.1 verification evidence
+  source: main HEAD after PR690
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: ec0333f
-  commit_subject: Record v0.4.1 DOI wait check log (#688)
+  commit: 820c7f6
+  commit_subject: Record final verification evidence (#690)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -28,6 +28,8 @@ safe_state:
   - 680
   - 681
   - 688
+  - 689
+  - 690
 release:
   current_version: 0.4.1
   previous_version: 0.4.0
@@ -36,14 +38,16 @@ release:
   zenodo_concept_doi: 10.5281/zenodo.20101359
   zenodo_version_doi: 10.5281/zenodo.20357657
   post_release_check: PASS
-  post_release_evidence: docs/reports/terminal/v041-doi-wait-check.log
+  post_release_evidence: docs/reports/terminal/v041-final-main-verify-after-pr689.log
 open_items:
   prs: []
   historical_prs_closed:
   - 562
   - 564
   - 568
-  next_expected_chat_action: Verify main after v0.4.1 DOI metadata closeout, regenerate the canonical handoff prompt if needed, then start the additive documentation-governance registry implementation.
+  next_expected_chat_action: Regenerate the canonical handoff prompt after PR690,
+    then start the additive documentation-governance registry implementation from
+    the released v0.4.1 baseline.
 completed_since_previous_handoff:
 - 'PR #647 enabled the Doctor button through the bounded read-only GUI contract.'
 - 'PR #649 added LLM communication and portable execution contracts.'
@@ -53,22 +57,37 @@ completed_since_previous_handoff:
 - 'PR #653 hardened GUI visual evidence workflow rules.'
 - 'PR #654 added the shared read-only GUI runner abstraction.'
 - 'PR #655 enabled check-docs as the third read-only GUI action.'
-- 'PR #656 closed out the GUI MVP with cockpit-readiness, doctor, and check-docs visually verified as bounded read-only GUI actions.'
+- 'PR #656 closed out the GUI MVP with cockpit-readiness, doctor, and check-docs visually
+  verified as bounded read-only GUI actions.'
 - 'PR #657 modeled administrative evidence state in generated handoff prompts.'
-- 'PR #659 repaired STATUS.md current-state drift after PR657 without changing CURRENT_HANDOFF.md or handoff_state.yaml.'
-- 'PR #660 refreshed handoff_state.yaml after PR659 while preserving existing rule and failure-pattern anchors.'
+- 'PR #659 repaired STATUS.md current-state drift after PR657 without changing CURRENT_HANDOFF.md
+  or handoff_state.yaml.'
+- 'PR #660 refreshed handoff_state.yaml after PR659 while preserving existing rule
+  and failure-pattern anchors.'
 - 'PR #661 added CURRENT_HANDOFF_OVERLAY_AFTER_PR660.md without changing CURRENT_HANDOFF.md.'
-- 'PR #663 repaired README DOI drift and changed doc_mesh README version extraction to use the explicit current verified release marker, with regression coverage for historical version anchors.'
-- 'PR #665 merged the PR661 overlay into CURRENT_HANDOFF.md non-destructively, preserving existing compatibility anchors.'
-- 'Historical PRs #562, #564, and #568 were closed without merge as superseded evidence branches.'
-- 'STATUS.md remains the compact live dashboard while CHANGELOG.md remains the long-term project history.'
-- 'PR #666 refreshed handoff_state.yaml after PR665 and set final verification plus canonical handoff prompt regeneration as the next allowed tasks.'
-- 'PR #671 closed the v0.4.0 DOI metadata state on main with verified Zenodo version DOI 10.5281/zenodo.20348382 and local Python 3.13 gate evidence.'
+- 'PR #663 repaired README DOI drift and changed doc_mesh README version extraction
+  to use the explicit current verified release marker, with regression coverage for
+  historical version anchors.'
+- 'PR #665 merged the PR661 overlay into CURRENT_HANDOFF.md non-destructively, preserving
+  existing compatibility anchors.'
+- 'Historical PRs #562, #564, and #568 were closed without merge as superseded evidence
+  branches.'
+- STATUS.md remains the compact live dashboard while CHANGELOG.md remains the long-term
+  project history.
+- 'PR #666 refreshed handoff_state.yaml after PR665 and set final verification plus
+  canonical handoff prompt regeneration as the next allowed tasks.'
+- 'PR #671 closed the v0.4.0 DOI metadata state on main with verified Zenodo version
+  DOI 10.5281/zenodo.20348382 and local Python 3.13 gate evidence.'
 - 'PR #672 refreshed handoff_state.yaml after v0.4.0 DOI metadata closeout.'
-- 'PR #679 added the live pr wait-ci adapter around deterministic merge readiness classification.'
-- 'PR #680 added headless tests for bounded read-only GUI action execution without opening a Tkinter window.'
-- 'PR #681 added deterministic recent-release CHANGELOG quality checks to check-docs and repaired doctor fixtures to satisfy the guard.'
+- 'PR #679 added the live pr wait-ci adapter around deterministic merge readiness
+  classification.'
+- 'PR #680 added headless tests for bounded read-only GUI action execution without
+  opening a Tkinter window.'
+- 'PR #681 added deterministic recent-release CHANGELOG quality checks to check-docs
+  and repaired doctor fixtures to satisfy the guard.'
 - 'PR #688 recorded the v0.4.1 DOI verification evidence with Zenodo version DOI 10.5281/zenodo.20357657.'
+- 'PR #689 closed the v0.4.1 DOI metadata state on main.'
+- 'PR #690 recorded final local main verification after v0.4.1 DOI metadata closeout.'
 current_capabilities:
   ns_actions:
   - agent-next
@@ -96,132 +115,198 @@ current_capabilities:
     - destructive_actions
     primary_evidence: docs/reports/terminal/v040-record-check-docs-gui-visual-pass.log
     headless_regression_evidence: docs/reports/terminal/gui-action-execution-headless-remote.log
-    runtime_note: Manual Tk verification requires a Tk-capable Python with project dependencies installed.
+    runtime_note: Manual Tk verification requires a Tk-capable Python with project
+      dependencies installed.
 policies:
   no_copy_terminal_policy: .agentic/no_copy_terminal_policy.yaml
 rules:
 - id: remote-first-no-guess
   status: active
-  text: Do not guess repository state, command syntax, file locations, release phase, GitHub JSON fields, or available evidence. Inspect the remote repository and authoritative command help or repo files first, then act on the verified result.
+  text: Do not guess repository state, command syntax, file locations, release phase,
+    GitHub JSON fields, or available evidence. Inspect the remote repository and authoritative
+    command help or repo files first, then act on the verified result.
 - id: deterministic-quality-before-speed
   status: active
   text: Prefer technically robust, testable, repeatable solutions over fast workarounds.
 - id: no-copy-terminal-evidence
   status: active
-  text: Routine PASS handoffs and normal FAIL handoffs must be backed by repo evidence; use d for log-backed PASS and f for log-backed FAIL. Manual terminal paste is only for hard failure, broken logging, blocked or aborted runs, unavailable pushed evidence, or explicit user request.
+  text: Routine PASS handoffs and normal FAIL handoffs must be backed by repo evidence;
+    use d for log-backed PASS and f for log-backed FAIL. Manual terminal paste is
+    only for hard failure, broken logging, blocked or aborted runs, unavailable pushed
+    evidence, or explicit user request.
 - id: planning-state-freshness
   status: active
-  text: Current planning files must be curated and mutually consistent; stale released-version claims or obsolete next-step fragments are guard failures.
+  text: Current planning files must be curated and mutually consistent; stale released-version
+    claims or obsolete next-step fragments are guard failures.
 - id: shell-to-python-portability
   status: active
-  text: Prefer portable Python-backed helpers and argument-vector execution over fragile shell quoting, heredocs, multiline python -c snippets, or nested quote-based code generation.
+  text: Prefer portable Python-backed helpers and argument-vector execution over fragile
+    shell quoting, heredocs, multiline python -c snippets, or nested quote-based code
+    generation.
 - id: rules-must-be-test-backed
   status: active
-  text: Workflow rules are not complete when they only exist in chat, prose, or handoff memory. Every durable rule must have a stable repository home, a rule id, documentation, and at least one deterministic test that fails when the rule disappears or is weakened.
+  text: Workflow rules are not complete when they only exist in chat, prose, or handoff
+    memory. Every durable rule must have a stable repository home, a rule id, documentation,
+    and at least one deterministic test that fails when the rule disappears or is
+    weakened.
 - id: no-unconditional-pass
   status: active
   text: Do not print PASS after a failed required command.
 - id: curate-chat-end-lessons
   status: active
-  text: Chat-end lessons must be curated into YAML and generated prompts without redundant, contradictory, or obsolete rules.
+  text: Chat-end lessons must be curated into YAML and generated prompts without redundant,
+    contradictory, or obsolete rules.
 - id: last-substantive-safe-state
   status: active
-  text: safe_state records the last substantive work state; administrative handoff refresh PRs are tracked separately to avoid refresh loops.
+  text: safe_state records the last substantive work state; administrative handoff
+    refresh PRs are tracked separately to avoid refresh loops.
 - id: quality-first-no-shortcuts
   status: active
-  text: Always choose the technically best deterministic solution for recurring workflow problems; do not use shortcut patches that merely get the current block past the gate.
+  text: Always choose the technically best deterministic solution for recurring workflow
+    problems; do not use shortcut patches that merely get the current block past the
+    gate.
 - id: patch-artifact-preflight-before-application
   status: active
-  text: 'Complex patches must be treated as patch artifacts and checked before application: syntax, YAML structure, generated Python compileability, documentation coverage terms, and final-summary validity.'
+  text: 'Complex patches must be treated as patch artifacts and checked before application:
+    syntax, YAML structure, generated Python compileability, documentation coverage
+    terms, and final-summary validity.'
 - id: generated-code-syntax-first
   status: active
-  text: Generated or newly added Python files must pass py_compile before full gates or commit attempts; nested string-generation mistakes are product defects, not acceptable manual errors.
+  text: Generated or newly added Python files must pass py_compile before full gates
+    or commit attempts; nested string-generation mistakes are product defects, not
+    acceptable manual errors.
 - id: coverage-yaml-terms-must-be-strings
   status: active
-  text: Documentation coverage terms must be strings; terms containing colons must be quoted so YAML cannot reinterpret them as mappings.
+  text: Documentation coverage terms must be strings; terms containing colons must
+    be quoted so YAML cannot reinterpret them as mappings.
 - id: final-summary-self-validation
   status: active
-  text: Terminal workflows must validate their mandatory final SUMMARY block before asking the user to reply p.
+  text: Terminal workflows must validate their mandatory final SUMMARY block before
+    asking the user to reply p.
 - id: yaml-structured-mutation-only
   status: active
-  text: YAML governance files must be changed through parse-modify-dump or an equivalent structured mutation path, then parsed again before gates. Text injection into YAML is forbidden for complex values.
+  text: YAML governance files must be changed through parse-modify-dump or an equivalent
+    structured mutation path, then parsed again before gates. Text injection into
+    YAML is forbidden for complex values.
 - id: quote-guard-no-nested-generation
   status: active
-  text: Avoid nested quote-based code generation; use file-based patch helpers or simple printf line generation.
+  text: Avoid nested quote-based code generation; use file-based patch helpers or
+    simple printf line generation.
 - id: canonical-handoff-prompt-command
   status: active
-  text: Use agentic-kit handoff prompt or python -m agentic_project_kit.cli handoff prompt as the canonical generator. Do not use ./ns handoff prompt unless ./ns explicitly routes that command correctly.
+  text: Use agentic-kit handoff prompt or python -m agentic_project_kit.cli handoff
+    prompt as the canonical generator. Do not use ./ns handoff prompt unless ./ns
+    explicitly routes that command correctly.
 - id: handoff-state-must-not-stale
   status: active
-  text: A chat switch handoff prompt is invalid if .agentic/handoff_state.yaml points to an obsolete version, commit, or next task. Refresh handoff_state first, then regenerate the prompt.
+  text: A chat switch handoff prompt is invalid if .agentic/handoff_state.yaml points
+    to an obsolete version, commit, or next task. Refresh handoff_state first, then
+    regenerate the prompt.
 - id: status-boundary-changelog-history
   status: active
-  text: docs/STATUS.md is the compact live dashboard; CHANGELOG.md is the long-term project history. Do not solve status-headroom failures by turning STATUS.md back into a historical log.
+  text: docs/STATUS.md is the compact live dashboard; CHANGELOG.md is the long-term
+    project history. Do not solve status-headroom failures by turning STATUS.md back
+    into a historical log.
 - id: administrative-evidence-state-boundary
   status: active
-  text: Separate substantive safe_state from administrative_evidence_state. Pure log, summary, handoff, or evidence commits after safe_state do not invalidate the successor-chat handoff; substantive code, doc, or product changes after safe_state do.
+  text: Separate substantive safe_state from administrative_evidence_state. Pure log,
+    summary, handoff, or evidence commits after safe_state do not invalidate the successor-chat
+    handoff; substantive code, doc, or product changes after safe_state do.
 - id: changelog-quality-guard-not-bullet-count
   status: active
-  text: Recent release CHANGELOG quality must be guarded by structural release evidence, substantive content, and category coverage; do not reduce it to a naive minimum bullet count.
+  text: Recent release CHANGELOG quality must be guarded by structural release evidence,
+    substantive content, and category coverage; do not reduce it to a naive minimum
+    bullet count.
 recent_failure_patterns:
 - id: guessing-before-inspection
-  prevention: Before choosing commands, paths, JSON fields, release checks, or DOI sources, inspect the remote repository and command help. Treat memory and chat summaries as hypotheses until verified.
+  prevention: Before choosing commands, paths, JSON fields, release checks, or DOI
+    sources, inspect the remote repository and command help. Treat memory and chat
+    summaries as hypotheses until verified.
 - id: stale-planning-documents
-  prevention: State freshness checks must compare STATUS, CURRENT_HANDOFF, handoff_state.yaml, release metadata, and strategy baselines before GUI or release-automation work starts.
+  prevention: State freshness checks must compare STATUS, CURRENT_HANDOFF, handoff_state.yaml,
+    release metadata, and strategy baselines before GUI or release-automation work
+    starts.
 - id: standard-error-guards
-  prevention: Recurring workflow failures must become guards, tests, and documented contracts.
+  prevention: Recurring workflow failures must become guards, tests, and documented
+    contracts.
 - id: interpreter-discovery-before-python
-  prevention: Terminal/workflow blocks must discover a usable interpreter first and prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python. Do not combine naked python with set -e because a missing interpreter can close the interactive terminal before diagnostics are preserved.
+  prevention: Terminal/workflow blocks must discover a usable interpreter first and
+    prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python.
+    Do not combine naked python with set -e because a missing interpreter can close
+    the interactive terminal before diagnostics are preserved.
 - id: global-cli-or-venv-assumption
-  prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and agentic-kit before using command names. Treat missing global agentic-kit or missing .venv as bootstrap/environment state, not as product failure.
+  prevention: At chat or workflow start, verify .venv, python3, ruff, pytest, and
+    agentic-kit before using command names. Treat missing global agentic-kit or missing
+    .venv as bootstrap/environment state, not as product failure.
 - id: interactive-terminal-exit
-  prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit codes belong inside saved scripts, not interactive paste blocks.
+  prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace
+    the shell with exec. Report PASS/FAIL with markers and return to the prompt. Exit
+    codes belong inside saved scripts, not interactive paste blocks.
 - id: repo-log-written-while-committing
-  prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo terminal log while the current process is still writing to it.
+  prevention: Tee long runs into a temporary log outside docs/reports/terminal, finalize
+    with ./ns terminal-finalize, then stage, commit, and push. Never commit a repo
+    terminal log while the current process is still writing to it.
 - id: unconditional-pass-after-failure
-  prevention: Use explicit status handling and require log-backed PASS. Avoid shell-specific status variables such as PIPESTATUS in zsh-pasted blocks unless the shell is explicitly controlled.
+  prevention: Use explicit status handling and require log-backed PASS. Avoid shell-specific
+    status variables such as PIPESTATUS in zsh-pasted blocks unless the shell is explicitly
+    controlled.
 - id: nested-triple-quote-code-generator
-  prevention: Do not generate source files through nested shell/Python quote layers or nested triple-quoted string literals inside another generated Python script. Prefer line-list generation, existing patch tools, or checked patch artifacts plus py_compile before application.
+  prevention: Do not generate source files through nested shell/Python quote layers
+    or nested triple-quoted string literals inside another generated Python script.
+    Prefer line-list generation, existing patch tools, or checked patch artifacts
+    plus py_compile before application.
 - id: yaml-colon-term-reinterpreted-as-mapping
-  prevention: Quote every documentation coverage term containing a colon, and keep the coverage-term string guard in the test suite.
+  prevention: Quote every documentation coverage term containing a colon, and keep
+    the coverage-term string guard in the test suite.
 - id: final-pass-after-inner-fail
-  prevention: Final summaries must distinguish work result from evidence result. A later successful evidence push must not relabel failed work as PASS.
+  prevention: Final summaries must distinguish work result from evidence result. A
+    later successful evidence push must not relabel failed work as PASS.
 - id: repeated-yaml-governance-file-corruption
-  prevention: Patch scripts must parse YAML before and after mutation, use safe_dump or an equivalent structured writer, and run a YAML integrity test before handoff, governance, or dev gates.
+  prevention: Patch scripts must parse YAML before and after mutation, use safe_dump
+    or an equivalent structured writer, and run a YAML integrity test before handoff,
+    governance, or dev gates.
 - id: nested-quote-based-code-generation
   status: active
-  description: nested quote-based code generation caused fragile generated repair scripts and must be blocked by deterministic patch helpers
-  prevention: Use file-based patch helpers or simple printf line generation; avoid nested quote-based code generation.
+  description: nested quote-based code generation caused fragile generated repair
+    scripts and must be blocked by deterministic patch helpers
+  prevention: Use file-based patch helpers or simple printf line generation; avoid
+    nested quote-based code generation.
 - id: stale-handoff-state-after-main-merge
   status: active
-  prevention: After merge verification, inspect and refresh .agentic/handoff_state.yaml before generating a successor-chat prompt.
+  prevention: After merge verification, inspect and refresh .agentic/handoff_state.yaml
+    before generating a successor-chat prompt.
 - id: wrong-handoff-command-route
   status: active
-  prevention: Do not assume ./ns handoff prompt works; verify command routing or call the canonical agentic-kit CLI directly.
+  prevention: Do not assume ./ns handoff prompt works; verify command routing or call
+    the canonical agentic-kit CLI directly.
 - id: invalid-gh-pr-json-field
   status: active
-  prevention: Inspect gh pr view --json field names before using them; use mergedAt rather than a non-existent merged field.
+  prevention: Inspect gh pr view --json field names before using them; use mergedAt
+    rather than a non-existent merged field.
 - id: handoff-moving-head-loop
   status: active
-  prevention: Do not chase every final log commit with a new safe_state commit. Store administrative evidence commits separately.
+  prevention: Do not chase every final log commit with a new safe_state commit. Store
+    administrative evidence commits separately.
 - id: readme-historical-version-anchor-vs-current-extractor
   status: active
-  description: README historical coverage anchors such as Version 0.3.9 must not be interpreted as the current project version by doc-mesh.
-  prevention: README version extraction must use the explicit Current verified release marker and retain regression coverage for historical version anchors.
+  description: README historical coverage anchors such as Version 0.3.9 must not be
+    interpreted as the current project version by doc-mesh.
+  prevention: README version extraction must use the explicit Current verified release
+    marker and retain regression coverage for historical version anchors.
 next_allowed_tasks:
-- id: verify-main-after-state-refresh
-  title: Verify main after the PR681 state refresh.
-  priority: 1
 - id: regenerate-canonical-handoff-prompt
-  title: Regenerate the canonical handoff prompt if a chat switch is needed.
+  title: Regenerate the canonical handoff prompt after PR690.
+  priority: 1
+- id: start-documentation-governance-registry
+  title: Start the additive documentation-governance registry implementation from
+    the released v0.4.1 baseline.
   priority: 2
-- id: continue-bounded-gui-work
-  title: Continue bounded GUI work from the headless action-execution test baseline.
-  priority: 3
 blocked_until_closeout:
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
-first_instruction: Verify main after the PR681 state refresh, read mandatory successor-chat sources, then continue bounded GUI work only from the tested read-only/action-execution baseline.
+first_instruction: Verify main after PR690, read mandatory successor-chat sources,
+  regenerate the canonical handoff prompt if needed, then start the additive documentation-governance
+  registry implementation.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
@@ -229,14 +314,22 @@ handoff_maintenance:
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
 current_notes:
-- 'Current main is after PR #671 v0.4.0 DOI metadata closeout, PR #672 handoff refresh, PR #679 live PR CI wait command, PR #680 headless GUI action execution tests, and PR #681 deterministic CHANGELOG quality guard.'
-- 'Historical PRs #562, #564, and #568 are closed without merge as superseded evidence branches.'
-- Handoff state and generated prompt must name the same current administrative evidence HEAD before chat migration.
+- 'Current main is after PR #671 v0.4.0 DOI metadata closeout, PR #672 handoff refresh,
+  PR #679 live PR CI wait command, PR #680 headless GUI action execution tests, and
+  PR #681 deterministic CHANGELOG quality guard.'
+- 'Historical PRs #562, #564, and #568 are closed without merge as superseded evidence
+  branches.'
+- Handoff state and generated prompt must name the same current administrative evidence
+  HEAD before chat migration.
 - use d for log-backed PASS and f for log-backed FAIL
 - nested triple-quoted string literals
-- 'v0.4.0 is tagged, published, post-release checked, and DOI metadata is recorded on main.'
+- v0.4.0 is tagged, published, post-release checked, and DOI metadata is recorded
+  on main.
+- 'Current main is after v0.4.1 release publication, DOI metadata closeout, and final
+  verification evidence through PR #690.'
 administrative_evidence_state:
-  current_head: a77dbb7
-  current_head_subject: Add deterministic changelog quality guard (#681)
+  current_head: 820c7f6
+  current_head_subject: Record final verification evidence (#690)
   allowed_after_safe_state: true
-  reason: post-PR681 state refresh after headless GUI test and CHANGELOG guard closeout
+  reason: post-PR690 final verification evidence after v0.4.1 release and DOI metadata
+    closeout
