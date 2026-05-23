@@ -51,7 +51,13 @@ def _write_minimal_handoff_state(root: Path) -> None:
         "completed_since_previous_handoff": ["test"],
         "current_capabilities": {"ns_actions": []},
         "rules": [{"id": "test-rule", "status": "active", "text": "test"}],
-        "recent_failure_patterns": [],
+        "recent_failure_patterns": [
+            {
+                "id": "test-pattern",
+                "description": "test-only pattern",
+                "prevention": "keep minimal fixture valid",
+            }
+        ],
         "next_allowed_tasks": ["test"],
         "blocked_until_closeout": [],
         "first_instruction": "Continue test work.",
