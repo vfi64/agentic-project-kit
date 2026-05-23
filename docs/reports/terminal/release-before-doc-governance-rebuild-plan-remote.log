@@ -1,0 +1,13 @@
+RELEASE BEFORE DOCUMENT GOVERNANCE REBUILD PLAN REMOTE EVIDENCE
+
+Scope:
+- Extend the Document and Artifact Governance OS plan.
+- Add a release-before-rebuild requirement for the current documentation-governance baseline.
+- Add additive migration, guard preservation, parity proof, and existing-check preservation requirements.
+
+Slice type:
+- Planning documentation update.
+- No implementation in this slice.
+- No GUI behavior change in this slice.
+
+Prepared through GitHub connector. CI should pass before merge.
