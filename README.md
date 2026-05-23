@@ -486,6 +486,7 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - Verified v0.3.35 version DOI: `10.5281/zenodo.20316280`
 - Verified v0.3.36 version DOI: `10.5281/zenodo.20329180`
 - Verified v0.3.37 version DOI: `10.5281/zenodo.20329450`
+- Verified v0.4.0 version DOI: `10.5281/zenodo.20348382`
 - Verified v0.3.29 version DOI: `10.5281/zenodo.20303218`
 - Verified v0.3.30 version DOI: `10.5281/zenodo.20308526`
 - Verified v0.3.28 version DOI: `10.5281/zenodo.20286394`
@@ -546,3 +547,4 @@ Earlier verified version-specific DOIs are intentionally maintained in `docs/rel
 Archived release v0.3.36 was post-release verified before v0.3.37.
 Version `0.3.37` is released and post-release verified with Zenodo version DOI `10.5281/zenodo.20329450`.
 Version `0.4.0` is the current release line prepared by `./ns release-prep 0.4.0`.
+Version `0.4.1` is the current release line prepared by `./ns release-prep 0.4.1`.
