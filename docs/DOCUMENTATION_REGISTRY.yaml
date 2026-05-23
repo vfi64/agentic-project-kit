@@ -153,6 +153,10 @@ documents:
     class: planning
     owner: maintainers
     notes: Concise current-state dashboard, not a long-term history file.
+  - path: docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+    class: planning
+    owner: maintainers
+    notes: Accepted near-term focus for reducing manual orchestration before GUI and Pattern Advisor expansion.
   - path: docs/handoff/CURRENT_HANDOFF.md
     class: planning
     owner: maintainers
