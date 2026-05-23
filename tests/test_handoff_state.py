@@ -77,8 +77,9 @@ def _write_minimal_registry(root: Path) -> None:
 def test_handoff_check_reports_registry_summary_when_available(tmp_path: Path) -> None:
     _write_minimal_handoff_state(tmp_path)
     _write_minimal_registry(tmp_path)
+    handoff_path = str(tmp_path / ".agentic/handoff_state.yaml")
 
-    result = CliRunner().invoke(app, ["handoff", "check", str(tmp_path / ".agentic/handoff_state.yaml")])
+    result = CliRunner().invoke(app, ["handoff", "check", "--path", handoff_path])
 
     assert result.exit_code == 0, result.output
     assert "Persistent handoff state check passed" in result.output
@@ -92,8 +93,9 @@ def test_handoff_check_reports_registry_summary_when_available(tmp_path: Path) -
 def test_handoff_show_reports_registry_summary_when_available(tmp_path: Path) -> None:
     _write_minimal_handoff_state(tmp_path)
     _write_minimal_registry(tmp_path)
+    handoff_path = str(tmp_path / ".agentic/handoff_state.yaml")
 
-    result = CliRunner().invoke(app, ["handoff", "show", str(tmp_path / ".agentic/handoff_state.yaml")])
+    result = CliRunner().invoke(app, ["handoff", "show", "--path", handoff_path])
 
     assert result.exit_code == 0, result.output
     assert "Repo: agentic-project-kit" in result.output
@@ -103,8 +105,9 @@ def test_handoff_show_reports_registry_summary_when_available(tmp_path: Path) ->
 
 def test_handoff_check_without_registry_keeps_existing_success_output(tmp_path: Path) -> None:
     _write_minimal_handoff_state(tmp_path)
+    handoff_path = str(tmp_path / ".agentic/handoff_state.yaml")
 
-    result = CliRunner().invoke(app, ["handoff", "check", str(tmp_path / ".agentic/handoff_state.yaml")])
+    result = CliRunner().invoke(app, ["handoff", "check", "--path", handoff_path])
 
     assert result.exit_code == 0, result.output
     assert "Persistent handoff state check passed" in result.output
