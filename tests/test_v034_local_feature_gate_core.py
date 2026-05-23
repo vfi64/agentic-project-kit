@@ -22,7 +22,7 @@ def test_local_feature_gate_runs_expected_commands(monkeypatch) -> None:
     assert ["git", "branch", "--show-current"] in calls
     assert ["git", "status", "--short"] in calls
     assert [sys.executable, "-m", "pytest", "-q", "tests/test_example.py"] in calls
-    assert [sys.executable, "-m", "ruff", "check", "."] in calls
+    assert [sys.executable, "-m", "ruff", "check", "src", "tests"] in calls
     assert [sys.executable, "-m", "agentic_project_kit.cli", "check-docs"] in calls
     assert [sys.executable, "-m", "agentic_project_kit.cli", "doctor"] in calls
     assert [sys.executable, "-m", "agentic_project_kit.cli", "pr-hygiene"] in calls
