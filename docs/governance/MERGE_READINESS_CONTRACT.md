@@ -43,10 +43,21 @@ The deterministic core classifies saved pull-request snapshots into explicit out
 - `WAITING`: status checks are missing or pending and the timeout has not been reached.
 - `TIMEOUT`: the waiting window was exhausted.
 - `BLOCKED`: the PR state, head SHA, check results, merge state, or mergeability blocks merge readiness.
+- `GH_ERROR`: the GitHub snapshot adapter failed before a reliable snapshot was available.
 
-## Future live adapter
+## Live adapter
 
-A future live adapter may poll `gh pr view` or the GitHub API until the deterministic core returns a terminal outcome. That adapter must stay thin and testable by feeding saved snapshots into the deterministic core. The adapter must not parse human prose such as “all checks successful” as merge authority.
+`agentic-kit pr wait-ci <number>` is the live adapter around the deterministic core. It polls `gh pr view --json state,headRefOid,mergeStateStatus,mergeable,statusCheckRollup`, feeds the snapshot into the classifier, and exits only after a terminal outcome or timeout.
+
+Required usage before merge:
+
+```bash
+agentic-kit pr wait-ci <number> --expected-head-sha <sha>
+```
+
+Optional repeated `--expected-check <name>` arguments may be used when a workflow has known required check names. The command exits with success only for `READY_TO_MERGE` or `ALREADY_MERGED`. `WAITING`, `TIMEOUT`, `BLOCKED`, and `GH_ERROR` are not merge authority.
+
+The live adapter must remain thin. It must not parse human prose such as “all checks successful” as merge authority, and the actual merge must still use expected-head-SHA protection.
 
 ## Test backing
 
@@ -59,5 +70,7 @@ The rule is backed by deterministic tests for:
 - missing expected checks,
 - moved head SHAs,
 - idempotent already-merged state,
-- unclean merge state, and
-- non-mergeable PRs.
+- unclean merge state,
+- non-mergeable PRs,
+- provider errors, and
+- CLI registration without running live GitHub commands.
