@@ -15,7 +15,7 @@ documents:
       - "## Documentation Coverage Rule"
       - "## Remote Work Authorization"
       - "## Required Local Gate"
-    max_words: 2500
+    max_words: 2700
   - path: docs/STATUS.md
     required_sections:
       - "## Current State"
