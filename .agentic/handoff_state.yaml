@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-23'
-  reason: Refresh handoff state after PR690 final v0.4.1 verification evidence
-  source: main HEAD after PR690
+  reason: Refresh handoff state after PR701 documentation registry release-check visibility
+  source: main HEAD after PR701
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 820c7f6
-  commit_subject: Record final verification evidence (#690)
+  commit: 499f7a6b
+  commit_subject: Surface documentation registry in release checks (#701)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -30,6 +30,8 @@ safe_state:
   - 688
   - 689
   - 690
+  - 691
+  - 694
 release:
   current_version: 0.4.1
   previous_version: 0.4.0
@@ -45,9 +47,9 @@ open_items:
   - 562
   - 564
   - 568
-  next_expected_chat_action: Regenerate the canonical handoff prompt after PR690,
-    then start the additive documentation-governance registry implementation from
-    the released v0.4.1 baseline.
+  next_expected_chat_action: Use docs/reports/terminal/v041-successor-chat-handoff-after-pr701.md,
+    verify main after PR701, then continue the documentation-management rebuild with
+    one small additive registry consumer such as artifact-GC planning.
 completed_since_previous_handoff:
 - 'PR #647 enabled the Doctor button through the bounded read-only GUI contract.'
 - 'PR #649 added LLM communication and portable execution contracts.'
@@ -70,9 +72,11 @@ completed_since_previous_handoff:
   historical version anchors.'
 - 'PR #665 merged the PR661 overlay into CURRENT_HANDOFF.md non-destructively, preserving
   existing compatibility anchors.'
-- 'Historical PRs #562, #564, and #568 were closed without merge as superseded evidence
-  branches.'
-- STATUS.md remains the compact live dashboard while CHANGELOG.md remains the long-term
+- >-
+  Historical PRs #562, #564, and #568 were closed without merge as superseded evidence
+  branches.
+- >-
+  STATUS.md remains the compact live dashboard while CHANGELOG.md remains the long-term
   project history.
 - 'PR #666 refreshed handoff_state.yaml after PR665 and set final verification plus
   canonical handoff prompt regeneration as the next allowed tasks.'
@@ -88,6 +92,16 @@ completed_since_previous_handoff:
 - 'PR #688 recorded the v0.4.1 DOI verification evidence with Zenodo version DOI 10.5281/zenodo.20357657.'
 - 'PR #689 closed the v0.4.1 DOI metadata state on main.'
 - 'PR #690 recorded final local main verification after v0.4.1 DOI metadata closeout.'
+- 'PR #691 refreshed handoff state and the successor handoff prompt after final v0.4.1 verification.'
+- 'PR #692 introduced the first documentation registry schema and guard slice.'
+- 'PR #694 refreshed the live status after the registry baseline.'
+- 'PR #695 added the first read-only registry consumer and operational/artifact classifications.'
+- 'PR #696 added the read-only registry JSON report path.'
+- 'PR #697 added docs-audit registry visibility.'
+- 'PR #698 added doc-mesh registry visibility.'
+- 'PR #699 added doc-lifecycle registry visibility.'
+- 'PR #700 added handoff check/show registry visibility.'
+- 'PR #701 added release-check and post-release-check registry visibility.'
 current_capabilities:
   ns_actions:
   - agent-next
@@ -103,6 +117,21 @@ current_capabilities:
   artifact_dirs:
     terminal_logs: docs/reports/terminal
     command_runs: docs/reports/command_runs
+  documentation_registry:
+    registry: docs/DOCUMENTATION_REGISTRY.yaml
+    contract: docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md
+    cli_summary: agentic-kit docs-registry
+    cli_report: agentic-kit docs-registry --report PATH
+    visible_in:
+    - check-docs
+    - docs-audit
+    - doc-mesh-audit
+    - doc-lifecycle-audit
+    - handoff check
+    - handoff show
+    - release-check
+    - post-release-check
+    broad_migration_allowed: false
   gui_mvp:
     status: closed_out_on_main
     verified_read_only_actions:
@@ -294,19 +323,18 @@ recent_failure_patterns:
   prevention: README version extraction must use the explicit Current verified release
     marker and retain regression coverage for historical version anchors.
 next_allowed_tasks:
-- id: regenerate-canonical-handoff-prompt
-  title: Regenerate the canonical handoff prompt after PR690.
+- id: switch-chat-with-pr701-handoff
+  title: Switch chat with the updated PR701 successor handoff prompt.
   priority: 1
-- id: start-documentation-governance-registry
-  title: Start the additive documentation-governance registry implementation from
-    the released v0.4.1 baseline.
+- id: plan-artifact-gc-registry-consumer
+  title: Add one small documentation-registry consumer for artifact-GC planning.
   priority: 2
 blocked_until_closeout:
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
-first_instruction: Verify main after PR690, read mandatory successor-chat sources,
-  regenerate the canonical handoff prompt if needed, then start the additive documentation-governance
-  registry implementation.
+first_instruction: Verify main after PR701, read mandatory successor-chat sources,
+  use the PR701 successor handoff prompt if switching chats, then continue the documentation-management
+  rebuild with one small additive registry consumer such as artifact-GC planning.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
@@ -314,22 +342,17 @@ handoff_maintenance:
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
 current_notes:
-- 'Current main is after PR #671 v0.4.0 DOI metadata closeout, PR #672 handoff refresh,
-  PR #679 live PR CI wait command, PR #680 headless GUI action execution tests, and
-  PR #681 deterministic CHANGELOG quality guard.'
+- 'Current main is after PR #701 release-check and post-release-check registry visibility.'
 - 'Historical PRs #562, #564, and #568 are closed without merge as superseded evidence
   branches.'
 - Handoff state and generated prompt must name the same current administrative evidence
   HEAD before chat migration.
 - use d for log-backed PASS and f for log-backed FAIL
 - nested triple-quoted string literals
-- v0.4.0 is tagged, published, post-release checked, and DOI metadata is recorded
+- v0.4.1 is tagged, published, post-release checked, and DOI metadata is recorded
   on main.
-- 'Current main is after v0.4.1 release publication, DOI metadata closeout, and final
-  verification evidence through PR #690.'
 administrative_evidence_state:
-  current_head: 820c7f6
-  current_head_subject: Record final verification evidence (#690)
+  current_head: 499f7a6b
+  current_head_subject: Surface documentation registry in release checks (#701)
   allowed_after_safe_state: true
-  reason: post-PR690 final verification evidence after v0.4.1 release and DOI metadata
-    closeout
+  reason: post-PR701 documentation registry release-check visibility closeout
