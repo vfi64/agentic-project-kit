@@ -4,7 +4,7 @@ Current version: 0.4.1
 
 <!-- CURRENT_HANDOFF_OVERLAY_AFTER_PR681 -->
 
-# Current Handoff Overlay After PR681
+# Current Handoff Overlay After PR688
 
 Status-date: 2026-05-23
 Project: agentic-project-kit
@@ -13,21 +13,21 @@ Base branch: main
 
 ## Purpose
 
-This overlay records the current state after PR #680 and PR #681 without shortening the preserved historical anchors below. `CURRENT_HANDOFF.md` still contains old compatibility and historical anchors that must not be removed by a broad rewrite.
+This overlay records the current state after PR #688 and the v0.4.1 DOI verification without shortening the preserved historical anchors below. `CURRENT_HANDOFF.md` still contains old compatibility and historical anchors that must not be removed by a broad rewrite.
 
 ## Current State
 
-- Current released version: 0.4.0.
-- Current release tag: v0.4.0.
+- Current released version: 0.4.1.
+- Current release tag: v0.4.1.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
-- Verified Zenodo version DOI: `10.5281/zenodo.20348382`.
+- Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
 - PR #656 closed out the GUI MVP three read-only actions: `cockpit-readiness`, `doctor`, and `check-docs`.
 - PR #670 guarded Ruff scope and terminal quote safety after v0.4.0 release publication.
 - PR #671 closed v0.4.0 DOI metadata on main.
 - PR #679 added the live `pr wait-ci` adapter around deterministic merge-readiness classification.
 - PR #680 added headless tests for bounded read-only GUI action execution without opening a Tkinter window.
 - PR #681 added deterministic recent-release CHANGELOG quality checks to `check-docs` without reducing quality to a naive bullet-count rule.
-- v0.4.0 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20348382`.
+- v0.4.1 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20357657`.
 
 ## Current GUI Baseline
 
@@ -45,9 +45,9 @@ This overlay records the current state after PR #680 and PR #681 without shorten
 
 ## Next Safe Step
 
-Merge this administrative state refresh only after CI is green. Then verify main, regenerate the canonical handoff prompt if a chat switch is needed, and continue bounded GUI work only from the tested read-only/action-execution baseline.
+Merge this v0.4.1 DOI metadata closeout only after CI is green. Then refresh handoff state, regenerate the canonical handoff prompt if a chat switch is needed, and begin the documentation registry implementation from the released pre-rebuild baseline.
 
-Do not start remote/destructive GUI actions or broad GUI architecture expansion in the next slice.
+Do not start remote/destructive GUI actions or broad GUI architecture expansion in the next slice; the next implementation focus is the additive documentation-governance registry.
 
 ## Preserved Historical And Compatibility Anchors
 

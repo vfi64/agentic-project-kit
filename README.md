@@ -516,6 +516,7 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - Verified v0.3.19 version DOI: `10.5281/zenodo.20246121`
 - Verified v0.3.22 version DOI: `10.5281/zenodo.20261634`
 - Verified v0.3.18 version DOI: `10.5281/zenodo.20245754`
+- Verified v0.4.1 version DOI: `10.5281/zenodo.20357657`
 
 Near-term documentation-governance work: stabilize `agentic-kit doc-mesh-audit` as a targeted special gate, collect false positives, then decide whether to promote it into `agentic-kit doctor` before any unconditional default `ns` integration.
 
@@ -541,10 +542,9 @@ agentic-kit scaffold planning-doc "GUI i18n Foundation" \
 ```
 
 The command writes a document under `docs/planning/` by default, includes `Status`, `Decision status`, `Scope`, and `Review policy`, and refuses to overwrite an existing file unless `--overwrite` is passed.
-Current verified release: version `0.3.37`, Zenodo version DOI `10.5281/zenodo.20329450`.
+Current verified release: version `0.4.1`, Zenodo version DOI `10.5281/zenodo.20357657`.
 
 Earlier verified version-specific DOIs are intentionally maintained in `docs/releases/VERIFIED_RELEASES.md` instead of duplicating a long and drift-prone release ledger in the README.
 Archived release v0.3.36 was post-release verified before v0.3.37.
 Version `0.3.37` is released and post-release verified with Zenodo version DOI `10.5281/zenodo.20329450`.
-Version `0.4.0` is the current release line prepared by `./ns release-prep 0.4.0`.
-Version `0.4.1` is the current release line prepared by `./ns release-prep 0.4.1`.
+Version `0.4.1` is the current release line prepared by `./ns release-prep 0.4.1` and released/post-release verified with Zenodo version DOI `10.5281/zenodo.20357657`.
