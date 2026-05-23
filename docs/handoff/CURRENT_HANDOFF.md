@@ -2,9 +2,9 @@ Current version: 0.4.0
 
 # Current Handoff
 
-<!-- CURRENT_HANDOFF_OVERLAY_AFTER_PR660_MERGED_AFTER_PR664 -->
+<!-- CURRENT_HANDOFF_OVERLAY_AFTER_PR681 -->
 
-# Current Handoff Overlay After PR660
+# Current Handoff Overlay After PR681
 
 Status-date: 2026-05-23
 Project: agentic-project-kit
@@ -13,7 +13,7 @@ Base branch: main
 
 ## Purpose
 
-This overlay records the current state after PR #659 and PR #660 without shortening `docs/handoff/CURRENT_HANDOFF.md`. It exists because `CURRENT_HANDOFF.md` still contains old compatibility and historical anchors that must not be removed by a broad rewrite.
+This overlay records the current state after PR #680 and PR #681 without shortening the preserved historical anchors below. `CURRENT_HANDOFF.md` still contains old compatibility and historical anchors that must not be removed by a broad rewrite.
 
 ## Current State
 
@@ -22,10 +22,11 @@ This overlay records the current state after PR #659 and PR #660 without shorten
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified Zenodo version DOI: `10.5281/zenodo.20348382`.
 - PR #656 closed out the GUI MVP three read-only actions: `cockpit-readiness`, `doctor`, and `check-docs`.
-- PR #657 modeled administrative evidence state in generated handoff prompts.
-- PR #659 repaired `docs/STATUS.md` current-state drift after PR #657.
-- PR #660 refreshed `.agentic/handoff_state.yaml` after PR #659.
 - PR #670 guarded Ruff scope and terminal quote safety after v0.4.0 release publication.
+- PR #671 closed v0.4.0 DOI metadata on main.
+- PR #679 added the live `pr wait-ci` adapter around deterministic merge-readiness classification.
+- PR #680 added headless tests for bounded read-only GUI action execution without opening a Tkinter window.
+- PR #681 added deterministic recent-release CHANGELOG quality checks to `check-docs` without reducing quality to a naive bullet-count rule.
 - v0.4.0 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20348382`.
 
 ## Current GUI Baseline
@@ -33,19 +34,20 @@ This overlay records the current state after PR #659 and PR #660 without shorten
 - `cockpit-readiness` visually passes as a bounded read-only GUI action.
 - `doctor` visually passes as a bounded read-only GUI action.
 - `check-docs` visually passes as a bounded read-only GUI action.
+- Headless GUI action execution tests cover the bounded read-only executor.
 - `agent-run` and non-read-only GUI actions remain disabled in the GUI MVP.
 
 ## Remaining Drift
 
-- `docs/handoff/CURRENT_HANDOFF.md` still opens with old v0.3.30/v0.3.34 planning text.
+- `docs/handoff/CURRENT_HANDOFF.md` still preserves old v0.3.30/v0.3.34 planning and compatibility anchors below this overlay.
 - Historical PRs #562, #564, and #568 are closed without merge as superseded evidence branches.
-- This overlay is now merged into `CURRENT_HANDOFF.md` non-destructively while preserving existing test-bound anchors.
+- The preserved sections below are compatibility anchors, not the current source-of-truth narrative.
 
 ## Next Safe Step
 
-Finish the v0.4.0 DOI metadata closeout on `docs/v040-doi-metadata`, run the required Python 3.13 gates, and merge only after CI is green. After merge, refresh handoff state and regenerate the canonical handoff prompt.
+Merge this administrative state refresh only after CI is green. Then verify main, regenerate the canonical handoff prompt if a chat switch is needed, and continue bounded GUI work only from the tested read-only/action-execution baseline.
 
-Do not start the separate Claude-review/documentation-language cleanup slice until the DOI metadata closeout is complete.
+Do not start remote/destructive GUI actions or broad GUI architecture expansion in the next slice.
 
 ## Preserved Historical And Compatibility Anchors
 
@@ -288,12 +290,6 @@ The architectural rule is: chat describes intent; repo-owned tools execute typed
 - CI note: a red main CI run for #525 is historical. It was caused by a stale test expecting old shell text. #526 fixed the test contract, and the latest main CI after #526 is green.
 - Evidence: `docs/reports/terminal/v0.3.34_local_feature_gate_core_merge_verification.log` records #525/#526 interpretation, latest successful main CI, targeted sanity, and full local gate.
 - Next recommended v0.3.34 slice: identify the next `ns` route that should become a thin dispatcher around a tested Python core. Avoid GUI work until these common workflow paths are stable.
-
-
-- Completed v0.3.34 core hardening slice: `src/agentic_project_kit/finalize_guard.py` now contains a pure decision core for finalize-guard classification, covered by `tests/test_v034_finalize_guard_core.py`.
-- The shell runner `python -m agentic_project_kit.finalize_guard` has not yet been replaced; this was intentional. The next safe slice can either wire the shell runner to the Python core or choose another bounded `ns` route.
-- Evidence: `docs/reports/terminal/v0.3.34_finalize_guard_core_merge_verification.log` records recent main CI, targeted regression, and targeted local feature gate evidence.
-- Next recommended v0.3.34 slice: either integrate `python -m agentic_project_kit.finalize_guard` with the new Python decision core or extract another small read-only/safety-critical wrapper. Avoid GUI work until these command paths are stable.
 
 
 - Completed v0.3.34 finalize-guard core contract hardening: `PASS_SUPERSEDED` is now reachable for a conflicting branch whose marker is already represented on main, and `src/agentic_project_kit/finalize_guard.py` exposes a module CLI/render contract for future shell/GUI/Cockpit integration.
