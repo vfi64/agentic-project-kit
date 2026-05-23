@@ -16,6 +16,7 @@ from agentic_project_kit.documentation_registry import (
     check_documentation_registry,
     load_documentation_registry,
 )
+from agentic_project_kit.documentation_system_audit import build_documentation_system_audit
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -219,3 +220,17 @@ def test_docs_audit_cli_runs_with_documentation_registry() -> None:
     result = runner.invoke(app, ["docs-audit"])
     assert result.exit_code == 0
     assert "Documentation system audit" in result.output
+    assert "Dokumentationsregistry" in result.output
+    assert "class:operational/automation" in result.output
+
+
+def test_documentation_system_audit_includes_registry_dimension() -> None:
+    report = build_documentation_system_audit(ROOT)
+    dimensions = {dimension.name: dimension for dimension in report.dimensions}
+
+    registry_dimension = dimensions["Dokumentationsregistry"]
+
+    assert registry_dimension.ok
+    assert any(finding == "registry=docs/DOCUMENTATION_REGISTRY.yaml" for finding in registry_dimension.findings)
+    assert any(finding.startswith("documents=") for finding in registry_dimension.findings)
+    assert any(finding.startswith("class:operational/automation=") for finding in registry_dimension.findings)
