@@ -1,0 +1,183 @@
+version: 1
+purpose: >-
+  Additive documentation-governance registry for classifying repository documents
+  before any broad migration. This first slice defines schema and guard inputs only.
+  It must not replace the existing documentation coverage matrix, doc mesh audit,
+  lifecycle audit, handoff checks, release checks, or artifact GC rules.
+
+status:
+  lifecycle: experimental-schema-baseline
+  migration_scope: minimal-first-slice
+  broad_migration_allowed: false
+  semantic_quality_boundary: >-
+    The registry guard validates structure, allowed classes, required rule fields,
+    duplicate paths, and existence of registered documents. It does not prove
+    semantic documentation quality.
+
+schema:
+  required_class_rule_fields:
+    - ownership
+    - freshness
+    - language_policy
+    - redundancy_boundary
+    - machine_readability
+    - retention_gc_behavior
+    - update_triggers
+    - portability_local_path_scanning
+    - gate_coverage
+  required_document_fields:
+    - path
+    - class
+    - owner
+
+class_rules:
+  governance/system:
+    ownership: Maintainers own normative project rules, contracts, gates, and agent instructions.
+    freshness: Must change with governance behavior, public workflow rules, or gate semantics.
+    language_policy: English for active governance documents.
+    redundancy_boundary: One canonical rule source per concept; state files should point to it instead of duplicating it.
+    machine_readability: Prefer YAML or deterministic anchors when a rule feeds checks.
+    retention_gc_behavior: Retain as active source-of-truth while governing current behavior.
+    update_triggers: Governance rule, gate, bootstrap, communication, safety, or architecture-boundary changes.
+    portability_local_path_scanning: Must not contain machine-specific paths unless explicitly labeled as examples.
+    gate_coverage: check-docs, docs-audit, governance checks, and targeted tests.
+  planning:
+    ownership: Maintainers own current plans, roadmaps, and next-safe-step pointers.
+    freshness: Must be concise and not pretend to be long-term history.
+    language_policy: English for active planning files.
+    redundancy_boundary: Current-state planning belongs in STATUS or handoff pointers; history belongs in CHANGELOG or archives.
+    machine_readability: Use YAML only when deterministic planning state is consumed by tools.
+    retention_gc_behavior: Archive or demote when superseded by release history or implementation evidence.
+    update_triggers: Goal changes, safe-state changes, release-line changes, or handoff changes.
+    portability_local_path_scanning: Active plans must avoid private absolute paths.
+    gate_coverage: docs-audit, lifecycle audit, handoff checks, and state freshness checks.
+  architecture:
+    ownership: Maintainers own architecture boundaries and durable product direction.
+    freshness: Must be reviewed when public command behavior, core boundaries, or governance architecture changes.
+    language_policy: English for active architecture documents.
+    redundancy_boundary: Architecture rationale belongs in architecture docs, not duplicated across status files.
+    machine_readability: Human-readable Markdown is acceptable when paired with deterministic tests or review-only exceptions.
+    retention_gc_behavior: Retain active contracts; archive superseded design notes explicitly.
+    update_triggers: Boundary changes, new subsystems, durable design decisions, or conflict findings.
+    portability_local_path_scanning: Must avoid local machine paths as normative examples.
+    gate_coverage: architecture contract gate, docs-audit, doc-mesh, and tests for implemented boundaries.
+  release:
+    ownership: Maintainers own release metadata, DOI records, and release-state evidence.
+    freshness: Must update with release, DOI, citation, or post-release verification changes.
+    language_policy: English for active release documentation.
+    redundancy_boundary: Current release state is concise; long release history belongs in CHANGELOG and verified release files.
+    machine_readability: Prefer structured metadata for version, tag, DOI, and archive state.
+    retention_gc_behavior: Retain as durable historical release evidence.
+    update_triggers: Tag, GitHub Release, Zenodo DOI, citation metadata, or release-check behavior changes.
+    portability_local_path_scanning: No local absolute paths in release metadata.
+    gate_coverage: release checks, post-release checks, doc-mesh, check-docs, and DOI verification tests.
+  operational/automation:
+    ownership: Maintainers own automation runbooks, workflows, queues, command runners, and evidence transport rules.
+    freshness: Must change with executable workflow behavior or evidence paths.
+    language_policy: English for active operational documentation.
+    redundancy_boundary: Operational details should point to canonical contracts instead of duplicating governance rule books.
+    machine_readability: Prefer typed work orders, reports, and deterministic summaries where practical.
+    retention_gc_behavior: Retain active automation contracts; obsolete runbooks move to archive or changelog history.
+    update_triggers: CLI workflow changes, command runner changes, evidence handling, or CI behavior changes.
+    portability_local_path_scanning: Must distinguish portable commands from local examples.
+    gate_coverage: workflow tests, docs-audit, check-docs, shell checks for shell adapters, and Python tests for core behavior.
+  user-facing description:
+    ownership: Maintainers own README-level user promises and public entry points.
+    freshness: Must match public commands, installation notes, release/citation state, and product scope.
+    language_policy: English for active user-facing documentation.
+    redundancy_boundary: README should stay discoverable and concise; detailed history belongs elsewhere.
+    machine_readability: Coverage anchors may be deterministic, but prose remains human-facing.
+    retention_gc_behavior: Retain active public documentation; remove stale claims promptly.
+    update_triggers: Public command, workflow, feature, installation, safety, or release/citation changes.
+    portability_local_path_scanning: No private local paths in public documentation.
+    gate_coverage: documentation coverage, check-docs, docs-audit, and README word-limit guards.
+  evidence/log:
+    ownership: Maintainers and automation own bounded evidence logs and command reports.
+    freshness: Immutable after capture except for explicit correction records.
+    language_policy: Preserve factual evidence language; generated summaries should use contract vocabulary.
+    redundancy_boundary: Evidence may repeat output because it is audit material, not current-state prose.
+    machine_readability: Prefer structured final summaries and report metadata.
+    retention_gc_behavior: Retain committed release, merge, gate, and failure evidence; GC only transient or registered temporary artifacts.
+    update_triggers: Terminal runs, CI evidence, command-run reports, merge verification, release verification, or failure recovery.
+    portability_local_path_scanning: Logs may mention local paths as evidence, but active docs must not turn them into normative paths.
+    gate_coverage: evidence guards, final summary validation, artifact GC policy, and direct remote-log lookup rules.
+  generated artifact:
+    ownership: Generators own generated artifacts; maintainers own checked-in generated outputs.
+    freshness: Must be regenerated or verified when generator contracts change.
+    language_policy: Follow the target artifact audience; active checked-in docs should be English unless scoped otherwise.
+    redundancy_boundary: Generated duplication is allowed only when it is deterministic and documented.
+    machine_readability: Generation inputs and outputs should be reproducible where practical.
+    retention_gc_behavior: Keep checked-in generated artifacts only when they are intended source artifacts or review evidence.
+    update_triggers: Generator changes, fixture changes, scaffold changes, or snapshot contract changes.
+    portability_local_path_scanning: Generated templates must not bake in private absolute paths.
+    gate_coverage: generator tests, fixture tests, check-docs, and snapshot inspections.
+  temporary artifact:
+    ownership: Automation owns transient artifacts; maintainers own GC policy.
+    freshness: Temporary artifacts should have explicit lifetime and should not become source-of-truth.
+    language_policy: No durable language policy; active references should be English.
+    redundancy_boundary: Temporary duplication is acceptable only before evidence finalization.
+    machine_readability: Prefer typed metadata so GC and recovery can classify artifacts safely.
+    retention_gc_behavior: GC-eligible when obsolete, expired, or superseded; never delete protected evidence paths by default.
+    update_triggers: New temporary paths, command inbox behavior, evidence staging, or cleanup automation changes.
+    portability_local_path_scanning: Local temp paths must remain examples or runtime state, not canonical project paths.
+    gate_coverage: artifact GC tests, communication artifact guards, and evidence-clean checks.
+  historical archive:
+    ownership: Maintainers own archived plans, old roadmaps, release history, and superseded evidence summaries.
+    freshness: Historical archives are not live state but should be clearly labeled when preserved.
+    language_policy: Preserve historical content unless active docs reference it; active summaries should be English.
+    redundancy_boundary: History may preserve context, but current-state docs must not duplicate old narratives.
+    machine_readability: Optional unless archives feed release or drift checks.
+    retention_gc_behavior: Retain durable history; do not GC without explicit archive policy.
+    update_triggers: Archival moves, release closeouts, historical-source-of-truth banners, or status-boundary cleanup.
+    portability_local_path_scanning: Historical local paths may remain as evidence but must not become current instructions.
+    gate_coverage: doc-mesh audit, lifecycle audit, release DOI list checks, and historical banner checks.
+
+documents:
+  - path: docs/DOCUMENTATION_REGISTRY.yaml
+    class: governance/system
+    owner: maintainers
+    notes: Self-registers the additive registry schema baseline.
+  - path: docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md
+    class: governance/system
+    owner: maintainers
+    notes: Human-readable contract for the first registry slice.
+  - path: docs/DOCUMENTATION_COVERAGE.yaml
+    class: governance/system
+    owner: maintainers
+    notes: Existing coverage matrix remains active and is not replaced by this registry.
+  - path: docs/TEST_GATES.md
+    class: governance/system
+    owner: maintainers
+    notes: Defines required evidence for documentation registry and governance changes.
+  - path: docs/STATUS.md
+    class: planning
+    owner: maintainers
+    notes: Concise current-state dashboard, not a long-term history file.
+  - path: docs/handoff/CURRENT_HANDOFF.md
+    class: planning
+    owner: maintainers
+    notes: Current handoff pointer with preserved compatibility anchors.
+  - path: docs/architecture/ARCHITECTURE_CONTRACT.md
+    class: architecture
+    owner: maintainers
+    notes: Governing architecture contract.
+  - path: README.md
+    class: user-facing description
+    owner: maintainers
+    notes: Public entry point and command visibility anchor.
+  - path: CHANGELOG.md
+    class: release
+    owner: maintainers
+    notes: Long-term release history.
+  - path: docs/releases/VERIFIED_RELEASES.md
+    class: release
+    owner: maintainers
+    notes: Historical Zenodo DOI archive.
+  - path: docs/reports/terminal/v041-final-main-verify-after-pr689.log
+    class: evidence/log
+    owner: maintainers
+    notes: Final v0.4.1 verification evidence before registry work.
+  - path: docs/reports/terminal/v041-handoff-after-pr690.log
+    class: evidence/log
+    owner: maintainers
+    notes: Handoff refresh evidence before registry work.
