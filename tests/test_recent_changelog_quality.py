@@ -37,7 +37,7 @@ def test_recent_changelog_entries_record_release_context_not_only_metadata() -> 
             assert term in section, f"{heading} missing targeted changelog term: {term}"
 
 
-def test_recent_changelog_quality_guard_is_targeted_not_minimum_bullet_count() -> None:
+def test_recent_changelog_quality_guard_does_not_count_bullets() -> None:
     test_text = Path(__file__).read_text(encoding="utf-8")
     assert "count(\"- \")" not in test_text
-    assert "minimum" not in test_text.lower()
+    assert "len(section.splitlines())" not in test_text
