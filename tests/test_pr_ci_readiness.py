@@ -1,11 +1,17 @@
+from typer.testing import CliRunner
+
 from agentic_project_kit.ci_readiness import (
     ALREADY_MERGED,
     BLOCKED,
+    GH_ERROR,
     READY_TO_MERGE,
     TIMEOUT,
     WAITING,
     classify_pr_readiness,
+    render_pr_readiness,
+    wait_for_pr_readiness,
 )
+from agentic_project_kit.cli import app
 
 
 def clean_snapshot():
@@ -108,3 +114,55 @@ def test_non_mergeable_pr_blocks_even_after_successful_checks():
     decision = classify_pr_readiness(snapshot)
     assert decision.outcome == BLOCKED
     assert "PR is not mergeable" in decision.reasons[0]
+
+
+def test_wait_for_pr_readiness_retries_pending_then_passes():
+    snapshots = [
+        {
+            **clean_snapshot(),
+            "statusCheckRollup": [{"name": "test", "status": "IN_PROGRESS", "conclusion": ""}],
+        },
+        clean_snapshot(),
+    ]
+    clock_values = iter([0, 0, 1])
+    sleeps = []
+
+    def provider():
+        return snapshots.pop(0)
+
+    decision = wait_for_pr_readiness(
+        provider,
+        expected_head_sha="abc123",
+        timeout_seconds=30,
+        interval_seconds=5,
+        clock=lambda: next(clock_values),
+        sleep=sleeps.append,
+    )
+    assert decision.outcome == READY_TO_MERGE
+    assert sleeps == [5]
+
+
+def test_wait_for_pr_readiness_turns_provider_error_into_terminal_failure():
+    def provider():
+        raise RuntimeError("gh unavailable")
+
+    decision = wait_for_pr_readiness(provider, clock=lambda: 0, sleep=lambda seconds: None)
+    assert decision.outcome == GH_ERROR
+    assert decision.terminal
+    assert not decision.success
+    assert decision.reasons == ("gh unavailable",)
+
+
+def test_render_pr_readiness_includes_machine_readable_outcome():
+    rendered = render_pr_readiness(
+        classify_pr_readiness(clean_snapshot(), expected_head_sha="abc123")
+    )
+    assert "PR readiness outcome: READY_TO_MERGE" in rendered
+    assert "success=true" in rendered
+
+
+def test_pr_wait_ci_help_is_registered_without_running_gh():
+    result = CliRunner().invoke(app, ["pr", "wait-ci", "--help"])
+    assert result.exit_code == 0
+    assert "expected-head-sha" in result.output
+    assert "Polling interval" in result.output
