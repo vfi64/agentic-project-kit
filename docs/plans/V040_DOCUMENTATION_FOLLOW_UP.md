@@ -19,6 +19,14 @@ This plan records documentation and review follow-up work that must not be mixed
 8. Consider splitting `AGENTS.md` into `docs/agent_rules/` only if the split reduces drift and preserves startup clarity.
 9. Add formal CHANGELOG quality checks where deterministic, but avoid naive minimum bullet-count rules.
 
+## Document and Artifact Governance OS
+
+The broader professionalization track is defined in `docs/plans/DOCUMENT_ARTIFACT_GOVERNANCE_OS_PLAN.md`.
+
+That plan treats documentation, generated handoffs, terminal evidence, temporary artifacts, security filters, source-of-truth relationships, update triggers, garbage-collector integration, and LLM/Codex/Claude-Code collaboration artifacts as one modular governance subsystem.
+
+The implementation must stay modular. Registry, validators, security filters, source-of-truth graph, update triggers, artifact lifecycle, garbage collection, and advisory semantic review must remain separate modules that compose through documented CLI profiles.
+
 ## Active documentation language cleanup
 
 All active documentation should be in English. German sections in active documentation should be translated into English. Terminal logs, historical evidence, and intentionally localized artifacts must be classified before editing and must not be rewritten blindly.

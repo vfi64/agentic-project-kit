@@ -1,0 +1,27 @@
+DOCUMENT AND ARTIFACT GOVERNANCE OS PLAN REMOTE EVIDENCE
+
+Scope:
+- Add a planning document for a modular Document and Artifact Governance OS.
+- Link the plan from the v0.4.0 documentation follow-up plan.
+
+Safety:
+- Planning-only documentation slice.
+- No tag.
+- No release.
+- No GUI behavior change.
+- No code implementation.
+
+Plan focus:
+- Knowledge registry for documents and artifacts.
+- Document classes and artifact lifecycle states.
+- Security and local-leak filters.
+- Controlled exceptions and quarantine workflow.
+- Source-of-truth graph and update-trigger matrix.
+- Registry-driven garbage collector integration.
+- Modular validators and performance profiles.
+- LLM, Codex, and Claude-Code collaboration artifacts as first-class resources.
+
+Remote execution note:
+- This slice was prepared through the GitHub connector.
+- Local Python 3.13 gates are not available inside this chat environment.
+- GitHub CI should be checked before merge.
