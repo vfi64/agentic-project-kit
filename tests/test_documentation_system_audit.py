@@ -22,6 +22,7 @@ def test_documentation_system_audit_has_required_dimensions() -> None:
         "Korrektheit",
         "Redundanzfreiheit",
         "Stringenz der Dokumentenordnung",
+        "Dokumentationsregistry",
         "Konsistenz",
     ]
 
@@ -78,5 +79,4 @@ def test_documentation_system_audit_enforces_status_headroom() -> None:
     report = build_documentation_system_audit(ROOT)
     rendered = render_documentation_system_audit(report)
     assert "docs/STATUS.md exceeds headroom limit" not in rendered
-
 
