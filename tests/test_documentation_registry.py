@@ -80,7 +80,10 @@ def test_check_docs_includes_documentation_registry_guard(tmp_path: Path) -> Non
 
     errors = check_docs(project)
 
-    assert f"{REGISTRY_PATH}: registered document does not exist: docs/missing-from-registry-test.md" in errors
+    assert (
+        f"{REGISTRY_PATH}: registered document does not exist: "
+        "docs/missing-from-registry-test.md"
+    ) in errors
 
 
 def test_documentation_registry_guard_reports_duplicate_paths(tmp_path: Path) -> None:
@@ -92,7 +95,10 @@ def test_documentation_registry_guard_reports_duplicate_paths(tmp_path: Path) ->
 
     errors = check_documentation_registry(project)
 
-    assert f"{REGISTRY_PATH}: duplicate document path 'docs/DOCUMENTATION_REGISTRY.yaml'" in errors
+    assert (
+        f"{REGISTRY_PATH}: duplicate document path "
+        "'docs/DOCUMENTATION_REGISTRY.yaml'"
+    ) in errors
 
 
 def test_documentation_registry_guard_reports_missing_class_rule_field(tmp_path: Path) -> None:
