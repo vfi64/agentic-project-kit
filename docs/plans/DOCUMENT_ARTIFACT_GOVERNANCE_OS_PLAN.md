@@ -26,6 +26,42 @@ Without a central registry and lifecycle model, recurring failures remain likely
 - expensive full scans can slow the standard development loop,
 - LLM-generated changes can satisfy structure while missing lifecycle, evidence, or source-of-truth obligations.
 
+## Current-System Preservation Requirement
+
+The existing documentation governance is intentionally imperfect but battle-tested. It currently works because many special-purpose guards were added after real project failures. The Document and Artifact Governance OS must preserve that quality before it attempts to consolidate it.
+
+The migration rule is:
+
+```text
+Preserve current guards. Add registry. Prove parity. Then consolidate.
+```
+
+The new system must initially be additive. It may classify, explain, report, and add new findings, but it must not remove, weaken, or replace existing `check-docs`, `docs-audit`, CHANGELOG, STATUS, handoff, terminal-safety, final-summary, Ruff-scope, evidence, or release guards until parity is proven by tests.
+
+Any migration of an existing special-purpose guard into the registry system requires:
+
+- a list of the old guard's positive and negative regression cases,
+- tests showing that the new registry-backed validator catches the same failures,
+- explicit documentation of any behavior change,
+- no loss of standard-gate speed,
+- maintainer approval before the old guard is removed or softened.
+
+## Release Before Rebuild Gate
+
+Before the first implementation PR that changes the architecture of documentation governance, the project should publish a release of the current functioning baseline.
+
+This pre-rebuild release is required because the current system is already useful and empirically hardened. Freezing it gives the project a stable rollback and comparison point before registry, artifact lifecycle, GC, language policy, and security-filter implementation work begins.
+
+The release-before-rebuild rule is:
+
+- complete a normal release from the current stable main before the first architectural documentation-governance implementation slice,
+- verify the release through the existing release and post-release checks,
+- record the release and DOI metadata using the existing release-closeout workflow,
+- refresh `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, `.agentic/handoff_state.yaml`, `CHANGELOG.md`, `CITATION.cff`, `README.md`, and `docs/releases/VERIFIED_RELEASES.md` as required by the current process,
+- only then start implementation of `.agentic/knowledge_registry.yaml` or the new registry validators.
+
+Planning-only PRs may still update this plan before the release. Implementation PRs for the new governance OS must wait until the pre-rebuild release closeout is complete.
+
 ## Design Principles
 
 1. Repository state is the source of truth; chat memory is not.
@@ -38,6 +74,8 @@ Without a central registry and lifecycle model, recurring failures remain likely
 8. Fast checks must remain fast. Full audits may be deeper and more expensive, but they should not be required for every small edit.
 9. LLM/Codex/Claude-Code integration must be explicit: prompts, handoffs, work orders, summaries, and remote evidence are first-class controlled artifacts.
 10. Safety is fail-closed for leaks, missing evidence, contradictory current-state facts, unknown active documents, and unsafe GC decisions.
+11. Existing guards remain authoritative during migration unless a new registry-backed guard has proven parity.
+12. The first implementation stage is read-only or advisory where possible; hard enforcement expands only after stable tests and documented behavior.
 
 ## Resource Classes
 
@@ -480,12 +518,30 @@ Advisory findings must not silently block a release unless converted into determ
 
 ## Implementation Roadmap
 
+### Phase 0: Release Current Documentation-Governance Baseline
+
+Before changing the architecture of the documentation-governance system, publish a release from the current stable main and complete the existing release closeout.
+
+This phase freezes the current working behavior as a known-good baseline. It also prevents the new registry work from being mixed with release metadata, DOI updates, GUI-readiness state, or unrelated documentation cleanup.
+
+Required evidence:
+
+- normal release-check pass,
+- release publication evidence,
+- post-release-check pass,
+- DOI metadata closeout where applicable,
+- refreshed current-state and handoff files,
+- remote terminal evidence.
+
+No registry implementation PR may be merged before this phase is complete.
+
 ### Phase 1: Planning and Registry Skeleton
 
 - Add `.agentic/knowledge_registry.yaml` with schema version, resource classes, lifecycle states, policies, and a small initial resource set.
 - Register core active resources: `README.md`, `AGENTS.md`, `CHANGELOG.md`, `CITATION.cff`, `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, `.agentic/handoff_state.yaml`, `docs/releases/VERIFIED_RELEASES.md`, core governance docs, terminal reports, and temporary local log patterns.
 - Add documentation explaining resource classes and lifecycle states.
 - No hard enforcement beyond YAML parse and basic schema validation.
+- Do not remove or weaken existing documentation checks.
 
 ### Phase 2: Registry Check
 
@@ -493,6 +549,7 @@ Advisory findings must not silently block a release unless converted into determ
 - Validate known classes, lifecycle values, policy values, path existence for active resources, and glob syntax for artifact classes.
 - Fail if a core active document is missing from the registry.
 - Add tests for valid registry, invalid class, missing active file, and unknown policy.
+- Run as an additive check first, preferably through `docs-audit` rather than mandatory `check-docs`.
 
 ### Phase 3: Security and Local-Leak Guard
 
@@ -500,6 +557,7 @@ Advisory findings must not silently block a release unless converted into determ
 - Make active documentation and governance fail closed.
 - Allow historical terminal logs to warn on local paths but block known secret patterns.
 - Add controlled exception records with scope, owner, reason, and expiry.
+- Prove that the guard does not break historical evidence preservation.
 
 ### Phase 4: Artifact Lifecycle and GC Contract
 
@@ -508,18 +566,21 @@ Advisory findings must not silently block a release unless converted into determ
 - Protect referenced evidence.
 - Report unclassified resources.
 - Fail final-summary validation when `/tmp/...` is the only evidence for a completed remote-relevant slice.
+- Do not enable destructive GC until dry-run behavior and reference protection are tested.
 
 ### Phase 5: Source-of-Truth Graph and Update Triggers
 
 - Encode version, DOI, release, GUI-baseline, handoff, and governance-rule facts as source/projection/evidence relationships.
 - Add update-trigger checks for release closeout, GUI baseline changes, governance rule changes, and handoff refreshes.
 - Integrate with `check-docs` where fast and deterministic.
+- Keep existing release and state checks until parity is proven.
 
 ### Phase 6: Performance Profiles and CI Integration
 
 - Keep `check-docs` fast.
 - Add deeper `docs-audit`, `artifact-audit`, `security-docs-check`, and `release-docs-check` profiles.
 - Consider scheduled CI or maintainer-invoked full scans for expensive checks.
+- Do not move expensive full-history scans into the normal fast path.
 
 ### Phase 7: LLM/Codex/Claude-Code Operating Layer
 
@@ -533,17 +594,32 @@ Advisory findings must not silently block a release unless converted into determ
 - Keep advisory findings separate from deterministic gates unless promoted to explicit rules.
 - Store advisory reports as classified generated artifacts, not as source-of-truth documents.
 
-## First Concrete Slice After This Plan
+## First Concrete Slice After The Pre-Rebuild Release
 
-The next implementation PR should be small:
+The next implementation PR after the pre-rebuild release should be small:
 
 1. Add `.agentic/knowledge_registry.yaml` with the first resource classes and core resource entries.
 2. Add a parser and schema-level validator.
 3. Add `agentic-kit knowledge-registry check`.
 4. Add tests for valid and invalid registry cases.
 5. Wire the check into `docs-audit` only, not yet into mandatory `check-docs`.
+6. Preserve all current guards unchanged.
 
 Only after the first registry check is stable should the project add security filters, GC integration, and update-trigger enforcement.
+
+## Guard Parity And Consolidation Policy
+
+Existing special-purpose guards may be consolidated into registry-backed validators only after parity is proven.
+
+A parity PR must include:
+
+- a short inventory of the old guard,
+- examples of known failures it catches,
+- tests proving the new validator catches the same failures,
+- a performance note for standard gates,
+- explicit confirmation that no required current-state, release, handoff, evidence, terminal-safety, or CHANGELOG behavior was lost.
+
+Until then, duplicated checks are acceptable. Temporary duplication is safer than losing a battle-tested guard.
 
 ## Non-Goals For The First Implementation
 
@@ -553,11 +629,14 @@ Only after the first registry check is stable should the project add security fi
 - Do not make the GUI responsible for governance logic.
 - Do not delete temporary files until dry-run reporting and reference protection are tested.
 - Do not add remote or destructive GUI actions as part of this plan.
+- Do not replace the existing functioning documentation-governance system in one large migration.
+- Do not start implementation before the pre-rebuild release closeout is complete.
 
 ## Success Criteria
 
 The system is successful when:
 
+- the pre-rebuild release freezes the current functioning documentation-governance baseline,
 - every active document has a class, lifecycle, owner, policy set, and validator profile,
 - evidence logs and active rules are treated differently,
 - generated files declare their generator and manual-edit policy,
@@ -567,4 +646,5 @@ The system is successful when:
 - update-trigger obligations are explicit and test-backed,
 - standard gates remain fast,
 - deeper audits remain available for release, handoff, and maintenance slices,
-- LLM/Codex/Claude-Code collaboration artifacts are portable, inspectable, and evidence-backed.
+- LLM/Codex/Claude-Code collaboration artifacts are portable, inspectable, and evidence-backed,
+- old guards are consolidated only after parity is proven.
