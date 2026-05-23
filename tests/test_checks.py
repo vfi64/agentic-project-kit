@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from agentic_project_kit.checks import (
+    check_changelog_quality,
     check_docs,
     check_document_quality,
     check_documentation_coverage,
@@ -80,6 +81,69 @@ def test_check_document_quality_reports_placeholder_markers():
     errors = check_document_quality("README.md", "# Demo\n\nFIXME: later\n")
 
     assert errors == ["README.md: unresolved placeholder marker 'FIXME'"]
+
+
+def test_changelog_quality_accepts_recent_substantive_release_entry(tmp_path: Path):
+    (tmp_path / "CHANGELOG.md").write_text(
+        "## v0.4.0 - 2026-05-20\n\n"
+        "Zenodo v0.4.0 DOI: 10.5281/zenodo.20348382\n\n"
+        "- Hardened terminal safety by scoping Ruff to Python sources and blocking risky generated shell quoting.\n"
+        "- Closed the bounded read-only GUI MVP while keeping destructive actions disabled.\n"
+        "- Recorded successor handoff evidence and release governance contracts for future chats.\n",
+        encoding="utf-8",
+    )
+
+    assert check_changelog_quality(tmp_path) == []
+
+
+def test_changelog_quality_ignores_historical_generic_entries_before_cutoff(tmp_path: Path):
+    (tmp_path / "CHANGELOG.md").write_text(
+        "## v0.3.35 - 2026-05-20\n\n"
+        "- Prepare release metadata for v0.3.35.\n",
+        encoding="utf-8",
+    )
+
+    assert check_changelog_quality(tmp_path) == []
+
+
+def test_changelog_quality_reports_recent_metadata_only_release_entry(tmp_path: Path):
+    (tmp_path / "CHANGELOG.md").write_text(
+        "## v0.3.36 - 2026-05-21\n\n"
+        "Zenodo v0.3.36 DOI: 10.5281/zenodo.20329180\n\n"
+        "- Prepare release metadata for v0.3.36.\n",
+        encoding="utf-8",
+    )
+
+    errors = check_changelog_quality(tmp_path)
+
+    assert "CHANGELOG.md: v0.3.36 has no substantive release bullet beyond generic metadata" in errors
+    assert any(error.startswith("CHANGELOG.md: v0.3.36 lacks enough release-quality categories") for error in errors)
+
+
+def test_changelog_quality_reports_missing_recent_date_and_zenodo_state(tmp_path: Path):
+    (tmp_path / "CHANGELOG.md").write_text(
+        "## v0.4.1\n\n"
+        "- Added a tested GUI view-model contract while keeping destructive actions disabled.\n",
+        encoding="utf-8",
+    )
+
+    errors = check_changelog_quality(tmp_path)
+
+    assert "CHANGELOG.md: v0.4.1 missing release date in heading" in errors
+    assert "CHANGELOG.md: v0.4.1 missing Zenodo DOI or pending verification marker" in errors
+
+
+def test_changelog_quality_is_called_by_check_docs(tmp_path: Path):
+    (tmp_path / "README.md").write_text("# Demo\nrequired-term\n", encoding="utf-8")
+    (tmp_path / "CHANGELOG.md").write_text(
+        "## v0.3.36 - 2026-05-21\n\n- Prepare release metadata for v0.3.36.\n",
+        encoding="utf-8",
+    )
+    _write_valid_state_gate_docs(tmp_path)
+
+    errors = check_docs(tmp_path)
+
+    assert "CHANGELOG.md: v0.3.36 missing Zenodo DOI or pending verification marker" in errors
 
 
 def test_check_todo_accepts_valid_items(tmp_path: Path):

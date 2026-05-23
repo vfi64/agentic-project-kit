@@ -31,6 +31,70 @@ STALE_HANDOFF_MARKERS = (
     "Run the local gate, inspect the diff, then commit the documentation-state update",
 )
 
+CHANGELOG_QUALITY_MIN_VERSION = (0, 3, 36)
+CHANGELOG_RELEASE_HEADING = re.compile(
+    r"^##\s+v(?P<version>\d+\.\d+\.\d+)(?:\s+-\s+(?P<date>\d{4}-\d{2}-\d{2}))?.*$",
+    re.MULTILINE,
+)
+CHANGELOG_GENERIC_BULLET_PATTERNS = (
+    re.compile(r"^- prepare release metadata for v\d+\.\d+\.\d+\.?$", re.IGNORECASE),
+    re.compile(r"^- post-release verification complete:.*$", re.IGNORECASE),
+)
+CHANGELOG_SUBSTANCE_CATEGORIES = {
+    "release-evidence": (
+        "zenodo",
+        "doi",
+        "post-release",
+        "github release",
+        "release metadata",
+        "verified",
+    ),
+    "implementation-or-doc-change": (
+        "add",
+        "added",
+        "harden",
+        "hardened",
+        "close",
+        "closed",
+        "repair",
+        "repaired",
+        "wire",
+        "wired",
+        "extract",
+        "extracted",
+        "refresh",
+        "refreshed",
+        "record",
+        "recorded",
+        "translate",
+        "translated",
+        "preserve",
+        "preserved",
+    ),
+    "safety-or-scope": (
+        "bounded",
+        "read-only",
+        "disabled",
+        "guard",
+        "safety",
+        "without",
+        "no tag",
+        "no release",
+        "deferred",
+        "scope",
+    ),
+    "continuity-or-governance": (
+        "evidence",
+        "handoff",
+        "governance",
+        "contract",
+        "regression",
+        "successor",
+        "current-state",
+        "documentation boundary",
+    ),
+}
+
 
 def _open_marker_pattern(marker: str) -> re.Pattern[str]:
     escaped_marker = re.escape(marker)
@@ -107,6 +171,7 @@ def check_docs(project_root: Path) -> list[str]:
 
     errors.extend(check_state_gate_docs(project_root))
     errors.extend(check_documentation_coverage(project_root))
+    errors.extend(check_changelog_quality(project_root))
     return errors
 
 
@@ -120,6 +185,82 @@ def check_document_quality(relative_path: str, content: str) -> list[str]:
     for marker, pattern in QUALITY_PLACEHOLDER_PATTERNS.items():
         if pattern.search(content):
             errors.append(f"{relative_path}: unresolved placeholder marker {marker!r}")
+    return errors
+
+
+def _release_version_tuple(version: str) -> tuple[int, int, int]:
+    major, minor, patch = version.split(".")
+    return int(major), int(minor), int(patch)
+
+
+def _release_sections(content: str) -> list[tuple[str, str | None, str]]:
+    matches = list(CHANGELOG_RELEASE_HEADING.finditer(content))
+    sections: list[tuple[str, str | None, str]] = []
+    for index, match in enumerate(matches):
+        start = match.end()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(content)
+        sections.append((match.group("version"), match.group("date"), content[start:end].strip()))
+    return sections
+
+
+def _substance_categories(section_text: str) -> set[str]:
+    normalized = section_text.lower()
+    return {
+        category
+        for category, terms in CHANGELOG_SUBSTANCE_CATEGORIES.items()
+        if any(term in normalized for term in terms)
+    }
+
+
+def _substantive_changelog_bullets(section_text: str) -> list[str]:
+    bullets = [line.strip() for line in section_text.splitlines() if line.strip().startswith("- ")]
+    return [
+        bullet
+        for bullet in bullets
+        if not any(pattern.match(bullet) for pattern in CHANGELOG_GENERIC_BULLET_PATTERNS)
+    ]
+
+
+def check_changelog_quality(project_root: Path) -> list[str]:
+    """Check recent release-history quality without pretending to judge prose quality.
+
+    The guard is intentionally structural and category-based. It prevents recent
+    release entries from collapsing into generic metadata-only bullets, but it does
+    not require a naive minimum bullet count and does not rewrite historical evidence.
+    """
+    path = project_root / "CHANGELOG.md"
+    if not path.exists():
+        return []
+
+    content = path.read_text(encoding="utf-8")
+    errors: list[str] = []
+    seen_versions: set[str] = set()
+
+    for version, date, body in _release_sections(content):
+        if version in seen_versions:
+            errors.append(f"CHANGELOG.md: duplicate release section v{version}")
+        seen_versions.add(version)
+
+        if _release_version_tuple(version) < CHANGELOG_QUALITY_MIN_VERSION:
+            continue
+
+        section_text = f"v{version}\n{body}"
+        normalized = section_text.lower()
+        if date is None:
+            errors.append(f"CHANGELOG.md: v{version} missing release date in heading")
+
+        has_zenodo_state = "zenodo" in normalized and ("doi" in normalized or "pending" in normalized)
+        if not has_zenodo_state:
+            errors.append(f"CHANGELOG.md: v{version} missing Zenodo DOI or pending verification marker")
+
+        if not _substantive_changelog_bullets(body):
+            errors.append(f"CHANGELOG.md: v{version} has no substantive release bullet beyond generic metadata")
+
+        categories = _substance_categories(section_text)
+        if len(categories) < 3:
+            found = ", ".join(sorted(categories)) or "none"
+            errors.append(f"CHANGELOG.md: v{version} lacks enough release-quality categories (found: {found})")
+
     return errors
 
 
