@@ -31,7 +31,7 @@ def wait_ci(
     expected_head_sha: str | None = typer.Option(
         None,
         "--expected-head-sha",
-        help="Expected PR head SHA. The command fails closed if the head moves.",
+        help="Expected PR head SHA for --expected-head-sha. The command fails closed if the head moves.",
     ),
     timeout_seconds: int = typer.Option(2700, min=1, help="Maximum wait time."),
     interval_seconds: int = typer.Option(20, min=1, help="Polling interval."),
