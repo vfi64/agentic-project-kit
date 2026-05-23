@@ -6,6 +6,8 @@ import json
 import re
 from typing import Any, Literal
 
+from agentic_project_kit.documentation_registry import build_documentation_registry_summary
+
 
 @dataclass(frozen=True)
 class DocMeshDocument:
@@ -41,6 +43,7 @@ class DocMeshFinding:
 class DocMeshReport:
     documents: tuple[DocMeshDocument, ...]
     findings: tuple[DocMeshFinding, ...]
+    registry_summary: dict[str, Any] | None = None
 
     @property
     def ok(self) -> bool:
@@ -51,6 +54,7 @@ class DocMeshReport:
             "ok": self.ok,
             "documents": [document.to_dict() for document in self.documents],
             "findings": [finding.to_dict() for finding in self.findings],
+            "registry_summary": self.registry_summary,
         }
 
 
@@ -248,7 +252,11 @@ def build_doc_mesh_report(project_root: Path) -> DocMeshReport:
 
     findings.extend(_check_version_consistency(versions))
     findings.extend(_check_release_doi_consistency(contents))
-    return DocMeshReport(documents=DOC_MESH_DOCUMENTS, findings=tuple(findings))
+    return DocMeshReport(
+        documents=DOC_MESH_DOCUMENTS,
+        findings=tuple(findings),
+        registry_summary=_load_registry_summary(project_root),
+    )
 
 
 def build_doc_mesh_repair_plan(report: DocMeshReport) -> DocMeshRepairPlan:
@@ -279,6 +287,20 @@ def render_doc_mesh_report(report: DocMeshReport) -> str:
     for document in report.documents:
         required = "required" if document.required else "optional"
         lines.append(f"- {document.path}: {document.category}, {required}")
+    if report.registry_summary is not None:
+        lines.append("")
+        lines.append("Documentation registry:")
+        lines.append(f"- registry: {report.registry_summary['registry_path']}")
+        lines.append(f"- version: {report.registry_summary['version']}")
+        lines.append(f"- documents: {report.registry_summary['document_count']}")
+        lines.append(
+            "- broad_migration_allowed: "
+            f"{report.registry_summary['broad_migration_allowed']}"
+        )
+        class_counts = report.registry_summary.get("class_counts", {})
+        if isinstance(class_counts, dict):
+            for class_name, count in class_counts.items():
+                lines.append(f"- class:{class_name}: {count}")
     lines.append("")
     if report.ok:
         lines.append("Overall: PASS")
@@ -380,6 +402,13 @@ def _insert_historical_banner(project_root: Path, relative_path: str) -> DocMesh
 
     path.write_text(f"{HISTORICAL_BANNER}\n\n{content}", encoding="utf-8")
     return DocMeshRepairAction(relative_path, "insert_historical_banner", True, "historical banner inserted")
+
+
+def _load_registry_summary(project_root: Path) -> dict[str, Any] | None:
+    try:
+        return build_documentation_registry_summary(project_root)
+    except (OSError, ValueError):
+        return None
 
 
 def _check_historical_document(path: str, content: str) -> list[DocMeshFinding]:
