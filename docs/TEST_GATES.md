@@ -81,7 +81,7 @@ Update it when adding or changing:
 
 `docs/DOCUMENTATION_REGISTRY.yaml` is the additive documentation-governance registry for classifying documents and artifacts before broad migration.
 
-The first slice validates only structural, machine-checkable registry rules: registry version, allowed classes, required class-rule fields, registered document fields, duplicate paths, and existence of registered files. It does not prove semantic documentation quality and must not trigger broad document migration by itself.
+The registry validates only structural, machine-checkable registry rules: registry version, allowed classes, required class-rule fields, registered document fields, duplicate paths, and existence of registered files. It does not prove semantic documentation quality and must not trigger broad document migration by itself.
 
 Required class-level rule fields are ownership, freshness, language policy, redundancy boundary, machine readability, retention / GC behavior, update triggers, portability/local-path scanning, and gate coverage.
 
@@ -91,11 +91,14 @@ Registry/schema changes must preserve these boundaries:
 - do not delete, move, or rewrite documents merely to satisfy a taxonomy;
 - keep evidence/log and temporary artifact behavior separate;
 - keep artifact GC integration explicit and protected;
-- update tests when allowed classes, required fields, or guard semantics change.
+- keep `agentic-kit docs-registry` read-only;
+- update tests when allowed classes, required fields, guard semantics, or registry reporting change.
 
-Required evidence for this first gate:
+Required evidence for this registry gate:
 
     python -m pytest -q tests/test_documentation_registry.py
+    agentic-kit docs-registry
+    agentic-kit docs-registry --report /tmp/agentic-docs-registry-summary.json
     agentic-kit check-docs
     agentic-kit docs-audit
 
