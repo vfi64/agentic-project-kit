@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-import shutil
 
 import yaml
 from typer.testing import CliRunner
@@ -19,36 +18,75 @@ from agentic_project_kit.documentation_registry import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def _copy_repo_subset(tmp_path: Path) -> Path:
+def _class_rules() -> dict[str, dict[str, str]]:
+    return {
+        class_name: {field: f"{class_name} {field}" for field in REQUIRED_CLASS_RULE_FIELDS}
+        for class_name in DOCUMENT_CLASSES
+    }
+
+
+def _write(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+
+
+def _write_minimal_project(tmp_path: Path) -> Path:
     project = tmp_path / "project"
     project.mkdir()
-    for relative in (
-        "README.md",
-        "AGENTS.md",
-        "CHANGELOG.md",
-        "CITATION.cff",
-        "sentinel.yaml",
-        "docs/DOCUMENTATION_COVERAGE.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml",
-        "docs/STATUS.md",
-        "docs/TEST_GATES.md",
-        "docs/handoff/CURRENT_HANDOFF.md",
-        "docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md",
-        "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-        "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-        "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-        "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-        "docs/architecture/ARCHITECTURE_CONTRACT.md",
-        "docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md",
-        "docs/releases/VERIFIED_RELEASES.md",
-        "docs/reports/terminal/v041-final-main-verify-after-pr689.log",
-        "docs/reports/terminal/v041-handoff-after-pr690.log",
-    ):
-        source = ROOT / relative
-        target = project / relative
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source, target)
+    _write(project / "sentinel.yaml", "documents: []\n")
+    _write(project / "CHANGELOG.md", "# Changelog\n")
+    _write(
+        project / "docs/DOCUMENTATION_COVERAGE.yaml",
+        "rules:\n"
+        "  - id: minimal\n"
+        "    documents:\n"
+        "      - path: docs/STATUS.md\n"
+        "        terms:\n"
+        "          - '## Current Goal'\n",
+    )
+    _write(project / "docs/STATUS.md", "## Current Goal\n\nRegistry test.\n\n## Next Safe Step\n")
+    _write(project / "docs/TEST_GATES.md", "## Gate Matrix\n\n## Outcome Reporting\n")
+    _write(
+        project / "docs/handoff/CURRENT_HANDOFF.md",
+        "# Current Handoff\n\n"
+        "## Current\n\n"
+        ".agentic/compiled_agent_context.yaml\n"
+        "FINAL_SUMMARY_CONTRACT.md\n"
+        "CHAT_COMMUNICATION_CONTRACT.md\n"
+        "CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md\n\n"
+        "## Next\n",
+    )
+    _write(
+        project / "docs/architecture/ARCHITECTURE_CONTRACT.md",
+        "## 1. Executive Summary\n\n"
+        "## 2. How to Use This Document\n\n"
+        "## 4. Decision Rules\n\n"
+        "## 7. Architectural Contract\n\n"
+        "## 17. Acceptance Criteria for Future Work\n",
+    )
+    _write_registry(project)
     return project
+
+
+def _write_registry(project: Path) -> None:
+    registry = {
+        "version": 1,
+        "class_rules": _class_rules(),
+        "documents": [
+            {
+                "path": "docs/STATUS.md",
+                "class": "planning",
+                "owner": "maintainers",
+            }
+        ],
+    }
+    _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+
+def _read_registry(project: Path) -> dict[str, object]:
+    registry = yaml.safe_load((project / REGISTRY_PATH).read_text(encoding="utf-8"))
+    assert isinstance(registry, dict)
+    return registry
 
 
 def test_documentation_registry_declares_all_required_classes_and_fields() -> None:
@@ -66,17 +104,18 @@ def test_documentation_registry_guard_passes_for_repo_baseline() -> None:
 
 
 def test_check_docs_includes_documentation_registry_guard(tmp_path: Path) -> None:
-    project = _copy_repo_subset(tmp_path)
-    registry_path = project / REGISTRY_PATH
-    registry = yaml.safe_load(registry_path.read_text(encoding="utf-8"))
-    registry["documents"].append(
+    project = _write_minimal_project(tmp_path)
+    registry = _read_registry(project)
+    documents = registry["documents"]
+    assert isinstance(documents, list)
+    documents.append(
         {
             "path": "docs/missing-from-registry-test.md",
             "class": "governance/system",
             "owner": "maintainers",
         }
     )
-    registry_path.write_text(yaml.safe_dump(registry, sort_keys=False), encoding="utf-8")
+    _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
 
     errors = check_docs(project)
 
@@ -87,26 +126,27 @@ def test_check_docs_includes_documentation_registry_guard(tmp_path: Path) -> Non
 
 
 def test_documentation_registry_guard_reports_duplicate_paths(tmp_path: Path) -> None:
-    project = _copy_repo_subset(tmp_path)
-    registry_path = project / REGISTRY_PATH
-    registry = yaml.safe_load(registry_path.read_text(encoding="utf-8"))
-    registry["documents"].append(dict(registry["documents"][0]))
-    registry_path.write_text(yaml.safe_dump(registry, sort_keys=False), encoding="utf-8")
+    project = _write_minimal_project(tmp_path)
+    registry = _read_registry(project)
+    documents = registry["documents"]
+    assert isinstance(documents, list)
+    documents.append(dict(documents[0]))
+    _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
 
     errors = check_documentation_registry(project)
 
-    assert (
-        f"{REGISTRY_PATH}: duplicate document path "
-        "'docs/DOCUMENTATION_REGISTRY.yaml'"
-    ) in errors
+    assert f"{REGISTRY_PATH}: duplicate document path 'docs/STATUS.md'" in errors
 
 
 def test_documentation_registry_guard_reports_missing_class_rule_field(tmp_path: Path) -> None:
-    project = _copy_repo_subset(tmp_path)
-    registry_path = project / REGISTRY_PATH
-    registry = yaml.safe_load(registry_path.read_text(encoding="utf-8"))
-    del registry["class_rules"]["planning"]["freshness"]
-    registry_path.write_text(yaml.safe_dump(registry, sort_keys=False), encoding="utf-8")
+    project = _write_minimal_project(tmp_path)
+    registry = _read_registry(project)
+    class_rules = registry["class_rules"]
+    assert isinstance(class_rules, dict)
+    planning_rules = class_rules["planning"]
+    assert isinstance(planning_rules, dict)
+    del planning_rules["freshness"]
+    _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
 
     errors = check_documentation_registry(project)
 
