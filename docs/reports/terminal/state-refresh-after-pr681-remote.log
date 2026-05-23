@@ -1,0 +1,13 @@
+STATE REFRESH AFTER PR681 REMOTE EVIDENCE
+
+Scope:
+- Refresh STATUS, CURRENT_HANDOFF, and handoff_state after PR 680 and PR 681.
+- PR 680 added headless tests for bounded read-only GUI action execution.
+- PR 681 added deterministic recent-release CHANGELOG quality checks to check-docs.
+
+Limits:
+- No tag.
+- No release.
+- No GUI behavior change.
+
+Prepared through the GitHub connector. CI must pass before merge.
