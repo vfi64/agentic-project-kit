@@ -6,7 +6,7 @@ Current version: 0.4.0
 
 # Current Handoff Overlay After PR660
 
-Status-date: 2026-05-22
+Status-date: 2026-05-23
 Project: agentic-project-kit
 Branch: main
 Base branch: main
@@ -17,14 +17,16 @@ This overlay records the current state after PR #659 and PR #660 without shorten
 
 ## Current State
 
-- Current released version: 0.3.37.
-- Current release tag: v0.3.37.
+- Current released version: 0.4.0.
+- Current release tag: v0.4.0.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
-- Verified Zenodo version DOI: `10.5281/zenodo.20329450`.
+- Verified Zenodo version DOI: `10.5281/zenodo.20348382`.
 - PR #656 closed out the GUI MVP three read-only actions: `cockpit-readiness`, `doctor`, and `check-docs`.
 - PR #657 modeled administrative evidence state in generated handoff prompts.
 - PR #659 repaired `docs/STATUS.md` current-state drift after PR #657.
 - PR #660 refreshed `.agentic/handoff_state.yaml` after PR #659.
+- PR #670 guarded Ruff scope and terminal quote safety after v0.4.0 release publication.
+- v0.4.0 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20348382`.
 
 ## Current GUI Baseline
 
@@ -41,9 +43,9 @@ This overlay records the current state after PR #659 and PR #660 without shorten
 
 ## Next Safe Step
 
-After this handoff repair is merged, verify main, refresh handoff state, and regenerate the canonical handoff prompt before any v0.4.0 readiness conclusion.
+Finish the v0.4.0 DOI metadata closeout on `docs/v040-doi-metadata`, run the required Python 3.13 gates, and merge only after CI is green. After merge, refresh handoff state and regenerate the canonical handoff prompt.
 
-Do not start v0.4.0 release-readiness conclusions until those remaining drift items are handled and gates are green.
+Do not start the separate Claude-review/documentation-language cleanup slice until the DOI metadata closeout is complete.
 
 ## Preserved Historical And Compatibility Anchors
 

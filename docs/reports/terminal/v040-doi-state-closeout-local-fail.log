@@ -1,0 +1,208 @@
+V0.4.0 DOI STATE CLOSEOUT -- LOCAL PATCH AND GATES
+
+### PRECHECK ###
+main
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * [new branch]      docs/v040-doi-metadata -> origin/docs/v040-doi-metadata
+Switched to a new branch 'docs/v040-doi-metadata'
+branch 'docs/v040-doi-metadata' set up to track 'origin/docs/v040-doi-metadata'.
+
+### WRITE PATCH SCRIPT ###
+PATCH_OK
+
+### DIFF SUMMARY ###
+diff --git a/docs/STATUS.md b/docs/STATUS.md
+index c686fe7..3631725 100644
+--- a/docs/STATUS.md
++++ b/docs/STATUS.md
+@@ -1,9 +1,9 @@
+ Current version: 0.4.0
+ # Project Status
+-Status-date: 2026-05-22
++Status-date: 2026-05-23
+ Project: agentic-project-kit
+ Primary branch: main
+-Current work branch: docs/repair-v040-status-drift-after-pr657
++Current work branch: docs/v040-doi-metadata
+ 
+ ## Purpose
+ agentic-project-kit is a repository-backed governance and workflow kit for long-running AI-assisted software projects. Durable project memory belongs in versioned repository files, deterministic gates, evidence logs, and explicit handoff state rather than chat transcripts.
+@@ -16,14 +16,14 @@ The repository is the source of truth; chat memory is not a source of truth. Cha
+ Machine guard: `agentic-kit docs-audit` enforces the current-state headroom boundary and fails if `docs/STATUS.md` exceeds the configured word limit. This is a hard drift signal, not a stylistic preference.
+ 
+ ## Current Goal
+-Keep the v0.4.0 GUI MVP baseline ready for the next readiness slice by repairing current-state drift after PR #657. This is a documentation-state repair only; it does not start release work or change GUI behavior.
++Close the v0.4.0 DOI metadata and successor-handoff state after the v0.4.0 release and PR #670 terminal-safety hardening. This is a documentation and release-metadata closeout only; it must not create a tag, publish a release, or merge without gates.
+ 
+ ## Current State
+-Current released version: 0.3.37.
+-Current release tag: v0.3.37.
++Current released version: 0.4.0.
++Current release tag: v0.4.0.
+ Zenodo concept DOI: `10.5281/zenodo.20101359`.
+-Verified Zenodo version DOI: `10.5281/zenodo.20329450`.
+-Post-release Zenodo verification remains covered by `agentic-kit post-release-check`.
++Verified Zenodo version DOI: `10.5281/zenodo.20348382`.
++Post-release Zenodo verification remains covered by `agentic-kit post-release-check --version 0.4.0`.
+ 
+ GUI MVP baseline on `main`:
+ - `cockpit-readiness` visually passes as a bounded read-only GUI action.
+@@ -32,16 +32,18 @@ GUI MVP baseline on `main`:
+ - `agent-run` and non-read-only actions remain disabled in the GUI MVP.
+ - Tk runtime for manual judgement must import `tkinter`, `yaml`, `typer`, `rich`, and `pydantic`.
+ 
+-Current GUI evidence:
++Current GUI and release evidence:
+ - `docs/reports/terminal/v040-record-check-docs-gui-visual-pass.log`
+ - `docs/reports/terminal/v040-repair-tk-venv-deps-zsh-safe-check-docs-visual.log`
+ - `docs/reports/terminal/v040-record-doctor-gui-manual-launch-visual-result.log`
+ - `docs/reports/terminal/v040-final-release-readiness-and-successor-handoff.log`
++- `docs/reports/terminal/v040-doi-metadata-remote-closeout.log`
+ 
+ Recent closeout anchors:
+ - PR #656 closed out the GUI MVP three read-only actions.
+ - PR #657 modeled administrative evidence state in generated handoff prompts.
+-- Historical open PRs #562, #564, and #568 still need explicit classification or closure before a final v0.4.0 release-readiness conclusion.
++- PR #670 guarded Ruff scope and terminal quote safety after release publication.
++- v0.4.0 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20348382`.
+ 
+ ## Active Workflow Rules
+ - Read mandatory successor-chat sources before mutation.
+@@ -52,6 +54,8 @@ Recent closeout anchors:
+ - Preserve relevant PASS and FAIL terminal output remotely under `docs/reports/terminal/*.log` whenever technically possible.
+ - Relevant terminal blocks must render the structured final SUMMARY in terminal output before log upload.
+ - `d`, `f`, `w`, and `p` are communication signals, not evidence.
++- Ruff must run only on Python sources or Python files; shell files use shell checks, not Ruff.
++- Generated terminal blocks must avoid heredocs, risky multiline `python -c` snippets, and quote-prone constructs.
+ 
+ ## Documentation and Communication Contracts
+ Mandatory successor-chat source order is defined by `.agentic/compiled_agent_context.yaml` and checked by `agentic-kit docs-audit`:
+@@ -78,6 +82,9 @@ Required gate set for current-state or handoff changes:
+ - `./ns dev`
+ - `agentic-kit check-docs`
+ - `agentic-kit doctor`
++- `agentic-kit post-release-check --version 0.4.0`
++
++This remote chat environment could not run the local Python 3.13 gates. Merge readiness requires this local gate block or equivalent CI evidence.
+ 
+ ## Compact Regression Anchors
+ These compact anchors are intentionally retained to keep existing deterministic gates stable while preserving the current-state boundary. They are pointers, not long-term narrative history.
+@@ -103,9 +110,9 @@ These anchors are deliberately compact compatibility pointers. Long narrative hi
+ - remote inspection evidence contract: failed or diagnostic logs must be uploaded and registered for later GC.
+ 
+ ## Next Safe Step
+-Finish this non-destructive current-state repair slice, verify the gates, and then handle the remaining drift separately: `.agentic/handoff_state.yaml`, `docs/handoff/CURRENT_HANDOFF.md`, and historical PRs #562, #564, and #568 must be classified or closed without removing test-bound compatibility anchors.
++Run the required local gates on Python 3.13 for the v0.4.0 DOI metadata closeout branch. Merge only after gates pass and CI is green. After merge, refresh `.agentic/handoff_state.yaml` and regenerate the canonical handoff prompt.
+ 
+-After the state repair is merged and verified on `main`, generate the next-chat handoff through `agentic-kit handoff prompt` before any v0.4.0 release-readiness conclusion.
++Then open a separate documentation-plan slice for Claude review follow-up and active-document language cleanup, without mixing it into the DOI metadata closeout.
+ 
+ ## Compatibility Coverage Anchors
+ These compact anchors are intentionally retained for deterministic coverage: documentation coverage, policy-pack checks, policy packs, Pattern Advisor, `patterns list`, `patterns show`, no-copy/evidence, Communication artifact GC hardening is now part of the pre-GUI baseline, long chat-generated shell or Python patch blocks, v0.3.31 is the current pre-GUI execution hardening line., Mandatory Final Summary Contract, policy-pack doctor checks, `agentic-kit post-release-check`, `.agentic/compiled_agent_context.yaml`, `CHAT_COMMUNICATION_CONTRACT.md`, `PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `FINAL_SUMMARY_CONTRACT.md`, `docs/TEST_GATES.md`.
+diff --git a/docs/handoff/CURRENT_HANDOFF.md b/docs/handoff/CURRENT_HANDOFF.md
+index 2667809..f4321c3 100644
+--- a/docs/handoff/CURRENT_HANDOFF.md
++++ b/docs/handoff/CURRENT_HANDOFF.md
+@@ -6,7 +6,7 @@ Current version: 0.4.0
+ 
+ # Current Handoff Overlay After PR660
+ 
+-Status-date: 2026-05-22
++Status-date: 2026-05-23
+ Project: agentic-project-kit
+ Branch: main
+ Base branch: main
+@@ -17,14 +17,16 @@ This overlay records the current state after PR #659 and PR #660 without shorten
+ 
+ ## Current State
+ 
+-- Current released version: 0.3.37.
+-- Current release tag: v0.3.37.
++- Current released version: 0.4.0.
++- Current release tag: v0.4.0.
+ - Zenodo concept DOI: `10.5281/zenodo.20101359`.
+-- Verified Zenodo version DOI: `10.5281/zenodo.20329450`.
++- Verified Zenodo version DOI: `10.5281/zenodo.20348382`.
+ - PR #656 closed out the GUI MVP three read-only actions: `cockpit-readiness`, `doctor`, and `check-docs`.
+ - PR #657 modeled administrative evidence state in generated handoff prompts.
+ - PR #659 repaired `docs/STATUS.md` current-state drift after PR #657.
+ - PR #660 refreshed `.agentic/handoff_state.yaml` after PR #659.
++- PR #670 guarded Ruff scope and terminal quote safety after v0.4.0 release publication.
++- v0.4.0 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20348382`.
+ 
+ ## Current GUI Baseline
+ 
+@@ -41,9 +43,9 @@ This overlay records the current state after PR #659 and PR #660 without shorten
+ 
+ ## Next Safe Step
+ 
+-After this handoff repair is merged, verify main, refresh handoff state, and regenerate the canonical handoff prompt before any v0.4.0 readiness conclusion.
++Finish the v0.4.0 DOI metadata closeout on `docs/v040-doi-metadata`, run the required Python 3.13 gates, and merge only after CI is green. After merge, refresh handoff state and regenerate the canonical handoff prompt.
+ 
+-Do not start v0.4.0 release-readiness conclusions until those remaining drift items are handled and gates are green.
++Do not start the separate Claude-review/documentation-language cleanup slice until the DOI metadata closeout is complete.
+ 
+ ## Preserved Historical And Compatibility Anchors
+ 
+
+### LOCAL GATES ###
+/opt/homebrew/opt/python@3.13/bin/python3.13: No module named pytest
+/opt/homebrew/opt/python@3.13/bin/python3.13: No module named ruff
+/opt/homebrew/opt/python@3.13/bin/python3.13: No module named agentic_project_kit
+/opt/homebrew/opt/python@3.13/bin/python3.13: No module named agentic_project_kit
+/opt/homebrew/opt/python@3.13/bin/python3.13: No module named agentic_project_kit
+
+### COMMIT AND PUSH IF CLEAN GATES PASSED ###
+
+### FINAL STATE ###
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? docs/plans/
+docs/v040-doi-metadata
+ebc4602 Enrich v0.4.0 changelog closeout
+283f6ec Record v0.4.0 DOI metadata remote evidence
+60a452e Record v0.4.0 verified release DOI
+9d6d03b Record v0.4.0 DOI metadata in citation file
+b1e5bc7 Guard ruff scope and terminal quote safety (#670)
+
+================================================================
+SUMMARY
+
+SLICE
+  NAME: v040-doi-state-closeout
+  SCOPE: v0.4.0 DOI metadata, status, handoff, follow-up plan
+  BRANCH: docs/v040-doi-metadata
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: not_run
+  SWITCH_HINT: ./ns mode-write local && ./ns mode-check local
+
+RESULT
+  WORK: FAIL
+  EVIDENCE: CHAT_ONLY
+  OVERALL: FAIL
+
+REMOTE
+  REMOTE_EVIDENCE: FAIL
+  PR: #671 open
+  HEAD_SHA: not_confirmed
+  CI: unknown
+  MERGE: not_done
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit-v040-doi-state-closeout.log
+  command_report: NONE
+
+INTERPRETATION
+  The local closeout block failed before a confirmed remote evidence commit; inspect the local log.
+
+NEXT
+  SAFE_STEP: reply f and preserve the local log path for diagnosis
+  CHAT_REPLY: f
+
+### RESULT: FAIL ###
+================================================================
