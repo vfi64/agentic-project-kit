@@ -201,7 +201,7 @@ def _release_sections(content: str) -> list[tuple[str, str | None, str]]:
     sections: list[tuple[str, str | None, str]] = []
     for index, match in enumerate(matches):
         start = match.end()
-        end = matches[index + 1].start() if index + 1 < len(content) else len(content)
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(content)
         sections.append((match.group("version"), match.group("date"), content[start:end].strip()))
     return sections
 
