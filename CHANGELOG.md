@@ -9,6 +9,7 @@ Zenodo Concept DOI: 10.5281/zenodo.20101359
 - Added and hardened communication, portable execution, bootstrap/drift, terminal safety, and final-summary governance contracts so successor chats must read canonical repo sources before mutation.
 - Hardened terminal safety after recurring workflow errors: Ruff is scoped to Python sources, shell files use shell checks, heredocs and risky multiline `python -c` snippets are forbidden in generated terminal blocks, and quote-safety is covered by tests.
 - Preserved v0.4.0 release and DOI evidence through `agentic-kit post-release-check --version 0.4.0`, the verified Zenodo version DOI, and committed release metadata.
+- Recorded the post-release successor-handoff state so future chats start from repository evidence rather than chat memory.
 
 ## v0.3.37 - 2026-05-20
 
@@ -19,13 +20,18 @@ Zenodo Concept DOI: 10.5281/zenodo.20101359
 - Preserved documentation-order and status-boundary hardening by keeping `CHANGELOG.md` as the long-term project protocol and `docs/STATUS.md` as the concise live dashboard.
 - Preserved release, GUI, no-copy, remote evidence, evidence guard, typed work order, Zenodo, and handoff-prompt history in long-term release/history files instead of expanding current-state docs.
 - Kept v0.3.36 current-state cleanup historically visible because it exposed the status-boundary failure mode.
+- Closed the pre-v0.4.0 documentation-state line without changing GUI behavior, release automation, or action execution semantics.
 
 ## v0.3.36 - 2026-05-21
 
-- Verified Zenodo version DOI: `10.5281/zenodo.20329180`.
+Zenodo v0.3.36 DOI: 10.5281/zenodo.20329180
+Zenodo Concept DOI: 10.5281/zenodo.20101359
 
-- Clean up README and CHANGELOG current-state wording before starting the first bounded Tkinter cockpit MVP slice.
-- Keep this release line documentation-only unless a separate tested implementation slice is explicitly opened.
+- Cleaned up README and CHANGELOG current-state wording before the first bounded Tkinter cockpit MVP slice.
+- Re-established the documentation boundary between concise live state and long-term history: `docs/STATUS.md` remains the current dashboard, while `CHANGELOG.md` carries durable release narrative.
+- Kept the release line documentation-only and avoided GUI behavior changes, action execution changes, tag creation, and release publication outside the explicit release workflow.
+- Preserved the current-state cleanup as a historical regression anchor because it exposed how status-boundary drift can hide release and GUI-readiness history.
+- Verified and recorded the v0.3.36 Zenodo version DOI after release closeout.
 
 ## v0.3.35 - 2026-05-20
 
