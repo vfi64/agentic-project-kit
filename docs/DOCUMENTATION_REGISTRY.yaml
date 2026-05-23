@@ -173,6 +173,26 @@ documents:
     class: release
     owner: maintainers
     notes: Historical Zenodo DOI archive.
+  - path: docs/WORKFLOW_OUTPUT_CYCLE.md
+    class: operational/automation
+    owner: maintainers
+    notes: Active workflow-output handoff and state behavior runbook.
+  - path: docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md
+    class: operational/automation
+    owner: maintainers
+    notes: Active no-copy terminal evidence policy for d/f handoff.
+  - path: docs/workflow/COMMUNICATION_ARTIFACT_GC.md
+    class: operational/automation
+    owner: maintainers
+    notes: Active communication artifact GC runbook and protected-artifact policy.
+  - path: .agentic/communication_artifacts.yaml
+    class: operational/automation
+    owner: maintainers
+    notes: Machine-readable communication artifact allowlist and retention policy.
+  - path: docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+    class: generated artifact
+    owner: automation
+    notes: Protected generated pointer to the latest terminal evidence log; artifact GC must not collect it.
   - path: docs/reports/terminal/v041-final-main-verify-after-pr689.log
     class: evidence/log
     owner: maintainers
