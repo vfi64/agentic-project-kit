@@ -33,12 +33,14 @@ REQUIRED_DOCS = (
     "docs/TEST_GATES.md",
     "docs/handoff/CURRENT_HANDOFF.md",
     "docs/DOCUMENTATION_COVERAGE.yaml",
+    "docs/DOCUMENTATION_REGISTRY.yaml",
     "sentinel.yaml",
     ".agentic/compiled_agent_context.yaml",
     "docs/governance/FINAL_SUMMARY_CONTRACT.md",
     "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
     "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
     "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
+    "docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md",
     "docs/architecture/ARCHITECTURE_CONTRACT.md",
     "docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md",
 )
@@ -170,7 +172,6 @@ def _redundancy_dimension(project_root: Path) -> DocumentationAuditDimension:
         findings=tuple(findings),
         review_only=findings == [boundary],
     )
-
 
 
 
