@@ -6,6 +6,9 @@ from enum import Enum
 from pathlib import Path
 import re
 import subprocess
+from typing import Any
+
+from agentic_project_kit.documentation_registry import build_documentation_registry_summary
 
 
 @dataclass(frozen=True)
@@ -39,6 +42,7 @@ class ReleaseCheckResult:
 class ReleaseStateReport:
     version: str
     checks: tuple[ReleaseCheckResult, ...]
+    registry_summary: dict[str, Any] | None = None
 
     @property
     def ok(self) -> bool:
@@ -139,7 +143,11 @@ def build_release_state_report(
         check_remote_tag_absent(project_root, resolved_version, resolved_command_runner),
         check_github_release_absent(project_root, resolved_version, resolved_command_runner),
     ]
-    return ReleaseStateReport(version=resolved_version, checks=tuple(checks))
+    return ReleaseStateReport(
+        version=resolved_version,
+        checks=tuple(checks),
+        registry_summary=_load_registry_summary(project_root),
+    )
 
 
 def check_semantic_version(version: str) -> ReleaseCheckResult:
@@ -283,6 +291,30 @@ def render_release_state_report(report: ReleaseStateReport) -> str:
     lines = [f"Release state check for target v{report.version}", ""]
     for check in report.checks:
         lines.append(f"[{check.status.value}] {check.name}: {check.detail}")
+    if report.registry_summary is not None:
+        lines.extend(("", *_render_registry_summary_lines(report.registry_summary)))
     lines.append("")
     lines.append("Overall: PASS" if report.ok else "Overall: FAIL")
     return "\n".join(lines) + "\n"
+
+
+def _load_registry_summary(project_root: Path) -> dict[str, Any] | None:
+    try:
+        return build_documentation_registry_summary(project_root)
+    except (OSError, ValueError):
+        return None
+
+
+def _render_registry_summary_lines(summary: dict[str, Any]) -> list[str]:
+    lines = [
+        "Documentation registry:",
+        f"- registry: {summary['registry_path']}",
+        f"- version: {summary['version']}",
+        f"- documents: {summary['document_count']}",
+        f"- broad_migration_allowed: {summary['broad_migration_allowed']}",
+    ]
+    class_counts = summary.get("class_counts", {})
+    if isinstance(class_counts, dict):
+        for class_name, count in class_counts.items():
+            lines.append(f"- class:{class_name}: {count}")
+    return lines

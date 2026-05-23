@@ -4,11 +4,13 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
+from typing import Any
 import json
 import re
 import urllib.parse
 import urllib.request
 
+from agentic_project_kit.documentation_registry import build_documentation_registry_summary
 from agentic_project_kit.release import CommandResult, read_project_version, run_command
 
 ZENODO_HTTP_TIMEOUT_SECONDS = 5
@@ -32,6 +34,7 @@ class PostReleaseCheckResult:
 class PostReleaseReport:
     version: str
     checks: tuple[PostReleaseCheckResult, ...]
+    registry_summary: dict[str, Any] | None = None
 
     @property
     def ok(self) -> bool:
@@ -60,6 +63,7 @@ def build_post_release_report(
     return PostReleaseReport(
         version=resolved_version,
         checks=(github_release, concept_doi_check, zenodo_check),
+        registry_summary=_load_registry_summary(project_root),
     )
 
 
@@ -183,6 +187,8 @@ def render_post_release_report(report: PostReleaseReport) -> str:
     lines = [f"Post-release check for target v{report.version}", ""]
     for check in report.checks:
         lines.append(f"[{check.status.value}] {check.name}: {check.detail}")
+    if report.registry_summary is not None:
+        lines.extend(("", *_render_registry_summary_lines(report.registry_summary)))
     lines.append("")
     lines.append("Overall: PASS" if report.ok else "Overall: FAIL")
     return "\n".join(lines) + "\n"
@@ -222,3 +228,25 @@ def _looks_like_unavailable_github_cli(output: str) -> bool:
 def _looks_like_missing_github_release(output: str) -> bool:
     normalized = output.lower()
     return any(fragment in normalized for fragment in ("release not found", "http 404"))
+
+
+def _load_registry_summary(project_root: Path) -> dict[str, Any] | None:
+    try:
+        return build_documentation_registry_summary(project_root)
+    except (OSError, ValueError):
+        return None
+
+
+def _render_registry_summary_lines(summary: dict[str, Any]) -> list[str]:
+    lines = [
+        "Documentation registry:",
+        f"- registry: {summary['registry_path']}",
+        f"- version: {summary['version']}",
+        f"- documents: {summary['document_count']}",
+        f"- broad_migration_allowed: {summary['broad_migration_allowed']}",
+    ]
+    class_counts = summary.get("class_counts", {})
+    if isinstance(class_counts, dict):
+        for class_name, count in class_counts.items():
+            lines.append(f"- class:{class_name}: {count}")
+    return lines
