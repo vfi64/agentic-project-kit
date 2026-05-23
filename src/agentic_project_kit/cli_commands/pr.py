@@ -41,6 +41,7 @@ def wait_ci(
         help="Check name that must be present before readiness can pass. Repeatable.",
     ),
 ) -> None:
+    """Wait for pull-request CI; guard merge preparation with --expected-head-sha."""
     result = wait_for_pr_readiness(
         gh_pr_snapshot_provider(pr_number),
         expected_head_sha=expected_head_sha,
