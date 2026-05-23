@@ -19,6 +19,10 @@ from agentic_project_kit.doc_mesh import (
     write_doc_mesh_repair_result,
 )
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_report, render_doc_lifecycle_report, write_doc_lifecycle_json_report
+from agentic_project_kit.documentation_registry import (
+    build_documentation_registry_summary,
+    render_documentation_registry_summary,
+)
 from agentic_project_kit.documentation_system_audit import (
     build_documentation_system_audit,
     render_documentation_system_audit,
@@ -34,6 +38,7 @@ def register_check_commands(app: typer.Typer) -> None:
     app.command("check-docs")(check_docs_command)
     app.command("check-todo")(check_todo_command)
     app.command("docs-audit")(docs_audit_command)
+    app.command("docs-registry")(docs_registry_command)
     app.command("doc-mesh-audit")(doc_mesh_audit_command)
     app.command("doc-lifecycle-audit")(doc_lifecycle_audit_command)
     app.command("doc-mesh-repair")(doc_mesh_repair_command)
@@ -66,6 +71,14 @@ def docs_audit_command(
     console.print(render_documentation_system_audit(report), markup=False)
     if not report.ok:
         raise typer.Exit(code=1)
+
+
+def docs_registry_command(
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+) -> None:
+    """Show a read-only summary of the documentation registry."""
+    summary = build_documentation_registry_summary(project_root.resolve())
+    console.print(render_documentation_registry_summary(summary), markup=False)
 
 
 def doc_lifecycle_audit_command(
