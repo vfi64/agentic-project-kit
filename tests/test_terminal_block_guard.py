@@ -22,7 +22,7 @@ printf 'Terminal bleibt offen. Kein exit am Blockende.\\n'
 """
     report = check_terminal_block(block)
     assert report.ok is True
-    assert report.findings == []
+    assert report.findings == ()
 
 
 def test_terminal_block_guard_rejects_heredoc() -> None:
