@@ -25,6 +25,21 @@ The kit should increasingly answer these questions from repository state instead
 
 The goal is to move from a powerful expert tool toward a robust working instrument.
 
+## Machine-Readable Source Direction
+
+Operational truth should move into machine-readable sources. Human-readable Markdown should explain, summarize, or project that state instead of becoming the unverified source of state.
+
+The governing rule is: every operational statement must be traceable to a machine-readable source of truth or to a machine-checkable anchor. This includes state, governance, next actions, evidence, release state, handoff state, registry entries, work orders, artifact retention, and automation behavior.
+
+This does not mean that every document should be forced into YAML or JSON. README files, websites, handbooks, tutorials, architecture rationale, and explanatory notes may remain primarily human-readable. The stricter requirement applies to operative content that affects project state or executable behavior.
+
+Target shape:
+
+- machine-readable sources: `.agentic/handoff_state.yaml`, `docs/DOCUMENTATION_REGISTRY.yaml`, `.agentic/work_orders/*.yaml`, `.agentic/communication_artifacts.yaml`, release metadata, evidence manifests, gate reports, and generated state summaries;
+- human-facing projections: `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, successor handoff prompts, README excerpts, handbook text, website text, GUI dashboards, and LLM-generated explanations.
+
+LLM assistance should use the structured sources to translate project state into clear human prose on request. The LLM may explain and review; it should not be the only place where operational truth exists.
+
 ## Priority Order
 
 1. Finish the documentation-management foundation through small, additive, reversible, test-backed registry slices.
