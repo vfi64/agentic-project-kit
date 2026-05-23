@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -109,6 +110,16 @@ def render_documentation_registry_summary(summary: dict[str, Any]) -> str:
         for owner, count in owner_counts.items():
             lines.append(f"- {owner}: {count}")
     return "\n".join(lines)
+
+
+def write_documentation_registry_summary_json(
+    summary: dict[str, Any], report_path: Path
+) -> None:
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
 
 
 def check_documentation_registry(project_root: Path) -> list[str]:

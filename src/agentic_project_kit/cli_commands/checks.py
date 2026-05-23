@@ -22,6 +22,7 @@ from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_report, render
 from agentic_project_kit.documentation_registry import (
     build_documentation_registry_summary,
     render_documentation_registry_summary,
+    write_documentation_registry_summary_json,
 )
 from agentic_project_kit.documentation_system_audit import (
     build_documentation_system_audit,
@@ -75,9 +76,12 @@ def docs_audit_command(
 
 def docs_registry_command(
     project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    report_path: Annotated[Path | None, typer.Option("--report")] = None,
 ) -> None:
     """Show a read-only summary of the documentation registry."""
     summary = build_documentation_registry_summary(project_root.resolve())
+    if report_path is not None:
+        write_documentation_registry_summary_json(summary, report_path)
     console.print(render_documentation_registry_summary(summary), markup=False)
 
 
