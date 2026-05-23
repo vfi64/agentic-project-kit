@@ -3,6 +3,8 @@ from typing import Any
 import re
 import yaml
 
+from agentic_project_kit.documentation_registry import check_documentation_registry
+
 
 STATE_GATE_DOCUMENTS = (
     "docs/STATUS.md",
@@ -171,6 +173,7 @@ def check_docs(project_root: Path) -> list[str]:
 
     errors.extend(check_state_gate_docs(project_root))
     errors.extend(check_documentation_coverage(project_root))
+    errors.extend(check_documentation_registry(project_root))
     errors.extend(check_changelog_quality(project_root))
     return errors
 
