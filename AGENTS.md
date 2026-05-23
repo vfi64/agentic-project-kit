@@ -190,7 +190,7 @@ If a command was not run, say so explicitly and explain why.
 For app-based ChatGPT workflows, use the compatibility entrypoint as the normal local command unless a more explicit workflow command is needed:
 
 ```bash
-cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+cd <your-project-root>
 ./ns
 ```
 
