@@ -3,7 +3,7 @@ Current version: 0.4.0
 Status-date: 2026-05-23
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/v040-doi-metadata
+Current work branch: docs/refresh-state-after-pr681
 
 ## Purpose
 agentic-project-kit is a repository-backed governance and workflow kit for long-running AI-assisted software projects. Durable project memory belongs in versioned repository files, deterministic gates, evidence logs, and explicit handoff state rather than chat transcripts.
@@ -16,7 +16,7 @@ The repository is the source of truth; chat memory is not a source of truth. Cha
 Machine guard: `agentic-kit docs-audit` enforces the current-state headroom boundary and fails if `docs/STATUS.md` exceeds the configured word limit. This is a hard drift signal, not a stylistic preference.
 
 ## Current Goal
-Close the v0.4.0 DOI metadata and successor-handoff state after the v0.4.0 release and PR #670 terminal-safety hardening. This is a documentation and release-metadata closeout only; it must not create a tag, publish a release, or merge without gates.
+Refresh live state after PR #680 and PR #681. PR #680 added headless tests for bounded read-only GUI action execution. PR #681 added a deterministic CHANGELOG quality guard for recent releases. This is an administrative documentation-state refresh only; it must not create a tag, publish a release, or change GUI behavior.
 
 ## Current State
 Current released version: 0.4.0.
@@ -30,19 +30,25 @@ GUI MVP baseline on `main`:
 - `doctor` visually passes as a bounded read-only GUI action.
 - `check-docs` visually passes as a bounded read-only GUI action.
 - `agent-run` and non-read-only actions remain disabled in the GUI MVP.
+- Headless GUI action execution tests now cover the bounded read-only action executor without opening a Tkinter window.
 - Tk runtime for manual judgement must import `tkinter`, `yaml`, `typer`, `rich`, and `pydantic`.
 
-Current GUI and release evidence:
+Current GUI, release, and governance evidence:
 - `docs/reports/terminal/v040-record-check-docs-gui-visual-pass.log`
 - `docs/reports/terminal/v040-repair-tk-venv-deps-zsh-safe-check-docs-visual.log`
 - `docs/reports/terminal/v040-record-doctor-gui-manual-launch-visual-result.log`
 - `docs/reports/terminal/v040-final-release-readiness-and-successor-handoff.log`
 - `docs/reports/terminal/v040-doi-metadata-remote-closeout.log`
+- `docs/reports/terminal/gui-action-execution-headless-remote.log`
+- `docs/reports/terminal/changelog-quality-guard-remote.log`
 
 Recent closeout anchors:
 - PR #656 closed out the GUI MVP three read-only actions.
 - PR #657 modeled administrative evidence state in generated handoff prompts.
 - PR #670 guarded Ruff scope and terminal quote safety after release publication.
+- PR #671 closed v0.4.0 DOI metadata on main.
+- PR #680 added headless GUI action execution tests.
+- PR #681 added deterministic recent-release CHANGELOG quality checks to `check-docs`.
 - v0.4.0 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20348382`.
 
 ## Active Workflow Rules
@@ -56,6 +62,7 @@ Recent closeout anchors:
 - `d`, `f`, `w`, and `p` are communication signals, not evidence.
 - Ruff must run only on Python sources or Python files; shell files use shell checks, not Ruff.
 - Generated terminal blocks must avoid heredocs, risky multiline `python -c` snippets, and quote-prone constructs.
+- Recent CHANGELOG release entries from v0.3.36 onward are guarded structurally; the guard must not be reduced to a naive bullet-count rule.
 
 ## Documentation and Communication Contracts
 Mandatory successor-chat source order is defined by `.agentic/compiled_agent_context.yaml` and checked by `agentic-kit docs-audit`:
@@ -84,7 +91,7 @@ Required gate set for current-state or handoff changes:
 - `agentic-kit doctor`
 - `agentic-kit post-release-check --version 0.4.0`
 
-This remote chat environment could not run the local Python 3.13 gates. Merge readiness requires this local gate block or equivalent CI evidence.
+This remote chat environment could not run the local Python 3.13 gates. Merge readiness requires equivalent CI evidence.
 
 ## Compact Regression Anchors
 These compact anchors are intentionally retained to keep existing deterministic gates stable while preserving the current-state boundary. They are pointers, not long-term narrative history.
@@ -110,9 +117,7 @@ These anchors are deliberately compact compatibility pointers. Long narrative hi
 - remote inspection evidence contract: failed or diagnostic logs must be uploaded and registered for later GC.
 
 ## Next Safe Step
-Run the required local gates on Python 3.13 for the v0.4.0 DOI metadata closeout branch. Merge only after gates pass and CI is green. After merge, refresh `.agentic/handoff_state.yaml` and regenerate the canonical handoff prompt.
-
-Then open a separate documentation-plan slice for Claude review follow-up and active-document language cleanup, without mixing it into the DOI metadata closeout.
+Merge this administrative state refresh only after CI is green. Then refresh `.agentic/handoff_state.yaml` and regenerate the canonical handoff prompt if a chat switch is needed. The next substantive GUI slice may continue only after main is verified after this refresh.
 
 ## Compatibility Coverage Anchors
 These compact anchors are intentionally retained for deterministic coverage: documentation coverage, policy-pack checks, policy packs, Pattern Advisor, `patterns list`, `patterns show`, no-copy/evidence, Communication artifact GC hardening is now part of the pre-GUI baseline, long chat-generated shell or Python patch blocks, v0.3.31 is the current pre-GUI execution hardening line., Mandatory Final Summary Contract, policy-pack doctor checks, `agentic-kit post-release-check`, `.agentic/compiled_agent_context.yaml`, `CHAT_COMMUNICATION_CONTRACT.md`, `PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `FINAL_SUMMARY_CONTRACT.md`, `docs/TEST_GATES.md`.
