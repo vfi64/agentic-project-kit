@@ -6,6 +6,8 @@ from typing import Any
 import yaml
 
 REGISTRY_PATH = Path("docs/DOCUMENTATION_REGISTRY.yaml")
+COMPILED_CONTEXT_PATH = Path(".agentic/compiled_agent_context.yaml")
+REGISTRY_CONTRACT_PATH = Path("docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md")
 
 DOCUMENT_CLASSES = (
     "governance/system",
@@ -40,7 +42,6 @@ REQUIRED_DOCUMENT_FIELDS = (
 
 
 def load_documentation_registry(project_root: Path) -> dict[str, Any]:
-    """Load the additive documentation registry schema file."""
     path = project_root / REGISTRY_PATH
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
@@ -49,14 +50,11 @@ def load_documentation_registry(project_root: Path) -> dict[str, Any]:
 
 
 def check_documentation_registry(project_root: Path) -> list[str]:
-    """Return deterministic documentation registry schema findings.
-
-    This first guard validates only structural, machine-checkable registry rules.
-    It does not migrate documents and does not claim semantic documentation quality.
-    """
     registry_file = project_root / REGISTRY_PATH
     if not registry_file.exists():
-        return [f"Missing documentation registry: {REGISTRY_PATH}"]
+        if _registry_required(project_root):
+            return [f"Missing documentation registry: {REGISTRY_PATH}"]
+        return []
 
     try:
         registry = load_documentation_registry(project_root)
@@ -70,6 +68,19 @@ def check_documentation_registry(project_root: Path) -> list[str]:
     errors.extend(_check_class_rules(registry))
     errors.extend(_check_document_entries(project_root, registry))
     return errors
+
+
+def _registry_required(project_root: Path) -> bool:
+    if (project_root / REGISTRY_CONTRACT_PATH).exists():
+        return True
+    compiled_context = project_root / COMPILED_CONTEXT_PATH
+    if not compiled_context.exists():
+        return False
+    try:
+        context = yaml.safe_load(compiled_context.read_text(encoding="utf-8")) or {}
+    except (OSError, yaml.YAMLError):
+        return True
+    return str(REGISTRY_PATH) in str(context)
 
 
 def _check_class_rules(registry: dict[str, Any]) -> list[str]:
