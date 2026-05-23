@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 import typer
+import yaml
 
 from agentic_project_kit.cli_commands.checks import doc_mesh_audit_command, doc_mesh_repair_command
 from agentic_project_kit.doc_mesh import (
@@ -10,9 +11,11 @@ from agentic_project_kit.doc_mesh import (
     apply_doc_mesh_repair_plan,
     build_doc_mesh_repair_plan,
     build_doc_mesh_report,
+    render_doc_mesh_report,
     write_doc_mesh_json_report,
     write_doc_mesh_repair_plan,
 )
+from agentic_project_kit.documentation_registry import DOCUMENT_CLASSES, REGISTRY_PATH, REQUIRED_CLASS_RULE_FIELDS
 
 
 def _write(path: Path, content: str) -> None:
@@ -20,7 +23,44 @@ def _write(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
-def _write_minimal_mesh(root: Path, *, version: str = "1.2.3", historical_banner: bool = True) -> None:
+def _class_rules() -> dict[str, dict[str, str]]:
+    return {
+        class_name: {field: f"{class_name} {field}" for field in REQUIRED_CLASS_RULE_FIELDS}
+        for class_name in DOCUMENT_CLASSES
+    }
+
+
+def _write_minimal_registry(root: Path) -> None:
+    registry = {
+        "version": 1,
+        "status": {
+            "lifecycle": "initial",
+            "broad_migration_allowed": False,
+        },
+        "class_rules": _class_rules(),
+        "documents": [
+            {
+                "path": "docs/STATUS.md",
+                "class": "planning",
+                "owner": "maintainers",
+            },
+            {
+                "path": "docs/WORKFLOW_OUTPUT_CYCLE.md",
+                "class": "operational/automation",
+                "owner": "maintainers",
+            },
+        ],
+    }
+    _write(root / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+
+def _write_minimal_mesh(
+    root: Path,
+    *,
+    version: str = "1.2.3",
+    historical_banner: bool = True,
+    registry: bool = False,
+) -> None:
     _write(root / "pyproject.toml", f'[project]\nversion = "{version}"\n')
     _write(root / "src/agentic_project_kit/__init__.py", f'__version__ = "{version}"\n')
     _write(root / "README.md", f'Current verified release: version `{version}`, Zenodo version DOI `10.5281/zenodo.12345678`.\n')
@@ -41,6 +81,8 @@ def _write_minimal_mesh(root: Path, *, version: str = "1.2.3", historical_banner
         root / "docs/reports/status_roadmap_summary_after_pr105_20260512.md",
         banner + "# Status and roadmap summary after PR 105\n",
     )
+    if registry:
+        _write_minimal_registry(root)
 
 
 def test_doc_mesh_accepts_consistent_minimal_project(tmp_path: Path) -> None:
@@ -50,7 +92,6 @@ def test_doc_mesh_accepts_consistent_minimal_project(tmp_path: Path) -> None:
 
     assert report.ok
     assert not report.findings
-
 
 
 
@@ -136,6 +177,32 @@ def test_doc_mesh_detects_release_doi_list_drift(tmp_path: Path) -> None:
     assert any(finding.code == "release-doi-list-mismatch" for finding in report.findings)
 
 
+def test_doc_mesh_includes_registry_summary_when_available(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path, registry=True)
+
+    report = build_doc_mesh_report(tmp_path)
+    rendered = render_doc_mesh_report(report)
+
+    assert report.registry_summary is not None
+    assert report.registry_summary["registry_path"] == "docs/DOCUMENTATION_REGISTRY.yaml"
+    assert report.registry_summary["document_count"] == 2
+    assert report.registry_summary["broad_migration_allowed"] is False
+    assert "Documentation registry:" in rendered
+    assert "class:operational/automation: 1" in rendered
+
+
+def test_doc_mesh_json_report_includes_registry_summary(tmp_path: Path) -> None:
+    _write_minimal_mesh(tmp_path, registry=True)
+    report = build_doc_mesh_report(tmp_path)
+    output_path = tmp_path / "reports" / "doc-mesh-report.json"
+
+    write_doc_mesh_json_report(report, output_path)
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload["registry_summary"]["registry_path"] == "docs/DOCUMENTATION_REGISTRY.yaml"
+    assert payload["registry_summary"]["class_counts"]["planning"] == 1
+
+
 def test_doc_mesh_json_report_output_contains_stable_shape(tmp_path: Path) -> None:
     _write_minimal_mesh(tmp_path, historical_banner=False)
     report = build_doc_mesh_report(tmp_path)
@@ -146,6 +213,7 @@ def test_doc_mesh_json_report_output_contains_stable_shape(tmp_path: Path) -> No
     payload = json.loads(output_path.read_text(encoding="utf-8"))
     assert payload["ok"] is False
     assert payload["documents"]
+    assert payload["registry_summary"] is None
     documents = {document["path"]: document for document in payload["documents"]}
     assert documents["CHANGELOG.md"]["category"] == "release-history"
     assert documents["CHANGELOG.md"]["required"] is True
