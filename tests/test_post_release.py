@@ -2,6 +2,9 @@ from pathlib import Path
 from collections.abc import Sequence
 import json
 
+import yaml
+
+from agentic_project_kit.documentation_registry import DOCUMENT_CLASSES, REGISTRY_PATH, REQUIRED_CLASS_RULE_FIELDS
 from agentic_project_kit.post_release import (
     PostReleaseStatus,
     build_post_release_report,
@@ -26,7 +29,30 @@ def test_post_release_report_passes_with_github_release_and_verified_zenodo_reco
         PostReleaseStatus.PASS,
         PostReleaseStatus.PASS,
     ]
+    assert report.registry_summary is None
     assert "10.5281/zenodo.1001" in report.checks[-1].detail
+
+
+def test_post_release_report_includes_registry_summary_when_available(tmp_path: Path):
+    _write_project_files(tmp_path, version="1.2.3", doi="10.5281/zenodo.1000")
+    _write_minimal_registry(tmp_path)
+
+    report = build_post_release_report(
+        tmp_path,
+        command_runner=_runner(github_release=CommandResult(0, "v1.2.3\n", "")),
+        http_getter=_http_getter(_zenodo_payload(version="1.2.3", doi="10.5281/zenodo.1001")),
+    )
+    rendered = render_post_release_report(report)
+
+    assert report.ok
+    assert report.registry_summary is not None
+    assert report.registry_summary["document_count"] == 2
+    assert "Documentation registry:" in rendered
+    assert "- registry: docs/DOCUMENTATION_REGISTRY.yaml" in rendered
+    assert "- documents: 2" in rendered
+    assert "- broad_migration_allowed: False" in rendered
+    assert "- class:release: 1" in rendered
+    assert "Overall: PASS" in rendered
 
 
 def test_post_release_report_waits_when_zenodo_record_is_not_available_yet(tmp_path: Path):
@@ -112,6 +138,27 @@ def _write_project_files(project_root: Path, *, version: str, doi: str | None) -
     (project_root / "pyproject.toml").write_text(f'version = "{version}"\n', encoding="utf-8")
     if doi is not None:
         (project_root / "CITATION.cff").write_text(f"cff-version: 1.2.0\ndoi: {doi}\n", encoding="utf-8")
+
+
+def _class_rules() -> dict[str, dict[str, str]]:
+    return {
+        class_name: {field: f"{class_name} {field}" for field in REQUIRED_CLASS_RULE_FIELDS}
+        for class_name in DOCUMENT_CLASSES
+    }
+
+
+def _write_minimal_registry(project_root: Path) -> None:
+    registry = {
+        "version": 1,
+        "status": {"lifecycle": "initial", "broad_migration_allowed": False},
+        "class_rules": _class_rules(),
+        "documents": [
+            {"path": "pyproject.toml", "class": "release", "owner": "maintainers"},
+            {"path": "CITATION.cff", "class": "release", "owner": "maintainers"},
+        ],
+    }
+    (project_root / REGISTRY_PATH).parent.mkdir(parents=True, exist_ok=True)
+    (project_root / REGISTRY_PATH).write_text(yaml.safe_dump(registry, sort_keys=False), encoding="utf-8")
 
 
 def _zenodo_payload(*, version: str, doi: str) -> str:
