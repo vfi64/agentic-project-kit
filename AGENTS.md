@@ -253,55 +253,55 @@ Rules:
 - If the terminal shows heredoc> or quote>, stop the unfinished input with Ctrl-C and run `git status --short` and `git branch --show-current` before continuing.
 - Use `./tools/screen_control_gate.sh` to capture local evidence in `Screen-Control_Output.txt` when local validation output should be shared.
 
-## Diagnose-/Output-Transfer-Regel
+## Diagnostic and Output Transfer Rule
 
-Wenn der arbeitende LLM/Agent keinen direkten Zugriff auf die lokale Kommandozeile, lokale Dateien oder die lokale Repo-Kopie hat, müssen relevante Diagnose-, Test-, Inspektions- und Gate-Ausgaben automatisch in Dateien geschrieben werden.
+When the working LLM or agent does not have direct access to the local command line, local files, or the local repository copy, relevant diagnostic, test, inspection, and gate outputs must be written to files automatically.
 
-Diese Dateien sollen am Ende eines Arbeitsblocks oder Slices in einen geeigneten versionierten oder remote zugänglichen Pfad übernommen und gepusht werden, sofern sie für die weitere Auswertung nützlich sind.
+At the end of a work block or slice, these files should be moved into a suitable versioned or remotely accessible path and pushed when they are useful for follow-up analysis.
 
-Ziel:
-- keine manuelle Copy-&-Paste-Abhängigkeit,
-- reproduzierbare Auswertung,
-- bessere Anschlussfähigkeit in neuen Chats,
-- auditierbare Entwicklungsschritte.
+Goal:
+- no dependency on manual copy and paste,
+- reproducible analysis,
+- better continuity in successor chats,
+- auditable development steps.
 
-Bevorzugte Pfade:
+Preferred paths:
 - docs/reports/
 - artifacts/
 - Logs/SharedManualTestRuns/
-- ein projektspezifischer Diagnose-/Report-Pfad
+- a project-specific diagnostic or report path
 
-Nicht geeignet:
-- ignorierte tmp-Dateien als alleinige Informationsquelle,
-- nur Terminalausgabe ohne gespeicherte Datei,
-- Screenshots als primäre Diagnosequelle.
+Not suitable:
+- ignored tmp files as the only information source,
+- terminal output only without a saved file,
+- screenshots as the primary diagnostic source.
 
-Weiterhin gilt:
-- Terminalblöcke müssen quoting-sicher bleiben.
-- Keine heredocs.
-- Keine riskanten mehrzeiligen python -c-Kommandos.
-- Längere Blöcke beginnen mit printf-Titelzeile.
+The following still applies:
+- terminal blocks must remain quote-safe,
+- no heredocs,
+- no risky multiline python -c commands,
+- longer blocks start with a printf title line.
 
-## Terminal-Rückmelde-Regel
+## Terminal Feedback Rule
 
-Jeder vorgeschlagene Terminalblock muss am Ende klar markieren, welche Rückmeldung erwartet wird.
+Every proposed terminal block must clearly mark the expected response at the end.
 
-Wenn keine Terminalausgabe benötigt wird:
+When no terminal output is needed:
 
-- Rückmeldung danach: Nur `done` reicht; die Kurzform `d` ist ebenfalls zulässig.
+- Expected response afterwards: only `done` is enough; the short form `d` is also valid.
 
-Wenn Terminalausgabe benötigt wird:
+When terminal output is needed:
 
-- Rückmeldung danach: Terminalausgabe notwendig.
-- Die relevante Ausgabe soll exakt zwischen folgenden Markern kopiert werden:
+- Expected response afterwards: terminal output is required.
+- The relevant output should be copied exactly between these markers:
 
 ```text
 ################### Begin Copy Terminal #####################
-... Terminalausgabe ...
+... terminal output ...
 ################### End Copy Terminal #####################
 ```
 
-Die Markierung verhindert, dass Shell-Kommandos, Prompts, Diagnoseausgaben und Chattext vermischt werden.
+The markers prevent shell commands, prompts, diagnostic output, and chat text from being mixed.
 
 ## Current Workflow Output
 
@@ -315,18 +315,18 @@ Use it to speed up app-based ChatGPT workflows and reduce manual copy-and-paste.
 
 Only create additional permanent report files when the result has long-term audit, release, or decision value.
 
-## Diagnosebericht-Hygiene
+## Diagnostic Report Hygiene
 
-Diagnose-, Inspektions- und Gate-Ausgaben sollen bei fehlendem direktem Shell-Zugriff des Agents in Dateien geschrieben werden.
+Diagnostic, inspection, and gate outputs should be written to files when the agent does not have direct shell access.
 
-Es sollen aber nicht alle Zwischenberichte dauerhaft versioniert werden.
+However, not every intermediate report should be versioned permanently.
 
-Bevorzugt wird:
+Prefer:
 
-- ein finaler, zusammenfassender Slice-Report pro Arbeitsabschnitt,
-- plus gezielte Gate-, Release- oder Audit-Berichte, wenn sie langfristigen Evidenzwert haben.
+- one final summarizing slice report per work section,
+- plus targeted gate, release, or audit reports when they have long-term evidence value.
 
-Temporäre Rohberichte sollen gelöscht oder uncommitted bleiben, sobald sie ihren Zweck erfüllt haben.
+Temporary raw reports should be deleted or left uncommitted once they have served their purpose.
 
 ## Workflow output handoff
 
