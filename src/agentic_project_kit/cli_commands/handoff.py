@@ -1,18 +1,32 @@
 from __future__ import annotations
 
-from typing import Annotated
+from pathlib import Path
+from typing import Annotated, Any
 
 import typer
 
+from agentic_project_kit.documentation_registry import build_documentation_registry_summary
 from agentic_project_kit.handoff_prompt import render_handoff_prompt
-from agentic_project_kit.handoff_state import current_git_safe_state, load_handoff_state, refresh_handoff_safe_state, save_handoff_state, summarize_handoff_state, validate_handoff_state
+from agentic_project_kit.handoff_state import (
+    current_git_safe_state,
+    load_handoff_state,
+    refresh_handoff_safe_state,
+    save_handoff_state,
+    summarize_handoff_state,
+    validate_handoff_state,
+)
 
 handoff_app = typer.Typer(help="Read-only persistent handoff state commands.")
+
 
 @handoff_app.command("show")
 def show(path: str = ".agentic/handoff_state.yaml") -> None:
     data = load_handoff_state(path)
     typer.echo(summarize_handoff_state(data))
+    registry_lines = _render_registry_summary(path)
+    if registry_lines:
+        typer.echo(registry_lines)
+
 
 @handoff_app.command("check")
 def check(path: str = ".agentic/handoff_state.yaml") -> None:
@@ -23,6 +37,10 @@ def check(path: str = ".agentic/handoff_state.yaml") -> None:
             typer.echo(f"[FAIL] {error}")
         raise typer.Exit(code=1)
     typer.echo("Persistent handoff state check passed")
+    registry_lines = _render_registry_summary(path)
+    if registry_lines:
+        typer.echo(registry_lines)
+
 
 @handoff_app.command("prompt")
 def prompt(path: str = ".agentic/handoff_state.yaml") -> None:
@@ -61,3 +79,35 @@ def refresh(
         typer.echo(f"Updated {path}")
     else:
         typer.echo("Dry run only. Use --write to update the YAML file.")
+
+
+def _render_registry_summary(handoff_path: str) -> str:
+    summary = _load_registry_summary(handoff_path)
+    if summary is None:
+        return ""
+    lines = [
+        "Documentation registry:",
+        f"- registry: {summary['registry_path']}",
+        f"- version: {summary['version']}",
+        f"- documents: {summary['document_count']}",
+        f"- broad_migration_allowed: {summary['broad_migration_allowed']}",
+    ]
+    class_counts = summary.get("class_counts", {})
+    if isinstance(class_counts, dict):
+        for class_name, count in class_counts.items():
+            lines.append(f"- class:{class_name}: {count}")
+    return "\n".join(lines)
+
+
+def _load_registry_summary(handoff_path: str) -> dict[str, Any] | None:
+    project_root = _project_root_for_handoff_path(Path(handoff_path))
+    try:
+        return build_documentation_registry_summary(project_root)
+    except (OSError, ValueError):
+        return None
+
+
+def _project_root_for_handoff_path(path: Path) -> Path:
+    if path.name == "handoff_state.yaml" and path.parent.name == ".agentic":
+        return path.parent.parent
+    return Path.cwd()
