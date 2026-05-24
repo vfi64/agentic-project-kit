@@ -134,7 +134,7 @@ handoff_maintenance:
   remove_obsolete_rules_when_system_changes: true
   latest_successor_prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr714.md
 administrative_evidence_state:
-  current_head: 3e4d700
-  current_head_subject: Restore remaining handoff compatibility anchors
+  current_head: fc9c625
+  current_head_subject: Restore remaining handoff test anchors
   allowed_after_safe_state: true
   reason: post-PR714 administrative closeout and drift-guard repair after substantive safe_state 7d092cb
