@@ -86,6 +86,22 @@ def test_validator_rejects_missing_required_term(tmp_path: Path) -> None:
     assert any("required term missing" in finding.message for finding in findings)
 
 
+def test_validator_rejects_missing_mechanism_sources(tmp_path: Path) -> None:
+    mechanism = _valid_mechanism()
+    mechanism["sources"] = []
+    _write_registry(tmp_path, mechanism)
+    findings = validate_rule_registry(tmp_path)
+    assert any("sources must list at least one source" in finding.message for finding in findings)
+
+
+def test_validator_rejects_source_without_required_terms(tmp_path: Path) -> None:
+    mechanism = _valid_mechanism()
+    mechanism["sources"] = [{"path": "source.txt", "required_terms": []}]
+    _write_registry(tmp_path, mechanism)
+    findings = validate_rule_registry(tmp_path)
+    assert any("must list at least one required_terms entry" in finding.message for finding in findings)
+
+
 def test_validator_rejects_migration_to_unknown_mechanism(tmp_path: Path) -> None:
     _write_registry(tmp_path, _valid_mechanism(), replaced_by="unknown")
     findings = validate_rule_registry(tmp_path)
@@ -178,6 +194,14 @@ def test_validator_rejects_invalid_migration_status(tmp_path: Path) -> None:
     _write_registry(tmp_path, _valid_mechanism(), migrations_override=[migration])
     findings = validate_rule_registry(tmp_path)
     assert any("status must be one of" in finding.message for finding in findings)
+
+
+def test_validator_rejects_missing_migration_evidence(tmp_path: Path) -> None:
+    migration = _valid_migration()
+    migration["evidence"] = []
+    _write_registry(tmp_path, _valid_mechanism(), migrations_override=[migration])
+    findings = validate_rule_registry(tmp_path)
+    assert any("evidence must list at least one evidence path" in finding.message for finding in findings)
 
 
 def test_validator_allows_archived_terminal_migration_status(tmp_path: Path) -> None:
