@@ -144,7 +144,7 @@ rules:
   text: Always choose the technically best deterministic solution for recurring workflow problems; do not use shortcut patches that merely get the current block past the gate.
 - id: patch-artifact-preflight-before-application
   status: active
-  text: Complex patches must be treated as patch artifacts and checked before application: syntax, YAML structure, generated Python compileability, documentation coverage terms, and final-summary validity.
+  text: 'Complex patches must be treated as patch artifacts and checked before application: syntax, YAML structure, generated Python compileability, documentation coverage terms, and final-summary validity.'
 - id: generated-code-syntax-first
   status: active
   text: Generated or newly added Python files must pass py_compile before full gates or commit attempts; nested string-generation mistakes are product defects, not acceptable manual errors.
@@ -159,7 +159,7 @@ rules:
   text: YAML governance files must be changed through parse-modify-dump or an equivalent structured mutation path, then parsed again before gates. Text injection into YAML is forbidden for complex values.
 - id: quote-guard-no-nested-generation
   status: active
-  text: Avoid nested quote-based code generation and nested shell/Python quote layers; use file-based patch helpers or simple printf line generation.
+  text: Avoid nested quote-based code generation and nested shell/Python quote layers; use line-list generation, existing patch tools, file-based patch helpers, or simple printf line generation.
 - id: canonical-handoff-prompt-command
   status: active
   text: Use agentic-kit handoff prompt or python -m agentic_project_kit.cli handoff prompt as the canonical generator. Do not use ./ns handoff prompt unless ./ns explicitly routes that command correctly.
