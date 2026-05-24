@@ -4,64 +4,112 @@ coverage:
 - mechanism_id: summary-renderer
   test_coverage: direct
   assertions:
-  - canonical structured summary rendering is validated
-  - legacy handwritten summary fallback is rejected
+  - assertion_id: summary-renderer-canonical-output
+    kind: behavior
+    statement: canonical structured summary rendering is validated
+  - assertion_id: summary-renderer-legacy-rejection
+    kind: negative-case
+    statement: legacy handwritten summary fallback is rejected
 - mechanism_id: execution-mode-switch
   test_coverage: documented
   coverage_rationale: Source and CLI anchors are preserved, but no direct mechanism-level regression test is registered yet.
   assertions:
-  - execution mode source anchors are preserved
-  - local versus remote mode switching remains visible in CLI surfaces
+  - assertion_id: execution-mode-source-anchors
+    kind: anchor
+    statement: execution mode source anchors are preserved
+  - assertion_id: execution-mode-cli-visible
+    kind: workflow
+    statement: local versus remote mode switching remains visible in CLI surfaces
 - mechanism_id: rule-preservation-guard
   test_coverage: direct
   assertions:
-  - required rule anchors are preserved across governance surfaces
-  - missing required terms produce rule-preservation findings
+  - assertion_id: rule-preservation-anchor-coverage
+    kind: guard
+    statement: required rule anchors are preserved across governance surfaces
+  - assertion_id: rule-preservation-missing-term
+    kind: negative-case
+    statement: missing required terms produce rule-preservation findings
 - mechanism_id: workflow-guard
   test_coverage: direct
   assertions:
-  - workflow guard passes current repository state
-  - registry drift and required registry file loss are hard findings
+  - assertion_id: workflow-guard-current-state
+    kind: guard
+    statement: workflow guard passes current repository state
+  - assertion_id: workflow-guard-registry-loss
+    kind: negative-case
+    statement: registry drift and required registry file loss are hard findings
 - mechanism_id: patch-preflight
   test_coverage: direct
   assertions:
-  - preflight validates governance YAML files
-  - preflight includes rule registry files before patch application
+  - assertion_id: patch-preflight-governance-yaml
+    kind: guard
+    statement: preflight validates governance YAML files
+  - assertion_id: patch-preflight-registry-files
+    kind: guard
+    statement: preflight includes rule registry files before patch application
 - mechanism_id: chat-communication-rules
   test_coverage: documented
   coverage_rationale: Contract and compiled-context anchors are preserved; direct behavioral tests are not registered for this documentation rule yet.
   assertions:
-  - d f w paste-output semantics remain documented
-  - remote-log-first evidence handling remains anchored
+  - assertion_id: chat-communication-ack-semantics
+    kind: anchor
+    statement: d f w paste-output semantics remain documented
+  - assertion_id: chat-communication-remote-log-first
+    kind: evidence
+    statement: remote-log-first evidence handling remains anchored
 - mechanism_id: chat-bootstrap-drift-rules
   test_coverage: documented
   coverage_rationale: Contract and compiled-context anchors are preserved; direct behavioral tests are not registered for this documentation rule yet.
   assertions:
-  - mandatory successor-chat bootstrap remains documented
-  - drift response and remote connector rules remain anchored
+  - assertion_id: chat-bootstrap-mandatory-sources
+    kind: anchor
+    statement: mandatory successor-chat bootstrap remains documented
+  - assertion_id: chat-bootstrap-drift-response
+    kind: workflow
+    statement: drift response and remote connector rules remain anchored
 - mechanism_id: portable-execution-rules
   test_coverage: documented
   coverage_rationale: Contract and compiled-context anchors are preserved; direct behavioral tests are not registered for this documentation rule yet.
   assertions:
-  - Python core remains canonical over shell adapters
-  - governance YAML mutation rules remain anchored
+  - assertion_id: portable-execution-python-core
+    kind: workflow
+    statement: Python core remains canonical over shell adapters
+  - assertion_id: portable-execution-yaml-mutation
+    kind: anchor
+    statement: governance YAML mutation rules remain anchored
 - mechanism_id: evidence-guard
   test_coverage: direct
   assertions:
-  - contradictory PASS evidence with failed gate markers is rejected
-  - expected negative smoke markers are accepted only when classified
+  - assertion_id: evidence-guard-contradictory-pass
+    kind: negative-case
+    statement: contradictory PASS evidence with failed gate markers is rejected
+  - assertion_id: evidence-guard-negative-smoke
+    kind: evidence
+    statement: expected negative smoke markers are accepted only when classified
 - mechanism_id: typed-work-order-runner
   test_coverage: direct
   assertions:
-  - typed work orders write machine-readable logs
-  - unsupported step kinds hard-fail deterministically
+  - assertion_id: typed-work-order-machine-log
+    kind: artifact
+    statement: typed work orders write machine-readable logs
+  - assertion_id: typed-work-order-unsupported-step
+    kind: negative-case
+    statement: unsupported step kinds hard-fail deterministically
 - mechanism_id: release-state-validation
   test_coverage: direct
   assertions:
-  - unused release versions pass release-state checks
-  - existing remote tags and releases fail before mutation
+  - assertion_id: release-state-unused-version
+    kind: release
+    statement: unused release versions pass release-state checks
+  - assertion_id: release-state-existing-remote
+    kind: negative-case
+    statement: existing remote tags and releases fail before mutation
 - mechanism_id: post-release-archive-check
   test_coverage: direct
   assertions:
-  - GitHub release and Zenodo records are verified after release
-  - waiting Zenodo records are non-failing until available
+  - assertion_id: post-release-archive-verification
+    kind: release
+    statement: GitHub release and Zenodo records are verified after release
+  - assertion_id: post-release-zenodo-waiting
+    kind: workflow
+    statement: waiting Zenodo records are non-failing until available
