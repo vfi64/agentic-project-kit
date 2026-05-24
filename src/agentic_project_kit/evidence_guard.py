@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import fnmatch
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -23,11 +24,20 @@ EXPECTED_NEGATIVE_SMOKE_MARKERS = (
     "PASS: ns evidence-guard rejected false-PASS log",
 )
 
+EVIDENCE_LOG_PATTERNS = ("docs/reports/terminal/*.log",)
+
 @dataclass(frozen=True)
 class EvidenceGuardResult:
     ok: bool
     path: Path
     final_result: str
+    findings: tuple[str, ...]
+
+@dataclass(frozen=True)
+class ChangeScopeGuardResult:
+    ok: bool
+    changed_paths: tuple[str, ...]
+    expected_paths: tuple[str, ...]
     findings: tuple[str, ...]
 
 def last_result_marker(text: str) -> str:
@@ -46,6 +56,37 @@ def last_result_marker(text: str) -> str:
 
 def _is_expected_negative_smoke_log(text: str) -> bool:
     return any(marker in text for marker in EXPECTED_NEGATIVE_SMOKE_MARKERS)
+
+def _normalize_paths(paths: list[str] | tuple[str, ...]) -> tuple[str, ...]:
+    return tuple(path.strip() for path in paths if path.strip())
+
+def _is_evidence_log_path(path: str, patterns: tuple[str, ...]) -> bool:
+    return any(fnmatch.fnmatch(path, pattern) for pattern in patterns)
+
+def check_change_scope(
+    *,
+    changed_paths: list[str] | tuple[str, ...],
+    expected_paths: list[str] | tuple[str, ...],
+    evidence_log_patterns: tuple[str, ...] = EVIDENCE_LOG_PATTERNS,
+) -> ChangeScopeGuardResult:
+    changed = _normalize_paths(changed_paths)
+    expected = _normalize_paths(expected_paths)
+    findings: list[str] = []
+    if not changed:
+        findings.append("changed_paths must list at least one changed path")
+    missing = tuple(path for path in expected if path not in changed)
+    if missing:
+        findings.append("expected changed paths missing: " + ", ".join(missing))
+    if expected and changed:
+        non_evidence = tuple(path for path in changed if not _is_evidence_log_path(path, evidence_log_patterns))
+        if not non_evidence:
+            findings.append("expected target changes, but changed paths are evidence logs only")
+    return ChangeScopeGuardResult(
+        ok=not findings,
+        changed_paths=changed,
+        expected_paths=expected,
+        findings=tuple(findings),
+    )
 
 def check_terminal_log(path: Path) -> EvidenceGuardResult:
     text = path.read_text(encoding="utf-8")
