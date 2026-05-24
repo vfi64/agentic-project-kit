@@ -1,0 +1,86 @@
+PR740 RULE REGISTRY SURFACES TESTS INVENTORY -- LOGGED -- NO RELEASE
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   d82771e..aac97c8  main       -> origin/main
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Updating d82771e..aac97c8
+Fast-forward
+ docs/reports/terminal/pr737-placeholder.txt        |  1 -
+ src/agentic_project_kit/rule_registry_validator.py | 29 +++++++++++++++++++---
+ tests/test_rule_registry_validator.py              | 24 ++++++++++++++++++
+ 3 files changed, 50 insertions(+), 4 deletions(-)
+ delete mode 100644 docs/reports/terminal/pr737-placeholder.txt
+aac97c8
+
+### CLEAN PRECHECK ###
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'feature/rule-registry-surfaces-tests-inventory-740'
+branch 'feature/rule-registry-surfaces-tests-inventory-740' set up to track 'origin/main'.
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+Traceback (most recent call last):
+  File "/tmp/pr740_patch_rule_registry_surfaces_tests.py", line 2, in <module>
+    import yaml
+ModuleNotFoundError: No module named 'yaml'
+
+### VERIFY YAML AND REGISTRY ###
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'yaml'
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 197, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/cli.py", line 2, in <module>
+    import typer
+ModuleNotFoundError: No module named 'typer'
+
+### TARGETED TESTS ###
+
+==================================== ERRORS ====================================
+____________ ERROR collecting tests/test_rule_registry_validator.py ____________
+ImportError while importing test module '/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_rule_registry_validator.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/importlib/__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_rule_registry_validator.py:3: in <module>
+    import yaml
+E   ModuleNotFoundError: No module named 'yaml'
+___________ ERROR collecting tests/test_rule_mechanism_inventory.py ____________
+ImportError while importing test module '/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_rule_mechanism_inventory.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/importlib/__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_rule_mechanism_inventory.py:3: in <module>
+    import yaml
+E   ModuleNotFoundError: No module named 'yaml'
+=========================== short test summary info ============================
+ERROR tests/test_rule_registry_validator.py
+ERROR tests/test_rule_mechanism_inventory.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!!
+2 errors in 0.11s
+
+### DOC/GATE SMOKE ###
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 197, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/cli.py", line 2, in <module>
+    import typer
+ModuleNotFoundError: No module named 'typer'
+
+### DIFF ###
+
+### STAGE PATCH ###
