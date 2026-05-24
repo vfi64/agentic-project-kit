@@ -1,0 +1,23 @@
+schema_version: 1
+purpose: Record legacy rule anchors and their governed successors instead of deleting rule intent.
+migrations:
+  - legacy_id: structured-summary-must-be-enforced
+    status: migrated
+    replaced_by: summary-renderer
+    evidence: [./ns, src/agentic_project_kit/run_summary_renderer.py, tests/test_run_summary_renderer.py]
+    migration_reason: Canonical behavior is preserved by ./ns summary and run_summary_renderer.
+  - legacy_id: structured-summary-drift
+    status: migrated
+    replaced_by: summary-renderer
+    evidence: [src/agentic_project_kit/run_summary_renderer.py, tests/test_run_summary_renderer.py]
+    migration_reason: Legacy summary rejection remains enforced by renderer validation.
+  - legacy_id: no-copy-terminal-evidence
+    status: migrated
+    replaced_by: summary-renderer
+    evidence: [src/agentic_project_kit/run_summary_renderer.py, docs/governance/CHAT_COMMUNICATION_CONTRACT.md]
+    migration_reason: Repo-backed evidence handoff is preserved by terminal_log_remote and canonical summary semantics.
+  - legacy_id: local-remote-mode-switching
+    status: migrated
+    replaced_by: execution-mode-switch
+    evidence: [./ns, src/agentic_project_kit/cli_commands/state.py, src/agentic_project_kit/execution_mode_state.py]
+    migration_reason: Existing mode-check and mode-write commands are the canonical execution-mode mechanism.
