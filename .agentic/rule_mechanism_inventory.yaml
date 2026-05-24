@@ -21,3 +21,33 @@ mechanisms:
       - path: src/agentic_project_kit/execution_mode_state.py
         required_terms: [LOCAL_READY, REMOTE_READY, DIRTY_LOCAL_BLOCKED, MODE_SWITCH_BLOCKED]
     protected_rule_intent: Explicit local versus remote execution-mode checks and switching.
+  - id: rule-preservation-guard
+    status: active
+    sources:
+      - path: .agentic/rule_preservation.yaml
+        required_terms: [structured-summary-must-be-enforced, no-copy-terminal-evidence, remote-log-lookup-first, yaml-structured-mutation-only, control-file-preservation]
+      - path: src/agentic_project_kit/rule_preservation.py
+        required_terms: [validate_rule_preservation, required_terms, surfaces, RulePreservationFinding]
+      - path: tests/test_rule_preservation.py
+        required_terms: [test_rule_preservation_current_repository_passes, missing_required_term]
+    protected_rule_intent: Preserve restored active workflow-rule anchors across required governance surfaces.
+  - id: workflow-guard
+    status: active
+    sources:
+      - path: src/agentic_project_kit/workflow_guard.py
+        required_terms: [run_workflow_guard, protected_control_files, check_required_anchors, check_rule_registry, rule-registry-drift, rule-preservation-drift]
+      - path: tests/test_workflow_guard.py
+        required_terms: [test_workflow_guard_passes_current_repository_state, test_workflow_guard_enforces_rule_registry, structured-summary-drift]
+      - path: docs/workflow/WORKFLOW_GUARD.md
+        required_terms: [diagnose-and-fail, protected control files, repair plan]
+    protected_rule_intent: Diagnose recurring workflow drift as hard findings before state-changing work continues.
+  - id: patch-preflight
+    status: active
+    sources:
+      - path: src/agentic_project_kit/patch_artifact_preflight.py
+        required_terms: [run_preflight, check_rule_registry_files, GOVERNANCE_YAML_FILES, patch-preflight, validate_rule_registry]
+      - path: tests/test_patch_artifact_preflight.py
+        required_terms: [test_preflight_rule_registry_validation_passes_current_state, test_preflight_includes_rule_registry_files, test_preflight_full_runner_includes_governance_yaml]
+      - path: ./ns
+        required_terms: [patch-preflight, agentic_project_kit.cli]
+    protected_rule_intent: Block unsafe generated patch artifacts and rule-registry drift before patch application.
