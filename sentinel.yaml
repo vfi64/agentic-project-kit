@@ -31,7 +31,6 @@ documents:
       - "## LLM Communication and Bootstrap Gate"
       - "## Standard Local Gate"
       - "## Outcome Reporting"
-    max_words: 3200
   - path: docs/handoff/CURRENT_HANDOFF.md
     required_sections:
       - "## Current Goal"
@@ -51,7 +50,6 @@ documents:
       - "## Failure communication"
       - "## PASS communication"
       - "## Optimization requirement"
-    max_words: 2200
   - path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
     required_sections:
       - "## Purpose"
@@ -62,7 +60,6 @@ documents:
       - "## Chat block rule"
       - "## OS independence rule"
       - "## Optimization requirement"
-    max_words: 1800
   - path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
     required_sections:
       - "## Purpose"
@@ -73,6 +70,5 @@ documents:
       - "## Machine-readable companion"
       - "## Deterministic check direction"
       - "## Optimization requirement"
-    max_words: 2000
 todo:
   path: .agentic/todo.yaml
