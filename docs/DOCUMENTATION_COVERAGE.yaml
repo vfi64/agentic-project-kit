@@ -48,10 +48,6 @@ rules:
     - fail_closed
     - local_repo_freshness_before_local_work
     - local-main-freshness-before-local-work
-    - github_connector_direct_path_first
-    - github-connector-direct-path-first
-    - yaml_governance_mutation_requires_parse_modify_dump
-    - yaml-governance-parse-modify-dump-only
   - path: docs/governance/CHAT_COMMUNICATION_CONTRACT.md
     terms:
     - User acknowledgements
@@ -75,10 +71,6 @@ rules:
     - subprocess.run
     - Local repository freshness rule
     - Mutation before that precondition is forbidden
-    - Remote connector route rule
-    - Search is for unknown paths or symbols
-    - Governance YAML mutation rule
-    - YAML parse error in CI is a workflow defect
   - path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
     terms:
     - Mandatory startup sequence
@@ -90,10 +82,6 @@ rules:
     - Local repository freshness precondition
     - Continuing product or governance mutation from a stale or contaminated local
       tree is drift
-    - Remote repository connector route
-    - GitHub connector direct-path-first workflow
-    - Governance YAML mutation rule
-    - The only allowed mutation workflow for these files is parse-modify-dump
   - path: docs/governance/FINAL_SUMMARY_CONTRACT.md
     terms:
     - 'REMOTE_EVIDENCE: PASS|FAIL|PARTIAL|NOT_REQUIRED'
@@ -108,8 +96,6 @@ rules:
     - concise pointers, not duplicate rule books
     - Local Freshness Gate
     - local repository freshness precondition
-    - Remote Connector Gate
-    - YAML Mutation Gate
 - id: public-command-readme-coverage
   description: Public CLI commands must be discoverable from README.md.
   documents:
@@ -252,3 +238,392 @@ rules:
   - path: docs/WORKFLOW_OUTPUT_CYCLE.md
     terms:
     - Standard next-step terminal workflow
+    - python3 tools/next-step.py
+    - done
+    - The short acknowledgement `d` is also valid
+    - manual Copy-and-Paste blocks
+    - compatibility bridge
+- id: single-command-next-step-coverage
+  description: next-step.py must document its single-command state behavior.
+  documents:
+  - path: docs/WORKFLOW_OUTPUT_CYCLE.md
+    terms:
+    - Single-command state behavior
+    - IDLE + .agentic/current_work.yaml state READY -> no-op -> IDLE
+    - ./ns --request
+    - IDLE + .agentic/current_work.yaml state REQUESTED -> run workflow -> reset request
+      to READY -> upload evidence -> UPLOADED
+    - UPLOADED -> cleanup temporary evidence branch -> IDLE
+    - FAILED -> preserve evidence; no automatic cleanup
+    - RUNNING -> refuse duplicate execution
+    - Optional shell shortcut
+    - ./ns
+- id: failed-next-step-handling-coverage
+  description: FAILED workflow-state handling must remain explicit because it requires
+    diagnosis, not automatic cleanup.
+  documents:
+  - path: docs/WORKFLOW_OUTPUT_CYCLE.md
+    terms:
+    - FAILED handling
+    - stop-and-diagnose state
+    - Do not repeatedly run `ns` or `python3 tools/next-step.py`
+    - Preserve the local terminal output and any files under `tmp/agent-evidence/`
+    - Send the relevant terminal output to the assistant if no temporary evidence
+      branch was uploaded
+    - git status --short
+    - git branch --show-current
+    - cat .agentic/workflow_state
+    - git restore .agentic/workflow_state docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+    - rm -f tmp/agent-evidence/workflow-output-*.md
+    - It is not sufficient for a local `FAILED` state
+    - Never automatically clean up from `FAILED`
+    - agentic-kit workflow fail-report
+- id: next-step-environment-bootstrap-coverage
+  description: next-step.py environment bootstrap must stay documented and bounded.
+  documents:
+  - path: docs/WORKFLOW_OUTPUT_CYCLE.md
+    terms:
+    - Environment bootstrap
+    - missing .venv/bin/python -> create .venv with the current Python interpreter
+    - missing .venv/bin/ruff or .venv/bin/agentic-kit -> run .venv/bin/python -m pip
+      install -e .[dev]
+    - .venv/bin/python
+    - .venv/bin/ruff
+    - .venv/bin/agentic-kit
+    - This does not activate the virtual environment in the parent shell
+- id: default-local-gate-workflow-coverage
+  description: Default next-step gate workflow must remain documented and bounded.
+  documents:
+  - path: docs/WORKFLOW_OUTPUT_CYCLE.md
+    terms:
+    - Default current-branch local gate workflow
+    - default-current-branch-local-gate
+    - pytest
+    - ruff_check
+    - check_docs
+    - doctor
+  - path: .agentic/current_work.yaml
+    terms:
+    - default-current-branch-local-gate
+    - git_fetch
+    - git_pull_ff_only
+    - pytest
+    - ruff_check
+    - check_docs
+    - doctor
+- id: cli-package-readme-coverage
+  description: CLI package modularization must remain visible after the monolith split.
+  documents:
+  - path: README.md
+    terms:
+    - CLI command package structure
+    - src/agentic_project_kit/cli_commands/
+    - thin root command registry
+    - cli.py
+    - Boundary tests
+- id: release-version-readme-coverage
+  description: README must mention the current release candidate and latest verified
+    DOI state.
+  documents:
+  - path: README.md
+    terms:
+    - Version `0.3.9`
+    - v0.3.3
+    - 10.5281/zenodo.20151924
+- id: example-workflow-coverage
+  description: README must point users to the minimal generated-project example.
+  documents:
+  - path: README.md
+    terms:
+    - Example workflow
+    - docs/examples/minimal-python-cli.md
+- id: project-contract-readme-coverage
+  description: Project contract, profiles, and policy packs must remain visible to
+    users.
+  documents:
+  - path: README.md
+    terms:
+    - .agentic/project.yaml
+    - project contract
+    - project profiles
+    - policy packs
+    - --profiles
+    - --policy-packs
+    - generic-git-repo
+    - markdown-docs
+    - python-cli
+    - agentic-development
+    - documentation-governed
+- id: policy-pack-doctor-coverage
+  description: Policy-pack-driven doctor checks must remain visible to users.
+  documents:
+  - path: README.md
+    terms:
+    - Policy-pack doctor checks
+    - policy-pack checks
+    - solo-maintainer
+    - release-managed
+    - documentation-governed
+    - structural prerequisites
+  - path: docs/STATUS.md
+    terms:
+    - policy-pack doctor checks
+    - policy packs
+  - path: docs/handoff/CURRENT_HANDOFF.md
+    terms:
+    - policy-pack checks
+    - policy packs
+- id: semantic-quality-boundary-coverage
+  description: Semantic quality limits must remain explicit so deterministic checks
+    are not oversold.
+  documents:
+  - path: docs/architecture/ARCHITECTURE_CONTRACT.md
+    terms:
+    - Semantic quality boundary
+    - semantic perfection
+    - advisory review
+    - hard deterministic gates
+    - LLM-based semantic review
+  - path: docs/TEST_GATES.md
+    terms:
+    - semantic perfection
+    - deterministic quality heuristics
+    - advisory review
+  - path: README.md
+    terms:
+    - deterministic document-quality heuristics
+    - semantic perfection
+    - advisory review
+- id: gate-document-command-coverage
+  description: Gate documentation must mention the commands used as evidence.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms:
+    - agentic-kit check-docs
+    - agentic-kit doctor
+    - agentic-kit release-plan
+    - agentic-kit release-check
+    - agentic-kit post-release-check
+    - agentic-kit doc-mesh-audit
+    - agentic-kit check-todo
+    - docs/DOCUMENTATION_COVERAGE.yaml
+    - Architecture Contract Gate
+    - Documentation Coverage Gate
+    - Documentation Mesh Audit Gate
+    - Standard Local Gate
+    - Doctor Gate
+    - Release Gate
+    - Outcome Reporting
+- id: rule-hardening-coverage
+  description: Governance rules must be backed by tests, gates, coverage checks, or
+    explicit review-only exceptions.
+  documents:
+  - path: AGENTS.md
+    terms:
+    - Rule Hardening Rule
+    - deterministic unit or integration test
+    - documentation coverage requirement
+    - explicit review-only exception
+  - path: docs/TEST_GATES.md
+    terms:
+    - Rule Hardening Gate
+    - Governance rule change
+    - deterministic unit or integration test
+    - documented review-only exception
+- id: post-release-zenodo-coverage
+  description: Post-release Zenodo checks must remain visible and separate from pre-release
+    gates.
+  documents:
+  - path: README.md
+    terms:
+    - agentic-kit post-release-check
+    - verified Zenodo version record
+    - WAITING
+    - README/CITATION DOI metadata unchanged
+    - separate from release-check
+  - path: docs/STATUS.md
+    terms:
+    - post-release Zenodo
+    - agentic-kit post-release-check
+  - path: docs/handoff/CURRENT_HANDOFF.md
+    terms:
+    - post-release Zenodo
+    - agentic-kit post-release-check
+- id: agent-instruction-coverage
+  description: Agent instructions must point agents to architecture and documentation
+    coverage duties.
+  documents:
+  - path: AGENTS.md
+    terms:
+    - docs/architecture/ARCHITECTURE_CONTRACT.md
+    - docs/DOCUMENTATION_COVERAGE.yaml
+    - agentic-kit check-docs
+    - agentic-kit doctor
+    - Architecture Contract Rule
+    - Documentation Coverage Rule
+    - Required Local Gate
+- id: architecture-contract-coverage
+  description: The architecture contract must define the concepts that govern new
+    checks.
+  documents:
+  - path: docs/architecture/ARCHITECTURE_CONTRACT.md
+    terms:
+    - Project contract
+    - Profile
+    - Policy pack
+    - Doctor
+    - Diagnostic
+    - Reviewability
+    - Evidence
+    - Architecture fitness function
+    - documentation gates
+    - deterministic checks
+    - review infrastructure
+- id: documentation-information-architecture-coverage
+  description: Documentation information architecture must remain visible as the canonical
+    directory and lifecycle contract.
+  documents:
+  - path: docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+    terms:
+    - Directory responsibilities
+    - Lifecycle states
+    - Promotion rules
+    - Advisory alignment
+    - Automation boundaries
+    - Current classification baseline
+    - Garbage collection must not delete information before classification
+  - path: docs/architecture/ARCHITECTURE_CONTRACT.md
+    terms:
+    - DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+- id: state-doc-coverage
+  description: State and handoff files must mention the current documentation coverage
+    gate.
+  documents:
+  - path: docs/STATUS.md
+    terms:
+    - documentation coverage
+    - docs/DOCUMENTATION_COVERAGE.yaml
+    - agentic-kit check-docs
+    - agentic-kit doctor
+  - path: docs/handoff/CURRENT_HANDOFF.md
+    terms:
+    - documentation coverage
+    - docs/DOCUMENTATION_COVERAGE.yaml
+    - agentic-kit check-docs
+    - agentic-kit doctor
+- id: citation-release-coverage
+  description: Release, citation, and archival workflows must be visible in README
+    and gates.
+  documents:
+  - path: README.md
+    terms:
+    - CITATION.cff
+    - .zenodo.json
+    - Zenodo
+    - DOI
+    - agentic-kit release-plan
+    - agentic-kit release-check
+    - agentic-kit post-release-check
+  - path: docs/TEST_GATES.md
+    terms:
+    - Packaging Gate
+    - Release Gate
+    - agentic-kit release-plan
+    - agentic-kit release-check
+    - agentic-kit post-release-check
+- id: safety-evidence-coverage
+  description: Safety and evidence constraints must be visible to users and agents.
+  documents:
+  - path: README.md
+    terms:
+    - Do not generate a public project from a private repository history
+    - Logs are diagnostic evidence
+    - Do not commit secrets
+  - path: AGENTS.md
+    terms:
+    - do not weaken tests
+    - evidence requirements
+    - architecture-contract update
+- id: local-cockpit-readme-coverage
+  description: Local cockpit commands, action inventory, safety classes, and adapter
+    direction must remain visible.
+  documents:
+  - path: README.md
+    terms:
+    - Local Cockpit Foundation
+    - agentic-kit cockpit status
+    - agentic-kit cockpit actions
+    - agentic-kit cockpit run
+    - structured action inventory
+    - read_only
+    - bounded
+    - destructive
+    - ./ns cockpit
+    - ./ns actions
+    - Tkinter cockpit
+  - path: docs/architecture/LOCAL_COCKPIT_FOUNDATION.md
+    terms:
+    - Local Cockpit Foundation
+    - shared action inventory
+    - central cockpit status command
+    - CLI adapter
+    - Shell adapter
+    - Tkinter adapter
+    - No shell-quoting based command synthesis
+  - path: docs/TEST_GATES.md
+    terms:
+    - Local Cockpit Gate
+    - agentic-kit cockpit status
+    - agentic-kit cockpit actions
+    - agentic-kit cockpit run
+    - action registry
+    - safety classification
+- id: planning-state-freshness-coverage
+  description: Planning state documents must remain current, mutually consistent,
+    and guarded against stale historical fragments.
+  documents:
+  - path: docs/STATUS.md
+    terms:
+    - 'Current released version: 0.3.29'
+    - Planning-state freshness
+    - no-copy/evidence
+    - Tkinter cockpit
+  - path: docs/handoff/CURRENT_HANDOFF.md
+    terms:
+    - 'Current released version: 0.3.29'
+    - curated
+    - no-copy/evidence
+    - Tkinter cockpit
+  - path: docs/workflow/HANDOFF_STATE.md
+    terms:
+    - Planning-state freshness rule
+    - curated, not accumulated
+    - ./ns state-freshness-check
+  - path: docs/TEST_GATES.md
+    terms:
+    - Planning State Freshness Gate
+    - ./ns state-freshness-check
+- id: final-summary-contract-coverage
+  description: Mandatory final terminal summaries must remain documented and test-backed.
+  documents:
+  - path: .agentic/no_copy_terminal_policy.yaml
+    terms:
+    - mandatory_final_summary_contract
+    - WORK RESULT
+    - REMOTE_EVIDENCE
+  - path: docs/TEST_GATES.md
+    terms:
+    - Mandatory Final Summary Contract Gate
+    - WORK RESULT
+    - REMOTE_EVIDENCE
+    - tests/test_final_summary_contract.py
+  - path: docs/STATUS.md
+    terms:
+    - Mandatory Final Summary Contract
+    - WORK RESULT
+    - REMOTE_EVIDENCE
+  - path: docs/handoff/CURRENT_HANDOFF.md
+    terms:
+    - Mandatory Final Summary Contract
+    - 'NEXT_CHAT_REPLY: p'
+    - 'REMOTE_EVIDENCE: PASS'
