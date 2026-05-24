@@ -62,6 +62,9 @@ def _validate_string_list(
 def _validate_mechanism_metadata(
     mechanism: dict[str, Any], mechanism_id: str, findings: list[RuleRegistryFinding]
 ) -> None:
+    owner = mechanism.get("owner")
+    if not isinstance(owner, str) or not owner.strip():
+        findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mechanism_id}: owner must be a non-empty string"))
     category = mechanism.get("category")
     if category not in VALID_MECHANISM_CATEGORIES:
         findings.append(
@@ -104,27 +107,30 @@ def _validate_mechanism_conflicts(mechanisms: list[Any], findings: list[RuleRegi
         if not isinstance(mechanism, dict) or mechanism.get("status") != "active":
             continue
         mechanism_id = str(mechanism.get("id", ""))
-        category = mechanism.get("category")
         priority = mechanism.get("priority")
         enforcement_phase = mechanism.get("enforcement_phase")
+        conflict_domains = _as_list(mechanism.get("conflict_domains"))
         if (
-            category not in VALID_MECHANISM_CATEGORIES
-            or not isinstance(priority, int)
+            not isinstance(priority, int)
             or not MIN_PRIORITY <= priority <= MAX_PRIORITY
             or enforcement_phase not in VALID_ENFORCEMENT_PHASES
         ):
             continue
-        key = (str(category), priority, str(enforcement_phase))
-        previous = seen.get(key)
-        if previous is not None:
-            findings.append(
-                RuleRegistryFinding(
-                    str(INVENTORY_PATH),
-                    f"ambiguous enforcement order: {previous} and {mechanism_id} share category={category}, priority={priority}, enforcement_phase={enforcement_phase}",
+        for domain in conflict_domains:
+            domain_text = str(domain).strip()
+            if not domain_text:
+                continue
+            key = (domain_text, priority, str(enforcement_phase))
+            previous = seen.get(key)
+            if previous is not None:
+                findings.append(
+                    RuleRegistryFinding(
+                        str(INVENTORY_PATH),
+                        f"ambiguous enforcement order: {previous} and {mechanism_id} share conflict_domain={domain_text}, priority={priority}, enforcement_phase={enforcement_phase}",
+                    )
                 )
-            )
-        else:
-            seen[key] = mechanism_id
+            else:
+                seen[key] = mechanism_id
 
 def _validate_migration_completeness(
     migrations: dict[str, Any], legacy_ids: set[str], findings: list[RuleRegistryFinding]
@@ -185,6 +191,13 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
         if mechanism.get("status") != "active":
             findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: status must be active"))
         _validate_mechanism_metadata(mechanism, mid, findings)
+        _validate_string_list(
+            value=mechanism.get("conflict_domains"),
+            label="conflict_domains",
+            mechanism_id=mid,
+            required_non_empty=True,
+            findings=findings,
+        )
         _validate_string_list(
             value=mechanism.get("surfaces"),
             label="surfaces",
