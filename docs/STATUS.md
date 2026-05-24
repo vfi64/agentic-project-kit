@@ -1,4 +1,4 @@
-<!-- post-pr725-closeout -->
+<!-- post-pr727-closeout -->
 # Project Status
 
 Status-date: 2026-05-24
@@ -27,12 +27,12 @@ Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
 Post-release Zenodo verification is covered by `agentic-kit post-release-check --version 0.4.1`; post-release Zenodo remains a guarded release-state anchor.
 
-Post-PR725 closeout target:
-- Main is refreshed after PR #725 at `0350fee` (`Enforce rule registry through patch preflight (#725)`).
-- PRs #718-#725 established the governed rule-registry baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, and patch-preflight integration.
+Post-PR727 closeout target:
+- Main is refreshed after PR #727 at `ef0166f` (`Expand governed rule registry coverage (#727)`).
+- PRs #718-#727 established the governed rule-registry baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, and coverage expansion from 2 to 5 core mechanisms.
 - Rule registry drift is now checked through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight.
-- Evidence: `docs/reports/terminal/pr718a-v5-inventory.log`, `docs/reports/terminal/pr721-rule-migrations.log`, `docs/reports/terminal/pr722-rule-registry-validator.log`, `docs/reports/terminal/pr723-rule-registry-cli.log`, `docs/reports/terminal/pr724-rule-registry-guard.log`, `docs/reports/terminal/pr725-rule-registry-preflight.log`.
-- Next immediate hardening task: expand coverage/classification/conflict checks for the governed rule registry in small additive slices. Do not resume broad documentation-management rebuild yet.
+- Evidence: `docs/reports/terminal/pr718a-v5-inventory.log`, `docs/reports/terminal/pr721-rule-migrations.log`, `docs/reports/terminal/pr722-rule-registry-validator.log`, `docs/reports/terminal/pr723-rule-registry-cli.log`, `docs/reports/terminal/pr724-rule-registry-guard.log`, `docs/reports/terminal/pr725-rule-registry-preflight.log`, `docs/reports/terminal/pr727-rule-registry-coverage.log`.
+- Next immediate hardening task: add rule-registry classification, priority, and conflict checks in small additive slices while allowing only targeted remaining coverage expansion. Do not resume broad documentation-management rebuild yet.
 
 Documentation registry baseline:
 - `docs/DOCUMENTATION_REGISTRY.yaml` is the additive machine-readable registry.
@@ -67,7 +67,7 @@ GUI MVP baseline:
 
 ## Current Goal
 
-Continue the governed rule registry with small additive slices: coverage expansion, classification, priority, and conflict checks. No broad documentation migration, release, tag, DOI mutation, or GUI expansion.
+Continue the governed rule registry with small additive slices: classification, priority, conflict checks, and targeted remaining coverage expansion. No broad documentation migration, release, tag, DOI mutation, or GUI expansion.
 
 ## Active Workflow Rules
 
@@ -141,4 +141,4 @@ Required gate set for current-state, handoff, or governance-summary changes:
 
 ## Next Safe Step
 
-Expand governed rule-registry coverage first. Add classification, priority, and conflict checks only in later small PRs. Do not start broad documentation-management rebuild, release, tag, DOI mutation, or GUI expansion.
+Add rule-registry classification and priority in the next small PR, then conflict checks in a separate PR. Keep only targeted remaining coverage expansion in scope. Do not start broad documentation-management rebuild, release, tag, DOI mutation, or GUI expansion.
