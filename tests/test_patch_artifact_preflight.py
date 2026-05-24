@@ -19,6 +19,7 @@ def test_preflight_accepts_current_governance_yaml() -> None:
         ".agentic/no_copy_terminal_policy.yaml",
         ".agentic/rule_mechanism_inventory.yaml",
         ".agentic/rule_migrations.yaml",
+        ".agentic/rule_test_coverage.yaml",
         "docs/DOCUMENTATION_COVERAGE.yaml",
     ]) == []
 
@@ -58,12 +59,11 @@ def test_preflight_full_runner_includes_governance_yaml() -> None:
 
 
 def test_preflight_includes_rule_registry_files() -> None:
-    assert ".agentic/rule_mechanism_inventory.yaml" in tuple(
-        __import__("agentic_project_kit.patch_artifact_preflight", fromlist=["GOVERNANCE_YAML_FILES"]).GOVERNANCE_YAML_FILES
-    )
-    assert ".agentic/rule_migrations.yaml" in tuple(
-        __import__("agentic_project_kit.patch_artifact_preflight", fromlist=["GOVERNANCE_YAML_FILES"]).GOVERNANCE_YAML_FILES
-    )
+    module = __import__("agentic_project_kit.patch_artifact_preflight", fromlist=["GOVERNANCE_YAML_FILES"])
+    governance_files = tuple(module.GOVERNANCE_YAML_FILES)
+    assert ".agentic/rule_mechanism_inventory.yaml" in governance_files
+    assert ".agentic/rule_migrations.yaml" in governance_files
+    assert ".agentic/rule_test_coverage.yaml" in governance_files
 
 
 def test_coverage_terms_still_parse_as_strings() -> None:
