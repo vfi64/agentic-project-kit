@@ -242,6 +242,8 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
     base = Path(root)
     inventory_path = base / INVENTORY_PATH
     migrations_path = base / MIGRATIONS_PATH
+    coverage_path = base / COVERAGE_PATH
+    coverage_metadata_present = coverage_path.exists()
     findings: list[RuleRegistryFinding] = []
     try:
         inventory = _load_yaml(inventory_path)
@@ -296,7 +298,8 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
             coverage_view["test_coverage"] = coverage_entry.get("test_coverage")
         if "coverage_rationale" not in coverage_view and "coverage_rationale" in coverage_entry:
             coverage_view["coverage_rationale"] = coverage_entry.get("coverage_rationale")
-        _validate_test_coverage(coverage_view, mid, tests, findings)
+        if coverage_metadata_present or "test_coverage" in mechanism:
+            _validate_test_coverage(coverage_view, mid, tests, findings)
         for test_path in tests:
             if not (base / test_path).exists():
                 findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: missing test path: {test_path}"))
@@ -328,13 +331,14 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
                 if str(term) not in text:
                     findings.append(RuleRegistryFinding(rel, f"{mid}: required term missing: {term}"))
     _validate_mechanism_conflicts(mechanisms, findings)
-    for coverage_id in sorted(set(coverage_by_mechanism) - mechanism_ids):
-        findings.append(
-            RuleRegistryFinding(
-                str(COVERAGE_PATH),
-                f"coverage entry references unknown mechanism: {coverage_id}",
+    if coverage_metadata_present:
+        for coverage_id in sorted(set(coverage_by_mechanism) - mechanism_ids):
+            findings.append(
+                RuleRegistryFinding(
+                    str(COVERAGE_PATH),
+                    f"coverage entry references unknown mechanism: {coverage_id}",
+                )
             )
-        )
     legacy_ids: set[str] = set()
     for migration in _as_list(migrations.get("migrations")):
         legacy_id = str(migration.get("legacy_id", ""))
