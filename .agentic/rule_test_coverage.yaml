@@ -1,0 +1,31 @@
+schema_version: 1
+purpose: Classify rule mechanism test coverage without silently accepting unclassified empty test lists.
+coverage:
+- mechanism_id: summary-renderer
+  test_coverage: direct
+- mechanism_id: execution-mode-switch
+  test_coverage: documented
+  coverage_rationale: Source and CLI anchors are preserved, but no direct mechanism-level regression test is registered yet.
+- mechanism_id: rule-preservation-guard
+  test_coverage: direct
+- mechanism_id: workflow-guard
+  test_coverage: direct
+- mechanism_id: patch-preflight
+  test_coverage: direct
+- mechanism_id: chat-communication-rules
+  test_coverage: documented
+  coverage_rationale: Contract and compiled-context anchors are preserved; direct behavioral tests are not registered for this documentation rule yet.
+- mechanism_id: chat-bootstrap-drift-rules
+  test_coverage: documented
+  coverage_rationale: Contract and compiled-context anchors are preserved; direct behavioral tests are not registered for this documentation rule yet.
+- mechanism_id: portable-execution-rules
+  test_coverage: documented
+  coverage_rationale: Contract and compiled-context anchors are preserved; direct behavioral tests are not registered for this documentation rule yet.
+- mechanism_id: evidence-guard
+  test_coverage: direct
+- mechanism_id: typed-work-order-runner
+  test_coverage: direct
+- mechanism_id: release-state-validation
+  test_coverage: direct
+- mechanism_id: post-release-archive-check
+  test_coverage: direct
