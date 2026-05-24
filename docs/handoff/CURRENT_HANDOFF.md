@@ -1,4 +1,4 @@
-<!-- post-pr718-closeout -->
+<!-- post-pr725-closeout -->
 # Current Handoff
 
 Status-date: 2026-05-24
@@ -17,20 +17,23 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 - Current release tag: v0.4.1.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
-- Main is refreshed after PR #718 at `930a36a`.
-- Evidence: `docs/reports/terminal/pr718a-v5-inventory.log`; remote evidence present.
+- Main is refreshed after PR #725 at `0350fee`.
+- PRs #718-#725 established the governed rule-registry baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, and patch-preflight integration.
+- Evidence: `docs/reports/terminal/pr718a-v5-inventory.log`, `docs/reports/terminal/pr721-rule-migrations.log`, `docs/reports/terminal/pr722-rule-registry-validator.log`, `docs/reports/terminal/pr723-rule-registry-cli.log`, `docs/reports/terminal/pr724-rule-registry-guard.log`, `docs/reports/terminal/pr725-rule-registry-preflight.log`.
 
 ## Current Repository State
 
-Safe state is main after PR718. PR718 is the first small rule-mechanism inventory baseline. Broad migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
+Safe state is main after PR725. The governed rule registry is now enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
 
 ## Current Goal
 
-Refresh PR718 closeout state, then continue the governed rule registry in small additive slices: migration map, validator, then workflow-guard integration.
+Continue the governed rule registry with small additive slices: coverage expansion, classification, priority, and conflict checks. Do not resume broad documentation-management rebuild yet.
 
 ## Current Baselines
 
 Documentation registry: `docs/DOCUMENTATION_REGISTRY.yaml`; contract: `docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md`; summary: `agentic-kit docs-registry`; JSON report: `agentic-kit docs-registry --report PATH`; visible in agentic-kit check-docs, agentic-kit doctor, docs-audit, doc-mesh-audit, doc-lifecycle-audit, handoff, release-check, and post-release-check.
+
+Rule registry: `.agentic/rule_mechanism_inventory.yaml`; migration map: `.agentic/rule_migrations.yaml`; validator: `src/agentic_project_kit/rule_registry_validator.py`; CLI: `agentic-kit rule-registry check`; hard enforcement: workflow-guard and patch-preflight.
 
 Workflow hardening: direct-path-first GitHub connector use; structured YAML mutation; `.agentic/control_file_preservation.yaml`; no-remote-command-deadlock; remote-first no-guess; command help inspection; Terminal acknowledgement audit; remote inspection evidence contract.
 
@@ -38,7 +41,7 @@ GUI MVP: cockpit-readiness, doctor, and check-docs pass as bounded read-only GUI
 
 ## Mandatory Successor-Chat Sources
 
-Read before mutation: `.agentic/compiled_agent_context.yaml`, `docs/governance/FINAL_SUMMARY_CONTRACT.md`, `docs/governance/CHAT_COMMUNICATION_CONTRACT.md`, `docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `docs/TEST_GATES.md`, `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`.
+Read before mutation: `.agentic/compiled_agent_context.yaml`, `docs/governance/FINAL_SUMMARY_CONTRACT.md`, `docs/governance/CHAT_COMMUNICATION_CONTRACT.md`, `docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `docs/TEST_GATES.md`, `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, `.agentic/handoff_state.yaml`.
 
 ## Active Rules For The Next Chat Or Slice
 
@@ -56,14 +59,15 @@ Read before mutation: `.agentic/compiled_agent_context.yaml`, `docs/governance/F
 - FAIL without terminal kill uses NEXT_CHAT_REPLY: f and must first inspect the repo-backed log before requesting paste-output.
 - Typed Work Orders Pre-GUI Execution Path remains preferred: ./ns typed-run <path>; ./ns typed-queue-status --json; ./ns typed-next --json; it uses the minimal typed Work Order Runner as the pre-GUI bridge without chat-generated patch scripts and dirty-state blocking. Required typed-state anchors: no_command, exactly_one_command, multiple_commands, already_executed, dirty worktrees, typed Patch DSL, structured State Source of Truth, Markdown is a projection.
 - Recurring workflow problems must become rules, failure patterns, tests, or tooling.
+- Governed rule-registry changes must be additive, structured, test-backed, and validated through `rule-registry check`, workflow-guard, and patch-preflight.
 
 ## Required Local Gate
 
-Run state-freshness-check, handoff-check, governance-check, docs-audit, dev, and terminal-remote-preflight where applicable.
+Run state-freshness-check, handoff-check, governance-check, rule-registry check, patch-preflight, docs-audit, dev, and terminal-remote-preflight where applicable.
 
 ## Next Safe Step
 
-PR718 is merged. Next safe step: add migration-aware rule entries for legacy rule anchors without deleting rule intent, then add validator and workflow-guard integration in separate small slices.
+PR725 is merged. Next safe step: expand governed rule-registry coverage, then add classification, priority, and conflict checks in separate small slices. Do not start broad documentation-management rebuild, release, tag, DOI mutation, or GUI expansion.
 
 ## Source of Truth
 

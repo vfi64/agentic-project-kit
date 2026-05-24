@@ -1,0 +1,38 @@
+POST-PR725 CLOSEOUT AND SUCCESSOR HANDOFF REFRESH -- REMOTE-FIRST -- NO RELEASE
+
+### REMOTE BASE ###
+main: 0350fee Enforce rule registry through patch preflight (#725)
+branch: post725-state-refresh
+
+### FILES REFRESHED ###
+- docs/STATUS.md
+- docs/handoff/CURRENT_HANDOFF.md
+- .agentic/handoff_state.yaml
+- docs/reports/terminal/v041-successor-chat-handoff-after-pr725.md
+- docs/reports/terminal/v041-handoff-after-pr725.log
+
+### STATE REFRESH ###
+- Safe state updated from PR718 baseline to PR725 baseline.
+- Rule registry baseline recorded as enforced through validator, CLI, workflow-guard, and patch-preflight.
+- Next safe task changed to rule-registry coverage expansion before classification and conflict checks.
+- Broad documentation-management rebuild remains blocked.
+
+### CI FAILURE AND REPAIR ###
+Initial PR726 CI failed because the first remote refresh made docs/STATUS.md too lossy and omitted guarded compatibility anchors that deterministic tests still require. It also omitted the exact remote evidence anchor required by .agentic/rule_preservation.yaml for remote-log-lookup-first.
+
+Remote repair commits on post725-state-refresh restored guarded status anchors, the ## Next Safe Step section, closeout sync markers, and the explicit remote evidence term in .agentic/handoff_state.yaml. This is a rule-preservation repair, not product work.
+
+Second CI feedback still showed status anchor omissions. The branch now restores guarded compatibility anchors for Tkinter deferral, typed-work-order cockpit consumption, v0.3.32 DOI compatibility, policy-pack doctor checks, and the exact lower-case remote evidence phrase in .agentic/handoff_state.yaml.
+
+### GATE EXPECTATION ###
+CI must validate the branch before merge.
+Relevant expected checks:
+- handoff state validation
+- docs/status and handoff freshness tests
+- rule-registry check
+- workflow-guard
+- patch-preflight
+- docs-audit/check-docs/dev gate set
+
+### RESULT ###
+Remote closeout patch created and repaired after CI feedback. CI is the validation source before merge.
