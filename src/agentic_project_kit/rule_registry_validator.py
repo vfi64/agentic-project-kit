@@ -10,6 +10,13 @@ INVENTORY_PATH = Path(".agentic/rule_mechanism_inventory.yaml")
 MIGRATIONS_PATH = Path(".agentic/rule_migrations.yaml")
 VALID_MECHANISM_CATEGORIES = {"communication", "execution", "governance", "workflow", "preflight"}
 VALID_ENFORCEMENT_PHASES = {"runtime", "guard", "preflight"}
+VALID_CATEGORY_PHASES = {
+    ("communication", "runtime"),
+    ("execution", "runtime"),
+    ("governance", "guard"),
+    ("workflow", "guard"),
+    ("preflight", "preflight"),
+}
 MIN_PRIORITY = 1
 MAX_PRIORITY = 5
 
@@ -53,6 +60,45 @@ def _validate_mechanism_metadata(
                 f"{mechanism_id}: enforcement_phase must be one of: {', '.join(sorted(VALID_ENFORCEMENT_PHASES))}",
             )
         )
+    if (
+        category in VALID_MECHANISM_CATEGORIES
+        and enforcement_phase in VALID_ENFORCEMENT_PHASES
+        and (category, enforcement_phase) not in VALID_CATEGORY_PHASES
+    ):
+        findings.append(
+            RuleRegistryFinding(
+                str(INVENTORY_PATH),
+                f"{mechanism_id}: incompatible category/enforcement_phase combination: {category}/{enforcement_phase}",
+            )
+        )
+
+def _validate_mechanism_conflicts(mechanisms: list[Any], findings: list[RuleRegistryFinding]) -> None:
+    seen: dict[tuple[str, int, str], str] = {}
+    for mechanism in mechanisms:
+        if not isinstance(mechanism, dict) or mechanism.get("status") != "active":
+            continue
+        mechanism_id = str(mechanism.get("id", ""))
+        category = mechanism.get("category")
+        priority = mechanism.get("priority")
+        enforcement_phase = mechanism.get("enforcement_phase")
+        if (
+            category not in VALID_MECHANISM_CATEGORIES
+            or not isinstance(priority, int)
+            or not MIN_PRIORITY <= priority <= MAX_PRIORITY
+            or enforcement_phase not in VALID_ENFORCEMENT_PHASES
+        ):
+            continue
+        key = (str(category), priority, str(enforcement_phase))
+        previous = seen.get(key)
+        if previous is not None:
+            findings.append(
+                RuleRegistryFinding(
+                    str(INVENTORY_PATH),
+                    f"ambiguous enforcement order: {previous} and {mechanism_id} share category={category}, priority={priority}, enforcement_phase={enforcement_phase}",
+                )
+            )
+        else:
+            seen[key] = mechanism_id
 
 def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
     base = Path(root)
@@ -96,6 +142,7 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
             for term in _as_list(source.get("required_terms")):
                 if str(term) not in text:
                     findings.append(RuleRegistryFinding(rel, f"{mid}: required term missing: {term}"))
+    _validate_mechanism_conflicts(mechanisms, findings)
     legacy_ids: set[str] = set()
     for migration in _as_list(migrations.get("migrations")):
         legacy_id = str(migration.get("legacy_id", ""))
