@@ -6,7 +6,7 @@ from typing import Iterable
 
 import yaml
 
-WORKFLOW_GUARD_CONFIG = Path(".agentic/workflow_guard.yaml")
+WORKFLOW_GUARD_CONFIG = Path("docs/workflow/WORKFLOW_GUARD.md")
 CONTROL_FILE_PRESERVATION = Path(".agentic/control_file_preservation.yaml")
 
 
@@ -28,19 +28,6 @@ def _load_yaml(path: Path) -> object:
 
 def _existing(paths: Iterable[Path]) -> list[Path]:
     return [path for path in paths if path.exists()]
-
-
-def load_workflow_guard_config(config_path: Path = WORKFLOW_GUARD_CONFIG) -> dict[str, object]:
-    if not config_path.exists():
-        return {
-            "schema_version": 1,
-            "required_preflight_sources": [],
-            "known_failure_patterns": [],
-        }
-    data = _load_yaml(config_path)
-    if not isinstance(data, dict):
-        raise ValueError(f"{config_path} must contain a YAML mapping")
-    return data
 
 
 def protected_control_files(config_path: Path = CONTROL_FILE_PRESERVATION) -> list[dict[str, object]]:
@@ -138,14 +125,42 @@ def check_no_lossy_control_file_policy() -> list[GuardFinding]:
     return findings
 
 
+def check_workflow_guard_document() -> list[GuardFinding]:
+    doc = WORKFLOW_GUARD_CONFIG
+    if not doc.exists():
+        return [
+            GuardFinding(
+                pattern_id="workflow-guard-policy-missing",
+                severity="HARD-FAIL",
+                path=str(doc),
+                message="workflow guard policy documentation is missing",
+                repair_mode="restore-policy-document",
+            )
+        ]
+    text = doc.read_text(encoding="utf-8")
+    required = ("diagnose-and-fail", "protected control files", "repair plan")
+    return [
+        GuardFinding(
+            pattern_id="workflow-guard-policy-weakened",
+            severity="HARD-FAIL",
+            path=str(doc),
+            message=f"required policy phrase missing: {phrase}",
+            repair_mode="restore-policy-phrase",
+        )
+        for phrase in required
+        if phrase not in text
+    ]
+
+
 def run_workflow_guard(paths: Iterable[str] | None = None) -> list[GuardFinding]:
     requested = [Path(path) for path in (paths or [])]
     protected = [Path(str(item["path"])) for item in protected_control_files() if isinstance(item.get("path"), str)]
-    yaml_targets = list(dict.fromkeys([*requested, *protected, WORKFLOW_GUARD_CONFIG, CONTROL_FILE_PRESERVATION]))
+    yaml_targets = list(dict.fromkeys([*requested, *protected, CONTROL_FILE_PRESERVATION]))
     findings: list[GuardFinding] = []
     findings.extend(check_yaml_parseability(yaml_targets))
     findings.extend(check_required_anchors())
     findings.extend(check_no_lossy_control_file_policy())
+    findings.extend(check_workflow_guard_document())
     return findings
 
 
