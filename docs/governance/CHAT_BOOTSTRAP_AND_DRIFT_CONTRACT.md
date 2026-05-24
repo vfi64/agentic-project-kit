@@ -25,6 +25,20 @@ A successor chat must perform this sequence before proposing any mutation block:
 
 A chat may summarize these sources compactly, but it must not replace the source-reading step with memory.
 
+## Remote repository connector route
+
+For remote-only work on GitHub repositories, use the GitHub connector direct-path-first workflow before falling back to search, guessed URLs, or local shell commands.
+
+Required first route:
+
+1. call `get_repo` for the exact `repository_full_name`;
+2. call `fetch_file` for known paths instead of searching for them;
+3. call `fetch_commit`, `get_pr_info`, `fetch_commit_workflow_runs`, or `compare_commits` for known commits, pull requests, runs, or branch comparisons;
+4. use repository search only when the path or symbol is genuinely unknown;
+5. fall back to raw URLs or local commands only after connector access is unavailable or insufficient.
+
+This route is a token- and drift-control rule. Repeatedly trying raw URLs, branch guesses, or unrelated searches while a known connector path exists is drift.
+
 ## Drift classes
 
 The system must treat the following as drift:
@@ -39,7 +53,10 @@ The system must treat the following as drift:
 - portable execution rules are absent from coverage or tests,
 - a workflow claims no-copy completion without remote-readable evidence,
 - a workflow asks for pasted output although usable local or remote evidence exists,
-- shell-only snippets are presented as canonical cross-platform execution;\n- local work starts while `main` is behind `origin/main`, the worktree is dirty, or the branch does not match the intended base.
+- shell-only snippets are presented as canonical cross-platform execution,
+- local work starts while `main` is behind `origin/main`, the worktree is dirty, or the branch does not match the intended base,
+- remote repository inspection ignores the GitHub connector direct-path-first workflow,
+- governance YAML is mutated without a parse-modify-dump workflow and post-mutation parse validation.
 
 ## Drift response
 
@@ -52,6 +69,20 @@ On drift detection, the assistant or tool must:
 5. prefer a small deterministic fix slice over broad product work.
 
 Drift must not be hidden behind a final PASS. If drift was found and not fixed, the final summary must report it honestly.
+
+## Governance YAML mutation rule
+
+Governance YAML includes `.agentic/handoff_state.yaml`, `.agentic/compiled_agent_context.yaml`, `.agentic/no_copy_terminal_policy.yaml`, `docs/DOCUMENTATION_COVERAGE.yaml`, and `docs/DOCUMENTATION_REGISTRY.yaml`.
+
+The only allowed mutation workflow for these files is parse-modify-dump:
+
+1. parse the original YAML with `yaml.safe_load`;
+2. mutate typed Python data structures;
+3. write with `yaml.safe_dump` or an equivalent structured emitter;
+4. parse the written file again;
+5. run the relevant YAML integrity, coverage, and governance tests before claiming success.
+
+Free-text insertion, regex insertion, manual indentation patches, and unparsed string concatenation are forbidden for governance YAML. Quoting a colon after the fact is not enough; the workflow must prevent malformed YAML from being created.
 
 ## Handoff prompt requirements
 

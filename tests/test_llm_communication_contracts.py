@@ -114,3 +114,56 @@ def test_local_repository_freshness_precondition_is_hardened_across_governance_d
     }
     for path, anchors in requirements.items():
         assert_contains(path, anchors)
+
+
+def test_remote_connector_route_is_hardened_before_search_or_raw_fallback() -> None:
+    requirements = {
+        ".agentic/compiled_agent_context.yaml": [
+            "github_connector_direct_path_first",
+            "github-connector-direct-path-first",
+            "fetch_file/fetch_commit/get_pr_info/fetch_commit_workflow_runs/compare_commits",
+        ],
+        "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md": [
+            "Remote repository connector route",
+            "GitHub connector direct-path-first workflow",
+            "call `fetch_file` for known paths instead of searching for them",
+        ],
+        "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md": [
+            "Remote connector route rule",
+            "direct connector route",
+            "Search is for unknown paths or symbols",
+        ],
+        "docs/TEST_GATES.md": [
+            "Remote Connector Gate",
+            "GitHub connector direct-path-first workflow",
+        ],
+    }
+    for path, anchors in requirements.items():
+        assert_contains(path, anchors)
+
+
+def test_governance_yaml_mutation_workflow_is_parse_modify_dump_only() -> None:
+    requirements = {
+        ".agentic/compiled_agent_context.yaml": [
+            "yaml_governance_mutation_requires_parse_modify_dump",
+            "yaml-governance-parse-modify-dump-only",
+            "parse-modify-dump is the only allowed governance YAML mutation workflow",
+        ],
+        "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md": [
+            "Governance YAML mutation rule",
+            "The only allowed mutation workflow for these files is parse-modify-dump",
+            "Free-text insertion, regex insertion, manual indentation patches",
+        ],
+        "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md": [
+            "Governance YAML mutation rule",
+            "must use parse-modify-dump",
+            "YAML parse error in CI is a workflow defect",
+        ],
+        "docs/TEST_GATES.md": [
+            "YAML Mutation Gate",
+            "parse-modify-dump",
+            "tests/test_yaml_governance_integrity.py tests/test_patch_artifact_preflight.py",
+        ],
+    }
+    for path, anchors in requirements.items():
+        assert_contains(path, anchors)

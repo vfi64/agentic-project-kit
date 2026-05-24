@@ -18,7 +18,9 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Documentation coverage change | Update docs/DOCUMENTATION_COVERAGE.yaml and run agentic-kit check-docs |
 | Documentation registry/schema change | Update docs/DOCUMENTATION_REGISTRY.yaml and docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md; run registry unit tests plus agentic-kit check-docs/docs-audit |
 | Documentation mesh / cross-document drift change | Unit tests plus agentic-kit doc-mesh-audit CLI smoke command; keep current-state, governance, architecture, and historical-plan document classes explicit |
-| Governance rule change | Rule Hardening Gate: add or update a deterministic test, coverage check, doctor check, release check, or documented review-only exception |\n| Local repository mutation | Local Freshness Gate: fetch the remote, verify the intended base is current, preserve or stop on dirty local state, then create the feature branch |
+| Governance rule change | Rule Hardening Gate: add or update a deterministic test, coverage check, doctor check, release check, or documented review-only exception |
+| Critical control file change | Control File Preservation Gate: preserve required anchors or record an explicit successor migration; hard length-limit trimming is forbidden |
+| Local repository mutation | Local Freshness Gate: fetch the remote, verify the intended base is current, preserve or stop on dirty local state, then create the feature branch |
 | LLM communication or bootstrap rule change | Update the communication/bootstrap governance contracts, compiled agent context, coverage anchors, and `tests/test_llm_communication_contracts.py`; run agentic-kit check-docs |
 | Portable execution rule change | Update `docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md`; add or update Python-first tests; do not make POSIX shell tools canonical workflow dependencies |
 | Document quality heuristic change | Unit tests plus agentic-kit check-docs; confirm that deterministic quality heuristics do not claim semantic perfection |
@@ -100,7 +102,6 @@ Required evidence for this registry gate:
     agentic-kit docs-registry
     agentic-kit docs-registry --report /tmp/agentic-docs-registry-summary.json
     agentic-kit check-docs
-    agentic-kit docs-audit
 
 ## LLM Communication and Bootstrap Gate
 
@@ -119,7 +120,8 @@ Required hardening:
 - update `docs/DOCUMENTATION_COVERAGE.yaml` when anchors change;
 - update `tests/test_llm_communication_contracts.py` or the deterministic communication-rules check;
 - keep `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` as concise pointers, not duplicate rule books;
-- prefer Python-core portable checks over shell-only snippets;\n- require a local repository freshness precondition before local mutation.
+- prefer Python-core portable checks over shell-only snippets;
+- require a local repository freshness precondition before local mutation.
 
 The gate must preserve these invariants: successor chats read mandatory sources before mutation, `d`/`f`/`w` are communication signals rather than evidence, `REMOTE_EVIDENCE` uses only final contract values, shell is only an adapter, and drift stops mutation-oriented work unless the mutation is the drift fix itself.
 
@@ -161,6 +163,19 @@ Accepted hardening mechanisms:
 - a documented review-only exception when the rule is intentionally not machine-checkable.
 
 Do not add normative rules that exist only as prose without a matching test, gate, coverage requirement, or explicit exception. Review-only exceptions must name why the rule cannot currently be enforced deterministically and what evidence reviewers should inspect.
+
+## Control File Preservation Gate
+
+Critical control files must not lose active rules for compactness, token budget, or broad rewrite convenience. Information preservation outranks compactness.
+
+Protected files and required anchors are listed in `.agentic/control_file_preservation.yaml`. The manifest explicitly sets `no_hard_length_limit: true`; hard length-limit trimming is forbidden. If a protected file becomes too large, split it, reference it, or generate projections from machine-readable sources instead of deleting still-active rules.
+
+A removed protected anchor is valid only when the same change records the removed anchor, successor anchor, rationale, deterministic test, and reviewer-visible summary. Otherwise the change is lossy and must fail.
+
+Required evidence:
+
+    python -m pytest -q tests/test_control_file_preservation.py
+    agentic-kit check-docs
 
 ## Document Quality Heuristic Gate
 
@@ -385,3 +400,24 @@ Before acting on repository state, command syntax, release phase, file locations
 Rule id: no-remote-command-deadlock
 
 Remote command first is a delivery preference, not a blocking rule. If `./ns agent-next` reports `NO-COMMAND`, the next assistant response must either queue a complete command pair remotely or give exactly one minimal fallback command. The user must not be kept in an `ask-agent-to-queue-command` loop. Long ad-hoc terminal blocks are only allowed when the remote command path is unavailable or broken.
+
+## Remote Connector Gate
+
+Remote-only repository work must start with the GitHub connector direct-path-first workflow when the connector is available and the repository, file path, commit, pull request, workflow run, or branch comparison is known.
+
+Required evidence is one of:
+
+- connector-backed file/PR/commit/run/compare inspection was used;
+- connector access was unavailable or insufficient and the fallback was named;
+- the target path or symbol was unknown, so search was justified.
+
+## YAML Mutation Gate
+
+Governance YAML files must be changed through parse-modify-dump and validated by parsing the written result again.
+
+Required evidence:
+
+    python -m pytest -q tests/test_yaml_governance_integrity.py tests/test_patch_artifact_preflight.py
+    agentic-kit check-docs
+
+A YAML parse failure in CI is a failed workflow gate. It must not be treated as a normal trial-and-error step.
