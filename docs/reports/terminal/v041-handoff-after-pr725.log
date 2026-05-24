@@ -1,0 +1,31 @@
+POST-PR725 CLOSEOUT AND SUCCESSOR HANDOFF REFRESH -- REMOTE-FIRST -- NO RELEASE
+
+### REMOTE BASE ###
+main: 0350fee Enforce rule registry through patch preflight (#725)
+branch: post725-state-refresh
+
+### FILES REFRESHED ###
+- docs/STATUS.md
+- docs/handoff/CURRENT_HANDOFF.md
+- .agentic/handoff_state.yaml
+- docs/reports/terminal/v041-successor-chat-handoff-after-pr725.md
+- docs/reports/terminal/v041-handoff-after-pr725.log
+
+### STATE REFRESH ###
+- Safe state updated from PR718 baseline to PR725 baseline.
+- Rule registry baseline recorded as enforced through validator, CLI, workflow-guard, and patch-preflight.
+- Next safe task changed to rule-registry coverage expansion before classification and conflict checks.
+- Broad documentation-management rebuild remains blocked.
+
+### GATE EXPECTATION ###
+CI must validate the branch before merge.
+Relevant expected checks:
+- handoff state validation
+- docs/status and handoff freshness tests
+- rule-registry check
+- workflow-guard
+- patch-preflight
+- docs-audit/check-docs/dev gate set
+
+### RESULT ###
+Remote closeout patch created. CI is the validation source before merge.
