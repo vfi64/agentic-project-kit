@@ -5,6 +5,7 @@ from typer.testing import CliRunner
 from agentic_project_kit.cli import app
 from agentic_project_kit.run_summary_renderer import render_summary
 from agentic_project_kit.workflow_guard import (
+    check_required_rule_registry_files,
     check_rule_registry,
     check_structured_summary_evidence,
     check_yaml_parseability,
@@ -54,6 +55,15 @@ def test_workflow_guard_enforces_rule_registry() -> None:
     text = Path("src/agentic_project_kit/workflow_guard.py").read_text(encoding="utf-8")
     assert "validate_rule_registry" in text
     assert "rule-registry-drift" in text
+
+
+def test_workflow_guard_requires_rule_registry_files() -> None:
+    assert check_required_rule_registry_files() == []
+    text = Path("src/agentic_project_kit/workflow_guard.py").read_text(encoding="utf-8")
+    assert ".agentic/rule_mechanism_inventory.yaml" in text
+    assert ".agentic/rule_migrations.yaml" in text
+    assert ".agentic/rule_test_coverage.yaml" in text
+    assert "rule-registry-file-missing" in text
 
 
 def test_workflow_guard_rejects_invalid_yaml(tmp_path: Path) -> None:
