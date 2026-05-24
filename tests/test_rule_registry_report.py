@@ -123,22 +123,40 @@ def _write_registry(root: Path) -> None:
 def test_build_rule_registry_report_summarizes_coverage(tmp_path: Path) -> None:
     _write_registry(tmp_path)
     report = build_rule_registry_report(tmp_path)
+    assert report["status"] == "warn"
     assert report["summary"]["active_mechanism_count"] == 2
     assert report["summary"]["direct_mechanism_count"] == 1
     assert report["summary"]["documented_mechanism_count"] == 1
     assert report["summary"]["mechanisms_without_direct_tests"] == 1
+    assert report["summary"]["followup_count"] == 1
     assert report["summary"]["assertion_count"] == 2
     assert report["summary"]["evidence_ref_count"] == 3
     assert report["summary"]["validation_finding_count"] == 0
+    assert report["followups"] == [
+        {
+            "mechanism_id": "documented-mechanism",
+            "owner": "test-owner",
+            "category": "communication",
+            "priority": 2,
+            "test_coverage": "documented",
+            "surfaces": ["documented-surface"],
+            "reason": "No direct test path is registered for this active mechanism.",
+            "recommended_next_step": "Add a direct regression test and register it in rule_mechanism_inventory.yaml.",
+        }
+    ]
 
 
 def test_render_rule_registry_report_includes_machine_counts(tmp_path: Path) -> None:
     _write_registry(tmp_path)
     rendered = render_rule_registry_report(build_rule_registry_report(tmp_path))
+    assert "status: warn" in rendered
     assert "active_mechanisms: 2" in rendered
     assert "direct: 1" in rendered
     assert "documented: 1" in rendered
+    assert "followups: 1" in rendered
     assert "documented-mechanism: coverage=documented" in rendered
+    assert "Follow-ups:" in rendered
+    assert "documented-mechanism: No direct test path is registered" in rendered
 
 
 def test_rule_registry_report_cli_emits_json_for_current_repo() -> None:
@@ -146,12 +164,17 @@ def test_rule_registry_report_cli_emits_json_for_current_repo() -> None:
     assert result.exit_code == 0
     payload = json.loads(result.output)
     assert payload["schema_version"] == 1
+    assert payload["status"] in {"pass", "warn"}
     assert payload["summary"]["active_mechanism_count"] >= 1
     assert payload["summary"]["validation_finding_count"] == 0
+    assert "followup_count" in payload["summary"]
+    assert "followups" in payload
 
 
 def test_rule_registry_report_cli_emits_human_summary_for_current_repo() -> None:
     result = CliRunner().invoke(app, ["rule-registry", "report"])
     assert result.exit_code == 0
     assert "Rule registry report" in result.output
+    assert "status:" in result.output
+    assert "followups:" in result.output
     assert "validation_findings: 0" in result.output
