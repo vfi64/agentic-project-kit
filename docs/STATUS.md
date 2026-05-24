@@ -1,4 +1,5 @@
-Current version: 0.4.1
+<!-- post-pr714-closeout -->
+Post-PR714 closeout: main is refreshed after PR #714 at `7d092cb` (`Add workflow guard diagnostics (#714)`). PR #714 completed the workflow-guard diagnostics slice. Next required work before returning to the documentation-management rebuild: harden and test canonical structured SUMMARY enforcement so missing or legacy summaries are detected as workflow drift.\n\nCurrent version: 0.4.1
 # Project Status
 Status-date: 2026-05-24
 Project: agentic-project-kit

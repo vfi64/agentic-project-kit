@@ -1,4 +1,5 @@
-Current version: 0.4.1
+<!-- post-pr714-closeout -->
+Post-PR714 handoff closeout: main is refreshed after PR #714 at `7d092cb` (`Add workflow guard diagnostics (#714)`). Treat structured SUMMARY enforcement as the next immediate hardening task before resuming documentation-management registry/projection work.\n\nCurrent version: 0.4.1
 
 # Current Handoff
 
