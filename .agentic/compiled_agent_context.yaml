@@ -1,7 +1,7 @@
 schema_version: 1
 updated:
   date: '2026-05-24'
-  reason: remote connector route and YAML mutation workflow hardening
+  reason: remote connector route, YAML mutation workflow, and control file preservation hardening
 purpose: Fast, redundant-free, machine-readable companion to the human governance docs.
 source_policy:
   remote_first_no_guess: true
@@ -11,8 +11,10 @@ source_policy:
   local_repo_freshness_before_local_work: true
   github_connector_direct_path_first: true
   yaml_governance_mutation_requires_parse_modify_dump: true
+  control_file_preservation_required: true
 priority_order:
 - .agentic/compiled_agent_context.yaml
+- .agentic/control_file_preservation.yaml
 - .agentic/handoff_state.yaml
 - .agentic/no_copy_terminal_policy.yaml
 - docs/governance/FINAL_SUMMARY_CONTRACT.md
@@ -46,6 +48,7 @@ stable_test_anchors:
 - "do not use interactive read prompts or shell-backslash summary invocations"
 - "GitHub connector direct-path-first workflow"
 - "parse-modify-dump is the only allowed governance YAML mutation workflow"
+- "Information preservation outranks compactness"
 hard_rules:
 - id: remote-first-no-guess
   rule: Inspect remote repo files, authoritative docs, and command help before acting.
@@ -75,6 +78,9 @@ hard_rules:
   rule: For remote repo work, first use the installed GitHub connector with repository_full_name and fetch_file/fetch_commit/get_pr_info/fetch_commit_workflow_runs/compare_commits before trying raw URLs, search, or local shell fallbacks.
 - id: yaml-governance-parse-modify-dump-only
   rule: parse-modify-dump is the only allowed governance YAML mutation workflow; never patch YAML with free-text injection, regex insertion, or unparsed string concatenation.
+- id: control-file-preservation
+  summary: Preserve critical control-file information; compactness must not delete active rules.
+  rule: Critical control files must be additive or use explicit migration records with successor anchors, rationale, and deterministic tests. Hard length-limit trimming is forbidden; if files grow too large, split, reference, or generate them.
 - id: gui-visual-two-phase-evidence
   rule: GUI visual checks must separate manual window launch from non-interactive PASS/FAIL evidence recording; do not use interactive read prompts or shell-backslash summary invocations.
 - id: local-main-freshness-before-local-work
@@ -151,6 +157,7 @@ drift_detection:
   - local work starts from stale or dirty repository state
   - remote work ignores the GitHub connector direct-path-first workflow
   - governance YAML is mutated without parse-modify-dump validation
+  - protected control file loses an active rule without an explicit successor migration
 normal_operator_path:
 - use GitHub connector direct-path-first workflow for remote repo inspection
 - verify local repository freshness before local mutation
@@ -159,6 +166,7 @@ normal_operator_path:
 - run handoff prompt freshness guard before presenting a successor prompt
 - run or inspect deterministic checks
 - mutate governance YAML only through parse-modify-dump helpers and validate parseability afterward
+- preserve protected control-file anchors or record explicit successor migrations
 - use portable Python core where available
 - render final summary through canonical renderer
 quality_goal: Prefer deterministic, portable, test-backed solutions over prompt-only conventions.
