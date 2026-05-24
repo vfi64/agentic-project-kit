@@ -298,7 +298,9 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
             coverage_view["test_coverage"] = coverage_entry.get("test_coverage")
         if "coverage_rationale" not in coverage_view and "coverage_rationale" in coverage_entry:
             coverage_view["coverage_rationale"] = coverage_entry.get("coverage_rationale")
-        if coverage_metadata_present or "test_coverage" in mechanism:
+        if coverage_metadata_present and mid not in coverage_by_mechanism and "test_coverage" not in mechanism:
+            pass
+        elif coverage_metadata_present or "test_coverage" in mechanism:
             _validate_test_coverage(coverage_view, mid, tests, findings)
         for test_path in tests:
             if not (base / test_path).exists():
@@ -332,6 +334,13 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
                     findings.append(RuleRegistryFinding(rel, f"{mid}: required term missing: {term}"))
     _validate_mechanism_conflicts(mechanisms, findings)
     if coverage_metadata_present:
+        for missing_id in sorted(mechanism_ids - set(coverage_by_mechanism)):
+            findings.append(
+                RuleRegistryFinding(
+                    str(COVERAGE_PATH),
+                    f"missing coverage entry for active mechanism: {missing_id}",
+                )
+            )
         for coverage_id in sorted(set(coverage_by_mechanism) - mechanism_ids):
             findings.append(
                 RuleRegistryFinding(
