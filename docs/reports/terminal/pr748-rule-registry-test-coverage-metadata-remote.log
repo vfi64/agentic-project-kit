@@ -1,0 +1,30 @@
+PR748 RULE REGISTRY TEST COVERAGE METADATA -- REMOTE PATCH -- NO RELEASE
+
+Remote-only recovery because the user is on iPhone.
+
+Base:
+- main after PR747: 45d3f4655910f1c145036ac2d9c0bfea30eae6e4
+- branch: feature/rule-registry-test-coverage-metadata-748
+
+Changes:
+- Added rule test coverage classification support to rule_registry_validator.
+- Added .agentic/rule_test_coverage.yaml as a machine-readable registry component.
+- Classified mechanisms with direct tests as direct.
+- Classified documentation/anchor-only mechanisms as documented with explicit coverage_rationale.
+- Added regression tests for coverage metadata validation.
+
+Scope:
+- no release
+- no tag
+- no DOI
+- no broad migration
+- no product feature outside rule-registry validation
+
+Expected verification:
+- GitHub CI on PR #748
+- rule-registry validator via current test suite
+- targeted test file tests/test_rule_registry_test_coverage_metadata.py
+
+Known remote adjustment:
+- The GitHub contents API blocked a full .agentic/rule_mechanism_inventory.yaml rewrite.
+- The patch uses a smaller dedicated .agentic/rule_test_coverage.yaml registry file instead.
