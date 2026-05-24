@@ -25,7 +25,7 @@ Current released version: 0.4.1.
 Current release tag: v0.4.1.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
-Post-release Zenodo verification is covered by `agentic-kit post-release-check --version 0.4.1`.
+Post-release Zenodo verification is covered by `agentic-kit post-release-check --version 0.4.1`; post-release Zenodo remains a guarded release-state anchor.
 
 Post-PR725 closeout target:
 - Main is refreshed after PR #725 at `0350fee` (`Enforce rule registry through patch preflight (#725)`).
@@ -37,6 +37,7 @@ Post-PR725 closeout target:
 Documentation registry baseline:
 - `docs/DOCUMENTATION_REGISTRY.yaml` is the additive machine-readable registry.
 - `docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md` is the human contract.
+- `docs/DOCUMENTATION_COVERAGE.yaml` and documentation coverage remain active gate inputs.
 - `agentic-kit docs-registry` shows the read-only summary.
 - `agentic-kit docs-registry --report PATH` writes the JSON report.
 - The registry is visible in `check-docs`, `docs-audit`, `doc-mesh-audit`, `doc-lifecycle-audit`, `handoff check`, `handoff show`, `release-check`, and `post-release-check`.
@@ -50,12 +51,18 @@ Workflow hardening baseline:
 - Information preservation outranks compactness for protected control files. Hard length-limit trimming is forbidden; large protected files must be split, referenced, or generated instead of losing active rules.
 - Rule registry artifacts are governed inputs: `.agentic/rule_mechanism_inventory.yaml` and `.agentic/rule_migrations.yaml`.
 - `agentic-kit rule-registry check`, workflow-guard, and patch-preflight are the current hard enforcement path for the governed rule registry.
+- remote inspection evidence contract and remote evidence present: standard PASS/FAIL work must preserve logs under `docs/reports/terminal` before asking for paste-output.
+- no-copy/evidence remains active: `d` and `f` are acknowledgements only; inspect evidence before continuing.
+- long chat-generated shell or Python patch blocks are disfavored; shell is a runner, not a patch language.
 
 GUI MVP baseline:
 - `cockpit-readiness`, `doctor`, and `check-docs` visually pass as bounded read-only GUI actions.
 - Action Registry is the single source of allowed GUI actions.
 - `agent-run` and non-read-only actions remain disabled in the GUI MVP.
 - Headless GUI action execution tests cover the bounded read-only action executor.
+- v0.3.30 GUI Readiness Hardening Plan and v0.3.30 GUI Readiness Hardening Closeout remain historical anchors; v0.3.30 was not the Tkinter GUI release, and Tkinter remains explicitly deferred.
+- Tkinter cockpit remains an anchor term for pre-GUI boundary checks.
+- Communication artifact GC hardening is now part of the pre-GUI baseline.
 
 ## Current Goal
 
@@ -86,7 +93,6 @@ Continue the governed rule registry with small additive slices: coverage expansi
 - Governance YAML must be changed through parse-modify-dump and validated after mutation.
 - Protected control files must preserve active rules unless an explicit successor migration is recorded and tested.
 - Structured SUMMARY drift is blocking drift: missing, malformed, contradictory, or legacy summaries must be fixed before product or documentation-management work continues.
-- v0.3.30 GUI Readiness Hardening Closeout was not the Tkinter GUI release.
 - GUI readiness hardening, not a Tkinter implementation, remains the pre-GUI boundary before any bounded Tkinter MVP work.
 - GUI expansion is intentionally paused until the current hardening slice is green.
 
@@ -102,9 +108,17 @@ Mandatory successor-chat source order is defined by `.agentic/compiled_agent_con
 7. `docs/STATUS.md`
 8. `docs/handoff/CURRENT_HANDOFF.md`
 
-Final summary contract: relevant workflow blocks must end with the framed SUMMARY contract containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, CHAT_REPLY, and the final result marker. No executable placeholder summaries and final-summary-no-executable-placeholders remain active.
+Mandatory Final Summary Contract: relevant workflow blocks must end with the framed SUMMARY contract containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, CHAT_REPLY, and the final result marker. No executable placeholder summaries and final-summary-no-executable-placeholders remain active.
 
 No-copy/evidence contract: `d` means a log-backed block appears finished; evidence must still be inspected. `f` means failure was reported; first inspect remote or local evidence and request pasted output only when evidence is unavailable or unusable.
+
+Pattern Advisor baseline: Pattern Advisor is an advisory-only read-only catalog; `patterns list` and `patterns show` are guarded anchor commands. Policy-pack doctor checks and policy packs remain guarded status terms.
+
+Planning-state freshness compatibility: Current released version: 0.3.29 and Current released version: 0.3.32 remain retained legacy anchors only for deterministic historical tests; the current version is 0.4.1.
+
+v0.3.36 current-state cleanup started as a documentation-only line; the current active line is the governed rule-registry baseline.
+
+Recent closeout anchors retained for handoff/status sync: PR #650 merged; PR #651 merged; PR #652 merged.
 
 ## Live Status Commands
 
@@ -123,3 +137,7 @@ Required gate set for current-state, handoff, or governance-summary changes:
 - `./ns docs-audit`
 - `./ns dev`
 - `agentic-kit check-docs`
+
+## Next Safe Step
+
+Expand governed rule-registry coverage first. Add classification, priority, and conflict checks only in later small PRs. Do not start broad documentation-management rebuild, release, tag, DOI mutation, or GUI expansion.
