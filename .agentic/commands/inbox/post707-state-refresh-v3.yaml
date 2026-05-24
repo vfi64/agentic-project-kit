@@ -1,0 +1,5 @@
+command_id: post707-state-refresh-v3
+title: Refresh handoff state after PR707 v3
+safety_class: remote-mutation
+expected_branch: post707-state-refresh
+description: Retry structured post-PR707 state refresh while validating target-main freshness instead of transient branch HEAD quietness.
