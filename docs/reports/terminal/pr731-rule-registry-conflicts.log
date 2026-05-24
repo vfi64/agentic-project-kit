@@ -1,0 +1,43 @@
+PR731 ADD RULE REGISTRY CONFLICT CHECKS -- REMOTE-FIRST -- NO RELEASE
+
+### REMOTE BASE ###
+main: 4f2b93a Refresh handoff state after PR729 (#730)
+branch: feature/rule-registry-conflicts-731
+
+### FILES CHANGED ###
+- src/agentic_project_kit/rule_registry_validator.py
+- tests/test_rule_registry_validator.py
+- docs/reports/terminal/pr731-rule-registry-conflicts.log
+
+### INTENT ###
+Add deterministic compatibility and conflict checks to the governed rule-registry validator. Keep this slice separate from completeness checks, coverage expansion, release work, GUI work, and documentation migration.
+
+### NEW VALIDATOR RULES ###
+- category/enforcement_phase combinations must match the explicit compatibility matrix.
+- active mechanisms must not share the same category, priority, and enforcement_phase because that creates ambiguous enforcement order.
+- same category and phase is allowed when priority differs.
+
+### TEST COVERAGE ###
+- current repository state validates.
+- CLI still passes current repository state.
+- incompatible category/phase is rejected.
+- ambiguous category+priority+phase is rejected.
+- same category/phase with different priority is accepted.
+- previous classification, migration, and source-term tests remain active.
+
+### OUT OF SCOPE ###
+- no completeness checks
+- no coverage expansion
+- no release, tag, DOI, or GUI work
+- no broad documentation migration
+
+### GATE EXPECTATION ###
+CI must validate before merge. Relevant expectations:
+- test_rule_registry_validator
+- workflow-guard
+- patch-preflight
+- rule-registry check
+- ruff/check-docs/dev gates
+
+### RESULT ###
+Remote conflict-check patch created. CI is the validation source before merge.
