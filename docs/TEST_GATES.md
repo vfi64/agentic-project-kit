@@ -390,7 +390,7 @@ Remote command first is a delivery preference, not a blocking rule. If `./ns age
 
 ## Remote Connector Gate
 
-Remote-only repository work must start with connector-backed inspection when the GitHub connector is available and the repository, file path, commit, pull request, workflow run, or branch comparison is known.
+Remote-only repository work must start with the GitHub connector direct-path-first workflow when the connector is available and the repository, file path, commit, pull request, workflow run, or branch comparison is known.
 
 Required evidence is one of:
 
