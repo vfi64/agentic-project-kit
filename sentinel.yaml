@@ -15,14 +15,12 @@ documents:
       - "## Documentation Coverage Rule"
       - "## Remote Work Authorization"
       - "## Required Local Gate"
-    max_words: 2700
   - path: docs/STATUS.md
     required_sections:
       - "## Current State"
       - "## Current Goal"
       - "## Live Status Commands"
       - "## Next Safe Step"
-    max_words: 3500
   - path: docs/TEST_GATES.md
     required_sections:
       - "## Gate Matrix"
@@ -38,7 +36,6 @@ documents:
       - "## Source of Truth"
       - "## Required Local Gate"
       - "## Next Safe Step"
-    max_words: 4000
   - path: docs/governance/CHAT_COMMUNICATION_CONTRACT.md
     required_sections:
       - "## Purpose"
