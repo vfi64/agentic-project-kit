@@ -22,7 +22,7 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 
 ## Current Repository State
 
-Safe state is main after PR714. PR715 is administrative closeout only. Broad migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked. The repository is the source of truth; chat memory is not a source of truth.
+Safe state is main after PR714. PR715 is administrative closeout only. Broad migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
 
 ## Current Goal
 
