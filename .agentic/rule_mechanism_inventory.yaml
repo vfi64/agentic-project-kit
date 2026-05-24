@@ -49,5 +49,5 @@ mechanisms:
       - path: tests/test_patch_artifact_preflight.py
         required_terms: [test_preflight_rule_registry_validation_passes_current_state, test_preflight_includes_rule_registry_files, test_preflight_full_runner_includes_governance_yaml]
       - path: ./ns
-        required_terms: [patch-preflight, patch_artifact_preflight]
+        required_terms: [patch-preflight, agentic_project_kit.cli]
     protected_rule_intent: Block unsafe generated patch artifacts and rule-registry drift before patch application.
