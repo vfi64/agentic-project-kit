@@ -107,7 +107,7 @@ rules:
   status: active
   text: Relevant local or remote work blocks must end with the canonical structured SUMMARY from FINAL_SUMMARY_CONTRACT.md. Missing, malformed, contradictory, or legacy summaries are workflow drift.
 - id: governed-rule-registry-before-documentation-rebuild
-  status: planned
+  status: active
   text: A governed modular rule registry must become the canonical source of truth before documentation-management rebuild work resumes.
 recent_failure_patterns:
 - id: guessing-before-inspection
