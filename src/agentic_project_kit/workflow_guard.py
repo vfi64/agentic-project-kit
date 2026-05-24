@@ -12,6 +12,11 @@ from agentic_project_kit.rule_registry_validator import validate_rule_registry
 
 WORKFLOW_GUARD_CONFIG = Path("docs/workflow/WORKFLOW_GUARD.md")
 CONTROL_FILE_PRESERVATION = Path(".agentic/control_file_preservation.yaml")
+REQUIRED_RULE_REGISTRY_FILES = (
+    Path(".agentic/rule_mechanism_inventory.yaml"),
+    Path(".agentic/rule_migrations.yaml"),
+    Path(".agentic/rule_test_coverage.yaml"),
+)
 SUMMARY_EVIDENCE_SUFFIXES = {".log", ".md", ".txt"}
 
 
@@ -61,6 +66,22 @@ def protected_control_files(config_path: Path = CONTROL_FILE_PRESERVATION) -> li
     if not isinstance(files, list):
         raise ValueError(f"{config_path}: protected_files must be a list")
     return [item for item in files if isinstance(item, dict)]
+
+
+def check_required_rule_registry_files() -> list[GuardFinding]:
+    findings: list[GuardFinding] = []
+    for path in REQUIRED_RULE_REGISTRY_FILES:
+        if not path.exists():
+            findings.append(
+                GuardFinding(
+                    pattern_id="rule-registry-file-missing",
+                    severity="HARD-FAIL",
+                    path=str(path),
+                    message="required rule registry file is missing",
+                    repair_mode="restore-rule-registry-file-before-continuing",
+                )
+            )
+    return findings
 
 
 def check_yaml_parseability(paths: Iterable[Path]) -> list[GuardFinding]:
@@ -211,8 +232,9 @@ def check_rule_registry() -> list[GuardFinding]:
 def run_workflow_guard(paths: Iterable[str] | None = None) -> list[GuardFinding]:
     requested = [Path(path) for path in (paths or [])]
     protected = [Path(str(item["path"])) for item in protected_control_files() if isinstance(item.get("path"), str)]
-    yaml_targets = list(dict.fromkeys([*requested, *protected, CONTROL_FILE_PRESERVATION]))
+    yaml_targets = list(dict.fromkeys([*requested, *protected, *REQUIRED_RULE_REGISTRY_FILES, CONTROL_FILE_PRESERVATION]))
     findings: list[GuardFinding] = []
+    findings.extend(check_required_rule_registry_files())
     findings.extend(check_yaml_parseability(yaml_targets))
     findings.extend(check_required_anchors())
     findings.extend(check_structured_summary_evidence(requested))
