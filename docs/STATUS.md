@@ -16,7 +16,7 @@ The repository is the source of truth; chat memory is not a source of truth. Cha
 Machine guard: `agentic-kit docs-audit` enforces the current-state headroom boundary and fails if `docs/STATUS.md` exceeds the configured word limit. This is a hard drift signal, not a stylistic preference.
 
 ## Current Goal
-Continue the documentation-management rebuild through small, reversible, test-backed registry slices. The registry baseline exists, has a read-only CLI summary, has a JSON report path, and is connected to the current read-only audit, handoff, release-check, post-release-check, and communication-artifact policy surfaces. Do not start a broad documentation migration, create a release tag, publish a release, or perform destructive GUI/remote actions in the next slice.
+Continue the documentation-management rebuild through small, reversible, test-backed registry slices after closing out the PR #712 workflow hardening. The registry baseline exists, has a read-only CLI summary, has a JSON report path, and is connected to the current read-only audit, handoff, release-check, post-release-check, and communication-artifact policy surfaces. Do not start a broad documentation migration, create a release tag, publish a release, or perform destructive GUI/remote actions in the next slice.
 
 ## Current State
 Current released version: 0.4.1.
@@ -41,6 +41,12 @@ Documentation registry baseline on `main`:
 - PR #709 exposed `.agentic/communication_artifacts.yaml` through the read-only documentation registry summary and JSON report without changing cleanup behavior.
 - The registry guard is intentionally structural only. It checks schema, allowed classes, required rule fields, duplicate paths, and registered path existence. It does not prove semantic documentation quality and does not authorize broad migration.
 
+Workflow hardening baseline on `main`:
+- PR #712 hardened remote repository access through the GitHub connector direct-path-first rule.
+- PR #712 hardened governance YAML mutation through the parse-modify-dump-only rule and tests.
+- PR #712 added the Control File Preservation Guard through `.agentic/control_file_preservation.yaml`, `tests/test_control_file_preservation.py`, `docs/TEST_GATES.md`, and `.agentic/compiled_agent_context.yaml`.
+- Information preservation outranks compactness for protected control files. Hard length-limit trimming is forbidden; large protected files must be split, referenced, or generated instead of losing active rules.
+
 GUI MVP baseline on `main`:
 - `cockpit-readiness` visually passes as a bounded read-only GUI action.
 - `doctor` visually passes as a bounded read-only GUI action.
@@ -58,16 +64,8 @@ Current GUI, release, documentation registry, and governance evidence:
 - `docs/reports/terminal/gui-action-execution-headless-remote.log`
 - `docs/reports/terminal/changelog-quality-guard-remote.log`
 - `docs/reports/terminal/v041-handoff-after-pr709.log`
-- PR #692 CI evidence for Ruff, tests, and CLI smoke.
-- PR #694 CI evidence for Ruff, tests, and CLI smoke.
-- PR #695 CI evidence for Ruff, tests, and CLI smoke.
-- PR #696 CI evidence for Ruff, tests, and CLI smoke.
-- PR #697 CI evidence for Ruff, tests, and CLI smoke.
-- PR #698 CI evidence for Ruff, tests, and CLI smoke.
-- PR #699 CI evidence for Ruff, tests, and CLI smoke.
-- PR #700 CI evidence for Ruff, tests, and CLI smoke.
-- PR #701 CI evidence for Ruff, tests, and CLI smoke.
-- PR #709 CI evidence for Ruff, tests, and CLI smoke.
+- `docs/reports/terminal/v041-post-pr712-closeout.log`
+- PR #692, #694, #695, #696, #697, #698, #699, #700, #701, #709, and #712 CI evidence for Ruff, tests, and CLI smoke.
 
 Recent closeout anchors:
 - PR #656 closed out the GUI MVP three read-only actions.
@@ -89,6 +87,7 @@ Recent closeout anchors:
 - PR #700 added handoff check/show registry visibility.
 - PR #701 added release-check and post-release-check registry visibility.
 - PR #709 added the artifact policy registry consumer.
+- PR #712 hardened remote access, governance YAML mutation, and protected control-file preservation.
 - v0.4.1 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20357657`.
 
 ## Active Workflow Rules
@@ -104,6 +103,9 @@ Recent closeout anchors:
 - Generated terminal blocks must avoid heredocs, risky multiline `python -c` snippets, and quote-prone constructs.
 - Recent CHANGELOG release entries from v0.3.36 onward are guarded structurally; the guard must not be reduced to a naive bullet-count rule.
 - Documentation registry changes must remain additive, modular, reversible, and test-backed. The registry guard is structural and must not be used as a broad migration trigger.
+- Remote repo inspection should use the GitHub connector direct-path-first workflow when path, commit, PR, or branch is known.
+- Governance YAML must be changed through parse-modify-dump and validated after mutation.
+- Protected control files must preserve active rules unless an explicit successor migration is recorded and tested.
 
 ## Documentation and Communication Contracts
 Mandatory successor-chat source order is defined by `.agentic/compiled_agent_context.yaml` and checked by `agentic-kit docs-audit`:
@@ -163,7 +165,7 @@ These anchors are deliberately compact compatibility pointers. Long narrative hi
 - remote inspection evidence contract: failed or diagnostic logs must be uploaded and registered for later GC.
 
 ## Next Safe Step
-Use `docs/reports/terminal/v041-successor-chat-handoff-after-pr709.md` for a chat switch after PR710 lands, then continue with one additional small registry consumer or machine-readable source/projection planning slice. Do not start a broad migration.
+Use `docs/reports/terminal/v041-successor-chat-handoff-after-pr712.md` for a chat switch after the PR712 closeout lands, then continue with one additional small registry consumer or machine-readable source/projection planning slice. Do not start a broad migration.
 
 ## Compatibility Coverage Anchors
 These compact anchors are intentionally retained for deterministic coverage: documentation coverage, policy-pack checks, policy packs, Pattern Advisor, `patterns list`, `patterns show`, no-copy/evidence, Communication artifact GC hardening is now part of the pre-GUI baseline, long chat-generated shell or Python patch blocks, v0.3.31 is the current pre-GUI execution hardening line., Mandatory Final Summary Contract, policy-pack doctor checks, `agentic-kit post-release-check`, `.agentic/compiled_agent_context.yaml`, `CHAT_COMMUNICATION_CONTRACT.md`, `PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `FINAL_SUMMARY_CONTRACT.md`, `docs/TEST_GATES.md`.
