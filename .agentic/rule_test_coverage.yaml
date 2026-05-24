@@ -31,12 +31,20 @@ coverage:
     kind: anchor
     covered_surfaces:
     - execution-mode-state
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/execution_mode_state.py
     statement: execution mode source anchors are preserved
   - assertion_id: execution-mode-switch-cli-visible
     kind: workflow
     covered_surfaces:
     - ns-cli
     - state-cli
+    evidence_refs:
+    - kind: source
+      path: ./ns
+    - kind: source
+      path: src/agentic_project_kit/cli_commands/state.py
     statement: local versus remote mode switching remains visible in CLI surfaces
 - mechanism_id: rule-preservation-guard
   test_coverage: direct
@@ -111,12 +119,22 @@ coverage:
     covered_surfaces:
     - chat-communication-contract
     - compiled-agent-context
+    evidence_refs:
+    - kind: source
+      path: docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+    - kind: source
+      path: .agentic/compiled_agent_context.yaml
     statement: d f w paste-output semantics remain documented
   - assertion_id: chat-communication-rules-remote-log-first
     kind: evidence
     covered_surfaces:
     - final-summary-contract
     - compiled-agent-context
+    evidence_refs:
+    - kind: source
+      path: docs/governance/FINAL_SUMMARY_CONTRACT.md
+    - kind: source
+      path: .agentic/compiled_agent_context.yaml
     statement: remote-log-first evidence handling remains anchored
 - mechanism_id: chat-bootstrap-drift-rules
   test_coverage: documented
@@ -127,12 +145,22 @@ coverage:
     covered_surfaces:
     - chat-bootstrap-contract
     - compiled-agent-context
+    evidence_refs:
+    - kind: source
+      path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+    - kind: source
+      path: .agentic/compiled_agent_context.yaml
     statement: mandatory successor-chat bootstrap remains documented
   - assertion_id: chat-bootstrap-drift-rules-drift-response
     kind: workflow
     covered_surfaces:
     - chat-bootstrap-contract
     - compiled-agent-context
+    evidence_refs:
+    - kind: source
+      path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+    - kind: source
+      path: .agentic/compiled_agent_context.yaml
     statement: drift response and remote connector rules remain anchored
 - mechanism_id: portable-execution-rules
   test_coverage: documented
@@ -143,12 +171,22 @@ coverage:
     covered_surfaces:
     - portable-execution-contract
     - compiled-agent-context
+    evidence_refs:
+    - kind: source
+      path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+    - kind: source
+      path: .agentic/compiled_agent_context.yaml
     statement: Python core remains canonical over shell adapters
   - assertion_id: portable-execution-rules-yaml-mutation
     kind: anchor
     covered_surfaces:
     - portable-execution-contract
     - compiled-agent-context
+    evidence_refs:
+    - kind: source
+      path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+    - kind: source
+      path: .agentic/compiled_agent_context.yaml
     statement: governance YAML mutation rules remain anchored
 - mechanism_id: evidence-guard
   test_coverage: direct
