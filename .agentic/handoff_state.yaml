@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-24'
-  reason: Refresh handoff state after PR727 rule-registry coverage expansion
-  source: main HEAD after PR727 merge verification
+  reason: Refresh handoff state after PR729 rule-registry classification and priority
+  source: main HEAD after PR729 merge verification
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: ef0166f
-  commit_subject: Expand governed rule registry coverage (#727)
+  commit: 58573ed
+  commit_subject: Add rule registry classification and priority (#729)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -49,6 +49,8 @@ safe_state:
   - 725
   - 726
   - 727
+  - 728
+  - 729
 release:
   current_version: 0.4.1
   previous_version: 0.4.0
@@ -60,7 +62,7 @@ release:
   post_release_evidence: docs/reports/terminal/v041-final-main-verify-after-pr689.log
 open_items:
   prs: []
-  next_expected_chat_action: Add rule-registry classification and priority in a small separate slice; then add compatibility and conflict checks.
+  next_expected_chat_action: Add deterministic rule-registry compatibility and conflict checks in a small separate slice.
 completed_since_previous_handoff:
 - 'PR #714 added workflow-guard diagnostics, integrated the guard into patch preflight, restored protected-control-file preservation coverage, and removed hard word limits from protected control files.'
 - 'PR #715 refreshed post-PR714 handoff state and successor handoff prompt.'
@@ -76,6 +78,8 @@ completed_since_previous_handoff:
 - 'PR #725 made rule-registry validation part of patch-preflight.'
 - 'PR #726 refreshed post-PR725 closeout state and successor handoff prompt.'
 - 'PR #727 expanded governed rule-registry coverage from two to five core mechanisms.'
+- 'PR #728 refreshed post-PR727 handoff state and successor handoff prompt.'
+- 'PR #729 added classification, priority, and enforcement-phase metadata to active rule mechanisms.'
 current_capabilities:
   ns_actions:
   - agent-next
@@ -112,13 +116,17 @@ current_capabilities:
     cli: agentic-kit rule-registry check
     workflow_guard_pattern: rule-registry-drift
     patch_preflight: true
-    status: coverage-expanded
+    status: classified
     mechanisms:
     - summary-renderer
     - execution-mode-switch
     - rule-preservation-guard
     - workflow-guard
     - patch-preflight
+    required_fields:
+    - category
+    - priority
+    - enforcement_phase
   workflow_hardening:
     remote_route_rule: GitHub connector direct-path-first for known paths, refs, PRs, and commits.
     yaml_mutation_rule: Use structured YAML mutation and parse validation.
@@ -205,14 +213,14 @@ recent_failure_patterns:
 - id: structured-summary-drift
   prevention: Verify canonical SUMMARY fields and consistency across WORK, EVIDENCE, OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and RESULT marker.
 next_allowed_tasks:
-- id: add-rule-registry-classification-and-priority
-  title: Add machine-readable classes, priorities, and precedence for governed rules.
-  priority: 1
 - id: add-rule-registry-conflict-checks
   title: Add deterministic compatibility and conflict checks for rule registry entries.
-  priority: 2
+  priority: 1
 - id: expand-governed-rule-registry-coverage
   title: Continue targeted governed rule-registry coverage for remaining active workflow, evidence, release, and communication rules.
+  priority: 2
+- id: add-rule-registry-completeness-checks
+  title: Ensure known active legacy rules cannot disappear without active, migrated, archived, or rejected status.
   priority: 3
 - id: continue-documentation-registry-rebuild
   title: After governed rule registry coverage and conflict checks, continue the documentation-management rebuild with one small additive registry or projection slice.
@@ -223,16 +231,16 @@ blocked_until_closeout:
 - Broad documentation migration
 - Release, tag, or DOI mutation
 - Documentation-management rebuild until governed rule registry coverage and conflict checks are merged
-first_instruction: Add rule-registry classification and priority after PR727; do not start broad migration, release, tag, DOI mutation, or destructive GUI action.
+first_instruction: Add deterministic rule-registry compatibility and conflict checks after PR729; do not start broad migration, release, tag, DOI mutation, or destructive GUI action.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr727.md
+  latest_successor_prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr729.md
 administrative_evidence_state:
-  current_head: ef0166f
-  current_head_subject: Expand governed rule registry coverage (#727)
+  current_head: 58573ed
+  current_head_subject: Add rule registry classification and priority (#729)
   allowed_after_safe_state: true
-  reason: post-PR727 state refresh for governed rule registry coverage expansion
+  reason: post-PR729 state refresh for governed rule registry classification and priority
