@@ -9,11 +9,19 @@ coverage:
     covered_surfaces:
     - summary-renderer
     - summary-tests
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/run_summary_renderer.py
+    - kind: test
+      path: tests/test_run_summary_renderer.py
     statement: canonical structured summary rendering is validated
   - assertion_id: summary-renderer-legacy-rejection
     kind: negative-case
     covered_surfaces:
     - summary-tests
+    evidence_refs:
+    - kind: test
+      path: tests/test_run_summary_renderer.py
     statement: legacy handwritten summary fallback is rejected
 - mechanism_id: execution-mode-switch
   test_coverage: documented
@@ -23,12 +31,20 @@ coverage:
     kind: anchor
     covered_surfaces:
     - execution-mode-state
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/execution_mode_state.py
     statement: execution mode source anchors are preserved
   - assertion_id: execution-mode-switch-cli-visible
     kind: workflow
     covered_surfaces:
     - ns-cli
     - state-cli
+    evidence_refs:
+    - kind: source
+      path: ./ns
+    - kind: source
+      path: src/agentic_project_kit/cli_commands/state.py
     statement: local versus remote mode switching remains visible in CLI surfaces
 - mechanism_id: rule-preservation-guard
   test_coverage: direct
@@ -39,11 +55,19 @@ coverage:
     - rule-preservation-yaml
     - rule-preservation-validator
     - rule-preservation-tests
+    evidence_refs:
+    - kind: source
+      path: .agentic/rule_preservation.yaml
+    - kind: test
+      path: tests/test_rule_preservation.py
     statement: required rule anchors are preserved across governance surfaces
   - assertion_id: rule-preservation-guard-missing-term
     kind: negative-case
     covered_surfaces:
     - rule-preservation-tests
+    evidence_refs:
+    - kind: test
+      path: tests/test_rule_preservation.py
     statement: missing required terms produce rule-preservation findings
 - mechanism_id: workflow-guard
   test_coverage: direct
@@ -53,11 +77,17 @@ coverage:
     covered_surfaces:
     - workflow-guard-cli
     - workflow-guard-tests
+    evidence_refs:
+    - kind: test
+      path: tests/test_workflow_guard.py
     statement: workflow guard passes current repository state
   - assertion_id: workflow-guard-registry-loss
     kind: negative-case
     covered_surfaces:
     - workflow-guard-tests
+    evidence_refs:
+    - kind: test
+      path: tests/test_workflow_guard.py
     statement: registry drift and required registry file loss are hard findings
 - mechanism_id: patch-preflight
   test_coverage: direct
@@ -67,12 +97,18 @@ coverage:
     covered_surfaces:
     - patch-preflight-validator
     - patch-preflight-tests
+    evidence_refs:
+    - kind: test
+      path: tests/test_patch_artifact_preflight.py
     statement: preflight validates governance YAML files
   - assertion_id: patch-preflight-registry-files
     kind: guard
     covered_surfaces:
     - patch-preflight-validator
     - patch-preflight-tests
+    evidence_refs:
+    - kind: test
+      path: tests/test_patch_artifact_preflight.py
     statement: preflight includes rule registry files before patch application
 - mechanism_id: chat-communication-rules
   test_coverage: documented
@@ -83,12 +119,22 @@ coverage:
     covered_surfaces:
     - chat-communication-contract
     - compiled-agent-context
+    evidence_refs:
+    - kind: source
+      path: docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+    - kind: source
+      path: .agentic/compiled_agent_context.yaml
     statement: d f w paste-output semantics remain documented
   - assertion_id: chat-communication-rules-remote-log-first
     kind: evidence
     covered_surfaces:
     - final-summary-contract
     - compiled-agent-context
+    evidence_refs:
+    - kind: source
+      path: docs/governance/FINAL_SUMMARY_CONTRACT.md
+    - kind: source
+      path: .agentic/compiled_agent_context.yaml
     statement: remote-log-first evidence handling remains anchored
 - mechanism_id: chat-bootstrap-drift-rules
   test_coverage: documented
@@ -99,12 +145,22 @@ coverage:
     covered_surfaces:
     - chat-bootstrap-contract
     - compiled-agent-context
+    evidence_refs:
+    - kind: source
+      path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+    - kind: source
+      path: .agentic/compiled_agent_context.yaml
     statement: mandatory successor-chat bootstrap remains documented
   - assertion_id: chat-bootstrap-drift-rules-drift-response
     kind: workflow
     covered_surfaces:
     - chat-bootstrap-contract
     - compiled-agent-context
+    evidence_refs:
+    - kind: source
+      path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+    - kind: source
+      path: .agentic/compiled_agent_context.yaml
     statement: drift response and remote connector rules remain anchored
 - mechanism_id: portable-execution-rules
   test_coverage: documented
@@ -115,12 +171,22 @@ coverage:
     covered_surfaces:
     - portable-execution-contract
     - compiled-agent-context
+    evidence_refs:
+    - kind: source
+      path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+    - kind: source
+      path: .agentic/compiled_agent_context.yaml
     statement: Python core remains canonical over shell adapters
   - assertion_id: portable-execution-rules-yaml-mutation
     kind: anchor
     covered_surfaces:
     - portable-execution-contract
     - compiled-agent-context
+    evidence_refs:
+    - kind: source
+      path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+    - kind: source
+      path: .agentic/compiled_agent_context.yaml
     statement: governance YAML mutation rules remain anchored
 - mechanism_id: evidence-guard
   test_coverage: direct
@@ -130,12 +196,22 @@ coverage:
     covered_surfaces:
     - evidence-guard-core
     - evidence-guard-tests
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/evidence_guard.py
+    - kind: test
+      path: tests/test_evidence_guard.py
     statement: contradictory PASS evidence with failed gate markers is rejected
   - assertion_id: evidence-guard-negative-smoke
     kind: evidence
     covered_surfaces:
     - evidence-guard-core
     - evidence-guard-tests
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/evidence_guard.py
+    - kind: test
+      path: tests/test_evidence_guard.py
     statement: expected negative smoke markers are accepted only when classified
 - mechanism_id: typed-work-order-runner
   test_coverage: direct
@@ -145,12 +221,22 @@ coverage:
     covered_surfaces:
     - typed-work-order-runner
     - typed-work-order-tests
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/typed_work_order_runner.py
+    - kind: test
+      path: tests/test_typed_work_order_runner.py
     statement: typed work orders write machine-readable logs
   - assertion_id: typed-work-order-runner-unsupported-step
     kind: negative-case
     covered_surfaces:
     - typed-work-order-runner
     - typed-work-order-tests
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/typed_work_order_runner.py
+    - kind: test
+      path: tests/test_typed_work_order_runner.py
     statement: unsupported step kinds hard-fail deterministically
 - mechanism_id: release-state-validation
   test_coverage: direct
@@ -161,6 +247,11 @@ coverage:
     - release-check-cli
     - release-state-core
     - release-tests
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/release.py
+    - kind: test
+      path: tests/test_release.py
     statement: unused release versions pass release-state checks
   - assertion_id: release-state-validation-existing-remote
     kind: negative-case
@@ -168,6 +259,11 @@ coverage:
     - release-check-cli
     - release-state-core
     - release-tests
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/release.py
+    - kind: test
+      path: tests/test_release.py
     statement: existing remote tags and releases fail before mutation
 - mechanism_id: post-release-archive-check
   test_coverage: direct
@@ -178,6 +274,12 @@ coverage:
     - post-release-check-cli
     - post-release-core
     - post-release-tests
+    - test-gates-docs
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/post_release.py
+    - kind: test
+      path: tests/test_post_release.py
     statement: GitHub release and Zenodo records are verified after release
   - assertion_id: post-release-archive-check-zenodo-waiting
     kind: workflow
@@ -185,4 +287,9 @@ coverage:
     - post-release-check-cli
     - post-release-core
     - post-release-tests
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/post_release.py
+    - kind: test
+      path: tests/test_post_release.py
     statement: waiting Zenodo records are non-failing until available

@@ -10,6 +10,7 @@ def _assertion(statement: str = "source anchors are preserved") -> dict[str, obj
         "assertion_id": "mechanism-under-test-source-anchor",
         "kind": "anchor",
         "covered_surfaces": ["test-surface"],
+        "evidence_refs": [{"kind": "source", "path": "source.txt"}],
         "statement": statement,
     }
 
@@ -118,6 +119,7 @@ def test_validator_rejects_coverage_for_unknown_mechanism(tmp_path: Path) -> Non
                         "assertion_id": "orphaned-coverage",
                         "kind": "negative-case",
                         "covered_surfaces": ["unknown-surface"],
+                        "evidence_refs": [{"kind": "source", "path": "source.txt"}],
                         "statement": "orphaned coverage is rejected",
                     }
                 ],
