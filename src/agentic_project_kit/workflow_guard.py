@@ -7,6 +7,7 @@ from typing import Iterable
 import yaml
 
 from agentic_project_kit.run_summary_renderer import validate_rendered_summary_text
+from agentic_project_kit.rule_preservation import validate_rule_preservation
 
 WORKFLOW_GUARD_CONFIG = Path("docs/workflow/WORKFLOW_GUARD.md")
 CONTROL_FILE_PRESERVATION = Path(".agentic/control_file_preservation.yaml")
@@ -201,6 +202,14 @@ def run_workflow_guard(paths: Iterable[str] | None = None) -> list[GuardFinding]
     findings.extend(check_structured_summary_evidence(requested))
     findings.extend(check_no_lossy_control_file_policy())
     findings.extend(check_workflow_guard_document())
+    for item in validate_rule_preservation():
+        findings.append(GuardFinding(
+            pattern_id="rule-preservation-drift",
+            severity="HARD-FAIL",
+            path=item.path,
+            message=f"{item.rule_id}: {item.message}",
+            repair_mode="restore-rule-surface-or-record-migration",
+        ))
     return findings
 
 
