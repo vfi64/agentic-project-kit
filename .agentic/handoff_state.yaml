@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-24'
-  reason: Refresh handoff state after PR709 artifact policy registry consumer and harden administrative refresh loop handling
-  source: main HEAD after PR709
+  reason: Refresh handoff state after PR712 workflow hardening closeout
+  source: main HEAD after PR712
 repo:
   name: agentic-project-kit
   local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: ef43055
-  commit_subject: Add artifact policy registry consumer (#709)
+  commit: ce665c3
+  commit_subject: Harden remote route and YAML mutation workflow (#712)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -36,6 +36,7 @@ safe_state:
   - 705
   - 707
   - 708
+  - 710
 release:
   current_version: 0.4.1
   previous_version: 0.4.0
@@ -51,7 +52,7 @@ open_items:
   - 562
   - 564
   - 568
-  next_expected_chat_action: Continue the documentation-management rebuild with one small additive registry slice after verifying the post-PR709 successor handoff prompt is quiet.
+  next_expected_chat_action: Continue the documentation-management rebuild with one small additive registry or projection-planning slice after verifying the post-PR712 successor handoff prompt is quiet.
 completed_since_previous_handoff:
 - 'PR #692 introduced the first documentation registry schema and guard slice.'
 - 'PR #695 added the first read-only registry consumer and operational/artifact classifications.'
@@ -66,6 +67,8 @@ completed_since_previous_handoff:
 - 'PR #707 recorded the post-guard successor handoff prompt and closeout evidence.'
 - 'PR #708 refreshed handoff state after PR707.'
 - 'PR #709 exposed the machine-readable communication artifact policy through docs-registry and its JSON report without changing cleanup behavior.'
+- 'PR #710 refreshed handoff state after PR709.'
+- 'PR #712 hardened remote access, governance YAML mutation, and protected control-file preservation.'
 current_capabilities:
   ns_actions:
   - agent-next
@@ -98,6 +101,10 @@ current_capabilities:
     - post-release-check
     - docs-registry JSON report
     broad_migration_allowed: false
+  workflow_hardening:
+    remote_route_rule: GitHub connector direct-path-first for known repository paths, refs, PRs, and commits.
+    yaml_mutation_rule: Governance YAML mutation must use parse-modify-dump or equivalent structured mutation, then parse again.
+    control_file_preservation: .agentic/control_file_preservation.yaml protects active rules from lossy shortening.
   gui_mvp:
     status: closed_out_on_main
     verified_read_only_actions:
@@ -111,6 +118,7 @@ current_capabilities:
     primary_evidence: docs/reports/terminal/v040-record-check-docs-gui-visual-pass.log
 policies:
   no_copy_terminal_policy: .agentic/no_copy_terminal_policy.yaml
+  control_file_preservation: .agentic/control_file_preservation.yaml
 rules:
 - id: remote-first-no-guess
   status: active
@@ -178,6 +186,12 @@ rules:
 - id: administrative-refresh-loop-guard
   status: active
   text: A pure administrative handoff refresh merge must not create an endless successor-prompt refresh loop; the freshness guard may accept an administrative refresh commit when the prompt names the last substantive safe/admin state.
+- id: github-connector-direct-path-first
+  status: active
+  text: For remote GitHub work with a known repository, ref, path, PR, or commit, use the GitHub connector direct fetch/update/PR APIs first instead of exploratory search or guessed URL variants.
+- id: control-file-preservation
+  status: active
+  text: Protected control files must preserve active rules and required anchors. Information preservation outranks compactness; hard length-limit trimming is forbidden. Split, reference, or generate large protected files instead of deleting active rules.
 recent_failure_patterns:
 - id: guessing-before-inspection
   prevention: Before choosing commands, paths, JSON fields, release checks, or DOI sources, inspect the remote repository and command help. Treat memory and chat summaries as hypotheses until verified.
@@ -205,9 +219,13 @@ recent_failure_patterns:
   prevention: Do not chase every final log commit with a new safe_state commit. Store administrative evidence commits separately and allow pure administrative refresh commits to point at the last substantive prompt marker.
 - id: final-pass-after-inner-fail
   prevention: Final summaries must distinguish work result from evidence result. A later successful evidence push must not relabel failed work as PASS.
+- id: github-remote-route-guessing
+  prevention: Use GitHub connector direct-path-first calls for known repo paths, refs, PRs, and commits to avoid search-route drift and token waste.
+- id: lossy-control-file-shortening
+  prevention: Protected control files must not be shortened by deleting active rules. Use explicit successor migrations, generated projections, or split/reference patterns.
 next_allowed_tasks:
-- id: verify-pr709-state-refresh
-  title: Verify the post-PR709 handoff freshness guard is quiet.
+- id: verify-pr712-state-refresh
+  title: Verify the post-PR712 handoff freshness guard is quiet.
   priority: 1
 - id: continue-documentation-registry-rebuild
   title: Add the next small documentation-registry slice, preferably toward machine-readable source/projection planning.
@@ -215,20 +233,20 @@ next_allowed_tasks:
 blocked_until_closeout:
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
-first_instruction: Verify the post-PR709 successor handoff prompt and freshness guard, then continue the documentation-management rebuild with one small additive registry slice. Do not start a broad migration, release, tag, or destructive GUI action.
+first_instruction: Verify the post-PR712 successor handoff prompt and freshness guard, then continue the documentation-management rebuild with one small additive registry slice. Do not start a broad migration, release, tag, or destructive GUI action.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr709.md
+  latest_successor_prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr712.md
 current_notes:
-- 'Current main after PR #709 includes the artifact policy registry consumer.'
+- 'Current main after PR #712 includes remote-route, governance-YAML, and control-file preservation hardening.'
 - 'The documentation-management rebuild is roughly 40-43 percent complete.'
-- 'The GUI is indirectly improved by structured registry state, but no new GUI slice was performed.'
+- 'The workflow should now be more stable and faster because repeated route/YAML/control-file drift paths are guarded.'
 administrative_evidence_state:
-  current_head: ef43055
-  current_head_subject: Add artifact policy registry consumer (#709)
+  current_head: ce665c3
+  current_head_subject: Harden remote route and YAML mutation workflow (#712)
   allowed_after_safe_state: true
-  reason: post-PR709 state refresh target; future pure administrative refresh merge may point at this prompt without creating a loop
+  reason: post-PR712 state refresh target; future pure administrative refresh merge may point at this prompt without creating a loop
