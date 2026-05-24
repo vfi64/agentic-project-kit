@@ -1,0 +1,38 @@
+MERGE PR716 AFTER GREEN CI -- LOCAL FALLBACK
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+HEAD is now at 95b9282 Refresh handoff state after PR714 (#715)
+
+### VERIFY PR716 STATE ###
+{"headRefName":"feature/rule-preservation-716","headRefOid":"0a74de4c74a76f2183834dd5c4f6214be43af471","isDraft":false,"mergeStateStatus":"CLEAN","number":716,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-24T16:22:39Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26366467415/job/77611018178","name":"test","startedAt":"2026-05-24T16:22:10Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-24T16:22:34Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26366466333/job/77611015261","name":"test","startedAt":"2026-05-24T16:22:06Z","status":"COMPLETED","workflowName":"CI"}]}
+
+### MERGE PR716 ###
+
+### SYNC MAIN AFTER MERGE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   95b9282..758f047  main       -> origin/main
+Already on 'main'
+Your branch is behind 'origin/main' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+HEAD is now at 758f047 Add rule preservation guard (#716)
+
+### VERIFY MAIN HEAD ###
+758f047 Add rule preservation guard (#716)
+95b9282 Refresh handoff state after PR714 (#715)
+7d092cb Add workflow guard diagnostics (#714)
+5d2bb85 Refresh handoff state after PR712 (#713)
+ce665c3 Harden remote route and YAML mutation workflow (#712)
+
+### VERIFY NEW FILES ON MAIN ###
+
+### RUN LOCAL SMOKE ###
+.....................                                                    [100%]
+21 passed in 0.25s
+All checks passed!
+
+### RECORD MERGE LOG ###
