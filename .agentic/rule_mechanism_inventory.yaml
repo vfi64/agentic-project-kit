@@ -3,6 +3,9 @@ purpose: Preserve existing canonical mechanisms before governed rule-registry mi
 mechanisms:
   - id: summary-renderer
     status: active
+    category: communication
+    priority: 1
+    enforcement_phase: runtime
     sources:
       - path: ./ns
         required_terms: [run_summary_renderer, summary]
@@ -13,6 +16,9 @@ mechanisms:
     protected_rule_intent: Canonical structured summary rendering and validation.
   - id: execution-mode-switch
     status: active
+    category: execution
+    priority: 2
+    enforcement_phase: runtime
     sources:
       - path: ./ns
         required_terms: [mode-check, mode-write]
@@ -23,6 +29,9 @@ mechanisms:
     protected_rule_intent: Explicit local versus remote execution-mode checks and switching.
   - id: rule-preservation-guard
     status: active
+    category: governance
+    priority: 1
+    enforcement_phase: guard
     sources:
       - path: .agentic/rule_preservation.yaml
         required_terms: [structured-summary-must-be-enforced, no-copy-terminal-evidence, remote-log-lookup-first, yaml-structured-mutation-only, control-file-preservation]
@@ -33,6 +42,9 @@ mechanisms:
     protected_rule_intent: Preserve restored active workflow-rule anchors across required governance surfaces.
   - id: workflow-guard
     status: active
+    category: workflow
+    priority: 1
+    enforcement_phase: guard
     sources:
       - path: src/agentic_project_kit/workflow_guard.py
         required_terms: [run_workflow_guard, protected_control_files, check_required_anchors, check_rule_registry, rule-registry-drift, rule-preservation-drift]
@@ -43,6 +55,9 @@ mechanisms:
     protected_rule_intent: Diagnose recurring workflow drift as hard findings before state-changing work continues.
   - id: patch-preflight
     status: active
+    category: preflight
+    priority: 1
+    enforcement_phase: preflight
     sources:
       - path: src/agentic_project_kit/patch_artifact_preflight.py
         required_terms: [run_preflight, check_rule_registry_files, GOVERNANCE_YAML_FILES, patch-preflight, validate_rule_registry]
