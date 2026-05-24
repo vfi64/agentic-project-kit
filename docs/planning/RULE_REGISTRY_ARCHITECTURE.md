@@ -1,6 +1,7 @@
 # Governed Rule Registry Architecture
 
-Status: planned
+Status: proposed
+Decision status: proposed
 Priority: 1
 Language: English
 
