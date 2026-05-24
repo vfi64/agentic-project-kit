@@ -5,6 +5,14 @@ import yaml
 from agentic_project_kit.rule_registry_validator import validate_rule_registry
 
 
+def _assertion(statement: str = "source anchors are preserved") -> dict[str, str]:
+    return {
+        "assertion_id": "source-anchor",
+        "kind": "anchor",
+        "statement": statement,
+    }
+
+
 def _write_registry(root: Path, coverage: list[dict[str, object]]) -> None:
     (root / "source.txt").write_text("present", encoding="utf-8")
     (root / "evidence.txt").write_text("evidence", encoding="utf-8")
@@ -65,7 +73,7 @@ def test_validator_accepts_documented_coverage_with_rationale(tmp_path: Path) ->
                 "mechanism_id": "mechanism-under-test",
                 "test_coverage": "documented",
                 "coverage_rationale": "covered by preserved source anchors",
-                "assertions": ["source anchors are preserved"],
+                "assertions": [_assertion()],
             }
         ],
     )
@@ -98,13 +106,19 @@ def test_validator_rejects_coverage_for_unknown_mechanism(tmp_path: Path) -> Non
                 "mechanism_id": "mechanism-under-test",
                 "test_coverage": "documented",
                 "coverage_rationale": "covered by preserved source anchors",
-                "assertions": ["source anchors are preserved"],
+                "assertions": [_assertion()],
             },
             {
                 "mechanism_id": "unknown-mechanism",
                 "test_coverage": "documented",
                 "coverage_rationale": "orphaned entry",
-                "assertions": ["orphaned coverage is rejected"],
+                "assertions": [
+                    {
+                        "assertion_id": "orphaned-coverage",
+                        "kind": "negative-case",
+                        "statement": "orphaned coverage is rejected",
+                    }
+                ],
             },
         ],
     )
