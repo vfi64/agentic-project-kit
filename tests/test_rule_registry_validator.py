@@ -11,9 +11,11 @@ def _valid_mechanism() -> dict[str, object]:
     return {
         "id": "m",
         "status": "active",
+        "owner": "validator-owner",
         "category": "governance",
         "priority": 1,
         "enforcement_phase": "guard",
+        "conflict_domains": ["validator-conflict-domain"],
         "surfaces": ["validator-test-surface"],
         "tests": [],
         "protected_rule_intent": "intent",
