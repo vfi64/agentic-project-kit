@@ -1,14 +1,14 @@
 schema_version: 1
 updated:
-  date: '2026-05-23'
-  reason: handoff prompt freshness guard integration
-purpose: Fast, redundant-free, machine-readable companion to the human governance
-  docs.
+  date: '2026-05-24'
+  reason: local repository freshness precondition hardening
+purpose: Fast, redundant-free, machine-readable companion to the human governance docs.
 source_policy:
   remote_first_no_guess: true
   human_docs_remain_authoritative: true
   compiled_yaml_must_match_docs: true
   new_rules_need_docs_yaml_tests: true
+  local_repo_freshness_before_local_work: true
 priority_order:
 - .agentic/compiled_agent_context.yaml
 - .agentic/handoff_state.yaml
@@ -39,6 +39,9 @@ mandatory_successor_chat_sources:
 - CITATION.cff
 - docs/releases/VERIFIED_RELEASES.md
 - relevant source files and tests for the requested slice
+stable_test_anchors:
+- "direct-fetch that path before relying on search results"
+- "do not use interactive read prompts or shell-backslash summary invocations"
 hard_rules:
 - id: remote-first-no-guess
   rule: Inspect remote repo files, authoritative docs, and command help before acting.
@@ -66,6 +69,8 @@ hard_rules:
   rule: If a concrete docs/reports/terminal log path is known, direct-fetch that path before relying on search results or declaring evidence missing.
 - id: gui-visual-two-phase-evidence
   rule: GUI visual checks must separate manual window launch from non-interactive PASS/FAIL evidence recording; do not use interactive read prompts or shell-backslash summary invocations.
+- id: local-main-freshness-before-local-work
+  rule: Before local repository mutation, fetch the remote, verify the intended local base equals its remote upstream, preserve or stop on dirty state, and only then create the feature branch.
 final_summary_contract:
   work_values:
   - PASS
@@ -136,6 +141,7 @@ drift_detection:
   - no-copy claim without remote-readable evidence
   - shell-only canonical workflow example
 normal_operator_path:
+- verify local repository freshness before local mutation
 - read mandatory successor chat sources
 - inspect current remote state
 - run handoff prompt freshness guard before presenting a successor prompt

@@ -1,6 +1,6 @@
 # Chat Bootstrap and Drift Contract
 
-Status-date: 2026-05-22
+Status-date: 2026-05-24
 Status: normative governance contract
 Scope: mandatory startup sequence, drift classes, drift response, and successor-chat handoff behavior
 
@@ -39,7 +39,7 @@ The system must treat the following as drift:
 - portable execution rules are absent from coverage or tests,
 - a workflow claims no-copy completion without remote-readable evidence,
 - a workflow asks for pasted output although usable local or remote evidence exists,
-- shell-only snippets are presented as canonical cross-platform execution.
+- shell-only snippets are presented as canonical cross-platform execution;\n- local work starts while `main` is behind `origin/main`, the worktree is dirty, or the branch does not match the intended base.
 
 ## Drift response
 
@@ -68,6 +68,12 @@ A drift handoff prompt must include:
 - last safe state,
 - next safe step,
 - instruction not to mutate before reading the mandatory sources.
+
+## Local repository freshness precondition
+
+Before any local mutation, the operator must verify the local repository against the intended remote base. For work based on `main`, the local branch must be `main`, `origin/main` must be fetched, the local HEAD must match `origin/main`, and the worktree must be clean except for explicitly preserved local diagnostics.
+
+If the local repository is behind, the workflow must update it before mutation. If local changes exist, they must be stashed, committed to an evidence branch, or explicitly stopped for review. Continuing product or governance mutation from a stale or contaminated local tree is drift.
 
 ## Machine-readable companion
 
