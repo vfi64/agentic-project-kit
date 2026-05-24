@@ -10,6 +10,7 @@ def _assertion(assertion_id: str = "mechanism-under-test-source-anchor") -> dict
         "assertion_id": assertion_id,
         "kind": "anchor",
         "covered_surfaces": ["test-surface"],
+        "evidence_refs": [{"kind": "source", "path": "source.txt"}],
         "statement": "source anchors are preserved",
     }
 
@@ -288,6 +289,7 @@ def test_validator_rejects_globally_duplicate_assertion_id(tmp_path: Path) -> No
                         "assertion_id": "mechanism-under-test-shared",
                         "kind": "anchor",
                         "covered_surfaces": ["test-surface"],
+                        "evidence_refs": [{"kind": "source", "path": "source.txt"}],
                         "statement": "source anchors are preserved",
                     }
                 ],
@@ -296,3 +298,63 @@ def test_validator_rejects_globally_duplicate_assertion_id(tmp_path: Path) -> No
     )
     findings = validate_rule_registry(tmp_path)
     assert any("assertion_id already used by mechanism-under-test" in finding.message for finding in findings)
+
+
+def test_validator_rejects_assertion_without_evidence_refs(tmp_path: Path) -> None:
+    assertion = _assertion()
+    assertion.pop("evidence_refs")
+    _write_registry(
+        tmp_path,
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+            "assertions": [assertion],
+        },
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("assertion missing evidence_refs list" in finding.message for finding in findings)
+
+
+def test_validator_rejects_empty_evidence_refs(tmp_path: Path) -> None:
+    assertion = _assertion()
+    assertion["evidence_refs"] = []
+    _write_registry(
+        tmp_path,
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+            "assertions": [assertion],
+        },
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("assertion evidence_refs must list at least one entry" in finding.message for finding in findings)
+
+
+def test_validator_rejects_unregistered_source_evidence_ref(tmp_path: Path) -> None:
+    assertion = _assertion()
+    assertion["evidence_refs"] = [{"kind": "source", "path": "other-source.txt"}]
+    _write_registry(
+        tmp_path,
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+            "assertions": [assertion],
+        },
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("evidence_refs source path is not registered" in finding.message for finding in findings)
+
+
+def test_validator_rejects_unregistered_test_evidence_ref(tmp_path: Path) -> None:
+    assertion = _assertion()
+    assertion["evidence_refs"] = [{"kind": "test", "path": "tests/test_missing.py"}]
+    _write_registry(
+        tmp_path,
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+            "assertions": [assertion],
+        },
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("evidence_refs test path is not registered" in finding.message for finding in findings)
