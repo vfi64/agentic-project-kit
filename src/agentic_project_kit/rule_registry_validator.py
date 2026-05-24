@@ -21,6 +21,7 @@ VALID_CATEGORY_PHASES = {
 VALID_MIGRATION_STATUSES = {"migrated", "archived", "rejected"}
 VALID_TEST_COVERAGE = {"direct", "indirect", "documented"}
 VALID_ASSERTION_KINDS = {"anchor", "artifact", "behavior", "evidence", "guard", "negative-case", "release", "workflow"}
+VALID_EVIDENCE_REF_KINDS = {"source", "test"}
 TERMINAL_MIGRATION_STATUSES = {"archived", "rejected"}
 MIN_PRIORITY = 1
 MAX_PRIORITY = 5
@@ -65,11 +66,59 @@ def _validate_string_list(
     return entries
 
 
+def _validate_evidence_refs(
+    *,
+    value: Any,
+    mechanism_id: str,
+    source_paths: set[str],
+    test_paths: set[str],
+    findings: list[RuleRegistryFinding],
+) -> None:
+    if not isinstance(value, list):
+        findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertion missing evidence_refs list"))
+        return
+    if not value:
+        findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertion evidence_refs must list at least one entry"))
+        return
+    for ref in value:
+        if not isinstance(ref, dict):
+            findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: evidence_refs entries must be mappings"))
+            continue
+        kind = str(ref.get("kind", "")).strip()
+        path = str(ref.get("path", "")).strip()
+        if kind not in VALID_EVIDENCE_REF_KINDS:
+            findings.append(
+                RuleRegistryFinding(
+                    str(COVERAGE_PATH),
+                    f"{mechanism_id}: evidence_refs kind must be one of: {', '.join(sorted(VALID_EVIDENCE_REF_KINDS))}",
+                )
+            )
+        if not path:
+            findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: evidence_refs entry missing path"))
+            continue
+        if kind == "source" and path not in source_paths:
+            findings.append(
+                RuleRegistryFinding(
+                    str(COVERAGE_PATH),
+                    f"{mechanism_id}: evidence_refs source path is not registered in mechanism sources: {path}",
+                )
+            )
+        if kind == "test" and path not in test_paths:
+            findings.append(
+                RuleRegistryFinding(
+                    str(COVERAGE_PATH),
+                    f"{mechanism_id}: evidence_refs test path is not registered in mechanism tests: {path}",
+                )
+            )
+
+
 def _validate_assertions(
     *,
     value: Any,
     mechanism_id: str,
     surfaces: set[str],
+    source_paths: set[str],
+    test_paths: set[str],
     global_assertion_ids: dict[str, str],
     findings: list[RuleRegistryFinding],
 ) -> None:
@@ -120,6 +169,13 @@ def _validate_assertions(
         statement = str(assertion.get("statement", "")).strip()
         if not statement:
             findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertion missing statement"))
+        _validate_evidence_refs(
+            value=assertion.get("evidence_refs"),
+            mechanism_id=mechanism_id,
+            source_paths=source_paths,
+            test_paths=test_paths,
+            findings=findings,
+        )
         covered_surfaces = assertion.get("covered_surfaces")
         if not isinstance(covered_surfaces, list):
             findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertion missing covered_surfaces list"))
@@ -221,6 +277,7 @@ def _validate_test_coverage(
     mechanism_id: str,
     tests: list[str],
     surfaces: set[str],
+    source_paths: set[str],
     global_assertion_ids: dict[str, str],
     findings: list[RuleRegistryFinding],
 ) -> None:
@@ -237,6 +294,8 @@ def _validate_test_coverage(
         value=mechanism.get("assertions"),
         mechanism_id=mechanism_id,
         surfaces=surfaces,
+        source_paths=source_paths,
+        test_paths=set(tests),
         global_assertion_ids=global_assertion_ids,
         findings=findings,
     )
@@ -381,6 +440,12 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
             required_non_empty=False,
             findings=findings,
         )
+        sources = _as_list(mechanism.get("sources"))
+        source_paths = {
+            str(source.get("path", "")).strip()
+            for source in sources
+            if isinstance(source, dict) and str(source.get("path", "")).strip()
+        }
         coverage_entry = coverage_by_mechanism.get(mid, {})
         coverage_view = dict(mechanism)
         if "test_coverage" not in coverage_view and "test_coverage" in coverage_entry:
@@ -392,13 +457,20 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
         if coverage_metadata_present and mid not in coverage_by_mechanism and "test_coverage" not in mechanism:
             pass
         elif coverage_metadata_present or "test_coverage" in mechanism:
-            _validate_test_coverage(coverage_view, mid, tests, set(surfaces), global_assertion_ids, findings)
+            _validate_test_coverage(
+                coverage_view,
+                mid,
+                tests,
+                set(surfaces),
+                source_paths,
+                global_assertion_ids,
+                findings,
+            )
         for test_path in tests:
             if not (base / test_path).exists():
                 findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: missing test path: {test_path}"))
         if not str(mechanism.get("protected_rule_intent", "")).strip():
             findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: missing protected_rule_intent"))
-        sources = _as_list(mechanism.get("sources"))
         if not sources:
             findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: sources must list at least one source"))
         for source in sources:
