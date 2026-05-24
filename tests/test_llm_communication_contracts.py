@@ -63,13 +63,22 @@ def test_chat_bootstrap_contract_requires_stop_on_drift_before_mutation() -> Non
     ])
 
 
-def test_sentinel_tracks_llm_governance_contracts_with_realistic_limits() -> None:
+def test_sentinel_tracks_llm_governance_contracts_without_hard_limits() -> None:
     assert_contains("sentinel.yaml", [
-        "docs/governance/CHAT_COMMUNICATION_CONTRACT.md", "max_words: 2200",
-        "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md", "max_words: 1800",
-        "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md", "max_words: 2000",
-        "## LLM Communication and Bootstrap Gate", "max_words: 3200",
+        "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
+        "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
+        "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
+        "## LLM Communication and Bootstrap Gate",
     ])
+    text = read("sentinel.yaml")
+    for path in [
+        "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
+        "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
+        "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
+        "docs/TEST_GATES.md",
+    ]:
+        block = text.split(f"path: {path}", 1)[1].split("  - path:", 1)[0]
+        assert "max_words:" not in block, f"protected control file still has hard length limit: {path}"
 
 
 def test_test_gates_points_to_contracts_without_becoming_rule_book() -> None:
