@@ -35,6 +35,30 @@ def _load_yaml(path: Path) -> Any:
 def _as_list(value: Any) -> list[Any]:
     return value if isinstance(value, list) else []
 
+
+def _validate_string_list(
+    *,
+    value: Any,
+    label: str,
+    mechanism_id: str,
+    required_non_empty: bool,
+    findings: list[RuleRegistryFinding],
+) -> list[str]:
+    if not isinstance(value, list):
+        findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mechanism_id}: {label} must be a list"))
+        return []
+    if required_non_empty and not value:
+        findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mechanism_id}: {label} must list at least one entry"))
+    entries: list[str] = []
+    for item in value:
+        text = str(item).strip()
+        if not text:
+            findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mechanism_id}: {label} entries must be non-empty strings"))
+            continue
+        entries.append(text)
+    return entries
+
+
 def _validate_mechanism_metadata(
     mechanism: dict[str, Any], mechanism_id: str, findings: list[RuleRegistryFinding]
 ) -> None:
@@ -161,6 +185,23 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
         if mechanism.get("status") != "active":
             findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: status must be active"))
         _validate_mechanism_metadata(mechanism, mid, findings)
+        _validate_string_list(
+            value=mechanism.get("surfaces"),
+            label="surfaces",
+            mechanism_id=mid,
+            required_non_empty=True,
+            findings=findings,
+        )
+        tests = _validate_string_list(
+            value=mechanism.get("tests"),
+            label="tests",
+            mechanism_id=mid,
+            required_non_empty=False,
+            findings=findings,
+        )
+        for test_path in tests:
+            if not (base / test_path).exists():
+                findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: missing test path: {test_path}"))
         if not str(mechanism.get("protected_rule_intent", "")).strip():
             findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: missing protected_rule_intent"))
         sources = _as_list(mechanism.get("sources"))
