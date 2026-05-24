@@ -387,3 +387,24 @@ Before acting on repository state, command syntax, release phase, file locations
 Rule id: no-remote-command-deadlock
 
 Remote command first is a delivery preference, not a blocking rule. If `./ns agent-next` reports `NO-COMMAND`, the next assistant response must either queue a complete command pair remotely or give exactly one minimal fallback command. The user must not be kept in an `ask-agent-to-queue-command` loop. Long ad-hoc terminal blocks are only allowed when the remote command path is unavailable or broken.
+
+## Remote Connector Gate
+
+Remote-only repository work must start with connector-backed inspection when the GitHub connector is available and the repository, file path, commit, pull request, workflow run, or branch comparison is known.
+
+Required evidence is one of:
+
+- connector-backed file/PR/commit/run/compare inspection was used;
+- connector access was unavailable or insufficient and the fallback was named;
+- the target path or symbol was unknown, so search was justified.
+
+## YAML Mutation Gate
+
+Governance YAML files must be changed through parse-modify-dump and validated by parsing the written result again.
+
+Required evidence:
+
+    python -m pytest -q tests/test_yaml_governance_integrity.py tests/test_patch_artifact_preflight.py
+    agentic-kit check-docs
+
+A YAML parse failure in CI is a failed workflow gate. It must not be treated as a normal trial-and-error step.
