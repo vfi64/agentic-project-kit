@@ -51,8 +51,7 @@ release:
   post_release_evidence: docs/reports/terminal/v041-final-main-verify-after-pr689.log
 open_items:
   prs: []
-  next_expected_chat_action: Continue governed rule registry with migration-aware
-    entries, then validator and workflow-guard integration in separate small slices.
+  next_expected_chat_action: Continue governed rule registry with migration-aware entries, then validator and workflow-guard integration in separate small slices.
 completed_since_previous_handoff:
 - PR
 - PR
@@ -61,8 +60,7 @@ completed_since_previous_handoff:
 - PR
 - PR
 - PR
-- 'PR #718 added the first small rule-mechanism inventory for canonical SUMMARY rendering
-  and execution-mode switching.'
+- 'PR #718 added the first small rule-mechanism inventory for canonical SUMMARY rendering and execution-mode switching.'
 current_capabilities:
   ns_actions:
   - agent-next
@@ -98,11 +96,9 @@ current_capabilities:
     - documentation-management rebuild
     target_source_of_truth: .agentic/rules/*.yaml
   workflow_hardening:
-    remote_route_rule: GitHub connector direct-path-first for known paths, refs, PRs,
-      and commits.
+    remote_route_rule: GitHub connector direct-path-first for known paths, refs, PRs, and commits.
     yaml_mutation_rule: Use structured YAML mutation and parse validation.
-    control_file_preservation: .agentic/control_file_preservation.yaml protects active
-      rules from lossy shortening.
+    control_file_preservation: .agentic/control_file_preservation.yaml protects active rules from lossy shortening.
   gui_mvp:
     status: closed_out_on_main
     verified_read_only_actions:
@@ -125,115 +121,77 @@ policies:
 rules:
 - id: remote-first-no-guess
   status: active
-  text: Do not guess repository state, command syntax, file locations, release phase,
-    GitHub JSON fields, or available evidence. Inspect the remote repository, command
-    help, known paths, PRs, commits, logs, and authoritative repo files before acting.
+  text: Do not guess repository state, command syntax, file locations, release phase, GitHub JSON fields, or available evidence. Inspect the remote repository, command help, known paths, PRs, commits, logs, and authoritative repo files before acting.
 - id: quality-first-no-shortcuts
   status: active
-  text: Prefer deterministic, test-backed, maintainable fixes over quick patches.
-    No shortcuts, workaround-only fixes, or chat-only promises for recurring workflow
-    defects.
+  text: Prefer deterministic, test-backed, maintainable fixes over quick patches. No shortcuts, workaround-only fixes, or chat-only promises for recurring workflow defects.
 - id: patch-artifact-preflight-before-application
   status: active
-  text: Before applying generated patch artifacts, run patch-artifact preflight diagnostics
-    and fail on unsafe quoting, ambiguous YAML terms, or control-file weakening.
+  text: Before applying generated patch artifacts, run patch-artifact preflight diagnostics and fail on unsafe quoting, ambiguous YAML terms, or control-file weakening.
 - id: generated-code-syntax-first
   status: active
-  text: Generated shell and Python artifacts must be syntax-checked before execution
-    or commit; generated code cannot be trusted because it looks plausible.
+  text: Generated shell and Python artifacts must be syntax-checked before execution or commit; generated code cannot be trusted because it looks plausible.
 - id: coverage-yaml-terms-must-be-strings
   status: active
-  text: Coverage YAML required terms must stay strings; colon-containing terms must
-    be quoted or written through structured YAML writers.
+  text: Coverage YAML required terms must stay strings; colon-containing terms must be quoted or written through structured YAML writers.
 - id: final-summary-self-validation
   status: active
-  text: Final summaries must be self-validated against preceding output before treating
-    a block as successful.
+  text: Final summaries must be self-validated against preceding output before treating a block as successful.
 - id: no-copy-terminal-evidence
   status: active
-  text: Routine PASS and normal FAIL handoffs must be backed by repo evidence; use
-    d for log-backed PASS and f for log-backed FAIL. Manual terminal paste is only
-    for hard failure, broken logging, unavailable evidence, unusable evidence, or
-    explicit user request.
+  text: Routine PASS and normal FAIL handoffs must be backed by repo evidence; use d for log-backed PASS and f for log-backed FAIL. Manual terminal paste is only for hard failure, broken logging, unavailable evidence, unusable evidence, or explicit user request.
 - id: rules-must-be-test-backed
   status: active
-  text: Durable workflow rules need a stable repository home, documentation, and deterministic
-    tests or guards that fail when the rule disappears or is weakened.
+  text: Durable workflow rules need a stable repository home, documentation, and deterministic tests or guards that fail when the rule disappears or is weakened.
 - id: yaml-structured-mutation-only
   status: active
-  text: YAML governance files must be changed through parse-modify-dump or equivalent
-    structured mutation, then parsed again before gates.
+  text: YAML governance files must be changed through parse-modify-dump or equivalent structured mutation, then parsed again before gates.
 - id: github-connector-direct-path-first
   status: active
-  text: For remote GitHub work with known paths, refs, or commits, use direct fetch,
-    update, and PR APIs before search.
+  text: For remote GitHub work with known paths, refs, or commits, use direct fetch, update, and PR APIs before search.
 - id: control-file-preservation
   status: active
-  text: Protected control files must preserve active rules and required anchors. Information
-    preservation outranks compactness; hard length-limit trimming is forbidden.
+  text: Protected control files must preserve active rules and required anchors. Information preservation outranks compactness; hard length-limit trimming is forbidden.
 - id: structured-summary-must-be-enforced
   status: active
-  text: Relevant local or remote work blocks must end with the canonical structured
-    SUMMARY from FINAL_SUMMARY_CONTRACT.md. Missing, malformed, contradictory, or
-    legacy summaries are workflow drift.
+  text: Relevant local or remote work blocks must end with the canonical structured SUMMARY from FINAL_SUMMARY_CONTRACT.md. Missing, malformed, contradictory, or legacy summaries are workflow drift.
 - id: governed-rule-registry-before-documentation-rebuild
   status: active
-  text: A governed modular rule registry must become the canonical source of truth
-    before documentation-management rebuild work resumes.
+  text: A governed modular rule registry must become the canonical source of truth before documentation-management rebuild work resumes.
 recent_failure_patterns:
 - id: guessing-before-inspection
-  prevention: Before choosing commands, paths, JSON fields, release checks, or DOI
-    sources, inspect the remote repository and command help. Treat memory and chat
-    summaries as hypotheses until verified.
+  prevention: Before choosing commands, paths, JSON fields, release checks, or DOI sources, inspect the remote repository and command help. Treat memory and chat summaries as hypotheses until verified.
 - id: interpreter-discovery-before-python
-  prevention: Discover the active interpreter and project environment before invoking
-    python, python3, pytest, ruff, or agentic-kit; prefer .venv/bin/python when the
-    project venv exists; avoid naked python; when wrapping shell commands, avoid assuming
-    set -e behavior unless explicitly set and logged.
+  prevention: Discover the active interpreter and project environment before invoking python, python3, pytest, ruff, or agentic-kit; prefer .venv/bin/python when the project venv exists; avoid naked python; when wrapping shell commands, avoid assuming set -e behavior unless explicitly set and logged.
 - id: global-cli-or-venv-assumption
-  prevention: Do not assume global CLIs or an existing venv; use project-local discovery
-    and documented bootstrap paths.
+  prevention: Do not assume global CLIs or an existing venv; use project-local discovery and documented bootstrap paths.
 - id: nested-triple-quote-code-generator
-  prevention: Avoid nested quote-based code generation, nested shell/Python quote
-    layers, nested triple-quoted string literals, and nested triple quotes in generated
-    patch scripts; prefer line-list generation, existing helper scripts, simple file
-    writes, or structured update APIs.
+  prevention: Avoid nested quote-based code generation, nested shell/Python quote layers, nested triple-quoted string literals, and nested triple quotes in generated patch scripts; prefer line-list generation, existing helper scripts, simple file writes, or structured update APIs.
 - id: yaml-colon-term-reinterpreted-as-mapping
-  prevention: Quote colon-containing YAML terms or use structured YAML writers so
-    plain scalars are not reinterpreted as mappings.
+  prevention: Quote colon-containing YAML terms or use structured YAML writers so plain scalars are not reinterpreted as mappings.
 - id: standard-error-guards
-  prevention: Recurring workflow errors must become deterministic guards, tests, or
-    documented failure patterns.
+  prevention: Recurring workflow errors must become deterministic guards, tests, or documented failure patterns.
 - id: interactive-terminal-exit
-  prevention: Chat-pasted terminal blocks must not end by closing the user terminal;
-    avoid top-level exit and exec unless explicitly requested.
+  prevention: Chat-pasted terminal blocks must not end by closing the user terminal; avoid top-level exit and exec unless explicitly requested.
 - id: stale-successor-handoff-prompt-after-main-merge
-  prevention: Refresh STATUS, handoff_state, CURRENT_HANDOFF, and successor prompt
-    before treating handoff prose as authoritative.
+  prevention: Refresh STATUS, handoff_state, CURRENT_HANDOFF, and successor prompt before treating handoff prose as authoritative.
 - id: repeated-yaml-governance-file-corruption
   prevention: Parse YAML before and after mutation and use a structured writer.
 - id: final-pass-after-inner-fail
-  prevention: Final summaries must distinguish work result from evidence result; evidence
-    upload must not relabel failed work as PASS.
+  prevention: Final summaries must distinguish work result from evidence result; evidence upload must not relabel failed work as PASS.
 - id: lossy-control-file-shortening
-  prevention: Do not shorten protected control files by deleting active rules; use
-    successors, generated projections, or split/reference patterns.
+  prevention: Do not shorten protected control files by deleting active rules; use successors, generated projections, or split/reference patterns.
 - id: structured-summary-drift
-  prevention: Verify canonical SUMMARY fields and consistency across WORK, EVIDENCE,
-    OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and RESULT
-    marker.
+  prevention: Verify canonical SUMMARY fields and consistency across WORK, EVIDENCE, OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and RESULT marker.
 next_allowed_tasks:
 - id: introduce-governed-rule-registry-baseline
-  title: Implement modular governed rule registry as canonical rule source before
-    documentation-management rebuild.
+  title: Implement modular governed rule registry as canonical rule source before documentation-management rebuild.
   priority: 1
 - id: enforce-structured-final-summaries
-  title: Continue hardening canonical structured SUMMARY enforcement as a rule-registry-backed
-    rule group.
+  title: Continue hardening canonical structured SUMMARY enforcement as a rule-registry-backed rule group.
   priority: 2
 - id: continue-documentation-registry-rebuild
-  title: After governed rule registry baseline only, continue the documentation-management
-    rebuild with one small additive registry or projection slice.
+  title: After governed rule registry baseline only, continue the documentation-management rebuild with one small additive registry or projection slice.
   priority: 3
 blocked_until_closeout:
 - Remote/destructive GUI actions
@@ -241,9 +199,7 @@ blocked_until_closeout:
 - Broad documentation migration
 - Release, tag, or DOI mutation
 - Documentation-management rebuild until governed rule registry baseline is merged
-first_instruction: Continue governed rule registry after PR718 with migration-aware
-  rule entries first; do not start broad migration, release, tag, DOI mutation, or
-  destructive GUI action.
+first_instruction: Continue governed rule registry after PR718 with migration-aware rule entries first; do not start broad migration, release, tag, DOI mutation, or destructive GUI action.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
@@ -255,5 +211,4 @@ administrative_evidence_state:
   current_head: f34f712
   current_head_subject: Record PR716 merge verification log
   allowed_after_safe_state: true
-  reason: post-PR716 planning update for governed rule registry before documentation-management
-    rebuild
+  reason: post-PR716 planning update for governed rule registry before documentation-management rebuild
