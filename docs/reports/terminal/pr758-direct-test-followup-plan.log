@@ -1,0 +1,27 @@
+PR758 DIRECT TEST FOLLOWUP PLAN -- REMOTE CONNECTOR -- NO RELEASE
+
+START STATE
+- Base branch: main at 0c47f7410a28939d8e153a828314360f198bc936.
+- Work branch: r758.
+- Scope: rule registry direct-test follow-up planning and validation.
+- No release, no tag, no DOI changes.
+
+REMOTE CHANGES
+- Added .agentic/rule_direct_test_plan.yaml.
+- Updated src/agentic_project_kit/rule_registry_validator.py.
+- Updated tests/test_rule_registry_validator.py.
+
+EXPECTED BEHAVIOR
+- Active mechanisms that have no registered direct tests and are not classified as direct now require a direct-test follow-up plan when rule_test_coverage.yaml is present.
+- The direct-test follow-up plan must use schema_version 1 and direct_test_followups entries.
+- Each follow-up entry must reference an active mechanism, use a valid status, define a positive priority_order, target a registered surface, name a target_test_path, include rationale, and list exit criteria.
+- Missing, stale, duplicated, or structurally invalid plan entries are hard rule-registry findings.
+- Current repository state includes planned follow-ups for execution-mode-switch, portable-execution-rules, chat-communication-rules, and chat-bootstrap-drift-rules.
+
+REMOTE LIMITATION
+- Local pytest/check-docs were not run because the user is on iPhone.
+- GitHub Actions CI is the required gate before merge.
+
+RESULT
+- Remote branch prepared for PR.
+- CI/merge verification still required after PR creation.
