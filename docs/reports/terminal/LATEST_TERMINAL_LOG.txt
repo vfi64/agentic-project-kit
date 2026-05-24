@@ -1,1 +1,1 @@
-docs/reports/terminal/20260524-103810_post707-state-refresh.log
+docs/reports/terminal/20260524-104108_post707-state-refresh-v2.log

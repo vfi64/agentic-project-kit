@@ -1,5 +1,0 @@
-command_id: post707-state-refresh-v2
-title: Refresh handoff state after PR707 retry
-safety_class: remote-mutation
-expected_branch: post707-state-refresh
-description: Retry structured post-PR707 state refresh with corrected test target and portable printf.
