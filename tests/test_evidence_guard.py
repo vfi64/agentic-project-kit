@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from agentic_project_kit.evidence_guard import check_change_scope
 from agentic_project_kit.evidence_guard import check_terminal_log
 from agentic_project_kit.evidence_guard import last_result_marker
 
@@ -57,3 +58,35 @@ def test_evidence_guard_accepts_expected_negative_smoke_log(tmp_path: Path) -> N
     result = check_terminal_log(log)
     assert result.ok
     assert result.final_result == "PASS"
+
+
+def test_change_scope_guard_accepts_expected_target_with_log() -> None:
+    result = check_change_scope(
+        changed_paths=(
+            "src/agentic_project_kit/evidence_guard.py",
+            "docs/reports/terminal/pr744.log",
+        ),
+        expected_paths=("src/agentic_project_kit/evidence_guard.py",),
+    )
+    assert result.ok
+
+
+def test_change_scope_guard_rejects_log_only_when_target_expected() -> None:
+    result = check_change_scope(
+        changed_paths=("docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log",),
+        expected_paths=(".agentic/rule_mechanism_inventory.yaml",),
+    )
+    assert not result.ok
+    assert "expected changed paths missing" in result.findings[0]
+    assert "evidence logs only" in result.findings[1]
+
+
+def test_change_scope_guard_rejects_missing_expected_target() -> None:
+    result = check_change_scope(
+        changed_paths=("tests/test_evidence_guard.py",),
+        expected_paths=("src/agentic_project_kit/evidence_guard.py",),
+    )
+    assert not result.ok
+    assert result.findings == (
+        "expected changed paths missing: src/agentic_project_kit/evidence_guard.py",
+    )
