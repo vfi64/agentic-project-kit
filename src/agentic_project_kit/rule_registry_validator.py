@@ -152,6 +152,13 @@ def _validate_test_coverage(
             )
         )
         return
+    _validate_string_list(
+        value=mechanism.get("assertions"),
+        label="assertions",
+        mechanism_id=mechanism_id,
+        required_non_empty=True,
+        findings=findings,
+    )
     rationale = str(mechanism.get("coverage_rationale", "")).strip()
     if tests and coverage != "direct":
         findings.append(
@@ -298,6 +305,8 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
             coverage_view["test_coverage"] = coverage_entry.get("test_coverage")
         if "coverage_rationale" not in coverage_view and "coverage_rationale" in coverage_entry:
             coverage_view["coverage_rationale"] = coverage_entry.get("coverage_rationale")
+        if "assertions" not in coverage_view and "assertions" in coverage_entry:
+            coverage_view["assertions"] = coverage_entry.get("assertions")
         if coverage_metadata_present and mid not in coverage_by_mechanism and "test_coverage" not in mechanism:
             pass
         elif coverage_metadata_present or "test_coverage" in mechanism:
