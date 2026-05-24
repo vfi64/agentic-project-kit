@@ -14,19 +14,19 @@ coverage:
   test_coverage: documented
   coverage_rationale: Source and CLI anchors are preserved, but no direct mechanism-level regression test is registered yet.
   assertions:
-  - assertion_id: execution-mode-source-anchors
+  - assertion_id: execution-mode-switch-source-anchors
     kind: anchor
     statement: execution mode source anchors are preserved
-  - assertion_id: execution-mode-cli-visible
+  - assertion_id: execution-mode-switch-cli-visible
     kind: workflow
     statement: local versus remote mode switching remains visible in CLI surfaces
 - mechanism_id: rule-preservation-guard
   test_coverage: direct
   assertions:
-  - assertion_id: rule-preservation-anchor-coverage
+  - assertion_id: rule-preservation-guard-anchor-coverage
     kind: guard
     statement: required rule anchors are preserved across governance surfaces
-  - assertion_id: rule-preservation-missing-term
+  - assertion_id: rule-preservation-guard-missing-term
     kind: negative-case
     statement: missing required terms produce rule-preservation findings
 - mechanism_id: workflow-guard
@@ -51,30 +51,30 @@ coverage:
   test_coverage: documented
   coverage_rationale: Contract and compiled-context anchors are preserved; direct behavioral tests are not registered for this documentation rule yet.
   assertions:
-  - assertion_id: chat-communication-ack-semantics
+  - assertion_id: chat-communication-rules-ack-semantics
     kind: anchor
     statement: d f w paste-output semantics remain documented
-  - assertion_id: chat-communication-remote-log-first
+  - assertion_id: chat-communication-rules-remote-log-first
     kind: evidence
     statement: remote-log-first evidence handling remains anchored
 - mechanism_id: chat-bootstrap-drift-rules
   test_coverage: documented
   coverage_rationale: Contract and compiled-context anchors are preserved; direct behavioral tests are not registered for this documentation rule yet.
   assertions:
-  - assertion_id: chat-bootstrap-mandatory-sources
+  - assertion_id: chat-bootstrap-drift-rules-mandatory-sources
     kind: anchor
     statement: mandatory successor-chat bootstrap remains documented
-  - assertion_id: chat-bootstrap-drift-response
+  - assertion_id: chat-bootstrap-drift-rules-drift-response
     kind: workflow
     statement: drift response and remote connector rules remain anchored
 - mechanism_id: portable-execution-rules
   test_coverage: documented
   coverage_rationale: Contract and compiled-context anchors are preserved; direct behavioral tests are not registered for this documentation rule yet.
   assertions:
-  - assertion_id: portable-execution-python-core
+  - assertion_id: portable-execution-rules-python-core
     kind: workflow
     statement: Python core remains canonical over shell adapters
-  - assertion_id: portable-execution-yaml-mutation
+  - assertion_id: portable-execution-rules-yaml-mutation
     kind: anchor
     statement: governance YAML mutation rules remain anchored
 - mechanism_id: evidence-guard
@@ -89,27 +89,27 @@ coverage:
 - mechanism_id: typed-work-order-runner
   test_coverage: direct
   assertions:
-  - assertion_id: typed-work-order-machine-log
+  - assertion_id: typed-work-order-runner-machine-log
     kind: artifact
     statement: typed work orders write machine-readable logs
-  - assertion_id: typed-work-order-unsupported-step
+  - assertion_id: typed-work-order-runner-unsupported-step
     kind: negative-case
     statement: unsupported step kinds hard-fail deterministically
 - mechanism_id: release-state-validation
   test_coverage: direct
   assertions:
-  - assertion_id: release-state-unused-version
+  - assertion_id: release-state-validation-unused-version
     kind: release
     statement: unused release versions pass release-state checks
-  - assertion_id: release-state-existing-remote
+  - assertion_id: release-state-validation-existing-remote
     kind: negative-case
     statement: existing remote tags and releases fail before mutation
 - mechanism_id: post-release-archive-check
   test_coverage: direct
   assertions:
-  - assertion_id: post-release-archive-verification
+  - assertion_id: post-release-archive-check-verification
     kind: release
     statement: GitHub release and Zenodo records are verified after release
-  - assertion_id: post-release-zenodo-waiting
+  - assertion_id: post-release-archive-check-zenodo-waiting
     kind: workflow
     statement: waiting Zenodo records are non-failing until available
