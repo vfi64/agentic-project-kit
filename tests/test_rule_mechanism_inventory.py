@@ -10,6 +10,9 @@ EXPECTED_MECHANISMS = {
     "rule-preservation-guard",
     "workflow-guard",
     "patch-preflight",
+    "chat-communication-rules",
+    "chat-bootstrap-drift-rules",
+    "portable-execution-rules",
 }
 EXPECTED_LEGACY_IDS = {
     "structured-summary-must-be-enforced",
@@ -19,6 +22,10 @@ EXPECTED_LEGACY_IDS = {
     "rules-must-be-test-backed",
     "workflow-guard-diagnostics",
     "patch-artifact-preflight-before-application",
+    "chat-acknowledgements-are-not-evidence",
+    "remote-log-direct-path-first",
+    "successor-chat-mandatory-bootstrap",
+    "portable-python-core-first",
 }
 
 
@@ -48,6 +55,7 @@ def test_rule_migrations_are_parseable_and_point_to_inventory() -> None:
     mechanism_ids = {item["id"] for item in inventory["mechanisms"]}
     legacy_ids = {item["legacy_id"] for item in migrations["migrations"]}
     assert migrations["schema_version"] == 1
+    assert set(migrations["known_legacy_rule_ids"]) == EXPECTED_LEGACY_IDS
     assert legacy_ids == EXPECTED_LEGACY_IDS
     for migration in migrations["migrations"]:
         assert migration["status"] == "migrated"
@@ -60,7 +68,12 @@ def test_rule_migrations_are_parseable_and_point_to_inventory() -> None:
 
 def test_rule_registry_coverage_expands_beyond_initial_baseline() -> None:
     data = yaml.safe_load(INVENTORY.read_text(encoding="utf-8"))
-    assert len(data["mechanisms"]) >= 5
-    assert {"rule-preservation-guard", "workflow-guard", "patch-preflight"} <= {
-        item["id"] for item in data["mechanisms"]
-    }
+    assert len(data["mechanisms"]) >= 8
+    assert {
+        "rule-preservation-guard",
+        "workflow-guard",
+        "patch-preflight",
+        "chat-communication-rules",
+        "chat-bootstrap-drift-rules",
+        "portable-execution-rules",
+    } <= {item["id"] for item in data["mechanisms"]}
