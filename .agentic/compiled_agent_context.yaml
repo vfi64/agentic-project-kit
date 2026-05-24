@@ -1,7 +1,7 @@
 schema_version: 1
 updated:
   date: '2026-05-24'
-  reason: local repository freshness precondition hardening
+  reason: remote connector route and YAML mutation workflow hardening
 purpose: Fast, redundant-free, machine-readable companion to the human governance docs.
 source_policy:
   remote_first_no_guess: true
@@ -9,6 +9,8 @@ source_policy:
   compiled_yaml_must_match_docs: true
   new_rules_need_docs_yaml_tests: true
   local_repo_freshness_before_local_work: true
+  github_connector_direct_path_first: true
+  yaml_governance_mutation_requires_parse_modify_dump: true
 priority_order:
 - .agentic/compiled_agent_context.yaml
 - .agentic/handoff_state.yaml
@@ -42,6 +44,8 @@ mandatory_successor_chat_sources:
 stable_test_anchors:
 - "direct-fetch that path before relying on search results"
 - "do not use interactive read prompts or shell-backslash summary invocations"
+- "GitHub connector direct-path-first workflow"
+- "parse-modify-dump is the only allowed governance YAML mutation workflow"
 hard_rules:
 - id: remote-first-no-guess
   rule: Inspect remote repo files, authoritative docs, and command help before acting.
@@ -67,6 +71,10 @@ hard_rules:
   rule: Durable rules require human docs, compiled YAML, and deterministic tests or a documented review-only exception.
 - id: remote-log-direct-path-first
   rule: If a concrete docs/reports/terminal log path is known, direct-fetch that path before relying on search results or declaring evidence missing.
+- id: github-connector-direct-path-first
+  rule: For remote repo work, first use the installed GitHub connector with repository_full_name and fetch_file/fetch_commit/get_pr_info/fetch_commit_workflow_runs/compare_commits before trying raw URLs, search, or local shell fallbacks.
+- id: yaml-governance-parse-modify-dump-only
+  rule: parse-modify-dump is the only allowed governance YAML mutation workflow; never patch YAML with free-text injection, regex insertion, or unparsed string concatenation.
 - id: gui-visual-two-phase-evidence
   rule: GUI visual checks must separate manual window launch from non-interactive PASS/FAIL evidence recording; do not use interactive read prompts or shell-backslash summary invocations.
 - id: local-main-freshness-before-local-work
@@ -140,12 +148,17 @@ drift_detection:
   - forbidden final summary value
   - no-copy claim without remote-readable evidence
   - shell-only canonical workflow example
+  - local work starts from stale or dirty repository state
+  - remote work ignores the GitHub connector direct-path-first workflow
+  - governance YAML is mutated without parse-modify-dump validation
 normal_operator_path:
+- use GitHub connector direct-path-first workflow for remote repo inspection
 - verify local repository freshness before local mutation
 - read mandatory successor chat sources
 - inspect current remote state
 - run handoff prompt freshness guard before presenting a successor prompt
 - run or inspect deterministic checks
+- mutate governance YAML only through parse-modify-dump helpers and validate parseability afterward
 - use portable Python core where available
 - render final summary through canonical renderer
 quality_goal: Prefer deterministic, portable, test-backed solutions over prompt-only conventions.
