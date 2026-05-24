@@ -1,4 +1,4 @@
-<!-- post-pr714-closeout -->
+<!-- post-pr718-closeout -->
 # Current Handoff
 
 Status-date: 2026-05-24
@@ -17,16 +17,16 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 - Current release tag: v0.4.1.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
-- Main is refreshed after PR #714 at `7d092cb`.
-- Evidence: `docs/reports/terminal/pr714-verify-after-test-alignment.log`; remote evidence present.
+- Main is refreshed after PR #718 at `930a36a`.
+- Evidence: `docs/reports/terminal/pr718a-v5-inventory.log`; remote evidence present.
 
 ## Current Repository State
 
-Safe state is main after PR714. PR715 is administrative closeout only. Broad migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
+Safe state is main after PR718. PR718 is the first small rule-mechanism inventory baseline. Broad migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
 
 ## Current Goal
 
-Repair PR715 closeout drift, merge only after green CI and clean mergeability, then implement structured-summary enforcement before documentation-management work resumes.
+Refresh PR718 closeout state, then continue the governed rule registry in small additive slices: migration map, validator, then workflow-guard integration.
 
 ## Current Baselines
 
@@ -63,7 +63,7 @@ Run state-freshness-check, handoff-check, governance-check, docs-audit, dev, and
 
 ## Next Safe Step
 
-Repair PR715 first and verify that the post-PR714 closeout state, handoff state, current handoff, and successor prompt are consistent with PR714 rather than PR712. After PR715 is green and merged, the next immediate hardening slice is structured final-summary enforcement.
+PR718 is merged. Next safe step: add migration-aware rule entries for legacy rule anchors without deleting rule intent, then add validator and workflow-guard integration in separate small slices.
 
 ## Source of Truth
 
