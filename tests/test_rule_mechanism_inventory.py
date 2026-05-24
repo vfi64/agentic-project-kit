@@ -13,6 +13,10 @@ EXPECTED_MECHANISMS = {
     "chat-communication-rules",
     "chat-bootstrap-drift-rules",
     "portable-execution-rules",
+    "evidence-guard",
+    "typed-work-order-runner",
+    "release-state-validation",
+    "post-release-archive-check",
 }
 EXPECTED_LEGACY_IDS = {
     "structured-summary-must-be-enforced",
@@ -26,6 +30,10 @@ EXPECTED_LEGACY_IDS = {
     "remote-log-direct-path-first",
     "successor-chat-mandatory-bootstrap",
     "portable-python-core-first",
+    "false-pass-evidence-must-fail",
+    "typed-work-orders-must-be-machine-readable",
+    "release-state-validation-before-release",
+    "post-release-doi-waiting-safety",
 }
 
 
@@ -68,7 +76,7 @@ def test_rule_migrations_are_parseable_and_point_to_inventory() -> None:
 
 def test_rule_registry_coverage_expands_beyond_initial_baseline() -> None:
     data = yaml.safe_load(INVENTORY.read_text(encoding="utf-8"))
-    assert len(data["mechanisms"]) >= 8
+    assert len(data["mechanisms"]) >= 12
     assert {
         "rule-preservation-guard",
         "workflow-guard",
@@ -76,4 +84,8 @@ def test_rule_registry_coverage_expands_beyond_initial_baseline() -> None:
         "chat-communication-rules",
         "chat-bootstrap-drift-rules",
         "portable-execution-rules",
+        "evidence-guard",
+        "typed-work-order-runner",
+        "release-state-validation",
+        "post-release-archive-check",
     } <= {item["id"] for item in data["mechanisms"]}
