@@ -1,4 +1,4 @@
-<!-- post-pr714-closeout -->
+<!-- post-pr718-closeout -->
 # Project Status
 
 Status-date: 2026-05-24
@@ -27,11 +27,11 @@ Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
 Post-release Zenodo verification is covered by `agentic-kit post-release-check --version 0.4.1`.
 
-Post-PR714 closeout target:
-- Main is refreshed after PR #714 at `7d092cb` (`Add workflow guard diagnostics (#714)`).
-- PR #714 completed the workflow-guard diagnostics slice, integrated the guard into patch preflight, restored protected-control-file preservation coverage, and removed hard word limits from protected control files.
-- Evidence: `docs/reports/terminal/pr714-verify-after-test-alignment.log`; remote evidence present.
-- The next immediate hardening task is canonical structured SUMMARY enforcement before resuming documentation-management registry or projection work.
+Post-PR718 closeout target:
+- Main is refreshed after PR #718 at `930a36a` (`Inventory existing rule mechanisms (#718)`).
+- PR #718 added the first small machine-readable inventory of existing canonical rule mechanisms: structured SUMMARY rendering and local/remote execution-mode switching.
+- Evidence: `docs/reports/terminal/pr718a-v5-inventory.log`; remote evidence present.
+- The next immediate hardening task is to add migration-aware rule entries and validator/guard integration in small follow-up slices, without broad documentation migration.
 
 Documentation registry baseline:
 - `docs/DOCUMENTATION_REGISTRY.yaml` is the additive machine-readable registry.
@@ -56,7 +56,7 @@ GUI MVP baseline:
 
 ## Current Goal
 
-Repair PR715 closeout drift without product changes, merge PR715 only after CI and mergeability are green, then harden canonical structured SUMMARY enforcement before resuming documentation-management work.
+Close out PR718 state, then continue the governed rule registry in small additive slices: migration map first, validator second, workflow-guard integration third. No broad documentation migration, release, tag, DOI mutation, or GUI expansion.
 
 ## Active Workflow Rules
 

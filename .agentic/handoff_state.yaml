@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-24'
-  reason: Prioritize governed rule registry after PR716 rule-preservation guard
-  source: main HEAD after PR716 merge verification
+  reason: Refresh handoff state after PR718 rule-mechanism inventory
+  source: main HEAD after PR718 merge verification
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,11 +10,36 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: f34f712
-  commit_subject: Record PR716 merge verification log
+  commit: 930a36a
+  commit_subject: Inventory existing rule mechanisms (#718)
   semantics: current_main_head
   working_tree_expected_clean: true
-  administrative_refresh_prs: [656, 657, 659, 660, 661, 663, 665, 666, 671, 672, 680, 681, 688, 689, 690, 691, 694, 702, 705, 707, 708, 710, 715, 716]
+  administrative_refresh_prs:
+  - 656
+  - 657
+  - 659
+  - 660
+  - 661
+  - 663
+  - 665
+  - 666
+  - 671
+  - 672
+  - 680
+  - 681
+  - 688
+  - 689
+  - 690
+  - 691
+  - 694
+  - 702
+  - 705
+  - 707
+  - 708
+  - 710
+  - 715
+  - 716
+  - 718
 release:
   current_version: 0.4.1
   previous_version: 0.4.0
@@ -26,17 +51,28 @@ release:
   post_release_evidence: docs/reports/terminal/v041-final-main-verify-after-pr689.log
 open_items:
   prs: []
-  next_expected_chat_action: Implement governed rule registry baseline before resuming documentation-management rebuild.
+  next_expected_chat_action: Continue governed rule registry with migration-aware entries, then validator and workflow-guard integration in separate small slices.
 completed_since_previous_handoff:
-- PR #692 introduced the documentation registry baseline.
-- PR #701 surfaced registry data in release gates.
-- PR #709 exposed communication artifact policy through the registry summary.
-- PR #712 hardened remote access, YAML mutation, and control-file preservation.
-- PR #714 added workflow guard diagnostics and removed hard word limits from protected control files.
-- PR #715 refreshed post-PR714 handoff state.
-- PR #716 added a machine-readable rule-preservation guard.
+- PR
+- PR
+- PR
+- PR
+- PR
+- PR
+- PR
+- 'PR #718 added the first small rule-mechanism inventory for canonical SUMMARY rendering and execution-mode switching.'
 current_capabilities:
-  ns_actions: [agent-next, agent-run, command-inbox-check, state-freshness-check, terminal-remote-preflight, terminal-finalize, handoff-show, handoff-check, governance-check, dev]
+  ns_actions:
+  - agent-next
+  - agent-run
+  - command-inbox-check
+  - state-freshness-check
+  - terminal-remote-preflight
+  - terminal-finalize
+  - handoff-show
+  - handoff-check
+  - governance-check
+  - dev
   artifact_dirs:
     terminal_logs: docs/reports/terminal
     command_runs: docs/reports/command_runs
@@ -56,7 +92,8 @@ current_capabilities:
     plan_yaml: docs/planning/RULE_REGISTRY_IMPLEMENTATION_PLAN.yaml
     architecture_doc: docs/planning/RULE_REGISTRY_ARCHITECTURE.md
     priority: 1
-    must_finish_before: [documentation-management rebuild]
+    must_finish_before:
+    - documentation-management rebuild
     target_source_of_truth: .agentic/rules/*.yaml
   workflow_hardening:
     remote_route_rule: GitHub connector direct-path-first for known paths, refs, PRs, and commits.
@@ -64,8 +101,20 @@ current_capabilities:
     control_file_preservation: .agentic/control_file_preservation.yaml protects active rules from lossy shortening.
   gui_mvp:
     status: closed_out_on_main
-    verified_read_only_actions: [cockpit-readiness, doctor, check-docs]
-    disabled_actions: [agent-run, remote_mutation, destructive_actions]
+    verified_read_only_actions:
+    - cockpit-readiness
+    - doctor
+    - check-docs
+    disabled_actions:
+    - agent-run
+    - remote_mutation
+    - destructive_actions
+  rule_mechanism_inventory:
+    registry: .agentic/rule_mechanism_inventory.yaml
+    status: baseline-active
+    mechanisms:
+    - summary-renderer
+    - execution-mode-switch
 policies:
   no_copy_terminal_policy: .agentic/no_copy_terminal_policy.yaml
   control_file_preservation: .agentic/control_file_preservation.yaml
@@ -150,14 +199,14 @@ blocked_until_closeout:
 - Broad documentation migration
 - Release, tag, or DOI mutation
 - Documentation-management rebuild until governed rule registry baseline is merged
-first_instruction: Implement the governed rule registry baseline before resuming documentation-management work. Do not start broad migration, release, tag, DOI mutation, or destructive GUI action.
+first_instruction: Continue governed rule registry after PR718 with migration-aware rule entries first; do not start broad migration, release, tag, DOI mutation, or destructive GUI action.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr714.md
+  latest_successor_prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr718.md
 administrative_evidence_state:
   current_head: f34f712
   current_head_subject: Record PR716 merge verification log
