@@ -10,6 +10,7 @@ import yaml
 REGISTRY_PATH = Path("docs/DOCUMENTATION_REGISTRY.yaml")
 COMPILED_CONTEXT_PATH = Path(".agentic/compiled_agent_context.yaml")
 REGISTRY_CONTRACT_PATH = Path("docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md")
+COMMUNICATION_ARTIFACTS_PATH = Path(".agentic/communication_artifacts.yaml")
 
 DOCUMENT_CLASSES = (
     "governance/system",
@@ -51,6 +52,63 @@ def load_documentation_registry(project_root: Path) -> dict[str, Any]:
     return data
 
 
+def load_communication_artifact_policy(project_root: Path) -> dict[str, Any]:
+    path = project_root / COMMUNICATION_ARTIFACTS_PATH
+    data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise ValueError(f"{COMMUNICATION_ARTIFACTS_PATH}: root must be a mapping")
+    return data
+
+
+def build_artifact_policy_summary(project_root: Path) -> dict[str, Any]:
+    """Build a read-only summary of communication artifact policy.
+
+    This intentionally consumes the machine-readable artifact policy without
+    changing cleanup behavior. It is a small integration step between the
+    documentation registry and the artifact retention policy.
+    """
+    try:
+        policy = load_communication_artifact_policy(project_root)
+    except FileNotFoundError:
+        return {
+            "policy_path": str(COMMUNICATION_ARTIFACTS_PATH),
+            "present": False,
+            "rule_count": 0,
+            "delete_allowed_counts": {},
+            "default_action_counts": {},
+            "protected_rule_ids": [],
+        }
+
+    rules = policy.get("rules", [])
+    if not isinstance(rules, list):
+        rules = []
+
+    delete_allowed_counts: Counter[str] = Counter()
+    default_action_counts: Counter[str] = Counter()
+    protected_rule_ids: list[str] = []
+    for rule in rules:
+        if not isinstance(rule, dict):
+            continue
+        delete_allowed = str(rule.get("delete_allowed", "<missing>")).strip() or "<missing>"
+        default_action = str(rule.get("default_action", "<missing>")).strip() or "<missing>"
+        rule_id = str(rule.get("id", "")).strip()
+        delete_allowed_counts[delete_allowed] += 1
+        default_action_counts[default_action] += 1
+        if delete_allowed in {"false", "False"} or default_action in {"keep", "keep-or-repair"}:
+            if rule_id:
+                protected_rule_ids.append(rule_id)
+
+    return {
+        "policy_path": str(COMMUNICATION_ARTIFACTS_PATH),
+        "present": True,
+        "schema_version": policy.get("schema_version"),
+        "rule_count": len(rules),
+        "delete_allowed_counts": dict(sorted(delete_allowed_counts.items())),
+        "default_action_counts": dict(sorted(default_action_counts.items())),
+        "protected_rule_ids": sorted(protected_rule_ids),
+    }
+
+
 def build_documentation_registry_summary(project_root: Path) -> dict[str, Any]:
     """Build a read-only summary for the documentation registry.
 
@@ -87,6 +145,7 @@ def build_documentation_registry_summary(project_root: Path) -> dict[str, Any]:
         "document_count": len(documents),
         "class_counts": dict(sorted(class_counts.items())),
         "owner_counts": dict(sorted(owner_counts.items())),
+        "artifact_policy": build_artifact_policy_summary(project_root),
     }
 
 
@@ -109,6 +168,26 @@ def render_documentation_registry_summary(summary: dict[str, Any]) -> str:
     if isinstance(owner_counts, dict):
         for owner, count in owner_counts.items():
             lines.append(f"- {owner}: {count}")
+
+    artifact_policy = summary.get("artifact_policy", {})
+    if isinstance(artifact_policy, dict) and artifact_policy.get("present"):
+        lines.extend(
+            [
+                "artifact policy:",
+                f"- policy: {artifact_policy['policy_path']}",
+                f"- rules: {artifact_policy['rule_count']}",
+                "- delete_allowed:",
+            ]
+        )
+        delete_counts = artifact_policy.get("delete_allowed_counts", {})
+        if isinstance(delete_counts, dict):
+            for value, count in delete_counts.items():
+                lines.append(f"  - {value}: {count}")
+        lines.append("- protected rules:")
+        protected = artifact_policy.get("protected_rule_ids", [])
+        if isinstance(protected, list):
+            for rule_id in protected:
+                lines.append(f"  - {rule_id}")
     return "\n".join(lines)
 
 
