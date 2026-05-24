@@ -412,10 +412,10 @@ def _validate_direct_test_followup_plan(
         for mechanism_id, mechanism in active_mechanisms.items()
         if _mechanism_requires_direct_test_plan(mechanism, coverage_by_mechanism)
     }
-    if not required_ids:
-        return
     plan_path = base / DIRECT_TEST_PLAN_PATH
-    if not plan_path.exists():
+    if not required_ids and not plan_path.exists():
+        return
+    if required_ids and not plan_path.exists():
         findings.append(
             RuleRegistryFinding(
                 str(DIRECT_TEST_PLAN_PATH),
