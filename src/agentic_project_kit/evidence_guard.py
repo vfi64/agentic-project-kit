@@ -13,6 +13,9 @@ FAIL_MARKERS = (
     "FAIL: repair did not pass gates",
     "FAILED tests/",
     "short test summary info",
+    "Traceback (most recent call last):",
+    "ModuleNotFoundError:",
+    "ERROR collecting",
 )
 
 EXPECTED_NEGATIVE_SMOKE_MARKERS = (
