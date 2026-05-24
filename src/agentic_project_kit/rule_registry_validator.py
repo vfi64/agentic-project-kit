@@ -163,14 +163,29 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
         _validate_mechanism_metadata(mechanism, mid, findings)
         if not str(mechanism.get("protected_rule_intent", "")).strip():
             findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: missing protected_rule_intent"))
-        for source in _as_list(mechanism.get("sources")):
+        sources = _as_list(mechanism.get("sources"))
+        if not sources:
+            findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: sources must list at least one source"))
+        for source in sources:
+            if not isinstance(source, dict):
+                findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: source entry must be a mapping"))
+                continue
             rel = str(source.get("path", ""))
+            required_terms = _as_list(source.get("required_terms"))
+            if not required_terms:
+                label = rel if rel else "<missing path>"
+                findings.append(
+                    RuleRegistryFinding(
+                        str(INVENTORY_PATH),
+                        f"{mid}: source {label} must list at least one required_terms entry",
+                    )
+                )
             source_path = base / rel
             if not rel or not source_path.exists():
                 findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: missing source path: {rel}"))
                 continue
             text = source_path.read_text(encoding="utf-8")
-            for term in _as_list(source.get("required_terms")):
+            for term in required_terms:
                 if str(term) not in text:
                     findings.append(RuleRegistryFinding(rel, f"{mid}: required term missing: {term}"))
     _validate_mechanism_conflicts(mechanisms, findings)
@@ -202,7 +217,15 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
             )
         if not str(migration.get("migration_reason", "")).strip():
             findings.append(RuleRegistryFinding(str(MIGRATIONS_PATH), f"{legacy_id}: missing migration_reason"))
-        for evidence in _as_list(migration.get("evidence")):
+        evidence_entries = _as_list(migration.get("evidence"))
+        if not evidence_entries:
+            findings.append(
+                RuleRegistryFinding(
+                    str(MIGRATIONS_PATH),
+                    f"{legacy_id}: evidence must list at least one evidence path",
+                )
+            )
+        for evidence in evidence_entries:
             if not (base / str(evidence)).exists():
                 findings.append(RuleRegistryFinding(str(MIGRATIONS_PATH), f"{legacy_id}: missing evidence path: {evidence}"))
     _validate_migration_completeness(migrations, legacy_ids, findings)
