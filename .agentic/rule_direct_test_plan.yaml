@@ -1,0 +1,39 @@
+schema_version: 1
+purpose: Track the remaining active rule mechanisms that still need direct regression tests.
+direct_test_followups:
+- mechanism_id: execution-mode-switch
+  status: planned
+  priority_order: 1
+  target_surface: execution-mode-state
+  target_test_path: tests/test_execution_mode_state.py
+  rationale: Add direct regression coverage for local versus remote execution-mode state transitions and CLI-visible mode switching anchors.
+  exit_criteria:
+  - tests list a direct regression path for execution-mode-switch in rule_mechanism_inventory.yaml
+  - rule_test_coverage.yaml marks execution-mode-switch as direct
+- mechanism_id: portable-execution-rules
+  status: planned
+  priority_order: 2
+  target_surface: portable-execution-contract
+  target_test_path: tests/test_portable_execution_contract.py
+  rationale: Add deterministic contract tests for Python-core-first execution and shell-adapter boundaries.
+  exit_criteria:
+  - tests list a direct regression path for portable-execution-rules in rule_mechanism_inventory.yaml
+  - rule_test_coverage.yaml marks portable-execution-rules as direct
+- mechanism_id: chat-communication-rules
+  status: planned
+  priority_order: 3
+  target_surface: chat-communication-contract
+  target_test_path: tests/test_chat_communication_contract.py
+  rationale: Add direct tests for d f w paste-output semantics and remote-log-first evidence handling.
+  exit_criteria:
+  - tests list a direct regression path for chat-communication-rules in rule_mechanism_inventory.yaml
+  - rule_test_coverage.yaml marks chat-communication-rules as direct
+- mechanism_id: chat-bootstrap-drift-rules
+  status: planned
+  priority_order: 4
+  target_surface: chat-bootstrap-contract
+  target_test_path: tests/test_chat_bootstrap_drift_contract.py
+  rationale: Add direct tests for mandatory successor-chat bootstrap, drift detection, and remote connector route anchors.
+  exit_criteria:
+  - tests list a direct regression path for chat-bootstrap-drift-rules in rule_mechanism_inventory.yaml
+  - rule_test_coverage.yaml marks chat-bootstrap-drift-rules as direct
