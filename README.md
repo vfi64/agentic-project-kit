@@ -476,6 +476,10 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
+Current verified release: `v0.4.1` with Zenodo version DOI `10.5281/zenodo.20357657`.
+Version `0.4.1` is the current release line prepared and verified.
+Earlier verified version-specific DOIs are intentionally maintained as historical release records in this section and in `docs/releases/VERIFIED_RELEASES.md`.
+
 Archived GUI/cockpit release notes: v0.3.22 verified DOI `10.5281/zenodo.20256637`; v0.3.19 verified DOI `10.5281/zenodo.20246121`.
 
 Archived release v0.3.10 covers workflow shortcut commands, bounded workflow-output upload, aligned shortcut guidance, and the contract-only Pattern Advisor MVP report with DOI `10.5281/zenodo.20214382`. Compatibility coverage anchor: Version `0.3.10`.
