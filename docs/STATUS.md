@@ -50,6 +50,7 @@ Workflow hardening baseline:
 
 GUI MVP baseline:
 - `cockpit-readiness`, `doctor`, and `check-docs` visually pass as bounded read-only GUI actions.
+- Action Registry is the single source of allowed GUI actions.
 - `agent-run` and non-read-only actions remain disabled in the GUI MVP.
 - Headless GUI action execution tests cover the bounded read-only action executor.
 
@@ -65,7 +66,7 @@ Repair PR715 closeout drift without product changes, merge PR715 only after CI a
 - Keep `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, `.agentic/handoff_state.yaml`, and `CHANGELOG.md` in their correct roles.
 - Use project-local interpreter/tooling first.
 - Preserve relevant PASS and FAIL terminal output remotely under `docs/reports/terminal/*.log` whenever technically possible.
-- Relevant terminal blocks must render the structured Final summary contract in terminal output before log upload.
+- Relevant terminal blocks must render the structured Final summary contract in terminal output before log upload; example evidence field: terminal_log=docs/reports/terminal/<name>.log.
 - `d`, `f`, `w`, and `p` are communication signals, not evidence.
 - Remote-first no-guess: do not guess repository state; inspect known remote paths, PRs, commits, logs, and command help first.
 - Remote command first is a delivery preference, not a permission bypass or a reason to skip evidence.
@@ -76,7 +77,7 @@ Repair PR715 closeout drift without product changes, merge PR715 only after CI a
 - Ruff must run only on Python sources or Python files; shell files use shell checks, not Ruff.
 - Generated terminal blocks must avoid heredocs, risky multiline `python -c` snippets, and quote-prone constructs.
 - Recent CHANGELOG release entries from v0.3.36 onward are guarded structurally.
-- Typed Work Orders Pre-GUI Execution Path remains the preferred pre-GUI execution path.
+- Typed Work Orders Pre-GUI Execution Path remains the preferred pre-GUI execution path, with the minimal typed Work Order Runner as the pre-GUI bridge.
 - Documentation registry changes must remain additive, modular, reversible, and test-backed.
 - Remote repo inspection should use the GitHub connector direct-path-first workflow when path, commit, PR, or branch is known.
 - Governance YAML must be changed through parse-modify-dump and validated after mutation.
