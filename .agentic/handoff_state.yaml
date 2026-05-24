@@ -153,7 +153,7 @@ rules:
   text: Routine PASS and normal FAIL handoffs must be backed by repo evidence; use d for log-backed PASS and f for log-backed FAIL. Manual terminal paste is only for hard failure, broken logging, unavailable evidence, unusable evidence, or explicit user request.
 - id: remote-log-lookup-first
   status: active
-  text: Remote evidence must be inspected first for FAIL or uncertain handoffs; direct-fetch docs/reports/terminal logs before asking for paste-output unless logging is broken or unavailable.
+  text: Remote evidence must be inspected first for FAIL or uncertain handoffs; direct-fetch docs/reports/terminal logs before asking for paste-output unless logging is broken or unavailable. The phrase remote evidence is intentionally preserved for rule-preservation coverage.
 - id: rules-must-be-test-backed
   status: active
   text: Durable workflow rules need a stable repository home, documentation, and deterministic tests or guards that fail when the rule disappears or is weakened.
