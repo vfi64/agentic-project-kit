@@ -16,7 +16,7 @@ def test_readme_distinguishes_prepared_release_from_verified_release():
     assert "Zenodo version DOI `10.5281/zenodo." in verified_lines[0]
     assert verified_lines[0].endswith("`.")
     assert "Version `0.3.35` is the current release line prepared" not in text
-    assert "Earlier verified version-specific DOIs are intentionally maintained in `docs/releases/VERIFIED_RELEASES.md`" in text
+    assert "verified version-specific DOI notes are maintained in `docs/releases/VERIFIED_RELEASES.md`" in text
 
 
 def test_changelog_v035_describes_actual_delivered_work():

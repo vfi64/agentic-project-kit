@@ -7,6 +7,7 @@ import typer
 import yaml
 
 from agentic_project_kit.final_summary_contract import validate_final_summary
+from agentic_project_kit.workflow_guard import run_workflow_guard
 
 FORBIDDEN_TEXT_PATTERNS = (
     ("heredoc", "<" + "<"),
@@ -78,6 +79,8 @@ def run_preflight(paths: list[str]) -> list[str]:
     errors.extend(check_python_files(checked))
     errors.extend(check_text_patterns(paths))
     errors.extend(check_final_summary_logs(paths))
+    for finding in run_workflow_guard(paths):
+        errors.append(finding.line())
     return errors
 
 def patch_preflight(paths: list[str] = typer.Argument(None)) -> None:

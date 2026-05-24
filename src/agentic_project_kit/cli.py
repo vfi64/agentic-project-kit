@@ -20,6 +20,7 @@ from agentic_project_kit.cli_commands.state import state_app
 from agentic_project_kit.cli_commands.todo import todo_app
 from agentic_project_kit.cli_commands.validation import register_validation_commands
 from agentic_project_kit.cli_commands.workflow import workflow_app
+from agentic_project_kit.cli_commands.workflow_guard import workflow_guard_app
 from agentic_project_kit.patch_artifact_preflight import register_patch_preflight_command
 
 app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
@@ -33,6 +34,7 @@ register_release_commands(app)
 register_validation_commands(app)
 register_patch_preflight_command(app)
 app.add_typer(workflow_app, name="workflow")
+app.add_typer(workflow_guard_app, name="workflow-guard")
 app.add_typer(handoff_app, name="handoff")
 app.add_typer(actions_app, name="actions")
 app.add_typer(evidence_app, name="evidence")
@@ -48,4 +50,3 @@ app.add_typer(todo_app, name="todo")
 
 if __name__ == "__main__":
     app()
-

@@ -3,6 +3,26 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: workflow-guard-coverage
+  description: Workflow guard diagnostics for recurring workflow failures must remain visible and test-backed.
+  documents:
+  - path: README.md
+    terms:
+    - agentic-kit workflow-guard check
+    - workflow guard
+  - path: docs/TEST_GATES.md
+    terms:
+    - Workflow Guard Gate
+    - agentic-kit workflow-guard check
+    - governance YAML parse failures
+    - protected control files
+    - repair plan
+  - path: docs/workflow/WORKFLOW_GUARD.md
+    terms:
+    - Workflow Guard
+    - diagnose-and-fail
+    - protected control files
+    - repair plan
 - id: documentation-system-audit-coverage
   description: Umbrella documentation-system audit must remain discoverable and must
     cover the six top-level documentation governance dimensions.
@@ -129,6 +149,7 @@ rules:
     - agentic-kit workflow fail-report
     - agentic-kit patterns list
     - agentic-kit patterns show
+    - agentic-kit workflow-guard check
 - id: pattern-advisor-readme-coverage
   description: Read-only Pattern Advisor MVP commands and boundaries must remain visible.
   documents:

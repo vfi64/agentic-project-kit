@@ -20,6 +20,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Documentation mesh / cross-document drift change | Unit tests plus agentic-kit doc-mesh-audit CLI smoke command; keep current-state, governance, architecture, and historical-plan document classes explicit |
 | Governance rule change | Rule Hardening Gate: add or update a deterministic test, coverage check, doctor check, release check, or documented review-only exception |
 | Critical control file change | Control File Preservation Gate: preserve required anchors or record an explicit successor migration; hard length-limit trimming is forbidden |
+| Workflow guard change | Workflow Guard Gate: run `agentic-kit workflow-guard check`, `agentic-kit patch-preflight`, and `python -m pytest -q tests/test_workflow_guard.py tests/test_patch_artifact_preflight.py` |
 | Local repository mutation | Local Freshness Gate: fetch the remote, verify the intended base is current, preserve or stop on dirty local state, then create the feature branch |
 | LLM communication or bootstrap rule change | Update the communication/bootstrap governance contracts, compiled agent context, coverage anchors, and `tests/test_llm_communication_contracts.py`; run agentic-kit check-docs |
 | Portable execution rule change | Update `docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md`; add or update Python-first tests; do not make POSIX shell tools canonical workflow dependencies |
@@ -124,6 +125,26 @@ Required hardening:
 - require a local repository freshness precondition before local mutation.
 
 The gate must preserve these invariants: successor chats read mandatory sources before mutation, `d`/`f`/`w` are communication signals rather than evidence, `REMOTE_EVIDENCE` uses only final contract values, shell is only an adapter, and drift stops mutation-oriented work unless the mutation is the drift fix itself.
+
+## Workflow Guard Gate
+
+`agentic-kit workflow-guard check` is the pre-mutation diagnostic for recurring workflow and standard-error patterns.
+
+The guard must block at least these classes before further mutation:
+
+- governance YAML parse failures;
+- missing required anchors in protected control files;
+- weakened no-hard-length-limit preservation policy;
+- missing workflow guard policy documentation.
+
+The guard is intentionally conservative: it diagnoses and hard-fails first. Automated repair is only acceptable for narrow, reversible, explicitly safe cases. Semantic rule loss, release-state conflict, broad document rewrite, and unclear YAML recovery require a repair plan and review-visible evidence before further mutation.
+
+Required evidence:
+
+    python -m pytest -q tests/test_workflow_guard.py tests/test_patch_artifact_preflight.py
+    agentic-kit workflow-guard check
+    agentic-kit patch-preflight
+    agentic-kit check-docs
 
 ## Next-Step Workflow Gate
 
