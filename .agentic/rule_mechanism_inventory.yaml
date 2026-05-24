@@ -101,3 +101,59 @@ mechanisms:
       - path: .agentic/compiled_agent_context.yaml
         required_terms: [portable-chat-execution-contract, canonical_core, shell_role]
     protected_rule_intent: Preserve Python-core-first portable execution and keep shell usage as an adapter, not canonical workflow logic.
+  - id: evidence-guard
+    status: active
+    category: governance
+    priority: 3
+    enforcement_phase: guard
+    sources:
+      - path: src/agentic_project_kit/evidence_guard.py
+        required_terms: [check_terminal_log, FAIL_MARKERS, EXPECTED_NEGATIVE_SMOKE_MARKERS]
+      - path: src/agentic_project_kit/cli_commands/evidence.py
+        required_terms: [guard, clean-check, check_terminal_log]
+      - path: tests/test_evidence_guard.py
+        required_terms: [test_evidence_guard_rejects_final_pass_after_failed_gate, test_evidence_guard_accepts_expected_negative_smoke_log]
+    protected_rule_intent: Reject contradictory terminal evidence that still contains failed gate markers.
+  - id: typed-work-order-runner
+    status: active
+    category: execution
+    priority: 3
+    enforcement_phase: runtime
+    sources:
+      - path: src/agentic_project_kit/typed_work_order_runner.py
+        required_terms: [parse_typed_work_order, run_typed_work_order, TypedWorkOrderResult, json.dumps, write_text]
+      - path: tests/test_typed_work_order_runner.py
+        required_terms: [test_run_typed_work_order_pass_writes_machine_readable_log, test_run_typed_work_order_fail_stops_on_failed_step, test_unsupported_step_kind_is_hard_fail]
+      - path: src/agentic_project_kit/cli.py
+        required_terms: [work_orders_app, work-order]
+    protected_rule_intent: Preserve typed, machine-readable work order execution logs and block command-step drift.
+  - id: release-state-validation
+    status: active
+    category: workflow
+    priority: 2
+    enforcement_phase: guard
+    sources:
+      - path: src/agentic_project_kit/release.py
+        required_terms: [build_release_state_report, ReleaseCheckStatus, check_remote_tag_absent, check_github_release_absent]
+      - path: src/agentic_project_kit/cli_commands/release.py
+        required_terms: [release-check, release_check_command, build_release_state_report]
+      - path: tests/test_release.py
+        required_terms: [test_build_release_state_report_passes_for_unused_version, test_build_release_state_report_fails_for_existing_remote_tag, test_build_release_state_report_fails_for_existing_github_release]
+      - path: docs/TEST_GATES.md
+        required_terms: [Release state validation change, agentic-kit release-check CLI smoke command]
+    protected_rule_intent: Preserve release-state checks for version files, unused tags, and absent GitHub releases before release mutation.
+  - id: post-release-archive-check
+    status: active
+    category: workflow
+    priority: 3
+    enforcement_phase: guard
+    sources:
+      - path: src/agentic_project_kit/post_release.py
+        required_terms: [build_post_release_report, PostReleaseStatus, check_zenodo_version_record, leave README/CITATION unchanged]
+      - path: src/agentic_project_kit/cli_commands/release.py
+        required_terms: [post-release-check, post_release_check_command, build_post_release_report]
+      - path: tests/test_post_release.py
+        required_terms: [test_post_release_report_passes_with_github_release_and_verified_zenodo_record, test_post_release_report_waits_when_zenodo_record_is_not_available_yet, test_render_post_release_report_shows_waiting_as_non_failing]
+      - path: docs/TEST_GATES.md
+        required_terms: [Post-release archive check, agentic-kit post-release-check CLI smoke command]
+    protected_rule_intent: Preserve post-release GitHub and Zenodo DOI verification and prevent premature README/CITATION DOI changes while Zenodo is waiting.

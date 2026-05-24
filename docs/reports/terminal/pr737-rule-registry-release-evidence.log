@@ -1,0 +1,86 @@
+PR737 RULE REGISTRY RELEASE/EVIDENCE COMPLETION -- LOCAL RUNNER WITH REMOTE LOG UPLOAD -- NO RELEASE
+
+$ git fetch origin main
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+
+$ git fetch origin feature/rule-registry-release-evidence-737:feature/rule-registry-release-evidence-737
+fatal: refusing to fetch into branch 'refs/heads/feature/rule-registry-release-evidence-737' checked out at '/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit'
+
+$ git rev-parse --verify feature/rule-registry-release-evidence-737
+fcf1c1faf060806e815fe476d2bdb1641d33de53
+
+$ git switch feature/rule-registry-release-evidence-737
+Already on 'feature/rule-registry-release-evidence-737'
+
+$ git reset --hard origin/feature/rule-registry-release-evidence-737
+HEAD is now at fcf1c1f Record PR737 remote workspace placeholder
+
+$ git status --short
+
+### PATCH RULE REGISTRY TESTS AND MIGRATIONS ###
+
+$ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/python -m pytest tests/test_rule_mechanism_inventory.py tests/test_rule_registry_validator.py tests/test_workflow_guard.py tests/test_patch_artifact_preflight.py -q
+.....................................                                    [100%]
+37 passed in 0.55s
+
+$ ruff check .
+All checks passed!
+
+$ ./ns check-docs
+Agentic project check passed
+
+$ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/python -m agentic_project_kit.cli workflow-guard check
+Workflow guard passed
+
+$ ./ns patch-preflight
+Patch artifact preflight passed
+
+$ git branch --show-current
+feature/rule-registry-release-evidence-737
+
+$ git rev-parse --short HEAD
+fcf1c1f
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-24 22:40:42 +0200
+
+SLICE
+  NAME: PR737 RULE REGISTRY RELEASE AND EVIDENCE MECHANISSMS
+  SCOPE: RULE REGISTRY / MECHANISM INVENTORY / NO RELEASE
+  BRANCH: feature/rule-registry-release-evidence-737
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: local targeted gates passed; remote branch and evidence log upload follow
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: 737
+  HEAD_SHA: fcf1c1f
+  CI: local-targeted
+  MERGE: not-merged
+
+EVIDENCE FILES
+  terminal_log: /tmp/apk-pr737-rule-registry-release-evidence.log
+  terminal_log_remote: docs/reports/terminal/pr737-rule-registry-release-evidence.log
+  terminal_log_local: /tmp/apk-pr737-rule-registry-release-evidence.log
+  command_report: rule-mechanism-inventory/rule-registry-validator/workflow-guard/patch-preflight/ruff/check-docs
+
+INTERPRETATION
+  The rule-registry inventory now covers release, post-release, evidence, and typed work-order mechanisms.
+
+NEXT
+  SAFE_STEP: verify PR737 CI and merge only if green
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
