@@ -21,3 +21,18 @@ migrations:
     replaced_by: execution-mode-switch
     evidence: [./ns, src/agentic_project_kit/cli_commands/state.py, src/agentic_project_kit/execution_mode_state.py]
     migration_reason: Existing mode-check and mode-write commands are the canonical execution-mode mechanism.
+  - legacy_id: rules-must-be-test-backed
+    status: migrated
+    replaced_by: rule-preservation-guard
+    evidence: [.agentic/rule_preservation.yaml, src/agentic_project_kit/rule_preservation.py, tests/test_rule_preservation.py]
+    migration_reason: Active restored workflow-rule anchors are now preserved through a machine-readable registry and tests.
+  - legacy_id: workflow-guard-diagnostics
+    status: migrated
+    replaced_by: workflow-guard
+    evidence: [src/agentic_project_kit/workflow_guard.py, tests/test_workflow_guard.py, docs/workflow/WORKFLOW_GUARD.md]
+    migration_reason: Recurring workflow drift is reported through hard workflow-guard findings with repair modes.
+  - legacy_id: patch-artifact-preflight-before-application
+    status: migrated
+    replaced_by: patch-preflight
+    evidence: [src/agentic_project_kit/patch_artifact_preflight.py, tests/test_patch_artifact_preflight.py, ./ns]
+    migration_reason: Generated patch artifacts and governance YAML are checked before patch application.
