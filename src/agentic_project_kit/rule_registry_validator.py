@@ -17,6 +17,8 @@ VALID_CATEGORY_PHASES = {
     ("workflow", "guard"),
     ("preflight", "preflight"),
 }
+VALID_MIGRATION_STATUSES = {"migrated", "archived", "rejected"}
+TERMINAL_MIGRATION_STATUSES = {"archived", "rejected"}
 MIN_PRIORITY = 1
 MAX_PRIORITY = 5
 
@@ -100,6 +102,35 @@ def _validate_mechanism_conflicts(mechanisms: list[Any], findings: list[RuleRegi
         else:
             seen[key] = mechanism_id
 
+def _validate_migration_completeness(
+    migrations: dict[str, Any], legacy_ids: set[str], findings: list[RuleRegistryFinding]
+) -> None:
+    known_legacy_rule_ids = {str(item) for item in _as_list(migrations.get("known_legacy_rule_ids"))}
+    if not known_legacy_rule_ids:
+        findings.append(
+            RuleRegistryFinding(
+                str(MIGRATIONS_PATH),
+                "known_legacy_rule_ids must list every known legacy rule id",
+            )
+        )
+        return
+    missing = sorted(known_legacy_rule_ids - legacy_ids)
+    extra = sorted(legacy_ids - known_legacy_rule_ids)
+    for legacy_id in missing:
+        findings.append(
+            RuleRegistryFinding(
+                str(MIGRATIONS_PATH),
+                f"known legacy rule missing migration entry: {legacy_id}",
+            )
+        )
+    for legacy_id in extra:
+        findings.append(
+            RuleRegistryFinding(
+                str(MIGRATIONS_PATH),
+                f"migration entry missing from known legacy rule index: {legacy_id}",
+            )
+        )
+
 def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
     base = Path(root)
     inventory_path = base / INVENTORY_PATH
@@ -152,15 +183,29 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
         if legacy_id in legacy_ids:
             findings.append(RuleRegistryFinding(str(MIGRATIONS_PATH), f"duplicate legacy_id: {legacy_id}"))
         legacy_ids.add(legacy_id)
-        if migration.get("status") != "migrated":
-            findings.append(RuleRegistryFinding(str(MIGRATIONS_PATH), f"{legacy_id}: status must be migrated"))
-        if migration.get("replaced_by") not in mechanism_ids:
+        status = migration.get("status")
+        if status not in VALID_MIGRATION_STATUSES:
+            findings.append(
+                RuleRegistryFinding(
+                    str(MIGRATIONS_PATH),
+                    f"{legacy_id}: status must be one of: {', '.join(sorted(VALID_MIGRATION_STATUSES))}",
+                )
+            )
+        if status == "migrated" and migration.get("replaced_by") not in mechanism_ids:
             findings.append(RuleRegistryFinding(str(MIGRATIONS_PATH), f"{legacy_id}: replaced_by must reference an active mechanism"))
+        if status in TERMINAL_MIGRATION_STATUSES and migration.get("replaced_by"):
+            findings.append(
+                RuleRegistryFinding(
+                    str(MIGRATIONS_PATH),
+                    f"{legacy_id}: terminal migration status must not set replaced_by",
+                )
+            )
         if not str(migration.get("migration_reason", "")).strip():
             findings.append(RuleRegistryFinding(str(MIGRATIONS_PATH), f"{legacy_id}: missing migration_reason"))
         for evidence in _as_list(migration.get("evidence")):
             if not (base / str(evidence)).exists():
                 findings.append(RuleRegistryFinding(str(MIGRATIONS_PATH), f"{legacy_id}: missing evidence path: {evidence}"))
+    _validate_migration_completeness(migrations, legacy_ids, findings)
     return findings
 
 def render_rule_registry_findings(findings: list[RuleRegistryFinding]) -> str:

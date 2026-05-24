@@ -1,0 +1,52 @@
+PR733 ADD RULE REGISTRY COMPLETENESS CHECKS -- REMOTE-FIRST -- NO RELEASE
+
+### REMOTE BASE ###
+main: a175dc8 Refresh handoff state after PR731 (#732)
+branch: feature/rule-registry-completeness-733
+
+### FILES CHANGED ###
+- .agentic/rule_migrations.yaml
+- src/agentic_project_kit/rule_registry_validator.py
+- tests/test_rule_registry_validator.py
+- docs/reports/terminal/pr733-rule-registry-completeness.log
+
+### INTENT ###
+Add deterministic completeness checks to the governed rule-registry migration map. Keep this slice separate from coverage expansion, release work, GUI work, and documentation migration.
+
+### NEW MIGRATION MAP FIELD ###
+- known_legacy_rule_ids lists every known legacy rule id expected to have an explicit disposition.
+
+### NEW VALIDATOR RULES ###
+- known_legacy_rule_ids must be non-empty.
+- every known legacy rule id must have a migration entry.
+- every migration entry must be included in known_legacy_rule_ids.
+- migration status must be one of: migrated, archived, rejected.
+- migrated entries must reference an active mechanism.
+- terminal archived/rejected entries must not set replaced_by.
+- migration_reason and evidence checks remain active.
+
+### TEST COVERAGE ###
+- current repository state validates.
+- CLI still passes current repository state.
+- missing known_legacy_rule_ids is rejected.
+- missing migration for known legacy rule is rejected.
+- unindexed migration entry is rejected.
+- invalid migration status is rejected.
+- archived terminal status is accepted.
+- terminal status with replaced_by is rejected.
+
+### OUT OF SCOPE ###
+- no coverage expansion
+- no release, tag, DOI, or GUI work
+- no broad documentation migration
+
+### GATE EXPECTATION ###
+CI must validate before merge. Relevant expectations:
+- test_rule_registry_validator
+- workflow-guard
+- patch-preflight
+- rule-registry check
+- ruff/check-docs/dev gates
+
+### RESULT ###
+Remote completeness-check patch created. CI is the validation source before merge.
