@@ -53,14 +53,12 @@ open_items:
   prs: []
   next_expected_chat_action: Continue governed rule registry with migration-aware entries, then validator and workflow-guard integration in separate small slices.
 completed_since_previous_handoff:
-- PR
-- PR
-- PR
-- PR
-- PR
-- PR
-- PR
+- 'PR #714 added workflow-guard diagnostics, integrated the guard into patch preflight, restored protected-control-file preservation coverage, and removed hard word limits from protected control files.'
+- 'PR #715 refreshed post-PR714 handoff state and successor handoff prompt.'
+- 'PR #716 added the rule-preservation guard for protected rule surfaces.'
+- 'PR #717 planned the governed modular rule registry before the documentation-management rebuild.'
 - 'PR #718 added the first small rule-mechanism inventory for canonical SUMMARY rendering and execution-mode switching.'
+- 'PR #719 refreshed post-PR718 closeout state and successor handoff prompt.'
 current_capabilities:
   ns_actions:
   - agent-next
