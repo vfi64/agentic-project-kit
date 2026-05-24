@@ -15,6 +15,7 @@ from agentic_project_kit.cli_commands.patterns import patterns_app
 from agentic_project_kit.cli_commands.profiles import register_profile_commands
 from agentic_project_kit.cli_commands.pr_hygiene import register_pr_hygiene_command
 from agentic_project_kit.cli_commands.release import register_release_commands
+from agentic_project_kit.cli_commands.rule_registry import rule_registry_app
 from agentic_project_kit.cli_commands.scaffold import scaffold_app
 from agentic_project_kit.cli_commands.state import state_app
 from agentic_project_kit.cli_commands.todo import todo_app
@@ -35,6 +36,7 @@ register_validation_commands(app)
 register_patch_preflight_command(app)
 app.add_typer(workflow_app, name="workflow")
 app.add_typer(workflow_guard_app, name="workflow-guard")
+app.add_typer(rule_registry_app, name="rule-registry")
 app.add_typer(handoff_app, name="handoff")
 app.add_typer(actions_app, name="actions")
 app.add_typer(evidence_app, name="evidence")
