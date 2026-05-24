@@ -35,6 +35,35 @@ def _valid_migration(replaced_by: str = "m") -> dict[str, object]:
     }
 
 
+def _valid_coverage() -> dict[str, object]:
+    return {
+        "mechanism_id": "m",
+        "test_coverage": "documented",
+        "coverage_rationale": "direct test still planned",
+        "assertions": [
+            {
+                "assertion_id": "m-anchor",
+                "kind": "anchor",
+                "covered_surfaces": ["validator-test-surface"],
+                "evidence_refs": [{"kind": "source", "path": "source.txt"}],
+                "statement": "source anchor remains present",
+            }
+        ],
+    }
+
+
+def _valid_direct_test_plan_entry(mechanism_id: str = "m") -> dict[str, object]:
+    return {
+        "mechanism_id": mechanism_id,
+        "status": "planned",
+        "priority_order": 1,
+        "target_surface": "validator-test-surface",
+        "target_test_path": "tests/test_validator_followup.py",
+        "rationale": "add direct regression coverage",
+        "exit_criteria": ["register a direct test path"],
+    }
+
+
 def _write_registry(
     tmp_path: Path,
     mechanism: dict[str, object],
@@ -42,6 +71,8 @@ def _write_registry(
     extra_mechanisms: list[dict[str, object]] | None = None,
     migrations_override: list[dict[str, object]] | None = None,
     known_legacy_rule_ids: list[str] | None = None,
+    coverage_override: list[dict[str, object]] | None = None,
+    direct_test_plan_override: list[dict[str, object]] | None = None,
 ) -> None:
     source = tmp_path / "source.txt"
     source.write_text("present", encoding="utf-8")
@@ -70,6 +101,16 @@ def _write_registry(
     (agentic / "rule_migrations.yaml").write_text(
         yaml.safe_dump(migrations_data), encoding="utf-8"
     )
+    if coverage_override is not None:
+        coverage_data = {"schema_version": 1, "coverage": coverage_override}
+        (agentic / "rule_test_coverage.yaml").write_text(
+            yaml.safe_dump(coverage_data), encoding="utf-8"
+        )
+    if direct_test_plan_override is not None:
+        direct_test_plan = {"schema_version": 1, "direct_test_followups": direct_test_plan_override}
+        (agentic / "rule_direct_test_plan.yaml").write_text(
+            yaml.safe_dump(direct_test_plan), encoding="utf-8"
+        )
 
 
 def test_current_rule_registry_validates() -> None:
@@ -106,13 +147,13 @@ def test_validator_rejects_source_without_required_terms(tmp_path: Path) -> None
     assert any("must list at least one required_terms entry" in finding.message for finding in findings)
 
 
-
 def test_validator_rejects_missing_surfaces_field(tmp_path: Path) -> None:
     mechanism = _valid_mechanism()
     mechanism.pop("surfaces")
     _write_registry(tmp_path, mechanism)
     findings = validate_rule_registry(tmp_path)
     assert any("surfaces must be a list" in finding.message for finding in findings)
+
 
 def test_validator_rejects_empty_surfaces(tmp_path: Path) -> None:
     mechanism = _valid_mechanism()
@@ -121,12 +162,14 @@ def test_validator_rejects_empty_surfaces(tmp_path: Path) -> None:
     findings = validate_rule_registry(tmp_path)
     assert any("surfaces must list at least one entry" in finding.message for finding in findings)
 
+
 def test_validator_rejects_missing_tests_field(tmp_path: Path) -> None:
     mechanism = _valid_mechanism()
     mechanism.pop("tests")
     _write_registry(tmp_path, mechanism)
     findings = validate_rule_registry(tmp_path)
     assert any("tests must be a list" in finding.message for finding in findings)
+
 
 def test_validator_rejects_missing_test_path(tmp_path: Path) -> None:
     mechanism = _valid_mechanism()
@@ -198,6 +241,80 @@ def test_validator_allows_same_category_with_different_priority(tmp_path: Path) 
     _write_registry(tmp_path, first, extra_mechanisms=[second])
     findings = validate_rule_registry(tmp_path)
     assert findings == []
+
+
+def test_validator_requires_direct_test_plan_for_documented_mechanism(tmp_path: Path) -> None:
+    _write_registry(
+        tmp_path,
+        _valid_mechanism(),
+        coverage_override=[_valid_coverage()],
+        direct_test_plan_override=[],
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("missing direct test followup plan entry: m" in finding.message for finding in findings)
+
+
+def test_validator_accepts_valid_direct_test_plan_for_documented_mechanism(tmp_path: Path) -> None:
+    _write_registry(
+        tmp_path,
+        _valid_mechanism(),
+        coverage_override=[_valid_coverage()],
+        direct_test_plan_override=[_valid_direct_test_plan_entry()],
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert findings == []
+
+
+def test_validator_rejects_direct_test_plan_unknown_mechanism(tmp_path: Path) -> None:
+    _write_registry(
+        tmp_path,
+        _valid_mechanism(),
+        coverage_override=[_valid_coverage()],
+        direct_test_plan_override=[_valid_direct_test_plan_entry("unknown")],
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("direct test followup references unknown active mechanism: unknown" in finding.message for finding in findings)
+
+
+def test_validator_rejects_direct_test_plan_unknown_surface(tmp_path: Path) -> None:
+    entry = _valid_direct_test_plan_entry()
+    entry["target_surface"] = "missing-surface"
+    _write_registry(
+        tmp_path,
+        _valid_mechanism(),
+        coverage_override=[_valid_coverage()],
+        direct_test_plan_override=[entry],
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("target_surface must reference a registered mechanism surface" in finding.message for finding in findings)
+
+
+def test_validator_rejects_stale_direct_test_plan_entry_for_direct_mechanism(tmp_path: Path) -> None:
+    mechanism = _valid_mechanism()
+    mechanism["tests"] = ["tests/test_rule_registry_validator.py"]
+    coverage = _valid_coverage()
+    coverage["test_coverage"] = "direct"
+    coverage.pop("coverage_rationale")
+    coverage["assertions"] = [
+        {
+            "assertion_id": "m-direct",
+            "kind": "behavior",
+            "covered_surfaces": ["validator-test-surface"],
+            "evidence_refs": [
+                {"kind": "source", "path": "source.txt"},
+                {"kind": "test", "path": "tests/test_rule_registry_validator.py"},
+            ],
+            "statement": "direct test coverage is present",
+        }
+    ]
+    _write_registry(
+        tmp_path,
+        mechanism,
+        coverage_override=[coverage],
+        direct_test_plan_override=[_valid_direct_test_plan_entry()],
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("stale direct test followup plan entry: m" in finding.message for finding in findings)
 
 
 def test_validator_rejects_missing_known_legacy_index(tmp_path: Path) -> None:
