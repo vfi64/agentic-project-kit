@@ -62,6 +62,7 @@ GUI MVP baseline:
 - Headless GUI action execution tests cover the bounded read-only action executor.
 - v0.3.30 GUI Readiness Hardening Plan and v0.3.30 GUI Readiness Hardening Closeout remain historical anchors; v0.3.30 was not the Tkinter GUI release, and Tkinter remains explicitly deferred.
 - Tkinter cockpit remains an anchor term for pre-GUI boundary checks.
+- Tkinter is explicitly deferred until these contracts pass gates.
 - Communication artifact GC hardening is now part of the pre-GUI baseline.
 
 ## Current Goal
@@ -87,7 +88,7 @@ Continue the governed rule registry with small additive slices: coverage expansi
 - Ruff must run only on Python sources or Python files; shell files use shell checks, not Ruff.
 - Generated terminal blocks must avoid heredocs, risky multiline `python -c` snippets, and quote-prone constructs.
 - Recent CHANGELOG release entries from v0.3.36 onward are guarded structurally.
-- Typed Work Orders Pre-GUI Execution Path remains the preferred pre-GUI execution path, with the minimal typed Work Order Runner as the pre-GUI bridge without chat-generated patch scripts.
+- Typed Work Orders Pre-GUI Execution Path remains the preferred pre-GUI execution path, with the minimal typed Work Order Runner as the pre-GUI bridge without chat-generated patch scripts; thin Tkinter cockpit must consume these typed contracts.
 - Documentation registry changes must remain additive, modular, reversible, and test-backed.
 - Remote repo inspection should use the GitHub connector direct-path-first workflow when path, commit, PR, or branch is known.
 - Governance YAML must be changed through parse-modify-dump and validated after mutation.
@@ -112,9 +113,9 @@ Mandatory Final Summary Contract: relevant workflow blocks must end with the fra
 
 No-copy/evidence contract: `d` means a log-backed block appears finished; evidence must still be inspected. `f` means failure was reported; first inspect remote or local evidence and request pasted output only when evidence is unavailable or unusable.
 
-Pattern Advisor baseline: Pattern Advisor is an advisory-only read-only catalog; `patterns list` and `patterns show` are guarded anchor commands. Policy-pack doctor checks and policy packs remain guarded status terms.
+Pattern Advisor baseline: Pattern Advisor is an advisory-only read-only catalog; `patterns list` and `patterns show` are guarded anchor commands. policy-pack doctor checks and policy packs remain guarded status terms.
 
-Planning-state freshness compatibility: Current released version: 0.3.29 and Current released version: 0.3.32 remain retained legacy anchors only for deterministic historical tests; the current version is 0.4.1.
+Planning-state freshness compatibility: Current released version: 0.3.29 and Current released version: 0.3.32 remain retained legacy anchors only for deterministic historical tests; Verified Zenodo version DOI: `10.5281/zenodo.20314341`; the current version is 0.4.1.
 
 v0.3.36 current-state cleanup started as a documentation-only line; the current active line is the governed rule-registry baseline.
 
