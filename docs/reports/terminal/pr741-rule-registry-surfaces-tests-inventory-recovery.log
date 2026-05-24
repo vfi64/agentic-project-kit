@@ -1,0 +1,540 @@
+PR741 RECOVERY -- SEMANTIC INVENTORY VERIFY -- NO RELEASE
+
+### BRANCH AND STATE ###
+feature/rule-registry-surfaces-tests-inventory-741
+ M .agentic/rule_mechanism_inventory.yaml
+
+### ENSURE FEATURE BRANCH ###
+
+### WRITE SEMANTIC VERIFY SCRIPT ###
+
+### VERIFY SEMANTIC PATCH CONTENT ###
+Semantic inventory metadata: PASS
+
+### VERIFY ACTUAL DIFF EXISTS ###
+diff --git a/.agentic/rule_mechanism_inventory.yaml b/.agentic/rule_mechanism_inventory.yaml
+index 3b7c333..9f60830 100644
+--- a/.agentic/rule_mechanism_inventory.yaml
++++ b/.agentic/rule_mechanism_inventory.yaml
+@@ -1,159 +1,355 @@
+ schema_version: 1
+ purpose: Preserve existing canonical mechanisms before governed rule-registry migration.
+ mechanisms:
+-  - id: summary-renderer
+-    status: active
+-    category: communication
+-    priority: 1
+-    enforcement_phase: runtime
+-    sources:
+-      - path: ./ns
+-        required_terms: [run_summary_renderer, summary]
+-      - path: src/agentic_project_kit/run_summary_renderer.py
+-        required_terms: [VALID_REMOTE_EVIDENCE_RESULTS, VALID_CHAT_REPLIES, validate_rendered_summary_text, LEGACY_SUMMARY_TOKENS, terminal_log_remote]
+-      - path: tests/test_run_summary_renderer.py
+-        required_terms: [remote_evidence, CHAT_REPLY]
+-    protected_rule_intent: Canonical structured summary rendering and validation.
+-  - id: execution-mode-switch
+-    status: active
+-    category: execution
+-    priority: 2
+-    enforcement_phase: runtime
+-    sources:
+-      - path: ./ns
+-        required_terms: [mode-check, mode-write]
+-      - path: src/agentic_project_kit/cli_commands/state.py
+-        required_terms: [mode_check, mode_write, local, remote]
+-      - path: src/agentic_project_kit/execution_mode_state.py
+-        required_terms: [LOCAL_READY, REMOTE_READY, DIRTY_LOCAL_BLOCKED, MODE_SWITCH_BLOCKED]
+-    protected_rule_intent: Explicit local versus remote execution-mode checks and switching.
+-  - id: rule-preservation-guard
+-    status: active
+-    category: governance
+-    priority: 1
+-    enforcement_phase: guard
+-    sources:
+-      - path: .agentic/rule_preservation.yaml
+-        required_terms: [structured-summary-must-be-enforced, no-copy-terminal-evidence, remote-log-lookup-first, yaml-structured-mutation-only, control-file-preservation]
+-      - path: src/agentic_project_kit/rule_preservation.py
+-        required_terms: [validate_rule_preservation, required_terms, surfaces, RulePreservationFinding]
+-      - path: tests/test_rule_preservation.py
+-        required_terms: [test_rule_preservation_current_repository_passes, missing_required_term]
+-    protected_rule_intent: Preserve restored active workflow-rule anchors across required governance surfaces.
+-  - id: workflow-guard
+-    status: active
+-    category: workflow
+-    priority: 1
+-    enforcement_phase: guard
+-    sources:
+-      - path: src/agentic_project_kit/workflow_guard.py
+-        required_terms: [run_workflow_guard, protected_control_files, check_required_anchors, check_rule_registry, rule-registry-drift, rule-preservation-drift]
+-      - path: tests/test_workflow_guard.py
+-        required_terms: [test_workflow_guard_passes_current_repository_state, test_workflow_guard_enforces_rule_registry, structured-summary-drift]
+-      - path: docs/workflow/WORKFLOW_GUARD.md
+-        required_terms: [diagnose-and-fail, protected control files, repair plan]
+-    protected_rule_intent: Diagnose recurring workflow drift as hard findings before state-changing work continues.
+-  - id: patch-preflight
+-    status: active
+-    category: preflight
+-    priority: 1
+-    enforcement_phase: preflight
+-    sources:
+-      - path: src/agentic_project_kit/patch_artifact_preflight.py
+-        required_terms: [run_preflight, check_rule_registry_files, GOVERNANCE_YAML_FILES, patch-preflight, validate_rule_registry]
+-      - path: tests/test_patch_artifact_preflight.py
+-        required_terms: [test_preflight_rule_registry_validation_passes_current_state, test_preflight_includes_rule_registry_files, test_preflight_full_runner_includes_governance_yaml]
+-      - path: ./ns
+-        required_terms: [patch-preflight, agentic_project_kit.cli]
+-    protected_rule_intent: Block unsafe generated patch artifacts and rule-registry drift before patch application.
+-  - id: chat-communication-rules
+-    status: active
+-    category: communication
+-    priority: 2
+-    enforcement_phase: runtime
+-    sources:
+-      - path: docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+-        required_terms: [User acknowledgements, paste-output, terminal log upload, remote evidence]
+-      - path: docs/governance/FINAL_SUMMARY_CONTRACT.md
+-        required_terms: [No legacy handwritten summary fallback, terminal_log_remote, Remote log lookup rule]
+-      - path: .agentic/compiled_agent_context.yaml
+-        required_terms: [chat-communication-contract, communication_rules, paste-output]
+-    protected_rule_intent: Preserve d/f/w/paste-output semantics, no-copy evidence handling, and remote-log-first communication rules.
+-  - id: chat-bootstrap-drift-rules
+-    status: active
+-    category: governance
+-    priority: 2
+-    enforcement_phase: guard
+-    sources:
+-      - path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+-        required_terms: [Mandatory startup sequence, Remote repository connector route, Governance YAML mutation rule, Local repository freshness precondition]
+-      - path: .agentic/compiled_agent_context.yaml
+-        required_terms: [chat-bootstrap-and-drift-contract, mandatory_successor_chat_sources, drift_detection]
+-    protected_rule_intent: Preserve mandatory successor-chat bootstrap, drift detection, direct connector route, and structured YAML mutation rules.
+-  - id: portable-execution-rules
+-    status: active
+-    category: execution
+-    priority: 1
+-    enforcement_phase: runtime
+-    sources:
+-      - path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+-        required_terms: [shell commands are adapters only, Remote connector route rule, Governance YAML mutation rule, Evidence rule]
+-      - path: .agentic/compiled_agent_context.yaml
+-        required_terms: [portable-chat-execution-contract, canonical_core, shell_role]
+-    protected_rule_intent: Preserve Python-core-first portable execution and keep shell usage as an adapter, not canonical workflow logic.
+-  - id: evidence-guard
+-    status: active
+-    category: governance
+-    priority: 3
+-    enforcement_phase: guard
+-    sources:
+-      - path: src/agentic_project_kit/evidence_guard.py
+-        required_terms: [check_terminal_log, FAIL_MARKERS, EXPECTED_NEGATIVE_SMOKE_MARKERS]
+-      - path: src/agentic_project_kit/cli_commands/evidence.py
+-        required_terms: [guard, clean-check, check_terminal_log]
+-      - path: tests/test_evidence_guard.py
+-        required_terms: [test_evidence_guard_rejects_final_pass_after_failed_gate, test_evidence_guard_accepts_expected_negative_smoke_log]
+-    protected_rule_intent: Reject contradictory terminal evidence that still contains failed gate markers.
+-  - id: typed-work-order-runner
+-    status: active
+-    category: execution
+-    priority: 3
+-    enforcement_phase: runtime
+-    sources:
+-      - path: src/agentic_project_kit/typed_work_order_runner.py
+-        required_terms: [parse_typed_work_order, run_typed_work_order, TypedWorkOrderResult, json.dumps, write_text]
+-      - path: tests/test_typed_work_order_runner.py
+-        required_terms: [test_run_typed_work_order_pass_writes_machine_readable_log, test_run_typed_work_order_fail_stops_on_failed_step, test_unsupported_step_kind_is_hard_fail]
+-      - path: src/agentic_project_kit/cli.py
+-        required_terms: [work_orders_app, work-order]
+-    protected_rule_intent: Preserve typed, machine-readable work order execution logs and block command-step drift.
+-  - id: release-state-validation
+-    status: active
+-    category: workflow
+-    priority: 2
+-    enforcement_phase: guard
+-    sources:
+-      - path: src/agentic_project_kit/release.py
+-        required_terms: [build_release_state_report, ReleaseCheckStatus, check_remote_tag_absent, check_github_release_absent]
+-      - path: src/agentic_project_kit/cli_commands/release.py
+-        required_terms: [release-check, release_check_command, build_release_state_report]
+-      - path: tests/test_release.py
+-        required_terms: [test_build_release_state_report_passes_for_unused_version, test_build_release_state_report_fails_for_existing_remote_tag, test_build_release_state_report_fails_for_existing_github_release]
+-      - path: docs/TEST_GATES.md
+-        required_terms: [Release state validation change, agentic-kit release-check CLI smoke command]
+-    protected_rule_intent: Preserve release-state checks for version files, unused tags, and absent GitHub releases before release mutation.
+-  - id: post-release-archive-check
+-    status: active
+-    category: workflow
+-    priority: 3
+-    enforcement_phase: guard
+-    sources:
+-      - path: src/agentic_project_kit/post_release.py
+-        required_terms: [build_post_release_report, PostReleaseStatus, check_zenodo_version_record, leave README/CITATION unchanged]
+-      - path: src/agentic_project_kit/cli_commands/release.py
+-        required_terms: [post-release-check, post_release_check_command, build_post_release_report]
+-      - path: tests/test_post_release.py
+-        required_terms: [test_post_release_report_passes_with_github_release_and_verified_zenodo_record, test_post_release_report_waits_when_zenodo_record_is_not_available_yet, test_render_post_release_report_shows_waiting_as_non_failing]
+-      - path: docs/TEST_GATES.md
+-        required_terms: [Post-release archive check, agentic-kit post-release-check CLI smoke command]
+-    protected_rule_intent: Preserve post-release GitHub and Zenodo DOI verification and prevent premature README/CITATION DOI changes while Zenodo is waiting.
++- id: summary-renderer
++  status: active
++  category: communication
++  priority: 1
++  enforcement_phase: runtime
++  sources:
++  - path: ./ns
++    required_terms:
++    - run_summary_renderer
++    - summary
++  - path: src/agentic_project_kit/run_summary_renderer.py
++    required_terms:
++    - VALID_REMOTE_EVIDENCE_RESULTS
++    - VALID_CHAT_REPLIES
++    - validate_rendered_summary_text
++    - LEGACY_SUMMARY_TOKENS
++    - terminal_log_remote
++  - path: tests/test_run_summary_renderer.py
++    required_terms:
++    - remote_evidence
++    - CHAT_REPLY
++  protected_rule_intent: Canonical structured summary rendering and validation.
++  surfaces:
++  - ns-cli
++  - summary-renderer
++  - summary-tests
++  tests:
++  - tests/test_run_summary_renderer.py
++- id: execution-mode-switch
++  status: active
++  category: execution
++  priority: 2
++  enforcement_phase: runtime
++  sources:
++  - path: ./ns
++    required_terms:
++    - mode-check
++    - mode-write
++  - path: src/agentic_project_kit/cli_commands/state.py
++    required_terms:
++    - mode_check
++    - mode_write
++    - local
++    - remote
++  - path: src/agentic_project_kit/execution_mode_state.py
++    required_terms:
++    - LOCAL_READY
++    - REMOTE_READY
++    - DIRTY_LOCAL_BLOCKED
++    - MODE_SWITCH_BLOCKED
++  protected_rule_intent: Explicit local versus remote execution-mode checks and switching.
++  surfaces:
++  - ns-cli
++  - execution-mode-state
++  - state-cli
++  tests: []
++- id: rule-preservation-guard
++  status: active
++  category: governance
++  priority: 1
++  enforcement_phase: guard
++  sources:
++  - path: .agentic/rule_preservation.yaml
++    required_terms:
++    - structured-summary-must-be-enforced
++    - no-copy-terminal-evidence
++    - remote-log-lookup-first
++    - yaml-structured-mutation-only
++    - control-file-preservation
++  - path: src/agentic_project_kit/rule_preservation.py
++    required_terms:
++    - validate_rule_preservation
++    - required_terms
++    - surfaces
++    - RulePreservationFinding
++  - path: tests/test_rule_preservation.py
++    required_terms:
++    - test_rule_preservation_current_repository_passes
++    - missing_required_term
++  protected_rule_intent: Preserve restored active workflow-rule anchors across required
++    governance surfaces.
++  surfaces:
++  - rule-preservation-yaml
++  - rule-preservation-validator
++  - rule-preservation-tests
++  tests:
++  - tests/test_rule_preservation.py
++- id: workflow-guard
++  status: active
++  category: workflow
++  priority: 1
++  enforcement_phase: guard
++  sources:
++  - path: src/agentic_project_kit/workflow_guard.py
++    required_terms:
++    - run_workflow_guard
++    - protected_control_files
++    - check_required_anchors
++    - check_rule_registry
++    - rule-registry-drift
++    - rule-preservation-drift
++  - path: tests/test_workflow_guard.py
++    required_terms:
++    - test_workflow_guard_passes_current_repository_state
++    - test_workflow_guard_enforces_rule_registry
++    - structured-summary-drift
++  - path: docs/workflow/WORKFLOW_GUARD.md
++    required_terms:
++    - diagnose-and-fail
++    - protected control files
++    - repair plan
++  protected_rule_intent: Diagnose recurring workflow drift as hard findings before
++    state-changing work continues.
++  surfaces:
++  - workflow-guard-cli
++  - workflow-guard-docs
++  - workflow-guard-tests
++  tests:
++  - tests/test_workflow_guard.py
++- id: patch-preflight
++  status: active
++  category: preflight
++  priority: 1
++  enforcement_phase: preflight
++  sources:
++  - path: src/agentic_project_kit/patch_artifact_preflight.py
++    required_terms:
++    - run_preflight
++    - check_rule_registry_files
++    - GOVERNANCE_YAML_FILES
++    - patch-preflight
++    - validate_rule_registry
++  - path: tests/test_patch_artifact_preflight.py
++    required_terms:
++    - test_preflight_rule_registry_validation_passes_current_state
++    - test_preflight_includes_rule_registry_files
++    - test_preflight_full_runner_includes_governance_yaml
++  - path: ./ns
++    required_terms:
++    - patch-preflight
++    - agentic_project_kit.cli
++  protected_rule_intent: Block unsafe generated patch artifacts and rule-registry
++    drift before patch application.
++  surfaces:
++  - patch-preflight-cli
++  - patch-preflight-validator
++  - patch-preflight-tests
++  tests:
++  - tests/test_patch_artifact_preflight.py
++- id: chat-communication-rules
++  status: active
++  category: communication
++  priority: 2
++  enforcement_phase: runtime
++  sources:
++  - path: docs/governance/CHAT_COMMUNICATION_CONTRACT.md
++    required_terms:
++    - User acknowledgements
++    - paste-output
++    - terminal log upload
++    - remote evidence
++  - path: docs/governance/FINAL_SUMMARY_CONTRACT.md
++    required_terms:
++    - No legacy handwritten summary fallback
++    - terminal_log_remote
++    - Remote log lookup rule
++  - path: .agentic/compiled_agent_context.yaml
++    required_terms:
++    - chat-communication-contract
++    - communication_rules
++    - paste-output
++  protected_rule_intent: Preserve d/f/w/paste-output semantics, no-copy evidence handling,
++    and remote-log-first communication rules.
++  surfaces:
++  - chat-communication-contract
++  - final-summary-contract
++  - compiled-agent-context
++  tests: []
++- id: chat-bootstrap-drift-rules
++  status: active
++  category: governance
++  priority: 2
++  enforcement_phase: guard
++  sources:
++  - path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
++    required_terms:
++    - Mandatory startup sequence
++    - Remote repository connector route
++    - Governance YAML mutation rule
++    - Local repository freshness precondition
++  - path: .agentic/compiled_agent_context.yaml
++    required_terms:
++    - chat-bootstrap-and-drift-contract
++    - mandatory_successor_chat_sources
++    - drift_detection
++  protected_rule_intent: Preserve mandatory successor-chat bootstrap, drift detection,
++    direct connector route, and structured YAML mutation rules.
++  surfaces:
++  - chat-bootstrap-contract
++  - compiled-agent-context
++  tests: []
++- id: portable-execution-rules
++  status: active
++  category: execution
++  priority: 1
++  enforcement_phase: runtime
++  sources:
++  - path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
++    required_terms:
++    - shell commands are adapters only
++    - Remote connector route rule
++    - Governance YAML mutation rule
++    - Evidence rule
++  - path: .agentic/compiled_agent_context.yaml
++    required_terms:
++    - portable-chat-execution-contract
++    - canonical_core
++    - shell_role
++  protected_rule_intent: Preserve Python-core-first portable execution and keep shell
++    usage as an adapter, not canonical workflow logic.
++  surfaces:
++  - portable-execution-contract
++  - compiled-agent-context
++  tests: []
++- id: evidence-guard
++  status: active
++  category: governance
++  priority: 3
++  enforcement_phase: guard
++  sources:
++  - path: src/agentic_project_kit/evidence_guard.py
++    required_terms:
++    - check_terminal_log
++    - FAIL_MARKERS
++    - EXPECTED_NEGATIVE_SMOKE_MARKERS
++  - path: src/agentic_project_kit/cli_commands/evidence.py
++    required_terms:
++    - guard
++    - clean-check
++    - check_terminal_log
++  - path: tests/test_evidence_guard.py
++    required_terms:
++    - test_evidence_guard_rejects_final_pass_after_failed_gate
++    - test_evidence_guard_accepts_expected_negative_smoke_log
++  protected_rule_intent: Reject contradictory terminal evidence that still contains
++    failed gate markers.
++  surfaces:
++  - evidence-guard-cli
++  - evidence-guard-core
++  - evidence-guard-tests
++  tests:
++  - tests/test_evidence_guard.py
++- id: typed-work-order-runner
++  status: active
++  category: execution
++  priority: 3
++  enforcement_phase: runtime
++  sources:
++  - path: src/agentic_project_kit/typed_work_order_runner.py
++    required_terms:
++    - parse_typed_work_order
++    - run_typed_work_order
++    - TypedWorkOrderResult
++    - json.dumps
++    - write_text
++  - path: tests/test_typed_work_order_runner.py
++    required_terms:
++    - test_run_typed_work_order_pass_writes_machine_readable_log
++    - test_run_typed_work_order_fail_stops_on_failed_step
++    - test_unsupported_step_kind_is_hard_fail
++  - path: src/agentic_project_kit/cli.py
++    required_terms:
++    - work_orders_app
++    - work-order
++  protected_rule_intent: Preserve typed, machine-readable work order execution logs
++    and block command-step drift.
++  surfaces:
++  - typed-work-order-runner
++  - work-order-cli
++  - typed-work-order-tests
++  tests:
++  - tests/test_typed_work_order_runner.py
++- id: release-state-validation
++  status: active
++  category: workflow
++  priority: 2
++  enforcement_phase: guard
++  sources:
++  - path: src/agentic_project_kit/release.py
++    required_terms:
++    - build_release_state_report
++    - ReleaseCheckStatus
++    - check_remote_tag_absent
++    - check_github_release_absent
++  - path: src/agentic_project_kit/cli_commands/release.py
++    required_terms:
++    - release-check
++    - release_check_command
++    - build_release_state_report
++  - path: tests/test_release.py
++    required_terms:
++    - test_build_release_state_report_passes_for_unused_version
++    - test_build_release_state_report_fails_for_existing_remote_tag
++    - test_build_release_state_report_fails_for_existing_github_release
++  - path: docs/TEST_GATES.md
++    required_terms:
++    - Release state validation change
++    - agentic-kit release-check CLI smoke command
++  protected_rule_intent: Preserve release-state checks for version files, unused tags,
++    and absent GitHub releases before release mutation.
++  surfaces:
++  - release-check-cli
++  - release-state-core
++  - release-tests
++  - test-gates-docs
++  tests:
++  - tests/test_release.py
++- id: post-release-archive-check
++  status: active
++  category: workflow
++  priority: 3
++  enforcement_phase: guard
++  sources:
++  - path: src/agentic_project_kit/post_release.py
++    required_terms:
++    - build_post_release_report
++    - PostReleaseStatus
++    - check_zenodo_version_record
++    - leave README/CITATION unchanged
++  - path: src/agentic_project_kit/cli_commands/release.py
++    required_terms:
++    - post-release-check
++    - post_release_check_command
++    - build_post_release_report
++  - path: tests/test_post_release.py
++    required_terms:
++    - test_post_release_report_passes_with_github_release_and_verified_zenodo_record
++    - test_post_release_report_waits_when_zenodo_record_is_not_available_yet
++    - test_render_post_release_report_shows_waiting_as_non_failing
++  - path: docs/TEST_GATES.md
++    required_terms:
++    - Post-release archive check
++    - agentic-kit post-release-check CLI smoke command
++  protected_rule_intent: Preserve post-release GitHub and Zenodo DOI verification
++    and prevent premature README/CITATION DOI changes while Zenodo is waiting.
++  surfaces:
++  - post-release-check-cli
++  - post-release-core
++  - post-release-tests
++  - test-gates-docs
++  tests:
++  - tests/test_post_release.py
+
+### GATES ###
+Rule registry validation passed
+.......................                                                  [100%]
+23 passed in 0.22s
+Agentic project check passed
+
+### COMMIT REAL PATCH ###
+[feature/rule-registry-surfaces-tests-inventory-741 b581eb1] Add rule registry surfaces and test metadata
+ 1 file changed, 352 insertions(+), 156 deletions(-)
