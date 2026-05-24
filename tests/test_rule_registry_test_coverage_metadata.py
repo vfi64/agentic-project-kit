@@ -5,10 +5,11 @@ import yaml
 from agentic_project_kit.rule_registry_validator import validate_rule_registry
 
 
-def _assertion(statement: str = "source anchors are preserved") -> dict[str, str]:
+def _assertion(statement: str = "source anchors are preserved") -> dict[str, object]:
     return {
         "assertion_id": "mechanism-under-test-source-anchor",
         "kind": "anchor",
+        "covered_surfaces": ["test-surface"],
         "statement": statement,
     }
 
@@ -116,6 +117,7 @@ def test_validator_rejects_coverage_for_unknown_mechanism(tmp_path: Path) -> Non
                     {
                         "assertion_id": "orphaned-coverage",
                         "kind": "negative-case",
+                        "covered_surfaces": ["unknown-surface"],
                         "statement": "orphaned coverage is rejected",
                     }
                 ],
