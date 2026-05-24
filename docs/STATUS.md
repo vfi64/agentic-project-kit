@@ -1,113 +1,94 @@
-Current version: 0.4.1
+<!-- post-pr714-closeout -->
 # Project Status
+
 Status-date: 2026-05-24
 Project: agentic-project-kit
 Primary branch: main
 Current work branch: main
+Current version: 0.4.1
 
 ## Purpose
+
 agentic-project-kit is a repository-backed governance and workflow kit for long-running AI-assisted software projects. Durable project memory belongs in versioned repository files, deterministic gates, evidence logs, and explicit handoff state rather than chat transcripts.
 
 The repository is the source of truth; chat memory is not a source of truth. Chat-only rules are not durable unless they are documented, test-backed, and enforced through repo tooling or gates.
 
 ## Current-State Boundary
+
 `docs/STATUS.md` is the live current-state dashboard. It must stay concise and must not accumulate release history, old planning fragments, or chat transcripts. Long-term history belongs in `CHANGELOG.md`, verified release/DOI history, architecture/governance contracts, or terminal evidence logs.
 
-Machine guard: `agentic-kit docs-audit` enforces the current-state headroom boundary and fails if `docs/STATUS.md` exceeds the configured word limit. This is a hard drift signal, not a stylistic preference.
-
-## Current Goal
-Continue the documentation-management rebuild through small, reversible, test-backed registry slices after closing out the PR #712 workflow hardening. The registry baseline exists, has a read-only CLI summary, has a JSON report path, and is connected to the current read-only audit, handoff, release-check, post-release-check, and communication-artifact policy surfaces. Do not start a broad documentation migration, create a release tag, publish a release, or perform destructive GUI/remote actions in the next slice.
+This document is a concise pointer, not a duplicate rule book. Machine guard: `agentic-kit docs-audit` enforces the current-state headroom boundary and fails if `docs/STATUS.md` exceeds the configured word limit. This is a hard drift signal.
 
 ## Current State
+
 Current released version: 0.4.1.
 Current release tag: v0.4.1.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
 Post-release Zenodo verification is covered by `agentic-kit post-release-check --version 0.4.1`.
 
-Documentation registry baseline on `main`:
-- PR #692 added `docs/DOCUMENTATION_REGISTRY.yaml` as the first additive documentation and artifact classification registry.
-- PR #692 documented the registry contract in `docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md`.
-- PR #692 wired the structural registry guard into `agentic-kit check-docs`, and therefore into `agentic-kit docs-audit`.
-- PR #692 added targeted registry tests and YAML governance parse coverage.
-- PR #694 refreshed `docs/STATUS.md` after the registry baseline while leaving the handoff file unchanged.
-- PR #695 classified a narrow operational/artifact set and added the read-only `agentic-kit docs-registry` summary command.
-- PR #696 added `agentic-kit docs-registry --report PATH` as a read-only JSON handoff for later GUI, doc-mesh, lifecycle, and artifact-GC consumers.
-- PR #697 surfaced registry summary data in `agentic-kit docs-audit` as a read-only audit dimension.
-- PR #698 surfaced registry summary data in `agentic-kit doc-mesh-audit` as read-only mesh context.
-- PR #699 surfaced registry summary data in `agentic-kit doc-lifecycle-audit` as read-only lifecycle context.
-- PR #700 surfaced registry summary data in `agentic-kit handoff check` and `agentic-kit handoff show` without changing generated handoff prompts.
-- PR #701 surfaced registry summary data in `agentic-kit release-check` and `agentic-kit post-release-check` as read-only release context.
-- PR #709 exposed `.agentic/communication_artifacts.yaml` through the read-only documentation registry summary and JSON report without changing cleanup behavior.
-- The registry guard is intentionally structural only. It checks schema, allowed classes, required rule fields, duplicate paths, and registered path existence. It does not prove semantic documentation quality and does not authorize broad migration.
+Post-PR714 closeout target:
+- Main is refreshed after PR #714 at `7d092cb` (`Add workflow guard diagnostics (#714)`).
+- PR #714 completed the workflow-guard diagnostics slice, integrated the guard into patch preflight, restored protected-control-file preservation coverage, and removed hard word limits from protected control files.
+- Evidence: `docs/reports/terminal/pr714-verify-after-test-alignment.log`; remote evidence present.
+- The next immediate hardening task is canonical structured SUMMARY enforcement before resuming documentation-management registry or projection work.
 
-Workflow hardening baseline on `main`:
-- PR #712 hardened remote repository access through the GitHub connector direct-path-first rule.
-- PR #712 hardened governance YAML mutation through the parse-modify-dump-only rule and tests.
-- PR #712 added the Control File Preservation Guard through `.agentic/control_file_preservation.yaml`, `tests/test_control_file_preservation.py`, `docs/TEST_GATES.md`, and `.agentic/compiled_agent_context.yaml`.
+Documentation registry baseline:
+- `docs/DOCUMENTATION_REGISTRY.yaml` is the additive machine-readable registry.
+- `docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md` is the human contract.
+- `agentic-kit docs-registry` shows the read-only summary.
+- `agentic-kit docs-registry --report PATH` writes the JSON report.
+- The registry is visible in `check-docs`, `docs-audit`, `doc-mesh-audit`, `doc-lifecycle-audit`, `handoff check`, `handoff show`, `release-check`, and `post-release-check`.
+- `.agentic/communication_artifacts.yaml` is consumed as read-only artifact-policy input.
+- Broad documentation migration remains forbidden. The registry guard is structural only and does not prove semantic documentation quality.
+
+Workflow hardening baseline:
+- GitHub connector direct-path-first is the required remote route for known repository paths, refs, PRs, and commits.
+- Governance YAML mutation must use parse-modify-dump or an equivalent structured mutation path, then parse again.
+- `.agentic/control_file_preservation.yaml` protects active rules from lossy shortening.
 - Information preservation outranks compactness for protected control files. Hard length-limit trimming is forbidden; large protected files must be split, referenced, or generated instead of losing active rules.
 
-GUI MVP baseline on `main`:
-- `cockpit-readiness` visually passes as a bounded read-only GUI action.
-- `doctor` visually passes as a bounded read-only GUI action.
-- `check-docs` visually passes as a bounded read-only GUI action.
+GUI MVP baseline:
+- `cockpit-readiness`, `doctor`, and `check-docs` visually pass as bounded read-only GUI actions.
+- Action Registry is the single source of allowed GUI actions.
 - `agent-run` and non-read-only actions remain disabled in the GUI MVP.
-- Headless GUI action execution tests now cover the bounded read-only action executor without opening a Tkinter window.
-- Tk runtime for manual judgement must import `tkinter`, `yaml`, `typer`, `rich`, and `pydantic`.
+- Headless GUI action execution tests cover the bounded read-only action executor.
 
-Current GUI, release, documentation registry, and governance evidence:
-- `docs/reports/terminal/v040-record-check-docs-gui-visual-pass.log`
-- `docs/reports/terminal/v040-repair-tk-venv-deps-zsh-safe-check-docs-visual.log`
-- `docs/reports/terminal/v040-record-doctor-gui-manual-launch-visual-result.log`
-- `docs/reports/terminal/v040-final-release-readiness-and-successor-handoff.log`
-- `docs/reports/terminal/v040-doi-metadata-remote-closeout.log`
-- `docs/reports/terminal/gui-action-execution-headless-remote.log`
-- `docs/reports/terminal/changelog-quality-guard-remote.log`
-- `docs/reports/terminal/v041-handoff-after-pr709.log`
-- `docs/reports/terminal/v041-post-pr712-closeout.log`
-- PR #692, #694, #695, #696, #697, #698, #699, #700, #701, #709, and #712 CI evidence for Ruff, tests, and CLI smoke.
+## Current Goal
 
-Recent closeout anchors:
-- PR #656 closed out the GUI MVP three read-only actions.
-- PR #657 modeled administrative evidence state in generated handoff prompts.
-- PR #670 guarded Ruff scope and terminal quote safety after release publication.
-- PR #671 closed v0.4.0 DOI metadata on main.
-- PR #680 added headless GUI action execution tests.
-- PR #681 added deterministic recent-release CHANGELOG quality checks to `check-docs`.
-- PR #689 closed the v0.4.1 DOI metadata state on main.
-- PR #690 recorded final main verification after the v0.4.1 DOI metadata closeout.
-- PR #691 refreshed handoff state and the successor handoff prompt after final v0.4.1 verification.
-- PR #692 introduced the first documentation registry schema and guard slice.
-- PR #694 refreshed the live status after the registry baseline.
-- PR #695 added the first read-only registry consumer and operational/artifact classifications.
-- PR #696 added the read-only registry JSON report path.
-- PR #697 added docs-audit registry visibility.
-- PR #698 added doc-mesh registry visibility.
-- PR #699 added doc-lifecycle registry visibility.
-- PR #700 added handoff check/show registry visibility.
-- PR #701 added release-check and post-release-check registry visibility.
-- PR #709 added the artifact policy registry consumer.
-- PR #712 hardened remote access, governance YAML mutation, and protected control-file preservation.
-- v0.4.1 is tagged, published, post-release checked, and has verified Zenodo version DOI `10.5281/zenodo.20357657`.
+Repair PR715 closeout drift without product changes, merge PR715 only after CI and mergeability are green, then harden canonical structured SUMMARY enforcement before resuming documentation-management work.
 
 ## Active Workflow Rules
+
 - Read mandatory successor-chat sources before mutation.
 - Use repo state as source of truth; do not reconstruct current state from chat memory.
 - Treat repeated workflow errors as product defects to be fixed with guards, tests, or repo-backed rules.
 - Keep `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, `.agentic/handoff_state.yaml`, and `CHANGELOG.md` in their correct roles.
 - Use project-local interpreter/tooling first.
 - Preserve relevant PASS and FAIL terminal output remotely under `docs/reports/terminal/*.log` whenever technically possible.
-- Relevant terminal blocks must render the structured Final summary contract in terminal output before log upload.
+- Relevant terminal blocks must render the structured Final summary contract in terminal output before log upload; example evidence field: terminal_log=docs/reports/terminal/<name>.log.
 - `d`, `f`, `w`, and `p` are communication signals, not evidence.
+- Remote-first no-guess: do not guess repository state; inspect known remote paths, PRs, commits, logs, and command help first.
+- Remote command first is a delivery preference, not a permission bypass or a reason to skip evidence.
+- Remote-log evidence is mandatory for standard-error hardening slices.
+- FAIL without terminal kill uses NEXT_CHAT_REPLY: f and must first inspect the repo-backed log before requesting paste-output.
+- Remote inspection evidence contract: logs and command reports that matter for later reasoning must be committed, pushed, and registered for later GC.
+- no-remote-command-deadlock applies: remote command output must not depend on manual paste when remote or local evidence exists.
 - Ruff must run only on Python sources or Python files; shell files use shell checks, not Ruff.
 - Generated terminal blocks must avoid heredocs, risky multiline `python -c` snippets, and quote-prone constructs.
-- Recent CHANGELOG release entries from v0.3.36 onward are guarded structurally; the guard must not be reduced to a naive bullet-count rule.
-- Documentation registry changes must remain additive, modular, reversible, and test-backed. The registry guard is structural and must not be used as a broad migration trigger.
+- Recent CHANGELOG release entries from v0.3.36 onward are guarded structurally.
+- Typed Work Orders Pre-GUI Execution Path remains the preferred pre-GUI execution path, with the minimal typed Work Order Runner as the pre-GUI bridge without chat-generated patch scripts.
+- Documentation registry changes must remain additive, modular, reversible, and test-backed.
 - Remote repo inspection should use the GitHub connector direct-path-first workflow when path, commit, PR, or branch is known.
 - Governance YAML must be changed through parse-modify-dump and validated after mutation.
 - Protected control files must preserve active rules unless an explicit successor migration is recorded and tested.
+- Structured SUMMARY drift is blocking drift: missing, malformed, contradictory, or legacy summaries must be fixed before product or documentation-management work continues.
+- v0.3.30 GUI Readiness Hardening Closeout was not the Tkinter GUI release.
+- GUI readiness hardening, not a Tkinter implementation, remains the pre-GUI boundary before any bounded Tkinter MVP work.
+- GUI expansion is intentionally paused until the current hardening slice is green.
 
 ## Documentation and Communication Contracts
+
 Mandatory successor-chat source order is defined by `.agentic/compiled_agent_context.yaml` and checked by `agentic-kit docs-audit`:
 1. `.agentic/compiled_agent_context.yaml`
 2. `docs/governance/FINAL_SUMMARY_CONTRACT.md`
@@ -118,17 +99,19 @@ Mandatory successor-chat source order is defined by `.agentic/compiled_agent_con
 7. `docs/STATUS.md`
 8. `docs/handoff/CURRENT_HANDOFF.md`
 
-Documentation registry contract: `docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md` governs the additive registry slices. The machine-readable source is `docs/DOCUMENTATION_REGISTRY.yaml`.
+Final summary contract: relevant workflow blocks must end with the framed SUMMARY contract containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, CHAT_REPLY, and the final result marker. No executable placeholder summaries and final-summary-no-executable-placeholders remain active.
 
-Final summary contract: relevant workflow blocks must end with the framed SUMMARY contract containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, and the final result marker.
+No-copy/evidence contract: `d` means a log-backed block appears finished; evidence must still be inspected. `f` means failure was reported; first inspect remote or local evidence and request pasted output only when evidence is unavailable or unusable.
 
 ## Live Status Commands
-Use project-local commands first: `./ns state`, `./ns check-docs`, `./ns doctor`, `./ns docs-audit`, `./ns handoff-check`, `./ns governance-check`, and `agentic-kit handoff prompt` when installed through the active project environment. Planning-state freshness, documentation coverage, policy-pack checks, Pattern Advisor, `patterns list`, `patterns show`, read-only catalog, advisory-only, post-release Zenodo, `docs/DOCUMENTATION_COVERAGE.yaml`, and `docs/DOCUMENTATION_REGISTRY.yaml` are compact live-state anchors here; detailed history belongs in `CHANGELOG.md`.
 
-The registry can be inspected through `agentic-kit docs-registry` and exported with `agentic-kit docs-registry --report PATH`. Registry summary data is visible in `agentic-kit docs-audit`, `agentic-kit doc-mesh-audit`, `agentic-kit doc-lifecycle-audit`, `agentic-kit handoff check`, `agentic-kit handoff show`, `agentic-kit release-check`, and `agentic-kit post-release-check`.
+Use project-local commands first: `./ns state`, `./ns check-docs`, `./ns doctor`, `./ns docs-audit`, `./ns handoff-check`, `./ns governance-check`, `agentic-kit check-docs`, `agentic-kit doctor`, and `agentic-kit handoff prompt` when installed through the active project environment.
+
+The registry can be inspected through `agentic-kit docs-registry` and exported with `agentic-kit docs-registry --report PATH`.
 
 ## Gate Status
-Required gate set for current-state or handoff changes:
+
+Required gate set for current-state, handoff, or governance-summary changes:
 - `./ns state-freshness-check`
 - `./ns handoff-check`
 - `./ns governance-check`
@@ -138,34 +121,18 @@ Required gate set for current-state or handoff changes:
 - `agentic-kit doctor`
 - `agentic-kit post-release-check --version 0.4.1`
 
-This remote chat environment could not run the local Python 3.13 gates. Merge readiness requires equivalent CI evidence.
-
-## Compact Regression Anchors
-These compact anchors are intentionally retained to keep existing deterministic gates stable while preserving the current-state boundary. They are pointers, not long-term narrative history.
-
-- No executable placeholder summaries / final-summary-no-executable-placeholders.
-- no-remote-command-deadlock; remote-first no-guess; remote inspection evidence contract.
-- Typed Work Orders Pre-GUI Execution Path; preferred pre-GUI execution path; already executed command; dirty worktrees; remote evidence present.
-- v0.3.30 GUI Readiness Hardening Plan; v0.3.30 GUI Readiness Hardening Closeout; GUI readiness hardening, not a Tkinter implementation; not the Tkinter GUI release; Tkinter is explicitly deferred until these contracts pass gates.
-- v0.3.31 Evidence Guard Usage; v0.3.31 Pre-GUI Execution Hardening Closeout; v0.3.31 is the current pre-GUI execution hardening line.; It does not ship the Tkinter GUI.; Terminal Evidence Guard with CLI command `agentic-kit evidence guard LOGFILE`.; `agentic-kit evidence guard LOGFILE`; Local shortcut `./ns evidence-guard LOGFILE`.; `./ns evidence-guard LOGFILE`; contradictory final state; final-PASS-after-failure; Typed Work Order Evidence Contract.; Typed Work Order Evidence Runtime Check.; validate_typed_work_order_evidence; Next safe step: prepare and release v0.3.31.; Do not start Tkinter before v0.3.31 is released and post-release verified.; Expected negative-smoke logs are allowed only when the log explicitly records that the false-PASS case was rejected.
-- Current released version: 0.3.29; Current released version: 0.3.32; v0.3.32 Release Phase and Evidence Closeout; `release-preflight` validates the before-metadata release phase; `release-check` remains the after-metadata gate; `post-release-check` remains the after-release GitHub and Zenodo verification gate; `evidence clean-check`; `./ns evidence-clean-check`; expected in-progress log may be the only dirty path.
-- v0.3.34 Portable Core Hardening Plan; Typed work order unit-test matrix; Release and DOI core action extraction; Concept-DOI versus version-DOI WAITING guard; no new large shell control blocks; Tkinter remains explicitly deferred.
-- v0.3.36 current-state cleanup started as a documentation-only line.
-- PR #649 merged; PR #650 merged; PR #651 merged; PR #652 merged.
-- Remote-log evidence is mandatory for standard-error hardening slices.
-
-## Compact Legacy Test Anchors
-These anchors are deliberately compact compatibility pointers. Long narrative history belongs in `CHANGELOG.md`.
-
-- no-remote-command-deadlock: Remote command first is a delivery preference, not a requirement when it would create deadlock.
-- remote-first no-guess: inspect command help before inventing command names; command help must be checked before remote-only assumptions.
-- Typed Work Orders Pre-GUI Execution Path: preferred pre-GUI execution path; long chat-generated shell or Python patch blocks are deprecated; thin Tkinter cockpit must consume these typed contracts.
-- Historic release anchor: Current released version: 0.3.32; Verified Zenodo version DOI: `10.5281/zenodo.20314341`.
-- v0.3.36 current-state cleanup started as a documentation-only line before any bounded Tkinter MVP work.
-- remote inspection evidence contract: failed or diagnostic logs must be uploaded and registered for later GC.
+This remote chat environment cannot run the local Python gates directly. Merge readiness requires equivalent CI evidence.
 
 ## Next Safe Step
-Use `docs/reports/terminal/v041-successor-chat-handoff-after-pr712.md` for a chat switch after the PR712 closeout lands, then continue with one additional small registry consumer or machine-readable source/projection planning slice. Do not start a broad migration.
+
+First repair PR715 and verify that the post-PR714 closeout state, handoff state, current handoff, and successor prompt are consistent with PR714 rather than PR712.
+
+Then perform the dedicated hardening slice: enforce structured final summaries across the renderer, tests, workflow guard or patch preflight, generated handoff prompts, terminal logs, command reports, and chat/workflow contracts. Do not return to the documentation-management rebuild until this drift is closed.
+
+## Historical Compatibility Anchors
+
+These anchors keep older regression tests attached to their migrated contracts without turning STATUS into the long-term history: read-only catalog; advisory-only; Pattern Advisor; `patterns list`; `patterns show`; Planning-state freshness; Tkinter cockpit; v0.3.30 GUI Readiness Hardening Plan; v0.3.30 GUI Readiness Hardening Closeout; PR #463: ActionResult core contract; PR #464: `cockpit run --json`; PR #465: Registry-only; PR #466: Queue-State contract; PR #467: Evidence-State contract; already executed command; dirty-state blocking; dirty worktrees; v0.3.31 Pre-GUI Execution Hardening Plan; v0.3.31 Pre-GUI Execution Hardening Closeout; v0.3.31 Evidence Guard Usage; v0.3.31 is the current pre-GUI execution hardening line.; It does not ship the Tkinter GUI.; Terminal Evidence Guard with CLI command `agentic-kit evidence guard LOGFILE`.; Local shortcut `./ns evidence-guard LOGFILE`.; `agentic-kit evidence guard LOGFILE`; `./ns evidence-guard LOGFILE`; contradictory final state; final-PASS-after-failure; Expected negative-smoke logs are allowed only when the log explicitly records that the false-PASS case was rejected.; Typed Work Order Evidence Contract.; Typed Work Order Evidence Runtime Check.; validate_typed_work_order_evidence; Next safe step: prepare and release v0.3.31.; Do not start Tkinter before v0.3.31 is released and post-release verified.; Begin v0.3.31 with minimal typed Work Order Runner work before further Tkinter GUI expansion.; Typed Work Orders Pre-GUI Execution Path; typed Patch DSL; structured State Source of Truth; Markdown is a projection; shell is a runner, not a patch language; no_command; exactly_one_command; multiple_commands; already_executed; v0.3.32 Release Phase and Evidence Closeout; Current released version: 0.3.29; Current released version: 0.3.32; Verified Zenodo version DOI: `10.5281/zenodo.20314341`; `release-preflight` validates the before-metadata release phase; `release-check` remains the after-metadata gate; `post-release-check` remains the after-release GitHub and Zenodo verification gate; `evidence clean-check`; `./ns evidence-clean-check`; expected in-progress log may be the only dirty path; v0.3.34 Portable Core Hardening Plan; Typed work order unit-test matrix; Release and DOI core action extraction; Concept-DOI versus version-DOI WAITING guard; no new large shell control blocks; Tkinter remains explicitly deferred; Tkinter is explicitly deferred until these contracts pass gates; thin Tkinter cockpit must consume these typed contracts; Do not start GUI implementation in this slice.; GUI expansion is intentionally paused; v0.3.36 current-state cleanup started as a documentation-only line; remote inspection evidence contract; Remote-log evidence is mandatory for standard-error hardening slices; PR #650 merged; PR #651 merged; PR #652 merged.
 
 ## Compatibility Coverage Anchors
-These compact anchors are intentionally retained for deterministic coverage: documentation coverage, policy-pack checks, policy packs, Pattern Advisor, `patterns list`, `patterns show`, no-copy/evidence, Communication artifact GC hardening is now part of the pre-GUI baseline, long chat-generated shell or Python patch blocks, v0.3.31 is the current pre-GUI execution hardening line., Mandatory Final Summary Contract, policy-pack doctor checks, `agentic-kit post-release-check`, `.agentic/compiled_agent_context.yaml`, `CHAT_COMMUNICATION_CONTRACT.md`, `PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `FINAL_SUMMARY_CONTRACT.md`, `docs/TEST_GATES.md`.
+
+These compact anchors are intentionally retained for deterministic coverage: documentation coverage, policy-pack checks, policy packs, Pattern Advisor, `patterns list`, `patterns show`, no-copy/evidence, Communication artifact GC hardening is now part of the pre-GUI baseline, long chat-generated shell or Python patch blocks, Mandatory Final Summary Contract, policy-pack doctor checks, `agentic-kit post-release-check`, `.agentic/compiled_agent_context.yaml`, `CHAT_COMMUNICATION_CONTRACT.md`, `PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `FINAL_SUMMARY_CONTRACT.md`, `docs/TEST_GATES.md`, planning-state freshness, post-release Zenodo, docs/DOCUMENTATION_COVERAGE.yaml, docs/DOCUMENTATION_REGISTRY.yaml.

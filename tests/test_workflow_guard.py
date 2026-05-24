@@ -3,7 +3,39 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
-from agentic_project_kit.workflow_guard import check_yaml_parseability, run_workflow_guard
+from agentic_project_kit.run_summary_renderer import render_summary
+from agentic_project_kit.workflow_guard import (
+    check_structured_summary_evidence,
+    check_yaml_parseability,
+    run_workflow_guard,
+)
+
+
+def _summary_payload() -> dict[str, str]:
+    return {
+        "comm_header": "SUMMARY COMM-00042 | 2026-05-21 16:40:00 +0200",
+        "slice_name": "TEST SLICE",
+        "scope": "NO GUI / NO RELEASE",
+        "branch": "feature/test",
+        "origin": "local",
+        "state_mode": "local",
+        "mode_check": "local feature branch",
+        "work": "PASS",
+        "evidence": "PASS",
+        "overall": "PASS",
+        "remote_evidence": "PASS",
+        "pr": "created",
+        "head_sha": "abc123",
+        "ci": "not_checked",
+        "merge": "not_done",
+        "terminal_log": "docs/reports/terminal/test.log",
+        "terminal_log_remote": "docs/reports/terminal/test.log",
+        "terminal_log_local": "/tmp/test.log",
+        "command_report": "NONE",
+        "interpretation": "Rendered by Python.",
+        "safe_step": "wait for CI",
+        "chat_reply": "d",
+    }
 
 
 def test_workflow_guard_passes_current_repository_state() -> None:
@@ -23,6 +55,38 @@ def test_workflow_guard_rejects_invalid_yaml(tmp_path: Path) -> None:
     assert findings
     assert findings[0].pattern_id == "yaml-parse-failure"
     assert findings[0].severity == "HARD-FAIL"
+
+
+def test_workflow_guard_rejects_legacy_summary_evidence(tmp_path: Path) -> None:
+    path = tmp_path / "docs" / "reports" / "terminal" / "legacy.log"
+    path.parent.mkdir(parents=True)
+    path.write_text(
+        """
+================================================================
+SUMMARY
+WORK RESULT: PASS
+EVIDENCE RESULT: PASS
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PASS
+terminal_log=docs/reports/terminal/legacy.log
+command_report=NONE
+NEXT_CHAT_REPLY: p
+### RESULT: PASS ###
+================================================================
+""",
+        encoding="utf-8",
+    )
+    findings = check_structured_summary_evidence([path])
+    assert findings
+    assert findings[0].pattern_id == "structured-summary-drift"
+    assert findings[0].severity == "HARD-FAIL"
+
+
+def test_workflow_guard_accepts_canonical_summary_evidence(tmp_path: Path) -> None:
+    path = tmp_path / "docs" / "reports" / "terminal" / "canonical.log"
+    path.parent.mkdir(parents=True)
+    path.write_text(render_summary(_summary_payload()), encoding="utf-8")
+    assert check_structured_summary_evidence([path]) == []
 
 
 def test_workflow_guard_policy_documents_repair_plan() -> None:

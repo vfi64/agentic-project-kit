@@ -6,8 +6,11 @@ from typing import Iterable
 
 import yaml
 
+from agentic_project_kit.run_summary_renderer import validate_rendered_summary_text
+
 WORKFLOW_GUARD_CONFIG = Path("docs/workflow/WORKFLOW_GUARD.md")
 CONTROL_FILE_PRESERVATION = Path(".agentic/control_file_preservation.yaml")
+SUMMARY_EVIDENCE_SUFFIXES = {".log", ".md", ".txt"}
 
 
 @dataclass(frozen=True)
@@ -28,6 +31,22 @@ def _load_yaml(path: Path) -> object:
 
 def _existing(paths: Iterable[Path]) -> list[Path]:
     return [path for path in paths if path.exists()]
+
+
+def _path_contains(path: Path, fragments: tuple[str, ...]) -> bool:
+    normalized = str(path).replace("\\", "/")
+    return "/".join(fragments) in normalized
+
+
+def _is_summary_evidence_path(path: Path) -> bool:
+    if path.suffix not in SUMMARY_EVIDENCE_SUFFIXES:
+        return False
+    normalized = str(path).replace("\\", "/")
+    if "/docs/reports/command_runs/" in f"/{normalized}" or normalized.startswith("docs/reports/command_runs/"):
+        return True
+    if "/docs/reports/terminal/" in f"/{normalized}" or normalized.startswith("docs/reports/terminal/"):
+        return path.suffix == ".log"
+    return False
 
 
 def protected_control_files(config_path: Path = CONTROL_FILE_PRESERVATION) -> list[dict[str, object]]:
@@ -96,6 +115,26 @@ def check_required_anchors() -> list[GuardFinding]:
     return findings
 
 
+def check_structured_summary_evidence(paths: Iterable[Path]) -> list[GuardFinding]:
+    findings: list[GuardFinding] = []
+    for path in _existing(paths):
+        if not _is_summary_evidence_path(path):
+            continue
+        text = path.read_text(encoding="utf-8")
+        summary_findings = validate_rendered_summary_text(text)
+        for finding in summary_findings:
+            findings.append(
+                GuardFinding(
+                    pattern_id="structured-summary-drift",
+                    severity="HARD-FAIL",
+                    path=str(path),
+                    message=finding,
+                    repair_mode="render-with-canonical-summary-renderer",
+                )
+            )
+    return findings
+
+
 def check_no_lossy_control_file_policy() -> list[GuardFinding]:
     findings: list[GuardFinding] = []
     policy = Path(".agentic/control_file_preservation.yaml")
@@ -159,6 +198,7 @@ def run_workflow_guard(paths: Iterable[str] | None = None) -> list[GuardFinding]
     findings: list[GuardFinding] = []
     findings.extend(check_yaml_parseability(yaml_targets))
     findings.extend(check_required_anchors())
+    findings.extend(check_structured_summary_evidence(requested))
     findings.extend(check_no_lossy_control_file_policy())
     findings.extend(check_workflow_guard_document())
     return findings

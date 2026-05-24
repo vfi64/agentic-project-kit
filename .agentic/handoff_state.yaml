@@ -1,42 +1,20 @@
 schema_version: 1
 updated:
   date: '2026-05-24'
-  reason: Refresh handoff state after PR712 workflow hardening closeout
-  source: main HEAD after PR712
+  reason: Refresh handoff state after PR714 workflow guard diagnostics closeout
+  source: main HEAD after PR714
 repo:
   name: agentic-project-kit
-  local_path: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+  local_path: agentic-project-kit
   remote: github.com:vfi64/agentic-project-kit
   default_branch: main
 safe_state:
   branch: main
-  commit: ce665c3
-  commit_subject: Harden remote route and YAML mutation workflow (#712)
+  commit: 7d092cb
+  commit_subject: Add workflow guard diagnostics (#714)
   semantics: current_main_head
   working_tree_expected_clean: true
-  administrative_refresh_prs:
-  - 656
-  - 657
-  - 659
-  - 660
-  - 661
-  - 663
-  - 665
-  - 666
-  - 671
-  - 672
-  - 680
-  - 681
-  - 688
-  - 689
-  - 690
-  - 691
-  - 694
-  - 702
-  - 705
-  - 707
-  - 708
-  - 710
+  administrative_refresh_prs: [656, 657, 659, 660, 661, 663, 665, 666, 671, 672, 680, 681, 688, 689, 690, 691, 694, 702, 705, 707, 708, 710]
 release:
   current_version: 0.4.1
   previous_version: 0.4.0
@@ -48,39 +26,16 @@ release:
   post_release_evidence: docs/reports/terminal/v041-final-main-verify-after-pr689.log
 open_items:
   prs: []
-  historical_prs_closed:
-  - 562
-  - 564
-  - 568
-  next_expected_chat_action: Continue the documentation-management rebuild with one small additive registry or projection-planning slice after verifying the post-PR712 successor handoff prompt is quiet.
+  historical_prs_closed: [562, 564, 568]
+  next_expected_chat_action: Harden structured SUMMARY enforcement before resuming documentation-management rebuild.
 completed_since_previous_handoff:
-- 'PR #692 introduced the first documentation registry schema and guard slice.'
-- 'PR #695 added the first read-only registry consumer and operational/artifact classifications.'
-- 'PR #696 added the read-only registry JSON report path.'
-- 'PR #697 surfaced registry summary data in docs-audit.'
-- 'PR #698 surfaced registry summary data in doc-mesh-audit.'
-- 'PR #699 surfaced registry summary data in doc-lifecycle-audit.'
-- 'PR #700 surfaced registry summary data in handoff check/show.'
-- 'PR #701 surfaced registry summary data in release-check and post-release-check.'
-- 'PR #702 refreshed status, handoff state, current handoff, successor prompt, and evidence after PR701.'
-- 'PR #706 added the warning-based successor handoff prompt freshness guard.'
-- 'PR #707 recorded the post-guard successor handoff prompt and closeout evidence.'
-- 'PR #708 refreshed handoff state after PR707.'
-- 'PR #709 exposed the machine-readable communication artifact policy through docs-registry and its JSON report without changing cleanup behavior.'
-- 'PR #710 refreshed handoff state after PR709.'
-- 'PR #712 hardened remote access, governance YAML mutation, and protected control-file preservation.'
+- PR #692 introduced the documentation registry baseline.
+- PR #701 surfaced registry data in release gates.
+- PR #709 exposed communication artifact policy through the registry summary.
+- PR #712 hardened remote access, YAML mutation, and control-file preservation.
+- PR #714 added workflow guard diagnostics and removed hard word limits from protected control files.
 current_capabilities:
-  ns_actions:
-  - agent-next
-  - agent-run
-  - command-inbox-check
-  - state-freshness-check
-  - terminal-remote-preflight
-  - terminal-finalize
-  - handoff-show
-  - handoff-check
-  - governance-check
-  - dev
+  ns_actions: [agent-next, agent-run, command-inbox-check, state-freshness-check, terminal-remote-preflight, terminal-finalize, handoff-show, handoff-check, governance-check, dev]
   artifact_dirs:
     terminal_logs: docs/reports/terminal
     command_runs: docs/reports/command_runs
@@ -90,163 +45,102 @@ current_capabilities:
     cli_summary: agentic-kit docs-registry
     cli_report: agentic-kit docs-registry --report PATH
     artifact_policy_source: .agentic/communication_artifacts.yaml
-    visible_in:
-    - check-docs
-    - docs-audit
-    - doc-mesh-audit
-    - doc-lifecycle-audit
-    - handoff check
-    - handoff show
-    - release-check
-    - post-release-check
-    - docs-registry JSON report
     broad_migration_allowed: false
   workflow_hardening:
-    remote_route_rule: GitHub connector direct-path-first for known repository paths, refs, PRs, and commits.
-    yaml_mutation_rule: Governance YAML mutation must use parse-modify-dump or equivalent structured mutation, then parse again.
+    remote_route_rule: GitHub connector direct-path-first for known paths, refs, PRs, and commits.
+    yaml_mutation_rule: Use structured YAML mutation and parse validation.
     control_file_preservation: .agentic/control_file_preservation.yaml protects active rules from lossy shortening.
   gui_mvp:
     status: closed_out_on_main
-    verified_read_only_actions:
-    - cockpit-readiness
-    - doctor
-    - check-docs
-    disabled_actions:
-    - agent-run
-    - remote_mutation
-    - destructive_actions
-    primary_evidence: docs/reports/terminal/v040-record-check-docs-gui-visual-pass.log
+    verified_read_only_actions: [cockpit-readiness, doctor, check-docs]
+    disabled_actions: [agent-run, remote_mutation, destructive_actions]
 policies:
   no_copy_terminal_policy: .agentic/no_copy_terminal_policy.yaml
   control_file_preservation: .agentic/control_file_preservation.yaml
 rules:
 - id: remote-first-no-guess
   status: active
-  text: Do not guess repository state, command syntax, file locations, release phase, GitHub JSON fields, or available evidence. Inspect the remote repository and authoritative command help or repo files first, then act on the verified result.
-- id: deterministic-quality-before-speed
-  status: active
-  text: Prefer technically robust, testable, repeatable solutions over fast workarounds.
-- id: no-copy-terminal-evidence
-  status: active
-  text: Routine PASS handoffs and normal FAIL handoffs must be backed by repo evidence; use d for log-backed PASS and f for log-backed FAIL. Manual terminal paste is only for hard failure, broken logging, blocked or aborted runs, unavailable pushed evidence, or explicit user request.
-- id: planning-state-freshness
-  status: active
-  text: Current planning files must be curated and mutually consistent; stale released-version claims or obsolete next-step fragments are guard failures.
-- id: shell-to-python-portability
-  status: active
-  text: Prefer portable Python-backed helpers and argument-vector execution over fragile shell quoting, heredocs, multiline python -c snippets, or nested quote-based code generation.
-- id: rules-must-be-test-backed
-  status: active
-  text: Workflow rules are not complete when they only exist in chat, prose, or handoff memory. Every durable rule must have a stable repository home, a rule id, documentation, and at least one deterministic test that fails when the rule disappears or is weakened.
-- id: no-unconditional-pass
-  status: active
-  text: Do not print PASS after a failed required command.
-- id: curate-chat-end-lessons
-  status: active
-  text: Chat-end lessons must be curated into YAML and generated prompts without redundant, contradictory, or obsolete rules.
-- id: last-substantive-safe-state
-  status: active
-  text: safe_state records the last substantive work state; administrative handoff refresh PRs are tracked separately to avoid refresh loops.
+  text: Do not guess repository state, command syntax, file locations, release phase, GitHub JSON fields, or available evidence. Inspect the remote repository, command help, known paths, PRs, commits, logs, and authoritative repo files before acting.
 - id: quality-first-no-shortcuts
   status: active
-  text: Always choose the technically best deterministic solution for recurring workflow problems; do not use shortcut patches that merely get the current block past the gate.
+  text: Prefer deterministic, test-backed, maintainable fixes over quick patches. No shortcuts, workaround-only fixes, or chat-only promises for recurring workflow defects.
 - id: patch-artifact-preflight-before-application
   status: active
-  text: 'Complex patches must be treated as patch artifacts and checked before application: syntax, YAML structure, generated Python compileability, documentation coverage terms, and final-summary validity.'
+  text: Before applying generated patch artifacts, run patch-artifact preflight diagnostics and fail on unsafe quoting, ambiguous YAML terms, or control-file weakening.
 - id: generated-code-syntax-first
   status: active
-  text: Generated or newly added Python files must pass py_compile before full gates or commit attempts; nested string-generation mistakes are product defects, not acceptable manual errors.
+  text: Generated shell and Python artifacts must be syntax-checked before execution or commit; generated code cannot be trusted because it looks plausible.
 - id: coverage-yaml-terms-must-be-strings
   status: active
-  text: Documentation coverage terms must be strings; terms containing colons must be quoted so YAML cannot reinterpret them as mappings.
+  text: Coverage YAML required terms must stay strings; colon-containing terms must be quoted or written through structured YAML writers.
 - id: final-summary-self-validation
   status: active
-  text: Terminal workflows must validate their mandatory final SUMMARY block before asking the user to reply p.
+  text: Final summaries must be self-validated against preceding output before treating a block as successful.
+- id: no-copy-terminal-evidence
+  status: active
+  text: Routine PASS and normal FAIL handoffs must be backed by repo evidence; use d for log-backed PASS and f for log-backed FAIL. Manual terminal paste is only for hard failure, broken logging, unavailable evidence, unusable evidence, or explicit user request.
+- id: rules-must-be-test-backed
+  status: active
+  text: Durable workflow rules need a stable repository home, documentation, and deterministic tests or guards that fail when the rule disappears or is weakened.
 - id: yaml-structured-mutation-only
   status: active
-  text: YAML governance files must be changed through parse-modify-dump or an equivalent structured mutation path, then parsed again before gates. Text injection into YAML is forbidden for complex values.
-- id: quote-guard-no-nested-generation
-  status: active
-  text: Avoid nested quote-based code generation and nested shell/Python quote layers; use line-list generation, existing patch tools, file-based patch helpers, or simple printf line generation.
-- id: canonical-handoff-prompt-command
-  status: active
-  text: Use agentic-kit handoff prompt or python -m agentic_project_kit.cli handoff prompt as the canonical generator. Do not use ./ns handoff prompt unless ./ns explicitly routes that command correctly.
-- id: handoff-state-must-not-stale
-  status: active
-  text: A chat switch handoff prompt is invalid if .agentic/handoff_state.yaml points to an obsolete version, commit, or next task. Refresh handoff_state first, then regenerate the prompt.
-- id: status-boundary-changelog-history
-  status: active
-  text: docs/STATUS.md is the compact live dashboard; CHANGELOG.md is the long-term project history. Do not solve status-headroom failures by turning STATUS.md back into a historical log.
-- id: administrative-evidence-state-boundary
-  status: active
-  text: Separate substantive safe_state from administrative_evidence_state. Pure log, summary, handoff, or evidence commits after safe_state do not invalidate the successor-chat handoff; substantive code, doc, or product changes after safe_state do.
-- id: successor-handoff-freshness-guard
-  status: active
-  text: Before a successor handoff prompt is treated as authoritative, check docs/STATUS.md, .agentic/handoff_state.yaml, docs/handoff/CURRENT_HANDOFF.md, and the latest successor prompt against current main; stale prompts must warn or trigger closeout refresh.
-- id: administrative-refresh-loop-guard
-  status: active
-  text: A pure administrative handoff refresh merge must not create an endless successor-prompt refresh loop; the freshness guard may accept an administrative refresh commit when the prompt names the last substantive safe/admin state.
+  text: YAML governance files must be changed through parse-modify-dump or equivalent structured mutation, then parsed again before gates.
 - id: github-connector-direct-path-first
   status: active
-  text: For remote GitHub work with a known repository, ref, path, PR, or commit, use the GitHub connector direct fetch/update/PR APIs first instead of exploratory search or guessed URL variants.
+  text: For remote GitHub work with known paths, refs, or commits, use direct fetch, update, and PR APIs before search.
 - id: control-file-preservation
   status: active
-  text: Protected control files must preserve active rules and required anchors. Information preservation outranks compactness; hard length-limit trimming is forbidden. Split, reference, or generate large protected files instead of deleting active rules.
+  text: Protected control files must preserve active rules and required anchors. Information preservation outranks compactness; hard length-limit trimming is forbidden.
+- id: structured-summary-must-be-enforced
+  status: active
+  text: Relevant local or remote work blocks must end with the canonical structured SUMMARY from FINAL_SUMMARY_CONTRACT.md. Missing, malformed, contradictory, or legacy summaries are workflow drift.
 recent_failure_patterns:
 - id: guessing-before-inspection
   prevention: Before choosing commands, paths, JSON fields, release checks, or DOI sources, inspect the remote repository and command help. Treat memory and chat summaries as hypotheses until verified.
-- id: stale-planning-documents
-  prevention: State freshness checks must compare STATUS, CURRENT_HANDOFF, handoff_state.yaml, release metadata, and strategy baselines before GUI or release-automation work starts.
-- id: standard-error-guards
-  prevention: Recurring workflow failures must become guards, tests, and documented contracts.
 - id: interpreter-discovery-before-python
-  prevention: Terminal/workflow blocks must discover a usable interpreter before set -e-sensitive work and prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python. Do not combine naked python with set -e.
+  prevention: Discover the active interpreter and project environment before invoking python, python3, pytest, ruff, or agentic-kit; prefer .venv/bin/python when the project venv exists; avoid naked python; when wrapping shell commands, avoid assuming set -e behavior unless explicitly set and logged.
 - id: global-cli-or-venv-assumption
-  prevention: Verify .venv, python3, ruff, pytest, and agentic-kit before using command names; missing global tooling is environment state, not product failure.
-- id: interactive-terminal-exit
-  prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace the shell with exec; report markers and return to the prompt.
+  prevention: Do not assume global CLIs or an existing venv; use project-local discovery and documented bootstrap paths.
 - id: nested-triple-quote-code-generator
-  prevention: Do not generate source files through nested shell/Python quote layers or nested triple-quoted string literals inside another generated Python script.
+  prevention: Avoid nested quote-based code generation, nested shell/Python quote layers, nested triple-quoted string literals, and nested triple quotes in generated patch scripts; prefer line-list generation, existing helper scripts, simple file writes, or structured update APIs.
 - id: yaml-colon-term-reinterpreted-as-mapping
-  prevention: Quote colon-containing YAML values and keep coverage-term string guards active so YAML cannot reinterpret prose as mappings.
-- id: nested-quote-based-code-generation
-  prevention: Use file-based patch helpers or simple printf line generation; avoid nested quote-based code generation.
-- id: repeated-yaml-governance-file-corruption
-  prevention: Patch scripts must parse YAML before and after mutation, use safe_dump or an equivalent structured writer, and run a YAML integrity test before handoff, governance, or dev gates.
+  prevention: Quote colon-containing YAML terms or use structured YAML writers so plain scalars are not reinterpreted as mappings.
+- id: standard-error-guards
+  prevention: Recurring workflow errors must become deterministic guards, tests, or documented failure patterns.
+- id: interactive-terminal-exit
+  prevention: Chat-pasted terminal blocks must not end by closing the user terminal; avoid top-level exit and exec unless explicitly requested.
 - id: stale-successor-handoff-prompt-after-main-merge
-  prevention: Run the successor handoff freshness guard and refresh STATUS, handoff_state, CURRENT_HANDOFF, and the successor prompt before treating handoff prose as authoritative.
-- id: handoff-moving-head-loop
-  prevention: Do not chase every final log commit with a new safe_state commit. Store administrative evidence commits separately and allow pure administrative refresh commits to point at the last substantive prompt marker.
+  prevention: Refresh STATUS, handoff_state, CURRENT_HANDOFF, and successor prompt before treating handoff prose as authoritative.
+- id: repeated-yaml-governance-file-corruption
+  prevention: Parse YAML before and after mutation and use a structured writer.
 - id: final-pass-after-inner-fail
-  prevention: Final summaries must distinguish work result from evidence result. A later successful evidence push must not relabel failed work as PASS.
-- id: github-remote-route-guessing
-  prevention: Use GitHub connector direct-path-first calls for known repo paths, refs, PRs, and commits to avoid search-route drift and token waste.
+  prevention: Final summaries must distinguish work result from evidence result; evidence upload must not relabel failed work as PASS.
 - id: lossy-control-file-shortening
-  prevention: Protected control files must not be shortened by deleting active rules. Use explicit successor migrations, generated projections, or split/reference patterns.
+  prevention: Do not shorten protected control files by deleting active rules; use successors, generated projections, or split/reference patterns.
+- id: structured-summary-drift
+  prevention: Verify canonical SUMMARY fields and consistency across WORK, EVIDENCE, OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and RESULT marker.
 next_allowed_tasks:
-- id: verify-pr712-state-refresh
-  title: Verify the post-PR712 handoff freshness guard is quiet.
+- id: enforce-structured-final-summaries
+  title: Harden and test canonical structured SUMMARY enforcement before resuming documentation-management work.
   priority: 1
 - id: continue-documentation-registry-rebuild
-  title: Add the next small documentation-registry slice, preferably toward machine-readable source/projection planning.
+  title: After summary enforcement only, continue the documentation-management rebuild with one small additive registry or projection slice.
   priority: 2
 blocked_until_closeout:
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
-first_instruction: Verify the post-PR712 successor handoff prompt and freshness guard, then continue the documentation-management rebuild with one small additive registry slice. Do not start a broad migration, release, tag, or destructive GUI action.
+- Broad documentation migration
+- Release, tag, or DOI mutation
+first_instruction: Verify PR715, merge it only if CI and mergeability are green, then harden structured SUMMARY enforcement before resuming documentation-management work. Do not start broad migration, release, tag, DOI mutation, or destructive GUI action.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr712.md
-current_notes:
-- 'Current main after PR #712 includes remote-route, governance-YAML, and control-file preservation hardening.'
-- 'The documentation-management rebuild is roughly 40-43 percent complete.'
-- 'The workflow should now be more stable and faster because repeated route/YAML/control-file drift paths are guarded.'
+  latest_successor_prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr714.md
 administrative_evidence_state:
-  current_head: ce665c3
-  current_head_subject: Harden remote route and YAML mutation workflow (#712)
+  current_head: 3f2e29d
+  current_head_subject: Restore final handoff state CI anchors
   allowed_after_safe_state: true
-  reason: post-PR712 state refresh target; future pure administrative refresh merge may point at this prompt without creating a loop
+  reason: post-PR714 administrative closeout and drift-guard repair after substantive safe_state 7d092cb

@@ -1,0 +1,9 @@
+# Post-PR714 closeout evidence
+
+Branch: post714-state-refresh
+
+HEAD before final commit: 0968018 Refresh handoff state after PR714
+
+Repair: structured-summary-must-be-enforced now has required text; structured-summary-drift now has required prevention.
+
+Generated successor handoff prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr714.md
