@@ -8,6 +8,10 @@ import yaml
 
 INVENTORY_PATH = Path(".agentic/rule_mechanism_inventory.yaml")
 MIGRATIONS_PATH = Path(".agentic/rule_migrations.yaml")
+VALID_MECHANISM_CATEGORIES = {"communication", "execution", "governance", "workflow", "preflight"}
+VALID_ENFORCEMENT_PHASES = {"runtime", "guard", "preflight"}
+MIN_PRIORITY = 1
+MAX_PRIORITY = 5
 
 @dataclass(frozen=True)
 class RuleRegistryFinding:
@@ -21,6 +25,34 @@ def _load_yaml(path: Path) -> Any:
 
 def _as_list(value: Any) -> list[Any]:
     return value if isinstance(value, list) else []
+
+def _validate_mechanism_metadata(
+    mechanism: dict[str, Any], mechanism_id: str, findings: list[RuleRegistryFinding]
+) -> None:
+    category = mechanism.get("category")
+    if category not in VALID_MECHANISM_CATEGORIES:
+        findings.append(
+            RuleRegistryFinding(
+                str(INVENTORY_PATH),
+                f"{mechanism_id}: category must be one of: {', '.join(sorted(VALID_MECHANISM_CATEGORIES))}",
+            )
+        )
+    priority = mechanism.get("priority")
+    if not isinstance(priority, int) or not MIN_PRIORITY <= priority <= MAX_PRIORITY:
+        findings.append(
+            RuleRegistryFinding(
+                str(INVENTORY_PATH),
+                f"{mechanism_id}: priority must be an integer from {MIN_PRIORITY} to {MAX_PRIORITY}",
+            )
+        )
+    enforcement_phase = mechanism.get("enforcement_phase")
+    if enforcement_phase not in VALID_ENFORCEMENT_PHASES:
+        findings.append(
+            RuleRegistryFinding(
+                str(INVENTORY_PATH),
+                f"{mechanism_id}: enforcement_phase must be one of: {', '.join(sorted(VALID_ENFORCEMENT_PHASES))}",
+            )
+        )
 
 def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
     base = Path(root)
@@ -51,6 +83,7 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
         mechanism_ids.add(mid)
         if mechanism.get("status") != "active":
             findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: status must be active"))
+        _validate_mechanism_metadata(mechanism, mid, findings)
         if not str(mechanism.get("protected_rule_intent", "")).strip():
             findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: missing protected_rule_intent"))
         for source in _as_list(mechanism.get("sources")):
