@@ -69,6 +69,7 @@ def _validate_assertions(
     *,
     value: Any,
     mechanism_id: str,
+    surfaces: set[str],
     global_assertion_ids: dict[str, str],
     findings: list[RuleRegistryFinding],
 ) -> None:
@@ -119,6 +120,24 @@ def _validate_assertions(
         statement = str(assertion.get("statement", "")).strip()
         if not statement:
             findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertion missing statement"))
+        covered_surfaces = assertion.get("covered_surfaces")
+        if not isinstance(covered_surfaces, list):
+            findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertion missing covered_surfaces list"))
+            continue
+        if not covered_surfaces:
+            findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertion covered_surfaces must list at least one entry"))
+            continue
+        for surface in covered_surfaces:
+            surface_text = str(surface).strip()
+            if not surface_text:
+                findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertion covered_surfaces entries must be non-empty strings"))
+            elif surface_text not in surfaces:
+                findings.append(
+                    RuleRegistryFinding(
+                        str(COVERAGE_PATH),
+                        f"{mechanism_id}: assertion references unknown covered_surface: {surface_text}",
+                    )
+                )
 
 
 def _validate_mechanism_metadata(
@@ -201,6 +220,7 @@ def _validate_test_coverage(
     mechanism: dict[str, Any],
     mechanism_id: str,
     tests: list[str],
+    surfaces: set[str],
     global_assertion_ids: dict[str, str],
     findings: list[RuleRegistryFinding],
 ) -> None:
@@ -216,6 +236,7 @@ def _validate_test_coverage(
     _validate_assertions(
         value=mechanism.get("assertions"),
         mechanism_id=mechanism_id,
+        surfaces=surfaces,
         global_assertion_ids=global_assertion_ids,
         findings=findings,
     )
@@ -346,7 +367,7 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
             required_non_empty=True,
             findings=findings,
         )
-        _validate_string_list(
+        surfaces = _validate_string_list(
             value=mechanism.get("surfaces"),
             label="surfaces",
             mechanism_id=mid,
@@ -371,7 +392,7 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
         if coverage_metadata_present and mid not in coverage_by_mechanism and "test_coverage" not in mechanism:
             pass
         elif coverage_metadata_present or "test_coverage" in mechanism:
-            _validate_test_coverage(coverage_view, mid, tests, global_assertion_ids, findings)
+            _validate_test_coverage(coverage_view, mid, tests, set(surfaces), global_assertion_ids, findings)
         for test_path in tests:
             if not (base / test_path).exists():
                 findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: missing test path: {test_path}"))

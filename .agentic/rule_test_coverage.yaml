@@ -6,9 +6,14 @@ coverage:
   assertions:
   - assertion_id: summary-renderer-canonical-output
     kind: behavior
+    covered_surfaces:
+    - summary-renderer
+    - summary-tests
     statement: canonical structured summary rendering is validated
   - assertion_id: summary-renderer-legacy-rejection
     kind: negative-case
+    covered_surfaces:
+    - summary-tests
     statement: legacy handwritten summary fallback is rejected
 - mechanism_id: execution-mode-switch
   test_coverage: documented
@@ -16,36 +21,58 @@ coverage:
   assertions:
   - assertion_id: execution-mode-switch-source-anchors
     kind: anchor
+    covered_surfaces:
+    - execution-mode-state
     statement: execution mode source anchors are preserved
   - assertion_id: execution-mode-switch-cli-visible
     kind: workflow
+    covered_surfaces:
+    - ns-cli
+    - state-cli
     statement: local versus remote mode switching remains visible in CLI surfaces
 - mechanism_id: rule-preservation-guard
   test_coverage: direct
   assertions:
   - assertion_id: rule-preservation-guard-anchor-coverage
     kind: guard
+    covered_surfaces:
+    - rule-preservation-yaml
+    - rule-preservation-validator
+    - rule-preservation-tests
     statement: required rule anchors are preserved across governance surfaces
   - assertion_id: rule-preservation-guard-missing-term
     kind: negative-case
+    covered_surfaces:
+    - rule-preservation-tests
     statement: missing required terms produce rule-preservation findings
 - mechanism_id: workflow-guard
   test_coverage: direct
   assertions:
   - assertion_id: workflow-guard-current-state
     kind: guard
+    covered_surfaces:
+    - workflow-guard-cli
+    - workflow-guard-tests
     statement: workflow guard passes current repository state
   - assertion_id: workflow-guard-registry-loss
     kind: negative-case
+    covered_surfaces:
+    - workflow-guard-tests
     statement: registry drift and required registry file loss are hard findings
 - mechanism_id: patch-preflight
   test_coverage: direct
   assertions:
   - assertion_id: patch-preflight-governance-yaml
     kind: guard
+    covered_surfaces:
+    - patch-preflight-validator
+    - patch-preflight-tests
     statement: preflight validates governance YAML files
   - assertion_id: patch-preflight-registry-files
     kind: guard
+    covered_surfaces:
+    - patch-preflight-validator
+    - patch-preflight-tests
     statement: preflight includes rule registry files before patch application
 - mechanism_id: chat-communication-rules
   test_coverage: documented
@@ -53,9 +80,15 @@ coverage:
   assertions:
   - assertion_id: chat-communication-rules-ack-semantics
     kind: anchor
+    covered_surfaces:
+    - chat-communication-contract
+    - compiled-agent-context
     statement: d f w paste-output semantics remain documented
   - assertion_id: chat-communication-rules-remote-log-first
     kind: evidence
+    covered_surfaces:
+    - final-summary-contract
+    - compiled-agent-context
     statement: remote-log-first evidence handling remains anchored
 - mechanism_id: chat-bootstrap-drift-rules
   test_coverage: documented
@@ -63,9 +96,15 @@ coverage:
   assertions:
   - assertion_id: chat-bootstrap-drift-rules-mandatory-sources
     kind: anchor
+    covered_surfaces:
+    - chat-bootstrap-contract
+    - compiled-agent-context
     statement: mandatory successor-chat bootstrap remains documented
   - assertion_id: chat-bootstrap-drift-rules-drift-response
     kind: workflow
+    covered_surfaces:
+    - chat-bootstrap-contract
+    - compiled-agent-context
     statement: drift response and remote connector rules remain anchored
 - mechanism_id: portable-execution-rules
   test_coverage: documented
@@ -73,43 +112,77 @@ coverage:
   assertions:
   - assertion_id: portable-execution-rules-python-core
     kind: workflow
+    covered_surfaces:
+    - portable-execution-contract
+    - compiled-agent-context
     statement: Python core remains canonical over shell adapters
   - assertion_id: portable-execution-rules-yaml-mutation
     kind: anchor
+    covered_surfaces:
+    - portable-execution-contract
+    - compiled-agent-context
     statement: governance YAML mutation rules remain anchored
 - mechanism_id: evidence-guard
   test_coverage: direct
   assertions:
   - assertion_id: evidence-guard-contradictory-pass
     kind: negative-case
+    covered_surfaces:
+    - evidence-guard-core
+    - evidence-guard-tests
     statement: contradictory PASS evidence with failed gate markers is rejected
   - assertion_id: evidence-guard-negative-smoke
     kind: evidence
+    covered_surfaces:
+    - evidence-guard-core
+    - evidence-guard-tests
     statement: expected negative smoke markers are accepted only when classified
 - mechanism_id: typed-work-order-runner
   test_coverage: direct
   assertions:
   - assertion_id: typed-work-order-runner-machine-log
     kind: artifact
+    covered_surfaces:
+    - typed-work-order-runner
+    - typed-work-order-tests
     statement: typed work orders write machine-readable logs
   - assertion_id: typed-work-order-runner-unsupported-step
     kind: negative-case
+    covered_surfaces:
+    - typed-work-order-runner
+    - typed-work-order-tests
     statement: unsupported step kinds hard-fail deterministically
 - mechanism_id: release-state-validation
   test_coverage: direct
   assertions:
   - assertion_id: release-state-validation-unused-version
     kind: release
+    covered_surfaces:
+    - release-check-cli
+    - release-state-core
+    - release-tests
     statement: unused release versions pass release-state checks
   - assertion_id: release-state-validation-existing-remote
     kind: negative-case
+    covered_surfaces:
+    - release-check-cli
+    - release-state-core
+    - release-tests
     statement: existing remote tags and releases fail before mutation
 - mechanism_id: post-release-archive-check
   test_coverage: direct
   assertions:
   - assertion_id: post-release-archive-check-verification
     kind: release
+    covered_surfaces:
+    - post-release-check-cli
+    - post-release-core
+    - post-release-tests
     statement: GitHub release and Zenodo records are verified after release
   - assertion_id: post-release-archive-check-zenodo-waiting
     kind: workflow
+    covered_surfaces:
+    - post-release-check-cli
+    - post-release-core
+    - post-release-tests
     statement: waiting Zenodo records are non-failing until available
