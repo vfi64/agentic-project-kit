@@ -1,0 +1,25 @@
+PR722 ADD RULE REGISTRY VALIDATOR -- NO CLI NO GUARD NO RELEASE
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+HEAD is now at 7d254ba Add rule migration entries (#721)
+
+### CREATE BRANCH ###
+Switched to a new branch 'feature/rule-registry-validator-722'
+
+### WRITE VALIDATOR MODULE ###
+
+### WRITE VALIDATOR TESTS ###
+
+### RUN TARGETED TESTS ###
+......                                                                   [100%]
+6 passed in 0.05s
+
+### RUN RUFF TARGET ###
+All checks passed!
+
+### CHECK DOCS ###
+Agentic project check passed
