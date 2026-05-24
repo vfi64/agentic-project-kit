@@ -15,6 +15,28 @@ def _assertion(statement: str = "source anchors are preserved") -> dict[str, obj
     }
 
 
+def _write_direct_test_plan(agentic: Path) -> None:
+    (agentic / "rule_direct_test_plan.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": 1,
+                "direct_test_followups": [
+                    {
+                        "mechanism_id": "mechanism-under-test",
+                        "status": "planned",
+                        "priority_order": 1,
+                        "target_test_path": "tests/test_mechanism_under_test.py",
+                        "target_surface": "test-surface",
+                        "rationale": "fixture keeps documented coverage explicit until a direct test exists",
+                        "exit_criteria": ["add a direct regression test for mechanism-under-test"],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
 def _write_registry(root: Path, coverage: list[dict[str, object]]) -> None:
     (root / "source.txt").write_text("present", encoding="utf-8")
     (root / "evidence.txt").write_text("evidence", encoding="utf-8")
@@ -65,6 +87,7 @@ def _write_registry(root: Path, coverage: list[dict[str, object]]) -> None:
         yaml.safe_dump({"schema_version": 1, "coverage": coverage}),
         encoding="utf-8",
     )
+    _write_direct_test_plan(agentic)
 
 
 def test_validator_accepts_documented_coverage_with_rationale(tmp_path: Path) -> None:

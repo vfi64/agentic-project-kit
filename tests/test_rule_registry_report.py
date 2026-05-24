@@ -118,6 +118,25 @@ def _write_registry(root: Path) -> None:
         ),
         encoding="utf-8",
     )
+    (agentic / "rule_direct_test_plan.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": 1,
+                "direct_test_followups": [
+                    {
+                        "mechanism_id": "documented-mechanism",
+                        "status": "planned",
+                        "priority_order": 1,
+                        "target_test_path": "tests/test_documented_mechanism.py",
+                        "target_surface": "documented-surface",
+                        "rationale": "fixture keeps documented coverage explicit until a direct test exists",
+                        "exit_criteria": ["add a direct regression test for documented-mechanism"],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
 
 
 def test_build_rule_registry_report_summarizes_coverage(tmp_path: Path) -> None:

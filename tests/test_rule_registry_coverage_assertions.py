@@ -15,6 +15,30 @@ def _assertion(assertion_id: str = "mechanism-under-test-source-anchor") -> dict
     }
 
 
+def _plan_entry(mechanism_id: str, surface: str = "test-surface") -> dict[str, object]:
+    return {
+        "mechanism_id": mechanism_id,
+        "status": "planned",
+        "priority_order": 1,
+        "target_test_path": f"tests/test_{mechanism_id.replace('-', '_')}.py",
+        "target_surface": surface,
+        "rationale": "fixture keeps documented coverage explicit until a direct test exists",
+        "exit_criteria": [f"add a direct regression test for {mechanism_id}"],
+    }
+
+
+def _write_direct_test_plan(agentic: Path, mechanism_ids: list[str]) -> None:
+    (agentic / "rule_direct_test_plan.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": 1,
+                "direct_test_followups": [_plan_entry(mechanism_id) for mechanism_id in mechanism_ids],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
 def _write_registry(root: Path, coverage_entry: dict[str, object]) -> None:
     (root / "source.txt").write_text("present", encoding="utf-8")
     (root / "evidence.txt").write_text("evidence", encoding="utf-8")
@@ -66,6 +90,7 @@ def _write_registry(root: Path, coverage_entry: dict[str, object]) -> None:
         yaml.safe_dump({"schema_version": 1, "coverage": [entry]}),
         encoding="utf-8",
     )
+    _write_direct_test_plan(agentic, ["mechanism-under-test"])
 
 
 def _write_two_mechanism_registry(root: Path, coverage: list[dict[str, object]]) -> None:
@@ -117,6 +142,7 @@ def _write_two_mechanism_registry(root: Path, coverage: list[dict[str, object]])
         yaml.safe_dump({"schema_version": 1, "coverage": coverage}),
         encoding="utf-8",
     )
+    _write_direct_test_plan(agentic, ["mechanism-under-test", "second-mechanism"])
 
 
 def test_validator_accepts_coverage_assertions(tmp_path: Path) -> None:

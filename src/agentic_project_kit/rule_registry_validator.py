@@ -9,6 +9,7 @@ import yaml
 INVENTORY_PATH = Path(".agentic/rule_mechanism_inventory.yaml")
 MIGRATIONS_PATH = Path(".agentic/rule_migrations.yaml")
 COVERAGE_PATH = Path(".agentic/rule_test_coverage.yaml")
+DIRECT_TEST_PLAN_PATH = Path(".agentic/rule_direct_test_plan.yaml")
 VALID_MECHANISM_CATEGORIES = {"communication", "execution", "governance", "workflow", "preflight"}
 VALID_ENFORCEMENT_PHASES = {"runtime", "guard", "preflight"}
 VALID_CATEGORY_PHASES = {
@@ -22,6 +23,7 @@ VALID_MIGRATION_STATUSES = {"migrated", "archived", "rejected"}
 VALID_TEST_COVERAGE = {"direct", "indirect", "documented"}
 VALID_ASSERTION_KINDS = {"anchor", "artifact", "behavior", "evidence", "guard", "negative-case", "release", "workflow"}
 VALID_EVIDENCE_REF_KINDS = {"source", "test"}
+VALID_DIRECT_TEST_PLAN_STATUSES = {"planned", "in-progress", "deferred"}
 TERMINAL_MIGRATION_STATUSES = {"archived", "rejected"}
 MIN_PRIORITY = 1
 MAX_PRIORITY = 5
@@ -323,6 +325,139 @@ def _validate_test_coverage(
         )
 
 
+def _mechanism_requires_direct_test_plan(
+    mechanism: dict[str, Any], coverage_by_mechanism: dict[str, dict[str, Any]]
+) -> bool:
+    tests = [str(item).strip() for item in _as_list(mechanism.get("tests")) if str(item).strip()]
+    if tests:
+        return False
+    mechanism_id = str(mechanism.get("id", "")).strip()
+    coverage_entry = coverage_by_mechanism.get(mechanism_id, {})
+    coverage = mechanism.get("test_coverage", coverage_entry.get("test_coverage"))
+    return coverage != "direct"
+
+
+def _validate_direct_test_plan_entry(
+    *,
+    entry: dict[str, Any],
+    active_mechanisms: dict[str, dict[str, Any]],
+    findings: list[RuleRegistryFinding],
+) -> str | None:
+    mechanism_id = str(entry.get("mechanism_id", "")).strip()
+    if not mechanism_id:
+        findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), "direct test followup entry missing mechanism_id"))
+        return None
+    mechanism = active_mechanisms.get(mechanism_id)
+    if mechanism is None:
+        findings.append(
+            RuleRegistryFinding(
+                str(DIRECT_TEST_PLAN_PATH),
+                f"direct test followup references unknown active mechanism: {mechanism_id}",
+            )
+        )
+    status = entry.get("status")
+    if status not in VALID_DIRECT_TEST_PLAN_STATUSES:
+        findings.append(
+            RuleRegistryFinding(
+                str(DIRECT_TEST_PLAN_PATH),
+                f"{mechanism_id}: direct test followup status must be one of: {', '.join(sorted(VALID_DIRECT_TEST_PLAN_STATUSES))}",
+            )
+        )
+    priority_order = entry.get("priority_order")
+    if not isinstance(priority_order, int) or priority_order < 1:
+        findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), f"{mechanism_id}: priority_order must be a positive integer"))
+    target_test_path = str(entry.get("target_test_path", "")).strip()
+    if not target_test_path:
+        findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), f"{mechanism_id}: target_test_path is required"))
+    target_surface = str(entry.get("target_surface", "")).strip()
+    if not target_surface:
+        findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), f"{mechanism_id}: target_surface is required"))
+    elif mechanism is not None:
+        surfaces = {str(surface).strip() for surface in _as_list(mechanism.get("surfaces"))}
+        if target_surface not in surfaces:
+            findings.append(
+                RuleRegistryFinding(
+                    str(DIRECT_TEST_PLAN_PATH),
+                    f"{mechanism_id}: target_surface must reference a registered mechanism surface: {target_surface}",
+                )
+            )
+    rationale = str(entry.get("rationale", "")).strip()
+    if not rationale:
+        findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), f"{mechanism_id}: rationale is required"))
+    exit_criteria = entry.get("exit_criteria")
+    if not isinstance(exit_criteria, list) or not exit_criteria:
+        findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), f"{mechanism_id}: exit_criteria must list at least one item"))
+    elif not all(str(item).strip() for item in exit_criteria):
+        findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), f"{mechanism_id}: exit_criteria entries must be non-empty strings"))
+    return mechanism_id
+
+
+def _validate_direct_test_followup_plan(
+    *,
+    base: Path,
+    mechanisms: list[Any],
+    coverage_by_mechanism: dict[str, dict[str, Any]],
+    coverage_metadata_present: bool,
+    findings: list[RuleRegistryFinding],
+) -> None:
+    if not coverage_metadata_present:
+        return
+    active_mechanisms = {
+        str(mechanism.get("id", "")).strip(): mechanism
+        for mechanism in mechanisms
+        if isinstance(mechanism, dict) and mechanism.get("status") == "active" and str(mechanism.get("id", "")).strip()
+    }
+    required_ids = {
+        mechanism_id
+        for mechanism_id, mechanism in active_mechanisms.items()
+        if _mechanism_requires_direct_test_plan(mechanism, coverage_by_mechanism)
+    }
+    plan_path = base / DIRECT_TEST_PLAN_PATH
+    if not required_ids and not plan_path.exists():
+        return
+    if required_ids and not plan_path.exists():
+        findings.append(
+            RuleRegistryFinding(
+                str(DIRECT_TEST_PLAN_PATH),
+                "missing direct test followup plan for mechanisms without direct tests",
+            )
+        )
+        return
+    try:
+        data = _load_yaml(plan_path)
+    except Exception as exc:
+        findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), f"cannot load direct test followup plan: {exc}"))
+        return
+    if not isinstance(data, dict):
+        findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), "direct test followup plan must be a mapping"))
+        return
+    if data.get("schema_version") != 1:
+        findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), "schema_version must be 1"))
+    entries = data.get("direct_test_followups")
+    if not isinstance(entries, list):
+        findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), "direct_test_followups must be a list"))
+        return
+    planned_ids: set[str] = set()
+    for entry in entries:
+        if not isinstance(entry, dict):
+            findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), "direct test followup entries must be mappings"))
+            continue
+        mechanism_id = _validate_direct_test_plan_entry(
+            entry=entry,
+            active_mechanisms=active_mechanisms,
+            findings=findings,
+        )
+        if mechanism_id is None:
+            continue
+        if mechanism_id in planned_ids:
+            findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), f"duplicate direct test followup plan entry: {mechanism_id}"))
+        planned_ids.add(mechanism_id)
+    for missing_id in sorted(required_ids - planned_ids):
+        findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), f"missing direct test followup plan entry: {missing_id}"))
+    for stale_id in sorted(planned_ids - required_ids):
+        findings.append(RuleRegistryFinding(str(DIRECT_TEST_PLAN_PATH), f"stale direct test followup plan entry: {stale_id}"))
+
+
 def _validate_mechanism_conflicts(mechanisms: list[Any], findings: list[RuleRegistryFinding]) -> None:
     seen: dict[tuple[str, int, str], str] = {}
     for mechanism in mechanisms:
@@ -511,6 +646,13 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
                     f"coverage entry references unknown mechanism: {coverage_id}",
                 )
             )
+    _validate_direct_test_followup_plan(
+        base=base,
+        mechanisms=mechanisms,
+        coverage_by_mechanism=coverage_by_mechanism,
+        coverage_metadata_present=coverage_metadata_present,
+        findings=findings,
+    )
     legacy_ids: set[str] = set()
     for migration in _as_list(migrations.get("migrations")):
         legacy_id = str(migration.get("legacy_id", ""))
