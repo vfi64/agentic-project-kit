@@ -1,0 +1,26 @@
+PR756 RULE REGISTRY COVERAGE REPORT -- REMOTE CONNECTOR -- NO RELEASE
+
+START STATE
+- Base branch: main at 2258382d940d8b6cbf7d51350bd7a5d148f5ca25.
+- Work branch: r756.
+- Scope: machine-readable rule registry coverage reporting.
+- No release, no tag, no DOI changes.
+
+REMOTE CHANGES
+- Added src/agentic_project_kit/rule_registry_report.py.
+- Added rule-registry report CLI with human and JSON output.
+- Added tests/test_rule_registry_report.py.
+
+EXPECTED BEHAVIOR
+- build_rule_registry_report() summarizes active mechanisms, coverage categories, direct tests, assertions, evidence refs, and validation findings.
+- agentic-kit rule-registry report emits a human-readable report.
+- agentic-kit rule-registry report --json emits stable JSON for later automation.
+- The report exits non-zero if registry validation findings exist.
+
+REMOTE LIMITATION
+- Local pytest/check-docs were not run in this chat because the user is on iPhone.
+- GitHub Actions CI is the required gate before merge.
+
+RESULT
+- Remote branch prepared for PR.
+- CI/merge verification still required after PR creation.
