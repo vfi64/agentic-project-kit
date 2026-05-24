@@ -59,6 +59,61 @@ def test_handoff_freshness_guard_accepts_current_admin_evidence_state(tmp_path: 
     assert warnings == []
 
 
+def test_handoff_freshness_guard_accepts_administrative_refresh_commit_after_state_refresh(
+    tmp_path: Path,
+) -> None:
+    handoff_path = tmp_path / ".agentic" / "handoff_state.yaml"
+    prompt_path = tmp_path / "docs" / "reports" / "terminal" / "after-pr709.md"
+    _write(tmp_path / "docs" / "STATUS.md", "status for ef43055\n")
+    _write(tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md", "handoff for ef43055\n")
+    _write(handoff_path, "schema_version: 1\n")
+    _write(prompt_path, "successor prompt generated for ef43055\n")
+    data = {
+        "safe_state": {"commit": "ef43055"},
+        "administrative_evidence_state": {"current_head": "ef43055"},
+        "handoff_maintenance": {
+            "latest_successor_prompt": "docs/reports/terminal/after-pr709.md",
+        },
+    }
+
+    warnings = assess_handoff_prompt_freshness(
+        data,
+        handoff_path,
+        current_head="abc7100",
+        current_subject="Refresh handoff state after PR709 (#710)",
+    )
+
+    assert warnings == []
+
+
+def test_handoff_freshness_guard_still_rejects_non_admin_commit_after_state_refresh(
+    tmp_path: Path,
+) -> None:
+    handoff_path = tmp_path / ".agentic" / "handoff_state.yaml"
+    prompt_path = tmp_path / "docs" / "reports" / "terminal" / "after-pr709.md"
+    _write(tmp_path / "docs" / "STATUS.md", "status for ef43055\n")
+    _write(tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md", "handoff for ef43055\n")
+    _write(handoff_path, "schema_version: 1\n")
+    _write(prompt_path, "successor prompt generated for ef43055\n")
+    data = {
+        "safe_state": {"commit": "ef43055"},
+        "administrative_evidence_state": {"current_head": "ef43055"},
+        "handoff_maintenance": {
+            "latest_successor_prompt": "docs/reports/terminal/after-pr709.md",
+        },
+    }
+
+    warnings = assess_handoff_prompt_freshness(
+        data,
+        handoff_path,
+        current_head="abc7110",
+        current_subject="Add another registry consumer (#711)",
+    )
+
+    assert any("not represented by handoff safe/admin state" in warning for warning in warnings)
+    assert any("does not mention current handoff commit marker" in warning for warning in warnings)
+
+
 def test_handoff_freshness_guard_renders_prominent_warning() -> None:
     guard = render_freshness_guard(["current git HEAD def7010 is not represented"])
 
