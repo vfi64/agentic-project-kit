@@ -1,0 +1,27 @@
+PR755 RULE COVERAGE EVIDENCE REFERENCE VALIDATION -- REMOTE CONNECTOR -- NO RELEASE
+
+START STATE
+- Base branch: main at 1dad07de88b060857adc65262f4ed0a10bf3a43c.
+- Work branch: r755.
+- Scope: rule registry coverage metadata and validator only.
+- No release, no tag, no DOI changes.
+
+REMOTE CHANGES
+- Updated .agentic/rule_test_coverage.yaml so every coverage assertion has evidence_refs.
+- Updated src/agentic_project_kit/rule_registry_validator.py to validate evidence_refs.
+- Updated tests/test_rule_registry_coverage_assertions.py with negative cases for missing, empty, and unregistered evidence_refs.
+
+EXPECTED VALIDATION
+- evidence_refs must be a non-empty list.
+- evidence_refs entries must be mappings.
+- kind must be source or test.
+- source evidence_refs must point to a source registered by the same mechanism.
+- test evidence_refs must point to a test registered by the same mechanism.
+
+REMOTE LIMITATION
+- Local pytest/check-docs were not run in this chat because the user is on iPhone.
+- CI must be treated as the required gate for this remote-only slice.
+
+RESULT
+- Remote branch prepared for PR.
+- CI/merge verification still required after PR creation.
