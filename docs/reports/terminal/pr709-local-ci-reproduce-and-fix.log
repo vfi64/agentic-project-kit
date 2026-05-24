@@ -1,0 +1,71 @@
+PR709 LOCAL CI REPRODUCE AND FIX -- LOGGED
+
+
+### SYNC PR BRANCH ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main               -> FETCH_HEAD
+ * [new ref]         refs/pull/709/head -> pr-709
+   21b088b..ef43055  main               -> origin/main
+Switched to branch 'pr-709'
+M	.agentic/handoff_state.yaml
+M	docs/STATUS.md
+M	docs/handoff/CURRENT_HANDOFF.md
+ M .agentic/handoff_state.yaml
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? docs/reports/terminal/v041-state-refresh-after-pr707.md
+?? docs/reports/terminal/v041-successor-chat-handoff-after-pr707.md
+5ae042f Add artifact policy registry consumer tests
+d9886b7 Add artifact policy summary to documentation registry
+5504dec Refresh handoff state after PR707 (#708)
+21b088b Record post-guard closeout evidence (#707)
+8c619e8 Guard successor handoff prompt freshness (#706)
+
+### INSTALL / REFRESH DEV ENV ###
+zsh: no matches found: .[dev]
+
+### RUN FAILING-LIKELY GATES ###
+........................................................................ [  7%]
+........................................................................ [ 15%]
+........................................................................ [ 23%]
+........................................................................ [ 31%]
+........................................................................ [ 39%]
+........................................................................ [ 47%]
+........................................................................ [ 55%]
+........................................................................ [ 62%]
+........................................................................ [ 70%]
+........................................................................ [ 78%]
+........................................................................ [ 86%]
+........................................................................ [ 94%]
+...................................................                      [100%]
+915 passed in 5.93s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.1
+
+Overall: PASS
+
+### GATE STATUS ###
+pytest=0
+ruff=0
+check-docs=0
+doctor=0
+
+### WORKTREE AFTER GATES ###
+ M .agentic/handoff_state.yaml
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+?? docs/reports/terminal/v041-state-refresh-after-pr707.md
+?? docs/reports/terminal/v041-successor-chat-handoff-after-pr707.md
