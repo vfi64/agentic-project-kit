@@ -245,11 +245,14 @@ rules:
     reference, or generate large protected files instead of deleting active rules.
 - id: structured-summary-must-be-enforced
   status: active
-  summary: Every relevant local or remote work block must end with the canonical structured
-    SUMMARY block. Missing, malformed, or legacy summaries are workflow drift and
-    must be repaired before continuing product work.
+  summary: Canonical structured SUMMARY output is mandatory for relevant work blocks
+    and must be validated before continuing product work.
   source: post-PR714 closeout; to be hardened with deterministic tests in the next
     chat
+  text: Every relevant local or remote work block must end with the canonical structured
+    SUMMARY block defined by FINAL_SUMMARY_CONTRACT.md. Missing, malformed, contradictory,
+    or legacy summaries are workflow drift; product or documentation-management work
+    must stop until the summary output is repaired and validated.
 recent_failure_patterns:
 - id: guessing-before-inspection
   prevention: Before choosing commands, paths, JSON fields, release checks, or DOI
@@ -304,7 +307,11 @@ recent_failure_patterns:
 - id: structured-summary-drift
   status: active
   summary: Structured SUMMARY output disappeared during long-chat workflow drift despite
-    prior rules; next slice must enforce summary rendering deterministically.
+    prior rules; enforce the canonical summary before resuming product work.
+  prevention: Before accepting a work block as successful, verify that the final output
+    contains exactly the canonical structured SUMMARY fields and that WORK RESULT,
+    EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report,
+    NEXT_CHAT_REPLY, and RESULT marker are mutually consistent.
 next_allowed_tasks:
 - id: verify-pr712-state-refresh
   title: Verify the post-PR712 handoff freshness guard is quiet.

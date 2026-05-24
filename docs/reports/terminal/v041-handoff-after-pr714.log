@@ -2,14 +2,8 @@
 
 Branch: post714-state-refresh
 
-HEAD: 7d092cb Add workflow guard diagnostics (#714)
+HEAD before final commit: 0968018 Refresh handoff state after PR714
 
-Changed files:
-
- M .agentic/handoff_state.yaml
- M docs/STATUS.md
- M docs/handoff/CURRENT_HANDOFF.md
-?? docs/reports/terminal/v041-handoff-after-pr714.log
-?? docs/reports/terminal/v041-successor-chat-handoff-after-pr714.md
+Repair: structured-summary-must-be-enforced now has required text; structured-summary-drift now has required prevention.
 
 Generated successor handoff prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr714.md
