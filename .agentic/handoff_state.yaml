@@ -142,9 +142,24 @@ rules:
 - id: quality-first-no-shortcuts
   status: active
   text: Always choose the technically best deterministic solution for recurring workflow problems; do not use shortcut patches that merely get the current block past the gate.
+- id: patch-artifact-preflight-before-application
+  status: active
+  text: Complex patches must be treated as patch artifacts and checked before application: syntax, YAML structure, generated Python compileability, documentation coverage terms, and final-summary validity.
+- id: generated-code-syntax-first
+  status: active
+  text: Generated or newly added Python files must pass py_compile before full gates or commit attempts; nested string-generation mistakes are product defects, not acceptable manual errors.
+- id: coverage-yaml-terms-must-be-strings
+  status: active
+  text: Documentation coverage terms must be strings; terms containing colons must be quoted so YAML cannot reinterpret them as mappings.
+- id: final-summary-self-validation
+  status: active
+  text: Terminal workflows must validate their mandatory final SUMMARY block before asking the user to reply p.
 - id: yaml-structured-mutation-only
   status: active
   text: YAML governance files must be changed through parse-modify-dump or an equivalent structured mutation path, then parsed again before gates. Text injection into YAML is forbidden for complex values.
+- id: quote-guard-no-nested-generation
+  status: active
+  text: Avoid nested quote-based code generation and nested shell/Python quote layers; use file-based patch helpers or simple printf line generation.
 - id: canonical-handoff-prompt-command
   status: active
   text: Use agentic-kit handoff prompt or python -m agentic_project_kit.cli handoff prompt as the canonical generator. Do not use ./ns handoff prompt unless ./ns explicitly routes that command correctly.
@@ -168,6 +183,20 @@ recent_failure_patterns:
   prevention: Before choosing commands, paths, JSON fields, release checks, or DOI sources, inspect the remote repository and command help. Treat memory and chat summaries as hypotheses until verified.
 - id: stale-planning-documents
   prevention: State freshness checks must compare STATUS, CURRENT_HANDOFF, handoff_state.yaml, release metadata, and strategy baselines before GUI or release-automation work starts.
+- id: standard-error-guards
+  prevention: Recurring workflow failures must become guards, tests, and documented contracts.
+- id: interpreter-discovery-before-python
+  prevention: Terminal/workflow blocks must discover a usable interpreter first and prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python.
+- id: global-cli-or-venv-assumption
+  prevention: Verify .venv, python3, ruff, pytest, and agentic-kit before using command names; missing global tooling is environment state, not product failure.
+- id: interactive-terminal-exit
+  prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace the shell with exec; report markers and return to the prompt.
+- id: nested-triple-quote-code-generator
+  prevention: Do not generate source files through nested shell/Python quote layers or nested triple-quoted string literals inside another generated Python script.
+- id: nested-quote-based-code-generation
+  prevention: Use file-based patch helpers or simple printf line generation; avoid nested quote-based code generation.
+- id: repeated-yaml-governance-file-corruption
+  prevention: Patch scripts must parse YAML before and after mutation, use safe_dump or an equivalent structured writer, and run a YAML integrity test before handoff, governance, or dev gates.
 - id: stale-successor-handoff-prompt-after-main-merge
   prevention: Run the successor handoff freshness guard and refresh STATUS, handoff_state, CURRENT_HANDOFF, and the successor prompt before treating handoff prose as authoritative.
 - id: handoff-moving-head-loop
