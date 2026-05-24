@@ -1,0 +1,50 @@
+terminal_log=docs/reports/terminal/20260524-103810_post707-state-refresh.log
+### RUN: sh .agentic/commands/current.sh
+
+
+
+.agentic/commands/current.sh: line 5: printf: --: invalid option
+printf: usage: printf [-v var] format [arguments]
+.agentic/commands/current.sh: line 6: printf: --: invalid option
+printf: usage: printf [-v var] format [arguments]
+.agentic/commands/current.sh: line 7: printf: --: invalid option
+printf: usage: printf [-v var] format [arguments]
+
+
+
+POST707 STATE REFRESH -- STRUCTURED -- NO RELEASE NO TAG
+
+
+### PRECHECK ###
+post707-state-refresh
+ D .agentic/commands/inbox/post707-state-refresh.sh
+ D .agentic/commands/inbox/post707-state-refresh.yaml
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? .agentic/commands/current.sh
+?? .agentic/commands/current.yaml
+?? docs/reports/terminal/20260524-103810_post707-state-refresh.log
+
+### WRITE STRUCTURED PATCH SCRIPT ###
+
+### APPLY STRUCTURED PATCH ###
+structured patch validation passed
+
+### TARGETED GATES ###
+ERROR: file or directory not found: tests/test_handoff_prompt_freshness.py
+
+
+no tests ran in 0.00s
+
+================================================================
+SUMMARY
+WORK RESULT: FAIL
+EVIDENCE RESULT: PASS
+OVERALL RESULT: FAIL
+REMOTE_EVIDENCE: PASS
+terminal_log=docs/reports/terminal/v041-state-refresh-after-pr707.md
+command_report=docs/reports/command_runs/post707-state-refresh.md
+NEXT_CHAT_REPLY: f
+### RESULT: FAIL ###
+================================================================
+### EXIT: 1
+### RESULT: FAIL ###
