@@ -1,5 +1,8 @@
 from pathlib import Path
 
+from typer.testing import CliRunner
+
+from agentic_project_kit.cli_commands.evidence import app as evidence_app
 from agentic_project_kit.evidence_guard import check_change_scope
 from agentic_project_kit.evidence_guard import check_terminal_log
 from agentic_project_kit.evidence_guard import last_result_marker
@@ -90,3 +93,38 @@ def test_change_scope_guard_rejects_missing_expected_target() -> None:
     assert result.findings == (
         "expected changed paths missing: src/agentic_project_kit/evidence_guard.py",
     )
+
+
+def test_evidence_scope_check_cli_accepts_expected_target() -> None:
+    runner = CliRunner()
+    result = runner.invoke(
+        evidence_app,
+        [
+            "scope-check",
+            "--changed",
+            "src/agentic_project_kit/evidence_guard.py",
+            "--changed",
+            "docs/reports/terminal/pr745.log",
+            "--expected",
+            "src/agentic_project_kit/evidence_guard.py",
+        ],
+    )
+    assert result.exit_code == 0
+    assert "PASS: change scope check" in result.output
+
+
+def test_evidence_scope_check_cli_rejects_log_only_target_miss() -> None:
+    runner = CliRunner()
+    result = runner.invoke(
+        evidence_app,
+        [
+            "scope-check",
+            "--changed",
+            "docs/reports/terminal/pr740.log",
+            "--expected",
+            ".agentic/rule_mechanism_inventory.yaml",
+        ],
+    )
+    assert result.exit_code == 1
+    assert "FAIL: change scope check" in result.output
+    assert "expected changed paths missing" in result.output
