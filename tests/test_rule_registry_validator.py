@@ -21,16 +21,24 @@ def _valid_mechanism() -> dict[str, object]:
     }
 
 
-def _write_registry(tmp_path: Path, mechanism: dict[str, object], replaced_by: str = "m") -> None:
+def _write_registry(
+    tmp_path: Path,
+    mechanism: dict[str, object],
+    replaced_by: str = "m",
+    extra_mechanisms: list[dict[str, object]] | None = None,
+) -> None:
     source = tmp_path / "source.txt"
     source.write_text("present", encoding="utf-8")
     evidence = tmp_path / "evidence.txt"
     evidence.write_text("evidence", encoding="utf-8")
     agentic = tmp_path / ".agentic"
     agentic.mkdir()
+    mechanisms = [mechanism]
+    if extra_mechanisms:
+        mechanisms.extend(extra_mechanisms)
     inventory = {
         "schema_version": 1,
-        "mechanisms": [mechanism],
+        "mechanisms": mechanisms,
     }
     migrations = {
         "schema_version": 1,
@@ -101,3 +109,34 @@ def test_validator_rejects_invalid_enforcement_phase(tmp_path: Path) -> None:
     _write_registry(tmp_path, mechanism)
     findings = validate_rule_registry(tmp_path)
     assert any("enforcement_phase must be one of" in finding.message for finding in findings)
+
+
+def test_validator_rejects_incompatible_category_phase(tmp_path: Path) -> None:
+    mechanism = _valid_mechanism()
+    mechanism["category"] = "communication"
+    mechanism["enforcement_phase"] = "guard"
+    _write_registry(tmp_path, mechanism)
+    findings = validate_rule_registry(tmp_path)
+    assert any(
+        "incompatible category/enforcement_phase combination" in finding.message
+        for finding in findings
+    )
+
+
+def test_validator_rejects_ambiguous_enforcement_order(tmp_path: Path) -> None:
+    first = _valid_mechanism()
+    second = _valid_mechanism()
+    second["id"] = "other"
+    _write_registry(tmp_path, first, extra_mechanisms=[second])
+    findings = validate_rule_registry(tmp_path)
+    assert any("ambiguous enforcement order" in finding.message for finding in findings)
+
+
+def test_validator_allows_same_category_with_different_priority(tmp_path: Path) -> None:
+    first = _valid_mechanism()
+    second = _valid_mechanism()
+    second["id"] = "other"
+    second["priority"] = 2
+    _write_registry(tmp_path, first, extra_mechanisms=[second])
+    findings = validate_rule_registry(tmp_path)
+    assert findings == []
