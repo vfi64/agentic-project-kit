@@ -20,6 +20,7 @@ VALID_CATEGORY_PHASES = {
 }
 VALID_MIGRATION_STATUSES = {"migrated", "archived", "rejected"}
 VALID_TEST_COVERAGE = {"direct", "indirect", "documented"}
+VALID_ASSERTION_KINDS = {"anchor", "artifact", "behavior", "evidence", "guard", "negative-case", "release", "workflow"}
 TERMINAL_MIGRATION_STATUSES = {"archived", "rejected"}
 MIN_PRIORITY = 1
 MAX_PRIORITY = 5
@@ -62,6 +63,43 @@ def _validate_string_list(
             continue
         entries.append(text)
     return entries
+
+
+def _validate_assertions(
+    *,
+    value: Any,
+    mechanism_id: str,
+    findings: list[RuleRegistryFinding],
+) -> None:
+    if not isinstance(value, list):
+        findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertions must be a list"))
+        return
+    if not value:
+        findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertions must list at least one entry"))
+        return
+    seen_ids: set[str] = set()
+    for assertion in value:
+        if not isinstance(assertion, dict):
+            findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertion entries must be mappings"))
+            continue
+        assertion_id = str(assertion.get("assertion_id", "")).strip()
+        if not assertion_id:
+            findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertion missing assertion_id"))
+        elif assertion_id in seen_ids:
+            findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: duplicate assertion_id: {assertion_id}"))
+        else:
+            seen_ids.add(assertion_id)
+        kind = assertion.get("kind")
+        if kind not in VALID_ASSERTION_KINDS:
+            findings.append(
+                RuleRegistryFinding(
+                    str(COVERAGE_PATH),
+                    f"{mechanism_id}: assertion kind must be one of: {', '.join(sorted(VALID_ASSERTION_KINDS))}",
+                )
+            )
+        statement = str(assertion.get("statement", "")).strip()
+        if not statement:
+            findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertion missing statement"))
 
 
 def _validate_mechanism_metadata(
@@ -152,13 +190,7 @@ def _validate_test_coverage(
             )
         )
         return
-    _validate_string_list(
-        value=mechanism.get("assertions"),
-        label="assertions",
-        mechanism_id=mechanism_id,
-        required_non_empty=True,
-        findings=findings,
-    )
+    _validate_assertions(value=mechanism.get("assertions"), mechanism_id=mechanism_id, findings=findings)
     rationale = str(mechanism.get("coverage_rationale", "")).strip()
     if tests and coverage != "direct":
         findings.append(
