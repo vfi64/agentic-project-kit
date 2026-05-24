@@ -15,6 +15,21 @@ def test_evidence_guard_rejects_final_pass_after_failed_gate(tmp_path: Path) -> 
     assert result.final_result == "PASS"
     assert "final PASS conflicts" in result.findings[0]
 
+def test_evidence_guard_rejects_final_pass_after_python_traceback(tmp_path: Path) -> None:
+    log = tmp_path / "python-error-false-pass.log"
+    log.write_text(
+        "Traceback (most recent call last):\n"
+        "ModuleNotFoundError: No module named 'yaml'\n"
+        "ERROR collecting tests/test_rule_registry_validator.py\n"
+        "### RESULT: PASS ###\n",
+        encoding="utf-8",
+    )
+    result = check_terminal_log(log)
+    assert not result.ok
+    assert result.final_result == "PASS"
+    assert "ModuleNotFoundError:" in result.findings[0]
+    assert "ERROR collecting" in result.findings[0]
+
 def test_evidence_guard_accepts_clean_pass(tmp_path: Path) -> None:
     log = tmp_path / "pass.log"
     log.write_text("all good\n### RESULT: PASS ###\n", encoding="utf-8")
