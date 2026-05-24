@@ -1,4 +1,4 @@
-<!-- post-pr733-closeout -->
+<!-- post-pr735-closeout -->
 # Current Handoff
 
 Status-date: 2026-05-24
@@ -17,17 +17,17 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 - Current release tag: v0.4.1.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
-- Main is refreshed after PR #733 at `13e78ee`.
-- PRs #718-#733 established the governed rule-registry baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, coverage expansion from 2 to 5 core mechanisms, required classification/priority/enforcement-phase metadata, deterministic compatibility/conflict checks, and migration-map completeness checks.
-- Evidence: `docs/reports/terminal/pr718a-v5-inventory.log`, `docs/reports/terminal/pr721-rule-migrations.log`, `docs/reports/terminal/pr722-rule-registry-validator.log`, `docs/reports/terminal/pr723-rule-registry-cli.log`, `docs/reports/terminal/pr724-rule-registry-guard.log`, `docs/reports/terminal/pr725-rule-registry-preflight.log`, `docs/reports/terminal/pr727-rule-registry-coverage.log`, `docs/reports/terminal/pr729-rule-registry-classification.log`, `docs/reports/terminal/pr731-rule-registry-conflicts.log`, `docs/reports/terminal/pr733-rule-registry-completeness.log`.
+- Main is refreshed after PR #735 at `c6e2690`.
+- PRs #718-#735 established the governed rule-registry baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, coverage expansion from 2 to 8 mechanisms, required classification/priority/enforcement-phase metadata, deterministic compatibility/conflict checks, migration-map completeness checks, and explicit coverage for communication, bootstrap/drift, and portable execution rules.
+- Evidence: `docs/reports/terminal/pr718a-v5-inventory.log`, `docs/reports/terminal/pr721-rule-migrations.log`, `docs/reports/terminal/pr722-rule-registry-validator.log`, `docs/reports/terminal/pr723-rule-registry-cli.log`, `docs/reports/terminal/pr724-rule-registry-guard.log`, `docs/reports/terminal/pr725-rule-registry-preflight.log`, `docs/reports/terminal/pr727-rule-registry-coverage.log`, `docs/reports/terminal/pr729-rule-registry-classification.log`, `docs/reports/terminal/pr731-rule-registry-conflicts.log`, `docs/reports/terminal/pr733-rule-registry-completeness.log`, `docs/reports/terminal/pr735-rule-registry-coverage.log`.
 
 ## Current Repository State
 
-Safe state is main after PR733. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers five core mechanisms with category, priority, enforcement_phase metadata, compatibility/conflict validation, and migration-map completeness validation: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, and patch-preflight. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
+Safe state is main after PR735. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers eight mechanisms with category, priority, enforcement_phase metadata, compatibility/conflict validation, and migration-map completeness validation: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, and portable-execution-rules. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
 
 ## Current Goal
 
-Continue the governed rule registry with small additive targeted coverage expansion. Do not resume broad documentation-management rebuild yet.
+Continue the governed rule registry with small additive targeted coverage expansion for remaining release/DOI/evidence/typed-work-order rules. Do not resume broad documentation-management rebuild yet.
 
 ## Current Baselines
 
@@ -67,7 +67,7 @@ Run state-freshness-check, handoff-check, governance-check, rule-registry check,
 
 ## Next Safe Step
 
-PR733 is merged. Next safe step: add targeted rule-registry coverage expansion in the next small PR. Prefer communication/evidence/bootstrap/release/workflow rules still only represented as compatibility anchors. Keep broad documentation-management rebuild, release, tag, DOI mutation, and GUI expansion out of that PR.
+PR735 is merged. Next safe step: add targeted rule-registry coverage expansion for remaining release/DOI/evidence/typed-work-order rules in the next small PR. Keep broad documentation-management rebuild, release, tag, DOI mutation, and GUI expansion out of that PR.
 
 ## Source of Truth
 
