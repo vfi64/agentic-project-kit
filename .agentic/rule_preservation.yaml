@@ -1,0 +1,54 @@
+schema_version: 1
+purpose: Machine-readable preservation registry for active workflow rules restored
+  after v0.4.1 drift.
+rules:
+- id: structured-summary-must-be-enforced
+  status: active
+  required_terms:
+  - structured SUMMARY
+  - WORK RESULT
+  - REMOTE_EVIDENCE
+  - CHAT_REPLY
+  surfaces:
+  - docs/governance/FINAL_SUMMARY_CONTRACT.md
+  - src/agentic_project_kit/run_summary_renderer.py
+- id: no-copy-terminal-evidence
+  status: active
+  required_terms:
+  - d for log-backed PASS
+  - f for log-backed FAIL
+  - Manual terminal paste is only
+  surfaces:
+  - .agentic/handoff_state.yaml
+  - docs/handoff/CURRENT_HANDOFF.md
+- id: remote-log-lookup-first
+  status: active
+  required_terms:
+  - remote evidence
+  - docs/reports/terminal
+  surfaces:
+  - .agentic/handoff_state.yaml
+  - docs/handoff/CURRENT_HANDOFF.md
+- id: yaml-structured-mutation-only
+  status: active
+  required_terms:
+  - parse-modify-dump
+  - structured YAML
+  surfaces:
+  - .agentic/handoff_state.yaml
+  - docs/STATUS.md
+- id: control-file-preservation
+  status: active
+  required_terms:
+  - Information preservation outranks compactness
+  - protected control files
+  surfaces:
+  - .agentic/handoff_state.yaml
+  - docs/STATUS.md
+- id: interpreter-discovery-before-python
+  status: active
+  required_terms:
+  - Discover the active interpreter
+  - avoid naked python
+  surfaces:
+  - .agentic/handoff_state.yaml

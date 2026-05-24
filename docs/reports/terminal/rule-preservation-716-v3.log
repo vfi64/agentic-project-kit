@@ -1,0 +1,27 @@
+RULE PRESERVATION 716 V3 -- FIX OVERSTRICT SUMMARY PATH TERM
+
+### CHECK BRANCH ###
+feature/rule-preservation-716
+ M src/agentic_project_kit/workflow_guard.py
+?? .agentic/rule_preservation.yaml
+?? src/agentic_project_kit/rule_preservation.py
+?? tests/test_rule_preservation.py
+
+### ENSURE FEATURE BRANCH ###
+
+### WRITE SAFE PATCH SCRIPT ###
+
+### APPLY PATCH ###
+
+### SHOW REGISTRY DIFF ###
+
+### VERIFY PYTHON SYNTAX ###
+
+### RUN TARGETED TESTS ###
+.....................                                                    [100%]
+21 passed in 0.22s
+
+### RUN RUFF TARGET ###
+All checks passed!
+
+### COMMIT AND PUSH IF GREEN ###
