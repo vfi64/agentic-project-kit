@@ -1,0 +1,81 @@
+schema_version: 1
+purpose: Machine-readable guard against lossy edits to critical control and governance files.
+policy:
+  rule_id: control-file-preservation
+  summary: Critical control files must preserve existing operative rules unless an explicit migration records the removed anchor, successor anchor, rationale, and test coverage.
+  no_hard_length_limit: true
+  length_policy: Information preservation outranks compactness. If a protected file grows too large, split, reference, or generate it; do not delete still-active rules to satisfy a size target.
+  allowed_mutation_modes:
+    - additive
+    - structured_refactor_with_explicit_migration
+  forbidden_mutation_modes:
+    - lossy_rewrite
+    - broad_replace_for_conciseness
+    - deletion_without_successor
+    - hard_length_limit_trimming
+protected_files:
+  - path: .agentic/compiled_agent_context.yaml
+    class: machine-readable governance context
+    no_hard_length_limit: true
+    preservation_mode: additive_or_explicit_migration
+    required_anchors:
+      - mandatory_successor_chat_sources
+      - hard_rules
+      - remote-first-no-guess
+      - rules-must-be-test-backed
+      - github-connector-direct-path-first
+      - yaml-governance-parse-modify-dump-only
+      - local-main-freshness-before-local-work
+      - final_summary_contract
+      - communication_rules
+      - drift_detection
+  - path: docs/TEST_GATES.md
+    class: governance gate matrix
+    no_hard_length_limit: true
+    preservation_mode: additive_or_explicit_migration
+    required_anchors:
+      - Rule Hardening Gate
+      - Local Freshness Gate
+      - LLM Communication and Bootstrap Gate
+      - Patch Artifact Preflight Gate
+      - YAML Governance Integrity Gate
+      - Remote Connector Gate
+      - YAML Mutation Gate
+      - Control File Preservation Gate
+  - path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+    class: governance contract
+    no_hard_length_limit: true
+    preservation_mode: additive_or_explicit_migration
+    required_anchors:
+      - Mandatory startup sequence
+      - Drift classes
+      - Drift response
+      - Remote repository connector route
+      - Governance YAML mutation rule
+      - Handoff prompt requirements
+  - path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+    class: governance contract
+    no_hard_length_limit: true
+    preservation_mode: additive_or_explicit_migration
+    required_anchors:
+      - Canonical rule
+      - Local repository freshness rule
+      - Remote connector route rule
+      - Governance YAML mutation rule
+      - External command rule
+  - path: docs/DOCUMENTATION_COVERAGE.yaml
+    class: documentation coverage registry
+    no_hard_length_limit: true
+    preservation_mode: additive_or_explicit_migration
+    required_anchors:
+      - llm-communication-bootstrap-coverage
+      - mandatory_successor_chat_sources
+      - local-main-freshness-before-local-work
+migration_requirements:
+  removed_anchor_requires:
+    - removed_anchor
+    - successor_anchor
+    - rationale
+    - deterministic_test
+    - reviewer_visible_summary
+  deletion_is_valid_only_if: The removed item is obsolete, has an explicit successor, and the preservation test or a dedicated migration test records the successor.
