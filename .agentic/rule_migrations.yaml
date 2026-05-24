@@ -1,5 +1,13 @@
 schema_version: 1
 purpose: Record legacy rule anchors and their governed successors instead of deleting rule intent.
+known_legacy_rule_ids:
+  - structured-summary-must-be-enforced
+  - structured-summary-drift
+  - no-copy-terminal-evidence
+  - local-remote-mode-switching
+  - rules-must-be-test-backed
+  - workflow-guard-diagnostics
+  - patch-artifact-preflight-before-application
 migrations:
   - legacy_id: structured-summary-must-be-enforced
     status: migrated
