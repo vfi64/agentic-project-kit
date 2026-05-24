@@ -8,7 +8,7 @@ Scope: operating-system-independent execution rules for chat-assisted workflows
 
 The kit must work across macOS, Linux, and Windows assumptions. Canonical workflow correctness must not depend on POSIX-only shell utilities, a healthy inherited `PATH`, or long copy-pasted shell scripts.
 
-The observed failure mode was simple and severe: a generated block could not find `git`, `cp`, `tail`, or `sh`. A governance system that cannot preserve evidence when the shell environment is degraded is not robust enough for large-LLM operation.
+The observed failure mode was simple and severe: a generated block could not find required tools. A governance system that cannot preserve evidence when the command environment is degraded is not robust enough for large-LLM operation.
 
 ## Canonical rule
 
@@ -49,6 +49,18 @@ Required direction:
 Local repository work must start from a verified fresh base. The workflow must fetch the remote, compare the intended local base with its upstream, and stop or synchronize before any mutation. A local branch that is behind `origin/main`, a dirty worktree, or untracked command artifacts are preflight findings, not details to ignore.
 
 For local `main`-based work, the safe precondition is: `git fetch origin`, clean or preserved local changes, `git switch main`, local HEAD equal to `origin/main`, then feature branch creation. Mutation before that precondition is forbidden.
+
+## Remote connector route rule
+
+When a GitHub connector is available, remote repository inspection must start with the direct connector route: `get_repo` for repository identity, `fetch_file` for known file paths, `fetch_commit` for known commits, `get_pr_info` for known pull requests, `fetch_commit_workflow_runs` for CI evidence, and `compare_commits` for branch comparisons.
+
+Search is for unknown paths or symbols. Raw URLs and local fallbacks come after connector access is unavailable or insufficient.
+
+## Governance YAML mutation rule
+
+Governance YAML mutation must use parse-modify-dump. Tools and command scripts must load YAML through a parser, mutate typed data, write it through a structured emitter, parse the result again, and then run YAML integrity tests.
+
+Manual indentation patches, regex insertion into YAML lists, unparsed string concatenation, and late quote repair after a failed test are forbidden. A YAML parse error in CI is a workflow defect, not a harmless iteration.
 
 ## External command rule
 
