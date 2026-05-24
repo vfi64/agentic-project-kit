@@ -23,6 +23,7 @@ GOVERNANCE_YAML_FILES = (
     ".agentic/no_copy_terminal_policy.yaml",
     ".agentic/rule_mechanism_inventory.yaml",
     ".agentic/rule_migrations.yaml",
+    ".agentic/rule_test_coverage.yaml",
     "docs/DOCUMENTATION_COVERAGE.yaml",
 )
 
