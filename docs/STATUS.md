@@ -1,4 +1,4 @@
-<!-- post-pr729-closeout -->
+<!-- post-pr731-closeout -->
 # Project Status
 
 Status-date: 2026-05-24
@@ -27,12 +27,12 @@ Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
 Post-release Zenodo verification is covered by `agentic-kit post-release-check --version 0.4.1`; post-release Zenodo remains a guarded release-state anchor.
 
-Post-PR729 closeout target:
-- Main is refreshed after PR #729 at `58573ed` (`Add rule registry classification and priority (#729)`).
-- PRs #718-#729 established the governed rule-registry baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, coverage expansion from 2 to 5 core mechanisms, and required classification/priority/enforcement-phase metadata.
-- Rule registry drift is now checked through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight.
-- Evidence: `docs/reports/terminal/pr718a-v5-inventory.log`, `docs/reports/terminal/pr721-rule-migrations.log`, `docs/reports/terminal/pr722-rule-registry-validator.log`, `docs/reports/terminal/pr723-rule-registry-cli.log`, `docs/reports/terminal/pr724-rule-registry-guard.log`, `docs/reports/terminal/pr725-rule-registry-preflight.log`, `docs/reports/terminal/pr727-rule-registry-coverage.log`, `docs/reports/terminal/pr729-rule-registry-classification.log`.
-- Next immediate hardening task: add deterministic rule-registry compatibility and conflict checks in a small additive slice. Keep only targeted remaining coverage expansion in scope. Do not resume broad documentation-management rebuild yet.
+Post-PR731 closeout target:
+- Main is refreshed after PR #731 at `880dfb1` (`Add rule registry conflict checks (#731)`).
+- PRs #718-#731 established the governed rule-registry baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, coverage expansion from 2 to 5 core mechanisms, required classification/priority/enforcement-phase metadata, and deterministic compatibility/conflict checks.
+- Rule registry drift is checked through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight.
+- Evidence: `docs/reports/terminal/pr718a-v5-inventory.log`, `docs/reports/terminal/pr721-rule-migrations.log`, `docs/reports/terminal/pr722-rule-registry-validator.log`, `docs/reports/terminal/pr723-rule-registry-cli.log`, `docs/reports/terminal/pr724-rule-registry-guard.log`, `docs/reports/terminal/pr725-rule-registry-preflight.log`, `docs/reports/terminal/pr727-rule-registry-coverage.log`, `docs/reports/terminal/pr729-rule-registry-classification.log`, `docs/reports/terminal/pr731-rule-registry-conflicts.log`.
+- Next immediate hardening task: add rule-registry completeness checks so known active legacy rules cannot disappear without active, migrated, archived, or rejected status. Keep remaining coverage expansion separate. Do not resume broad documentation-management rebuild yet.
 
 Documentation registry baseline:
 - `docs/DOCUMENTATION_REGISTRY.yaml` is the additive machine-readable registry.
@@ -67,7 +67,7 @@ GUI MVP baseline:
 
 ## Current Goal
 
-Continue the governed rule registry with small additive slices: compatibility/conflict checks, completeness checks, and targeted remaining coverage expansion. No broad documentation migration, release, tag, DOI mutation, or GUI expansion.
+Continue the governed rule registry with small additive slices: completeness checks and targeted remaining coverage expansion. No broad documentation migration, release, tag, DOI mutation, or GUI expansion.
 
 ## Active Workflow Rules
 
@@ -141,4 +141,4 @@ Required gate set for current-state, handoff, or governance-summary changes:
 
 ## Next Safe Step
 
-Add deterministic rule-registry compatibility and conflict checks in the next small PR. Keep completeness checks, remaining coverage expansion, broad documentation-management rebuild, release, tag, DOI mutation, and GUI expansion out of that PR.
+Add deterministic rule-registry completeness checks in the next small PR. Keep remaining coverage expansion, broad documentation-management rebuild, release, tag, DOI mutation, and GUI expansion out of that PR.
