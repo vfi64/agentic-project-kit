@@ -5,6 +5,14 @@ import yaml
 from agentic_project_kit.rule_registry_validator import validate_rule_registry
 
 
+def _assertion(assertion_id: str = "source-anchor") -> dict[str, str]:
+    return {
+        "assertion_id": assertion_id,
+        "kind": "anchor",
+        "statement": "source anchors are preserved",
+    }
+
+
 def _write_registry(root: Path, coverage_entry: dict[str, object]) -> None:
     (root / "source.txt").write_text("present", encoding="utf-8")
     (root / "evidence.txt").write_text("evidence", encoding="utf-8")
@@ -64,7 +72,7 @@ def test_validator_accepts_coverage_assertions(tmp_path: Path) -> None:
         {
             "test_coverage": "documented",
             "coverage_rationale": "covered by source anchors",
-            "assertions": ["source anchors are preserved"],
+            "assertions": [_assertion()],
         },
     )
     assert validate_rule_registry(tmp_path) == []
@@ -93,3 +101,59 @@ def test_validator_rejects_empty_coverage_assertions(tmp_path: Path) -> None:
     )
     findings = validate_rule_registry(tmp_path)
     assert any("assertions must list at least one entry" in finding.message for finding in findings)
+
+
+def test_validator_rejects_free_text_assertions(tmp_path: Path) -> None:
+    _write_registry(
+        tmp_path,
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+            "assertions": ["source anchors are preserved"],
+        },
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("assertion entries must be mappings" in finding.message for finding in findings)
+
+
+def test_validator_rejects_unknown_assertion_kind(tmp_path: Path) -> None:
+    assertion = _assertion()
+    assertion["kind"] = "later"
+    _write_registry(
+        tmp_path,
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+            "assertions": [assertion],
+        },
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("assertion kind must be one of" in finding.message for finding in findings)
+
+
+def test_validator_rejects_duplicate_assertion_id(tmp_path: Path) -> None:
+    _write_registry(
+        tmp_path,
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+            "assertions": [_assertion(), _assertion()],
+        },
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("duplicate assertion_id: source-anchor" in finding.message for finding in findings)
+
+
+def test_validator_rejects_assertion_without_statement(tmp_path: Path) -> None:
+    assertion = _assertion()
+    assertion["statement"] = ""
+    _write_registry(
+        tmp_path,
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+            "assertions": [assertion],
+        },
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("assertion missing statement" in finding.message for finding in findings)
