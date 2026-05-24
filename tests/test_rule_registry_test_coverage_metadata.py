@@ -65,6 +65,7 @@ def test_validator_accepts_documented_coverage_with_rationale(tmp_path: Path) ->
                 "mechanism_id": "mechanism-under-test",
                 "test_coverage": "documented",
                 "coverage_rationale": "covered by preserved source anchors",
+                "assertions": ["source anchors are preserved"],
             }
         ],
     )
@@ -97,11 +98,13 @@ def test_validator_rejects_coverage_for_unknown_mechanism(tmp_path: Path) -> Non
                 "mechanism_id": "mechanism-under-test",
                 "test_coverage": "documented",
                 "coverage_rationale": "covered by preserved source anchors",
+                "assertions": ["source anchors are preserved"],
             },
             {
                 "mechanism_id": "unknown-mechanism",
                 "test_coverage": "documented",
                 "coverage_rationale": "orphaned entry",
+                "assertions": ["orphaned coverage is rejected"],
             },
         ],
     )
