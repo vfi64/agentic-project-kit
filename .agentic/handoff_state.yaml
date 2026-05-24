@@ -186,13 +186,15 @@ recent_failure_patterns:
 - id: standard-error-guards
   prevention: Recurring workflow failures must become guards, tests, and documented contracts.
 - id: interpreter-discovery-before-python
-  prevention: Terminal/workflow blocks must discover a usable interpreter first and prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python.
+  prevention: Terminal/workflow blocks must discover a usable interpreter before set -e-sensitive work and prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python.
 - id: global-cli-or-venv-assumption
   prevention: Verify .venv, python3, ruff, pytest, and agentic-kit before using command names; missing global tooling is environment state, not product failure.
 - id: interactive-terminal-exit
   prevention: Chat-pasted terminal blocks must not call exit, logout, kill, or replace the shell with exec; report markers and return to the prompt.
 - id: nested-triple-quote-code-generator
   prevention: Do not generate source files through nested shell/Python quote layers or nested triple-quoted string literals inside another generated Python script.
+- id: yaml-colon-term-reinterpreted-as-mapping
+  prevention: Quote colon-containing YAML values and keep coverage-term string guards active so YAML cannot reinterpret prose as mappings.
 - id: nested-quote-based-code-generation
   prevention: Use file-based patch helpers or simple printf line generation; avoid nested quote-based code generation.
 - id: repeated-yaml-governance-file-corruption
