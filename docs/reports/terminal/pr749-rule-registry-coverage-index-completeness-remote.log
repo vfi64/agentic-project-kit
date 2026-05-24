@@ -1,0 +1,27 @@
+PR749 RULE REGISTRY COVERAGE INDEX COMPLETENESS -- REMOTE PATCH -- NO RELEASE
+
+Remote-only slice because the user is on iPhone.
+
+Base:
+- main after PR748: b3c6473bfb6d7e40712517c69977a745efa09727
+- branch: feature/rule-registry-coverage-index-completeness-749
+
+Changes:
+- Tightened rule registry coverage validation so a present .agentic/rule_test_coverage.yaml is treated as a complete coverage index.
+- Missing coverage metadata for an active mechanism is now reported explicitly as a coverage-index finding.
+- Added a targeted regression test for missing active-mechanism coverage.
+
+Scope:
+- no release
+- no tag
+- no DOI
+- no broad migration
+- no product work outside rule-registry validation
+
+Expected verification:
+- GitHub CI on PR #749 must pass before merge.
+- Existing rule-registry validator tests plus targeted coverage-index test must pass.
+
+Remote execution note:
+- Updating the existing coverage test file was blocked by the connector safety filter.
+- The same regression coverage was added as a small separate test file instead.
