@@ -16,3 +16,18 @@ def test_inventory_sources_exist_and_keep_terms() -> None:
             text = path.read_text(encoding="utf-8")
             for term in source["required_terms"]:
                 assert term in text, f"{term} missing from {path}"
+
+MIGRATIONS = Path(".agentic/rule_migrations.yaml")
+
+def test_rule_migrations_are_parseable_and_point_to_inventory() -> None:
+    inventory = yaml.safe_load(INVENTORY.read_text(encoding="utf-8"))
+    migrations = yaml.safe_load(MIGRATIONS.read_text(encoding="utf-8"))
+    mechanism_ids = {item["id"] for item in inventory["mechanisms"]}
+    legacy_ids = {item["legacy_id"] for item in migrations["migrations"]}
+    assert migrations["schema_version"] == 1
+    assert legacy_ids == {"structured-summary-must-be-enforced", "structured-summary-drift", "no-copy-terminal-evidence", "local-remote-mode-switching"}
+    for migration in migrations["migrations"]:
+        assert migration["status"] == "migrated"
+        assert migration["replaced_by"] in mechanism_ids
+        assert migration["migration_reason"]
+        assert migration["evidence"]
