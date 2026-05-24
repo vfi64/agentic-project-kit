@@ -8,6 +8,7 @@ import yaml
 
 from agentic_project_kit.run_summary_renderer import validate_rendered_summary_text
 from agentic_project_kit.rule_preservation import validate_rule_preservation
+from agentic_project_kit.rule_registry_validator import validate_rule_registry
 
 WORKFLOW_GUARD_CONFIG = Path("docs/workflow/WORKFLOW_GUARD.md")
 CONTROL_FILE_PRESERVATION = Path(".agentic/control_file_preservation.yaml")
@@ -192,6 +193,21 @@ def check_workflow_guard_document() -> list[GuardFinding]:
     ]
 
 
+def check_rule_registry() -> list[GuardFinding]:
+    findings: list[GuardFinding] = []
+    for item in validate_rule_registry():
+        findings.append(
+            GuardFinding(
+                pattern_id="rule-registry-drift",
+                severity="HARD-FAIL",
+                path=item.path,
+                message=item.message,
+                repair_mode="repair-rule-registry-or-record-migration",
+            )
+        )
+    return findings
+
+
 def run_workflow_guard(paths: Iterable[str] | None = None) -> list[GuardFinding]:
     requested = [Path(path) for path in (paths or [])]
     protected = [Path(str(item["path"])) for item in protected_control_files() if isinstance(item.get("path"), str)]
@@ -202,6 +218,7 @@ def run_workflow_guard(paths: Iterable[str] | None = None) -> list[GuardFinding]
     findings.extend(check_structured_summary_evidence(requested))
     findings.extend(check_no_lossy_control_file_policy())
     findings.extend(check_workflow_guard_document())
+    findings.extend(check_rule_registry())
     for item in validate_rule_preservation():
         findings.append(GuardFinding(
             pattern_id="rule-preservation-drift",

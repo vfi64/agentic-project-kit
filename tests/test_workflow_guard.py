@@ -5,6 +5,7 @@ from typer.testing import CliRunner
 from agentic_project_kit.cli import app
 from agentic_project_kit.run_summary_renderer import render_summary
 from agentic_project_kit.workflow_guard import (
+    check_rule_registry,
     check_structured_summary_evidence,
     check_yaml_parseability,
     run_workflow_guard,
@@ -46,6 +47,13 @@ def test_workflow_guard_cli_passes_current_repository_state() -> None:
     result = CliRunner().invoke(app, ["workflow-guard", "check"])
     assert result.exit_code == 0
     assert "Workflow guard passed" in result.output
+
+
+def test_workflow_guard_enforces_rule_registry() -> None:
+    assert check_rule_registry() == []
+    text = Path("src/agentic_project_kit/workflow_guard.py").read_text(encoding="utf-8")
+    assert "validate_rule_registry" in text
+    assert "rule-registry-drift" in text
 
 
 def test_workflow_guard_rejects_invalid_yaml(tmp_path: Path) -> None:
