@@ -4,6 +4,7 @@ from pathlib import Path
 
 import typer
 
+from agentic_project_kit.evidence_guard import check_change_scope
 from agentic_project_kit.evidence_guard import check_terminal_log
 from agentic_project_kit.evidence_clean import check_clean_except_expected_log, clean_local_evidence
 
@@ -16,6 +17,23 @@ def guard(logfile: Path) -> None:
     result = check_terminal_log(logfile)
     status = "PASS" if result.ok else "FAIL"
     typer.echo(f"{status}: {result.path} final_result={result.final_result}")
+    for finding in result.findings:
+        typer.echo(f"  - {finding}")
+    if not result.ok:
+        raise typer.Exit(1)
+
+
+@app.command("scope-check")
+def scope_check(
+    changed: list[str] = typer.Option([], "--changed", help="Changed repository path. Repeat for multiple paths."),
+    expected: list[str] = typer.Option([], "--expected", help="Expected target path. Repeat for multiple paths."),
+) -> None:
+    """Fail if expected target paths are missing from a change set."""
+    result = check_change_scope(changed_paths=changed, expected_paths=expected)
+    status = "PASS" if result.ok else "FAIL"
+    typer.echo(f"{status}: change scope check")
+    typer.echo("changed_paths=" + ", ".join(result.changed_paths))
+    typer.echo("expected_paths=" + ", ".join(result.expected_paths))
     for finding in result.findings:
         typer.echo(f"  - {finding}")
     if not result.ok:
