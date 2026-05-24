@@ -3,9 +3,12 @@ purpose: Preserve existing canonical mechanisms before governed rule-registry mi
 mechanisms:
 - id: summary-renderer
   status: active
+  owner: communication-governance
   category: communication
   priority: 1
   enforcement_phase: runtime
+  conflict_domains:
+  - summary-output-contract
   sources:
   - path: ./ns
     required_terms:
@@ -31,9 +34,12 @@ mechanisms:
   - tests/test_run_summary_renderer.py
 - id: execution-mode-switch
   status: active
+  owner: execution-governance
   category: execution
   priority: 2
   enforcement_phase: runtime
+  conflict_domains:
+  - execution-mode-state
   sources:
   - path: ./ns
     required_terms:
@@ -59,9 +65,12 @@ mechanisms:
   tests: []
 - id: rule-preservation-guard
   status: active
+  owner: rule-governance
   category: governance
   priority: 1
   enforcement_phase: guard
+  conflict_domains:
+  - rule-preservation
   sources:
   - path: .agentic/rule_preservation.yaml
     required_terms:
@@ -90,9 +99,12 @@ mechanisms:
   - tests/test_rule_preservation.py
 - id: workflow-guard
   status: active
+  owner: workflow-governance
   category: workflow
   priority: 1
   enforcement_phase: guard
+  conflict_domains:
+  - workflow-drift-guard
   sources:
   - path: src/agentic_project_kit/workflow_guard.py
     required_terms:
@@ -122,9 +134,12 @@ mechanisms:
   - tests/test_workflow_guard.py
 - id: patch-preflight
   status: active
+  owner: patch-governance
   category: preflight
   priority: 1
   enforcement_phase: preflight
+  conflict_domains:
+  - patch-artifact-safety
   sources:
   - path: src/agentic_project_kit/patch_artifact_preflight.py
     required_terms:
@@ -152,9 +167,12 @@ mechanisms:
   - tests/test_patch_artifact_preflight.py
 - id: chat-communication-rules
   status: active
+  owner: communication-governance
   category: communication
   priority: 2
   enforcement_phase: runtime
+  conflict_domains:
+  - chat-communication-contract
   sources:
   - path: docs/governance/CHAT_COMMUNICATION_CONTRACT.md
     required_terms:
@@ -181,9 +199,12 @@ mechanisms:
   tests: []
 - id: chat-bootstrap-drift-rules
   status: active
+  owner: chat-governance
   category: governance
   priority: 2
   enforcement_phase: guard
+  conflict_domains:
+  - chat-bootstrap-drift
   sources:
   - path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
     required_terms:
@@ -204,9 +225,12 @@ mechanisms:
   tests: []
 - id: portable-execution-rules
   status: active
+  owner: execution-governance
   category: execution
   priority: 1
   enforcement_phase: runtime
+  conflict_domains:
+  - portable-execution-contract
   sources:
   - path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
     required_terms:
@@ -227,9 +251,12 @@ mechanisms:
   tests: []
 - id: evidence-guard
   status: active
+  owner: evidence-governance
   category: governance
   priority: 3
   enforcement_phase: guard
+  conflict_domains:
+  - evidence-integrity
   sources:
   - path: src/agentic_project_kit/evidence_guard.py
     required_terms:
@@ -262,9 +289,12 @@ mechanisms:
   - tests/test_evidence_guard.py
 - id: typed-work-order-runner
   status: active
+  owner: execution-governance
   category: execution
   priority: 3
   enforcement_phase: runtime
+  conflict_domains:
+  - typed-work-order-execution
   sources:
   - path: src/agentic_project_kit/typed_work_order_runner.py
     required_terms:
@@ -292,9 +322,12 @@ mechanisms:
   - tests/test_typed_work_order_runner.py
 - id: release-state-validation
   status: active
+  owner: release-governance
   category: workflow
   priority: 2
   enforcement_phase: guard
+  conflict_domains:
+  - release-state-validation
   sources:
   - path: src/agentic_project_kit/release.py
     required_terms:
@@ -327,9 +360,12 @@ mechanisms:
   - tests/test_release.py
 - id: post-release-archive-check
   status: active
+  owner: release-governance
   category: workflow
   priority: 3
   enforcement_phase: guard
+  conflict_domains:
+  - post-release-archive-verification
   sources:
   - path: src/agentic_project_kit/post_release.py
     required_terms:
