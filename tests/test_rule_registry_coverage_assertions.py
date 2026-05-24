@@ -5,10 +5,11 @@ import yaml
 from agentic_project_kit.rule_registry_validator import validate_rule_registry
 
 
-def _assertion(assertion_id: str = "mechanism-under-test-source-anchor") -> dict[str, str]:
+def _assertion(assertion_id: str = "mechanism-under-test-source-anchor") -> dict[str, object]:
     return {
         "assertion_id": assertion_id,
         "kind": "anchor",
+        "covered_surfaces": ["test-surface"],
         "statement": "source anchors are preserved",
     }
 
@@ -210,6 +211,51 @@ def test_validator_rejects_assertion_without_statement(tmp_path: Path) -> None:
     assert any("assertion missing statement" in finding.message for finding in findings)
 
 
+def test_validator_rejects_assertion_without_covered_surfaces(tmp_path: Path) -> None:
+    assertion = _assertion()
+    assertion.pop("covered_surfaces")
+    _write_registry(
+        tmp_path,
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+            "assertions": [assertion],
+        },
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("assertion missing covered_surfaces list" in finding.message for finding in findings)
+
+
+def test_validator_rejects_empty_covered_surfaces(tmp_path: Path) -> None:
+    assertion = _assertion()
+    assertion["covered_surfaces"] = []
+    _write_registry(
+        tmp_path,
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+            "assertions": [assertion],
+        },
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("assertion covered_surfaces must list at least one entry" in finding.message for finding in findings)
+
+
+def test_validator_rejects_unknown_covered_surface(tmp_path: Path) -> None:
+    assertion = _assertion()
+    assertion["covered_surfaces"] = ["not-a-mechanism-surface"]
+    _write_registry(
+        tmp_path,
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+            "assertions": [assertion],
+        },
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("assertion references unknown covered_surface" in finding.message for finding in findings)
+
+
 def test_validator_rejects_assertion_id_without_mechanism_prefix(tmp_path: Path) -> None:
     _write_registry(
         tmp_path,
@@ -241,6 +287,7 @@ def test_validator_rejects_globally_duplicate_assertion_id(tmp_path: Path) -> No
                     {
                         "assertion_id": "mechanism-under-test-shared",
                         "kind": "anchor",
+                        "covered_surfaces": ["test-surface"],
                         "statement": "source anchors are preserved",
                     }
                 ],
