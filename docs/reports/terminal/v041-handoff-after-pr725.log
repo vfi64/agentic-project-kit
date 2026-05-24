@@ -22,6 +22,8 @@ Initial PR726 CI failed because the first remote refresh made docs/STATUS.md too
 
 Remote repair commits on post725-state-refresh restored guarded status anchors, the ## Next Safe Step section, closeout sync markers, and the explicit remote evidence term in .agentic/handoff_state.yaml. This is a rule-preservation repair, not product work.
 
+Second CI feedback still showed status anchor omissions. The branch now restores guarded compatibility anchors for Tkinter deferral, typed-work-order cockpit consumption, v0.3.32 DOI compatibility, policy-pack doctor checks, and the exact lower-case remote evidence phrase in .agentic/handoff_state.yaml.
+
 ### GATE EXPECTATION ###
 CI must validate the branch before merge.
 Relevant expected checks:
