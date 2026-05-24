@@ -7,7 +7,7 @@ from agentic_project_kit.rule_registry_validator import validate_rule_registry
 
 def _assertion(statement: str = "source anchors are preserved") -> dict[str, str]:
     return {
-        "assertion_id": "source-anchor",
+        "assertion_id": "mechanism-under-test-source-anchor",
         "kind": "anchor",
         "statement": statement,
     }
