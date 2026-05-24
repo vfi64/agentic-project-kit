@@ -4,6 +4,8 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from agentic_project_kit.handoff_state import is_administrative_evidence_subject
+
 FRESHNESS_GUARD_FILES = [
     "docs/STATUS.md",
     ".agentic/handoff_state.yaml",
@@ -16,6 +18,7 @@ def assess_handoff_prompt_freshness(
     handoff_path: str | Path = ".agentic/handoff_state.yaml",
     *,
     current_head: str | None = None,
+    current_subject: str | None = None,
 ) -> list[str]:
     """Return warnings when a successor handoff prompt may be stale.
 
@@ -33,8 +36,20 @@ def assess_handoff_prompt_freshness(
             warnings.append(f"required handoff freshness file missing: {relative_path}")
 
     detected_head = _short_commit(current_head) if current_head else _git_short_head(project_root)
+    detected_subject = current_subject if current_subject is not None else _git_head_subject(project_root)
     expected_commits = _expected_handoff_commits(data)
-    if detected_head and expected_commits and not _commit_matches(detected_head, expected_commits):
+    admin_refresh_head = bool(
+        detected_head
+        and expected_commits
+        and not _commit_matches(detected_head, expected_commits)
+        and is_administrative_evidence_subject(detected_subject)
+    )
+    if (
+        detected_head
+        and expected_commits
+        and not _commit_matches(detected_head, expected_commits)
+        and not admin_refresh_head
+    ):
         joined = ", ".join(expected_commits)
         warnings.append(
             "current git HEAD "
@@ -51,7 +66,7 @@ def assess_handoff_prompt_freshness(
         warnings.append(f"latest successor handoff prompt is missing: {relative_prompt}")
         return warnings
 
-    marker_commits = [detected_head] if detected_head else expected_commits
+    marker_commits = expected_commits if admin_refresh_head else ([detected_head] if detected_head else expected_commits)
     prompt_text = successor_prompt_path.read_text(encoding="utf-8")
     if marker_commits and not any(commit and commit in prompt_text for commit in marker_commits):
         relative_prompt = _relative_to_project(successor_prompt_path, project_root)
@@ -94,6 +109,18 @@ def _git_short_head(project_root: Path) -> str:
     try:
         return subprocess.check_output(
             ["git", "rev-parse", "--short", "HEAD"],
+            cwd=project_root,
+            stderr=subprocess.DEVNULL,
+            text=True,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return ""
+
+
+def _git_head_subject(project_root: Path) -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "log", "-1", "--pretty=%s"],
             cwd=project_root,
             stderr=subprocess.DEVNULL,
             text=True,

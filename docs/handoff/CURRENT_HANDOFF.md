@@ -2,18 +2,18 @@ Current version: 0.4.1
 
 # Current Handoff
 
-<!-- CURRENT_HANDOFF_OVERLAY_AFTER_PR701 -->
+<!-- CURRENT_HANDOFF_OVERLAY_AFTER_PR709 -->
 
-# Current Handoff Overlay After PR701
+# Current Handoff Overlay After PR709
 
-Status-date: 2026-05-23
+Status-date: 2026-05-24
 Project: agentic-project-kit
 Branch: main
 Base branch: main
 
 ## Purpose
 
-This overlay records the current state after PR #701 without rewriting the preserved compatibility anchors below. `CURRENT_HANDOFF.md` still contains old compatibility and historical anchors that must not be treated as the current source-of-truth narrative.
+This overlay records the current state after PR #709 without rewriting the preserved compatibility anchors below. `CURRENT_HANDOFF.md` still contains old compatibility and historical anchors that must not be treated as the current source-of-truth narrative.
 
 ## Current State
 
@@ -33,6 +33,7 @@ This overlay records the current state after PR #701 without rewriting the prese
 - PR #699 added doc-lifecycle registry visibility.
 - PR #700 added handoff check/show registry visibility.
 - PR #701 added release-check and post-release-check registry visibility.
+- PR #709 exposed `.agentic/communication_artifacts.yaml` through the read-only documentation registry summary and JSON report without changing cleanup behavior.
 
 ## Documentation Registry Baseline
 
@@ -40,6 +41,7 @@ This overlay records the current state after PR #701 without rewriting the prese
 - Registry contract: `docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md`.
 - Read-only summary command: `agentic-kit docs-registry`.
 - Read-only JSON report: `agentic-kit docs-registry --report PATH`.
+- Artifact policy source now consumed by the registry summary: `.agentic/communication_artifacts.yaml`.
 - The registry is visible in `check-docs`, `docs-audit`, `doc-mesh-audit`, `doc-lifecycle-audit`, `handoff check`, `handoff show`, `release-check`, and `post-release-check`.
 - Broad migration is still forbidden. The current registry guard is structural only and does not prove semantic documentation quality.
 
@@ -59,7 +61,7 @@ This overlay records the current state after PR #701 without rewriting the prese
 
 ## Next Safe Step
 
-Use `docs/reports/terminal/v041-successor-chat-handoff-after-pr701.md` for a chat switch. Then continue the documentation-management rebuild with one small, additive, reversible, test-backed registry consumer such as artifact-GC planning.
+Use `docs/reports/terminal/v041-successor-chat-handoff-after-pr709.md` for a chat switch after PR710 lands. Then continue the documentation-management rebuild with one small, additive, reversible, test-backed registry consumer or machine-readable source/projection planning slice.
 
 Do not start a broad documentation migration, create a tag, publish a release, or perform remote/destructive GUI actions in the next slice.
 
