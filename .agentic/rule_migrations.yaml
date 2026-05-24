@@ -8,6 +8,10 @@ known_legacy_rule_ids:
   - rules-must-be-test-backed
   - workflow-guard-diagnostics
   - patch-artifact-preflight-before-application
+  - chat-acknowledgements-are-not-evidence
+  - remote-log-direct-path-first
+  - successor-chat-mandatory-bootstrap
+  - portable-python-core-first
 migrations:
   - legacy_id: structured-summary-must-be-enforced
     status: migrated
@@ -44,3 +48,23 @@ migrations:
     replaced_by: patch-preflight
     evidence: [src/agentic_project_kit/patch_artifact_preflight.py, tests/test_patch_artifact_preflight.py, ./ns]
     migration_reason: Generated patch artifacts and governance YAML are checked before patch application.
+  - legacy_id: chat-acknowledgements-are-not-evidence
+    status: migrated
+    replaced_by: chat-communication-rules
+    evidence: [docs/governance/CHAT_COMMUNICATION_CONTRACT.md, .agentic/compiled_agent_context.yaml]
+    migration_reason: Short replies such as d, f, w, paste-output, and stop are communication signals only and must be interpreted through evidence.
+  - legacy_id: remote-log-direct-path-first
+    status: migrated
+    replaced_by: chat-communication-rules
+    evidence: [docs/governance/FINAL_SUMMARY_CONTRACT.md, docs/governance/CHAT_COMMUNICATION_CONTRACT.md, .agentic/compiled_agent_context.yaml]
+    migration_reason: Remote log lookup and no-copy evidence semantics are preserved through communication and summary contracts.
+  - legacy_id: successor-chat-mandatory-bootstrap
+    status: migrated
+    replaced_by: chat-bootstrap-drift-rules
+    evidence: [docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md, .agentic/compiled_agent_context.yaml]
+    migration_reason: Mandatory successor-chat source reading and drift response are preserved through the bootstrap contract and compiled context.
+  - legacy_id: portable-python-core-first
+    status: migrated
+    replaced_by: portable-execution-rules
+    evidence: [docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md, .agentic/compiled_agent_context.yaml]
+    migration_reason: Python-core-first portable execution and shell-as-adapter behavior are preserved through the portable execution contract.
