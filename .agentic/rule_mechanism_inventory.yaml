@@ -66,3 +66,38 @@ mechanisms:
       - path: ./ns
         required_terms: [patch-preflight, agentic_project_kit.cli]
     protected_rule_intent: Block unsafe generated patch artifacts and rule-registry drift before patch application.
+  - id: chat-communication-rules
+    status: active
+    category: communication
+    priority: 2
+    enforcement_phase: runtime
+    sources:
+      - path: docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+        required_terms: [User acknowledgements, paste-output, terminal log upload, remote evidence]
+      - path: docs/governance/FINAL_SUMMARY_CONTRACT.md
+        required_terms: [No legacy handwritten summary fallback, terminal_log_remote, Remote log lookup rule]
+      - path: .agentic/compiled_agent_context.yaml
+        required_terms: [chat-communication-contract, communication_rules, paste-output]
+    protected_rule_intent: Preserve d/f/w/paste-output semantics, no-copy evidence handling, and remote-log-first communication rules.
+  - id: chat-bootstrap-drift-rules
+    status: active
+    category: governance
+    priority: 2
+    enforcement_phase: guard
+    sources:
+      - path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+        required_terms: [Mandatory startup sequence, Remote repository connector route, Governance YAML mutation rule, Local repository freshness precondition]
+      - path: .agentic/compiled_agent_context.yaml
+        required_terms: [chat-bootstrap-and-drift-contract, mandatory_successor_chat_sources, drift_detection]
+    protected_rule_intent: Preserve mandatory successor-chat bootstrap, drift detection, direct connector route, and structured YAML mutation rules.
+  - id: portable-execution-rules
+    status: active
+    category: execution
+    priority: 1
+    enforcement_phase: runtime
+    sources:
+      - path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+        required_terms: [shell commands are adapters only, Remote connector route rule, Governance YAML mutation rule, Evidence rule]
+      - path: .agentic/compiled_agent_context.yaml
+        required_terms: [portable-chat-execution-contract, canonical_core, shell_role]
+    protected_rule_intent: Preserve Python-core-first portable execution and keep shell usage as an adapter, not canonical workflow logic.
