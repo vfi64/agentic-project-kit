@@ -69,6 +69,7 @@ def _validate_assertions(
     *,
     value: Any,
     mechanism_id: str,
+    global_assertion_ids: dict[str, str],
     findings: list[RuleRegistryFinding],
 ) -> None:
     if not isinstance(value, list):
@@ -78,6 +79,7 @@ def _validate_assertions(
         findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertions must list at least one entry"))
         return
     seen_ids: set[str] = set()
+    required_prefix = f"{mechanism_id}-"
     for assertion in value:
         if not isinstance(assertion, dict):
             findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertion entries must be mappings"))
@@ -85,10 +87,27 @@ def _validate_assertions(
         assertion_id = str(assertion.get("assertion_id", "")).strip()
         if not assertion_id:
             findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: assertion missing assertion_id"))
-        elif assertion_id in seen_ids:
-            findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: duplicate assertion_id: {assertion_id}"))
         else:
+            if not assertion_id.startswith(required_prefix):
+                findings.append(
+                    RuleRegistryFinding(
+                        str(COVERAGE_PATH),
+                        f"{mechanism_id}: assertion_id must start with {required_prefix}: {assertion_id}",
+                    )
+                )
+            if assertion_id in seen_ids:
+                findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"{mechanism_id}: duplicate assertion_id: {assertion_id}"))
             seen_ids.add(assertion_id)
+            previous_mechanism = global_assertion_ids.get(assertion_id)
+            if previous_mechanism is not None and previous_mechanism != mechanism_id:
+                findings.append(
+                    RuleRegistryFinding(
+                        str(COVERAGE_PATH),
+                        f"{mechanism_id}: assertion_id already used by {previous_mechanism}: {assertion_id}",
+                    )
+                )
+            else:
+                global_assertion_ids[assertion_id] = mechanism_id
         kind = assertion.get("kind")
         if kind not in VALID_ASSERTION_KINDS:
             findings.append(
@@ -179,7 +198,11 @@ def _load_test_coverage_metadata(base: Path, findings: list[RuleRegistryFinding]
 
 
 def _validate_test_coverage(
-    mechanism: dict[str, Any], mechanism_id: str, tests: list[str], findings: list[RuleRegistryFinding]
+    mechanism: dict[str, Any],
+    mechanism_id: str,
+    tests: list[str],
+    global_assertion_ids: dict[str, str],
+    findings: list[RuleRegistryFinding],
 ) -> None:
     coverage = mechanism.get("test_coverage")
     if coverage not in VALID_TEST_COVERAGE:
@@ -190,7 +213,12 @@ def _validate_test_coverage(
             )
         )
         return
-    _validate_assertions(value=mechanism.get("assertions"), mechanism_id=mechanism_id, findings=findings)
+    _validate_assertions(
+        value=mechanism.get("assertions"),
+        mechanism_id=mechanism_id,
+        global_assertion_ids=global_assertion_ids,
+        findings=findings,
+    )
     rationale = str(mechanism.get("coverage_rationale", "")).strip()
     if tests and coverage != "direct":
         findings.append(
@@ -299,6 +327,7 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
         findings.append(RuleRegistryFinding(str(MIGRATIONS_PATH), "schema_version must be 1"))
     mechanisms = _as_list(inventory.get("mechanisms"))
     mechanism_ids: set[str] = set()
+    global_assertion_ids: dict[str, str] = {}
     for mechanism in mechanisms:
         mid = str(mechanism.get("id", ""))
         if not mid:
@@ -342,7 +371,7 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
         if coverage_metadata_present and mid not in coverage_by_mechanism and "test_coverage" not in mechanism:
             pass
         elif coverage_metadata_present or "test_coverage" in mechanism:
-            _validate_test_coverage(coverage_view, mid, tests, findings)
+            _validate_test_coverage(coverage_view, mid, tests, global_assertion_ids, findings)
         for test_path in tests:
             if not (base / test_path).exists():
                 findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: missing test path: {test_path}"))
