@@ -19,6 +19,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Documentation registry/schema change | Update docs/DOCUMENTATION_REGISTRY.yaml and docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md; run registry unit tests plus agentic-kit check-docs/docs-audit |
 | Documentation mesh / cross-document drift change | Unit tests plus agentic-kit doc-mesh-audit CLI smoke command; keep current-state, governance, architecture, and historical-plan document classes explicit |
 | Governance rule change | Rule Hardening Gate: add or update a deterministic test, coverage check, doctor check, release check, or documented review-only exception |
+| Critical control file change | Control File Preservation Gate: preserve required anchors or record an explicit successor migration; hard length-limit trimming is forbidden |
 | Local repository mutation | Local Freshness Gate: fetch the remote, verify the intended base is current, preserve or stop on dirty local state, then create the feature branch |
 | LLM communication or bootstrap rule change | Update the communication/bootstrap governance contracts, compiled agent context, coverage anchors, and `tests/test_llm_communication_contracts.py`; run agentic-kit check-docs |
 | Portable execution rule change | Update `docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md`; add or update Python-first tests; do not make POSIX shell tools canonical workflow dependencies |
@@ -101,7 +102,6 @@ Required evidence for this registry gate:
     agentic-kit docs-registry
     agentic-kit docs-registry --report /tmp/agentic-docs-registry-summary.json
     agentic-kit check-docs
-    agentic-kit docs-audit
 
 ## LLM Communication and Bootstrap Gate
 
@@ -163,6 +163,19 @@ Accepted hardening mechanisms:
 - a documented review-only exception when the rule is intentionally not machine-checkable.
 
 Do not add normative rules that exist only as prose without a matching test, gate, coverage requirement, or explicit exception. Review-only exceptions must name why the rule cannot currently be enforced deterministically and what evidence reviewers should inspect.
+
+## Control File Preservation Gate
+
+Critical control files must not lose active rules for compactness, token budget, or broad rewrite convenience. Information preservation outranks compactness.
+
+Protected files and required anchors are listed in `.agentic/control_file_preservation.yaml`. The manifest explicitly sets `no_hard_length_limit: true`; hard length-limit trimming is forbidden. If a protected file becomes too large, split it, reference it, or generate projections from machine-readable sources instead of deleting still-active rules.
+
+A removed protected anchor is valid only when the same change records the removed anchor, successor anchor, rationale, deterministic test, and reviewer-visible summary. Otherwise the change is lossy and must fail.
+
+Required evidence:
+
+    python -m pytest -q tests/test_control_file_preservation.py
+    agentic-kit check-docs
 
 ## Document Quality Heuristic Gate
 
