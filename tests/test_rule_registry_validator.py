@@ -14,6 +14,8 @@ def _valid_mechanism() -> dict[str, object]:
         "category": "governance",
         "priority": 1,
         "enforcement_phase": "guard",
+        "surfaces": ["validator-test-surface"],
+        "tests": [],
         "protected_rule_intent": "intent",
         "sources": [
             {"path": "source.txt", "required_terms": ["present"]},
@@ -100,6 +102,36 @@ def test_validator_rejects_source_without_required_terms(tmp_path: Path) -> None
     _write_registry(tmp_path, mechanism)
     findings = validate_rule_registry(tmp_path)
     assert any("must list at least one required_terms entry" in finding.message for finding in findings)
+
+
+
+def test_validator_rejects_missing_surfaces_field(tmp_path: Path) -> None:
+    mechanism = _valid_mechanism()
+    mechanism.pop("surfaces")
+    _write_registry(tmp_path, mechanism)
+    findings = validate_rule_registry(tmp_path)
+    assert any("surfaces must be a list" in finding.message for finding in findings)
+
+def test_validator_rejects_empty_surfaces(tmp_path: Path) -> None:
+    mechanism = _valid_mechanism()
+    mechanism["surfaces"] = []
+    _write_registry(tmp_path, mechanism)
+    findings = validate_rule_registry(tmp_path)
+    assert any("surfaces must list at least one entry" in finding.message for finding in findings)
+
+def test_validator_rejects_missing_tests_field(tmp_path: Path) -> None:
+    mechanism = _valid_mechanism()
+    mechanism.pop("tests")
+    _write_registry(tmp_path, mechanism)
+    findings = validate_rule_registry(tmp_path)
+    assert any("tests must be a list" in finding.message for finding in findings)
+
+def test_validator_rejects_missing_test_path(tmp_path: Path) -> None:
+    mechanism = _valid_mechanism()
+    mechanism["tests"] = ["tests/missing_test_file.py"]
+    _write_registry(tmp_path, mechanism)
+    findings = validate_rule_registry(tmp_path)
+    assert any("missing test path: tests/missing_test_file.py" in finding.message for finding in findings)
 
 
 def test_validator_rejects_migration_to_unknown_mechanism(tmp_path: Path) -> None:

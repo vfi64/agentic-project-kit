@@ -1,0 +1,186 @@
+PR742 RULE REGISTRY SURFACES TESTS VALIDATION -- LOCAL RECOVERY -- NO RELEASE
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+0eceba5bb20c6ac7425d5ba774cfc275af7bed7d
+0eceba5 Add rule registry surfaces and test metadata (#741)
+9bd190f Add rule registry surfaces and test metadata (#740)
+aac97c8 Harden rule registry source and evidence validation (#739)
+5ac7d9d Remove PR737 placeholder evidence file (#738)
+d82771e Expand rule registry release and evidence coverage (#737)
+
+### CLEAN PRECHECK ###
+
+### ENV PRECHECK ###
+Obtaining file:///Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Installing backend dependencies: started
+  Installing backend dependencies: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: pydantic>=2.7 in ./.venv/lib/python3.13/site-packages (from agentic-project-kit==0.4.1) (2.13.4)
+Requirement already satisfied: pyyaml>=6.0 in ./.venv/lib/python3.13/site-packages (from agentic-project-kit==0.4.1) (6.0.3)
+Requirement already satisfied: rich>=13.7 in ./.venv/lib/python3.13/site-packages (from agentic-project-kit==0.4.1) (15.0.0)
+Requirement already satisfied: typer>=0.12 in ./.venv/lib/python3.13/site-packages (from agentic-project-kit==0.4.1) (0.25.1)
+Requirement already satisfied: annotated-types>=0.6.0 in ./.venv/lib/python3.13/site-packages (from pydantic>=2.7->agentic-project-kit==0.4.1) (0.7.0)
+Requirement already satisfied: pydantic-core==2.46.4 in ./.venv/lib/python3.13/site-packages (from pydantic>=2.7->agentic-project-kit==0.4.1) (2.46.4)
+Requirement already satisfied: typing-extensions>=4.14.1 in ./.venv/lib/python3.13/site-packages (from pydantic>=2.7->agentic-project-kit==0.4.1) (4.15.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in ./.venv/lib/python3.13/site-packages (from pydantic>=2.7->agentic-project-kit==0.4.1) (0.4.2)
+Requirement already satisfied: markdown-it-py>=2.2.0 in ./.venv/lib/python3.13/site-packages (from rich>=13.7->agentic-project-kit==0.4.1) (4.2.0)
+Requirement already satisfied: pygments<3.0.0,>=2.13.0 in ./.venv/lib/python3.13/site-packages (from rich>=13.7->agentic-project-kit==0.4.1) (2.20.0)
+Requirement already satisfied: mdurl~=0.1 in ./.venv/lib/python3.13/site-packages (from markdown-it-py>=2.2.0->rich>=13.7->agentic-project-kit==0.4.1) (0.1.2)
+Requirement already satisfied: click>=8.2.1 in ./.venv/lib/python3.13/site-packages (from typer>=0.12->agentic-project-kit==0.4.1) (8.4.1)
+Requirement already satisfied: shellingham>=1.3.0 in ./.venv/lib/python3.13/site-packages (from typer>=0.12->agentic-project-kit==0.4.1) (1.5.4)
+Requirement already satisfied: annotated-doc>=0.0.2 in ./.venv/lib/python3.13/site-packages (from typer>=0.12->agentic-project-kit==0.4.1) (0.0.4)
+Building wheels for collected packages: agentic-project-kit
+  Building editable for agentic-project-kit (pyproject.toml): started
+  Building editable for agentic-project-kit (pyproject.toml): finished with status 'done'
+  Created wheel for agentic-project-kit: filename=agentic_project_kit-0.4.1-py3-none-any.whl size=10995 sha256=e241fc856573ba60459f4cf67ce18f79a09fc1ad6a5c2e2930037b1b666f2c2a
+  Stored in directory: /private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pip-ephem-wheel-cache-4vi83cyl/wheels/b5/8f/a3/2558d63d8dae58d78c2ae9b34588082684703aa20f52453070
+Successfully built agentic-project-kit
+Installing collected packages: agentic-project-kit
+  Attempting uninstall: agentic-project-kit
+    Found existing installation: agentic-project-kit 0.4.1
+    Uninstalling agentic-project-kit-0.4.1:
+      Successfully uninstalled agentic-project-kit-0.4.1
+Successfully installed agentic-project-kit-0.4.1
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'feature/rule-registry-surfaces-tests-validation-742'
+branch 'feature/rule-registry-surfaces-tests-validation-742' set up to track 'origin/main'.
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+
+### VERIFY EXPECTED DIFF ###
+diff --git a/src/agentic_project_kit/rule_registry_validator.py b/src/agentic_project_kit/rule_registry_validator.py
+index 3d75fe1..bfeec53 100644
+--- a/src/agentic_project_kit/rule_registry_validator.py
++++ b/src/agentic_project_kit/rule_registry_validator.py
+@@ -35,6 +35,30 @@ def _load_yaml(path: Path) -> Any:
+ def _as_list(value: Any) -> list[Any]:
+     return value if isinstance(value, list) else []
+ 
++
++def _validate_string_list(
++    *,
++    value: Any,
++    label: str,
++    mechanism_id: str,
++    required_non_empty: bool,
++    findings: list[RuleRegistryFinding],
++) -> list[str]:
++    if not isinstance(value, list):
++        findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mechanism_id}: {label} must be a list"))
++        return []
++    if required_non_empty and not value:
++        findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mechanism_id}: {label} must list at least one entry"))
++    entries: list[str] = []
++    for item in value:
++        text = str(item).strip()
++        if not text:
++            findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mechanism_id}: {label} entries must be non-empty strings"))
++            continue
++        entries.append(text)
++    return entries
++
++
+ def _validate_mechanism_metadata(
+     mechanism: dict[str, Any], mechanism_id: str, findings: list[RuleRegistryFinding]
+ ) -> None:
+@@ -161,6 +185,23 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
+         if mechanism.get("status") != "active":
+             findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: status must be active"))
+         _validate_mechanism_metadata(mechanism, mid, findings)
++        _validate_string_list(
++            value=mechanism.get("surfaces"),
++            label="surfaces",
++            mechanism_id=mid,
++            required_non_empty=True,
++            findings=findings,
++        )
++        tests = _validate_string_list(
++            value=mechanism.get("tests"),
++            label="tests",
++            mechanism_id=mid,
++            required_non_empty=False,
++            findings=findings,
++        )
++        for test_path in tests:
++            if not (base / test_path).exists():
++                findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: missing test path: {test_path}"))
+         if not str(mechanism.get("protected_rule_intent", "")).strip():
+             findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: missing protected_rule_intent"))
+         sources = _as_list(mechanism.get("sources"))
+diff --git a/tests/test_rule_registry_validator.py b/tests/test_rule_registry_validator.py
+index 8715775..ae091cb 100644
+--- a/tests/test_rule_registry_validator.py
++++ b/tests/test_rule_registry_validator.py
+@@ -14,6 +14,8 @@ def _valid_mechanism() -> dict[str, object]:
+         "category": "governance",
+         "priority": 1,
+         "enforcement_phase": "guard",
++        "surfaces": ["validator-test-surface"],
++        "tests": [],
+         "protected_rule_intent": "intent",
+         "sources": [
+             {"path": "source.txt", "required_terms": ["present"]},
+@@ -102,6 +104,36 @@ def test_validator_rejects_source_without_required_terms(tmp_path: Path) -> None
+     assert any("must list at least one required_terms entry" in finding.message for finding in findings)
+ 
+ 
++
++def test_validator_rejects_missing_surfaces_field(tmp_path: Path) -> None:
++    mechanism = _valid_mechanism()
++    mechanism.pop("surfaces")
++    _write_registry(tmp_path, mechanism)
++    findings = validate_rule_registry(tmp_path)
++    assert any("surfaces must be a list" in finding.message for finding in findings)
++
++def test_validator_rejects_empty_surfaces(tmp_path: Path) -> None:
++    mechanism = _valid_mechanism()
++    mechanism["surfaces"] = []
++    _write_registry(tmp_path, mechanism)
++    findings = validate_rule_registry(tmp_path)
++    assert any("surfaces must list at least one entry" in finding.message for finding in findings)
++
++def test_validator_rejects_missing_tests_field(tmp_path: Path) -> None:
++    mechanism = _valid_mechanism()
++    mechanism.pop("tests")
++    _write_registry(tmp_path, mechanism)
++    findings = validate_rule_registry(tmp_path)
++    assert any("tests must be a list" in finding.message for finding in findings)
++
++def test_validator_rejects_missing_test_path(tmp_path: Path) -> None:
++    mechanism = _valid_mechanism()
++    mechanism["tests"] = ["tests/missing_test_file.py"]
++    _write_registry(tmp_path, mechanism)
++    findings = validate_rule_registry(tmp_path)
++    assert any("missing test path: tests/missing_test_file.py" in finding.message for finding in findings)
++
++
+ def test_validator_rejects_migration_to_unknown_mechanism(tmp_path: Path) -> None:
+     _write_registry(tmp_path, _valid_mechanism(), replaced_by="unknown")
+     findings = validate_rule_registry(tmp_path)
+
+### GATES ###
+Rule registry validation passed
+...........................                                              [100%]
+27 passed in 0.20s
+Agentic project check passed
+
+### COMMIT REAL PATCH ###
+[feature/rule-registry-surfaces-tests-validation-742 1df6d09] Validate rule registry surfaces and tests metadata
+ 2 files changed, 73 insertions(+)
