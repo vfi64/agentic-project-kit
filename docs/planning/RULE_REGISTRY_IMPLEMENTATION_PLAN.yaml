@@ -1,0 +1,109 @@
+schema_version: 1
+id: rule-registry-implementation-plan
+status: planned
+priority: 1
+supersedes_next_work:
+  - continue-documentation-registry-rebuild
+reason: >-
+  Rule loss during v0.4.1 closeout showed that prose-only governance and
+  scattered compatibility anchors are not sufficient. A governed rule registry
+  must become the canonical source before the documentation-management rebuild
+  continues.
+english_only: true
+scope:
+  in:
+    - active workflow rules
+    - communication and final-summary rules
+    - evidence and no-copy terminal rules
+    - GitHub/remote-work rules
+    - YAML/control-file preservation rules
+    - GUI and documentation-management gating rules
+  out:
+    - release tagging
+    - DOI mutation
+    - broad documentation migration
+    - GUI feature expansion
+architecture:
+  source_of_truth: .agentic/rules/*.yaml
+  compatibility_bridge: .agentic/rule_preservation.yaml
+  projections:
+    - .agentic/compiled_agent_context.yaml
+    - docs/STATUS.md
+    - docs/handoff/CURRENT_HANDOFF.md
+    - successor handoff prompts
+  validator_module: src/agentic_project_kit/rules_registry.py
+  cli_commands:
+    - agentic-kit rules check
+    - agentic-kit rules render --check
+    - agentic-kit rules diff
+    - agentic-kit rules audit
+file_strategy:
+  small_files: true
+  modular_layout:
+    - .agentic/rules/000-core.yaml
+    - .agentic/rules/100-communication.yaml
+    - .agentic/rules/200-evidence.yaml
+    - .agentic/rules/300-terminal.yaml
+    - .agentic/rules/400-remote-git.yaml
+    - .agentic/rules/500-release.yaml
+    - .agentic/rules/600-gui.yaml
+    - .agentic/rules/700-documentation.yaml
+  maximum_rule_file_goal: small enough for review and connector updates
+rule_schema_required_fields:
+  - id
+  - title
+  - language
+  - status
+  - category
+  - priority
+  - scope
+  - normative_text
+  - enforcement
+  - projections
+  - dependencies
+  - conflicts_with
+  - replaces
+  - replaced_by
+  - last_reviewed
+allowed_statuses:
+  - active
+  - deprecated
+  - obsolete
+  - migrated
+  - experimental
+allowed_priorities:
+  - critical
+  - required
+  - recommended
+  - advisory
+required_invariants:
+  - every persistent rule must be English
+  - every active critical or required rule must have at least one deterministic enforcement reference
+  - every active rule must have at least one projection or explicit no_projection_reason
+  - rule ids must be stable, unique, and never recycled
+  - obsolete rules must not be rendered into active projections
+  - migrated rules must name their successor rule id
+  - dependencies and conflicts must reference existing ids
+  - generated projections must not become independent rule sources
+  - STATUS and CURRENT_HANDOFF must stay concise projections, not canonical rule stores
+  - broad documentation migration remains blocked until rules check passes
+test_plan:
+  - duplicate ids fail
+  - non-English active rule fails
+  - missing enforcement on critical rule fails
+  - unknown dependency fails
+  - active conflicting rules fail
+  - obsolete rule in active projection fails
+  - projection drift fails
+  - current PR716 preserved rules migrate into modular registry without loss
+acceptance_gates:
+  - targeted pytest for rules registry
+  - workflow-guard includes rules registry check
+  - check-docs stays green
+  - doctor stays green
+  - no release, tag, or DOI mutation
+next_slice:
+  title: Introduce governed rule registry baseline
+  branch_suggestion: feature/governed-rule-registry-baseline
+  must_finish_before:
+    - documentation-management rebuild

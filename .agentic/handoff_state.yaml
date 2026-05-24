@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-24'
-  reason: Refresh handoff state after PR714 workflow guard diagnostics closeout
-  source: main HEAD after PR714
+  reason: Prioritize governed rule registry after PR716 rule-preservation guard
+  source: main HEAD after PR716 merge verification
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,11 +10,11 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 7d092cb
-  commit_subject: Add workflow guard diagnostics (#714)
+  commit: f34f712
+  commit_subject: Record PR716 merge verification log
   semantics: current_main_head
   working_tree_expected_clean: true
-  administrative_refresh_prs: [656, 657, 659, 660, 661, 663, 665, 666, 671, 672, 680, 681, 688, 689, 690, 691, 694, 702, 705, 707, 708, 710]
+  administrative_refresh_prs: [656, 657, 659, 660, 661, 663, 665, 666, 671, 672, 680, 681, 688, 689, 690, 691, 694, 702, 705, 707, 708, 710, 715, 716]
 release:
   current_version: 0.4.1
   previous_version: 0.4.0
@@ -26,19 +26,25 @@ release:
   post_release_evidence: docs/reports/terminal/v041-final-main-verify-after-pr689.log
 open_items:
   prs: []
-  historical_prs_closed: [562, 564, 568]
-  next_expected_chat_action: Harden structured SUMMARY enforcement before resuming documentation-management rebuild.
+  next_expected_chat_action: Implement governed rule registry baseline before resuming documentation-management rebuild.
 completed_since_previous_handoff:
 - PR #692 introduced the documentation registry baseline.
 - PR #701 surfaced registry data in release gates.
 - PR #709 exposed communication artifact policy through the registry summary.
 - PR #712 hardened remote access, YAML mutation, and control-file preservation.
 - PR #714 added workflow guard diagnostics and removed hard word limits from protected control files.
+- PR #715 refreshed post-PR714 handoff state.
+- PR #716 added a machine-readable rule-preservation guard.
 current_capabilities:
   ns_actions: [agent-next, agent-run, command-inbox-check, state-freshness-check, terminal-remote-preflight, terminal-finalize, handoff-show, handoff-check, governance-check, dev]
   artifact_dirs:
     terminal_logs: docs/reports/terminal
     command_runs: docs/reports/command_runs
+  rule_preservation:
+    registry: .agentic/rule_preservation.yaml
+    guard: src/agentic_project_kit/rule_preservation.py
+    workflow_guard_pattern: rule-preservation-drift
+    status: baseline-active
   documentation_registry:
     registry: docs/DOCUMENTATION_REGISTRY.yaml
     contract: docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md
@@ -46,6 +52,12 @@ current_capabilities:
     cli_report: agentic-kit docs-registry --report PATH
     artifact_policy_source: .agentic/communication_artifacts.yaml
     broad_migration_allowed: false
+  governed_rule_registry_plan:
+    plan_yaml: docs/planning/RULE_REGISTRY_IMPLEMENTATION_PLAN.yaml
+    architecture_doc: docs/planning/RULE_REGISTRY_ARCHITECTURE.md
+    priority: 1
+    must_finish_before: [documentation-management rebuild]
+    target_source_of_truth: .agentic/rules/*.yaml
   workflow_hardening:
     remote_route_rule: GitHub connector direct-path-first for known paths, refs, PRs, and commits.
     yaml_mutation_rule: Use structured YAML mutation and parse validation.
@@ -94,6 +106,9 @@ rules:
 - id: structured-summary-must-be-enforced
   status: active
   text: Relevant local or remote work blocks must end with the canonical structured SUMMARY from FINAL_SUMMARY_CONTRACT.md. Missing, malformed, contradictory, or legacy summaries are workflow drift.
+- id: governed-rule-registry-before-documentation-rebuild
+  status: active
+  text: A governed modular rule registry must become the canonical source of truth before documentation-management rebuild work resumes.
 recent_failure_patterns:
 - id: guessing-before-inspection
   prevention: Before choosing commands, paths, JSON fields, release checks, or DOI sources, inspect the remote repository and command help. Treat memory and chat summaries as hypotheses until verified.
@@ -120,18 +135,22 @@ recent_failure_patterns:
 - id: structured-summary-drift
   prevention: Verify canonical SUMMARY fields and consistency across WORK, EVIDENCE, OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and RESULT marker.
 next_allowed_tasks:
-- id: enforce-structured-final-summaries
-  title: Harden and test canonical structured SUMMARY enforcement before resuming documentation-management work.
+- id: introduce-governed-rule-registry-baseline
+  title: Implement modular governed rule registry as canonical rule source before documentation-management rebuild.
   priority: 1
-- id: continue-documentation-registry-rebuild
-  title: After summary enforcement only, continue the documentation-management rebuild with one small additive registry or projection slice.
+- id: enforce-structured-final-summaries
+  title: Continue hardening canonical structured SUMMARY enforcement as a rule-registry-backed rule group.
   priority: 2
+- id: continue-documentation-registry-rebuild
+  title: After governed rule registry baseline only, continue the documentation-management rebuild with one small additive registry or projection slice.
+  priority: 3
 blocked_until_closeout:
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
 - Broad documentation migration
 - Release, tag, or DOI mutation
-first_instruction: Verify PR715, merge it only if CI and mergeability are green, then harden structured SUMMARY enforcement before resuming documentation-management work. Do not start broad migration, release, tag, DOI mutation, or destructive GUI action.
+- Documentation-management rebuild until governed rule registry baseline is merged
+first_instruction: Implement the governed rule registry baseline before resuming documentation-management work. Do not start broad migration, release, tag, DOI mutation, or destructive GUI action.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
@@ -140,7 +159,7 @@ handoff_maintenance:
   remove_obsolete_rules_when_system_changes: true
   latest_successor_prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr714.md
 administrative_evidence_state:
-  current_head: 3f2e29d
-  current_head_subject: Restore final handoff state CI anchors
+  current_head: f34f712
+  current_head_subject: Record PR716 merge verification log
   allowed_after_safe_state: true
-  reason: post-PR714 administrative closeout and drift-guard repair after substantive safe_state 7d092cb
+  reason: post-PR716 planning update for governed rule registry before documentation-management rebuild
