@@ -53,6 +53,10 @@ GUI MVP baseline:
 - `agent-run` and non-read-only actions remain disabled in the GUI MVP.
 - Headless GUI action execution tests cover the bounded read-only action executor.
 
+## Current Goal
+
+Repair PR715 closeout drift without product changes, merge PR715 only after CI and mergeability are green, then harden canonical structured SUMMARY enforcement before resuming documentation-management work.
+
 ## Active Workflow Rules
 
 - Read mandatory successor-chat sources before mutation.
@@ -63,6 +67,9 @@ GUI MVP baseline:
 - Preserve relevant PASS and FAIL terminal output remotely under `docs/reports/terminal/*.log` whenever technically possible.
 - Relevant terminal blocks must render the structured Final summary contract in terminal output before log upload.
 - `d`, `f`, `w`, and `p` are communication signals, not evidence.
+- Remote-first no-guess: do not guess repository state; inspect known remote paths, PRs, commits, logs, and command help first.
+- Remote-log evidence is mandatory for standard-error hardening slices.
+- no-remote-command-deadlock applies: remote command output must not depend on manual paste when remote or local evidence exists.
 - Ruff must run only on Python sources or Python files; shell files use shell checks, not Ruff.
 - Generated terminal blocks must avoid heredocs, risky multiline `python -c` snippets, and quote-prone constructs.
 - Recent CHANGELOG release entries from v0.3.36 onward are guarded structurally.
@@ -84,13 +91,13 @@ Mandatory successor-chat source order is defined by `.agentic/compiled_agent_con
 7. `docs/STATUS.md`
 8. `docs/handoff/CURRENT_HANDOFF.md`
 
-Final summary contract: relevant workflow blocks must end with the framed SUMMARY contract containing WORK, EVIDENCE, OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and the final result marker.
+Final summary contract: relevant workflow blocks must end with the framed SUMMARY contract containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, CHAT_REPLY, and the final result marker. No executable placeholder summaries and final-summary-no-executable-placeholders remain active.
 
 No-copy/evidence contract: `d` means a log-backed block appears finished; evidence must still be inspected. `f` means failure was reported; first inspect remote or local evidence and request pasted output only when evidence is unavailable or unusable.
 
 ## Live Status Commands
 
-Use project-local commands first: `./ns state`, `./ns check-docs`, `./ns doctor`, `./ns docs-audit`, `./ns handoff-check`, `./ns governance-check`, and `agentic-kit handoff prompt` when installed through the active project environment.
+Use project-local commands first: `./ns state`, `./ns check-docs`, `./ns doctor`, `./ns docs-audit`, `./ns handoff-check`, `./ns governance-check`, `agentic-kit check-docs`, `agentic-kit doctor`, and `agentic-kit handoff prompt` when installed through the active project environment.
 
 The registry can be inspected through `agentic-kit docs-registry` and exported with `agentic-kit docs-registry --report PATH`.
 
@@ -113,6 +120,10 @@ This remote chat environment cannot run the local Python gates directly. Merge r
 First repair PR715 and verify that the post-PR714 closeout state, handoff state, current handoff, and successor prompt are consistent with PR714 rather than PR712.
 
 Then perform the dedicated hardening slice: enforce structured final summaries across the renderer, tests, workflow guard or patch preflight, generated handoff prompts, terminal logs, command reports, and chat/workflow contracts. Do not return to the documentation-management rebuild until this drift is closed.
+
+## Historical Compatibility Anchors
+
+These anchors keep older regression tests attached to their migrated contracts without turning STATUS into the long-term history: read-only catalog; advisory-only; Pattern Advisor; `patterns list`; `patterns show`; Planning-state freshness; Tkinter cockpit; v0.3.30 GUI Readiness Hardening Plan; v0.3.30 GUI Readiness Hardening Closeout; v0.3.31 Pre-GUI Execution Hardening Plan; v0.3.31 Pre-GUI Execution Hardening Closeout; v0.3.31 Evidence Guard Usage; v0.3.31 is the current pre-GUI execution hardening line.; It does not ship the Tkinter GUI.; Terminal Evidence Guard with CLI command `agentic-kit evidence guard LOGFILE`.; Local shortcut `./ns evidence-guard LOGFILE`.; `agentic-kit evidence guard LOGFILE`; `./ns evidence-guard LOGFILE`; contradictory final state; final-PASS-after-failure; Expected negative-smoke logs are allowed only when the log explicitly records that the false-PASS case was rejected.; Typed Work Order Evidence Contract.; Typed Work Order Evidence Runtime Check.; validate_typed_work_order_evidence; Next safe step: prepare and release v0.3.31.; Do not start Tkinter before v0.3.31 is released and post-release verified.; Typed Work Orders Pre-GUI Execution Path; v0.3.32 Release Phase and Evidence Closeout; Current released version: 0.3.29; Current released version: 0.3.32; `release-preflight` validates the before-metadata release phase; `release-check` remains the after-metadata gate; `post-release-check` remains the after-release GitHub and Zenodo verification gate; `evidence clean-check`; `./ns evidence-clean-check`; expected in-progress log may be the only dirty path; v0.3.34 Portable Core Hardening Plan; Typed work order unit-test matrix; Release and DOI core action extraction; concept-DOI versus version-DOI WAITING guard; no new large shell control blocks; Tkinter remains explicitly deferred; v0.3.36 current-state cleanup started as a documentation-only line; remote inspection evidence contract; Remote-log evidence is mandatory for standard-error hardening slices; PR #650 merged; PR #651 merged; PR #652 merged.
 
 ## Compatibility Coverage Anchors
 
