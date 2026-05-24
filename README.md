@@ -292,6 +292,12 @@ Prefer the package CLI for normal use; the legacy command is kept visible for co
 
 The legacy cycle uses `IDLE`, `TEST`, `UPLOAD`, and `CLEANUP`. Details are documented in `docs/WORKFLOW_OUTPUT_CYCLE.md`.
 
+## Workflow guard
+
+Use `agentic-kit workflow-guard check` before mutation-oriented workflow repair or protected control-file changes. The workflow guard diagnoses recurring workflow failures such as governance YAML parse errors, missing protected anchors, weakened no-hard-length-limit preservation policy, and missing workflow guard policy documentation.
+
+The guard is conservative by design: it diagnoses first and requires a repair plan for semantic rule loss, release-state conflict, broad document rewrites, and unclear YAML recovery. It is a workflow guard, not an autonomous semantic fixer.
+
 
 ## Pattern Advisor read-only catalog
 
@@ -517,34 +523,3 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - Verified v0.3.22 version DOI: `10.5281/zenodo.20261634`
 - Verified v0.3.18 version DOI: `10.5281/zenodo.20245754`
 - Verified v0.4.1 version DOI: `10.5281/zenodo.20357657`
-
-Near-term documentation-governance work: stabilize `agentic-kit doc-mesh-audit` as a targeted special gate, collect false positives, then decide whether to promote it into `agentic-kit doctor` before any unconditional default `ns` integration.
-
-## PR Hygiene Diagnostics
-
-Use `agentic-kit pr-hygiene` as a read-only diagnostic guard for pull-request and branch drift.
-
-```bash
-agentic-kit pr-hygiene
-agentic-kit pr-hygiene --json
-```
-
-The command reports similar open PRs, open PRs without a detectable main delta, stale sibling signals, and local branches whose upstream branch is gone. It does not close PRs, delete branches, push, merge, tag, or release.
-
-## Planning Document Scaffolding
-
-Use `agentic-kit scaffold planning-doc` to create governed planning documents with lifecycle-valid metadata from the start.
-
-```bash
-agentic-kit scaffold planning-doc "GUI i18n Foundation" \
-  --scope "post-v0.3.21 GUI localization foundation" \
-  --review-policy "review before implementation and after each milestone"
-```
-
-The command writes a document under `docs/planning/` by default, includes `Status`, `Decision status`, `Scope`, and `Review policy`, and refuses to overwrite an existing file unless `--overwrite` is passed.
-Current verified release: version `0.4.1`, Zenodo version DOI `10.5281/zenodo.20357657`.
-
-Earlier verified version-specific DOIs are intentionally maintained in `docs/releases/VERIFIED_RELEASES.md` instead of duplicating a long and drift-prone release ledger in the README.
-Archived release v0.3.36 was post-release verified before v0.3.37.
-Version `0.3.37` is released and post-release verified with Zenodo version DOI `10.5281/zenodo.20329450`.
-Version `0.4.1` is the current release line prepared by `./ns release-prep 0.4.1` and released/post-release verified with Zenodo version DOI `10.5281/zenodo.20357657`.
