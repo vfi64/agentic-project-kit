@@ -8,6 +8,7 @@ import yaml
 
 INVENTORY_PATH = Path(".agentic/rule_mechanism_inventory.yaml")
 MIGRATIONS_PATH = Path(".agentic/rule_migrations.yaml")
+COVERAGE_PATH = Path(".agentic/rule_test_coverage.yaml")
 VALID_MECHANISM_CATEGORIES = {"communication", "execution", "governance", "workflow", "preflight"}
 VALID_ENFORCEMENT_PHASES = {"runtime", "guard", "preflight"}
 VALID_CATEGORY_PHASES = {
@@ -23,15 +24,18 @@ TERMINAL_MIGRATION_STATUSES = {"archived", "rejected"}
 MIN_PRIORITY = 1
 MAX_PRIORITY = 5
 
+
 @dataclass(frozen=True)
 class RuleRegistryFinding:
     path: str
     message: str
 
+
 def _load_yaml(path: Path) -> Any:
     if not path.exists():
         raise FileNotFoundError(path)
     return yaml.safe_load(path.read_text(encoding="utf-8"))
+
 
 def _as_list(value: Any) -> list[Any]:
     return value if isinstance(value, list) else []
@@ -102,6 +106,40 @@ def _validate_mechanism_metadata(
             )
         )
 
+
+def _load_test_coverage_metadata(base: Path, findings: list[RuleRegistryFinding]) -> dict[str, dict[str, Any]]:
+    coverage_path = base / COVERAGE_PATH
+    if not coverage_path.exists():
+        return {}
+    try:
+        data = _load_yaml(coverage_path)
+    except Exception as exc:
+        findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"cannot load test coverage metadata: {exc}"))
+        return {}
+    if not isinstance(data, dict):
+        findings.append(RuleRegistryFinding(str(COVERAGE_PATH), "coverage metadata must be a mapping"))
+        return {}
+    if data.get("schema_version") != 1:
+        findings.append(RuleRegistryFinding(str(COVERAGE_PATH), "schema_version must be 1"))
+    coverage_entries = data.get("coverage")
+    if not isinstance(coverage_entries, list):
+        findings.append(RuleRegistryFinding(str(COVERAGE_PATH), "coverage must be a list"))
+        return {}
+    by_mechanism: dict[str, dict[str, Any]] = {}
+    for entry in coverage_entries:
+        if not isinstance(entry, dict):
+            findings.append(RuleRegistryFinding(str(COVERAGE_PATH), "coverage entry must be a mapping"))
+            continue
+        mechanism_id = str(entry.get("mechanism_id", "")).strip()
+        if not mechanism_id:
+            findings.append(RuleRegistryFinding(str(COVERAGE_PATH), "coverage entry missing mechanism_id"))
+            continue
+        if mechanism_id in by_mechanism:
+            findings.append(RuleRegistryFinding(str(COVERAGE_PATH), f"duplicate coverage entry: {mechanism_id}"))
+        by_mechanism[mechanism_id] = entry
+    return by_mechanism
+
+
 def _validate_test_coverage(
     mechanism: dict[str, Any], mechanism_id: str, tests: list[str], findings: list[RuleRegistryFinding]
 ) -> None:
@@ -137,6 +175,7 @@ def _validate_test_coverage(
             )
         )
 
+
 def _validate_mechanism_conflicts(mechanisms: list[Any], findings: list[RuleRegistryFinding]) -> None:
     seen: dict[tuple[str, int, str], str] = {}
     for mechanism in mechanisms:
@@ -168,6 +207,7 @@ def _validate_mechanism_conflicts(mechanisms: list[Any], findings: list[RuleRegi
             else:
                 seen[key] = mechanism_id
 
+
 def _validate_migration_completeness(
     migrations: dict[str, Any], legacy_ids: set[str], findings: list[RuleRegistryFinding]
 ) -> None:
@@ -197,6 +237,7 @@ def _validate_migration_completeness(
             )
         )
 
+
 def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
     base = Path(root)
     inventory_path = base / INVENTORY_PATH
@@ -210,6 +251,7 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
         migrations = _load_yaml(migrations_path)
     except Exception as exc:
         return [RuleRegistryFinding(str(MIGRATIONS_PATH), f"cannot load migrations: {exc}")]
+    coverage_by_mechanism = _load_test_coverage_metadata(base, findings)
     if inventory.get("schema_version") != 1:
         findings.append(RuleRegistryFinding(str(INVENTORY_PATH), "schema_version must be 1"))
     if migrations.get("schema_version") != 1:
@@ -248,7 +290,13 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
             required_non_empty=False,
             findings=findings,
         )
-        _validate_test_coverage(mechanism, mid, tests, findings)
+        coverage_entry = coverage_by_mechanism.get(mid, {})
+        coverage_view = dict(mechanism)
+        if "test_coverage" not in coverage_view and "test_coverage" in coverage_entry:
+            coverage_view["test_coverage"] = coverage_entry.get("test_coverage")
+        if "coverage_rationale" not in coverage_view and "coverage_rationale" in coverage_entry:
+            coverage_view["coverage_rationale"] = coverage_entry.get("coverage_rationale")
+        _validate_test_coverage(coverage_view, mid, tests, findings)
         for test_path in tests:
             if not (base / test_path).exists():
                 findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: missing test path: {test_path}"))
@@ -280,6 +328,13 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
                 if str(term) not in text:
                     findings.append(RuleRegistryFinding(rel, f"{mid}: required term missing: {term}"))
     _validate_mechanism_conflicts(mechanisms, findings)
+    for coverage_id in sorted(set(coverage_by_mechanism) - mechanism_ids):
+        findings.append(
+            RuleRegistryFinding(
+                str(COVERAGE_PATH),
+                f"coverage entry references unknown mechanism: {coverage_id}",
+            )
+        )
     legacy_ids: set[str] = set()
     for migration in _as_list(migrations.get("migrations")):
         legacy_id = str(migration.get("legacy_id", ""))
@@ -321,6 +376,7 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
                 findings.append(RuleRegistryFinding(str(MIGRATIONS_PATH), f"{legacy_id}: missing evidence path: {evidence}"))
     _validate_migration_completeness(migrations, legacy_ids, findings)
     return findings
+
 
 def render_rule_registry_findings(findings: list[RuleRegistryFinding]) -> str:
     if not findings:
