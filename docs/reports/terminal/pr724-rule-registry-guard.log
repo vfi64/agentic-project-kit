@@ -1,0 +1,29 @@
+PR724 INTEGRATE RULE REGISTRY VALIDATOR INTO WORKFLOW GUARD -- REMOTE-FIRST -- NO PREFLIGHT NO RELEASE
+
+### REMOTE BASE ###
+main: f7233ff Add rule registry CLI command (#723)
+
+### FILES CHANGED ###
+- src/agentic_project_kit/workflow_guard.py
+- tests/test_workflow_guard.py
+- docs/reports/terminal/pr724-rule-registry-guard.log
+
+### INTENT ###
+Wire the rule registry validator into workflow-guard as a hard failure surface.
+Do not wire into patch-preflight yet.
+Do not change release metadata, tags, DOI metadata, GUI code, or broad documentation.
+
+### ENFORCEMENT ###
+- Workflow guard now imports validate_rule_registry.
+- Workflow guard emits rule-registry-drift HARD-FAIL findings for validator findings.
+- Workflow guard current repository test still expects no findings.
+- A targeted test asserts validate_rule_registry is wired and rule-registry-drift exists.
+
+### LOCAL TEST EXPECTATION ###
+CI must run the full test suite.
+Targeted expected checks:
+- pytest tests/test_workflow_guard.py tests/test_rule_registry_validator.py
+- ruff on changed Python files
+
+### RESULT ###
+Remote patch created. CI is the validation source before merge.
