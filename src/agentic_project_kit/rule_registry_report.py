@@ -24,6 +24,12 @@ def _list_of_dicts(value: Any) -> list[dict[str, Any]]:
     return [item for item in value if isinstance(item, dict)]
 
 
+def _string_list(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    return [str(item) for item in value]
+
+
 def _evidence_refs(assertions: list[dict[str, Any]]) -> list[dict[str, Any]]:
     refs: list[dict[str, Any]] = []
     for assertion in assertions:
@@ -35,6 +41,21 @@ def _evidence_refs(assertions: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def _finding_to_dict(finding: RuleRegistryFinding) -> dict[str, str]:
     return {"path": finding.path, "message": finding.message}
+
+
+def _followup_for_row(row: dict[str, Any]) -> dict[str, Any] | None:
+    if not row.get("requires_direct_test_followup"):
+        return None
+    return {
+        "mechanism_id": row.get("id"),
+        "owner": row.get("owner"),
+        "category": row.get("category"),
+        "priority": row.get("priority"),
+        "test_coverage": row.get("test_coverage"),
+        "surfaces": row.get("surfaces", []),
+        "reason": "No direct test path is registered for this active mechanism.",
+        "recommended_next_step": "Add a direct regression test and register it in rule_mechanism_inventory.yaml.",
+    }
 
 
 def build_rule_registry_report(root: Path | str = ".") -> dict[str, Any]:
@@ -61,7 +82,7 @@ def build_rule_registry_report(root: Path | str = ".") -> dict[str, Any]:
         coverage_entry = coverage_by_mechanism.get(mechanism_id, {})
         tests = mechanism.get("tests", []) if isinstance(mechanism.get("tests"), list) else []
         sources = mechanism.get("sources", []) if isinstance(mechanism.get("sources"), list) else []
-        surfaces = mechanism.get("surfaces", []) if isinstance(mechanism.get("surfaces"), list) else []
+        surfaces = _string_list(mechanism.get("surfaces"))
         assertions = _list_of_dicts(coverage_entry.get("assertions", mechanism.get("assertions", [])))
         evidence_refs = _evidence_refs(assertions)
         test_coverage = str(coverage_entry.get("test_coverage", mechanism.get("test_coverage", "unclassified")))
@@ -72,6 +93,7 @@ def build_rule_registry_report(root: Path | str = ".") -> dict[str, Any]:
             "priority": mechanism.get("priority"),
             "enforcement_phase": mechanism.get("enforcement_phase"),
             "test_coverage": test_coverage,
+            "surfaces": surfaces,
             "source_count": len(sources),
             "surface_count": len(surfaces),
             "direct_test_count": len(tests),
@@ -90,8 +112,12 @@ def build_rule_registry_report(root: Path | str = ".") -> dict[str, Any]:
         coverage = str(row["test_coverage"])
         by_coverage[coverage] = by_coverage.get(coverage, 0) + 1
 
+    followups = [followup for row in mechanism_rows if (followup := _followup_for_row(row)) is not None]
+    status = "fail" if validation_findings else "warn" if followups else "pass"
+
     report = {
         "schema_version": 1,
+        "status": status,
         "summary": {
             "active_mechanism_count": len(mechanism_rows),
             "coverage_counts": by_coverage,
@@ -100,11 +126,13 @@ def build_rule_registry_report(root: Path | str = ".") -> dict[str, Any]:
             "indirect_mechanism_count": by_coverage.get("indirect", 0),
             "unclassified_mechanism_count": by_coverage.get("unclassified", 0),
             "mechanisms_without_direct_tests": sum(1 for row in mechanism_rows if not row["has_direct_tests"]),
+            "followup_count": len(followups),
             "assertion_count": sum(int(row["assertion_count"]) for row in mechanism_rows),
             "evidence_ref_count": sum(int(row["evidence_ref_count"]) for row in mechanism_rows),
             "validation_finding_count": len(validation_findings),
         },
         "mechanisms": mechanism_rows,
+        "followups": followups,
         "validation_findings": [_finding_to_dict(finding) for finding in validation_findings],
     }
     return report
@@ -114,11 +142,13 @@ def render_rule_registry_report(report: dict[str, Any]) -> str:
     summary = report.get("summary", {}) if isinstance(report.get("summary"), dict) else {}
     lines = [
         "Rule registry report",
+        f"status: {report.get('status', 'unknown')}",
         f"active_mechanisms: {summary.get('active_mechanism_count', 0)}",
         f"direct: {summary.get('direct_mechanism_count', 0)}",
         f"documented: {summary.get('documented_mechanism_count', 0)}",
         f"indirect: {summary.get('indirect_mechanism_count', 0)}",
         f"without_direct_tests: {summary.get('mechanisms_without_direct_tests', 0)}",
+        f"followups: {summary.get('followup_count', 0)}",
         f"assertions: {summary.get('assertion_count', 0)}",
         f"evidence_refs: {summary.get('evidence_ref_count', 0)}",
         f"validation_findings: {summary.get('validation_finding_count', 0)}",
@@ -135,6 +165,18 @@ def render_rule_registry_report(report: dict[str, Any]) -> str:
                     tests=row.get("direct_test_count"),
                     assertions=row.get("assertion_count"),
                     evidence_refs=row.get("evidence_ref_count"),
+                )
+            )
+    followups = report.get("followups", [])
+    if isinstance(followups, list) and followups:
+        lines.append("Follow-ups:")
+        for followup in followups:
+            if not isinstance(followup, dict):
+                continue
+            lines.append(
+                "- {mechanism_id}: {reason}".format(
+                    mechanism_id=followup.get("mechanism_id"),
+                    reason=followup.get("reason"),
                 )
             )
     return "\n".join(lines)
