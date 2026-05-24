@@ -186,7 +186,7 @@ recent_failure_patterns:
 - id: standard-error-guards
   prevention: Recurring workflow failures must become guards, tests, and documented contracts.
 - id: interpreter-discovery-before-python
-  prevention: Terminal/workflow blocks must discover a usable interpreter before set -e-sensitive work and prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python.
+  prevention: Terminal/workflow blocks must discover a usable interpreter before set -e-sensitive work and prefer .venv/bin/python, then .venv/bin/python3, then python3, and only then python. Do not combine naked python with set -e.
 - id: global-cli-or-venv-assumption
   prevention: Verify .venv, python3, ruff, pytest, and agentic-kit before using command names; missing global tooling is environment state, not product failure.
 - id: interactive-terminal-exit
