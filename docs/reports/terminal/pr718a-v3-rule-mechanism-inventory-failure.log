@@ -1,0 +1,66 @@
+PR718A V3 MIGRATION-AWARE RULE MECHANISM INVENTORY -- INTEGRATED LOG UPLOAD -- NO RELEASE
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+HEAD is now at 55c2ddc Record PR718 broken runner recovery failure log
+
+### CLEAN LOCAL WORK BRANCH IF PRESENT ###
+Switched to a new branch 'feature/rule-mechanism-inventory-718a-v3'
+
+### PRECHECK EXISTING CANONICAL MECHANISMS ###
+74:  PYTHONPATH=src "$PY" -m agentic_project_kit.run_summary_renderer "$@"
+77:if [ "${1:-}" = "mode-check" ]; then
+79:  PYTHONPATH=src "$PY" -m agentic_project_kit.cli state mode-check "$@"
+83:if [ "${1:-}" = "mode-write" ]; then
+85:  PYTHONPATH=src "$PY" -m agentic_project_kit.cli state mode-write "$@"
+13:VALID_REMOTE_EVIDENCE_RESULTS = {"PASS", "FAIL", "PARTIAL", "NOT_REQUIRED"}
+93:    if payload.remote_evidence not in VALID_REMOTE_EVIDENCE_RESULTS:
+14:VALID_CHAT_REPLIES = {"d", "f", "w", "paste-output", "stop"}
+96:    if next_reply not in VALID_CHAT_REPLIES:
+115:def validate_rendered_summary_text(text: str) -> list[str]:
+192:    rendered_findings = validate_rendered_summary_text(rendered)
+15:LEGACY_SUMMARY_TOKENS = ("WORK RESULT:", "EVIDENCE RESULT:", "OVERALL RESULT:", "NEXT_CHAT_REPLY:")
+117:    for token in LEGACY_SUMMARY_TOKENS:
+92:        state = "LOCAL_READY" if target == "local" else "REMOTE_READY"
+92:        state = "LOCAL_READY" if target == "local" else "REMOTE_READY"
+
+### WRITE MECHANISM INVENTORY ###
+
+### WRITE MIGRATION MAP ###
+
+### WRITE TESTS ###
+
+### RUN TARGETED TESTS ###
+.F.............                                                          [100%]
+=================================== FAILURES ===================================
+__________ test_rule_mechanism_inventory_sources_exist_and_keep_terms __________
+
+    def test_rule_mechanism_inventory_sources_exist_and_keep_terms() -> None:
+        data = yaml.safe_load(INVENTORY.read_text(encoding="utf-8"))
+        for mechanism in data["mechanisms"]:
+            assert mechanism["status"] == "active"
+            assert mechanism["protected_rule_intent"]
+            for source in mechanism["sources"]:
+                path = Path(source["path"])
+                assert path.exists(), source["path"]
+                text = path.read_text(encoding="utf-8")
+                for term in source["required_terms"]:
+>                   assert term in text, f"{term} missing from {path}"
+E                   AssertionError: terminal_log_remote missing from docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+E                   assert 'terminal_log_remote' in '# Chat Communication Contract\n\nStatus-date: 2026-05-22\nStatus: normative governance contract\nScope: LLM-to-user, ...e record: GUI launch first, then a non-interactive PASS or FAIL evidence record with a generated summary invocation.\n'
+
+tests/test_rule_mechanism_inventory.py:24: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_rule_mechanism_inventory.py::test_rule_mechanism_inventory_sources_exist_and_keep_terms
+1 failed, 14 passed in 0.10s
+
+### RUN RUFF TARGET ###
+All checks passed!
+
+### CHECK DOCS LIGHT ###
+Agentic project check passed
+
+### STORE STATUS ###
