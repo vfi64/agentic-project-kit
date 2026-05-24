@@ -234,21 +234,28 @@ mechanisms:
   - path: src/agentic_project_kit/evidence_guard.py
     required_terms:
     - check_terminal_log
+    - check_change_scope
     - FAIL_MARKERS
     - EXPECTED_NEGATIVE_SMOKE_MARKERS
+    - EVIDENCE_LOG_PATTERNS
   - path: src/agentic_project_kit/cli_commands/evidence.py
     required_terms:
     - guard
+    - scope-check
     - clean-check
     - check_terminal_log
+    - check_change_scope
   - path: tests/test_evidence_guard.py
     required_terms:
     - test_evidence_guard_rejects_final_pass_after_failed_gate
     - test_evidence_guard_accepts_expected_negative_smoke_log
-  protected_rule_intent: Reject contradictory terminal evidence that still contains
-    failed gate markers.
+    - test_change_scope_guard_rejects_log_only_when_target_expected
+    - test_evidence_scope_check_cli_rejects_log_only_target_miss
+  protected_rule_intent: Reject contradictory terminal evidence and expected-target
+    false success where evidence logs replace required product changes.
   surfaces:
   - evidence-guard-cli
+  - evidence-scope-check-cli
   - evidence-guard-core
   - evidence-guard-tests
   tests:
