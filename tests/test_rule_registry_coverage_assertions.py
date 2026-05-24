@@ -5,7 +5,7 @@ import yaml
 from agentic_project_kit.rule_registry_validator import validate_rule_registry
 
 
-def _write_registry(root: Path, coverage: list[dict[str, object]]) -> None:
+def _write_registry(root: Path, coverage_entry: dict[str, object]) -> None:
     (root / "source.txt").write_text("present", encoding="utf-8")
     (root / "evidence.txt").write_text("evidence", encoding="utf-8")
     agentic = root / ".agentic"
@@ -51,62 +51,45 @@ def _write_registry(root: Path, coverage: list[dict[str, object]]) -> None:
         ),
         encoding="utf-8",
     )
+    entry = {"mechanism_id": "mechanism-under-test", **coverage_entry}
     (agentic / "rule_test_coverage.yaml").write_text(
-        yaml.safe_dump({"schema_version": 1, "coverage": coverage}),
+        yaml.safe_dump({"schema_version": 1, "coverage": [entry]}),
         encoding="utf-8",
     )
 
 
-def test_validator_accepts_documented_coverage_with_rationale(tmp_path: Path) -> None:
+def test_validator_accepts_coverage_assertions(tmp_path: Path) -> None:
     _write_registry(
         tmp_path,
-        [
-            {
-                "mechanism_id": "mechanism-under-test",
-                "test_coverage": "documented",
-                "coverage_rationale": "covered by preserved source anchors",
-                "assertions": ["source anchors are preserved"],
-            }
-        ],
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+            "assertions": ["source anchors are preserved"],
+        },
     )
     assert validate_rule_registry(tmp_path) == []
 
 
-def test_validator_rejects_unclassified_coverage(tmp_path: Path) -> None:
+def test_validator_rejects_missing_coverage_assertions(tmp_path: Path) -> None:
     _write_registry(
         tmp_path,
-        [{"mechanism_id": "mechanism-under-test", "test_coverage": "later"}],
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+        },
     )
     findings = validate_rule_registry(tmp_path)
-    assert any("test_coverage must be one of" in finding.message for finding in findings)
+    assert any("assertions must be a list" in finding.message for finding in findings)
 
 
-def test_validator_rejects_documented_coverage_without_rationale(tmp_path: Path) -> None:
+def test_validator_rejects_empty_coverage_assertions(tmp_path: Path) -> None:
     _write_registry(
         tmp_path,
-        [{"mechanism_id": "mechanism-under-test", "test_coverage": "documented"}],
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+            "assertions": [],
+        },
     )
     findings = validate_rule_registry(tmp_path)
-    assert any("coverage_rationale is required" in finding.message for finding in findings)
-
-
-def test_validator_rejects_coverage_for_unknown_mechanism(tmp_path: Path) -> None:
-    _write_registry(
-        tmp_path,
-        [
-            {
-                "mechanism_id": "mechanism-under-test",
-                "test_coverage": "documented",
-                "coverage_rationale": "covered by preserved source anchors",
-                "assertions": ["source anchors are preserved"],
-            },
-            {
-                "mechanism_id": "unknown-mechanism",
-                "test_coverage": "documented",
-                "coverage_rationale": "orphaned entry",
-                "assertions": ["orphaned coverage is rejected"],
-            },
-        ],
-    )
-    findings = validate_rule_registry(tmp_path)
-    assert any("coverage entry references unknown mechanism" in finding.message for finding in findings)
+    assert any("assertions must list at least one entry" in finding.message for finding in findings)
