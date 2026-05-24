@@ -5,7 +5,7 @@ import yaml
 from agentic_project_kit.rule_registry_validator import validate_rule_registry
 
 
-def _assertion(assertion_id: str = "source-anchor") -> dict[str, str]:
+def _assertion(assertion_id: str = "mechanism-under-test-source-anchor") -> dict[str, str]:
     return {
         "assertion_id": assertion_id,
         "kind": "anchor",
@@ -62,6 +62,57 @@ def _write_registry(root: Path, coverage_entry: dict[str, object]) -> None:
     entry = {"mechanism_id": "mechanism-under-test", **coverage_entry}
     (agentic / "rule_test_coverage.yaml").write_text(
         yaml.safe_dump({"schema_version": 1, "coverage": [entry]}),
+        encoding="utf-8",
+    )
+
+
+def _write_two_mechanism_registry(root: Path, coverage: list[dict[str, object]]) -> None:
+    (root / "source.txt").write_text("present", encoding="utf-8")
+    (root / "evidence.txt").write_text("evidence", encoding="utf-8")
+    agentic = root / ".agentic"
+    agentic.mkdir()
+    mechanisms = []
+    migrations = []
+    for mechanism_id in ["mechanism-under-test", "second-mechanism"]:
+        mechanisms.append(
+            {
+                "id": mechanism_id,
+                "status": "active",
+                "owner": "test-owner",
+                "category": "governance",
+                "priority": 1,
+                "enforcement_phase": "guard",
+                "conflict_domains": [mechanism_id],
+                "surfaces": ["test-surface"],
+                "tests": [],
+                "protected_rule_intent": "preserve a tested rule",
+                "sources": [{"path": "source.txt", "required_terms": ["present"]}],
+            }
+        )
+        migrations.append(
+            {
+                "legacy_id": f"legacy-{mechanism_id}",
+                "status": "migrated",
+                "replaced_by": mechanism_id,
+                "evidence": ["evidence.txt"],
+                "migration_reason": f"covered by {mechanism_id}",
+            }
+        )
+    (agentic / "rule_mechanism_inventory.yaml").write_text(
+        yaml.safe_dump({"schema_version": 1, "mechanisms": mechanisms}), encoding="utf-8"
+    )
+    (agentic / "rule_migrations.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": 1,
+                "known_legacy_rule_ids": [m["legacy_id"] for m in migrations],
+                "migrations": migrations,
+            }
+        ),
+        encoding="utf-8",
+    )
+    (agentic / "rule_test_coverage.yaml").write_text(
+        yaml.safe_dump({"schema_version": 1, "coverage": coverage}),
         encoding="utf-8",
     )
 
@@ -141,7 +192,7 @@ def test_validator_rejects_duplicate_assertion_id(tmp_path: Path) -> None:
         },
     )
     findings = validate_rule_registry(tmp_path)
-    assert any("duplicate assertion_id: source-anchor" in finding.message for finding in findings)
+    assert any("duplicate assertion_id: mechanism-under-test-source-anchor" in finding.message for finding in findings)
 
 
 def test_validator_rejects_assertion_without_statement(tmp_path: Path) -> None:
@@ -157,3 +208,44 @@ def test_validator_rejects_assertion_without_statement(tmp_path: Path) -> None:
     )
     findings = validate_rule_registry(tmp_path)
     assert any("assertion missing statement" in finding.message for finding in findings)
+
+
+def test_validator_rejects_assertion_id_without_mechanism_prefix(tmp_path: Path) -> None:
+    _write_registry(
+        tmp_path,
+        {
+            "test_coverage": "documented",
+            "coverage_rationale": "covered by source anchors",
+            "assertions": [_assertion("source-anchor")],
+        },
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("assertion_id must start with mechanism-under-test-" in finding.message for finding in findings)
+
+
+def test_validator_rejects_globally_duplicate_assertion_id(tmp_path: Path) -> None:
+    _write_two_mechanism_registry(
+        tmp_path,
+        [
+            {
+                "mechanism_id": "mechanism-under-test",
+                "test_coverage": "documented",
+                "coverage_rationale": "covered by source anchors",
+                "assertions": [_assertion("mechanism-under-test-shared")],
+            },
+            {
+                "mechanism_id": "second-mechanism",
+                "test_coverage": "documented",
+                "coverage_rationale": "covered by source anchors",
+                "assertions": [
+                    {
+                        "assertion_id": "mechanism-under-test-shared",
+                        "kind": "anchor",
+                        "statement": "source anchors are preserved",
+                    }
+                ],
+            },
+        ],
+    )
+    findings = validate_rule_registry(tmp_path)
+    assert any("assertion_id already used by mechanism-under-test" in finding.message for finding in findings)
