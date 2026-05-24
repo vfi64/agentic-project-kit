@@ -23,6 +23,9 @@ Expand rule-registry coverage beyond the initial two mechanisms without adding c
 - workflow-guard-diagnostics -> workflow-guard
 - patch-artifact-preflight-before-application -> patch-preflight
 
+### CI FAILURE AND REPAIR ###
+Initial CI failed because the patch-preflight mechanism entry required the term patch_artifact_preflight in ./ns, but the wrapper delegates patch-preflight through agentic_project_kit.cli and does not contain that module name. The registry entry was repaired to require the actual wrapper terms: patch-preflight and agentic_project_kit.cli.
+
 ### GATE EXPECTATION ###
 CI must validate before merge. Relevant expectations:
 - test_rule_mechanism_inventory
@@ -33,4 +36,4 @@ CI must validate before merge. Relevant expectations:
 - ruff/check-docs/dev gates
 
 ### RESULT ###
-Remote coverage expansion patch created. CI is the validation source before merge.
+Remote coverage expansion patch created and repaired after CI feedback. CI is the validation source before merge.
