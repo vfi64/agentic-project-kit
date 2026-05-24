@@ -18,6 +18,7 @@ VALID_CATEGORY_PHASES = {
     ("preflight", "preflight"),
 }
 VALID_MIGRATION_STATUSES = {"migrated", "archived", "rejected"}
+VALID_TEST_COVERAGE = {"direct", "indirect", "documented"}
 TERMINAL_MIGRATION_STATUSES = {"archived", "rejected"}
 MIN_PRIORITY = 1
 MAX_PRIORITY = 5
@@ -98,6 +99,41 @@ def _validate_mechanism_metadata(
             RuleRegistryFinding(
                 str(INVENTORY_PATH),
                 f"{mechanism_id}: incompatible category/enforcement_phase combination: {category}/{enforcement_phase}",
+            )
+        )
+
+def _validate_test_coverage(
+    mechanism: dict[str, Any], mechanism_id: str, tests: list[str], findings: list[RuleRegistryFinding]
+) -> None:
+    coverage = mechanism.get("test_coverage")
+    if coverage not in VALID_TEST_COVERAGE:
+        findings.append(
+            RuleRegistryFinding(
+                str(INVENTORY_PATH),
+                f"{mechanism_id}: test_coverage must be one of: {', '.join(sorted(VALID_TEST_COVERAGE))}",
+            )
+        )
+        return
+    rationale = str(mechanism.get("coverage_rationale", "")).strip()
+    if tests and coverage != "direct":
+        findings.append(
+            RuleRegistryFinding(
+                str(INVENTORY_PATH),
+                f"{mechanism_id}: test_coverage must be direct when tests are listed",
+            )
+        )
+    if not tests and coverage == "direct":
+        findings.append(
+            RuleRegistryFinding(
+                str(INVENTORY_PATH),
+                f"{mechanism_id}: direct test_coverage requires at least one test path",
+            )
+        )
+    if not tests and not rationale:
+        findings.append(
+            RuleRegistryFinding(
+                str(INVENTORY_PATH),
+                f"{mechanism_id}: coverage_rationale is required when no direct tests are listed",
             )
         )
 
@@ -212,6 +248,7 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
             required_non_empty=False,
             findings=findings,
         )
+        _validate_test_coverage(mechanism, mid, tests, findings)
         for test_path in tests:
             if not (base / test_path).exists():
                 findings.append(RuleRegistryFinding(str(INVENTORY_PATH), f"{mid}: missing test path: {test_path}"))
