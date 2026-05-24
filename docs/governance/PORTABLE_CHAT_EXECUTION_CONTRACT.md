@@ -1,6 +1,6 @@
 # Portable Chat Execution Contract
 
-Status-date: 2026-05-22
+Status-date: 2026-05-24
 Status: normative governance contract
 Scope: operating-system-independent execution rules for chat-assisted workflows
 
@@ -43,6 +43,12 @@ Required direction:
 - `agentic-kit handoff-prompt --reason drift` emits a successor-chat prompt when drift is detected.
 
 `./ns` may expose shortcuts for local convenience, but it must not be the only canonical route.
+
+## Local repository freshness rule
+
+Local repository work must start from a verified fresh base. The workflow must fetch the remote, compare the intended local base with its upstream, and stop or synchronize before any mutation. A local branch that is behind `origin/main`, a dirty worktree, or untracked command artifacts are preflight findings, not details to ignore.
+
+For local `main`-based work, the safe precondition is: `git fetch origin`, clean or preserved local changes, `git switch main`, local HEAD equal to `origin/main`, then feature branch creation. Mutation before that precondition is forbidden.
 
 ## External command rule
 

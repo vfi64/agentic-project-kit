@@ -1,7 +1,7 @@
 schema_version: 1
 updated:
-  date: '2026-05-23'
-  reason: handoff prompt freshness guard integration
+  date: '2026-05-24'
+  reason: local repository freshness precondition hardening
 purpose: Fast, redundant-free, machine-readable companion to the human governance
   docs.
 source_policy:
@@ -9,6 +9,7 @@ source_policy:
   human_docs_remain_authoritative: true
   compiled_yaml_must_match_docs: true
   new_rules_need_docs_yaml_tests: true
+  local_repo_freshness_before_local_work: true
 priority_order:
 - .agentic/compiled_agent_context.yaml
 - .agentic/handoff_state.yaml
@@ -43,29 +44,47 @@ hard_rules:
 - id: remote-first-no-guess
   rule: Inspect remote repo files, authoritative docs, and command help before acting.
 - id: no-long-manual-command-blocks
-  rule: Queue repo-backed commands or use portable Python core commands instead of returning long local shell blocks.
+  rule: Queue repo-backed commands or use portable Python core commands instead of
+    returning long local shell blocks.
 - id: final-summary-contract
   summary: Preserve the framed SUMMARY contract in every final block.
   rule: Use the mandatory SUMMARY block and never relabel inner failures as PASS.
 - id: chat-communication-contract
-  rule: Interpret d/f/w/paste-output/stop as communication signals only; verify outcomes from evidence before continuing.
+  rule: Interpret d/f/w/paste-output/stop as communication signals only; verify outcomes
+    from evidence before continuing.
 - id: portable-chat-execution-contract
-  rule: Canonical workflow correctness must be Python-core-first and operating-system independent; shell is an adapter only.
+  rule: Canonical workflow correctness must be Python-core-first and operating-system
+    independent; shell is an adapter only.
 - id: chat-bootstrap-and-drift-contract
-  rule: Successor chats must read mandatory sources first, detect drift, warn, and avoid mutation except for drift fixes.
+  rule: Successor chats must read mandatory sources first, detect drift, warn, and
+    avoid mutation except for drift fixes.
 - id: successor-handoff-freshness-guard
-  rule: Before presenting a successor handoff prompt as authoritative, run the freshness guard against STATUS, handoff_state, CURRENT_HANDOFF, and the latest successor prompt.
+  rule: Before presenting a successor handoff prompt as authoritative, run the freshness
+    guard against STATUS, handoff_state, CURRENT_HANDOFF, and the latest successor
+    prompt.
 - id: documentation-registry-first-slice
-  summary: Classify documentation and artifacts through an additive, reversible registry before broad migration.
-  rule: Documentation registry changes must keep the first slice structural, test-backed, and non-destructive; broad migration, deletion, or taxonomy-driven rewrites require later explicit slices.
+  summary: Classify documentation and artifacts through an additive, reversible registry
+    before broad migration.
+  rule: Documentation registry changes must keep the first slice structural, test-backed,
+    and non-destructive; broad migration, deletion, or taxonomy-driven rewrites require
+    later explicit slices.
 - id: patch-artifact-preflight
-  rule: Generated patch artifacts must pass syntax, YAML, coverage-term, and final-summary checks before use.
+  rule: Generated patch artifacts must pass syntax, YAML, coverage-term, and final-summary
+    checks before use.
 - id: rules-must-be-test-backed
-  rule: Durable rules require human docs, compiled YAML, and deterministic tests or a documented review-only exception.
+  rule: Durable rules require human docs, compiled YAML, and deterministic tests or
+    a documented review-only exception.
 - id: remote-log-direct-path-first
-  rule: If a concrete docs/reports/terminal log path is known, direct-fetch that path before relying on search results or declaring evidence missing.
+  rule: If a concrete docs/reports/terminal log path is known, direct-fetch that path
+    before relying on search results or declaring evidence missing.
 - id: gui-visual-two-phase-evidence
-  rule: GUI visual checks must separate manual window launch from non-interactive PASS/FAIL evidence recording; do not use interactive read prompts or shell-backslash summary invocations.
+  rule: GUI visual checks must separate manual window launch from non-interactive
+    PASS/FAIL evidence recording; do not use interactive read prompts or shell-backslash
+    summary invocations.
+- id: local-main-freshness-before-local-work
+  rule: Before local repository mutation, fetch the remote, verify the intended local
+    base equals its remote upstream, preserve or stop on dirty state, and only then
+    create the feature branch.
 final_summary_contract:
   work_values:
   - PASS
@@ -98,7 +117,8 @@ communication_rules:
   d: local block appears finished; inspect evidence before treating as success
   f: failure reported; inspect or upload evidence before asking for pasted output
   w: continue within current governance and evidence rules
-  paste-output: manual paste only when repo-backed or local evidence is unavailable or unusable
+  paste-output: manual paste only when repo-backed or local evidence is unavailable
+    or unusable
   stop: no further mutation or terminal instructions
 portable_execution_rules:
   canonical_core: Python modules and CLI commands
@@ -136,16 +156,20 @@ drift_detection:
   - no-copy claim without remote-readable evidence
   - shell-only canonical workflow example
 normal_operator_path:
+- verify local repository freshness before local mutation
 - read mandatory successor chat sources
 - inspect current remote state
 - run handoff prompt freshness guard before presenting a successor prompt
 - run or inspect deterministic checks
 - use portable Python core where available
 - render final summary through canonical renderer
-quality_goal: Prefer deterministic, portable, test-backed solutions over prompt-only conventions.
+quality_goal: Prefer deterministic, portable, test-backed solutions over prompt-only
+  conventions.
 workflow_friction_rules:
 - id: no-remote-command-deadlock
   priority: high
-  rule: Remote command first is preferred, but NO-COMMAND must trigger queuing a complete command pair or exactly one minimal fallback command. Do not loop on ask-agent-to-queue-command.
+  rule: Remote command first is preferred, but NO-COMMAND must trigger queuing a complete
+    command pair or exactly one minimal fallback command. Do not loop on ask-agent-to-queue-command.
 - id: final-summary-no-executable-placeholders
-  summary: Executable terminal blocks must print only concrete final SUMMARY outcomes; never placeholder alternatives like PASS|FAIL or p|paste-output.
+  summary: Executable terminal blocks must print only concrete final SUMMARY outcomes;
+    never placeholder alternatives like PASS|FAIL or p|paste-output.

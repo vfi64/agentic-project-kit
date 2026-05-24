@@ -143,3 +143,18 @@ def test_documentation_coverage_tracks_llm_communication_contracts() -> None:
         "LLM Communication and Bootstrap Gate",
     ]:
         assert term in text
+
+
+def test_local_repository_freshness_precondition_is_hardened_across_governance_docs() -> None:
+    required = {
+        "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md": ["Local repository freshness precondition", "stale or contaminated local tree is drift"],
+        "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md": ["Local repository freshness rule", "Mutation before that precondition is forbidden"],
+        "docs/TEST_GATES.md": ["Local Freshness Gate", "local repository freshness precondition"],
+        ".agentic/compiled_agent_context.yaml": ["local_repo_freshness_before_local_work", "local-main-freshness-before-local-work"],
+        "docs/DOCUMENTATION_COVERAGE.yaml": ["Local repository freshness precondition", "local-main-freshness-before-local-work"],
+    }
+    for path, anchors in required.items():
+        text = read(path)
+        for anchor in anchors:
+            assert anchor in text, f"missing {anchor!r} in {path}"
+\n
