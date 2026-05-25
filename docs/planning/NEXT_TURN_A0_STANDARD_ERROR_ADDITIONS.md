@@ -3,7 +3,6 @@
 Status-date: 2026-05-25
 Status: active addendum
 Decision status: accepted
-Review policy: Review together with `docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md` before Slice A1.
 
 ## Purpose
 
@@ -22,3 +21,7 @@ This addendum records standard-error variants observed during the Slice A0 imple
 Slice A1 must implement a result/evidence finalizer that writes structured results and terminal logs from the beginning of execution, publishes them when the declared remote-evidence policy allows it, and records a precise recovery instruction when publication is unsafe or impossible.
 
 A1 should also introduce idempotent final-result classification so `nothing to commit`, already-existing PRs, already-merged PRs, and already-uploaded evidence are not treated as ordinary failures.
+
+## Review Policy
+
+Review this addendum together with `docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md` before Slice A1 starts. When Slice A1 updates the main plan, fold these additions into the primary standard-error list or explicitly keep this file as the active addendum.
