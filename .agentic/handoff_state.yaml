@@ -79,16 +79,16 @@ open_items:
   prs: []
   next_expected_chat_action: Merge and verify the post-PR762 status/handoff closeout, then only add small rule-registry reporting/readability improvements if needed.
 completed_since_previous_handoff:
-- PR 736 refreshed post-PR735 handoff state.
-- PR 737 expanded the rule registry to evidence, typed-work-order, release-state, and post-release archive mechanisms.
-- PR 738 removed an accidental placeholder evidence file.
-- PR 739 hardened source/evidence validation for rule-registry entries.
-- PR 740 added initial surfaces/tests metadata evidence without product changes.
-- PR 741 populated surfaces and test metadata for active rule mechanisms.
-- PR 742 made surfaces and tests metadata mandatory and validated test paths.
-- PRs 743 through 760 continued small rule-registry hardening and direct coverage preparation.
-- PR 761 marked chat communication rules as direct rule coverage.
-- PR 762 marked chat bootstrap/drift rules as direct rule coverage and cleared the direct-test follow-up plan.
+- "PR #736 refreshed post-PR735 handoff state."
+- "PR #737 expanded the rule registry to evidence, typed-work-order, release-state, and post-release archive mechanisms."
+- "PR #738 removed an accidental placeholder evidence file."
+- "PR #739 hardened source/evidence validation for rule-registry entries."
+- "PR #740 added initial surfaces/tests metadata evidence without product changes."
+- "PR #741 populated surfaces and test metadata for active rule mechanisms."
+- "PR #742 made surfaces and tests metadata mandatory and validated test paths."
+- "PR #743 through PR #760 continued small rule-registry hardening and direct coverage preparation."
+- "PR #761 marked chat communication rules as direct rule coverage."
+- "PR #762 marked chat bootstrap/drift rules as direct rule coverage and cleared the direct-test follow-up plan."
 current_capabilities:
   ns_actions:
   - agent-next
