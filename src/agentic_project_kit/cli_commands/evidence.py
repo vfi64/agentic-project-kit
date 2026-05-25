@@ -26,7 +26,10 @@ def guard(logfile: Path) -> None:
 
 
 @app.command("inspect")
-def inspect(path: Path | None = None, root: Path = typer.Option(Path("."), "--root")) -> None:
+def inspect(
+    path: Path | None = typer.Argument(None),
+    root: Path = typer.Option(Path("."), "--root"),
+) -> None:
     """Inspect explicit or latest terminal evidence before continuing after chat control signals."""
     result = inspect_evidence(path, root=root)
     typer.echo(render_evidence_inspection(result))
