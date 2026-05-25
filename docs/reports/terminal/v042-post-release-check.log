@@ -1,0 +1,52 @@
+V0.4.2 POST-RELEASE CHECK -- ZENODO DOI STATUS -- LOGGED
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+63eae142d3e09026b15230710a78fd2f727959b7
+63eae14 Record v0.4.2 release publication evidence (#768)
+00236e1 Prepare v0.4.2 safety release metadata (#767)
+cf75340 Plan rule registry improvement backlog (#766)
+c7c31cd Refresh handoff after rule registry completion reporting (#765)
+c09f8d9 Report rule registry direct coverage completion explicitly (#764)
+6b706b9 Refresh status after rule registry direct coverage closeout (#763)
+b22196a Mark chat bootstrap drift rules as direct rule coverage (#762)
+01b1d19 Mark chat communication rules as direct rule coverage (#761)
+
+### CLEAN PRECHECK ###
+
+### VERIFY RELEASE AND TAG ###
+79caf07d02cea98a203b969b1a59f243658aef84
+{"assets":[{"apiUrl":"https://api.github.com/repos/vfi64/agentic-project-kit/releases/assets/429221310","contentType":"application/octet-stream","createdAt":"2026-05-25T09:18:57Z","digest":"sha256:7811cc769bfcb5412148dd194f463373e99236eca212e255c5cb648a84c003a4","downloadCount":0,"id":"RA_kwDOSYo5m84ZlWW-","label":"","name":"agentic_project_kit-0.4.2-py3-none-any.whl","size":196057,"state":"uploaded","updatedAt":"2026-05-25T09:18:57Z","url":"https://github.com/vfi64/agentic-project-kit/releases/download/v0.4.2/agentic_project_kit-0.4.2-py3-none-any.whl"},{"apiUrl":"https://api.github.com/repos/vfi64/agentic-project-kit/releases/assets/429221309","contentType":"application/gzip","createdAt":"2026-05-25T09:18:57Z","digest":"sha256:c47260fc6f9d461846d1ec4882f06400240ea7603227ef9221bbe155f5a0dbb8","downloadCount":0,"id":"RA_kwDOSYo5m84ZlWW9","label":"","name":"agentic_project_kit-0.4.2.tar.gz","size":2076761,"state":"uploaded","updatedAt":"2026-05-25T09:18:57Z","url":"https://github.com/vfi64/agentic-project-kit/releases/download/v0.4.2/agentic_project_kit-0.4.2.tar.gz"}],"isDraft":false,"isPrerelease":false,"name":"v0.4.2","tagName":"v0.4.2","url":"https://github.com/vfi64/agentic-project-kit/releases/tag/v0.4.2"}
+
+### POST-RELEASE CHECK ###
+Post-release check for target v0.4.2
+
+[PASS] GitHub release: GitHub release exists: v0.4.2
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.4.2: 10.5281/zenodo.20376095
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 19
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 4
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+
+
+### RECORD POST-RELEASE CHECK LOG ###
+Switched to a new branch 'release/v0.4.2-post-release-check'
