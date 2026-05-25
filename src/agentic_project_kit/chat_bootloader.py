@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 DEFAULT_BOOTSTRAP_PATH = Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md")
+START_PROMPT_PATH = "docs/handoff/START_NEW_CHAT_PROMPT.md"
+CLOSEOUT_PROMPT_PATH = "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
 
 MANDATORY_BOOT_SOURCES = (
     ".agentic/compiled_agent_context.yaml",
@@ -14,6 +16,8 @@ MANDATORY_BOOT_SOURCES = (
     ".agentic/rule_preservation.yaml",
     "docs/STATUS.md",
     "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
     "docs/governance/FINAL_SUMMARY_CONTRACT.md",
     "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
     "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
@@ -30,6 +34,7 @@ BOOTLOADER_RULES = (
     "Treat d, f, and w as communication signals rather than evidence.",
     "Inspect repo or remote evidence before requesting pasted terminal output.",
     "Use protected change planning before protected YAML, JSON, or Markdown control changes.",
+    "Before a chat switch, run the closeout prompt and check whether START_NEW_CHAT_PROMPT.md, CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md, and NEXT_CHAT_BOOTSTRAP.md all need updates.",
 )
 
 NEXT_WORK_ITEMS = (
@@ -89,6 +94,12 @@ def render_next_chat_bootstrap(root: Path | str = ".") -> str:
         "",
         "This file is the canonical remote handoff entry point for a successor chat.",
         "Do not start from chat memory. Read this file first, then follow its boot sequence.",
+        "",
+        "## Canonical chat-switch prompt files",
+        "",
+        f"- Start a successor chat with `{START_PROMPT_PATH}`.",
+        f"- Before leaving a chat, run the closeout routine in `{CLOSEOUT_PROMPT_PATH}`.",
+        "- A closeout may need to update both prompt files and this bootstrap file.",
         "",
         "## Standard successor-chat prompt",
         "",
