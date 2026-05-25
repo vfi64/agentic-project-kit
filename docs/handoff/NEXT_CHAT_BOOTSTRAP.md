@@ -3,6 +3,12 @@
 This file is the canonical remote handoff entry point for a successor chat.
 Do not start from chat memory. Read this file first, then follow its boot sequence.
 
+## Canonical chat-switch prompt files
+
+- Start a successor chat with `docs/handoff/START_NEW_CHAT_PROMPT.md`.
+- Before leaving a chat, run the closeout routine in `docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md`.
+- A closeout may need to update both prompt files and this bootstrap file.
+
 ## Standard successor-chat prompt
 
 Copy this into the next chat:
@@ -35,6 +41,8 @@ Mandatory boot sources:
 - [present] .agentic/rule_preservation.yaml
 - [present] docs/STATUS.md
 - [present] docs/handoff/CURRENT_HANDOFF.md
+- [present] docs/handoff/START_NEW_CHAT_PROMPT.md
+- [present] docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
 - [present] docs/governance/FINAL_SUMMARY_CONTRACT.md
 - [present] docs/governance/CHAT_COMMUNICATION_CONTRACT.md
 - [present] docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
@@ -50,6 +58,7 @@ Mandatory workflow rules:
 - Treat d, f, and w as communication signals rather than evidence.
 - Inspect repo or remote evidence before requesting pasted terminal output.
 - Use protected change planning before protected YAML, JSON, or Markdown control changes.
+- Before a chat switch, run the closeout prompt and check whether START_NEW_CHAT_PROMPT.md, CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md, and NEXT_CHAT_BOOTSTRAP.md all need updates.
 
 Required first action in a successor chat:
 - Read these sources and verify main, open PRs, CI, STATUS, handoff, rule registry, and final-summary contracts before repository changes.
