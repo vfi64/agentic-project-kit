@@ -1,12 +1,3 @@
 schema_version: 1
 purpose: Track the remaining active rule mechanisms that still need direct regression tests.
-direct_test_followups:
-- mechanism_id: chat-bootstrap-drift-rules
-  status: planned
-  priority_order: 1
-  target_surface: chat-bootstrap-contract
-  target_test_path: tests/test_chat_bootstrap_drift_contract.py
-  rationale: Add direct tests for mandatory successor-chat bootstrap, drift detection, and remote connector route anchors.
-  exit_criteria:
-  - tests list a direct regression path for chat-bootstrap-drift-rules in rule_mechanism_inventory.yaml
-  - rule_test_coverage.yaml marks chat-bootstrap-drift-rules as direct
+direct_test_followups: []
