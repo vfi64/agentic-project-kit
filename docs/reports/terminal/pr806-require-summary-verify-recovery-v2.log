@@ -1,0 +1,105 @@
+### PRECHECK ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+a3ab9df Record PR806 require-summary verification recovery log
+
+### VERIFY PREVIOUS RECOVERY LOG CONTAINS KNOWN SUMMARY ERROR ###
+114:run-summary-renderer: error: invalid field: remote_evidence; invalid pass: remote evidence is not complete
+97:RECOVERY_CHECK: PASS
+
+### TARGETED STRICT SUMMARY TESTS ###
+PY=.venv/bin/python
+.................                                                        [100%]
+17 passed in 0.50s
+
+### STRICT SUMMARY SMOKE WITH VALID SUMMARY ###
+EVIDENCE_INSPECTION
+verdict: PASS_CONTINUE
+evidence_exists: yes
+require_summary: yes
+git_branch: main
+git_status_clean: yes
+pass_markers: 1
+fail_markers: 0
+hidden_fail_before_final_pass: no
+structured_summary_found: yes
+structured_summary_valid: yes
+summary_name: PR806 REQUIRE SUMMARY VERIFY RECOVERY V2
+summary_scope: LOCAL VERIFY / RECOVERY / STRICT SUMMARY / SUMMARY FIX
+summary_branch: main
+summary_origin: local
+summary_state_mode: local
+summary_mode_check: strict evidence summary smoke via ns summary with valid remote-evidence field
+summary_work: PASS
+summary_evidence: PASS
+summary_overall: PASS
+summary_remote_evidence: NOT_REQUIRED
+summary_pr: 806
+summary_head_sha: a3ab9dffe9d1615866ee4cd65a1982b4cdbc8c9c
+summary_ci: passed-before-merge
+summary_merge: completed
+summary_terminal_log: /tmp/evidence-structured-required-pass-v2.log
+summary_terminal_log_remote: NONE
+summary_terminal_log_local: /tmp/evidence-structured-required-pass-v2.log
+summary_command_report: strict-summary-cli-smoke/recovery-v2
+summary_safe_step: upload this corrected recovery log and continue with next safe slice
+summary_chat_reply: d
+summary_result_marker: PASS
+evidence_path: /tmp/evidence-structured-required-pass-v2.log
+final_marker: ### RESULT: PASS ###
+next_action: continue with the next safe slice after reviewing evidence
+### RESULT: PASS ###
+
+### BOOT CLOSEOUT STILL PASSING ###
+CHAT_SWITCH_CLOSEOUT: PASS
+
+### FINAL CLEAN CHECK BEFORE SUMMARY ###
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-25 23:18:37 +0200
+
+SLICE
+  NAME: PR806 REQUIRE SUMMARY VERIFY RECOVERY V2
+  SCOPE: LOCAL VERIFY / RECOVERY / STRICT SUMMARY / LOG UPLOAD
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: previous recovery summary error verified and corrected
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: NOT_REQUIRED
+  PR: 806
+  HEAD_SHA: a3ab9dffe9d1615866ee4cd65a1982b4cdbc8c9c
+  CI: passed-before-merge
+  MERGE: completed
+
+EVIDENCE FILES
+  terminal_log: /tmp/pr806-require-summary-verify-recovery-v2.log
+  terminal_log_remote: docs/reports/terminal/pr806-require-summary-verify-recovery-v2.log
+  terminal_log_local: /tmp/pr806-require-summary-verify-recovery-v2.log
+  command_report: previous-log-error-check/strict-summary-tests/evidence-inspect-require-summary/boot-closeout/recovery-log-upload
+
+INTERPRETATION
+  PR806 strict evidence summary verification is valid; the previous recovery log is preserved as failed-summary evidence, and this log records the corrected summary path.
+
+NEXT
+  SAFE_STEP: upload corrected recovery log, then continue with next workflow hardening slice
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
