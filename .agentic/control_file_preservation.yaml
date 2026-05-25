@@ -5,6 +5,28 @@ policy:
   summary: Critical control files must preserve existing operative rules unless an explicit migration records the removed anchor, successor anchor, rationale, and test coverage.
   no_hard_length_limit: true
   length_policy: Information preservation outranks compactness. If a protected file grows too large, split, reference, or generate it; do not delete still-active rules to satisfy a size target.
+  full_replacement_source_policy:
+    rule_id: partial-fetch-full-replacement-corruption
+    summary: Full-file replacement must never use line-range fetches, search snippets, PR patches, truncated API responses, or other partial context as the replacement source.
+    allowed_full_replacement_sources:
+      - full_raw_fetch_without_line_limits
+      - full_blob_content
+      - local_complete_file_content
+      - generated_file_from_canonical_source_model
+    forbidden_replacement_sources:
+      - line_range_fetch
+      - search_result_snippet
+      - pr_file_patch
+      - diff_hunk
+      - truncated_api_response
+      - copied_chat_excerpt
+    required_review_signal: Any protected-file full replacement must explain the complete-file source and must pass protected-file diff budget checks before merge.
+  diff_budget_policy:
+    protected_file_max_deletions_without_migration: 20
+    large_deletion_requires:
+      - explicit_control_file_migration
+      - reviewer_visible_summary
+      - deterministic_test
   allowed_mutation_modes:
     - additive
     - structured_refactor_with_explicit_migration
@@ -13,6 +35,8 @@ policy:
     - broad_replace_for_conciseness
     - deletion_without_successor
     - hard_length_limit_trimming
+    - partial_fetch_full_replacement
+    - snippet_based_full_replacement
 protected_files:
   - path: .agentic/compiled_agent_context.yaml
     class: machine-readable governance context
@@ -29,6 +53,27 @@ protected_files:
       - final_summary_contract
       - communication_rules
       - drift_detection
+  - path: .agentic/handoff_state.yaml
+    class: machine-readable handoff state
+    no_hard_length_limit: true
+    preservation_mode: additive_or_explicit_migration
+    required_anchors:
+      - safe_state
+      - release
+      - current_capabilities
+      - recent_failure_patterns
+      - control-file-preservation
+      - nested shell/Python quote layers
+      - next_allowed_tasks
+  - path: README.md
+    class: public project and release summary
+    no_hard_length_limit: true
+    preservation_mode: additive_or_explicit_migration
+    required_anchors:
+      - Current version
+      - Citation and archiving
+      - Current status
+      - Historical verified version-specific DOI notes
   - path: docs/TEST_GATES.md
     class: governance gate matrix
     no_hard_length_limit: true
