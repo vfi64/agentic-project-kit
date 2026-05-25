@@ -1,4 +1,4 @@
-<!-- v042-safety-release-prep -->
+<!-- v042-post-release-doi-closeout -->
 # Project Status
 
 Status-date: 2026-05-25
@@ -21,20 +21,21 @@ This document is a concise pointer, not a duplicate rule book. Machine guard: `a
 
 ## Current State
 
-Prepared release: 0.4.2.
-Prepared release tag: v0.4.2.
+Released version: 0.4.2.
+Release tag: v0.4.2.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Previous verified Zenodo version DOI: `10.5281/zenodo.20357657`.
-v0.4.2 GitHub Release publication and post-release Zenodo verification are pending; previous v0.4.1 verification remains the current verified DOI anchor until post-release closeout. The guarded command remains `agentic-kit post-release-check --version 0.4.2` after GitHub Release publication and archive processing.
+Verified v0.4.2 Zenodo version DOI: `10.5281/zenodo.20376095`.
+GitHub Release publication, release assets, and post-release Zenodo verification are complete for v0.4.2.
 
-v0.4.2 safety-release target:
-- Main is refreshed after PR #766 at `cf75340` (`Plan rule registry improvement backlog (#766)`).
-- PRs #718-#764 established and closed out the governed rule-registry direct-coverage baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, deterministic metadata/conflict/completeness checks, direct test coverage for all active mechanisms, an empty direct-test follow-up plan, and explicit machine-readable plus human-readable completion reporting.
-- The governed rule registry currently covers twelve active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check.
+v0.4.2 safety-release closeout:
+- Main is refreshed after PR #769 at `06d6ea30a39e5763283358db8bb93d5566b421cd` (`Record v0.4.2 post-release check log (#769)`).
+- Release assets are verified: `agentic_project_kit-0.4.2-py3-none-any.whl` and `agentic_project_kit-0.4.2.tar.gz`.
+- Release evidence is preserved in `docs/reports/terminal/pr767-v042-release-metadata-prep.log`, `docs/reports/terminal/v042-release-publish.log`, and `docs/reports/terminal/v042-post-release-check.log`.
+- The governed rule registry baseline remains complete and covers twelve active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check.
 - Rule registry drift is checked through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight.
-- Rule registry completion is now explicitly reportable through `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json`; the JSON summary includes `direct_coverage_complete`.
+- Rule registry completion is explicitly reportable through `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json`; the JSON summary includes `direct_coverage_complete`.
 - Evidence is preserved in committed terminal logs including `docs/reports/terminal/pr737-rule-registry-release-evidence.log`, `docs/reports/terminal/pr739-rule-registry-source-evidence-validation.log`, `docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log`, `docs/reports/terminal/pr741-rule-registry-surfaces-tests-inventory-recovery.log`, `docs/reports/terminal/pr742-rule-registry-surfaces-tests-validation.log`, `docs/reports/terminal/pr761-chat-communication-direct-coverage.log`, `docs/reports/terminal/pr762-chat-bootstrap-drift-direct-coverage.log`, and `docs/reports/terminal/pr764-rule-registry-completion-reporting.log`.
-- Next immediate task: merge and verify v0.4.2 release metadata, publish the v0.4.2 tag/release, then run post-release verification before opening the successor-chat handoff.
+- Next immediate task after this DOI metadata closeout: fix protected control-file preservation before further registry hardening.
 
 Documentation registry baseline:
 - `docs/DOCUMENTATION_REGISTRY.yaml` is the additive machine-readable registry.
@@ -69,7 +70,7 @@ GUI MVP baseline:
 
 ## Current Goal
 
-Prepare and publish the v0.4.2 safety release after the governed rule-registry baseline and accepted improvement backlog. Documentation-management rebuild work resumes only after release and successor-chat handoff closeout.
+Keep v0.4.2 release and DOI metadata synchronized after post-release verification. The next implementation target is protected control-file preservation before Rule Registry Phase A or documentation-management rebuild work resumes.
 
 ## Active Workflow Rules
 
@@ -117,7 +118,7 @@ No-copy/evidence contract: `d` means a log-backed block appears finished; eviden
 
 Pattern Advisor baseline: Pattern Advisor is an advisory-only read-only catalog; `patterns list` and `patterns show` are guarded anchor commands. policy-pack doctor checks and policy packs remain guarded status terms.
 
-Planning-state freshness compatibility: Current released version: 0.3.29 and Current released version: 0.3.32 remain retained legacy anchors only for deterministic historical tests; Verified Zenodo version DOI: `10.5281/zenodo.20314341`; the current version is 0.4.1.
+Planning-state freshness compatibility: Current released version: 0.3.29 and Current released version: 0.3.32 remain retained legacy anchors only for deterministic historical tests; Verified Zenodo version DOI: `10.5281/zenodo.20314341`; the current version is 0.4.2.
 
 v0.3.36 current-state cleanup started as a documentation-only line; the current active line is the governed rule-registry direct-coverage baseline.
 
@@ -143,4 +144,4 @@ Required gate set for current-state, handoff, or governance-summary changes:
 
 ## Next Safe Step
 
-Merge and verify v0.4.2 release metadata, then publish the v0.4.2 tag/release and run post-release checks. After release closeout, start a new chat with a detailed handoff before resuming documentation-management work.
+Merge and verify this v0.4.2 DOI metadata closeout. After the closeout is on main, fix protected control-file preservation before further registry hardening, generated-projection work, or documentation-management rebuild work.
