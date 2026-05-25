@@ -1,0 +1,91 @@
+### START: MERGE PR787 AND VERIFY MAIN ###
+
+### PYTHON PRECHECK ###
+Python 3.13.13
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### VERIFY PR GREEN ###
+{"headRefOid":"a7177e4fe8452d8f2d41a1cd7860e415afe63f53","mergeStateStatus":"CLEAN","mergeable":"MERGEABLE","state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-25T16:21:01Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26409951475/job/77742005873","name":"test","startedAt":"2026-05-25T16:20:33Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-25T16:20:57Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26409949377/job/77742000250","name":"test","startedAt":"2026-05-25T16:20:30Z","status":"COMPLETED","workflowName":"CI"}],"url":"https://github.com/vfi64/agentic-project-kit/pull/787"}
+CHECK_DECISION=green
+
+### MERGE PR ###
+
+### SYNC MAIN AFTER MERGE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   eb02fb7..c2a8bd9  main       -> origin/main
+Already on 'main'
+Your branch is behind 'origin/main' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Updating eb02fb7..c2a8bd9
+Fast-forward
+ docs/reports/command_runs/next-turn-latest.json | 13 ------------
+ docs/reports/command_runs/smoke-a10.json        | 13 ------------
+ docs/reports/command_runs/verify-a10.json       | 13 ------------
+ docs/reports/terminal/smoke-a10.log             |  3 ---
+ docs/reports/terminal/verify-a10.log            |  3 ---
+ tests/test_next_turn_evidence_repo_hygiene.py   | 28 +++++++++++++++++++++++++
+ 6 files changed, 28 insertions(+), 45 deletions(-)
+ delete mode 100644 docs/reports/command_runs/next-turn-latest.json
+ delete mode 100644 docs/reports/command_runs/smoke-a10.json
+ delete mode 100644 docs/reports/command_runs/verify-a10.json
+ delete mode 100644 docs/reports/terminal/smoke-a10.log
+ delete mode 100644 docs/reports/terminal/verify-a10.log
+ create mode 100644 tests/test_next_turn_evidence_repo_hygiene.py
+c2a8bd9 Guard next-turn transient evidence hygiene (#787)
+eb02fb7 Record PR786 next-turn A10 merge verification log
+beb956e Record verify-a10 evidence
+0ce06f0 Add next-turn A10 evidence auto-publish (#786)
+99e5831 Harden next-turn A9 runner cleanup
+d94f325 Add next-turn A8 fixed-slot runner
+413abd2 Record PR783 next-turn A7 merge verification log
+c263a2f Add next-turn A7 fixed-slot work order (#783)
+
+### VERIFY A10B ON MAIN ###
+...........                                                              [100%]
+11 passed in 0.71s
+........................................................................ [  6%]
+........................................................................ [ 13%]
+........................................................................ [ 20%]
+........................................................................ [ 26%]
+........................................................................ [ 33%]
+........................................................................ [ 40%]
+........................................................................ [ 47%]
+........................................................................ [ 53%]
+........................................................................ [ 60%]
+........................................................................ [ 67%]
+........................................................................ [ 74%]
+........................................................................ [ 80%]
+........................................................................ [ 87%]
+........................................................................ [ 94%]
+...........................................................              [100%]
+1067 passed in 7.58s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.2
+
+Overall: PASS
+
+### RECORD MERGE VERIFY LOG ###
