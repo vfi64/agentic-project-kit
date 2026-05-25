@@ -1,0 +1,77 @@
+### START: MERGE PR783 AND VERIFY MAIN ###
+
+### PYTHON PRECHECK ###
+Python 3.13.13
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### VERIFY PR GREEN ###
+{"headRefOid":"11a83c10dd24f39a626ff4c209c52c15d0739bf4","mergeStateStatus":"CLEAN","mergeable":"MERGEABLE","state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-25T15:49:29Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26408766903/job/77738288753","name":"test","startedAt":"2026-05-25T15:49:00Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-25T15:49:27Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26408765471/job/77738285053","name":"test","startedAt":"2026-05-25T15:48:59Z","status":"COMPLETED","workflowName":"CI"}],"url":"https://github.com/vfi64/agentic-project-kit/pull/783"}
+CHECK_DECISION=green
+
+### MERGE PR ###
+
+### SYNC MAIN AFTER MERGE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   2d002ee..c263a2f  main       -> origin/main
+Already on 'main'
+Your branch is behind 'origin/main' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Updating 2d002ee..c263a2f
+Fast-forward
+ .../V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md    |   3 +-
+ ns                                                 |   7 ++
+ src/agentic_project_kit/next_turn_slot.py          | 106 +++++++++++++++++++++
+ tests/test_next_turn_slot.py                       |  29 ++++++
+ 4 files changed, 144 insertions(+), 1 deletion(-)
+ create mode 100644 src/agentic_project_kit/next_turn_slot.py
+ create mode 100644 tests/test_next_turn_slot.py
+c263a2f Add next-turn A7 fixed-slot work order (#783)
+2d002ee Record PR782 next-turn A6 merge verification log
+e03e239 Add next-turn A6 merge-if-green kernel (#782)
+dc09bf9 Add next-turn A5 PR status kernel
+67372b6 Add next-turn A4 commit push finalizer
+d7ad62a Record PR779 next-turn A3 merge verification log
+6eb610a Add next-turn A3 evidence commit helper (#779)
+ef8de4f Add next-turn A2 evidence publisher
+
+### VERIFY A7 ON MAIN ###
+NEXT_TURN_FIXED_SLOT_STATUS
+state=empty
+yaml_exists=false
+script_exists=false
+overwrite_allowed=true
+yaml_path=.agentic/commands/inbox/next-turn.yaml
+script_path=.agentic/commands/inbox/next-turn.py
+reason=no fixed-slot work order exists
+### RESULT: PASS ###
+......                                                                   [100%]
+6 passed in 0.04s
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.2
+
+Overall: PASS
+
+### RECORD MERGE VERIFY LOG ###
