@@ -18,6 +18,7 @@ REQUIRED_RULE_REGISTRY_FILES = (
     Path(".agentic/rule_test_coverage.yaml"),
 )
 SUMMARY_EVIDENCE_SUFFIXES = {".log", ".md", ".txt"}
+DEFAULT_PROTECTED_FILE_MAX_DELETIONS = 20
 
 
 @dataclass(frozen=True)
@@ -66,6 +67,105 @@ def protected_control_files(config_path: Path = CONTROL_FILE_PRESERVATION) -> li
     if not isinstance(files, list):
         raise ValueError(f"{config_path}: protected_files must be a list")
     return [item for item in files if isinstance(item, dict)]
+
+
+def _control_file_policy(config_path: Path = CONTROL_FILE_PRESERVATION) -> dict[str, object]:
+    if not config_path.exists():
+        return {}
+    data = _load_yaml(config_path)
+    if not isinstance(data, dict):
+        return {}
+    policy = data.get("policy", {})
+    return policy if isinstance(policy, dict) else {}
+
+
+def _protected_file_paths() -> set[str]:
+    paths: set[str] = set()
+    for item in protected_control_files():
+        raw_path = item.get("path")
+        if isinstance(raw_path, str):
+            paths.add(raw_path)
+    return paths
+
+
+def _protected_file_deletion_budget() -> int:
+    policy = _control_file_policy()
+    diff_budget = policy.get("diff_budget_policy", {})
+    if isinstance(diff_budget, dict):
+        value = diff_budget.get("protected_file_max_deletions_without_migration")
+        if isinstance(value, int):
+            return value
+    return DEFAULT_PROTECTED_FILE_MAX_DELETIONS
+
+
+def _normalize_diff_path(raw: str) -> str:
+    path = raw.strip().split("\t", 1)[0].split(" ", 1)[0]
+    if path.startswith("a/") or path.startswith("b/"):
+        return path[2:]
+    return path
+
+
+def _has_explicit_control_file_migration(diff_text: str) -> bool:
+    migration_terms = (
+        "explicit_control_file_migration",
+        "structured_refactor_with_explicit_migration",
+        "removed_anchor",
+        "successor_anchor",
+    )
+    return any(term in diff_text for term in migration_terms)
+
+
+def check_protected_file_diff_budget(diff_text: str) -> list[GuardFinding]:
+    """Reject noisy or lossy protected-file diffs before merge.
+
+    The guard intentionally operates on unified diff text so it can be used with
+    GitHub PR patches, local git diff output, or later command-run reports.
+    It does not need network access and does not infer semantic safety from YAML
+    parseability alone.
+    """
+    protected_paths = _protected_file_paths()
+    if not protected_paths:
+        return []
+    max_deletions = _protected_file_deletion_budget()
+    explicit_migration = _has_explicit_control_file_migration(diff_text)
+    current_path: str | None = None
+    deletions: dict[str, int] = {}
+    findings: list[GuardFinding] = []
+
+    for line in diff_text.splitlines():
+        if line.startswith("diff --git "):
+            current_path = None
+            parts = line.split()
+            if len(parts) >= 4:
+                current_path = _normalize_diff_path(parts[3])
+            continue
+        if line.startswith("+++ "):
+            candidate = _normalize_diff_path(line[4:])
+            if candidate != "/dev/null":
+                current_path = candidate
+            continue
+        if current_path not in protected_paths:
+            continue
+        if line.startswith("---") or line.startswith("+++"):
+            continue
+        if line.startswith("-"):
+            deletions[current_path] = deletions.get(current_path, 0) + 1
+
+    for path, count in deletions.items():
+        if count > max_deletions and not explicit_migration:
+            findings.append(
+                GuardFinding(
+                    pattern_id="protected-file-diff-budget-exceeded",
+                    severity="HARD-FAIL",
+                    path=path,
+                    message=(
+                        f"protected file has {count} deleted lines; maximum without explicit "
+                        f"control-file migration is {max_deletions}"
+                    ),
+                    repair_mode="restore-from-authoritative-main-or-record-explicit-migration",
+                )
+            )
+    return findings
 
 
 def check_required_rule_registry_files() -> list[GuardFinding]:
@@ -173,7 +273,16 @@ def check_no_lossy_control_file_policy() -> list[GuardFinding]:
         )
         return findings
     text = policy.read_text(encoding="utf-8")
-    for required in ("no_hard_length_limit", "deletion_without_successor", "hard_length_limit_trimming"):
+    for required in (
+        "no_hard_length_limit",
+        "deletion_without_successor",
+        "hard_length_limit_trimming",
+        "partial-fetch-full-replacement-corruption",
+        "line_range_fetch",
+        "search_result_snippet",
+        "truncated_api_response",
+        "protected_file_max_deletions_without_migration",
+    ):
         if required not in text:
             findings.append(
                 GuardFinding(
@@ -200,7 +309,7 @@ def check_workflow_guard_document() -> list[GuardFinding]:
             )
         ]
     text = doc.read_text(encoding="utf-8")
-    required = ("diagnose-and-fail", "protected control files", "repair plan")
+    required = ("diagnose-and-fail", "protected control files", "repair plan", "partial-fetch-full-replacement-corruption")
     return [
         GuardFinding(
             pattern_id="workflow-guard-policy-weakened",
