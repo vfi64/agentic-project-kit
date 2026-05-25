@@ -1,0 +1,142 @@
+PR767 V0.4.2 RELEASE METADATA RECOVERY 7 -- ANCHOR PRESERVATION FIX -- NO TAG YET
+
+### SYNC PREFLIGHT ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+ * branch            release/v0.4.2-safety-baseline-767 -> FETCH_HEAD
+Already on 'release/v0.4.2-safety-baseline-767'
+Your branch is up to date with 'origin/release/v0.4.2-safety-baseline-767'.
+local=9f4e6d1a11071f260d58269b4e8f691cd5c9a55e
+remote=9f4e6d1a11071f260d58269b4e8f691cd5c9a55e
+
+### WRITE PATCH SCRIPT ###
+
+### RUN PATCH SCRIPT ###
+
+### VERIFY ANCHORS ###
+322:# preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
+323:# preservation-anchor: nested shell/Python quote layers
+484:Current verified release: `v0.4.1` with Zenodo version DOI `10.5281/zenodo.20357657`.
+483:Version `0.4.2` is the current release line prepared as a safety baseline after the governed rule-registry completion baseline and before the next successor-chat/documentation-management continuation.
+421:Historical verified version-specific DOI notes are maintained in `docs/releases/VERIFIED_RELEASES.md`.
+485:Earlier verified version-specific DOI notes are maintained in `docs/releases/VERIFIED_RELEASES.md`; historical release records remain in this section and the verified release archive.
+
+### TARGETED REGRESSION TESTS ###
+.......                                                                  [100%]
+7 passed in 0.03s
+
+### FULL GATES ###
+Release state check for target v0.4.2
+
+[PASS] semantic version: 0.4.2 is valid
+[PASS] pyproject version: found text: version = "0.4.2"
+[PASS] package __version__: found text: __version__ = "0.4.2"
+[PASS] CHANGELOG version: found text: v0.4.2
+[PASS] README version: found text: Version `0.4.2`
+[PASS] CITATION version: found text: version: 0.4.2
+[PASS] STATUS version: found text: Current version: 0.4.2
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.4.2
+[PASS] local tag unused: tag is unused: v0.4.2
+[PASS] remote tag unused: remote tag is unused: v0.4.2
+[PASS] GitHub release unused: GitHub release is absent: v0.4.2
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 19
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 4
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+
+Agentic project check passed
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Dokumentationsregistry
+- registry=docs/DOCUMENTATION_REGISTRY.yaml
+- version=1
+- documents=19
+- broad_migration_allowed=False
+- class:architecture=1
+- class:evidence/log=2
+- class:generated artifact=1
+- class:governance/system=4
+- class:operational/automation=4
+- class:planning=4
+- class:release=2
+- class:user-facing description=1
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
+Rule registry validation passed
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 19
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 4
+- class:release: 2
+- class:user-facing description: 1
+........................................................................ [  6%]
+........................................................................ [ 13%]
+........................................................................ [ 20%]
+........................................................................ [ 27%]
+........................................................................ [ 34%]
+........................................................................ [ 41%]
+........................................................................ [ 48%]
+........................................................................ [ 55%]
+........................................................................ [ 62%]
+........................................................................ [ 69%]
+........................................................................ [ 76%]
+........................................................................ [ 83%]
+........................................................................ [ 90%]
+........................................................................ [ 97%]
+.....................                                                    [100%]
+1029 passed in 6.35s
+All checks passed!
+
+### PACKAGE BUILD SMOKE ###
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for sdist...
+* Building sdist...
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for wheel...
+* Building wheel...
+Successfully built agentic_project_kit-0.4.2.tar.gz and agentic_project_kit-0.4.2-py3-none-any.whl
+
+### COPY TERMINAL EVIDENCE INTO REPO ###
