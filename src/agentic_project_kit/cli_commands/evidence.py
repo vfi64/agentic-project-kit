@@ -6,6 +6,7 @@ import typer
 
 from agentic_project_kit.evidence_clean import check_clean_except_expected_log, clean_local_evidence
 from agentic_project_kit.evidence_finalize_log import finalize_log
+from agentic_project_kit.evidence_finalize_log import render_finalize_log_error
 from agentic_project_kit.evidence_finalize_log import render_finalize_log_result
 from agentic_project_kit.evidence_guard import check_change_scope
 from agentic_project_kit.evidence_guard import check_terminal_log
@@ -66,30 +67,34 @@ def finalize_log_command(
     root: Path = typer.Option(Path("."), "--root"),
 ) -> None:
     """Append a canonical summary, require strict inspection, then upload the evidence log."""
-    result = finalize_log(
-        root=root,
-        run_log=run_log,
-        remote_log=remote_log,
-        slice_name=slice_name,
-        scope=scope,
-        mode_check=mode_check,
-        work=work,
-        evidence=evidence,
-        overall=overall,
-        remote_evidence=remote_evidence,
-        pr=pr,
-        ci=ci,
-        merge=merge,
-        command_report=command_report,
-        interpretation=interpretation,
-        safe_step=safe_step,
-        chat_reply=chat_reply,
-        origin=origin,
-        state_mode=state_mode,
-        comm_id=comm_id,
-        commit_message=commit_message,
-        push=push,
-    )
+    try:
+        result = finalize_log(
+            root=root,
+            run_log=run_log,
+            remote_log=remote_log,
+            slice_name=slice_name,
+            scope=scope,
+            mode_check=mode_check,
+            work=work,
+            evidence=evidence,
+            overall=overall,
+            remote_evidence=remote_evidence,
+            pr=pr,
+            ci=ci,
+            merge=merge,
+            command_report=command_report,
+            interpretation=interpretation,
+            safe_step=safe_step,
+            chat_reply=chat_reply,
+            origin=origin,
+            state_mode=state_mode,
+            comm_id=comm_id,
+            commit_message=commit_message,
+            push=push,
+        )
+    except (ValueError, FileNotFoundError) as exc:
+        typer.echo(render_finalize_log_error(str(exc)))
+        raise typer.Exit(code=1) from None
     typer.echo(render_finalize_log_result(result))
     if not result.success:
         raise typer.Exit(code=1)
