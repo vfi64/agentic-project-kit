@@ -1,4 +1,4 @@
-<!-- post-pr762-rule-registry-direct-coverage-closeout -->
+<!-- post-pr764-rule-registry-completion-reporting-closeout -->
 # Project Status
 
 Status-date: 2026-05-25
@@ -27,13 +27,14 @@ Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
 Post-release Zenodo verification is covered by `agentic-kit post-release-check --version 0.4.1`; post-release Zenodo remains a guarded release-state anchor.
 
-Post-PR762 closeout target:
-- Main is refreshed after PR #762 at `b22196a` (`Mark chat bootstrap drift rules as direct rule coverage (#762)`).
-- PRs #718-#762 established and closed out the governed rule-registry direct-coverage baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, deterministic metadata/conflict/completeness checks, direct test coverage for all active mechanisms, and an empty direct-test follow-up plan.
+Post-PR764 closeout target:
+- Main is refreshed after PR #764 at `c09f8d9` (`Report rule registry direct coverage completion explicitly (#764)`).
+- PRs #718-#764 established and closed out the governed rule-registry direct-coverage baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, deterministic metadata/conflict/completeness checks, direct test coverage for all active mechanisms, an empty direct-test follow-up plan, and explicit machine-readable plus human-readable completion reporting.
 - The governed rule registry currently covers twelve active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check.
 - Rule registry drift is checked through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight.
-- Evidence is preserved in committed terminal logs including `docs/reports/terminal/pr737-rule-registry-release-evidence.log`, `docs/reports/terminal/pr739-rule-registry-source-evidence-validation.log`, `docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log`, `docs/reports/terminal/pr741-rule-registry-surfaces-tests-inventory-recovery.log`, `docs/reports/terminal/pr742-rule-registry-surfaces-tests-validation.log`, `docs/reports/terminal/pr761-chat-communication-direct-coverage.log`, and `docs/reports/terminal/pr762-chat-bootstrap-drift-direct-coverage.log`.
-- Next immediate hardening task: close out rule-registry status/handoff state, then add a small report/readability improvement only if needed. Do not resume broad documentation-management rebuild until the closeout is merged and verified.
+- Rule registry completion is now explicitly reportable through `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json`; the JSON summary includes `direct_coverage_complete`.
+- Evidence is preserved in committed terminal logs including `docs/reports/terminal/pr737-rule-registry-release-evidence.log`, `docs/reports/terminal/pr739-rule-registry-source-evidence-validation.log`, `docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log`, `docs/reports/terminal/pr741-rule-registry-surfaces-tests-inventory-recovery.log`, `docs/reports/terminal/pr742-rule-registry-surfaces-tests-validation.log`, `docs/reports/terminal/pr761-chat-communication-direct-coverage.log`, `docs/reports/terminal/pr762-chat-bootstrap-drift-direct-coverage.log`, and `docs/reports/terminal/pr764-rule-registry-completion-reporting.log`.
+- Next immediate task: merge and verify this post-PR764 status/handoff closeout. After that, broad documentation-management rebuild may resume only as small additive, test-backed documentation-registry/projection slices.
 
 Documentation registry baseline:
 - `docs/DOCUMENTATION_REGISTRY.yaml` is the additive machine-readable registry.
@@ -43,7 +44,7 @@ Documentation registry baseline:
 - `agentic-kit docs-registry --report PATH` writes the JSON report.
 - The registry is visible in `check-docs`, `docs-audit`, `doc-mesh-audit`, `doc-lifecycle-audit`, `handoff check`, `handoff show`, `release-check`, and `post-release-check`.
 - `.agentic/communication_artifacts.yaml` is consumed as read-only artifact-policy input.
-- Broad documentation migration remains forbidden. The registry guard is structural only and does not prove semantic documentation quality.
+- The registry guard is structural only and does not prove semantic documentation quality.
 
 Workflow hardening baseline:
 - GitHub connector direct-path-first is the required remote route for known repository paths, refs, PRs, and commits.
@@ -68,7 +69,7 @@ GUI MVP baseline:
 
 ## Current Goal
 
-Close out the governed rule-registry direct-coverage baseline after PR762. After closeout, the next small slice may improve report/readability ergonomics for the completed registry. Broad documentation-management rebuild, release, tag, DOI mutation, and GUI expansion remain out of scope.
+Close out the governed rule-registry completion-reporting baseline after PR764. After closeout, the next small slice may resume documentation-management rebuild work as an additive documentation-registry or projection improvement. Release, tag, DOI mutation, and GUI expansion remain out of scope.
 
 ## Active Workflow Rules
 
@@ -124,7 +125,7 @@ Recent closeout anchors retained for handoff/status sync: PR #650 merged; PR #65
 
 ## Live Status Commands
 
-Use project-local commands first: `./ns state`, `./ns check-docs`, `./ns doctor`, `./ns docs-audit`, `./ns handoff-check`, `./ns governance-check`, `./ns rule-registry check`, `agentic-kit check-docs`, `agentic-kit doctor`, `agentic-kit rule-registry check`, and `agentic-kit handoff prompt` when installed through the active project environment.
+Use project-local commands first: `./ns state`, `./ns check-docs`, `./ns doctor`, `./ns docs-audit`, `./ns handoff-check`, `./ns governance-check`, `./ns rule-registry check`, `agentic-kit check-docs`, `agentic-kit doctor`, `agentic-kit rule-registry check`, `agentic-kit rule-registry report`, and `agentic-kit handoff prompt` when installed through the active project environment.
 
 The documentation registry can be inspected through `agentic-kit docs-registry` and exported with `agentic-kit docs-registry --report PATH`.
 
@@ -142,4 +143,4 @@ Required gate set for current-state, handoff, or governance-summary changes:
 
 ## Next Safe Step
 
-Merge and verify the post-PR762 status/handoff closeout. After that, the next small rule-registry slice should improve completion reporting/readability only if the current CLI/report does not clearly show that all active mechanisms have direct coverage. Keep broad documentation-management rebuild, release, tag, DOI mutation, and GUI expansion out of that PR.
+Merge and verify this post-PR764 status/handoff closeout. After that, continue the documentation-management rebuild only through small additive documentation-registry or projection slices. Keep release, tag, DOI mutation, and GUI expansion out of the next PR.
