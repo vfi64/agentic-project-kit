@@ -17,6 +17,7 @@ Copy this into the next chat:
 We work in repo vfi64/agentic-project-kit. Do not start from chat memory.
 Read the remote file docs/handoff/NEXT_CHAT_BOOTSTRAP.md on main completely and execute its boot routine.
 After that, verify main, open PRs, CI, STATUS, CURRENT_HANDOFF, handoff_state, compiled_agent_context, rule registry files, document-management rules, and FINAL_SUMMARY_CONTRACT before any mutation.
+If continuing after d, f, w, or any other short chat signal, first run agentic-kit evidence inspect locally or inspect equivalent committed remote/repo evidence.
 ```
 
 ## First chat command
@@ -25,6 +26,7 @@ After that, verify main, open PRs, CI, STATUS, CURRENT_HANDOFF, handoff_state, c
 2. Run or verify `agentic-kit boot check` and `agentic-kit boot prompt` if a local checkout is available.
 3. Open every mandatory boot source listed below before repository mutation.
 4. Report current main HEAD, open PRs, CI status, last clean evidence, and next smallest safe slice.
+5. Before continuing after a chat control signal, use `agentic-kit evidence inspect` or equivalent remote/repo evidence inspection.
 
 ## Bootloader output
 
@@ -56,12 +58,14 @@ Mandatory workflow rules:
 - Prefer Python runners for local workflow execution; shell remains a thin adapter.
 - Use run_summary_renderer for final summaries in evidence-bearing workflows.
 - Treat d, f, and w as communication signals rather than evidence.
+- Run `agentic-kit evidence inspect` or inspect equivalent remote/repo evidence before continuing after chat control signals.
 - Inspect repo or remote evidence before requesting pasted terminal output.
 - Use protected change planning before protected YAML, JSON, or Markdown control changes.
 - Before a chat switch, run the closeout prompt and check whether START_NEW_CHAT_PROMPT.md, CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md, and NEXT_CHAT_BOOTSTRAP.md all need updates.
 
 Required first action in a successor chat:
 - Read these sources and verify main, open PRs, CI, STATUS, handoff, rule registry, and final-summary contracts before repository changes.
+- If continuing after a chat control signal, run `agentic-kit evidence inspect` or inspect equivalent remote/repo evidence first.
 
 ### RESULT: PASS ###
 ```
@@ -71,11 +75,11 @@ Required first action in a successor chat:
 - Finish local sync after the bootloader/summary-runner merge and verify boot write/check plus targeted tests.
 - Use boot write to refresh docs/handoff/NEXT_CHAT_BOOTSTRAP.md before chat changes.
 - Harden no-op/PASS_ALREADY_DONE handling for already satisfied target states.
-- Harden d/f semantics through repo evidence instead of chat discipline.
+- Use `agentic-kit evidence inspect` after chat control signals so d/f/w do not rely on chat memory.
 - Automate red CI failed-log diagnosis in the repo workflow path.
 - Resume Rule Registry Phase A only in small PRs: typed schema, generated projections, stronger assertions, query/impact analysis, and documentation integration.
 - Continue the document-management projection system: move operative truth into machine-readable sources and keep Markdown as generated or verified projection where possible.
-- Postpone GUI work until the workflow kernel, no-op handling, d/f semantics, and red-CI diagnosis are stable.
+- Postpone GUI work until the workflow kernel, no-op handling, evidence inspection, and red-CI diagnosis are stable.
 
 ## Final summary requirement
 
