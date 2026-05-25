@@ -19,6 +19,7 @@ class FinalizeLogResult:
     commit_created: bool
     commit_sha: str
     summary_inspection: EvidenceInspection
+    canonical_summary: str
     findings: tuple[str, ...] = ()
 
 
@@ -106,7 +107,7 @@ def finalize_log(
     findings: list[str] = []
     if not summary_inspection.success:
         findings.append("structured summary inspection failed")
-        return FinalizeLogResult(False, run_log_path, remote_log_path, False, "", summary_inspection, tuple(findings))
+        return FinalizeLogResult(False, run_log_path, remote_log_path, False, "", summary_inspection, summary, tuple(findings))
 
     destination = root_path / remote_log_path
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -115,7 +116,7 @@ def finalize_log(
     add_result = _run_git(["add", str(remote_log_path)], root=root_path)
     if add_result.returncode != 0:
         findings.append(add_result.stderr.strip() or "git add failed")
-        return FinalizeLogResult(False, run_log_path, remote_log_path, False, "", summary_inspection, tuple(findings))
+        return FinalizeLogResult(False, run_log_path, remote_log_path, False, "", summary_inspection, summary, tuple(findings))
 
     diff_result = _run_git(["diff", "--cached", "--quiet"], root=root_path)
     commit_created = diff_result.returncode != 0
@@ -125,14 +126,14 @@ def finalize_log(
         commit_result = _run_git(["commit", "-m", message], root=root_path)
         if commit_result.returncode != 0:
             findings.append(commit_result.stderr.strip() or "git commit failed")
-            return FinalizeLogResult(False, run_log_path, remote_log_path, False, "", summary_inspection, tuple(findings))
+            return FinalizeLogResult(False, run_log_path, remote_log_path, False, "", summary_inspection, summary, tuple(findings))
         commit_sha = _git_stdout(["rev-parse", "HEAD"], root=root_path) or "UNKNOWN"
         if push:
             push_result = _run_git(["push", "origin", branch], root=root_path)
             if push_result.returncode != 0:
                 findings.append(push_result.stderr.strip() or "git push failed")
-                return FinalizeLogResult(False, run_log_path, remote_log_path, True, commit_sha, summary_inspection, tuple(findings))
-    return FinalizeLogResult(True, run_log_path, remote_log_path, commit_created, commit_sha, summary_inspection, tuple(findings))
+                return FinalizeLogResult(False, run_log_path, remote_log_path, True, commit_sha, summary_inspection, summary, tuple(findings))
+    return FinalizeLogResult(True, run_log_path, remote_log_path, commit_created, commit_sha, summary_inspection, summary, tuple(findings))
 
 
 def render_finalize_log_result(result: FinalizeLogResult) -> str:
@@ -150,5 +151,19 @@ def render_finalize_log_result(result: FinalizeLogResult) -> str:
     if result.findings:
         lines.append("findings:")
         lines.extend(f"- {finding}" for finding in result.findings)
-    lines.append(f"### RESULT: {'PASS' if result.success else 'FAIL'} ###")
+    lines.extend(["", "### CANONICAL SUMMARY ###", result.canonical_summary, "", f"### RESULT: {'PASS' if result.success else 'FAIL'} ###"])
     return "\n".join(lines)
+
+
+def render_finalize_log_error(message: str) -> str:
+    return "\n".join(
+        [
+            "EVIDENCE_FINALIZE_LOG",
+            "success: no",
+            "commit_created: no",
+            "commit_sha: NONE",
+            "findings:",
+            f"- {message}",
+            "### RESULT: FAIL ###",
+        ]
+    )
