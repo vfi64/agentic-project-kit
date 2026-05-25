@@ -157,6 +157,10 @@ documents:
     class: planning
     owner: maintainers
     notes: Accepted near-term focus for reducing manual orchestration before GUI and Pattern Advisor expansion.
+  - path: docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
+    class: planning
+    owner: maintainers
+    notes: Accepted backlog for reducing remaining rule-registry weaknesses without blocking documentation-management work.
   - path: docs/handoff/CURRENT_HANDOFF.md
     class: planning
     owner: maintainers
