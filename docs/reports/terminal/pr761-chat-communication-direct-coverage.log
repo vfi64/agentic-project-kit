@@ -1,0 +1,37 @@
+PR761 CHAT COMMUNICATION DIRECT COVERAGE -- REMOTE CONNECTOR -- NO RELEASE
+
+START STATE
+- Base branch: main at 21a93277004bd124a1d2ff9c975c9a997f2afd07.
+- Work branch: r761.
+- Scope: convert chat-communication-rules from documented coverage to direct test coverage.
+- No release, no tag, no DOI changes.
+
+REMOTE OBSERVATIONS
+- chat-communication-rules was listed with tests: [] in .agentic/rule_mechanism_inventory.yaml.
+- rule_test_coverage.yaml classified chat-communication-rules as documented.
+- rule_direct_test_plan.yaml contained a planned chat-communication-rules follow-up.
+- Authoritative anchors are docs/governance/CHAT_COMMUNICATION_CONTRACT.md, docs/governance/FINAL_SUMMARY_CONTRACT.md, and .agentic/compiled_agent_context.yaml.
+
+REMOTE CHANGES
+- Added tests/test_chat_communication_contract.py with direct assertions for:
+  - d/D, f/F, w/W, paste-output, and stop semantics as control signals rather than evidence.
+  - Remote-log-first failure recovery.
+  - PASS claim requirements and terminal evidence boundaries.
+  - No legacy handwritten summary fallback and direct remote-log lookup rule.
+  - Compiled context agreement with the chat communication contract.
+- Registered tests/test_chat_communication_contract.py under chat-communication-rules in .agentic/rule_mechanism_inventory.yaml.
+- Marked chat-communication-rules as direct in .agentic/rule_test_coverage.yaml.
+- Removed the completed chat-communication-rules item from .agentic/rule_direct_test_plan.yaml.
+
+EXPECTED BEHAVIOR
+- rule registry validation should no longer require a direct-test follow-up for chat-communication-rules.
+- rule registry report should count chat-communication-rules as direct.
+- Remaining direct-test follow-up should be chat-bootstrap-drift-rules.
+
+REMOTE LIMITATION
+- Local pytest/check-docs were not run because the user is on iPhone.
+- GitHub Actions CI is the required gate before merge.
+
+RESULT
+- Remote branch prepared for PR761.
+- CI/merge verification still required after PR creation.

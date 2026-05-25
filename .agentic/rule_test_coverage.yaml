@@ -124,11 +124,10 @@ coverage:
       path: tests/test_patch_artifact_preflight.py
     statement: preflight includes rule registry files before patch application
 - mechanism_id: chat-communication-rules
-  test_coverage: documented
-  coverage_rationale: Contract and compiled-context anchors are preserved; direct behavioral tests are not registered for this documentation rule yet.
+  test_coverage: direct
   assertions:
   - assertion_id: chat-communication-rules-ack-semantics
-    kind: anchor
+    kind: behavior
     covered_surfaces:
     - chat-communication-contract
     - compiled-agent-context
@@ -137,18 +136,38 @@ coverage:
       path: docs/governance/CHAT_COMMUNICATION_CONTRACT.md
     - kind: source
       path: .agentic/compiled_agent_context.yaml
-    statement: d f w paste-output semantics remain documented
+    - kind: test
+      path: tests/test_chat_communication_contract.py
+    statement: d f w paste-output and stop semantics are direct-tested as control signals rather than evidence
   - assertion_id: chat-communication-rules-remote-log-first
     kind: evidence
     covered_surfaces:
+    - chat-communication-contract
     - final-summary-contract
     - compiled-agent-context
     evidence_refs:
     - kind: source
+      path: docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+    - kind: source
       path: docs/governance/FINAL_SUMMARY_CONTRACT.md
     - kind: source
       path: .agentic/compiled_agent_context.yaml
-    statement: remote-log-first evidence handling remains anchored
+    - kind: test
+      path: tests/test_chat_communication_contract.py
+    statement: failure recovery and remote-log-first handling are direct-tested against governance contracts
+  - assertion_id: chat-communication-rules-pass-boundary
+    kind: guard
+    covered_surfaces:
+    - chat-communication-contract
+    - final-summary-contract
+    evidence_refs:
+    - kind: source
+      path: docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+    - kind: source
+      path: docs/governance/FINAL_SUMMARY_CONTRACT.md
+    - kind: test
+      path: tests/test_chat_communication_contract.py
+    statement: PASS claims require matching work, gates, evidence, canonical renderer use, and no overwritten inner FAIL
 - mechanism_id: chat-bootstrap-drift-rules
   test_coverage: documented
   coverage_rationale: Contract and compiled-context anchors are preserved; direct behavioral tests are not registered for this documentation rule yet.
