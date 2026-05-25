@@ -1,0 +1,173 @@
+### PRECHECK ###
+main
+
+### FETCH MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   bd06709..09a5e5a  main       -> origin/main
+
+### SWITCH MAIN ###
+Already on 'main'
+Your branch is behind 'origin/main' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+
+### PULL MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Updating bd06709..09a5e5a
+Fast-forward
+ docs/handoff/NEXT_CHAT_BOOTSTRAP.md              |  10 +-
+ src/agentic_project_kit/chat_bootloader.py       |  12 +-
+ src/agentic_project_kit/cli_commands/evidence.py |  57 +++++++++
+ src/agentic_project_kit/evidence_finalize_log.py | 154 +++++++++++++++++++++++
+ tests/test_evidence_finalize_log.py              |  59 +++++++++
+ 5 files changed, 283 insertions(+), 9 deletions(-)
+ create mode 100644 src/agentic_project_kit/evidence_finalize_log.py
+ create mode 100644 tests/test_evidence_finalize_log.py
+
+### VERIFY HEAD ###
+09a5e5a62227c3849dc5cc8048de4eb46f3ca9f5
+09a5e5a Add evidence finalization wrapper (#807)
+expected_head=09a5e5a62227c3849dc5cc8048de4eb46f3ca9f5
+
+### STATUS ###
+
+### TARGETED TESTS ###
+PY=.venv/bin/python
+.........................                                                [100%]
+25 passed in 0.58s
+
+### FINALIZE-LOG INVALID PASS MUST FAIL ###
+╭──────────────────────────────────────────────── Traceback (most recent call last) ────────────────────────────────────────────────╮
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/cli_commands/evidence.py:69 in finalize_log_command  │
+│                                                                                                                                   │
+│    66 │   root: Path = typer.Option(Path("."), "--root"),                                                                         │
+│    67 ) -> None:                                                                                                                  │
+│    68 │   """Append a canonical summary, require strict inspection, then upload the evidence log."""                              │
+│ ❱  69 │   result = finalize_log(                                                                                                  │
+│    70 │   │   root=root,                                                                                                          │
+│    71 │   │   run_log=run_log,                                                                                                    │
+│    72 │   │   remote_log=remote_log,                                                                                              │
+│                                                                                                                                   │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/evidence_finalize_log.py:99 in finalize_log          │
+│                                                                                                                                   │
+│    96 │   │   safe_step=safe_step,                                                                                                │
+│    97 │   │   chat_reply=chat_reply,                                                                                              │
+│    98 │   )                                                                                                                       │
+│ ❱  99 │   summary = render_summary(payload)                                                                                       │
+│   100 │   with run_log_path.open("a", encoding="utf-8") as handle:                                                                │
+│   101 │   │   handle.write("\n\n### CANONICAL SUMMARY ###\n")                                                                     │
+│   102 │   │   handle.write(summary)                                                                                               │
+│                                                                                                                                   │
+│ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/run_summary_renderer.py:150 in render_summary        │
+│                                                                                                                                   │
+│   147 │   │   payload = _payload_from_mapping(payload)                                                                            │
+│   148 │   findings = validate_summary_data(payload)                                                                               │
+│   149 │   if findings:                                                                                                            │
+│ ❱ 150 │   │   raise ValueError("; ".join(findings))                                                                               │
+│   151 │   slice_name = payload.slice or payload.slice_name or "UNKNOWN"                                                           │
+│   152 │   next_reply = _selected_chat_reply(payload)                                                                              │
+│   153 │   lines = [                                                                                                               │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+ValueError: invalid field: remote_evidence; invalid pass: remote evidence is not complete
+
+### FINALIZE-LOG POSITIVE SMOKE ###
+EVIDENCE_FINALIZE_LOG
+success: yes
+run_log: /tmp/pr807-finalize-log-positive.log
+remote_log: docs/reports/terminal/pr807-finalize-log-positive-smoke.log
+commit_created: yes
+commit_sha: 2c12720174bd0123f8beaef85c79227695e3b390
+summary_verdict: PASS_CONTINUE
+structured_summary_found: yes
+structured_summary_valid: yes
+### RESULT: PASS ###
+EVIDENCE_INSPECTION
+verdict: PASS_CONTINUE
+evidence_exists: yes
+require_summary: yes
+git_branch: main
+git_status_clean: yes
+pass_markers: 1
+fail_markers: 0
+hidden_fail_before_final_pass: no
+structured_summary_found: yes
+structured_summary_valid: yes
+summary_name: PR807 FINALIZE LOG POSITIVE SMOKE
+summary_scope: LOCAL VERIFY / POSITIVE SMOKE
+summary_branch: main
+summary_origin: local
+summary_state_mode: local
+summary_mode_check: valid summary and strict evidence inspection must pass
+summary_work: PASS
+summary_evidence: PASS
+summary_overall: PASS
+summary_remote_evidence: NOT_REQUIRED
+summary_pr: 807
+summary_head_sha: 09a5e5a62227c3849dc5cc8048de4eb46f3ca9f5
+summary_ci: passed-before-merge
+summary_merge: completed
+summary_terminal_log: /tmp/pr807-finalize-log-positive.log
+summary_terminal_log_remote: docs/reports/terminal/pr807-finalize-log-positive-smoke.log
+summary_terminal_log_local: /tmp/pr807-finalize-log-positive.log
+summary_command_report: positive-finalize-log-smoke
+summary_safe_step: remove positive smoke artifact before final verification
+summary_chat_reply: d
+summary_result_marker: PASS
+evidence_path: docs/reports/terminal/pr807-finalize-log-positive-smoke.log
+final_marker: ### RESULT: PASS ###
+next_action: continue with the next safe slice after reviewing evidence
+### RESULT: PASS ###
+
+### REMOVE POSITIVE SMOKE ARTIFACT COMMIT FROM LOCAL MAIN ###
+
+### BOOT CLOSEOUT STILL PASSING ###
+CHAT_SWITCH_CLOSEOUT: PASS
+
+### FINAL CLEAN CHECK BEFORE FINALIZE WRAPPER LOG ###
+
+### FINALIZE THIS VERIFY LOG THROUGH NEW WRAPPER ###
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-25 23:33:29 +0200
+
+SLICE
+  NAME: PR807 FINALIZE LOG WRAPPER VERIFY
+  SCOPE: LOCAL VERIFY / FINALIZE LOG WRAPPER / LOG UPLOAD
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: sync main, tests, negative smoke, positive smoke, cleanup, boot closeout
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: NOT_REQUIRED
+  PR: 807
+  HEAD_SHA: 09a5e5a62227c3849dc5cc8048de4eb46f3ca9f5
+  CI: passed-before-merge
+  MERGE: completed
+
+EVIDENCE FILES
+  terminal_log: /tmp/pr807-finalize-log-wrapper-verify.log
+  terminal_log_remote: docs/reports/terminal/pr807-finalize-log-wrapper-verify.log
+  terminal_log_local: /tmp/pr807-finalize-log-wrapper-verify.log
+  command_report: targeted-tests/finalize-log-negative-smoke/finalize-log-positive-smoke/strict-inspect/boot-closeout
+
+INTERPRETATION
+  PR807 finalize-log wrapper is locally verified; this log was finalized through the new wrapper rather than a freehand PASS footer.
+
+NEXT
+  SAFE_STEP: continue with FINAL_SUMMARY_CONTRACT documentation follow-up
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
