@@ -30,6 +30,28 @@ def test_flags_large_deletion() -> None:
     findings = analyze_diff(diff)
     assert any(f.code == "possible-full-replacement-or-large-deletion" for f in findings)
 
+def test_flags_large_rewrite_without_decision() -> None:
+    removed = "\n".join("-old protected rule " + str(i) for i in range(25))
+    added = "\n".join("+new replacement text " + str(i) for i in range(25))
+    diff = "\n".join([
+        "diff --git a/docs/governance/FINAL_SUMMARY_CONTRACT.md b/docs/governance/FINAL_SUMMARY_CONTRACT.md",
+        removed,
+        added,
+    ])
+    findings = analyze_diff(diff)
+    assert any(f.code == "large-protected-file-rewrite-without-decision" for f in findings)
+
+def test_accepts_large_rewrite_with_explicit_decision() -> None:
+    removed = "\n".join("-old protected rule " + str(i) for i in range(25))
+    added = "\n".join("+new replacement text " + str(i) for i in range(25))
+    diff = "\n".join([
+        "diff --git a/docs/governance/FINAL_SUMMARY_CONTRACT.md b/docs/governance/FINAL_SUMMARY_CONTRACT.md",
+        removed,
+        added,
+    ])
+    findings = analyze_diff(diff, decisions={"docs/governance/FINAL_SUMMARY_CONTRACT.md": "migrate"})
+    assert not any(f.code == "large-protected-file-rewrite-without-decision" for f in findings)
+
 def test_render_pass_and_block() -> None:
     assert "result=PASS" in render_findings([])
     diff = "diff --git a/docs/governance/FINAL_SUMMARY_CONTRACT.md b/docs/governance/FINAL_SUMMARY_CONTRACT.md\n-WORK RESULT\n"
