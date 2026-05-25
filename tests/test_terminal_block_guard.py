@@ -14,6 +14,7 @@ printf '------------------------------------------------------------------------
 printf '-------------------------------------------------------------------------\\n'
 printf '\\n\\n\\n'
 printf '### START ###\\n'
+set -e
 python3 -m pytest -q tests/test_terminal_block_guard.py
 ruff check src tests
 sh -n tools/example.sh
@@ -56,6 +57,58 @@ def test_terminal_block_guard_rejects_terminal_exit() -> None:
     assert any(f.rule_id == "no-terminal-exit" for f in report.findings)
 
 
+def test_terminal_block_guard_rejects_unchecked_final_pass_after_pytest() -> None:
+    block = "\n".join(
+        [
+            "python3 -m pytest -q tests/test_handoff_state_completed_list.py",
+            "printf '### RESULT: PASS ###\\n'",
+        ]
+    )
+    report = check_terminal_block(block)
+    assert report.ok is False
+    assert any(f.rule_id == "no-unchecked-final-pass" for f in report.findings)
+
+
+def test_terminal_block_guard_rejects_unchecked_final_pass_after_ns_gate() -> None:
+    block = "\n".join(
+        [
+            "./ns check-docs",
+            "printf '### RESULT: PASS ###\\n'",
+        ]
+    )
+    report = check_terminal_block(block)
+    assert report.ok is False
+    assert any(f.rule_id == "no-unchecked-final-pass" for f in report.findings)
+
+
+def test_terminal_block_guard_accepts_explicit_status_handling() -> None:
+    block = "\n".join(
+        [
+            "python3 -m pytest -q tests/test_handoff_state_completed_list.py",
+            'TEST_STATUS="$?"',
+            'if [ "$TEST_STATUS" -eq 0 ]; then',
+            "  printf '### RESULT: PASS ###\\n'",
+            "else",
+            "  printf '### RESULT: FAIL ###\\n'",
+            "fi",
+        ]
+    )
+    report = check_terminal_block(block)
+    assert report.ok is True
+
+
+def test_terminal_block_guard_accepts_set_e_guarded_pass() -> None:
+    block = "\n".join(
+        [
+            "set -e",
+            "python3 -m pytest -q tests/test_handoff_state_completed_list.py",
+            "printf '### RESULT: PASS ###\\n'",
+        ]
+    )
+    report = check_terminal_block(block)
+    assert report.ok is True
+
+
 def test_forbidden_pattern_registry_is_non_empty() -> None:
     assert FORBIDDEN_TERMINAL_PATTERNS
     assert {pattern.rule_id for pattern in FORBIDDEN_TERMINAL_PATTERNS} >= {
@@ -64,4 +117,5 @@ def test_forbidden_pattern_registry_is_non_empty() -> None:
         "no-shell-continuation-prompts",
         "quote-regex-tokens",
         "no-terminal-exit",
+        "no-unchecked-final-pass",
     }
