@@ -22,6 +22,9 @@ This plan intentionally prioritizes enforcement over additional prose rules. Rep
 - block merge/release/protected-file operations through local gates;
 - make every run auditable, idempotent, and recoverable;
 - keep the workflow usable without paid model APIs.
+- make assistant-authored copy-and-paste terminal blocks a bootstrap and recovery path only, not the normal operating mode;
+- make every generated work order executable through the fixed slot instead of through a one-off chat block;
+- preserve evidence even on controlled exceptions, interrupted execution, or unsafe remote-upload state.
 
 ## Canonical Fixed Slot
 
@@ -191,6 +194,82 @@ On `d`, the assistant must first read the structured run result and then the lin
 
 On `f` or `fail`, the assistant must still perform log-first and result-first recovery. Manual copy-and-paste is allowed only after expected evidence is missing or unusable.
 
+
+## Bootstrap And CAP Fallback Policy
+
+Assistant-authored terminal blocks are allowed only for bootstrapping the `next-turn` runner, repairing the runner, or recovering when the runner cannot produce usable evidence.
+
+Once `./ns next-turn` exists, the normal assistant behavior is to create or update the fixed work-order slot. The user should not have to paste long command sequences for routine work.
+
+During the transition period, any CAP block that changes the repository must be treated as temporary scaffolding and should be replaced by runner functionality as soon as possible.
+
+## Crash And Recovery Guarantees
+
+The runner must write evidence from the first line of execution and must attempt to preserve a final result even when the work order fails.
+
+Implementation requirements:
+
+- use guarded execution with `try`, `except`, and `finally`;
+- use `atexit` or equivalent local cleanup hooks where appropriate;
+- write result files atomically through temporary files followed by rename;
+- mark uncontrolled interruptions as `recovery_needed` when a normal final summary cannot be completed;
+- never silently discard a local log because remote evidence upload failed;
+- print the exact local recovery path when remote evidence is not available.
+
+## Result And Evidence Lookup Order
+
+On `d`, `done`, `f`, or `fail`, the assistant must use this lookup order before requesting pasted terminal output:
+
+1. `docs/reports/command_runs/next-turn-latest.json`;
+2. `docs/reports/command_runs/next-turn-latest.md`;
+3. `docs/reports/terminal/next-turn-latest.log`;
+4. `.agentic/commands/executed.jsonl`;
+5. run-id-specific JSON, Markdown, and terminal evidence referenced by the ledger;
+6. current PR or branch evidence logs under `docs/reports/terminal/`;
+7. GitHub run logs for the relevant head SHA;
+8. manual copy-and-paste only if the expected evidence is missing or unusable.
+
+The assistant must state which expected evidence paths were checked when manual output is requested.
+
+## Overwrite Protection
+
+The fixed slot must not be overwritten silently.
+
+Overwrite is allowed only when all of the following are true:
+
+- the previous work order is `completed`, `failed`, or explicitly recovered;
+- the execution ledger contains the previous run;
+- expected evidence exists or the runner recorded why evidence could not be published;
+- no `prepared` or `running` work order is being replaced;
+- any recovery override is explicit and itself logged.
+
+## PR And Merge Readiness Boundary
+
+The no-chat-decision zone also covers the statement that a PR is ready to merge.
+
+The assistant may summarize observed state, but readiness must be determined by `./ns pr-status`, `./ns merge-if-green`, or an equivalent local gate. `mergeable`, small diffs, zero deletions, or visual inspection are not sufficient readiness evidence.
+
+## Generated Projection And Closeout Policy
+
+Release, handoff, and documentation state should move toward generated or transaction-based updates rather than repeated manual synchronization.
+
+Long-term targets:
+
+- STATUS, HANDOFF, handoff_state, CHANGELOG, README, CITATION, and VERIFIED_RELEASES must be checked by a closeout command;
+- generated projections should be produced from explicit source data where practical;
+- manual updates across multiple canonical documents must be represented as document transactions;
+- stale post-release metadata and stale handoff state must become gate failures before successor work starts.
+
+## Meta-Review Additions
+
+Before implementation starts, each slice must answer:
+
+- Is this enforcing behavior or only documenting behavior?
+- Which repeated standard error does it make technically impossible or at least locally blocked?
+- What is the smallest deterministic test proving the behavior?
+- Does this preserve the future GUI path by using the same command layer?
+- Does this reduce CAP, or does it add another temporary CAP dependency?
+
 ## Standard Errors Addressed
 
 - `copy-and-paste-primary-execution`: CAP becomes fallback, not the primary workflow.
@@ -205,6 +284,13 @@ On `f` or `fail`, the assistant must still perform log-first and result-first re
 - `final-summary-contradiction`: structured result must reflect prior failures, blocked checks, and missing evidence.
 - `chat-directs-no-chat-decision-zone`: chat must not bypass local gates for critical mutations.
 - `non-idempotent-gui-button`: repeated button presses must not duplicate or corrupt work.
+- `remote-log-not-uploaded-after-readonly-diagnosis`: read-only diagnosis must either publish evidence through a safe path or clearly mark local-only evidence and recovery instructions.
+- `green-claim-without-main-ci-verify`: a merged PR is not complete until main CI is verified green or red with diagnosis.
+- `gh-schema-assumption`: local GitHub CLI usage must avoid unsupported fields and flags and must degrade through version-compatible routes.
+- `heading-format-guessing-without-rule-inspection`: formatting fixes must inspect the enforcing rule before patching guessed headings or literals.
+- `plan-only-fix-without-executable-guard`: repeated workflow failures must not be closed by planning text alone when an executable guard is required.
+- `cap-bootstrap-not-retired`: temporary CAP scaffolding must be retired once the runner command exists.
+- `next-turn-result-lookup-order-ignored`: assistant responses after `d` or `f` must follow the defined evidence lookup order before asking for pasted output.
 
 ## Documentation-Management Extension
 
@@ -232,6 +318,13 @@ CLI, chat, and GUI should eventually share a capability manifest, for example `.
 The manifest should list commands, labels, safety class, GUI availability, required gates, and mutation scope. The GUI should render available buttons from this manifest instead of hardcoding policy.
 
 ## Implementation Slices
+
+### Slice 0: Bootstrap policy and compatibility guard
+
+- define the temporary CAP bootstrap boundary;
+- add result/evidence lookup order to the assistant-facing docs;
+- add tests for missing evidence recovery messages;
+- verify the plan does not require paid model APIs.
 
 ### Slice A: State-machine skeleton
 
@@ -290,3 +383,9 @@ The manifest should list commands, labels, safety class, GUI availability, requi
 - Protected-file broad rewrites are blocked before PR creation or merge.
 - The workflow is usable without paid model APIs.
 - Documentation-management work uses document transactions instead of ad-hoc broad edits.
+- Assistant-generated CAP blocks are allowed only for bootstrap and recovery once `./ns next-turn` exists.
+- Every `d` or `f` response triggers structured result lookup before log lookup and before any manual output request.
+- The runner preserves local evidence on crash, interruption, or unsafe remote upload.
+- Work-order overwrite requires completed or recovered prior state plus ledger evidence.
+- PR readiness claims and merge recommendations come only from local gates.
+- Release and documentation closeout move toward generated projections or transaction-based updates.
