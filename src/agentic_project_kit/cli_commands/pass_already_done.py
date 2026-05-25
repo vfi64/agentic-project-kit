@@ -6,6 +6,8 @@ import typer
 
 from agentic_project_kit.pass_already_done import classify_file
 from agentic_project_kit.pass_already_done import render_classification
+from agentic_project_kit.result_report_classifier import classify_report
+from agentic_project_kit.result_report_classifier import render_report_classification
 
 app = typer.Typer(help="Classify idempotent already-done command outcomes.")
 
@@ -19,4 +21,16 @@ def classify(
     classification = classify_file(path, exit_code=exit_code, target_verified=target_verified)
     typer.echo(render_classification(classification))
     if not classification.success:
+        raise typer.Exit(code=1)
+
+
+@app.command("report")
+def report(
+    path: Path,
+    exit_code: int = typer.Option(..., "--exit-code"),
+    target_verified: bool = typer.Option(False, "--target-verified"),
+) -> None:
+    result = classify_report(path, raw_exit_code=exit_code, target_verified=target_verified)
+    typer.echo(render_report_classification(result))
+    if not result.success:
         raise typer.Exit(code=1)
