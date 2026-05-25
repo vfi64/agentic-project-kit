@@ -42,6 +42,19 @@ def _summary_payload() -> dict[str, str]:
     }
 
 
+def _large_protected_file_deletion_diff() -> str:
+    deleted_lines = "\n".join(f"-obsolete line {number}" for number in range(25))
+    return f"""
+diff --git a/.agentic/handoff_state.yaml b/.agentic/handoff_state.yaml
+index 1111111..2222222 100644
+--- a/.agentic/handoff_state.yaml
++++ b/.agentic/handoff_state.yaml
+@@ -1,30 +1,5 @@
+ {deleted_lines}
++schema_version: 1
+"""
+
+
 def test_workflow_guard_passes_current_repository_state() -> None:
     assert run_workflow_guard([]) == []
 
@@ -135,21 +148,20 @@ def test_workflow_guard_keeps_partial_fetch_replacement_policy() -> None:
 
 
 def test_workflow_guard_rejects_large_protected_file_deletion_diff() -> None:
-    deleted_lines = "\n".join(f"-obsolete line {number}" for number in range(25))
-    diff_text = f"""
-diff --git a/.agentic/handoff_state.yaml b/.agentic/handoff_state.yaml
-index 1111111..2222222 100644
---- a/.agentic/handoff_state.yaml
-+++ b/.agentic/handoff_state.yaml
-@@ -1,30 +1,5 @@
- {deleted_lines}
-+schema_version: 1
-"""
-    findings = check_protected_file_diff_budget(diff_text)
+    findings = check_protected_file_diff_budget(_large_protected_file_deletion_diff())
     assert findings
     assert findings[0].pattern_id == "protected-file-diff-budget-exceeded"
     assert findings[0].severity == "HARD-FAIL"
     assert findings[0].path == ".agentic/handoff_state.yaml"
+
+
+def test_workflow_guard_diff_cli_rejects_large_protected_file_deletion_diff(tmp_path: Path) -> None:
+    diff_file = tmp_path / "danger.diff"
+    diff_file.write_text(_large_protected_file_deletion_diff(), encoding="utf-8")
+    result = CliRunner().invoke(app, ["workflow-guard", "diff", str(diff_file)])
+    assert result.exit_code == 1
+    assert "protected-file-diff-budget-exceeded" in result.output
+    assert ".agentic/handoff_state.yaml" in result.output
 
 
 def test_workflow_guard_allows_small_protected_file_metadata_diff() -> None:
