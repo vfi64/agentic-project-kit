@@ -19,7 +19,7 @@ class EvidencePublishPlan:
     push_command: str
 
 
-def _run_git(args: list[str], *, root: Path) -> str:
+def _run_git(args: list[str], *, root: Path, check: bool = True) -> subprocess.CompletedProcess[str]:
     completed = subprocess.run(
         ["git", *args],
         cwd=root,
@@ -27,13 +27,17 @@ def _run_git(args: list[str], *, root: Path) -> str:
         capture_output=True,
         check=False,
     )
-    if completed.returncode != 0:
+    if check and completed.returncode != 0:
         raise RuntimeError(completed.stderr.strip() or completed.stdout.strip())
-    return completed.stdout.strip()
+    return completed
+
+
+def _git_stdout(args: list[str], *, root: Path) -> str:
+    return _run_git(args, root=root).stdout.strip()
 
 
 def current_branch(root: Path | str = ".") -> str:
-    return _run_git(["branch", "--show-current"], root=Path(root))
+    return _git_stdout(["branch", "--show-current"], root=Path(root))
 
 
 def build_evidence_publish_plan(
@@ -86,6 +90,87 @@ def publish_and_stage_evidence(
     return plan
 
 
+
+@dataclass(frozen=True)
+class EvidenceFinalizeResult:
+    plan: EvidencePublishPlan
+    committed: bool
+    pushed: bool
+    already_clean: bool
+    commit_sha: str
+    message: str
+
+
+def has_staged_changes(root: Path | str = ".") -> bool:
+    completed = _run_git(["diff", "--cached", "--quiet"], root=Path(root), check=False)
+    return completed.returncode == 1
+
+
+def commit_and_push_evidence(
+    *,
+    plan: EvidencePublishPlan,
+    root: Path | str = ".",
+    push: bool = True,
+) -> EvidenceFinalizeResult:
+    root_path = Path(root)
+
+    if not has_staged_changes(root_path):
+        return EvidenceFinalizeResult(
+            plan=plan,
+            committed=False,
+            pushed=False,
+            already_clean=True,
+            commit_sha="",
+            message="PASS_ALREADY_DONE: no staged evidence changes",
+        )
+
+    commit = _run_git(["commit", "-m", plan.commit_message], root=root_path, check=False)
+    if commit.returncode != 0:
+        combined = (commit.stderr + commit.stdout).strip()
+        if "nothing to commit" in combined or "no changes added to commit" in combined:
+            return EvidenceFinalizeResult(
+                plan=plan,
+                committed=False,
+                pushed=False,
+                already_clean=True,
+                commit_sha="",
+                message="PASS_ALREADY_DONE: nothing to commit",
+            )
+        raise RuntimeError(combined)
+
+    sha = _git_stdout(["rev-parse", "HEAD"], root=root_path)
+
+    pushed = False
+    if push:
+        push_result = _run_git(["push", "-u", "origin", plan.branch], root=root_path, check=False)
+        if push_result.returncode != 0:
+            raise RuntimeError((push_result.stderr + push_result.stdout).strip())
+        pushed = True
+
+    return EvidenceFinalizeResult(
+        plan=plan,
+        committed=True,
+        pushed=pushed,
+        already_clean=False,
+        commit_sha=sha,
+        message="PASS: evidence committed" + (" and pushed" if pushed else ""),
+    )
+
+
+def render_finalize_result(result: EvidenceFinalizeResult) -> str:
+    lines = [
+        "NEXT_TURN_EVIDENCE_FINALIZE_RESULT",
+        f"run_id={result.plan.run_id}",
+        f"committed={str(result.committed).lower()}",
+        f"pushed={str(result.pushed).lower()}",
+        f"already_clean={str(result.already_clean).lower()}",
+        f"commit_sha={result.commit_sha}",
+        f"message={result.message}",
+        f"branch={result.plan.branch}",
+        "### RESULT: PASS ###",
+    ]
+    return "\n".join(lines)
+
 def render_plan(plan: EvidencePublishPlan) -> str:
     lines = [
         "NEXT_TURN_EVIDENCE_PUBLISH_PLAN",
@@ -108,6 +193,8 @@ def main() -> int:
     parser.add_argument("--local-terminal-log", required=True)
     parser.add_argument("--work-result", required=True, choices=["PASS", "FAIL", "PENDING", "HARD_FAIL", "PASS_ALREADY_DONE", "NOOP"])
     parser.add_argument("--plan-only", action="store_true")
+    parser.add_argument("--commit", action="store_true")
+    parser.add_argument("--no-push", action="store_true")
     args = parser.parse_args()
 
     if args.plan_only:
@@ -116,14 +203,23 @@ def main() -> int:
             local_terminal_log=args.local_terminal_log,
             work_result=args.work_result,
         )
-    else:
-        plan = publish_and_stage_evidence(
-            run_id=args.run_id,
-            local_terminal_log=args.local_terminal_log,
-            work_result=args.work_result,
-        )
+        print(render_plan(plan))
+        return 0
 
-    print(render_plan(plan))
+    plan = publish_and_stage_evidence(
+        run_id=args.run_id,
+        local_terminal_log=args.local_terminal_log,
+        work_result=args.work_result,
+    )
+
+    if args.commit:
+        finalize_result = commit_and_push_evidence(
+            plan=plan,
+            push=not args.no_push,
+        )
+        print(render_finalize_result(finalize_result))
+    else:
+        print(render_plan(plan))
     return 0
 
 

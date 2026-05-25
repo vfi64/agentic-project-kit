@@ -3,7 +3,7 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
-from agentic_project_kit.next_turn_evidence import build_evidence_publish_plan, publish_and_stage_evidence
+from agentic_project_kit.next_turn_evidence import build_evidence_publish_plan, commit_and_push_evidence, publish_and_stage_evidence
 
 
 def init_repo(path: Path) -> None:
@@ -46,3 +46,37 @@ def test_publish_and_stage_evidence_creates_and_stages_files(tmp_path: Path) -> 
     assert "docs/reports/terminal/run1.log" in status
     assert "docs/reports/command_runs/run1.json" in status
     assert plan.commit_message == "Record run1 evidence"
+
+
+def test_commit_and_push_evidence_commits_without_push(tmp_path: Path) -> None:
+    init_repo(tmp_path)
+    local_log = tmp_path.parent / f"{tmp_path.name}-local.log"
+    local_log.write_text("evidence\n", encoding="utf-8")
+    plan = publish_and_stage_evidence(
+        run_id="run2",
+        local_terminal_log=str(local_log),
+        work_result="FAIL",
+        root=tmp_path,
+    )
+    result = commit_and_push_evidence(plan=plan, root=tmp_path, push=False)
+    assert result.committed is True
+    assert result.pushed is False
+    assert result.already_clean is False
+    assert result.commit_sha
+    status = subprocess.run(["git", "status", "--short"], cwd=tmp_path, text=True, capture_output=True, check=True).stdout
+    assert status == ""
+
+
+def test_commit_and_push_evidence_treats_clean_stage_as_already_done(tmp_path: Path) -> None:
+    init_repo(tmp_path)
+    plan = build_evidence_publish_plan(
+        run_id="clean",
+        local_terminal_log="/tmp/clean.log",
+        work_result="FAIL",
+        root=tmp_path,
+    )
+    result = commit_and_push_evidence(plan=plan, root=tmp_path, push=False)
+    assert result.committed is False
+    assert result.pushed is False
+    assert result.already_clean is True
+    assert "PASS_ALREADY_DONE" in result.message
