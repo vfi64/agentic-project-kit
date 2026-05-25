@@ -1,7 +1,7 @@
-<!-- post-pr735-closeout -->
+<!-- post-pr762-rule-registry-direct-coverage-closeout -->
 # Project Status
 
-Status-date: 2026-05-24
+Status-date: 2026-05-25
 Project: agentic-project-kit
 Primary branch: main
 Current work branch: main
@@ -27,12 +27,13 @@ Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
 Post-release Zenodo verification is covered by `agentic-kit post-release-check --version 0.4.1`; post-release Zenodo remains a guarded release-state anchor.
 
-Post-PR735 closeout target:
-- Main is refreshed after PR #735 at `c6e2690` (`Expand rule registry coverage for communication and execution rules (#735)`).
-- PRs #718-#735 established the governed rule-registry baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, coverage expansion from 2 to 8 mechanisms, required classification/priority/enforcement-phase metadata, deterministic compatibility/conflict checks, migration-map completeness checks, and explicit coverage for communication, bootstrap/drift, and portable execution rules.
+Post-PR762 closeout target:
+- Main is refreshed after PR #762 at `b22196a` (`Mark chat bootstrap drift rules as direct rule coverage (#762)`).
+- PRs #718-#762 established and closed out the governed rule-registry direct-coverage baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, deterministic metadata/conflict/completeness checks, direct test coverage for all active mechanisms, and an empty direct-test follow-up plan.
+- The governed rule registry currently covers twelve active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check.
 - Rule registry drift is checked through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight.
-- Evidence: `docs/reports/terminal/pr718a-v5-inventory.log`, `docs/reports/terminal/pr721-rule-migrations.log`, `docs/reports/terminal/pr722-rule-registry-validator.log`, `docs/reports/terminal/pr723-rule-registry-cli.log`, `docs/reports/terminal/pr724-rule-registry-guard.log`, `docs/reports/terminal/pr725-rule-registry-preflight.log`, `docs/reports/terminal/pr727-rule-registry-coverage.log`, `docs/reports/terminal/pr729-rule-registry-classification.log`, `docs/reports/terminal/pr731-rule-registry-conflicts.log`, `docs/reports/terminal/pr733-rule-registry-completeness.log`, `docs/reports/terminal/pr735-rule-registry-coverage.log`.
-- Next immediate hardening task: targeted rule-registry coverage expansion for remaining release/DOI/evidence/typed-work-order rules. Keep it additive and small. Do not resume broad documentation-management rebuild yet.
+- Evidence is preserved in committed terminal logs including `docs/reports/terminal/pr737-rule-registry-release-evidence.log`, `docs/reports/terminal/pr739-rule-registry-source-evidence-validation.log`, `docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log`, `docs/reports/terminal/pr741-rule-registry-surfaces-tests-inventory-recovery.log`, `docs/reports/terminal/pr742-rule-registry-surfaces-tests-validation.log`, `docs/reports/terminal/pr761-chat-communication-direct-coverage.log`, and `docs/reports/terminal/pr762-chat-bootstrap-drift-direct-coverage.log`.
+- Next immediate hardening task: close out rule-registry status/handoff state, then add a small report/readability improvement only if needed. Do not resume broad documentation-management rebuild until the closeout is merged and verified.
 
 Documentation registry baseline:
 - `docs/DOCUMENTATION_REGISTRY.yaml` is the additive machine-readable registry.
@@ -49,7 +50,7 @@ Workflow hardening baseline:
 - Governance YAML mutation must use parse-modify-dump or an equivalent structured mutation path, then parse again.
 - `.agentic/control_file_preservation.yaml` protects active rules from lossy shortening.
 - Information preservation outranks compactness for protected control files. Hard length-limit trimming is forbidden; large protected files must be split, referenced, or generated instead of losing active rules.
-- Rule registry artifacts are governed inputs: `.agentic/rule_mechanism_inventory.yaml` and `.agentic/rule_migrations.yaml`.
+- Rule registry artifacts are governed inputs: `.agentic/rule_mechanism_inventory.yaml`, `.agentic/rule_migrations.yaml`, `.agentic/rule_test_coverage.yaml`, and `.agentic/rule_direct_test_plan.yaml`.
 - `agentic-kit rule-registry check`, workflow-guard, and patch-preflight are the current hard enforcement path for the governed rule registry.
 - remote inspection evidence contract and remote evidence present: standard PASS/FAIL work must preserve logs under `docs/reports/terminal` before asking for paste-output.
 - no-copy/evidence remains active: `d` and `f` are acknowledgements only; inspect evidence before continuing.
@@ -67,7 +68,7 @@ GUI MVP baseline:
 
 ## Current Goal
 
-Continue the governed rule registry with small additive targeted coverage expansion for remaining release/DOI/evidence/typed-work-order rules. No broad documentation migration, release, tag, DOI mutation, or GUI expansion.
+Close out the governed rule-registry direct-coverage baseline after PR762. After closeout, the next small slice may improve report/readability ergonomics for the completed registry. Broad documentation-management rebuild, release, tag, DOI mutation, and GUI expansion remain out of scope.
 
 ## Active Workflow Rules
 
@@ -117,7 +118,7 @@ Pattern Advisor baseline: Pattern Advisor is an advisory-only read-only catalog;
 
 Planning-state freshness compatibility: Current released version: 0.3.29 and Current released version: 0.3.32 remain retained legacy anchors only for deterministic historical tests; Verified Zenodo version DOI: `10.5281/zenodo.20314341`; the current version is 0.4.1.
 
-v0.3.36 current-state cleanup started as a documentation-only line; the current active line is the governed rule-registry baseline.
+v0.3.36 current-state cleanup started as a documentation-only line; the current active line is the governed rule-registry direct-coverage baseline.
 
 Recent closeout anchors retained for handoff/status sync: PR #650 merged; PR #651 merged; PR #652 merged.
 
@@ -141,4 +142,4 @@ Required gate set for current-state, handoff, or governance-summary changes:
 
 ## Next Safe Step
 
-Add targeted rule-registry coverage expansion for remaining release/DOI/evidence/typed-work-order rules in the next small PR. Keep broad documentation-management rebuild, release, tag, DOI mutation, and GUI expansion out of that PR.
+Merge and verify the post-PR762 status/handoff closeout. After that, the next small rule-registry slice should improve completion reporting/readability only if the current CLI/report does not clearly show that all active mechanisms have direct coverage. Keep broad documentation-management rebuild, release, tag, DOI mutation, and GUI expansion out of that PR.
