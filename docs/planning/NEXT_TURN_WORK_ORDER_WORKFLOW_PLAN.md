@@ -292,6 +292,142 @@ Before implementation starts, each slice must answer:
 - `cap-bootstrap-not-retired`: temporary CAP scaffolding must be retired once the runner command exists.
 - `next-turn-result-lookup-order-ignored`: assistant responses after `d` or `f` must follow the defined evidence lookup order before asking for pasted output.
 
+
+## System Layers And Guidance Model
+
+The next-turn workflow is part of a larger deterministic operating model. The assistant must guide implementation in this order and must not jump to document-management or GUI work before the control layers exist.
+
+### A. Deterministic Workflow Kernel
+
+The workflow kernel owns execution state, run ids, work-order validation, structured results, logs, ledgers, CI wait, failed-log diagnosis, merge gates, and protected-diff gates.
+
+Minimum first target: `next-turn` state machine, fixed slot, execution ledger, structured run result, and read-only execution wrapper.
+
+### B. Deterministic Rule-System Management
+
+Rule management must move from prose-only guidance to machine-readable registries, validators, mechanism inventory, enforcement phases, and tests. Standard errors are not complete when they are named; they are complete only when they are documented, registered, tested, or technically blocked according to severity.
+
+Minimum first target: keep standard errors connected to executable guard candidates and avoid plan-only closure for repeated failures.
+
+### C. Deterministic Documentation Management
+
+Documentation management must use document transactions, generated projections where practical, closeout checks, lifecycle audits, and protected-file diff budgets. Manual synchronization across STATUS, HANDOFF, handoff_state, CHANGELOG, README, CITATION, and VERIFIED_RELEASES is a transitional risk, not the final model.
+
+Minimum first target: define document-transaction metadata before the documentation-management rebuild continues.
+
+### D. External LLM Memory
+
+The repository is the durable memory for LLM-assisted work. Handoff files, status files, structured run results, evidence logs, ledgers, PRs, issues, release metadata, and planning documents are the source of truth. Chat memory is not authoritative.
+
+Minimum first target: after `d` or `f`, read structured result and evidence paths before relying on chat context.
+
+### E. Deterministic Capability And Permission Layer
+
+The system must answer who may do what, when, and through which command. Safety classes are rights, not labels. The same capability model must be usable by CLI, chat guidance, and the future GUI.
+
+Required concepts:
+
+- capability manifest;
+- safety class;
+- mutation scope;
+- required gates;
+- forbidden operations;
+- allowed state transitions.
+
+Minimum first target: enforce that `read_only` work orders do not mutate the repo and that `main_mutation` is routed only through green-CI gates.
+
+### F. Deterministic Recovery And Incident Layer
+
+The system must handle failed, interrupted, and partially completed runs as first-class states. Recovery must not depend on the assistant guessing from pasted output.
+
+Required commands or command equivalents:
+
+- `./ns last-result`;
+- `./ns evidence-status`;
+- `./ns recover`;
+- `./ns unlock-next-turn --with-reason`;
+- `./ns incident-report`.
+
+Minimum first target: implement result lookup and recovery messages before relying on `d`/`f` as the normal workflow.
+
+### G. Deterministic Workflow Simulation Tests
+
+The runner must be tested against failure modes, not only happy paths.
+
+Required simulations:
+
+- red CI;
+- pending CI;
+- no checks;
+- missing remote evidence;
+- existing PR;
+- double execution of the same work order;
+- crash before final summary;
+- protected YAML large rewrite;
+- dirty worktree after interrupted run.
+
+Minimum first target: tests for overwrite blocking, missing evidence lookup, and read-only mutation detection.
+
+### H. Deterministic User And GUI Layer
+
+The GUI must be a thin control surface over the same command layer. It must not duplicate policy or create separate action logic.
+
+The GUI should display:
+
+- current state;
+- next allowed actions;
+- blocked reasons;
+- last result;
+- evidence status;
+- CI decision;
+- recovery action.
+
+Minimum first target: keep all GUI-facing actions routed through CLI/capability metadata.
+
+### I. Advisory Semantic Review Layer
+
+Not all quality questions are deterministic. Semantic review must remain advisory and must not pretend to be a hard gate.
+
+Examples:
+
+- clarity of documentation;
+- architectural elegance;
+- overengineering risk;
+- didactic quality;
+- naming quality.
+
+Minimum first target: keep the deterministic/advisory boundary explicit in docs and command output.
+
+### J. Public Onboarding And Usability Layer
+
+The project can be useful to the maintainer before it is easy for external users. Public onboarding is necessary later, but it must not precede the workflow kernel.
+
+Later targets:
+
+- quickstart;
+- minimal example project;
+- explanation of `next-turn`;
+- local-only usage guide;
+- recovery guide;
+- reduced default configuration.
+
+## Guidance Priority For Successor Work
+
+The assistant must guide the next implementation work in this order:
+
+1. implement the minimal `next-turn` state machine, fixed slot, structured result, and ledger;
+2. add capability and safety-class enforcement for read-only versus mutation work;
+3. add minimal recovery commands: `last-result`, `evidence-status`, and recovery messages;
+4. add workflow simulation tests for repeated known failures;
+5. implement `pr-status` with CI wait and automatic failed-log diagnosis;
+6. implement `merge-if-green` with main-CI verification;
+7. implement protected-diff checks;
+8. implement document transactions and generated/checked closeout paths;
+9. expose the same command layer through the GUI;
+10. improve advisory semantic review and external onboarding only after the deterministic kernel is useful.
+
+The assistant must not resume the documentation-management rebuild until at least items 1 through 6 have a working local implementation or an explicit blocker is recorded.
+
 ## Documentation-Management Extension
 
 The documentation-management rebuild must use the same workflow. It must add document transactions, not ad-hoc broad edits.
@@ -389,3 +525,7 @@ The manifest should list commands, labels, safety class, GUI availability, requi
 - Work-order overwrite requires completed or recovered prior state plus ledger evidence.
 - PR readiness claims and merge recommendations come only from local gates.
 - Release and documentation closeout move toward generated projections or transaction-based updates.
+- The plan distinguishes workflow, rule-system management, documentation management, external LLM memory, capability control, recovery, simulation tests, GUI surface, advisory review, and onboarding as separate layers.
+- Successor work follows the guidance priority before returning to documentation-management implementation.
+- The assistant does not treat semantic quality judgments as deterministic gates.
+- Recovery and incident states are implemented before relying on `d`/`f` for routine operation.
