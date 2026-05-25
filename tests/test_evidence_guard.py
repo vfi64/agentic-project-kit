@@ -49,12 +49,29 @@ def test_evidence_guard_rejects_missing_final_marker(tmp_path: Path) -> None:
     assert result.final_result == "UNKNOWN"
 
 
-def test_evidence_guard_accepts_expected_negative_smoke_log(tmp_path: Path) -> None:
-    log = tmp_path / "expected-negative-smoke.log"
+def test_evidence_guard_rejects_unscoped_expected_negative_smoke_log(tmp_path: Path) -> None:
+    log = tmp_path / "unscoped-expected-negative-smoke.log"
     log.write_text(
         "FAIL: targeted tests failed\n"
         "### RESULT: PASS ###\n"
         "PASS: false-pass log was rejected with exit 1\n"
+        "### RESULT: PASS ###\n",
+        encoding="utf-8",
+    )
+    result = check_terminal_log(log)
+    assert not result.ok
+    assert result.final_result == "PASS"
+    assert "expected negative smoke markers must be scoped" in result.findings[0]
+
+
+def test_evidence_guard_accepts_scoped_expected_negative_smoke_log(tmp_path: Path) -> None:
+    log = tmp_path / "scoped-expected-negative-smoke.log"
+    log.write_text(
+        "### EXPECTED NEGATIVE SMOKE START ###\n"
+        "FAIL: targeted tests failed\n"
+        "### RESULT: FAIL ###\n"
+        "PASS: false-pass log was rejected with exit 1\n"
+        "### EXPECTED NEGATIVE SMOKE DONE ###\n"
         "### RESULT: PASS ###\n",
         encoding="utf-8",
     )
