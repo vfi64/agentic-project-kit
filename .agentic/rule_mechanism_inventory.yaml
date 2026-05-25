@@ -62,7 +62,8 @@ mechanisms:
   - ns-cli
   - execution-mode-state
   - state-cli
-  tests: []
+  tests:
+  - tests/test_execution_mode_state.py
 - id: rule-preservation-guard
   status: active
   owner: rule-governance
