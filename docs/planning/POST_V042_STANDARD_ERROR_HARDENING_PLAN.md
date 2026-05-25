@@ -106,7 +106,7 @@ The next hardening phase must move critical workflow decisions out of chat disci
 
 | Priority | Command | Purpose | Standard errors addressed | Acceptance |
 |---:|---|---|---|---|
-| 1 | `./ns pr-status <pr>` | Print machine-readable PR, merge, and check state; on failure, fetch failed CI logs immediately | `tool-schema-drift`, `merge-before-green-ci`, `red-ci-diagnosis-not-automatic` | reports open/closed state, base/head, pending checks, failed checks, successful checks, unknown check state, and failed-run log excerpts |
+| 1 | `./ns pr-status <pr>` | Print machine-readable PR, merge, and check state; after push, wait for CI; on failure, fetch failed CI logs immediately | `tool-schema-drift`, `merge-before-green-ci`, `red-ci-diagnosis-not-automatic`, `ci-wait-not-automatic-after-push` | reports open/closed state, base/head, pending checks, failed checks, successful checks, unknown check state, failed-run log excerpts, and green/red/timeout CI decision |
 | 2 | `./ns merge-if-green <pr>` | The only allowed merge path for normal PRs | `merge-before-green-ci` | refuses merge unless all required checks are successful and no checks are pending, failed, cancelled, skipped unexpectedly, or unknown |
 | 3 | `./ns fail` | Log-first failure diagnosis | `fail-signal-ignored-remote-log-first`, `remote-evidence-unavailable-on-fail` | searches latest local, repo, branch, PR, and GitHub run logs before requesting paste-output |
 | 4 | `./ns protected-diff-check [diff]` | Block unsafe protected-file diffs | `partial-fetch-full-replacement-corruption`, `protected-yaml-rewrite-noise` | rejects PR #771-style protected-file deletion or broad rewrite diffs without explicit migration |
@@ -127,6 +127,7 @@ The next hardening phase must move critical workflow decisions out of chat disci
 - `stale-post-release-metadata`: release metadata closeout must be checked by a dedicated closeout command instead of broad manual edits.
 - `llm-rule-accumulation-without-enforcement`: repeated failures must escalate to enforceable tooling, not only additional prose.
 - `red-ci-diagnosis-not-automatic`: PR/CI status checks must fetch failed run logs in the same command so a red check produces immediate diagnosis, not another chat iteration.
+- `ci-wait-not-automatic-after-push`: after `d` on a successful push or PR update, the standard path is an automatic CI wait/status loop until green, red with failed logs, or timeout; do not ask for another manual status step first.
 
 ### Sequencing
 
