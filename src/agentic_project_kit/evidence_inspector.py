@@ -69,6 +69,7 @@ class EvidenceInspection:
     fail_markers: int = 0
     hidden_fail_before_final_pass: bool = False
     structured_summary: ParsedSummary = ParsedSummary(found=False, valid=False)
+    require_summary: bool = False
     git_branch: str = "UNKNOWN"
     git_status: tuple[str, ...] = ()
 
@@ -132,11 +133,7 @@ def parse_structured_summary(text: str) -> ParsedSummary:
         return ParsedSummary(found=False, valid=False)
     lines = block.splitlines()
     comm_header = next((line for line in lines if line.startswith(STRUCTURED_SUMMARY_HEADER)), "")
-    marker_values = [
-        line.replace("### RESULT:", "").replace("###", "").strip()
-        for line in lines
-        if line.startswith("### RESULT:")
-    ]
+    marker_values = [line.replace("### RESULT:", "").replace("###", "").strip() for line in lines if line.startswith("### RESULT:")]
     result_marker = marker_values[0] if len(marker_values) == 1 else ""
     payload = SummaryPayload(
         comm_header=comm_header,
@@ -167,22 +164,19 @@ def parse_structured_summary(text: str) -> ParsedSummary:
         findings.append(f"invalid result marker count: {len(marker_values)}")
     if payload.overall and result_marker and payload.overall != result_marker:
         findings.append("contradictory summary marker")
-    if not payload.branch:
-        findings.append("missing summary field: BRANCH")
-    if not payload.origin:
-        findings.append("missing summary field: ORIGIN")
-    if not payload.state_mode:
-        findings.append("missing summary field: STATE_MODE")
-    if not payload.mode_check:
-        findings.append("missing summary field: MODE_CHECK")
-    if not payload.terminal_log_remote:
-        findings.append("missing summary field: terminal_log_remote")
-    if not payload.terminal_log_local:
-        findings.append("missing summary field: terminal_log_local")
+    for label, value in (
+        ("BRANCH", payload.branch),
+        ("ORIGIN", payload.origin),
+        ("STATE_MODE", payload.state_mode),
+        ("MODE_CHECK", payload.mode_check),
+        ("terminal_log_remote", payload.terminal_log_remote),
+        ("terminal_log_local", payload.terminal_log_local),
+        ("SAFE_STEP", payload.safe_step),
+    ):
+        if not value:
+            findings.append(f"missing summary field: {label}")
     if not payload.interpretation:
         findings.append("missing summary section: INTERPRETATION")
-    if not payload.safe_step:
-        findings.append("missing summary field: SAFE_STEP")
     return ParsedSummary(found=True, valid=not findings, payload=payload, result_marker=result_marker, findings=tuple(findings))
 
 
@@ -204,16 +198,16 @@ def _marker_verdict(text: str) -> tuple[EvidenceVerdict, str | None, int, int, b
     return verdict, final_marker, pass_count, fail_count, hidden_fail
 
 
-def inspect_evidence(path: Path | str | None = None, *, root: Path | str = ".") -> EvidenceInspection:
+def inspect_evidence(path: Path | str | None = None, *, root: Path | str = ".", require_summary: bool = False) -> EvidenceInspection:
     root_path = Path(root)
     evidence_path = Path(path) if path is not None else resolve_latest_evidence(root_path)
     branch_lines = _run_git(["branch", "--show-current"], root_path)
     status_lines = _run_git(["status", "--short"], root_path)
     branch = branch_lines[0] if branch_lines else "UNKNOWN"
     if evidence_path is None:
-        return EvidenceInspection(path=None, exists=False, verdict=EvidenceVerdict.MISSING_EVIDENCE_UPLOAD_FIRST, git_branch=branch, git_status=status_lines)
+        return EvidenceInspection(path=None, exists=False, verdict=EvidenceVerdict.MISSING_EVIDENCE_UPLOAD_FIRST, require_summary=require_summary, git_branch=branch, git_status=status_lines)
     if not evidence_path.exists():
-        return EvidenceInspection(path=evidence_path, exists=False, verdict=EvidenceVerdict.MISSING_EVIDENCE_UPLOAD_FIRST, git_branch=branch, git_status=status_lines)
+        return EvidenceInspection(path=evidence_path, exists=False, verdict=EvidenceVerdict.MISSING_EVIDENCE_UPLOAD_FIRST, require_summary=require_summary, git_branch=branch, git_status=status_lines)
     text = evidence_path.read_text(encoding="utf-8")
     summary = parse_structured_summary(text)
     marker_verdict, final_marker, pass_count, fail_count, hidden_fail = _marker_verdict(text)
@@ -226,9 +220,11 @@ def inspect_evidence(path: Path | str | None = None, *, root: Path | str = ".") 
             verdict = EvidenceVerdict.FAIL_DIAGNOSE
         else:
             verdict = EvidenceVerdict.AMBIGUOUS_SUMMARY_REVIEW_REQUIRED
+    elif require_summary:
+        verdict = EvidenceVerdict.AMBIGUOUS_SUMMARY_REVIEW_REQUIRED
     else:
         verdict = marker_verdict
-    return EvidenceInspection(path=evidence_path, exists=True, verdict=verdict, final_marker=final_marker, pass_markers=pass_count, fail_markers=fail_count, hidden_fail_before_final_pass=hidden_fail, structured_summary=summary, git_branch=branch, git_status=status_lines)
+    return EvidenceInspection(path=evidence_path, exists=True, verdict=verdict, final_marker=final_marker, pass_markers=pass_count, fail_markers=fail_count, hidden_fail_before_final_pass=hidden_fail, structured_summary=summary, require_summary=require_summary, git_branch=branch, git_status=status_lines)
 
 
 def render_evidence_inspection(result: EvidenceInspection) -> str:
@@ -238,6 +234,7 @@ def render_evidence_inspection(result: EvidenceInspection) -> str:
         "EVIDENCE_INSPECTION",
         f"verdict: {result.verdict.value}",
         f"evidence_exists: {'yes' if result.exists else 'no'}",
+        f"require_summary: {'yes' if result.require_summary else 'no'}",
         f"git_branch: {result.git_branch}",
         f"git_status_clean: {'yes' if not result.git_status else 'no'}",
         f"pass_markers: {result.pass_markers}",
@@ -246,6 +243,9 @@ def render_evidence_inspection(result: EvidenceInspection) -> str:
         f"structured_summary_found: {'yes' if summary.found else 'no'}",
         f"structured_summary_valid: {'yes' if summary.valid else 'no'}",
     ]
+    if result.require_summary and not summary.found:
+        lines.append("summary_findings:")
+        lines.append("- missing structured summary block")
     if summary.found:
         lines.extend([
             f"summary_name: {payload.slice or payload.slice_name}",
