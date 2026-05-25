@@ -1,0 +1,218 @@
+### START: PR772 RED CI DIAGNOSIS -- READ ONLY ###
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### CURRENT MAIN ###
+5b052b8b9941707bcf3db21f178f514795467d2a
+5b052b8 Plan post-v0.4.2 standard-error hardening (#772)
+06d6ea3 Record v0.4.2 post-release check log (#769)
+63eae14 Record v0.4.2 release publication evidence (#768)
+00236e1 Prepare v0.4.2 safety release metadata (#767)
+cf75340 Plan rule registry improvement backlog (#766)
+?? docs/reports/terminal/pr772-standard-error-backlog-push.log
+
+### PR772 STATE ###
+Unknown JSON field: "merged"
+Available fields:
+  additions
+  assignees
+  author
+  autoMergeRequest
+  baseRefName
+  baseRefOid
+  body
+  changedFiles
+  closed
+  closedAt
+  closingIssuesReferences
+  comments
+  commits
+  createdAt
+  deletions
+  files
+  fullDatabaseId
+  headRefName
+  headRefOid
+  headRepository
+  headRepositoryOwner
+  id
+  isCrossRepository
+  isDraft
+  labels
+  latestReviews
+  maintainerCanModify
+  mergeCommit
+  mergeStateStatus
+  mergeable
+  mergedAt
+  mergedBy
+  milestone
+  number
+  potentialMergeCommit
+  projectCards
+  projectItems
+  reactionGroups
+  reviewDecision
+  reviewRequests
+  reviews
+  state
+  statusCheckRollup
+  title
+  updatedAt
+  url
+
+### RECENT RUNS ON MAIN ###
+completed	failure	Plan post-v0.4.2 standard-error hardening (#772)	CI	main	push	26402000564	28s	2026-05-25T13:05:21Z
+completed	success	Record v0.4.2 post-release check log (#769)	CI	main	push	26393231829	31s	2026-05-25T09:21:32Z
+completed	success	Record v0.4.2 release publication evidence (#768)	CI	main	push	26393147589	31s	2026-05-25T09:19:28Z
+completed	success	Prepare v0.4.2 safety release metadata (#767)	CI	main	push	26392985323	30s	2026-05-25T09:15:25Z
+completed	success	Plan rule registry improvement backlog (#766)	CI	main	push	26391467089	31s	2026-05-25T08:35:35Z
+completed	success	Refresh handoff after rule registry completion reporting (#765)	CI	main	push	26390091331	27s	2026-05-25T07:59:50Z
+completed	success	Report rule registry direct coverage completion explicitly (#764)	CI	main	push	26389630781	27s	2026-05-25T07:47:57Z
+completed	success	Refresh status after rule registry direct coverage closeout (#763)	CI	main	push	26389118552	37s	2026-05-25T07:34:24Z
+completed	success	Mark chat bootstrap drift rules as direct rule coverage (#762)	CI	main	push	26387843915	34s	2026-05-25T06:59:13Z
+completed	success	Mark chat communication rules as direct rule coverage (#761)	CI	main	push	26387587438	36s	2026-05-25T06:51:57Z
+
+### RECENT RUNS JSON ###
+[{"conclusion":"failure","createdAt":"2026-05-25T13:05:21Z","databaseId":26402000564,"displayTitle":"Plan post-v0.4.2 standard-error hardening (#772)","headSha":"5b052b8b9941707bcf3db21f178f514795467d2a","status":"completed","updatedAt":"2026-05-25T13:05:49Z","url":"https://github.com/vfi64/agentic-project-kit/actions/runs/26402000564","workflowName":"CI"},{"conclusion":"success","createdAt":"2026-05-25T09:21:32Z","databaseId":26393231829,"displayTitle":"Record v0.4.2 post-release check log (#769)","headSha":"06d6ea30a39e5763283358db8bb93d5566b421cd","status":"completed","updatedAt":"2026-05-25T09:22:03Z","url":"https://github.com/vfi64/agentic-project-kit/actions/runs/26393231829","workflowName":"CI"},{"conclusion":"success","createdAt":"2026-05-25T09:19:28Z","databaseId":26393147589,"displayTitle":"Record v0.4.2 release publication evidence (#768)","headSha":"63eae142d3e09026b15230710a78fd2f727959b7","status":"completed","updatedAt":"2026-05-25T09:19:59Z","url":"https://github.com/vfi64/agentic-project-kit/actions/runs/26393147589","workflowName":"CI"},{"conclusion":"success","createdAt":"2026-05-25T09:15:25Z","databaseId":26392985323,"displayTitle":"Prepare v0.4.2 safety release metadata (#767)","headSha":"00236e1e5242f9da8adf853219995ed702fdbd18","status":"completed","updatedAt":"2026-05-25T09:15:55Z","url":"https://github.com/vfi64/agentic-project-kit/actions/runs/26392985323","workflowName":"CI"},{"conclusion":"success","createdAt":"2026-05-25T08:35:35Z","databaseId":26391467089,"displayTitle":"Plan rule registry improvement backlog (#766)","headSha":"cf75340cbaab675808755e0bd656feab98cb5f58","status":"completed","updatedAt":"2026-05-25T08:36:06Z","url":"https://github.com/vfi64/agentic-project-kit/actions/runs/26391467089","workflowName":"CI"},{"conclusion":"success","createdAt":"2026-05-25T07:59:50Z","databaseId":26390091331,"displayTitle":"Refresh handoff after rule registry completion reporting (#765)","headSha":"c7c31cde8d87bf79fc44855fb7cb7e33427d59cf","status":"completed","updatedAt":"2026-05-25T08:00:17Z","url":"https://github.com/vfi64/agentic-project-kit/actions/runs/26390091331","workflowName":"CI"},{"conclusion":"success","createdAt":"2026-05-25T07:47:57Z","databaseId":26389630781,"displayTitle":"Report rule registry direct coverage completion explicitly (#764)","headSha":"c09f8d994d10d854bf69ac34fca9853fc7a3c525","status":"completed","updatedAt":"2026-05-25T07:48:24Z","url":"https://github.com/vfi64/agentic-project-kit/actions/runs/26389630781","workflowName":"CI"},{"conclusion":"success","createdAt":"2026-05-25T07:34:24Z","databaseId":26389118552,"displayTitle":"Refresh status after rule registry direct coverage closeout (#763)","headSha":"6b706b916ddc6202db7079f681d44e81d932816b","status":"completed","updatedAt":"2026-05-25T07:35:01Z","url":"https://github.com/vfi64/agentic-project-kit/actions/runs/26389118552","workflowName":"CI"},{"conclusion":"success","createdAt":"2026-05-25T06:59:13Z","databaseId":26387843915,"displayTitle":"Mark chat bootstrap drift rules as direct rule coverage (#762)","headSha":"b22196ad42bc15acf482dd4ba1d005551f42538f","status":"completed","updatedAt":"2026-05-25T06:59:47Z","url":"https://github.com/vfi64/agentic-project-kit/actions/runs/26387843915","workflowName":"CI"},{"conclusion":"success","createdAt":"2026-05-25T06:51:57Z","databaseId":26387587438,"displayTitle":"Mark chat communication rules as direct rule coverage (#761)","headSha":"01b1d19de888083b292ffa8ccd7b2eadee188448","status":"completed","updatedAt":"2026-05-25T06:52:33Z","url":"https://github.com/vfi64/agentic-project-kit/actions/runs/26387587438","workflowName":"CI"}]
+
+### FAILED RUN DETAILS ###
+FAILED_RUN_ID=26402000564
+
+X main CI · 26402000564
+Triggered via push about 1 minute ago
+
+JOBS
+X test in 23s (ID 77716299747)
+  ✓ Set up job
+  ✓ Run actions/checkout@v6
+  ✓ Run actions/setup-python@v6
+  ✓ Install package
+  ✓ Ruff
+  X Tests
+  - CLI smoke
+  - Post Run actions/setup-python@v6
+  ✓ Post Run actions/checkout@v6
+  ✓ Complete job
+
+ANNOTATIONS
+X Process completed with exit code 1.
+test: .github#42
+
+
+To see what failed, try: gh run view 26402000564 --log-failed
+View this run on GitHub: https://github.com/vfi64/agentic-project-kit/actions/runs/26402000564
+
+### FAILED JOBS JSON ###
+{"jobs":[{"completedAt":"2026-05-25T13:05:48Z","conclusion":"failure","databaseId":77716299747,"name":"test","startedAt":"2026-05-25T13:05:25Z","status":"completed","steps":[{"completedAt":"2026-05-25T13:05:26Z","conclusion":"success","name":"Set up job","number":1,"startedAt":"2026-05-25T13:05:25Z","status":"completed"},{"completedAt":"2026-05-25T13:05:27Z","conclusion":"success","name":"Run actions/checkout@v6","number":2,"startedAt":"2026-05-25T13:05:26Z","status":"completed"},{"completedAt":"2026-05-25T13:05:27Z","conclusion":"success","name":"Run actions/setup-python@v6","number":3,"startedAt":"2026-05-25T13:05:27Z","status":"completed"},{"completedAt":"2026-05-25T13:05:35Z","conclusion":"success","name":"Install package","number":4,"startedAt":"2026-05-25T13:05:27Z","status":"completed"},{"completedAt":"2026-05-25T13:05:35Z","conclusion":"success","name":"Ruff","number":5,"startedAt":"2026-05-25T13:05:35Z","status":"completed"},{"completedAt":"2026-05-25T13:05:46Z","conclusion":"failure","name":"Tests","number":6,"startedAt":"2026-05-25T13:05:35Z","status":"completed"},{"completedAt":"2026-05-25T13:05:46Z","conclusion":"skipped","name":"CLI smoke","number":7,"startedAt":"2026-05-25T13:05:46Z","status":"completed"},{"completedAt":"2026-05-25T13:05:46Z","conclusion":"skipped","name":"Post Run actions/setup-python@v6","number":13,"startedAt":"2026-05-25T13:05:46Z","status":"completed"},{"completedAt":"2026-05-25T13:05:46Z","conclusion":"success","name":"Post Run actions/checkout@v6","number":14,"startedAt":"2026-05-25T13:05:46Z","status":"completed"},{"completedAt":"2026-05-25T13:05:46Z","conclusion":"success","name":"Complete job","number":15,"startedAt":"2026-05-25T13:05:46Z","status":"completed"}],"url":"https://github.com/vfi64/agentic-project-kit/actions/runs/26402000564/job/77716299747"}]}
+
+### FAILED RUN LOG EXTRACT ###
+test	Tests	﻿2026-05-25T13:05:35.1889974Z ##[group]Run python -m pytest -q
+test	Tests	2026-05-25T13:05:35.1890301Z [36;1mpython -m pytest -q[0m
+test	Tests	2026-05-25T13:05:35.1912228Z shell: /usr/bin/bash -e {0}
+test	Tests	2026-05-25T13:05:35.1912470Z env:
+test	Tests	2026-05-25T13:05:35.1912732Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+test	Tests	2026-05-25T13:05:35.1913255Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+test	Tests	2026-05-25T13:05:35.1913657Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+test	Tests	2026-05-25T13:05:35.1914010Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+test	Tests	2026-05-25T13:05:35.1914366Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+test	Tests	2026-05-25T13:05:35.1914727Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+test	Tests	2026-05-25T13:05:35.1915017Z ##[endgroup]
+test	Tests	2026-05-25T13:05:37.6174881Z ........................................................................ [  6%]
+test	Tests	2026-05-25T13:05:38.4463943Z ........................................................................ [ 13%]
+test	Tests	2026-05-25T13:05:38.9611953Z ........................................................................ [ 20%]
+test	Tests	2026-05-25T13:05:40.3902217Z F....................................................................... [ 27%]
+test	Tests	2026-05-25T13:05:41.0832917Z ........................................................................ [ 34%]
+test	Tests	2026-05-25T13:05:42.0157942Z ........................................................................ [ 41%]
+test	Tests	2026-05-25T13:05:42.6604935Z ........................................................................ [ 48%]
+test	Tests	2026-05-25T13:05:42.9192971Z ........................................................................ [ 55%]
+test	Tests	2026-05-25T13:05:43.5920712Z ........................................................................ [ 62%]
+test	Tests	2026-05-25T13:05:43.8900848Z ........................................................................ [ 69%]
+test	Tests	2026-05-25T13:05:43.9547413Z ........................................................................ [ 76%]
+test	Tests	2026-05-25T13:05:44.0480290Z ........................................................................ [ 83%]
+test	Tests	2026-05-25T13:05:44.8486284Z ........................................................................ [ 90%]
+test	Tests	2026-05-25T13:05:46.1950063Z ........................................................................ [ 97%]
+test	Tests	2026-05-25T13:05:46.6117900Z .....................                                                    [100%]
+test	Tests	2026-05-25T13:05:46.6119797Z =================================== FAILURES ===================================
+test	Tests	2026-05-25T13:05:46.6120722Z _____________ test_docs_audit_cli_runs_with_documentation_registry _____________
+test	Tests	2026-05-25T13:05:46.6121002Z 
+test	Tests	2026-05-25T13:05:46.6121211Z     def test_docs_audit_cli_runs_with_documentation_registry() -> None:
+test	Tests	2026-05-25T13:05:46.6121549Z         runner = CliRunner()
+test	Tests	2026-05-25T13:05:46.6121819Z         result = runner.invoke(app, ["docs-audit"])
+test	Tests	2026-05-25T13:05:46.6122096Z >       assert result.exit_code == 0
+test	Tests	2026-05-25T13:05:46.6122335Z E       assert 1 == 0
+test	Tests	2026-05-25T13:05:46.6122573Z E        +  where 1 = <Result SystemExit(1)>.exit_code
+test	Tests	2026-05-25T13:05:46.6122787Z 
+test	Tests	2026-05-25T13:05:46.6122925Z tests/test_documentation_registry.py:221: AssertionError
+test	Tests	2026-05-25T13:05:46.6123268Z =========================== short test summary info ============================
+test	Tests	2026-05-25T13:05:46.6123889Z FAILED tests/test_documentation_registry.py::test_docs_audit_cli_runs_with_documentation_registry - assert 1 == 0
+test	Tests	2026-05-25T13:05:46.6124390Z  +  where 1 = <Result SystemExit(1)>.exit_code
+test	Tests	2026-05-25T13:05:46.6124654Z 1 failed, 1028 passed in 10.94s
+test	Tests	2026-05-25T13:05:46.6892635Z ##[error]Process completed with exit code 1.
+
+### LOCAL MINIMAL GATES ###
+........................................................................ [  6%]
+........................................................................ [ 13%]
+........................................................................ [ 20%]
+F....................................................................... [ 27%]
+........................................................................ [ 34%]
+........................................................................ [ 41%]
+........................................................................ [ 48%]
+........................................................................ [ 55%]
+........................................................................ [ 62%]
+........................................................................ [ 69%]
+........................................................................ [ 76%]
+........................................................................ [ 83%]
+........................................................................ [ 90%]
+........................................................................ [ 97%]
+.....................                                                    [100%]
+=================================== FAILURES ===================================
+_____________ test_docs_audit_cli_runs_with_documentation_registry _____________
+
+    def test_docs_audit_cli_runs_with_documentation_registry() -> None:
+        runner = CliRunner()
+        result = runner.invoke(app, ["docs-audit"])
+>       assert result.exit_code == 0
+E       assert 1 == 0
+E        +  where 1 = <Result SystemExit(1)>.exit_code
+
+tests/test_documentation_registry.py:221: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_documentation_registry.py::test_docs_audit_cli_runs_with_documentation_registry
+1 failed, 1028 passed in 6.71s
+All checks passed!
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[FAIL] document lifecycle audit: docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md: active and idea documents need a Review 
+policy
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.2
+
+Overall: FAIL
+
+### FINAL SUMMARY ###
+WORK RESULT: FAIL
+EVIDENCE RESULT: LOCAL_LOG
+OVERALL RESULT: FAIL
+REMOTE_EVIDENCE: PARTIAL
+terminal_log=/tmp/agentic-pr772-red-ci-diagnosis.log
+command_report=NONE
+NEXT_CHAT_REPLY: f
+CHAT_REPLY: f
+### RESULT: FAIL ###

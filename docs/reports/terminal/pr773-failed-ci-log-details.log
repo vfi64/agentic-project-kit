@@ -1,0 +1,230 @@
+### START: PR773 FAILED CI LOG DETAILS -- READ ONLY ###
+
+### VERIFY LOCAL STATE ###
+fix/pr772-doc-lifecycle-review-policy
+
+### PR773 CHECK STATUS ###
+{"baseRefOid":"5b052b8b9941707bcf3db21f178f514795467d2a","headRefOid":"c9cca08b67c267a99d07d87dbfcf6e8538e020cf","mergeStateStatus":"UNSTABLE","mergeable":"MERGEABLE","number":773,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-25T13:24:42Z","conclusion":"FAILURE","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26402770482/job/77718854969","name":"test","startedAt":"2026-05-25T13:24:17Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-25T13:24:49Z","conclusion":"FAILURE","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26402769812/job/77718853423","name":"test","startedAt":"2026-05-25T13:24:17Z","status":"COMPLETED","workflowName":"CI"}],"url":"https://github.com/vfi64/agentic-project-kit/pull/773"}
+
+### FAILED PULL_REQUEST RUN LOG ###
+
+X fix/pr772-doc-lifecycle-review-policy CI vfi64/agentic-project-kit#773 · 26402770482
+Triggered via pull_request about 3 minutes ago
+
+JOBS
+X test in 25s (ID 77718854969)
+  ✓ Set up job
+  ✓ Run actions/checkout@v6
+  ✓ Run actions/setup-python@v6
+  ✓ Install package
+  ✓ Ruff
+  X Tests
+  - CLI smoke
+  - Post Run actions/setup-python@v6
+  ✓ Post Run actions/checkout@v6
+  ✓ Complete job
+
+ANNOTATIONS
+X Process completed with exit code 1.
+test: .github#42
+
+
+To see what failed, try: gh run view 26402770482 --log-failed
+View this run on GitHub: https://github.com/vfi64/agentic-project-kit/actions/runs/26402770482
+
+### FAILED PULL_REQUEST RUN FAILED LOG ###
+test	Tests	﻿2026-05-25T13:24:28.6130485Z ##[group]Run python -m pytest -q
+test	Tests	2026-05-25T13:24:28.6130766Z [36;1mpython -m pytest -q[0m
+test	Tests	2026-05-25T13:24:28.6152975Z shell: /usr/bin/bash -e {0}
+test	Tests	2026-05-25T13:24:28.6153209Z env:
+test	Tests	2026-05-25T13:24:28.6153458Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+test	Tests	2026-05-25T13:24:28.6153830Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+test	Tests	2026-05-25T13:24:28.6154206Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+test	Tests	2026-05-25T13:24:28.6154527Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+test	Tests	2026-05-25T13:24:28.6154881Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+test	Tests	2026-05-25T13:24:28.6155225Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+test	Tests	2026-05-25T13:24:28.6155496Z ##[endgroup]
+test	Tests	2026-05-25T13:24:30.9972303Z ........................................................................ [  6%]
+test	Tests	2026-05-25T13:24:31.8409476Z ........................................................................ [ 13%]
+test	Tests	2026-05-25T13:24:32.3776393Z ........................................................................ [ 20%]
+test	Tests	2026-05-25T13:24:33.8077740Z F....................................................................... [ 27%]
+test	Tests	2026-05-25T13:24:34.5033411Z ........................................................................ [ 34%]
+test	Tests	2026-05-25T13:24:35.4434674Z ........................................................................ [ 41%]
+test	Tests	2026-05-25T13:24:36.1240182Z ........................................................................ [ 48%]
+test	Tests	2026-05-25T13:24:36.3881323Z ........................................................................ [ 55%]
+test	Tests	2026-05-25T13:24:37.0684622Z ........................................................................ [ 62%]
+test	Tests	2026-05-25T13:24:37.3754112Z ........................................................................ [ 69%]
+test	Tests	2026-05-25T13:24:37.4405488Z ........................................................................ [ 76%]
+test	Tests	2026-05-25T13:24:37.5360162Z ........................................................................ [ 83%]
+test	Tests	2026-05-25T13:24:38.2800537Z ........................................................................ [ 90%]
+test	Tests	2026-05-25T13:24:39.6401996Z ........................................................................ [ 97%]
+test	Tests	2026-05-25T13:24:40.0986878Z .....................                                                    [100%]
+test	Tests	2026-05-25T13:24:40.0987592Z =================================== FAILURES ===================================
+test	Tests	2026-05-25T13:24:40.0988557Z _____________ test_docs_audit_cli_runs_with_documentation_registry _____________
+test	Tests	2026-05-25T13:24:40.0989353Z 
+test	Tests	2026-05-25T13:24:40.0989812Z     def test_docs_audit_cli_runs_with_documentation_registry() -> None:
+test	Tests	2026-05-25T13:24:40.0990748Z         runner = CliRunner()
+test	Tests	2026-05-25T13:24:40.0991363Z         result = runner.invoke(app, ["docs-audit"])
+test	Tests	2026-05-25T13:24:40.0992078Z >       assert result.exit_code == 0
+test	Tests	2026-05-25T13:24:40.0992651Z E       assert 1 == 0
+test	Tests	2026-05-25T13:24:40.0993201Z E        +  where 1 = <Result SystemExit(1)>.exit_code
+test	Tests	2026-05-25T13:24:40.0993733Z 
+test	Tests	2026-05-25T13:24:40.0994059Z tests/test_documentation_registry.py:221: AssertionError
+test	Tests	2026-05-25T13:24:40.0994973Z =========================== short test summary info ============================
+test	Tests	2026-05-25T13:24:40.0996774Z FAILED tests/test_documentation_registry.py::test_docs_audit_cli_runs_with_documentation_registry - assert 1 == 0
+test	Tests	2026-05-25T13:24:40.0998205Z  +  where 1 = <Result SystemExit(1)>.exit_code
+test	Tests	2026-05-25T13:24:40.0998884Z 1 failed, 1028 passed in 11.14s
+test	Tests	2026-05-25T13:24:40.1838906Z ##[error]Process completed with exit code 1.
+
+### FAILED PUSH RUN LOG ###
+
+X fix/pr772-doc-lifecycle-review-policy CI vfi64/agentic-project-kit#773 · 26402769812
+Triggered via push about 3 minutes ago
+
+JOBS
+X test in 32s (ID 77718853423)
+  ✓ Set up job
+  ✓ Run actions/checkout@v6
+  ✓ Run actions/setup-python@v6
+  ✓ Install package
+  ✓ Ruff
+  X Tests
+  - CLI smoke
+  - Post Run actions/setup-python@v6
+  ✓ Post Run actions/checkout@v6
+  ✓ Complete job
+
+ANNOTATIONS
+X Process completed with exit code 1.
+test: .github#42
+
+
+To see what failed, try: gh run view 26402769812 --log-failed
+View this run on GitHub: https://github.com/vfi64/agentic-project-kit/actions/runs/26402769812
+
+### FAILED PUSH RUN FAILED LOG ###
+test	Tests	﻿2026-05-25T13:24:31.7794544Z ##[group]Run python -m pytest -q
+test	Tests	2026-05-25T13:24:31.7794867Z [36;1mpython -m pytest -q[0m
+test	Tests	2026-05-25T13:24:31.7828456Z shell: /usr/bin/bash -e {0}
+test	Tests	2026-05-25T13:24:31.7828678Z env:
+test	Tests	2026-05-25T13:24:31.7828932Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+test	Tests	2026-05-25T13:24:31.7829360Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+test	Tests	2026-05-25T13:24:31.7829779Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+test	Tests	2026-05-25T13:24:31.7830465Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+test	Tests	2026-05-25T13:24:31.7830947Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+test	Tests	2026-05-25T13:24:31.7831318Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+test	Tests	2026-05-25T13:24:31.7831609Z ##[endgroup]
+test	Tests	2026-05-25T13:24:34.5913978Z ........................................................................ [  6%]
+test	Tests	2026-05-25T13:24:35.8088409Z ........................................................................ [ 13%]
+test	Tests	2026-05-25T13:24:36.4486017Z ........................................................................ [ 20%]
+test	Tests	2026-05-25T13:24:38.2676867Z F....................................................................... [ 27%]
+test	Tests	2026-05-25T13:24:39.1087620Z ........................................................................ [ 34%]
+test	Tests	2026-05-25T13:24:40.2209278Z ........................................................................ [ 41%]
+test	Tests	2026-05-25T13:24:42.3135071Z ........................................................................ [ 48%]
+test	Tests	2026-05-25T13:24:42.6333927Z ........................................................................ [ 55%]
+test	Tests	2026-05-25T13:24:43.4457319Z ........................................................................ [ 62%]
+test	Tests	2026-05-25T13:24:43.8288464Z ........................................................................ [ 69%]
+test	Tests	2026-05-25T13:24:43.9091074Z ........................................................................ [ 76%]
+test	Tests	2026-05-25T13:24:44.0206709Z ........................................................................ [ 83%]
+test	Tests	2026-05-25T13:24:44.8598616Z ........................................................................ [ 90%]
+test	Tests	2026-05-25T13:24:46.5657590Z ........................................................................ [ 97%]
+test	Tests	2026-05-25T13:24:47.0427346Z .....................                                                    [100%]
+test	Tests	2026-05-25T13:24:47.0428370Z =================================== FAILURES ===================================
+test	Tests	2026-05-25T13:24:47.0429131Z _____________ test_docs_audit_cli_runs_with_documentation_registry _____________
+test	Tests	2026-05-25T13:24:47.0429676Z 
+test	Tests	2026-05-25T13:24:47.0430346Z     def test_docs_audit_cli_runs_with_documentation_registry() -> None:
+test	Tests	2026-05-25T13:24:47.0430993Z         runner = CliRunner()
+test	Tests	2026-05-25T13:24:47.0431444Z         result = runner.invoke(app, ["docs-audit"])
+test	Tests	2026-05-25T13:24:47.0431952Z >       assert result.exit_code == 0
+test	Tests	2026-05-25T13:24:47.0432342Z E       assert 1 == 0
+test	Tests	2026-05-25T13:24:47.0432718Z E        +  where 1 = <Result SystemExit(1)>.exit_code
+test	Tests	2026-05-25T13:24:47.0433059Z 
+test	Tests	2026-05-25T13:24:47.0433279Z tests/test_documentation_registry.py:221: AssertionError
+test	Tests	2026-05-25T13:24:47.0433841Z =========================== short test summary info ============================
+test	Tests	2026-05-25T13:24:47.0434835Z FAILED tests/test_documentation_registry.py::test_docs_audit_cli_runs_with_documentation_registry - assert 1 == 0
+test	Tests	2026-05-25T13:24:47.0435665Z  +  where 1 = <Result SystemExit(1)>.exit_code
+test	Tests	2026-05-25T13:24:47.0436063Z 1 failed, 1028 passed in 14.73s
+test	Tests	2026-05-25T13:24:47.1232696Z ##[error]Process completed with exit code 1.
+
+### LOCAL TARGETED REPRO ###
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____________ test_docs_audit_cli_runs_with_documentation_registry _____________
+
+    def test_docs_audit_cli_runs_with_documentation_registry() -> None:
+        runner = CliRunner()
+        result = runner.invoke(app, ["docs-audit"])
+>       assert result.exit_code == 0
+E       assert 1 == 0
+E        +  where 1 = <Result SystemExit(1)>.exit_code
+
+tests/test_documentation_registry.py:221: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_documentation_registry.py::test_docs_audit_cli_runs_with_documentation_registry
+1 failed in 0.21s
+
+### LOCAL DOCS AUDIT OUTPUT ###
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[FAIL] Korrektheit
+- doc-lifecycle:missing-review-policy:docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md: active and idea documents need a 
+Review policy
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Dokumentationsregistry
+- registry=docs/DOCUMENTATION_REGISTRY.yaml
+- version=1
+- documents=19
+- broad_migration_allowed=False
+- class:architecture=1
+- class:evidence/log=2
+- class:generated artifact=1
+- class:governance/system=4
+- class:operational/automation=4
+- class:planning=4
+- class:release=2
+- class:user-facing description=1
+
+[FAIL] Konsistenz
+- doc-lifecycle:missing-review-policy:docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md: active and idea documents need a 
+Review policy
+
+Overall: FAIL
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[FAIL] document lifecycle audit: docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md: active and idea documents need a Review 
+policy
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.2
+
+Overall: FAIL
+
+### FINAL SUMMARY ###
+WORK RESULT: FAIL
+EVIDENCE RESULT: LOCAL_LOG
+OVERALL RESULT: FAIL
+REMOTE_EVIDENCE: PARTIAL
+terminal_log=/tmp/agentic-pr773-failed-ci-log-details.log
+command_report=NONE
+NEXT_CHAT_REPLY: f
+CHAT_REPLY: f
+### RESULT: FAIL ###
