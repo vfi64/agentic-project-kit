@@ -224,7 +224,8 @@ mechanisms:
   surfaces:
   - chat-bootstrap-contract
   - compiled-agent-context
-  tests: []
+  tests:
+  - tests/test_chat_bootstrap_drift_contract.py
 - id: portable-execution-rules
   status: active
   owner: execution-governance

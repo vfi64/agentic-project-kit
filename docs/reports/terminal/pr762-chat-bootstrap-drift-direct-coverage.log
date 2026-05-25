@@ -1,0 +1,38 @@
+PR762 CHAT BOOTSTRAP DRIFT DIRECT COVERAGE -- REMOTE CONNECTOR -- NO RELEASE
+
+START STATE
+- Base branch: main at 01b1d19de888083b292ffa8ccd7b2eadee188448.
+- Work branch: r762.
+- Scope: convert chat-bootstrap-drift-rules from documented coverage to direct test coverage.
+- No release, no tag, no DOI changes.
+
+REMOTE OBSERVATIONS
+- chat-bootstrap-drift-rules was listed with tests: [] in .agentic/rule_mechanism_inventory.yaml.
+- rule_test_coverage.yaml classified chat-bootstrap-drift-rules as documented.
+- rule_direct_test_plan.yaml contained the final planned chat-bootstrap-drift-rules follow-up.
+- Authoritative anchors are docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md and .agentic/compiled_agent_context.yaml.
+
+REMOTE CHANGES
+- Added tests/test_chat_bootstrap_drift_contract.py with direct assertions for:
+  - mandatory successor-chat startup source reading before mutation;
+  - direct-path-first GitHub connector route;
+  - drift classes and fail-closed drift response;
+  - governance YAML parse-modify-dump mutation rule;
+  - drift handoff prompt requirements;
+  - compiled context agreement with the bootstrap and drift contract.
+- Registered tests/test_chat_bootstrap_drift_contract.py under chat-bootstrap-drift-rules in .agentic/rule_mechanism_inventory.yaml.
+- Marked chat-bootstrap-drift-rules as direct in .agentic/rule_test_coverage.yaml.
+- Cleared .agentic/rule_direct_test_plan.yaml because all active mechanisms now have direct coverage or direct follow-up is complete.
+
+EXPECTED BEHAVIOR
+- rule registry validation should no longer require any direct-test follow-up.
+- rule registry report should count all active mechanisms as direct.
+- Remaining work after this PR should shift from direct coverage completion to registry ergonomics/reporting, not missing direct tests.
+
+REMOTE LIMITATION
+- Local pytest/check-docs were not run because the user is on iPhone.
+- GitHub Actions CI is the required gate before merge.
+
+RESULT
+- Remote branch prepared for PR762.
+- CI/merge verification still required after PR creation.
