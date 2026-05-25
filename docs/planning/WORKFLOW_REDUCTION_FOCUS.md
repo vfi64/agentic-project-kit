@@ -1,6 +1,6 @@
 # Workflow Reduction Focus
 
-Status-date: 2026-05-23
+Status-date: 2026-05-25
 Status: active
 Decision status: accepted
 Review policy: Review after the documentation-management foundation and before expanding GUI scope or Pattern Advisor scope.
@@ -39,6 +39,23 @@ Target shape:
 - human-facing projections: `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, successor handoff prompts, README excerpts, handbook text, website text, GUI dashboards, and LLM-generated explanations.
 
 LLM assistance should use the structured sources to translate project state into clear human prose on request. The LLM may explain and review; it should not be the only place where operational truth exists.
+
+## Rule Registry Improvement Direction
+
+The governed rule registry is the current proof point for this direction: rules have moved from chat-only memory into machine-readable inventory, migration, coverage, direct-test-plan, validation, and report artifacts.
+
+Remaining rule-registry weaknesses must be reduced as incremental planning work, not as a second broad rebuild. The accepted backlog is `docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md`.
+
+The improvement direction is:
+
+1. keep the current rule-registry baseline usable while documentation-management work resumes;
+2. harden the schema through typed or schema-backed validation;
+3. generate human projections instead of duplicating registry state manually;
+4. replace high-value `required_terms` checks with stronger behavioral or structural assertions;
+5. add query and impact-analysis commands when documentation management or GUI readiness needs them;
+6. evaluate external policy tooling only after the internal domain model is stable.
+
+This keeps the rule registry professional without letting perfectionism block the next documentation-registry and projection slices.
 
 ## Priority Order
 
