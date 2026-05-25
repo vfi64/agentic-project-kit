@@ -1,0 +1,114 @@
+### PRECHECK ###
+main
+
+### VERIFY MAIN HEAD ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+41e12995f23fcc076e5e786ca90d66ecd1ead643
+41e1299 Require structured summaries for strict evidence inspection (#806)
+expected_head=41e12995f23fcc076e5e786ca90d66ecd1ead643
+
+### TARGETED STRICT SUMMARY TESTS ###
+PY=.venv/bin/python
+.................                                                        [100%]
+17 passed in 0.48s
+
+### REQUIRE SUMMARY RECOVERY SMOKE ###
+EVIDENCE_INSPECTION
+verdict: PASS_CONTINUE
+evidence_exists: yes
+require_summary: no
+git_branch: main
+git_status_clean: yes
+pass_markers: 1
+fail_markers: 0
+hidden_fail_before_final_pass: no
+structured_summary_found: no
+structured_summary_valid: no
+evidence_path: /tmp/evidence-marker-only-pass.log
+final_marker: ### RESULT: PASS ###
+next_action: continue with the next safe slice after reviewing evidence
+### RESULT: PASS ###
+EVIDENCE_INSPECTION
+verdict: AMBIGUOUS_SUMMARY_REVIEW_REQUIRED
+evidence_exists: yes
+require_summary: yes
+git_branch: main
+git_status_clean: yes
+pass_markers: 1
+fail_markers: 0
+hidden_fail_before_final_pass: no
+structured_summary_found: no
+structured_summary_valid: no
+summary_findings:
+- missing structured summary block
+evidence_path: /tmp/evidence-marker-only-pass.log
+final_marker: ### RESULT: PASS ###
+next_action: review ambiguous evidence manually before continuing
+### RESULT: FAIL ###
+EVIDENCE_INSPECTION
+verdict: PASS_CONTINUE
+evidence_exists: yes
+require_summary: yes
+git_branch: main
+git_status_clean: yes
+pass_markers: 1
+fail_markers: 0
+hidden_fail_before_final_pass: no
+structured_summary_found: yes
+structured_summary_valid: yes
+summary_name: PR806 REQUIRE SUMMARY VERIFY RECOVERY
+summary_scope: LOCAL VERIFY / RECOVERY / STRICT SUMMARY
+summary_branch: main
+summary_origin: local
+summary_state_mode: local
+summary_mode_check: strict evidence summary smoke via ns summary
+summary_work: PASS
+summary_evidence: PASS
+summary_overall: PASS
+summary_remote_evidence: NOT_REQUIRED
+summary_pr: 806
+summary_head_sha: 41e12995f23fcc076e5e786ca90d66ecd1ead643
+summary_ci: passed-before-merge
+summary_merge: completed
+summary_terminal_log: /tmp/evidence-structured-required-pass.log
+summary_terminal_log_remote: NONE
+summary_terminal_log_local: /tmp/evidence-structured-required-pass.log
+summary_command_report: strict-summary-cli-smoke/recovery
+summary_safe_step: continue with next safe slice
+summary_chat_reply: d
+summary_result_marker: PASS
+evidence_path: /tmp/evidence-structured-required-pass.log
+final_marker: ### RESULT: PASS ###
+next_action: continue with the next safe slice after reviewing evidence
+### RESULT: PASS ###
+
+### BOOT CLOSEOUT STILL PASSING ###
+CHAT_SWITCH_CLOSEOUT: PASS
+
+### FINAL STATUS BEFORE LOG UPLOAD ###
+
+### RECOVERY RESULT SUMMARY ###
+RECOVERY_CHECK: PASS
+usage: run-summary-renderer [-h] [--json JSON] [--comm-id COMM_ID]
+                            [--comm-header COMM_HEADER] [--slice SLICE]
+                            [--slice-name SLICE_NAME] [--scope SCOPE]
+                            [--branch BRANCH] [--origin ORIGIN]
+                            [--state-mode STATE_MODE]
+                            [--mode-check MODE_CHECK] [--work WORK]
+                            [--evidence EVIDENCE] [--overall OVERALL]
+                            [--remote-evidence REMOTE_EVIDENCE] [--pr PR]
+                            [--head-sha HEAD_SHA] [--ci CI] [--merge MERGE]
+                            [--terminal-log TERMINAL_LOG]
+                            [--terminal-log-remote TERMINAL_LOG_REMOTE]
+                            [--terminal-log-local TERMINAL_LOG_LOCAL]
+                            [--command-report COMMAND_REPORT]
+                            [--interpretation INTERPRETATION]
+                            [--safe-step SAFE_STEP] [--next NEXT]
+                            [--chat-reply CHAT_REPLY] [--timestamp TIMESTAMP]
+run-summary-renderer: error: invalid field: remote_evidence; invalid pass: remote evidence is not complete
