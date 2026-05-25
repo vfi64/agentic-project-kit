@@ -139,6 +139,85 @@ def _write_registry(root: Path) -> None:
     )
 
 
+def _write_direct_complete_registry(root: Path) -> None:
+    (root / "source.txt").write_text("present", encoding="utf-8")
+    (root / "test_module.py").write_text("def test_present():\n    assert True\n", encoding="utf-8")
+    (root / "evidence.txt").write_text("evidence", encoding="utf-8")
+    agentic = root / ".agentic"
+    agentic.mkdir()
+    (agentic / "rule_mechanism_inventory.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": 1,
+                "mechanisms": [
+                    {
+                        "id": "direct-mechanism",
+                        "status": "active",
+                        "owner": "test-owner",
+                        "category": "governance",
+                        "priority": 1,
+                        "enforcement_phase": "guard",
+                        "conflict_domains": ["direct-domain"],
+                        "surfaces": ["direct-surface"],
+                        "tests": ["test_module.py"],
+                        "protected_rule_intent": "preserve direct behavior",
+                        "sources": [{"path": "source.txt", "required_terms": ["present"]}],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (agentic / "rule_migrations.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": 1,
+                "known_legacy_rule_ids": ["old-direct"],
+                "migrations": [
+                    {
+                        "legacy_id": "old-direct",
+                        "status": "migrated",
+                        "replaced_by": "direct-mechanism",
+                        "evidence": ["evidence.txt"],
+                        "migration_reason": "direct mechanism covers it",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (agentic / "rule_test_coverage.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": 1,
+                "coverage": [
+                    {
+                        "mechanism_id": "direct-mechanism",
+                        "test_coverage": "direct",
+                        "assertions": [
+                            {
+                                "assertion_id": "direct-mechanism-direct-assertion",
+                                "kind": "guard",
+                                "covered_surfaces": ["direct-surface"],
+                                "evidence_refs": [
+                                    {"kind": "source", "path": "source.txt"},
+                                    {"kind": "test", "path": "test_module.py"},
+                                ],
+                                "statement": "direct behavior is tested",
+                            }
+                        ],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (agentic / "rule_direct_test_plan.yaml").write_text(
+        yaml.safe_dump({"schema_version": 1, "direct_test_followups": []}),
+        encoding="utf-8",
+    )
+
+
 def test_build_rule_registry_report_summarizes_coverage(tmp_path: Path) -> None:
     _write_registry(tmp_path)
     report = build_rule_registry_report(tmp_path)
@@ -148,6 +227,7 @@ def test_build_rule_registry_report_summarizes_coverage(tmp_path: Path) -> None:
     assert report["summary"]["documented_mechanism_count"] == 1
     assert report["summary"]["mechanisms_without_direct_tests"] == 1
     assert report["summary"]["followup_count"] == 1
+    assert report["summary"]["direct_coverage_complete"] is False
     assert report["summary"]["assertion_count"] == 2
     assert report["summary"]["evidence_ref_count"] == 3
     assert report["summary"]["validation_finding_count"] == 0
@@ -165,10 +245,24 @@ def test_build_rule_registry_report_summarizes_coverage(tmp_path: Path) -> None:
     ]
 
 
+def test_build_rule_registry_report_marks_direct_coverage_complete(tmp_path: Path) -> None:
+    _write_direct_complete_registry(tmp_path)
+    report = build_rule_registry_report(tmp_path)
+    assert report["status"] == "pass"
+    assert report["summary"]["active_mechanism_count"] == 1
+    assert report["summary"]["direct_mechanism_count"] == 1
+    assert report["summary"]["mechanisms_without_direct_tests"] == 0
+    assert report["summary"]["followup_count"] == 0
+    assert report["summary"]["validation_finding_count"] == 0
+    assert report["summary"]["direct_coverage_complete"] is True
+
+
 def test_render_rule_registry_report_includes_machine_counts(tmp_path: Path) -> None:
     _write_registry(tmp_path)
     rendered = render_rule_registry_report(build_rule_registry_report(tmp_path))
     assert "status: warn" in rendered
+    assert "direct_coverage_complete: false" in rendered
+    assert "completion_status: incomplete" in rendered
     assert "active_mechanisms: 2" in rendered
     assert "direct: 1" in rendered
     assert "documented: 1" in rendered
@@ -176,6 +270,14 @@ def test_render_rule_registry_report_includes_machine_counts(tmp_path: Path) -> 
     assert "documented-mechanism: coverage=documented" in rendered
     assert "Follow-ups:" in rendered
     assert "documented-mechanism: No direct test path is registered" in rendered
+
+
+def test_render_rule_registry_report_marks_complete(tmp_path: Path) -> None:
+    _write_direct_complete_registry(tmp_path)
+    rendered = render_rule_registry_report(build_rule_registry_report(tmp_path))
+    assert "status: pass" in rendered
+    assert "direct_coverage_complete: true" in rendered
+    assert "completion_status: complete" in rendered
 
 
 def test_rule_registry_report_cli_emits_json_for_current_repo() -> None:
@@ -187,6 +289,7 @@ def test_rule_registry_report_cli_emits_json_for_current_repo() -> None:
     assert payload["summary"]["active_mechanism_count"] >= 1
     assert payload["summary"]["validation_finding_count"] == 0
     assert "followup_count" in payload["summary"]
+    assert "direct_coverage_complete" in payload["summary"]
     assert "followups" in payload
 
 
@@ -195,5 +298,7 @@ def test_rule_registry_report_cli_emits_human_summary_for_current_repo() -> None
     assert result.exit_code == 0
     assert "Rule registry report" in result.output
     assert "status:" in result.output
+    assert "direct_coverage_complete:" in result.output
+    assert "completion_status:" in result.output
     assert "followups:" in result.output
     assert "validation_findings: 0" in result.output
