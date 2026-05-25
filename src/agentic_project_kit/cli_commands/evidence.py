@@ -29,9 +29,10 @@ def guard(logfile: Path) -> None:
 def inspect(
     path: Path | None = typer.Argument(None),
     root: Path = typer.Option(Path("."), "--root"),
+    require_summary: bool = typer.Option(False, "--require-summary"),
 ) -> None:
     """Inspect explicit or latest terminal evidence before continuing after chat control signals."""
-    result = inspect_evidence(path, root=root)
+    result = inspect_evidence(path, root=root, require_summary=require_summary)
     typer.echo(render_evidence_inspection(result))
     if not result.success:
         raise typer.Exit(code=1)
