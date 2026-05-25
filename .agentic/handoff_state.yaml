@@ -83,7 +83,7 @@ open_items:
   next_expected_chat_action: Merge and verify v0.4.2 release metadata, publish the
     v0.4.2 tag/release, run post-release checks, then prepare a successor-chat handoff.
 completed_since_previous_handoff:
-- 'Protected Change Planner A1 merged and verified via docs/reports/terminal/protected-change-planner-a1-merge-verify.log.'
+- 'PR #791 merged Protected Change Planner A1 and verified it via docs/reports/terminal/protected-change-planner-a1-merge-verify.log.'
 - 'PR #763 refreshed status and handoff after the PR762 direct-coverage closeout.'
 - 'PR #764 added explicit rule-registry direct coverage completion reporting for JSON
   and human CLI reports.'
