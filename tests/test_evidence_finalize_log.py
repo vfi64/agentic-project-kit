@@ -1,10 +1,20 @@
 from pathlib import Path
+import subprocess
 
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
 from agentic_project_kit.evidence_finalize_log import finalize_log
 from agentic_project_kit.evidence_finalize_log import render_finalize_log_result
+
+
+def _init_repo(root: Path) -> None:
+    subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=root, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=root, check=True)
+    (root / "README.md").write_text("test\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=root, check=True)
+    subprocess.run(["git", "commit", "-m", "Initial commit"], cwd=root, check=True, capture_output=True, text=True)
 
 
 def test_finalize_log_rejects_invalid_pass_remote_evidence(tmp_path: Path) -> None:
@@ -64,6 +74,7 @@ def test_finalize_log_rejects_absolute_remote_log(tmp_path: Path) -> None:
 
 
 def test_finalize_log_render_prints_canonical_summary(tmp_path: Path) -> None:
+    _init_repo(tmp_path)
     run_log = tmp_path / "run.log"
     run_log.write_text("body before finalize\n", encoding="utf-8")
     result = finalize_log(
@@ -85,6 +96,7 @@ def test_finalize_log_render_prints_canonical_summary(tmp_path: Path) -> None:
         safe_step="continue",
     )
     output = render_finalize_log_result(result)
+    assert "success: yes" in output
     assert "### CANONICAL SUMMARY ###" in output
     assert "SUMMARY COMM-LOCAL" in output
     assert "NAME: VISIBLE SUMMARY TEST" in output
