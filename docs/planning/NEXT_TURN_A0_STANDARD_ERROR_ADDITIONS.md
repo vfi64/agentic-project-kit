@@ -3,6 +3,7 @@
 Status-date: 2026-05-25
 Status: active addendum
 Decision status: accepted
+Review policy: Review together with `docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md` before Slice A1.
 
 ## Purpose
 
