@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
+import sys
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -62,7 +63,7 @@ def run_fixed_slot(root: Path | str = ".") -> NextTurnRunResult:
         return result
 
     completed = subprocess.run(
-        ["python3", str(script_path)],
+        [sys.executable, str(script_path)],
         cwd=root_path,
         text=True,
         capture_output=True,
@@ -83,6 +84,9 @@ def run_fixed_slot(root: Path | str = ".") -> NextTurnRunResult:
         timestamp_utc=datetime.now(timezone.utc).isoformat(),
     )
     command_report.write_text(json.dumps(asdict(result), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if outcome == "PASS_EXECUTED":
+        yaml_path.unlink(missing_ok=True)
+        script_path.unlink(missing_ok=True)
     return result
 
 
