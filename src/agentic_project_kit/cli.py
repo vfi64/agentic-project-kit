@@ -9,6 +9,7 @@ from agentic_project_kit.cli_commands.github import register_github_commands
 from agentic_project_kit.cli_commands.governance import governance_app
 from agentic_project_kit.cli_commands.handoff import handoff_app
 from agentic_project_kit.cli_commands.init import register_init_command
+from agentic_project_kit.cli_commands.pass_already_done import app as pass_already_done_app
 from agentic_project_kit.cli_commands.patterns import patterns_app
 from agentic_project_kit.cli_commands.pr import pr_app, register_pr_closeout_alias
 from agentic_project_kit.cli_commands.pr_hygiene import register_pr_hygiene_command
@@ -39,6 +40,7 @@ app.add_typer(workflow_guard_app, name="workflow-guard")
 app.add_typer(rule_registry_app, name="rule-registry")
 app.add_typer(handoff_app, name="handoff")
 app.add_typer(boot_app, name="boot")
+app.add_typer(pass_already_done_app, name="pass-already-done")
 app.add_typer(actions_app, name="actions")
 app.add_typer(evidence_app, name="evidence")
 app.add_typer(work_orders_app, name="work-order")
