@@ -10,12 +10,25 @@ def _summary(**overrides: str) -> str:
     data = dict(
         comm_id="COMM-TEST",
         slice="summary-parser-test",
-        scope="test",
+        scope="TEST / STRUCTURED SUMMARY",
+        branch="main",
+        origin="local",
+        state_mode="local",
+        mode_check="summary parser test",
         work="PASS",
         evidence="PASS",
         overall="PASS",
         remote_evidence="NOT_REQUIRED",
+        pr="NONE",
+        head_sha="abc123",
+        ci="not-required",
+        merge="not-required",
         terminal_log="docs/reports/terminal/test.log",
+        terminal_log_remote="NONE",
+        terminal_log_local="docs/reports/terminal/test.log",
+        command_report="summary-parser-test",
+        interpretation="Structured summary parser test.",
+        safe_step="continue with next safe slice",
         chat_reply="d",
     )
     data.update(overrides)
@@ -29,6 +42,14 @@ def test_structured_pass_summary_allows_continue(tmp_path: Path) -> None:
     assert result.verdict == EvidenceVerdict.PASS_CONTINUE
     assert result.structured_summary.found
     assert result.structured_summary.valid
+    assert result.structured_summary.payload.scope == "TEST / STRUCTURED SUMMARY"
+    assert result.structured_summary.payload.branch == "main"
+    assert result.structured_summary.payload.origin == "local"
+    assert result.structured_summary.payload.state_mode == "local"
+    assert result.structured_summary.payload.mode_check == "summary parser test"
+    assert result.structured_summary.payload.terminal_log_remote == "NONE"
+    assert result.structured_summary.payload.terminal_log_local == "docs/reports/terminal/test.log"
+    assert result.structured_summary.payload.safe_step == "continue with next safe slice"
     assert result.structured_summary.overall == "PASS"
 
 
@@ -49,6 +70,15 @@ def test_invalid_structured_pass_is_ambiguous(tmp_path: Path) -> None:
     assert result.verdict == EvidenceVerdict.AMBIGUOUS_SUMMARY_REVIEW_REQUIRED
     assert not result.structured_summary.valid
     assert "invalid pass: chat_reply must be d" in result.structured_summary.findings
+
+
+def test_old_chat_only_pass_summary_is_ambiguous(tmp_path: Path) -> None:
+    text = _summary(evidence="CHAT_ONLY", remote_evidence="NOT_REQUIRED")
+    log = tmp_path / "summary-chat-only.log"
+    log.write_text(text, encoding="utf-8")
+    result = inspect_evidence(log, root=tmp_path)
+    assert result.verdict == EvidenceVerdict.AMBIGUOUS_SUMMARY_REVIEW_REQUIRED
+    assert "invalid pass: evidence is not complete" in result.structured_summary.findings
 
 
 def test_structured_summary_overrides_hidden_expected_fail_marker(tmp_path: Path) -> None:
