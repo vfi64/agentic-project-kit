@@ -108,6 +108,17 @@ def test_validate_rendered_summary_rejects_contradictory_marker():
     assert "contradictory summary marker" in validate_rendered_summary_text(rendered)
 
 
+def test_validate_rendered_summary_rejects_duplicate_summary_header():
+    rendered = render_summary(base_data())
+    doubled = rendered.replace("SUMMARY COMM-00042", "SUMMARY COMM-00042\nSUMMARY COMM-00043")
+    assert "invalid summary count: 2" in validate_rendered_summary_text(doubled)
+
+
+def test_validate_rendered_summary_rejects_duplicate_result_marker():
+    rendered = render_summary(base_data()) + "\n### RESULT: PASS ###\n"
+    assert "invalid result marker count: 2" in validate_rendered_summary_text(rendered)
+
+
 def test_module_cli_renders_json(tmp_path):
     payload = tmp_path / "summary.json"
     payload.write_text(json.dumps(base_data()), encoding="utf-8")
