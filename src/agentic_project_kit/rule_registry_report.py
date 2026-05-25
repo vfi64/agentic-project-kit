@@ -113,20 +113,31 @@ def build_rule_registry_report(root: Path | str = ".") -> dict[str, Any]:
         by_coverage[coverage] = by_coverage.get(coverage, 0) + 1
 
     followups = [followup for row in mechanism_rows if (followup := _followup_for_row(row)) is not None]
+    active_count = len(mechanism_rows)
+    direct_count = by_coverage.get("direct", 0)
+    mechanisms_without_direct_tests = sum(1 for row in mechanism_rows if not row["has_direct_tests"])
+    direct_coverage_complete = (
+        active_count > 0
+        and not validation_findings
+        and not followups
+        and direct_count == active_count
+        and mechanisms_without_direct_tests == 0
+    )
     status = "fail" if validation_findings else "warn" if followups else "pass"
 
     report = {
         "schema_version": 1,
         "status": status,
         "summary": {
-            "active_mechanism_count": len(mechanism_rows),
+            "active_mechanism_count": active_count,
             "coverage_counts": by_coverage,
-            "direct_mechanism_count": by_coverage.get("direct", 0),
+            "direct_mechanism_count": direct_count,
             "documented_mechanism_count": by_coverage.get("documented", 0),
             "indirect_mechanism_count": by_coverage.get("indirect", 0),
             "unclassified_mechanism_count": by_coverage.get("unclassified", 0),
-            "mechanisms_without_direct_tests": sum(1 for row in mechanism_rows if not row["has_direct_tests"]),
+            "mechanisms_without_direct_tests": mechanisms_without_direct_tests,
             "followup_count": len(followups),
+            "direct_coverage_complete": direct_coverage_complete,
             "assertion_count": sum(int(row["assertion_count"]) for row in mechanism_rows),
             "evidence_ref_count": sum(int(row["evidence_ref_count"]) for row in mechanism_rows),
             "validation_finding_count": len(validation_findings),
@@ -140,9 +151,13 @@ def build_rule_registry_report(root: Path | str = ".") -> dict[str, Any]:
 
 def render_rule_registry_report(report: dict[str, Any]) -> str:
     summary = report.get("summary", {}) if isinstance(report.get("summary"), dict) else {}
+    direct_coverage_complete = bool(summary.get("direct_coverage_complete", False))
+    completion_status = "complete" if direct_coverage_complete else "incomplete"
     lines = [
         "Rule registry report",
         f"status: {report.get('status', 'unknown')}",
+        f"direct_coverage_complete: {str(direct_coverage_complete).lower()}",
+        f"completion_status: {completion_status}",
         f"active_mechanisms: {summary.get('active_mechanism_count', 0)}",
         f"direct: {summary.get('direct_mechanism_count', 0)}",
         f"documented: {summary.get('documented_mechanism_count', 0)}",
