@@ -176,8 +176,7 @@ coverage:
       path: .agentic/compiled_agent_context.yaml
     statement: drift response and remote connector rules remain anchored
 - mechanism_id: portable-execution-rules
-  test_coverage: documented
-  coverage_rationale: Contract and compiled-context anchors are preserved; direct behavioral tests are not registered for this documentation rule yet.
+  test_coverage: direct
   assertions:
   - assertion_id: portable-execution-rules-python-core
     kind: workflow
@@ -189,9 +188,11 @@ coverage:
       path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
     - kind: source
       path: .agentic/compiled_agent_context.yaml
-    statement: Python core remains canonical over shell adapters
+    - kind: test
+      path: tests/test_portable_execution_contract.py
+    statement: Python modules and CLI commands remain canonical while shell commands stay adapters only
   - assertion_id: portable-execution-rules-yaml-mutation
-    kind: anchor
+    kind: guard
     covered_surfaces:
     - portable-execution-contract
     - compiled-agent-context
@@ -200,7 +201,19 @@ coverage:
       path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
     - kind: source
       path: .agentic/compiled_agent_context.yaml
-    statement: governance YAML mutation rules remain anchored
+    - kind: test
+      path: tests/test_portable_execution_contract.py
+    statement: governance YAML mutation must use parse-modify-dump instead of manual indentation or string concatenation
+  - assertion_id: portable-execution-rules-evidence-boundary
+    kind: evidence
+    covered_surfaces:
+    - portable-execution-contract
+    evidence_refs:
+    - kind: source
+      path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+    - kind: test
+      path: tests/test_portable_execution_contract.py
+    statement: evidence generation and chat terminal blocks remain bounded by portable Python-first rules
 - mechanism_id: evidence-guard
   test_coverage: direct
   assertions:
