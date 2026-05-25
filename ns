@@ -18,6 +18,13 @@ resolve_python() {
 
 PY="$(resolve_python || true)"
 
+if [ "${1:-}" = "next-turn-slot" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.next_turn_slot "$@"
+  exit $?
+fi
+
+
 if [ "${1:-}" = "merge-if-green" ]; then
   shift
   PYTHONPATH=src "$PY" -m agentic_project_kit.next_turn_merge_if_green "$@"
