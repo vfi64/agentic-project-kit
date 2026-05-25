@@ -68,3 +68,15 @@ Protected files require a deletion and rewrite budget. Large deletion diffs, bro
 - no broad documentation-management rebuild
 - no Connector-based protected-file full replacement
 - no reuse of PR #771 as a working base
+
+## Review policy
+
+This active planning document must be reviewed before any successor implementation slice starts.
+
+Review requirements:
+
+- confirm that the clean restart point still matches current `main`;
+- confirm that PR #771 is not reused as a working base;
+- confirm that the next slice implements a deterministic guard before repeating DOI closeout work;
+- confirm that any protected-file change has a small diff or an explicit migration record;
+- retire or update this plan after the guard and DOI closeout are merged.
