@@ -1,0 +1,72 @@
+# NEXT CHAT BOOTSTRAP
+
+This file is the canonical remote handoff entry point for a successor chat.
+Do not start from chat memory. Read this file first, then follow its boot sequence.
+
+## Standard successor-chat prompt
+
+Copy this into the next chat:
+
+```text
+We work in repo vfi64/agentic-project-kit. Do not start from chat memory.
+Read the remote file docs/handoff/NEXT_CHAT_BOOTSTRAP.md on main completely and execute its boot routine.
+After that, verify main, open PRs, CI, STATUS, CURRENT_HANDOFF, handoff_state, compiled_agent_context, rule registry files, document-management rules, and FINAL_SUMMARY_CONTRACT before any mutation.
+```
+
+## First chat command
+
+1. Read this file completely from remote main.
+2. Run or verify `agentic-kit boot check` and `agentic-kit boot prompt` if a local checkout is available.
+3. Open every mandatory boot source listed below before repository mutation.
+4. Report current main HEAD, open PRs, CI status, last clean evidence, and next smallest safe slice.
+
+## Bootloader output
+
+```text
+CHAT_BOOTLOADER
+
+Purpose: bootstrap a successor chat from repository truth.
+
+Mandatory boot sources:
+- [present] .agentic/compiled_agent_context.yaml
+- [present] .agentic/handoff_state.yaml
+- [present] .agentic/rule_mechanism_inventory.yaml
+- [present] .agentic/rule_migrations.yaml
+- [present] .agentic/rule_preservation.yaml
+- [present] docs/STATUS.md
+- [present] docs/handoff/CURRENT_HANDOFF.md
+- [present] docs/governance/FINAL_SUMMARY_CONTRACT.md
+- [present] docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+- [present] docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+- [present] docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+- [present] docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
+- [present] docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+
+Mandatory workflow rules:
+- Start from repository artifacts instead of chat memory.
+- Read mandatory boot sources before repository changes.
+- Prefer Python runners for local workflow execution; shell remains a thin adapter.
+- Use run_summary_renderer for final summaries in evidence-bearing workflows.
+- Treat d, f, and w as communication signals rather than evidence.
+- Inspect repo or remote evidence before requesting pasted terminal output.
+- Use protected change planning before protected YAML, JSON, or Markdown control changes.
+
+Required first action in a successor chat:
+- Read these sources and verify main, open PRs, CI, STATUS, handoff, rule registry, and final-summary contracts before repository changes.
+
+### RESULT: PASS ###
+```
+
+## Next work items
+
+- Finish local sync after the bootloader/summary-runner merge.
+- Use boot write to refresh docs/handoff/NEXT_CHAT_BOOTSTRAP.md before chat changes.
+- Harden no-op/PASS_ALREADY_DONE handling for already satisfied target states.
+- Harden d/f semantics through repo evidence instead of chat discipline.
+- Automate red CI failed-log diagnosis in the repo workflow path.
+
+## Final summary requirement
+
+Evidence-bearing workflow outputs must use `agentic_project_kit.run_summary_renderer.SummaryPayload` or the Python workflow summary runner. Do not hand-write legacy final summaries.
+
+### RESULT: PASS ###
