@@ -249,7 +249,8 @@ mechanisms:
   surfaces:
   - portable-execution-contract
   - compiled-agent-context
-  tests: []
+  tests:
+  - tests/test_portable_execution_contract.py
 - id: evidence-guard
   status: active
   owner: evidence-governance
