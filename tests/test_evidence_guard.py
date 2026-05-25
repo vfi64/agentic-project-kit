@@ -64,7 +64,7 @@ def test_evidence_guard_rejects_unscoped_expected_negative_smoke_log(tmp_path: P
     assert "expected negative smoke markers must be scoped" in result.findings[0]
 
 
-def test_evidence_guard_accepts_scoped_expected_negative_smoke_log(tmp_path: Path) -> None:
+def test_evidence_guard_accepts_expected_negative_smoke_log(tmp_path: Path) -> None:
     log = tmp_path / "scoped-expected-negative-smoke.log"
     log.write_text(
         "### EXPECTED NEGATIVE SMOKE START ###\n"
