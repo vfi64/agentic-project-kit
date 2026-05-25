@@ -73,7 +73,7 @@ def test_invalid_structured_pass_is_ambiguous(tmp_path: Path) -> None:
 
 
 def test_old_chat_only_pass_summary_is_ambiguous(tmp_path: Path) -> None:
-    text = _summary(evidence="CHAT_ONLY", remote_evidence="NOT_REQUIRED")
+    text = _summary().replace("  EVIDENCE: PASS", "  EVIDENCE: CHAT_ONLY")
     log = tmp_path / "summary-chat-only.log"
     log.write_text(text, encoding="utf-8")
     result = inspect_evidence(log, root=tmp_path)
