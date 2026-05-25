@@ -5,6 +5,7 @@ import typer
 from agentic_project_kit.chat_bootloader import check_boot_sources
 from agentic_project_kit.chat_bootloader import render_boot_report
 from agentic_project_kit.chat_bootloader import render_bootloader
+from agentic_project_kit.chat_bootloader import run_chat_switch_closeout
 from agentic_project_kit.chat_bootloader import write_boot_report
 from agentic_project_kit.chat_bootloader import write_next_chat_bootstrap
 
@@ -41,3 +42,14 @@ def report(root: str = ".", path: str = "") -> None:
         typer.echo(f"WROTE {output_path}")
     else:
         typer.echo(render_boot_report(root))
+
+
+@boot_app.command("closeout")
+def closeout(root: str = ".") -> None:
+    findings = run_chat_switch_closeout(root)
+    if findings:
+        typer.echo("CHAT_SWITCH_CLOSEOUT: FAIL")
+        for finding in findings:
+            typer.echo(f"- {finding}")
+        raise typer.Exit(code=1)
+    typer.echo("CHAT_SWITCH_CLOSEOUT: PASS")
