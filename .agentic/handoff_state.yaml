@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-25'
-  reason: Refresh handoff state after PR762 rule-registry direct coverage closeout
-  source: main HEAD after PR762 merge verification
+  reason: Refresh handoff state after PR764 rule-registry completion reporting
+  source: main HEAD after PR764 merge verification
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: b22196a
-  commit_subject: Mark chat bootstrap drift rules as direct rule coverage (#762)
+  commit: c09f8d9
+  commit_subject: Report rule registry direct coverage completion explicitly (#764)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -66,6 +66,8 @@ safe_state:
   - 742
   - 761
   - 762
+  - 763
+  - 764
 release:
   current_version: 0.4.1
   previous_version: 0.4.0
@@ -77,18 +79,10 @@ release:
   post_release_evidence: docs/reports/terminal/v041-final-main-verify-after-pr689.log
 open_items:
   prs: []
-  next_expected_chat_action: Merge and verify the post-PR762 status/handoff closeout, then only add small rule-registry reporting/readability improvements if needed.
+  next_expected_chat_action: Merge and verify this post-PR764 status/handoff closeout, then resume documentation-management rebuild only through small additive documentation-registry or projection slices.
 completed_since_previous_handoff:
-- "PR #736 refreshed post-PR735 handoff state."
-- "PR #737 expanded the rule registry to evidence, typed-work-order, release-state, and post-release archive mechanisms."
-- "PR #738 removed an accidental placeholder evidence file."
-- "PR #739 hardened source/evidence validation for rule-registry entries."
-- "PR #740 added initial surfaces/tests metadata evidence without product changes."
-- "PR #741 populated surfaces and test metadata for active rule mechanisms."
-- "PR #742 made surfaces and tests metadata mandatory and validated test paths."
-- "PR #743 through PR #760 continued small rule-registry hardening and direct coverage preparation."
-- "PR #761 marked chat communication rules as direct rule coverage."
-- "PR #762 marked chat bootstrap/drift rules as direct rule coverage and cleared the direct-test follow-up plan."
+- "PR #763 refreshed status and handoff after the PR762 direct-coverage closeout."
+- "PR #764 added explicit rule-registry direct coverage completion reporting for JSON and human CLI reports."
 current_capabilities:
   ns_actions:
   - agent-next
@@ -101,6 +95,7 @@ current_capabilities:
   - handoff-check
   - governance-check
   - rule-registry check
+  - rule-registry report
   - patch-preflight
   - dev
   artifact_dirs:
@@ -125,9 +120,11 @@ current_capabilities:
     direct_test_plan: .agentic/rule_direct_test_plan.yaml
     validator: src/agentic_project_kit/rule_registry_validator.py
     cli: agentic-kit rule-registry check
+    report_cli: agentic-kit rule-registry report
+    report_completion_field: summary.direct_coverage_complete
     workflow_guard_pattern: rule-registry-drift
     patch_preflight: true
-    status: direct-coverage-closed
+    status: completion-reporting-closed
     mechanisms:
     - summary-renderer
     - execution-mode-switch
@@ -161,6 +158,9 @@ current_capabilities:
     - test coverage classification for every active mechanism
     - direct-test path validation
     - empty direct-test follow-up plan after PR762
+    reporting_checks:
+    - explicit JSON direct_coverage_complete field after PR764
+    - explicit human completion_status line after PR764
   workflow_hardening:
     remote_route_rule: GitHub connector direct-path-first for known paths, refs, PRs, and commits.
     yaml_mutation_rule: Use structured YAML mutation and parse validation.
@@ -247,18 +247,18 @@ recent_failure_patterns:
 - id: structured-summary-drift
   prevention: Verify canonical SUMMARY fields and consistency across WORK, EVIDENCE, OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and RESULT marker.
 next_allowed_tasks:
-- id: rule-registry-completion-reporting
-  title: Improve completed rule-registry report/readability only if the current CLI/report does not clearly show all active mechanisms as directly covered.
-  priority: 1
 - id: continue-documentation-registry-rebuild
-  title: After governed rule-registry closeout, continue the documentation-management rebuild with one small additive registry or projection slice.
+  title: After this closeout is merged and verified, continue the documentation-management rebuild with one small additive registry or projection slice.
+  priority: 1
+- id: verify-rule-registry-reporting
+  title: Verify rule-registry completion reporting remains pass/complete after local main sync.
   priority: 2
 blocked_until_closeout:
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
-- Broad documentation migration until post-PR762 closeout is merged and verified
+- Broad documentation migration until post-PR764 closeout is merged and verified
 - Release, tag, or DOI mutation
-first_instruction: Merge and verify the post-PR762 status/handoff closeout; then inspect rule-registry reporting before any broader documentation-management work.
+first_instruction: Merge and verify this post-PR764 status/handoff closeout; then continue documentation-management rebuild only through small additive documentation-registry or projection slices.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
@@ -267,7 +267,7 @@ handoff_maintenance:
   remove_obsolete_rules_when_system_changes: true
   latest_successor_prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr735.md
 administrative_evidence_state:
-  current_head: b22196a
-  current_head_subject: Mark chat bootstrap drift rules as direct rule coverage (#762)
+  current_head: c09f8d9
+  current_head_subject: Report rule registry direct coverage completion explicitly (#764)
   allowed_after_safe_state: true
-  reason: post-PR762 state refresh for governed rule registry direct coverage closeout
+  reason: post-PR764 state refresh for governed rule registry completion reporting closeout
