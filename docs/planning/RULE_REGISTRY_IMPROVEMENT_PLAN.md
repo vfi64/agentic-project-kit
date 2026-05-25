@@ -1,8 +1,8 @@
 # Rule Registry Improvement Plan
 
 Status-date: 2026-05-25
-Status: active planning
-Decision status: accepted backlog
+Status: active
+Decision status: accepted
 Review policy: Review after each documentation-registry foundation milestone and before introducing external policy engines.
 Project: agentic-project-kit
 
