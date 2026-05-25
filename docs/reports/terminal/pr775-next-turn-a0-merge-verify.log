@@ -1,0 +1,90 @@
+### START: MERGE PR775 AND VERIFY MAIN ###
+
+### SYNC MAIN ###
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### VERIFY PR STATE AND CHECKS ###
+{"headRefOid":"3dbd5b90151943b9ce52626627e4e10e021c78bd","mergeStateStatus":"CLEAN","mergeable":"MERGEABLE","state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-25T14:31:51Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26405648816/job/77728227282","name":"test","startedAt":"2026-05-25T14:31:26Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-25T14:31:50Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26405647186/job/77728223686","name":"test","startedAt":"2026-05-25T14:31:24Z","status":"COMPLETED","workflowName":"CI"}],"url":"https://github.com/vfi64/agentic-project-kit/pull/775"}
+CHECK_DECISION=green
+
+### MERGE PR ###
+
+### SYNC MAIN AFTER MERGE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   183c727..24eec15  main       -> origin/main
+Already on 'main'
+Your branch is behind 'origin/main' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Updating 183c727..24eec15
+Fast-forward
+ .../next-turn-a0-commit-current-green-state.log    |  90 ++++++++++++++
+ .../V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md    |   4 +-
+ ns                                                 |  11 ++
+ src/agentic_project_kit/next_turn_status.py        | 131 +++++++++++++++++++++
+ tests/test_next_turn_status.py                     |  54 +++++++++
+ 5 files changed, 289 insertions(+), 1 deletion(-)
+ create mode 100644 docs/reports/terminal/next-turn-a0-commit-current-green-state.log
+ create mode 100644 src/agentic_project_kit/next_turn_status.py
+ create mode 100644 tests/test_next_turn_status.py
+24eec15 Add next-turn A0 status and result lookup (#775)
+183c727 Plan next-turn workflow kernel (#774)
+92a8936 Fix PR772 planning lifecycle policy (#773)
+5b052b8 Plan post-v0.4.2 standard-error hardening (#772)
+06d6ea3 Record v0.4.2 post-release check log (#769)
+63eae14 Record v0.4.2 release publication evidence (#768)
+00236e1 Prepare v0.4.2 safety release metadata (#767)
+cf75340 Plan rule registry improvement backlog (#766)
+
+### VERIFY A0 ON MAIN ###
+NEXT_TURN_STATUS
+state=empty
+yaml_exists=false
+script_exists=false
+overwrite_allowed=true
+reason=no fixed-slot files exist
+evidence_lookup_order:
+- docs/reports/command_runs/next-turn-latest.json
+- docs/reports/command_runs/next-turn-latest.md
+- docs/reports/terminal/next-turn-latest.log
+- .agentic/commands/executed.jsonl
+### RESULT: PASS ###
+NEXT_TURN_LAST_RESULT
+status=FOUND
+path=.agentic/commands/executed.jsonl
+checked_paths:
+- docs/reports/command_runs/next-turn-latest.json
+- docs/reports/command_runs/next-turn-latest.md
+- docs/reports/terminal/next-turn-latest.log
+- .agentic/commands/executed.jsonl
+preview:
+{"command_id": "post707-state-refresh-v3", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "0d47e43ad9a42165ff3d86c8cd2e4db008da062c462ac5265001df2010ed27a8", "timestamp_utc": "2026-05-24T08:43:23.196541+00:00"}
+### RESULT: PASS ###
+.......                                                                  [100%]
+7 passed in 0.05s
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.2
+
+Overall: PASS
+
+### RECORD MERGE VERIFY LOG ###
