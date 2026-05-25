@@ -197,7 +197,8 @@ mechanisms:
   - chat-communication-contract
   - final-summary-contract
   - compiled-agent-context
-  tests: []
+  tests:
+  - tests/test_chat_communication_contract.py
 - id: chat-bootstrap-drift-rules
   status: active
   owner: chat-governance
