@@ -4,6 +4,7 @@ from agentic_project_kit.cli_commands.actions import actions_app
 from agentic_project_kit.cli_commands.boot import boot_app
 from agentic_project_kit.cli_commands.checks import register_check_commands
 from agentic_project_kit.cli_commands.cockpit import cockpit_app
+from agentic_project_kit.cli_commands.comm import comm_app
 from agentic_project_kit.cli_commands.evidence import app as evidence_app
 from agentic_project_kit.cli_commands.github import register_github_commands
 from agentic_project_kit.cli_commands.governance import governance_app
@@ -40,6 +41,7 @@ app.add_typer(workflow_guard_app, name="workflow-guard")
 app.add_typer(rule_registry_app, name="rule-registry")
 app.add_typer(handoff_app, name="handoff")
 app.add_typer(boot_app, name="boot")
+app.add_typer(comm_app, name="comm")
 app.add_typer(pass_already_done_app, name="pass-already-done")
 app.add_typer(actions_app, name="actions")
 app.add_typer(evidence_app, name="evidence")
