@@ -33,11 +33,14 @@ BOOTLOADER_RULES = (
 )
 
 NEXT_WORK_ITEMS = (
-    "Finish local sync after the bootloader/summary-runner merge.",
+    "Finish local sync after the bootloader/summary-runner merge and verify boot write/check plus targeted tests.",
     "Use boot write to refresh docs/handoff/NEXT_CHAT_BOOTSTRAP.md before chat changes.",
     "Harden no-op/PASS_ALREADY_DONE handling for already satisfied target states.",
     "Harden d/f semantics through repo evidence instead of chat discipline.",
     "Automate red CI failed-log diagnosis in the repo workflow path.",
+    "Resume Rule Registry Phase A only in small PRs: typed schema, generated projections, stronger assertions, query/impact analysis, and documentation integration.",
+    "Continue the document-management projection system: move operative truth into machine-readable sources and keep Markdown as generated or verified projection where possible.",
+    "Postpone GUI work until the workflow kernel, no-op handling, d/f semantics, and red-CI diagnosis are stable.",
 )
 
 
