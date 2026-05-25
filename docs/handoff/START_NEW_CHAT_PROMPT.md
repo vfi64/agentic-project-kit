@@ -14,6 +14,7 @@ required_terms:
   - compiled_agent_context.yaml
   - Rule Registry
   - boot write
+  - evidence inspect
   - PASS_ALREADY_DONE
   - d/f
   - red CI
@@ -65,8 +66,8 @@ Report briefly:
 Important:
 
 - d, f, and w are communication signals, not evidence.
-- On d, inspect logs and repo state before treating the previous action as success.
-- On f, inspect remote or repo evidence before asking for pasted terminal output.
+- After d, f, w, or any other short chat control signal, run `agentic-kit evidence inspect` locally or inspect equivalent committed remote/repo evidence before continuing.
+- Do not ask for pasted terminal output before checking available repo or remote evidence.
 - Do not mutate product state before full boot verification.
 - Protected YAML, JSON, and Markdown control files require protected change planning.
 - Evidence-bearing workflows must use the structured summary renderer or Python workflow summary runner.

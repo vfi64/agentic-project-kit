@@ -14,6 +14,7 @@ required_terms:
   - compiled_agent_context.yaml
   - Rule Registry
   - boot write
+  - evidence inspect
   - PASS_ALREADY_DONE
   - d/f
   - red CI
@@ -61,14 +62,14 @@ Steps:
    - Rule Registry and document-management work,
    - GUI deferral,
    - no-op / PASS_ALREADY_DONE,
-   - d/f semantics,
+   - evidence inspect after d/f/w or any short chat control signal,
    - red CI failed-log diagnosis.
 
 3. If any file is stale:
    - build a small PR that only updates bootstrap/handoff prompt state,
    - use agentic-kit boot write or write_next_chat_bootstrap() where applicable,
    - update docs/handoff/START_NEW_CHAT_PROMPT.md and docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md if their contracts or prompt wording changed,
-   - run targeted tests for chat boot, workflow summary runner, run summary renderer, and any affected handoff/governance tests,
+   - run targeted tests for chat boot, evidence inspector, workflow summary runner, run summary renderer, and any affected handoff/governance tests,
    - wait for CI,
    - if CI is red, fetch failed job logs in the same diagnostic path,
    - merge only after green CI.
