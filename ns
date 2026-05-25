@@ -24,6 +24,7 @@ if [ "${1:-}" = "pr-status" ]; then
   exit $?
 fi
 
+
 if [ "${1:-}" = "next-turn-evidence" ]; then
   shift
   PYTHONPATH=src "$PY" -m agentic_project_kit.next_turn_evidence "$@"
@@ -85,3 +86,361 @@ if [ "${1:-}" = "gui" ]; then
   PYTHONPATH=src "$PY" -m agentic_project_kit.gui_dry_run "$@"
   exit $?
 fi
+
+if [ "${1:-}" = "comm-check" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.communication_state check "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "comm-next-summary" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.communication_state next-summary "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "summary" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.run_summary_renderer "$@"
+  exit $?
+fi
+if [ "${1:-}" = "mode-check" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli state mode-check "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "mode-write" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli state mode-write "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "action-list" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli actions list "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "action-show" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli actions show "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-refresh" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli handoff refresh "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-show" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli handoff show
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-check" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli handoff check
+  exit $?
+fi
+
+if [ "${1:-}" = "handoff-prompt" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli handoff prompt
+  exit $?
+fi
+
+if [ "${1:-}" = "run-logged" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging run-logged "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-status" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-status
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-upload" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-upload
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-finalize" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-finalize "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-clean-check" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-clean-check
+  exit $?
+fi
+
+if [ "${1:-}" = "terminal-remote-preflight" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.terminal_logging terminal-remote-preflight
+  exit $?
+fi
+
+
+if [ "${1:-}" = "evidence-guard" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli evidence guard "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "patch-preflight" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli patch-preflight "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "artifact-gc" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.communication_artifact_gc "$@"
+  exit $?
+fi
+
+
+
+
+if [ "${1:-}" = "evidence-clean-check" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli evidence clean-check "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "typed-next" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli work-order typed-next "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "typed-queue-status" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli work-order typed-queue-status "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "typed-run" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli work-order typed-run "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "command-inbox-check" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.command_inbox_check
+  exit $?
+fi
+if [ "${1:-}" = "agent-next" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.agent_command_runner next
+  exit $?
+fi
+
+if [ "${1:-}" = "agent-run" ]; then
+  PYTHONPATH=src "$PY" -m agentic_project_kit.agent_command_runner
+  exit $?
+fi
+
+
+if [ "${1:-}" = "cockpit-readiness" ]; then
+  PYTHONPATH=src "$PY" tools/cockpit_readiness.py
+  exit $?
+fi
+
+set -eu
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+cd "$SCRIPT_DIR"
+if [ "${1:-}" = "cockpit" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit cockpit status "$@"
+    exit $?
+  fi
+  agentic-kit cockpit status "$@"
+  exit $?
+fi
+if [ "${1:-}" = "actions" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit cockpit actions "$@"
+    exit $?
+  fi
+  agentic-kit cockpit actions "$@"
+  exit $?
+fi
+if [ "${1:-}" = "select" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit cockpit select "$@"
+    exit $?
+  fi
+  agentic-kit cockpit select "$@"
+  exit $?
+fi
+if [ "${1:-}" = "cockpit-run" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit cockpit run "$@"
+    exit $?
+  fi
+  agentic-kit cockpit run "$@"
+  exit $?
+fi
+if [ "${1:-}" = "state" ] || [ "${1:-}" = "status" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow state "$@"
+    exit $?
+  fi
+  agentic-kit workflow state "$@"
+  exit $?
+fi
+if [ "${1:-}" = "list" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow list "$@"
+    exit $?
+  fi
+  agentic-kit workflow list "$@"
+  exit $?
+fi
+if [ "${1:-}" = "show" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow show "$@"
+    exit $?
+  fi
+  agentic-kit workflow show "$@"
+  exit $?
+fi
+if [ "${1:-}" = "run" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow run "$@"
+    exit $?
+  fi
+  agentic-kit workflow run "$@"
+  exit $?
+fi
+if [ "${1:-}" = "release-prep" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.release_prep_core "$@"
+  exit $?
+fi
+if [ "${1:-}" = "release-gate" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.release_gate_core "$@"
+  exit $?
+fi
+if [ "${1:-}" = "release-publish" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.release_publish_core "$@"
+  exit $?
+fi
+if [ "${1:-}" = "release-verify" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.release_verify_core "$@"
+  exit $?
+fi
+if [ "${1:-}" = "finalize-guard" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.finalize_guard "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "clean-evidence" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli evidence clean "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "commit-guard" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.commit_guard "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "pr-cleanup" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.pr_cleanup "$@"
+  exit $?
+fi
+if [ "${1:-}" = "slice-runner" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.ns_slice_runner "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "dev" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.local_feature_gate --include-pr-hygiene "$@"
+  exit $?
+fi
+ if [ "${1:-}" = "go" ]; then
+  shift
+  BRANCH="$(git branch --show-current 2>/dev/null)"
+  DIRTY="$(git status --short 2>/dev/null)"
+  if [ "$BRANCH" != "main" ] && [ -n "$DIRTY" ] && grep -q "git_pull_ff_only" .agentic/current_work.yaml 2>/dev/null; then
+    printf '
+### NS GO GUARD ###
+'
+    printf 'Refusing governed workflow go on a dirty feature branch because current_work includes git_pull_ff_only.
+'
+    printf 'Use ./ns dev for local feature gates, or clean the branch before ./ns go.
+'
+    printf '
+### RESULT: FAIL ###
+'
+    exit 2
+  fi
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow go "$@"
+    exit $?
+  fi
+  agentic-kit workflow go "$@"
+  exit $?
+fi
+if [ "${1:-}" = "up" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.ns_up_pr_completion "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "upload" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow upload "$@"
+    exit $?
+  fi
+  agentic-kit workflow upload "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "fail" ]; then
+  shift
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit workflow fail-report "$@"
+    exit $?
+  fi
+  agentic-kit workflow fail-report "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "check-docs" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli check-docs "$@"
+  exit $?
+fi
+
+if [ "${1:-}" = "doctor" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.cli doctor "$@"
+  exit $?
+fi
+
+if [ -x ".venv/bin/python" ]; then
+  "$PY" tools/next-step.py "$@"
+fi
+"$PY" tools/next-step.py "$@"
+
+# no-copy workflow shortcuts: ./ns dev, ./ns go, ./ns up
