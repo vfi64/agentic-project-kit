@@ -67,6 +67,18 @@ GUI MVP baseline:
 - Tkinter is explicitly deferred until these contracts pass gates.
 - Communication artifact GC hardening is now part of the pre-GUI baseline.
 
+## A1 State Refresh Addendum
+
+Remote main is refreshed after Protected Change Planner A1.
+
+- Current verified main HEAD: `c07f8ece568501771849bd922aefd1f8ed169ff6`.
+- PR #791 `Expose protected change planner through ns` is merged.
+- `./ns protected-change-plan --diff-file <file>` is available as a read-only route.
+- A1 verification evidence: `docs/reports/terminal/protected-change-planner-a1-merge-verify.log`.
+- The A1 verification log contains an expected negative planner smoke that prints `### RESULT: FAIL ###`; this is not an unresolved gate failure, but it exposes the next standard-error hardening target: expected negative smokes must not look like final workflow failures.
+
+Next safe slice: harden final-summary and expected-negative-smoke reporting so each workflow has exactly one canonical final SUMMARY and expected blocking tests are clearly scoped.
+
 ## Current Goal
 
 Prepare and publish the v0.4.2 safety release after the governed rule-registry baseline and accepted improvement backlog. Documentation-management rebuild work resumes only after release and successor-chat handoff closeout.
