@@ -18,6 +18,13 @@ resolve_python() {
 
 PY="$(resolve_python || true)"
 
+if [ "${1:-}" = "pr-status" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.next_turn_pr_status "$@"
+  exit $?
+fi
+
+
 if [ "${1:-}" = "next-turn-evidence" ]; then
   shift
   PYTHONPATH=src "$PY" -m agentic_project_kit.next_turn_evidence "$@"
