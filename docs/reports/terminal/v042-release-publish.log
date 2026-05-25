@@ -1,0 +1,202 @@
+V0.4.2 RELEASE PUBLISH -- TAG AND GITHUB RELEASE -- LOGGED
+
+### SYNC MAIN ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+00236e1e5242f9da8adf853219995ed702fdbd18
+00236e1 Prepare v0.4.2 safety release metadata (#767)
+cf75340 Plan rule registry improvement backlog (#766)
+c7c31cd Refresh handoff after rule registry completion reporting (#765)
+c09f8d9 Report rule registry direct coverage completion explicitly (#764)
+6b706b9 Refresh status after rule registry direct coverage closeout (#763)
+b22196a Mark chat bootstrap drift rules as direct rule coverage (#762)
+01b1d19 Mark chat communication rules as direct rule coverage (#761)
+21a9327 Mark portable execution rules as direct rule coverage (#760)
+
+### CLEAN PRECHECK ###
+
+### VERIFY EXPECTED RELEASE METADATA ###
+7:version = "0.4.2"
+1:__version__ = "0.4.2"
+1:## v0.4.2 - 2026-05-25
+483:Version `0.4.2` is the current release line prepared as a safety baseline after the governed rule-registry completion baseline and before the next successor-chat/documentation-management continuation.
+484:Current verified release: `v0.4.1` with Zenodo version DOI `10.5281/zenodo.20357657`.
+51:version: 0.4.2
+8:Current version: 0.4.2
+8:Current version: 0.4.2
+
+### RELEASE PREFLIGHT ###
+Release state check for target v0.4.2
+
+[PASS] semantic version: 0.4.2 is valid
+[PASS] pyproject version: found text: version = "0.4.2"
+[PASS] package __version__: found text: __version__ = "0.4.2"
+[PASS] CHANGELOG version: found text: v0.4.2
+[PASS] README version: found text: Version `0.4.2`
+[PASS] CITATION version: found text: version: 0.4.2
+[PASS] STATUS version: found text: Current version: 0.4.2
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.4.2
+[PASS] local tag unused: tag is unused: v0.4.2
+[PASS] remote tag unused: remote tag is unused: v0.4.2
+[PASS] GitHub release unused: GitHub release is absent: v0.4.2
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 19
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 4
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+
+Agentic project check passed
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Dokumentationsregistry
+- registry=docs/DOCUMENTATION_REGISTRY.yaml
+- version=1
+- documents=19
+- broad_migration_allowed=False
+- class:architecture=1
+- class:evidence/log=2
+- class:generated artifact=1
+- class:governance/system=4
+- class:operational/automation=4
+- class:planning=4
+- class:release=2
+- class:user-facing description=1
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
+Rule registry validation passed
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 19
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 4
+- class:release: 2
+- class:user-facing description: 1
+........................................................................ [  6%]
+........................................................................ [ 13%]
+........................................................................ [ 20%]
+........................................................................ [ 27%]
+........................................................................ [ 34%]
+........................................................................ [ 41%]
+........................................................................ [ 48%]
+........................................................................ [ 55%]
+........................................................................ [ 62%]
+........................................................................ [ 69%]
+........................................................................ [ 76%]
+........................................................................ [ 83%]
+........................................................................ [ 90%]
+........................................................................ [ 97%]
+.....................                                                    [100%]
+1029 passed in 6.35s
+All checks passed!
+
+### BUILD RELEASE ASSETS ###
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for sdist...
+* Building sdist...
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for wheel...
+* Building wheel...
+Successfully built agentic_project_kit-0.4.2.tar.gz and agentic_project_kit-0.4.2-py3-none-any.whl
+total 4448
+drwxr-xr-x@  4 hof  staff      128 25 Mai  11:18 .
+drwxr-xr-x@ 31 hof  staff      992 25 Mai  11:18 ..
+-rw-r--r--@  1 hof  staff   196057 25 Mai  11:18 agentic_project_kit-0.4.2-py3-none-any.whl
+-rw-r--r--@  1 hof  staff  2076761 25 Mai  11:18 agentic_project_kit-0.4.2.tar.gz
+
+### VERIFY TAG AND RELEASE ABSENT ###
+
+### WRITE RELEASE NOTES ###
+# agentic-project-kit v0.4.2
+
+Safety release after the governed rule-registry completion baseline.
+
+Highlights:
+- preserves the completed rule-registry baseline and direct coverage reporting;
+- records the accepted rule-registry improvement backlog;
+- prepares the repository for successor-chat closeout before resuming documentation-management work;
+- includes release metadata, documentation, governance, test, lint, and package-build verification.
+
+Zenodo version DOI verification is pending until archive processing completes. Concept DOI: 10.5281/zenodo.20101359.
+
+### CREATE AND PUSH TAG ###
+To github.com:vfi64/agentic-project-kit.git
+ * [new tag]         v0.4.2 -> v0.4.2
+
+### CREATE GITHUB RELEASE ###
+https://github.com/vfi64/agentic-project-kit/releases/tag/v0.4.2
+
+### VERIFY GITHUB RELEASE ###
+{"assets":[{"apiUrl":"https://api.github.com/repos/vfi64/agentic-project-kit/releases/assets/429220964","contentType":"application/octet-stream","createdAt":"2026-05-25T09:18:38Z","digest":"sha256:7811cc769bfcb5412148dd194f463373e99236eca212e255c5cb648a84c003a4","downloadCount":0,"id":"RA_kwDOSYo5m84ZlWRk","label":"","name":"agentic_project_kit-0.4.2-py3-none-any.whl","size":196057,"state":"uploaded","updatedAt":"2026-05-25T09:18:38Z","url":"https://github.com/vfi64/agentic-project-kit/releases/download/v0.4.2/agentic_project_kit-0.4.2-py3-none-any.whl"},{"apiUrl":"https://api.github.com/repos/vfi64/agentic-project-kit/releases/assets/429220966","contentType":"application/x-gtar","createdAt":"2026-05-25T09:18:38Z","digest":"sha256:c47260fc6f9d461846d1ec4882f06400240ea7603227ef9221bbe155f5a0dbb8","downloadCount":0,"id":"RA_kwDOSYo5m84ZlWRm","label":"","name":"agentic_project_kit-0.4.2.tar.gz","size":2076761,"state":"uploaded","updatedAt":"2026-05-25T09:18:39Z","url":"https://github.com/vfi64/agentic-project-kit/releases/download/v0.4.2/agentic_project_kit-0.4.2.tar.gz"}],"isDraft":false,"isPrerelease":false,"name":"v0.4.2","tagName":"v0.4.2","url":"https://github.com/vfi64/agentic-project-kit/releases/tag/v0.4.2"}
+
+### POST-RELEASE CHECK INITIAL ###
+Post-release check for target v0.4.2
+
+[PASS] GitHub release: GitHub release exists: v0.4.2
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[WAITING] Zenodo version DOI: no verified Zenodo record found yet for v0.4.2; leave README/CITATION unchanged
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 19
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 4
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+
+
+### COPY TERMINAL EVIDENCE INTO REPO ON RELEASE-EVIDENCE BRANCH ###
+Switched to a new branch 'release/v0.4.2-publish-evidence'
