@@ -1,7 +1,7 @@
 # Next-Turn A0 Standard Error Additions
 
 Status-date: 2026-05-25
-Status: active addendum
+Status: active
 Decision status: accepted
 Review policy: Review together with `docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md` before Slice A1.
 
