@@ -120,8 +120,13 @@ def validate_rendered_summary_text(text: str) -> list[str]:
     for token in REQUIRED_RENDERED_TOKENS:
         if token not in text:
             findings.append(f"missing summary token: {token.strip()}")
+    summary_headers = [line for line in text.splitlines() if line.startswith("SUMMARY COMM-")]
+    if len(summary_headers) != 1:
+        findings.append(f"invalid summary count: {len(summary_headers)}")
     result_values = [line.split(":", 1)[1].strip() for line in text.splitlines() if line.strip().startswith("OVERALL:")]
     marker_values = [line.replace("### RESULT:", "").replace("###", "").strip() for line in text.splitlines() if line.startswith("### RESULT:")]
+    if len(marker_values) != 1:
+        findings.append(f"invalid result marker count: {len(marker_values)}")
     if result_values and marker_values and result_values[-1] != marker_values[-1]:
         findings.append("contradictory summary marker")
     for bad in ("  REMOTE_EVIDENCE: NONE", "  REMOTE_EVIDENCE: CHAT_ONLY", "  REMOTE_EVIDENCE: PENDING"):
