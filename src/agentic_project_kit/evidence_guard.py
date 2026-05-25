@@ -19,6 +19,8 @@ FAIL_MARKERS = (
     "ERROR collecting",
 )
 
+EXPECTED_NEGATIVE_SMOKE_START = "### EXPECTED NEGATIVE SMOKE START ###"
+EXPECTED_NEGATIVE_SMOKE_DONE = "### EXPECTED NEGATIVE SMOKE DONE ###"
 EXPECTED_NEGATIVE_SMOKE_MARKERS = (
     "PASS: false-pass log was rejected",
     "PASS: ns evidence-guard rejected false-PASS log",
@@ -55,7 +57,17 @@ def last_result_marker(text: str) -> str:
     return result
 
 def _is_expected_negative_smoke_log(text: str) -> bool:
+    if EXPECTED_NEGATIVE_SMOKE_START not in text or EXPECTED_NEGATIVE_SMOKE_DONE not in text:
+        return False
+    if text.count(EXPECTED_NEGATIVE_SMOKE_START) != text.count(EXPECTED_NEGATIVE_SMOKE_DONE):
+        return False
     return any(marker in text for marker in EXPECTED_NEGATIVE_SMOKE_MARKERS)
+
+def _has_unscoped_expected_negative_smoke_marker(text: str) -> bool:
+    has_marker = any(marker in text for marker in EXPECTED_NEGATIVE_SMOKE_MARKERS)
+    if not has_marker:
+        return False
+    return EXPECTED_NEGATIVE_SMOKE_START not in text or EXPECTED_NEGATIVE_SMOKE_DONE not in text
 
 def _normalize_paths(paths: list[str] | tuple[str, ...]) -> tuple[str, ...]:
     return tuple(path.strip() for path in paths if path.strip())
@@ -95,6 +107,8 @@ def check_terminal_log(path: Path) -> EvidenceGuardResult:
     fail_hits = [marker for marker in FAIL_MARKERS if marker in text]
     if final_result == "UNKNOWN":
         findings.append("missing final result marker")
+    if _has_unscoped_expected_negative_smoke_marker(text):
+        findings.append("expected negative smoke markers must be scoped with START/DONE markers")
     if final_result == "PASS" and fail_hits and not _is_expected_negative_smoke_log(text):
         findings.append("final PASS conflicts with earlier failure markers: " + ", ".join(fail_hits))
     return EvidenceGuardResult(ok=not findings, path=path, final_result=final_result, findings=tuple(findings))
