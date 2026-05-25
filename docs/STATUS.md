@@ -1,11 +1,11 @@
-<!-- post-pr764-rule-registry-completion-reporting-closeout -->
+<!-- v042-safety-release-prep -->
 # Project Status
 
 Status-date: 2026-05-25
 Project: agentic-project-kit
 Primary branch: main
 Current work branch: main
-Current version: 0.4.1
+Current version: 0.4.2
 
 ## Purpose
 
@@ -21,20 +21,20 @@ This document is a concise pointer, not a duplicate rule book. Machine guard: `a
 
 ## Current State
 
-Current released version: 0.4.1.
-Current release tag: v0.4.1.
+Prepared release: 0.4.2.
+Prepared release tag: v0.4.2.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
-Post-release Zenodo verification is covered by `agentic-kit post-release-check --version 0.4.1`; post-release Zenodo remains a guarded release-state anchor.
+Previous verified Zenodo version DOI: `10.5281/zenodo.20357657`.
+v0.4.2 GitHub Release publication and post-release Zenodo verification are pending; previous v0.4.1 verification remains the current verified DOI anchor until post-release closeout. The guarded command remains `agentic-kit post-release-check --version 0.4.2` after GitHub Release publication and archive processing.
 
-Post-PR764 closeout target:
-- Main is refreshed after PR #764 at `c09f8d9` (`Report rule registry direct coverage completion explicitly (#764)`).
+v0.4.2 safety-release target:
+- Main is refreshed after PR #766 at `cf75340` (`Plan rule registry improvement backlog (#766)`).
 - PRs #718-#764 established and closed out the governed rule-registry direct-coverage baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, deterministic metadata/conflict/completeness checks, direct test coverage for all active mechanisms, an empty direct-test follow-up plan, and explicit machine-readable plus human-readable completion reporting.
 - The governed rule registry currently covers twelve active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check.
 - Rule registry drift is checked through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight.
 - Rule registry completion is now explicitly reportable through `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json`; the JSON summary includes `direct_coverage_complete`.
 - Evidence is preserved in committed terminal logs including `docs/reports/terminal/pr737-rule-registry-release-evidence.log`, `docs/reports/terminal/pr739-rule-registry-source-evidence-validation.log`, `docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log`, `docs/reports/terminal/pr741-rule-registry-surfaces-tests-inventory-recovery.log`, `docs/reports/terminal/pr742-rule-registry-surfaces-tests-validation.log`, `docs/reports/terminal/pr761-chat-communication-direct-coverage.log`, `docs/reports/terminal/pr762-chat-bootstrap-drift-direct-coverage.log`, and `docs/reports/terminal/pr764-rule-registry-completion-reporting.log`.
-- Next immediate task: merge and verify this post-PR764 status/handoff closeout. After that, broad documentation-management rebuild may resume only as small additive, test-backed documentation-registry/projection slices.
+- Next immediate task: merge and verify v0.4.2 release metadata, publish the v0.4.2 tag/release, then run post-release verification before opening the successor-chat handoff.
 
 Documentation registry baseline:
 - `docs/DOCUMENTATION_REGISTRY.yaml` is the additive machine-readable registry.
@@ -69,7 +69,7 @@ GUI MVP baseline:
 
 ## Current Goal
 
-Close out the governed rule-registry completion-reporting baseline after PR764. After closeout, the next small slice may resume documentation-management rebuild work as an additive documentation-registry or projection improvement. Release, tag, DOI mutation, and GUI expansion remain out of scope.
+Prepare and publish the v0.4.2 safety release after the governed rule-registry baseline and accepted improvement backlog. Documentation-management rebuild work resumes only after release and successor-chat handoff closeout.
 
 ## Active Workflow Rules
 
@@ -143,4 +143,4 @@ Required gate set for current-state, handoff, or governance-summary changes:
 
 ## Next Safe Step
 
-Merge and verify this post-PR764 status/handoff closeout. After that, continue the documentation-management rebuild only through small additive documentation-registry or projection slices. Keep release, tag, DOI mutation, and GUI expansion out of the next PR.
+Merge and verify v0.4.2 release metadata, then publish the v0.4.2 tag/release and run post-release checks. After release closeout, start a new chat with a detailed handoff before resuming documentation-management work.

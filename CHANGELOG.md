@@ -1,3 +1,13 @@
+## v0.4.2 - 2026-05-25
+
+- Release: prepare a safety release after the governed rule-registry completion baseline and before successor-chat/documentation-management continuation.
+- Governance: preserve the completed rule-registry baseline, including mechanism inventory, migration map, coverage map, direct-test plan, validator, CLI check/report, workflow-guard integration, and patch-preflight integration.
+- Planning: carry forward the accepted rule-registry improvement backlog without blocking the next documentation-registry/projection slices.
+- Evidence: release-check, documentation gates, registry checks, tests, linting, and package build are expected before tag publication.
+
+Zenodo verification pending until GitHub Release publication and archive processing.
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
 ## v0.4.1 - 2026-05-23
 
 - Release: freeze the current functioning documentation-governance baseline before the Document and Artifact Governance OS rebuild.

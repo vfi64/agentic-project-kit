@@ -1,11 +1,11 @@
-<!-- post-pr764-rule-registry-completion-reporting-closeout -->
+<!-- v042-safety-release-prep -->
 # Current Handoff
 
 Status-date: 2026-05-25
 Project: agentic-project-kit
 Branch: main
 Base branch: main
-Current version: 0.4.1
+Current version: 0.4.2
 
 ## Purpose
 
@@ -13,21 +13,21 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 
 ## Current State
 
-- Current released version: 0.4.1.
-- Current release tag: v0.4.1.
+- Prepared release: 0.4.2.
+- Prepared release tag: v0.4.2.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
-- Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
-- Main is refreshed after PR #764 at `c09f8d9`.
+- Previous verified Zenodo version DOI: `10.5281/zenodo.20357657`; v0.4.2 Zenodo verification is pending until post-release closeout.
+- Main is refreshed after PR #766 at `cf75340`.
 - PRs #718-#764 established and closed out the governed rule-registry direct-coverage baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, deterministic metadata/conflict/completeness checks, direct test coverage for all active mechanisms, an empty direct-test follow-up plan, and explicit machine-readable plus human-readable completion reporting.
 - Evidence: `docs/reports/terminal/pr737-rule-registry-release-evidence.log`, `docs/reports/terminal/pr739-rule-registry-source-evidence-validation.log`, `docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log`, `docs/reports/terminal/pr741-rule-registry-surfaces-tests-inventory-recovery.log`, `docs/reports/terminal/pr742-rule-registry-surfaces-tests-validation.log`, `docs/reports/terminal/pr761-chat-communication-direct-coverage.log`, `docs/reports/terminal/pr762-chat-bootstrap-drift-direct-coverage.log`, and `docs/reports/terminal/pr764-rule-registry-completion-reporting.log`.
 
 ## Current Repository State
 
-Safe state is main after PR764. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers twelve active mechanisms with category, priority, enforcement_phase, owner, conflict_domains, surfaces, tests, coverage classification, migration-map completeness, and direct-test coverage for all active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check. `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json` now expose explicit direct-coverage completion state. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked unless a new slice explicitly scopes them. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
+Safe state is main after PR766 and before v0.4.2 release publication. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers twelve active mechanisms with category, priority, enforcement_phase, owner, conflict_domains, surfaces, tests, coverage classification, migration-map completeness, and direct-test coverage for all active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check. `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json` now expose explicit direct-coverage completion state. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked unless a new slice explicitly scopes them. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
 
 ## Current Goal
 
-Close out the governed rule-registry completion-reporting baseline after PR764. After closeout, the next small slice may resume documentation-management rebuild work as an additive documentation-registry or projection improvement.
+Prepare and publish the v0.4.2 safety release, then start a successor chat before resuming documentation-management rebuild work.
 
 ## Current Baselines
 
@@ -68,7 +68,7 @@ Run state-freshness-check, handoff-check, governance-check, rule-registry check,
 
 ## Next Safe Step
 
-Merge and verify this post-PR764 status/handoff closeout. After that, continue the documentation-management rebuild only through small additive documentation-registry or projection slices. Keep release, tag, DOI mutation, and GUI expansion out of the next PR.
+Merge and verify v0.4.2 release metadata, publish the v0.4.2 tag/release, run post-release checks, and then prepare a detailed successor-chat handoff.
 
 ## Source of Truth
 
