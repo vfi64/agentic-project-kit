@@ -2,17 +2,11 @@ from __future__ import annotations
 
 from typing import Any
 
+from agentic_project_kit.chat_bootloader import MANDATORY_BOOT_SOURCES
 from agentic_project_kit.handoff_state import active_rules
 
-MANDATORY_SUCCESSOR_CHAT_SOURCES = [
-    ".agentic/compiled_agent_context.yaml",
-    "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-    "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-    "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-    "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
+MANDATORY_SUCCESSOR_CHAT_SOURCES = list(MANDATORY_BOOT_SOURCES) + [
     "docs/TEST_GATES.md",
-    "docs/STATUS.md",
-    "docs/handoff/CURRENT_HANDOFF.md",
     "relevant source files and tests for the requested slice",
 ]
 
@@ -118,6 +112,10 @@ def render_handoff_prompt(data: dict[str, Any]) -> str:
     lines.extend(_bullet_lines(MANDATORY_SUCCESSOR_CHAT_SOURCES))
     lines.extend([
         "",
+        "## 4a. Bootloader",
+        "",
+        "Beim Chatwechsel zuerst den Bootloader ausführen: `agentic-kit boot prompt` oder `./ns chat-bootloader`.",
+        "",
         "## 5. Kommunikations- und Summary-Regeln",
         "",
         "User-Kürzel sind Kommunikationssignale, keine Evidence:",
@@ -172,10 +170,11 @@ def render_handoff_prompt(data: dict[str, Any]) -> str:
         "",
         "## 14. Arbeitsmodus für den Nachfolge-Chat",
         "",
-        "1. Lies zuerst alle Pflichtquellen aus Abschnitt 4.",
-        "2. Rekonstruiere den aktuellen Stand aus Repo, PR/CI, Logs und Summary, nicht aus Chat-Erinnerung.",
-        "3. Prüfe Drift zwischen Regeln, Tests, Summary-Renderer, Status und Handoff.",
-        "4. Bei Drift: warnen, keine Produktmutation, Handoff-Prompt oder Drift-Fix anbieten.",
-        "5. Arbeite nur in kleinen, testbaren Slices mit ehrlicher Evidence.",
+        "1. Führe zuerst den Bootloader aus.",
+        "2. Lies danach alle Pflichtquellen aus Abschnitt 4.",
+        "3. Rekonstruiere den aktuellen Stand aus Repo, PR/CI, Logs und Summary, nicht aus Chat-Erinnerung.",
+        "4. Prüfe Drift zwischen Regeln, Tests, Summary-Renderer, Status und Handoff.",
+        "5. Bei Drift: warnen, keine Produktmutation, Handoff-Prompt oder Drift-Fix anbieten.",
+        "6. Arbeite nur in kleinen, testbaren Slices mit ehrlicher Evidence.",
     ])
     return "\n".join(lines).rstrip() + "\n"
