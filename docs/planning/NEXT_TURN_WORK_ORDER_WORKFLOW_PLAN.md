@@ -415,7 +415,8 @@ Later targets:
 
 The assistant must guide the next implementation work in this order:
 
-1. implement the minimal `next-turn` state machine, fixed slot, structured result, and ledger;
+1. implement Slice A0: `./ns next-turn --status` and `./ns last-result` before adding any execution power;
+2. implement the minimal `next-turn` state machine, fixed slot, structured result, and ledger;
 2. add capability and safety-class enforcement for read-only versus mutation work;
 3. add minimal recovery commands: `last-result`, `evidence-status`, and recovery messages;
 4. add workflow simulation tests for repeated known failures;
@@ -461,6 +462,39 @@ The manifest should list commands, labels, safety class, GUI availability, requi
 - add result/evidence lookup order to the assistant-facing docs;
 - add tests for missing evidence recovery messages;
 - verify the plan does not require paid model APIs.
+
+### Slice A0: Status and result lookup before execution
+
+This is the first implementation slice because it stabilizes the chat-to-repo feedback loop before adding any new execution power.
+
+Required commands:
+
+- `./ns next-turn --status`;
+- `./ns last-result`.
+
+`./ns next-turn --status` must report:
+
+- whether `.agentic/commands/next-turn.yaml` exists;
+- whether `.agentic/commands/next-turn.py` exists;
+- the detected state: `empty`, `prepared`, `running`, `completed`, `failed`, `blocked`, or `recovery_needed`;
+- whether the fixed slot may be overwritten;
+- which result and evidence paths will be checked after `d` or `f`.
+
+`./ns last-result` must check, in order:
+
+1. `docs/reports/command_runs/next-turn-latest.json`;
+2. `docs/reports/command_runs/next-turn-latest.md`;
+3. `docs/reports/terminal/next-turn-latest.log`;
+4. `.agentic/commands/executed.jsonl`.
+
+If no result exists, it must print `NO_RESULT_FOUND`, list checked paths, and give a recovery instruction. This is not a product failure; it is the expected clean state before the first runner execution.
+
+Acceptance for Slice A0:
+
+- no remote mutation is required by the implemented commands;
+- no work-order execution is added yet;
+- tests cover empty state, partial slot state, and no-result lookup;
+- the assistant can use `./ns last-result` output as the first response step after `d` or `f`.
 
 ### Slice A: State-machine skeleton
 
@@ -529,3 +563,4 @@ The manifest should list commands, labels, safety class, GUI availability, requi
 - Successor work follows the guidance priority before returning to documentation-management implementation.
 - The assistant does not treat semantic quality judgments as deterministic gates.
 - Recovery and incident states are implemented before relying on `d`/`f` for routine operation.
+- The first implementation slice is Slice A0: status and result lookup before execution power is added.
