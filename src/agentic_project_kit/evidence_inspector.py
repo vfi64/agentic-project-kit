@@ -5,6 +5,9 @@ from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 
+from agentic_project_kit.run_summary_renderer import SummaryPayload
+from agentic_project_kit.run_summary_renderer import validate_summary_data
+
 PASS_MARKER = "### RESULT: PASS ###"
 FAIL_MARKER = "### RESULT: FAIL ###"
 LATEST_TERMINAL_POINTER = Path("docs/reports/terminal/LATEST_TERMINAL_LOG.txt")
@@ -23,16 +26,29 @@ class EvidenceVerdict(str, Enum):
 class ParsedSummary:
     found: bool
     valid: bool
-    work: str = ""
-    evidence: str = ""
-    overall: str = ""
-    remote_evidence: str = ""
-    terminal_log: str = ""
-    terminal_log_remote: str = ""
-    command_report: str = ""
-    chat_reply: str = ""
+    payload: SummaryPayload = SummaryPayload()
     result_marker: str = ""
     findings: tuple[str, ...] = ()
+
+    @property
+    def work(self) -> str:
+        return self.payload.work
+
+    @property
+    def evidence(self) -> str:
+        return self.payload.evidence
+
+    @property
+    def overall(self) -> str:
+        return self.payload.overall
+
+    @property
+    def remote_evidence(self) -> str:
+        return self.payload.remote_evidence
+
+    @property
+    def chat_reply(self) -> str:
+        return self.payload.chat_reply or self.payload.next
 
     @property
     def overall_pass(self) -> bool:
@@ -102,63 +118,72 @@ def _summary_field(block: str, label: str) -> str:
     return ""
 
 
+def _summary_paragraph(block: str, section: str) -> str:
+    lines = block.splitlines()
+    for index, line in enumerate(lines):
+        if line == section and index + 1 < len(lines) and lines[index + 1].startswith("  "):
+            return lines[index + 1].strip()
+    return ""
+
+
 def parse_structured_summary(text: str) -> ParsedSummary:
     block = _last_structured_summary_block(text)
     if block is None:
         return ParsedSummary(found=False, valid=False)
+    lines = block.splitlines()
+    comm_header = next((line for line in lines if line.startswith(STRUCTURED_SUMMARY_HEADER)), "")
     marker_values = [
         line.replace("### RESULT:", "").replace("###", "").strip()
-        for line in block.splitlines()
+        for line in lines
         if line.startswith("### RESULT:")
     ]
-    work = _summary_field(block, "WORK")
-    evidence = _summary_field(block, "EVIDENCE")
-    overall = _summary_field(block, "OVERALL")
-    remote_evidence = _summary_field(block, "REMOTE_EVIDENCE")
-    terminal_log = _summary_field(block, "terminal_log")
-    terminal_log_remote = _summary_field(block, "terminal_log_remote")
-    command_report = _summary_field(block, "command_report")
-    chat_reply = _summary_field(block, "CHAT_REPLY")
-    findings: list[str] = []
+    result_marker = marker_values[0] if len(marker_values) == 1 else ""
+    payload = SummaryPayload(
+        comm_header=comm_header,
+        slice=_summary_field(block, "NAME"),
+        scope=_summary_field(block, "SCOPE"),
+        branch=_summary_field(block, "BRANCH"),
+        origin=_summary_field(block, "ORIGIN"),
+        state_mode=_summary_field(block, "STATE_MODE"),
+        mode_check=_summary_field(block, "MODE_CHECK"),
+        work=_summary_field(block, "WORK"),
+        evidence=_summary_field(block, "EVIDENCE"),
+        overall=_summary_field(block, "OVERALL"),
+        remote_evidence=_summary_field(block, "REMOTE_EVIDENCE"),
+        pr=_summary_field(block, "PR"),
+        head_sha=_summary_field(block, "HEAD_SHA"),
+        ci=_summary_field(block, "CI"),
+        merge=_summary_field(block, "MERGE"),
+        terminal_log=_summary_field(block, "terminal_log"),
+        terminal_log_remote=_summary_field(block, "terminal_log_remote"),
+        terminal_log_local=_summary_field(block, "terminal_log_local"),
+        command_report=_summary_field(block, "command_report"),
+        interpretation=_summary_paragraph(block, "INTERPRETATION"),
+        safe_step=_summary_field(block, "SAFE_STEP"),
+        chat_reply=_summary_field(block, "CHAT_REPLY"),
+    )
+    findings = list(validate_summary_data(payload))
     if len(marker_values) != 1:
         findings.append(f"invalid result marker count: {len(marker_values)}")
-    result_marker = marker_values[0] if len(marker_values) == 1 else ""
-    for name, value in (
-        ("WORK", work),
-        ("EVIDENCE", evidence),
-        ("OVERALL", overall),
-        ("REMOTE_EVIDENCE", remote_evidence),
-        ("terminal_log", terminal_log),
-        ("CHAT_REPLY", chat_reply),
-    ):
-        if not value:
-            findings.append(f"missing summary field: {name}")
-    if overall and result_marker and overall != result_marker:
+    if payload.overall and result_marker and payload.overall != result_marker:
         findings.append("contradictory summary marker")
-    if overall == "PASS" and work != "PASS":
-        findings.append("invalid pass: work is not PASS")
-    if overall == "PASS" and evidence in {"FAIL", "PARTIAL", "CHAT_ONLY"}:
-        findings.append("invalid pass: evidence is not complete")
-    if overall == "PASS" and remote_evidence not in {"PASS", "NOT_REQUIRED"}:
-        findings.append("invalid pass: remote evidence is not complete")
-    if overall == "PASS" and chat_reply != "d":
-        findings.append("invalid pass: chat_reply must be d")
-    if overall in {"FAIL", "HARD-FAIL"} and chat_reply == "d":
-        findings.append("invalid failure: chat_reply must not be d")
-    return ParsedSummary(
-        found=True,
-        valid=not findings,
-        work=work,
-        evidence=evidence,
-        overall=overall,
-        remote_evidence=remote_evidence,
-        terminal_log=terminal_log,
-        terminal_log_remote=terminal_log_remote,
-        command_report=command_report,
-        chat_reply=chat_reply,
-        result_marker=result_marker,
-        findings=tuple(findings),
-    )
+    if not payload.branch:
+        findings.append("missing summary field: BRANCH")
+    if not payload.origin:
+        findings.append("missing summary field: ORIGIN")
+    if not payload.state_mode:
+        findings.append("missing summary field: STATE_MODE")
+    if not payload.mode_check:
+        findings.append("missing summary field: MODE_CHECK")
+    if not payload.terminal_log_remote:
+        findings.append("missing summary field: terminal_log_remote")
+    if not payload.terminal_log_local:
+        findings.append("missing summary field: terminal_log_local")
+    if not payload.interpretation:
+        findings.append("missing summary section: INTERPRETATION")
+    if not payload.safe_step:
+        findings.append("missing summary field: SAFE_STEP")
+    return ParsedSummary(found=True, valid=not findings, payload=payload, result_marker=result_marker, findings=tuple(findings))
 
 
 def _marker_verdict(text: str) -> tuple[EvidenceVerdict, str | None, int, int, bool]:
@@ -186,21 +211,9 @@ def inspect_evidence(path: Path | str | None = None, *, root: Path | str = ".") 
     status_lines = _run_git(["status", "--short"], root_path)
     branch = branch_lines[0] if branch_lines else "UNKNOWN"
     if evidence_path is None:
-        return EvidenceInspection(
-            path=None,
-            exists=False,
-            verdict=EvidenceVerdict.MISSING_EVIDENCE_UPLOAD_FIRST,
-            git_branch=branch,
-            git_status=status_lines,
-        )
+        return EvidenceInspection(path=None, exists=False, verdict=EvidenceVerdict.MISSING_EVIDENCE_UPLOAD_FIRST, git_branch=branch, git_status=status_lines)
     if not evidence_path.exists():
-        return EvidenceInspection(
-            path=evidence_path,
-            exists=False,
-            verdict=EvidenceVerdict.MISSING_EVIDENCE_UPLOAD_FIRST,
-            git_branch=branch,
-            git_status=status_lines,
-        )
+        return EvidenceInspection(path=evidence_path, exists=False, verdict=EvidenceVerdict.MISSING_EVIDENCE_UPLOAD_FIRST, git_branch=branch, git_status=status_lines)
     text = evidence_path.read_text(encoding="utf-8")
     summary = parse_structured_summary(text)
     marker_verdict, final_marker, pass_count, fail_count, hidden_fail = _marker_verdict(text)
@@ -215,22 +228,12 @@ def inspect_evidence(path: Path | str | None = None, *, root: Path | str = ".") 
             verdict = EvidenceVerdict.AMBIGUOUS_SUMMARY_REVIEW_REQUIRED
     else:
         verdict = marker_verdict
-    return EvidenceInspection(
-        path=evidence_path,
-        exists=True,
-        verdict=verdict,
-        final_marker=final_marker,
-        pass_markers=pass_count,
-        fail_markers=fail_count,
-        hidden_fail_before_final_pass=hidden_fail,
-        structured_summary=summary,
-        git_branch=branch,
-        git_status=status_lines,
-    )
+    return EvidenceInspection(path=evidence_path, exists=True, verdict=verdict, final_marker=final_marker, pass_markers=pass_count, fail_markers=fail_count, hidden_fail_before_final_pass=hidden_fail, structured_summary=summary, git_branch=branch, git_status=status_lines)
 
 
 def render_evidence_inspection(result: EvidenceInspection) -> str:
     summary = result.structured_summary
+    payload = summary.payload
     lines = [
         "EVIDENCE_INSPECTION",
         f"verdict: {result.verdict.value}",
@@ -244,16 +247,29 @@ def render_evidence_inspection(result: EvidenceInspection) -> str:
         f"structured_summary_valid: {'yes' if summary.valid else 'no'}",
     ]
     if summary.found:
-        lines.extend(
-            [
-                f"summary_work: {summary.work}",
-                f"summary_evidence: {summary.evidence}",
-                f"summary_overall: {summary.overall}",
-                f"summary_remote_evidence: {summary.remote_evidence}",
-                f"summary_chat_reply: {summary.chat_reply}",
-                f"summary_result_marker: {summary.result_marker}",
-            ]
-        )
+        lines.extend([
+            f"summary_name: {payload.slice or payload.slice_name}",
+            f"summary_scope: {payload.scope}",
+            f"summary_branch: {payload.branch}",
+            f"summary_origin: {payload.origin}",
+            f"summary_state_mode: {payload.state_mode}",
+            f"summary_mode_check: {payload.mode_check}",
+            f"summary_work: {payload.work}",
+            f"summary_evidence: {payload.evidence}",
+            f"summary_overall: {payload.overall}",
+            f"summary_remote_evidence: {payload.remote_evidence}",
+            f"summary_pr: {payload.pr}",
+            f"summary_head_sha: {payload.head_sha}",
+            f"summary_ci: {payload.ci}",
+            f"summary_merge: {payload.merge}",
+            f"summary_terminal_log: {payload.terminal_log}",
+            f"summary_terminal_log_remote: {payload.terminal_log_remote}",
+            f"summary_terminal_log_local: {payload.terminal_log_local}",
+            f"summary_command_report: {payload.command_report}",
+            f"summary_safe_step: {payload.safe_step}",
+            f"summary_chat_reply: {summary.chat_reply}",
+            f"summary_result_marker: {summary.result_marker}",
+        ])
         if summary.findings:
             lines.append("summary_findings:")
             lines.extend(f"- {finding}" for finding in summary.findings)
