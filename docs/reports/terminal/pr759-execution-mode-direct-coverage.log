@@ -1,0 +1,32 @@
+PR759 EXECUTION MODE DIRECT COVERAGE -- REMOTE CONNECTOR -- NO RELEASE
+
+START STATE
+- Base branch: main at 496bd2529dacdaedc2f735af7f3a0a66c9021c5f.
+- Work branch: r759.
+- Scope: convert execution-mode-switch from documented coverage to direct test coverage.
+- No release, no tag, no DOI changes.
+
+REMOTE OBSERVATIONS
+- tests/test_execution_mode_state.py already exists on main and directly exercises execution_mode_state behavior.
+- execution-mode-switch was still listed with tests: [] in .agentic/rule_mechanism_inventory.yaml.
+- rule_test_coverage.yaml still classified execution-mode-switch as documented.
+- rule_direct_test_plan.yaml still contained a planned execution-mode-switch follow-up.
+
+REMOTE CHANGES
+- Registered tests/test_execution_mode_state.py under execution-mode-switch in .agentic/rule_mechanism_inventory.yaml.
+- Marked execution-mode-switch as direct in .agentic/rule_test_coverage.yaml.
+- Added direct coverage assertions for local readiness, remote readiness, and blocked states.
+- Removed the completed execution-mode-switch item from .agentic/rule_direct_test_plan.yaml and renumbered remaining priority_order values.
+
+EXPECTED BEHAVIOR
+- rule registry validation should no longer require a direct-test follow-up for execution-mode-switch.
+- rule registry report should count execution-mode-switch as direct.
+- Remaining direct-test follow-ups should be portable-execution-rules, chat-communication-rules, and chat-bootstrap-drift-rules.
+
+REMOTE LIMITATION
+- Local pytest/check-docs were not run because the user is on iPhone.
+- GitHub Actions CI is the required gate before merge.
+
+RESULT
+- Remote branch prepared for PR759.
+- CI/merge verification still required after PR creation.
