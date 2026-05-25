@@ -5,6 +5,8 @@ from pathlib import Path
 import typer
 
 from agentic_project_kit.evidence_clean import check_clean_except_expected_log, clean_local_evidence
+from agentic_project_kit.evidence_finalize_log import finalize_log
+from agentic_project_kit.evidence_finalize_log import render_finalize_log_result
 from agentic_project_kit.evidence_guard import check_change_scope
 from agentic_project_kit.evidence_guard import check_terminal_log
 from agentic_project_kit.evidence_inspector import inspect_evidence
@@ -34,6 +36,61 @@ def inspect(
     """Inspect explicit or latest terminal evidence before continuing after chat control signals."""
     result = inspect_evidence(path, root=root, require_summary=require_summary)
     typer.echo(render_evidence_inspection(result))
+    if not result.success:
+        raise typer.Exit(code=1)
+
+
+@app.command("finalize-log")
+def finalize_log_command(
+    run_log: Path = typer.Option(..., "--run-log"),
+    remote_log: Path = typer.Option(..., "--remote-log"),
+    slice_name: str = typer.Option(..., "--slice"),
+    scope: str = typer.Option(..., "--scope"),
+    mode_check: str = typer.Option(..., "--mode-check"),
+    work: str = typer.Option("PASS", "--work"),
+    evidence: str = typer.Option("PASS", "--evidence"),
+    overall: str = typer.Option("PASS", "--overall"),
+    remote_evidence: str = typer.Option("NOT_REQUIRED", "--remote-evidence"),
+    pr: str = typer.Option("NONE", "--pr"),
+    ci: str = typer.Option("not-required", "--ci"),
+    merge: str = typer.Option("not-required", "--merge"),
+    command_report: str = typer.Option(..., "--command-report"),
+    interpretation: str = typer.Option(..., "--interpretation"),
+    safe_step: str = typer.Option(..., "--safe-step"),
+    chat_reply: str = typer.Option("d", "--next"),
+    origin: str = typer.Option("local", "--origin"),
+    state_mode: str = typer.Option("local", "--state-mode"),
+    comm_id: str = typer.Option("COMM-LOCAL", "--comm-id"),
+    commit_message: str | None = typer.Option(None, "--commit-message"),
+    push: bool = typer.Option(False, "--push"),
+    root: Path = typer.Option(Path("."), "--root"),
+) -> None:
+    """Append a canonical summary, require strict inspection, then upload the evidence log."""
+    result = finalize_log(
+        root=root,
+        run_log=run_log,
+        remote_log=remote_log,
+        slice_name=slice_name,
+        scope=scope,
+        mode_check=mode_check,
+        work=work,
+        evidence=evidence,
+        overall=overall,
+        remote_evidence=remote_evidence,
+        pr=pr,
+        ci=ci,
+        merge=merge,
+        command_report=command_report,
+        interpretation=interpretation,
+        safe_step=safe_step,
+        chat_reply=chat_reply,
+        origin=origin,
+        state_mode=state_mode,
+        comm_id=comm_id,
+        commit_message=commit_message,
+        push=push,
+    )
+    typer.echo(render_finalize_log_result(result))
     if not result.success:
         raise typer.Exit(code=1)
 
