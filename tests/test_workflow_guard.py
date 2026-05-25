@@ -5,6 +5,8 @@ from typer.testing import CliRunner
 from agentic_project_kit.cli import app
 from agentic_project_kit.run_summary_renderer import render_summary
 from agentic_project_kit.workflow_guard import (
+    check_no_lossy_control_file_policy,
+    check_protected_file_diff_budget,
     check_required_rule_registry_files,
     check_rule_registry,
     check_structured_summary_evidence,
@@ -112,6 +114,7 @@ def test_workflow_guard_policy_documents_repair_plan() -> None:
     assert "diagnose-and-fail" in text
     assert "protected control files" in text
     assert "repair plan" in text
+    assert "partial-fetch-full-replacement-corruption" in text
 
 
 def test_workflow_guard_keeps_control_file_length_policy() -> None:
@@ -119,3 +122,62 @@ def test_workflow_guard_keeps_control_file_length_policy() -> None:
     assert "no_hard_length_limit" in text
     assert "Information preservation outranks compactness" in text
     assert "hard_length_limit_trimming" in text
+
+
+def test_workflow_guard_keeps_partial_fetch_replacement_policy() -> None:
+    text = Path(".agentic/control_file_preservation.yaml").read_text(encoding="utf-8")
+    assert "partial-fetch-full-replacement-corruption" in text
+    assert "line_range_fetch" in text
+    assert "search_result_snippet" in text
+    assert "pr_file_patch" in text
+    assert "truncated_api_response" in text
+    assert "protected_file_max_deletions_without_migration" in text
+
+
+def test_workflow_guard_rejects_large_protected_file_deletion_diff() -> None:
+    deleted_lines = "\n".join(f"-obsolete line {number}" for number in range(25))
+    diff_text = f"""
+diff --git a/.agentic/handoff_state.yaml b/.agentic/handoff_state.yaml
+index 1111111..2222222 100644
+--- a/.agentic/handoff_state.yaml
++++ b/.agentic/handoff_state.yaml
+@@ -1,30 +1,5 @@
+ {deleted_lines}
++schema_version: 1
+"""
+    findings = check_protected_file_diff_budget(diff_text)
+    assert findings
+    assert findings[0].pattern_id == "protected-file-diff-budget-exceeded"
+    assert findings[0].severity == "HARD-FAIL"
+    assert findings[0].path == ".agentic/handoff_state.yaml"
+
+
+def test_workflow_guard_allows_small_protected_file_metadata_diff() -> None:
+    diff_text = """
+diff --git a/README.md b/README.md
+index 1111111..2222222 100644
+--- a/README.md
++++ b/README.md
+@@ -1,5 +1,6 @@
+ # Agentic Project Kit
+ Current version: 0.4.2
++Latest verified version DOI: `10.5281/zenodo.20376095`
+"""
+    assert check_protected_file_diff_budget(diff_text) == []
+
+
+def test_workflow_guard_allows_large_protected_diff_with_explicit_migration() -> None:
+    deleted_lines = "\n".join(f"-obsolete line {number}" for number in range(25))
+    diff_text = f"""
+diff --git a/.agentic/handoff_state.yaml b/.agentic/handoff_state.yaml
+index 1111111..2222222 100644
+--- a/.agentic/handoff_state.yaml
++++ b/.agentic/handoff_state.yaml
+@@ -1,30 +1,5 @@
++explicit_control_file_migration: true
++removed_anchor: old-state
++successor_anchor: new-state
+ {deleted_lines}
++schema_version: 1
+"""
+    assert check_protected_file_diff_budget(diff_text) == []
