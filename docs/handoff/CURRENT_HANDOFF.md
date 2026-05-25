@@ -25,6 +25,16 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 
 Safe state is main after PR766 and before v0.4.2 release publication. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers twelve active mechanisms with category, priority, enforcement_phase, owner, conflict_domains, surfaces, tests, coverage classification, migration-map completeness, and direct-test coverage for all active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check. `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json` now expose explicit direct-coverage completion state. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked unless a new slice explicitly scopes them. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
 
+## A1 State Refresh Addendum
+
+Protected Change Planner A1 is complete on remote main.
+
+- Verified main HEAD: `c07f8ece568501771849bd922aefd1f8ed169ff6`.
+- PR #791 is merged.
+- `./ns protected-change-plan --diff-file <file>` routes to `agentic_project_kit.protected_change_planner`.
+- Verification log: `docs/reports/terminal/protected-change-planner-a1-merge-verify.log`.
+- Immediate next slice: fix expected-negative-smoke and final-summary ambiguity before product work.
+
 ## Current Goal
 
 Prepare and publish the v0.4.2 safety release, then start a successor chat before resuming documentation-management rebuild work.
