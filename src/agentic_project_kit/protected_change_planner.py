@@ -1,0 +1,106 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+from pathlib import Path
+import argparse
+import sys
+
+PROTECTED_FILES = {
+    ".agentic/compiled_agent_context.yaml",
+    ".agentic/handoff_state.yaml",
+    ".agentic/control_file_preservation.yaml",
+    ".agentic/rule_mechanism_inventory.yaml",
+    "docs/DOCUMENTATION_REGISTRY.yaml",
+    "docs/governance/FINAL_SUMMARY_CONTRACT.md",
+    "docs/governance/PROTECTED_CONTROL_FILE_CHANGE_CONTRACT.md",
+}
+
+VALID_DECISIONS = {"keep", "migrate", "obsolete", "abort"}
+
+ANCHORS = {
+    ".agentic/compiled_agent_context.yaml": {"hard_rules", "final_summary_contract", "communication_rules", "normal_operator_path"},
+    ".agentic/handoff_state.yaml": {"safe_state", "release", "recent_failure_patterns"},
+    ".agentic/rule_mechanism_inventory.yaml": {"mechanisms"},
+    "docs/DOCUMENTATION_REGISTRY.yaml": {"documents"},
+    "docs/governance/FINAL_SUMMARY_CONTRACT.md": {"WORK RESULT", "OVERALL RESULT", "NEXT_CHAT_REPLY"},
+    "docs/governance/PROTECTED_CONTROL_FILE_CHANGE_CONTRACT.md": {"migration record", "user decision", "protected_control"},
+}
+
+@dataclass(frozen=True)
+class ProtectedChangeFinding:
+    path: str
+    severity: str
+    code: str
+    message: str
+
+def touched_protected_files(diff_text: str) -> set[str]:
+    touched: set[str] = set()
+    for line in diff_text.splitlines():
+        if line.startswith("diff --git "):
+            parts = line.split()
+            for part in parts[2:]:
+                candidate = part[2:] if part.startswith(("a/", "b/")) else part
+                if candidate in PROTECTED_FILES:
+                    touched.add(candidate)
+    return touched
+
+def removed_lines_for_path(diff_text: str, path: str) -> list[str]:
+    lines: list[str] = []
+    active = False
+    for line in diff_text.splitlines():
+        if line.startswith("diff --git "):
+            active = (" a/" + path + " ") in line or (" b/" + path) in line or line.endswith(" " + "b/" + path)
+            continue
+        if active and line.startswith("-") and not line.startswith("---"):
+            lines.append(line[1:])
+    return lines
+
+def added_lines_for_path(diff_text: str, path: str) -> list[str]:
+    lines: list[str] = []
+    active = False
+    for line in diff_text.splitlines():
+        if line.startswith("diff --git "):
+            active = (" a/" + path + " ") in line or (" b/" + path) in line or line.endswith(" " + "b/" + path)
+            continue
+        if active and line.startswith("+") and not line.startswith("+++"):
+            lines.append(line[1:])
+    return lines
+
+def analyze_diff(diff_text: str, decisions: dict[str, str] | None = None) -> list[ProtectedChangeFinding]:
+    decisions = decisions or {}
+    findings: list[ProtectedChangeFinding] = []
+    for path in sorted(touched_protected_files(diff_text)):
+        removed = removed_lines_for_path(diff_text, path)
+        added = added_lines_for_path(diff_text, path)
+        if len(removed) >= 20 and len(added) <= 3:
+            findings.append(ProtectedChangeFinding(path, "block", "possible-full-replacement-or-large-deletion", "large protected-file deletion requires migration record or user decision"))
+        removed_text = "\n".join(removed)
+        added_text = "\n".join(added)
+        for anchor in ANCHORS.get(path, set()):
+            if anchor in removed_text and anchor not in added_text:
+                decision = decisions.get(path)
+                if decision not in VALID_DECISIONS:
+                    findings.append(ProtectedChangeFinding(path, "block", "protected-anchor-removal-without-decision", f"anchor {anchor!r} removed without keep/migrate/obsolete/abort decision"))
+    return findings
+
+def render_findings(findings: list[ProtectedChangeFinding]) -> str:
+    if not findings:
+        return "PROTECTED_CHANGE_PLAN\nresult=PASS\nfindings=0\n### RESULT: PASS ###\n"
+    out = ["PROTECTED_CHANGE_PLAN", "result=BLOCK", f"findings={len(findings)}"]
+    for finding in findings:
+        out.append(f"- {finding.severity}:{finding.code}:{finding.path}: {finding.message}")
+    out.append("required_decision=keep|migrate|obsolete|abort")
+    out.append("### RESULT: FAIL ###")
+    return "\n".join(out) + "\n"
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--diff-file", required=True)
+    args = parser.parse_args(argv)
+    diff_text = Path(args.diff_file).read_text(encoding="utf-8")
+    findings = analyze_diff(diff_text)
+    sys.stdout.write(render_findings(findings))
+    return 1 if findings else 0
+
+if __name__ == "__main__":
+    raise SystemExit(main())
