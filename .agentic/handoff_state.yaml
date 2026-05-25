@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-25'
-  reason: Prepare v0.4.2 safety release metadata after PR766
-  source: main HEAD after PR766 merge verification
+  reason: Close v0.4.2 post-release DOI metadata after PR769 verification
+  source: main HEAD after PR769 post-release verification
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: cf75340
-  commit_subject: Plan rule registry improvement backlog (#766)
+  commit: 06d6ea30a39e5763283358db8bb93d5566b421cd
+  commit_subject: Record v0.4.2 post-release check log (#769)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -69,25 +69,28 @@ safe_state:
   - 763
   - 764
   - 766
+  - 767
+  - 768
+  - 769
 release:
   current_version: 0.4.2
   previous_version: 0.4.1
   tag: v0.4.2
-  github_release_exists: false
+  github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
-  zenodo_version_doi: PENDING
-  post_release_check: PENDING
-  post_release_evidence: docs/reports/terminal/v041-final-main-verify-after-pr689.log
+  zenodo_version_doi: 10.5281/zenodo.20376095
+  post_release_check: complete
+  post_release_evidence: docs/reports/terminal/v042-post-release-check.log
 open_items:
   prs: []
-  next_expected_chat_action: Merge and verify v0.4.2 release metadata, publish the
-    v0.4.2 tag/release, run post-release checks, then prepare a successor-chat handoff.
+  next_expected_chat_action: Merge and verify this v0.4.2 DOI metadata closeout, then fix protected control-file preservation before further registry hardening.
 completed_since_previous_handoff:
 - 'PR #763 refreshed status and handoff after the PR762 direct-coverage closeout.'
-- 'PR #764 added explicit rule-registry direct coverage completion reporting for JSON
-  and human CLI reports.'
-- 'PR #766 recorded the accepted rule-registry improvement backlog before the v0.4.2
-  safety release.'
+- 'PR #764 added explicit rule-registry direct coverage completion reporting for JSON and human CLI reports.'
+- 'PR #766 recorded the accepted rule-registry improvement backlog before the v0.4.2 safety release.'
+- 'PR #767 prepared v0.4.2 safety release metadata.'
+- 'PR #768 published the v0.4.2 release metadata and release evidence.'
+- 'PR #769 recorded v0.4.2 post-release verification evidence.'
 current_capabilities:
   ns_actions:
   - agent-next
@@ -167,11 +170,9 @@ current_capabilities:
     - explicit JSON direct_coverage_complete field after PR764
     - explicit human completion_status line after PR764
   workflow_hardening:
-    remote_route_rule: GitHub connector direct-path-first for known paths, refs, PRs,
-      and commits.
+    remote_route_rule: GitHub connector direct-path-first for known paths, refs, PRs, and commits.
     yaml_mutation_rule: Use structured YAML mutation and parse validation.
-    control_file_preservation: .agentic/control_file_preservation.yaml protects active
-      rules from lossy shortening.
+    control_file_preservation: .agentic/control_file_preservation.yaml protects active rules from lossy shortening.
   gui_mvp:
     status: closed_out_on_main
     verified_read_only_actions:
@@ -188,125 +189,87 @@ policies:
 rules:
 - id: remote-first-no-guess
   status: active
-  text: Do not guess repository state, command syntax, file locations, release phase,
-    GitHub JSON fields, or available evidence. Inspect the remote repository, command
-    help, known paths, PRs, commits, logs, and authoritative repo files before acting.
+  text: Do not guess repository state, command syntax, file locations, release phase, GitHub JSON fields, or available evidence. Inspect the remote repository, command help, known paths, PRs, commits, logs, and authoritative repo files before acting.
 - id: quality-first-no-shortcuts
   status: active
-  text: Prefer deterministic, test-backed, maintainable fixes over quick patches.
-    No shortcuts, workaround-only fixes, or chat-only promises for recurring workflow
-    defects.
+  text: Prefer deterministic, test-backed, maintainable fixes over quick patches. No shortcuts, workaround-only fixes, or chat-only promises for recurring workflow defects.
 - id: patch-artifact-preflight-before-application
   status: active
-  text: Before applying generated patch artifacts, run patch-artifact preflight diagnostics
-    and fail on unsafe quoting, ambiguous YAML terms, or control-file weakening.
+  text: Before applying generated patch artifacts, run patch-artifact preflight diagnostics and fail on unsafe quoting, ambiguous YAML terms, or control-file weakening.
 - id: generated-code-syntax-first
   status: active
-  text: Generated shell and Python artifacts must be syntax-checked before execution
-    or commit; generated code cannot be trusted because it looks plausible.
+  text: Generated shell and Python artifacts must be syntax-checked before execution or commit; generated code cannot be trusted because it looks plausible.
 - id: coverage-yaml-terms-must-be-strings
   status: active
-  text: Coverage YAML required terms must stay strings; colon-containing terms must
-    be quoted or written through structured YAML writers.
+  text: Coverage YAML required terms must stay strings; colon-containing terms must be quoted or written through structured YAML writers.
 - id: final-summary-self-validation
   status: active
-  text: Final summaries must be self-validated against preceding output before treating
-    a block as successful.
+  text: Final summaries must be self-validated against preceding output before treating a block as successful.
 - id: no-copy-terminal-evidence
   status: active
-  text: Routine PASS and normal FAIL handoffs must be backed by repo evidence; use
-    d for log-backed PASS and f for log-backed FAIL. Manual terminal paste is only
-    for hard failure, broken logging, unavailable evidence, unusable evidence, or
-    explicit user request.
+  text: Routine PASS and normal FAIL handoffs must be backed by repo evidence; use d for log-backed PASS and f for log-backed FAIL. Manual terminal paste is only for hard failure, broken logging, unavailable evidence, unusable evidence, or explicit user request.
 - id: remote-log-lookup-first
   status: active
-  text: Remote evidence must be inspected first for FAIL or uncertain handoffs; direct-fetch
-    docs/reports/terminal logs before asking for paste-output unless logging is broken
-    or unavailable. The phrase remote evidence is intentionally preserved for rule-preservation
-    coverage.
+  text: Remote evidence must be inspected first for FAIL or uncertain handoffs; direct-fetch docs/reports/terminal logs before asking for paste-output unless logging is broken or unavailable. The phrase remote evidence is intentionally preserved for rule-preservation coverage.
 - id: rules-must-be-test-backed
   status: active
-  text: Durable workflow rules need a stable repository home, documentation, and deterministic
-    tests or guards that fail when the rule disappears or is weakened.
+  text: Durable workflow rules need a stable repository home, documentation, and deterministic tests or guards that fail when the rule disappears or is weakened.
 - id: yaml-structured-mutation-only
   status: active
-  text: YAML governance files must be changed through parse-modify-dump or equivalent
-    structured mutation, then parsed again before gates.
+  text: YAML governance files must be changed through parse-modify-dump or equivalent structured mutation, then parsed again before gates.
 - id: github-connector-direct-path-first
   status: active
-  text: For remote GitHub work with known paths, refs, or commits, use direct fetch,
-    update, and PR APIs before search.
+  text: For remote GitHub work with known paths, refs, or commits, use direct fetch, update, and PR APIs before search.
 - id: control-file-preservation
   status: active
-  text: Protected control files must preserve active rules and required anchors. Information
-    preservation outranks compactness; hard length-limit trimming is forbidden.
+  text: Protected control files must preserve active rules and required anchors. Information preservation outranks compactness; hard length-limit trimming is forbidden.
 - id: structured-summary-must-be-enforced
   status: active
-  text: Relevant local or remote work blocks must end with the canonical structured
-    SUMMARY from FINAL_SUMMARY_CONTRACT.md. Missing, malformed, contradictory, or
-    legacy summaries are workflow drift.
+  text: Relevant local or remote work blocks must end with the canonical structured SUMMARY from FINAL_SUMMARY_CONTRACT.md. Missing, malformed, contradictory, or legacy summaries are workflow drift.
 - id: governed-rule-registry-before-documentation-rebuild
   status: active
-  text: A governed modular rule registry must become the canonical source of truth
-    before documentation-management rebuild work resumes.
+  text: A governed modular rule registry must become the canonical source of truth before documentation-management rebuild work resumes.
 recent_failure_patterns:
 - id: guessing-before-inspection
-  prevention: Before choosing commands, paths, JSON fields, release checks, or DOI
-    sources, inspect the remote repository and command help. Treat memory and chat
-    summaries as hypotheses until verified.
+  prevention: Before choosing commands, paths, JSON fields, release checks, or DOI sources, inspect the remote repository and command help. Treat memory and chat summaries as hypotheses until verified.
 - id: interpreter-discovery-before-python
-  prevention: Discover the active interpreter and project environment before invoking
-    python, python3, pytest, ruff, or agentic-kit; prefer .venv/bin/python when the
-    project venv exists; avoid naked python; when wrapping shell commands, avoid assuming
-    set -e behavior unless explicitly set and logged.
+  prevention: Discover the active interpreter and project environment before invoking python, python3, pytest, ruff, or agentic-kit; prefer .venv/bin/python when the project venv exists; avoid naked python; when wrapping shell commands, avoid assuming set -e behavior unless explicitly set and logged.
 - id: global-cli-or-venv-assumption
-  prevention: Do not assume global CLIs or an existing venv; use project-local discovery
-    and documented bootstrap paths.
+  prevention: Do not assume global CLIs or an existing venv; use project-local discovery and documented bootstrap paths.
 - id: nested-triple-quote-code-generator
-  prevention: Avoid nested quote-based code generation, nested shell/Python quote
-    layers, nested triple-quoted string literals, and nested triple quotes in generated
-    patch scripts; prefer line-list generation, existing helper scripts, simple file
-    writes, or structured update APIs.
+  prevention: Avoid nested quote-based code generation, nested shell/Python quote layers, nested triple-quoted string literals, and nested triple quotes in generated patch scripts; prefer line-list generation, existing helper scripts, simple file writes, or structured update APIs.
 - id: yaml-colon-term-reinterpreted-as-mapping
-  prevention: Quote colon-containing YAML terms or use structured YAML writers so
-    plain scalars are not reinterpreted as mappings.
+  prevention: Quote colon-containing YAML terms or use structured YAML writers so plain scalars are not reinterpreted as mappings.
 - id: standard-error-guards
-  prevention: Recurring workflow errors must become deterministic guards, tests, or
-    documented failure patterns.
+  prevention: Recurring workflow errors must become deterministic guards, tests, or documented failure patterns.
 - id: interactive-terminal-exit
-  prevention: Chat-pasted terminal blocks must not end by closing the user terminal;
-    avoid top-level exit and exec unless explicitly requested.
+  prevention: Chat-pasted terminal blocks must not end by closing the user terminal; avoid top-level exit and exec unless explicitly requested.
 - id: stale-successor-handoff-prompt-after-main-merge
-  prevention: Refresh STATUS, handoff_state, CURRENT_HANDOFF, and successor prompt
-    before treating handoff prose as authoritative.
+  prevention: Refresh STATUS, handoff_state, CURRENT_HANDOFF, and successor prompt before treating handoff prose as authoritative.
 - id: repeated-yaml-governance-file-corruption
   prevention: Parse YAML before and after mutation and use a structured writer.
 - id: final-pass-after-inner-fail
-  prevention: Final summaries must distinguish work result from evidence result; evidence
-    upload must not relabel failed work as PASS.
+  prevention: Final summaries must distinguish work result from evidence result; evidence upload must not relabel failed work as PASS.
 - id: lossy-control-file-shortening
-  prevention: Do not shorten protected control files by deleting active rules; use
-    successors, generated projections, or split/reference patterns.
+  prevention: Do not shorten protected control files by deleting active rules; use successors, generated projections, or split/reference patterns.
 - id: structured-summary-drift
-  prevention: Verify canonical SUMMARY fields and consistency across WORK, EVIDENCE,
-    OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and RESULT
-    marker.
+  prevention: Verify canonical SUMMARY fields and consistency across WORK, EVIDENCE, OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and RESULT marker.
 next_allowed_tasks:
-- id: continue-documentation-registry-rebuild
-  title: After this closeout is merged and verified, continue the documentation-management
-    rebuild with one small additive registry or projection slice.
+- id: fix-control-file-preservation
+  title: Fix protected control-file preservation before further rule-registry hardening.
   priority: 1
 - id: verify-rule-registry-reporting
-  title: Verify rule-registry completion reporting remains pass/complete after local
-    main sync.
+  title: Verify rule-registry completion reporting remains pass/complete after local main sync.
   priority: 2
+- id: continue-documentation-registry-rebuild
+  title: Continue the documentation-management rebuild with one small additive registry or projection slice only after preservation hardening.
+  priority: 3
 blocked_until_closeout:
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
-- Broad documentation migration until post-PR764 closeout is merged and verified
-- Release, tag, or DOI mutation
-first_instruction: Merge and verify v0.4.2 release metadata, publish the v0.4.2 tag/release,
-  run post-release checks, then prepare a successor-chat handoff.
+- Broad documentation migration until protected control-file preservation is hardened
+- Release, tag, or DOI mutation outside an explicit release flow
+first_instruction: Merge and verify this v0.4.2 DOI metadata closeout, then fix protected control-file preservation before further registry hardening.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
@@ -315,9 +278,9 @@ handoff_maintenance:
   remove_obsolete_rules_when_system_changes: true
   latest_successor_prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr735.md
 administrative_evidence_state:
-  current_head: cf75340
-  current_head_subject: Plan rule registry improvement backlog (#766)
+  current_head: 06d6ea30a39e5763283358db8bb93d5566b421cd
+  current_head_subject: Record v0.4.2 post-release check log (#769)
   allowed_after_safe_state: true
-  reason: v0.4.2 safety release metadata preparation after PR766
+  reason: v0.4.2 post-release DOI metadata closeout after PR769
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
