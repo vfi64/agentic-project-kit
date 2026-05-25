@@ -69,6 +69,12 @@ if [ "${1:-}" = "last-result" ]; then
   exit $?
 fi
 
+if [ "${1:-}" = "protected-change-plan" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.protected_change_planner "$@"
+  exit $?
+fi
+
 if [ "${1:-}" = "pr-create-or-skip" ]; then
   shift
   PYTHONPATH=src "$PY" -m agentic_project_kit.pr_create_or_skip "$@"
