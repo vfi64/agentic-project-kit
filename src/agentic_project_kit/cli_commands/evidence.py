@@ -4,9 +4,11 @@ from pathlib import Path
 
 import typer
 
+from agentic_project_kit.evidence_clean import check_clean_except_expected_log, clean_local_evidence
 from agentic_project_kit.evidence_guard import check_change_scope
 from agentic_project_kit.evidence_guard import check_terminal_log
-from agentic_project_kit.evidence_clean import check_clean_except_expected_log, clean_local_evidence
+from agentic_project_kit.evidence_inspector import inspect_evidence
+from agentic_project_kit.evidence_inspector import render_evidence_inspection
 
 app = typer.Typer(help="Validate terminal evidence logs.")
 
@@ -21,6 +23,15 @@ def guard(logfile: Path) -> None:
         typer.echo(f"  - {finding}")
     if not result.ok:
         raise typer.Exit(1)
+
+
+@app.command("inspect")
+def inspect(path: Path | None = None, root: Path = typer.Option(Path("."), "--root")) -> None:
+    """Inspect explicit or latest terminal evidence before continuing after chat control signals."""
+    result = inspect_evidence(path, root=root)
+    typer.echo(render_evidence_inspection(result))
+    if not result.success:
+        raise typer.Exit(code=1)
 
 
 @app.command("scope-check")
