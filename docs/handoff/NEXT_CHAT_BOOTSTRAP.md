@@ -59,7 +59,7 @@ Mandatory workflow rules:
 - Use run_summary_renderer for final summaries in evidence-bearing workflows.
 - Evidence-bearing local workflow finalization must use `agentic-kit evidence finalize-log` or a stricter successor. Freehand final PASS footers are not valid closeout evidence.
 - Treat d, f, and w as communication signals rather than evidence.
-- Run `agentic-kit evidence inspect --require-summary` or inspect equivalent committed remote/repo evidence before continuing after chat control signals.
+- Run `agentic-kit evidence inspect --require-summary` or inspect equivalent remote/repo evidence before continuing after chat control signals.
 - Inspect repo or remote evidence before requesting pasted terminal output.
 - Use protected change planning before protected YAML, JSON, or Markdown control changes.
 - Before a chat switch, run the closeout prompt and check whether START_NEW_CHAT_PROMPT.md, CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md, and NEXT_CHAT_BOOTSTRAP.md all need updates.
