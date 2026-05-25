@@ -42,6 +42,9 @@ def test_next_chat_bootstrap_contains_standard_prompt_and_next_work(tmp_path: Pa
     assert "FINAL_SUMMARY_CONTRACT" in text
     assert "PASS_ALREADY_DONE" in text
     assert "run_summary_renderer.SummaryPayload" in text
+    assert "Rule Registry Phase A only in small PRs" in text
+    assert "document-management projection system" in text
+    assert "Postpone GUI work until" in text
 
 
 def test_next_chat_bootstrap_writer_creates_file(tmp_path: Path) -> None:
