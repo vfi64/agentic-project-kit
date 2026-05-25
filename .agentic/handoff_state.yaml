@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
-  date: '2026-05-24'
-  reason: Refresh handoff state after PR735 rule-registry coverage expansion
-  source: main HEAD after PR735 merge verification
+  date: '2026-05-25'
+  reason: Refresh handoff state after PR762 rule-registry direct coverage closeout
+  source: main HEAD after PR762 merge verification
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: c6e2690
-  commit_subject: Expand rule registry coverage for communication and execution rules (#735)
+  commit: b22196a
+  commit_subject: Mark chat bootstrap drift rules as direct rule coverage (#762)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -57,6 +57,15 @@ safe_state:
   - 733
   - 734
   - 735
+  - 736
+  - 737
+  - 738
+  - 739
+  - 740
+  - 741
+  - 742
+  - 761
+  - 762
 release:
   current_version: 0.4.1
   previous_version: 0.4.0
@@ -68,30 +77,18 @@ release:
   post_release_evidence: docs/reports/terminal/v041-final-main-verify-after-pr689.log
 open_items:
   prs: []
-  next_expected_chat_action: Add targeted governed rule-registry coverage expansion for remaining release, DOI, evidence, and typed-work-order rules in a small separate slice.
+  next_expected_chat_action: Merge and verify the post-PR762 status/handoff closeout, then only add small rule-registry reporting/readability improvements if needed.
 completed_since_previous_handoff:
-- 'PR #714 added workflow-guard diagnostics, integrated the guard into patch preflight, restored protected-control-file preservation coverage, and removed hard word limits from protected control files.'
-- 'PR #715 refreshed post-PR714 handoff state and successor handoff prompt.'
-- 'PR #716 added the rule-preservation guard for protected rule surfaces.'
-- 'PR #717 planned the governed modular rule registry before the documentation-management rebuild.'
-- 'PR #718 added the first small rule-mechanism inventory for canonical SUMMARY rendering and execution-mode switching.'
-- 'PR #719 refreshed post-PR718 closeout state and successor handoff prompt.'
-- 'PR #720 repaired and guarded handoff completed-list information preservation.'
-- 'PR #721 added migration-aware legacy rule entries without deleting rule intent.'
-- 'PR #722 added standalone validation for rule mechanism inventory and migration map.'
-- 'PR #723 added the rule-registry CLI command.'
-- 'PR #724 made rule-registry validation mandatory through workflow-guard.'
-- 'PR #725 made rule-registry validation part of patch-preflight.'
-- 'PR #726 refreshed post-PR725 closeout state and successor handoff prompt.'
-- 'PR #727 expanded governed rule-registry coverage from two to five core mechanisms.'
-- 'PR #728 refreshed post-PR727 handoff state and successor handoff prompt.'
-- 'PR #729 added classification, priority, and enforcement-phase metadata to active rule mechanisms.'
-- 'PR #730 refreshed post-PR729 handoff state and successor handoff prompt.'
-- 'PR #731 added deterministic rule-registry compatibility and conflict checks.'
-- 'PR #732 refreshed post-PR731 handoff state and successor handoff prompt.'
-- 'PR #733 added deterministic rule-registry migration-map completeness checks.'
-- 'PR #734 refreshed post-PR733 handoff state and successor handoff prompt.'
-- 'PR #735 expanded governed rule-registry coverage to communication, bootstrap/drift, and portable execution rules.'
+- "PR #736 refreshed post-PR735 handoff state."
+- "PR #737 expanded the rule registry to evidence, typed-work-order, release-state, and post-release archive mechanisms."
+- "PR #738 removed an accidental placeholder evidence file."
+- "PR #739 hardened source/evidence validation for rule-registry entries."
+- "PR #740 added initial surfaces/tests metadata evidence without product changes."
+- "PR #741 populated surfaces and test metadata for active rule mechanisms."
+- "PR #742 made surfaces and tests metadata mandatory and validated test paths."
+- "PR #743 through PR #760 continued small rule-registry hardening and direct coverage preparation."
+- "PR #761 marked chat communication rules as direct rule coverage."
+- "PR #762 marked chat bootstrap/drift rules as direct rule coverage and cleared the direct-test follow-up plan."
 current_capabilities:
   ns_actions:
   - agent-next
@@ -124,11 +121,13 @@ current_capabilities:
   governed_rule_registry:
     mechanism_inventory: .agentic/rule_mechanism_inventory.yaml
     migration_map: .agentic/rule_migrations.yaml
+    test_coverage: .agentic/rule_test_coverage.yaml
+    direct_test_plan: .agentic/rule_direct_test_plan.yaml
     validator: src/agentic_project_kit/rule_registry_validator.py
     cli: agentic-kit rule-registry check
     workflow_guard_pattern: rule-registry-drift
     patch_preflight: true
-    status: coverage-expanded
+    status: direct-coverage-closed
     mechanisms:
     - summary-renderer
     - execution-mode-switch
@@ -138,10 +137,18 @@ current_capabilities:
     - chat-communication-rules
     - chat-bootstrap-drift-rules
     - portable-execution-rules
+    - evidence-guard
+    - typed-work-order-runner
+    - release-state-validation
+    - post-release-archive-check
     required_fields:
     - category
     - priority
     - enforcement_phase
+    - owner
+    - conflict_domains
+    - surfaces
+    - tests
     compatibility_checks:
     - category/enforcement_phase matrix
     - ambiguous category/priority/enforcement_phase rejection
@@ -150,6 +157,10 @@ current_capabilities:
     - migration entry for every known legacy rule
     - every migration entry indexed
     - migrated/archived/rejected disposition statuses
+    coverage_checks:
+    - test coverage classification for every active mechanism
+    - direct-test path validation
+    - empty direct-test follow-up plan after PR762
   workflow_hardening:
     remote_route_rule: GitHub connector direct-path-first for known paths, refs, PRs, and commits.
     yaml_mutation_rule: Use structured YAML mutation and parse validation.
@@ -236,19 +247,18 @@ recent_failure_patterns:
 - id: structured-summary-drift
   prevention: Verify canonical SUMMARY fields and consistency across WORK, EVIDENCE, OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and RESULT marker.
 next_allowed_tasks:
-- id: expand-governed-rule-registry-release-evidence-typed-coverage
-  title: Continue targeted governed rule-registry coverage for remaining release, DOI, evidence, and typed-work-order rules.
+- id: rule-registry-completion-reporting
+  title: Improve completed rule-registry report/readability only if the current CLI/report does not clearly show all active mechanisms as directly covered.
   priority: 1
 - id: continue-documentation-registry-rebuild
-  title: After governed rule registry targeted coverage expansion, continue the documentation-management rebuild with one small additive registry or projection slice.
+  title: After governed rule-registry closeout, continue the documentation-management rebuild with one small additive registry or projection slice.
   priority: 2
 blocked_until_closeout:
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
-- Broad documentation migration
+- Broad documentation migration until post-PR762 closeout is merged and verified
 - Release, tag, or DOI mutation
-- Documentation-management rebuild until targeted governed rule-registry coverage expansion is merged
-first_instruction: Add targeted governed rule-registry coverage expansion for release, DOI, evidence, and typed-work-order rules after PR735; do not start broad migration, release, tag, DOI mutation, or destructive GUI action.
+first_instruction: Merge and verify the post-PR762 status/handoff closeout; then inspect rule-registry reporting before any broader documentation-management work.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
@@ -257,7 +267,7 @@ handoff_maintenance:
   remove_obsolete_rules_when_system_changes: true
   latest_successor_prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr735.md
 administrative_evidence_state:
-  current_head: c6e2690
-  current_head_subject: Expand rule registry coverage for communication and execution rules (#735)
+  current_head: b22196a
+  current_head_subject: Mark chat bootstrap drift rules as direct rule coverage (#762)
   allowed_after_safe_state: true
-  reason: post-PR735 state refresh for governed rule registry coverage expansion
+  reason: post-PR762 state refresh for governed rule registry direct coverage closeout

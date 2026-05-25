@@ -1,7 +1,7 @@
-<!-- post-pr735-closeout -->
+<!-- post-pr762-rule-registry-direct-coverage-closeout -->
 # Current Handoff
 
-Status-date: 2026-05-24
+Status-date: 2026-05-25
 Project: agentic-project-kit
 Branch: main
 Base branch: main
@@ -17,23 +17,23 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 - Current release tag: v0.4.1.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified Zenodo version DOI: `10.5281/zenodo.20357657`.
-- Main is refreshed after PR #735 at `c6e2690`.
-- PRs #718-#735 established the governed rule-registry baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, coverage expansion from 2 to 8 mechanisms, required classification/priority/enforcement-phase metadata, deterministic compatibility/conflict checks, migration-map completeness checks, and explicit coverage for communication, bootstrap/drift, and portable execution rules.
-- Evidence: `docs/reports/terminal/pr718a-v5-inventory.log`, `docs/reports/terminal/pr721-rule-migrations.log`, `docs/reports/terminal/pr722-rule-registry-validator.log`, `docs/reports/terminal/pr723-rule-registry-cli.log`, `docs/reports/terminal/pr724-rule-registry-guard.log`, `docs/reports/terminal/pr725-rule-registry-preflight.log`, `docs/reports/terminal/pr727-rule-registry-coverage.log`, `docs/reports/terminal/pr729-rule-registry-classification.log`, `docs/reports/terminal/pr731-rule-registry-conflicts.log`, `docs/reports/terminal/pr733-rule-registry-completeness.log`, `docs/reports/terminal/pr735-rule-registry-coverage.log`.
+- Main is refreshed after PR #762 at `b22196a`.
+- PRs #718-#762 established and closed out the governed rule-registry direct-coverage baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, deterministic metadata/conflict/completeness checks, direct test coverage for all active mechanisms, and an empty direct-test follow-up plan.
+- Evidence: `docs/reports/terminal/pr737-rule-registry-release-evidence.log`, `docs/reports/terminal/pr739-rule-registry-source-evidence-validation.log`, `docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log`, `docs/reports/terminal/pr741-rule-registry-surfaces-tests-inventory-recovery.log`, `docs/reports/terminal/pr742-rule-registry-surfaces-tests-validation.log`, `docs/reports/terminal/pr761-chat-communication-direct-coverage.log`, and `docs/reports/terminal/pr762-chat-bootstrap-drift-direct-coverage.log`.
 
 ## Current Repository State
 
-Safe state is main after PR735. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers eight mechanisms with category, priority, enforcement_phase metadata, compatibility/conflict validation, and migration-map completeness validation: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, and portable-execution-rules. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
+Safe state is main after PR762. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers twelve active mechanisms with category, priority, enforcement_phase, owner, conflict_domains, surfaces, tests, coverage classification, migration-map completeness, and direct-test coverage for all active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
 
 ## Current Goal
 
-Continue the governed rule registry with small additive targeted coverage expansion for remaining release/DOI/evidence/typed-work-order rules. Do not resume broad documentation-management rebuild yet.
+Close out the governed rule-registry direct-coverage baseline after PR762. After closeout, the next small slice may improve report/readability ergonomics for the completed registry. Do not resume broad documentation-management rebuild yet.
 
 ## Current Baselines
 
 Documentation registry: `docs/DOCUMENTATION_REGISTRY.yaml`; contract: `docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md`; summary: `agentic-kit docs-registry`; JSON report: `agentic-kit docs-registry --report PATH`; visible in agentic-kit check-docs, agentic-kit doctor, docs-audit, doc-mesh-audit, doc-lifecycle-audit, handoff, release-check, and post-release-check.
 
-Rule registry: `.agentic/rule_mechanism_inventory.yaml`; migration map: `.agentic/rule_migrations.yaml`; validator: `src/agentic_project_kit/rule_registry_validator.py`; CLI: `agentic-kit rule-registry check`; hard enforcement: workflow-guard and patch-preflight.
+Rule registry: `.agentic/rule_mechanism_inventory.yaml`; migration map: `.agentic/rule_migrations.yaml`; coverage map: `.agentic/rule_test_coverage.yaml`; direct-test plan: `.agentic/rule_direct_test_plan.yaml`; validator: `src/agentic_project_kit/rule_registry_validator.py`; CLI: `agentic-kit rule-registry check`; hard enforcement: workflow-guard and patch-preflight.
 
 Workflow hardening: direct-path-first GitHub connector use; structured YAML mutation; `.agentic/control_file_preservation.yaml`; no-remote-command-deadlock; remote-first no-guess; command help inspection; Terminal acknowledgement audit; remote inspection evidence contract.
 
@@ -41,7 +41,7 @@ GUI MVP: cockpit-readiness, doctor, and check-docs pass as bounded read-only GUI
 
 ## Mandatory Successor-Chat Sources
 
-Read before mutation: `.agentic/compiled_agent_context.yaml`, `docs/governance/FINAL_SUMMARY_CONTRACT.md`, `docs/governance/CHAT_COMMUNICATION_CONTRACT.md`, `docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `docs/TEST_GATES.md`, `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, `.agentic/handoff_state.yaml`, `.agentic/rule_mechanism_inventory.yaml`, `.agentic/rule_migrations.yaml`.
+Read before mutation: `.agentic/compiled_agent_context.yaml`, `docs/governance/FINAL_SUMMARY_CONTRACT.md`, `docs/governance/CHAT_COMMUNICATION_CONTRACT.md`, `docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `docs/TEST_GATES.md`, `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, `.agentic/handoff_state.yaml`, `.agentic/rule_mechanism_inventory.yaml`, `.agentic/rule_migrations.yaml`, `.agentic/rule_test_coverage.yaml`, `.agentic/rule_direct_test_plan.yaml`.
 
 ## Active Rules For The Next Chat Or Slice
 
@@ -67,11 +67,11 @@ Run state-freshness-check, handoff-check, governance-check, rule-registry check,
 
 ## Next Safe Step
 
-PR735 is merged. Next safe step: add targeted rule-registry coverage expansion for remaining release/DOI/evidence/typed-work-order rules in the next small PR. Keep broad documentation-management rebuild, release, tag, DOI mutation, and GUI expansion out of that PR.
+Merge and verify the post-PR762 status/handoff closeout. After that, the next small rule-registry slice should improve completion reporting/readability only if the current CLI/report does not clearly show that all active mechanisms have direct coverage. Keep broad documentation-management rebuild, release, tag, DOI mutation, and GUI expansion out of that PR.
 
 ## Source of Truth
 
-The repository is the source of truth, not the chat transcript. Current state is maintained through docs/STATUS.md, docs/handoff/CURRENT_HANDOFF.md, .agentic/handoff_state.yaml, docs/TEST_GATES.md, docs/DOCUMENTATION_COVERAGE.yaml, .agentic/project.yaml, sentinel.yaml, governance contracts, and committed terminal evidence.
+The repository is the source of truth, not the chat transcript. Current state is maintained through docs/STATUS.md, docs/handoff/CURRENT_HANDOFF.md, .agentic/handoff_state.yaml, docs/TEST_GATES.md, docs/DOCUMENTATION_COVERAGE.yaml, .agentic/project.yaml, sentinel.yaml, governance contracts, rule-registry files, and committed terminal evidence.
 
 ## Historical Compatibility Anchors
 
