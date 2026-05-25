@@ -400,3 +400,33 @@ mechanisms:
   - test-gates-docs
   tests:
   - tests/test_post_release.py
+- id: protected-change-planner
+  status: active
+  owner: rule-governance
+  category: governance
+  priority: 4
+  enforcement_phase: guard
+  conflict_domains:
+  - protected-control-file-change-safety
+  sources:
+  - path: ./ns
+    required_terms:
+    - protected-change-plan
+  - path: src/agentic_project_kit/protected_change_planner.py
+    required_terms:
+    - large-protected-file-rewrite-without-decision
+    - LARGE_PROTECTED_REMOVAL_THRESHOLD
+    - protected-anchor-removal-without-decision
+  - path: tests/test_protected_change_planner.py
+    required_terms:
+    - test_flags_large_rewrite_without_decision
+    - test_accepts_large_rewrite_with_explicit_decision
+  protected_rule_intent: Block lossy broad rewrites and anchor removals in protected
+    governance/control files unless an explicit keep/migrate/obsolete/abort decision
+    exists.
+  surfaces:
+  - ns-cli
+  - protected-change-planner-core
+  - protected-change-planner-tests
+  tests:
+  - tests/test_protected_change_planner.py
