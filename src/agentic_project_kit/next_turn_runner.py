@@ -101,7 +101,7 @@ def render_result(result: NextTurnRunResult) -> str:
             f"exit_code={result.exit_code}",
             f"terminal_log={result.terminal_log}",
             f"command_report={result.command_report}",
-            f"### RESULT: {status} ###",
+            f"subresult={status}",
         ]
     )
 

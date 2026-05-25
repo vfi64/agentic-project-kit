@@ -167,7 +167,7 @@ def render_finalize_result(result: EvidenceFinalizeResult) -> str:
         f"commit_sha={result.commit_sha}",
         f"message={result.message}",
         f"branch={result.plan.branch}",
-        "### RESULT: PASS ###",
+        "subresult=PASS",
     ]
     return "\n".join(lines)
 
@@ -183,7 +183,7 @@ def render_plan(plan: EvidencePublishPlan) -> str:
         "files_to_stage:",
     ]
     lines.extend(f"- {item}" for item in plan.files_to_stage)
-    lines.append("### RESULT: PASS ###")
+    lines.append("subresult=PASS")
     return "\n".join(lines)
 
 
