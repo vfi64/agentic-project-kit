@@ -1,0 +1,9 @@
+PR773 STRUCTURAL REVIEW POLICY FIX
+
+Scope:
+- repair docs-audit missing-review-policy finding
+- add explicit `Review policy:` structural line to active planning document
+- keep red-ci automatic diagnosis requirement in workflow-kernel plan
+- no product code
+- no release mutation
+- no GUI work

@@ -3,6 +3,7 @@
 Status-date: 2026-05-25
 Status: active
 Decision status: accepted
+Review policy: Review before any successor implementation slice; retire or update after guard, DOI closeout, and workflow-kernel follow-up are merged.
 Project: agentic-project-kit
 
 ## Top-Level Meta-Rule For Problem Solving
@@ -114,6 +115,7 @@ The next hardening phase must move critical workflow decisions out of chat disci
 
 ### Critical standard errors to patch
 
+- `red-ci-diagnosis-not-automatic`: `pr-status` and `merge-if-green` must fetch failed CI logs immediately when checks are red, so diagnosis is available in the same command output.
 - `merge-before-green-ci`: no merge may use `mergeable`, small diff size, or human impression as substitute for green CI.
 - `fail-signal-ignored-remote-log-first`: `f` or `F` means log-first diagnosis; paste-output is allowed only after expected logs are missing or unusable.
 - `partial-fetch-full-replacement-corruption`: partial context must never become full-file replacement content.
