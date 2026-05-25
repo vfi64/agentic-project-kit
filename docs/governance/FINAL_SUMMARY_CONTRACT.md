@@ -152,3 +152,15 @@ Phase A may launch the GUI and record technical launch evidence, but it must not
 Phase B must record the human PASS or FAIL result non-interactively, render the structured summary with a generated argument list or JSON payload, and upload the completed log.
 
 Long shell-backslash invocations of `./ns summary` are forbidden in GUI visual evidence blocks because a lost dash can corrupt the summary command. Use a generated Python argument list or JSON payload instead.
+
+## Canonical field anchors
+
+The final framed SUMMARY block must preserve these exact field anchors:
+
+- WORK RESULT
+- EVIDENCE RESULT
+- OVERALL RESULT
+- REMOTE_EVIDENCE
+- NEXT_CHAT_REPLY
+
+These anchors are machine-checked so summary rendering cannot silently drift back to an older or ambiguous format.
