@@ -1,0 +1,20 @@
+PR773 PLAN META-RULE AND LIFECYCLE FIX
+
+Scope:
+- repair PR772 red CI caused by missing planning-document Review policy
+- add top-level problem-solving meta-rule
+- add local workflow kernel implementation plan
+- no product code
+- no release mutation
+- no GUI work
+
+SUMMARY
+WORK RESULT: PASS
+EVIDENCE RESULT: PASS
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PASS
+terminal_log=docs/reports/terminal/pr773-plan-meta-rule-and-lifecycle-fix.log
+command_report=NONE
+NEXT_CHAT_REPLY: d
+CHAT_REPLY: d
+### RESULT: PASS ###

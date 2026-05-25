@@ -5,6 +5,22 @@ Status: active
 Decision status: accepted
 Project: agentic-project-kit
 
+## Top-Level Meta-Rule For Problem Solving
+
+Repeated workflow failures must not be answered by accumulating more chat-only rules.
+
+When the same error class appears more than once, the agent must actively search for a better solution class and propose at least one enforceable alternative: local runner, CLI gate, state-machine transition, preflight, deterministic test, diff budget, merge blocker, or automated diagnosis.
+
+Priority order for fixes:
+
+1. technically block the invalid action;
+2. add a deterministic test or gate;
+3. register the rule in machine-readable policy;
+4. document the behavior;
+5. use a chat-only reminder only as a temporary fallback.
+
+For critical workflow errors, documentation alone is not an acceptable final fix.
+
 ## Purpose
 
 This plan records the standard-error backlog after the v0.4.2 release line and the failed PR #771 closeout attempt.
@@ -80,3 +96,40 @@ Review requirements:
 - confirm that the next slice implements a deterministic guard before repeating DOI closeout work;
 - confirm that any protected-file change has a small diff or an explicit migration record;
 - retire or update this plan after the guard and DOI closeout are merged.
+
+## Local Workflow Kernel Implementation Plan
+
+The next hardening phase must move critical workflow decisions out of chat discipline and into deterministic local commands.
+
+### Kernel command backlog
+
+| Priority | Command | Purpose | Standard errors addressed | Acceptance |
+|---:|---|---|---|---|
+| 1 | `./ns pr-status <pr>` | Print machine-readable PR, merge, and check state | `tool-schema-drift`, `merge-before-green-ci` | reports open/closed state, base/head, pending checks, failed checks, successful checks, and unknown check state |
+| 2 | `./ns merge-if-green <pr>` | The only allowed merge path for normal PRs | `merge-before-green-ci` | refuses merge unless all required checks are successful and no checks are pending, failed, cancelled, skipped unexpectedly, or unknown |
+| 3 | `./ns fail` | Log-first failure diagnosis | `fail-signal-ignored-remote-log-first`, `remote-evidence-unavailable-on-fail` | searches latest local, repo, branch, PR, and GitHub run logs before requesting paste-output |
+| 4 | `./ns protected-diff-check [diff]` | Block unsafe protected-file diffs | `partial-fetch-full-replacement-corruption`, `protected-yaml-rewrite-noise` | rejects PR #771-style protected-file deletion or broad rewrite diffs without explicit migration |
+| 5 | `./ns next-safe-step` | State-based next action | oversized slices, stale handoff, merge drift | prints only allowed next actions based on branch, worktree, PR, CI, logs, and release state |
+| 6 | `./ns closeout-check --version VERSION` | Release/DOI closeout consistency | stale post-release metadata, projection drift, handoff staleness | checks README, CITATION, CHANGELOG, STATUS, CURRENT_HANDOFF, handoff_state, verified releases, tag, release, DOI, and evidence |
+
+### Critical standard errors to patch
+
+- `merge-before-green-ci`: no merge may use `mergeable`, small diff size, or human impression as substitute for green CI.
+- `fail-signal-ignored-remote-log-first`: `f` or `F` means log-first diagnosis; paste-output is allowed only after expected logs are missing or unusable.
+- `partial-fetch-full-replacement-corruption`: partial context must never become full-file replacement content.
+- `protected-yaml-rewrite-noise`: protected YAML/control files must not be broadly reformatted when only narrow fields change.
+- `tool-schema-drift`: local commands must use version-compatible CLI routes and avoid assuming unsupported flags such as `gh pr view --head`.
+- `transport-failure-vs-product-failure`: connector, schema, and CI transport failures must be classified separately from product-code failures.
+- `oversized-slice`: guard, release closeout, handoff, registry, and GUI work must not be combined unless explicitly declared and gated.
+- `final-summary-contradiction`: a final PASS may not hide prior FAIL, red CI, blocked merge, or missing evidence.
+- `stale-post-release-metadata`: release metadata closeout must be checked by a dedicated closeout command instead of broad manual edits.
+- `llm-rule-accumulation-without-enforcement`: repeated failures must escalate to enforceable tooling, not only additional prose.
+
+### Sequencing
+
+1. Repair this PR #772 documentation lifecycle failure.
+2. Implement `pr-status` and `merge-if-green`.
+3. Implement `fail` log-first diagnosis.
+4. Implement `protected-diff-check`.
+5. Redo the v0.4.2 DOI metadata closeout as a minimal guarded diff.
+6. Continue Rule Registry Phase A only after the workflow kernel has the first three commands.
