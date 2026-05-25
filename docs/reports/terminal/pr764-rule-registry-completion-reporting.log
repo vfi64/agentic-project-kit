@@ -1,0 +1,31 @@
+PR764 RULE REGISTRY COMPLETION REPORTING -- REMOTE CONNECTOR -- NO RELEASE
+
+START STATE
+- Base branch: main at 6b706b916ddc6202db7079f681d44e81d932816b.
+- Work branch: r764.
+- Scope: reporting/readability only for governed rule-registry completion.
+- No release, tag, DOI, GUI, or broad documentation-management changes.
+
+REMOTE OBSERVATION
+- The existing `agentic-kit rule-registry report` output already exposed counts, including direct mechanism count and follow-up count.
+- The completion state was still implicit: a reader had to infer completion from `direct == active`, `followups == 0`, and `validation_findings == 0`.
+
+CHANGE
+- Added `summary.direct_coverage_complete` to the machine-readable rule-registry report.
+- Added human-readable report lines:
+  - `direct_coverage_complete: true|false`
+  - `completion_status: complete|incomplete`
+- Added tests for both incomplete and complete fixture states.
+- Updated CLI JSON/human report tests to require the new completion field/lines.
+
+EXPECTED CURRENT-REPO RESULT AFTER CI
+- `agentic-kit rule-registry report --json` should expose `summary.direct_coverage_complete`.
+- For the post-PR762 direct-coverage baseline, the expected value is true if all active mechanisms remain direct-covered with no followups and no validation findings.
+
+REMOTE LIMITATION
+- This was prepared remotely through the GitHub connector because the user is on iPhone.
+- GitHub Actions CI is required before merge.
+
+RESULT
+- Remote branch prepared for PR764.
+- CI/merge verification still required after PR creation.
