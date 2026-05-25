@@ -18,6 +18,17 @@ resolve_python() {
 
 PY="$(resolve_python || true)"
 
+if [ "${1:-}" = "next-turn" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.next_turn_status next-turn "$@"
+  exit $?
+fi
+if [ "${1:-}" = "last-result" ]; then
+  shift
+  PYTHONPATH=src "$PY" -m agentic_project_kit.next_turn_status last-result "$@"
+  exit $?
+fi
+
 if [ "${1:-}" = "pr-create-or-skip" ]; then
   shift
   PYTHONPATH=src "$PY" -m agentic_project_kit.pr_create_or_skip "$@"
