@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import argparse
+import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
 DEFAULT_BOOTSTRAP_PATH = Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md")
 START_PROMPT_PATH = "docs/handoff/START_NEW_CHAT_PROMPT.md"
 CLOSEOUT_PROMPT_PATH = "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
+BOOT_REPORT_PATH = Path("docs/handoff/BOOT_REPORT.md")
 
 MANDATORY_BOOT_SOURCES = (
     ".agentic/compiled_agent_context.yaml",
@@ -55,6 +57,19 @@ class BootCheckResult:
     exists: bool
 
 
+def _run_git(args: list[str], root: Path) -> str:
+    completed = subprocess.run(["git", *args], cwd=root, text=True, capture_output=True, check=False)
+    return completed.stdout.strip() if completed.returncode == 0 else "UNKNOWN"
+
+
+def current_git_head(root: Path | str = ".") -> str:
+    return _run_git(["rev-parse", "HEAD"], Path(root))
+
+
+def current_git_branch(root: Path | str = ".") -> str:
+    return _run_git(["branch", "--show-current"], Path(root))
+
+
 def check_boot_sources(root: Path | str = ".") -> tuple[BootCheckResult, ...]:
     root_path = Path(root)
     return tuple(BootCheckResult(source, (root_path / source).exists()) for source in MANDATORY_BOOT_SOURCES)
@@ -87,7 +102,7 @@ def render_bootloader(root: Path | str = ".") -> str:
     return "\n".join(lines)
 
 
-def render_next_chat_bootstrap(root: Path | str = ".") -> str:
+def render_next_chat_bootstrap(root: Path | str = ".", *, include_state: bool = False) -> str:
     bootloader_text = render_bootloader(root)
     lines = [
         "# NEXT CHAT BOOTSTRAP",
@@ -95,38 +110,54 @@ def render_next_chat_bootstrap(root: Path | str = ".") -> str:
         "This file is the canonical remote handoff entry point for a successor chat.",
         "Do not start from chat memory. Read this file first, then follow its boot sequence.",
         "",
-        "## Canonical chat-switch prompt files",
-        "",
-        f"- Start a successor chat with `{START_PROMPT_PATH}`.",
-        f"- Before leaving a chat, run the closeout routine in `{CLOSEOUT_PROMPT_PATH}`.",
-        "- A closeout may need to update both prompt files and this bootstrap file.",
-        "",
-        "## Standard successor-chat prompt",
-        "",
-        "Copy this into the next chat:",
-        "",
-        "```text",
-        "We work in repo vfi64/agentic-project-kit. Do not start from chat memory.",
-        "Read the remote file docs/handoff/NEXT_CHAT_BOOTSTRAP.md on main completely and execute its boot routine.",
-        "After that, verify main, open PRs, CI, STATUS, CURRENT_HANDOFF, handoff_state, compiled_agent_context, rule registry files, document-management rules, and FINAL_SUMMARY_CONTRACT before any mutation.",
-        "```",
-        "",
-        "## First chat command",
-        "",
-        "1. Read this file completely from remote main.",
-        "2. Run or verify `agentic-kit boot check` and `agentic-kit boot prompt` if a local checkout is available.",
-        "3. Open every mandatory boot source listed below before repository mutation.",
-        "4. Report current main HEAD, open PRs, CI status, last clean evidence, and next smallest safe slice.",
-        "",
-        "## Bootloader output",
-        "",
-        "```text",
-        bootloader_text,
-        "```",
-        "",
-        "## Next work items",
-        "",
     ]
+    if include_state:
+        lines.extend(
+            [
+                "## Repository state snapshot",
+                "",
+                f"- Branch: `{current_git_branch(root)}`",
+                f"- HEAD: `{current_git_head(root)}`",
+                "- Open PRs: inspect remote GitHub before mutation.",
+                "- CI: inspect remote GitHub before mutation.",
+                "",
+            ]
+        )
+    lines.extend(
+        [
+            "## Canonical chat-switch prompt files",
+            "",
+            f"- Start a successor chat with `{START_PROMPT_PATH}`.",
+            f"- Before leaving a chat, run the closeout routine in `{CLOSEOUT_PROMPT_PATH}`.",
+            "- A closeout may need to update both prompt files and this bootstrap file.",
+            "",
+            "## Standard successor-chat prompt",
+            "",
+            "Copy this into the next chat:",
+            "",
+            "```text",
+            "We work in repo vfi64/agentic-project-kit. Do not start from chat memory.",
+            "Read the remote file docs/handoff/NEXT_CHAT_BOOTSTRAP.md on main completely and execute its boot routine.",
+            "After that, verify main, open PRs, CI, STATUS, CURRENT_HANDOFF, handoff_state, compiled_agent_context, rule registry files, document-management rules, and FINAL_SUMMARY_CONTRACT before any mutation.",
+            "```",
+            "",
+            "## First chat command",
+            "",
+            "1. Read this file completely from remote main.",
+            "2. Run or verify `agentic-kit boot check` and `agentic-kit boot prompt` if a local checkout is available.",
+            "3. Open every mandatory boot source listed below before repository mutation.",
+            "4. Report current main HEAD, open PRs, CI status, last clean evidence, and next smallest safe slice.",
+            "",
+            "## Bootloader output",
+            "",
+            "```text",
+            bootloader_text,
+            "```",
+            "",
+            "## Next work items",
+            "",
+        ]
+    )
     lines.extend(f"- {item}" for item in NEXT_WORK_ITEMS)
     lines.extend(
         [
@@ -142,11 +173,68 @@ def render_next_chat_bootstrap(root: Path | str = ".") -> str:
     return "\n".join(lines)
 
 
-def write_next_chat_bootstrap(path: Path | str = DEFAULT_BOOTSTRAP_PATH, root: Path | str = ".") -> Path:
+def write_next_chat_bootstrap(
+    path: Path | str = DEFAULT_BOOTSTRAP_PATH,
+    root: Path | str = ".",
+    *,
+    include_state: bool = False,
+) -> Path:
     output_path = Path(path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(render_next_chat_bootstrap(root), encoding="utf-8")
+    output_path.write_text(render_next_chat_bootstrap(root, include_state=include_state), encoding="utf-8")
     return output_path
+
+
+def validate_generated_bootstrap(path: Path | str = DEFAULT_BOOTSTRAP_PATH, root: Path | str = ".") -> list[str]:
+    output_path = Path(root) / path
+    if not output_path.exists():
+        return [f"missing bootstrap file: {path}"]
+    expected = render_next_chat_bootstrap(root)
+    actual = output_path.read_text(encoding="utf-8")
+    if actual != expected:
+        return ["bootstrap file is not generated from chat_bootloader.py"]
+    return []
+
+
+def render_boot_report(root: Path | str = ".") -> str:
+    checks = check_boot_sources(root)
+    missing = [item.source for item in checks if not item.exists]
+    drift = validate_generated_bootstrap(root=root)
+    lines = [
+        "BOOT_REPORT",
+        "",
+        f"branch: {current_git_branch(root)}",
+        f"head: {current_git_head(root)}",
+        f"mandatory_sources_total: {len(checks)}",
+        f"mandatory_sources_missing: {len(missing)}",
+        "sources_read_required: yes",
+        "open_prs: inspect_remote_github_before_mutation",
+        "ci: inspect_remote_github_before_mutation",
+        "drift_findings:",
+    ]
+    lines.extend(f"- {finding}" for finding in drift) if drift else lines.append("- none")
+    lines.extend(
+        [
+            "next_safe_slice: verify remote PRs/CI, then continue with no-op/PASS_ALREADY_DONE hardening",
+            "### RESULT: PASS ###" if not missing and not drift else "### RESULT: FAIL ###",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def write_boot_report(path: Path | str = BOOT_REPORT_PATH, root: Path | str = ".") -> Path:
+    output_path = Path(path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(render_boot_report(root), encoding="utf-8")
+    return output_path
+
+
+def run_chat_switch_closeout(root: Path | str = ".") -> list[str]:
+    findings: list[str] = []
+    findings.extend(validate_generated_bootstrap(root=root))
+    missing = [item.source for item in check_boot_sources(root) if not item.exists]
+    findings.extend(f"missing mandatory boot source: {source}" for source in missing)
+    return findings
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -155,20 +243,36 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--check", action="store_true")
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--path", default=str(DEFAULT_BOOTSTRAP_PATH))
+    parser.add_argument("--include-state", action="store_true")
+    parser.add_argument("--report", action="store_true")
+    parser.add_argument("--closeout", action="store_true")
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    status = 0
     if args.write:
-        output_path = write_next_chat_bootstrap(args.path, args.root)
+        output_path = write_next_chat_bootstrap(args.path, args.root, include_state=args.include_state)
         print(f"WROTE {output_path}")
+    elif args.report:
+        print(render_boot_report(args.root))
+    elif args.closeout:
+        findings = run_chat_switch_closeout(args.root)
+        if findings:
+            print("CHAT_SWITCH_CLOSEOUT: FAIL")
+            for finding in findings:
+                print(f"- {finding}")
+            status = 1
+        else:
+            print("CHAT_SWITCH_CLOSEOUT: PASS")
     else:
         print(render_bootloader(args.root))
     if args.check:
         missing = [item.source for item in check_boot_sources(args.root) if not item.exists]
-        return 1 if missing else 0
-    return 0
+        if missing:
+            status = 1
+    return status
 
 
 if __name__ == "__main__":
