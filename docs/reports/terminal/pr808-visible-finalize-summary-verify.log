@@ -1,0 +1,186 @@
+### PRECHECK ###
+main
+
+### FETCH MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   9afb2d1..56dcd20  main       -> origin/main
+
+### SWITCH MAIN ###
+Already on 'main'
+Your branch is behind 'origin/main' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+
+### PULL MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Updating 9afb2d1..56dcd20
+Fast-forward
+ src/agentic_project_kit/cli_commands/evidence.py | 53 ++++++++-------
+ src/agentic_project_kit/evidence_finalize_log.py | 27 ++++++--
+ tests/test_evidence_finalize_log.py              | 83 ++++++++++++++++++++++++
+ 3 files changed, 133 insertions(+), 30 deletions(-)
+
+### VERIFY HEAD ###
+56dcd204906e17fbf7b2877bbdc0a8a932e20807
+56dcd20 Print canonical summary from finalize-log (#808)
+expected_head=56dcd204906e17fbf7b2877bbdc0a8a932e20807
+
+### STATUS ###
+
+### TARGETED TESTS ###
+PY=.venv/bin/python
+.....................                                                    [100%]
+21 passed in 0.70s
+
+### INVALID FINALIZE MUST FAIL CLEANLY WITHOUT TRACEBACK ###
+EVIDENCE_FINALIZE_LOG
+success: no
+commit_created: no
+commit_sha: NONE
+findings:
+- invalid field: remote_evidence; invalid pass: remote evidence is not complete
+### RESULT: FAIL ###
+
+### VISIBLE FINALIZE SUMMARY POSITIVE SMOKE ###
+EVIDENCE_FINALIZE_LOG
+success: yes
+run_log: /tmp/pr808-visible-finalize-summary-positive.log
+remote_log: docs/reports/terminal/pr808-visible-finalize-positive-smoke.log
+commit_created: yes
+commit_sha: b15fb0bc6a22c038fd6503d5f522dcf687b686e2
+summary_verdict: PASS_CONTINUE
+structured_summary_found: yes
+structured_summary_valid: yes
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-25 23:41:22 +0200
+
+SLICE
+  NAME: PR808 VISIBLE FINALIZE SUMMARY POSITIVE SMOKE
+  SCOPE: LOCAL VERIFY / POSITIVE SMOKE
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: visible canonical summary must print to stdout
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: NOT_REQUIRED
+  PR: 808
+  HEAD_SHA: 56dcd204906e17fbf7b2877bbdc0a8a932e20807
+  CI: passed-before-merge
+  MERGE: completed
+
+EVIDENCE FILES
+  terminal_log: /tmp/pr808-visible-finalize-summary-positive.log
+  terminal_log_remote: docs/reports/terminal/pr808-visible-finalize-positive-smoke.log
+  terminal_log_local: /tmp/pr808-visible-finalize-summary-positive.log
+  command_report: visible-finalize-summary-positive-smoke
+
+INTERPRETATION
+  Finalize-log must print the canonical summary visibly and also upload a strict-inspectable log.
+
+NEXT
+  SAFE_STEP: remove positive smoke artifact before final verification
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
+
+### RESULT: PASS ###
+EVIDENCE_INSPECTION
+verdict: PASS_CONTINUE
+evidence_exists: yes
+require_summary: yes
+git_branch: main
+git_status_clean: yes
+pass_markers: 1
+fail_markers: 0
+hidden_fail_before_final_pass: no
+structured_summary_found: yes
+structured_summary_valid: yes
+summary_name: PR808 VISIBLE FINALIZE SUMMARY POSITIVE SMOKE
+summary_scope: LOCAL VERIFY / POSITIVE SMOKE
+summary_branch: main
+summary_origin: local
+summary_state_mode: local
+summary_mode_check: visible canonical summary must print to stdout
+summary_work: PASS
+summary_evidence: PASS
+summary_overall: PASS
+summary_remote_evidence: NOT_REQUIRED
+summary_pr: 808
+summary_head_sha: 56dcd204906e17fbf7b2877bbdc0a8a932e20807
+summary_ci: passed-before-merge
+summary_merge: completed
+summary_terminal_log: /tmp/pr808-visible-finalize-summary-positive.log
+summary_terminal_log_remote: docs/reports/terminal/pr808-visible-finalize-positive-smoke.log
+summary_terminal_log_local: /tmp/pr808-visible-finalize-summary-positive.log
+summary_command_report: visible-finalize-summary-positive-smoke
+summary_safe_step: remove positive smoke artifact before final verification
+summary_chat_reply: d
+summary_result_marker: PASS
+evidence_path: docs/reports/terminal/pr808-visible-finalize-positive-smoke.log
+final_marker: ### RESULT: PASS ###
+next_action: continue with the next safe slice after reviewing evidence
+### RESULT: PASS ###
+
+### REMOVE POSITIVE SMOKE ARTIFACT COMMIT FROM LOCAL MAIN ###
+
+### BOOT CLOSEOUT STILL PASSING ###
+CHAT_SWITCH_CLOSEOUT: PASS
+
+### FINAL CLEAN CHECK BEFORE FINALIZE WRAPPER LOG ###
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-25 23:41:22 +0200
+
+SLICE
+  NAME: PR808 VISIBLE FINALIZE SUMMARY VERIFY
+  SCOPE: LOCAL VERIFY / FINALIZE LOG VISIBLE SUMMARY / LOG UPLOAD
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: sync main, tests, clean invalid failure, visible positive summary, cleanup, boot closeout
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: NOT_REQUIRED
+  PR: 808
+  HEAD_SHA: 56dcd204906e17fbf7b2877bbdc0a8a932e20807
+  CI: passed-before-merge
+  MERGE: completed
+
+EVIDENCE FILES
+  terminal_log: /tmp/pr808-visible-finalize-summary-verify.log
+  terminal_log_remote: docs/reports/terminal/pr808-visible-finalize-summary-verify.log
+  terminal_log_local: /tmp/pr808-visible-finalize-summary-verify.log
+  command_report: targeted-tests/invalid-clean-failure/visible-positive-summary/strict-inspect/boot-closeout
+
+INTERPRETATION
+  PR808 visible finalize summary behavior is locally verified; this log was finalized through finalize-log and printed the canonical summary visibly.
+
+NEXT
+  SAFE_STEP: continue with FINAL_SUMMARY_CONTRACT documentation follow-up
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
