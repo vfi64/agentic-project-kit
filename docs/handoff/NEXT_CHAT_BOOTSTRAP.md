@@ -57,15 +57,16 @@ Mandatory workflow rules:
 - Read mandatory boot sources before repository changes.
 - Prefer Python runners for local workflow execution; shell remains a thin adapter.
 - Use run_summary_renderer for final summaries in evidence-bearing workflows.
+- Evidence-bearing local workflow finalization must use `agentic-kit evidence finalize-log` or a stricter successor. Freehand final PASS footers are not valid closeout evidence.
 - Treat d, f, and w as communication signals rather than evidence.
-- Run `agentic-kit evidence inspect` or inspect equivalent remote/repo evidence before continuing after chat control signals.
+- Run `agentic-kit evidence inspect --require-summary` or inspect equivalent committed remote/repo evidence before continuing after chat control signals.
 - Inspect repo or remote evidence before requesting pasted terminal output.
 - Use protected change planning before protected YAML, JSON, or Markdown control changes.
 - Before a chat switch, run the closeout prompt and check whether START_NEW_CHAT_PROMPT.md, CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md, and NEXT_CHAT_BOOTSTRAP.md all need updates.
 
 Required first action in a successor chat:
 - Read these sources and verify main, open PRs, CI, STATUS, handoff, rule registry, and final-summary contracts before repository changes.
-- If continuing after a chat control signal, run `agentic-kit evidence inspect` or inspect equivalent remote/repo evidence first.
+- If continuing after a chat control signal, run `agentic-kit evidence inspect --require-summary` or inspect equivalent remote/repo evidence first.
 
 ### RESULT: PASS ###
 ```
@@ -75,7 +76,8 @@ Required first action in a successor chat:
 - Finish local sync after the bootloader/summary-runner merge and verify boot write/check plus targeted tests.
 - Use boot write to refresh docs/handoff/NEXT_CHAT_BOOTSTRAP.md before chat changes.
 - Harden no-op/PASS_ALREADY_DONE handling for already satisfied target states.
-- Use `agentic-kit evidence inspect` after chat control signals so d/f/w do not rely on chat memory.
+- Use `agentic-kit evidence inspect --require-summary` after chat control signals so d/f/w do not rely on chat memory.
+- Use `agentic-kit evidence finalize-log` for evidence-bearing local workflow closeout so invalid summary fields cannot still end in a freehand final PASS.
 - Automate red CI failed-log diagnosis in the repo workflow path.
 - Resume Rule Registry Phase A only in small PRs: typed schema, generated projections, stronger assertions, query/impact analysis, and documentation integration.
 - Continue the document-management projection system: move operative truth into machine-readable sources and keep Markdown as generated or verified projection where possible.
@@ -83,6 +85,6 @@ Required first action in a successor chat:
 
 ## Final summary requirement
 
-Evidence-bearing workflow outputs must use `agentic_project_kit.run_summary_renderer.SummaryPayload` or the Python workflow summary runner. Do not hand-write legacy final summaries.
+Evidence-bearing workflow outputs must use `agentic_project_kit.run_summary_renderer.SummaryPayload`, the Python workflow summary runner, or `agentic-kit evidence finalize-log`. Do not hand-write legacy final summaries.
 
 ### RESULT: PASS ###
