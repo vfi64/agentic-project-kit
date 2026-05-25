@@ -1,0 +1,49 @@
+V0.4.2 DOI METADATA CLOSEOUT -- REMOTE CONNECTOR EVIDENCE
+
+Scope:
+- Remote-only metadata closeout after PR #769 post-release verification.
+- No product feature work.
+- No Rule Registry Phase A implementation.
+- No GUI work.
+
+Verified release facts carried into metadata:
+- main after PR #769: 06d6ea30a39e5763283358db8bb93d5566b421cd
+- release tag: v0.4.2
+- GitHub Release exists for v0.4.2
+- release assets: agentic_project_kit-0.4.2-py3-none-any.whl, agentic_project_kit-0.4.2.tar.gz
+- Zenodo concept DOI: 10.5281/zenodo.20101359
+- Zenodo v0.4.2 version DOI: 10.5281/zenodo.20376095
+- release evidence already on main:
+  - docs/reports/terminal/pr767-v042-release-metadata-prep.log
+  - docs/reports/terminal/v042-release-publish.log
+  - docs/reports/terminal/v042-post-release-check.log
+
+Files updated in this closeout branch:
+- README.md: added latest verified version DOI line for v0.4.2.
+- CITATION.cff: added verified v0.4.2 version DOI comment.
+- CHANGELOG.md: replaced pending Zenodo wording with completed v0.4.2 DOI verification.
+- docs/releases/VERIFIED_RELEASES.md: added v0.4.2 verified release DOI entry.
+- docs/STATUS.md: updated current state from prepared/pending to released/verified.
+- docs/handoff/CURRENT_HANDOFF.md: updated current handoff from release-prep to post-release DOI closeout.
+- .agentic/handoff_state.yaml: updated safe_state, release fields, completed PR list, and next allowed tasks.
+
+Intentional sequencing:
+1. Finish v0.4.2 DOI metadata closeout first.
+2. Then fix protected control-file preservation.
+3. Then continue Rule Registry improvement slices.
+4. Then return to documentation-management rebuild work.
+
+Remote connector limitation:
+- This evidence log was created remotely via GitHub connector rather than a local terminal run.
+- Local gates still need CI/PR verification or a later local gate run after merge.
+
+SUMMARY
+WORK RESULT: PASS
+EVIDENCE RESULT: PASS
+OVERALL RESULT: PASS
+REMOTE_EVIDENCE: PASS
+terminal_log=docs/reports/terminal/v042-doi-metadata-closeout-remote.log
+command_report=NONE
+NEXT_CHAT_REPLY: p
+CHAT_REPLY: p
+### RESULT: PASS ###
