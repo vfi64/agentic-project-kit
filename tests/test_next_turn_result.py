@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from agentic_project_kit.next_turn_result import (
+    publish_local_evidence,
     build_result,
     classify_next_chat_reply,
     render_summary,
@@ -66,3 +67,36 @@ def test_render_summary_contains_contract_lines() -> None:
     assert "REMOTE_EVIDENCE: PASS" in summary
     assert "NEXT_CHAT_REPLY: d" in summary
     assert "### RESULT: PASS ###" in summary
+
+
+def test_publish_local_evidence_copies_log_and_writes_result(tmp_path: Path) -> None:
+    source = tmp_path / "local.log"
+    source.write_text("hello evidence\n", encoding="utf-8")
+    result = publish_local_evidence(
+        run_id="publish-run",
+        local_terminal_log=source,
+        work_result="FAIL",
+        root=tmp_path,
+        reason="publish test",
+    )
+    assert result.remote_evidence == "PARTIAL"
+    assert result.next_chat_reply == "f"
+    remote_log = tmp_path / "docs" / "reports" / "terminal" / "publish-run.log"
+    report = tmp_path / "docs" / "reports" / "command_runs" / "publish-run.json"
+    latest = tmp_path / "docs" / "reports" / "command_runs" / "next-turn-latest.json"
+    assert remote_log.read_text(encoding="utf-8") == "hello evidence\n"
+    assert report.exists()
+    assert latest.exists()
+
+
+def test_publish_local_evidence_missing_log_records_failure(tmp_path: Path) -> None:
+    result = publish_local_evidence(
+        run_id="missing-log",
+        local_terminal_log=tmp_path / "missing.log",
+        work_result="FAIL",
+        root=tmp_path,
+    )
+    assert result.remote_evidence == "FAIL"
+    assert result.next_chat_reply == "paste-output"
+    report = tmp_path / "docs" / "reports" / "command_runs" / "missing-log.json"
+    assert report.exists()
