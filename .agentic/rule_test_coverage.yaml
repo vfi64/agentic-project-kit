@@ -169,11 +169,10 @@ coverage:
       path: tests/test_chat_communication_contract.py
     statement: PASS claims require matching work, gates, evidence, canonical renderer use, and no overwritten inner FAIL
 - mechanism_id: chat-bootstrap-drift-rules
-  test_coverage: documented
-  coverage_rationale: Contract and compiled-context anchors are preserved; direct behavioral tests are not registered for this documentation rule yet.
+  test_coverage: direct
   assertions:
-  - assertion_id: chat-bootstrap-drift-rules-mandatory-sources
-    kind: anchor
+  - assertion_id: chat-bootstrap-drift-rules-mandatory-startup
+    kind: guard
     covered_surfaces:
     - chat-bootstrap-contract
     - compiled-agent-context
@@ -182,8 +181,10 @@ coverage:
       path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
     - kind: source
       path: .agentic/compiled_agent_context.yaml
-    statement: mandatory successor-chat bootstrap remains documented
-  - assertion_id: chat-bootstrap-drift-rules-drift-response
+    - kind: test
+      path: tests/test_chat_bootstrap_drift_contract.py
+    statement: successor chats must read mandatory sources before proposing mutation and must not replace source-reading with memory
+  - assertion_id: chat-bootstrap-drift-rules-remote-connector-route
     kind: workflow
     covered_surfaces:
     - chat-bootstrap-contract
@@ -193,7 +194,32 @@ coverage:
       path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
     - kind: source
       path: .agentic/compiled_agent_context.yaml
-    statement: drift response and remote connector rules remain anchored
+    - kind: test
+      path: tests/test_chat_bootstrap_drift_contract.py
+    statement: remote work must use the GitHub connector direct-path-first route before search, raw URLs, or local shell fallbacks
+  - assertion_id: chat-bootstrap-drift-rules-drift-response
+    kind: negative-case
+    covered_surfaces:
+    - chat-bootstrap-contract
+    - compiled-agent-context
+    evidence_refs:
+    - kind: source
+      path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+    - kind: source
+      path: .agentic/compiled_agent_context.yaml
+    - kind: test
+      path: tests/test_chat_bootstrap_drift_contract.py
+    statement: drift classes and drift responses are direct-tested and must not be hidden behind final PASS
+  - assertion_id: chat-bootstrap-drift-rules-yaml-and-handoff-boundary
+    kind: guard
+    covered_surfaces:
+    - chat-bootstrap-contract
+    evidence_refs:
+    - kind: source
+      path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+    - kind: test
+      path: tests/test_chat_bootstrap_drift_contract.py
+    statement: governance YAML mutation and drift handoff requirements are direct-tested
 - mechanism_id: portable-execution-rules
   test_coverage: direct
   assertions:
