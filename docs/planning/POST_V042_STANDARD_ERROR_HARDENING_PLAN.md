@@ -85,7 +85,7 @@ Protected files require a deletion and rewrite budget. Large deletion diffs, bro
 - no Connector-based protected-file full replacement
 - no reuse of PR #771 as a working base
 
-## Review policy
+## Review Policy
 
 This active planning document must be reviewed before any successor implementation slice starts.
 
@@ -105,7 +105,7 @@ The next hardening phase must move critical workflow decisions out of chat disci
 
 | Priority | Command | Purpose | Standard errors addressed | Acceptance |
 |---:|---|---|---|---|
-| 1 | `./ns pr-status <pr>` | Print machine-readable PR, merge, and check state | `tool-schema-drift`, `merge-before-green-ci` | reports open/closed state, base/head, pending checks, failed checks, successful checks, and unknown check state |
+| 1 | `./ns pr-status <pr>` | Print machine-readable PR, merge, and check state; on failure, fetch failed CI logs immediately | `tool-schema-drift`, `merge-before-green-ci`, `red-ci-diagnosis-not-automatic` | reports open/closed state, base/head, pending checks, failed checks, successful checks, unknown check state, and failed-run log excerpts |
 | 2 | `./ns merge-if-green <pr>` | The only allowed merge path for normal PRs | `merge-before-green-ci` | refuses merge unless all required checks are successful and no checks are pending, failed, cancelled, skipped unexpectedly, or unknown |
 | 3 | `./ns fail` | Log-first failure diagnosis | `fail-signal-ignored-remote-log-first`, `remote-evidence-unavailable-on-fail` | searches latest local, repo, branch, PR, and GitHub run logs before requesting paste-output |
 | 4 | `./ns protected-diff-check [diff]` | Block unsafe protected-file diffs | `partial-fetch-full-replacement-corruption`, `protected-yaml-rewrite-noise` | rejects PR #771-style protected-file deletion or broad rewrite diffs without explicit migration |
@@ -124,6 +124,7 @@ The next hardening phase must move critical workflow decisions out of chat disci
 - `final-summary-contradiction`: a final PASS may not hide prior FAIL, red CI, blocked merge, or missing evidence.
 - `stale-post-release-metadata`: release metadata closeout must be checked by a dedicated closeout command instead of broad manual edits.
 - `llm-rule-accumulation-without-enforcement`: repeated failures must escalate to enforceable tooling, not only additional prose.
+- `red-ci-diagnosis-not-automatic`: PR/CI status checks must fetch failed run logs in the same command so a red check produces immediate diagnosis, not another chat iteration.
 
 ### Sequencing
 
