@@ -24,28 +24,41 @@ coverage:
       path: tests/test_run_summary_renderer.py
     statement: legacy handwritten summary fallback is rejected
 - mechanism_id: execution-mode-switch
-  test_coverage: documented
-  coverage_rationale: Source and CLI anchors are preserved, but no direct mechanism-level regression test is registered yet.
+  test_coverage: direct
   assertions:
-  - assertion_id: execution-mode-switch-source-anchors
-    kind: anchor
+  - assertion_id: execution-mode-switch-local-ready
+    kind: behavior
     covered_surfaces:
     - execution-mode-state
     evidence_refs:
     - kind: source
       path: src/agentic_project_kit/execution_mode_state.py
-    statement: execution mode source anchors are preserved
-  - assertion_id: execution-mode-switch-cli-visible
-    kind: workflow
+    - kind: test
+      path: tests/test_execution_mode_state.py
+    statement: local execution mode readiness checks branch cleanliness, required tools, and venv availability
+  - assertion_id: execution-mode-switch-remote-ready
+    kind: behavior
     covered_surfaces:
-    - ns-cli
+    - execution-mode-state
     - state-cli
     evidence_refs:
     - kind: source
-      path: ./ns
+      path: src/agentic_project_kit/execution_mode_state.py
     - kind: source
       path: src/agentic_project_kit/cli_commands/state.py
-    statement: local versus remote mode switching remains visible in CLI surfaces
+    - kind: test
+      path: tests/test_execution_mode_state.py
+    statement: remote execution mode readiness remains distinct from local tooling requirements
+  - assertion_id: execution-mode-switch-blocked-states
+    kind: negative-case
+    covered_surfaces:
+    - execution-mode-state
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/execution_mode_state.py
+    - kind: test
+      path: tests/test_execution_mode_state.py
+    statement: dirty worktrees, missing tooling, and branch mismatches produce deterministic blocked states
 - mechanism_id: rule-preservation-guard
   test_coverage: direct
   assertions:
