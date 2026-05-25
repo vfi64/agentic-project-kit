@@ -1,0 +1,13 @@
+schema_version: 1
+coverage:
+- mechanism_id: protected-change-planner
+  test_coverage: direct
+  assertions:
+  - assertion_id: protected-change-planner-large-edit
+    kind: guard
+    covered_surfaces:
+    - protected-change-planner-core
+    evidence_refs:
+    - kind: test
+      path: tests/test_protected_change_planner.py
+    statement: large edits need a recorded decision
