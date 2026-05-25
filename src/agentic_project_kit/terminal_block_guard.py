@@ -43,9 +43,31 @@ FORBIDDEN_TERMINAL_PATTERNS: tuple[ForbiddenTerminalPattern, ...] = (
         "no-terminal-exit",
         "pasted blocks must not close the interactive shell",
     ),
+    ForbiddenTerminalPattern(
+        "no-unchecked-final-pass",
+        "final PASS after verification commands must be guarded by set -e or explicit status handling",
+    ),
 )
 
 _RULE_MESSAGES = {pattern.rule_id: pattern.message for pattern in FORBIDDEN_TERMINAL_PATTERNS}
+_VERIFICATION_TOKENS = (
+    "pytest",
+    "ruff check",
+    "check-docs",
+    "doctor",
+    "./ns ",
+    "agentic-kit ",
+)
+_STATUS_HANDLING_TOKENS = (
+    "TEST_STATUS=",
+    "STATUS=",
+    "DEP_STATUS=",
+    "RUFF_STATUS=",
+    "PLAN_STATUS=",
+    "GATE_STATUS=",
+    "CHECK_STATUS=",
+)
+_SET_E_TOKENS = ("set -e", "set -eu", "set -euo pipefail")
 
 
 def check_terminal_block(text: str) -> TerminalBlockReport:
@@ -54,7 +76,8 @@ def check_terminal_block(text: str) -> TerminalBlockReport:
 
 def check_terminal_block_text(text: str) -> TerminalBlockReport:
     findings: list[TerminalBlockFinding] = []
-    for index, line in enumerate(text.splitlines(), start=1):
+    lines = text.splitlines()
+    for index, line in enumerate(lines, start=1):
         stripped = line.strip()
         if _contains_heredoc_marker(line):
             findings.append(_finding("no-heredoc", index, line))
@@ -66,11 +89,36 @@ def check_terminal_block_text(text: str) -> TerminalBlockReport:
             findings.append(_finding("quote-regex-tokens", index, line))
         if stripped == "exit" or stripped.startswith("exit ") or stripped.startswith("exec "):
             findings.append(_finding("no-terminal-exit", index, line))
+    if _has_unchecked_final_pass(lines):
+        findings.append(
+            _finding("no-unchecked-final-pass", _last_pass_line(lines), "### RESULT: PASS ###")
+        )
     return TerminalBlockReport(ok=not findings, findings=tuple(findings))
 
 
 def check_terminal_block_file(path: Path) -> TerminalBlockReport:
     return check_terminal_block_text(path.read_text(encoding="utf-8"))
+
+
+def _has_unchecked_final_pass(lines: list[str]) -> bool:
+    text = "\n".join(lines)
+    if "### RESULT: PASS ###" not in text:
+        return False
+    if not any(token in text for token in _VERIFICATION_TOKENS):
+        return False
+    if any(token in text for token in _SET_E_TOKENS):
+        return False
+    if any(token in text for token in _STATUS_HANDLING_TOKENS):
+        return False
+    return True
+
+
+def _last_pass_line(lines: list[str]) -> int:
+    result = 1
+    for index, line in enumerate(lines, start=1):
+        if "### RESULT: PASS ###" in line:
+            result = index
+    return result
 
 
 def _finding(rule_id: str, line: int, text: str) -> TerminalBlockFinding:
