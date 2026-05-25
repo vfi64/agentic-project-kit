@@ -1,0 +1,88 @@
+### START: PROTECTED CHANGE PLANNER A1 PR CHECK AND MERGE V2 ###
+
+### PYTHON PRECHECK ###
+Python 3.13.13
+
+### SYNC REFS ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            feature/protected-change-planner-a1-ns-route -> FETCH_HEAD
+
+### FIND PR ###
+PR_NUMBER=791
+
+### WAIT FOR CI ###
+test	pass	31s	https://github.com/vfi64/agentic-project-kit/actions/runs/26412223497/job/77748973857	
+test	pass	24s	https://github.com/vfi64/agentic-project-kit/actions/runs/26412225510/job/77748979658	
+test	pass	31s	https://github.com/vfi64/agentic-project-kit/actions/runs/26412223497/job/77748973857	
+test	pass	24s	https://github.com/vfi64/agentic-project-kit/actions/runs/26412225510/job/77748979658	
+
+### PR STATUS JSON ###
+{"headRefOid":"5a18d82d7d3a8ec4ab280e4bb498a79dbea633ce","mergeStateStatus":"CLEAN","mergeable":"MERGEABLE","number":791,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-25T17:24:53Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26412225510/job/77748979658","name":"test","startedAt":"2026-05-25T17:24:29Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-25T17:24:57Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26412223497/job/77748973857","name":"test","startedAt":"2026-05-25T17:24:26Z","status":"COMPLETED","workflowName":"CI"}],"url":"https://github.com/vfi64/agentic-project-kit/pull/791"}
+
+### CI DECISION ###
+state=OPEN
+mergeStateStatus=CLEAN
+success_count=2
+pending_count=0
+failed_count=0
+
+### AUTO DIAGNOSE FAILED CI IF NEEDED ###
+
+### MERGE PR ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   8a7f532..ab17c68  main       -> origin/main
+Updating 8a7f532..ab17c68
+Fast-forward
+ .../V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md    |  3 ++-
+ ns                                                 |  6 ++++++
+ tests/test_protected_change_planner_ns_route.py    | 25 ++++++++++++++++++++++
+ 3 files changed, 33 insertions(+), 1 deletion(-)
+ create mode 100644 tests/test_protected_change_planner_ns_route.py
+
+### SYNC MAIN AFTER MERGE ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+ab17c68 Expose protected change planner through ns (#791)
+8a7f532 Record protected change planner A0 merge verification log
+7841a51 Add read-only protected change planner (#790)
+a13613b Record protected control file preservation gate verification log
+9f87441 Add protected control file preservation gate (#789)
+66dce66 Guard next-turn canonical summary contract
+958fbe1 Record PR787 next-turn A10b merge verification log
+c2a8bd9 Guard next-turn transient evidence hygiene (#787)
+
+### VERIFY MAIN ###
+..........                                                               [100%]
+10 passed in 0.56s
+PROTECTED_CHANGE_PLAN
+result=BLOCK
+findings=1
+- block:protected-anchor-removal-without-decision:.agentic/compiled_agent_context.yaml: anchor 'hard_rules' removed without keep/migrate/obsolete/abort decision
+required_decision=keep|migrate|obsolete|abort
+### RESULT: FAIL ###
+Agentic project check passed
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; 
+policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.2
+
+Overall: PASS
+
+### RECORD REMOTE MERGE VERIFY LOG ###
