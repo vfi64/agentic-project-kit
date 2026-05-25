@@ -8,6 +8,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+from agentic_project_kit.next_turn_evidence import commit_and_push_evidence, publish_and_stage_evidence, render_finalize_result
 from agentic_project_kit.next_turn_slot import FIXED_SLOT_SCRIPT, FIXED_SLOT_YAML
 
 LATEST_TERMINAL_LOG = Path("docs/reports/terminal/next-turn-latest.log")
@@ -105,11 +106,31 @@ def render_result(result: NextTurnRunResult) -> str:
     )
 
 
+def work_result_from_outcome(outcome: str) -> str:
+    return "PASS" if outcome == "PASS_EXECUTED" else "FAIL"
+
+
+def publish_run_evidence(result: NextTurnRunResult, *, run_id: str, push: bool = True) -> str:
+    plan = publish_and_stage_evidence(
+        run_id=run_id,
+        local_terminal_log=result.terminal_log,
+        work_result=work_result_from_outcome(result.outcome),
+    )
+    finalize_result = commit_and_push_evidence(plan=plan, push=push)
+    return render_finalize_result(finalize_result)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(prog="next-turn-run")
-    parser.parse_args()
+    parser.add_argument("--publish-evidence", action="store_true")
+    parser.add_argument("--run-id", default="")
+    parser.add_argument("--no-push", action="store_true")
+    args = parser.parse_args()
     result = run_fixed_slot()
     print(render_result(result))
+    if args.publish_evidence:
+        run_id = args.run_id or result.command_id
+        print(publish_run_evidence(result, run_id=run_id, push=not args.no_push))
     return 0 if result.outcome == "PASS_EXECUTED" else 1
 
 

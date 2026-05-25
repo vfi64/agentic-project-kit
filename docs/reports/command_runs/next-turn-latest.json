@@ -1,0 +1,13 @@
+{
+  "command_report": "docs/reports/command_runs/smoke-a10.json",
+  "evidence_result": "PASS",
+  "next_chat_reply": "d",
+  "overall_result": "PASS",
+  "reason": "",
+  "remote_evidence": "PARTIAL",
+  "remote_terminal_log": "docs/reports/terminal/smoke-a10.log",
+  "run_id": "smoke-a10",
+  "terminal_log": "docs/reports/terminal/next-turn-latest.log",
+  "timestamp_utc": "2026-05-25T16:12:30.408262+00:00",
+  "work_result": "PASS"
+}
