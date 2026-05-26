@@ -360,6 +360,8 @@ Before terminal workflows perform remote mutations or merge/sync verification, t
 
 `./ns state-freshness-check` detects known stale current-state fragments in `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md`. It is intentionally narrow and deterministic: it catches recurring obsolete state fragments such as old released-version claims, old status dates, and stale slice descriptions without trying to prove full semantic freshness.
 
+The gate also checks active next-step instructions in `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, and `.agentic/handoff_state.yaml`: they must not point to closeout evidence that already exists, and active handoff instructions must not reference an older release version than `.agentic/handoff_state.yaml` declares as current.
+
 ## Communication artifact garbage collector
 
 `./ns artifact-gc` reports transient communication artifacts without deleting them. `./ns artifact-gc --execute` removes only registered transient `.agentic/commands/current.yaml` and `.agentic/commands/current.sh` compatibility files. It must not delete `docs/reports/terminal/LATEST_TERMINAL_LOG.txt`, because that file is part of the committed terminal-evidence pointer chain.
