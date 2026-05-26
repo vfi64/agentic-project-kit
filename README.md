@@ -479,10 +479,9 @@ These repository settings are maintainer-owned and are not changed by the packag
 ## Current status
 
 Current version: 0.4.3
-Prepared release: `v0.4.3`; GitHub Release, tag publication, and Zenodo version DOI verification are pending.
+Prepared release: `v0.4.3`; GitHub Release, tag publication, and Zenodo version DOI verification are complete.
 Version `0.4.3` is the current release line prepared as a safety baseline after PR #812, including PR811 closeout evidence, protected-diff hardening, and the opt-in Tk window-smoke guard.
-Current verified release: `v0.4.1` with Zenodo version DOI `10.5281/zenodo.20357657`.
-Published GitHub release `v0.4.2` is awaiting Zenodo version DOI closeout.
+Current verified release: `v0.4.3` with Zenodo version DOI `10.5281/zenodo.20393329`.
 Earlier verified version-specific DOI notes are maintained in `docs/releases/VERIFIED_RELEASES.md`; historical release records remain in this section and the verified release archive.
 
 Archived GUI/cockpit release notes: v0.3.22 verified DOI `10.5281/zenodo.20256637`; v0.3.19 verified DOI `10.5281/zenodo.20246121`.
@@ -532,3 +531,4 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - Verified v0.3.22 version DOI: `10.5281/zenodo.20261634`
 - Verified v0.3.18 version DOI: `10.5281/zenodo.20245754`
 - Verified v0.4.1 version DOI: `10.5281/zenodo.20357657`
+- Verified v0.4.3 version DOI: `10.5281/zenodo.20393329`

@@ -1,1 +1,1 @@
-docs/reports/terminal/20260526-082958_pr811-closeout-dev-after-gui-guard.log
+docs/reports/terminal/20260526-120216_v043-release-verify.log

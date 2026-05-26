@@ -1,0 +1,139 @@
+terminal_log=docs/reports/terminal/20260526-120216_v043-release-verify.log
+### RUN: ./ns release-verify 0.4.3
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+NS RELEASE VERIFY CYCLE v0.4.3
+
+### SAFETY ###
+Safety: verifies completed release state only; no tag, release, merge, push, or publish action.
+
+### BRANCH / STATUS ###
+main
+M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? docs/reports/terminal/20260526-120216_v043-release-verify.log
+
+### VERIFY LOCAL TAG ###
+97dceef1aeccccd2d96f4433925693a0fe341d91
+
+### VERIFY REMOTE TAG ###
+97dceef1aeccccd2d96f4433925693a0fe341d91	refs/tags/v0.4.3
+
+### WAIT FOR GITHUB RELEASE ###
+title:	v0.4.3
+tag:	v0.4.3
+draft:	false
+prerelease:	false
+immutable:	false
+author:	github-actions[bot]
+created:	2026-05-26T09:51:24Z
+published:	2026-05-26T09:57:25Z
+url:	https://github.com/vfi64/agentic-project-kit/releases/tag/v0.4.3
+asset:	agentic_project_kit-0.4.3-py3-none-any.whl
+asset:	agentic_project_kit-0.4.3.tar.gz
+--
+## What's Changed
+* Record v0.4.2 release publication evidence by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/768
+* Record v0.4.2 post-release check log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/769
+* Plan post-v0.4.2 standard-error hardening by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/772
+* Fix PR772 planning lifecycle policy by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/773
+* Plan next-turn workflow kernel by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/774
+* Add next-turn A0 status and result lookup by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/775
+* Record next-turn A0 standard error additions by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/776
+* Add next-turn A1 result finalizer by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/777
+* Add next-turn A2 evidence publisher by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/778
+* Add next-turn A3 evidence commit helper by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/779
+* Add next-turn A4 commit push finalizer by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/780
+* Add next-turn A5 PR status kernel by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/781
+* Add next-turn A6 merge-if-green kernel by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/782
+* Add next-turn A7 fixed-slot work order by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/783
+* Add next-turn A8 fixed-slot runner by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/784
+* Harden next-turn A9 runner cleanup by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/785
+* Add next-turn A10 evidence auto-publish by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/786
+* Guard next-turn transient evidence hygiene by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/787
+* Guard next-turn canonical summary contract by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/788
+* Add protected control file preservation gate by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/789
+* Add read-only protected change planner by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/790
+* Expose protected change planner through ns by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/791
+* Refresh state after protected planner A1 by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/792
+* Harden terminal block final pass guard by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/793
+* Require scoped expected negative smoke markers by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/794
+* Enforce single final summary validation by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/795
+* Add Python workflow summary runner and chat bootloader by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/796
+* Add next chat bootstrap writer by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/797
+* Expand next chat bootstrap work items by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/798
+* Add canonical chat switch prompts by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/799
+* Harden chat switch closeout boot checks by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/800
+* Add boot closeout CLI route by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/801
+* Add PASS_ALREADY_DONE classifier by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/802
+* Add workflow report PASS_ALREADY_DONE classification by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/803
+* Add last evidence inspector by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/804
+* Parse structured summaries in evidence inspector by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/805
+* Require structured summaries for strict evidence inspection by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/806
+* Add evidence finalization wrapper by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/807
+* Print canonical summary from finalize-log by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/808
+* Document finalize-log closeout and harden protected changes by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/809
+* Refresh status handoff and record post-PR809 successor prompt by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/810
+* Recognize YAML successor handoff overrides by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/811
+* Close out PR811 evidence and harden gates by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/812
+* Prepare v0.4.3 safety release metadata by @vfi64 in https://github.com/vfi64/agentic-project-kit/pull/813
+
+
+**Full Changelog**: https://github.com/vfi64/agentic-project-kit/compare/v0.4.2...v0.4.3
+
+### RELEASE WORKFLOW STATUS ###
+completed	success	Prepare v0.4.3 safety release metadata (#813)	Release	v0.4.3	push	26445449706	25s	2026-05-26T09:57:04Z
+completed	success	Prepare v0.4.2 safety release metadata (#767)	Release	v0.4.2	push	26393115207	21s	2026-05-25T09:18:39Z
+completed	success	Record v0.4.1 release publish log (#686)	Release	v0.4.1	push	26338861919	18s	2026-05-23T17:19:45Z
+completed	success	Record v0.4.0 final pre-tag readiness log	Release	v0.4.0	push	26307694832	24s	2026-05-22T19:26:32Z
+completed	success	Prepare v0.3.37 release metadata (#614)	Release	v0.3.37	push	26240022486	23s	2026-05-21T16:46:59Z
+completed	success	Record v0.3.36 release gate log	Release	v0.3.36	push	26238742306	24s	2026-05-21T16:22:42Z
+completed	success	Prepare v0.3.35 release metadata (#548)	Release	v0.3.35	push	26188849844	26s	2026-05-20T20:43:46Z
+completed	success	Prepare v0.3.34 release metadata (#536)	Release	v0.3.34	push	26185657969	28s	2026-05-20T19:40:39Z
+
+### POST RELEASE CHECK ###
+Post-release check for target v0.4.3
+
+[PASS] GitHub release: GitHub release exists: v0.4.3
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.4.3: 
+10.5281/zenodo.20393329
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 19
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 4
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+
+### FINAL STATE ###
+main
+97dceef Prepare v0.4.3 safety release metadata (#813)
+12bae32 Close out PR811 evidence and harden gates (#812)
+f9cf805 Recognize YAML successor handoff overrides (#811)
+dc1b96b Record PR810 merge finalize evidence
+e4b2ebe Refresh status handoff and record post-PR809 successor prompt (#810)
+ee87fa5 Record PR809 finalize-log recovery evidence
+713c18d Record PR809 merge finalize summary log
+02bacce Document finalize-log closeout and harden protected changes (#809)
+M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? docs/reports/terminal/20260526-120216_v043-release-verify.log
+
+### RESULT: PASS ###
+### EXIT: 0
+### RESULT: PASS ###

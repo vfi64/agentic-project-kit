@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-26'
-  reason: Refresh handoff state to last substantive work commit
-  source: agentic-kit handoff refresh
+  reason: Record v0.4.3 post-release DOI verification
+  source: agentic-kit post-release-check
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: f9cf805
-  commit_subject: Recognize YAML successor handoff overrides (#811)
+  commit: 97dceef
+  commit_subject: Prepare v0.4.3 safety release metadata (#813)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -70,19 +70,21 @@ safe_state:
   - 764
   - 766
 release:
-  current_version: 0.4.2
-  previous_version: 0.4.1
-  tag: v0.4.2
-  github_release_exists: false
+  current_version: 0.4.3
+  previous_version: 0.4.2
+  tag: v0.4.3
+  github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
-  zenodo_version_doi: PENDING
-  post_release_check: PENDING
-  post_release_evidence: docs/reports/terminal/protected-change-planner-a1-merge-verify.log
+  zenodo_version_doi: 10.5281/zenodo.20393329
+  post_release_check: PASS
+  post_release_evidence: docs/reports/terminal/20260526-120216_v043-release-verify.log
 open_items:
   prs: []
-  next_expected_chat_action: Merge and verify v0.4.2 release metadata, publish the
-    v0.4.2 tag/release, run post-release checks, then prepare a successor-chat handoff.
+  next_expected_chat_action: Merge and verify v0.4.3 DOI metadata closeout, then start
+    the approved Release-/Evidence-Kernel hardening slice.
 completed_since_previous_handoff:
+- 'PR #813 published v0.4.3 and post-release verification found Zenodo version DOI
+  10.5281/zenodo.20393329; evidence: docs/reports/terminal/20260526-120216_v043-release-verify.log.'
 - 'PR #791 merged Protected Change Planner A1 and verified it via docs/reports/terminal/protected-change-planner-a1-merge-verify.log.'
 - 'PR #763 refreshed status and handoff after the PR762 direct-coverage closeout.'
 - 'PR #764 added explicit rule-registry direct coverage completion reporting for JSON
