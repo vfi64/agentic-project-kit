@@ -10,8 +10,10 @@ from agentic_project_kit.release import (
     CommandResult,
     ReleaseCheckStatus,
     build_release_plan,
+    build_release_preflight_report,
     build_release_state_report,
     render_release_plan,
+    render_release_preflight_report,
     render_release_state_report,
     validate_version,
 )
@@ -74,7 +76,7 @@ def test_build_release_state_report_passes_for_unused_version(tmp_path: Path):
     report = build_release_state_report(tmp_path, command_runner=_runner())
 
     assert report.ok
-    assert [check.status for check in report.checks] == [ReleaseCheckStatus.PASS] * 11
+    assert [check.status for check in report.checks] == [ReleaseCheckStatus.PASS] * 12
     assert report.registry_summary is None
 
 
@@ -96,15 +98,19 @@ def test_build_release_state_report_includes_registry_summary_when_available(tmp
     assert "Overall: PASS" in rendered
 
 
-def test_build_release_state_report_warns_without_git_repo(tmp_path: Path):
+def test_build_release_state_report_allows_local_tag_warning_without_remote_warnings(tmp_path: Path):
     _write_release_files(tmp_path, "1.2.3")
 
-    report = build_release_state_report(tmp_path)
+    report = build_release_state_report(
+        tmp_path,
+        command_runner=_runner(local_tag=CommandResult(2, "", "fatal: not a git repository")),
+    )
 
     assert report.ok
-    assert report.checks[-3].status == ReleaseCheckStatus.WARN
-    assert report.checks[-3].detail
-    assert report.checks[-3].name == "local tag unused"
+    check = _check_by_name(report, "local tag unused")
+    assert check.status == ReleaseCheckStatus.WARN
+    assert check.detail == "fatal: not a git repository"
+    assert _check_by_name(report, "release publish readiness").status == ReleaseCheckStatus.PASS
 
 
 def test_build_release_state_report_warns_when_remote_tag_check_is_unavailable(tmp_path: Path):
@@ -115,9 +121,12 @@ def test_build_release_state_report_warns_when_remote_tag_check_is_unavailable(t
         command_runner=_runner(remote_tag=CommandResult(2, "", "fatal: 'origin' does not appear to be a git repository")),
     )
 
-    assert report.ok
-    assert report.checks[-2].status == ReleaseCheckStatus.WARN
-    assert report.checks[-2].name == "remote tag unused"
+    assert not report.ok
+    assert report.outcome == ReleaseCheckStatus.BLOCK
+    assert _check_by_name(report, "remote tag unused").status == ReleaseCheckStatus.WARN
+    readiness = _check_by_name(report, "release publish readiness")
+    assert readiness.status == ReleaseCheckStatus.BLOCK
+    assert "do not tag or publish" in readiness.detail
 
 
 def test_build_release_state_report_warns_when_github_release_check_is_unavailable(tmp_path: Path):
@@ -128,9 +137,12 @@ def test_build_release_state_report_warns_when_github_release_check_is_unavailab
         command_runner=_runner(github_release=CommandResult(127, "", "could not run gh: not found")),
     )
 
-    assert report.ok
-    assert report.checks[-1].status == ReleaseCheckStatus.WARN
-    assert report.checks[-1].name == "GitHub release unused"
+    assert not report.ok
+    assert report.outcome == ReleaseCheckStatus.BLOCK
+    assert _check_by_name(report, "GitHub release unused").status == ReleaseCheckStatus.WARN
+    readiness = _check_by_name(report, "release publish readiness")
+    assert readiness.status == ReleaseCheckStatus.BLOCK
+    assert "do not tag or publish" in readiness.detail
 
 
 def test_build_release_state_report_fails_for_missing_changelog_version(tmp_path: Path):
@@ -186,8 +198,9 @@ def test_build_release_state_report_fails_for_existing_local_tag(tmp_path: Path)
     report = build_release_state_report(tmp_path, command_runner=_runner(local_tag=CommandResult(0, "v1.2.3\n", "")))
 
     assert not report.ok
-    assert report.checks[-3].status == ReleaseCheckStatus.FAIL
-    assert report.checks[-3].detail == "tag already exists: v1.2.3"
+    check = _check_by_name(report, "local tag unused")
+    assert check.status == ReleaseCheckStatus.FAIL
+    assert check.detail == "tag already exists: v1.2.3"
 
 
 def test_build_release_state_report_fails_for_existing_remote_tag(tmp_path: Path):
@@ -199,8 +212,10 @@ def test_build_release_state_report_fails_for_existing_remote_tag(tmp_path: Path
     )
 
     assert not report.ok
-    assert report.checks[-2].status == ReleaseCheckStatus.FAIL
-    assert report.checks[-2].detail == "remote tag already exists: v1.2.3"
+    check = _check_by_name(report, "remote tag unused")
+    assert check.status == ReleaseCheckStatus.FAIL
+    assert check.detail == "remote tag already exists: v1.2.3"
+    assert _check_by_name(report, "release publish readiness").status == ReleaseCheckStatus.FAIL
 
 
 def test_build_release_state_report_fails_for_existing_github_release(tmp_path: Path):
@@ -209,8 +224,10 @@ def test_build_release_state_report_fails_for_existing_github_release(tmp_path: 
     report = build_release_state_report(tmp_path, command_runner=_runner(github_release=CommandResult(0, "title: v1.2.3\n", "")))
 
     assert not report.ok
-    assert report.checks[-1].status == ReleaseCheckStatus.FAIL
-    assert report.checks[-1].detail == "GitHub release already exists: v1.2.3"
+    check = _check_by_name(report, "GitHub release unused")
+    assert check.status == ReleaseCheckStatus.FAIL
+    assert check.detail == "GitHub release already exists: v1.2.3"
+    assert _check_by_name(report, "release publish readiness").status == ReleaseCheckStatus.FAIL
 
 
 def test_render_release_state_report_shows_overall_status(tmp_path: Path):
@@ -225,7 +242,37 @@ def test_render_release_state_report_shows_overall_status(tmp_path: Path):
     assert "[PASS] CITATION version" in rendered
     assert "[PASS] remote tag unused" in rendered
     assert "[PASS] GitHub release unused" in rendered
+    assert "[PASS] release publish readiness" in rendered
     assert "Overall: PASS" in rendered
+
+
+def test_render_release_state_report_blocks_when_remote_check_warns(tmp_path: Path):
+    _write_release_files(tmp_path, "1.2.3")
+
+    report = build_release_state_report(
+        tmp_path,
+        command_runner=_runner(remote_tag=CommandResult(2, "", "network unavailable")),
+    )
+    rendered = render_release_state_report(report)
+
+    assert "[WARN] remote tag unused: network unavailable" in rendered
+    assert "[BLOCK] release publish readiness" in rendered
+    assert "Overall: BLOCK" in rendered
+
+
+def test_build_release_preflight_report_blocks_on_remote_warnings(tmp_path: Path):
+    report = build_release_preflight_report(
+        tmp_path,
+        "1.2.3",
+        command_runner=_runner(github_release=CommandResult(127, "", "could not run gh: not found")),
+    )
+    rendered = render_release_preflight_report(report)
+
+    assert not report.ok
+    assert report.outcome == ReleaseCheckStatus.BLOCK
+    assert "[WARN] GitHub release unused" in rendered
+    assert "[BLOCK] release publish readiness" in rendered
+    assert "Overall: BLOCK" in rendered
 
 
 def _write_release_files(project_root: Path, version: str) -> None:

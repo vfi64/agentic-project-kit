@@ -29,6 +29,7 @@ class ReleaseCheckStatus(str, Enum):
     PASS = "PASS"
     FAIL = "FAIL"
     WARN = "WARN"
+    BLOCK = "BLOCK"
 
 
 @dataclass(frozen=True)
@@ -46,7 +47,15 @@ class ReleaseStateReport:
 
     @property
     def ok(self) -> bool:
-        return all(check.status != ReleaseCheckStatus.FAIL for check in self.checks)
+        return self.outcome == ReleaseCheckStatus.PASS
+
+    @property
+    def outcome(self) -> ReleaseCheckStatus:
+        if any(check.status == ReleaseCheckStatus.FAIL for check in self.checks):
+            return ReleaseCheckStatus.FAIL
+        if any(check.status == ReleaseCheckStatus.BLOCK for check in self.checks):
+            return ReleaseCheckStatus.BLOCK
+        return ReleaseCheckStatus.PASS
 
 
 @dataclass(frozen=True)
@@ -57,6 +66,8 @@ class CommandResult:
 
 
 CommandRunner = Callable[[Path, Sequence[str]], CommandResult]
+
+REMOTE_RELEASE_CHECK_NAMES = ("remote tag unused", "GitHub release unused")
 
 
 def build_release_plan(project_root: Path, version: str | None = None) -> ReleasePlan:
@@ -143,11 +154,28 @@ def build_release_state_report(
         check_remote_tag_absent(project_root, resolved_version, resolved_command_runner),
         check_github_release_absent(project_root, resolved_version, resolved_command_runner),
     ]
+    checks.append(check_release_publish_readiness(checks))
     return ReleaseStateReport(
         version=resolved_version,
         checks=tuple(checks),
         registry_summary=_load_registry_summary(project_root),
     )
+
+
+def build_release_preflight_report(
+    project_root: Path,
+    version: str,
+    command_runner: CommandRunner | None = None,
+) -> ReleaseStateReport:
+    resolved_command_runner = command_runner or run_command
+    checks = [
+        check_semantic_version(version),
+        check_local_tag_absent(project_root, version, resolved_command_runner),
+        check_remote_tag_absent(project_root, version, resolved_command_runner),
+        check_github_release_absent(project_root, version, resolved_command_runner),
+    ]
+    checks.append(check_release_publish_readiness(checks))
+    return ReleaseStateReport(version=version, checks=tuple(checks))
 
 
 def check_semantic_version(version: str) -> ReleaseCheckResult:
@@ -216,6 +244,38 @@ def check_github_release_absent(
     if _looks_like_missing_github_release(output):
         return ReleaseCheckResult("GitHub release unused", ReleaseCheckStatus.PASS, f"GitHub release is absent: {tag}")
     return ReleaseCheckResult("GitHub release unused", ReleaseCheckStatus.WARN, output or "gh release view failed")
+
+
+def check_release_publish_readiness(checks: Sequence[ReleaseCheckResult]) -> ReleaseCheckResult:
+    remote_checks = {check.name: check for check in checks if check.name in REMOTE_RELEASE_CHECK_NAMES}
+    missing_checks = [name for name in REMOTE_RELEASE_CHECK_NAMES if name not in remote_checks]
+    if missing_checks:
+        return ReleaseCheckResult(
+            "release publish readiness",
+            ReleaseCheckStatus.BLOCK,
+            "missing remote release checks: " + ", ".join(missing_checks),
+        )
+    failed = [check.name for check in remote_checks.values() if check.status == ReleaseCheckStatus.FAIL]
+    if failed:
+        return ReleaseCheckResult(
+            "release publish readiness",
+            ReleaseCheckStatus.FAIL,
+            "remote release target is not unused: " + ", ".join(failed),
+        )
+    warned = [check.name for check in remote_checks.values() if check.status == ReleaseCheckStatus.WARN]
+    if warned:
+        return ReleaseCheckResult(
+            "release publish readiness",
+            ReleaseCheckStatus.BLOCK,
+            "remote release checks are inconclusive: "
+            + ", ".join(warned)
+            + "; do not tag or publish until they pass",
+        )
+    return ReleaseCheckResult(
+        "release publish readiness",
+        ReleaseCheckStatus.PASS,
+        "remote tag and GitHub release absence verified",
+    )
 
 
 def _looks_like_unavailable_github_cli(output: str) -> bool:
@@ -294,7 +354,16 @@ def render_release_state_report(report: ReleaseStateReport) -> str:
     if report.registry_summary is not None:
         lines.extend(("", *_render_registry_summary_lines(report.registry_summary)))
     lines.append("")
-    lines.append("Overall: PASS" if report.ok else "Overall: FAIL")
+    lines.append(f"Overall: {report.outcome.value}")
+    return "\n".join(lines) + "\n"
+
+
+def render_release_preflight_report(report: ReleaseStateReport) -> str:
+    lines = [f"Release preflight for target v{report.version}", ""]
+    for check in report.checks:
+        lines.append(f"[{check.status.value}] {check.name}: {check.detail}")
+    lines.append("")
+    lines.append(f"Overall: {report.outcome.value}")
     return "\n".join(lines) + "\n"
 
 

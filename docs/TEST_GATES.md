@@ -316,6 +316,8 @@ This file intentionally keeps compact anchors for deterministic tests and human 
 - Final summary contract: see `docs/governance/FINAL_SUMMARY_CONTRACT.md`.
 - No executable placeholder summaries: final summaries must be rendered evidence, not runnable placeholder blocks; persistent rule id `final-summary-no-executable-placeholders`.
 - Release route safety: `release-prep --help` and `release-gate --help`, `release-publish --help` and invalid argument behavior must remain documented and testable before release-route changes.
+- Release prep mutation safety: `release-prep` must stop before metadata patching when updating main, verifying main, or creating/checking out the release branch fails.
+- Release remote readiness: release remote checks may report `WARN` for inconclusive network/tool state, but release readiness must report `BLOCK` and exit nonzero until the remote tag and GitHub Release absence checks pass.
 
 - Release route help anchors: `release-prep --help`, `release-gate --help`, `release-publish --help`, and `release-verify --help` and invalid-argument paths must not create branches` must remain documented and testable before release-route changes.
 
