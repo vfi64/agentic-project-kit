@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-26'
-  reason: Record v0.4.3 post-release DOI verification
-  source: agentic-kit post-release-check
+  reason: Record PR815 release/evidence kernel hardening closeout
+  source: agentic-kit handoff refresh plus PR815 closeout
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 97dceef
-  commit_subject: Prepare v0.4.3 safety release metadata (#813)
+  commit: f1fef05
+  commit_subject: Harden release prep and remote readiness checks (#815)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -80,9 +80,13 @@ release:
   post_release_evidence: docs/reports/terminal/20260526-120216_v043-release-verify.log
 open_items:
   prs: []
-  next_expected_chat_action: Merge and verify v0.4.3 DOI metadata closeout, then start
-    the approved Release-/Evidence-Kernel hardening slice.
+  next_expected_chat_action: Continue with the next smallest release/evidence-kernel
+    hardening follow-up; do not start broad documentation migration or GUI expansion.
 completed_since_previous_handoff:
+- 'PR #815 hardened release-prep atomicity and remote release readiness: release-prep
+  stops before metadata patching on main/branch failures; release-check and release-preflight
+  block release readiness on remote WARN; release-publish blocks inconclusive remote
+  lookups before tagging.'
 - 'PR #813 published v0.4.3 and post-release verification found Zenodo version DOI
   10.5281/zenodo.20393329; evidence: docs/reports/terminal/20260526-120216_v043-release-verify.log.'
 - 'PR #791 merged Protected Change Planner A1 and verified it via docs/reports/terminal/protected-change-planner-a1-merge-verify.log.'
