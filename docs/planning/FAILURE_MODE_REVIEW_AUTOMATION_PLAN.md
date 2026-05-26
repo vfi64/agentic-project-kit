@@ -1,6 +1,7 @@
 # Failure-Mode Review Automation Plan
 
-Status: planning
+Status: proposed
+Decision status: proposed for phased implementation
 Owner: release/evidence kernel
 Scope: agentic workflow safety, pre-slice review, post-merge closeout
 

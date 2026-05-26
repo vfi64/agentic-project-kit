@@ -272,3 +272,196 @@ Run these commands:
 Run this command when changing project health diagnostics:
 
     agentic-kit doctor
+
+Expected evidence: required project files and documentation/TODO gates are reported as PASS, WARN, or FAIL with an overall status.
+
+## Packaging Gate
+
+Run these commands:
+
+    rm -rf dist build
+    find . -maxdepth 3 -name "*.egg-info" -type d -prune -exec rm -rf {} +
+    python -m build
+    twine check dist/*
+    ls -lh dist/
+
+## Release Gate
+
+Plan first:
+
+    agentic-kit release-plan
+
+Validate release state before tagging:
+
+    agentic-kit release-check --version <version>
+
+Check post-release archive state after publishing:
+
+    agentic-kit post-release-check --version <version>
+
+Before tagging:
+
+    git status --short
+    git log --oneline -5
+    git show HEAD:pyproject.toml | grep '^version'
+
+After tagging:
+
+    gh run list --workflow Release --limit 5
+    gh run watch $(gh run list --workflow Release --limit 1 --json databaseId --jq '.[0].databaseId')
+    gh release view <tag>
+
+
+## Screen-Control Local Gate
+
+For chat-assisted development without a local coding agent CLI, run the bundled screen-control gate when a full local evidence capture is useful:
+
+```bash
+printf "\n========== START: screen-control-gate ==========\n"
+./tools/screen_control_gate.sh
+```
+
+This mirrors the standard local validation output to the terminal and to `Screen-Control_Output.txt`. The output file is intentionally ignored by Git and is meant for local review or temporary sharing, not for commits.
+
+
+## Required persistent contract anchors
+
+This file intentionally keeps compact anchors for deterministic tests and human review.
+
+- Final summary contract: see `docs/governance/FINAL_SUMMARY_CONTRACT.md`.
+- No executable placeholder summaries: final summaries must be rendered evidence, not runnable placeholder blocks; persistent rule id `final-summary-no-executable-placeholders`.
+- Release route safety: `release-prep --help` and `release-gate --help`, `release-publish --help` and invalid argument behavior must remain documented and testable before release-route changes.
+- Release prep mutation safety: `release-prep` must stop before metadata patching when updating main, verifying main, or creating/checking out the release branch fails.
+- Release remote readiness: release remote checks may report `WARN` for inconclusive network/tool state, but release readiness must report `BLOCK` and exit nonzero until the remote tag and GitHub Release absence checks pass.
+- PASS_ALREADY_DONE target-state safety: already-done classification must require `--target-verified` and target-specific output patterns; generic `already exists` output is not sufficient success evidence.
+- PR status failed-log diagnosis: red CI status must expose failed check names, GitHub Actions run ids when available, exact `gh run view <run-id> --log-failed` commands, and bounded failed-log fetch status; empty check rollups must classify as `no-checks`, not green or pending.
+- Merge-if-green postcondition: after a successful merge, `./ns merge-if-green <pr>` must verify the merge commit on `main`, wait for main CI, and fail the command result when main CI is red, pending beyond the wait budget, unknown, or missing checks.
+- Merge-if-green head/base pinning: `./ns merge-if-green <pr>` must refuse unexpected base branches, require a PR head SHA, pass `--match-head-commit <sha>` to GitHub, and render the checked base/head refs in the command output.
+
+- Release route help anchors: `release-prep --help`, `release-gate --help`, `release-publish --help`, and `release-verify --help` and invalid-argument paths must not create branches` must remain documented and testable before release-route changes.
+
+## Documentation System Audit Gate
+
+`agentic-kit docs-audit` is the umbrella documentation-system audit. It reports Aktualität, Vollständigkeit, Korrektheit, Redundanzfreiheit, Stringenz der Dokumentenordnung, and Konsistenz.
+
+The gate aggregates deterministic findings from `agentic-kit check-docs`, `agentic-kit doc-mesh-audit`, and `agentic-kit doc-lifecycle-audit`. Full semantic redundancy freedom remains a review-only boundary.
+
+Run this gate after changes to documentation governance, communication rules, handoff rules, summary rules, source ordering, or document lifecycle rules.
+
+## Outcome Reporting
+
+Use this shape:
+
+    - Intended outcome:
+    - Required evidence:
+    - Architecture contract checked: yes / no / not relevant
+    - Documentation coverage checked: yes / no / not relevant
+    - Outcome achieved: yes / no / partial
+    - Changed files:
+    - Tests run:
+    - Tests not run:
+    - Remaining risks:
+    - Next safe step:
+
+## Maintenance Rule
+
+Whenever the current branch, version, release state, test status, architecture contract status, documentation coverage status, or next safe step changes, update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md.
+
+## Remote mutation preflight guard
+
+Before terminal workflows perform remote mutations or merge/sync verification, the working tree must be fully clean. Terminal-log dirtiness is not allowed for this preflight because it can block branch switching, fast-forward pulls, PR merges, and verification. Use `./ns terminal-remote-preflight` before `gh pr merge`, release publication, tag creation, or any merge-verification block.
+
+## State freshness guard
+
+`./ns state-freshness-check` detects known stale current-state fragments in `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md`. It is intentionally narrow and deterministic: it catches recurring obsolete state fragments such as old released-version claims, old status dates, and stale slice descriptions without trying to prove full semantic freshness.
+
+The gate also checks active next-step instructions in `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, and `.agentic/handoff_state.yaml`: they must not point to closeout evidence that already exists, and active handoff instructions must not reference an older release version than `.agentic/handoff_state.yaml` declares as current.
+
+## Communication artifact garbage collector
+
+`./ns artifact-gc` reports transient communication artifacts without deleting them. `./ns artifact-gc --execute` removes only registered transient `.agentic/commands/current.yaml` and `.agentic/commands/current.sh` compatibility files. It must not delete `docs/reports/terminal/LATEST_TERMINAL_LOG.txt`, because that file is part of the committed terminal-evidence pointer chain.
+
+## Latest command-run pointer
+
+`tests/test_agent_command_runner.py` verifies that command reports update `docs/reports/command_runs/LATEST_COMMAND_RUN.txt` and that `agent_run` includes that pointer in the uploaded evidence paths. This backs the no-copy `d`/`f` handoff contract.
+
+## Visible agent-next result footer
+
+`tests/test_agent_command_runner.py` verifies that `agent_next` prints visible terminal footers for no-command, pass, and normal fail outcomes. The footer tells the user whether to reply with `d`, `f`, `ask-agent-to-queue-command`, or paste output for hard failures.
+
+## Agent-next hard-fail result contract
+
+`tests/test_agent_command_runner.py` verifies that `agent_next` prints `HARD-FAIL` with `reply=paste-output` for pull failure, ambiguous command inbox, and postcondition failure. This separates workflow-level hard failures from normal command `FAIL` cases that can be handled with `f` and remote evidence.
+
+## Command inbox check
+
+`tests/test_command_inbox_check.py` verifies the repo-backed command queue validator behind `./ns command-inbox-check`: empty inbox, one valid pair, orphan detection, multiple-command refusal, invalid safety class detection, and forbidden-fragment detection.
+
+
+### Mandatory terminal evidence capture gate
+
+Long-running workflows must not leave the user guessing whether copy-and-paste is required. A run may claim no-copy completion only when its final summary includes `REMOTE_EVIDENCE: PASS` and the relevant terminal log or command-run report has been committed and pushed. If that proof is unavailable, the final summary must say that remote evidence is incomplete and paste-output is required.
+
+Terminal logs must be finalized before commit and must not be written again after they have been committed. This prevents self-modifying log artifacts from producing dirty worktrees after the evidence commit.
+
+## Planning State Freshness Gate
+
+When changing planning files, handoff state, release state, no-copy evidence policy, GUI roadmap, or next safe step, run `./ns state-freshness-check` plus `./ns handoff-check` and `./ns governance-check`.
+
+The freshness gate must reject contradictory current-state claims across `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, and `.agentic/handoff_state.yaml`, including mismatched current release versions, stale DOI baselines, obsolete next-step instructions, and strategy documents that present old baselines as current without a historical marker.
+
+## Mandatory Final Summary Contract Gate
+
+Every relevant terminal work block must end with a machine-readable SUMMARY block containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, and the final result marker.
+
+A final `### RESULT: PASS ###` is valid only when `WORK RESULT: PASS`, `OVERALL RESULT: PASS`, and, for relevant workflows, `REMOTE_EVIDENCE: PASS` are all true. A previous inner FAIL must not be converted into a final PASS by a later commit or push of evidence. Evidence success and work success are separate outcomes.
+
+Contract tests live in `tests/test_final_summary_contract.py` and validate the parser in `src/agentic_project_kit/final_summary_contract.py`.
+
+## Patch Artifact Preflight Gate
+
+Complex generated patches must be checked before application or commit. Required preflight checks include Python syntax for patch scripts, `py_compile` for generated Python files, YAML parse and coverage-term string validation for coverage files, and final SUMMARY contract validation for terminal logs.
+
+Known forbidden shortcut patterns include nested triple-quote Python generators, unquoted YAML terms containing colons, shell-specific pipeline status tricks, and final PASS summaries after an earlier required-step FAIL.
+
+## YAML Governance Integrity Gate
+
+Any patch touching governance YAML must parse the file before and after mutation. Complex YAML changes should use parse-modify-dump instead of raw text injection. Required files include `.agentic/handoff_state.yaml`, `.agentic/no_copy_terminal_policy.yaml`, `docs/DOCUMENTATION_COVERAGE.yaml`, and `docs/DOCUMENTATION_REGISTRY.yaml`.
+
+The regression test `tests/test_yaml_governance_integrity.py` records the rule and verifies that core YAML governance files remain parseable.
+
+
+## Remote-first no-guess rule
+
+Before acting on repository state, command syntax, release phase, file locations, GitHub JSON fields, or evidence paths, inspect the remote repository, authoritative repo files, and command help. Chat memory is not a source of truth until verified. This remote-first no-guess rule is mandatory for release, DOI, PR, evidence, and governance work.
+
+## Compiled Agent Context YAML
+
+`.agentic/compiled_agent_context.yaml` is the compact machine-readable companion to the human governance docs. New durable rules must be reflected in the human docs, the compiled YAML, and deterministic tests.
+
+## No remote-command deadlock
+
+Rule id: no-remote-command-deadlock
+
+Remote command first is a delivery preference, not a blocking rule. If `./ns agent-next` reports `NO-COMMAND`, the next assistant response must either queue a complete command pair remotely or give exactly one minimal fallback command. The user must not be kept in an `ask-agent-to-queue-command` loop. Long ad-hoc terminal blocks are only allowed when the remote command path is unavailable or broken.
+
+## Remote Connector Gate
+
+Remote-only repository work must start with the GitHub connector direct-path-first workflow when the connector is available and the repository, file path, commit, pull request, workflow run, or branch comparison is known.
+
+Required evidence is one of:
+
+- connector-backed file/PR/commit/run/compare inspection was used;
+- connector access was unavailable or insufficient and the fallback was named;
+- the target path or symbol was unknown, so search was justified.
+
+## YAML Mutation Gate
+
+Governance YAML files must be changed through parse-modify-dump and validated by parsing the written result again.
+
+Required evidence:
+
+    python -m pytest -q tests/test_yaml_governance_integrity.py tests/test_patch_artifact_preflight.py
+    agentic-kit check-docs
+
+A YAML parse failure in CI is a failed workflow gate. It must not be treated as a normal trial-and-error step.
