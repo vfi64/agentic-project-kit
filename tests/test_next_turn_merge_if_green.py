@@ -1,10 +1,16 @@
 from __future__ import annotations
 
+import subprocess
+
+import agentic_project_kit.next_turn_merge_if_green as merge_if_green_module
 from agentic_project_kit.next_turn_merge_if_green import (
     MergeIfGreenResult,
+    PrMergeRefs,
+    build_merge_args,
     decide_merge,
     main_verification_passed,
     render_result,
+    verify_merge_refs,
     verify_main_ci,
 )
 from agentic_project_kit.next_turn_pr_status import classify_pr_status
@@ -12,6 +18,20 @@ from agentic_project_kit.next_turn_pr_status import classify_pr_status
 
 def status(payload: dict[str, object]):
     return classify_pr_status(payload, pr="1")
+
+
+def green_payload(*, base_ref_name: str = "main", head_ref_oid: str = "head") -> dict[str, object]:
+    return {
+        "state": "OPEN",
+        "mergeStateStatus": "CLEAN",
+        "baseRefName": base_ref_name,
+        "baseRefOid": "base",
+        "headRefName": "feature",
+        "headRefOid": head_ref_oid,
+        "statusCheckRollup": [
+            {"name": "test", "status": "COMPLETED", "conclusion": "SUCCESS"},
+        ],
+    }
 
 
 def test_decide_merge_accepts_green_open_pr() -> None:
@@ -95,6 +115,131 @@ def test_decide_merge_refuses_not_open_pr() -> None:
     assert "not open" in reason
 
 
+def test_verify_merge_refs_accepts_expected_base_and_head() -> None:
+    decision, reason = verify_merge_refs(
+        PrMergeRefs(
+            base_ref_name="main",
+            base_ref_oid="base",
+            head_ref_name="feature",
+            head_ref_oid="head",
+        ),
+        expected_base_branch="main",
+        expected_head_sha="head",
+    )
+
+    assert decision == "merge"
+    assert reason == "PR base/head refs verified"
+
+
+def test_verify_merge_refs_refuses_wrong_base_branch() -> None:
+    decision, reason = verify_merge_refs(
+        PrMergeRefs(
+            base_ref_name="develop",
+            base_ref_oid="base",
+            head_ref_name="feature",
+            head_ref_oid="head",
+        ),
+        expected_base_branch="main",
+        expected_head_sha="head",
+    )
+
+    assert decision == "refuse"
+    assert "expected main" in reason
+
+
+def test_verify_merge_refs_refuses_missing_head_sha() -> None:
+    decision, reason = verify_merge_refs(
+        PrMergeRefs(
+            base_ref_name="main",
+            base_ref_oid="base",
+            head_ref_name="feature",
+            head_ref_oid="",
+        ),
+        expected_base_branch="main",
+    )
+
+    assert decision == "refuse"
+    assert reason == "missing PR head SHA"
+
+
+def test_verify_merge_refs_refuses_head_drift() -> None:
+    decision, reason = verify_merge_refs(
+        PrMergeRefs(
+            base_ref_name="main",
+            base_ref_oid="base",
+            head_ref_name="feature",
+            head_ref_oid="new-head",
+        ),
+        expected_base_branch="main",
+        expected_head_sha="old-head",
+    )
+
+    assert decision == "refuse"
+    assert "PR head changed" in reason
+
+
+def test_build_merge_args_pins_head_commit() -> None:
+    args = build_merge_args(
+        "123",
+        merge_method="squash",
+        delete_branch=True,
+        match_head_sha="abc123",
+    )
+
+    assert args == [
+        "pr",
+        "merge",
+        "123",
+        "--squash",
+        "--match-head-commit",
+        "abc123",
+        "--delete-branch",
+    ]
+
+
+def test_merge_if_green_refuses_unexpected_base_before_merge(monkeypatch) -> None:
+    monkeypatch.setattr(merge_if_green_module, "fetch_pr_payload", lambda _pr: green_payload(base_ref_name="develop"))
+
+    def fail_run(_args: list[str]) -> subprocess.CompletedProcess[str]:
+        raise AssertionError("merge command must not run when base branch mismatches")
+
+    monkeypatch.setattr(merge_if_green_module, "_run_gh", fail_run)
+
+    result = merge_if_green_module.merge_if_green("123", expected_base_branch="main")
+
+    assert result.decision == "refuse"
+    assert result.reason == "PR base branch is develop, expected main"
+    assert not result.merged
+
+
+def test_merge_if_green_uses_match_head_commit_for_merge(monkeypatch) -> None:
+    commands: list[list[str]] = []
+    monkeypatch.setattr(merge_if_green_module, "fetch_pr_payload", lambda _pr: green_payload(head_ref_oid="abc123"))
+
+    def fake_run(args: list[str]) -> subprocess.CompletedProcess[str]:
+        commands.append(args)
+        return subprocess.CompletedProcess(args=["gh", *args], returncode=0, stdout="merged", stderr="")
+
+    monkeypatch.setattr(merge_if_green_module, "_run_gh", fake_run)
+
+    result = merge_if_green_module.merge_if_green("123", verify_main=False)
+
+    assert result.decision == "merge"
+    assert result.merged
+    assert result.expected_head_sha == "abc123"
+    assert commands == [
+        [
+            "pr",
+            "merge",
+            "123",
+            "--squash",
+            "--match-head-commit",
+            "abc123",
+            "--delete-branch",
+        ]
+    ]
+
+
 def test_render_result_contains_contract_lines() -> None:
     st = status(
         {
@@ -114,11 +259,20 @@ def test_render_result_contains_contract_lines() -> None:
         status_decision=st,
         merged=False,
         merge_output="",
+        base_ref_name="main",
+        base_ref_oid="base",
+        head_ref_name="feature",
+        head_ref_oid="abc",
+        expected_base_branch="main",
+        expected_head_sha="abc",
     )
 
     rendered = render_result(result)
     assert "NEXT_TURN_MERGE_IF_GREEN" in rendered
     assert "decision=merge" in rendered
+    assert "base_ref_name=main" in rendered
+    assert "head_ref_oid=abc" in rendered
+    assert "expected_head_sha=abc" in rendered
     assert "main_verification_required=false" in rendered
     assert "### RESULT: PASS ###" in rendered
 

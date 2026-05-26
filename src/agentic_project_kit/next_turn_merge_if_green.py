@@ -23,6 +23,14 @@ Sleep = Callable[[float], None]
 
 
 @dataclass(frozen=True)
+class PrMergeRefs:
+    base_ref_name: str
+    base_ref_oid: str
+    head_ref_name: str
+    head_ref_oid: str
+
+
+@dataclass(frozen=True)
 class MergeIfGreenResult:
     pr: str
     decision: MergeDecision
@@ -30,6 +38,12 @@ class MergeIfGreenResult:
     status_decision: PrStatusDecision
     merged: bool
     merge_output: str
+    base_ref_name: str = ""
+    base_ref_oid: str = ""
+    head_ref_name: str = ""
+    head_ref_oid: str = ""
+    expected_base_branch: str = ""
+    expected_head_sha: str = ""
     merge_commit_sha: str = ""
     main_verification_required: bool = False
     main_status_decision: PrStatusDecision | None = None
@@ -44,6 +58,45 @@ def decide_merge(status: PrStatusDecision) -> tuple[MergeDecision, str]:
     if status.merge_state_status not in {"CLEAN", "UNKNOWN"}:
         return "refuse", f"merge state is not clean: {status.merge_state_status}"
     return "merge", "PR is green"
+
+
+def pr_merge_refs(payload: dict[str, Any]) -> PrMergeRefs:
+    return PrMergeRefs(
+        base_ref_name=str(payload.get("baseRefName") or ""),
+        base_ref_oid=str(payload.get("baseRefOid") or ""),
+        head_ref_name=str(payload.get("headRefName") or ""),
+        head_ref_oid=str(payload.get("headRefOid") or ""),
+    )
+
+
+def verify_merge_refs(
+    refs: PrMergeRefs,
+    *,
+    expected_base_branch: str,
+    expected_head_sha: str = "",
+) -> tuple[MergeDecision, str]:
+    if not refs.base_ref_name:
+        return "refuse", "missing PR base branch"
+    if expected_base_branch and refs.base_ref_name != expected_base_branch:
+        return "refuse", f"PR base branch is {refs.base_ref_name}, expected {expected_base_branch}"
+    if not refs.head_ref_oid:
+        return "refuse", "missing PR head SHA"
+    if expected_head_sha and refs.head_ref_oid != expected_head_sha:
+        return "refuse", f"PR head changed: {refs.head_ref_oid} != {expected_head_sha}"
+    return "merge", "PR base/head refs verified"
+
+
+def build_merge_args(
+    pr: str,
+    *,
+    merge_method: str,
+    delete_branch: bool,
+    match_head_sha: str,
+) -> list[str]:
+    args = ["pr", "merge", pr, f"--{merge_method}", "--match-head-commit", match_head_sha]
+    if delete_branch:
+        args.append("--delete-branch")
+    return args
 
 
 def _run_gh(args: list[str]) -> subprocess.CompletedProcess[str]:
@@ -143,12 +196,25 @@ def merge_if_green(
     dry_run: bool = False,
     verify_main: bool = True,
     main_branch: str = "main",
+    expected_base_branch: str = "",
+    expected_head_sha: str = "",
     main_ci_timeout_seconds: int = 300,
     main_ci_poll_seconds: int = 10,
 ) -> MergeIfGreenResult:
     payload = fetch_pr_payload(pr)
     status = classify_pr_status(payload, pr=pr)
+    refs = pr_merge_refs(payload)
+    effective_expected_base_branch = expected_base_branch or main_branch
+    effective_expected_head_sha = expected_head_sha or refs.head_ref_oid
     decision, reason = decide_merge(status)
+    if decision == "merge":
+        decision, ref_reason = verify_merge_refs(
+            refs,
+            expected_base_branch=effective_expected_base_branch,
+            expected_head_sha=expected_head_sha,
+        )
+        if decision != "merge":
+            reason = ref_reason
 
     if decision != "merge" or dry_run:
         return MergeIfGreenResult(
@@ -158,12 +224,21 @@ def merge_if_green(
             status_decision=status,
             merged=False,
             merge_output="",
+            base_ref_name=refs.base_ref_name,
+            base_ref_oid=refs.base_ref_oid,
+            head_ref_name=refs.head_ref_name,
+            head_ref_oid=refs.head_ref_oid,
+            expected_base_branch=effective_expected_base_branch,
+            expected_head_sha=effective_expected_head_sha,
             main_verification_required=False,
         )
 
-    args = ["pr", "merge", pr, f"--{merge_method}"]
-    if delete_branch:
-        args.append("--delete-branch")
+    args = build_merge_args(
+        pr,
+        merge_method=merge_method,
+        delete_branch=delete_branch,
+        match_head_sha=effective_expected_head_sha,
+    )
 
     completed = _run_gh(args)
     if completed.returncode != 0:
@@ -194,6 +269,12 @@ def merge_if_green(
         status_decision=status,
         merged=True,
         merge_output=(completed.stdout + completed.stderr).strip(),
+        base_ref_name=refs.base_ref_name,
+        base_ref_oid=refs.base_ref_oid,
+        head_ref_name=refs.head_ref_name,
+        head_ref_oid=refs.head_ref_oid,
+        expected_base_branch=effective_expected_base_branch,
+        expected_head_sha=effective_expected_head_sha,
         merge_commit_sha=merge_commit_sha,
         main_verification_required=verify_main,
         main_status_decision=main_status,
@@ -243,6 +324,12 @@ def render_result(result: MergeIfGreenResult) -> str:
         f"status_decision={result.status_decision.decision}",
         f"state={result.status_decision.state}",
         f"merge_state_status={result.status_decision.merge_state_status}",
+        f"base_ref_name={result.base_ref_name or '(unknown)'}",
+        f"base_ref_oid={result.base_ref_oid or '(unknown)'}",
+        f"head_ref_name={result.head_ref_name or '(unknown)'}",
+        f"head_ref_oid={result.head_ref_oid or '(unknown)'}",
+        f"expected_base_branch={result.expected_base_branch or '(unspecified)'}",
+        f"expected_head_sha={result.expected_head_sha or '(unknown)'}",
         f"merged={str(result.merged).lower()}",
         f"merge_commit_sha={result.merge_commit_sha or '(unknown)'}",
         f"main_verification_required={str(result.main_verification_required).lower()}",
@@ -271,6 +358,8 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--skip-main-verification", action="store_true")
     parser.add_argument("--main-branch", default="main")
+    parser.add_argument("--expected-base-branch", default="")
+    parser.add_argument("--expected-head-sha", default="")
     parser.add_argument("--main-ci-timeout-seconds", type=int, default=300)
     parser.add_argument("--main-ci-poll-seconds", type=int, default=10)
     args = parser.parse_args()
@@ -282,6 +371,8 @@ def main() -> int:
         dry_run=args.dry_run,
         verify_main=not args.skip_main_verification,
         main_branch=args.main_branch,
+        expected_base_branch=args.expected_base_branch,
+        expected_head_sha=args.expected_head_sha,
         main_ci_timeout_seconds=args.main_ci_timeout_seconds,
         main_ci_poll_seconds=args.main_ci_poll_seconds,
     )
