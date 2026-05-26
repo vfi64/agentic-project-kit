@@ -1,14 +1,14 @@
-## Post-PR821 Release-/Evidence-Kernel Current-State Override
+## Post-PR823 Release-/Evidence-Kernel Current-State Override
 
-Safe state is main at `f86e49ad76a17d6a0bc9b531b7009d12564f8879` (`f86e49a`), after PR #821 and the merge-if-green main-CI verification slice.
+Safe state is main at `a98aa8a05349e0e94b2b1a26283f1f04ada71c8a` (`a98aa8a`), after PR #823 and the merge-if-green head/base pinning slice.
 
-PR #821 `Verify main CI after merge-if-green` is merged. It hardens `./ns merge-if-green <pr>` so a successful PR merge must be followed by merge-commit verification on `main`; the command waits for main CI and fails the command result unless that main CI is green.
+PR #823 `Harden merge-if-green head and base pins` is merged. It hardens `./ns merge-if-green <pr>` so the command validates the PR base branch, requires a PR head SHA, passes `--match-head-commit <sha>` to GitHub, and renders the checked base/head refs before merge.
 
-PR #819 remains the red-CI failed-log diagnostics anchor. PR #817 remains the PASS_ALREADY_DONE hardening anchor. PR #815 remains the release readiness hardening anchor: `release-prep` stops before metadata patching on main/branch failures, remote WARN states block release readiness, and `release-publish` refuses to tag when remote lookup is inconclusive.
+PR #821 remains the post-merge main-CI verification anchor. PR #819 remains the red-CI failed-log diagnostics anchor. PR #817 remains the PASS_ALREADY_DONE hardening anchor. PR #815 remains the release readiness hardening anchor: `release-prep` stops before metadata patching on main/branch failures, remote WARN states block release readiness, and `release-publish` refuses to tag when remote lookup is inconclusive.
 
 v0.4.3 remains published and post-release verified. Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
-Next safe step: record PR821 closeout evidence, then continue only with the next smallest Release-/Evidence-Kernel follow-up. Do not start broad documentation migration or GUI expansion.
+Next safe step: record PR823 closeout evidence, then continue only with the next smallest Release-/Evidence-Kernel follow-up. Do not start broad documentation migration or GUI expansion.
 
 
 ## Post-PR809 Current-State Override
@@ -27,7 +27,7 @@ Next safe step: continue with guarded status/handoff refresh closeout and then g
 
 Status-date: 2026-05-26
 Project: agentic-project-kit
-Branch: docs/record-pr821-merge-if-green-closeout
+Branch: docs/record-pr823-merge-if-green-head-base-closeout
 Base branch: main
 Current version: 0.4.3
 
@@ -41,7 +41,8 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 - Current release tag: v0.4.3.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified Zenodo version DOI: `10.5281/zenodo.20393329`.
-- Main is refreshed after PR #821 at `f86e49a`.
+- Main is refreshed after PR #823 at `a98aa8a`.
+- PR #823 hardened `merge-if-green` so the merge command validates the target base branch, requires a PR head SHA, passes `--match-head-commit <sha>` to GitHub, and renders checked base/head refs.
 - PR #821 hardened `merge-if-green` so post-merge main-CI verification is required before the command reports clean success.
 - PR #819 hardened PR status failed-log diagnostics so red CI carries check names, Actions run ids, exact failed-log commands, bounded log-fetch status, and `no-checks` classification.
 - PR #817 hardened PASS_ALREADY_DONE target-state classification so generic already-exists output is not sufficient success evidence.
@@ -52,7 +53,7 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 
 ## Current Repository State
 
-Safe state is main after PR821 and v0.4.3 release publication. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers twelve active mechanisms with category, priority, enforcement_phase, owner, conflict_domains, surfaces, tests, coverage classification, migration-map completeness, and direct-test coverage for all active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check. `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json` now expose explicit direct-coverage completion state. Release/evidence-kernel hardening continues only in small slices. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked unless a new slice explicitly scopes them. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
+Safe state is main after PR823 and v0.4.3 release publication. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers twelve active mechanisms with category, priority, enforcement_phase, owner, conflict_domains, surfaces, tests, coverage classification, migration-map completeness, and direct-test coverage for all active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check. `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json` now expose explicit direct-coverage completion state. Release/evidence-kernel hardening continues only in small slices. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked unless a new slice explicitly scopes them. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
 
 ## A1 State Refresh Addendum
 
@@ -66,7 +67,7 @@ Protected Change Planner A1 is complete on remote main.
 
 ## Current Goal
 
-Record PR821 merge-if-green main-CI verification closeout after successful merge verification, then continue with the next smallest Release-/Evidence-Kernel follow-up.
+Record PR823 merge-if-green head/base pinning closeout after successful merge verification, then continue with the next smallest Release-/Evidence-Kernel follow-up.
 
 ## Current Baselines
 
@@ -107,7 +108,7 @@ Run state-freshness-check, handoff-check, governance-check, rule-registry check,
 
 ## Next Safe Step
 
-Record and merge PR821 closeout evidence, then continue with the next smallest Release-/Evidence-Kernel follow-up. Documentation-management rebuild work remains deferred.
+Record and merge PR823 closeout evidence, then continue with the next smallest Release-/Evidence-Kernel follow-up. Documentation-management rebuild work remains deferred.
 
 ## Source of Truth
 

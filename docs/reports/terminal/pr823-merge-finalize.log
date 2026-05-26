@@ -1,0 +1,191 @@
+terminal_log=docs/reports/terminal/20260526-192747_pr823-merge-finalize.log
+### RUN: tmp/pr823_closeout_gate.sh
+docs/record-pr823-merge-if-green-head-base-closeout
+ M .agentic/handoff_state.yaml
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? docs/reports/terminal/20260526-192747_pr823-merge-finalize.log
+{"baseRefName":"main","headRefOid":"0530904fb47bc22a87b2a6c0232f33f92c52d6b9","mergeCommit":{"oid":"a98aa8a05349e0e94b2b1a26283f1f04ada71c8a"},"mergedAt":"2026-05-26T17:23:15Z","state":"MERGED"}
+EVIDENCE_INSPECTION
+verdict: PASS_CONTINUE
+evidence_exists: yes
+require_summary: yes
+git_branch: docs/record-pr823-merge-if-green-head-base-closeout
+git_status_clean: no
+pass_markers: 4
+fail_markers: 0
+hidden_fail_before_final_pass: no
+structured_summary_found: yes
+structured_summary_valid: yes
+summary_name: PR821 merge-if-green main-CI verification closeout
+summary_scope: PR821 merge verification, merge-if-green post-merge main-CI verification hardening, status and handoff refresh
+summary_branch: docs/record-pr821-merge-if-green-closeout
+summary_origin: local
+summary_state_mode: local
+summary_mode_check: branch docs/record-pr821-merge-if-green-closeout; protected branch mutation via PR
+summary_work: PASS
+summary_evidence: PASS
+summary_overall: PASS
+summary_remote_evidence: PASS
+summary_pr: #821 merged
+summary_head_sha: f86e49ad76a17d6a0bc9b531b7009d12564f8879
+summary_ci: PR CI success; merge-if-green verified main CI success for f86e49ad76a17d6a0bc9b531b7009d12564f8879
+summary_merge: merge-if-green squash merged f86e49ad76a17d6a0bc9b531b7009d12564f8879
+summary_terminal_log: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/20260526-183547_pr821-merge-finalize.log
+summary_terminal_log_remote: docs/reports/terminal/pr821-merge-finalize.log
+summary_terminal_log_local: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/20260526-183547_pr821-merge-finalize.log
+summary_command_report: run_logged pr821 closeout gate: evidence inspect PR819, full pytest 1163 passed, ruff, check-docs, docs-audit, state-freshness-check, handoff-check, governance-check, doctor
+summary_safe_step: Merge this closeout evidence, then continue with the next smallest Release-/Evidence-Kernel follow-up.
+summary_chat_reply: d
+summary_result_marker: PASS
+evidence_path: docs/reports/terminal/pr821-merge-finalize.log
+final_marker: ### RESULT: PASS ###
+git_status:
+M .agentic/handoff_state.yaml
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? docs/reports/terminal/20260526-192747_pr823-merge-finalize.log
+next_action: continue with the next safe slice after reviewing evidence
+### RESULT: PASS ###
+........................................................................ [  6%]
+........................................................................ [ 12%]
+........................................................................ [ 18%]
+........................................................................ [ 24%]
+........................................................................ [ 30%]
+........................................................................ [ 36%]
+........................................................................ [ 43%]
+........................................................................ [ 49%]
+........................................................................ [ 55%]
+........................................................................ [ 61%]
+........................................................................ [ 67%]
+........................................................................ [ 73%]
+........................................................................ [ 80%]
+........................................................................ [ 86%]
+........................................................................ [ 92%]
+........................................................................ [ 98%]
+..................                                                       [100%]
+1170 passed in 9.57s
+All checks passed!
+Agentic project check passed
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check
+only catches known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Dokumentationsregistry
+- registry=docs/DOCUMENTATION_REGISTRY.yaml
+- version=1
+- documents=19
+- broad_migration_allowed=False
+- class:architecture=1
+- class:evidence/log=2
+- class:generated artifact=1
+- class:governance/system=4
+- class:operational/automation=4
+- class:planning=4
+- class:release=2
+- class:user-facing description=1
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
+PASS: no stale STATUS/HANDOFF current-state fragments found
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 19
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 4
+- class:release: 2
+- class:user-facing description: 1
+Governance check passed
+Agentic project doctor report for 
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, 
+markdown-docs, python-cli, git-github, release-managed; policy packs: 
+solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.3
+
+Overall: PASS
+PROTECTED_CHANGE_PLAN
+result=PASS
+findings=0
+### RESULT: PASS ###
+### EXIT: 0
+### RESULT: PASS ###
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-26 19:28:27 +0200
+
+SLICE
+  NAME: PR823 merge-if-green head/base pinning closeout
+  SCOPE: PR823 merge verification, merge-if-green head/base pinning hardening, status and handoff refresh
+  BRANCH: docs/record-pr823-merge-if-green-head-base-closeout
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: branch docs/record-pr823-merge-if-green-head-base-closeout; protected branch mutation via PR
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: #823 merged
+  HEAD_SHA: a98aa8a05349e0e94b2b1a26283f1f04ada71c8a
+  CI: PR CI success; merge-if-green verified main CI success for a98aa8a05349e0e94b2b1a26283f1f04ada71c8a
+  MERGE: merge-if-green squash merged a98aa8a05349e0e94b2b1a26283f1f04ada71c8a
+
+EVIDENCE FILES
+  terminal_log: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/20260526-192747_pr823-merge-finalize.log
+  terminal_log_remote: docs/reports/terminal/pr823-merge-finalize.log
+  terminal_log_local: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/20260526-192747_pr823-merge-finalize.log
+  command_report: run_logged pr823 closeout gate: PR823 merge view, evidence inspect PR821, full pytest 1170 passed, ruff, check-docs, docs-audit, state-freshness-check, handoff-check, governance-check, doctor, protected-change-plan
+
+INTERPRETATION
+  PR823 is merged and merge-if-green head/base pinning is verified; status and handoff now point at a98aa8a.
+
+NEXT
+  SAFE_STEP: Merge this closeout evidence, then continue with the next smallest Release-/Evidence-Kernel follow-up.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================

@@ -1,14 +1,14 @@
-## Post-PR821 Release-/Evidence-Kernel Current-State Override
+## Post-PR823 Release-/Evidence-Kernel Current-State Override
 
-Current verified main HEAD: `f86e49ad76a17d6a0bc9b531b7009d12564f8879` (`f86e49a`).
+Current verified main HEAD: `a98aa8a05349e0e94b2b1a26283f1f04ada71c8a` (`a98aa8a`).
 
-PR #821 `Verify main CI after merge-if-green` is merged. It hardens `./ns merge-if-green <pr>` so a successful PR merge must be followed by merge-commit verification on `main`; the command waits for main CI and fails the command result unless that main CI is green.
+PR #823 `Harden merge-if-green head and base pins` is merged. It hardens `./ns merge-if-green <pr>` so the command validates the PR base branch, requires a PR head SHA, passes `--match-head-commit <sha>` to GitHub, and renders the checked base/head refs before merge.
 
-PR #819 remains the red-CI failed-log diagnostics anchor. PR #817 remains the PASS_ALREADY_DONE hardening anchor. PR #815 remains the release readiness hardening anchor: `release-prep` stops before metadata patching on main/branch failures, remote WARN states block release readiness, and `release-publish` refuses to tag when remote lookup is inconclusive.
+PR #821 remains the post-merge main-CI verification anchor. PR #819 remains the red-CI failed-log diagnostics anchor. PR #817 remains the PASS_ALREADY_DONE hardening anchor. PR #815 remains the release readiness hardening anchor: `release-prep` stops before metadata patching on main/branch failures, remote WARN states block release readiness, and `release-publish` refuses to tag when remote lookup is inconclusive.
 
 v0.4.3 remains the current published and post-release verified release. Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
-Immediate next safe step: record PR821 closeout evidence, then continue only with the next smallest Release-/Evidence-Kernel follow-up. Do not start broad documentation migration or GUI expansion.
+Immediate next safe step: record PR823 closeout evidence, then continue only with the next smallest Release-/Evidence-Kernel follow-up. Do not start broad documentation migration or GUI expansion.
 
 
 ## Post-PR809 Current-State Override
@@ -28,7 +28,7 @@ Immediate next safe step: refresh handoff/status state after PR809, then continu
 Status-date: 2026-05-26
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/record-pr821-merge-if-green-closeout
+Current work branch: docs/record-pr823-merge-if-green-head-base-closeout
 Current version: 0.4.3
 
 ## Purpose
@@ -50,11 +50,12 @@ Current release tag: v0.4.3.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20393329`.
 Post-release verification command: `agentic-kit post-release-check --version 0.4.3`.
-Current verified main after release/evidence hardening: `f86e49a` (`Verify main CI after merge-if-green (#821)`).
+Current verified main after release/evidence hardening: `a98aa8a` (`Harden merge-if-green head and base pins (#823)`).
 v0.4.3 GitHub Release publication and post-release Zenodo verification are complete. Evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
 v0.4.3 safety-release target:
-- Main is refreshed after PR #821 at `f86e49a` (`Verify main CI after merge-if-green (#821)`).
+- Main is refreshed after PR #823 at `a98aa8a` (`Harden merge-if-green head and base pins (#823)`).
+- PR #823 hardened `merge-if-green` so the merge command validates the target base branch, requires a PR head SHA, passes `--match-head-commit <sha>` to GitHub, and renders checked base/head refs.
 - PR #821 hardened `merge-if-green` so post-merge main-CI verification is required before the command reports clean success.
 - PR #819 hardened PR status failed-log diagnostics so red CI carries check names, Actions run ids, exact failed-log commands, bounded log-fetch status, and `no-checks` classification.
 - PR #817 hardened PASS_ALREADY_DONE target-state classification so generic already-exists output is not sufficient success evidence.
@@ -65,7 +66,7 @@ v0.4.3 safety-release target:
 - Rule registry drift is checked through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight.
 - Rule registry completion is now explicitly reportable through `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json`; the JSON summary includes `direct_coverage_complete`.
 - Evidence is preserved in committed terminal logs including `docs/reports/terminal/pr737-rule-registry-release-evidence.log`, `docs/reports/terminal/pr739-rule-registry-source-evidence-validation.log`, `docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log`, `docs/reports/terminal/pr741-rule-registry-surfaces-tests-inventory-recovery.log`, `docs/reports/terminal/pr742-rule-registry-surfaces-tests-validation.log`, `docs/reports/terminal/pr761-chat-communication-direct-coverage.log`, `docs/reports/terminal/pr762-chat-bootstrap-drift-direct-coverage.log`, and `docs/reports/terminal/pr764-rule-registry-completion-reporting.log`.
-- Next immediate task: record PR821 closeout evidence, then continue with the next smallest Release-/Evidence-Kernel follow-up.
+- Next immediate task: record PR823 closeout evidence, then continue with the next smallest Release-/Evidence-Kernel follow-up.
 
 Documentation registry baseline:
 - `docs/DOCUMENTATION_REGISTRY.yaml` is the additive machine-readable registry.
@@ -112,7 +113,7 @@ Next safe slice: harden final-summary and expected-negative-smoke reporting so e
 
 ## Current Goal
 
-Record PR821 merge-if-green main-CI verification closeout after successful merge verification. After this closeout, continue with the next smallest Release-/Evidence-Kernel follow-up.
+Record PR823 merge-if-green head/base pinning closeout after successful merge verification. After this closeout, continue with the next smallest Release-/Evidence-Kernel follow-up.
 
 ## Active Workflow Rules
 

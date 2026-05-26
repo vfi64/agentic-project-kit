@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-26'
-  reason: Record PR821 merge-if-green main-CI verification closeout
-  source: agentic-kit handoff refresh plus PR821 closeout
+  reason: Record PR823 merge-if-green head/base pin closeout
+  source: agentic-kit handoff refresh plus PR823 closeout
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: f86e49a
-  commit_subject: Verify main CI after merge-if-green (#821)
+  commit: a98aa8a
+  commit_subject: Harden merge-if-green head and base pins (#823)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -80,13 +80,16 @@ release:
   post_release_evidence: docs/reports/terminal/20260526-120216_v043-release-verify.log
 open_items:
   prs: []
-  next_expected_chat_action: Record PR821 closeout evidence, then continue with the next
-    smallest release/evidence-kernel follow-up. Do not start broad documentation migration
-    or GUI expansion.
+  next_expected_chat_action: Record PR823 closeout evidence, then continue with the
+    next smallest release/evidence-kernel hardening follow-up. Do not start broad
+    documentation migration or GUI expansion.
 completed_since_previous_handoff:
-- 'PR #821 hardened merge-if-green postconditions: after a successful merge, the
-  command verifies the merge commit on main, waits for main CI, and fails the command
-  result unless main CI is green.'
+- 'PR #823 hardened merge-if-green head/base pinning: the command validates the target
+  base branch, requires a PR head SHA, passes --match-head-commit to GitHub, and renders
+  checked base/head refs in the command output.'
+- 'PR #821 hardened merge-if-green postconditions: after a successful merge, the command
+  verifies the merge commit on main, waits for main CI, and fails the command result
+  unless main CI is green.'
 - 'PR #819 hardened next-turn PR status failed-log diagnostics: red CI now exposes
   failed check names, GitHub Actions run ids, exact gh run view --log-failed commands,
   bounded log-fetch status, and no-checks classification for empty rollups.'
@@ -309,21 +312,25 @@ recent_failure_patterns:
     OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and RESULT
     marker.
 next_allowed_tasks:
+- id: continue-release-evidence-kernel-hardening
+  title: After this closeout is merged and verified, continue with the next smallest
+    release/evidence-kernel hardening slice.
+  priority: 1
 - id: continue-documentation-registry-rebuild
   title: After this closeout is merged and verified, continue the documentation-management
     rebuild with one small additive registry or projection slice.
-  priority: 1
+  priority: 2
 - id: verify-rule-registry-reporting
   title: Verify rule-registry completion reporting remains pass/complete after local
     main sync.
-  priority: 2
+  priority: 3
 blocked_until_closeout:
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
-- Broad documentation migration until post-PR764 closeout is merged and verified
+- Broad documentation migration during release/evidence-kernel hardening closeouts
 - Release, tag, or DOI mutation
-first_instruction: Merge and verify v0.4.2 release metadata, publish the v0.4.2 tag/release,
-  run post-release checks, then prepare a successor-chat handoff.
+first_instruction: Record PR823 closeout evidence, then continue with the next smallest
+  release/evidence-kernel hardening follow-up.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
