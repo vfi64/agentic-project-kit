@@ -149,23 +149,36 @@ mechanisms:
     - GOVERNANCE_YAML_FILES
     - patch-preflight
     - validate_rule_registry
+  - path: src/agentic_project_kit/protected_change_planner.py
+    required_terms:
+    - analyze_diff
+    - LARGE_PROTECTED_REMOVAL_THRESHOLD
+    - protected-anchor-removal-without-decision
   - path: tests/test_patch_artifact_preflight.py
     required_terms:
     - test_preflight_rule_registry_validation_passes_current_state
     - test_preflight_includes_rule_registry_files
     - test_preflight_full_runner_includes_governance_yaml
+  - path: tests/test_protected_change_planner.py
+    required_terms:
+    - test_flags_large_rewrite_without_decision
+    - test_accepts_large_rewrite_with_explicit_decision
   - path: ./ns
     required_terms:
     - patch-preflight
+    - protected-change-plan
     - agentic_project_kit.cli
-  protected_rule_intent: Block unsafe generated patch artifacts and rule-registry
-    drift before patch application.
+  protected_rule_intent: Block unsafe generated patch artifacts, broad protected-file
+    replacements, anchor removal, and rule-registry drift before patch application.
   surfaces:
   - patch-preflight-cli
   - patch-preflight-validator
   - patch-preflight-tests
+  - protected-change-planner-core
+  - protected-change-planner-tests
   tests:
   - tests/test_patch_artifact_preflight.py
+  - tests/test_protected_change_planner.py
 - id: chat-communication-rules
   status: active
   owner: communication-governance

@@ -1,0 +1,18 @@
+schema_version: 1
+purpose: Supplemental registry metadata for guarded patch preflight surfaces that should remain additive and non-canonical until the canonical coverage schema supports fragments.
+coverage:
+- mechanism_id: patch-preflight
+  supplemental_surface: protected-change-planner
+  test_coverage: direct
+  assertions:
+  - assertion_id: patch-preflight-protected-change-planner-large-edit
+    kind: guard
+    covered_surfaces:
+    - protected-change-planner-core
+    - protected-change-planner-tests
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/protected_change_planner.py
+    - kind: test
+      path: tests/test_protected_change_planner.py
+    statement: Broad protected-file edits and anchor removals are checked before protected control-file changes are accepted.

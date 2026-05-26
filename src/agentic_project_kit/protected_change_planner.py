@@ -16,6 +16,7 @@ PROTECTED_FILES = {
 }
 
 VALID_DECISIONS = {"keep", "migrate", "obsolete", "abort"}
+LARGE_PROTECTED_REMOVAL_THRESHOLD = 20
 
 ANCHORS = {
     ".agentic/compiled_agent_context.yaml": {"hard_rules", "final_summary_contract", "communication_rules", "normal_operator_path"},
@@ -66,20 +67,26 @@ def added_lines_for_path(diff_text: str, path: str) -> list[str]:
             lines.append(line[1:])
     return lines
 
+def _has_valid_decision(path: str, decisions: dict[str, str]) -> bool:
+    return decisions.get(path) in VALID_DECISIONS
+
 def analyze_diff(diff_text: str, decisions: dict[str, str] | None = None) -> list[ProtectedChangeFinding]:
     decisions = decisions or {}
     findings: list[ProtectedChangeFinding] = []
     for path in sorted(touched_protected_files(diff_text)):
         removed = removed_lines_for_path(diff_text, path)
         added = added_lines_for_path(diff_text, path)
-        if len(removed) >= 20 and len(added) <= 3:
-            findings.append(ProtectedChangeFinding(path, "block", "possible-full-replacement-or-large-deletion", "large protected-file deletion requires migration record or user decision"))
+        has_valid_decision = _has_valid_decision(path, decisions)
+        if len(removed) >= LARGE_PROTECTED_REMOVAL_THRESHOLD and not has_valid_decision:
+            if len(added) >= LARGE_PROTECTED_REMOVAL_THRESHOLD:
+                findings.append(ProtectedChangeFinding(path, "block", "large-protected-file-rewrite-without-decision", "large protected-file rewrite requires keep/migrate/obsolete/abort decision before replacement-style editing"))
+            else:
+                findings.append(ProtectedChangeFinding(path, "block", "possible-full-replacement-or-large-deletion", "large protected-file deletion requires migration record or user decision"))
         removed_text = "\n".join(removed)
         added_text = "\n".join(added)
         for anchor in ANCHORS.get(path, set()):
             if anchor in removed_text and anchor not in added_text:
-                decision = decisions.get(path)
-                if decision not in VALID_DECISIONS:
+                if not has_valid_decision:
                     findings.append(ProtectedChangeFinding(path, "block", "protected-anchor-removal-without-decision", f"anchor {anchor!r} removed without keep/migrate/obsolete/abort decision"))
     return findings
 
