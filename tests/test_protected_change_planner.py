@@ -24,6 +24,16 @@ def test_accepts_anchor_removal_with_decision() -> None:
     ])
     assert analyze_diff(diff, decisions={".agentic/compiled_agent_context.yaml": "migrate"}) == []
 
+def test_yaml_anchor_detection_does_not_match_substrings() -> None:
+    diff = "\n".join([
+        "diff --git a/.agentic/handoff_state.yaml b/.agentic/handoff_state.yaml",
+        "-  allowed_after_safe_state: true",
+        "-  reason: v0.4.2 safety release metadata preparation after PR766",
+        "+  reason: administrative evidence/log/handoff commit after substantive safe_state",
+    ])
+
+    assert analyze_diff(diff) == []
+
 def test_flags_large_deletion() -> None:
     removed = "\n".join("-line" + str(i) for i in range(25))
     diff = "diff --git a/docs/DOCUMENTATION_REGISTRY.yaml b/docs/DOCUMENTATION_REGISTRY.yaml\n" + removed

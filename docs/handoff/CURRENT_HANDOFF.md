@@ -1,3 +1,14 @@
+## Post-PR811 Current-State Override
+
+Safe state is main at `f9cf80513eaa89e7d0e8b4dc060e83621058fe62` (`f9cf805`), after PR #811.
+
+PR #811 is merged and hardens `src/agentic_project_kit/handoff_freshness.py` so successor-handoff discovery includes Markdown, YAML, and YML files. The PR810 stale-Markdown plus valid-YAML override case is covered by `tests/test_handoff_freshness.py`.
+
+Evidence path for this closeout: `docs/reports/terminal/pr811-merge-finalize.log`.
+
+Next safe step: finish the PR811 closeout evidence and then continue only with a small deterministic workflow-kernel hardening slice, such as PR/CI status or protected-diff checking. Do not start broad documentation migration, GUI expansion, release tagging, or publication work from this handoff.
+
+
 ## Post-PR809 Current-State Override
 
 Safe state is main at `ee87fa57ed9372c758e68770478b5783878b506d` (`ee87fa5`), after PR #809 and recovery evidence commit. PR #809 is merged at `02bacce54bdc9fd9936fd381d40a7db82bf12924`.
