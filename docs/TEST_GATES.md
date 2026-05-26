@@ -104,6 +104,21 @@ Required evidence for this registry gate:
     agentic-kit docs-registry --report /tmp/agentic-docs-registry-summary.json
     agentic-kit check-docs
 
+## Failure-Mode Review Automation Gate (planned)
+
+`docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md` defines the implementation contract for a future repo-backed failure-mode review path.
+
+The first implementation phase must remain read-only and must add `agentic-kit next-slice review` plus `./ns next-slice-review` before any patch-preflight BLOCK integration. The planned Phase-1 evidence is:
+
+    python -m pytest -q tests/test_failure_mode_review.py
+    agentic-kit next-slice review
+    ./ns next-slice-review
+    agentic-kit check-docs
+    agentic-kit docs-audit
+    agentic-kit doctor
+
+Until Phase 1 is implemented, this section is a planning gate only. It must not be cited as evidence that the command already exists.
+
 ## LLM Communication and Bootstrap Gate
 
 Changes to chat communication, final summary behavior, portable execution, successor-chat bootstrap, drift detection, or handoff prompt behavior must update the canonical governance contracts instead of spreading long duplicate rules across state files.

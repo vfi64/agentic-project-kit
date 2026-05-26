@@ -161,6 +161,10 @@ documents:
     class: planning
     owner: maintainers
     notes: Accepted backlog for reducing remaining rule-registry weaknesses without blocking documentation-management work.
+  - path: docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
+    class: planning
+    owner: maintainers
+    notes: Implementation contract for repo-backed failure-mode review automation before slices and after merges.
   - path: docs/handoff/CURRENT_HANDOFF.md
     class: planning
     owner: maintainers
