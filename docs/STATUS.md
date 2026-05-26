@@ -1,12 +1,14 @@
-## Post-PR815 Release-/Evidence-Kernel Current-State Override
+## Post-PR817 Release-/Evidence-Kernel Current-State Override
 
-Current verified main HEAD: `f1fef051ffcc51ca2e063a451b9362dd4fdc983c` (`f1fef05`).
+Current verified main HEAD: `8209777be2f3e72bfbfe01304d2d9febee8aa1a3` (`8209777`).
 
-PR #815 `Harden release prep and remote readiness checks` is merged. It hardens `release-prep` so main-update, main-verification, and release-branch failures stop before metadata patching. It also makes remote release WARN states explicit blockers: `release-check` and `release-preflight` report `[WARN]` for inconclusive remote checks plus `[BLOCK] release publish readiness`, and `release-publish` refuses to tag when remote tag or GitHub Release lookup is inconclusive.
+PR #817 `Harden already-done target classification` is merged. It tightens PASS_ALREADY_DONE handling so generic `already exists` output is not enough success evidence; already-done promotion now requires `--target-verified` plus target-specific output patterns, with explicit `--target-state` support for branch-exists cases and hard-failure precedence for Tracebacks.
+
+PR #815 remains the release readiness hardening anchor: `release-prep` stops before metadata patching on main/branch failures, remote WARN states block release readiness, and `release-publish` refuses to tag when remote lookup is inconclusive.
 
 v0.4.3 remains the current published and post-release verified release. Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
-Immediate next safe step: record PR815 closeout evidence, then continue only with the next smallest Release-/Evidence-Kernel follow-up. Do not start broad documentation migration or GUI expansion.
+Immediate next safe step: record PR817 closeout evidence, then continue only with the next smallest Release-/Evidence-Kernel follow-up, likely red-CI failed-log diagnosis. Do not start broad documentation migration or GUI expansion.
 
 
 ## Post-PR809 Current-State Override
@@ -26,7 +28,7 @@ Immediate next safe step: refresh handoff/status state after PR809, then continu
 Status-date: 2026-05-26
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/record-pr815-release-kernel-closeout
+Current work branch: docs/record-pr817-already-done-closeout
 Current version: 0.4.3
 
 ## Purpose
@@ -48,11 +50,12 @@ Current release tag: v0.4.3.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20393329`.
 Post-release verification command: `agentic-kit post-release-check --version 0.4.3`.
-Current verified main after release/evidence hardening: `f1fef05` (`Harden release prep and remote readiness checks (#815)`).
+Current verified main after release/evidence hardening: `8209777` (`Harden already-done target classification (#817)`).
 v0.4.3 GitHub Release publication and post-release Zenodo verification are complete. Evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
 v0.4.3 safety-release target:
-- Main is refreshed after PR #815 at `f1fef05` (`Harden release prep and remote readiness checks (#815)`).
+- Main is refreshed after PR #817 at `8209777` (`Harden already-done target classification (#817)`).
+- PR #817 hardened PASS_ALREADY_DONE target-state classification so generic already-exists output is not sufficient success evidence.
 - PR #815 hardened release-prep atomicity and remote release readiness so inconclusive remote checks no longer permit a release PASS.
 - PR #812 includes the PR811 closeout evidence log, successor-handoff YAML freshness baseline, protected-change planner YAML anchor hardening, handoff-state preservation, and the explicit opt-in Tk window-smoke guard.
 - PRs #718-#764 established and closed out the governed rule-registry direct-coverage baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, deterministic metadata/conflict/completeness checks, direct test coverage for all active mechanisms, an empty direct-test follow-up plan, and explicit machine-readable plus human-readable completion reporting.
@@ -60,7 +63,7 @@ v0.4.3 safety-release target:
 - Rule registry drift is checked through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight.
 - Rule registry completion is now explicitly reportable through `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json`; the JSON summary includes `direct_coverage_complete`.
 - Evidence is preserved in committed terminal logs including `docs/reports/terminal/pr737-rule-registry-release-evidence.log`, `docs/reports/terminal/pr739-rule-registry-source-evidence-validation.log`, `docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log`, `docs/reports/terminal/pr741-rule-registry-surfaces-tests-inventory-recovery.log`, `docs/reports/terminal/pr742-rule-registry-surfaces-tests-validation.log`, `docs/reports/terminal/pr761-chat-communication-direct-coverage.log`, `docs/reports/terminal/pr762-chat-bootstrap-drift-direct-coverage.log`, and `docs/reports/terminal/pr764-rule-registry-completion-reporting.log`.
-- Next immediate task: record PR815 closeout evidence, then continue with the next smallest Release-/Evidence-Kernel follow-up.
+- Next immediate task: record PR817 closeout evidence, then continue with the next smallest Release-/Evidence-Kernel follow-up.
 
 Documentation registry baseline:
 - `docs/DOCUMENTATION_REGISTRY.yaml` is the additive machine-readable registry.
@@ -107,7 +110,7 @@ Next safe slice: harden final-summary and expected-negative-smoke reporting so e
 
 ## Current Goal
 
-Record PR815 release/evidence-kernel hardening closeout after successful merge verification. After this closeout, continue with the next smallest Release-/Evidence-Kernel follow-up.
+Record PR817 PASS_ALREADY_DONE hardening closeout after successful merge verification. After this closeout, continue with the next smallest Release-/Evidence-Kernel follow-up.
 
 ## Active Workflow Rules
 
@@ -181,4 +184,4 @@ Required gate set for current-state, handoff, or governance-summary changes:
 
 ## Next Safe Step
 
-Record and merge PR815 closeout evidence, then continue with the next smallest Release-/Evidence-Kernel follow-up. Documentation-management rebuild work remains deferred.
+Record and merge PR817 closeout evidence, then continue with the next smallest Release-/Evidence-Kernel follow-up. Documentation-management rebuild work remains deferred.

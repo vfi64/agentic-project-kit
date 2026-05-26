@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-26'
-  reason: Record PR815 release/evidence kernel hardening closeout
-  source: agentic-kit handoff refresh plus PR815 closeout
+  reason: Record PR817 PASS_ALREADY_DONE hardening closeout
+  source: agentic-kit handoff refresh plus PR817 closeout
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: f1fef05
-  commit_subject: Harden release prep and remote readiness checks (#815)
+  commit: '8209777'
+  commit_subject: Harden already-done target classification (#817)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -81,8 +81,12 @@ release:
 open_items:
   prs: []
   next_expected_chat_action: Continue with the next smallest release/evidence-kernel
-    hardening follow-up; do not start broad documentation migration or GUI expansion.
+    follow-up, likely red-CI failed-log diagnosis; do not start broad documentation
+    migration or GUI expansion.
 completed_since_previous_handoff:
+- 'PR #817 hardened PASS_ALREADY_DONE target-state classification: generic already-exists
+  output is no longer sufficient success evidence; target-specific classes and hard-failure
+  precedence are test-backed.'
 - 'PR #815 hardened release-prep atomicity and remote release readiness: release-prep
   stops before metadata patching on main/branch failures; release-check and release-preflight
   block release readiness on remote WARN; release-publish blocks inconclusive remote
