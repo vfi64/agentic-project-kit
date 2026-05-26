@@ -1,3 +1,14 @@
+## Post-PR809 Current-State Override
+
+Safe state is main at `ee87fa57ed9372c758e68770478b5783878b506d` (`ee87fa5`), after PR #809 and recovery evidence commit. PR #809 is merged at `02bacce54bdc9fd9936fd381d40a7db82bf12924`.
+
+The current protection baseline includes the finalize-log addendum `docs/governance/FINAL_SUMMARY_CONTRACT_FINALIZE_LOG_ADDENDUM.md`, the protected-change planner broad-rewrite guard, and direct tests in `tests/test_protected_change_planner.py` plus registry integration through the `patch-preflight` mechanism.
+
+Evidence: `docs/reports/terminal/pr809-merge-finalize-summary-recovery.log`. The earlier ambiguous PR809 closeout log is superseded and must not be used as success evidence.
+
+Next safe step: continue with guarded status/handoff refresh closeout and then generate a successor-chat handoff only after evidence inspection passes.
+
+
 <!-- v042-safety-release-prep -->
 # Current Handoff
 
