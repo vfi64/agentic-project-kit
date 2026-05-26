@@ -1,12 +1,12 @@
-## Post-PR811 Current-State Override
+## Post-PR812 Current-State Override
 
-Safe state is main at `f9cf80513eaa89e7d0e8b4dc060e83621058fe62` (`f9cf805`), after PR #811.
+Safe state is main at `12bae324dd7a06165d5a015fda0b042b7e58b057` (`12bae32`), after PR #812.
 
-PR #811 is merged and hardens `src/agentic_project_kit/handoff_freshness.py` so successor-handoff discovery includes Markdown, YAML, and YML files. The PR810 stale-Markdown plus valid-YAML override case is covered by `tests/test_handoff_freshness.py`.
+PR #812 is merged and records the PR811 closeout evidence, refreshes handoff/status state, hardens protected YAML anchor matching, preserves handoff-state comments during refresh, and blocks real Tk window-smoke checks unless `AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE=1` is set.
 
 Evidence path for this closeout: `docs/reports/terminal/pr811-merge-finalize.log`.
 
-Next safe step: finish the PR811 closeout evidence and then continue only with a small deterministic workflow-kernel hardening slice, such as PR/CI status or protected-diff checking. Do not start broad documentation migration, GUI expansion, release tagging, or publication work from this handoff.
+Next safe step: finish v0.4.3 release metadata, run release gates, publish tag/release from clean `main`, and run post-release verification. Do not start broad documentation migration or GUI expansion before release closeout.
 
 
 ## Post-PR809 Current-State Override
@@ -23,11 +23,11 @@ Next safe step: continue with guarded status/handoff refresh closeout and then g
 <!-- v042-safety-release-prep -->
 # Current Handoff
 
-Status-date: 2026-05-25
+Status-date: 2026-05-26
 Project: agentic-project-kit
-Branch: main
+Branch: release/prepare-v0.4.3
 Base branch: main
-Current version: 0.4.2
+Current version: 0.4.3
 
 ## Purpose
 
@@ -35,17 +35,18 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 
 ## Current State
 
-- Prepared release: 0.4.2.
-- Prepared release tag: v0.4.2.
+- Prepared release: 0.4.3.
+- Prepared release tag: v0.4.3.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
-- Previous verified Zenodo version DOI: `10.5281/zenodo.20357657`; v0.4.2 Zenodo verification is pending until post-release closeout.
-- Main is refreshed after PR #766 at `cf75340`.
+- Previous verified Zenodo version DOI: `10.5281/zenodo.20357657`; v0.4.3 Zenodo verification is pending until post-release closeout.
+- Main is refreshed after PR #812 at `12bae32`.
+- PR #812 includes the PR811 closeout evidence log, successor-handoff YAML freshness baseline, protected-change planner YAML anchor hardening, handoff-state preservation, and the explicit opt-in Tk window-smoke guard.
 - PRs #718-#764 established and closed out the governed rule-registry direct-coverage baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, deterministic metadata/conflict/completeness checks, direct test coverage for all active mechanisms, an empty direct-test follow-up plan, and explicit machine-readable plus human-readable completion reporting.
 - Evidence: `docs/reports/terminal/pr737-rule-registry-release-evidence.log`, `docs/reports/terminal/pr739-rule-registry-source-evidence-validation.log`, `docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log`, `docs/reports/terminal/pr741-rule-registry-surfaces-tests-inventory-recovery.log`, `docs/reports/terminal/pr742-rule-registry-surfaces-tests-validation.log`, `docs/reports/terminal/pr761-chat-communication-direct-coverage.log`, `docs/reports/terminal/pr762-chat-bootstrap-drift-direct-coverage.log`, and `docs/reports/terminal/pr764-rule-registry-completion-reporting.log`.
 
 ## Current Repository State
 
-Safe state is main after PR766 and before v0.4.2 release publication. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers twelve active mechanisms with category, priority, enforcement_phase, owner, conflict_domains, surfaces, tests, coverage classification, migration-map completeness, and direct-test coverage for all active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check. `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json` now expose explicit direct-coverage completion state. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked unless a new slice explicitly scopes them. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
+Safe state is main after PR812 and before v0.4.3 release publication. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers twelve active mechanisms with category, priority, enforcement_phase, owner, conflict_domains, surfaces, tests, coverage classification, migration-map completeness, and direct-test coverage for all active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check. `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json` now expose explicit direct-coverage completion state. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked unless a new slice explicitly scopes them. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
 
 ## A1 State Refresh Addendum
 
@@ -59,7 +60,7 @@ Protected Change Planner A1 is complete on remote main.
 
 ## Current Goal
 
-Prepare and publish the v0.4.2 safety release, then start a successor chat before resuming documentation-management rebuild work.
+Prepare and publish the v0.4.3 safety release after PR #812, then start a successor chat before resuming documentation-management rebuild work.
 
 ## Current Baselines
 
@@ -100,7 +101,7 @@ Run state-freshness-check, handoff-check, governance-check, rule-registry check,
 
 ## Next Safe Step
 
-Merge and verify v0.4.2 release metadata, publish the v0.4.2 tag/release, run post-release checks, and then prepare a detailed successor-chat handoff.
+Merge and verify v0.4.3 release metadata, publish the v0.4.3 tag/release, run post-release checks, and then prepare a detailed successor-chat handoff.
 
 ## Source of Truth
 
