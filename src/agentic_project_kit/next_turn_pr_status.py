@@ -224,7 +224,7 @@ def fetch_pr_payload(pr: str) -> dict[str, Any]:
         "view",
         pr,
         "--json",
-        "state,mergeStateStatus,headRefOid,statusCheckRollup,url",
+        "baseRefName,baseRefOid,headRefName,headRefOid,state,mergeStateStatus,statusCheckRollup,url",
     ])
     payload = json.loads(raw)
     if not isinstance(payload, dict):
