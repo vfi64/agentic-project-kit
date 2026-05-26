@@ -33,8 +33,37 @@ def test_pull_request_already_exists_can_be_pass_already_done() -> None:
     assert result.outcome == CompletionOutcome.PASS_ALREADY_DONE
 
 
+def test_generic_already_exists_is_not_pass_already_done() -> None:
+    result = classify_completion(exit_code=1, output="already exists", target_verified=True)
+    assert result.outcome == CompletionOutcome.FAIL
+
+
+def test_branch_already_exists_requires_explicit_target_state() -> None:
+    output = "fatal: a branch named feature/x already exists"
+    generic_result = classify_completion(exit_code=1, output=output, target_verified=True)
+    branch_result = classify_completion(
+        exit_code=1,
+        output=output,
+        target_verified=True,
+        target_state="branch-exists",
+    )
+
+    assert generic_result.outcome == CompletionOutcome.FAIL
+    assert branch_result.outcome == CompletionOutcome.PASS_ALREADY_DONE
+    assert branch_result.target_state == "branch-exists"
+
+
 def test_traceback_is_fail_even_when_target_verified() -> None:
     result = classify_completion(exit_code=1, output="Traceback: boom", target_verified=True)
+    assert result.outcome == CompletionOutcome.FAIL
+
+
+def test_traceback_wins_over_noop_phrase() -> None:
+    result = classify_completion(
+        exit_code=1,
+        output="Traceback: boom\nnothing to commit, working tree clean\n",
+        target_verified=True,
+    )
     assert result.outcome == CompletionOutcome.FAIL
 
 
@@ -55,6 +84,28 @@ def test_cli_classify_pass_already_done(tmp_path: Path) -> None:
     )
     assert result.exit_code == 0, result.output
     assert "outcome: PASS_ALREADY_DONE" in result.output
+
+
+def test_cli_classify_branch_already_done_target_state(tmp_path: Path) -> None:
+    output_file = tmp_path / "out.txt"
+    output_file.write_text("fatal: a branch named feature/x already exists\n", encoding="utf-8")
+    runner = CliRunner()
+    result = runner.invoke(
+        app,
+        [
+            "pass-already-done",
+            "classify",
+            str(output_file),
+            "--exit-code",
+            "1",
+            "--target-verified",
+            "--target-state",
+            "branch-exists",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    assert "outcome: PASS_ALREADY_DONE" in result.output
+    assert "target_state: branch-exists" in result.output
 
 
 def test_cli_classify_fail_without_verified_target(tmp_path: Path) -> None:

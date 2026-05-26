@@ -27,11 +27,31 @@ def test_report_classifier_fails_unverified_noop(tmp_path: Path) -> None:
 def test_render_report_classification_has_effective_success(tmp_path: Path) -> None:
     report = tmp_path / "report.md"
     report.write_text("Everything up-to-date\n", encoding="utf-8")
-    result = classify_report(report, raw_exit_code=1, target_verified=True)
+    result = classify_report(
+        report,
+        raw_exit_code=1,
+        target_verified=True,
+        target_state="remote-sync",
+    )
     text = render_report_classification(result)
     assert "WORKFLOW_REPORT_CLASSIFICATION" in text
+    assert "target_state: remote-sync" in text
     assert "effective_success: yes" in text
     assert "outcome: PASS_ALREADY_DONE" in text
+
+
+def test_report_classifier_renders_normalized_target_state(tmp_path: Path) -> None:
+    report = tmp_path / "report.md"
+    report.write_text("Everything up-to-date\n", encoding="utf-8")
+    result = classify_report(
+        report,
+        raw_exit_code=1,
+        target_verified=True,
+        target_state="remote_sync",
+    )
+
+    assert result.target_state == "remote-sync"
+    assert "target_state: remote-sync" in render_report_classification(result)
 
 
 def test_cli_report_classification_pass(tmp_path: Path) -> None:
@@ -40,7 +60,16 @@ def test_cli_report_classification_pass(tmp_path: Path) -> None:
     runner = CliRunner()
     result = runner.invoke(
         app,
-        ["pass-already-done", "report", str(report), "--exit-code", "1", "--target-verified"],
+        [
+            "pass-already-done",
+            "report",
+            str(report),
+            "--exit-code",
+            "1",
+            "--target-verified",
+            "--target-state",
+            "remote-sync",
+        ],
     )
     assert result.exit_code == 0, result.output
     assert "WORKFLOW_REPORT_CLASSIFICATION" in result.output

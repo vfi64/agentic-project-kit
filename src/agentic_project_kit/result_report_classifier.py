@@ -13,6 +13,7 @@ class ReportClassification:
     report_path: Path
     raw_exit_code: int
     target_verified: bool
+    target_state: str | None
     classification: CompletionClassification
 
     @property
@@ -20,17 +21,25 @@ class ReportClassification:
         return self.classification.success
 
 
-def classify_report(path: Path, *, raw_exit_code: int, target_verified: bool = False) -> ReportClassification:
+def classify_report(
+    path: Path,
+    *,
+    raw_exit_code: int,
+    target_verified: bool = False,
+    target_state: str | None = None,
+) -> ReportClassification:
     text = path.read_text(encoding="utf-8")
     classification = classify_completion(
         exit_code=raw_exit_code,
         output=text,
         target_verified=target_verified,
+        target_state=target_state,
     )
     return ReportClassification(
         report_path=path,
         raw_exit_code=raw_exit_code,
         target_verified=target_verified,
+        target_state=classification.target_state,
         classification=classification,
     )
 
@@ -41,6 +50,7 @@ def render_report_classification(result: ReportClassification) -> str:
         f"report_path: {result.report_path}",
         f"raw_exit_code: {result.raw_exit_code}",
         f"target_verified: {'yes' if result.target_verified else 'no'}",
+        f"target_state: {result.target_state or 'default'}",
         f"effective_success: {'yes' if result.success else 'no'}",
         render_classification(result.classification),
     ]
