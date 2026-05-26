@@ -11,6 +11,11 @@ FRESHNESS_GUARD_FILES = [
     ".agentic/handoff_state.yaml",
     "docs/handoff/CURRENT_HANDOFF.md",
 ]
+SUCCESSOR_HANDOFF_GLOBS = [
+    "*successor*handoff*.md",
+    "*successor*handoff*.yaml",
+    "*successor*handoff*.yml",
+]
 
 
 def assess_handoff_prompt_freshness(
@@ -169,7 +174,11 @@ def _latest_successor_prompt_path(data: dict[str, Any], project_root: Path) -> P
     terminal_dir = project_root / "docs" / "reports" / "terminal"
     if not terminal_dir.exists():
         return None
-    candidates = sorted(terminal_dir.glob("*successor*handoff*.md"))
+    candidates = sorted(
+        candidate
+        for pattern in SUCCESSOR_HANDOFF_GLOBS
+        for candidate in terminal_dir.glob(pattern)
+    )
     if not candidates:
         return None
     return candidates[-1]

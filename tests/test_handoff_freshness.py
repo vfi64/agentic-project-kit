@@ -114,6 +114,30 @@ def test_handoff_freshness_guard_still_rejects_non_admin_commit_after_state_refr
     assert any("does not mention current handoff commit marker" in warning for warning in warnings)
 
 
+def test_handoff_freshness_guard_uses_yaml_successor_override_when_it_is_latest(
+    tmp_path: Path,
+) -> None:
+    handoff_path = tmp_path / ".agentic" / "handoff_state.yaml"
+    terminal_dir = tmp_path / "docs" / "reports" / "terminal"
+    _write(tmp_path / "docs" / "STATUS.md", "status for e4b2ebe\n")
+    _write(tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md", "handoff for e4b2ebe\n")
+    _write(handoff_path, "schema_version: 1\n")
+    _write(terminal_dir / "post-pr809-kit-generated-successor-handoff.md", "stale prompt for c07f8ec\n")
+    _write(
+        terminal_dir / "post-pr809-successor-handoff-override.yaml",
+        "successor_chat_handoff:\n  main_after_pr810: e4b2ebe\n",
+    )
+    data = {"safe_state": {"commit": "e4b2ebe"}}
+
+    warnings = assess_handoff_prompt_freshness(
+        data,
+        handoff_path,
+        current_head="e4b2ebe",
+    )
+
+    assert warnings == []
+
+
 def test_handoff_freshness_guard_renders_prominent_warning() -> None:
     guard = render_freshness_guard(["current git HEAD def7010 is not represented"])
 
