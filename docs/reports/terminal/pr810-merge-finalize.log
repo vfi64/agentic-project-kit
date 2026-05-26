@@ -1,0 +1,152 @@
+### PR810 MERGE VERIFY ###
+
+### VERIFY MAIN ###
+main
+e4b2ebe Refresh status handoff and record post-PR809 successor prompt (#810)
+ee87fa5 Record PR809 finalize-log recovery evidence
+713c18d Record PR809 merge finalize summary log
+02bacce Document finalize-log closeout and harden protected changes (#809)
+
+### VERIFY PR810 ###
+{"headRefOid":"dc7403492772ddec6ef8dea396a9ad2f9cff5bd7","mergeCommit":{"oid":"e4b2ebea32c9701738983b78a935ade928392436"},"mergedAt":"2026-05-26T05:33:46Z","state":"MERGED"}
+
+### VERIFY HANDOFF FILES ###
+
+--- generated handoff drift evidence head ---
+# Post-PR809 kit-generated handoff drift evidence
+
+Status: stale-generator-output-evidence
+Use-as-successor-prompt: no
+Canonical successor override: docs/reports/terminal/post-pr809-successor-handoff-override.yaml
+
+## Why this file exists
+
+This file records that `agentic-kit handoff prompt` was run during the post-PR809 handoff-file slice, but its generated output was stale because the current status and handoff state still contained older anchors.
+
+The original generated prompt included stale references such as `c07f8ec`, `cf75340`, PR #766, PR #791, and v0.4.2 release-preparation state. Those references are not the current post-PR809 safe state and must not be used as successor-chat instructions.
+
+## Current authoritative handoff file for this slice
+
+Use the YAML override instead:
+
+- `docs/reports/terminal/post-pr809-successor-handoff-override.yaml`
+
+## Required successor behavior
+
+A successor chat must read `docs/handoff/NEXT_CHAT_BOOTSTRAP.md`, inspect `docs/reports/terminal/pr809-merge-finalize-summary-recovery.log`, and then follow the override YAML. It must not treat stale generated prompt content as authoritative.
+
+## Evidence interpretation
+
+This file is intentionally short and additive. It preserves the fact that the generator was run while preventing stale generated prose from becoming an apparent source of truth.
+
+--- override yaml head ---
+post_pr809_successor_handoff_override:
+  repo: "vfi64/agentic-project-kit"
+  rule: "Do not work from chat memory. Read repo/remote sources first."
+
+  required_start:
+    - "Read docs/handoff/NEXT_CHAT_BOOTSTRAP.md fully."
+    - "Run or read output from .venv/bin/agentic-kit handoff prompt."
+    - "Treat generated handoff/status state as potentially stale until verified against the override below."
+
+  last_clean_remote_anchor:
+    commit: "ee87fa57ed9372c758e68770478b5783878b506d"
+    subject: "Record PR809 finalize-log recovery evidence"
+    evidence_log: "docs/reports/terminal/pr809-merge-finalize-summary-recovery.log"
+    required_check:
+      - "Read the evidence log directly from main."
+      - "Run agentic-kit evidence inspect --require-summary against the log when local repo is available."
+
+  pr_state:
+    pr808:
+      status: "merged"
+      meaning:
+        - "agentic-kit evidence finalize-log prints the canonical summary visibly."
+        - "Invalid summary semantics are rejected."
+    pr809:
+      status: "merged"
+      merge_commit: "02bacce54bdc9fd9936fd381d40a7db82bf12924"
+      recovery_commit: "ee87fa57ed9372c758e68770478b5783878b506d"
+      meaning:
+        - "protected_change_planner blocks broad protected-file rewrites."
+        - "protected_change_planner is registered through patch-preflight."
+
+  superseded_bad_evidence:
+    bad_log: "docs/reports/terminal/pr809-merge-finalize-summary.log"
+    reason:
+      - "Summary rendering rejected PASS with remote-evidence PARTIAL."
+      - "The rejected/ambiguous log was committed accidentally."
+      - "It must not be used as success evidence."
+    superseded_by: "docs/reports/terminal/pr809-merge-finalize-summary-recovery.log"
+
+  local_state_at_chat_switch:
+    branch: "post-pr809-status-handoff-refresh"
+    dirty_paths_before_closeout:
+      - "docs/STATUS.md"
+      - "docs/handoff/CURRENT_HANDOFF.md"
+    required_first_action:
+      - "Inspect local branch and git status."
+      - "Inspect or verify any remaining local diff."
+      - "Do not assume local main is clean."
+
+  process_constraints:
+    - "No long freehand shell monoliths for mutation, evidence, merge, status, or handoff."
+    - "Prefer ./ns, agentic-kit, and registered repo actions."
+    - "Before commits touching protected files, inspect actual git diff and run protected-change-plan."
+    - "If protected-change-plan reports BLOCK or any gate reports FAIL, stop immediately."
+    - "No commit, push, PR, or merge after BLOCK/FAIL."
+    - "Evidence-bearing workflows must close through agentic-kit evidence finalize-log or stricter successor."
+    - "After closeout, run evidence inspect --require-summary against the named repo-readable log."
+    - "d/f/w are communication, not evidence."
+
+  next_goal:
+    - "Finish the post-PR809 status/handoff refresh safely."
+    - "If no atomic command exists for guarded status/handoff refresh, build one as a small repo-backed action before using it repeatedly."
+
+### TARGETED CHECKS ###
+...........                                                              [100%]
+11 passed in 0.08s
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-26 07:37:32 +0200
+
+SLICE
+  NAME: PR810 MERGE FINALIZE
+  SCOPE: MERGE VERIFY / SUCCESSOR HANDOFF FILES / POST-PR809
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: PR810 merged, main synced, handoff files verified, targeted checks passed
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: NOT_REQUIRED
+  PR: 810
+  HEAD_SHA: e4b2ebea32c9701738983b78a935ade928392436
+  CI: passed-before-merge
+  MERGE: completed
+
+EVIDENCE FILES
+  terminal_log: /tmp/pr810-merge-finalize.log
+  terminal_log_remote: docs/reports/terminal/pr810-merge-finalize.log
+  terminal_log_local: /tmp/pr810-merge-finalize.log
+  command_report: targeted-tests/protected-change-planner/rule-mechanism-inventory
+
+INTERPRETATION
+  PR810 is merged and locally verified; the stale generated handoff is preserved only as drift evidence and the YAML override is the successor handoff anchor.
+
+NEXT
+  SAFE_STEP: inspect finalized evidence and then produce final YAML handoff prompt
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
