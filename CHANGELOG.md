@@ -4,8 +4,9 @@
 - Governance: refresh status and handoff state after PR811/PR812, preserve the canonical PR811 finalize evidence at `docs/reports/terminal/pr811-merge-finalize.log`, and keep the failed GUI-smoke precursor log visible as repair evidence.
 - Safety: require explicit `AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE=1` before a real Tk window-smoke opens, preventing local gates from aborting the Python process in non-window-safe sessions.
 - Testing: keep the successor-handoff YAML/YML freshness regression, protected YAML anchor matching regression, handoff-state preservation tests, and GUI window guard regression in the release line.
+- Evidence: GitHub Release publication and post-release Zenodo verification are complete for v0.4.3 with version DOI `10.5281/zenodo.20393329`.
 
-Zenodo verification pending until GitHub Release publication and archive processing.
+Zenodo v0.4.3 DOI: 10.5281/zenodo.20393329
 Zenodo Concept DOI: 10.5281/zenodo.20101359
 
 ## v0.4.2 - 2026-05-25

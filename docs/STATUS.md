@@ -1,12 +1,12 @@
-## Post-PR812 Current-State Override
+## Post-v0.4.3 Release Closeout Current-State Override
 
-Current verified main HEAD: `12bae324dd7a06165d5a015fda0b042b7e58b057` (`12bae32`).
+Current verified main HEAD: `97dceef1aeccccd2d96f4433925693a0fe341d91` (`97dceef`).
 
-PR #812 `Close out PR811 evidence and harden gates` is merged. It records the missing PR811 closeout evidence, refreshes status/handoff safe-state anchors, hardens protected YAML anchor matching, preserves handoff-state comments during refresh, and blocks real Tk window-smoke checks unless `AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE=1` is set.
+v0.4.3 is published and post-release verified. It includes PR #812, the PR811 closeout evidence, protected YAML anchor hardening, handoff-state preservation, and the explicit opt-in Tk window-smoke guard.
 
-Release target: v0.4.3 safety baseline on top of PR #812. Closeout evidence path: `docs/reports/terminal/pr811-merge-finalize.log`.
+Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
-Immediate next safe step: finish v0.4.3 release metadata, run release gates, publish tag/release from clean `main`, then run post-release verification. Do not start broad documentation migration or GUI expansion before release closeout.
+Immediate next safe step: merge this DOI metadata closeout, then continue with the approved Release-/Evidence-Kernel hardening slice. Do not start broad documentation migration or GUI expansion.
 
 
 ## Post-PR809 Current-State Override
@@ -26,7 +26,7 @@ Immediate next safe step: refresh handoff/status state after PR809, then continu
 Status-date: 2026-05-26
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: release/prepare-v0.4.3
+Current work branch: docs/record-v0.4.3-doi
 Current version: 0.4.3
 
 ## Purpose
@@ -43,11 +43,12 @@ This document is a concise pointer, not a duplicate rule book. Machine guard: `a
 
 ## Current State
 
-Prepared release: 0.4.3.
-Prepared release tag: v0.4.3.
+Current verified release: 0.4.3.
+Current release tag: v0.4.3.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Previous verified Zenodo version DOI: `10.5281/zenodo.20357657`.
-v0.4.3 GitHub Release publication and post-release Zenodo verification are pending; previous v0.4.1 verification remains the current verified DOI anchor until post-release closeout. The guarded command remains `agentic-kit post-release-check --version 0.4.3` after GitHub Release publication and archive processing.
+Verified Zenodo version DOI: `10.5281/zenodo.20393329`.
+Post-release verification command: `agentic-kit post-release-check --version 0.4.3`.
+v0.4.3 GitHub Release publication and post-release Zenodo verification are complete. Evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
 v0.4.3 safety-release target:
 - Main is refreshed after PR #812 at `12bae32` (`Close out PR811 evidence and harden gates (#812)`).
@@ -57,7 +58,7 @@ v0.4.3 safety-release target:
 - Rule registry drift is checked through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight.
 - Rule registry completion is now explicitly reportable through `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json`; the JSON summary includes `direct_coverage_complete`.
 - Evidence is preserved in committed terminal logs including `docs/reports/terminal/pr737-rule-registry-release-evidence.log`, `docs/reports/terminal/pr739-rule-registry-source-evidence-validation.log`, `docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log`, `docs/reports/terminal/pr741-rule-registry-surfaces-tests-inventory-recovery.log`, `docs/reports/terminal/pr742-rule-registry-surfaces-tests-validation.log`, `docs/reports/terminal/pr761-chat-communication-direct-coverage.log`, `docs/reports/terminal/pr762-chat-bootstrap-drift-direct-coverage.log`, and `docs/reports/terminal/pr764-rule-registry-completion-reporting.log`.
-- Next immediate task: merge and verify v0.4.3 release metadata, publish the v0.4.3 tag/release, then run post-release verification before opening the successor-chat handoff.
+- Next immediate task: merge and verify v0.4.3 DOI metadata closeout, then start the approved Release-/Evidence-Kernel hardening slice.
 
 Documentation registry baseline:
 - `docs/DOCUMENTATION_REGISTRY.yaml` is the additive machine-readable registry.
@@ -104,7 +105,7 @@ Next safe slice: harden final-summary and expected-negative-smoke reporting so e
 
 ## Current Goal
 
-Prepare and publish the v0.4.3 safety release after PR #812. Documentation-management rebuild work resumes only after release and successor-chat handoff closeout.
+Record the v0.4.3 DOI metadata closeout after successful release verification. After this closeout, continue with the approved Release-/Evidence-Kernel hardening slice.
 
 ## Active Workflow Rules
 
@@ -178,4 +179,4 @@ Required gate set for current-state, handoff, or governance-summary changes:
 
 ## Next Safe Step
 
-Merge and verify v0.4.3 release metadata, then publish the v0.4.3 tag/release and run post-release checks. After release closeout, start a new chat with a detailed handoff before resuming documentation-management work.
+Merge and verify v0.4.3 DOI metadata closeout, then begin Release-/Evidence-Kernel hardening. Documentation-management rebuild work remains deferred.
