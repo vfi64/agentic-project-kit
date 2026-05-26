@@ -1,12 +1,12 @@
-## Post-v0.4.3 Release Closeout Current-State Override
+## Post-PR815 Release-/Evidence-Kernel Current-State Override
 
-Safe state is main at `97dceef1aeccccd2d96f4433925693a0fe341d91` (`97dceef`), after PR #813 and v0.4.3 release publication.
+Safe state is main at `f1fef051ffcc51ca2e063a451b9362dd4fdc983c` (`f1fef05`), after PR #815 and the first release/evidence-kernel hardening slice.
 
-v0.4.3 is published and post-release verified. It includes PR #812, the PR811 closeout evidence, protected YAML anchor hardening, handoff-state preservation, and the explicit opt-in Tk window-smoke guard.
+PR #815 `Harden release prep and remote readiness checks` is merged. It hardens `release-prep` so main-update, main-verification, and release-branch failures stop before metadata patching. It also makes remote release WARN states block release readiness and prevents `release-publish` from tagging when remote tag or GitHub Release lookup is inconclusive.
 
-Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
+v0.4.3 remains published and post-release verified. Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
-Next safe step: merge this DOI metadata closeout, then continue with the approved Release-/Evidence-Kernel hardening slice. Do not start broad documentation migration or GUI expansion.
+Next safe step: record PR815 closeout evidence, then continue only with the next smallest Release-/Evidence-Kernel follow-up. Do not start broad documentation migration or GUI expansion.
 
 
 ## Post-PR809 Current-State Override
@@ -25,7 +25,7 @@ Next safe step: continue with guarded status/handoff refresh closeout and then g
 
 Status-date: 2026-05-26
 Project: agentic-project-kit
-Branch: docs/record-v0.4.3-doi
+Branch: docs/record-pr815-release-kernel-closeout
 Base branch: main
 Current version: 0.4.3
 
@@ -39,14 +39,15 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 - Current release tag: v0.4.3.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified Zenodo version DOI: `10.5281/zenodo.20393329`.
-- Main is refreshed after PR #813 at `97dceef`.
+- Main is refreshed after PR #815 at `f1fef05`.
+- PR #815 hardened release-prep atomicity and remote release readiness so inconclusive remote checks no longer permit a release PASS.
 - PR #812 includes the PR811 closeout evidence log, successor-handoff YAML freshness baseline, protected-change planner YAML anchor hardening, handoff-state preservation, and the explicit opt-in Tk window-smoke guard.
 - PRs #718-#764 established and closed out the governed rule-registry direct-coverage baseline: mechanism inventory, migration map, validator, CLI command, workflow-guard integration, patch-preflight integration, deterministic metadata/conflict/completeness checks, direct test coverage for all active mechanisms, an empty direct-test follow-up plan, and explicit machine-readable plus human-readable completion reporting.
 - Evidence: `docs/reports/terminal/pr737-rule-registry-release-evidence.log`, `docs/reports/terminal/pr739-rule-registry-source-evidence-validation.log`, `docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log`, `docs/reports/terminal/pr741-rule-registry-surfaces-tests-inventory-recovery.log`, `docs/reports/terminal/pr742-rule-registry-surfaces-tests-validation.log`, `docs/reports/terminal/pr761-chat-communication-direct-coverage.log`, `docs/reports/terminal/pr762-chat-bootstrap-drift-direct-coverage.log`, and `docs/reports/terminal/pr764-rule-registry-completion-reporting.log`.
 
 ## Current Repository State
 
-Safe state is main after PR813 and v0.4.3 release publication. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers twelve active mechanisms with category, priority, enforcement_phase, owner, conflict_domains, surfaces, tests, coverage classification, migration-map completeness, and direct-test coverage for all active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check. `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json` now expose explicit direct-coverage completion state. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked unless a new slice explicitly scopes them. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
+Safe state is main after PR815 and v0.4.3 release publication. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers twelve active mechanisms with category, priority, enforcement_phase, owner, conflict_domains, surfaces, tests, coverage classification, migration-map completeness, and direct-test coverage for all active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check. `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json` now expose explicit direct-coverage completion state. Release/evidence-kernel hardening continues only in small slices. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked unless a new slice explicitly scopes them. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
 
 ## A1 State Refresh Addendum
 
@@ -60,7 +61,7 @@ Protected Change Planner A1 is complete on remote main.
 
 ## Current Goal
 
-Record the v0.4.3 DOI metadata closeout after successful release verification, then continue with the approved Release-/Evidence-Kernel hardening slice.
+Record PR815 release/evidence-kernel hardening closeout after successful merge verification, then continue with the next smallest Release-/Evidence-Kernel follow-up.
 
 ## Current Baselines
 
@@ -101,7 +102,7 @@ Run state-freshness-check, handoff-check, governance-check, rule-registry check,
 
 ## Next Safe Step
 
-Merge and verify v0.4.3 DOI metadata closeout, then begin Release-/Evidence-Kernel hardening. Documentation-management rebuild work remains deferred.
+Record and merge PR815 closeout evidence, then continue with the next smallest Release-/Evidence-Kernel follow-up. Documentation-management rebuild work remains deferred.
 
 ## Source of Truth
 
