@@ -1,3 +1,14 @@
+## Post-PR809 Current-State Override
+
+Current verified main HEAD: `ee87fa57ed9372c758e68770478b5783878b506d` (`ee87fa5`).
+
+PR #809 `Document finalize-log closeout and harden protected changes` is merged. It adds the finalize-log summary-contract addendum, hardens `protected_change_planner.py` against broad protected-file rewrites, extends direct tests, and registers the protected-change planner as a `patch-preflight` protected surface.
+
+Authoritative recovery evidence: `docs/reports/terminal/pr809-merge-finalize-summary-recovery.log`. The earlier `docs/reports/terminal/pr809-merge-finalize-summary.log` is ambiguous and superseded by this recovery log.
+
+Immediate next safe step: refresh handoff/status state after PR809, then continue only through guarded diffs, `protected-change-plan`, targeted gates, PR, merge, and `agentic-kit evidence finalize-log` evidence.
+
+
 <!-- v042-safety-release-prep -->
 # Project Status
 
