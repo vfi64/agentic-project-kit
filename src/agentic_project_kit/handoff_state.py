@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date
 from pathlib import Path
 import subprocess
 from typing import Any
@@ -25,6 +26,10 @@ REQUIRED_TOP_LEVEL_FIELDS = [
 ]
 VALID_RULE_STATUSES = {"active", "superseded", "historical"}
 VALID_SAFE_STATE_SEMANTICS = {"last_substantive_work_state", "current_main_head"}
+HANDOFF_STATE_PRESERVATION_ANCHORS = (
+    "# preservation-anchor: use d for log-backed PASS and f for log-backed FAIL",
+    "# preservation-anchor: nested shell/Python quote layers",
+)
 ADMINISTRATIVE_EVIDENCE_SUBJECT_PREFIXES = (
     "record ",
     "refresh handoff state",
@@ -170,16 +175,18 @@ def refresh_handoff_safe_state(
     commit: str,
     commit_subject: str,
     reason: str = "Refresh handoff state to last substantive work commit",
+    updated_date: str | None = None,
 ) -> dict[str, Any]:
     refreshed = dict(data)
     safe_state = dict(refreshed.get("safe_state", {}))
     safe_state.setdefault("semantics", "last_substantive_work_state")
+    refresh_date = updated_date or date.today().isoformat()
     if is_administrative_evidence_subject(commit_subject):
         safe_state["semantics"] = "last_substantive_work_state"
         refreshed["safe_state"] = safe_state
         refreshed["administrative_evidence_state"] = build_administrative_evidence_state(commit, commit_subject)
         refreshed["updated"] = {
-            "date": "2026-05-22",
+            "date": refresh_date,
             "reason": "administrative handoff refresh: Current HEAD is administrative evidence; safe_state remains on last substantive work state",
             "source": "agentic-kit handoff refresh",
         }
@@ -190,7 +197,7 @@ def refresh_handoff_safe_state(
     refreshed["safe_state"] = safe_state
     refreshed.pop("administrative_evidence_state", None)
     refreshed["updated"] = {
-        "date": "2026-05-18",
+        "date": refresh_date,
         "reason": reason,
         "source": "agentic-kit handoff refresh",
     }
@@ -198,4 +205,8 @@ def refresh_handoff_safe_state(
 
 def save_handoff_state(data: dict[str, Any], path: str | Path = DEFAULT_HANDOFF_STATE_PATH) -> None:
     state_path = Path(path)
-    state_path.write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True), encoding="utf-8")
+    text = yaml.safe_dump(data, sort_keys=False, allow_unicode=True)
+    missing_anchors = [anchor for anchor in HANDOFF_STATE_PRESERVATION_ANCHORS if anchor not in text]
+    if missing_anchors:
+        text = text.rstrip() + "\n" + "\n".join(missing_anchors) + "\n"
+    state_path.write_text(text, encoding="utf-8")

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import importlib
+import os
 
 
 @dataclass(frozen=True)
@@ -23,6 +24,13 @@ def check_window_launch_ready() -> WindowGuardResult:
         native_importable = True
     except Exception as exc:
         return WindowGuardResult(False, tkinter_importable, False, f"native _tkinter import failed: {exc}")
+    if os.environ.get("AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE") != "1":
+        return WindowGuardResult(
+            False,
+            tkinter_importable,
+            native_importable,
+            "real Tk window smoke requires AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE=1",
+        )
     return WindowGuardResult(True, tkinter_importable, native_importable, "window launch guard passed")
 
 

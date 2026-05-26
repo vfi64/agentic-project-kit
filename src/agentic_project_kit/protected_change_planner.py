@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 import argparse
+import re
 import sys
 
 PROTECTED_FILES = {
@@ -25,6 +26,13 @@ ANCHORS = {
     "docs/DOCUMENTATION_REGISTRY.yaml": {"documents"},
     "docs/governance/FINAL_SUMMARY_CONTRACT.md": {"WORK RESULT", "OVERALL RESULT", "NEXT_CHAT_REPLY"},
     "docs/governance/PROTECTED_CONTROL_FILE_CHANGE_CONTRACT.md": {"migration record", "user decision", "protected_control"},
+}
+YAML_PROTECTED_FILES = {
+    ".agentic/compiled_agent_context.yaml",
+    ".agentic/handoff_state.yaml",
+    ".agentic/control_file_preservation.yaml",
+    ".agentic/rule_mechanism_inventory.yaml",
+    "docs/DOCUMENTATION_REGISTRY.yaml",
 }
 
 @dataclass(frozen=True)
@@ -70,6 +78,11 @@ def added_lines_for_path(diff_text: str, path: str) -> list[str]:
 def _has_valid_decision(path: str, decisions: dict[str, str]) -> bool:
     return decisions.get(path) in VALID_DECISIONS
 
+def _contains_anchor(path: str, text: str, anchor: str) -> bool:
+    if path in YAML_PROTECTED_FILES:
+        return re.search(rf"(?m)^\s*{re.escape(anchor)}\s*:", text) is not None
+    return anchor in text
+
 def analyze_diff(diff_text: str, decisions: dict[str, str] | None = None) -> list[ProtectedChangeFinding]:
     decisions = decisions or {}
     findings: list[ProtectedChangeFinding] = []
@@ -85,7 +98,7 @@ def analyze_diff(diff_text: str, decisions: dict[str, str] | None = None) -> lis
         removed_text = "\n".join(removed)
         added_text = "\n".join(added)
         for anchor in ANCHORS.get(path, set()):
-            if anchor in removed_text and anchor not in added_text:
+            if _contains_anchor(path, removed_text, anchor) and not _contains_anchor(path, added_text, anchor):
                 if not has_valid_decision:
                     findings.append(ProtectedChangeFinding(path, "block", "protected-anchor-removal-without-decision", f"anchor {anchor!r} removed without keep/migrate/obsolete/abort decision"))
     return findings

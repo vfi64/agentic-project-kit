@@ -1,3 +1,14 @@
+## Post-PR811 Current-State Override
+
+Current verified main HEAD: `f9cf80513eaa89e7d0e8b4dc060e83621058fe62` (`f9cf805`).
+
+PR #811 `Recognize YAML successor handoff overrides` is merged. It extends the successor-handoff freshness guard to consider `.yaml` and `.yml` override files in addition to Markdown prompts, so `docs/reports/terminal/post-pr809-successor-handoff-override.yaml` is not missed when stale generated Markdown handoff evidence is nearby.
+
+Targeted verification: `tests/test_handoff_freshness.py` passes. Closeout evidence path: `docs/reports/terminal/pr811-merge-finalize.log`.
+
+Immediate next safe step: finish PR811 closeout evidence and protected-change inspection, then continue with the smallest deterministic workflow-kernel hardening slice. Do not start a broad documentation migration, GUI expansion, release tag, or publication action from this state.
+
+
 ## Post-PR809 Current-State Override
 
 Current verified main HEAD: `ee87fa57ed9372c758e68770478b5783878b506d` (`ee87fa5`).
