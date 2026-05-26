@@ -1,0 +1,33 @@
+### PR809 MERGE FINALIZE SUMMARY ###
+
+### VERIFY MAIN ###
+main
+02bacce Document finalize-log closeout and harden protected changes (#809)
+
+### VERIFY PR809 ###
+{"mergeCommit":{"oid":"02bacce54bdc9fd9936fd381d40a7db82bf12924"},"mergedAt":"2026-05-26T04:29:01Z","state":"MERGED"}
+
+### VERIFY TARGETED GATES ###
+...........                                                              [100%]
+11 passed in 0.08s
+
+### RENDER CANONICAL SUMMARY ###
+usage: run-summary-renderer [-h] [--json JSON] [--comm-id COMM_ID]
+                            [--comm-header COMM_HEADER] [--slice SLICE]
+                            [--slice-name SLICE_NAME] [--scope SCOPE]
+                            [--branch BRANCH] [--origin ORIGIN]
+                            [--state-mode STATE_MODE]
+                            [--mode-check MODE_CHECK] [--work WORK]
+                            [--evidence EVIDENCE] [--overall OVERALL]
+                            [--remote-evidence REMOTE_EVIDENCE] [--pr PR]
+                            [--head-sha HEAD_SHA] [--ci CI] [--merge MERGE]
+                            [--terminal-log TERMINAL_LOG]
+                            [--terminal-log-remote TERMINAL_LOG_REMOTE]
+                            [--terminal-log-local TERMINAL_LOG_LOCAL]
+                            [--command-report COMMAND_REPORT]
+                            [--interpretation INTERPRETATION]
+                            [--safe-step SAFE_STEP] [--next NEXT]
+                            [--chat-reply CHAT_REPLY] [--timestamp TIMESTAMP]
+run-summary-renderer: error: invalid pass: remote evidence is not complete
+
+Terminal bleibt offen. Kein exit am Blockende.
