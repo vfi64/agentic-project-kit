@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-26'
-  reason: Record PR817 PASS_ALREADY_DONE hardening closeout
-  source: agentic-kit handoff refresh plus PR817 closeout
+  reason: Record PR819 PR-status failed-log diagnostics closeout
+  source: agentic-kit handoff refresh plus PR819 closeout
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: '8209777'
-  commit_subject: Harden already-done target classification (#817)
+  commit: 064665c
+  commit_subject: Harden PR status failed-log diagnostics (#819)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -80,10 +80,13 @@ release:
   post_release_evidence: docs/reports/terminal/20260526-120216_v043-release-verify.log
 open_items:
   prs: []
-  next_expected_chat_action: Continue with the next smallest release/evidence-kernel
-    follow-up, likely red-CI failed-log diagnosis; do not start broad documentation
-    migration or GUI expansion.
+  next_expected_chat_action: Record PR819 closeout evidence, then continue with the next
+    smallest release/evidence-kernel follow-up. Do not start broad documentation migration
+    or GUI expansion.
 completed_since_previous_handoff:
+- 'PR #819 hardened next-turn PR status failed-log diagnostics: red CI now exposes
+  failed check names, GitHub Actions run ids, exact gh run view --log-failed commands,
+  bounded log-fetch status, and no-checks classification for empty rollups.'
 - 'PR #817 hardened PASS_ALREADY_DONE target-state classification: generic already-exists
   output is no longer sufficient success evidence; target-specific classes and hard-failure
   precedence are test-backed.'
