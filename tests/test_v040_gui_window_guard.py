@@ -1,7 +1,11 @@
 from pathlib import Path
 
 from agentic_project_kit.gui_dry_run import render_result, run_gui_dry_run
-from agentic_project_kit.gui_window_guard import WindowGuardResult, render_window_guard_result
+from agentic_project_kit.gui_window_guard import (
+    WindowGuardResult,
+    check_window_launch_ready,
+    render_window_guard_result,
+)
 
 
 def test_window_guard_renderer_reports_native_tkinter_state_without_inner_result_marker():
@@ -41,3 +45,13 @@ def test_gui_dry_run_does_not_embed_inner_result_markers_for_expected_blocked_gu
     assert "window_guard_status=" in guard_block
     assert "### RESULT: FAIL ###" not in guard_block
     assert "### RESULT: PASS ###" not in guard_block
+
+
+def test_window_launch_guard_requires_explicit_real_window_opt_in(monkeypatch):
+    monkeypatch.delenv("AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE", raising=False)
+
+    result = check_window_launch_ready()
+
+    if result.tkinter_importable and result.native_tkinter_importable:
+        assert result.ok is False
+        assert "AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE=1" in result.message
