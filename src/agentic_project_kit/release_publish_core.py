@@ -50,6 +50,11 @@ def run_command(repo_root: Path, args: list[str]) -> CommandResult:
     return CommandResult(completed.returncode, completed.stdout.strip())
 
 
+def _looks_like_missing_github_release(output: str) -> bool:
+    normalized = output.lower()
+    return any(fragment in normalized for fragment in ("release not found", "http 404"))
+
+
 def render_header(tag: str, expected: str) -> list[str]:
     return [
         "",
@@ -132,12 +137,18 @@ def publish_release(
             lines.append(f"ERROR: local tag already exists: {tag}")
             status = 1
         remote_tag = run_command(repo_root, ["git", "ls-remote", "--tags", "origin", tag])
-        if remote_tag.returncode == 0 and tag in remote_tag.output:
+        if remote_tag.returncode != 0:
+            lines.append(f"ERROR: remote tag lookup failed: {remote_tag.output or 'git ls-remote failed'}")
+            status = 1
+        elif remote_tag.output.strip():
             lines.append(f"ERROR: remote tag already exists: {tag}")
             status = 1
         github_release = run_command(repo_root, ["gh", "release", "view", tag])
         if github_release.returncode == 0:
             lines.append(f"ERROR: GitHub release already exists: {tag}")
+            status = 1
+        elif not _looks_like_missing_github_release(github_release.output):
+            lines.append(f"ERROR: GitHub release lookup failed: {github_release.output or 'gh release view failed'}")
             status = 1
 
     section("CREATE AND PUSH TAG")

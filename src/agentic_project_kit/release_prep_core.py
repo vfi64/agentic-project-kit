@@ -94,13 +94,32 @@ def prepare_release(version: str, repo_root: Path) -> int:
             status = 1
         return result
 
+    def append_final_state() -> None:
+        section("FINAL STATE")
+        append_command(["git", "branch", "--show-current"])
+        append_command(["git", "status", "--short"])
+        append_command(["git", "log", "--oneline", "-8"])
+
+    def abort_before_metadata_patch(reason: str) -> int:
+        section("ABORT BEFORE METADATA PATCH")
+        lines.append(reason)
+        lines.append("Release metadata was not patched.")
+        append_final_state()
+        lines.append("\n### RESULT: FAIL ###")
+        print("\n".join(lines))
+        return status or 1
+
     section("UPDATE MAIN")
     append_command(["git", "switch", "main"])
     append_command(["git", "pull", "--ff-only", "origin", "main"])
+    if status != 0:
+        return abort_before_metadata_patch("ERROR: release prep could not update main cleanly.")
 
     section("VERIFY MAIN BEFORE RELEASE BRANCH")
     append_command(["./ns", "dev"])
     append_command([py, "-m", "agentic_project_kit.cli", "pr-hygiene"], env_prefix="PYTHONPATH=src")
+    if status != 0:
+        return abort_before_metadata_patch("ERROR: release prep main verification failed.")
 
     section("CREATE RELEASE PREP BRANCH")
     branch = f"release/prepare-{tag}"
@@ -109,6 +128,8 @@ def prepare_release(version: str, repo_root: Path) -> int:
         append_command(["git", "switch", branch])
     else:
         append_command(["git", "switch", "-c", branch])
+    if status != 0:
+        return abort_before_metadata_patch("ERROR: release prep branch could not be created or checked out.")
 
     section("PATCH RELEASE METADATA")
     append_command([py, "tools/ns_release_metadata_prep.py", plain_version])
@@ -131,10 +152,7 @@ def prepare_release(version: str, repo_root: Path) -> int:
         "docs/handoff/CURRENT_HANDOFF.md",
     ])
 
-    section("FINAL STATE")
-    append_command(["git", "branch", "--show-current"])
-    append_command(["git", "status", "--short"])
-    append_command(["git", "log", "--oneline", "-8"])
+    append_final_state()
 
     lines.append("\n### RESULT: PASS ###" if status == 0 else "\n### RESULT: FAIL ###")
     print("\n".join(lines))
