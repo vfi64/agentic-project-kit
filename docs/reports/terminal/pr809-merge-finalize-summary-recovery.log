@@ -1,0 +1,60 @@
+### PR809 MERGE FINALIZE SUMMARY RECOVERY ###
+
+### WHY RECOVERY IS NEEDED ###
+Previous log docs/reports/terminal/pr809-merge-finalize-summary.log is ambiguous because summary rendering rejected PASS with incomplete remote evidence.
+This run uses agentic-kit evidence finalize-log as the required closeout route.
+
+### VERIFY MAIN ###
+main
+713c18d Record PR809 merge finalize summary log
+
+### VERIFY PR809 ###
+{"mergeCommit":{"oid":"02bacce54bdc9fd9936fd381d40a7db82bf12924"},"mergedAt":"2026-05-26T04:29:01Z","state":"MERGED"}
+
+### VERIFY TARGETED GATES ###
+...........                                                              [100%]
+11 passed in 0.07s
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-26 06:30:59 +0200
+
+SLICE
+  NAME: PR809 MERGE FINALIZE RECOVERY
+  SCOPE: RECOVERY / FINALIZE-LOG / PROTECTED CHANGE PLANNER
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: PR809 merged, main synced, targeted gates passed; previous ambiguous log superseded
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: NOT_REQUIRED
+  PR: 809
+  HEAD_SHA: 713c18d5d8be721f417af397763952171e0f58b8
+  CI: passed-before-merge
+  MERGE: completed
+
+EVIDENCE FILES
+  terminal_log: /tmp/pr809-merge-finalize-summary-recovery.log
+  terminal_log_remote: docs/reports/terminal/pr809-merge-finalize-summary-recovery.log
+  terminal_log_local: /tmp/pr809-merge-finalize-summary-recovery.log
+  command_report: targeted-tests/protected-change-planner/rule-mechanism-inventory
+
+INTERPRETATION
+  PR809 is merged and locally verified; this recovery log supersedes the ambiguous prior closeout log.
+
+NEXT
+  SAFE_STEP: continue with status and handoff refresh after inspecting this finalized evidence log
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
