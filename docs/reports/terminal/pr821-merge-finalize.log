@@ -1,0 +1,186 @@
+terminal_log=docs/reports/terminal/20260526-183547_pr821-merge-finalize.log
+### RUN: tmp/pr821_closeout_gate.sh
+docs/record-pr821-merge-if-green-closeout
+ M .agentic/handoff_state.yaml
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? docs/reports/terminal/20260526-183547_pr821-merge-finalize.log
+EVIDENCE_INSPECTION
+verdict: PASS_CONTINUE
+evidence_exists: yes
+require_summary: yes
+git_branch: docs/record-pr821-merge-if-green-closeout
+git_status_clean: no
+pass_markers: 2
+fail_markers: 0
+hidden_fail_before_final_pass: no
+structured_summary_found: yes
+structured_summary_valid: yes
+summary_name: PR819 PR-status failed-log diagnostics closeout
+summary_scope: PR819 merge verification, PR status failed-log diagnostics hardening, status and handoff refresh
+summary_branch: docs/record-pr819-pr-status-closeout
+summary_origin: local
+summary_state_mode: local
+summary_mode_check: branch docs/record-pr819-pr-status-closeout; protected branch mutation via PR
+summary_work: PASS
+summary_evidence: PASS
+summary_overall: PASS
+summary_remote_evidence: PASS
+summary_pr: #819 merged
+summary_head_sha: 064665c832ae1e33192aba141e3cd9cf5cd07978
+summary_ci: CI success; mergeStateStatus CLEAN; statusCheckRollup SUCCESS
+summary_merge: squash merged 064665c832ae1e33192aba141e3cd9cf5cd07978
+summary_terminal_log: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/20260526-164543_pr819-merge-finalize.log
+summary_terminal_log_remote: docs/reports/terminal/pr819-merge-finalize.log
+summary_terminal_log_local: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/20260526-164543_pr819-merge-finalize.log
+summary_command_report: run_logged pr819 closeout gate: 30 next-turn PR status tests, ruff, check-docs, docs-audit, state-freshness-check, handoff-check, governance-check, doctor
+summary_safe_step: Merge this closeout evidence, then continue with the next smallest Release-/Evidence-Kernel follow-up.
+summary_chat_reply: d
+summary_result_marker: PASS
+evidence_path: docs/reports/terminal/pr819-merge-finalize.log
+final_marker: ### RESULT: PASS ###
+git_status:
+M .agentic/handoff_state.yaml
+ M docs/STATUS.md
+ M docs/handoff/CURRENT_HANDOFF.md
+ M docs/reports/terminal/LATEST_TERMINAL_LOG.txt
+?? docs/reports/terminal/20260526-183547_pr821-merge-finalize.log
+next_action: continue with the next safe slice after reviewing evidence
+### RESULT: PASS ###
+........................................................................ [  6%]
+........................................................................ [ 12%]
+........................................................................ [ 18%]
+........................................................................ [ 24%]
+........................................................................ [ 30%]
+........................................................................ [ 37%]
+........................................................................ [ 43%]
+........................................................................ [ 49%]
+........................................................................ [ 55%]
+........................................................................ [ 61%]
+........................................................................ [ 68%]
+........................................................................ [ 74%]
+........................................................................ [ 80%]
+........................................................................ [ 86%]
+........................................................................ [ 92%]
+........................................................................ [ 99%]
+...........                                                              [100%]
+1163 passed in 8.39s
+All checks passed!
+Agentic project check passed
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check
+only catches known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Dokumentationsregistry
+- registry=docs/DOCUMENTATION_REGISTRY.yaml
+- version=1
+- documents=19
+- broad_migration_allowed=False
+- class:architecture=1
+- class:evidence/log=2
+- class:generated artifact=1
+- class:governance/system=4
+- class:operational/automation=4
+- class:planning=4
+- class:release=2
+- class:user-facing description=1
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
+PASS: no stale STATUS/HANDOFF current-state fragments found
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 19
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 4
+- class:release: 2
+- class:user-facing description: 1
+Governance check passed
+Agentic project doctor report for 
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, 
+markdown-docs, python-cli, git-github, release-managed; policy packs: 
+solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.3
+
+Overall: PASS
+### EXIT: 0
+### RESULT: PASS ###
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-26 18:36:18 +0200
+
+SLICE
+  NAME: PR821 merge-if-green main-CI verification closeout
+  SCOPE: PR821 merge verification, merge-if-green post-merge main-CI verification hardening, status and handoff refresh
+  BRANCH: docs/record-pr821-merge-if-green-closeout
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: branch docs/record-pr821-merge-if-green-closeout; protected branch mutation via PR
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: #821 merged
+  HEAD_SHA: f86e49ad76a17d6a0bc9b531b7009d12564f8879
+  CI: PR CI success; merge-if-green verified main CI success for f86e49ad76a17d6a0bc9b531b7009d12564f8879
+  MERGE: merge-if-green squash merged f86e49ad76a17d6a0bc9b531b7009d12564f8879
+
+EVIDENCE FILES
+  terminal_log: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/20260526-183547_pr821-merge-finalize.log
+  terminal_log_remote: docs/reports/terminal/pr821-merge-finalize.log
+  terminal_log_local: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/20260526-183547_pr821-merge-finalize.log
+  command_report: run_logged pr821 closeout gate: evidence inspect PR819, full pytest 1163 passed, ruff, check-docs, docs-audit, state-freshness-check, handoff-check, governance-check, doctor
+
+INTERPRETATION
+  PR821 is merged and merge-if-green main-CI verification hardening is verified; status and handoff now point at f86e49a.
+
+NEXT
+  SAFE_STEP: Merge this closeout evidence, then continue with the next smallest Release-/Evidence-Kernel follow-up.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
