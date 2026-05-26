@@ -1,10 +1,10 @@
-## Post-PR824 Release-/Evidence-Kernel Current-State Override
+## Post-PR825 Release-/Evidence-Kernel Current-State Override
 
-Current administrative main HEAD is `ec581a3780da8443d07f3ae3c4f3543036688615` (`ec581a3`). The substantive safe state is `a98aa8a05349e0e94b2b1a26283f1f04ada71c8a` (`a98aa8a`), after PR #823 and the merge-if-green head/base pinning slice.
+Safe state is main at `0ca727a5aaffb69c6557fb443c6eaf4511486233` (`0ca727a`), after PR #825 and the active handoff freshness slice.
 
-PR #824 `Record PR823 merge-if-green closeout evidence` is merged. It records `docs/reports/terminal/pr823-merge-finalize.log` and refreshes STATUS, CURRENT_HANDOFF, and handoff state after PR #823.
+PR #825 `Harden active handoff state freshness` is merged. It hardens `./ns state-freshness-check` so active next-step instructions fail when they point to already-recorded closeout evidence or stale release versions.
 
-PR #823 remains the merge-if-green head/base pinning anchor. PR #821 remains the post-merge main-CI verification anchor. PR #819 remains the red-CI failed-log diagnostics anchor. PR #817 remains the PASS_ALREADY_DONE hardening anchor. PR #815 remains the release readiness hardening anchor: `release-prep` stops before metadata patching on main/branch failures, remote WARN states block release readiness, and `release-publish` refuses to tag when remote lookup is inconclusive.
+PR #824 remains the PR823 closeout evidence anchor. PR #823 remains the merge-if-green head/base pinning anchor. PR #821 remains the post-merge main-CI verification anchor. PR #819 remains the red-CI failed-log diagnostics anchor. PR #817 remains the PASS_ALREADY_DONE hardening anchor. PR #815 remains the release readiness hardening anchor: `release-prep` stops before metadata patching on main/branch failures, remote WARN states block release readiness, and `release-publish` refuses to tag when remote lookup is inconclusive.
 
 v0.4.3 remains published and post-release verified. Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
@@ -27,7 +27,7 @@ Next safe step: continue with guarded status/handoff refresh closeout and then g
 
 Status-date: 2026-05-26
 Project: agentic-project-kit
-Branch: codex/harden-state-freshness-active-handoff
+Branch: docs/record-pr825-active-handoff-freshness-closeout
 Base branch: main
 Current version: 0.4.3
 
@@ -41,7 +41,8 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 - Current release tag: v0.4.3.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified Zenodo version DOI: `10.5281/zenodo.20393329`.
-- Main is refreshed after PR #824 at `ec581a3`.
+- Main is refreshed after PR #825 at `0ca727a`.
+- PR #825 hardened active handoff freshness checks so already-recorded closeout evidence and stale release-version instructions are blocking drift.
 - PR #824 recorded PR #823 closeout evidence at `docs/reports/terminal/pr823-merge-finalize.log`.
 - PR #823 hardened `merge-if-green` so the merge command validates the target base branch, requires a PR head SHA, passes `--match-head-commit <sha>` to GitHub, and renders checked base/head refs.
 - PR #821 hardened `merge-if-green` so post-merge main-CI verification is required before the command reports clean success.
@@ -54,7 +55,7 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 
 ## Current Repository State
 
-Safe state is main after PR824 administrative closeout and PR823 substantive hardening. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers twelve active mechanisms with category, priority, enforcement_phase, owner, conflict_domains, surfaces, tests, coverage classification, migration-map completeness, and direct-test coverage for all active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check. `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json` now expose explicit direct-coverage completion state. Release/evidence-kernel hardening continues only in small slices. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked unless a new slice explicitly scopes them. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
+Safe state is main after PR825 active handoff freshness hardening. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers twelve active mechanisms with category, priority, enforcement_phase, owner, conflict_domains, surfaces, tests, coverage classification, migration-map completeness, and direct-test coverage for all active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check. `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json` now expose explicit direct-coverage completion state. Release/evidence-kernel hardening continues only in small slices. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked unless a new slice explicitly scopes them. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
 
 ## A1 State Refresh Addendum
 
@@ -68,7 +69,7 @@ Protected Change Planner A1 is complete on remote main.
 
 ## Current Goal
 
-Harden `state-freshness-check` so active STATUS/HANDOFF/handoff-state next-step instructions fail when they point to already-recorded closeout evidence or stale release versions.
+Preserve PR825 closeout evidence without reintroducing stale closeout-next-step instructions, then continue with the next smallest Release-/Evidence-Kernel follow-up.
 
 ## Current Baselines
 
