@@ -1,10 +1,10 @@
-## Post-PR824 Release-/Evidence-Kernel Current-State Override
+## Post-PR825 Release-/Evidence-Kernel Current-State Override
 
-Current administrative main HEAD: `ec581a3780da8443d07f3ae3c4f3543036688615` (`ec581a3`). Current substantive safe state: `a98aa8a05349e0e94b2b1a26283f1f04ada71c8a` (`a98aa8a`).
+Current verified main HEAD: `0ca727a5aaffb69c6557fb443c6eaf4511486233` (`0ca727a`).
 
-PR #824 `Record PR823 merge-if-green closeout evidence` is merged. It records `docs/reports/terminal/pr823-merge-finalize.log` and refreshes STATUS, CURRENT_HANDOFF, and handoff state after PR #823.
+PR #825 `Harden active handoff state freshness` is merged. It hardens `./ns state-freshness-check` so active next-step instructions fail when they point to already-recorded closeout evidence or stale release versions.
 
-PR #823 remains the merge-if-green head/base pinning anchor. PR #821 remains the post-merge main-CI verification anchor. PR #819 remains the red-CI failed-log diagnostics anchor. PR #817 remains the PASS_ALREADY_DONE hardening anchor. PR #815 remains the release readiness hardening anchor: `release-prep` stops before metadata patching on main/branch failures, remote WARN states block release readiness, and `release-publish` refuses to tag when remote lookup is inconclusive.
+PR #824 remains the PR823 closeout evidence anchor. PR #823 remains the merge-if-green head/base pinning anchor. PR #821 remains the post-merge main-CI verification anchor. PR #819 remains the red-CI failed-log diagnostics anchor. PR #817 remains the PASS_ALREADY_DONE hardening anchor. PR #815 remains the release readiness hardening anchor: `release-prep` stops before metadata patching on main/branch failures, remote WARN states block release readiness, and `release-publish` refuses to tag when remote lookup is inconclusive.
 
 v0.4.3 remains the current published and post-release verified release. Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
@@ -28,7 +28,7 @@ Immediate next safe step: refresh handoff/status state after PR809, then continu
 Status-date: 2026-05-26
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: codex/harden-state-freshness-active-handoff
+Current work branch: docs/record-pr825-active-handoff-freshness-closeout
 Current version: 0.4.3
 
 ## Purpose
@@ -50,11 +50,12 @@ Current release tag: v0.4.3.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20393329`.
 Post-release verification command: `agentic-kit post-release-check --version 0.4.3`.
-Current administrative main after release/evidence hardening closeout: `ec581a3` (`Record PR823 merge-if-green closeout evidence (#824)`). Current substantive safe state remains `a98aa8a` (`Harden merge-if-green head and base pins (#823)`).
+Current verified main after release/evidence hardening: `0ca727a` (`Harden active handoff state freshness (#825)`).
 v0.4.3 GitHub Release publication and post-release Zenodo verification are complete. Evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
 v0.4.3 safety-release target:
-- Main is refreshed after PR #824 at `ec581a3` (`Record PR823 merge-if-green closeout evidence (#824)`).
+- Main is refreshed after PR #825 at `0ca727a` (`Harden active handoff state freshness (#825)`).
+- PR #825 hardened active handoff freshness checks so already-recorded closeout evidence and stale release-version instructions are blocking drift.
 - PR #824 recorded PR #823 closeout evidence at `docs/reports/terminal/pr823-merge-finalize.log`.
 - PR #823 hardened `merge-if-green` so the merge command validates the target base branch, requires a PR head SHA, passes `--match-head-commit <sha>` to GitHub, and renders checked base/head refs.
 - PR #821 hardened `merge-if-green` so post-merge main-CI verification is required before the command reports clean success.
@@ -114,7 +115,7 @@ Next safe slice: harden final-summary and expected-negative-smoke reporting so e
 
 ## Current Goal
 
-Harden `state-freshness-check` so active STATUS/HANDOFF/handoff-state next-step instructions fail when they point to already-recorded closeout evidence or stale release versions.
+Preserve PR825 closeout evidence without reintroducing stale closeout-next-step instructions, then continue with the next smallest Release-/Evidence-Kernel follow-up.
 
 ## Active Workflow Rules
 

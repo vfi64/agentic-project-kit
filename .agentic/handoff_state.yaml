@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-26'
-  reason: Harden active handoff freshness checks
-  source: agentic-kit handoff refresh plus state-freshness guard slice
+  reason: Record PR825 active handoff freshness closeout
+  source: agentic-kit handoff refresh plus PR825 closeout
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: a98aa8a
-  commit_subject: Harden merge-if-green head and base pins (#823)
+  commit: 0ca727a
+  commit_subject: Harden active handoff state freshness (#825)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -83,6 +83,9 @@ open_items:
   next_expected_chat_action: Continue with the next smallest release/evidence-kernel
     hardening follow-up. Do not start broad documentation migration or GUI expansion.
 completed_since_previous_handoff:
+- 'PR #825 hardened active handoff freshness checks: state-freshness-check now fails
+  active next-step instructions that point to already-recorded closeout evidence or
+  stale release versions.'
 - 'PR #824 recorded PR #823 closeout evidence at docs/reports/terminal/pr823-merge-finalize.log
   and refreshed STATUS, CURRENT_HANDOFF, and persistent handoff state.'
 - 'PR #823 hardened merge-if-green head/base pinning: the command validates the target
@@ -330,8 +333,8 @@ blocked_until_closeout:
 - Large GUI architecture expansion before successor-chat bootstrap
 - Broad documentation migration during release/evidence-kernel hardening closeouts
 - Release, tag, or DOI mutation
-first_instruction: Harden state-freshness-check so active next-step instructions fail
-  when they point to already-recorded closeout evidence or stale release versions.
+first_instruction: Continue with the next smallest release/evidence-kernel hardening
+  follow-up.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
@@ -339,10 +342,5 @@ handoff_maintenance:
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
   latest_successor_prompt: docs/reports/terminal/v041-successor-chat-handoff-after-pr735.md
-administrative_evidence_state:
-  current_head: ec581a3
-  current_head_subject: Record PR823 merge-if-green closeout evidence (#824)
-  allowed_after_safe_state: true
-  reason: administrative evidence/log/handoff commit after substantive safe_state
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
