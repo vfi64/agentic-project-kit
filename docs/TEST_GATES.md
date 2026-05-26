@@ -320,6 +320,7 @@ This file intentionally keeps compact anchors for deterministic tests and human 
 - Release remote readiness: release remote checks may report `WARN` for inconclusive network/tool state, but release readiness must report `BLOCK` and exit nonzero until the remote tag and GitHub Release absence checks pass.
 - PASS_ALREADY_DONE target-state safety: already-done classification must require `--target-verified` and target-specific output patterns; generic `already exists` output is not sufficient success evidence.
 - PR status failed-log diagnosis: red CI status must expose failed check names, GitHub Actions run ids when available, exact `gh run view <run-id> --log-failed` commands, and bounded failed-log fetch status; empty check rollups must classify as `no-checks`, not green or pending.
+- Merge-if-green postcondition: after a successful merge, `./ns merge-if-green <pr>` must verify the merge commit on `main`, wait for main CI, and fail the command result when main CI is red, pending beyond the wait budget, unknown, or missing checks.
 
 - Release route help anchors: `release-prep --help`, `release-gate --help`, `release-publish --help`, and `release-verify --help` and invalid-argument paths must not create branches` must remain documented and testable before release-route changes.
 
