@@ -3,6 +3,15 @@
 This file is the canonical remote handoff entry point for a successor chat.
 Do not start from chat memory. Read this file first, then follow its boot sequence.
 
+## Current remote state
+
+- Latest verified main head after administrative handoff refresh: `777d957474318fdf797ca23625e52046c3fb7df0` (`Refresh post-PR837 administrative handoff state (#838)`).
+- PR #837 `Record post-PR836 successor handoff` is merged at `71ba85b5322e26c52680b0dbfe38d81957bb1160`.
+- PR #838 `Refresh post-PR837 administrative handoff state` is merged at `777d957474318fdf797ca23625e52046c3fb7df0`.
+- The substantive safe-state remains `c0ac933a29b71c6660ae7e436386414f08ff9e7b` with `safe_state.semantics: last_substantive_work_state`; later administrative evidence belongs in `administrative_evidence_state`.
+- Open PRs at the post-PR838 handoff refresh: none known from remote PR inspection.
+- Next safe slice: fix any remaining status/handoff freshness drift first; then continue only with the smallest GUI or failure-mode automation slice.
+
 ## Canonical chat-switch prompt files
 
 - Start a successor chat with `docs/handoff/START_NEW_CHAT_PROMPT.md`.
@@ -73,7 +82,7 @@ Required first action in a successor chat:
 
 ## Next work items
 
-- Finish local sync after the bootloader/summary-runner merge and verify boot write/check plus targeted tests.
+- Fix any remaining post-PR838 handoff/status freshness drift before product work.
 - Use boot write to refresh docs/handoff/NEXT_CHAT_BOOTSTRAP.md before chat changes.
 - Harden no-op/PASS_ALREADY_DONE handling for already satisfied target states.
 - Use `agentic-kit evidence inspect --require-summary` after chat control signals so d/f/w do not rely on chat memory.
