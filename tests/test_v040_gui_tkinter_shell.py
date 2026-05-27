@@ -25,6 +25,9 @@ class FakeRoot:
     def geometry(self, value):
         self.geometry_value = value
 
+    def minsize(self, width, height):
+        self.minsize_value = (width, height)
+
 
 def test_build_tkinter_shell_spec_uses_presenter_contract():
     spec = build_tkinter_shell_spec()
@@ -40,7 +43,8 @@ def test_configure_tkinter_root_is_testable_without_opening_window():
     root = FakeRoot()
     configure_tkinter_root(root, spec)
     assert root.title_value == "agentic-project-kit Cockpit"
-    assert root.geometry_value == "1000x650"
+    assert root.geometry_value == "1200x760"
+    assert root.minsize_value == (950, 560)
 
 
 def test_create_tkinter_root_accepts_factory_for_headless_tests():

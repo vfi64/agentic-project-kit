@@ -1,0 +1,103 @@
+### FIX GUI COMPACT SCROLLABLE BUTTON PR -- LOGGED ###
+2026-05-27 22:17:33 +0200
+### SYNC FEATURE BRANCH ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'gui/compact-scrollable-buttons'
+Your branch is up to date with 'origin/gui/compact-scrollable-buttons'.
+From github.com:vfi64/agentic-project-kit
+ * branch            gui/compact-scrollable-buttons -> FETCH_HEAD
+Already up to date.
+gui/compact-scrollable-buttons
+bf793c5 Make GUI action buttons compact and scrollable
+8cdf496 Record duplicate PR865 verification cleanup evidence (#868)
+cc38b0a Record PR865 merge verification evidence (#866)
+c164bd6 Record post-PR864 main closeout evidence (#865)
+79d2d8b Record external review enforcement priorities in planning (#864)
+### PATCH TEST EXPECTED GEOMETRY ###
+patched test_v040_gui_tkinter_shell geometry/minsize expectation
+### REVIEW DIFF ###
+ M tests/test_v040_gui_tkinter_shell.py
+diff --git a/tests/test_v040_gui_tkinter_shell.py b/tests/test_v040_gui_tkinter_shell.py
+index 900226c..cbb7ea0 100644
+--- a/tests/test_v040_gui_tkinter_shell.py
++++ b/tests/test_v040_gui_tkinter_shell.py
+@@ -25,6 +25,9 @@ class FakeRoot:
+     def geometry(self, value):
+         self.geometry_value = value
+ 
++    def minsize(self, width, height):
++        self.minsize_value = (width, height)
++
+ 
+ def test_build_tkinter_shell_spec_uses_presenter_contract():
+     spec = build_tkinter_shell_spec()
+@@ -40,7 +43,8 @@ def test_configure_tkinter_root_is_testable_without_opening_window():
+     root = FakeRoot()
+     configure_tkinter_root(root, spec)
+     assert root.title_value == "agentic-project-kit Cockpit"
+-    assert root.geometry_value == "1000x650"
++    assert root.geometry_value == "1200x760"
++    assert root.minsize_value == (950, 560)
+ 
+ 
+ def test_create_tkinter_root_accepts_factory_for_headless_tests():
+### TARGETED TESTS AND SMOKE ###
+.....................................                                    [100%]
+37 passed in 0.30s
+TKINTER SHELL
+title=agentic-project-kit Cockpit
+status=tkinter-shell-ready
+action_count=32
+menu_count=5
+toolbar_button_count=8
+action_button_count=32
+destructive_actions_enabled=false
+toolbar_icons=branch,status,history,handoff,stethoscope,document-check,audit,guard
+### RESULT: PASS ###
+All checks passed!
+### COPY FIX LOG TO REPO PATH BEFORE SUMMARY ###
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-27 22:17:37 +0200
+
+SLICE
+  NAME: GUI compact scrollable button layout fix
+  SCOPE: Fix the GUI compact scrollable button PR by updating the geometry/minsize test expectation and rerunning targeted checks.
+  BRANCH: gui/compact-scrollable-buttons
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: fix after initial PR log contained a failed targeted test; no remote/destructive/parameterized actions enabled
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: 869
+  HEAD_SHA: bf793c5b61330074af25196753b3c7cc79a65177
+  CI: PENDING_AFTER_PUSH
+  MERGE: NOT_APPLICABLE
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit/gui-compact-scrollable-buttons-fix.log
+  terminal_log_remote: docs/reports/terminal/gui-compact-scrollable-buttons-fix.log
+  terminal_log_local: /tmp/agentic-project-kit/gui-compact-scrollable-buttons-fix.log
+  command_report: targeted GUI pytest/no-window-smoke/ruff
+
+INTERPRETATION
+  The first GUI compact-scrollable PR log contained a failed targeted test and an invalid PASS summary. This fix updates the affected test expectation, reruns the targeted GUI checks, and records a corrected evidence log. PR869 must be judged by this fix log and CI after this push, not by the initial failed log.
+
+NEXT
+  SAFE_STEP: Push fix to PR869, wait for machine-readable CI, merge only if clean, then sync main and manually re-check the GUI layout.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================

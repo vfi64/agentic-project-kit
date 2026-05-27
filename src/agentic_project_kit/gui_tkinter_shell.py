@@ -242,7 +242,9 @@ def configure_tkinter_root(root: object, spec: TkinterShellSpec) -> None:
     if hasattr(root, "title"):
         root.title(spec.title)
     if hasattr(root, "geometry"):
-        root.geometry("1000x650")
+        root.geometry("1200x760")
+    if hasattr(root, "minsize"):
+        root.minsize(950, 560)
 
 
 def render_tkinter_shell_summary(spec: TkinterShellSpec) -> str:
@@ -640,27 +642,56 @@ def render_manual_launch_content(root: object) -> None:
 
     body = ttk.Frame(root, padding=(12, 0, 12, 12))
     body.pack(fill="both", expand=True)
-    actions = ttk.Frame(body, padding=6)
-    actions.pack(side="left", fill="y", padx=(0, 8))
+
+    actions_container = ttk.Frame(body, padding=0)
+    actions_container.pack(side="left", fill="y", padx=(0, 8))
+
+    actions_canvas = tk.Canvas(
+        actions_container,
+        width=250,
+        highlightthickness=0,
+        bg=frame_bg,
+    )
+    actions_scrollbar = ttk.Scrollbar(
+        actions_container,
+        orient="vertical",
+        command=actions_canvas.yview,
+    )
+    actions = ttk.Frame(actions_canvas, padding=4)
+    actions_window = actions_canvas.create_window((0, 0), window=actions, anchor="nw")
+
+    def update_actions_scroll_region(_event: object | None = None) -> None:
+        actions_canvas.configure(scrollregion=actions_canvas.bbox("all"))
+
+    def update_actions_width(event: object) -> None:
+        width = getattr(event, "width", 250)
+        actions_canvas.itemconfigure(actions_window, width=width)
+
+    actions.bind("<Configure>", update_actions_scroll_region)
+    actions_canvas.bind("<Configure>", update_actions_width)
+    actions_canvas.configure(yscrollcommand=actions_scrollbar.set)
+    actions_canvas.pack(side="left", fill="y", expand=False)
+    actions_scrollbar.pack(side="right", fill="y")
+
     for category, buttons in gui_buttons_by_category().items():
-        category_frame = ttk.LabelFrame(actions, text=category, padding=4)
-        category_frame.pack(fill="x", pady=3)
+        category_frame = ttk.LabelFrame(actions, text=category, padding=3)
+        category_frame.pack(fill="x", pady=2)
         for button in buttons:
             if button.enabled:
                 ttk.Button(
                     category_frame,
                     text=button.label,
                     command=lambda command_id=button.command_id: run_action_click(command_id),
-                    width=24,
-                ).pack(fill="x", pady=2)
+                    width=20,
+                ).pack(fill="x", pady=1)
             else:
                 ttk.Button(
                     category_frame,
                     text=button.label,
                     state="disabled",
-                    width=24,
+                    width=20,
                     style="ReadableDisabled.TButton",
-                ).pack(fill="x", pady=2)
+                ).pack(fill="x", pady=1)
 
     output = ttk.LabelFrame(body, text="Output / Status", padding=6)
     output.pack(side="left", fill="both", expand=True)
