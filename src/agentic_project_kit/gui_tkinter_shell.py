@@ -626,20 +626,9 @@ def render_manual_launch_content(root: object) -> None:
             )
             set_status(f"Status: fail | branch: main | action: {command_id}")
 
-    toolbar = ttk.Frame(root, padding=4)
-    toolbar.pack(fill="x", padx=12, pady=(0, 8))
-    for button in toolbar_gui_buttons():
-        if button.enabled:
-            ttk.Button(
-                toolbar,
-                text=button.label,
-                command=lambda command_id=button.command_id: run_action_click(command_id),
-            ).pack(side="left", padx=4, pady=4)
-        else:
-            ttk.Button(
-                toolbar, text=button.label, state="disabled", style="ReadableDisabled.TButton"
-            ).pack(side="left", padx=4, pady=4)
-
+    # The former top toolbar duplicated actions from the categorized left action list.
+    # Keep toolbar metadata in the catalog for future compact quick-access designs, but
+    # do not render a redundant horizontal button row in the current manual cockpit.
     body = ttk.Frame(root, padding=(12, 0, 12, 12))
     body.pack(fill="both", expand=True)
 
