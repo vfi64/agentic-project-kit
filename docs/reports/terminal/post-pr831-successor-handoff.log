@@ -1,0 +1,108 @@
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+POST-PR831 SUCCESSOR HANDOFF REPAIR V2 -- CLEAN CHAT SWITCH
+
+### VERIFIED BASE ###
+repo=/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+branch=docs/post-pr831-successor-handoff
+main_head=011b6dc24829be44c7693c468a90694981cd40ce
+main_subject=Record PR830 Tkinter GUI plan closeout evidence (#831)
+
+### WRITE CORRECTED SUCCESSOR HANDOFF OVERRIDE ###
+prompt_written=docs/reports/terminal/post-pr831-successor-handoff.md
+log_written=docs/reports/terminal/post-pr831-successor-handoff.log
+
+### STATUS AFTER WRITE ###
+$ git status -sb
+## docs/post-pr831-successor-handoff...origin/main
+?? docs/reports/terminal/post-pr831-successor-handoff.log
+?? docs/reports/terminal/post-pr831-successor-handoff.md
+
+### PROTECTED CHANGE PLAN ###
+$ ./ns protected-change-plan --diff-file /var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/post-pr831-handoff-v2-yjbwv381.diff
+PROTECTED_CHANGE_PLAN
+result=PASS
+findings=0
+### RESULT: PASS ###
+
+### GATES ###
+$ ./ns state-freshness-check
+PASS: no stale STATUS/HANDOFF/handoff-state current-state fragments found
+$ ./ns handoff-check
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 21
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 6
+- class:release: 2
+- class:user-facing description: 1
+$ ./ns governance-check
+Governance check passed
+$ .venv/bin/agentic-kit doctor
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, 
+git-github, release-managed; policy packs: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.3
+
+Overall: PASS
+
+================================================================
+SUMMARY COMM-PENDING | 2026-05-27 13:30:31 +0200
+
+SLICE
+  NAME: POST-PR831 SUCCESSOR HANDOFF REPAIR V2
+  SCOPE: HANDOFF PROMPT / REMOTE EVIDENCE / NEXT CHAT
+  BRANCH: docs/post-pr831-successor-handoff
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: Python file-backed handoff repair; clean-state precheck before committed log writes
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: created-or-found-after-push
+  HEAD_SHA: 011b6dc24829be44c7693c468a90694981cd40ce
+  CI: pending-after-PR
+  MERGE: not-attempted
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/post-pr831-successor-handoff.log
+  terminal_log_remote: docs/reports/terminal/post-pr831-successor-handoff.log
+  terminal_log_local: docs/reports/terminal/post-pr831-successor-handoff.log
+  command_report: corrected-handoff-override/protected-change-plan/state-handoff-governance/doctor/evidence-inspect
+
+INTERPRETATION
+  A corrected successor handoff override was generated from verified post-PR831 main and prepared for remote-readable evidence.
+
+NEXT
+  SAFE_STEP: machine-check the handoff PR; if clean, merge with ./ns merge-if-green, then start the next chat from docs/reports/terminal/post-pr831-successor-handoff.md
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
