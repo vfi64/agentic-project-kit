@@ -1,0 +1,115 @@
+### POST-PR857 MAIN CLOSEOUT EVIDENCE ###
+### SYNC MAIN ###
+Your branch is up to date with 'origin/main'.
+Already up to date.
+main
+f5e482b Unify next-turn fixed-slot path handling (#857)
+d87f308 Record Post-PR855 main closeout evidence log (#856)
+19a7bcb Classify executed ledger in next-turn last-result (#855)
+3112de4 Record Post-PR853 main closeout evidence log (#854)
+5f8f5d9 Harden next-turn last-result evidence classification (#853)
+5f82b65 Record Post-PR851 main closeout evidence log (#852)
+e98ac30 Record Post-PR850 main closeout evidence log (#851)
+1878c08 Record Post-PR849 main closeout evidence log (#850)
+### VERIFY PRODUCT SLICE ON MAIN ###
+..........................                                               [100%]
+26 passed in 0.29s
+All checks passed!
+### VERIFY STATUS SURFACE ###
+NEXT_TURN_STATUS
+state=empty
+yaml_exists=false
+script_exists=false
+overwrite_allowed=true
+reason=no fixed-slot files exist
+evidence_lookup_order:
+- docs/reports/command_runs/next-turn-latest.json
+- docs/reports/command_runs/next-turn-latest.md
+- docs/reports/terminal/next-turn-latest.log
+- .agentic/commands/executed.jsonl
+### RESULT: PASS ###
+NEXT_TURN_LAST_RESULT
+status=FOUND_PASS
+path=.agentic/commands/executed.jsonl
+evidence_verdict=PASS_CONTINUE
+recommended_chat_reply=d
+recovery=continue from executed command ledger
+checked_paths:
+- docs/reports/command_runs/next-turn-latest.json
+- docs/reports/command_runs/next-turn-latest.md
+- docs/reports/terminal/next-turn-latest.log
+- .agentic/commands/executed.jsonl
+preview:
+{"command_id": "post707-state-refresh-v3", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "0d47e43ad9a42165ff3d86c8cd2e4db008da062c462ac5265001df2010ed27a8", "timestamp_utc": "2026-05-24T08:43:23.196541+00:00"}
+### RESULT: PASS ###
+### VERIFY HANDOFF STATE ###
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 21
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 6
+- class:release: 2
+- class:user-facing description: 1
+### VERIFIED EVIDENCE ###
+- PR857 was green before merge.
+- Guarded merge-if-green reported main_verification_passed=true.
+- Main was synced after merge.
+- Targeted fixed-slot path consistency tests passed on main.
+- Targeted ruff passed on main.
+- next-turn status and last-result surfaces passed on main.
+- Handoff check passed.
+### WORKFLOW NOTE ###
+During the PR857 product slice, agentic-kit protected-change-plan was attempted but that CLI route does not exist in this checkout. The product diff was still narrow and verified by targeted tests, ruff, CI, guarded merge, and handoff check. Follow-up needed: identify or add the valid protected-change planning route instead of using a missing command.
+### INTERPRETATION ###
+PR857 unifies next-turn fixed-slot path handling: status detection now uses the same inbox constants as slot creation and runner execution, and the planning document now names the inbox fixed-slot paths.
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-POST-PR857-MAIN-CLOSEOUT | 2026-05-27 20:11:14 +0200
+
+SLICE
+  NAME: Post-PR857 main closeout
+  SCOPE: Record final green main closeout after fixed-slot path consistency merge.
+  BRANCH: post-pr857-main-closeout
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: no product work; closeout evidence only
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: 857
+  HEAD_SHA: f5e482b3b4b0cc3363c51a90d0e4dd3c59a7ff37
+  CI: PR857 CI passed before merge; guarded merge-if-green reported main_verification_passed=true; post-merge targeted tests, ruff, status surface checks, and handoff check passed.
+  MERGE: PR857 merged as main commit f5e482b
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit/post-pr857-main-closeout.log
+  terminal_log_remote: docs/reports/terminal/post-pr857-main-closeout.log
+  terminal_log_local: /tmp/agentic-project-kit/post-pr857-main-closeout.log
+  command_report: NOT_REQUIRED
+
+INTERPRETATION
+  The fixed-slot path consistency slice is now committed on main. next-turn status detection, slot creation, runner execution, tests, and planning references now agree on .agentic/commands/inbox/next-turn.*.
+
+NEXT
+  SAFE_STEP: Continue workflow-kernel hardening; first resolve the missing protected-change planning route or use the repository-supported equivalent before the next protected planning-doc mutation.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
