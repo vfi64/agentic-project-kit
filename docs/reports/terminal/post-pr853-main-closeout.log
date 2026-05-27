@@ -1,0 +1,83 @@
+### POST-PR853 MAIN CLOSEOUT EVIDENCE ###
+### SYNC MAIN ###
+Your branch is up to date with 'origin/main'.
+Already up to date.
+main
+5f8f5d9 Harden next-turn last-result evidence classification (#853)
+5f82b65 Record Post-PR851 main closeout evidence log (#852)
+e98ac30 Record Post-PR850 main closeout evidence log (#851)
+1878c08 Record Post-PR849 main closeout evidence log (#850)
+9cf2121 Add guarded merge-if-green PR CLI route (#849)
+f7f3b18 Record post-PR847 main closeout evidence (#848)
+### VERIFY PRODUCT SLICE ON MAIN ###
+.........................                                                [100%]
+25 passed in 0.33s
+All checks passed!
+### VERIFY HANDOFF STATE ###
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 21
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 6
+- class:release: 2
+- class:user-facing description: 1
+### VERIFIED EVIDENCE ###
+- PR853 was green before merge.
+- Guarded merge-if-green reported main_verification_passed=true.
+- Main was synced after merge.
+- Targeted next-turn status/result tests passed on main.
+- Targeted ruff passed on main.
+- Handoff check passed.
+### INTERPRETATION ###
+PR853 hardens next-turn last-result classification so d/f recovery starts from structured result and terminal evidence lookup before requesting pasted output.
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-POST-PR853-MAIN-CLOSEOUT | 2026-05-27 19:56:41 +0200
+
+SLICE
+  NAME: Post-PR853 main closeout
+  SCOPE: Record final green main closeout after result-first/log-first last-result classification merge.
+  BRANCH: post-pr853-main-closeout
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: no product work; closeout evidence only
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: 853
+  HEAD_SHA: 5f8f5d9f84605c76f85cbdd31c824bfb36fe70fd
+  CI: PR853 CI passed before merge; guarded merge-if-green reported main_verification_passed=true; post-merge targeted tests, ruff, and handoff check passed.
+  MERGE: PR853 merged as main commit 5f8f5d9
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit/post-pr853-main-closeout.log
+  terminal_log_remote: docs/reports/terminal/post-pr853-main-closeout.log
+  terminal_log_local: /tmp/agentic-project-kit/post-pr853-main-closeout.log
+  command_report: NOT_REQUIRED
+
+INTERPRETATION
+  The result-first/log-first lookup slice is now committed on main. next-turn last-result output classifies pass, fail, ambiguous, and missing evidence states before requesting pasted output.
+
+NEXT
+  SAFE_STEP: Continue workflow-kernel hardening; next logical slice is either closeout merge for this evidence PR or the next bounded next-turn state-machine/ledger hardening slice.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
