@@ -85,6 +85,23 @@ def test_decide_merge_refuses_pending_pr() -> None:
     assert "pending" in reason
 
 
+def test_decide_merge_refuses_unknown_merge_state_even_when_checks_are_green() -> None:
+    decision, reason = decide_merge(
+        status(
+            {
+                "state": "OPEN",
+                "mergeStateStatus": "UNKNOWN",
+                "headRefOid": "abc",
+                "statusCheckRollup": [
+                    {"name": "test", "status": "COMPLETED", "conclusion": "SUCCESS"},
+                ],
+            }
+        )
+    )
+    assert decision == "refuse"
+    assert "merge state is not clean: UNKNOWN" == reason
+
+
 def test_decide_merge_refuses_no_checks_pr() -> None:
     decision, reason = decide_merge(
         status(
