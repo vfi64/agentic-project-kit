@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-27'
-  reason: Repair post-PR831 generator-backed handoff freshness state
-  source: structured YAML mutation from docs/reports/terminal/post-pr831-successor-handoff.md
+  reason: Record PR834 handoff freshness repair closeout
+  source: structured YAML mutation plus PR834 closeout evidence
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 011b6dc24829be44c7693c468a90694981cd40ce
-  commit_subject: Record PR830 Tkinter GUI plan closeout evidence (#831)
+  commit: fd1e631312723166982fb1e0d9ecb76397e97559
+  commit_subject: Repair post-PR831 handoff freshness state (#834)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -71,6 +71,7 @@ safe_state:
   - 766
   - 831
   - 833
+  - 835
 release:
   current_version: 0.4.3
   previous_version: 0.4.2
@@ -82,10 +83,12 @@ release:
   post_release_evidence: docs/reports/terminal/20260526-120216_v043-release-verify.log
 open_items:
   prs: []
-  next_expected_chat_action: Verify the generated handoff prompt remains free of freshness
-    warnings, then continue with the smallest planned GUI or failure-mode automation
-    slice only after this freshness repair is merged and verified.
+  next_expected_chat_action: Inspect docs/reports/terminal/pr834-merge-finalize.log
+    and the generated handoff prompt; if both are clean, continue with the smallest
+    planned GUI or failure-mode automation slice.
 completed_since_previous_handoff:
+- 'PR #834 repaired generator-backed handoff freshness state so the generated successor
+  prompt anchors to the post-PR834 safe state.'
 - 'PR #833 recorded the corrected post-PR831 successor handoff at docs/reports/terminal/post-pr831-successor-handoff.md
   and superseded the rejected PR825-era stale generated prompt.'
 - 'PR #831 recorded PR #830 closeout evidence at docs/reports/terminal/pr830-merge-finalize.log
@@ -324,30 +327,32 @@ recent_failure_patterns:
     OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and RESULT
     marker.
 next_allowed_tasks:
-- id: verify-clean-handoff-freshness
-  title: After this repair is merged and verified, confirm agentic-kit handoff prompt
-    has no freshness warning.
-  priority: 1
 - id: tkinter-workbench-gui-slice-1
-  title: Continue with the smallest Tkinter workbench GUI slice from docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md.
-  priority: 2
+  title: Continue with the smallest Tkinter workbench GUI slice from docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
+    after PR834 closeout evidence is inspected.
+  priority: 1
 - id: failure-mode-review-automation-slice-1
-  title: Continue with the smallest failure-mode review automation slice from docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md.
+  title: Continue with the smallest failure-mode review automation slice from docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
+    after PR834 closeout evidence is inspected.
+  priority: 2
+- id: release-evidence-kernel-hardening-follow-up
+  title: Use only a small release/evidence-kernel hardening follow-up if freshness
+    or evidence drift reappears.
   priority: 3
 blocked_until_closeout:
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
 - Broad documentation migration during release/evidence-kernel hardening closeouts
 - Release, tag, or DOI mutation
-first_instruction: Verify the generated handoff prompt remains free of freshness warnings,
-  then continue with the smallest planned GUI or failure-mode automation slice only
-  after this freshness repair is merged and verified.
+first_instruction: Inspect docs/reports/terminal/pr834-merge-finalize.log and the
+  generated handoff prompt; if both are clean, continue with the smallest planned
+  GUI or failure-mode automation slice.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr831-successor-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr834-successor-handoff.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
