@@ -1,0 +1,136 @@
+### GUI REMOVE REDUNDANT TOP TOOLBAR -- LOGGED ###
+2026-05-27 22:32:31 +0200
+### SYNC MAIN AND VERIFY BASE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+0383fd4 Make GUI action buttons compact and scrollable (#869)
+8cdf496 Record duplicate PR865 verification cleanup evidence (#868)
+cc38b0a Record PR865 merge verification evidence (#866)
+c164bd6 Record post-PR864 main closeout evidence (#865)
+79d2d8b Record external review enforcement priorities in planning (#864)
+590d30a Record Post-PR862 main closeout evidence log (#863)
+1fb1b57 Expand GUI workflow button catalog (#862)
+970eb6b Record post-PR860 main closeout evidence (#861)
+e91539a Clarify protected change planning route (#860)
+1601942 Record post-PR858 successor chat handoff (#859)
+### VERIFY PR869 STATE BEFORE NEW GUI SLICE ###
+{"baseRefOid":"8cdf49624a0ac923866c1a4e8357ed79267f85bf","headRefOid":"61c0d27c88ef302d0d429b88d6942e76db592f73","mergeCommit":{"oid":"0383fd4dd948c181b5eb953461b90044c72b934f"},"mergedAt":"2026-05-27T20:25:43Z","number":869,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/869"}
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'gui/remove-redundant-top-toolbar'
+### PATCH GUI TO HIDE REDUNDANT TOP TOOLBAR ###
+removed redundant rendered top toolbar
+### REVIEW DIFF ###
+ M src/agentic_project_kit/gui_tkinter_shell.py
+diff --git a/src/agentic_project_kit/gui_tkinter_shell.py b/src/agentic_project_kit/gui_tkinter_shell.py
+index d5f7bdf..65c4754 100644
+--- a/src/agentic_project_kit/gui_tkinter_shell.py
++++ b/src/agentic_project_kit/gui_tkinter_shell.py
+@@ -626,20 +626,9 @@ def render_manual_launch_content(root: object) -> None:
+             )
+             set_status(f"Status: fail | branch: main | action: {command_id}")
+ 
+-    toolbar = ttk.Frame(root, padding=4)
+-    toolbar.pack(fill="x", padx=12, pady=(0, 8))
+-    for button in toolbar_gui_buttons():
+-        if button.enabled:
+-            ttk.Button(
+-                toolbar,
+-                text=button.label,
+-                command=lambda command_id=button.command_id: run_action_click(command_id),
+-            ).pack(side="left", padx=4, pady=4)
+-        else:
+-            ttk.Button(
+-                toolbar, text=button.label, state="disabled", style="ReadableDisabled.TButton"
+-            ).pack(side="left", padx=4, pady=4)
+-
++    # The former top toolbar duplicated actions from the categorized left action list.
++    # Keep toolbar metadata in the catalog for future compact quick-access designs, but
++    # do not render a redundant horizontal button row in the current manual cockpit.
+     body = ttk.Frame(root, padding=(12, 0, 12, 12))
+     body.pack(fill="both", expand=True)
+ 
+### TARGETED TESTS AND SMOKE ###
+..............F......................                                    [100%]
+=================================== FAILURES ===================================
+_________ test_manual_launch_disabled_buttons_use_readable_theme_style _________
+
+    def test_manual_launch_disabled_buttons_use_readable_theme_style():
+        from pathlib import Path
+    
+        source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
+        manual_source = source[
+            source.index("def render_manual_launch_content") : source.index("def run_manual_launch")
+        ]
+        assert "ReadableDisabled.TButton" in manual_source
+        assert 'style.map("ReadableDisabled.TButton"' in manual_source
+>       assert manual_source.count('style="ReadableDisabled.TButton"') >= 2
+E       assert 1 >= 2
+E        +  where 1 = <built-in method count of str object at 0xa7711f800>('style="ReadableDisabled.TButton"')
+E        +    where <built-in method count of str object at 0xa7711f800> = 'def render_manual_launch_content(root: object) -> None:\n    import tkinter as tk\n    from tkinter import ttk\n\n   ... read-only buttons: {enabled_count}",\n        anchor="w",\n    )\n    status_text.pack(fill="x", side="bottom")\n\n\n'.count
+
+tests/test_v040_gui_tkinter_shell.py:276: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v040_gui_tkinter_shell.py::test_manual_launch_disabled_buttons_use_readable_theme_style
+1 failed, 36 passed in 0.30s
+TKINTER SHELL
+title=agentic-project-kit Cockpit
+status=tkinter-shell-ready
+action_count=32
+menu_count=5
+toolbar_button_count=8
+action_button_count=32
+destructive_actions_enabled=false
+toolbar_icons=branch,status,history,handoff,stethoscope,document-check,audit,guard
+### RESULT: PASS ###
+All checks passed!
+### COPY LOG TO REPO PATH BEFORE SUMMARY ###
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-27 22:32:36 +0200
+
+SLICE
+  NAME: GUI remove redundant top toolbar
+  SCOPE: Remove the rendered horizontal toolbar from the manual Tkinter cockpit while keeping toolbar catalog metadata for future compact quick-access designs.
+  BRANCH: gui/remove-redundant-top-toolbar
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: GUI layout-only change; no remote/destructive/parameterized actions enabled
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: PENDING_CREATION
+  HEAD_SHA: 0383fd4dd948c181b5eb953461b90044c72b934f
+  CI: PENDING
+  MERGE: NOT_APPLICABLE
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit/gui-remove-redundant-top-toolbar.log
+  terminal_log_remote: docs/reports/terminal/gui-remove-redundant-top-toolbar.log
+  terminal_log_local: /tmp/agentic-project-kit/gui-remove-redundant-top-toolbar.log
+  command_report: targeted GUI pytest/no-window-smoke/ruff
+
+INTERPRETATION
+  Manual GUI testing showed that the horizontal top toolbar duplicated the categorized action list and consumed screen space. This slice removes only the rendered redundant row. It does not remove catalog metadata and does not enable new actions.
+
+NEXT
+  SAFE_STEP: Create PR, wait for machine-readable CI, merge only if clean, sync main, and manually re-check the GUI layout.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
