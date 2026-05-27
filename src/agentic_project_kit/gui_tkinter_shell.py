@@ -47,6 +47,11 @@ from agentic_project_kit.rule_registry_validator import (
 from agentic_project_kit.state_freshness import find_stale_state_fragments, format_findings
 from agentic_project_kit.workflow_guard import render_findings as render_workflow_guard_findings
 from agentic_project_kit.workflow_guard import run_workflow_guard
+from agentic_project_kit.work_order_validator import (
+    read_work_order_preview,
+    render_work_order_validation,
+    validate_work_order_file,
+)
 
 
 @dataclass(frozen=True)
@@ -532,6 +537,15 @@ def _run_gui_dry_run() -> tuple[int, str]:
     return 0, render_tkinter_shell_summary(build_tkinter_shell_spec())
 
 
+def _run_work_order_show() -> tuple[int, str]:
+    return read_work_order_preview()
+
+
+def _run_work_order_validate() -> tuple[int, str]:
+    result = validate_work_order_file()
+    return (0 if result.ok else 1), render_work_order_validation(result)
+
+
 def _run_actions_list() -> tuple[int, str]:
     lines = ["GUI_ACTIONS"]
     for button in all_gui_buttons():
@@ -562,6 +576,8 @@ MANUAL_GUI_READONLY_RUNNERS: dict[str, Callable[[], tuple[int, str]]] = {
     "rule-registry-report": _run_rule_registry_report,
     "state-freshness": _run_state_freshness,
     "terminal-remote-preflight": _run_terminal_remote_preflight,
+    "work-order-show": _run_work_order_show,
+    "work-order-validate": _run_work_order_validate,
     "workflow-guard-check": _run_workflow_guard,
 }
 

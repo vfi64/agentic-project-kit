@@ -288,6 +288,20 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         disabled_reason="release publication requires maintainer-owned confirmation",
     ),
     _button(
+        "work-order-show",
+        "Show Work Order",
+        "Workflow Automation",
+        "Display the fixed next-turn Python work-order file without executing it.",
+        "work-order-show",
+    ),
+    _button(
+        "work-order-validate",
+        "Validate Work Order",
+        "Workflow Automation",
+        "Validate the fixed next-turn Python work-order file before execution is allowed.",
+        "work-order-validate",
+    ),
+    _button(
         "agent-next",
         "Agent Next",
         "Workflow Automation",

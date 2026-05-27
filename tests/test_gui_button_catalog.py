@@ -24,6 +24,8 @@ def test_gui_button_catalog_covers_communication_and_workflow_surface():
         "protected-change-plan",
         "merge-if-green",
         "agent-run",
+        "work-order-show",
+        "work-order-validate",
     } <= command_ids
 
 
