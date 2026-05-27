@@ -1,0 +1,171 @@
+### MERGE PR865 THROUGH LOCAL GATE -- LOGGED ###
+2026-05-27 21:51:00 +0200
+NEXT_TURN_MERGE_IF_GREEN
+pr=865
+decision=merge
+reason=PR is green
+status_decision=green
+state=OPEN
+merge_state_status=CLEAN
+base_ref_name=main
+base_ref_oid=79d2d8b2798547e5328f7e0f2d10bcb7d55e92f5
+head_ref_name=post-pr864-main-closeout
+head_ref_oid=a6fc3cd72b19ff9e3ad77cc6d7ffdea914dd0164
+expected_base_branch=main
+expected_head_sha=a6fc3cd72b19ff9e3ad77cc6d7ffdea914dd0164
+merged=true
+merge_commit_sha=c164bd60ec53a071fdcb66d31ace1fc91467677b
+main_verification_required=true
+main_verification_decision=green
+main_verification_passed=true
+main_failed_run_log_hint=none
+main_verification_error=none
+failed_checks:
+pending_checks:
+unknown_checks:
+main_failed_run_diagnostics:
+### RESULT: PASS ###
+### SYNC MAIN AFTER PR865 ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+c164bd6 Record post-PR864 main closeout evidence (#865)
+79d2d8b Record external review enforcement priorities in planning (#864)
+590d30a Record Post-PR862 main closeout evidence log (#863)
+1fb1b57 Expand GUI workflow button catalog (#862)
+970eb6b Record post-PR860 main closeout evidence (#861)
+e91539a Clarify protected change planning route (#860)
+1601942 Record post-PR858 successor chat handoff (#859)
+d644744 Record Post-PR857 main closeout evidence log (#858)
+### VERIFY PR865 MERGE STATE ###
+{"baseRefOid":"79d2d8b2798547e5328f7e0f2d10bcb7d55e92f5","headRefOid":"a6fc3cd72b19ff9e3ad77cc6d7ffdea914dd0164","mergeCommit":{"oid":"c164bd60ec53a071fdcb66d31ace1fc91467677b"},"mergedAt":"2026-05-27T19:51:02Z","number":865,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/865"}
+### VERIFY CLOSEOUT LOG ON MAIN ###
+-rw-r--r--@ 1 hof  staff  7379 27 Mai  21:51 docs/reports/terminal/post-pr864-main-closeout.log
+EVIDENCE_INSPECTION
+verdict: PASS_CONTINUE
+evidence_exists: yes
+require_summary: yes
+git_branch: main
+git_status_clean: yes
+pass_markers: 5
+fail_markers: 0
+hidden_fail_before_final_pass: no
+structured_summary_found: yes
+structured_summary_valid: yes
+summary_name: Post-PR864 main closeout
+summary_scope: Record repo-readable closeout evidence after merging external review enforcement priorities planning update.
+summary_branch: post-pr864-main-closeout
+summary_origin: local
+summary_state_mode: local
+summary_mode_check: local main synced after PR864 merge; planning anchors and gates verified
+summary_work: PASS
+summary_evidence: PASS
+summary_overall: PASS
+summary_remote_evidence: PASS
+summary_pr: 864
+summary_head_sha: 79d2d8b2798547e5328f7e0f2d10bcb7d55e92f5
+summary_ci: PR864 merged through ./ns merge-if-green; main verification reported green; post-merge handoff, evidence inspect, next-turn status, check-docs, docs-audit, governance check, and ruff passed.
+summary_merge: PR864 merged as main commit 79d2d8b
+summary_terminal_log: /tmp/agentic-project-kit/post-pr864-main-closeout.log
+summary_terminal_log_remote: docs/reports/terminal/post-pr864-main-closeout.log
+summary_terminal_log_local: /tmp/agentic-project-kit/post-pr864-main-closeout.log
+summary_command_report: main-sync/pr864-merge-state/planning-anchor-checks/check-docs/docs-audit/governance/ruff
+summary_safe_step: Continue with the next GUI slice: parameterized read-only dispatch for evidence inspection, protected-change planning, and PR status; do not enable remote mutation buttons yet.
+summary_chat_reply: d
+summary_result_marker: PASS
+evidence_path: docs/reports/terminal/post-pr864-main-closeout.log
+final_marker: ### RESULT: PASS ###
+next_action: continue with the next safe slice after reviewing evidence
+### RESULT: PASS ###
+### VERIFY STATUS SURFACES ###
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 21
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 6
+- class:release: 2
+- class:user-facing description: 1
+NEXT_TURN_STATUS
+state=empty
+yaml_exists=false
+script_exists=false
+overwrite_allowed=true
+reason=no fixed-slot files exist
+evidence_lookup_order:
+- docs/reports/command_runs/next-turn-latest.json
+- docs/reports/command_runs/next-turn-latest.md
+- docs/reports/terminal/next-turn-latest.log
+- .agentic/commands/executed.jsonl
+### RESULT: PASS ###
+NEXT_TURN_LAST_RESULT
+status=FOUND_PASS
+path=.agentic/commands/executed.jsonl
+evidence_verdict=PASS_CONTINUE
+recommended_chat_reply=d
+recovery=continue from executed command ledger
+checked_paths:
+- docs/reports/command_runs/next-turn-latest.json
+- docs/reports/command_runs/next-turn-latest.md
+- docs/reports/terminal/next-turn-latest.log
+- .agentic/commands/executed.jsonl
+preview:
+{"command_id": "post707-state-refresh-v3", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "0d47e43ad9a42165ff3d86c8cd2e4db008da062c462ac5265001df2010ed27a8", "timestamp_utc": "2026-05-24T08:43:23.196541+00:00"}
+### RESULT: PASS ###
+### COPY MERGE VERIFY LOG TO REPO PATH ###
+Switched to a new branch 'post-pr865-main-closeout'
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-27 21:51:45 +0200
+
+SLICE
+  NAME: PR865 merge and main verify
+  SCOPE: Merge post-PR864 closeout evidence and verify main.
+  BRANCH: post-pr865-main-closeout
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: merge through ./ns merge-if-green; main synced and evidence inspected
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: 865
+  HEAD_SHA: c164bd60ec53a071fdcb66d31ace1fc91467677b
+  CI: PR865 merged through local gate; main verification and evidence inspection passed after sync.
+  MERGE: PR865 merged into main
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit/pr865-merge-and-main-verify.log
+  terminal_log_remote: docs/reports/terminal/pr865-merge-and-main-verify.log
+  terminal_log_local: /tmp/agentic-project-kit/pr865-merge-and-main-verify.log
+  command_report: merge-if-green/main-sync/evidence-inspect/handoff/next-turn-status
+
+INTERPRETATION
+  Post-PR864 closeout evidence is now on main and verified. The repository is ready for the next GUI-safe parameterized read-only dispatch slice.
+
+NEXT
+  SAFE_STEP: Continue with GUI-safe parameterized read-only dispatch for evidence inspection, protected-change planning, and PR status; do not enable remote mutation buttons yet.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
