@@ -364,3 +364,5 @@ administrative_evidence_state:
   head_subject: Refresh post-PR835 next step state (#836)
   allowed_after_safe_state: true
   reason: Post-PR836 administrative handoff/evidence refresh; no product-state change.
+# preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
+# preservation-anchor: nested shell/Python quote layers
