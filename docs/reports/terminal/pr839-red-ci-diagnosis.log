@@ -170,3 +170,47 @@ SUMMARY
   NEXT_CHAT_REPLY: f
   CHAT_REPLY: f
 ### RESULT: FAIL ###
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-PR839-RED-CI-DIAGNOSIS | 2026-05-27 18:34:09 +0200
+
+SLICE
+  NAME: PR839 red CI diagnosis evidence summary repair
+  SCOPE: Append structured summary to the committed PR839 red-CI diagnosis log without changing product state.
+  BRANCH: docs/pr839-evidence-summary-repair
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: no product work; evidence summary repair only
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: FAIL
+  EVIDENCE: PASS
+  OVERALL: FAIL
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: 839
+  HEAD_SHA: 10bc252dd80604f8720c5a007611f8bad17a2ac4
+  CI: red CI diagnosis recorded; later PR839 CI passed after generated-bootstrap restoration
+  MERGE: PR839 already merged as 10bc252
+
+EVIDENCE FILES
+  terminal_log: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/pr839-red-ci-diagnosis.log
+  terminal_log_remote: docs/reports/terminal/pr839-red-ci-diagnosis.log
+  terminal_log_local: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/pr839-red-ci-diagnosis.log
+  command_report: NOT_REQUIRED
+
+INTERPRETATION
+  This log is diagnostic FAIL evidence for the earlier generated-bootstrap CI failure; it is intentionally superseded by the later PR839 fix and green CI.
+
+NEXT
+  SAFE_STEP: Use the later PR839 merge and green CI as product-state evidence; keep this log as diagnostic evidence only.
+  CHAT_REPLY: f
+
+### RESULT: FAIL ###
+================================================================
