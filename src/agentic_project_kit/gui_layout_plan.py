@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 from agentic_project_kit.gui_tkinter_shell import TkinterShellSpec, build_tkinter_shell_spec
 
+
 @dataclass(frozen=True)
 class LayoutNode:
     node_id: str
@@ -16,6 +17,10 @@ class LayoutNode:
     command_id: str = ""
     safety_class: str = ""
     icon_id: str = ""
+    category: str = ""
+    implementation_state: str = ""
+    disabled_reason: str = ""
+
 
 @dataclass(frozen=True)
 class LayoutPlan:
@@ -30,8 +35,40 @@ class LayoutPlan:
     def nodes_by_kind(self, kind: str) -> tuple[LayoutNode, ...]:
         return tuple(node for node in self.nodes if node.kind == kind)
 
-def _append(nodes: list[LayoutNode], node_id: str, kind: str, label: str, parent: str, enabled: bool = True, tooltip: str = "", command_id: str = "", safety_class: str = "", icon_id: str = "") -> None:
-    nodes.append(LayoutNode(node_id=node_id, kind=kind, label=label, parent=parent, order=len(nodes), enabled=enabled, tooltip=tooltip, command_id=command_id, safety_class=safety_class, icon_id=icon_id))
+
+def _append(
+    nodes: list[LayoutNode],
+    node_id: str,
+    kind: str,
+    label: str,
+    parent: str,
+    enabled: bool = True,
+    tooltip: str = "",
+    command_id: str = "",
+    safety_class: str = "",
+    icon_id: str = "",
+    category: str = "",
+    implementation_state: str = "",
+    disabled_reason: str = "",
+) -> None:
+    nodes.append(
+        LayoutNode(
+            node_id=node_id,
+            kind=kind,
+            label=label,
+            parent=parent,
+            order=len(nodes),
+            enabled=enabled,
+            tooltip=tooltip,
+            command_id=command_id,
+            safety_class=safety_class,
+            icon_id=icon_id,
+            category=category,
+            implementation_state=implementation_state,
+            disabled_reason=disabled_reason,
+        )
+    )
+
 
 def build_layout_plan(spec: TkinterShellSpec | None = None) -> LayoutPlan:
     shell = build_tkinter_shell_spec() if spec is None else spec
@@ -42,23 +79,70 @@ def build_layout_plan(spec: TkinterShellSpec | None = None) -> LayoutPlan:
         menu_id = "menu-" + menu.label.lower().replace(" ", "-")
         _append(nodes, menu_id, "menu", menu.label, "menu-bar")
         for item in menu.items:
-            _append(nodes, menu_id + "-" + item.command_id, "menu_item", item.label, menu_id, item.enabled, item.tooltip, item.command_id)
+            _append(
+                nodes,
+                menu_id + "-" + item.command_id,
+                "menu_item",
+                item.label,
+                menu_id,
+                item.enabled,
+                item.tooltip,
+                item.command_id,
+            )
     _append(nodes, "toolbar", "toolbar", "Toolbar", "root")
     for button in shell.design.toolbar:
-        _append(nodes, "toolbar-" + button.command_id, "toolbar_button", button.label, "toolbar", button.enabled, button.tooltip, button.command_id, button.safety_class, button.icon_id)
+        _append(
+            nodes,
+            "toolbar-" + button.command_id,
+            "toolbar_button",
+            button.label,
+            "toolbar",
+            button.enabled,
+            button.tooltip,
+            button.command_id,
+            button.safety_class,
+            button.icon_id,
+            button.category,
+            button.implementation_state,
+            button.disabled_reason,
+        )
     _append(nodes, "main", "main_area", "Main", "root")
     _append(nodes, "actions", "action_panel", "Actions", "main")
     for button in shell.design.action_buttons:
-        _append(nodes, "action-" + button.command_id, "action_button", button.label, "actions", button.enabled, button.tooltip, button.command_id, button.safety_class, button.icon_id)
+        _append(
+            nodes,
+            "action-" + button.command_id,
+            "action_button",
+            button.label,
+            "actions",
+            button.enabled,
+            button.tooltip,
+            button.command_id,
+            button.safety_class,
+            button.icon_id,
+            button.category,
+            button.implementation_state,
+            button.disabled_reason,
+        )
     _append(nodes, "details", "details_panel", "Details / Parameters", "main")
     _append(nodes, "output", "output_panel", "Output / Log", "root")
     _append(nodes, "summary", "summary_bar", "Last Summary", "root")
     return LayoutPlan(title=shell.title, geometry="1000x650", nodes=tuple(nodes))
 
+
 def render_layout_plan(plan: LayoutPlan) -> str:
-    lines = ["GUI LAYOUT PLAN", f"title={plan.title}", f"geometry={plan.geometry}", f"node_count={plan.node_count}"]
+    lines = [
+        "GUI LAYOUT PLAN",
+        f"title={plan.title}",
+        f"geometry={plan.geometry}",
+        f"node_count={plan.node_count}",
+    ]
     for kind in ("menu", "toolbar_button", "action_button", "output_panel", "summary_bar"):
         lines.append(f"{kind}_count={len(plan.nodes_by_kind(kind))}")
+    categories = sorted(
+        {node.category for node in plan.nodes_by_kind("action_button") if node.category}
+    )
+    lines.append("action_categories=" + (",".join(categories) if categories else "NONE"))
     disabled = [node.command_id for node in plan.nodes if not node.enabled]
     lines.append("disabled_commands=" + (",".join(disabled) if disabled else "NONE"))
     return "\n".join(lines)
