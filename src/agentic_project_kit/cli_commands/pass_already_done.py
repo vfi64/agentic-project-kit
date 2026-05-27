@@ -6,6 +6,7 @@ import typer
 
 from agentic_project_kit.pass_already_done import classify_file
 from agentic_project_kit.pass_already_done import render_classification
+from agentic_project_kit.pass_already_done import render_classification_json
 from agentic_project_kit.pass_already_done import SUPPORTED_TARGET_STATES
 from agentic_project_kit.result_report_classifier import classify_report
 from agentic_project_kit.result_report_classifier import render_report_classification
@@ -23,6 +24,7 @@ def classify(
         "--target-state",
         help="Already-done target class. One of: " + ", ".join(sorted(SUPPORTED_TARGET_STATES)),
     ),
+    json_output: bool = typer.Option(False, "--json", help="Emit machine-readable JSON output."),
 ) -> None:
     classification = classify_file(
         path,
@@ -30,7 +32,10 @@ def classify(
         target_verified=target_verified,
         target_state=target_state,
     )
-    typer.echo(render_classification(classification))
+    if json_output:
+        typer.echo(render_classification_json(classification))
+    else:
+        typer.echo(render_classification(classification))
     if not classification.success:
         raise typer.Exit(code=1)
 
@@ -45,6 +50,7 @@ def report(
         "--target-state",
         help="Already-done target class. One of: " + ", ".join(sorted(SUPPORTED_TARGET_STATES)),
     ),
+    json_output: bool = typer.Option(False, "--json", help="Emit machine-readable JSON output."),
 ) -> None:
     result = classify_report(
         path,

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
@@ -156,6 +157,21 @@ def render_classification(classification: CompletionClassification) -> str:
     return "\n".join(lines)
 
 
+
+def classification_to_dict(classification: CompletionClassification) -> dict[str, object]:
+    return {
+        "outcome": classification.outcome.value,
+        "success": classification.success,
+        "reason": classification.reason,
+        "target_state": classification.target_state,
+        "matched_phrase": classification.matched_phrase,
+    }
+
+
+def render_classification_json(classification: CompletionClassification) -> str:
+    return json.dumps(classification_to_dict(classification), sort_keys=True)
+
+
 def classify_file(
     path: Path,
     *,
@@ -177,6 +193,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--exit-code", type=int, required=True)
     parser.add_argument("--target-verified", action="store_true")
     parser.add_argument("--target-state", choices=sorted(SUPPORTED_TARGET_STATES))
+    parser.add_argument("--json", action="store_true", dest="json_output")
     return parser
 
 
@@ -188,7 +205,10 @@ def main(argv: list[str] | None = None) -> int:
         target_verified=args.target_verified,
         target_state=args.target_state,
     )
-    print(render_classification(classification))
+    if args.json_output:
+        print(render_classification_json(classification))
+    else:
+        print(render_classification(classification))
     return 0 if classification.success else 1
 
 
