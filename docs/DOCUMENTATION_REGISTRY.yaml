@@ -165,6 +165,10 @@ documents:
     class: planning
     owner: maintainers
     notes: Implementation contract for repo-backed failure-mode review automation before slices and after merges.
+  - path: docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
+    class: planning
+    owner: maintainers
+    notes: Full structured Tkinter workbench GUI plan with complete button catalog, staged enablement, dispatch integration, and evidence requirements.
   - path: docs/handoff/CURRENT_HANDOFF.md
     class: planning
     owner: maintainers

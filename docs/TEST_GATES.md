@@ -119,6 +119,20 @@ The first implementation phase must remain read-only and must add `agentic-kit n
 
 Until Phase 1 is implemented, this section is a planning gate only. It must not be cited as evidence that the command already exists.
 
+## Tkinter Workbench GUI Gate (planned)
+
+`docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md` defines the full structured Tkinter workbench plan. The GUI must render the complete planned button catalog from the first implementation slice, while non-implemented actions remain visible and disabled. Functionality is enabled in later slices only behind metadata, tests, safety classes, evidence checks, and existing branch/PR workflow gates.
+
+The first implementation phase must remain non-destructive and must add the full button catalog plus a headless-renderable Tkinter workbench skeleton before enabling bounded mutation buttons. The planned Phase-1 evidence is:
+
+    python -m pytest -q tests/test_tkinter_workbench_gui.py tests/test_cockpit.py tests/test_repo_ns_entrypoint.py
+    ruff check .
+    agentic-kit check-docs
+    agentic-kit docs-audit
+    agentic-kit doctor
+
+Until Slice 1 is implemented, this section is a planning gate only. It must not be cited as evidence that the GUI backend already exists.
+
 ## LLM Communication and Bootstrap Gate
 
 Changes to chat communication, final summary behavior, portable execution, successor-chat bootstrap, drift detection, or handoff prompt behavior must update the canonical governance contracts instead of spreading long duplicate rules across state files.
