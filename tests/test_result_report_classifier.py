@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from typer.testing import CliRunner
@@ -83,3 +84,30 @@ def test_cli_report_classification_fail_without_verification(tmp_path: Path) -> 
     result = runner.invoke(app, ["pass-already-done", "report", str(report), "--exit-code", "1"])
     assert result.exit_code == 1
     assert "outcome: FAIL" in result.output
+
+
+
+def test_report_cli_json_output_for_verified_target(tmp_path: Path) -> None:
+    report = tmp_path / "report.md"
+    report.write_text("nothing to commit, working tree clean\\n", encoding="utf-8")
+    runner = CliRunner()
+    result = runner.invoke(
+        app,
+        [
+            "pass-already-done",
+            "report",
+            str(report),
+            "--exit-code",
+            "1",
+            "--target-verified",
+            "--target-state",
+            "git-clean",
+            "--json",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["outcome"] == "PASS_ALREADY_DONE"
+    assert payload["success"] is True
+    assert payload["target_state"] == "git-clean"
+    assert payload["matched_phrase"] == "nothing to commit, working tree clean"
