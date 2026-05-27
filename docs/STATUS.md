@@ -4,7 +4,7 @@ Current verified main HEAD: `fd1e631312723166982fb1e0d9ecb76397e97559` (`fd1e631
 
 Generated handoff safe-state anchor: `fd1e631312723166982fb1e0d9ecb76397e97559` (`fd1e631`), after PR #834 repaired generator-backed handoff freshness.
 
-PR #834 `Repair post-PR831 handoff freshness state` is merged. PR #835 added `docs/reports/terminal/post-pr834-successor-handoff.md` and `docs/reports/terminal/pr834-merge-finalize.log` as the successor/evidence anchors.
+PR #834 `Repair post-PR831 handoff freshness state` is merged. PR #835 added `docs/reports/terminal/post-pr836-successor-handoff.md` and `docs/reports/terminal/post-pr836-successor-handoff.log` as the successor/evidence anchors.
 
 v0.4.3 remains the current published and post-release verified release. Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
@@ -56,8 +56,8 @@ v0.4.3 GitHub Release publication and post-release Zenodo verification are compl
 
 v0.4.3 safety-release and successor-handoff target:
 - Main contains PR #834 at `fd1e631` (`Repair post-PR831 handoff freshness state (#834)`).
-- PR #835 added PR834 closeout evidence at `docs/reports/terminal/pr834-merge-finalize.log`.
-- Generated handoff safe-state now anchors to PR #834 via `docs/reports/terminal/post-pr834-successor-handoff.md`.
+- PR #835 added PR834 closeout evidence at `docs/reports/terminal/post-pr836-successor-handoff.log`.
+- Generated handoff safe-state now anchors to PR #834 via `docs/reports/terminal/post-pr836-successor-handoff.md`.
 - PR #833 recorded the corrected post-PR831 successor handoff at `docs/reports/terminal/post-pr831-successor-handoff.md`.
 - PR #831 recorded PR #830 closeout evidence at `docs/reports/terminal/pr830-merge-finalize.log`.
 - PR #825 hardened active handoff freshness checks so already-recorded closeout evidence and stale release-version instructions are blocking drift.
