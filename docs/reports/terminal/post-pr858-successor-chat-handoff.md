@@ -84,10 +84,10 @@ Suggested first local commands:
     git pull --ff-only origin main
     git status --short
     git log -8 --oneline
-    PATH=\".venv/bin:$PATH\" agentic-kit handoff check
-    PATH=\".venv/bin:$PATH\" agentic-kit evidence inspect --require-summary docs/reports/terminal/post-pr857-main-closeout.log
-    PATH=\".venv/bin:$PATH\" python -m agentic_project_kit.next_turn_status next-turn --status
-    PATH=\".venv/bin:$PATH\" python -m agentic_project_kit.next_turn_status last-result
+    PATH=".venv/bin:$PATH" agentic-kit handoff check
+    PATH=".venv/bin:$PATH" agentic-kit evidence inspect --require-summary docs/reports/terminal/post-pr857-main-closeout.log
+    PATH=".venv/bin:$PATH" python -m agentic_project_kit.next_turn_status next-turn --status
+    PATH=".venv/bin:$PATH" python -m agentic_project_kit.next_turn_status last-result
 
 Then continue with the smallest safe slice: resolve the missing protected-change planning route before any protected planning-doc mutation.
 
