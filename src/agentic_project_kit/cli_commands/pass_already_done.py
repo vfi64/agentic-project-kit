@@ -58,6 +58,9 @@ def report(
         target_verified=target_verified,
         target_state=target_state,
     )
-    typer.echo(render_report_classification(result))
+    if json_output:
+        typer.echo(render_classification_json(result.classification))
+    else:
+        typer.echo(render_report_classification(result))
     if not result.success:
         raise typer.Exit(code=1)
