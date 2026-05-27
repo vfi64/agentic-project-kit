@@ -1,0 +1,53 @@
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+POST-PR836 SUCCESSOR HANDOFF -- CLEAN CHAT SWITCH V4
+
+repo=/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+branch=docs/post-pr836-successor-handoff
+main_head=c0ac933a29b71c6660ae7e436386414f08ff9e7b
+main_subject=Refresh post-PR835 next step state (#836)
+prompt=docs/reports/terminal/post-pr836-successor-handoff.md
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-PENDING | 2026-05-27 15:53:28 +0200
+
+SLICE
+  NAME: POST-PR836 SUCCESSOR HANDOFF V4
+  SCOPE: HANDOFF FRESHNESS REPAIR / SUCCESSOR CHAT SWITCH
+  BRANCH: docs/post-pr836-successor-handoff
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: Python file-backed command; structured handoff_state mutation; placeholder freshness anchor before generator run
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: created-or-found-after-push
+  HEAD_SHA: c0ac933a29b71c6660ae7e436386414f08ff9e7b
+  CI: pending-after-PR
+  MERGE: not-attempted
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/post-pr836-successor-handoff.log
+  terminal_log_remote: docs/reports/terminal/post-pr836-successor-handoff.log
+  terminal_log_local: docs/reports/terminal/post-pr836-successor-handoff.log
+  command_report: handoff-state-structured-patch/handoff-prompt/protected-change-plan/state-handoff-governance/doctor/evidence-inspect
+
+INTERPRETATION
+  A warning-free post-PR836 successor handoff prompt was generated and recorded for the next chat.
+
+NEXT
+  SAFE_STEP: machine-check the handoff PR; if clean, merge with ./ns merge-if-green, then start the next chat from docs/reports/terminal/post-pr836-successor-handoff.md
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
