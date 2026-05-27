@@ -19,6 +19,12 @@ PROTECTED_FILES = {
 VALID_DECISIONS = {"keep", "migrate", "obsolete", "abort"}
 LARGE_PROTECTED_REMOVAL_THRESHOLD = 20
 
+GENERATED_ARTIFACTS = {
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md": (
+        "src/agentic_project_kit/chat_bootloader.py",
+    ),
+}
+
 ANCHORS = {
     ".agentic/compiled_agent_context.yaml": {"hard_rules", "final_summary_contract", "communication_rules", "normal_operator_path"},
     ".agentic/handoff_state.yaml": {"safe_state", "release", "recent_failure_patterns"},
@@ -42,16 +48,19 @@ class ProtectedChangeFinding:
     code: str
     message: str
 
-def touched_protected_files(diff_text: str) -> set[str]:
+def touched_files(diff_text: str) -> set[str]:
     touched: set[str] = set()
     for line in diff_text.splitlines():
         if line.startswith("diff --git "):
             parts = line.split()
             for part in parts[2:]:
                 candidate = part[2:] if part.startswith(("a/", "b/")) else part
-                if candidate in PROTECTED_FILES:
-                    touched.add(candidate)
+                touched.add(candidate)
     return touched
+
+
+def touched_protected_files(diff_text: str) -> set[str]:
+    return touched_files(diff_text) & PROTECTED_FILES
 
 def removed_lines_for_path(diff_text: str, path: str) -> list[str]:
     lines: list[str] = []
@@ -86,7 +95,11 @@ def _contains_anchor(path: str, text: str, anchor: str) -> bool:
 def analyze_diff(diff_text: str, decisions: dict[str, str] | None = None) -> list[ProtectedChangeFinding]:
     decisions = decisions or {}
     findings: list[ProtectedChangeFinding] = []
-    for path in sorted(touched_protected_files(diff_text)):
+    touched = touched_files(diff_text)
+    for path, generator_sources in sorted(GENERATED_ARTIFACTS.items()):
+        if path in touched and not any(source in touched for source in generator_sources):
+            findings.append(ProtectedChangeFinding(path, "block", "generated-artifact-direct-edit", "generated artifact changed without its generator source; use the generator path instead of direct editing"))
+    for path in sorted(touched & PROTECTED_FILES):
         removed = removed_lines_for_path(diff_text, path)
         added = added_lines_for_path(diff_text, path)
         has_valid_decision = _has_valid_decision(path, decisions)

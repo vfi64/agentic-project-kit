@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from agentic_project_kit.protected_change_planner import analyze_diff, render_findings, touched_protected_files
+from agentic_project_kit.protected_change_planner import analyze_diff, render_findings, touched_files, touched_protected_files
 
 def test_detects_touched_protected_file() -> None:
     diff = "diff --git a/.agentic/compiled_agent_context.yaml b/.agentic/compiled_agent_context.yaml\n"
@@ -68,3 +68,27 @@ def test_render_pass_and_block() -> None:
     rendered = render_findings(analyze_diff(diff))
     assert "result=BLOCK" in rendered
     assert "required_decision=keep|migrate|obsolete|abort" in rendered
+
+
+def test_tracks_all_touched_files_for_generated_artifact_guards() -> None:
+    diff = "diff --git a/docs/handoff/NEXT_CHAT_BOOTSTRAP.md b/docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n"
+    assert touched_files(diff) == {"docs/handoff/NEXT_CHAT_BOOTSTRAP.md"}
+
+
+def test_blocks_direct_generated_bootstrap_edit_without_generator_source() -> None:
+    diff = "\n".join([
+        "diff --git a/docs/handoff/NEXT_CHAT_BOOTSTRAP.md b/docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "+manual state text",
+    ])
+    findings = analyze_diff(diff)
+    assert any(f.code == "generated-artifact-direct-edit" for f in findings)
+
+
+def test_allows_generated_bootstrap_change_with_generator_source() -> None:
+    diff = "\n".join([
+        "diff --git a/src/agentic_project_kit/chat_bootloader.py b/src/agentic_project_kit/chat_bootloader.py",
+        "+NEXT_WORK_ITEMS = ()",
+        "diff --git a/docs/handoff/NEXT_CHAT_BOOTSTRAP.md b/docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "+generated output",
+    ])
+    assert not any(f.code == "generated-artifact-direct-edit" for f in analyze_diff(diff))
