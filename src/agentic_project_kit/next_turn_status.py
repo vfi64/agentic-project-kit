@@ -82,6 +82,49 @@ def _read_preview(path: Path) -> str:
         return lines[-1] if lines else ""
     return text[:4000]
 
+
+def _classify_executed_jsonl(preview: str) -> tuple[str, str, str, str]:
+    if not preview:
+        return (
+            "FOUND_UNUSABLE",
+            "MISSING_EVIDENCE_UPLOAD_FIRST",
+            "paste-output",
+            "executed ledger exists but contains no usable entry; inspect terminal evidence before requesting pasted output",
+        )
+    try:
+        payload = json.loads(preview)
+    except json.JSONDecodeError:
+        return (
+            "FOUND_UNUSABLE",
+            "AMBIGUOUS_SUMMARY_REVIEW_REQUIRED",
+            "paste-output",
+            "executed ledger latest entry is unreadable; inspect terminal evidence before requesting pasted output",
+        )
+
+    outcome = str(payload.get("outcome") or "")
+    exit_code = payload.get("exit_code")
+
+    if outcome == "PASS_EXECUTED" or exit_code == 0:
+        return (
+            "FOUND_PASS",
+            "PASS_CONTINUE",
+            "d",
+            "continue from executed command ledger",
+        )
+    if outcome.startswith("FAIL") or isinstance(exit_code, int) and exit_code != 0:
+        return (
+            "FOUND_FAIL",
+            "FAIL_DIAGNOSE",
+            "f",
+            "diagnose from executed command ledger and inspect terminal evidence if needed",
+        )
+    return (
+        "FOUND_AMBIGUOUS",
+        "AMBIGUOUS_SUMMARY_REVIEW_REQUIRED",
+        "paste-output",
+        "executed ledger latest entry is ambiguous; inspect terminal evidence before requesting pasted output",
+    )
+
 @dataclass(frozen=True)
 class LastResult:
     path: Path | None
@@ -159,6 +202,8 @@ def find_last_result(root: Path | str = ".") -> LastResult:
         preview = _read_preview(candidate)
         if candidate.suffix == ".json":
             status, verdict, reply, recovery = _classify_json_result(candidate, preview)
+        elif candidate.name == "executed.jsonl":
+            status, verdict, reply, recovery = _classify_executed_jsonl(preview)
         elif candidate.suffix in {".log", ".md"}:
             status, verdict, reply, recovery = _classify_terminal_result(candidate, root_path)
         else:

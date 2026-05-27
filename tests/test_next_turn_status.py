@@ -86,3 +86,40 @@ def test_next_turn_last_result_missing_result_recommends_paste_output_only_after
     assert result.evidence_verdict == "MISSING_EVIDENCE_UPLOAD_FIRST"
     assert result.recommended_chat_reply == "paste-output"
     assert "next-turn --status" in result.recovery
+
+
+def test_next_turn_last_result_classifies_executed_jsonl_pass(tmp_path: Path) -> None:
+    ledger = tmp_path / ".agentic" / "commands" / "executed.jsonl"
+    ledger.parent.mkdir(parents=True)
+    ledger.write_text(
+        '{"command_id": "ledger-pass", "exit_code": 0, "outcome": "PASS_EXECUTED"}\n',
+        encoding="utf-8",
+    )
+    result = find_last_result(tmp_path)
+    assert result.status == "FOUND_PASS"
+    assert result.evidence_verdict == "PASS_CONTINUE"
+    assert result.recommended_chat_reply == "d"
+    assert "executed command ledger" in result.recovery
+
+
+def test_next_turn_last_result_classifies_executed_jsonl_fail(tmp_path: Path) -> None:
+    ledger = tmp_path / ".agentic" / "commands" / "executed.jsonl"
+    ledger.parent.mkdir(parents=True)
+    ledger.write_text(
+        '{"command_id": "ledger-fail", "exit_code": 7, "outcome": "FAIL_EXECUTED"}\n',
+        encoding="utf-8",
+    )
+    result = find_last_result(tmp_path)
+    assert result.status == "FOUND_FAIL"
+    assert result.evidence_verdict == "FAIL_DIAGNOSE"
+    assert result.recommended_chat_reply == "f"
+
+
+def test_next_turn_last_result_classifies_unreadable_executed_jsonl_as_unusable(tmp_path: Path) -> None:
+    ledger = tmp_path / ".agentic" / "commands" / "executed.jsonl"
+    ledger.parent.mkdir(parents=True)
+    ledger.write_text('not json\n', encoding="utf-8")
+    result = find_last_result(tmp_path)
+    assert result.status == "FOUND_UNUSABLE"
+    assert result.evidence_verdict == "AMBIGUOUS_SUMMARY_REVIEW_REQUIRED"
+    assert result.recommended_chat_reply == "paste-output"
