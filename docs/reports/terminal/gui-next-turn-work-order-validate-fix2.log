@@ -1,0 +1,153 @@
+### FIX2 GUI NEXT-TURN WORK ORDER VALIDATE TEST FILE -- LOGGED ###
+2026-05-27 23:11:12 +0200
+### SYNC FEATURE BRANCH ###
+Already on 'gui/next-turn-work-order-validate'
+Your branch is up to date with 'origin/gui/next-turn-work-order-validate'.
+From github.com:vfi64/agentic-project-kit
+ * branch            gui/next-turn-work-order-validate -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            gui/next-turn-work-order-validate -> FETCH_HEAD
+Already up to date.
+gui/next-turn-work-order-validate
+24f854b Add GUI next-turn work order validation
+4a41e1f Remove redundant GUI top toolbar (#870)
+0383fd4 Make GUI action buttons compact and scrollable (#869)
+8cdf496 Record duplicate PR865 verification cleanup evidence (#868)
+cc38b0a Record PR865 merge verification evidence (#866)
+### REWRITE TEST FILE WITH REAL NEWLINES ###
+rewrote tests/test_work_order_validator.py
+### VERIFY TEST FILE HEAD ###
+from agentic_project_kit.work_order_validator import (
+    WORK_ORDER_PATH,
+    read_work_order_preview,
+    render_work_order_validation,
+    validate_work_order_file,
+    validate_work_order_text,
+)
+
+
+VALID_WORK_ORDER = '# agentic-project-kit work order\nfrom pathlib import Path\n\nLOG = Path("/tmp/agentic-project-kit/next-turn-latest.log")\nREMOTE_LOG = Path("docs/reports/terminal/next-turn-latest.log")\nCOMMAND_HINT = "./ns pr-status 123"\nSUMMARY = """### CANONICAL SUMMARY ###\n### RESULT: PASS ###\nTerminal bleibt offen. Kein exit am Blockende.\n"""\n'
+
+
+def test_valid_work_order_text_passes_minimal_contract():
+    result = validate_work_order_text(VALID_WORK_ORDER)
+    rendered = render_work_order_validation(result)
+
+    assert result.ok is True
+    assert result.exists is True
+    assert result.preferred_command_hint_found is True
+    assert "WORK_ORDER_VALIDATION" in rendered
+    assert "ok=true" in rendered
+    assert "### RESULT: PASS ###" in rendered
+
+
+def test_work_order_validation_rejects_missing_required_summary():
+    result = validate_work_order_text(
+        "# agentic-project-kit work order\nprint(\"hello\")\n"
+    )
+
+    assert result.ok is False
+    assert any("missing required phrase" in finding.message for finding in result.findings)
+
+
+def test_work_order_validation_rejects_forbidden_remote_mutation_patterns():
+    result = validate_work_order_text(
+        "# agentic-project-kit work order\n"
+        "COMMAND = \"git push origin branch\"\n"
+        "SUMMARY = \"### CANONICAL SUMMARY ### ### RESULT: PASS ### Terminal bleibt offen. Kein exit am Blockende.\"\n"
+    )
+
+    assert result.ok is False
+    assert any("git push" in finding.message for finding in result.findings)
+
+
+def test_work_order_validation_rejects_forbidden_imports():
+    result = validate_work_order_text(
+        "# agentic-project-kit work order\n"
+        "import requests\n"
+        "COMMAND = \"./ns status\"\n"
+        "SUMMARY = \"### CANONICAL SUMMARY ### ### RESULT: PASS ### Terminal bleibt offen. Kein exit am Blockende.\"\n"
+    )
+
+    assert result.ok is False
+    assert any("forbidden import" in finding.message for finding in result.findings)
+
+
+def test_missing_work_order_file_reports_fixed_path(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    result = validate_work_order_file(WORK_ORDER_PATH)
+
+    assert result.ok is False
+    assert result.exists is False
+    assert str(WORK_ORDER_PATH) in render_work_order_validation(result)
+
+
+def test_work_order_preview_is_read_only(tmp_path):
+    path = tmp_path / "next-turn.py"
+    path.write_text(VALID_WORK_ORDER, encoding="utf-8")
+
+    returncode, output = read_work_order_preview(path)
+
+    assert returncode == 0
+    assert "WORK_ORDER_PREVIEW" in output
+    assert "content_begin" in output
+    assert "agentic-project-kit work order" in output
+### TARGETED TESTS AND SMOKE ###
+............................................                             [100%]
+44 passed in 0.26s
+TKINTER SHELL
+title=agentic-project-kit Cockpit
+status=tkinter-shell-ready
+action_count=34
+menu_count=5
+toolbar_button_count=8
+action_button_count=34
+destructive_actions_enabled=false
+toolbar_icons=branch,status,history,handoff,stethoscope,document-check,audit,guard
+### RESULT: PASS ###
+All checks passed!
+### COPY FIX2 LOG TO REPO PATH BEFORE SUMMARY ###
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-27 23:11:16 +0200
+
+SLICE
+  NAME: GUI next-turn work-order validate fix2
+  SCOPE: Repair the generated work-order validator test file so it contains real Python lines and rerun targeted checks.
+  BRANCH: gui/next-turn-work-order-validate
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: fix after fix log still contained invalid generated test syntax; GUI read-only validation slice; no work-order execution
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: 871
+  HEAD_SHA: 24f854bc1b014073e5191985283915bdb3bc439c
+  CI: PENDING_AFTER_PUSH
+  MERGE: NOT_APPLICABLE
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit/gui-next-turn-work-order-validate-fix2.log
+  terminal_log_remote: docs/reports/terminal/gui-next-turn-work-order-validate-fix2.log
+  terminal_log_local: /tmp/agentic-project-kit/gui-next-turn-work-order-validate-fix2.log
+  command_report: targeted work-order validator and GUI pytest/no-window-smoke/ruff
+
+INTERPRETATION
+  The prior fix generated tests/test_work_order_validator.py with escaped newline literals. This fix rewrites the file with real Python syntax, reruns targeted tests, and keeps execution of remote Python out of scope.
+
+NEXT
+  SAFE_STEP: Push fix to PR871, wait for machine-readable CI, merge only if clean, sync main, then continue with guarded run support in a separate slice.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================

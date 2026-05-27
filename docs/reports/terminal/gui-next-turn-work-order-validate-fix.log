@@ -1,0 +1,341 @@
+### FIX GUI NEXT-TURN WORK ORDER VALIDATE SLICE -- LOGGED ###
+2026-05-27 23:08:54 +0200
+### CURRENT STATE ###
+Already on 'gui/next-turn-work-order-validate'
+M	src/agentic_project_kit/gui_button_catalog.py
+M	src/agentic_project_kit/gui_tkinter_shell.py
+M	tests/test_gui_button_catalog.py
+M	tests/test_v040_gui_tkinter_shell.py
+Your branch is up to date with 'origin/gui/next-turn-work-order-validate'.
+gui/next-turn-work-order-validate
+ M src/agentic_project_kit/gui_button_catalog.py
+ M src/agentic_project_kit/gui_tkinter_shell.py
+ M tests/test_gui_button_catalog.py
+ M tests/test_v040_gui_tkinter_shell.py
+?? docs/reports/terminal/gui-next-turn-work-order-validate.log
+?? src/agentic_project_kit/work_order_validator.py
+4a41e1f Remove redundant GUI top toolbar (#870)
+0383fd4 Make GUI action buttons compact and scrollable (#869)
+8cdf496 Record duplicate PR865 verification cleanup evidence (#868)
+cc38b0a Record PR865 merge verification evidence (#866)
+c164bd6 Record post-PR864 main closeout evidence (#865)
+79d2d8b Record external review enforcement priorities in planning (#864)
+590d30a Record Post-PR862 main closeout evidence log (#863)
+1fb1b57 Expand GUI workflow button catalog (#862)
+### PRESERVE INVALID INITIAL LOG AS FAILED ATTEMPT ###
+### CREATE MISSING WORK ORDER VALIDATOR TEST FILE ###
+created tests/test_work_order_validator.py
+### REVIEW CURRENT DIFF ###
+ M src/agentic_project_kit/gui_button_catalog.py
+ M src/agentic_project_kit/gui_tkinter_shell.py
+ M tests/test_gui_button_catalog.py
+ M tests/test_v040_gui_tkinter_shell.py
+?? docs/reports/terminal/gui-next-turn-work-order-validate-failed-attempt.log
+?? src/agentic_project_kit/work_order_validator.py
+?? tests/test_work_order_validator.py
+diff --git a/src/agentic_project_kit/gui_button_catalog.py b/src/agentic_project_kit/gui_button_catalog.py
+index a738255..de6f24b 100644
+--- a/src/agentic_project_kit/gui_button_catalog.py
++++ b/src/agentic_project_kit/gui_button_catalog.py
+@@ -287,6 +287,20 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
+         enabled=False,
+         disabled_reason="release publication requires maintainer-owned confirmation",
+     ),
++    _button(
++        "work-order-show",
++        "Show Work Order",
++        "Workflow Automation",
++        "Display the fixed next-turn Python work-order file without executing it.",
++        "work-order-show",
++    ),
++    _button(
++        "work-order-validate",
++        "Validate Work Order",
++        "Workflow Automation",
++        "Validate the fixed next-turn Python work-order file before execution is allowed.",
++        "work-order-validate",
++    ),
+     _button(
+         "agent-next",
+         "Agent Next",
+diff --git a/src/agentic_project_kit/gui_tkinter_shell.py b/src/agentic_project_kit/gui_tkinter_shell.py
+index 65c4754..b88f345 100644
+--- a/src/agentic_project_kit/gui_tkinter_shell.py
++++ b/src/agentic_project_kit/gui_tkinter_shell.py
+@@ -47,6 +47,11 @@ from agentic_project_kit.rule_registry_validator import (
+ from agentic_project_kit.state_freshness import find_stale_state_fragments, format_findings
+ from agentic_project_kit.workflow_guard import render_findings as render_workflow_guard_findings
+ from agentic_project_kit.workflow_guard import run_workflow_guard
++from agentic_project_kit.work_order_validator import (
++    read_work_order_preview,
++    render_work_order_validation,
++    validate_work_order_file,
++)
+ 
+ 
+ @dataclass(frozen=True)
+@@ -532,6 +537,15 @@ def _run_gui_dry_run() -> tuple[int, str]:
+     return 0, render_tkinter_shell_summary(build_tkinter_shell_spec())
+ 
+ 
++def _run_work_order_show() -> tuple[int, str]:
++    return read_work_order_preview()
++
++
++def _run_work_order_validate() -> tuple[int, str]:
++    result = validate_work_order_file()
++    return (0 if result.ok else 1), render_work_order_validation(result)
++
++
+ def _run_actions_list() -> tuple[int, str]:
+     lines = ["GUI_ACTIONS"]
+     for button in all_gui_buttons():
+@@ -562,6 +576,8 @@ MANUAL_GUI_READONLY_RUNNERS: dict[str, Callable[[], tuple[int, str]]] = {
+     "rule-registry-report": _run_rule_registry_report,
+     "state-freshness": _run_state_freshness,
+     "terminal-remote-preflight": _run_terminal_remote_preflight,
++    "work-order-show": _run_work_order_show,
++    "work-order-validate": _run_work_order_validate,
+     "workflow-guard-check": _run_workflow_guard,
+ }
+ 
+diff --git a/tests/test_gui_button_catalog.py b/tests/test_gui_button_catalog.py
+index 6f98725..7934e25 100644
+--- a/tests/test_gui_button_catalog.py
++++ b/tests/test_gui_button_catalog.py
+@@ -24,6 +24,8 @@ def test_gui_button_catalog_covers_communication_and_workflow_surface():
+         "protected-change-plan",
+         "merge-if-green",
+         "agent-run",
++        "work-order-show",
++        "work-order-validate",
+     } <= command_ids
+ 
+ 
+diff --git a/tests/test_v040_gui_tkinter_shell.py b/tests/test_v040_gui_tkinter_shell.py
+index 4367349..d06b2f3 100644
+--- a/tests/test_v040_gui_tkinter_shell.py
++++ b/tests/test_v040_gui_tkinter_shell.py
+@@ -427,6 +427,19 @@ def test_manual_gui_catalog_runs_communication_buttons_readonly():
+         assert "executed=true" in output
+ 
+ 
++def test_manual_gui_catalog_runs_work_order_validation_readonly():
++    from agentic_project_kit.gui_tkinter_shell import run_manual_gui_catalog_action
++
++    output = run_manual_gui_catalog_action("work-order-validate")
++
++    assert "action=work-order-validate" in output
++    assert "safety_class=read-only" in output
++    assert "allowed=true" in output
++    assert "executed=true" in output
++    assert "WORK_ORDER_VALIDATION" in output
++    assert "missing work order file" in output
++
++
+ def test_manual_gui_catalog_blocks_planned_mutating_buttons():
+     from agentic_project_kit.gui_tkinter_shell import run_manual_gui_catalog_action
+ 
+### TARGETED TESTS AND SMOKE ###
+
+==================================== ERRORS ====================================
+_____________ ERROR collecting tests/test_work_order_validator.py ______________
+.venv/lib/python3.13/site-packages/_pytest/python.py:507: in importtestmodule
+    mod = import_path(
+.venv/lib/python3.13/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+/opt/homebrew/Cellar/python@3.13/3.13.13_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    source_stat, co = _rewrite_test(fn, self.config)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py:357: in _rewrite_test
+    tree = ast.parse(source, filename=strfn)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/homebrew/Cellar/python@3.13/3.13.13_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ast.py:50: in parse
+    return compile(source, filename, mode, flags,
+E     File "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_work_order_validator.py", line 1
+E       from agentic_project_kit.work_order_validator import (\n    WORK_ORDER_PATH,\n    read_work_order_preview,\n    render_work_order_validation,\n    validate_work_order_file,\n    validate_work_order_text,\n)\n\n\nVALID_WORK_ORDER = \"\"\"\n# agentic-project-kit work order\nfrom pathlib import Path\n\nLOG = Path(\"/tmp/agentic-project-kit/next-turn-latest.log\")\nREMOTE_LOG = Path(\"docs/reports/terminal/next-turn-latest.log\")\nCOMMAND_HINT = \"./ns pr-status 123\"\nSUMMARY = \"\"\"### CANONICAL SUMMARY ###\n### RESULT: PASS ###\nTerminal bleibt offen. Kein exit am Blockende.\n\"\"\"\n\"\"\"\n\n\ndef test_valid_work_order_text_passes_minimal_contract():\n    result = validate_work_order_text(VALID_WORK_ORDER)\n    rendered = render_work_order_validation(result)\n\n    assert result.ok is True\n    assert result.exists is True\n    assert result.preferred_command_hint_found is True\n    assert \"WORK_ORDER_VALIDATION\" in rendered\n    assert \"ok=true\" in rendered\n    assert \"### RE
+E                                                              ^
+E   SyntaxError: unexpected character after line continuation character
+=========================== short test summary info ============================
+ERROR tests/test_work_order_validator.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.20s
+TKINTER SHELL
+title=agentic-project-kit Cockpit
+status=tkinter-shell-ready
+action_count=34
+menu_count=5
+toolbar_button_count=8
+action_button_count=34
+destructive_actions_enabled=false
+toolbar_icons=branch,status,history,handoff,stethoscope,document-check,audit,guard
+### RESULT: PASS ###
+invalid-syntax: Expected a newline after line continuation character
+ --> tests/test_work_order_validator.py:1:55
+  |
+1 | from agentic_project_kit.work_order_validator import (\n    WORK_ORDER_PATH,\n    read_work_order_preview,\n    render_work_order_valid…
+  |                                                       ^
+  |
+
+invalid-syntax: Expected `,`, found name
+ --> tests/test_work_order_validator.py:1:61
+  |
+1 | from agentic_project_kit.work_order_validator import (\n    WORK_ORDER_PATH,\n    read_work_order_preview,\n    render_work_order_valid…
+  |                                                             ^^^^^^^^^^^^^^^
+  |
+
+invalid-syntax: Expected a newline after line continuation character
+ --> tests/test_work_order_validator.py:1:77
+  |
+1 | from agentic_project_kit.work_order_validator import (\n    WORK_ORDER_PATH,\n    read_work_order_preview,\n    render_work_order_valid…
+  |                                                                             ^
+  |
+
+invalid-syntax: Expected `,`, found name
+ --> tests/test_work_order_validator.py:1:83
+  |
+1 | from agentic_project_kit.work_order_validator import (\n    WORK_ORDER_PATH,\n    read_work_order_preview,\n    render_work_order_valid…
+  |                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  |
+
+invalid-syntax: Expected a newline after line continuation character
+ --> tests/test_work_order_validator.py:1:107
+  |
+1 | from agentic_project_kit.work_order_validator import (\n    WORK_ORDER_PATH,\n    read_work_order_preview,\n    render_work_order_valid…
+  |                                                                                                           ^
+  |
+
+invalid-syntax: Expected `,`, found name
+ --> tests/test_work_order_validator.py:1:113
+  |
+1 | … WORK_ORDER_PATH,\n    read_work_order_preview,\n    render_work_order_validation,\n    validate_work_order_file,\n    validate_work_o…
+  |                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+
+invalid-syntax: Expected a newline after line continuation character
+ --> tests/test_work_order_validator.py:1:142
+  |
+1 | …,\n    read_work_order_preview,\n    render_work_order_validation,\n    validate_work_order_file,\n    validate_work_order_text,\n)\n\…
+  |                                                                    ^
+  |
+
+invalid-syntax: Expected `,`, found name
+ --> tests/test_work_order_validator.py:1:148
+  |
+1 | …order_preview,\n    render_work_order_validation,\n    validate_work_order_file,\n    validate_work_order_text,\n)\n\n\nVALID_WORK_ORD…
+  |                                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+
+invalid-syntax: Expected a newline after line continuation character
+ --> tests/test_work_order_validator.py:1:173
+  |
+1 | …\n    render_work_order_validation,\n    validate_work_order_file,\n    validate_work_order_text,\n)\n\n\nVALID_WORK_ORDER = \"\"\"\n#…
+  |                                                                    ^
+  |
+
+invalid-syntax: Expected `,`, found name
+ --> tests/test_work_order_validator.py:1:179
+  |
+1 | …_order_validation,\n    validate_work_order_file,\n    validate_work_order_text,\n)\n\n\nVALID_WORK_ORDER = \"\"\"\n# agentic-project-…
+  |                                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+
+invalid-syntax: Expected a newline after line continuation character
+ --> tests/test_work_order_validator.py:1:204
+  |
+1 | …ion,\n    validate_work_order_file,\n    validate_work_order_text,\n)\n\n\nVALID_WORK_ORDER = \"\"\"\n# agentic-project-kit work order…
+  |                                                                    ^
+  |
+
+invalid-syntax: Expected a newline after line continuation character
+ --> tests/test_work_order_validator.py:1:207
+  |
+1 | …,\n    validate_work_order_file,\n    validate_work_order_text,\n)\n\n\nVALID_WORK_ORDER = \"\"\"\n# agentic-project-kit work order\nf…
+  |                                                                    ^
+  |
+
+invalid-syntax: Expected a newline after line continuation character
+ --> tests/test_work_order_validator.py:1:209
+  |
+1 | …n    validate_work_order_file,\n    validate_work_order_text,\n)\n\n\nVALID_WORK_ORDER = \"\"\"\n# agentic-project-kit work order\nfro…
+  |                                                                    ^
+  |
+
+invalid-syntax: Expected a newline after line continuation character
+ --> tests/test_work_order_validator.py:1:211
+  |
+1 | …   validate_work_order_file,\n    validate_work_order_text,\n)\n\n\nVALID_WORK_ORDER = \"\"\"\n# agentic-project-kit work order\nfrom …
+  |                                                                    ^
+  |
+
+invalid-syntax: Expected a newline after line continuation character
+ --> tests/test_work_order_validator.py:1:232
+  |
+1 | …r_file,\n    validate_work_order_text,\n)\n\n\nVALID_WORK_ORDER = \"\"\"\n# agentic-project-kit work order\nfrom pathlib import Path\n…
+  |                                                                    ^
+  |
+
+invalid-syntax: missing closing quote in string literal
+ --> tests/test_work_order_validator.py:1:233
+  |
+1 | …R = \"\"\"\n# agentic-project-kit work order\nfrom pathlib import Path\n\nLOG = Path(\"/tmp/agentic-project-kit/next-turn-latest.log\")\nREMOTE_LOG = Path(\"docs/reports/terminal/next-turn-latest.log\")\nCOMMAND_HINT = \"./ns pr-status 123\"\nSUMMARY = \"\"\"### CANONICAL SUMMARY ###\n### RESULT: PASS ###\nTerminal bleibt offen. Kein exit am Blockende.\n\"\"\"\n\"\"\"\n\n\ndef test_valid_work_order_text_passes_minimal_contract():\n    result = validate_work_order_text(VALID_WORK_ORDER)\n    rendered = render_work_order_validation(result)\n\n    assert result.ok is True\n    assert result.exists is True\n    assert result.preferred_command_hint_found is True\n    assert \"WORK_ORDER_VALIDATION\" in rendered\n    assert \"ok=true\" in rendered\n    assert \"### RESULT: PASS ###\" in rendered\n\n\ndef test_work_order_validation_rejects_missing_required_summary():\n    result = validate_work_order_text(\n        \"# agentic-project-kit work order\\nprint(\\\"hello\\\")\\n\"\n    )\n\n    assert result.ok is False\n    assert any(\"missing required phrase\" in finding.message for finding in result.findings)\n\n\ndef test_work_order_validation_rejects_forbidden_remote_mutation_patterns():\n    result = validate_work_order_text(\n        \"# agentic-project-kit work order\\n\"\n        \"COMMAND = \\\"git push origin branch\\\"\\n\"\n        \"SUMMARY = \\\"### CANONICAL SUMMARY ### ### RESULT: PASS ### Terminal bleibt offen. Kein exit am Blockende.\\\"\\n\"\n    )\n\n    assert result.ok is False\n    assert any(\"git push\" in finding.message for finding in result.findings)\n\n\ndef test_work_order_validation_rejects_forbidden_imports():\n    result = validate_work_order_text(\n        \"# agentic-project-kit work order\\n\"\n        \"import requests\\n\"\n        \"COMMAND = \\\"./ns status\\\"\\n\"\n        \"SUMMARY = \\\"### CANONICAL SUMMARY ### ### RESULT: PASS ### Terminal bleibt offen. Kein exit am Blockende.\\\"\\n\"\n    )\n\n    assert result.ok is False\n    assert any(\"forbidden import\" in finding.message for finding in result.findings)\n\n\ndef test_missing_work_order_file_reports_fixed_path(tmp_path, monkeypatch):\n    monkeypatch.chdir(tmp_path)\n    result = validate_work_order_file(WORK_ORDER_PATH)\n\n    assert result.ok is False\n    assert result.exists is False\n    assert str(WORK_ORDER_PATH) in render_work_order_validation(result)\n\n\ndef test_work_order_preview_is_read_only(tmp_path):\n    path = tmp_path / \"next-turn.py\"\n    path.write_text(VALID_WORK_ORDER, encoding=\"utf-8\")\n\n    returncode, output = read_work_order_preview(path)\n\n    assert returncode == 0\n    assert \"WORK_ORDER_PREVIEW\" in output\n    assert \"content_begin\" in output\n    assert \"agentic-project-kit work order\" in output\n
+  |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+
+Found 16 errors.
+### COPY FIX LOG TO REPO PATH BEFORE SUMMARY ###
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-27 23:08:55 +0200
+
+SLICE
+  NAME: GUI next-turn work-order validate fix
+  SCOPE: Complete the safe GUI show/validate support for the fixed next-turn Python work-order file without executing remote Python.
+  BRANCH: gui/next-turn-work-order-validate
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: fix after failed initial attempt; GUI read-only validation slice; no work-order execution, no remote/destructive/parameterized actions enabled
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: PENDING_CREATION
+  HEAD_SHA: 4a41e1f484874fd1c83b140bd6b66bf386acf685
+  CI: PENDING
+  MERGE: NOT_APPLICABLE
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit/gui-next-turn-work-order-validate-fix.log
+  terminal_log_remote: docs/reports/terminal/gui-next-turn-work-order-validate-fix.log
+  terminal_log_local: /tmp/agentic-project-kit/gui-next-turn-work-order-validate-fix.log
+  command_report: targeted work-order validator and GUI pytest/no-window-smoke/ruff
+
+INTERPRETATION
+  The GUI now has the first safe dialog-workflow bridge: it can display and validate the fixed .agentic/commands/inbox/next-turn.py work-order file. Execution is intentionally not implemented in this slice. The validator enforces fixed-path, Python syntax, required communication/evidence phrases, preferred kit command hints, and blocks obvious unsafe remote/destructive patterns. The failed first attempt is preserved separately and must not be treated as success evidence.
+
+NEXT
+  SAFE_STEP: Create PR, wait for machine-readable CI, merge only if clean, sync main, then add the next slice: guarded run of a validated work order with fixed local and remote logs.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================

@@ -1,0 +1,256 @@
+### GUI NEXT-TURN WORK ORDER VALIDATE -- LOGGED ###
+2026-05-27 23:06:47 +0200
+### SYNC MAIN AND VERIFY BASE ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+4a41e1f Remove redundant GUI top toolbar (#870)
+0383fd4 Make GUI action buttons compact and scrollable (#869)
+8cdf496 Record duplicate PR865 verification cleanup evidence (#868)
+cc38b0a Record PR865 merge verification evidence (#866)
+c164bd6 Record post-PR864 main closeout evidence (#865)
+79d2d8b Record external review enforcement priorities in planning (#864)
+590d30a Record Post-PR862 main closeout evidence log (#863)
+1fb1b57 Expand GUI workflow button catalog (#862)
+970eb6b Record post-PR860 main closeout evidence (#861)
+e91539a Clarify protected change planning route (#860)
+1601942 Record post-PR858 successor chat handoff (#859)
+d644744 Record Post-PR857 main closeout evidence log (#858)
+### VERIFY GUI LAYOUT BASE IS PRESENT ###
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'gui/next-turn-work-order-validate'
+### ADD WORK ORDER VALIDATOR MODULE ###
+created work_order_validator.py
+### PATCH GUI BUTTON CATALOG ###
+patched GUI button catalog with work-order show/validate
+### PATCH TKINTER SHELL RUNNERS ###
+patched Tkinter shell work-order runners
+### ADD TESTS ###
+  File "<string>", line 15
+    from pathlib import Path
+    ^^^^
+SyntaxError: invalid syntax
+### PATCH GUI TEST EXPECTATIONS ###
+patched GUI tests
+### REVIEW DIFF ###
+ M src/agentic_project_kit/gui_button_catalog.py
+ M src/agentic_project_kit/gui_tkinter_shell.py
+ M tests/test_gui_button_catalog.py
+ M tests/test_v040_gui_tkinter_shell.py
+?? src/agentic_project_kit/work_order_validator.py
+diff --git a/src/agentic_project_kit/gui_button_catalog.py b/src/agentic_project_kit/gui_button_catalog.py
+index a738255..de6f24b 100644
+--- a/src/agentic_project_kit/gui_button_catalog.py
++++ b/src/agentic_project_kit/gui_button_catalog.py
+@@ -287,6 +287,20 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
+         enabled=False,
+         disabled_reason="release publication requires maintainer-owned confirmation",
+     ),
++    _button(
++        "work-order-show",
++        "Show Work Order",
++        "Workflow Automation",
++        "Display the fixed next-turn Python work-order file without executing it.",
++        "work-order-show",
++    ),
++    _button(
++        "work-order-validate",
++        "Validate Work Order",
++        "Workflow Automation",
++        "Validate the fixed next-turn Python work-order file before execution is allowed.",
++        "work-order-validate",
++    ),
+     _button(
+         "agent-next",
+         "Agent Next",
+diff --git a/src/agentic_project_kit/gui_tkinter_shell.py b/src/agentic_project_kit/gui_tkinter_shell.py
+index 65c4754..b88f345 100644
+--- a/src/agentic_project_kit/gui_tkinter_shell.py
++++ b/src/agentic_project_kit/gui_tkinter_shell.py
+@@ -47,6 +47,11 @@ from agentic_project_kit.rule_registry_validator import (
+ from agentic_project_kit.state_freshness import find_stale_state_fragments, format_findings
+ from agentic_project_kit.workflow_guard import render_findings as render_workflow_guard_findings
+ from agentic_project_kit.workflow_guard import run_workflow_guard
++from agentic_project_kit.work_order_validator import (
++    read_work_order_preview,
++    render_work_order_validation,
++    validate_work_order_file,
++)
+ 
+ 
+ @dataclass(frozen=True)
+@@ -532,6 +537,15 @@ def _run_gui_dry_run() -> tuple[int, str]:
+     return 0, render_tkinter_shell_summary(build_tkinter_shell_spec())
+ 
+ 
++def _run_work_order_show() -> tuple[int, str]:
++    return read_work_order_preview()
++
++
++def _run_work_order_validate() -> tuple[int, str]:
++    result = validate_work_order_file()
++    return (0 if result.ok else 1), render_work_order_validation(result)
++
++
+ def _run_actions_list() -> tuple[int, str]:
+     lines = ["GUI_ACTIONS"]
+     for button in all_gui_buttons():
+@@ -562,6 +576,8 @@ MANUAL_GUI_READONLY_RUNNERS: dict[str, Callable[[], tuple[int, str]]] = {
+     "rule-registry-report": _run_rule_registry_report,
+     "state-freshness": _run_state_freshness,
+     "terminal-remote-preflight": _run_terminal_remote_preflight,
++    "work-order-show": _run_work_order_show,
++    "work-order-validate": _run_work_order_validate,
+     "workflow-guard-check": _run_workflow_guard,
+ }
+ 
+diff --git a/tests/test_gui_button_catalog.py b/tests/test_gui_button_catalog.py
+index 6f98725..7934e25 100644
+--- a/tests/test_gui_button_catalog.py
++++ b/tests/test_gui_button_catalog.py
+@@ -24,6 +24,8 @@ def test_gui_button_catalog_covers_communication_and_workflow_surface():
+         "protected-change-plan",
+         "merge-if-green",
+         "agent-run",
++        "work-order-show",
++        "work-order-validate",
+     } <= command_ids
+ 
+ 
+diff --git a/tests/test_v040_gui_tkinter_shell.py b/tests/test_v040_gui_tkinter_shell.py
+index 4367349..d06b2f3 100644
+--- a/tests/test_v040_gui_tkinter_shell.py
++++ b/tests/test_v040_gui_tkinter_shell.py
+@@ -427,6 +427,19 @@ def test_manual_gui_catalog_runs_communication_buttons_readonly():
+         assert "executed=true" in output
+ 
+ 
++def test_manual_gui_catalog_runs_work_order_validation_readonly():
++    from agentic_project_kit.gui_tkinter_shell import run_manual_gui_catalog_action
++
++    output = run_manual_gui_catalog_action("work-order-validate")
++
++    assert "action=work-order-validate" in output
++    assert "safety_class=read-only" in output
++    assert "allowed=true" in output
++    assert "executed=true" in output
++    assert "WORK_ORDER_VALIDATION" in output
++    assert "missing work order file" in output
++
++
+ def test_manual_gui_catalog_blocks_planned_mutating_buttons():
+     from agentic_project_kit.gui_tkinter_shell import run_manual_gui_catalog_action
+ 
+### TARGETED TESTS AND SMOKE ###
+ERROR: file or directory not found: tests/test_work_order_validator.py
+
+
+no tests ran in 0.00s
+TKINTER SHELL
+title=agentic-project-kit Cockpit
+status=tkinter-shell-ready
+action_count=34
+menu_count=5
+toolbar_button_count=8
+action_button_count=34
+destructive_actions_enabled=false
+toolbar_icons=branch,status,history,handoff,stethoscope,document-check,audit,guard
+### RESULT: PASS ###
+E902 No such file or directory (os error 2)
+--> tests/test_work_order_validator.py:1:1
+
+Found 1 error.
+### COPY LOG TO REPO PATH BEFORE SUMMARY ###
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-27 23:06:51 +0200
+
+SLICE
+  NAME: GUI next-turn work-order validate
+  SCOPE: Add safe GUI show/validate support for the fixed next-turn Python work-order file without executing remote Python.
+  BRANCH: gui/next-turn-work-order-validate
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: GUI read-only validation slice; no work-order execution, no remote/destructive/parameterized actions enabled
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: PENDING_CREATION
+  HEAD_SHA: 4a41e1f484874fd1c83b140bd6b66bf386acf685
+  CI: PENDING
+  MERGE: NOT_APPLICABLE
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit/gui-next-turn-work-order-validate.log
+  terminal_log_remote: docs/reports/terminal/gui-next-turn-work-order-validate.log
+  terminal_log_local: /tmp/agentic-project-kit/gui-next-turn-work-order-validate.log
+  command_report: targeted work-order validator and GUI pytest/no-window-smoke/ruff
+
+INTERPRETATION
+  The GUI now has the first safe dialog-workflow bridge: it can display and validate the fixed .agentic/commands/inbox/next-turn.py work-order file. Execution is intentionally not implemented in this slice. The validator enforces fixed-path, Python syntax, required communication/evidence phrases, preferred kit command hints, and blocks obvious unsafe remote/destructive patterns.
+
+NEXT
+  SAFE_STEP: Create PR, wait for machine-readable CI, merge only if clean, sync main, then add the next slice: guarded run of a validated work order with fixed local and remote logs.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-27 23:08:54 +0200
+
+SLICE
+  NAME: GUI next-turn work-order validate failed attempt
+  SCOPE: Preserve failed first attempt for the GUI next-turn work-order validation slice.
+  BRANCH: gui/next-turn-work-order-validate
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: first attempt failed before commit; Python test-file generation had a SyntaxError and targeted tests/ruff did not pass
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: FAIL
+  EVIDENCE: PASS
+  OVERALL: FAIL
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: NOT_CREATED
+  HEAD_SHA: NOT_APPLICABLE
+  CI: NOT_RUN
+  MERGE: NOT_APPLICABLE
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit/gui-next-turn-work-order-validate.log
+  terminal_log_remote: docs/reports/terminal/gui-next-turn-work-order-validate-failed-attempt.log
+  terminal_log_local: /tmp/agentic-project-kit/gui-next-turn-work-order-validate.log
+  command_report: failed inline Python generation plus failed targeted checks
+
+INTERPRETATION
+  The first work-order validation slice attempt is invalid as success evidence. It continued after a SyntaxError, missed tests/test_work_order_validator.py, and produced an invalid PASS summary. The corrected slice must be judged by the later fix log.
+
+NEXT
+  SAFE_STEP: Commit only after the missing test file exists, targeted tests pass, no-window smoke passes, ruff passes, and the fix log summary passes evidence inspection.
+  CHAT_REPLY: f
+
+### RESULT: FAIL ###
+================================================================
