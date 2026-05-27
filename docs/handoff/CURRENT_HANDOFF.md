@@ -1,14 +1,14 @@
-## Post-PR825 Release-/Evidence-Kernel Current-State Override
+## Post-PR833 Successor-Handoff Freshness Repair State
 
-Safe state is main at `0ca727a5aaffb69c6557fb443c6eaf4511486233` (`0ca727a`), after PR #825 and the active handoff freshness slice.
+Current administrative main HEAD is `0e15f8f7f176cdd446f6c3b2f1221195b68cc7ad` (`0e15f8f`), after PR #833 recorded the corrected post-PR831 successor handoff.
 
-PR #825 `Harden active handoff state freshness` is merged. It hardens `./ns state-freshness-check` so active next-step instructions fail when they point to already-recorded closeout evidence or stale release versions.
+Generated handoff safe-state anchor is `011b6dc24829be44c7693c468a90694981cd40ce` (`011b6dc`), after PR #831 recorded the PR #830 closeout evidence.
 
-PR #824 remains the PR823 closeout evidence anchor. PR #823 remains the merge-if-green head/base pinning anchor. PR #821 remains the post-merge main-CI verification anchor. PR #819 remains the red-CI failed-log diagnostics anchor. PR #817 remains the PASS_ALREADY_DONE hardening anchor. PR #815 remains the release readiness hardening anchor: `release-prep` stops before metadata patching on main/branch failures, remote WARN states block release readiness, and `release-publish` refuses to tag when remote lookup is inconclusive.
+PR #833 `Record corrected post-PR831 successor handoff` is merged and records `docs/reports/terminal/post-pr831-successor-handoff.md` as the successor handoff anchor. It supersedes the rejected PR825-era stale generated prompt.
 
 v0.4.3 remains published and post-release verified. Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
-Next safe step: continue only with the next smallest Release-/Evidence-Kernel follow-up. Do not start broad documentation migration or GUI expansion.
+Next safe step: verify the generated handoff prompt is free of freshness warnings, then continue only with the smallest planned GUI or failure-mode automation slice after this repair is merged and verified.
 
 
 ## Post-PR809 Current-State Override
@@ -25,9 +25,9 @@ Next safe step: continue with guarded status/handoff refresh closeout and then g
 <!-- v042-safety-release-prep -->
 # Current Handoff
 
-Status-date: 2026-05-26
+Status-date: 2026-05-27
 Project: agentic-project-kit
-Branch: docs/record-pr825-active-handoff-freshness-closeout
+Branch: codex/repair-post-pr831-freshness-state
 Base branch: main
 Current version: 0.4.3
 
@@ -41,7 +41,9 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 - Current release tag: v0.4.3.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified Zenodo version DOI: `10.5281/zenodo.20393329`.
-- Main is refreshed after PR #825 at `0ca727a`.
+- Main contains PR #833 at `0e15f8f`.
+- Generated handoff safe-state now anchors to PR #831 at `011b6dc` via `docs/reports/terminal/post-pr831-successor-handoff.md`.
+- PR #831 recorded PR #830 closeout evidence at `docs/reports/terminal/pr830-merge-finalize.log`.
 - PR #825 hardened active handoff freshness checks so already-recorded closeout evidence and stale release-version instructions are blocking drift.
 - PR #824 recorded PR #823 closeout evidence at `docs/reports/terminal/pr823-merge-finalize.log`.
 - PR #823 hardened `merge-if-green` so the merge command validates the target base branch, requires a PR head SHA, passes `--match-head-commit <sha>` to GitHub, and renders checked base/head refs.
@@ -55,7 +57,7 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 
 ## Current Repository State
 
-Safe state is main after PR825 active handoff freshness hardening. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers twelve active mechanisms with category, priority, enforcement_phase, owner, conflict_domains, surfaces, tests, coverage classification, migration-map completeness, and direct-test coverage for all active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check. `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json` now expose explicit direct-coverage completion state. Release/evidence-kernel hardening continues only in small slices. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked unless a new slice explicitly scopes them. GUI work remains deferred. The repository is the source of truth; chat memory is not a source of truth.
+Generated handoff safe state is main after PR831 closeout evidence, with PR833 as the administrative successor-handoff correction on main. The governed rule registry is enforced through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight. It currently covers twelve active mechanisms with category, priority, enforcement_phase, owner, conflict_domains, surfaces, tests, coverage classification, migration-map completeness, and direct-test coverage for all active mechanisms: summary-renderer, execution-mode-switch, rule-preservation-guard, workflow-guard, patch-preflight, chat-communication-rules, chat-bootstrap-drift-rules, portable-execution-rules, evidence-guard, typed-work-order-runner, release-state-validation, and post-release-archive-check. `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json` now expose explicit direct-coverage completion state. Release/evidence-kernel hardening continues only in small slices. Broad documentation migration, release, tag, DOI mutation, and non-read-only GUI work remain blocked unless a new slice explicitly scopes them. GUI work remains deferred until handoff freshness is clean. The repository is the source of truth; chat memory is not a source of truth.
 
 ## A1 State Refresh Addendum
 
@@ -69,7 +71,7 @@ Protected Change Planner A1 is complete on remote main.
 
 ## Current Goal
 
-Preserve PR825 closeout evidence without reintroducing stale closeout-next-step instructions, then continue with the next smallest Release-/Evidence-Kernel follow-up.
+Repair generator-backed successor-handoff freshness so `agentic-kit handoff prompt` no longer anchors to the rejected PR825-era state, then continue only after the repair is merged and verified.
 
 ## Current Baselines
 
@@ -110,7 +112,7 @@ Run state-freshness-check, handoff-check, governance-check, rule-registry check,
 
 ## Next Safe Step
 
-Continue with the next smallest Release-/Evidence-Kernel follow-up. Documentation-management rebuild work remains deferred.
+Verify the generated handoff prompt remains clean, then continue with the smallest planned GUI or failure-mode automation slice only after this freshness repair is merged and verified. Documentation-management rebuild work remains deferred.
 
 ## Source of Truth
 
