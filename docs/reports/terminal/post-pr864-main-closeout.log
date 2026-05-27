@@ -1,0 +1,189 @@
+### POST-PR864 MAIN CLOSEOUT -- LOGGED ###
+2026-05-27 21:48:37 +0200
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+79d2d8b Record external review enforcement priorities in planning (#864)
+590d30a Record Post-PR862 main closeout evidence log (#863)
+1fb1b57 Expand GUI workflow button catalog (#862)
+970eb6b Record post-PR860 main closeout evidence (#861)
+e91539a Clarify protected change planning route (#860)
+1601942 Record post-PR858 successor chat handoff (#859)
+d644744 Record Post-PR857 main closeout evidence log (#858)
+f5e482b Unify next-turn fixed-slot path handling (#857)
+### VERIFY PR864 MERGE STATE ###
+{"baseRefOid":"590d30a34e272edc0a6ec59e9315ae09361442d1","headRefOid":"0d9b562cd4641ebd53352e4dae15caad4e1bf34f","mergeCommit":{"oid":"79d2d8b2798547e5328f7e0f2d10bcb7d55e92f5"},"mergedAt":"2026-05-27T19:43:46Z","number":864,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/864"}
+### VERIFY LOCAL KIT STATUS SURFACES ###
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 21
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 6
+- class:release: 2
+- class:user-facing description: 1
+EVIDENCE_INSPECTION
+verdict: PASS_CONTINUE
+evidence_exists: yes
+require_summary: yes
+git_branch: main
+git_status_clean: yes
+pass_markers: 2
+fail_markers: 0
+hidden_fail_before_final_pass: no
+structured_summary_found: yes
+structured_summary_valid: yes
+summary_name: External review enforcement priorities planning update
+summary_scope: Add external-review handling and enforcement-priority guidance to active planning documents without removing existing content.
+summary_branch: planning/external-review-enforcement-priorities
+summary_origin: local
+summary_state_mode: local
+summary_mode_check: additive planning update; protected-change-plan ran against actual diff file
+summary_work: PASS
+summary_evidence: PASS
+summary_overall: PASS
+summary_remote_evidence: PASS
+summary_pr: PENDING_CREATION_OR_UPDATE
+summary_head_sha: PENDING_AFTER_COMMIT
+summary_ci: PENDING
+summary_merge: NOT_APPLICABLE
+summary_terminal_log: /tmp/agentic-project-kit/planning-external-review-enforcement-priorities-apply.log
+summary_terminal_log_remote: docs/reports/terminal/planning-external-review-enforcement-priorities-apply.log
+summary_terminal_log_local: /tmp/agentic-project-kit/planning-external-review-enforcement-priorities-apply.log
+summary_command_report: protected-change-plan diff file plus check-docs/docs-audit/governance/ruff
+summary_safe_step: Create or update PR, wait for machine-readable CI, merge only if clean, then sync main and create closeout evidence.
+summary_chat_reply: d
+summary_result_marker: PASS
+evidence_path: docs/reports/terminal/planning-external-review-enforcement-priorities-apply.log
+final_marker: ### RESULT: PASS ###
+next_action: continue with the next safe slice after reviewing evidence
+### RESULT: PASS ###
+NEXT_TURN_STATUS
+state=empty
+yaml_exists=false
+script_exists=false
+overwrite_allowed=true
+reason=no fixed-slot files exist
+evidence_lookup_order:
+- docs/reports/command_runs/next-turn-latest.json
+- docs/reports/command_runs/next-turn-latest.md
+- docs/reports/terminal/next-turn-latest.log
+- .agentic/commands/executed.jsonl
+### RESULT: PASS ###
+NEXT_TURN_LAST_RESULT
+status=FOUND_PASS
+path=.agentic/commands/executed.jsonl
+evidence_verdict=PASS_CONTINUE
+recommended_chat_reply=d
+recovery=continue from executed command ledger
+checked_paths:
+- docs/reports/command_runs/next-turn-latest.json
+- docs/reports/command_runs/next-turn-latest.md
+- docs/reports/terminal/next-turn-latest.log
+- .agentic/commands/executed.jsonl
+preview:
+{"command_id": "post707-state-refresh-v3", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "0d47e43ad9a42165ff3d86c8cd2e4db008da062c462ac5265001df2010ed27a8", "timestamp_utc": "2026-05-24T08:43:23.196541+00:00"}
+### RESULT: PASS ###
+### VERIFY MERGED PLANNING CONTENT EXISTS ON MAIN ###
+98:## External Review Input Handling
+296:## External Review Follow-Up Priorities
+81:## External Review Incorporation Rule
+### TARGETED GATES ###
+Agentic project check passed
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches known 
+structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Dokumentationsregistry
+- registry=docs/DOCUMENTATION_REGISTRY.yaml
+- version=1
+- documents=21
+- broad_migration_allowed=False
+- class:architecture=1
+- class:evidence/log=2
+- class:generated artifact=1
+- class:governance/system=4
+- class:operational/automation=4
+- class:planning=6
+- class:release=2
+- class:user-facing description=1
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
+Governance check passed
+All checks passed!
+### CREATE CLOSEOUT BRANCH ###
+Switched to a new branch 'post-pr864-main-closeout'
+### COPY LOG TO REPO PATH BEFORE SUMMARY ###
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-27 21:48:42 +0200
+
+SLICE
+  NAME: Post-PR864 main closeout
+  SCOPE: Record repo-readable closeout evidence after merging external review enforcement priorities planning update.
+  BRANCH: post-pr864-main-closeout
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: local main synced after PR864 merge; planning anchors and gates verified
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: 864
+  HEAD_SHA: 79d2d8b2798547e5328f7e0f2d10bcb7d55e92f5
+  CI: PR864 merged through ./ns merge-if-green; main verification reported green; post-merge handoff, evidence inspect, next-turn status, check-docs, docs-audit, governance check, and ruff passed.
+  MERGE: PR864 merged as main commit 79d2d8b
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit/post-pr864-main-closeout.log
+  terminal_log_remote: docs/reports/terminal/post-pr864-main-closeout.log
+  terminal_log_local: /tmp/agentic-project-kit/post-pr864-main-closeout.log
+  command_report: main-sync/pr864-merge-state/planning-anchor-checks/check-docs/docs-audit/governance/ruff
+
+INTERPRETATION
+  External review input has been translated into repository-owned planning guidance and verified on main. The update is additive and preserves existing planning content. Future work should continue with GUI-safe parameterized read-only dispatch or a workflow-kernel guard slice.
+
+NEXT
+  SAFE_STEP: Continue with the next GUI slice: parameterized read-only dispatch for evidence inspection, protected-change planning, and PR status; do not enable remote mutation buttons yet.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
