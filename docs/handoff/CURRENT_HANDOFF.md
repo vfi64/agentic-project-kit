@@ -4,11 +4,11 @@ Current verified main HEAD is `fd1e631312723166982fb1e0d9ecb76397e97559` (`fd1e6
 
 Generated handoff safe-state anchor is `fd1e631312723166982fb1e0d9ecb76397e97559` (`fd1e631`).
 
-This closeout records `docs/reports/terminal/post-pr834-successor-handoff.md` and `docs/reports/terminal/pr834-merge-finalize.log` as the next successor/evidence anchors.
+PR #835 added `docs/reports/terminal/post-pr834-successor-handoff.md` and `docs/reports/terminal/pr834-merge-finalize.log` as the successor/evidence anchors.
 
 v0.4.3 remains published and post-release verified. Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
-Next safe step: inspect `docs/reports/terminal/pr834-merge-finalize.log` and the generated handoff prompt; if both are clean, continue with the smallest planned GUI or failure-mode automation slice.
+Next safe step: continue with the smallest planned GUI or failure-mode automation slice; stop first if handoff freshness, evidence, or status drift reappears.
 
 
 ## Post-PR809 Current-State Override
@@ -27,7 +27,7 @@ Next safe step: continue with guarded status/handoff refresh closeout and then g
 
 Status-date: 2026-05-27
 Project: agentic-project-kit
-Branch: codex/record-pr834-freshness-closeout
+Branch: codex/refresh-post-pr835-next-step-state
 Base branch: main
 Current version: 0.4.3
 
@@ -42,6 +42,7 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified Zenodo version DOI: `10.5281/zenodo.20393329`.
 - Main contains PR #834 at `fd1e631`.
+- PR #835 added PR834 closeout evidence at `docs/reports/terminal/pr834-merge-finalize.log`.
 - Generated handoff safe-state now anchors to PR #834 via `docs/reports/terminal/post-pr834-successor-handoff.md`.
 - PR #833 recorded the corrected post-PR831 successor handoff at `docs/reports/terminal/post-pr831-successor-handoff.md`.
 - PR #831 recorded PR #830 closeout evidence at `docs/reports/terminal/pr830-merge-finalize.log`.
@@ -72,7 +73,7 @@ Protected Change Planner A1 is complete on remote main.
 
 ## Current Goal
 
-Record PR834 closeout evidence and successor handoff state, then continue only after evidence inspection confirms the generated handoff prompt is clean.
+Continue with the smallest planned GUI or failure-mode automation slice; stop first if handoff freshness, evidence, or status drift reappears.
 
 ## Current Baselines
 
@@ -113,7 +114,7 @@ Run state-freshness-check, handoff-check, governance-check, rule-registry check,
 
 ## Next Safe Step
 
-Inspect PR834 closeout evidence and the generated handoff prompt, then continue with the smallest planned GUI or failure-mode automation slice if both are clean. Documentation-management rebuild work remains deferred.
+Continue with the smallest planned GUI or failure-mode automation slice; stop first if handoff freshness, evidence, or status drift reappears. Documentation-management rebuild work remains deferred.
 
 ## Source of Truth
 

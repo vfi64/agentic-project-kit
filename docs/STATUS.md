@@ -4,11 +4,11 @@ Current verified main HEAD: `fd1e631312723166982fb1e0d9ecb76397e97559` (`fd1e631
 
 Generated handoff safe-state anchor: `fd1e631312723166982fb1e0d9ecb76397e97559` (`fd1e631`), after PR #834 repaired generator-backed handoff freshness.
 
-PR #834 `Repair post-PR831 handoff freshness state` is merged. This closeout records `docs/reports/terminal/post-pr834-successor-handoff.md` and `docs/reports/terminal/pr834-merge-finalize.log` as the next successor/evidence anchors.
+PR #834 `Repair post-PR831 handoff freshness state` is merged. PR #835 added `docs/reports/terminal/post-pr834-successor-handoff.md` and `docs/reports/terminal/pr834-merge-finalize.log` as the successor/evidence anchors.
 
 v0.4.3 remains the current published and post-release verified release. Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
-Immediate next safe step: inspect `docs/reports/terminal/pr834-merge-finalize.log` and the generated handoff prompt; if both are clean, continue with the smallest planned GUI or failure-mode automation slice.
+Immediate next safe step: continue with the smallest planned GUI or failure-mode automation slice; stop first if handoff freshness, evidence, or status drift reappears.
 
 
 ## Post-PR809 Current-State Override
@@ -28,7 +28,7 @@ Immediate next safe step: refresh handoff/status state after PR809, then continu
 Status-date: 2026-05-27
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: codex/record-pr834-freshness-closeout
+Current work branch: codex/refresh-post-pr835-next-step-state
 Current version: 0.4.3
 
 ## Purpose
@@ -56,6 +56,7 @@ v0.4.3 GitHub Release publication and post-release Zenodo verification are compl
 
 v0.4.3 safety-release and successor-handoff target:
 - Main contains PR #834 at `fd1e631` (`Repair post-PR831 handoff freshness state (#834)`).
+- PR #835 added PR834 closeout evidence at `docs/reports/terminal/pr834-merge-finalize.log`.
 - Generated handoff safe-state now anchors to PR #834 via `docs/reports/terminal/post-pr834-successor-handoff.md`.
 - PR #833 recorded the corrected post-PR831 successor handoff at `docs/reports/terminal/post-pr831-successor-handoff.md`.
 - PR #831 recorded PR #830 closeout evidence at `docs/reports/terminal/pr830-merge-finalize.log`.
@@ -72,7 +73,7 @@ v0.4.3 safety-release and successor-handoff target:
 - Rule registry drift is checked through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight.
 - Rule registry completion is now explicitly reportable through `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json`; the JSON summary includes `direct_coverage_complete`.
 - Evidence is preserved in committed terminal logs including `docs/reports/terminal/pr737-rule-registry-release-evidence.log`, `docs/reports/terminal/pr739-rule-registry-source-evidence-validation.log`, `docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log`, `docs/reports/terminal/pr741-rule-registry-surfaces-tests-inventory-recovery.log`, `docs/reports/terminal/pr742-rule-registry-surfaces-tests-validation.log`, `docs/reports/terminal/pr761-chat-communication-direct-coverage.log`, `docs/reports/terminal/pr762-chat-bootstrap-drift-direct-coverage.log`, and `docs/reports/terminal/pr764-rule-registry-completion-reporting.log`.
-- Next immediate task: inspect PR834 closeout evidence and the generated handoff prompt, then continue with the smallest planned GUI or failure-mode automation slice if both are clean.
+- Next immediate task: continue with the smallest planned GUI or failure-mode automation slice; stop first if handoff freshness, evidence, or status drift reappears.
 
 Documentation registry baseline:
 - `docs/DOCUMENTATION_REGISTRY.yaml` is the additive machine-readable registry.
@@ -119,7 +120,7 @@ Next safe slice: harden final-summary and expected-negative-smoke reporting so e
 
 ## Current Goal
 
-Record PR834 closeout evidence and successor handoff state, then continue only after evidence inspection confirms the generated handoff prompt is clean.
+Continue with the smallest planned GUI or failure-mode automation slice; stop first if handoff freshness, evidence, or status drift reappears.
 
 ## Active Workflow Rules
 
