@@ -1,0 +1,45 @@
+POST-PR847 MAIN CLOSEOUT -- PR STATUS CLI ROUTE
+
+### REPO STATE ###
+branch: post-pr847-main-closeout
+main_after_merge: 82f318e Add PR status CLI route (#847)
+
+### VERIFIED MERGE FACTS ###
+PR: 847
+Merged main commit: 82f318e Add PR status CLI route (#847)
+Feature head before merge: 952193295afa7bde0414ab2d50b1b9e1233f3269
+Pre-merge PR state: OPEN, mergeStateStatus CLEAN, two CI checks SUCCESS
+Pre-merge readiness: READY_TO_MERGE
+
+### LOCAL GATE EVIDENCE AFTER CLEAN VENV RERUN ###
+Python: .venv Python 3.13.13
+Typer: 0.25.1
+Ruff: 0.15.14
+Targeted tests before merge: 25 passed
+Fast tests before merge: 41 passed
+Ruff before merge: PASS
+Protected change plan: PASS
+Post-merge targeted tests on main: 25 passed
+Post-merge ruff on main: PASS
+Post-merge handoff check on main: PASS
+
+### PRIOR FAILED LOCAL ATTEMPTS ACKNOWLEDGED ###
+Earlier local attempts used system python without Typer and shell ruff was unavailable.
+Those failures were environment/toolchain routing failures and are not counted as passing gate evidence.
+The accepted gate evidence is the later explicit .venv rerun.
+
+================================================================
+SUMMARY COMM-PASS | Post-PR847 main closeout
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+REMOTE_EVIDENCE: PASS
+PR: 847
+HEAD_SHA: 952193295afa7bde0414ab2d50b1b9e1233f3269
+MERGE: PR847 merged as main commit 82f318e
+CI: PR847 CI passed before merge; post-merge local .venv tests, ruff, protected-change-plan, and handoff check passed.
+NEXT
+  SAFE_STEP: Continue workflow-kernel hardening; next logical slice is merge-if-green or fail log-first diagnosis.
+  CHAT_REPLY: d
+### RESULT: PASS ###
