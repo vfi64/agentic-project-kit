@@ -95,6 +95,21 @@ Implementation should not interrupt the current documentation-management line. T
 4. then make the GUI expose this reduced-orchestration model;
 5. only after that, resume Pattern Advisor expansion.
 
+## External Review Input Handling
+
+External model reviews, advisory audits, or user-provided comparative assessments may be used as prioritization input, but they are not evidence by themselves.
+
+When an external review identifies a repeated workflow risk, the kit should classify it into one of these outcomes:
+
+- already covered by an executable guard or deterministic check;
+- covered by a plan but still missing executable enforcement;
+- useful only as advisory context;
+- rejected because it conflicts with repository evidence.
+
+The preferred response to useful external review input is not to copy ratings or qualitative praise into status documents. The preferred response is to connect the input to a concrete backlog item, guard candidate, GUI-safe action, test, or workflow-kernel capability.
+
+For the current GUI and workflow-kernel line, the useful review signal is: prioritize enforcement and automation over additional chat-only instructions. The GUI should expose existing hardened command paths and make safe state, evidence, PR status, protected-change planning, and next-step decisions easier to execute without manual terminal orchestration.
+
 ## Non-Goals For The Current Line
 
 - no broad documentation migration,

@@ -78,6 +78,20 @@ Protected files require a deletion and rewrite budget. Large deletion diffs, bro
 - Tests cover large protected-file deletion, small safe metadata diff, and explicit migration override.
 - The v0.4.2 DOI closeout is not repeated until this guard is merged or included in the same guarded local PR.
 
+## External Review Incorporation Rule
+
+External review comments are useful only when they are translated into repository-owned work products.
+
+For this plan, the accepted incorporation rule is:
+
+- do not record external ratings as project evidence;
+- do not treat external summaries as source of truth over current `main`;
+- do use repeated-risk observations to refine backlog ordering;
+- do connect useful observations to deterministic guard candidates, tests, protected-diff checks, GUI safety contracts, or workflow-kernel commands;
+- do preserve all existing planning text and patch additively unless a separate protected-change plan explicitly approves migration or retirement.
+
+The concrete reinforced priority is that `partial-fetch-full-replacement-corruption` and `plan-only-fix-without-executable-guard` remain high-risk standard errors until executable checks make them locally blocked or at least deterministically detected.
+
 ## Non-Goals
 
 - no GUI work

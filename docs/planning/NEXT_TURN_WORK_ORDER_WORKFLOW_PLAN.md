@@ -293,6 +293,20 @@ Before implementation starts, each slice must answer:
 - `next-turn-result-lookup-order-ignored`: assistant responses after `d` or `f` must follow the defined evidence lookup order before asking for pasted output.
 
 
+## External Review Follow-Up Priorities
+
+Recent external-review input reinforces the existing workflow-kernel direction: repeated failures must become local runner behavior, gates, or tests instead of more chat-only reminders.
+
+The following follow-up priorities should shape the next GUI and workflow-kernel slices:
+
+1. Keep GUI expansion tied to the same command layer as `./ns next-turn`, `./ns pr-status`, `./ns protected-change-plan`, evidence inspection, and closeout checks.
+2. Treat parameterized read-only GUI actions as the next safe GUI surface before enabling any remote mutation.
+3. Ensure every GUI button has an explicit safety class, parameter contract, disabled reason, idempotency expectation, and evidence behavior.
+4. Prioritize standard errors that are empirically observed in this repository, especially `partial-fetch-full-replacement-corruption`, `plan-only-fix-without-executable-guard`, `next-turn-result-lookup-order-ignored`, and `non-idempotent-gui-button`.
+5. Avoid closing repeated workflow risks with prose-only plan updates when an executable guard candidate is known.
+
+The next GUI slice should therefore prepare parameterized read-only dispatch for evidence inspection, protected-change planning, and PR status before remote push, PR creation, merge, release, or destructive actions are exposed through the GUI.
+
 ## System Layers And Guidance Model
 
 The next-turn workflow is part of a larger deterministic operating model. The assistant must guide implementation in this order and must not jump to document-management or GUI work before the control layers exist.

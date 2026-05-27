@@ -1,0 +1,188 @@
+### APPLY EXTERNAL REVIEW ENFORCEMENT PRIORITIES -- LOGGED ###
+2026-05-27 21:40:26 +0200
+### SYNC BRANCH ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'planning/external-review-enforcement-priorities'
+Your branch is up to date with 'origin/planning/external-review-enforcement-priorities'.
+From github.com:vfi64/agentic-project-kit
+ * branch            planning/external-review-enforcement-priorities -> FETCH_HEAD
+Already up to date.
+d7de434 Record failed external review planning update recovery evidence
+590d30a Record Post-PR862 main closeout evidence log (#863)
+1fb1b57 Expand GUI workflow button catalog (#862)
+970eb6b Record post-PR860 main closeout evidence (#861)
+e91539a Clarify protected change planning route (#860)
+### APPLY ADDITIVE PATCH ###
+patched: docs/planning/WORKFLOW_REDUCTION_FOCUS.md: ## External Review Input Handling
+patched: docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md: ## External Review Follow-Up Priorities
+patched: docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md: ## External Review Incorporation Rule
+### WRITE ACTUAL DIFF FILE ###
+      76 /tmp/agentic-project-kit/planning-external-review-enforcement-priorities.diff
+diff --git a/docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md b/docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+index 8130f09..415625d 100644
+--- a/docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
++++ b/docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+@@ -293,6 +293,20 @@ Before implementation starts, each slice must answer:
+ - `next-turn-result-lookup-order-ignored`: assistant responses after `d` or `f` must follow the defined evidence lookup order before asking for pasted output.
+ 
+ 
++## External Review Follow-Up Priorities
++
++Recent external-review input reinforces the existing workflow-kernel direction: repeated failures must become local runner behavior, gates, or tests instead of more chat-only reminders.
++
++The following follow-up priorities should shape the next GUI and workflow-kernel slices:
++
++1. Keep GUI expansion tied to the same command layer as `./ns next-turn`, `./ns pr-status`, `./ns protected-change-plan`, evidence inspection, and closeout checks.
++2. Treat parameterized read-only GUI actions as the next safe GUI surface before enabling any remote mutation.
++3. Ensure every GUI button has an explicit safety class, parameter contract, disabled reason, idempotency expectation, and evidence behavior.
++4. Prioritize standard errors that are empirically observed in this repository, especially `partial-fetch-full-replacement-corruption`, `plan-only-fix-without-executable-guard`, `next-turn-result-lookup-order-ignored`, and `non-idempotent-gui-button`.
++5. Avoid closing repeated workflow risks with prose-only plan updates when an executable guard candidate is known.
++
++The next GUI slice should therefore prepare parameterized read-only dispatch for evidence inspection, protected-change planning, and PR status before remote push, PR creation, merge, release, or destructive actions are exposed through the GUI.
++
+ ## System Layers And Guidance Model
+ 
+ The next-turn workflow is part of a larger deterministic operating model. The assistant must guide implementation in this order and must not jump to document-management or GUI work before the control layers exist.
+diff --git a/docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md b/docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
+index 7a02da6..d8a30a1 100644
+--- a/docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
++++ b/docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
+@@ -78,6 +78,20 @@ Protected files require a deletion and rewrite budget. Large deletion diffs, bro
+ - Tests cover large protected-file deletion, small safe metadata diff, and explicit migration override.
+ - The v0.4.2 DOI closeout is not repeated until this guard is merged or included in the same guarded local PR.
+ 
++## External Review Incorporation Rule
++
++External review comments are useful only when they are translated into repository-owned work products.
++
++For this plan, the accepted incorporation rule is:
++
++- do not record external ratings as project evidence;
++- do not treat external summaries as source of truth over current `main`;
++- do use repeated-risk observations to refine backlog ordering;
++- do connect useful observations to deterministic guard candidates, tests, protected-diff checks, GUI safety contracts, or workflow-kernel commands;
++- do preserve all existing planning text and patch additively unless a separate protected-change plan explicitly approves migration or retirement.
++
++The concrete reinforced priority is that `partial-fetch-full-replacement-corruption` and `plan-only-fix-without-executable-guard` remain high-risk standard errors until executable checks make them locally blocked or at least deterministically detected.
++
+ ## Non-Goals
+ 
+ - no GUI work
+diff --git a/docs/planning/WORKFLOW_REDUCTION_FOCUS.md b/docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+index 5d87c45..f41f170 100644
+--- a/docs/planning/WORKFLOW_REDUCTION_FOCUS.md
++++ b/docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+@@ -95,6 +95,21 @@ Implementation should not interrupt the current documentation-management line. T
+ 4. then make the GUI expose this reduced-orchestration model;
+ 5. only after that, resume Pattern Advisor expansion.
+ 
++## External Review Input Handling
++
++External model reviews, advisory audits, or user-provided comparative assessments may be used as prioritization input, but they are not evidence by themselves.
++
++When an external review identifies a repeated workflow risk, the kit should classify it into one of these outcomes:
++
++- already covered by an executable guard or deterministic check;
++- covered by a plan but still missing executable enforcement;
++- useful only as advisory context;
++- rejected because it conflicts with repository evidence.
++
++The preferred response to useful external review input is not to copy ratings or qualitative praise into status documents. The preferred response is to connect the input to a concrete backlog item, guard candidate, GUI-safe action, test, or workflow-kernel capability.
++
++For the current GUI and workflow-kernel line, the useful review signal is: prioritize enforcement and automation over additional chat-only instructions. The GUI should expose existing hardened command paths and make safe state, evidence, PR status, protected-change planning, and next-step decisions easier to execute without manual terminal orchestration.
++
+ ## Non-Goals For The Current Line
+ 
+ - no broad documentation migration,
+### PROTECTED CHANGE PLAN AGAINST ACTUAL DIFF ###
+PROTECTED_CHANGE_PLAN
+result=PASS
+findings=0
+### RESULT: PASS ###
+protected-change-plan passed
+### TARGETED CHECKS ###
+Agentic project check passed
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches known 
+structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Dokumentationsregistry
+- registry=docs/DOCUMENTATION_REGISTRY.yaml
+- version=1
+- documents=21
+- broad_migration_allowed=False
+- class:architecture=1
+- class:evidence/log=2
+- class:generated artifact=1
+- class:governance/system=4
+- class:operational/automation=4
+- class:planning=6
+- class:release=2
+- class:user-facing description=1
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
+Governance check passed
+All checks passed!
+### COPY LOG BEFORE SUMMARY ###
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-27 21:40:30 +0200
+
+SLICE
+  NAME: External review enforcement priorities planning update
+  SCOPE: Add external-review handling and enforcement-priority guidance to active planning documents without removing existing content.
+  BRANCH: planning/external-review-enforcement-priorities
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: additive planning update; protected-change-plan ran against actual diff file
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: PENDING_CREATION_OR_UPDATE
+  HEAD_SHA: PENDING_AFTER_COMMIT
+  CI: PENDING
+  MERGE: NOT_APPLICABLE
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit/planning-external-review-enforcement-priorities-apply.log
+  terminal_log_remote: docs/reports/terminal/planning-external-review-enforcement-priorities-apply.log
+  terminal_log_local: /tmp/agentic-project-kit/planning-external-review-enforcement-priorities-apply.log
+  command_report: protected-change-plan diff file plus check-docs/docs-audit/governance/ruff
+
+INTERPRETATION
+  External review input was translated into repository-owned planning guidance. External ratings were not recorded as evidence. The update preserves existing planning content and reinforces enforcement, guard candidates, safe GUI dispatch, and workflow-kernel priorities.
+
+NEXT
+  SAFE_STEP: Create or update PR, wait for machine-readable CI, merge only if clean, then sync main and create closeout evidence.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
