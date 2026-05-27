@@ -18,7 +18,7 @@ def test_next_turn_status_empty_slot(tmp_path: Path) -> None:
 
 
 def test_next_turn_status_blocks_partial_slot(tmp_path: Path) -> None:
-    commands = tmp_path / ".agentic" / "commands"
+    commands = tmp_path / ".agentic" / "commands" / "inbox"
     commands.mkdir(parents=True)
     (commands / "next-turn.yaml").write_text("state: prepared\n", encoding="utf-8")
     status = detect_next_turn_status(tmp_path)
@@ -28,7 +28,7 @@ def test_next_turn_status_blocks_partial_slot(tmp_path: Path) -> None:
 
 
 def test_next_turn_status_reads_declared_state(tmp_path: Path) -> None:
-    commands = tmp_path / ".agentic" / "commands"
+    commands = tmp_path / ".agentic" / "commands" / "inbox"
     commands.mkdir(parents=True)
     (commands / "next-turn.yaml").write_text("id: next-turn\nstate: running\n", encoding="utf-8")
     (commands / "next-turn.py").write_text("pass\n", encoding="utf-8")
@@ -123,3 +123,27 @@ def test_next_turn_last_result_classifies_unreadable_executed_jsonl_as_unusable(
     assert result.status == "FOUND_UNUSABLE"
     assert result.evidence_verdict == "AMBIGUOUS_SUMMARY_REVIEW_REQUIRED"
     assert result.recommended_chat_reply == "paste-output"
+
+
+def test_next_turn_status_uses_fixed_slot_inbox_constants(tmp_path: Path) -> None:
+    commands = tmp_path / ".agentic" / "commands" / "inbox"
+    commands.mkdir(parents=True)
+    (commands / "next-turn.yaml").write_text("id: next-turn\nstate: prepared\n", encoding="utf-8")
+    (commands / "next-turn.py").write_text("pass\n", encoding="utf-8")
+    status = detect_next_turn_status(tmp_path)
+    assert status.state == "prepared"
+    assert status.yaml_exists is True
+    assert status.script_exists is True
+    assert status.overwrite_allowed is False
+
+
+def test_next_turn_status_ignores_legacy_non_inbox_slot_path(tmp_path: Path) -> None:
+    commands = tmp_path / ".agentic" / "commands"
+    commands.mkdir(parents=True)
+    (commands / "next-turn.yaml").write_text("id: next-turn\nstate: prepared\n", encoding="utf-8")
+    (commands / "next-turn.py").write_text("pass\n", encoding="utf-8")
+    status = detect_next_turn_status(tmp_path)
+    assert status.state == "empty"
+    assert status.yaml_exists is False
+    assert status.script_exists is False
+    assert status.overwrite_allowed is True

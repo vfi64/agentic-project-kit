@@ -9,6 +9,8 @@ from typing import Iterable
 
 from agentic_project_kit.evidence_inspector import EvidenceVerdict
 from agentic_project_kit.evidence_inspector import inspect_evidence
+from agentic_project_kit.next_turn_slot import FIXED_SLOT_SCRIPT
+from agentic_project_kit.next_turn_slot import FIXED_SLOT_YAML
 
 VALID_STATES = {"empty", "prepared", "running", "completed", "failed", "blocked", "recovery_needed"}
 
@@ -33,8 +35,8 @@ def _extract_state(yaml_text: str) -> str | None:
 
 def detect_next_turn_status(root: Path | str = ".") -> NextTurnStatus:
     root_path = Path(root)
-    yaml_path = root_path / ".agentic/commands/next-turn.yaml"
-    script_path = root_path / ".agentic/commands/next-turn.py"
+    yaml_path = root_path / FIXED_SLOT_YAML
+    script_path = root_path / FIXED_SLOT_SCRIPT
     yaml_exists = yaml_path.exists()
     script_exists = script_path.exists()
     if not yaml_exists and not script_exists:
