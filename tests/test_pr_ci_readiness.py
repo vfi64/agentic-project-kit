@@ -227,3 +227,53 @@ def test_pr_status_cli_renders_green_snapshot_without_running_gh(monkeypatch):
     assert "NEXT_TURN_PR_STATUS" in result.output
     assert "pr=123" in result.output
     assert "decision=green" in result.output
+
+def test_pr_merge_if_green_help_is_registered_without_running_gh():
+    result = CliRunner().invoke(app, ["pr", "merge-if-green", "--help"])
+    assert result.exit_code == 0
+    assert "Merge only when PR checks are green" in result.output
+
+
+def test_pr_merge_if_green_cli_passes_expected_head_sha(monkeypatch):
+    from agentic_project_kit.cli_commands import pr as pr_commands
+
+    captured: dict[str, object] = {}
+
+    def fake_merge_if_green(pr_number: str, **kwargs):
+        from agentic_project_kit.next_turn_merge_if_green import MergeIfGreenResult
+        from agentic_project_kit.next_turn_pr_status import classify_pr_status
+
+        captured["pr_number"] = pr_number
+        captured.update(kwargs)
+        status = classify_pr_status(
+            {
+                "state": "OPEN",
+                "mergeStateStatus": "CLEAN",
+                "headRefOid": "expected-sha",
+                "statusCheckRollup": [
+                    {"name": "test", "status": "COMPLETED", "conclusion": "SUCCESS"},
+                ],
+            },
+            pr=pr_number,
+        )
+        return MergeIfGreenResult(
+            pr=pr_number,
+            decision="merge",
+            reason="DRY_RUN: PR is green",
+            status_decision=status,
+            merged=False,
+            merge_output="",
+            expected_head_sha=str(kwargs["expected_head_sha"]),
+        )
+
+    monkeypatch.setattr(pr_commands, "merge_if_green", fake_merge_if_green)
+
+    result = CliRunner().invoke(
+        app,
+        ["pr", "merge-if-green", "123", "--dry-run", "--expected-head-sha", "expected-sha"],
+    )
+
+    assert result.exit_code == 0
+    assert captured["pr_number"] == "123"
+    assert captured["expected_head_sha"] == "expected-sha"
+    assert "expected_head_sha=expected-sha" in result.output

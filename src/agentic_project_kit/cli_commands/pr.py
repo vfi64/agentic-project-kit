@@ -11,6 +11,7 @@ from agentic_project_kit.ci_readiness import (
     render_pr_readiness,
     wait_for_pr_readiness,
 )
+from agentic_project_kit.next_turn_merge_if_green import main_verification_passed, merge_if_green, render_result
 from agentic_project_kit.next_turn_pr_status import (
     attach_failed_run_logs,
     classify_pr_status,
@@ -51,6 +52,42 @@ def status(
         typer.echo(json.dumps(decision, default=lambda item: item.__dict__, indent=2, sort_keys=True))
     else:
         typer.echo(render_decision(decision))
+
+
+@pr_app.command("merge-if-green")
+def merge_if_green_command(
+    pr_number: int = typer.Argument(..., help="Pull request number to merge only after green checks."),
+    merge_method: str = typer.Option(
+        "squash",
+        help="GitHub merge method: squash, merge, or rebase.",
+    ),
+    delete_branch: bool = typer.Option(True, help="Delete the branch after a successful merge."),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Evaluate without merging."),
+    no_verify_main: bool = typer.Option(False, "--no-verify-main", help="Do not verify main CI after merge."),
+    main_branch: str = typer.Option("main", help="Expected base branch and post-merge verification branch."),
+    expected_base_branch: str = typer.Option("", help="Expected PR base branch. Defaults to --main-branch."),
+    expected_head_sha: str = typer.Option("", help="Expected PR head SHA. Refuses merge if the head moved."),
+    main_ci_timeout_seconds: int = typer.Option(300, min=1, help="Post-merge main CI wait timeout."),
+    main_ci_poll_seconds: int = typer.Option(10, min=1, help="Post-merge main CI polling interval."),
+) -> None:
+    """Merge only when PR checks are green, refs match, and merge state is clean."""
+    result = merge_if_green(
+        str(pr_number),
+        merge_method=merge_method,
+        delete_branch=delete_branch,
+        dry_run=dry_run,
+        verify_main=not no_verify_main,
+        main_branch=main_branch,
+        expected_base_branch=expected_base_branch,
+        expected_head_sha=expected_head_sha,
+        main_ci_timeout_seconds=main_ci_timeout_seconds,
+        main_ci_poll_seconds=main_ci_poll_seconds,
+    )
+    typer.echo(render_result(result))
+    if dry_run:
+        return
+    if result.decision != "merge" or not result.merged or not main_verification_passed(result):
+        raise typer.Exit(code=1)
 
 
 @pr_app.command("wait-ci")

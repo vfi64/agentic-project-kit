@@ -55,7 +55,7 @@ def decide_merge(status: PrStatusDecision) -> tuple[MergeDecision, str]:
         return "refuse", "PR is not open"
     if status.decision != "green":
         return "refuse", f"PR checks are not green: {status.decision}"
-    if status.merge_state_status not in {"CLEAN", "UNKNOWN"}:
+    if status.merge_state_status != "CLEAN":
         return "refuse", f"merge state is not clean: {status.merge_state_status}"
     return "merge", "PR is green"
 
