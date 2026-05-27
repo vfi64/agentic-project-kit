@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-27'
-  reason: post-PR837 administrative successor-handoff evidence refresh
-  source: docs/reports/terminal/post-pr836-successor-handoff.md
+  reason: post-PR838 administrative handoff/bootstrap refresh
+  source: docs/reports/terminal/post-pr838-handoff-refresh-note.log
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -73,6 +73,8 @@ safe_state:
   - 833
   - 835
   - 836
+  - 837
+  - 838
 release:
   current_version: 0.4.3
   previous_version: 0.4.2
@@ -87,6 +89,10 @@ open_items:
   next_expected_chat_action: Continue with the smallest planned GUI or failure-mode
     automation slice; stop first if handoff freshness, evidence, or status drift reappears.
 completed_since_previous_handoff:
+- 'PR #838 refreshed post-PR837 administrative handoff state and preserved the last substantive safe-state distinction.'
+- 'PR #837 recorded the post-PR836 successor handoff prompt and evidence anchor.'
+- 'PR #838 refreshed post-PR837 administrative handoff state and preserved the last substantive safe-state distinction.'
+- 'PR #837 recorded the post-PR836 successor handoff prompt and evidence anchor.'
 - 'PR #836 refreshed post-PR835 next-step state and is the current successor-handoff
   safe-state anchor.'
 - 'PR #835 recorded PR #834 closeout evidence at docs/reports/terminal/pr834-merge-finalize.log
@@ -359,11 +365,11 @@ handoff_maintenance:
   remove_obsolete_rules_when_system_changes: true
   latest_successor_prompt: docs/reports/terminal/post-pr836-successor-handoff.md
 administrative_evidence_state:
-  current_head: 71ba85b5322e26c52680b0dbfe38d81957bb1160
-  current_head_subject: Record post-PR836 successor handoff (#837)
-  head_subject: Record post-PR836 successor handoff (#837)
+  current_head: 777d957474318fdf797ca23625e52046c3fb7df0
+  current_head_subject: Refresh post-PR837 administrative handoff state (#838)
+  head_subject: Refresh post-PR837 administrative handoff state (#838)
   allowed_after_safe_state: true
-  reason: Post-PR837 administrative successor-handoff evidence refresh; no product-state
+  reason: Post-PR838 administrative handoff/bootstrap refresh; no product-state
     change.
   latest_successor_prompt: docs/reports/terminal/post-pr836-successor-handoff.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
