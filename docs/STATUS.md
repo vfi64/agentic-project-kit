@@ -1,14 +1,14 @@
-## Post-PR825 Release-/Evidence-Kernel Current-State Override
+## Post-PR833 Successor-Handoff Freshness Repair State
 
-Current verified main HEAD: `0ca727a5aaffb69c6557fb443c6eaf4511486233` (`0ca727a`).
+Current administrative main HEAD: `0e15f8f7f176cdd446f6c3b2f1221195b68cc7ad` (`0e15f8f`).
 
-PR #825 `Harden active handoff state freshness` is merged. It hardens `./ns state-freshness-check` so active next-step instructions fail when they point to already-recorded closeout evidence or stale release versions.
+Generated handoff safe-state anchor: `011b6dc24829be44c7693c468a90694981cd40ce` (`011b6dc`), after PR #831 recorded the PR #830 closeout evidence.
 
-PR #824 remains the PR823 closeout evidence anchor. PR #823 remains the merge-if-green head/base pinning anchor. PR #821 remains the post-merge main-CI verification anchor. PR #819 remains the red-CI failed-log diagnostics anchor. PR #817 remains the PASS_ALREADY_DONE hardening anchor. PR #815 remains the release readiness hardening anchor: `release-prep` stops before metadata patching on main/branch failures, remote WARN states block release readiness, and `release-publish` refuses to tag when remote lookup is inconclusive.
+PR #833 `Record corrected post-PR831 successor handoff` is merged and records `docs/reports/terminal/post-pr831-successor-handoff.md` as the successor handoff anchor. It supersedes the rejected PR825-era stale generated prompt.
 
 v0.4.3 remains the current published and post-release verified release. Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
-Immediate next safe step: continue only with the next smallest Release-/Evidence-Kernel follow-up. Do not start broad documentation migration or GUI expansion.
+Immediate next safe step: verify the generator-backed handoff prompt is free of freshness warnings, then continue only with the smallest planned GUI or failure-mode automation slice after this repair is merged and verified.
 
 
 ## Post-PR809 Current-State Override
@@ -25,10 +25,10 @@ Immediate next safe step: refresh handoff/status state after PR809, then continu
 <!-- v042-safety-release-prep -->
 # Project Status
 
-Status-date: 2026-05-26
+Status-date: 2026-05-27
 Project: agentic-project-kit
 Primary branch: main
-Current work branch: docs/record-pr825-active-handoff-freshness-closeout
+Current work branch: codex/repair-post-pr831-freshness-state
 Current version: 0.4.3
 
 ## Purpose
@@ -50,11 +50,14 @@ Current release tag: v0.4.3.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20393329`.
 Post-release verification command: `agentic-kit post-release-check --version 0.4.3`.
-Current verified main after release/evidence hardening: `0ca727a` (`Harden active handoff state freshness (#825)`).
+Current administrative main after successor-handoff correction: `0e15f8f` (`Record corrected post-PR831 successor handoff (#833)`).
+Generated handoff safe-state anchor: `011b6dc` (`Record PR830 Tkinter GUI plan closeout evidence (#831)`).
 v0.4.3 GitHub Release publication and post-release Zenodo verification are complete. Evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
 
-v0.4.3 safety-release target:
-- Main is refreshed after PR #825 at `0ca727a` (`Harden active handoff state freshness (#825)`).
+v0.4.3 safety-release and successor-handoff target:
+- Main contains PR #833 at `0e15f8f` (`Record corrected post-PR831 successor handoff (#833)`).
+- Generated handoff safe-state now anchors to PR #831 at `011b6dc` via `docs/reports/terminal/post-pr831-successor-handoff.md`.
+- PR #831 recorded PR #830 closeout evidence at `docs/reports/terminal/pr830-merge-finalize.log`.
 - PR #825 hardened active handoff freshness checks so already-recorded closeout evidence and stale release-version instructions are blocking drift.
 - PR #824 recorded PR #823 closeout evidence at `docs/reports/terminal/pr823-merge-finalize.log`.
 - PR #823 hardened `merge-if-green` so the merge command validates the target base branch, requires a PR head SHA, passes `--match-head-commit <sha>` to GitHub, and renders checked base/head refs.
@@ -68,7 +71,7 @@ v0.4.3 safety-release target:
 - Rule registry drift is checked through `agentic-kit rule-registry check`, workflow-guard, and patch-preflight.
 - Rule registry completion is now explicitly reportable through `agentic-kit rule-registry report` and `agentic-kit rule-registry report --json`; the JSON summary includes `direct_coverage_complete`.
 - Evidence is preserved in committed terminal logs including `docs/reports/terminal/pr737-rule-registry-release-evidence.log`, `docs/reports/terminal/pr739-rule-registry-source-evidence-validation.log`, `docs/reports/terminal/pr740-rule-registry-surfaces-tests-inventory.log`, `docs/reports/terminal/pr741-rule-registry-surfaces-tests-inventory-recovery.log`, `docs/reports/terminal/pr742-rule-registry-surfaces-tests-validation.log`, `docs/reports/terminal/pr761-chat-communication-direct-coverage.log`, `docs/reports/terminal/pr762-chat-bootstrap-drift-direct-coverage.log`, and `docs/reports/terminal/pr764-rule-registry-completion-reporting.log`.
-- Next immediate task: continue with the next smallest Release-/Evidence-Kernel follow-up.
+- Next immediate task: verify the generated handoff prompt is clean, then continue with the smallest planned GUI or failure-mode automation slice only after this freshness repair is merged and verified.
 
 Documentation registry baseline:
 - `docs/DOCUMENTATION_REGISTRY.yaml` is the additive machine-readable registry.
@@ -115,7 +118,7 @@ Next safe slice: harden final-summary and expected-negative-smoke reporting so e
 
 ## Current Goal
 
-Preserve PR825 closeout evidence without reintroducing stale closeout-next-step instructions, then continue with the next smallest Release-/Evidence-Kernel follow-up.
+Repair generator-backed successor-handoff freshness so `agentic-kit handoff prompt` no longer anchors to the rejected PR825-era state, then continue only after the repair is merged and verified.
 
 ## Active Workflow Rules
 
