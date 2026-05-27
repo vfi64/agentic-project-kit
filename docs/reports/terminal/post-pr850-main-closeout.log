@@ -1,0 +1,67 @@
+POST-PR850 MAIN CLOSEOUT -- POST-PR849 CLOSEOUT EVIDENCE
+
+### REPO STATE ###
+main after PR850 merge:
+1878c08 Record Post-PR849 main closeout evidence log (#850)
+9cf2121 Add guarded merge-if-green PR CLI route (#849)
+f7f3b18 Record post-PR847 main closeout evidence (#848)
+
+### VERIFIED MERGE FACTS ###
+PR: 850
+Merged main commit: 1878c08
+PR850 merged the canonical post-PR849 main closeout evidence log.
+
+### VERIFIED EVIDENCE ###
+- PR850 was green before merge.
+- Guarded merge-if-green reported main_verification_passed=true.
+- Main was synced after merge.
+- docs/reports/terminal/post-pr849-main-closeout.log passed strict evidence inspection on main.
+- handoff check passed.
+- ruff check passed for merge-if-green and PR CLI related paths.
+
+### INTERPRETATION ###
+Post-PR849 closeout evidence is now present on main, and the guarded merge-if-green route has been exercised successfully for PR850.
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-POST-PR850-MAIN-CLOSEOUT | 2026-05-27 19:41:47 +0200
+
+SLICE
+  NAME: Post-PR850 main closeout
+  SCOPE: Record final green main closeout after post-PR849 closeout evidence merge.
+  BRANCH: post-pr850-main-closeout
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: no product work; closeout evidence only
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: 850
+  HEAD_SHA: 1878c08cc513d631734322578bdec12122946cb2
+  CI: PR850 CI passed before merge; guarded merge-if-green reported main_verification_passed=true; post-merge evidence inspection, handoff check, and ruff passed.
+  MERGE: PR850 merged as main commit 1878c08
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit/post-pr850-main-closeout.log
+  terminal_log_remote: docs/reports/terminal/post-pr850-main-closeout.log
+  terminal_log_local: /tmp/agentic-project-kit/post-pr850-main-closeout.log
+  command_report: NOT_REQUIRED
+
+INTERPRETATION
+  Post-PR849 closeout evidence is now committed on main, and the guarded merge-if-green path has been validated on a real closeout PR.
+
+NEXT
+  SAFE_STEP: Continue workflow-kernel hardening; next logical slice is fail log-first diagnosis or next-turn result lookup order hardening.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
