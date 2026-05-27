@@ -31,3 +31,8 @@ Protected files may be changed and may shrink, but risky semantic removal requir
 ## Dialog Requirement
 
 When a protected anchor would be removed without a migration record, the workflow must stop and ask the user to choose keep, migrate, obsolete, or abort. Chat-only decisions are not sufficient; the decision must be written to the repo.
+
+
+## Generated Artifacts
+
+Generated artifacts must not be edited directly. If a generated file changes, the diff must also include the generator source or another registered generator input. For example, `docs/handoff/NEXT_CHAT_BOOTSTRAP.md` is generated from `src/agentic_project_kit/chat_bootloader.py`; direct edits to the generated Markdown must be blocked and the generator path must be used instead.
