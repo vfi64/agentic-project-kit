@@ -2,6 +2,7 @@ from pathlib import Path
 
 from agentic_project_kit.next_turn_status import (
     detect_next_turn_status,
+    find_last_result,
     render_last_result,
     render_status,
 )
@@ -52,3 +53,36 @@ def test_next_turn_last_result_prefers_json(tmp_path: Path) -> None:
     assert "status=FOUND" in rendered
     assert "next-turn-latest.json" in rendered
     assert "\"overall_result\": \"PASS\"" in rendered
+
+def test_next_turn_last_result_classifies_json_failure_with_remote_evidence(tmp_path: Path) -> None:
+    result_dir = tmp_path / "docs" / "reports" / "command_runs"
+    result_dir.mkdir(parents=True)
+    (result_dir / "next-turn-latest.json").write_text(
+        "{\"overall_result\": \"FAIL\", \"remote_evidence\": \"PASS\", \"next_chat_reply\": \"f\"}",
+        encoding="utf-8",
+    )
+    result = find_last_result(tmp_path)
+    assert result.status == "FOUND_FAIL"
+    assert result.evidence_verdict == "FAIL_DIAGNOSE"
+    assert result.recommended_chat_reply == "f"
+    rendered = render_last_result(tmp_path)
+    assert "status=FOUND_FAIL" in rendered
+    assert "recommended_chat_reply=f" in rendered
+
+
+def test_next_turn_last_result_classifies_terminal_fail_when_no_json(tmp_path: Path) -> None:
+    terminal_dir = tmp_path / "docs" / "reports" / "terminal"
+    terminal_dir.mkdir(parents=True)
+    (terminal_dir / "next-turn-latest.log").write_text("boom\n### RESULT: FAIL ###\n", encoding="utf-8")
+    result = find_last_result(tmp_path)
+    assert result.status == "FOUND_FAIL"
+    assert result.evidence_verdict == "FAIL_DIAGNOSE"
+    assert result.recommended_chat_reply == "f"
+
+
+def test_next_turn_last_result_missing_result_recommends_paste_output_only_after_lookup(tmp_path: Path) -> None:
+    result = find_last_result(tmp_path)
+    assert result.status == "NO_RESULT_FOUND"
+    assert result.evidence_verdict == "MISSING_EVIDENCE_UPLOAD_FIRST"
+    assert result.recommended_chat_reply == "paste-output"
+    assert "next-turn --status" in result.recovery

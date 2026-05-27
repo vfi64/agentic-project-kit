@@ -7,6 +7,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
+from agentic_project_kit.evidence_inspector import EvidenceVerdict
+from agentic_project_kit.evidence_inspector import inspect_evidence
+
 VALID_STATES = {"empty", "prepared", "running", "completed", "failed", "blocked", "recovery_needed"}
 
 EVIDENCE_LOOKUP_ORDER = (
@@ -79,36 +82,129 @@ def _read_preview(path: Path) -> str:
         return lines[-1] if lines else ""
     return text[:4000]
 
-def find_last_result(root: Path | str = ".") -> tuple[Path | None, list[str], str]:
+@dataclass(frozen=True)
+class LastResult:
+    path: Path | None
+    checked_paths: tuple[str, ...]
+    preview: str
+    status: str
+    evidence_verdict: str
+    recommended_chat_reply: str
+    recovery: str
+
+
+def _classify_json_result(path: Path, preview: str) -> tuple[str, str, str, str]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return (
+            "FOUND_UNUSABLE",
+            "AMBIGUOUS_SUMMARY_REVIEW_REQUIRED",
+            "paste-output",
+            "JSON result is unreadable; inspect terminal log before requesting pasted output.",
+        )
+
+    overall = str(payload.get("overall_result") or payload.get("work_result") or payload.get("outcome") or "")
+    remote = str(payload.get("remote_evidence") or "")
+    reply = str(payload.get("next_chat_reply") or "")
+
+    if reply:
+        recommended = reply
+    elif overall in {"PASS", "PASS_ALREADY_DONE", "NOOP", "PASS_EXECUTED"}:
+        recommended = "d"
+    elif remote in {"PASS", "PARTIAL"}:
+        recommended = "f"
+    else:
+        recommended = "paste-output"
+
+    if overall in {"PASS", "PASS_ALREADY_DONE", "NOOP", "PASS_EXECUTED"}:
+        verdict = "PASS_CONTINUE"
+        status = "FOUND_PASS"
+        recovery = "continue from structured command result"
+    elif overall in {"FAIL", "HARD_FAIL", "FAIL_EXECUTED", "FAIL_NO_FIXED_SLOT"}:
+        verdict = "FAIL_DIAGNOSE"
+        status = "FOUND_FAIL"
+        recovery = "diagnose from structured command result and then inspect terminal evidence if needed"
+    else:
+        verdict = "AMBIGUOUS_SUMMARY_REVIEW_REQUIRED"
+        status = "FOUND_AMBIGUOUS"
+        recovery = "inspect terminal evidence before requesting pasted output"
+
+    if recommended == "paste-output" and "docs/reports/terminal/next-turn-latest.log" in preview:
+        recovery = "inspect the referenced terminal log before requesting pasted output"
+
+    return status, verdict, recommended, recovery
+
+
+def _classify_terminal_result(path: Path, root: Path) -> tuple[str, str, str, str]:
+    inspection = inspect_evidence(path, root=root, require_summary=False)
+    verdict = inspection.verdict.value
+    if inspection.verdict == EvidenceVerdict.PASS_CONTINUE:
+        return "FOUND_PASS", verdict, "d", "continue from inspected terminal evidence"
+    if inspection.verdict == EvidenceVerdict.FAIL_DIAGNOSE:
+        return "FOUND_FAIL", verdict, "f", "diagnose from inspected terminal evidence"
+    if inspection.verdict == EvidenceVerdict.MISSING_EVIDENCE_UPLOAD_FIRST:
+        return "FOUND_UNUSABLE", verdict, "paste-output", "upload or locate evidence before requesting pasted output"
+    return "FOUND_AMBIGUOUS", verdict, "paste-output", "review ambiguous terminal evidence before requesting pasted output"
+
+
+def find_last_result(root: Path | str = ".") -> LastResult:
     root_path = Path(root)
     checked: list[str] = []
     for relative in EVIDENCE_LOOKUP_ORDER:
         checked.append(relative)
         candidate = root_path / relative
-        if candidate.exists():
-            return candidate, checked, _read_preview(candidate)
-    return None, checked, ""
+        if not candidate.exists():
+            continue
+        preview = _read_preview(candidate)
+        if candidate.suffix == ".json":
+            status, verdict, reply, recovery = _classify_json_result(candidate, preview)
+        elif candidate.suffix in {".log", ".md"}:
+            status, verdict, reply, recovery = _classify_terminal_result(candidate, root_path)
+        else:
+            status, verdict, reply, recovery = (
+                "FOUND_AMBIGUOUS",
+                "AMBIGUOUS_SUMMARY_REVIEW_REQUIRED",
+                "paste-output",
+                "review result source before requesting pasted output",
+            )
+        return LastResult(candidate, tuple(checked), preview, status, verdict, reply, recovery)
+    return LastResult(
+        None,
+        tuple(checked),
+        "",
+        "NO_RESULT_FOUND",
+        "MISSING_EVIDENCE_UPLOAD_FIRST",
+        "paste-output",
+        "run ./ns next-turn --status before requesting pasted terminal output",
+    )
+
 
 def render_last_result(root: Path | str = ".") -> str:
-    found, checked, preview = find_last_result(root)
+    result = find_last_result(root)
     lines: list[str] = ["NEXT_TURN_LAST_RESULT"]
-    if found is None:
-        lines.append("status=NO_RESULT_FOUND")
+    if result.path is None:
+        lines.append(f"status={result.status}")
+        lines.append(f"evidence_verdict={result.evidence_verdict}")
+        lines.append(f"recommended_chat_reply={result.recommended_chat_reply}")
         lines.append("checked_paths:")
-        lines.extend(f"- {path}" for path in checked)
-        lines.append("recovery=run ./ns next-turn --status before requesting pasted terminal output")
+        lines.extend(f"- {path}" for path in result.checked_paths)
+        lines.append(f"recovery={result.recovery}")
         lines.append("### RESULT: PASS ###")
         return "\n".join(lines)
     try:
-        relative = found.relative_to(Path(root))
+        relative = result.path.relative_to(Path(root))
     except ValueError:
-        relative = found
-    lines.append("status=FOUND")
+        relative = result.path
+    lines.append(f"status={result.status}")
     lines.append(f"path={relative}")
+    lines.append(f"evidence_verdict={result.evidence_verdict}")
+    lines.append(f"recommended_chat_reply={result.recommended_chat_reply}")
+    lines.append(f"recovery={result.recovery}")
     lines.append("checked_paths:")
-    lines.extend(f"- {path}" for path in checked)
+    lines.extend(f"- {path}" for path in result.checked_paths)
     lines.append("preview:")
-    lines.append(preview)
+    lines.append(result.preview)
     lines.append("### RESULT: PASS ###")
     return "\n".join(lines)
 
