@@ -1,0 +1,216 @@
+### RESOLVE DUPLICATE PR865 VERIFY PRS -- LOGGED ###
+2026-05-27 21:55:56 +0200
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main
+c164bd6 Record post-PR864 main closeout evidence (#865)
+79d2d8b Record external review enforcement priorities in planning (#864)
+590d30a Record Post-PR862 main closeout evidence log (#863)
+1fb1b57 Expand GUI workflow button catalog (#862)
+970eb6b Record post-PR860 main closeout evidence (#861)
+e91539a Clarify protected change planning route (#860)
+1601942 Record post-PR858 successor chat handoff (#859)
+d644744 Record Post-PR857 main closeout evidence log (#858)
+### INSPECT DUPLICATE PRS ###
+{"baseRefOid":"c164bd60ec53a071fdcb66d31ace1fc91467677b","headRefName":"post-pr865-main-closeout","headRefOid":"12744d00c544f2f0b96d59dd34fbdf5c724e3cf1","mergeStateStatus":"CLEAN","number":866,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-27T19:52:22Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26534994492/job/78161379676","name":"test","startedAt":"2026-05-27T19:51:55Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-27T19:52:18Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26534993295/job/78161375739","name":"test","startedAt":"2026-05-27T19:51:54Z","status":"COMPLETED","workflowName":"CI"}],"url":"https://github.com/vfi64/agentic-project-kit/pull/866"}
+{"baseRefOid":"c164bd60ec53a071fdcb66d31ace1fc91467677b","headRefName":"post-pr865-main-verify","headRefOid":"2e94f71d74ba8ce4d702aa09120dec7ea5b05bef","mergeStateStatus":"CLEAN","number":867,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-27T19:54:01Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26535078574/job/78161676301","name":"test","startedAt":"2026-05-27T19:53:36Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-27T19:54:02Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26535074153/job/78161659508","name":"test","startedAt":"2026-05-27T19:53:30Z","status":"COMPLETED","workflowName":"CI"}],"url":"https://github.com/vfi64/agentic-project-kit/pull/867"}
+### CLOSE BAD DUPLICATE PR867 ###
+✓ Closed pull request vfi64/agentic-project-kit#867 (Record PR865 merge verification evidence)
+### VERIFY GOOD PR866 STATUS THROUGH LOCAL KIT ###
+NEXT_TURN_PR_STATUS
+pr=866
+state=OPEN
+merge_state_status=CLEAN
+head_ref_oid=12744d00c544f2f0b96d59dd34fbdf5c724e3cf1
+decision=green
+successful_checks:
+- test
+- test
+pending_checks:
+failed_checks:
+unknown_checks:
+failed_run_log_hint=none
+failed_run_diagnostics:
+### RESULT: PASS ###
+### MERGE GOOD PR866 THROUGH LOCAL GATE ###
+NEXT_TURN_MERGE_IF_GREEN
+pr=866
+decision=merge
+reason=PR is green
+status_decision=green
+state=OPEN
+merge_state_status=CLEAN
+base_ref_name=main
+base_ref_oid=c164bd60ec53a071fdcb66d31ace1fc91467677b
+head_ref_name=post-pr865-main-closeout
+head_ref_oid=12744d00c544f2f0b96d59dd34fbdf5c724e3cf1
+expected_base_branch=main
+expected_head_sha=12744d00c544f2f0b96d59dd34fbdf5c724e3cf1
+merged=true
+merge_commit_sha=cc38b0a74868715c5943e68eb5b8fa4f7e4ba227
+main_verification_required=true
+main_verification_decision=green
+main_verification_passed=true
+main_failed_run_log_hint=none
+main_verification_error=none
+failed_checks:
+pending_checks:
+unknown_checks:
+main_failed_run_diagnostics:
+### RESULT: PASS ###
+### SYNC MAIN AFTER PR866 ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   c164bd6..cc38b0a  main       -> origin/main
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Updating c164bd6..cc38b0a
+Fast-forward
+ .../terminal/pr865-merge-and-main-verify.log       | 171 +++++++++++++++++++++
+ 1 file changed, 171 insertions(+)
+ create mode 100644 docs/reports/terminal/pr865-merge-and-main-verify.log
+main
+cc38b0a Record PR865 merge verification evidence (#866)
+c164bd6 Record post-PR864 main closeout evidence (#865)
+79d2d8b Record external review enforcement priorities in planning (#864)
+590d30a Record Post-PR862 main closeout evidence log (#863)
+1fb1b57 Expand GUI workflow button catalog (#862)
+970eb6b Record post-PR860 main closeout evidence (#861)
+e91539a Clarify protected change planning route (#860)
+1601942 Record post-PR858 successor chat handoff (#859)
+### VERIFY PR866 AND PR867 FINAL STATES ###
+{"baseRefOid":"c164bd60ec53a071fdcb66d31ace1fc91467677b","headRefOid":"12744d00c544f2f0b96d59dd34fbdf5c724e3cf1","mergeCommit":{"oid":"cc38b0a74868715c5943e68eb5b8fa4f7e4ba227"},"mergedAt":"2026-05-27T19:56:07Z","number":866,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/866"}
+{"baseRefOid":"c164bd60ec53a071fdcb66d31ace1fc91467677b","headRefOid":"2e94f71d74ba8ce4d702aa09120dec7ea5b05bef","mergeCommit":null,"mergedAt":null,"number":867,"state":"CLOSED","url":"https://github.com/vfi64/agentic-project-kit/pull/867"}
+### VERIFY PR865 MERGE VERIFY LOG ON MAIN ###
+-rw-r--r--@ 1 hof  staff  6842 27 Mai  21:56 docs/reports/terminal/pr865-merge-and-main-verify.log
+EVIDENCE_INSPECTION
+verdict: PASS_CONTINUE
+evidence_exists: yes
+require_summary: yes
+git_branch: main
+git_status_clean: yes
+pass_markers: 6
+fail_markers: 0
+hidden_fail_before_final_pass: no
+structured_summary_found: yes
+structured_summary_valid: yes
+summary_name: PR865 merge and main verify
+summary_scope: Merge post-PR864 closeout evidence and verify main.
+summary_branch: post-pr865-main-closeout
+summary_origin: local
+summary_state_mode: local
+summary_mode_check: merge through ./ns merge-if-green; main synced and evidence inspected
+summary_work: PASS
+summary_evidence: PASS
+summary_overall: PASS
+summary_remote_evidence: PASS
+summary_pr: 865
+summary_head_sha: c164bd60ec53a071fdcb66d31ace1fc91467677b
+summary_ci: PR865 merged through local gate; main verification and evidence inspection passed after sync.
+summary_merge: PR865 merged into main
+summary_terminal_log: /tmp/agentic-project-kit/pr865-merge-and-main-verify.log
+summary_terminal_log_remote: docs/reports/terminal/pr865-merge-and-main-verify.log
+summary_terminal_log_local: /tmp/agentic-project-kit/pr865-merge-and-main-verify.log
+summary_command_report: merge-if-green/main-sync/evidence-inspect/handoff/next-turn-status
+summary_safe_step: Continue with GUI-safe parameterized read-only dispatch for evidence inspection, protected-change planning, and PR status; do not enable remote mutation buttons yet.
+summary_chat_reply: d
+summary_result_marker: PASS
+evidence_path: docs/reports/terminal/pr865-merge-and-main-verify.log
+final_marker: ### RESULT: PASS ###
+next_action: continue with the next safe slice after reviewing evidence
+### RESULT: PASS ###
+### VERIFY STATUS SURFACES ###
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 21
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 6
+- class:release: 2
+- class:user-facing description: 1
+NEXT_TURN_STATUS
+state=empty
+yaml_exists=false
+script_exists=false
+overwrite_allowed=true
+reason=no fixed-slot files exist
+evidence_lookup_order:
+- docs/reports/command_runs/next-turn-latest.json
+- docs/reports/command_runs/next-turn-latest.md
+- docs/reports/terminal/next-turn-latest.log
+- .agentic/commands/executed.jsonl
+### RESULT: PASS ###
+NEXT_TURN_LAST_RESULT
+status=FOUND_PASS
+path=.agentic/commands/executed.jsonl
+evidence_verdict=PASS_CONTINUE
+recommended_chat_reply=d
+recovery=continue from executed command ledger
+checked_paths:
+- docs/reports/command_runs/next-turn-latest.json
+- docs/reports/command_runs/next-turn-latest.md
+- docs/reports/terminal/next-turn-latest.log
+- .agentic/commands/executed.jsonl
+preview:
+{"command_id": "post707-state-refresh-v3", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "0d47e43ad9a42165ff3d86c8cd2e4db008da062c462ac5265001df2010ed27a8", "timestamp_utc": "2026-05-24T08:43:23.196541+00:00"}
+### RESULT: PASS ###
+### COPY CLEANUP LOG TO REPO PATH ###
+Switched to a new branch 'post-pr866-duplicate-pr-cleanup'
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-27 21:56:58 +0200
+
+SLICE
+  NAME: Resolve duplicate PR865 verification PRs
+  SCOPE: Close invalid duplicate PR867, merge valid PR866 verification evidence, and verify main.
+  BRANCH: post-pr866-duplicate-pr-cleanup
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: cleanup of duplicate evidence PRs; merge through ./ns merge-if-green; main synced and evidence inspected
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: 866
+  HEAD_SHA: cc38b0a74868715c5943e68eb5b8fa4f7e4ba227
+  CI: PR866 merged through local gate; PR867 closed as invalid duplicate; main verification and evidence inspection passed.
+  MERGE: PR866 merged into main
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit/resolve-duplicate-pr865-verify-prs.log
+  terminal_log_remote: docs/reports/terminal/resolve-duplicate-pr865-verify-prs.log
+  terminal_log_local: /tmp/agentic-project-kit/resolve-duplicate-pr865-verify-prs.log
+  command_report: duplicate-pr-inspection/pr-close/pr-status/merge-if-green/main-sync/evidence-inspect/handoff/next-turn-status
+
+INTERPRETATION
+  Duplicate evidence PR handling is complete. PR867 was invalid because it attempted to verify an already-merged PR and contained inconsistent PASS framing. PR866 is the valid PR865 merge verification evidence.
+
+NEXT
+  SAFE_STEP: Stop recursive closeout PR creation here unless the repository requires one. Continue next product work only after main is clean and no duplicate verification PRs remain.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
