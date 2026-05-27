@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-27'
-  reason: Record PR834 handoff freshness repair closeout
-  source: structured YAML mutation plus PR834 closeout evidence
+  reason: Refresh post-PR835 next-step state
+  source: structured YAML mutation after PR834 closeout merge
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -72,6 +72,7 @@ safe_state:
   - 831
   - 833
   - 835
+  - 836
 release:
   current_version: 0.4.3
   previous_version: 0.4.2
@@ -83,10 +84,12 @@ release:
   post_release_evidence: docs/reports/terminal/20260526-120216_v043-release-verify.log
 open_items:
   prs: []
-  next_expected_chat_action: Inspect docs/reports/terminal/pr834-merge-finalize.log
-    and the generated handoff prompt; if both are clean, continue with the smallest
-    planned GUI or failure-mode automation slice.
+  next_expected_chat_action: Continue with the smallest planned GUI or failure-mode
+    automation slice; stop first if handoff freshness, evidence, or status drift reappears.
 completed_since_previous_handoff:
+- 'PR #835 recorded PR #834 closeout evidence at docs/reports/terminal/pr834-merge-finalize.log
+  and added docs/reports/terminal/post-pr834-successor-handoff.md as the successor
+  anchor.'
 - 'PR #834 repaired generator-backed handoff freshness state so the generated successor
   prompt anchors to the post-PR834 safe state.'
 - 'PR #833 recorded the corrected post-PR831 successor handoff at docs/reports/terminal/post-pr831-successor-handoff.md
@@ -344,9 +347,8 @@ blocked_until_closeout:
 - Large GUI architecture expansion before successor-chat bootstrap
 - Broad documentation migration during release/evidence-kernel hardening closeouts
 - Release, tag, or DOI mutation
-first_instruction: Inspect docs/reports/terminal/pr834-merge-finalize.log and the
-  generated handoff prompt; if both are clean, continue with the smallest planned
-  GUI or failure-mode automation slice.
+first_instruction: Continue with the smallest planned GUI or failure-mode automation
+  slice; stop first if handoff freshness, evidence, or status drift reappears.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
