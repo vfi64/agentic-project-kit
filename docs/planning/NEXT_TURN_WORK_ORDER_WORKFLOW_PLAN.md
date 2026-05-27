@@ -30,8 +30,8 @@ This plan intentionally prioritizes enforcement over additional prose rules. Rep
 
 There is exactly one canonical next work-order slot:
 
-- `.agentic/commands/next-turn.yaml`
-- `.agentic/commands/next-turn.py`
+- `.agentic/commands/inbox/next-turn.yaml`
+- `.agentic/commands/inbox/next-turn.py`
 
 The canonical local command is:
 
@@ -61,8 +61,8 @@ The work order is input. The run result is output. They must not be conflated.
 
 Input files:
 
-- `.agentic/commands/next-turn.yaml`
-- `.agentic/commands/next-turn.py`
+- `.agentic/commands/inbox/next-turn.yaml`
+- `.agentic/commands/inbox/next-turn.py`
 
 Output files:
 
@@ -474,8 +474,8 @@ Required commands:
 
 `./ns next-turn --status` must report:
 
-- whether `.agentic/commands/next-turn.yaml` exists;
-- whether `.agentic/commands/next-turn.py` exists;
+- whether `.agentic/commands/inbox/next-turn.yaml` exists;
+- whether `.agentic/commands/inbox/next-turn.py` exists;
 - the detected state: `empty`, `prepared`, `running`, `completed`, `failed`, `blocked`, or `recovery_needed`;
 - whether the fixed slot may be overwritten;
 - which result and evidence paths will be checked after `d` or `f`.
