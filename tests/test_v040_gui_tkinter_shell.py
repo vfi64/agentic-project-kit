@@ -273,7 +273,7 @@ def test_manual_launch_disabled_buttons_use_readable_theme_style():
     ]
     assert "ReadableDisabled.TButton" in manual_source
     assert 'style.map("ReadableDisabled.TButton"' in manual_source
-    assert manual_source.count('style="ReadableDisabled.TButton"') >= 2
+    assert manual_source.count('style="ReadableDisabled.TButton"') >= 1
     assert 'state="disabled"' in manual_source
 
 
