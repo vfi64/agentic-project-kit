@@ -59,6 +59,12 @@ def test_next_chat_bootstrap_contains_standard_prompt_and_next_work(tmp_path: Pa
     assert "Standard successor-chat prompt" in text
     assert "Read the remote file docs/handoff/NEXT_CHAT_BOOTSTRAP.md" in text
     assert "agentic-kit boot check" in text
+    assert "`./ns protected-change-plan --diff-file <file>`" in text
+    assert "`python -m agentic_project_kit.protected_change_planner --diff-file <file>`" in text
+    assert (
+        "`agentic-kit protected-change-plan`; that package CLI command is not registered"
+        in text
+    )
     assert "FINAL_SUMMARY_CONTRACT" in text
     assert "PASS_ALREADY_DONE" in text
     assert "run_summary_renderer.SummaryPayload" in text

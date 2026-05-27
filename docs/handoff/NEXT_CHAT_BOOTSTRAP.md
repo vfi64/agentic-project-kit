@@ -61,7 +61,7 @@ Mandatory workflow rules:
 - Treat d, f, and w as communication signals rather than evidence.
 - Run `agentic-kit evidence inspect --require-summary` or inspect equivalent remote/repo evidence before continuing after chat control signals.
 - Inspect repo or remote evidence before requesting pasted terminal output.
-- Use protected change planning before protected YAML, JSON, or Markdown control changes.
+- Use the supported protected-change planning route before protected YAML, JSON, or Markdown control changes: `./ns protected-change-plan --diff-file <file>` or `python -m agentic_project_kit.protected_change_planner --diff-file <file>`. Do not use `agentic-kit protected-change-plan`; that package CLI command is not registered.
 - Before a chat switch, run the closeout prompt and check whether START_NEW_CHAT_PROMPT.md, CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md, and NEXT_CHAT_BOOTSTRAP.md all need updates.
 
 Required first action in a successor chat:
