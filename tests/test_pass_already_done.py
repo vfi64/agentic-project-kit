@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from typer.testing import CliRunner
@@ -6,6 +7,7 @@ from agentic_project_kit.cli import app
 from agentic_project_kit.pass_already_done import CompletionOutcome
 from agentic_project_kit.pass_already_done import classify_completion
 from agentic_project_kit.pass_already_done import render_classification
+from agentic_project_kit.pass_already_done import render_classification_json
 
 
 def test_zero_exit_is_pass() -> None:
@@ -115,3 +117,31 @@ def test_cli_classify_fail_without_verified_target(tmp_path: Path) -> None:
     result = runner.invoke(app, ["pass-already-done", "classify", str(output_file), "--exit-code", "1"])
     assert result.exit_code == 1
     assert "outcome: FAIL" in result.output
+
+
+
+def test_render_classification_json_is_machine_readable() -> None:
+    result = classify_completion(exit_code=1, output="nothing to commit", target_verified=True)
+    payload = json.loads(render_classification_json(result))
+    assert payload == {
+        "matched_phrase": "nothing to commit",
+        "outcome": "PASS_ALREADY_DONE",
+        "reason": "git commit target state already clean",
+        "success": True,
+        "target_state": None,
+    }
+
+
+def test_cli_classify_json_output(tmp_path: Path) -> None:
+    output_file = tmp_path / "out.txt"
+    output_file.write_text("nothing to commit, working tree clean\n", encoding="utf-8")
+    runner = CliRunner()
+    result = runner.invoke(
+        app,
+        ["pass-already-done", "classify", str(output_file), "--exit-code", "1", "--target-verified", "--json"],
+    )
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["outcome"] == "PASS_ALREADY_DONE"
+    assert payload["success"] is True
+    assert payload["matched_phrase"] == "nothing to commit, working tree clean"
