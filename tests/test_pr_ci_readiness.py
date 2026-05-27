@@ -166,3 +166,64 @@ def test_pr_wait_ci_help_is_registered_without_running_gh():
     assert result.exit_code == 0
     assert "Polling interval" in result.output
     assert "Maximum wait time" in result.output
+
+
+def test_pr_status_help_is_registered_without_running_gh():
+    result = CliRunner().invoke(app, ["pr", "status", "--help"])
+    assert result.exit_code == 0
+    assert "Print deterministic PR/CI status" in result.output
+
+
+def test_pr_status_cli_no_failed_log_fetch_skips_fetcher(monkeypatch):
+    from agentic_project_kit.cli_commands import pr as pr_commands
+
+    monkeypatch.setattr(
+        pr_commands,
+        "fetch_pr_payload",
+        lambda pr: {
+            "state": "OPEN",
+            "mergeStateStatus": "UNSTABLE",
+            "headRefOid": "abc123",
+            "statusCheckRollup": [
+                {
+                    "name": "test",
+                    "status": "COMPLETED",
+                    "conclusion": "FAILURE",
+                    "detailsUrl": "https://github.com/vfi64/agentic-project-kit/actions/runs/123456/job/789",
+                },
+            ],
+        },
+    )
+
+    def fail_if_called(*args, **kwargs):
+        raise AssertionError("failed log fetch should be skipped")
+
+    monkeypatch.setattr(pr_commands, "attach_failed_run_logs", fail_if_called)
+
+    result = CliRunner().invoke(app, ["pr", "status", "123", "--no-failed-log-fetch"])
+    assert result.exit_code == 0
+    assert "decision=red" in result.output
+    assert "log_status=not-fetched" in result.output
+
+
+def test_pr_status_cli_renders_green_snapshot_without_running_gh(monkeypatch):
+    from agentic_project_kit.cli_commands import pr as pr_commands
+
+    monkeypatch.setattr(
+        pr_commands,
+        "fetch_pr_payload",
+        lambda pr: {
+            "state": "OPEN",
+            "mergeStateStatus": "CLEAN",
+            "headRefOid": "abc123",
+            "statusCheckRollup": [
+                {"name": "test", "status": "COMPLETED", "conclusion": "SUCCESS"},
+            ],
+        },
+    )
+
+    result = CliRunner().invoke(app, ["pr", "status", "123"])
+    assert result.exit_code == 0
+    assert "NEXT_TURN_PR_STATUS" in result.output
+    assert "pr=123" in result.output
+    assert "decision=green" in result.output
