@@ -11,6 +11,12 @@ from agentic_project_kit.ci_readiness import (
     render_pr_readiness,
     wait_for_pr_readiness,
 )
+from agentic_project_kit.next_turn_pr_status import (
+    attach_failed_run_logs,
+    classify_pr_status,
+    fetch_pr_payload,
+    render_decision,
+)
 from agentic_project_kit.pr_closeout import BLOCKED, evaluate_pr_closeout, render_pr_closeout
 
 pr_app = typer.Typer(help="Evaluate deterministic PR closeout and readiness state.")
@@ -23,6 +29,28 @@ def closeout_check(json_file: Path) -> None:
     typer.echo(render_pr_closeout(result))
     if result.outcome == BLOCKED:
         raise typer.Exit(code=1)
+
+
+@pr_app.command("status")
+def status(
+    pr_number: int = typer.Argument(..., help="Pull request number to inspect."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of the text report."),
+    no_failed_log_fetch: bool = typer.Option(
+        False,
+        "--no-failed-log-fetch",
+        help="Do not fetch failed GitHub Actions logs for red checks.",
+    ),
+    failed_log_lines: int = typer.Option(120, min=0, help="Maximum failed-log excerpt lines."),
+) -> None:
+    """Print deterministic PR/CI status and fetch failed logs for red CI."""
+    payload = fetch_pr_payload(str(pr_number))
+    decision = classify_pr_status(payload, pr=str(pr_number))
+    if decision.decision == "red" and not no_failed_log_fetch:
+        decision = attach_failed_run_logs(decision, max_lines=failed_log_lines)
+    if json_output:
+        typer.echo(json.dumps(decision, default=lambda item: item.__dict__, indent=2, sort_keys=True))
+    else:
+        typer.echo(render_decision(decision))
 
 
 @pr_app.command("wait-ci")
