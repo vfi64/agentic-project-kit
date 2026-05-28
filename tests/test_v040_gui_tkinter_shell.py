@@ -453,6 +453,18 @@ def test_manual_gui_catalog_runs_work_order_runner_with_validation_block():
     assert "validation_ok=false" in output
 
 
+def test_manual_gui_catalog_runs_work_order_upload_with_missing_log_block():
+    from agentic_project_kit.gui_tkinter_shell import run_manual_gui_catalog_action
+
+    output = run_manual_gui_catalog_action("work-order-upload")
+
+    assert "action=work-order-upload" in output
+    assert "allowed=true" in output
+    assert "executed=true" in output
+    assert "WORK_ORDER_UPLOAD_RESULT" in output
+    assert "missing result log" in output
+
+
 def test_manual_gui_catalog_blocks_planned_mutating_buttons():
     from agentic_project_kit.gui_tkinter_shell import run_manual_gui_catalog_action
 
@@ -474,3 +486,13 @@ def test_manual_gui_check_docs_status_transition_contract_is_present():
     assert "check-docs" in {button.command_id for button in all_gui_buttons()}
     assert "run_action_click(command_id)" in manual_source
     assert "Status: success | branch: main | action: {command_id}" in manual_source
+
+def test_work_order_strip_command_ids_are_not_empty():
+    from agentic_project_kit.gui_tkinter_shell import WORK_ORDER_STRIP_COMMAND_IDS
+
+    assert WORK_ORDER_STRIP_COMMAND_IDS == (
+        "work-order-show",
+        "work-order-validate",
+        "work-order-run",
+        "work-order-upload",
+    )
