@@ -126,7 +126,7 @@ def main() -> int:
     rc, out = run_capture(["git", "rev-parse", "HEAD"])
     current = out.strip()
     log.append(f"current_head={current}")
-    rc, out = run_capture(["git", "merge-base", "--is-ancestor", HEAD, "HEAD"])
+    rc, _out = run_capture(["git", "merge-base", "--is-ancestor", HEAD, "HEAD"])
     head_is_ancestor = rc == 0
     log.append(f"target_head_is_ancestor={head_is_ancestor}")
     if not head_is_ancestor:
@@ -142,14 +142,17 @@ def main() -> int:
     rc, prompt = run_capture([sys.executable, "-m", "agentic_project_kit.cli", "handoff", "prompt"])
     PROMPT_PATH.write_text(prompt, encoding="utf-8")
     warning_present = "WARNING: this successor handoff prompt may be stale" in prompt
+    required_markers_present = HEAD in prompt and "PR #883" in prompt and "GUI gatekeeper implementation inventory" in prompt
     log.extend([
         f"status_changed={status_changed}",
         f"current_handoff_changed={handoff_changed}",
         f"prompt_path={PROMPT_PATH}",
         f"prompt_returncode={rc}",
         f"freshness_warning_present={warning_present}",
+        f"required_markers_present={required_markers_present}",
+        "note=freshness_warning_present may be expected before the refresh PR is committed and merged; post-merge main verification must require it to be absent",
     ])
-    result = "PASS" if rc == 0 and not warning_present else "FAIL"
+    result = "PASS" if rc == 0 and required_markers_present else "FAIL"
     log.append(f"result={result}")
     LOG_PATH.write_text("\n".join(log) + "\n", encoding="utf-8")
     print(LOG_PATH)
