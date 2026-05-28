@@ -1,3 +1,15 @@
+## Post-PR888 Patch Preflight Slice-Gate State
+
+Current verified main HEAD: `508f3dfa2be50d4f369f31e270cc930c24873015` (`508f3df`).
+Commit subject: `Merge pull request #888 from vfi64/feature/patch-preflight-slice-gate-clean`.
+
+PR #888 is merged. It adds the optional `agentic-kit patch-preflight --require-slice-gate planning-doc` path so patch preflight can require deterministic slice-gate evidence and a clean worktree before accepting planning-document preflight readiness.
+
+Current verified release: v0.4.4.
+Verified Zenodo version DOI: `10.5281/zenodo.20431326`.
+
+Next safe step after this refresh is merged and verified: continue with the smallest gatekeeper-hardening slice, using the slice gate and patch preflight before PR creation or merge claims.
+
 ## Post-PR886 Workflow Evidence Hygiene State
 
 Current verified main HEAD: `d77d5804d7eead98ff65b52e38c6d73bc640051c` (`d77d580`).
