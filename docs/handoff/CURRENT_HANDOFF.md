@@ -36,7 +36,7 @@ Generated handoff safe-state anchor is `fd1e631312723166982fb1e0d9ecb76397e97559
 
 PR #835 added `docs/reports/terminal/post-pr836-successor-handoff.md` and `docs/reports/terminal/post-pr836-successor-handoff.log` as the successor/evidence anchors.
 
-v0.4.3 remains published and post-release verified. Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
+v0.4.4 is published and post-release verified. Verified Zenodo version DOI: `10.5281/zenodo.20431326`. Release verification evidence: `docs/reports/terminal/v044-post-release-verify.log`.
 
 Next safe step: continue with the smallest planned GUI or failure-mode automation slice; stop first if handoff freshness, evidence, or status drift reappears.
 
@@ -67,10 +67,10 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 
 ## Current State
 
-- Current verified release: 0.4.3.
-- Current release tag: v0.4.3.
+- Current verified release: 0.4.4.
+- Current release tag: v0.4.4.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
-- Verified Zenodo version DOI: `10.5281/zenodo.20393329`.
+- Verified Zenodo version DOI: `10.5281/zenodo.20431326`.
 - Main contains PR #834 at `fd1e631`.
 - PR #835 added PR834 closeout evidence at `docs/reports/terminal/post-pr836-successor-handoff.log`.
 - Generated handoff safe-state now anchors to PR #834 via `docs/reports/terminal/post-pr836-successor-handoff.md`.
