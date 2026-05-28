@@ -1,0 +1,12 @@
+V0.4.4 FINAL MAIN CLOSEOUT AFTER PR876
+
+Result: PASS
+Main HEAD: 29758836e60b9235de74d59059b05901f1a4f7c6
+Main subject: Merge pull request #876 from vfi64/release/v0.4.4-post-release-metadata
+Merged PRs: #875 release metadata, #876 DOI metadata
+Release tag: v0.4.4
+Zenodo concept DOI: 10.5281/zenodo.20101359
+Zenodo version DOI: 10.5281/zenodo.20431326
+Release verification evidence: docs/reports/terminal/v044-post-release-verify.log
+Gates: full pytest PASS; check-docs PASS; docs-audit PASS; doctor PASS; post-release-check PASS
+Next safe step: generate a fresh successor-chat handoff before starting the GUI deterministic gatekeeper migration PR series.
