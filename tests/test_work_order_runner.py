@@ -6,17 +6,7 @@ from agentic_project_kit.work_order_runner import (
 )
 
 
-def _valid_work_order_text() -> str:
-    return """# agentic-project-kit work order
-from pathlib import Path
-
-print("hello from work order")
-COMMAND_HINT = "./ns pr-status 123"
-SUMMARY = """### CANONICAL SUMMARY ###
-### RESULT: PASS ###
-Terminal bleibt offen. Kein exit am Blockende.
-"""
-"""
+VALID_WORK_ORDER = '# agentic-project-kit work order\nfrom pathlib import Path\n\nprint("hello from work order")\nCOMMAND_HINT = "./ns pr-status 123"\nSUMMARY = "### CANONICAL SUMMARY ###\\n### RESULT: PASS ###\\nTerminal bleibt offen. Kein exit am Blockende.\\n"\n'
 
 
 def test_run_validated_work_order_blocks_missing_file(tmp_path, monkeypatch):
@@ -39,7 +29,7 @@ def test_run_validated_work_order_executes_and_writes_logs(tmp_path, monkeypatch
     monkeypatch.chdir(tmp_path)
     work_order = tmp_path / ".agentic/commands/inbox/next-turn.py"
     work_order.parent.mkdir(parents=True)
-    work_order.write_text(_valid_work_order_text(), encoding="utf-8")
+    work_order.write_text(VALID_WORK_ORDER, encoding="utf-8")
 
     result = run_validated_work_order(
         work_order_path=work_order,
