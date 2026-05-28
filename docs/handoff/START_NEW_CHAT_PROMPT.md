@@ -26,7 +26,9 @@ This file is the canonical prompt for starting a successor chat. It is paired wi
 
 If this prompt changes, the closeout prompt and `NEXT_CHAT_BOOTSTRAP.md` may also need to be updated. A closeout slice must check all three files before a chat switch.
 
-Current administrative handoff state after PR #838: main contains `777d957474318fdf797ca23625e52046c3fb7df0` (`Refresh post-PR837 administrative handoff state (#838)`). The substantive safe-state may intentionally remain at the last substantive work commit when `safe_state.semantics: last_substantive_work_state` is set; later handoff-only refreshes belong in `administrative_evidence_state`.
+Current administrative handoff state after PR #880: main contains `f853ccf770e5f692ca2815912b252e453259fc69` (`f853ccf`), `Merge pull request #880 from vfi64/fix/handoff-freshness-admin-merge-chain`. PR #880 is administrative handoff-freshness hardening; verified release remains v0.4.4, Zenodo version DOI `10.5281/zenodo.20431326`. Successor chats must verify this state before GUI product work. The next safe product slice is GUI deterministic gatekeeper migration as read-only inspection/inventory only.
+
+Historical administrative handoff state after PR #838: main contains `777d957474318fdf797ca23625e52046c3fb7df0` (`Refresh post-PR837 administrative handoff state (#838)`). The substantive safe-state may intentionally remain at the last substantive work commit when `safe_state.semantics: last_substantive_work_state` is set; later handoff-only refreshes belong in `administrative_evidence_state`.
 
 ## Prompt to copy into the successor chat
 

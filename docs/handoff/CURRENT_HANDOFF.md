@@ -1,3 +1,17 @@
+## Post-PR880 Bootstrap Refresh State
+
+Current verified main HEAD is `f853ccf770e5f692ca2815912b252e453259fc69` (`f853ccf`).
+Commit subject: `Merge pull request #880 from vfi64/fix/handoff-freshness-admin-merge-chain`.
+
+PR #880 is merged. It hardens the handoff freshness guard by accepting direct administrative merge commits and bounded first-parent administrative merge chains, while still blocking product merges inside such chains.
+
+Current verified release remains v0.4.4.
+Verified Zenodo version DOI remains `10.5281/zenodo.20431326`.
+
+This is an administrative bootstrap/handoff/status refresh only. No GUI product work belongs in this slice.
+
+Next safe step after this refresh is merged and verified: begin the GUI deterministic gatekeeper migration with a read-only inspection/inventory slice only.
+
 ## Post-PR873 GUI Gatekeeper Planning State
 
 Current verified main HEAD is `5b30fe30ed9b813255fb9a89d85a6f7bf1ab70ab` (`5b30fe3`).
