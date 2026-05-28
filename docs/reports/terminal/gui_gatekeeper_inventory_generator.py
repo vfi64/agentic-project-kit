@@ -94,7 +94,8 @@ def render_markdown(files: list[str], classification: Classification) -> str:
     lines: list[str] = [
         "# GUI Gatekeeper Implementation Inventory",
         "",
-        "Status: draft",
+        "Status: proposed",
+        "Decision status: proposed",
         "Scope: read-only inventory; no product-code changes.",
         "Baseline: post-PR882 main after post-PR880/PR881 bootstrap refresh.",
         "",
@@ -161,6 +162,8 @@ def validate(files: list[str], markdown: str, classification: Classification) ->
         if section not in markdown:
             errors.append(f"missing section: {section}")
     required_phrases = [
+        "Status: proposed",
+        "Decision status: proposed",
         "A helper-local PASS is not a slice PASS.",
         "BLOCKED_BY_MISSING_REPO_GATES",
         "BLOCKED_BY_REPO_GOVERNANCE_FAIL",
