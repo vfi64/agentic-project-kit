@@ -10,9 +10,10 @@ from pathlib import Path
 
 from agentic_project_kit.next_turn_evidence import commit_and_push_evidence, publish_and_stage_evidence, render_finalize_result
 from agentic_project_kit.next_turn_slot import FIXED_SLOT_SCRIPT, FIXED_SLOT_YAML
+from agentic_project_kit.work_order_validator import LOCAL_RESULT_LOG_PATH
 
-LATEST_TERMINAL_LOG = Path("docs/reports/terminal/next-turn-latest.log")
-LATEST_COMMAND_REPORT = Path("docs/reports/command_runs/next-turn-latest.json")
+LATEST_TERMINAL_LOG = LOCAL_RESULT_LOG_PATH
+LATEST_COMMAND_REPORT = Path("/tmp/agentic-project-kit/next-turn-latest.json")
 
 
 @dataclass(frozen=True)
@@ -55,8 +56,8 @@ def run_fixed_slot(root: Path | str = ".") -> NextTurnRunResult:
             exit_code=2,
             script_path=str(FIXED_SLOT_SCRIPT),
             yaml_path=str(FIXED_SLOT_YAML),
-            terminal_log=str(LATEST_TERMINAL_LOG),
-            command_report=str(LATEST_COMMAND_REPORT),
+            terminal_log=str(terminal_log),
+            command_report=str(command_report),
             timestamp_utc=datetime.now(timezone.utc).isoformat(),
         )
         terminal_log.write_text("NEXT_TURN_RUNNER\noutcome=FAIL_NO_FIXED_SLOT\n### RESULT: FAIL ###\n", encoding="utf-8")
@@ -80,8 +81,8 @@ def run_fixed_slot(root: Path | str = ".") -> NextTurnRunResult:
         exit_code=completed.returncode,
         script_path=str(FIXED_SLOT_SCRIPT),
         yaml_path=str(FIXED_SLOT_YAML),
-        terminal_log=str(LATEST_TERMINAL_LOG),
-        command_report=str(LATEST_COMMAND_REPORT),
+        terminal_log=str(terminal_log),
+        command_report=str(command_report),
         timestamp_utc=datetime.now(timezone.utc).isoformat(),
     )
     command_report.write_text(json.dumps(asdict(result), indent=2, sort_keys=True) + "\n", encoding="utf-8")

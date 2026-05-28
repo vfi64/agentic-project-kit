@@ -20,12 +20,13 @@ def test_run_validated_work_order_blocks_missing_file(tmp_path, monkeypatch):
     assert result.validation_ok is False
     assert result.executed is False
     assert result.returncode == 1
-    assert "missing work order file" in (tmp_path / "remote.log").read_text(
+    assert "missing work order file" in (tmp_path / "local.log").read_text(
         encoding="utf-8"
     )
+    assert not (tmp_path / "remote.log").exists()
 
 
-def test_run_validated_work_order_executes_and_writes_logs(tmp_path, monkeypatch):
+def test_run_validated_work_order_executes_and_writes_local_log_only(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     work_order = tmp_path / ".agentic/commands/inbox/next-turn.py"
     work_order.parent.mkdir(parents=True)
@@ -38,7 +39,7 @@ def test_run_validated_work_order_executes_and_writes_logs(tmp_path, monkeypatch
     )
 
     rendered = render_work_order_run_result(result)
-    remote_log = (tmp_path / "docs/reports/terminal/next-turn-latest.log").read_text(
+    local_log = (tmp_path / "next-turn-latest-local.log").read_text(
         encoding="utf-8"
     )
 
@@ -46,4 +47,5 @@ def test_run_validated_work_order_executes_and_writes_logs(tmp_path, monkeypatch
     assert result.executed is True
     assert result.returncode == 0
     assert "WORK_ORDER_RUN_RESULT" in rendered
-    assert "hello from work order" in remote_log
+    assert "hello from work order" in local_log
+    assert not (tmp_path / "docs/reports/terminal/next-turn-latest.log").exists()

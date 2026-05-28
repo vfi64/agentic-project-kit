@@ -26,7 +26,10 @@ def test_upload_next_turn_result_log_blocks_missing_file(tmp_path, monkeypatch):
     _init_repo(repo)
     monkeypatch.chdir(repo)
 
-    result = upload_next_turn_result_log(log_path=Path("docs/reports/terminal/next-turn-latest.log"))
+    result = upload_next_turn_result_log(
+        log_path=Path("docs/reports/terminal/next-turn-latest.log"),
+        local_log_path=tmp_path / "missing-next-turn-latest.log",
+    )
 
     rendered = render_work_order_upload_result(result)
     assert result.ok is False
@@ -74,3 +77,55 @@ def test_upload_next_turn_result_log_commits_only_result_log(tmp_path, monkeypat
     assert "WORK_ORDER_UPLOAD_RESULT" in rendered
     changed = _git(["show", "--name-only", "--format=", "HEAD"], repo).stdout.splitlines()
     assert changed == ["docs/reports/terminal/next-turn-latest.log"]
+
+
+def test_upload_next_turn_result_log_promotes_local_log_before_commit(tmp_path, monkeypatch):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_repo(repo)
+    remote = tmp_path / "remote.git"
+    _git(["init", "--bare", str(remote)], tmp_path)
+    _git(["remote", "add", "origin", str(remote)], repo)
+    _git(["push", "-u", "origin", "HEAD"], repo)
+    monkeypatch.chdir(repo)
+
+    local_log = tmp_path / "next-turn-latest.log"
+    local_log.write_text(
+        "WORK_ORDER_RUN\nrepo_root=" + str(repo.resolve()) + "\n### RESULT: PASS ###\n",
+        encoding="utf-8",
+    )
+
+    result = upload_next_turn_result_log(
+        local_log_path=local_log,
+        log_path=Path("docs/reports/terminal/next-turn-latest.log"),
+    )
+
+    assert result.ok is True
+    assert (repo / "docs/reports/terminal/next-turn-latest.log").read_text(encoding="utf-8") == local_log.read_text(
+        encoding="utf-8"
+    )
+    changed = _git(["show", "--name-only", "--format=", "HEAD"], repo).stdout.splitlines()
+    assert changed == ["docs/reports/terminal/next-turn-latest.log"]
+
+
+def test_upload_next_turn_result_log_ignores_stale_local_log_from_other_repo(tmp_path, monkeypatch):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_repo(repo)
+    monkeypatch.chdir(repo)
+
+    local_log = tmp_path / "next-turn-latest.log"
+    local_log.write_text(
+        "WORK_ORDER_RUN\nrepo_root=/tmp/different-repo\n### RESULT: PASS ###\n",
+        encoding="utf-8",
+    )
+
+    result = upload_next_turn_result_log(
+        local_log_path=local_log,
+        log_path=Path("docs/reports/terminal/next-turn-latest.log"),
+    )
+
+    assert result.ok is False
+    assert result.committed is False
+    assert "missing result log" in result.message
+    assert not (repo / "docs/reports/terminal/next-turn-latest.log").exists()

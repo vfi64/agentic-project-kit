@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import subprocess
 import sys
 import time
 from dataclasses import dataclass
@@ -17,6 +18,18 @@ class ArtifactRule:
 TRANSIENT_RULES = (
     ArtifactRule("agent-current-yaml", ".agentic/commands/current.yaml", "stale-transient-command", "transient compatibility file after agent-next or agent-run"),
     ArtifactRule("agent-current-sh", ".agentic/commands/current.sh", "stale-transient-command", "transient compatibility file after agent-next or agent-run"),
+    ArtifactRule(
+        "next-turn-latest-terminal-log",
+        "docs/reports/terminal/next-turn-latest.log",
+        "stale-next-turn-working-copy",
+        "untracked fixed-slot working log; durable evidence must be uploaded explicitly",
+    ),
+    ArtifactRule(
+        "next-turn-latest-command-report",
+        "docs/reports/command_runs/next-turn-latest.json",
+        "stale-next-turn-working-copy",
+        "untracked fixed-slot working report; durable evidence must be uploaded explicitly",
+    ),
 )
 
 PROTECTED_ARTIFACTS = (
@@ -24,12 +37,32 @@ PROTECTED_ARTIFACTS = (
 )
 
 ALLOWED_PREFIXES = (".agentic/commands/",)
+ALLOWED_EXACT_PATHS = (
+    "docs/reports/terminal/next-turn-latest.log",
+    "docs/reports/command_runs/next-turn-latest.json",
+)
 DEFAULT_TMP_LOG_TTL_SECONDS = 24 * 60 * 60
 
 
 def _is_allowed(path: Path) -> bool:
     text = path.as_posix()
-    return any(text.startswith(prefix) for prefix in ALLOWED_PREFIXES) and text not in PROTECTED_ARTIFACTS
+    if text in PROTECTED_ARTIFACTS:
+        return False
+    return text in ALLOWED_EXACT_PATHS or any(text.startswith(prefix) for prefix in ALLOWED_PREFIXES)
+
+
+def _is_git_untracked(base: Path, rel: Path) -> bool:
+    completed = subprocess.run(
+        ["git", "status", "--porcelain", "--", rel.as_posix()],
+        cwd=base,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    )
+    if completed.returncode != 0:
+        return False
+    return any(line.startswith("?? ") for line in completed.stdout.splitlines())
 
 
 def collect_candidates(root: Path | str = ".") -> list[tuple[ArtifactRule, Path]]:
@@ -37,8 +70,11 @@ def collect_candidates(root: Path | str = ".") -> list[tuple[ArtifactRule, Path]
     found: list[tuple[ArtifactRule, Path]] = []
     for rule in TRANSIENT_RULES:
         rel = Path(rule.path)
-        if (base / rel).exists():
-            found.append((rule, rel))
+        if not (base / rel).exists():
+            continue
+        if rel.as_posix() in ALLOWED_EXACT_PATHS and not _is_git_untracked(base, rel):
+            continue
+        found.append((rule, rel))
     return found
 
 

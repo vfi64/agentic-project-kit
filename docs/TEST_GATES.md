@@ -400,7 +400,9 @@ The gate also checks active next-step instructions in `docs/STATUS.md`, `docs/ha
 
 ## Communication artifact garbage collector
 
-`./ns artifact-gc` reports transient communication artifacts without deleting them. `./ns artifact-gc --execute` removes only registered transient `.agentic/commands/current.yaml` and `.agentic/commands/current.sh` compatibility files. It must not delete `docs/reports/terminal/LATEST_TERMINAL_LOG.txt`, because that file is part of the committed terminal-evidence pointer chain.
+`./ns artifact-gc` reports transient communication artifacts without deleting them. `./ns artifact-gc --execute` removes only registered transient `.agentic/commands/current.yaml` and `.agentic/commands/current.sh` compatibility files plus untracked fixed-slot working copies `docs/reports/terminal/next-turn-latest.log` and `docs/reports/command_runs/next-turn-latest.json`. It must not delete tracked repo evidence or `docs/reports/terminal/LATEST_TERMINAL_LOG.txt`, because that file is part of the committed terminal-evidence pointer chain.
+
+Fixed-slot work-order execution must write the active result first to `/tmp/agentic-project-kit/next-turn-latest.log`. The repo-backed path `docs/reports/terminal/next-turn-latest.log` is created only by explicit upload/promotion. A validation-only or blocked run must not leave untracked repo evidence that later blocks `terminal-remote-preflight`.
 
 ## Latest command-run pointer
 
@@ -444,6 +446,8 @@ Contract tests live in `tests/test_final_summary_contract.py` and validate the p
 Complex generated patches must be checked before application or commit. Required preflight checks include Python syntax for patch scripts, `py_compile` for generated Python files, YAML parse and coverage-term string validation for coverage files, and final SUMMARY contract validation for terminal logs.
 
 Known forbidden shortcut patterns include nested triple-quote Python generators, unquoted YAML terms containing colons, shell-specific pipeline status tricks, and final PASS summaries after an earlier required-step FAIL.
+
+For `.log` files with structured summaries, `agentic-kit patch-preflight` must validate the canonical `SUMMARY COMM-...` renderer contract. It must not reject logs merely because they no longer use the older handwritten `SUMMARY` block shape.
 
 ## YAML Governance Integrity Gate
 

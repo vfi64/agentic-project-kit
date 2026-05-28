@@ -29,6 +29,13 @@ rules:
     class: repo-backed-command-run-evidence
     default_action: keep
     delete_allowed: false
+  - id: next-turn-working-copy-artifacts
+    status: active
+    path_glob: "docs/reports/terminal/next-turn-latest.log and docs/reports/command_runs/next-turn-latest.json"
+    class: local-working-copy-evidence
+    default_action: delete-if-untracked
+    delete_allowed: conditional
+    notes: "These fixed-slot working copies are local communication artifacts, not durable evidence. `artifact-gc --execute` may remove them only when git reports them as untracked."
   - id: agent-command-inbox
     status: active
     path_glob: ".agentic/commands/inbox/*"

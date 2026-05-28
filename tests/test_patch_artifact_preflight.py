@@ -5,12 +5,14 @@ from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
 from agentic_project_kit.patch_artifact_preflight import (
+    check_final_summary_logs,
     check_python_files,
     check_rule_registry_files,
     check_text_patterns,
     check_yaml_files,
     run_preflight,
 )
+from agentic_project_kit.run_summary_renderer import render_summary
 
 
 def test_preflight_accepts_current_governance_yaml() -> None:
@@ -45,6 +47,67 @@ def test_preflight_rejects_forbidden_shell_patterns(tmp_path: Path) -> None:
     path.write_text("python " + "-c bad\n", encoding="utf-8")
     errors = check_text_patterns([str(path)])
     assert any("multiline-python-c" in error for error in errors)
+
+
+def test_preflight_accepts_canonical_rendered_summary_log(tmp_path: Path) -> None:
+    path = tmp_path / "canonical.log"
+    path.write_text(
+        render_summary(
+            {
+                "comm_header": "SUMMARY COMM-PREFLIGHT | 2026-05-28 20:00:00 +0200",
+                "slice_name": "patch-preflight",
+                "scope": "summary validation",
+                "branch": "test",
+                "origin": "local",
+                "state_mode": "local",
+                "mode_check": "unit test",
+                "work": "PASS",
+                "evidence": "PASS",
+                "overall": "PASS",
+                "remote_evidence": "PASS",
+                "pr": "NONE",
+                "head_sha": "abc123",
+                "ci": "not-required",
+                "merge": "not-required",
+                "terminal_log": "docs/reports/terminal/canonical.log",
+                "terminal_log_remote": "docs/reports/terminal/canonical.log",
+                "terminal_log_local": str(path),
+                "command_report": "NONE",
+                "interpretation": "Rendered by the canonical summary renderer.",
+                "next_safe_step": "continue",
+                "chat_reply": "d",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert check_final_summary_logs([str(path)]) == []
+
+
+def test_preflight_rejects_legacy_summary_log(tmp_path: Path) -> None:
+    path = tmp_path / "legacy.log"
+    path.write_text(
+        "\n".join(
+            [
+                "================================================================",
+                "SUMMARY",
+                "WORK RESULT: PASS",
+                "EVIDENCE RESULT: PASS",
+                "OVERALL RESULT: PASS",
+                "REMOTE_EVIDENCE: PASS",
+                "terminal_log=docs/reports/terminal/legacy.log",
+                "command_report=NONE",
+                "NEXT_CHAT_REPLY: p",
+                "### RESULT: PASS ###",
+                "================================================================",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    errors = check_final_summary_logs([str(path)])
+
+    assert any("legacy summary token" in error for error in errors)
 
 
 def test_preflight_cli_passes_for_current_yaml_files() -> None:

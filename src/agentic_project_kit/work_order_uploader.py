@@ -4,7 +4,7 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from agentic_project_kit.work_order_validator import RESULT_LOG_PATH
+from agentic_project_kit.work_order_validator import LOCAL_RESULT_LOG_PATH, RESULT_LOG_PATH
 
 
 @dataclass(frozen=True)
@@ -56,19 +56,31 @@ def _allowed_dirty_lines_for_log_path(log_path: Path) -> set[str]:
     return allowed
 
 
+def _local_log_belongs_to_current_repo(local_log_path: Path) -> bool:
+    if not local_log_path.exists():
+        return False
+    expected = "repo_root=" + str(Path.cwd().resolve())
+    try:
+        return expected in local_log_path.read_text(encoding="utf-8").splitlines()
+    except UnicodeDecodeError:
+        return False
+
+
 def upload_next_turn_result_log(
     *,
     log_path: Path = RESULT_LOG_PATH,
+    local_log_path: Path = LOCAL_RESULT_LOG_PATH,
     commit_message: str = "Upload next-turn result log",
 ) -> WorkOrderUploadResult:
-    if not log_path.exists():
+    local_log_ready = _local_log_belongs_to_current_repo(local_log_path)
+    if not log_path.exists() and not local_log_ready:
         return WorkOrderUploadResult(
             ok=False,
             committed=False,
             pushed=False,
             returncode=1,
             log_path=log_path,
-            message="missing result log: " + str(log_path),
+            message="missing result log: " + str(local_log_path) + " or " + str(log_path),
         )
 
     dirty = _status_short()
@@ -83,6 +95,10 @@ def upload_next_turn_result_log(
             log_path=log_path,
             message="refusing upload because other worktree changes exist: " + "; ".join(disallowed),
         )
+
+    if local_log_ready:
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        log_path.write_text(local_log_path.read_text(encoding="utf-8"), encoding="utf-8")
 
     add = _run_git(["add", str(log_path)])
     if add.returncode != 0:
