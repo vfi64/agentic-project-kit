@@ -1,3 +1,15 @@
+## Post-PR886 Workflow Evidence Hygiene State
+
+Current verified main HEAD: `d77d5804d7eead98ff65b52e38c6d73bc640051c` (`d77d580`).
+Commit subject: `Merge pull request #886 from vfi64/codex/fix-workflow-evidence-hygiene`.
+
+PR #886 is merged. It fixed workflow evidence hygiene by writing active next-turn/work-order results first to a local temporary path, making the repo-backed fixed slot an explicit upload/promotion artifact, validating `repo_root` on upload, allowing artifact GC to remove untracked fixed-slot artifacts, and accepting canonical `SUMMARY COMM-...` evidence logs in patch preflight.
+
+Current verified release: v0.4.4.
+Verified Zenodo version DOI: `10.5281/zenodo.20431326`.
+
+Next safe step after this refresh is merged and verified: continue with the smallest gatekeeper-hardening slice, using `agentic-kit slice gate --kind planning-doc` before PR creation or merge claims.
+
 ## Post-PR883 GUI Gatekeeper Inventory State
 
 Current verified main HEAD: `1ec13cb5283d9b796b667526791eaa94a04073ff` (`1ec13cb`).

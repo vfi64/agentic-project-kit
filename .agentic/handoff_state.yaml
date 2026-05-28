@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-28'
-  reason: post-PR883 GUI gatekeeper inventory handoff refresh
-  source: PR883 main verification
+  reason: post-PR886 workflow evidence hygiene handoff refresh
+  source: PR886 main verification
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 1ec13cb5283d9b796b667526791eaa94a04073ff
-  commit_subject: 'Merge pull request #883 from vfi64/feature/gui-gatekeeper-inventory-helper'
+  commit: d77d5804d7eead98ff65b52e38c6d73bc640051c
+  commit_subject: 'Merge pull request #886 from vfi64/codex/fix-workflow-evidence-hygiene'
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -80,6 +80,7 @@ safe_state:
   - 880
   - 881
   - 883
+  - 886
 release:
   current_version: 0.4.4
   previous_version: 0.4.3
@@ -91,10 +92,11 @@ release:
   post_release_evidence: docs/reports/terminal/v044-post-release-verify.log
 open_items:
   prs: []
-  next_expected_chat_action: After this post-PR883 handoff refresh is merged and verified,
-    implement the smallest temporary Python slice-gate command for planning/documentation
-    slices so helper-local PASS cannot be confused with slice PASS.
+  next_expected_chat_action: After this post-PR886 handoff refresh is merged and verified,
+    continue with the smallest gatekeeper-hardening slice using slice-gate evidence.
 completed_since_previous_handoff:
+- 'PR #886 fixed workflow evidence hygiene by moving active next-turn/work-order results
+  out of the repo-backed fixed slot until explicit upload/promotion.'
 - 'PR #883 added the GUI gatekeeper implementation inventory and recorded that helper-local
   PASS is not slice PASS without matching repository governance gates.'
 - 'PR #881 refreshed bootstrap/handoff state after PR #880; this post-PR881 refresh
@@ -382,24 +384,26 @@ blocked_until_closeout:
   slice
 - Gatekeeper product work before post-PR883 handoff refresh is merged and verified
 - Treating helper-local PASS as slice PASS before repository governance gates pass
-first_instruction: After this post-PR883 handoff refresh is merged and verified, implement
-  the smallest temporary Python slice-gate command for planning/documentation slices;
-  stop first if handoff freshness, evidence, or status drift reappears.
+- Gatekeeper product work before post-PR886 handoff refresh is merged and verified
+- Treating helper-local PASS as slice PASS without slice-gate evidence
+first_instruction: After this post-PR886 handoff refresh is merged and verified, continue
+  with the smallest gatekeeper-hardening slice; stop first if handoff freshness, evidence,
+  or status drift reappears.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr883.md
+  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr886.md
 administrative_evidence_state:
-  current_head: 1ec13cb5283d9b796b667526791eaa94a04073ff
-  current_head_subject: 'Merge pull request #883 from vfi64/feature/gui-gatekeeper-inventory-helper'
-  head_subject: 'Merge pull request #883 from vfi64/feature/gui-gatekeeper-inventory-helper'
+  current_head: d77d5804d7eead98ff65b52e38c6d73bc640051c
+  current_head_subject: 'Merge pull request #886 from vfi64/codex/fix-workflow-evidence-hygiene'
+  head_subject: 'Merge pull request #886 from vfi64/codex/fix-workflow-evidence-hygiene'
   allowed_after_safe_state: true
-  reason: PR883 GUI gatekeeper inventory merged and verified on main
-  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr883.md
-  current_subject: 'Merge pull request #883 from vfi64/feature/gui-gatekeeper-inventory-helper'
+  reason: PR886 workflow evidence hygiene merged and verified on main
+  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr886.md
+  current_subject: 'Merge pull request #886 from vfi64/codex/fix-workflow-evidence-hygiene'
   safe_state_semantics: current_main_head
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
