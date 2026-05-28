@@ -6,7 +6,7 @@ from pathlib import Path
 import typer
 import yaml
 
-from agentic_project_kit.final_summary_contract import validate_final_summary
+from agentic_project_kit.run_summary_renderer import validate_rendered_summary_text
 from agentic_project_kit.rule_registry_validator import validate_rule_registry
 from agentic_project_kit.workflow_guard import run_workflow_guard
 
@@ -77,7 +77,7 @@ def check_final_summary_logs(paths: list[str]) -> list[str]:
         text = path.read_text(encoding="utf-8")
         if "SUMMARY" not in text:
             continue
-        for error in validate_final_summary(text):
+        for error in validate_rendered_summary_text(text):
             errors.append(f"{path}: {error}")
     return errors
 

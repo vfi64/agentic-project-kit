@@ -32,19 +32,33 @@ def run_validated_work_order(
 ) -> WorkOrderRunResult:
     validation = validate_work_order_file(work_order_path)
     local_log_path.parent.mkdir(parents=True, exist_ok=True)
-    remote_log_path.parent.mkdir(parents=True, exist_ok=True)
 
     if not validation.ok:
         output = render_work_order_validation(validation)
-        local_log_path.write_text(output + chr(10), encoding="utf-8")
-        remote_log_path.write_text(output + chr(10), encoding="utf-8")
+        body = chr(10).join(
+            [
+                "WORK_ORDER_RUN",
+                "repo_root=" + str(Path.cwd().resolve()),
+                "path=" + str(work_order_path),
+                "validation_ok=false",
+                "executed=false",
+                "returncode=1",
+                "local_log=" + str(local_log_path),
+                "remote_log=" + str(remote_log_path),
+                "validation_report_begin",
+                output,
+                "validation_report_end",
+                "### RESULT: FAIL ###",
+            ]
+        )
+        local_log_path.write_text(body + chr(10), encoding="utf-8")
         return WorkOrderRunResult(
             validation_ok=False,
             executed=False,
             returncode=1,
             local_log=local_log_path,
             remote_log=remote_log_path,
-            message="work order validation failed; execution blocked",
+            message="work order validation failed; execution blocked; remote log not written",
         )
 
     completed = subprocess.run(
@@ -57,6 +71,7 @@ def run_validated_work_order(
     body = chr(10).join(
         [
             "WORK_ORDER_RUN",
+            "repo_root=" + str(Path.cwd().resolve()),
             "path=" + str(work_order_path),
             "validation_ok=true",
             "executed=true",
@@ -73,14 +88,17 @@ def run_validated_work_order(
         ]
     )
     local_log_path.write_text(body + chr(10), encoding="utf-8")
-    remote_log_path.write_text(body + chr(10), encoding="utf-8")
     return WorkOrderRunResult(
         validation_ok=True,
         executed=True,
         returncode=completed.returncode,
         local_log=local_log_path,
         remote_log=remote_log_path,
-        message="work order executed" if completed.returncode == 0 else "work order executed with failure",
+        message=(
+            "work order executed; remote log pending explicit upload"
+            if completed.returncode == 0
+            else "work order executed with failure; remote log pending explicit upload"
+        ),
     )
 
 

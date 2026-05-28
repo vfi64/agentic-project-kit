@@ -85,6 +85,51 @@ def test_gc_does_not_collect_command_inbox_files(tmp_path: Path) -> None:
     assert script.exists()
 
 
+def test_gc_collects_untracked_next_turn_working_artifacts(tmp_path: Path) -> None:
+    import subprocess
+
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=tmp_path, check=True)
+    (tmp_path / "README.md").write_text("repo\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "commit", "-m", "Initial commit"], cwd=tmp_path, check=True, capture_output=True, text=True)
+
+    terminal = tmp_path / "docs/reports/terminal/next-turn-latest.log"
+    report = tmp_path / "docs/reports/command_runs/next-turn-latest.json"
+    terminal.parent.mkdir(parents=True)
+    report.parent.mkdir(parents=True)
+    terminal.write_text("local only\n", encoding="utf-8")
+    report.write_text("{}\n", encoding="utf-8")
+
+    outcome, message = execute_gc(tmp_path)
+
+    assert outcome == "PASS_COLLECTED"
+    assert "docs/reports/terminal/next-turn-latest.log" in message
+    assert "docs/reports/command_runs/next-turn-latest.json" in message
+    assert not terminal.exists()
+    assert not report.exists()
+
+
+def test_gc_keeps_tracked_next_turn_working_artifacts(tmp_path: Path) -> None:
+    import subprocess
+
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=tmp_path, check=True)
+    terminal = tmp_path / "docs/reports/terminal/next-turn-latest.log"
+    terminal.parent.mkdir(parents=True)
+    terminal.write_text("tracked evidence\n", encoding="utf-8")
+    subprocess.run(["git", "add", terminal.as_posix()], cwd=tmp_path, check=True)
+    subprocess.run(["git", "commit", "-m", "Track log"], cwd=tmp_path, check=True, capture_output=True, text=True)
+
+    outcome, message = execute_gc(tmp_path)
+
+    assert outcome == "PASS_NOTHING_TO_COLLECT"
+    assert message == ""
+    assert terminal.read_text(encoding="utf-8") == "tracked evidence\n"
+
+
 def test_tmp_log_gc_collects_only_expired_local_tmp_logs(tmp_path: Path) -> None:
     import os
     from agentic_project_kit.communication_artifact_gc import collect_expired_tmp_logs

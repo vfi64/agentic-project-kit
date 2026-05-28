@@ -2,42 +2,60 @@ from __future__ import annotations
 
 import json
 
+from pathlib import Path
+
+from agentic_project_kit import next_turn_runner
 from agentic_project_kit.next_turn_runner import run_fixed_slot, work_result_from_outcome
 from agentic_project_kit.next_turn_slot import write_fixed_slot
 
 
-def test_run_fixed_slot_reports_missing_slot(tmp_path):
+def _redirect_latest_paths(tmp_path: Path, monkeypatch) -> tuple[Path, Path]:
+    terminal = tmp_path / "local" / "next-turn-latest.log"
+    report = tmp_path / "local" / "next-turn-latest.json"
+    monkeypatch.setattr(next_turn_runner, "LATEST_TERMINAL_LOG", terminal)
+    monkeypatch.setattr(next_turn_runner, "LATEST_COMMAND_REPORT", report)
+    return terminal, report
+
+
+def test_run_fixed_slot_reports_missing_slot(tmp_path, monkeypatch):
+    terminal, report = _redirect_latest_paths(tmp_path, monkeypatch)
     result = run_fixed_slot(tmp_path)
     assert result.outcome == "FAIL_NO_FIXED_SLOT"
     assert result.exit_code == 2
-    assert (tmp_path / "docs/reports/terminal/next-turn-latest.log").exists()
-    assert (tmp_path / "docs/reports/command_runs/next-turn-latest.json").exists()
+    assert terminal.exists()
+    assert report.exists()
+    assert not (tmp_path / "docs/reports/terminal/next-turn-latest.log").exists()
 
 
-def test_run_fixed_slot_executes_placeholder(tmp_path):
+def test_run_fixed_slot_executes_placeholder(tmp_path, monkeypatch):
+    terminal, report_path = _redirect_latest_paths(tmp_path, monkeypatch)
     write_fixed_slot(tmp_path, command_id="abc")
     result = run_fixed_slot(tmp_path)
     assert result.outcome == "PASS_EXECUTED"
     assert result.exit_code == 0
-    report = json.loads((tmp_path / "docs/reports/command_runs/next-turn-latest.json").read_text(encoding="utf-8"))
+    report = json.loads(report_path.read_text(encoding="utf-8"))
     assert report["command_id"] == "abc"
     assert report["outcome"] == "PASS_EXECUTED"
-    assert "NEXT_TURN_FIXED_SLOT_PLACEHOLDER" in (tmp_path / "docs/reports/terminal/next-turn-latest.log").read_text(encoding="utf-8")
+    assert "NEXT_TURN_FIXED_SLOT_PLACEHOLDER" in terminal.read_text(encoding="utf-8")
+    assert not (tmp_path / "docs/reports/terminal/next-turn-latest.log").exists()
 
 
 
-def test_run_fixed_slot_removes_slot_after_success(tmp_path):
+def test_run_fixed_slot_removes_slot_after_success(tmp_path, monkeypatch):
+    terminal, report = _redirect_latest_paths(tmp_path, monkeypatch)
     write_fixed_slot(tmp_path, command_id="cleanup")
     result = run_fixed_slot(tmp_path)
     assert result.outcome == "PASS_EXECUTED"
     assert not (tmp_path / ".agentic/commands/inbox/next-turn.yaml").exists()
     assert not (tmp_path / ".agentic/commands/inbox/next-turn.py").exists()
-    assert (tmp_path / "docs/reports/terminal/next-turn-latest.log").exists()
-    assert (tmp_path / "docs/reports/command_runs/next-turn-latest.json").exists()
+    assert terminal.exists()
+    assert report.exists()
+    assert not (tmp_path / "docs/reports/terminal/next-turn-latest.log").exists()
 
 
 
-def test_run_fixed_slot_keeps_slot_after_failure(tmp_path):
+def test_run_fixed_slot_keeps_slot_after_failure(tmp_path, monkeypatch):
+    _redirect_latest_paths(tmp_path, monkeypatch)
     write_fixed_slot(tmp_path, command_id="fail")
     script = tmp_path / ".agentic/commands/inbox/next-turn.py"
     script.write_text("raise SystemExit(7)\n", encoding="utf-8")
