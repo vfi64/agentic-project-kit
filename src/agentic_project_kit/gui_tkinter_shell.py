@@ -56,6 +56,10 @@ from agentic_project_kit.work_order_runner import (
     render_work_order_run_result,
     run_validated_work_order,
 )
+from agentic_project_kit.work_order_uploader import (
+    render_work_order_upload_result,
+    upload_next_turn_result_log,
+)
 
 
 @dataclass(frozen=True)
@@ -97,6 +101,18 @@ class TkinterShellDesignSpec:
 
 
 GuiDesignSpec = TkinterShellDesignSpec
+
+
+WORK_ORDER_STRIP_COMMAND_IDS: tuple[str, ...] = (
+    "work-order-show",
+    "work-order-validate",
+    "work-order-run",
+    "work-order-upload",
+)
+
+
+def is_work_order_strip_button(command_id: str) -> bool:
+    return command_id in WORK_ORDER_STRIP_COMMAND_IDS
 
 
 @dataclass(frozen=True)
@@ -223,7 +239,11 @@ def build_windows_style_design_spec() -> TkinterShellDesignSpec:
         ),
     )
     toolbar = tuple(_button_from_catalog(button) for button in toolbar_gui_buttons())
-    action_buttons = tuple(_button_from_catalog(button) for button in all_gui_buttons())
+    action_buttons = tuple(
+        _button_from_catalog(button)
+        for button in all_gui_buttons()
+        if not is_work_order_strip_button(button.command_id)
+    )
     return TkinterShellDesignSpec(menu_bar, toolbar, action_buttons)
 
 
@@ -397,6 +417,17 @@ def run_manual_gui_catalog_action(action_name: str) -> str:
             returncode=2,
             message="No bounded read-only runner is registered for this button.",
         )
+    if button.command_id == "work-order-upload":
+        returncode, output = runner()
+        return _catalog_action_result(
+            button.command_id,
+            button.safety_class,
+            allowed=True,
+            executed=True,
+            returncode=returncode,
+            message="Action executed through bounded fixed-path uploader.",
+            output=output,
+        )
     action = SimpleNamespace(name=button.command_id, safety_class=button.safety_class)
     result = run_bounded_read_only_action(
         [action], button.command_id, executor=lambda _action: runner()
@@ -555,6 +586,11 @@ def _run_work_order_run() -> tuple[int, str]:
     return result.returncode, render_work_order_run_result(result)
 
 
+def _run_work_order_upload() -> tuple[int, str]:
+    result = upload_next_turn_result_log()
+    return result.returncode, render_work_order_upload_result(result)
+
+
 def _run_actions_list() -> tuple[int, str]:
     lines = ["GUI_ACTIONS"]
     for button in all_gui_buttons():
@@ -588,6 +624,7 @@ MANUAL_GUI_READONLY_RUNNERS: dict[str, Callable[[], tuple[int, str]]] = {
     "work-order-show": _run_work_order_show,
     "work-order-validate": _run_work_order_validate,
     "work-order-run": _run_work_order_run,
+    "work-order-upload": _run_work_order_upload,
     "workflow-guard-check": _run_workflow_guard,
 }
 
@@ -619,7 +656,20 @@ def render_manual_launch_content(root: object) -> None:
         ),
         anchor="w",
     )
-    safety.pack(fill="x", padx=12, pady=(0, 10))
+    safety.pack(fill="x", padx=12, pady=(0, 6))
+
+    workflow_strip = ttk.Frame(root, padding=(12, 0, 12, 8))
+    workflow_strip.pack(fill="x")
+    for command_id in WORK_ORDER_STRIP_COMMAND_IDS:
+        button = get_gui_button(command_id)
+        if button is None:
+            continue
+        ttk.Button(
+            workflow_strip,
+            text=button.label,
+            command=lambda command_id=command_id: run_action_click(command_id),
+            width=22,
+        ).pack(side="left", padx=(0, 8))
 
     output_text = None
     status_text = None
@@ -692,6 +742,8 @@ def render_manual_launch_content(root: object) -> None:
         category_frame = ttk.LabelFrame(actions, text=category, padding=3)
         category_frame.pack(fill="x", pady=2)
         for button in buttons:
+            if is_work_order_strip_button(button.command_id):
+                continue
             if button.enabled:
                 ttk.Button(
                     category_frame,

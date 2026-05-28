@@ -309,6 +309,14 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         "work-order-run",
     ),
     _button(
+        "work-order-upload",
+        "Upload Result Log",
+        "Workflow Automation",
+        "Commit and push only docs/reports/terminal/next-turn-latest.log after a validated work-order run.",
+        "work-order-upload",
+        safety_class="bounded-mutation",
+    ),
+    _button(
         "agent-next",
         "Agent Next",
         "Workflow Automation",

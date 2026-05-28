@@ -1,0 +1,395 @@
+### FIX GUI WORK ORDER UPLOAD AND STRIP -- LOGGED ###
+2026-05-28 12:57:59 +0200
+### SYNC FEATURE BRANCH ###
+Already on 'gui/work-order-upload-and-strip'
+Your branch is up to date with 'origin/gui/work-order-upload-and-strip'.
+From github.com:vfi64/agentic-project-kit
+ * branch            gui/work-order-upload-and-strip -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            gui/work-order-upload-and-strip -> FETCH_HEAD
+Already up to date.
+gui/work-order-upload-and-strip
+?? docs/reports/terminal/next-turn-latest.log
+3c8ea4e Add GUI work order upload strip
+a5814aa Add GUI guarded work order execution (#872)
+7092082 Add GUI next-turn work order validation (#871)
+4a41e1f Remove redundant GUI top toolbar (#870)
+0383fd4 Make GUI action buttons compact and scrollable (#869)
+8cdf496 Record duplicate PR865 verification cleanup evidence (#868)
+### PATCH TKINTER SHELL AGAINST ACTUAL STRUCTURE ###
+patched gui_tkinter_shell.py
+### REWRITE UPLOADER TESTS WITH BARE REMOTE OUTSIDE WORKTREE ###
+rewrote tests/test_work_order_uploader.py
+### VERIFY PATCH STRUCTURE ###
+106:WORK_ORDER_STRIP_COMMAND_IDS: tuple[str, ...] = (
+107-    "work-order-show",
+108-    "work-order-validate",
+109-    "work-order-run",
+110-    "work-order-upload",
+111-)
+112-
+113-
+114-def is_work_order_strip_button(command_id: str) -> bool:
+115:    return command_id in WORK_ORDER_STRIP_COMMAND_IDS
+116-
+117-
+118-@dataclass(frozen=True)
+119-class TkinterShellSpec:
+120-    title: str
+121-    status: str
+122-    action_count: int
+123-    destructive_actions_enabled: bool
+124-    preview: str
+125-    design: TkinterShellDesignSpec
+126-
+127-
+128-def _button(
+129-    command_id: str,
+--
+663:    for command_id in WORK_ORDER_STRIP_COMMAND_IDS:
+664-        button = get_gui_button(command_id)
+665-        if button is None:
+666-            continue
+667-        ttk.Button(
+668-            workflow_strip,
+669-            text=button.label,
+670-            command=lambda command_id=command_id: run_action_click(command_id),
+671-            width=22,
+672-        ).pack(side="left", padx=(0, 8))
+673-
+674-    output_text = None
+675-    status_text = None
+676-
+677-    def set_status(value: str) -> None:
+102-
+103-GuiDesignSpec = TkinterShellDesignSpec
+104-
+105-
+106-WORK_ORDER_STRIP_COMMAND_IDS: tuple[str, ...] = (
+107-    "work-order-show",
+108-    "work-order-validate",
+109-    "work-order-run",
+110:    "work-order-upload",
+111-)
+112-
+113-
+114-def is_work_order_strip_button(command_id: str) -> bool:
+115-    return command_id in WORK_ORDER_STRIP_COMMAND_IDS
+116-
+117-
+118-@dataclass(frozen=True)
+--
+412-        return _catalog_action_result(
+413-            button.command_id,
+414-            button.safety_class,
+415-            allowed=False,
+416-            executed=False,
+417-            returncode=2,
+418-            message="No bounded read-only runner is registered for this button.",
+419-        )
+420:    if button.command_id == "work-order-upload":
+421-        returncode, output = runner()
+422-        return _catalog_action_result(
+423-            button.command_id,
+424-            button.safety_class,
+425-            allowed=True,
+426-            executed=True,
+427-            returncode=returncode,
+428-            message="Action executed through bounded fixed-path uploader.",
+--
+619-    "patch-preflight": _run_patch_preflight,
+620-    "rule-registry-check": _run_rule_registry_check,
+621-    "rule-registry-report": _run_rule_registry_report,
+622-    "state-freshness": _run_state_freshness,
+623-    "terminal-remote-preflight": _run_terminal_remote_preflight,
+624-    "work-order-show": _run_work_order_show,
+625-    "work-order-validate": _run_work_order_validate,
+626-    "work-order-run": _run_work_order_run,
+627:    "work-order-upload": _run_work_order_upload,
+628-    "workflow-guard-check": _run_workflow_guard,
+629-}
+630-
+631-
+632-def render_manual_launch_content(root: object) -> None:
+633-    import tkinter as tk
+634-    from tkinter import ttk
+635-
+653-            "Safety: manual launch; communication/workflow read-only buttons enabled; "
+654-            f"remote/destructive/parameterized buttons disabled ({enabled_count} enabled, "
+655-            f"{disabled_count} disabled)."
+656-        ),
+657-        anchor="w",
+658-    )
+659-    safety.pack(fill="x", padx=12, pady=(0, 6))
+660-
+661:    workflow_strip = ttk.Frame(root, padding=(12, 0, 12, 8))
+662:    workflow_strip.pack(fill="x")
+663-    for command_id in WORK_ORDER_STRIP_COMMAND_IDS:
+664-        button = get_gui_button(command_id)
+665-        if button is None:
+666-            continue
+667-        ttk.Button(
+668:            workflow_strip,
+669-            text=button.label,
+670-            command=lambda command_id=command_id: run_action_click(command_id),
+671-            width=22,
+672-        ).pack(side="left", padx=(0, 8))
+673-
+674-    output_text = None
+675-    status_text = None
+676-
+677-    def set_status(value: str) -> None:
+678-        if status_text is not None:
+679-            status_text.configure(text=value)
+680-            root.update_idletasks()
+681-
+682-    def write_output(value: str) -> None:
+683-        if output_text is None:
+684-            return
+110-    "work-order-upload",
+111-)
+112-
+113-
+114:def is_work_order_strip_button(command_id: str) -> bool:
+115-    return command_id in WORK_ORDER_STRIP_COMMAND_IDS
+116-
+117-
+118-@dataclass(frozen=True)
+119-class TkinterShellSpec:
+120-    title: str
+121-    status: str
+122-    action_count: int
+--
+241-    toolbar = tuple(_button_from_catalog(button) for button in toolbar_gui_buttons())
+242-    action_buttons = tuple(
+243-        _button_from_catalog(button)
+244-        for button in all_gui_buttons()
+245:        if not is_work_order_strip_button(button.command_id)
+246-    )
+247-    return TkinterShellDesignSpec(menu_bar, toolbar, action_buttons)
+248-
+249-
+250-def build_tkinter_shell_spec() -> TkinterShellSpec:
+251-    presenter = build_no_window_presenter_result(list_actions())
+252-    return TkinterShellSpec(
+253-        "agentic-project-kit Cockpit",
+--
+741-    for category, buttons in gui_buttons_by_category().items():
+742-        category_frame = ttk.LabelFrame(actions, text=category, padding=3)
+743-        category_frame.pack(fill="x", pady=2)
+744-        for button in buttons:
+745:            if is_work_order_strip_button(button.command_id):
+746-                continue
+747-            if button.enabled:
+748-                ttk.Button(
+749-                    category_frame,
+750-                    text=button.label,
+751-                    command=lambda command_id=button.command_id: run_action_click(command_id),
+752-                    width=20,
+753-                ).pack(fill="x", pady=1)
+### TARGETED TESTS AND SMOKE ###
+..........F.F.....F.F.....................F....FFF..                     [100%]
+=================================== FAILURES ===================================
+___________ test_upload_next_turn_result_log_commits_only_result_log ___________
+
+tmp_path = PosixPath('/private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pytest-of-hof/pytest-2805/test_upload_next_turn_result_l2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x106fa8b50>
+
+    def test_upload_next_turn_result_log_commits_only_result_log(tmp_path, monkeypatch):
+        repo = tmp_path / "repo"
+        repo.mkdir()
+        _init_repo(repo)
+        remote = tmp_path / "remote.git"
+        _git(["init", "--bare", str(remote)], tmp_path)
+        _git(["remote", "add", "origin", str(remote)], repo)
+        _git(["push", "-u", "origin", "HEAD"], repo)
+        monkeypatch.chdir(repo)
+    
+        log = repo / "docs/reports/terminal/next-turn-latest.log"
+        log.parent.mkdir(parents=True)
+        log.write_text("WORK_ORDER_RUN\n### RESULT: PASS ###\n", encoding="utf-8")
+    
+        result = upload_next_turn_result_log(log_path=Path("docs/reports/terminal/next-turn-latest.log"))
+    
+        rendered = render_work_order_upload_result(result)
+>       assert result.ok is True
+E       AssertionError: assert False is True
+E        +  where False = WorkOrderUploadResult(ok=False, committed=False, pushed=False, returncode=1, log_path=PosixPath('docs/reports/terminal/next-turn-latest.log'), message='refusing upload because other worktree changes exist: ?? docs/', commit_sha=None).ok
+
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_work_order_uploader.py:71: AssertionError
+_________ test_gui_button_catalog_keeps_only_readonly_buttons_enabled __________
+
+    def test_gui_button_catalog_keeps_only_readonly_buttons_enabled():
+        enabled = [button for button in all_gui_buttons() if button.enabled]
+        assert {button.command_id for button in enabled} == set(enabled_gui_button_ids())
+>       assert all(button.safety_class == "read-only" for button in enabled)
+E       assert False
+E        +  where False = all(<generator object test_gui_button_catalog_keeps_only_readonly_buttons_enabled.<locals>.<genexpr> at 0x106f32c20>)
+
+tests/test_gui_button_catalog.py:37: AssertionError
+______________ test_render_tkinter_shell_summary_is_deterministic ______________
+
+    def test_render_tkinter_shell_summary_is_deterministic():
+        output = render_tkinter_shell_summary(build_tkinter_shell_spec())
+        assert "TKINTER SHELL" in output
+        assert "status=tkinter-shell-ready" in output
+        assert "menu_count=5" in output
+        assert f"toolbar_button_count={len(toolbar_gui_buttons())}" in output
+>       assert f"action_button_count={len(all_gui_buttons())}" in output
+E       AssertionError: assert 'action_button_count=36' in 'TKINTER SHELL\ntitle=agentic-project-kit Cockpit\nstatus=tkinter-shell-ready\naction_count=36\nmenu_count=5\ntoolbar_...ndestructive_actions_enabled=false\ntoolbar_icons=branch,status,history,handoff,stethoscope,document-check,audit,guard'
+
+tests/test_v040_gui_tkinter_shell.py:61: AssertionError
+_____ test_windows_style_design_has_menu_bar_toolbar_buttons_and_tooltips ______
+
+    def test_windows_style_design_has_menu_bar_toolbar_buttons_and_tooltips():
+        design = build_windows_style_design_spec()
+        assert [menu.label for menu in design.menu_bar] == [
+            "File",
+            "Communication",
+            "Gates",
+            "View",
+            "Help",
+        ]
+        assert all(button.tooltip for button in design.toolbar)
+        assert all(button.tooltip for button in design.action_buttons)
+        assert {button.command_id for button in design.toolbar} == {
+            button.command_id for button in toolbar_gui_buttons()
+        }
+>       assert len(design.action_buttons) == len(all_gui_buttons())
+E       AssertionError: assert 32 == 36
+E        +  where 32 = len((ButtonSpec(command_id='branch-status-check', label='Branch Status', tooltip='Show current branch, HEAD, and dirty sta...fety_class='read-only', enabled=True, category='Session', implementation_state='implemented', disabled_reason=''), ...))
+E        +    where (ButtonSpec(command_id='branch-status-check', label='Branch Status', tooltip='Show current branch, HEAD, and dirty sta...fety_class='read-only', enabled=True, category='Session', implementation_state='implemented', disabled_reason=''), ...) = TkinterShellDesignSpec(menu_bar=(MenuSpec(label='File', items=(MenuItemSpec(label='Branch status', command_id='branch-...ry='Workflow Automation', implementation_state='planned', disabled_reason='remote command execution disabled in GUI'))).action_buttons
+E        +  and   36 = len((GuiButtonDefinition(command_id='branch-status-check', label='Branch Status', category='Session', tooltip='Show curren...text='bootstrap', safety_class='read-only', implementation_state='implemented', enabled=True, disabled_reason=''), ...))
+E        +    where (GuiButtonDefinition(command_id='branch-status-check', label='Branch Status', category='Session', tooltip='Show curren...text='bootstrap', safety_class='read-only', implementation_state='implemented', enabled=True, disabled_reason=''), ...) = all_gui_buttons()
+
+tests/test_v040_gui_tkinter_shell.py:86: AssertionError
+____ test_manual_gui_catalog_runs_work_order_upload_with_missing_log_block _____
+
+    def test_manual_gui_catalog_runs_work_order_upload_with_missing_log_block():
+        from agentic_project_kit.gui_tkinter_shell import run_manual_gui_catalog_action
+    
+        output = run_manual_gui_catalog_action("work-order-upload")
+    
+        assert "action=work-order-upload" in output
+        assert "allowed=true" in output
+        assert "executed=true" in output
+        assert "WORK_ORDER_UPLOAD_RESULT" in output
+>       assert "missing result log" in output
+E       AssertionError: assert 'missing result log' in 'GUI ACTION EXECUTION RESULT\naction=work-order-upload\nsafety_class=bounded-mutation\nallowed=true\nexecuted=true\nre...M src/agentic_project_kit/gui_tkinter_shell.py;  M tests/test_work_order_uploader.py\n### RESULT: FAIL ###\noutput_end'
+
+tests/test_v040_gui_tkinter_shell.py:465: AssertionError
+__ test_render_layout_to_tkinter_preserves_menu_toolbar_actions_and_tooltips ___
+
+    def test_render_layout_to_tkinter_preserves_menu_toolbar_actions_and_tooltips():
+        result = render_layout_to_tkinter(FakeRoot(), build_layout_plan())
+        assert len(result.widgets_by_kind("menu")) == 5
+        assert len(result.widgets_by_kind("toolbar_button")) == len(toolbar_gui_buttons())
+>       assert len(result.widgets_by_kind("action_button")) == len(all_gui_buttons())
+E       AssertionError: assert 32 == 36
+E        +  where 32 = len((RenderedWidget(node_id='action-branch-status-check', kind='action_button', label='Branch Status', parent='actions', e...ootstrap file.', icon_id='bootstrap', category='Session', implementation_state='implemented', disabled_reason=''), ...))
+E        +    where (RenderedWidget(node_id='action-branch-status-check', kind='action_button', label='Branch Status', parent='actions', e...ootstrap file.', icon_id='bootstrap', category='Session', implementation_state='implemented', disabled_reason=''), ...) = widgets_by_kind('action_button')
+E        +      where widgets_by_kind = TkinterRenderResult(title='agentic-project-kit Cockpit', geometry='1000x650', widgets=(RenderedWidget(node_id='root', ...d_id='', tooltip='', icon_id='', category='', implementation_state='', disabled_reason='')), destructive_enabled=False).widgets_by_kind
+E        +  and   36 = len((GuiButtonDefinition(command_id='branch-status-check', label='Branch Status', category='Session', tooltip='Show curren...text='bootstrap', safety_class='read-only', implementation_state='implemented', enabled=True, disabled_reason=''), ...))
+E        +    where (GuiButtonDefinition(command_id='branch-status-check', label='Branch Status', category='Session', tooltip='Show curren...text='bootstrap', safety_class='read-only', implementation_state='implemented', enabled=True, disabled_reason=''), ...) = all_gui_buttons()
+
+tests/test_v040_gui_tkinter_renderer.py:34: AssertionError
+_____________ test_render_tkinter_result_summary_is_deterministic ______________
+
+    def test_render_tkinter_result_summary_is_deterministic():
+        output = render_tkinter_result_summary(
+            render_layout_to_tkinter(FakeRoot(), build_layout_plan())
+        )
+        assert "TKINTER RENDER RESULT" in output
+        assert "menu_count=5" in output
+        assert f"toolbar_button_count={len(toolbar_gui_buttons())}" in output
+>       assert f"action_button_count={len(all_gui_buttons())}" in output
+E       AssertionError: assert 'action_button_count=36' in 'TKINTER RENDER RESULT\ntitle=agentic-project-kit Cockpit\ngeometry=1000x650\nwidget_count=68\nmenu_count=5\ntoolbar_b...ommit-prepare,finalize-log,release-plan,release-verify,release-publish,agent-next,agent-run\ndestructive_enabled=false'
+
+tests/test_v040_gui_tkinter_renderer.py:49: AssertionError
+______ test_shell_spec_has_windows_style_menu_toolbar_and_action_buttons _______
+
+    def test_shell_spec_has_windows_style_menu_toolbar_and_action_buttons():
+        spec = build_tkinter_shell_spec()
+        assert [menu.label for menu in spec.design.menu_bar] == [
+            "File",
+            "Communication",
+            "Gates",
+            "View",
+            "Help",
+        ]
+        assert len(spec.design.toolbar) == len(toolbar_gui_buttons())
+>       assert len(spec.design.action_buttons) == len(all_gui_buttons())
+E       AssertionError: assert 32 == 36
+E        +  where 32 = len((ButtonSpec(command_id='branch-status-check', label='Branch Status', tooltip='Show current branch, HEAD, and dirty sta...fety_class='read-only', enabled=True, category='Session', implementation_state='implemented', disabled_reason=''), ...))
+E        +    where (ButtonSpec(command_id='branch-status-check', label='Branch Status', tooltip='Show current branch, HEAD, and dirty sta...fety_class='read-only', enabled=True, category='Session', implementation_state='implemented', disabled_reason=''), ...) = TkinterShellDesignSpec(menu_bar=(MenuSpec(label='File', items=(MenuItemSpec(label='Branch status', command_id='branch-...ry='Workflow Automation', implementation_state='planned', disabled_reason='remote command execution disabled in GUI'))).action_buttons
+E        +      where TkinterShellDesignSpec(menu_bar=(MenuSpec(label='File', items=(MenuItemSpec(label='Branch status', command_id='branch-...ry='Workflow Automation', implementation_state='planned', disabled_reason='remote command execution disabled in GUI'))) = TkinterShellSpec(title='agentic-project-kit Cockpit', status='tkinter-shell-ready', action_count=36, destructive_actio...y='Workflow Automation', implementation_state='planned', disabled_reason='remote command execution disabled in GUI')))).design
+E        +  and   36 = len((GuiButtonDefinition(command_id='branch-status-check', label='Branch Status', category='Session', tooltip='Show curren...text='bootstrap', safety_class='read-only', implementation_state='implemented', enabled=True, disabled_reason=''), ...))
+E        +    where (GuiButtonDefinition(command_id='branch-status-check', label='Branch Status', category='Session', tooltip='Show curren...text='bootstrap', safety_class='read-only', implementation_state='implemented', enabled=True, disabled_reason=''), ...) = all_gui_buttons()
+
+tests/test_v040_gui_menu_toolbar_tooltip_icon_contract.py:29: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_work_order_uploader.py::test_upload_next_turn_result_log_commits_only_result_log
+FAILED tests/test_gui_button_catalog.py::test_gui_button_catalog_keeps_only_readonly_buttons_enabled
+FAILED tests/test_v040_gui_tkinter_shell.py::test_render_tkinter_shell_summary_is_deterministic
+FAILED tests/test_v040_gui_tkinter_shell.py::test_windows_style_design_has_menu_bar_toolbar_buttons_and_tooltips
+FAILED tests/test_v040_gui_tkinter_shell.py::test_manual_gui_catalog_runs_work_order_upload_with_missing_log_block
+FAILED tests/test_v040_gui_tkinter_renderer.py::test_render_layout_to_tkinter_preserves_menu_toolbar_actions_and_tooltips
+FAILED tests/test_v040_gui_tkinter_renderer.py::test_render_tkinter_result_summary_is_deterministic
+FAILED tests/test_v040_gui_menu_toolbar_tooltip_icon_contract.py::test_shell_spec_has_windows_style_menu_toolbar_and_action_buttons
+8 failed, 44 passed in 0.67s
+TKINTER SHELL
+title=agentic-project-kit Cockpit
+status=tkinter-shell-ready
+action_count=36
+menu_count=5
+toolbar_button_count=8
+action_button_count=32
+destructive_actions_enabled=false
+toolbar_icons=branch,status,history,handoff,stethoscope,document-check,audit,guard
+### RESULT: PASS ###
+All checks passed!
+### COPY FIX LOG TO REPO PATH BEFORE SUMMARY ###
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-28 12:58:05 +0200
+
+SLICE
+  NAME: GUI work-order upload and horizontal strip fix
+  SCOPE: Repair PR873 after failed marker-based layout patch and failed uploader test.
+  BRANCH: gui/work-order-upload-and-strip
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: bounded mutation for one fixed result log path only; no broad git add, no PR merge, no release, no destructive action
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: 873
+  HEAD_SHA: 3c8ea4e7710a306ddd390aa423074f65f32fca41
+  CI: PENDING_AFTER_PUSH
+  MERGE: NOT_APPLICABLE
+
+EVIDENCE FILES
+  terminal_log: /tmp/agentic-project-kit/gui-work-order-upload-and-strip-fix.log
+  terminal_log_remote: docs/reports/terminal/gui-work-order-upload-and-strip-fix.log
+  terminal_log_local: /tmp/agentic-project-kit/gui-work-order-upload-and-strip-fix.log
+  command_report: py_compile plus targeted uploader/work-order/GUI pytest/no-window-smoke/ruff
+
+INTERPRETATION
+  The first PR873 patch failed to insert the workflow strip because it targeted an obsolete layout marker, left upload without a registered GUI runner, and used a test remote inside the worktree. This fix patches the actual Tkinter layout, registers the fixed-path uploader, permits only the explicit work-order-upload bounded mutation path, removes work-order duplicates from the sidebar, and reruns targeted checks.
+
+NEXT
+  SAFE_STEP: Push fix to PR873, wait for machine-readable CI, merge only if clean, sync main, then test full Show/Validate/Run/Upload path.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================

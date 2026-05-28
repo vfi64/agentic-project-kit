@@ -1,4 +1,5 @@
 from agentic_project_kit.gui_tkinter_shell import (
+    WORK_ORDER_STRIP_COMMAND_IDS,
     build_tkinter_shell_spec,
     build_windows_style_design_spec,
     configure_tkinter_root,
@@ -58,7 +59,7 @@ def test_render_tkinter_shell_summary_is_deterministic():
     assert "status=tkinter-shell-ready" in output
     assert "menu_count=5" in output
     assert f"toolbar_button_count={len(toolbar_gui_buttons())}" in output
-    assert f"action_button_count={len(all_gui_buttons())}" in output
+    assert f"action_button_count={len([button for button in all_gui_buttons() if button.command_id not in WORK_ORDER_STRIP_COMMAND_IDS])}" in output
     assert "destructive_actions_enabled=false" in output
 
 
@@ -83,7 +84,7 @@ def test_windows_style_design_has_menu_bar_toolbar_buttons_and_tooltips():
     assert {button.command_id for button in design.toolbar} == {
         button.command_id for button in toolbar_gui_buttons()
     }
-    assert len(design.action_buttons) == len(all_gui_buttons())
+    assert len(design.action_buttons) == len([button for button in all_gui_buttons() if button.command_id not in WORK_ORDER_STRIP_COMMAND_IDS])
     assert set(enabled_gui_button_ids()) >= {
         "branch-status-check",
         "next-turn-status",
@@ -453,6 +454,48 @@ def test_manual_gui_catalog_runs_work_order_runner_with_validation_block():
     assert "validation_ok=false" in output
 
 
+def test_manual_gui_catalog_runs_work_order_upload_with_missing_log_block(tmp_path, monkeypatch):
+    import subprocess
+
+    from agentic_project_kit.gui_tkinter_shell import run_manual_gui_catalog_action
+
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True, text=True)
+    subprocess.run(
+        ["git", "config", "user.email", "test@example.invalid"],
+        cwd=repo,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "Test User"],
+        cwd=repo,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    (repo / "README.md").write_text("repo\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=repo, check=True, capture_output=True, text=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Initial commit"],
+        cwd=repo,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    monkeypatch.chdir(repo)
+
+    output = run_manual_gui_catalog_action("work-order-upload")
+
+    assert "action=work-order-upload" in output
+    assert "allowed=true" in output
+    assert "executed=true" in output
+    assert "WORK_ORDER_UPLOAD_RESULT" in output
+    assert "missing result log" in output
+
+
 def test_manual_gui_catalog_blocks_planned_mutating_buttons():
     from agentic_project_kit.gui_tkinter_shell import run_manual_gui_catalog_action
 
@@ -474,3 +517,13 @@ def test_manual_gui_check_docs_status_transition_contract_is_present():
     assert "check-docs" in {button.command_id for button in all_gui_buttons()}
     assert "run_action_click(command_id)" in manual_source
     assert "Status: success | branch: main | action: {command_id}" in manual_source
+
+def test_work_order_strip_command_ids_are_not_empty():
+    from agentic_project_kit.gui_tkinter_shell import WORK_ORDER_STRIP_COMMAND_IDS
+
+    assert WORK_ORDER_STRIP_COMMAND_IDS == (
+        "work-order-show",
+        "work-order-validate",
+        "work-order-run",
+        "work-order-upload",
+    )
