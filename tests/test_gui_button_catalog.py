@@ -34,7 +34,15 @@ def test_gui_button_catalog_covers_communication_and_workflow_surface():
 def test_gui_button_catalog_keeps_only_readonly_buttons_enabled():
     enabled = [button for button in all_gui_buttons() if button.enabled]
     assert {button.command_id for button in enabled} == set(enabled_gui_button_ids())
-    assert all(button.safety_class == "read-only" or button.command_id == "work-order-upload" for button in enabled)\n    assert any(button.command_id == "work-order-upload" and button.safety_class == "bounded-mutation" for button in enabled)
+    assert all(
+        button.safety_class == "read-only" or button.command_id == "work-order-upload"
+        for button in enabled
+    )
+    assert any(
+        button.command_id == "work-order-upload"
+        and button.safety_class == "bounded-mutation"
+        for button in enabled
+    )
     assert {"agent-run", "merge-if-green", "release-publish"} <= set(disabled_gui_button_ids())
     assert all(button.disabled_reason for button in all_gui_buttons() if not button.enabled)
 

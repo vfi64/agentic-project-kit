@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from agentic_project_kit.gui_button_catalog import all_gui_buttons, toolbar_gui_buttons
+from agentic_project_kit.gui_tkinter_shell import WORK_ORDER_STRIP_COMMAND_IDS
 from agentic_project_kit.gui_dry_run import render_result, run_gui_dry_run
 
 
