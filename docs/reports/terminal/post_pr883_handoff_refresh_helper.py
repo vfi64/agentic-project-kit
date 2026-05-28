@@ -126,9 +126,12 @@ def main() -> int:
     rc, out = run_capture(["git", "rev-parse", "HEAD"])
     current = out.strip()
     log.append(f"current_head={current}")
-    if rc != 0 or current != HEAD:
+    rc, out = run_capture(["git", "merge-base", "--is-ancestor", HEAD, "HEAD"])
+    head_is_ancestor = rc == 0
+    log.append(f"target_head_is_ancestor={head_is_ancestor}")
+    if not head_is_ancestor:
         log.append("result=FAIL")
-        log.append("error=helper must run on post-PR883 main head before patching")
+        log.append("error=helper branch must contain post-PR883 main head before patching")
         LOG_PATH.write_text("\n".join(log) + "\n", encoding="utf-8")
         print(LOG_PATH)
         print("result=FAIL")
