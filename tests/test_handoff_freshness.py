@@ -169,3 +169,70 @@ def test_handoff_freshness_guard_accepts_freshly_rendered_successor_prompt_text(
     )
 
     assert warnings == []
+
+def test_handoff_freshness_guard_accepts_administrative_github_merge_commit(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    handoff_path = tmp_path / ".agentic" / "handoff_state.yaml"
+    prompt_path = tmp_path / "docs" / "reports" / "terminal" / "after-pr878.md"
+    _write(tmp_path / "docs" / "STATUS.md", "status for admin refresh\n")
+    _write(tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md", "handoff for admin refresh\n")
+    _write(handoff_path, "schema_version: 1\n")
+    _write(prompt_path, "successor prompt generated for 162fa44\n")
+    data = {
+        "safe_state": {"commit": "5b30fe3"},
+        "administrative_evidence_state": {"current_head": "162fa44"},
+        "handoff_maintenance": {
+            "latest_successor_prompt": "docs/reports/terminal/after-pr878.md",
+        },
+    }
+
+    monkeypatch.setattr(
+        "agentic_project_kit.handoff_freshness._git_parent_commits",
+        lambda project_root, commit: ["162fa44", "35918d9"],
+    )
+
+    warnings = assess_handoff_prompt_freshness(
+        data,
+        handoff_path,
+        current_head="ce0ea15",
+        current_subject="Merge pull request #878 from vfi64/docs/v044-post-pr877-handoff-refresh\n\nRefresh handoff state after PR877",
+    )
+
+    assert warnings == []
+
+
+def test_handoff_freshness_guard_rejects_non_admin_github_merge_commit(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    handoff_path = tmp_path / ".agentic" / "handoff_state.yaml"
+    prompt_path = tmp_path / "docs" / "reports" / "terminal" / "after-pr878.md"
+    _write(tmp_path / "docs" / "STATUS.md", "status for admin refresh\n")
+    _write(tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md", "handoff for admin refresh\n")
+    _write(handoff_path, "schema_version: 1\n")
+    _write(prompt_path, "successor prompt generated for 162fa44\n")
+    data = {
+        "safe_state": {"commit": "5b30fe3"},
+        "administrative_evidence_state": {"current_head": "162fa44"},
+        "handoff_maintenance": {
+            "latest_successor_prompt": "docs/reports/terminal/after-pr878.md",
+        },
+    }
+
+    monkeypatch.setattr(
+        "agentic_project_kit.handoff_freshness._git_parent_commits",
+        lambda project_root, commit: ["162fa44", "abcdef0"],
+    )
+
+    warnings = assess_handoff_prompt_freshness(
+        data,
+        handoff_path,
+        current_head="fedcba0",
+        current_subject="Merge pull request #999 from vfi64/feature/product-change\n\nAdd product behavior",
+    )
+
+    assert any("not represented by handoff safe/admin state" in warning for warning in warnings)
+    assert any("does not mention current handoff commit marker" in warning for warning in warnings)
+

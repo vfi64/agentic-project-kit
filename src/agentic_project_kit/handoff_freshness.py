@@ -43,12 +43,25 @@ def assess_handoff_prompt_freshness(
 
     detected_head = _short_commit(current_head) if current_head else _git_short_head(project_root)
     detected_subject = current_subject if current_subject is not None else _git_head_subject(project_root)
+    detected_message = (
+        current_subject
+        if current_subject is not None
+        else _git_head_message(project_root)
+    )
     expected_commits = _expected_handoff_commits(data)
     admin_refresh_head = bool(
         detected_head
         and expected_commits
         and not _commit_matches(detected_head, expected_commits)
-        and is_administrative_evidence_subject(detected_subject)
+        and (
+            is_administrative_evidence_subject(detected_subject)
+            or _is_administrative_merge_commit(
+                project_root,
+                detected_head,
+                detected_message,
+                expected_commits,
+            )
+        )
     )
     if (
         detected_head
@@ -136,6 +149,61 @@ def _git_head_subject(project_root: Path) -> str:
         ).strip()
     except (OSError, subprocess.CalledProcessError):
         return ""
+
+
+def _git_head_message(project_root: Path) -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "log", "-1", "--pretty=%B"],
+            cwd=project_root,
+            stderr=subprocess.DEVNULL,
+            text=True,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return ""
+
+
+def _git_parent_commits(project_root: Path, commit: str) -> list[str]:
+    try:
+        parents = subprocess.check_output(
+            ["git", "show", "-s", "--pretty=%P", commit],
+            cwd=project_root,
+            stderr=subprocess.DEVNULL,
+            text=True,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return []
+    return [_short_commit(parent) for parent in parents.split() if parent.strip()]
+
+
+def _is_administrative_merge_commit(
+    project_root: Path,
+    detected_head: str,
+    detected_message: str,
+    expected_commits: list[str],
+) -> bool:
+    """Return true for GitHub merge commits that only merge administrative handoff/evidence work.
+
+    A normal product merge must still trigger the freshness guard. Therefore the
+    check requires both a GitHub-style merge message and administrative wording
+    in the full merge message, plus a parent already represented by handoff
+    safe/admin state.
+    """
+
+    message = detected_message.lower()
+    if not message.startswith("merge pull request #"):
+        return False
+    administrative_terms = (
+        "handoff",
+        "successor",
+        "closeout",
+        "evidence",
+        "refresh",
+    )
+    if not any(term in message for term in administrative_terms):
+        return False
+    parents = _git_parent_commits(project_root, detected_head)
+    return any(_commit_matches(parent, expected_commits) for parent in parents)
 
 
 def _expected_handoff_commits(data: dict[str, Any]) -> list[str]:
