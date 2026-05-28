@@ -169,6 +169,10 @@ documents:
     class: planning
     owner: maintainers
     notes: Full structured Tkinter workbench GUI plan with complete button catalog, staged enablement, dispatch integration, and evidence requirements.
+  - path: docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
+    class: planning
+    owner: maintainers
+    notes: Read-only implementation-surface inventory for the GUI deterministic gatekeeper migration.
   - path: docs/handoff/CURRENT_HANDOFF.md
     class: planning
     owner: maintainers
