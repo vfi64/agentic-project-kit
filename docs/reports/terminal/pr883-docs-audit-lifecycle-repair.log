@@ -1,0 +1,36 @@
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches known 
+structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Dokumentationsregistry
+- registry=docs/DOCUMENTATION_REGISTRY.yaml
+- version=1
+- documents=22
+- broad_migration_allowed=False
+- class:architecture=1
+- class:evidence/log=2
+- class:generated artifact=1
+- class:governance/system=4
+- class:operational/automation=4
+- class:planning=7
+- class:release=2
+- class:user-facing description=1
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
