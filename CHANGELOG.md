@@ -1,3 +1,14 @@
+## v0.4.4 - 2026-05-28
+
+- Release: prepare a safety baseline after PR #874 so the post-PR873 GUI upload-strip state and the deterministic gatekeeper migration plan are frozen before implementation work starts.
+- Planning: preserve `docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md` as the migration roadmap for classifier, summary validation, upload preflight, next-action derivation, shell-route inventory, and handoff freshness gates.
+- Governance: carry forward the required sequence: finish the planning release checkpoint, publish v0.4.4, generate a fresh successor-chat handoff, then start the gatekeeper migration series in small reversible PRs.
+- Safety: no gatekeeper implementation, GUI feature expansion, remote-mutation enablement, or release-publication side effects belong in the release-prep PR.
+- Evidence: release-check, full tests, documentation gates, doctor, package build, and twine validation are required before tag publication.
+
+Zenodo verification pending until GitHub Release publication and archive processing.
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
 ## v0.4.3 - 2026-05-26
 
 - Release: publish a safety baseline after PR #812 so the merged PR811 closeout, evidence logs, protected-diff hardening, and Tk window-smoke guard are included in the rollback point.
