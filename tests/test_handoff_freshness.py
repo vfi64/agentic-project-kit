@@ -145,3 +145,27 @@ def test_handoff_freshness_guard_renders_prominent_warning() -> None:
     assert "WARNING" in guard
     assert "successor handoff prompt may be stale" in guard
     assert "docs/STATUS.md" in guard
+
+def test_handoff_freshness_guard_accepts_freshly_rendered_successor_prompt_text(tmp_path: Path) -> None:
+    handoff_path = tmp_path / ".agentic" / "handoff_state.yaml"
+    prompt_path = tmp_path / "docs" / "reports" / "terminal" / "after-pr876.md"
+    _write(tmp_path / "docs" / "STATUS.md", "status for abc8760\n")
+    _write(tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md", "handoff for abc8760\n")
+    _write(handoff_path, "schema_version: 1\n")
+    _write(prompt_path, "old prompt without current marker\n")
+    data = {
+        "safe_state": {"commit": "safe8730"},
+        "administrative_evidence_state": {"current_head": "abc8760"},
+        "handoff_maintenance": {
+            "latest_successor_prompt": "docs/reports/terminal/after-pr876.md",
+        },
+    }
+
+    warnings = assess_handoff_prompt_freshness(
+        data,
+        handoff_path,
+        current_head="abc8760",
+        successor_prompt_text="fresh prompt for abc8760\n",
+    )
+
+    assert warnings == []

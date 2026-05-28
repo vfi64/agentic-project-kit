@@ -24,6 +24,7 @@ def assess_handoff_prompt_freshness(
     *,
     current_head: str | None = None,
     current_subject: str | None = None,
+    successor_prompt_text: str | None = None,
 ) -> list[str]:
     """Return warnings when a successor handoff prompt may be stale.
 
@@ -72,7 +73,10 @@ def assess_handoff_prompt_freshness(
         return warnings
 
     marker_commits = expected_commits if admin_refresh_head else ([detected_head] if detected_head else expected_commits)
-    prompt_text = successor_prompt_path.read_text(encoding="utf-8")
+    if successor_prompt_text is None:
+        prompt_text = successor_prompt_path.read_text(encoding="utf-8")
+    else:
+        prompt_text = successor_prompt_text
     if marker_commits and not any(commit and commit in prompt_text for commit in marker_commits):
         relative_prompt = _relative_to_project(successor_prompt_path, project_root)
         joined = ", ".join(marker_commits)

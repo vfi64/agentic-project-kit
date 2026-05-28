@@ -1,10 +1,3 @@
-## Handoff Freshness Guard
-
-WARNING: this successor handoff prompt may be stale.
-Refresh `docs/STATUS.md`, `.agentic/handoff_state.yaml`, `docs/handoff/CURRENT_HANDOFF.md`, and the successor prompt before treating this prompt as authoritative.
-
-- latest successor handoff prompt docs/reports/terminal/post-pr836-successor-handoff.md does not mention current handoff commit marker(s): 5b30fe3, 777d957
-
 # Übergabeprompt
 
 ## 1. Arbeitsumgebung
@@ -25,18 +18,18 @@ Working tree expected clean: `True`
 
 Administrative Evidence Commits nach dem fachlichen Safe-State sind erlaubt, wenn sie nur Logs, Handoff, Summary oder Evidence aktualisieren. Sie ändern den fachlichen Safe-State nicht.
 
-Current HEAD at generation time: `777d957474318fdf797ca23625e52046c3fb7df0`
-HEAD subject: Refresh post-PR837 administrative handoff state (#838)
+Current HEAD at generation time: `02a69aafcb4c46ad0d3db7db292751efbe3f4f0c`
+HEAD subject: Record v0.4.4 successor handoff prompt
 Allowed after safe state: `True`
-Reason: Post-PR838 administrative handoff/bootstrap refresh; no product-state change.
+Reason: v0.4.4 release, DOI metadata, final closeout, and successor handoff evidence after substantive safe_state
 
 ## 3. Release- und Produktstand
 
-Current version: `0.4.3`
-Previous version: `0.4.2`
-Tag: `v0.4.3`
+Current version: `0.4.4`
+Previous version: `0.4.3`
+Tag: `v0.4.4`
 Zenodo concept DOI: `10.5281/zenodo.20101359`
-Zenodo version DOI: `10.5281/zenodo.20393329`
+Zenodo version DOI: `10.5281/zenodo.20431326`
 Post-release check: `PASS`
 
 ## 4. Pflichtquellen vor jeder Mutation
@@ -106,6 +99,8 @@ Final-Summary-Vokabular:
 
 ## 8. Abgeschlossen seit letzter Übergabe
 
+- PR #876 recorded v0.4.4 DOI metadata and post-release evidence at docs/reports/terminal/v044-post-release-verify.log.
+- PR #875 prepared v0.4.4 release metadata, after which v0.4.4 was tagged and post-release verified with Zenodo version DOI 10.5281/zenodo.20431326.
 - PR #874 records the GUI deterministic gatekeeper migration plan in docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md as planning-only work.
 - PR #873 added the GUI work order upload strip and was verified by docs/reports/terminal/pr873-final-main-closeout.log.
 - PR #838 refreshed post-PR837 administrative handoff state and preserved the last substantive safe-state distinction.
