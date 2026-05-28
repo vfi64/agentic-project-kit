@@ -1,3 +1,15 @@
+## Post-PR881 Bootstrap Refresh State
+
+Current verified main HEAD: `1bb1c0d4b1f0d937314f245217cda9266ed0d106` (`1bb1c0d`).
+Commit subject: `Refresh bootstrap handoff after PR880`.
+
+PR #881 merged the post-PR880 bootstrap/handoff refresh. Its merge commit used a custom subject, so this administrative refresh records the actual post-PR881 main HEAD before any GUI product work.
+
+Current verified release remains v0.4.4.
+Verified Zenodo version DOI remains `10.5281/zenodo.20431326`.
+
+Next safe step after this refresh is merged and verified: start the GUI deterministic gatekeeper migration only as the smallest reversible read-only inspection/inventory slice.
+
 ## Post-PR880 Bootstrap Refresh State
 
 Current verified main HEAD: `f853ccf770e5f692ca2815912b252e453259fc69` (`f853ccf`).
