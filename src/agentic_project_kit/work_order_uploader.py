@@ -40,6 +40,22 @@ def _status_short() -> list[str]:
     return [line for line in output.splitlines() if line.strip()]
 
 
+def _allowed_dirty_lines_for_log_path(log_path: Path) -> set[str]:
+    path = str(log_path)
+    allowed = {
+        "?? " + path,
+        " M " + path,
+        "M  " + path,
+        "A  " + path,
+    }
+
+    parts = path.split("/")
+    for index in range(1, len(parts)):
+        allowed.add("?? " + "/".join(parts[:index]) + "/")
+
+    return allowed
+
+
 def upload_next_turn_result_log(
     *,
     log_path: Path = RESULT_LOG_PATH,
@@ -56,7 +72,7 @@ def upload_next_turn_result_log(
         )
 
     dirty = _status_short()
-    allowed_dirty = {"?? " + str(log_path), " M " + str(log_path), "M  " + str(log_path), "A  " + str(log_path)}
+    allowed_dirty = _allowed_dirty_lines_for_log_path(log_path)
     disallowed = [line for line in dirty if line not in allowed_dirty]
     if disallowed:
         return WorkOrderUploadResult(
