@@ -163,6 +163,45 @@ def _git_head_message(project_root: Path) -> str:
         return ""
 
 
+def _git_commit_subject(project_root: Path, commit: str) -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "log", "-1", "--pretty=%s", commit],
+            cwd=project_root,
+            stderr=subprocess.DEVNULL,
+            text=True,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return ""
+
+
+def _git_commit_message(project_root: Path, commit: str) -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "log", "-1", "--pretty=%B", commit],
+            cwd=project_root,
+            stderr=subprocess.DEVNULL,
+            text=True,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return ""
+
+
+def _is_administrative_merge_message(message: str) -> bool:
+    lowered = message.lower()
+    if not lowered.startswith("merge pull request #"):
+        return False
+    administrative_terms = (
+        "handoff",
+        "successor",
+        "closeout",
+        "evidence",
+        "refresh",
+        "freshness",
+    )
+    return any(term in lowered for term in administrative_terms)
+
+
 def _git_parent_commits(project_root: Path, commit: str) -> list[str]:
     try:
         parents = subprocess.check_output(
@@ -191,19 +230,47 @@ def _is_administrative_merge_commit(
     """
 
     message = detected_message.lower()
-    if not message.startswith("merge pull request #"):
-        return False
-    administrative_terms = (
-        "handoff",
-        "successor",
-        "closeout",
-        "evidence",
-        "refresh",
-    )
-    if not any(term in message for term in administrative_terms):
+    if not _is_administrative_merge_message(message):
         return False
     parents = _git_parent_commits(project_root, detected_head)
-    return any(_commit_matches(parent, expected_commits) for parent in parents)
+    if any(_commit_matches(parent, expected_commits) for parent in parents):
+        return True
+    return _has_expected_commit_in_first_parent_admin_chain(
+        project_root,
+        detected_head,
+        expected_commits,
+    )
+
+
+def _has_expected_commit_in_first_parent_admin_chain(
+    project_root: Path,
+    start_commit: str,
+    expected_commits: list[str],
+    *,
+    max_depth: int = 20,
+) -> bool:
+    """Accept bounded chains of administrative GitHub merge commits.
+
+    This prevents a loop where every administrative merge commit requires a new
+    handoff-state refresh. The walk is deliberately first-parent and bounded:
+    product merges still warn unless every merge on the path is itself
+    administrative and the chain reaches an already represented commit.
+    """
+
+    current = start_commit
+    for _ in range(max_depth):
+        parents = _git_parent_commits(project_root, current)
+        if not parents:
+            return False
+        first_parent = parents[0]
+        if _commit_matches(first_parent, expected_commits):
+            return True
+        subject = _git_commit_subject(project_root, first_parent)
+        message = _git_commit_message(project_root, first_parent)
+        if not _is_administrative_merge_message(message or subject):
+            return False
+        current = first_parent
+    return False
 
 
 def _expected_handoff_commits(data: dict[str, Any]) -> list[str]:
