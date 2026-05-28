@@ -119,6 +119,14 @@ def render_markdown(files: list[str], classification: Classification) -> str:
         "",
         "The next slice must refine this inventory into deterministic implementation targets for result/log classification, summary validation, upload/evidence preflight, work-order routing, action registry, GUI display, handoff freshness, PR/merge readiness, and shell-adapter migration.",
         "",
+        "## Slice gate requirement",
+        "",
+        "A helper-local PASS is not a slice PASS. A repo-backed helper may validate its own generated artifacts, but the slice is not ready for PR creation, upload, or merge until the matching repository governance gates also pass.",
+        "",
+        "For documentation or planning slices, the minimum follow-up gate set is: handoff check, check-docs, docs-audit, doctor, and targeted tests for the touched governance or documentation subsystem. Full pytest is required when the touched files, generator behavior, or governance rules can affect global repository checks.",
+        "",
+        "This explicitly captures the failure mode observed in PR883: the inventory generator reported result=PASS, but the repository-level documentation audit still failed in CI. Future GUI gatekeeper work must classify this as BLOCKED_BY_MISSING_REPO_GATES or BLOCKED_BY_REPO_GOVERNANCE_FAIL rather than READY_TO_CONTINUE.",
+        "",
         "## Standard failure modes to cover",
         "",
         "- Long manual shell blocks, heredocs, and risky multiline quote states must not be normal evidence-bearing workflows.",
@@ -127,6 +135,7 @@ def render_markdown(files: list[str], classification: Classification) -> str:
         "- LLM-to-terminal execution should flow through repo-backed work orders or registered actions, not ad-hoc shell blocks.",
         "- Administrative handoff/refresh merges must not create handoff freshness drift through unsupported custom merge subjects.",
         "- Shell quoting must not allow Markdown/code markers such as backticks to disappear through command substitution.",
+        "- Helper-local PASS must not be treated as slice PASS until matching repository governance gates also pass.",
         "",
         "## Non-goals",
         "",
@@ -148,9 +157,17 @@ def validate(files: list[str], markdown: str, classification: Classification) ->
         errors.append(f"inventory contains excluded or empty paths: {bad_files[:5]}")
     if "\n- \n" in markdown or markdown.endswith("\n- \n"):
         errors.append("markdown contains empty bullet points")
-    for section in ["## Current inventory", "## Initial gatekeeper area classification", "## Standard failure modes to cover", "## Non-goals"]:
+    for section in ["## Current inventory", "## Initial gatekeeper area classification", "## Slice gate requirement", "## Standard failure modes to cover", "## Non-goals"]:
         if section not in markdown:
             errors.append(f"missing section: {section}")
+    required_phrases = [
+        "A helper-local PASS is not a slice PASS.",
+        "BLOCKED_BY_MISSING_REPO_GATES",
+        "BLOCKED_BY_REPO_GOVERNANCE_FAIL",
+    ]
+    for phrase in required_phrases:
+        if phrase not in markdown:
+            errors.append(f"missing required planning phrase: {phrase}")
     non_empty_areas = sum(1 for selected in classification.areas.values() if selected)
     if non_empty_areas < 5:
         errors.append(f"too few classified areas have entries: {non_empty_areas}")
