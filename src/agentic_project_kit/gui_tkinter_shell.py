@@ -52,6 +52,10 @@ from agentic_project_kit.work_order_validator import (
     render_work_order_validation,
     validate_work_order_file,
 )
+from agentic_project_kit.work_order_runner import (
+    render_work_order_run_result,
+    run_validated_work_order,
+)
 
 
 @dataclass(frozen=True)
@@ -546,6 +550,11 @@ def _run_work_order_validate() -> tuple[int, str]:
     return (0 if result.ok else 1), render_work_order_validation(result)
 
 
+def _run_work_order_run() -> tuple[int, str]:
+    result = run_validated_work_order()
+    return result.returncode, render_work_order_run_result(result)
+
+
 def _run_actions_list() -> tuple[int, str]:
     lines = ["GUI_ACTIONS"]
     for button in all_gui_buttons():
@@ -578,6 +587,7 @@ MANUAL_GUI_READONLY_RUNNERS: dict[str, Callable[[], tuple[int, str]]] = {
     "terminal-remote-preflight": _run_terminal_remote_preflight,
     "work-order-show": _run_work_order_show,
     "work-order-validate": _run_work_order_validate,
+    "work-order-run": _run_work_order_run,
     "workflow-guard-check": _run_workflow_guard,
 }
 

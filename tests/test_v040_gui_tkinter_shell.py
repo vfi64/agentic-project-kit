@@ -440,6 +440,19 @@ def test_manual_gui_catalog_runs_work_order_validation_readonly():
     assert "missing work order file" in output
 
 
+def test_manual_gui_catalog_runs_work_order_runner_with_validation_block():
+    from agentic_project_kit.gui_tkinter_shell import run_manual_gui_catalog_action
+
+    output = run_manual_gui_catalog_action("work-order-run")
+
+    assert "action=work-order-run" in output
+    assert "safety_class=read-only" in output
+    assert "allowed=true" in output
+    assert "executed=true" in output
+    assert "WORK_ORDER_RUN_RESULT" in output
+    assert "validation_ok=false" in output
+
+
 def test_manual_gui_catalog_blocks_planned_mutating_buttons():
     from agentic_project_kit.gui_tkinter_shell import run_manual_gui_catalog_action
 

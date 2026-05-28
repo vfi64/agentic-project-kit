@@ -26,6 +26,7 @@ def test_gui_button_catalog_covers_communication_and_workflow_surface():
         "agent-run",
         "work-order-show",
         "work-order-validate",
+        "work-order-run",
     } <= command_ids
 
 
