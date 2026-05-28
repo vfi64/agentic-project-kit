@@ -1,0 +1,186 @@
+WORKFLOW_EVIDENCE_HYGIENE_LOCAL_GATES
+created_utc=2026-05-28T19:19:39.621902+00:00
+scope=next-turn evidence hygiene and summary preflight compatibility
+
+## COMMAND branch
+argv=git branch --show-current
+exit_code=0
+```text
+codex/fix-workflow-evidence-hygiene
+```
+
+## COMMAND status
+argv=git status --short
+exit_code=0
+```text
+
+```
+
+## COMMAND terminal-remote-preflight
+argv=./ns terminal-remote-preflight
+exit_code=0
+```text
+PASS_CLEAN_FOR_REMOTE_MUTATION
+Working tree is clean for remote mutation or merge verification.
+```
+
+## COMMAND artifact-gc-dry-run
+argv=./ns artifact-gc
+exit_code=0
+```text
+PASS_NOTHING_TO_COLLECT
+```
+
+## COMMAND pytest-full
+argv=.venv/bin/python -m pytest -q
+exit_code=0
+```text
+........................................................................ [  5%]
+........................................................................ [ 11%]
+........................................................................ [ 17%]
+........................................................................ [ 23%]
+........................................................................ [ 29%]
+........................................................................ [ 35%]
+........................................................................ [ 40%]
+........................................................................ [ 46%]
+........................................................................ [ 52%]
+........................................................................ [ 58%]
+........................................................................ [ 64%]
+........................................................................ [ 70%]
+........................................................................ [ 76%]
+........................................................................ [ 81%]
+........................................................................ [ 87%]
+........................................................................ [ 93%]
+........................................................................ [ 99%]
+......                                                                   [100%]
+1230 passed in 10.74s
+```
+
+## COMMAND ruff-full
+argv=.venv/bin/ruff check .
+exit_code=0
+```text
+All checks passed!
+```
+
+## COMMAND check-docs
+argv=.venv/bin/agentic-kit check-docs
+exit_code=0
+```text
+Agentic project check passed
+```
+
+## COMMAND docs-audit
+argv=.venv/bin/agentic-kit docs-audit
+exit_code=0
+```text
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check
+only catches known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Dokumentationsregistry
+- registry=docs/DOCUMENTATION_REGISTRY.yaml
+- version=1
+- documents=22
+- broad_migration_allowed=False
+- class:architecture=1
+- class:evidence/log=2
+- class:generated artifact=1
+- class:governance/system=4
+- class:operational/automation=4
+- class:planning=7
+- class:release=2
+- class:user-facing description=1
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
+```
+
+## COMMAND doctor
+argv=.venv/bin/agentic-kit doctor
+exit_code=0
+```text
+Agentic project doctor report for 
+/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, 
+markdown-docs, python-cli, git-github, release-managed; policy packs: 
+solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.4
+
+Overall: PASS
+```
+
+## LOCAL GATE RESULT
+overall_exit_code=0
+workflow_evidence_hygiene_result=PASS
+chat_reply=d
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-WORKFLOW-EVIDENCE-HYGIENE | 2026-05-28 21:20:10 +0200
+
+SLICE
+  NAME: workflow-evidence-hygiene
+  SCOPE: next-turn-evidence-hygiene-and-summary-preflight
+  BRANCH: codex/fix-workflow-evidence-hygiene
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: python local gates and workflow hygiene checks
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: PASS
+  PR: NONE
+  HEAD_SHA: ea32378a30d570a1a7e140b30bf2c915aac82222
+  CI: local-pass
+  MERGE: not-requested
+
+EVIDENCE FILES
+  terminal_log: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tmp/workflow-evidence-hygiene-local-gates.raw.log
+  terminal_log_remote: docs/reports/terminal/workflow-evidence-hygiene-local-gates.log
+  terminal_log_local: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tmp/workflow-evidence-hygiene-local-gates.raw.log
+  command_report: docs/reports/terminal/workflow-evidence-hygiene-local-gates.log
+
+INTERPRETATION
+  Local next-turn/work-order evidence now stays outside repo paths until explicit upload, artifact-gc removes only untracked fixed-slot working copies, and patch-preflight accepts canonical SUMMARY COMM logs.
+
+NEXT
+  SAFE_STEP: open PR and wait for CI before merge
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
