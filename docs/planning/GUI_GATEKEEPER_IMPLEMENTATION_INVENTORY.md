@@ -1,6 +1,7 @@
 # GUI Gatekeeper Implementation Inventory
 
-Status: draft
+Status: proposed
+Decision status: proposed
 Scope: read-only inventory; no product-code changes.
 Baseline: post-PR882 main after post-PR880/PR881 bootstrap refresh.
 
