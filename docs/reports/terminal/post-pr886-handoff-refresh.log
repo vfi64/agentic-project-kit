@@ -1,0 +1,12 @@
+POST_PR886_HANDOFF_REFRESH
+target_head=d77d5804d7eead98ff65b52e38c6d73bc640051c
+current_head=746509689739c0dab9a06adf4adaccc693521b6d
+target_head_is_ancestor=True
+status_changed=True
+current_handoff_changed=True
+prompt_path=docs/reports/terminal/v044-successor-chat-handoff-after-pr886.md
+prompt_returncode=0
+freshness_warning_present=True
+required_markers_present=True
+note=freshness_warning_present may be expected before the refresh PR is committed and merged; post-merge main verification must require it to be absent
+result=PASS

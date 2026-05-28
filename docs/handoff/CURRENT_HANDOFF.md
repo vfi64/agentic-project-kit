@@ -1,3 +1,14 @@
+## Post-PR886 Workflow Evidence Hygiene State
+
+Current verified main HEAD is `d77d5804d7eead98ff65b52e38c6d73bc640051c` (`d77d580`).
+Commit subject: `Merge pull request #886 from vfi64/codex/fix-workflow-evidence-hygiene`.
+
+PR #886 is merged. It removes the recurring dirty-worktree failure caused by ordinary next-turn/work-order runs writing directly to `docs/reports/terminal/next-turn-latest.log`. The fixed repo-backed slot is now produced by explicit upload/promotion, and upload checks `repo_root` to avoid stale evidence from another checkout.
+
+This is an administrative post-PR886 handoff/status refresh only. No product-code change belongs in this slice.
+
+Next safe step after this refresh is merged and verified: continue with the smallest gatekeeper-hardening slice, with slice-gate evidence rather than helper-local PASS claims.
+
 ## Post-PR883 GUI Gatekeeper Inventory State
 
 Current verified main HEAD is `1ec13cb5283d9b796b667526791eaa94a04073ff` (`1ec13cb`).
