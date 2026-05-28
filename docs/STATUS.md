@@ -1,3 +1,22 @@
+## Post-PR873 GUI Gatekeeper Planning State
+
+Current verified main HEAD: `5b30fe30ed9b813255fb9a89d85a6f7bf1ab70ab` (`5b30fe3`).
+Commit subject: `Record PR873 final main closeout evidence`.
+
+PR #873 baseline: `Add GUI work order upload strip (#873)`, commit `23532a0`. Final closeout evidence: `docs/reports/terminal/pr873-final-main-closeout.log`.
+
+Planning document: `docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md`.
+
+PR #874 is planning/state-refresh only. It records the GUI deterministic gatekeeper migration plan and refreshes state pointers. It must not include product-code changes.
+
+Required sequence:
+1. Finish planning-only PR #874.
+2. Prepare and publish safety release v0.4.4.
+3. Generate fresh successor-chat handoff.
+4. Start the gatekeeper migration PR series in small reversible PRs.
+
+Next safe step: finish this planning/state-refresh PR; do not start gatekeeper implementation or further GUI feature work before v0.4.4 is released and post-release verified.
+
 ## Post-PR838 Administrative Handoff Refresh State
 
 Current administrative main HEAD: `777d957474318fdf797ca23625e52046c3fb7df0` (`777d957`), after PR #838 refreshed post-PR837 administrative handoff state.
