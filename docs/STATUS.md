@@ -36,7 +36,7 @@ Generated handoff safe-state anchor: `fd1e631312723166982fb1e0d9ecb76397e97559` 
 
 PR #834 `Repair post-PR831 handoff freshness state` is merged. PR #835 added `docs/reports/terminal/post-pr836-successor-handoff.md` and `docs/reports/terminal/post-pr836-successor-handoff.log` as the successor/evidence anchors.
 
-v0.4.3 remains the current published and post-release verified release. Verified Zenodo version DOI: `10.5281/zenodo.20393329`. Release verification evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
+v0.4.4 is published and post-release verified. Verified Zenodo version DOI: `10.5281/zenodo.20431326`. Release verification evidence: `docs/reports/terminal/v044-post-release-verify.log`.
 
 Immediate next safe step: continue with the smallest planned GUI or failure-mode automation slice; stop first if handoff freshness, evidence, or status drift reappears.
 
@@ -75,14 +75,14 @@ This document is a concise pointer, not a duplicate rule book. Machine guard: `a
 
 ## Current State
 
-Current verified release: 0.4.3.
-Current release tag: v0.4.3.
+Current verified release: 0.4.4.
+Current release tag: v0.4.4.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.20393329`.
-Post-release verification command: `agentic-kit post-release-check --version 0.4.3`.
+Verified Zenodo version DOI: `10.5281/zenodo.20431326`.
+Post-release verification command: `agentic-kit post-release-check --version 0.4.4`.
 Current verified main after handoff freshness repair: `fd1e631` (`Repair post-PR831 handoff freshness state (#834)`).
 Generated handoff safe-state anchor: `fd1e631`.
-v0.4.3 GitHub Release publication and post-release Zenodo verification are complete. Evidence: `docs/reports/terminal/20260526-120216_v043-release-verify.log`.
+v0.4.4 GitHub Release publication and post-release Zenodo verification are complete. Evidence: `docs/reports/terminal/v044-post-release-verify.log`.
 
 v0.4.3 safety-release and successor-handoff target:
 - Main contains PR #834 at `fd1e631` (`Repair post-PR831 handoff freshness state (#834)`).

@@ -1,0 +1,10 @@
+V0.4.4 POST-RELEASE VERIFY
+
+Result: PASS
+Version: 0.4.4
+GitHub release: exists
+Zenodo concept DOI: 10.5281/zenodo.20101359
+Zenodo version DOI: 10.5281/zenodo.20431326
+Verification command: .venv/bin/python -m agentic_project_kit.cli post-release-check --version 0.4.4
+Release workflow: completed successfully for tag v0.4.4
+Next safe step: commit DOI metadata, merge the post-release metadata PR, then generate a fresh successor-chat handoff before starting gatekeeper migration implementation.

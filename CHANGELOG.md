@@ -6,7 +6,9 @@
 - Safety: no gatekeeper implementation, GUI feature expansion, remote-mutation enablement, or release-publication side effects belong in the release-prep PR.
 - Evidence: release-check, full tests, documentation gates, doctor, package build, and twine validation are required before tag publication.
 
-Zenodo verification pending until GitHub Release publication and archive processing.
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.4.4 DOI `10.5281/zenodo.20431326`.
+
+Zenodo v0.4.4 DOI: 10.5281/zenodo.20431326
 Zenodo Concept DOI: 10.5281/zenodo.20101359
 
 ## v0.4.3 - 2026-05-26
