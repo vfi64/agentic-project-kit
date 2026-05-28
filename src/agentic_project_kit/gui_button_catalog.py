@@ -302,6 +302,13 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         "work-order-validate",
     ),
     _button(
+        "work-order-run",
+        "Run Validated Work Order",
+        "Workflow Automation",
+        "Run the fixed next-turn Python work-order only after validation passes; writes fixed local and repo logs without pushing.",
+        "work-order-run",
+    ),
+    _button(
         "agent-next",
         "Agent Next",
         "Workflow Automation",
