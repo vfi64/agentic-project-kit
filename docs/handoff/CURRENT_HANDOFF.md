@@ -1,3 +1,14 @@
+## Post-PR888 Patch Preflight Slice-Gate State
+
+Current verified main HEAD is `508f3dfa2be50d4f369f31e270cc930c24873015` (`508f3df`).
+Commit subject: `Merge pull request #888 from vfi64/feature/patch-preflight-slice-gate-clean`.
+
+PR #888 is merged. It hardens patch preflight with an optional required slice gate, preventing helper-local PASS from being confused with slice readiness when the worktree is dirty or slice governance gates fail.
+
+This is an administrative post-PR888 handoff/status refresh only. No product-code change belongs in this slice.
+
+Next safe step after this refresh is merged and verified: continue with the smallest gatekeeper-hardening slice, with slice-gate evidence and patch-preflight evidence rather than helper-local PASS claims.
+
 ## Post-PR886 Workflow Evidence Hygiene State
 
 Current verified main HEAD is `d77d5804d7eead98ff65b52e38c6d73bc640051c` (`d77d580`).
