@@ -52,6 +52,27 @@ rules:
     - Documentation System Audit Contract
     - agentic-kit docs-audit
     - review-only
+- id: planning-doc-slice-gate-coverage
+  description: Temporary planning-documentation slice gate must remain discoverable
+    and must keep helper-local success separate from governed slice success.
+  documents:
+  - path: README.md
+    terms:
+    - Planning-documentation slice gate
+    - agentic-kit slice gate --kind planning-doc
+    - SLICE_GATE_RESULT
+    - slice_result=PASS|BLOCKED
+    - helper-local PASS is not a slice PASS
+    - merge_pr_ready=NO
+  - path: docs/TEST_GATES.md
+    terms:
+    - Planning-Documentation Slice Gate
+    - agentic-kit slice gate --kind planning-doc
+    - SLICE_GATE_RESULT
+    - gate=... status=PASS|FAIL
+    - slice_result=PASS|BLOCKED
+    - helper-local PASS from slice PASS
+    - agentic-kit docs-audit
 - id: llm-communication-bootstrap-coverage
   description: Portable LLM communication, final summary, bootstrap, drift, and handoff
     contracts must remain visible without turning status files into duplicate rule
@@ -149,6 +170,7 @@ rules:
     - agentic-kit workflow fail-report
     - agentic-kit patterns list
     - agentic-kit patterns show
+    - agentic-kit slice gate --kind planning-doc
     - agentic-kit workflow-guard check
 - id: pattern-advisor-readme-coverage
   description: Read-only Pattern Advisor MVP commands and boundaries must remain visible.
