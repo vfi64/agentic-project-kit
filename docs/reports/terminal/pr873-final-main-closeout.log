@@ -1,0 +1,86 @@
+### PR873 FINAL MAIN CLOSEOUT EVIDENCE ###
+2026-05-28 13:18:00 +0200
+
+### ENSURE MAIN IS CURRENT ###
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### REMOVE UNTRACKED TRANSIENT NEXT-TURN LOG ###
+
+### STATE ###
+main
+23532a0 Add GUI work order upload strip (#873)
+a5814aa Add GUI guarded work order execution (#872)
+7092082 Add GUI next-turn work order validation (#871)
+4a41e1f Remove redundant GUI top toolbar (#870)
+0383fd4 Make GUI action buttons compact and scrollable (#869)
+8cdf496 Record duplicate PR865 verification cleanup evidence (#868)
+
+### VERIFY TRANSIENT NEXT-TURN LOG IS NOT TRACKED ###
+tracked transient log absent
+
+### VERIFY PR873 MERGED MAIN HEAD ###
+23532a0592648d832bbf39868f9a1e24df6d9dcc
+23532a0 Add GUI work order upload strip (#873)
+{"baseRefOid":"a5814aa5cbced58fa33016f16c140b73c06f084c","headRefOid":"744758d8fa013e40b024b633a55c6c1ff0f6311b","mergeStateStatus":"UNKNOWN","state":"MERGED","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-28T11:12:26Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26571175571/job/78278412887","name":"test","startedAt":"2026-05-28T11:11:58Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-28T11:12:30Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26571174125/job/78278409240","name":"test","startedAt":"2026-05-28T11:11:58Z","status":"COMPLETED","workflowName":"CI"}]}
+
+### TARGETED MAIN TESTS ###
+..................................................                       [100%]
+50 passed in 0.72s
+
+### GUI NO-WINDOW SMOKE ON MAIN ###
+TKINTER SHELL
+title=agentic-project-kit Cockpit
+status=tkinter-shell-ready
+action_count=36
+menu_count=5
+toolbar_button_count=8
+action_button_count=32
+destructive_actions_enabled=false
+toolbar_icons=branch,status,history,handoff,stethoscope,document-check,audit,guard
+### RESULT: PASS ###
+
+### FINAL STATUS BEFORE LOG COPY ###
+?? docs/reports/terminal/next-turn-latest.log
+
+================================================================
+SUMMARY COMM-LOCAL | 2026-05-28 13:18:06 +0200
+
+SLICE
+  NAME: PR873 final main closeout
+  SCOPE: Verify merged PR873 on main, transient next-turn log hygiene, targeted tests, and GUI no-window smoke.
+  BRANCH: main
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: main verification
+  MODE_CHECK: no product work, no merge, no release, no remote mutation except fetch/pull
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+INTERPRETATION
+  PR873 is merged into main. The transient next-turn result log is not tracked. Targeted GUI/work-order tests and the no-window GUI smoke pass on main.
+
+REMOTE
+  PR: 873
+  MAIN_HEAD: 23532a0592648d832bbf39868f9a1e24df6d9dcc
+  CI: verified clean before merge; post-merge targeted local gates pass
+  MERGE: complete
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/pr873-final-main-closeout.log
+
+NEXT
+  SAFE_STEP: commit this closeout evidence log only, then push main.
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
