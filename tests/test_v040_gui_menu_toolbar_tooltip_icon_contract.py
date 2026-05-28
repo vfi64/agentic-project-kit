@@ -1,7 +1,7 @@
 from agentic_project_kit.gui_button_catalog import all_gui_buttons, toolbar_gui_buttons
 from agentic_project_kit.gui_layout_plan import build_layout_plan
 from agentic_project_kit.gui_tkinter_renderer import render_layout_to_tkinter
-from agentic_project_kit.gui_tkinter_shell import build_tkinter_shell_spec
+from agentic_project_kit.gui_tkinter_shell import WORK_ORDER_STRIP_COMMAND_IDS, build_tkinter_shell_spec
 
 
 class DummyRoot:
@@ -26,7 +26,7 @@ def test_shell_spec_has_windows_style_menu_toolbar_and_action_buttons():
         "Help",
     ]
     assert len(spec.design.toolbar) == len(toolbar_gui_buttons())
-    assert len(spec.design.action_buttons) == len(all_gui_buttons())
+    assert len(spec.design.action_buttons) == len([button for button in all_gui_buttons() if button.command_id not in WORK_ORDER_STRIP_COMMAND_IDS])
     assert all(button.tooltip for button in spec.design.toolbar)
     assert all(button.icon_id for button in spec.design.toolbar)
     assert all(button.tooltip for button in spec.design.action_buttons)

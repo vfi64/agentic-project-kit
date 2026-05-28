@@ -31,7 +31,7 @@ def test_render_layout_to_tkinter_preserves_menu_toolbar_actions_and_tooltips():
     result = render_layout_to_tkinter(FakeRoot(), build_layout_plan())
     assert len(result.widgets_by_kind("menu")) == 5
     assert len(result.widgets_by_kind("toolbar_button")) == len(toolbar_gui_buttons())
-    assert len(result.widgets_by_kind("action_button")) == len(all_gui_buttons())
+    assert len(result.widgets_by_kind("action_button")) == len([button for button in all_gui_buttons() if button.command_id not in WORK_ORDER_STRIP_COMMAND_IDS])
     assert all(widget.tooltip for widget in result.widgets_by_kind("toolbar_button"))
     assert all(widget.tooltip for widget in result.widgets_by_kind("action_button"))
     assert all(widget.category for widget in result.widgets_by_kind("action_button"))
@@ -46,7 +46,7 @@ def test_render_tkinter_result_summary_is_deterministic():
     assert "TKINTER RENDER RESULT" in output
     assert "menu_count=5" in output
     assert f"toolbar_button_count={len(toolbar_gui_buttons())}" in output
-    assert f"action_button_count={len(all_gui_buttons())}" in output
+    assert f"action_button_count={len([button for button in all_gui_buttons() if button.command_id not in WORK_ORDER_STRIP_COMMAND_IDS])}" in output
     assert (
         "action_categories=Diagnostics,Evidence,Git Workflow,Quality Gates,Release,Session,Workflow Automation"
         in output
