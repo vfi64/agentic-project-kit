@@ -17,6 +17,7 @@ from agentic_project_kit.cli_commands.profiles import register_profile_commands
 from agentic_project_kit.cli_commands.release import register_release_commands
 from agentic_project_kit.cli_commands.rule_registry import rule_registry_app
 from agentic_project_kit.cli_commands.scaffold import scaffold_app
+from agentic_project_kit.cli_commands.slice import slice_app
 from agentic_project_kit.cli_commands.state import state_app
 from agentic_project_kit.cli_commands.todo import todo_app
 from agentic_project_kit.cli_commands.validation import register_validation_commands
@@ -50,6 +51,7 @@ register_pr_closeout_alias(app)
 app.add_typer(cockpit_app, name="cockpit")
 app.add_typer(patterns_app, name="patterns")
 app.add_typer(scaffold_app, name="scaffold")
+app.add_typer(slice_app, name="slice")
 app.add_typer(state_app, name="state")
 app.add_typer(todo_app, name="todo")
 

@@ -35,6 +35,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Post-release archive check | Unit tests plus agentic-kit post-release-check CLI smoke command |
 | TODO validation change | Unit tests plus agentic-kit check-todo CLI smoke command |
 | Project health check change | Unit tests plus agentic-kit doctor CLI smoke command |
+| Planning-documentation slice gate | Unit tests plus CLI smoke command for `agentic-kit slice gate --kind planning-doc`; output must distinguish helper-local PASS from slice PASS |
 | TestPyPI validation | TestPyPI upload, fresh venv install, CLI smoke command |
 | Handoff/state change | Update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md |
 
@@ -280,6 +281,12 @@ Run these commands:
     ruff check .
     agentic-kit check-docs
     agentic-kit doctor
+
+## Planning-Documentation Slice Gate
+
+`agentic-kit slice gate --kind planning-doc` is a temporary repo-local gate for planning-documentation slices. It must emit `SLICE_GATE_RESULT`, individual `gate=... status=PASS|FAIL` step lines, `slice_result=PASS|BLOCKED`, `next_safe_action=...`, and `chat_reply=d|f`.
+
+For `planning-doc`, the gate must run targeted tests plus `agentic-kit handoff check`, `agentic-kit check-docs`, `agentic-kit docs-audit`, and `agentic-kit doctor`. Helper-local PASS is not a slice PASS; slice PASS requires the repository governance gates to pass. Dirty state must be visible and must keep `merge_pr_ready=NO` until the changed files have been reviewed and committed intentionally.
 
 ## Doctor Gate
 

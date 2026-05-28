@@ -160,6 +160,10 @@ Agentic project doctor report for /path/to/project
 Overall: PASS
 ```
 
+## Planning-documentation slice gate
+
+`agentic-kit slice gate --kind planning-doc` emits `SLICE_GATE_RESULT` and `slice_result=PASS|BLOCKED`. helper-local PASS is not a slice PASS; `planning-doc` runs targeted tests plus `agentic-kit handoff check`, `agentic-kit check-docs`, `agentic-kit docs-audit`, and `agentic-kit doctor`. Dirty state reports `merge_pr_ready=NO`.
+
 ## Deterministic quality heuristics
 
 `agentic-kit check-docs` includes deterministic document-quality heuristics for machine-checkable problems such as unresolved placeholder markers, stale handoff markers, missing required sections, missing coverage terms, and documentation drift.
