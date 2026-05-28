@@ -54,10 +54,13 @@ def prompt(path: str = ".agentic/handoff_state.yaml") -> None:
         for error in errors:
             typer.echo(f"[FAIL] {error}")
         raise typer.Exit(code=1)
-    guard = render_freshness_guard(assess_handoff_prompt_freshness(data, path))
+    rendered_prompt = render_handoff_prompt(data)
+    guard = render_freshness_guard(
+        assess_handoff_prompt_freshness(data, path, successor_prompt_text=rendered_prompt)
+    )
     if guard:
         typer.echo(guard)
-    typer.echo(render_handoff_prompt(data))
+    typer.echo(rendered_prompt)
 
 
 @handoff_app.command("refresh")
