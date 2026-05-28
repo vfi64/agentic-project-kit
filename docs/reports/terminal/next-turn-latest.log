@@ -1,0 +1,11 @@
+WORK_ORDER_VALIDATION
+path=.agentic/commands/inbox/next-turn.py
+exists=false
+ok=false
+line_count=0
+preferred_command_hint_found=false
+expected_local_log=/tmp/agentic-project-kit/next-turn-latest.log
+expected_remote_log=docs/reports/terminal/next-turn-latest.log
+findings:
+- error: missing work order file: .agentic/commands/inbox/next-turn.py
+### RESULT: FAIL ###
