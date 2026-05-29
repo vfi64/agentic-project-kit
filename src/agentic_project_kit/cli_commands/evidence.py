@@ -5,6 +5,8 @@ from pathlib import Path
 import typer
 
 from agentic_project_kit.evidence_clean import check_clean_except_expected_log, clean_local_evidence
+from agentic_project_kit.evidence_commit_paths import commit_paths
+from agentic_project_kit.evidence_commit_paths import render_commit_paths_result
 from agentic_project_kit.evidence_finalize_log import finalize_log
 from agentic_project_kit.evidence_finalize_log import render_finalize_log_error
 from agentic_project_kit.evidence_finalize_log import render_finalize_log_result
@@ -117,6 +119,28 @@ def finalize_log_command(
         typer.echo(render_finalize_log_error(str(exc)))
         raise typer.Exit(code=1) from None
     typer.echo(render_finalize_log_result(result))
+    if not result.success:
+        raise typer.Exit(code=1)
+
+
+@app.command("commit-paths")
+def commit_paths_command(
+    path: list[str] = typer.Option([], "--path", help="Repository-relative path to commit. Repeat for multiple paths."),
+    message: str = typer.Option(..., "--message"),
+    log_path: str | None = typer.Option(None, "--log-path"),
+    push: bool = typer.Option(False, "--push"),
+    root: Path = typer.Option(Path("."), "--root"),
+) -> None:
+    """Commit an explicit evidence path set and verify the worktree is clean afterwards."""
+    try:
+        result = commit_paths(root=root, paths=tuple(path), message=message, log_path=log_path, push=push)
+    except ValueError as exc:
+        typer.echo("EVIDENCE_COMMIT_PATHS")
+        typer.echo("success=no")
+        typer.echo(f"finding={exc}")
+        typer.echo("### RESULT: FAIL ###")
+        raise typer.Exit(code=1) from None
+    typer.echo(render_commit_paths_result(result))
     if not result.success:
         raise typer.Exit(code=1)
 
