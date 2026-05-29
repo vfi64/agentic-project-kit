@@ -1,0 +1,45 @@
+Typed work order: rn-rnc-e2e-valid-smoke
+Title: rn rnc e2e valid smoke
+Safety: local-only
+
+### JSON RESULT ###
+{
+  "command_report": null,
+  "dirty_state": "clean",
+  "message": "Typed work order executed.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "safety": "local-only",
+  "schema_version": 1,
+  "step_results": [
+    {
+      "argv": [
+        ".venv/bin/agentic-kit",
+        "cockpit",
+        "actions"
+      ],
+      "kind": "command_argv",
+      "label": "cockpit actions smoke",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "Local cockpit actions\n- git.status [git/read_only] git status --short\n  Show uncommitted local changes.\n- workflow.state [workflow/read_only] agentic-kit workflow state\n  Show guided workflow state and recommended next step.\n- dialog.rn [dialog/bounded] agentic-kit rn\n  Synchronize main and run the next typed work order.\n- dialog.rnc [dialog/bounded] agentic-kit rnc\n  Commit and push the expected closeout paths from the last remote-next run.\n- workflow.list [workflow/read_only] agentic-kit workflow list\n  List stored local workflow items.\n- gate.check-docs [gate/read_only] agentic-kit check-docs\n  Run deterministic documentation gates.\n- gate.doctor [gate/read_only] agentic-kit doctor\n  Run compact project health checks.\n- audit.doc-mesh [audit/read_only] agentic-kit doc-mesh-audit\n  Audit cross-document state and governance drift.\n- audit.doc-lifecycle [audit/read_only] agentic-kit doc-lifecycle-audit\n  Audit lifecycle metadata for governed planning documents.\n- audit.pr-hygiene [audit/read_only] agentic-kit pr-hygiene\n  Diagnose stale, duplicate, or empty pull-request and branch hygiene signals.\n- rules.communication-refresh [rules/read_only] agentic-kit rules communication-refresh\n  Generate the repo-backed communication rules refresh file for d2.\n- rules.handoff-refresh [rules/read_only] agentic-kit rules handoff-refresh\n  Generate the repo-backed handoff rules refresh file for d3.\n- release.plan [release/read_only] agentic-kit release-plan\n  Print release preparation checklist.\n- release.check [release/read_only] agentic-kit release-check\n  Validate release state for a target version.\n- release.post-check [release/read_only] agentic-kit post-release-check\n  Validate GitHub and Zenodo post-release state.\n- workflow.go [workflow/bounded] agentic-kit workflow go\n  Request and run one bounded workflow step.\n"
+    },
+    {
+      "argv": [
+        ".venv/bin/agentic-kit",
+        "doctor"
+      ],
+      "kind": "command_argv",
+      "label": "doctor smoke",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit\n\n[PASS] pyproject.toml: present\n[PASS] README.md: present\n[PASS] sentinel.yaml: present\n[PASS] .github/workflows/ci.yml: present\n[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, \nrelease-managed; policy packs: solo-maintainer, agentic-development, release-managed, documentation-governed\n[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed\n[PASS] documentation gates: passed\n[PASS] document lifecycle audit: passed\n[PASS] todo gates: passed\n[PASS] version drift: project state matches version 0.4.4\n\nOverall: PASS\n"
+    }
+  ],
+  "terminal_log": "docs/reports/terminal/rn-rnc-e2e-valid-smoke.log",
+  "work_order_id": "rn-rnc-e2e-valid-smoke"
+}
+
+### RESULT: PASS ###
+Return code: 0
+Terminal bleibt offen. Kein exit am Blockende.
