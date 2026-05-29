@@ -116,7 +116,7 @@ def test_classify_log_blocks_pending(tmp_path: Path) -> None:
 def test_classify_log_detects_missing_summary_when_required(tmp_path: Path) -> None:
     log = tmp_path / "missing-summary.log"
     log.write_text("### RESULT: PASS ###\n", encoding="utf-8")
-    result = classify_log(log, root=tmp_path, require_summary=True)
+    result = classify_log(log, root=tmp_path, require_summary=True, check_git_status=False)
     assert result.state == LogClassificationState.BLOCKED_BY_MISSING_SUMMARY
     assert "missing structured summary block" in result.reasons
 
@@ -229,7 +229,7 @@ def _canonical_summary_log(*, overall: str = "PASS", marker: str = "PASS") -> st
 def test_classify_log_allows_canonical_summary_pass(tmp_path: Path) -> None:
     log = tmp_path / "canonical.log"
     log.write_text(_canonical_summary_log(), encoding="utf-8")
-    result = classify_log(log, root=tmp_path, require_summary=True)
+    result = classify_log(log, root=tmp_path, require_summary=True, check_git_status=False)
     assert result.state == LogClassificationState.READY_TO_CONTINUE
     assert result.summary_found
     assert result.summary_valid
@@ -238,7 +238,7 @@ def test_classify_log_allows_canonical_summary_pass(tmp_path: Path) -> None:
 def test_classify_log_blocks_contradictory_summary_marker(tmp_path: Path) -> None:
     log = tmp_path / "contradictory.log"
     log.write_text(_canonical_summary_log(overall="PASS", marker="FAIL"), encoding="utf-8")
-    result = classify_log(log, root=tmp_path, require_summary=True)
+    result = classify_log(log, root=tmp_path, require_summary=True, check_git_status=False)
     assert result.state == LogClassificationState.BLOCKED_BY_CONTRADICTORY_SUMMARY
     assert "contradictory summary marker" in result.reasons
 
@@ -256,7 +256,7 @@ def test_classify_log_allows_scoped_expected_negative_smoke_before_final_pass(tm
         + _canonical_summary_log(),
         encoding="utf-8",
     )
-    result = classify_log(log, root=tmp_path, require_summary=True)
+    result = classify_log(log, root=tmp_path, require_summary=True, check_git_status=False)
     assert result.state == LogClassificationState.READY_TO_CONTINUE
     assert result.decision == "continue"
 
@@ -269,7 +269,7 @@ def test_classify_log_blocks_unscoped_expected_negative_smoke_marker(tmp_path: P
         + _canonical_summary_log(),
         encoding="utf-8",
     )
-    result = classify_log(log, root=tmp_path, require_summary=True)
+    result = classify_log(log, root=tmp_path, require_summary=True, check_git_status=False)
     assert result.state == LogClassificationState.BLOCKED_BY_UNSCOPED_NEGATIVE_SMOKE
     assert result.decision == "fail"
 
@@ -277,5 +277,5 @@ def test_classify_log_blocks_unscoped_expected_negative_smoke_marker(tmp_path: P
 def test_classify_log_require_summary_blocks_legacy_marker_only(tmp_path: Path) -> None:
     log = tmp_path / "legacy-only.log"
     log.write_text("WORK RESULT: PASS\nNEXT_CHAT_REPLY: d\n### RESULT: PASS ###\n", encoding="utf-8")
-    result = classify_log(log, root=tmp_path, require_summary=True)
+    result = classify_log(log, root=tmp_path, require_summary=True, check_git_status=False)
     assert result.state == LogClassificationState.BLOCKED_BY_MISSING_SUMMARY
