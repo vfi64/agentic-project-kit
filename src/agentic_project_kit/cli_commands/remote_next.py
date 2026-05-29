@@ -1,0 +1,28 @@
+from __future__ import annotations
+
+import json
+from pathlib import Path
+from typing import Annotated
+
+import typer
+
+from agentic_project_kit.remote_next import (
+    remote_next_result_as_json_data,
+    render_remote_next_result,
+    run_remote_next,
+)
+
+
+def register_remote_next_command(app: typer.Typer) -> None:
+    @app.command("remote-next")
+    def remote_next_command(
+        project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+        json_output: Annotated[bool, typer.Option("--json", help="Print machine-readable JSON result.")] = False,
+    ) -> None:
+        result = run_remote_next(project_root)
+        if json_output:
+            typer.echo(json.dumps(remote_next_result_as_json_data(result), indent=2, sort_keys=True))
+        else:
+            typer.echo(render_remote_next_result(result))
+        if result.returncode != 0:
+            raise typer.Exit(code=result.returncode)
