@@ -1,0 +1,9 @@
+POST_PR897_HANDOFF_REFRESH
+target_head=a766ce92bbd4fc6cebfbb3ce3762bfa56e79c60c
+target_subject=Harden standard summary log classification (#897)
+status_changed=True
+current_handoff_changed=True
+prompt_path=docs/reports/terminal/v044-successor-chat-handoff-after-pr897.md
+prompt_returncode=0
+freshness_warning_present=True
+result=PASS

@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-29'
-  reason: post-PR894 handoff refresh
-  source: PR894 main verification
+  reason: post-PR897 handoff refresh
+  source: PR897 main verification
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 87407ac463b46638f340fc757ec452c46e803096
-  commit_subject: 'Merge pull request #894 from vfi64/docs/post-merge-gate-bootstrap-visibility'
+  commit: a766ce92bbd4fc6cebfbb3ce3762bfa56e79c60c
+  commit_subject: Harden standard summary log classification (#897)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -84,6 +84,7 @@ safe_state:
   - 888
   - 892
   - 894
+  - 897
 release:
   current_version: 0.4.4
   previous_version: 0.4.3
@@ -98,6 +99,8 @@ open_items:
   next_expected_chat_action: Continue after PR892 with post-merge gate visibility
     follow-up work only after the post-merge refresh status gate reports NOOP.
 completed_since_previous_handoff:
+- 'PR #897 merged standard summary validator hardening before this administrative
+  handoff refresh.'
 - 'PR #894 merged post-merge gate bootstrap visibility documentation before this administrative
   handoff refresh.'
 - 'PR #892 recorded the post-merge handoff refresh status gate visibility inventory
@@ -397,7 +400,7 @@ blocked_until_closeout:
 - Treating helper-local PASS as slice PASS without slice-gate evidence
 - Gatekeeper product work before post-PR888 handoff refresh is merged and verified
 - Treating helper-local PASS as slice PASS without patch-preflight slice-gate evidence
-first_instruction: Start the next chat from the fresh post-PR894 successor handoff
+first_instruction: Start the next chat from the fresh post-PR897 successor handoff
   prompt and obey agentic-kit handoff post-merge-refresh-status before product work.
 handoff_maintenance:
   principle: curated-not-accumulated
@@ -405,15 +408,15 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr894.md
+  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr897.md
 administrative_evidence_state:
-  current_head: 87407ac463b46638f340fc757ec452c46e803096
-  current_head_subject: 'Merge pull request #894 from vfi64/docs/post-merge-gate-bootstrap-visibility'
-  head_subject: 'Merge pull request #894 from vfi64/docs/post-merge-gate-bootstrap-visibility'
+  current_head: a766ce92bbd4fc6cebfbb3ce3762bfa56e79c60c
+  current_head_subject: Harden standard summary log classification (#897)
+  head_subject: Harden standard summary log classification (#897)
   allowed_after_safe_state: true
-  reason: PR894 post-merge gate bootstrap visibility merged on main
-  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr894.md
-  current_subject: 'Merge pull request #894 from vfi64/docs/post-merge-gate-bootstrap-visibility'
+  reason: PR897 standard summary validator hardening merged on main
+  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr897.md
+  current_subject: Harden standard summary log classification (#897)
   safe_state_semantics: current_main_head
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
