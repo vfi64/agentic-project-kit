@@ -1,0 +1,7 @@
+POST_MERGE_GATE_VISIBILITY_INVENTORY
+report=docs/reports/terminal/post-merge-gate-visibility-inventory.md
+hits=4
+files_with_hits=1
+missing_files=0
+test_gates_mentions_gate=True
+result=PASS
