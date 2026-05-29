@@ -1,0 +1,22 @@
+id: post-pr926-status-checks
+title: Post PR926 status checks
+safety: local-only
+log_path: docs/reports/terminal/post-pr926-status-checks.log
+block_dirty_worktree: true
+steps:
+  - kind: command_argv
+    label: handoff check
+    argv:
+      - .venv/bin/agentic-kit
+      - handoff
+      - check
+  - kind: command_argv
+    label: doctor
+    argv:
+      - .venv/bin/agentic-kit
+      - doctor
+  - kind: command_argv
+    label: check docs
+    argv:
+      - .venv/bin/agentic-kit
+      - check-docs
