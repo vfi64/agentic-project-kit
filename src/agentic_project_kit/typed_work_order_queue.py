@@ -21,6 +21,7 @@ STATUS_ALREADY_EXECUTED = "already_executed"
 DEFAULT_TYPED_WORK_ORDER_INBOX = Path(".agentic/typed_work_orders/inbox")
 DEFAULT_TYPED_WORK_ORDER_EXECUTED = Path(".agentic/typed_work_orders/executed")
 
+
 @dataclass(frozen=True)
 class TypedWorkOrderQueueStatus:
     inbox_path: Path
@@ -30,6 +31,7 @@ class TypedWorkOrderQueueStatus:
     @property
     def pending_count(self) -> int:
         return len(self.pending_paths)
+
 
 @dataclass(frozen=True)
 class TypedNextResult:
@@ -41,6 +43,8 @@ class TypedNextResult:
     terminal_log: str | None
     message: str
     work_order_result: TypedWorkOrderResult | None = None
+    expected_closeout_paths: tuple[str, ...] = ()
+
 
 def inspect_typed_work_order_queue(inbox_path: Path = DEFAULT_TYPED_WORK_ORDER_INBOX) -> TypedWorkOrderQueueStatus:
     inbox = inbox_path
@@ -57,6 +61,7 @@ def inspect_typed_work_order_queue(inbox_path: Path = DEFAULT_TYPED_WORK_ORDER_I
         status = STATUS_MULTIPLE_COMMANDS
     return TypedWorkOrderQueueStatus(inbox, status, pending)
 
+
 def typed_work_order_queue_status_as_json_data(status: TypedWorkOrderQueueStatus) -> dict[str, object]:
     return {
         "schema_version": 1,
@@ -65,6 +70,7 @@ def typed_work_order_queue_status_as_json_data(status: TypedWorkOrderQueueStatus
         "pending_count": status.pending_count,
         "pending_paths": [str(path) for path in status.pending_paths],
     }
+
 
 def typed_next_result_as_json_data(result: TypedNextResult) -> dict[str, object]:
     return {
@@ -76,7 +82,9 @@ def typed_next_result_as_json_data(result: TypedNextResult) -> dict[str, object]
         "executed_path": result.executed_path,
         "terminal_log": result.terminal_log,
         "message": result.message,
+        "expected_closeout_paths": list(result.expected_closeout_paths),
     }
+
 
 def render_typed_work_order_queue_status(status: TypedWorkOrderQueueStatus) -> str:
     lines = [
@@ -89,6 +97,11 @@ def render_typed_work_order_queue_status(status: TypedWorkOrderQueueStatus) -> s
         lines.append(f"pending={path}")
     return "\n".join(lines)
 
+
+def _expected_closeout_paths(*paths: str | None) -> tuple[str, ...]:
+    return tuple(path for path in paths if path)
+
+
 def run_typed_next(
     project_root: Path = Path("."),
     inbox_path: Path = DEFAULT_TYPED_WORK_ORDER_INBOX,
@@ -99,16 +112,55 @@ def run_typed_next(
     if status.status == STATUS_NO_COMMAND:
         return TypedNextResult(status.status, RESULT_PENDING, 2, None, None, None, "No typed work order queued.")
     if status.status == STATUS_MULTIPLE_COMMANDS:
-        return TypedNextResult(status.status, RESULT_FAIL, 2, None, None, None, "Multiple typed work orders queued; refusing ambiguous execution.")
+        return TypedNextResult(
+            status.status,
+            RESULT_FAIL,
+            2,
+            None,
+            None,
+            None,
+            "Multiple typed work orders queued; refusing ambiguous execution.",
+        )
     source = status.pending_paths[0]
+    source_rel = str(source.relative_to(root))
     target_dir = root / executed_dir
     target = target_dir / source.name
+    target_rel = str(target.relative_to(root))
     if target.exists():
-        return TypedNextResult(STATUS_ALREADY_EXECUTED, RESULT_PENDING, 2, str(source.relative_to(root)), str(target.relative_to(root)), None, "Typed work order was already executed; refusing duplicate execution.")
+        return TypedNextResult(
+            STATUS_ALREADY_EXECUTED,
+            RESULT_PENDING,
+            2,
+            source_rel,
+            target_rel,
+            None,
+            "Typed work order was already executed; refusing duplicate execution.",
+            expected_closeout_paths=_expected_closeout_paths(source_rel, target_rel),
+        )
     order = load_typed_work_order(source)
     result = run_typed_work_order(order, root)
     if result.result_status == RESULT_PASS:
         target_dir.mkdir(parents=True, exist_ok=True)
         shutil.move(str(source), str(target))
-        return TypedNextResult(status.status, result.result_status, result.returncode, str(source.relative_to(root)), str(target.relative_to(root)), result.terminal_log, "Typed work order executed and moved to executed queue.", result)
-    return TypedNextResult(status.status, result.result_status, result.returncode, str(source.relative_to(root)), None, result.terminal_log, result.message, result)
+        return TypedNextResult(
+            status.status,
+            result.result_status,
+            result.returncode,
+            source_rel,
+            target_rel,
+            result.terminal_log,
+            "Typed work order executed and moved to executed queue.",
+            result,
+            _expected_closeout_paths(source_rel, target_rel, result.terminal_log),
+        )
+    return TypedNextResult(
+        status.status,
+        result.result_status,
+        result.returncode,
+        source_rel,
+        None,
+        result.terminal_log,
+        result.message,
+        result,
+        _expected_closeout_paths(result.terminal_log),
+    )
