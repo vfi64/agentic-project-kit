@@ -10,6 +10,8 @@ from agentic_project_kit.run_summary_renderer import validate_summary_data
 
 PASS_MARKER = "### RESULT: PASS ###"
 FAIL_MARKER = "### RESULT: FAIL ###"
+PENDING_MARKER = "### RESULT: PENDING ###"
+HARD_FAIL_MARKER = "### RESULT: HARD-FAIL ###"
 LATEST_TERMINAL_POINTER = Path("docs/reports/terminal/LATEST_TERMINAL_LOG.txt")
 STRUCTURED_SUMMARY_HEADER = "SUMMARY COMM-"
 SUMMARY_BOUNDARY = "================================================================"
@@ -288,5 +290,178 @@ def render_evidence_inspection(result: EvidenceInspection) -> str:
         lines.append("next_action: locate remote or repo evidence, or run an evidence upload slice before requesting pasted output")
     else:
         lines.append("next_action: review ambiguous evidence manually before continuing")
+    lines.append(f"### RESULT: {'PASS' if result.success else 'FAIL'} ###")
+    return "\n".join(lines)
+
+
+class LogClassificationState(str, Enum):
+    READY_TO_CONTINUE = "READY_TO_CONTINUE"
+    BLOCKED_BY_FAIL = "BLOCKED_BY_FAIL"
+    BLOCKED_BY_PENDING = "BLOCKED_BY_PENDING"
+    BLOCKED_BY_MISSING_SUMMARY = "BLOCKED_BY_MISSING_SUMMARY"
+    BLOCKED_BY_BAD_SUMMARY = "BLOCKED_BY_BAD_SUMMARY"
+    BLOCKED_BY_HIDDEN_FAIL = "BLOCKED_BY_HIDDEN_FAIL"
+    BLOCKED_BY_TEST_FAILURE = "BLOCKED_BY_TEST_FAILURE"
+    BLOCKED_BY_RUFF_FAILURE = "BLOCKED_BY_RUFF_FAILURE"
+    BLOCKED_BY_TRACEBACK = "BLOCKED_BY_TRACEBACK"
+    BLOCKED_BY_SHELL_SYNTAX = "BLOCKED_BY_SHELL_SYNTAX"
+    BLOCKED_BY_DIRTY_WORKTREE = "BLOCKED_BY_DIRTY_WORKTREE"
+    AMBIGUOUS = "AMBIGUOUS"
+
+
+@dataclass(frozen=True)
+class LogClassification:
+    path: Path | None
+    exists: bool
+    state: LogClassificationState
+    decision: str
+    summary_found: bool
+    summary_valid: bool
+    hidden_fail: bool
+    final_marker: str
+    reasons: tuple[str, ...] = ()
+
+    @property
+    def success(self) -> bool:
+        return self.state == LogClassificationState.READY_TO_CONTINUE
+
+
+def _last_any_result_marker(text: str) -> str:
+    marker_values = (
+        (text.rfind(PASS_MARKER), "PASS"),
+        (text.rfind(FAIL_MARKER), "FAIL"),
+        (text.rfind(PENDING_MARKER), "PENDING"),
+        (text.rfind(HARD_FAIL_MARKER), "HARD-FAIL"),
+    )
+    marker_values = tuple(item for item in marker_values if item[0] >= 0)
+    if not marker_values:
+        return "UNKNOWN"
+    return max(marker_values, key=lambda item: item[0])[1]
+
+
+def _contains_any(text: str, markers: tuple[str, ...]) -> bool:
+    return any(marker in text for marker in markers)
+
+
+def classify_log(
+    path: Path | str | None = None,
+    *,
+    root: Path | str = ".",
+    require_summary: bool = False,
+    check_git_status: bool = True,
+) -> LogClassification:
+    root_path = Path(root)
+    evidence_path = Path(path) if path is not None else resolve_latest_evidence(root_path)
+    if evidence_path is None:
+        return LogClassification(
+            path=None,
+            exists=False,
+            state=LogClassificationState.AMBIGUOUS,
+            decision="review",
+            summary_found=False,
+            summary_valid=False,
+            hidden_fail=False,
+            final_marker="UNKNOWN",
+            reasons=("missing evidence log",),
+        )
+    if not evidence_path.exists():
+        return LogClassification(
+            path=evidence_path,
+            exists=False,
+            state=LogClassificationState.AMBIGUOUS,
+            decision="review",
+            summary_found=False,
+            summary_valid=False,
+            hidden_fail=False,
+            final_marker="UNKNOWN",
+            reasons=("missing evidence log",),
+        )
+
+    text = evidence_path.read_text(encoding="utf-8")
+    inspection = inspect_evidence(evidence_path, root=root_path, require_summary=require_summary)
+    summary = inspection.structured_summary
+    final_marker = _last_any_result_marker(text)
+    reasons: list[str] = []
+
+    test_failure = _contains_any(text, ("FAILED tests/", "short test summary info", "pytest", "AssertionError"))
+    ruff_failure = _contains_any(text, ("ruff failed", "Ruff failed", "ruff check", "would reformat"))
+    traceback = _contains_any(text, ("Traceback (most recent call last):", "ModuleNotFoundError:", "ERROR collecting"))
+    shell_syntax = _contains_any(text, ("syntax error", "parse error", "unexpected EOF", "zsh: parse error", "bash: syntax error"))
+
+    if require_summary and not summary.found:
+        reasons.append("missing structured summary block")
+        state = LogClassificationState.BLOCKED_BY_MISSING_SUMMARY
+    elif summary.found and not summary.valid:
+        reasons.extend(summary.findings or ("invalid structured summary block",))
+        state = LogClassificationState.BLOCKED_BY_BAD_SUMMARY
+    elif inspection.hidden_fail_before_final_pass:
+        reasons.append("hidden fail before final PASS")
+        state = LogClassificationState.BLOCKED_BY_HIDDEN_FAIL
+    elif final_marker in {"FAIL", "HARD-FAIL"}:
+        reasons.append(f"final result marker is {final_marker}")
+        state = LogClassificationState.BLOCKED_BY_FAIL
+    elif final_marker == "PENDING":
+        reasons.append("final result marker is PENDING")
+        state = LogClassificationState.BLOCKED_BY_PENDING
+    elif test_failure:
+        reasons.append("test failure marker found")
+        state = LogClassificationState.BLOCKED_BY_TEST_FAILURE
+    elif ruff_failure:
+        reasons.append("ruff failure marker found")
+        state = LogClassificationState.BLOCKED_BY_RUFF_FAILURE
+    elif traceback:
+        reasons.append("python traceback or collection error found")
+        state = LogClassificationState.BLOCKED_BY_TRACEBACK
+    elif shell_syntax:
+        reasons.append("shell syntax failure marker found")
+        state = LogClassificationState.BLOCKED_BY_SHELL_SYNTAX
+    elif check_git_status and summary.found and summary.valid and summary.overall_pass and inspection.git_status:
+        reasons.append("current git status is dirty while summary claims PASS")
+        state = LogClassificationState.BLOCKED_BY_DIRTY_WORKTREE
+    elif final_marker == "PASS":
+        reasons.append("clean final PASS")
+        state = LogClassificationState.READY_TO_CONTINUE
+    else:
+        reasons.append("missing or unknown final result marker")
+        state = LogClassificationState.AMBIGUOUS
+
+    if state == LogClassificationState.READY_TO_CONTINUE:
+        decision = "continue"
+    elif state == LogClassificationState.BLOCKED_BY_PENDING:
+        decision = "pending"
+    elif state == LogClassificationState.AMBIGUOUS:
+        decision = "review"
+    else:
+        decision = "fail"
+
+    return LogClassification(
+        path=evidence_path,
+        exists=True,
+        state=state,
+        decision=decision,
+        summary_found=summary.found,
+        summary_valid=summary.valid,
+        hidden_fail=inspection.hidden_fail_before_final_pass,
+        final_marker=final_marker,
+        reasons=tuple(reasons),
+    )
+
+
+def render_log_classification(result: LogClassification) -> str:
+    lines = [
+        "LOG_CLASSIFICATION",
+        f"state={result.state.value}",
+        f"decision={result.decision}",
+        f"evidence_exists={str(result.exists).lower()}",
+        f"summary_found={str(result.summary_found).lower()}",
+        f"summary_valid={str(result.summary_valid).lower()}",
+        f"hidden_fail={str(result.hidden_fail).lower()}",
+        f"final_marker={result.final_marker}",
+    ]
+    if result.path is not None:
+        lines.append(f"path={result.path}")
+    if result.reasons:
+        lines.append("reasons:")
+        lines.extend(f"- {reason}" for reason in result.reasons)
     lines.append(f"### RESULT: {'PASS' if result.success else 'FAIL'} ###")
     return "\n".join(lines)

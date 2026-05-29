@@ -10,8 +10,10 @@ from agentic_project_kit.evidence_finalize_log import render_finalize_log_error
 from agentic_project_kit.evidence_finalize_log import render_finalize_log_result
 from agentic_project_kit.evidence_guard import check_change_scope
 from agentic_project_kit.evidence_guard import check_terminal_log
+from agentic_project_kit.evidence_inspector import classify_log
 from agentic_project_kit.evidence_inspector import inspect_evidence
 from agentic_project_kit.evidence_inspector import render_evidence_inspection
+from agentic_project_kit.evidence_inspector import render_log_classification
 
 app = typer.Typer(help="Validate terminal evidence logs.")
 
@@ -37,6 +39,25 @@ def inspect(
     """Inspect explicit or latest terminal evidence before continuing after chat control signals."""
     result = inspect_evidence(path, root=root, require_summary=require_summary)
     typer.echo(render_evidence_inspection(result))
+    if not result.success:
+        raise typer.Exit(code=1)
+
+
+@app.command("classify-log")
+def classify_log_command(
+    path: Path | None = typer.Argument(None),
+    root: Path = typer.Option(Path("."), "--root"),
+    require_summary: bool = typer.Option(False, "--require-summary"),
+    ignore_git_status: bool = typer.Option(False, "--ignore-git-status"),
+) -> None:
+    """Classify a terminal/evidence log for deterministic gatekeeper decisions."""
+    result = classify_log(
+        path,
+        root=root,
+        require_summary=require_summary,
+        check_git_status=not ignore_git_status,
+    )
+    typer.echo(render_log_classification(result))
     if not result.success:
         raise typer.Exit(code=1)
 
