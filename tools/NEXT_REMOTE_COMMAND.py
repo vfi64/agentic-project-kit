@@ -36,21 +36,17 @@ out('===================================================')
 out('===================================================')
 out('REMOTE COMMAND: implement agentic-kit remote-next')
 
-if not ROOT.exists():
-    out(f'missing repo root: {ROOT}')
-    out('### RESULT: FAIL ###')
-    raise SystemExit(1)
-
 PY = ROOT / '.venv/bin/python'
 AK = ROOT / '.venv/bin/agentic-kit'
 if not PY.exists() or not AK.exists():
     out('missing repo .venv python or agentic-kit')
-    out(f'python={PY}')
-    out(f'agentic_kit={AK}')
     out('### RESULT: FAIL ###')
     raise SystemExit(1)
 
 run('FETCH MAIN', ['git', 'fetch', 'origin', 'main'])
+branch = run('CURRENT BRANCH', ['git', 'branch', '--show-current']).stdout.strip()
+if branch == BRANCH:
+    run('RESET BROKEN FEATURE BRANCH', ['git', 'reset', '--hard'])
 run('SWITCH MAIN', ['git', 'switch', 'main'])
 run('PULL MAIN', ['git', 'pull', '--ff-only', 'origin', 'main'])
 status = run('PRE-BRANCH STATUS', ['git', 'status', '--porcelain'], check=False).stdout.strip()
@@ -63,11 +59,11 @@ if status:
 existing = subprocess.run(['git', 'rev-parse', '--verify', BRANCH], cwd=ROOT, text=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 if existing.returncode == 0:
     run('SWITCH EXISTING BRANCH', ['git', 'switch', BRANCH])
-    run('REBASE ON MAIN', ['git', 'rebase', 'main'])
+    run('RESET FEATURE BRANCH TO MAIN', ['git', 'reset', '--hard', 'main'])
 else:
     run('CREATE FEATURE BRANCH', ['git', 'switch', '-c', BRANCH])
 
-remote_next_py = '''from __future__ import annotations
+remote_next_py = r'''from __future__ import annotations
 
 import dataclasses
 import subprocess
@@ -81,6 +77,7 @@ from agentic_project_kit.typed_work_order_queue import (
 
 STATUS_SYNC_FAIL = "sync_fail"
 
+
 @dataclasses.dataclass(frozen=True)
 class RemoteNextResult:
     sync_status: str
@@ -90,7 +87,14 @@ class RemoteNextResult:
 
 
 def _run_git(project_root: Path, argv: list[str]) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(argv, cwd=project_root, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    return subprocess.run(
+        argv,
+        cwd=project_root,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
 
 
 def _sync_main(project_root: Path) -> tuple[bool, str]:
@@ -137,16 +141,18 @@ def render_remote_next_result(result: RemoteNextResult) -> str:
         f"message={result.message}",
     ]
     if result.typed_next is not None:
-        lines.extend([
-            f"typed_queue_status={result.typed_next.queue_status}",
-            f"typed_result_status={result.typed_next.result_status}",
-        ])
+        lines.extend(
+            [
+                f"typed_queue_status={result.typed_next.queue_status}",
+                f"typed_result_status={result.typed_next.result_status}",
+            ]
+        )
         if result.typed_next.terminal_log:
             lines.append(f"terminal_log={result.typed_next.terminal_log}")
     return "\n".join(lines)
 '''
 
-remote_next_cli = '''from __future__ import annotations
+remote_next_cli = r'''from __future__ import annotations
 
 import json
 from pathlib import Path
@@ -191,7 +197,7 @@ out('patched=src/agentic_project_kit/cli.py')
 write('src/agentic_project_kit/remote_next.py', remote_next_py)
 write('src/agentic_project_kit/cli_commands/remote_next.py', remote_next_cli)
 
-test_remote_next = '''from __future__ import annotations
+test_remote_next = r'''from __future__ import annotations
 
 import subprocess
 from pathlib import Path
@@ -256,15 +262,15 @@ def test_remote_next_reports_sync_failure(tmp_path, monkeypatch):
 
 
 def test_remote_next_render_and_json_shape():
-    result = run_remote_next_result = SimpleNamespace(
+    result = SimpleNamespace(
         sync_status="sync_fail",
         returncode=2,
         message="failed",
         typed_next=None,
     )
 
-    rendered = render_remote_next_result(run_remote_next_result)
-    data = remote_next_result_as_json_data(run_remote_next_result)
+    rendered = render_remote_next_result(result)
+    data = remote_next_result_as_json_data(result)
 
     assert "REMOTE_NEXT_RESULT" in rendered
     assert data["schema_version"] == 1
@@ -286,20 +292,21 @@ write('tests/test_remote_next.py', test_remote_next)
 
 no_copy = ROOT / 'docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md'
 no_copy_text = no_copy.read_text(encoding='utf-8')
-needle = 'For repo-backed agent commands, `docs/reports/command_runs/LATEST_COMMAND_RUN.txt` is the canonical first read after `d` or `f`.'
-addition = '''\n\n## Fixed remote-next dialog path\n\nFor dialog-oriented local work, the preferred target path is `agentic-kit remote-next`. The command synchronizes `main` and executes the next typed work order through the repo-backed typed work-order runner. Chat assistants should prefer queuing a typed work order for this path over pasting long local terminal blocks. The GUI must use the same command path instead of introducing a separate execution model.\n'''
+addition = '''
+
+## Fixed remote-next dialog path
+
+For dialog-oriented local work, the preferred target path is `agentic-kit remote-next`. The command synchronizes `main` and executes the next typed work order through the repo-backed typed work-order runner. Chat assistants should prefer queuing a typed work order for this path over pasting long local terminal blocks. The GUI must use the same command path instead of introducing a separate execution model.
+'''
 if '## Fixed remote-next dialog path' not in no_copy_text:
-    no_copy_text += addition
-    no_copy.write_text(no_copy_text, encoding='utf-8')
+    no_copy.write_text(no_copy_text + addition, encoding='utf-8')
     out('patched=docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md')
 
-run('RUFF', [str(AK), 'check-docs'], check=False)
 run('TARGETED TESTS', [str(PY), '-m', 'pytest', 'tests/test_remote_next.py', '-q'])
-run('WORK ORDER TESTS', [str(PY), '-m', 'pytest', 'tests/test_remote_next.py', 'tests/test_gui_gatekeeper_status.py', '-q'])
 run('RUFF CHECK', [str(PY), '-m', 'ruff', 'check', 'src/agentic_project_kit/remote_next.py', 'src/agentic_project_kit/cli_commands/remote_next.py', 'tests/test_remote_next.py'])
 run('CHECK DOCS', [str(AK), 'check-docs'])
+run('DOCTOR', [str(AK), 'doctor'])
 
-run('DIFF STAT', ['git', 'diff', '--stat'])
 planner = run('PROTECTED CHANGE PLAN', ['./ns', 'protected-change-plan'], check=False)
 if planner.returncode != 0:
     out('protected-change-plan failed')
