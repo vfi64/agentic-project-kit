@@ -174,7 +174,7 @@ Final-Summary-Vokabular:
 
 ## 13. Erste Arbeitsanweisung
 
-Start the next chat from the fresh post-PR897 successor handoff prompt and obey agentic-kit handoff post-merge-refresh-status before product work.
+Start the next chat from the fresh post-PR899 successor handoff prompt and obey agentic-kit handoff post-merge-refresh-status before product work.
 
 ## 14. Arbeitsmodus für den Nachfolge-Chat
 
