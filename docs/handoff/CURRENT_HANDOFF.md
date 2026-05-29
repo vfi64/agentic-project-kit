@@ -1,3 +1,14 @@
+## Post-PR894 Handoff Refresh State
+
+Current verified main HEAD is `87407ac463b46638f340fc757ec452c46e803096` (`87407ac`).
+Commit subject: `Merge pull request #894 from vfi64/docs/post-merge-gate-bootstrap-visibility`.
+
+PR #894 is merged. This is an administrative post-merge handoff/status refresh before chat handoff.
+
+The post-merge handoff refresh status gate is the canonical decision point after merges: `agentic-kit handoff post-merge-refresh-status`.
+
+Next safe step after this refresh is merged and verified: start the successor chat from the fresh prompt and continue only if the machine-readable refresh status is `result=NOOP`.
+
 ## Post-Merge Handoff Refresh Status Gate Visibility
 
 The post-merge handoff refresh status gate is now documented for bootstrap visibility. After any PR merge and local main sync, run agentic-kit handoff post-merge-refresh-status. Continue only on result=NOOP; create an administrative handoff refresh slice on result=REFRESH_REQUIRED before product work.
