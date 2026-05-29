@@ -3,8 +3,8 @@
 WARNING: this successor handoff prompt may be stale.
 Refresh `docs/STATUS.md`, `.agentic/handoff_state.yaml`, `docs/handoff/CURRENT_HANDOFF.md`, and the successor prompt before treating this prompt as authoritative.
 
-- current git HEAD 3385eac is not represented by handoff safe/admin state (87407ac)
-- latest successor handoff prompt docs/reports/terminal/v044-successor-chat-handoff-after-pr894.md does not mention current handoff commit marker(s): 3385eac
+- current git HEAD 380ca8c is not represented by handoff safe/admin state (87407ac)
+- latest successor handoff prompt is missing: docs/reports/terminal/v044-successor-chat-handoff-after-pr894.md
 
 # Übergabeprompt
 
