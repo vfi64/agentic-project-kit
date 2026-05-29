@@ -33,6 +33,7 @@ def test_remote_next_syncs_main_then_runs_typed_next(tmp_path, monkeypatch):
         source_path=None,
         executed_path=None,
         terminal_log=None,
+        expected_closeout_paths=(),
     )
 
     monkeypatch.setattr("agentic_project_kit.remote_next._run_git", fake_git)
@@ -76,6 +77,26 @@ def test_remote_next_render_and_json_shape():
     assert "REMOTE_NEXT_RESULT" in rendered
     assert data["schema_version"] == 1
     assert data["typed_next"] is None
+
+
+def test_remote_next_renders_expected_closeout_paths():
+    typed = SimpleNamespace(
+        queue_status="exactly_one_command",
+        result_status="PASS",
+        terminal_log="docs/reports/terminal/example.log",
+        expected_closeout_paths=(
+            ".agentic/typed_work_orders/inbox/example.yaml",
+            ".agentic/typed_work_orders/executed/example.yaml",
+            "docs/reports/terminal/example.log",
+        ),
+    )
+    result = SimpleNamespace(sync_status="synced", returncode=0, message="ok", typed_next=typed)
+
+    rendered = render_remote_next_result(result)
+
+    assert "expected_closeout_path=.agentic/typed_work_orders/inbox/example.yaml" in rendered
+    assert "expected_closeout_path=.agentic/typed_work_orders/executed/example.yaml" in rendered
+    assert "expected_closeout_path=docs/reports/terminal/example.log" in rendered
 
 
 def test_remote_next_cli_is_registered(monkeypatch):
