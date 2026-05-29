@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-29'
-  reason: post-PR897 handoff refresh
-  source: PR897 main verification
+  reason: Refresh handoff state to last substantive work commit
+  source: agentic-kit handoff refresh
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: a766ce92bbd4fc6cebfbb3ce3762bfa56e79c60c
-  commit_subject: Harden standard summary log classification (#897)
+  commit: 922812e
+  commit_subject: Enforce classifier in evidence finalization (#899)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -409,14 +409,5 @@ handoff_maintenance:
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
   latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr897.md
-administrative_evidence_state:
-  current_head: a766ce92bbd4fc6cebfbb3ce3762bfa56e79c60c
-  current_head_subject: Harden standard summary log classification (#897)
-  head_subject: Harden standard summary log classification (#897)
-  allowed_after_safe_state: true
-  reason: PR897 standard summary validator hardening merged on main
-  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr897.md
-  current_subject: Harden standard summary log classification (#897)
-  safe_state_semantics: current_main_head
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
