@@ -1,3 +1,14 @@
+## Post-PR897 Handoff Refresh State
+
+Current verified main HEAD is `a766ce92bbd4fc6cebfbb3ce3762bfa56e79c60c` (`a766ce9`).
+Commit subject: `Harden standard summary log classification (#897)`.
+
+PR #897 is merged. This is an administrative post-merge handoff/status refresh before chat handoff.
+
+The post-merge handoff refresh status gate is the canonical decision point after merges: `agentic-kit handoff post-merge-refresh-status`.
+
+Next safe step after this refresh is merged and verified: start the successor chat from the fresh prompt and continue only if the machine-readable refresh status is `result=NOOP`.
+
 ## Post-PR894 Handoff Refresh State
 
 Current verified main HEAD is `87407ac463b46638f340fc757ec452c46e803096` (`87407ac`).
