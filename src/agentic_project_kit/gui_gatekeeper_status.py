@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 import subprocess
-from typing import Iterable, Sequence
+from typing import Sequence
 import yaml
 
 from agentic_project_kit.action_registry import ACTIONS, SafetyClass
