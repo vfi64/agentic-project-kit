@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import date
 from pathlib import Path
+import re
 import subprocess
 from typing import Any
 
@@ -40,6 +41,37 @@ ADMINISTRATIVE_EVIDENCE_SUBJECT_PREFIXES = (
     "record final post-pr",
     "recover post-",
 )
+
+PR_REFERENCE_RE = re.compile(r"post-PR(?P<number>\d+)|after-pr(?P<after_number>\d+)", re.IGNORECASE)
+
+
+def _referenced_pr_numbers(text: str) -> set[str]:
+    numbers: set[str] = set()
+    for match in PR_REFERENCE_RE.finditer(text):
+        number = match.group("number") or match.group("after_number")
+        if number:
+            numbers.add(number)
+    return numbers
+
+
+def _validate_handoff_next_reference_consistency(data: dict[str, Any]) -> list[str]:
+    first_instruction = str(data.get("first_instruction", ""))
+    maintenance = data.get("handoff_maintenance", {})
+    if not isinstance(maintenance, dict):
+        return []
+    latest_prompt = str(maintenance.get("latest_successor_prompt", ""))
+    instruction_refs = _referenced_pr_numbers(first_instruction)
+    prompt_refs = _referenced_pr_numbers(latest_prompt)
+    if not instruction_refs or not prompt_refs:
+        return []
+    if instruction_refs == prompt_refs:
+        return []
+    return [
+        "first_instruction successor prompt reference does not match "
+        "handoff_maintenance.latest_successor_prompt: "
+        f"first_instruction PRs={sorted(instruction_refs)}, "
+        f"latest_successor_prompt PRs={sorted(prompt_refs)}"
+    ]
 
 def load_handoff_state(path: str | Path = DEFAULT_HANDOFF_STATE_PATH) -> dict[str, Any]:
     state_path = Path(path)
@@ -113,6 +145,7 @@ def validate_handoff_state(data: dict[str, Any]) -> list[str]:
     for blocked_item in blocked:
         if blocked_item and blocked_item in first_instruction:
             errors.append(f"first_instruction mentions blocked work: {blocked_item}")
+    errors.extend(_validate_handoff_next_reference_consistency(data))
     return errors
 
 def active_rules(data: dict[str, Any]) -> list[dict[str, Any]]:

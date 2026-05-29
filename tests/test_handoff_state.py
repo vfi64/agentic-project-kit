@@ -118,3 +118,49 @@ def test_handoff_check_without_registry_keeps_existing_success_output(tmp_path: 
     assert result.exit_code == 0, result.output
     assert "Persistent handoff state check passed" in result.output
     assert "Documentation registry:" not in result.output
+
+def test_handoff_state_accepts_matching_successor_prompt_references(tmp_path: Path) -> None:
+    _write_minimal_handoff_state(tmp_path)
+    handoff_path = tmp_path / ".agentic/handoff_state.yaml"
+    data = yaml.safe_load(handoff_path.read_text(encoding="utf-8"))
+    data["first_instruction"] = (
+        "Start the next chat from the fresh post-PR903 successor handoff prompt."
+    )
+    data["handoff_maintenance"]["latest_successor_prompt"] = (
+        "docs/reports/terminal/v044-successor-chat-handoff-after-pr903.md"
+    )
+
+    assert validate_handoff_state(data) == []
+
+
+def test_handoff_state_rejects_mismatched_successor_prompt_references(tmp_path: Path) -> None:
+    _write_minimal_handoff_state(tmp_path)
+    handoff_path = tmp_path / ".agentic/handoff_state.yaml"
+    data = yaml.safe_load(handoff_path.read_text(encoding="utf-8"))
+    data["first_instruction"] = (
+        "Start the next chat from the fresh post-PR897 successor handoff prompt."
+    )
+    data["handoff_maintenance"]["latest_successor_prompt"] = (
+        "docs/reports/terminal/v044-successor-chat-handoff-after-pr903.md"
+    )
+
+    errors = validate_handoff_state(data)
+
+    assert errors == [
+        "first_instruction successor prompt reference does not match "
+        "handoff_maintenance.latest_successor_prompt: "
+        "first_instruction PRs=['897'], latest_successor_prompt PRs=['903']"
+    ]
+
+
+def test_handoff_state_allows_generic_next_instruction_without_pr_reference(tmp_path: Path) -> None:
+    _write_minimal_handoff_state(tmp_path)
+    handoff_path = tmp_path / ".agentic/handoff_state.yaml"
+    data = yaml.safe_load(handoff_path.read_text(encoding="utf-8"))
+    data["first_instruction"] = "Continue with the next safe slice."
+    data["handoff_maintenance"]["latest_successor_prompt"] = (
+        "docs/reports/terminal/v044-successor-chat-handoff-after-pr903.md"
+    )
+
+    assert validate_handoff_state(data) == []
+
