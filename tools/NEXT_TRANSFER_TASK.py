@@ -7,6 +7,7 @@ import subprocess
 ROOT = Path('/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit')
 BRANCH = 'docs/post-pr928-handoff-refresh-evidence'
 PATHS = [
+    '.agentic/handoff_state.yaml',
     '.agentic/typed_work_orders/inbox/post-pr928-handoff-refresh.yaml',
     '.agentic/typed_work_orders/executed/post-pr928-handoff-refresh.yaml',
     'docs/reports/terminal/post-pr928-handoff-refresh.log',
@@ -51,12 +52,11 @@ def main() -> int:
         return 1
 
     run('CREATE CLOSEOUT BRANCH', ['git', 'switch', '-c', BRANCH])
-    run('EVIDENCE COMMIT PATHS', [
-        '.venv/bin/agentic-kit', 'evidence', 'commit-paths',
-        '--path', PATHS[0], '--path', PATHS[1], '--path', PATHS[2],
-        '--message', 'Record post-PR928 handoff refresh evidence',
-        '--push',
-    ])
+    cmd = ['.venv/bin/agentic-kit', 'evidence', 'commit-paths']
+    for path in PATHS:
+        cmd.extend(['--path', path])
+    cmd.extend(['--message', 'Record post-PR928 handoff refresh evidence', '--push'])
+    run('EVIDENCE COMMIT PATHS', cmd)
     run('STATUS AFTER CLOSEOUT', ['git', 'status', '--short'], check=False)
     print()
     print('SUMMARY COMM-LOCAL | post-pr928-handoff-refresh-evidence')
