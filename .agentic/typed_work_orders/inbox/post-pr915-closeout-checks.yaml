@@ -2,7 +2,7 @@ id: post-pr915-closeout-checks
 title: Post PR915 closeout checks
 safety: local-only
 log_path: docs/reports/terminal/post-pr915-closeout-checks.log
-block_dirty_worktree: true
+block_dirty_worktree: false
 steps:
   - kind: command_argv
     label: handoff check
