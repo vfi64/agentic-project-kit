@@ -1,0 +1,34 @@
+Typed work order: post-pr923-handoff-rules-refresh
+Title: Post PR923 handoff rules refresh
+Safety: local-only
+
+### JSON RESULT ###
+{
+  "command_report": null,
+  "dirty_state": "clean",
+  "message": "Typed work order executed.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "safety": "local-only",
+  "schema_version": 1,
+  "step_results": [
+    {
+      "argv": [
+        ".venv/bin/agentic-kit",
+        "rules",
+        "handoff-refresh"
+      ],
+      "kind": "command_argv",
+      "label": "handoff rules refresh",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "RULE_REFRESH_RESULT\noutput_path=docs/reports/handoff_rules/CURRENT_HANDOFF_RULES.md\nnext_reply=d3\ninstruction=On user reply d3, read this generated file before continuing and start the documented handoff mechanism from the repo-backed source snapshots.\nsource_path=docs/handoff/CURRENT_HANDOFF.md\nsource_path=docs/handoff/START_NEW_CHAT_PROMPT.md\nsource_path=docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md\nsource_path=docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md\nsource_path=docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md\nsource_path=.agentic/handoff_state.yaml\nsource_path=.agentic/compiled_agent_context.yaml\n"
+    }
+  ],
+  "terminal_log": "docs/reports/terminal/post-pr923-handoff-rules-refresh.log",
+  "work_order_id": "post-pr923-handoff-rules-refresh"
+}
+
+### RESULT: PASS ###
+Return code: 0
+Terminal bleibt offen. Kein exit am Blockende.
