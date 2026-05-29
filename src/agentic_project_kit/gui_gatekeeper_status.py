@@ -60,8 +60,19 @@ def build_gui_gatekeeper_status(
     if workflow_state not in {"IDLE", "READY"}:
         blockers.append(f"workflow_state is {workflow_state}")
 
+    ready_for_read_only_actions = not git_dirty
+    ready_for_mutating_actions = (
+        not git_dirty
+        and branch != "unknown"
+        and workflow_state in {"IDLE", "READY"}
+    )
+
     action_statuses = tuple(
-        classify_gui_gatekeeper_action(action, git_dirty=git_dirty)
+        classify_gui_gatekeeper_action(
+            action,
+            git_dirty=git_dirty,
+            local_only_allowed=ready_for_mutating_actions,
+        )
         for action in (actions if actions is not None else ACTIONS)
     )
 
@@ -71,14 +82,19 @@ def build_gui_gatekeeper_status(
         workflow_state=workflow_state,
         current_work_present=current_work_present,
         current_work_state=current_work_state,
-        ready_for_read_only_actions=not git_dirty,
-        ready_for_mutating_actions=False,
+        ready_for_read_only_actions=ready_for_read_only_actions,
+        ready_for_mutating_actions=ready_for_mutating_actions,
         action_statuses=action_statuses,
         blockers=tuple(blockers),
     )
 
 
-def classify_gui_gatekeeper_action(action: object, *, git_dirty: bool) -> GuiGatekeeperActionStatus:
+def classify_gui_gatekeeper_action(
+    action: object,
+    *,
+    git_dirty: bool,
+    local_only_allowed: bool = False,
+) -> GuiGatekeeperActionStatus:
     action_id = str(getattr(action, "name", getattr(action, "action_id", "<unknown>")))
     safety_class = _safety_value(getattr(action, "safety_class", getattr(action, "safety", "unknown")))
     mutation_scope = str(getattr(action, "mutation_scope", "unknown"))
@@ -101,12 +117,30 @@ def classify_gui_gatekeeper_action(action: object, *, git_dirty: bool) -> GuiGat
             reason="read-only action blocked because working tree is dirty",
         )
 
+    if safety_class == SafetyClass.LOCAL_ONLY.value and local_only_allowed:
+        return GuiGatekeeperActionStatus(
+            action_id=action_id,
+            safety_class=safety_class,
+            mutation_scope=mutation_scope,
+            enabled=True,
+            reason="local-only action allowed in clean GUI gatekeeper state",
+        )
+
+    if safety_class == SafetyClass.LOCAL_ONLY.value:
+        return GuiGatekeeperActionStatus(
+            action_id=action_id,
+            safety_class=safety_class,
+            mutation_scope=mutation_scope,
+            enabled=False,
+            reason="local-only action blocked because GUI gatekeeper is not clean",
+        )
+
     return GuiGatekeeperActionStatus(
         action_id=action_id,
         safety_class=safety_class,
         mutation_scope=mutation_scope,
         enabled=False,
-        reason="GUI gatekeeper blocks non-read-only actions",
+        reason="GUI gatekeeper blocks remote mutation actions",
     )
 
 
