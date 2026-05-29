@@ -406,7 +406,17 @@ def classify_log(
     final_marker = _last_any_result_marker(text)
     reasons: list[str] = []
 
-    test_failure = _contains_any(text, ("FAILED tests/", "short test summary info", "pytest", "AssertionError"))
+    test_failure = _contains_any(
+        text,
+        (
+            "FAILED tests/",
+            "short test summary info",
+            "AssertionError",
+            "ERROR tests/",
+            "FAILED ",
+            "= FAILURES =",
+        ),
+    )
     ruff_failure = _contains_any(text, ("ruff failed", "Ruff failed", "ruff check", "would reformat"))
     traceback = _contains_any(text, ("Traceback (most recent call last):", "ModuleNotFoundError:", "ERROR collecting"))
     shell_syntax = _contains_any(text, ("syntax error", "parse error", "unexpected EOF", "zsh: parse error", "bash: syntax error"))

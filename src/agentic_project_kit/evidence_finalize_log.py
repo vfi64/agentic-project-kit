@@ -6,7 +6,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from agentic_project_kit.evidence_inspector import EvidenceInspection
+from agentic_project_kit.evidence_inspector import classify_log
 from agentic_project_kit.evidence_inspector import inspect_evidence
+from agentic_project_kit.evidence_inspector import render_log_classification
 from agentic_project_kit.run_summary_renderer import SummaryPayload
 from agentic_project_kit.run_summary_renderer import render_summary
 
@@ -103,10 +105,22 @@ def finalize_log(
         handle.write(summary)
         handle.write("\n")
 
+    classification = classify_log(
+        run_log_path,
+        root=root_path,
+        require_summary=True,
+        check_git_status=False,
+    )
     summary_inspection = inspect_evidence(run_log_path, root=root_path, require_summary=True)
     findings: list[str] = []
-    if not summary_inspection.success:
-        findings.append("structured summary inspection failed")
+    if not classification.success:
+        rendered_classification = render_log_classification(classification)
+        findings.extend(
+            (
+                "log classification failed before evidence upload",
+                rendered_classification,
+            )
+        )
         return FinalizeLogResult(False, run_log_path, remote_log_path, False, "", summary_inspection, summary, tuple(findings))
 
     destination = root_path / remote_log_path
