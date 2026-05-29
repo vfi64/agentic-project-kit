@@ -1,0 +1,27 @@
+id: post-pr916-handoff-refresh-checks
+title: Post PR916 handoff refresh checks
+safety: local-only
+log_path: docs/reports/terminal/post-pr916-handoff-refresh-checks.log
+block_dirty_worktree: true
+steps:
+  - kind: command_argv
+    label: handoff check
+    argv:
+      - .venv/bin/agentic-kit
+      - handoff
+      - check
+  - kind: command_argv
+    label: doctor
+    argv:
+      - .venv/bin/agentic-kit
+      - doctor
+  - kind: command_argv
+    label: check docs
+    argv:
+      - .venv/bin/agentic-kit
+      - check-docs
+  - kind: command_argv
+    label: remote-next no-command smoke
+    argv:
+      - .venv/bin/agentic-kit
+      - remote-next
