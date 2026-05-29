@@ -30,6 +30,17 @@ Current administrative handoff state after PR #880: main contains `f853ccf770e5f
 
 Historical administrative handoff state after PR #838: main contains `777d957474318fdf797ca23625e52046c3fb7df0` (`Refresh post-PR837 administrative handoff state (#838)`). The substantive safe-state may intentionally remain at the last substantive work commit when `safe_state.semantics: last_substantive_work_state` is set; later handoff-only refreshes belong in `administrative_evidence_state`.
 
+## Post-Merge Handoff Refresh Status Gate
+
+After every PR merge and local main sync, run agentic-kit handoff post-merge-refresh-status before product work.
+
+Interpretation is machine-derived:
+
+- result=NOOP: continue without an administrative handoff refresh.
+- result=REFRESH_REQUIRED: create an administrative handoff refresh slice before product work.
+
+This is not a chat-judgement step. The kit decides whether a post-merge handoff refresh is required; d, f, and w remain communication signals only.
+
 ## Prompt to run before leaving the current chat
 
 ```text
