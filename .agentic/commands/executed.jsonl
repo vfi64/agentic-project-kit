@@ -28,3 +28,4 @@
 {"command_id": "post707-state-refresh", "exit_code": 1, "outcome": "FAIL_COMMAND", "script_sha256": "066c7e339d3f1886e2e2672a9f97b197bcb87a2ea4d2b2e42433c47711625c88", "timestamp_utc": "2026-05-24T08:38:10.665537+00:00"}
 {"command_id": "post707-state-refresh-v2", "exit_code": 1, "outcome": "FAIL_COMMAND", "script_sha256": "cc0f2ae0d193e24b808803f2a82248478c173faa3a2b14e0cb1563fdf9d32056", "timestamp_utc": "2026-05-24T08:41:09.190097+00:00"}
 {"command_id": "post707-state-refresh-v3", "exit_code": 0, "outcome": "PASS_EXECUTED", "script_sha256": "0d47e43ad9a42165ff3d86c8cd2e4db008da062c462ac5265001df2010ed27a8", "timestamp_utc": "2026-05-24T08:43:23.196541+00:00"}
+{"command_id": "post-pr914-closeout-precheck", "exit_code": 1, "outcome": "FAIL_COMMAND", "script_sha256": "8dc8322668b9bd9fb72feb4d60a18e72596127d2e2bc856991edcd12359b9070", "timestamp_utc": "2026-05-29T17:36:09.429816+00:00"}

@@ -1,0 +1,34 @@
+terminal_log=docs/reports/terminal/20260529-193605_post-pr914-closeout-precheck.log
+### RUN: sh .agentic/commands/current.sh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+===================================================
+===================================================
+===================================================
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+main HEAD mismatch: 921e7b8c75a44a1b59819254e74fd7b798d7255a expected 040765e2e6f4647b50d653f3fffbc383d62fd4cc
+### RESULT: FAIL ###
+### EXIT: 1
+### RESULT: FAIL ###

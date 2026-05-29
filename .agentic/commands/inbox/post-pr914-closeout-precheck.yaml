@@ -1,5 +1,0 @@
-command_id: post-pr914-closeout-precheck
-title: Post PR914 closeout precheck
-safety_class: local-only
-expected_branch: main
-description: Sync main to the PR914 merge commit and run handoff and documentation prechecks.
