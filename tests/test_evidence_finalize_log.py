@@ -144,8 +144,7 @@ def test_cli_finalize_log_invalid_pass_has_no_traceback(tmp_path: Path) -> None:
 
 def test_finalize_log_rejects_hidden_fail_before_final_pass(tmp_path: Path) -> None:
     run_log = tmp_path / "run.log"
-    remote_log = tmp_path / "docs" / "reports" / "terminal" / "run.log"
-    remote_log.parent.mkdir(parents=True)
+    remote_log = "docs/reports/terminal/run.log"
     run_log.write_text(
         "================================================================\n"
         "SUMMARY COMM-TEST | 2026-05-29 12:00:00 +0000\n"
@@ -203,9 +202,16 @@ def test_finalize_log_rejects_hidden_fail_before_final_pass(tmp_path: Path) -> N
         command_report="NONE",
         interpretation="Hidden fail classifier smoke.",
         safe_step="stop",
+        work="PASS",
+        evidence="PASS",
+        overall="PASS",
+        remote_evidence="NOT_REQUIRED",
+        pr="NONE",
+        ci="not_required",
+        merge="not_required",
     )
 
     assert not result.success
     assert any("log classification failed before evidence upload" in item for item in result.findings)
     assert any("BLOCKED_BY_HIDDEN_FAIL" in item for item in result.findings)
-    assert not remote_log.exists()
+    assert not (tmp_path / remote_log).exists()
