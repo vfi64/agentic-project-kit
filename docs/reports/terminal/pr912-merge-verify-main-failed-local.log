@@ -1,0 +1,117 @@
+==============================
+==============================
+==============================
+PR912 WAIT CI, MERGE, VERIFY MAIN -- LOGGED
+
+PRECHECK
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            docs/post-pr911-admin-closeout -> FETCH_HEAD
+Already on 'docs/post-pr911-admin-closeout'
+M	docs/reports/terminal/post-pr911-admin-closeout-fix3.log
+Your branch is up to date with 'origin/docs/post-pr911-admin-closeout'.
+From github.com:vfi64/agentic-project-kit
+ * branch            docs/post-pr911-admin-closeout -> FETCH_HEAD
+Already up to date.
+docs/post-pr911-admin-closeout
+## docs/post-pr911-admin-closeout...origin/docs/post-pr911-admin-closeout
+ M docs/reports/terminal/post-pr911-admin-closeout-fix3.log
+?? docs/reports/terminal/pr912-merge-verify-main.log
+569baf8 (HEAD -> docs/post-pr911-admin-closeout, origin/docs/post-pr911-admin-closeout) Refresh handoff state after PR911
+e1cac6c (origin/main, origin/HEAD, main) Integrate GUI gatekeeper into Tkinter shell (#911)
+e596e8a Refresh handoff state after PR909 (#910)
+9d1cdd1 Expose GUI gatekeeper status in cockpit CLI (#909)
+d3bd0e5 Refresh handoff state after PR907 (#908)
+local_head=569baf868aeb7b04632a49c17e2fe0833744807f
+
+PR STATE BEFORE WAIT
+{"baseRefOid":"e1cac6c809562f2b99054fdcbc6fe74cfa3e4cf8","headRefOid":"569baf868aeb7b04632a49c17e2fe0833744807f","mergeStateStatus":"CLEAN","number":912,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-29T16:14:38Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26648466729/job/78540316291","name":"test","startedAt":"2026-05-29T16:14:04Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-29T16:14:33Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26648464322/job/78540308459","name":"test","startedAt":"2026-05-29T16:14:01Z","status":"COMPLETED","workflowName":"CI"}]}
+
+WAIT FOR CHECKS
+test	pass	32s	https://github.com/vfi64/agentic-project-kit/actions/runs/26648464322/job/78540308459	
+test	pass	34s	https://github.com/vfi64/agentic-project-kit/actions/runs/26648466729/job/78540316291	
+test	pass	32s	https://github.com/vfi64/agentic-project-kit/actions/runs/26648464322/job/78540308459	
+test	pass	34s	https://github.com/vfi64/agentic-project-kit/actions/runs/26648466729/job/78540316291	
+
+PR STATE AFTER WAIT
+{"baseRefOid":"e1cac6c809562f2b99054fdcbc6fe74cfa3e4cf8","headRefOid":"569baf868aeb7b04632a49c17e2fe0833744807f","mergeStateStatus":"CLEAN","number":912,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-29T16:14:38Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26648466729/job/78540316291","name":"test","startedAt":"2026-05-29T16:14:04Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-29T16:14:33Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26648464322/job/78540308459","name":"test","startedAt":"2026-05-29T16:14:01Z","status":"COMPLETED","workflowName":"CI"}]}
+
+PROTECTED CHANGE PLAN AGAINST ACTUAL PR DIFF
+PROTECTED_CHANGE_PLAN
+result=PASS
+findings=0
+### RESULT: PASS ###
+
+MERGE DECISION
+pr_head=569baf868aeb7b04632a49c17e2fe0833744807f
+local_head=569baf868aeb7b04632a49c17e2fe0833744807f
+ready_for_merge=true
+head_ok=true
+protected_plan_status=0
+check_wait_status=0
+failed to run git: error: Your local changes to the following files would be overwritten by checkout:
+	docs/reports/terminal/post-pr911-admin-closeout-fix3.log
+Please commit your changes or stash them before you switch branches.
+Aborting
+
+
+SYNC MAIN AFTER MERGE
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   e1cac6c..29e407f  main       -> origin/main
+error: Your local changes to the following files would be overwritten by checkout:
+	docs/reports/terminal/post-pr911-admin-closeout-fix3.log
+Please commit your changes or stash them before you switch branches.
+Aborting
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+hint: Diverging branches can't be fast-forwarded, you need to either:
+hint:
+hint: 	git merge --no-ff
+hint:
+hint: or:
+hint:
+hint: 	git rebase
+hint:
+hint: Disable this message with "git config set advice.diverging false"
+fatal: Not possible to fast-forward, aborting.
+
+VERIFY MAIN
+569baf8 (HEAD -> docs/post-pr911-admin-closeout, origin/docs/post-pr911-admin-closeout) Refresh handoff state after PR911
+e1cac6c (main) Integrate GUI gatekeeper into Tkinter shell (#911)
+e596e8a Refresh handoff state after PR909 (#910)
+9d1cdd1 Expose GUI gatekeeper status in cockpit CLI (#909)
+d3bd0e5 Refresh handoff state after PR907 (#908)
+a2a04b6 Add GUI gatekeeper status model (#907)
+8c6a35c Refresh handoff state after PR905 (#906)
+ebe6aff Guard handoff next prompt reference consistency (#905)
+## docs/post-pr911-admin-closeout...origin/docs/post-pr911-admin-closeout
+ M docs/reports/terminal/post-pr911-admin-closeout-fix3.log
+?? docs/reports/terminal/pr912-merge-verify-main.log
+
+VERIFY HANDOFF AFTER MERGE
+Repo: agentic-project-kit
+Path: agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.4.4
+Safe state: main @ e1cac6c
+Next: Start the next chat from the fresh post-PR911 successor handoff prompt and obey agentic-kit handoff post-merge-refresh-status before product work.
+POST_MERGE_HANDOFF_REFRESH
+current_head=569baf8
+freshness_warning_present=False
+refresh_required=False
+latest_successor_prompt=docs/reports/terminal/v044-successor-chat-handoff-after-pr911.md
+result=NOOP
+next_safe_action=continue_without_post_merge_handoff_refresh
+
+LOCAL SMOKE
+..................                                                       [100%]
+18 passed in 0.38s
+
+FINAL RESULT
+merge_status=1
+post_merge_status=0
+smoke_status=0
+RESULT: FAIL
+Terminal bleibt offen. Kein exit am Blockende.
