@@ -1,0 +1,239 @@
+==============================
+==============================
+==============================
+POST-PR911 ADMIN CLOSEOUT FIX2 -- FIRST INSTRUCTION PR911 -- LOGGED
+
+PRECHECK
+docs/post-pr911-admin-closeout
+## docs/post-pr911-admin-closeout
+ M .agentic/handoff_state.yaml
+ M docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix2.log
+?? docs/reports/terminal/gui-tkinter-gatekeeper-dirty-state-diagnosis.log
+?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix.log
+?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-pr-create.log
+?? docs/reports/terminal/post-pr911-admin-closeout-fix.log
+?? docs/reports/terminal/post-pr911-admin-closeout-fix2.log
+?? docs/reports/terminal/post-pr911-admin-closeout.log
+?? docs/reports/terminal/pr911-merge-verify-main.log
+?? docs/reports/terminal/v044-successor-chat-handoff-after-pr911.md
+e1cac6c (HEAD -> docs/post-pr911-admin-closeout, origin/main, origin/HEAD, main) Integrate GUI gatekeeper into Tkinter shell (#911)
+e596e8a Refresh handoff state after PR909 (#910)
+9d1cdd1 Expose GUI gatekeeper status in cockpit CLI (#909)
+d3bd0e5 Refresh handoff state after PR907 (#908)
+a2a04b6 Add GUI gatekeeper status model (#907)
+
+PATCH FIRST INSTRUCTION DIRECTLY
+old_text_found=false
+
+REGENERATE SUCCESSOR PROMPT
+
+VERIFY HANDOFF
+[FAIL] first_instruction successor prompt reference does not match handoff_maintenance.latest_successor_prompt: first_instruction PRs=['909'], latest_successor_prompt PRs=['911']
+Repo: agentic-project-kit
+Path: agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.4.4
+Safe state: main @ e1cac6c
+Next: Start the next chat from the fresh post-PR909 successor handoff prompt and obey agentic-kit handoff post-merge-refresh-status before product work.
+POST_MERGE_HANDOFF_REFRESH
+current_head=e1cac6c
+freshness_warning_present=False
+refresh_required=False
+latest_successor_prompt=docs/reports/terminal/v044-successor-chat-handoff-after-pr911.md
+result=NOOP
+next_safe_action=continue_without_post_merge_handoff_refresh
+
+VERIFY NO ACTIVE PR909 REFERENCE
+.agentic/handoff_state.yaml:403:first_instruction: Start the next chat from the fresh post-PR909 successor handoff
+stale_status=1
+
+LOCAL GATES
+All checks passed!
+........................................................................ [  5%]
+........................................................................ [ 11%]
+........................................................................ [ 17%]
+........................................................................ [ 22%]
+..................................................FF.................... [ 28%]
+................................F.....FF..F............................. [ 34%]
+........................................................................ [ 39%]
+........................................................................ [ 45%]
+........................................................................ [ 51%]
+........................................................................ [ 56%]
+........................................................................ [ 62%]
+........................................................................ [ 68%]
+........................................................................ [ 74%]
+........................................................................ [ 79%]
+........................................................................ [ 85%]
+........................................................................ [ 91%]
+........................................................................ [ 96%]
+........................................                                 [100%]
+=================================== FAILURES ===================================
+______________ test_governance_check_passes_for_repository_state _______________
+
+    def test_governance_check_passes_for_repository_state():
+>       assert governance_check() == []
+E       assert ["handoff: fi... PRs=['911']"] == []
+E         
+E         Left contains one more item: "handoff: first_instruction successor prompt reference does not match handoff_maintenance.latest_successor_prompt: first_instruction PRs=['909'], latest_successor_prompt PRs=['911']"
+E         Use -v to get more diff
+
+tests/test_governance_check.py:16: AssertionError
+_______________________ test_governance_check_cli_passes _______________________
+
+    def test_governance_check_cli_passes():
+        result = CliRunner().invoke(app, ["governance", "check"])
+>       assert result.exit_code == 0
+E       assert 1 == 0
+E        +  where 1 = <Result SystemExit(1)>.exit_code
+
+tests/test_governance_check.py:21: AssertionError
+__________________________ test_handoff_cli_commands ___________________________
+
+    def test_handoff_cli_commands():
+        runner = CliRunner()
+        check_result = runner.invoke(app, ["handoff", "check"])
+>       assert check_result.exit_code == 0
+E       assert 1 == 0
+E        +  where 1 = <Result SystemExit(1)>.exit_code
+
+tests/test_handoff_prompt.py:21: AssertionError
+______________ test_handoff_refresh_dry_run_does_not_mutate_file _______________
+
+tmp_path = PosixPath('/private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pytest-of-hof/pytest-2955/test_handoff_refresh_dry_run_d0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10c446c80>
+
+    def test_handoff_refresh_dry_run_does_not_mutate_file(tmp_path, monkeypatch):
+        source = Path(".agentic/handoff_state.yaml")
+        target = tmp_path / "handoff_state.yaml"
+        target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+        before = target.read_text(encoding="utf-8")
+        monkeypatch.setattr("agentic_project_kit.cli_commands.handoff.current_git_safe_state", lambda: {"commit": "dryrun1", "commit_subject": "Dry run subject"})
+        result = CliRunner().invoke(app, ["handoff", "refresh", str(target)])
+>       assert result.exit_code == 0
+E       assert 1 == 0
+E        +  where 1 = <Result SystemExit(1)>.exit_code
+
+tests/test_handoff_refresh.py:28: AssertionError
+___________________ test_handoff_refresh_write_updates_file ____________________
+
+tmp_path = PosixPath('/private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pytest-of-hof/pytest-2955/test_handoff_refresh_write_upd0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10c445710>
+
+    def test_handoff_refresh_write_updates_file(tmp_path, monkeypatch):
+        source = Path(".agentic/handoff_state.yaml")
+        target = tmp_path / "handoff_state.yaml"
+        target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+        monkeypatch.setattr("agentic_project_kit.cli_commands.handoff.current_git_safe_state", lambda: {"commit": "write01", "commit_subject": "Write subject"})
+        result = CliRunner().invoke(app, ["handoff", "refresh", str(target), "--write"])
+>       assert result.exit_code == 0
+E       assert 1 == 0
+E        +  where 1 = <Result SystemExit(1)>.exit_code
+
+tests/test_handoff_refresh.py:38: AssertionError
+________________ test_handoff_state_yaml_is_parseable_and_valid ________________
+
+    def test_handoff_state_yaml_is_parseable_and_valid():
+        data = load_handoff_state()
+        assert data["schema_version"] == 1
+>       assert validate_handoff_state(data) == []
+E       assert ["first_instr... PRs=['911']"] == []
+E         
+E         Left contains one more item: "first_instruction successor prompt reference does not match handoff_maintenance.latest_successor_prompt: first_instruction PRs=['909'], latest_successor_prompt PRs=['911']"
+E         Use -v to get more diff
+
+tests/test_handoff_state.py:14: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_governance_check.py::test_governance_check_passes_for_repository_state
+FAILED tests/test_governance_check.py::test_governance_check_cli_passes - ass...
+FAILED tests/test_handoff_prompt.py::test_handoff_cli_commands - assert 1 == 0
+FAILED tests/test_handoff_refresh.py::test_handoff_refresh_dry_run_does_not_mutate_file
+FAILED tests/test_handoff_refresh.py::test_handoff_refresh_write_updates_file
+FAILED tests/test_handoff_state.py::test_handoff_state_yaml_is_parseable_and_valid
+6 failed, 1258 passed in 10.25s
+Agentic project check passed
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches 
+known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Dokumentationsregistry
+- registry=docs/DOCUMENTATION_REGISTRY.yaml
+- version=1
+- documents=22
+- broad_migration_allowed=False
+- class:architecture=1
+- class:evidence/log=2
+- class:generated artifact=1
+- class:governance/system=4
+- class:operational/automation=4
+- class:planning=7
+- class:release=2
+- class:user-facing description=1
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.4
+
+Overall: PASS
+
+PROTECTED CHANGE PLAN
+PROTECTED_CHANGE_PLAN
+result=PASS
+findings=0
+### RESULT: PASS ###
+
+FINAL DECISION BEFORE COMMIT
+patch_status=0
+prompt_status=1
+handoff_check_status=1
+post_merge_status=0
+stale_status=1
+ruff_status=0
+test_status=1
+docs_status=0
+audit_status=0
+doctor_status=0
+plan_status=0
+## docs/post-pr911-admin-closeout
+ M .agentic/handoff_state.yaml
+ M docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix2.log
+?? docs/reports/terminal/gui-tkinter-gatekeeper-dirty-state-diagnosis.log
+?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix.log
+?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-pr-create.log
+?? docs/reports/terminal/post-pr911-admin-closeout-fix.log
+?? docs/reports/terminal/post-pr911-admin-closeout-fix2.log
+?? docs/reports/terminal/post-pr911-admin-closeout.log
+?? docs/reports/terminal/pr911-merge-verify-main.log
+?? docs/reports/terminal/v044-successor-chat-handoff-after-pr911.md
+
+RESULT: FAIL
+Terminal bleibt offen. Kein exit am Blockende.

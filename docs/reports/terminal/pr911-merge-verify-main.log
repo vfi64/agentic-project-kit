@@ -1,0 +1,120 @@
+PR911 WAIT CI, MERGE, VERIFY MAIN -- LOGGED
+
+PRECHECK
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+From github.com:vfi64/agentic-project-kit
+ * branch            feature/gui-tkinter-gatekeeper-integration -> FETCH_HEAD
+Already on 'feature/gui-tkinter-gatekeeper-integration'
+M	docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix2.log
+Your branch is up to date with 'origin/feature/gui-tkinter-gatekeeper-integration'.
+From github.com:vfi64/agentic-project-kit
+ * branch            feature/gui-tkinter-gatekeeper-integration -> FETCH_HEAD
+Already up to date.
+feature/gui-tkinter-gatekeeper-integration
+## feature/gui-tkinter-gatekeeper-integration...origin/feature/gui-tkinter-gatekeeper-integration
+ M docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix2.log
+?? docs/reports/terminal/gui-tkinter-gatekeeper-dirty-state-diagnosis.log
+?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix.log
+?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-pr-create.log
+?? docs/reports/terminal/pr911-merge-verify-main.log
+7c87c3e (HEAD -> feature/gui-tkinter-gatekeeper-integration, origin/feature/gui-tkinter-gatekeeper-integration) Integrate GUI gatekeeper into Tkinter shell
+df77f86 Record GUI Tkinter gatekeeper integration log
+e596e8a (origin/main, origin/HEAD, main) Refresh handoff state after PR909 (#910)
+9d1cdd1 Expose GUI gatekeeper status in cockpit CLI (#909)
+d3bd0e5 Refresh handoff state after PR907 (#908)
+local_head=7c87c3e7952d84ded58bd2ffaff312b6f740d6d8
+
+PR STATE BEFORE WAIT
+{"baseRefOid":"e596e8ae2d3990f5125ded7a971534996ef4db45","headRefOid":"7c87c3e7952d84ded58bd2ffaff312b6f740d6d8","mergeStateStatus":"CLEAN","number":911,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-29T15:50:22Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26647227166/job/78535985373","name":"test","startedAt":"2026-05-29T15:49:48Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-29T15:50:18Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26647221718/job/78535967349","name":"test","startedAt":"2026-05-29T15:49:42Z","status":"COMPLETED","workflowName":"CI"}]}
+
+WAIT FOR CHECKS
+test	pass	36s	https://github.com/vfi64/agentic-project-kit/actions/runs/26647221718/job/78535967349	
+test	pass	34s	https://github.com/vfi64/agentic-project-kit/actions/runs/26647227166/job/78535985373	
+test	pass	36s	https://github.com/vfi64/agentic-project-kit/actions/runs/26647221718/job/78535967349	
+test	pass	34s	https://github.com/vfi64/agentic-project-kit/actions/runs/26647227166/job/78535985373	
+
+PR STATE AFTER WAIT
+{"baseRefOid":"e596e8ae2d3990f5125ded7a971534996ef4db45","headRefOid":"7c87c3e7952d84ded58bd2ffaff312b6f740d6d8","mergeStateStatus":"CLEAN","number":911,"state":"OPEN","statusCheckRollup":[{"__typename":"CheckRun","completedAt":"2026-05-29T15:50:22Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26647227166/job/78535985373","name":"test","startedAt":"2026-05-29T15:49:48Z","status":"COMPLETED","workflowName":"CI"},{"__typename":"CheckRun","completedAt":"2026-05-29T15:50:18Z","conclusion":"SUCCESS","detailsUrl":"https://github.com/vfi64/agentic-project-kit/actions/runs/26647221718/job/78535967349","name":"test","startedAt":"2026-05-29T15:49:42Z","status":"COMPLETED","workflowName":"CI"}]}
+
+PROTECTED CHANGE PLAN AGAINST ACTUAL PR DIFF
+PROTECTED_CHANGE_PLAN
+result=PASS
+findings=0
+### RESULT: PASS ###
+
+MERGE DECISION
+pr_head=7c87c3e7952d84ded58bd2ffaff312b6f740d6d8
+local_head=7c87c3e7952d84ded58bd2ffaff312b6f740d6d8
+ready_for_merge=true
+head_ok=true
+protected_plan_status=0
+check_wait_status=0
+failed to run git: error: Your local changes to the following files would be overwritten by checkout:
+	docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix2.log
+Please commit your changes or stash them before you switch branches.
+Aborting
+
+
+SYNC MAIN AFTER MERGE
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+   e596e8a..e1cac6c  main       -> origin/main
+error: Your local changes to the following files would be overwritten by checkout:
+	docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix2.log
+Please commit your changes or stash them before you switch branches.
+Aborting
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+hint: Diverging branches can't be fast-forwarded, you need to either:
+hint:
+hint: 	git merge --no-ff
+hint:
+hint: or:
+hint:
+hint: 	git rebase
+hint:
+hint: Disable this message with "git config set advice.diverging false"
+fatal: Not possible to fast-forward, aborting.
+
+VERIFY MAIN
+7c87c3e (HEAD -> feature/gui-tkinter-gatekeeper-integration, origin/feature/gui-tkinter-gatekeeper-integration) Integrate GUI gatekeeper into Tkinter shell
+df77f86 Record GUI Tkinter gatekeeper integration log
+e596e8a (main) Refresh handoff state after PR909 (#910)
+9d1cdd1 Expose GUI gatekeeper status in cockpit CLI (#909)
+d3bd0e5 Refresh handoff state after PR907 (#908)
+a2a04b6 Add GUI gatekeeper status model (#907)
+8c6a35c Refresh handoff state after PR905 (#906)
+ebe6aff Guard handoff next prompt reference consistency (#905)
+## feature/gui-tkinter-gatekeeper-integration...origin/feature/gui-tkinter-gatekeeper-integration
+ M docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix2.log
+?? docs/reports/terminal/gui-tkinter-gatekeeper-dirty-state-diagnosis.log
+?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix.log
+?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-pr-create.log
+?? docs/reports/terminal/pr911-merge-verify-main.log
+
+VERIFY TKINTER GATEKEEPER INTEGRATION ON MAIN
+.................................................                        [100%]
+49 passed in 0.62s
+
+VERIFY HANDOFF / POST-MERGE STATUS
+Repo: agentic-project-kit
+Path: agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.4.4
+Safe state: main @ 9d1cdd1
+Next: Start the next chat from the fresh post-PR909 successor handoff prompt and obey agentic-kit handoff post-merge-refresh-status before product work.
+POST_MERGE_HANDOFF_REFRESH
+current_head=7c87c3e
+freshness_warning_present=True
+refresh_required=True
+latest_successor_prompt=docs/reports/terminal/v044-successor-chat-handoff-after-pr909.md
+result=REFRESH_REQUIRED
+next_safe_action=create_administrative_handoff_refresh
+
+FINAL RESULT
+merge_status=1
+smoke_status=0
+post_merge_status=1
+RESULT: FAIL
+Terminal bleibt offen. Kein exit am Blockende.

@@ -1,0 +1,226 @@
+GUI TKINTER GATEKEEPER INTEGRATION -- TEST COMMIT PUSH PR -- LOGGED
+
+PRECHECK
+feature/gui-tkinter-gatekeeper-integration
+## feature/gui-tkinter-gatekeeper-integration
+ M src/agentic_project_kit/gui_tkinter_shell.py
+ M tests/test_v040_gui_tkinter_shell.py
+?? docs/reports/terminal/gui-tkinter-gatekeeper-dirty-state-diagnosis.log
+?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-pr-create.log
+df77f86 (HEAD -> feature/gui-tkinter-gatekeeper-integration) Record GUI Tkinter gatekeeper integration log
+e596e8a (origin/main, origin/HEAD, main) Refresh handoff state after PR909 (#910)
+9d1cdd1 Expose GUI gatekeeper status in cockpit CLI (#909)
+d3bd0e5 Refresh handoff state after PR907 (#908)
+a2a04b6 Add GUI gatekeeper status model (#907)
+
+VERIFY EXPECTED BRANCH
+branch_ok=yes
+
+DIFF SUMMARY BEFORE GATES
+ src/agentic_project_kit/gui_tkinter_shell.py | 66 +++++++++++++++++++++++-----
+ tests/test_v040_gui_tkinter_shell.py         | 63 ++++++++++++++++++++++++++
+ 2 files changed, 119 insertions(+), 10 deletions(-)
+
+RUFF
+F401 [*] `agentic_project_kit.gui_button_catalog.gui_buttons_by_category` imported but unused
+  --> src/agentic_project_kit/gui_tkinter_shell.py:26:5
+   |
+24 |     all_gui_buttons,
+25 |     get_gui_button,
+26 |     gui_buttons_by_category,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+27 |     toolbar_gui_buttons,
+28 | )
+   |
+help: Remove unused import: `agentic_project_kit.gui_button_catalog.gui_buttons_by_category`
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.
+
+TARGETED TESTS
+.......F..F............F.........................                        [100%]
+=================================== FAILURES ===================================
+____________ test_build_tkinter_shell_spec_uses_presenter_contract _____________
+
+    def test_build_tkinter_shell_spec_uses_presenter_contract():
+        spec = build_tkinter_shell_spec()
+        assert spec.title == "agentic-project-kit Cockpit"
+>       assert spec.status == "tkinter-shell-ready"
+E       AssertionError: assert 'tkinter-shell-blocked' == 'tkinter-shell-ready'
+E         
+E         - tkinter-shell-ready
+E         ?               ^ - -
+E         + tkinter-shell-blocked
+E         ?               ^^^^^
+
+tests/test_v040_gui_tkinter_shell.py:36: AssertionError
+______________ test_render_tkinter_shell_summary_is_deterministic ______________
+
+    def test_render_tkinter_shell_summary_is_deterministic():
+        output = render_tkinter_shell_summary(build_tkinter_shell_spec())
+        assert "TKINTER SHELL" in output
+>       assert "status=tkinter-shell-ready" in output
+E       AssertionError: assert 'status=tkinter-shell-ready' in 'TKINTER SHELL\ntitle=agentic-project-kit Cockpit\nstatus=tkinter-shell-blocked\naction_count=36\nmenu_count=5\ntoolba...ndestructive_actions_enabled=false\ntoolbar_icons=branch,status,history,handoff,stethoscope,document-check,audit,guard'
+
+tests/test_v040_gui_tkinter_shell.py:59: AssertionError
+__________ test_manual_gui_keeps_remote_destructive_actions_disabled ___________
+
+    def test_manual_gui_keeps_remote_destructive_actions_disabled():
+        from pathlib import Path
+    
+        source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
+        manual_source = source[
+            source.index("def render_manual_launch_content") : source.index("def run_manual_launch")
+        ]
+        assert "run_action_click(command_id)" in manual_source
+>       assert "gui_buttons_by_category()" in manual_source
+E       assert 'gui_buttons_by_category()' in 'def render_manual_launch_content(root: object) -> None:\n    import tkinter as tk\n    from tkinter import ttk\n\n   ... read-only buttons: {enabled_count}",\n        anchor="w",\n    )\n    status_text.pack(fill="x", side="bottom")\n\n\n'
+
+tests/test_v040_gui_tkinter_shell.py:301: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v040_gui_tkinter_shell.py::test_build_tkinter_shell_spec_uses_presenter_contract
+FAILED tests/test_v040_gui_tkinter_shell.py::test_render_tkinter_shell_summary_is_deterministic
+FAILED tests/test_v040_gui_tkinter_shell.py::test_manual_gui_keeps_remote_destructive_actions_disabled
+3 failed, 46 passed in 0.62s
+
+FULL TESTS
+........................................................................ [  5%]
+........................................................................ [ 11%]
+........................................................................ [ 17%]
+........................................................................ [ 22%]
+........................................................................ [ 28%]
+........................................................................ [ 34%]
+........................................................................ [ 39%]
+........................................................................ [ 45%]
+........................................................................ [ 51%]
+........................................................................ [ 56%]
+........................................................................ [ 62%]
+........................................................................ [ 68%]
+........................................................................ [ 74%]
+........................................................................ [ 79%]
+........................................................................ [ 85%]
+...................................F..F............F.................... [ 91%]
+........................................................................ [ 96%]
+........................................                                 [100%]
+=================================== FAILURES ===================================
+____________ test_build_tkinter_shell_spec_uses_presenter_contract _____________
+
+    def test_build_tkinter_shell_spec_uses_presenter_contract():
+        spec = build_tkinter_shell_spec()
+        assert spec.title == "agentic-project-kit Cockpit"
+>       assert spec.status == "tkinter-shell-ready"
+E       AssertionError: assert 'tkinter-shell-blocked' == 'tkinter-shell-ready'
+E         
+E         - tkinter-shell-ready
+E         ?               ^ - -
+E         + tkinter-shell-blocked
+E         ?               ^^^^^
+
+tests/test_v040_gui_tkinter_shell.py:36: AssertionError
+______________ test_render_tkinter_shell_summary_is_deterministic ______________
+
+    def test_render_tkinter_shell_summary_is_deterministic():
+        output = render_tkinter_shell_summary(build_tkinter_shell_spec())
+        assert "TKINTER SHELL" in output
+>       assert "status=tkinter-shell-ready" in output
+E       AssertionError: assert 'status=tkinter-shell-ready' in 'TKINTER SHELL\ntitle=agentic-project-kit Cockpit\nstatus=tkinter-shell-blocked\naction_count=36\nmenu_count=5\ntoolba...ndestructive_actions_enabled=false\ntoolbar_icons=branch,status,history,handoff,stethoscope,document-check,audit,guard'
+
+tests/test_v040_gui_tkinter_shell.py:59: AssertionError
+__________ test_manual_gui_keeps_remote_destructive_actions_disabled ___________
+
+    def test_manual_gui_keeps_remote_destructive_actions_disabled():
+        from pathlib import Path
+    
+        source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
+        manual_source = source[
+            source.index("def render_manual_launch_content") : source.index("def run_manual_launch")
+        ]
+        assert "run_action_click(command_id)" in manual_source
+>       assert "gui_buttons_by_category()" in manual_source
+E       assert 'gui_buttons_by_category()' in 'def render_manual_launch_content(root: object) -> None:\n    import tkinter as tk\n    from tkinter import ttk\n\n   ... read-only buttons: {enabled_count}",\n        anchor="w",\n    )\n    status_text.pack(fill="x", side="bottom")\n\n\n'
+
+tests/test_v040_gui_tkinter_shell.py:301: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v040_gui_tkinter_shell.py::test_build_tkinter_shell_spec_uses_presenter_contract
+FAILED tests/test_v040_gui_tkinter_shell.py::test_render_tkinter_shell_summary_is_deterministic
+FAILED tests/test_v040_gui_tkinter_shell.py::test_manual_gui_keeps_remote_destructive_actions_disabled
+3 failed, 1261 passed in 10.69s
+
+DOC GATES
+Agentic project check passed
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches 
+known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Dokumentationsregistry
+- registry=docs/DOCUMENTATION_REGISTRY.yaml
+- version=1
+- documents=22
+- broad_migration_allowed=False
+- class:architecture=1
+- class:evidence/log=2
+- class:generated artifact=1
+- class:governance/system=4
+- class:operational/automation=4
+- class:planning=7
+- class:release=2
+- class:user-facing description=1
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.4
+
+Overall: PASS
+
+PROTECTED CHANGE PLAN
+PROTECTED_CHANGE_PLAN
+result=PASS
+findings=0
+### RESULT: PASS ###
+
+FINAL DECISION BEFORE COMMIT
+ruff_status=1
+target_status=1
+full_status=1
+docs_status=0
+audit_status=0
+doctor_status=0
+plan_status=0
+## feature/gui-tkinter-gatekeeper-integration
+ M src/agentic_project_kit/gui_tkinter_shell.py
+ M tests/test_v040_gui_tkinter_shell.py
+?? docs/reports/terminal/gui-tkinter-gatekeeper-dirty-state-diagnosis.log
+?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-pr-create.log
+
+RESULT: FAIL
+Terminal bleibt offen. Kein exit am Blockende.
