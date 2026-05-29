@@ -1,32 +1,68 @@
-GUI TKINTER GATEKEEPER INTEGRATION FIX2 -- REPAIR TEST FILE -- LOGGED
+==============================
+==============================
+==============================
+POST-PR911 ADMIN CLOSEOUT FIX3 -- REPLACE POST-PR909 REFERENCES -- LOGGED
 
 PRECHECK
-feature/gui-tkinter-gatekeeper-integration
-## feature/gui-tkinter-gatekeeper-integration
- M src/agentic_project_kit/gui_tkinter_shell.py
- M tests/test_v040_gui_tkinter_shell.py
+docs/post-pr911-admin-closeout
+## docs/post-pr911-admin-closeout
+ M .agentic/handoff_state.yaml
+ M docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix2.log
 ?? docs/reports/terminal/gui-tkinter-gatekeeper-dirty-state-diagnosis.log
 ?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix.log
-?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix2.log
 ?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-pr-create.log
-df77f86 (HEAD -> feature/gui-tkinter-gatekeeper-integration) Record GUI Tkinter gatekeeper integration log
-e596e8a (origin/main, origin/HEAD, main) Refresh handoff state after PR909 (#910)
+?? docs/reports/terminal/post-pr911-admin-closeout-fix.log
+?? docs/reports/terminal/post-pr911-admin-closeout-fix2.log
+?? docs/reports/terminal/post-pr911-admin-closeout-fix3.log
+?? docs/reports/terminal/post-pr911-admin-closeout.log
+?? docs/reports/terminal/pr911-merge-verify-main.log
+?? docs/reports/terminal/v044-successor-chat-handoff-after-pr911.md
+e1cac6c (HEAD -> docs/post-pr911-admin-closeout, origin/main, origin/HEAD, main) Integrate GUI gatekeeper into Tkinter shell (#911)
+e596e8a Refresh handoff state after PR909 (#910)
 9d1cdd1 Expose GUI gatekeeper status in cockpit CLI (#909)
 d3bd0e5 Refresh handoff state after PR907 (#908)
 a2a04b6 Add GUI gatekeeper status model (#907)
 
-REPAIR TEST FILE SAFELY
+PATCH FIRST INSTRUCTION AND ACTIVE HANDOFF REFERENCES
+stale_reference_count_before=1
+stale_reference_count_after=0
 
-VERIFY SYNTAX
+REGENERATE SUCCESSOR PROMPT
 
-RUFF
+VERIFY HANDOFF
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+Repo: agentic-project-kit
+Path: agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.4.4
+Safe state: main @ e1cac6c
+Next: Start the next chat from the fresh post-PR911 successor handoff prompt and obey agentic-kit handoff post-merge-refresh-status before product work.
+POST_MERGE_HANDOFF_REFRESH
+current_head=e1cac6c
+freshness_warning_present=False
+refresh_required=False
+latest_successor_prompt=docs/reports/terminal/v044-successor-chat-handoff-after-pr911.md
+result=NOOP
+next_safe_action=continue_without_post_merge_handoff_refresh
+
+VERIFY NO ACTIVE PR909 REFERENCE
+stale_status=0
+
+LOCAL GATES
 All checks passed!
-
-TARGETED TESTS
-.................................................                        [100%]
-49 passed in 0.58s
-
-FULL TESTS
 ........................................................................ [  5%]
 ........................................................................ [ 11%]
 ........................................................................ [ 17%]
@@ -45,9 +81,7 @@ FULL TESTS
 ........................................................................ [ 91%]
 ........................................................................ [ 96%]
 ........................................                                 [100%]
-1264 passed in 10.64s
-
-DOC GATES
+1264 passed in 10.43s
 Agentic project check passed
 Documentation system audit
 
@@ -110,37 +144,28 @@ findings=0
 ### RESULT: PASS ###
 
 FINAL DECISION BEFORE COMMIT
-syntax_status=0
+patch_status=0
+prompt_status=0
+handoff_check_status=0
+post_merge_status=0
+stale_status=0
 ruff_status=0
-target_status=0
-full_status=0
+test_status=0
 docs_status=0
 audit_status=0
 doctor_status=0
 plan_status=0
-## feature/gui-tkinter-gatekeeper-integration
- M src/agentic_project_kit/gui_tkinter_shell.py
- M tests/test_v040_gui_tkinter_shell.py
+## docs/post-pr911-admin-closeout
+ M .agentic/handoff_state.yaml
+ M docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix2.log
 ?? docs/reports/terminal/gui-tkinter-gatekeeper-dirty-state-diagnosis.log
 ?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix.log
-?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix2.log
 ?? docs/reports/terminal/gui-tkinter-gatekeeper-integration-pr-create.log
+?? docs/reports/terminal/post-pr911-admin-closeout-fix.log
+?? docs/reports/terminal/post-pr911-admin-closeout-fix2.log
+?? docs/reports/terminal/post-pr911-admin-closeout-fix3.log
+?? docs/reports/terminal/post-pr911-admin-closeout.log
+?? docs/reports/terminal/pr911-merge-verify-main.log
+?? docs/reports/terminal/v044-successor-chat-handoff-after-pr911.md
 
 COMMIT AND PUSH
-[feature/gui-tkinter-gatekeeper-integration 7c87c3e] Integrate GUI gatekeeper into Tkinter shell
- 3 files changed, 259 insertions(+), 14 deletions(-)
- create mode 100644 docs/reports/terminal/gui-tkinter-gatekeeper-integration-fix2.log
-remote: 
-remote: Create a pull request for 'feature/gui-tkinter-gatekeeper-integration' on GitHub by visiting:        
-remote:      https://github.com/vfi64/agentic-project-kit/pull/new/feature/gui-tkinter-gatekeeper-integration        
-remote: 
-To github.com:vfi64/agentic-project-kit.git
- * [new branch]      feature/gui-tkinter-gatekeeper-integration -> feature/gui-tkinter-gatekeeper-integration
-branch 'feature/gui-tkinter-gatekeeper-integration' set up to track 'origin/feature/gui-tkinter-gatekeeper-integration'.
-
-CREATE OR SHOW PR
-https://github.com/vfi64/agentic-project-kit/pull/911
-{"baseRefOid":"e596e8ae2d3990f5125ded7a971534996ef4db45","headRefOid":"7c87c3e7952d84ded58bd2ffaff312b6f740d6d8","mergeStateStatus":"CLEAN","number":911,"state":"OPEN","statusCheckRollup":[]}
-
-RESULT: PASS
-Terminal bleibt offen. Kein exit am Blockende.

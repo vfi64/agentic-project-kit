@@ -1,0 +1,209 @@
+GUI TKINTER GATEKEEPER DIRTY STATE DIAGNOSIS -- NO MUTATION
+feature/gui-tkinter-gatekeeper-integration
+## feature/gui-tkinter-gatekeeper-integration
+ M src/agentic_project_kit/gui_tkinter_shell.py
+ M tests/test_v040_gui_tkinter_shell.py
+?? docs/reports/terminal/gui-tkinter-gatekeeper-dirty-state-diagnosis.log
+df77f86 (HEAD -> feature/gui-tkinter-gatekeeper-integration) Record GUI Tkinter gatekeeper integration log
+e596e8a (origin/main, origin/HEAD, main) Refresh handoff state after PR909 (#910)
+9d1cdd1 Expose GUI gatekeeper status in cockpit CLI (#909)
+d3bd0e5 Refresh handoff state after PR907 (#908)
+a2a04b6 Add GUI gatekeeper status model (#907)
+
+DIFF SUMMARY
+ src/agentic_project_kit/gui_tkinter_shell.py | 66 +++++++++++++++++++++++-----
+ tests/test_v040_gui_tkinter_shell.py         | 63 ++++++++++++++++++++++++++
+ 2 files changed, 119 insertions(+), 10 deletions(-)
+
+DIFF
+diff --git a/src/agentic_project_kit/gui_tkinter_shell.py b/src/agentic_project_kit/gui_tkinter_shell.py
+index 16bfcf5..cf54744 100644
+--- a/src/agentic_project_kit/gui_tkinter_shell.py
++++ b/src/agentic_project_kit/gui_tkinter_shell.py
+@@ -16,6 +16,10 @@ from agentic_project_kit.gui_action_execution import (
+     normalize_safety_class,
+     run_bounded_read_only_action,
+ )
++from agentic_project_kit.gui_gatekeeper_status import (
++    GuiGatekeeperStatus,
++    build_gui_gatekeeper_status,
++)
+ from agentic_project_kit.gui_button_catalog import (
+     all_gui_buttons,
+     get_gui_button,
+@@ -163,7 +167,35 @@ def _button_from_catalog(button: object) -> ButtonSpec:
+     )
+ 
+ 
+-def build_windows_style_design_spec() -> TkinterShellDesignSpec:
++def build_windows_style_design_spec(
++    gatekeeper_status: GuiGatekeeperStatus | None = None,
++) -> TkinterShellDesignSpec:
++    gatekeeper = gatekeeper_status or build_gui_gatekeeper_status(Path.cwd())
++    action_enabled_by_id = {action.action_id: action.enabled for action in gatekeeper.action_statuses}
++    action_reason_by_id = {action.action_id: action.reason for action in gatekeeper.action_statuses}
++
++    def gate_button(button: object) -> ButtonSpec:
++        spec = _button_from_catalog(button)
++        enabled = spec.enabled and gatekeeper.ready_for_read_only_actions
++        disabled_reason = spec.disabled_reason
++        if not gatekeeper.ready_for_read_only_actions and spec.enabled:
++            disabled_reason = ", ".join(gatekeeper.blockers) or "GUI gatekeeper blocks this action"
++        if spec.command_id in action_enabled_by_id:
++            enabled = spec.enabled and action_enabled_by_id[spec.command_id]
++            if not enabled:
++                disabled_reason = action_reason_by_id.get(spec.command_id, disabled_reason)
++        return _button(
++            spec.command_id,
++            spec.label,
++            spec.tooltip,
++            spec.icon_text,
++            spec.safety_class,
++            enabled,
++            spec.category,
++            spec.implementation_state,
++            disabled_reason,
++        )
++
+     menu_bar = (
+         MenuSpec(
+             "File",
+@@ -238,24 +270,33 @@ def build_windows_style_design_spec() -> TkinterShellDesignSpec:
+             ),
+         ),
+     )
+-    toolbar = tuple(_button_from_catalog(button) for button in toolbar_gui_buttons())
++    toolbar = tuple(gate_button(button) for button in toolbar_gui_buttons())
+     action_buttons = tuple(
+-        _button_from_catalog(button)
++        gate_button(button)
+         for button in all_gui_buttons()
+         if not is_work_order_strip_button(button.command_id)
+     )
+     return TkinterShellDesignSpec(menu_bar, toolbar, action_buttons)
+ 
+ 
+-def build_tkinter_shell_spec() -> TkinterShellSpec:
++def build_tkinter_shell_spec(
++    gatekeeper_status: GuiGatekeeperStatus | None = None,
++) -> TkinterShellSpec:
+     presenter = build_no_window_presenter_result(list_actions())
++    gatekeeper = gatekeeper_status or build_gui_gatekeeper_status(Path.cwd())
++    status = "tkinter-shell-ready" if presenter.ok and gatekeeper.ready_for_read_only_actions else "tkinter-shell-blocked"
++    preview_lines = [presenter.rendered]
++    if gatekeeper.blockers:
++        preview_lines.append("GUI gatekeeper blockers: " + ", ".join(gatekeeper.blockers))
++    else:
++        preview_lines.append("GUI gatekeeper blockers: <none>")
+     return TkinterShellSpec(
+         "agentic-project-kit Cockpit",
+-        "tkinter-shell-ready" if presenter.ok else "tkinter-shell-blocked",
++        status,
+         len(all_gui_buttons()),
+         False,
+-        presenter.rendered,
+-        build_windows_style_design_spec(),
++        chr(10).join(preview_lines),
++        build_windows_style_design_spec(gatekeeper),
+     )
+ 
+ 
+@@ -645,8 +686,10 @@ def render_manual_launch_content(root: object) -> None:
+         root, text="agentic-project-kit Cockpit", anchor="w", font=("TkDefaultFont", 18, "bold")
+     )
+     header.pack(fill="x", padx=12, pady=(12, 6))
+-    enabled_count = len([button for button in all_gui_buttons() if button.enabled])
+-    disabled_count = len([button for button in all_gui_buttons() if not button.enabled])
++    spec = build_tkinter_shell_spec()
++    buttons = spec.design.action_buttons
++    enabled_count = len([button for button in buttons if button.enabled])
++    disabled_count = len([button for button in buttons if not button.enabled])
+     safety = ttk.Label(
+         root,
+         text=(
+@@ -738,7 +781,10 @@ def render_manual_launch_content(root: object) -> None:
+     actions_canvas.pack(side="left", fill="y", expand=False)
+     actions_scrollbar.pack(side="right", fill="y")
+ 
+-    for category, buttons in gui_buttons_by_category().items():
++    buttons_by_category: dict[str, list[ButtonSpec]] = {}
++    for button in buttons:
++        buttons_by_category.setdefault(button.category, []).append(button)
++    for category, buttons in buttons_by_category.items():
+         category_frame = ttk.LabelFrame(actions, text=category, padding=3)
+         category_frame.pack(fill="x", pady=2)
+         for button in buttons:
+diff --git a/tests/test_v040_gui_tkinter_shell.py b/tests/test_v040_gui_tkinter_shell.py
+index 6256c3e..b28affc 100644
+--- a/tests/test_v040_gui_tkinter_shell.py
++++ b/tests/test_v040_gui_tkinter_shell.py
+@@ -527,3 +527,66 @@ def test_work_order_strip_command_ids_are_not_empty():
+         "work-order-run",
+         "work-order-upload",
+     )
++
++
++def test_tkinter_shell_spec_reflects_gatekeeper_dirty_blocker():
++    from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperActionStatus, GuiGatekeeperStatus
++
++    gatekeeper = GuiGatekeeperStatus(
++        branch="feature/dirty",
++        git_dirty=True,
++        workflow_state="IDLE",
++        current_work_present=True,
++        current_work_state="READY",
++        ready_for_read_only_actions=False,
++        ready_for_mutating_actions=False,
++        action_statuses=(
++            GuiGatekeeperActionStatus(
++                action_id="doctor",
++                safety_class="read-only",
++                mutation_scope="none",
++                enabled=False,
++                reason="read-only action blocked because working tree is dirty",
++            ),
++        ),
++        blockers=("working tree is dirty",),
++    )
++
++    spec = build_tkinter_shell_spec(gatekeeper)
++
++    assert spec.status == "tkinter-shell-blocked"
++    assert "GUI gatekeeper blockers: working tree is dirty" in spec.preview
++    doctor = next(button for button in spec.design.action_buttons if button.command_id == "doctor")
++    assert doctor.enabled is False
++    assert doctor.disabled_reason == "read-only action blocked because working tree is dirty"
++
++
++def test_tkinter_shell_spec_keeps_readonly_enabled_when_gatekeeper_clean():
++    from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperActionStatus, GuiGatekeeperStatus
++
++    gatekeeper = GuiGatekeeperStatus(
++        branch="main",
++        git_dirty=False,
++        workflow_state="IDLE",
++        current_work_present=True,
++        current_work_state="READY",
++        ready_for_read_only_actions=True,
++        ready_for_mutating_actions=False,
++        action_statuses=(
++            GuiGatekeeperActionStatus(
++                action_id="doctor",
++                safety_class="read-only",
++                mutation_scope="none",
++                enabled=True,
++                reason="read-only action allowed in clean GUI gatekeeper state",
++            ),
++        ),
++        blockers=(),
++    )
++
++    spec = build_tkinter_shell_spec(gatekeeper)
++
++    assert spec.status == "tkinter-shell-ready"
++    doctor = next(button for button in spec.design.action_buttons if button.command_id == "doctor")
++    assert doctor.enabled is True
++
+
+RESULT: DIAGNOSIS_ONLY
+Terminal bleibt offen. Kein exit am Blockende.
