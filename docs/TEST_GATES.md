@@ -271,6 +271,21 @@ Required evidence:
 
 The action registry must preserve explicit safety classification. Machine-readable inventory output must remain parseable JSON and must not execute actions. Read-only cockpit commands must not execute destructive Git, release, tag, merge, cleanup, or remote operations. `cockpit run` may execute registered `read_only` actions through argument-vector execution. Bounded actions may be listed as action metadata, but they must be blocked unless an explicit bounded-action allow path is used. Destructive actions must remain blocked.
 
+## Post-Merge Handoff Refresh Status Gate
+
+After a PR merge and local main sync, run:
+
+`agentic-kit handoff post-merge-refresh-status`
+
+The command is the canonical machine-readable check for the recurring post-merge handoff freshness state.
+
+Required interpretation:
+
+- `result=NOOP`: continue without an administrative handoff refresh.
+- `result=REFRESH_REQUIRED`: create an administrative handoff refresh slice before product work.
+
+This gate prevents treating post-merge handoff freshness as a chat judgement problem. The kit decides whether a refresh is required; chat signals such as `d`, `f`, or `w` are not evidence.
+
 ## Standard Local Gate
 
 Run these commands:
