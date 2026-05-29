@@ -37,3 +37,7 @@ Manual paste is an exception, not the normal workflow. It is allowed only when t
 Local execution requests must be delivered as repo-backed Python programs, typed work orders, or `agentic-kit` commands. They must run through the repository virtual environment and must not depend on global Python or shell state. For this repository the canonical local runtime is `.venv/bin/python` and `.venv/bin/agentic-kit` with Python 3.13.
 
 Long ad-hoc shell blocks, fragile multi-line `python -c` strings, and raw decoration lines as terminal input are not valid default execution paths. They are recovery-only tools when the repo-backed Python or typed-work-order path is unavailable.
+
+## Safe evidence closeout helper
+
+Use `agentic-kit evidence commit-paths` for explicit evidence path commits. The helper accepts only the expected path set, commits it with a supplied message, and verifies that the worktree is clean after the commit. Closeout scripts must finalize any repo-backed log before invoking this helper and must not write to the committed repo-backed log afterwards.
