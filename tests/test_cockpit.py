@@ -19,6 +19,8 @@ def test_cockpit_action_registry_contains_core_read_only_actions() -> None:
     assert "release.plan" in action_ids
     assert "audit.doc-lifecycle" in action_ids
     assert "audit.pr-hygiene" in action_ids
+    assert "rules.communication-refresh" in action_ids
+    assert "rules.handoff-refresh" in action_ids
 
 
 def test_cockpit_action_registry_classifies_bounded_workflow_go() -> None:
@@ -234,3 +236,15 @@ def test_cockpit_actions_json_cli_does_not_execute_actions() -> None:
     assert result.exit_code == 0, result.output
     assert "allowed=true" not in result.output
     assert "executed=true" not in result.output
+
+
+def test_cockpit_rule_refresh_actions_are_read_only() -> None:
+    communication = action_by_id("rules.communication-refresh")
+    handoff = action_by_id("rules.handoff-refresh")
+
+    assert communication is not None
+    assert handoff is not None
+    assert communication.safety == READ_ONLY
+    assert handoff.safety == READ_ONLY
+    assert communication.command == ("agentic-kit", "rules", "communication-refresh")
+    assert handoff.command == ("agentic-kit", "rules", "handoff-refresh")

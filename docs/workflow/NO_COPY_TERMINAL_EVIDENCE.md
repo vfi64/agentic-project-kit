@@ -25,3 +25,15 @@ For repo-backed agent commands, `docs/reports/command_runs/LATEST_COMMAND_RUN.tx
 For dialog-oriented local work, the preferred target path is `agentic-kit remote-next`. The command synchronizes `main` and executes the next typed work order through the repo-backed typed work-order runner. Chat assistants should prefer queuing a typed work order for this path over pasting long local terminal blocks. The GUI must use the same command path instead of introducing a separate execution model.
 
 `remote-next` reports `expected_closeout_path=` lines when a typed work order creates repo-backed evidence. Those paths are the canonical dirty-state closeout set for the next evidence PR and are intended for future GUI display.
+
+## Full-output transfer requirement
+
+Every local task initiated by the assistant must capture the complete terminal transcript in a repo-backed transfer or evidence file that the assistant can inspect without asking the user to paste output. The captured record must include stdout, stderr, exit code, argv, start time, end time, current branch, HEAD, dirty-state evidence, and the generated terminal-log or command-report path.
+
+Manual paste is an exception, not the normal workflow. It is allowed only when the transfer/evidence file cannot be produced or retrieved, for example after kill -9, terminal loss, machine crash, network failure before push, Python startup failure, filesystem failure, or an explicitly reported broken logging path.
+
+## Remote Python task requirement
+
+Local execution requests must be delivered as repo-backed Python programs, typed work orders, or `agentic-kit` commands. They must run through the repository virtual environment and must not depend on global Python or shell state. For this repository the canonical local runtime is `.venv/bin/python` and `.venv/bin/agentic-kit` with Python 3.13.
+
+Long ad-hoc shell blocks, fragile multi-line `python -c` strings, and raw decoration lines as terminal input are not valid default execution paths. They are recovery-only tools when the repo-backed Python or typed-work-order path is unavailable.
