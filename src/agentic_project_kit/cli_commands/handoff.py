@@ -20,6 +20,8 @@ from agentic_project_kit.handoff_state import (
     validate_handoff_state,
 )
 
+from agentic_project_kit.post_merge_handoff_refresh import evaluate_post_merge_handoff_refresh, render_post_merge_handoff_refresh_status
+
 handoff_app = typer.Typer(help="Read-only persistent handoff state commands.")
 
 
@@ -121,3 +123,11 @@ def _project_root_for_handoff_path(path: Path) -> Path:
     if path.name == "handoff_state.yaml" and path.parent.name == ".agentic":
         return path.parent.parent
     return Path.cwd()
+
+
+@handoff_app.command("post-merge-refresh-status")
+def post_merge_refresh_status() -> None:
+    status = evaluate_post_merge_handoff_refresh(Path("."))
+    typer.echo(render_post_merge_handoff_refresh_status(status), nl=False)
+    if status.refresh_required:
+        raise typer.Exit(1)
