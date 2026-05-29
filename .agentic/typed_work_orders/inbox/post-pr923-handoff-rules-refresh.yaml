@@ -1,0 +1,12 @@
+id: post-pr923-handoff-rules-refresh
+title: Post PR923 handoff rules refresh
+safety: local-only
+log_path: docs/reports/terminal/post-pr923-handoff-rules-refresh.log
+block_dirty_worktree: true
+steps:
+  - kind: command_argv
+    label: handoff rules refresh
+    argv:
+      - .venv/bin/agentic-kit
+      - rules
+      - handoff-refresh
