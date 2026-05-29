@@ -17,6 +17,11 @@ from agentic_project_kit.cockpit import (
     render_cockpit_status,
     run_cockpit_action,
 )
+from agentic_project_kit.gui_gatekeeper_status import (
+    build_gui_gatekeeper_status,
+    gui_gatekeeper_status_as_json_data,
+    render_gui_gatekeeper_status,
+)
 
 
 cockpit_app = typer.Typer(help="Inspect local cockpit status and structured project actions.")
@@ -27,6 +32,21 @@ console = Console()
 def cockpit_status_command(project_root: Annotated[Path, typer.Option("--root")] = Path(".")) -> None:
     status = build_cockpit_status(project_root.resolve())
     console.print(render_cockpit_status(status), markup=False)
+
+
+@cockpit_app.command("gatekeeper-status")
+def cockpit_gatekeeper_status_command(
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    json_output: Annotated[
+        bool,
+        typer.Option("--json", help="Print machine-readable JSON GUI gatekeeper status."),
+    ] = False,
+) -> None:
+    status = build_gui_gatekeeper_status(project_root.resolve())
+    if json_output:
+        typer.echo(json.dumps(gui_gatekeeper_status_as_json_data(status), indent=2, sort_keys=True))
+        return
+    console.print(render_gui_gatekeeper_status(status), markup=False)
 
 
 @cockpit_app.command("actions")

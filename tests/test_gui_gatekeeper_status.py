@@ -1,3 +1,4 @@
+import json
 from types import SimpleNamespace
 
 from agentic_project_kit.action_registry import SafetyClass
@@ -96,3 +97,53 @@ def test_gui_gatekeeper_rendering_is_deterministic(tmp_path, monkeypatch):
         "blockers=<none>",
         "action=git.status;safety=read-only;enabled=true;reason=read-only action allowed in clean GUI gatekeeper state",
     ]
+
+def test_gui_gatekeeper_status_json_data_has_stable_schema(tmp_path, monkeypatch):
+    agentic = tmp_path / ".agentic"
+    agentic.mkdir()
+    (agentic / "workflow_state").write_text("IDLE\n", encoding="utf-8")
+
+    monkeypatch.setattr("agentic_project_kit.gui_gatekeeper_status._git_branch", lambda root: "main")
+    monkeypatch.setattr("agentic_project_kit.gui_gatekeeper_status._git_dirty", lambda root: False)
+
+    actions = [
+        SimpleNamespace(name="git.status", safety_class=SafetyClass.READ_ONLY, mutation_scope="none"),
+    ]
+
+    from agentic_project_kit.gui_gatekeeper_status import gui_gatekeeper_status_as_json_data
+
+    data = gui_gatekeeper_status_as_json_data(build_gui_gatekeeper_status(tmp_path, actions=actions))
+
+    assert data["schema_version"] == 1
+    assert data["branch"] == "main"
+    assert data["git_dirty"] is False
+    assert data["ready_for_read_only_actions"] is True
+    assert data["ready_for_mutating_actions"] is False
+    assert data["actions"][0]["action_id"] == "git.status"
+    assert data["actions"][0]["enabled"] is True
+
+
+def test_cockpit_gatekeeper_status_cli_renders_text():
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    result = CliRunner().invoke(app, ["cockpit", "gatekeeper-status"])
+
+    assert result.exit_code == 0, result.output
+    assert "GUI_GATEKEEPER_STATUS" in result.output
+    assert "ready_for_read_only_actions=" in result.output
+    assert "ready_for_mutating_actions=false" in result.output
+
+
+def test_cockpit_gatekeeper_status_cli_outputs_json():
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    result = CliRunner().invoke(app, ["cockpit", "gatekeeper-status", "--json"])
+
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.output)
+    assert data["schema_version"] == 1
+    assert "actions" in data
+    assert data["ready_for_mutating_actions"] is False
+
