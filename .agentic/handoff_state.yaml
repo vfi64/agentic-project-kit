@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 922812e
-  commit_subject: Enforce classifier in evidence finalization (#899)
+  commit: 819e2cb
+  commit_subject: Keep handoff show output compact (#903)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
