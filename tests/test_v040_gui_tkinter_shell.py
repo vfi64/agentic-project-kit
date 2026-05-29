@@ -15,6 +15,34 @@ from agentic_project_kit.gui_button_catalog import (
 )
 
 
+
+def clean_gui_gatekeeper_status():
+    from agentic_project_kit.gui_gatekeeper_status import (
+        GuiGatekeeperActionStatus,
+        GuiGatekeeperStatus,
+    )
+
+    return GuiGatekeeperStatus(
+        branch="main",
+        git_dirty=False,
+        workflow_state="IDLE",
+        current_work_present=True,
+        current_work_state="READY",
+        ready_for_read_only_actions=True,
+        ready_for_mutating_actions=False,
+        action_statuses=(
+            GuiGatekeeperActionStatus(
+                action_id="doctor",
+                safety_class="read-only",
+                mutation_scope="none",
+                enabled=True,
+                reason="read-only action allowed in clean GUI gatekeeper state",
+            ),
+        ),
+        blockers=(),
+    )
+
+
 class FakeRoot:
     def __init__(self):
         self.title_value = None
@@ -31,7 +59,7 @@ class FakeRoot:
 
 
 def test_build_tkinter_shell_spec_uses_presenter_contract():
-    spec = build_tkinter_shell_spec()
+    spec = build_tkinter_shell_spec(clean_gui_gatekeeper_status())
     assert spec.title == "agentic-project-kit Cockpit"
     assert spec.status == "tkinter-shell-ready"
     assert spec.action_count >= 1
@@ -54,7 +82,7 @@ def test_create_tkinter_root_accepts_factory_for_headless_tests():
 
 
 def test_render_tkinter_shell_summary_is_deterministic():
-    output = render_tkinter_shell_summary(build_tkinter_shell_spec())
+    output = render_tkinter_shell_summary(build_tkinter_shell_spec(clean_gui_gatekeeper_status()))
     assert "TKINTER SHELL" in output
     assert "status=tkinter-shell-ready" in output
     assert "menu_count=5" in output
@@ -298,7 +326,7 @@ def test_manual_gui_keeps_remote_destructive_actions_disabled():
         source.index("def render_manual_launch_content") : source.index("def run_manual_launch")
     ]
     assert "run_action_click(command_id)" in manual_source
-    assert "gui_buttons_by_category()" in manual_source
+    assert "buttons_by_category" in manual_source
     assert "agent-run" in {button.command_id for button in all_gui_buttons()}
     assert 'state="disabled"' in manual_source
     assert "remote/destructive/parameterized buttons disabled" in manual_source.lower()
@@ -527,3 +555,46 @@ def test_work_order_strip_command_ids_are_not_empty():
         "work-order-run",
         "work-order-upload",
     )
+
+
+def test_tkinter_shell_spec_reflects_gatekeeper_dirty_blocker():
+    from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperActionStatus, GuiGatekeeperStatus
+
+    gatekeeper = GuiGatekeeperStatus(
+        branch="feature/dirty",
+        git_dirty=True,
+        workflow_state="IDLE",
+        current_work_present=True,
+        current_work_state="READY",
+        ready_for_read_only_actions=False,
+        ready_for_mutating_actions=False,
+        action_statuses=(
+            GuiGatekeeperActionStatus(
+                action_id="doctor",
+                safety_class="read-only",
+                mutation_scope="none",
+                enabled=False,
+                reason="read-only action blocked because working tree is dirty",
+            ),
+        ),
+        blockers=("working tree is dirty",),
+    )
+
+    spec = build_tkinter_shell_spec(gatekeeper)
+
+    assert spec.status == "tkinter-shell-blocked"
+    assert "GUI gatekeeper blockers: working tree is dirty" in spec.preview
+    doctor = next(button for button in spec.design.action_buttons if button.command_id == "doctor")
+    assert doctor.enabled is False
+    assert doctor.disabled_reason == "read-only action blocked because working tree is dirty"
+
+
+def test_tkinter_shell_spec_keeps_readonly_enabled_when_gatekeeper_clean():
+    gatekeeper = clean_gui_gatekeeper_status()
+
+    spec = build_tkinter_shell_spec(gatekeeper)
+
+    assert spec.status == "tkinter-shell-ready"
+    doctor = next(button for button in spec.design.action_buttons if button.command_id == "doctor")
+    assert doctor.enabled is True
+
