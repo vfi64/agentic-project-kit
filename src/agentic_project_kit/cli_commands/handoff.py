@@ -29,9 +29,6 @@ handoff_app = typer.Typer(help="Read-only persistent handoff state commands.")
 def show(path: str = ".agentic/handoff_state.yaml") -> None:
     data = load_handoff_state(path)
     typer.echo(summarize_handoff_state(data))
-    registry_lines = _render_registry_summary(path)
-    if registry_lines:
-        typer.echo(registry_lines)
 
 
 @handoff_app.command("check")
