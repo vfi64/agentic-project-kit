@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -44,6 +45,39 @@ def collect_hits(path: Path) -> list[Hit]:
         if any(needle in line for needle in NEEDLES):
             hits.append(Hit(str(path.relative_to(ROOT)), idx, line.strip()))
     return hits
+
+
+def run_git(args: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", *args],
+        cwd=ROOT,
+        check=check,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+
+
+def current_branch() -> str:
+    return run_git(["branch", "--show-current"]).stdout.strip()
+
+
+def has_staged_changes() -> bool:
+    return bool(run_git(["diff", "--cached", "--name-only"]).stdout.strip())
+
+
+def upload_evidence() -> tuple[str, list[str]]:
+    messages: list[str] = []
+    branch = current_branch()
+    run_git(["add", str(LOG_PATH.relative_to(ROOT)), str(REPORT_PATH.relative_to(ROOT))])
+    if not has_staged_changes():
+        return "NOOP", [f"branch={branch}", "evidence_commit=NO_CHANGES"]
+    commit = run_git(["commit", "-m", "Record post-merge gate visibility inventory evidence"]).stdout.strip()
+    messages.append(commit)
+    pushed = run_git(["push", "origin", branch]).stdout.strip()
+    messages.append(pushed)
+    head = run_git(["rev-parse", "--short", "HEAD"]).stdout.strip()
+    return "PUSHED", [f"branch={branch}", f"evidence_commit={head}", *messages]
 
 
 def main() -> int:
@@ -107,9 +141,26 @@ def main() -> int:
         f"result={result}\n",
         encoding="utf-8",
     )
+
+    upload_result = "SKIPPED"
+    upload_messages: list[str] = []
+    if result == "PASS":
+        try:
+            upload_result, upload_messages = upload_evidence()
+        except subprocess.CalledProcessError as exc:
+            upload_result = "FAIL"
+            upload_messages = [exc.stdout]
+            result = "FAIL"
+        with LOG_PATH.open("a", encoding="utf-8") as fh:
+            fh.write(f"upload_result={upload_result}\n")
+            for msg in upload_messages:
+                for line in msg.splitlines():
+                    fh.write(f"upload_detail={line}\n")
+
     print(LOG_PATH.relative_to(ROOT))
     print(f"result={result}")
-    return 0 if result == "PASS" else 1
+    print(f"upload_result={upload_result}")
+    return 0 if result == "PASS" and upload_result in {"PUSHED", "NOOP"} else 1
 
 
 if __name__ == "__main__":
