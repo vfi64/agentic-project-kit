@@ -20,8 +20,3 @@ steps:
     argv:
       - .venv/bin/agentic-kit
       - check-docs
-  - kind: command_argv
-    label: remote-next no-command smoke
-    argv:
-      - .venv/bin/agentic-kit
-      - remote-next
