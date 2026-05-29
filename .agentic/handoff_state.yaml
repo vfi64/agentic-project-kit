@@ -408,6 +408,6 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr897.md
+  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr899.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
