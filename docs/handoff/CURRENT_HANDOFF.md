@@ -1,3 +1,15 @@
+## Post-PR892 Handoff Refresh State
+
+Current verified main HEAD is `64f5c4d49e4012e42170b47e6bcf48bf383e8a94` (`64f5c4d`).
+Commit subject: `Merge pull request #892 from vfi64/feature/post-merge-gate-visibility-inventory`.
+
+PR #892 is merged. It recorded a read-only inventory of where the post-merge handoff refresh status gate is visible.
+
+Current verified release remains v0.4.4.
+Verified Zenodo version DOI remains `10.5281/zenodo.20431326`.
+
+Next safe step after this refresh is merged and verified: move the post-merge refresh status gate into a more visible kit/ns workflow path without broad product-code changes.
+
 ## Post-PR888 Patch Preflight Slice-Gate State
 
 Current verified main HEAD is `508f3dfa2be50d4f369f31e270cc930c24873015` (`508f3df`).

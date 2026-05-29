@@ -1,8 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-28'
-  reason: post-PR888 patch preflight slice-gate handoff refresh
-  source: PR888 main verification
+  reason: post-PR892 handoff refresh
+  source: PR892 main verification
 repo:
   name: agentic-project-kit
   local_path: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 508f3dfa2be50d4f369f31e270cc930c24873015
-  commit_subject: 'Merge pull request #888 from vfi64/feature/patch-preflight-slice-gate-clean'
+  commit: 64f5c4d49e4012e42170b47e6bcf48bf383e8a94
+  commit_subject: 'Merge pull request #892 from vfi64/feature/post-merge-gate-visibility-inventory'
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -82,6 +82,7 @@ safe_state:
   - 883
   - 886
   - 888
+  - 892
 release:
   current_version: 0.4.4
   previous_version: 0.4.3
@@ -93,10 +94,9 @@ release:
   post_release_evidence: docs/reports/terminal/v044-post-release-verify.log
 open_items:
   prs: []
-  next_expected_chat_action: After this post-PR888 handoff refresh is merged and verified,
-    continue with the smallest gatekeeper-hardening slice using slice-gate and patch-preflight
-    evidence.
+  next_expected_chat_action: Continue after PR892 with post-merge gate visibility follow-up work only after the post-merge refresh status gate reports NOOP.
 completed_since_previous_handoff:
+- 'PR #892 recorded the post-merge handoff refresh status gate visibility inventory so the workflow can move the gate into more visible kit/ns paths.'
 - 'PR #888 added optional patch-preflight slice-gate enforcement so planning-document
   preflight can require deterministic slice readiness and a clean worktree.'
 - 'PR #886 fixed workflow evidence hygiene by moving active next-turn/work-order results
@@ -401,15 +401,15 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr888.md
+  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr892.md
 administrative_evidence_state:
-  current_head: 508f3dfa2be50d4f369f31e270cc930c24873015
-  current_head_subject: 'Merge pull request #888 from vfi64/feature/patch-preflight-slice-gate-clean'
-  head_subject: 'Merge pull request #888 from vfi64/feature/patch-preflight-slice-gate-clean'
+  current_head: 64f5c4d49e4012e42170b47e6bcf48bf383e8a94
+  current_head_subject: 'Merge pull request #892 from vfi64/feature/post-merge-gate-visibility-inventory'
+  head_subject: 'Merge pull request #892 from vfi64/feature/post-merge-gate-visibility-inventory'
   allowed_after_safe_state: true
-  reason: PR888 patch preflight slice-gate enforcement merged and verified on main
-  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr888.md
-  current_subject: 'Merge pull request #888 from vfi64/feature/patch-preflight-slice-gate-clean'
+  reason: PR892 post-merge gate visibility inventory merged on main
+  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr892.md
+  current_subject: 'Merge pull request #892 from vfi64/feature/post-merge-gate-visibility-inventory'
   safe_state_semantics: current_main_head
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers

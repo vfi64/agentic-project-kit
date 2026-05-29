@@ -1,0 +1,13 @@
+POST_PR892_HANDOFF_REFRESH
+target_head=64f5c4d49e4012e42170b47e6bcf48bf383e8a94
+current_head=2739f768001a34848b0aea65d86e9eba83f943ec
+current_subject=Make PR892 handoff refresh helper tolerate wrapped admin reason
+branch_has_expected_admin_delta=True
+status_changed=True
+current_handoff_changed=True
+handoff_state_changed=True
+prompt_path=docs/reports/terminal/v044-successor-chat-handoff-after-pr892.md
+prompt_returncode=0
+freshness_warning_present=True
+markers_ok=True
+result=PASS
