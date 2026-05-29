@@ -59,7 +59,16 @@ state.setdefault('administrative_evidence_state', {}).update({
     'current_subject': subject,
     'safe_state_semantics': 'current_main_head',
 })
-STATE.write_text(yaml.safe_dump(state, sort_keys=False, allow_unicode=True), encoding='utf-8')
+dumped_state = yaml.safe_dump(state, sort_keys=False, allow_unicode=True)
+for anchor in [
+    "# preservation-anchor: use d for log-backed PASS and f for log-backed FAIL",
+    "# preservation-anchor: nested shell/Python quote layers",
+]:
+    if anchor not in dumped_state:
+        if not dumped_state.endswith("\n"):
+            dumped_state += "\n"
+        dumped_state += anchor + "\n"
+STATE.write_text(dumped_state, encoding='utf-8')
 
 title = '## Post-PR894 Handoff Refresh State'
 body = f'''Current verified main HEAD is `{head}` (`{short}`).
