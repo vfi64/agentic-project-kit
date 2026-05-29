@@ -136,6 +136,30 @@ def render_gui_gatekeeper_status(status: GuiGatekeeperStatus) -> str:
     return "\n".join(lines)
 
 
+def gui_gatekeeper_status_as_json_data(status: GuiGatekeeperStatus) -> dict[str, object]:
+    return {
+        "schema_version": 1,
+        "branch": status.branch,
+        "git_dirty": status.git_dirty,
+        "workflow_state": status.workflow_state,
+        "current_work_present": status.current_work_present,
+        "current_work_state": status.current_work_state,
+        "ready_for_read_only_actions": status.ready_for_read_only_actions,
+        "ready_for_mutating_actions": status.ready_for_mutating_actions,
+        "blockers": list(status.blockers),
+        "actions": [
+            {
+                "action_id": action.action_id,
+                "safety_class": action.safety_class,
+                "mutation_scope": action.mutation_scope,
+                "enabled": action.enabled,
+                "reason": action.reason,
+            }
+            for action in status.action_statuses
+        ],
+    }
+
+
 def _safety_value(value: object) -> str:
     raw = getattr(value, "value", value)
     return str(raw).strip().lower().replace("_", "-")
