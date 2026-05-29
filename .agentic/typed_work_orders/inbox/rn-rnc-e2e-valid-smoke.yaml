@@ -1,0 +1,17 @@
+id: rn-rnc-e2e-valid-smoke
+title: rn rnc e2e valid smoke
+safety: local-only
+log_path: docs/reports/terminal/rn-rnc-e2e-valid-smoke.log
+block_dirty_worktree: true
+steps:
+  - kind: command_argv
+    label: cockpit actions smoke
+    argv:
+      - .venv/bin/agentic-kit
+      - cockpit
+      - actions
+  - kind: command_argv
+    label: doctor smoke
+    argv:
+      - .venv/bin/agentic-kit
+      - doctor
