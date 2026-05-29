@@ -1,3 +1,7 @@
+## Post-Merge Handoff Refresh Status Gate Visibility
+
+The post-merge handoff refresh status gate is now documented for bootstrap visibility. After any PR merge and local main sync, run agentic-kit handoff post-merge-refresh-status. Continue only on result=NOOP; create an administrative handoff refresh slice on result=REFRESH_REQUIRED before product work.
+
 ## Post-PR892 Handoff Refresh State
 
 Current verified main HEAD is `64f5c4d49e4012e42170b47e6bcf48bf383e8a94` (`64f5c4d`).
