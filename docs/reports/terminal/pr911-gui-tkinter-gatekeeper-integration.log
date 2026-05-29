@@ -1,0 +1,435 @@
+================================================================
+### GUI TKINTER GATEKEEPER INTEGRATION -- LOGGED -- VENV ONLY ###
+================================================================
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK ###
+main
+## main...origin/main
+?? docs/reports/terminal/pr911-gui-tkinter-gatekeeper-integration.log
+e596e8a (HEAD -> main, origin/main, origin/HEAD) Refresh handoff state after PR909 (#910)
+9d1cdd1 Expose GUI gatekeeper status in cockpit CLI (#909)
+d3bd0e5 Refresh handoff state after PR907 (#908)
+a2a04b6 Add GUI gatekeeper status model (#907)
+8c6a35c Refresh handoff state after PR905 (#906)
+ebe6aff Guard handoff next prompt reference consistency (#905)
+91d8cb5 Refresh handoff state after PR903 (#904)
+819e2cb Keep handoff show output compact (#903)
+Python 3.13.13
+Repo: agentic-project-kit
+Path: agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.4.4
+Safe state: main @ 9d1cdd1
+Next: Start the next chat from the fresh post-PR909 successor handoff prompt and obey agentic-kit handoff post-merge-refresh-status before product work.
+POST_MERGE_HANDOFF_REFRESH
+current_head=e596e8a
+freshness_warning_present=False
+refresh_required=False
+latest_successor_prompt=docs/reports/terminal/v044-successor-chat-handoff-after-pr909.md
+result=NOOP
+next_safe_action=continue_without_post_merge_handoff_refresh
+
+### CREATE FEATURE BRANCH ###
+Switched to a new branch 'feature/gui-tkinter-gatekeeper-integration'
+
+### PATCH GUI TKINTER SHELL TO USE GATEKEEPER STATUS ###
+patched src/agentic_project_kit/gui_tkinter_shell.py
+
+### ADD TESTS ###
+patched tests/test_v040_gui_tkinter_shell.py
+
+### VERIFY DIFF ###
+diff --git a/src/agentic_project_kit/gui_tkinter_shell.py b/src/agentic_project_kit/gui_tkinter_shell.py
+index 16bfcf5..cf54744 100644
+--- a/src/agentic_project_kit/gui_tkinter_shell.py
++++ b/src/agentic_project_kit/gui_tkinter_shell.py
+@@ -16,6 +16,10 @@ from agentic_project_kit.gui_action_execution import (
+     normalize_safety_class,
+     run_bounded_read_only_action,
+ )
++from agentic_project_kit.gui_gatekeeper_status import (
++    GuiGatekeeperStatus,
++    build_gui_gatekeeper_status,
++)
+ from agentic_project_kit.gui_button_catalog import (
+     all_gui_buttons,
+     get_gui_button,
+@@ -163,7 +167,35 @@ def _button_from_catalog(button: object) -> ButtonSpec:
+     )
+ 
+ 
+-def build_windows_style_design_spec() -> TkinterShellDesignSpec:
++def build_windows_style_design_spec(
++    gatekeeper_status: GuiGatekeeperStatus | None = None,
++) -> TkinterShellDesignSpec:
++    gatekeeper = gatekeeper_status or build_gui_gatekeeper_status(Path.cwd())
++    action_enabled_by_id = {action.action_id: action.enabled for action in gatekeeper.action_statuses}
++    action_reason_by_id = {action.action_id: action.reason for action in gatekeeper.action_statuses}
++
++    def gate_button(button: object) -> ButtonSpec:
++        spec = _button_from_catalog(button)
++        enabled = spec.enabled and gatekeeper.ready_for_read_only_actions
++        disabled_reason = spec.disabled_reason
++        if not gatekeeper.ready_for_read_only_actions and spec.enabled:
++            disabled_reason = ", ".join(gatekeeper.blockers) or "GUI gatekeeper blocks this action"
++        if spec.command_id in action_enabled_by_id:
++            enabled = spec.enabled and action_enabled_by_id[spec.command_id]
++            if not enabled:
++                disabled_reason = action_reason_by_id.get(spec.command_id, disabled_reason)
++        return _button(
++            spec.command_id,
++            spec.label,
++            spec.tooltip,
++            spec.icon_text,
++            spec.safety_class,
++            enabled,
++            spec.category,
++            spec.implementation_state,
++            disabled_reason,
++        )
++
+     menu_bar = (
+         MenuSpec(
+             "File",
+@@ -238,24 +270,33 @@ def build_windows_style_design_spec() -> TkinterShellDesignSpec:
+             ),
+         ),
+     )
+-    toolbar = tuple(_button_from_catalog(button) for button in toolbar_gui_buttons())
++    toolbar = tuple(gate_button(button) for button in toolbar_gui_buttons())
+     action_buttons = tuple(
+-        _button_from_catalog(button)
++        gate_button(button)
+         for button in all_gui_buttons()
+         if not is_work_order_strip_button(button.command_id)
+     )
+     return TkinterShellDesignSpec(menu_bar, toolbar, action_buttons)
+ 
+ 
+-def build_tkinter_shell_spec() -> TkinterShellSpec:
++def build_tkinter_shell_spec(
++    gatekeeper_status: GuiGatekeeperStatus | None = None,
++) -> TkinterShellSpec:
+     presenter = build_no_window_presenter_result(list_actions())
++    gatekeeper = gatekeeper_status or build_gui_gatekeeper_status(Path.cwd())
++    status = "tkinter-shell-ready" if presenter.ok and gatekeeper.ready_for_read_only_actions else "tkinter-shell-blocked"
++    preview_lines = [presenter.rendered]
++    if gatekeeper.blockers:
++        preview_lines.append("GUI gatekeeper blockers: " + ", ".join(gatekeeper.blockers))
++    else:
++        preview_lines.append("GUI gatekeeper blockers: <none>")
+     return TkinterShellSpec(
+         "agentic-project-kit Cockpit",
+-        "tkinter-shell-ready" if presenter.ok else "tkinter-shell-blocked",
++        status,
+         len(all_gui_buttons()),
+         False,
+-        presenter.rendered,
+-        build_windows_style_design_spec(),
++        chr(10).join(preview_lines),
++        build_windows_style_design_spec(gatekeeper),
+     )
+ 
+ 
+@@ -645,8 +686,10 @@ def render_manual_launch_content(root: object) -> None:
+         root, text="agentic-project-kit Cockpit", anchor="w", font=("TkDefaultFont", 18, "bold")
+     )
+     header.pack(fill="x", padx=12, pady=(12, 6))
+-    enabled_count = len([button for button in all_gui_buttons() if button.enabled])
+-    disabled_count = len([button for button in all_gui_buttons() if not button.enabled])
++    spec = build_tkinter_shell_spec()
++    buttons = spec.design.action_buttons
++    enabled_count = len([button for button in buttons if button.enabled])
++    disabled_count = len([button for button in buttons if not button.enabled])
+     safety = ttk.Label(
+         root,
+         text=(
+@@ -738,7 +781,10 @@ def render_manual_launch_content(root: object) -> None:
+     actions_canvas.pack(side="left", fill="y", expand=False)
+     actions_scrollbar.pack(side="right", fill="y")
+ 
+-    for category, buttons in gui_buttons_by_category().items():
++    buttons_by_category: dict[str, list[ButtonSpec]] = {}
++    for button in buttons:
++        buttons_by_category.setdefault(button.category, []).append(button)
++    for category, buttons in buttons_by_category.items():
+         category_frame = ttk.LabelFrame(actions, text=category, padding=3)
+         category_frame.pack(fill="x", pady=2)
+         for button in buttons:
+diff --git a/tests/test_v040_gui_tkinter_shell.py b/tests/test_v040_gui_tkinter_shell.py
+index 6256c3e..b28affc 100644
+--- a/tests/test_v040_gui_tkinter_shell.py
++++ b/tests/test_v040_gui_tkinter_shell.py
+@@ -527,3 +527,66 @@ def test_work_order_strip_command_ids_are_not_empty():
+         "work-order-run",
+         "work-order-upload",
+     )
++
++
++def test_tkinter_shell_spec_reflects_gatekeeper_dirty_blocker():
++    from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperActionStatus, GuiGatekeeperStatus
++
++    gatekeeper = GuiGatekeeperStatus(
++        branch="feature/dirty",
++        git_dirty=True,
++        workflow_state="IDLE",
++        current_work_present=True,
++        current_work_state="READY",
++        ready_for_read_only_actions=False,
++        ready_for_mutating_actions=False,
++        action_statuses=(
++            GuiGatekeeperActionStatus(
++                action_id="doctor",
++                safety_class="read-only",
++                mutation_scope="none",
++                enabled=False,
++                reason="read-only action blocked because working tree is dirty",
++            ),
++        ),
++        blockers=("working tree is dirty",),
++    )
++
++    spec = build_tkinter_shell_spec(gatekeeper)
++
++    assert spec.status == "tkinter-shell-blocked"
++    assert "GUI gatekeeper blockers: working tree is dirty" in spec.preview
++    doctor = next(button for button in spec.design.action_buttons if button.command_id == "doctor")
++    assert doctor.enabled is False
++    assert doctor.disabled_reason == "read-only action blocked because working tree is dirty"
++
++
++def test_tkinter_shell_spec_keeps_readonly_enabled_when_gatekeeper_clean():
++    from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperActionStatus, GuiGatekeeperStatus
++
++    gatekeeper = GuiGatekeeperStatus(
++        branch="main",
++        git_dirty=False,
++        workflow_state="IDLE",
++        current_work_present=True,
++        current_work_state="READY",
++        ready_for_read_only_actions=True,
++        ready_for_mutating_actions=False,
++        action_statuses=(
++            GuiGatekeeperActionStatus(
++                action_id="doctor",
++                safety_class="read-only",
++                mutation_scope="none",
++                enabled=True,
++                reason="read-only action allowed in clean GUI gatekeeper state",
++            ),
++        ),
++        blockers=(),
++    )
++
++    spec = build_tkinter_shell_spec(gatekeeper)
++
++    assert spec.status == "tkinter-shell-ready"
++    doctor = next(button for button in spec.design.action_buttons if button.command_id == "doctor")
++    assert doctor.enabled is True
++
+
+### LOCAL GATES ###
+F401 [*] `agentic_project_kit.gui_button_catalog.gui_buttons_by_category` imported but unused
+  --> src/agentic_project_kit/gui_tkinter_shell.py:26:5
+   |
+24 |     all_gui_buttons,
+25 |     get_gui_button,
+26 |     gui_buttons_by_category,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+27 |     toolbar_gui_buttons,
+28 | )
+   |
+help: Remove unused import: `agentic_project_kit.gui_button_catalog.gui_buttons_by_category`
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.
+.......F..F............F.........................                        [100%]
+=================================== FAILURES ===================================
+____________ test_build_tkinter_shell_spec_uses_presenter_contract _____________
+
+    def test_build_tkinter_shell_spec_uses_presenter_contract():
+        spec = build_tkinter_shell_spec()
+        assert spec.title == "agentic-project-kit Cockpit"
+>       assert spec.status == "tkinter-shell-ready"
+E       AssertionError: assert 'tkinter-shell-blocked' == 'tkinter-shell-ready'
+E         
+E         - tkinter-shell-ready
+E         ?               ^ - -
+E         + tkinter-shell-blocked
+E         ?               ^^^^^
+
+tests/test_v040_gui_tkinter_shell.py:36: AssertionError
+______________ test_render_tkinter_shell_summary_is_deterministic ______________
+
+    def test_render_tkinter_shell_summary_is_deterministic():
+        output = render_tkinter_shell_summary(build_tkinter_shell_spec())
+        assert "TKINTER SHELL" in output
+>       assert "status=tkinter-shell-ready" in output
+E       AssertionError: assert 'status=tkinter-shell-ready' in 'TKINTER SHELL\ntitle=agentic-project-kit Cockpit\nstatus=tkinter-shell-blocked\naction_count=36\nmenu_count=5\ntoolba...ndestructive_actions_enabled=false\ntoolbar_icons=branch,status,history,handoff,stethoscope,document-check,audit,guard'
+
+tests/test_v040_gui_tkinter_shell.py:59: AssertionError
+__________ test_manual_gui_keeps_remote_destructive_actions_disabled ___________
+
+    def test_manual_gui_keeps_remote_destructive_actions_disabled():
+        from pathlib import Path
+    
+        source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
+        manual_source = source[
+            source.index("def render_manual_launch_content") : source.index("def run_manual_launch")
+        ]
+        assert "run_action_click(command_id)" in manual_source
+>       assert "gui_buttons_by_category()" in manual_source
+E       assert 'gui_buttons_by_category()' in 'def render_manual_launch_content(root: object) -> None:\n    import tkinter as tk\n    from tkinter import ttk\n\n   ... read-only buttons: {enabled_count}",\n        anchor="w",\n    )\n    status_text.pack(fill="x", side="bottom")\n\n\n'
+
+tests/test_v040_gui_tkinter_shell.py:301: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v040_gui_tkinter_shell.py::test_build_tkinter_shell_spec_uses_presenter_contract
+FAILED tests/test_v040_gui_tkinter_shell.py::test_render_tkinter_shell_summary_is_deterministic
+FAILED tests/test_v040_gui_tkinter_shell.py::test_manual_gui_keeps_remote_destructive_actions_disabled
+3 failed, 46 passed in 0.66s
+........................................................................ [  5%]
+........................................................................ [ 11%]
+........................................................................ [ 17%]
+........................................................................ [ 22%]
+........................................................................ [ 28%]
+........................................................................ [ 34%]
+........................................................................ [ 39%]
+........................................................................ [ 45%]
+........................................................................ [ 51%]
+........................................................................ [ 56%]
+........................................................................ [ 62%]
+........................................................................ [ 68%]
+........................................................................ [ 74%]
+........................................................................ [ 79%]
+........................................................................ [ 85%]
+...................................F..F............F.................... [ 91%]
+........................................................................ [ 96%]
+........................................                                 [100%]
+=================================== FAILURES ===================================
+____________ test_build_tkinter_shell_spec_uses_presenter_contract _____________
+
+    def test_build_tkinter_shell_spec_uses_presenter_contract():
+        spec = build_tkinter_shell_spec()
+        assert spec.title == "agentic-project-kit Cockpit"
+>       assert spec.status == "tkinter-shell-ready"
+E       AssertionError: assert 'tkinter-shell-blocked' == 'tkinter-shell-ready'
+E         
+E         - tkinter-shell-ready
+E         ?               ^ - -
+E         + tkinter-shell-blocked
+E         ?               ^^^^^
+
+tests/test_v040_gui_tkinter_shell.py:36: AssertionError
+______________ test_render_tkinter_shell_summary_is_deterministic ______________
+
+    def test_render_tkinter_shell_summary_is_deterministic():
+        output = render_tkinter_shell_summary(build_tkinter_shell_spec())
+        assert "TKINTER SHELL" in output
+>       assert "status=tkinter-shell-ready" in output
+E       AssertionError: assert 'status=tkinter-shell-ready' in 'TKINTER SHELL\ntitle=agentic-project-kit Cockpit\nstatus=tkinter-shell-blocked\naction_count=36\nmenu_count=5\ntoolba...ndestructive_actions_enabled=false\ntoolbar_icons=branch,status,history,handoff,stethoscope,document-check,audit,guard'
+
+tests/test_v040_gui_tkinter_shell.py:59: AssertionError
+__________ test_manual_gui_keeps_remote_destructive_actions_disabled ___________
+
+    def test_manual_gui_keeps_remote_destructive_actions_disabled():
+        from pathlib import Path
+    
+        source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
+        manual_source = source[
+            source.index("def render_manual_launch_content") : source.index("def run_manual_launch")
+        ]
+        assert "run_action_click(command_id)" in manual_source
+>       assert "gui_buttons_by_category()" in manual_source
+E       assert 'gui_buttons_by_category()' in 'def render_manual_launch_content(root: object) -> None:\n    import tkinter as tk\n    from tkinter import ttk\n\n   ... read-only buttons: {enabled_count}",\n        anchor="w",\n    )\n    status_text.pack(fill="x", side="bottom")\n\n\n'
+
+tests/test_v040_gui_tkinter_shell.py:301: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v040_gui_tkinter_shell.py::test_build_tkinter_shell_spec_uses_presenter_contract
+FAILED tests/test_v040_gui_tkinter_shell.py::test_render_tkinter_shell_summary_is_deterministic
+FAILED tests/test_v040_gui_tkinter_shell.py::test_manual_gui_keeps_remote_destructive_actions_disabled
+3 failed, 1261 passed in 10.68s
+Agentic project check passed
+Documentation system audit
+
+[PASS] Aktualität
+- no deterministic findings
+
+[PASS] Vollständigkeit
+- no deterministic findings
+
+[PASS] Korrektheit
+- no deterministic findings
+
+[PASS] Redundanzfreiheit (review-only boundary)
+- semantic redundancy-free prose still requires advisory review; this hard check only catches 
+known structural duplication patterns
+
+[PASS] Stringenz der Dokumentenordnung
+- no deterministic findings
+
+[PASS] Dokumentationsregistry
+- registry=docs/DOCUMENTATION_REGISTRY.yaml
+- version=1
+- documents=22
+- broad_migration_allowed=False
+- class:architecture=1
+- class:evidence/log=2
+- class:generated artifact=1
+- class:governance/system=4
+- class:operational/automation=4
+- class:planning=7
+- class:release=2
+- class:user-facing description=1
+
+[PASS] Konsistenz
+- no deterministic findings
+
+Overall: PASS
+Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, 
+python-cli, git-github, release-managed; policy packs: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, 
+documentation-governed
+[PASS] documentation gates: passed
+[PASS] document lifecycle audit: passed
+[PASS] todo gates: passed
+[PASS] version drift: project state matches version 0.4.4
+
+Overall: PASS
+
+### PROTECTED CHANGE PLAN ###
+PROTECTED_CHANGE_PLAN
+result=PASS
+findings=0
+### RESULT: PASS ###
+
+### FINAL DECISION ###
+ruff_status=1
+target_status=1
+full_status=1
+docs_status=0
+audit_status=0
+doctor_status=0
+plan_status=0
+## feature/gui-tkinter-gatekeeper-integration
+ M src/agentic_project_kit/gui_tkinter_shell.py
+ M tests/test_v040_gui_tkinter_shell.py
+?? docs/reports/terminal/pr911-gui-tkinter-gatekeeper-integration.log
+
+### RESULT: FAIL ###
+Terminal bleibt offen. Kein exit am Blockende.
