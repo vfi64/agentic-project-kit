@@ -96,7 +96,7 @@ def test_handoff_check_reports_registry_summary_when_available(tmp_path: Path) -
     assert "- class:governance/system: 1" in result.output
 
 
-def test_handoff_show_reports_registry_summary_when_available(tmp_path: Path) -> None:
+def test_handoff_show_keeps_compact_output_when_registry_available(tmp_path: Path) -> None:
     _write_minimal_handoff_state(tmp_path)
     _write_minimal_registry(tmp_path)
     handoff_path = str(tmp_path / ".agentic/handoff_state.yaml")
@@ -105,8 +105,8 @@ def test_handoff_show_reports_registry_summary_when_available(tmp_path: Path) ->
 
     assert result.exit_code == 0, result.output
     assert "Repo: agentic-project-kit" in result.output
-    assert "Documentation registry:" in result.output
-    assert "- class:planning: 1" in result.output
+    assert "Documentation registry:" not in result.output
+    assert "- class:planning: 1" not in result.output
 
 
 def test_handoff_check_without_registry_keeps_existing_success_output(tmp_path: Path) -> None:
