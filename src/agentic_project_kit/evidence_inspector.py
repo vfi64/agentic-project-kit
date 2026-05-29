@@ -15,6 +15,12 @@ HARD_FAIL_MARKER = "### RESULT: HARD-FAIL ###"
 LATEST_TERMINAL_POINTER = Path("docs/reports/terminal/LATEST_TERMINAL_LOG.txt")
 STRUCTURED_SUMMARY_HEADER = "SUMMARY COMM-"
 SUMMARY_BOUNDARY = "================================================================"
+EXPECTED_NEGATIVE_SMOKE_START = "### EXPECTED NEGATIVE SMOKE START ###"
+EXPECTED_NEGATIVE_SMOKE_DONE = "### EXPECTED NEGATIVE SMOKE DONE ###"
+EXPECTED_NEGATIVE_SMOKE_MARKERS = (
+    "PASS: false-pass log was rejected",
+    "PASS: ns evidence-guard rejected false-PASS log",
+)
 
 
 class EvidenceVerdict(str, Enum):
@@ -300,6 +306,8 @@ class LogClassificationState(str, Enum):
     BLOCKED_BY_PENDING = "BLOCKED_BY_PENDING"
     BLOCKED_BY_MISSING_SUMMARY = "BLOCKED_BY_MISSING_SUMMARY"
     BLOCKED_BY_BAD_SUMMARY = "BLOCKED_BY_BAD_SUMMARY"
+    BLOCKED_BY_CONTRADICTORY_SUMMARY = "BLOCKED_BY_CONTRADICTORY_SUMMARY"
+    BLOCKED_BY_UNSCOPED_NEGATIVE_SMOKE = "BLOCKED_BY_UNSCOPED_NEGATIVE_SMOKE"
     BLOCKED_BY_HIDDEN_FAIL = "BLOCKED_BY_HIDDEN_FAIL"
     BLOCKED_BY_TEST_FAILURE = "BLOCKED_BY_TEST_FAILURE"
     BLOCKED_BY_RUFF_FAILURE = "BLOCKED_BY_RUFF_FAILURE"
@@ -324,6 +332,21 @@ class LogClassification:
     @property
     def success(self) -> bool:
         return self.state == LogClassificationState.READY_TO_CONTINUE
+
+
+def _is_expected_negative_smoke_log(text: str) -> bool:
+    if EXPECTED_NEGATIVE_SMOKE_START not in text or EXPECTED_NEGATIVE_SMOKE_DONE not in text:
+        return False
+    if text.count(EXPECTED_NEGATIVE_SMOKE_START) != text.count(EXPECTED_NEGATIVE_SMOKE_DONE):
+        return False
+    return any(marker in text for marker in EXPECTED_NEGATIVE_SMOKE_MARKERS)
+
+
+def _has_unscoped_expected_negative_smoke_marker(text: str) -> bool:
+    has_marker = any(marker in text for marker in EXPECTED_NEGATIVE_SMOKE_MARKERS)
+    if not has_marker:
+        return False
+    return EXPECTED_NEGATIVE_SMOKE_START not in text or EXPECTED_NEGATIVE_SMOKE_DONE not in text
 
 
 def _last_any_result_marker(text: str) -> str:
@@ -388,13 +411,19 @@ def classify_log(
     traceback = _contains_any(text, ("Traceback (most recent call last):", "ModuleNotFoundError:", "ERROR collecting"))
     shell_syntax = _contains_any(text, ("syntax error", "parse error", "unexpected EOF", "zsh: parse error", "bash: syntax error"))
 
-    if require_summary and not summary.found:
+    if _has_unscoped_expected_negative_smoke_marker(text):
+        reasons.append("expected negative smoke marker is not scoped with START/DONE markers")
+        state = LogClassificationState.BLOCKED_BY_UNSCOPED_NEGATIVE_SMOKE
+    elif require_summary and not summary.found:
         reasons.append("missing structured summary block")
         state = LogClassificationState.BLOCKED_BY_MISSING_SUMMARY
+    elif summary.found and "contradictory summary marker" in summary.findings:
+        reasons.extend(summary.findings)
+        state = LogClassificationState.BLOCKED_BY_CONTRADICTORY_SUMMARY
     elif summary.found and not summary.valid:
         reasons.extend(summary.findings or ("invalid structured summary block",))
         state = LogClassificationState.BLOCKED_BY_BAD_SUMMARY
-    elif inspection.hidden_fail_before_final_pass:
+    elif inspection.hidden_fail_before_final_pass and not _is_expected_negative_smoke_log(text):
         reasons.append("hidden fail before final PASS")
         state = LogClassificationState.BLOCKED_BY_HIDDEN_FAIL
     elif final_marker in {"FAIL", "HARD-FAIL"}:
