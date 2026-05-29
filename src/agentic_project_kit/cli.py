@@ -16,6 +16,7 @@ from agentic_project_kit.cli_commands.pr_hygiene import register_pr_hygiene_comm
 from agentic_project_kit.cli_commands.profiles import register_profile_commands
 from agentic_project_kit.cli_commands.release import register_release_commands
 from agentic_project_kit.cli_commands.remote_next import register_remote_next_command
+from agentic_project_kit.cli_commands.rules import register_rules_commands
 from agentic_project_kit.cli_commands.rule_registry import rule_registry_app
 from agentic_project_kit.cli_commands.scaffold import scaffold_app
 from agentic_project_kit.cli_commands.slice import slice_app
@@ -36,6 +37,7 @@ register_github_commands(app)
 register_check_commands(app)
 register_release_commands(app)
 register_remote_next_command(app)
+register_rules_commands(app)
 register_validation_commands(app)
 register_patch_preflight_command(app)
 app.add_typer(workflow_app, name="workflow")
