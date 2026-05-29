@@ -1,0 +1,98 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+===================================================
+===================================================
+===================================================
+POST PR923 HANDOFF RULES REFRESH EVIDENCE CLOSEOUT
+started_at=2026-05-29T20:02:52+00:00
+root=/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+log=docs/reports/terminal/post-pr923-handoff-rules-refresh-closeout.log
+
+### CURRENT BRANCH ###
+$ git branch --show-current
+main
+status=0
+
+### HEAD ###
+$ git rev-parse HEAD
+0da9d7f0b7645b7607e2b7490cacc2011b2749a5
+status=0
+head=0da9d7f0b7645b7607e2b7490cacc2011b2749a5
+
+### STATUS BEFORE CLOSEOUT ###
+$ git status --short
+ D .agentic/typed_work_orders/inbox/post-pr923-handoff-rules-refresh.yaml
+?? .agentic/typed_work_orders/executed/post-pr923-handoff-rules-refresh.yaml
+?? docs/reports/handoff_rules/
+?? docs/reports/terminal/post-pr923-handoff-rules-refresh-closeout.log
+?? docs/reports/terminal/post-pr923-handoff-rules-refresh.log
+status=0
+unexpected dirty paths:
+'?? docs/reports/terminal/post-pr923-handoff-rules-refresh-closeout.log'
+### RESULT: FAIL ###
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+===================================================
+===================================================
+===================================================
+POST PR923 HANDOFF RULES REFRESH EVIDENCE CLOSEOUT CONTINUE
+continued_at=2026-05-29T20:03:32+00:00
+log=docs/reports/terminal/post-pr923-handoff-rules-refresh-closeout.log
+
+### CURRENT BRANCH ###
+$ git branch --show-current
+main
+status=0
+
+### STATUS BEFORE CLOSEOUT ###
+$ git status --short
+ D .agentic/typed_work_orders/inbox/post-pr923-handoff-rules-refresh.yaml
+?? .agentic/typed_work_orders/executed/post-pr923-handoff-rules-refresh.yaml
+?? docs/reports/handoff_rules/
+?? docs/reports/terminal/post-pr923-handoff-rules-refresh-closeout.log
+?? docs/reports/terminal/post-pr923-handoff-rules-refresh.log
+status=0
+
+### CREATE CLOSEOUT BRANCH ###
+$ git switch -c docs/post-pr923-handoff-rules-refresh-evidence
+Switched to a new branch 'docs/post-pr923-handoff-rules-refresh-evidence'
+status=0
+
+### ADD EVIDENCE PATHS ###
+$ git add .agentic/typed_work_orders/inbox/post-pr923-handoff-rules-refresh.yaml .agentic/typed_work_orders/executed/post-pr923-handoff-rules-refresh.yaml docs/reports/handoff_rules/CURRENT_HANDOFF_RULES.md docs/reports/terminal/post-pr923-handoff-rules-refresh.log docs/reports/terminal/post-pr923-handoff-rules-refresh-closeout.log
