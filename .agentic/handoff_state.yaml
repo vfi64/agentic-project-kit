@@ -400,7 +400,7 @@ blocked_until_closeout:
 - Treating helper-local PASS as slice PASS without slice-gate evidence
 - Gatekeeper product work before post-PR888 handoff refresh is merged and verified
 - Treating helper-local PASS as slice PASS without patch-preflight slice-gate evidence
-first_instruction: Start the next chat from the fresh post-PR905 successor handoff
+first_instruction: Start the next chat from the fresh post-PR907 successor handoff
   prompt and obey agentic-kit handoff post-merge-refresh-status before product work.
 handoff_maintenance:
   principle: curated-not-accumulated
@@ -408,6 +408,6 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr905.md
+  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr907.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
