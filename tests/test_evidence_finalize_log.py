@@ -140,3 +140,72 @@ def test_cli_finalize_log_invalid_pass_has_no_traceback(tmp_path: Path) -> None:
     assert "success: no" in result.output
     assert "invalid field: remote_evidence" in result.output
     assert "Traceback" not in result.output
+
+
+def test_finalize_log_rejects_hidden_fail_before_final_pass(tmp_path: Path) -> None:
+    run_log = tmp_path / "run.log"
+    remote_log = tmp_path / "docs" / "reports" / "terminal" / "run.log"
+    remote_log.parent.mkdir(parents=True)
+    run_log.write_text(
+        "================================================================\n"
+        "SUMMARY COMM-TEST | 2026-05-29 12:00:00 +0000\n"
+        "\n"
+        "SLICE\n"
+        "  NAME: hidden fail smoke\n"
+        "  SCOPE: tests\n"
+        "  BRANCH: main\n"
+        "\n"
+        "EXECUTION\n"
+        "  ORIGIN: local\n"
+        "  STATE_MODE: local\n"
+        "  MODE_CHECK: pass\n"
+        "  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote\n"
+        "\n"
+        "RESULT\n"
+        "  WORK: PASS\n"
+        "  EVIDENCE: PASS\n"
+        "  OVERALL: PASS\n"
+        "\n"
+        "REMOTE\n"
+        "  REMOTE_EVIDENCE: NOT_REQUIRED\n"
+        "  PR: NONE\n"
+        "  HEAD_SHA: NONE\n"
+        "  CI: not_required\n"
+        "  MERGE: not_required\n"
+        "\n"
+        "EVIDENCE FILES\n"
+        "  terminal_log: /tmp/run.log\n"
+        "  terminal_log_remote: NONE\n"
+        "  terminal_log_local: /tmp/run.log\n"
+        "  command_report: NONE\n"
+        "\n"
+        "INTERPRETATION\n"
+        "  Hidden fail classifier smoke.\n"
+        "\n"
+        "NEXT\n"
+        "  SAFE_STEP: continue\n"
+        "  CHAT_REPLY: d\n"
+        "\n"
+        "### RESULT: FAIL ###\n"
+        "then later\n"
+        "### RESULT: PASS ###\n"
+        "================================================================\n",
+        encoding="utf-8",
+    )
+
+    result = finalize_log(
+        root=tmp_path,
+        run_log=run_log,
+        remote_log=remote_log,
+        slice_name="hidden fail smoke",
+        scope="tests",
+        mode_check="pass",
+        command_report="NONE",
+        interpretation="Hidden fail classifier smoke.",
+        safe_step="stop",
+    )
+
+    assert not result.success
+    assert any("log classification failed before evidence upload" in item for item in result.findings)
+    assert any("BLOCKED_BY_HIDDEN_FAIL" in item for item in result.findings)
+    assert not remote_log.exists()
