@@ -11,12 +11,6 @@ steps:
       - handoff
       - check
   - kind: command_argv
-    label: handoff post-merge refresh status
-    argv:
-      - .venv/bin/agentic-kit
-      - handoff
-      - post-merge-refresh-status
-  - kind: command_argv
     label: doctor
     argv:
       - .venv/bin/agentic-kit
