@@ -1,0 +1,56 @@
+Typed work order: post-pr918-remote-next-smoke
+Title: Post PR918 remote-next smoke
+Safety: local-only
+
+### JSON RESULT ###
+{
+  "command_report": null,
+  "dirty_state": "clean",
+  "message": "Typed work order executed.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "safety": "local-only",
+  "schema_version": 1,
+  "step_results": [
+    {
+      "argv": [
+        ".venv/bin/agentic-kit",
+        "handoff",
+        "check"
+      ],
+      "kind": "command_argv",
+      "label": "handoff check",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "Persistent handoff state check passed\nDocumentation registry:\n- registry: docs/DOCUMENTATION_REGISTRY.yaml\n- version: 1\n- documents: 22\n- broad_migration_allowed: False\n- class:architecture: 1\n- class:evidence/log: 2\n- class:generated artifact: 1\n- class:governance/system: 4\n- class:operational/automation: 4\n- class:planning: 7\n- class:release: 2\n- class:user-facing description: 1\n"
+    },
+    {
+      "argv": [
+        ".venv/bin/agentic-kit",
+        "doctor"
+      ],
+      "kind": "command_argv",
+      "label": "doctor",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "Agentic project doctor report for /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit\n\n[PASS] pyproject.toml: present\n[PASS] README.md: present\n[PASS] sentinel.yaml: present\n[PASS] .github/workflows/ci.yml: present\n[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, markdown-docs, python-cli, git-github, release-managed; policy \npacks: solo-maintainer, agentic-development, release-managed, documentation-governed\n[PASS] policy pack checks: active: solo-maintainer, agentic-development, release-managed, documentation-governed\n[PASS] documentation gates: passed\n[PASS] document lifecycle audit: passed\n[PASS] todo gates: passed\n[PASS] version drift: project state matches version 0.4.4\n\nOverall: PASS\n"
+    },
+    {
+      "argv": [
+        ".venv/bin/agentic-kit",
+        "check-docs"
+      ],
+      "kind": "command_argv",
+      "label": "check docs",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "Agentic project check passed\n"
+    }
+  ],
+  "terminal_log": "docs/reports/terminal/post-pr918-remote-next-smoke.log",
+  "work_order_id": "post-pr918-remote-next-smoke"
+}
+
+### RESULT: PASS ###
+Return code: 0
+Terminal bleibt offen. Kein exit am Blockende.
