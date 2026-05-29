@@ -415,5 +415,3 @@ administrative_evidence_state:
   latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr894.md
   current_subject: 'Merge pull request #894 from vfi64/docs/post-merge-gate-bootstrap-visibility'
   safe_state_semantics: current_main_head
-# preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
-# preservation-anchor: nested shell/Python quote layers
