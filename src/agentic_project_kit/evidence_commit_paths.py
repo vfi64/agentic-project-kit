@@ -85,7 +85,11 @@ def commit_paths(
             tuple(["unexpected dirty paths before commit", *unexpected]),
         )
 
-    missing = [rel for rel in normalized_paths if not (root_path / rel).exists()]
+    deletion_lines = {line[3:] for line in status_before if line.startswith(" D ") or line.startswith("D  ")}
+    missing = [
+        rel for rel in normalized_paths
+        if not (root_path / rel).exists() and rel not in deletion_lines
+    ]
     if missing:
         return EvidenceCommitPathsResult(
             False,
@@ -97,7 +101,7 @@ def commit_paths(
             tuple(f"missing path: {rel}" for rel in missing),
         )
 
-    add_result = _run_git(root_path, ["add", *normalized_paths])
+    add_result = _run_git(root_path, ["add", "-A", "--", *normalized_paths])
     if add_result.returncode != 0:
         return EvidenceCommitPathsResult(
             False,

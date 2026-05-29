@@ -128,3 +128,9 @@ For assistant-initiated local work, complete terminal output must be captured in
 Local tasks must normally be provided as repo-backed Python programs, typed work orders, or `agentic-kit` commands and must run through the repository virtual environment. Global Python, global shell state, long ad-hoc shell blocks, risky multi-line `python -c`, and raw visual separator lines as terminal commands are forbidden as default control paths.
 
 Manual copy-and-paste of terminal output is allowed only after a hard local failure that prevents evidence creation or transfer, including kill -9, process startup failure, terminal loss, machine crash, filesystem failure, network failure before push, or explicitly broken logging.
+
+## Preferred dialog signals
+
+The preferred dialog signals are `d` for done, `f` for fail, and `g` for go. `g` replaces the former German `w` signal for continuing with the next safe planned step. `w` remains accepted as a legacy alias for `g` during transition, but new tooling and generated instructions should prefer `g`.
+
+The local command aliases are `agentic-kit rn` for run-next/remote-next and `agentic-kit rnc` for remote-next closeout. GUI controls must use these aliases rather than introducing a separate execution model.

@@ -37,6 +37,22 @@ def test_commit_paths_commits_expected_paths_and_requires_clean_afterwards(tmp_p
     assert git(tmp_path, "status", "--short").stdout == ""
 
 
+def test_commit_paths_accepts_expected_tracked_deletion(tmp_path: Path) -> None:
+    init_repo(tmp_path)
+    rel = "docs/reports/terminal/delete-me.log"
+    path = tmp_path / rel
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("old log\n", encoding="utf-8")
+    git(tmp_path, "add", rel)
+    assert git(tmp_path, "commit", "-m", "add log").returncode == 0
+    path.unlink()
+
+    result = commit_paths(root=tmp_path, paths=(rel,), message="Record deletion")
+
+    assert result.success, result.findings
+    assert git(tmp_path, "status", "--short").stdout == ""
+
+
 def test_commit_paths_blocks_unexpected_dirty_paths(tmp_path: Path) -> None:
     init_repo(tmp_path)
     expected = "docs/reports/terminal/demo.log"

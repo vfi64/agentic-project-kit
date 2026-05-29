@@ -59,6 +59,8 @@ def cockpit_actions() -> list[CockpitAction]:
     return [
         CockpitAction("git.status", "Git status", "git", ("git", "status", "--short"), READ_ONLY, "Show uncommitted local changes."),
         CockpitAction("workflow.state", "Workflow state", "workflow", ("agentic-kit", "workflow", "state"), READ_ONLY, "Show guided workflow state and recommended next step."),
+        CockpitAction("dialog.rn", "Run Next Work Order", "dialog", ("agentic-kit", "rn"), BOUNDED, "Synchronize main and run the next typed work order."),
+        CockpitAction("dialog.rnc", "Close Out Last Run", "dialog", ("agentic-kit", "rnc"), BOUNDED, "Commit and push the expected closeout paths from the last remote-next run."),
         CockpitAction("workflow.list", "Workflow items", "workflow", ("agentic-kit", "workflow", "list"), READ_ONLY, "List stored local workflow items."),
         CockpitAction("gate.check-docs", "Documentation gate", "gate", ("agentic-kit", "check-docs"), READ_ONLY, "Run deterministic documentation gates."),
         CockpitAction("gate.doctor", "Doctor", "gate", ("agentic-kit", "doctor"), READ_ONLY, "Run compact project health checks."),

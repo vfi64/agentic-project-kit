@@ -14,6 +14,8 @@ def test_cockpit_action_registry_contains_core_read_only_actions() -> None:
     action_ids = {action.action_id for action in cockpit_actions()}
     assert "git.status" in action_ids
     assert "workflow.state" in action_ids
+    assert "dialog.rn" in action_ids
+    assert "dialog.rnc" in action_ids
     assert "gate.doctor" in action_ids
     assert "gate.check-docs" in action_ids
     assert "release.plan" in action_ids

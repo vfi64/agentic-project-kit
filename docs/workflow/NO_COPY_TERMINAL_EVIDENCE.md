@@ -40,4 +40,8 @@ Long ad-hoc shell blocks, fragile multi-line `python -c` strings, and raw decora
 
 ## Safe evidence closeout helper
 
-Use `agentic-kit evidence commit-paths` for explicit evidence path commits. The helper accepts only the expected path set, commits it with a supplied message, and verifies that the worktree is clean after the commit. Closeout scripts must finalize any repo-backed log before invoking this helper and must not write to the committed repo-backed log afterwards.
+Use `agentic-kit evidence commit-paths` for explicit evidence path commits. The helper accepts only the expected path set, commits it with a supplied message, and verifies that the worktree is clean after the commit. Closeout scripts must finalize any repo-backed log before invoking this helper and must not write to the committed repo-backed log afterwards. The helper must accept expected tracked deletions and stage them with `git add -A -- <paths>`.
+
+## Remote-next aliases
+
+Use `agentic-kit rn` as the short alias for `agentic-kit remote-next`. Use `agentic-kit rnc` to close out the dirty path set produced by the last successful remote-next run. The GUI must expose these as Run Next Work Order and Close Out Last Run.
