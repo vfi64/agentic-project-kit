@@ -84,4 +84,6 @@ def render_remote_next_result(result: RemoteNextResult) -> str:
         )
         if result.typed_next.terminal_log:
             lines.append(f"terminal_log={result.typed_next.terminal_log}")
+        for path in result.typed_next.expected_closeout_paths:
+            lines.append(f"expected_closeout_path={path}")
     return "\n".join(lines)
