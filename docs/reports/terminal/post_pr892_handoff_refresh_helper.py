@@ -41,6 +41,13 @@ def replace_regex_once(text: str, pattern: str, replacement: str, label: str) ->
     return new_text
 
 
+def replace_block_once(text: str, pattern: str, replacement: str, label: str) -> str:
+    new_text, count = re.subn(pattern, replacement, text, count=1, flags=re.MULTILINE | re.DOTALL)
+    if count != 1:
+        raise RuntimeError(f"missing expected block for {label}")
+    return new_text
+
+
 def replace_all(text: str, old: str, new: str) -> str:
     return text.replace(old, new)
 
@@ -59,8 +66,8 @@ def update_handoff_state() -> bool:
     yaml.safe_load(text)
 
     # This helper is intentionally tolerant of the exact previous administrative
-    # refresh wording. Earlier post-merge refreshes may have used PR888 or PR889
-    # wording, but the target state for this slice is unambiguous: PR892.
+    # refresh wording. Earlier post-merge refreshes may have used PR888, PR889,
+    # or wrapped YAML values. The target state for this slice is unambiguous: PR892.
     text = replace_regex_once(text, r"(?m)^  reason: .*", "  reason: post-PR892 handoff refresh", "updated.reason")
     text = replace_regex_once(text, r"(?m)^  source: .*", "  source: PR892 main verification", "updated.source")
     text = replace_regex_once(text, r"(?m)^  commit: [0-9a-f]{40}$", f"  commit: {TARGET_HEAD}", "safe_state.commit")
@@ -69,9 +76,9 @@ def update_handoff_state() -> bool:
     if "  - 892\n" not in text:
         text = replace_regex_once(text, r"(?m)^  - 888\n", "  - 888\n  - 892\n", "administrative_refresh_prs")
 
-    text = replace_regex_once(
+    text = replace_block_once(
         text,
-        r"(?ms)^  next_expected_chat_action: .*?(?=\ncompleted_since_previous_handoff:)",
+        r"^  next_expected_chat_action: .*?(?=\ncompleted_since_previous_handoff:)",
         "  next_expected_chat_action: Continue after PR892 with post-merge gate visibility follow-up work only after the post-merge refresh status gate reports NOOP.",
         "next_expected_chat_action",
     )
@@ -87,7 +94,12 @@ def update_handoff_state() -> bool:
     text = replace_regex_once(text, r"(?m)^  current_head: [0-9a-f]{40}$", f"  current_head: {TARGET_HEAD}", "admin.current_head")
     text = replace_regex_once(text, r"(?m)^  current_head_subject: .*$", f"  current_head_subject: '{TARGET_SUBJECT}'", "admin.current_head_subject")
     text = replace_regex_once(text, r"(?m)^  head_subject: .*$", f"  head_subject: '{TARGET_SUBJECT}'", "admin.head_subject")
-    text = replace_regex_once(text, r"(?m)^  reason: PR.*merged on main$", "  reason: PR892 post-merge gate visibility inventory merged on main", "admin.reason")
+    text = replace_block_once(
+        text,
+        r"(^administrative_evidence_state:\n(?:  [^\n]+\n)*?  allowed_after_safe_state: true\n)  reason: .*?(?=\n  latest_successor_prompt:)",
+        r"\1  reason: PR892 post-merge gate visibility inventory merged on main",
+        "admin.reason",
+    )
     text = replace_regex_once(text, r"(?m)^  current_subject: .*$", f"  current_subject: '{TARGET_SUBJECT}'", "admin.current_subject")
 
     if text != original:
