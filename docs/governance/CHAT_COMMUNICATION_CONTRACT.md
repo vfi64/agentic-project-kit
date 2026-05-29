@@ -120,3 +120,11 @@ A final PASS claim requires all of the following:
 For every future rule or workflow step, prefer the option that reduces LLM discretion, reduces duplicated wording, improves portability, and makes drift machine-detectable. If a rule cannot yet be machine-checked, it must name the review-only exception and the evidence a reviewer must inspect.
 
 Manual GUI verification must not hide the final result behind an interactive terminal read prompt. Use a two-phase record: GUI launch first, then a non-interactive PASS or FAIL evidence record with a generated summary invocation.
+
+## Mandatory no-copy transfer rules
+
+For assistant-initiated local work, complete terminal output must be captured in a repo-backed transfer or evidence file. The record must contain stdout, stderr, exit code, argv, start time, end time, current branch, HEAD, dirty-state evidence, and a concrete log or command-report path. A normal FAIL must still produce inspectable evidence; the assistant must not ask for pasted output when the transfer file exists or can be pushed.
+
+Local tasks must normally be provided as repo-backed Python programs, typed work orders, or `agentic-kit` commands and must run through the repository virtual environment. Global Python, global shell state, long ad-hoc shell blocks, risky multi-line `python -c`, and raw visual separator lines as terminal commands are forbidden as default control paths.
+
+Manual copy-and-paste of terminal output is allowed only after a hard local failure that prevents evidence creation or transfer, including kill -9, process startup failure, terminal loss, machine crash, filesystem failure, network failure before push, or explicitly broken logging.
