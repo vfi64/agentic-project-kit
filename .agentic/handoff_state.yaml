@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: e1cac6c
-  commit_subject: Integrate GUI gatekeeper into Tkinter shell (#911)
+  commit: 6fa49bf
+  commit_subject: Remove stale PR927 typed work order (#929)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
