@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: ebe6aff
-  commit_subject: Guard handoff next prompt reference consistency (#905)
+  commit: a2a04b6
+  commit_subject: Add GUI gatekeeper status model (#907)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
