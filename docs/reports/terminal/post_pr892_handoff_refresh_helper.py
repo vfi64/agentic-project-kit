@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+import re
 import subprocess
-from datetime import date
 from pathlib import Path
 
 import yaml
@@ -34,6 +34,17 @@ def replace_once(text: str, old: str, new: str, label: str) -> str:
     return text.replace(old, new, 1)
 
 
+def replace_regex_once(text: str, pattern: str, replacement: str, label: str) -> str:
+    new_text, count = re.subn(pattern, replacement, text, count=1, flags=re.MULTILINE)
+    if count != 1:
+        raise RuntimeError(f"missing expected pattern for {label}")
+    return new_text
+
+
+def replace_all(text: str, old: str, new: str) -> str:
+    return text.replace(old, new)
+
+
 def prepend_section(path: Path, title: str, body: str) -> bool:
     text = path.read_text(encoding="utf-8")
     if title in text:
@@ -47,27 +58,37 @@ def update_handoff_state() -> bool:
     original = text
     yaml.safe_load(text)
 
-    text = replace_once(text, "reason: post-PR888 handoff refresh", "reason: post-PR892 handoff refresh", "updated.reason")
-    text = replace_once(text, "source: PR888 main verification", "source: PR892 main verification", "updated.source")
-    text = replace_once(text, "commit: 508f3dfa2be50d4f369f31e270cc930c24873015", f"commit: {TARGET_HEAD}", "safe_state.commit")
-    text = replace_once(text, "commit_subject: 'Merge pull request #888 from vfi64/feature/patch-preflight-slice-gate-clean'", f"commit_subject: '{TARGET_SUBJECT}'", "safe_state.commit_subject")
-    text = replace_once(text, "  - 888\n", "  - 888\n  - 892\n", "administrative_refresh_prs")
-    text = replace_once(
+    # This helper is intentionally tolerant of the exact previous administrative
+    # refresh wording. Earlier post-merge refreshes may have used PR888 or PR889
+    # wording, but the target state for this slice is unambiguous: PR892.
+    text = replace_regex_once(text, r"(?m)^  reason: .*", "  reason: post-PR892 handoff refresh", "updated.reason")
+    text = replace_regex_once(text, r"(?m)^  source: .*", "  source: PR892 main verification", "updated.source")
+    text = replace_regex_once(text, r"(?m)^  commit: [0-9a-f]{40}$", f"  commit: {TARGET_HEAD}", "safe_state.commit")
+    text = replace_regex_once(text, r"(?m)^  commit_subject: .*$", f"  commit_subject: '{TARGET_SUBJECT}'", "safe_state.commit_subject")
+
+    if "  - 892\n" not in text:
+        text = replace_regex_once(text, r"(?m)^  - 888\n", "  - 888\n  - 892\n", "administrative_refresh_prs")
+
+    text = replace_regex_once(
         text,
-        "next_expected_chat_action: Continue with post-PR888 stabilized planning-document slice workflow; run the post-merge refresh status gate after future PR merges before deciding whether another administrative refresh is required.",
-        "next_expected_chat_action: Continue after PR892 with post-merge gate visibility follow-up work only after the post-merge refresh status gate reports NOOP.",
+        r"(?ms)^  next_expected_chat_action: .*?(?=\ncompleted_since_previous_handoff:)",
+        "  next_expected_chat_action: Continue after PR892 with post-merge gate visibility follow-up work only after the post-merge refresh status gate reports NOOP.",
         "next_expected_chat_action",
     )
     insert = "- 'PR #892 recorded the post-merge handoff refresh status gate visibility inventory so the workflow can move the gate into more visible kit/ns paths.'\n"
     if insert not in text:
         text = replace_once(text, "completed_since_previous_handoff:\n", "completed_since_previous_handoff:\n" + insert, "completed_since_previous_handoff")
-    text = replace_once(text, "latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr888.md", "latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr892.md", "handoff_maintenance.latest_successor_prompt")
-    text = replace_once(text, "current_head: 508f3dfa2be50d4f369f31e270cc930c24873015", f"current_head: {TARGET_HEAD}", "admin.current_head")
-    text = replace_once(text, "current_head_subject: 'Merge pull request #888 from vfi64/feature/patch-preflight-slice-gate-clean'", f"current_head_subject: '{TARGET_SUBJECT}'", "admin.current_head_subject")
-    text = replace_once(text, "head_subject: 'Merge pull request #888 from vfi64/feature/patch-preflight-slice-gate-clean'", f"head_subject: '{TARGET_SUBJECT}'", "admin.head_subject")
-    text = replace_once(text, "reason: PR888 patch preflight slice-gate requirement merged on main", "reason: PR892 post-merge gate visibility inventory merged on main", "admin.reason")
-    text = replace_once(text, "latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr888.md", "latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr892.md", "admin.latest_successor_prompt")
-    text = replace_once(text, "current_subject: 'Merge pull request #888 from vfi64/feature/patch-preflight-slice-gate-clean'", f"current_subject: '{TARGET_SUBJECT}'", "admin.current_subject")
+
+    text = replace_all(
+        text,
+        "latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr888.md",
+        "latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr892.md",
+    )
+    text = replace_regex_once(text, r"(?m)^  current_head: [0-9a-f]{40}$", f"  current_head: {TARGET_HEAD}", "admin.current_head")
+    text = replace_regex_once(text, r"(?m)^  current_head_subject: .*$", f"  current_head_subject: '{TARGET_SUBJECT}'", "admin.current_head_subject")
+    text = replace_regex_once(text, r"(?m)^  head_subject: .*$", f"  head_subject: '{TARGET_SUBJECT}'", "admin.head_subject")
+    text = replace_regex_once(text, r"(?m)^  reason: PR.*merged on main$", "  reason: PR892 post-merge gate visibility inventory merged on main", "admin.reason")
+    text = replace_regex_once(text, r"(?m)^  current_subject: .*$", f"  current_subject: '{TARGET_SUBJECT}'", "admin.current_subject")
 
     if text != original:
         yaml.safe_load(text)
