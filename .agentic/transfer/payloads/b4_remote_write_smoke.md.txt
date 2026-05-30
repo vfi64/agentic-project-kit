@@ -1,5 +1,0 @@
-# B4 remote write smoke
-
-Status: PASS
-
-This tiny payload verifies that ChatGPT can write transfer payload files directly to the remote branch b4-pr-wrapper-mvp.
