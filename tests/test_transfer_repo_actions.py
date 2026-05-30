@@ -5,7 +5,7 @@ import subprocess
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
-from agentic_project_kit.transfer_repo_actions import branch_create, branch_delete, branch_switch, commit_paths, fetch_origin, pull_current, repo_diff, repo_log, repo_status
+from agentic_project_kit.transfer_repo_actions import branch_create, branch_delete, branch_switch, commit_paths, fetch_origin, pr_merge_safe, pr_wait_ci, pull_current, repo_diff, repo_log, repo_status
 
 
 def _init_repo(path):
@@ -133,3 +133,39 @@ def test_transfer_branch_delete_cli(tmp_path, monkeypatch):
 
     assert result.exit_code == 0
     assert '"action": "branch-delete"' in result.stdout
+
+
+def test_guarded_pr_actions_reject_short_expected_head_sha(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    wait_result = pr_wait_ci(123, expected_head_sha="abc123")
+    merge_result = pr_merge_safe(123, expected_head_sha="abc123")
+
+    assert wait_result.result_status == "FAIL"
+    assert wait_result.returncode == 2
+    assert "full 40-character head SHA" in wait_result.stderr
+    assert merge_result.result_status == "FAIL"
+    assert merge_result.returncode == 2
+    assert "full 40-character head SHA" in merge_result.stderr
+
+
+def test_transfer_pr_wait_ci_cli_accepts_interval_seconds_option(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "pr-wait-ci",
+            "123",
+            "--expected-head-sha",
+            "abc123",
+            "--interval-seconds",
+            "1",
+        ],
+    )
+
+    assert result.exit_code != 0
+    assert "full 40-character head SHA" in result.stdout

@@ -28,6 +28,18 @@ def _agentic_kit_command() -> str:
     return "agentic-kit"
 
 
+
+def _full_sha_guard(action: str, expected_head_sha: str) -> RepoActionResult | None:
+    if len(expected_head_sha) != 40:
+        completed = subprocess.CompletedProcess(
+            [action, "--expected-head-sha"],
+            2,
+            "",
+            "Expected full 40-character head SHA. Short SHAs are refused for guarded PR actions.\n",
+        )
+        return _result(action, [action, "--expected-head-sha"], completed, "Re-run with the full PR head SHA.")
+    return None
+
 def _run(command: list[str], *, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         command,
@@ -179,6 +191,10 @@ def pr_wait_ci(
     timeout_seconds: int = 300,
     poll_seconds: int = 10,
 ) -> RepoActionResult:
+    if expected_head_sha:
+        guarded = _full_sha_guard("pr-wait-ci", expected_head_sha)
+        if guarded is not None:
+            return guarded
     command = [
         _agentic_kit_command(),
         "pr",
@@ -203,6 +219,9 @@ def pr_merge_safe(
     merge_method: str = "squash",
     no_verify_main: bool = False,
 ) -> RepoActionResult:
+    guarded = _full_sha_guard("pr-merge-safe", expected_head_sha)
+    if guarded is not None:
+        return guarded
     command = [
         _agentic_kit_command(),
         "pr",

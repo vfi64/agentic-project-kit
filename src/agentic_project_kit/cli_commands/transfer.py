@@ -183,7 +183,7 @@ def pr_wait_ci_command(
     pr_number: int = typer.Argument(..., help="Pull request number to wait for."),
     expected_head_sha: str = typer.Option("", "--expected-head-sha", help="Expected PR head SHA."),
     timeout_seconds: int = typer.Option(300, "--timeout-seconds", min=1, help="Maximum wait time."),
-    poll_seconds: int = typer.Option(10, "--poll-seconds", min=1, help="Polling interval."),
+    poll_seconds: int = typer.Option(10, "--interval-seconds", "--poll-seconds", min=1, help="Polling interval."),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     result = pr_wait_ci(
@@ -304,11 +304,13 @@ def pr_status_command(
         help="Do not fetch failed GitHub Actions logs for red checks.",
     ),
     failed_log_lines: int = typer.Option(120, min=0, help="Maximum failed-log excerpt lines."),
+    expected_head_sha: str = typer.Option("", "--expected-head-sha", help="Expected full PR head SHA."),
 ) -> None:
     result = pr_status_transfer(
         pr_number,
         no_failed_log_fetch=no_failed_log_fetch,
         failed_log_lines=failed_log_lines,
+        expected_head_sha=expected_head_sha,
     )
     if json_output:
         typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
