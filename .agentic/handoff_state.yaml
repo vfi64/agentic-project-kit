@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: b79f33d
-  commit_subject: 'Merge pull request #961 from vfi64/feature/b11-safe-admin-refresh-flow'
+  commit: 71a5000
+  commit_subject: 'Merge pull request #963 from vfi64/release/v0.4.5-safety-metadata'
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
