@@ -1,6 +1,6 @@
 schema_version: 1
 updated:
-  date: '2026-05-29'
+  date: '2026-05-30'
   reason: Refresh handoff state to last substantive work commit
   source: agentic-kit handoff refresh
 repo:
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 6fa49bf
-  commit_subject: Remove stale PR927 typed work order (#929)
+  commit: 421b136
+  commit_subject: Update GUI transfer Basic MVP plan (#935)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
