@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: c2e8b27
-  commit_subject: Harden transfer PR wrapper head guards (#953)
+  commit: 134b915
+  commit_subject: Harden transfer PR status head guard (#955)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
