@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: f58a2a4
-  commit_subject: Add transfer runner MVP (#937)
+  commit: 3ca119b
+  commit_subject: Add canonical transfer state command (#939)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
