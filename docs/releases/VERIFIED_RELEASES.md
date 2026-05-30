@@ -58,3 +58,15 @@ The archived v0.3.18 release has the verified version-specific DOI: `10.5281/zen
 - `v0.4.1` / `0.4.1`: Zenodo version DOI `10.5281/zenodo.20357657`; concept DOI `10.5281/zenodo.20101359`.
 - `v0.4.3` / `0.4.3`: Zenodo version DOI `10.5281/zenodo.20393329`; concept DOI `10.5281/zenodo.20101359`.
 - `v0.4.4` / `0.4.4`: Zenodo version DOI `10.5281/zenodo.20431326`; concept DOI `10.5281/zenodo.20101359`.
+- `v0.3.22` / `0.3.22`: Zenodo version DOI `10.5281/zenodo.20261634`
+- `v0.3.23` / `0.3.23`: Zenodo version DOI `10.5281/zenodo.20261956`; concept DOI `10.5281/zenodo.20101359`.
+- `v0.3.24` / `0.3.24`: Zenodo version DOI `10.5281/zenodo.20270197`; concept DOI `10.5281/zenodo.20101359`.
+- `v0.3.27` / `0.3.27`: Zenodo version DOI `10.5281/zenodo.20283414`; concept DOI `10.5281/zenodo.20101359`.
+- `v0.3.28` / `0.3.28`: Zenodo version DOI `10.5281/zenodo.20286394`; concept DOI `10.5281/zenodo.20101359`.
+- `v0.3.29` / `0.3.29`: Zenodo version DOI `10.5281/zenodo.20303218`; concept DOI `10.5281/zenodo.20101359`.
+- `v0.3.30` / `0.3.30`: Zenodo version DOI `10.5281/zenodo.20308526`; concept DOI `10.5281/zenodo.20101359`.
+- `v0.3.31` / `0.3.31`: Zenodo version DOI `10.5281/zenodo.20313834`; concept DOI `10.5281/zenodo.20101359`.
+- `v0.3.32` / `0.3.32`: Zenodo version DOI `10.5281/zenodo.20314341`; concept DOI `10.5281/zenodo.20101359`.
+- `v0.3.34` / `0.3.34`: Zenodo version DOI `10.5281/zenodo.20315568`; concept DOI `10.5281/zenodo.20101359`.
+- `v0.3.35` / `0.3.35`: Zenodo version DOI `10.5281/zenodo.20316280`; concept DOI `10.5281/zenodo.20101359`.
+- `v0.4.5` / `0.4.5`: Zenodo version DOI `10.5281/zenodo.20467371`; concept DOI `10.5281/zenodo.20101359`.

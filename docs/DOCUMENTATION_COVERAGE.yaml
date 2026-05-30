@@ -365,14 +365,18 @@ rules:
     - cli.py
     - Boundary tests
 - id: release-version-readme-coverage
-  description: README must mention the current release candidate and latest verified
-    DOI state.
+  description: README must mention the current release candidate and latest verified DOI archive pointer, while historical verified DOI entries live in the release archive.
   documents:
   - path: README.md
     terms:
     - Version `0.3.9`
+    - docs/releases/VERIFIED_RELEASES.md
+  - path: docs/releases/VERIFIED_RELEASES.md
+    terms:
     - v0.3.3
     - 10.5281/zenodo.20151924
+    - v0.4.5
+    - 10.5281/zenodo.20467371
 - id: example-workflow-coverage
   description: README must point users to the minimal generated-project example.
   documents:
