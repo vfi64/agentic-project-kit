@@ -1,0 +1,1452 @@
+### B6 BASIS WRAPPER INVENTORY ###
+Sa. 30 Mai 2026 19:11:15 CEST
+
+### BRANCH / STATUS ###
+feature/b6-transfer-basis-wrapper-batch
+c9c093d Refresh handoff state after PR949 (#950)
+9ee3f7e Add B5 transfer repo action wrappers (#949)
+5707a29 Refresh handoff state after PR947 (#948)
+1261ff0 Add B4 transfer PR wrapper MVP (#947)
+d3d5410 Refresh handoff state after PR945 (#946)
+3b1a18f Add transfer closeout command (#945)
+1e6d77d Refresh handoff state after PR943 (#944)
+bf15490 Add transfer remote-next command (#943)
+?? docs/reports/terminal/b6-basis-wrapper-inventory.txt
+
+### TRANSFER CLI HELP ###
+                                                                                                   
+ Usage: agentic-kit transfer [OPTIONS] COMMAND [ARGS]...                                           
+                                                                                                   
+ Inspect and apply repo-backed text transfer orders.                                               
+                                                                                                   
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────╮
+│ closeout                                                                                        │
+│ remote-next                                                                                     │
+│ branch-create                                                                                   │
+│ branch-switch                                                                                   │
+│ commit                                                                                          │
+│ push-current                                                                                    │
+│ pr-create                                                                                       │
+│ pr-status                                                                                       │
+│ run-local                                                                                       │
+│ state                                                                                           │
+│ status                                                                                          │
+│ inspect                                                                                         │
+│ apply                                                                                           │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+### PR CLI HELP ###
+                                                                                                   
+ Usage: agentic-kit pr [OPTIONS] COMMAND [ARGS]...                                                 
+                                                                                                   
+ Evaluate deterministic PR closeout and readiness state.                                           
+                                                                                                   
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────╮
+│ closeout-check                                                                                  │
+│ status          Print deterministic PR/CI status and fetch failed logs for red CI.              │
+│ merge-if-green  Merge only when PR checks are green, refs match, and merge state is clean.      │
+│ wait-ci         Wait for pull-request CI; guard merge preparation with --expected-head-sha.     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+### WORKFLOW / COCKPIT SURFACE ###
+                                                                                                   
+ Usage: agentic-kit [OPTIONS] COMMAND [ARGS]...                                                    
+                                                                                                   
+ Generate and check agentic GitHub project skeletons.                                              
+                                                                                                   
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.                         │
+│ --show-completion             Show completion for the current shell, to copy it or customize    │
+│                               the installation.                                                 │
+│ --help                        Show this message and exit.                                       │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────╮
+│ init                                                                                            │
+│ profile-explain           List available project profiles and policy packs.                     │
+│ pr-hygiene                                                                                      │
+│ github-create                                                                                   │
+│ check                                                                                           │
+│ check-docs                                                                                      │
+│ check-todo                                                                                      │
+│ docs-audit                Run the umbrella documentation-system audit.                          │
+│ docs-registry             Show a read-only summary of the documentation registry.               │
+│ doc-mesh-audit            Audit cross-document state, governance, architecture, and             │
+│                           historical-plan drift.                                                │
+│ doc-lifecycle-audit       Audit lifecycle status headers for planning, roadmap, strategy, and   │
+│                           idea documents.                                                       │
+│ doc-mesh-repair           Apply safe automatic documentation mesh repairs.                      │
+│ doctor                    Run a compact project health check.                                   │
+│ release-plan              Print a release preparation checklist for the current project.        │
+│ release-preflight         Validate before-metadata release readiness for a target version.      │
+│ release-check             Validate release state for a target version.                          │
+│ post-release-check        Validate post-release GitHub and Zenodo state without guessing DOI    │
+│                           metadata.                                                             │
+│ remote-next                                                                                     │
+│ rn                                                                                              │
+│ rnc                                                                                             │
+│ validate-contract         Validate the machine-readable project contract.                       │
+│ validate-output-contract  Validate an output file against a machine-readable output contract.   │
+│ validate-sections         Validate that a text file contains required literal section markers.  │
+│ patch-preflight                                                                                 │
+│ pr-closeout                                                                                     │
+│ rules                     Generate repo-backed rule refresh files.                              │
+│ workflow                  Run and inspect bounded local workflow handoff states.                │
+│ workflow-guard            Diagnose recurring workflow failure patterns before mutation.         │
+│ rule-registry             Validate governed rule registry artifacts.                            │
+│ handoff                   Read-only persistent handoff state commands.                          │
+│ boot                      Render and check successor-chat boot information.                     │
+│ pass-already-done         Classify idempotent already-done command outcomes.                    │
+│ actions                   Inspect parameterized action specifications.                          │
+│ evidence                  Validate terminal evidence logs.                                      │
+│ work-order                Inspect and run repo-backed work orders.                              │
+│ governance                Run deterministic project governance checks.                          │
+│ pr                        Evaluate deterministic PR closeout and readiness state.               │
+│ cockpit                   Inspect local cockpit status and structured project actions.          │
+│ patterns                  Inspect the local read-only pattern catalog.                          │
+│ scaffold                  Create governed repository scaffolding artifacts.                     │
+│ slice                     Run temporary slice-specific governance gates.                        │
+│ state                     Check repository state freshness and execution mode safety.           │
+│ todo                      Manage generated project TODO items.                                  │
+│ transfer                  Inspect and apply repo-backed text transfer orders.                   │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+### TRANSFER CLI SOURCE ###
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import typer
+
+from agentic_project_kit.transfer_closeout import closeout_transfer
+from agentic_project_kit.transfer_local_runner import run_local_transfer
+from agentic_project_kit.transfer_pr_actions import pr_status_transfer
+from agentic_project_kit.transfer_remote_next import run_remote_next_transfer
+from agentic_project_kit.transfer_repo_actions import branch_create, branch_switch, commit_paths, pr_create, push_current, result_json
+from agentic_project_kit.transfer_runner import (
+    DEFAULT_INBOX,
+    apply_transfer_order,
+    inspect_transfer_order,
+    load_transfer_order,
+    transfer_result_as_json_data,
+)
+from agentic_project_kit.transfer_state import build_transfer_state
+
+transfer_app = typer.Typer(help="Inspect and apply repo-backed text transfer orders.")
+
+
+def _load_or_exit(path: Path):
+    try:
+        return load_transfer_order(path)
+    except (FileNotFoundError, ValueError) as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+
+
+def _emit_result(result, json_output: bool) -> None:
+    if json_output:
+        typer.echo(json.dumps(transfer_result_as_json_data(result), indent=2, sort_keys=True))
+    else:
+        typer.echo(f"transfer_id={result.transfer_id}")
+        typer.echo(f"result_status={result.result_status}")
+        typer.echo(f"returncode={result.returncode}")
+        typer.echo(f"report_path={result.report_path}")
+        typer.echo(f"message={result.message}")
+
+
+@transfer_app.command("closeout")
+def closeout(
+    no_remove_transfer_dir: bool = typer.Option(
+        False,
+        "--no-remove-transfer-dir",
+        help="Do not remove .agentic/transfer during closeout.",
+    ),
+    json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
+) -> None:
+    try:
+        result = closeout_transfer(Path("."), remove_transfer_dir=not no_remove_transfer_dir)
+    except RuntimeError as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+
+    if json_output:
+        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo(f"result_status={result.result_status}")
+        typer.echo(f"returncode={result.returncode}")
+        typer.echo(f"removed_transfer_dir={result.removed_transfer_dir}")
+        typer.echo(f"latest_command_run_path={result.latest_command_run_path}")
+        typer.echo(f"blocked_dirty_paths={','.join(result.blocked_dirty_paths)}")
+        typer.echo(f"next_action={result.next_action}")
+
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("remote-next")
+def remote_next(
+    branch: str = typer.Argument(..., help="Remote transfer branch to fetch, switch to, pull, and run."),
+    json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
+) -> None:
+    try:
+        result = run_remote_next_transfer(Path("."), branch)
+    except (RuntimeError, ValueError, FileNotFoundError) as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+
+    if json_output:
+        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo(f"branch={result.branch}")
+        typer.echo(f"head={result.head}")
+        typer.echo(f"result_status={result.local_run.result_status}")
+        typer.echo(f"returncode={result.local_run.returncode}")
+        typer.echo(f"next_action={result.local_run.next_action}")
+
+    if result.local_run.returncode != 0:
+        raise typer.Exit(code=result.local_run.returncode)
+
+
+
+@transfer_app.command("branch-create")
+def branch_create_command(
+    branch: str = typer.Argument(..., help="Branch name to create."),
+    start_point: str = typer.Option("main", help="Start point for the new branch."),
+    push: bool = typer.Option(False, "--push", help="Push the new branch and set upstream."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = branch_create(branch, start_point=start_point, push=push)
+    if json_output:
+        typer.echo(result_json(result))
+    else:
+        typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("branch-switch")
+def branch_switch_command(
+    branch: str = typer.Argument(..., help="Branch name to switch to."),
+    pull: bool = typer.Option(False, "--pull", help="Fast-forward pull from origin after switching."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = branch_switch(branch, pull=pull)
+    if json_output:
+        typer.echo(result_json(result))
+    else:
+        typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("commit")
+def commit_command(
+    message: str = typer.Option(..., "--message", "-m", help="Commit message."),
+    path: list[str] = typer.Option([], "--path", help="Path to add before commit. Repeatable."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = commit_paths(message, list(path))
+    if json_output:
+        typer.echo(result_json(result))
+    else:
+        typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("push-current")
+def push_current_command(
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = push_current()
+    if json_output:
+        typer.echo(result_json(result))
+    else:
+        typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("pr-create")
+def pr_create_command(
+    base: str = typer.Option("main", "--base", help="Base branch."),
+    head: str = typer.Option(..., "--head", help="Head branch."),
+    title: str = typer.Option(..., "--title", help="Pull request title."),
+    body: str = typer.Option("", "--body", help="Pull request body."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = pr_create(base=base, head=head, title=title, body=body)
+    if json_output:
+        typer.echo(result_json(result))
+    else:
+        typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("pr-status")
+def pr_status_command(
+    pr_number: int = typer.Argument(..., help="Pull request number to inspect through the transfer wrapper."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text report."),
+    no_failed_log_fetch: bool = typer.Option(
+        False,
+        "--no-failed-log-fetch",
+        help="Do not fetch failed GitHub Actions logs for red checks.",
+    ),
+    failed_log_lines: int = typer.Option(120, min=0, help="Maximum failed-log excerpt lines."),
+) -> None:
+    result = pr_status_transfer(
+        pr_number,
+        no_failed_log_fetch=no_failed_log_fetch,
+        failed_log_lines=failed_log_lines,
+    )
+    if json_output:
+        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo(result.report)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("run-local")
+def run_local(
+    path: Path = typer.Option(DEFAULT_INBOX, "--path", help="Transfer order path."),
+    json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
+) -> None:
+    try:
+        result = run_local_transfer(Path("."), path)
+    except (FileNotFoundError, ValueError) as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+
+    if json_output:
+        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo(f"transfer_id={result.transfer_id}")
+        typer.echo(f"result_status={result.result_status}")
+        typer.echo(f"returncode={result.returncode}")
+        typer.echo(f"next_action={result.next_action}")
+
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("state")
+def state(
+    json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
+) -> None:
+    snapshot = build_transfer_state(Path("."))
+    data = snapshot.as_json_data()
+    if json_output:
+        typer.echo(json.dumps(data, indent=2, sort_keys=True))
+    else:
+        typer.echo(f"primary_state={snapshot.primary_state}")
+        typer.echo(f"next_action={snapshot.next_action}")
+
+
+@transfer_app.command("status")
+def status(
+    path: Path = typer.Option(DEFAULT_INBOX, "--path", help="Transfer order path."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    order = _load_or_exit(path)
+    result = inspect_transfer_order(order, Path("."))
+    _emit_result(result, json_output)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("inspect")
+def inspect(
+    path: Path = typer.Option(DEFAULT_INBOX, "--path", help="Transfer order path."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    order = _load_or_exit(path)
+    result = inspect_transfer_order(order, Path("."))
+    _emit_result(result, json_output)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("apply")
+def apply(
+    path: Path = typer.Option(DEFAULT_INBOX, "--path", help="Transfer order path."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    order = _load_or_exit(path)
+    result = apply_transfer_order(order, Path("."))
+    _emit_result(result, json_output)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+### TRANSFER REPO ACTIONS SOURCE ###
+from __future__ import annotations
+
+import json
+import subprocess
+from dataclasses import dataclass, asdict
+from pathlib import Path
+
+
+@dataclass(frozen=True)
+class RepoActionResult:
+    action: str
+    result_status: str
+    returncode: int
+    command: list[str]
+    stdout: str
+    stderr: str
+    next_action: str
+
+    def as_json_data(self) -> dict:
+        return asdict(self)
+
+
+def _run(command: list[str], *, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        command,
+        cwd=cwd,
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+
+
+def _result(action: str, command: list[str], completed: subprocess.CompletedProcess[str], next_action: str) -> RepoActionResult:
+    status = "PASS" if completed.returncode == 0 else "FAIL"
+    return RepoActionResult(
+        action=action,
+        result_status=status,
+        returncode=completed.returncode,
+        command=command,
+        stdout=completed.stdout,
+        stderr=completed.stderr,
+        next_action=next_action,
+    )
+
+
+def branch_create(branch: str, *, start_point: str = "main", push: bool = False) -> RepoActionResult:
+    command = ["git", "switch", "-c", branch, start_point]
+    completed = _run(command)
+    if completed.returncode != 0:
+        return _result("branch-create", command, completed, "Inspect branch state before continuing.")
+    if push:
+        push_command = ["git", "push", "-u", "origin", branch]
+        pushed = _run(push_command)
+        return _result("branch-create", push_command, pushed, "Run transfer state or continue with queued work.")
+    return _result("branch-create", command, completed, "Run transfer state or continue with queued work.")
+
+
+def branch_switch(branch: str, *, pull: bool = False) -> RepoActionResult:
+    command = ["git", "switch", branch]
+    completed = _run(command)
+    if completed.returncode != 0:
+        return _result("branch-switch", command, completed, "Inspect branch state before continuing.")
+    if pull:
+        pull_command = ["git", "pull", "--ff-only", "origin", branch]
+        pulled = _run(pull_command)
+        return _result("branch-switch", pull_command, pulled, "Run transfer state or continue with queued work.")
+    return _result("branch-switch", command, completed, "Run transfer state or continue with queued work.")
+
+
+def commit_paths(message: str, paths: list[str]) -> RepoActionResult:
+    if not paths:
+        completed = subprocess.CompletedProcess(["git", "add"], 2, "", "No paths supplied.\n")
+        return _result("commit", ["git", "add"], completed, "Provide explicit paths for commit.")
+    add_command = ["git", "add", *paths]
+    added = _run(add_command)
+    if added.returncode != 0:
+        return _result("commit", add_command, added, "Inspect path list and worktree before continuing.")
+    commit_command = ["git", "commit", "-m", message]
+    committed = _run(commit_command)
+    return _result("commit", commit_command, committed, "Push current branch or inspect status.")
+
+
+def push_current() -> RepoActionResult:
+    branch_completed = _run(["git", "branch", "--show-current"])
+    if branch_completed.returncode != 0:
+        return _result("push-current", ["git", "branch", "--show-current"], branch_completed, "Inspect repository state.")
+    branch = branch_completed.stdout.strip()
+    if not branch:
+        completed = subprocess.CompletedProcess(["git", "push"], 2, "", "No current branch detected.\n")
+        return _result("push-current", ["git", "push"], completed, "Switch to a named branch first.")
+    command = ["git", "push", "-u", "origin", branch]
+    completed = _run(command)
+    return _result("push-current", command, completed, "Create or inspect pull request.")
+
+
+def pr_create(*, base: str, head: str, title: str, body: str) -> RepoActionResult:
+    command = [
+        "gh",
+        "pr",
+        "create",
+        "--base",
+        base,
+        "--head",
+        head,
+        "--title",
+        title,
+        "--body",
+        body,
+    ]
+    completed = _run(command)
+    return _result("pr-create", command, completed, "Run agentic-kit transfer pr-status on the created PR.")
+
+
+def result_json(result: RepoActionResult) -> str:
+    return json.dumps(result.as_json_data(), indent=2, sort_keys=True)
+
+### TRANSFER PR ACTIONS SOURCE ###
+from __future__ import annotations
+
+import json
+from dataclasses import dataclass
+
+from agentic_project_kit.next_turn_pr_status import (
+    attach_failed_run_logs,
+    classify_pr_status,
+    fetch_pr_payload,
+    render_decision,
+)
+
+
+@dataclass(frozen=True)
+class TransferPrStatusResult:
+    schema_version: int
+    action: str
+    pr_number: int
+    result_status: str
+    returncode: int
+    decision: str
+    report: str
+
+    def as_json_data(self) -> dict[str, object]:
+        return {
+            "schema_version": self.schema_version,
+            "action": self.action,
+            "pr_number": self.pr_number,
+            "result_status": self.result_status,
+            "returncode": self.returncode,
+            "decision": self.decision,
+            "report": self.report,
+        }
+
+
+def pr_status_transfer(
+    pr_number: int,
+    *,
+    no_failed_log_fetch: bool = False,
+    failed_log_lines: int = 120,
+) -> TransferPrStatusResult:
+    payload = fetch_pr_payload(str(pr_number))
+    decision = classify_pr_status(payload, pr=str(pr_number))
+    if decision.decision == "red" and not no_failed_log_fetch:
+        decision = attach_failed_run_logs(decision, max_lines=failed_log_lines)
+
+    ok = decision.decision == "green"
+    return TransferPrStatusResult(
+        schema_version=1,
+        action="pr-status",
+        pr_number=pr_number,
+        result_status="PASS" if ok else "FAIL",
+        returncode=0 if ok else 1,
+        decision=decision.decision,
+        report=render_decision(decision),
+    )
+
+
+def pr_status_transfer_json(
+    pr_number: int,
+    *,
+    no_failed_log_fetch: bool = False,
+    failed_log_lines: int = 120,
+) -> str:
+    result = pr_status_transfer(
+        pr_number,
+        no_failed_log_fetch=no_failed_log_fetch,
+        failed_log_lines=failed_log_lines,
+    )
+    return json.dumps(result.as_json_data(), indent=2, sort_keys=True)
+
+### PR CLI SOURCE ###
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import typer
+
+from agentic_project_kit.ci_readiness import (
+    WAITING,
+    gh_pr_snapshot_provider,
+    render_pr_readiness,
+    wait_for_pr_readiness,
+)
+from agentic_project_kit.next_turn_merge_if_green import main_verification_passed, merge_if_green, render_result
+from agentic_project_kit.next_turn_pr_status import (
+    attach_failed_run_logs,
+    classify_pr_status,
+    fetch_pr_payload,
+    render_decision,
+)
+from agentic_project_kit.pr_closeout import BLOCKED, evaluate_pr_closeout, render_pr_closeout
+
+pr_app = typer.Typer(help="Evaluate deterministic PR closeout and readiness state.")
+
+
+@pr_app.command("closeout-check")
+def closeout_check(json_file: Path) -> None:
+    data = json.loads(json_file.read_text(encoding="utf-8"))
+    result = evaluate_pr_closeout(data)
+    typer.echo(render_pr_closeout(result))
+    if result.outcome == BLOCKED:
+        raise typer.Exit(code=1)
+
+
+@pr_app.command("status")
+def status(
+    pr_number: int = typer.Argument(..., help="Pull request number to inspect."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of the text report."),
+    no_failed_log_fetch: bool = typer.Option(
+        False,
+        "--no-failed-log-fetch",
+        help="Do not fetch failed GitHub Actions logs for red checks.",
+    ),
+    failed_log_lines: int = typer.Option(120, min=0, help="Maximum failed-log excerpt lines."),
+) -> None:
+    """Print deterministic PR/CI status and fetch failed logs for red CI."""
+    payload = fetch_pr_payload(str(pr_number))
+    decision = classify_pr_status(payload, pr=str(pr_number))
+    if decision.decision == "red" and not no_failed_log_fetch:
+        decision = attach_failed_run_logs(decision, max_lines=failed_log_lines)
+    if json_output:
+        typer.echo(json.dumps(decision, default=lambda item: item.__dict__, indent=2, sort_keys=True))
+    else:
+        typer.echo(render_decision(decision))
+
+
+@pr_app.command("merge-if-green")
+def merge_if_green_command(
+    pr_number: int = typer.Argument(..., help="Pull request number to merge only after green checks."),
+    merge_method: str = typer.Option(
+        "squash",
+        help="GitHub merge method: squash, merge, or rebase.",
+    ),
+    delete_branch: bool = typer.Option(True, help="Delete the branch after a successful merge."),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Evaluate without merging."),
+    no_verify_main: bool = typer.Option(False, "--no-verify-main", help="Do not verify main CI after merge."),
+    main_branch: str = typer.Option("main", help="Expected base branch and post-merge verification branch."),
+    expected_base_branch: str = typer.Option("", help="Expected PR base branch. Defaults to --main-branch."),
+    expected_head_sha: str = typer.Option("", help="Expected PR head SHA. Refuses merge if the head moved."),
+    main_ci_timeout_seconds: int = typer.Option(300, min=1, help="Post-merge main CI wait timeout."),
+    main_ci_poll_seconds: int = typer.Option(10, min=1, help="Post-merge main CI polling interval."),
+) -> None:
+    """Merge only when PR checks are green, refs match, and merge state is clean."""
+    result = merge_if_green(
+        str(pr_number),
+        merge_method=merge_method,
+        delete_branch=delete_branch,
+        dry_run=dry_run,
+        verify_main=not no_verify_main,
+        main_branch=main_branch,
+        expected_base_branch=expected_base_branch,
+        expected_head_sha=expected_head_sha,
+        main_ci_timeout_seconds=main_ci_timeout_seconds,
+        main_ci_poll_seconds=main_ci_poll_seconds,
+    )
+    typer.echo(render_result(result))
+    if dry_run:
+        return
+    if result.decision != "merge" or not result.merged or not main_verification_passed(result):
+        raise typer.Exit(code=1)
+
+
+@pr_app.command("wait-ci")
+def wait_ci(
+    pr_number: int = typer.Argument(..., help="Pull request number to inspect."),
+    expected_head_sha: str | None = typer.Option(
+        None,
+        "--expected-head-sha",
+        help="Expected PR head SHA for --expected-head-sha. The command fails closed if the head moves.",
+    ),
+    timeout_seconds: int = typer.Option(2700, min=1, help="Maximum wait time."),
+    interval_seconds: int = typer.Option(20, min=1, help="Polling interval."),
+    expected_check: list[str] = typer.Option(
+        [],
+        "--expected-check",
+        help="Check name that must be present before readiness can pass. Repeatable.",
+    ),
+) -> None:
+    """Wait for pull-request CI; guard merge preparation with --expected-head-sha."""
+    result = wait_for_pr_readiness(
+        gh_pr_snapshot_provider(pr_number),
+        expected_head_sha=expected_head_sha,
+        timeout_seconds=timeout_seconds,
+        interval_seconds=interval_seconds,
+        expected_checks=tuple(expected_check),
+    )
+    typer.echo(render_pr_readiness(result))
+    if not result.success:
+        raise typer.Exit(code=2 if result.outcome == WAITING else 1)
+
+
+def register_pr_closeout_alias(app: typer.Typer) -> None:
+    @app.command("pr-closeout")
+    def pr_closeout_alias(json_file: Path) -> None:
+        data = json.loads(json_file.read_text(encoding="utf-8"))
+        result = evaluate_pr_closeout(data)
+        typer.echo(render_pr_closeout(result))
+        if result.outcome == BLOCKED:
+            raise typer.Exit(code=1)
+
+### MERGE IF GREEN SOURCE ###
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+import time
+from collections.abc import Callable
+from dataclasses import dataclass
+from typing import Any
+from typing import Literal
+
+from agentic_project_kit.next_turn_pr_status import (
+    PrStatusDecision,
+    attach_failed_run_logs,
+    classify_pr_status,
+    fetch_pr_payload,
+)
+
+MergeDecision = Literal["merge", "refuse"]
+MainRunFetcher = Callable[[str, str], dict[str, Any]]
+FailedLogFetcher = Callable[[str], tuple[int, str, str]]
+Sleep = Callable[[float], None]
+
+
+@dataclass(frozen=True)
+class PrMergeRefs:
+    base_ref_name: str
+    base_ref_oid: str
+    head_ref_name: str
+    head_ref_oid: str
+
+
+@dataclass(frozen=True)
+class MergeIfGreenResult:
+    pr: str
+    decision: MergeDecision
+    reason: str
+    status_decision: PrStatusDecision
+    merged: bool
+    merge_output: str
+    base_ref_name: str = ""
+    base_ref_oid: str = ""
+    head_ref_name: str = ""
+    head_ref_oid: str = ""
+    expected_base_branch: str = ""
+    expected_head_sha: str = ""
+    merge_commit_sha: str = ""
+    main_verification_required: bool = False
+    main_status_decision: PrStatusDecision | None = None
+    main_verification_error: str = ""
+
+
+def decide_merge(status: PrStatusDecision) -> tuple[MergeDecision, str]:
+    if status.state != "OPEN":
+        return "refuse", "PR is not open"
+    if status.decision != "green":
+        return "refuse", f"PR checks are not green: {status.decision}"
+    if status.merge_state_status != "CLEAN":
+        return "refuse", f"merge state is not clean: {status.merge_state_status}"
+    return "merge", "PR is green"
+
+
+def pr_merge_refs(payload: dict[str, Any]) -> PrMergeRefs:
+    return PrMergeRefs(
+        base_ref_name=str(payload.get("baseRefName") or ""),
+        base_ref_oid=str(payload.get("baseRefOid") or ""),
+        head_ref_name=str(payload.get("headRefName") or ""),
+        head_ref_oid=str(payload.get("headRefOid") or ""),
+    )
+
+
+def verify_merge_refs(
+    refs: PrMergeRefs,
+    *,
+    expected_base_branch: str,
+    expected_head_sha: str = "",
+) -> tuple[MergeDecision, str]:
+    if not refs.base_ref_name:
+        return "refuse", "missing PR base branch"
+    if expected_base_branch and refs.base_ref_name != expected_base_branch:
+        return "refuse", f"PR base branch is {refs.base_ref_name}, expected {expected_base_branch}"
+    if not refs.head_ref_oid:
+        return "refuse", "missing PR head SHA"
+    if expected_head_sha and refs.head_ref_oid != expected_head_sha:
+        return "refuse", f"PR head changed: {refs.head_ref_oid} != {expected_head_sha}"
+    return "merge", "PR base/head refs verified"
+
+
+def build_merge_args(
+    pr: str,
+    *,
+    merge_method: str,
+    delete_branch: bool,
+    match_head_sha: str,
+) -> list[str]:
+    args = ["pr", "merge", pr, f"--{merge_method}", "--match-head-commit", match_head_sha]
+    if delete_branch:
+        args.append("--delete-branch")
+    return args
+
+
+def _run_gh(args: list[str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(["gh", *args], text=True, capture_output=True, check=False)
+
+
+def _run_gh_json(args: list[str]) -> Any:
+    completed = _run_gh(args)
+    if completed.returncode != 0:
+        raise RuntimeError((completed.stderr + completed.stdout).strip())
+    return json.loads(completed.stdout)
+
+
+def fetch_merge_commit_sha(pr: str) -> str:
+    payload = _run_gh_json(["pr", "view", pr, "--json", "state,mergeCommit,mergedAt"])
+    if not isinstance(payload, dict):
+        raise RuntimeError("gh pr view did not return a JSON object")
+    merge_commit = payload.get("mergeCommit") or {}
+    if not isinstance(merge_commit, dict):
+        return ""
+    return str(merge_commit.get("oid") or "")
+
+
+def fetch_main_run_payload(commit_sha: str, branch: str) -> dict[str, Any]:
+    runs = _run_gh_json(
+        [
+            "run",
+            "list",
+            "--branch",
+            branch,
+            "--commit",
+            commit_sha,
+            "--limit",
+            "20",
+            "--json",
+            "databaseId,status,conclusion,name,workflowName,url",
+        ]
+    )
+    if not isinstance(runs, list):
+        raise RuntimeError("gh run list did not return a JSON array")
+    checks: list[dict[str, Any]] = []
+    for run in runs:
+        if not isinstance(run, dict):
+            continue
+        checks.append(
+            {
+                "name": run.get("name") or run.get("workflowName") or "workflow",
+                "status": run.get("status"),
+                "conclusion": run.get("conclusion"),
+                "detailsUrl": run.get("url") or "",
+            }
+        )
+    return {
+        "state": "OPEN",
+        "mergeStateStatus": "CLEAN",
+        "headRefOid": commit_sha,
+        "statusCheckRollup": checks,
+    }
+
+
+def verify_main_ci(
+    commit_sha: str,
+    *,
+    branch: str = "main",
+    timeout_seconds: int = 300,
+    poll_seconds: int = 10,
+    failed_log_lines: int = 120,
+    fetcher: MainRunFetcher = fetch_main_run_payload,
+    failed_log_fetcher: FailedLogFetcher | None = None,
+    sleep: Sleep = time.sleep,
+) -> PrStatusDecision:
+    attempts = max(1, int(timeout_seconds / poll_seconds) if poll_seconds > 0 else 1)
+    status: PrStatusDecision | None = None
+    for attempt in range(1, attempts + 1):
+        payload = fetcher(commit_sha, branch)
+        status = classify_pr_status(payload, pr=f"{branch}@{commit_sha[:12]}")
+        if status.decision not in {"pending", "no-checks"}:
+            break
+        if attempt < attempts and poll_seconds > 0:
+            sleep(poll_seconds)
+    if status is None:
+        payload = fetcher(commit_sha, branch)
+        status = classify_pr_status(payload, pr=f"{branch}@{commit_sha[:12]}")
+    if status.decision == "red":
+        if failed_log_fetcher is None:
+            status = attach_failed_run_logs(status, max_lines=failed_log_lines)
+        else:
+            status = attach_failed_run_logs(status, max_lines=failed_log_lines, fetcher=failed_log_fetcher)
+    return status
+
+
+def merge_if_green(
+    pr: str,
+    *,
+    merge_method: str = "squash",
+    delete_branch: bool = True,
+    dry_run: bool = False,
+    verify_main: bool = True,
+    main_branch: str = "main",
+    expected_base_branch: str = "",
+    expected_head_sha: str = "",
+    main_ci_timeout_seconds: int = 300,
+    main_ci_poll_seconds: int = 10,
+) -> MergeIfGreenResult:
+    payload = fetch_pr_payload(pr)
+    status = classify_pr_status(payload, pr=pr)
+    refs = pr_merge_refs(payload)
+    effective_expected_base_branch = expected_base_branch or main_branch
+    effective_expected_head_sha = expected_head_sha or refs.head_ref_oid
+    decision, reason = decide_merge(status)
+    if decision == "merge":
+        decision, ref_reason = verify_merge_refs(
+            refs,
+            expected_base_branch=effective_expected_base_branch,
+            expected_head_sha=expected_head_sha,
+        )
+        if decision != "merge":
+            reason = ref_reason
+
+    if decision != "merge" or dry_run:
+        return MergeIfGreenResult(
+            pr=pr,
+            decision=decision,
+            reason=reason if not dry_run else f"DRY_RUN: {reason}",
+            status_decision=status,
+            merged=False,
+            merge_output="",
+            base_ref_name=refs.base_ref_name,
+            base_ref_oid=refs.base_ref_oid,
+            head_ref_name=refs.head_ref_name,
+            head_ref_oid=refs.head_ref_oid,
+            expected_base_branch=effective_expected_base_branch,
+            expected_head_sha=effective_expected_head_sha,
+            main_verification_required=False,
+        )
+
+    args = build_merge_args(
+        pr,
+        merge_method=merge_method,
+        delete_branch=delete_branch,
+        match_head_sha=effective_expected_head_sha,
+    )
+
+    completed = _run_gh(args)
+    if completed.returncode != 0:
+        raise RuntimeError((completed.stderr + completed.stdout).strip())
+
+    merge_commit_sha = ""
+    main_status: PrStatusDecision | None = None
+    main_error = ""
+    if verify_main:
+        try:
+            merge_commit_sha = fetch_merge_commit_sha(pr)
+            if not merge_commit_sha:
+                main_error = "merged PR did not expose mergeCommit.oid"
+            else:
+                main_status = verify_main_ci(
+                    merge_commit_sha,
+                    branch=main_branch,
+                    timeout_seconds=main_ci_timeout_seconds,
+                    poll_seconds=main_ci_poll_seconds,
+                )
+        except RuntimeError as exc:
+            main_error = str(exc)
+
+    return MergeIfGreenResult(
+        pr=pr,
+        decision="merge",
+        reason=reason,
+        status_decision=status,
+        merged=True,
+        merge_output=(completed.stdout + completed.stderr).strip(),
+        base_ref_name=refs.base_ref_name,
+        base_ref_oid=refs.base_ref_oid,
+        head_ref_name=refs.head_ref_name,
+        head_ref_oid=refs.head_ref_oid,
+        expected_base_branch=effective_expected_base_branch,
+        expected_head_sha=effective_expected_head_sha,
+        merge_commit_sha=merge_commit_sha,
+        main_verification_required=verify_main,
+        main_status_decision=main_status,
+        main_verification_error=main_error,
+    )
+
+
+def main_verification_passed(result: MergeIfGreenResult) -> bool:
+    if not result.main_verification_required:
+        return True
+    return result.main_status_decision is not None and result.main_status_decision.decision == "green"
+
+
+def _render_failed_run_diagnostics(status: PrStatusDecision | None) -> list[str]:
+    if status is None:
+        return []
+    lines: list[str] = []
+    for diagnostic in status.failed_run_diagnostics:
+        lines.extend(
+            [
+                (
+                    f"- check={diagnostic.check_name} conclusion={diagnostic.conclusion} "
+                    f"run_id={diagnostic.run_id or '(missing)'} log_status={diagnostic.log_status}"
+                ),
+                f"  command={diagnostic.command or '(unavailable)'}",
+                f"  details_url={diagnostic.details_url or '(missing)'}",
+            ]
+        )
+        if diagnostic.error:
+            lines.append(f"  error={diagnostic.error}")
+        if diagnostic.log_excerpt:
+            lines.append("  log_excerpt:")
+            lines.extend(f"    {line}" for line in diagnostic.log_excerpt.splitlines())
+    return lines
+
+
+def render_result(result: MergeIfGreenResult) -> str:
+    main_status = result.main_status_decision
+    main_decision = main_status.decision if main_status is not None else "not-run"
+    main_failed_hint = main_status.failed_run_log_hint if main_status is not None else "none"
+    final_marker = "### RESULT: PASS ###" if main_verification_passed(result) else "### RESULT: FAIL ###"
+    lines = [
+        "NEXT_TURN_MERGE_IF_GREEN",
+        f"pr={result.pr}",
+        f"decision={result.decision}",
+        f"reason={result.reason}",
+        f"status_decision={result.status_decision.decision}",
+        f"state={result.status_decision.state}",
+        f"merge_state_status={result.status_decision.merge_state_status}",
+        f"base_ref_name={result.base_ref_name or '(unknown)'}",
+        f"base_ref_oid={result.base_ref_oid or '(unknown)'}",
+        f"head_ref_name={result.head_ref_name or '(unknown)'}",
+        f"head_ref_oid={result.head_ref_oid or '(unknown)'}",
+        f"expected_base_branch={result.expected_base_branch or '(unspecified)'}",
+        f"expected_head_sha={result.expected_head_sha or '(unknown)'}",
+        f"merged={str(result.merged).lower()}",
+        f"merge_commit_sha={result.merge_commit_sha or '(unknown)'}",
+        f"main_verification_required={str(result.main_verification_required).lower()}",
+        f"main_verification_decision={main_decision}",
+        f"main_verification_passed={str(main_verification_passed(result)).lower()}",
+        f"main_failed_run_log_hint={main_failed_hint}",
+        f"main_verification_error={result.main_verification_error or 'none'}",
+        "failed_checks:",
+        *[f"- {item}" for item in result.status_decision.failed_checks],
+        "pending_checks:",
+        *[f"- {item}" for item in result.status_decision.pending_checks],
+        "unknown_checks:",
+        *[f"- {item}" for item in result.status_decision.unknown_checks],
+        "main_failed_run_diagnostics:",
+        *_render_failed_run_diagnostics(main_status),
+        final_marker,
+    ]
+    return "\n".join(lines)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(prog="next-turn-merge-if-green")
+    parser.add_argument("pr")
+    parser.add_argument("--merge-method", choices=["squash", "merge", "rebase"], default="squash")
+    parser.add_argument("--keep-branch", action="store_true")
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--skip-main-verification", action="store_true")
+    parser.add_argument("--main-branch", default="main")
+
+### CI READINESS SOURCE ###
+from __future__ import annotations
+
+import json
+import subprocess
+import time
+from dataclasses import dataclass
+from typing import Any, Callable
+
+READY_TO_MERGE = "READY_TO_MERGE"
+ALREADY_MERGED = "ALREADY_MERGED"
+WAITING = "WAITING"
+BLOCKED = "BLOCKED"
+TIMEOUT = "TIMEOUT"
+GH_ERROR = "GH_ERROR"
+
+SUCCESS_OUTCOMES = {READY_TO_MERGE, ALREADY_MERGED}
+FAILED_CONCLUSIONS = {
+    "ACTION_REQUIRED",
+    "CANCELLED",
+    "FAILURE",
+    "STARTUP_FAILURE",
+    "STALE",
+    "TIMED_OUT",
+}
+SUCCESS_CONCLUSIONS = {"SUCCESS", "NEUTRAL", "SKIPPED"}
+
+
+@dataclass(frozen=True)
+class ReadinessDecision:
+    outcome: str
+    reasons: tuple[str, ...]
+    terminal: bool
+
+    @property
+    def success(self) -> bool:
+        return self.outcome in SUCCESS_OUTCOMES
+
+
+SnapshotProvider = Callable[[], dict[str, Any]]
+Clock = Callable[[], float]
+Sleeper = Callable[[float], None]
+
+
+def normalize_status_checks(snapshot: dict[str, Any]) -> list[dict[str, str]]:
+    raw = snapshot.get("statusCheckRollup") or []
+    if isinstance(raw, dict):
+        raw = raw.get("nodes") or raw.get("edges") or []
+    checks: list[dict[str, str]] = []
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        if isinstance(item.get("node"), dict):
+            item = item["node"]
+        checks.append(
+            {
+                "name": str(item.get("name") or item.get("context") or ""),
+                "status": str(item.get("status") or item.get("state") or "").upper(),
+                "conclusion": str(item.get("conclusion") or "").upper(),
+            }
+        )
+    return checks
+
+
+def classify_pr_readiness(
+    snapshot: dict[str, Any],
+    *,
+    expected_head_sha: str | None = None,
+    elapsed_seconds: int = 0,
+    timeout_seconds: int = 2700,
+    expected_checks: tuple[str, ...] = (),
+) -> ReadinessDecision:
+    if elapsed_seconds >= timeout_seconds:
+        return ReadinessDecision(
+            TIMEOUT,
+            (f"timeout reached after {elapsed_seconds}s",),
+            True,
+        )
+
+    actual_head_sha = str(
+        snapshot.get("headRefOid") or snapshot.get("headSha") or snapshot.get("head_sha") or ""
+    )
+    if expected_head_sha and actual_head_sha and actual_head_sha != expected_head_sha:
+        return ReadinessDecision(
+            BLOCKED,
+            (f"head SHA changed: expected {expected_head_sha}, got {actual_head_sha}",),
+            True,
+        )
+
+    state = str(snapshot.get("state") or "").upper()
+    checks = normalize_status_checks(snapshot)
+    successful = [
+        check
+        for check in checks
+        if check["status"] == "COMPLETED" and check["conclusion"] in SUCCESS_CONCLUSIONS
+    ]
+
+    if state == "MERGED" and checks and len(successful) == len(checks):
+        return ReadinessDecision(ALREADY_MERGED, (), True)
+
+    if state != "OPEN":
+        return ReadinessDecision(BLOCKED, (f"PR state is not OPEN: {state or '<unknown>'}",), True)
+
+    if not checks:
+        return ReadinessDecision(WAITING, ("no status checks reported yet",), False)
+
+    names = {check["name"] for check in checks}
+    missing = tuple(name for name in expected_checks if name and name not in names)
+    if missing:
+        return ReadinessDecision(
+            WAITING,
+            tuple(f"expected check missing: {name}" for name in missing),
+            False,
+        )
+
+    failed = [check for check in checks if check["conclusion"] in FAILED_CONCLUSIONS]
+    if failed:
+        return ReadinessDecision(
+            BLOCKED,
+            tuple(f"check failed: {check['name'] or '<unknown>'}" for check in failed),
+            True,
+        )
+
+    pending = [check for check in checks if check not in successful]
+    if pending:
+        return ReadinessDecision(
+            WAITING,
+            tuple(f"check pending: {check['name'] or '<unknown>'}" for check in pending),
+            False,
+        )
+
+    merge_state = str(snapshot.get("mergeStateStatus") or "").upper()
+    mergeable = snapshot.get("mergeable")
+    if merge_state != "CLEAN":
+        return ReadinessDecision(
+            BLOCKED,
+            (f"mergeStateStatus is not CLEAN: {merge_state or '<unknown>'}",),
+            True,
+        )
+    if mergeable not in (True, "MERGEABLE", "mergeable"):
+        return ReadinessDecision(BLOCKED, (f"PR is not mergeable: {mergeable!r}",), True)
+
+    return ReadinessDecision(
+        READY_TO_MERGE,
+        ("all required checks passed and merge state is clean",),
+        True,
+    )
+
+
+def wait_for_pr_readiness(
+    snapshot_provider: SnapshotProvider,
+    *,
+    expected_head_sha: str | None = None,
+    timeout_seconds: int = 2700,
+    interval_seconds: int = 20,
+    expected_checks: tuple[str, ...] = (),
+    clock: Clock = time.monotonic,
+    sleep: Sleeper = time.sleep,
+) -> ReadinessDecision:
+    start = clock()
+    while True:
+        elapsed = int(clock() - start)
+        try:
+            snapshot = snapshot_provider()
+        except Exception as exc:
+            return ReadinessDecision(GH_ERROR, (str(exc),), True)
+        decision = classify_pr_readiness(
+            snapshot,
+            expected_head_sha=expected_head_sha,
+            elapsed_seconds=elapsed,
+            timeout_seconds=timeout_seconds,
+            expected_checks=expected_checks,
+        )
+        if decision.terminal:
+            return decision
+        remaining = timeout_seconds - elapsed
+        if remaining <= 0:
+            return ReadinessDecision(TIMEOUT, ("timeout reached while waiting for CI",), True)
+        sleep(min(interval_seconds, remaining))
+
+
+def gh_pr_snapshot_provider(pr_number: int) -> SnapshotProvider:
+    def provider() -> dict[str, Any]:
+        completed = subprocess.run(
+            [
+                "gh",
+                "pr",
+                "view",
+                str(pr_number),
+                "--json",
+                "state,headRefOid,mergeStateStatus,mergeable,statusCheckRollup",
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if completed.returncode != 0:
+            details = completed.stderr.strip() or completed.stdout.strip() or "gh pr view failed"
+            raise RuntimeError(details)
+        return json.loads(completed.stdout)
+
+    return provider
+
+
+def render_pr_readiness(decision: ReadinessDecision) -> str:
+    lines = [
+        f"PR readiness outcome: {decision.outcome}",
+        f"terminal={str(decision.terminal).lower()}",
+        f"success={str(decision.success).lower()}",
+    ]
+    lines.extend(f"- {reason}" for reason in decision.reasons)
+    return "\n".join(lines)
+
+### EXISTING TRANSFER TESTS ###
+tests/test_transfer_cli.py
+tests/test_transfer_closeout.py
+tests/test_transfer_local_runner.py
+tests/test_transfer_pr_actions.py
+tests/test_transfer_remote_next.py
+tests/test_transfer_repo_actions.py
+tests/test_transfer_runner.py
+tests/test_transfer_state.py
+
+### REPO ACTION TESTS ###
+from __future__ import annotations
+
+import subprocess
+
+from typer.testing import CliRunner
+
+from agentic_project_kit.cli import app
+from agentic_project_kit.transfer_repo_actions import branch_create, branch_switch, commit_paths
+
+
+def _init_repo(path):
+    subprocess.run(["git", "init"], cwd=path, check=True, stdout=subprocess.PIPE)
+    subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=path, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=path, check=True)
+    (path / "README.md").write_text("base\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=path, check=True)
+    subprocess.run(["git", "commit", "-m", "Initial"], cwd=path, check=True, stdout=subprocess.PIPE)
+    subprocess.run(["git", "branch", "-M", "main"], cwd=path, check=True, stdout=subprocess.PIPE)
+
+
+def test_branch_create_and_switch(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    created = branch_create("feature/example", start_point="main")
+    assert created.result_status == "PASS"
+
+    switched = branch_switch("main")
+    assert switched.result_status == "PASS"
+
+
+def test_commit_paths(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "file.txt").write_text("content\n", encoding="utf-8")
+
+    result = commit_paths("Add file", ["file.txt"])
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+
+
+def test_transfer_branch_create_cli(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(app, ["transfer", "branch-create", "feature/cli"])
+
+    assert result.exit_code == 0
+    assert '"action": "branch-create"' in result.stdout
+    assert '"result_status": "PASS"' in result.stdout
+
+
+def test_transfer_commit_cli_requires_path(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(app, ["transfer", "commit", "--message", "No paths"])
+
+    assert result.exit_code != 0
+    assert "No paths supplied" in result.stdout
+
+### PR ACTION TESTS ###
+from __future__ import annotations
+
+from typer.testing import CliRunner
+
+from agentic_project_kit.cli import app
+from agentic_project_kit.transfer_pr_actions import pr_status_transfer
+
+
+
+def test_pr_status_transfer_green(monkeypatch):
+    class Decision:
+        decision = "green"
+
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.fetch_pr_payload",
+        lambda pr: {"number": pr},
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.classify_pr_status",
+        lambda payload, pr: Decision(),
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.render_decision",
+        lambda decision: "PR green",
+    )
+
+    result = pr_status_transfer(123)
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert result.decision == "green"
+    assert result.report == "PR green"
+
+
+def test_pr_status_transfer_red_fetches_logs(monkeypatch):
+    class RedDecision:
+        decision = "red"
+
+    class RedWithLogs:
+        decision = "red"
+
+    calls = []
+
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.fetch_pr_payload",
+        lambda pr: {"number": pr},
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.classify_pr_status",
+        lambda payload, pr: RedDecision(),
+    )
+
+    def fake_attach(decision, max_lines):
+        calls.append(max_lines)
+        return RedWithLogs()
+
+    monkeypatch.setattr("agentic_project_kit.transfer_pr_actions.attach_failed_run_logs", fake_attach)
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.render_decision",
+        lambda decision: "PR red",
+    )
+
+    result = pr_status_transfer(123, failed_log_lines=17)
+
+    assert calls == [17]
+    assert result.result_status == "FAIL"
+    assert result.returncode == 1
+    assert result.decision == "red"
+
+
+def test_transfer_pr_status_cli_json(monkeypatch):
+    class Decision:
+        decision = "green"
+
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.fetch_pr_payload",
+        lambda pr: {"number": pr},
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.classify_pr_status",
+        lambda payload, pr: Decision(),
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.render_decision",
+        lambda decision: "PR green",
+    )
+
+    result = CliRunner().invoke(app, ["transfer", "pr-status", "123", "--json"])
+
+    assert result.exit_code == 0
+    assert '"decision": "green"' in result.stdout
+    assert '"result_status": "PASS"' in result.stdout
