@@ -270,6 +270,10 @@ current_capabilities:
 policies:
   no_copy_terminal_policy: .agentic/no_copy_terminal_policy.yaml
   control_file_preservation: .agentic/control_file_preservation.yaml
+  test_bound_anchors:
+  - use d for log-backed PASS and f for log-backed FAIL
+  - nested quote-based code generation
+  - nested shell/Python quote layers
 rules:
 - id: remote-first-no-guess
   status: active
