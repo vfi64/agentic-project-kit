@@ -1,0 +1,166 @@
+from __future__ import annotations
+
+import hashlib
+import json
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any
+
+import yaml
+
+DEFAULT_INBOX = Path(".agentic/transfer/inbox/current.yaml")
+RESULT_PASS = "PASS"
+RESULT_FAIL = "FAIL"
+RESULT_PENDING = "PENDING"
+ACTION_WRITE_TEXT_FILE = "write_text_file"
+
+
+@dataclass(frozen=True)
+class TransferAction:
+    kind: str
+    target_path: str
+    payload_path: str
+    sha256: str | None = None
+
+
+@dataclass(frozen=True)
+class TransferOrder:
+    transfer_id: str
+    title: str
+    safety: str
+    report_path: str
+    actions: tuple[TransferAction, ...]
+
+
+@dataclass(frozen=True)
+class TransferResult:
+    transfer_id: str
+    result_status: str
+    returncode: int
+    safety: str
+    report_path: str
+    message: str = ""
+    action_results: tuple[dict[str, Any], ...] = field(default_factory=tuple)
+
+
+def _require_string(data: dict[str, Any], key: str) -> str:
+    value = data.get(key)
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"missing or invalid transfer field: {key}")
+    return value
+
+
+def _safe_repo_relative_path(path_text: str, *, field_name: str) -> Path:
+    path = Path(path_text)
+    if path.is_absolute():
+        raise ValueError(f"{field_name} must be repo-relative")
+    if any(part in {"", ".", ".."} for part in path.parts):
+        raise ValueError(f"{field_name} must not contain empty/current/parent segments")
+    blocked_roots = {".git", ".venv", "venv", "__pycache__"}
+    if path.parts and path.parts[0] in blocked_roots:
+        raise ValueError(f"{field_name} uses blocked root: {path.parts[0]}")
+    return path
+
+
+def _parse_action(data: dict[str, Any]) -> TransferAction:
+    kind = _require_string(data, "type")
+    if kind != ACTION_WRITE_TEXT_FILE:
+        raise ValueError(f"unsupported transfer action type: {kind}")
+    target_path = str(_safe_repo_relative_path(_require_string(data, "target_path"), field_name="target_path"))
+    payload_path = str(_safe_repo_relative_path(_require_string(data, "payload_path"), field_name="payload_path"))
+    sha = data.get("sha256")
+    if sha is not None and (not isinstance(sha, str) or len(sha) != 64):
+        raise ValueError("sha256 must be a 64 character hex string when provided")
+    return TransferAction(kind=kind, target_path=target_path, payload_path=payload_path, sha256=sha)
+
+
+def parse_transfer_order(data: dict[str, Any]) -> TransferOrder:
+    actions_data = data.get("actions")
+    if not isinstance(actions_data, list) or not actions_data:
+        raise ValueError("transfer order requires at least one action")
+    report_path = str(_safe_repo_relative_path(_require_string(data, "report_path"), field_name="report_path"))
+    if not report_path.startswith("docs/reports/command_runs/"):
+        raise ValueError("report_path must be under docs/reports/command_runs/")
+    actions = tuple(_parse_action(action) for action in actions_data)
+    return TransferOrder(
+        transfer_id=_require_string(data, "id"),
+        title=_require_string(data, "title"),
+        safety=_require_string(data, "safety"),
+        report_path=report_path,
+        actions=actions,
+    )
+
+
+def load_transfer_order(path: Path = DEFAULT_INBOX) -> TransferOrder:
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    if not isinstance(data, dict):
+        raise ValueError(f"transfer order must be a mapping: {path}")
+    return parse_transfer_order(data)
+
+
+def transfer_result_as_json_data(result: TransferResult) -> dict[str, Any]:
+    return {
+        "schema_version": 1,
+        "transfer_id": result.transfer_id,
+        "result_status": result.result_status,
+        "returncode": result.returncode,
+        "safety": result.safety,
+        "report_path": result.report_path,
+        "message": result.message,
+        "action_results": list(result.action_results),
+    }
+
+
+def inspect_transfer_order(order: TransferOrder, project_root: Path = Path(".")) -> TransferResult:
+    root = project_root.resolve()
+    action_results: list[dict[str, Any]] = []
+    for action in order.actions:
+        payload = root / action.payload_path
+        target = root / action.target_path
+        if not payload.exists():
+            return TransferResult(order.transfer_id, RESULT_FAIL, 2, order.safety, order.report_path, message=f"missing payload: {action.payload_path}", action_results=tuple(action_results))
+        digest = hashlib.sha256(payload.read_bytes()).hexdigest()
+        if action.sha256 and digest != action.sha256:
+            return TransferResult(order.transfer_id, RESULT_FAIL, 3, order.safety, order.report_path, message=f"sha256 mismatch: {action.payload_path}", action_results=tuple(action_results))
+        action_results.append({"type": action.kind, "target_path": action.target_path, "payload_path": action.payload_path, "sha256": digest, "would_write": str(target.relative_to(root))})
+    return TransferResult(order.transfer_id, RESULT_PENDING, 0, order.safety, order.report_path, message="Transfer order inspected. Re-run apply to write files.", action_results=tuple(action_results))
+
+
+def _write_report(project_root: Path, result: TransferResult) -> None:
+    path = project_root / result.report_path
+    path.parent.mkdir(parents=True, exist_ok=True)
+    data = transfer_result_as_json_data(result)
+    lines = [
+        f"Transfer: {result.transfer_id}",
+        f"Safety: {result.safety}",
+        "",
+        "### JSON RESULT ###",
+        json.dumps(data, indent=2, sort_keys=True),
+        "",
+        f"### RESULT: {result.result_status} ###",
+        f"Return code: {result.returncode}",
+        "Terminal bleibt offen. Kein exit am Blockende.",
+    ]
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    latest = project_root / "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
+    latest.parent.mkdir(parents=True, exist_ok=True)
+    latest.write_text(result.report_path + "\n", encoding="utf-8")
+
+
+def apply_transfer_order(order: TransferOrder, project_root: Path = Path(".")) -> TransferResult:
+    root = project_root.resolve()
+    inspected = inspect_transfer_order(order, root)
+    if inspected.result_status == RESULT_FAIL:
+        _write_report(root, inspected)
+        return inspected
+    action_results: list[dict[str, Any]] = []
+    for item in inspected.action_results:
+        payload_path = root / str(item["payload_path"])
+        target_path = root / str(item["target_path"])
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        text = payload_path.read_text(encoding="utf-8")
+        target_path.write_text(text, encoding="utf-8")
+        action_results.append({**item, "written": True})
+    result = TransferResult(order.transfer_id, RESULT_PASS, 0, order.safety, order.report_path, message="Transfer order applied.", action_results=tuple(action_results))
+    _write_report(root, result)
+    return result
