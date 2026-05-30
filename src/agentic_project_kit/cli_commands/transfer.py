@@ -7,6 +7,7 @@ import typer
 
 from agentic_project_kit.transfer_closeout import closeout_transfer
 from agentic_project_kit.transfer_local_runner import run_local_transfer
+from agentic_project_kit.transfer_pr_actions import pr_status_transfer
 from agentic_project_kit.transfer_remote_next import run_remote_next_transfer
 from agentic_project_kit.transfer_runner import (
     DEFAULT_INBOX,
@@ -90,6 +91,30 @@ def remote_next(
 
     if result.local_run.returncode != 0:
         raise typer.Exit(code=result.local_run.returncode)
+
+
+@transfer_app.command("pr-status")
+def pr_status_command(
+    pr_number: int = typer.Argument(..., help="Pull request number to inspect through the transfer wrapper."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text report."),
+    no_failed_log_fetch: bool = typer.Option(
+        False,
+        "--no-failed-log-fetch",
+        help="Do not fetch failed GitHub Actions logs for red checks.",
+    ),
+    failed_log_lines: int = typer.Option(120, min=0, help="Maximum failed-log excerpt lines."),
+) -> None:
+    result = pr_status_transfer(
+        pr_number,
+        no_failed_log_fetch=no_failed_log_fetch,
+        failed_log_lines=failed_log_lines,
+    )
+    if json_output:
+        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo(result.report)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
 
 
 @transfer_app.command("run-local")
