@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 1261ff0
-  commit_subject: Add B4 transfer PR wrapper MVP (#947)
+  commit: 9ee3f7e
+  commit_subject: Add B5 transfer repo action wrappers (#949)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
