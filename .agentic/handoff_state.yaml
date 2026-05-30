@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 3ca119b
-  commit_subject: Add canonical transfer state command (#939)
+  commit: 482ee33
+  commit_subject: Add transfer run-local command (#941)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
