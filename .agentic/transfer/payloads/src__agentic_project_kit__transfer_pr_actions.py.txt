@@ -1,0 +1,108 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+from pathlib import Path
+
+from agentic_project_kit.ci_readiness import gh_pr_snapshot_provider, render_pr_readiness, wait_for_pr_readiness
+from agentic_project_kit.next_turn_merge_if_green import merge_if_green, render_result
+from agentic_project_kit.next_turn_pr_status import (
+    attach_failed_run_logs,
+    classify_pr_status,
+    fetch_pr_payload,
+    render_decision,
+)
+
+
+@dataclass(frozen=True)
+class TransferPrActionResult:
+    action: str
+    result_status: str
+    returncode: int
+    report: str
+    data: dict[str, object]
+
+    def as_json_data(self) -> dict[str, object]:
+        return {
+            "action": self.action,
+            "data": self.data,
+            "report": self.report,
+            "result_status": self.result_status,
+            "returncode": self.returncode,
+        }
+
+
+def transfer_pr_status(
+    repo_root: Path,
+    pr_number: int,
+    *,
+    no_failed_log_fetch: bool = False,
+    failed_log_lines: int = 120,
+) -> TransferPrActionResult:
+    payload = fetch_pr_payload(str(pr_number))
+    decision = classify_pr_status(payload, pr=str(pr_number))
+    if decision.decision == "red" and not no_failed_log_fetch:
+        decision = attach_failed_run_logs(decision, max_lines=failed_log_lines)
+    returncode = 0 if decision.decision == "green" else 1
+    return TransferPrActionResult(
+        action="pr-status",
+        result_status="PASS" if returncode == 0 else "FAIL",
+        returncode=returncode,
+        report=render_decision(decision),
+        data=decision.__dict__,
+    )
+
+
+def transfer_pr_wait_ci(
+    repo_root: Path,
+    pr_number: int,
+    *,
+    expected_head_sha: str,
+    timeout_seconds: int,
+    interval_seconds: int,
+    expected_checks: tuple[str, ...] = (),
+) -> TransferPrActionResult:
+    result = wait_for_pr_readiness(
+        gh_pr_snapshot_provider(pr_number),
+        expected_head_sha=expected_head_sha,
+        timeout_seconds=timeout_seconds,
+        interval_seconds=interval_seconds,
+        expected_checks=expected_checks,
+    )
+    return TransferPrActionResult(
+        action="pr-wait-ci",
+        result_status="PASS" if result.success else "FAIL",
+        returncode=0 if result.success else 1,
+        report=render_pr_readiness(result),
+        data=result.__dict__,
+    )
+
+
+def transfer_pr_merge_if_green(
+    repo_root: Path,
+    pr_number: int,
+    *,
+    expected_head_sha: str,
+    expected_base_branch: str = "",
+    main_branch: str = "main",
+    merge_method: str = "squash",
+    execute: bool = False,
+    no_verify_main: bool = False,
+) -> TransferPrActionResult:
+    result = merge_if_green(
+        str(pr_number),
+        merge_method=merge_method,
+        delete_branch=True,
+        dry_run=not execute,
+        verify_main=not no_verify_main,
+        main_branch=main_branch,
+        expected_base_branch=expected_base_branch,
+        expected_head_sha=expected_head_sha,
+    )
+    success = result.decision == "merge" and (not execute or result.merged)
+    return TransferPrActionResult(
+        action="pr-merge-if-green",
+        result_status="PASS" if success else "FAIL",
+        returncode=0 if success else 1,
+        report=render_result(result),
+        data=result.__dict__,
+    )
