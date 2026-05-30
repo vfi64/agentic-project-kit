@@ -44,4 +44,4 @@ Use `agentic-kit evidence commit-paths` for explicit evidence path commits. The 
 
 ## Remote-next aliases
 
-Use `agentic-kit rn` as the short alias for `agentic-kit remote-next`. Use `agentic-kit rnc` to close out the dirty path set produced by the last successful remote-next run. The GUI must expose these as Run Next Work Order and Close Out Last Run.
+Use `agentic-kit rn` as the short alias for `agentic-kit remote-next`. Use `agentic-kit rnc` to close out the dirty path set produced by the last successful remote-next run. If no closeout paths are dirty, `rnc` must report `result_status=no_closeout`, render `### RESULT: NO-CLOSEOUT ###`, and exit with code 2 rather than presenting the state as a hard failure. The GUI must expose these as Run Next Work Order and Close Out Last Run.

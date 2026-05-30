@@ -40,6 +40,16 @@ def test_rnc_commits_expected_closeout_paths_including_deletion(tmp_path: Path) 
     assert git(tmp_path, "status", "--short").stdout == ""
 
 
+def test_rnc_reports_no_closeout_on_clean_worktree(tmp_path: Path) -> None:
+    init_repo(tmp_path)
+
+    result = run_remote_next_closeout(tmp_path, push=False)
+
+    assert not result.success
+    assert result.status == "no_closeout"
+    assert result.findings == ("no closeout paths are dirty",)
+
+
 def test_rnc_blocks_unexpected_dirty_path(tmp_path: Path) -> None:
     init_repo(tmp_path)
     (tmp_path / "unexpected.txt").write_text("dirty\n", encoding="utf-8")
@@ -48,6 +58,16 @@ def test_rnc_blocks_unexpected_dirty_path(tmp_path: Path) -> None:
 
     assert not result.success
     assert any("unexpected dirty path" in finding for finding in result.findings)
+
+
+def test_rnc_cli_uses_exit_2_for_no_closeout(tmp_path: Path) -> None:
+    init_repo(tmp_path)
+
+    result = CliRunner().invoke(app, ["rnc", "--root", str(tmp_path), "--no-push"])
+
+    assert result.exit_code == 2, result.output
+    assert "result_status=no_closeout" in result.output
+    assert "### RESULT: NO-CLOSEOUT ###" in result.output
 
 
 def test_rn_and_rnc_cli_are_registered(monkeypatch, tmp_path: Path) -> None:
