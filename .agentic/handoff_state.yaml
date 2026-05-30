@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 3b1a18f
-  commit_subject: Add transfer closeout command (#945)
+  commit: 1261ff0
+  commit_subject: Add B4 transfer PR wrapper MVP (#947)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
