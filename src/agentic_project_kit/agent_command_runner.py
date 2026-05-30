@@ -18,11 +18,19 @@ import dataclasses
 import datetime as _dt
 import hashlib
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 from agentic_project_kit import terminal_logging
+
+
+def _clean_git_env() -> dict[str, str]:
+    env = os.environ.copy()
+    for key in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_OBJECT_DIRECTORY", "GIT_ALTERNATE_OBJECT_DIRECTORIES"):
+        env.pop(key, None)
+    return env
 
 COMMAND_DIR = Path(".agentic/commands")
 CURRENT_YAML = COMMAND_DIR / "current.yaml"
@@ -166,7 +174,40 @@ def script_sha256(path: Path = CURRENT_SCRIPT) -> str:
 
 
 def current_branch() -> str:
-    proc = subprocess.run(["git", "branch", "--show-current"], text=True, capture_output=True, check=False)
+    # Do not let inherited Git environment or an enclosing repository leak into
+    # temporary test directories. For this runner, the current directory must
+    # itself be a Git worktree root or an unknown branch is safer.
+    cwd = Path.cwd().resolve()
+    if not (cwd / ".git").exists():
+        return "unknown"
+
+    inside = subprocess.run(
+        ["git", "rev-parse", "--is-inside-work-tree"],
+        text=True,
+        capture_output=True,
+        check=False,
+        env=_clean_git_env(),
+    )
+    if inside.returncode != 0 or inside.stdout.strip() != "true":
+        return "unknown"
+
+    top_level = subprocess.run(
+        ["git", "rev-parse", "--show-toplevel"],
+        text=True,
+        capture_output=True,
+        check=False,
+        env=_clean_git_env(),
+    )
+    if top_level.returncode != 0 or Path(top_level.stdout.strip()).resolve() != cwd:
+        return "unknown"
+
+    proc = subprocess.run(
+        ["git", "branch", "--show-current"],
+        text=True,
+        capture_output=True,
+        check=False,
+        env=_clean_git_env(),
+    )
     if proc.returncode != 0:
         return "unknown"
     return proc.stdout.strip() or "unknown"

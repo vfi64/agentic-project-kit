@@ -5,7 +5,7 @@ import subprocess
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
-from agentic_project_kit.transfer_repo_actions import branch_create, branch_delete, branch_switch, commit_paths, fetch_origin, head_sha, pr_merge_safe, pr_wait_ci, post_merge_check, pull_current, repo_diff, repo_log, repo_status
+from agentic_project_kit.transfer_repo_actions import admin_refresh_pr, branch_create, branch_delete, branch_switch, commit_paths, fetch_origin, head_sha, pr_merge_safe, pr_wait_ci, post_merge_check, pull_current, repo_diff, repo_log, repo_status
 
 
 def _init_repo(path):
@@ -34,10 +34,47 @@ def test_commit_paths(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     (tmp_path / "file.txt").write_text("content\n", encoding="utf-8")
 
+    result = commit_paths("Add file", ["file.txt"], allow_main=True)
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+
+
+def test_commit_paths_refuses_main_by_default(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "file.txt").write_text("content\n", encoding="utf-8")
+
+    result = commit_paths("Add file", ["file.txt"])
+
+    assert result.result_status == "FAIL"
+    assert result.returncode == 2
+    assert "Refusing to commit directly on main" in result.stderr
+
+
+def test_commit_paths_allows_feature_branch_by_default(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    branch_create("feature/commit-ok", start_point="main")
+    (tmp_path / "file.txt").write_text("content\n", encoding="utf-8")
+
     result = commit_paths("Add file", ["file.txt"])
 
     assert result.result_status == "PASS"
     assert result.returncode == 0
+
+
+def test_transfer_commit_cli_supports_allow_main(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "file.txt").write_text("content\n", encoding="utf-8")
+
+    blocked = CliRunner().invoke(app, ["transfer", "commit", "--message", "Add file", "--path", "file.txt"])
+    allowed = CliRunner().invoke(app, ["transfer", "commit", "--message", "Add file", "--path", "file.txt", "--allow-main"])
+
+    assert blocked.exit_code != 0
+    assert "Refusing to commit directly on main" in blocked.stdout
+    assert allowed.exit_code == 0
 
 
 def test_transfer_branch_create_cli(tmp_path, monkeypatch):
@@ -261,7 +298,69 @@ def test_post_merge_check_detects_refresh_required(tmp_path, monkeypatch):
 
     assert result.result_status == "PASS"
     assert result.returncode == 0
-    assert "administrative handoff refresh" in result.next_action
+    assert "admin-refresh-pr" in result.next_action
+    assert "--allow-main" in result.next_action
+
+
+def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    calls = []
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command == ["git", "status", "--short"]:
+            status_count = sum(1 for item in calls if item == ["git", "status", "--short"])
+            return subprocess.CompletedProcess(command, 0, "" if status_count == 1 else " M .agentic/handoff_state.yaml\n", "")
+        if command == ["git", "switch", "-c", "docs/post-pr123-handoff-refresh", "main"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["agentic-kit", "handoff", "refresh", ".agentic/handoff_state.yaml", "--write"]:
+            return subprocess.CompletedProcess(command, 0, "Updated .agentic/handoff_state.yaml\n", "")
+        if command == ["agentic-kit", "handoff", "check"]:
+            return subprocess.CompletedProcess(command, 0, "Persistent handoff state check passed\n", "")
+        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+            return subprocess.CompletedProcess(command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", "")
+        if command == ["git", "add", ".agentic/handoff_state.yaml"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "commit", "-m", "Refresh handoff state after PR123"]:
+            return subprocess.CompletedProcess(command, 0, "[branch abc123] Refresh handoff state after PR123\n", "")
+        if command == ["git", "push", "-u", "origin", "docs/post-pr123-handoff-refresh"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command[:4] == ["gh", "pr", "create", "--base"]:
+            return subprocess.CompletedProcess(command, 0, "https://github.com/vfi64/agentic-project-kit/pull/999\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._agentic_kit_command", lambda: "agentic-kit")
+
+    result = admin_refresh_pr(123)
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert "docs/post-pr123-handoff-refresh" in result.stdout
+    assert "pull/999" in result.stdout
+
+
+def test_admin_refresh_pr_requires_clean_main(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    def fake_run(command, cwd=None):
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command == ["git", "status", "--short"]:
+            return subprocess.CompletedProcess(command, 0, " M file.txt\n", "")
+        return subprocess.CompletedProcess(command, 99, "", "unexpected command\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+
+    result = admin_refresh_pr(123)
+
+    assert result.result_status == "FAIL"
+    assert "dirty worktree" in result.stderr
 
 
 def test_transfer_post_merge_check_cli_help(tmp_path, monkeypatch):
