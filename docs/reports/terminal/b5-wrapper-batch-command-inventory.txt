@@ -1,0 +1,100 @@
+### B5 WRAPPER COMMAND INVENTORY ###
+Sa. 30 Mai 2026 18:39:50 CEST
+
+### BRANCH / STATUS ###
+feature/b5-git-pr-wrapper-batch
+7776bcd Inspect wrapper batch surface for B5
+5707a29 Refresh handoff state after PR947 (#948)
+1261ff0 Add B4 transfer PR wrapper MVP (#947)
+?? docs/reports/terminal/b5-wrapper-batch-command-inventory.txt
+
+### TRANSFER COMMANDS FOUND ###
+│ --help          Show this message and exit.                                                     │
+│ closeout                                                                                        │
+│ remote-next                                                                                     │
+│ pr-status                                                                                       │
+│ run-local                                                                                       │
+│ state                                                                                           │
+│ status                                                                                          │
+│ inspect                                                                                         │
+│ apply                                                                                           │
+
+### PR COMMANDS FOUND ###
+│ --help          Show this message and exit.                                                     │
+│ closeout-check                                                                                  │
+│ status          Print deterministic PR/CI status and fetch failed logs for red CI.              │
+│ merge-if-green  Merge only when PR checks are green, refs match, and merge state is clean.      │
+│ wait-ci         Wait for pull-request CI; guard merge preparation with --expected-head-sha.     │
+
+### EXISTING WRAPPER-LIKE MODULES ###
+src/agentic_project_kit/github.py
+src/agentic_project_kit/gui_presenter.py
+src/agentic_project_kit/handoff_prompt.py
+src/agentic_project_kit/next_turn_merge_if_green.py
+src/agentic_project_kit/next_turn_pr_status.py
+src/agentic_project_kit/ns_up_pr_completion.py
+src/agentic_project_kit/patch_artifact_preflight.py
+src/agentic_project_kit/post_merge_handoff_refresh.py
+src/agentic_project_kit/pr_cleanup.py
+src/agentic_project_kit/pr_closeout.py
+src/agentic_project_kit/pr_create_or_skip.py
+src/agentic_project_kit/pr_hygiene.py
+src/agentic_project_kit/protected_change_planner.py
+src/agentic_project_kit/release_prep_core.py
+src/agentic_project_kit/rule_preservation.py
+src/agentic_project_kit/transfer_pr_actions.py
+
+
+### EXISTING RELEVANT TESTS ###
+tests/test_control_file_preservation.py
+tests/test_handoff_prompt.py
+tests/test_interpreter_discovery_guard.py
+tests/test_next_turn_merge_if_green.py
+tests/test_next_turn_pr_status.py
+tests/test_ns_interpreter_and_no_exec_guard.py
+tests/test_ns_up_pr_completion.py
+tests/test_patch_artifact_preflight.py
+tests/test_patch_preflight_slice_gate_requirement.py
+tests/test_post_merge_handoff_refresh.py
+tests/test_pr_ci_readiness.py
+tests/test_pr_cleanup.py
+tests/test_pr_closeout.py
+tests/test_pr_hygiene.py
+tests/test_pre_gui_execution_hardening_plan.py
+tests/test_protected_change_planner_ns_route.py
+tests/test_protected_change_planner.py
+tests/test_protected_control_file_preservation_gate.py
+tests/test_release_preflight_phase.py
+tests/test_release_prep_core.py
+tests/test_rule_preservation.py
+tests/test_terminal_remote_preflight.py
+tests/test_transfer_cli.py
+tests/test_transfer_closeout.py
+tests/test_transfer_local_runner.py
+tests/test_transfer_pr_actions.py
+tests/test_transfer_remote_next.py
+tests/test_transfer_runner.py
+tests/test_transfer_state.py
+tests/test_typed_work_orders_pre_gui_docs.py
+tests/test_v031_pre_gui_execution_hardening_contract.py
+tests/test_v036_logged_block_status_propagation.py
+tests/test_v037_final_gui_preparation_closeout.py
+tests/test_v040_gui_presenter_remote_mutation_safety.py
+tests/test_v040_gui_presenter.py
+tests/test_work_order_prepare.py
+
+### PRELIMINARY GAP LIST ###
+present: agentic-kit pr status
+present: agentic-kit pr wait-ci
+present: agentic-kit pr merge-if-green
+present: agentic-kit transfer pr-status
+present: agentic-kit transfer remote-next
+present: agentic-kit transfer closeout
+present: agentic-kit transfer state
+present: agentic-kit transfer run-local
+missing-or-not-yet-standardized: branch create/switch/sync wrapper
+missing-or-not-yet-standardized: commit wrapper
+missing-or-not-yet-standardized: push wrapper
+missing-or-not-yet-standardized: PR create wrapper
+missing-or-not-yet-standardized: branch delete cleanup wrapper
+missing-or-not-yet-standardized: full workflow wrapper combining local gates, protected plan, PR create, wait, merge
