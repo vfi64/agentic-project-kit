@@ -1,1 +1,1 @@
-docs/reports/command_runs/transfer-remote-next-mvp.md
+docs/reports/command_runs/transfer-closeout-mvp.md

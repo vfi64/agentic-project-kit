@@ -5,6 +5,7 @@ from pathlib import Path
 
 import typer
 
+from agentic_project_kit.transfer_closeout import closeout_transfer
 from agentic_project_kit.transfer_local_runner import run_local_transfer
 from agentic_project_kit.transfer_remote_next import run_remote_next_transfer
 from agentic_project_kit.transfer_runner import (
@@ -36,6 +37,35 @@ def _emit_result(result, json_output: bool) -> None:
         typer.echo(f"returncode={result.returncode}")
         typer.echo(f"report_path={result.report_path}")
         typer.echo(f"message={result.message}")
+
+
+@transfer_app.command("closeout")
+def closeout(
+    no_remove_transfer_dir: bool = typer.Option(
+        False,
+        "--no-remove-transfer-dir",
+        help="Do not remove .agentic/transfer during closeout.",
+    ),
+    json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
+) -> None:
+    try:
+        result = closeout_transfer(Path("."), remove_transfer_dir=not no_remove_transfer_dir)
+    except RuntimeError as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+
+    if json_output:
+        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo(f"result_status={result.result_status}")
+        typer.echo(f"returncode={result.returncode}")
+        typer.echo(f"removed_transfer_dir={result.removed_transfer_dir}")
+        typer.echo(f"latest_command_run_path={result.latest_command_run_path}")
+        typer.echo(f"blocked_dirty_paths={','.join(result.blocked_dirty_paths)}")
+        typer.echo(f"next_action={result.next_action}")
+
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
 
 
 @transfer_app.command("remote-next")
