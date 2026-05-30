@@ -2,6 +2,25 @@
 GUI Deterministic Gatekeeper Plan
 Status: proposed Decision status: proposed
 Scope: planning only Target baseline: post-PR873 main Next release checkpoint: v0.4.4 Product-code changes in this planning PR: none
+Transfer runner MVP contract
+Status: active MVP under agentic-kit transfer
+
+The Basic GUI must remind the assistant/operator on every local file-writing Auftrag that the normal path is not ad-hoc terminal execution. The normal path is:
+
+1. ChatGPT writes a YAML transfer order and .txt payloads.
+2. The user runs agentic-kit transfer inspect.
+3. The user runs agentic-kit transfer apply only after inspection is clean.
+4. The assistant reads docs/reports/command_runs/LATEST_COMMAND_RUN.txt and the referenced report before claiming PASS or planning recovery.
+
+The GUI should render this as a visible control sequence:
+* transfer state,
+* inspect action,
+* apply action,
+* last evidence,
+* blocked/free-terminal warning.
+
+The runner is documented in docs/workflow/TEXT_TRANSFER_RUNNER.md.
+
 Purpose
 This document records the migration plan for turning the GUI from a remote-control surface into a deterministic gatekeeper for repository-backed AI-assisted work.
 The GUI must not become a remote control for the LLM. It must become a deterministic gatekeeper over repository state, evidence, summaries, communication contracts, and allowed actions.
