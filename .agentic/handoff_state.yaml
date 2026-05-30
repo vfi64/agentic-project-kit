@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: bf15490
-  commit_subject: Add transfer remote-next command (#943)
+  commit: 3b1a18f
+  commit_subject: Add transfer closeout command (#945)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
