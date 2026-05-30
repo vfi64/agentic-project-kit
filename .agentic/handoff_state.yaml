@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 5d204f1
-  commit_subject: 'Merge pull request #959 from vfi64/feature/b10-transfer-wrapper-completion'
+  commit: b79f33d
+  commit_subject: 'Merge pull request #961 from vfi64/feature/b11-safe-admin-refresh-flow'
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
