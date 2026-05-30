@@ -186,7 +186,7 @@ def pr_wait_ci(
         str(pr_number),
         "--timeout-seconds",
         str(timeout_seconds),
-        "--poll-seconds",
+        "--interval-seconds",
         str(poll_seconds),
     ]
     if expected_head_sha:
