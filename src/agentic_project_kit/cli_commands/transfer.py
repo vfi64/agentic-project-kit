@@ -9,6 +9,7 @@ from agentic_project_kit.transfer_closeout import closeout_transfer
 from agentic_project_kit.transfer_local_runner import run_local_transfer
 from agentic_project_kit.transfer_pr_actions import pr_status_transfer
 from agentic_project_kit.transfer_remote_next import run_remote_next_transfer
+from agentic_project_kit.transfer_repo_actions import branch_create, branch_switch, commit_paths, pr_create, push_current, result_json
 from agentic_project_kit.transfer_runner import (
     DEFAULT_INBOX,
     apply_transfer_order,
@@ -91,6 +92,83 @@ def remote_next(
 
     if result.local_run.returncode != 0:
         raise typer.Exit(code=result.local_run.returncode)
+
+
+
+@transfer_app.command("branch-create")
+def branch_create_command(
+    branch: str = typer.Argument(..., help="Branch name to create."),
+    start_point: str = typer.Option("main", help="Start point for the new branch."),
+    push: bool = typer.Option(False, "--push", help="Push the new branch and set upstream."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = branch_create(branch, start_point=start_point, push=push)
+    if json_output:
+        typer.echo(result_json(result))
+    else:
+        typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("branch-switch")
+def branch_switch_command(
+    branch: str = typer.Argument(..., help="Branch name to switch to."),
+    pull: bool = typer.Option(False, "--pull", help="Fast-forward pull from origin after switching."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = branch_switch(branch, pull=pull)
+    if json_output:
+        typer.echo(result_json(result))
+    else:
+        typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("commit")
+def commit_command(
+    message: str = typer.Option(..., "--message", "-m", help="Commit message."),
+    path: list[str] = typer.Option([], "--path", help="Path to add before commit. Repeatable."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = commit_paths(message, list(path))
+    if json_output:
+        typer.echo(result_json(result))
+    else:
+        typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("push-current")
+def push_current_command(
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = push_current()
+    if json_output:
+        typer.echo(result_json(result))
+    else:
+        typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("pr-create")
+def pr_create_command(
+    base: str = typer.Option("main", "--base", help="Base branch."),
+    head: str = typer.Option(..., "--head", help="Head branch."),
+    title: str = typer.Option(..., "--title", help="Pull request title."),
+    body: str = typer.Option("", "--body", help="Pull request body."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = pr_create(base=base, head=head, title=title, body=body)
+    if json_output:
+        typer.echo(result_json(result))
+    else:
+        typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
 
 
 @transfer_app.command("pr-status")
