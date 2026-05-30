@@ -240,5 +240,36 @@ def pr_merge_safe(
     return _result("pr-merge-safe", command, completed, "Sync main and run post-merge handoff refresh status.")
 
 
+def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
+    branch_command = ["git", "branch", "--show-current"]
+    branch_completed = _run(branch_command)
+    if branch_completed.returncode != 0:
+        return _result("post-merge-check", branch_command, branch_completed, "Inspect repository branch state.")
+
+    branch = branch_completed.stdout.strip()
+    if branch != main_branch:
+        completed = subprocess.CompletedProcess(
+            branch_command,
+            2,
+            branch_completed.stdout,
+            f"Expected branch {main_branch} before post-merge lifecycle check. Current branch: {branch}\n",
+        )
+        return _result("post-merge-check", branch_command, completed, f"Switch to {main_branch} and sync before post-merge check.")
+
+    command = [_agentic_kit_command(), "handoff", "post-merge-refresh-status"]
+    completed = _run(command)
+    if completed.returncode != 0:
+        return _result("post-merge-check", command, completed, "Inspect handoff refresh status failure before product work.")
+
+    if "result=NOOP" in completed.stdout:
+        next_action = "Continue without administrative handoff refresh."
+    elif "result=REFRESH_REQUIRED" in completed.stdout:
+        next_action = "Create and merge an administrative handoff refresh before product work."
+    else:
+        next_action = "Inspect post-merge handoff refresh status output before continuing."
+
+    return _result("post-merge-check", command, completed, next_action)
+
+
 def result_json(result: RepoActionResult) -> str:
     return json.dumps(result.as_json_data(), indent=2, sort_keys=True)

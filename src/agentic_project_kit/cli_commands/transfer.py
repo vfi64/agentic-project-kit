@@ -18,6 +18,7 @@ from agentic_project_kit.transfer_repo_actions import (
     pr_create,
     pr_merge_safe,
     pr_wait_ci,
+    post_merge_check,
     pull_current,
     push_current,
     repo_diff,
@@ -213,6 +214,17 @@ def pr_merge_safe_command(
         merge_method=merge_method,
         no_verify_main=no_verify_main,
     )
+    typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("post-merge-check")
+def post_merge_check_command(
+    main_branch: str = typer.Option("main", "--main-branch", help="Expected current branch after merge."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = post_merge_check(main_branch=main_branch)
     typer.echo(result_json(result))
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
