@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 482ee33
-  commit_subject: Add transfer run-local command (#941)
+  commit: bf15490
+  commit_subject: Add transfer remote-next command (#943)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
