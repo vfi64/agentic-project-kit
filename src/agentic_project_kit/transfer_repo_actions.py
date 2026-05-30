@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sys
 import subprocess
 from dataclasses import dataclass, asdict
 from pathlib import Path
@@ -18,6 +19,13 @@ class RepoActionResult:
 
     def as_json_data(self) -> dict:
         return asdict(self)
+
+
+def _agentic_kit_command() -> str:
+    candidate = Path(sys.executable).parent / "agentic-kit"
+    if candidate.exists():
+        return str(candidate)
+    return "agentic-kit"
 
 
 def _run(command: list[str], *, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
@@ -110,6 +118,107 @@ def pr_create(*, base: str, head: str, title: str, body: str) -> RepoActionResul
     ]
     completed = _run(command)
     return _result("pr-create", command, completed, "Run agentic-kit transfer pr-status on the created PR.")
+
+
+
+def repo_status(*, short: bool = True) -> RepoActionResult:
+    command = ["git", "status", "--short"] if short else ["git", "status"]
+    completed = _run(command)
+    return _result("repo-status", command, completed, "Inspect changes, commit explicit paths, or clean the worktree.")
+
+
+def repo_log(limit: int = 5) -> RepoActionResult:
+    command = ["git", "log", f"-{limit}", "--oneline"]
+    completed = _run(command)
+    return _result("repo-log", command, completed, "Use commit SHAs for guarded PR or merge work.")
+
+
+def repo_diff(*, cached: bool = False, name_only: bool = False) -> RepoActionResult:
+    command = ["git", "diff"]
+    if cached:
+        command.append("--cached")
+    if name_only:
+        command.append("--name-only")
+    completed = _run(command)
+    return _result("repo-diff", command, completed, "Review the actual diff before committing or protected planning.")
+
+
+def fetch_origin(branch: str = "main") -> RepoActionResult:
+    command = ["git", "fetch", "origin", branch]
+    completed = _run(command)
+    return _result("fetch-origin", command, completed, "Fast-forward pull, switch branch, or inspect PR state.")
+
+
+def pull_current() -> RepoActionResult:
+    branch_completed = _run(["git", "branch", "--show-current"])
+    if branch_completed.returncode != 0:
+        return _result("pull-current", ["git", "branch", "--show-current"], branch_completed, "Inspect repository state.")
+    branch = branch_completed.stdout.strip()
+    if not branch:
+        completed = subprocess.CompletedProcess(["git", "pull"], 2, "", "No current branch detected.\n")
+        return _result("pull-current", ["git", "pull"], completed, "Switch to a named branch first.")
+    command = ["git", "pull", "--ff-only", "origin", branch]
+    completed = _run(command)
+    return _result("pull-current", command, completed, "Run transfer state or continue with queued work.")
+
+
+def branch_delete(branch: str, *, remote: bool = False, force: bool = False) -> RepoActionResult:
+    if remote:
+        command = ["git", "push", "origin", "--delete", branch]
+        completed = _run(command)
+        return _result("branch-delete", command, completed, "Inspect local and remote branch state.")
+    command = ["git", "branch", "-D" if force else "-d", branch]
+    completed = _run(command)
+    return _result("branch-delete", command, completed, "Inspect local branch state.")
+
+
+def pr_wait_ci(
+    pr_number: int,
+    *,
+    expected_head_sha: str = "",
+    timeout_seconds: int = 300,
+    poll_seconds: int = 10,
+) -> RepoActionResult:
+    command = [
+        _agentic_kit_command(),
+        "pr",
+        "wait-ci",
+        str(pr_number),
+        "--timeout-seconds",
+        str(timeout_seconds),
+        "--interval-seconds",
+        str(poll_seconds),
+    ]
+    if expected_head_sha:
+        command.extend(["--expected-head-sha", expected_head_sha])
+    completed = _run(command)
+    return _result("pr-wait-ci", command, completed, "Run transfer pr-status or merge-if-green after CI is green.")
+
+
+def pr_merge_safe(
+    pr_number: int,
+    *,
+    expected_head_sha: str,
+    main_branch: str = "main",
+    merge_method: str = "squash",
+    no_verify_main: bool = False,
+) -> RepoActionResult:
+    command = [
+        _agentic_kit_command(),
+        "pr",
+        "merge-if-green",
+        str(pr_number),
+        "--expected-head-sha",
+        expected_head_sha,
+        "--main-branch",
+        main_branch,
+        "--merge-method",
+        merge_method,
+    ]
+    if no_verify_main:
+        command.append("--no-verify-main")
+    completed = _run(command)
+    return _result("pr-merge-safe", command, completed, "Sync main and run post-merge handoff refresh status.")
 
 
 def result_json(result: RepoActionResult) -> str:

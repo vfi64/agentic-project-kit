@@ -9,7 +9,22 @@ from agentic_project_kit.transfer_closeout import closeout_transfer
 from agentic_project_kit.transfer_local_runner import run_local_transfer
 from agentic_project_kit.transfer_pr_actions import pr_status_transfer
 from agentic_project_kit.transfer_remote_next import run_remote_next_transfer
-from agentic_project_kit.transfer_repo_actions import branch_create, branch_switch, commit_paths, pr_create, push_current, result_json
+from agentic_project_kit.transfer_repo_actions import (
+    branch_create,
+    branch_delete,
+    branch_switch,
+    commit_paths,
+    fetch_origin,
+    pr_create,
+    pr_merge_safe,
+    pr_wait_ci,
+    pull_current,
+    push_current,
+    repo_diff,
+    repo_log,
+    repo_status,
+    result_json,
+)
 from agentic_project_kit.transfer_runner import (
     DEFAULT_INBOX,
     apply_transfer_order,
@@ -93,6 +108,114 @@ def remote_next(
     if result.local_run.returncode != 0:
         raise typer.Exit(code=result.local_run.returncode)
 
+
+
+@transfer_app.command("repo-status")
+def repo_status_command(
+    short: bool = typer.Option(True, "--short/--full", help="Use short git status by default."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = repo_status(short=short)
+    typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("repo-log")
+def repo_log_command(
+    limit: int = typer.Option(5, "--limit", "-n", min=1, help="Number of commits to show."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = repo_log(limit=limit)
+    typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("repo-diff")
+def repo_diff_command(
+    cached: bool = typer.Option(False, "--cached", help="Show staged diff."),
+    name_only: bool = typer.Option(False, "--name-only", help="Show only changed path names."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = repo_diff(cached=cached, name_only=name_only)
+    typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("fetch-origin")
+def fetch_origin_command(
+    branch: str = typer.Option("main", "--branch", help="Remote branch to fetch from origin."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = fetch_origin(branch)
+    typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("pull-current")
+def pull_current_command(
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = pull_current()
+    typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("branch-delete")
+def branch_delete_command(
+    branch: str = typer.Argument(..., help="Branch name to delete."),
+    remote: bool = typer.Option(False, "--remote", help="Delete branch on origin instead of locally."),
+    force: bool = typer.Option(False, "--force", help="Force local branch deletion with -D."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = branch_delete(branch, remote=remote, force=force)
+    typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("pr-wait-ci")
+def pr_wait_ci_command(
+    pr_number: int = typer.Argument(..., help="Pull request number to wait for."),
+    expected_head_sha: str = typer.Option("", "--expected-head-sha", help="Expected PR head SHA."),
+    timeout_seconds: int = typer.Option(300, "--timeout-seconds", min=1, help="Maximum wait time."),
+    poll_seconds: int = typer.Option(10, "--poll-seconds", min=1, help="Polling interval."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = pr_wait_ci(
+        pr_number,
+        expected_head_sha=expected_head_sha,
+        timeout_seconds=timeout_seconds,
+        poll_seconds=poll_seconds,
+    )
+    typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("pr-merge-safe")
+def pr_merge_safe_command(
+    pr_number: int = typer.Argument(..., help="Pull request number to merge safely."),
+    expected_head_sha: str = typer.Option(..., "--expected-head-sha", help="Expected PR head SHA."),
+    main_branch: str = typer.Option("main", "--main-branch", help="Expected base branch."),
+    merge_method: str = typer.Option("squash", "--merge-method", help="GitHub merge method."),
+    no_verify_main: bool = typer.Option(False, "--no-verify-main", help="Skip post-merge main verification."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = pr_merge_safe(
+        pr_number,
+        expected_head_sha=expected_head_sha,
+        main_branch=main_branch,
+        merge_method=merge_method,
+        no_verify_main=no_verify_main,
+    )
+    typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
 
 
 @transfer_app.command("branch-create")
