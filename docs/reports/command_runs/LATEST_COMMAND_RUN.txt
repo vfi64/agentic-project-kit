@@ -1,1 +1,1 @@
-docs/reports/command_runs/slice-a-transfer-state.md
+docs/reports/command_runs/transfer-run-local-mvp.md
