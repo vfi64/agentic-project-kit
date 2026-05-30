@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 47f7bca
-  commit_subject: Add transfer post-merge lifecycle check (#957)
+  commit: 5d204f1
+  commit_subject: 'Merge pull request #959 from vfi64/feature/b10-transfer-wrapper-completion'
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
