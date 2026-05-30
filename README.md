@@ -537,3 +537,4 @@ This repository has maintainer-owned GitHub releases and verified Zenodo archive
 - Verified v0.4.1 version DOI: `10.5281/zenodo.20357657`
 - Verified v0.4.3 version DOI: `10.5281/zenodo.20393329`
 - Verified v0.4.4 version DOI: `10.5281/zenodo.20431326`
+- Verified v0.4.5 version DOI: `10.5281/zenodo.20467371`

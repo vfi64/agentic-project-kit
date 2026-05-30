@@ -167,7 +167,7 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 - Current verified release: 0.4.4.
 - Current release tag: v0.4.4.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
-- Verified Zenodo version DOI: `10.5281/zenodo.20431326`.
+- Verified Zenodo version DOI: `10.5281/zenodo.20467371`.
 - Main contains PR #834 at `fd1e631`.
 - PR #835 added PR834 closeout evidence at `docs/reports/terminal/post-pr836-successor-handoff.log`.
 - Generated handoff safe-state now anchors to PR #834 via `docs/reports/terminal/post-pr836-successor-handoff.md`.
