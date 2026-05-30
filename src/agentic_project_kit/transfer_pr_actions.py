@@ -42,6 +42,24 @@ def pr_status_transfer(
     failed_log_lines: int = 120,
     expected_head_sha: str = "",
 ) -> TransferPrStatusResult:
+    if expected_head_sha and len(expected_head_sha) != 40:
+        return TransferPrStatusResult(
+            schema_version=1,
+            action="pr-status",
+            pr_number=pr_number,
+            result_status="FAIL",
+            returncode=2,
+            decision="red",
+            report=(
+                "HEAD_GUARD\n"
+                f"expected_head_sha={expected_head_sha}\n"
+                "actual_head_sha=(not-fetched)\n"
+                "result=FAIL\n"
+                "message=Expected full 40-character head SHA. Short SHAs are refused for guarded PR actions.\n"
+                "### RESULT: FAIL ###"
+            ),
+            head_ref_oid="",
+        )
     payload = fetch_pr_payload(str(pr_number))
     decision = classify_pr_status(payload, pr=str(pr_number))
     head_ref_oid = str(payload.get("headRefOid") or "")

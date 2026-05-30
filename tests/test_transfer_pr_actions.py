@@ -90,3 +90,73 @@ def test_transfer_pr_status_cli_json(monkeypatch):
     assert result.exit_code == 0
     assert '"decision": "green"' in result.stdout
     assert '"result_status": "PASS"' in result.stdout
+
+def test_pr_status_transfer_rejects_short_expected_head_sha(monkeypatch):
+    calls = []
+
+    def fake_fetch(pr):
+        calls.append(pr)
+        return {"headRefOid": "0" * 40}
+
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.fetch_pr_payload",
+        fake_fetch,
+    )
+
+    result = pr_status_transfer(123, expected_head_sha="abc123")
+
+    assert calls == []
+    assert result.result_status == "FAIL"
+    assert result.returncode == 2
+    assert result.decision == "red"
+    assert result.head_ref_oid == ""
+    assert "full 40-character head SHA" in result.report
+
+
+def test_pr_status_transfer_expected_head_sha_matches(monkeypatch):
+    class Decision:
+        decision = "green"
+
+    head = "a" * 40
+
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.fetch_pr_payload",
+        lambda pr: {"number": pr, "headRefOid": head},
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.classify_pr_status",
+        lambda payload, pr: Decision(),
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.render_decision",
+        lambda decision: "PR green",
+    )
+
+    result = pr_status_transfer(123, expected_head_sha=head)
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert result.head_ref_oid == head
+
+
+def test_transfer_pr_status_cli_rejects_short_expected_head_sha(monkeypatch):
+    calls = []
+
+    def fake_fetch(pr):
+        calls.append(pr)
+        return {"headRefOid": "0" * 40}
+
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.fetch_pr_payload",
+        fake_fetch,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "pr-status", "123", "--expected-head-sha", "abc123"],
+    )
+
+    assert calls == []
+    assert result.exit_code == 2
+    assert "full 40-character head SHA" in result.stdout
+
