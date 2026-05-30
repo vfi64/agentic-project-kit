@@ -123,6 +123,7 @@ class DocMeshRepairResult:
 DOC_MESH_DOCUMENTS: tuple[DocMeshDocument, ...] = (
     DocMeshDocument("README.md", "current-state"),
     DocMeshDocument("CHANGELOG.md", "release-history"),
+    DocMeshDocument("docs/releases/VERIFIED_RELEASES.md", "release-history", required=False),
     DocMeshDocument("CITATION.cff", "current-state"),
     DocMeshDocument("pyproject.toml", "current-state"),
     DocMeshDocument("src/agentic_project_kit/__init__.py", "current-state"),
@@ -452,12 +453,21 @@ def _check_version_consistency(versions: dict[str, str]) -> list[DocMeshFinding]
 
 
 def _extract_verified_dois(content: str) -> dict[str, str]:
-    return {match.group("version"): match.group("doi") for match in _VERIFIED_DOI_PATTERN.finditer(content)}
-
+    dois: dict[str, str] = {}
+    for match in _VERIFIED_DOI_PATTERN.finditer(content):
+        dois[match.group("version")] = match.group("doi")
+    archive_pattern = re.compile(
+        r"`v(?P<version>\d+\.\d+\.\d+)`\s*/\s*`\d+\.\d+\.\d+`:\s*"
+        r"Zenodo version DOI `(?P<doi>10\.5281/zenodo\.\d+)`"
+    )
+    for match in archive_pattern.finditer(content):
+        dois[match.group("version")] = match.group("doi")
+    return dois
 
 def _check_release_doi_consistency(contents: dict[str, str]) -> list[DocMeshFinding]:
     findings: list[DocMeshFinding] = []
-    readme = contents.get("README.md", "")
+    release_archive_path = "docs/releases/VERIFIED_RELEASES.md"
+    release_archive = contents.get(release_archive_path, "")
     sources = {
         "CHANGELOG.md": contents.get("CHANGELOG.md", ""),
         "CITATION.cff": contents.get("CITATION.cff", ""),
@@ -468,14 +478,14 @@ def _check_release_doi_consistency(contents: dict[str, str]) -> list[DocMeshFind
     for content in sources.values():
         expected.update(_extract_verified_dois(content))
 
-    readme_dois = _extract_verified_dois(readme)
+    archive_dois = _extract_verified_dois(release_archive)
     for version, doi in sorted(expected.items()):
-        if readme_dois.get(version) != doi:
+        if archive_dois.get(version) != doi:
             findings.append(
                 DocMeshFinding(
                     "release-doi-list-mismatch",
-                    "README.md",
-                    f"README DOI list missing or mismatching v{version} -> {doi}",
+                    release_archive_path,
+                    f"release archive DOI list missing or mismatching v{version} -> {doi}",
                 )
             )
     return findings

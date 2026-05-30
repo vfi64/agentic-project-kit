@@ -1,0 +1,57 @@
+### SLICE 1 STAGE AND COMMIT ###
+created_at_utc=2026-05-30T22:04:08Z
+
+### PRECHECK STATUS ###
+ M README.md
+ M docs/DOCUMENTATION_COVERAGE.yaml
+ M docs/releases/VERIFIED_RELEASES.md
+ M src/agentic_project_kit/doc_mesh.py
+?? docs/reports/terminal/slice-1-clean-logs-and-protected-plan.log
+?? docs/reports/terminal/slice-1-diff-and-protected-plan.log
+?? docs/reports/terminal/slice-1-protected-plan-with-diff-file.log
+?? docs/reports/terminal/slice-1-stage-and-commit.log
+?? docs/reports/terminal/slice-1-v0322-archive-normalize-and-gate.log
+
+### REMOVE SUPERSEDED FAILED CLEAN LOG ###
+
+### STAGE INTENDED FILES ONLY ###
+
+### STAGED DIFF NAME ONLY ###
+README.md
+docs/DOCUMENTATION_COVERAGE.yaml
+docs/releases/VERIFIED_RELEASES.md
+docs/reports/terminal/slice-1-diff-and-protected-plan.log
+docs/reports/terminal/slice-1-protected-plan-with-diff-file.log
+docs/reports/terminal/slice-1-v0322-archive-normalize-and-gate.log
+src/agentic_project_kit/doc_mesh.py
+
+### STAGED DIFF STAT ###
+ README.md                                          |  52 +----
+ docs/DOCUMENTATION_COVERAGE.yaml                   |   8 +-
+ docs/releases/VERIFIED_RELEASES.md                 |  12 +
+ .../terminal/slice-1-diff-and-protected-plan.log   | 254 +++++++++++++++++++++
+ .../slice-1-protected-plan-with-diff-file.log      |  35 +++
+ .../slice-1-v0322-archive-normalize-and-gate.log   | 135 +++++++++++
+ src/agentic_project_kit/doc_mesh.py                |  24 +-
+ 7 files changed, 464 insertions(+), 56 deletions(-)
+
+### VERIFY NO UNTRACKED SLICE LOGS REMAIN ###
+A  docs/reports/terminal/slice-1-diff-and-protected-plan.log
+A  docs/reports/terminal/slice-1-protected-plan-with-diff-file.log
+A  docs/reports/terminal/slice-1-v0322-archive-normalize-and-gate.log
+?? docs/reports/terminal/slice-1-stage-and-commit.log
+
+### COMMIT ###
+[docs/readme-release-history-extraction 9bc616f] Move verified DOI history to release archive
+ 7 files changed, 464 insertions(+), 56 deletions(-)
+ create mode 100644 docs/reports/terminal/slice-1-diff-and-protected-plan.log
+ create mode 100644 docs/reports/terminal/slice-1-protected-plan-with-diff-file.log
+ create mode 100644 docs/reports/terminal/slice-1-v0322-archive-normalize-and-gate.log
+
+### POST-COMMIT STATUS ###
+?? docs/reports/terminal/slice-1-stage-and-commit.log
+9bc616f Move verified DOI history to release archive
+
+### RESULT SUMMARY ###
+commit_rc=0
+overall=PASS
