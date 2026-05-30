@@ -164,8 +164,8 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 
 ## Current State
 
-- Current verified release: 0.4.4.
-- Current release tag: v0.4.4.
+- Current verified release: 0.4.5.
+- Current release tag: v0.4.5.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified Zenodo version DOI: `10.5281/zenodo.20467371`.
 - Main contains PR #834 at `fd1e631`.
