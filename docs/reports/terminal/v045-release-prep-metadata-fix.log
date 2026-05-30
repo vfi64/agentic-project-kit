@@ -1,0 +1,114 @@
+### V0.4.5 RELEASE PREP METADATA FIX ###
+created_at=2026-05-30T20:11:38Z
+
+### RELEASE CHECK ###
+Release state check for target v0.4.5
+
+[PASS] semantic version: 0.4.5 is valid
+[PASS] pyproject version: found text: version = "0.4.5"
+[PASS] package __version__: found text: __version__ = "0.4.5"
+[PASS] CHANGELOG version: found text: v0.4.5
+[PASS] README version: found text: Version `0.4.5`
+[PASS] CITATION version: found text: version: 0.4.5
+[PASS] STATUS version: found text: Current version: 0.4.5
+[PASS] CURRENT_HANDOFF version: found text: Current version: 0.4.5
+[PASS] local tag unused: tag is unused: v0.4.5
+[PASS] remote tag unused: remote tag is unused: v0.4.5
+[PASS] GitHub release unused: GitHub release is absent: v0.4.5
+[PASS] release publish readiness: remote tag and GitHub release absence verified
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+
+
+### DOCS CHECK ###
+Agentic project check passed
+
+### LOCAL GATES ###
+........................................................................ [  5%]
+........................................................................ [ 10%]
+........................................................................ [ 16%]
+........................................................................ [ 21%]
+........................................................................ [ 26%]
+........................................................................ [ 32%]
+........................................................................ [ 37%]
+........................................................................ [ 43%]
+........................................................................ [ 48%]
+........................................................................ [ 53%]
+........................................................................ [ 59%]
+........................................................................ [ 64%]
+........................................................................ [ 69%]
+........................................................................ [ 75%]
+........................................................................ [ 80%]
+........................................................................ [ 86%]
+........................................................................ [ 91%]
+........................................................................ [ 96%]
+...........................................                              [100%]
+1339 passed in 15.96s
+All checks passed!
+
+### PACKAGE BUILD CHECK ###
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for sdist...
+* Building sdist...
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - hatchling>=1.25
+* Getting build dependencies for wheel...
+* Building wheel...
+Successfully built agentic_project_kit-0.4.5.tar.gz and agentic_project_kit-0.4.5-py3-none-any.whl
+Checking dist/agentic_project_kit-0.4.5-py3-none-any.whl: [32mPASSED[0m
+Checking dist/agentic_project_kit-0.4.5.tar.gz: [32mPASSED[0m
+
+### REPO STATUS ###
+{
+  "action": "repo-status",
+  "command": [
+    "git",
+    "status",
+    "--short"
+  ],
+  "next_action": "Inspect changes, commit explicit paths, or clean the worktree.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": " M CHANGELOG.md\n M CITATION.cff\n M README.md\n M docs/STATUS.md\n M docs/handoff/CURRENT_HANDOFF.md\n M pyproject.toml\n M src/agentic_project_kit/__init__.py\n?? docs/reports/terminal/v045-release-prep-metadata-fix.log\n?? docs/reports/terminal/v045-release-prep-metadata.log\n"
+}
+{
+  "action": "repo-diff",
+  "command": [
+    "git",
+    "diff",
+    "--name-only"
+  ],
+  "next_action": "Review the actual diff before committing or protected planning.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "CHANGELOG.md\nCITATION.cff\nREADME.md\ndocs/STATUS.md\ndocs/handoff/CURRENT_HANDOFF.md\npyproject.toml\nsrc/agentic_project_kit/__init__.py\n"
+}
+
+### RESULT SUMMARY ###
+release_rc=0
+docs_rc=0
+pytest_rc=0
+ruff_rc=0
+build_rc=0
+twine_rc=0
+overall=PASS
