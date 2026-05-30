@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: d384e16
-  commit_subject: 'Merge pull request #967 from vfi64/docs/v045-current-state-release-line-fix'
+  commit: 0ab2f47
+  commit_subject: 'Merge pull request #968 from vfi64/docs/post-pr967-handoff-refresh'
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -85,20 +85,23 @@ safe_state:
   - 892
   - 894
   - 897
+  - 968
 release:
-  current_version: 0.4.4
-  previous_version: 0.4.3
-  tag: v0.4.4
+  current_version: 0.4.5
+  previous_version: 0.4.4
+  tag: v0.4.5
   github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
-  zenodo_version_doi: 10.5281/zenodo.20431326
+  zenodo_version_doi: 10.5281/zenodo.20467371
   post_release_check: PASS
-  post_release_evidence: docs/reports/terminal/v044-post-release-verify.log
+  post_release_evidence: docs/reports/terminal/v045-doi-metadata-update.log
 open_items:
   prs: []
   next_expected_chat_action: Continue after PR892 with post-merge gate visibility
     follow-up work only after the post-merge refresh status gate reports NOOP.
 completed_since_previous_handoff:
+- 'PR #968 refreshed handoff state after README release-history extraction and v0.4.5
+  DOI closeout.'
 - 'PR #897 merged standard summary validator hardening before this administrative
   handoff refresh.'
 - 'PR #894 merged post-merge gate bootstrap visibility documentation before this administrative
@@ -267,6 +270,10 @@ current_capabilities:
 policies:
   no_copy_terminal_policy: .agentic/no_copy_terminal_policy.yaml
   control_file_preservation: .agentic/control_file_preservation.yaml
+  test_bound_anchors:
+  - use d for log-backed PASS and f for log-backed FAIL
+  - nested quote-based code generation
+  - nested shell/Python quote layers
 rules:
 - id: remote-first-no-guess
   status: active
@@ -374,18 +381,26 @@ recent_failure_patterns:
     OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and RESULT
     marker.
 next_allowed_tasks:
-- id: tkinter-workbench-gui-slice-1
-  title: Continue with the smallest Tkinter workbench GUI slice from docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
-    after PR834 closeout evidence is inspected.
+- id: readme-release-history-extraction-follow-up
+  title: Continue only with the next smallest README release-history extraction follow-up
+    if README size or DOI-history drift reappears.
   priority: 1
-- id: failure-mode-review-automation-slice-1
-  title: Continue with the smallest failure-mode review automation slice from docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
-    after PR834 closeout evidence is inspected.
+- id: inspect-selected-dead-code-slice
+  title: Remove or justify inspect_selected() dead code in one isolated, test-backed
+    slice.
   priority: 2
-- id: release-evidence-kernel-hardening-follow-up
-  title: Use only a small release/evidence-kernel hardening follow-up if freshness
-    or evidence drift reappears.
+- id: doctor-absolute-path-gate-slice
+  title: Add the missing doctor gate for absolute path leakage in one isolated, test-backed
+    slice.
   priority: 3
+- id: cockpit-action-result-enum-slice
+  title: Replace CockpitActionResult string literal result constants with an enum
+    in one isolated, test-backed slice.
+  priority: 4
+- id: tkinter-workbench-gui-slice-1
+  title: Resume the smallest Tkinter workbench GUI slice only after current-state
+    and handoff freshness are clean.
+  priority: 5
 blocked_until_closeout:
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
@@ -400,14 +415,17 @@ blocked_until_closeout:
 - Treating helper-local PASS as slice PASS without slice-gate evidence
 - Gatekeeper product work before post-PR888 handoff refresh is merged and verified
 - Treating helper-local PASS as slice PASS without patch-preflight slice-gate evidence
-first_instruction: Start the next chat from the fresh post-PR911 successor handoff
-  prompt and obey agentic-kit handoff post-merge-refresh-status before product work.
+first_instruction: Start the next chat from the fresh v0.4.5 successor handoff after
+  PR968 and obey agentic-kit handoff post-merge-refresh-status before product work.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr911.md
-# preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
-# preservation-anchor: nested shell/Python quote layers
+  latest_successor_prompt: docs/reports/terminal/v045-successor-chat-handoff-after-pr968.md
+next_step:
+  first_instruction: Start the next chat from the fresh v0.4.5 successor handoff after
+    PR968 and obey agentic-kit handoff post-merge-refresh-status before product work.
+evidence:
+  latest_successor_prompt: docs/reports/terminal/v045-successor-chat-handoff-after-pr968.md

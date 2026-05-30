@@ -1,0 +1,143 @@
+### SLICE 0C FINAL HANDOFF PROMPT CLEAN CHECK ###
+created_at_utc=2026-05-30T21:22:26Z
+
+### CLEAN INTERMEDIATE DIAGNOSE LOGS ###
+
+### PRECHECK ###
+{
+  "branch": "main",
+  "capabilities": {
+    "closeout_last_run": false,
+    "diagnose": true,
+    "refresh_rules": true,
+    "run_next_command": false
+  },
+  "closeout": {
+    "dirty_worktree": true,
+    "pending_transfer_order": false
+  },
+  "created_at": "2026-05-30T21:22:26.375298+00:00",
+  "head": "0ab2f47",
+  "last_result": {
+    "exists": true,
+    "report_path": "docs/reports/command_runs/transfer-closeout-mvp.md"
+  },
+  "next_action": "Review or clean the worktree before running another transfer action.",
+  "primary_state": "BLOCKED",
+  "reasons": [
+    "dirty_worktree"
+  ],
+  "repo": "vfi64/agentic-project-kit",
+  "schema_version": 1
+}
+{
+  "action": "repo-status",
+  "command": [
+    "git",
+    "status",
+    "--short"
+  ],
+  "next_action": "Inspect changes, commit explicit paths, or clean the worktree.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": " M .agentic/handoff_state.yaml\n?? docs/reports/terminal/slice-0c-final-handoff-prompt-clean-check.log\n?? docs/reports/terminal/v045-successor-chat-handoff-after-pr968.md\n"
+}
+
+### HANDOFF CHECK ###
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+
+### REGENERATE SUCCESSOR PROMPT ###
+prompt_returncode=0
+prompt_path=docs/reports/terminal/v045-successor-chat-handoff-after-pr968.md
+WARNING: this successor handoff prompt may be stale.=False
+post-PR911=False
+PR968=True
+0ab2f47=True
+0.4.5=True
+10.5281/zenodo.20467371=True
+
+### POST MERGE REFRESH STATUS ###
+POST_MERGE_HANDOFF_REFRESH
+current_head=0ab2f47
+freshness_warning_present=False
+refresh_required=False
+latest_successor_prompt=docs/reports/terminal/v045-successor-chat-handoff-after-pr968.md
+result=NOOP
+next_safe_action=continue_without_post_merge_handoff_refresh
+
+### POST RELEASE CHECK ###
+Post-release check for target v0.4.5
+
+[PASS] GitHub release: GitHub release exists: v0.4.5
+[PASS] Zenodo concept DOI: found DOI: 10.5281/zenodo.20101359
+[PASS] Zenodo version DOI: verified version DOI for v0.4.5: 10.5281/zenodo.20467371
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+
+
+### FINAL WARNING GREP ###
+warning_present=False
+
+### REPO STATUS / DIFF ###
+{
+  "action": "repo-status",
+  "command": [
+    "git",
+    "status",
+    "--short"
+  ],
+  "next_action": "Inspect changes, commit explicit paths, or clean the worktree.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": " M .agentic/handoff_state.yaml\n?? docs/reports/terminal/slice-0c-final-handoff-prompt-clean-check.log\n?? docs/reports/terminal/v045-successor-chat-handoff-after-pr968.md\n"
+}
+{
+  "action": "repo-diff",
+  "command": [
+    "git",
+    "diff",
+    "--name-only"
+  ],
+  "next_action": "Review the actual diff before committing or protected planning.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": ".agentic/handoff_state.yaml\n"
+}
+
+### RESULT SUMMARY ###
+check_rc=0
+prompt_rc=0
+refresh_rc=0
+post_rc=0
+warn_rc=0
+overall=PASS
