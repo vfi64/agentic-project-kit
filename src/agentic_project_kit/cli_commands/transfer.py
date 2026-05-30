@@ -10,6 +10,7 @@ from agentic_project_kit.transfer_local_runner import run_local_transfer
 from agentic_project_kit.transfer_pr_actions import pr_status_transfer
 from agentic_project_kit.transfer_remote_next import run_remote_next_transfer
 from agentic_project_kit.transfer_repo_actions import (
+    admin_refresh_pr,
     branch_create,
     branch_delete,
     branch_switch,
@@ -242,6 +243,18 @@ def post_merge_check_command(
         raise typer.Exit(code=result.returncode)
 
 
+@transfer_app.command("admin-refresh-pr")
+def admin_refresh_pr_command(
+    after_pr: int = typer.Option(..., "--after-pr", help="Merged PR number that requires the administrative handoff refresh."),
+    main_branch: str = typer.Option("main", "--main-branch", help="Main branch to refresh from."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = admin_refresh_pr(after_pr, main_branch=main_branch)
+    typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
 @transfer_app.command("branch-create")
 def branch_create_command(
     branch: str = typer.Argument(..., help="Branch name to create."),
@@ -277,9 +290,10 @@ def branch_switch_command(
 def commit_command(
     message: str = typer.Option(..., "--message", "-m", help="Commit message."),
     path: list[str] = typer.Option([], "--path", help="Path to add before commit. Repeatable."),
+    allow_main: bool = typer.Option(False, "--allow-main", help="Allow committing directly on main. Use only for explicit emergency/admin flows."),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
-    result = commit_paths(message, list(path))
+    result = commit_paths(message, list(path), allow_main=allow_main)
     if json_output:
         typer.echo(result_json(result))
     else:

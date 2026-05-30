@@ -88,10 +88,26 @@ def branch_switch(branch: str, *, pull: bool = False) -> RepoActionResult:
     return _result("branch-switch", command, completed, "Run transfer state or continue with queued work.")
 
 
-def commit_paths(message: str, paths: list[str]) -> RepoActionResult:
+def commit_paths(message: str, paths: list[str], *, allow_main: bool = False) -> RepoActionResult:
     if not paths:
         completed = subprocess.CompletedProcess(["git", "add"], 2, "", "No paths supplied.\n")
         return _result("commit", ["git", "add"], completed, "Provide explicit paths for commit.")
+
+    branch_command = ["git", "branch", "--show-current"]
+    branch_completed = _run(branch_command)
+    if branch_completed.returncode != 0:
+        return _result("commit", branch_command, branch_completed, "Inspect repository branch state before committing.")
+
+    branch = branch_completed.stdout.strip()
+    if branch == "main" and not allow_main:
+        completed = subprocess.CompletedProcess(
+            ["git", "commit", "-m", message],
+            2,
+            "",
+            "Refusing to commit directly on main. Use a branch or pass --allow-main explicitly.\n",
+        )
+        return _result("commit", completed.args, completed, "Create a feature/admin branch before committing.")
+
     add_command = ["git", "add", *paths]
     added = _run(add_command)
     if added.returncode != 0:
@@ -270,11 +286,106 @@ def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
     if "result=NOOP" in completed.stdout:
         next_action = "Continue without administrative handoff refresh."
     elif "result=REFRESH_REQUIRED" in completed.stdout:
-        next_action = "Create and merge an administrative handoff refresh before product work."
+        next_action = (
+            "Run transfer admin-refresh-pr --after-pr <merged-pr-number>. "
+            "Do not commit directly on main unless --allow-main is explicit."
+        )
     else:
         next_action = "Inspect post-merge handoff refresh status output before continuing."
 
     return _result("post-merge-check", command, completed, next_action)
+
+
+def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionResult:
+    branch_command = ["git", "branch", "--show-current"]
+    branch_completed = _run(branch_command)
+    if branch_completed.returncode != 0:
+        return _result("admin-refresh-pr", branch_command, branch_completed, "Inspect repository branch state.")
+
+    branch = branch_completed.stdout.strip()
+    if branch != main_branch:
+        completed = subprocess.CompletedProcess(
+            branch_command,
+            2,
+            branch_completed.stdout,
+            f"Expected branch {main_branch} before admin refresh. Current branch: {branch}\n",
+        )
+        return _result("admin-refresh-pr", branch_command, completed, f"Switch to {main_branch} and sync before admin refresh.")
+
+    status_command = ["git", "status", "--short"]
+    status_completed = _run(status_command)
+    if status_completed.returncode != 0:
+        return _result("admin-refresh-pr", status_command, status_completed, "Inspect worktree status.")
+    if status_completed.stdout.strip():
+        completed = subprocess.CompletedProcess(
+            status_command,
+            2,
+            status_completed.stdout,
+            "Refusing admin refresh with dirty worktree. Commit, clean, or inspect first.\n",
+        )
+        return _result("admin-refresh-pr", status_command, completed, "Start admin refresh from a clean main worktree.")
+
+    refresh_branch = f"docs/post-pr{after_pr}-handoff-refresh"
+    transcript: list[str] = []
+
+    steps = [
+        ["git", "switch", "-c", refresh_branch, main_branch],
+        [_agentic_kit_command(), "handoff", "refresh", ".agentic/handoff_state.yaml", "--write"],
+        [_agentic_kit_command(), "handoff", "check"],
+        [_agentic_kit_command(), "handoff", "post-merge-refresh-status"],
+        ["git", "status", "--short"],
+    ]
+
+    for step in steps:
+        completed = _run(step)
+        transcript.append(f"$ {' '.join(step)}\n{completed.stdout}{completed.stderr}")
+        if completed.returncode != 0:
+            return _result("admin-refresh-pr", step, completed, "Inspect admin refresh step failure before continuing.")
+
+    final_status = _run(["git", "status", "--short"])
+    changed = tuple(line.strip() for line in final_status.stdout.splitlines() if line.strip())
+    allowed = ("M .agentic/handoff_state.yaml",)
+    if changed != allowed:
+        completed = subprocess.CompletedProcess(
+            ["git", "status", "--short"],
+            2,
+            final_status.stdout,
+            "Admin refresh must change only .agentic/handoff_state.yaml.\n",
+        )
+        return _result("admin-refresh-pr", completed.args, completed, "Inspect unexpected admin refresh diff before committing.")
+
+    commit_message = f"Refresh handoff state after PR{after_pr}"
+    more_steps = [
+        ["git", "add", ".agentic/handoff_state.yaml"],
+        ["git", "commit", "-m", commit_message],
+        ["git", "push", "-u", "origin", refresh_branch],
+        [
+            "gh",
+            "pr",
+            "create",
+            "--base",
+            main_branch,
+            "--head",
+            refresh_branch,
+            "--title",
+            commit_message,
+            "--body",
+            f"Administrative handoff-state refresh after PR{after_pr}. No product-code changes.",
+        ],
+    ]
+    for step in more_steps:
+        completed = _run(step)
+        transcript.append(f"$ {' '.join(step)}\n{completed.stdout}{completed.stderr}")
+        if completed.returncode != 0:
+            return _result("admin-refresh-pr", step, completed, "Inspect admin refresh PR creation failure.")
+
+    completed = subprocess.CompletedProcess(
+        ["agentic-kit", "transfer", "admin-refresh-pr", "--after-pr", str(after_pr)],
+        0,
+        "\n".join(transcript),
+        "",
+    )
+    return _result("admin-refresh-pr", completed.args, completed, "Run transfer pr-status on the created admin refresh PR.")
 
 
 def result_json(result: RepoActionResult) -> str:

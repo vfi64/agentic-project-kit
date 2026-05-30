@@ -5,9 +5,18 @@ import subprocess
 import sys
 from pathlib import Path
 
+
 import typer
 
 workflow_app = typer.Typer(help="Run and inspect bounded local workflow handoff states.")
+
+
+def _clean_git_env() -> dict[str, str]:
+    env = os.environ.copy()
+    for key in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_OBJECT_DIRECTORY", "GIT_ALTERNATE_OBJECT_DIRECTORIES"):
+        env.pop(key, None)
+    return env
+
 
 VALID_STATES = {"IDLE", "TEST", "UPLOAD", "CLEANUP", "REQUESTED", "RUNNING", "UPLOADED", "FAILED"}
 STATE_FILE = Path(".agentic/workflow_state")
@@ -119,7 +128,14 @@ def _run_next_step(root: Path, extra_args: list[str] | None = None, env: dict[st
 
 
 def _run_git(root: Path, args: list[str]) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(["git", *args], cwd=root.resolve(), text=True, capture_output=True, check=False)
+    return subprocess.run(
+        ["git", *args],
+        cwd=root.resolve(),
+        text=True,
+        capture_output=True,
+        check=False,
+        env=_clean_git_env(),
+    )
 
 
 def _is_git_repository(root: Path) -> bool:
@@ -130,9 +146,12 @@ def _is_git_repository(root: Path) -> bool:
 
 
 def _working_tree_dirty(root: Path) -> bool:
-    if not _is_git_repository(root):
+    resolved = root.resolve()
+    if not (resolved / ".git").exists():
         return False
-    result = _run_git(root, ["status", "--porcelain"])
+    if not _is_git_repository(resolved):
+        return False
+    result = _run_git(resolved, ["status", "--porcelain"])
     return result.returncode == 0 and bool(result.stdout.strip())
 
 
