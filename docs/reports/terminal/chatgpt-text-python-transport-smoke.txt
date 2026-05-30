@@ -1,0 +1,8 @@
+from pathlib import Path
+
+root = Path('/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit')
+out = root / 'docs' / 'reports' / 'terminal' / 'chatgpt-text-python-transport-smoke.local.txt'
+out.parent.mkdir(parents=True, exist_ok=True)
+out.write_text('TEXT_PYTHON_TRANSPORT_SMOKE: PASS\n', encoding='utf-8')
+print('TEXT_PYTHON_TRANSPORT_SMOKE: PASS')
+print(f'output={out.relative_to(root)}')
