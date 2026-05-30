@@ -22,6 +22,7 @@ from agentic_project_kit.cli_commands.scaffold import scaffold_app
 from agentic_project_kit.cli_commands.slice import slice_app
 from agentic_project_kit.cli_commands.state import state_app
 from agentic_project_kit.cli_commands.todo import todo_app
+from agentic_project_kit.cli_commands.transfer import transfer_app
 from agentic_project_kit.cli_commands.validation import register_validation_commands
 from agentic_project_kit.cli_commands.work_orders import work_orders_app
 from agentic_project_kit.cli_commands.workflow import workflow_app
@@ -58,6 +59,7 @@ app.add_typer(scaffold_app, name="scaffold")
 app.add_typer(slice_app, name="slice")
 app.add_typer(state_app, name="state")
 app.add_typer(todo_app, name="todo")
+app.add_typer(transfer_app, name="transfer")
 
 if __name__ == "__main__":
     app()

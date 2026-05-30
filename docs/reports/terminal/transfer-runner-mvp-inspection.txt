@@ -1,0 +1,444 @@
+### cli.py ###
+import typer
+
+from agentic_project_kit.cli_commands.actions import actions_app
+from agentic_project_kit.cli_commands.boot import boot_app
+from agentic_project_kit.cli_commands.checks import register_check_commands
+from agentic_project_kit.cli_commands.cockpit import cockpit_app
+from agentic_project_kit.cli_commands.evidence import app as evidence_app
+from agentic_project_kit.cli_commands.github import register_github_commands
+from agentic_project_kit.cli_commands.governance import governance_app
+from agentic_project_kit.cli_commands.handoff import handoff_app
+from agentic_project_kit.cli_commands.init import register_init_command
+from agentic_project_kit.cli_commands.pass_already_done import app as pass_already_done_app
+from agentic_project_kit.cli_commands.patterns import patterns_app
+from agentic_project_kit.cli_commands.pr import pr_app, register_pr_closeout_alias
+from agentic_project_kit.cli_commands.pr_hygiene import register_pr_hygiene_command
+from agentic_project_kit.cli_commands.profiles import register_profile_commands
+from agentic_project_kit.cli_commands.release import register_release_commands
+from agentic_project_kit.cli_commands.remote_next import register_remote_next_command
+from agentic_project_kit.cli_commands.rules import register_rules_commands
+from agentic_project_kit.cli_commands.rule_registry import rule_registry_app
+from agentic_project_kit.cli_commands.scaffold import scaffold_app
+from agentic_project_kit.cli_commands.slice import slice_app
+from agentic_project_kit.cli_commands.state import state_app
+from agentic_project_kit.cli_commands.todo import todo_app
+from agentic_project_kit.cli_commands.validation import register_validation_commands
+from agentic_project_kit.cli_commands.work_orders import work_orders_app
+from agentic_project_kit.cli_commands.workflow import workflow_app
+from agentic_project_kit.cli_commands.workflow_guard import workflow_guard_app
+from agentic_project_kit.patch_artifact_preflight import register_patch_preflight_command
+
+app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
+
+register_init_command(app)
+register_profile_commands(app)
+register_pr_hygiene_command(app)
+register_github_commands(app)
+register_check_commands(app)
+register_release_commands(app)
+register_remote_next_command(app)
+register_rules_commands(app)
+register_validation_commands(app)
+register_patch_preflight_command(app)
+app.add_typer(workflow_app, name="workflow")
+app.add_typer(workflow_guard_app, name="workflow-guard")
+app.add_typer(rule_registry_app, name="rule-registry")
+app.add_typer(handoff_app, name="handoff")
+app.add_typer(boot_app, name="boot")
+app.add_typer(pass_already_done_app, name="pass-already-done")
+app.add_typer(actions_app, name="actions")
+app.add_typer(evidence_app, name="evidence")
+app.add_typer(work_orders_app, name="work-order")
+app.add_typer(governance_app, name="governance")
+app.add_typer(pr_app, name="pr")
+register_pr_closeout_alias(app)
+app.add_typer(cockpit_app, name="cockpit")
+app.add_typer(patterns_app, name="patterns")
+app.add_typer(scaffold_app, name="scaffold")
+app.add_typer(slice_app, name="slice")
+app.add_typer(state_app, name="state")
+app.add_typer(todo_app, name="todo")
+
+if __name__ == "__main__":
+    app()
+
+### work_orders cli ###
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import typer
+
+from agentic_project_kit.typed_work_order_queue import (
+    inspect_typed_work_order_queue,
+    render_typed_work_order_queue_status,
+    run_typed_next,
+    typed_next_result_as_json_data,
+    typed_work_order_queue_status_as_json_data,
+)
+from agentic_project_kit.typed_work_order_runner import (
+    load_typed_work_order,
+    run_typed_work_order,
+    typed_work_order_result_as_json_data,
+)
+from agentic_project_kit.work_orders import (
+    check_work_orders,
+    list_work_order_templates,
+    list_work_orders,
+    load_work_order,
+    prepare_work_order,
+    render_work_order,
+    run_work_order,
+)
+
+work_orders_app = typer.Typer(help="Inspect and run repo-backed work orders.")
+
+
+@work_orders_app.command("list")
+def list_command() -> None:
+    for order in list_work_orders():
+        typer.echo(f"{order.work_order_id}\t{order.safety}\t{order.title}")
+
+
+@work_orders_app.command("show")
+def show_command(work_order_id: str) -> None:
+    try:
+        order = load_work_order(work_order_id)
+    except (FileNotFoundError, ValueError) as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+    typer.echo(render_work_order(order))
+
+
+@work_orders_app.command("check")
+def check_command() -> None:
+    errors = check_work_orders()
+    if errors:
+        for error in errors:
+            typer.echo(f"[FAIL] {error}")
+        raise typer.Exit(code=1)
+    typer.echo("Work order contract check passed")
+
+
+@work_orders_app.command("run")
+def run_command(work_order_id: str, execute: bool = typer.Option(False, "--execute", help="Actually run the work order. Omit for dry-run.")) -> None:
+    try:
+        order = load_work_order(work_order_id)
+    except (FileNotFoundError, ValueError) as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+    typer.echo(render_work_order(order))
+    if not execute:
+        typer.echo("Dry run only. Re-run with --execute to run the command.")
+        return
+    result_code = run_work_order(order)
+    typer.echo(f"Work order log written: {order.log_path}")
+    if result_code != 0:
+        raise typer.Exit(code=result_code)
+
+
+
+
+@work_orders_app.command("typed-next")
+def typed_next_command(
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON result."),
+) -> None:
+    result = run_typed_next(Path("."))
+    data = typed_next_result_as_json_data(result)
+    if json_output:
+        typer.echo(json.dumps(data, indent=2, sort_keys=True))
+    else:
+        typer.echo(f"typed_next_status={result.result_status}")
+        typer.echo(f"queue_status={result.queue_status}")
+        typer.echo(f"message={result.message}")
+        if result.terminal_log:
+            typer.echo(f"terminal_log={result.terminal_log}")
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@work_orders_app.command("typed-queue-status")
+def typed_queue_status_command(
+    inbox_path: Path = typer.Option(Path(".agentic/typed_work_orders/inbox"), "--inbox", help="Typed work order inbox directory."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON queue status."),
+) -> None:
+    try:
+        status = inspect_typed_work_order_queue(inbox_path)
+    except ValueError as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=2) from exc
+    if json_output:
+        typer.echo(json.dumps(typed_work_order_queue_status_as_json_data(status), indent=2, sort_keys=True))
+    else:
+        typer.echo(render_typed_work_order_queue_status(status))
+    if status.status == "multiple_commands":
+        raise typer.Exit(code=2)
+
+
+@work_orders_app.command("typed-run")
+def typed_run_command(
+    work_order_path: Path,
+    execute: bool = typer.Option(False, "--execute", help="Actually run the typed work order. Omit for dry-run."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON result."),
+) -> None:
+    try:
+        order = load_typed_work_order(work_order_path)
+    except (FileNotFoundError, ValueError) as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+    if not execute:
+        typer.echo(f"Typed work order: {order.work_order_id}")
+        typer.echo(f"Safety: {order.safety}")
+        typer.echo(f"Steps: {len(order.steps)}")
+        typer.echo("Dry run only. Re-run with --execute to run the typed work order.")
+        return
+    result = run_typed_work_order(order, Path("."))
+    data = typed_work_order_result_as_json_data(result)
+    if json_output:
+        typer.echo(json.dumps(data, indent=2, sort_keys=True))
+    else:
+        typer.echo(f"Typed work order result: {result.result_status}")
+        typer.echo(f"Typed work order log written: {result.terminal_log}")
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@work_orders_app.command("templates")
+def templates() -> None:
+    for template_id in list_work_order_templates():
+        typer.echo(template_id)
+
+
+@work_orders_app.command("prepare")
+def prepare(template_id: str, work_order_id: str, expected_branch: str) -> None:
+    try:
+        path = prepare_work_order(template_id, work_order_id, expected_branch)
+    except (FileNotFoundError, ValueError) as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+    typer.echo(f"Prepared work order: {path}")
+
+### typed runner style ###
+from __future__ import annotations
+
+import json
+import subprocess
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Callable
+
+import yaml
+
+from agentic_project_kit.cockpit import action_result_as_json_data, run_cockpit_action
+
+RESULT_PASS = "PASS"
+RESULT_FAIL = "FAIL"
+RESULT_PENDING = "PENDING"
+RESULT_HARD_FAIL = "HARD-FAIL"
+
+STEP_COMMAND_ARGV = "command_argv"
+STEP_COCKPIT_ACTION = "cockpit_action"
+
+@dataclass(frozen=True)
+class TypedWorkOrderStep:
+    kind: str
+    label: str
+    argv: tuple[str, ...] = ()
+    action_id: str | None = None
+    allow_bounded: bool = False
+
+@dataclass(frozen=True)
+class TypedWorkOrder:
+    work_order_id: str
+    title: str
+    safety: str
+    log_path: str
+    steps: tuple[TypedWorkOrderStep, ...]
+    block_dirty_worktree: bool = True
+
+@dataclass(frozen=True)
+class TypedWorkOrderResult:
+    work_order_id: str
+    result_status: str
+    returncode: int
+    safety: str
+    dirty_state: str
+    terminal_log: str
+    command_report: str | None = None
+    message: str = ""
+    step_results: tuple[dict[str, Any], ...] = field(default_factory=tuple)
+
+CommandRunner = Callable[[tuple[str, ...], Path], subprocess.CompletedProcess[str]]
+
+def _require_string(data: dict[str, Any], key: str) -> str:
+    value = data.get(key)
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"missing or invalid typed work order field: {key}")
+    return value
+
+def _parse_step(data: dict[str, Any]) -> TypedWorkOrderStep:
+    kind = _require_string(data, "kind")
+    label = str(data.get("label") or kind)
+    if kind == STEP_COMMAND_ARGV:
+        argv = data.get("argv")
+        if not isinstance(argv, list) or not argv or not all(isinstance(item, str) and item for item in argv):
+            raise ValueError("command_argv step requires a non-empty argv string list")
+        return TypedWorkOrderStep(kind=kind, label=label, argv=tuple(argv))
+    if kind == STEP_COCKPIT_ACTION:
+        action_id = _require_string(data, "action_id")
+        allow_bounded = bool(data.get("allow_bounded", False))
+        return TypedWorkOrderStep(kind=kind, label=label, action_id=action_id, allow_bounded=allow_bounded)
+    raise ValueError(f"unsupported typed work order step kind: {kind}")
+
+def parse_typed_work_order(data: dict[str, Any]) -> TypedWorkOrder:
+    steps_data = data.get("steps")
+    if not isinstance(steps_data, list) or not steps_data:
+        raise ValueError("typed work order requires at least one step")
+    steps = tuple(_parse_step(step) for step in steps_data)
+    log_path = _require_string(data, "log_path")
+    if not log_path.startswith("docs/reports/terminal/"):
+        raise ValueError("typed work order log_path must be under docs/reports/terminal/")
+    return TypedWorkOrder(
+        work_order_id=_require_string(data, "id"),
+        title=_require_string(data, "title"),
+        safety=_require_string(data, "safety"),
+        log_path=log_path,
+        steps=steps,
+        block_dirty_worktree=bool(data.get("block_dirty_worktree", True)),
+    )
+
+def load_typed_work_order(path: Path) -> TypedWorkOrder:
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    if not isinstance(data, dict):
+        raise ValueError(f"typed work order must be a mapping: {path}")
+    return parse_typed_work_order(data)
+
+def _default_runner(argv: tuple[str, ...], project_root: Path) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(list(argv), cwd=project_root, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+
+def _git_dirty_state(project_root: Path) -> str:
+    result = subprocess.run(["git", "status", "--porcelain"], cwd=project_root, text=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, check=False)
+    if result.returncode != 0:
+        return "unknown"
+    return "dirty" if result.stdout.strip() else "clean"
+
+def typed_work_order_result_as_json_data(result: TypedWorkOrderResult) -> dict[str, Any]:
+    return {
+        "schema_version": 1,
+        "work_order_id": result.work_order_id,
+        "result_status": result.result_status,
+        "returncode": result.returncode,
+        "safety": result.safety,
+        "dirty_state": result.dirty_state,
+        "terminal_log": result.terminal_log,
+        "command_report": result.command_report,
+        "message": result.message,
+        "step_results": list(result.step_results),
+    }
+
+def _write_result_log(order: TypedWorkOrder, project_root: Path, result: TypedWorkOrderResult) -> None:
+    path = project_root / order.log_path
+    path.parent.mkdir(parents=True, exist_ok=True)
+    data = typed_work_order_result_as_json_data(result)
+    lines = [
+        f"Typed work order: {order.work_order_id}",
+        f"Title: {order.title}",
+        f"Safety: {order.safety}",
+        "",
+        "### JSON RESULT ###",
+        json.dumps(data, indent=2, sort_keys=True),
+        "",
+        f"### RESULT: {result.result_status} ###",
+        f"Return code: {result.returncode}",
+        "Terminal bleibt offen. Kein exit am Blockende.",
+    ]
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+def run_typed_work_order(order: TypedWorkOrder, project_root: Path = Path("."), runner: CommandRunner | None = None) -> TypedWorkOrderResult:
+    root = project_root.resolve()
+    dirty_state = _git_dirty_state(root)
+    if order.block_dirty_worktree and dirty_state == "dirty":
+        result = TypedWorkOrderResult(order.work_order_id, RESULT_PENDING, 96, order.safety, dirty_state, order.log_path, message="Dirty worktree blocks typed work order execution.")
+        _write_result_log(order, root, result)
+        return result
+    command_runner = runner if runner is not None else _default_runner
+    step_results: list[dict[str, Any]] = []
+    for step in order.steps:
+        if step.kind == STEP_COMMAND_ARGV:
+            completed = command_runner(step.argv, root)
+            step_results.append({"kind": step.kind, "label": step.label, "argv": list(step.argv), "returncode": completed.returncode, "stdout": completed.stdout, "stderr": completed.stderr})
+            if completed.returncode != 0:
+                result = TypedWorkOrderResult(order.work_order_id, RESULT_FAIL, completed.returncode, order.safety, dirty_state, order.log_path, message=f"Step failed: {step.label}", step_results=tuple(step_results))
+                _write_result_log(order, root, result)
+                return result
+        elif step.kind == STEP_COCKPIT_ACTION:
+            assert step.action_id is not None
+            action_result = run_cockpit_action(step.action_id, root, allow_bounded=step.allow_bounded)
+            action_data = action_result_as_json_data(action_result)
+            step_results.append({"kind": step.kind, "label": step.label, "action_result": action_data})
+            if action_result.result_status != RESULT_PASS:
+                result = TypedWorkOrderResult(order.work_order_id, action_result.result_status, action_result.returncode or 95, order.safety, dirty_state, order.log_path, message=f"Cockpit action failed: {step.action_id}", step_results=tuple(step_results))
+                _write_result_log(order, root, result)
+                return result
+        else:
+            result = TypedWorkOrderResult(order.work_order_id, RESULT_HARD_FAIL, 94, order.safety, dirty_state, order.log_path, message=f"Unsupported step kind: {step.kind}", step_results=tuple(step_results))
+            _write_result_log(order, root, result)
+            return result
+    result = TypedWorkOrderResult(order.work_order_id, RESULT_PASS, 0, order.safety, dirty_state, order.log_path, message="Typed work order executed.", step_results=tuple(step_results))
+    _write_result_log(order, root, result)
+    return result
+
+### work order tests style ###
+from pathlib import Path
+
+from agentic_project_kit.work_order_runner import (
+    render_work_order_run_result,
+    run_validated_work_order,
+)
+
+
+VALID_WORK_ORDER = '# agentic-project-kit work order\nfrom pathlib import Path\n\nprint("hello from work order")\nCOMMAND_HINT = "./ns pr-status 123"\nSUMMARY = "### CANONICAL SUMMARY ###\\n### RESULT: PASS ###\\nTerminal bleibt offen. Kein exit am Blockende.\\n"\n'
+
+
+def test_run_validated_work_order_blocks_missing_file(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    result = run_validated_work_order(
+        work_order_path=Path(".agentic/commands/inbox/next-turn.py"),
+        local_log_path=tmp_path / "local.log",
+        remote_log_path=tmp_path / "remote.log",
+    )
+
+    assert result.validation_ok is False
+    assert result.executed is False
+    assert result.returncode == 1
+    assert "missing work order file" in (tmp_path / "local.log").read_text(
+        encoding="utf-8"
+    )
+    assert not (tmp_path / "remote.log").exists()
+
+
+def test_run_validated_work_order_executes_and_writes_local_log_only(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    work_order = tmp_path / ".agentic/commands/inbox/next-turn.py"
+    work_order.parent.mkdir(parents=True)
+    work_order.write_text(VALID_WORK_ORDER, encoding="utf-8")
+
+    result = run_validated_work_order(
+        work_order_path=work_order,
+        local_log_path=tmp_path / "next-turn-latest-local.log",
+        remote_log_path=tmp_path / "docs/reports/terminal/next-turn-latest.log",
+    )
+
+    rendered = render_work_order_run_result(result)
+    local_log = (tmp_path / "next-turn-latest-local.log").read_text(
+        encoding="utf-8"
+    )
+
+    assert result.validation_ok is True
+    assert result.executed is True
+    assert result.returncode == 0
+    assert "WORK_ORDER_RUN_RESULT" in rendered
+    assert "hello from work order" in local_log
+    assert not (tmp_path / "docs/reports/terminal/next-turn-latest.log").exists()
