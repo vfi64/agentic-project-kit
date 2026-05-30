@@ -5,6 +5,7 @@ from pathlib import Path
 
 import typer
 
+from agentic_project_kit.transfer_local_runner import run_local_transfer
 from agentic_project_kit.transfer_runner import (
     DEFAULT_INBOX,
     apply_transfer_order,
@@ -34,6 +35,29 @@ def _emit_result(result, json_output: bool) -> None:
         typer.echo(f"returncode={result.returncode}")
         typer.echo(f"report_path={result.report_path}")
         typer.echo(f"message={result.message}")
+
+
+@transfer_app.command("run-local")
+def run_local(
+    path: Path = typer.Option(DEFAULT_INBOX, "--path", help="Transfer order path."),
+    json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
+) -> None:
+    try:
+        result = run_local_transfer(Path("."), path)
+    except (FileNotFoundError, ValueError) as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+
+    if json_output:
+        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo(f"transfer_id={result.transfer_id}")
+        typer.echo(f"result_status={result.result_status}")
+        typer.echo(f"returncode={result.returncode}")
+        typer.echo(f"next_action={result.next_action}")
+
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
 
 
 @transfer_app.command("state")
