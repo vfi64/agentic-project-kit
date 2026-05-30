@@ -1,7 +1,8 @@
 schema_version: 1
 updated:
   date: '2026-05-30'
-  reason: Refresh handoff state to last substantive work commit
+  reason: 'administrative handoff refresh: Current HEAD is administrative evidence;
+    safe_state remains on last substantive work state'
   source: agentic-kit handoff refresh
 repo:
   name: agentic-project-kit
@@ -12,7 +13,7 @@ safe_state:
   branch: main
   commit: 5d204f1
   commit_subject: 'Merge pull request #959 from vfi64/feature/b10-transfer-wrapper-completion'
-  semantics: current_main_head
+  semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
   - 656
@@ -409,5 +410,10 @@ handoff_maintenance:
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
   latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr911.md
+administrative_evidence_state:
+  current_head: abb11ae
+  current_head_subject: Refresh handoff state after PR959
+  allowed_after_safe_state: true
+  reason: administrative evidence/log/handoff commit after substantive safe_state
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
