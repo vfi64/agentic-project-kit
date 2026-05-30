@@ -8,7 +8,9 @@ Safety release after transfer-wrapper hardening and safe post-merge admin-refres
 - Reduced duplicate CI trigger noise while preserving PR CI and main CI safety anchors.
 - Validated post-merge handoff refresh flow through PR #962.
 
-Zenodo verification pending until GitHub Release publication and archive processing.
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.4.5 DOI `10.5281/zenodo.20467371`.
+
+Zenodo v0.4.5 DOI: 10.5281/zenodo.20467371
 Zenodo Concept DOI: 10.5281/zenodo.20101359
 
 ## v0.4.4 - 2026-05-28

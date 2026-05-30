@@ -174,7 +174,7 @@ This document is a concise pointer, not a duplicate rule book. Machine guard: `a
 Current verified release: 0.4.4.
 Current release tag: v0.4.4.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.20431326`.
+Verified Zenodo version DOI: `10.5281/zenodo.20467371`.
 Post-release verification command: `agentic-kit post-release-check --version 0.4.4`.
 Current verified main after handoff freshness repair: `fd1e631` (`Repair post-PR831 handoff freshness state (#834)`).
 Generated handoff safe-state anchor: `fd1e631`.
