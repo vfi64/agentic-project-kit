@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 9ee3f7e
-  commit_subject: Add B5 transfer repo action wrappers (#949)
+  commit: fea7d7c
+  commit_subject: Add B6 transfer basis wrapper commands (#951)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
