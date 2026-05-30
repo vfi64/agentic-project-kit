@@ -1,3 +1,16 @@
+## v0.4.5 - 2026-05-30
+
+Safety release after transfer-wrapper hardening and safe post-merge admin-refresh flow.
+
+- Added `agentic-kit transfer head-sha` for guarded SHA anchoring.
+- Hardened transfer/admin refresh workflow to avoid accidental direct commits on `main`.
+- Added `agentic-kit transfer admin-refresh-pr` for branch-based handoff refresh PRs.
+- Reduced duplicate CI trigger noise while preserving PR CI and main CI safety anchors.
+- Validated post-merge handoff refresh flow through PR #962.
+
+Zenodo verification pending until GitHub Release publication and archive processing.
+Zenodo Concept DOI: 10.5281/zenodo.20101359
+
 ## v0.4.4 - 2026-05-28
 
 - Release: prepare a safety baseline after PR #874 so the post-PR873 GUI upload-strip state and the deterministic gatekeeper migration plan are frozen before implementation work starts.
