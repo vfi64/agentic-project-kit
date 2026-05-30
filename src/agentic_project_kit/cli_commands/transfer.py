@@ -12,6 +12,7 @@ from agentic_project_kit.transfer_runner import (
     load_transfer_order,
     transfer_result_as_json_data,
 )
+from agentic_project_kit.transfer_state import build_transfer_state
 
 transfer_app = typer.Typer(help="Inspect and apply repo-backed text transfer orders.")
 
@@ -33,6 +34,19 @@ def _emit_result(result, json_output: bool) -> None:
         typer.echo(f"returncode={result.returncode}")
         typer.echo(f"report_path={result.report_path}")
         typer.echo(f"message={result.message}")
+
+
+@transfer_app.command("state")
+def state(
+    json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
+) -> None:
+    snapshot = build_transfer_state(Path("."))
+    data = snapshot.as_json_data()
+    if json_output:
+        typer.echo(json.dumps(data, indent=2, sort_keys=True))
+    else:
+        typer.echo(f"primary_state={snapshot.primary_state}")
+        typer.echo(f"next_action={snapshot.next_action}")
 
 
 @transfer_app.command("status")
