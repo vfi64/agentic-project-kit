@@ -15,6 +15,7 @@ from agentic_project_kit.transfer_repo_actions import (
     branch_switch,
     commit_paths,
     fetch_origin,
+    head_sha,
     pr_create,
     pr_merge_safe,
     pr_wait_ci,
@@ -128,6 +129,17 @@ def repo_log_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     result = repo_log(limit=limit)
+    typer.echo(result_json(result))
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("head-sha")
+def head_sha_command(
+    full: bool = typer.Option(False, "--full", help="Print the full HEAD SHA instead of the short SHA."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = head_sha(full=full)
     typer.echo(result_json(result))
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
