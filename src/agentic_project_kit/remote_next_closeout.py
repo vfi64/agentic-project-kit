@@ -11,6 +11,7 @@ from agentic_project_kit.evidence_commit_paths import commit_paths
 @dataclass(frozen=True)
 class RemoteNextCloseoutResult:
     success: bool
+    status: str
     branch: str
     closeout_branch: str
     commit_sha: str
@@ -60,32 +61,33 @@ def run_remote_next_closeout(project_root: Path = Path("."), *, push: bool = Tru
     branch_result = _run_git(root, ["branch", "--show-current"])
     branch = branch_result.stdout.strip() if branch_result.returncode == 0 else "UNKNOWN"
     if branch != "main":
-        return RemoteNextCloseoutResult(False, branch, "", "", (), (f"expected main branch, got {branch}",))
+        return RemoteNextCloseoutResult(False, "fail", branch, "", "", (), (f"expected main branch, got {branch}",))
 
     status = _status_lines(root)
     if not status:
-        return RemoteNextCloseoutResult(False, branch, "", "", (), ("no closeout paths are dirty",))
+        return RemoteNextCloseoutResult(False, "no_closeout", branch, "", "", (), ("no closeout paths are dirty",))
 
     paths = tuple(dict.fromkeys(_path_from_status(line) for line in status))
     unexpected = tuple(path for path in paths if not _is_allowed_closeout_path(path))
     if unexpected:
-        return RemoteNextCloseoutResult(False, branch, "", "", paths, tuple(f"unexpected dirty path: {path}" for path in unexpected))
+        return RemoteNextCloseoutResult(False, "fail", branch, "", "", paths, tuple(f"unexpected dirty path: {path}" for path in unexpected))
 
     closeout_branch = _derive_closeout_branch(paths)
     switch = _run_git(root, ["switch", "-c", closeout_branch])
     if switch.returncode != 0:
-        return RemoteNextCloseoutResult(False, branch, closeout_branch, "", paths, ((switch.stderr or switch.stdout or "git switch failed").strip(),))
+        return RemoteNextCloseoutResult(False, "fail", branch, closeout_branch, "", paths, ((switch.stderr or switch.stdout or "git switch failed").strip(),))
 
     result = commit_paths(root=root, paths=paths, message=f"Record {closeout_branch.removeprefix('docs/')} evidence", push=push)
     if not result.success:
-        return RemoteNextCloseoutResult(False, branch, closeout_branch, result.commit_sha, paths, result.findings)
-    return RemoteNextCloseoutResult(True, branch, closeout_branch, result.commit_sha, paths, ())
+        return RemoteNextCloseoutResult(False, "fail", branch, closeout_branch, result.commit_sha, paths, result.findings)
+    return RemoteNextCloseoutResult(True, "pass", branch, closeout_branch, result.commit_sha, paths, ())
 
 
 def render_remote_next_closeout_result(result: RemoteNextCloseoutResult) -> str:
     lines = [
         "REMOTE_NEXT_CLOSEOUT_RESULT",
         f"success={'yes' if result.success else 'no'}",
+        f"result_status={result.status}",
         f"source_branch={result.branch}",
         f"closeout_branch={result.closeout_branch or 'NONE'}",
         f"commit_sha={result.commit_sha or 'NONE'}",
@@ -94,5 +96,6 @@ def render_remote_next_closeout_result(result: RemoteNextCloseoutResult) -> str:
         lines.append(f"path={path}")
     for finding in result.findings:
         lines.append(f"finding={finding}")
-    lines.append(f"### RESULT: {'PASS' if result.success else 'FAIL'} ###")
+    result_label = "PASS" if result.success else "NO-CLOSEOUT" if result.status == "no_closeout" else "FAIL"
+    lines.append(f"### RESULT: {result_label} ###")
     return "\n".join(lines)

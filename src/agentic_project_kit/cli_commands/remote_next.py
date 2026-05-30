@@ -51,5 +51,7 @@ def register_remote_next_command(app: typer.Typer) -> None:
     ) -> None:
         result = run_remote_next_closeout(project_root, push=not no_push)
         typer.echo(render_remote_next_closeout_result(result))
+        if result.status == "no_closeout":
+            raise typer.Exit(code=2)
         if not result.success:
             raise typer.Exit(code=1)
