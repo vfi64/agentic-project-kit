@@ -5,7 +5,7 @@ import subprocess
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
-from agentic_project_kit.transfer_repo_actions import branch_create, branch_delete, branch_switch, commit_paths, fetch_origin, pr_merge_safe, pr_wait_ci, pull_current, repo_diff, repo_log, repo_status
+from agentic_project_kit.transfer_repo_actions import branch_create, branch_delete, branch_switch, commit_paths, fetch_origin, pr_merge_safe, pr_wait_ci, post_merge_check, pull_current, repo_diff, repo_log, repo_status
 
 
 def _init_repo(path):
@@ -169,3 +169,75 @@ def test_transfer_pr_wait_ci_cli_accepts_interval_seconds_option(tmp_path, monke
 
     assert result.exit_code != 0
     assert "full 40-character head SHA" in result.stdout
+
+def test_post_merge_check_noop_on_main(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    calls = []
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+            return subprocess.CompletedProcess(command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", "")
+        return subprocess.CompletedProcess(command, 99, "", "unexpected command\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._agentic_kit_command", lambda: "agentic-kit")
+
+    result = post_merge_check(main_branch="main")
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert result.action == "post-merge-check"
+    assert "Continue without administrative handoff refresh" in result.next_action
+    assert calls == [
+        ["git", "branch", "--show-current"],
+        ["agentic-kit", "handoff", "post-merge-refresh-status"],
+    ]
+
+
+def test_post_merge_check_requires_main_branch(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    branch_create("feature/not-main", start_point="main")
+
+    result = post_merge_check(main_branch="main")
+
+    assert result.result_status == "FAIL"
+    assert result.returncode == 2
+    assert "Expected branch main" in result.stderr
+
+
+def test_post_merge_check_detects_refresh_required(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    def fake_run(command, cwd=None):
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+            return subprocess.CompletedProcess(command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n", "")
+        return subprocess.CompletedProcess(command, 99, "", "unexpected command\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._agentic_kit_command", lambda: "agentic-kit")
+
+    result = post_merge_check(main_branch="main")
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert "administrative handoff refresh" in result.next_action
+
+
+def test_transfer_post_merge_check_cli_help(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(app, ["transfer", "post-merge-check", "--help"])
+
+    assert result.exit_code == 0
+    assert "post-merge-check" in result.stdout
+
