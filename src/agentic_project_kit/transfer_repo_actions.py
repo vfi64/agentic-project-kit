@@ -145,6 +145,12 @@ def repo_log(limit: int = 5) -> RepoActionResult:
     return _result("repo-log", command, completed, "Use commit SHAs for guarded PR or merge work.")
 
 
+def head_sha(*, full: bool = False) -> RepoActionResult:
+    command = ["git", "rev-parse", "HEAD"] if full else ["git", "rev-parse", "--short", "HEAD"]
+    completed = _run(command)
+    return _result("head-sha", command, completed, "Use this SHA for guarded PR or merge work.")
+
+
 def repo_diff(*, cached: bool = False, name_only: bool = False) -> RepoActionResult:
     command = ["git", "diff"]
     if cached:

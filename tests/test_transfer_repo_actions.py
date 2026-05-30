@@ -5,7 +5,7 @@ import subprocess
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
-from agentic_project_kit.transfer_repo_actions import branch_create, branch_delete, branch_switch, commit_paths, fetch_origin, pr_merge_safe, pr_wait_ci, post_merge_check, pull_current, repo_diff, repo_log, repo_status
+from agentic_project_kit.transfer_repo_actions import branch_create, branch_delete, branch_switch, commit_paths, fetch_origin, head_sha, pr_merge_safe, pr_wait_ci, post_merge_check, pull_current, repo_diff, repo_log, repo_status
 
 
 def _init_repo(path):
@@ -77,6 +77,22 @@ def test_repo_status_log_and_diff(tmp_path, monkeypatch):
     assert diff.result_status == "PASS"
 
 
+def test_head_sha_short_and_full(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    short = head_sha()
+    full = head_sha(full=True)
+
+    assert short.result_status == "PASS"
+    assert short.command == ["git", "rev-parse", "--short", "HEAD"]
+    assert len(short.stdout.strip()) >= 4
+    assert full.result_status == "PASS"
+    assert full.command == ["git", "rev-parse", "HEAD"]
+    assert len(full.stdout.strip()) == 40
+    assert full.stdout.strip().startswith(short.stdout.strip())
+
+
 def test_fetch_and_pull_current_without_origin_fail_deterministically(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     monkeypatch.chdir(tmp_path)
@@ -121,6 +137,22 @@ def test_transfer_repo_log_cli(tmp_path, monkeypatch):
 
     assert result.exit_code == 0
     assert '"action": "repo-log"' in result.stdout
+
+
+def test_transfer_head_sha_cli(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(app, ["transfer", "head-sha"])
+    full_result = CliRunner().invoke(app, ["transfer", "head-sha", "--full"])
+
+    assert result.exit_code == 0
+    assert '"action": "head-sha"' in result.stdout
+    assert '"rev-parse"' in result.stdout
+    assert '"--short"' in result.stdout
+    assert full_result.exit_code == 0
+    assert '"action": "head-sha"' in full_result.stdout
+    assert '"--short"' not in full_result.stdout
 
 
 def test_transfer_branch_delete_cli(tmp_path, monkeypatch):
