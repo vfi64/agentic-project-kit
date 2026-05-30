@@ -6,6 +6,7 @@ from pathlib import Path
 import typer
 
 from agentic_project_kit.transfer_local_runner import run_local_transfer
+from agentic_project_kit.transfer_remote_next import run_remote_next_transfer
 from agentic_project_kit.transfer_runner import (
     DEFAULT_INBOX,
     apply_transfer_order,
@@ -35,6 +36,30 @@ def _emit_result(result, json_output: bool) -> None:
         typer.echo(f"returncode={result.returncode}")
         typer.echo(f"report_path={result.report_path}")
         typer.echo(f"message={result.message}")
+
+
+@transfer_app.command("remote-next")
+def remote_next(
+    branch: str = typer.Argument(..., help="Remote transfer branch to fetch, switch to, pull, and run."),
+    json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
+) -> None:
+    try:
+        result = run_remote_next_transfer(Path("."), branch)
+    except (RuntimeError, ValueError, FileNotFoundError) as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+
+    if json_output:
+        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo(f"branch={result.branch}")
+        typer.echo(f"head={result.head}")
+        typer.echo(f"result_status={result.local_run.result_status}")
+        typer.echo(f"returncode={result.local_run.returncode}")
+        typer.echo(f"next_action={result.local_run.next_action}")
+
+    if result.local_run.returncode != 0:
+        raise typer.Exit(code=result.local_run.returncode)
 
 
 @transfer_app.command("run-local")
