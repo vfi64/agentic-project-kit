@@ -35,6 +35,26 @@ class TransferPrStatusResult:
         }
 
 
+def _final_signal(returncode: int) -> str:
+    return "d" if returncode == 0 else "f"
+
+
+def _with_final_signal(report: str, *, returncode: int, next_action: str) -> str:
+    return "\n".join(
+        (
+            report.rstrip(),
+            f"FINAL_SIGNAL={_final_signal(returncode)}",
+            f"FINAL_NEXT={next_action}",
+        )
+    )
+
+
+def _final_next(decision: str) -> str:
+    if decision == "green":
+        return "Run transfer pr-wait-ci or pr-merge-safe with the verified head SHA."
+    return "Inspect failed or pending PR status before merge."
+
+
 def pr_status_transfer(
     pr_number: int,
     *,
@@ -43,20 +63,23 @@ def pr_status_transfer(
     expected_head_sha: str = "",
 ) -> TransferPrStatusResult:
     if expected_head_sha and len(expected_head_sha) != 40:
+        returncode = 2
         return TransferPrStatusResult(
             schema_version=1,
             action="pr-status",
             pr_number=pr_number,
             result_status="FAIL",
-            returncode=2,
+            returncode=returncode,
             decision="red",
-            report=(
+            report=_with_final_signal(
                 "HEAD_GUARD\n"
                 f"expected_head_sha={expected_head_sha}\n"
                 "actual_head_sha=(not-fetched)\n"
                 "result=FAIL\n"
                 "message=Expected full 40-character head SHA. Short SHAs are refused for guarded PR actions.\n"
-                "### RESULT: FAIL ###"
+                "### RESULT: FAIL ###",
+                returncode=returncode,
+                next_action="Re-run with the full PR head SHA.",
             ),
             head_ref_oid="",
         )
@@ -64,16 +87,19 @@ def pr_status_transfer(
     decision = classify_pr_status(payload, pr=str(pr_number))
     head_ref_oid = str(payload.get("headRefOid") or "")
     if expected_head_sha and head_ref_oid != expected_head_sha:
-        report = (
+        returncode = 1
+        report = _with_final_signal(
             render_decision(decision)
-            + f"\nHEAD_GUARD\nexpected_head_sha={expected_head_sha}\nactual_head_sha={head_ref_oid}\nresult=FAIL\n### RESULT: FAIL ###"
+            + f"\nHEAD_GUARD\nexpected_head_sha={expected_head_sha}\nactual_head_sha={head_ref_oid}\nresult=FAIL\n### RESULT: FAIL ###",
+            returncode=returncode,
+            next_action="Stop and inspect the PR head SHA mismatch before continuing.",
         )
         return TransferPrStatusResult(
             schema_version=1,
             action="pr-status",
             pr_number=pr_number,
             result_status="FAIL",
-            returncode=1,
+            returncode=returncode,
             decision="red",
             report=report,
             head_ref_oid=head_ref_oid,
@@ -82,14 +108,19 @@ def pr_status_transfer(
         decision = attach_failed_run_logs(decision, max_lines=failed_log_lines)
 
     ok = decision.decision == "green"
+    returncode = 0 if ok else 1
     return TransferPrStatusResult(
         schema_version=1,
         action="pr-status",
         pr_number=pr_number,
         result_status="PASS" if ok else "FAIL",
-        returncode=0 if ok else 1,
+        returncode=returncode,
         decision=decision.decision,
-        report=render_decision(decision),
+        report=_with_final_signal(
+            render_decision(decision),
+            returncode=returncode,
+            next_action=_final_next(decision.decision),
+        ),
         head_ref_oid=head_ref_oid,
     )
 
