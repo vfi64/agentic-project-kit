@@ -110,6 +110,8 @@ The preferred response to useful external review input is not to copy ratings or
 
 For the current GUI and workflow-kernel line, the useful review signal is: prioritize enforcement and automation over additional chat-only instructions. The GUI should expose existing hardened command paths and make safe state, evidence, PR status, protected-change planning, and next-step decisions easier to execute without manual terminal orchestration.
 
+The rule-refresh handshake is the stability core for this direction. `docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md` governs the staged work to make local-to-LLM and LLM-to-local rule freshness machine-checkable, fail-closed, and visible to the later GUI.
+
 ## Non-Goals For The Current Line
 
 - no broad documentation migration,
