@@ -5,6 +5,7 @@ from pathlib import Path
 from agentic_project_kit.rule_ack import (
     RuleAcknowledgement,
     acknowledgement_from_json_data,
+    build_rule_acknowledgement,
     validate_rule_acknowledgement,
 )
 from agentic_project_kit.rule_snapshot import build_derived_rule_snapshot
@@ -137,3 +138,21 @@ def test_rule_acknowledgement_roundtrip_from_json_data(tmp_path: Path) -> None:
     ack = acknowledgement_from_json_data(_valid_ack(snapshot).as_json_data())
 
     assert ack == _valid_ack(snapshot)
+
+
+def test_build_rule_acknowledgement_uses_snapshot_identity(tmp_path: Path) -> None:
+    write_minimal_sources(tmp_path)
+    snapshot = build_derived_rule_snapshot(tmp_path)
+
+    ack = build_rule_acknowledgement(
+        snapshot,
+        repo_head="abc123",
+        declared_next_allowed_action="run_next_command",
+    )
+
+    assert ack.schema_version == 1
+    assert ack.snapshot_id == snapshot.snapshot_id
+    assert ack.repo_head == "abc123"
+    assert ack.sources_total == snapshot.sources_total
+    assert ack.missing_sources_total == len(snapshot.validation.missing_required_paths)
+    assert ack.declared_next_allowed_action == "run_next_command"
