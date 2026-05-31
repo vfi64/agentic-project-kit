@@ -1,0 +1,141 @@
+### POST-PR974 HANDOFF STATE REFRESH APPLY ###
+created_at_utc=2026-05-31T11:10:36Z
+
+### SYNC MAIN AND PRECHECK ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+?? docs/reports/terminal/post-pr974-handoff-refresh-implementation-precheck.log
+?? docs/reports/terminal/post-pr974-handoff-refresh-source-and-generator-inventory.log
+?? docs/reports/terminal/post-pr974-handoff-refresh-state-check.log
+?? docs/reports/terminal/post-pr974-handoff-source-inspect.log
+?? docs/reports/terminal/post-pr974-handoff-state-refresh-apply.log
+?? docs/reports/terminal/post-pr974-handoff-status-diagnose.log
+8fc03e7 Record PR973 post-merge main verification (#974)
+36fe53b Record PR972 post-merge main verification (#973)
+f43bb89 Record PR971 post-merge main verification (#972)
+33c4896 Record PR970 post-merge main verification (#971)
+bbbccd9 Move verified DOI history to release archive (#970)
+e9b28bd Merge pull request #969 from vfi64/docs/v045-successor-handoff-anchor
+ee7973e Restore handoff state test anchors
+7604590 Record v0.4.5 successor handoff anchor
+
+### CREATE OR SWITCH REFRESH BRANCH ###
+Switched to a new branch 'docs/post-pr974-bootstrap-handoff-refresh'
+
+### STATE BEFORE PATCH ###
+docs/post-pr974-bootstrap-handoff-refresh
+?? docs/reports/terminal/post-pr974-handoff-refresh-implementation-precheck.log
+?? docs/reports/terminal/post-pr974-handoff-refresh-source-and-generator-inventory.log
+?? docs/reports/terminal/post-pr974-handoff-refresh-state-check.log
+?? docs/reports/terminal/post-pr974-handoff-source-inspect.log
+?? docs/reports/terminal/post-pr974-handoff-state-refresh-apply.log
+?? docs/reports/terminal/post-pr974-handoff-status-diagnose.log
+13:  commit: 0ab2f47
+419:  PR968 and obey agentic-kit handoff post-merge-refresh-status before product work.
+429:    PR968 and obey agentic-kit handoff post-merge-refresh-status before product work.
+
+### PATCH HANDOFF STATE ONLY ###
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+ModuleNotFoundError: No module named 'yaml'
+
+### WRITE GENERATED BOOTSTRAP AND SUCCESSOR PROMPT ###
+WROTE docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+
+### VERIFY MARKERS AFTER PATCH ###
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+Repo: agentic-project-kit
+Path: agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.4.5
+Safe state: main @ 0ab2f47
+Next: Start the next chat from the fresh v0.4.5 successor handoff after PR968 and obey agentic-kit handoff post-merge-refresh-status before product work.
+.agentic/handoff_state.yaml:13:  commit: 0ab2f47
+.agentic/handoff_state.yaml:419:  PR968 and obey agentic-kit handoff post-merge-refresh-status before product work.
+.agentic/handoff_state.yaml:429:    PR968 and obey agentic-kit handoff post-merge-refresh-status before product work.
+docs/reports/terminal/post-pr974-successor-chat-handoff.md:12:Commit: `0ab2f47`
+docs/reports/terminal/post-pr974-successor-chat-handoff.md:180:Start the next chat from the fresh v0.4.5 successor handoff after PR968 and obey agentic-kit handoff post-merge-refresh-status before product work.
+
+### DIFF NAME ONLY ###
+
+### PROTECTED CHANGE PLAN ###
+PROTECTED_CHANGE_PLAN
+result=PASS
+findings=0
+### RESULT: PASS ###
+
+### LOCAL GATES ###
+Agentic project check passed
+Documentation mesh audit
+
+Documents:
+- README.md: current-state, required
+- CHANGELOG.md: release-history, required
+- docs/releases/VERIFIED_RELEASES.md: release-history, optional
+- CITATION.cff: current-state, required
+- pyproject.toml: current-state, required
+- src/agentic_project_kit/__init__.py: current-state, required
+- docs/STATUS.md: current-state, required
+- docs/handoff/CURRENT_HANDOFF.md: current-state, required
+- AGENTS.md: governance, required
+- docs/TEST_GATES.md: governance, required
+- docs/DOCUMENTATION_COVERAGE.yaml: governance, required
+- sentinel.yaml: governance, required
+- .agentic/project.yaml: governance, required
+- docs/architecture/ARCHITECTURE_CONTRACT.md: architecture, required
+- docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md: architecture, required
+- docs/WORKFLOW_OUTPUT_CYCLE.md: architecture, required
+- DESIGN.md: architecture, optional
+- docs/reports/status_roadmap_summary_after_pr105_20260512.md: historical-plan, required
+- docs/V0.3.0_OUTPUT_REPAIR_PLAN.md: historical-plan, optional
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+......................................                                   [100%]
+38 passed in 0.57s
+All checks passed!
+
+### RESULT SUMMARY ###
+branch_rc=0
+patch_rc=1
+boot_rc=0
+prompt_rc=0
+handoff_check_rc=0
+handoff_show_rc=0
+protected_plan_rc=0
+docs_rc=0
+mesh_rc=0
+test_rc=0
+ruff_rc=0
+overall=FAIL
