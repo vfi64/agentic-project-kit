@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: dd10c7a
-  commit_subject: Expose derived rule snapshot CLI (#999)
+  commit: 3b785b0
+  commit_subject: Gate transfer state on rule snapshot validity (#1001)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
