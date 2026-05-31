@@ -42,7 +42,7 @@ Required direction:
 - `agentic-kit comm-rules-check` verifies communication, summary, bootstrap, and drift contracts.
 - `agentic-kit handoff-prompt --reason drift` emits a successor-chat prompt when drift is detected.
 
-`./ns` may expose shortcuts for local convenience, but it must not be the only canonical route.
+`./ns` may expose shortcuts for local convenience, but it must not be the only canonical route. A chat or workflow must use a wrapper only when the wrapper contract is clear for the concrete task from repository documentation, command help, or existing evidence. If the wrapper is ambiguous, unavailable, or narrower than the requested workflow, use the explicit project-local Python entry point such as `./.venv/bin/python -m agentic_project_kit.cli ...` or the documented Python module path instead of guessing a wrapper subcommand.
 
 ## Local repository freshness rule
 
