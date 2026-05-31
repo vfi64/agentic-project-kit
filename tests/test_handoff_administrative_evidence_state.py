@@ -28,7 +28,11 @@ def _base_state():
 def test_administrative_evidence_subjects_are_recognized():
     assert is_administrative_evidence_subject("Record final post-PR656 handoff consistency log")
     assert is_administrative_evidence_subject("Recover post-PR656 handoff prompt")
+    assert is_administrative_evidence_subject("Refresh post-PR974 bootstrap handoff state")
+    assert is_administrative_evidence_subject("Refresh post-PR974 bootstrap handoff state (#975)")
+    assert is_administrative_evidence_subject("Refresh post-PR974 administrative handoff state")
     assert not is_administrative_evidence_subject("Enable check-docs as read-only GUI action (#655)")
+    assert not is_administrative_evidence_subject("Refresh post-PR974 product workflow state")
 
 
 def test_administrative_evidence_head_does_not_move_substantive_safe_state():
