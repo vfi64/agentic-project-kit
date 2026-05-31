@@ -1,0 +1,1104 @@
+===============================================================================
+===============================================================================
+===============================================================================
+### REMOTE CONNECTOR SAFE BRANCH / PR / MERGE PATH BOOTSTRAP ###
+created_at_utc=2026-05-31T12:10:17Z
+
+### CURRENT STATE ###
+workflow_state=IDLE
+current_work=present
+current_work_state=READY
+current_report=docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+
+Safety:
+- This command is read-only.
+- current_report points to the latest workflow-output summary, not necessarily uploadable local evidence.
+
+Interpretation:
+- Working tree has uncommitted changes.
+
+Recommended next step:
+- Run: git status --short
+- Do not start workflow automation until the working tree is clean or intentionally staged.
+
+Optional checks:
+- agentic-kit doctor
+- agentic-kit check-docs
+{
+  "branch": "main",
+  "capabilities": {
+    "closeout_last_run": false,
+    "diagnose": true,
+    "refresh_rules": true,
+    "run_next_command": false
+  },
+  "closeout": {
+    "dirty_worktree": true,
+    "pending_transfer_order": false
+  },
+  "created_at": "2026-05-31T12:10:18.260563+00:00",
+  "head": "078145b",
+  "last_result": {
+    "exists": true,
+    "report_path": "docs/reports/command_runs/transfer-closeout-mvp.md"
+  },
+  "next_action": "Review or clean the worktree before running another transfer action.",
+  "primary_state": "BLOCKED",
+  "reasons": [
+    "dirty_worktree"
+  ],
+  "repo": "vfi64/agentic-project-kit",
+  "schema_version": 1
+}
+POST_MERGE_HANDOFF_REFRESH
+current_head=078145b
+freshness_warning_present=False
+refresh_required=False
+latest_successor_prompt=docs/reports/terminal/post-remote-connector-write-test-final-successor-chat-handoff.md
+result=NOOP
+next_safe_action=continue_without_post_merge_handoff_refresh
+Repo: agentic-project-kit
+Path: agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.4.5
+Safe state: main @ 16b5204
+Next: Start the next chat from the fresh post-remote-connector-write-test successor handoff prompt. Verify the current main state, confirm the remote connector write test marker is present, and continue only with the secure remote connector Branch/PR/Merge path before GUI implementation.
+
+### READ REQUIRED HANDOFF / GOVERNANCE SOURCES ###
+# Übergabeprompt
+
+## 1. Arbeitsumgebung
+
+Local path: `agentic-project-kit`
+Remote: `github.com:vfi64/agentic-project-kit`
+Default branch: `main`
+
+## 2. Sicherer Stand
+
+Branch: `main`
+Commit: `16b5204`
+Subject: Refresh handoff after remote connector write test
+Semantics: `current_main_head`
+Working tree expected clean: `True`
+
+## 3. Release- und Produktstand
+
+Current version: `0.4.5`
+Previous version: `0.4.4`
+Tag: `v0.4.5`
+Zenodo concept DOI: `10.5281/zenodo.20101359`
+Zenodo version DOI: `10.5281/zenodo.20467371`
+Post-release check: `PASS`
+
+## 4. Pflichtquellen vor jeder Mutation
+
+Lies diese Quellen zuerst. Wenn eine Quelle fehlt, widersprüchlich ist oder nicht gelesen werden kann, melde Drift und mutiere nicht außer zur Drift-Reparatur.
+
+- .agentic/compiled_agent_context.yaml
+- .agentic/handoff_state.yaml
+- .agentic/rule_mechanism_inventory.yaml
+- .agentic/rule_migrations.yaml
+- .agentic/rule_preservation.yaml
+- docs/STATUS.md
+- docs/handoff/CURRENT_HANDOFF.md
+- docs/handoff/START_NEW_CHAT_PROMPT.md
+- docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
+- docs/governance/FINAL_SUMMARY_CONTRACT.md
+- docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+- docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+- docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+- docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
+- docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+- docs/TEST_GATES.md
+- relevant source files and tests for the requested slice
+
+## 4a. Bootloader
+
+Beim Chatwechsel zuerst den Bootloader ausführen: `agentic-kit boot prompt` oder `./ns chat-bootloader`.
+
+## 5. Kommunikations- und Summary-Regeln
+
+User-Kürzel sind Kommunikationssignale, keine Evidence:
+
+- d/D: local block appears finished; verify evidence before treating it as success
+- f/F: failure reported; inspect or upload evidence before asking for pasted output
+- w/W: continue within the current governance and evidence rules
+- paste-output: manual paste only when repo-backed or local evidence is unavailable or unusable
+- stop: no further mutation or terminal instructions
+
+Final-Summary-Vokabular:
+
+- WORK RESULT: PASS|FAIL|PENDING|HARD-FAIL|NO-COMMAND
+- EVIDENCE RESULT: PASS|FAIL|PARTIAL|CHAT_ONLY|NOT_REQUIRED
+- OVERALL RESULT: PASS|FAIL|PENDING|HARD-FAIL|NO-COMMAND
+- REMOTE_EVIDENCE: PASS|FAIL|PARTIAL|NOT_REQUIRED
+- NEXT_CHAT_REPLY: p|f|paste-output|continue|stop
+
+## 6. Aktive Regeln aus handoff_state
+
+- `remote-first-no-guess`: Do not guess repository state, command syntax, file locations, release phase, GitHub JSON fields, or available evidence. Inspect the remote repository, command help, known paths, PRs, commits, logs, and authoritative repo files before acting.
+- `quality-first-no-shortcuts`: Prefer deterministic, test-backed, maintainable fixes over quick patches. No shortcuts, workaround-only fixes, or chat-only promises for recurring workflow defects.
+- `patch-artifact-preflight-before-application`: Before applying generated patch artifacts, run patch-artifact preflight diagnostics and fail on unsafe quoting, ambiguous YAML terms, or control-file weakening.
+- `generated-code-syntax-first`: Generated shell and Python artifacts must be syntax-checked before execution or commit; generated code cannot be trusted because it looks plausible.
+- `coverage-yaml-terms-must-be-strings`: Coverage YAML required terms must stay strings; colon-containing terms must be quoted or written through structured YAML writers.
+- `final-summary-self-validation`: Final summaries must be self-validated against preceding output before treating a block as successful.
+- `no-copy-terminal-evidence`: Routine PASS and normal FAIL handoffs must be backed by repo evidence; use d for log-backed PASS and f for log-backed FAIL. Manual terminal paste is only for hard failure, broken logging, unavailable evidence, unusable evidence, or explicit user request.
+- `remote-log-lookup-first`: Remote evidence must be inspected first for FAIL or uncertain handoffs; direct-fetch docs/reports/terminal logs before asking for paste-output unless logging is broken or unavailable. The phrase remote evidence is intentionally preserved for rule-preservation coverage.
+- `rules-must-be-test-backed`: Durable workflow rules need a stable repository home, documentation, and deterministic tests or guards that fail when the rule disappears or is weakened.
+- `yaml-structured-mutation-only`: YAML governance files must be changed through parse-modify-dump or equivalent structured mutation, then parsed again before gates.
+- `github-connector-direct-path-first`: For remote GitHub work with known paths, refs, or commits, use direct fetch, update, and PR APIs before search.
+- `control-file-preservation`: Protected control files must preserve active rules and required anchors. Information preservation outranks compactness; hard length-limit trimming is forbidden.
+- `structured-summary-must-be-enforced`: Relevant local or remote work blocks must end with the canonical structured SUMMARY from FINAL_SUMMARY_CONTRACT.md. Missing, malformed, contradictory, or legacy summaries are workflow drift.
+- `governed-rule-registry-before-documentation-rebuild`: A governed modular rule registry must become the canonical source of truth before documentation-management rebuild work resumes.
+
+## 7. Offene Punkte
+
+- Keine offenen PRs im handoff_state.
+
+## 8. Abgeschlossen seit letzter Übergabe
+
+- PR #968 refreshed handoff state after README release-history extraction and v0.4.5 DOI closeout.
+- PR #897 merged standard summary validator hardening before this administrative handoff refresh.
+- PR #894 merged post-merge gate bootstrap visibility documentation before this administrative handoff refresh.
+- PR #892 recorded the post-merge handoff refresh status gate visibility inventory so the workflow can move the gate into more visible kit/ns paths.
+- PR #888 added optional patch-preflight slice-gate enforcement so planning-document preflight can require deterministic slice readiness and a clean worktree.
+- PR #886 fixed workflow evidence hygiene by moving active next-turn/work-order results out of the repo-backed fixed slot until explicit upload/promotion.
+- PR #883 added the GUI gatekeeper implementation inventory and recorded that helper-local PASS is not slice PASS without matching repository governance gates.
+- PR #881 refreshed bootstrap/handoff state after PR #880; this post-PR881 refresh records the resulting custom-subject administrative merge commit as current main.
+- PR #880 accepted bounded administrative merge chains in the handoff freshness guard while preserving blocking behavior for product merges inside such chains.
+- PR #877 fixed the handoff freshness self-reference loop by checking freshly rendered prompt text before warning.
+- PR #876 recorded v0.4.4 DOI metadata and post-release evidence at docs/reports/terminal/v044-post-release-verify.log.
+- PR #875 prepared v0.4.4 release metadata, after which v0.4.4 was tagged and post-release verified with Zenodo version DOI 10.5281/zenodo.20431326.
+- PR #874 records the GUI deterministic gatekeeper migration plan in docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md as planning-only work.
+- PR #873 added the GUI work order upload strip and was verified by docs/reports/terminal/pr873-final-main-closeout.log.
+- PR #838 refreshed post-PR837 administrative handoff state and preserved the last substantive safe-state distinction.
+- PR #837 recorded the post-PR836 successor handoff prompt and evidence anchor.
+- PR #838 refreshed post-PR837 administrative handoff state and preserved the last substantive safe-state distinction.
+- PR #837 recorded the post-PR836 successor handoff prompt and evidence anchor.
+- PR #836 refreshed post-PR835 next-step state and is the current successor-handoff safe-state anchor.
+- PR #835 recorded PR #834 closeout evidence at docs/reports/terminal/pr834-merge-finalize.log and added docs/reports/terminal/post-pr834-successor-handoff.md as the successor anchor.
+- PR #834 repaired generator-backed handoff freshness state so the generated successor prompt anchors to the post-PR834 safe state.
+- PR #833 recorded the corrected post-PR831 successor handoff at docs/reports/terminal/post-pr831-successor-handoff.md and superseded the rejected PR825-era stale generated prompt.
+- PR #831 recorded PR #830 closeout evidence at docs/reports/terminal/pr830-merge-finalize.log and verified main 011b6dc24829be44c7693c468a90694981cd40ce for the successor handoff anchor.
+- PR #825 hardened active handoff freshness checks: state-freshness-check now fails active next-step instructions that point to already-recorded closeout evidence or stale release versions.
+- PR #824 recorded PR #823 closeout evidence at docs/reports/terminal/pr823-merge-finalize.log and refreshed STATUS, CURRENT_HANDOFF, and persistent handoff state.
+- PR #823 hardened merge-if-green head/base pinning: the command validates the target base branch, requires a PR head SHA, passes --match-head-commit to GitHub, and renders checked base/head refs in the command output.
+- PR #821 hardened merge-if-green postconditions: after a successful merge, the command verifies the merge commit on main, waits for main CI, and fails the command result unless main CI is green.
+- PR #819 hardened next-turn PR status failed-log diagnostics: red CI now exposes failed check names, GitHub Actions run ids, exact gh run view --log-failed commands, bounded log-fetch status, and no-checks classification for empty rollups.
+- PR #817 hardened PASS_ALREADY_DONE target-state classification: generic already-exists output is no longer sufficient success evidence; target-specific classes and hard-failure precedence are test-backed.
+- PR #815 hardened release-prep atomicity and remote release readiness: release-prep stops before metadata patching on main/branch failures; release-check and release-preflight block release readiness on remote WARN; release-publish blocks inconclusive remote lookups before tagging.
+- PR #813 published v0.4.3 and post-release verification found Zenodo version DOI 10.5281/zenodo.20393329; evidence: docs/reports/terminal/20260526-120216_v043-release-verify.log.
+- PR #791 merged Protected Change Planner A1 and verified it via docs/reports/terminal/protected-change-planner-a1-merge-verify.log.
+- PR #763 refreshed status and handoff after the PR762 direct-coverage closeout.
+- PR #764 added explicit rule-registry direct coverage completion reporting for JSON and human CLI reports.
+- PR #766 recorded the accepted rule-registry improvement backlog before the v0.4.2 safety release.
+
+## 9. Letzte bekannte Fehler- und Driftmuster
+
+- `guessing-before-inspection`: Before choosing commands, paths, JSON fields, release checks, or DOI sources, inspect the remote repository and command help. Treat memory and chat summaries as hypotheses until verified.
+- `interpreter-discovery-before-python`: Discover the active interpreter and project environment before invoking python, python3, pytest, ruff, or agentic-kit; prefer .venv/bin/python when the project venv exists; avoid naked python; when wrapping shell commands, avoid assuming set -e behavior unless explicitly set and logged.
+- `global-cli-or-venv-assumption`: Do not assume global CLIs or an existing venv; use project-local discovery and documented bootstrap paths.
+- `nested-triple-quote-code-generator`: Avoid nested quote-based code generation, nested shell/Python quote layers, nested triple-quoted string literals, and nested triple quotes in generated patch scripts; prefer line-list generation, existing helper scripts, simple file writes, or structured update APIs.
+- `yaml-colon-term-reinterpreted-as-mapping`: Quote colon-containing YAML terms or use structured YAML writers so plain scalars are not reinterpreted as mappings.
+- `standard-error-guards`: Recurring workflow errors must become deterministic guards, tests, or documented failure patterns.
+- `interactive-terminal-exit`: Chat-pasted terminal blocks must not end by closing the user terminal; avoid top-level exit and exec unless explicitly requested.
+- `stale-successor-handoff-prompt-after-main-merge`: Refresh STATUS, handoff_state, CURRENT_HANDOFF, and successor prompt before treating handoff prose as authoritative.
+- `repeated-yaml-governance-file-corruption`: Parse YAML before and after mutation and use a structured writer.
+- `final-pass-after-inner-fail`: Final summaries must distinguish work result from evidence result; evidence upload must not relabel failed work as PASS.
+- `lossy-control-file-shortening`: Do not shorten protected control files by deleting active rules; use successors, generated projections, or split/reference patterns.
+- `structured-summary-drift`: Verify canonical SUMMARY fields and consistency across WORK, EVIDENCE, OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and RESULT marker.
+
+## 10. Verbotene Muster
+
+- mutating before reading the mandatory successor-chat sources
+- treating d as proof of success
+- asking for pasted output while usable local or remote evidence exists
+- using shell-only snippets as canonical cross-platform execution
+- using POSIX tools as correctness dependencies for portable workflows
+- printing REMOTE_EVIDENCE: PENDING in a final summary
+- adding handwritten legacy summary footers after the summary renderer
+- continuing product work after unresolved contract or evidence drift
+
+## 11. Nächste erlaubte Aufgaben
+
+- 1. `readme-release-history-extraction-follow-up` — Continue only with the next smallest README release-history extraction follow-up if README size or DOI-history drift reappears.
+- 2. `inspect-selected-dead-code-slice` — Remove or justify inspect_selected() dead code in one isolated, test-backed slice.
+- 3. `doctor-absolute-path-gate-slice` — Add the missing doctor gate for absolute path leakage in one isolated, test-backed slice.
+- 4. `cockpit-action-result-enum-slice` — Replace CockpitActionResult string literal result constants with an enum in one isolated, test-backed slice.
+- 1. `b11-gatekeeper-core` — Implement B11 Gatekeeper Core before GUI work: machine-readable READY/WAIT/BLOCKED/FAILED state model, next_action, allowed actions, button enablement contract, safe GitHub/PR/CI checks, race-condition handling, automatic log/evidence classification, no-copy transfer path, and hardened handoff-prompt preparation command.
+- 5. `tkinter-workbench-gui-slice-1` — Resume the smallest Tkinter workbench GUI slice only after B11 Gatekeeper Core state/action contract is test-backed and current-state/handoff freshness are clean.
+
+## 12. Gesperrte Aufgaben
+
+- Remote/destructive GUI actions
+- Large GUI architecture expansion before successor-chat bootstrap
+- Broad documentation migration during release/evidence-kernel hardening closeouts
+- Release, tag, or DOI mutation
+- GUI product work before post-PR880 bootstrap refresh is merged and verified
+- Broad GUI implementation before the deterministic gatekeeper read-only inspection slice
+- Gatekeeper product work before post-PR883 handoff refresh is merged and verified
+- Treating helper-local PASS as slice PASS before repository governance gates pass
+- Gatekeeper product work before post-PR886 handoff refresh is merged and verified
+- Treating helper-local PASS as slice PASS without slice-gate evidence
+- Gatekeeper product work before post-PR888 handoff refresh is merged and verified
+- Treating helper-local PASS as slice PASS without patch-preflight slice-gate evidence
+- GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
+
+## 13. Erste Arbeitsanweisung
+
+Start the next chat from the fresh post-remote-connector-write-test successor handoff prompt. Verify the current main state, confirm the remote connector write test marker is present, and continue only with the secure remote connector Branch/PR/Merge path before GUI implementation.
+
+## 14. Arbeitsmodus für den Nachfolge-Chat
+
+1. Führe zuerst den Bootloader aus.
+2. Lies danach alle Pflichtquellen aus Abschnitt 4.
+3. Rekonstruiere den aktuellen Stand aus Repo, PR/CI, Logs und Summary, nicht aus Chat-Erinnerung.
+4. Prüfe Drift zwischen Regeln, Tests, Summary-Renderer, Status und Handoff.
+5. Bei Drift: warnen, keine Produktmutation, Handoff-Prompt oder Drift-Fix anbieten.
+6. Arbeite nur in kleinen, testbaren Slices mit ehrlicher Evidence.
+
+
+CHAT_BOOTLOADER
+
+Purpose: bootstrap a successor chat from repository truth.
+
+Mandatory boot sources:
+- [present] .agentic/compiled_agent_context.yaml
+- [present] .agentic/handoff_state.yaml
+- [present] .agentic/rule_mechanism_inventory.yaml
+- [present] .agentic/rule_migrations.yaml
+- [present] .agentic/rule_preservation.yaml
+- [present] docs/STATUS.md
+- [present] docs/handoff/CURRENT_HANDOFF.md
+- [present] docs/handoff/START_NEW_CHAT_PROMPT.md
+- [present] docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
+- [present] docs/governance/FINAL_SUMMARY_CONTRACT.md
+- [present] docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+- [present] docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+- [present] docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+- [present] docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
+- [present] docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+
+Mandatory workflow rules:
+- Start from repository artifacts instead of chat memory.
+- Read mandatory boot sources before repository changes.
+- Prefer Python runners for local workflow execution; shell remains a thin adapter.
+- Use run_summary_renderer for final summaries in evidence-bearing workflows.
+- Evidence-bearing local workflow finalization must use `agentic-kit evidence finalize-log` or a stricter successor. Freehand final PASS footers are not valid closeout evidence.
+- Treat d, f, and w as communication signals rather than evidence.
+- Run `agentic-kit evidence inspect --require-summary` or inspect equivalent remote/repo evidence before continuing after chat control signals.
+- Inspect repo or remote evidence before requesting pasted terminal output.
+- Use the supported protected-change planning route before protected YAML, JSON, or Markdown control changes: `./ns protected-change-plan --diff-file <file>` or `python -m agentic_project_kit.protected_change_planner --diff-file <file>`. Do not use `agentic-kit protected-change-plan`; that package CLI command is not registered.
+- Before a chat switch, run the closeout prompt and check whether START_NEW_CHAT_PROMPT.md, CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md, and NEXT_CHAT_BOOTSTRAP.md all need updates.
+
+Required first action in a successor chat:
+- Read these sources and verify main, open PRs, CI, STATUS, handoff, rule registry, and final-summary contracts before repository changes.
+- If continuing after a chat control signal, run `agentic-kit evidence inspect --require-summary` or inspect equivalent remote/repo evidence first.
+
+### RESULT: PASS ###
+
+# Portable Chat Execution Contract
+
+Status-date: 2026-05-24
+Status: normative governance contract
+Scope: operating-system-independent execution rules for chat-assisted workflows
+
+## Purpose
+
+The kit must work across macOS, Linux, and Windows assumptions. Canonical workflow correctness must not depend on POSIX-only shell utilities, a healthy inherited `PATH`, or long copy-pasted shell scripts.
+
+The observed failure mode was simple and severe: a generated block could not find required tools. A governance system that cannot preserve evidence when the command environment is degraded is not robust enough for large-LLM operation.
+
+## Canonical rule
+
+Durable workflow behavior belongs in Python modules, tests, and CLI commands. Shell commands are adapters only (`shell commands are adapters only`).
+
+Canonical implementation must prefer:
+
+- `pathlib.Path` for paths,
+- `shutil` for file operations and tool discovery,
+- `platform` for platform inspection,
+- `subprocess.run([...], shell=False)` when external commands are unavoidable,
+- explicit return objects or structured text reports,
+- direct log writing through Python file APIs,
+- one summary renderer and one validation vocabulary.
+
+Canonical implementation must not require:
+
+- `cp`, `tail`, `grep`, `sed`, `head`, `tee`, `find`, or `sh`,
+- hard-coded Unix paths such as `/usr/bin/git`, `/bin/cp`, or `/tmp` as normative rules,
+- shell pipelines for correctness,
+- shell-specific quoting behavior,
+- shell activation of a virtual environment as the only path to execution.
+
+## Bootstrap principle
+
+The portable bootstrap path is a Python entry point, not a shell recovery script.
+
+Required direction:
+
+- `agentic-kit bootstrap-check` verifies Python, repo root, package importability, required governance files, summary renderer importability, and optional Git availability through portable Python APIs.
+- `agentic-kit comm-rules-check` verifies communication, summary, bootstrap, and drift contracts.
+- `agentic-kit handoff-prompt --reason drift` emits a successor-chat prompt when drift is detected.
+
+`./ns` may expose shortcuts for local convenience, but it must not be the only canonical route.
+
+## Local repository freshness rule
+
+Local repository work must start from a verified fresh base. The workflow must fetch the remote, compare the intended local base with its upstream, and stop or synchronize before any mutation. A local branch that is behind `origin/main`, a dirty worktree, or untracked command artifacts are preflight findings, not details to ignore.
+
+For local `main`-based work, the safe precondition is: `git fetch origin`, clean or preserved local changes, `git switch main`, local HEAD equal to `origin/main`, then feature branch creation. Mutation before that precondition is forbidden.
+
+## Remote connector route rule
+
+When a GitHub connector is available, remote repository inspection must start with the direct connector route: `get_repo` for repository identity, `fetch_file` for known file paths, `fetch_commit` for known commits, `get_pr_info` for known pull requests, `fetch_commit_workflow_runs` for CI evidence, and `compare_commits` for branch comparisons.
+
+Search is for unknown paths or symbols. Raw URLs and local fallbacks come after connector access is unavailable or insufficient.
+
+## Governance YAML mutation rule
+
+Governance YAML mutation must use parse-modify-dump. Tools and command scripts must load YAML through a parser, mutate typed data, write it through a structured emitter, parse the result again, and then run YAML integrity tests.
+
+Manual indentation patches, regex insertion into YAML lists, unparsed string concatenation, and late quote repair after a failed test are forbidden. A YAML parse error in CI is a workflow defect, not a harmless iteration.
+
+## External command rule
+
+When Python code must call an external command, it must use an argument list and `shell=False`. The code must capture stdout, stderr, return code, and command identity in a reportable structure. It must handle command-not-found as a normal diagnostic result, not as an unhandled crash.
+
+## Evidence rule
+
+Evidence generation must be possible without POSIX file-copy utilities. Python code must be able to create log directories, write logs, copy or move report files, and name local and remote evidence paths using portable path handling.
+
+## Chat block rule
+
+A chat-generated terminal block is allowed only as a bounded fallback or adapter. It must not be the authoritative expression of a reusable workflow. If a shell block is used because the portable runner is missing or broken, the summary must say so and must not claim the portable workflow is healthy.
+
+## OS independence rule
+
+Documentation and tests must not define macOS-only, Linux-only, or Windows-only paths as canonical. OS-specific examples may appear only when labeled as examples or local recovery snippets, not as normative kit behavior.
+
+## Optimization requirement
+
+Whenever a workflow is converted from shell to Python, the implementation must remove assumptions instead of merely translating shell commands. Prefer file parsing, imports, and deterministic checks over external process execution whenever possible.
+
+# Chat Communication Contract
+
+Status-date: 2026-05-22
+Status: normative governance contract
+Scope: LLM-to-user, user-to-LLM, LLM-to-terminal, and terminal-to-LLM communication for agentic-project-kit work
+
+## Purpose
+
+This contract removes ambiguity from chat-assisted development. Communication shortcuts, terminal blocks, failure handling, and follow-up behavior must be interpreted from repository evidence, not from memory or good intentions.
+
+Large LLMs must have less freedom, not more prose. The durable pattern is: read the required sources, verify current state, run deterministic checks, produce honest evidence, then continue.
+
+## Required startup behavior for successor chats
+
+A successor chat must not start with a terminal block, mutation, merge, release, or GUI feature patch. It must first read the mandatory source list from `.agentic/compiled_agent_context.yaml` and then the human governance documents named there.
+
+Minimum first-read set:
+
+1. `.agentic/compiled_agent_context.yaml`
+2. `docs/governance/FINAL_SUMMARY_CONTRACT.md`
+3. `docs/governance/CHAT_COMMUNICATION_CONTRACT.md`
+4. `docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md`
+5. `docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`
+6. `docs/TEST_GATES.md`
+7. `docs/STATUS.md`
+8. `docs/handoff/CURRENT_HANDOFF.md`
+9. relevant source and test files for the requested slice
+
+If any of these sources are missing, contradictory, stale, or unreachable, the chat must report drift and avoid mutation until the drift is resolved or a handoff prompt is produced.
+
+## User acknowledgements
+
+Short user replies are control signals, not evidence.
+
+- `d` or `D`: the previous local block appears finished from the user's perspective. The assistant must still inspect terminal output, remote log, command report, PR state, branch, dirty state, and summary before treating it as success.
+- `f` or `F`: the previous block failed or the user reports failure. The assistant must first look for local or remote evidence paths and propose log upload/recovery before asking for pasted output.
+- `w` or `W`: continue, but only within the current governance and evidence rules.
+- `paste-output`: manual output is needed because repo-backed or local evidence is unavailable, broken, or insufficient.
+- `stop`: no further mutation or terminal instructions.
+
+A suggested next chat reply for a failed workflow should normally be `f`, not `d`, when remote evidence exists but the work failed. Remote evidence can prove failure; it does not convert failure into success.
+
+## LLM-to-user rules
+
+The assistant must:
+
+- state the current source of truth and evidence basis for any next action,
+- separate product progress from workflow/evidence progress,
+- report when a failure is caused by tooling, shell environment, summary rendering, CI, docs, tests, or product code,
+- avoid asking for full pasted output when a local or remote log path exists,
+- prefer a minimal evidence-recovery step over a large new patch after failure,
+- never treat a user's `d` as proof that the work passed,
+- never hide that a block was only partially executed,
+- explicitly say when remote evidence is unavailable.
+
+## LLM-to-terminal rules
+
+Canonical workflow execution must not depend on long ad-hoc shell blocks. When terminal execution is unavoidable, the block must be bounded, copy-safe, and evidence-aware.
+
+Forbidden as canonical control mechanisms:
+
+- heredocs,
+- risky multi-line `python -c` strings,
+- raw decoration lines that execute as shell commands,
+- implicit POSIX tools as correctness dependencies,
+- status variables mutated inside `{ ... } | tee "$LOG"` pipeline/subshell constructs,
+- handwritten legacy summary footers after `./ns summary`,
+- `REMOTE_EVIDENCE: PENDING` in final summaries,
+- continuing to PR creation, merge, release, or tagging after a blocking gate failure.
+
+Allowed routes:
+
+- repository-owned Python runners,
+- `agentic-kit` CLI commands backed by Python core logic,
+- `./ns` as a thin convenience adapter when the local shell is healthy,
+- generated command reports and terminal logs stored under the documented evidence paths.
+
+## Terminal-to-LLM rules
+
+Every non-trivial terminal or remote command workflow must end in evidence that the assistant can inspect:
+
+- a rendered final summary printed in the terminal output,
+- the same rendered final summary captured in the terminal log or command report,
+- a terminal log path or command report path,
+- branch and dirty-state evidence when mutation occurred,
+- PR/CI/merge state when remote mutation occurred,
+- explicit downgrade when evidence is partial, chat-only, or failed.
+
+A chat-only structured summary is not enough for terminal-directed work. The terminal block must render the structured summary itself, normally through `./ns summary`, so the evidence remains inspectable after chat handoff.
+
+A terminal log upload is evidence transport. It does not change the result of failed work.
+
+If a terminal summary names a concrete remote log path, verify that exact path directly before using search results. Search lag is not evidence that a pushed log is missing.
+
+## Failure communication
+
+On failure, the next assistant response must choose the least lossy recovery path:
+
+1. inspect remote evidence if available,
+2. inspect local log path if the user pasted it,
+3. propose a minimal log-upload or status-recovery step,
+4. ask for pasted output only when evidence cannot be retrieved or uploaded.
+
+A blocking gate failure must stop later mutation sections. The final result must identify the first blocking failure and the actual state reached.
+
+## PASS communication
+
+A final PASS claim requires all of the following:
+
+- required work passed,
+- required gates passed or were honestly marked not run/not required,
+- evidence exists and matches the claim,
+- remote evidence is PASS when the workflow requires no-copy continuation,
+- no earlier required inner FAIL was overwritten,
+- the final summary is rendered through the canonical renderer route,
+- terminal-directed work printed the structured summary in the terminal output and captured it in the terminal log.
+
+## Optimization requirement
+
+For every future rule or workflow step, prefer the option that reduces LLM discretion, reduces duplicated wording, improves portability, and makes drift machine-detectable. If a rule cannot yet be machine-checked, it must name the review-only exception and the evidence a reviewer must inspect.
+
+Manual GUI verification must not hide the final result behind an interactive terminal read prompt. Use a two-phase record: GUI launch first, then a non-interactive PASS or FAIL evidence record with a generated summary invocation.
+
+## Mandatory no-copy transfer rules
+
+For assistant-initiated local work, complete terminal output must be captured in a repo-backed transfer or evidence file. The record must contain stdout, stderr, exit code, argv, start time, end time, current branch, HEAD, dirty-state evidence, and a concrete log or command-report path. A normal FAIL must still produce inspectable evidence; the assistant must not ask for pasted output when the transfer file exists or can be pushed.
+
+Local tasks must normally be provided as repo-backed Python programs, typed work orders, or `agentic-kit` commands and must run through the repository virtual environment. Global Python, global shell state, long ad-hoc shell blocks, risky multi-line `python -c`, and raw visual separator lines as terminal commands are forbidden as default control paths.
+
+Manual copy-and-paste of terminal output is allowed only after a hard local failure that prevents evidence creation or transfer, including kill -9, process startup failure, terminal loss, machine crash, filesystem failure, network failure before push, or explicitly broken logging.
+
+## Preferred dialog signals
+
+The preferred dialog signals are `d` for done, `f` for fail, and `g` for go. `g` replaces the former German `w` signal for continuing with the next safe planned step. `w` remains accepted as a legacy alias for `g` during transition, but new tooling and generated instructions should prefer `g`.
+
+The local command aliases are `agentic-kit rn` for run-next/remote-next and `agentic-kit rnc` for remote-next closeout. GUI controls must use these aliases rather than introducing a separate execution model.
+
+# Test Gates
+
+Status-date: 2026-05-24
+Project: agentic-project-kit
+
+## Purpose
+
+This file defines the required evidence before claiming that a change is complete.
+
+The repository must not rely on memory, chat history, or informal claims. Relevant checks must be run and reported explicitly.
+
+## Gate Matrix
+
+| Change type | Required evidence |
+|---|---|
+| Documentation only | git diff, content review, and agentic-kit check-docs |
+| Architecture-relevant change | Read docs/architecture/ARCHITECTURE_CONTRACT.md; state whether the contract remains valid or is updated; run the standard local gate |
+| Documentation coverage change | Update docs/DOCUMENTATION_COVERAGE.yaml and run agentic-kit check-docs |
+| Documentation registry/schema change | Update docs/DOCUMENTATION_REGISTRY.yaml and docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md; run registry unit tests plus agentic-kit check-docs/docs-audit |
+| Documentation mesh / cross-document drift change | Unit tests plus agentic-kit doc-mesh-audit CLI smoke command; keep current-state, governance, architecture, and historical-plan document classes explicit |
+| Governance rule change | Rule Hardening Gate: add or update a deterministic test, coverage check, doctor check, release check, or documented review-only exception |
+| Critical control file change | Control File Preservation Gate: preserve required anchors or record an explicit successor migration; hard length-limit trimming is forbidden |
+| Workflow guard change | Workflow Guard Gate: run `agentic-kit workflow-guard check`, `agentic-kit patch-preflight`, and `python -m pytest -q tests/test_workflow_guard.py tests/test_patch_artifact_preflight.py` |
+| Local repository mutation | Local Freshness Gate: fetch the remote, verify the intended base is current, preserve or stop on dirty local state, then create the feature branch |
+| LLM communication or bootstrap rule change | Update the communication/bootstrap governance contracts, compiled agent context, coverage anchors, and `tests/test_llm_communication_contracts.py`; run agentic-kit check-docs |
+| Portable execution rule change | Update `docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md`; add or update Python-first tests; do not make POSIX shell tools canonical workflow dependencies |
+| Document quality heuristic change | Unit tests plus agentic-kit check-docs; confirm that deterministic quality heuristics do not claim semantic perfection |
+| Python code | python -m pytest -q and ruff check . |
+| CLI behavior | Unit tests plus CLI smoke command; update docs/DOCUMENTATION_COVERAGE.yaml when public command visibility changes |
+| Generator behavior | Generator test plus generated-project file inspection |
+| GitHub workflow change | Local workflow review plus GitHub Actions run |
+| Packaging/release change | python -m build, twine check dist/*, release workflow result |
+| Release planning change | Unit tests plus agentic-kit release-plan CLI smoke command |
+| Release state validation change | Unit tests plus agentic-kit release-check CLI smoke command |
+| Post-release archive check | Unit tests plus agentic-kit post-release-check CLI smoke command |
+| TODO validation change | Unit tests plus agentic-kit check-todo CLI smoke command |
+| Project health check change | Unit tests plus agentic-kit doctor CLI smoke command |
+| Planning-documentation slice gate | Unit tests plus CLI smoke command for `agentic-kit slice gate --kind planning-doc`; output must distinguish helper-local PASS from slice PASS |
+| TestPyPI validation | TestPyPI upload, fresh venv install, CLI smoke command |
+| Handoff/state change | Update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md |
+
+## Architecture Contract Gate
+
+`docs/architecture/ARCHITECTURE_CONTRACT.md` is a required project gate document.
+
+Architecture-relevant changes include changes to:
+
+- project purpose or product boundary;
+- CLI command behavior;
+- generated project structure;
+- profiles or policy packs;
+- doctor, check-docs, check-todo, release checks, or other gates;
+- repository state files or handoff conventions;
+- agent instructions, PR templates, evidence staging, or review workflow;
+- automation boundaries, GitHub integration, or future multiuser assumptions.
+
+For such changes, report one of these outcomes:
+
+- architecture contract reviewed; no update needed;
+- architecture contract updated in the change;
+- architecture conflict found; implementation deferred or narrowed.
+
+`agentic-kit check-docs` must fail if the architecture contract file is missing or loses required anchor sections.
+
+## Documentation Coverage Gate
+
+`docs/DOCUMENTATION_COVERAGE.yaml` is a required project gate document.
+
+It lists public commands, workflows, governance concepts, safety rules, release/citation topics, evidence conventions, and state-doc expectations that must remain visible in the documentation set.
+
+Update it when adding or changing:
+
+- public CLI commands;
+- generated project files;
+- user workflows;
+- test gates;
+- doctor or check-docs behavior;
+- release, citation, or archival behavior;
+- safety or evidence rules;
+- architecture concepts, profiles, or policy packs.
+
+`agentic-kit check-docs` must fail if a required term from the coverage matrix is missing from its target document.
+
+## Documentation Registry Gate
+
+`docs/DOCUMENTATION_REGISTRY.yaml` is the additive documentation-governance registry for classifying documents and artifacts before broad migration.
+
+The registry validates only structural, machine-checkable registry rules: registry version, allowed classes, required class-rule fields, registered document fields, duplicate paths, and existence of registered files. It does not prove semantic documentation quality and must not trigger broad document migration by itself.
+
+Required class-level rule fields are ownership, freshness, language policy, redundancy boundary, machine readability, retention / GC behavior, update triggers, portability/local-path scanning, and gate coverage.
+
+Registry/schema changes must preserve these boundaries:
+
+- add classifications incrementally in small reversible slices;
+- do not delete, move, or rewrite documents merely to satisfy a taxonomy;
+- keep evidence/log and temporary artifact behavior separate;
+- keep artifact GC integration explicit and protected;
+- keep `agentic-kit docs-registry` read-only;
+- update tests when allowed classes, required fields, guard semantics, or registry reporting change.
+
+Required evidence for this registry gate:
+
+    python -m pytest -q tests/test_documentation_registry.py
+    agentic-kit docs-registry
+    agentic-kit docs-registry --report /tmp/agentic-docs-registry-summary.json
+    agentic-kit check-docs
+
+## Failure-Mode Review Automation Gate (planned)
+
+`docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md` defines the implementation contract for a future repo-backed failure-mode review path.
+
+The first implementation phase must remain read-only and must add `agentic-kit next-slice review` plus `./ns next-slice-review` before any patch-preflight BLOCK integration. The planned Phase-1 evidence is:
+
+    python -m pytest -q tests/test_failure_mode_review.py
+    agentic-kit next-slice review
+    ./ns next-slice-review
+    agentic-kit check-docs
+    agentic-kit docs-audit
+    agentic-kit doctor
+
+Until Phase 1 is implemented, this section is a planning gate only. It must not be cited as evidence that the command already exists.
+
+## Tkinter Workbench GUI Gate (planned)
+
+`docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md` defines the full structured Tkinter workbench plan. The GUI must render the complete planned button catalog from the first implementation slice, while non-implemented actions remain visible and disabled. Functionality is enabled in later slices only behind metadata, tests, safety classes, evidence checks, and existing branch/PR workflow gates.
+
+The first implementation phase must remain non-destructive and must add the full button catalog plus a headless-renderable Tkinter workbench skeleton before enabling bounded mutation buttons. The planned Phase-1 evidence is:
+
+    python -m pytest -q tests/test_tkinter_workbench_gui.py tests/test_cockpit.py tests/test_repo_ns_entrypoint.py
+    ruff check .
+    agentic-kit check-docs
+    agentic-kit docs-audit
+    agentic-kit doctor
+
+Until Slice 1 is implemented, this section is a planning gate only. It must not be cited as evidence that the GUI backend already exists.
+
+## LLM Communication and Bootstrap Gate
+
+Changes to chat communication, final summary behavior, portable execution, successor-chat bootstrap, drift detection, or handoff prompt behavior must update the canonical governance contracts instead of spreading long duplicate rules across state files.
+
+Required source documents:
+
+- `docs/governance/CHAT_COMMUNICATION_CONTRACT.md`
+- `docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md`
+- `docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`
+- `docs/governance/FINAL_SUMMARY_CONTRACT.md`
+- `.agentic/compiled_agent_context.yaml`
+
+Required hardening:
+
+- update `docs/DOCUMENTATION_COVERAGE.yaml` when anchors change;
+- update `tests/test_llm_communication_contracts.py` or the deterministic communication-rules check;
+- keep `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md` as concise pointers, not duplicate rule books;
+- prefer Python-core portable checks over shell-only snippets;
+- require a local repository freshness precondition before local mutation.
+
+The gate must preserve these invariants: successor chats read mandatory sources before mutation, `d`/`f`/`w` are communication signals rather than evidence, `REMOTE_EVIDENCE` uses only final contract values, shell is only an adapter, and drift stops mutation-oriented work unless the mutation is the drift fix itself.
+
+## Workflow Guard Gate
+
+`agentic-kit workflow-guard check` is the pre-mutation diagnostic for recurring workflow and standard-error patterns.
+
+The guard must block at least these classes before further mutation:
+
+- governance YAML parse failures;
+- missing required anchors in protected control files;
+- weakened no-hard-length-limit preservation policy;
+- missing workflow guard policy documentation.
+
+The guard is intentionally conservative: it diagnoses and hard-fails first. Automated repair is only acceptable for narrow, reversible, explicitly safe cases. Semantic rule loss, release-state conflict, broad document rewrite, and unclear YAML recovery require a repair plan and review-visible evidence before further mutation.
+
+Required evidence:
+
+    python -m pytest -q tests/test_workflow_guard.py tests/test_patch_artifact_preflight.py
+    agentic-kit workflow-guard check
+    agentic-kit patch-preflight
+    agentic-kit check-docs
+
+## Next-Step Workflow Gate
+
+When changing `tools/next-step.py`, `.agentic/current_work.yaml`, workflow state handling, or the local `ns` convention, run the normal Python and documentation gates plus an explicit request/no-op smoke check.
+
+Required behavior:
+
+- `.agentic/current_work.yaml` with `state: READY` and `.agentic/workflow_state` `IDLE` must no-op and stay `IDLE`.
+- `.venv/bin/python tools/next-step.py --request` must set `.agentic/current_work.yaml` to `state: REQUESTED` without changing `.agentic/workflow_state`.
+- the next normal `tools/next-step.py` / `ns` run may execute the configured workflow and must reset the request to `READY` on success.
+- `FAILED` must preserve evidence and must not automatically clean up.
+
+## Documentation Mesh Audit Gate
+
+Use `agentic-kit doc-mesh-audit` when changing cross-document state, release metadata, documentation taxonomy, historical planning documents, or cross-document drift rules.
+
+The documentation mesh is split into explicit document classes:
+
+- current-state documents such as README, CITATION, pyproject, package `__version__`, STATUS, and CURRENT_HANDOFF;
+- release-history documents such as CHANGELOG.md, which remain required and may feed release DOI synchronization without being treated as live project state;
+- governance documents such as AGENTS, TEST_GATES, DOCUMENTATION_COVERAGE, sentinel, and project contract files;
+- architecture/design documents such as ARCHITECTURE_CONTRACT, WORKFLOW_OUTPUT_CYCLE, and optional DESIGN.md;
+- historical-plan documents such as roadmap summaries, status reports, and v0.3.0 output-repair planning files.
+
+The hard audit checks only machine-checkable drift classes, including version mismatches, stale current-state wording, missing historical-source-of-truth banners, and release DOI list mismatches. It must not claim semantic proof of documentation quality.
+
+## Rule Hardening Gate
+
+Every new or changed governance rule must be backed by at least one explicit hardening mechanism in the same change.
+
+Accepted hardening mechanisms:
+
+- a deterministic unit or integration test;
+- a documentation coverage requirement in `docs/DOCUMENTATION_COVERAGE.yaml`;
+- a doctor, check-docs, release-check, or check-todo gate;
+- a generator fixture test when the rule affects generated projects;
+- a documented review-only exception when the rule is intentionally not machine-checkable.
+
+Do not add normative rules that exist only as prose without a matching test, gate, coverage requirement, or explicit exception. Review-only exceptions must name why the rule cannot currently be enforced deterministically and what evidence reviewers should inspect.
+
+## Control File Preservation Gate
+
+Critical control files must not lose active rules for compactness, token budget, or broad rewrite convenience. Information preservation outranks compactness.
+
+Protected files and required anchors are listed in `.agentic/control_file_preservation.yaml`. The manifest explicitly sets `no_hard_length_limit: true`; hard length-limit trimming is forbidden. If a protected file becomes too large, split it, reference it, or generate projections from machine-readable sources instead of deleting still-active rules.
+
+A removed protected anchor is valid only when the same change records the removed anchor, successor anchor, rationale, deterministic test, and reviewer-visible summary. Otherwise the change is lossy and must fail.
+
+Required evidence:
+
+    python -m pytest -q tests/test_control_file_preservation.py
+    agentic-kit check-docs
+
+## Document Quality Heuristic Gate
+
+`agentic-kit check-docs` may use deterministic quality heuristics as hard checks for known machine-checkable problems, including unresolved placeholder markers, stale handoff markers, missing required sections, and missing coverage terms.
+
+These checks are useful drift indicators. They must not be described as proof of semantic perfection.
+
+Advisory review may later evaluate clarity, didactic quality, audience fit, missing rationale, and possible architecture drift. Such advisory review must remain separate from hard gates unless it is converted into a deterministic rule with a clear failure condition.
+
+## Remote Work Authorization Gate
+
+Agents may create remote feature branches, edit files on those branches, repair follow-up gate failures, and open or update pull requests without additional confirmation when the work fits the current request and the architecture contract.
+
+The following decisions remain maintainer-owned and require explicit approval:
+
+- merge pull requests;
+- write directly to `main`;
+- create release tags;
+- create release or publication artifacts;
+- raise release versions;
+- change repository visibility, access rights, or private configuration;
+- change architecture direction when multiple plausible options exist.
+
+
+## Local Cockpit Gate
+
+When changing the local cockpit, cockpit action registry, cockpit CLI adapter, `./ns cockpit` shortcuts, or `./ns-menu` cockpit entries, run unit tests plus explicit CLI smoke commands.
+When changing the experimental Tkinter GUI cockpit, also verify that the selected local Python can import `tkinter`. On Homebrew/macOS, Tk support is provided by the separate `python-tk@3.13` package and is not a pip dependency. A GUI launch smoke should use a dedicated Tk-capable virtual environment when the default development venv lacks `_tkinter`. Real Tk window smoke checks are blocked by default during local gates; set `AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE=1` only for an intentional real-window launch evidence run.
+
+
+Required evidence:
+
+### INSPECT EXISTING TRANSFER / PR ROUTES ###
+                                                                                                   
+ Usage: agentic-kit transfer [OPTIONS] COMMAND [ARGS]...                                           
+                                                                                                   
+ Inspect and apply repo-backed text transfer orders.                                               
+                                                                                                   
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────╮
+│ closeout                                                                                        │
+│ remote-next                                                                                     │
+│ repo-status                                                                                     │
+│ repo-log                                                                                        │
+│ head-sha                                                                                        │
+│ repo-diff                                                                                       │
+│ fetch-origin                                                                                    │
+│ pull-current                                                                                    │
+│ branch-delete                                                                                   │
+│ pr-wait-ci                                                                                      │
+│ pr-merge-safe                                                                                   │
+│ post-merge-check                                                                                │
+│ admin-refresh-pr                                                                                │
+│ branch-create                                                                                   │
+│ branch-switch                                                                                   │
+│ commit                                                                                          │
+│ push-current                                                                                    │
+│ pr-create                                                                                       │
+│ pr-status                                                                                       │
+│ run-local                                                                                       │
+│ state                                                                                           │
+│ status                                                                                          │
+│ inspect                                                                                         │
+│ apply                                                                                           │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+{
+  "branch": "main",
+  "capabilities": {
+    "closeout_last_run": false,
+    "diagnose": true,
+    "refresh_rules": true,
+    "run_next_command": false
+  },
+  "closeout": {
+    "dirty_worktree": true,
+    "pending_transfer_order": false
+  },
+  "created_at": "2026-05-31T12:10:19.093730+00:00",
+  "head": "078145b",
+  "last_result": {
+    "exists": true,
+    "report_path": "docs/reports/command_runs/transfer-closeout-mvp.md"
+  },
+  "next_action": "Review or clean the worktree before running another transfer action.",
+  "primary_state": "BLOCKED",
+  "reasons": [
+    "dirty_worktree"
+  ],
+  "repo": "vfi64/agentic-project-kit",
+  "schema_version": 1
+}
+
+[Errno 2] No such file or directory: '.agentic/transfer/inbox/current.yaml'
+
+                                                                                                   
+ Usage: agentic-kit transfer branch-create [OPTIONS] BRANCH                                        
+                                                                                                   
+╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────╮
+│ *    branch      TEXT  Branch name to create. [required]                                        │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ --start-point        TEXT  Start point for the new branch. [default: main]                      │
+│ --push                     Push the new branch and set upstream.                                │
+│ --json                     Print JSON instead of text.                                          │
+│ --help                     Show this message and exit.                                          │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+                                                                                                   
+ Usage: agentic-kit transfer branch-switch [OPTIONS] BRANCH                                        
+                                                                                                   
+╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────╮
+│ *    branch      TEXT  Branch name to switch to. [required]                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ --pull          Fast-forward pull from origin after switching.                                  │
+│ --json          Print JSON instead of text.                                                     │
+│ --help          Show this message and exit.                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+                                                                                                   
+ Usage: agentic-kit transfer commit [OPTIONS]                                                      
+                                                                                                   
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ *  --message     -m      TEXT  Commit message. [required]                                       │
+│    --path                TEXT  Path to add before commit. Repeatable.                           │
+│    --allow-main                Allow committing directly on main. Use only for explicit         │
+│                                emergency/admin flows.                                           │
+│    --json                      Print JSON instead of text.                                      │
+│    --help                      Show this message and exit.                                      │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+                                                                                                   
+ Usage: agentic-kit transfer push-current [OPTIONS]                                                
+                                                                                                   
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ --json          Print JSON instead of text.                                                     │
+│ --help          Show this message and exit.                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+                                                                                                   
+ Usage: agentic-kit transfer pr-create [OPTIONS]                                                   
+                                                                                                   
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│    --base         TEXT  Base branch. [default: main]                                            │
+│ *  --head         TEXT  Head branch. [required]                                                 │
+│ *  --title        TEXT  Pull request title. [required]                                          │
+│    --body         TEXT  Pull request body.                                                      │
+│    --json               Print JSON instead of text.                                             │
+│    --help               Show this message and exit.                                             │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+                                                                                                   
+ Usage: agentic-kit transfer pr-status [OPTIONS] PR_NUMBER                                         
+                                                                                                   
+╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────╮
+│ *    pr_number      INTEGER  Pull request number to inspect through the transfer wrapper.       │
+│                              [required]                                                         │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ --json                                             Print JSON instead of text report.           │
+│ --no-failed-log-fetch                              Do not fetch failed GitHub Actions logs for  │
+│                                                    red checks.                                  │
+│ --failed-log-lines           INTEGER RANGE [x>=0]  Maximum failed-log excerpt lines.            │
+│                                                    [default: 120]                               │
+│ --expected-head-sha          TEXT                  Expected full PR head SHA.                   │
+│ --help                                             Show this message and exit.                  │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+                                                                                                   
+ Usage: agentic-kit transfer pr-wait-ci [OPTIONS] PR_NUMBER                                        
+                                                                                                   
+╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────╮
+│ *    pr_number      INTEGER  Pull request number to wait for. [required]                        │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ --expected-head-sha                      TEXT                  Expected PR head SHA.            │
+│ --timeout-seconds                        INTEGER RANGE [x>=1]  Maximum wait time.               │
+│                                                                [default: 300]                   │
+│ --interval-seconds,--poll-seconds        INTEGER RANGE [x>=1]  Polling interval. [default: 10]  │
+│ --json                                                         Print JSON instead of text.      │
+│ --help                                                         Show this message and exit.      │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+                                                                                                   
+ Usage: agentic-kit transfer pr-merge-safe [OPTIONS] PR_NUMBER                                     
+                                                                                                   
+╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────╮
+│ *    pr_number      INTEGER  Pull request number to merge safely. [required]                    │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ *  --expected-head-sha        TEXT  Expected PR head SHA. [required]                            │
+│    --main-branch              TEXT  Expected base branch. [default: main]                       │
+│    --merge-method             TEXT  GitHub merge method. [default: squash]                      │
+│    --no-verify-main                 Skip post-merge main verification.                          │
+│    --json                           Print JSON instead of text.                                 │
+│    --help                           Show this message and exit.                                 │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+                                                                                                   
+ Usage: agentic-kit pr [OPTIONS] COMMAND [ARGS]...                                                 
+                                                                                                   
+ Evaluate deterministic PR closeout and readiness state.                                           
+                                                                                                   
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────╮
+│ closeout-check                                                                                  │
+│ status          Print deterministic PR/CI status and fetch failed logs for red CI.              │
+│ merge-if-green  Merge only when PR checks are green, refs match, and merge state is clean.      │
+│ wait-ci         Wait for pull-request CI; guard merge preparation with --expected-head-sha.     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+                                                                                                   
+ Usage: agentic-kit pr status [OPTIONS] PR_NUMBER                                                  
+                                                                                                   
+ Print deterministic PR/CI status and fetch failed logs for red CI.                                
+                                                                                                   
+╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────╮
+│ *    pr_number      INTEGER  Pull request number to inspect. [required]                         │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ --json                                             Print JSON instead of the text report.       │
+│ --no-failed-log-fetch                              Do not fetch failed GitHub Actions logs for  │
+│                                                    red checks.                                  │
+│ --failed-log-lines           INTEGER RANGE [x>=0]  Maximum failed-log excerpt lines.            │
+│                                                    [default: 120]                               │
+│ --help                                             Show this message and exit.                  │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+                                                                                                   
+ Usage: agentic-kit pr wait-ci [OPTIONS] PR_NUMBER                                                 
+                                                                                                   
+ Wait for pull-request CI; guard merge preparation with --expected-head-sha.                       
+                                                                                                   
+╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────╮
+│ *    pr_number      INTEGER  Pull request number to inspect. [required]                         │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ --expected-head-sha        TEXT                  Expected PR head SHA for --expected-head-sha.  │
+│                                                  The command fails closed if the head moves.    │
+│ --timeout-seconds          INTEGER RANGE [x>=1]  Maximum wait time. [default: 2700]             │
+│ --interval-seconds         INTEGER RANGE [x>=1]  Polling interval. [default: 20]                │
+│ --expected-check           TEXT                  Check name that must be present before         │
+│                                                  readiness can pass. Repeatable.                │
+│ --help                                           Show this message and exit.                    │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+                                                                                                   
+ Usage: agentic-kit pr merge-if-green [OPTIONS] PR_NUMBER                                          
+                                                                                                   
+ Merge only when PR checks are green, refs match, and merge state is clean.                        
+                                                                                                   
+╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────╮
+│ *    pr_number      INTEGER  Pull request number to merge only after green checks. [required]   │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────╮
+│ --merge-method                                   TEXT                  GitHub merge method:     │
+│                                                                        squash, merge, or        │
+│                                                                        rebase.                  │
+│                                                                        [default: squash]        │
+│ --delete-branch            --no-delete-branch                          Delete the branch after  │
+│                                                                        a successful merge.      │
+│                                                                        [default: delete-branch] │
+│ --dry-run                                                              Evaluate without         │
+│                                                                        merging.                 │
+│ --no-verify-main                                                       Do not verify main CI    │
+│                                                                        after merge.             │
+│ --main-branch                                    TEXT                  Expected base branch and │
+│                                                                        post-merge verification  │
+│                                                                        branch.                  │
+│                                                                        [default: main]          │
+│ --expected-base-branch                           TEXT                  Expected PR base branch. │
+│                                                                        Defaults to              │
+│                                                                        --main-branch.           │
+│ --expected-head-sha                              TEXT                  Expected PR head SHA.    │
+│                                                                        Refuses merge if the     │
+│                                                                        head moved.              │
+│ --main-ci-timeout-seco…                          INTEGER RANGE [x>=1]  Post-merge main CI wait  │
+│                                                                        timeout.                 │
+│                                                                        [default: 300]           │
+│ --main-ci-poll-seconds                           INTEGER RANGE [x>=1]  Post-merge main CI       │
+│                                                                        polling interval.        │
+│                                                                        [default: 10]            │
+│ --help                                                                 Show this message and    │
+│                                                                        exit.                    │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+### LOCAL BASELINE GATES ###
+Agentic project check passed
+Documentation mesh audit
+
+Documents:
+- README.md: current-state, required
+- CHANGELOG.md: release-history, required
+- docs/releases/VERIFIED_RELEASES.md: release-history, optional
+- CITATION.cff: current-state, required
+- pyproject.toml: current-state, required
+- src/agentic_project_kit/__init__.py: current-state, required
+- docs/STATUS.md: current-state, required
+- docs/handoff/CURRENT_HANDOFF.md: current-state, required
+- AGENTS.md: governance, required
+- docs/TEST_GATES.md: governance, required
+- docs/DOCUMENTATION_COVERAGE.yaml: governance, required
+- sentinel.yaml: governance, required
+- .agentic/project.yaml: governance, required
+- docs/architecture/ARCHITECTURE_CONTRACT.md: architecture, required
+- docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md: architecture, required
+- docs/WORKFLOW_OUTPUT_CYCLE.md: architecture, required
+- DESIGN.md: architecture, optional
+- docs/reports/status_roadmap_summary_after_pr105_20260512.md: historical-plan, required
+- docs/V0.3.0_OUTPUT_REPAIR_PLAN.md: historical-plan, optional
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+........................................................................ [ 97%]
+..                                                                       [100%]
+74 passed in 2.57s
+All checks passed!
+
+### RESULT SUMMARY ###
+docs_rc=0
+mesh_rc=0
+test_rc=0
+ruff_rc=0
+overall=PASS_BOOTSTRAP_READY

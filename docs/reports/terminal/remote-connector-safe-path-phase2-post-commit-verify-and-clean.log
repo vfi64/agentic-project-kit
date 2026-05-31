@@ -1,0 +1,218 @@
+===============================================================================
+===============================================================================
+===============================================================================
+### REMOTE CONNECTOR SAFE PATH PHASE 2 POST-COMMIT VERIFY AND CLEAN -- AGENTIC-KIT ROUTE ONLY ###
+created_at_utc=2026-05-31T12:14:22Z
+
+### STATE BEFORE CLEANUP ###
+workflow_state=IDLE
+current_work=present
+current_work_state=READY
+current_report=docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+
+Safety:
+- This command is read-only.
+- current_report points to the latest workflow-output summary, not necessarily uploadable local evidence.
+
+Interpretation:
+- Working tree has uncommitted changes.
+
+Recommended next step:
+- Run: git status --short
+- Do not start workflow automation until the working tree is clean or intentionally staged.
+
+Optional checks:
+- agentic-kit doctor
+- agentic-kit check-docs
+{
+  "branch": "feature/secure-remote-connector-branch-pr-merge-path",
+  "capabilities": {
+    "closeout_last_run": false,
+    "diagnose": true,
+    "refresh_rules": true,
+    "run_next_command": false
+  },
+  "closeout": {
+    "dirty_worktree": true,
+    "pending_transfer_order": false
+  },
+  "created_at": "2026-05-31T12:14:23.317433+00:00",
+  "head": "9f995b7",
+  "last_result": {
+    "exists": true,
+    "report_path": "docs/reports/command_runs/transfer-closeout-mvp.md"
+  },
+  "next_action": "Review or clean the worktree before running another transfer action.",
+  "primary_state": "BLOCKED",
+  "reasons": [
+    "dirty_worktree"
+  ],
+  "repo": "vfi64/agentic-project-kit",
+  "schema_version": 1
+}
+POST_MERGE_HANDOFF_REFRESH
+current_head=9f995b7
+freshness_warning_present=True
+refresh_required=True
+latest_successor_prompt=docs/reports/terminal/post-remote-connector-write-test-final-successor-chat-handoff.md
+result=REFRESH_REQUIRED
+next_safe_action=create_administrative_handoff_refresh
+Repo: agentic-project-kit
+Path: agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.4.5
+Safe state: main @ 16b5204
+Next: Start the next chat from the fresh post-remote-connector-write-test successor handoff prompt. Verify the current main state, confirm the remote connector write test marker is present, and continue only with the secure remote connector Branch/PR/Merge path before GUI implementation.
+
+### COMMIT SELF-MUTATED PHASE2 COMMIT LOG ###
+{
+  "action": "commit",
+  "command": [
+    "git",
+    "commit",
+    "-m",
+    "Record remote connector safe path phase2 verification log"
+  ],
+  "next_action": "Push current branch or inspect status.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "[feature/secure-remote-connector-branch-pr-merge-path b2bddfc] Record remote connector safe path phase2 verification log\n 2 files changed, 159 insertions(+)\n create mode 100644 docs/reports/terminal/remote-connector-safe-path-phase2-post-commit-verify-and-clean.log\n"
+}
+
+### PUSH CURRENT BRANCH ###
+{
+  "action": "push-current",
+  "command": [
+    "git",
+    "push",
+    "-u",
+    "origin",
+    "feature/secure-remote-connector-branch-pr-merge-path"
+  ],
+  "next_action": "Create or inspect pull request.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "To github.com:vfi64/agentic-project-kit.git\n   9f995b7..b2bddfc  feature/secure-remote-connector-branch-pr-merge-path -> feature/secure-remote-connector-branch-pr-merge-path\n",
+  "stdout": "branch 'feature/secure-remote-connector-branch-pr-merge-path' set up to track 'origin/feature/secure-remote-connector-branch-pr-merge-path'.\n"
+}
+
+### VERIFY CURRENT BRANCH STATE ###
+workflow_state=IDLE
+current_work=present
+current_work_state=READY
+current_report=docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+
+Safety:
+- This command is read-only.
+- current_report points to the latest workflow-output summary, not necessarily uploadable local evidence.
+
+Interpretation:
+- Working tree has uncommitted changes.
+
+Recommended next step:
+- Run: git status --short
+- Do not start workflow automation until the working tree is clean or intentionally staged.
+
+Optional checks:
+- agentic-kit doctor
+- agentic-kit check-docs
+{
+  "branch": "feature/secure-remote-connector-branch-pr-merge-path",
+  "capabilities": {
+    "closeout_last_run": false,
+    "diagnose": true,
+    "refresh_rules": true,
+    "run_next_command": false
+  },
+  "closeout": {
+    "dirty_worktree": true,
+    "pending_transfer_order": false
+  },
+  "created_at": "2026-05-31T12:14:26.903605+00:00",
+  "head": "b2bddfc",
+  "last_result": {
+    "exists": true,
+    "report_path": "docs/reports/command_runs/transfer-closeout-mvp.md"
+  },
+  "next_action": "Review or clean the worktree before running another transfer action.",
+  "primary_state": "BLOCKED",
+  "reasons": [
+    "dirty_worktree"
+  ],
+  "repo": "vfi64/agentic-project-kit",
+  "schema_version": 1
+}
+
+### VERIFY NO REMAINING DIFF ###
+{
+  "action": "repo-diff",
+  "command": [
+    "git",
+    "diff"
+  ],
+  "next_action": "Review the actual diff before committing or protected planning.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "diff --git a/docs/reports/terminal/remote-connector-safe-path-phase2-post-commit-verify-and-clean.log b/docs/reports/terminal/remote-connector-safe-path-phase2-post-commit-verify-and-clean.log\nindex b43f894..dfe1ce5 100644\n--- a/docs/reports/terminal/remote-connector-safe-path-phase2-post-commit-verify-and-clean.log\n+++ b/docs/reports/terminal/remote-connector-safe-path-phase2-post-commit-verify-and-clean.log\n@@ -65,3 +65,83 @@ Safe state: main @ 16b5204\n Next: Start the next chat from the fresh post-remote-connector-write-test successor handoff prompt. Verify the current main state, confirm the remote connector write test marker is present, and continue only with the secure remote connector Branch/PR/Merge path before GUI implementation.\n \n ### COMMIT SELF-MUTATED PHASE2 COMMIT LOG ###\n+{\n+  \"action\": \"commit\",\n+  \"command\": [\n+    \"git\",\n+    \"commit\",\n+    \"-m\",\n+    \"Record remote connector safe path phase2 verification log\"\n+  ],\n+  \"next_action\": \"Push current branch or inspect status.\",\n+  \"result_status\": \"PASS\",\n+  \"returncode\": 0,\n+  \"stderr\": \"\",\n+  \"stdout\": \"[feature/secure-remote-connector-branch-pr-merge-path b2bddfc] Record remote connector safe path phase2 verification log\\n 2 files changed, 159 insertions(+)\\n create mode 100644 docs/reports/terminal/remote-connector-safe-path-phase2-post-commit-verify-and-clean.log\\n\"\n+}\n+\n+### PUSH CURRENT BRANCH ###\n+{\n+  \"action\": \"push-current\",\n+  \"command\": [\n+    \"git\",\n+    \"push\",\n+    \"-u\",\n+    \"origin\",\n+    \"feature/secure-remote-connector-branch-pr-merge-path\"\n+  ],\n+  \"next_action\": \"Create or inspect pull request.\",\n+  \"result_status\": \"PASS\",\n+  \"returncode\": 0,\n+  \"stderr\": \"To github.com:vfi64/agentic-project-kit.git\\n   9f995b7..b2bddfc  feature/secure-remote-connector-branch-pr-merge-path -> feature/secure-remote-connector-branch-pr-merge-path\\n\",\n+  \"stdout\": \"branch 'feature/secure-remote-connector-branch-pr-merge-path' set up to track 'origin/feature/secure-remote-connector-branch-pr-merge-path'.\\n\"\n+}\n+\n+### VERIFY CURRENT BRANCH STATE ###\n+workflow_state=IDLE\n+current_work=present\n+current_work_state=READY\n+current_report=docs/reports/CURRENT_WORKFLOW_OUTPUT.md\n+\n+Safety:\n+- This command is read-only.\n+- current_report points to the latest workflow-output summary, not necessarily uploadable local evidence.\n+\n+Interpretation:\n+- Working tree has uncommitted changes.\n+\n+Recommended next step:\n+- Run: git status --short\n+- Do not start workflow automation until the working tree is clean or intentionally staged.\n+\n+Optional checks:\n+- agentic-kit doctor\n+- agentic-kit check-docs\n+{\n+  \"branch\": \"feature/secure-remote-connector-branch-pr-merge-path\",\n+  \"capabilities\": {\n+    \"closeout_last_run\": false,\n+    \"diagnose\": true,\n+    \"refresh_rules\": true,\n+    \"run_next_command\": false\n+  },\n+  \"closeout\": {\n+    \"dirty_worktree\": true,\n+    \"pending_transfer_order\": false\n+  },\n+  \"created_at\": \"2026-05-31T12:14:26.903605+00:00\",\n+  \"head\": \"b2bddfc\",\n+  \"last_result\": {\n+    \"exists\": true,\n+    \"report_path\": \"docs/reports/command_runs/transfer-closeout-mvp.md\"\n+  },\n+  \"next_action\": \"Review or clean the worktree before running another transfer action.\",\n+  \"primary_state\": \"BLOCKED\",\n+  \"reasons\": [\n+    \"dirty_worktree\"\n+  ],\n+  \"repo\": \"vfi64/agentic-project-kit\",\n+  \"schema_version\": 1\n+}\n+\n+### VERIFY NO REMAINING DIFF ###\ndiff --git a/docs/workflow/TEXT_TRANSFER_RUNNER.md b/docs/workflow/TEXT_TRANSFER_RUNNER.md\nindex d10f7b8..6179f10 100644\n--- a/docs/workflow/TEXT_TRANSFER_RUNNER.md\n+++ b/docs/workflow/TEXT_TRANSFER_RUNNER.md\n@@ -77,3 +77,29 @@ The GUI must treat the runner as the normal execution path for local file-writin\n 5. Warn visibly that free terminal shortcuts are not the normal path.\n \n The GUI is not the safety anchor. The safety anchors remain `agentic-kit`, path validation, hash validation, tests, Git, PR CI, protected-change planning, and repo-backed evidence.\n+\n+## Secure remote connector Branch/PR/Merge path\n+\n+When the ChatGPT GitHub connector is available, it may be used to create or update UTF-8 text files in the repository, but the safe repository mutation path is still governed by `agentic-kit` wrappers. Raw `git`/`gh` commands are not the normal operator interface for this path.\n+\n+Required route for connector-backed repository updates:\n+\n+1. Create and push a feature branch with `agentic-kit transfer branch-create <branch> --push`.\n+2. Switch to that branch with `agentic-kit transfer branch-switch <branch> --pull`.\n+3. Use the GitHub connector only for direct-path file create/update operations on that feature branch.\n+4. Pull the feature branch locally with `agentic-kit transfer pull-current`.\n+5. Run the relevant local gates before PR creation.\n+6. Create the pull request with `agentic-kit transfer pr-create --head <branch> --base main`.\n+7. Inspect the PR with `agentic-kit transfer pr-status <pr> --expected-head-sha <full_sha>`.\n+8. Wait for CI with `agentic-kit transfer pr-wait-ci <pr> --expected-head-sha <full_sha>`.\n+9. Merge only with `agentic-kit transfer pr-merge-safe <pr> --expected-head-sha <full_sha>`.\n+10. After merge, run the post-merge handoff freshness check and refresh handoff state if required.\n+\n+Safety requirements:\n+\n+- The connector must not write directly to `main` for product work.\n+- The connector must not replace protected governance, YAML, status, or handoff files wholesale.\n+- The PR head SHA must be treated as a pinned merge precondition.\n+- Merge readiness is not inferred from visual inspection, small diffs, or \u201cgreen-looking\u201d UI state.\n+- A dirty worktree blocks the route until the dirty paths are reviewed, committed intentionally, or cleaned.\n+- If connector access is unavailable or insufficient, the fallback must be named explicitly in the evidence log.\n"
+}
+
+### VERIFY REQUIRED CONTENT EXISTS IN WORKTREE ###
+MISSING_TERM tests/test_secure_remote_connector_branch_pr_merge_path.py: test_secure_remote_connector_branch_pr_merge_path_is_documented
+
+### LOCAL GATES ###
+Agentic project check passed
+Documentation mesh audit
+
+Documents:
+- README.md: current-state, required
+- CHANGELOG.md: release-history, required
+- docs/releases/VERIFIED_RELEASES.md: release-history, optional
+- CITATION.cff: current-state, required
+- pyproject.toml: current-state, required
+- src/agentic_project_kit/__init__.py: current-state, required
+- docs/STATUS.md: current-state, required
+- docs/handoff/CURRENT_HANDOFF.md: current-state, required
+- AGENTS.md: governance, required
+- docs/TEST_GATES.md: governance, required
+- docs/DOCUMENTATION_COVERAGE.yaml: governance, required
+- sentinel.yaml: governance, required
+- .agentic/project.yaml: governance, required
+- docs/architecture/ARCHITECTURE_CONTRACT.md: architecture, required
+- docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md: architecture, required
+- docs/WORKFLOW_OUTPUT_CYCLE.md: architecture, required
+- DESIGN.md: architecture, optional
+- docs/reports/status_roadmap_summary_after_pr105_20260512.md: historical-plan, required
+- docs/V0.3.0_OUTPUT_REPAIR_PLAN.md: historical-plan, optional
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+........................................................................ [ 96%]
+...                                                                      [100%]
+75 passed in 2.64s
+All checks passed!
+
+### RESULT SUMMARY ###
+commit_rc=0
+push_rc=0
+diff_rc=0
+content_rc=1
+docs_rc=0
+mesh_rc=0
+test_rc=0
+ruff_rc=0
+overall=FAIL
