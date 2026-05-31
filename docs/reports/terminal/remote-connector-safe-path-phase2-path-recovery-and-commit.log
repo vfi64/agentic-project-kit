@@ -137,3 +137,95 @@ Overall: PASS
 All checks passed!
 
 ### COMMIT EXPLICIT PATHS ###
+{
+  "action": "commit",
+  "command": [
+    "git",
+    "commit",
+    "-m",
+    "Document secure remote connector branch PR merge path"
+  ],
+  "next_action": "Push current branch or inspect status.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "[feature/secure-remote-connector-branch-pr-merge-path 9f995b7] Document secure remote connector branch PR merge path\n 6 files changed, 3888 insertions(+)\n create mode 100644 docs/reports/terminal/remote-connector-safe-branch-pr-merge-path-bootstrap.log\n create mode 100644 docs/reports/terminal/remote-connector-safe-path-phase1-branch-and-inspect.log\n create mode 100644 docs/reports/terminal/remote-connector-safe-path-phase2-commit-agentic-kit-route.log\n create mode 100644 docs/reports/terminal/remote-connector-safe-path-phase2-docs-tests.log\n create mode 100644 docs/reports/terminal/remote-connector-safe-path-phase2-path-recovery-and-commit.log\n create mode 100644 tests/test_secure_remote_connector_branch_pr_merge_path.py\n"
+}
+
+### PUSH CURRENT BRANCH ###
+{
+  "action": "push-current",
+  "command": [
+    "git",
+    "push",
+    "-u",
+    "origin",
+    "feature/secure-remote-connector-branch-pr-merge-path"
+  ],
+  "next_action": "Create or inspect pull request.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "To github.com:vfi64/agentic-project-kit.git\n   078145b..9f995b7  feature/secure-remote-connector-branch-pr-merge-path -> feature/secure-remote-connector-branch-pr-merge-path\n",
+  "stdout": "branch 'feature/secure-remote-connector-branch-pr-merge-path' set up to track 'origin/feature/secure-remote-connector-branch-pr-merge-path'.\n"
+}
+
+### STATE AFTER PUSH ###
+workflow_state=IDLE
+current_work=present
+current_work_state=READY
+current_report=docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+
+Safety:
+- This command is read-only.
+- current_report points to the latest workflow-output summary, not necessarily uploadable local evidence.
+
+Interpretation:
+- Working tree has uncommitted changes.
+
+Recommended next step:
+- Run: git status --short
+- Do not start workflow automation until the working tree is clean or intentionally staged.
+
+Optional checks:
+- agentic-kit doctor
+- agentic-kit check-docs
+{
+  "branch": "feature/secure-remote-connector-branch-pr-merge-path",
+  "capabilities": {
+    "closeout_last_run": false,
+    "diagnose": true,
+    "refresh_rules": true,
+    "run_next_command": false
+  },
+  "closeout": {
+    "dirty_worktree": true,
+    "pending_transfer_order": false
+  },
+  "created_at": "2026-05-31T12:13:40.218013+00:00",
+  "head": "9f995b7",
+  "last_result": {
+    "exists": true,
+    "report_path": "docs/reports/command_runs/transfer-closeout-mvp.md"
+  },
+  "next_action": "Review or clean the worktree before running another transfer action.",
+  "primary_state": "BLOCKED",
+  "reasons": [
+    "dirty_worktree"
+  ],
+  "repo": "vfi64/agentic-project-kit",
+  "schema_version": 1
+}
+
+### RESULT SUMMARY ###
+diff_rc=0
+found_doc=docs/reports/terminal/post-remote-connector-write-test-final-handoff-refresh-agentic-kit-route.log
+doc_exists_rc=0
+test_exists_rc=0
+protected_plan_rc=0
+docs_rc=0
+mesh_rc=0
+test_rc=0
+ruff_rc=0
+commit_rc=0
+push_rc=0
+overall=PASS_COMMITTED_AND_PUSHED
