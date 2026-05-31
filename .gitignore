@@ -14,3 +14,6 @@ tmp/
 
 # Local screen-control gate output
 Screen-Control_Output.txt
+
+# Local runtime rule acknowledgement state
+.agentic/rule_ack/

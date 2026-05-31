@@ -53,6 +53,22 @@ def acknowledgement_from_json_data(data: dict[str, Any]) -> RuleAcknowledgement:
     )
 
 
+def build_rule_acknowledgement(
+    snapshot: DerivedRuleSnapshot,
+    *,
+    repo_head: str,
+    declared_next_allowed_action: str,
+) -> RuleAcknowledgement:
+    return RuleAcknowledgement(
+        schema_version=1,
+        snapshot_id=snapshot.snapshot_id,
+        repo_head=repo_head,
+        sources_total=snapshot.sources_total,
+        missing_sources_total=len(snapshot.validation.missing_required_paths),
+        declared_next_allowed_action=declared_next_allowed_action,
+    )
+
+
 def validate_rule_acknowledgement(
     snapshot: DerivedRuleSnapshot,
     acknowledgement: RuleAcknowledgement | None,
