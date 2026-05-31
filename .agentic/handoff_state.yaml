@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 6aaaea3
-  commit_subject: Document secure remote connector branch PR merge path (#977)
+  commit: '5942428'
+  commit_subject: Refresh handoff after PR977 (#978)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
