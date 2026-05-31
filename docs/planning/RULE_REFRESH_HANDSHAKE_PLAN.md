@@ -3,6 +3,7 @@
 Status-date: 2026-05-31
 Status: active
 Decision status: accepted
+Review policy: Review before Phase 0 closeout, before adding rule-snapshot schema implementation, and before expanding GUI write actions.
 Project: agentic-project-kit
 
 ## Purpose
