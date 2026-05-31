@@ -169,6 +169,10 @@ documents:
     class: planning
     owner: maintainers
     notes: Hardened plan for machine-checkable local-to-LLM and LLM-to-local rule-refresh handshake state before GUI expansion.
+  - path: docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
+    class: planning
+    owner: maintainers
+    notes: Phase 0 coverage matrix for transfer GitHub actions needed before hardened rule-refresh handshake and GUI write-action expansion.
   - path: docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
     class: planning
     owner: maintainers

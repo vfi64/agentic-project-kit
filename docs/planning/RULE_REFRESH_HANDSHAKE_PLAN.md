@@ -81,6 +81,8 @@ Acceptance:
 - identify actions that are safe enough for GUI dispatch;
 - add deterministic test anchors for the critical action names.
 
+Phase 0 artifact: `docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md`.
+
 ## Phase 1: Rule Snapshot Schema
 
 Goal: define a machine-readable rule snapshot schema.
