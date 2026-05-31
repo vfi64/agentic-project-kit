@@ -1,0 +1,134 @@
+### POST-PR974 HANDOFF STATE REFRESH APPLY FIXED ###
+created_at_utc=2026-05-31T11:11:20Z
+
+### PRECHECK ###
+docs/post-pr974-bootstrap-handoff-refresh
+?? docs/reports/terminal/post-pr974-handoff-refresh-implementation-precheck.log
+?? docs/reports/terminal/post-pr974-handoff-refresh-source-and-generator-inventory.log
+?? docs/reports/terminal/post-pr974-handoff-refresh-state-check.log
+?? docs/reports/terminal/post-pr974-handoff-source-inspect.log
+?? docs/reports/terminal/post-pr974-handoff-state-refresh-apply-fixed.log
+?? docs/reports/terminal/post-pr974-handoff-state-refresh-apply.log
+?? docs/reports/terminal/post-pr974-handoff-status-diagnose.log
+?? docs/reports/terminal/post-pr974-successor-chat-handoff.md
+8fc03e7 Record PR973 post-merge main verification (#974)
+36fe53b Record PR972 post-merge main verification (#973)
+f43bb89 Record PR971 post-merge main verification (#972)
+33c4896 Record PR970 post-merge main verification (#971)
+bbbccd9 Move verified DOI history to release archive (#970)
+e9b28bd Merge pull request #969 from vfi64/docs/v045-successor-handoff-anchor
+ee7973e Restore handoff state test anchors
+7604590 Record v0.4.5 successor handoff anchor
+
+### ENSURE REFRESH BRANCH ###
+Already on 'docs/post-pr974-bootstrap-handoff-refresh'
+
+### PATCH HANDOFF STATE WITH VENV PYTHON ###
+
+### WRITE GENERATED BOOTSTRAP AND SUCCESSOR PROMPT ###
+WROTE docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+
+### VERIFY MARKERS AFTER PATCH ###
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+Repo: agentic-project-kit
+Path: agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.4.5
+Safe state: main @ 8fc03e7
+Next: Start the next chat from the fresh post-PR974 successor handoff prompt. Verify main at 8fc03e7, confirm PR970-PR974 are merged, and continue only with B11 Gatekeeper Core before GUI implementation.
+.agentic/handoff_state.yaml:4:  reason: Refresh handoff state after PR970-PR974 evidence closeout
+.agentic/handoff_state.yaml:13:  commit: 8fc03e7
+.agentic/handoff_state.yaml:390:  title: 'Implement B11 Gatekeeper Core before GUI work: machine-readable READY/WAIT/BLOCKED/FAILED
+.agentic/handoff_state.yaml:409:- GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
+.agentic/handoff_state.yaml:412:first_instruction: Start the next chat from the fresh post-PR974 successor handoff
+.agentic/handoff_state.yaml:413:  prompt. Verify main at 8fc03e7, confirm PR970-PR974 are merged, and continue only
+.agentic/handoff_state.yaml:414:  with B11 Gatekeeper Core before GUI implementation.
+.agentic/handoff_state.yaml:423:  first_instruction: Start the next chat from the fresh post-PR974 successor handoff
+.agentic/handoff_state.yaml:424:    prompt. Verify main at 8fc03e7, confirm PR970-PR974 are merged, and continue only
+.agentic/handoff_state.yaml:425:    with B11 Gatekeeper Core before GUI implementation.
+docs/reports/terminal/post-pr974-successor-chat-handoff.md:12:Commit: `8fc03e7`
+docs/reports/terminal/post-pr974-successor-chat-handoff.md:157:- 1. `b11-gatekeeper-core` — Implement B11 Gatekeeper Core before GUI work: machine-readable READY/WAIT/BLOCKED/FAILED state model, next_action, allowed actions, button enablement contract, safe GitHub/PR/CI checks, race-condition handling, automatic log/evidence classification, no-copy transfer path, and hardened handoff-prompt preparation command.
+docs/reports/terminal/post-pr974-successor-chat-handoff.md:173:- GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
+docs/reports/terminal/post-pr974-successor-chat-handoff.md:179:Start the next chat from the fresh post-PR974 successor handoff prompt. Verify main at 8fc03e7, confirm PR970-PR974 are merged, and continue only with B11 Gatekeeper Core before GUI implementation.
+
+### DIFF NAME ONLY ###
+.agentic/handoff_state.yaml
+
+### PROTECTED CHANGE PLAN ###
+PROTECTED_CHANGE_PLAN
+result=BLOCK
+findings=1
+- block:large-protected-file-rewrite-without-decision:.agentic/handoff_state.yaml: large protected-file rewrite requires keep/migrate/obsolete/abort decision before replacement-style editing
+required_decision=keep|migrate|obsolete|abort
+### RESULT: FAIL ###
+
+### LOCAL GATES ###
+Agentic project check passed
+Documentation mesh audit
+
+Documents:
+- README.md: current-state, required
+- CHANGELOG.md: release-history, required
+- docs/releases/VERIFIED_RELEASES.md: release-history, optional
+- CITATION.cff: current-state, required
+- pyproject.toml: current-state, required
+- src/agentic_project_kit/__init__.py: current-state, required
+- docs/STATUS.md: current-state, required
+- docs/handoff/CURRENT_HANDOFF.md: current-state, required
+- AGENTS.md: governance, required
+- docs/TEST_GATES.md: governance, required
+- docs/DOCUMENTATION_COVERAGE.yaml: governance, required
+- sentinel.yaml: governance, required
+- .agentic/project.yaml: governance, required
+- docs/architecture/ARCHITECTURE_CONTRACT.md: architecture, required
+- docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md: architecture, required
+- docs/WORKFLOW_OUTPUT_CYCLE.md: architecture, required
+- DESIGN.md: architecture, optional
+- docs/reports/status_roadmap_summary_after_pr105_20260512.md: historical-plan, required
+- docs/V0.3.0_OUTPUT_REPAIR_PLAN.md: historical-plan, optional
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+......................................                                   [100%]
+38 passed in 0.62s
+All checks passed!
+
+### RESULT SUMMARY ###
+branch_rc=0
+patch_rc=0
+boot_rc=0
+prompt_rc=0
+handoff_check_rc=0
+handoff_show_rc=0
+protected_plan_rc=1
+docs_rc=0
+mesh_rc=0
+test_rc=0
+ruff_rc=0
+overall=FAIL

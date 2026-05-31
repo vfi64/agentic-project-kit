@@ -1,0 +1,385 @@
+### POST-PR974 HANDOFF REFRESH IMPLEMENTATION PRECHECK ###
+created_at_utc=2026-05-31T11:08:14Z
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK STATE ###
+main
+?? docs/reports/terminal/post-pr974-handoff-refresh-implementation-precheck.log
+?? docs/reports/terminal/post-pr974-handoff-refresh-state-check.log
+?? docs/reports/terminal/post-pr974-handoff-status-diagnose.log
+8fc03e7 Record PR973 post-merge main verification (#974)
+36fe53b Record PR972 post-merge main verification (#973)
+f43bb89 Record PR971 post-merge main verification (#972)
+33c4896 Record PR970 post-merge main verification (#971)
+bbbccd9 Move verified DOI history to release archive (#970)
+e9b28bd Merge pull request #969 from vfi64/docs/v045-successor-handoff-anchor
+ee7973e Restore handoff state test anchors
+7604590 Record v0.4.5 successor handoff anchor
+0ab2f47 Merge pull request #968 from vfi64/docs/post-pr967-handoff-refresh
+f35f7f0 Refresh handoff state after PR967
+
+### OPEN PRS ###
+[]
+
+### VERIFY RECENT PRS ###
+{"number":970,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/970"}
+{"number":971,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/971"}
+{"number":972,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/972"}
+{"number":973,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/973"}
+{"number":974,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/974"}
+
+### CREATE REPAIR BRANCH ###
+Switched to a new branch 'fix/post-pr974-handoff-refresh-guard'
+
+### LOCATE HANDOFF / BOOTSTRAP IMPLEMENTATION ###
+src/agentic_project_kit/gui_tkinter_shell.py:234:                    tooltip="Render current successor handoff prompt.",
+src/agentic_project_kit/gui_tkinter_shell.py:558:def _run_handoff_check() -> tuple[int, str]:
+src/agentic_project_kit/gui_tkinter_shell.py:566:def _run_handoff_prompt() -> tuple[int, str]:
+src/agentic_project_kit/gui_tkinter_shell.py:575:    path = Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md")
+src/agentic_project_kit/action_specs.py:74:            postconditions=("state docs point to next allowed task", "handoff prompt is current", "local gates pass"),
+src/agentic_project_kit/protected_change_planner.py:23:    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md": (
+src/agentic_project_kit/cli_commands/handoff.py:29:def show(path: str = ".agentic/handoff_state.yaml") -> None:
+src/agentic_project_kit/cli_commands/handoff.py:35:def check(path: str = ".agentic/handoff_state.yaml") -> None:
+src/agentic_project_kit/cli_commands/handoff.py:49:def prompt(path: str = ".agentic/handoff_state.yaml") -> None:
+src/agentic_project_kit/cli_commands/handoff.py:93:def _render_registry_summary(handoff_path: str) -> str:
+src/agentic_project_kit/cli_commands/handoff.py:111:def _load_registry_summary(handoff_path: str) -> dict[str, Any] | None:
+src/agentic_project_kit/cli_commands/handoff.py:119:def _project_root_for_handoff_path(path: Path) -> Path:
+src/agentic_project_kit/cli_commands/handoff.py:125:@handoff_app.command("post-merge-refresh-status")
+src/agentic_project_kit/cli_commands/boot.py:30:    path: str = "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+src/agentic_project_kit/cli_commands/rules.py:32:def handoff_refresh(
+src/agentic_project_kit/transfer_repo_actions.py:281:    command = [_agentic_kit_command(), "handoff", "post-merge-refresh-status"]
+src/agentic_project_kit/transfer_repo_actions.py:335:        [_agentic_kit_command(), "handoff", "post-merge-refresh-status"],
+src/agentic_project_kit/handoff_state.py:57:def _validate_handoff_next_reference_consistency(data: dict[str, Any]) -> list[str]:
+src/agentic_project_kit/handoff_state.py:76:def load_handoff_state(path: str | Path = DEFAULT_HANDOFF_STATE_PATH) -> dict[str, Any]:
+src/agentic_project_kit/handoff_state.py:88:def validate_handoff_state(data: dict[str, Any]) -> list[str]:
+src/agentic_project_kit/handoff_state.py:158:def summarize_handoff_state(data: dict[str, Any]) -> str:
+src/agentic_project_kit/handoff_state.py:206:def refresh_handoff_safe_state(
+src/agentic_project_kit/handoff_state.py:239:def save_handoff_state(data: dict[str, Any], path: str | Path = DEFAULT_HANDOFF_STATE_PATH) -> None:
+src/agentic_project_kit/state_freshness.py:73:def _stale_handoff_state_findings(base: Path) -> list[StaleFragment]:
+src/agentic_project_kit/rule_refresh.py:18:    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+src/agentic_project_kit/rule_refresh.py:19:    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+src/agentic_project_kit/rule_refresh.py:53:def refresh_handoff_rules(project_root: Path = Path(".")) -> RuleRefreshResult:
+src/agentic_project_kit/chat_bootloader.py:8:DEFAULT_BOOTSTRAP_PATH = Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md")
+src/agentic_project_kit/chat_bootloader.py:9:START_PROMPT_PATH = "docs/handoff/START_NEW_CHAT_PROMPT.md"
+src/agentic_project_kit/chat_bootloader.py:10:CLOSEOUT_PROMPT_PATH = "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
+src/agentic_project_kit/chat_bootloader.py:21:    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+src/agentic_project_kit/chat_bootloader.py:22:    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+src/agentic_project_kit/chat_bootloader.py:47:    "Before a chat switch, run the closeout prompt and check whether START_NEW_CHAT_PROMPT.md, CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md, and NEXT_CHAT_BOOTSTRAP.md all need updates.",
+src/agentic_project_kit/chat_bootloader.py:52:    "Use boot write to refresh docs/handoff/NEXT_CHAT_BOOTSTRAP.md before chat changes.",
+src/agentic_project_kit/chat_bootloader.py:150:            "Read the remote file docs/handoff/NEXT_CHAT_BOOTSTRAP.md on main completely and execute its boot routine.",
+src/agentic_project_kit/gui_button_catalog.py:77:        "Render the current successor handoff prompt for review.",
+src/agentic_project_kit/handoff_prompt.py:49:def render_handoff_prompt(data: dict[str, Any]) -> str:
+src/agentic_project_kit/handoff_freshness.py:21:def assess_handoff_prompt_freshness(
+src/agentic_project_kit/handoff_freshness.py:29:    """Return warnings when a successor handoff prompt may be stale.
+src/agentic_project_kit/handoff_freshness.py:80:        warnings.append("no successor handoff prompt was found under docs/reports/terminal")
+src/agentic_project_kit/handoff_freshness.py:85:        warnings.append(f"latest successor handoff prompt is missing: {relative_prompt}")
+src/agentic_project_kit/handoff_freshness.py:97:            "latest successor handoff prompt "
+src/agentic_project_kit/handoff_freshness.py:110:        "WARNING: this successor handoff prompt may be stale.",
+src/agentic_project_kit/handoff_freshness.py:124:def _project_root_for_handoff_path(path: Path) -> Path:
+src/agentic_project_kit/handoff_freshness.py:276:def _expected_handoff_commits(data: dict[str, Any]) -> list[str]:
+src/agentic_project_kit/post_merge_handoff_refresh.py:19:def evaluate_post_merge_handoff_refresh(project_root: Path = Path('.'), *, state_path: str = '.agentic/handoff_state.yaml') -> PostMergeHandoffRefreshStatus:
+src/agentic_project_kit/post_merge_handoff_refresh.py:27:def render_post_merge_handoff_refresh_status(status: PostMergeHandoffRefreshStatus) -> str:
+src/agentic_project_kit/documentation_system_audit.py:188:def _status_handoff_sync_findings(project_root: Path) -> tuple[str, ...]:
+tests/test_documentation_system_audit.py:58:def test_documentation_system_audit_checks_status_handoff_closeout_sync() -> None:
+tests/test_handoff_prompt.py:8:def test_handoff_prompt_contains_required_sections_and_active_rules_only():
+tests/test_handoff_prompt.py:18:def test_handoff_cli_commands():
+tests/test_handoff_prompt.py:31:def test_handoff_prompt_contains_successor_chat_bootstrap_sections() -> None:
+tests/test_handoff_prompt.py:45:def test_handoff_prompt_lists_mandatory_rule_documents() -> None:
+tests/test_handoff_prompt.py:61:def test_handoff_prompt_defines_communication_shortcuts_and_summary_vocabulary() -> None:
+tests/test_handoff_prompt.py:73:def test_handoff_prompt_includes_forbidden_patterns() -> None:
+tests/test_post_merge_handoff_refresh.py:3:def test_render_post_merge_handoff_refresh_status_noop():
+tests/test_post_merge_handoff_refresh.py:9:def test_render_post_merge_handoff_refresh_status_required():
+tests/test_rule_governance_contract.py:9:def test_rule_governance_rule_is_active_in_handoff_state() -> None:
+tests/test_chat_boot.py:9:START_PROMPT = Path("docs/handoff/START_NEW_CHAT_PROMPT.md")
+tests/test_chat_boot.py:10:CLOSEOUT_PROMPT = Path("docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")
+tests/test_chat_boot.py:11:BOOTSTRAP = Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md")
+tests/test_chat_boot.py:33:    assert "START_NEW_CHAT_PROMPT.md" in text
+tests/test_chat_boot.py:34:    assert "CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md" in text
+tests/test_chat_boot.py:56:    assert "START_NEW_CHAT_PROMPT.md" in text
+tests/test_chat_boot.py:57:    assert "CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md" in text
+tests/test_chat_boot.py:60:    assert "Read the remote file docs/handoff/NEXT_CHAT_BOOTSTRAP.md" in text
+tests/test_chat_boot.py:77:    output = tmp_path / "docs" / "handoff" / "NEXT_CHAT_BOOTSTRAP.md"
+tests/test_handoff_refresh.py:9:def test_refresh_handoff_safe_state_updates_commit_without_mutating_input():
+tests/test_handoff_refresh.py:21:def test_handoff_refresh_dry_run_does_not_mutate_file(tmp_path, monkeypatch):
+tests/test_handoff_refresh.py:32:def test_handoff_refresh_write_updates_file(tmp_path, monkeypatch):
+tests/test_handoff_refresh.py:73:def test_save_handoff_state_preserves_required_comment_anchors(tmp_path: Path):
+tests/test_v036_summary_and_ack_audit_hardening.py:12:def test_handoff_requires_terminal_acknowledgement_audit() -> None:
+tests/test_standard_error_guards.py:8:def test_quality_rule_is_front_loaded_in_handoff_state_docs():
+tests/test_standard_error_guards.py:16:def test_recurring_standard_errors_are_recorded_in_handoff_state():
+tests/test_rule_refresh.py:23:        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+tests/test_rule_refresh.py:24:        "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+tests/test_rule_refresh.py:45:def test_refresh_handoff_rules_writes_generated_file(tmp_path):
+tests/test_rule_refresh.py:69:def test_rules_cli_handoff_refresh_json(tmp_path):
+tests/test_handoff_state.py:11:def test_handoff_state_yaml_is_parseable_and_valid():
+tests/test_handoff_state.py:43:def _write_minimal_handoff_state(root: Path) -> None:
+tests/test_handoff_state.py:83:def test_handoff_check_reports_registry_summary_when_available(tmp_path: Path) -> None:
+tests/test_handoff_state.py:99:def test_handoff_show_keeps_compact_output_when_registry_available(tmp_path: Path) -> None:
+tests/test_handoff_state.py:112:def test_handoff_check_without_registry_keeps_existing_success_output(tmp_path: Path) -> None:
+tests/test_handoff_state.py:122:def test_handoff_state_accepts_matching_successor_prompt_references(tmp_path: Path) -> None:
+tests/test_handoff_state.py:127:        "Start the next chat from the fresh post-PR903 successor handoff prompt."
+tests/test_handoff_state.py:136:def test_handoff_state_rejects_mismatched_successor_prompt_references(tmp_path: Path) -> None:
+tests/test_handoff_state.py:141:        "Start the next chat from the fresh post-PR897 successor handoff prompt."
+tests/test_handoff_state.py:156:def test_handoff_state_allows_generic_next_instruction_without_pr_reference(tmp_path: Path) -> None:
+tests/test_handoff_freshness.py:14:def test_handoff_freshness_guard_reports_stale_successor_prompt(tmp_path: Path) -> None:
+tests/test_handoff_freshness.py:38:def test_handoff_freshness_guard_accepts_current_admin_evidence_state(tmp_path: Path) -> None:
+tests/test_handoff_freshness.py:62:def test_handoff_freshness_guard_accepts_administrative_refresh_commit_after_state_refresh(
+tests/test_handoff_freshness.py:89:def test_handoff_freshness_guard_still_rejects_non_admin_commit_after_state_refresh(
+tests/test_handoff_freshness.py:117:def test_handoff_freshness_guard_uses_yaml_successor_override_when_it_is_latest(
+tests/test_handoff_freshness.py:141:def test_handoff_freshness_guard_renders_prominent_warning() -> None:
+tests/test_handoff_freshness.py:146:    assert "successor handoff prompt may be stale" in guard
+tests/test_handoff_freshness.py:149:def test_handoff_freshness_guard_accepts_freshly_rendered_successor_prompt_text(tmp_path: Path) -> None:
+tests/test_handoff_freshness.py:173:def test_handoff_freshness_guard_accepts_administrative_github_merge_commit(
+tests/test_handoff_freshness.py:206:def test_handoff_freshness_guard_rejects_non_admin_github_merge_commit(
+tests/test_handoff_freshness.py:239:def test_handoff_freshness_guard_accepts_bounded_administrative_merge_chain(
+tests/test_handoff_freshness.py:289:def test_handoff_freshness_guard_rejects_product_merge_inside_admin_chain(
+tests/test_remote_first_no_guess_rule.py:6:def test_remote_first_no_guess_rule_is_active_in_handoff_state():
+tests/test_handoff_state_completed_list.py:4:def test_handoff_completed_entries_are_informative() -> None:
+tests/test_protected_control_file_preservation_gate.py:38:def test_handoff_state_preserves_current_release_anchors() -> None:
+tests/test_transfer_repo_actions.py:252:        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+tests/test_transfer_repo_actions.py:267:        ["agentic-kit", "handoff", "post-merge-refresh-status"],
+tests/test_transfer_repo_actions.py:290:        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+tests/test_transfer_repo_actions.py:324:        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+tests/test_compiled_agent_context.py:27:def test_compiled_agent_context_lists_handoff_freshness_sources():
+tests/test_compiled_agent_context.py:34:    assert "stale successor handoff prompt after newer main merge" in data["drift_detection"]["drift_classes"]
+tests/test_chat_switch_closeout.py:24:    bootstrap = tmp_path / "docs" / "handoff" / "NEXT_CHAT_BOOTSTRAP.md"
+tests/test_chat_switch_closeout.py:32:    write_next_chat_bootstrap(tmp_path / "docs" / "handoff" / "NEXT_CHAT_BOOTSTRAP.md", tmp_path)
+tests/test_chat_switch_closeout.py:51:    write_next_chat_bootstrap(tmp_path / "docs" / "handoff" / "NEXT_CHAT_BOOTSTRAP.md", tmp_path)
+tests/test_interpreter_discovery_guard.py:5:def test_handoff_state_records_interpreter_discovery_guard():
+tests/test_no_copy_fail_evidence_policy.py:11:def test_handoff_state_records_f_for_log_backed_fail() -> None:
+tests/test_v031_status_handoff_closeout.py:3:def test_v031_status_and_handoff_closeout_is_documented() -> None:
+tests/test_v036_current_state_docs.py:39:def test_release_phase_semantics_are_explicit_in_readme_and_handoff():
+tests/test_chat_bootstrap_drift_contract.py:75:def test_chat_bootstrap_contract_preserves_yaml_mutation_and_handoff_requirements() -> None:
+tests/test_chat_bootstrap_drift_contract.py:83:    assert "A drift handoff prompt must include" in text
+tests/test_state_freshness.py:10:def write_handoff_state(tmp_path: Path, *, first_instruction: str, next_action: str | None = None) -> None:
+tests/test_state_freshness.py:46:def test_state_freshness_fails_when_active_handoff_instruction_references_old_release(tmp_path: Path) -> None:
+tests/test_state_freshness.py:81:def test_state_freshness_checks_handoff_next_expected_chat_action(tmp_path: Path) -> None:
+tests/test_checks.py:217:def test_check_state_gate_docs_reports_stale_handoff_marker(tmp_path: Path):
+tests/test_protected_change_planner.py:74:    diff = "diff --git a/docs/handoff/NEXT_CHAT_BOOTSTRAP.md b/docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n"
+tests/test_protected_change_planner.py:75:    assert touched_files(diff) == {"docs/handoff/NEXT_CHAT_BOOTSTRAP.md"}
+tests/test_protected_change_planner.py:80:        "diff --git a/docs/handoff/NEXT_CHAT_BOOTSTRAP.md b/docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+tests/test_protected_change_planner.py:91:        "diff --git a/docs/handoff/NEXT_CHAT_BOOTSTRAP.md b/docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+tests/test_handoff_administrative_evidence_state.py:30:    assert is_administrative_evidence_subject("Recover post-PR656 handoff prompt")
+tests/test_quality_first_workflow_lessons.py:5:def test_quality_first_rules_are_recorded_in_handoff_state() -> None:
+docs/plans/DOCUMENT_ARTIFACT_GOVERNANCE_OS_PLAN.md:470:- successor-chat handoff prompts,
+docs/plans/DOCUMENT_ARTIFACT_GOVERNANCE_OS_PLAN.md:485:- handoff prompts must list mandatory sources,
+docs/plans/DOCUMENT_ARTIFACT_GOVERNANCE_OS_PLAN.md:587:- Register generated handoff prompts, typed work orders, agent instructions, final summaries, and GUI action reports.
+docs/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md:19:7. generated handoff prompt when drift is detected.
+docs/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md:27:- The plan explicitly covers communication rules, summary structure, portable execution, drift detection, and handoff prompt generation.
+docs/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md:65:### M6: Drift handoff prompt path
+docs/handoff/CURRENT_HANDOFF.md:8:The post-merge handoff refresh status gate is the canonical decision point after merges: `agentic-kit handoff post-merge-refresh-status`.
+docs/handoff/CURRENT_HANDOFF.md:19:The post-merge handoff refresh status gate is the canonical decision point after merges: `agentic-kit handoff post-merge-refresh-status`.
+docs/handoff/CURRENT_HANDOFF.md:25:The post-merge handoff refresh status gate is now documented for bootstrap visibility. After any PR merge and local main sync, run agentic-kit handoff post-merge-refresh-status. Continue only on result=NOOP; create an administrative handoff refresh slice on result=REFRESH_REQUIRED before product work.
+docs/handoff/NEXT_CHAT_BOOTSTRAP.md:8:- Start a successor chat with `docs/handoff/START_NEW_CHAT_PROMPT.md`.
+docs/handoff/NEXT_CHAT_BOOTSTRAP.md:9:- Before leaving a chat, run the closeout routine in `docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md`.
+docs/handoff/NEXT_CHAT_BOOTSTRAP.md:18:Read the remote file docs/handoff/NEXT_CHAT_BOOTSTRAP.md on main completely and execute its boot routine.
+docs/handoff/NEXT_CHAT_BOOTSTRAP.md:46:- [present] docs/handoff/START_NEW_CHAT_PROMPT.md
+docs/handoff/NEXT_CHAT_BOOTSTRAP.md:47:- [present] docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
+docs/handoff/NEXT_CHAT_BOOTSTRAP.md:65:- Before a chat switch, run the closeout prompt and check whether START_NEW_CHAT_PROMPT.md, CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md, and NEXT_CHAT_BOOTSTRAP.md all need updates.
+docs/handoff/NEXT_CHAT_BOOTSTRAP.md:77:- Use boot write to refresh docs/handoff/NEXT_CHAT_BOOTSTRAP.md before chat changes.
+docs/handoff/START_NEW_CHAT_PROMPT.md:5:canonical_bootstrap: docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+docs/handoff/START_NEW_CHAT_PROMPT.md:6:paired_prompt: docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
+docs/handoff/START_NEW_CHAT_PROMPT.md:8:  - docs/handoff/START_NEW_CHAT_PROMPT.md
+docs/handoff/START_NEW_CHAT_PROMPT.md:9:  - docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
+docs/handoff/START_NEW_CHAT_PROMPT.md:10:  - docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+docs/handoff/START_NEW_CHAT_PROMPT.md:25:This file is the canonical prompt for starting a successor chat. It is paired with `docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md` and `docs/handoff/NEXT_CHAT_BOOTSTRAP.md`.
+docs/handoff/START_NEW_CHAT_PROMPT.md:27:If this prompt changes, the closeout prompt and `NEXT_CHAT_BOOTSTRAP.md` may also need to be updated. A closeout slice must check all three files before a chat switch.
+docs/handoff/START_NEW_CHAT_PROMPT.md:35:After every PR merge and local main sync, run agentic-kit handoff post-merge-refresh-status before product work.
+docs/handoff/START_NEW_CHAT_PROMPT.md:51:First read the remote file docs/handoff/NEXT_CHAT_BOOTSTRAP.md on main completely and execute its boot routine.
+docs/handoff/START_NEW_CHAT_PROMPT.md:59:- docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+docs/handoff/START_NEW_CHAT_PROMPT.md:76:3. whether NEXT_CHAT_BOOTSTRAP.md is current enough,
+docs/handoff/START_NEW_CHAT_PROMPT.md:89:- Before the next chat switch, run a closeout slice using docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md. That closeout may need to update this prompt, the closeout prompt, and docs/handoff/NEXT_CHAT_BOOTSTRAP.md.
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:5:canonical_bootstrap: docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:6:paired_prompt: docs/handoff/START_NEW_CHAT_PROMPT.md
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:8:  - docs/handoff/START_NEW_CHAT_PROMPT.md
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:9:  - docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:10:  - docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:25:This file is the canonical closeout prompt for the current chat before starting a successor chat. It is paired with `docs/handoff/START_NEW_CHAT_PROMPT.md` and `docs/handoff/NEXT_CHAT_BOOTSTRAP.md`.
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:27:If this prompt changes, the start prompt and `NEXT_CHAT_BOOTSTRAP.md` may also need to be updated. A closeout slice must check all three files before a chat switch.
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:35:After every PR merge and local main sync, run agentic-kit handoff post-merge-refresh-status before product work.
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:49:Goal: A successor chat must be able to reconstruct all current workflow rules, bootloader rules, open work, last verified state, and next safe slice from docs/handoff/NEXT_CHAT_BOOTSTRAP.md on main.
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:59:   - docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:60:   - docs/handoff/START_NEW_CHAT_PROMPT.md
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:61:   - docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:69:2. Check whether NEXT_CHAT_BOOTSTRAP.md and both chat-switch prompt files include the current state:
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:84:   - build a small PR that only updates bootstrap/handoff prompt state,
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:86:   - update docs/handoff/START_NEW_CHAT_PROMPT.md and docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md if their contracts or prompt wording changed,
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:95:   - name docs/handoff/NEXT_CHAT_BOOTSTRAP.md as the canonical successor-chat entry point.
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:103:   - the short start prompt from docs/handoff/START_NEW_CHAT_PROMPT.md.
+docs/handoff/CURRENT_HANDOFF_OVERLAY_AFTER_PR660.md:19:- PR #657 modeled administrative evidence state in generated handoff prompts.
+docs/TEST_GATES.md:139:Changes to chat communication, final summary behavior, portable execution, successor-chat bootstrap, drift detection, or handoff prompt behavior must update the canonical governance contracts instead of spreading long duplicate rules across state files.
+docs/TEST_GATES.md:278:`agentic-kit handoff post-merge-refresh-status`
+docs/STATUS.md:8:The post-merge handoff refresh status gate is the canonical decision point after merges: `agentic-kit handoff post-merge-refresh-status`.
+docs/STATUS.md:19:The post-merge handoff refresh status gate is the canonical decision point after merges: `agentic-kit handoff post-merge-refresh-status`.
+docs/STATUS.md:210:- The registry is visible in `check-docs`, `docs-audit`, `doc-mesh-audit`, `doc-lifecycle-audit`, `handoff check`, `handoff show`, `release-check`, and `post-release-check`.
+docs/STATUS.md:305:Use project-local commands first: `./ns state`, `./ns check-docs`, `./ns doctor`, `./ns docs-audit`, `./ns handoff-check`, `./ns governance-check`, `./ns rule-registry check`, `agentic-kit check-docs`, `agentic-kit doctor`, `agentic-kit rule-registry check`, `agentic-kit rule-registry report`, and `agentic-kit handoff prompt` when installed through the active project environment.
+docs/planning/RULE_REGISTRY_IMPLEMENTATION_PLAN.yaml:33:    - successor handoff prompts
+docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md:130:    surface: handoff prompt
+docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md:241:  - handoff prompt
+docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md:18:- docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
+docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md:21:- docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md:22:- docs/handoff/START_NEW_CHAT_PROMPT.md
+docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md:317:- docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
+docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md:320:- docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md:321:- docs/handoff/START_NEW_CHAT_PROMPT.md
+docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md:17:4. Drift must be detected deterministically and must stop mutation-oriented work until a warning and handoff prompt are produced.
+docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md:33:If any required source is missing or contradictory, the successor chat must report drift, avoid mutation, and offer a comprehensive handoff prompt.
+docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md:72:- handoff prompt omissions.
+docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md:74:### Phase 5: handoff prompt generation
+docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md:75:The handoff prompt generator must include:
+docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md:95:- a drift handoff prompt path exists,
+docs/planning/GUI_COCKPIT_EXPANSION_ROADMAP.md:27:The kit should provide a CLI command that creates a structured instruction artifact for the assistant. The artifact can contain a detailed handoff prompt, next-step request, diagnostic request, or release request. The user can then paste a short trigger or the generated text into the chat.
+docs/planning/GUI_COCKPIT_EXPANSION_ROADMAP.md:41:Goal: create a detailed, copyable handoff prompt from repository state.
+docs/planning/WORKFLOW_REDUCTION_FOCUS.md:39:- human-facing projections: `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, successor handoff prompts, README excerpts, handbook text, website text, GUI dashboards, and LLM-generated explanations.
+docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md:58:| Generate handoff prompt | `handoff-prompt-generate` | planned |
+docs/planning/PERSISTENT_HANDOFF_STATE.md:46:The generated handoff prompt should include active rules by default. Superseded or historical rules should not appear as binding instructions.
+docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md:34:3. Successor-chat handoff: generate a fresh handoff prompt according to the governed handoff rules.
+docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md:137:* generated handoff prompt is older than the current verified main state,
+docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md:287:5. handoff prompt/check,
+docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md:329:The handoff prompt generation path should include:
+docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md:340:Goal: If docs/STATUS.md, docs/handoff/CURRENT_HANDOFF.md, .agentic/handoff_state.yaml, or the latest generated handoff prompt do not match the current verified main state, handoff generation must fail or prominently report:
+docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md:30:    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli handoff prompt",
+docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md:32:    "PYTHONPATH=src \"$PY\" -m agentic_project_kit.cli handoff show",
+docs/workflow/RULE_GOVERNANCE.md:16:- The rule is not treated as complete when it only appears in chat, a handoff prompt, or temporary terminal output.
+docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md:16:- Future handoff YAML and generated handoff prompts must include this policy and must not accumulate obsolete workaround rules.
+docs/workflow/HANDOFF_STATE.md:16:- `./ns handoff-prompt` renders a copy-ready handoff prompt from YAML.
+docs/workflow/HANDOFF_STATE.md:20:Rules use `active`, `superseded`, or `historical` status. Generated handoff prompts include active rules by default and must not present superseded or historical rules as binding instructions.
+docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md:5:Scope: successor chat handoff prompts, closeout refreshes, and stale handoff detection
+docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md:9:A successor handoff prompt must not be treated as authoritative merely because it exists in `docs/reports/terminal/`. The prompt must represent the current repository state or must prominently warn that it may be stale.
+docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md:11:This rule addresses the observed failure pattern where a successor handoff prompt generated after one PR remained apparently current after later substantive main merges.
+docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md:15:Before a successor handoff prompt is presented as authoritative, the prompt path must check at least:
+docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md:20:- the latest successor handoff prompt under `docs/reports/terminal/`.
+docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md:24:The guard must warn prominently when the current git HEAD is not represented by `handoff_state.yaml` safe/admin state or when the configured/latest successor handoff prompt does not mention the current handoff commit marker.
+docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md:30:When a user asks for a handoff prompt, the system must first check whether status, handoff state, current handoff, and the latest successor prompt are current against main. If not, the correct next action is a small closeout/handoff-refresh slice before the prompt is used as authoritative.
+docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md:34:The canonical prompt path is `agentic-kit handoff prompt`. It must surface the freshness guard result before the rendered handoff prompt.
+docs/governance/CHAT_COMMUNICATION_CONTRACT.md:29:If any of these sources are missing, contradictory, stale, or unreachable, the chat must report drift and avoid mutation until the drift is resolved or a handoff prompt is produced.
+docs/governance/PROTECTED_CONTROL_FILE_CHANGE_CONTRACT.md:38:Generated artifacts must not be edited directly. If a generated file changes, the diff must also include the generator source or another registered generator input. For example, `docs/handoff/NEXT_CHAT_BOOTSTRAP.md` is generated from `src/agentic_project_kit/chat_bootloader.py`; direct edits to the generated Markdown must be blocked and the generator path must be used instead.
+docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md:68:4. offer a comprehensive handoff prompt when chat length, ambiguity, or contradictory state makes continuation unsafe,
+docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md:89:A drift handoff prompt must include:
+docs/reports/terminal/v040-repair-pr649-closeout-status-length.log:24:224:- PR #649 merged: LLM communication/bootstrap contracts, `agentic-kit docs-audit`, handoff prompt, and Terminal output requirement are on main; canonical rule docs remain the source of truth.
+docs/reports/terminal/v040-repair-pr649-closeout-status-length.log:26:328:- `agentic-kit handoff prompt` is canonical; `agentic-kit docs-audit` is the umbrella docs audit.
+docs/reports/terminal/v044-successor-chat-handoff-after-pr876.log:10:Generated handoff prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr876.md
+docs/reports/terminal/v040-successor-chat-handoff-release-readiness.md:85:- `canonical-handoff-prompt-command`: Use agentic-kit handoff prompt or python -m agentic_project_kit.cli handoff prompt as the canonical generator. Do not use ./ns handoff prompt unless ./ns explicitly routes that command correctly.
+docs/reports/terminal/v040-successor-chat-handoff-release-readiness.md:86:- `handoff-state-must-not-stale`: A chat switch handoff prompt is invalid if .agentic/handoff_state.yaml points to an obsolete version, commit, or next task. Refresh handoff_state first, then regenerate the prompt.
+docs/reports/terminal/v040-successor-chat-handoff-release-readiness.md:123:- `wrong-handoff-command-route`: Do not assume ./ns handoff prompt works; verify command routing or call the canonical agentic-kit CLI directly.
+docs/reports/terminal/v040-successor-chat-handoff-release-readiness.md:140:- 1. `chat-switch-with-refreshed-handoff` — Switch to a new chat using the refreshed kit-generated handoff prompt.
+docs/reports/terminal/v040-successor-chat-handoff-release-readiness.md:142:- 3. `handoff-generator-route-hardening` — Optionally harden ./ns handoff prompt routing so it cannot call the legacy next-step path.
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:12:763e9ee Model administrative evidence state in handoff prompts (#657)
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:15:ac92db8 Finalize post-PR656 handoff prompt at current main head
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:20:8ef8206 Recover post-PR656 handoff prompt
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:21:ba3edb1 Record post-PR656 handoff prompt
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:22:bcf9f0f Record PR656 merge verification and handoff prompt
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:30:763e9ee Model administrative evidence state in handoff prompts (#657)
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:35: Usage: agentic-kit handoff prompt [OPTIONS]                                                                                         
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:128:- `canonical-handoff-prompt-command`: Use agentic-kit handoff prompt or python -m agentic_project_kit.cli handoff prompt as the canonical generator. Do not use ./ns handoff prompt unless ./ns explicitly routes that command correctly.
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:129:- `handoff-state-must-not-stale`: A chat switch handoff prompt is invalid if .agentic/handoff_state.yaml points to an obsolete version, commit, or next task. Refresh handoff_state first, then regenerate the prompt.
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:166:- `wrong-handoff-command-route`: Do not assume ./ns handoff prompt works; verify command routing or call the canonical agentic-kit CLI directly.
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:183:- 1. `chat-switch-with-refreshed-handoff` — Switch to a new chat using the refreshed kit-generated handoff prompt.
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:185:- 3. `handoff-generator-route-hardening` — Optionally harden ./ns handoff prompt routing so it cannot call the legacy next-step path.
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:213:140:- 1. `chat-switch-with-refreshed-handoff` — Switch to a new chat using the refreshed kit-generated handoff prompt.
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:237:763e9ee Model administrative evidence state in handoff prompts (#657)
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:240:ac92db8 Finalize post-PR656 handoff prompt at current main head
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:245:8ef8206 Recover post-PR656 handoff prompt
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:246:ba3edb1 Record post-PR656 handoff prompt
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:247:bcf9f0f Record PR656 merge verification and handoff prompt
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:265:  MODE_CHECK: final successor-chat handoff prompt generated from canonical kit command after PR657 merge; required anchors verified
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:287:  The repo is ready for chat switch. The successor chat should start from the generated handoff prompt and mandatory rule sources, not from chat memory.
+docs/reports/terminal/v040-generate-final-successor-chat-handoff-after-pr657.log:290:  SAFE_STEP: upload handoff prompt and log, then switch to a new chat
+docs/reports/terminal/post-pr911-admin-closeout-fix3.log:52:Next: Start the next chat from the fresh post-PR911 successor handoff prompt and obey agentic-kit handoff post-merge-refresh-status before product work.
+docs/reports/terminal/v040-finalize-refreshed-handoff-state-after-pr656.log:6:8ef8206 Recover post-PR656 handoff prompt
+docs/reports/terminal/v040-finalize-refreshed-handoff-state-after-pr656.log:7:ba3edb1 Record post-PR656 handoff prompt
+docs/reports/terminal/v040-finalize-refreshed-handoff-state-after-pr656.log:8:bcf9f0f Record PR656 merge verification and handoff prompt
+docs/reports/terminal/v040-finalize-refreshed-handoff-state-after-pr656.log:39:240:  the refreshed handoff prompt matches v0.3.37 and GUI MVP closeout, then continue only with
+docs/reports/terminal/v040-finalize-refreshed-handoff-state-after-pr656.log:48:76:- `canonical-handoff-prompt-command`: Use agentic-kit handoff prompt or python -m agentic_project_kit.cli handoff prompt as the canonical generator. Do not use ./ns handoff prompt unless ./ns explicitly routes that command correctly.
+docs/reports/terminal/v040-finalize-refreshed-handoff-state-after-pr656.log:51:113:- `wrong-handoff-command-route`: Do not assume ./ns handoff prompt works; verify command routing or call the canonical agentic-kit CLI directly.
+docs/reports/terminal/v040-finalize-refreshed-handoff-state-after-pr656.log:54:141:Read the mandatory successor-chat sources, verify main after PR656, confirm the refreshed handoff prompt matches v0.3.37 and GUI MVP closeout, then continue only with a small bounded next slice.
+
+### CURRENT HANDOFF OUTPUT ###
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+Repo: agentic-project-kit
+Path: agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.4.5
+Safe state: main @ 0ab2f47
+Next: Start the next chat from the fresh v0.4.5 successor handoff after PR968 and obey agentic-kit handoff post-merge-refresh-status before product work.
+
+### STALE MARKER SEARCH ###
+.agentic/handoff_state.yaml:13:  commit: 0ab2f47
+.agentic/handoff_state.yaml:103:- 'PR #968 refreshed handoff state after README release-history extraction and v0.4.5
+.agentic/handoff_state.yaml:419:  PR968 and obey agentic-kit handoff post-merge-refresh-status before product work.
+.agentic/handoff_state.yaml:429:    PR968 and obey agentic-kit handoff post-merge-refresh-status before product work.
+
+### LOCAL GATES BASELINE ###
+Agentic project check passed
+Documentation mesh audit
+
+Documents:
+- README.md: current-state, required
+- CHANGELOG.md: release-history, required
+- docs/releases/VERIFIED_RELEASES.md: release-history, optional
+- CITATION.cff: current-state, required
+- pyproject.toml: current-state, required
+- src/agentic_project_kit/__init__.py: current-state, required
+- docs/STATUS.md: current-state, required
+- docs/handoff/CURRENT_HANDOFF.md: current-state, required
+- AGENTS.md: governance, required
+- docs/TEST_GATES.md: governance, required
+- docs/DOCUMENTATION_COVERAGE.yaml: governance, required
+- sentinel.yaml: governance, required
+- .agentic/project.yaml: governance, required
+- docs/architecture/ARCHITECTURE_CONTRACT.md: architecture, required
+- docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md: architecture, required
+- docs/WORKFLOW_OUTPUT_CYCLE.md: architecture, required
+- DESIGN.md: architecture, optional
+- docs/reports/status_roadmap_summary_after_pr105_20260512.md: historical-plan, required
+- docs/V0.3.0_OUTPUT_REPAIR_PLAN.md: historical-plan, optional
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+.........................                                                [100%]
+25 passed in 0.26s
+All checks passed!
+
+### RESULT SUMMARY ###
+branch_rc=0
+handoff_check_rc=0
+handoff_show_rc=0
+handoff_prompt_rc=0
+docs_rc=0
+mesh_rc=0
+target_rc=0
+ruff_rc=0
+overall=PASS_PRECHECK
