@@ -1,0 +1,4 @@
+remote_connector_write_test
+created_by=chatgpt_github_connector
+scope=terminal_report_marker_only
+next=safe_agentic_kit_route
