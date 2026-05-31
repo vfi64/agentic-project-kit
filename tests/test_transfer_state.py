@@ -7,6 +7,8 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
+from agentic_project_kit.rule_ack import RuleAcknowledgement
+from agentic_project_kit.rule_snapshot import build_derived_rule_snapshot
 from agentic_project_kit.transfer_state import PRIMARY_BLOCKED, PRIMARY_WAIT, build_transfer_state
 from tests.test_rule_source_validator import write_minimal_sources
 
@@ -33,6 +35,32 @@ def _write_and_commit_minimal_sources(root: Path) -> None:
     )
 
 
+def _write_rule_ack(
+    root: Path, *, repo_head: str | None = None, next_action: str = "run_next_command"
+) -> None:
+    snapshot = build_derived_rule_snapshot(root)
+    head = repo_head
+    if head is None:
+        head = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            cwd=root,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+        ).stdout.strip()
+    ack = RuleAcknowledgement(
+        schema_version=1,
+        snapshot_id=snapshot.snapshot_id,
+        repo_head=head,
+        sources_total=snapshot.sources_total,
+        missing_sources_total=len(snapshot.validation.missing_required_paths),
+        declared_next_allowed_action=next_action,
+    )
+    path = root / ".agentic/rule_ack/current.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(ack.as_json_data(), indent=2, sort_keys=True), encoding="utf-8")
+
+
 def test_transfer_state_waits_without_pending_order(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     _write_and_commit_minimal_sources(tmp_path)
@@ -45,6 +73,8 @@ def test_transfer_state_waits_without_pending_order(tmp_path, monkeypatch):
     assert snapshot.primary_state == PRIMARY_WAIT
     assert snapshot.capabilities["diagnose"] is True
     assert snapshot.capabilities["run_next_command"] is False
+    assert snapshot.capabilities["rules_confirmed"] is False
+    assert "missing_rule_acknowledgement" in snapshot.reasons
 
 
 def test_transfer_state_blocks_dirty_worktree(tmp_path, monkeypatch):
@@ -73,12 +103,15 @@ def test_transfer_state_ready_with_pending_order(tmp_path, monkeypatch):
         check=True,
         stdout=subprocess.PIPE,
     )
+    _write_rule_ack(tmp_path)
     monkeypatch.chdir(tmp_path)
 
     snapshot = build_transfer_state(tmp_path)
 
     assert snapshot.primary_state == "READY"
     assert snapshot.capabilities["run_next_command"] is True
+    assert snapshot.capabilities["rules_confirmed"] is True
+    assert snapshot.rule_acknowledgement["decision"]["is_confirmed"] is True
 
 
 def test_transfer_state_cli_emits_json(tmp_path, monkeypatch):
@@ -93,6 +126,8 @@ def test_transfer_state_cli_emits_json(tmp_path, monkeypatch):
     assert data["schema_version"] == 1
     assert data["primary_state"] == "WAIT"
     assert "capabilities" in data
+    assert data["capabilities"]["rules_confirmed"] is False
+    assert data["rule_acknowledgement"]["present"] is False
 
 
 def test_transfer_state_blocks_when_rule_snapshot_fails_closed(tmp_path, monkeypatch):
@@ -112,3 +147,32 @@ def test_transfer_state_blocks_when_rule_snapshot_fails_closed(tmp_path, monkeyp
         ".agentic/compiled_agent_context.yaml"
         in snapshot.rule_snapshot["validation"]["missing_required_paths"]
     )
+
+
+def test_transfer_state_rejects_stale_rule_acknowledgement(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    _write_rule_ack(tmp_path, repo_head="stale")
+    monkeypatch.chdir(tmp_path)
+
+    snapshot = build_transfer_state(tmp_path)
+
+    assert snapshot.primary_state == PRIMARY_WAIT
+    assert snapshot.capabilities["rules_confirmed"] is False
+    assert "repo_head_mismatch" in snapshot.reasons
+    assert snapshot.rule_acknowledgement["present"] is True
+    assert snapshot.rule_acknowledgement["decision"]["is_confirmed"] is False
+
+
+def test_transfer_state_confirms_matching_rule_acknowledgement_without_order(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    _write_rule_ack(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    snapshot = build_transfer_state(tmp_path)
+
+    assert snapshot.primary_state == PRIMARY_WAIT
+    assert snapshot.capabilities["rules_confirmed"] is True
+    assert snapshot.capabilities["run_next_command"] is False
+    assert snapshot.rule_acknowledgement["decision"]["is_confirmed"] is True

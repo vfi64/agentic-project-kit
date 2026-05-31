@@ -7,6 +7,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from agentic_project_kit.rule_ack import (
+    acknowledgement_from_json_data,
+    validate_rule_acknowledgement,
+)
 from agentic_project_kit.rule_snapshot import build_derived_rule_snapshot
 
 PRIMARY_READY = "READY"
@@ -29,6 +33,7 @@ class TransferStateSnapshot:
     last_result: dict[str, Any] | None = None
     closeout: dict[str, Any] = field(default_factory=dict)
     rule_snapshot: dict[str, Any] = field(default_factory=dict)
+    rule_acknowledgement: dict[str, Any] = field(default_factory=dict)
 
     def as_json_data(self) -> dict[str, Any]:
         return {
@@ -44,6 +49,7 @@ class TransferStateSnapshot:
             "last_result": self.last_result,
             "closeout": self.closeout,
             "rule_snapshot": self.rule_snapshot,
+            "rule_acknowledgement": self.rule_acknowledgement,
         }
 
 
@@ -83,15 +89,41 @@ def _read_latest_result(project_root: Path) -> dict[str, Any] | None:
     return {"report_path": report_path, "exists": report.exists()}
 
 
+def _read_dirty_worktree(project_root: Path) -> str:
+    status = _run_git(project_root, "status", "--short")
+    kept_lines: list[str] = []
+    for line in status.splitlines():
+        path_text = line[3:] if len(line) > 3 else ""
+        if path_text == ".agentic/rule_ack/current.json":
+            continue
+        if path_text.startswith(".agentic/rule_ack/"):
+            continue
+        kept_lines.append(line)
+    return "\n".join(kept_lines)
+
+
 def _has_pending_transfer_order(project_root: Path) -> bool:
     return (project_root / ".agentic/transfer/inbox/current.yaml").exists()
+
+
+def _read_rule_acknowledgement(project_root: Path):
+    path = project_root / ".agentic/rule_ack/current.json"
+    if not path.exists():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+    if not isinstance(data, dict):
+        return None
+    return acknowledgement_from_json_data(data)
 
 
 def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapshot:
     root = project_root.resolve()
     branch = _run_git(root, "branch", "--show-current") or "UNKNOWN"
     head = _run_git(root, "rev-parse", "--short", "HEAD") or "UNKNOWN"
-    dirty = _run_git(root, "status", "--short")
+    dirty = _read_dirty_worktree(root)
     reasons: list[str] = []
 
     if dirty:
@@ -103,6 +135,17 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
 
     has_order = _has_pending_transfer_order(root)
     latest_result = _read_latest_result(root)
+    acknowledgement = _read_rule_acknowledgement(root)
+    acknowledgement_decision = validate_rule_acknowledgement(
+        rule_snapshot,
+        acknowledgement,
+        repo_head=head,
+        required_next_allowed_action="run_next_command",
+    )
+    if acknowledgement_decision.fail_closed:
+        reasons.extend(acknowledgement_decision.blocking_reasons)
+
+    rules_confirmed = acknowledgement_decision.is_confirmed
 
     if dirty:
         primary_state = PRIMARY_BLOCKED
@@ -110,6 +153,9 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
     elif rule_snapshot.fail_closed:
         primary_state = PRIMARY_BLOCKED
         next_action = "Repair canonical rule sources before running transfer actions."
+    elif not rules_confirmed:
+        primary_state = PRIMARY_WAIT
+        next_action = "Acknowledge the current rule snapshot before running transfer actions."
     elif has_order:
         primary_state = PRIMARY_READY
         next_action = "Run agentic-kit transfer inspect before apply."
@@ -117,15 +163,15 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
         primary_state = PRIMARY_WAIT
         next_action = "Queue a transfer order or continue with a read-only diagnostic action."
 
-    transfer_allowed = has_order and not dirty and not rule_snapshot.fail_closed
-    clean_for_closeout = latest_result is not None and not dirty and not rule_snapshot.fail_closed
+    transfer_allowed = has_order and not dirty and rules_confirmed
+    clean_for_closeout = latest_result is not None and not dirty and rules_confirmed
 
     capabilities = {
         "refresh_rules": True,
         "run_next_command": transfer_allowed,
         "closeout_last_run": clean_for_closeout,
         "diagnose": True,
-        "rules_confirmed": not rule_snapshot.fail_closed,
+        "rules_confirmed": rules_confirmed,
     }
 
     return TransferStateSnapshot(
@@ -144,6 +190,11 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
             "dirty_worktree": bool(dirty),
         },
         rule_snapshot=rule_snapshot.as_json_data(),
+        rule_acknowledgement={
+            "path": ".agentic/rule_ack/current.json",
+            "present": acknowledgement is not None,
+            "decision": acknowledgement_decision.as_json_data(),
+        },
     )
 
 
