@@ -20,9 +20,17 @@ def evaluate_post_merge_handoff_refresh(project_root: Path = Path('.'), *, state
     state_file = project_root / state_path
     data = load_handoff_state(str(state_file))
     rendered_prompt = render_handoff_prompt(data)
-    warnings = assess_handoff_prompt_freshness(data, str(state_file), successor_prompt_text=rendered_prompt)
+    current_head = _git_short_head(project_root)
+    current_subject = _git_commit_subject(project_root)
+    warnings = assess_handoff_prompt_freshness(
+        data,
+        str(state_file),
+        current_head=current_head,
+        current_subject=current_subject,
+        successor_prompt_text=rendered_prompt,
+    )
     warning = bool(warnings)
-    return PostMergeHandoffRefreshStatus(_git_short_head(project_root), warning, warning, _latest_successor_prompt(data), 'REFRESH_REQUIRED' if warning else 'NOOP', 'create_administrative_handoff_refresh' if warning else 'continue_without_post_merge_handoff_refresh')
+    return PostMergeHandoffRefreshStatus(current_head, warning, warning, _latest_successor_prompt(data), 'REFRESH_REQUIRED' if warning else 'NOOP', 'create_administrative_handoff_refresh' if warning else 'continue_without_post_merge_handoff_refresh')
 
 def render_post_merge_handoff_refresh_status(status: PostMergeHandoffRefreshStatus) -> str:
     return '\n'.join(['POST_MERGE_HANDOFF_REFRESH', f'current_head={status.current_head}', f'freshness_warning_present={str(status.freshness_warning_present)}', f'refresh_required={str(status.refresh_required)}', f'latest_successor_prompt={status.latest_successor_prompt or ""}', f'result={status.result}', f'next_safe_action={status.next_safe_action}']) + '\n'
@@ -32,6 +40,13 @@ def _git_short_head(project_root: Path) -> str:
         return subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=project_root, stderr=subprocess.DEVNULL, text=True).strip()
     except (OSError, subprocess.CalledProcessError):
         return ''
+
+def _git_commit_subject(project_root: Path) -> str:
+    try:
+        return subprocess.check_output(['git', 'log', '-1', '--pretty=%s'], cwd=project_root, stderr=subprocess.DEVNULL, text=True).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return ''
+
 
 def _latest_successor_prompt(data: dict[str, Any]) -> str | None:
     for key in ('handoff_maintenance', 'administrative_evidence_state'):
