@@ -66,6 +66,8 @@ def _require_transfer_capability(capability: str) -> None:
     typer.echo(
         json.dumps(
             {
+                "chat_reply": "f",
+                "next_safe_action": snapshot.next_action,
                 "result_status": "BLOCKED",
                 "returncode": 2,
                 "required_capability": capability,

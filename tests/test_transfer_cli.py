@@ -104,4 +104,6 @@ def test_transfer_apply_cli_blocks_without_rule_acknowledgement(tmp_path, monkey
     assert result.exit_code == 2
     assert '"required_capability": "run_next_command"' in result.stdout
     assert '"result_status": "BLOCKED"' in result.stdout
+    assert '"chat_reply": "f"' in result.stdout
+    assert '"next_safe_action"' in result.stdout
     assert not (tmp_path / "generated/cli.txt").exists()
