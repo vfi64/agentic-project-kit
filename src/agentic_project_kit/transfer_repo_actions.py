@@ -64,6 +64,20 @@ def _result(action: str, command: list[str], completed: subprocess.CompletedProc
     )
 
 
+def final_signal(result: RepoActionResult) -> str:
+    return "d" if result.result_status == "PASS" and result.returncode == 0 else "f"
+
+
+def result_terminal(result: RepoActionResult) -> str:
+    return "\n".join(
+        (
+            result_json(result),
+            f"FINAL_SIGNAL={final_signal(result)}",
+            f"FINAL_NEXT={result.next_action}",
+        )
+    )
+
+
 def branch_create(branch: str, *, start_point: str = "main", push: bool = False) -> RepoActionResult:
     command = ["git", "switch", "-c", branch, start_point]
     completed = _run(command)
@@ -323,7 +337,7 @@ def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionR
             status_completed.stdout,
             "Refusing admin refresh with dirty worktree. Commit, clean, or inspect first.\n",
         )
-        return _result("admin-refresh-pr", status_command, completed, "Start admin refresh from a clean main worktree.")
+        return _result("admin-refresh-pr", completed.args, completed, "Start admin refresh from a clean main worktree.")
 
     refresh_branch = f"docs/post-pr{after_pr}-handoff-refresh"
     transcript: list[str] = []
