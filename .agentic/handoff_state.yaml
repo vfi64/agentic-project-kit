@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 77fdfad
-  commit_subject: Fix post-merge handoff refresh loop (#980)
+  commit: 9d2207d
+  commit_subject: Classify refresh handoff after PR subjects as administrative (#982)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
