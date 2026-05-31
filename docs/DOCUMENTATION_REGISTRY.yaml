@@ -169,6 +169,10 @@ documents:
     class: planning
     owner: maintainers
     notes: Hardened plan for machine-checkable local-to-LLM and LLM-to-local rule-refresh handshake state before GUI expansion.
+  - path: docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
+    class: planning
+    owner: maintainers
+    notes: Stable JSON contract for the read-only canonical rule source validator consumed by rule-refresh, transfer-state, and GUI gates.
   - path: docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
     class: planning
     owner: maintainers

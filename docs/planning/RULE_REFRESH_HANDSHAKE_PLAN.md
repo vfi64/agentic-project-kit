@@ -107,6 +107,8 @@ Acceptance:
 
 Phase 0 artifact: `docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md`.
 
+Rule-source validator JSON contract: `docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md`.
+
 ## Phase 1: Canonical Rule Source Hardening And Derived Snapshot Schema
 
 Goal: harden the existing canonical rule sources and define the derived snapshot schema without creating a second manually maintained rule system.
