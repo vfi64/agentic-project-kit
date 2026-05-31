@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 0a2fd1c
-  commit_subject: Add rule acknowledgement CLI (#1007)
+  commit: f3b8cc0
+  commit_subject: Guard transfer actions behind rule acknowledgement (#1009)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
