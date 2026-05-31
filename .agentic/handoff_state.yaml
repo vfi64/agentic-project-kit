@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 9aac3e8
-  commit_subject: Document rule source validator JSON contract (#995)
+  commit: 391be83
+  commit_subject: Add derived rule snapshot core (#997)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
