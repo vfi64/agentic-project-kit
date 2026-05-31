@@ -27,6 +27,7 @@ from agentic_project_kit.transfer_repo_actions import (
     repo_log,
     repo_status,
     result_json,
+    result_terminal,
 )
 from agentic_project_kit.transfer_runner import (
     DEFAULT_INBOX,
@@ -59,6 +60,10 @@ def _emit_result(result, json_output: bool) -> None:
         typer.echo(f"message={result.message}")
 
 
+def _echo_repo_result(result, json_output: bool) -> None:
+    typer.echo(result_json(result) if json_output else result_terminal(result))
+
+
 def _require_transfer_capability(capability: str) -> None:
     snapshot = build_transfer_state(Path("."))
     if snapshot.capabilities.get(capability, False):
@@ -80,6 +85,8 @@ def _require_transfer_capability(capability: str) -> None:
             sort_keys=True,
         )
     )
+    typer.echo("FINAL_SIGNAL=f")
+    typer.echo(f"FINAL_NEXT={snapshot.next_action}")
     raise typer.Exit(code=2)
 
 
@@ -144,7 +151,7 @@ def repo_status_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     result = repo_status(short=short)
-    typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -155,7 +162,7 @@ def repo_log_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     result = repo_log(limit=limit)
-    typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -168,7 +175,7 @@ def head_sha_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     result = head_sha(full=full)
-    typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -180,7 +187,7 @@ def repo_diff_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     result = repo_diff(cached=cached, name_only=name_only)
-    typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -191,7 +198,7 @@ def fetch_origin_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     result = fetch_origin(branch)
-    typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -201,7 +208,7 @@ def pull_current_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     result = pull_current()
-    typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -217,7 +224,7 @@ def branch_delete_command(
 ) -> None:
     _require_transfer_capability("rules_confirmed")
     result = branch_delete(branch, remote=remote, force=force)
-    typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -238,7 +245,7 @@ def pr_wait_ci_command(
         timeout_seconds=timeout_seconds,
         poll_seconds=poll_seconds,
     )
-    typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -262,7 +269,7 @@ def pr_merge_safe_command(
         merge_method=merge_method,
         no_verify_main=no_verify_main,
     )
-    typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -275,7 +282,7 @@ def post_merge_check_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     result = post_merge_check(main_branch=main_branch)
-    typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -290,7 +297,7 @@ def admin_refresh_pr_command(
 ) -> None:
     _require_transfer_capability("rules_confirmed")
     result = admin_refresh_pr(after_pr, main_branch=main_branch)
-    typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -304,10 +311,7 @@ def branch_create_command(
 ) -> None:
     _require_transfer_capability("rules_confirmed")
     result = branch_create(branch, start_point=start_point, push=push)
-    if json_output:
-        typer.echo(result_json(result))
-    else:
-        typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -322,10 +326,7 @@ def branch_switch_command(
 ) -> None:
     _require_transfer_capability("rules_confirmed")
     result = branch_switch(branch, pull=pull)
-    if json_output:
-        typer.echo(result_json(result))
-    else:
-        typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -343,10 +344,7 @@ def commit_command(
 ) -> None:
     _require_transfer_capability("rules_confirmed")
     result = commit_paths(message, list(path), allow_main=allow_main)
-    if json_output:
-        typer.echo(result_json(result))
-    else:
-        typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -357,10 +355,7 @@ def push_current_command(
 ) -> None:
     _require_transfer_capability("rules_confirmed")
     result = push_current()
-    if json_output:
-        typer.echo(result_json(result))
-    else:
-        typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
@@ -375,10 +370,7 @@ def pr_create_command(
 ) -> None:
     _require_transfer_capability("rules_confirmed")
     result = pr_create(base=base, head=head, title=title, body=body)
-    if json_output:
-        typer.echo(result_json(result))
-    else:
-        typer.echo(result_json(result))
+    _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 

@@ -20,6 +20,7 @@ from agentic_project_kit.transfer_repo_actions import (
     repo_diff,
     repo_log,
     repo_status,
+    result_terminal,
 )
 from tests.test_rule_source_validator import write_minimal_sources
 
@@ -52,9 +53,9 @@ def test_branch_create_and_switch(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
 
     created = branch_create("feature/example", start_point="main")
-    assert created.result_status == "PASS"
-
     switched = branch_switch("main")
+
+    assert created.result_status == "PASS"
     assert switched.result_status == "PASS"
 
 
@@ -254,6 +255,48 @@ def test_guarded_pr_actions_reject_short_expected_head_sha(tmp_path, monkeypatch
     assert merge_result.result_status == "FAIL"
     assert merge_result.returncode == 2
     assert "full 40-character head SHA" in merge_result.stderr
+
+
+def test_result_terminal_adds_final_signal_lines_for_pass_and_fail(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    passing = repo_log(limit=1)
+    failing = fetch_origin("main")
+
+    passing_output = result_terminal(passing)
+    failing_output = result_terminal(failing)
+
+    assert passing_output.splitlines()[-2:] == [
+        "FINAL_SIGNAL=d",
+        "FINAL_NEXT=Use commit SHAs for guarded PR or merge work.",
+    ]
+    assert failing_output.splitlines()[-2] == "FINAL_SIGNAL=f"
+    assert failing_output.splitlines()[-1].startswith("FINAL_NEXT=")
+
+
+def test_transfer_repo_log_cli_prints_final_signal_last(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(app, ["transfer", "repo-log", "--limit", "1"])
+
+    assert result.exit_code == 0
+    assert result.stdout.splitlines()[-2:] == [
+        "FINAL_SIGNAL=d",
+        "FINAL_NEXT=Use commit SHAs for guarded PR or merge work.",
+    ]
+
+
+def test_transfer_branch_create_cli_block_prints_final_signal_last(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(app, ["transfer", "branch-create", "feature/blocked"])
+
+    assert result.exit_code == 2
+    assert result.stdout.splitlines()[-2].strip() == "FINAL_SIGNAL=f"
+    assert result.stdout.splitlines()[-1].startswith("FINAL_NEXT=")
 
 
 def test_transfer_pr_wait_ci_cli_accepts_interval_seconds_option(tmp_path, monkeypatch):
