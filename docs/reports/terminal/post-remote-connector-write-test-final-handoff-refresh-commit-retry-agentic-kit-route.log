@@ -1,0 +1,67 @@
+===============================================================================
+===============================================================================
+===============================================================================
+### POST REMOTE CONNECTOR WRITE TEST FINAL HANDOFF COMMIT RETRY -- AGENTIC-KIT ROUTE ONLY ###
+created_at_utc=2026-05-31T12:05:59Z
+
+### STATE BEFORE COMMIT ###
+workflow_state=IDLE
+current_work=present
+current_work_state=READY
+current_report=docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+
+Safety:
+- This command is read-only.
+- current_report points to the latest workflow-output summary, not necessarily uploadable local evidence.
+
+Interpretation:
+- Working tree has uncommitted changes.
+
+Recommended next step:
+- Run: git status --short
+- Do not start workflow automation until the working tree is clean or intentionally staged.
+
+Optional checks:
+- agentic-kit doctor
+- agentic-kit check-docs
+{
+  "branch": "main",
+  "capabilities": {
+    "closeout_last_run": false,
+    "diagnose": true,
+    "refresh_rules": true,
+    "run_next_command": false
+  },
+  "closeout": {
+    "dirty_worktree": true,
+    "pending_transfer_order": false
+  },
+  "created_at": "2026-05-31T12:05:59.642540+00:00",
+  "head": "16b5204",
+  "last_result": {
+    "exists": true,
+    "report_path": "docs/reports/command_runs/transfer-closeout-mvp.md"
+  },
+  "next_action": "Review or clean the worktree before running another transfer action.",
+  "primary_state": "BLOCKED",
+  "reasons": [
+    "dirty_worktree"
+  ],
+  "repo": "vfi64/agentic-project-kit",
+  "schema_version": 1
+}
+POST_MERGE_HANDOFF_REFRESH
+current_head=16b5204
+freshness_warning_present=False
+refresh_required=False
+latest_successor_prompt=docs/reports/terminal/post-remote-connector-write-test-final-successor-chat-handoff.md
+result=NOOP
+next_safe_action=continue_without_post_merge_handoff_refresh
+Repo: agentic-project-kit
+Path: agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.4.5
+Safe state: main @ 16b5204
+Next: Start the next chat from the fresh post-remote-connector-write-test successor handoff prompt. Verify the current main state, confirm the remote connector write test marker is present, and continue only with the secure remote connector Branch/PR/Merge path before GUI implementation.
+
+### COMMIT EXPLICIT DIRTY PATHS WITH PUSH ###
