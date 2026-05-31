@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: f2b3863
-  commit_subject: 'Merge pull request #984 from vfi64/docs/clarify-entrypoint-selection-rule'
+  commit: '1608567'
+  commit_subject: 'Merge pull request #987 from vfi64/docs/transfer-github-action-coverage'
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
