@@ -59,6 +59,28 @@ def _emit_result(result, json_output: bool) -> None:
         typer.echo(f"message={result.message}")
 
 
+def _require_transfer_capability(capability: str) -> None:
+    snapshot = build_transfer_state(Path("."))
+    if snapshot.capabilities.get(capability, False):
+        return
+    typer.echo(
+        json.dumps(
+            {
+                "result_status": "BLOCKED",
+                "returncode": 2,
+                "required_capability": capability,
+                "primary_state": snapshot.primary_state,
+                "reasons": snapshot.reasons,
+                "next_action": snapshot.next_action,
+                "rule_acknowledgement": snapshot.rule_acknowledgement,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    raise typer.Exit(code=2)
+
+
 @transfer_app.command("closeout")
 def closeout(
     no_remove_transfer_dir: bool = typer.Option(
@@ -90,7 +112,9 @@ def closeout(
 
 @transfer_app.command("remote-next")
 def remote_next(
-    branch: str = typer.Argument(..., help="Remote transfer branch to fetch, switch to, pull, and run."),
+    branch: str = typer.Argument(
+        ..., help="Remote transfer branch to fetch, switch to, pull, and run."
+    ),
     json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
 ) -> None:
     try:
@@ -110,7 +134,6 @@ def remote_next(
 
     if result.local_run.returncode != 0:
         raise typer.Exit(code=result.local_run.returncode)
-
 
 
 @transfer_app.command("repo-status")
@@ -137,7 +160,9 @@ def repo_log_command(
 
 @transfer_app.command("head-sha")
 def head_sha_command(
-    full: bool = typer.Option(False, "--full", help="Print the full HEAD SHA instead of the short SHA."),
+    full: bool = typer.Option(
+        False, "--full", help="Print the full HEAD SHA instead of the short SHA."
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     result = head_sha(full=full)
@@ -182,10 +207,13 @@ def pull_current_command(
 @transfer_app.command("branch-delete")
 def branch_delete_command(
     branch: str = typer.Argument(..., help="Branch name to delete."),
-    remote: bool = typer.Option(False, "--remote", help="Delete branch on origin instead of locally."),
+    remote: bool = typer.Option(
+        False, "--remote", help="Delete branch on origin instead of locally."
+    ),
     force: bool = typer.Option(False, "--force", help="Force local branch deletion with -D."),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
+    _require_transfer_capability("rules_confirmed")
     result = branch_delete(branch, remote=remote, force=force)
     typer.echo(result_json(result))
     if result.returncode != 0:
@@ -197,7 +225,9 @@ def pr_wait_ci_command(
     pr_number: int = typer.Argument(..., help="Pull request number to wait for."),
     expected_head_sha: str = typer.Option("", "--expected-head-sha", help="Expected PR head SHA."),
     timeout_seconds: int = typer.Option(300, "--timeout-seconds", min=1, help="Maximum wait time."),
-    poll_seconds: int = typer.Option(10, "--interval-seconds", "--poll-seconds", min=1, help="Polling interval."),
+    poll_seconds: int = typer.Option(
+        10, "--interval-seconds", "--poll-seconds", min=1, help="Polling interval."
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     result = pr_wait_ci(
@@ -217,9 +247,12 @@ def pr_merge_safe_command(
     expected_head_sha: str = typer.Option(..., "--expected-head-sha", help="Expected PR head SHA."),
     main_branch: str = typer.Option("main", "--main-branch", help="Expected base branch."),
     merge_method: str = typer.Option("squash", "--merge-method", help="GitHub merge method."),
-    no_verify_main: bool = typer.Option(False, "--no-verify-main", help="Skip post-merge main verification."),
+    no_verify_main: bool = typer.Option(
+        False, "--no-verify-main", help="Skip post-merge main verification."
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
+    _require_transfer_capability("rules_confirmed")
     result = pr_merge_safe(
         pr_number,
         expected_head_sha=expected_head_sha,
@@ -234,7 +267,9 @@ def pr_merge_safe_command(
 
 @transfer_app.command("post-merge-check")
 def post_merge_check_command(
-    main_branch: str = typer.Option("main", "--main-branch", help="Expected current branch after merge."),
+    main_branch: str = typer.Option(
+        "main", "--main-branch", help="Expected current branch after merge."
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     result = post_merge_check(main_branch=main_branch)
@@ -245,10 +280,13 @@ def post_merge_check_command(
 
 @transfer_app.command("admin-refresh-pr")
 def admin_refresh_pr_command(
-    after_pr: int = typer.Option(..., "--after-pr", help="Merged PR number that requires the administrative handoff refresh."),
+    after_pr: int = typer.Option(
+        ..., "--after-pr", help="Merged PR number that requires the administrative handoff refresh."
+    ),
     main_branch: str = typer.Option("main", "--main-branch", help="Main branch to refresh from."),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
+    _require_transfer_capability("rules_confirmed")
     result = admin_refresh_pr(after_pr, main_branch=main_branch)
     typer.echo(result_json(result))
     if result.returncode != 0:
@@ -262,6 +300,7 @@ def branch_create_command(
     push: bool = typer.Option(False, "--push", help="Push the new branch and set upstream."),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
+    _require_transfer_capability("rules_confirmed")
     result = branch_create(branch, start_point=start_point, push=push)
     if json_output:
         typer.echo(result_json(result))
@@ -274,9 +313,12 @@ def branch_create_command(
 @transfer_app.command("branch-switch")
 def branch_switch_command(
     branch: str = typer.Argument(..., help="Branch name to switch to."),
-    pull: bool = typer.Option(False, "--pull", help="Fast-forward pull from origin after switching."),
+    pull: bool = typer.Option(
+        False, "--pull", help="Fast-forward pull from origin after switching."
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
+    _require_transfer_capability("rules_confirmed")
     result = branch_switch(branch, pull=pull)
     if json_output:
         typer.echo(result_json(result))
@@ -290,9 +332,14 @@ def branch_switch_command(
 def commit_command(
     message: str = typer.Option(..., "--message", "-m", help="Commit message."),
     path: list[str] = typer.Option([], "--path", help="Path to add before commit. Repeatable."),
-    allow_main: bool = typer.Option(False, "--allow-main", help="Allow committing directly on main. Use only for explicit emergency/admin flows."),
+    allow_main: bool = typer.Option(
+        False,
+        "--allow-main",
+        help="Allow committing directly on main. Use only for explicit emergency/admin flows.",
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
+    _require_transfer_capability("rules_confirmed")
     result = commit_paths(message, list(path), allow_main=allow_main)
     if json_output:
         typer.echo(result_json(result))
@@ -306,6 +353,7 @@ def commit_command(
 def push_current_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
+    _require_transfer_capability("rules_confirmed")
     result = push_current()
     if json_output:
         typer.echo(result_json(result))
@@ -323,6 +371,7 @@ def pr_create_command(
     body: str = typer.Option("", "--body", help="Pull request body."),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
+    _require_transfer_capability("rules_confirmed")
     result = pr_create(base=base, head=head, title=title, body=body)
     if json_output:
         typer.echo(result_json(result))
@@ -334,7 +383,9 @@ def pr_create_command(
 
 @transfer_app.command("pr-status")
 def pr_status_command(
-    pr_number: int = typer.Argument(..., help="Pull request number to inspect through the transfer wrapper."),
+    pr_number: int = typer.Argument(
+        ..., help="Pull request number to inspect through the transfer wrapper."
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text report."),
     no_failed_log_fetch: bool = typer.Option(
         False,
@@ -342,7 +393,9 @@ def pr_status_command(
         help="Do not fetch failed GitHub Actions logs for red checks.",
     ),
     failed_log_lines: int = typer.Option(120, min=0, help="Maximum failed-log excerpt lines."),
-    expected_head_sha: str = typer.Option("", "--expected-head-sha", help="Expected full PR head SHA."),
+    expected_head_sha: str = typer.Option(
+        "", "--expected-head-sha", help="Expected full PR head SHA."
+    ),
 ) -> None:
     result = pr_status_transfer(
         pr_number,
@@ -423,6 +476,7 @@ def apply(
     path: Path = typer.Option(DEFAULT_INBOX, "--path", help="Transfer order path."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
+    _require_transfer_capability("run_next_command")
     order = _load_or_exit(path)
     result = apply_transfer_order(order, Path("."))
     _emit_result(result, json_output)

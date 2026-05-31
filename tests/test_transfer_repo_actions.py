@@ -5,7 +5,23 @@ import subprocess
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
-from agentic_project_kit.transfer_repo_actions import admin_refresh_pr, branch_create, branch_delete, branch_switch, commit_paths, fetch_origin, head_sha, pr_merge_safe, pr_wait_ci, post_merge_check, pull_current, repo_diff, repo_log, repo_status
+from agentic_project_kit.transfer_repo_actions import (
+    admin_refresh_pr,
+    branch_create,
+    branch_delete,
+    branch_switch,
+    commit_paths,
+    fetch_origin,
+    head_sha,
+    pr_merge_safe,
+    pr_wait_ci,
+    post_merge_check,
+    pull_current,
+    repo_diff,
+    repo_log,
+    repo_status,
+)
+from tests.test_rule_source_validator import write_minimal_sources
 
 
 def _init_repo(path):
@@ -16,6 +32,19 @@ def _init_repo(path):
     subprocess.run(["git", "add", "README.md"], cwd=path, check=True)
     subprocess.run(["git", "commit", "-m", "Initial"], cwd=path, check=True, stdout=subprocess.PIPE)
     subprocess.run(["git", "branch", "-M", "main"], cwd=path, check=True, stdout=subprocess.PIPE)
+
+
+def _acknowledge_rules(path):
+    write_minimal_sources(path)
+    subprocess.run(["git", "add", "."], cwd=path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Add minimal rule sources"],
+        cwd=path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    result = CliRunner().invoke(app, ["rules", "acknowledge", "--root", str(path)])
+    assert result.exit_code == 0, result.output
 
 
 def test_branch_create_and_switch(tmp_path, monkeypatch):
@@ -66,11 +95,16 @@ def test_commit_paths_allows_feature_branch_by_default(tmp_path, monkeypatch):
 
 def test_transfer_commit_cli_supports_allow_main(tmp_path, monkeypatch):
     _init_repo(tmp_path)
+    _acknowledge_rules(tmp_path)
     monkeypatch.chdir(tmp_path)
     (tmp_path / "file.txt").write_text("content\n", encoding="utf-8")
 
-    blocked = CliRunner().invoke(app, ["transfer", "commit", "--message", "Add file", "--path", "file.txt"])
-    allowed = CliRunner().invoke(app, ["transfer", "commit", "--message", "Add file", "--path", "file.txt", "--allow-main"])
+    blocked = CliRunner().invoke(
+        app, ["transfer", "commit", "--message", "Add file", "--path", "file.txt"]
+    )
+    allowed = CliRunner().invoke(
+        app, ["transfer", "commit", "--message", "Add file", "--path", "file.txt", "--allow-main"]
+    )
 
     assert blocked.exit_code != 0
     assert "Refusing to commit directly on main" in blocked.stdout
@@ -79,6 +113,7 @@ def test_transfer_commit_cli_supports_allow_main(tmp_path, monkeypatch):
 
 def test_transfer_branch_create_cli(tmp_path, monkeypatch):
     _init_repo(tmp_path)
+    _acknowledge_rules(tmp_path)
     monkeypatch.chdir(tmp_path)
 
     result = CliRunner().invoke(app, ["transfer", "branch-create", "feature/cli"])
@@ -90,6 +125,7 @@ def test_transfer_branch_create_cli(tmp_path, monkeypatch):
 
 def test_transfer_commit_cli_requires_path(tmp_path, monkeypatch):
     _init_repo(tmp_path)
+    _acknowledge_rules(tmp_path)
     monkeypatch.chdir(tmp_path)
 
     result = CliRunner().invoke(app, ["transfer", "commit", "--message", "No paths"])
@@ -194,6 +230,7 @@ def test_transfer_head_sha_cli(tmp_path, monkeypatch):
 
 def test_transfer_branch_delete_cli(tmp_path, monkeypatch):
     _init_repo(tmp_path)
+    _acknowledge_rules(tmp_path)
     monkeypatch.chdir(tmp_path)
     branch_create("feature/cli-delete", start_point="main")
     branch_switch("main")
@@ -239,6 +276,7 @@ def test_transfer_pr_wait_ci_cli_accepts_interval_seconds_option(tmp_path, monke
     assert result.exit_code != 0
     assert "full 40-character head SHA" in result.stdout
 
+
 def test_post_merge_check_noop_on_main(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     monkeypatch.chdir(tmp_path)
@@ -250,11 +288,15 @@ def test_post_merge_check_noop_on_main(tmp_path, monkeypatch):
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "main\n", "")
         if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
-            return subprocess.CompletedProcess(command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", "")
+            return subprocess.CompletedProcess(
+                command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", ""
+            )
         return subprocess.CompletedProcess(command, 99, "", "unexpected command\n")
 
     monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
-    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._agentic_kit_command", lambda: "agentic-kit")
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._agentic_kit_command", lambda: "agentic-kit"
+    )
 
     result = post_merge_check(main_branch="main")
 
@@ -288,11 +330,15 @@ def test_post_merge_check_detects_refresh_required(tmp_path, monkeypatch):
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "main\n", "")
         if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
-            return subprocess.CompletedProcess(command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n", "")
+            return subprocess.CompletedProcess(
+                command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n", ""
+            )
         return subprocess.CompletedProcess(command, 99, "", "unexpected command\n")
 
     monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
-    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._agentic_kit_command", lambda: "agentic-kit")
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._agentic_kit_command", lambda: "agentic-kit"
+    )
 
     result = post_merge_check(main_branch="main")
 
@@ -314,27 +360,47 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
             return subprocess.CompletedProcess(command, 0, "main\n", "")
         if command == ["git", "status", "--short"]:
             status_count = sum(1 for item in calls if item == ["git", "status", "--short"])
-            return subprocess.CompletedProcess(command, 0, "" if status_count == 1 else " M .agentic/handoff_state.yaml\n", "")
+            return subprocess.CompletedProcess(
+                command, 0, "" if status_count == 1 else " M .agentic/handoff_state.yaml\n", ""
+            )
         if command == ["git", "switch", "-c", "docs/post-pr123-handoff-refresh", "main"]:
             return subprocess.CompletedProcess(command, 0, "", "")
-        if command == ["agentic-kit", "handoff", "refresh", ".agentic/handoff_state.yaml", "--write"]:
-            return subprocess.CompletedProcess(command, 0, "Updated .agentic/handoff_state.yaml\n", "")
+        if command == [
+            "agentic-kit",
+            "handoff",
+            "refresh",
+            ".agentic/handoff_state.yaml",
+            "--write",
+        ]:
+            return subprocess.CompletedProcess(
+                command, 0, "Updated .agentic/handoff_state.yaml\n", ""
+            )
         if command == ["agentic-kit", "handoff", "check"]:
-            return subprocess.CompletedProcess(command, 0, "Persistent handoff state check passed\n", "")
+            return subprocess.CompletedProcess(
+                command, 0, "Persistent handoff state check passed\n", ""
+            )
         if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
-            return subprocess.CompletedProcess(command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", "")
+            return subprocess.CompletedProcess(
+                command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", ""
+            )
         if command == ["git", "add", ".agentic/handoff_state.yaml"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "commit", "-m", "Refresh handoff state after PR123"]:
-            return subprocess.CompletedProcess(command, 0, "[branch abc123] Refresh handoff state after PR123\n", "")
+            return subprocess.CompletedProcess(
+                command, 0, "[branch abc123] Refresh handoff state after PR123\n", ""
+            )
         if command == ["git", "push", "-u", "origin", "docs/post-pr123-handoff-refresh"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command[:4] == ["gh", "pr", "create", "--base"]:
-            return subprocess.CompletedProcess(command, 0, "https://github.com/vfi64/agentic-project-kit/pull/999\n", "")
+            return subprocess.CompletedProcess(
+                command, 0, "https://github.com/vfi64/agentic-project-kit/pull/999\n", ""
+            )
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
-    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._agentic_kit_command", lambda: "agentic-kit")
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._agentic_kit_command", lambda: "agentic-kit"
+    )
 
     result = admin_refresh_pr(123)
 
@@ -372,3 +438,26 @@ def test_transfer_post_merge_check_cli_help(tmp_path, monkeypatch):
     assert result.exit_code == 0
     assert "post-merge-check" in result.stdout
 
+
+def test_transfer_branch_create_cli_blocks_without_rule_acknowledgement(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(app, ["transfer", "branch-create", "feature/blocked"])
+
+    assert result.exit_code == 2
+    assert '"required_capability": "rules_confirmed"' in result.stdout
+    assert '"result_status": "BLOCKED"' in result.stdout
+
+
+def test_transfer_branch_delete_cli_blocks_without_rule_acknowledgement(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    branch_create("feature/delete-blocked", start_point="main")
+    branch_switch("main")
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(app, ["transfer", "branch-delete", "feature/delete-blocked"])
+
+    assert result.exit_code == 2
+    assert '"required_capability": "rules_confirmed"' in result.stdout
+    assert '"result_status": "BLOCKED"' in result.stdout
