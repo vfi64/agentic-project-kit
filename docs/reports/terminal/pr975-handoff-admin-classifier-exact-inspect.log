@@ -1,0 +1,239 @@
+===============================================================================
+===============================================================================
+===============================================================================
+### PR975 HANDOFF ADMIN CLASSIFIER EXACT INSPECT ###
+created_at_utc=2026-05-31T11:19:20Z
+
+### PRECHECK ###
+fix/pr975-handoff-admin-classifier
+?? docs/reports/terminal/pr975-handoff-admin-classifier-exact-inspect.log
+?? docs/reports/terminal/pr975-handoff-admin-classifier-fix.log
+?? docs/reports/terminal/pr975-handoff-freshness-warning-root-cause.log
+?? docs/reports/terminal/pr975-post-merge-main-verify.log
+b9c9444 Refresh post-PR974 bootstrap handoff state (#975)
+8fc03e7 Record PR973 post-merge main verification (#974)
+36fe53b Record PR972 post-merge main verification (#973)
+f43bb89 Record PR971 post-merge main verification (#972)
+33c4896 Record PR970 post-merge main verification (#971)
+bbbccd9 Move verified DOI history to release archive (#970)
+e9b28bd Merge pull request #969 from vfi64/docs/v045-successor-handoff-anchor
+ee7973e Restore handoff state test anchors
+
+### ENSURE FIX BRANCH ###
+Already on 'fix/pr975-handoff-admin-classifier'
+
+### EXACT CLASSIFIER SOURCE ###
+    release = data.get("release", {})
+    safe_state = data.get("safe_state", {})
+    lines = [
+        f"Repo: {repo.get('name', '<unknown>')}",
+        f"Path: {repo.get('local_path', '<unknown>')}",
+        f"Remote: {repo.get('remote', '<unknown>')}",
+        f"Version: {release.get('current_version', '<unknown>')}",
+        f"Safe state: {safe_state.get('branch', '<unknown>')} @ {safe_state.get('commit', '<unknown>')}",
+        f"Next: {data.get('first_instruction', '<none>')}",
+    ]
+    return "\n".join(lines)
+
+
+def current_git_safe_state() -> dict[str, str]:
+    commit = subprocess.check_output([
+        "git",
+        "rev-parse",
+        "--short",
+        "HEAD",
+    ], text=True).strip()
+    subject = subprocess.check_output([
+        "git",
+        "log",
+        "-1",
+        "--pretty=%s",
+    ], text=True).strip()
+    return {"commit": commit, "commit_subject": subject}
+
+def is_administrative_evidence_subject(commit_subject: str) -> bool:
+    lowered = commit_subject.lower().strip()
+    return lowered.startswith(ADMINISTRATIVE_EVIDENCE_SUBJECT_PREFIXES)
+
+
+def is_administrative_refresh_subject(commit_subject: str) -> bool:
+    return is_administrative_evidence_subject(commit_subject)
+
+
+def build_administrative_evidence_state(commit: str, commit_subject: str) -> dict[str, Any]:
+    return {
+        "current_head": commit,
+        "current_head_subject": commit_subject,
+        "allowed_after_safe_state": True,
+        "reason": "administrative evidence/log/handoff commit after substantive safe_state",
+    }
+
+
+def refresh_handoff_safe_state(
+    data: dict[str, Any],
+    commit: str,
+    commit_subject: str,
+    reason: str = "Refresh handoff state to last substantive work commit",
+    updated_date: str | None = None,
+) -> dict[str, Any]:
+    refreshed = dict(data)
+    safe_state = dict(refreshed.get("safe_state", {}))
+    safe_state.setdefault("semantics", "last_substantive_work_state")
+
+### EXACT FRESHNESS ADMIN SOURCE ###
+from __future__ import annotations
+
+import subprocess
+from pathlib import Path
+from typing import Any
+
+from agentic_project_kit.handoff_state import is_administrative_evidence_subject
+
+FRESHNESS_GUARD_FILES = [
+    "docs/STATUS.md",
+    ".agentic/handoff_state.yaml",
+    "docs/handoff/CURRENT_HANDOFF.md",
+]
+SUCCESSOR_HANDOFF_GLOBS = [
+    "*successor*handoff*.md",
+    "*successor*handoff*.yaml",
+    "*successor*handoff*.yml",
+]
+
+
+def assess_handoff_prompt_freshness(
+    data: dict[str, Any],
+    handoff_path: str | Path = ".agentic/handoff_state.yaml",
+    *,
+    current_head: str | None = None,
+    current_subject: str | None = None,
+    successor_prompt_text: str | None = None,
+) -> list[str]:
+    """Return warnings when a successor handoff prompt may be stale.
+
+    The guard is intentionally warning-based. A stale repository still needs to
+    render a repairable prompt; it must not silently present that prompt as
+    authoritative.
+    """
+
+    state_path = Path(handoff_path)
+    project_root = _project_root_for_handoff_path(state_path)
+    warnings: list[str] = []
+
+    for relative_path in FRESHNESS_GUARD_FILES:
+        if not (project_root / relative_path).exists():
+            warnings.append(f"required handoff freshness file missing: {relative_path}")
+
+    detected_head = _short_commit(current_head) if current_head else _git_short_head(project_root)
+    detected_subject = current_subject if current_subject is not None else _git_head_subject(project_root)
+    detected_message = (
+        current_subject
+        if current_subject is not None
+        else _git_head_message(project_root)
+    )
+    expected_commits = _expected_handoff_commits(data)
+    admin_refresh_head = bool(
+        detected_head
+        and expected_commits
+        and not _commit_matches(detected_head, expected_commits)
+        and (
+            is_administrative_evidence_subject(detected_subject)
+            or _is_administrative_merge_commit(
+                project_root,
+                detected_head,
+                detected_message,
+                expected_commits,
+            )
+        )
+    )
+    if (
+        detected_head
+        and expected_commits
+        and not _commit_matches(detected_head, expected_commits)
+        and not admin_refresh_head
+    ):
+        joined = ", ".join(expected_commits)
+        warnings.append(
+            "current git HEAD "
+            f"{detected_head} is not represented by handoff safe/admin state ({joined})"
+        )
+
+    successor_prompt_path = _latest_successor_prompt_path(data, project_root)
+    if successor_prompt_path is None:
+        warnings.append("no successor handoff prompt was found under docs/reports/terminal")
+        return warnings
+
+    if not successor_prompt_path.exists():
+        relative_prompt = _relative_to_project(successor_prompt_path, project_root)
+        warnings.append(f"latest successor handoff prompt is missing: {relative_prompt}")
+        return warnings
+
+    marker_commits = expected_commits if admin_refresh_head else ([detected_head] if detected_head else expected_commits)
+    if successor_prompt_text is None:
+        prompt_text = successor_prompt_path.read_text(encoding="utf-8")
+
+### EXACT TEST FILE HEAD ###
+from agentic_project_kit.handoff_prompt import render_handoff_prompt
+from agentic_project_kit.handoff_state import (
+    is_administrative_evidence_subject,
+    refresh_handoff_safe_state,
+    validate_handoff_state,
+)
+
+
+def _base_state():
+    return {
+        "schema_version": 1,
+        "updated": {"date": "2026-05-22"},
+        "repo": {"local_path": "/repo", "remote": "github.com/example/repo", "default_branch": "main"},
+        "safe_state": {"branch": "main", "commit": "adc65ac", "commit_subject": "Close out GUI MVP three read-only actions (#656)", "semantics": "last_substantive_work_state", "working_tree_expected_clean": True},
+        "release": {"current_version": "0.3.37", "previous_version": "0.3.36", "tag": "v0.3.37"},
+        "open_items": {"prs": []},
+        "completed_since_previous_handoff": ["baseline"],
+        "current_capabilities": {"handoff": "available"},
+        "rules": [{"id": "test-rule", "status": "active", "text": "test rule"}],
+        "recent_failure_patterns": [{"id": "test-pattern", "prevention": "test prevention"}],
+        "next_allowed_tasks": ["continue safely"],
+        "blocked_until_closeout": [],
+        "first_instruction": "continue safely",
+        "handoff_maintenance": {"status": "active"},
+    }
+
+
+def test_administrative_evidence_subjects_are_recognized():
+    assert is_administrative_evidence_subject("Record final post-PR656 handoff consistency log")
+    assert is_administrative_evidence_subject("Recover post-PR656 handoff prompt")
+    assert not is_administrative_evidence_subject("Enable check-docs as read-only GUI action (#655)")
+
+
+def test_administrative_evidence_head_does_not_move_substantive_safe_state():
+    state = refresh_handoff_safe_state(_base_state(), "deadbee", "Record final post-PR656 handoff consistency log")
+    assert state["safe_state"]["commit"] == "adc65ac"
+    assert state["safe_state"]["semantics"] == "last_substantive_work_state"
+    assert state["administrative_evidence_state"]["current_head"] == "deadbee"
+    assert validate_handoff_state(state) == []
+    prompt = render_handoff_prompt(state)
+    assert "## 2a. Administrative Evidence State" in prompt
+    assert "Commit: `adc65ac`" in prompt
+    assert "Current HEAD at generation time: `deadbee`" in prompt
+
+
+def test_substantive_head_moves_safe_state_and_clears_admin_state():
+    state = _base_state()
+    state["administrative_evidence_state"] = {"current_head": "old"}
+    refreshed = refresh_handoff_safe_state(state, "c0ffee1", "Enable next GUI action (#999)")
+    assert refreshed["safe_state"]["commit"] == "c0ffee1"
+    assert "administrative_evidence_state" not in refreshed
+
+### CLASSIFIER CURRENT BEHAVIOR ###
+'Refresh post-PR974 bootstrap handoff state': False
+'Refresh post-PR974 bootstrap handoff state (#975)': False
+'Refresh post-PR974 administrative handoff state': False
+'Record post-PR974 successor handoff': True
+'Recover post-PR974 handoff prompt': True
+'Enable check-docs as read-only GUI action (#655)': False
+
+### RESULT SUMMARY ###
+branch_rc=0
+classifier_rc=0
+overall=PASS_INSPECT_ONLY

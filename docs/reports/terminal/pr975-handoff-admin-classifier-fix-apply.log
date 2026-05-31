@@ -1,0 +1,180 @@
+===============================================================================
+===============================================================================
+===============================================================================
+### PR975 HANDOFF ADMIN CLASSIFIER FIX APPLY ###
+created_at_utc=2026-05-31T11:20:26Z
+
+### PRECHECK ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'fix/pr975-handoff-admin-classifier'
+?? docs/reports/terminal/pr975-handoff-admin-classifier-exact-inspect.log
+?? docs/reports/terminal/pr975-handoff-admin-classifier-fix-apply.log
+?? docs/reports/terminal/pr975-handoff-admin-classifier-fix.log
+?? docs/reports/terminal/pr975-handoff-freshness-warning-root-cause.log
+?? docs/reports/terminal/pr975-post-merge-main-verify.log
+b9c9444 Refresh post-PR974 bootstrap handoff state (#975)
+8fc03e7 Record PR973 post-merge main verification (#974)
+36fe53b Record PR972 post-merge main verification (#973)
+f43bb89 Record PR971 post-merge main verification (#972)
+33c4896 Record PR970 post-merge main verification (#971)
+bbbccd9 Move verified DOI history to release archive (#970)
+e9b28bd Merge pull request #969 from vfi64/docs/v045-successor-handoff-anchor
+ee7973e Restore handoff state test anchors
+
+### PATCH CLASSIFIER AND TEST ###
+
+### VERIFY CLASSIFIER ###
+'Refresh post-PR974 bootstrap handoff state': True
+'Refresh post-PR974 bootstrap handoff state (#975)': True
+'Refresh post-PR974 administrative handoff state': True
+'Record post-PR974 successor handoff': True
+'Recover post-PR974 handoff prompt': True
+'Refresh post-PR974 product workflow state': False
+'Enable check-docs as read-only GUI action (#655)': False
+
+### HANDOFF PROMPT WARNING CHECK ###
+# Übergabeprompt
+
+## 1. Arbeitsumgebung
+
+Local path: `agentic-project-kit`
+Remote: `github.com:vfi64/agentic-project-kit`
+Default branch: `main`
+
+## 2. Sicherer Stand
+
+Branch: `main`
+Commit: `8fc03e7`
+Subject: Record PR973 post-merge main verification (#974)
+Semantics: `current_main_head`
+Working tree expected clean: `True`
+
+## 3. Release- und Produktstand
+
+Current version: `0.4.5`
+Previous version: `0.4.4`
+Tag: `v0.4.5`
+Zenodo concept DOI: `10.5281/zenodo.20101359`
+Zenodo version DOI: `10.5281/zenodo.20467371`
+Post-release check: `PASS`
+
+## 4. Pflichtquellen vor jeder Mutation
+
+Lies diese Quellen zuerst. Wenn eine Quelle fehlt, widersprüchlich ist oder nicht gelesen werden kann, melde Drift und mutiere nicht außer zur Drift-Reparatur.
+
+- .agentic/compiled_agent_context.yaml
+- .agentic/handoff_state.yaml
+- .agentic/rule_mechanism_inventory.yaml
+- .agentic/rule_migrations.yaml
+- .agentic/rule_preservation.yaml
+- docs/STATUS.md
+- docs/handoff/CURRENT_HANDOFF.md
+- docs/handoff/START_NEW_CHAT_PROMPT.md
+- docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
+- docs/governance/FINAL_SUMMARY_CONTRACT.md
+- docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+
+### WARNING SEARCH ###
+warning_check=PASS
+
+### DIFF ###
+src/agentic_project_kit/handoff_state.py
+tests/test_handoff_administrative_evidence_state.py
+ src/agentic_project_kit/handoff_state.py            | 5 ++++-
+ tests/test_handoff_administrative_evidence_state.py | 4 ++++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+diff --git a/src/agentic_project_kit/handoff_state.py b/src/agentic_project_kit/handoff_state.py
+index 8c71e00..4a84741 100644
+--- a/src/agentic_project_kit/handoff_state.py
++++ b/src/agentic_project_kit/handoff_state.py
+@@ -187,7 +187,10 @@ def current_git_safe_state() -> dict[str, str]:
+ 
+ def is_administrative_evidence_subject(commit_subject: str) -> bool:
+     lowered = commit_subject.lower().strip()
+-    return lowered.startswith(ADMINISTRATIVE_EVIDENCE_SUBJECT_PREFIXES)
++    return lowered.startswith(ADMINISTRATIVE_EVIDENCE_SUBJECT_PREFIXES) or (
++        lowered.startswith("refresh post-pr")
++        and ("handoff" in lowered or "bootstrap" in lowered)
++    )
+ 
+ 
+ def is_administrative_refresh_subject(commit_subject: str) -> bool:
+diff --git a/tests/test_handoff_administrative_evidence_state.py b/tests/test_handoff_administrative_evidence_state.py
+index 21ee046..9032b61 100644
+--- a/tests/test_handoff_administrative_evidence_state.py
++++ b/tests/test_handoff_administrative_evidence_state.py
+@@ -28,7 +28,11 @@ def _base_state():
+ def test_administrative_evidence_subjects_are_recognized():
+     assert is_administrative_evidence_subject("Record final post-PR656 handoff consistency log")
+     assert is_administrative_evidence_subject("Recover post-PR656 handoff prompt")
++    assert is_administrative_evidence_subject("Refresh post-PR974 bootstrap handoff state")
++    assert is_administrative_evidence_subject("Refresh post-PR974 bootstrap handoff state (#975)")
++    assert is_administrative_evidence_subject("Refresh post-PR974 administrative handoff state")
+     assert not is_administrative_evidence_subject("Enable check-docs as read-only GUI action (#655)")
++    assert not is_administrative_evidence_subject("Refresh post-PR974 product workflow state")
+ 
+ 
+ def test_administrative_evidence_head_does_not_move_substantive_safe_state():
+
+### PROTECTED CHANGE PLAN ###
+PROTECTED_CHANGE_PLAN
+result=PASS
+findings=0
+### RESULT: PASS ###
+
+### LOCAL GATES ###
+.............................                                            [100%]
+29 passed in 0.50s
+Agentic project check passed
+Documentation mesh audit
+
+Documents:
+- README.md: current-state, required
+- CHANGELOG.md: release-history, required
+- docs/releases/VERIFIED_RELEASES.md: release-history, optional
+- CITATION.cff: current-state, required
+- pyproject.toml: current-state, required
+- src/agentic_project_kit/__init__.py: current-state, required
+- docs/STATUS.md: current-state, required
+- docs/handoff/CURRENT_HANDOFF.md: current-state, required
+- AGENTS.md: governance, required
+- docs/TEST_GATES.md: governance, required
+- docs/DOCUMENTATION_COVERAGE.yaml: governance, required
+- sentinel.yaml: governance, required
+- .agentic/project.yaml: governance, required
+- docs/architecture/ARCHITECTURE_CONTRACT.md: architecture, required
+- docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md: architecture, required
+- docs/WORKFLOW_OUTPUT_CYCLE.md: architecture, required
+- DESIGN.md: architecture, optional
+- docs/reports/status_roadmap_summary_after_pr105_20260512.md: historical-plan, required
+- docs/V0.3.0_OUTPUT_REPAIR_PLAN.md: historical-plan, optional
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+All checks passed!
+
+### RESULT SUMMARY ###
+patch_rc=0
+classifier_rc=0
+prompt_rc=0
+warning_rc=0
+protected_plan_rc=0
+test_rc=0
+docs_rc=0
+mesh_rc=0
+ruff_rc=0
+overall=PASS_READY_TO_COMMIT
