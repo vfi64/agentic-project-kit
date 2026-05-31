@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: '1608567'
-  commit_subject: 'Merge pull request #987 from vfi64/docs/transfer-github-action-coverage'
+  commit: da938f5
+  commit_subject: 'Merge pull request #989 from vfi64/docs/canonical-rule-source-hardening-contract'
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
