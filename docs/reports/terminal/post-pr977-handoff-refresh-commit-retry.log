@@ -1,0 +1,118 @@
+===============================================================================
+===============================================================================
+===============================================================================
+### POST-PR977 HANDOFF REFRESH COMMIT RETRY -- FIX BROKEN TEST COMMAND ###
+created_at_utc=2026-05-31T13:09:25Z
+
+### STATE BEFORE RETRY ###
+docs/post-pr977-handoff-refresh
+ M .agentic/handoff_state.yaml
+?? docs/reports/terminal/post-pr977-handoff-refresh-commit-retry.log
+?? docs/reports/terminal/post-pr977-handoff-refresh-write-and-commit.log
+?? docs/reports/terminal/post-pr977-handoff-refresh.log
+6aaaea3 Document secure remote connector branch PR merge path (#977)
+078145b Record final remote connector handoff refresh self-mutation log
+914de46 Record final remote connector handoff refresh
+{
+  "branch": "docs/post-pr977-handoff-refresh",
+  "capabilities": {
+    "closeout_last_run": false,
+    "diagnose": true,
+    "refresh_rules": true,
+    "run_next_command": false
+  },
+  "closeout": {
+    "dirty_worktree": true,
+    "pending_transfer_order": false
+  },
+  "created_at": "2026-05-31T13:09:25.748113+00:00",
+  "head": "6aaaea3",
+  "last_result": {
+    "exists": true,
+    "report_path": "docs/reports/command_runs/transfer-closeout-mvp.md"
+  },
+  "next_action": "Review or clean the worktree before running another transfer action.",
+  "primary_state": "BLOCKED",
+  "reasons": [
+    "dirty_worktree"
+  ],
+  "repo": "vfi64/agentic-project-kit",
+  "schema_version": 1
+}
+POST_MERGE_HANDOFF_REFRESH
+current_head=6aaaea3
+freshness_warning_present=False
+refresh_required=False
+latest_successor_prompt=docs/reports/terminal/post-remote-connector-write-test-final-successor-chat-handoff.md
+result=NOOP
+next_safe_action=continue_without_post_merge_handoff_refresh
+
+### ACTUAL DIFF ###
+{
+  "action": "repo-diff",
+  "command": [
+    "git",
+    "diff"
+  ],
+  "next_action": "Review the actual diff before committing or protected planning.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "diff --git a/.agentic/handoff_state.yaml b/.agentic/handoff_state.yaml\nindex 698aea2..e0c92c0 100644\n--- a/.agentic/handoff_state.yaml\n+++ b/.agentic/handoff_state.yaml\n@@ -10,8 +10,8 @@ repo:\n   default_branch: main\n safe_state:\n   branch: main\n-  commit: 16b5204\n-  commit_subject: Refresh handoff after remote connector write test\n+  commit: 6aaaea3\n+  commit_subject: Document secure remote connector branch PR merge path (#977)\n   semantics: current_main_head\n   working_tree_expected_clean: true\n   administrative_refresh_prs:\n@@ -445,3 +445,5 @@ next_step:\n     Branch/PR/Merge path before GUI implementation.\n evidence:\n   latest_successor_prompt: docs/reports/terminal/post-remote-connector-write-test-successor-chat-handoff.md\n+# preservation-anchor: use d for log-backed PASS and f for log-backed FAIL\n+# preservation-anchor: nested shell/Python quote layers\n"
+}
+
+### PROTECTED CHANGE PLAN ###
+PROTECTED_CHANGE_PLAN
+result=PASS
+findings=0
+### RESULT: PASS ###
+
+### DOC GATES ###
+Agentic project check passed
+Documentation mesh audit
+
+Documents:
+- README.md: current-state, required
+- CHANGELOG.md: release-history, required
+- docs/releases/VERIFIED_RELEASES.md: release-history, optional
+- CITATION.cff: current-state, required
+- pyproject.toml: current-state, required
+- src/agentic_project_kit/__init__.py: current-state, required
+- docs/STATUS.md: current-state, required
+- docs/handoff/CURRENT_HANDOFF.md: current-state, required
+- AGENTS.md: governance, required
+- docs/TEST_GATES.md: governance, required
+- docs/DOCUMENTATION_COVERAGE.yaml: governance, required
+- sentinel.yaml: governance, required
+- .agentic/project.yaml: governance, required
+- docs/architecture/ARCHITECTURE_CONTRACT.md: architecture, required
+- docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md: architecture, required
+- docs/WORKFLOW_OUTPUT_CYCLE.md: architecture, required
+- DESIGN.md: architecture, optional
+- docs/reports/status_roadmap_summary_after_pr105_20260512.md: historical-plan, required
+- docs/V0.3.0_OUTPUT_REPAIR_PLAN.md: historical-plan, optional
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+
+### TARGETED TESTS -- SINGLE LINE ARRAY SAFE ###
+.............................                                            [100%]
+29 passed in 0.37s
+
+### RUFF ###
+All checks passed!
+
+### COMMIT EXPLICIT PATHS ###
