@@ -12,6 +12,10 @@ from agentic_project_kit.rule_refresh import (
     render_rule_refresh_result,
     rule_refresh_result_as_json_data,
 )
+from agentic_project_kit.rule_source_validator import (
+    render_rule_source_validation,
+    validate_rule_sources,
+)
 
 rules_app = typer.Typer(help="Generate repo-backed rule refresh files.")
 
@@ -38,6 +42,20 @@ def handoff_refresh(
         typer.echo(json.dumps(rule_refresh_result_as_json_data(result), indent=2, sort_keys=True))
     else:
         typer.echo(render_rule_refresh_result(result))
+
+
+@rules_app.command("validate-sources")
+def validate_sources(
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    json_output: Annotated[bool, typer.Option("--json")] = False,
+) -> None:
+    result = validate_rule_sources(project_root)
+    if json_output:
+        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo(render_rule_source_validation(result))
+    if result.fail_closed:
+        raise typer.Exit(1)
 
 
 def register_rules_commands(app: typer.Typer) -> None:
