@@ -29,7 +29,11 @@ def test_pr_status_transfer_green(monkeypatch):
     assert result.result_status == "PASS"
     assert result.returncode == 0
     assert result.decision == "green"
-    assert result.report == "PR green"
+    assert result.report.splitlines() == [
+        "PR green",
+        "FINAL_SIGNAL=d",
+        "FINAL_NEXT=Run transfer pr-wait-ci or pr-merge-safe with the verified head SHA.",
+    ]
 
 
 def test_pr_status_transfer_red_fetches_logs(monkeypatch):
@@ -159,4 +163,12 @@ def test_transfer_pr_status_cli_rejects_short_expected_head_sha(monkeypatch):
     assert calls == []
     assert result.exit_code == 2
     assert "full 40-character head SHA" in result.stdout
+
+def test_pr_status_transfer_rejects_short_sha_with_final_signal():
+    result = pr_status_transfer(123, expected_head_sha="abc123")
+
+    assert result.result_status == "FAIL"
+    assert result.returncode == 2
+    assert result.report.splitlines()[-2] == "FINAL_SIGNAL=f"
+    assert result.report.splitlines()[-1] == "FINAL_NEXT=Re-run with the full PR head SHA."
 
