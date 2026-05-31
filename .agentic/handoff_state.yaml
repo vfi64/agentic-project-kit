@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: ebd83e4
-  commit_subject: Add chat reply hints to blocked transfer actions (#1015)
+  commit: 6986fb1
+  commit_subject: Add final signal lines to transfer outputs (#1017)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
