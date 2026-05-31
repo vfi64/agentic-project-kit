@@ -1,0 +1,147 @@
+### PR975 POST-MERGE MAIN VERIFY ###
+created_at_utc=2026-05-31T11:16:53Z
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### STATE ###
+main
+?? docs/reports/terminal/pr975-post-merge-main-verify.log
+b9c9444 Refresh post-PR974 bootstrap handoff state (#975)
+8fc03e7 Record PR973 post-merge main verification (#974)
+36fe53b Record PR972 post-merge main verification (#973)
+f43bb89 Record PR971 post-merge main verification (#972)
+33c4896 Record PR970 post-merge main verification (#971)
+bbbccd9 Move verified DOI history to release archive (#970)
+e9b28bd Merge pull request #969 from vfi64/docs/v045-successor-handoff-anchor
+ee7973e Restore handoff state test anchors
+7604590 Record v0.4.5 successor handoff anchor
+0ab2f47 Merge pull request #968 from vfi64/docs/post-pr967-handoff-refresh
+
+### VERIFY RECENT PRS MERGED ###
+{"baseRefOid":"e9b28bd7c6a69b90b9a5307f7a9a80d497caa88d","headRefOid":"fd6b32f4f813bc5ade80bde048f485146c3b4acf","mergeStateStatus":"UNKNOWN","number":970,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/970"}
+{"baseRefOid":"bbbccd90598450e32057e08cd507a4a1004e2b94","headRefOid":"1a35639ec811e56ee67034390922306ca85312a9","mergeStateStatus":"UNKNOWN","number":971,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/971"}
+{"baseRefOid":"33c489631cd366295fb334fd7383cfee43d96ec1","headRefOid":"67822011abb30fea24408e64d72eee7cefc4bc82","mergeStateStatus":"UNKNOWN","number":972,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/972"}
+{"baseRefOid":"f43bb896781ddece8b4951239d354a7c84545f10","headRefOid":"b24c88a68fb150c2dc9ed1454469f0a58d14b471","mergeStateStatus":"UNKNOWN","number":973,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/973"}
+{"baseRefOid":"36fe53bee0d403e3780206fa67efe0bf8249bcec","headRefOid":"d6bd719b2459e7137383127795177210fca3daf7","mergeStateStatus":"UNKNOWN","number":974,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/974"}
+{"baseRefOid":"8fc03e70fce33707ad4b6557097ba7eedd8fed31","headRefOid":"9fe72fc809b21d74334d53e2928f5b8449f85c17","mergeStateStatus":"UNKNOWN","number":975,"state":"MERGED","url":"https://github.com/vfi64/agentic-project-kit/pull/975"}
+
+### OPEN PRS ###
+[]
+
+### HANDOFF COMMANDS ###
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+Repo: agentic-project-kit
+Path: agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.4.5
+Safe state: main @ 8fc03e7
+Next: Start the next chat from the fresh post-PR974 successor handoff prompt. Verify main at 8fc03e7, confirm PR970-PR974 are merged, and continue only with B11 Gatekeeper Core before GUI implementation.
+
+### HANDOFF FRESHNESS MARKERS ###
+.agentic/handoff_state.yaml:4:  reason: Refresh handoff state after PR970-PR974 evidence closeout
+.agentic/handoff_state.yaml:13:  commit: 8fc03e7
+.agentic/handoff_state.yaml:161:- 'PR #817 hardened PASS_ALREADY_DONE target-state classification: generic already-exists
+.agentic/handoff_state.yaml:401:  title: 'Implement B11 Gatekeeper Core before GUI work: machine-readable READY/WAIT/BLOCKED/FAILED
+.agentic/handoff_state.yaml:407:  title: Resume the smallest Tkinter workbench GUI slice only after B11 Gatekeeper Core
+.agentic/handoff_state.yaml:424:- GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
+.agentic/handoff_state.yaml:425:first_instruction: Start the next chat from the fresh post-PR974 successor handoff
+.agentic/handoff_state.yaml:426:  prompt. Verify main at 8fc03e7, confirm PR970-PR974 are merged, and continue only
+.agentic/handoff_state.yaml:427:  with B11 Gatekeeper Core before GUI implementation.
+.agentic/handoff_state.yaml:436:  first_instruction: Start the next chat from the fresh post-PR974 successor handoff
+.agentic/handoff_state.yaml:437:    prompt. Verify main at 8fc03e7, confirm PR970-PR974 are merged, and continue only
+.agentic/handoff_state.yaml:438:    with B11 Gatekeeper Core before GUI implementation.
+docs/STATUS.md:194:- PR #817 hardened PASS_ALREADY_DONE target-state classification so generic already-exists output is not sufficient success evidence.
+docs/handoff/CURRENT_HANDOFF.md:181:- PR #817 hardened PASS_ALREADY_DONE target-state classification so generic already-exists output is not sufficient success evidence.
+docs/handoff/CURRENT_HANDOFF.md:252:agentic-kit check-docs; agentic-kit doctor; Tkinter cockpit; v0.3.30 GUI Readiness Hardening Plan; v0.3.30 GUI Readiness Hardening Closeout; not the Tkinter cockpit release; PR #463: ActionResult core contract; PR #464: `cockpit run --json`; PR #465: Registry-only; PR #466: Queue-State contract; PR #467: Evidence-State contract; already executed command; dirty-state blocking; dirty worktrees; v0.3.31 Pre-GUI Execution Hardening Plan; v0.3.31 Pre-GUI Execution Hardening Closeout; v0.3.31 Evidence Guard Usage; v0.3.31 is the current pre-GUI execution hardening line.; It does not ship the Tkinter GUI.; Terminal Evidence Guard with CLI command `agentic-kit evidence guard LOGFILE`.; Local shortcut `./ns evidence-guard LOGFILE`.; `agentic-kit evidence guard LOGFILE`; `./ns evidence-guard LOGFILE`; contradictory final state; final-PASS-after-failure; Expected negative-smoke logs are allowed only when the log explicitly records that the false-PASS case was rejected.; Typed Work Order Evidence Contract.; Typed Work Order Evidence Runtime Check.; validate_typed_work_order_evidence; Next safe step: prepare and release v0.3.31.; Do not start Tkinter before v0.3.31 is released and post-release verified.; Begin v0.3.31 with minimal typed Work Order Runner work before further Tkinter GUI expansion.; Typed Work Orders Pre-GUI Execution Path; typed Patch DSL; structured State Source of Truth; Markdown is a projection; no_command; exactly_one_command; multiple_commands; already_executed; v0.3.32 Release Phase and Evidence Closeout; Current released version: 0.3.29; Current released version: 0.3.32; Verified Zenodo version DOI: `10.5281/zenodo.20314341`; `release-preflight` validates the before-metadata release phase; `release-check` remains the after-metadata gate; `post-release-check` remains the after-release GitHub and Zenodo verification gate; `evidence clean-check`; `./ns evidence-clean-check`; expected in-progress log may be the only dirty path; v0.3.34 Portable Core Hardening Plan; Typed work order unit-test matrix; Release and DOI core action extraction; Concept-DOI versus version-DOI WAITING guard; no new large shell control blocks; Tkinter remains explicitly deferred; Do not start GUI implementation in this slice.; GUI expansion is intentionally paused; remote inspection evidence contract; Remote-log evidence is mandatory for standard-error hardening slices; Terminal acknowledgement audit; PR #650 merged; PR #651 merged; PR #652 merged.
+docs/handoff/NEXT_CHAT_BOOTSTRAP.md:78:- Harden no-op/PASS_ALREADY_DONE handling for already satisfied target states.
+docs/handoff/START_NEW_CHAT_PROMPT.md:18:  - PASS_ALREADY_DONE
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:18:  - PASS_ALREADY_DONE
+docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md:79:   - no-op / PASS_ALREADY_DONE,
+docs/reports/terminal/post-pr974-successor-chat-handoff.md:12:Commit: `8fc03e7`
+docs/reports/terminal/post-pr974-successor-chat-handoff.md:121:- PR #817 hardened PASS_ALREADY_DONE target-state classification: generic already-exists output is no longer sufficient success evidence; target-specific classes and hard-failure precedence are test-backed.
+docs/reports/terminal/post-pr974-successor-chat-handoff.md:161:- 1. `b11-gatekeeper-core` — Implement B11 Gatekeeper Core before GUI work: machine-readable READY/WAIT/BLOCKED/FAILED state model, next_action, allowed actions, button enablement contract, safe GitHub/PR/CI checks, race-condition handling, automatic log/evidence classification, no-copy transfer path, and hardened handoff-prompt preparation command.
+docs/reports/terminal/post-pr974-successor-chat-handoff.md:162:- 5. `tkinter-workbench-gui-slice-1` — Resume the smallest Tkinter workbench GUI slice only after B11 Gatekeeper Core state/action contract is test-backed and current-state/handoff freshness are clean.
+docs/reports/terminal/post-pr974-successor-chat-handoff.md:178:- GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
+docs/reports/terminal/post-pr974-successor-chat-handoff.md:182:Start the next chat from the fresh post-PR974 successor handoff prompt. Verify main at 8fc03e7, confirm PR970-PR974 are merged, and continue only with B11 Gatekeeper Core before GUI implementation.
+/tmp/post-pr975-current-handoff-prompt.md:6:- current git HEAD b9c9444 is not represented by handoff safe/admin state (8fc03e7)
+/tmp/post-pr975-current-handoff-prompt.md:7:- latest successor handoff prompt docs/reports/terminal/post-pr974-successor-chat-handoff.md does not mention current handoff commit marker(s): b9c9444
+/tmp/post-pr975-current-handoff-prompt.md:20:Commit: `8fc03e7`
+/tmp/post-pr975-current-handoff-prompt.md:129:- PR #817 hardened PASS_ALREADY_DONE target-state classification: generic already-exists output is no longer sufficient success evidence; target-specific classes and hard-failure precedence are test-backed.
+/tmp/post-pr975-current-handoff-prompt.md:169:- 1. `b11-gatekeeper-core` — Implement B11 Gatekeeper Core before GUI work: machine-readable READY/WAIT/BLOCKED/FAILED state model, next_action, allowed actions, button enablement contract, safe GitHub/PR/CI checks, race-condition handling, automatic log/evidence classification, no-copy transfer path, and hardened handoff-prompt preparation command.
+/tmp/post-pr975-current-handoff-prompt.md:170:- 5. `tkinter-workbench-gui-slice-1` — Resume the smallest Tkinter workbench GUI slice only after B11 Gatekeeper Core state/action contract is test-backed and current-state/handoff freshness are clean.
+/tmp/post-pr975-current-handoff-prompt.md:186:- GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
+/tmp/post-pr975-current-handoff-prompt.md:190:Start the next chat from the fresh post-PR974 successor handoff prompt. Verify main at 8fc03e7, confirm PR970-PR974 are merged, and continue only with B11 Gatekeeper Core before GUI implementation.
+
+### LOCAL GATES ###
+Agentic project check passed
+Documentation mesh audit
+
+Documents:
+- README.md: current-state, required
+- CHANGELOG.md: release-history, required
+- docs/releases/VERIFIED_RELEASES.md: release-history, optional
+- CITATION.cff: current-state, required
+- pyproject.toml: current-state, required
+- src/agentic_project_kit/__init__.py: current-state, required
+- docs/STATUS.md: current-state, required
+- docs/handoff/CURRENT_HANDOFF.md: current-state, required
+- AGENTS.md: governance, required
+- docs/TEST_GATES.md: governance, required
+- docs/DOCUMENTATION_COVERAGE.yaml: governance, required
+- sentinel.yaml: governance, required
+- .agentic/project.yaml: governance, required
+- docs/architecture/ARCHITECTURE_CONTRACT.md: architecture, required
+- docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md: architecture, required
+- docs/WORKFLOW_OUTPUT_CYCLE.md: architecture, required
+- DESIGN.md: architecture, optional
+- docs/reports/status_roadmap_summary_after_pr105_20260512.md: historical-plan, required
+- docs/V0.3.0_OUTPUT_REPAIR_PLAN.md: historical-plan, optional
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+...............................................................          [100%]
+63 passed in 0.83s
+All checks passed!
+
+### RESULT SUMMARY ###
+handoff_check_rc=0
+handoff_show_rc=0
+handoff_prompt_rc=0
+docs_rc=0
+mesh_rc=0
+test_rc=0
+ruff_rc=0
+overall=PASS

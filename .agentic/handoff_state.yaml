@@ -1,7 +1,7 @@
 schema_version: 1
 updated:
   date: '2026-05-31'
-  reason: Refresh handoff state after PR970-PR974 evidence closeout
+  reason: Refresh handoff state to last substantive work commit
   source: agentic-kit handoff refresh
 repo:
   name: agentic-project-kit
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 8fc03e7
-  commit_subject: 'Record PR973 post-merge main verification (#974)'
+  commit: fbe4592
+  commit_subject: Recognize bootstrap handoff refresh commits as administrative (#976)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -400,12 +400,13 @@ next_allowed_tasks:
 - id: b11-gatekeeper-core
   title: 'Implement B11 Gatekeeper Core before GUI work: machine-readable READY/WAIT/BLOCKED/FAILED
     state model, next_action, allowed actions, button enablement contract, safe GitHub/PR/CI
-    checks, race-condition handling, automatic log/evidence classification, no-copy transfer
-    path, and hardened handoff-prompt preparation command.'
+    checks, race-condition handling, automatic log/evidence classification, no-copy
+    transfer path, and hardened handoff-prompt preparation command.'
   priority: 1
 - id: tkinter-workbench-gui-slice-1
-  title: Resume the smallest Tkinter workbench GUI slice only after B11 Gatekeeper Core
-    state/action contract is test-backed and current-state/handoff freshness are clean.
+  title: Resume the smallest Tkinter workbench GUI slice only after B11 Gatekeeper
+    Core state/action contract is test-backed and current-state/handoff freshness
+    are clean.
   priority: 5
 blocked_until_closeout:
 - Remote/destructive GUI actions
@@ -422,8 +423,8 @@ blocked_until_closeout:
 - Gatekeeper product work before post-PR888 handoff refresh is merged and verified
 - Treating helper-local PASS as slice PASS without patch-preflight slice-gate evidence
 - GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
-first_instruction: Start the next chat from the fresh post-PR974 successor handoff
-  prompt. Verify main at 8fc03e7, confirm PR970-PR974 are merged, and continue only
+first_instruction: Start the next chat from the fresh post-PR976 successor handoff
+  prompt. Verify main at fbe4592, confirm PR970-PR976 are merged, and continue only
   with B11 Gatekeeper Core before GUI implementation.
 handoff_maintenance:
   principle: curated-not-accumulated
@@ -431,10 +432,12 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr974-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr976-successor-chat-handoff.md
 next_step:
-  first_instruction: Start the next chat from the fresh post-PR974 successor handoff
-    prompt. Verify main at 8fc03e7, confirm PR970-PR974 are merged, and continue only
+  first_instruction: Start the next chat from the fresh post-PR976 successor handoff
+    prompt. Verify main at fbe4592, confirm PR970-PR976 are merged, and continue only
     with B11 Gatekeeper Core before GUI implementation.
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr974-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr976-successor-chat-handoff.md
+# preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
+# preservation-anchor: nested shell/Python quote layers

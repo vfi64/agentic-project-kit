@@ -1,0 +1,113 @@
+===============================================================================
+===============================================================================
+===============================================================================
+### PR975 HANDOFF ADMIN CLASSIFIER FIX ###
+created_at_utc=2026-05-31T11:18:37Z
+
+### SYNC MAIN ###
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+From github.com:vfi64/agentic-project-kit
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+### PRECHECK ###
+main
+?? docs/reports/terminal/pr975-handoff-admin-classifier-fix.log
+?? docs/reports/terminal/pr975-handoff-freshness-warning-root-cause.log
+?? docs/reports/terminal/pr975-post-merge-main-verify.log
+b9c9444 Refresh post-PR974 bootstrap handoff state (#975)
+8fc03e7 Record PR973 post-merge main verification (#974)
+36fe53b Record PR972 post-merge main verification (#973)
+f43bb89 Record PR971 post-merge main verification (#972)
+33c4896 Record PR970 post-merge main verification (#971)
+bbbccd9 Move verified DOI history to release archive (#970)
+e9b28bd Merge pull request #969 from vfi64/docs/v045-successor-handoff-anchor
+ee7973e Restore handoff state test anchors
+
+### CREATE FIX BRANCH ###
+Switched to a new branch 'fix/pr975-handoff-admin-classifier'
+
+### PATCH CLASSIFIER AND TESTS ###
+Expected classifier block not found; inspect before patching.
+
+### VERIFY CLASSIFIER ###
+'Refresh post-PR974 bootstrap handoff state': False
+'Refresh post-PR974 bootstrap handoff state (#975)': False
+'Refresh post-PR974 administrative handoff state': False
+'Record post-PR974 successor handoff': True
+'Recover post-PR974 handoff prompt': True
+'Enable check-docs as read-only GUI action (#655)': False
+
+### HANDOFF PROMPT WARNING CHECK ###
+## Handoff Freshness Guard
+
+WARNING: this successor handoff prompt may be stale.
+Refresh `docs/STATUS.md`, `.agentic/handoff_state.yaml`, `docs/handoff/CURRENT_HANDOFF.md`, and the successor prompt before treating this prompt as authoritative.
+
+- current git HEAD b9c9444 is not represented by handoff safe/admin state (8fc03e7)
+- latest successor handoff prompt docs/reports/terminal/post-pr974-successor-chat-handoff.md does not mention current handoff commit marker(s): b9c9444
+
+# Übergabeprompt
+
+## 1. Arbeitsumgebung
+
+Local path: `agentic-project-kit`
+Remote: `github.com:vfi64/agentic-project-kit`
+Default branch: `main`
+
+## 2. Sicherer Stand
+
+Branch: `main`
+Commit: `8fc03e7`
+Subject: Record PR973 post-merge main verification (#974)
+Semantics: `current_main_head`
+Working tree expected clean: `True`
+
+## 3. Release- und Produktstand
+
+Current version: `0.4.5`
+Previous version: `0.4.4`
+Tag: `v0.4.5`
+Zenodo concept DOI: `10.5281/zenodo.20101359`
+Zenodo version DOI: `10.5281/zenodo.20467371`
+Post-release check: `PASS`
+
+## 4. Pflichtquellen vor jeder Mutation
+
+Lies diese Quellen zuerst. Wenn eine Quelle fehlt, widersprüchlich ist oder nicht gelesen werden kann, melde Drift und mutiere nicht außer zur Drift-Reparatur.
+
+- .agentic/compiled_agent_context.yaml
+- .agentic/handoff_state.yaml
+- .agentic/rule_mechanism_inventory.yaml
+
+### WARNING SEARCH ###
+3:WARNING: this successor handoff prompt may be stale.
+6:- current git HEAD b9c9444 is not represented by handoff safe/admin state (8fc03e7)
+7:- latest successor handoff prompt docs/reports/terminal/post-pr974-successor-chat-handoff.md does not mention current handoff commit marker(s): b9c9444
+
+### DIFF ###
+
+### PROTECTED CHANGE PLAN ###
+PROTECTED_CHANGE_PLAN
+result=PASS
+findings=0
+### RESULT: PASS ###
+
+### LOCAL GATES ###
+.............................                                            [100%]
+29 passed in 0.51s
+All checks passed!
+
+### RESULT SUMMARY ###
+branch_rc=0
+patch_rc=1
+classifier_rc=0
+prompt_rc=0
+warning_rc=1
+protected_plan_rc=0
+test_rc=0
+ruff_rc=0
+overall=FAIL

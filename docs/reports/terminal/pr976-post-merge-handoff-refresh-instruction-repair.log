@@ -1,0 +1,168 @@
+===============================================================================
+===============================================================================
+===============================================================================
+### PR976 POST-MERGE HANDOFF INSTRUCTION REPAIR -- NO GH COMMANDS ###
+created_at_utc=2026-05-31T11:32:16Z
+
+### PRECHECK ###
+main
+ M .agentic/handoff_state.yaml
+?? docs/reports/terminal/post-pr976-successor-chat-handoff.md
+?? docs/reports/terminal/pr975-handoff-admin-classifier-fix.log
+?? docs/reports/terminal/pr975-post-merge-main-verify.log
+?? docs/reports/terminal/pr976-agentic-kit-route-inventory.log
+?? docs/reports/terminal/pr976-post-merge-handoff-refresh-apply.log
+?? docs/reports/terminal/pr976-post-merge-handoff-refresh-instruction-repair.log
+?? docs/reports/terminal/pr976-post-merge-main-verify.log
+fbe4592 Recognize bootstrap handoff refresh commits as administrative (#976)
+b9c9444 Refresh post-PR974 bootstrap handoff state (#975)
+8fc03e7 Record PR973 post-merge main verification (#974)
+36fe53b Record PR972 post-merge main verification (#973)
+f43bb89 Record PR971 post-merge main verification (#972)
+33c4896 Record PR970 post-merge main verification (#971)
+bbbccd9 Move verified DOI history to release archive (#970)
+e9b28bd Merge pull request #969 from vfi64/docs/v045-successor-handoff-anchor
+
+### AGENTIC-KIT STATE BEFORE PATCH ###
+Usage: agentic-kit state [OPTIONS] COMMAND [ARGS]...
+Try 'agentic-kit state --help' for help.
+╭─ Error ─────────────────────────────────────────────────────────────────────────────────────────╮
+│ Missing command.                                                                                │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────╯
+POST_MERGE_HANDOFF_REFRESH
+current_head=fbe4592
+freshness_warning_present=False
+refresh_required=False
+latest_successor_prompt=docs/reports/terminal/post-pr974-successor-chat-handoff.md
+result=NOOP
+next_safe_action=continue_without_post_merge_handoff_refresh
+Repo: agentic-project-kit
+Path: agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.4.5
+Safe state: main @ fbe4592
+Next: Start the next chat from the fresh post-PR974 successor handoff prompt. Verify main at 8fc03e7, confirm PR970-PR974 are merged, and continue only with B11 Gatekeeper Core before GUI implementation.
+
+### PATCH HANDOFF STATE INSTRUCTIONS MINIMALLY ###
+
+### REGENERATE BOOTSTRAP AND SUCCESSOR PROMPT ###
+WROTE docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+
+### VERIFY HANDOFF OUTPUT ###
+Persistent handoff state check passed
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+Repo: agentic-project-kit
+Path: agentic-project-kit
+Remote: github.com:vfi64/agentic-project-kit
+Version: 0.4.5
+Safe state: main @ fbe4592
+Next: Start the next chat from the fresh post-PR976 successor handoff prompt. Verify main at fbe4592, confirm PR970-PR976 are merged, and continue only with B11 Gatekeeper Core before GUI implementation.
+POST_MERGE_HANDOFF_REFRESH
+current_head=fbe4592
+freshness_warning_present=False
+refresh_required=False
+latest_successor_prompt=docs/reports/terminal/post-pr976-successor-chat-handoff.md
+result=NOOP
+next_safe_action=continue_without_post_merge_handoff_refresh
+
+### WARNING CHECK ###
+warning_check=PASS
+
+### MARKER CHECK ###
+.agentic/handoff_state.yaml:13:  commit: fbe4592
+.agentic/handoff_state.yaml:401:  title: 'Implement B11 Gatekeeper Core before GUI work: machine-readable READY/WAIT/BLOCKED/FAILED
+.agentic/handoff_state.yaml:407:  title: Resume the smallest Tkinter workbench GUI slice only after B11 Gatekeeper
+.agentic/handoff_state.yaml:425:- GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
+.agentic/handoff_state.yaml:426:first_instruction: Start the next chat from the fresh post-PR976 successor handoff
+.agentic/handoff_state.yaml:427:  prompt. Verify main at fbe4592, confirm PR970-PR976 are merged, and continue only
+.agentic/handoff_state.yaml:428:  with B11 Gatekeeper Core before GUI implementation.
+.agentic/handoff_state.yaml:437:  first_instruction: Start the next chat from the fresh post-PR976 successor handoff
+.agentic/handoff_state.yaml:438:    prompt. Verify main at fbe4592, confirm PR970-PR976 are merged, and continue only
+.agentic/handoff_state.yaml:439:    with B11 Gatekeeper Core before GUI implementation.
+docs/reports/terminal/post-pr976-successor-chat-handoff.md:12:Commit: `fbe4592`
+docs/reports/terminal/post-pr976-successor-chat-handoff.md:161:- 1. `b11-gatekeeper-core` — Implement B11 Gatekeeper Core before GUI work: machine-readable READY/WAIT/BLOCKED/FAILED state model, next_action, allowed actions, button enablement contract, safe GitHub/PR/CI checks, race-condition handling, automatic log/evidence classification, no-copy transfer path, and hardened handoff-prompt preparation command.
+docs/reports/terminal/post-pr976-successor-chat-handoff.md:162:- 5. `tkinter-workbench-gui-slice-1` — Resume the smallest Tkinter workbench GUI slice only after B11 Gatekeeper Core state/action contract is test-backed and current-state/handoff freshness are clean.
+docs/reports/terminal/post-pr976-successor-chat-handoff.md:178:- GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
+docs/reports/terminal/post-pr976-successor-chat-handoff.md:182:Start the next chat from the fresh post-PR976 successor handoff prompt. Verify main at fbe4592, confirm PR970-PR976 are merged, and continue only with B11 Gatekeeper Core before GUI implementation.
+
+### DIFF SUMMARY ###
+.agentic/handoff_state.yaml
+ .agentic/handoff_state.yaml | 29 ++++++++++++++++-------------
+ 1 file changed, 16 insertions(+), 13 deletions(-)
+
+### PROTECTED CHANGE PLAN ###
+PROTECTED_CHANGE_PLAN
+result=PASS
+findings=0
+### RESULT: PASS ###
+
+### LOCAL GATES ###
+Agentic project check passed
+Documentation mesh audit
+
+Documents:
+- README.md: current-state, required
+- CHANGELOG.md: release-history, required
+- docs/releases/VERIFIED_RELEASES.md: release-history, optional
+- CITATION.cff: current-state, required
+- pyproject.toml: current-state, required
+- src/agentic_project_kit/__init__.py: current-state, required
+- docs/STATUS.md: current-state, required
+- docs/handoff/CURRENT_HANDOFF.md: current-state, required
+- AGENTS.md: governance, required
+- docs/TEST_GATES.md: governance, required
+- docs/DOCUMENTATION_COVERAGE.yaml: governance, required
+- sentinel.yaml: governance, required
+- .agentic/project.yaml: governance, required
+- docs/architecture/ARCHITECTURE_CONTRACT.md: architecture, required
+- docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md: architecture, required
+- docs/WORKFLOW_OUTPUT_CYCLE.md: architecture, required
+- DESIGN.md: architecture, optional
+- docs/reports/status_roadmap_summary_after_pr105_20260512.md: historical-plan, required
+- docs/V0.3.0_OUTPUT_REPAIR_PLAN.md: historical-plan, optional
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+.........................................                                [100%]
+41 passed in 0.60s
+All checks passed!
+
+### RESULT SUMMARY ###
+patch_rc=0
+boot_rc=0
+prompt_rc=0
+handoff_check_rc=0
+handoff_show_rc=0
+post_merge_rc=0
+warning_rc=0
+protected_plan_rc=0
+docs_rc=0
+mesh_rc=0
+test_rc=0
+ruff_rc=0
+overall=PASS_READY_TO_COMMIT
