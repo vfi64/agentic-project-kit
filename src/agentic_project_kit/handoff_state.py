@@ -187,9 +187,13 @@ def current_git_safe_state() -> dict[str, str]:
 
 def is_administrative_evidence_subject(commit_subject: str) -> bool:
     lowered = commit_subject.lower().strip()
-    return lowered.startswith(ADMINISTRATIVE_EVIDENCE_SUBJECT_PREFIXES) or (
-        lowered.startswith("refresh post-pr")
-        and ("handoff" in lowered or "bootstrap" in lowered)
+    return (
+        lowered.startswith(ADMINISTRATIVE_EVIDENCE_SUBJECT_PREFIXES)
+        or lowered.startswith("refresh handoff after pr")
+        or (
+            lowered.startswith("refresh post-pr")
+            and ("handoff" in lowered or "bootstrap" in lowered)
+        )
     )
 
 
