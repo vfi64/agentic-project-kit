@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 9ed5b0e
-  commit_subject: Add rule snapshot acknowledgement core (#1003)
+  commit: 3604bd1
+  commit_subject: Gate transfer state on rule acknowledgement (#1005)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
