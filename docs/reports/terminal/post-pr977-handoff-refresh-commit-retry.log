@@ -113,3 +113,70 @@ Overall: PASS
 All checks passed!
 
 ### COMMIT EXPLICIT PATHS ###
+{
+  "action": "commit",
+  "command": [
+    "git",
+    "commit",
+    "-m",
+    "Refresh handoff after PR977"
+  ],
+  "next_action": "Push current branch or inspect status.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "[docs/post-pr977-handoff-refresh 642b0df] Refresh handoff after PR977\n 1 file changed, 11 insertions(+), 14 deletions(-)\n"
+}
+
+### PUSH CURRENT BRANCH ###
+{
+  "action": "push-current",
+  "command": [
+    "git",
+    "push",
+    "-u",
+    "origin",
+    "docs/post-pr977-handoff-refresh"
+  ],
+  "next_action": "Create or inspect pull request.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "To github.com:vfi64/agentic-project-kit.git\n   3764ee1..642b0df  docs/post-pr977-handoff-refresh -> docs/post-pr977-handoff-refresh\n",
+  "stdout": "branch 'docs/post-pr977-handoff-refresh' set up to track 'origin/docs/post-pr977-handoff-refresh'.\n"
+}
+
+### STATE AFTER PUSH ###
+ M docs/reports/terminal/post-pr977-handoff-refresh-commit-retry.log
+docs/post-pr977-handoff-refresh
+642b0df Refresh handoff after PR977
+3764ee1 Refresh handoff after PR977
+6aaaea3 Document secure remote connector branch PR merge path (#977)
+{
+  "action": "repo-diff",
+  "command": [
+    "git",
+    "diff"
+  ],
+  "next_action": "Review the actual diff before committing or protected planning.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "diff --git a/docs/reports/terminal/post-pr977-handoff-refresh-commit-retry.log b/docs/reports/terminal/post-pr977-handoff-refresh-commit-retry.log\nindex fd65a2d..1e2f30d 100644\n--- a/docs/reports/terminal/post-pr977-handoff-refresh-commit-retry.log\n+++ b/docs/reports/terminal/post-pr977-handoff-refresh-commit-retry.log\n@@ -113,3 +113,41 @@ Overall: PASS\n All checks passed!\n \n ### COMMIT EXPLICIT PATHS ###\n+{\n+  \"action\": \"commit\",\n+  \"command\": [\n+    \"git\",\n+    \"commit\",\n+    \"-m\",\n+    \"Refresh handoff after PR977\"\n+  ],\n+  \"next_action\": \"Push current branch or inspect status.\",\n+  \"result_status\": \"PASS\",\n+  \"returncode\": 0,\n+  \"stderr\": \"\",\n+  \"stdout\": \"[docs/post-pr977-handoff-refresh 642b0df] Refresh handoff after PR977\\n 1 file changed, 11 insertions(+), 14 deletions(-)\\n\"\n+}\n+\n+### PUSH CURRENT BRANCH ###\n+{\n+  \"action\": \"push-current\",\n+  \"command\": [\n+    \"git\",\n+    \"push\",\n+    \"-u\",\n+    \"origin\",\n+    \"docs/post-pr977-handoff-refresh\"\n+  ],\n+  \"next_action\": \"Create or inspect pull request.\",\n+  \"result_status\": \"PASS\",\n+  \"returncode\": 0,\n+  \"stderr\": \"To github.com:vfi64/agentic-project-kit.git\\n   3764ee1..642b0df  docs/post-pr977-handoff-refresh -> docs/post-pr977-handoff-refresh\\n\",\n+  \"stdout\": \"branch 'docs/post-pr977-handoff-refresh' set up to track 'origin/docs/post-pr977-handoff-refresh'.\\n\"\n+}\n+\n+### STATE AFTER PUSH ###\n+ M docs/reports/terminal/post-pr977-handoff-refresh-commit-retry.log\n+docs/post-pr977-handoff-refresh\n+642b0df Refresh handoff after PR977\n+3764ee1 Refresh handoff after PR977\n+6aaaea3 Document secure remote connector branch PR merge path (#977)\n"
+}
+POST_MERGE_HANDOFF_REFRESH
+current_head=642b0df
+freshness_warning_present=True
+refresh_required=True
+latest_successor_prompt=docs/reports/terminal/post-remote-connector-write-test-final-successor-chat-handoff.md
+result=REFRESH_REQUIRED
+next_safe_action=create_administrative_handoff_refresh
+
+### RESULT SUMMARY ###
+protected_plan_rc=0
+docs_rc=0
+mesh_rc=0
+test_rc=0
+ruff_rc=0
+commit_rc=0
+push_rc=0
+overall=PASS_READY_FOR_ADMIN_REFRESH_PR
