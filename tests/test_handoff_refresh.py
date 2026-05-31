@@ -4,7 +4,7 @@ import yaml
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
-from agentic_project_kit.handoff_state import refresh_handoff_safe_state, save_handoff_state
+from agentic_project_kit.handoff_state import is_administrative_refresh_subject, refresh_handoff_safe_state, save_handoff_state
 
 def test_refresh_handoff_safe_state_updates_commit_without_mutating_input():
     data = {
@@ -79,3 +79,7 @@ def test_save_handoff_state_preserves_required_comment_anchors(tmp_path: Path):
     assert "# preservation-anchor: use d for log-backed PASS and f for log-backed FAIL" in text
     assert "# preservation-anchor: nested shell/Python quote layers" in text
     assert yaml.safe_load(text)["schema_version"] == 1
+
+
+def test_refresh_handoff_after_pr_subject_is_administrative() -> None:
+    assert is_administrative_refresh_subject("Refresh handoff after PR980 (#981)")
