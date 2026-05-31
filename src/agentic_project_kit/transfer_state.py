@@ -7,6 +7,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from agentic_project_kit.rule_snapshot import build_derived_rule_snapshot
+
 PRIMARY_READY = "READY"
 PRIMARY_WAIT = "WAIT"
 PRIMARY_BLOCKED = "BLOCKED"
@@ -26,6 +28,7 @@ class TransferStateSnapshot:
     capabilities: dict[str, bool] = field(default_factory=dict)
     last_result: dict[str, Any] | None = None
     closeout: dict[str, Any] = field(default_factory=dict)
+    rule_snapshot: dict[str, Any] = field(default_factory=dict)
 
     def as_json_data(self) -> dict[str, Any]:
         return {
@@ -40,6 +43,7 @@ class TransferStateSnapshot:
             "capabilities": self.capabilities,
             "last_result": self.last_result,
             "closeout": self.closeout,
+            "rule_snapshot": self.rule_snapshot,
         }
 
 
@@ -93,12 +97,19 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
     if dirty:
         reasons.append("dirty_worktree")
 
+    rule_snapshot = build_derived_rule_snapshot(root)
+    if rule_snapshot.fail_closed:
+        reasons.append("rule_snapshot_fail_closed")
+
     has_order = _has_pending_transfer_order(root)
     latest_result = _read_latest_result(root)
 
     if dirty:
         primary_state = PRIMARY_BLOCKED
         next_action = "Review or clean the worktree before running another transfer action."
+    elif rule_snapshot.fail_closed:
+        primary_state = PRIMARY_BLOCKED
+        next_action = "Repair canonical rule sources before running transfer actions."
     elif has_order:
         primary_state = PRIMARY_READY
         next_action = "Run agentic-kit transfer inspect before apply."
@@ -106,11 +117,15 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
         primary_state = PRIMARY_WAIT
         next_action = "Queue a transfer order or continue with a read-only diagnostic action."
 
+    transfer_allowed = has_order and not dirty and not rule_snapshot.fail_closed
+    clean_for_closeout = latest_result is not None and not dirty and not rule_snapshot.fail_closed
+
     capabilities = {
         "refresh_rules": True,
-        "run_next_command": has_order and not dirty,
-        "closeout_last_run": latest_result is not None and not dirty,
+        "run_next_command": transfer_allowed,
+        "closeout_last_run": clean_for_closeout,
         "diagnose": True,
+        "rules_confirmed": not rule_snapshot.fail_closed,
     }
 
     return TransferStateSnapshot(
@@ -128,6 +143,7 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
             "pending_transfer_order": has_order,
             "dirty_worktree": bool(dirty),
         },
+        rule_snapshot=rule_snapshot.as_json_data(),
     )
 
 
