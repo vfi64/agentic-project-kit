@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 9d2207d
-  commit_subject: Classify refresh handoff after PR subjects as administrative (#982)
+  commit: f2b3863
+  commit_subject: 'Merge pull request #984 from vfi64/docs/clarify-entrypoint-selection-rule'
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
