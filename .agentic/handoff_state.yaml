@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 16b5204
-  commit_subject: Refresh handoff after remote connector write test
+  commit: 6aaaea3
+  commit_subject: Document secure remote connector branch PR merge path (#977)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -445,3 +445,5 @@ next_step:
     Branch/PR/Merge path before GUI implementation.
 evidence:
   latest_successor_prompt: docs/reports/terminal/post-remote-connector-write-test-successor-chat-handoff.md
+# preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
+# preservation-anchor: nested shell/Python quote layers
