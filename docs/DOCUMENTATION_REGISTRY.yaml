@@ -165,6 +165,10 @@ documents:
     class: planning
     owner: maintainers
     notes: Implementation contract for repo-backed failure-mode review automation before slices and after merges.
+  - path: docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
+    class: planning
+    owner: maintainers
+    notes: Hardened plan for machine-checkable local-to-LLM and LLM-to-local rule-refresh handshake state before GUI expansion.
   - path: docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
     class: planning
     owner: maintainers
