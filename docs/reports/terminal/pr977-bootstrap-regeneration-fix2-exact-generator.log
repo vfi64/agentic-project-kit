@@ -1,0 +1,529 @@
+===============================================================================
+===============================================================================
+===============================================================================
+### PR977 BOOTSTRAP REGENERATION FIX2 -- EXACT GENERATOR ROUTE ###
+created_at_utc=2026-05-31T12:59:51Z
+
+### PRECHECK ###
+feature/secure-remote-connector-branch-pr-merge-path
+?? docs/reports/terminal/pr977-bootstrap-regeneration-fix.log
+?? docs/reports/terminal/pr977-bootstrap-regeneration-fix2-exact-generator.log
+4b2061ffa2a127251489df3ffb9122806d447b24
+workflow_state=IDLE
+current_work=present
+current_work_state=READY
+current_report=docs/reports/CURRENT_WORKFLOW_OUTPUT.md
+
+Safety:
+- This command is read-only.
+- current_report points to the latest workflow-output summary, not necessarily uploadable local evidence.
+
+Interpretation:
+- Working tree has uncommitted changes.
+
+Recommended next step:
+- Run: git status --short
+- Do not start workflow automation until the working tree is clean or intentionally staged.
+
+Optional checks:
+- agentic-kit doctor
+- agentic-kit check-docs
+{
+  "branch": "feature/secure-remote-connector-branch-pr-merge-path",
+  "capabilities": {
+    "closeout_last_run": false,
+    "diagnose": true,
+    "refresh_rules": true,
+    "run_next_command": false
+  },
+  "closeout": {
+    "dirty_worktree": true,
+    "pending_transfer_order": false
+  },
+  "created_at": "2026-05-31T12:59:51.946584+00:00",
+  "head": "4b2061f",
+  "last_result": {
+    "exists": true,
+    "report_path": "docs/reports/command_runs/transfer-closeout-mvp.md"
+  },
+  "next_action": "Review or clean the worktree before running another transfer action.",
+  "primary_state": "BLOCKED",
+  "reasons": [
+    "dirty_worktree"
+  ],
+  "repo": "vfi64/agentic-project-kit",
+  "schema_version": 1
+}
+
+### INSPECT BOOT WRITE CLI IMPLEMENTATION ###
+from __future__ import annotations
+
+import typer
+
+from agentic_project_kit.chat_bootloader import check_boot_sources
+from agentic_project_kit.chat_bootloader import render_boot_report
+from agentic_project_kit.chat_bootloader import render_bootloader
+from agentic_project_kit.chat_bootloader import run_chat_switch_closeout
+from agentic_project_kit.chat_bootloader import write_boot_report
+from agentic_project_kit.chat_bootloader import write_next_chat_bootstrap
+
+boot_app = typer.Typer(help="Render and check successor-chat boot information.")
+
+
+@boot_app.command("prompt")
+def prompt(root: str = ".") -> None:
+    typer.echo(render_bootloader(root))
+
+
+@boot_app.command("check")
+def check(root: str = ".") -> None:
+    typer.echo(render_bootloader(root))
+    missing = [item.source for item in check_boot_sources(root) if not item.exists]
+    if missing:
+        raise typer.Exit(code=1)
+
+
+@boot_app.command("write")
+def write(
+    path: str = "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    root: str = ".",
+    include_state: bool = False,
+) -> None:
+    output_path = write_next_chat_bootstrap(path, root, include_state=include_state)
+    typer.echo(f"WROTE {output_path}")
+
+
+@boot_app.command("report")
+def report(root: str = ".", path: str = "") -> None:
+    if path:
+        output_path = write_boot_report(path, root)
+        typer.echo(f"WROTE {output_path}")
+    else:
+        typer.echo(render_boot_report(root))
+
+
+@boot_app.command("closeout")
+def closeout(root: str = ".") -> None:
+    findings = run_chat_switch_closeout(root)
+    if findings:
+        typer.echo("CHAT_SWITCH_CLOSEOUT: FAIL")
+        for finding in findings:
+            typer.echo(f"- {finding}")
+        raise typer.Exit(code=1)
+    typer.echo("CHAT_SWITCH_CLOSEOUT: PASS")
+            "",
+            "### RESULT: PASS ###",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def write_next_chat_bootstrap(
+    path: Path | str = DEFAULT_BOOTSTRAP_PATH,
+    root: Path | str = ".",
+    *,
+    include_state: bool = False,
+) -> Path:
+    output_path = Path(path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(render_next_chat_bootstrap(root, include_state=include_state), encoding="utf-8")
+    return output_path
+
+
+def validate_generated_bootstrap(path: Path | str = DEFAULT_BOOTSTRAP_PATH, root: Path | str = ".") -> list[str]:
+    output_path = Path(root) / path
+    if not output_path.exists():
+        return [f"missing bootstrap file: {path}"]
+    expected = render_next_chat_bootstrap(root)
+    actual = output_path.read_text(encoding="utf-8")
+    if actual != expected:
+        return ["bootstrap file is not generated from chat_bootloader.py"]
+    return []
+
+
+def render_boot_report(root: Path | str = ".") -> str:
+    checks = check_boot_sources(root)
+    missing = [item.source for item in checks if not item.exists]
+    drift = validate_generated_bootstrap(root=root)
+    lines = [
+        "BOOT_REPORT",
+        "",
+        f"branch: {current_git_branch(root)}",
+        f"head: {current_git_head(root)}",
+        f"mandatory_sources_total: {len(checks)}",
+        f"mandatory_sources_missing: {len(missing)}",
+        "sources_read_required: yes",
+        "open_prs: inspect_remote_github_before_mutation",
+        "ci: inspect_remote_github_before_mutation",
+        "drift_findings:",
+    ]
+    lines.extend(f"- {finding}" for finding in drift) if drift else lines.append("- none")
+    lines.extend(
+        [
+            "next_safe_slice: verify remote PRs/CI, then continue with no-op/PASS_ALREADY_DONE hardening",
+            "### RESULT: PASS ###" if not missing and not drift else "### RESULT: FAIL ###",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def write_boot_report(path: Path | str = BOOT_REPORT_PATH, root: Path | str = ".") -> Path:
+    output_path = Path(path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(render_boot_report(root), encoding="utf-8")
+
+### WRITE BOOTSTRAP WITH EXACT VALIDATION GENERATOR ###
+wrote=docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+findings=[]
+
+### VERIFY DIFF AFTER EXACT BOOTSTRAP WRITE ###
+{
+  "action": "repo-diff",
+  "command": [
+    "git",
+    "diff"
+  ],
+  "next_action": "Review the actual diff before committing or protected planning.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "diff --git a/docs/handoff/NEXT_CHAT_BOOTSTRAP.md b/docs/handoff/NEXT_CHAT_BOOTSTRAP.md\nindex bbedb9f..fb5c14e 100644\n--- a/docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n+++ b/docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n@@ -1,3 +1,36 @@\n+# NEXT CHAT BOOTSTRAP\n+\n+This file is the canonical remote handoff entry point for a successor chat.\n+Do not start from chat memory. Read this file first, then follow its boot sequence.\n+\n+## Canonical chat-switch prompt files\n+\n+- Start a successor chat with `docs/handoff/START_NEW_CHAT_PROMPT.md`.\n+- Before leaving a chat, run the closeout routine in `docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md`.\n+- A closeout may need to update both prompt files and this bootstrap file.\n+\n+## Standard successor-chat prompt\n+\n+Copy this into the next chat:\n+\n+```text\n+We work in repo vfi64/agentic-project-kit. Do not start from chat memory.\n+Read the remote file docs/handoff/NEXT_CHAT_BOOTSTRAP.md on main completely and execute its boot routine.\n+After that, verify main, open PRs, CI, STATUS, CURRENT_HANDOFF, handoff_state, compiled_agent_context, rule registry files, document-management rules, and FINAL_SUMMARY_CONTRACT before any mutation.\n+If continuing after d, f, w, or any other short chat signal, first run agentic-kit evidence inspect locally or inspect equivalent committed remote/repo evidence.\n+```\n+\n+## First chat command\n+\n+1. Read this file completely from remote main.\n+2. Run or verify `agentic-kit boot check` and `agentic-kit boot prompt` if a local checkout is available.\n+3. Open every mandatory boot source listed below before repository mutation.\n+4. Report current main HEAD, open PRs, CI status, last clean evidence, and next smallest safe slice.\n+5. Before continuing after a chat control signal, use `agentic-kit evidence inspect` or equivalent remote/repo evidence inspection.\n+\n+## Bootloader output\n+\n+```text\n CHAT_BOOTLOADER\n \n Purpose: bootstrap a successor chat from repository truth.\n@@ -36,3 +69,22 @@ Required first action in a successor chat:\n - If continuing after a chat control signal, run `agentic-kit evidence inspect --require-summary` or inspect equivalent remote/repo evidence first.\n \n ### RESULT: PASS ###\n+```\n+\n+## Next work items\n+\n+- Finish local sync after the bootloader/summary-runner merge and verify boot write/check plus targeted tests.\n+- Use boot write to refresh docs/handoff/NEXT_CHAT_BOOTSTRAP.md before chat changes.\n+- Harden no-op/PASS_ALREADY_DONE handling for already satisfied target states.\n+- Use `agentic-kit evidence inspect --require-summary` after chat control signals so d/f/w do not rely on chat memory.\n+- Use `agentic-kit evidence finalize-log` for evidence-bearing local workflow closeout so invalid summary fields cannot still end in a freehand final PASS.\n+- Automate red CI failed-log diagnosis in the repo workflow path.\n+- Resume Rule Registry Phase A only in small PRs: typed schema, generated projections, stronger assertions, query/impact analysis, and documentation integration.\n+- Continue the document-management projection system: move operative truth into machine-readable sources and keep Markdown as generated or verified projection where possible.\n+- Postpone GUI work until the workflow kernel, no-op handling, evidence inspection, and red-CI diagnosis are stable.\n+\n+## Final summary requirement\n+\n+Evidence-bearing workflow outputs must use `agentic_project_kit.run_summary_renderer.SummaryPayload`, the Python workflow summary runner, or `agentic-kit evidence finalize-log`. Do not hand-write legacy final summaries.\n+\n+### RESULT: PASS ###\n"
+}
+
+### TARGETED BOOT TESTS ###
+============================= test session starts ==============================
+platform darwin -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+configfile: pyproject.toml
+testpaths: tests
+collected 1340 items
+
+tests/test_action_registry.py .....                                      [  0%]
+tests/test_action_specs.py ......                                        [  0%]
+tests/test_active_documentation_language.py ..                           [  0%]
+tests/test_agent_command_envelope_fallback.py ..                         [  1%]
+tests/test_agent_command_runner.py ...........................           [  3%]
+tests/test_agent_command_runner_summary_footer.py ...                    [  3%]
+tests/test_agent_next_already_executed_idempotent.py .                   [  3%]
+tests/test_agent_next_pathspec_guard.py .                                [  3%]
+tests/test_agents_local_path_guard.py ..                                 [  3%]
+tests/test_boot_closeout_cli.py .                                        [  3%]
+tests/test_chat_boot.py .....                                            [  4%]
+tests/test_chat_bootstrap_drift_contract.py .....                        [  4%]
+tests/test_chat_communication_contract.py .....                          [  4%]
+tests/test_chat_switch_closeout.py .....                                 [  5%]
+tests/test_checks.py ...................                                 [  6%]
+tests/test_cli.py .............                                          [  7%]
+tests/test_cockpit.py ...................                                [  9%]
+tests/test_cockpit_readiness.py ...                                      [  9%]
+tests/test_cockpit_registry_only_contract.py ....                        [  9%]
+tests/test_cockpit_run_json_action_result.py ..                          [  9%]
+tests/test_command_inbox_check.py .....                                  [ 10%]
+tests/test_command_queue_contract.py .......                             [ 10%]
+tests/test_commit_guard.py ...                                           [ 10%]
+tests/test_communication_artifact_gc.py .............                    [ 11%]
+tests/test_communication_state.py ...                                    [ 12%]
+tests/test_compiled_agent_context.py ...                                 [ 12%]
+tests/test_contract.py .....                                             [ 12%]
+tests/test_control_file_preservation.py ....                             [ 12%]
+tests/test_control_state.py ....                                         [ 13%]
+tests/test_doc_lifecycle.py ..........                                   [ 13%]
+tests/test_doc_mesh.py .....................                             [ 15%]
+tests/test_doctor.py ..........                                          [ 16%]
+tests/test_doctor_package_version.py ..                                  [ 16%]
+tests/test_documentation_coverage_terms.py .                             [ 16%]
+tests/test_documentation_registry.py ...........                         [ 17%]
+tests/test_documentation_registry_artifact_policy.py ....                [ 17%]
+tests/test_documentation_system_audit.py .......                         [ 18%]
+tests/test_evidence_clean.py .....                                       [ 18%]
+tests/test_evidence_clean_cli.py ....                                    [ 18%]
+tests/test_evidence_commit_paths.py .....                                [ 19%]
+tests/test_evidence_finalize_log.py .....                                [ 19%]
+tests/test_evidence_guard.py ............                                [ 20%]
+tests/test_evidence_guard_cli.py ..                                      [ 20%]
+tests/test_evidence_inspector.py ........................                [ 22%]
+tests/test_evidence_require_summary.py ...                               [ 22%]
+tests/test_evidence_state_contract.py ......                             [ 23%]
+tests/test_evidence_summary_parser.py .....                              [ 23%]
+tests/test_execution_mode_state.py .....                                 [ 23%]
+tests/test_execution_mode_state_cli.py ...                               [ 24%]
+tests/test_final_summary_contract.py ............                        [ 24%]
+tests/test_final_summary_no_placeholders.py .                            [ 25%]
+tests/test_gc_hardening_docs.py ..                                       [ 25%]
+tests/test_generator.py ......                                           [ 25%]
+tests/test_governance_check.py ...                                       [ 25%]
+tests/test_governance_rules.py ..                                        [ 25%]
+tests/test_gui_action_execution_headless.py ..........                   [ 26%]
+tests/test_gui_button_catalog.py ....                                    [ 27%]
+tests/test_gui_cockpit.py .........                                      [ 27%]
+tests/test_gui_gatekeeper_status.py .........                            [ 28%]
+tests/test_gui_readiness_action_result_core_contract.py ....             [ 28%]
+tests/test_gui_readiness_planning.py .                                   [ 28%]
+tests/test_handoff_administrative_evidence_state.py ...                  [ 28%]
+tests/test_handoff_freshness.py ...........                              [ 29%]
+tests/test_handoff_prompt.py ......                                      [ 30%]
+tests/test_handoff_refresh.py .....                                      [ 30%]
+tests/test_handoff_state.py .........                                    [ 31%]
+tests/test_handoff_state_completed_list.py .                             [ 31%]
+tests/test_interpreter_discovery_guard.py .                              [ 31%]
+tests/test_llm_communication_contracts.py ...........                    [ 32%]
+tests/test_local_feature_gate_contract.py ..                             [ 32%]
+tests/test_next_step_state_machine.py ........                           [ 32%]
+tests/test_next_turn_evidence.py ....                                    [ 33%]
+tests/test_next_turn_evidence_repo_hygiene.py .                          [ 33%]
+tests/test_next_turn_merge_if_green.py .................                 [ 34%]
+tests/test_next_turn_pr_status.py ........                               [ 35%]
+tests/test_next_turn_result.py ........                                  [ 35%]
+tests/test_next_turn_runner.py ......                                    [ 36%]
+tests/test_next_turn_slot.py ....                                        [ 36%]
+tests/test_next_turn_status.py .............                             [ 37%]
+tests/test_next_turn_summary_contract.py ...                             [ 37%]
+tests/test_no_copy_fail_evidence_policy.py ..                            [ 37%]
+tests/test_no_copy_terminal_policy.py ..                                 [ 38%]
+tests/test_no_remote_command_deadlock_rule.py ..                         [ 38%]
+tests/test_ns_evidence_guard_shortcut.py .                               [ 38%]
+tests/test_ns_interpreter_and_no_exec_guard.py ...                       [ 38%]
+tests/test_ns_slice_runner.py ........                                   [ 39%]
+tests/test_ns_up_pr_completion.py .                                      [ 39%]
+tests/test_output_contract.py .........                                  [ 39%]
+tests/test_output_repair.py ...                                          [ 40%]
+tests/test_pass_already_done.py ..............                           [ 41%]
+tests/test_patch_artifact_preflight.py ...........                       [ 41%]
+tests/test_patch_preflight_slice_gate_requirement.py ....                [ 42%]
+tests/test_patterns.py .......                                           [ 42%]
+tests/test_portable_execution_contract.py .....                          [ 43%]
+tests/test_post_merge_handoff_refresh.py ..                              [ 43%]
+tests/test_post_release.py .........                                     [ 43%]
+tests/test_pr_ci_readiness.py ...................                        [ 45%]
+tests/test_pr_cleanup.py ........                                        [ 45%]
+tests/test_pr_closeout.py ...........                                    [ 46%]
+tests/test_pr_hygiene.py ........                                        [ 47%]
+tests/test_pre_gui_execution_hardening_plan.py .                         [ 47%]
+tests/test_protected_change_planner.py ...........                       [ 48%]
+tests/test_protected_change_planner_ns_route.py ...                      [ 48%]
+tests/test_protected_control_file_preservation_gate.py ......            [ 48%]
+tests/test_quality_first_workflow_lessons.py ..                          [ 49%]
+tests/test_quote_guard_contract.py .                                     [ 49%]
+tests/test_readme_release_history_extraction.py ...                      [ 49%]
+tests/test_recent_changelog_quality.py ..                                [ 49%]
+tests/test_release.py ...................                                [ 50%]
+tests/test_release_doi_safety.py ........                                [ 51%]
+tests/test_release_preflight_phase.py ....                               [ 51%]
+tests/test_release_prep_core.py ....                                     [ 52%]
+tests/test_release_publish_core.py ....                                  [ 52%]
+tests/test_release_version_source_contract.py .                          [ 52%]
+tests/test_remote_first_no_guess_rule.py ...                             [ 52%]
+tests/test_remote_next.py .....                                          [ 53%]
+tests/test_remote_next_closeout.py .....                                 [ 53%]
+tests/test_repair_report.py ...                                          [ 53%]
+tests/test_repo_ns_entrypoint.py ....................................... [ 56%]
+.                                                                        [ 56%]
+tests/test_result_report_classifier.py .......                           [ 57%]
+tests/test_rule_governance_contract.py ...                               [ 57%]
+tests/test_rule_mechanism_inventory.py ....                              [ 57%]
+tests/test_rule_preservation.py ...                                      [ 57%]
+tests/test_rule_refresh.py ....                                          [ 58%]
+tests/test_rule_registry_coverage_assertions.py ................         [ 59%]
+tests/test_rule_registry_coverage_index_completeness.py .                [ 59%]
+tests/test_rule_registry_owner_conflict_domains.py ...                   [ 59%]
+tests/test_rule_registry_report.py ......                                [ 60%]
+tests/test_rule_registry_test_coverage_metadata.py ....                  [ 60%]
+tests/test_rule_registry_validator.py ............................       [ 62%]
+tests/test_run_summary_renderer.py .............                         [ 63%]
+tests/test_runtime_validator.py ......                                   [ 64%]
+tests/test_runtime_validator_cli.py ..                                   [ 64%]
+tests/test_safe_file_replace.py ...                                      [ 64%]
+tests/test_safe_patch.py .....                                           [ 64%]
+tests/test_scaffold.py .......                                           [ 65%]
+tests/test_secure_remote_connector_branch_pr_merge_path.py .             [ 65%]
+tests/test_slice_gate.py .....                                           [ 65%]
+tests/test_slice_runner.py ....                                          [ 66%]
+tests/test_standard_error_guards.py .......                              [ 66%]
+tests/test_state_freshness.py ......                                     [ 67%]
+tests/test_terminal_block_guard.py ...........                           [ 67%]
+tests/test_terminal_logging.py .............                             [ 68%]
+tests/test_terminal_remote_preflight.py ...                              [ 69%]
+tests/test_terminal_safety_governance.py .                               [ 69%]
+tests/test_todo.py ....                                                  [ 69%]
+tests/test_transfer_cli.py ...                                           [ 69%]
+tests/test_transfer_closeout.py ....                                     [ 69%]
+tests/test_transfer_local_runner.py ...                                  [ 70%]
+tests/test_transfer_pr_actions.py ......                                 [ 70%]
+tests/test_transfer_remote_next.py ....                                  [ 70%]
+tests/test_transfer_repo_actions.py .......................              [ 72%]
+tests/test_transfer_runner.py .....                                      [ 72%]
+tests/test_transfer_state.py ....                                        [ 73%]
+tests/test_typed_next_already_executed_guard.py ..                       [ 73%]
+tests/test_typed_next_queue_execution.py .....                           [ 73%]
+tests/test_typed_work_order_cli.py ...                                   [ 74%]
+tests/test_typed_work_order_evidence_contract.py ..                      [ 74%]
+tests/test_typed_work_order_evidence_runtime.py ....                     [ 74%]
+tests/test_typed_work_order_example_and_ns_shortcut.py ..                [ 74%]
+tests/test_typed_work_order_queue_status.py .....                        [ 75%]
+tests/test_typed_work_order_runner.py .......                            [ 75%]
+tests/test_typed_work_orders_pre_gui_docs.py .                           [ 75%]
+tests/test_v030_post_release_state_cleanup.py ...                        [ 75%]
+tests/test_v031_evidence_guard_usage_docs.py .                           [ 75%]
+tests/test_v031_pre_gui_execution_hardening_contract.py .                [ 75%]
+tests/test_v031_status_handoff_closeout.py ..                            [ 76%]
+tests/test_v032_status_handoff_closeout.py ..                            [ 76%]
+tests/test_v034_finalize_guard_core.py ...............                   [ 77%]
+tests/test_v034_local_feature_gate_core.py .....                         [ 77%]
+tests/test_v034_ns_dev_gate_routing.py ..                                [ 77%]
+tests/test_v034_portable_core_hardening_plan.py ..                       [ 78%]
+tests/test_v034_typed_work_order_unit_baseline.py ...                    [ 78%]
+tests/test_v035_finalize_guard_shell_core_routing.py ...                 [ 78%]
+tests/test_v035_release_gate_core.py ....                                [ 78%]
+tests/test_v036_agents_rule_split.py ..                                  [ 78%]
+tests/test_v036_audit_test_matrix.py ...                                 [ 79%]
+tests/test_v036_communication_summary_id.py .....                        [ 79%]
+tests/test_v036_current_state_docs.py ....                               [ 79%]
+tests/test_v036_deterministic_rule_hardening.py .......                  [ 80%]
+tests/test_v036_doc_rules_contract_hardening.py ...                      [ 80%]
+tests/test_v036_logged_block_status_propagation.py ...                   [ 80%]
+tests/test_v036_ns_python_portability.py ...                             [ 81%]
+tests/test_v036_portability_shell_gate.py ...                            [ 81%]
+tests/test_v036_release_route_help_safety.py .....                       [ 81%]
+tests/test_v036_remote_inspection_evidence_contract.py ...               [ 81%]
+tests/test_v036_run_summary.py ..                                        [ 82%]
+tests/test_v036_safe_remove_diagnostic.py ....                           [ 82%]
+tests/test_v036_shell_adapter_inventory_baseline.py ..                   [ 82%]
+tests/test_v036_standard_error_hardening.py ...                          [ 82%]
+tests/test_v036_summary_and_ack_audit_hardening.py ...                   [ 82%]
+tests/test_v036_summary_format_execution_origin.py ...                   [ 83%]
+tests/test_v036_summary_renderer_usage_hardening.py ....                 [ 83%]
+tests/test_v036_terminal_log_mandate.py ...                              [ 83%]
+tests/test_v036_zero_ns_shell_adapter_contract.py ...                    [ 83%]
+tests/test_v037_final_gui_preparation_closeout.py ....                   [ 84%]
+tests/test_v040_gui_action_detail_panel_viewmodel.py ...                 [ 84%]
+tests/test_v040_gui_action_readiness_contract.py ......                  [ 84%]
+tests/test_v040_gui_action_renderer.py ....                              [ 85%]
+tests/test_v040_gui_action_run_intent.py ......                          [ 85%]
+tests/test_v040_gui_bounded_readonly_action_execution.py ......          [ 86%]
+tests/test_v040_gui_dry_run.py ......                                    [ 86%]
+tests/test_v040_gui_dry_run_renderer_integration.py ..                   [ 86%]
+tests/test_v040_gui_execution_result_wiring.py .....                     [ 87%]
+tests/test_v040_gui_help_contract.py ....                                [ 87%]
+tests/test_v040_gui_layout_plan.py ...                                   [ 87%]
+tests/test_v040_gui_menu_toolbar_tooltip_icon_contract.py ...            [ 87%]
+tests/test_v040_gui_output_log_status_panel.py ...                       [ 87%]
+tests/test_v040_gui_output_status_dry_run_integration.py ..              [ 88%]
+tests/test_v040_gui_presenter.py ..                                      [ 88%]
+tests/test_v040_gui_presenter_remote_mutation_safety.py .....            [ 88%]
+tests/test_v040_gui_tkinter_renderer.py ...                              [ 88%]
+tests/test_v040_gui_tkinter_shell.py .................................   [ 91%]
+tests/test_v040_gui_viewmodel.py ....                                    [ 91%]
+tests/test_v040_gui_window_guard.py .....                                [ 92%]
+tests/test_v040_ns_check_docs_doctor_routes.py .                         [ 92%]
+tests/test_v040_strategy_roadmap.py ......                               [ 92%]
+tests/test_v0_3_30_gui_readiness_closeout_docs.py .                      [ 92%]
+tests/test_validate_contract_cli.py ...                                  [ 92%]
+tests/test_validate_output_contract_cli.py ..........                    [ 93%]
+tests/test_work_order_prepare.py ....                                    [ 93%]
+tests/test_work_order_runner.py ..                                       [ 94%]
+tests/test_work_order_templates.py ...                                   [ 94%]
+tests/test_work_order_uploader.py .....                                  [ 94%]
+tests/test_work_order_validator.py ......                                [ 95%]
+tests/test_work_orders.py ..................                             [ 96%]
+tests/test_workflow_guard.py .........                                   [ 97%]
+tests/test_workflow_request_cli.py .......................               [ 98%]
+tests/test_workflow_runner_steps.py .......                              [ 99%]
+tests/test_workflow_state.py .....                                       [ 99%]
+tests/test_workflow_summary_runner.py ..                                 [ 99%]
+tests/test_yaml_governance_integrity.py ..                               [100%]
+
+============================ 1340 passed in 15.95s =============================
+zsh: permission denied: tests/test_chat_switch_closeout.py
+zsh: permission denied: tests/test_boot_closeout_cli.py
+zsh: permission denied: tests/test_chat_boot.py
+zsh: command not found: -q
+
+### PROTECTED CHANGE PLAN ###
+PROTECTED_CHANGE_PLAN
+result=PASS
+findings=0
+### RESULT: PASS ###
+
+### FULL LOCAL GATES ###
+Agentic project check passed
+Documentation mesh audit
+
+Documents:
+- README.md: current-state, required
+- CHANGELOG.md: release-history, required
+- docs/releases/VERIFIED_RELEASES.md: release-history, optional
+- CITATION.cff: current-state, required
+- pyproject.toml: current-state, required
+- src/agentic_project_kit/__init__.py: current-state, required
+- docs/STATUS.md: current-state, required
+- docs/handoff/CURRENT_HANDOFF.md: current-state, required
+- AGENTS.md: governance, required
+- docs/TEST_GATES.md: governance, required
+- docs/DOCUMENTATION_COVERAGE.yaml: governance, required
+- sentinel.yaml: governance, required
+- .agentic/project.yaml: governance, required
+- docs/architecture/ARCHITECTURE_CONTRACT.md: architecture, required
+- docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md: architecture, required
+- docs/WORKFLOW_OUTPUT_CYCLE.md: architecture, required
+- DESIGN.md: architecture, optional
+- docs/reports/status_roadmap_summary_after_pr105_20260512.md: historical-plan, required
+- docs/V0.3.0_OUTPUT_REPAIR_PLAN.md: historical-plan, optional
+
+Documentation registry:
+- registry: docs/DOCUMENTATION_REGISTRY.yaml
+- version: 1
+- documents: 22
+- broad_migration_allowed: False
+- class:architecture: 1
+- class:evidence/log: 2
+- class:generated artifact: 1
+- class:governance/system: 4
+- class:operational/automation: 4
+- class:planning: 7
+- class:release: 2
+- class:user-facing description: 1
+
+Overall: PASS
+........................................................................ [  5%]
+........................................................................ [ 10%]
+........................................................................ [ 16%]
+........................................................................ [ 21%]
+........................................................................ [ 26%]
+........................................................................ [ 32%]
+........................................................................ [ 37%]
+........................................................................ [ 42%]
+........................................................................ [ 48%]
+........................................................................ [ 53%]
+........................................................................ [ 59%]
+........................................................................ [ 64%]
+........................................................................ [ 69%]
+........................................................................ [ 75%]
+........................................................................ [ 80%]
+........................................................................ [ 85%]
+........................................................................ [ 91%]
+........................................................................ [ 96%]
+............................................                             [100%]
+1340 passed in 15.93s
+All checks passed!
+
+### COMMIT EXPLICIT PATHS ###
+
+### PUSH CURRENT BRANCH ###
+
+### NEW HEAD AND PR STATUS ###
+new_head_sha=4b2061ffa2a127251489df3ffb9122806d447b24
+
+### RESULT SUMMARY ###
+boot_write_rc=0
+boot_test_rc=127
+protected_plan_rc=0
+docs_rc=0
+mesh_rc=0
+test_rc=0
+ruff_rc=0
+commit_rc=1
+push_rc=1
+status_rc=1
+new_head_sha=4b2061ffa2a127251489df3ffb9122806d447b24
+overall=FAIL
