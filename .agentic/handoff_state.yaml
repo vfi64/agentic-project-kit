@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 86bfbe9
-  commit_subject: Expose rule source validator CLI (#993)
+  commit: 9aac3e8
+  commit_subject: Document rule source validator JSON contract (#995)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
