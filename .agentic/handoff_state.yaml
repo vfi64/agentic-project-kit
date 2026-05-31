@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 3604bd1
-  commit_subject: Gate transfer state on rule acknowledgement (#1005)
+  commit: 0a2fd1c
+  commit_subject: Add rule acknowledgement CLI (#1007)
   semantics: current_main_head
   working_tree_expected_clean: true
   administrative_refresh_prs:
