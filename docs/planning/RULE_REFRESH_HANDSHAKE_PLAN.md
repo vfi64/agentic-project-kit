@@ -36,6 +36,28 @@ A correct workflow should be able to answer:
 
 The GUI must later display this state; it must not invent or infer it.
 
+## Canonical Rule Source Contract
+
+The hardened rule-refresh workflow must not create a second manually maintained rule system.
+
+The existing repository-backed rule sources remain the only canonical rule source of truth. They include the existing `.agentic/*.yaml` rule and handoff files, governance documents, handoff documents, planning documents, and the existing rule-refresh source lists.
+
+Snapshots are derived artifacts. They must be generated from canonical sources and must never require manual rule duplication.
+
+Markdown refresh files are human-readable projections. They may help the LLM and maintainer understand the current rules, but they are not the authoritative machine state.
+
+The optimized architecture is:
+
+- Canonical rule sources
+- read-only validation
+- derived snapshot with hashes, freshness, and validity
+- human-readable projection
+- LLM acknowledgement against snapshot identity
+- transfer-state gate
+- GUI button state
+
+A future implementation must preserve this single-source model. If a proposed slice adds a manually edited snapshot, a separate GUI rule table, or a chat-only rule copy, the slice must be blocked or redesigned.
+
 ## Non-Negotiable Requirements
 
 - Fail closed when a mandatory rule source is missing.
@@ -47,6 +69,8 @@ The GUI must later display this state; it must not invent or infer it.
 - Keep all rule-refresh state repo-readable and auditable.
 - Prefer explicit project-local Python entry points when wrapper contracts are unclear.
 - Keep GUI behavior downstream of the machine-checked state.
+- Do not introduce double-maintained rule or snapshot state.
+- Treat generated snapshots and Markdown refresh files as derived artifacts, not canonical sources.
 
 ## Phase 0: Transfer GitHub Action Coverage
 
@@ -83,32 +107,29 @@ Acceptance:
 
 Phase 0 artifact: `docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md`.
 
-## Phase 1: Rule Snapshot Schema
+## Phase 1: Canonical Rule Source Hardening And Derived Snapshot Schema
 
-Goal: define a machine-readable rule snapshot schema.
+Goal: harden the existing canonical rule sources and define the derived snapshot schema without creating a second manually maintained rule system.
 
-Required fields:
+Required work:
 
-- schema version,
-- generated timestamp,
-- generating command,
-- repository name,
-- current main commit,
-- handoff safe-state commit,
-- source file list,
-- per-source content hash,
-- combined snapshot hash,
-- missing source list,
-- stale-state indicators,
-- intended next LLM action,
-- allowed next transfer state.
+- document the canonical source set used by rule refresh;
+- add read-only validation expectations for existing YAML and governance sources;
+- define required source presence, parseability, and role metadata;
+- define per-source content hashing for derived snapshots;
+- define a combined snapshot identity derived from canonical sources;
+- define missing-source and stale-state validity fields;
+- define intended next LLM action and allowed next transfer state;
+- specify that Markdown refresh files are projections, not canonical state.
 
 Acceptance:
 
-- schema is documented;
+- the canonical source contract is documented;
+- schema work is framed as a generated derivative of canonical sources;
 - generated snapshots are deterministic except for timestamp;
-- missing mandatory sources make the snapshot invalid;
-- tests reject malformed snapshots.
+- missing mandatory sources make the derived snapshot invalid;
+- tests reject double-maintained rule-state language;
+- tests protect the no-parallel-rule-system decision.
 
 ## Phase 2: Rule Snapshot Generator
 
@@ -170,7 +191,7 @@ Acceptance:
 ## Execution Order
 
 1. Complete Phase 0 before expanding GUI implementation.
-2. Implement the snapshot schema before changing rule-refresh behavior broadly.
+2. Harden and validate canonical sources before adding generated snapshot behavior broadly.
 3. Add acknowledgement validation before treating a generated rule file as sufficient.
 4. Integrate transfer-state gating before adding GUI write actions.
 5. Only after this foundation is green should GUI implementation expand.
@@ -181,7 +202,8 @@ Acceptance:
 - no broad rewrite of the rule registry;
 - no GUI implementation in the planning PR;
 - no claim that deterministic validation proves semantic perfection;
-- no chat-only rule additions without repo-backed anchors.
+- no chat-only rule additions without repo-backed anchors;
+- no parallel manually maintained snapshot or GUI rule table.
 
 ## Review Rule
 
@@ -192,3 +214,4 @@ Any future slice in this line must answer:
 - Does this fail closed?
 - Does this improve local-to-LLM or LLM-to-local transfer reliability?
 - Does this keep GUI behavior downstream of machine-checked state?
+- Does this preserve one canonical rule source model?
