@@ -39,7 +39,9 @@ class TransferLocalRun:
         }
 
 
-def run_local_transfer(project_root: Path = Path("."), path: Path = DEFAULT_INBOX) -> TransferLocalRun:
+def run_local_transfer(
+    project_root: Path = Path("."), path: Path = DEFAULT_INBOX
+) -> TransferLocalRun:
     root = project_root.resolve()
     order = load_transfer_order(path)
     inspect_result = inspect_transfer_order(order, root)
@@ -49,6 +51,22 @@ def run_local_transfer(project_root: Path = Path("."), path: Path = DEFAULT_INBO
     result_status = inspect_result.result_status
     returncode = inspect_result.returncode
     next_action = "Fix transfer inspection errors before applying."
+
+    state_before_apply = build_transfer_state(root)
+    if inspect_result.returncode == 0 and not state_before_apply.capabilities.get(
+        "run_next_command", False
+    ):
+        state_data = state_before_apply.as_json_data()
+        return TransferLocalRun(
+            schema_version=1,
+            transfer_id=order.transfer_id,
+            inspect=inspect_data,
+            apply=None,
+            state=state_data,
+            result_status="BLOCKED",
+            returncode=2,
+            next_action="Transfer blocked because run_next_command is false.",
+        )
 
     if inspect_result.returncode == 0:
         apply_result = apply_transfer_order(order, root)
@@ -76,4 +94,6 @@ def run_local_transfer(project_root: Path = Path("."), path: Path = DEFAULT_INBO
 
 
 def run_local_transfer_json(project_root: Path = Path("."), path: Path = DEFAULT_INBOX) -> str:
-    return json.dumps(run_local_transfer(project_root, path).as_json_data(), indent=2, sort_keys=True)
+    return json.dumps(
+        run_local_transfer(project_root, path).as_json_data(), indent=2, sort_keys=True
+    )
