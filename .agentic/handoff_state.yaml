@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: b8d78c2
-  commit_subject: Recover existing admin refresh PR branches (#1045)
+  commit: d007601
+  commit_subject: Harden transfer report label paths (#1047)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
