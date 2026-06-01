@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 445c474
-  commit_subject: Add quiet go transfer report output (#1027)
+  commit: 94cadb7
+  commit_subject: Add transfer show-last-report command (#1029)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
