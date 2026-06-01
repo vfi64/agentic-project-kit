@@ -6,6 +6,7 @@ import sys
 from agentic_project_kit.transfer_uplink import (
     LATEST_JSON,
     LATEST_LOG,
+    publish_latest_transfer_report,
     run_and_log_transfer_command,
     run_and_log_transfer_sequence,
 )
@@ -232,4 +233,51 @@ def test_transfer_report_empty_label_uses_safe_default(tmp_path):
     assert result.label == "transfer-report"
     assert result.remote_report_path.endswith("-transfer-report.json")
     assert (tmp_path / result.remote_report_path).exists()
+
+
+def test_publish_latest_transfer_report_copies_gitignored_latest_report_to_tracked_handoff_dir(tmp_path):
+    run_and_log_transfer_command(
+        [sys.executable, "-c", "print('FINAL_SIGNAL=d'); print('FINAL_NEXT=handoff ready')"],
+        label="primary handoff",
+        cwd=tmp_path,
+    )
+
+    published = publish_latest_transfer_report(tmp_path, label="primary handoff")
+
+    assert published["transfer_upload"] == "done"
+    assert published["chat_reply"] == "g"
+    assert str(published["remote_report"]).startswith("docs/reports/terminal/transfer_handoff_reports/")
+    assert "docs/reports/transfer_runs/" not in str(published["remote_report"])
+    report_path = tmp_path / str(published["remote_report"])
+    latest_path = tmp_path / str(published["latest_remote_report"])
+    assert report_path.exists()
+    assert latest_path.exists()
+    data = json.loads(report_path.read_text(encoding="utf-8"))
+    assert data["final_signal"] == "d"
+    assert data["published_transfer_handoff"]["source_latest_json_path"] == str(LATEST_JSON)
+    assert data["published_transfer_handoff"]["published_report_path"] == published["remote_report"]
+
+
+def test_publish_last_report_cli_prints_go_lines_for_tracked_report(tmp_path, monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    monkeypatch.chdir(tmp_path)
+    run_and_log_transfer_command(
+        [sys.executable, "-c", "print('FINAL_SIGNAL=d'); print('FINAL_NEXT=handoff ready')"],
+        label="cli handoff",
+        cwd=tmp_path,
+    )
+
+    result = CliRunner().invoke(app, ["transfer", "publish-last-report", "--label", "cli handoff"])
+
+    assert result.exit_code == 0
+    lines = result.stdout.splitlines()
+    assert lines[0] == "TRANSFER_UPLOAD=done"
+    assert lines[1].startswith("REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/")
+    assert lines[2] == "CHAT_REPLY=g"
+    assert len(lines) == 3
+    report_path = lines[1].split("=", 1)[1]
+    assert (tmp_path / report_path).exists()
+
 

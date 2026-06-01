@@ -40,6 +40,7 @@ from agentic_project_kit.transfer_runner import (
 )
 from agentic_project_kit.transfer_state import build_transfer_state
 from agentic_project_kit.transfer_uplink import (
+    publish_latest_transfer_report,
     read_latest_transfer_report,
     run_and_log_transfer_command,
     run_and_log_transfer_sequence,
@@ -530,6 +531,29 @@ def apply(
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
+
+
+
+@transfer_app.command("publish-last-report")
+def publish_last_report(
+    label: str = typer.Option("transfer-handoff", "--label", help="Label for the published tracked handoff report."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of concise handoff lines."),
+) -> None:
+    try:
+        result = publish_latest_transfer_report(Path("."), label=label)
+    except (FileNotFoundError, ValueError) as exc:
+        typer.echo(str(exc))
+        typer.echo("TRANSFER_UPLOAD=missing")
+        typer.echo("REMOTE_REPORT=")
+        typer.echo("CHAT_REPLY=f")
+        raise typer.Exit(code=1) from exc
+
+    if json_output:
+        typer.echo(json.dumps(result, indent=2, sort_keys=True))
+    else:
+        typer.echo("TRANSFER_UPLOAD=done")
+        typer.echo(f"REMOTE_REPORT={result['remote_report']}")
+        typer.echo("CHAT_REPLY=g")
 
 
 @transfer_app.command("show-last-report")
