@@ -8,8 +8,9 @@ from pathlib import Path
 from uuid import uuid4
 
 
-LATEST_LOG = Path("docs/reports/terminal/latest-transfer-uplink.log")
-LATEST_JSON = Path("docs/reports/terminal/latest-transfer-uplink.json")
+TRANSFER_RUN_DIR = Path("docs/reports/transfer_runs")
+LATEST_LOG = TRANSFER_RUN_DIR / "latest-transfer-report.log"
+LATEST_JSON = TRANSFER_RUN_DIR / "latest-transfer-report.json"
 
 
 @dataclass(frozen=True)
@@ -49,6 +50,8 @@ class TransferUplinkResult:
     latest_log_path: str
     latest_json_path: str
     timestamped_log_path: str
+    remote_report_path: str
+    transfer_upload: str
 
     def as_json_data(self) -> dict[str, object]:
         data: dict[str, object] = {
@@ -65,6 +68,8 @@ class TransferUplinkResult:
             "latest_log_path": self.latest_log_path,
             "latest_json_path": self.latest_json_path,
             "timestamped_log_path": self.timestamped_log_path,
+            "remote_report_path": self.remote_report_path,
+            "transfer_upload": self.transfer_upload,
         }
         steps = getattr(self, "sequence_steps", None)
         if steps is not None:
@@ -118,11 +123,11 @@ def render_uplink_log(result: TransferUplinkResult) -> str:
             "### STDERR ###",
             result.stderr.rstrip(),
             "### SUMMARY ###",
-            "TRANSFER_REPORT_WRITTEN=d",
-            f"TRANSFER_REPORT_PATH={result.latest_json_path}",
+            "TRANSFER_UPLOAD=done",
+            f"REMOTE_REPORT={result.remote_report_path}",
             f"FINAL_SIGNAL={result.final_signal}",
             f"FINAL_NEXT={result.next_action}",
-            f"CHAT_REPLY={result.chat_reply} | NEXT={result.next_action}",
+            f"CHAT_REPLY={result.chat_reply}",
             "",
         )
     )
@@ -146,7 +151,8 @@ def run_and_log_transfer_command(command: list[str], *, label: str = "transfer-r
 
     final_signal = _derive_final_signal(returncode, stdout, stderr)
     next_action = _derive_next_action(final_signal, stdout, stderr)
-    timestamped_log = Path("docs/reports/terminal") / f"transfer-uplink-{run_id}.log"
+    timestamped_log = TRANSFER_RUN_DIR / f"{run_id}-{label}.log"
+    timestamped_json = TRANSFER_RUN_DIR / f"{run_id}-{label}.json"
 
     result = TransferUplinkResult(
         schema_version=1,
@@ -157,17 +163,20 @@ def run_and_log_transfer_command(command: list[str], *, label: str = "transfer-r
         stdout=stdout,
         stderr=stderr,
         final_signal=final_signal,
-        chat_reply=final_signal,
+        chat_reply="g",
         next_action=next_action,
         latest_log_path=str(LATEST_LOG),
         latest_json_path=str(LATEST_JSON),
         timestamped_log_path=str(timestamped_log),
+        remote_report_path=str(timestamped_json),
+        transfer_upload="done",
     )
 
     for relative_path, content in (
         (LATEST_LOG, render_uplink_log(result)),
         (timestamped_log, render_uplink_log(result)),
         (LATEST_JSON, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + "\n"),
+        (timestamped_json, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + "\n"),
     ):
         target = root / relative_path
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -230,7 +239,8 @@ def run_and_log_transfer_sequence(
             break
 
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
-    timestamped_log = Path("docs/reports/terminal") / f"transfer-uplink-{run_id}.log"
+    timestamped_log = TRANSFER_RUN_DIR / f"{run_id}-{label}.log"
+    timestamped_json = TRANSFER_RUN_DIR / f"{run_id}-{label}.json"
 
     result = TransferUplinkResult(
         schema_version=1,
@@ -241,11 +251,13 @@ def run_and_log_transfer_sequence(
         stdout="\n".join(combined_stdout) + "\n",
         stderr="\n".join(combined_stderr) + "\n",
         final_signal=overall_signal,
-        chat_reply=overall_signal,
+        chat_reply="g",
         next_action=next_action,
         latest_log_path=str(LATEST_LOG),
         latest_json_path=str(LATEST_JSON),
         timestamped_log_path=str(timestamped_log),
+        remote_report_path=str(timestamped_json),
+        transfer_upload="done",
     )
     object.__setattr__(result, "sequence_steps", steps)
 
@@ -253,6 +265,7 @@ def run_and_log_transfer_sequence(
         (LATEST_LOG, render_uplink_log(result)),
         (timestamped_log, render_uplink_log(result)),
         (LATEST_JSON, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + "\n"),
+        (timestamped_json, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + "\n"),
     ):
         target = root / relative_path
         target.parent.mkdir(parents=True, exist_ok=True)
