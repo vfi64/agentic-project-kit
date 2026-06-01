@@ -267,12 +267,14 @@ def test_result_terminal_adds_final_signal_lines_for_pass_and_fail(tmp_path, mon
     passing_output = result_terminal(passing)
     failing_output = result_terminal(failing)
 
-    assert passing_output.splitlines()[-2:] == [
+    assert passing_output.splitlines()[-3:] == [
         "FINAL_SIGNAL=d",
         "FINAL_NEXT=Use commit SHAs for guarded PR or merge work.",
+        "CHAT_REPLY=d | NEXT=Use commit SHAs for guarded PR or merge work.",
     ]
-    assert failing_output.splitlines()[-2] == "FINAL_SIGNAL=f"
-    assert failing_output.splitlines()[-1].startswith("FINAL_NEXT=")
+    assert failing_output.splitlines()[-3] == "FINAL_SIGNAL=f"
+    assert failing_output.splitlines()[-2].startswith("FINAL_NEXT=")
+    assert failing_output.splitlines()[-1].startswith("CHAT_REPLY=f | NEXT=")
 
 
 def test_transfer_repo_log_cli_prints_final_signal_last(tmp_path, monkeypatch):
@@ -282,9 +284,10 @@ def test_transfer_repo_log_cli_prints_final_signal_last(tmp_path, monkeypatch):
     result = CliRunner().invoke(app, ["transfer", "repo-log", "--limit", "1"])
 
     assert result.exit_code == 0
-    assert result.stdout.splitlines()[-2:] == [
+    assert result.stdout.splitlines()[-3:] == [
         "FINAL_SIGNAL=d",
         "FINAL_NEXT=Use commit SHAs for guarded PR or merge work.",
+        "CHAT_REPLY=d | NEXT=Use commit SHAs for guarded PR or merge work.",
     ]
 
 
@@ -295,8 +298,9 @@ def test_transfer_branch_create_cli_block_prints_final_signal_last(tmp_path, mon
     result = CliRunner().invoke(app, ["transfer", "branch-create", "feature/blocked"])
 
     assert result.exit_code == 2
-    assert result.stdout.splitlines()[-2].strip() == "FINAL_SIGNAL=f"
-    assert result.stdout.splitlines()[-1].startswith("FINAL_NEXT=")
+    assert result.stdout.splitlines()[-3].strip() == "FINAL_SIGNAL=f"
+    assert result.stdout.splitlines()[-2].startswith("FINAL_NEXT=")
+    assert result.stdout.splitlines()[-1].startswith("CHAT_REPLY=f | NEXT=")
 
 
 def test_transfer_pr_wait_ci_cli_accepts_interval_seconds_option(tmp_path, monkeypatch):

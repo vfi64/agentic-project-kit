@@ -69,11 +69,13 @@ def final_signal(result: RepoActionResult) -> str:
 
 
 def result_terminal(result: RepoActionResult) -> str:
+    signal = final_signal(result)
     return "\n".join(
         (
             result_json(result),
-            f"FINAL_SIGNAL={final_signal(result)}",
+            f"FINAL_SIGNAL={signal}",
             f"FINAL_NEXT={result.next_action}",
+            f"CHAT_REPLY={signal} | NEXT={result.next_action}",
         )
     )
 
