@@ -12,6 +12,9 @@ from uuid import uuid4
 TRANSFER_RUN_DIR = Path("docs/reports/transfer_runs")
 LATEST_LOG = TRANSFER_RUN_DIR / "latest-transfer-report.log"
 LATEST_JSON = TRANSFER_RUN_DIR / "latest-transfer-report.json"
+PUBLISHED_TRANSFER_HANDOFF_DIR = Path("docs/reports/terminal/transfer_handoff_reports")
+PUBLISHED_LATEST_JSON = PUBLISHED_TRANSFER_HANDOFF_DIR / "latest-transfer-handoff-report.json"
+PUBLISHED_LATEST_LOG = PUBLISHED_TRANSFER_HANDOFF_DIR / "latest-transfer-handoff-report.log"
 
 _SAFE_LABEL_PATTERN = re.compile(r"[^A-Za-z0-9_.-]+")
 
@@ -285,6 +288,87 @@ def run_and_log_transfer_sequence(
         target.write_text(content, encoding="utf-8")
 
     return result
+
+def publish_latest_transfer_report(
+    root: Path | None = None,
+    *,
+    label: str = "transfer-handoff",
+) -> dict[str, object]:
+    base = Path(".") if root is None else root
+    latest_json_path = base / LATEST_JSON
+    latest_log_path = base / LATEST_LOG
+    if not latest_json_path.exists():
+        raise FileNotFoundError(f"latest transfer report not found: {LATEST_JSON}")
+
+    report_text = latest_json_path.read_text(encoding="utf-8")
+    try:
+        report_data = json.loads(report_text)
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"latest transfer report is not valid JSON: {LATEST_JSON}: {exc}") from exc
+    if not isinstance(report_data, dict):
+        raise ValueError(f"latest transfer report must be a JSON object: {LATEST_JSON}")
+
+    run_id = str(report_data.get("run_id") or datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8])
+    source_label = str(report_data.get("label") or label)
+    safe_label = safe_transfer_report_label(label if label != "transfer-handoff" else source_label)
+
+    timestamped_json = PUBLISHED_TRANSFER_HANDOFF_DIR / f"{run_id}-{safe_label}.json"
+    timestamped_log = PUBLISHED_TRANSFER_HANDOFF_DIR / f"{run_id}-{safe_label}.log"
+
+    published_data = dict(report_data)
+    published_data["published_transfer_handoff"] = {
+        "schema_version": 1,
+        "source_latest_json_path": str(LATEST_JSON),
+        "source_latest_log_path": str(LATEST_LOG),
+        "source_remote_report_path": str(report_data.get("remote_report_path", "")),
+        "published_report_path": str(timestamped_json),
+        "published_log_path": str(timestamped_log),
+        "latest_published_report_path": str(PUBLISHED_LATEST_JSON),
+        "latest_published_log_path": str(PUBLISHED_LATEST_LOG),
+    }
+
+    log_text = latest_log_path.read_text(encoding="utf-8") if latest_log_path.exists() else ""
+    if not log_text:
+        log_text = render_uplink_log(
+            TransferUplinkResult(
+                schema_version=int(report_data.get("schema_version", 1)),
+                run_id=run_id,
+                label=safe_label,
+                command=list(report_data.get("command", [])),
+                returncode=int(report_data.get("returncode", 1)),
+                stdout=str(report_data.get("stdout", "")),
+                stderr=str(report_data.get("stderr", "")),
+                final_signal=str(report_data.get("final_signal", "f")),
+                chat_reply="g",
+                next_action=str(report_data.get("next_action", "Inspect published transfer handoff report.")),
+                latest_log_path=str(PUBLISHED_LATEST_LOG),
+                latest_json_path=str(PUBLISHED_LATEST_JSON),
+                timestamped_log_path=str(timestamped_log),
+                remote_report_path=str(timestamped_json),
+                transfer_upload="done",
+            )
+        )
+
+    for relative_path, content in (
+        (PUBLISHED_LATEST_JSON, json.dumps(published_data, indent=2, sort_keys=True) + "\n"),
+        (timestamped_json, json.dumps(published_data, indent=2, sort_keys=True) + "\n"),
+        (PUBLISHED_LATEST_LOG, log_text),
+        (timestamped_log, log_text),
+    ):
+        target = base / relative_path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(content, encoding="utf-8")
+
+    return {
+        "transfer_upload": "done",
+        "remote_report": str(timestamped_json),
+        "latest_remote_report": str(PUBLISHED_LATEST_JSON),
+        "remote_log": str(timestamped_log),
+        "latest_remote_log": str(PUBLISHED_LATEST_LOG),
+        "chat_reply": "g",
+    }
+
+
 
 def read_latest_transfer_report(root: Path | None = None) -> str:
     base = Path(".") if root is None else root
