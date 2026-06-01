@@ -1,0 +1,3 @@
+B11.13 transfer commit route smoke.
+Purpose: verify transfer commit does not drift to main after PR1039.
+Created at: 2026-06-01T13:01:41Z
