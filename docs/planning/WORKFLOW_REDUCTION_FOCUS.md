@@ -83,6 +83,20 @@ Handoff prompts should be generated from state files, Git state, PR state, regis
 
 `docs/STATUS.md` should remain a compact dashboard. Long history belongs in `CHANGELOG.md`, release records, evidence logs, or dedicated planning documents such as this file.
 
+## Transfer Go Mode Direction
+
+The current communication hardening line must converge on one normal human signal: `g` for go. The local transfer runner should write and upload a remote report, then print only a compact success block in the normal path:
+
+```text
+TRANSFER_UPLOAD=done
+REMOTE_REPORT=docs/reports/transfer_runs/<timestamp>-<label>.json
+CHAT_REPLY=g
+```
+
+The detailed command outputs, intermediate `d`/`f` classifications, and next-action reasoning belong in the remote report and GUI inspection view. A later successful command must not hide an earlier failed command in the same sequence. CI-dependent operations must wait locally for a terminal CI state or timeout and show progress so the user can distinguish active waiting from a stalled process.
+
+The implementation contract for this line is recorded in `docs/planning/TRANSFER_GO_MODE_AND_UPLINK_PLAN.md`. GUI work should not resume until this transfer/uplink contract is test-backed enough that the GUI can safely call a single Go action and inspect the last transfer report.
+
 ## Sequencing Decision
 
 This focus must be recorded before completing the documentation-management phase so that the remaining registry slices and the later GUI are shaped by it.
