@@ -172,3 +172,22 @@ def test_pr_status_transfer_rejects_short_sha_with_final_signal():
     assert result.report.splitlines()[-2] == "FINAL_SIGNAL=f"
     assert result.report.splitlines()[-1] == "FINAL_NEXT=Re-run with the full PR head SHA."
 
+def test_pr_status_transfer_returns_structured_failure_when_pr_lookup_fails(monkeypatch):
+    def boom(_pr):
+        raise RuntimeError("GraphQL: Could not resolve to a PullRequest with the number of 1040.")
+
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_pr_actions.fetch_pr_payload",
+        boom,
+    )
+
+    result = pr_status_transfer(1040)
+
+    assert result.result_status == "FAIL"
+    assert result.returncode == 1
+    assert result.decision == "red"
+    assert "PR_STATUS_LOOKUP_FAILED" in result.report
+    assert "Could not resolve to a PullRequest" in result.report
+    assert "FINAL_SIGNAL=f" in result.report
+    assert "Inspect the PR number or discover the existing PR" in result.report
+

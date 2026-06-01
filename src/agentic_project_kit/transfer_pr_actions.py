@@ -83,7 +83,30 @@ def pr_status_transfer(
             ),
             head_ref_oid="",
         )
-    payload = fetch_pr_payload(str(pr_number))
+    try:
+        payload = fetch_pr_payload(str(pr_number))
+    except RuntimeError as exc:
+        returncode = 1
+        message = str(exc).strip() or "PR status lookup failed."
+        return TransferPrStatusResult(
+            schema_version=1,
+            action="pr-status",
+            pr_number=pr_number,
+            result_status="FAIL",
+            returncode=returncode,
+            decision="red",
+            report=_with_final_signal(
+                "PR_STATUS_LOOKUP_FAILED\n"
+                f"pr={pr_number}\n"
+                "decision=red\n"
+                f"message={message}\n"
+                "### RESULT: FAIL ###",
+                returncode=returncode,
+                next_action="Inspect the PR number or discover the existing PR before continuing.",
+            ),
+            head_ref_oid="",
+        )
+
     decision = classify_pr_status(payload, pr=str(pr_number))
     head_ref_oid = str(payload.get("headRefOid") or "")
     if expected_head_sha and head_ref_oid != expected_head_sha:
