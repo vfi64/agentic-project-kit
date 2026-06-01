@@ -208,3 +208,28 @@ def test_transfer_run_reports_are_gitignored():
 
     assert "docs/reports/transfer_runs/" in gitignore
 
+def test_transfer_report_label_is_sanitized_for_paths(tmp_path):
+    result = run_and_log_transfer_command(
+        [sys.executable, "-c", "print('FINAL_SIGNAL=d')"],
+        label="../bad label/with spaces",
+        cwd=tmp_path,
+    )
+
+    assert result.label == "bad-label-with-spaces"
+    assert result.remote_report_path.startswith("docs/reports/transfer_runs/")
+    assert "../" not in result.remote_report_path
+    assert "/" not in result.remote_report_path.removeprefix("docs/reports/transfer_runs/")
+    assert (tmp_path / result.remote_report_path).exists()
+
+
+def test_transfer_report_empty_label_uses_safe_default(tmp_path):
+    result = run_and_log_transfer_sequence(
+        [[sys.executable, "-c", "print('FINAL_SIGNAL=d')"]],
+        label=" ../ ",
+        cwd=tmp_path,
+    )
+
+    assert result.label == "transfer-report"
+    assert result.remote_report_path.endswith("-transfer-report.json")
+    assert (tmp_path / result.remote_report_path).exists()
+
