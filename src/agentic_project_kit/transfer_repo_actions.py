@@ -124,30 +124,70 @@ def branch_switch(branch: str, *, pull: bool = False) -> RepoActionResult:
     return _result("branch-switch", command, completed, "Run transfer state or continue with queued work.")
 
 
+def _current_branch_result(action: str = "commit") -> tuple[str, RepoActionResult | None]:
+    branch_command = ["git", "branch", "--show-current"]
+    branch_completed = _run(branch_command)
+    if branch_completed.returncode != 0:
+        return "", _result(
+            action,
+            branch_command,
+            branch_completed,
+            "Inspect repository branch state before committing.",
+        )
+    return branch_completed.stdout.strip(), None
+
+
+def _main_commit_refusal(message: str) -> RepoActionResult:
+    completed = subprocess.CompletedProcess(
+        ["git", "commit", "-m", message],
+        2,
+        "",
+        "Refusing to commit directly on main. Use a branch or pass --allow-main explicitly.\n",
+    )
+    return _result("commit", completed.args, completed, "Create a feature/admin branch before committing.")
+
+
 def commit_paths(message: str, paths: list[str], *, allow_main: bool = False) -> RepoActionResult:
     if not paths:
         completed = subprocess.CompletedProcess(["git", "add"], 2, "", "No paths supplied.\n")
         return _result("commit", ["git", "add"], completed, "Provide explicit paths for commit.")
 
-    branch_command = ["git", "branch", "--show-current"]
-    branch_completed = _run(branch_command)
-    if branch_completed.returncode != 0:
-        return _result("commit", branch_command, branch_completed, "Inspect repository branch state before committing.")
+    branch_before_add, branch_error = _current_branch_result()
+    if branch_error is not None:
+        return branch_error
 
-    branch = branch_completed.stdout.strip()
-    if branch == "main" and not allow_main:
-        completed = subprocess.CompletedProcess(
-            ["git", "commit", "-m", message],
-            2,
-            "",
-            "Refusing to commit directly on main. Use a branch or pass --allow-main explicitly.\n",
-        )
-        return _result("commit", completed.args, completed, "Create a feature/admin branch before committing.")
+    if branch_before_add == "main" and not allow_main:
+        return _main_commit_refusal(message)
 
     add_command = ["git", "add", *paths]
     added = _run(add_command)
     if added.returncode != 0:
         return _result("commit", add_command, added, "Inspect path list and worktree before continuing.")
+
+    branch_before_commit, branch_error = _current_branch_result()
+    if branch_error is not None:
+        return branch_error
+
+    if branch_before_commit != branch_before_add:
+        completed = subprocess.CompletedProcess(
+            ["git", "commit", "-m", message],
+            2,
+            "",
+            (
+                "Refusing to commit because the current branch changed during transfer commit: "
+                f"{branch_before_add} -> {branch_before_commit}\n"
+            ),
+        )
+        return _result(
+            "commit",
+            completed.args,
+            completed,
+            "Inspect branch drift before committing.",
+        )
+
+    if branch_before_commit == "main" and not allow_main:
+        return _main_commit_refusal(message)
+
     commit_command = ["git", "commit", "-m", message]
     committed = _run(commit_command)
     return _result("commit", commit_command, committed, "Push current branch or inspect status.")

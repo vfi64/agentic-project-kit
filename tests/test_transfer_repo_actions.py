@@ -5,6 +5,7 @@ import subprocess
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
+import agentic_project_kit.transfer_repo_actions as transfer_repo_actions
 from agentic_project_kit.transfer_repo_actions import (
     admin_refresh_pr,
     branch_create,
@@ -23,6 +24,7 @@ from agentic_project_kit.transfer_repo_actions import (
     result_terminal,
 )
 from tests.test_rule_source_validator import write_minimal_sources
+from pathlib import Path
 
 
 def _init_repo(path):
@@ -711,4 +713,33 @@ def test_transfer_pr_wait_ci_cli_quiet_report_still_exits_nonzero_on_failure(tmp
     report = (tmp_path / report_path).read_text(encoding="utf-8")
     assert "NOT_READY" in report
     assert "pending checks remain" in report
+
+def test_commit_paths_refuses_branch_drift_between_add_and_commit(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    subprocess.run(["git", "init", "-b", "main"], check=True)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], check=True)
+    Path("file.txt").write_text("demo\n", encoding="utf-8")
+    subprocess.run(["git", "add", "file.txt"], check=True)
+    subprocess.run(["git", "commit", "-m", "Initial"], check=True)
+    subprocess.run(["git", "switch", "-c", "feature/demo"], check=True)
+
+    calls = {"branch": 0}
+    original_run = transfer_repo_actions._run
+
+    def drifting_run(command, *, cwd=None):
+        if command == ["git", "branch", "--show-current"]:
+            calls["branch"] += 1
+            branch = "feature/demo" if calls["branch"] == 1 else "main"
+            return subprocess.CompletedProcess(command, 0, branch + "\n", "")
+        return original_run(command, cwd=cwd)
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", drifting_run)
+
+    Path("file.txt").write_text("changed\n", encoding="utf-8")
+    result = commit_paths("Change file", ["file.txt"])
+
+    assert result.returncode == 2
+    assert "current branch changed during transfer commit" in result.stderr
+    assert result.next_action == "Inspect branch drift before committing."
 
