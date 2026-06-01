@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 476fa70
-  commit_subject: Ignore local transfer run reports (#1037)
+  commit: 89cd45c
+  commit_subject: Guard transfer commit against branch drift (#1039)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
