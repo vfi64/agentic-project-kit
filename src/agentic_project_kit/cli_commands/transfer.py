@@ -37,6 +37,7 @@ from agentic_project_kit.transfer_runner import (
     transfer_result_as_json_data,
 )
 from agentic_project_kit.transfer_state import build_transfer_state
+from agentic_project_kit.transfer_uplink import run_and_log_transfer_command
 
 transfer_app = typer.Typer(help="Inspect and apply repo-backed text transfer orders.")
 
@@ -89,6 +90,40 @@ def _require_transfer_capability(capability: str) -> None:
     typer.echo(f"FINAL_NEXT={snapshot.next_action}")
     typer.echo(f"CHAT_REPLY=f | NEXT={snapshot.next_action}")
     raise typer.Exit(code=2)
+
+
+@transfer_app.command("run-and-log", context_settings={"allow_extra_args": True, "ignore_unknown_options": True})
+def run_and_log(
+    ctx: typer.Context,
+    label: str = typer.Option("transfer-run", "--label", help="Label for the transfer uplink report."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    command = list(ctx.args)
+    if command[:1] == ["--"]:
+        command = command[1:]
+    try:
+        result = run_and_log_transfer_command(command, label=label, cwd=Path("."))
+    except ValueError as exc:
+        typer.echo(str(exc))
+        typer.echo("FINAL_SIGNAL=f")
+        typer.echo("FINAL_NEXT=Provide a command after run-and-log.")
+        typer.echo("CHAT_REPLY=f | NEXT=Provide a command after run-and-log.")
+        raise typer.Exit(code=2) from exc
+
+    if json_output:
+        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo(f"run_id={result.run_id}")
+        typer.echo(f"latest_log_path={result.latest_log_path}")
+        typer.echo(f"latest_json_path={result.latest_json_path}")
+        typer.echo(f"timestamped_log_path={result.timestamped_log_path}")
+
+    typer.echo(f"FINAL_SIGNAL={result.final_signal}")
+    typer.echo(f"FINAL_NEXT={result.next_action}")
+    typer.echo(f"CHAT_REPLY={result.chat_reply} | NEXT={result.next_action}")
+
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
 
 
 @transfer_app.command("closeout")
