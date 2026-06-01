@@ -289,7 +289,7 @@ def pr_wait_ci_command(
 @transfer_app.command("pr-merge-safe")
 def pr_merge_safe_command(
     pr_number: int = typer.Argument(..., help="Pull request number to merge safely."),
-    expected_head_sha: str = typer.Option(..., "--expected-head-sha", help="Expected PR head SHA."),
+    expected_head_sha: str = typer.Option("", "--expected-head-sha", help="Expected PR head SHA. If omitted, the PR head SHA is resolved automatically."),
     main_branch: str = typer.Option("main", "--main-branch", help="Expected base branch."),
     merge_method: str = typer.Option("squash", "--merge-method", help="GitHub merge method."),
     no_verify_main: bool = typer.Option(

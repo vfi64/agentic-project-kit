@@ -580,3 +580,60 @@ def test_pr_wait_ci_auto_sha_failure_fails_closed(monkeypatch):
     assert "network failure" in result.stderr
     assert "PR head SHA lookup failure" in result.next_action
 
+def test_transfer_pr_merge_safe_cli_allows_omitted_expected_head_sha(monkeypatch):
+    from agentic_project_kit.transfer_repo_actions import RepoActionResult
+
+    calls = []
+
+    def fake_require(capability):
+        calls.append(("capability", capability))
+
+    def fake_pr_merge_safe(
+        pr_number,
+        *,
+        expected_head_sha="",
+        main_branch="main",
+        merge_method="squash",
+        no_verify_main=False,
+    ):
+        calls.append(
+            (
+                pr_number,
+                expected_head_sha,
+                main_branch,
+                merge_method,
+                no_verify_main,
+            )
+        )
+        return RepoActionResult(
+            action="pr-merge-safe",
+            result_status="PASS",
+            returncode=0,
+            command=["fake"],
+            stdout="merged\n",
+            stderr="",
+            next_action="Sync main and run post-merge handoff refresh status.",
+        )
+
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
+        fake_require,
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer.pr_merge_safe",
+        fake_pr_merge_safe,
+    )
+
+    result = CliRunner().invoke(app, ["transfer", "pr-merge-safe", "123"])
+
+    assert result.exit_code == 0
+    assert ("capability", "rules_confirmed") in calls
+    assert (
+        123,
+        "",
+        "main",
+        "squash",
+        False,
+    ) in calls
+    assert "FINAL_SIGNAL=d" in result.stdout
+
