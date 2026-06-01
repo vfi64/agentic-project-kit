@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -11,6 +12,16 @@ from uuid import uuid4
 TRANSFER_RUN_DIR = Path("docs/reports/transfer_runs")
 LATEST_LOG = TRANSFER_RUN_DIR / "latest-transfer-report.log"
 LATEST_JSON = TRANSFER_RUN_DIR / "latest-transfer-report.json"
+
+_SAFE_LABEL_PATTERN = re.compile(r"[^A-Za-z0-9_.-]+")
+
+
+def safe_transfer_report_label(label: str) -> str:
+    cleaned = _SAFE_LABEL_PATTERN.sub("-", label.strip())
+    cleaned = cleaned.strip("._-")
+    if not cleaned:
+        cleaned = "transfer-report"
+    return cleaned[:80]
 
 
 @dataclass(frozen=True)
@@ -151,13 +162,14 @@ def run_and_log_transfer_command(command: list[str], *, label: str = "transfer-r
 
     final_signal = _derive_final_signal(returncode, stdout, stderr)
     next_action = _derive_next_action(final_signal, stdout, stderr)
-    timestamped_log = TRANSFER_RUN_DIR / f"{run_id}-{label}.log"
-    timestamped_json = TRANSFER_RUN_DIR / f"{run_id}-{label}.json"
+    safe_label = safe_transfer_report_label(label)
+    timestamped_log = TRANSFER_RUN_DIR / f"{run_id}-{safe_label}.log"
+    timestamped_json = TRANSFER_RUN_DIR / f"{run_id}-{safe_label}.json"
 
     result = TransferUplinkResult(
         schema_version=1,
         run_id=run_id,
-        label=label,
+        label=safe_label,
         command=list(command),
         returncode=returncode,
         stdout=stdout,
@@ -239,13 +251,14 @@ def run_and_log_transfer_sequence(
             break
 
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
-    timestamped_log = TRANSFER_RUN_DIR / f"{run_id}-{label}.log"
-    timestamped_json = TRANSFER_RUN_DIR / f"{run_id}-{label}.json"
+    safe_label = safe_transfer_report_label(label)
+    timestamped_log = TRANSFER_RUN_DIR / f"{run_id}-{safe_label}.log"
+    timestamped_json = TRANSFER_RUN_DIR / f"{run_id}-{safe_label}.json"
 
     result = TransferUplinkResult(
         schema_version=1,
         run_id=run_id,
-        label=label,
+        label=safe_label,
         command=["<sequence>"],
         returncode=overall_returncode,
         stdout="\n".join(combined_stdout) + "\n",
@@ -288,8 +301,9 @@ def write_transfer_report_from_repo_result(
 ) -> TransferUplinkResult:
     root = Path(".") if cwd is None else cwd
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
-    timestamped_log = TRANSFER_RUN_DIR / f"{run_id}-{label}.log"
-    timestamped_json = TRANSFER_RUN_DIR / f"{run_id}-{label}.json"
+    safe_label = safe_transfer_report_label(label)
+    timestamped_log = TRANSFER_RUN_DIR / f"{run_id}-{safe_label}.log"
+    timestamped_json = TRANSFER_RUN_DIR / f"{run_id}-{safe_label}.json"
 
     final_signal = _derive_final_signal(repo_result.returncode, repo_result.stdout, repo_result.stderr)
     if repo_result.returncode != 0:
@@ -304,7 +318,7 @@ def write_transfer_report_from_repo_result(
     result = TransferUplinkResult(
         schema_version=1,
         run_id=run_id,
-        label=label,
+        label=safe_label,
         command=list(repo_result.command),
         returncode=repo_result.returncode,
         stdout=repo_result.stdout,
