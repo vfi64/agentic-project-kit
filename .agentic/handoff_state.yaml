@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: bb71e3b
-  commit_subject: Add sequence-level transfer signal reporting (#1025)
+  commit: 445c474
+  commit_subject: Add quiet go transfer report output (#1027)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
