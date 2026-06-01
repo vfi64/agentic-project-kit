@@ -60,6 +60,70 @@ def _resolve_pr_head_sha(pr_number: int, *, action: str) -> tuple[str, RepoActio
 
     return head_sha, None
 
+
+def _existing_admin_refresh_pr(refresh_branch: str, *, action: str = "admin-refresh-pr") -> RepoActionResult | None:
+    command = [
+        "gh",
+        "pr",
+        "list",
+        "--head",
+        refresh_branch,
+        "--state",
+        "open",
+        "--json",
+        "number,url,headRefName,headRefOid,state,title",
+    ]
+    completed = _run(command)
+    if completed.returncode != 0:
+        return _result(action, command, completed, "Inspect existing admin refresh PR lookup failure.")
+
+    try:
+        prs = json.loads(completed.stdout or "[]")
+    except json.JSONDecodeError as exc:
+        bad = subprocess.CompletedProcess(
+            command,
+            2,
+            completed.stdout,
+            f"Could not parse existing admin refresh PR lookup JSON: {exc}\n",
+        )
+        return _result(action, command, bad, "Inspect existing admin refresh PR lookup output.")
+
+    if not isinstance(prs, list):
+        bad = subprocess.CompletedProcess(
+            command,
+            2,
+            completed.stdout,
+            "Existing admin refresh PR lookup did not return a JSON list.\n",
+        )
+        return _result(action, command, bad, "Inspect existing admin refresh PR lookup output.")
+
+    if len(prs) > 1:
+        bad = subprocess.CompletedProcess(
+            command,
+            2,
+            completed.stdout,
+            f"Multiple open admin refresh PRs found for branch {refresh_branch}.\n",
+        )
+        return _result(action, command, bad, "Resolve duplicate admin refresh PRs before continuing.")
+
+    if not prs:
+        return None
+
+    pr = prs[0]
+    number = pr.get("number", "")
+    url = pr.get("url", "")
+    head_ref_oid = pr.get("headRefOid", "")
+    out = (
+        "ADMIN_REFRESH_EXISTING_BRANCH_RECOVERY\n"
+        f"refresh_branch={refresh_branch}\n"
+        f"existing_pr={number}\n"
+        f"head_ref_oid={head_ref_oid}\n"
+        f"url={url}\n"
+        "result=PASS\n"
+    )
+    ok = subprocess.CompletedProcess(command, 0, out, "")
+    return _result(action, command, ok, "Run transfer pr-status on the existing admin refresh PR.")
+
 def _run(command: list[str], *, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         command,
@@ -414,8 +478,23 @@ def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionR
     refresh_branch = f"docs/post-pr{after_pr}-handoff-refresh"
     transcript: list[str] = []
 
+    branch_create_step = ["git", "switch", "-c", refresh_branch, main_branch]
+    completed = _run(branch_create_step)
+    transcript.append(f"$ {' '.join(branch_create_step)}\n{completed.stdout}{completed.stderr}")
+    if completed.returncode != 0:
+        combined = f"{completed.stdout}{completed.stderr}"
+        if "already exists" in combined:
+            existing = _existing_admin_refresh_pr(refresh_branch)
+            if existing is not None:
+                return existing
+        return _result(
+            "admin-refresh-pr",
+            branch_create_step,
+            completed,
+            "Inspect admin refresh branch state or existing PR before continuing.",
+        )
+
     steps = [
-        ["git", "switch", "-c", refresh_branch, main_branch],
         [_agentic_kit_command(), "handoff", "refresh", ".agentic/handoff_state.yaml", "--write"],
         [_agentic_kit_command(), "handoff", "check"],
         [_agentic_kit_command(), "handoff", "post-merge-refresh-status"],

@@ -478,6 +478,92 @@ def test_admin_refresh_pr_requires_clean_main(tmp_path, monkeypatch):
     assert "dirty worktree" in result.stderr
 
 
+def test_admin_refresh_pr_returns_existing_pr_when_refresh_branch_exists(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    calls = []
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command == ["git", "status", "--short"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "switch", "-c", "docs/post-pr123-handoff-refresh", "main"]:
+            return subprocess.CompletedProcess(
+                command,
+                128,
+                "",
+                "fatal: a branch named 'docs/post-pr123-handoff-refresh' already exists\n",
+            )
+        if command == [
+            "gh",
+            "pr",
+            "list",
+            "--head",
+            "docs/post-pr123-handoff-refresh",
+            "--state",
+            "open",
+            "--json",
+            "number,url,headRefName,headRefOid,state,title",
+        ]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                '[{"number":999,"url":"https://github.com/vfi64/agentic-project-kit/pull/999","headRefName":"docs/post-pr123-handoff-refresh","headRefOid":"a%s","state":"OPEN","title":"Refresh handoff state after PR123"}]\n'
+                % ("a" * 39),
+                "",
+            )
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+
+    result = admin_refresh_pr(123)
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert "ADMIN_REFRESH_EXISTING_BRANCH_RECOVERY" in result.stdout
+    assert "existing_pr=999" in result.stdout
+    assert "pull/999" in result.stdout
+    assert "Run transfer pr-status on the existing admin refresh PR" in result.next_action
+    assert ["agentic-kit", "handoff", "refresh", ".agentic/handoff_state.yaml", "--write"] not in calls
+
+
+def test_admin_refresh_pr_fails_when_existing_branch_has_multiple_open_prs(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    def fake_run(command, cwd=None):
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command == ["git", "status", "--short"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "switch", "-c", "docs/post-pr123-handoff-refresh", "main"]:
+            return subprocess.CompletedProcess(
+                command,
+                128,
+                "",
+                "fatal: a branch named 'docs/post-pr123-handoff-refresh' already exists\n",
+            )
+        if command[:6] == ["gh", "pr", "list", "--head", "docs/post-pr123-handoff-refresh", "--state"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                '[{"number":998},{"number":999}]\n',
+                "",
+            )
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+
+    result = admin_refresh_pr(123)
+
+    assert result.result_status == "FAIL"
+    assert result.returncode == 2
+    assert "Multiple open admin refresh PRs found" in result.stderr
+
+
 def test_transfer_post_merge_check_cli_help(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     monkeypatch.chdir(tmp_path)
