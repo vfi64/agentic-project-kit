@@ -1,0 +1,31 @@
+{
+  "chat_reply": "g",
+  "command": [
+    "./.venv/bin/agentic-kit",
+    "transfer",
+    "repo-status"
+  ],
+  "final_signal": "d",
+  "label": "b11-22-real-tracked-transfer-handoff-smoke",
+  "latest_json_path": "docs/reports/transfer_runs/latest-transfer-report.json",
+  "latest_log_path": "docs/reports/transfer_runs/latest-transfer-report.log",
+  "next_action": "Inspect changes, commit explicit paths, or clean the worktree.",
+  "published_transfer_handoff": {
+    "latest_published_log_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
+    "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+    "published_log_path": "docs/reports/terminal/transfer_handoff_reports/20260601T162428Z-dede3f16-b11-22-real-tracked-transfer-handoff-smoke.log",
+    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260601T162428Z-dede3f16-b11-22-real-tracked-transfer-handoff-smoke.json",
+    "schema_version": 1,
+    "source_latest_json_path": "docs/reports/transfer_runs/latest-transfer-report.json",
+    "source_latest_log_path": "docs/reports/transfer_runs/latest-transfer-report.log",
+    "source_remote_report_path": "docs/reports/transfer_runs/20260601T162428Z-dede3f16-b11-22-real-tracked-transfer-handoff-smoke.json"
+  },
+  "remote_report_path": "docs/reports/transfer_runs/20260601T162428Z-dede3f16-b11-22-real-tracked-transfer-handoff-smoke.json",
+  "returncode": 0,
+  "run_id": "20260601T162428Z-dede3f16",
+  "schema_version": 1,
+  "stderr": "",
+  "stdout": "{\n  \"action\": \"repo-status\",\n  \"command\": [\n    \"git\",\n    \"status\",\n    \"--short\"\n  ],\n  \"next_action\": \"Inspect changes, commit explicit paths, or clean the worktree.\",\n  \"result_status\": \"PASS\",\n  \"returncode\": 0,\n  \"stderr\": \"\",\n  \"stdout\": \"\"\n}\nFINAL_SIGNAL=d\nFINAL_NEXT=Inspect changes, commit explicit paths, or clean the worktree.\nCHAT_REPLY=d | NEXT=Inspect changes, commit explicit paths, or clean the worktree.\n",
+  "timestamped_log_path": "docs/reports/transfer_runs/20260601T162428Z-dede3f16-b11-22-real-tracked-transfer-handoff-smoke.log",
+  "transfer_upload": "done"
+}
