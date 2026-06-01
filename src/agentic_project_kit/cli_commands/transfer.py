@@ -87,6 +87,7 @@ def _require_transfer_capability(capability: str) -> None:
     )
     typer.echo("FINAL_SIGNAL=f")
     typer.echo(f"FINAL_NEXT={snapshot.next_action}")
+    typer.echo(f"CHAT_REPLY=f | NEXT={snapshot.next_action}")
     raise typer.Exit(code=2)
 
 
