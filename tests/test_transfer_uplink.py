@@ -201,3 +201,10 @@ def test_write_transfer_report_from_repo_result_does_not_execute_python(tmp_path
     assert uplink.returncode == 0
     assert uplink.final_signal == "d"
 
+def test_transfer_run_reports_are_gitignored():
+    from pathlib import Path
+
+    gitignore = Path(".gitignore").read_text(encoding="utf-8").splitlines()
+
+    assert "docs/reports/transfer_runs/" in gitignore
+
