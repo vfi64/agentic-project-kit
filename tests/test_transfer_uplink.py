@@ -174,3 +174,30 @@ def test_show_last_report_fails_when_missing(tmp_path, monkeypatch):
     assert "TRANSFER_UPLOAD=missing" in result.stdout
     assert "CHAT_REPLY=f" in result.stdout
 
+def test_write_transfer_report_from_repo_result_does_not_execute_python(tmp_path):
+    from agentic_project_kit.transfer_repo_actions import RepoActionResult
+    from agentic_project_kit.transfer_uplink import write_transfer_report_from_repo_result
+
+    result = RepoActionResult(
+        action="pr-wait-ci",
+        result_status="PASS",
+        returncode=0,
+        command=["agentic-kit", "pr", "wait-ci", "123"],
+        stdout="PR readiness outcome: READY_TO_MERGE\n",
+        stderr="",
+        next_action="Run transfer pr-status or merge-if-green after CI is green.",
+    )
+
+    uplink = write_transfer_report_from_repo_result(
+        result,
+        label="direct-repo-result",
+        cwd=tmp_path,
+    )
+
+    report = (tmp_path / uplink.remote_report_path).read_text(encoding="utf-8")
+    assert "READY_TO_MERGE" in report
+    assert "agentic-kit" in report
+    assert "FileNotFoundError" not in report
+    assert uplink.returncode == 0
+    assert uplink.final_signal == "d"
+
