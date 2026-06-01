@@ -37,6 +37,7 @@ from agentic_project_kit.transfer_runner import (
     transfer_result_as_json_data,
 )
 from agentic_project_kit.transfer_state import build_transfer_state
+from agentic_project_kit.transfer_uplink import run_and_log_transfer_command
 
 transfer_app = typer.Typer(help="Inspect and apply repo-backed text transfer orders.")
 

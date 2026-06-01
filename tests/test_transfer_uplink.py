@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import sys
-from pathlib import Path
 
 from agentic_project_kit.transfer_uplink import (
     LATEST_JSON,
