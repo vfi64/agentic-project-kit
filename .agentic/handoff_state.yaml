@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 4f218f4
-  commit_subject: Smoke test transfer commit route (#1041)
+  commit: 3c66521
+  commit_subject: Return structured transfer PR status lookup failures (#1043)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
