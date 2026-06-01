@@ -1,6 +1,6 @@
 schema_version: 1
 updated:
-  date: '2026-05-31'
+  date: '2026-06-01'
   reason: Refresh handoff state to last substantive work commit
   source: agentic-kit handoff refresh
 repo:
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: ad60476
-  commit_subject: Add final signal lines to pr-status output (#1019)
+  commit: 3bbe055
+  commit_subject: Add one-line chat reply to transfer output (#1021)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
