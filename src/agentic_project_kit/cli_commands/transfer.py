@@ -43,6 +43,7 @@ from agentic_project_kit.transfer_uplink import (
     read_latest_transfer_report,
     run_and_log_transfer_command,
     run_and_log_transfer_sequence,
+    write_transfer_report_from_repo_result,
 )
 
 transfer_app = typer.Typer(help="Inspect and apply repo-backed text transfer orders.")
@@ -72,20 +73,7 @@ def _echo_repo_result(result, json_output: bool) -> None:
 
 
 def _echo_quiet_repo_report(result: RepoActionResult, *, label: str) -> None:
-    uplink = run_and_log_transfer_command(
-        [
-            "python",
-            "-c",
-            (
-                "import sys; "
-                f"sys.stdout.write({result.stdout!r}); "
-                f"sys.stderr.write({result.stderr!r}); "
-                f"sys.exit({result.returncode!r})"
-            ),
-        ],
-        label=label,
-        cwd=Path("."),
-    )
+    uplink = write_transfer_report_from_repo_result(result, label=label, cwd=Path("."))
     typer.echo("TRANSFER_UPLOAD=done")
     typer.echo(f"REMOTE_REPORT={uplink.remote_report_path}")
     typer.echo("CHAT_REPLY=g")

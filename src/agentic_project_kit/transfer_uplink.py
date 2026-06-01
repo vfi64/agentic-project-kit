@@ -280,3 +280,54 @@ def read_latest_transfer_report(root: Path | None = None) -> str:
         raise FileNotFoundError(f"latest transfer report not found: {LATEST_JSON}")
     return report_path.read_text(encoding="utf-8")
 
+def write_transfer_report_from_repo_result(
+    repo_result,
+    *,
+    label: str = "transfer-repo-result",
+    cwd: Path | None = None,
+) -> TransferUplinkResult:
+    root = Path(".") if cwd is None else cwd
+    run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
+    timestamped_log = TRANSFER_RUN_DIR / f"{run_id}-{label}.log"
+    timestamped_json = TRANSFER_RUN_DIR / f"{run_id}-{label}.json"
+
+    final_signal = _derive_final_signal(repo_result.returncode, repo_result.stdout, repo_result.stderr)
+    if repo_result.returncode != 0:
+        final_signal = "f"
+
+    next_action = repo_result.next_action or _derive_next_action(
+        final_signal,
+        repo_result.stdout,
+        repo_result.stderr,
+    )
+
+    result = TransferUplinkResult(
+        schema_version=1,
+        run_id=run_id,
+        label=label,
+        command=list(repo_result.command),
+        returncode=repo_result.returncode,
+        stdout=repo_result.stdout,
+        stderr=repo_result.stderr,
+        final_signal=final_signal,
+        chat_reply="g",
+        next_action=next_action,
+        latest_log_path=str(LATEST_LOG),
+        latest_json_path=str(LATEST_JSON),
+        timestamped_log_path=str(timestamped_log),
+        remote_report_path=str(timestamped_json),
+        transfer_upload="done",
+    )
+
+    for relative_path, content in (
+        (LATEST_LOG, render_uplink_log(result)),
+        (timestamped_log, render_uplink_log(result)),
+        (LATEST_JSON, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + "\n"),
+        (timestamped_json, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + "\n"),
+    ):
+        target = root / relative_path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(content, encoding="utf-8")
+
+    return result
+
