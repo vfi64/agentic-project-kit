@@ -508,3 +508,75 @@ def test_transfer_branch_delete_cli_blocks_without_rule_acknowledgement(tmp_path
     assert result.exit_code == 2
     assert '"required_capability": "rules_confirmed"' in result.stdout
     assert '"result_status": "BLOCKED"' in result.stdout
+
+def test_pr_wait_ci_auto_resolves_head_sha_when_omitted(monkeypatch):
+    calls = []
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["gh", "pr", "view", "123", "--json", "headRefOid", "--jq", ".headRefOid"]:
+            return subprocess.CompletedProcess(command, 0, "a" * 40 + "\n", "")
+        if command[:4] == ["agentic-kit", "pr", "wait-ci", "123"]:
+            return subprocess.CompletedProcess(command, 0, "ready\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._agentic_kit_command",
+        lambda: "agentic-kit",
+    )
+
+    from agentic_project_kit.transfer_repo_actions import pr_wait_ci
+
+    result = pr_wait_ci(123, timeout_seconds=5, poll_seconds=1)
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert ["gh", "pr", "view", "123", "--json", "headRefOid", "--jq", ".headRefOid"] in calls
+    assert ["--expected-head-sha", "a" * 40] == calls[-1][-2:]
+
+
+def test_pr_merge_safe_auto_resolves_head_sha_when_omitted(monkeypatch):
+    calls = []
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["gh", "pr", "view", "123", "--json", "headRefOid", "--jq", ".headRefOid"]:
+            return subprocess.CompletedProcess(command, 0, "b" * 40 + "\n", "")
+        if command[:4] == ["agentic-kit", "pr", "merge-if-green", "123"]:
+            return subprocess.CompletedProcess(command, 0, "merged\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._agentic_kit_command",
+        lambda: "agentic-kit",
+    )
+
+    from agentic_project_kit.transfer_repo_actions import pr_merge_safe
+
+    result = pr_merge_safe(123, expected_head_sha="", main_branch="main", merge_method="squash")
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert ["gh", "pr", "view", "123", "--json", "headRefOid", "--jq", ".headRefOid"] in calls
+    assert ["--expected-head-sha", "b" * 40] == calls[-1][4:6]
+
+
+def test_pr_wait_ci_auto_sha_failure_fails_closed(monkeypatch):
+    def fake_run(command, cwd=None):
+        if command == ["gh", "pr", "view", "123", "--json", "headRefOid", "--jq", ".headRefOid"]:
+            return subprocess.CompletedProcess(command, 1, "", "network failure\n")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+
+    from agentic_project_kit.transfer_repo_actions import pr_wait_ci
+
+    result = pr_wait_ci(123)
+
+    assert result.result_status == "FAIL"
+    assert result.returncode == 1
+    assert "network failure" in result.stderr
+    assert "PR head SHA lookup failure" in result.next_action
+

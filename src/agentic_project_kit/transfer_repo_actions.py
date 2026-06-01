@@ -40,6 +40,26 @@ def _full_sha_guard(action: str, expected_head_sha: str) -> RepoActionResult | N
         return _result(action, [action, "--expected-head-sha"], completed, "Re-run with the full PR head SHA.")
     return None
 
+
+
+def _resolve_pr_head_sha(pr_number: int, *, action: str) -> tuple[str, RepoActionResult | None]:
+    command = ["gh", "pr", "view", str(pr_number), "--json", "headRefOid", "--jq", ".headRefOid"]
+    completed = _run(command)
+    if completed.returncode != 0:
+        return "", _result(action, command, completed, "Inspect PR head SHA lookup failure before continuing.")
+
+    head_sha = completed.stdout.strip()
+    if len(head_sha) != 40:
+        bad = subprocess.CompletedProcess(
+            command,
+            2,
+            completed.stdout,
+            f"Resolved PR head SHA is not a full 40-character SHA: {head_sha}\n",
+        )
+        return "", _result(action, command, bad, "Inspect PR head SHA lookup failure before continuing.")
+
+    return head_sha, None
+
 def _run(command: list[str], *, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         command,
@@ -233,6 +253,11 @@ def pr_wait_ci(
         guarded = _full_sha_guard("pr-wait-ci", expected_head_sha)
         if guarded is not None:
             return guarded
+    else:
+        expected_head_sha, failure = _resolve_pr_head_sha(pr_number, action="pr-wait-ci")
+        if failure is not None:
+            return failure
+
     command = [
         _agentic_kit_command(),
         "pr",
@@ -242,9 +267,9 @@ def pr_wait_ci(
         str(timeout_seconds),
         "--interval-seconds",
         str(poll_seconds),
+        "--expected-head-sha",
+        expected_head_sha,
     ]
-    if expected_head_sha:
-        command.extend(["--expected-head-sha", expected_head_sha])
     completed = _run(command)
     return _result("pr-wait-ci", command, completed, "Run transfer pr-status or merge-if-green after CI is green.")
 
@@ -252,14 +277,19 @@ def pr_wait_ci(
 def pr_merge_safe(
     pr_number: int,
     *,
-    expected_head_sha: str,
+    expected_head_sha: str = "",
     main_branch: str = "main",
     merge_method: str = "squash",
     no_verify_main: bool = False,
 ) -> RepoActionResult:
-    guarded = _full_sha_guard("pr-merge-safe", expected_head_sha)
-    if guarded is not None:
-        return guarded
+    if expected_head_sha:
+        guarded = _full_sha_guard("pr-merge-safe", expected_head_sha)
+        if guarded is not None:
+            return guarded
+    else:
+        expected_head_sha, failure = _resolve_pr_head_sha(pr_number, action="pr-merge-safe")
+        if failure is not None:
+            return failure
     command = [
         _agentic_kit_command(),
         "pr",
