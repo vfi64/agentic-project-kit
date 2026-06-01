@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: e0ed967
-  commit_subject: Write quiet PR CI reports without Python subprocess (#1035)
+  commit: 476fa70
+  commit_subject: Ignore local transfer run reports (#1037)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
