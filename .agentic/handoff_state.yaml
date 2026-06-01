@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: d007601
-  commit_subject: Harden transfer report label paths (#1047)
+  commit: f6444da
+  commit_subject: Harden mutating transfer actions against branch drift (#1049)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
