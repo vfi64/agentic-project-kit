@@ -164,15 +164,47 @@ def result_terminal(result: RepoActionResult) -> str:
     )
 
 
+def _verify_current_branch(action: str, expected_branch: str, *, command: list[str]) -> RepoActionResult | None:
+    branch_command = ["git", "branch", "--show-current"]
+    branch_completed = _run(branch_command)
+    if branch_completed.returncode != 0:
+        return _result(action, branch_command, branch_completed, "Inspect repository branch state.")
+
+    actual_branch = branch_completed.stdout.strip()
+    if actual_branch != expected_branch:
+        completed = subprocess.CompletedProcess(
+            command,
+            2,
+            branch_completed.stdout,
+            (
+                f"Refusing to continue {action} because the current branch drifted: "
+                f"expected {expected_branch}, got {actual_branch}\n"
+            ),
+        )
+        return _result(action, command, completed, "Inspect branch drift before continuing.")
+    return None
+
+
 def branch_create(branch: str, *, start_point: str = "main", push: bool = False) -> RepoActionResult:
     command = ["git", "switch", "-c", branch, start_point]
     completed = _run(command)
     if completed.returncode != 0:
         return _result("branch-create", command, completed, "Inspect branch state before continuing.")
+
+    drift = _verify_current_branch("branch-create", branch, command=command)
+    if drift is not None:
+        return drift
+
     if push:
         push_command = ["git", "push", "-u", "origin", branch]
         pushed = _run(push_command)
+        if pushed.returncode != 0:
+            return _result("branch-create", push_command, pushed, "Inspect branch push failure before continuing.")
+        drift = _verify_current_branch("branch-create", branch, command=push_command)
+        if drift is not None:
+            return drift
         return _result("branch-create", push_command, pushed, "Run transfer state or continue with queued work.")
+
     return _result("branch-create", command, completed, "Run transfer state or continue with queued work.")
 
 
@@ -181,10 +213,21 @@ def branch_switch(branch: str, *, pull: bool = False) -> RepoActionResult:
     completed = _run(command)
     if completed.returncode != 0:
         return _result("branch-switch", command, completed, "Inspect branch state before continuing.")
+
+    drift = _verify_current_branch("branch-switch", branch, command=command)
+    if drift is not None:
+        return drift
+
     if pull:
         pull_command = ["git", "pull", "--ff-only", "origin", branch]
         pulled = _run(pull_command)
+        if pulled.returncode != 0:
+            return _result("branch-switch", pull_command, pulled, "Inspect pull failure before continuing.")
+        drift = _verify_current_branch("branch-switch", branch, command=pull_command)
+        if drift is not None:
+            return drift
         return _result("branch-switch", pull_command, pulled, "Run transfer state or continue with queued work.")
+
     return _result("branch-switch", command, completed, "Run transfer state or continue with queued work.")
 
 
@@ -265,8 +308,16 @@ def push_current() -> RepoActionResult:
     if not branch:
         completed = subprocess.CompletedProcess(["git", "push"], 2, "", "No current branch detected.\n")
         return _result("push-current", ["git", "push"], completed, "Switch to a named branch first.")
+
     command = ["git", "push", "-u", "origin", branch]
     completed = _run(command)
+    if completed.returncode != 0:
+        return _result("push-current", command, completed, "Inspect push failure before continuing.")
+
+    drift = _verify_current_branch("push-current", branch, command=command)
+    if drift is not None:
+        return drift
+
     return _result("push-current", command, completed, "Create or inspect pull request.")
 
 

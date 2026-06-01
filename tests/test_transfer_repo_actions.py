@@ -18,6 +18,7 @@ from agentic_project_kit.transfer_repo_actions import (
     pr_wait_ci,
     post_merge_check,
     pull_current,
+    push_current,
     repo_diff,
     repo_log,
     repo_status,
@@ -828,4 +829,71 @@ def test_commit_paths_refuses_branch_drift_between_add_and_commit(tmp_path, monk
     assert result.returncode == 2
     assert "current branch changed during transfer commit" in result.stderr
     assert result.next_action == "Inspect branch drift before committing."
+
+def test_branch_create_refuses_branch_drift_after_create(monkeypatch):
+    calls = []
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "switch", "-c", "feature/drift", "main"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = branch_create("feature/drift", start_point="main")
+
+    assert result.returncode == 2
+    assert result.result_status == "FAIL"
+    assert "current branch drifted" in result.stderr
+    assert result.next_action == "Inspect branch drift before continuing."
+    assert ["git", "push", "-u", "origin", "feature/drift"] not in calls
+
+
+def test_branch_switch_refuses_branch_drift_after_pull(monkeypatch):
+    calls = {"branch": 0}
+
+    def fake_run(command, cwd=None):
+        if command == ["git", "switch", "feature/drift"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "pull", "--ff-only", "origin", "feature/drift"]:
+            return subprocess.CompletedProcess(command, 0, "Already up to date.\n", "")
+        if command == ["git", "branch", "--show-current"]:
+            calls["branch"] += 1
+            branch = "feature/drift" if calls["branch"] == 1 else "main"
+            return subprocess.CompletedProcess(command, 0, branch + "\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = branch_switch("feature/drift", pull=True)
+
+    assert result.returncode == 2
+    assert result.result_status == "FAIL"
+    assert "current branch drifted" in result.stderr
+    assert result.next_action == "Inspect branch drift before continuing."
+
+
+def test_push_current_refuses_branch_drift_after_push(monkeypatch):
+    calls = {"branch": 0}
+
+    def fake_run(command, cwd=None):
+        if command == ["git", "branch", "--show-current"]:
+            calls["branch"] += 1
+            branch = "feature/demo" if calls["branch"] == 1 else "main"
+            return subprocess.CompletedProcess(command, 0, branch + "\n", "")
+        if command == ["git", "push", "-u", "origin", "feature/demo"]:
+            return subprocess.CompletedProcess(command, 0, "pushed\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = push_current()
+
+    assert result.returncode == 2
+    assert result.result_status == "FAIL"
+    assert "current branch drifted" in result.stderr
+    assert result.next_action == "Inspect branch drift before continuing."
 
