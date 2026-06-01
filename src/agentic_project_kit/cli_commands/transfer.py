@@ -114,16 +114,9 @@ def run_and_log(
     if json_output:
         typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
     else:
-        typer.echo(f"run_id={result.run_id}")
-        typer.echo(f"latest_log_path={result.latest_log_path}")
-        typer.echo(f"latest_json_path={result.latest_json_path}")
-        typer.echo(f"timestamped_log_path={result.timestamped_log_path}")
-
-    typer.echo("TRANSFER_REPORT_WRITTEN=d")
-    typer.echo(f"TRANSFER_REPORT_PATH={result.latest_json_path}")
-    typer.echo(f"FINAL_SIGNAL={result.final_signal}")
-    typer.echo(f"FINAL_NEXT={result.next_action}")
-    typer.echo(f"CHAT_REPLY={result.chat_reply} | NEXT={result.next_action}")
+        typer.echo("TRANSFER_UPLOAD=done")
+        typer.echo(f"REMOTE_REPORT={result.remote_report_path}")
+        typer.echo("CHAT_REPLY=g")
 
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
@@ -538,16 +531,9 @@ def run_sequence_and_log(
     if json_output:
         typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
     else:
-        typer.echo(f"run_id={result.run_id}")
-        typer.echo(f"latest_log_path={result.latest_log_path}")
-        typer.echo(f"latest_json_path={result.latest_json_path}")
-        typer.echo(f"timestamped_log_path={result.timestamped_log_path}")
-
-    typer.echo("TRANSFER_REPORT_WRITTEN=d")
-    typer.echo(f"TRANSFER_REPORT_PATH={result.latest_json_path}")
-    typer.echo(f"FINAL_SIGNAL={result.final_signal}")
-    typer.echo(f"FINAL_NEXT={result.next_action}")
-    typer.echo(f"CHAT_REPLY={result.chat_reply} | NEXT={result.next_action}")
+        typer.echo("TRANSFER_UPLOAD=done")
+        typer.echo(f"REMOTE_REPORT={result.remote_report_path}")
+        typer.echo("CHAT_REPLY=g")
 
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
