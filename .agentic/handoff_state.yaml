@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 158b4cd
-  commit_subject: Add quiet transfer report option for PR CI wait (#1033)
+  commit: e0ed967
+  commit_subject: Write quiet PR CI reports without Python subprocess (#1035)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
