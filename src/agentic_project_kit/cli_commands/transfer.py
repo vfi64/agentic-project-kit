@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import shlex
 from pathlib import Path
 
 import typer
@@ -37,7 +38,7 @@ from agentic_project_kit.transfer_runner import (
     transfer_result_as_json_data,
 )
 from agentic_project_kit.transfer_state import build_transfer_state
-from agentic_project_kit.transfer_uplink import run_and_log_transfer_command
+from agentic_project_kit.transfer_uplink import run_and_log_transfer_command, run_and_log_transfer_sequence
 
 transfer_app = typer.Typer(help="Inspect and apply repo-backed text transfer orders.")
 
@@ -118,6 +119,8 @@ def run_and_log(
         typer.echo(f"latest_json_path={result.latest_json_path}")
         typer.echo(f"timestamped_log_path={result.timestamped_log_path}")
 
+    typer.echo("TRANSFER_REPORT_WRITTEN=d")
+    typer.echo(f"TRANSFER_REPORT_PATH={result.latest_json_path}")
     typer.echo(f"FINAL_SIGNAL={result.final_signal}")
     typer.echo(f"FINAL_NEXT={result.next_action}")
     typer.echo(f"CHAT_REPLY={result.chat_reply} | NEXT={result.next_action}")
@@ -510,5 +513,41 @@ def apply(
     order = _load_or_exit(path)
     result = apply_transfer_order(order, Path("."))
     _emit_result(result, json_output)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("run-sequence-and-log")
+def run_sequence_and_log(
+    step: list[str] = typer.Option(..., "--step", help="One command step; quote it as one shell argument."),
+    label: str = typer.Option("transfer-sequence", "--label", help="Label for the transfer sequence report."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    commands = [shlex.split(item) for item in step]
+    try:
+        result = run_and_log_transfer_sequence(commands, label=label, cwd=Path("."))
+    except ValueError as exc:
+        typer.echo(str(exc))
+        typer.echo("TRANSFER_REPORT_WRITTEN=f")
+        typer.echo("TRANSFER_REPORT_PATH=")
+        typer.echo("FINAL_SIGNAL=f")
+        typer.echo("FINAL_NEXT=Provide at least one non-empty --step command.")
+        typer.echo("CHAT_REPLY=f | NEXT=Provide at least one non-empty --step command.")
+        raise typer.Exit(code=2) from exc
+
+    if json_output:
+        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo(f"run_id={result.run_id}")
+        typer.echo(f"latest_log_path={result.latest_log_path}")
+        typer.echo(f"latest_json_path={result.latest_json_path}")
+        typer.echo(f"timestamped_log_path={result.timestamped_log_path}")
+
+    typer.echo("TRANSFER_REPORT_WRITTEN=d")
+    typer.echo(f"TRANSFER_REPORT_PATH={result.latest_json_path}")
+    typer.echo(f"FINAL_SIGNAL={result.final_signal}")
+    typer.echo(f"FINAL_NEXT={result.next_action}")
+    typer.echo(f"CHAT_REPLY={result.chat_reply} | NEXT={result.next_action}")
+
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)

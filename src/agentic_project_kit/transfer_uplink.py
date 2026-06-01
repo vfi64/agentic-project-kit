@@ -13,6 +13,28 @@ LATEST_JSON = Path("docs/reports/terminal/latest-transfer-uplink.json")
 
 
 @dataclass(frozen=True)
+class TransferSequenceStepResult:
+    index: int
+    command: list[str]
+    returncode: int
+    stdout: str
+    stderr: str
+    final_signal: str
+    next_action: str
+
+    def as_json_data(self) -> dict[str, object]:
+        return {
+            "index": self.index,
+            "command": self.command,
+            "returncode": self.returncode,
+            "stdout": self.stdout,
+            "stderr": self.stderr,
+            "final_signal": self.final_signal,
+            "next_action": self.next_action,
+        }
+
+
+@dataclass(frozen=True)
 class TransferUplinkResult:
     schema_version: int
     run_id: str
@@ -29,7 +51,7 @@ class TransferUplinkResult:
     timestamped_log_path: str
 
     def as_json_data(self) -> dict[str, object]:
-        return {
+        data: dict[str, object] = {
             "schema_version": self.schema_version,
             "run_id": self.run_id,
             "label": self.label,
@@ -44,6 +66,10 @@ class TransferUplinkResult:
             "latest_json_path": self.latest_json_path,
             "timestamped_log_path": self.timestamped_log_path,
         }
+        steps = getattr(self, "sequence_steps", None)
+        if steps is not None:
+            data["sequence_steps"] = [step.as_json_data() for step in steps]
+        return data
 
 
 def _extract_last_prefixed_line(text: str, prefix: str) -> str:
@@ -92,6 +118,8 @@ def render_uplink_log(result: TransferUplinkResult) -> str:
             "### STDERR ###",
             result.stderr.rstrip(),
             "### SUMMARY ###",
+            "TRANSFER_REPORT_WRITTEN=d",
+            f"TRANSFER_REPORT_PATH={result.latest_json_path}",
             f"FINAL_SIGNAL={result.final_signal}",
             f"FINAL_NEXT={result.next_action}",
             f"CHAT_REPLY={result.chat_reply} | NEXT={result.next_action}",
@@ -135,6 +163,91 @@ def run_and_log_transfer_command(command: list[str], *, label: str = "transfer-r
         latest_json_path=str(LATEST_JSON),
         timestamped_log_path=str(timestamped_log),
     )
+
+    for relative_path, content in (
+        (LATEST_LOG, render_uplink_log(result)),
+        (timestamped_log, render_uplink_log(result)),
+        (LATEST_JSON, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + "\n"),
+    ):
+        target = root / relative_path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(content, encoding="utf-8")
+
+    return result
+
+
+def run_and_log_transfer_sequence(
+    commands: list[list[str]],
+    *,
+    label: str = "transfer-sequence",
+    cwd: Path | None = None,
+) -> TransferUplinkResult:
+    if not commands:
+        raise ValueError("commands must not be empty")
+
+    root = Path(".") if cwd is None else cwd
+    steps: list[TransferSequenceStepResult] = []
+    combined_stdout: list[str] = []
+    combined_stderr: list[str] = []
+    overall_returncode = 0
+    overall_signal = "d"
+    next_action = "Continue with the next safe transfer step."
+
+    for index, command in enumerate(commands, start=1):
+        if not command:
+            raise ValueError("sequence commands must not be empty")
+
+        try:
+            completed = subprocess.run(command, cwd=root, text=True, capture_output=True, check=False)
+            returncode = completed.returncode
+            stdout = completed.stdout
+            stderr = completed.stderr
+        except OSError as exc:
+            returncode = 127
+            stdout = ""
+            stderr = f"{type(exc).__name__}: {exc}\n"
+
+        step_signal = _derive_final_signal(returncode, stdout, stderr)
+        step_next = _derive_next_action(step_signal, stdout, stderr)
+        steps.append(
+            TransferSequenceStepResult(
+                index=index,
+                command=list(command),
+                returncode=returncode,
+                stdout=stdout,
+                stderr=stderr,
+                final_signal=step_signal,
+                next_action=step_next,
+            )
+        )
+        combined_stdout.append(f"### STEP {index} STDOUT ###\n{stdout.rstrip()}")
+        combined_stderr.append(f"### STEP {index} STDERR ###\n{stderr.rstrip()}")
+
+        if returncode != 0 or step_signal == "f":
+            overall_returncode = returncode if returncode != 0 else 1
+            overall_signal = "f"
+            next_action = step_next
+            break
+
+    run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
+    timestamped_log = Path("docs/reports/terminal") / f"transfer-uplink-{run_id}.log"
+
+    result = TransferUplinkResult(
+        schema_version=1,
+        run_id=run_id,
+        label=label,
+        command=["<sequence>"],
+        returncode=overall_returncode,
+        stdout="\n".join(combined_stdout) + "\n",
+        stderr="\n".join(combined_stderr) + "\n",
+        final_signal=overall_signal,
+        chat_reply=overall_signal,
+        next_action=next_action,
+        latest_log_path=str(LATEST_LOG),
+        latest_json_path=str(LATEST_JSON),
+        timestamped_log_path=str(timestamped_log),
+    )
+    object.__setattr__(result, "sequence_steps", steps)
 
     for relative_path, content in (
         (LATEST_LOG, render_uplink_log(result)),
