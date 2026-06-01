@@ -11,6 +11,7 @@ from agentic_project_kit.transfer_local_runner import run_local_transfer
 from agentic_project_kit.transfer_pr_actions import pr_status_transfer
 from agentic_project_kit.transfer_remote_next import run_remote_next_transfer
 from agentic_project_kit.transfer_repo_actions import (
+    RepoActionResult,
     admin_refresh_pr,
     branch_create,
     branch_delete,
@@ -68,6 +69,26 @@ def _emit_result(result, json_output: bool) -> None:
 
 def _echo_repo_result(result, json_output: bool) -> None:
     typer.echo(result_json(result) if json_output else result_terminal(result))
+
+
+def _echo_quiet_repo_report(result: RepoActionResult, *, label: str) -> None:
+    uplink = run_and_log_transfer_command(
+        [
+            "python",
+            "-c",
+            (
+                "import sys; "
+                f"sys.stdout.write({result.stdout!r}); "
+                f"sys.stderr.write({result.stderr!r}); "
+                f"sys.exit({result.returncode!r})"
+            ),
+        ],
+        label=label,
+        cwd=Path("."),
+    )
+    typer.echo("TRANSFER_UPLOAD=done")
+    typer.echo(f"REMOTE_REPORT={uplink.remote_report_path}")
+    typer.echo("CHAT_REPLY=g")
 
 
 def _require_transfer_capability(capability: str) -> None:
@@ -273,6 +294,11 @@ def pr_wait_ci_command(
     poll_seconds: int = typer.Option(
         10, "--interval-seconds", "--poll-seconds", min=1, help="Polling interval."
     ),
+    quiet_report: bool = typer.Option(
+        False,
+        "--quiet-report",
+        help="Write the detailed wait output to a transfer report and print only go lines.",
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     result = pr_wait_ci(
@@ -281,7 +307,10 @@ def pr_wait_ci_command(
         timeout_seconds=timeout_seconds,
         poll_seconds=poll_seconds,
     )
-    _echo_repo_result(result, json_output)
+    if quiet_report and not json_output:
+        _echo_quiet_repo_report(result, label=f"pr-wait-ci-{pr_number}")
+    else:
+        _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 

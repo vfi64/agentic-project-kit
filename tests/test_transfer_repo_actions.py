@@ -637,3 +637,78 @@ def test_transfer_pr_merge_safe_cli_allows_omitted_expected_head_sha(monkeypatch
     ) in calls
     assert "FINAL_SIGNAL=d" in result.stdout
 
+def test_transfer_pr_wait_ci_cli_quiet_report_prints_only_go_lines(tmp_path, monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    monkeypatch.chdir(tmp_path)
+
+    def fake_pr_wait_ci(pr_number, *, expected_head_sha="", timeout_seconds=300, poll_seconds=10):
+        from agentic_project_kit.transfer_repo_actions import RepoActionResult
+        return RepoActionResult(
+            action="pr-wait-ci",
+            result_status="PASS",
+            returncode=0,
+            command=["fake", "wait-ci", str(pr_number)],
+            stdout="PR readiness outcome: READY_TO_MERGE\\nterminal=true\\nsuccess=true\\n",
+            stderr="",
+            next_action="Run transfer pr-status or merge-if-green after CI is green.",
+        )
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.transfer.pr_wait_ci", fake_pr_wait_ci)
+
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "pr-wait-ci", "123", "--quiet-report"],
+    )
+
+    assert result.exit_code == 0
+    lines = result.stdout.splitlines()
+    assert lines[0] == "TRANSFER_UPLOAD=done"
+    assert lines[1].startswith("REMOTE_REPORT=docs/reports/transfer_runs/")
+    assert lines[2] == "CHAT_REPLY=g"
+    assert len(lines) == 3
+
+    report_path = lines[1].split("=", 1)[1]
+    report = (tmp_path / report_path).read_text(encoding="utf-8")
+    assert "READY_TO_MERGE" in report
+    assert "pr-wait-ci" in report
+
+
+def test_transfer_pr_wait_ci_cli_quiet_report_still_exits_nonzero_on_failure(tmp_path, monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    monkeypatch.chdir(tmp_path)
+
+    def fake_pr_wait_ci(pr_number, *, expected_head_sha="", timeout_seconds=300, poll_seconds=10):
+        from agentic_project_kit.transfer_repo_actions import RepoActionResult
+        return RepoActionResult(
+            action="pr-wait-ci",
+            result_status="FAIL",
+            returncode=1,
+            command=["fake", "wait-ci", str(pr_number)],
+            stdout="PR readiness outcome: NOT_READY\\n",
+            stderr="pending checks remain\\n",
+            next_action="Inspect failed or pending PR status before merge.",
+        )
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.transfer.pr_wait_ci", fake_pr_wait_ci)
+
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "pr-wait-ci", "123", "--quiet-report"],
+    )
+
+    assert result.exit_code == 1
+    lines = result.stdout.splitlines()
+    assert lines[0] == "TRANSFER_UPLOAD=done"
+    assert lines[1].startswith("REMOTE_REPORT=docs/reports/transfer_runs/")
+    assert lines[2] == "CHAT_REPLY=g"
+    assert len(lines) == 3
+
+    report_path = lines[1].split("=", 1)[1]
+    report = (tmp_path / report_path).read_text(encoding="utf-8")
+    assert "NOT_READY" in report
+    assert "pending checks remain" in report
+
