@@ -38,7 +38,11 @@ from agentic_project_kit.transfer_runner import (
     transfer_result_as_json_data,
 )
 from agentic_project_kit.transfer_state import build_transfer_state
-from agentic_project_kit.transfer_uplink import run_and_log_transfer_command, run_and_log_transfer_sequence
+from agentic_project_kit.transfer_uplink import (
+    read_latest_transfer_report,
+    run_and_log_transfer_command,
+    run_and_log_transfer_sequence,
+)
 
 transfer_app = typer.Typer(help="Inspect and apply repo-backed text transfer orders.")
 
@@ -508,6 +512,19 @@ def apply(
     _emit_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
+
+
+
+@transfer_app.command("show-last-report")
+def show_last_report() -> None:
+    try:
+        typer.echo(read_latest_transfer_report(Path(".")))
+    except FileNotFoundError as exc:
+        typer.echo(str(exc))
+        typer.echo("TRANSFER_UPLOAD=missing")
+        typer.echo("REMOTE_REPORT=")
+        typer.echo("CHAT_REPLY=f")
+        raise typer.Exit(code=1) from exc
 
 
 @transfer_app.command("run-sequence-and-log")

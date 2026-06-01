@@ -272,3 +272,11 @@ def run_and_log_transfer_sequence(
         target.write_text(content, encoding="utf-8")
 
     return result
+
+def read_latest_transfer_report(root: Path | None = None) -> str:
+    base = Path(".") if root is None else root
+    report_path = base / LATEST_JSON
+    if not report_path.exists():
+        raise FileNotFoundError(f"latest transfer report not found: {LATEST_JSON}")
+    return report_path.read_text(encoding="utf-8")
+
