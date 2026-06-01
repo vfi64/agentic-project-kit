@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 6934d5e
-  commit_subject: Auto-resolve PR head SHA for transfer CI actions (#1031)
+  commit: 158b4cd
+  commit_subject: Add quiet transfer report option for PR CI wait (#1033)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
