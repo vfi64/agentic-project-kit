@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 3c66521
-  commit_subject: Return structured transfer PR status lookup failures (#1043)
+  commit: b8d78c2
+  commit_subject: Recover existing admin refresh PR branches (#1045)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
