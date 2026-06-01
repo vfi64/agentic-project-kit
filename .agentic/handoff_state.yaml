@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 89cd45c
-  commit_subject: Guard transfer commit against branch drift (#1039)
+  commit: 4f218f4
+  commit_subject: Smoke test transfer commit route (#1041)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
