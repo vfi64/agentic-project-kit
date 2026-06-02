@@ -45,6 +45,8 @@ def commit_paths(
     message: str,
     log_path: str | None = None,
     push: bool = False,
+    required_branch: str = "",
+    allow_main: bool = False,
 ) -> EvidenceCommitPathsResult:
     root_path = Path(root).resolve()
     if not paths:
@@ -67,6 +69,10 @@ def commit_paths(
             raise ValueError(".venv paths are not allowed")
 
     branch = _git_stdout(root_path, ["branch", "--show-current"]) or "UNKNOWN"
+    if required_branch and branch != required_branch:
+        raise ValueError(f"current branch {branch!r} does not match required branch {required_branch!r}")
+    if branch == "main" and not allow_main:
+        raise ValueError("evidence commit-paths refuses to commit on main without --allow-main")
     head_before = _git_stdout(root_path, ["rev-parse", "HEAD"]) or "UNKNOWN"
     status_before = _status_lines(root_path)
 

@@ -133,11 +133,21 @@ def commit_paths_command(
     message: str = typer.Option(..., "--message"),
     log_path: str | None = typer.Option(None, "--log-path"),
     push: bool = typer.Option(False, "--push"),
+    required_branch: str = typer.Option("", "--branch", help="Expected branch for evidence commit-paths commits."),
+    allow_main: bool = typer.Option(False, "--allow-main", help="Allow evidence commit-paths to commit on main."),
     root: Path = typer.Option(Path("."), "--root"),
 ) -> None:
     """Commit an explicit evidence path set and verify the worktree is clean afterwards."""
     try:
-        result = commit_paths(root=root, paths=tuple(path), message=message, log_path=log_path, push=push)
+        result = commit_paths(
+            root=root,
+            paths=tuple(path),
+            message=message,
+            log_path=log_path,
+            push=push,
+            required_branch=required_branch,
+            allow_main=allow_main,
+        )
     except ValueError as exc:
         typer.echo("EVIDENCE_COMMIT_PATHS")
         typer.echo("success=no")
