@@ -218,10 +218,11 @@ def test_ns_up_handles_already_merged_pr_idempotently() -> None:
 def test_ns_up_treats_pending_checks_as_wait_state_not_fail_state() -> None:
     text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
     assert "### PR CHECKS SNAPSHOT ###" in text
-    assert "gh" in text
+    assert "agentic-kit" in text
     assert "pr" in text
-    assert "checks" in text
-    assert "--watch" in text
+    assert "wait-ci" in text
+    assert "--expected-head-sha" in text
+    assert "--watch" not in text
 
 def test_ns_pr_create_or_skip_handles_no_delta_idempotently() -> None:
     text = Path("src/agentic_project_kit/pr_create_or_skip.py").read_text(encoding="utf-8")

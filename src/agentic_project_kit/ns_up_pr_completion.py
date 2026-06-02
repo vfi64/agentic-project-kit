@@ -33,6 +33,11 @@ def local_python(repo_root: Path) -> str:
     return str(candidate) if candidate.exists() else "python3"
 
 
+def local_agentic_kit(repo_root: Path) -> str:
+    candidate = repo_root / ".venv" / "bin" / "agentic-kit"
+    return str(candidate) if candidate.exists() else "agentic-kit"
+
+
 def print_header() -> None:
     print("\n\n\n")
     print("--------------------------------------------------------------------------------")
@@ -121,13 +126,50 @@ def run_ns_up(repo_root: Path) -> int:
 
     if status == 0 and not merged:
         print("\n### WAIT FOR GREEN CHECKS AND MERGE ###")
-        if run_command(repo_root, ["gh", "pr", "checks", pr_number, "--watch"]).returncode == 0:
-            if run_command(repo_root, ["gh", "pr", "merge", pr_number, "--squash", "--delete-branch"]).returncode == 0:
-                merged = True
+        head = run_command(repo_root, ["gh", "pr", "view", pr_number, "--json", "headRefOid", "--jq", ".headRefOid"])
+        expected_head_sha = head.output.splitlines()[-1] if head.returncode == 0 and head.output else ""
+        if not expected_head_sha:
+            print("ERROR: could not resolve PR head SHA before guarded merge.")
+            status = 1
+        else:
+            kit = local_agentic_kit(repo_root)
+            waited = run_command(
+                repo_root,
+                [
+                    kit,
+                    "pr",
+                    "wait-ci",
+                    pr_number,
+                    "--expected-head-sha",
+                    expected_head_sha,
+                    "--timeout-seconds",
+                    "300",
+                    "--interval-seconds",
+                    "10",
+                ],
+            )
+            if waited.returncode == 0:
+                merged_result = run_command(
+                    repo_root,
+                    [
+                        kit,
+                        "pr",
+                        "merge-if-green",
+                        pr_number,
+                        "--expected-head-sha",
+                        expected_head_sha,
+                        "--main-branch",
+                        "main",
+                        "--merge-method",
+                        "squash",
+                    ],
+                )
+                if merged_result.returncode == 0:
+                    merged = True
+                else:
+                    status = 1
             else:
                 status = 1
-        else:
-            status = 1
 
     if merged:
         print("\n### UPDATE MAIN ###")
