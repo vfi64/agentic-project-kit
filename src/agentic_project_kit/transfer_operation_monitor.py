@@ -47,6 +47,7 @@ MAIN_MUTATION_ALLOWLIST = {
     "pull-current",
     "repo-status",
     "post-merge-check",
+    "branch-switch",
 }
 
 

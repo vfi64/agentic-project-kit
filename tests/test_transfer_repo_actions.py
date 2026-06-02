@@ -236,13 +236,30 @@ def test_transfer_branch_delete_cli(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     _acknowledge_rules(tmp_path)
     monkeypatch.chdir(tmp_path)
-    branch_create("feature/cli-delete", start_point="main")
-    branch_switch("main")
+
+    created = branch_create("feature/cli-delete", start_point="main")
+    assert created.returncode == 0, created.as_json_data()
+
+    switched = subprocess.run(
+        ["git", "switch", "main"],
+        cwd=tmp_path,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert switched.returncode == 0, {
+        "stdout": switched.stdout,
+        "stderr": switched.stderr,
+    }
 
     result = CliRunner().invoke(app, ["transfer", "branch-delete", "feature/cli-delete"])
 
-    assert result.exit_code == 0
-    assert '"action": "branch-delete"' in result.stdout
+    assert result.exit_code == 0, {
+        "stdout": result.stdout,
+        "stderr": result.stderr,
+        "exception": repr(result.exception),
+    }
+    assert "\"action\": \"branch-delete\"" in result.stdout
 
 
 def test_guarded_pr_actions_reject_short_expected_head_sha(tmp_path, monkeypatch):
@@ -628,6 +645,16 @@ def test_pr_wait_ci_auto_resolves_head_sha_when_omitted(monkeypatch):
 def test_pr_merge_safe_auto_resolves_head_sha_when_omitted(monkeypatch):
     calls = []
 
+    class PassingMonitor:
+        decision = transfer_repo_actions.MonitorDecision.CONTINUE
+        actual_branch = "main"
+        required_branch = "main"
+        reason = "test_monitor_pass"
+
+    def fake_guard_branch(**kwargs):
+        calls.append(["guard_branch", kwargs])
+        return PassingMonitor()
+
     def fake_run(command, cwd=None):
         calls.append(command)
         if command == ["gh", "pr", "view", "123", "--json", "headRefOid", "--jq", ".headRefOid"]:
@@ -636,6 +663,7 @@ def test_pr_merge_safe_auto_resolves_head_sha_when_omitted(monkeypatch):
             return subprocess.CompletedProcess(command, 0, "merged\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions.guard_branch", fake_guard_branch)
     monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.transfer_repo_actions._agentic_kit_command",
@@ -833,6 +861,16 @@ def test_commit_paths_refuses_branch_drift_between_add_and_commit(tmp_path, monk
 def test_branch_create_refuses_branch_drift_after_create(monkeypatch):
     calls = []
 
+    class PassingMonitor:
+        decision = transfer_repo_actions.MonitorDecision.CONTINUE
+        actual_branch = "main"
+        required_branch = "main"
+        reason = "test_monitor_pass"
+
+    def fake_guard_branch(**kwargs):
+        calls.append(["guard_branch", kwargs])
+        return PassingMonitor()
+
     def fake_run(command, cwd=None):
         calls.append(command)
         if command == ["git", "switch", "-c", "feature/drift", "main"]:
@@ -841,6 +879,7 @@ def test_branch_create_refuses_branch_drift_after_create(monkeypatch):
             return subprocess.CompletedProcess(command, 0, "main\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
     monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
 
     result = branch_create("feature/drift", start_point="main")
@@ -855,6 +894,15 @@ def test_branch_create_refuses_branch_drift_after_create(monkeypatch):
 def test_branch_switch_refuses_branch_drift_after_pull(monkeypatch):
     calls = {"branch": 0}
 
+    class PassingMonitor:
+        decision = transfer_repo_actions.MonitorDecision.CONTINUE
+        actual_branch = "feature/drift"
+        required_branch = "feature/drift"
+        reason = "test_monitor_pass"
+
+    def fake_guard_branch(**kwargs):
+        return PassingMonitor()
+
     def fake_run(command, cwd=None):
         if command == ["git", "switch", "feature/drift"]:
             return subprocess.CompletedProcess(command, 0, "", "")
@@ -866,6 +914,7 @@ def test_branch_switch_refuses_branch_drift_after_pull(monkeypatch):
             return subprocess.CompletedProcess(command, 0, branch + "\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
     monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
 
     result = branch_switch("feature/drift", pull=True)
@@ -999,3 +1048,215 @@ def test_push_current_with_required_branch_blocks_before_push(monkeypatch):
     assert result.result_status == "FAIL"
     assert "Transfer operation monitor blocked push-current" in result.stderr
     assert ["git", "push", "-u", "origin", "feature/demo"] not in calls
+
+
+def test_commit_paths_with_required_branch_switches_before_add(monkeypatch):
+    calls = []
+
+    class SwitchMonitor:
+        decision = transfer_repo_actions.MonitorDecision.SWITCH
+        actual_branch = "feature/demo"
+        required_branch = "feature/demo"
+        reason = "switched_to_required_branch"
+
+    def fake_guard_branch(**kwargs):
+        calls.append(["guard_branch", kwargs])
+        return SwitchMonitor()
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "add", "file.txt"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "commit", "-m", "Commit on feature"]:
+            return subprocess.CompletedProcess(command, 0, "committed\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.commit_paths(
+        "Commit on feature",
+        ["file.txt"],
+        required_branch="feature/demo",
+    )
+
+    assert result.returncode == 0
+    assert calls[0][0] == "guard_branch"
+    assert ["git", "add", "file.txt"] in calls
+    assert ["git", "commit", "-m", "Commit on feature"] in calls
+
+
+def test_commit_paths_with_required_branch_blocks_before_add(monkeypatch):
+    calls = []
+
+    class BlockMonitor:
+        decision = transfer_repo_actions.MonitorDecision.BLOCK
+        actual_branch = "main"
+        required_branch = "feature/demo"
+        reason = "dirty_worktree_blocks_branch_switch"
+
+    def fake_guard_branch(**kwargs):
+        calls.append(["guard_branch", kwargs])
+        return BlockMonitor()
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.commit_paths(
+        "Blocked commit",
+        ["file.txt"],
+        required_branch="feature/demo",
+    )
+
+    assert result.returncode == 2
+    assert result.result_status == "FAIL"
+    assert "Transfer operation monitor blocked commit" in result.stderr
+    assert ["git", "add", "file.txt"] not in calls
+
+
+def test_branch_create_monitor_switches_to_start_point_before_create(monkeypatch):
+    calls = []
+
+    class SwitchMonitor:
+        decision = transfer_repo_actions.MonitorDecision.SWITCH
+        actual_branch = "main"
+        required_branch = "main"
+        reason = "switched_to_required_branch"
+
+    def fake_guard_branch(**kwargs):
+        calls.append(["guard_branch", kwargs])
+        return SwitchMonitor()
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "switch", "-c", "feature/demo", "main"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.branch_create("feature/demo", start_point="main")
+
+    assert result.returncode == 0
+    assert calls[0][0] == "guard_branch"
+    assert calls[0][1]["required_branch"] == "main"
+    assert ["git", "switch", "-c", "feature/demo", "main"] in calls
+
+
+def test_branch_create_monitor_blocks_before_create(monkeypatch):
+    calls = []
+
+    class BlockMonitor:
+        decision = transfer_repo_actions.MonitorDecision.BLOCK
+        actual_branch = "feature/dirty"
+        required_branch = "main"
+        reason = "dirty_worktree_blocks_branch_switch"
+
+    def fake_guard_branch(**kwargs):
+        calls.append(["guard_branch", kwargs])
+        return BlockMonitor()
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.branch_create("feature/demo", start_point="main")
+
+    assert result.returncode == 2
+    assert "Transfer operation monitor blocked branch-create" in result.stderr
+    assert ["git", "switch", "-c", "feature/demo", "main"] not in calls
+
+
+def test_branch_switch_monitor_blocks_before_switch(monkeypatch):
+    calls = []
+
+    class BlockMonitor:
+        decision = transfer_repo_actions.MonitorDecision.BLOCK
+        actual_branch = "main"
+        required_branch = "feature/demo"
+        reason = "dirty_worktree_blocks_branch_switch"
+
+    def fake_guard_branch(**kwargs):
+        calls.append(["guard_branch", kwargs])
+        return BlockMonitor()
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.branch_switch("feature/demo")
+
+    assert result.returncode == 2
+    assert "Transfer operation monitor blocked branch-switch" in result.stderr
+    assert ["git", "switch", "feature/demo"] not in calls
+
+
+def test_pr_merge_safe_monitor_blocks_before_sha_lookup(monkeypatch):
+    calls = []
+
+    class BlockMonitor:
+        decision = transfer_repo_actions.MonitorDecision.BLOCK
+        actual_branch = "feature/work"
+        required_branch = "main"
+        reason = "dirty_worktree_blocks_branch_switch"
+
+    def fake_guard_branch(**kwargs):
+        calls.append(["guard_branch", kwargs])
+        return BlockMonitor()
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.pr_merge_safe(123, expected_head_sha="", main_branch="main")
+
+    assert result.returncode == 2
+    assert result.result_status == "FAIL"
+    assert "Transfer operation monitor blocked pr-merge-safe" in result.stderr
+    assert ["gh", "pr", "view", "123", "--json", "headRefOid", "--jq", ".headRefOid"] not in calls
+
+
+def test_admin_refresh_pr_monitor_blocks_before_status(monkeypatch):
+    calls = []
+
+    class BlockMonitor:
+        decision = transfer_repo_actions.MonitorDecision.BLOCK
+        actual_branch = "feature/work"
+        required_branch = "main"
+        reason = "dirty_worktree_blocks_branch_switch"
+
+    def fake_guard_branch(**kwargs):
+        calls.append(["guard_branch", kwargs])
+        return BlockMonitor()
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.admin_refresh_pr(123, main_branch="main")
+
+    assert result.returncode == 2
+    assert result.result_status == "FAIL"
+    assert "Transfer operation monitor blocked admin-refresh-pr" in result.stderr
+    assert ["git", "status", "--short"] not in calls
