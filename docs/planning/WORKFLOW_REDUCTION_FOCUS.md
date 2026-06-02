@@ -1,9 +1,9 @@
 # Workflow Reduction Focus
 
-Status-date: 2026-06-01
+Status-date: 2026-06-02
 Status: active
 Decision status: accepted
-Review policy: Review after the rule-semantics cleanup, documentation-registry completion audit, before adding deterministic transfer outbox implementation, and before expanding GUI scope or Pattern Advisor scope.
+Review policy: Review after the current B11 recovery, before any further product slice, after the fail-closed precondition-chain hardening, after the rule-semantics cleanup, after the documentation-registry completion audit, before adding deterministic transfer outbox implementation, and before expanding GUI scope or Pattern Advisor scope.
 Project: agentic-project-kit
 
 ## Purpose
@@ -59,16 +59,18 @@ This keeps the rule registry professional without letting perfectionism block th
 
 ## Priority Order
 
-1. Clean the active rule semantics before hardening: remove `w` from active dialogue rules, make `d/f/g` the only preferred signals, classify or obsolete legacy communication anchors, and update tests/compiled context through the rule-management workflow.
-2. Complete a documentation-registry coverage audit before final hardening: identify active docs not yet registered or classified, register them in small reversible slices, and record any intentional exclusions with a machine-checkable rationale.
-3. Finish the current B11 transfer-report contract semantics slice: preserve local report command semantics, make `publish-last-report` the only tracked handoff upload source, keep `show-last-report` local-only, and run the targeted transfer tests before PR creation.
-4. Add the deterministic transfer outbox context projection to the rule-refresh handshake roadmap: every `.agentic/transfer/outbox/last_result.txt` write should embed a freshly extracted machine-readable header from canonical sources.
-5. Introduce `.agentic/dialogue_rules.yaml` only as a tested rule-management slice, not as an unregistered parallel rule table.
-6. Ensure every new documentation artifact is registered or classified through the documentation-management system, and every new durable rule is registered through the rule-management system with validation and preservation anchors where appropriate.
-7. Finish the documentation-management foundation through small, additive, reversible, test-backed registry slices.
-8. Use the registry to make status, handoff, evidence, artifacts, transfer outbox state, and retention/GC behavior visible and machine-checkable.
-9. Build the GUI as a control surface over already-hardened read-only or bounded actions.
-10. Defer Pattern Advisor expansion until the document, rule, evidence, and transfer substrates are stable.
+1. Stabilize and close the current interrupted B11 local state without doing product work on the wrong branch: preserve or clean the dirty `main` state, restore the intended feature-branch context, and record evidence before continuing.
+2. Add the fail-closed precondition-chain hardening slice immediately after the current recovery/slice: a failed branch switch, wrong branch, dirty blocker, failed `run-and-log`, or failed transfer report publication must block every following workflow step until explicitly resolved.
+3. Clean the active rule semantics before hardening: remove `w` from active dialogue rules, make `d/f/g` the only preferred signals, classify or obsolete legacy communication anchors, and update tests/compiled context through the rule-management workflow.
+4. Complete a documentation-registry coverage audit before final hardening: identify active docs not yet registered or classified, register them in small reversible slices, and record any intentional exclusions with a machine-checkable rationale.
+5. Finish the current B11 transfer-report contract semantics slice: preserve local report command semantics, make `publish-last-report` the only tracked handoff upload source, keep `show-last-report` local-only, and run the targeted transfer tests before PR creation.
+6. Add the deterministic transfer outbox context projection to the rule-refresh handshake roadmap: every `.agentic/transfer/outbox/last_result.txt` write should embed a freshly extracted machine-readable header from canonical sources.
+7. Introduce `.agentic/dialogue_rules.yaml` only as a tested rule-management slice, not as an unregistered parallel rule table.
+8. Ensure every new documentation artifact is registered or classified through the documentation-management system, and every new durable rule is registered through the rule-management system with validation and preservation anchors where appropriate.
+9. Finish the documentation-management foundation through small, additive, reversible, test-backed registry slices.
+10. Use the registry to make status, handoff, evidence, artifacts, transfer outbox state, and retention/GC behavior visible and machine-checkable.
+11. Build the GUI as a control surface over already-hardened read-only or bounded actions.
+12. Defer Pattern Advisor expansion until the document, rule, evidence, and transfer substrates are stable.
 
 ## Work Model Direction
 
@@ -122,6 +124,31 @@ The current transfer line has these remaining work items from the successor-hand
 13. After green targeted tests, commit, push, create a PR only if there is a real diff against `origin/main`, wait for CI, merge only when clean, sync main, and run the post-merge handoff refresh status.
 14. If post-merge status is `REFRESH_REQUIRED`, create and merge the administrative handoff-refresh PR through existing safe wrappers before continuing product work.
 
+## Fail-Closed Precondition Chain Roadmap
+
+The current workflow still permits a dangerous interpretation error: a later diagnostic command can return `PASS` after an earlier precondition command returned `FAIL`. That must never be interpreted as authorization to continue.
+
+This hardening line must be inserted immediately after the current interrupted B11 recovery/slice and before further rule/outbox/gui hardening.
+
+Required rules:
+
+1. A failed precondition is sticky for the current workflow chain until explicitly resolved.
+2. `branch-switch` failure blocks all later product actions; `repo-status PASS` after `branch-switch FAIL` is diagnostic only and must not clear the block.
+3. Wrong branch, dirty protected state, untracked files that would be overwritten by checkout, missing transfer inbox file, and failed report publication are workflow blockers.
+4. `run-and-log` and `publish-last-report` must support or consume expected branch/clean-state metadata and must fail closed when the current repo state does not match the requested work context.
+5. `publish-last-report` must not emit `CHAT_REPLY=g` for reports with `returncode != 0`, `final_signal=f`, wrong-branch failures, missing-file failures, branch-switch failures, or unresolved precondition blockers.
+6. `repo-status` must distinguish command execution success from workflow safety. A successful status command is not a workflow PASS.
+7. Transfer reports must preserve precondition-chain state so the LLM cannot treat a later signal as clearing an earlier blocker.
+8. The normal LLM-to-local transfer path must use the canonical inbox file `.agentic/transfer/inbox/next_command.py.txt` so branch switches are not blocked by accumulated untracked throwaway transfer files.
+
+Acceptance tests:
+
+- `branch-switch FAIL` followed by `repo-status PASS` still yields workflow `BLOCKED`.
+- wrong-branch `run-and-log` yields `chat_reply=f` and does not create a go-state report.
+- `publish-last-report` for a failed report yields `chat_reply=f`, not `g`.
+- untracked transfer inbox files that block checkout are detected as a precondition-chain blocker.
+- the generated outbox/report state includes both command status and workflow state.
+
 ## Rule Semantics Cleanup Roadmap
 
 The current rule system still has transition drift around dialogue signals and planned transfer rules. Before hardening generated outbox context or GUI gates, this must be cleaned in a rule-management slice:
@@ -137,18 +164,20 @@ The current rule system still has transition drift around dialogue signals and p
 
 This focus must be recorded before completing the documentation-management phase so that the remaining registry slices and the later GUI are shaped by it.
 
-Implementation should not interrupt the current transfer-report contract semantics line except where rule or documentation cleanup is a prerequisite for safe hardening. The practical sequence is:
+Implementation must not continue product work from a dirty or wrong branch. The practical sequence is:
 
-1. record the rule-semantics cleanup and documentation-registry completion requirements in planning;
-2. clean active dialogue/transfer rules in a protected rule-management slice;
-3. audit and complete documentation-registry coverage for active docs in small reversible slices;
-4. finish the B11 transfer-report contract semantics repair;
-5. add any new documentation artifacts to the documentation-management system and any new durable rules to the rule-management system;
-6. continue the handoff/status freshness guard and documentation-registry work;
-7. complete the documentation-management foundation enough for artifact and evidence visibility;
-8. implement transfer outbox context generation and dialogue rules in small tested slices;
-9. then make the GUI expose this reduced-orchestration model;
-10. only after that, resume Pattern Advisor expansion.
+1. stabilize and document the current interrupted B11 local state without further mutation on the wrong branch;
+2. complete the current B11 recovery/slice only after branch and dirty-state blockers are resolved;
+3. implement the fail-closed precondition-chain hardening slice immediately after the current recovery/slice;
+4. clean active dialogue/transfer rules in a protected rule-management slice;
+5. audit and complete documentation-registry coverage for active docs in small reversible slices;
+6. finish any remaining B11 transfer-report contract semantics repair;
+7. add any new documentation artifacts to the documentation-management system and any new durable rules to the rule-management system;
+8. continue the handoff/status freshness guard and documentation-registry work;
+9. complete the documentation-management foundation enough for artifact and evidence visibility;
+10. implement transfer outbox context generation and dialogue rules in small tested slices;
+11. then make the GUI expose this reduced-orchestration model;
+12. only after that, resume Pattern Advisor expansion.
 
 ## External Review Input Handling
 
