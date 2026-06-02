@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: bbe56fb
-  commit_subject: Harden productive mutation paths with branch safety (#1074)
+  commit: 435cb68
+  commit_subject: Harden ns up PR merge path (#1077)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
