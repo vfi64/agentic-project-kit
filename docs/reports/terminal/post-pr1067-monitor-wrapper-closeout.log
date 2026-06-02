@@ -70,3 +70,47 @@ NEXT
   SAFE_STEP: run evidence finalize-log with this run log, then inspect --require-summary
   CHAT_REPLY: d
 ### RESULT: PASS ###
+
+
+### CANONICAL SUMMARY ###
+================================================================
+SUMMARY COMM-LOCAL | 2026-06-02 17:52:39 +0200
+
+SLICE
+  NAME: post-pr1067-monitor-wrapper-closeout
+  SCOPE: post-PR1067 transfer monitor wrapper hardening closeout
+  BRANCH: docs/post-pr1067-monitor-wrapper-closeout-evidence
+
+EXECUTION
+  ORIGIN: local
+  STATE_MODE: local
+  MODE_CHECK: local smoke gates and post-merge handoff checks passed on main after PR1067
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PASS
+  OVERALL: PASS
+
+REMOTE
+  REMOTE_EVIDENCE: NOT_REQUIRED
+  PR: NONE
+  HEAD_SHA: 22a16095fccbd99072f9873de5ec8e87fc7f220e
+  CI: not-required
+  MERGE: not-required
+
+EVIDENCE FILES
+  terminal_log: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log
+  terminal_log_remote: docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log
+  terminal_log_local: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log
+  command_report: post-pr1067-monitor-wrapper-closeout.log records post-merge check PASS, handoff check PASS, ruff PASS, and targeted monitor/transfer tests PASS
+
+INTERPRETATION
+  PR1064 introduced the transfer operation monitor, PR1066 expanded wrapper coverage, PR1067 refreshed handoff state; this closeout records the clean post-merge state before the next wrapper-hardening slice
+
+NEXT
+  SAFE_STEP: Run evidence inspect --require-summary on this log, then update PR1068 and merge only after green checks
+  CHAT_REPLY: d
+
+### RESULT: PASS ###
+================================================================
