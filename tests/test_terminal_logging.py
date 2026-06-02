@@ -107,3 +107,13 @@ def test_terminal_log_finalize_contract_words_are_stable():
     text = Path(".agentic/no_copy_terminal_policy.yaml").read_text(encoding="utf-8")
     assert "finalize terminal evidence" in text
     assert "committed and pushed repo artifacts" in text
+
+def test_terminal_upload_refuses_main_branch(monkeypatch):
+    monkeypatch.setattr(tl, "_current_branch", lambda: "main")
+    assert tl.upload_terminal_output() == 1
+
+
+def test_terminal_upload_accepts_required_feature_branch_without_ready_log(monkeypatch):
+    monkeypatch.setattr(tl, "_current_branch", lambda: "feature/demo")
+    monkeypatch.setattr(tl, "terminal_status", lambda: ("FAIL_INVALID_POINTER", "missing"))
+    assert tl.upload_terminal_output(required_branch="feature/demo") == 1

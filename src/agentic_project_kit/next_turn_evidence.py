@@ -111,6 +111,8 @@ def commit_and_push_evidence(
     plan: EvidencePublishPlan,
     root: Path | str = ".",
     push: bool = True,
+    required_branch: str = "",
+    allow_main: bool = False,
 ) -> EvidenceFinalizeResult:
     root_path = Path(root)
 
@@ -123,6 +125,14 @@ def commit_and_push_evidence(
             commit_sha="",
             message="PASS_ALREADY_DONE: no staged evidence changes",
         )
+
+    branch = current_branch(root_path)
+    if required_branch and branch != required_branch:
+        raise RuntimeError(f"current branch {branch!r} does not match required branch {required_branch!r}")
+    if branch == "main" and not allow_main:
+        raise RuntimeError("next-turn evidence refuses to commit on main without allow_main=True")
+    if not branch:
+        raise RuntimeError("next-turn evidence refuses to commit without a current branch")
 
     commit = _run_git(["commit", "-m", plan.commit_message], root=root_path, check=False)
     if commit.returncode != 0:

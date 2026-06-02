@@ -85,7 +85,7 @@ def test_agent_run_executes_and_records_report(tmp_path, monkeypatch):
     monkeypatch.setattr(acr.terminal_logging, "run_logged", lambda name, command: 0)
     monkeypatch.setattr(acr.terminal_logging, "read_latest_pointer", lambda: log_path)
     pushed_paths = []
-    def fake_stage_commit_push(paths, message):
+    def fake_stage_commit_push(paths, message, **kwargs):
         pushed_paths.extend(path.as_posix() for path in paths)
         assert "cmd-1" in message
         return 0
@@ -166,7 +166,7 @@ def test_agent_run_includes_extra_upload_paths(tmp_path, monkeypatch):
     monkeypatch.setattr(acr.terminal_logging, "run_logged", lambda name, command: 0)
     monkeypatch.setattr(acr.terminal_logging, "read_latest_pointer", lambda: log_path)
     pushed_paths = []
-    def fake_stage_commit_push(paths, message):
+    def fake_stage_commit_push(paths, message, **kwargs):
         pushed_paths.extend(path.as_posix() for path in paths)
         return 0
     monkeypatch.setattr(acr, "stage_commit_push", fake_stage_commit_push)
@@ -219,7 +219,7 @@ def test_agent_run_uploads_latest_command_run_pointer(tmp_path, monkeypatch):
     monkeypatch.setattr(acr.terminal_logging, "run_logged", lambda name, command: 0)
     monkeypatch.setattr(acr.terminal_logging, "read_latest_pointer", lambda: log_path)
     pushed_paths = []
-    def fake_stage_commit_push(paths, message):
+    def fake_stage_commit_push(paths, message, **kwargs):
         pushed_paths.extend(path.as_posix() for path in paths)
         return 0
     monkeypatch.setattr(acr, "stage_commit_push", fake_stage_commit_push)
@@ -325,3 +325,12 @@ def test_script_sha256_returns_missing_when_current_script_is_gone(tmp_path):
     from agentic_project_kit.agent_command_runner import script_sha256
     missing = tmp_path / "missing.sh"
     assert script_sha256(missing) == "missing"
+
+def test_stage_commit_push_refuses_main_branch(monkeypatch):
+    monkeypatch.setattr(acr, "current_branch", lambda: "main")
+    assert acr.stage_commit_push([], "msg") == 1
+
+
+def test_stage_commit_push_refuses_branch_mismatch(monkeypatch):
+    monkeypatch.setattr(acr, "current_branch", lambda: "feature/actual")
+    assert acr.stage_commit_push([], "msg", required_branch="feature/expected") == 1

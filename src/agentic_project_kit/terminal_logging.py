@@ -140,7 +140,27 @@ def run_logged(name: str, command: list[str]) -> int:
     return code
 
 
-def upload_terminal_output() -> int:
+def _current_branch() -> str:
+    proc = subprocess.run(["git", "branch", "--show-current"], text=True, capture_output=True, check=False)
+    return proc.stdout.strip() if proc.returncode == 0 else ""
+
+
+def _refuse_unsafe_mutation_branch(required_branch: str = "", allow_main: bool = False) -> tuple[bool, str]:
+    branch = _current_branch()
+    if required_branch and branch != required_branch:
+        return False, f"FAIL_BRANCH_MISMATCH actual={branch or 'UNKNOWN'} required={required_branch}"
+    if branch == "main" and not allow_main:
+        return False, "FAIL_MAIN_MUTATION_NOT_ALLOWED"
+    if not branch:
+        return False, "FAIL_NO_CURRENT_BRANCH"
+    return True, branch
+
+
+def upload_terminal_output(required_branch: str = "", allow_main: bool = False) -> int:
+    branch_ok, branch_message = _refuse_unsafe_mutation_branch(required_branch=required_branch, allow_main=allow_main)
+    if not branch_ok:
+        print(branch_message)
+        return 1
     outcome, message = terminal_status()
     print(outcome)
     print(message)

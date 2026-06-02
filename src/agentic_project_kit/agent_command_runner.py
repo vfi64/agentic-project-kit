@@ -275,12 +275,21 @@ def _git_path_is_tracked(path: Path) -> bool:
     return result.returncode == 0
 
 
-def stage_commit_push(paths: list[Path], message: str) -> int:
+def stage_commit_push(paths: list[Path], message: str, *, required_branch: str = "", allow_main: bool = False) -> int:
+    branch = current_branch()
+    if required_branch and branch != required_branch:
+        print(f"FAIL_BRANCH_MISMATCH actual={branch} required={required_branch}")
+        return 1
+    if branch == "main" and not allow_main:
+        print("FAIL_MAIN_MUTATION_NOT_ALLOWED")
+        return 1
+    if branch in {"", "unknown"}:
+        print("FAIL_NO_CURRENT_BRANCH")
+        return 1
     add_paths = [path for path in paths if path.exists() or _git_path_is_tracked(path)]
     if add_paths:
         subprocess.run(["git", "add", *[path.as_posix() for path in add_paths]], check=True)
     subprocess.run(["git", "commit", "-m", message], check=True)
-    branch = current_branch()
     push = subprocess.run(["git", "push", "-u", "origin", branch], check=False)
     return push.returncode
 
@@ -333,7 +342,11 @@ def agent_run(extra_upload_paths: list[Path] | None = None) -> int:
         upload_paths.append(log_path)
     upload_paths.append(terminal_logging.LATEST_POINTER)
 
-    pushed = stage_commit_push(upload_paths, f"Record agent command run {command.command_id}")
+    pushed = stage_commit_push(
+        upload_paths,
+        f"Record agent command run {command.command_id}",
+        required_branch=command.expected_branch or "",
+    )
     if pushed != 0:
         print(OUTCOME_FAIL_UPLOAD)
         return pushed

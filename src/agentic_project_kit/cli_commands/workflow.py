@@ -251,12 +251,19 @@ def _cleanup_stale_temp_branches(root: Path) -> int:
     if not branches:
         return 0
     for branch in branches:
-        if branch in local_branches:
-            _run_git(root, ["branch", "-D", branch])
-            typer.echo(f"Deleted local stale workflow evidence branch: {branch}")
-        if branch in remote_branches:
-            _run_git(root, ["push", "origin", "--delete", branch])
-            typer.echo(f"Deleted remote stale workflow evidence branch: {branch}")
+        safe_branch = _safe_temp_branch(branch)
+        if safe_branch is None:
+            raise typer.BadParameter(f"refusing unsafe workflow evidence branch cleanup target: {branch}")
+        if safe_branch in local_branches:
+            local_delete = _run_git(root, ["branch", "-D", safe_branch])
+            if local_delete.returncode != 0:
+                raise typer.BadParameter(local_delete.stderr.strip() or f"failed to delete local branch: {safe_branch}")
+            typer.echo(f"Deleted local stale workflow evidence branch: {safe_branch}")
+        if safe_branch in remote_branches:
+            remote_delete = _run_git(root, ["push", "origin", "--delete", safe_branch])
+            if remote_delete.returncode != 0:
+                raise typer.BadParameter(remote_delete.stderr.strip() or f"failed to delete remote branch: {safe_branch}")
+            typer.echo(f"Deleted remote stale workflow evidence branch: {safe_branch}")
     return len(branches)
 
 

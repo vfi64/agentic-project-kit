@@ -62,6 +62,8 @@ def test_upload_next_turn_result_log_commits_only_result_log(tmp_path, monkeypat
     _git(["init", "--bare", str(remote)], tmp_path)
     _git(["remote", "add", "origin", str(remote)], repo)
     _git(["push", "-u", "origin", "HEAD"], repo)
+    _git(["switch", "-c", "feature/upload-result-log"], repo)
+    _git(["push", "-u", "origin", "HEAD"], repo)
     monkeypatch.chdir(repo)
 
     log = repo / "docs/reports/terminal/next-turn-latest.log"
@@ -86,6 +88,8 @@ def test_upload_next_turn_result_log_promotes_local_log_before_commit(tmp_path, 
     remote = tmp_path / "remote.git"
     _git(["init", "--bare", str(remote)], tmp_path)
     _git(["remote", "add", "origin", str(remote)], repo)
+    _git(["push", "-u", "origin", "HEAD"], repo)
+    _git(["switch", "-c", "feature/promote-result-log"], repo)
     _git(["push", "-u", "origin", "HEAD"], repo)
     monkeypatch.chdir(repo)
 
@@ -129,3 +133,37 @@ def test_upload_next_turn_result_log_ignores_stale_local_log_from_other_repo(tmp
     assert result.committed is False
     assert "missing result log" in result.message
     assert not (repo / "docs/reports/terminal/next-turn-latest.log").exists()
+
+def test_upload_next_turn_result_log_refuses_main_branch(tmp_path, monkeypatch):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_repo(repo)
+    _git(["branch", "-M", "main"], repo)
+    monkeypatch.chdir(repo)
+    log = repo / "docs/reports/terminal/next-turn-latest.log"
+    log.parent.mkdir(parents=True)
+    log.write_text("### RESULT: PASS ###\n", encoding="utf-8")
+
+    result = upload_next_turn_result_log(log_path=Path("docs/reports/terminal/next-turn-latest.log"))
+
+    assert result.ok is False
+    assert "refuses to commit on main" in result.message
+
+
+def test_upload_next_turn_result_log_refuses_branch_mismatch(tmp_path, monkeypatch):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_repo(repo)
+    _git(["switch", "-c", "feature/actual"], repo)
+    monkeypatch.chdir(repo)
+    log = repo / "docs/reports/terminal/next-turn-latest.log"
+    log.parent.mkdir(parents=True)
+    log.write_text("### RESULT: PASS ###\n", encoding="utf-8")
+
+    result = upload_next_turn_result_log(
+        log_path=Path("docs/reports/terminal/next-turn-latest.log"),
+        required_branch="feature/expected",
+    )
+
+    assert result.ok is False
+    assert "does not match required branch" in result.message
