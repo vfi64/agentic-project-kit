@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 EXPECTED_BRANCH = "feature/transfer-wrapper-branch-safety"
 
+
 def run(cmd: list[str]) -> subprocess.CompletedProcess[str]:
     print("$", " ".join(cmd))
     completed = subprocess.run(cmd, cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -17,10 +18,23 @@ def run(cmd: list[str]) -> subprocess.CompletedProcess[str]:
         print(completed.stderr, end="", file=sys.stderr)
     return completed
 
+
 def require(condition: bool, message: str) -> None:
     if not condition:
         print(message, file=sys.stderr)
         raise SystemExit(1)
+
+
+def replace_once(text: str, old: str, new: str, label: str) -> str:
+    require(old in text, f"{label} not found")
+    return text.replace(old, new, 1)
+
+
+def replace_regex(text: str, pattern: str, replacement: str, label: str) -> str:
+    new_text, count = re.subn(pattern, replacement, text, count=1, flags=re.S)
+    require(count == 1, f"{label} not found or not unique")
+    return new_text
+
 
 print("### PRECHECK ###")
 branch = run(["git", "branch", "--show-current"]).stdout.strip()
@@ -31,20 +45,8 @@ require(status_before == "", "DIRTY_WORKTREE_BEFORE_PATCH\n" + status_before)
 print("### PATCH transfer_repo_actions.py ###")
 path = ROOT / "src/agentic_project_kit/transfer_repo_actions.py"
 s = path.read_text(encoding="utf-8")
-s = s.replace("from dataclasses import dataclass, asdict", "from dataclasses import dataclass, asdict, field")
-old = '''class RepoActionResult:
-    action: str
-    result_status: str
-    returncode: int
-    command: list[str]
-    stdout: str
-    stderr: str
-    next_action: str
-
-    def as_json_data(self) -> dict:
-        return asdict(self)
-'''
-new = '''class RepoActionResult:
+s = replace_once(s, "from dataclasses import dataclass, asdict", "from dataclasses import dataclass, asdict, field", "dataclass import")
+repo_result_new = '''class RepoActionResult:
     action: str
     result_status: str
     returncode: int
@@ -69,21 +71,8 @@ new = '''class RepoActionResult:
     def as_json_data(self) -> dict:
         return asdict(self)
 '''
-require(old in s, "RepoActionResult block not found")
-s = s.replace(old, new, 1)
-old = '''def _result(action: str, command: list[str], completed: subprocess.CompletedProcess[str], next_action: str) -> RepoActionResult:
-    status = "PASS" if completed.returncode == 0 else "FAIL"
-    return RepoActionResult(
-        action=action,
-        result_status=status,
-        returncode=completed.returncode,
-        command=command,
-        stdout=completed.stdout,
-        stderr=completed.stderr,
-        next_action=next_action,
-    )
-'''
-new = '''def _repo_context() -> dict[str, str]:
+s = replace_regex(s, r"class RepoActionResult:\n.*?\n\s+def as_json_data\(self\) -> dict:\n\s+return asdict\(self\)\n", repo_result_new, "RepoActionResult")
+result_new = '''def _repo_context() -> dict[str, str]:
     branch = _run(["git", "branch", "--show-current"])
     head = _run(["git", "rev-parse", "HEAD"])
     upstream = _run(["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"])
@@ -144,29 +133,8 @@ def _result(
         **context,
     )
 '''
-require(old in s, "_result block not found")
-s = s.replace(old, new, 1)
-old = '''def push_current() -> RepoActionResult:
-    branch_completed = _run(["git", "branch", "--show-current"])
-    if branch_completed.returncode != 0:
-        return _result("push-current", ["git", "branch", "--show-current"], branch_completed, "Inspect repository state.")
-    branch = branch_completed.stdout.strip()
-    if not branch:
-        completed = subprocess.CompletedProcess(["git", "push"], 2, "", "No current branch detected.\n")
-        return _result("push-current", ["git", "push"], completed, "Switch to a named branch first.")
-
-    command = ["git", "push", "-u", "origin", branch]
-    completed = _run(command)
-    if completed.returncode != 0:
-        return _result("push-current", command, completed, "Inspect push failure before continuing.")
-
-    drift = _verify_current_branch("push-current", branch, command=command)
-    if drift is not None:
-        return drift
-
-    return _result("push-current", command, completed, "Create or inspect pull request.")
-'''
-new = '''def push_current(*, expected_branch: str = "", allow_main: bool = False) -> RepoActionResult:
+s = replace_regex(s, r"def _result\(.*?\n\s+\)\n", result_new, "_result")
+push_new = '''def push_current(*, expected_branch: str = "", allow_main: bool = False) -> RepoActionResult:
     branch_completed = _run(["git", "branch", "--show-current"])
     if branch_completed.returncode != 0:
         return _result("push-current", ["git", "branch", "--show-current"], branch_completed, "Inspect repository state.")
@@ -220,20 +188,10 @@ new = '''def push_current(*, expected_branch: str = "", allow_main: bool = False
 
     return _result("push-current", command, completed, "Create or inspect pull request.", target_branch=branch, pushed_branch=branch, expected_branch=expected_branch or branch)
 '''
-require(old in s, "push_current block not found")
-s = s.replace(old, new, 1)
-insert_after = '''def branch_delete(branch: str, *, remote: bool = False, force: bool = False) -> RepoActionResult:
-    if remote:
-        command = ["git", "push", "origin", "--delete", branch]
-        completed = _run(command)
-        return _result("branch-delete", command, completed, "Inspect local and remote branch state.")
-    command = ["git", "branch", "-D" if force else "-d", branch]
-    completed = _run(command)
-    return _result("branch-delete", command, completed, "Inspect local branch state.")
+s = replace_regex(s, r"def push_current\(\) -> RepoActionResult:\n.*?\n\ndef pr_create", push_new + "\n\ndef pr_create", "push_current")
+stash_block = '''
 
-
-'''
-stash_block = '''def stash_list() -> RepoActionResult:
+def stash_list() -> RepoActionResult:
     command = ["git", "stash", "list", "--format=%gd%x09%H%x09%gs"]
     completed = _run(command)
     return _result("stash-list", command, completed, "Inspect a stash by object id before any destructive stash action.")
@@ -322,28 +280,15 @@ def stash_drop_safe(stash_object_id: str, *, expected_subject: str = "", expecte
     command = ["git", "stash", "drop", ref]
     dropped = _run(command)
     return _result("stash-drop-safe", command, dropped, "Run transfer stash-list and repo-status to verify cleanup.", stash_ref=ref, stash_object_id=oid, stash_subject=subject, affected_paths=paths)
-
-
 '''
-require(insert_after in s, "branch_delete block not found for stash insertion")
-s = s.replace(insert_after, insert_after + stash_block, 1)
+s = replace_once(s, "\n\ndef pr_wait_ci(", stash_block + "\n\ndef pr_wait_ci(", "stash insertion")
 path.write_text(s, encoding="utf-8")
 
 print("### PATCH cli transfer commands ###")
 path = ROOT / "src/agentic_project_kit/cli_commands/transfer.py"
 s = path.read_text(encoding="utf-8")
-s = s.replace("    pull_current,\n    push_current,", "    pull_current,\n    push_current,\n    stash_drop_safe,\n    stash_inspect,\n    stash_list,")
-old = '''@transfer_app.command("push-current")
-def push_current_command(
-    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
-) -> None:
-    _require_transfer_capability("rules_confirmed")
-    result = push_current()
-    _echo_repo_result(result, json_output)
-    if result.returncode != 0:
-        raise typer.Exit(code=result.returncode)
-'''
-new = '''@transfer_app.command("push-current")
+s = replace_once(s, "    pull_current,\n    push_current,\n", "    pull_current,\n    push_current,\n    stash_drop_safe,\n    stash_inspect,\n    stash_list,\n", "transfer imports")
+push_command_new = '''@transfer_app.command("push-current")
 def push_current_command(
     expected_branch: str = typer.Option("", "--expected-branch", help="Refuse to push unless this branch is currently checked out."),
     allow_main: bool = typer.Option(False, "--allow-main", help="Allow pushing main only for explicit verified admin flows."),
@@ -390,14 +335,13 @@ def stash_drop_safe_command(
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 '''
-require(old in s, "push_current_command block not found")
-s = s.replace(old, new, 1)
+s = replace_regex(s, r"@transfer_app\.command\(\"push-current\"\)\ndef push_current_command\(.*?\n\n@transfer_app\.command\(\"pr-create\"\)", push_command_new + "\n\n@transfer_app.command(\"pr-create\")", "push-current CLI block")
 path.write_text(s, encoding="utf-8")
 
 print("### PATCH tests ###")
 path = ROOT / "tests/test_transfer_repo_actions.py"
 s = path.read_text(encoding="utf-8")
-s = s.replace("    push_current,\n    repo_diff,", "    push_current,\n    stash_drop_safe,\n    stash_inspect,\n    stash_list,\n    repo_diff,")
+s = replace_once(s, "    push_current,\n    repo_diff,", "    push_current,\n    stash_drop_safe,\n    stash_inspect,\n    stash_list,\n    repo_diff,", "test imports")
 insert = '''
 
 def test_push_current_refuses_main_without_explicit_allow(tmp_path, monkeypatch):
@@ -469,9 +413,8 @@ def test_stash_inspect_and_drop_safe_use_verified_object_id(tmp_path, monkeypatc
     assert dropped.affected_paths == ["scratch.txt"]
     assert stash_object_id not in listed_after.stdout
 '''
-anchor = "\ndef test_transfer_repo_log_cli_prints_final_signal_last"
-require(anchor in s, "test insertion anchor not found")
-s = s.replace(anchor, insert + anchor, 1)
+if "test_push_current_refuses_main_without_explicit_allow" not in s:
+    s = replace_once(s, "\ndef test_transfer_repo_log_cli_prints_final_signal_last", insert + "\ndef test_transfer_repo_log_cli_prints_final_signal_last", "test insertion")
 path.write_text(s, encoding="utf-8")
 
 print("### VERIFY EXPECTED DIRTY FILES ###")
