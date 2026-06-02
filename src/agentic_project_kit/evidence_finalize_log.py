@@ -60,6 +60,8 @@ def finalize_log(
     comm_id: str = "COMM-LOCAL",
     commit_message: str | None = None,
     push: bool = False,
+    required_branch: str = "",
+    allow_main: bool = False,
 ) -> FinalizeLogResult:
     root_path = Path(root).resolve()
     run_log_path = Path(run_log)
@@ -74,6 +76,10 @@ def finalize_log(
         raise FileNotFoundError(run_log_path)
 
     branch = _git_stdout(["branch", "--show-current"], root=root_path) or "UNKNOWN"
+    if required_branch and branch != required_branch:
+        raise ValueError(f"current branch {branch!r} does not match required branch {required_branch!r}")
+    if branch == "main" and not allow_main:
+        raise ValueError("evidence finalize-log refuses to commit on main without --allow-main")
     head_sha = _git_stdout(["rev-parse", "HEAD"], root=root_path) or "UNKNOWN"
     payload = SummaryPayload(
         comm_id=comm_id,

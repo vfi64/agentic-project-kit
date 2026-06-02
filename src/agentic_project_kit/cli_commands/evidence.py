@@ -87,6 +87,8 @@ def finalize_log_command(
     comm_id: str = typer.Option("COMM-LOCAL", "--comm-id"),
     commit_message: str | None = typer.Option(None, "--commit-message"),
     push: bool = typer.Option(False, "--push"),
+    required_branch: str = typer.Option("", "--branch", help="Expected branch for finalize-log commits."),
+    allow_main: bool = typer.Option(False, "--allow-main", help="Allow finalize-log to commit on main."),
     root: Path = typer.Option(Path("."), "--root"),
 ) -> None:
     """Append a canonical summary, require strict inspection, then upload the evidence log."""
@@ -114,6 +116,8 @@ def finalize_log_command(
             comm_id=comm_id,
             commit_message=commit_message,
             push=push,
+            required_branch=required_branch,
+            allow_main=allow_main,
         )
     except (ValueError, FileNotFoundError) as exc:
         typer.echo(render_finalize_log_error(str(exc)))
