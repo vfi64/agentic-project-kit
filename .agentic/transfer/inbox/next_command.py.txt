@@ -1,0 +1,494 @@
+from __future__ import annotations
+
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[3]
+EXPECTED_BRANCH = "feature/transfer-wrapper-branch-safety"
+
+def run(cmd: list[str]) -> subprocess.CompletedProcess[str]:
+    print("$", " ".join(cmd))
+    completed = subprocess.run(cmd, cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if completed.stdout:
+        print(completed.stdout, end="")
+    if completed.stderr:
+        print(completed.stderr, end="", file=sys.stderr)
+    return completed
+
+def require(condition: bool, message: str) -> None:
+    if not condition:
+        print(message, file=sys.stderr)
+        raise SystemExit(1)
+
+print("### PRECHECK ###")
+branch = run(["git", "branch", "--show-current"]).stdout.strip()
+require(branch == EXPECTED_BRANCH, f"WRONG_BRANCH expected={EXPECTED_BRANCH} actual={branch}")
+status_before = run(["git", "status", "--short"]).stdout.strip()
+require(status_before == "", "DIRTY_WORKTREE_BEFORE_PATCH\n" + status_before)
+
+print("### PATCH transfer_repo_actions.py ###")
+path = ROOT / "src/agentic_project_kit/transfer_repo_actions.py"
+s = path.read_text(encoding="utf-8")
+s = s.replace("from dataclasses import dataclass, asdict", "from dataclasses import dataclass, asdict, field")
+old = '''class RepoActionResult:
+    action: str
+    result_status: str
+    returncode: int
+    command: list[str]
+    stdout: str
+    stderr: str
+    next_action: str
+
+    def as_json_data(self) -> dict:
+        return asdict(self)
+'''
+new = '''class RepoActionResult:
+    action: str
+    result_status: str
+    returncode: int
+    command: list[str]
+    stdout: str
+    stderr: str
+    next_action: str
+    current_branch: str = ""
+    target_branch: str = ""
+    pushed_branch: str = ""
+    expected_branch: str = ""
+    repo_head: str = ""
+    upstream_ref: str = ""
+    dirty_state: str = ""
+    workflow_state: str = ""
+    blocking_reason: str = ""
+    stash_ref: str = ""
+    stash_object_id: str = ""
+    stash_subject: str = ""
+    affected_paths: list[str] = field(default_factory=list)
+
+    def as_json_data(self) -> dict:
+        return asdict(self)
+'''
+require(old in s, "RepoActionResult block not found")
+s = s.replace(old, new, 1)
+old = '''def _result(action: str, command: list[str], completed: subprocess.CompletedProcess[str], next_action: str) -> RepoActionResult:
+    status = "PASS" if completed.returncode == 0 else "FAIL"
+    return RepoActionResult(
+        action=action,
+        result_status=status,
+        returncode=completed.returncode,
+        command=command,
+        stdout=completed.stdout,
+        stderr=completed.stderr,
+        next_action=next_action,
+    )
+'''
+new = '''def _repo_context() -> dict[str, str]:
+    branch = _run(["git", "branch", "--show-current"])
+    head = _run(["git", "rev-parse", "HEAD"])
+    upstream = _run(["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"])
+    status = _run(["git", "status", "--short"])
+    dirty_state = "unknown"
+    if status.returncode == 0:
+        dirty_state = "dirty" if status.stdout.strip() else "clean"
+    return {
+        "current_branch": branch.stdout.strip() if branch.returncode == 0 else "",
+        "repo_head": head.stdout.strip() if head.returncode == 0 else "",
+        "upstream_ref": upstream.stdout.strip() if upstream.returncode == 0 else "",
+        "dirty_state": dirty_state,
+    }
+
+
+def _workflow_state(completed: subprocess.CompletedProcess[str], blocking_reason: str) -> str:
+    if completed.returncode == 0:
+        return "SAFE"
+    if completed.returncode == 2 or blocking_reason:
+        return "BLOCKED"
+    return "FAILED"
+
+
+def _result(
+    action: str,
+    command: list[str],
+    completed: subprocess.CompletedProcess[str],
+    next_action: str,
+    *,
+    target_branch: str = "",
+    pushed_branch: str = "",
+    expected_branch: str = "",
+    blocking_reason: str = "",
+    stash_ref: str = "",
+    stash_object_id: str = "",
+    stash_subject: str = "",
+    affected_paths: list[str] | None = None,
+) -> RepoActionResult:
+    status = "PASS" if completed.returncode == 0 else "FAIL"
+    context = _repo_context()
+    return RepoActionResult(
+        action=action,
+        result_status=status,
+        returncode=completed.returncode,
+        command=command,
+        stdout=completed.stdout,
+        stderr=completed.stderr,
+        next_action=next_action,
+        target_branch=target_branch,
+        pushed_branch=pushed_branch,
+        expected_branch=expected_branch,
+        workflow_state=_workflow_state(completed, blocking_reason),
+        blocking_reason=blocking_reason,
+        stash_ref=stash_ref,
+        stash_object_id=stash_object_id,
+        stash_subject=stash_subject,
+        affected_paths=list(affected_paths or []),
+        **context,
+    )
+'''
+require(old in s, "_result block not found")
+s = s.replace(old, new, 1)
+old = '''def push_current() -> RepoActionResult:
+    branch_completed = _run(["git", "branch", "--show-current"])
+    if branch_completed.returncode != 0:
+        return _result("push-current", ["git", "branch", "--show-current"], branch_completed, "Inspect repository state.")
+    branch = branch_completed.stdout.strip()
+    if not branch:
+        completed = subprocess.CompletedProcess(["git", "push"], 2, "", "No current branch detected.\n")
+        return _result("push-current", ["git", "push"], completed, "Switch to a named branch first.")
+
+    command = ["git", "push", "-u", "origin", branch]
+    completed = _run(command)
+    if completed.returncode != 0:
+        return _result("push-current", command, completed, "Inspect push failure before continuing.")
+
+    drift = _verify_current_branch("push-current", branch, command=command)
+    if drift is not None:
+        return drift
+
+    return _result("push-current", command, completed, "Create or inspect pull request.")
+'''
+new = '''def push_current(*, expected_branch: str = "", allow_main: bool = False) -> RepoActionResult:
+    branch_completed = _run(["git", "branch", "--show-current"])
+    if branch_completed.returncode != 0:
+        return _result("push-current", ["git", "branch", "--show-current"], branch_completed, "Inspect repository state.")
+    branch = branch_completed.stdout.strip()
+    if not branch:
+        completed = subprocess.CompletedProcess(["git", "push"], 2, "", "No current branch detected.\n")
+        return _result("push-current", ["git", "push"], completed, "Switch to a named branch first.", blocking_reason="no_current_branch")
+    if expected_branch and branch != expected_branch:
+        completed = subprocess.CompletedProcess(
+            ["git", "push", "-u", "origin", branch],
+            2,
+            branch_completed.stdout,
+            f"Refusing to push because current branch does not match expected branch: expected {expected_branch}, got {branch}\n",
+        )
+        return _result(
+            "push-current",
+            completed.args,
+            completed,
+            "Switch to the expected branch or rerun with the correct --expected-branch.",
+            target_branch=branch,
+            pushed_branch="",
+            expected_branch=expected_branch,
+            blocking_reason="expected_branch_mismatch",
+        )
+    if branch == "main" and not allow_main:
+        completed = subprocess.CompletedProcess(
+            ["git", "push", "-u", "origin", branch],
+            2,
+            branch_completed.stdout,
+            "Refusing to push main through transfer push-current without --allow-main. Switch to a feature/admin branch first.\n",
+        )
+        return _result(
+            "push-current",
+            completed.args,
+            completed,
+            "Switch to a feature/admin branch before pushing, or pass --allow-main only for explicit verified admin flows.",
+            target_branch=branch,
+            pushed_branch="",
+            expected_branch=expected_branch or branch,
+            blocking_reason="main_push_refused",
+        )
+
+    command = ["git", "push", "-u", "origin", branch]
+    completed = _run(command)
+    if completed.returncode != 0:
+        return _result("push-current", command, completed, "Inspect push failure before continuing.", target_branch=branch, expected_branch=expected_branch or branch)
+
+    drift = _verify_current_branch("push-current", branch, command=command)
+    if drift is not None:
+        return drift
+
+    return _result("push-current", command, completed, "Create or inspect pull request.", target_branch=branch, pushed_branch=branch, expected_branch=expected_branch or branch)
+'''
+require(old in s, "push_current block not found")
+s = s.replace(old, new, 1)
+insert_after = '''def branch_delete(branch: str, *, remote: bool = False, force: bool = False) -> RepoActionResult:
+    if remote:
+        command = ["git", "push", "origin", "--delete", branch]
+        completed = _run(command)
+        return _result("branch-delete", command, completed, "Inspect local and remote branch state.")
+    command = ["git", "branch", "-D" if force else "-d", branch]
+    completed = _run(command)
+    return _result("branch-delete", command, completed, "Inspect local branch state.")
+
+
+'''
+stash_block = '''def stash_list() -> RepoActionResult:
+    command = ["git", "stash", "list", "--format=%gd%x09%H%x09%gs"]
+    completed = _run(command)
+    return _result("stash-list", command, completed, "Inspect a stash by object id before any destructive stash action.")
+
+
+def _resolve_stash_entries() -> tuple[list[tuple[str, str, str]], subprocess.CompletedProcess[str]]:
+    command = ["git", "stash", "list", "--format=%gd%x09%H%x09%gs"]
+    completed = _run(command)
+    entries: list[tuple[str, str, str]] = []
+    if completed.returncode == 0:
+        for line in completed.stdout.splitlines():
+            parts = line.split("\t", 2)
+            if len(parts) == 3:
+                entries.append((parts[0], parts[1], parts[2]))
+    return entries, completed
+
+
+def _stash_show_paths(stash_object_id: str) -> list[str]:
+    completed = _run(["git", "stash", "show", "--name-only", stash_object_id])
+    if completed.returncode != 0:
+        return []
+    return [line.strip() for line in completed.stdout.splitlines() if line.strip()]
+
+
+def stash_inspect(stash_object_id: str) -> RepoActionResult:
+    entries, listed = _resolve_stash_entries()
+    if listed.returncode != 0:
+        return _result("stash-inspect", listed.args, listed, "Inspect stash list failure before continuing.")
+    matches = [(ref, oid, subject) for ref, oid, subject in entries if oid == stash_object_id]
+    if len(matches) != 1:
+        completed = subprocess.CompletedProcess(
+            ["git", "stash", "show", "--name-status", stash_object_id],
+            2,
+            listed.stdout,
+            f"Expected exactly one stash object id match for {stash_object_id}, found {len(matches)}.\n",
+        )
+        return _result("stash-inspect", completed.args, completed, "Re-read stash list and use one full stash object id.", stash_object_id=stash_object_id, blocking_reason="stash_object_id_not_unique")
+    ref, oid, subject = matches[0]
+    show = _run(["git", "stash", "show", "--name-status", oid])
+    paths = _stash_show_paths(oid)
+    stdout = f"STASH_REF={ref}\nSTASH_OBJECT_ID={oid}\nSTASH_SUBJECT={subject}\n" + show.stdout
+    completed = subprocess.CompletedProcess(show.args, show.returncode, stdout, show.stderr)
+    return _result("stash-inspect", show.args, completed, "Use stash-drop-safe only with this full object id if the stash is obsolete.", stash_ref=ref, stash_object_id=oid, stash_subject=subject, affected_paths=paths)
+
+
+def stash_drop_safe(stash_object_id: str, *, expected_subject: str = "", expected_paths: list[str] | None = None) -> RepoActionResult:
+    if len(stash_object_id) != 40:
+        completed = subprocess.CompletedProcess(
+            ["git", "stash", "drop", stash_object_id],
+            2,
+            "",
+            "Refusing destructive stash drop without a full 40-character stash object id.\n",
+        )
+        return _result("stash-drop-safe", completed.args, completed, "Run transfer stash-list and stash-inspect first.", stash_object_id=stash_object_id, blocking_reason="stash_object_id_not_full")
+    entries, listed = _resolve_stash_entries()
+    if listed.returncode != 0:
+        return _result("stash-drop-safe", listed.args, listed, "Inspect stash list failure before continuing.")
+    matches = [(ref, oid, subject) for ref, oid, subject in entries if oid == stash_object_id]
+    if len(matches) != 1:
+        completed = subprocess.CompletedProcess(
+            ["git", "stash", "drop", stash_object_id],
+            2,
+            listed.stdout,
+            f"Refusing stash drop: expected exactly one stash object id match for {stash_object_id}, found {len(matches)}.\n",
+        )
+        return _result("stash-drop-safe", completed.args, completed, "Re-read stash list; stash refs may have changed.", stash_object_id=stash_object_id, blocking_reason="stash_object_id_not_unique")
+    ref, oid, subject = matches[0]
+    if expected_subject and expected_subject not in subject:
+        completed = subprocess.CompletedProcess(
+            ["git", "stash", "drop", ref],
+            2,
+            listed.stdout,
+            f"Refusing stash drop: expected subject fragment {expected_subject!r} not found in {subject!r}.\n",
+        )
+        return _result("stash-drop-safe", completed.args, completed, "Inspect stash subject mismatch before destructive action.", stash_ref=ref, stash_object_id=oid, stash_subject=subject, blocking_reason="expected_subject_mismatch")
+    paths = _stash_show_paths(oid)
+    expected = list(expected_paths or [])
+    if expected and sorted(paths) != sorted(expected):
+        completed = subprocess.CompletedProcess(
+            ["git", "stash", "drop", ref],
+            2,
+            "\n".join(paths) + "\n",
+            "Refusing stash drop: affected paths do not match expected paths.\n",
+        )
+        return _result("stash-drop-safe", completed.args, completed, "Inspect stash path mismatch before destructive action.", stash_ref=ref, stash_object_id=oid, stash_subject=subject, affected_paths=paths, blocking_reason="expected_paths_mismatch")
+    command = ["git", "stash", "drop", ref]
+    dropped = _run(command)
+    return _result("stash-drop-safe", command, dropped, "Run transfer stash-list and repo-status to verify cleanup.", stash_ref=ref, stash_object_id=oid, stash_subject=subject, affected_paths=paths)
+
+
+'''
+require(insert_after in s, "branch_delete block not found for stash insertion")
+s = s.replace(insert_after, insert_after + stash_block, 1)
+path.write_text(s, encoding="utf-8")
+
+print("### PATCH cli transfer commands ###")
+path = ROOT / "src/agentic_project_kit/cli_commands/transfer.py"
+s = path.read_text(encoding="utf-8")
+s = s.replace("    pull_current,\n    push_current,", "    pull_current,\n    push_current,\n    stash_drop_safe,\n    stash_inspect,\n    stash_list,")
+old = '''@transfer_app.command("push-current")
+def push_current_command(
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    _require_transfer_capability("rules_confirmed")
+    result = push_current()
+    _echo_repo_result(result, json_output)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+'''
+new = '''@transfer_app.command("push-current")
+def push_current_command(
+    expected_branch: str = typer.Option("", "--expected-branch", help="Refuse to push unless this branch is currently checked out."),
+    allow_main: bool = typer.Option(False, "--allow-main", help="Allow pushing main only for explicit verified admin flows."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    _require_transfer_capability("rules_confirmed")
+    result = push_current(expected_branch=expected_branch, allow_main=allow_main)
+    _echo_repo_result(result, json_output)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("stash-list")
+def stash_list_command(
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = stash_list()
+    _echo_repo_result(result, json_output)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("stash-inspect")
+def stash_inspect_command(
+    stash_object_id: str = typer.Argument(..., help="Full 40-character stash object id from transfer stash-list."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    result = stash_inspect(stash_object_id)
+    _echo_repo_result(result, json_output)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("stash-drop-safe")
+def stash_drop_safe_command(
+    stash_object_id: str = typer.Argument(..., help="Full 40-character stash object id from transfer stash-list."),
+    expected_subject: str = typer.Option("", "--expected-subject", help="Required subject fragment before dropping."),
+    expected_path: list[str] = typer.Option([], "--expected-path", help="Expected affected path. Repeatable; if set, all paths must match exactly."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    _require_transfer_capability("rules_confirmed")
+    result = stash_drop_safe(stash_object_id, expected_subject=expected_subject, expected_paths=list(expected_path))
+    _echo_repo_result(result, json_output)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+'''
+require(old in s, "push_current_command block not found")
+s = s.replace(old, new, 1)
+path.write_text(s, encoding="utf-8")
+
+print("### PATCH tests ###")
+path = ROOT / "tests/test_transfer_repo_actions.py"
+s = path.read_text(encoding="utf-8")
+s = s.replace("    push_current,\n    repo_diff,", "    push_current,\n    stash_drop_safe,\n    stash_inspect,\n    stash_list,\n    repo_diff,")
+insert = '''
+
+def test_push_current_refuses_main_without_explicit_allow(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = push_current()
+
+    assert result.result_status == "FAIL"
+    assert result.returncode == 2
+    assert result.current_branch == "main"
+    assert result.target_branch == "main"
+    assert result.pushed_branch == ""
+    assert result.expected_branch == "main"
+    assert result.workflow_state == "BLOCKED"
+    assert result.blocking_reason == "main_push_refused"
+    assert "Refusing to push main" in result.stderr
+
+
+def test_push_current_blocks_expected_branch_mismatch(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    branch_create("feature/current", start_point="main")
+
+    result = push_current(expected_branch="feature/other")
+
+    assert result.result_status == "FAIL"
+    assert result.returncode == 2
+    assert result.current_branch == "feature/current"
+    assert result.target_branch == "feature/current"
+    assert result.expected_branch == "feature/other"
+    assert result.blocking_reason == "expected_branch_mismatch"
+    assert "does not match expected branch" in result.stderr
+
+
+def test_stash_drop_safe_requires_full_object_id(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = stash_drop_safe("stash@{0}")
+
+    assert result.result_status == "FAIL"
+    assert result.returncode == 2
+    assert result.workflow_state == "BLOCKED"
+    assert result.blocking_reason == "stash_object_id_not_full"
+    assert "full 40-character stash object id" in result.stderr
+
+
+def test_stash_inspect_and_drop_safe_use_verified_object_id(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "scratch.txt").write_text("scratch\n", encoding="utf-8")
+    subprocess.run(["git", "stash", "push", "-u", "-m", "safe scratch stash"], cwd=tmp_path, check=True, stdout=subprocess.PIPE)
+    stash_object_id = subprocess.check_output(["git", "rev-parse", "stash@{0}"], cwd=tmp_path, text=True).strip()
+
+    listed = stash_list()
+    inspected = stash_inspect(stash_object_id)
+    dropped = stash_drop_safe(stash_object_id, expected_subject="safe scratch stash", expected_paths=["scratch.txt"])
+    listed_after = stash_list()
+
+    assert listed.result_status == "PASS"
+    assert stash_object_id in listed.stdout
+    assert inspected.result_status == "PASS"
+    assert inspected.stash_object_id == stash_object_id
+    assert inspected.stash_ref == "stash@{0}"
+    assert inspected.affected_paths == ["scratch.txt"]
+    assert dropped.result_status == "PASS"
+    assert dropped.stash_object_id == stash_object_id
+    assert dropped.affected_paths == ["scratch.txt"]
+    assert stash_object_id not in listed_after.stdout
+'''
+anchor = "\ndef test_transfer_repo_log_cli_prints_final_signal_last"
+require(anchor in s, "test insertion anchor not found")
+s = s.replace(anchor, insert + anchor, 1)
+path.write_text(s, encoding="utf-8")
+
+print("### VERIFY EXPECTED DIRTY FILES ###")
+status = run(["git", "status", "--short"]).stdout.strip().splitlines()
+print("DIRTY_FILES=" + ",".join(status))
+expected = {
+    " M src/agentic_project_kit/cli_commands/transfer.py",
+    " M src/agentic_project_kit/transfer_repo_actions.py",
+    " M tests/test_transfer_repo_actions.py",
+}
+require(set(status) == expected, "UNEXPECTED_DIRTY_SET\n" + "\n".join(status))
+
+print("### TARGETED TESTS ###")
+completed = run(["./.venv/bin/python", "-m", "pytest", "-q", "tests/test_transfer_repo_actions.py", "tests/test_transfer_pr_actions.py"])
+require(completed.returncode == 0, "TARGETED_TESTS_FAILED")
+completed = run(["./.venv/bin/ruff", "check", "src/agentic_project_kit/transfer_repo_actions.py", "src/agentic_project_kit/cli_commands/transfer.py", "tests/test_transfer_repo_actions.py"])
+require(completed.returncode == 0, "RUFF_FAILED")
+print("FINAL_SIGNAL=d")
+print("FINAL_NEXT=Review diff, run full tests, protected-change-plan, then commit via transfer wrapper.")
+print("CHAT_REPLY=d | NEXT=Review diff, run full tests, protected-change-plan, then commit via transfer wrapper.")
