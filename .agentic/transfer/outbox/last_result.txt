@@ -1,0 +1,232 @@
+{
+  "derived_projection": true,
+  "kind": "local_to_llm_last_result",
+  "last_result": {
+    "chat_reply": "d | NEXT=Run transfer publish-last-report",
+    "command": [
+      "<sequence>"
+    ],
+    "final_signal": "f",
+    "label": "one-command-transfer-rule-bootstrap-plan",
+    "latest_json_path": "docs/reports/transfer_runs/latest-transfer-report.json",
+    "latest_log_path": "docs/reports/transfer_runs/latest-transfer-report.log",
+    "next_action": "Inspect latest-transfer-uplink log before continuing.",
+    "remote_report_path": "docs/reports/transfer_runs/20260602T200130Z-e6aed055-one-command-transfer-rule-bootstrap-plan.json",
+    "returncode": 2,
+    "run_id": "20260602T200130Z-e6aed055",
+    "schema_version": 1,
+    "sequence_steps": [
+      {
+        "command": [
+          "./.venv/bin/agentic-kit",
+          "transfer",
+          "repo-status"
+        ],
+        "final_signal": "d",
+        "index": 1,
+        "next_action": "Inspect changes, commit explicit paths, or clean the worktree.",
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "{\n  \"action\": \"repo-status\",\n  \"command\": [\n    \"git\",\n    \"status\",\n    \"--short\"\n  ],\n  \"next_action\": \"Inspect changes, commit explicit paths, or clean the worktree.\",\n  \"result_status\": \"PASS\",\n  \"returncode\": 0,\n  \"stderr\": \"\",\n  \"stdout\": \"?? .agentic/transfer/outbox/\\n\"\n}\nFINAL_SIGNAL=d\nFINAL_NEXT=Inspect changes, commit explicit paths, or clean the worktree.\nCHAT_REPLY=d | NEXT=Inspect changes, commit explicit paths, or clean the worktree.\n"
+      },
+      {
+        "command": [
+          "./.venv/bin/agentic-kit",
+          "transfer",
+          "repo-log",
+          "--limit",
+          "8"
+        ],
+        "final_signal": "d",
+        "index": 2,
+        "next_action": "Use commit SHAs for guarded PR or merge work.",
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "{\n  \"action\": \"repo-log\",\n  \"command\": [\n    \"git\",\n    \"log\",\n    \"-8\",\n    \"--oneline\"\n  ],\n  \"next_action\": \"Use commit SHAs for guarded PR or merge work.\",\n  \"result_status\": \"PASS\",\n  \"returncode\": 0,\n  \"stderr\": \"\",\n  \"stdout\": \"f75134f Allow remote-next to read branch from transfer order\\nc6cf69e Add branchless remote-next bootstrap script\\n8085f0d Register release publish CLI command\\n5d6bdf5 Harden release publish head guards\\ne471401 Refresh handoff state after PR1077 (#1078)\\n435cb68 Harden ns up PR merge path (#1077)\\nb698cb3 Record remaining Git mutation audit after PR1075 (#1076)\\nc20c6b0 Refresh handoff state after PR1074 (#1075)\\n\"\n}\nFINAL_SIGNAL=d\nFINAL_NEXT=Use commit SHAs for guarded PR or merge work.\nCHAT_REPLY=d | NEXT=Use commit SHAs for guarded PR or merge work.\n"
+      },
+      {
+        "command": [
+          "./.venv/bin/python",
+          "-m",
+          "pytest",
+          "tests/test_transfer_remote_next.py",
+          "tests/test_transfer_runner.py",
+          "-q"
+        ],
+        "final_signal": "f",
+        "index": 3,
+        "next_action": "Inspect latest-transfer-uplink log before continuing.",
+        "returncode": 2,
+        "stderr": "",
+        "stdout": "\n==================================== ERRORS ====================================\n_____________ ERROR collecting tests/test_transfer_remote_next.py ______________\n.venv/lib/python3.13/site-packages/_pytest/python.py:507: in importtestmodule\n    mod = import_path(\n.venv/lib/python3.13/site-packages/_pytest/pathlib.py:587: in import_path\n    importlib.import_module(module_name)\n/opt/homebrew/Cellar/python@3.13/3.13.13_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1395: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py:188: in exec_module\n    source_stat, co = _rewrite_test(fn, self.config)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py:357: in _rewrite_test\n    tree = ast.parse(source, filename=strfn)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/opt/homebrew/Cellar/python@3.13/3.13.13_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ast.py:50: in parse\n    return compile(source, filename, mode, flags,\nE     File \"/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_transfer_remote_next.py\", line 61\nE       (tmp_path / \"dirty.txt\").write_text(\"dirty\nE                                           ^\nE   SyntaxError: unterminated string literal (detected at line 61)\n=========================== short test summary info ============================\nERROR tests/test_transfer_remote_next.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.12s\n"
+      }
+    ],
+    "stderr": "### STEP 1 STDERR ###\n\n### STEP 2 STDERR ###\n\n### STEP 3 STDERR ###\n\n",
+    "stdout": "### STEP 1 STDOUT ###\n{\n  \"action\": \"repo-status\",\n  \"command\": [\n    \"git\",\n    \"status\",\n    \"--short\"\n  ],\n  \"next_action\": \"Inspect changes, commit explicit paths, or clean the worktree.\",\n  \"result_status\": \"PASS\",\n  \"returncode\": 0,\n  \"stderr\": \"\",\n  \"stdout\": \"?? .agentic/transfer/outbox/\\n\"\n}\nFINAL_SIGNAL=d\nFINAL_NEXT=Inspect changes, commit explicit paths, or clean the worktree.\nCHAT_REPLY=d | NEXT=Inspect changes, commit explicit paths, or clean the worktree.\n### STEP 2 STDOUT ###\n{\n  \"action\": \"repo-log\",\n  \"command\": [\n    \"git\",\n    \"log\",\n    \"-8\",\n    \"--oneline\"\n  ],\n  \"next_action\": \"Use commit SHAs for guarded PR or merge work.\",\n  \"result_status\": \"PASS\",\n  \"returncode\": 0,\n  \"stderr\": \"\",\n  \"stdout\": \"f75134f Allow remote-next to read branch from transfer order\\nc6cf69e Add branchless remote-next bootstrap script\\n8085f0d Register release publish CLI command\\n5d6bdf5 Harden release publish head guards\\ne471401 Refresh handoff state after PR1077 (#1078)\\n435cb68 Harden ns up PR merge path (#1077)\\nb698cb3 Record remaining Git mutation audit after PR1075 (#1076)\\nc20c6b0 Refresh handoff state after PR1074 (#1075)\\n\"\n}\nFINAL_SIGNAL=d\nFINAL_NEXT=Use commit SHAs for guarded PR or merge work.\nCHAT_REPLY=d | NEXT=Use commit SHAs for guarded PR or merge work.\n### STEP 3 STDOUT ###\n\n==================================== ERRORS ====================================\n_____________ ERROR collecting tests/test_transfer_remote_next.py ______________\n.venv/lib/python3.13/site-packages/_pytest/python.py:507: in importtestmodule\n    mod = import_path(\n.venv/lib/python3.13/site-packages/_pytest/pathlib.py:587: in import_path\n    importlib.import_module(module_name)\n/opt/homebrew/Cellar/python@3.13/3.13.13_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1395: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py:188: in exec_module\n    source_stat, co = _rewrite_test(fn, self.config)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n.venv/lib/python3.13/site-packages/_pytest/assertion/rewrite.py:357: in _rewrite_test\n    tree = ast.parse(source, filename=strfn)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/opt/homebrew/Cellar/python@3.13/3.13.13_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ast.py:50: in parse\n    return compile(source, filename, mode, flags,\nE     File \"/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/tests/test_transfer_remote_next.py\", line 61\nE       (tmp_path / \"dirty.txt\").write_text(\"dirty\nE                                           ^\nE   SyntaxError: unterminated string literal (detected at line 61)\n=========================== short test summary info ============================\nERROR tests/test_transfer_remote_next.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.12s\n",
+    "timestamped_log_path": "docs/reports/transfer_runs/20260602T200130Z-e6aed055-one-command-transfer-rule-bootstrap-plan.log",
+    "transfer_report_written": "done",
+    "transfer_upload": "done"
+  },
+  "safety_header": {
+    "authoritative_sources": [
+      {
+        "path": ".agentic/transfer_safety_rules.yaml",
+        "sha256": "4eb28be3fffb54696d56a18feecfab096ea89e01fe96ae536a03a9f0aa00da39"
+      },
+      {
+        "path": ".agentic/rule_mechanism_inventory.yaml",
+        "sha256": "eeddfb7fd51a0e9764784dfbb9f532b204497156488ab1b55b3eb4e3a4ae2850"
+      },
+      {
+        "path": ".agentic/rule_preservation.yaml",
+        "sha256": "817319e295674992e6665df25778b5c9cb767d1e393e5402df708d52ec79ff39"
+      },
+      {
+        "path": "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
+        "sha256": "d43b4451f778fd2875be4a5f22aee0be669bf28021d795dca856cdf6352e3165"
+      },
+      {
+        "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+        "sha256": "e622d208cb98eaec09d23790b200636e2093a007e7edb72d0327a91691ab337f"
+      }
+    ],
+    "canonical_cli_usage": {
+      "evidence_finalize_log": {
+        "command": "agentic-kit evidence finalize-log --run-log <path> --remote-log <docs/reports/terminal/name.log> --slice <name> --scope <text> --mode-check <text> --command-report <text> --interpretation <text> --safe-step <text>",
+        "notes": [
+          "remote-log must be repository-relative under docs/reports/terminal/",
+          "run-log may already be the same repository-relative evidence path",
+          "Use --commit-message and --push only when the current branch is intended for evidence publication"
+        ],
+        "required_options": [
+          "--run-log",
+          "--remote-log",
+          "--slice",
+          "--scope",
+          "--mode-check",
+          "--command-report",
+          "--interpretation",
+          "--safe-step"
+        ]
+      },
+      "evidence_inspect": {
+        "command": "agentic-kit evidence inspect --require-summary <path>",
+        "invalid_forms": [
+          "agentic-kit evidence inspect --run-log <path>"
+        ],
+        "notes": [
+          "The log path is a positional argument, not --run-log"
+        ]
+      },
+      "rules_acknowledge_after_commit": {
+        "command": "agentic-kit rules acknowledge",
+        "notes": [
+          "Do not run transfer actions after a commit until the current rule snapshot has been acknowledged"
+        ],
+        "trigger": "required after every commit because repo_head changes"
+      },
+      "transfer_admin_refresh_pr": {
+        "command": "agentic-kit transfer admin-refresh-pr --after-pr <merged-pr-number>",
+        "notes": [
+          "Use after post-merge-check reports REFRESH_REQUIRED",
+          "Then run transfer pr-status, pr-wait-ci, and pr-merge-safe on the created admin PR"
+        ],
+        "required_options": [
+          "--after-pr"
+        ]
+      },
+      "transfer_pr_create": {
+        "command": "agentic-kit transfer pr-create --base main --head <branch> --title <title> --body <body>",
+        "notes": [
+          "--base defaults to main but should be explicit in transfer examples",
+          "Run transfer pr-status on the created PR after creation"
+        ],
+        "required_options": [
+          "--head",
+          "--title"
+        ]
+      }
+    },
+    "canonical_transfer_files": {
+      "llm_to_local": ".agentic/transfer/inbox/next_command.py.txt",
+      "local_to_llm": ".agentic/transfer/outbox/last_result.txt"
+    },
+    "derived_projection": true,
+    "kind": "transfer_safety_context_header",
+    "known_failure_classes": [
+      "wrong_branch_execution",
+      "stale_local_branch_after_fetch",
+      "rule_acknowledgement_head_mismatch",
+      "dirty_worktree_before_transfer",
+      "accumulated_untracked_transfer_or_report_files",
+      "failed_report_publication_misread_as_go_signal",
+      "diagnostic_status_success_masking_earlier_blocker",
+      "heredoc_style_shell_mutation",
+      "unescaped_shell_substitution",
+      "raw_newline_in_python_string_literals",
+      "quote_escape_drift",
+      "fragile_multiline_inline_python_commands",
+      "long_shell_mutation_blocks",
+      "line_ending_drift",
+      "python_transfer_txt_suffix_not_syntax_validated",
+      "partial_patch_application",
+      "fragile_text_anchor_patching",
+      "accidental_compatibility_key_removal",
+      "destructive_use_of_moving_references",
+      "implicit_main_push_or_upstream_mutation",
+      "syntax_broken_python_before_cli_import",
+      "cli_parameter_drift",
+      "pr_create_missing_required_head",
+      "finalize_log_missing_required_metadata",
+      "evidence_inspect_wrong_run_log_option",
+      "admin_refresh_pr_missing_after_pr",
+      "rule_acknowledgement_required_after_commit",
+      "terminal_quote_prompt_hang"
+    ],
+    "post_patch_rules": [
+      "changed_python_files_must_compile_before_cli_import",
+      "failed_guard_must_emit_final_signal_f",
+      "failed_guard_must_not_emit_go_semantics"
+    ],
+    "preflight_rules": [
+      "expected_branch_must_match",
+      "worktree_must_be_clean_before_transfer",
+      "local_head_must_match_upstream_head",
+      "rule_acknowledgement_must_match_head",
+      "canonical_inbox_file_must_exist",
+      "canonical_inbox_file_must_compile_as_python_source"
+    ],
+    "repo_state": {
+      "branch": "feature/harden-release-publish-head-guards",
+      "dirty_status": "?? .agentic/transfer/outbox/",
+      "head": "f75134f92e136297b0417c0ced49aef579964cd2",
+      "head_matches_upstream": false,
+      "upstream": "origin/feature/harden-release-publish-head-guards",
+      "upstream_head": "c6cf69e64f93e0189222e0a4f1d50085011cde7a"
+    },
+    "schema_version": 1,
+    "terminal_block_rules": {
+      "avoid": [
+        "long heredoc-style shell mutation blocks",
+        "inline Python with complex shell quoting",
+        "commands that can leave zsh in quote> or dquote>"
+      ],
+      "preferred": [
+        "Use printf '%s\\n' for visible shell output lines",
+        "Keep terminal blocks small",
+        "Avoid unterminated single or double quotes",
+        "Avoid large nested quote blocks",
+        "Use ./.venv/bin/python instead of python"
+      ],
+      "recovery": [
+        "If quote>, dquote>, or heredoc> appears, press Ctrl-C, then run git status --short and git branch --show-current"
+      ]
+    },
+    "transfer_priorities": [
+      "remote_repo_backed_work_first",
+      "canonical_transfer_files_second",
+      "copy_paste_only_fallback"
+    ]
+  },
+  "schema_version": 1
+}
