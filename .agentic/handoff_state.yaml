@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: d16ca7a
-  commit_subject: Add transfer safety rule header (#1058)
+  commit: 67e2128
+  commit_subject: Allow finalize-log same-file evidence paths (#1061)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
