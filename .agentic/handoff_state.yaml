@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: cded617
-  commit_subject: Expand transfer monitor coverage for wrapper actions (#1066)
+  commit: eb4e843
+  commit_subject: Harden evidence finalize-log branch safety (#1070)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
