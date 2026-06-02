@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: e501d96
-  commit_subject: Harden evidence commit-paths branch safety (#1072)
+  commit: bbe56fb
+  commit_subject: Harden productive mutation paths with branch safety (#1074)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
