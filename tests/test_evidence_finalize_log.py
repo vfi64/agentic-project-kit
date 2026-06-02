@@ -215,3 +215,35 @@ def test_finalize_log_rejects_hidden_fail_before_final_pass(tmp_path: Path) -> N
     assert any("log classification failed before evidence upload" in item for item in result.findings)
     assert any("BLOCKED_BY_HIDDEN_FAIL" in item for item in result.findings)
     assert not (tmp_path / remote_log).exists()
+
+
+def test_finalize_log_allows_run_log_already_at_remote_path(tmp_path: Path) -> None:
+    repo_log = tmp_path / "docs" / "reports" / "terminal" / "same.log"
+    repo_log.parent.mkdir(parents=True)
+    repo_log.write_text("body before finalize\n\n### RESULT: PASS ###\n", encoding="utf-8")
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=tmp_path, check=True)
+
+    result = finalize_log(
+        root=tmp_path,
+        run_log=repo_log,
+        remote_log="docs/reports/terminal/same.log",
+        slice_name="samefile-finalize",
+        scope="Verify finalize-log accepts an already repository-relative evidence log.",
+        mode_check="same file source and destination",
+        work="PASS",
+        evidence="PASS",
+        overall="PASS",
+        remote_evidence="NOT_REQUIRED",
+        pr="NONE",
+        ci="not-required",
+        merge="not-required",
+        command_report="samefile finalize completed",
+        interpretation="The log was already at the requested remote evidence path.",
+        safe_step="Continue.",
+        chat_reply="d",
+    )
+
+    assert result.success
+    assert "### CANONICAL SUMMARY ###" in repo_log.read_text(encoding="utf-8")
