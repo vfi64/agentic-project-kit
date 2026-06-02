@@ -36,3 +36,20 @@ def test_transfer_outbox_is_json_with_safety_header(tmp_path: Path) -> None:
     assert '"safety_header"' in text
     assert '"raw_newline_in_python_string_literals"' in text
     assert '"last_result"' in text
+
+
+def test_transfer_safety_header_contains_cli_usage_and_terminal_rules() -> None:
+    header = build_transfer_safety_header(Path("."))
+
+    cli_usage = header["canonical_cli_usage"]
+    assert "--head" in cli_usage["transfer_pr_create"]["required_options"]
+    assert "--run-log" in cli_usage["evidence_finalize_log"]["required_options"]
+    assert "--remote-log" in cli_usage["evidence_finalize_log"]["required_options"]
+    assert "agentic-kit evidence inspect --run-log <path>" in cli_usage["evidence_inspect"]["invalid_forms"]
+    assert "--after-pr" in cli_usage["transfer_admin_refresh_pr"]["required_options"]
+    assert cli_usage["rules_acknowledge_after_commit"]["trigger"] == "required after every commit because repo_head changes"
+
+    terminal_rules = header["terminal_block_rules"]
+    assert "Use ./.venv/bin/python instead of python" in terminal_rules["preferred"]
+    assert "commands that can leave zsh in quote> or dquote>" in terminal_rules["avoid"]
+    assert "terminal_quote_prompt_hang" in header["known_failure_classes"]

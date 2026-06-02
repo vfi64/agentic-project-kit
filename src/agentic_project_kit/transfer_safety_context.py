@@ -69,6 +69,8 @@ def build_transfer_safety_header(root: Path | str = ".") -> dict[str, Any]:
         "known_failure_classes": rules["known_failure_classes"],
         "preflight_rules": rules["preflight_rules"],
         "post_patch_rules": rules["post_patch_rules"],
+        "canonical_cli_usage": rules.get("canonical_cli_usage", {}),
+        "terminal_block_rules": rules.get("terminal_block_rules", {}),
         "repo_state": {
             "branch": branch,
             "head": head,

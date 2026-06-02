@@ -30,6 +30,13 @@ known_failure_classes:
 - destructive_use_of_moving_references
 - implicit_main_push_or_upstream_mutation
 - syntax_broken_python_before_cli_import
+- cli_parameter_drift
+- pr_create_missing_required_head
+- finalize_log_missing_required_metadata
+- evidence_inspect_wrong_run_log_option
+- admin_refresh_pr_missing_after_pr
+- rule_acknowledgement_required_after_commit
+- terminal_quote_prompt_hang
 preflight_rules:
 - expected_branch_must_match
 - worktree_must_be_clean_before_transfer
@@ -41,3 +48,65 @@ post_patch_rules:
 - changed_python_files_must_compile_before_cli_import
 - failed_guard_must_emit_final_signal_f
 - failed_guard_must_not_emit_go_semantics
+canonical_cli_usage:
+  transfer_pr_create:
+    command: agentic-kit transfer pr-create --base main --head <branch> --title <title>
+      --body <body>
+    required_options:
+    - --head
+    - --title
+    notes:
+    - --base defaults to main but should be explicit in transfer examples
+    - Run transfer pr-status on the created PR after creation
+  evidence_finalize_log:
+    command: agentic-kit evidence finalize-log --run-log <path> --remote-log <docs/reports/terminal/name.log>
+      --slice <name> --scope <text> --mode-check <text> --command-report <text> --interpretation
+      <text> --safe-step <text>
+    required_options:
+    - --run-log
+    - --remote-log
+    - --slice
+    - --scope
+    - --mode-check
+    - --command-report
+    - --interpretation
+    - --safe-step
+    notes:
+    - remote-log must be repository-relative under docs/reports/terminal/
+    - run-log may already be the same repository-relative evidence path
+    - Use --commit-message and --push only when the current branch is intended for
+      evidence publication
+  evidence_inspect:
+    command: agentic-kit evidence inspect --require-summary <path>
+    invalid_forms:
+    - agentic-kit evidence inspect --run-log <path>
+    notes:
+    - The log path is a positional argument, not --run-log
+  transfer_admin_refresh_pr:
+    command: agentic-kit transfer admin-refresh-pr --after-pr <merged-pr-number>
+    required_options:
+    - --after-pr
+    notes:
+    - Use after post-merge-check reports REFRESH_REQUIRED
+    - Then run transfer pr-status, pr-wait-ci, and pr-merge-safe on the created admin
+      PR
+  rules_acknowledge_after_commit:
+    command: agentic-kit rules acknowledge
+    trigger: required after every commit because repo_head changes
+    notes:
+    - Do not run transfer actions after a commit until the current rule snapshot has
+      been acknowledged
+terminal_block_rules:
+  preferred:
+  - Use printf '%s\n' for visible shell output lines
+  - Keep terminal blocks small
+  - Avoid unterminated single or double quotes
+  - Avoid large nested quote blocks
+  - Use ./.venv/bin/python instead of python
+  avoid:
+  - long heredoc-style shell mutation blocks
+  - inline Python with complex shell quoting
+  - commands that can leave zsh in quote> or dquote>
+  recovery:
+  - If quote>, dquote>, or heredoc> appears, press Ctrl-C, then run git status --short
+    and git branch --show-current
