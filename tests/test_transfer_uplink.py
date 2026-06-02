@@ -23,7 +23,7 @@ def test_run_and_log_transfer_command_records_success_with_chat_reply(tmp_path):
 
     assert result.returncode == 0
     assert result.final_signal == "d"
-    assert result.chat_reply == "g"
+    assert result.chat_reply == "d | NEXT=Run transfer publish-last-report"
     assert result.next_action == "continue now"
     assert (tmp_path / LATEST_LOG).exists()
     assert result.transfer_upload == "done"
@@ -32,7 +32,7 @@ def test_run_and_log_transfer_command_records_success_with_chat_reply(tmp_path):
     data = json.loads((tmp_path / LATEST_JSON).read_text(encoding="utf-8"))
     assert data["final_signal"] == "d"
     assert data["next_action"] == "continue now"
-    assert "CHAT_REPLY=g" in (tmp_path / LATEST_LOG).read_text(encoding="utf-8")
+    assert "CHAT_REPLY=d | NEXT=Run transfer publish-last-report" in (tmp_path / LATEST_LOG).read_text(encoding="utf-8")
 
 
 def test_run_and_log_transfer_command_records_failure_without_explicit_signal(tmp_path):
@@ -44,7 +44,7 @@ def test_run_and_log_transfer_command_records_failure_without_explicit_signal(tm
 
     assert result.returncode == 3
     assert result.final_signal == "f"
-    assert result.chat_reply == "g"
+    assert result.chat_reply == "d | NEXT=Run transfer publish-last-report"
     assert result.next_action == "Inspect latest-transfer-uplink log before continuing."
     assert "broken" in (tmp_path / LATEST_LOG).read_text(encoding="utf-8")
 
@@ -61,15 +61,15 @@ def test_run_sequence_stops_on_first_failure_and_keeps_overall_failure(tmp_path)
 
     assert result.returncode == 1
     assert result.final_signal == "f"
-    assert result.chat_reply == "g"
+    assert result.chat_reply == "d | NEXT=Run transfer publish-last-report"
     assert result.next_action == "fix first"
     data = json.loads((tmp_path / LATEST_JSON).read_text(encoding="utf-8"))
     assert data["final_signal"] == "f"
     assert len(data["sequence_steps"]) == 1
     log = (tmp_path / LATEST_LOG).read_text(encoding="utf-8")
-    assert "TRANSFER_UPLOAD=done" in log
-    assert "REMOTE_REPORT=docs/reports/transfer_runs/" in log
-    assert "CHAT_REPLY=g" in log
+    assert "TRANSFER_REPORT_WRITTEN=done" in log
+    assert "LOCAL_REPORT=docs/reports/transfer_runs/" in log
+    assert "CHAT_REPLY=d | NEXT=Run transfer publish-last-report" in log
 
 
 def test_run_sequence_records_success_when_all_steps_succeed(tmp_path):
@@ -84,7 +84,7 @@ def test_run_sequence_records_success_when_all_steps_succeed(tmp_path):
 
     assert result.returncode == 0
     assert result.final_signal == "d"
-    assert result.chat_reply == "g"
+    assert result.chat_reply == "d | NEXT=Run transfer publish-last-report"
     assert result.next_action == "Continue with the next safe transfer step."
     data = json.loads((tmp_path / LATEST_JSON).read_text(encoding="utf-8"))
     assert data["final_signal"] == "d"
@@ -104,14 +104,14 @@ def test_run_and_log_cli_prints_only_human_go_lines(tmp_path, monkeypatch):
 
     assert result.exit_code == 0
     lines = result.stdout.splitlines()
-    assert lines[0] == "TRANSFER_UPLOAD=done"
-    assert lines[1].startswith("REMOTE_REPORT=docs/reports/transfer_runs/")
-    assert lines[2] == "CHAT_REPLY=g"
+    assert lines[0] == "TRANSFER_REPORT_WRITTEN=done"
+    assert lines[1].startswith("LOCAL_REPORT=docs/reports/transfer_runs/")
+    assert lines[2] == "CHAT_REPLY=d | NEXT=Run transfer publish-last-report"
     assert len(lines) == 3
     report_path = lines[1].split("=", 1)[1]
     data = json.loads((tmp_path / report_path).read_text(encoding="utf-8"))
     assert data["final_signal"] == "d"
-    assert data["chat_reply"] == "g"
+    assert data["chat_reply"] == "d | NEXT=Run transfer publish-last-report"
 
 
 def test_run_sequence_cli_prints_go_even_when_step_failed_but_report_written(tmp_path, monkeypatch):
@@ -134,9 +134,9 @@ def test_run_sequence_cli_prints_go_even_when_step_failed_but_report_written(tmp
 
     assert result.exit_code == 3
     lines = result.stdout.splitlines()
-    assert lines[0] == "TRANSFER_UPLOAD=done"
-    assert lines[1].startswith("REMOTE_REPORT=docs/reports/transfer_runs/")
-    assert lines[2] == "CHAT_REPLY=g"
+    assert lines[0] == "TRANSFER_REPORT_WRITTEN=done"
+    assert lines[1].startswith("LOCAL_REPORT=docs/reports/transfer_runs/")
+    assert lines[2] == "CHAT_REPLY=d | NEXT=Run transfer publish-last-report"
     assert len(lines) == 3
     report_path = lines[1].split("=", 1)[1]
     data = json.loads((tmp_path / report_path).read_text(encoding="utf-8"))
@@ -158,8 +158,8 @@ def test_show_last_report_prints_latest_json(tmp_path, monkeypatch):
 
     assert result.exit_code == 0
     data = json.loads(result.stdout)
-    assert data["transfer_upload"] == "done"
-    assert data["chat_reply"] == "g"
+    assert data["transfer_report_written"] == "done"
+    assert data["chat_reply"] == "d | NEXT=Run transfer publish-last-report"
     assert data["remote_report_path"].startswith("docs/reports/transfer_runs/")
 
 
@@ -258,6 +258,26 @@ def test_publish_latest_transfer_report_copies_gitignored_latest_report_to_track
     assert data["published_transfer_handoff"]["published_report_path"] == published["remote_report"]
 
 
+
+
+def test_publish_last_report_cli_prints_failure_lines_for_failed_tracked_report(tmp_path, monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    monkeypatch.chdir(tmp_path)
+    run_and_log_transfer_command(
+        [sys.executable, "-c", "import sys; print('FINAL_SIGNAL=f'); print('FINAL_NEXT=fix failure'); sys.exit(4)"],
+        label="failed handoff",
+        cwd=tmp_path,
+    )
+
+    result = CliRunner().invoke(app, ["transfer", "publish-last-report", "--label", "failed handoff"])
+
+    assert result.exit_code == 0
+    lines = result.stdout.splitlines()
+    assert lines[0] == "TRANSFER_UPLOAD=done"
+    assert lines[1].startswith("REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/")
+    assert lines[2] == "CHAT_REPLY=f | NEXT=Inspect published transfer handoff report."
 def test_publish_last_report_cli_prints_go_lines_for_tracked_report(tmp_path, monkeypatch):
     from typer.testing import CliRunner
     from agentic_project_kit.cli import app
