@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 0d22b55
-  commit_subject: Add CLI usage drift rules to transfer header
+  commit: 133ea54
+  commit_subject: Add transfer operation monitor for branch-safe actions (#1064)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
