@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: eb4e843
-  commit_subject: Harden evidence finalize-log branch safety (#1070)
+  commit: e501d96
+  commit_subject: Harden evidence commit-paths branch safety (#1072)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
