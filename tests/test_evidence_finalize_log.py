@@ -75,6 +75,7 @@ def test_finalize_log_rejects_absolute_remote_log(tmp_path: Path) -> None:
 
 def test_finalize_log_render_prints_canonical_summary(tmp_path: Path) -> None:
     _init_repo(tmp_path)
+    subprocess.run(["git", "switch", "-c", "docs/evidence"], cwd=tmp_path, check=True, capture_output=True, text=True)
     run_log = tmp_path / "run.log"
     run_log.write_text("body before finalize\n", encoding="utf-8")
     result = finalize_log(
@@ -94,6 +95,7 @@ def test_finalize_log_render_prints_canonical_summary(tmp_path: Path) -> None:
         command_report="visible-summary-test",
         interpretation="Finalize-log output must visibly include the canonical summary.",
         safe_step="continue",
+        required_branch="docs/evidence",
     )
     output = render_finalize_log_result(result)
     assert "success: yes" in output
@@ -224,6 +226,10 @@ def test_finalize_log_allows_run_log_already_at_remote_path(tmp_path: Path) -> N
     subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True, text=True)
     subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=tmp_path, check=True)
     subprocess.run(["git", "config", "user.name", "Test User"], cwd=tmp_path, check=True)
+    (tmp_path / "README.md").write_text("test\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "commit", "-m", "Initial commit"], cwd=tmp_path, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "switch", "-c", "docs/evidence"], cwd=tmp_path, check=True, capture_output=True, text=True)
 
     result = finalize_log(
         root=tmp_path,
@@ -243,7 +249,140 @@ def test_finalize_log_allows_run_log_already_at_remote_path(tmp_path: Path) -> N
         interpretation="The log was already at the requested remote evidence path.",
         safe_step="Continue.",
         chat_reply="d",
+        required_branch="docs/evidence",
     )
 
     assert result.success
     assert "### CANONICAL SUMMARY ###" in repo_log.read_text(encoding="utf-8")
+
+def test_finalize_log_refuses_main_without_allow_main(tmp_path: Path) -> None:
+    _init_repo(tmp_path)
+    subprocess.run(["git", "branch", "-M", "main"], cwd=tmp_path, check=True)
+    run_log = tmp_path / "run.log"
+    run_log.write_text("body before finalize\n\n### RESULT: PASS ###\n", encoding="utf-8")
+
+    try:
+        finalize_log(
+            root=tmp_path,
+            run_log=run_log,
+            remote_log="docs/reports/terminal/main-refused.log",
+            slice_name="main-refused",
+            scope="Verify finalize-log refuses default main commits.",
+            mode_check="main branch refusal",
+            work="PASS",
+            evidence="PASS",
+            overall="PASS",
+            remote_evidence="NOT_REQUIRED",
+            pr="NONE",
+            ci="not-required",
+            merge="not-required",
+            command_report="main refusal test",
+            interpretation="Finalize-log must not silently create evidence commits on main.",
+            safe_step="Switch to an evidence branch first.",
+        )
+    except ValueError as exc:
+        assert "refuses to commit on main" in str(exc)
+    else:
+        raise AssertionError("finalize-log unexpectedly allowed a main commit")
+
+
+def test_finalize_log_required_branch_mismatch_fails_closed(tmp_path: Path) -> None:
+    _init_repo(tmp_path)
+    subprocess.run(["git", "switch", "-c", "docs/evidence"], cwd=tmp_path, check=True, capture_output=True, text=True)
+    run_log = tmp_path / "run.log"
+    run_log.write_text("body before finalize\n\n### RESULT: PASS ###\n", encoding="utf-8")
+
+    try:
+        finalize_log(
+            root=tmp_path,
+            run_log=run_log,
+            remote_log="docs/reports/terminal/branch-mismatch.log",
+            slice_name="branch-mismatch",
+            scope="Verify finalize-log checks expected branch.",
+            mode_check="required branch mismatch",
+            work="PASS",
+            evidence="PASS",
+            overall="PASS",
+            remote_evidence="NOT_REQUIRED",
+            pr="NONE",
+            ci="not-required",
+            merge="not-required",
+            command_report="branch mismatch test",
+            interpretation="Finalize-log must fail closed on branch drift.",
+            safe_step="Switch to the required branch.",
+            required_branch="docs/other-evidence",
+        )
+    except ValueError as exc:
+        assert "does not match required branch" in str(exc)
+    else:
+        raise AssertionError("finalize-log unexpectedly allowed branch mismatch")
+
+
+def test_finalize_log_required_branch_match_commits(tmp_path: Path) -> None:
+    _init_repo(tmp_path)
+    subprocess.run(["git", "switch", "-c", "docs/evidence"], cwd=tmp_path, check=True, capture_output=True, text=True)
+    run_log = tmp_path / "run.log"
+    run_log.write_text("body before finalize\n\n### RESULT: PASS ###\n", encoding="utf-8")
+
+    result = finalize_log(
+        root=tmp_path,
+        run_log=run_log,
+        remote_log="docs/reports/terminal/branch-match.log",
+        slice_name="branch-match",
+        scope="Verify finalize-log accepts expected evidence branch.",
+        mode_check="required branch match",
+        work="PASS",
+        evidence="PASS",
+        overall="PASS",
+        remote_evidence="NOT_REQUIRED",
+        pr="NONE",
+        ci="not-required",
+        merge="not-required",
+        command_report="branch match test",
+        interpretation="Finalize-log may commit on the explicitly required evidence branch.",
+        safe_step="Inspect evidence and open PR.",
+        required_branch="docs/evidence",
+    )
+
+    assert result.success
+    assert result.commit_created
+    assert (tmp_path / "docs/reports/terminal/branch-match.log").exists()
+
+
+def test_cli_finalize_log_main_refusal_has_no_traceback(tmp_path: Path) -> None:
+    _init_repo(tmp_path)
+    subprocess.run(["git", "branch", "-M", "main"], cwd=tmp_path, check=True)
+    run_log = tmp_path / "run.log"
+    run_log.write_text("body before finalize\n\n### RESULT: PASS ###\n", encoding="utf-8")
+    runner = CliRunner()
+
+    result = runner.invoke(
+        app,
+        [
+            "evidence",
+            "finalize-log",
+            "--root",
+            str(tmp_path),
+            "--run-log",
+            str(run_log),
+            "--remote-log",
+            "docs/reports/terminal/main-refused.log",
+            "--slice",
+            "main-refused",
+            "--scope",
+            "Verify CLI main refusal.",
+            "--mode-check",
+            "main refusal",
+            "--command-report",
+            "CLI main refusal test",
+            "--interpretation",
+            "Finalize-log must fail cleanly on main.",
+            "--safe-step",
+            "Switch to evidence branch.",
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "success: no" in result.output
+    assert "refuses to commit on main" in result.output
+    assert "Traceback" not in result.output
