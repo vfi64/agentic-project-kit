@@ -126,6 +126,28 @@ The current transfer line has these remaining work items from the successor-hand
 14. After green targeted tests, commit, push, create a PR only if there is a real diff against `origin/main`, wait for CI, merge only when clean, sync main, and run the post-merge handoff refresh status.
 15. If post-merge status is `REFRESH_REQUIRED`, create and merge the administrative handoff-refresh PR through existing safe wrappers before continuing product work.
 
+## Transfer Communication Safety Roadmap
+
+This roadmap item is the immediate prerequisite for branch-safety, fail-closed precondition-chain, and GUI action hardening. The transfer channel must treat LLM-to-local transfer files as untrusted work orders, not as intrinsically safe execution artifacts.
+
+Staged implementation:
+
+1. Add machine-readable transfer and Python-patch safety rules to the rule-management system before relying on generated transfer-file prose. These rules must include known recurring failure classes: wrong branch execution, stale local branch after fetch, rule acknowledgement head mismatch, dirty worktree, accumulated untracked transfer or report files, failed report publication being misread as a go signal, diagnostic status success masking an earlier blocker, heredoc-style shell mutation, unescaped shell substitution, raw newlines inside generated Python string literals, quote and escape drift, fragile multiline inline Python commands, long shell mutation blocks, line-ending drift, Python transfer files with text suffixes not validated as Python source, partial patch application, fragile text-anchor patching, accidental compatibility-key removal, destructive use of moving references, implicit main push or upstream mutation, and Python files being syntactically broken before the CLI can still import.
+2. Generate the local-to-LLM result file with a deterministic machine-readable rule-refresh header freshly extracted from canonical repo sources on every write. The header must include source hashes, transfer priorities, canonical inbox/outbox paths, patch-safety rules, branch/head/upstream/dirty state, and the last blocking workflow state where available.
+3. Add canonical transfer execution preflight before running the LLM-to-local transfer file: verify expected branch, clean worktree, local HEAD equals upstream HEAD, rule acknowledgement matches HEAD, the canonical transfer file exists, and transfer-file content compiles as Python.
+4. Add post-patch guards: every changed Python file must pass Python syntax validation before any CLI import or broader tests; failures must stop with FINAL_SIGNAL=f, preserve evidence, and must not emit go semantics.
+5. Only after those guards are test-backed, harden push-current, safe stash handling, fail-closed precondition chains, and GUI button enablement on top of the guarded transfer substrate.
+
+Acceptance tests:
+
+- A stale local branch behind its upstream blocks canonical transfer execution before the transfer file is run.
+- A rule acknowledgement for a different repo head blocks canonical transfer execution.
+- A Python transfer file with invalid Python syntax is rejected before execution.
+- A transfer file that generates invalid Python source fails at the post-patch syntax gate before any CLI import is attempted.
+- Generated local-to-LLM result state includes the machine-readable safety header from repo rule sources and contains the known failure-class identifiers.
+- Diagnostic status success after a prior workflow blocker is classified as diagnostic only and does not clear the blocker.
+- Failed local transfer reports may be published as evidence, but never as a go reply.
+
 ## Transfer Wrapper Branch-Safety Roadmap
 
 The current workflow exposed a direct wrapper branch-safety bug: `transfer push-current` can report success for a push that targets `main` even when the intended feature branch contains the pending work. This is a hard workflow safety defect, not a usability issue.
