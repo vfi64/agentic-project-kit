@@ -389,6 +389,11 @@ def branch_switch_command(
 def commit_command(
     message: str = typer.Option(..., "--message", "-m", help="Commit message."),
     path: list[str] = typer.Option([], "--path", help="Path to add before commit. Repeatable."),
+    branch: str = typer.Option(
+        "",
+        "--branch",
+        help="Expected branch for the commit. If set, the transfer monitor switches to it or blocks safely.",
+    ),
     allow_main: bool = typer.Option(
         False,
         "--allow-main",
@@ -397,7 +402,7 @@ def commit_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     _require_transfer_capability("rules_confirmed")
-    result = commit_paths(message, list(path), allow_main=allow_main)
+    result = commit_paths(message, list(path), allow_main=allow_main, required_branch=branch)
     _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)

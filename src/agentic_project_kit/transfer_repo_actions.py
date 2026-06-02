@@ -168,6 +168,27 @@ def result_terminal(result: RepoActionResult) -> str:
     )
 
 
+def _monitor_block_result(
+    *,
+    action: str,
+    command_kind: str,
+    required_branch: str,
+    monitor,
+    next_action: str,
+) -> RepoActionResult:
+    completed = subprocess.CompletedProcess(
+        ["transfer-monitor", command_kind, "--branch", required_branch],
+        2,
+        "",
+        (
+            f"Transfer operation monitor blocked {command_kind}: "
+            f"{monitor.reason}; actual_branch={monitor.actual_branch}; "
+            f"required_branch={monitor.required_branch}\n"
+        ),
+    )
+    return _result(action, list(completed.args), completed, next_action)
+
+
 def _verify_current_branch(action: str, expected_branch: str, *, command: list[str]) -> RepoActionResult | None:
     branch_command = ["git", "branch", "--show-current"]
     branch_completed = _run(branch_command)
@@ -190,6 +211,21 @@ def _verify_current_branch(action: str, expected_branch: str, *, command: list[s
 
 
 def branch_create(branch: str, *, start_point: str = "main", push: bool = False) -> RepoActionResult:
+    monitor = guard_branch(
+        command_kind="branch-create",
+        required_branch=start_point,
+        allow_main_mutation=True,
+        auto_switch=True,
+    )
+    if monitor.decision == MonitorDecision.BLOCK:
+        return _monitor_block_result(
+            action="branch-create",
+            command_kind="branch-create",
+            required_branch=start_point,
+            monitor=monitor,
+            next_action="Inspect transfer operation monitor block before creating branch.",
+        )
+
     command = ["git", "switch", "-c", branch, start_point]
     completed = _run(command)
     if completed.returncode != 0:
@@ -213,6 +249,21 @@ def branch_create(branch: str, *, start_point: str = "main", push: bool = False)
 
 
 def branch_switch(branch: str, *, pull: bool = False) -> RepoActionResult:
+    monitor = guard_branch(
+        command_kind="branch-switch",
+        required_branch=branch,
+        allow_main_mutation=True,
+        auto_switch=True,
+    )
+    if monitor.decision == MonitorDecision.BLOCK:
+        return _monitor_block_result(
+            action="branch-switch",
+            command_kind="branch-switch",
+            required_branch=branch,
+            monitor=monitor,
+            next_action="Inspect transfer operation monitor block before switching branch.",
+        )
+
     command = ["git", "switch", branch]
     completed = _run(command)
     if completed.returncode != 0:
@@ -258,10 +309,26 @@ def _main_commit_refusal(message: str) -> RepoActionResult:
     return _result("commit", completed.args, completed, "Create a feature/admin branch before committing.")
 
 
-def commit_paths(message: str, paths: list[str], *, allow_main: bool = False) -> RepoActionResult:
+def commit_paths(message: str, paths: list[str], *, allow_main: bool = False, required_branch: str = "") -> RepoActionResult:
     if not paths:
         completed = subprocess.CompletedProcess(["git", "add"], 2, "", "No paths supplied.\n")
         return _result("commit", ["git", "add"], completed, "Provide explicit paths for commit.")
+
+    if required_branch:
+        monitor = guard_branch(
+            command_kind="commit",
+            required_branch=required_branch,
+            allow_main_mutation=allow_main,
+            auto_switch=True,
+        )
+        if monitor.decision == MonitorDecision.BLOCK:
+            return _monitor_block_result(
+                action="commit",
+                command_kind="commit",
+                required_branch=required_branch,
+                monitor=monitor,
+                next_action="Inspect transfer operation monitor block before committing.",
+            )
 
     branch_before_add, branch_error = _current_branch_result()
     if branch_error is not None:
@@ -269,6 +336,23 @@ def commit_paths(message: str, paths: list[str], *, allow_main: bool = False) ->
 
     if branch_before_add == "main" and not allow_main:
         return _main_commit_refusal(message)
+
+    if required_branch and branch_before_add != required_branch:
+        completed = subprocess.CompletedProcess(
+            ["transfer-monitor", "commit", "--branch", required_branch],
+            2,
+            "",
+            (
+                "Transfer operation monitor branch mismatch before commit: "
+                f"actual_branch={branch_before_add}; required_branch={required_branch}\n"
+            ),
+        )
+        return _result(
+            "commit",
+            list(completed.args),
+            completed,
+            "Inspect transfer operation monitor branch mismatch before committing.",
+        )
 
     add_command = ["git", "add", *paths]
     added = _run(add_command)
@@ -510,6 +594,21 @@ def pr_merge_safe(
     merge_method: str = "squash",
     no_verify_main: bool = False,
 ) -> RepoActionResult:
+    monitor = guard_branch(
+        command_kind="pr-merge-safe",
+        required_branch=main_branch,
+        allow_main_mutation=True,
+        auto_switch=True,
+    )
+    if monitor.decision == MonitorDecision.BLOCK:
+        return _monitor_block_result(
+            action="pr-merge-safe",
+            command_kind="pr-merge-safe",
+            required_branch=main_branch,
+            monitor=monitor,
+            next_action="Inspect transfer operation monitor block before merging PR.",
+        )
+
     if expected_head_sha:
         guarded = _full_sha_guard("pr-merge-safe", expected_head_sha)
         if guarded is not None:
@@ -571,20 +670,20 @@ def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
 
 
 def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionResult:
-    branch_command = ["git", "branch", "--show-current"]
-    branch_completed = _run(branch_command)
-    if branch_completed.returncode != 0:
-        return _result("admin-refresh-pr", branch_command, branch_completed, "Inspect repository branch state.")
-
-    branch = branch_completed.stdout.strip()
-    if branch != main_branch:
-        completed = subprocess.CompletedProcess(
-            branch_command,
-            2,
-            branch_completed.stdout,
-            f"Expected branch {main_branch} before admin refresh. Current branch: {branch}\n",
+    monitor = guard_branch(
+        command_kind="admin-refresh-pr",
+        required_branch=main_branch,
+        allow_main_mutation=True,
+        auto_switch=True,
+    )
+    if monitor.decision == MonitorDecision.BLOCK:
+        return _monitor_block_result(
+            action="admin-refresh-pr",
+            command_kind="admin-refresh-pr",
+            required_branch=main_branch,
+            monitor=monitor,
+            next_action="Inspect transfer operation monitor block before admin refresh.",
         )
-        return _result("admin-refresh-pr", branch_command, completed, f"Switch to {main_branch} and sync before admin refresh.")
 
     status_command = ["git", "status", "--short"]
     status_completed = _run(status_command)
