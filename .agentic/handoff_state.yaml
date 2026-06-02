@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 449c397
-  commit_subject: Prioritize transfer communication safety roadmap (#1056)
+  commit: d16ca7a
+  commit_subject: Add transfer safety rule header (#1058)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
