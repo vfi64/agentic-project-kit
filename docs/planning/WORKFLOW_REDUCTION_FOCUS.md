@@ -3,7 +3,7 @@
 Status-date: 2026-06-02
 Status: active
 Decision status: accepted
-Review policy: Review after the current B11 recovery, before any further product slice, after the fail-closed precondition-chain hardening, after the rule-semantics cleanup, after the documentation-registry completion audit, before adding deterministic transfer outbox implementation, and before expanding GUI scope or Pattern Advisor scope.
+Review policy: Review after PR1054 closeout, before any further product slice, after the transfer-wrapper branch-safety hardening, after the fail-closed precondition-chain hardening, after the rule-semantics cleanup, after the documentation-registry completion audit, before adding deterministic transfer outbox implementation, and before expanding GUI scope or Pattern Advisor scope.
 Project: agentic-project-kit
 
 ## Purpose
@@ -59,18 +59,19 @@ This keeps the rule registry professional without letting perfectionism block th
 
 ## Priority Order
 
-1. Stabilize and close the current interrupted B11 local state without doing product work on the wrong branch: preserve or clean the dirty `main` state, restore the intended feature-branch context, and record evidence before continuing.
-2. Add the fail-closed precondition-chain hardening slice immediately after the current recovery/slice: a failed branch switch, wrong branch, dirty blocker, failed `run-and-log`, or failed transfer report publication must block every following workflow step until explicitly resolved.
-3. Clean the active rule semantics before hardening: remove `w` from active dialogue rules, make `d/f/g` the only preferred signals, classify or obsolete legacy communication anchors, and update tests/compiled context through the rule-management workflow.
-4. Complete a documentation-registry coverage audit before final hardening: identify active docs not yet registered or classified, register them in small reversible slices, and record any intentional exclusions with a machine-checkable rationale.
-5. Finish the current B11 transfer-report contract semantics slice: preserve local report command semantics, make `publish-last-report` the only tracked handoff upload source, keep `show-last-report` local-only, and run the targeted transfer tests before PR creation.
-6. Add the deterministic transfer outbox context projection to the rule-refresh handshake roadmap: every `.agentic/transfer/outbox/last_result.txt` write should embed a freshly extracted machine-readable header from canonical sources.
-7. Introduce `.agentic/dialogue_rules.yaml` only as a tested rule-management slice, not as an unregistered parallel rule table.
-8. Ensure every new documentation artifact is registered or classified through the documentation-management system, and every new durable rule is registered through the rule-management system with validation and preservation anchors where appropriate.
-9. Finish the documentation-management foundation through small, additive, reversible, test-backed registry slices.
-10. Use the registry to make status, handoff, evidence, artifacts, transfer outbox state, and retention/GC behavior visible and machine-checkable.
-11. Build the GUI as a control surface over already-hardened read-only or bounded actions.
-12. Defer Pattern Advisor expansion until the document, rule, evidence, and transfer substrates are stable.
+1. Close the current PR1054/B11 slice without further local product work: verify the PR state/CI, merge only when clean, sync main, run post-merge handoff checks, and preserve evidence.
+2. Add the transfer-wrapper branch-safety hardening slice immediately after PR1054: `transfer push-current` must push the actual current branch or fail closed; mutating transfer wrappers must record and validate current branch, requested branch, target branch, upstream branch, and repo head before executing.
+3. Add the fail-closed precondition-chain hardening slice immediately after the wrapper branch-safety slice: a failed branch switch, wrong branch, dirty blocker, failed `run-and-log`, or failed transfer report publication must block every following workflow step until explicitly resolved.
+4. Clean the active rule semantics before final hardening: remove `w` from active dialogue rules, make `d/f/g` the only preferred signals, classify or obsolete legacy communication anchors, and update tests/compiled context through the rule-management workflow.
+5. Complete a documentation-registry coverage audit before final hardening: identify active docs not yet registered or classified, register them in small reversible slices, and record any intentional exclusions with a machine-checkable rationale.
+6. Finish any remaining B11 transfer-report contract semantics follow-up: preserve local report command semantics, make `publish-last-report` the only tracked handoff upload source, keep `show-last-report` local-only, and run the targeted transfer tests before PR creation.
+7. Add the deterministic transfer outbox context projection to the rule-refresh handshake roadmap: every `.agentic/transfer/outbox/last_result.txt` write should embed a freshly extracted machine-readable header from canonical sources.
+8. Introduce `.agentic/dialogue_rules.yaml` only as a tested rule-management slice, not as an unregistered parallel rule table.
+9. Ensure every new documentation artifact is registered or classified through the documentation-management system, and every new durable rule is registered through the rule-management system with validation and preservation anchors where appropriate.
+10. Finish the documentation-management foundation through small, additive, reversible, test-backed registry slices.
+11. Use the registry to make status, handoff, evidence, artifacts, transfer outbox state, and retention/GC behavior visible and machine-checkable.
+12. Build the GUI as a control surface over already-hardened read-only or bounded actions.
+13. Defer Pattern Advisor expansion until the document, rule, evidence, and transfer substrates are stable.
 
 ## Work Model Direction
 
@@ -112,23 +113,49 @@ The current transfer line has these remaining work items from the successor-hand
 1. Inspect and repair the existing branch `feature/b11-transfer-report-contract-semantics` without blindly overwriting dirty local work.
 2. Fix `run-and-log` and `run-sequence-and-log` so their terminal short output reports local report writing only: `TRANSFER_REPORT_WRITTEN=done`, `LOCAL_REPORT=docs/reports/transfer_runs/...`, and `CHAT_REPLY=d | NEXT=Run transfer publish-last-report`.
 3. Preserve the JSON report's underlying command semantics: `final_signal`, `returncode`, and the original `next_action` must not be replaced by the publish step.
-4. Keep `publish-last-report` as the only source of tracked handoff upload semantics: `TRANSFER_UPLOAD=done`, `REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/...`, and `CHAT_REPLY=g`.
-5. Keep `show-last-report` local-only; it must not imply a tracked handoff or remote upload.
-6. Keep gitignored local reports under `docs/reports/transfer_runs/` and tracked handoff reports under `docs/reports/terminal/transfer_handoff_reports/`.
-7. Move future local-to-LLM exchange toward exactly one canonical outbox file, `.agentic/transfer/outbox/last_result.txt`, generated as JSON with a deterministic context header extracted from canonical sources at each write.
-8. Move future LLM-to-local exchange toward exactly one canonical inbox file, `.agentic/transfer/inbox/next_command.py.txt`, overwritten rather than accumulated.
-9. Implement a local Python outbox-header builder that reads and hashes canonical sources, extracts dialogue/transfer priorities, embeds repo state, and fails closed on missing or contradictory sources.
-10. Introduce `.agentic/dialogue_rules.yaml` only after schema, parser, tests, compiled-context integration, rule-mechanism inventory integration, and protected-change planning are ready.
-11. Register or classify every new planning/governance/status/evidence document in the documentation-management system; do not create untracked documentation islands.
-12. Register every new durable dialogue, transfer, or workflow rule in the rule-management system; do not rely on chat-only or document-only instructions when the rule affects executable behavior.
-13. After green targeted tests, commit, push, create a PR only if there is a real diff against `origin/main`, wait for CI, merge only when clean, sync main, and run the post-merge handoff refresh status.
-14. If post-merge status is `REFRESH_REQUIRED`, create and merge the administrative handoff-refresh PR through existing safe wrappers before continuing product work.
+4. Keep `publish-last-report` as the only source of tracked handoff upload semantics: `TRANSFER_UPLOAD=done`, `REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/...`, and `CHAT_REPLY=g` for successful published reports.
+5. `publish-last-report` must publish failed reports as evidence without emitting `CHAT_REPLY=g`; failed published reports must emit a failure reply and a next action to inspect the published handoff report.
+6. Keep `show-last-report` local-only; it must not imply a tracked handoff or remote upload.
+7. Keep gitignored local reports under `docs/reports/transfer_runs/` and tracked handoff reports under `docs/reports/terminal/transfer_handoff_reports/`.
+8. Move future local-to-LLM exchange toward exactly one canonical outbox file, `.agentic/transfer/outbox/last_result.txt`, generated as JSON with a deterministic context header extracted from canonical sources at each write.
+9. Move future LLM-to-local exchange toward exactly one canonical inbox file, `.agentic/transfer/inbox/next_command.py.txt`, overwritten rather than accumulated.
+10. Implement a local Python outbox-header builder that reads and hashes canonical sources, extracts dialogue/transfer priorities, embeds repo state, and fails closed on missing or contradictory sources.
+11. Introduce `.agentic/dialogue_rules.yaml` only after schema, parser, tests, compiled-context integration, rule-mechanism inventory integration, and protected-change planning are ready.
+12. Register or classify every new planning/governance/status/evidence document in the documentation-management system; do not create untracked documentation islands.
+13. Register every new durable dialogue, transfer, or workflow rule in the rule-management system; do not rely on chat-only or document-only instructions when the rule affects executable behavior.
+14. After green targeted tests, commit, push, create a PR only if there is a real diff against `origin/main`, wait for CI, merge only when clean, sync main, and run the post-merge handoff refresh status.
+15. If post-merge status is `REFRESH_REQUIRED`, create and merge the administrative handoff-refresh PR through existing safe wrappers before continuing product work.
+
+## Transfer Wrapper Branch-Safety Roadmap
+
+The current workflow exposed a direct wrapper branch-safety bug: `transfer push-current` can report success for a push that targets `main` even when the intended feature branch contains the pending work. This is a hard workflow safety defect, not a usability issue.
+
+This hardening line is the first follow-up after PR1054 closeout and before broader fail-closed precondition-chain work.
+
+Required rules:
+
+1. `transfer push-current` must derive the branch to push from the actual current branch at execution time, not from stale rule-ack metadata, default branch state, cached transfer state, or an implicit `main` fallback.
+2. If actual current branch, requested branch, upstream branch, and pushed ref differ, the command must fail closed with `chat_reply=f`, report the exact mismatch, and perform no push.
+3. `push-current` must not silently set `main` upstream or push `main` when the local current branch is a feature branch.
+4. Mutating wrappers must include precondition fields in their JSON result: `current_branch`, `target_branch`, `pushed_branch` where applicable, `expected_branch` where supplied, `repo_head`, `upstream_ref`, `dirty_state`, `workflow_state`, and `blocking_reason`.
+5. A wrapper result status must distinguish command execution success from workflow safety; `git push` returning zero is not sufficient for workflow `PASS` when the pushed ref is wrong.
+6. `rules acknowledge` metadata must not cause later wrappers to select `main` when the worktree has moved to a feature branch.
+7. Commit, push, PR, merge, run-and-log, publish-last-report, and branch-switch wrapper paths should accept an explicit `--expected-branch` or equivalent typed work-order branch contract.
+8. The GUI must not expose branch-mutating buttons unless current branch, expected branch, dirty state, and workflow state are consistent.
+
+Acceptance tests:
+
+- On a feature branch, `transfer push-current` pushes that feature branch and never pushes `main`.
+- On `main`, `transfer push-current` refuses product-work pushes unless an explicit safe administrative context allows it.
+- If current branch and requested/expected branch differ, no push is attempted and the result is `BLOCKED`/`chat_reply=f`.
+- If upstream tracking points to a different ref than the current branch, `push-current` fails closed and reports the mismatch.
+- Wrapper JSON includes branch and workflow-safety fields sufficient for LLM/GUI consumers to reject stale or wrong-branch continuations.
 
 ## Fail-Closed Precondition Chain Roadmap
 
 The current workflow still permits a dangerous interpretation error: a later diagnostic command can return `PASS` after an earlier precondition command returned `FAIL`. That must never be interpreted as authorization to continue.
 
-This hardening line must be inserted immediately after the current interrupted B11 recovery/slice and before further rule/outbox/gui hardening.
+This hardening line must be inserted immediately after the transfer-wrapper branch-safety slice and before further rule/outbox/gui hardening.
 
 Required rules:
 
@@ -166,12 +193,12 @@ This focus must be recorded before completing the documentation-management phase
 
 Implementation must not continue product work from a dirty or wrong branch. The practical sequence is:
 
-1. stabilize and document the current interrupted B11 local state without further mutation on the wrong branch;
-2. complete the current B11 recovery/slice only after branch and dirty-state blockers are resolved;
-3. implement the fail-closed precondition-chain hardening slice immediately after the current recovery/slice;
+1. close PR1054/B11 with PR/CI/merge evidence and no further local product work;
+2. implement the transfer-wrapper branch-safety hardening slice;
+3. implement the fail-closed precondition-chain hardening slice;
 4. clean active dialogue/transfer rules in a protected rule-management slice;
 5. audit and complete documentation-registry coverage for active docs in small reversible slices;
-6. finish any remaining B11 transfer-report contract semantics repair;
+6. finish any remaining B11 transfer-report contract semantics follow-up;
 7. add any new documentation artifacts to the documentation-management system and any new durable rules to the rule-management system;
 8. continue the handoff/status freshness guard and documentation-registry work;
 9. complete the documentation-management foundation enough for artifact and evidence visibility;
