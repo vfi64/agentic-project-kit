@@ -15,6 +15,7 @@ EXPECTED_MECHANISMS = {
     "portable-execution-rules",
     "evidence-guard",
     "typed-work-order-runner",
+    "transfer-safety-rules",
     "release-state-validation",
     "post-release-archive-check",
 }

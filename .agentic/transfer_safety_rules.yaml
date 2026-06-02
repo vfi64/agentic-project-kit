@@ -1,0 +1,43 @@
+schema_version: 1
+purpose: Machine-readable safety rules for the LLM-to-local and local-to-LLM transfer
+  boundary.
+canonical_transfer_files:
+  llm_to_local: .agentic/transfer/inbox/next_command.py.txt
+  local_to_llm: .agentic/transfer/outbox/last_result.txt
+transfer_priorities:
+- remote_repo_backed_work_first
+- canonical_transfer_files_second
+- copy_paste_only_fallback
+known_failure_classes:
+- wrong_branch_execution
+- stale_local_branch_after_fetch
+- rule_acknowledgement_head_mismatch
+- dirty_worktree_before_transfer
+- accumulated_untracked_transfer_or_report_files
+- failed_report_publication_misread_as_go_signal
+- diagnostic_status_success_masking_earlier_blocker
+- heredoc_style_shell_mutation
+- unescaped_shell_substitution
+- raw_newline_in_python_string_literals
+- quote_escape_drift
+- fragile_multiline_inline_python_commands
+- long_shell_mutation_blocks
+- line_ending_drift
+- python_transfer_txt_suffix_not_syntax_validated
+- partial_patch_application
+- fragile_text_anchor_patching
+- accidental_compatibility_key_removal
+- destructive_use_of_moving_references
+- implicit_main_push_or_upstream_mutation
+- syntax_broken_python_before_cli_import
+preflight_rules:
+- expected_branch_must_match
+- worktree_must_be_clean_before_transfer
+- local_head_must_match_upstream_head
+- rule_acknowledgement_must_match_head
+- canonical_inbox_file_must_exist
+- canonical_inbox_file_must_compile_as_python_source
+post_patch_rules:
+- changed_python_files_must_compile_before_cli_import
+- failed_guard_must_emit_final_signal_f
+- failed_guard_must_not_emit_go_semantics
