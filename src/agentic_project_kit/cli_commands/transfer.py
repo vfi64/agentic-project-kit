@@ -167,8 +167,9 @@ def closeout(
 
 @transfer_app.command("remote-next")
 def remote_next(
-    branch: str = typer.Argument(
-        ..., help="Remote transfer branch to fetch, switch to, pull, and run."
+    branch: str | None = typer.Argument(
+        None,
+        help="Optional remote transfer branch. If omitted, read branch from the transfer order.",
     ),
     json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
 ) -> None:

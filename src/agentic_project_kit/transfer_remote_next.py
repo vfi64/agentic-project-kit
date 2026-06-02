@@ -3,8 +3,12 @@ from __future__ import annotations
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
+
+import yaml
 
 from agentic_project_kit.transfer_local_runner import TransferLocalRun, run_local_transfer
+from agentic_project_kit.transfer_runner import DEFAULT_INBOX
 
 
 @dataclass(frozen=True)
@@ -59,9 +63,31 @@ def _validate_branch_name(branch: str) -> str:
     return value
 
 
-def run_remote_next_transfer(project_root: Path, branch: str) -> TransferRemoteNextRun:
+def _read_transfer_order_data(path: Path) -> dict[str, Any]:
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(f"transfer order not found: {path}") from exc
+    if not isinstance(data, dict):
+        raise ValueError(f"transfer order must be a mapping: {path}")
+    return data
+
+
+def resolve_remote_next_branch(project_root: Path, branch: str | None = None, path: Path = DEFAULT_INBOX) -> str:
+    if branch is not None and branch.strip():
+        return _validate_branch_name(branch)
     root = project_root.resolve()
-    safe_branch = _validate_branch_name(branch)
+    order_path = path if path.is_absolute() else root / path
+    data = _read_transfer_order_data(order_path)
+    order_branch = data.get("branch")
+    if not isinstance(order_branch, str) or not order_branch.strip():
+        raise ValueError(f"transfer order must define a non-empty branch: {path}")
+    return _validate_branch_name(order_branch)
+
+
+def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> TransferRemoteNextRun:
+    root = project_root.resolve()
+    safe_branch = resolve_remote_next_branch(root, branch)
 
     _ensure_clean(root)
     _run(["git", "fetch", "origin", safe_branch], root)

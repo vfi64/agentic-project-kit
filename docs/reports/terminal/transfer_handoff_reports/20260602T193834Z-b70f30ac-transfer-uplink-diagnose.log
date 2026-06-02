@@ -1,0 +1,117 @@
+TRANSFER_UPLINK_RUN=20260602T193834Z-b70f30ac
+LABEL=transfer-uplink-diagnose
+COMMAND=<sequence>
+RETURNCODE=0
+### STDOUT ###
+### STEP 1 STDOUT ###
+{
+  "action": "repo-status",
+  "command": [
+    "git",
+    "status",
+    "--short"
+  ],
+  "next_action": "Inspect changes, commit explicit paths, or clean the worktree.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": " M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n?? .agentic/transfer/outbox/\n?? docs/reports/terminal/release-publish-agentic-cli-next-chat-prompt.md\n?? docs/reports/terminal/release-publish-agentic-cli-wip-handoff.md\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193000Z-ef75688b-release-publish-branch-sync-check.json\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193000Z-ef75688b-release-publish-branch-sync-check.log\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193056Z-b5389601-release-publish-branch-sync-check.json\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193056Z-b5389601-release-publish-branch-sync-check.log\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193519Z-05276939-release-publish-show-last-report.json\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193519Z-05276939-release-publish-show-last-report.log\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193728Z-2259c9ba-release-publish-uplink-check.json\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193728Z-2259c9ba-release-publish-uplink-check.log\n"
+}
+FINAL_SIGNAL=d
+FINAL_NEXT=Inspect changes, commit explicit paths, or clean the worktree.
+CHAT_REPLY=d | NEXT=Inspect changes, commit explicit paths, or clean the worktree.
+### STEP 2 STDOUT ###
+{
+  "chat_reply": "d | NEXT=Run transfer publish-last-report",
+  "command": [
+    "<sequence>"
+  ],
+  "final_signal": "f",
+  "label": "release-publish-uplink-check",
+  "latest_json_path": "docs/reports/transfer_runs/latest-transfer-report.json",
+  "latest_log_path": "docs/reports/transfer_runs/latest-transfer-report.log",
+  "next_action": "Inspect latest-transfer-uplink log before continuing.",
+  "remote_report_path": "docs/reports/transfer_runs/20260602T193728Z-2259c9ba-release-publish-uplink-check.json",
+  "returncode": 1,
+  "run_id": "20260602T193728Z-2259c9ba",
+  "schema_version": 1,
+  "sequence_steps": [
+    {
+      "command": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "repo-status"
+      ],
+      "final_signal": "d",
+      "index": 1,
+      "next_action": "Inspect changes, commit explicit paths, or clean the worktree.",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\n  \"action\": \"repo-status\",\n  \"command\": [\n    \"git\",\n    \"status\",\n    \"--short\"\n  ],\n  \"next_action\": \"Inspect changes, commit explicit paths, or clean the worktree.\",\n  \"result_status\": \"PASS\",\n  \"returncode\": 0,\n  \"stderr\": \"\",\n  \"stdout\": \" M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\\n?? .agentic/transfer/outbox/\\n?? docs/reports/terminal/release-publish-agentic-cli-next-chat-prompt.md\\n?? docs/reports/terminal/release-publish-agentic-cli-wip-handoff.md\\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193000Z-ef75688b-release-publish-branch-sync-check.json\\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193000Z-ef75688b-release-publish-branch-sync-check.log\\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193056Z-b5389601-release-publish-branch-sync-check.json\\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193056Z-b5389601-release-publish-branch-sync-check.log\\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193519Z-05276939-release-publish-show-last-report.json\\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193519Z-05276939-release-publish-show-last-report.log\\n\"\n}\nFINAL_SIGNAL=d\nFINAL_NEXT=Inspect changes, commit explicit paths, or clean the worktree.\nCHAT_REPLY=d | NEXT=Inspect changes, commit explicit paths, or clean the worktree.\n"
+    },
+    {
+      "command": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "repo-log",
+        "--limit",
+        "5"
+      ],
+      "final_signal": "d",
+      "index": 2,
+      "next_action": "Use commit SHAs for guarded PR or merge work.",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\n  \"action\": \"repo-log\",\n  \"command\": [\n    \"git\",\n    \"log\",\n    \"-5\",\n    \"--oneline\"\n  ],\n  \"next_action\": \"Use commit SHAs for guarded PR or merge work.\",\n  \"result_status\": \"PASS\",\n  \"returncode\": 0,\n  \"stderr\": \"\",\n  \"stdout\": \"5d6bdf5 Harden release publish head guards\\ne471401 Refresh handoff state after PR1077 (#1078)\\n435cb68 Harden ns up PR merge path (#1077)\\nb698cb3 Record remaining Git mutation audit after PR1075 (#1076)\\nc20c6b0 Refresh handoff state after PR1074 (#1075)\\n\"\n}\nFINAL_SIGNAL=d\nFINAL_NEXT=Use commit SHAs for guarded PR or merge work.\nCHAT_REPLY=d | NEXT=Use commit SHAs for guarded PR or merge work.\n"
+    },
+    {
+      "command": [
+        "./.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_release_publish_core.py",
+        "-q"
+      ],
+      "final_signal": "f",
+      "index": 3,
+      "next_action": "Inspect latest-transfer-uplink log before continuing.",
+      "returncode": 1,
+      "stderr": "",
+      "stdout": "....FF                                                                   [100%]\n=================================== FAILURES ===================================\n______ test_publish_release_blocks_when_expected_head_drifted_before_tag _______\n\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1083b8170>\ntmp_path = PosixPath('/private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pytest-of-hof/pytest-3173/test_publish_release_blocks_wh2')\ncapsys = <_pytest.capture.CaptureFixture object at 0x108259450>\n\n    def test_publish_release_blocks_when_expected_head_drifted_before_tag(monkeypatch, tmp_path: Path, capsys):\n        calls = []\n    \n        def fake_run_command(repo_root, args):\n            calls.append(args)\n            if args == [\"git\", \"branch\", \"--show-current\"]:\n                return CommandResult(0, \"main\")\n            if args in ([\"git\", \"status\", \"--short\"], [\"git\", \"status\", \"--porcelain\"]):\n                return CommandResult(0, \"\")\n            if args == [\"git\", \"rev-parse\", \"HEAD\"]:\n                return CommandResult(0, \"b\" * 40)\n            if args == [\"git\", \"pull\", \"--ff-only\", \"origin\", \"main\"]:\n                return CommandResult(0, \"\")\n            if args == [\"./ns\", \"release-gate\", \"0.4.4\"]:\n                return CommandResult(0, \"release gate pass\")\n            if args == [\"git\", \"rev-parse\", \"v0.4.4\"]:\n                return CommandResult(1, \"fatal: ambiguous argument\")\n            if args == [\"git\", \"ls-remote\", \"--tags\", \"origin\", \"v0.4.4\"]:\n                return CommandResult(0, \"\")\n            if args == [\"gh\", \"release\", \"view\", \"v0.4.4\"]:\n                return CommandResult(1, \"release not found\")\n            if args[:3] == [\"gh\", \"run\", \"list\"]:\n                return CommandResult(0, \"workflow list\")\n            if args == [\"git\", \"log\", \"--oneline\", \"-8\"]:\n                return CommandResult(0, \"\")\n            raise AssertionError(f\"unexpected command: {args}\")\n    \n        monkeypatch.setattr(release_publish_core, \"run_command\", fake_run_command)\n    \n        assert publish_release(\n            \"0.4.4\",\n            \"publish-v0.4.4\",\n            tmp_path,\n            sleep_seconds=0,\n            expected_head_sha=\"a\" * 40,\n        ) == 1\n    \n        output = capsys.readouterr().out\n>       assert \"ERROR: HEAD does not match expected release head before main update\" in output\nE       AssertionError: assert 'ERROR: HEAD does not match expected release head before main update' in '\\n\\n\\n-------------------------------------------------------------------------\\n------------------------------------...W STATUS ###\\nworkflow list\\n\\n### VERIFY COMPLETED RELEASE ###\\n\\n### FINAL STATE ###\\nmain\\n\\n### RESULT: FAIL ###\\n'\n\ntests/test_release_publish_core.py:128: AssertionError\n________ test_publish_release_blocks_when_created_tag_points_elsewhere _________\n\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1082648d0>\ntmp_path = PosixPath('/private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pytest-of-hof/pytest-3173/test_publish_release_blocks_wh3')\ncapsys = <_pytest.capture.CaptureFixture object at 0x1081a2650>\n\n    def test_publish_release_blocks_when_created_tag_points_elsewhere(monkeypatch, tmp_path: Path, capsys):\n        calls = []\n        head_calls = 0\n    \n        def fake_run_command(repo_root, args):\n            nonlocal head_calls\n            calls.append(args)\n            if args == [\"git\", \"branch\", \"--show-current\"]:\n                return CommandResult(0, \"main\")\n            if args in ([\"git\", \"status\", \"--short\"], [\"git\", \"status\", \"--porcelain\"]):\n                return CommandResult(0, \"\")\n            if args == [\"git\", \"rev-parse\", \"HEAD\"]:\n                head_calls += 1\n                return CommandResult(0, \"a\" * 40)\n            if args == [\"git\", \"pull\", \"--ff-only\", \"origin\", \"main\"]:\n                return CommandResult(0, \"\")\n            if args == [\"./ns\", \"release-gate\", \"0.4.4\"]:\n                return CommandResult(0, \"release gate pass\")\n            if args == [\"git\", \"rev-parse\", \"v0.4.4\"]:\n                return CommandResult(1, \"fatal: ambiguous argument\")\n            if args == [\"git\", \"ls-remote\", \"--tags\", \"origin\", \"v0.4.4\"]:\n                return CommandResult(0, \"\")\n            if args == [\"gh\", \"release\", \"view\", \"v0.4.4\"]:\n                return CommandResult(1, \"release not found\")\n            if args == [\"git\", \"tag\", \"v0.4.4\"]:\n                return CommandResult(0, \"\")\n            if args == [\"git\", \"rev-list\", \"-n\", \"1\", \"v0.4.4\"]:\n                return CommandResult(0, \"b\" * 40)\n            if args[:3] == [\"gh\", \"run\", \"list\"]:\n                return CommandResult(0, \"workflow list\")\n            if args == [\"git\", \"log\", \"--oneline\", \"-8\"]:\n                return CommandResult(0, \"\")\n            raise AssertionError(f\"unexpected command: {args}\")\n    \n        monkeypatch.setattr(release_publish_core, \"run_command\", fake_run_command)\n    \n        assert publish_release(\n            \"0.4.4\",\n            \"publish-v0.4.4\",\n            tmp_path,\n            sleep_seconds=0,\n            expected_head_sha=\"a\" * 40,\n        ) == 1\n    \n        output = capsys.readouterr().out\n        assert \"ERROR: created tag does not point at current HEAD\" in output\n        assert [\"git\", \"push\", \"origin\", \"v0.4.4\"] not in calls\n>       assert head_calls >= 2\nE       assert 1 >= 2\n\ntests/test_release_publish_core.py:180: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_release_publish_core.py::test_publish_release_blocks_when_expected_head_drifted_before_tag\nFAILED tests/test_release_publish_core.py::test_publish_release_blocks_when_created_tag_points_elsewhere\n2 failed, 4 passed in 0.03s\n"
+    }
+  ],
+  "stderr": "### STEP 1 STDERR ###\n\n### STEP 2 STDERR ###\n\n### STEP 3 STDERR ###\n\n",
+  "stdout": "### STEP 1 STDOUT ###\n{\n  \"action\": \"repo-status\",\n  \"command\": [\n    \"git\",\n    \"status\",\n    \"--short\"\n  ],\n  \"next_action\": \"Inspect changes, commit explicit paths, or clean the worktree.\",\n  \"result_status\": \"PASS\",\n  \"returncode\": 0,\n  \"stderr\": \"\",\n  \"stdout\": \" M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\\n?? .agentic/transfer/outbox/\\n?? docs/reports/terminal/release-publish-agentic-cli-next-chat-prompt.md\\n?? docs/reports/terminal/release-publish-agentic-cli-wip-handoff.md\\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193000Z-ef75688b-release-publish-branch-sync-check.json\\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193000Z-ef75688b-release-publish-branch-sync-check.log\\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193056Z-b5389601-release-publish-branch-sync-check.json\\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193056Z-b5389601-release-publish-branch-sync-check.log\\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193519Z-05276939-release-publish-show-last-report.json\\n?? docs/reports/terminal/transfer_handoff_reports/20260602T193519Z-05276939-release-publish-show-last-report.log\\n\"\n}\nFINAL_SIGNAL=d\nFINAL_NEXT=Inspect changes, commit explicit paths, or clean the worktree.\nCHAT_REPLY=d | NEXT=Inspect changes, commit explicit paths, or clean the worktree.\n### STEP 2 STDOUT ###\n{\n  \"action\": \"repo-log\",\n  \"command\": [\n    \"git\",\n    \"log\",\n    \"-5\",\n    \"--oneline\"\n  ],\n  \"next_action\": \"Use commit SHAs for guarded PR or merge work.\",\n  \"result_status\": \"PASS\",\n  \"returncode\": 0,\n  \"stderr\": \"\",\n  \"stdout\": \"5d6bdf5 Harden release publish head guards\\ne471401 Refresh handoff state after PR1077 (#1078)\\n435cb68 Harden ns up PR merge path (#1077)\\nb698cb3 Record remaining Git mutation audit after PR1075 (#1076)\\nc20c6b0 Refresh handoff state after PR1074 (#1075)\\n\"\n}\nFINAL_SIGNAL=d\nFINAL_NEXT=Use commit SHAs for guarded PR or merge work.\nCHAT_REPLY=d | NEXT=Use commit SHAs for guarded PR or merge work.\n### STEP 3 STDOUT ###\n....FF                                                                   [100%]\n=================================== FAILURES ===================================\n______ test_publish_release_blocks_when_expected_head_drifted_before_tag _______\n\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1083b8170>\ntmp_path = PosixPath('/private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pytest-of-hof/pytest-3173/test_publish_release_blocks_wh2')\ncapsys = <_pytest.capture.CaptureFixture object at 0x108259450>\n\n    def test_publish_release_blocks_when_expected_head_drifted_before_tag(monkeypatch, tmp_path: Path, capsys):\n        calls = []\n    \n        def fake_run_command(repo_root, args):\n            calls.append(args)\n            if args == [\"git\", \"branch\", \"--show-current\"]:\n                return CommandResult(0, \"main\")\n            if args in ([\"git\", \"status\", \"--short\"], [\"git\", \"status\", \"--porcelain\"]):\n                return CommandResult(0, \"\")\n            if args == [\"git\", \"rev-parse\", \"HEAD\"]:\n                return CommandResult(0, \"b\" * 40)\n            if args == [\"git\", \"pull\", \"--ff-only\", \"origin\", \"main\"]:\n                return CommandResult(0, \"\")\n            if args == [\"./ns\", \"release-gate\", \"0.4.4\"]:\n                return CommandResult(0, \"release gate pass\")\n            if args == [\"git\", \"rev-parse\", \"v0.4.4\"]:\n                return CommandResult(1, \"fatal: ambiguous argument\")\n            if args == [\"git\", \"ls-remote\", \"--tags\", \"origin\", \"v0.4.4\"]:\n                return CommandResult(0, \"\")\n            if args == [\"gh\", \"release\", \"view\", \"v0.4.4\"]:\n                return CommandResult(1, \"release not found\")\n            if args[:3] == [\"gh\", \"run\", \"list\"]:\n                return CommandResult(0, \"workflow list\")\n            if args == [\"git\", \"log\", \"--oneline\", \"-8\"]:\n                return CommandResult(0, \"\")\n            raise AssertionError(f\"unexpected command: {args}\")\n    \n        monkeypatch.setattr(release_publish_core, \"run_command\", fake_run_command)\n    \n        assert publish_release(\n            \"0.4.4\",\n            \"publish-v0.4.4\",\n            tmp_path,\n            sleep_seconds=0,\n            expected_head_sha=\"a\" * 40,\n        ) == 1\n    \n        output = capsys.readouterr().out\n>       assert \"ERROR: HEAD does not match expected release head before main update\" in output\nE       AssertionError: assert 'ERROR: HEAD does not match expected release head before main update' in '\\n\\n\\n-------------------------------------------------------------------------\\n------------------------------------...W STATUS ###\\nworkflow list\\n\\n### VERIFY COMPLETED RELEASE ###\\n\\n### FINAL STATE ###\\nmain\\n\\n### RESULT: FAIL ###\\n'\n\ntests/test_release_publish_core.py:128: AssertionError\n________ test_publish_release_blocks_when_created_tag_points_elsewhere _________\n\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1082648d0>\ntmp_path = PosixPath('/private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/pytest-of-hof/pytest-3173/test_publish_release_blocks_wh3')\ncapsys = <_pytest.capture.CaptureFixture object at 0x1081a2650>\n\n    def test_publish_release_blocks_when_created_tag_points_elsewhere(monkeypatch, tmp_path: Path, capsys):\n        calls = []\n        head_calls = 0\n    \n        def fake_run_command(repo_root, args):\n            nonlocal head_calls\n            calls.append(args)\n            if args == [\"git\", \"branch\", \"--show-current\"]:\n                return CommandResult(0, \"main\")\n            if args in ([\"git\", \"status\", \"--short\"], [\"git\", \"status\", \"--porcelain\"]):\n                return CommandResult(0, \"\")\n            if args == [\"git\", \"rev-parse\", \"HEAD\"]:\n                head_calls += 1\n                return CommandResult(0, \"a\" * 40)\n            if args == [\"git\", \"pull\", \"--ff-only\", \"origin\", \"main\"]:\n                return CommandResult(0, \"\")\n            if args == [\"./ns\", \"release-gate\", \"0.4.4\"]:\n                return CommandResult(0, \"release gate pass\")\n            if args == [\"git\", \"rev-parse\", \"v0.4.4\"]:\n                return CommandResult(1, \"fatal: ambiguous argument\")\n            if args == [\"git\", \"ls-remote\", \"--tags\", \"origin\", \"v0.4.4\"]:\n                return CommandResult(0, \"\")\n            if args == [\"gh\", \"release\", \"view\", \"v0.4.4\"]:\n                return CommandResult(1, \"release not found\")\n            if args == [\"git\", \"tag\", \"v0.4.4\"]:\n                return CommandResult(0, \"\")\n            if args == [\"git\", \"rev-list\", \"-n\", \"1\", \"v0.4.4\"]:\n                return CommandResult(0, \"b\" * 40)\n            if args[:3] == [\"gh\", \"run\", \"list\"]:\n                return CommandResult(0, \"workflow list\")\n            if args == [\"git\", \"log\", \"--oneline\", \"-8\"]:\n                return CommandResult(0, \"\")\n            raise AssertionError(f\"unexpected command: {args}\")\n    \n        monkeypatch.setattr(release_publish_core, \"run_command\", fake_run_command)\n    \n        assert publish_release(\n            \"0.4.4\",\n            \"publish-v0.4.4\",\n            tmp_path,\n            sleep_seconds=0,\n            expected_head_sha=\"a\" * 40,\n        ) == 1\n    \n        output = capsys.readouterr().out\n        assert \"ERROR: created tag does not point at current HEAD\" in output\n        assert [\"git\", \"push\", \"origin\", \"v0.4.4\"] not in calls\n>       assert head_calls >= 2\nE       assert 1 >= 2\n\ntests/test_release_publish_core.py:180: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_release_publish_core.py::test_publish_release_blocks_when_expected_head_drifted_before_tag\nFAILED tests/test_release_publish_core.py::test_publish_release_blocks_when_created_tag_points_elsewhere\n2 failed, 4 passed in 0.03s\n",
+  "timestamped_log_path": "docs/reports/transfer_runs/20260602T193728Z-2259c9ba-release-publish-uplink-check.log",
+  "transfer_report_written": "done",
+  "transfer_upload": "done"
+}
+### STEP 3 STDOUT ###
+{
+  "action": "repo-diff",
+  "command": [
+    "git",
+    "diff",
+    "--name-only"
+  ],
+  "next_action": "Review the actual diff before committing or protected planning.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\ndocs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n"
+}
+FINAL_SIGNAL=d
+FINAL_NEXT=Review the actual diff before committing or protected planning.
+CHAT_REPLY=d | NEXT=Review the actual diff before committing or protected planning.
+### STDERR ###
+### STEP 1 STDERR ###
+
+### STEP 2 STDERR ###
+
+### STEP 3 STDERR ###
+### SUMMARY ###
+TRANSFER_REPORT_WRITTEN=done
+LOCAL_REPORT=docs/reports/transfer_runs/20260602T193834Z-b70f30ac-transfer-uplink-diagnose.json
+FINAL_SIGNAL=d
+FINAL_NEXT=Continue with the next safe transfer step.
+CHAT_REPLY=d | NEXT=Run transfer publish-last-report
