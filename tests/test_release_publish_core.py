@@ -22,6 +22,8 @@ def test_publish_release_blocks_when_remote_tag_lookup_fails(monkeypatch, tmp_pa
             return CommandResult(0, "main")
         if args in (["git", "status", "--short"], ["git", "status", "--porcelain"]):
             return CommandResult(0, "")
+        if args == ["git", "rev-parse", "HEAD"]:
+            return CommandResult(0, "a" * 40)
         if args == ["git", "pull", "--ff-only", "origin", "main"]:
             return CommandResult(0, "updated")
         if args == ["./ns", "release-gate", "0.4.4"]:
@@ -57,6 +59,8 @@ def test_publish_release_blocks_when_github_release_lookup_is_inconclusive(monke
             return CommandResult(0, "main")
         if args in (["git", "status", "--short"], ["git", "status", "--porcelain"]):
             return CommandResult(0, "")
+        if args == ["git", "rev-parse", "HEAD"]:
+            return CommandResult(0, "a" * 40)
         if args == ["git", "pull", "--ff-only", "origin", "main"]:
             return CommandResult(0, "updated")
         if args == ["./ns", "release-gate", "0.4.4"]:
@@ -81,3 +85,96 @@ def test_publish_release_blocks_when_github_release_lookup_is_inconclusive(monke
     assert "ERROR: GitHub release lookup failed: network unavailable" in output
     assert ["git", "tag", "v0.4.4"] not in calls
     assert ["git", "push", "origin", "v0.4.4"] not in calls
+
+
+def test_publish_release_blocks_when_expected_head_drifted_before_tag(monkeypatch, tmp_path: Path, capsys):
+    calls = []
+
+    def fake_run_command(repo_root, args):
+        calls.append(args)
+        if args == ["git", "branch", "--show-current"]:
+            return CommandResult(0, "main")
+        if args in (["git", "status", "--short"], ["git", "status", "--porcelain"]):
+            return CommandResult(0, "")
+        if args == ["git", "rev-parse", "HEAD"]:
+            return CommandResult(0, "b" * 40)
+        if args == ["git", "pull", "--ff-only", "origin", "main"]:
+            return CommandResult(0, "")
+        if args == ["./ns", "release-gate", "0.4.4"]:
+            return CommandResult(0, "release gate pass")
+        if args == ["git", "rev-parse", "v0.4.4"]:
+            return CommandResult(1, "fatal: ambiguous argument")
+        if args == ["git", "ls-remote", "--tags", "origin", "v0.4.4"]:
+            return CommandResult(0, "")
+        if args == ["gh", "release", "view", "v0.4.4"]:
+            return CommandResult(1, "release not found")
+        if args[:3] == ["gh", "run", "list"]:
+            return CommandResult(0, "workflow list")
+        if args == ["git", "log", "--oneline", "-8"]:
+            return CommandResult(0, "")
+        raise AssertionError(f"unexpected command: {args}")
+
+    monkeypatch.setattr(release_publish_core, "run_command", fake_run_command)
+
+    assert publish_release(
+        "0.4.4",
+        "publish-v0.4.4",
+        tmp_path,
+        sleep_seconds=0,
+        expected_head_sha="a" * 40,
+    ) == 1
+
+    output = capsys.readouterr().out
+    assert "ERROR: HEAD does not match expected release head before main update" in output
+    assert ["git", "tag", "v0.4.4"] not in calls
+    assert ["git", "push", "origin", "v0.4.4"] not in calls
+
+
+def test_publish_release_blocks_when_created_tag_points_elsewhere(monkeypatch, tmp_path: Path, capsys):
+    calls = []
+    head_calls = 0
+
+    def fake_run_command(repo_root, args):
+        nonlocal head_calls
+        calls.append(args)
+        if args == ["git", "branch", "--show-current"]:
+            return CommandResult(0, "main")
+        if args in (["git", "status", "--short"], ["git", "status", "--porcelain"]):
+            return CommandResult(0, "")
+        if args == ["git", "rev-parse", "HEAD"]:
+            head_calls += 1
+            return CommandResult(0, "a" * 40)
+        if args == ["git", "pull", "--ff-only", "origin", "main"]:
+            return CommandResult(0, "")
+        if args == ["./ns", "release-gate", "0.4.4"]:
+            return CommandResult(0, "release gate pass")
+        if args == ["git", "rev-parse", "v0.4.4"]:
+            return CommandResult(1, "fatal: ambiguous argument")
+        if args == ["git", "ls-remote", "--tags", "origin", "v0.4.4"]:
+            return CommandResult(0, "")
+        if args == ["gh", "release", "view", "v0.4.4"]:
+            return CommandResult(1, "release not found")
+        if args == ["git", "tag", "v0.4.4"]:
+            return CommandResult(0, "")
+        if args == ["git", "rev-list", "-n", "1", "v0.4.4"]:
+            return CommandResult(0, "b" * 40)
+        if args[:3] == ["gh", "run", "list"]:
+            return CommandResult(0, "workflow list")
+        if args == ["git", "log", "--oneline", "-8"]:
+            return CommandResult(0, "")
+        raise AssertionError(f"unexpected command: {args}")
+
+    monkeypatch.setattr(release_publish_core, "run_command", fake_run_command)
+
+    assert publish_release(
+        "0.4.4",
+        "publish-v0.4.4",
+        tmp_path,
+        sleep_seconds=0,
+        expected_head_sha="a" * 40,
+    ) == 1
+
+    output = capsys.readouterr().out
+    assert "ERROR: created tag does not point at current HEAD" in output
+    assert ["git", "push", "origin", "v0.4.4"] not in calls
+    assert head_calls >= 2
