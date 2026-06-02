@@ -413,3 +413,45 @@ mechanisms:
   - test-gates-docs
   tests:
   - tests/test_post_release.py
+- id: transfer-safety-rules
+  status: active
+  owner: execution-governance
+  category: governance
+  priority: 1
+  enforcement_phase: guard
+  conflict_domains:
+  - transfer-boundary
+  - generated-python-patch-safety
+  - local-to-llm-outbox
+  sources:
+  - path: .agentic/transfer_safety_rules.yaml
+    required_terms:
+    - raw_newline_in_python_string_literals
+    - python_transfer_txt_suffix_not_syntax_validated
+    - wrong_branch_execution
+    - changed_python_files_must_compile_before_cli_import
+  - path: src/agentic_project_kit/transfer_safety_context.py
+    required_terms:
+    - build_transfer_safety_header
+    - write_transfer_outbox
+    - OUTBOX_LAST_RESULT
+  - path: src/agentic_project_kit/transfer_uplink.py
+    required_terms:
+    - write_transfer_outbox
+    - run_and_log_transfer_command
+    - run_and_log_transfer_sequence
+  - path: tests/test_transfer_safety_context.py
+    required_terms:
+    - test_transfer_safety_header_contains_known_failure_classes
+    - test_transfer_outbox_is_json_with_safety_header
+  protected_rule_intent: Preserve machine-readable transfer safety rules and deterministic
+    local-to-LLM outbox headers so recurring generated patch and transfer drift is
+    visible before follow-up work.
+  surfaces:
+  - transfer-safety-rules-yaml
+  - transfer-safety-context
+  - transfer-outbox-header
+  - transfer-safety-tests
+  tests:
+  - tests/test_transfer_safety_context.py
+  - tests/test_transfer_uplink.py

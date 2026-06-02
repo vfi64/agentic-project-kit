@@ -52,3 +52,12 @@ rules:
   - avoid naked python
   surfaces:
   - .agentic/handoff_state.yaml
+- id: transfer-safety-rules-must-be-preserved
+  status: active
+  required_terms:
+  - raw_newline_in_python_string_literals
+  - python_transfer_txt_suffix_not_syntax_validated
+  - wrong_branch_execution
+  surfaces:
+  - .agentic/transfer_safety_rules.yaml
+  - src/agentic_project_kit/transfer_safety_context.py

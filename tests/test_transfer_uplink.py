@@ -301,3 +301,30 @@ def test_publish_last_report_cli_prints_go_lines_for_tracked_report(tmp_path, mo
     assert (tmp_path / report_path).exists()
 
 
+def test_run_and_log_writes_canonical_outbox_with_safety_header(tmp_path):
+    from pathlib import Path
+
+    for relative in (
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/rule_mechanism_inventory.yaml",
+        ".agentic/rule_preservation.yaml",
+        "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
+        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    ):
+        source = Path(relative)
+        target = tmp_path / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+
+    run_and_log_transfer_command(
+        [sys.executable, "-c", "print('FINAL_SIGNAL=d'); print('FINAL_NEXT=continue')"],
+        label="outbox-header",
+        cwd=tmp_path,
+    )
+
+    outbox = tmp_path / ".agentic" / "transfer" / "outbox" / "last_result.txt"
+    data = json.loads(outbox.read_text(encoding="utf-8"))
+    assert data["kind"] == "local_to_llm_last_result"
+    assert data["safety_header"]["canonical_transfer_files"]["local_to_llm"] == ".agentic/transfer/outbox/last_result.txt"
+    assert "raw_newline_in_python_string_literals" in data["safety_header"]["known_failure_classes"]
+    assert data["last_result"]["transfer_report_written"] == "done"

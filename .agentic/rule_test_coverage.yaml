@@ -364,3 +364,31 @@ coverage:
     - kind: test
       path: tests/test_post_release.py
     statement: waiting Zenodo records are non-failing until available
+
+- mechanism_id: transfer-safety-rules
+  test_coverage: direct
+  assertions:
+  - assertion_id: transfer-safety-rules-known-failure-classes
+    kind: guard
+    covered_surfaces:
+    - transfer-safety-rules-yaml
+    - transfer-safety-context
+    evidence_refs:
+    - kind: source
+      path: .agentic/transfer_safety_rules.yaml
+    - kind: source
+      path: src/agentic_project_kit/transfer_safety_context.py
+    - kind: test
+      path: tests/test_transfer_safety_context.py
+    statement: transfer safety headers preserve known generated patch and transfer failure classes
+  - assertion_id: transfer-safety-rules-outbox-header
+    kind: behavior
+    covered_surfaces:
+    - transfer-outbox-header
+    - transfer-safety-tests
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/transfer_uplink.py
+    - kind: test
+      path: tests/test_transfer_uplink.py
+    statement: transfer run logs write a deterministic local-to-LLM outbox header

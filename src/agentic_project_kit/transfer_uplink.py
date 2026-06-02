@@ -8,6 +8,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
 
+from agentic_project_kit.transfer_safety_context import write_transfer_outbox
+
 
 TRANSFER_RUN_DIR = Path("docs/reports/transfer_runs")
 LATEST_LOG = TRANSFER_RUN_DIR / "latest-transfer-report.log"
@@ -197,6 +199,7 @@ def run_and_log_transfer_command(command: list[str], *, label: str = "transfer-r
         target = root / relative_path
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(content, encoding="utf-8")
+    write_transfer_outbox(root, result.as_json_data())
 
     return result
 
@@ -287,6 +290,7 @@ def run_and_log_transfer_sequence(
         target = root / relative_path
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(content, encoding="utf-8")
+    write_transfer_outbox(root, result.as_json_data())
 
     return result
 
