@@ -405,10 +405,15 @@ def commit_command(
 
 @transfer_app.command("push-current")
 def push_current_command(
+    branch: str = typer.Option(
+        "",
+        "--branch",
+        help="Expected branch to push. If set, the transfer monitor switches to it or blocks safely.",
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     _require_transfer_capability("rules_confirmed")
-    result = push_current()
+    result = push_current(required_branch=branch)
     _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
