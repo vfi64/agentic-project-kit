@@ -1,6 +1,6 @@
 schema_version: 1
 updated:
-  date: '2026-06-01'
+  date: '2026-06-02'
   reason: Refresh handoff state to last substantive work commit
   source: agentic-kit handoff refresh
 repo:
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: d6e8ceb
-  commit_subject: Publish tracked transfer handoff reports (#1051)
+  commit: d45526e
+  commit_subject: Fix transfer report handoff semantics (#1054)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
