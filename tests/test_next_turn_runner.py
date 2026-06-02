@@ -81,6 +81,7 @@ def test_next_turn_run_publish_evidence_no_push_cli(tmp_path):
     subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True, text=True)
     subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=tmp_path, check=True)
     subprocess.run(["git", "config", "user.name", "Test User"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "switch", "-c", "feature/publish-cli"], cwd=tmp_path, check=True, capture_output=True, text=True)
     write_fixed_slot(tmp_path, command_id="publish-cli")
     completed = subprocess.run(
         [

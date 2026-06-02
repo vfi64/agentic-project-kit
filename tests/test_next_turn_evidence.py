@@ -50,6 +50,7 @@ def test_publish_and_stage_evidence_creates_and_stages_files(tmp_path: Path) -> 
 
 def test_commit_and_push_evidence_commits_without_push(tmp_path: Path) -> None:
     init_repo(tmp_path)
+    subprocess.run(["git", "switch", "-c", "feature/evidence"], cwd=tmp_path, check=True)
     local_log = tmp_path.parent / f"{tmp_path.name}-local.log"
     local_log.write_text("evidence\n", encoding="utf-8")
     plan = publish_and_stage_evidence(
@@ -80,3 +81,40 @@ def test_commit_and_push_evidence_treats_clean_stage_as_already_done(tmp_path: P
     assert result.pushed is False
     assert result.already_clean is True
     assert "PASS_ALREADY_DONE" in result.message
+
+def test_commit_and_push_evidence_refuses_main_branch(tmp_path: Path) -> None:
+    init_repo(tmp_path)
+    subprocess.run(["git", "branch", "-M", "main"], cwd=tmp_path, check=True)
+    local_log = tmp_path.parent / f"{tmp_path.name}-main-refuse.log"
+    local_log.write_text("evidence\n", encoding="utf-8")
+    plan = publish_and_stage_evidence(
+        run_id="main-refuse",
+        local_terminal_log=str(local_log),
+        work_result="FAIL",
+        root=tmp_path,
+    )
+    try:
+        commit_and_push_evidence(plan=plan, root=tmp_path, push=False)
+    except RuntimeError as exc:
+        assert "refuses to commit on main" in str(exc)
+    else:
+        raise AssertionError("expected RuntimeError")
+
+
+def test_commit_and_push_evidence_refuses_branch_mismatch(tmp_path: Path) -> None:
+    init_repo(tmp_path)
+    subprocess.run(["git", "switch", "-c", "feature/actual"], cwd=tmp_path, check=True)
+    local_log = tmp_path.parent / f"{tmp_path.name}-branch-mismatch.log"
+    local_log.write_text("evidence\n", encoding="utf-8")
+    plan = publish_and_stage_evidence(
+        run_id="branch-mismatch",
+        local_terminal_log=str(local_log),
+        work_result="FAIL",
+        root=tmp_path,
+    )
+    try:
+        commit_and_push_evidence(plan=plan, root=tmp_path, push=False, required_branch="feature/expected")
+    except RuntimeError as exc:
+        assert "does not match required branch" in str(exc)
+    else:
+        raise AssertionError("expected RuntimeError")

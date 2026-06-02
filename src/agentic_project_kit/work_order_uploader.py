@@ -66,11 +66,17 @@ def _local_log_belongs_to_current_repo(local_log_path: Path) -> bool:
         return False
 
 
+def _current_branch() -> str:
+    return _git_stdout(["branch", "--show-current"])
+
+
 def upload_next_turn_result_log(
     *,
     log_path: Path = RESULT_LOG_PATH,
     local_log_path: Path = LOCAL_RESULT_LOG_PATH,
     commit_message: str = "Upload next-turn result log",
+    required_branch: str = "",
+    allow_main: bool = False,
 ) -> WorkOrderUploadResult:
     local_log_ready = _local_log_belongs_to_current_repo(local_log_path)
     if not log_path.exists() and not local_log_ready:
@@ -94,6 +100,35 @@ def upload_next_turn_result_log(
             returncode=1,
             log_path=log_path,
             message="refusing upload because other worktree changes exist: " + "; ".join(disallowed),
+        )
+
+    branch = _current_branch()
+    if required_branch and branch != required_branch:
+        return WorkOrderUploadResult(
+            ok=False,
+            committed=False,
+            pushed=False,
+            returncode=1,
+            log_path=log_path,
+            message=f"current branch {branch!r} does not match required branch {required_branch!r}",
+        )
+    if branch == "main" and not allow_main:
+        return WorkOrderUploadResult(
+            ok=False,
+            committed=False,
+            pushed=False,
+            returncode=1,
+            log_path=log_path,
+            message="work-order uploader refuses to commit on main without allow_main=True",
+        )
+    if not branch:
+        return WorkOrderUploadResult(
+            ok=False,
+            committed=False,
+            pushed=False,
+            returncode=1,
+            log_path=log_path,
+            message="work-order uploader refuses to commit without a current branch",
         )
 
     if local_log_ready:

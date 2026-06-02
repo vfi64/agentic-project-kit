@@ -390,3 +390,20 @@ def test_workflow_run_named_item_does_not_replace_current_work_during_bounded_st
     assert calls[0][2]["AGENTIC_WORKFLOW_FILE"].endswith("tmp/agent-evidence/run-pattern-advisor-readonly-catalog-mvp.yaml")
     assert current_work.read_text(encoding="utf-8") == original
 
+def test_cleanup_stale_temp_branches_fails_on_remote_delete_error(tmp_path: Path, monkeypatch) -> None:
+    import agentic_project_kit.cli_commands.workflow as workflow_module
+
+    _write_workflow_files(tmp_path, workflow_state="IDLE", request_state="READY")
+    monkeypatch.setattr(workflow_module, "_is_git_repository", lambda root: True)
+    monkeypatch.setattr(workflow_module, "_local_temp_branches", lambda root: [])
+    monkeypatch.setattr(workflow_module, "_remote_temp_branches", lambda root: ["temp/workflow-evidence-x"])
+
+    def fake_run_git(root: Path, args: list[str]):
+        return subprocess.CompletedProcess(["git", *args], 1, "", "remote delete failed")
+
+    monkeypatch.setattr(workflow_module, "_run_git", fake_run_git)
+
+    result = runner.invoke(app, ["workflow", "cleanup", "--root", str(tmp_path)])
+
+    assert result.exit_code != 0
+    assert "remote delete failed" in result.output
