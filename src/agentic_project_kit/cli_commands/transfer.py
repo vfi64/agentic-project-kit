@@ -128,9 +128,9 @@ def run_and_log(
     if json_output:
         typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
     else:
-        typer.echo("TRANSFER_UPLOAD=done")
-        typer.echo(f"REMOTE_REPORT={result.remote_report_path}")
-        typer.echo("CHAT_REPLY=g")
+        typer.echo("TRANSFER_REPORT_WRITTEN=done")
+        typer.echo(f"LOCAL_REPORT={result.remote_report_path}")
+        typer.echo("CHAT_REPLY=d | NEXT=Run transfer publish-last-report")
 
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
@@ -553,7 +553,7 @@ def publish_last_report(
     else:
         typer.echo("TRANSFER_UPLOAD=done")
         typer.echo(f"REMOTE_REPORT={result['remote_report']}")
-        typer.echo("CHAT_REPLY=g")
+        typer.echo(f"CHAT_REPLY={result['chat_reply']}")
 
 
 @transfer_app.command("show-last-report")
@@ -589,9 +589,9 @@ def run_sequence_and_log(
     if json_output:
         typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
     else:
-        typer.echo("TRANSFER_UPLOAD=done")
-        typer.echo(f"REMOTE_REPORT={result.remote_report_path}")
-        typer.echo("CHAT_REPLY=g")
+        typer.echo("TRANSFER_REPORT_WRITTEN=done")
+        typer.echo(f"LOCAL_REPORT={result.remote_report_path}")
+        typer.echo("CHAT_REPLY=d | NEXT=Run transfer publish-last-report")
 
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)

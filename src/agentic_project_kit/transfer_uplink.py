@@ -84,6 +84,7 @@ class TransferUplinkResult:
             "timestamped_log_path": self.timestamped_log_path,
             "remote_report_path": self.remote_report_path,
             "transfer_upload": self.transfer_upload,
+            "transfer_report_written": self.transfer_upload,
         }
         steps = getattr(self, "sequence_steps", None)
         if steps is not None:
@@ -137,8 +138,8 @@ def render_uplink_log(result: TransferUplinkResult) -> str:
             "### STDERR ###",
             result.stderr.rstrip(),
             "### SUMMARY ###",
-            "TRANSFER_UPLOAD=done",
-            f"REMOTE_REPORT={result.remote_report_path}",
+            "TRANSFER_REPORT_WRITTEN=done",
+            f"LOCAL_REPORT={result.remote_report_path}",
             f"FINAL_SIGNAL={result.final_signal}",
             f"FINAL_NEXT={result.next_action}",
             f"CHAT_REPLY={result.chat_reply}",
@@ -178,7 +179,7 @@ def run_and_log_transfer_command(command: list[str], *, label: str = "transfer-r
         stdout=stdout,
         stderr=stderr,
         final_signal=final_signal,
-        chat_reply="g",
+        chat_reply="d | NEXT=Run transfer publish-last-report",
         next_action=next_action,
         latest_log_path=str(LATEST_LOG),
         latest_json_path=str(LATEST_JSON),
@@ -267,7 +268,7 @@ def run_and_log_transfer_sequence(
         stdout="\n".join(combined_stdout) + "\n",
         stderr="\n".join(combined_stderr) + "\n",
         final_signal=overall_signal,
-        chat_reply="g",
+        chat_reply="d | NEXT=Run transfer publish-last-report",
         next_action=next_action,
         latest_log_path=str(LATEST_LOG),
         latest_json_path=str(LATEST_JSON),
@@ -365,7 +366,7 @@ def publish_latest_transfer_report(
         "latest_remote_report": str(PUBLISHED_LATEST_JSON),
         "remote_log": str(timestamped_log),
         "latest_remote_log": str(PUBLISHED_LATEST_LOG),
-        "chat_reply": "g",
+        "chat_reply": "g" if int(report_data.get("returncode", 1)) == 0 and str(report_data.get("final_signal", "f")) == "d" else "f | NEXT=Inspect published transfer handoff report.",
     }
 
 
