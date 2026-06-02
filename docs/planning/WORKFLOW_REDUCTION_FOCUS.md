@@ -3,7 +3,7 @@
 Status-date: 2026-06-01
 Status: active
 Decision status: accepted
-Review policy: Review after the documentation-management foundation, before adding deterministic transfer outbox implementation, and before expanding GUI scope or Pattern Advisor scope.
+Review policy: Review after the rule-semantics cleanup, documentation-registry completion audit, before adding deterministic transfer outbox implementation, and before expanding GUI scope or Pattern Advisor scope.
 Project: agentic-project-kit
 
 ## Purpose
@@ -35,7 +35,7 @@ This does not mean that every document should be forced into YAML or JSON. READM
 
 Target shape:
 
-- machine-readable sources: `.agentic/handoff_state.yaml`, docs/DOCUMENTATION_REGISTRY.yaml`, `.agentic/work_orders/*.yaml`, `.agentic/communication_artifacts.yaml`, future `.agentic/dialogue_rules.yaml`, release metadata, evidence manifests, gate reports, generated state summaries, and generated transfer outbox context projections;
+- machine-readable sources: `.agentic/handoff_state.yaml`, docs/DOCUMENTATION_REGISTRY.yaml, `.agentic/work_orders/*.yaml`, `.agentic/communication_artifacts.yaml`, future `.agentic/dialogue_rules.yaml`, release metadata, evidence manifests, gate reports, generated state summaries, and generated transfer outbox context projections;
 - human-facing projections: `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, successor handoff prompts, README excerpts, handbook text, website text, GUI dashboards, and LLM-generated explanations.
 
 LLM assistance should use the structured sources to translate project state into clear human prose on request. The LLM may explain and review; it should not be the only place where operational truth exists.
@@ -59,14 +59,16 @@ This keeps the rule registry professional without letting perfectionism block th
 
 ## Priority Order
 
-1. Finish the current B11 transfer-report contract semantics slice: preserve local report command semantics, make `publish-last-report` the only tracked handoff upload source, keep `show-last-report` local-only, and run the targeted transfer tests before PR creation.
-2. Add the deterministic transfer outbox context projection to the rule-refresh handshake roadmap: every `.agentic/transfer/outbox/last_result.txt` write should embed a freshly extracted machine-readable header from canonical sources.
-3. Introduce `.agentic/dialogue_rules.yaml` only as a tested rule-management slice, not as an unregistered parallel rule table.
-4. Ensure every new documentation artifact is registered or classified through the documentation-management system, and every new durable rule is registered through the rule-management system with validation and preservation anchors where appropriate.
-5. Finish the documentation-management foundation through small, additive, reversible, test-backed registry slices.
-6. Use the registry to make status, handoff, evidence, artifacts, transfer outbox state, and retention/GC behavior visible and machine-checkable.
-7. Build the GUI as a control surface over already-hardened read-only or bounded actions.
-8. Defer Pattern Advisor expansion until the document, rule, evidence, and transfer substrates are stable.
+1. Clean the active rule semantics before hardening: remove `w` from active dialogue rules, make `d/f/g` the only preferred signals, classify or obsolete legacy communication anchors, and update tests/compiled context through the rule-management workflow.
+2. Complete a documentation-registry coverage audit before final hardening: identify active docs not yet registered or classified, register them in small reversible slices, and record any intentional exclusions with a machine-checkable rationale.
+3. Finish the current B11 transfer-report contract semantics slice: preserve local report command semantics, make `publish-last-report` the only tracked handoff upload source, keep `show-last-report` local-only, and run the targeted transfer tests before PR creation.
+4. Add the deterministic transfer outbox context projection to the rule-refresh handshake roadmap: every `.agentic/transfer/outbox/last_result.txt` write should embed a freshly extracted machine-readable header from canonical sources.
+5. Introduce `.agentic/dialogue_rules.yaml` only as a tested rule-management slice, not as an unregistered parallel rule table.
+6. Ensure every new documentation artifact is registered or classified through the documentation-management system, and every new durable rule is registered through the rule-management system with validation and preservation anchors where appropriate.
+7. Finish the documentation-management foundation through small, additive, reversible, test-backed registry slices.
+8. Use the registry to make status, handoff, evidence, artifacts, transfer outbox state, and retention/GC behavior visible and machine-checkable.
+9. Build the GUI as a control surface over already-hardened read-only or bounded actions.
+10. Defer Pattern Advisor expansion until the document, rule, evidence, and transfer substrates are stable.
 
 ## Work Model Direction
 
@@ -87,6 +89,20 @@ Handoff prompts should be generated from state files, Git state, PR state, regis
 
 `docs/STATUS.md` should remain a compact dashboard. Long history belongs in `CHANGELOG.md`, release records, evidence logs, or dedicated planning documents such as this file.
 
+## Documentation Registry Completion Roadmap
+
+The documentation registry is currently an experimental first-slice governance baseline. The contract states that the first slice intentionally registers only a small set of canonical documents and evidence logs and that broad classification must happen later in small reversible slices.
+
+Before final hardening, the project needs a documentation-registry completion line:
+
+1. Add or run a deterministic inventory that lists active repository documentation and classifies each file as registered, intentionally excluded, temporary, generated, historical, or pending classification.
+2. Compare the inventory against `docs/DOCUMENTATION_REGISTRY.yaml` and fail closed for new active documents that bypass classification.
+3. Register missing active planning, governance, architecture, workflow, handoff, release, and user-facing documents in small additive slices.
+4. Record intentional exclusions with rationale instead of silently ignoring them.
+5. Keep evidence logs bounded: do not register every transient log individually unless it is durable evidence; prefer class-level retention and GC policy for generated/temporary reports.
+6. Add tests or `check-docs` assertions that prevent new documentation islands.
+7. Update roadmap/status/handoff projections only after the registry state is machine-checkable.
+
 ## B11 Transfer And Rule-Refresh Roadmap
 
 The current transfer line has these remaining work items from the successor-handoff prompt and subsequent planning decisions:
@@ -106,20 +122,33 @@ The current transfer line has these remaining work items from the successor-hand
 13. After green targeted tests, commit, push, create a PR only if there is a real diff against `origin/main`, wait for CI, merge only when clean, sync main, and run the post-merge handoff refresh status.
 14. If post-merge status is `REFRESH_REQUIRED`, create and merge the administrative handoff-refresh PR through existing safe wrappers before continuing product work.
 
+## Rule Semantics Cleanup Roadmap
+
+The current rule system still has transition drift around dialogue signals and planned transfer rules. Before hardening generated outbox context or GUI gates, this must be cleaned in a rule-management slice:
+
+1. Remove `w` from active dialogue rules, compiled context, generated prompts, and tests; historical logs may remain unchanged as evidence.
+2. Make `d/f/g` the only active dialogue signal set.
+3. Add `.agentic/dialogue_rules.yaml` only with schema, validation, tests, and registry integration.
+4. Add rule-mechanism inventory and test-coverage entries for transfer outbox context projection and canonical transfer files.
+5. Add preservation anchors when the new dialogue/transfer rule files become protected control state.
+6. Add drift tests proving that governance docs, compiled context, dialogue rules, and generated outbox projections do not disagree.
+
 ## Sequencing Decision
 
 This focus must be recorded before completing the documentation-management phase so that the remaining registry slices and the later GUI are shaped by it.
 
-Implementation should not interrupt the current transfer-report contract semantics line. The practical sequence is:
+Implementation should not interrupt the current transfer-report contract semantics line except where rule or documentation cleanup is a prerequisite for safe hardening. The practical sequence is:
 
-1. finish the B11 transfer-report contract semantics repair;
-2. record the deterministic transfer outbox and dialogue-rule direction in planning;
-3. add any new documentation artifacts to the documentation-management system and any new durable rules to the rule-management system;
-4. continue the handoff/status freshness guard and documentation-registry work;
-5. complete the documentation-management foundation enough for artifact and evidence visibility;
-6. implement transfer outbox context generation and dialogue rules in small tested slices;
-7. then make the GUI expose this reduced-orchestration model;
-8. only after that, resume Pattern Advisor expansion.
+1. record the rule-semantics cleanup and documentation-registry completion requirements in planning;
+2. clean active dialogue/transfer rules in a protected rule-management slice;
+3. audit and complete documentation-registry coverage for active docs in small reversible slices;
+4. finish the B11 transfer-report contract semantics repair;
+5. add any new documentation artifacts to the documentation-management system and any new durable rules to the rule-management system;
+6. continue the handoff/status freshness guard and documentation-registry work;
+7. complete the documentation-management foundation enough for artifact and evidence visibility;
+8. implement transfer outbox context generation and dialogue rules in small tested slices;
+9. then make the GUI expose this reduced-orchestration model;
+10. only after that, resume Pattern Advisor expansion.
 
 ## External Review Input Handling
 
@@ -140,7 +169,7 @@ The rule-refresh handshake is the stability core for this direction. `docs/plann
 
 ## Non-Goals For The Current Line
 
-- no broad documentation migration,
+- no broad documentation migration in one PR,
 - no release or tag work,
 - no destructive GUI or remote-GUI actions,
 - no expansion of Pattern Advisor before the registry and GUI foundations are ready,
