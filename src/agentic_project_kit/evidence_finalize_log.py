@@ -125,7 +125,8 @@ def finalize_log(
 
     destination = root_path / remote_log_path
     destination.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(run_log_path, destination)
+    if run_log_path.resolve() != destination.resolve():
+        shutil.copyfile(run_log_path, destination)
 
     add_result = _run_git(["add", str(remote_log_path)], root=root_path)
     if add_result.returncode != 0:
