@@ -25,12 +25,13 @@ def init_repo(root: Path) -> None:
 
 def test_commit_paths_commits_expected_paths_and_requires_clean_afterwards(tmp_path: Path) -> None:
     init_repo(tmp_path)
+    git(tmp_path, "switch", "-c", "docs/evidence")
     rel = "docs/reports/terminal/demo.log"
     path = tmp_path / rel
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("complete log\n### RESULT: PASS ###\n", encoding="utf-8")
 
-    result = commit_paths(root=tmp_path, paths=(rel,), message="Record demo evidence")
+    result = commit_paths(root=tmp_path, paths=(rel,), message="Record demo evidence", required_branch="docs/evidence")
 
     assert result.success
     assert result.commit_sha
@@ -39,6 +40,7 @@ def test_commit_paths_commits_expected_paths_and_requires_clean_afterwards(tmp_p
 
 def test_commit_paths_accepts_expected_tracked_deletion(tmp_path: Path) -> None:
     init_repo(tmp_path)
+    git(tmp_path, "switch", "-c", "docs/evidence")
     rel = "docs/reports/terminal/delete-me.log"
     path = tmp_path / rel
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -47,7 +49,7 @@ def test_commit_paths_accepts_expected_tracked_deletion(tmp_path: Path) -> None:
     assert git(tmp_path, "commit", "-m", "add log").returncode == 0
     path.unlink()
 
-    result = commit_paths(root=tmp_path, paths=(rel,), message="Record deletion")
+    result = commit_paths(root=tmp_path, paths=(rel,), message="Record deletion", required_branch="docs/evidence")
 
     assert result.success, result.findings
     assert git(tmp_path, "status", "--short").stdout == ""
@@ -55,13 +57,19 @@ def test_commit_paths_accepts_expected_tracked_deletion(tmp_path: Path) -> None:
 
 def test_commit_paths_blocks_unexpected_dirty_paths(tmp_path: Path) -> None:
     init_repo(tmp_path)
+    git(tmp_path, "switch", "-c", "docs/evidence")
     expected = "docs/reports/terminal/demo.log"
     other = "unexpected.txt"
     (tmp_path / expected).parent.mkdir(parents=True, exist_ok=True)
     (tmp_path / expected).write_text("log\n", encoding="utf-8")
     (tmp_path / other).write_text("dirty\n", encoding="utf-8")
 
-    result = commit_paths(root=tmp_path, paths=(expected,), message="Record demo evidence")
+    result = commit_paths(
+        root=tmp_path,
+        paths=(expected,),
+        message="Record demo evidence",
+        required_branch="docs/evidence",
+    )
 
     assert not result.success
     assert any("unexpected dirty paths" in finding for finding in result.findings)
@@ -81,6 +89,7 @@ def test_commit_paths_rejects_venv_and_git_paths(tmp_path: Path) -> None:
 
 def test_evidence_commit_paths_cli(tmp_path: Path) -> None:
     init_repo(tmp_path)
+    git(tmp_path, "switch", "-c", "docs/evidence")
     rel = "docs/reports/terminal/demo.log"
     path = tmp_path / rel
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -97,6 +106,8 @@ def test_evidence_commit_paths_cli(tmp_path: Path) -> None:
             rel,
             "--message",
             "Record demo evidence",
+            "--branch",
+            "docs/evidence",
         ],
     )
 
@@ -104,3 +115,88 @@ def test_evidence_commit_paths_cli(tmp_path: Path) -> None:
     assert "EVIDENCE_COMMIT_PATHS" in result.output
     assert "success=yes" in result.output
     assert git(tmp_path, "status", "--short").stdout == ""
+
+def test_commit_paths_refuses_main_without_allow_main(tmp_path: Path) -> None:
+    init_repo(tmp_path)
+    git(tmp_path, "branch", "-M", "main")
+    rel = "docs/reports/terminal/main-refused.log"
+    path = tmp_path / rel
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("log\n", encoding="utf-8")
+
+    try:
+        commit_paths(root=tmp_path, paths=(rel,), message="Record evidence")
+    except ValueError as exc:
+        assert "refuses to commit on main" in str(exc)
+    else:
+        raise AssertionError("commit_paths unexpectedly allowed a main commit")
+
+
+def test_commit_paths_required_branch_mismatch_fails_closed(tmp_path: Path) -> None:
+    init_repo(tmp_path)
+    git(tmp_path, "switch", "-c", "docs/evidence")
+    rel = "docs/reports/terminal/branch-mismatch.log"
+    path = tmp_path / rel
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("log\n", encoding="utf-8")
+
+    try:
+        commit_paths(
+            root=tmp_path,
+            paths=(rel,),
+            message="Record evidence",
+            required_branch="docs/other-evidence",
+        )
+    except ValueError as exc:
+        assert "does not match required branch" in str(exc)
+    else:
+        raise AssertionError("commit_paths unexpectedly allowed branch mismatch")
+
+
+def test_commit_paths_required_branch_match_commits(tmp_path: Path) -> None:
+    init_repo(tmp_path)
+    git(tmp_path, "switch", "-c", "docs/evidence")
+    rel = "docs/reports/terminal/branch-match.log"
+    path = tmp_path / rel
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("log\n", encoding="utf-8")
+
+    result = commit_paths(
+        root=tmp_path,
+        paths=(rel,),
+        message="Record evidence",
+        required_branch="docs/evidence",
+    )
+
+    assert result.success
+    assert result.commit_sha
+    assert git(tmp_path, "status", "--short").stdout == ""
+
+
+def test_evidence_commit_paths_cli_main_refusal_has_no_traceback(tmp_path: Path) -> None:
+    init_repo(tmp_path)
+    git(tmp_path, "branch", "-M", "main")
+    rel = "docs/reports/terminal/main-refused.log"
+    path = tmp_path / rel
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("log\n", encoding="utf-8")
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "evidence",
+            "commit-paths",
+            "--root",
+            str(tmp_path),
+            "--path",
+            rel,
+            "--message",
+            "Record evidence",
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "success=no" in result.output
+    assert "refuses to commit on main" in result.output
+    assert "Traceback" not in result.output
+
