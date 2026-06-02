@@ -1,0 +1,423 @@
+from __future__ import annotations
+
+import ast
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+import yaml
+
+ROOT = Path.cwd()
+EXPECTED_BRANCH = "feature/transfer-safety-rule-header"
+
+
+def run(command: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
+    print("$ " + " ".join(command))
+    completed = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=False)
+    if completed.stdout:
+        print(completed.stdout, end="")
+    if completed.stderr:
+        print(completed.stderr, end="", file=sys.stderr)
+    if check and completed.returncode != 0:
+        raise SystemExit(completed.returncode)
+    return completed
+
+
+def read(path: str) -> str:
+    return (ROOT / path).read_text(encoding="utf-8")
+
+
+def write(path: str, text: str) -> None:
+    target = ROOT / path
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(text, encoding="utf-8")
+
+
+def replace_once(path: str, old: str, new: str) -> None:
+    text = read(path)
+    if old not in text:
+        raise SystemExit(f"ANCHOR_NOT_FOUND {path}: {old[:80]!r}")
+    write(path, text.replace(old, new, 1))
+
+
+def require_clean_status() -> None:
+    status = run(["git", "status", "--short"]).stdout.strip()
+    if status:
+        raise SystemExit("WORKTREE_NOT_CLEAN_BEFORE_PATCH\n" + status)
+
+
+def add_yaml_list_item(path: str, key: str, item: dict) -> None:
+    data = yaml.safe_load(read(path))
+    items = data[key]
+    existing = {entry.get("id") for entry in items}
+    if item["id"] not in existing:
+        items.append(item)
+        write(path, yaml.safe_dump(data, sort_keys=False, allow_unicode=True))
+
+
+def add_expected_mechanism(mechanism_id: str) -> None:
+    path = "tests/test_rule_mechanism_inventory.py"
+    text = read(path)
+    if f'    "{mechanism_id}",' in text:
+        return
+    old = '    "typed-work-order-runner",\n    "release-state-validation",\n'
+    new = '    "typed-work-order-runner",\n    "transfer-safety-rules",\n    "release-state-validation",\n'
+    if old not in text:
+        raise SystemExit("EXPECTED_MECHANISMS_ANCHOR_NOT_FOUND")
+    write(path, text.replace(old, new, 1))
+
+
+def add_preservation_test_id(rule_id: str) -> None:
+    path = "tests/test_rule_preservation.py"
+    text = read(path)
+    if f'    assert "{rule_id}" in ids' in text:
+        return
+    old = '    assert "no-copy-terminal-evidence" in ids\n'
+    new = old + f'    assert "{rule_id}" in ids\n'
+    if old not in text:
+        raise SystemExit("PRESERVATION_TEST_ANCHOR_NOT_FOUND")
+    write(path, text.replace(old, new, 1))
+
+
+def main() -> int:
+    print("### PRECHECK ###")
+    branch = run(["git", "branch", "--show-current"]).stdout.strip()
+    if branch != EXPECTED_BRANCH:
+        print(f"WRONG_BRANCH expected={EXPECTED_BRANCH} actual={branch}", file=sys.stderr)
+        return 1
+    require_clean_status()
+
+    print("### WRITE MACHINE-READABLE TRANSFER SAFETY RULES ###")
+    safety_yaml = {
+        "schema_version": 1,
+        "purpose": "Machine-readable safety rules for the LLM-to-local and local-to-LLM transfer boundary.",
+        "canonical_transfer_files": {
+            "llm_to_local": ".agentic/transfer/inbox/next_command.py.txt",
+            "local_to_llm": ".agentic/transfer/outbox/last_result.txt",
+        },
+        "transfer_priorities": [
+            "remote_repo_backed_work_first",
+            "canonical_transfer_files_second",
+            "copy_paste_only_fallback",
+        ],
+        "known_failure_classes": [
+            "wrong_branch_execution",
+            "stale_local_branch_after_fetch",
+            "rule_acknowledgement_head_mismatch",
+            "dirty_worktree_before_transfer",
+            "accumulated_untracked_transfer_or_report_files",
+            "failed_report_publication_misread_as_go_signal",
+            "diagnostic_status_success_masking_earlier_blocker",
+            "heredoc_style_shell_mutation",
+            "unescaped_shell_substitution",
+            "raw_newline_in_python_string_literals",
+            "quote_escape_drift",
+            "fragile_multiline_inline_python_commands",
+            "long_shell_mutation_blocks",
+            "line_ending_drift",
+            "python_transfer_txt_suffix_not_syntax_validated",
+            "partial_patch_application",
+            "fragile_text_anchor_patching",
+            "accidental_compatibility_key_removal",
+            "destructive_use_of_moving_references",
+            "implicit_main_push_or_upstream_mutation",
+            "syntax_broken_python_before_cli_import",
+        ],
+        "preflight_rules": [
+            "expected_branch_must_match",
+            "worktree_must_be_clean_before_transfer",
+            "local_head_must_match_upstream_head",
+            "rule_acknowledgement_must_match_head",
+            "canonical_inbox_file_must_exist",
+            "canonical_inbox_file_must_compile_as_python_source",
+        ],
+        "post_patch_rules": [
+            "changed_python_files_must_compile_before_cli_import",
+            "failed_guard_must_emit_final_signal_f",
+            "failed_guard_must_not_emit_go_semantics",
+        ],
+    }
+    write(".agentic/transfer_safety_rules.yaml", yaml.safe_dump(safety_yaml, sort_keys=False, allow_unicode=True))
+
+    print("### WRITE TRANSFER SAFETY CONTEXT MODULE ###")
+    module = '''from __future__ import annotations
+
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+from typing import Any
+
+import yaml
+
+TRANSFER_SAFETY_RULES = Path(".agentic/transfer_safety_rules.yaml")
+OUTBOX_LAST_RESULT = Path(".agentic/transfer/outbox/last_result.txt")
+CANONICAL_SOURCE_PATHS = (
+    ".agentic/transfer_safety_rules.yaml",
+    ".agentic/rule_mechanism_inventory.yaml",
+    ".agentic/rule_preservation.yaml",
+    "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
+    "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+)
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _git(root: Path, args: list[str]) -> str:
+    completed = subprocess.run(["git", *args], cwd=root, text=True, capture_output=True, check=False)
+    if completed.returncode != 0:
+        return ""
+    return completed.stdout.strip()
+
+
+def load_transfer_safety_rules(root: Path | str = ".") -> dict[str, Any]:
+    root_path = Path(root)
+    path = root_path / TRANSFER_SAFETY_RULES
+    return yaml.safe_load(path.read_text(encoding="utf-8"))
+
+
+def build_transfer_safety_header(root: Path | str = ".") -> dict[str, Any]:
+    root_path = Path(root)
+    rules = load_transfer_safety_rules(root_path)
+    sources: list[dict[str, str]] = []
+    for relative in CANONICAL_SOURCE_PATHS:
+        path = root_path / relative
+        if path.exists():
+            sources.append({"path": relative, "sha256": _sha256(path)})
+        else:
+            sources.append({"path": relative, "sha256": "missing"})
+    branch = _git(root_path, ["branch", "--show-current"])
+    head = _git(root_path, ["rev-parse", "HEAD"])
+    upstream = _git(root_path, ["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"])
+    upstream_head = _git(root_path, ["rev-parse", "@{u}"]) if upstream else ""
+    return {
+        "schema_version": 1,
+        "kind": "transfer_safety_context_header",
+        "derived_projection": True,
+        "authoritative_sources": sources,
+        "canonical_transfer_files": rules["canonical_transfer_files"],
+        "transfer_priorities": rules["transfer_priorities"],
+        "known_failure_classes": rules["known_failure_classes"],
+        "preflight_rules": rules["preflight_rules"],
+        "post_patch_rules": rules["post_patch_rules"],
+        "repo_state": {
+            "branch": branch,
+            "head": head,
+            "upstream": upstream,
+            "upstream_head": upstream_head,
+            "head_matches_upstream": bool(head and upstream_head and head == upstream_head),
+            "dirty_status": _git(root_path, ["status", "--short"]),
+        },
+    }
+
+
+def write_transfer_outbox(root: Path | str, last_result: dict[str, Any]) -> Path:
+    root_path = Path(root)
+    payload = {
+        "schema_version": 1,
+        "kind": "local_to_llm_last_result",
+        "derived_projection": True,
+        "safety_header": build_transfer_safety_header(root_path),
+        "last_result": last_result,
+    }
+    target = root_path / OUTBOX_LAST_RESULT
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return target
+'''
+    write("src/agentic_project_kit/transfer_safety_context.py", module)
+
+    print("### INTEGRATE OUTBOX WRITES INTO TRANSFER UPLINK ###")
+    replace_once(
+        "src/agentic_project_kit/transfer_uplink.py",
+        "from uuid import uuid4\n",
+        "from uuid import uuid4\n\nfrom agentic_project_kit.transfer_safety_context import write_transfer_outbox\n",
+    )
+    replace_once(
+        "src/agentic_project_kit/transfer_uplink.py",
+        "    for relative_path, content in (\n        (LATEST_LOG, render_uplink_log(result)),\n        (timestamped_log, render_uplink_log(result)),\n        (LATEST_JSON, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + \"\\n\"),\n        (timestamped_json, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + \"\\n\"),\n    ):\n        target = root / relative_path\n        target.parent.mkdir(parents=True, exist_ok=True)\n        target.write_text(content, encoding=\"utf-8\")\n\n    return result\n",
+        "    for relative_path, content in (\n        (LATEST_LOG, render_uplink_log(result)),\n        (timestamped_log, render_uplink_log(result)),\n        (LATEST_JSON, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + \"\\n\"),\n        (timestamped_json, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + \"\\n\"),\n    ):\n        target = root / relative_path\n        target.parent.mkdir(parents=True, exist_ok=True)\n        target.write_text(content, encoding=\"utf-8\")\n    write_transfer_outbox(root, result.as_json_data())\n\n    return result\n",
+    )
+    replace_once(
+        "src/agentic_project_kit/transfer_uplink.py",
+        "    for relative_path, content in (\n        (LATEST_LOG, render_uplink_log(result)),\n        (timestamped_log, render_uplink_log(result)),\n        (LATEST_JSON, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + \"\\n\"),\n        (timestamped_json, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + \"\\n\"),\n    ):\n        target = root / relative_path\n        target.parent.mkdir(parents=True, exist_ok=True)\n        target.write_text(content, encoding=\"utf-8\")\n\n    return result\n",
+        "    for relative_path, content in (\n        (LATEST_LOG, render_uplink_log(result)),\n        (timestamped_log, render_uplink_log(result)),\n        (LATEST_JSON, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + \"\\n\"),\n        (timestamped_json, json.dumps(result.as_json_data(), indent=2, sort_keys=True) + \"\\n\"),\n    ):\n        target = root / relative_path\n        target.parent.mkdir(parents=True, exist_ok=True)\n        target.write_text(content, encoding=\"utf-8\")\n    write_transfer_outbox(root, result.as_json_data())\n\n    return result\n",
+    )
+
+    print("### ADD TESTS ###")
+    test_context = '''from pathlib import Path
+
+from agentic_project_kit.transfer_safety_context import build_transfer_safety_header
+from agentic_project_kit.transfer_safety_context import write_transfer_outbox
+
+
+def test_transfer_safety_header_contains_known_failure_classes() -> None:
+    header = build_transfer_safety_header(Path("."))
+
+    assert header["derived_projection"] is True
+    assert header["canonical_transfer_files"]["llm_to_local"] == ".agentic/transfer/inbox/next_command.py.txt"
+    assert header["canonical_transfer_files"]["local_to_llm"] == ".agentic/transfer/outbox/last_result.txt"
+    assert "raw_newline_in_python_string_literals" in header["known_failure_classes"]
+    assert "python_transfer_txt_suffix_not_syntax_validated" in header["known_failure_classes"]
+    assert "expected_branch_must_match" in header["preflight_rules"]
+    assert "changed_python_files_must_compile_before_cli_import" in header["post_patch_rules"]
+
+
+def test_transfer_outbox_is_json_with_safety_header(tmp_path: Path) -> None:
+    for relative in (
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/rule_mechanism_inventory.yaml",
+        ".agentic/rule_preservation.yaml",
+        "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
+        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    ):
+        source = Path(relative)
+        target = tmp_path / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+
+    outbox = write_transfer_outbox(tmp_path, {"final_signal": "d", "next_action": "continue"})
+    text = outbox.read_text(encoding="utf-8")
+
+    assert '"kind": "local_to_llm_last_result"' in text
+    assert '"safety_header"' in text
+    assert '"raw_newline_in_python_string_literals"' in text
+    assert '"last_result"' in text
+'''
+    write("tests/test_transfer_safety_context.py", test_context)
+
+    append_test = '''
+
+def test_run_and_log_writes_canonical_outbox_with_safety_header(tmp_path):
+    from pathlib import Path
+
+    for relative in (
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/rule_mechanism_inventory.yaml",
+        ".agentic/rule_preservation.yaml",
+        "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
+        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    ):
+        source = Path(relative)
+        target = tmp_path / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+
+    run_and_log_transfer_command(
+        [sys.executable, "-c", "print('FINAL_SIGNAL=d'); print('FINAL_NEXT=continue')"],
+        label="outbox-header",
+        cwd=tmp_path,
+    )
+
+    outbox = tmp_path / ".agentic" / "transfer" / "outbox" / "last_result.txt"
+    data = json.loads(outbox.read_text(encoding="utf-8"))
+    assert data["kind"] == "local_to_llm_last_result"
+    assert data["safety_header"]["canonical_transfer_files"]["local_to_llm"] == ".agentic/transfer/outbox/last_result.txt"
+    assert "raw_newline_in_python_string_literals" in data["safety_header"]["known_failure_classes"]
+    assert data["last_result"]["transfer_report_written"] == "done"
+'''
+    path = "tests/test_transfer_uplink.py"
+    text = read(path)
+    if "test_run_and_log_writes_canonical_outbox_with_safety_header" not in text:
+        write(path, text.rstrip() + "\n" + append_test)
+
+    print("### UPDATE RULE REGISTRY ###")
+    mechanism = {
+        "id": "transfer-safety-rules",
+        "status": "active",
+        "owner": "execution-governance",
+        "category": "execution",
+        "priority": 1,
+        "enforcement_phase": "guard",
+        "conflict_domains": ["transfer-boundary", "generated-python-patch-safety", "local-to-llm-outbox"],
+        "sources": [
+            {
+                "path": ".agentic/transfer_safety_rules.yaml",
+                "required_terms": [
+                    "raw_newline_in_python_string_literals",
+                    "python_transfer_txt_suffix_not_syntax_validated",
+                    "wrong_branch_execution",
+                    "changed_python_files_must_compile_before_cli_import",
+                ],
+            },
+            {
+                "path": "src/agentic_project_kit/transfer_safety_context.py",
+                "required_terms": [
+                    "build_transfer_safety_header",
+                    "write_transfer_outbox",
+                    "OUTBOX_LAST_RESULT",
+                ],
+            },
+            {
+                "path": "tests/test_transfer_safety_context.py",
+                "required_terms": [
+                    "test_transfer_safety_header_contains_known_failure_classes",
+                    "test_transfer_outbox_is_json_with_safety_header",
+                ],
+            },
+        ],
+        "protected_rule_intent": "Preserve machine-readable transfer safety rules and deterministic local-to-LLM outbox headers so recurring generated patch and transfer drift is visible before follow-up work.",
+        "surfaces": ["transfer-safety-rules-yaml", "transfer-safety-context", "transfer-outbox-header", "transfer-safety-tests"],
+        "tests": ["tests/test_transfer_safety_context.py", "tests/test_transfer_uplink.py"],
+    }
+    add_yaml_list_item(".agentic/rule_mechanism_inventory.yaml", "mechanisms", mechanism)
+    add_expected_mechanism("transfer-safety-rules")
+
+    preservation = {
+        "id": "transfer-safety-rules-must-be-preserved",
+        "status": "active",
+        "required_terms": [
+            "raw_newline_in_python_string_literals",
+            "python_transfer_txt_suffix_not_syntax_validated",
+            "wrong_branch_execution",
+        ],
+        "surfaces": [".agentic/transfer_safety_rules.yaml", "src/agentic_project_kit/transfer_safety_context.py"],
+    }
+    add_yaml_list_item(".agentic/rule_preservation.yaml", "rules", preservation)
+    add_preservation_test_id("transfer-safety-rules-must-be-preserved")
+
+    print("### SYNTAX CHECK CHANGED PYTHON FILES BEFORE CLI IMPORT ###")
+    for file_name in [
+        "src/agentic_project_kit/transfer_safety_context.py",
+        "src/agentic_project_kit/transfer_uplink.py",
+        "tests/test_transfer_safety_context.py",
+        "tests/test_transfer_uplink.py",
+        "tests/test_rule_mechanism_inventory.py",
+        "tests/test_rule_preservation.py",
+    ]:
+        ast.parse(read(file_name), filename=file_name)
+        print(f"PY_SYNTAX_OK {file_name}")
+
+    print("### TARGETED TESTS ###")
+    run([
+        "./.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_transfer_safety_context.py",
+        "tests/test_transfer_uplink.py",
+        "tests/test_rule_mechanism_inventory.py",
+        "tests/test_rule_preservation.py",
+    ])
+    run([
+        "./.venv/bin/ruff",
+        "check",
+        "src/agentic_project_kit/transfer_safety_context.py",
+        "src/agentic_project_kit/transfer_uplink.py",
+        "tests/test_transfer_safety_context.py",
+        "tests/test_transfer_uplink.py",
+        "tests/test_rule_mechanism_inventory.py",
+        "tests/test_rule_preservation.py",
+    ])
+
+    print("FINAL_SIGNAL=d")
+    print("FINAL_NEXT=Inspect diff, run protected-change-plan, then commit if acceptable.")
+    print("CHAT_REPLY=d | NEXT=Inspect diff, run protected-change-plan, then commit if acceptable.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
