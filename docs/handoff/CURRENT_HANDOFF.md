@@ -1,3 +1,14 @@
+## Post-PR1054 Handoff Refresh State
+
+Current verified main HEAD is d45526ed72d7e48d9cc7bc85ad090dc342a385a6 (d45526e).
+Commit subject: Fix transfer report handoff semantics (#1054).
+
+PR #1054 is merged. It fixed transfer report handoff semantics: local run-and-log paths now report local report writing, publish-last-report remains the tracked handoff upload path, failed published reports no longer emit a go reply, and the roadmap now prioritizes transfer-wrapper branch-safety hardening next.
+
+The post-merge handoff refresh status gate is the canonical decision point after merges: agentic-kit handoff post-merge-refresh-status.
+
+Next safe step after this refresh is merged and verified: implement the transfer-wrapper branch-safety hardening slice. transfer push-current must push the actual current branch or fail closed; no product work should start before this wrapper branch-safety defect is fixed.
+
 ## Post-PR897 Handoff Refresh State
 
 Current verified main HEAD is `a766ce92bbd4fc6cebfbb3ce3762bfa56e79c60c` (`a766ce9`).
