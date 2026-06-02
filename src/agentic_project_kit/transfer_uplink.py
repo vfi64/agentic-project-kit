@@ -83,6 +83,7 @@ class TransferUplinkResult:
             "latest_json_path": self.latest_json_path,
             "timestamped_log_path": self.timestamped_log_path,
             "remote_report_path": self.remote_report_path,
+            "transfer_upload": self.transfer_upload,
             "transfer_report_written": self.transfer_upload,
         }
         steps = getattr(self, "sequence_steps", None)

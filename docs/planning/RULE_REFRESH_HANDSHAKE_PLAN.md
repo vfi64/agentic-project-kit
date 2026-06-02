@@ -122,7 +122,7 @@ Until that slice is implemented and tested, the machine-readable dialogue rule f
 - Keep all rule-refresh state repo-readable and auditable.
 - Prefer explicit project-local Python entry points when wrapper contracts are unclear.
 - Keep GUI behavior downstream of the machine-checked state.
-- Do not introduce double-maintained rule or snapshot state.
+- Do not introduce double-maintained rule or snapshot state. This means no parallel manually maintained snapshot or GUI rule table.
 - Treat generated snapshots, Markdown refresh files, and transfer outbox headers as derived artifacts, not canonical sources.
 
 ## Phase 0: Transfer GitHub Action Coverage
