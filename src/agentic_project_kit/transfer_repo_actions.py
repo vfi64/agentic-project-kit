@@ -6,6 +6,10 @@ import subprocess
 from dataclasses import dataclass, asdict
 from pathlib import Path
 
+from agentic_project_kit.transfer_operation_monitor import MonitorDecision
+from agentic_project_kit.transfer_operation_monitor import guard_branch
+from agentic_project_kit.transfer_operation_monitor import guard_pr_create
+
 
 @dataclass(frozen=True)
 class RepoActionResult:
@@ -300,7 +304,32 @@ def commit_paths(message: str, paths: list[str], *, allow_main: bool = False) ->
     return _result("commit", commit_command, committed, "Push current branch or inspect status.")
 
 
-def push_current() -> RepoActionResult:
+def push_current(*, required_branch: str = "") -> RepoActionResult:
+    if required_branch:
+        monitor = guard_branch(
+            command_kind="push-current",
+            required_branch=required_branch,
+            allow_main_mutation=False,
+            auto_switch=True,
+        )
+        if monitor.decision == MonitorDecision.BLOCK:
+            completed = subprocess.CompletedProcess(
+                ["transfer-monitor", "push-current", "--branch", required_branch],
+                2,
+                "",
+                (
+                    "Transfer operation monitor blocked push-current: "
+                    f"{monitor.reason}; actual_branch={monitor.actual_branch}; "
+                    f"required_branch={monitor.required_branch}\n"
+                ),
+            )
+            return _result(
+                "push-current",
+                list(completed.args),
+                completed,
+                "Inspect transfer operation monitor block before pushing.",
+            )
+
     branch_completed = _run(["git", "branch", "--show-current"])
     if branch_completed.returncode != 0:
         return _result("push-current", ["git", "branch", "--show-current"], branch_completed, "Inspect repository state.")
@@ -308,6 +337,40 @@ def push_current() -> RepoActionResult:
     if not branch:
         completed = subprocess.CompletedProcess(["git", "push"], 2, "", "No current branch detected.\n")
         return _result("push-current", ["git", "push"], completed, "Switch to a named branch first.")
+
+    if branch == "main":
+        completed = subprocess.CompletedProcess(
+            ["transfer-monitor", "push-current", "--branch", branch],
+            2,
+            "",
+            (
+                "Transfer operation monitor blocked push-current: "
+                "main_mutation_not_allowed; actual_branch=main; required_branch=main\n"
+            ),
+        )
+        return _result(
+            "push-current",
+            list(completed.args),
+            completed,
+            "Switch to a feature/admin branch before pushing.",
+        )
+
+    if required_branch and branch != required_branch:
+        completed = subprocess.CompletedProcess(
+            ["transfer-monitor", "push-current", "--branch", required_branch],
+            2,
+            "",
+            (
+                "Transfer operation monitor branch mismatch after guard: "
+                f"actual_branch={branch}; required_branch={required_branch}\n"
+            ),
+        )
+        return _result(
+            "push-current",
+            list(completed.args),
+            completed,
+            "Inspect transfer operation monitor branch mismatch before pushing.",
+        )
 
     command = ["git", "push", "-u", "origin", branch]
     completed = _run(command)
@@ -322,6 +385,16 @@ def push_current() -> RepoActionResult:
 
 
 def pr_create(*, base: str, head: str, title: str, body: str) -> RepoActionResult:
+    monitor = guard_pr_create(base_branch=base, head_branch=head)
+    if monitor.decision == MonitorDecision.BLOCK:
+        completed = subprocess.CompletedProcess(
+            ["transfer-monitor", "pr-create", "--base", base, "--head", head],
+            2,
+            "",
+            f"Transfer operation monitor blocked pr-create: {monitor.reason}; actual_branch={monitor.actual_branch}; required_branch={monitor.required_branch}\n",
+        )
+        return _result("pr-create", list(completed.args), completed, "Inspect transfer operation monitor block before creating a PR.")
+
     command = [
         "gh",
         "pr",

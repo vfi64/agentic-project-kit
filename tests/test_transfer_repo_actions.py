@@ -588,9 +588,9 @@ def test_transfer_branch_create_cli_blocks_without_rule_acknowledgement(tmp_path
 
 def test_transfer_branch_delete_cli_blocks_without_rule_acknowledgement(tmp_path, monkeypatch):
     _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
     branch_create("feature/delete-blocked", start_point="main")
     branch_switch("main")
-    monkeypatch.chdir(tmp_path)
 
     result = CliRunner().invoke(app, ["transfer", "branch-delete", "feature/delete-blocked"])
 
@@ -879,6 +879,15 @@ def test_branch_switch_refuses_branch_drift_after_pull(monkeypatch):
 def test_push_current_refuses_branch_drift_after_push(monkeypatch):
     calls = {"branch": 0}
 
+    class PassingMonitor:
+        decision = transfer_repo_actions.MonitorDecision.CONTINUE
+        actual_branch = "feature/demo"
+        required_branch = "feature/demo"
+        reason = "test_monitor_pass"
+
+    def fake_guard_branch(**kwargs):
+        return PassingMonitor()
+
     def fake_run(command, cwd=None):
         if command == ["git", "branch", "--show-current"]:
             calls["branch"] += 1
@@ -888,6 +897,7 @@ def test_push_current_refuses_branch_drift_after_push(monkeypatch):
             return subprocess.CompletedProcess(command, 0, "pushed\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
     monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
 
     result = push_current()
@@ -897,3 +907,95 @@ def test_push_current_refuses_branch_drift_after_push(monkeypatch):
     assert "current branch drifted" in result.stderr
     assert result.next_action == "Inspect branch drift before continuing."
 
+
+
+def test_push_current_refuses_main_without_monitor_allowance(monkeypatch):
+    def fake_run(command, cwd=None):
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = push_current()
+
+    assert result.returncode == 2
+    assert result.result_status == "FAIL"
+    assert "Transfer operation monitor blocked push-current" in result.stderr
+    assert "main_mutation_not_allowed" in result.stderr
+
+
+def test_pr_create_blocks_head_equal_base_before_gh_call(monkeypatch):
+    calls = []
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.pr_create(base="main", head="main", title="Bad PR", body="bad")
+
+    assert result.returncode == 2
+    assert result.result_status == "FAIL"
+    assert "pr_create_head_equals_base" in result.stderr
+    assert not any(command[:3] == ["gh", "pr", "create"] for command in calls)
+
+
+def test_push_current_with_required_branch_switches_before_push(monkeypatch):
+    calls = []
+
+    class SwitchMonitor:
+        decision = transfer_repo_actions.MonitorDecision.SWITCH
+        actual_branch = "feature/demo"
+        required_branch = "feature/demo"
+        reason = "switched_to_required_branch"
+
+    def fake_guard_branch(**kwargs):
+        calls.append(["guard_branch", kwargs])
+        return SwitchMonitor()
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "push", "-u", "origin", "feature/demo"]:
+            return subprocess.CompletedProcess(command, 0, "pushed\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.push_current(required_branch="feature/demo")
+
+    assert result.returncode == 0
+    assert result.result_status == "PASS"
+    assert ["git", "push", "-u", "origin", "feature/demo"] in calls
+
+
+def test_push_current_with_required_branch_blocks_before_push(monkeypatch):
+    calls = []
+
+    class BlockMonitor:
+        decision = transfer_repo_actions.MonitorDecision.BLOCK
+        actual_branch = "main"
+        required_branch = "feature/demo"
+        reason = "dirty_worktree_blocks_branch_switch"
+
+    def fake_guard_branch(**kwargs):
+        calls.append(["guard_branch", kwargs])
+        return BlockMonitor()
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.push_current(required_branch="feature/demo")
+
+    assert result.returncode == 2
+    assert result.result_status == "FAIL"
+    assert "Transfer operation monitor blocked push-current" in result.stderr
+    assert ["git", "push", "-u", "origin", "feature/demo"] not in calls
