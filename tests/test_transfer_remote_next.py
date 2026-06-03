@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import subprocess
 from pathlib import Path
 
@@ -69,6 +70,23 @@ def test_remote_next_blocks_dirty_worktree_before_fetch(tmp_path, monkeypatch):
     assert "dirty_worktree" in result.reasons
     assert result.published_report_path
     assert (tmp_path / result.published_report_path).exists()
+
+
+def test_remote_next_report_includes_protocol_header(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "dirty.txt").write_text("dirty\n", encoding="utf-8")
+
+    result = run_remote_next_transfer(tmp_path, "transfer/example")
+    report = json.loads((tmp_path / result.published_report_path).read_text(encoding="utf-8"))
+
+    assert report["kind"] == "local_to_llm_remote_next_report"
+    assert report["protocol_header"]["kind"] == "transfer_protocol_header"
+    assert report["protocol_header"]["one_command_transfer_protocol"]["id"] == (
+        "one-command-transfer-protocol"
+    )
+    assert report["remote_next_report"]["result_status"] == "BLOCKED"
+    assert report["last_result"] == report["remote_next_report"]
 
 
 def test_remote_next_without_branch_requires_order_branch(tmp_path, monkeypatch):
