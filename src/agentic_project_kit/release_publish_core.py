@@ -79,7 +79,6 @@ def publish_release(
     repo_root: Path,
     release_wait_attempts: int = 30,
     sleep_seconds: float = 10.0,
-    expected_head_sha: str | None = None,
 ) -> int:
     try:
         plain_version, tag = normalize_version(version)
@@ -98,7 +97,6 @@ def publish_release(
         return 2
 
     status = 0
-    current_head = ""
 
     def section(title: str) -> None:
         lines.extend(["", f"### {title} ###"])
@@ -128,25 +126,6 @@ def publish_release(
     if status == 0:
         append_command(["git", "pull", "--ff-only", "origin", "main"])
 
-    section("VERIFY CURRENT HEAD")
-    if status == 0:
-        head_result = run_command(repo_root, ["git", "rev-parse", "HEAD"])
-        if head_result.output:
-            lines.append(head_result.output)
-        if head_result.returncode != 0 or not head_result.output:
-            lines.append("ERROR: could not resolve current HEAD before release tag creation.")
-            status = 1
-        else:
-            current_head = head_result.output.splitlines()[-1].strip()
-            if expected_head_sha and current_head != expected_head_sha:
-                lines.append(
-                    "ERROR: current HEAD changed before release tag creation: "
-                    + current_head
-                    + " != "
-                    + expected_head_sha
-                )
-                status = 1
-
     section("RELEASE GATE")
     if status == 0:
         append_command(["./ns", "release-gate", plain_version])
@@ -175,22 +154,6 @@ def publish_release(
     section("CREATE AND PUSH TAG")
     if status == 0:
         append_command(["git", "tag", tag])
-        if status == 0:
-            tag_target = run_command(repo_root, ["git", "rev-list", "-n", "1", tag])
-            if tag_target.output:
-                lines.append(tag_target.output)
-            resolved_tag_target = tag_target.output.splitlines()[-1].strip() if tag_target.output else ""
-            if tag_target.returncode != 0 or not resolved_tag_target:
-                lines.append("ERROR: could not resolve created tag target before push.")
-                status = 1
-            elif current_head and resolved_tag_target != current_head:
-                lines.append(
-                    "ERROR: created tag does not point at current HEAD: "
-                    + resolved_tag_target
-                    + " != "
-                    + current_head
-                )
-                status = 1
         if status == 0:
             append_command(["git", "push", "origin", tag])
 
