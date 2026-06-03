@@ -6,7 +6,7 @@
     "blocked_message": "",
     "branch": "feature/harden-release-publish-head-guards",
     "chat_reply": "g",
-    "head": "1a9e6fc",
+    "head": "5ad2d9f",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -73,8 +73,8 @@
           "dirty_worktree": true,
           "pending_transfer_order": true
         },
-        "created_at": "2026-06-03T16:43:34.141744+00:00",
-        "head": "1a9e6fc",
+        "created_at": "2026-06-03T16:45:16.338396+00:00",
+        "head": "5ad2d9f",
         "last_result": {
           "exists": true,
           "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md"
@@ -237,12 +237,12 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "1a9e6fc",
+      "head": "5ad2d9f",
       "order_sync": {
         "attempted": true,
         "current_branch": "feature/harden-release-publish-head-guards",
-        "final_head": "1a9e6fc",
-        "head": "8f75c8a",
+        "final_head": "5ad2d9f",
+        "head": "5ad2d9f",
         "schema_version": 1,
         "steps": [
           {
@@ -254,7 +254,7 @@
             ],
             "name": "git_fetch_current_branch",
             "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            feature/harden-release-publish-head-guards -> FETCH_HEAD\n   8f75c8a..1a9e6fc  feature/harden-release-publish-head-guards -> origin/feature/harden-release-publish-head-guards",
+            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            feature/harden-release-publish-head-guards -> FETCH_HEAD",
             "stdout": ""
           },
           {
@@ -268,7 +268,7 @@
             "name": "git_pull_current_branch",
             "returncode": 0,
             "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            feature/harden-release-publish-head-guards -> FETCH_HEAD",
-            "stdout": "Updating 8f75c8a..1a9e6fc\nFast-forward\n src/agentic_project_kit/cli_commands/transfer.py |  42 ++-\n src/agentic_project_kit/transfer_remote_next.py  | 449 ++++++++++++-----------\n 2 files changed, 263 insertions(+), 228 deletions(-)"
+            "stdout": "Already up to date."
           }
         ]
       },
@@ -282,12 +282,12 @@
               "--worktree",
               "--",
               "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
-              "docs/reports/terminal/transfer_handoff_reports/20260603T162130Z-f254d747-remote-next.json",
-              "docs/reports/terminal/transfer_handoff_reports/20260603T162130Z-f254d747-remote-next.log",
+              "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.json",
+              "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.log",
               "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
               "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-              "docs/reports/transfer_runs/20260603T162130Z-f254d747-remote-next.json",
-              "docs/reports/transfer_runs/20260603T162130Z-f254d747-remote-next.log",
+              "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.json",
+              "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.log",
               "docs/reports/transfer_runs/latest-remote-next-report.json",
               "docs/reports/transfer_runs/latest-remote-next-report.log"
             ],
@@ -308,40 +308,30 @@
         "foreign_dirty_paths": [],
         "owned_report_artifacts": [
           "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
-          "docs/reports/terminal/transfer_handoff_reports/20260603T162130Z-f254d747-remote-next.json",
-          "docs/reports/terminal/transfer_handoff_reports/20260603T162130Z-f254d747-remote-next.log",
+          "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.json",
+          "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.log",
           "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
           "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-          "docs/reports/transfer_runs/20260603T162130Z-f254d747-remote-next.json",
-          "docs/reports/transfer_runs/20260603T162130Z-f254d747-remote-next.log",
+          "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.json",
+          "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.log",
           "docs/reports/transfer_runs/latest-remote-next-report.json",
           "docs/reports/transfer_runs/latest-remote-next-report.log",
           "docs/reports/command_runs/one-command-transfer-closeout-check.md"
         ],
         "schema_version": 1
       },
-      "remote_tracking": "origin/feature/harden-release-publish-head-guards",
-      "rule_ack_refresh_before_transfer": {
-        "argv": [
-          "./.venv/bin/agentic-kit",
-          "rules",
-          "acknowledge"
-        ],
-        "returncode": 0,
-        "stderr": "",
-        "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=d2d75fd48c25cdddfc869c426320d402ede8574533d84af2c98b5dc4ad8e89cb\nrepo_head=1a9e6fc\ndeclared_next_allowed_action=run_next_command"
-      }
+      "remote_tracking": "origin/feature/harden-release-publish-head-guards"
     },
     "primary_state": "PASS",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.json",
+    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json",
     "reasons": [],
-    "report_path": "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.json",
+    "report_path": "docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json",
     "result_status": "PASS",
     "returncode": 0,
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "1a9e6fc",
+      "head": "5ad2d9f",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -649,10 +639,10 @@
     "repo_state": {
       "branch": "feature/harden-release-publish-head-guards",
       "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
-      "head": "1a9e6fca4c925f21c9fac4e5ab3f09605e5fd705",
+      "head": "5ad2d9fff02f8d7bc2cb57b39ed16e236af42e34",
       "head_matches_upstream": true,
       "upstream": "origin/feature/harden-release-publish-head-guards",
-      "upstream_head": "1a9e6fca4c925f21c9fac4e5ab3f09605e5fd705"
+      "upstream_head": "5ad2d9fff02f8d7bc2cb57b39ed16e236af42e34"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -683,7 +673,7 @@
     "blocked_message": "",
     "branch": "feature/harden-release-publish-head-guards",
     "chat_reply": "g",
-    "head": "1a9e6fc",
+    "head": "5ad2d9f",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -750,8 +740,8 @@
           "dirty_worktree": true,
           "pending_transfer_order": true
         },
-        "created_at": "2026-06-03T16:43:34.141744+00:00",
-        "head": "1a9e6fc",
+        "created_at": "2026-06-03T16:45:16.338396+00:00",
+        "head": "5ad2d9f",
         "last_result": {
           "exists": true,
           "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md"
@@ -914,12 +904,12 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "1a9e6fc",
+      "head": "5ad2d9f",
       "order_sync": {
         "attempted": true,
         "current_branch": "feature/harden-release-publish-head-guards",
-        "final_head": "1a9e6fc",
-        "head": "8f75c8a",
+        "final_head": "5ad2d9f",
+        "head": "5ad2d9f",
         "schema_version": 1,
         "steps": [
           {
@@ -931,7 +921,7 @@
             ],
             "name": "git_fetch_current_branch",
             "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            feature/harden-release-publish-head-guards -> FETCH_HEAD\n   8f75c8a..1a9e6fc  feature/harden-release-publish-head-guards -> origin/feature/harden-release-publish-head-guards",
+            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            feature/harden-release-publish-head-guards -> FETCH_HEAD",
             "stdout": ""
           },
           {
@@ -945,7 +935,7 @@
             "name": "git_pull_current_branch",
             "returncode": 0,
             "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            feature/harden-release-publish-head-guards -> FETCH_HEAD",
-            "stdout": "Updating 8f75c8a..1a9e6fc\nFast-forward\n src/agentic_project_kit/cli_commands/transfer.py |  42 ++-\n src/agentic_project_kit/transfer_remote_next.py  | 449 ++++++++++++-----------\n 2 files changed, 263 insertions(+), 228 deletions(-)"
+            "stdout": "Already up to date."
           }
         ]
       },
@@ -959,12 +949,12 @@
               "--worktree",
               "--",
               "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
-              "docs/reports/terminal/transfer_handoff_reports/20260603T162130Z-f254d747-remote-next.json",
-              "docs/reports/terminal/transfer_handoff_reports/20260603T162130Z-f254d747-remote-next.log",
+              "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.json",
+              "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.log",
               "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
               "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-              "docs/reports/transfer_runs/20260603T162130Z-f254d747-remote-next.json",
-              "docs/reports/transfer_runs/20260603T162130Z-f254d747-remote-next.log",
+              "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.json",
+              "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.log",
               "docs/reports/transfer_runs/latest-remote-next-report.json",
               "docs/reports/transfer_runs/latest-remote-next-report.log"
             ],
@@ -985,40 +975,30 @@
         "foreign_dirty_paths": [],
         "owned_report_artifacts": [
           "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
-          "docs/reports/terminal/transfer_handoff_reports/20260603T162130Z-f254d747-remote-next.json",
-          "docs/reports/terminal/transfer_handoff_reports/20260603T162130Z-f254d747-remote-next.log",
+          "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.json",
+          "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.log",
           "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
           "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-          "docs/reports/transfer_runs/20260603T162130Z-f254d747-remote-next.json",
-          "docs/reports/transfer_runs/20260603T162130Z-f254d747-remote-next.log",
+          "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.json",
+          "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.log",
           "docs/reports/transfer_runs/latest-remote-next-report.json",
           "docs/reports/transfer_runs/latest-remote-next-report.log",
           "docs/reports/command_runs/one-command-transfer-closeout-check.md"
         ],
         "schema_version": 1
       },
-      "remote_tracking": "origin/feature/harden-release-publish-head-guards",
-      "rule_ack_refresh_before_transfer": {
-        "argv": [
-          "./.venv/bin/agentic-kit",
-          "rules",
-          "acknowledge"
-        ],
-        "returncode": 0,
-        "stderr": "",
-        "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=d2d75fd48c25cdddfc869c426320d402ede8574533d84af2c98b5dc4ad8e89cb\nrepo_head=1a9e6fc\ndeclared_next_allowed_action=run_next_command"
-      }
+      "remote_tracking": "origin/feature/harden-release-publish-head-guards"
     },
     "primary_state": "PASS",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.json",
+    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json",
     "reasons": [],
-    "report_path": "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.json",
+    "report_path": "docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json",
     "result_status": "PASS",
     "returncode": 0,
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "1a9e6fc",
+      "head": "5ad2d9f",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -1326,10 +1306,10 @@
     "repo_state": {
       "branch": "feature/harden-release-publish-head-guards",
       "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
-      "head": "1a9e6fca4c925f21c9fac4e5ab3f09605e5fd705",
+      "head": "5ad2d9fff02f8d7bc2cb57b39ed16e236af42e34",
       "head_matches_upstream": true,
       "upstream": "origin/feature/harden-release-publish-head-guards",
-      "upstream_head": "1a9e6fca4c925f21c9fac4e5ab3f09605e5fd705"
+      "upstream_head": "5ad2d9fff02f8d7bc2cb57b39ed16e236af42e34"
     },
     "schema_version": 1,
     "terminal_block_rules": {
