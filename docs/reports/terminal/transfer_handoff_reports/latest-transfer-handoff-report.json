@@ -6,7 +6,7 @@
     "blocked_message": "",
     "branch": "feature/harden-release-publish-head-guards",
     "chat_reply": "g",
-    "head": "4c2f741",
+    "head": "2b52d68",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -71,8 +71,8 @@
           "dirty_worktree": true,
           "pending_transfer_order": true
         },
-        "created_at": "2026-06-03T16:03:59.869113+00:00",
-        "head": "4c2f741",
+        "created_at": "2026-06-03T16:17:23.290011+00:00",
+        "head": "2b52d68",
         "last_result": {
           "exists": true,
           "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md"
@@ -235,12 +235,12 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "4c2f741",
+      "head": "2b52d68",
       "order_sync": {
         "attempted": true,
         "current_branch": "feature/harden-release-publish-head-guards",
-        "final_head": "4c2f741",
-        "head": "4c2f741",
+        "final_head": "2b52d68",
+        "head": "2b52d68",
         "schema_version": 1,
         "steps": [
           {
@@ -278,28 +278,18 @@
         "owned_report_artifacts": [],
         "schema_version": 1
       },
-      "remote_tracking": "origin/feature/harden-release-publish-head-guards",
-      "rule_ack_refresh_before_transfer": {
-        "argv": [
-          "./.venv/bin/agentic-kit",
-          "rules",
-          "acknowledge"
-        ],
-        "returncode": 0,
-        "stderr": "",
-        "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=d2d75fd48c25cdddfc869c426320d402ede8574533d84af2c98b5dc4ad8e89cb\nrepo_head=4c2f741\ndeclared_next_allowed_action=run_next_command"
-      }
+      "remote_tracking": "origin/feature/harden-release-publish-head-guards"
     },
     "primary_state": "FAIL",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T160359Z-1b073326-remote-next.json",
+    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T161723Z-e10c9a21-remote-next.json",
     "reasons": [],
-    "report_path": "docs/reports/transfer_runs/20260603T160359Z-1b073326-remote-next.json",
+    "report_path": "docs/reports/transfer_runs/20260603T161723Z-e10c9a21-remote-next.json",
     "result_status": "FAIL",
     "returncode": 1,
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "4c2f741",
+      "head": "2b52d68",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -607,10 +597,10 @@
     "repo_state": {
       "branch": "feature/harden-release-publish-head-guards",
       "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
-      "head": "4c2f7412162cd47c7c532597938304780afc6305",
+      "head": "2b52d685d908e6cebe45a8ba3d1a84ca2acd1edf",
       "head_matches_upstream": true,
       "upstream": "origin/feature/harden-release-publish-head-guards",
-      "upstream_head": "4c2f7412162cd47c7c532597938304780afc6305"
+      "upstream_head": "2b52d685d908e6cebe45a8ba3d1a84ca2acd1edf"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -641,7 +631,7 @@
     "blocked_message": "",
     "branch": "feature/harden-release-publish-head-guards",
     "chat_reply": "g",
-    "head": "4c2f741",
+    "head": "2b52d68",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -706,8 +696,8 @@
           "dirty_worktree": true,
           "pending_transfer_order": true
         },
-        "created_at": "2026-06-03T16:03:59.869113+00:00",
-        "head": "4c2f741",
+        "created_at": "2026-06-03T16:17:23.290011+00:00",
+        "head": "2b52d68",
         "last_result": {
           "exists": true,
           "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md"
@@ -870,12 +860,12 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "4c2f741",
+      "head": "2b52d68",
       "order_sync": {
         "attempted": true,
         "current_branch": "feature/harden-release-publish-head-guards",
-        "final_head": "4c2f741",
-        "head": "4c2f741",
+        "final_head": "2b52d68",
+        "head": "2b52d68",
         "schema_version": 1,
         "steps": [
           {
@@ -913,28 +903,18 @@
         "owned_report_artifacts": [],
         "schema_version": 1
       },
-      "remote_tracking": "origin/feature/harden-release-publish-head-guards",
-      "rule_ack_refresh_before_transfer": {
-        "argv": [
-          "./.venv/bin/agentic-kit",
-          "rules",
-          "acknowledge"
-        ],
-        "returncode": 0,
-        "stderr": "",
-        "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=d2d75fd48c25cdddfc869c426320d402ede8574533d84af2c98b5dc4ad8e89cb\nrepo_head=4c2f741\ndeclared_next_allowed_action=run_next_command"
-      }
+      "remote_tracking": "origin/feature/harden-release-publish-head-guards"
     },
     "primary_state": "FAIL",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T160359Z-1b073326-remote-next.json",
+    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T161723Z-e10c9a21-remote-next.json",
     "reasons": [],
-    "report_path": "docs/reports/transfer_runs/20260603T160359Z-1b073326-remote-next.json",
+    "report_path": "docs/reports/transfer_runs/20260603T161723Z-e10c9a21-remote-next.json",
     "result_status": "FAIL",
     "returncode": 1,
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "4c2f741",
+      "head": "2b52d68",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -1242,10 +1222,10 @@
     "repo_state": {
       "branch": "feature/harden-release-publish-head-guards",
       "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
-      "head": "4c2f7412162cd47c7c532597938304780afc6305",
+      "head": "2b52d685d908e6cebe45a8ba3d1a84ca2acd1edf",
       "head_matches_upstream": true,
       "upstream": "origin/feature/harden-release-publish-head-guards",
-      "upstream_head": "4c2f7412162cd47c7c532597938304780afc6305"
+      "upstream_head": "2b52d685d908e6cebe45a8ba3d1a84ca2acd1edf"
     },
     "schema_version": 1,
     "terminal_block_rules": {
