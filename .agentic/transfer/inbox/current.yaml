@@ -9,11 +9,15 @@ report_path: docs/reports/command_runs/pr1079-final-closeout-evidence.md
 actions:
 - type: run_command
   command:
+  - ./.venv/bin/python
+  - .agentic/transfer/payloads/write_pr1079_clean_closeout_log.py
+- type: run_command
+  command:
   - ./.venv/bin/agentic-kit
   - evidence
   - finalize-log
   - --run-log
-  - docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log
+  - docs/reports/command_runs/pr1079-clean-closeout-run.log
   - --remote-log
   - docs/reports/terminal/pr1079-one-command-transfer-final-closeout.log
   - --slice
