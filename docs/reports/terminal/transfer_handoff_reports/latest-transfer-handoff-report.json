@@ -6,7 +6,7 @@
     "blocked_message": "",
     "branch": "feature/harden-release-publish-head-guards",
     "chat_reply": "g",
-    "head": "2b52d68",
+    "head": "463d826",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -17,19 +17,20 @@
               "./.venv/bin/agentic-kit",
               "evidence",
               "inspect",
-              "--require-summary"
+              "--require-summary",
+              "docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log"
             ],
-            "returncode": 1,
+            "returncode": 0,
             "stderr": "",
-            "stdout": "EVIDENCE_INSPECTION\nverdict: AMBIGUOUS_SUMMARY_REVIEW_REQUIRED\nevidence_exists: yes\nrequire_summary: yes\ngit_branch: feature/harden-release-publish-head-guards\ngit_status_clean: yes\npass_markers: 0\nfail_markers: 2\nhidden_fail_before_final_pass: no\nstructured_summary_found: no\nstructured_summary_valid: no\nsummary_findings:\n- missing structured summary block\nevidence_path: docs/reports/terminal/20260529-193605_post-pr914-closeout-precheck.log\nfinal_marker: ### RESULT: FAIL ###\nnext_action: review ambiguous evidence manually before continuing\n### RESULT: FAIL ###\n",
+            "stdout": "EVIDENCE_INSPECTION\nverdict: PASS_CONTINUE\nevidence_exists: yes\nrequire_summary: yes\ngit_branch: feature/harden-release-publish-head-guards\ngit_status_clean: yes\npass_markers: 2\nfail_markers: 0\nhidden_fail_before_final_pass: no\nstructured_summary_found: yes\nstructured_summary_valid: yes\nsummary_name: post-pr1067-monitor-wrapper-closeout\nsummary_scope: post-PR1067 transfer monitor wrapper hardening closeout\nsummary_branch: docs/post-pr1067-monitor-wrapper-closeout-evidence\nsummary_origin: local\nsummary_state_mode: local\nsummary_mode_check: local smoke gates and post-merge handoff checks passed on main after PR1067\nsummary_work: PASS\nsummary_evidence: PASS\nsummary_overall: PASS\nsummary_remote_evidence: NOT_REQUIRED\nsummary_pr: NONE\nsummary_head_sha: 22a16095fccbd99072f9873de5ec8e87fc7f220e\nsummary_ci: not-required\nsummary_merge: not-required\nsummary_terminal_log: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nsummary_terminal_log_remote: docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nsummary_terminal_log_local: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nsummary_command_report: post-pr1067-monitor-wrapper-closeout.log records post-merge check PASS, handoff check PASS, ruff PASS, and targeted monitor/transfer tests PASS\nsummary_safe_step: Run evidence inspect --require-summary on this log, then update PR1068 and merge only after green checks\nsummary_chat_reply: d\nsummary_result_marker: PASS\nevidence_path: docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nfinal_marker: ### RESULT: PASS ###\nnext_action: continue with the next safe slice after reviewing evidence\n### RESULT: PASS ###\n",
             "type": "run_command"
           }
         ],
-        "message": "Transfer command action failed.",
+        "message": "Transfer order applied.",
         "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md",
-        "result_status": "FAIL",
-        "returncode": 1,
-        "safety": "Bounded repo-local closeout diagnostics only. This transfer order runs the project evidence inspection through the agentic-kit CLI without shell expansion and records stdout, stderr, and return codes in the transfer report.",
+        "result_status": "PASS",
+        "returncode": 0,
+        "safety": "Bounded repo-local closeout diagnostics only. This transfer order runs evidence inspection against an explicit current closeout log path, avoiding implicit fallback to stale evidence.",
         "schema_version": 1,
         "transfer_id": "one-command-transfer-closeout-check"
       },
@@ -40,7 +41,8 @@
               "./.venv/bin/agentic-kit",
               "evidence",
               "inspect",
-              "--require-summary"
+              "--require-summary",
+              "docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log"
             ],
             "type": "run_command",
             "would_run": true
@@ -50,13 +52,13 @@
         "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md",
         "result_status": "PENDING",
         "returncode": 0,
-        "safety": "Bounded repo-local closeout diagnostics only. This transfer order runs the project evidence inspection through the agentic-kit CLI without shell expansion and records stdout, stderr, and return codes in the transfer report.",
+        "safety": "Bounded repo-local closeout diagnostics only. This transfer order runs evidence inspection against an explicit current closeout log path, avoiding implicit fallback to stale evidence.",
         "schema_version": 1,
         "transfer_id": "one-command-transfer-closeout-check"
       },
-      "next_action": "Fix transfer apply errors before continuing.",
-      "result_status": "FAIL",
-      "returncode": 1,
+      "next_action": "Review transfer state and evidence report before continuing.",
+      "result_status": "PASS",
+      "returncode": 0,
       "schema_version": 1,
       "state": {
         "branch": "feature/harden-release-publish-head-guards",
@@ -71,8 +73,8 @@
           "dirty_worktree": true,
           "pending_transfer_order": true
         },
-        "created_at": "2026-06-03T16:17:23.290011+00:00",
-        "head": "2b52d68",
+        "created_at": "2026-06-03T16:21:30.051403+00:00",
+        "head": "463d826",
         "last_result": {
           "exists": true,
           "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md"
@@ -220,7 +222,7 @@
       },
       "transfer_id": "one-command-transfer-closeout-check"
     },
-    "next_action": "Fix transfer apply errors before continuing.",
+    "next_action": "Review transfer state and evidence report before continuing.",
     "post_report_actions": {
       "attempted": true,
       "schema_version": 1,
@@ -235,12 +237,12 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "2b52d68",
+      "head": "463d826",
       "order_sync": {
         "attempted": true,
         "current_branch": "feature/harden-release-publish-head-guards",
-        "final_head": "2b52d68",
-        "head": "2b52d68",
+        "final_head": "463d826",
+        "head": "463d826",
         "schema_version": 1,
         "steps": [
           {
@@ -278,18 +280,28 @@
         "owned_report_artifacts": [],
         "schema_version": 1
       },
-      "remote_tracking": "origin/feature/harden-release-publish-head-guards"
+      "remote_tracking": "origin/feature/harden-release-publish-head-guards",
+      "rule_ack_refresh_before_transfer": {
+        "argv": [
+          "./.venv/bin/agentic-kit",
+          "rules",
+          "acknowledge"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=d2d75fd48c25cdddfc869c426320d402ede8574533d84af2c98b5dc4ad8e89cb\nrepo_head=463d826\ndeclared_next_allowed_action=run_next_command"
+      }
     },
-    "primary_state": "FAIL",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T161723Z-e10c9a21-remote-next.json",
+    "primary_state": "PASS",
+    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T162130Z-f254d747-remote-next.json",
     "reasons": [],
-    "report_path": "docs/reports/transfer_runs/20260603T161723Z-e10c9a21-remote-next.json",
-    "result_status": "FAIL",
-    "returncode": 1,
+    "report_path": "docs/reports/transfer_runs/20260603T162130Z-f254d747-remote-next.json",
+    "result_status": "PASS",
+    "returncode": 0,
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "2b52d68",
+      "head": "463d826",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -597,10 +609,10 @@
     "repo_state": {
       "branch": "feature/harden-release-publish-head-guards",
       "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
-      "head": "2b52d685d908e6cebe45a8ba3d1a84ca2acd1edf",
+      "head": "463d826efdd2155b365f93663f5a097e4be64e01",
       "head_matches_upstream": true,
       "upstream": "origin/feature/harden-release-publish-head-guards",
-      "upstream_head": "2b52d685d908e6cebe45a8ba3d1a84ca2acd1edf"
+      "upstream_head": "463d826efdd2155b365f93663f5a097e4be64e01"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -631,7 +643,7 @@
     "blocked_message": "",
     "branch": "feature/harden-release-publish-head-guards",
     "chat_reply": "g",
-    "head": "2b52d68",
+    "head": "463d826",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -642,19 +654,20 @@
               "./.venv/bin/agentic-kit",
               "evidence",
               "inspect",
-              "--require-summary"
+              "--require-summary",
+              "docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log"
             ],
-            "returncode": 1,
+            "returncode": 0,
             "stderr": "",
-            "stdout": "EVIDENCE_INSPECTION\nverdict: AMBIGUOUS_SUMMARY_REVIEW_REQUIRED\nevidence_exists: yes\nrequire_summary: yes\ngit_branch: feature/harden-release-publish-head-guards\ngit_status_clean: yes\npass_markers: 0\nfail_markers: 2\nhidden_fail_before_final_pass: no\nstructured_summary_found: no\nstructured_summary_valid: no\nsummary_findings:\n- missing structured summary block\nevidence_path: docs/reports/terminal/20260529-193605_post-pr914-closeout-precheck.log\nfinal_marker: ### RESULT: FAIL ###\nnext_action: review ambiguous evidence manually before continuing\n### RESULT: FAIL ###\n",
+            "stdout": "EVIDENCE_INSPECTION\nverdict: PASS_CONTINUE\nevidence_exists: yes\nrequire_summary: yes\ngit_branch: feature/harden-release-publish-head-guards\ngit_status_clean: yes\npass_markers: 2\nfail_markers: 0\nhidden_fail_before_final_pass: no\nstructured_summary_found: yes\nstructured_summary_valid: yes\nsummary_name: post-pr1067-monitor-wrapper-closeout\nsummary_scope: post-PR1067 transfer monitor wrapper hardening closeout\nsummary_branch: docs/post-pr1067-monitor-wrapper-closeout-evidence\nsummary_origin: local\nsummary_state_mode: local\nsummary_mode_check: local smoke gates and post-merge handoff checks passed on main after PR1067\nsummary_work: PASS\nsummary_evidence: PASS\nsummary_overall: PASS\nsummary_remote_evidence: NOT_REQUIRED\nsummary_pr: NONE\nsummary_head_sha: 22a16095fccbd99072f9873de5ec8e87fc7f220e\nsummary_ci: not-required\nsummary_merge: not-required\nsummary_terminal_log: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nsummary_terminal_log_remote: docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nsummary_terminal_log_local: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nsummary_command_report: post-pr1067-monitor-wrapper-closeout.log records post-merge check PASS, handoff check PASS, ruff PASS, and targeted monitor/transfer tests PASS\nsummary_safe_step: Run evidence inspect --require-summary on this log, then update PR1068 and merge only after green checks\nsummary_chat_reply: d\nsummary_result_marker: PASS\nevidence_path: docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nfinal_marker: ### RESULT: PASS ###\nnext_action: continue with the next safe slice after reviewing evidence\n### RESULT: PASS ###\n",
             "type": "run_command"
           }
         ],
-        "message": "Transfer command action failed.",
+        "message": "Transfer order applied.",
         "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md",
-        "result_status": "FAIL",
-        "returncode": 1,
-        "safety": "Bounded repo-local closeout diagnostics only. This transfer order runs the project evidence inspection through the agentic-kit CLI without shell expansion and records stdout, stderr, and return codes in the transfer report.",
+        "result_status": "PASS",
+        "returncode": 0,
+        "safety": "Bounded repo-local closeout diagnostics only. This transfer order runs evidence inspection against an explicit current closeout log path, avoiding implicit fallback to stale evidence.",
         "schema_version": 1,
         "transfer_id": "one-command-transfer-closeout-check"
       },
@@ -665,7 +678,8 @@
               "./.venv/bin/agentic-kit",
               "evidence",
               "inspect",
-              "--require-summary"
+              "--require-summary",
+              "docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log"
             ],
             "type": "run_command",
             "would_run": true
@@ -675,13 +689,13 @@
         "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md",
         "result_status": "PENDING",
         "returncode": 0,
-        "safety": "Bounded repo-local closeout diagnostics only. This transfer order runs the project evidence inspection through the agentic-kit CLI without shell expansion and records stdout, stderr, and return codes in the transfer report.",
+        "safety": "Bounded repo-local closeout diagnostics only. This transfer order runs evidence inspection against an explicit current closeout log path, avoiding implicit fallback to stale evidence.",
         "schema_version": 1,
         "transfer_id": "one-command-transfer-closeout-check"
       },
-      "next_action": "Fix transfer apply errors before continuing.",
-      "result_status": "FAIL",
-      "returncode": 1,
+      "next_action": "Review transfer state and evidence report before continuing.",
+      "result_status": "PASS",
+      "returncode": 0,
       "schema_version": 1,
       "state": {
         "branch": "feature/harden-release-publish-head-guards",
@@ -696,8 +710,8 @@
           "dirty_worktree": true,
           "pending_transfer_order": true
         },
-        "created_at": "2026-06-03T16:17:23.290011+00:00",
-        "head": "2b52d68",
+        "created_at": "2026-06-03T16:21:30.051403+00:00",
+        "head": "463d826",
         "last_result": {
           "exists": true,
           "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md"
@@ -845,7 +859,7 @@
       },
       "transfer_id": "one-command-transfer-closeout-check"
     },
-    "next_action": "Fix transfer apply errors before continuing.",
+    "next_action": "Review transfer state and evidence report before continuing.",
     "post_report_actions": {
       "attempted": true,
       "schema_version": 1,
@@ -860,12 +874,12 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "2b52d68",
+      "head": "463d826",
       "order_sync": {
         "attempted": true,
         "current_branch": "feature/harden-release-publish-head-guards",
-        "final_head": "2b52d68",
-        "head": "2b52d68",
+        "final_head": "463d826",
+        "head": "463d826",
         "schema_version": 1,
         "steps": [
           {
@@ -903,18 +917,28 @@
         "owned_report_artifacts": [],
         "schema_version": 1
       },
-      "remote_tracking": "origin/feature/harden-release-publish-head-guards"
+      "remote_tracking": "origin/feature/harden-release-publish-head-guards",
+      "rule_ack_refresh_before_transfer": {
+        "argv": [
+          "./.venv/bin/agentic-kit",
+          "rules",
+          "acknowledge"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=d2d75fd48c25cdddfc869c426320d402ede8574533d84af2c98b5dc4ad8e89cb\nrepo_head=463d826\ndeclared_next_allowed_action=run_next_command"
+      }
     },
-    "primary_state": "FAIL",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T161723Z-e10c9a21-remote-next.json",
+    "primary_state": "PASS",
+    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T162130Z-f254d747-remote-next.json",
     "reasons": [],
-    "report_path": "docs/reports/transfer_runs/20260603T161723Z-e10c9a21-remote-next.json",
-    "result_status": "FAIL",
-    "returncode": 1,
+    "report_path": "docs/reports/transfer_runs/20260603T162130Z-f254d747-remote-next.json",
+    "result_status": "PASS",
+    "returncode": 0,
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "2b52d68",
+      "head": "463d826",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -1222,10 +1246,10 @@
     "repo_state": {
       "branch": "feature/harden-release-publish-head-guards",
       "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
-      "head": "2b52d685d908e6cebe45a8ba3d1a84ca2acd1edf",
+      "head": "463d826efdd2155b365f93663f5a097e4be64e01",
       "head_matches_upstream": true,
       "upstream": "origin/feature/harden-release-publish-head-guards",
-      "upstream_head": "2b52d685d908e6cebe45a8ba3d1a84ca2acd1edf"
+      "upstream_head": "463d826efdd2155b365f93663f5a097e4be64e01"
     },
     "schema_version": 1,
     "terminal_block_rules": {
