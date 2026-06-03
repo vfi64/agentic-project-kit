@@ -3,16 +3,16 @@
   "kind": "local_to_llm_remote_next_report",
   "last_result": {
     "artifact_type": "transfer_remote_next_execution_report",
-    "blocked_message": "worktree must be clean before transfer remote-next:\nM docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+    "blocked_message": "worktree must be clean before transfer remote-next:\nM docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
     "branch": "feature/harden-release-publish-head-guards",
     "chat_reply": "g",
-    "head": "2f74617",
+    "head": "2dd8f65",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
       "apply": null,
       "inspect": {
-        "message": "worktree must be clean before transfer remote-next:\nM docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+        "message": "worktree must be clean before transfer remote-next:\nM docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
         "reasons": [
           "dirty_worktree"
         ],
@@ -31,14 +31,18 @@
           "staged_changes": [
             "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
           ],
-          "status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+          "status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
           "unstaged_changes": [
             "docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json",
             "docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log",
+            "docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json",
+            "docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.log",
             "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
             "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
             "docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json",
             "docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log",
+            "docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json",
+            "docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.log",
             "docs/reports/transfer_runs/latest-remote-next-report.json",
             "docs/reports/transfer_runs/latest-remote-next-report.log"
           ],
@@ -46,7 +50,7 @@
             "docs/reports/command_runs/one-command-transfer-closeout-check.md"
           ]
         },
-        "head": "2f74617",
+        "head": "2dd8f65",
         "next_action": "Inspect the published remote-next diagnostic report before retrying.",
         "primary_state": "BLOCKED",
         "reasons": [
@@ -69,14 +73,18 @@
         "staged_changes": [
           "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
         ],
-        "status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+        "status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
         "unstaged_changes": [
           "docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json",
           "docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log",
+          "docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json",
+          "docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.log",
           "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
           "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
           "docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json",
           "docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log",
+          "docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json",
+          "docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.log",
           "docs/reports/transfer_runs/latest-remote-next-report.json",
           "docs/reports/transfer_runs/latest-remote-next-report.log"
         ],
@@ -84,15 +92,15 @@
           "docs/reports/command_runs/one-command-transfer-closeout-check.md"
         ]
       },
-      "head": "2f74617",
+      "head": "2dd8f65",
       "remote_tracking": "origin/feature/harden-release-publish-head-guards"
     },
     "primary_state": "BLOCKED",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json",
+    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T152651Z-983de48c-remote-next.json",
     "reasons": [
       "dirty_worktree"
     ],
-    "report_path": "docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json",
+    "report_path": "docs/reports/transfer_runs/20260603T152651Z-983de48c-remote-next.json",
     "result_status": "BLOCKED",
     "returncode": 2,
     "rule_ack": {
@@ -407,11 +415,11 @@
     ],
     "repo_state": {
       "branch": "feature/harden-release-publish-head-guards",
-      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
-      "head": "2f74617a492ae579e5e6e7762a131d4e4d8bd5f9",
+      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+      "head": "2dd8f65fa21d37ce22c42a2ed1f965f2a64b836d",
       "head_matches_upstream": true,
       "upstream": "origin/feature/harden-release-publish-head-guards",
-      "upstream_head": "2f74617a492ae579e5e6e7762a131d4e4d8bd5f9"
+      "upstream_head": "2dd8f65fa21d37ce22c42a2ed1f965f2a64b836d"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -439,16 +447,16 @@
   },
   "remote_next_report": {
     "artifact_type": "transfer_remote_next_execution_report",
-    "blocked_message": "worktree must be clean before transfer remote-next:\nM docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+    "blocked_message": "worktree must be clean before transfer remote-next:\nM docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
     "branch": "feature/harden-release-publish-head-guards",
     "chat_reply": "g",
-    "head": "2f74617",
+    "head": "2dd8f65",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
       "apply": null,
       "inspect": {
-        "message": "worktree must be clean before transfer remote-next:\nM docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+        "message": "worktree must be clean before transfer remote-next:\nM docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
         "reasons": [
           "dirty_worktree"
         ],
@@ -467,14 +475,18 @@
           "staged_changes": [
             "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
           ],
-          "status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+          "status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
           "unstaged_changes": [
             "docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json",
             "docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log",
+            "docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json",
+            "docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.log",
             "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
             "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
             "docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json",
             "docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log",
+            "docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json",
+            "docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.log",
             "docs/reports/transfer_runs/latest-remote-next-report.json",
             "docs/reports/transfer_runs/latest-remote-next-report.log"
           ],
@@ -482,7 +494,7 @@
             "docs/reports/command_runs/one-command-transfer-closeout-check.md"
           ]
         },
-        "head": "2f74617",
+        "head": "2dd8f65",
         "next_action": "Inspect the published remote-next diagnostic report before retrying.",
         "primary_state": "BLOCKED",
         "reasons": [
@@ -505,14 +517,18 @@
         "staged_changes": [
           "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
         ],
-        "status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+        "status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
         "unstaged_changes": [
           "docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json",
           "docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log",
+          "docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json",
+          "docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.log",
           "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
           "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
           "docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json",
           "docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log",
+          "docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json",
+          "docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.log",
           "docs/reports/transfer_runs/latest-remote-next-report.json",
           "docs/reports/transfer_runs/latest-remote-next-report.log"
         ],
@@ -520,15 +536,15 @@
           "docs/reports/command_runs/one-command-transfer-closeout-check.md"
         ]
       },
-      "head": "2f74617",
+      "head": "2dd8f65",
       "remote_tracking": "origin/feature/harden-release-publish-head-guards"
     },
     "primary_state": "BLOCKED",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json",
+    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T152651Z-983de48c-remote-next.json",
     "reasons": [
       "dirty_worktree"
     ],
-    "report_path": "docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json",
+    "report_path": "docs/reports/transfer_runs/20260603T152651Z-983de48c-remote-next.json",
     "result_status": "BLOCKED",
     "returncode": 2,
     "rule_ack": {
@@ -843,11 +859,11 @@
     ],
     "repo_state": {
       "branch": "feature/harden-release-publish-head-guards",
-      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
-      "head": "2f74617a492ae579e5e6e7762a131d4e4d8bd5f9",
+      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.json\n M docs/reports/transfer_runs/20260603T132330Z-267ed860-remote-next.log\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.json\n M docs/reports/transfer_runs/20260603T134058Z-5eebd690-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+      "head": "2dd8f65fa21d37ce22c42a2ed1f965f2a64b836d",
       "head_matches_upstream": true,
       "upstream": "origin/feature/harden-release-publish-head-guards",
-      "upstream_head": "2f74617a492ae579e5e6e7762a131d4e4d8bd5f9"
+      "upstream_head": "2dd8f65fa21d37ce22c42a2ed1f965f2a64b836d"
     },
     "schema_version": 1,
     "terminal_block_rules": {
