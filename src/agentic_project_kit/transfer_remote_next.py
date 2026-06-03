@@ -14,14 +14,14 @@ from agentic_project_kit.transfer_local_runner import TransferLocalRun, run_loca
 from agentic_project_kit.transfer_runner import DEFAULT_INBOX
 from agentic_project_kit.transfer_safety_context import build_local_to_llm_payload
 
-REMOTE_NEXT_REPORT_DIR = Path('docs/reports/transfer_runs')
-REMOTE_NEXT_LATEST_JSON = REMOTE_NEXT_REPORT_DIR / 'latest-remote-next-report.json'
-REMOTE_NEXT_LATEST_LOG = REMOTE_NEXT_REPORT_DIR / 'latest-remote-next-report.log'
-PUBLISHED_REPORT_DIR = Path('docs/reports/terminal/transfer_handoff_reports')
-PUBLISHED_LATEST_JSON = PUBLISHED_REPORT_DIR / 'latest-transfer-handoff-report.json'
-PUBLISHED_LATEST_LOG = PUBLISHED_REPORT_DIR / 'latest-transfer-handoff-report.log'
-COMMAND_RUN_LATEST = Path('docs/reports/command_runs/LATEST_COMMAND_RUN.txt')
-RULE_ACK_PATH = Path('.agentic/rule_ack/current.json')
+REMOTE_NEXT_REPORT_DIR = Path("docs/reports/transfer_runs")
+REMOTE_NEXT_LATEST_JSON = REMOTE_NEXT_REPORT_DIR / "latest-remote-next-report.json"
+REMOTE_NEXT_LATEST_LOG = REMOTE_NEXT_REPORT_DIR / "latest-remote-next-report.log"
+PUBLISHED_REPORT_DIR = Path("docs/reports/terminal/transfer_handoff_reports")
+PUBLISHED_LATEST_JSON = PUBLISHED_REPORT_DIR / "latest-transfer-handoff-report.json"
+PUBLISHED_LATEST_LOG = PUBLISHED_REPORT_DIR / "latest-transfer-handoff-report.log"
+COMMAND_RUN_LATEST = Path("docs/reports/command_runs/LATEST_COMMAND_RUN.txt")
+RULE_ACK_PATH = Path(".agentic/rule_ack/current.json")
 
 
 @dataclass(frozen=True)
@@ -40,15 +40,15 @@ class GitSnapshot:
 
     def as_json_data(self) -> dict[str, object]:
         return {
-            'current_branch': self.current_branch,
-            'head': self.head,
-            'remote_tracking': self.remote_tracking,
-            'dirty_state': {
-                'clean': self.clean,
-                'status_short': self.status_short,
-                'staged_changes': list(self.staged_changes),
-                'unstaged_changes': list(self.unstaged_changes),
-                'untracked_files': list(self.untracked_files),
+            "current_branch": self.current_branch,
+            "head": self.head,
+            "remote_tracking": self.remote_tracking,
+            "dirty_state": {
+                "clean": self.clean,
+                "status_short": self.status_short,
+                "staged_changes": list(self.staged_changes),
+                "unstaged_changes": list(self.unstaged_changes),
+                "untracked_files": list(self.untracked_files),
             },
         }
 
@@ -58,16 +58,16 @@ class RuleAckSnapshot:
     present: bool
     confirmed: bool
     path: str = str(RULE_ACK_PATH)
-    head: str = ''
+    head: str = ""
     blocking_reasons: tuple[str, ...] = field(default_factory=tuple)
 
     def as_json_data(self) -> dict[str, object]:
         return {
-            'path': self.path,
-            'present': self.present,
-            'confirmed': self.confirmed,
-            'head': self.head,
-            'blocking_reasons': list(self.blocking_reasons),
+            "path": self.path,
+            "present": self.present,
+            "confirmed": self.confirmed,
+            "head": self.head,
+            "blocking_reasons": list(self.blocking_reasons),
         }
 
 
@@ -84,29 +84,29 @@ class TransferRemoteNextRun:
     reasons: tuple[str, ...] = field(default_factory=tuple)
     preflight: dict[str, object] = field(default_factory=dict)
     rule_ack: RuleAckSnapshot | None = None
-    blocked_message: str = ''
+    blocked_message: str = ""
     post_report_actions: dict[str, object] = field(default_factory=dict)
 
     def as_json_data(self) -> dict[str, object]:
-        primary_state = 'BLOCKED' if self.result_status == 'BLOCKED' else self.result_status
+        primary_state = "BLOCKED" if self.result_status == "BLOCKED" else self.result_status
         return {
-            'schema_version': 1,
-            'artifact_type': 'transfer_remote_next_execution_report',
-            'branch': self.branch,
-            'head': self.head,
-            'result_status': self.result_status,
-            'primary_state': primary_state,
-            'returncode': self.returncode,
-            'next_action': self.next_action,
-            'chat_reply': 'g',
-            'report_path': self.report_path,
-            'published_report_path': self.published_report_path,
-            'reasons': list(self.reasons),
-            'blocked_message': self.blocked_message,
-            'preflight': self.preflight,
-            'rule_ack': self.rule_ack.as_json_data() if self.rule_ack else None,
-            'post_report_actions': self.post_report_actions,
-            'local_run': self.local_run.as_json_data(),
+            "schema_version": 1,
+            "artifact_type": "transfer_remote_next_execution_report",
+            "branch": self.branch,
+            "head": self.head,
+            "result_status": self.result_status,
+            "primary_state": primary_state,
+            "returncode": self.returncode,
+            "next_action": self.next_action,
+            "chat_reply": "g",
+            "report_path": self.report_path,
+            "published_report_path": self.published_report_path,
+            "reasons": list(self.reasons),
+            "blocked_message": self.blocked_message,
+            "preflight": self.preflight,
+            "rule_ack": self.rule_ack.as_json_data() if self.rule_ack else None,
+            "post_report_actions": self.post_report_actions,
+            "local_run": self.local_run.as_json_data(),
         }
 
 
@@ -119,10 +119,10 @@ class _CommandResult:
 
     def as_json_data(self) -> dict[str, object]:
         return {
-            'argv': list(self.argv),
-            'returncode': self.returncode,
-            'stdout': self.stdout,
-            'stderr': self.stderr,
+            "argv": list(self.argv),
+            "returncode": self.returncode,
+            "stdout": self.stdout,
+            "stderr": self.stderr,
         }
 
 
@@ -134,14 +134,17 @@ class RemoteNextBlocked(RuntimeError):
 
 
 def _command(argv: list[str], cwd: Path) -> _CommandResult:
-    process = subprocess.run(
-        argv,
-        cwd=cwd,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-    )
+    try:
+        process = subprocess.run(
+            argv,
+            cwd=cwd,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+    except FileNotFoundError as exc:
+        return _CommandResult(tuple(argv), 127, "", str(exc))
     return _CommandResult(tuple(argv), process.returncode, process.stdout.strip(), process.stderr.strip())
 
 
@@ -154,10 +157,10 @@ def _run(argv: list[str], cwd: Path) -> str:
 
 def _status_path(line: str) -> str:
     if len(line) <= 3:
-        return ''
-    if line.startswith('?? '):
+        return ""
+    if line.startswith("?? "):
         return line[3:]
-    if len(line) > 2 and line[2] == ' ':
+    if len(line) > 2 and line[2] == " ":
         return line[3:]
     return line[2:].strip()
 
@@ -171,24 +174,24 @@ def _status_paths(status_short: str) -> tuple[tuple[str, ...], tuple[str, ...], 
             continue
         status = line[:2]
         path = _status_path(line)
-        if status == '??':
+        if status == "??":
             untracked.append(path)
             continue
-        if status[0] != ' ':
+        if status[0] != " ":
             staged.append(path)
-        if status[1] != ' ':
+        if status[1] != " ":
             unstaged.append(path)
     return tuple(staged), tuple(unstaged), tuple(untracked)
 
 
 def _git_snapshot(project_root: Path) -> GitSnapshot:
-    status = _command(['git', 'status', '--porcelain=v1'], project_root).stdout
+    status = _command(["git", "status", "--porcelain=v1"], project_root).stdout
     staged, unstaged, untracked = _status_paths(status)
     return GitSnapshot(
-        current_branch=_command(['git', 'branch', '--show-current'], project_root).stdout or 'UNKNOWN',
-        head=_command(['git', 'rev-parse', '--short', 'HEAD'], project_root).stdout or 'UNKNOWN',
+        current_branch=_command(["git", "branch", "--show-current"], project_root).stdout or "UNKNOWN",
+        head=_command(["git", "rev-parse", "--short", "HEAD"], project_root).stdout or "UNKNOWN",
         remote_tracking=_command(
-            ['git', 'rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{u}'],
+            ["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"],
             project_root,
         ).stdout,
         status_short=status,
@@ -201,46 +204,46 @@ def _git_snapshot(project_root: Path) -> GitSnapshot:
 def _rule_ack_snapshot(project_root: Path, *, repo_head: str) -> RuleAckSnapshot:
     path = project_root / RULE_ACK_PATH
     if not path.exists():
-        return RuleAckSnapshot(False, False, blocking_reasons=('missing_rule_ack',))
+        return RuleAckSnapshot(False, False, blocking_reasons=("missing_rule_ack",))
     try:
-        data = json.loads(path.read_text(encoding='utf-8'))
+        data = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
-        return RuleAckSnapshot(True, False, blocking_reasons=('invalid_rule_ack_json',))
+        return RuleAckSnapshot(True, False, blocking_reasons=("invalid_rule_ack_json",))
     if not isinstance(data, dict):
-        return RuleAckSnapshot(True, False, blocking_reasons=('invalid_rule_ack_shape',))
-    ack_head = str(data.get('repo_head') or data.get('head') or '')
+        return RuleAckSnapshot(True, False, blocking_reasons=("invalid_rule_ack_shape",))
+    ack_head = str(data.get("repo_head") or data.get("head") or "")
     reasons: list[str] = []
     if ack_head and ack_head != repo_head:
-        reasons.append('stale_rule_ack')
+        reasons.append("stale_rule_ack")
     return RuleAckSnapshot(True, not reasons, head=ack_head, blocking_reasons=tuple(reasons))
 
 
 def _refresh_rule_ack(root: Path) -> _CommandResult:
-    result = _command(['./.venv/bin/agentic-kit', 'rules', 'acknowledge'], root)
+    result = _command(["./.venv/bin/agentic-kit", "rules", "acknowledge"], root)
     if result.returncode == 127:
-        return _command(['agentic-kit', 'rules', 'acknowledge'], root)
+        return _command(["agentic-kit", "rules", "acknowledge"], root)
     return result
 
 
 def _current_transfer_report_path(root: Path) -> str:
     try:
-        data = yaml.safe_load((root / DEFAULT_INBOX).read_text(encoding='utf-8')) or {}
+        data = yaml.safe_load((root / DEFAULT_INBOX).read_text(encoding="utf-8")) or {}
     except FileNotFoundError:
-        return ''
+        return ""
     if not isinstance(data, dict):
-        return ''
-    report_path = data.get('report_path')
+        return ""
+    report_path = data.get("report_path")
     if not isinstance(report_path, str):
-        return ''
+        return ""
     value = report_path.strip()
-    if not value.startswith('docs/reports/command_runs/'):
-        return ''
-    if '..' in Path(value).parts:
-        return ''
+    if not value.startswith("docs/reports/command_runs/"):
+        return ""
+    if ".." in Path(value).parts:
+        return ""
     return value
 
 
-def _is_owned_remote_next_report_path(path: str, *, current_order_report: str = '') -> bool:
+def _is_owned_remote_next_report_path(path: str, *, current_order_report: str = "") -> bool:
     value = path.strip()
     if value in {
         str(REMOTE_NEXT_LATEST_JSON),
@@ -251,48 +254,46 @@ def _is_owned_remote_next_report_path(path: str, *, current_order_report: str = 
         current_order_report,
     }:
         return True
-    if value.startswith(str(REMOTE_NEXT_REPORT_DIR) + '/') and value.endswith(('-remote-next.json', '-remote-next.log')):
+    if value.startswith(str(REMOTE_NEXT_REPORT_DIR) + "/") and value.endswith(("-remote-next.json", "-remote-next.log")):
         return True
-    return value.startswith(str(PUBLISHED_REPORT_DIR) + '/') and value.endswith(('-remote-next.json', '-remote-next.log'))
+    return value.startswith(str(PUBLISHED_REPORT_DIR) + "/") and value.endswith(("-remote-next.json", "-remote-next.log"))
 
 
 def _recover_owned_report_artifacts(root: Path) -> dict[str, object]:
     snapshot = _git_snapshot(root)
     current_order_report = _current_transfer_report_path(root)
     dirty_paths = tuple(dict.fromkeys((*snapshot.staged_changes, *snapshot.unstaged_changes, *snapshot.untracked_files)))
-    owned = tuple(
-        path for path in dirty_paths if _is_owned_remote_next_report_path(path, current_order_report=current_order_report)
-    )
+    owned = tuple(path for path in dirty_paths if _is_owned_remote_next_report_path(path, current_order_report=current_order_report))
     foreign = tuple(path for path in dirty_paths if path not in owned)
     actions: list[dict[str, object]] = []
     result: dict[str, object] = {
-        'schema_version': 1,
-        'attempted': bool(owned),
-        'current_order_report': current_order_report,
-        'owned_report_artifacts': list(owned),
-        'foreign_dirty_paths': list(foreign),
-        'actions': actions,
+        "schema_version": 1,
+        "attempted": bool(owned),
+        "current_order_report": current_order_report,
+        "owned_report_artifacts": list(owned),
+        "foreign_dirty_paths": list(foreign),
+        "actions": actions,
     }
     if foreign or not owned:
         return result
     tracked_owned = tuple(path for path in owned if path not in snapshot.untracked_files)
     untracked_owned = tuple(path for path in owned if path in snapshot.untracked_files)
     if tracked_owned:
-        restore = _command(['git', 'restore', '--staged', '--worktree', '--', *tracked_owned], root)
-        actions.append({'name': 'restore_tracked_owned_report_artifacts', **restore.as_json_data()})
+        restore = _command(["git", "restore", "--staged", "--worktree", "--", *tracked_owned], root)
+        actions.append({"name": "restore_tracked_owned_report_artifacts", **restore.as_json_data()})
         if restore.returncode != 0:
-            result['blocked_reason'] = 'restore_owned_report_artifacts_failed'
+            result["blocked_reason"] = "restore_owned_report_artifacts_failed"
             return result
     for relative in untracked_owned:
         target = root / relative
         try:
             target.unlink(missing_ok=True)
-            actions.append({'name': 'remove_untracked_owned_report_artifact', 'path': relative, 'returncode': 0})
+            actions.append({"name": "remove_untracked_owned_report_artifact", "path": relative, "returncode": 0})
         except OSError as exc:
-            actions.append({'name': 'remove_untracked_owned_report_artifact', 'path': relative, 'returncode': 1, 'stderr': str(exc)})
-            result['blocked_reason'] = 'remove_owned_report_artifacts_failed'
+            actions.append({"name": "remove_untracked_owned_report_artifact", "path": relative, "returncode": 1, "stderr": str(exc)})
+            result["blocked_reason"] = "remove_owned_report_artifacts_failed"
             return result
-    result['final_status_short'] = _command(['git', 'status', '--porcelain=v1'], root).stdout
+    result["final_status_short"] = _command(["git", "status", "--porcelain=v1"], root).stdout
     return result
 
 
@@ -300,8 +301,8 @@ def _ensure_clean(project_root: Path, *, branch: str | None) -> None:
     snapshot = _git_snapshot(project_root)
     if snapshot.status_short:
         raise RemoteNextBlocked(
-            f'worktree must be clean before transfer remote-next:\n{snapshot.status_short}',
-            reasons=('dirty_worktree',),
+            f"worktree must be clean before transfer remote-next:\n{snapshot.status_short}",
+            reasons=("dirty_worktree",),
             branch=branch,
         )
 
@@ -309,22 +310,22 @@ def _ensure_clean(project_root: Path, *, branch: str | None) -> None:
 def _validate_branch_name(branch: str) -> str:
     value = branch.strip()
     if not value:
-        raise ValueError('branch must not be empty')
-    if value.startswith('-') or '..' in value or value.endswith('.lock'):
-        raise ValueError(f'unsafe branch name: {branch}')
-    allowed = set('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._/-')
+        raise ValueError("branch must not be empty")
+    if value.startswith("-") or ".." in value or value.endswith(".lock"):
+        raise ValueError(f"unsafe branch name: {branch}")
+    allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._/-")
     if any(char not in allowed for char in value):
-        raise ValueError(f'unsafe branch name: {branch}')
+        raise ValueError(f"unsafe branch name: {branch}")
     return value
 
 
 def _read_transfer_order_data(path: Path) -> dict[str, Any]:
     try:
-        data = yaml.safe_load(path.read_text(encoding='utf-8')) or {}
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     except FileNotFoundError as exc:
-        raise FileNotFoundError(f'transfer order not found: {path}') from exc
+        raise FileNotFoundError(f"transfer order not found: {path}") from exc
     if not isinstance(data, dict):
-        raise ValueError(f'transfer order must be a mapping: {path}')
+        raise ValueError(f"transfer order must be a mapping: {path}")
     return data
 
 
@@ -334,62 +335,68 @@ def resolve_remote_next_branch(project_root: Path, branch: str | None = None, pa
     root = project_root.resolve()
     order_path = path if path.is_absolute() else root / path
     data = _read_transfer_order_data(order_path)
-    order_branch = data.get('branch')
+    order_branch = data.get("branch")
     if not isinstance(order_branch, str) or not order_branch.strip():
-        raise ValueError(f'transfer order must define a non-empty branch: {path}')
+        raise ValueError(f"transfer order must define a non-empty branch: {path}")
     return _validate_branch_name(order_branch)
 
 
 def _sync_current_branch_before_order(root: Path) -> dict[str, object]:
     snapshot = _git_snapshot(root)
     steps: list[dict[str, object]] = []
-    result: dict[str, object] = {'schema_version': 1, 'attempted': False, 'current_branch': snapshot.current_branch, 'head': snapshot.head, 'steps': steps}
+    result: dict[str, object] = {
+        "schema_version": 1,
+        "attempted": False,
+        "current_branch": snapshot.current_branch,
+        "head": snapshot.head,
+        "steps": steps,
+    }
     if not snapshot.clean:
-        result['skipped_reason'] = 'dirty_worktree_before_order_sync'
+        result["skipped_reason"] = "dirty_worktree_before_order_sync"
         return result
-    if not snapshot.current_branch or snapshot.current_branch == 'UNKNOWN':
-        result['skipped_reason'] = 'unknown_current_branch'
+    if not snapshot.current_branch or snapshot.current_branch == "UNKNOWN":
+        result["skipped_reason"] = "unknown_current_branch"
         return result
-    result['attempted'] = True
-    fetch = _command(['git', 'fetch', 'origin', snapshot.current_branch], root)
-    steps.append({'name': 'git_fetch_current_branch', **fetch.as_json_data()})
+    result["attempted"] = True
+    fetch = _command(["git", "fetch", "origin", snapshot.current_branch], root)
+    steps.append({"name": "git_fetch_current_branch", **fetch.as_json_data()})
     if fetch.returncode != 0:
-        result['blocked_reason'] = 'fetch_current_branch_failed'
+        result["blocked_reason"] = "fetch_current_branch_failed"
         return result
-    pull = _command(['git', 'pull', '--ff-only', 'origin', snapshot.current_branch], root)
-    steps.append({'name': 'git_pull_current_branch', **pull.as_json_data()})
+    pull = _command(["git", "pull", "--ff-only", "origin", snapshot.current_branch], root)
+    steps.append({"name": "git_pull_current_branch", **pull.as_json_data()})
     if pull.returncode != 0:
-        result['blocked_reason'] = 'pull_current_branch_failed'
-    result['final_head'] = _command(['git', 'rev-parse', '--short', 'HEAD'], root).stdout
+        result["blocked_reason"] = "pull_current_branch_failed"
+    result["final_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
     return result
 
 
 def _blocked_local_run(message: str, reasons: tuple[str, ...], snapshot: GitSnapshot) -> TransferLocalRun:
     state = {
-        'schema_version': 1,
-        'primary_state': 'BLOCKED',
-        'reasons': list(reasons),
-        'next_action': 'Inspect the published remote-next diagnostic report before retrying.',
-        'branch': snapshot.current_branch,
-        'head': snapshot.head,
-        'dirty_state': snapshot.as_json_data()['dirty_state'],
+        "schema_version": 1,
+        "primary_state": "BLOCKED",
+        "reasons": list(reasons),
+        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+        "branch": snapshot.current_branch,
+        "head": snapshot.head,
+        "dirty_state": snapshot.as_json_data()["dirty_state"],
     }
-    inspect = {'schema_version': 1, 'result_status': 'BLOCKED', 'returncode': 2, 'message': message, 'reasons': list(reasons)}
+    inspect = {"schema_version": 1, "result_status": "BLOCKED", "returncode": 2, "message": message, "reasons": list(reasons)}
     return TransferLocalRun(
         schema_version=1,
-        transfer_id='remote-next-blocked',
+        transfer_id="remote-next-blocked",
         inspect=inspect,
         apply=None,
         state=state,
-        result_status='BLOCKED',
+        result_status="BLOCKED",
         returncode=2,
-        next_action='Inspect the published remote-next diagnostic report before retrying.',
+        next_action="Inspect the published remote-next diagnostic report before retrying.",
     )
 
 
 def _remote_next_payload(root: Path, data: dict[str, object]) -> dict[str, object]:
-    payload = build_local_to_llm_payload(root, data, kind='local_to_llm_remote_next_report')
-    payload['remote_next_report'] = data
+    payload = build_local_to_llm_payload(root, data, kind="local_to_llm_remote_next_report")
+    payload["remote_next_report"] = data
     return payload
 
 
@@ -410,20 +417,20 @@ def _report_paths(timestamped_json: Path, timestamped_log: Path, published_json:
 
 
 def _build_log_text(data: dict[str, object], payload_text: str) -> str:
-    return '\n'.join(
+    return "\n".join(
         (
-            'TRANSFER_REMOTE_NEXT_REPORT',
+            "TRANSFER_REMOTE_NEXT_REPORT",
             f"RESULT_STATUS={data['result_status']}",
             f"RETURNCODE={data['returncode']}",
             f"BRANCH={data.get('branch') or ''}",
             f"HEAD={data.get('head') or ''}",
             f"REMOTE_REPORT={data['published_report_path']}",
-            'CHAT_REPLY=g',
+            "CHAT_REPLY=g",
             f"NEXT={data['next_action']}",
-            '',
-            '### JSON RESULT ###',
+            "",
+            "### JSON RESULT ###",
             payload_text.rstrip(),
-            '',
+            "",
         )
     )
 
@@ -432,12 +439,20 @@ def _write_payload_files(root: Path, paths_and_content: tuple[tuple[Path, str], 
     for relative_path, content in paths_and_content:
         target = root / relative_path
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(content, encoding='utf-8')
+        target.write_text(content, encoding="utf-8")
 
 
-def _write_report_payloads(root: Path, data: dict[str, object], *, timestamped_json: Path, timestamped_log: Path, published_json: Path, published_log: Path) -> None:
+def _write_report_payloads(
+    root: Path,
+    data: dict[str, object],
+    *,
+    timestamped_json: Path,
+    timestamped_log: Path,
+    published_json: Path,
+    published_log: Path,
+) -> None:
     payload = _remote_next_payload(root, data)
-    payload_text = json.dumps(payload, indent=2, sort_keys=True) + '\n'
+    payload_text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
     log_text = _build_log_text(data, payload_text)
     _write_payload_files(
         root,
@@ -457,76 +472,90 @@ def _write_report_payloads(root: Path, data: dict[str, object], *, timestamped_j
 def _attempt_report_commit_ack_push(root: Path, *, branch: str | None, paths: tuple[str, ...]) -> dict[str, object]:
     steps: list[dict[str, object]] = []
     actions: dict[str, object] = {
-        'schema_version': 1,
-        'attempted': True,
-        'branch': branch,
-        'paths': list(paths),
-        'steps': steps,
-        'committed': False,
-        'rule_ack_refreshed_after_commit': False,
-        'pushed': False,
+        "schema_version": 1,
+        "attempted": True,
+        "branch": branch,
+        "paths": list(paths),
+        "steps": steps,
+        "committed": False,
+        "rule_ack_refreshed_after_commit": False,
+        "pushed": False,
     }
-    add = _command(['git', 'add', '-f', *paths], root)
-    steps.append({'name': 'git_add_force_report_paths', **add.as_json_data()})
+    add = _command(["git", "add", "-f", *paths], root)
+    steps.append({"name": "git_add_force_report_paths", **add.as_json_data()})
     if add.returncode != 0:
-        actions['blocked_reason'] = 'git_add_failed'
+        actions["blocked_reason"] = "git_add_failed"
         return actions
-    staged = _command(['git', 'diff', '--cached', '--quiet'], root)
+    staged = _command(["git", "diff", "--cached", "--quiet"], root)
     if staged.returncode == 0:
-        actions['skipped_reason'] = 'no_report_changes_to_commit'
+        actions["skipped_reason"] = "no_report_changes_to_commit"
     else:
-        commit = _command(['git', 'commit', '-m', 'Publish remote-next transfer report'], root)
-        steps.append({'name': 'git_commit_report_paths', **commit.as_json_data()})
+        commit = _command(["git", "commit", "-m", "Publish remote-next transfer report"], root)
+        steps.append({"name": "git_commit_report_paths", **commit.as_json_data()})
         if commit.returncode != 0:
-            actions['blocked_reason'] = 'git_commit_failed'
+            actions["blocked_reason"] = "git_commit_failed"
             return actions
-        actions['committed'] = True
-        actions['commit_head'] = _command(['git', 'rev-parse', '--short', 'HEAD'], root).stdout
+        actions["committed"] = True
+        actions["commit_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
         ack = _refresh_rule_ack(root)
-        steps.append({'name': 'rules_acknowledge_after_report_commit', **ack.as_json_data()})
-        actions['rule_ack_refreshed_after_commit'] = ack.returncode == 0
-    push = _command(['git', 'push', 'origin', branch], root) if branch else _command(['git', 'push'], root)
-    steps.append({'name': 'git_push_report_commit', **push.as_json_data()})
-    actions['pushed'] = push.returncode == 0
+        steps.append({"name": "rules_acknowledge_after_report_commit", **ack.as_json_data()})
+        actions["rule_ack_refreshed_after_commit"] = ack.returncode == 0
+    push = _command(["git", "push", "origin", branch], root) if branch else _command(["git", "push"], root)
+    steps.append({"name": "git_push_report_commit", **push.as_json_data()})
+    actions["pushed"] = push.returncode == 0
     if push.returncode != 0:
-        actions['blocked_reason'] = 'git_push_failed'
-    actions['final_head'] = _command(['git', 'rev-parse', '--short', 'HEAD'], root).stdout
-    actions['final_status_short'] = _command(['git', 'status', '--porcelain=v1'], root).stdout
+        actions["blocked_reason"] = "git_push_failed"
+    actions["final_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
+    actions["final_status_short"] = _command(["git", "status", "--porcelain=v1"], root).stdout
     return actions
 
 
 def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> TransferRemoteNextRun:
-    run_id = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
-    run_id = f'{run_id}-{uuid4().hex[:8]}'
-    label = 'remote-next'
-    timestamped_json = REMOTE_NEXT_REPORT_DIR / f'{run_id}-{label}.json'
-    timestamped_log = REMOTE_NEXT_REPORT_DIR / f'{run_id}-{label}.log'
-    published_json = PUBLISHED_REPORT_DIR / f'{run_id}-{label}.json'
-    published_log = PUBLISHED_REPORT_DIR / f'{run_id}-{label}.log'
+    run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    run_id = f"{run_id}-{uuid4().hex[:8]}"
+    label = "remote-next"
+    timestamped_json = REMOTE_NEXT_REPORT_DIR / f"{run_id}-{label}.json"
+    timestamped_log = REMOTE_NEXT_REPORT_DIR / f"{run_id}-{label}.log"
+    published_json = PUBLISHED_REPORT_DIR / f"{run_id}-{label}.json"
+    published_log = PUBLISHED_REPORT_DIR / f"{run_id}-{label}.log"
     paths = _report_paths(timestamped_json, timestamped_log, published_json, published_log)
     provisional_data = result.as_json_data()
     provisional_data.update(
         {
-            'report_path': str(timestamped_json),
-            'published_report_path': str(published_json),
-            'latest_report_path': str(REMOTE_NEXT_LATEST_JSON),
-            'latest_published_report_path': str(PUBLISHED_LATEST_JSON),
-            'post_report_actions': {'schema_version': 1, 'attempted': True, 'status': 'pending_until_report_files_are_written'},
+            "report_path": str(timestamped_json),
+            "published_report_path": str(published_json),
+            "latest_report_path": str(REMOTE_NEXT_LATEST_JSON),
+            "latest_published_report_path": str(PUBLISHED_LATEST_JSON),
+            "post_report_actions": {"schema_version": 1, "attempted": True, "status": "pending_until_report_files_are_written"},
         }
     )
-    _write_report_payloads(root, provisional_data, timestamped_json=timestamped_json, timestamped_log=timestamped_log, published_json=published_json, published_log=published_log)
+    _write_report_payloads(
+        root,
+        provisional_data,
+        timestamped_json=timestamped_json,
+        timestamped_log=timestamped_log,
+        published_json=published_json,
+        published_log=published_log,
+    )
     post_report_actions = _attempt_report_commit_ack_push(root, branch=result.branch, paths=paths)
     final_data = result.as_json_data()
     final_data.update(
         {
-            'report_path': str(timestamped_json),
-            'published_report_path': str(published_json),
-            'latest_report_path': str(REMOTE_NEXT_LATEST_JSON),
-            'latest_published_report_path': str(PUBLISHED_LATEST_JSON),
-            'post_report_actions': post_report_actions,
+            "report_path": str(timestamped_json),
+            "published_report_path": str(published_json),
+            "latest_report_path": str(REMOTE_NEXT_LATEST_JSON),
+            "latest_published_report_path": str(PUBLISHED_LATEST_JSON),
+            "post_report_actions": post_report_actions,
         }
     )
-    _write_report_payloads(root, final_data, timestamped_json=timestamped_json, timestamped_log=timestamped_log, published_json=published_json, published_log=published_log)
+    _write_report_payloads(
+        root,
+        final_data,
+        timestamped_json=timestamped_json,
+        timestamped_log=timestamped_log,
+        published_json=published_json,
+        published_log=published_log,
+    )
     return TransferRemoteNextRun(
         branch=result.branch,
         local_run=result.local_run,
@@ -551,22 +580,22 @@ def _blocked_result(root: Path, exc: Exception, *, branch: str | None = None) ->
         reasons = exc.reasons
         branch = exc.branch or branch
     elif isinstance(exc, FileNotFoundError):
-        reasons = ('missing_transfer_order',)
+        reasons = ("missing_transfer_order",)
     elif isinstance(exc, ValueError):
-        reasons = ('invalid_transfer_order',)
+        reasons = ("invalid_transfer_order",)
     else:
-        reasons = ('remote_next_blocked',)
+        reasons = ("remote_next_blocked",)
     return _write_remote_next_report(
         root,
         TransferRemoteNextRun(
             branch=branch,
             local_run=_blocked_local_run(str(exc), reasons, snapshot),
             head=snapshot.head,
-            result_status='BLOCKED',
+            result_status="BLOCKED",
             returncode=2,
-            next_action='Inspect the published remote-next diagnostic report before retrying.',
-            report_path='',
-            published_report_path='',
+            next_action="Inspect the published remote-next diagnostic report before retrying.",
+            report_path="",
+            published_report_path="",
             reasons=reasons,
             preflight=snapshot.as_json_data(),
             rule_ack=ack,
@@ -582,22 +611,22 @@ def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> T
         order_sync = _sync_current_branch_before_order(root)
         safe_branch = resolve_remote_next_branch(root, branch)
         _ensure_clean(root, branch=safe_branch)
-        _run(['git', 'fetch', 'origin', safe_branch], root)
-        _run(['git', 'switch', safe_branch], root)
-        _run(['git', 'pull', '--ff-only', 'origin', safe_branch], root)
-        head = _run(['git', 'rev-parse', '--short', 'HEAD'], root)
+        _run(["git", "fetch", "origin", safe_branch], root)
+        _run(["git", "switch", safe_branch], root)
+        _run(["git", "pull", "--ff-only", "origin", safe_branch], root)
+        head = _run(["git", "rev-parse", "--short", "HEAD"], root)
         ack_before = _rule_ack_snapshot(root, repo_head=head)
         ack_refresh: dict[str, object] | None = None
         if not ack_before.confirmed:
             ack_result = _refresh_rule_ack(root)
             ack_refresh = ack_result.as_json_data()
         preflight = _git_snapshot(root).as_json_data()
-        preflight['owned_report_artifact_recovery'] = cleanup
-        preflight['order_sync'] = order_sync
+        preflight["owned_report_artifact_recovery"] = cleanup
+        preflight["order_sync"] = order_sync
         if ack_refresh is not None:
-            preflight['rule_ack_refresh_before_transfer'] = ack_refresh
+            preflight["rule_ack_refresh_before_transfer"] = ack_refresh
         local_run = run_local_transfer(root)
-        head = _run(['git', 'rev-parse', '--short', 'HEAD'], root)
+        head = _run(["git", "rev-parse", "--short", "HEAD"], root)
         result = TransferRemoteNextRun(
             branch=safe_branch,
             local_run=local_run,
@@ -605,8 +634,8 @@ def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> T
             result_status=local_run.result_status,
             returncode=local_run.returncode,
             next_action=local_run.next_action,
-            report_path='',
-            published_report_path='',
+            report_path="",
+            published_report_path="",
             preflight=preflight,
             rule_ack=_rule_ack_snapshot(root, repo_head=head),
         )
