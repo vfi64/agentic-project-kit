@@ -42,6 +42,20 @@ def _write_order(root: Path, payload_text: str = "hello\n") -> Path:
     return path
 
 
+def _write_command_order(root: Path, command: list[str]) -> Path:
+    order = {
+        "id": "example-command-transfer",
+        "title": "Example command transfer",
+        "safety": "bounded-local-command",
+        "report_path": "docs/reports/command_runs/example-command-transfer.md",
+        "actions": [{"type": "run_command", "command": command}],
+    }
+    path = root / ".agentic/transfer/inbox/current.yaml"
+    path.parent.mkdir(parents=True)
+    path.write_text(yaml.safe_dump(order, sort_keys=False), encoding="utf-8")
+    return path
+
+
 def test_parse_transfer_order_rejects_absolute_target_path():
     with pytest.raises(ValueError, match="repo-relative"):
         parse_transfer_order(
@@ -50,7 +64,13 @@ def test_parse_transfer_order_rejects_absolute_target_path():
                 "title": "Bad",
                 "safety": "bounded",
                 "report_path": "docs/reports/command_runs/bad.md",
-                "actions": [{"type": "write_text_file", "target_path": "/tmp/out.txt", "payload_path": ".agentic/transfer/payloads/x.txt"}],
+                "actions": [
+                    {
+                        "type": "write_text_file",
+                        "target_path": "/tmp/out.txt",
+                        "payload_path": ".agentic/transfer/payloads/x.txt",
+                    }
+                ],
             }
         )
 
@@ -63,7 +83,39 @@ def test_parse_transfer_order_rejects_parent_segments():
                 "title": "Bad",
                 "safety": "bounded",
                 "report_path": "docs/reports/command_runs/bad.md",
-                "actions": [{"type": "write_text_file", "target_path": "../out.txt", "payload_path": ".agentic/transfer/payloads/x.txt"}],
+                "actions": [
+                    {
+                        "type": "write_text_file",
+                        "target_path": "../out.txt",
+                        "payload_path": ".agentic/transfer/payloads/x.txt",
+                    }
+                ],
+            }
+        )
+
+
+def test_parse_transfer_order_rejects_shell_command_tokens():
+    with pytest.raises(ValueError, match="shell control tokens"):
+        parse_transfer_order(
+            {
+                "id": "bad",
+                "title": "Bad",
+                "safety": "bounded",
+                "report_path": "docs/reports/command_runs/bad.md",
+                "actions": [{"type": "run_command", "command": ["git", "status", "&&", "echo"]}],
+            }
+        )
+
+
+def test_parse_transfer_order_rejects_direct_shell_invocation():
+    with pytest.raises(ValueError, match="must not invoke a shell"):
+        parse_transfer_order(
+            {
+                "id": "bad",
+                "title": "Bad",
+                "safety": "bounded",
+                "report_path": "docs/reports/command_runs/bad.md",
+                "actions": [{"type": "run_command", "command": ["bash", "-lc", "echo unsafe"]}],
             }
         )
 
@@ -79,6 +131,19 @@ def test_inspect_transfer_order_does_not_write_target(tmp_path):
     assert not (tmp_path / "generated/example.txt").exists()
 
 
+def test_inspect_transfer_order_reports_command_without_running(tmp_path):
+    marker = tmp_path / "marker.txt"
+    order_path = _write_command_order(tmp_path, ["git", "status", "--short"])
+    order = load_transfer_order(order_path)
+
+    result = inspect_transfer_order(order, tmp_path)
+
+    assert result.result_status == RESULT_PENDING
+    assert result.returncode == 0
+    assert result.action_results[0]["would_run"] is True
+    assert not marker.exists()
+
+
 def test_apply_transfer_order_writes_target_and_report(tmp_path):
     order_path = _write_order(tmp_path, "written\n")
     order = load_transfer_order(order_path)
@@ -89,7 +154,35 @@ def test_apply_transfer_order_writes_target_and_report(tmp_path):
     assert result.returncode == 0
     assert (tmp_path / "generated/example.txt").read_text(encoding="utf-8") == "written\n"
     assert (tmp_path / "docs/reports/command_runs/example-transfer.md").exists()
-    assert (tmp_path / "docs/reports/command_runs/LATEST_COMMAND_RUN.txt").read_text(encoding="utf-8") == "docs/reports/command_runs/example-transfer.md\n"
+    assert (
+        (tmp_path / "docs/reports/command_runs/LATEST_COMMAND_RUN.txt").read_text(encoding="utf-8")
+        == "docs/reports/command_runs/example-transfer.md\n"
+    )
+
+
+def test_apply_transfer_order_runs_bounded_command_and_writes_report(tmp_path):
+    order_path = _write_command_order(tmp_path, ["git", "init"])
+    order = load_transfer_order(order_path)
+
+    result = apply_transfer_order(order, tmp_path)
+
+    assert result.result_status == RESULT_PASS
+    assert result.returncode == 0
+    assert result.action_results[0]["type"] == "run_command"
+    assert result.action_results[0]["returncode"] == 0
+    assert (tmp_path / "docs/reports/command_runs/example-command-transfer.md").exists()
+
+
+def test_apply_transfer_order_stops_on_failed_command_and_writes_report(tmp_path):
+    order_path = _write_command_order(tmp_path, ["git", "not-a-command"])
+    order = load_transfer_order(order_path)
+
+    result = apply_transfer_order(order, tmp_path)
+
+    assert result.result_status == RESULT_FAIL
+    assert result.returncode != 0
+    assert "failed" in result.message
+    assert (tmp_path / "docs/reports/command_runs/example-command-transfer.md").exists()
 
 
 def test_apply_transfer_order_rejects_hash_mismatch_and_writes_report(tmp_path):
