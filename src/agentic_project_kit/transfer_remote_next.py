@@ -72,7 +72,7 @@ class RuleAckSnapshot:
 @dataclass(frozen=True)
 class TransferRemoteNextRun:
     branch: str | None
-    local_run: TransferLocalRun | None
+    local_run: TransferLocalRun
     head: str
     result_status: str
     returncode: int
@@ -101,7 +101,7 @@ class TransferRemoteNextRun:
             "blocked_message": self.blocked_message,
             "preflight": self.preflight,
             "rule_ack": self.rule_ack.as_json_data() if self.rule_ack else None,
-            "local_run": self.local_run.as_json_data() if self.local_run else None,
+            "local_run": self.local_run.as_json_data(),
         }
 
 
@@ -245,6 +245,35 @@ def resolve_remote_next_branch(project_root: Path, branch: str | None = None, pa
     return _validate_branch_name(order_branch)
 
 
+def _blocked_local_run(message: str, reasons: tuple[str, ...], snapshot: GitSnapshot) -> TransferLocalRun:
+    state = {
+        "schema_version": 1,
+        "primary_state": "BLOCKED",
+        "reasons": list(reasons),
+        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+        "branch": snapshot.current_branch,
+        "head": snapshot.head,
+        "dirty_state": snapshot.as_json_data()["dirty_state"],
+    }
+    inspect = {
+        "schema_version": 1,
+        "result_status": "BLOCKED",
+        "returncode": 2,
+        "message": message,
+        "reasons": list(reasons),
+    }
+    return TransferLocalRun(
+        schema_version=1,
+        transfer_id="remote-next-blocked",
+        inspect=inspect,
+        apply=None,
+        state=state,
+        result_status="BLOCKED",
+        returncode=2,
+        next_action="Inspect the published remote-next diagnostic report before retrying.",
+    )
+
+
 def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> TransferRemoteNextRun:
     data = result.as_json_data()
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
@@ -326,7 +355,7 @@ def _blocked_result(root: Path, exc: Exception, *, branch: str | None = None) ->
         root,
         TransferRemoteNextRun(
             branch=branch,
-            local_run=None,
+            local_run=_blocked_local_run(str(exc), reasons, snapshot),
             head=snapshot.head,
             result_status="BLOCKED",
             returncode=2,
