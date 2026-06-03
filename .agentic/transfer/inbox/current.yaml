@@ -1,0 +1,28 @@
+schema_version: 1
+id: one-command-transfer-closeout-check
+title: One-command transfer closeout check
+branch: feature/harden-release-publish-head-guards
+safety: >-
+  Bounded repo-local closeout diagnostics only. This transfer order runs the
+  project evidence inspection through the agentic-kit CLI without shell
+  expansion and records stdout, stderr, and return codes in the transfer report.
+label: one-command-transfer-closeout-check
+allow_blocked_start: true
+report_path: docs/reports/command_runs/one-command-transfer-closeout-check.md
+actions:
+  - type: run_command
+    command:
+      - ./.venv/bin/agentic-kit
+      - evidence
+      - inspect
+      - --require-summary
+publish_last_report: true
+commit:
+  message: Publish one-command transfer closeout check report
+  paths:
+    - docs/reports/command_runs
+    - docs/reports/transfer_runs
+    - docs/reports/terminal/transfer_handoff_reports
+push:
+  branch: feature/harden-release-publish-head-guards
+expected_chat_reply: g
