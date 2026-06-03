@@ -223,6 +223,13 @@ def _rule_ack_snapshot(project_root: Path, *, repo_head: str) -> RuleAckSnapshot
     return RuleAckSnapshot(True, confirmed, head=ack_head, blocking_reasons=tuple(reasons))
 
 
+def _refresh_rule_ack(root: Path) -> _CommandResult:
+    result = _command(["./.venv/bin/agentic-kit", "rules", "acknowledge"], root)
+    if result.returncode == 127:
+        return _command(["agentic-kit", "rules", "acknowledge"], root)
+    return result
+
+
 def _ensure_clean(project_root: Path, *, branch: str | None) -> None:
     snapshot = _git_snapshot(project_root)
     if snapshot.status_short:
@@ -269,6 +276,36 @@ def resolve_remote_next_branch(
     if not isinstance(order_branch, str) or not order_branch.strip():
         raise ValueError(f"transfer order must define a non-empty branch: {path}")
     return _validate_branch_name(order_branch)
+
+
+def _sync_current_branch_before_order(root: Path) -> dict[str, object]:
+    snapshot = _git_snapshot(root)
+    steps: list[dict[str, object]] = []
+    result: dict[str, object] = {
+        "schema_version": 1,
+        "attempted": False,
+        "current_branch": snapshot.current_branch,
+        "head": snapshot.head,
+        "steps": steps,
+    }
+    if not snapshot.clean:
+        result["skipped_reason"] = "dirty_worktree_before_order_sync"
+        return result
+    if not snapshot.current_branch or snapshot.current_branch == "UNKNOWN":
+        result["skipped_reason"] = "unknown_current_branch"
+        return result
+    result["attempted"] = True
+    fetch = _command(["git", "fetch", "origin", snapshot.current_branch], root)
+    steps.append({"name": "git_fetch_current_branch", **fetch.as_json_data()})
+    if fetch.returncode != 0:
+        result["blocked_reason"] = "fetch_current_branch_failed"
+        return result
+    pull = _command(["git", "pull", "--ff-only", "origin", snapshot.current_branch], root)
+    steps.append({"name": "git_pull_current_branch", **pull.as_json_data()})
+    if pull.returncode != 0:
+        result["blocked_reason"] = "pull_current_branch_failed"
+    result["final_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
+    return result
 
 
 def _blocked_local_run(
@@ -355,29 +392,26 @@ def _attempt_report_commit_ack_push(
 
     before_status = _command(["git", "status", "--short"], root)
     steps.append({"name": "status_before_report_commit", **before_status.as_json_data()})
-    if not before_status.stdout:
-        actions["skipped_reason"] = "no_report_changes_to_commit"
-        return actions
-
     add = _command(["git", "add", *paths], root)
     steps.append({"name": "git_add_report_paths", **add.as_json_data()})
     if add.returncode != 0:
         actions["blocked_reason"] = "git_add_failed"
         return actions
 
-    commit = _command(["git", "commit", "-m", "Publish remote-next transfer report"], root)
-    steps.append({"name": "git_commit_report_paths", **commit.as_json_data()})
-    if commit.returncode != 0:
-        actions["blocked_reason"] = "git_commit_failed"
-        return actions
-    actions["committed"] = True
-    actions["commit_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
-
-    ack = _command(["./.venv/bin/agentic-kit", "rules", "acknowledge"], root)
-    if ack.returncode == 127:
-        ack = _command(["agentic-kit", "rules", "acknowledge"], root)
-    steps.append({"name": "rules_acknowledge_after_commit", **ack.as_json_data()})
-    actions["rule_ack_refreshed_after_commit"] = ack.returncode == 0
+    staged = _command(["git", "diff", "--cached", "--quiet"], root)
+    if staged.returncode == 0:
+        actions["skipped_reason"] = "no_report_changes_to_commit"
+    else:
+        commit = _command(["git", "commit", "-m", "Publish remote-next transfer report"], root)
+        steps.append({"name": "git_commit_report_paths", **commit.as_json_data()})
+        if commit.returncode != 0:
+            actions["blocked_reason"] = "git_commit_failed"
+            return actions
+        actions["committed"] = True
+        actions["commit_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
+        ack = _refresh_rule_ack(root)
+        steps.append({"name": "rules_acknowledge_after_commit", **ack.as_json_data()})
+        actions["rule_ack_refreshed_after_commit"] = ack.returncode == 0
 
     if branch:
         push = _command(["git", "push", "origin", branch], root)
@@ -403,6 +437,25 @@ def _write_payload_files(
         target.write_text(content, encoding="utf-8")
 
 
+def _build_log_text(data: dict[str, object], payload_text: str) -> str:
+    return "\n".join(
+        (
+            "TRANSFER_REMOTE_NEXT_REPORT",
+            f"RESULT_STATUS={data['result_status']}",
+            f"RETURNCODE={data['returncode']}",
+            f"BRANCH={data.get('branch') or ''}",
+            f"HEAD={data.get('head') or ''}",
+            f"REMOTE_REPORT={data['published_report_path']}",
+            "CHAT_REPLY=g",
+            f"NEXT={data['next_action']}",
+            "",
+            "### JSON RESULT ###",
+            payload_text.rstrip(),
+            "",
+        )
+    )
+
+
 def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> TransferRemoteNextRun:
     data = result.as_json_data()
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -425,22 +478,7 @@ def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> Tran
     )
     payload = _remote_next_payload(root, data)
     payload_text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
-    log_text = "\n".join(
-        (
-            "TRANSFER_REMOTE_NEXT_REPORT",
-            f"RESULT_STATUS={data['result_status']}",
-            f"RETURNCODE={data['returncode']}",
-            f"BRANCH={data.get('branch') or ''}",
-            f"HEAD={data.get('head') or ''}",
-            f"REMOTE_REPORT={published_json}",
-            "CHAT_REPLY=g",
-            f"NEXT={data['next_action']}",
-            "",
-            "### JSON RESULT ###",
-            payload_text.rstrip(),
-            "",
-        )
-    )
+    log_text = _build_log_text(data, payload_text)
 
     _write_payload_files(
         root,
@@ -456,41 +494,24 @@ def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> Tran
         ),
     )
 
-    post_report_actions: dict[str, object] = result.post_report_actions
-    if result.result_status != "BLOCKED":
-        post_report_actions = _attempt_report_commit_ack_push(root, branch=result.branch, paths=paths)
-        data["post_report_actions"] = post_report_actions
-        payload = _remote_next_payload(root, data)
-        payload_text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
-        log_text = "\n".join(
-            (
-                "TRANSFER_REMOTE_NEXT_REPORT",
-                f"RESULT_STATUS={data['result_status']}",
-                f"RETURNCODE={data['returncode']}",
-                f"BRANCH={data.get('branch') or ''}",
-                f"HEAD={data.get('head') or ''}",
-                f"REMOTE_REPORT={published_json}",
-                "CHAT_REPLY=g",
-                f"NEXT={data['next_action']}",
-                "",
-                "### JSON RESULT ###",
-                payload_text.rstrip(),
-                "",
-            )
-        )
-        _write_payload_files(
-            root,
-            (
-                (REMOTE_NEXT_LATEST_JSON, payload_text),
-                (timestamped_json, payload_text),
-                (PUBLISHED_LATEST_JSON, payload_text),
-                (published_json, payload_text),
-                (REMOTE_NEXT_LATEST_LOG, log_text),
-                (timestamped_log, log_text),
-                (PUBLISHED_LATEST_LOG, log_text),
-                (published_log, log_text),
-            ),
-        )
+    post_report_actions = _attempt_report_commit_ack_push(root, branch=result.branch, paths=paths)
+    data["post_report_actions"] = post_report_actions
+    payload = _remote_next_payload(root, data)
+    payload_text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    log_text = _build_log_text(data, payload_text)
+    _write_payload_files(
+        root,
+        (
+            (REMOTE_NEXT_LATEST_JSON, payload_text),
+            (timestamped_json, payload_text),
+            (REMOTE_NEXT_LATEST_LOG, log_text),
+            (timestamped_log, log_text),
+            (PUBLISHED_LATEST_JSON, payload_text),
+            (published_json, payload_text),
+            (PUBLISHED_LATEST_LOG, log_text),
+            (published_log, log_text),
+        ),
+    )
 
     return TransferRemoteNextRun(
         branch=result.branch,
@@ -544,13 +565,24 @@ def _blocked_result(root: Path, exc: Exception, *, branch: str | None = None) ->
 def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> TransferRemoteNextRun:
     root = project_root.resolve()
     try:
+        order_sync = _sync_current_branch_before_order(root)
         safe_branch = resolve_remote_next_branch(root, branch)
         _ensure_clean(root, branch=safe_branch)
         _run(["git", "fetch", "origin", safe_branch], root)
         _run(["git", "switch", safe_branch], root)
         _run(["git", "pull", "--ff-only", "origin", safe_branch], root)
 
-        preflight = _git_snapshot(root)
+        head = _run(["git", "rev-parse", "--short", "HEAD"], root)
+        ack_before = _rule_ack_snapshot(root, repo_head=head)
+        ack_refresh: dict[str, object] | None = None
+        if not ack_before.confirmed:
+            ack_result = _refresh_rule_ack(root)
+            ack_refresh = ack_result.as_json_data()
+        preflight = _git_snapshot(root).as_json_data()
+        preflight["order_sync"] = order_sync
+        if ack_refresh is not None:
+            preflight["rule_ack_refresh_before_transfer"] = ack_refresh
+
         local_run = run_local_transfer(root)
         head = _run(["git", "rev-parse", "--short", "HEAD"], root)
         result = TransferRemoteNextRun(
@@ -562,7 +594,7 @@ def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> T
             next_action=local_run.next_action,
             report_path="",
             published_report_path="",
-            preflight=preflight.as_json_data(),
+            preflight=preflight,
             rule_ack=_rule_ack_snapshot(root, repo_head=head),
         )
         return _write_remote_next_report(root, result)
