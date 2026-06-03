@@ -80,32 +80,38 @@ def _echo_quiet_repo_report(result: RepoActionResult, *, label: str) -> None:
     typer.echo("CHAT_REPLY=g")
 
 
+def _summary_line(label: str, value: object, *, indent: int = 0, width: int = 24) -> str:
+    return f"{' ' * indent}{label + ':':<{width}}{value}"
+
+
 def _echo_remote_next_user_summary(result) -> None:
     actions = result.post_report_actions or {}
     committed = bool(actions.get("committed"))
     pushed = bool(actions.get("pushed"))
-    status = result.result_status
-    if pushed:
-        upload_status = "REMOTE_REPORT_UPLOADED=yes"
-    elif committed:
-        upload_status = "REMOTE_REPORT_UPLOADED=no_push_failed"
-    else:
-        upload_status = "REMOTE_REPORT_UPLOADED=no_commit_failed"
+    uploaded = "yes" if pushed else "no_push_failed" if committed else "no_commit_failed"
 
+    typer.echo("*" * 36 + " START SUMMARY " + "*" * 36)
     typer.echo("TRANSFER_REMOTE_NEXT_DONE")
-    typer.echo(f"STATE={status}")
-    typer.echo(f"RETURNCODE={result.returncode}")
-    typer.echo(upload_status)
-    typer.echo(f"REMOTE_REPORT_COMMITTED={'yes' if committed else 'no'}")
-    typer.echo(f"REMOTE_REPORT_PUSHED={'yes' if pushed else 'no'}")
-    typer.echo(f"REMOTE_REPORT_PATH={result.published_report_path}")
-    typer.echo(f"LOCAL_REPORT_PATH={result.report_path}")
+    typer.echo("")
+    typer.echo(_summary_line("STATE", result.result_status))
+    typer.echo(_summary_line("RETURNCODE", result.returncode))
+    typer.echo("")
+    typer.echo("REMOTE_REPORT:")
+    typer.echo(_summary_line("UPLOADED", uploaded, indent=2))
+    typer.echo(_summary_line("COMMITTED", "yes" if committed else "no", indent=2))
+    typer.echo(_summary_line("PUSHED", "yes" if pushed else "no", indent=2))
+    typer.echo(_summary_line("REPORT_PATH", result.published_report_path, indent=2))
     if actions.get("commit_head"):
-        typer.echo(f"REMOTE_REPORT_COMMIT={actions['commit_head']}")
+        typer.echo(_summary_line("REPORT_COMMIT", actions["commit_head"], indent=2))
     if actions.get("blocked_reason"):
-        typer.echo(f"REMOTE_REPORT_BLOCKED_REASON={actions['blocked_reason']}")
-    typer.echo(f"NEXT={result.next_action}")
-    typer.echo("CHAT_REPLY=g")
+        typer.echo(_summary_line("BLOCKED_REASON", actions["blocked_reason"], indent=2))
+    typer.echo("")
+    typer.echo("LOCAL:")
+    typer.echo(_summary_line("REPORT_PATH", result.report_path, indent=2))
+    typer.echo("")
+    typer.echo(_summary_line("NEXT", result.next_action))
+    typer.echo(_summary_line("CHAT_REPLY", "g"))
+    typer.echo("*" * 37 + " END SUMMARY " + "*" * 37)
 
 
 def _require_transfer_capability(capability: str) -> None:
