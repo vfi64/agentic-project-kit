@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -13,14 +14,17 @@ RESULT_PASS = "PASS"
 RESULT_FAIL = "FAIL"
 RESULT_PENDING = "PENDING"
 ACTION_WRITE_TEXT_FILE = "write_text_file"
+ACTION_RUN_COMMAND = "run_command"
+BLOCKED_COMMAND_TOKENS = {";", "&&", "||", "|", ">", "<", "`", "$", "$(", "\n"}
 
 
 @dataclass(frozen=True)
 class TransferAction:
     kind: str
-    target_path: str
-    payload_path: str
+    target_path: str = ""
+    payload_path: str = ""
     sha256: str | None = None
+    command: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -62,16 +66,34 @@ def _safe_repo_relative_path(path_text: str, *, field_name: str) -> Path:
     return path
 
 
+def _parse_command(data: dict[str, Any]) -> tuple[str, ...]:
+    command = data.get("command")
+    if not isinstance(command, list) or not command:
+        raise ValueError("run_command action requires non-empty command list")
+    parsed: list[str] = []
+    for item in command:
+        if not isinstance(item, str) or not item.strip():
+            raise ValueError("run_command command items must be non-empty strings")
+        if item in BLOCKED_COMMAND_TOKENS or any(token in item for token in ("\n", "\r")):
+            raise ValueError("run_command command items must not contain shell control tokens")
+        parsed.append(item)
+    if parsed[0] in {"sh", "bash", "zsh", "fish", "python", "python3"}:
+        raise ValueError("run_command must not invoke a shell or ambiguous interpreter directly")
+    return tuple(parsed)
+
+
 def _parse_action(data: dict[str, Any]) -> TransferAction:
     kind = _require_string(data, "type")
-    if kind != ACTION_WRITE_TEXT_FILE:
-        raise ValueError(f"unsupported transfer action type: {kind}")
-    target_path = str(_safe_repo_relative_path(_require_string(data, "target_path"), field_name="target_path"))
-    payload_path = str(_safe_repo_relative_path(_require_string(data, "payload_path"), field_name="payload_path"))
-    sha = data.get("sha256")
-    if sha is not None and (not isinstance(sha, str) or len(sha) != 64):
-        raise ValueError("sha256 must be a 64 character hex string when provided")
-    return TransferAction(kind=kind, target_path=target_path, payload_path=payload_path, sha256=sha)
+    if kind == ACTION_WRITE_TEXT_FILE:
+        target_path = str(_safe_repo_relative_path(_require_string(data, "target_path"), field_name="target_path"))
+        payload_path = str(_safe_repo_relative_path(_require_string(data, "payload_path"), field_name="payload_path"))
+        sha = data.get("sha256")
+        if sha is not None and (not isinstance(sha, str) or len(sha) != 64):
+            raise ValueError("sha256 must be a 64 character hex string when provided")
+        return TransferAction(kind, target_path=target_path, payload_path=payload_path, sha256=sha)
+    if kind == ACTION_RUN_COMMAND:
+        return TransferAction(kind, command=_parse_command(data))
+    raise ValueError(f"unsupported transfer action type: {kind}")
 
 
 def parse_transfer_order(data: dict[str, Any]) -> TransferOrder:
@@ -115,6 +137,9 @@ def inspect_transfer_order(order: TransferOrder, project_root: Path = Path("."))
     root = project_root.resolve()
     action_results: list[dict[str, Any]] = []
     for action in order.actions:
+        if action.kind == ACTION_RUN_COMMAND:
+            action_results.append({"type": action.kind, "command": list(action.command), "would_run": True})
+            continue
         payload = root / action.payload_path
         target = root / action.target_path
         if not payload.exists():
@@ -123,7 +148,7 @@ def inspect_transfer_order(order: TransferOrder, project_root: Path = Path("."))
         if action.sha256 and digest != action.sha256:
             return TransferResult(order.transfer_id, RESULT_FAIL, 3, order.safety, order.report_path, message=f"sha256 mismatch: {action.payload_path}", action_results=tuple(action_results))
         action_results.append({"type": action.kind, "target_path": action.target_path, "payload_path": action.payload_path, "sha256": digest, "would_write": str(target.relative_to(root))})
-    return TransferResult(order.transfer_id, RESULT_PENDING, 0, order.safety, order.report_path, message="Transfer order inspected. Re-run apply to write files.", action_results=tuple(action_results))
+    return TransferResult(order.transfer_id, RESULT_PENDING, 0, order.safety, order.report_path, message="Transfer order inspected. Re-run apply to write files or run commands.", action_results=tuple(action_results))
 
 
 def _write_report(project_root: Path, result: TransferResult) -> None:
@@ -147,6 +172,24 @@ def _write_report(project_root: Path, result: TransferResult) -> None:
     latest.write_text(result.report_path + "\n", encoding="utf-8")
 
 
+def _run_command_action(root: Path, action: TransferAction) -> dict[str, Any]:
+    completed = subprocess.run(
+        list(action.command),
+        cwd=root,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    return {
+        "type": action.kind,
+        "command": list(action.command),
+        "returncode": completed.returncode,
+        "stdout": completed.stdout,
+        "stderr": completed.stderr,
+    }
+
+
 def apply_transfer_order(order: TransferOrder, project_root: Path = Path(".")) -> TransferResult:
     root = project_root.resolve()
     inspected = inspect_transfer_order(order, root)
@@ -154,13 +197,26 @@ def apply_transfer_order(order: TransferOrder, project_root: Path = Path(".")) -
         _write_report(root, inspected)
         return inspected
     action_results: list[dict[str, Any]] = []
-    for item in inspected.action_results:
-        payload_path = root / str(item["payload_path"])
-        target_path = root / str(item["target_path"])
+    result_status = RESULT_PASS
+    returncode = 0
+    message = "Transfer order applied."
+    for action in order.actions:
+        if action.kind == ACTION_RUN_COMMAND:
+            command_result = _run_command_action(root, action)
+            action_results.append(command_result)
+            if int(command_result["returncode"]) != 0:
+                result_status = RESULT_FAIL
+                returncode = int(command_result["returncode"])
+                message = "Transfer command action failed."
+                break
+            continue
+        payload_path = root / action.payload_path
+        target_path = root / action.target_path
         target_path.parent.mkdir(parents=True, exist_ok=True)
         text = payload_path.read_text(encoding="utf-8")
         target_path.write_text(text, encoding="utf-8")
-        action_results.append({**item, "written": True})
-    result = TransferResult(order.transfer_id, RESULT_PASS, 0, order.safety, order.report_path, message="Transfer order applied.", action_results=tuple(action_results))
+        digest = hashlib.sha256(payload_path.read_bytes()).hexdigest()
+        action_results.append({"type": action.kind, "target_path": action.target_path, "payload_path": action.payload_path, "sha256": digest, "written": True})
+    result = TransferResult(order.transfer_id, result_status, returncode, order.safety, order.report_path, message=message, action_results=tuple(action_results))
     _write_report(root, result)
     return result

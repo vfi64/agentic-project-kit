@@ -80,6 +80,40 @@ def _echo_quiet_repo_report(result: RepoActionResult, *, label: str) -> None:
     typer.echo("CHAT_REPLY=g")
 
 
+def _summary_line(label: str, value: object, *, indent: int = 0, width: int = 24) -> str:
+    return f"{' ' * indent}{label + ':':<{width}}{value}"
+
+
+def _echo_remote_next_user_summary(result) -> None:
+    actions = result.post_report_actions or {}
+    committed = bool(actions.get("committed"))
+    pushed = bool(actions.get("pushed"))
+    uploaded = "yes" if pushed else "no_push_failed" if committed else "no_commit_failed"
+
+    typer.echo("*" * 36 + " START SUMMARY " + "*" * 36)
+    typer.echo("TRANSFER_REMOTE_NEXT_DONE")
+    typer.echo("")
+    typer.echo(_summary_line("STATE", result.result_status))
+    typer.echo(_summary_line("RETURNCODE", result.returncode))
+    typer.echo("")
+    typer.echo("REMOTE_REPORT:")
+    typer.echo(_summary_line("UPLOADED", uploaded, indent=2))
+    typer.echo(_summary_line("COMMITTED", "yes" if committed else "no", indent=2))
+    typer.echo(_summary_line("PUSHED", "yes" if pushed else "no", indent=2))
+    typer.echo(_summary_line("REPORT_PATH", result.published_report_path, indent=2))
+    if actions.get("commit_head"):
+        typer.echo(_summary_line("REPORT_COMMIT", actions["commit_head"], indent=2))
+    if actions.get("blocked_reason"):
+        typer.echo(_summary_line("BLOCKED_REASON", actions["blocked_reason"], indent=2))
+    typer.echo("")
+    typer.echo("LOCAL:")
+    typer.echo(_summary_line("REPORT_PATH", result.report_path, indent=2))
+    typer.echo("")
+    typer.echo(_summary_line("NEXT", result.next_action))
+    typer.echo(_summary_line("CHAT_REPLY", "g"))
+    typer.echo("*" * 37 + " END SUMMARY " + "*" * 37)
+
+
 def _require_transfer_capability(capability: str) -> None:
     snapshot = build_transfer_state(Path("."))
     if snapshot.capabilities.get(capability, False):
@@ -167,10 +201,11 @@ def closeout(
 
 @transfer_app.command("remote-next")
 def remote_next(
-    branch: str = typer.Argument(
-        ..., help="Remote transfer branch to fetch, switch to, pull, and run."
+    branch: str | None = typer.Argument(
+        None,
+        help="Optional remote transfer branch. If omitted, read branch from the transfer order.",
     ),
-    json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
+    json_output: bool = typer.Option(False, "--json/--no-json", help="Print machine-readable JSON."),
 ) -> None:
     try:
         result = run_remote_next_transfer(Path("."), branch)
@@ -181,11 +216,7 @@ def remote_next(
     if json_output:
         typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
     else:
-        typer.echo(f"branch={result.branch}")
-        typer.echo(f"head={result.head}")
-        typer.echo(f"result_status={result.local_run.result_status}")
-        typer.echo(f"returncode={result.local_run.returncode}")
-        typer.echo(f"next_action={result.local_run.next_action}")
+        _echo_remote_next_user_summary(result)
 
     if result.local_run.returncode != 0:
         raise typer.Exit(code=result.local_run.returncode)
@@ -307,7 +338,11 @@ def pr_wait_ci_command(
 @transfer_app.command("pr-merge-safe")
 def pr_merge_safe_command(
     pr_number: int = typer.Argument(..., help="Pull request number to merge safely."),
-    expected_head_sha: str = typer.Option("", "--expected-head-sha", help="Expected PR head SHA. If omitted, the PR head SHA is resolved automatically."),
+    expected_head_sha: str = typer.Option(
+        "",
+        "--expected-head-sha",
+        help="Expected PR head SHA. If omitted, the PR head SHA is resolved automatically.",
+    ),
     main_branch: str = typer.Option("main", "--main-branch", help="Expected base branch."),
     merge_method: str = typer.Option("squash", "--merge-method", help="GitHub merge method."),
     no_verify_main: bool = typer.Option(
@@ -542,12 +577,18 @@ def apply(
         raise typer.Exit(code=result.returncode)
 
 
-
-
 @transfer_app.command("publish-last-report")
 def publish_last_report(
-    label: str = typer.Option("transfer-handoff", "--label", help="Label for the published tracked handoff report."),
-    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of concise handoff lines."),
+    label: str = typer.Option(
+        "transfer-handoff",
+        "--label",
+        help="Label for the published tracked handoff report.",
+    ),
+    json_output: bool = typer.Option(
+        False,
+        "--json",
+        help="Print JSON instead of concise handoff lines.",
+    ),
 ) -> None:
     try:
         result = publish_latest_transfer_report(Path("."), label=label)
@@ -580,8 +621,16 @@ def show_last_report() -> None:
 
 @transfer_app.command("run-sequence-and-log")
 def run_sequence_and_log(
-    step: list[str] = typer.Option(..., "--step", help="One command step; quote it as one shell argument."),
-    label: str = typer.Option("transfer-sequence", "--label", help="Label for the transfer sequence report."),
+    step: list[str] = typer.Option(
+        ...,
+        "--step",
+        help="One command step; quote it as one shell argument.",
+    ),
+    label: str = typer.Option(
+        "transfer-sequence",
+        "--label",
+        help="Label for the transfer sequence report.",
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     commands = [shlex.split(item) for item in step]

@@ -20,3 +20,8 @@ Screen-Control_Output.txt
 
 # Local transfer report scratch output; never commit generated quiet/progress reports.
 docs/reports/transfer_runs/
+
+# Generated timestamped transfer handoff reports are scratch artifacts.
+# Keep only stable latest-transfer-handoff-report.* files tracked for chat handoff.
+docs/reports/terminal/transfer_handoff_reports/20*.json
+docs/reports/terminal/transfer_handoff_reports/20*.log
