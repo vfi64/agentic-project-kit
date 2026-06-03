@@ -85,13 +85,14 @@ class TransferRemoteNextRun:
     blocked_message: str = ""
 
     def as_json_data(self) -> dict[str, object]:
+        primary_state = "BLOCKED" if self.result_status == "BLOCKED" else self.result_status
         return {
             "schema_version": 1,
             "artifact_type": "transfer_remote_next_execution_report",
             "branch": self.branch,
             "head": self.head,
             "result_status": self.result_status,
-            "primary_state": "BLOCKED" if self.result_status == "BLOCKED" else self.result_status,
+            "primary_state": primary_state,
             "returncode": self.returncode,
             "next_action": self.next_action,
             "chat_reply": "g",
@@ -122,7 +123,13 @@ class _CommandResult:
 
 
 class RemoteNextBlocked(RuntimeError):
-    def __init__(self, message: str, *, reasons: tuple[str, ...], branch: str | None = None):
+    def __init__(
+        self,
+        message: str,
+        *,
+        reasons: tuple[str, ...],
+        branch: str | None = None,
+    ):
         super().__init__(message)
         self.reasons = reasons
         self.branch = branch
@@ -137,7 +144,12 @@ def _command(argv: list[str], cwd: Path) -> _CommandResult:
         stderr=subprocess.PIPE,
         check=False,
     )
-    return _CommandResult(tuple(argv), process.returncode, process.stdout.strip(), process.stderr.strip())
+    return _CommandResult(
+        tuple(argv),
+        process.returncode,
+        process.stdout.strip(),
+        process.stderr.strip(),
+    )
 
 
 def _run(argv: list[str], cwd: Path) -> str:
@@ -149,7 +161,9 @@ def _run(argv: list[str], cwd: Path) -> str:
     return result.stdout.strip()
 
 
-def _status_paths(status_short: str) -> tuple[tuple[str, ...], tuple[str, ...], tuple[str, ...]]:
+def _status_paths(
+    status_short: str,
+) -> tuple[tuple[str, ...], tuple[str, ...], tuple[str, ...]]:
     staged: list[str] = []
     unstaged: list[str] = []
     untracked: list[str] = []
@@ -172,9 +186,14 @@ def _git_snapshot(project_root: Path) -> GitSnapshot:
     status = _command(["git", "status", "--short"], project_root).stdout
     staged, unstaged, untracked = _status_paths(status)
     return GitSnapshot(
-        current_branch=_command(["git", "branch", "--show-current"], project_root).stdout or "UNKNOWN",
+        current_branch=(
+            _command(["git", "branch", "--show-current"], project_root).stdout or "UNKNOWN"
+        ),
         head=_command(["git", "rev-parse", "--short", "HEAD"], project_root).stdout or "UNKNOWN",
-        remote_tracking=_command(["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"], project_root).stdout,
+        remote_tracking=_command(
+            ["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"],
+            project_root,
+        ).stdout,
         status_short=status,
         staged_changes=staged,
         unstaged_changes=unstaged,
@@ -233,7 +252,11 @@ def _read_transfer_order_data(path: Path) -> dict[str, Any]:
     return data
 
 
-def resolve_remote_next_branch(project_root: Path, branch: str | None = None, path: Path = DEFAULT_INBOX) -> str:
+def resolve_remote_next_branch(
+    project_root: Path,
+    branch: str | None = None,
+    path: Path = DEFAULT_INBOX,
+) -> str:
     if branch is not None and branch.strip():
         return _validate_branch_name(branch)
     root = project_root.resolve()
@@ -245,7 +268,11 @@ def resolve_remote_next_branch(project_root: Path, branch: str | None = None, pa
     return _validate_branch_name(order_branch)
 
 
-def _blocked_local_run(message: str, reasons: tuple[str, ...], snapshot: GitSnapshot) -> TransferLocalRun:
+def _blocked_local_run(
+    message: str,
+    reasons: tuple[str, ...],
+    snapshot: GitSnapshot,
+) -> TransferLocalRun:
     state = {
         "schema_version": 1,
         "primary_state": "BLOCKED",
@@ -276,7 +303,8 @@ def _blocked_local_run(message: str, reasons: tuple[str, ...], snapshot: GitSnap
 
 def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> TransferRemoteNextRun:
     data = result.as_json_data()
-    run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
+    run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    run_id = f"{run_id}-{uuid4().hex[:8]}"
     label = "remote-next"
     timestamped_json = REMOTE_NEXT_REPORT_DIR / f"{run_id}-{label}.json"
     timestamped_log = REMOTE_NEXT_REPORT_DIR / f"{run_id}-{label}.log"
@@ -382,12 +410,11 @@ def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> T
         preflight = _git_snapshot(root)
         local_run = run_local_transfer(root)
         head = _run(["git", "rev-parse", "--short", "HEAD"], root)
-        status = local_run.result_status
         result = TransferRemoteNextRun(
             branch=safe_branch,
             local_run=local_run,
             head=head,
-            result_status=status,
+            result_status=local_run.result_status,
             returncode=local_run.returncode,
             next_action=local_run.next_action,
             report_path="",
