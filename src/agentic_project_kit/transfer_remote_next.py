@@ -372,71 +372,6 @@ def _report_paths(
     )
 
 
-def _attempt_report_commit_ack_push(
-    root: Path,
-    *,
-    branch: str | None,
-    paths: tuple[str, ...],
-) -> dict[str, object]:
-    steps: list[dict[str, object]] = []
-    actions: dict[str, object] = {
-        "schema_version": 1,
-        "attempted": True,
-        "branch": branch,
-        "paths": list(paths),
-        "steps": steps,
-        "committed": False,
-        "rule_ack_refreshed_after_commit": False,
-        "pushed": False,
-    }
-
-    before_status = _command(["git", "status", "--short"], root)
-    steps.append({"name": "status_before_report_commit", **before_status.as_json_data()})
-    add = _command(["git", "add", *paths], root)
-    steps.append({"name": "git_add_report_paths", **add.as_json_data()})
-    if add.returncode != 0:
-        actions["blocked_reason"] = "git_add_failed"
-        return actions
-
-    staged = _command(["git", "diff", "--cached", "--quiet"], root)
-    if staged.returncode == 0:
-        actions["skipped_reason"] = "no_report_changes_to_commit"
-    else:
-        commit = _command(["git", "commit", "-m", "Publish remote-next transfer report"], root)
-        steps.append({"name": "git_commit_report_paths", **commit.as_json_data()})
-        if commit.returncode != 0:
-            actions["blocked_reason"] = "git_commit_failed"
-            return actions
-        actions["committed"] = True
-        actions["commit_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
-        ack = _refresh_rule_ack(root)
-        steps.append({"name": "rules_acknowledge_after_commit", **ack.as_json_data()})
-        actions["rule_ack_refreshed_after_commit"] = ack.returncode == 0
-
-    if branch:
-        push = _command(["git", "push", "origin", branch], root)
-    else:
-        push = _command(["git", "push"], root)
-    steps.append({"name": "git_push_report_commit", **push.as_json_data()})
-    actions["pushed"] = push.returncode == 0
-    if push.returncode != 0:
-        actions["blocked_reason"] = "git_push_failed"
-
-    actions["final_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
-    actions["final_status_short"] = _command(["git", "status", "--short"], root).stdout
-    return actions
-
-
-def _write_payload_files(
-    root: Path,
-    paths_and_content: tuple[tuple[Path, str], ...],
-) -> None:
-    for relative_path, content in paths_and_content:
-        target = root / relative_path
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(content, encoding="utf-8")
-
-
 def _build_log_text(data: dict[str, object], payload_text: str) -> str:
     return "\n".join(
         (
@@ -456,8 +391,93 @@ def _build_log_text(data: dict[str, object], payload_text: str) -> str:
     )
 
 
+def _write_payload_files(
+    root: Path,
+    paths_and_content: tuple[tuple[Path, str], ...],
+) -> None:
+    for relative_path, content in paths_and_content:
+        target = root / relative_path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(content, encoding="utf-8")
+
+
+def _write_report_payloads(
+    root: Path,
+    data: dict[str, object],
+    *,
+    timestamped_json: Path,
+    timestamped_log: Path,
+    published_json: Path,
+    published_log: Path,
+) -> None:
+    payload = _remote_next_payload(root, data)
+    payload_text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    log_text = _build_log_text(data, payload_text)
+    _write_payload_files(
+        root,
+        (
+            (REMOTE_NEXT_LATEST_JSON, payload_text),
+            (timestamped_json, payload_text),
+            (REMOTE_NEXT_LATEST_LOG, log_text),
+            (timestamped_log, log_text),
+            (PUBLISHED_LATEST_JSON, payload_text),
+            (published_json, payload_text),
+            (PUBLISHED_LATEST_LOG, log_text),
+            (published_log, log_text),
+        ),
+    )
+
+
+def _attempt_report_commit_ack_push(
+    root: Path,
+    *,
+    branch: str | None,
+    paths: tuple[str, ...],
+) -> dict[str, object]:
+    steps: list[dict[str, object]] = []
+    actions: dict[str, object] = {
+        "schema_version": 1,
+        "attempted": True,
+        "branch": branch,
+        "paths": list(paths),
+        "steps": steps,
+        "committed": False,
+        "pushed": False,
+    }
+
+    add = _command(["git", "add", *paths], root)
+    steps.append({"name": "git_add_report_paths", **add.as_json_data()})
+    if add.returncode != 0:
+        actions["blocked_reason"] = "git_add_failed"
+        return actions
+
+    staged = _command(["git", "diff", "--cached", "--quiet"], root)
+    if staged.returncode == 0:
+        actions["skipped_reason"] = "no_report_changes_to_commit"
+    else:
+        commit = _command(["git", "commit", "-m", "Publish remote-next transfer report"], root)
+        steps.append({"name": "git_commit_report_paths", **commit.as_json_data()})
+        if commit.returncode != 0:
+            actions["blocked_reason"] = "git_commit_failed"
+            return actions
+        actions["committed"] = True
+        actions["commit_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
+
+    if branch:
+        push = _command(["git", "push", "origin", branch], root)
+    else:
+        push = _command(["git", "push"], root)
+    steps.append({"name": "git_push_report_commit", **push.as_json_data()})
+    actions["pushed"] = push.returncode == 0
+    if push.returncode != 0:
+        actions["blocked_reason"] = "git_push_failed"
+
+    actions["final_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
+    actions["final_status_short"] = _command(["git", "status", "--short"], root).stdout
+    return actions
+
+
 def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> TransferRemoteNextRun:
-    data = result.as_json_data()
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     run_id = f"{run_id}-{uuid4().hex[:8]}"
     label = "remote-next"
@@ -467,50 +487,48 @@ def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> Tran
     published_log = PUBLISHED_REPORT_DIR / f"{run_id}-{label}.log"
 
     paths = _report_paths(timestamped_json, timestamped_log, published_json, published_log)
-    data.update(
+    provisional_data = result.as_json_data()
+    provisional_data.update(
         {
             "report_path": str(timestamped_json),
             "published_report_path": str(published_json),
             "latest_report_path": str(REMOTE_NEXT_LATEST_JSON),
             "latest_published_report_path": str(PUBLISHED_LATEST_JSON),
-            "post_report_actions": result.post_report_actions,
+            "post_report_actions": {
+                "schema_version": 1,
+                "attempted": True,
+                "status": "pending_until_report_files_are_written",
+            },
         }
     )
-    payload = _remote_next_payload(root, data)
-    payload_text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
-    log_text = _build_log_text(data, payload_text)
-
-    _write_payload_files(
+    _write_report_payloads(
         root,
-        (
-            (REMOTE_NEXT_LATEST_JSON, payload_text),
-            (timestamped_json, payload_text),
-            (REMOTE_NEXT_LATEST_LOG, log_text),
-            (timestamped_log, log_text),
-            (PUBLISHED_LATEST_JSON, payload_text),
-            (published_json, payload_text),
-            (PUBLISHED_LATEST_LOG, log_text),
-            (published_log, log_text),
-        ),
+        provisional_data,
+        timestamped_json=timestamped_json,
+        timestamped_log=timestamped_log,
+        published_json=published_json,
+        published_log=published_log,
     )
 
     post_report_actions = _attempt_report_commit_ack_push(root, branch=result.branch, paths=paths)
-    data["post_report_actions"] = post_report_actions
-    payload = _remote_next_payload(root, data)
-    payload_text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
-    log_text = _build_log_text(data, payload_text)
-    _write_payload_files(
+    final_data = result.as_json_data()
+    final_data.update(
+        {
+            "report_path": str(timestamped_json),
+            "published_report_path": str(published_json),
+            "latest_report_path": str(REMOTE_NEXT_LATEST_JSON),
+            "latest_published_report_path": str(PUBLISHED_LATEST_JSON),
+            "post_report_actions": post_report_actions,
+        }
+    )
+
+    _write_report_payloads(
         root,
-        (
-            (REMOTE_NEXT_LATEST_JSON, payload_text),
-            (timestamped_json, payload_text),
-            (REMOTE_NEXT_LATEST_LOG, log_text),
-            (timestamped_log, log_text),
-            (PUBLISHED_LATEST_JSON, payload_text),
-            (published_json, payload_text),
-            (PUBLISHED_LATEST_LOG, log_text),
-            (published_log, log_text),
-        ),
+        final_data,
+        timestamped_json=timestamped_json,
+        timestamped_log=timestamped_log,
+        published_json=published_json,
+        published_log=published_log,
     )
 
     return TransferRemoteNextRun(
