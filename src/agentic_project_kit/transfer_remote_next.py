@@ -12,6 +12,7 @@ import yaml
 
 from agentic_project_kit.transfer_local_runner import TransferLocalRun, run_local_transfer
 from agentic_project_kit.transfer_runner import DEFAULT_INBOX
+from agentic_project_kit.transfer_safety_context import build_local_to_llm_payload
 
 REMOTE_NEXT_REPORT_DIR = Path("docs/reports/transfer_runs")
 REMOTE_NEXT_LATEST_JSON = REMOTE_NEXT_REPORT_DIR / "latest-remote-next-report.json"
@@ -301,6 +302,16 @@ def _blocked_local_run(
     )
 
 
+def _remote_next_payload(root: Path, data: dict[str, object]) -> dict[str, object]:
+    payload = build_local_to_llm_payload(
+        root,
+        data,
+        kind="local_to_llm_remote_next_report",
+    )
+    payload["remote_next_report"] = data
+    return payload
+
+
 def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> TransferRemoteNextRun:
     data = result.as_json_data()
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -319,6 +330,7 @@ def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> Tran
             "latest_published_report_path": str(PUBLISHED_LATEST_JSON),
         }
     )
+    payload = _remote_next_payload(root, data)
     log_text = "\n".join(
         (
             "TRANSFER_REMOTE_NEXT_REPORT",
@@ -331,18 +343,18 @@ def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> Tran
             f"NEXT={data['next_action']}",
             "",
             "### JSON RESULT ###",
-            json.dumps(data, indent=2, sort_keys=True),
+            json.dumps(payload, indent=2, sort_keys=True),
             "",
         )
     )
 
     for relative_path, content in (
-        (REMOTE_NEXT_LATEST_JSON, json.dumps(data, indent=2, sort_keys=True) + "\n"),
-        (timestamped_json, json.dumps(data, indent=2, sort_keys=True) + "\n"),
+        (REMOTE_NEXT_LATEST_JSON, json.dumps(payload, indent=2, sort_keys=True) + "\n"),
+        (timestamped_json, json.dumps(payload, indent=2, sort_keys=True) + "\n"),
         (REMOTE_NEXT_LATEST_LOG, log_text),
         (timestamped_log, log_text),
-        (PUBLISHED_LATEST_JSON, json.dumps(data, indent=2, sort_keys=True) + "\n"),
-        (published_json, json.dumps(data, indent=2, sort_keys=True) + "\n"),
+        (PUBLISHED_LATEST_JSON, json.dumps(payload, indent=2, sort_keys=True) + "\n"),
+        (published_json, json.dumps(payload, indent=2, sort_keys=True) + "\n"),
         (PUBLISHED_LATEST_LOG, log_text),
         (published_log, log_text),
     ):
