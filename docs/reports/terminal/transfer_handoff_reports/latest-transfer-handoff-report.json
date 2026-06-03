@@ -6,7 +6,7 @@
     "blocked_message": "",
     "branch": "main",
     "chat_reply": "g",
-    "head": "d0cf443",
+    "head": "0cf955d",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -79,8 +79,8 @@
           "dirty_worktree": true,
           "pending_transfer_order": true
         },
-        "created_at": "2026-06-03T19:56:09.898088+00:00",
-        "head": "d0cf443",
+        "created_at": "2026-06-03T20:01:15.145868+00:00",
+        "head": "0cf955d",
         "last_result": {
           "exists": true,
           "report_path": "docs/reports/command_runs/merge-pr1080-admin-refresh.md"
@@ -243,12 +243,12 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "d0cf443",
+      "head": "0cf955d",
       "order_sync": {
         "attempted": true,
         "current_branch": "main",
-        "final_head": "d0cf443",
-        "head": "d0cf443",
+        "final_head": "0cf955d",
+        "head": "0cf955d",
         "schema_version": 1,
         "steps": [
           {
@@ -297,7 +297,7 @@
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "d0cf443",
+      "head": "0cf955d",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -605,10 +605,10 @@
     "repo_state": {
       "branch": "main",
       "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/merge-pr1080-admin-refresh.md",
-      "head": "d0cf4435619845bc705c3fadcbef5977b1aea429",
+      "head": "0cf955d77b3c012c4c577d7f74bf382ee63267f4",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "d0cf4435619845bc705c3fadcbef5977b1aea429"
+      "upstream_head": "0cf955d77b3c012c4c577d7f74bf382ee63267f4"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -639,7 +639,7 @@
     "blocked_message": "",
     "branch": "main",
     "chat_reply": "g",
-    "head": "d0cf443",
+    "head": "0cf955d",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -712,8 +712,8 @@
           "dirty_worktree": true,
           "pending_transfer_order": true
         },
-        "created_at": "2026-06-03T19:56:09.898088+00:00",
-        "head": "d0cf443",
+        "created_at": "2026-06-03T20:01:15.145868+00:00",
+        "head": "0cf955d",
         "last_result": {
           "exists": true,
           "report_path": "docs/reports/command_runs/merge-pr1080-admin-refresh.md"
@@ -876,12 +876,12 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "d0cf443",
+      "head": "0cf955d",
       "order_sync": {
         "attempted": true,
         "current_branch": "main",
-        "final_head": "d0cf443",
-        "head": "d0cf443",
+        "final_head": "0cf955d",
+        "head": "0cf955d",
         "schema_version": 1,
         "steps": [
           {
@@ -930,7 +930,7 @@
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "d0cf443",
+      "head": "0cf955d",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -1238,10 +1238,10 @@
     "repo_state": {
       "branch": "main",
       "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/merge-pr1080-admin-refresh.md",
-      "head": "d0cf4435619845bc705c3fadcbef5977b1aea429",
+      "head": "0cf955d77b3c012c4c577d7f74bf382ee63267f4",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "d0cf4435619845bc705c3fadcbef5977b1aea429"
+      "upstream_head": "0cf955d77b3c012c4c577d7f74bf382ee63267f4"
     },
     "schema_version": 1,
     "terminal_block_rules": {
