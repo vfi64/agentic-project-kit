@@ -1,22 +1,25 @@
 schema_version: 1
-id: pr1079-final-closeout-inspect
-title: Inspect final PR1079 closeout evidence
-branch: feature/harden-release-publish-head-guards
-safety: Bounded repo-local evidence inspection only.
-label: pr1079-final-closeout-inspect
+id: merge-pr1080-admin-refresh
+title: Merge PR1080 administrative handoff refresh
+branch: main
+safety: Bounded administrative PR merge only. Merge PR1080 if green with exact head guard; no product work.
+label: merge-pr1080-admin-refresh
 allow_blocked_start: true
-report_path: docs/reports/command_runs/pr1079-final-closeout-inspect.md
+report_path: docs/reports/command_runs/merge-pr1080-admin-refresh.md
 actions:
 - type: run_command
   command:
   - ./.venv/bin/agentic-kit
-  - evidence
-  - inspect
-  - --require-summary
-  - docs/reports/terminal/pr1079-one-command-transfer-final-closeout.log
+  - transfer
+  - pr-merge-safe
+  - "1080"
+  - --expected-head-sha
+  - e312f85e3eab280ae747b195a8fb54b6363a4e8d
+  - --merge-method
+  - squash
 publish_last_report: true
 commit:
-  message: Publish PR1079 final closeout inspection report
+  message: Publish PR1080 admin refresh merge transfer report
   paths:
   - docs/reports/command_runs
   - docs/reports/transfer_runs/latest-remote-next-report.json
@@ -24,5 +27,5 @@ commit:
   - docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
   - docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log
 push:
-  branch: feature/harden-release-publish-head-guards
+  branch: main
 expected_chat_reply: g
