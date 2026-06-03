@@ -3,226 +3,60 @@
   "kind": "local_to_llm_remote_next_report",
   "last_result": {
     "artifact_type": "transfer_remote_next_execution_report",
-    "blocked_message": "",
+    "blocked_message": "worktree must be clean before transfer remote-next:\nM docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
     "branch": "feature/harden-release-publish-head-guards",
     "chat_reply": "g",
-    "head": "5ad2d9f",
+    "head": "a590c41",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
-      "apply": {
-        "action_results": [
-          {
-            "command": [
-              "./.venv/bin/agentic-kit",
-              "evidence",
-              "inspect",
-              "--require-summary",
-              "docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log"
-            ],
-            "returncode": 0,
-            "stderr": "",
-            "stdout": "EVIDENCE_INSPECTION\nverdict: PASS_CONTINUE\nevidence_exists: yes\nrequire_summary: yes\ngit_branch: feature/harden-release-publish-head-guards\ngit_status_clean: yes\npass_markers: 2\nfail_markers: 0\nhidden_fail_before_final_pass: no\nstructured_summary_found: yes\nstructured_summary_valid: yes\nsummary_name: post-pr1067-monitor-wrapper-closeout\nsummary_scope: post-PR1067 transfer monitor wrapper hardening closeout\nsummary_branch: docs/post-pr1067-monitor-wrapper-closeout-evidence\nsummary_origin: local\nsummary_state_mode: local\nsummary_mode_check: local smoke gates and post-merge handoff checks passed on main after PR1067\nsummary_work: PASS\nsummary_evidence: PASS\nsummary_overall: PASS\nsummary_remote_evidence: NOT_REQUIRED\nsummary_pr: NONE\nsummary_head_sha: 22a16095fccbd99072f9873de5ec8e87fc7f220e\nsummary_ci: not-required\nsummary_merge: not-required\nsummary_terminal_log: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nsummary_terminal_log_remote: docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nsummary_terminal_log_local: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nsummary_command_report: post-pr1067-monitor-wrapper-closeout.log records post-merge check PASS, handoff check PASS, ruff PASS, and targeted monitor/transfer tests PASS\nsummary_safe_step: Run evidence inspect --require-summary on this log, then update PR1068 and merge only after green checks\nsummary_chat_reply: d\nsummary_result_marker: PASS\nevidence_path: docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nfinal_marker: ### RESULT: PASS ###\nnext_action: continue with the next safe slice after reviewing evidence\n### RESULT: PASS ###\n",
-            "type": "run_command"
-          }
-        ],
-        "message": "Transfer order applied.",
-        "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md",
-        "result_status": "PASS",
-        "returncode": 0,
-        "safety": "Bounded repo-local closeout diagnostics only. This transfer order runs evidence inspection against an explicit current closeout log path, avoiding implicit fallback to stale evidence.",
-        "schema_version": 1,
-        "transfer_id": "one-command-transfer-closeout-check"
-      },
+      "apply": null,
       "inspect": {
-        "action_results": [
-          {
-            "command": [
-              "./.venv/bin/agentic-kit",
-              "evidence",
-              "inspect",
-              "--require-summary",
-              "docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log"
-            ],
-            "type": "run_command",
-            "would_run": true
-          }
+        "message": "worktree must be clean before transfer remote-next:\nM docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+        "reasons": [
+          "dirty_worktree"
         ],
-        "message": "Transfer order inspected. Re-run apply to write files or run commands.",
-        "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md",
-        "result_status": "PENDING",
-        "returncode": 0,
-        "safety": "Bounded repo-local closeout diagnostics only. This transfer order runs evidence inspection against an explicit current closeout log path, avoiding implicit fallback to stale evidence.",
-        "schema_version": 1,
-        "transfer_id": "one-command-transfer-closeout-check"
+        "result_status": "BLOCKED",
+        "returncode": 2,
+        "schema_version": 1
       },
-      "next_action": "Review transfer state and evidence report before continuing.",
-      "result_status": "PASS",
-      "returncode": 0,
+      "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+      "result_status": "BLOCKED",
+      "returncode": 2,
       "schema_version": 1,
       "state": {
         "branch": "feature/harden-release-publish-head-guards",
-        "capabilities": {
-          "closeout_last_run": false,
-          "diagnose": true,
-          "refresh_rules": true,
-          "rules_confirmed": true,
-          "run_next_command": false
+        "dirty_state": {
+          "clean": false,
+          "staged_changes": [
+            "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
+          ],
+          "status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+          "unstaged_changes": [
+            "docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json",
+            "docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.log",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
+            "docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json",
+            "docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.log",
+            "docs/reports/transfer_runs/latest-remote-next-report.json",
+            "docs/reports/transfer_runs/latest-remote-next-report.log"
+          ],
+          "untracked_files": [
+            "docs/reports/command_runs/one-command-transfer-closeout-check.md"
+          ]
         },
-        "closeout": {
-          "dirty_worktree": true,
-          "pending_transfer_order": true
-        },
-        "created_at": "2026-06-03T16:45:16.338396+00:00",
-        "head": "5ad2d9f",
-        "last_result": {
-          "exists": true,
-          "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md"
-        },
-        "next_action": "Review or clean the worktree before running another transfer action.",
+        "head": "a590c41",
+        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
         "primary_state": "BLOCKED",
         "reasons": [
           "dirty_worktree"
         ],
-        "repo": "vfi64/agentic-project-kit",
-        "rule_acknowledgement": {
-          "decision": {
-            "blocking_reasons": [],
-            "fail_closed": false,
-            "is_confirmed": true,
-            "schema_version": 1
-          },
-          "path": ".agentic/rule_ack/current.json",
-          "present": true
-        },
-        "rule_snapshot": {
-          "fail_closed": false,
-          "is_valid": true,
-          "schema_version": 1,
-          "snapshot_id": "d2d75fd48c25cdddfc869c426320d402ede8574533d84af2c98b5dc4ad8e89cb",
-          "source_digests": [
-            {
-              "path": ".agentic/compiled_agent_context.yaml",
-              "sha256": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
-              "size_bytes": 8483
-            },
-            {
-              "path": ".agentic/handoff_state.yaml",
-              "sha256": "ee575ee8700a127165afda8100e1e615f60195542a572cc0f9fe255a96fb9449",
-              "size_bytes": 19959
-            },
-            {
-              "path": ".agentic/rule_mechanism_inventory.yaml",
-              "sha256": "eeddfb7fd51a0e9764784dfbb9f532b204497156488ab1b55b3eb4e3a4ae2850",
-              "size_bytes": 14084
-            },
-            {
-              "path": ".agentic/rule_migrations.yaml",
-              "sha256": "7e47b41dc5a2de80a80a51caac132974c44a747e9ae7f1f4d8813eae7e0b58ef",
-              "size_bytes": 5765
-            },
-            {
-              "path": ".agentic/rule_preservation.yaml",
-              "sha256": "817319e295674992e6665df25778b5c9cb767d1e393e5402df708d52ec79ff39",
-              "size_bytes": 1688
-            },
-            {
-              "path": "docs/STATUS.md",
-              "sha256": "a53c7c202bf490130dae4ddc40e46683bafcb02b2a57eaedc98eb72ef27b5b28",
-              "size_bytes": 25663
-            },
-            {
-              "path": "docs/handoff/CURRENT_HANDOFF.md",
-              "sha256": "f7c4bf4b09c57d37b3610d0b260076fa872272083c3b6081dcfd85092ec4f1d0",
-              "size_bytes": 24329
-            },
-            {
-              "path": "docs/handoff/START_NEW_CHAT_PROMPT.md",
-              "sha256": "6a44261a68eddfca368e8f310ee423498186adc891ec4656b3474df743311473",
-              "size_bytes": 4388
-            },
-            {
-              "path": "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-              "sha256": "0334ccd565e2f154c09739f48cab1b3e380c0081963c92796d5e790e80023a6f",
-              "size_bytes": 4758
-            },
-            {
-              "path": "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-              "sha256": "f3a22adca9ec4e30fdbfedca8ef030be25da63df1159a34d7ebdf0f7b23c2ba6",
-              "size_bytes": 10976
-            },
-            {
-              "path": "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-              "sha256": "2f2ff37428d0c1bc2e9d816abdcaca345cab4e4931a39da05e13afeb9638c680",
-              "size_bytes": 8308
-            },
-            {
-              "path": "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-              "sha256": "3bb7492c9afc41eac24a268bab367e2a3781ec57899691f6f19e34f460fa0801",
-              "size_bytes": 5625
-            },
-            {
-              "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-              "sha256": "65e557eaabe9fabbc20da721fc00798d4625d726fe52b0f7806e85322a3a3979",
-              "size_bytes": 7410
-            },
-            {
-              "path": "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
-              "sha256": "8da278556b422111087997253ac60ec3723872f7bf45c07564c4a6f16304f452",
-              "size_bytes": 8414
-            },
-            {
-              "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-              "sha256": "e622d208cb98eaec09d23790b200636e2093a007e7edb72d0327a91691ab337f",
-              "size_bytes": 24207
-            },
-            {
-              "path": "docs/TEST_GATES.md",
-              "sha256": "802d896337e268faa5af9ba81c50b9fe6f8dd475d4172756753b6828e5531023",
-              "size_bytes": 32142
-            },
-            {
-              "path": "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md",
-              "sha256": "39468ae932293745ac6b8838d8b2c5a17da42d293f3bd704551e991a7fd3ca1b",
-              "size_bytes": 4445
-            }
-          ],
-          "sources_total": 17,
-          "validation": {
-            "blocking_reasons": [],
-            "fail_closed": false,
-            "handoff_state_errors": [],
-            "is_valid": true,
-            "missing_required_paths": [],
-            "schema_version": 1,
-            "source_paths": [
-              ".agentic/compiled_agent_context.yaml",
-              ".agentic/handoff_state.yaml",
-              ".agentic/rule_mechanism_inventory.yaml",
-              ".agentic/rule_migrations.yaml",
-              ".agentic/rule_preservation.yaml",
-              "docs/STATUS.md",
-              "docs/handoff/CURRENT_HANDOFF.md",
-              "docs/handoff/START_NEW_CHAT_PROMPT.md",
-              "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-              "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-              "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-              "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-              "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-              "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
-              "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-              "docs/TEST_GATES.md",
-              "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md"
-            ],
-            "sources_total": 17,
-            "yaml_parse_error_paths": []
-          }
-        },
         "schema_version": 1
       },
-      "transfer_id": "one-command-transfer-closeout-check"
+      "transfer_id": "remote-next-blocked"
     },
-    "next_action": "Review transfer state and evidence report before continuing.",
+    "next_action": "Inspect the published remote-next diagnostic report before retrying.",
     "post_report_actions": {
       "attempted": true,
       "schema_version": 1,
@@ -231,107 +65,42 @@
     "preflight": {
       "current_branch": "feature/harden-release-publish-head-guards",
       "dirty_state": {
-        "clean": true,
-        "staged_changes": [],
-        "status_short": "",
-        "unstaged_changes": [],
-        "untracked_files": []
-      },
-      "head": "5ad2d9f",
-      "order_sync": {
-        "attempted": true,
-        "current_branch": "feature/harden-release-publish-head-guards",
-        "final_head": "5ad2d9f",
-        "head": "5ad2d9f",
-        "schema_version": 1,
-        "steps": [
-          {
-            "argv": [
-              "git",
-              "fetch",
-              "origin",
-              "feature/harden-release-publish-head-guards"
-            ],
-            "name": "git_fetch_current_branch",
-            "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            feature/harden-release-publish-head-guards -> FETCH_HEAD",
-            "stdout": ""
-          },
-          {
-            "argv": [
-              "git",
-              "pull",
-              "--ff-only",
-              "origin",
-              "feature/harden-release-publish-head-guards"
-            ],
-            "name": "git_pull_current_branch",
-            "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            feature/harden-release-publish-head-guards -> FETCH_HEAD",
-            "stdout": "Already up to date."
-          }
-        ]
-      },
-      "owned_report_artifact_recovery": {
-        "actions": [
-          {
-            "argv": [
-              "git",
-              "restore",
-              "--staged",
-              "--worktree",
-              "--",
-              "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
-              "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.json",
-              "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.log",
-              "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-              "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-              "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.json",
-              "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.log",
-              "docs/reports/transfer_runs/latest-remote-next-report.json",
-              "docs/reports/transfer_runs/latest-remote-next-report.log"
-            ],
-            "name": "restore_tracked_owned_report_artifacts",
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          },
-          {
-            "name": "remove_untracked_owned_report_artifact",
-            "path": "docs/reports/command_runs/one-command-transfer-closeout-check.md",
-            "returncode": 0
-          }
+        "clean": false,
+        "staged_changes": [
+          "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
         ],
-        "attempted": true,
-        "current_order_report": "docs/reports/command_runs/one-command-transfer-closeout-check.md",
-        "final_status_short": "",
-        "foreign_dirty_paths": [],
-        "owned_report_artifacts": [
-          "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
-          "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.json",
-          "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.log",
+        "status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+        "unstaged_changes": [
+          "docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json",
+          "docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.log",
           "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
           "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-          "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.json",
-          "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.log",
+          "docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json",
+          "docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.log",
           "docs/reports/transfer_runs/latest-remote-next-report.json",
-          "docs/reports/transfer_runs/latest-remote-next-report.log",
-          "docs/reports/command_runs/one-command-transfer-closeout-check.md"
+          "docs/reports/transfer_runs/latest-remote-next-report.log"
         ],
-        "schema_version": 1
+        "untracked_files": [
+          "docs/reports/command_runs/one-command-transfer-closeout-check.md"
+        ]
       },
+      "head": "a590c41",
       "remote_tracking": "origin/feature/harden-release-publish-head-guards"
     },
-    "primary_state": "PASS",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json",
-    "reasons": [],
-    "report_path": "docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json",
-    "result_status": "PASS",
-    "returncode": 0,
+    "primary_state": "BLOCKED",
+    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+    "reasons": [
+      "dirty_worktree"
+    ],
+    "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
+    "result_status": "BLOCKED",
+    "returncode": 2,
     "rule_ack": {
-      "blocking_reasons": [],
-      "confirmed": true,
-      "head": "5ad2d9f",
+      "blocking_reasons": [
+        "stale_rule_ack"
+      ],
+      "confirmed": false,
+      "head": "ccaf9bf",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -638,11 +407,11 @@
     ],
     "repo_state": {
       "branch": "feature/harden-release-publish-head-guards",
-      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
-      "head": "5ad2d9fff02f8d7bc2cb57b39ed16e236af42e34",
+      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+      "head": "a590c415f589af96c5fe9475115bf097f57c359e",
       "head_matches_upstream": true,
       "upstream": "origin/feature/harden-release-publish-head-guards",
-      "upstream_head": "5ad2d9fff02f8d7bc2cb57b39ed16e236af42e34"
+      "upstream_head": "a590c415f589af96c5fe9475115bf097f57c359e"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -670,226 +439,60 @@
   },
   "remote_next_report": {
     "artifact_type": "transfer_remote_next_execution_report",
-    "blocked_message": "",
+    "blocked_message": "worktree must be clean before transfer remote-next:\nM docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
     "branch": "feature/harden-release-publish-head-guards",
     "chat_reply": "g",
-    "head": "5ad2d9f",
+    "head": "a590c41",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
-      "apply": {
-        "action_results": [
-          {
-            "command": [
-              "./.venv/bin/agentic-kit",
-              "evidence",
-              "inspect",
-              "--require-summary",
-              "docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log"
-            ],
-            "returncode": 0,
-            "stderr": "",
-            "stdout": "EVIDENCE_INSPECTION\nverdict: PASS_CONTINUE\nevidence_exists: yes\nrequire_summary: yes\ngit_branch: feature/harden-release-publish-head-guards\ngit_status_clean: yes\npass_markers: 2\nfail_markers: 0\nhidden_fail_before_final_pass: no\nstructured_summary_found: yes\nstructured_summary_valid: yes\nsummary_name: post-pr1067-monitor-wrapper-closeout\nsummary_scope: post-PR1067 transfer monitor wrapper hardening closeout\nsummary_branch: docs/post-pr1067-monitor-wrapper-closeout-evidence\nsummary_origin: local\nsummary_state_mode: local\nsummary_mode_check: local smoke gates and post-merge handoff checks passed on main after PR1067\nsummary_work: PASS\nsummary_evidence: PASS\nsummary_overall: PASS\nsummary_remote_evidence: NOT_REQUIRED\nsummary_pr: NONE\nsummary_head_sha: 22a16095fccbd99072f9873de5ec8e87fc7f220e\nsummary_ci: not-required\nsummary_merge: not-required\nsummary_terminal_log: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nsummary_terminal_log_remote: docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nsummary_terminal_log_local: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nsummary_command_report: post-pr1067-monitor-wrapper-closeout.log records post-merge check PASS, handoff check PASS, ruff PASS, and targeted monitor/transfer tests PASS\nsummary_safe_step: Run evidence inspect --require-summary on this log, then update PR1068 and merge only after green checks\nsummary_chat_reply: d\nsummary_result_marker: PASS\nevidence_path: docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log\nfinal_marker: ### RESULT: PASS ###\nnext_action: continue with the next safe slice after reviewing evidence\n### RESULT: PASS ###\n",
-            "type": "run_command"
-          }
-        ],
-        "message": "Transfer order applied.",
-        "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md",
-        "result_status": "PASS",
-        "returncode": 0,
-        "safety": "Bounded repo-local closeout diagnostics only. This transfer order runs evidence inspection against an explicit current closeout log path, avoiding implicit fallback to stale evidence.",
-        "schema_version": 1,
-        "transfer_id": "one-command-transfer-closeout-check"
-      },
+      "apply": null,
       "inspect": {
-        "action_results": [
-          {
-            "command": [
-              "./.venv/bin/agentic-kit",
-              "evidence",
-              "inspect",
-              "--require-summary",
-              "docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log"
-            ],
-            "type": "run_command",
-            "would_run": true
-          }
+        "message": "worktree must be clean before transfer remote-next:\nM docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+        "reasons": [
+          "dirty_worktree"
         ],
-        "message": "Transfer order inspected. Re-run apply to write files or run commands.",
-        "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md",
-        "result_status": "PENDING",
-        "returncode": 0,
-        "safety": "Bounded repo-local closeout diagnostics only. This transfer order runs evidence inspection against an explicit current closeout log path, avoiding implicit fallback to stale evidence.",
-        "schema_version": 1,
-        "transfer_id": "one-command-transfer-closeout-check"
+        "result_status": "BLOCKED",
+        "returncode": 2,
+        "schema_version": 1
       },
-      "next_action": "Review transfer state and evidence report before continuing.",
-      "result_status": "PASS",
-      "returncode": 0,
+      "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+      "result_status": "BLOCKED",
+      "returncode": 2,
       "schema_version": 1,
       "state": {
         "branch": "feature/harden-release-publish-head-guards",
-        "capabilities": {
-          "closeout_last_run": false,
-          "diagnose": true,
-          "refresh_rules": true,
-          "rules_confirmed": true,
-          "run_next_command": false
+        "dirty_state": {
+          "clean": false,
+          "staged_changes": [
+            "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
+          ],
+          "status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+          "unstaged_changes": [
+            "docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json",
+            "docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.log",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
+            "docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json",
+            "docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.log",
+            "docs/reports/transfer_runs/latest-remote-next-report.json",
+            "docs/reports/transfer_runs/latest-remote-next-report.log"
+          ],
+          "untracked_files": [
+            "docs/reports/command_runs/one-command-transfer-closeout-check.md"
+          ]
         },
-        "closeout": {
-          "dirty_worktree": true,
-          "pending_transfer_order": true
-        },
-        "created_at": "2026-06-03T16:45:16.338396+00:00",
-        "head": "5ad2d9f",
-        "last_result": {
-          "exists": true,
-          "report_path": "docs/reports/command_runs/one-command-transfer-closeout-check.md"
-        },
-        "next_action": "Review or clean the worktree before running another transfer action.",
+        "head": "a590c41",
+        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
         "primary_state": "BLOCKED",
         "reasons": [
           "dirty_worktree"
         ],
-        "repo": "vfi64/agentic-project-kit",
-        "rule_acknowledgement": {
-          "decision": {
-            "blocking_reasons": [],
-            "fail_closed": false,
-            "is_confirmed": true,
-            "schema_version": 1
-          },
-          "path": ".agentic/rule_ack/current.json",
-          "present": true
-        },
-        "rule_snapshot": {
-          "fail_closed": false,
-          "is_valid": true,
-          "schema_version": 1,
-          "snapshot_id": "d2d75fd48c25cdddfc869c426320d402ede8574533d84af2c98b5dc4ad8e89cb",
-          "source_digests": [
-            {
-              "path": ".agentic/compiled_agent_context.yaml",
-              "sha256": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
-              "size_bytes": 8483
-            },
-            {
-              "path": ".agentic/handoff_state.yaml",
-              "sha256": "ee575ee8700a127165afda8100e1e615f60195542a572cc0f9fe255a96fb9449",
-              "size_bytes": 19959
-            },
-            {
-              "path": ".agentic/rule_mechanism_inventory.yaml",
-              "sha256": "eeddfb7fd51a0e9764784dfbb9f532b204497156488ab1b55b3eb4e3a4ae2850",
-              "size_bytes": 14084
-            },
-            {
-              "path": ".agentic/rule_migrations.yaml",
-              "sha256": "7e47b41dc5a2de80a80a51caac132974c44a747e9ae7f1f4d8813eae7e0b58ef",
-              "size_bytes": 5765
-            },
-            {
-              "path": ".agentic/rule_preservation.yaml",
-              "sha256": "817319e295674992e6665df25778b5c9cb767d1e393e5402df708d52ec79ff39",
-              "size_bytes": 1688
-            },
-            {
-              "path": "docs/STATUS.md",
-              "sha256": "a53c7c202bf490130dae4ddc40e46683bafcb02b2a57eaedc98eb72ef27b5b28",
-              "size_bytes": 25663
-            },
-            {
-              "path": "docs/handoff/CURRENT_HANDOFF.md",
-              "sha256": "f7c4bf4b09c57d37b3610d0b260076fa872272083c3b6081dcfd85092ec4f1d0",
-              "size_bytes": 24329
-            },
-            {
-              "path": "docs/handoff/START_NEW_CHAT_PROMPT.md",
-              "sha256": "6a44261a68eddfca368e8f310ee423498186adc891ec4656b3474df743311473",
-              "size_bytes": 4388
-            },
-            {
-              "path": "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-              "sha256": "0334ccd565e2f154c09739f48cab1b3e380c0081963c92796d5e790e80023a6f",
-              "size_bytes": 4758
-            },
-            {
-              "path": "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-              "sha256": "f3a22adca9ec4e30fdbfedca8ef030be25da63df1159a34d7ebdf0f7b23c2ba6",
-              "size_bytes": 10976
-            },
-            {
-              "path": "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-              "sha256": "2f2ff37428d0c1bc2e9d816abdcaca345cab4e4931a39da05e13afeb9638c680",
-              "size_bytes": 8308
-            },
-            {
-              "path": "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-              "sha256": "3bb7492c9afc41eac24a268bab367e2a3781ec57899691f6f19e34f460fa0801",
-              "size_bytes": 5625
-            },
-            {
-              "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-              "sha256": "65e557eaabe9fabbc20da721fc00798d4625d726fe52b0f7806e85322a3a3979",
-              "size_bytes": 7410
-            },
-            {
-              "path": "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
-              "sha256": "8da278556b422111087997253ac60ec3723872f7bf45c07564c4a6f16304f452",
-              "size_bytes": 8414
-            },
-            {
-              "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-              "sha256": "e622d208cb98eaec09d23790b200636e2093a007e7edb72d0327a91691ab337f",
-              "size_bytes": 24207
-            },
-            {
-              "path": "docs/TEST_GATES.md",
-              "sha256": "802d896337e268faa5af9ba81c50b9fe6f8dd475d4172756753b6828e5531023",
-              "size_bytes": 32142
-            },
-            {
-              "path": "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md",
-              "sha256": "39468ae932293745ac6b8838d8b2c5a17da42d293f3bd704551e991a7fd3ca1b",
-              "size_bytes": 4445
-            }
-          ],
-          "sources_total": 17,
-          "validation": {
-            "blocking_reasons": [],
-            "fail_closed": false,
-            "handoff_state_errors": [],
-            "is_valid": true,
-            "missing_required_paths": [],
-            "schema_version": 1,
-            "source_paths": [
-              ".agentic/compiled_agent_context.yaml",
-              ".agentic/handoff_state.yaml",
-              ".agentic/rule_mechanism_inventory.yaml",
-              ".agentic/rule_migrations.yaml",
-              ".agentic/rule_preservation.yaml",
-              "docs/STATUS.md",
-              "docs/handoff/CURRENT_HANDOFF.md",
-              "docs/handoff/START_NEW_CHAT_PROMPT.md",
-              "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-              "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-              "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-              "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-              "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-              "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
-              "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-              "docs/TEST_GATES.md",
-              "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md"
-            ],
-            "sources_total": 17,
-            "yaml_parse_error_paths": []
-          }
-        },
         "schema_version": 1
       },
-      "transfer_id": "one-command-transfer-closeout-check"
+      "transfer_id": "remote-next-blocked"
     },
-    "next_action": "Review transfer state and evidence report before continuing.",
+    "next_action": "Inspect the published remote-next diagnostic report before retrying.",
     "post_report_actions": {
       "attempted": true,
       "schema_version": 1,
@@ -898,107 +501,42 @@
     "preflight": {
       "current_branch": "feature/harden-release-publish-head-guards",
       "dirty_state": {
-        "clean": true,
-        "staged_changes": [],
-        "status_short": "",
-        "unstaged_changes": [],
-        "untracked_files": []
-      },
-      "head": "5ad2d9f",
-      "order_sync": {
-        "attempted": true,
-        "current_branch": "feature/harden-release-publish-head-guards",
-        "final_head": "5ad2d9f",
-        "head": "5ad2d9f",
-        "schema_version": 1,
-        "steps": [
-          {
-            "argv": [
-              "git",
-              "fetch",
-              "origin",
-              "feature/harden-release-publish-head-guards"
-            ],
-            "name": "git_fetch_current_branch",
-            "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            feature/harden-release-publish-head-guards -> FETCH_HEAD",
-            "stdout": ""
-          },
-          {
-            "argv": [
-              "git",
-              "pull",
-              "--ff-only",
-              "origin",
-              "feature/harden-release-publish-head-guards"
-            ],
-            "name": "git_pull_current_branch",
-            "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            feature/harden-release-publish-head-guards -> FETCH_HEAD",
-            "stdout": "Already up to date."
-          }
-        ]
-      },
-      "owned_report_artifact_recovery": {
-        "actions": [
-          {
-            "argv": [
-              "git",
-              "restore",
-              "--staged",
-              "--worktree",
-              "--",
-              "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
-              "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.json",
-              "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.log",
-              "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-              "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-              "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.json",
-              "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.log",
-              "docs/reports/transfer_runs/latest-remote-next-report.json",
-              "docs/reports/transfer_runs/latest-remote-next-report.log"
-            ],
-            "name": "restore_tracked_owned_report_artifacts",
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          },
-          {
-            "name": "remove_untracked_owned_report_artifact",
-            "path": "docs/reports/command_runs/one-command-transfer-closeout-check.md",
-            "returncode": 0
-          }
+        "clean": false,
+        "staged_changes": [
+          "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
         ],
-        "attempted": true,
-        "current_order_report": "docs/reports/command_runs/one-command-transfer-closeout-check.md",
-        "final_status_short": "",
-        "foreign_dirty_paths": [],
-        "owned_report_artifacts": [
-          "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
-          "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.json",
-          "docs/reports/terminal/transfer_handoff_reports/20260603T164334Z-6f3427be-remote-next.log",
+        "status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+        "unstaged_changes": [
+          "docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json",
+          "docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.log",
           "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
           "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-          "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.json",
-          "docs/reports/transfer_runs/20260603T164334Z-6f3427be-remote-next.log",
+          "docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json",
+          "docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.log",
           "docs/reports/transfer_runs/latest-remote-next-report.json",
-          "docs/reports/transfer_runs/latest-remote-next-report.log",
-          "docs/reports/command_runs/one-command-transfer-closeout-check.md"
+          "docs/reports/transfer_runs/latest-remote-next-report.log"
         ],
-        "schema_version": 1
+        "untracked_files": [
+          "docs/reports/command_runs/one-command-transfer-closeout-check.md"
+        ]
       },
+      "head": "a590c41",
       "remote_tracking": "origin/feature/harden-release-publish-head-guards"
     },
-    "primary_state": "PASS",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json",
-    "reasons": [],
-    "report_path": "docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json",
-    "result_status": "PASS",
-    "returncode": 0,
+    "primary_state": "BLOCKED",
+    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+    "reasons": [
+      "dirty_worktree"
+    ],
+    "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
+    "result_status": "BLOCKED",
+    "returncode": 2,
     "rule_ack": {
-      "blocking_reasons": [],
-      "confirmed": true,
-      "head": "5ad2d9f",
+      "blocking_reasons": [
+        "stale_rule_ack"
+      ],
+      "confirmed": false,
+      "head": "ccaf9bf",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -1305,11 +843,11 @@
     ],
     "repo_state": {
       "branch": "feature/harden-release-publish-head-guards",
-      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
-      "head": "5ad2d9fff02f8d7bc2cb57b39ed16e236af42e34",
+      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/terminal/transfer_handoff_reports/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.json\n M docs/reports/transfer_runs/20260603T164516Z-85f04b58-remote-next.log\n M docs/reports/transfer_runs/latest-remote-next-report.json\n M docs/reports/transfer_runs/latest-remote-next-report.log\n?? docs/reports/command_runs/one-command-transfer-closeout-check.md",
+      "head": "a590c415f589af96c5fe9475115bf097f57c359e",
       "head_matches_upstream": true,
       "upstream": "origin/feature/harden-release-publish-head-guards",
-      "upstream_head": "5ad2d9fff02f8d7bc2cb57b39ed16e236af42e34"
+      "upstream_head": "a590c415f589af96c5fe9475115bf097f57c359e"
     },
     "schema_version": 1,
     "terminal_block_rules": {
