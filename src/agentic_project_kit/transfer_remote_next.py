@@ -3,10 +3,8 @@ from __future__ import annotations
 import json
 import subprocess
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
-from uuid import uuid4
 
 import yaml
 
@@ -191,8 +189,7 @@ def _git_snapshot(project_root: Path) -> GitSnapshot:
         current_branch=_command(["git", "branch", "--show-current"], project_root).stdout or "UNKNOWN",
         head=_command(["git", "rev-parse", "--short", "HEAD"], project_root).stdout or "UNKNOWN",
         remote_tracking=_command(
-            ["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"],
-            project_root,
+            ["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"], project_root
         ).stdout,
         status_short=status,
         staged_changes=staged,
@@ -400,20 +397,8 @@ def _remote_next_payload(root: Path, data: dict[str, object]) -> dict[str, objec
     return payload
 
 
-def _report_paths(timestamped_json: Path, timestamped_log: Path, published_json: Path, published_log: Path) -> tuple[str, ...]:
-    return tuple(
-        str(path)
-        for path in (
-            REMOTE_NEXT_LATEST_JSON,
-            timestamped_json,
-            REMOTE_NEXT_LATEST_LOG,
-            timestamped_log,
-            PUBLISHED_LATEST_JSON,
-            published_json,
-            PUBLISHED_LATEST_LOG,
-            published_log,
-        )
-    )
+def _report_paths() -> tuple[str, ...]:
+    return tuple(str(path) for path in (REMOTE_NEXT_LATEST_JSON, REMOTE_NEXT_LATEST_LOG, PUBLISHED_LATEST_JSON, PUBLISHED_LATEST_LOG))
 
 
 def _build_log_text(data: dict[str, object], payload_text: str) -> str:
@@ -442,15 +427,7 @@ def _write_payload_files(root: Path, paths_and_content: tuple[tuple[Path, str], 
         target.write_text(content, encoding="utf-8")
 
 
-def _write_report_payloads(
-    root: Path,
-    data: dict[str, object],
-    *,
-    timestamped_json: Path,
-    timestamped_log: Path,
-    published_json: Path,
-    published_log: Path,
-) -> None:
+def _write_report_payloads(root: Path, data: dict[str, object]) -> None:
     payload = _remote_next_payload(root, data)
     payload_text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
     log_text = _build_log_text(data, payload_text)
@@ -458,13 +435,9 @@ def _write_report_payloads(
         root,
         (
             (REMOTE_NEXT_LATEST_JSON, payload_text),
-            (timestamped_json, payload_text),
             (REMOTE_NEXT_LATEST_LOG, log_text),
-            (timestamped_log, log_text),
             (PUBLISHED_LATEST_JSON, payload_text),
-            (published_json, payload_text),
             (PUBLISHED_LATEST_LOG, log_text),
-            (published_log, log_text),
         ),
     )
 
@@ -511,51 +484,20 @@ def _attempt_report_commit_ack_push(root: Path, *, branch: str | None, paths: tu
 
 
 def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> TransferRemoteNextRun:
-    run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    run_id = f"{run_id}-{uuid4().hex[:8]}"
-    label = "remote-next"
-    timestamped_json = REMOTE_NEXT_REPORT_DIR / f"{run_id}-{label}.json"
-    timestamped_log = REMOTE_NEXT_REPORT_DIR / f"{run_id}-{label}.log"
-    published_json = PUBLISHED_REPORT_DIR / f"{run_id}-{label}.json"
-    published_log = PUBLISHED_REPORT_DIR / f"{run_id}-{label}.log"
-    paths = _report_paths(timestamped_json, timestamped_log, published_json, published_log)
+    paths = _report_paths()
     provisional_data = result.as_json_data()
     provisional_data.update(
         {
-            "report_path": str(timestamped_json),
-            "published_report_path": str(published_json),
+            "report_path": str(REMOTE_NEXT_LATEST_JSON),
+            "published_report_path": str(PUBLISHED_LATEST_JSON),
             "latest_report_path": str(REMOTE_NEXT_LATEST_JSON),
             "latest_published_report_path": str(PUBLISHED_LATEST_JSON),
             "post_report_actions": {"schema_version": 1, "attempted": True, "status": "pending_until_report_files_are_written"},
         }
     )
-    _write_report_payloads(
-        root,
-        provisional_data,
-        timestamped_json=timestamped_json,
-        timestamped_log=timestamped_log,
-        published_json=published_json,
-        published_log=published_log,
-    )
+    _write_report_payloads(root, provisional_data)
     post_report_actions = _attempt_report_commit_ack_push(root, branch=result.branch, paths=paths)
-    final_data = result.as_json_data()
-    final_data.update(
-        {
-            "report_path": str(timestamped_json),
-            "published_report_path": str(published_json),
-            "latest_report_path": str(REMOTE_NEXT_LATEST_JSON),
-            "latest_published_report_path": str(PUBLISHED_LATEST_JSON),
-            "post_report_actions": post_report_actions,
-        }
-    )
-    _write_report_payloads(
-        root,
-        final_data,
-        timestamped_json=timestamped_json,
-        timestamped_log=timestamped_log,
-        published_json=published_json,
-        published_log=published_log,
-    )
+
     return TransferRemoteNextRun(
         branch=result.branch,
         local_run=result.local_run,
@@ -563,8 +505,8 @@ def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> Tran
         result_status=result.result_status,
         returncode=result.returncode,
         next_action=result.next_action,
-        report_path=str(timestamped_json),
-        published_report_path=str(published_json),
+        report_path=str(REMOTE_NEXT_LATEST_JSON),
+        published_report_path=str(PUBLISHED_LATEST_JSON),
         reasons=result.reasons,
         preflight=result.preflight,
         rule_ack=result.rule_ack,
