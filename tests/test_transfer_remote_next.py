@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 from pathlib import Path
 
 import yaml
@@ -108,7 +109,7 @@ def test_remote_next_without_branch_requires_order_branch(tmp_path, monkeypatch)
 
 def test_transfer_help_lists_remote_next():
     completed = subprocess.run(
-        ["python", "-m", "agentic_project_kit.cli", "transfer", "--help"],
+        [sys.executable, "-m", "agentic_project_kit.cli", "transfer", "--help"],
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,

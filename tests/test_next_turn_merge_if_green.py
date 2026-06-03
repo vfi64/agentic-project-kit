@@ -12,6 +12,7 @@ from agentic_project_kit.next_turn_merge_if_green import (
     render_result,
     verify_merge_refs,
     verify_main_ci,
+    wait_for_pr_merge_state,
 )
 from agentic_project_kit.next_turn_pr_status import classify_pr_status
 
@@ -228,6 +229,98 @@ def test_merge_if_green_refuses_unexpected_base_before_merge(monkeypatch) -> Non
     assert result.reason == "PR base branch is develop, expected main"
     assert not result.merged
 
+
+
+
+def test_wait_for_pr_merge_state_waits_from_unknown_to_clean() -> None:
+    calls: list[dict[str, object]] = []
+    sleeps: list[float] = []
+    payloads = [
+        green_payload(head_ref_oid="abc123") | {"mergeStateStatus": "UNKNOWN"},
+        green_payload(head_ref_oid="abc123"),
+    ]
+
+    def fetcher(_pr: str) -> dict[str, object]:
+        payload = payloads[len(calls)]
+        calls.append(payload)
+        return payload
+
+    _payload, decision, refs, wait_reason = wait_for_pr_merge_state(
+        "123",
+        timeout_seconds=20,
+        poll_seconds=10,
+        fetcher=fetcher,
+        sleep=sleeps.append,
+    )
+
+    assert decision.decision == "green"
+    assert decision.merge_state_status == "CLEAN"
+    assert refs.head_ref_oid == "abc123"
+    assert wait_reason == ""
+    assert len(calls) == 2
+    assert sleeps == [10]
+
+
+def test_merge_if_green_waits_for_unknown_merge_state_before_merge(monkeypatch) -> None:
+    commands: list[list[str]] = []
+    sleeps: list[float] = []
+    payloads = [
+        green_payload(head_ref_oid="abc123") | {"mergeStateStatus": "UNKNOWN"},
+        green_payload(head_ref_oid="abc123"),
+    ]
+
+    def fetcher(_pr: str) -> dict[str, object]:
+        return payloads.pop(0)
+
+    def fake_run(args: list[str]) -> subprocess.CompletedProcess[str]:
+        commands.append(args)
+        return subprocess.CompletedProcess(args=["gh", *args], returncode=0, stdout="merged", stderr="")
+
+    monkeypatch.setattr(merge_if_green_module, "_run_gh", fake_run)
+
+    result = merge_if_green_module.merge_if_green(
+        "123",
+        expected_head_sha="abc123",
+        verify_main=False,
+        merge_state_timeout_seconds=20,
+        merge_state_poll_seconds=10,
+        pr_payload_fetcher=fetcher,
+        sleep=sleeps.append,
+    )
+
+    assert result.decision == "merge"
+    assert result.merged
+    assert result.status_decision.merge_state_status == "CLEAN"
+    assert sleeps == [10]
+    assert commands == [["pr", "merge", "123", "--squash", "--match-head-commit", "abc123", "--delete-branch"]]
+
+
+def test_merge_if_green_refuses_after_merge_state_timeout(monkeypatch) -> None:
+    commands: list[list[str]] = []
+
+    def fetcher(_pr: str) -> dict[str, object]:
+        return green_payload(head_ref_oid="abc123") | {"mergeStateStatus": "UNKNOWN"}
+
+    def fake_run(args: list[str]) -> subprocess.CompletedProcess[str]:
+        commands.append(args)
+        return subprocess.CompletedProcess(args=["gh", *args], returncode=0, stdout="merged", stderr="")
+
+    monkeypatch.setattr(merge_if_green_module, "_run_gh", fake_run)
+
+    result = merge_if_green_module.merge_if_green(
+        "123",
+        expected_head_sha="abc123",
+        verify_main=False,
+        merge_state_timeout_seconds=1,
+        merge_state_poll_seconds=0,
+        pr_payload_fetcher=fetcher,
+        sleep=lambda _seconds: None,
+    )
+
+    assert result.decision == "refuse"
+    assert result.reason == "merge state stayed UNKNOWN after timeout"
+    assert not result.merged
+    assert commands == []
 
 def test_merge_if_green_uses_match_head_commit_for_merge(monkeypatch) -> None:
     commands: list[list[str]] = []

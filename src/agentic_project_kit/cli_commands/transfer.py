@@ -348,6 +348,12 @@ def pr_merge_safe_command(
     no_verify_main: bool = typer.Option(
         False, "--no-verify-main", help="Skip post-merge main verification."
     ),
+    merge_state_timeout_seconds: int = typer.Option(
+        60, "--merge-state-timeout-seconds", min=1, help="Pre-merge GitHub merge-state wait timeout."
+    ),
+    merge_state_poll_seconds: int = typer.Option(
+        5, "--merge-state-poll-seconds", min=1, help="Pre-merge GitHub merge-state polling interval."
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     _require_transfer_capability("rules_confirmed")
@@ -357,6 +363,8 @@ def pr_merge_safe_command(
         main_branch=main_branch,
         merge_method=merge_method,
         no_verify_main=no_verify_main,
+        merge_state_timeout_seconds=merge_state_timeout_seconds,
+        merge_state_poll_seconds=merge_state_poll_seconds,
     )
     _echo_repo_result(result, json_output)
     if result.returncode != 0:
