@@ -58,13 +58,13 @@ def test_resolve_remote_next_branch_requires_order_branch(tmp_path):
 def test_remote_next_blocks_dirty_worktree_before_fetch(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     monkeypatch.chdir(tmp_path)
-    (tmp_path / "dirty.txt").write_text("dirty
-", encoding="utf-8")
+    (tmp_path / "dirty.txt").write_text("dirty\n", encoding="utf-8")
 
     result = CliRunner().invoke(app, ["transfer", "remote-next", "transfer/example"])
 
-    assert result.exit_code == 1
-    assert "worktree must be clean before transfer remote-next" in result.stdout
+    assert result.exit_code == 2
+    assert "dirty_worktree" in result.stdout
+    assert "published_report_path" in result.stdout
 
 
 def test_remote_next_without_branch_requires_order_branch(tmp_path, monkeypatch):
@@ -76,7 +76,8 @@ def test_remote_next_without_branch_requires_order_branch(tmp_path, monkeypatch)
 
     result = CliRunner().invoke(app, ["transfer", "remote-next"])
 
-    assert result.exit_code == 1
+    assert result.exit_code == 2
+    assert "invalid_transfer_order" in result.stdout
     assert "must define a non-empty branch" in result.stdout
 
 
