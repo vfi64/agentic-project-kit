@@ -712,6 +712,8 @@ def test_transfer_pr_merge_safe_cli_allows_omitted_expected_head_sha(monkeypatch
         main_branch="main",
         merge_method="squash",
         no_verify_main=False,
+        merge_state_timeout_seconds=60,
+        merge_state_poll_seconds=5,
     ):
         calls.append(
             (
@@ -720,6 +722,8 @@ def test_transfer_pr_merge_safe_cli_allows_omitted_expected_head_sha(monkeypatch
                 main_branch,
                 merge_method,
                 no_verify_main,
+                merge_state_timeout_seconds,
+                merge_state_poll_seconds,
             )
         )
         return RepoActionResult(
@@ -744,15 +748,11 @@ def test_transfer_pr_merge_safe_cli_allows_omitted_expected_head_sha(monkeypatch
     result = CliRunner().invoke(app, ["transfer", "pr-merge-safe", "123"])
 
     assert result.exit_code == 0
-    assert ("capability", "rules_confirmed") in calls
-    assert (
-        123,
-        "",
-        "main",
-        "squash",
-        False,
-    ) in calls
-    assert "FINAL_SIGNAL=d" in result.stdout
+    assert calls == [
+        ("capability", "rules_confirmed"),
+        (123, "", "main", "squash", False, 60, 5),
+    ]
+
 
 def test_transfer_pr_wait_ci_cli_quiet_report_prints_only_go_lines(tmp_path, monkeypatch):
     from typer.testing import CliRunner
