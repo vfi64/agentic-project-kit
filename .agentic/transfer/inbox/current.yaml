@@ -1,28 +1,29 @@
 schema_version: 1
-id: one-command-transfer-closeout-check
-title: One-command transfer explicit closeout evidence check
+id: cleanup-timestamped-transfer-reports
+title: Cleanup timestamped transfer reports
 branch: feature/harden-release-publish-head-guards
-safety: Bounded repo-local closeout diagnostics only. This transfer order runs evidence
-  inspection against an explicit current closeout log path, avoiding implicit fallback
-  to stale evidence.
-label: one-command-transfer-closeout-check
+safety: >-
+  Bounded repo-local cleanup only. This transfer order removes generated
+  timestamped transfer report JSON/log files from the transfer report directories
+  while preserving stable latest-report files and other handoff or governance
+  files. The cleanup helper commits and pushes only the targeted report removals.
+label: cleanup-timestamped-transfer-reports
 allow_blocked_start: true
-report_path: docs/reports/command_runs/one-command-transfer-closeout-check.md
+report_path: docs/reports/command_runs/cleanup-timestamped-transfer-reports.md
 actions:
-- type: run_command
-  command:
-  - ./.venv/bin/agentic-kit
-  - evidence
-  - inspect
-  - --require-summary
-  - docs/reports/terminal/post-pr1067-monitor-wrapper-closeout.log
+  - type: run_command
+    command:
+      - ./.venv/bin/python
+      - .agentic/transfer/payloads/cleanup_timestamped_transfer_reports.py
 publish_last_report: true
 commit:
-  message: Publish explicit one-command closeout evidence check report
+  message: Publish timestamped transfer report cleanup result
   paths:
-  - docs/reports/command_runs
-  - docs/reports/transfer_runs
-  - docs/reports/terminal/transfer_handoff_reports
+    - docs/reports/command_runs
+    - docs/reports/transfer_runs/latest-remote-next-report.json
+    - docs/reports/transfer_runs/latest-remote-next-report.log
+    - docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
+    - docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log
 push:
   branch: feature/harden-release-publish-head-guards
 expected_chat_reply: g
