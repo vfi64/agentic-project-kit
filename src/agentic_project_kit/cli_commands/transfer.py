@@ -332,7 +332,11 @@ def pr_wait_ci_command(
 @transfer_app.command("pr-merge-safe")
 def pr_merge_safe_command(
     pr_number: int = typer.Argument(..., help="Pull request number to merge safely."),
-    expected_head_sha: str = typer.Option("", "--expected-head-sha", help="Expected PR head SHA. If omitted, the PR head SHA is resolved automatically."),
+    expected_head_sha: str = typer.Option(
+        "",
+        "--expected-head-sha",
+        help="Expected PR head SHA. If omitted, the PR head SHA is resolved automatically.",
+    ),
     main_branch: str = typer.Option("main", "--main-branch", help="Expected base branch."),
     merge_method: str = typer.Option("squash", "--merge-method", help="GitHub merge method."),
     no_verify_main: bool = typer.Option(
@@ -538,5 +542,109 @@ def status(
     order = _load_or_exit(path)
     result = inspect_transfer_order(order, Path("."))
     _emit_result(result, json_output)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("inspect")
+def inspect(
+    path: Path = typer.Option(DEFAULT_INBOX, "--path", help="Transfer order path."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    order = _load_or_exit(path)
+    result = inspect_transfer_order(order, Path("."))
+    _emit_result(result, json_output)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("apply")
+def apply(
+    path: Path = typer.Option(DEFAULT_INBOX, "--path", help="Transfer order path."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    _require_transfer_capability("run_next_command")
+    order = _load_or_exit(path)
+    result = apply_transfer_order(order, Path("."))
+    _emit_result(result, json_output)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("publish-last-report")
+def publish_last_report(
+    label: str = typer.Option(
+        "transfer-handoff",
+        "--label",
+        help="Label for the published tracked handoff report.",
+    ),
+    json_output: bool = typer.Option(
+        False,
+        "--json",
+        help="Print JSON instead of concise handoff lines.",
+    ),
+) -> None:
+    try:
+        result = publish_latest_transfer_report(Path("."), label=label)
+    except (FileNotFoundError, ValueError) as exc:
+        typer.echo(str(exc))
+        typer.echo("TRANSFER_UPLOAD=missing")
+        typer.echo("REMOTE_REPORT=")
+        typer.echo("CHAT_REPLY=f")
+        raise typer.Exit(code=1) from exc
+
+    if json_output:
+        typer.echo(json.dumps(result, indent=2, sort_keys=True))
+    else:
+        typer.echo("TRANSFER_UPLOAD=done")
+        typer.echo(f"REMOTE_REPORT={result['remote_report']}")
+        typer.echo(f"CHAT_REPLY={result['chat_reply']}")
+
+
+@transfer_app.command("show-last-report")
+def show_last_report() -> None:
+    try:
+        typer.echo(read_latest_transfer_report(Path(".")))
+    except FileNotFoundError as exc:
+        typer.echo(str(exc))
+        typer.echo("TRANSFER_UPLOAD=missing")
+        typer.echo("REMOTE_REPORT=")
+        typer.echo("CHAT_REPLY=f")
+        raise typer.Exit(code=1) from exc
+
+
+@transfer_app.command("run-sequence-and-log")
+def run_sequence_and_log(
+    step: list[str] = typer.Option(
+        ...,
+        "--step",
+        help="One command step; quote it as one shell argument.",
+    ),
+    label: str = typer.Option(
+        "transfer-sequence",
+        "--label",
+        help="Label for the transfer sequence report.",
+    ),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    commands = [shlex.split(item) for item in step]
+    try:
+        result = run_and_log_transfer_sequence(commands, label=label, cwd=Path("."))
+    except ValueError as exc:
+        typer.echo(str(exc))
+        typer.echo("TRANSFER_REPORT_WRITTEN=f")
+        typer.echo("TRANSFER_REPORT_PATH=")
+        typer.echo("FINAL_SIGNAL=f")
+        typer.echo("FINAL_NEXT=Provide at least one non-empty --step command.")
+        typer.echo("CHAT_REPLY=f | NEXT=Provide at least one non-empty --step command.")
+        raise typer.Exit(code=2) from exc
+
+    if json_output:
+        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo("TRANSFER_REPORT_WRITTEN=done")
+        typer.echo(f"LOCAL_REPORT={result.remote_report_path}")
+        typer.echo("CHAT_REPLY=d | NEXT=Run transfer publish-last-report")
+
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
