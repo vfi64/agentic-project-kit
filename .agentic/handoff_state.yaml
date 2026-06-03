@@ -1,6 +1,6 @@
 schema_version: 1
 updated:
-  date: '2026-06-02'
+  date: '2026-06-03'
   reason: Refresh handoff state to last substantive work commit
   source: agentic-kit handoff refresh
 repo:
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 435cb68
-  commit_subject: Harden ns up PR merge path (#1077)
+  commit: 73fe131
+  commit_subject: 'WIP: harden one-command transfer protocol (#1079)'
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
