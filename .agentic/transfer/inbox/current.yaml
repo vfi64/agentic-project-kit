@@ -1,40 +1,12 @@
 schema_version: 1
-id: pr1079-final-closeout-evidence
-title: Final PR1079 one-command transfer closeout evidence
+id: pr1079-final-closeout-inspect
+title: Inspect final PR1079 closeout evidence
 branch: feature/harden-release-publish-head-guards
-safety: Bounded repo-local final evidence creation and inspection for PR1079 only. No merge, no release-publish product work.
-label: pr1079-final-closeout-evidence
+safety: Bounded repo-local evidence inspection only.
+label: pr1079-final-closeout-inspect
 allow_blocked_start: true
-report_path: docs/reports/command_runs/pr1079-final-closeout-evidence.md
+report_path: docs/reports/command_runs/pr1079-final-closeout-inspect.md
 actions:
-- type: run_command
-  command:
-  - ./.venv/bin/python
-  - .agentic/transfer/payloads/write_pr1079_clean_closeout_log.py
-- type: run_command
-  command:
-  - ./.venv/bin/agentic-kit
-  - evidence
-  - finalize-log
-  - --run-log
-  - docs/reports/command_runs/pr1079-clean-closeout-run.log
-  - --remote-log
-  - docs/reports/terminal/pr1079-one-command-transfer-final-closeout.log
-  - --slice
-  - pr1079-one-command-transfer-protocol
-  - --scope
-  - one-command transfer protocol hardening for PR1079
-  - --mode-check
-  - remote-next normal transfer PASS and latest CI success for current PR head
-  - --command-report
-  - remote-next branchless transfer, stable latest report files, protocol header, blocked-state diagnostics, summary output, cleanup of generated timestamped transfer artifacts
-  - --interpretation
-  - PR1079 transfer protocol hardening closeout evidence
-  - --safe-step
-  - Inspect this PR1079 final closeout log, verify CI for the resulting head, then keep PR1079 draft until review.
-  - --commit-message
-  - Record PR1079 final transfer closeout evidence
-  - --push
 - type: run_command
   command:
   - ./.venv/bin/agentic-kit
@@ -44,7 +16,7 @@ actions:
   - docs/reports/terminal/pr1079-one-command-transfer-final-closeout.log
 publish_last_report: true
 commit:
-  message: Publish PR1079 final closeout transfer report
+  message: Publish PR1079 final closeout inspection report
   paths:
   - docs/reports/command_runs
   - docs/reports/transfer_runs/latest-remote-next-report.json
