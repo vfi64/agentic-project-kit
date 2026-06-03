@@ -164,6 +164,16 @@ def _run(argv: list[str], cwd: Path) -> str:
     return result.stdout.strip()
 
 
+def _status_path(line: str) -> str:
+    if len(line) <= 3:
+        return ""
+    if line.startswith("?? "):
+        return line[3:]
+    if len(line) > 2 and line[2] == " ":
+        return line[3:]
+    return line[2:].strip()
+
+
 def _status_paths(
     status_short: str,
 ) -> tuple[tuple[str, ...], tuple[str, ...], tuple[str, ...]]:
@@ -174,7 +184,7 @@ def _status_paths(
         if not line:
             continue
         status = line[:2]
-        path = line[3:] if len(line) > 3 else ""
+        path = _status_path(line)
         if status == "??":
             untracked.append(path)
             continue
@@ -186,7 +196,7 @@ def _status_paths(
 
 
 def _git_snapshot(project_root: Path) -> GitSnapshot:
-    status = _command(["git", "status", "--short"], project_root).stdout
+    status = _command(["git", "status", "--porcelain=v1"], project_root).stdout
     staged, unstaged, untracked = _status_paths(status)
     return GitSnapshot(
         current_branch=(
@@ -227,6 +237,66 @@ def _refresh_rule_ack(root: Path) -> _CommandResult:
     result = _command(["./.venv/bin/agentic-kit", "rules", "acknowledge"], root)
     if result.returncode == 127:
         return _command(["agentic-kit", "rules", "acknowledge"], root)
+    return result
+
+
+def _is_owned_remote_next_report_path(path: str) -> bool:
+    value = path.strip()
+    if value in {
+        str(REMOTE_NEXT_LATEST_JSON),
+        str(REMOTE_NEXT_LATEST_LOG),
+        str(PUBLISHED_LATEST_JSON),
+        str(PUBLISHED_LATEST_LOG),
+    }:
+        return True
+    if value.startswith(f"{REMOTE_NEXT_REPORT_DIR}/") and value.endswith(("-remote-next.json", "-remote-next.log")):
+        return True
+    return value.startswith(f"{PUBLISHED_REPORT_DIR}/") and value.endswith(("-remote-next.json", "-remote-next.log"))
+
+
+def _recover_owned_report_artifacts(root: Path) -> dict[str, object]:
+    snapshot = _git_snapshot(root)
+    dirty_paths = tuple(
+        dict.fromkeys((*snapshot.staged_changes, *snapshot.unstaged_changes, *snapshot.untracked_files))
+    )
+    owned = tuple(path for path in dirty_paths if _is_owned_remote_next_report_path(path))
+    foreign = tuple(path for path in dirty_paths if path not in owned)
+    actions: list[dict[str, object]] = []
+    result: dict[str, object] = {
+        "schema_version": 1,
+        "attempted": bool(owned),
+        "owned_report_artifacts": list(owned),
+        "foreign_dirty_paths": list(foreign),
+        "actions": actions,
+    }
+    if foreign or not owned:
+        return result
+
+    tracked_owned = tuple(path for path in owned if path not in snapshot.untracked_files)
+    untracked_owned = tuple(path for path in owned if path in snapshot.untracked_files)
+    if tracked_owned:
+        restore = _command(["git", "restore", "--staged", "--worktree", "--", *tracked_owned], root)
+        actions.append({"name": "restore_tracked_owned_report_artifacts", **restore.as_json_data()})
+        if restore.returncode != 0:
+            result["blocked_reason"] = "restore_owned_report_artifacts_failed"
+            return result
+    for relative in untracked_owned:
+        target = root / relative
+        try:
+            target.unlink(missing_ok=True)
+            actions.append({"name": "remove_untracked_owned_report_artifact", "path": relative, "returncode": 0})
+        except OSError as exc:
+            actions.append(
+                {
+                    "name": "remove_untracked_owned_report_artifact",
+                    "path": relative,
+                    "returncode": 1,
+                    "stderr": str(exc),
+                }
+            )
+            result["blocked_reason"] = "remove_owned_report_artifacts_failed"
+            return result
+    result["final_status_short"] = _command(["git", "status", "--porcelain=v1"], root).stdout
     return result
 
 
@@ -445,8 +515,8 @@ def _attempt_report_commit_ack_push(
         "pushed": False,
     }
 
-    add = _command(["git", "add", *paths], root)
-    steps.append({"name": "git_add_report_paths", **add.as_json_data()})
+    add = _command(["git", "add", "-f", *paths], root)
+    steps.append({"name": "git_add_force_report_paths", **add.as_json_data()})
     if add.returncode != 0:
         actions["blocked_reason"] = "git_add_failed"
         return actions
@@ -473,7 +543,7 @@ def _attempt_report_commit_ack_push(
         actions["blocked_reason"] = "git_push_failed"
 
     actions["final_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
-    actions["final_status_short"] = _command(["git", "status", "--short"], root).stdout
+    actions["final_status_short"] = _command(["git", "status", "--porcelain=v1"], root).stdout
     return actions
 
 
@@ -583,6 +653,7 @@ def _blocked_result(root: Path, exc: Exception, *, branch: str | None = None) ->
 def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> TransferRemoteNextRun:
     root = project_root.resolve()
     try:
+        cleanup = _recover_owned_report_artifacts(root)
         order_sync = _sync_current_branch_before_order(root)
         safe_branch = resolve_remote_next_branch(root, branch)
         _ensure_clean(root, branch=safe_branch)
@@ -597,6 +668,7 @@ def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> T
             ack_result = _refresh_rule_ack(root)
             ack_refresh = ack_result.as_json_data()
         preflight = _git_snapshot(root).as_json_data()
+        preflight["owned_report_artifact_recovery"] = cleanup
         preflight["order_sync"] = order_sync
         if ack_refresh is not None:
             preflight["rule_ack_refresh_before_transfer"] = ack_refresh
