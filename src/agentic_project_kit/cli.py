@@ -23,7 +23,9 @@ from agentic_project_kit.cli_commands.slice import slice_app
 from agentic_project_kit.cli_commands.state import state_app
 from agentic_project_kit.cli_commands.todo import todo_app
 from agentic_project_kit.cli_commands.transfer import transfer_app
-from agentic_project_kit.cli_commands.transfer_post_merge_complete import register_transfer_post_merge_complete_command
+from agentic_project_kit.cli_commands.transfer_post_merge_complete import (
+    register_transfer_post_merge_complete_command,
+)
 from agentic_project_kit.cli_commands.validation import register_validation_commands
 from agentic_project_kit.cli_commands.work_orders import work_orders_app
 from agentic_project_kit.cli_commands.workflow import workflow_app
