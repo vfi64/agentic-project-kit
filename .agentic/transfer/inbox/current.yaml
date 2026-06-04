@@ -1,20 +1,19 @@
 schema_version: 1
-id: post-pr1082-post-merge-check
-title: Run post-PR1082 post-merge handoff check
+id: create-post-merge-complete-pr
+title: Create PR for post-merge-complete transfer command
 branch: main
-safety: Bounded administrative post-merge lifecycle check after PR1082. No product work.
-label: post-pr1082-post-merge-check
+safety: Bounded implementation slice for a typed post-merge completion command. Cleans only known transfer/report artifacts before branching; no broad protected-file replacement.
+label: create-post-merge-complete-pr
 allow_blocked_start: true
-report_path: docs/reports/command_runs/post-pr1082-post-merge-check.md
+report_path: docs/reports/command_runs/create-post-merge-complete-pr.md
 actions:
 - type: run_command
   command:
-  - ./.venv/bin/agentic-kit
-  - transfer
-  - post-merge-check
+  - ./.venv/bin/python
+  - .agentic/transfer/payloads/create_post_merge_complete_pr.py
 publish_last_report: true
 commit:
-  message: Publish post-PR1082 post-merge check transfer report
+  message: Publish post-merge-complete fix transfer report
   paths:
   - docs/reports/command_runs
   - docs/reports/transfer_runs/latest-remote-next-report.json
