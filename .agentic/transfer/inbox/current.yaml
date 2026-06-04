@@ -1,25 +1,20 @@
 schema_version: 1
-id: merge-pr1080-admin-refresh
-title: Merge PR1080 administrative handoff refresh
+id: post-pr1081-post-merge-check
+title: Run post-PR1081 post-merge handoff check
 branch: main
-safety: Bounded administrative PR merge only. Merge PR1080 if green with exact head guard; no product work.
-label: merge-pr1080-admin-refresh
+safety: Bounded administrative post-merge lifecycle check only. Sync main locally before running; no product work.
+label: post-pr1081-post-merge-check
 allow_blocked_start: true
-report_path: docs/reports/command_runs/merge-pr1080-admin-refresh.md
+report_path: docs/reports/command_runs/post-pr1081-post-merge-check.md
 actions:
 - type: run_command
   command:
   - ./.venv/bin/agentic-kit
   - transfer
-  - pr-merge-safe
-  - "1080"
-  - --expected-head-sha
-  - e312f85e3eab280ae747b195a8fb54b6363a4e8d
-  - --merge-method
-  - squash
+  - post-merge-check
 publish_last_report: true
 commit:
-  message: Publish PR1080 admin refresh merge transfer report
+  message: Publish post-PR1081 post-merge check transfer report
   paths:
   - docs/reports/command_runs
   - docs/reports/transfer_runs/latest-remote-next-report.json
