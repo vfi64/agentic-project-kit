@@ -9,6 +9,8 @@ from agentic_project_kit.transfer_post_merge_lifecycle import post_merge_complet
 
 def render_post_merge_complete_result(result) -> str:
     data = result.as_json_data()
+    signal = "d" if result.result_status == "PASS" and result.returncode == 0 else "f"
+    next_action = str(data["next_action"])
     lines = [
         "TRANSFER_POST_MERGE_COMPLETE",
         f"after_pr={data['after_pr']}",
@@ -17,7 +19,9 @@ def render_post_merge_complete_result(result) -> str:
         f"lifecycle_state={data['lifecycle_state']}",
         f"refresh_pr={data['refresh_pr'] or ''}",
         f"refresh_loop_detected={str(data['refresh_loop_detected']).lower()}",
-        f"next_action={data['next_action']}",
+        f"next_action={next_action}",
+        f"FINAL_SIGNAL={signal}",
+        f"FINAL_NEXT={next_action}",
     ]
     return "\n".join(lines)
 
