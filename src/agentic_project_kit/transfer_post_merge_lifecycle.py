@@ -118,7 +118,10 @@ def post_merge_complete(
             result_status="PASS",
             returncode=0,
             lifecycle_state="NOOP",
-            next_action="Post-merge lifecycle is complete; continue with the next planned slice.",
+            next_action=(
+                "Post-merge lifecycle is complete; "
+                "continue with the next planned slice."
+            ),
             steps=steps,
         )
 
@@ -128,7 +131,10 @@ def post_merge_complete(
             result_status="BLOCKED",
             returncode=2,
             lifecycle_state=initial_state,
-            next_action="Inspect post-merge-check output before creating any administrative refresh.",
+            next_action=(
+                "Inspect post-merge-check output before creating any "
+                "administrative refresh."
+            ),
             steps=steps,
         )
 
@@ -151,7 +157,10 @@ def post_merge_complete(
             result_status="BLOCKED",
             returncode=2,
             lifecycle_state="ADMIN_REFRESH_PR_UNKNOWN",
-            next_action="Admin refresh PR number was not found; inspect admin-refresh-pr output.",
+            next_action=(
+                "Admin refresh PR number was not found; "
+                "inspect admin-refresh-pr output."
+            ),
             steps=steps,
         )
 
@@ -204,7 +213,7 @@ def post_merge_complete(
             result_status="PASS",
             returncode=0,
             lifecycle_state="COMPLETE",
-            next_action="Post-merge lifecycle is complete after administrative refresh.",
+            next_action="Post-merge lifecycle is complete after admin refresh.",
             steps=steps,
             refresh_pr=refresh_pr,
         )
@@ -215,7 +224,10 @@ def post_merge_complete(
             result_status="BLOCKED",
             returncode=2,
             lifecycle_state="REFRESH_LOOP_DETECTED",
-            next_action="Stop: REFRESH_REQUIRED persisted after one admin refresh; diagnose refresh loop before creating another refresh PR.",
+            next_action=(
+                "Stop: REFRESH_REQUIRED persisted after one admin refresh; "
+                "diagnose refresh loop before creating another refresh PR."
+            ),
             steps=steps,
             refresh_pr=refresh_pr,
             refresh_loop_detected=True,
