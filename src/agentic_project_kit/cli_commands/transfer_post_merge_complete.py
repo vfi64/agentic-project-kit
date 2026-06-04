@@ -29,19 +29,53 @@ def render_post_merge_complete_result(result) -> str:
 def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> None:
     @transfer_app.command("post-merge-complete")
     def post_merge_complete_command(
-        after_pr: int = typer.Option(..., "--after-pr", help="Merged PR number to complete."),
-        main_branch: str = typer.Option("main", "--main-branch", help="Main branch to verify."),
-        merge_method: str = typer.Option("squash", "--merge-method", help="Merge method for admin refresh PR."),
+        after_pr: int = typer.Option(
+            ...,
+            "--after-pr",
+            help="Merged PR number to complete.",
+        ),
+        main_branch: str = typer.Option(
+            "main",
+            "--main-branch",
+            help="Main branch to verify.",
+        ),
+        merge_method: str = typer.Option(
+            "squash",
+            "--merge-method",
+            help="Merge method for admin refresh PR.",
+        ),
         refresh_expected_head_sha: str = typer.Option(
             "",
             "--refresh-expected-head-sha",
-            help="Expected admin refresh PR head SHA. If omitted, existing guarded commands resolve it.",
+            help="Expected admin refresh PR head SHA. Existing commands resolve empty values.",
         ),
-        ci_timeout_seconds: int = typer.Option(300, "--ci-timeout-seconds", min=1, help="CI wait timeout."),
-        ci_poll_seconds: int = typer.Option(10, "--ci-poll-seconds", min=1, help="CI polling interval."),
-        merge_state_timeout_seconds: int = typer.Option(60, "--merge-state-timeout-seconds", min=1),
-        merge_state_poll_seconds: int = typer.Option(5, "--merge-state-poll-seconds", min=1),
-        json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+        ci_timeout_seconds: int = typer.Option(
+            300,
+            "--ci-timeout-seconds",
+            min=1,
+            help="CI wait timeout.",
+        ),
+        ci_poll_seconds: int = typer.Option(
+            10,
+            "--ci-poll-seconds",
+            min=1,
+            help="CI polling interval.",
+        ),
+        merge_state_timeout_seconds: int = typer.Option(
+            60,
+            "--merge-state-timeout-seconds",
+            min=1,
+        ),
+        merge_state_poll_seconds: int = typer.Option(
+            5,
+            "--merge-state-poll-seconds",
+            min=1,
+        ),
+        json_output: bool = typer.Option(
+            False,
+            "--json",
+            help="Print JSON instead of text.",
+        ),
     ) -> None:
         result = post_merge_complete(
             after_pr,
