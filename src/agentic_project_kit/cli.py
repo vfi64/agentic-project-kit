@@ -62,3 +62,6 @@ app.add_typer(slice_app, name="slice")
 app.add_typer(state_app, name="state")
 app.add_typer(todo_app, name="todo")
 app.add_typer(transfer_app, name="transfer")
+
+if __name__ == "__main__":
+    app()
