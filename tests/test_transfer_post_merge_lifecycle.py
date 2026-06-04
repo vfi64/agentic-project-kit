@@ -21,7 +21,7 @@ def _result(action: str, stdout: str, *, returncode: int = 0) -> RepoActionResul
 def test_post_merge_complete_noop_stops_without_refresh(monkeypatch):
     calls: list[str] = []
 
-    def fake_post_merge_check(*, main_branch="main"):
+    def fake_post_merge_check(**_kwargs):
         calls.append("post_merge_check")
         return _result(
             "post-merge-check",
@@ -48,22 +48,22 @@ def test_post_merge_complete_refresh_required_completes_after_one_refresh(monkey
     )
     calls: list[str] = []
 
-    def fake_post_merge_check(*, main_branch="main"):
+    def fake_post_merge_check(**_kwargs):
         calls.append("post_merge_check")
         return _result("post-merge-check", next(post_merge_outputs))
 
-    def fake_admin_refresh_pr(after_pr, *, main_branch="main"):
+    def fake_admin_refresh_pr(after_pr, **_kwargs):
         calls.append(f"admin_refresh_pr:{after_pr}")
         return _result(
             "admin-refresh-pr",
             "https://github.com/vfi64/agentic-project-kit/pull/1090\n",
         )
 
-    def fake_pr_wait_ci(pr_number, **kwargs):
+    def fake_pr_wait_ci(pr_number, **_kwargs):
         calls.append(f"pr_wait_ci:{pr_number}")
         return _result("pr-wait-ci", "ci green\n")
 
-    def fake_pr_merge_safe(pr_number, **kwargs):
+    def fake_pr_merge_safe(pr_number, **_kwargs):
         calls.append(f"pr_merge_safe:{pr_number}")
         return _result("pr-merge-safe", "merged\n")
 
@@ -103,21 +103,21 @@ def test_post_merge_complete_stops_on_refresh_loop(monkeypatch):
         ]
     )
 
-    def fake_post_merge_check(*, main_branch="main"):
+    def fake_post_merge_check(**_kwargs):
         return _result("post-merge-check", next(post_merge_outputs))
 
     monkeypatch.setattr(f"{TARGET}.post_merge_check", fake_post_merge_check)
     monkeypatch.setattr(
         f"{TARGET}.admin_refresh_pr",
-        lambda after_pr, **kwargs: _result("admin-refresh-pr", "existing_pr=1091\n"),
+        lambda _after_pr, **_kwargs: _result("admin-refresh-pr", "existing_pr=1091\n"),
     )
     monkeypatch.setattr(
         f"{TARGET}.pr_wait_ci",
-        lambda pr_number, **kwargs: _result("pr-wait-ci", "ci green\n"),
+        lambda _pr_number, **_kwargs: _result("pr-wait-ci", "ci green\n"),
     )
     monkeypatch.setattr(
         f"{TARGET}.pr_merge_safe",
-        lambda pr_number, **kwargs: _result("pr-merge-safe", "merged\n"),
+        lambda _pr_number, **_kwargs: _result("pr-merge-safe", "merged\n"),
     )
 
     result = post_merge_complete(1083)
@@ -133,7 +133,7 @@ def test_post_merge_complete_stops_on_refresh_loop(monkeypatch):
 def test_post_merge_complete_blocks_unknown_initial_state(monkeypatch):
     monkeypatch.setattr(
         f"{TARGET}.post_merge_check",
-        lambda **kwargs: _result(
+        lambda **_kwargs: _result(
             "post-merge-check",
             "POST_MERGE_HANDOFF_REFRESH\nresult=STRANGE\n",
         ),
