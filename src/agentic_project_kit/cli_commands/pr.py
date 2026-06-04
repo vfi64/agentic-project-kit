@@ -69,6 +69,8 @@ def merge_if_green_command(
     expected_head_sha: str = typer.Option("", help="Expected PR head SHA. Refuses merge if the head moved."),
     main_ci_timeout_seconds: int = typer.Option(300, min=1, help="Post-merge main CI wait timeout."),
     main_ci_poll_seconds: int = typer.Option(10, min=1, help="Post-merge main CI polling interval."),
+    merge_state_timeout_seconds: int = typer.Option(60, min=1, help="Pre-merge GitHub merge-state wait timeout."),
+    merge_state_poll_seconds: int = typer.Option(5, min=1, help="Pre-merge GitHub merge-state polling interval."),
 ) -> None:
     """Merge only when PR checks are green, refs match, and merge state is clean."""
     result = merge_if_green(
@@ -82,6 +84,8 @@ def merge_if_green_command(
         expected_head_sha=expected_head_sha,
         main_ci_timeout_seconds=main_ci_timeout_seconds,
         main_ci_poll_seconds=main_ci_poll_seconds,
+        merge_state_timeout_seconds=merge_state_timeout_seconds,
+        merge_state_poll_seconds=merge_state_poll_seconds,
     )
     typer.echo(render_result(result))
     if dry_run:

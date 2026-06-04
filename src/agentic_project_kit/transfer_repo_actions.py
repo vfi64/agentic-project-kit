@@ -593,6 +593,8 @@ def pr_merge_safe(
     main_branch: str = "main",
     merge_method: str = "squash",
     no_verify_main: bool = False,
+    merge_state_timeout_seconds: int = 60,
+    merge_state_poll_seconds: int = 5,
 ) -> RepoActionResult:
     monitor = guard_branch(
         command_kind="pr-merge-safe",
@@ -628,6 +630,10 @@ def pr_merge_safe(
         main_branch,
         "--merge-method",
         merge_method,
+        "--merge-state-timeout-seconds",
+        str(merge_state_timeout_seconds),
+        "--merge-state-poll-seconds",
+        str(merge_state_poll_seconds),
     ]
     if no_verify_main:
         command.append("--no-verify-main")

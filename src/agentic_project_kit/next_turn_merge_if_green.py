@@ -18,6 +18,7 @@ from agentic_project_kit.next_turn_pr_status import (
 
 MergeDecision = Literal["merge", "refuse"]
 MainRunFetcher = Callable[[str, str], dict[str, Any]]
+PrPayloadFetcher = Callable[[str], dict[str, Any]]
 FailedLogFetcher = Callable[[str], tuple[int, str, str]]
 Sleep = Callable[[float], None]
 
@@ -67,6 +68,47 @@ def pr_merge_refs(payload: dict[str, Any]) -> PrMergeRefs:
         head_ref_name=str(payload.get("headRefName") or ""),
         head_ref_oid=str(payload.get("headRefOid") or ""),
     )
+
+
+def _is_transient_merge_state(status: PrStatusDecision) -> bool:
+    return (
+        status.state == "OPEN"
+        and status.decision == "green"
+        and status.merge_state_status in {"UNKNOWN", ""}
+    )
+
+
+def wait_for_pr_merge_state(
+    pr: str,
+    *,
+    timeout_seconds: int = 60,
+    poll_seconds: int = 5,
+    fetcher: PrPayloadFetcher | None = None,
+    sleep: Sleep = time.sleep,
+) -> tuple[dict[str, Any], PrStatusDecision, PrMergeRefs, str]:
+    """Wait for transient GitHub mergeability before final merge decision."""
+    payload_fetcher = fetcher or fetch_pr_payload
+    attempts = max(1, int(timeout_seconds / poll_seconds) if poll_seconds > 0 else 1)
+    payload: dict[str, Any] | None = None
+    status: PrStatusDecision | None = None
+    refs: PrMergeRefs | None = None
+
+    for attempt in range(1, attempts + 1):
+        payload = payload_fetcher(pr)
+        status = classify_pr_status(payload, pr=pr)
+        refs = pr_merge_refs(payload)
+        if not _is_transient_merge_state(status):
+            return payload, status, refs, ""
+        if attempt < attempts and poll_seconds > 0:
+            sleep(poll_seconds)
+
+    if payload is None or status is None or refs is None:
+        payload = payload_fetcher(pr)
+        status = classify_pr_status(payload, pr=pr)
+        refs = pr_merge_refs(payload)
+
+    merge_state = status.merge_state_status or "UNKNOWN"
+    return payload, status, refs, f"merge state stayed {merge_state} after timeout"
 
 
 def verify_merge_refs(
@@ -200,13 +242,23 @@ def merge_if_green(
     expected_head_sha: str = "",
     main_ci_timeout_seconds: int = 300,
     main_ci_poll_seconds: int = 10,
+    merge_state_timeout_seconds: int = 60,
+    merge_state_poll_seconds: int = 5,
+    pr_payload_fetcher: PrPayloadFetcher | None = None,
+    sleep: Sleep = time.sleep,
 ) -> MergeIfGreenResult:
-    payload = fetch_pr_payload(pr)
-    status = classify_pr_status(payload, pr=pr)
-    refs = pr_merge_refs(payload)
+    payload, status, refs, merge_state_wait_reason = wait_for_pr_merge_state(
+        pr,
+        timeout_seconds=merge_state_timeout_seconds,
+        poll_seconds=merge_state_poll_seconds,
+        fetcher=pr_payload_fetcher,
+        sleep=sleep,
+    )
     effective_expected_base_branch = expected_base_branch or main_branch
     effective_expected_head_sha = expected_head_sha or refs.head_ref_oid
     decision, reason = decide_merge(status)
+    if decision != "merge" and merge_state_wait_reason:
+        reason = merge_state_wait_reason
     if decision == "merge":
         decision, ref_reason = verify_merge_refs(
             refs,
