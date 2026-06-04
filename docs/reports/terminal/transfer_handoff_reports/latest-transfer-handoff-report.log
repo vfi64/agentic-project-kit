@@ -1,11 +1,11 @@
 TRANSFER_REMOTE_NEXT_REPORT
-RESULT_STATUS=FAIL
-RETURNCODE=1
+RESULT_STATUS=PASS
+RETURNCODE=0
 BRANCH=main
-HEAD=a76cc36
+HEAD=26f4053
 REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
 CHAT_REPLY=g
-NEXT=Fix transfer apply errors before continuing.
+NEXT=Review transfer state and evidence report before continuing.
 
 ### JSON RESULT ###
 {
@@ -16,7 +16,7 @@ NEXT=Fix transfer apply errors before continuing.
     "blocked_message": "",
     "branch": "main",
     "chat_reply": "g",
-    "head": "a76cc36",
+    "head": "26f4053",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -26,21 +26,23 @@ NEXT=Fix transfer apply errors before continuing.
             "command": [
               "./.venv/bin/agentic-kit",
               "transfer",
-              "post-merge-check"
+              "admin-refresh-pr",
+              "--after-pr",
+              "1081"
             ],
-            "returncode": 1,
+            "returncode": 0,
             "stderr": "",
-            "stdout": "{\n  \"action\": \"post-merge-check\",\n  \"command\": [\n    \"/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/agentic-kit\",\n    \"handoff\",\n    \"post-merge-refresh-status\"\n  ],\n  \"next_action\": \"Inspect handoff refresh status failure before product work.\",\n  \"result_status\": \"FAIL\",\n  \"returncode\": 1,\n  \"stderr\": \"\",\n  \"stdout\": \"POST_MERGE_HANDOFF_REFRESH\\ncurrent_head=a76cc36\\nfreshness_warning_present=True\\nrefresh_required=True\\nlatest_successor_prompt=docs/reports/terminal/post-pr1011-successor-chat-handoff.md\\nresult=REFRESH_REQUIRED\\nnext_safe_action=create_administrative_handoff_refresh\\n\"\n}\nFINAL_SIGNAL=f\nFINAL_NEXT=Inspect handoff refresh status failure before product work.\nCHAT_REPLY=f | NEXT=Inspect handoff refresh status failure before product work.\n",
+            "stdout": "{\n  \"action\": \"admin-refresh-pr\",\n  \"command\": [\n    \"gh\",\n    \"pr\",\n    \"list\",\n    \"--head\",\n    \"docs/post-pr1081-handoff-refresh\",\n    \"--state\",\n    \"open\",\n    \"--json\",\n    \"number,url,headRefName,headRefOid,state,title\"\n  ],\n  \"next_action\": \"Run transfer pr-status on the existing admin refresh PR.\",\n  \"result_status\": \"PASS\",\n  \"returncode\": 0,\n  \"stderr\": \"\",\n  \"stdout\": \"ADMIN_REFRESH_EXISTING_BRANCH_RECOVERY\\nrefresh_branch=docs/post-pr1081-handoff-refresh\\nexisting_pr=1082\\nhead_ref_oid=b4d0eba34d43965c22c94375349f7e2451f866ba\\nurl=https://github.com/vfi64/agentic-project-kit/pull/1082\\nresult=PASS\\n\"\n}\nFINAL_SIGNAL=d\nFINAL_NEXT=Run transfer pr-status on the existing admin refresh PR.\nCHAT_REPLY=d | NEXT=Run transfer pr-status on the existing admin refresh PR.\n",
             "type": "run_command"
           }
         ],
-        "message": "Transfer command action failed.",
-        "report_path": "docs/reports/command_runs/post-pr1081-post-merge-check.md",
-        "result_status": "FAIL",
-        "returncode": 1,
-        "safety": "Bounded administrative post-merge lifecycle check only. Sync main locally before running; no product work.",
+        "message": "Transfer order applied.",
+        "report_path": "docs/reports/command_runs/post-pr1081-admin-refresh.md",
+        "result_status": "PASS",
+        "returncode": 0,
+        "safety": "Bounded administrative handoff refresh only after PR1081. No product work.",
         "schema_version": 1,
-        "transfer_id": "post-pr1081-post-merge-check"
+        "transfer_id": "post-pr1081-admin-refresh"
       },
       "inspect": {
         "action_results": [
@@ -48,23 +50,25 @@ NEXT=Fix transfer apply errors before continuing.
             "command": [
               "./.venv/bin/agentic-kit",
               "transfer",
-              "post-merge-check"
+              "admin-refresh-pr",
+              "--after-pr",
+              "1081"
             ],
             "type": "run_command",
             "would_run": true
           }
         ],
         "message": "Transfer order inspected. Re-run apply to write files or run commands.",
-        "report_path": "docs/reports/command_runs/post-pr1081-post-merge-check.md",
+        "report_path": "docs/reports/command_runs/post-pr1081-admin-refresh.md",
         "result_status": "PENDING",
         "returncode": 0,
-        "safety": "Bounded administrative post-merge lifecycle check only. Sync main locally before running; no product work.",
+        "safety": "Bounded administrative handoff refresh only after PR1081. No product work.",
         "schema_version": 1,
-        "transfer_id": "post-pr1081-post-merge-check"
+        "transfer_id": "post-pr1081-admin-refresh"
       },
-      "next_action": "Fix transfer apply errors before continuing.",
-      "result_status": "FAIL",
-      "returncode": 1,
+      "next_action": "Review transfer state and evidence report before continuing.",
+      "result_status": "PASS",
+      "returncode": 0,
       "schema_version": 1,
       "state": {
         "branch": "main",
@@ -79,11 +83,11 @@ NEXT=Fix transfer apply errors before continuing.
           "dirty_worktree": true,
           "pending_transfer_order": true
         },
-        "created_at": "2026-06-04T04:32:43.990336+00:00",
-        "head": "a76cc36",
+        "created_at": "2026-06-04T06:15:16.935054+00:00",
+        "head": "26f4053",
         "last_result": {
           "exists": true,
-          "report_path": "docs/reports/command_runs/post-pr1081-post-merge-check.md"
+          "report_path": "docs/reports/command_runs/post-pr1081-admin-refresh.md"
         },
         "next_action": "Review or clean the worktree before running another transfer action.",
         "primary_state": "BLOCKED",
@@ -226,9 +230,9 @@ NEXT=Fix transfer apply errors before continuing.
         },
         "schema_version": 1
       },
-      "transfer_id": "post-pr1081-post-merge-check"
+      "transfer_id": "post-pr1081-admin-refresh"
     },
-    "next_action": "Fix transfer apply errors before continuing.",
+    "next_action": "Review transfer state and evidence report before continuing.",
     "post_report_actions": {
       "attempted": true,
       "schema_version": 1,
@@ -243,12 +247,12 @@ NEXT=Fix transfer apply errors before continuing.
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "a76cc36",
+      "head": "26f4053",
       "order_sync": {
         "attempted": true,
-        "current_branch": "main",
-        "final_head": "a76cc36",
-        "head": "a76cc36",
+        "current_branch": "docs/post-pr1081-handoff-refresh",
+        "final_head": "129734a",
+        "head": "129734a",
         "schema_version": 1,
         "steps": [
           {
@@ -256,11 +260,11 @@ NEXT=Fix transfer apply errors before continuing.
               "git",
               "fetch",
               "origin",
-              "main"
+              "docs/post-pr1081-handoff-refresh"
             ],
             "name": "git_fetch_current_branch",
             "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            main       -> FETCH_HEAD",
+            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            docs/post-pr1081-handoff-refresh -> FETCH_HEAD",
             "stdout": ""
           },
           {
@@ -269,35 +273,69 @@ NEXT=Fix transfer apply errors before continuing.
               "pull",
               "--ff-only",
               "origin",
-              "main"
+              "docs/post-pr1081-handoff-refresh"
             ],
             "name": "git_pull_current_branch",
             "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            main       -> FETCH_HEAD",
+            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            docs/post-pr1081-handoff-refresh -> FETCH_HEAD",
             "stdout": "Already up to date."
           }
         ]
       },
       "owned_report_artifact_recovery": {
-        "actions": [],
-        "attempted": false,
-        "current_order_report": "docs/reports/command_runs/post-pr1081-post-merge-check.md",
+        "actions": [
+          {
+            "argv": [
+              "git",
+              "restore",
+              "--staged",
+              "--worktree",
+              "--",
+              "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
+            ],
+            "name": "restore_tracked_owned_report_artifacts",
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          },
+          {
+            "name": "remove_untracked_owned_report_artifact",
+            "path": "docs/reports/command_runs/post-pr1081-admin-refresh.md",
+            "returncode": 0
+          }
+        ],
+        "attempted": true,
+        "current_order_report": "docs/reports/command_runs/post-pr1081-admin-refresh.md",
+        "final_status_short": "",
         "foreign_dirty_paths": [],
-        "owned_report_artifacts": [],
+        "owned_report_artifacts": [
+          "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
+          "docs/reports/command_runs/post-pr1081-admin-refresh.md"
+        ],
         "schema_version": 1
       },
-      "remote_tracking": "origin/main"
+      "remote_tracking": "origin/main",
+      "rule_ack_refresh_before_transfer": {
+        "argv": [
+          "./.venv/bin/agentic-kit",
+          "rules",
+          "acknowledge"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=46ff5970d0e020d64844ef9bb6d62ee5633a44cf7c975a8e323df8c59058ee28\nrepo_head=26f4053\ndeclared_next_allowed_action=run_next_command"
+      }
     },
-    "primary_state": "FAIL",
+    "primary_state": "PASS",
     "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "reasons": [],
     "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
-    "result_status": "FAIL",
-    "returncode": 1,
+    "result_status": "PASS",
+    "returncode": 0,
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "a76cc36",
+      "head": "26f4053",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -604,11 +642,11 @@ NEXT=Fix transfer apply errors before continuing.
     ],
     "repo_state": {
       "branch": "main",
-      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/post-pr1081-post-merge-check.md",
-      "head": "a76cc360512375218eeefe6e4d792c9427025413",
+      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/post-pr1081-admin-refresh.md",
+      "head": "26f405350d82b11146f2b722aee4a1e21b723e64",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "a76cc360512375218eeefe6e4d792c9427025413"
+      "upstream_head": "26f405350d82b11146f2b722aee4a1e21b723e64"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -639,7 +677,7 @@ NEXT=Fix transfer apply errors before continuing.
     "blocked_message": "",
     "branch": "main",
     "chat_reply": "g",
-    "head": "a76cc36",
+    "head": "26f4053",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -649,21 +687,23 @@ NEXT=Fix transfer apply errors before continuing.
             "command": [
               "./.venv/bin/agentic-kit",
               "transfer",
-              "post-merge-check"
+              "admin-refresh-pr",
+              "--after-pr",
+              "1081"
             ],
-            "returncode": 1,
+            "returncode": 0,
             "stderr": "",
-            "stdout": "{\n  \"action\": \"post-merge-check\",\n  \"command\": [\n    \"/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/agentic-kit\",\n    \"handoff\",\n    \"post-merge-refresh-status\"\n  ],\n  \"next_action\": \"Inspect handoff refresh status failure before product work.\",\n  \"result_status\": \"FAIL\",\n  \"returncode\": 1,\n  \"stderr\": \"\",\n  \"stdout\": \"POST_MERGE_HANDOFF_REFRESH\\ncurrent_head=a76cc36\\nfreshness_warning_present=True\\nrefresh_required=True\\nlatest_successor_prompt=docs/reports/terminal/post-pr1011-successor-chat-handoff.md\\nresult=REFRESH_REQUIRED\\nnext_safe_action=create_administrative_handoff_refresh\\n\"\n}\nFINAL_SIGNAL=f\nFINAL_NEXT=Inspect handoff refresh status failure before product work.\nCHAT_REPLY=f | NEXT=Inspect handoff refresh status failure before product work.\n",
+            "stdout": "{\n  \"action\": \"admin-refresh-pr\",\n  \"command\": [\n    \"gh\",\n    \"pr\",\n    \"list\",\n    \"--head\",\n    \"docs/post-pr1081-handoff-refresh\",\n    \"--state\",\n    \"open\",\n    \"--json\",\n    \"number,url,headRefName,headRefOid,state,title\"\n  ],\n  \"next_action\": \"Run transfer pr-status on the existing admin refresh PR.\",\n  \"result_status\": \"PASS\",\n  \"returncode\": 0,\n  \"stderr\": \"\",\n  \"stdout\": \"ADMIN_REFRESH_EXISTING_BRANCH_RECOVERY\\nrefresh_branch=docs/post-pr1081-handoff-refresh\\nexisting_pr=1082\\nhead_ref_oid=b4d0eba34d43965c22c94375349f7e2451f866ba\\nurl=https://github.com/vfi64/agentic-project-kit/pull/1082\\nresult=PASS\\n\"\n}\nFINAL_SIGNAL=d\nFINAL_NEXT=Run transfer pr-status on the existing admin refresh PR.\nCHAT_REPLY=d | NEXT=Run transfer pr-status on the existing admin refresh PR.\n",
             "type": "run_command"
           }
         ],
-        "message": "Transfer command action failed.",
-        "report_path": "docs/reports/command_runs/post-pr1081-post-merge-check.md",
-        "result_status": "FAIL",
-        "returncode": 1,
-        "safety": "Bounded administrative post-merge lifecycle check only. Sync main locally before running; no product work.",
+        "message": "Transfer order applied.",
+        "report_path": "docs/reports/command_runs/post-pr1081-admin-refresh.md",
+        "result_status": "PASS",
+        "returncode": 0,
+        "safety": "Bounded administrative handoff refresh only after PR1081. No product work.",
         "schema_version": 1,
-        "transfer_id": "post-pr1081-post-merge-check"
+        "transfer_id": "post-pr1081-admin-refresh"
       },
       "inspect": {
         "action_results": [
@@ -671,23 +711,25 @@ NEXT=Fix transfer apply errors before continuing.
             "command": [
               "./.venv/bin/agentic-kit",
               "transfer",
-              "post-merge-check"
+              "admin-refresh-pr",
+              "--after-pr",
+              "1081"
             ],
             "type": "run_command",
             "would_run": true
           }
         ],
         "message": "Transfer order inspected. Re-run apply to write files or run commands.",
-        "report_path": "docs/reports/command_runs/post-pr1081-post-merge-check.md",
+        "report_path": "docs/reports/command_runs/post-pr1081-admin-refresh.md",
         "result_status": "PENDING",
         "returncode": 0,
-        "safety": "Bounded administrative post-merge lifecycle check only. Sync main locally before running; no product work.",
+        "safety": "Bounded administrative handoff refresh only after PR1081. No product work.",
         "schema_version": 1,
-        "transfer_id": "post-pr1081-post-merge-check"
+        "transfer_id": "post-pr1081-admin-refresh"
       },
-      "next_action": "Fix transfer apply errors before continuing.",
-      "result_status": "FAIL",
-      "returncode": 1,
+      "next_action": "Review transfer state and evidence report before continuing.",
+      "result_status": "PASS",
+      "returncode": 0,
       "schema_version": 1,
       "state": {
         "branch": "main",
@@ -702,11 +744,11 @@ NEXT=Fix transfer apply errors before continuing.
           "dirty_worktree": true,
           "pending_transfer_order": true
         },
-        "created_at": "2026-06-04T04:32:43.990336+00:00",
-        "head": "a76cc36",
+        "created_at": "2026-06-04T06:15:16.935054+00:00",
+        "head": "26f4053",
         "last_result": {
           "exists": true,
-          "report_path": "docs/reports/command_runs/post-pr1081-post-merge-check.md"
+          "report_path": "docs/reports/command_runs/post-pr1081-admin-refresh.md"
         },
         "next_action": "Review or clean the worktree before running another transfer action.",
         "primary_state": "BLOCKED",
@@ -849,9 +891,9 @@ NEXT=Fix transfer apply errors before continuing.
         },
         "schema_version": 1
       },
-      "transfer_id": "post-pr1081-post-merge-check"
+      "transfer_id": "post-pr1081-admin-refresh"
     },
-    "next_action": "Fix transfer apply errors before continuing.",
+    "next_action": "Review transfer state and evidence report before continuing.",
     "post_report_actions": {
       "attempted": true,
       "schema_version": 1,
@@ -866,12 +908,12 @@ NEXT=Fix transfer apply errors before continuing.
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "a76cc36",
+      "head": "26f4053",
       "order_sync": {
         "attempted": true,
-        "current_branch": "main",
-        "final_head": "a76cc36",
-        "head": "a76cc36",
+        "current_branch": "docs/post-pr1081-handoff-refresh",
+        "final_head": "129734a",
+        "head": "129734a",
         "schema_version": 1,
         "steps": [
           {
@@ -879,11 +921,11 @@ NEXT=Fix transfer apply errors before continuing.
               "git",
               "fetch",
               "origin",
-              "main"
+              "docs/post-pr1081-handoff-refresh"
             ],
             "name": "git_fetch_current_branch",
             "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            main       -> FETCH_HEAD",
+            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            docs/post-pr1081-handoff-refresh -> FETCH_HEAD",
             "stdout": ""
           },
           {
@@ -892,35 +934,69 @@ NEXT=Fix transfer apply errors before continuing.
               "pull",
               "--ff-only",
               "origin",
-              "main"
+              "docs/post-pr1081-handoff-refresh"
             ],
             "name": "git_pull_current_branch",
             "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            main       -> FETCH_HEAD",
+            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            docs/post-pr1081-handoff-refresh -> FETCH_HEAD",
             "stdout": "Already up to date."
           }
         ]
       },
       "owned_report_artifact_recovery": {
-        "actions": [],
-        "attempted": false,
-        "current_order_report": "docs/reports/command_runs/post-pr1081-post-merge-check.md",
+        "actions": [
+          {
+            "argv": [
+              "git",
+              "restore",
+              "--staged",
+              "--worktree",
+              "--",
+              "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
+            ],
+            "name": "restore_tracked_owned_report_artifacts",
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          },
+          {
+            "name": "remove_untracked_owned_report_artifact",
+            "path": "docs/reports/command_runs/post-pr1081-admin-refresh.md",
+            "returncode": 0
+          }
+        ],
+        "attempted": true,
+        "current_order_report": "docs/reports/command_runs/post-pr1081-admin-refresh.md",
+        "final_status_short": "",
         "foreign_dirty_paths": [],
-        "owned_report_artifacts": [],
+        "owned_report_artifacts": [
+          "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
+          "docs/reports/command_runs/post-pr1081-admin-refresh.md"
+        ],
         "schema_version": 1
       },
-      "remote_tracking": "origin/main"
+      "remote_tracking": "origin/main",
+      "rule_ack_refresh_before_transfer": {
+        "argv": [
+          "./.venv/bin/agentic-kit",
+          "rules",
+          "acknowledge"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=46ff5970d0e020d64844ef9bb6d62ee5633a44cf7c975a8e323df8c59058ee28\nrepo_head=26f4053\ndeclared_next_allowed_action=run_next_command"
+      }
     },
-    "primary_state": "FAIL",
+    "primary_state": "PASS",
     "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "reasons": [],
     "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
-    "result_status": "FAIL",
-    "returncode": 1,
+    "result_status": "PASS",
+    "returncode": 0,
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "a76cc36",
+      "head": "26f4053",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -1227,11 +1303,11 @@ NEXT=Fix transfer apply errors before continuing.
     ],
     "repo_state": {
       "branch": "main",
-      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/post-pr1081-post-merge-check.md",
-      "head": "a76cc360512375218eeefe6e4d792c9427025413",
+      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/post-pr1081-admin-refresh.md",
+      "head": "26f405350d82b11146f2b722aee4a1e21b723e64",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "a76cc360512375218eeefe6e4d792c9427025413"
+      "upstream_head": "26f405350d82b11146f2b722aee4a1e21b723e64"
     },
     "schema_version": 1,
     "terminal_block_rules": {
