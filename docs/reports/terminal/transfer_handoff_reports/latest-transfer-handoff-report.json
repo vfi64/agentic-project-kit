@@ -6,7 +6,7 @@
     "blocked_message": "",
     "branch": "main",
     "chat_reply": "g",
-    "head": "0cf955d",
+    "head": "a76cc36",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -16,26 +16,21 @@
             "command": [
               "./.venv/bin/agentic-kit",
               "transfer",
-              "pr-merge-safe",
-              "1080",
-              "--expected-head-sha",
-              "e312f85e3eab280ae747b195a8fb54b6363a4e8d",
-              "--merge-method",
-              "squash"
+              "post-merge-check"
             ],
             "returncode": 1,
             "stderr": "",
-            "stdout": "{\n  \"action\": \"pr-merge-safe\",\n  \"command\": [\n    \"/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/agentic-kit\",\n    \"pr\",\n    \"merge-if-green\",\n    \"1080\",\n    \"--expected-head-sha\",\n    \"e312f85e3eab280ae747b195a8fb54b6363a4e8d\",\n    \"--main-branch\",\n    \"main\",\n    \"--merge-method\",\n    \"squash\"\n  ],\n  \"next_action\": \"Sync main and run post-merge handoff refresh status.\",\n  \"result_status\": \"FAIL\",\n  \"returncode\": 1,\n  \"stderr\": \"\",\n  \"stdout\": \"NEXT_TURN_MERGE_IF_GREEN\\npr=1080\\ndecision=refuse\\nreason=merge state is not clean: UNKNOWN\\nstatus_decision=green\\nstate=OPEN\\nmerge_state_status=UNKNOWN\\nbase_ref_name=main\\nbase_ref_oid=73fe131bef0cba256741794c9fc2bee8a4c7ba97\\nhead_ref_name=docs/post-pr1079-handoff-refresh\\nhead_ref_oid=e312f85e3eab280ae747b195a8fb54b6363a4e8d\\nexpected_base_branch=main\\nexpected_head_sha=e312f85e3eab280ae747b195a8fb54b6363a4e8d\\nmerged=false\\nmerge_commit_sha=(unknown)\\nmain_verification_required=false\\nmain_verification_decision=not-run\\nmain_verification_passed=true\\nmain_failed_run_log_hint=none\\nmain_verification_error=none\\nfailed_checks:\\npending_checks:\\nunknown_checks:\\nmain_failed_run_diagnostics:\\n### RESULT: PASS ###\\n\"\n}\nFINAL_SIGNAL=f\nFINAL_NEXT=Sync main and run post-merge handoff refresh status.\nCHAT_REPLY=f | NEXT=Sync main and run post-merge handoff refresh status.\n",
+            "stdout": "{\n  \"action\": \"post-merge-check\",\n  \"command\": [\n    \"/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/agentic-kit\",\n    \"handoff\",\n    \"post-merge-refresh-status\"\n  ],\n  \"next_action\": \"Inspect handoff refresh status failure before product work.\",\n  \"result_status\": \"FAIL\",\n  \"returncode\": 1,\n  \"stderr\": \"\",\n  \"stdout\": \"POST_MERGE_HANDOFF_REFRESH\\ncurrent_head=a76cc36\\nfreshness_warning_present=True\\nrefresh_required=True\\nlatest_successor_prompt=docs/reports/terminal/post-pr1011-successor-chat-handoff.md\\nresult=REFRESH_REQUIRED\\nnext_safe_action=create_administrative_handoff_refresh\\n\"\n}\nFINAL_SIGNAL=f\nFINAL_NEXT=Inspect handoff refresh status failure before product work.\nCHAT_REPLY=f | NEXT=Inspect handoff refresh status failure before product work.\n",
             "type": "run_command"
           }
         ],
         "message": "Transfer command action failed.",
-        "report_path": "docs/reports/command_runs/merge-pr1080-admin-refresh.md",
+        "report_path": "docs/reports/command_runs/post-pr1081-post-merge-check.md",
         "result_status": "FAIL",
         "returncode": 1,
-        "safety": "Bounded administrative PR merge only. Merge PR1080 if green with exact head guard; no product work.",
+        "safety": "Bounded administrative post-merge lifecycle check only. Sync main locally before running; no product work.",
         "schema_version": 1,
-        "transfer_id": "merge-pr1080-admin-refresh"
+        "transfer_id": "post-pr1081-post-merge-check"
       },
       "inspect": {
         "action_results": [
@@ -43,24 +38,19 @@
             "command": [
               "./.venv/bin/agentic-kit",
               "transfer",
-              "pr-merge-safe",
-              "1080",
-              "--expected-head-sha",
-              "e312f85e3eab280ae747b195a8fb54b6363a4e8d",
-              "--merge-method",
-              "squash"
+              "post-merge-check"
             ],
             "type": "run_command",
             "would_run": true
           }
         ],
         "message": "Transfer order inspected. Re-run apply to write files or run commands.",
-        "report_path": "docs/reports/command_runs/merge-pr1080-admin-refresh.md",
+        "report_path": "docs/reports/command_runs/post-pr1081-post-merge-check.md",
         "result_status": "PENDING",
         "returncode": 0,
-        "safety": "Bounded administrative PR merge only. Merge PR1080 if green with exact head guard; no product work.",
+        "safety": "Bounded administrative post-merge lifecycle check only. Sync main locally before running; no product work.",
         "schema_version": 1,
-        "transfer_id": "merge-pr1080-admin-refresh"
+        "transfer_id": "post-pr1081-post-merge-check"
       },
       "next_action": "Fix transfer apply errors before continuing.",
       "result_status": "FAIL",
@@ -79,11 +69,11 @@
           "dirty_worktree": true,
           "pending_transfer_order": true
         },
-        "created_at": "2026-06-03T20:01:15.145868+00:00",
-        "head": "0cf955d",
+        "created_at": "2026-06-04T04:32:43.990336+00:00",
+        "head": "a76cc36",
         "last_result": {
           "exists": true,
-          "report_path": "docs/reports/command_runs/merge-pr1080-admin-refresh.md"
+          "report_path": "docs/reports/command_runs/post-pr1081-post-merge-check.md"
         },
         "next_action": "Review or clean the worktree before running another transfer action.",
         "primary_state": "BLOCKED",
@@ -105,7 +95,7 @@
           "fail_closed": false,
           "is_valid": true,
           "schema_version": 1,
-          "snapshot_id": "d2d75fd48c25cdddfc869c426320d402ede8574533d84af2c98b5dc4ad8e89cb",
+          "snapshot_id": "46ff5970d0e020d64844ef9bb6d62ee5633a44cf7c975a8e323df8c59058ee28",
           "source_digests": [
             {
               "path": ".agentic/compiled_agent_context.yaml",
@@ -114,8 +104,8 @@
             },
             {
               "path": ".agentic/handoff_state.yaml",
-              "sha256": "ee575ee8700a127165afda8100e1e615f60195542a572cc0f9fe255a96fb9449",
-              "size_bytes": 19959
+              "sha256": "746a6c7a813928079f1ce2291be305d77f9e6ec501e4fb59de7ad917b264756b",
+              "size_bytes": 19976
             },
             {
               "path": ".agentic/rule_mechanism_inventory.yaml",
@@ -226,7 +216,7 @@
         },
         "schema_version": 1
       },
-      "transfer_id": "merge-pr1080-admin-refresh"
+      "transfer_id": "post-pr1081-post-merge-check"
     },
     "next_action": "Fix transfer apply errors before continuing.",
     "post_report_actions": {
@@ -243,12 +233,12 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "0cf955d",
+      "head": "a76cc36",
       "order_sync": {
         "attempted": true,
         "current_branch": "main",
-        "final_head": "0cf955d",
-        "head": "0cf955d",
+        "final_head": "a76cc36",
+        "head": "a76cc36",
         "schema_version": 1,
         "steps": [
           {
@@ -281,7 +271,7 @@
       "owned_report_artifact_recovery": {
         "actions": [],
         "attempted": false,
-        "current_order_report": "docs/reports/command_runs/merge-pr1080-admin-refresh.md",
+        "current_order_report": "docs/reports/command_runs/post-pr1081-post-merge-check.md",
         "foreign_dirty_paths": [],
         "owned_report_artifacts": [],
         "schema_version": 1
@@ -297,7 +287,7 @@
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "0cf955d",
+      "head": "a76cc36",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -604,11 +594,11 @@
     ],
     "repo_state": {
       "branch": "main",
-      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/merge-pr1080-admin-refresh.md",
-      "head": "0cf955d77b3c012c4c577d7f74bf382ee63267f4",
+      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/post-pr1081-post-merge-check.md",
+      "head": "a76cc360512375218eeefe6e4d792c9427025413",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "0cf955d77b3c012c4c577d7f74bf382ee63267f4"
+      "upstream_head": "a76cc360512375218eeefe6e4d792c9427025413"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -639,7 +629,7 @@
     "blocked_message": "",
     "branch": "main",
     "chat_reply": "g",
-    "head": "0cf955d",
+    "head": "a76cc36",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -649,26 +639,21 @@
             "command": [
               "./.venv/bin/agentic-kit",
               "transfer",
-              "pr-merge-safe",
-              "1080",
-              "--expected-head-sha",
-              "e312f85e3eab280ae747b195a8fb54b6363a4e8d",
-              "--merge-method",
-              "squash"
+              "post-merge-check"
             ],
             "returncode": 1,
             "stderr": "",
-            "stdout": "{\n  \"action\": \"pr-merge-safe\",\n  \"command\": [\n    \"/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/agentic-kit\",\n    \"pr\",\n    \"merge-if-green\",\n    \"1080\",\n    \"--expected-head-sha\",\n    \"e312f85e3eab280ae747b195a8fb54b6363a4e8d\",\n    \"--main-branch\",\n    \"main\",\n    \"--merge-method\",\n    \"squash\"\n  ],\n  \"next_action\": \"Sync main and run post-merge handoff refresh status.\",\n  \"result_status\": \"FAIL\",\n  \"returncode\": 1,\n  \"stderr\": \"\",\n  \"stdout\": \"NEXT_TURN_MERGE_IF_GREEN\\npr=1080\\ndecision=refuse\\nreason=merge state is not clean: UNKNOWN\\nstatus_decision=green\\nstate=OPEN\\nmerge_state_status=UNKNOWN\\nbase_ref_name=main\\nbase_ref_oid=73fe131bef0cba256741794c9fc2bee8a4c7ba97\\nhead_ref_name=docs/post-pr1079-handoff-refresh\\nhead_ref_oid=e312f85e3eab280ae747b195a8fb54b6363a4e8d\\nexpected_base_branch=main\\nexpected_head_sha=e312f85e3eab280ae747b195a8fb54b6363a4e8d\\nmerged=false\\nmerge_commit_sha=(unknown)\\nmain_verification_required=false\\nmain_verification_decision=not-run\\nmain_verification_passed=true\\nmain_failed_run_log_hint=none\\nmain_verification_error=none\\nfailed_checks:\\npending_checks:\\nunknown_checks:\\nmain_failed_run_diagnostics:\\n### RESULT: PASS ###\\n\"\n}\nFINAL_SIGNAL=f\nFINAL_NEXT=Sync main and run post-merge handoff refresh status.\nCHAT_REPLY=f | NEXT=Sync main and run post-merge handoff refresh status.\n",
+            "stdout": "{\n  \"action\": \"post-merge-check\",\n  \"command\": [\n    \"/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/agentic-kit\",\n    \"handoff\",\n    \"post-merge-refresh-status\"\n  ],\n  \"next_action\": \"Inspect handoff refresh status failure before product work.\",\n  \"result_status\": \"FAIL\",\n  \"returncode\": 1,\n  \"stderr\": \"\",\n  \"stdout\": \"POST_MERGE_HANDOFF_REFRESH\\ncurrent_head=a76cc36\\nfreshness_warning_present=True\\nrefresh_required=True\\nlatest_successor_prompt=docs/reports/terminal/post-pr1011-successor-chat-handoff.md\\nresult=REFRESH_REQUIRED\\nnext_safe_action=create_administrative_handoff_refresh\\n\"\n}\nFINAL_SIGNAL=f\nFINAL_NEXT=Inspect handoff refresh status failure before product work.\nCHAT_REPLY=f | NEXT=Inspect handoff refresh status failure before product work.\n",
             "type": "run_command"
           }
         ],
         "message": "Transfer command action failed.",
-        "report_path": "docs/reports/command_runs/merge-pr1080-admin-refresh.md",
+        "report_path": "docs/reports/command_runs/post-pr1081-post-merge-check.md",
         "result_status": "FAIL",
         "returncode": 1,
-        "safety": "Bounded administrative PR merge only. Merge PR1080 if green with exact head guard; no product work.",
+        "safety": "Bounded administrative post-merge lifecycle check only. Sync main locally before running; no product work.",
         "schema_version": 1,
-        "transfer_id": "merge-pr1080-admin-refresh"
+        "transfer_id": "post-pr1081-post-merge-check"
       },
       "inspect": {
         "action_results": [
@@ -676,24 +661,19 @@
             "command": [
               "./.venv/bin/agentic-kit",
               "transfer",
-              "pr-merge-safe",
-              "1080",
-              "--expected-head-sha",
-              "e312f85e3eab280ae747b195a8fb54b6363a4e8d",
-              "--merge-method",
-              "squash"
+              "post-merge-check"
             ],
             "type": "run_command",
             "would_run": true
           }
         ],
         "message": "Transfer order inspected. Re-run apply to write files or run commands.",
-        "report_path": "docs/reports/command_runs/merge-pr1080-admin-refresh.md",
+        "report_path": "docs/reports/command_runs/post-pr1081-post-merge-check.md",
         "result_status": "PENDING",
         "returncode": 0,
-        "safety": "Bounded administrative PR merge only. Merge PR1080 if green with exact head guard; no product work.",
+        "safety": "Bounded administrative post-merge lifecycle check only. Sync main locally before running; no product work.",
         "schema_version": 1,
-        "transfer_id": "merge-pr1080-admin-refresh"
+        "transfer_id": "post-pr1081-post-merge-check"
       },
       "next_action": "Fix transfer apply errors before continuing.",
       "result_status": "FAIL",
@@ -712,11 +692,11 @@
           "dirty_worktree": true,
           "pending_transfer_order": true
         },
-        "created_at": "2026-06-03T20:01:15.145868+00:00",
-        "head": "0cf955d",
+        "created_at": "2026-06-04T04:32:43.990336+00:00",
+        "head": "a76cc36",
         "last_result": {
           "exists": true,
-          "report_path": "docs/reports/command_runs/merge-pr1080-admin-refresh.md"
+          "report_path": "docs/reports/command_runs/post-pr1081-post-merge-check.md"
         },
         "next_action": "Review or clean the worktree before running another transfer action.",
         "primary_state": "BLOCKED",
@@ -738,7 +718,7 @@
           "fail_closed": false,
           "is_valid": true,
           "schema_version": 1,
-          "snapshot_id": "d2d75fd48c25cdddfc869c426320d402ede8574533d84af2c98b5dc4ad8e89cb",
+          "snapshot_id": "46ff5970d0e020d64844ef9bb6d62ee5633a44cf7c975a8e323df8c59058ee28",
           "source_digests": [
             {
               "path": ".agentic/compiled_agent_context.yaml",
@@ -747,8 +727,8 @@
             },
             {
               "path": ".agentic/handoff_state.yaml",
-              "sha256": "ee575ee8700a127165afda8100e1e615f60195542a572cc0f9fe255a96fb9449",
-              "size_bytes": 19959
+              "sha256": "746a6c7a813928079f1ce2291be305d77f9e6ec501e4fb59de7ad917b264756b",
+              "size_bytes": 19976
             },
             {
               "path": ".agentic/rule_mechanism_inventory.yaml",
@@ -859,7 +839,7 @@
         },
         "schema_version": 1
       },
-      "transfer_id": "merge-pr1080-admin-refresh"
+      "transfer_id": "post-pr1081-post-merge-check"
     },
     "next_action": "Fix transfer apply errors before continuing.",
     "post_report_actions": {
@@ -876,12 +856,12 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "0cf955d",
+      "head": "a76cc36",
       "order_sync": {
         "attempted": true,
         "current_branch": "main",
-        "final_head": "0cf955d",
-        "head": "0cf955d",
+        "final_head": "a76cc36",
+        "head": "a76cc36",
         "schema_version": 1,
         "steps": [
           {
@@ -914,7 +894,7 @@
       "owned_report_artifact_recovery": {
         "actions": [],
         "attempted": false,
-        "current_order_report": "docs/reports/command_runs/merge-pr1080-admin-refresh.md",
+        "current_order_report": "docs/reports/command_runs/post-pr1081-post-merge-check.md",
         "foreign_dirty_paths": [],
         "owned_report_artifacts": [],
         "schema_version": 1
@@ -930,7 +910,7 @@
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "0cf955d",
+      "head": "a76cc36",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -1237,11 +1217,11 @@
     ],
     "repo_state": {
       "branch": "main",
-      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/merge-pr1080-admin-refresh.md",
-      "head": "0cf955d77b3c012c4c577d7f74bf382ee63267f4",
+      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/post-pr1081-post-merge-check.md",
+      "head": "a76cc360512375218eeefe6e4d792c9427025413",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "0cf955d77b3c012c4c577d7f74bf382ee63267f4"
+      "upstream_head": "a76cc360512375218eeefe6e4d792c9427025413"
     },
     "schema_version": 1,
     "terminal_block_rules": {
