@@ -1,22 +1,20 @@
 schema_version: 1
-id: post-pr1081-admin-refresh
-title: Create administrative handoff refresh after PR1081
+id: post-pr1082-post-merge-check
+title: Run post-PR1082 post-merge handoff check
 branch: main
-safety: Bounded administrative handoff refresh only after PR1081. No product work.
-label: post-pr1081-admin-refresh
+safety: Bounded administrative post-merge lifecycle check after PR1082. No product work.
+label: post-pr1082-post-merge-check
 allow_blocked_start: true
-report_path: docs/reports/command_runs/post-pr1081-admin-refresh.md
+report_path: docs/reports/command_runs/post-pr1082-post-merge-check.md
 actions:
 - type: run_command
   command:
   - ./.venv/bin/agentic-kit
   - transfer
-  - admin-refresh-pr
-  - --after-pr
-  - "1081"
+  - post-merge-check
 publish_last_report: true
 commit:
-  message: Publish post-PR1081 admin refresh transfer report
+  message: Publish post-PR1082 post-merge check transfer report
   paths:
   - docs/reports/command_runs
   - docs/reports/transfer_runs/latest-remote-next-report.json
