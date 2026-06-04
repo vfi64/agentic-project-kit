@@ -23,6 +23,7 @@ from agentic_project_kit.cli_commands.slice import slice_app
 from agentic_project_kit.cli_commands.state import state_app
 from agentic_project_kit.cli_commands.todo import todo_app
 from agentic_project_kit.cli_commands.transfer import transfer_app
+from agentic_project_kit.cli_commands.transfer_post_merge_complete import register_transfer_post_merge_complete_command
 from agentic_project_kit.cli_commands.validation import register_validation_commands
 from agentic_project_kit.cli_commands.work_orders import work_orders_app
 from agentic_project_kit.cli_commands.workflow import workflow_app
@@ -41,6 +42,7 @@ register_remote_next_command(app)
 register_rules_commands(app)
 register_validation_commands(app)
 register_patch_preflight_command(app)
+register_transfer_post_merge_complete_command(transfer_app)
 app.add_typer(workflow_app, name="workflow")
 app.add_typer(workflow_guard_app, name="workflow-guard")
 app.add_typer(rule_registry_app, name="rule-registry")
@@ -60,6 +62,3 @@ app.add_typer(slice_app, name="slice")
 app.add_typer(state_app, name="state")
 app.add_typer(todo_app, name="todo")
 app.add_typer(transfer_app, name="transfer")
-
-if __name__ == "__main__":
-    app()
