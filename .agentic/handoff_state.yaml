@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: '6061738'
-  commit_subject: Treat post-merge refresh output as lifecycle state (#1085)
+  commit: 6c729c1
+  commit_subject: Harden post-merge complete finalization (#1088)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
