@@ -25,6 +25,12 @@ def test_remote_next_summary_shows_local_state_rule_ack_and_blockers(capsys):
             "pushed": False,
             "blocked_reason": "git_push_failed",
             "commit_head": "abc1234",
+            "rule_ack_after_report_commit": {
+                "present": True,
+                "confirmed": True,
+                "head": "abc1234",
+                "blocking_reasons": [],
+            },
         },
         published_report_path="docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
         report_path="docs/reports/transfer_runs/latest-remote-next-report.json",
@@ -61,6 +67,8 @@ def test_remote_next_summary_shows_local_state_rule_ack_and_blockers(capsys):
     assert "BLOCKERS:" in output
     assert "REASON:                 dirty_worktree" in output
     assert "BLOCKED_REASON:         git_push_failed" in output
+    assert "RULE_ACK_AFTER_REPORT:" in output
+    assert "CONFIRMED:              yes" in output
     assert "CHAT_REPLY:             g" in output
 
 def test_remote_next_summary_shows_new_order_required_for_no_current_order(capsys):

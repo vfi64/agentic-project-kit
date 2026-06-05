@@ -144,6 +144,16 @@ def _echo_remote_next_user_summary(result) -> None:
         for reason in rule_ack.get("blocking_reasons", ()): 
             typer.echo(_summary_line("BLOCKING_REASON", reason, indent=2))
         typer.echo("")
+    final_rule_ack = actions.get("rule_ack_after_report_commit")
+    if isinstance(final_rule_ack, dict):
+        typer.echo("RULE_ACK_AFTER_REPORT:")
+        typer.echo(_summary_line("PRESENT", "yes" if final_rule_ack.get("present") else "no", indent=2))
+        typer.echo(_summary_line("CONFIRMED", "yes" if final_rule_ack.get("confirmed") else "no", indent=2))
+        if final_rule_ack.get("head"):
+            typer.echo(_summary_line("HEAD", final_rule_ack["head"], indent=2))
+        for reason in final_rule_ack.get("blocking_reasons", ()):
+            typer.echo(_summary_line("BLOCKING_REASON", reason, indent=2))
+        typer.echo("")
     _summary_items("BLOCKERS:", result.reasons, label="REASON")
     typer.echo("REMOTE_REPORT:")
     typer.echo(_summary_line("UPLOADED", uploaded, indent=2))
