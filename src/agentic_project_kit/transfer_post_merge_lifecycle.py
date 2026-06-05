@@ -9,6 +9,7 @@ from agentic_project_kit.transfer_repo_actions import (
     post_merge_check,
     pr_merge_safe,
     pr_wait_ci,
+    pull_current,
 )
 
 
@@ -148,6 +149,24 @@ def _run_final_check(
     main_branch: str,
     recovered_from_merge_block: bool = False,
 ) -> PostMergeLifecycleResult:
+    sync = pull_current()
+    sync_step_name = (
+        "merge-block-recovery-main-sync"
+        if recovered_from_merge_block
+        else "final-main-sync"
+    )
+    steps.append(PostMergeLifecycleStep(sync_step_name, sync))
+    if sync.returncode != 0 or sync.result_status != "PASS":
+        return _finish(
+            after_pr=after_pr,
+            result_status="BLOCKED",
+            returncode=2,
+            lifecycle_state="FINAL_MAIN_SYNC_BLOCKED",
+            next_action="Synchronize main before running the final post-merge check.",
+            steps=steps,
+            refresh_pr=refresh_pr,
+        )
+
     final_check = post_merge_check(main_branch=main_branch)
     step_name = (
         "merge-block-recovery-post-merge-check"
