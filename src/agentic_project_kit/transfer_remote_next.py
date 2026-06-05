@@ -86,7 +86,7 @@ class TransferRemoteNextRun:
     post_report_actions: dict[str, object] = field(default_factory=dict)
 
     def as_json_data(self) -> dict[str, object]:
-        primary_state = "BLOCKED" if self.result_status == "BLOCKED" else self.result_status
+        primary_state = _remote_next_primary_state(self.result_status, self.reasons)
         return {
             "schema_version": 1,
             "artifact_type": "transfer_remote_next_execution_report",
@@ -471,11 +471,12 @@ def _sync_current_branch_before_order(root: Path) -> dict[str, object]:
 
 
 def _blocked_local_run(message: str, reasons: tuple[str, ...], snapshot: GitSnapshot) -> TransferLocalRun:
+    next_action = _remote_next_next_action(reasons)
     state = {
         "schema_version": 1,
-        "primary_state": "BLOCKED",
+        "primary_state": _remote_next_primary_state("BLOCKED", reasons),
         "reasons": list(reasons),
-        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+        "next_action": next_action,
         "branch": snapshot.current_branch,
         "head": snapshot.head,
         "dirty_state": snapshot.as_json_data()["dirty_state"],
@@ -489,7 +490,7 @@ def _blocked_local_run(message: str, reasons: tuple[str, ...], snapshot: GitSnap
         state=state,
         result_status="BLOCKED",
         returncode=2,
-        next_action="Inspect the published remote-next diagnostic report before retrying.",
+        next_action=_remote_next_next_action(reasons),
     )
 
 

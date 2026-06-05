@@ -47,9 +47,12 @@ def test_remote_next_blocks_inactive_transfer_order_without_branch_before_branch
 
     assert result.returncode == 2
     assert result.result_status == "BLOCKED"
+    assert result.as_json_data()["primary_state"] == "NEW_ORDER_REQUIRED"
+    assert result.next_action == "Create or queue a fresh remote-next transfer order, then rerun the canonical command."
     assert "no_current_transfer_order" in result.reasons
     assert "invalid_transfer_order" not in result.reasons
     assert result.local_run.apply is None
+    assert result.local_run.state["primary_state"] == "NEW_ORDER_REQUIRED"
     assert result.preflight["transfer_order_guard"]["status"] == "inactive"
 
 
