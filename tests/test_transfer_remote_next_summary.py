@@ -62,3 +62,39 @@ def test_remote_next_summary_shows_local_state_rule_ack_and_blockers(capsys):
     assert "REASON:                 dirty_worktree" in output
     assert "BLOCKED_REASON:         git_push_failed" in output
     assert "CHAT_REPLY:             g" in output
+
+def test_remote_next_summary_shows_new_order_required_for_no_current_order(capsys):
+    result = SimpleNamespace(
+        result_status="BLOCKED",
+        returncode=2,
+        reasons=("no_current_transfer_order",),
+        post_report_actions={
+            "committed": True,
+            "pushed": True,
+            "commit_head": "abc1234",
+        },
+        published_report_path="docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        report_path="docs/reports/transfer_runs/latest-remote-next-report.json",
+        next_action="Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
+        preflight={
+            "current_branch": "main",
+            "dirty_state": {
+                "clean": True,
+                "staged_changes": [],
+                "unstaged_changes": [],
+                "untracked_files": [],
+            },
+        },
+        branch=None,
+        head="abc1234",
+        rule_ack=FakeRuleAck(),
+        local_run=SimpleNamespace(state={}),
+    )
+
+    _echo_remote_next_user_summary(result)
+
+    output = capsys.readouterr().out
+    assert "STATE:                  NEW_ORDER_REQUIRED" in output
+    assert "REASON:                 no_current_transfer_order" in output
+    assert "NEXT:                   Create or queue a fresh remote-next transfer order, then rerun the canonical command." in output
+

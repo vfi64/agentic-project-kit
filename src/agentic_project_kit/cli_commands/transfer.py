@@ -117,7 +117,8 @@ def _echo_remote_next_user_summary(result) -> None:
     typer.echo("*" * 36 + " START SUMMARY " + "*" * 36)
     typer.echo("TRANSFER_REMOTE_NEXT_DONE")
     typer.echo("")
-    typer.echo(_summary_line("STATE", result.result_status))
+    primary_state = "NEW_ORDER_REQUIRED" if "no_current_transfer_order" in result.reasons else result.result_status
+    typer.echo(_summary_line("STATE", primary_state))
     typer.echo(_summary_line("RETURNCODE", result.returncode))
     if result.reasons:
         typer.echo(_summary_line("REASONS", ",".join(result.reasons)))
