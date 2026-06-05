@@ -106,3 +106,72 @@ def test_remote_next_summary_shows_new_order_required_for_no_current_order(capsy
     assert "REASON:                 no_current_transfer_order" in output
     assert "NEXT:                   Create or queue a fresh remote-next transfer order, then rerun the canonical command." in output
 
+def test_remote_next_summary_shows_stale_order_state(capsys):
+    result = SimpleNamespace(
+        result_status="BLOCKED",
+        returncode=2,
+        reasons=("stale_transfer_order_head_mismatch",),
+        post_report_actions={
+            "committed": True,
+            "pushed": True,
+            "commit_head": "abc1234",
+        },
+        published_report_path="docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        report_path="docs/reports/transfer_runs/latest-remote-next-report.json",
+        next_action="Supersede the stale remote-next transfer order with a fresh head-anchored order.",
+        preflight={
+            "current_branch": "main",
+            "dirty_state": {
+                "clean": True,
+                "staged_changes": [],
+                "unstaged_changes": [],
+                "untracked_files": [],
+            },
+        },
+        branch=None,
+        head="abc1234",
+        rule_ack=FakeRuleAck(),
+        local_run=SimpleNamespace(state={}),
+    )
+
+    _echo_remote_next_user_summary(result)
+
+    output = capsys.readouterr().out
+    assert "STATE:                  STALE_ORDER" in output
+    assert "REASON:                 stale_transfer_order_head_mismatch" in output
+
+
+def test_remote_next_summary_shows_order_consumed_state(capsys):
+    result = SimpleNamespace(
+        result_status="BLOCKED",
+        returncode=2,
+        reasons=("order_consumed",),
+        post_report_actions={
+            "committed": True,
+            "pushed": True,
+            "commit_head": "abc1234",
+        },
+        published_report_path="docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        report_path="docs/reports/transfer_runs/latest-remote-next-report.json",
+        next_action="Queue a fresh remote-next transfer order; the previous order has already been consumed.",
+        preflight={
+            "current_branch": "main",
+            "dirty_state": {
+                "clean": True,
+                "staged_changes": [],
+                "unstaged_changes": [],
+                "untracked_files": [],
+            },
+        },
+        branch=None,
+        head="abc1234",
+        rule_ack=FakeRuleAck(),
+        local_run=SimpleNamespace(state={}),
+    )
+
+    _echo_remote_next_user_summary(result)
+
+    output = capsys.readouterr().out
+    assert "STATE:                  ORDER_CONSUMED" in output
+    assert "REASON:                 order_consumed" in output
+

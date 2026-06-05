@@ -120,3 +120,48 @@ def test_remote_next_blocks_head_mismatch_before_apply(tmp_path, monkeypatch):
     assert result.result_status == "BLOCKED"
     assert "stale_transfer_order_head_mismatch" in result.reasons
     assert result.local_run.apply is None
+
+
+def test_remote_next_reports_consumed_order_state(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    _write_order(
+        tmp_path,
+        {
+            "schema_version": 1,
+            "id": "already-consumed",
+            "status": "consumed",
+        },
+    )
+
+    result = run_remote_next_transfer(tmp_path)
+
+    assert result.returncode == 2
+    assert result.result_status == "BLOCKED"
+    assert result.as_json_data()["primary_state"] == "ORDER_CONSUMED"
+    assert "order_consumed" in result.reasons
+    assert result.next_action == "Queue a fresh remote-next transfer order; the previous order has already been consumed."
+    assert result.local_run.apply is None
+
+
+def test_remote_next_reports_stale_order_status_state(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    _write_order(
+        tmp_path,
+        {
+            "schema_version": 1,
+            "id": "stale-order",
+            "status": "stale",
+        },
+    )
+
+    result = run_remote_next_transfer(tmp_path)
+
+    assert result.returncode == 2
+    assert result.result_status == "BLOCKED"
+    assert result.as_json_data()["primary_state"] == "STALE_ORDER"
+    assert "stale_transfer_order_status" in result.reasons
+    assert result.next_action == "Supersede the stale remote-next transfer order with a fresh head-anchored order."
+    assert result.local_run.apply is None
+

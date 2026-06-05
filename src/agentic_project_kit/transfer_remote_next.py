@@ -127,6 +127,18 @@ class _CommandResult:
 def _remote_next_primary_state(result_status: str, reasons: tuple[str, ...]) -> str:
     if "no_current_transfer_order" in reasons:
         return "NEW_ORDER_REQUIRED"
+    if "order_consumed" in reasons:
+        return "ORDER_CONSUMED"
+    if any(
+        reason in reasons
+        for reason in (
+            "stale_transfer_order_status",
+            "stale_transfer_order_branch_mismatch",
+            "stale_order_missing_freshness_anchor",
+            "stale_transfer_order_head_mismatch",
+        )
+    ):
+        return "STALE_ORDER"
     if result_status == "BLOCKED":
         return "BLOCKED"
     return result_status
@@ -135,6 +147,18 @@ def _remote_next_primary_state(result_status: str, reasons: tuple[str, ...]) -> 
 def _remote_next_next_action(reasons: tuple[str, ...]) -> str:
     if "no_current_transfer_order" in reasons:
         return "Create or queue a fresh remote-next transfer order, then rerun the canonical command."
+    if "order_consumed" in reasons:
+        return "Queue a fresh remote-next transfer order; the previous order has already been consumed."
+    if any(
+        reason in reasons
+        for reason in (
+            "stale_transfer_order_status",
+            "stale_transfer_order_branch_mismatch",
+            "stale_order_missing_freshness_anchor",
+            "stale_transfer_order_head_mismatch",
+        )
+    ):
+        return "Supersede the stale remote-next transfer order with a fresh head-anchored order."
     return "Inspect the published remote-next diagnostic report before retrying."
 
 
@@ -402,10 +426,24 @@ def _ensure_transfer_order_is_fresh(root: Path, *, branch: str | None = None) ->
         },
     }
     status = str(data.get("status") or "active").strip().lower()
-    if status in {"inactive", "none", "no-current-order", "no_current_order", "consumed", "superseded", "stale"}:
+    if status in {"inactive", "none", "no-current-order", "no_current_order"}:
         raise RemoteNextBlocked(
             f"remote-next transfer order is not active: {status}",
             reasons=("no_current_transfer_order",),
+            branch=branch,
+            preflight=preflight,
+        )
+    if status == "consumed":
+        raise RemoteNextBlocked(
+            "remote-next transfer order has already been consumed",
+            reasons=("order_consumed",),
+            branch=branch,
+            preflight=preflight,
+        )
+    if status in {"superseded", "stale"}:
+        raise RemoteNextBlocked(
+            f"remote-next transfer order is stale: {status}",
+            reasons=("stale_transfer_order_status",),
             branch=branch,
             preflight=preflight,
         )
