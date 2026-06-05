@@ -117,7 +117,22 @@ def _echo_remote_next_user_summary(result) -> None:
     typer.echo("*" * 36 + " START SUMMARY " + "*" * 36)
     typer.echo("TRANSFER_REMOTE_NEXT_DONE")
     typer.echo("")
-    primary_state = "NEW_ORDER_REQUIRED" if "no_current_transfer_order" in result.reasons else result.result_status
+    if "no_current_transfer_order" in result.reasons:
+        primary_state = "NEW_ORDER_REQUIRED"
+    elif "order_consumed" in result.reasons:
+        primary_state = "ORDER_CONSUMED"
+    elif any(
+        reason in result.reasons
+        for reason in (
+            "stale_transfer_order_status",
+            "stale_transfer_order_branch_mismatch",
+            "stale_order_missing_freshness_anchor",
+            "stale_transfer_order_head_mismatch",
+        )
+    ):
+        primary_state = "STALE_ORDER"
+    else:
+        primary_state = result.result_status
     typer.echo(_summary_line("STATE", primary_state))
     typer.echo(_summary_line("RETURNCODE", result.returncode))
     if result.reasons:
