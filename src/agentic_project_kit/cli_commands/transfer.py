@@ -84,18 +84,66 @@ def _summary_line(label: str, value: object, *, indent: int = 0, width: int = 24
     return f"{' ' * indent}{label + ':':<{width}}{value}"
 
 
+def _summary_items(title: str, values: object, *, label: str) -> None:
+    if not isinstance(values, (list, tuple)) or not values:
+        return
+    typer.echo(title)
+    for value in values:
+        typer.echo(_summary_line(label, value, indent=2))
+    typer.echo("")
+
+
+def _dirty_state_from_result(result) -> dict[str, object]:
+    preflight = result.preflight if isinstance(result.preflight, dict) else {}
+    dirty_state = preflight.get("dirty_state")
+    if isinstance(dirty_state, dict):
+        return dirty_state
+    local_run_state = getattr(result.local_run, "state", None)
+    if isinstance(local_run_state, dict):
+        nested_dirty_state = local_run_state.get("dirty_state")
+        if isinstance(nested_dirty_state, dict):
+            return nested_dirty_state
+    return {}
+
+
 def _echo_remote_next_user_summary(result) -> None:
     actions = result.post_report_actions or {}
     committed = bool(actions.get("committed"))
     pushed = bool(actions.get("pushed"))
     uploaded = "yes" if pushed else "no_push_failed" if committed else "no_commit_failed"
+    dirty_state = _dirty_state_from_result(result)
+    rule_ack = result.rule_ack.as_json_data() if result.rule_ack else None
 
     typer.echo("*" * 36 + " START SUMMARY " + "*" * 36)
     typer.echo("TRANSFER_REMOTE_NEXT_DONE")
     typer.echo("")
     typer.echo(_summary_line("STATE", result.result_status))
     typer.echo(_summary_line("RETURNCODE", result.returncode))
+    if result.reasons:
+        typer.echo(_summary_line("REASONS", ",".join(result.reasons)))
     typer.echo("")
+    if dirty_state:
+        typer.echo("LOCAL_STATE:")
+        typer.echo(_summary_line("CLEAN", "yes" if dirty_state.get("clean") else "no", indent=2))
+        typer.echo(_summary_line("BRANCH", result.preflight.get("current_branch", result.branch or ""), indent=2))
+        typer.echo(_summary_line("HEAD", result.head, indent=2))
+        for path in dirty_state.get("staged_changes", ()):
+            typer.echo(_summary_line("STAGED", path, indent=2))
+        for path in dirty_state.get("unstaged_changes", ()):
+            typer.echo(_summary_line("UNSTAGED", path, indent=2))
+        for path in dirty_state.get("untracked_files", ()):
+            typer.echo(_summary_line("UNTRACKED", path, indent=2))
+        typer.echo("")
+    if rule_ack is not None:
+        typer.echo("RULE_ACK:")
+        typer.echo(_summary_line("PRESENT", "yes" if rule_ack.get("present") else "no", indent=2))
+        typer.echo(_summary_line("CONFIRMED", "yes" if rule_ack.get("confirmed") else "no", indent=2))
+        if rule_ack.get("head"):
+            typer.echo(_summary_line("HEAD", rule_ack["head"], indent=2))
+        for reason in rule_ack.get("blocking_reasons", ()): 
+            typer.echo(_summary_line("BLOCKING_REASON", reason, indent=2))
+        typer.echo("")
+    _summary_items("BLOCKERS:", result.reasons, label="REASON")
     typer.echo("REMOTE_REPORT:")
     typer.echo(_summary_line("UPLOADED", uploaded, indent=2))
     typer.echo(_summary_line("COMMITTED", "yes" if committed else "no", indent=2))
