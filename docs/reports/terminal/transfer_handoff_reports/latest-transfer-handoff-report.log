@@ -1,11 +1,11 @@
 TRANSFER_REMOTE_NEXT_REPORT
-RESULT_STATUS=FAIL
-RETURNCODE=1
-BRANCH=main
-HEAD=de24109
+RESULT_STATUS=BLOCKED
+RETURNCODE=2
+BRANCH=
+HEAD=2744b2a
 REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
 CHAT_REPLY=g
-NEXT=Fix transfer apply errors before continuing.
+NEXT=Inspect the published remote-next diagnostic report before retrying.
 
 ### JSON RESULT ###
 {
@@ -13,222 +13,47 @@ NEXT=Fix transfer apply errors before continuing.
   "kind": "local_to_llm_remote_next_report",
   "last_result": {
     "artifact_type": "transfer_remote_next_execution_report",
-    "blocked_message": "",
-    "branch": "main",
+    "blocked_message": "transfer order must define a non-empty branch: .agentic/transfer/inbox/current.yaml",
+    "branch": null,
     "chat_reply": "g",
-    "head": "de24109",
+    "head": "2744b2a",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
-      "apply": {
-        "action_results": [
-          {
-            "command": [
-              "./.venv/bin/agentic-kit",
-              "transfer",
-              "post-merge-check"
-            ],
-            "returncode": 1,
-            "stderr": "",
-            "stdout": "{\n  \"action\": \"post-merge-check\",\n  \"command\": [\n    \"/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/agentic-kit\",\n    \"handoff\",\n    \"post-merge-refresh-status\"\n  ],\n  \"next_action\": \"Inspect handoff refresh status failure before product work.\",\n  \"result_status\": \"FAIL\",\n  \"returncode\": 1,\n  \"stderr\": \"\",\n  \"stdout\": \"POST_MERGE_HANDOFF_REFRESH\\ncurrent_head=de24109\\nfreshness_warning_present=True\\nrefresh_required=True\\nlatest_successor_prompt=docs/reports/terminal/post-pr1011-successor-chat-handoff.md\\nresult=REFRESH_REQUIRED\\nnext_safe_action=create_administrative_handoff_refresh\\n\"\n}\nFINAL_SIGNAL=f\nFINAL_NEXT=Inspect handoff refresh status failure before product work.\nCHAT_REPLY=f | NEXT=Inspect handoff refresh status failure before product work.\n",
-            "type": "run_command"
-          }
-        ],
-        "message": "Transfer command action failed.",
-        "report_path": "docs/reports/command_runs/post-pr1082-post-merge-check.md",
-        "result_status": "FAIL",
-        "returncode": 1,
-        "safety": "Bounded administrative post-merge lifecycle check after PR1082. No product work.",
-        "schema_version": 1,
-        "transfer_id": "post-pr1082-post-merge-check"
-      },
+      "apply": null,
       "inspect": {
-        "action_results": [
-          {
-            "command": [
-              "./.venv/bin/agentic-kit",
-              "transfer",
-              "post-merge-check"
-            ],
-            "type": "run_command",
-            "would_run": true
-          }
+        "message": "transfer order must define a non-empty branch: .agentic/transfer/inbox/current.yaml",
+        "reasons": [
+          "invalid_transfer_order"
         ],
-        "message": "Transfer order inspected. Re-run apply to write files or run commands.",
-        "report_path": "docs/reports/command_runs/post-pr1082-post-merge-check.md",
-        "result_status": "PENDING",
-        "returncode": 0,
-        "safety": "Bounded administrative post-merge lifecycle check after PR1082. No product work.",
-        "schema_version": 1,
-        "transfer_id": "post-pr1082-post-merge-check"
+        "result_status": "BLOCKED",
+        "returncode": 2,
+        "schema_version": 1
       },
-      "next_action": "Fix transfer apply errors before continuing.",
-      "result_status": "FAIL",
-      "returncode": 1,
+      "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+      "result_status": "BLOCKED",
+      "returncode": 2,
       "schema_version": 1,
       "state": {
         "branch": "main",
-        "capabilities": {
-          "closeout_last_run": false,
-          "diagnose": true,
-          "refresh_rules": true,
-          "rules_confirmed": true,
-          "run_next_command": false
+        "dirty_state": {
+          "clean": true,
+          "staged_changes": [],
+          "status_short": "",
+          "unstaged_changes": [],
+          "untracked_files": []
         },
-        "closeout": {
-          "dirty_worktree": true,
-          "pending_transfer_order": true
-        },
-        "created_at": "2026-06-04T08:29:38.144326+00:00",
-        "head": "de24109",
-        "last_result": {
-          "exists": true,
-          "report_path": "docs/reports/command_runs/post-pr1082-post-merge-check.md"
-        },
-        "next_action": "Review or clean the worktree before running another transfer action.",
+        "head": "2744b2a",
+        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
         "primary_state": "BLOCKED",
         "reasons": [
-          "dirty_worktree"
+          "invalid_transfer_order"
         ],
-        "repo": "vfi64/agentic-project-kit",
-        "rule_acknowledgement": {
-          "decision": {
-            "blocking_reasons": [],
-            "fail_closed": false,
-            "is_confirmed": true,
-            "schema_version": 1
-          },
-          "path": ".agentic/rule_ack/current.json",
-          "present": true
-        },
-        "rule_snapshot": {
-          "fail_closed": false,
-          "is_valid": true,
-          "schema_version": 1,
-          "snapshot_id": "c43eda07cb5967b0c3ff80fb7d42085de72d05a95cffa035d48d3e52310ec0ff",
-          "source_digests": [
-            {
-              "path": ".agentic/compiled_agent_context.yaml",
-              "sha256": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
-              "size_bytes": 8483
-            },
-            {
-              "path": ".agentic/handoff_state.yaml",
-              "sha256": "4c81aeb84de48c67047f2cda55f04db1a01c8307eea77631cd18d29088f20978",
-              "size_bytes": 19965
-            },
-            {
-              "path": ".agentic/rule_mechanism_inventory.yaml",
-              "sha256": "eeddfb7fd51a0e9764784dfbb9f532b204497156488ab1b55b3eb4e3a4ae2850",
-              "size_bytes": 14084
-            },
-            {
-              "path": ".agentic/rule_migrations.yaml",
-              "sha256": "7e47b41dc5a2de80a80a51caac132974c44a747e9ae7f1f4d8813eae7e0b58ef",
-              "size_bytes": 5765
-            },
-            {
-              "path": ".agentic/rule_preservation.yaml",
-              "sha256": "817319e295674992e6665df25778b5c9cb767d1e393e5402df708d52ec79ff39",
-              "size_bytes": 1688
-            },
-            {
-              "path": "docs/STATUS.md",
-              "sha256": "a53c7c202bf490130dae4ddc40e46683bafcb02b2a57eaedc98eb72ef27b5b28",
-              "size_bytes": 25663
-            },
-            {
-              "path": "docs/handoff/CURRENT_HANDOFF.md",
-              "sha256": "f7c4bf4b09c57d37b3610d0b260076fa872272083c3b6081dcfd85092ec4f1d0",
-              "size_bytes": 24329
-            },
-            {
-              "path": "docs/handoff/START_NEW_CHAT_PROMPT.md",
-              "sha256": "6a44261a68eddfca368e8f310ee423498186adc891ec4656b3474df743311473",
-              "size_bytes": 4388
-            },
-            {
-              "path": "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-              "sha256": "0334ccd565e2f154c09739f48cab1b3e380c0081963c92796d5e790e80023a6f",
-              "size_bytes": 4758
-            },
-            {
-              "path": "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-              "sha256": "f3a22adca9ec4e30fdbfedca8ef030be25da63df1159a34d7ebdf0f7b23c2ba6",
-              "size_bytes": 10976
-            },
-            {
-              "path": "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-              "sha256": "2f2ff37428d0c1bc2e9d816abdcaca345cab4e4931a39da05e13afeb9638c680",
-              "size_bytes": 8308
-            },
-            {
-              "path": "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-              "sha256": "3bb7492c9afc41eac24a268bab367e2a3781ec57899691f6f19e34f460fa0801",
-              "size_bytes": 5625
-            },
-            {
-              "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-              "sha256": "65e557eaabe9fabbc20da721fc00798d4625d726fe52b0f7806e85322a3a3979",
-              "size_bytes": 7410
-            },
-            {
-              "path": "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
-              "sha256": "8da278556b422111087997253ac60ec3723872f7bf45c07564c4a6f16304f452",
-              "size_bytes": 8414
-            },
-            {
-              "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-              "sha256": "e622d208cb98eaec09d23790b200636e2093a007e7edb72d0327a91691ab337f",
-              "size_bytes": 24207
-            },
-            {
-              "path": "docs/TEST_GATES.md",
-              "sha256": "802d896337e268faa5af9ba81c50b9fe6f8dd475d4172756753b6828e5531023",
-              "size_bytes": 32142
-            },
-            {
-              "path": "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md",
-              "sha256": "39468ae932293745ac6b8838d8b2c5a17da42d293f3bd704551e991a7fd3ca1b",
-              "size_bytes": 4445
-            }
-          ],
-          "sources_total": 17,
-          "validation": {
-            "blocking_reasons": [],
-            "fail_closed": false,
-            "handoff_state_errors": [],
-            "is_valid": true,
-            "missing_required_paths": [],
-            "schema_version": 1,
-            "source_paths": [
-              ".agentic/compiled_agent_context.yaml",
-              ".agentic/handoff_state.yaml",
-              ".agentic/rule_mechanism_inventory.yaml",
-              ".agentic/rule_migrations.yaml",
-              ".agentic/rule_preservation.yaml",
-              "docs/STATUS.md",
-              "docs/handoff/CURRENT_HANDOFF.md",
-              "docs/handoff/START_NEW_CHAT_PROMPT.md",
-              "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-              "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-              "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-              "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-              "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-              "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
-              "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-              "docs/TEST_GATES.md",
-              "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md"
-            ],
-            "sources_total": 17,
-            "yaml_parse_error_paths": []
-          }
-        },
         "schema_version": 1
       },
-      "transfer_id": "post-pr1082-post-merge-check"
+      "transfer_id": "remote-next-blocked"
     },
-    "next_action": "Fix transfer apply errors before continuing.",
+    "next_action": "Inspect the published remote-next diagnostic report before retrying.",
     "post_report_actions": {
       "attempted": true,
       "schema_version": 1,
@@ -243,95 +68,21 @@ NEXT=Fix transfer apply errors before continuing.
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "de24109",
-      "order_sync": {
-        "attempted": true,
-        "current_branch": "docs/post-pr1081-handoff-refresh",
-        "final_head": "186722c",
-        "head": "186722c",
-        "schema_version": 1,
-        "steps": [
-          {
-            "argv": [
-              "git",
-              "fetch",
-              "origin",
-              "docs/post-pr1081-handoff-refresh"
-            ],
-            "name": "git_fetch_current_branch",
-            "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            docs/post-pr1081-handoff-refresh -> FETCH_HEAD",
-            "stdout": ""
-          },
-          {
-            "argv": [
-              "git",
-              "pull",
-              "--ff-only",
-              "origin",
-              "docs/post-pr1081-handoff-refresh"
-            ],
-            "name": "git_pull_current_branch",
-            "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            docs/post-pr1081-handoff-refresh -> FETCH_HEAD",
-            "stdout": "Already up to date."
-          }
-        ]
-      },
-      "owned_report_artifact_recovery": {
-        "actions": [
-          {
-            "argv": [
-              "git",
-              "restore",
-              "--staged",
-              "--worktree",
-              "--",
-              "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
-            ],
-            "name": "restore_tracked_owned_report_artifacts",
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          },
-          {
-            "name": "remove_untracked_owned_report_artifact",
-            "path": "docs/reports/command_runs/post-pr1081-admin-refresh.md",
-            "returncode": 0
-          }
-        ],
-        "attempted": true,
-        "current_order_report": "docs/reports/command_runs/post-pr1081-admin-refresh.md",
-        "final_status_short": "",
-        "foreign_dirty_paths": [],
-        "owned_report_artifacts": [
-          "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
-          "docs/reports/command_runs/post-pr1081-admin-refresh.md"
-        ],
-        "schema_version": 1
-      },
-      "remote_tracking": "origin/main",
-      "rule_ack_refresh_before_transfer": {
-        "argv": [
-          "./.venv/bin/agentic-kit",
-          "rules",
-          "acknowledge"
-        ],
-        "returncode": 0,
-        "stderr": "",
-        "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=c43eda07cb5967b0c3ff80fb7d42085de72d05a95cffa035d48d3e52310ec0ff\nrepo_head=de24109\ndeclared_next_allowed_action=run_next_command"
-      }
+      "head": "2744b2a",
+      "remote_tracking": "origin/main"
     },
-    "primary_state": "FAIL",
+    "primary_state": "BLOCKED",
     "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "reasons": [],
+    "reasons": [
+      "invalid_transfer_order"
+    ],
     "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
-    "result_status": "FAIL",
-    "returncode": 1,
+    "result_status": "BLOCKED",
+    "returncode": 2,
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "de24109",
+      "head": "2744b2a",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -638,11 +389,11 @@ NEXT=Fix transfer apply errors before continuing.
     ],
     "repo_state": {
       "branch": "main",
-      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/post-pr1082-post-merge-check.md",
-      "head": "de24109158b59e42b141f56c35a17f2b78300050",
+      "dirty_status": "",
+      "head": "2744b2af727705c2709bc7c3f99c8b2b7c8433b7",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "de24109158b59e42b141f56c35a17f2b78300050"
+      "upstream_head": "2744b2af727705c2709bc7c3f99c8b2b7c8433b7"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -670,222 +421,47 @@ NEXT=Fix transfer apply errors before continuing.
   },
   "remote_next_report": {
     "artifact_type": "transfer_remote_next_execution_report",
-    "blocked_message": "",
-    "branch": "main",
+    "blocked_message": "transfer order must define a non-empty branch: .agentic/transfer/inbox/current.yaml",
+    "branch": null,
     "chat_reply": "g",
-    "head": "de24109",
+    "head": "2744b2a",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
-      "apply": {
-        "action_results": [
-          {
-            "command": [
-              "./.venv/bin/agentic-kit",
-              "transfer",
-              "post-merge-check"
-            ],
-            "returncode": 1,
-            "stderr": "",
-            "stdout": "{\n  \"action\": \"post-merge-check\",\n  \"command\": [\n    \"/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/agentic-kit\",\n    \"handoff\",\n    \"post-merge-refresh-status\"\n  ],\n  \"next_action\": \"Inspect handoff refresh status failure before product work.\",\n  \"result_status\": \"FAIL\",\n  \"returncode\": 1,\n  \"stderr\": \"\",\n  \"stdout\": \"POST_MERGE_HANDOFF_REFRESH\\ncurrent_head=de24109\\nfreshness_warning_present=True\\nrefresh_required=True\\nlatest_successor_prompt=docs/reports/terminal/post-pr1011-successor-chat-handoff.md\\nresult=REFRESH_REQUIRED\\nnext_safe_action=create_administrative_handoff_refresh\\n\"\n}\nFINAL_SIGNAL=f\nFINAL_NEXT=Inspect handoff refresh status failure before product work.\nCHAT_REPLY=f | NEXT=Inspect handoff refresh status failure before product work.\n",
-            "type": "run_command"
-          }
-        ],
-        "message": "Transfer command action failed.",
-        "report_path": "docs/reports/command_runs/post-pr1082-post-merge-check.md",
-        "result_status": "FAIL",
-        "returncode": 1,
-        "safety": "Bounded administrative post-merge lifecycle check after PR1082. No product work.",
-        "schema_version": 1,
-        "transfer_id": "post-pr1082-post-merge-check"
-      },
+      "apply": null,
       "inspect": {
-        "action_results": [
-          {
-            "command": [
-              "./.venv/bin/agentic-kit",
-              "transfer",
-              "post-merge-check"
-            ],
-            "type": "run_command",
-            "would_run": true
-          }
+        "message": "transfer order must define a non-empty branch: .agentic/transfer/inbox/current.yaml",
+        "reasons": [
+          "invalid_transfer_order"
         ],
-        "message": "Transfer order inspected. Re-run apply to write files or run commands.",
-        "report_path": "docs/reports/command_runs/post-pr1082-post-merge-check.md",
-        "result_status": "PENDING",
-        "returncode": 0,
-        "safety": "Bounded administrative post-merge lifecycle check after PR1082. No product work.",
-        "schema_version": 1,
-        "transfer_id": "post-pr1082-post-merge-check"
+        "result_status": "BLOCKED",
+        "returncode": 2,
+        "schema_version": 1
       },
-      "next_action": "Fix transfer apply errors before continuing.",
-      "result_status": "FAIL",
-      "returncode": 1,
+      "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+      "result_status": "BLOCKED",
+      "returncode": 2,
       "schema_version": 1,
       "state": {
         "branch": "main",
-        "capabilities": {
-          "closeout_last_run": false,
-          "diagnose": true,
-          "refresh_rules": true,
-          "rules_confirmed": true,
-          "run_next_command": false
+        "dirty_state": {
+          "clean": true,
+          "staged_changes": [],
+          "status_short": "",
+          "unstaged_changes": [],
+          "untracked_files": []
         },
-        "closeout": {
-          "dirty_worktree": true,
-          "pending_transfer_order": true
-        },
-        "created_at": "2026-06-04T08:29:38.144326+00:00",
-        "head": "de24109",
-        "last_result": {
-          "exists": true,
-          "report_path": "docs/reports/command_runs/post-pr1082-post-merge-check.md"
-        },
-        "next_action": "Review or clean the worktree before running another transfer action.",
+        "head": "2744b2a",
+        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
         "primary_state": "BLOCKED",
         "reasons": [
-          "dirty_worktree"
+          "invalid_transfer_order"
         ],
-        "repo": "vfi64/agentic-project-kit",
-        "rule_acknowledgement": {
-          "decision": {
-            "blocking_reasons": [],
-            "fail_closed": false,
-            "is_confirmed": true,
-            "schema_version": 1
-          },
-          "path": ".agentic/rule_ack/current.json",
-          "present": true
-        },
-        "rule_snapshot": {
-          "fail_closed": false,
-          "is_valid": true,
-          "schema_version": 1,
-          "snapshot_id": "c43eda07cb5967b0c3ff80fb7d42085de72d05a95cffa035d48d3e52310ec0ff",
-          "source_digests": [
-            {
-              "path": ".agentic/compiled_agent_context.yaml",
-              "sha256": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
-              "size_bytes": 8483
-            },
-            {
-              "path": ".agentic/handoff_state.yaml",
-              "sha256": "4c81aeb84de48c67047f2cda55f04db1a01c8307eea77631cd18d29088f20978",
-              "size_bytes": 19965
-            },
-            {
-              "path": ".agentic/rule_mechanism_inventory.yaml",
-              "sha256": "eeddfb7fd51a0e9764784dfbb9f532b204497156488ab1b55b3eb4e3a4ae2850",
-              "size_bytes": 14084
-            },
-            {
-              "path": ".agentic/rule_migrations.yaml",
-              "sha256": "7e47b41dc5a2de80a80a51caac132974c44a747e9ae7f1f4d8813eae7e0b58ef",
-              "size_bytes": 5765
-            },
-            {
-              "path": ".agentic/rule_preservation.yaml",
-              "sha256": "817319e295674992e6665df25778b5c9cb767d1e393e5402df708d52ec79ff39",
-              "size_bytes": 1688
-            },
-            {
-              "path": "docs/STATUS.md",
-              "sha256": "a53c7c202bf490130dae4ddc40e46683bafcb02b2a57eaedc98eb72ef27b5b28",
-              "size_bytes": 25663
-            },
-            {
-              "path": "docs/handoff/CURRENT_HANDOFF.md",
-              "sha256": "f7c4bf4b09c57d37b3610d0b260076fa872272083c3b6081dcfd85092ec4f1d0",
-              "size_bytes": 24329
-            },
-            {
-              "path": "docs/handoff/START_NEW_CHAT_PROMPT.md",
-              "sha256": "6a44261a68eddfca368e8f310ee423498186adc891ec4656b3474df743311473",
-              "size_bytes": 4388
-            },
-            {
-              "path": "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-              "sha256": "0334ccd565e2f154c09739f48cab1b3e380c0081963c92796d5e790e80023a6f",
-              "size_bytes": 4758
-            },
-            {
-              "path": "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-              "sha256": "f3a22adca9ec4e30fdbfedca8ef030be25da63df1159a34d7ebdf0f7b23c2ba6",
-              "size_bytes": 10976
-            },
-            {
-              "path": "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-              "sha256": "2f2ff37428d0c1bc2e9d816abdcaca345cab4e4931a39da05e13afeb9638c680",
-              "size_bytes": 8308
-            },
-            {
-              "path": "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-              "sha256": "3bb7492c9afc41eac24a268bab367e2a3781ec57899691f6f19e34f460fa0801",
-              "size_bytes": 5625
-            },
-            {
-              "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-              "sha256": "65e557eaabe9fabbc20da721fc00798d4625d726fe52b0f7806e85322a3a3979",
-              "size_bytes": 7410
-            },
-            {
-              "path": "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
-              "sha256": "8da278556b422111087997253ac60ec3723872f7bf45c07564c4a6f16304f452",
-              "size_bytes": 8414
-            },
-            {
-              "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-              "sha256": "e622d208cb98eaec09d23790b200636e2093a007e7edb72d0327a91691ab337f",
-              "size_bytes": 24207
-            },
-            {
-              "path": "docs/TEST_GATES.md",
-              "sha256": "802d896337e268faa5af9ba81c50b9fe6f8dd475d4172756753b6828e5531023",
-              "size_bytes": 32142
-            },
-            {
-              "path": "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md",
-              "sha256": "39468ae932293745ac6b8838d8b2c5a17da42d293f3bd704551e991a7fd3ca1b",
-              "size_bytes": 4445
-            }
-          ],
-          "sources_total": 17,
-          "validation": {
-            "blocking_reasons": [],
-            "fail_closed": false,
-            "handoff_state_errors": [],
-            "is_valid": true,
-            "missing_required_paths": [],
-            "schema_version": 1,
-            "source_paths": [
-              ".agentic/compiled_agent_context.yaml",
-              ".agentic/handoff_state.yaml",
-              ".agentic/rule_mechanism_inventory.yaml",
-              ".agentic/rule_migrations.yaml",
-              ".agentic/rule_preservation.yaml",
-              "docs/STATUS.md",
-              "docs/handoff/CURRENT_HANDOFF.md",
-              "docs/handoff/START_NEW_CHAT_PROMPT.md",
-              "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-              "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-              "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-              "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-              "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-              "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
-              "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-              "docs/TEST_GATES.md",
-              "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md"
-            ],
-            "sources_total": 17,
-            "yaml_parse_error_paths": []
-          }
-        },
         "schema_version": 1
       },
-      "transfer_id": "post-pr1082-post-merge-check"
+      "transfer_id": "remote-next-blocked"
     },
-    "next_action": "Fix transfer apply errors before continuing.",
+    "next_action": "Inspect the published remote-next diagnostic report before retrying.",
     "post_report_actions": {
       "attempted": true,
       "schema_version": 1,
@@ -900,95 +476,21 @@ NEXT=Fix transfer apply errors before continuing.
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "de24109",
-      "order_sync": {
-        "attempted": true,
-        "current_branch": "docs/post-pr1081-handoff-refresh",
-        "final_head": "186722c",
-        "head": "186722c",
-        "schema_version": 1,
-        "steps": [
-          {
-            "argv": [
-              "git",
-              "fetch",
-              "origin",
-              "docs/post-pr1081-handoff-refresh"
-            ],
-            "name": "git_fetch_current_branch",
-            "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            docs/post-pr1081-handoff-refresh -> FETCH_HEAD",
-            "stdout": ""
-          },
-          {
-            "argv": [
-              "git",
-              "pull",
-              "--ff-only",
-              "origin",
-              "docs/post-pr1081-handoff-refresh"
-            ],
-            "name": "git_pull_current_branch",
-            "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            docs/post-pr1081-handoff-refresh -> FETCH_HEAD",
-            "stdout": "Already up to date."
-          }
-        ]
-      },
-      "owned_report_artifact_recovery": {
-        "actions": [
-          {
-            "argv": [
-              "git",
-              "restore",
-              "--staged",
-              "--worktree",
-              "--",
-              "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
-            ],
-            "name": "restore_tracked_owned_report_artifacts",
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          },
-          {
-            "name": "remove_untracked_owned_report_artifact",
-            "path": "docs/reports/command_runs/post-pr1081-admin-refresh.md",
-            "returncode": 0
-          }
-        ],
-        "attempted": true,
-        "current_order_report": "docs/reports/command_runs/post-pr1081-admin-refresh.md",
-        "final_status_short": "",
-        "foreign_dirty_paths": [],
-        "owned_report_artifacts": [
-          "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
-          "docs/reports/command_runs/post-pr1081-admin-refresh.md"
-        ],
-        "schema_version": 1
-      },
-      "remote_tracking": "origin/main",
-      "rule_ack_refresh_before_transfer": {
-        "argv": [
-          "./.venv/bin/agentic-kit",
-          "rules",
-          "acknowledge"
-        ],
-        "returncode": 0,
-        "stderr": "",
-        "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=c43eda07cb5967b0c3ff80fb7d42085de72d05a95cffa035d48d3e52310ec0ff\nrepo_head=de24109\ndeclared_next_allowed_action=run_next_command"
-      }
+      "head": "2744b2a",
+      "remote_tracking": "origin/main"
     },
-    "primary_state": "FAIL",
+    "primary_state": "BLOCKED",
     "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "reasons": [],
+    "reasons": [
+      "invalid_transfer_order"
+    ],
     "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
-    "result_status": "FAIL",
-    "returncode": 1,
+    "result_status": "BLOCKED",
+    "returncode": 2,
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "de24109",
+      "head": "2744b2a",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -1295,11 +797,11 @@ NEXT=Fix transfer apply errors before continuing.
     ],
     "repo_state": {
       "branch": "main",
-      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/post-pr1082-post-merge-check.md",
-      "head": "de24109158b59e42b141f56c35a17f2b78300050",
+      "dirty_status": "",
+      "head": "2744b2af727705c2709bc7c3f99c8b2b7c8433b7",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "de24109158b59e42b141f56c35a17f2b78300050"
+      "upstream_head": "2744b2af727705c2709bc7c3f99c8b2b7c8433b7"
     },
     "schema_version": 1,
     "terminal_block_rules": {
