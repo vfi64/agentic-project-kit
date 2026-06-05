@@ -590,6 +590,8 @@ def _attempt_report_commit_ack_push(root: Path, *, branch: str | None, paths: tu
         ack = _refresh_rule_ack(root)
         steps.append({"name": "rules_acknowledge_after_report_commit", **ack.as_json_data()})
         actions["rule_ack_refreshed_after_commit"] = ack.returncode == 0
+        post_ack_head = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
+        actions["rule_ack_after_report_commit"] = _rule_ack_snapshot(root, repo_head=post_ack_head).as_json_data()
     push = _command(["git", "push", "origin", branch], root) if branch else _command(["git", "push"], root)
     steps.append({"name": "git_push_report_commit", **push.as_json_data()})
     actions["pushed"] = push.returncode == 0
