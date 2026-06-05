@@ -1,7 +1,8 @@
 # Post-Merge Lifecycle State Model
 
 Status-date: 2026-06-04
-Status: active implementation slice
+Status: active
+Decision status: proposed
 Project: agentic-project-kit
 
 ## Purpose
