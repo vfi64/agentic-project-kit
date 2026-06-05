@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: e824dc2
-  commit_subject: Guard remote-next against stale transfer orders (#1100)
+  commit: 1b26ebc
+  commit_subject: Report remote-next no-current order as new order required (#1103)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
