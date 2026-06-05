@@ -21,6 +21,10 @@ def _final_signal(result) -> str:
     return "d" if result.result_status == "PASS" and result.returncode == 0 else "f"
 
 
+def _chat_reply(signal: str, next_action: str) -> str:
+    return f"{signal} | NEXT={next_action}"
+
+
 def _report_label(after_pr: int) -> str:
     return safe_transfer_report_label(f"post-merge-complete-after-pr{after_pr}")
 
@@ -70,7 +74,7 @@ def write_post_merge_complete_report(result, *, after_pr: int, cwd: Path | None 
         ],
         "returncode": result.returncode,
         "final_signal": signal,
-        "chat_reply": "d | NEXT=Run transfer publish-last-report",
+        "chat_reply": _chat_reply(signal, result.next_action),
         "next_action": result.next_action,
         "latest_log_path": str(LATEST_LOG),
         "latest_json_path": str(LATEST_JSON),
@@ -145,10 +149,9 @@ def render_post_merge_complete_result(
         [
             f"FINAL_SIGNAL={signal}",
             f"FINAL_NEXT={next_action}",
+            f"CHAT_REPLY={_chat_reply(signal, next_action)}",
         ]
     )
-    if published_report is not None:
-        lines.append(f"CHAT_REPLY={published_report['chat_reply']}")
     return "\n".join(lines)
 
 
@@ -222,6 +225,7 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
                 payload["transfer_report"] = local_report
                 payload["transfer_upload"] = "blocked"
                 payload["transfer_upload_error"] = str(exc)
+                payload["chat_reply"] = _chat_reply("f", f"Inspect upload blocker: {exc}")
                 typer.echo(json.dumps(payload, indent=2, sort_keys=True))
             else:
                 typer.echo(
@@ -237,6 +241,7 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
             payload = result.as_json_data()
             payload["transfer_report"] = local_report
             payload["published_transfer_report"] = published_report
+            payload["chat_reply"] = _chat_reply(_final_signal(result), result.next_action)
             typer.echo(json.dumps(payload, indent=2, sort_keys=True))
         else:
             typer.echo(
