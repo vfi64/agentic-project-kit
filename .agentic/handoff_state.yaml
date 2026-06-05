@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 6d7f8c6
-  commit_subject: Show final rule ack after remote-next report commit (#1105)
+  commit: ac4dfbf
+  commit_subject: Report remote-next order lifecycle states (#1107)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
