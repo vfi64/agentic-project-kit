@@ -44,12 +44,12 @@ _NOOP = "result=NOOP"
 
 def _post_merge_state(result: RepoActionResult) -> str:
     output = f"{result.stdout}\n{result.stderr}"
-    if result.returncode != 0 or result.result_status != "PASS":
-        return "CHECK_FAILED"
     if _NOOP in output:
         return "NOOP"
     if _REFRESH_REQUIRED in output:
         return "REFRESH_REQUIRED"
+    if result.returncode != 0 or result.result_status != "PASS":
+        return "CHECK_FAILED"
     return "UNKNOWN"
 
 

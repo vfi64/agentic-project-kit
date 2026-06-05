@@ -39,6 +39,46 @@ def test_post_merge_complete_noop_stops_without_refresh(monkeypatch):
     assert calls == ["post_merge_check"]
 
 
+def test_post_merge_complete_treats_refresh_required_output_as_lifecycle_state_even_on_nonzero_returncode(monkeypatch):
+    post_merge_outputs = iter(
+        [
+            "POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n",
+            "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n",
+        ]
+    )
+
+    def fake_post_merge_check(**_kwargs):
+        return _result(
+            "post-merge-check",
+            next(post_merge_outputs),
+            returncode=1,
+        )
+
+    monkeypatch.setattr(f"{TARGET}.post_merge_check", fake_post_merge_check)
+    monkeypatch.setattr(
+        f"{TARGET}.admin_refresh_pr",
+        lambda _after_pr, **_kwargs: _result(
+            "admin-refresh-pr",
+            "existing_pr=1092\n",
+        ),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.pr_wait_ci",
+        lambda _pr_number, **_kwargs: _result("pr-wait-ci", "ci green\n"),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.pr_merge_safe",
+        lambda _pr_number, **_kwargs: _result("pr-merge-safe", "merged\n"),
+    )
+
+    result = post_merge_complete(1084)
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert result.lifecycle_state == "COMPLETE"
+    assert result.refresh_pr == 1092
+
+
 def test_post_merge_complete_refresh_required_completes_after_one_refresh(monkeypatch):
     post_merge_outputs = iter(
         [
