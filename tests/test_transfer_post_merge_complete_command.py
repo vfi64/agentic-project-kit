@@ -45,12 +45,14 @@ def test_write_post_merge_complete_report_writes_latest_and_timestamped_reports(
     assert report["artifact_type"] == "post_merge_complete_transfer_report"
     assert report["transfer_report_written"] == "done"
     assert report["final_signal"] == "d"
+    assert report["chat_reply"] == "d | NEXT=Post-merge lifecycle is complete after admin refresh."
     assert report["remote_report_path"].startswith("docs/reports/transfer_runs/")
     assert (tmp_path / LATEST_JSON).exists()
     assert (tmp_path / LATEST_LOG).exists()
     assert (tmp_path / str(report["remote_report_path"])).exists()
     latest = json.loads((tmp_path / LATEST_JSON).read_text(encoding="utf-8"))
     assert latest["post_merge_complete"]["lifecycle_state"] == "COMPLETE"
+    assert latest["chat_reply"] == "d | NEXT=Post-merge lifecycle is complete after admin refresh."
     assert "TRANSFER_POST_MERGE_COMPLETE" in (tmp_path / LATEST_LOG).read_text(encoding="utf-8")
 
 
@@ -77,7 +79,7 @@ def test_render_post_merge_complete_result_includes_report_and_upload_fields():
     assert "REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/20260605T000000Z-post-merge-complete.json" in rendered
     assert "LATEST_REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json" in rendered
     assert "FINAL_SIGNAL=d" in rendered
-    assert rendered.splitlines()[-1] == "CHAT_REPLY=g"
+    assert rendered.splitlines()[-1] == "CHAT_REPLY=d | NEXT=Post-merge lifecycle is complete after admin refresh."
 
 
 def test_render_post_merge_complete_result_marks_upload_error_as_blocked():
@@ -97,6 +99,7 @@ def test_render_post_merge_complete_result_marks_upload_error_as_blocked():
     assert "REMOTE_REPORT=" in rendered
     assert "UPLOAD_ERROR=latest transfer report is not valid JSON" in rendered
     assert "FINAL_SIGNAL=f" in rendered
+    assert rendered.splitlines()[-1] == "CHAT_REPLY=f | NEXT=Post-merge lifecycle is complete after admin refresh."
 
 
 def test_post_merge_complete_cli_writes_and_publishes_report(tmp_path, monkeypatch):
@@ -111,6 +114,8 @@ def test_post_merge_complete_cli_writes_and_publishes_report(tmp_path, monkeypat
     assert "REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/" in result.stdout
     assert "LATEST_REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json" in result.stdout
     assert "FINAL_SIGNAL=d" in result.stdout
+    assert "CHAT_REPLY=d | NEXT=Post-merge lifecycle is complete after admin refresh." in result.stdout
+    assert "CHAT_REPLY=g" not in result.stdout
     assert (tmp_path / "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json").exists()
 
 
@@ -130,3 +135,4 @@ def test_post_merge_complete_cli_reports_publish_blocker(tmp_path, monkeypatch):
     assert "TRANSFER_UPLOAD=blocked" in result.stdout
     assert "UPLOAD_ERROR=broken publish" in result.stdout
     assert "FINAL_SIGNAL=f" in result.stdout
+    assert "CHAT_REPLY=f | NEXT=Post-merge lifecycle is complete after admin refresh." in result.stdout
