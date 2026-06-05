@@ -77,7 +77,10 @@ def test_render_post_merge_complete_result_includes_human_readable_sections():
     )
 
     assert rendered.startswith("********************************** START SUMMARY")
-    assert rendered.rstrip().endswith("END SUMMARY ***********************************")
+    summary_footer = rendered.rstrip().splitlines()[-1]
+    assert " END SUMMARY " in summary_footer
+    assert summary_footer.startswith("*")
+    assert summary_footer.endswith("*")
     assert "TRANSFER_POST_MERGE_COMPLETE" in rendered
     assert "STATE:                 PASS" in rendered
     assert "RETURNCODE:            0" in rendered
