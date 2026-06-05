@@ -18,6 +18,15 @@ def _result(action: str, stdout: str, *, returncode: int = 0) -> RepoActionResul
     )
 
 
+def _patch_successful_pull(monkeypatch, calls: list[str] | None = None) -> None:
+    def fake_pull_current(**_kwargs):
+        if calls is not None:
+            calls.append("pull_current")
+        return _result("pull-current", "Already up to date.\n")
+
+    monkeypatch.setattr(f"{TARGET}.pull_current", fake_pull_current)
+
+
 def test_post_merge_complete_noop_stops_without_refresh(monkeypatch):
     calls: list[str] = []
 
@@ -46,8 +55,11 @@ def test_post_merge_complete_treats_refresh_required_output_as_lifecycle_state_e
             "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n",
         ]
     )
+    calls: list[str] = []
+    _patch_successful_pull(monkeypatch, calls)
 
     def fake_post_merge_check(**_kwargs):
+        calls.append("post_merge_check")
         return _result(
             "post-merge-check",
             next(post_merge_outputs),
@@ -77,6 +89,7 @@ def test_post_merge_complete_treats_refresh_required_output_as_lifecycle_state_e
     assert result.returncode == 0
     assert result.lifecycle_state == "COMPLETE"
     assert result.refresh_pr == 1092
+    assert calls == ["post_merge_check", "pull_current", "post_merge_check"]
 
 
 def test_post_merge_complete_refresh_required_completes_after_one_refresh(monkeypatch):
@@ -87,6 +100,7 @@ def test_post_merge_complete_refresh_required_completes_after_one_refresh(monkey
         ]
     )
     calls: list[str] = []
+    _patch_successful_pull(monkeypatch, calls)
 
     def fake_post_merge_check(**_kwargs):
         calls.append("post_merge_check")
@@ -124,6 +138,7 @@ def test_post_merge_complete_refresh_required_completes_after_one_refresh(monkey
         "admin-refresh-pr",
         "admin-refresh-pr-wait-ci",
         "admin-refresh-pr-merge-safe",
+        "final-main-sync",
         "final-post-merge-check",
     ]
     assert calls == [
@@ -131,6 +146,7 @@ def test_post_merge_complete_refresh_required_completes_after_one_refresh(monkey
         "admin_refresh_pr:1083",
         "pr_wait_ci:1090",
         "pr_merge_safe:1090",
+        "pull_current",
         "post_merge_check",
     ]
 
@@ -143,6 +159,7 @@ def test_post_merge_complete_recovers_when_merge_step_blocks_but_final_check_is_
         ]
     )
     calls: list[str] = []
+    _patch_successful_pull(monkeypatch, calls)
 
     def fake_post_merge_check(**_kwargs):
         calls.append("post_merge_check")
@@ -178,10 +195,45 @@ def test_post_merge_complete_recovers_when_merge_step_blocks_but_final_check_is_
         "admin-refresh-pr",
         "admin-refresh-pr-wait-ci",
         "admin-refresh-pr-merge-safe",
+        "merge-block-recovery-main-sync",
         "merge-block-recovery-post-merge-check",
     ]
     assert "recovery" in result.next_action
-    assert calls == ["post_merge_check", "post_merge_check"]
+    assert calls == ["post_merge_check", "pull_current", "post_merge_check"]
+
+
+def test_post_merge_complete_blocks_when_final_main_sync_fails(monkeypatch):
+    def fake_pull_current(**_kwargs):
+        return _result("pull-current", "fast-forward rejected\n", returncode=1)
+
+    monkeypatch.setattr(
+        f"{TARGET}.post_merge_check",
+        lambda **_kwargs: _result(
+            "post-merge-check",
+            "POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n",
+        ),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.admin_refresh_pr",
+        lambda _after_pr, **_kwargs: _result("admin-refresh-pr", "existing_pr=1086\n"),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.pr_wait_ci",
+        lambda _pr_number, **_kwargs: _result("pr-wait-ci", "ci green\n"),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.pr_merge_safe",
+        lambda _pr_number, **_kwargs: _result("pr-merge-safe", "merged\n"),
+    )
+    monkeypatch.setattr(f"{TARGET}.pull_current", fake_pull_current)
+
+    result = post_merge_complete(1084)
+
+    assert result.result_status == "BLOCKED"
+    assert result.returncode == 2
+    assert result.lifecycle_state == "FINAL_MAIN_SYNC_BLOCKED"
+    assert result.refresh_pr == 1086
+    assert [step.name for step in result.steps][-1] == "final-main-sync"
 
 
 def test_post_merge_complete_does_not_hide_merge_block_when_recovery_check_fails(monkeypatch):
@@ -191,6 +243,7 @@ def test_post_merge_complete_does_not_hide_merge_block_when_recovery_check_fails
             "POST_MERGE_HANDOFF_REFRESH\nresult=STRANGE\n",
         ]
     )
+    _patch_successful_pull(monkeypatch)
 
     monkeypatch.setattr(
         f"{TARGET}.post_merge_check",
@@ -220,6 +273,7 @@ def test_post_merge_complete_does_not_hide_merge_block_when_recovery_check_fails
         "admin-refresh-pr",
         "admin-refresh-pr-wait-ci",
         "admin-refresh-pr-merge-safe",
+        "merge-block-recovery-main-sync",
         "merge-block-recovery-post-merge-check",
     ]
 
@@ -231,6 +285,7 @@ def test_post_merge_complete_stops_on_refresh_loop(monkeypatch):
             "POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n",
         ]
     )
+    _patch_successful_pull(monkeypatch)
 
     def fake_post_merge_check(**_kwargs):
         return _result("post-merge-check", next(post_merge_outputs))
@@ -266,6 +321,7 @@ def test_post_merge_complete_stops_on_refresh_loop_after_merge_block_recovery(mo
             "POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n",
         ]
     )
+    _patch_successful_pull(monkeypatch)
 
     monkeypatch.setattr(
         f"{TARGET}.post_merge_check",
