@@ -1,25 +1,6 @@
 schema_version: 1
-id: create-post-merge-complete-pr
-title: Create PR for post-merge-complete transfer command
-branch: main
-safety: Bounded implementation slice for a typed post-merge completion command. Cleans only known transfer/report artifacts before branching; no broad protected-file replacement.
-label: create-post-merge-complete-pr
-allow_blocked_start: true
-report_path: docs/reports/command_runs/create-post-merge-complete-pr.md
-actions:
-- type: run_command
-  command:
-  - ./.venv/bin/python
-  - .agentic/transfer/payloads/create_post_merge_complete_pr.py
-publish_last_report: true
-commit:
-  message: Publish post-merge-complete fix transfer report
-  paths:
-  - docs/reports/command_runs
-  - docs/reports/transfer_runs/latest-remote-next-report.json
-  - docs/reports/transfer_runs/latest-remote-next-report.log
-  - docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
-  - docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log
-push:
-  branch: main
+id: no-current-transfer-order
+title: No current remote-next transfer order
+status: inactive
+reason: Previous remote-next transfer order was stale after post-merge-complete implementation and must not be executed.
 expected_chat_reply: g
