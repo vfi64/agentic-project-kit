@@ -125,10 +125,18 @@ class _CommandResult:
 
 
 class RemoteNextBlocked(RuntimeError):
-    def __init__(self, message: str, *, reasons: tuple[str, ...], branch: str | None = None):
+    def __init__(
+        self,
+        message: str,
+        *,
+        reasons: tuple[str, ...],
+        branch: str | None = None,
+        preflight: dict[str, object] | None = None,
+    ):
         super().__init__(message)
         self.reasons = reasons
         self.branch = branch
+        self.preflight = preflight or {}
 
 
 def _command(argv: list[str], cwd: Path) -> _CommandResult:
@@ -196,6 +204,17 @@ def _git_snapshot(project_root: Path) -> GitSnapshot:
         unstaged_changes=unstaged,
         untracked_files=untracked,
     )
+
+
+def _full_head(project_root: Path) -> str:
+    return _command(["git", "rev-parse", "HEAD"], project_root).stdout.strip()
+
+
+def _head_matches(expected: str, *, short_head: str, full_head: str) -> bool:
+    value = expected.strip()
+    if not value:
+        return True
+    return short_head.startswith(value) or full_head.startswith(value) or value.startswith(short_head)
 
 
 def _rule_ack_snapshot(project_root: Path, *, repo_head: str) -> RuleAckSnapshot:
@@ -324,6 +343,82 @@ def _read_transfer_order_data(path: Path) -> dict[str, Any]:
     if not isinstance(data, dict):
         raise ValueError(f"transfer order must be a mapping: {path}")
     return data
+
+
+def _order_identity(data: dict[str, Any]) -> dict[str, object]:
+    return {
+        "schema_version": 1,
+        "id": data.get("id", ""),
+        "status": data.get("status", ""),
+        "branch": data.get("branch", ""),
+        "expected_current_branch": data.get("expected_current_branch", ""),
+        "expected_current_head": data.get("expected_current_head", ""),
+        "expected_head": data.get("expected_head", ""),
+        "created_for_head": data.get("created_for_head", ""),
+    }
+
+
+def _freshness_anchor(data: dict[str, Any]) -> str:
+    for key in ("expected_current_head", "expected_head", "created_for_head"):
+        value = data.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    return ""
+
+
+def _ensure_transfer_order_is_fresh(root: Path, *, branch: str | None = None) -> dict[str, object]:
+    data = _read_transfer_order_data(root / DEFAULT_INBOX)
+    snapshot = _git_snapshot(root)
+    full_head = _full_head(root)
+    order = _order_identity(data)
+    preflight = {
+        "schema_version": 1,
+        "transfer_order_guard": {
+            **order,
+            "current_branch": snapshot.current_branch,
+            "current_head": snapshot.head,
+            "current_full_head": full_head,
+        },
+    }
+    status = str(data.get("status") or "active").strip().lower()
+    if status in {"inactive", "none", "no-current-order", "no_current_order", "consumed", "superseded", "stale"}:
+        raise RemoteNextBlocked(
+            f"remote-next transfer order is not active: {status}",
+            reasons=("no_current_transfer_order",),
+            branch=branch,
+            preflight=preflight,
+        )
+    if status not in {"active", "pending", "ready"}:
+        raise RemoteNextBlocked(
+            f"remote-next transfer order has unsupported status: {status}",
+            reasons=("invalid_transfer_order_status",),
+            branch=branch,
+            preflight=preflight,
+        )
+    expected_branch = data.get("expected_current_branch")
+    if isinstance(expected_branch, str) and expected_branch.strip() and expected_branch.strip() != snapshot.current_branch:
+        raise RemoteNextBlocked(
+            "remote-next transfer order expected a different current branch",
+            reasons=("stale_transfer_order_branch_mismatch",),
+            branch=branch,
+            preflight=preflight,
+        )
+    anchor = _freshness_anchor(data)
+    if not anchor:
+        raise RemoteNextBlocked(
+            "remote-next transfer order is missing a freshness head anchor",
+            reasons=("stale_order_missing_freshness_anchor",),
+            branch=branch,
+            preflight=preflight,
+        )
+    if not _head_matches(anchor, short_head=snapshot.head, full_head=full_head):
+        raise RemoteNextBlocked(
+            "remote-next transfer order freshness anchor does not match current HEAD",
+            reasons=("stale_transfer_order_head_mismatch",),
+            branch=branch,
+            preflight=preflight,
+        )
+    return preflight["transfer_order_guard"]
 
 
 def resolve_remote_next_branch(project_root: Path, branch: str | None = None, path: Path = DEFAULT_INBOX) -> str:
@@ -518,15 +613,19 @@ def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> Tran
 def _blocked_result(root: Path, exc: Exception, *, branch: str | None = None) -> TransferRemoteNextRun:
     snapshot = _git_snapshot(root)
     ack = _rule_ack_snapshot(root, repo_head=snapshot.head)
+    extra_preflight: dict[str, object] = {}
     if isinstance(exc, RemoteNextBlocked):
         reasons = exc.reasons
         branch = exc.branch or branch
+        extra_preflight = exc.preflight
     elif isinstance(exc, FileNotFoundError):
         reasons = ("missing_transfer_order",)
     elif isinstance(exc, ValueError):
         reasons = ("invalid_transfer_order",)
     else:
         reasons = ("remote_next_blocked",)
+    preflight = snapshot.as_json_data()
+    preflight.update(extra_preflight)
     return _write_remote_next_report(
         root,
         TransferRemoteNextRun(
@@ -539,7 +638,7 @@ def _blocked_result(root: Path, exc: Exception, *, branch: str | None = None) ->
             report_path="",
             published_report_path="",
             reasons=reasons,
-            preflight=snapshot.as_json_data(),
+            preflight=preflight,
             rule_ack=ack,
             blocked_message=str(exc),
         ),
@@ -552,6 +651,14 @@ def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> T
         cleanup = _recover_owned_report_artifacts(root)
         order_sync = _sync_current_branch_before_order(root)
         safe_branch = resolve_remote_next_branch(root, branch)
+        if branch is None:
+            order_guard = _ensure_transfer_order_is_fresh(root, branch=safe_branch)
+        else:
+            order_guard = {
+                "schema_version": 1,
+                "skipped_reason": "explicit_branch_argument",
+                "branch": safe_branch,
+            }
         _ensure_clean(root, branch=safe_branch)
         _run(["git", "fetch", "origin", safe_branch], root)
         _run(["git", "switch", safe_branch], root)
@@ -565,6 +672,7 @@ def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> T
         preflight = _git_snapshot(root).as_json_data()
         preflight["owned_report_artifact_recovery"] = cleanup
         preflight["order_sync"] = order_sync
+        preflight["transfer_order_guard"] = order_guard
         if ack_refresh is not None:
             preflight["rule_ack_refresh_before_transfer"] = ack_refresh
         local_run = run_local_transfer(root)
