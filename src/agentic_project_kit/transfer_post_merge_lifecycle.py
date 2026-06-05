@@ -88,6 +88,83 @@ def _finish(
     )
 
 
+def _finish_after_final_check(
+    *,
+    after_pr: int,
+    refresh_pr: int,
+    steps: list[PostMergeLifecycleStep],
+    final_state: str,
+    recovered_from_merge_block: bool = False,
+) -> PostMergeLifecycleResult:
+    if final_state == "NOOP":
+        if recovered_from_merge_block:
+            next_action = (
+                "Post-merge lifecycle is complete after admin refresh merge recovery; "
+                "publish or inspect the command evidence report."
+            )
+        else:
+            next_action = "Post-merge lifecycle is complete after admin refresh."
+        return _finish(
+            after_pr=after_pr,
+            result_status="PASS",
+            returncode=0,
+            lifecycle_state="COMPLETE",
+            next_action=next_action,
+            steps=steps,
+            refresh_pr=refresh_pr,
+        )
+
+    if final_state == "REFRESH_REQUIRED":
+        return _finish(
+            after_pr=after_pr,
+            result_status="BLOCKED",
+            returncode=2,
+            lifecycle_state="REFRESH_LOOP_DETECTED",
+            next_action=(
+                "Stop: REFRESH_REQUIRED persisted after one admin refresh; "
+                "diagnose refresh loop before creating another refresh PR."
+            ),
+            steps=steps,
+            refresh_pr=refresh_pr,
+            refresh_loop_detected=True,
+        )
+
+    return _finish(
+        after_pr=after_pr,
+        result_status="BLOCKED",
+        returncode=2,
+        lifecycle_state=final_state,
+        next_action="Inspect final post-merge-check output before continuing.",
+        steps=steps,
+        refresh_pr=refresh_pr,
+    )
+
+
+def _run_final_check(
+    *,
+    after_pr: int,
+    refresh_pr: int,
+    steps: list[PostMergeLifecycleStep],
+    main_branch: str,
+    recovered_from_merge_block: bool = False,
+) -> PostMergeLifecycleResult:
+    final_check = post_merge_check(main_branch=main_branch)
+    step_name = (
+        "merge-block-recovery-post-merge-check"
+        if recovered_from_merge_block
+        else "final-post-merge-check"
+    )
+    steps.append(PostMergeLifecycleStep(step_name, final_check))
+    final_state = _post_merge_state(final_check)
+    return _finish_after_final_check(
+        after_pr=after_pr,
+        refresh_pr=refresh_pr,
+        steps=steps,
+        final_state=final_state,
+        recovered_from_merge_block=recovered_from_merge_block,
+    )
+
+
 def post_merge_complete(
     after_pr: int,
     *,
@@ -193,6 +270,15 @@ def post_merge_complete(
     )
     steps.append(PostMergeLifecycleStep("admin-refresh-pr-merge-safe", refresh_merge))
     if refresh_merge.returncode != 0 or refresh_merge.result_status != "PASS":
+        recovery = _run_final_check(
+            after_pr=after_pr,
+            refresh_pr=refresh_pr,
+            steps=steps,
+            main_branch=main_branch,
+            recovered_from_merge_block=True,
+        )
+        if recovery.lifecycle_state in {"COMPLETE", "REFRESH_LOOP_DETECTED"}:
+            return recovery
         return _finish(
             after_pr=after_pr,
             result_status="BLOCKED",
@@ -203,42 +289,9 @@ def post_merge_complete(
             refresh_pr=refresh_pr,
         )
 
-    final_check = post_merge_check(main_branch=main_branch)
-    steps.append(PostMergeLifecycleStep("final-post-merge-check", final_check))
-    final_state = _post_merge_state(final_check)
-
-    if final_state == "NOOP":
-        return _finish(
-            after_pr=after_pr,
-            result_status="PASS",
-            returncode=0,
-            lifecycle_state="COMPLETE",
-            next_action="Post-merge lifecycle is complete after admin refresh.",
-            steps=steps,
-            refresh_pr=refresh_pr,
-        )
-
-    if final_state == "REFRESH_REQUIRED":
-        return _finish(
-            after_pr=after_pr,
-            result_status="BLOCKED",
-            returncode=2,
-            lifecycle_state="REFRESH_LOOP_DETECTED",
-            next_action=(
-                "Stop: REFRESH_REQUIRED persisted after one admin refresh; "
-                "diagnose refresh loop before creating another refresh PR."
-            ),
-            steps=steps,
-            refresh_pr=refresh_pr,
-            refresh_loop_detected=True,
-        )
-
-    return _finish(
+    return _run_final_check(
         after_pr=after_pr,
-        result_status="BLOCKED",
-        returncode=2,
-        lifecycle_state=final_state,
-        next_action="Inspect final post-merge-check output before continuing.",
-        steps=steps,
         refresh_pr=refresh_pr,
+        steps=steps,
+        main_branch=main_branch,
     )

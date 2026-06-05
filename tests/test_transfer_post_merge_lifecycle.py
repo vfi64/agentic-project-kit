@@ -135,6 +135,95 @@ def test_post_merge_complete_refresh_required_completes_after_one_refresh(monkey
     ]
 
 
+def test_post_merge_complete_recovers_when_merge_step_blocks_but_final_check_is_noop(monkeypatch):
+    post_merge_outputs = iter(
+        [
+            "POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n",
+            "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n",
+        ]
+    )
+    calls: list[str] = []
+
+    def fake_post_merge_check(**_kwargs):
+        calls.append("post_merge_check")
+        return _result("post-merge-check", next(post_merge_outputs))
+
+    monkeypatch.setattr(f"{TARGET}.post_merge_check", fake_post_merge_check)
+    monkeypatch.setattr(
+        f"{TARGET}.admin_refresh_pr",
+        lambda _after_pr, **_kwargs: _result("admin-refresh-pr", "existing_pr=1086\n"),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.pr_wait_ci",
+        lambda _pr_number, **_kwargs: _result("pr-wait-ci", "ci green\n"),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.pr_merge_safe",
+        lambda _pr_number, **_kwargs: _result(
+            "pr-merge-safe",
+            "merge evidence unavailable after remote merge\n",
+            returncode=1,
+        ),
+    )
+
+    result = post_merge_complete(1084)
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert result.lifecycle_state == "COMPLETE"
+    assert result.refresh_pr == 1086
+    assert result.refresh_loop_detected is False
+    assert [step.name for step in result.steps] == [
+        "initial-post-merge-check",
+        "admin-refresh-pr",
+        "admin-refresh-pr-wait-ci",
+        "admin-refresh-pr-merge-safe",
+        "merge-block-recovery-post-merge-check",
+    ]
+    assert "recovery" in result.next_action
+    assert calls == ["post_merge_check", "post_merge_check"]
+
+
+def test_post_merge_complete_does_not_hide_merge_block_when_recovery_check_fails(monkeypatch):
+    post_merge_outputs = iter(
+        [
+            "POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n",
+            "POST_MERGE_HANDOFF_REFRESH\nresult=STRANGE\n",
+        ]
+    )
+
+    monkeypatch.setattr(
+        f"{TARGET}.post_merge_check",
+        lambda **_kwargs: _result("post-merge-check", next(post_merge_outputs)),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.admin_refresh_pr",
+        lambda _after_pr, **_kwargs: _result("admin-refresh-pr", "existing_pr=1086\n"),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.pr_wait_ci",
+        lambda _pr_number, **_kwargs: _result("pr-wait-ci", "ci green\n"),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.pr_merge_safe",
+        lambda _pr_number, **_kwargs: _result("pr-merge-safe", "blocked\n", returncode=1),
+    )
+
+    result = post_merge_complete(1084)
+
+    assert result.result_status == "BLOCKED"
+    assert result.returncode == 2
+    assert result.lifecycle_state == "ADMIN_REFRESH_MERGE_BLOCKED"
+    assert result.refresh_pr == 1086
+    assert [step.name for step in result.steps] == [
+        "initial-post-merge-check",
+        "admin-refresh-pr",
+        "admin-refresh-pr-wait-ci",
+        "admin-refresh-pr-merge-safe",
+        "merge-block-recovery-post-merge-check",
+    ]
+
+
 def test_post_merge_complete_stops_on_refresh_loop(monkeypatch):
     post_merge_outputs = iter(
         [
@@ -168,6 +257,41 @@ def test_post_merge_complete_stops_on_refresh_loop(monkeypatch):
     assert result.refresh_pr == 1091
     assert result.refresh_loop_detected is True
     assert "Stop" in result.next_action
+
+
+def test_post_merge_complete_stops_on_refresh_loop_after_merge_block_recovery(monkeypatch):
+    post_merge_outputs = iter(
+        [
+            "POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n",
+            "POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n",
+        ]
+    )
+
+    monkeypatch.setattr(
+        f"{TARGET}.post_merge_check",
+        lambda **_kwargs: _result("post-merge-check", next(post_merge_outputs)),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.admin_refresh_pr",
+        lambda _after_pr, **_kwargs: _result("admin-refresh-pr", "existing_pr=1091\n"),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.pr_wait_ci",
+        lambda _pr_number, **_kwargs: _result("pr-wait-ci", "ci green\n"),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.pr_merge_safe",
+        lambda _pr_number, **_kwargs: _result("pr-merge-safe", "blocked\n", returncode=1),
+    )
+
+    result = post_merge_complete(1083)
+
+    assert result.result_status == "BLOCKED"
+    assert result.returncode == 2
+    assert result.lifecycle_state == "REFRESH_LOOP_DETECTED"
+    assert result.refresh_pr == 1091
+    assert result.refresh_loop_detected is True
+    assert [step.name for step in result.steps][-1] == "merge-block-recovery-post-merge-check"
 
 
 def test_post_merge_complete_blocks_unknown_initial_state(monkeypatch):
