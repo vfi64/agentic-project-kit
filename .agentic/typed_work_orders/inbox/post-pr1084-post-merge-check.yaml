@@ -1,0 +1,15 @@
+id: post-pr1084-post-merge-check
+title: Post PR1084 post-merge check
+safety: >-
+  Read-only lifecycle check after PR1084 merge. The command verifies whether the
+  post-merge handoff state is NOOP or REFRESH_REQUIRED. It may write a local
+  terminal evidence log but must not mutate product code.
+log_path: docs/reports/terminal/post-pr1084-post-merge-check.md
+block_dirty_worktree: false
+steps:
+  - kind: command_argv
+    label: transfer post-merge-check after PR1084
+    argv:
+      - ./.venv/bin/agentic-kit
+      - transfer
+      - post-merge-check
