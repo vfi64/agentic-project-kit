@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 6c729c1
-  commit_subject: Harden post-merge complete finalization (#1088)
+  commit: 2d21adc
+  commit_subject: Synchronize main before post-merge final check (#1090)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
