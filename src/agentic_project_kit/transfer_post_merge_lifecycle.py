@@ -277,7 +277,7 @@ def post_merge_complete(
             main_branch=main_branch,
             recovered_from_merge_block=True,
         )
-        if recovery.result_status == "PASS":
+        if recovery.lifecycle_state in {"COMPLETE", "REFRESH_LOOP_DETECTED"}:
             return recovery
         return _finish(
             after_pr=after_pr,
