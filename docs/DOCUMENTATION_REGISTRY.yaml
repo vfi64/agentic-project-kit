@@ -189,6 +189,10 @@ documents:
     class: planning
     owner: maintainers
     notes: Typed post-merge lifecycle state model for completing PR merges without REFRESH_REQUIRED loops.
+  - path: docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
+    class: planning
+    owner: maintainers
+    notes: Priority plan for hardening unsafe individual commands before GUI or release orchestration work resumes.
   - path: docs/handoff/CURRENT_HANDOFF.md
     class: planning
     owner: maintainers
