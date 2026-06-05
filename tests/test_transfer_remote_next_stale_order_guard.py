@@ -31,6 +31,28 @@ def _write_order(root: Path, data: dict[str, object]) -> None:
     inbox.write_text(yaml.safe_dump(data), encoding="utf-8")
 
 
+def test_remote_next_blocks_inactive_transfer_order_without_branch_before_branch_validation(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    _write_order(
+        tmp_path,
+        {
+            "schema_version": 1,
+            "id": "no-current-transfer-order",
+            "status": "inactive",
+        },
+    )
+
+    result = run_remote_next_transfer(tmp_path)
+
+    assert result.returncode == 2
+    assert result.result_status == "BLOCKED"
+    assert "no_current_transfer_order" in result.reasons
+    assert "invalid_transfer_order" not in result.reasons
+    assert result.local_run.apply is None
+    assert result.preflight["transfer_order_guard"]["status"] == "inactive"
+
+
 def test_remote_next_blocks_inactive_transfer_order_before_apply(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     monkeypatch.chdir(tmp_path)

@@ -366,6 +366,13 @@ def _freshness_anchor(data: dict[str, Any]) -> str:
     return ""
 
 
+def _block_inactive_transfer_order_before_branch_resolution(root: Path, *, branch: str | None = None) -> None:
+    data = _read_transfer_order_data(root / DEFAULT_INBOX)
+    status = str(data.get("status") or "active").strip().lower()
+    if status in {"inactive", "none", "no-current-order", "no_current_order", "consumed", "superseded", "stale"}:
+        _ensure_transfer_order_is_fresh(root, branch=branch)
+
+
 def _ensure_transfer_order_is_fresh(root: Path, *, branch: str | None = None) -> dict[str, object]:
     data = _read_transfer_order_data(root / DEFAULT_INBOX)
     snapshot = _git_snapshot(root)
@@ -650,6 +657,8 @@ def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> T
     try:
         cleanup = _recover_owned_report_artifacts(root)
         order_sync = _sync_current_branch_before_order(root)
+        if branch is None:
+            _block_inactive_transfer_order_before_branch_resolution(root)
         safe_branch = resolve_remote_next_branch(root, branch)
         if branch is None:
             order_guard = _ensure_transfer_order_is_fresh(root, branch=safe_branch)
