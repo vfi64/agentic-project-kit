@@ -6,7 +6,7 @@
     "blocked_message": "remote-next transfer order is not active: inactive",
     "branch": null,
     "chat_reply": "g",
-    "head": "9ec549e",
+    "head": "360f998",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -20,7 +20,7 @@
         "returncode": 2,
         "schema_version": 1
       },
-      "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+      "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
       "result_status": "BLOCKED",
       "returncode": 2,
       "schema_version": 1,
@@ -33,9 +33,9 @@
           "unstaged_changes": [],
           "untracked_files": []
         },
-        "head": "9ec549e",
-        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
-        "primary_state": "BLOCKED",
+        "head": "360f998",
+        "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
+        "primary_state": "NEW_ORDER_REQUIRED",
         "reasons": [
           "no_current_transfer_order"
         ],
@@ -43,7 +43,7 @@
       },
       "transfer_id": "remote-next-blocked"
     },
-    "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+    "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
     "post_report_actions": {
       "attempted": true,
       "schema_version": 1,
@@ -58,15 +58,15 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "9ec549e",
+      "head": "360f998",
       "remote_tracking": "origin/main",
       "schema_version": 1,
       "transfer_order_guard": {
         "branch": "",
         "created_for_head": "",
         "current_branch": "main",
-        "current_full_head": "9ec549e8524c85cacecf2bc166cd7a12210994fc",
-        "current_head": "9ec549e",
+        "current_full_head": "360f99889479a490803649f9cd1aa3b3df7f9cec",
+        "current_head": "360f998",
         "expected_current_branch": "",
         "expected_current_head": "",
         "expected_head": "",
@@ -75,7 +75,7 @@
         "status": "inactive"
       }
     },
-    "primary_state": "BLOCKED",
+    "primary_state": "NEW_ORDER_REQUIRED",
     "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "reasons": [
       "no_current_transfer_order"
@@ -84,9 +84,11 @@
     "result_status": "BLOCKED",
     "returncode": 2,
     "rule_ack": {
-      "blocking_reasons": [],
-      "confirmed": true,
-      "head": "9ec549e",
+      "blocking_reasons": [
+        "stale_rule_ack"
+      ],
+      "confirmed": false,
+      "head": "1b26ebc",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -394,10 +396,10 @@
     "repo_state": {
       "branch": "main",
       "dirty_status": "",
-      "head": "9ec549e8524c85cacecf2bc166cd7a12210994fc",
+      "head": "360f99889479a490803649f9cd1aa3b3df7f9cec",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "9ec549e8524c85cacecf2bc166cd7a12210994fc"
+      "upstream_head": "360f99889479a490803649f9cd1aa3b3df7f9cec"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -428,7 +430,7 @@
     "blocked_message": "remote-next transfer order is not active: inactive",
     "branch": null,
     "chat_reply": "g",
-    "head": "9ec549e",
+    "head": "360f998",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -442,7 +444,7 @@
         "returncode": 2,
         "schema_version": 1
       },
-      "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+      "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
       "result_status": "BLOCKED",
       "returncode": 2,
       "schema_version": 1,
@@ -455,9 +457,9 @@
           "unstaged_changes": [],
           "untracked_files": []
         },
-        "head": "9ec549e",
-        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
-        "primary_state": "BLOCKED",
+        "head": "360f998",
+        "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
+        "primary_state": "NEW_ORDER_REQUIRED",
         "reasons": [
           "no_current_transfer_order"
         ],
@@ -465,7 +467,7 @@
       },
       "transfer_id": "remote-next-blocked"
     },
-    "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+    "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
     "post_report_actions": {
       "attempted": true,
       "schema_version": 1,
@@ -480,15 +482,15 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "9ec549e",
+      "head": "360f998",
       "remote_tracking": "origin/main",
       "schema_version": 1,
       "transfer_order_guard": {
         "branch": "",
         "created_for_head": "",
         "current_branch": "main",
-        "current_full_head": "9ec549e8524c85cacecf2bc166cd7a12210994fc",
-        "current_head": "9ec549e",
+        "current_full_head": "360f99889479a490803649f9cd1aa3b3df7f9cec",
+        "current_head": "360f998",
         "expected_current_branch": "",
         "expected_current_head": "",
         "expected_head": "",
@@ -497,7 +499,7 @@
         "status": "inactive"
       }
     },
-    "primary_state": "BLOCKED",
+    "primary_state": "NEW_ORDER_REQUIRED",
     "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "reasons": [
       "no_current_transfer_order"
@@ -506,9 +508,11 @@
     "result_status": "BLOCKED",
     "returncode": 2,
     "rule_ack": {
-      "blocking_reasons": [],
-      "confirmed": true,
-      "head": "9ec549e",
+      "blocking_reasons": [
+        "stale_rule_ack"
+      ],
+      "confirmed": false,
+      "head": "1b26ebc",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -816,10 +820,10 @@
     "repo_state": {
       "branch": "main",
       "dirty_status": "",
-      "head": "9ec549e8524c85cacecf2bc166cd7a12210994fc",
+      "head": "360f99889479a490803649f9cd1aa3b3df7f9cec",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "9ec549e8524c85cacecf2bc166cd7a12210994fc"
+      "upstream_head": "360f99889479a490803649f9cd1aa3b3df7f9cec"
     },
     "schema_version": 1,
     "terminal_block_rules": {
