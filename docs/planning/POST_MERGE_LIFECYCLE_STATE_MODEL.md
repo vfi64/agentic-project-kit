@@ -3,6 +3,7 @@
 Status-date: 2026-06-04
 Status: active
 Decision status: proposed
+Review policy: Review when post-merge transfer behavior, handoff refresh semantics, or PR merge completion gates change.
 Project: agentic-project-kit
 
 ## Purpose
