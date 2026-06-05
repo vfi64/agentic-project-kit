@@ -16,6 +16,9 @@ from agentic_project_kit.transfer_uplink import (
     safe_transfer_report_label,
 )
 
+_SUMMARY_WIDTH = 84
+_LABEL_WIDTH = 22
+
 
 def _final_signal(result) -> str:
     return "d" if result.result_status == "PASS" and result.returncode == 0 else "f"
@@ -23,6 +26,22 @@ def _final_signal(result) -> str:
 
 def _chat_reply(signal: str, next_action: str) -> str:
     return f"{signal} | NEXT={next_action}"
+
+
+def _summary_rule(label: str, *, end: bool = False) -> str:
+    side = " END SUMMARY " if end else f" {label} "
+    stars = max(0, _SUMMARY_WIDTH - len(side))
+    left = stars // 2
+    right = stars - left
+    return "*" * left + side + "*" * right
+
+
+def _summary_field(label: str, value: object) -> str:
+    return f"{label + ':':<{_LABEL_WIDTH}} {value}"
+
+
+def _summary_bullet(label: str, value: object) -> str:
+    return f"- {label + ':':<{_LABEL_WIDTH - 2}} {value}"
 
 
 def _report_label(after_pr: int) -> str:
@@ -111,45 +130,54 @@ def render_post_merge_complete_result(
     data = result.as_json_data()
     signal = _final_signal(result)
     next_action = str(data["next_action"])
+    upload_status = "pending"
+    if published_report is not None:
+        upload_status = "done"
+    elif publish_error:
+        signal = "f"
+        upload_status = "blocked"
+    chat_reply = _chat_reply(signal, next_action)
+
     lines = [
+        _summary_rule("START SUMMARY"),
         "TRANSFER_POST_MERGE_COMPLETE",
-        f"after_pr={data['after_pr']}",
-        f"result_status={data['result_status']}",
-        f"returncode={data['returncode']}",
-        f"lifecycle_state={data['lifecycle_state']}",
-        f"refresh_pr={data['refresh_pr'] or ''}",
-        f"refresh_loop_detected={str(data['refresh_loop_detected']).lower()}",
-        f"next_action={next_action}",
+        "",
+        _summary_field("STATE", data["result_status"]),
+        _summary_field("RETURNCODE", data["returncode"]),
+        "",
+        "LIFECYCLE",
+        _summary_bullet("AFTER_PR", data["after_pr"]),
+        _summary_bullet("STATE", data["lifecycle_state"]),
+        _summary_bullet("REFRESH_PR", data["refresh_pr"] or ""),
+        _summary_bullet("REFRESH_LOOP", str(data["refresh_loop_detected"]).lower()),
+        "",
+        "REMOTE_REPORT",
+        _summary_bullet("UPLOADED", "yes" if upload_status == "done" else upload_status),
     ]
-    if local_report is not None:
-        lines.extend(
-            [
-                "TRANSFER_REPORT_WRITTEN=done",
-                f"LOCAL_REPORT={local_report['remote_report_path']}",
-            ]
-        )
     if published_report is not None:
         lines.extend(
             [
-                "TRANSFER_UPLOAD=done",
-                f"REMOTE_REPORT={published_report['remote_report']}",
-                f"LATEST_REMOTE_REPORT={published_report['latest_remote_report']}",
+                _summary_bullet("REPORT_PATH", published_report["remote_report"]),
+                _summary_bullet("LATEST", published_report["latest_remote_report"]),
             ]
         )
-    elif publish_error:
-        signal = "f"
-        lines.extend(
-            [
-                "TRANSFER_UPLOAD=blocked",
-                "REMOTE_REPORT=",
-                f"UPLOAD_ERROR={publish_error}",
-            ]
-        )
+    else:
+        lines.append(_summary_bullet("REPORT_PATH", ""))
+    if publish_error:
+        lines.append(_summary_bullet("UPLOAD_ERROR", publish_error))
+
     lines.extend(
         [
-            f"FINAL_SIGNAL={signal}",
-            f"FINAL_NEXT={next_action}",
-            f"CHAT_REPLY={_chat_reply(signal, next_action)}",
+            "",
+            "LOCAL",
+            _summary_bullet(
+                "REPORT_PATH",
+                "" if local_report is None else local_report["remote_report_path"],
+            ),
+            "",
+            _summary_field("NEXT", next_action),
+            _summary_field("CHAT_REPLY", chat_reply),
+            _summary_rule("SUMMARY", end=True),
         ]
     )
     return "\n".join(lines)
