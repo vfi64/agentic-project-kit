@@ -288,9 +288,9 @@ def test_post_merge_complete_stops_on_refresh_loop_after_merge_block_recovery(mo
 
     assert result.result_status == "BLOCKED"
     assert result.returncode == 2
-    assert result.lifecycle_state == "ADMIN_REFRESH_MERGE_BLOCKED"
+    assert result.lifecycle_state == "REFRESH_LOOP_DETECTED"
     assert result.refresh_pr == 1091
-    assert result.refresh_loop_detected is False
+    assert result.refresh_loop_detected is True
     assert [step.name for step in result.steps][-1] == "merge-block-recovery-post-merge-check"
 
 
