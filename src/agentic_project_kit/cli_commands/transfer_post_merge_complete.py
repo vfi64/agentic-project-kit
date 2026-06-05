@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import subprocess
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
@@ -18,6 +20,48 @@ from agentic_project_kit.transfer_uplink import (
 
 _SUMMARY_WIDTH = 84
 _LABEL_WIDTH = 22
+_REPORT_ARTIFACT_PREFIXES = (
+    "docs/reports/terminal/transfer_handoff_reports/",
+    "docs/reports/transfer_runs/",
+    "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
+)
+
+
+@dataclass(frozen=True)
+class LocalState:
+    clean: bool
+    dirty_paths: tuple[str, ...]
+    report_artifact_paths: tuple[str, ...]
+    product_paths: tuple[str, ...]
+    blocked_reason: str = ""
+
+    def as_json_data(self) -> dict[str, object]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class PreflightBlockedResult:
+    after_pr: int
+    local_state: LocalState
+    result_status: str = "BLOCKED"
+    returncode: int = 2
+    lifecycle_state: str = "LOCAL_PREFLIGHT_BLOCKED"
+    next_action: str = "Clean or publish local changes before running post-merge-complete."
+    refresh_pr: int | None = None
+    refresh_loop_detected: bool = False
+
+    def as_json_data(self) -> dict[str, object]:
+        return {
+            "after_pr": self.after_pr,
+            "result_status": self.result_status,
+            "returncode": self.returncode,
+            "lifecycle_state": self.lifecycle_state,
+            "next_action": self.next_action,
+            "refresh_pr": self.refresh_pr,
+            "refresh_loop_detected": self.refresh_loop_detected,
+            "local_state": self.local_state.as_json_data(),
+            "steps": [],
+        }
 
 
 def _final_signal(result) -> str:
@@ -46,6 +90,66 @@ def _summary_bullet(label: str, value: object) -> str:
 
 def _report_label(after_pr: int) -> str:
     return safe_transfer_report_label(f"post-merge-complete-after-pr{after_pr}")
+
+
+def _dirty_path_from_porcelain_line(line: str) -> str:
+    raw_path = line[3:] if len(line) > 3 else ""
+    if " -> " in raw_path:
+        raw_path = raw_path.split(" -> ", 1)[1]
+    return raw_path.strip().strip('"')
+
+
+def _is_report_artifact_path(path: str) -> bool:
+    return path.startswith(_REPORT_ARTIFACT_PREFIXES)
+
+
+def inspect_local_state(cwd: Path | None = None) -> LocalState:
+    root = Path(".") if cwd is None else cwd
+    try:
+        completed = subprocess.run(
+            ["git", "status", "--porcelain"],
+            cwd=root,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    except OSError as exc:
+        return LocalState(
+            clean=False,
+            dirty_paths=(),
+            report_artifact_paths=(),
+            product_paths=(),
+            blocked_reason=f"git_status_unavailable:{exc}",
+        )
+    if completed.returncode != 0:
+        return LocalState(
+            clean=False,
+            dirty_paths=(),
+            report_artifact_paths=(),
+            product_paths=(),
+            blocked_reason="git_status_failed",
+        )
+
+    dirty_paths = tuple(
+        path
+        for path in (_dirty_path_from_porcelain_line(line) for line in completed.stdout.splitlines())
+        if path
+    )
+    report_artifact_paths = tuple(path for path in dirty_paths if _is_report_artifact_path(path))
+    product_paths = tuple(path for path in dirty_paths if not _is_report_artifact_path(path))
+    if not dirty_paths:
+        return LocalState(clean=True, dirty_paths=(), report_artifact_paths=(), product_paths=())
+    if product_paths:
+        reason = "dirty_product_paths_before_post_merge_complete"
+    else:
+        reason = "dirty_report_artifacts_before_post_merge_complete"
+    return LocalState(
+        clean=False,
+        dirty_paths=dirty_paths,
+        report_artifact_paths=report_artifact_paths,
+        product_paths=product_paths,
+        blocked_reason=reason,
+    )
 
 
 def _render_report_log(report: dict[str, object], rendered_result: str) -> str:
@@ -120,6 +224,25 @@ def write_post_merge_complete_report(result, *, after_pr: int, cwd: Path | None 
     return report
 
 
+def _append_local_state(lines: list[str], local_state: dict[str, object] | None) -> None:
+    if local_state is None:
+        return
+    lines.extend(
+        [
+            "",
+            "LOCAL_STATE",
+            _summary_bullet("CLEAN", "yes" if local_state.get("clean") else "no"),
+        ]
+    )
+    blocked_reason = str(local_state.get("blocked_reason") or "")
+    if blocked_reason:
+        lines.append(_summary_bullet("BLOCKED_REASON", blocked_reason))
+    for path in local_state.get("report_artifact_paths", ()):
+        lines.append(_summary_bullet("REPORT_DIRTY", path))
+    for path in local_state.get("product_paths", ()):
+        lines.append(_summary_bullet("PRODUCT_DIRTY", path))
+
+
 def render_post_merge_complete_result(
     result,
     *,
@@ -150,10 +273,15 @@ def render_post_merge_complete_result(
         _summary_bullet("STATE", data["lifecycle_state"]),
         _summary_bullet("REFRESH_PR", data["refresh_pr"] or ""),
         _summary_bullet("REFRESH_LOOP", str(data["refresh_loop_detected"]).lower()),
-        "",
-        "REMOTE_REPORT",
-        _summary_bullet("UPLOADED", "yes" if upload_status == "done" else upload_status),
     ]
+    _append_local_state(lines, data.get("local_state") if isinstance(data.get("local_state"), dict) else None)
+    lines.extend(
+        [
+            "",
+            "REMOTE_REPORT",
+            _summary_bullet("UPLOADED", "yes" if upload_status == "done" else upload_status),
+        ]
+    )
     if published_report is not None:
         lines.extend(
             [
@@ -181,6 +309,13 @@ def render_post_merge_complete_result(
         ]
     )
     return "\n".join(lines)
+
+
+def _run_or_preflight_block(after_pr: int):
+    local_state = inspect_local_state(Path("."))
+    if local_state.clean:
+        return post_merge_complete(after_pr)
+    return PreflightBlockedResult(after_pr=after_pr, local_state=local_state)
 
 
 def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> None:
@@ -234,16 +369,20 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
             help="Print JSON instead of text.",
         ),
     ) -> None:
-        result = post_merge_complete(
-            after_pr,
-            main_branch=main_branch,
-            merge_method=merge_method,
-            refresh_expected_head_sha=refresh_expected_head_sha,
-            ci_timeout_seconds=ci_timeout_seconds,
-            ci_poll_seconds=ci_poll_seconds,
-            merge_state_timeout_seconds=merge_state_timeout_seconds,
-            merge_state_poll_seconds=merge_state_poll_seconds,
-        )
+        local_state = inspect_local_state(Path("."))
+        if local_state.clean:
+            result = post_merge_complete(
+                after_pr,
+                main_branch=main_branch,
+                merge_method=merge_method,
+                refresh_expected_head_sha=refresh_expected_head_sha,
+                ci_timeout_seconds=ci_timeout_seconds,
+                ci_poll_seconds=ci_poll_seconds,
+                merge_state_timeout_seconds=merge_state_timeout_seconds,
+                merge_state_poll_seconds=merge_state_poll_seconds,
+            )
+        else:
+            result = PreflightBlockedResult(after_pr=after_pr, local_state=local_state)
         local_report = write_post_merge_complete_report(result, after_pr=after_pr, cwd=Path("."))
         try:
             published_report = publish_latest_transfer_report(Path("."), label=str(local_report["label"]))
