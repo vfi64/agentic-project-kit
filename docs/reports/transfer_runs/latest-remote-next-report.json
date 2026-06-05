@@ -6,7 +6,7 @@
     "blocked_message": "remote-next transfer order is not active: inactive",
     "branch": null,
     "chat_reply": "g",
-    "head": "9b60ebd",
+    "head": "7b44fca",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -33,7 +33,7 @@
           "unstaged_changes": [],
           "untracked_files": []
         },
-        "head": "9b60ebd",
+        "head": "7b44fca",
         "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
         "primary_state": "NEW_ORDER_REQUIRED",
         "reasons": [
@@ -58,15 +58,15 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "9b60ebd",
+      "head": "7b44fca",
       "remote_tracking": "origin/main",
       "schema_version": 1,
       "transfer_order_guard": {
         "branch": "",
         "created_for_head": "",
         "current_branch": "main",
-        "current_full_head": "9b60ebdb7f738de7179a92e86cdc5163b7d11d42",
-        "current_head": "9b60ebd",
+        "current_full_head": "7b44fca29cb78d39e6adf3bad769b8dcbcb197fc",
+        "current_head": "7b44fca",
         "expected_current_branch": "",
         "expected_current_head": "",
         "expected_head": "",
@@ -88,7 +88,7 @@
         "stale_rule_ack"
       ],
       "confirmed": false,
-      "head": "6d7f8c6",
+      "head": "ac4dfbf",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -396,10 +396,10 @@
     "repo_state": {
       "branch": "main",
       "dirty_status": "",
-      "head": "9b60ebdb7f738de7179a92e86cdc5163b7d11d42",
+      "head": "7b44fca29cb78d39e6adf3bad769b8dcbcb197fc",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "9b60ebdb7f738de7179a92e86cdc5163b7d11d42"
+      "upstream_head": "7b44fca29cb78d39e6adf3bad769b8dcbcb197fc"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -430,7 +430,7 @@
     "blocked_message": "remote-next transfer order is not active: inactive",
     "branch": null,
     "chat_reply": "g",
-    "head": "9b60ebd",
+    "head": "7b44fca",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -457,7 +457,7 @@
           "unstaged_changes": [],
           "untracked_files": []
         },
-        "head": "9b60ebd",
+        "head": "7b44fca",
         "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
         "primary_state": "NEW_ORDER_REQUIRED",
         "reasons": [
@@ -482,15 +482,15 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "9b60ebd",
+      "head": "7b44fca",
       "remote_tracking": "origin/main",
       "schema_version": 1,
       "transfer_order_guard": {
         "branch": "",
         "created_for_head": "",
         "current_branch": "main",
-        "current_full_head": "9b60ebdb7f738de7179a92e86cdc5163b7d11d42",
-        "current_head": "9b60ebd",
+        "current_full_head": "7b44fca29cb78d39e6adf3bad769b8dcbcb197fc",
+        "current_head": "7b44fca",
         "expected_current_branch": "",
         "expected_current_head": "",
         "expected_head": "",
@@ -512,7 +512,7 @@
         "stale_rule_ack"
       ],
       "confirmed": false,
-      "head": "6d7f8c6",
+      "head": "ac4dfbf",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -820,10 +820,10 @@
     "repo_state": {
       "branch": "main",
       "dirty_status": "",
-      "head": "9b60ebdb7f738de7179a92e86cdc5163b7d11d42",
+      "head": "7b44fca29cb78d39e6adf3bad769b8dcbcb197fc",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "9b60ebdb7f738de7179a92e86cdc5163b7d11d42"
+      "upstream_head": "7b44fca29cb78d39e6adf3bad769b8dcbcb197fc"
     },
     "schema_version": 1,
     "terminal_block_rules": {
