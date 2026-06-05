@@ -124,6 +124,20 @@ class _CommandResult:
         }
 
 
+def _remote_next_primary_state(result_status: str, reasons: tuple[str, ...]) -> str:
+    if "no_current_transfer_order" in reasons:
+        return "NEW_ORDER_REQUIRED"
+    if result_status == "BLOCKED":
+        return "BLOCKED"
+    return result_status
+
+
+def _remote_next_next_action(reasons: tuple[str, ...]) -> str:
+    if "no_current_transfer_order" in reasons:
+        return "Create or queue a fresh remote-next transfer order, then rerun the canonical command."
+    return "Inspect the published remote-next diagnostic report before retrying."
+
+
 class RemoteNextBlocked(RuntimeError):
     def __init__(
         self,
