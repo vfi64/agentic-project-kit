@@ -8,6 +8,9 @@ from typer.testing import CliRunner
 from agentic_project_kit.cli import app
 from agentic_project_kit.cli_commands import transfer_post_merge_complete as command_module
 from agentic_project_kit.cli_commands.transfer_post_merge_complete import (
+    LocalState,
+    PreflightBlockedResult,
+    inspect_local_state,
     render_post_merge_complete_result,
     write_post_merge_complete_report,
 )
@@ -117,8 +120,125 @@ def test_render_post_merge_complete_result_marks_upload_error_as_blocked():
     assert "CHAT_REPLY:            f | NEXT=Post-merge lifecycle is complete after admin refresh." in rendered
 
 
+def test_render_post_merge_complete_result_includes_local_state_for_preflight_block():
+    result = PreflightBlockedResult(
+        after_pr=1094,
+        local_state=LocalState(
+            clean=False,
+            dirty_paths=(
+                "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+                "src/example.py",
+            ),
+            report_artifact_paths=(
+                "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            ),
+            product_paths=("src/example.py",),
+            blocked_reason="dirty_product_paths_before_post_merge_complete",
+        ),
+    )
+
+    rendered = render_post_merge_complete_result(result)
+
+    assert "LOCAL_STATE" in rendered
+    assert "- CLEAN:               no" in rendered
+    assert "- BLOCKED_REASON:      dirty_product_paths_before_post_merge_complete" in rendered
+    assert "- REPORT_DIRTY:        docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json" in rendered
+    assert "- PRODUCT_DIRTY:       src/example.py" in rendered
+    assert "CHAT_REPLY:            f | NEXT=Clean or publish local changes before running post-merge-complete." in rendered
+
+
+def test_inspect_local_state_classifies_dirty_report_artifacts(tmp_path):
+    (tmp_path / "docs/reports/terminal/transfer_handoff_reports").mkdir(parents=True)
+    (tmp_path / "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json").write_text(
+        "{}\n",
+        encoding="utf-8",
+    )
+
+    import subprocess
+
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "initial"],
+        cwd=tmp_path,
+        check=True,
+        capture_output=True,
+        env={"GIT_AUTHOR_NAME": "Test", "GIT_AUTHOR_EMAIL": "test@example.invalid", "GIT_COMMITTER_NAME": "Test", "GIT_COMMITTER_EMAIL": "test@example.invalid"},
+    )
+    (tmp_path / "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json").write_text(
+        "{\"changed\": true}\n",
+        encoding="utf-8",
+    )
+
+    local_state = inspect_local_state(tmp_path)
+
+    assert local_state.clean is False
+    assert local_state.blocked_reason == "dirty_report_artifacts_before_post_merge_complete"
+    assert local_state.report_artifact_paths == (
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+    )
+    assert local_state.product_paths == ()
+
+
+def test_inspect_local_state_classifies_dirty_product_paths(tmp_path):
+    (tmp_path / "src").mkdir()
+    (tmp_path / "src/example.py").write_text("print('hello')\n", encoding="utf-8")
+
+    import subprocess
+
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "initial"],
+        cwd=tmp_path,
+        check=True,
+        capture_output=True,
+        env={"GIT_AUTHOR_NAME": "Test", "GIT_AUTHOR_EMAIL": "test@example.invalid", "GIT_COMMITTER_NAME": "Test", "GIT_COMMITTER_EMAIL": "test@example.invalid"},
+    )
+    (tmp_path / "src/example.py").write_text("print('changed')\n", encoding="utf-8")
+
+    local_state = inspect_local_state(tmp_path)
+
+    assert local_state.clean is False
+    assert local_state.blocked_reason == "dirty_product_paths_before_post_merge_complete"
+    assert local_state.product_paths == ("src/example.py",)
+
+
+def test_post_merge_complete_cli_blocks_dirty_worktree_before_lifecycle(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    called = False
+
+    def fake_post_merge_complete(*_args, **_kwargs):
+        nonlocal called
+        called = True
+        return FakePostMergeCompleteResult()
+
+    monkeypatch.setattr(command_module, "post_merge_complete", fake_post_merge_complete)
+    monkeypatch.setattr(
+        command_module,
+        "inspect_local_state",
+        lambda *_args, **_kwargs: LocalState(
+            clean=False,
+            dirty_paths=("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",),
+            report_artifact_paths=("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",),
+            product_paths=(),
+            blocked_reason="dirty_report_artifacts_before_post_merge_complete",
+        ),
+    )
+
+    result = CliRunner().invoke(app, ["transfer", "post-merge-complete", "--after-pr", "1094"])
+
+    assert result.exit_code == 2
+    assert called is False
+    assert "LOCAL_STATE" in result.stdout
+    assert "- BLOCKED_REASON:      dirty_report_artifacts_before_post_merge_complete" in result.stdout
+    assert "- REPORT_DIRTY:        docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log" in result.stdout
+    assert "CHAT_REPLY:            f | NEXT=Clean or publish local changes before running post-merge-complete." in result.stdout
+
+
 def test_post_merge_complete_cli_writes_and_publishes_report(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(command_module, "inspect_local_state", lambda *_args, **_kwargs: LocalState(True, (), (), ()))
     monkeypatch.setattr(command_module, "post_merge_complete", lambda *_args, **_kwargs: FakePostMergeCompleteResult())
 
     result = CliRunner().invoke(app, ["transfer", "post-merge-complete", "--after-pr", "1090"])
@@ -139,6 +259,7 @@ def test_post_merge_complete_cli_writes_and_publishes_report(tmp_path, monkeypat
 
 def test_post_merge_complete_cli_reports_publish_blocker(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(command_module, "inspect_local_state", lambda *_args, **_kwargs: LocalState(True, (), (), ()))
     monkeypatch.setattr(command_module, "post_merge_complete", lambda *_args, **_kwargs: FakePostMergeCompleteResult())
 
     def fail_publish(*_args, **_kwargs):
