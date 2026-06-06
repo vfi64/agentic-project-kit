@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: d94b778
-  commit_subject: Add remote work start transfer command (#1120)
+  commit: 565bc81
+  commit_subject: Support current expected head SHA alias (#1122)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
