@@ -918,6 +918,11 @@ def prepare_successor_handoff(
         "--render-prompt",
         help="Render a copy-and-paste successor chat prompt directly from the handoff payload.",
     ),
+    write_outbox: bool = typer.Option(
+        False,
+        "--write-outbox/--no-write-outbox",
+        help="Write the canonical transfer outbox. Defaults to no write to avoid volatile dirty state.",
+    ),
 ) -> None:
     """Prepare a canonical LLM handoff assignment in the transfer outbox.
 
@@ -1175,8 +1180,11 @@ Zusätzlich: Möglichst komplexere agentic-kit-Kommandos bevorzugen, damit die Z
         },
     }
 
-    outbox_path = write_transfer_outbox(root, payload)
-    payload["outbox_written"] = str(outbox_path)
+    if write_outbox:
+        outbox_path = write_transfer_outbox(root, payload)
+        payload["outbox_written"] = str(outbox_path)
+    else:
+        payload["outbox_written"] = None
 
     if render_prompt and not json_output:
         prompt_state = {
@@ -1205,7 +1213,8 @@ Zusätzlich: Möglichst komplexere agentic-kit-Kommandos bevorzugen, damit die Z
             transfer_rules=transfer_rules_text.strip(),
         )
         payload["rendered_successor_prompt"] = rendered_prompt
-        write_transfer_outbox(root, payload)
+        if write_outbox:
+            write_transfer_outbox(root, payload)
         typer.echo(rendered_prompt)
         return
 
