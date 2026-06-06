@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 55edd8c
-  commit_subject: Avoid normalize-session outbox dirty state by default (#1132)
+  commit: dc109d6
+  commit_subject: Add patch transfer request schema (#1135)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
