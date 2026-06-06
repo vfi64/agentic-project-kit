@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "llm_to_local_transfer_order",
+  "status": "ORDER_READY",
+  "branch": "docs/post-pr1109-bootstrap-handoff-refresh",
+  "name": "inspect_handoff_generator_sources",
+  "goal": "Find the source or generator path for handoff and bootstrap generated artifacts before refreshing them.",
+  "context": {
+    "last_substantive_pr": 1109,
+    "last_substantive_commit": "deb4305aca447f62d58416a4bdc393f7a10ba77d",
+    "previous_block": "protected-change-plan blocked direct generated artifact edit"
+  },
+  "allowed_action": "inspect only and publish a transfer report",
+  "report_path_prefix": "docs/reports/transfer_runs/inspect-handoff-generators",
+  "next_requested_llm_action": "Read the transfer report and issue the generator-compliant next order."
+}
