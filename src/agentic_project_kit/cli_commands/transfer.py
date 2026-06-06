@@ -1157,6 +1157,129 @@ Zusätzlich: Möglichst komplexere agentic-kit-Kommandos bevorzugen, damit die Z
         typer.echo(f"FINAL_NEXT={next_action}")
         typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
 
+
+@transfer_app.command("remote-work-start")
+def remote_work_start(
+    branch: str = typer.Argument(..., help="Feature branch to prepare, for example feature/name."),
+    main_branch: str = typer.Option("main", "--main-branch", help="Base branch for new work branches."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    import json
+    import re
+    import subprocess
+    from datetime import datetime, timezone
+    from pathlib import Path
+    from typing import Any
+
+    root = Path(".")
+    known_volatile_paths = [
+        ".agentic/transfer/outbox/last_result.txt",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
+    ]
+
+    steps: list[dict[str, Any]] = []
+    blockers: list[str] = []
+
+    def run_step(name: str, argv: list[str], *, allow_fail: bool = False) -> dict[str, Any]:
+        completed = subprocess.run(argv, cwd=root, text=True, capture_output=True)
+        item = {
+            "name": name,
+            "argv": argv,
+            "returncode": completed.returncode,
+            "stdout": completed.stdout,
+            "stderr": completed.stderr,
+            "ok": completed.returncode == 0,
+            "allowed_failure": allow_fail,
+        }
+        steps.append(item)
+        if completed.returncode != 0 and not allow_fail:
+            blockers.append(name + "_failed")
+        return item
+
+    def restore_volatile(name: str) -> None:
+        run_step(name, ["git", "restore", "--", *known_volatile_paths], allow_fail=True)
+
+    if not re.fullmatch(r"[A-Za-z0-9._/-]+", branch):
+        blockers.append("invalid_branch_name")
+    if branch in {main_branch, "main", "master"}:
+        blockers.append("refuse_main_branch")
+    if branch.startswith("/") or branch.endswith("/") or ".." in branch:
+        blockers.append("unsafe_branch_name")
+    if not branch.startswith(("feature/", "fix/", "docs/", "chore/")):
+        blockers.append("branch_prefix_not_allowed")
+
+    if not blockers:
+        restore_volatile("restore-before-start")
+        run_step("rules-acknowledge-before-start", ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
+        restore_volatile("restore-after-ack")
+
+        run_step("switch-main", ["./.venv/bin/agentic-kit", "transfer", "branch-switch", main_branch])
+        restore_volatile("restore-after-switch-main")
+
+        run_step("pull-main", ["./.venv/bin/agentic-kit", "transfer", "pull-current"])
+        restore_volatile("restore-after-pull-main")
+
+        run_step("rules-acknowledge-main", ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
+        restore_volatile("restore-after-main-ack")
+
+        run_step("normalize-main", ["./.venv/bin/agentic-kit", "transfer", "normalize-session", "--repair-known-volatile"])
+        restore_volatile("restore-after-normalize-main")
+
+        create = run_step("branch-create", ["./.venv/bin/agentic-kit", "transfer", "branch-create", branch], allow_fail=True)
+        restore_volatile("restore-after-branch-create")
+
+        create_text = create["stdout"] + create["stderr"]
+        if create["ok"]:
+            run_step("branch-switch-created", ["./.venv/bin/agentic-kit", "transfer", "branch-switch", branch])
+        elif "already exists" in create_text:
+            run_step("branch-switch-existing", ["./.venv/bin/agentic-kit", "transfer", "branch-switch", branch])
+        else:
+            blockers.append("branch_create_failed")
+
+        restore_volatile("restore-after-work-branch-switch")
+        run_step("rules-acknowledge-work-branch", ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
+        restore_volatile("restore-after-work-branch-ack")
+
+        run_step("push-current", ["./.venv/bin/agentic-kit", "transfer", "push-current"])
+        restore_volatile("restore-after-push")
+
+        run_step("repo-status", ["./.venv/bin/agentic-kit", "transfer", "repo-status"])
+
+    blockers = list(dict.fromkeys(blockers))
+    result_status = "PASS" if not blockers else "BLOCK"
+    final_signal = "d" if result_status == "PASS" else "f"
+    next_action = "Remote work branch is ready; continue with the product slice." if result_status == "PASS" else "Resolve remote-work-start blockers before continuing: " + ", ".join(blockers)
+
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_remote_work_start_result",
+        "action": "remote-work-start",
+        "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "branch": branch,
+        "main_branch": main_branch,
+        "blockers": blockers,
+        "steps": steps,
+        "next_action": next_action,
+    }
+
+    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    if not json_output:
+        typer.echo("********************************** START SUMMARY ***********************************")
+        typer.echo("TRANSFER_REMOTE_WORK_START")
+        typer.echo("")
+        typer.echo(f"STATE:                 {result_status}")
+        typer.echo(f"BRANCH:                {branch}")
+        typer.echo(f"MAIN_BRANCH:           {main_branch}")
+        typer.echo(f"BLOCKERS:              {len(blockers)}")
+        typer.echo("")
+        typer.echo(f"NEXT:                  {next_action}")
+        typer.echo(f"CHAT_REPLY:            {final_signal} | NEXT={next_action}")
+        typer.echo("*********************************** END SUMMARY ************************************")
+
+
 @transfer_app.command("show-last-report")
 def show_last_report() -> None:
     try:
