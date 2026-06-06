@@ -88,6 +88,10 @@ def test_remote_next_report_includes_protocol_header(tmp_path, monkeypatch):
     )
     assert report["remote_next_report"]["result_status"] == "BLOCKED"
     assert report["last_result"] == report["remote_next_report"]
+    post_actions = report["remote_next_report"]["post_report_actions"]
+    assert post_actions["attempted"] is True
+    assert post_actions.get("status") != "pending_until_report_files_are_written"
+    assert "steps" in post_actions
 
 
 def test_remote_next_without_branch_requires_order_branch(tmp_path, monkeypatch):

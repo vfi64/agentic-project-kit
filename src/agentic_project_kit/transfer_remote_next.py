@@ -640,6 +640,50 @@ def _attempt_report_commit_ack_push(root: Path, *, branch: str | None, paths: tu
     return actions
 
 
+def _attempt_final_report_projection_commit_push(
+    root: Path,
+    *,
+    branch: str | None,
+    paths: tuple[str, ...],
+) -> dict[str, object]:
+    steps: list[dict[str, object]] = []
+    actions: dict[str, object] = {
+        "schema_version": 1,
+        "attempted": True,
+        "branch": branch,
+        "paths": list(paths),
+        "steps": steps,
+        "committed": False,
+        "pushed": False,
+    }
+    add = _command(["git", "add", "-f", *paths], root)
+    steps.append({"name": "git_add_force_final_report_projection", **add.as_json_data()})
+    if add.returncode != 0:
+        actions["blocked_reason"] = "git_add_failed"
+        return actions
+
+    staged = _command(["git", "diff", "--cached", "--quiet"], root)
+    if staged.returncode == 0:
+        actions["skipped_reason"] = "no_final_projection_changes_to_commit"
+    else:
+        commit = _command(["git", "commit", "-m", "Publish final remote-next report projection"], root)
+        steps.append({"name": "git_commit_final_report_projection", **commit.as_json_data()})
+        if commit.returncode != 0:
+            actions["blocked_reason"] = "git_commit_failed"
+            return actions
+        actions["committed"] = True
+        actions["commit_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
+
+    push = _command(["git", "push", "origin", branch], root) if branch else _command(["git", "push"], root)
+    steps.append({"name": "git_push_final_report_projection", **push.as_json_data()})
+    actions["pushed"] = push.returncode == 0
+    if push.returncode != 0:
+        actions["blocked_reason"] = "git_push_failed"
+    actions["final_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
+    actions["final_status_short"] = _command(["git", "status", "--porcelain=v1"], root).stdout
+    return actions
+
+
 def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> TransferRemoteNextRun:
     paths = _report_paths()
     provisional_data = result.as_json_data()
@@ -654,6 +698,43 @@ def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> Tran
     )
     _write_report_payloads(root, provisional_data)
     post_report_actions = _attempt_report_commit_ack_push(root, branch=result.branch, paths=paths)
+
+    final_result = TransferRemoteNextRun(
+        branch=result.branch,
+        local_run=result.local_run,
+        head=result.head,
+        result_status=result.result_status,
+        returncode=result.returncode,
+        next_action=result.next_action,
+        report_path=str(REMOTE_NEXT_LATEST_JSON),
+        published_report_path=str(PUBLISHED_LATEST_JSON),
+        reasons=result.reasons,
+        preflight=result.preflight,
+        rule_ack=result.rule_ack,
+        blocked_message=result.blocked_message,
+        post_report_actions=post_report_actions,
+    )
+
+    final_data = final_result.as_json_data()
+    final_data.update(
+        {
+            "report_path": str(REMOTE_NEXT_LATEST_JSON),
+            "published_report_path": str(PUBLISHED_LATEST_JSON),
+            "latest_report_path": str(REMOTE_NEXT_LATEST_JSON),
+            "latest_published_report_path": str(PUBLISHED_LATEST_JSON),
+        }
+    )
+    _write_report_payloads(root, final_data)
+    final_projection = _attempt_final_report_projection_commit_push(root, branch=result.branch, paths=paths)
+    post_report_actions["final_projection"] = final_projection
+    if final_projection.get("commit_head"):
+        post_report_actions["final_projection_commit_head"] = final_projection["commit_head"]
+        post_report_actions["final_head"] = final_projection.get("final_head", final_projection["commit_head"])
+    if final_projection.get("blocked_reason"):
+        post_report_actions["final_projection_blocked_reason"] = final_projection["blocked_reason"]
+        post_report_actions["pushed"] = False
+    elif final_projection.get("pushed") is False:
+        post_report_actions["pushed"] = False
 
     return TransferRemoteNextRun(
         branch=result.branch,
