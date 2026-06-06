@@ -735,6 +735,10 @@ def normalize_session(
     if repair_known_volatile:
         volatile_repair_result = run(["git", "restore", "--", *known_volatile_paths])
 
+    volatile_repair_result = None
+    if repair_known_volatile:
+        volatile_repair_result = run(["git", "restore", "--", *known_volatile_paths])
+
     branch_result = run(["git", "branch", "--show-current"])
     status_result = run(["git", "status", "--short"])
     head_result = run(["git", "rev-parse", "HEAD"])
@@ -883,6 +887,11 @@ def normalize_session(
 @transfer_app.command("prepare-successor-handoff")
 def prepare_successor_handoff(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+    repair_known_volatile: bool = typer.Option(
+        False,
+        "--repair-known-volatile",
+        help="Restore known volatile transfer output files before preparing the handoff request.",
+    ),
 ) -> None:
     """Prepare a canonical LLM handoff assignment in the transfer outbox.
 
@@ -899,6 +908,12 @@ def prepare_successor_handoff(
     from agentic_project_kit.transfer_safety_context import write_transfer_outbox
 
     root = Path(".")
+
+    known_volatile_paths = [
+        ".agentic/transfer/outbox/last_result.txt",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
+    ]
 
     required_sources = [
         "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -1002,6 +1017,10 @@ Zusätzlich: Möglichst komplexere agentic-kit-Kommandos bevorzugen, damit die Z
             "sha256": hashlib.sha256(data).hexdigest(),
             "size": len(data),
         }
+
+    volatile_repair_result = None
+    if repair_known_volatile:
+        volatile_repair_result = run(["git", "restore", "--", *known_volatile_paths])
 
     branch_result = run(["git", "branch", "--show-current"])
     status_result = run(["git", "status", "--short"])
@@ -1122,6 +1141,11 @@ Zusätzlich: Möglichst komplexere agentic-kit-Kommandos bevorzugen, damit die Z
             "für PR-Kommandos, und die Forderung nach weniger Einzelschrittmodus."
         ),
         "blockers": blockers,
+        "volatile_repair": {
+            "requested": repair_known_volatile,
+            "known_paths": known_volatile_paths,
+            "result": volatile_repair_result,
+        },
     }
 
     outbox_path = write_transfer_outbox(root, payload)
