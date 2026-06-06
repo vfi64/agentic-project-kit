@@ -909,6 +909,11 @@ def prepare_successor_handoff(
         "--repair-known-volatile",
         help="Restore known volatile transfer output files before preparing the handoff request.",
     ),
+    render_prompt: bool = typer.Option(
+        False,
+        "--render-prompt",
+        help="Render a copy-and-paste successor chat prompt directly from the handoff payload.",
+    ),
 ) -> None:
     """Prepare a canonical LLM handoff assignment in the transfer outbox.
 
@@ -1167,6 +1172,64 @@ Zusätzlich: Möglichst komplexere agentic-kit-Kommandos bevorzugen, damit die Z
 
     outbox_path = write_transfer_outbox(root, payload)
     payload["outbox_written"] = str(outbox_path)
+
+    if render_prompt and not json_output:
+        prompt_state = {
+            "schema_version": 1,
+            "kind": "successor_chat_handoff_state",
+            "repo": payload["repo"],
+            "message_kind": payload["message_kind"],
+            "assignment_kind": payload["assignment_kind"],
+            "result_status": payload["result_status"],
+            "blockers": payload["blockers"],
+            "missing_sources": payload["missing_sources"],
+            "transfer_protocol_machine": payload["transfer_protocol_machine"],
+        }
+        required_source_lines = [
+            "- {path}: exists={exists}, sha256={sha256}, size={size}".format(**item)
+            for item in source_inventory
+        ]
+        rendered_prompt = "\n".join([
+            "Wir arbeiten im Repo `vfi64/agentic-project-kit`.",
+            "",
+            "Arbeite nicht aus Chat-Erinnerung. Quelle der Wahrheit ist der aktuelle Remote-Stand von `main`, die lokalen `agentic-kit`-Kommandos und repo-committete Evidenz.",
+            "",
+            "Lokaler Pfad:",
+            "cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
+            "",
+            "Pflichtstart:",
+            "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile",
+            "./.venv/bin/agentic-kit rules acknowledge",
+            "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile",
+            "",
+            "Wenn normalize-session nicht PASS meldet: nicht weiterarbeiten, sondern zuerst den Blocker beheben.",
+            "",
+            "Aktueller maschinenlesbarer Zustand:",
+            json.dumps(prompt_state, indent=2, ensure_ascii=False),
+            "",
+            "Pflichtquellen:",
+            "\n".join(required_source_lines),
+            "",
+            "Transferregeln:",
+            transfer_rules_text.strip(),
+            "",
+            "Arbeitsregeln:",
+            "1. Keine Arbeit direkt auf main.",
+            "2. Für neue Slices bevorzugt: ./.venv/bin/agentic-kit transfer remote-work-start feature/<name>",
+            "3. Für PR-Kommandos darf --expected-head-sha current genutzt werden.",
+            "4. Komplexe agentic-kit transfer Wrapper sind rohen Git-/Shell-Einzelschritten vorzuziehen.",
+            "5. Kanonische Transferdateien bleiben .agentic/transfer/inbox/next_command.py.txt und .agentic/transfer/outbox/last_result.txt.",
+            "6. d, f, g, w sind Kommunikationssignale, aber keine Evidenz.",
+            "7. Dauerhafte Evidenz gehört ins Repo.",
+            "8. Geschützte Dateien nie breit ersetzen.",
+            "",
+            "Nächster sicherer Schritt:",
+            "Lies die Pflichtquellen, prüfe den Repo-Zustand mit den Startbefehlen und setze dann den nächsten offenen Slice fort.",
+        ])
+        payload["rendered_successor_prompt"] = rendered_prompt
+        write_transfer_outbox(root, payload)
+        typer.echo(rendered_prompt)
+        return
 
     typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
     if not json_output:
