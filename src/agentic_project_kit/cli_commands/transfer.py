@@ -879,6 +879,260 @@ def normalize_session(
         typer.echo(f"FINAL_NEXT={next_action}")
         typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
 
+
+@transfer_app.command("prepare-successor-handoff")
+def prepare_successor_handoff(
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Prepare a canonical LLM handoff assignment in the transfer outbox.
+
+    This command creates a repo-backed local-to-LLM transfer message. The LLM can
+    read it after a simple "g" and produce a copy-and-paste successor chat prompt.
+    """
+    import hashlib
+    import json
+    import subprocess
+    from datetime import datetime, timezone
+    from pathlib import Path
+    from typing import Any
+
+    from agentic_project_kit.transfer_safety_context import write_transfer_outbox
+
+    root = Path(".")
+
+    required_sources = [
+        "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+        "docs/STATUS.md",
+        ".agentic/handoff_state.yaml",
+        ".agentic/compiled_agent_context.yaml",
+        ".agentic/rule_mechanism_inventory.yaml",
+        ".agentic/rule_migrations.yaml",
+        ".agentic/rule_preservation.yaml",
+        ".agentic/transfer_safety_rules.yaml",
+        "docs/governance/FINAL_SUMMARY_CONTRACT.md",
+        "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
+        "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
+        "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
+        "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
+        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    ]
+
+    help_commands = [
+        ["./.venv/bin/agentic-kit", "--help"],
+        ["./.venv/bin/agentic-kit", "transfer", "--help"],
+        ["./.venv/bin/agentic-kit", "work-order", "--help"],
+        ["./.venv/bin/agentic-kit", "handoff", "--help"],
+        ["./.venv/bin/agentic-kit", "evidence", "--help"],
+        ["./.venv/bin/agentic-kit", "rules", "--help"],
+    ]
+
+    transfer_rules_text = """Transferregeln
+1. Remote arbeiten
+Vorrang hat remote-repo-backed Arbeit.
+Das bedeutet:
+* Änderungen, Aufträge, Reports und Übergaben sollen möglichst über das Remote-Repo laufen.
+* Der lokale Rechner führt nur klar definierte, repo-gestützte Aktionen aus.
+* Vor jeder Arbeit gilt:
+    * aktuellen Branch prüfen,
+    * Status prüfen,
+    * Regel-Acknowledgement prüfen,
+    * keine Arbeit auf schmutzigem oder falschem Branch.
+* Für Git-, Status- und Transferaktionen sind bevorzugt vorhandene agentic-kit transfer ...-Kommandos zu verwenden, nicht rohe Shell-Kommandos.
+* PRs, Checks, Merge und Handoff-Refresh laufen über die vorhandenen sicheren Wrapper.
+* Dauerhafte Evidenz gehört ins Repo unter geeignete Report- oder Evidence-Pfade.
+* Temporäre Transferdaten dürfen das Repo nicht dauerhaft zumüllen.
+2. Via Transferdateien arbeiten
+Wenn Remote-Arbeit allein nicht reicht, wird über feste Transferdateien gearbeitet.
+Es gibt je Richtung genau eine kanonische Datei:
+.agentic/transfer/inbox/next_command.py.txt
+.agentic/transfer/outbox/last_result.txt
+Regeln:
+* next_command.py.txt ist die Datei LLM → lokal.
+* last_result.txt ist die Datei lokal → LLM.
+* Diese Dateien werden überschrieben, nicht jedes Mal neu angelegt.
+* Keine ständig neuen Dateien wie b11_..._repair.py.txt, außer es gibt einen ausdrücklich begründeten Archiv- oder Evidence-Fall.
+* Python-Transferdateien behalten die Endung .py.txt.
+* Lokal wird eine Transferdatei bewusst mit dem Projekt-Python ausgeführt:
+./.venv/bin/python .agentic/transfer/inbox/next_command.py.txt
+* Die Ausführung soll das Ergebnis nach .agentic/transfer/outbox/last_result.txt schreiben.
+* Die Rückmeldung an den Chat soll bevorzugt nur den Inhalt oder die Kerndaten aus last_result.txt enthalten.
+* Wenn ein Ergebnis dauerhaft nachweisbar sein soll, wird es zusätzlich über einen vorhandenen Publish- oder Report-Mechanismus ins Repo geschrieben, nicht durch wahlloses Sammeln neuer Transferdateien.
+3. Copy and Paste
+Copy & Paste ist nur der Fallback.
+Es wird nur genutzt, wenn:
+* Remote-Arbeit nicht möglich ist,
+* Transferdateien nicht funktionieren,
+* oder eine kurze manuelle Bestätigung wirklich schneller und risikoärmer ist.
+Regeln:
+* Keine langen Shellskripte per Copy & Paste.
+* Keine heredocs.
+* Keine fragilen mehrzeiligen Kommando-Blöcke.
+* Keine Blöcke, die den Terminalprozess versehentlich beenden.
+* Wenn Copy & Paste nötig ist, dann nur:
+    * kurze Einzelkommandos,
+    * klarer Zweck,
+    * vorher Branch- und Statusprüfung,
+    * danach Ausgabe zurückmelden.
+* Copy & Paste ist keine dauerhafte Evidenz. Dauerhafte Evidenz muss ins Repo oder in einen Report.
+Für Fehlerzustände gilt konkret: keine neuen ad-hoc-Patch-Dateinamen erzeugen, sondern die kanonische Datei .agentic/transfer/inbox/next_command.py.txt remote überschreiben lassen. Danach lokal genau diese Datei mit ./.venv/bin/python ... ausführen und die Antwort aus .agentic/transfer/outbox/last_result.txt zurückgeben.
+Zusätzlich: Möglichst komplexere agentic-kit-Kommandos bevorzugen, damit die Zusammenarbeit nicht in zu viele manuelle Einzelschritte zerfällt.
+"""
+
+    def run(argv: list[str]) -> dict[str, Any]:
+        completed = subprocess.run(argv, cwd=root, text=True, capture_output=True)
+        return {
+            "argv": argv,
+            "returncode": completed.returncode,
+            "stdout": completed.stdout,
+            "stderr": completed.stderr,
+            "ok": completed.returncode == 0,
+        }
+
+    def file_info(rel_path: str) -> dict[str, Any]:
+        p = root / rel_path
+        if not p.exists():
+            return {"path": rel_path, "exists": False, "sha256": None, "size": None}
+        data = p.read_bytes()
+        return {
+            "path": rel_path,
+            "exists": True,
+            "sha256": hashlib.sha256(data).hexdigest(),
+            "size": len(data),
+        }
+
+    branch_result = run(["git", "branch", "--show-current"])
+    status_result = run(["git", "status", "--short"])
+    head_result = run(["git", "rev-parse", "HEAD"])
+    upstream_result = run(["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"])
+    upstream_head_result = (
+        run(["git", "rev-parse", "@{u}"])
+        if upstream_result["ok"]
+        else {"argv": ["git", "rev-parse", "@{u}"], "returncode": 1, "stdout": "", "stderr": "no upstream", "ok": False}
+    )
+
+    command_inventory = []
+    for argv in help_commands:
+        command_inventory.append(run(argv))
+
+    branch = branch_result["stdout"].strip()
+    head = head_result["stdout"].strip()
+    upstream = upstream_result["stdout"].strip() if upstream_result["ok"] else ""
+    upstream_head = upstream_head_result["stdout"].strip() if upstream_head_result["ok"] else ""
+    dirty_status = status_result["stdout"]
+
+    source_inventory = [file_info(path) for path in required_sources]
+    missing_sources = [item["path"] for item in source_inventory if not item["exists"]]
+
+    result_status = "PASS" if branch and head and head == upstream_head and dirty_status == "" and not missing_sources else "BLOCK"
+    final_signal = "d" if result_status == "PASS" else "f"
+    blockers = []
+    if not branch:
+        blockers.append("branch_missing")
+    if not head or head != upstream_head:
+        blockers.append("head_upstream_mismatch")
+    if dirty_status:
+        blockers.append("dirty_worktree")
+    if missing_sources:
+        blockers.append("missing_required_sources")
+
+    next_action = (
+        "Tell the LLM 'g'; it should read this handoff_request and return a copy-and-paste successor chat prompt."
+        if result_status == "PASS"
+        else "Resolve handoff preparation blockers before asking the LLM for a successor prompt: " + ", ".join(blockers)
+    )
+
+    payload: dict[str, Any] = {
+        "schema_version": 1,
+        "kind": "local_to_llm_last_result",
+        "message_kind": "handoff_request",
+        "assignment_kind": "successor_chat_prompt",
+        "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "chat_reply": f"{final_signal} | NEXT={next_action}",
+        "next_action": next_action,
+        "repo": {
+            "full_name": "vfi64/agentic-project-kit",
+            "local_path": "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
+            "branch": branch,
+            "head": head,
+            "upstream": upstream,
+            "upstream_head": upstream_head,
+            "head_matches_upstream": bool(head and head == upstream_head),
+            "dirty_status": dirty_status,
+            "worktree_clean": dirty_status == "",
+        },
+        "llm_assignment": {
+            "task": "Erzeuge einen vollständigen Copy-and-Paste-Übergabeprompt für einen neuen Chat.",
+            "language": "de",
+            "must_do": [
+                "Nicht aus Chat-Erinnerung arbeiten.",
+                "Die aufgeführten Repo-Pflichtquellen und maschinenlesbaren Regeln als Quellen der Wahrheit behandeln.",
+                "Alle Erfahrungen, Ideen, Fehlerklassen und offenen Aufgaben aus dem aktuellen Chat ergänzen, soweit sie noch nicht in Handoff-, Status-, Planungs- oder Governance-Dateien enthalten sind.",
+                "Unsicherheit und stale-verdächtige Quellen klar markieren.",
+                "Dem neuen Chat die vollständigen Transferregeln geben.",
+                "Dem neuen Chat den aktuellen agentic-kit-Kommandobestand und die Präferenz für komplexere transfer-Kommandos mitgeben.",
+                "Einen direkt kopierbaren Startprompt ausgeben, der Repo, lokalen Pfad, Startbefehle, Pflichtquellen, aktuellen Stand, offene Blocker und nächsten sicheren Slice enthält.",
+            ],
+            "must_not_do": [
+                "Keine erfolgreichen Checks oder Merges erfinden.",
+                "Keine rohen Git-Kommandos bevorzugen, wenn agentic-kit transfer-Kommandos existieren.",
+                "Keine Copy/Paste-Skripte als Primärweg vorschlagen.",
+                "Keine geschützten Dateien breit überschreiben.",
+            ],
+            "response_contract": {
+                "must_return_sections": [
+                    "Copy-and-paste successor prompt",
+                    "Machine-readable current state summary",
+                    "Missing or stale repo updates",
+                    "Next safest slice",
+                ],
+                "format": "markdown with a fenced YAML or JSON state block inside the prompt",
+            },
+        },
+        "transfer_rules_text": transfer_rules_text,
+        "transfer_protocol_machine": {
+            "priority_order": [
+                "remote_repo_backed_work_first",
+                "canonical_transfer_files_second",
+                "copy_paste_only_fallback",
+            ],
+            "canonical_files": {
+                "llm_to_local": ".agentic/transfer/inbox/next_command.py.txt",
+                "local_to_llm": ".agentic/transfer/outbox/last_result.txt",
+            },
+            "command_policy": {
+                "prefer_agentic_kit_transfer_commands": True,
+                "prefer_complex_wrappers_over_single_step_mode": True,
+            },
+        },
+        "required_sources": source_inventory,
+        "missing_sources": missing_sources,
+        "command_inventory": {
+            "source": "local_cli_help",
+            "commands": command_inventory,
+        },
+        "chat_delta_capture_instruction": (
+            "Die LLM soll zusätzlich alles aus dem aktuellen Chat aufnehmen, was noch nicht repo-backed "
+            "dokumentiert ist: Transferdatei-Zustandsmodell, handoff_request/message_kind-Idee, "
+            "prepare-successor-handoff-MVP, normalize-session-Erfahrungen, volatile repair, current-SHA-Automatisierung "
+            "für PR-Kommandos, und die Forderung nach weniger Einzelschrittmodus."
+        ),
+        "blockers": blockers,
+    }
+
+    outbox_path = write_transfer_outbox(root, payload)
+    payload["outbox_written"] = str(outbox_path)
+
+    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    if not json_output:
+        typer.echo(f"FINAL_SIGNAL={final_signal}")
+        typer.echo(f"FINAL_NEXT={next_action}")
+        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+
 @transfer_app.command("show-last-report")
 def show_last_report() -> None:
     try:
