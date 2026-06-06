@@ -78,6 +78,17 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         "prompt",
     ),
     _button(
+        "successor-handoff-prompt",
+        "Successor Handoff Prompt",
+        "Session",
+        "Render the successor chat prompt through prepare-successor-handoff --repair-known-volatile --render-prompt.",
+        "handoff-prompt",
+        safety_class="bounded-mutation",
+        implementation_state="planned",
+        enabled=False,
+        disabled_reason="requires guarded GUI dispatch for transfer output mutation",
+    ),
+    _button(
         "bootstrap-show",
         "Show Bootstrap",
         "Session",

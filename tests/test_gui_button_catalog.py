@@ -18,6 +18,7 @@ def test_gui_button_catalog_covers_communication_and_workflow_surface():
         "last-result",
         "handoff-check",
         "handoff-prompt",
+        "successor-handoff-prompt",
         "bootstrap-show",
         "terminal-remote-preflight",
         "workflow-guard-check",
@@ -43,7 +44,12 @@ def test_gui_button_catalog_keeps_only_readonly_buttons_enabled():
         and button.safety_class == "bounded-mutation"
         for button in enabled
     )
-    assert {"agent-run", "merge-if-green", "release-publish"} <= set(disabled_gui_button_ids())
+    assert {
+        "agent-run",
+        "merge-if-green",
+        "release-publish",
+        "successor-handoff-prompt",
+    } <= set(disabled_gui_button_ids())
     assert all(button.disabled_reason for button in all_gui_buttons() if not button.enabled)
 
 

@@ -23,6 +23,7 @@ def test_cockpit_action_registry_contains_core_read_only_actions() -> None:
     assert "audit.pr-hygiene" in action_ids
     assert "rules.communication-refresh" in action_ids
     assert "rules.handoff-refresh" in action_ids
+    assert "handoff.successor-prompt" in action_ids
 
 
 def test_cockpit_action_registry_classifies_bounded_workflow_go() -> None:
@@ -30,6 +31,19 @@ def test_cockpit_action_registry_classifies_bounded_workflow_go() -> None:
     assert action is not None
     assert action.safety == BOUNDED
     assert action.command == ("agentic-kit", "workflow", "go")
+
+
+def test_cockpit_action_registry_classifies_successor_handoff_prompt_as_bounded() -> None:
+    action = action_by_id("handoff.successor-prompt")
+    assert action is not None
+    assert action.safety == BOUNDED
+    assert action.command == (
+        "agentic-kit",
+        "transfer",
+        "prepare-successor-handoff",
+        "--repair-known-volatile",
+        "--render-prompt",
+    )
 
 
 def test_cockpit_foundation_does_not_mark_git_or_release_actions_destructive() -> None:
