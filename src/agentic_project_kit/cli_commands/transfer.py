@@ -715,6 +715,11 @@ def normalize_session(
         "--repair-known-volatile",
         help="Restore known volatile transfer output files before checking the session.",
     ),
+    write_outbox: bool = typer.Option(
+        False,
+        "--write-outbox/--no-write-outbox",
+        help="Write the normalized session result to the canonical transfer outbox.",
+    ),
 ) -> None:
     """Normalize and summarize the local transfer session state.
 
@@ -747,10 +752,6 @@ def normalize_session(
             "stderr": completed.stderr,
             "ok": completed.returncode == 0,
         }
-
-    volatile_repair_result = None
-    if repair_known_volatile:
-        volatile_repair_result = run(["git", "restore", "--", *known_volatile_paths])
 
     volatile_repair_result = None
     if repair_known_volatile:
@@ -891,8 +892,11 @@ def normalize_session(
         },
     }
 
-    outbox_written = write_transfer_outbox(root, payload)
-    payload["outbox_written"] = str(outbox_written)
+    if write_outbox:
+        outbox_written = write_transfer_outbox(root, payload)
+        payload["outbox_written"] = str(outbox_written)
+    else:
+        payload["outbox_written"] = None
 
     typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
     if not json_output:
