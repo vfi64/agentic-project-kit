@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vfi64.github.io/agentic-project-kit/schemas/patch_transfer_request.schema.json",
+  "title": "agentic-project-kit LLM-to-local patch transfer request",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "kind",
+    "message_kind",
+    "created_at_utc",
+    "result_status",
+    "target_branch",
+    "patch_policy",
+    "files",
+    "tests"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "kind": {"const": "llm_to_local_transfer_request"},
+    "message_kind": {"const": "patch_transfer_request"},
+    "result_status": {"enum": ["READY", "BLOCK"]},
+    "target_branch": {"type": "string", "minLength": 1},
+    "patch_policy": {
+      "type": "object",
+      "required": [
+        "no_heredoc",
+        "no_inline_multiline_shell",
+        "write_canonical_next_command_only",
+        "require_repo_status_before_and_after"
+      ],
+      "properties": {
+        "no_heredoc": {"const": true},
+        "no_inline_multiline_shell": {"const": true},
+        "write_canonical_next_command_only": {"const": true},
+        "require_repo_status_before_and_after": {"const": true}
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "operation"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "operation": {"enum": ["create", "modify", "delete"]}
+        }
+      }
+    },
+    "tests": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  }
+}

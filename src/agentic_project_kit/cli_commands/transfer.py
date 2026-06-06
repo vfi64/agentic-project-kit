@@ -954,6 +954,7 @@ def prepare_successor_handoff(
         ".agentic/rule_preservation.yaml",
         ".agentic/transfer_safety_rules.yaml",
         ".agentic/transfer/schemas/handoff_request.schema.json",
+        ".agentic/transfer/schemas/patch_transfer_request.schema.json",
         "docs/governance/FINAL_SUMMARY_CONTRACT.md",
         "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
         "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
