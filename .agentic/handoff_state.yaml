@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: ca514b1
-  commit_subject: Render successor handoff prompt from template (#1126)
+  commit: 07cc715
+  commit_subject: Add successor handoff schema contract (#1128)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
