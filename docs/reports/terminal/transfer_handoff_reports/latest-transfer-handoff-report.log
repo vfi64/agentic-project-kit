@@ -2,7 +2,7 @@ TRANSFER_REMOTE_NEXT_REPORT
 RESULT_STATUS=BLOCKED
 RETURNCODE=2
 BRANCH=
-HEAD=7b44fca
+HEAD=6a172d0
 REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
 CHAT_REPLY=g
 NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonical command.
@@ -16,7 +16,7 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
     "blocked_message": "remote-next transfer order is not active: inactive",
     "branch": null,
     "chat_reply": "g",
-    "head": "7b44fca",
+    "head": "6a172d0",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -43,7 +43,7 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
           "unstaged_changes": [],
           "untracked_files": []
         },
-        "head": "7b44fca",
+        "head": "6a172d0",
         "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
         "primary_state": "NEW_ORDER_REQUIRED",
         "reasons": [
@@ -68,15 +68,15 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "7b44fca",
+      "head": "6a172d0",
       "remote_tracking": "origin/main",
       "schema_version": 1,
       "transfer_order_guard": {
         "branch": "",
         "created_for_head": "",
         "current_branch": "main",
-        "current_full_head": "7b44fca29cb78d39e6adf3bad769b8dcbcb197fc",
-        "current_head": "7b44fca",
+        "current_full_head": "6a172d07f01a1295ed933beb6d7bb3f0904467e1",
+        "current_head": "6a172d0",
         "expected_current_branch": "",
         "expected_current_head": "",
         "expected_head": "",
@@ -94,11 +94,9 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
     "result_status": "BLOCKED",
     "returncode": 2,
     "rule_ack": {
-      "blocking_reasons": [
-        "stale_rule_ack"
-      ],
-      "confirmed": false,
-      "head": "ac4dfbf",
+      "blocking_reasons": [],
+      "confirmed": true,
+      "head": "6a172d0",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -406,10 +404,10 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
     "repo_state": {
       "branch": "main",
       "dirty_status": "",
-      "head": "7b44fca29cb78d39e6adf3bad769b8dcbcb197fc",
+      "head": "6a172d07f01a1295ed933beb6d7bb3f0904467e1",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "7b44fca29cb78d39e6adf3bad769b8dcbcb197fc"
+      "upstream_head": "6a172d07f01a1295ed933beb6d7bb3f0904467e1"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -440,7 +438,7 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
     "blocked_message": "remote-next transfer order is not active: inactive",
     "branch": null,
     "chat_reply": "g",
-    "head": "7b44fca",
+    "head": "6a172d0",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -467,7 +465,7 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
           "unstaged_changes": [],
           "untracked_files": []
         },
-        "head": "7b44fca",
+        "head": "6a172d0",
         "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
         "primary_state": "NEW_ORDER_REQUIRED",
         "reasons": [
@@ -492,15 +490,15 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "7b44fca",
+      "head": "6a172d0",
       "remote_tracking": "origin/main",
       "schema_version": 1,
       "transfer_order_guard": {
         "branch": "",
         "created_for_head": "",
         "current_branch": "main",
-        "current_full_head": "7b44fca29cb78d39e6adf3bad769b8dcbcb197fc",
-        "current_head": "7b44fca",
+        "current_full_head": "6a172d07f01a1295ed933beb6d7bb3f0904467e1",
+        "current_head": "6a172d0",
         "expected_current_branch": "",
         "expected_current_head": "",
         "expected_head": "",
@@ -518,11 +516,9 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
     "result_status": "BLOCKED",
     "returncode": 2,
     "rule_ack": {
-      "blocking_reasons": [
-        "stale_rule_ack"
-      ],
-      "confirmed": false,
-      "head": "ac4dfbf",
+      "blocking_reasons": [],
+      "confirmed": true,
+      "head": "6a172d0",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -830,10 +826,10 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
     "repo_state": {
       "branch": "main",
       "dirty_status": "",
-      "head": "7b44fca29cb78d39e6adf3bad769b8dcbcb197fc",
+      "head": "6a172d07f01a1295ed933beb6d7bb3f0904467e1",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "7b44fca29cb78d39e6adf3bad769b8dcbcb197fc"
+      "upstream_head": "6a172d07f01a1295ed933beb6d7bb3f0904467e1"
     },
     "schema_version": 1,
     "terminal_block_rules": {
