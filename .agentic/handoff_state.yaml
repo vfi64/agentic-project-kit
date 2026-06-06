@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: b7038d3
-  commit_subject: Add transfer successor handoff preparation (#1116)
+  commit: 3d79fd1
+  commit_subject: Add volatile repair to successor handoff preparation (#1118)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
