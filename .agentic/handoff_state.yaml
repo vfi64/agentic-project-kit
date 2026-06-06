@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 3d79fd1
-  commit_subject: Add volatile repair to successor handoff preparation (#1118)
+  commit: d94b778
+  commit_subject: Add remote work start transfer command (#1120)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
