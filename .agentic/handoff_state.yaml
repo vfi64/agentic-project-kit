@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 367a413
-  commit_subject: Add normalize-session volatile repair option (#1114)
+  commit: b7038d3
+  commit_subject: Add transfer successor handoff preparation (#1116)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
