@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 07cc715
-  commit_subject: Add successor handoff schema contract (#1128)
+  commit: db17f0e
+  commit_subject: Add successor handoff GUI action (#1130)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
