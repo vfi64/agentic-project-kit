@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 7e9291a
-  commit_subject: Add transfer normalize-session command (#1112)
+  commit: 367a413
+  commit_subject: Add normalize-session volatile repair option (#1114)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
