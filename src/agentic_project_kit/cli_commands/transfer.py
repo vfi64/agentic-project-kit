@@ -689,6 +689,176 @@ def publish_last_report(
         typer.echo(f"CHAT_REPLY={result['chat_reply']}")
 
 
+
+@transfer_app.command("normalize-session")
+def normalize_session(
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Normalize and summarize the local transfer session state.
+
+    The MVP is diagnostic and evidence-producing only. It does not switch branches,
+    pull, delete files, commit, push, or mutate the worktree except for writing the
+    canonical transfer outbox file.
+    """
+    import ast
+    import json
+    import subprocess
+    from pathlib import Path
+    from typing import Any
+
+    from agentic_project_kit.transfer_safety_context import write_transfer_outbox
+
+    root = Path(".")
+
+    def run(argv: list[str]) -> dict[str, Any]:
+        completed = subprocess.run(argv, cwd=root, text=True, capture_output=True)
+        return {
+            "argv": argv,
+            "returncode": completed.returncode,
+            "stdout": completed.stdout,
+            "stderr": completed.stderr,
+            "ok": completed.returncode == 0,
+        }
+
+    branch_result = run(["git", "branch", "--show-current"])
+    status_result = run(["git", "status", "--short"])
+    head_result = run(["git", "rev-parse", "HEAD"])
+    upstream_result = run(["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"])
+    upstream_head_result = (
+        run(["git", "rev-parse", "@{u}"])
+        if upstream_result["ok"]
+        else {
+            "argv": ["git", "rev-parse", "@{u}"],
+            "returncode": 1,
+            "stdout": "",
+            "stderr": "no upstream",
+            "ok": False,
+        }
+    )
+
+    branch = branch_result["stdout"].strip()
+    head = head_result["stdout"].strip()
+    upstream = upstream_result["stdout"].strip() if upstream_result["ok"] else ""
+    upstream_head = upstream_head_result["stdout"].strip() if upstream_head_result["ok"] else ""
+    dirty_status = status_result["stdout"]
+
+    ack_path = root / ".agentic" / "rule_ack" / "current.json"
+    rule_ack: dict[str, Any] = {
+        "path": str(ack_path),
+        "exists": ack_path.exists(),
+        "repo_head": None,
+        "matches_head": False,
+        "error": None,
+    }
+    if ack_path.exists():
+        try:
+            ack_data = json.loads(ack_path.read_text(encoding="utf-8"))
+            rule_ack["repo_head"] = ack_data.get("repo_head")
+            rule_ack["matches_head"] = bool(head and ack_data.get("repo_head") == head[:7])
+        except Exception as exc:
+            rule_ack["error"] = str(exc)
+
+    inbox_path = root / ".agentic" / "transfer" / "inbox" / "next_command.py.txt"
+    outbox_path = root / ".agentic" / "transfer" / "outbox" / "last_result.txt"
+
+    inbox_status: dict[str, Any] = {
+        "path": str(inbox_path),
+        "exists": inbox_path.exists(),
+        "syntax_ok": None,
+        "error": None,
+    }
+    if inbox_path.exists():
+        try:
+            ast.parse(inbox_path.read_text(encoding="utf-8"), filename=str(inbox_path))
+            inbox_status["syntax_ok"] = True
+        except SyntaxError as exc:
+            inbox_status["syntax_ok"] = False
+            inbox_status["error"] = f"{exc.__class__.__name__}: {exc}"
+
+    typed_inbox = root / ".agentic" / "typed_work_orders" / "inbox"
+    typed_pending = sorted(str(p) for p in typed_inbox.glob("*.yaml")) if typed_inbox.exists() else []
+    typed_queue_status = (
+        "no_command"
+        if not typed_pending
+        else "single_command"
+        if len(typed_pending) == 1
+        else "multiple_commands"
+    )
+
+    checks = {
+        "branch_present": bool(branch),
+        "worktree_clean": dirty_status == "",
+        "head_matches_upstream": bool(head and upstream_head and head == upstream_head),
+        "rule_ack_current": bool(rule_ack["matches_head"]),
+        "canonical_inbox_syntax_ok": inbox_status["syntax_ok"] is not False,
+        "typed_queue_not_ambiguous": typed_queue_status != "multiple_commands",
+    }
+
+    blockers: list[str] = []
+    if not checks["branch_present"]:
+        blockers.append("branch_missing")
+    if not checks["worktree_clean"]:
+        blockers.append("dirty_worktree")
+    if not checks["head_matches_upstream"]:
+        blockers.append("head_upstream_mismatch_or_missing_upstream")
+    if not checks["rule_ack_current"]:
+        blockers.append("rule_ack_not_current")
+    if not checks["canonical_inbox_syntax_ok"]:
+        blockers.append("canonical_inbox_syntax_error")
+    if not checks["typed_queue_not_ambiguous"]:
+        blockers.append("typed_queue_multiple_commands")
+
+    result_status = "PASS" if not blockers else "BLOCK"
+    final_signal = "d" if result_status == "PASS" else "f"
+    next_action = (
+        "Session normalized; proceed with the next explicit transfer or product slice."
+        if result_status == "PASS"
+        else "Resolve blockers before running transfer work: " + ", ".join(blockers)
+    )
+
+    payload: dict[str, Any] = {
+        "schema_version": 1,
+        "kind": "transfer_normalize_session_result",
+        "action": "normalize-session",
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "next_action": next_action,
+        "repo": {
+            "branch": branch,
+            "head": head,
+            "upstream": upstream,
+            "upstream_head": upstream_head,
+            "head_matches_upstream": checks["head_matches_upstream"],
+            "dirty_status": dirty_status,
+            "worktree_clean": checks["worktree_clean"],
+        },
+        "rule_ack": rule_ack,
+        "canonical_transfer_files": {
+            "inbox": inbox_status,
+            "outbox": {
+                "path": str(outbox_path),
+                "exists": outbox_path.exists(),
+            },
+        },
+        "typed_work_orders": {
+            "inbox_path": str(typed_inbox),
+            "status": typed_queue_status,
+            "pending_count": len(typed_pending),
+            "pending": typed_pending,
+        },
+        "checks": checks,
+        "blockers": blockers,
+    }
+
+    outbox_written = write_transfer_outbox(root, payload)
+    payload["outbox_written"] = str(outbox_written)
+
+    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    if not json_output:
+        typer.echo(f"FINAL_SIGNAL={final_signal}")
+        typer.echo(f"FINAL_NEXT={next_action}")
+        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+
 @transfer_app.command("show-last-report")
 def show_last_report() -> None:
     try:
