@@ -1,0 +1,14 @@
+id: inspect-handoff-generators
+schema_version: 1
+title: Inspect handoff and bootstrap generator sources
+safety: inspect_only
+log_path: docs/reports/terminal/inspect-handoff-generators-typed-work-order.log
+block_dirty_worktree: true
+steps:
+  - kind: command_argv
+    label: grep NEXT_CHAT_BOOTSTRAP references
+    argv:
+      - git
+      - grep
+      - -n
+      -
