@@ -693,6 +693,11 @@ def publish_last_report(
 @transfer_app.command("normalize-session")
 def normalize_session(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+    repair_known_volatile: bool = typer.Option(
+        False,
+        "--repair-known-volatile",
+        help="Restore known volatile transfer output files before checking the session.",
+    ),
 ) -> None:
     """Normalize and summarize the local transfer session state.
 
@@ -710,6 +715,12 @@ def normalize_session(
 
     root = Path(".")
 
+    known_volatile_paths = [
+        ".agentic/transfer/outbox/last_result.txt",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
+    ]
+
     def run(argv: list[str]) -> dict[str, Any]:
         completed = subprocess.run(argv, cwd=root, text=True, capture_output=True)
         return {
@@ -719,6 +730,10 @@ def normalize_session(
             "stderr": completed.stderr,
             "ok": completed.returncode == 0,
         }
+
+    volatile_repair_result = None
+    if repair_known_volatile:
+        volatile_repair_result = run(["git", "restore", "--", *known_volatile_paths])
 
     branch_result = run(["git", "branch", "--show-current"])
     status_result = run(["git", "status", "--short"])
@@ -848,6 +863,11 @@ def normalize_session(
         },
         "checks": checks,
         "blockers": blockers,
+        "volatile_repair": {
+            "requested": repair_known_volatile,
+            "known_paths": known_volatile_paths,
+            "result": volatile_repair_result,
+        },
     }
 
     outbox_written = write_transfer_outbox(root, payload)
