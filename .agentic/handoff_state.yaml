@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: db17f0e
-  commit_subject: Add successor handoff GUI action (#1130)
+  commit: 55edd8c
+  commit_subject: Avoid normalize-session outbox dirty state by default (#1132)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
