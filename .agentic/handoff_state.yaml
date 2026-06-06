@@ -1,6 +1,6 @@
 schema_version: 1
 updated:
-  date: '2026-06-05'
+  date: '2026-06-06'
   reason: Refresh handoff state to last substantive work commit
   source: agentic-kit handoff refresh
 repo:
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: ac4dfbf
-  commit_subject: Report remote-next order lifecycle states (#1107)
+  commit: deb4305
+  commit_subject: Publish final remote-next JSON projection (#1109)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
