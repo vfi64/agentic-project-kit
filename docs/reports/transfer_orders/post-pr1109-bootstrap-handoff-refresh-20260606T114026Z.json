@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "kind": "llm_to_local_transfer_order",
+  "created_at_utc": "20260606T114026Z",
+  "branch": "docs/post-pr1109-bootstrap-handoff-refresh",
+  "head": "52ce2343693e70111a665198b872d998b011a116",
+  "head_short": "52ce234",
+  "status": "ORDER_READY",
+  "blocked_previous_attempt": {
+    "result": "BLOCK",
+    "reason": "protected-change-plan rejected direct edit of generated artifact docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "action_taken": "restored direct edits to protected/generated files before writing this transfer order"
+  },
+  "source_of_truth": [
+    "repo committed files",
+    "agentic-kit local commands",
+    "protected-change-plan output",
+    "remote reports under docs/reports"
+  ],
+  "task": {
+    "name": "post_pr1109_bootstrap_handoff_refresh_via_generator_path",
+    "goal": "Refresh bootstrap/handoff state after PR #1109 without directly editing generated artifacts.",
+    "constraints": [
+      "No product work in this slice.",
+      "No GUI work.",
+      "No release work.",
+      "Do not directly edit docs/handoff/NEXT_CHAT_BOOTSTRAP.md unless the generator contract explicitly allows it.",
+      "Use the generator/source path for generated handoff artifacts.",
+      "Protected YAML/Markdown control files must be changed minimally/additively.",
+      "Run protected-change-plan against the real diff before commit.",
+      "Stop immediately on BLOCK or FAIL."
+    ],
+    "known_state": {
+      "last_substantive_pr": 1109,
+      "last_substantive_commit": "deb4305aca447f62d58416a4bdc393f7a10ba77d",
+      "remote_next_echo_test": "NEW_ORDER_REQUIRED/no_current_transfer_order with repaired final JSON projection",
+      "previous_local_head_observed": "52ce234",
+      "previous_block": "generated-artifact-direct-edit on docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
+    },
+    "requested_next_action_for_llm": [
+      "Read this transfer order from the repo.",
+      "Identify the correct generator/source files for NEXT_CHAT_BOOTSTRAP.md and related handoff prompts.",
+      "Return a new local command block that uses the generator path, not direct generated-artifact edits.",
+      "Keep communication via transfer files/reports; do not ask for long pasted terminal output if a repo report exists."
+    ]
+  },
+  "local_evidence": {
+    "before_restore_git_status_short": " M .agentic/handoff_state.yaml\n M docs/STATUS.md\n M docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md\n M docs/handoff/CURRENT_HANDOFF.md\n M docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n M docs/handoff/START_NEW_CHAT_PROMPT.md\n",
+    "after_restore_git_status_short": ""
+  }
+}
