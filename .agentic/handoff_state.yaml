@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 1024d4d
-  commit_subject: Render successor handoff prompt from transfer command (#1124)
+  commit: ca514b1
+  commit_subject: Render successor handoff prompt from template (#1126)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
