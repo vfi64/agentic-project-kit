@@ -380,10 +380,27 @@ def branch_delete_command(
         raise typer.Exit(code=result.returncode)
 
 
+
+def _resolve_expected_head_sha_alias(expected_head_sha: str) -> str:
+    """Resolve supported expected-head aliases before guarded PR actions."""
+    if expected_head_sha != "current":
+        return expected_head_sha
+
+    import subprocess
+
+    completed = subprocess.run(["git", "rev-parse", "HEAD"], text=True, capture_output=True)
+    if completed.returncode != 0:
+        raise typer.BadParameter(
+            "Could not resolve --expected-head-sha current via git rev-parse HEAD: "
+            + completed.stderr.strip()
+        )
+    return completed.stdout.strip()
+
+
 @transfer_app.command("pr-wait-ci")
 def pr_wait_ci_command(
     pr_number: int = typer.Argument(..., help="Pull request number to wait for."),
-    expected_head_sha: str = typer.Option("", "--expected-head-sha", help="Expected PR head SHA."),
+    expected_head_sha: str = typer.Option("", "--expected-head-sha", help="Expected PR head SHA, or current to use git rev-parse HEAD."),
     timeout_seconds: int = typer.Option(300, "--timeout-seconds", min=1, help="Maximum wait time."),
     poll_seconds: int = typer.Option(
         10, "--interval-seconds", "--poll-seconds", min=1, help="Polling interval."
@@ -397,7 +414,7 @@ def pr_wait_ci_command(
 ) -> None:
     result = pr_wait_ci(
         pr_number,
-        expected_head_sha=expected_head_sha,
+        expected_head_sha=_resolve_expected_head_sha_alias(expected_head_sha),
         timeout_seconds=timeout_seconds,
         poll_seconds=poll_seconds,
     )
@@ -433,7 +450,7 @@ def pr_merge_safe_command(
     _require_transfer_capability("rules_confirmed")
     result = pr_merge_safe(
         pr_number,
-        expected_head_sha=expected_head_sha,
+        expected_head_sha=_resolve_expected_head_sha_alias(expected_head_sha),
         main_branch=main_branch,
         merge_method=merge_method,
         no_verify_main=no_verify_main,
@@ -576,7 +593,7 @@ def pr_status_command(
         pr_number,
         no_failed_log_fetch=no_failed_log_fetch,
         failed_log_lines=failed_log_lines,
-        expected_head_sha=expected_head_sha,
+        expected_head_sha=_resolve_expected_head_sha_alias(expected_head_sha),
     )
     if json_output:
         typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
