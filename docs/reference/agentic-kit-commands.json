@@ -5880,6 +5880,60 @@
       "qualified_name": "agentic-kit transfer sync-main"
     },
     {
+      "group": "transfer",
+      "help": "Apply a guarded JSON/YAML text-replacement patch work order.",
+      "name": "work-order-patch",
+      "params": [
+        {
+          "default": "PosixPath('.agentic/transfer/inbox/patch.yaml')",
+          "help": "JSON/YAML patch work-order path.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Validate without writing files.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "dry_run",
+          "opts": [
+            "--dry-run"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "work-order-patch"
+      ],
+      "qualified_name": "agentic-kit transfer work-order-patch"
+    },
+    {
       "group": "root",
       "help": "Validate the machine-readable project contract.",
       "name": "validate-contract",

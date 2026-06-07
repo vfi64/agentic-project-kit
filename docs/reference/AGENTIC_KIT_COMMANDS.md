@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `139`
+- Command count: `140`
 
 ## Commands
 
@@ -974,6 +974,16 @@ Synchronize main, acknowledge rules, and normalize the session.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `main_branch` | `TyperOption` | --main-branch | `False` | `main` | Main branch to synchronize. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
+### `agentic-kit transfer work-order-patch`
+
+Apply a guarded JSON/YAML text-replacement patch work order.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/patch.yaml')` | JSON/YAML patch work-order path. |
+| `dry_run` | `TyperOption` | --dry-run | `False` | `False` | Validate without writing files. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
 ### `agentic-kit validate-contract`
