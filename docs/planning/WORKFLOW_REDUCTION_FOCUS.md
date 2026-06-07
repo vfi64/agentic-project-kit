@@ -276,26 +276,19 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 | technische Vermeidung von Inline-, Quote- und Heredoc-Fallen | weiterhin wichtig |
 | weitere Reduktion manueller Einzelschritte | offen, aber deutlich weniger kritisch |
 | Outbox-Dirty-Handling bei allen Transferkommandos | Hauptfälle erledigt, Rest beobachten |
-| Evidence-Abschluss ergonomisch machen | offen; `finalize-log` ist noch zu schwer zu bedienen |
-| Evidence-Abschluss | funktional, aber noch zu sperrig |
+| Evidence-Abschluss ergonomisch machen | Hauptpfad erledigt via `transfer evidence-finalize-current-transfer`; Evidence-PR-Automation bleibt offen |
+| Evidence-Abschluss | funktional und ergonomischer; direkte Main-Push-Vermeidung/Evidence-PR-Pfad bleibt weiter zu härten |
 | Copy/Paste-Patches | weiterhin Schwachstelle |
 
 ### Missing Or Desired Wrapper Commands
 
 | Fehlendes Kommando | Warum nötig | Ersetzt bisher |
 |---|---|---|
-| `transfer restore-known-volatile` | volatile Transferdateien gezielt zurücksetzen | `git restore -- .agentic/... docs/reports/...` |
-| `transfer sync-main` | `main` wechseln, pullen, Rule-Ack, Normalize in einem Schritt | `branch-switch main`, `pull-current`, `rules acknowledge`, `normalize-session` |
 | `transfer evidence-pr-complete` | Evidence-Commit über Branch/PR statt direktem `main`-Push abschließen | `git branch evidence/...`, `git reset --hard origin/main`, PR-Erstellung |
 | `transfer branch-save-commit BRANCH SHA` | lokalen Commit sicher auf Branch retten | `git branch evidence/... 512c771` |
 | `transfer reset-current-to-upstream` | lokalen Branch kontrolliert auf Upstream zurücksetzen | `git reset --hard origin/main` |
 | `transfer rebase-on-upstream` | Rebase mit Guarding und Konfliktbericht | `git rebase origin/branch` |
-| `transfer divergence-status` | lokale/remote Divergenz maschinenlesbar anzeigen | `git log --left-right HEAD...origin/branch` |
 | `transfer protected-diff-plan` | Diff erzeugen und protected-change-plan ausführen | `git diff --output=/tmp/...` plus `./ns protected-change-plan` |
-| `transfer command-reference-refresh` | Generator laufen lassen, JSON/MD prüfen | `python scripts/generate_agentic_kit_command_reference.py` |
-| `transfer command-reference-check` | Registry-Drift-Test gezielt laufen lassen | `pytest tests/test_agentic_kit_command_reference_is_current.py` |
-| `evidence finalize-current-transfer` | ergonomische Hülle um `evidence finalize-log` | langer `finalize-log`-Befehl |
-| `evidence inspect-latest` | garantiert aktuelles Evidence-Log prüfen | `evidence inspect --require-summary`, das aktuell noch ein altes Log erwischen kann |
 | `transfer concise-report` | lange JSON-/Help-Ausgaben auf Kurzsummary reduzieren | manuelle Python-Auswertung von Reports |
 | `transfer work-order-patch` | Patchauftrag aus Datei statt Heredoc/Inline-Paste | lange Copy/Paste-Pythonblöcke |
 | `transfer conflict-status` | Rebase-/Merge-Konflikte kurz und maschinenlesbar ausgeben | `git status --short` im Konfliktfall |
@@ -303,20 +296,35 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 | `transfer pr-existing-for-branch` | vorhandenen PR zu Branch finden | manuelle GitHub-/`gh`-Abfrage |
 | `transfer delete-merged-work-branch` | alte Feature-/Evidence-Branches nach Merge löschen | `git branch -d`, `git push origin --delete ...` |
 
+### Completed Pre-GUI Wrapper Commands
+
+| Erledigtes Kommando | Stand |
+|---|---|
+| `transfer restore-known-volatile` | erledigt und getestet |
+| `transfer sync-main` | erledigt, getestet und mit kurzer Standardausgabe versehen |
+| `transfer divergence-status` | erledigt und getestet |
+| `transfer command-reference-refresh` | erledigt und getestet |
+| `transfer command-reference-check` | erledigt und getestet |
+| `transfer evidence-inspect-latest` | erledigt und getestet; kann korrekt FAIL melden, wenn das aktuell gefundene Evidence-Log alt/ambig/rot ist |
+| `transfer evidence-finalize-current-transfer` | erledigt und getestet als ergonomische Hülle um `evidence finalize-log` |
+| `transfer remote-work-start` concise default output | erledigt und regressionsgetestet |
+
 ### Pre-GUI Work Order
 
 #### 1. Wrapper-Lücken schließen
 
 Priority order:
 
-1. `transfer restore-known-volatile`
-2. `transfer sync-main`
-3. `evidence finalize-current-transfer`
-4. `evidence inspect-latest`
-5. `transfer protected-diff-plan`
-6. `transfer divergence-status`
-7. `transfer rebase-on-upstream`
-8. `transfer command-reference-refresh` and `transfer command-reference-check`
+1. `transfer protected-diff-plan`
+2. `transfer rebase-on-upstream`
+3. `transfer evidence-pr-complete`
+4. `transfer work-order-patch`
+5. `transfer conflict-status`
+6. `transfer conflict-resolve-file`
+7. `transfer pr-existing-for-branch`
+8. `transfer delete-merged-work-branch`
+
+Completed in the first hardening pass: `transfer restore-known-volatile`, `transfer sync-main`, `transfer divergence-status`, `transfer command-reference-refresh`, `transfer command-reference-check`, `transfer evidence-inspect-latest`, and `transfer evidence-finalize-current-transfer`.
 
 Reason: these steps are still repeatedly replaced by raw shell, raw git, direct Python invocation, or long copy/paste snippets.
 
@@ -335,14 +343,18 @@ This reduces quote, terminal, heredoc, escape, copy/paste, and message-stream fa
 
 #### 3. Evidence ergonomisch machen
 
-`evidence finalize-log` works, but is still too long and error-prone for regular use.
+`evidence finalize-log` works. The regular transfer path is now shortened by `transfer evidence-finalize-current-transfer`.
 
-Needed:
+Completed:
 
-- `evidence finalize-current-transfer --slice ... --pr ...`;
-- automatic selection of `docs/reports/transfer_runs/latest-transfer-report.log`;
+- `transfer evidence-finalize-current-transfer --slice ... --pr ...`;
+- default selection of `docs/reports/transfer_runs/latest-transfer-report.log`;
 - automatic remote log path generation;
-- automatic `inspect-latest` after finalization;
+- strict wrapper around `evidence finalize-log`.
+
+Still needed:
+
+- automatic `transfer evidence-inspect-latest` after finalization where appropriate;
 - direct detection that evidence must not be pushed directly to `main`, but must go through an evidence PR when branch protection or the transfer monitor requires it.
 
 #### 4. Command-Reference in Regelverwaltung prüfen
@@ -357,9 +369,12 @@ The command reference registry now has a governance contract and a staleness tes
 
 Desired behavior:
 
-- `--concise` or equivalent should become the default for transfer-facing commands;
+- concise output is now the default for `transfer sync-main` and `transfer remote-work-start`;
+- full detail payloads remain available through `--json`;
 - long reports belong in files, not chat;
 - chat output should be limited to status, PR number, HEAD, failed step, report path, and next action.
+
+Still needed: apply the same output discipline to remaining transfer-facing commands that still emit large JSON or embedded stdout by default.
 
 #### 6. Erst danach GUI
 
@@ -370,11 +385,11 @@ The GUI should expose stable wrappers, not raw git, raw GitHub, or unbounded she
 | Neuer Arbeitsbranch | `transfer remote-work-start` |
 | Main synchronisieren | `transfer sync-main` |
 | PR abschließen | `transfer pr-complete` |
-| Evidence abschließen | `evidence finalize-current-transfer` |
+| Evidence abschließen | `transfer evidence-finalize-current-transfer` |
 | Handoff erzeugen | `transfer prepare-successor-handoff --render-prompt` |
 | Command-Reference aktualisieren | `transfer command-reference-refresh` |
 | Volatile Dateien bereinigen | `transfer restore-known-volatile` |
 | Status anzeigen | `transfer normalize-session --repair-known-volatile` |
-| Fehlerdiagnose | `transfer pr-status`, `transfer divergence-status`, `evidence inspect-latest` |
+| Fehlerdiagnose | `transfer pr-status`, `transfer divergence-status`, `transfer evidence-inspect-latest` |
 
 Acceptance condition before GUI expansion: every GUI button that mutates repository state must map to a bounded wrapper with branch, dirty-state, rule-ack, evidence, and failure-mode guards.
