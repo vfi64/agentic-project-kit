@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 3c1d312
-  commit_subject: Add transfer startup hardening commands (#1151)
+  commit: 0c5e483
+  commit_subject: Add command reference transfer wrappers (#1153)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
