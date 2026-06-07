@@ -9,11 +9,9 @@ import click
 from typer.main import get_command
 
 ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT / "src") not in sys.path:
-    sys.path.insert(0, str(ROOT / "src"))
+SRC = ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
 
 REFERENCE_JSON = ROOT / "docs/reference/agentic-kit-commands.json"
-REFERENCE_MD = ROOT / "docs/reference/AGENTIC_KIT_COMMANDS.md"
-
-
-def _param_type(param: click.Parameter
+REFERENCE
