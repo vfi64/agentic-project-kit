@@ -462,6 +462,55 @@ def pr_merge_safe_command(
         raise typer.Exit(code=result.returncode)
 
 
+@transfer_app.command("pr-complete")
+def pr_complete_command(
+    pr_number: int = typer.Argument(..., help="Pull request number to wait, merge, sync, and complete."),
+    expected_head_sha: str = typer.Option(
+        "",
+        "--expected-head-sha",
+        help="Expected PR head SHA, or current to use git rev-parse HEAD.",
+    ),
+    main_branch: str = typer.Option("main", "--main-branch", help="Expected base branch."),
+    merge_method: str = typer.Option("squash", "--merge-method", help="GitHub merge method."),
+    timeout_seconds: int = typer.Option(300, "--timeout-seconds", min=1, help="Maximum CI wait time."),
+    poll_seconds: int = typer.Option(
+        10,
+        "--interval-seconds",
+        "--poll-seconds",
+        min=1,
+        help="CI polling interval.",
+    ),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    """Wait for PR CI, merge safely, and then run the existing post-merge completion lifecycle.
+
+    This is intentionally a CLI registration stub in this slice. The full orchestration
+    is added in the next slice after the command contract is pinned.
+    """
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_pr_complete_result",
+        "action": "pr-complete",
+        "pr_number": pr_number,
+        "expected_head_sha": _resolve_expected_head_sha_alias(expected_head_sha),
+        "main_branch": main_branch,
+        "merge_method": merge_method,
+        "timeout_seconds": timeout_seconds,
+        "poll_seconds": poll_seconds,
+        "result_status": "BLOCKED",
+        "final_signal": "f",
+        "next_action": "Implement pr-complete orchestration after CLI registration contract is green.",
+    }
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        typer.echo("TRANSFER_PR_COMPLETE")
+        typer.echo("STATE:                 BLOCKED")
+        typer.echo("NEXT:                  Implement pr-complete orchestration after CLI registration contract is green.")
+        typer.echo("CHAT_REPLY:            f | NEXT=Implement pr-complete orchestration after CLI registration contract is green.")
+    raise typer.Exit(code=2)
+
+
 @transfer_app.command("post-merge-check")
 def post_merge_check_command(
     main_branch: str = typer.Option(
