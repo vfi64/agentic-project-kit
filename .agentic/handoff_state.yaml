@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 01a0a8c
-  commit_subject: Update roadmap for guard diagnostics wrappers (#1167)
+  commit: 9b33585
+  commit_subject: Add transfer work-order patch wrapper (#1169)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
