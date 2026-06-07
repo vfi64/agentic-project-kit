@@ -6,7 +6,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-import click
 from typer.main import get_command
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -50,7 +49,7 @@ def _jsonable(value: Any) -> Any:
     return repr(value)
 
 
-def _param_record(param: click.Parameter) -> dict[str, Any]:
+def _param_record(param: Any) -> dict[str, Any]:
     record: dict[str, Any] = {
         "name": param.name,
         "param_type": param.__class__.__name__,
@@ -58,16 +57,16 @@ def _param_record(param: click.Parameter) -> dict[str, Any]:
         "default": _jsonable(getattr(param, "default", None)),
         "metavar": getattr(param, "metavar", None),
     }
-    if isinstance(param, click.Option):
-        record["opts"] = list(param.opts)
-        record["secondary_opts"] = list(param.secondary_opts)
-        record["help"] = param.help or ""
-        record["is_flag"] = bool(param.is_flag)
-        record["multiple"] = bool(param.multiple)
+    if hasattr(param, "opts"):
+        record["opts"] = list(getattr(param, "opts", []))
+        record["secondary_opts"] = list(getattr(param, "secondary_opts", []))
+        record["help"] = getattr(param, "help", None) or ""
+        record["is_flag"] = bool(getattr(param, "is_flag", False))
+        record["multiple"] = bool(getattr(param, "multiple", False))
     return record
 
 
-def _record_for(path: list[str], command: click.Command) -> CommandRecord:
+def _record_for(path: list[str], command: Any) -> CommandRecord:
     group = "root" if len(path) == 1 else " ".join(path[:-1])
     return CommandRecord(
         group=group,
@@ -79,11 +78,12 @@ def _record_for(path: list[str], command: click.Command) -> CommandRecord:
     )
 
 
-def _walk(path: list[str], command: click.Command) -> list[CommandRecord]:
-    if isinstance(command, click.Group):
+def _walk(path: list[str], command: Any) -> list[CommandRecord]:
+    commands = getattr(command, "commands", None)
+    if isinstance(commands, dict):
         records: list[CommandRecord] = []
-        for name in sorted(command.commands):
-            records.extend(_walk([*path, name], command.commands[name]))
+        for name in sorted(commands):
+            records.extend(_walk([*path, name], commands[name]))
         return records
     return [_record_for(path, command)]
 
@@ -92,7 +92,8 @@ def build_reference() -> dict[str, Any]:
     root = get_command(app)
     commands: list[dict[str, Any]] = []
     for name, command in sorted(root.commands.items()):
-        if isinstance(command, click.Group):
+        nested = getattr(command, "commands", None)
+        if isinstance(nested, dict):
             commands.extend(record.as_dict() for record in _walk([name], command))
         else:
             commands.append(_record_for([name], command).as_dict())

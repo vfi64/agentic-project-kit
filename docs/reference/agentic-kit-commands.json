@@ -18,10 +18,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "action_id",
+          "opts": [
+            "action_id"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -352,10 +359,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "action_id",
+          "opts": [
+            "action_id"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": "PosixPath('.')",
@@ -684,10 +698,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "path",
+          "opts": [
+            "path"
+          ],
           "param_type": "TyperArgument",
-          "required": false
+          "required": false,
+          "secondary_opts": []
         },
         {
           "default": "PosixPath('.')",
@@ -771,10 +792,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "expected_log",
+          "opts": [
+            "expected_log"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": "PosixPath('.')",
@@ -1262,10 +1290,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "logfile",
+          "opts": [
+            "logfile"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -1281,10 +1316,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "path",
+          "opts": [
+            "path"
+          ],
           "param_type": "TyperArgument",
-          "required": false
+          "required": false,
+          "secondary_opts": []
         },
         {
           "default": "PosixPath('.')",
@@ -1495,10 +1537,17 @@
       "params": [
         {
           "default": ".agentic/handoff_state.yaml",
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "path",
+          "opts": [
+            "path"
+          ],
           "param_type": "TyperArgument",
-          "required": false
+          "required": false,
+          "secondary_opts": []
         },
         {
           "default": false,
@@ -1554,10 +1603,17 @@
       "params": [
         {
           "default": null,
+          "help": "Project directory/name.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "name",
+          "opts": [
+            "name"
+          ],
           "param_type": "TyperArgument",
-          "required": false
+          "required": false,
+          "secondary_opts": []
         },
         {
           "default": "python-cli",
@@ -1764,10 +1820,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "path",
+          "opts": [
+            "path"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": null,
@@ -1839,10 +1902,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "path",
+          "opts": [
+            "path"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": null,
@@ -1914,10 +1984,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "paths",
+          "opts": [
+            "paths"
+          ],
           "param_type": "TyperArgument",
-          "required": false
+          "required": false,
+          "secondary_opts": []
         },
         {
           "default": null,
@@ -1957,10 +2034,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "pattern_id",
+          "opts": [
+            "pattern_id"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -2015,10 +2099,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "json_file",
+          "opts": [
+            "json_file"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -2034,10 +2125,17 @@
       "params": [
         {
           "default": null,
+          "help": "Pull request number to merge only after green checks.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": "squash",
@@ -2209,10 +2307,17 @@
       "params": [
         {
           "default": null,
+          "help": "Pull request number to inspect.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": false,
@@ -2270,10 +2375,17 @@
       "params": [
         {
           "default": null,
+          "help": "Pull request number to inspect.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": null,
@@ -2345,10 +2457,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "json_file",
+          "opts": [
+            "json_file"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -2911,10 +3030,17 @@
       "params": [
         {
           "default": null,
+          "help": "Planning document title",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "title",
+          "opts": [
+            "title"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": "PosixPath('.')",
@@ -3079,10 +3205,17 @@
       "params": [
         {
           "default": null,
+          "help": "Execution target: local or remote.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "target",
+          "opts": [
+            "target"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": null,
@@ -3126,10 +3259,17 @@
       "params": [
         {
           "default": null,
+          "help": "Execution target: local or remote.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "target",
+          "opts": [
+            "target"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": null,
@@ -3187,10 +3327,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "item_id",
+          "opts": [
+            "item_id"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": null,
@@ -3367,10 +3514,17 @@
       "params": [
         {
           "default": null,
+          "help": "Branch name to create.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "branch",
+          "opts": [
+            "branch"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": "main",
@@ -3428,10 +3582,17 @@
       "params": [
         {
           "default": null,
+          "help": "Branch name to delete.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "branch",
+          "opts": [
+            "branch"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": false,
@@ -3489,10 +3650,17 @@
       "params": [
         {
           "default": null,
+          "help": "Branch name to switch to.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "branch",
+          "opts": [
+            "branch"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": false,
@@ -4015,10 +4183,17 @@
       "params": [
         {
           "default": null,
+          "help": "Pull request number to complete.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": "",
@@ -4201,10 +4376,17 @@
       "params": [
         {
           "default": null,
+          "help": "Pull request number to merge safely.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": "",
@@ -4318,10 +4500,17 @@
       "params": [
         {
           "default": null,
+          "help": "Pull request number to inspect through the transfer wrapper.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": false,
@@ -4393,10 +4582,17 @@
       "params": [
         {
           "default": null,
+          "help": "Pull request number to wait for.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": "",
@@ -4643,10 +4839,17 @@
       "params": [
         {
           "default": null,
+          "help": "Optional remote transfer branch. If omitted, read branch from the transfer order.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "branch",
+          "opts": [
+            "branch"
+          ],
           "param_type": "TyperArgument",
-          "required": false
+          "required": false,
+          "secondary_opts": []
         },
         {
           "default": false,
@@ -4678,10 +4881,17 @@
       "params": [
         {
           "default": null,
+          "help": "Feature branch to prepare, for example feature/name.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "branch",
+          "opts": [
+            "branch"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": "main",
@@ -5102,10 +5312,17 @@
       "params": [
         {
           "default": null,
+          "help": "Output text file to validate.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "output_path",
+          "opts": [
+            "output_path"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": null,
@@ -5191,10 +5408,17 @@
       "params": [
         {
           "default": null,
+          "help": "Text file to validate.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "path",
+          "opts": [
+            "path"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": null,
@@ -5246,24 +5470,45 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "template_id",
+          "opts": [
+            "template_id"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "work_order_id",
+          "opts": [
+            "work_order_id"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "expected_branch",
+          "opts": [
+            "expected_branch"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -5279,10 +5524,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "work_order_id",
+          "opts": [
+            "work_order_id"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": false,
@@ -5312,10 +5564,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "work_order_id",
+          "opts": [
+            "work_order_id"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -5408,10 +5667,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "work_order_path",
+          "opts": [
+            "work_order_path"
+          ],
           "param_type": "TyperArgument",
-          "required": true
+          "required": true,
+          "secondary_opts": []
         },
         {
           "default": false,
@@ -5585,10 +5851,17 @@
       "params": [
         {
           "default": null,
+          "help": "Optional stored workflow item name to set before running.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "name",
+          "opts": [
+            "name"
+          ],
           "param_type": "TyperArgument",
-          "required": false
+          "required": false,
+          "secondary_opts": []
         },
         {
           "default": "PosixPath('.')",
@@ -5618,10 +5891,17 @@
       "params": [
         {
           "default": null,
+          "help": "Optional stored workflow item name.",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "name",
+          "opts": [
+            "name"
+          ],
           "param_type": "TyperArgument",
-          "required": false
+          "required": false,
+          "secondary_opts": []
         },
         {
           "default": "PosixPath('.')",
@@ -5769,10 +6049,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "paths",
+          "opts": [
+            "paths"
+          ],
           "param_type": "TyperArgument",
-          "required": false
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -5788,10 +6075,17 @@
       "params": [
         {
           "default": null,
+          "help": "",
+          "is_flag": false,
           "metavar": null,
+          "multiple": false,
           "name": "paths",
+          "opts": [
+            "paths"
+          ],
           "param_type": "TyperArgument",
-          "required": false
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [

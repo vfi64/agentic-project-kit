@@ -17,7 +17,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `action_id` | `TyperArgument` |  | `True` |  |  |
+| `action_id` | `TyperArgument` | action_id | `True` |  |  |
 
 ### `agentic-kit boot check`
 
@@ -87,7 +87,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `action_id` | `TyperArgument` |  | `True` |  |  |
+| `action_id` | `TyperArgument` | action_id | `True` |  |  |
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `allow_bounded` | `TyperOption` | --allow-bounded | `False` | `False` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON action result. |
@@ -162,7 +162,7 @@ Classify a terminal/evidence log for deterministic gatekeeper decisions.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `path` | `TyperArgument` |  | `False` |  |  |
+| `path` | `TyperArgument` | path | `False` |  |  |
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `require_summary` | `TyperOption` | --require-summary | `False` | `False` |  |
 | `ignore_git_status` | `TyperOption` | --ignore-git-status | `False` | `False` |  |
@@ -181,7 +181,7 @@ Pass when git status is clean except one expected in-progress log.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `expected_log` | `TyperArgument` |  | `True` |  |  |
+| `expected_log` | `TyperArgument` | expected_log | `True` |  |  |
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 
 ### `agentic-kit evidence commit-paths`
@@ -235,7 +235,7 @@ Fail if a terminal evidence log has contradictory final state.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `logfile` | `TyperArgument` |  | `True` |  |  |
+| `logfile` | `TyperArgument` | logfile | `True` |  |  |
 
 ### `agentic-kit evidence inspect`
 
@@ -243,7 +243,7 @@ Inspect explicit or latest terminal evidence before continuing after chat contro
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `path` | `TyperArgument` |  | `False` |  |  |
+| `path` | `TyperArgument` | path | `False` |  |  |
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `require_summary` | `TyperOption` | --require-summary | `False` | `False` |  |
 
@@ -288,7 +288,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `path` | `TyperArgument` |  | `False` | `.agentic/handoff_state.yaml` |  |
+| `path` | `TyperArgument` | path | `False` | `.agentic/handoff_state.yaml` |  |
 | `write` | `TyperOption` | --write | `False` | `False` | Write refreshed safe_state to YAML. |
 
 ### `agentic-kit handoff show`
@@ -301,7 +301,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `name` | `TyperArgument` |  | `False` |  |  |
+| `name` | `TyperArgument` | name | `False` |  | Project directory/name. |
 | `project_type` | `TyperOption` | --type | `False` | `python-cli` | python-cli, python-lib, generic, governance-wrapper |
 | `description` | `TyperOption` | --description | `False` |  |  |
 | `license_name` | `TyperOption` | --license | `False` | `MIT` |  |
@@ -320,7 +320,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `path` | `TyperArgument` |  | `True` |  |  |
+| `path` | `TyperArgument` | path | `True` |  |  |
 | `exit_code` | `TyperOption` | --exit-code | `True` |  |  |
 | `target_verified` | `TyperOption` | --target-verified | `False` | `False` |  |
 | `target_state` | `TyperOption` | --target-state | `False` |  | Already-done target class. One of: branch-exists, git-clean, pull-request-exists, remote-sync |
@@ -330,7 +330,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `path` | `TyperArgument` |  | `True` |  |  |
+| `path` | `TyperArgument` | path | `True` |  |  |
 | `exit_code` | `TyperOption` | --exit-code | `True` |  |  |
 | `target_verified` | `TyperOption` | --target-verified | `False` | `False` |  |
 | `target_state` | `TyperOption` | --target-state | `False` |  | Already-done target class. One of: branch-exists, git-clean, pull-request-exists, remote-sync |
@@ -340,7 +340,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `paths` | `TyperArgument` |  | `False` |  |  |
+| `paths` | `TyperArgument` | paths | `False` |  |  |
 | `require_slice_gate` | `TyperOption` | --require-slice-gate | `False` |  | Require a clean passing slice gate before accepting preflight. |
 
 ### `agentic-kit patterns list`
@@ -355,7 +355,7 @@ Show one local pattern catalog entry by stable ID.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `pattern_id` | `TyperArgument` |  | `True` |  |  |
+| `pattern_id` | `TyperArgument` | pattern_id | `True` |  |  |
 
 ### `agentic-kit post-release-check`
 
@@ -370,7 +370,7 @@ Validate post-release GitHub and Zenodo state without guessing DOI metadata.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `json_file` | `TyperArgument` |  | `True` |  |  |
+| `json_file` | `TyperArgument` | json_file | `True` |  |  |
 
 ### `agentic-kit pr merge-if-green`
 
@@ -378,7 +378,7 @@ Merge only when PR checks are green, refs match, and merge state is clean.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `pr_number` | `TyperArgument` |  | `True` |  |  |
+| `pr_number` | `TyperArgument` | pr_number | `True` |  | Pull request number to merge only after green checks. |
 | `merge_method` | `TyperOption` | --merge-method | `False` | `squash` | GitHub merge method: squash, merge, or rebase. |
 | `delete_branch` | `TyperOption` | --delete-branch, --no-delete-branch | `False` | `True` | Delete the branch after a successful merge. |
 | `dry_run` | `TyperOption` | --dry-run | `False` | `False` | Evaluate without merging. |
@@ -397,7 +397,7 @@ Print deterministic PR/CI status and fetch failed logs for red CI.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `pr_number` | `TyperArgument` |  | `True` |  |  |
+| `pr_number` | `TyperArgument` | pr_number | `True` |  | Pull request number to inspect. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of the text report. |
 | `no_failed_log_fetch` | `TyperOption` | --no-failed-log-fetch | `False` | `False` | Do not fetch failed GitHub Actions logs for red checks. |
 | `failed_log_lines` | `TyperOption` | --failed-log-lines | `False` | `120` | Maximum failed-log excerpt lines. |
@@ -408,7 +408,7 @@ Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `pr_number` | `TyperArgument` |  | `True` |  |  |
+| `pr_number` | `TyperArgument` | pr_number | `True` |  | Pull request number to inspect. |
 | `expected_head_sha` | `TyperOption` | --expected-head-sha | `False` |  | Expected PR head SHA for --expected-head-sha. The command fails closed if the head moves. |
 | `timeout_seconds` | `TyperOption` | --timeout-seconds | `False` | `2700` | Maximum wait time. |
 | `interval_seconds` | `TyperOption` | --interval-seconds | `False` | `20` | Polling interval. |
@@ -418,7 +418,7 @@ Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `json_file` | `TyperArgument` |  | `True` |  |  |
+| `json_file` | `TyperArgument` | json_file | `True` |  |  |
 
 ### `agentic-kit pr-hygiene`
 
@@ -532,7 +532,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `title` | `TyperArgument` |  | `True` |  |  |
+| `title` | `TyperArgument` | title | `True` |  | Planning document title |
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `status` | `TyperOption` | --status | `False` | `active` |  |
 | `decision_status` | `TyperOption` | --decision-status | `False` | `proposed` |  |
@@ -556,7 +556,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `target` | `TyperArgument` |  | `True` |  |  |
+| `target` | `TyperArgument` | target | `True` |  | Execution target: local or remote. |
 | `expected_branch` | `TyperOption` | --expected-branch | `False` |  |  |
 | `allow_dirty` | `TyperOption` | --allow-dirty | `False` | `False` | Allow a dirty worktree. |
 
@@ -564,7 +564,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `target` | `TyperArgument` |  | `True` |  |  |
+| `target` | `TyperArgument` | target | `True` |  | Execution target: local or remote. |
 | `expected_branch` | `TyperOption` | --expected-branch | `False` |  |  |
 | `reason` | `TyperOption` | --reason | `False` | `manual_mode_transition` |  |
 | `allow_dirty` | `TyperOption` | --allow-dirty | `False` | `False` | Allow a dirty worktree. |
@@ -575,7 +575,7 @@ Mark a TODO item as done and store evidence.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `item_id` | `TyperArgument` |  | `True` |  |  |
+| `item_id` | `TyperArgument` | item_id | `True` |  |  |
 | `evidence` | `TyperOption` | --evidence | `True` |  | Evidence for completing the item. |
 | `render` | `TyperOption` | --render, --no-render | `False` | `True` | Regenerate docs/TODO.md. |
 
@@ -612,7 +612,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `branch` | `TyperArgument` |  | `True` |  |  |
+| `branch` | `TyperArgument` | branch | `True` |  | Branch name to create. |
 | `start_point` | `TyperOption` | --start-point | `False` | `main` | Start point for the new branch. |
 | `push` | `TyperOption` | --push | `False` | `False` | Push the new branch and set upstream. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
@@ -621,7 +621,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `branch` | `TyperArgument` |  | `True` |  |  |
+| `branch` | `TyperArgument` | branch | `True` |  | Branch name to delete. |
 | `remote` | `TyperOption` | --remote | `False` | `False` | Delete branch on origin instead of locally. |
 | `force` | `TyperOption` | --force | `False` | `False` | Force local branch deletion with -D. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
@@ -630,7 +630,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `branch` | `TyperArgument` |  | `True` |  |  |
+| `branch` | `TyperArgument` | branch | `True` |  | Branch name to switch to. |
 | `pull` | `TyperOption` | --pull | `False` | `False` | Fast-forward pull from origin after switching. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
@@ -711,7 +711,7 @@ canonical transfer outbox file.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `pr_number` | `TyperArgument` |  | `True` |  |  |
+| `pr_number` | `TyperArgument` | pr_number | `True` |  | Pull request number to complete. |
 | `expected_head_sha` | `TyperOption` | --expected-head-sha | `False` | `` | Expected PR head SHA, or current to use git rev-parse HEAD before the merge. |
 | `main_branch` | `TyperOption` | --main-branch | `False` | `main` | Main branch to sync after the merge. |
 | `merge_method` | `TyperOption` | --merge-method | `False` | `squash` | GitHub merge method. |
@@ -733,7 +733,7 @@ canonical transfer outbox file.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `pr_number` | `TyperArgument` |  | `True` |  |  |
+| `pr_number` | `TyperArgument` | pr_number | `True` |  | Pull request number to merge safely. |
 | `expected_head_sha` | `TyperOption` | --expected-head-sha | `False` | `` | Expected PR head SHA. If omitted, the PR head SHA is resolved automatically. |
 | `main_branch` | `TyperOption` | --main-branch | `False` | `main` | Expected base branch. |
 | `merge_method` | `TyperOption` | --merge-method | `False` | `squash` | GitHub merge method. |
@@ -746,7 +746,7 @@ canonical transfer outbox file.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `pr_number` | `TyperArgument` |  | `True` |  |  |
+| `pr_number` | `TyperArgument` | pr_number | `True` |  | Pull request number to inspect through the transfer wrapper. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text report. |
 | `no_failed_log_fetch` | `TyperOption` | --no-failed-log-fetch | `False` | `False` | Do not fetch failed GitHub Actions logs for red checks. |
 | `failed_log_lines` | `TyperOption` | --failed-log-lines | `False` | `120` | Maximum failed-log excerpt lines. |
@@ -756,7 +756,7 @@ canonical transfer outbox file.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `pr_number` | `TyperArgument` |  | `True` |  |  |
+| `pr_number` | `TyperArgument` | pr_number | `True` |  | Pull request number to wait for. |
 | `expected_head_sha` | `TyperOption` | --expected-head-sha | `False` | `` | Expected PR head SHA, or current to use git rev-parse HEAD. |
 | `timeout_seconds` | `TyperOption` | --timeout-seconds | `False` | `300` | Maximum wait time. |
 | `poll_seconds` | `TyperOption` | --interval-seconds, --poll-seconds | `False` | `10` | Polling interval. |
@@ -800,14 +800,14 @@ read it after a simple "g" and produce a copy-and-paste successor chat prompt.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `branch` | `TyperArgument` |  | `False` |  |  |
+| `branch` | `TyperArgument` | branch | `False` |  | Optional remote transfer branch. If omitted, read branch from the transfer order. |
 | `json_output` | `TyperOption` | --json, --no-json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer remote-work-start`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `branch` | `TyperArgument` |  | `True` |  |  |
+| `branch` | `TyperArgument` | branch | `True` |  | Feature branch to prepare, for example feature/name. |
 | `main_branch` | `TyperOption` | --main-branch | `False` | `main` | Base branch for new work branches. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
@@ -886,7 +886,7 @@ Validate an output file against a machine-readable output contract.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `output_path` | `TyperArgument` |  | `True` |  |  |
+| `output_path` | `TyperArgument` | output_path | `True` |  | Output text file to validate. |
 | `contract_path` | `TyperOption` | --contract, -c | `True` |  | Output contract YAML file. |
 | `report_path` | `TyperOption` | --report | `False` |  | Write a JSON validation report. |
 | `report_schema_path` | `TyperOption` | --report-schema | `False` |  | Validate the JSON report against a generated validation-report.schema.json file. |
@@ -899,7 +899,7 @@ Validate that a text file contains required literal section markers.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `path` | `TyperArgument` |  | `True` |  |  |
+| `path` | `TyperArgument` | path | `True` |  | Text file to validate. |
 | `required_section` | `TyperOption` | --required-section, -s | `True` |  | Required literal section marker. Repeat the option for multiple sections. |
 
 ### `agentic-kit work-order check`
@@ -914,22 +914,22 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `template_id` | `TyperArgument` |  | `True` |  |  |
-| `work_order_id` | `TyperArgument` |  | `True` |  |  |
-| `expected_branch` | `TyperArgument` |  | `True` |  |  |
+| `template_id` | `TyperArgument` | template_id | `True` |  |  |
+| `work_order_id` | `TyperArgument` | work_order_id | `True` |  |  |
+| `expected_branch` | `TyperArgument` | expected_branch | `True` |  |  |
 
 ### `agentic-kit work-order run`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `work_order_id` | `TyperArgument` |  | `True` |  |  |
+| `work_order_id` | `TyperArgument` | work_order_id | `True` |  |  |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Actually run the work order. Omit for dry-run. |
 
 ### `agentic-kit work-order show`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `work_order_id` | `TyperArgument` |  | `True` |  |  |
+| `work_order_id` | `TyperArgument` | work_order_id | `True` |  |  |
 
 ### `agentic-kit work-order templates`
 
@@ -952,7 +952,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `work_order_path` | `TyperArgument` |  | `True` |  |  |
+| `work_order_path` | `TyperArgument` | work_order_path | `True` |  |  |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Actually run the typed work order. Omit for dry-run. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON result. |
 
@@ -1002,7 +1002,7 @@ Run the current workflow, or set a stored workflow item and run it.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `name` | `TyperArgument` |  | `False` |  |  |
+| `name` | `TyperArgument` | name | `False` |  | Optional stored workflow item name to set before running. |
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root containing tools/next-step.py. |
 
 ### `agentic-kit workflow show`
@@ -1011,7 +1011,7 @@ Show the current workflow request or one stored workflow item.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `name` | `TyperArgument` |  | `False` |  |  |
+| `name` | `TyperArgument` | name | `False` |  | Optional stored workflow item name. |
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root containing .agentic/current_work.yaml. |
 
 ### `agentic-kit workflow state`
@@ -1051,10 +1051,10 @@ Alias for upload-output.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `paths` | `TyperArgument` |  | `False` |  |  |
+| `paths` | `TyperArgument` | paths | `False` |  |  |
 
 ### `agentic-kit workflow-guard diagnose`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `paths` | `TyperArgument` |  | `False` |  |  |
+| `paths` | `TyperArgument` | paths | `False` |  |  |
