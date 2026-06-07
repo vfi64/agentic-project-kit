@@ -1095,6 +1095,148 @@ def command_reference_check(
         raise typer.Exit(code=1)
 
 
+@transfer_app.command("evidence-inspect-latest")
+def evidence_inspect_latest(
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Inspect the latest evidence log with the required-summary contract."""
+    inspect_result = _run_transfer_subprocess(
+        ["./.venv/bin/agentic-kit", "evidence", "inspect", "--require-summary"]
+    )
+    result_status = "PASS" if inspect_result["ok"] else "FAIL"
+    final_signal = "d" if inspect_result["ok"] else "f"
+    next_action = (
+        "Latest evidence inspection passed."
+        if inspect_result["ok"]
+        else "Inspect latest evidence failure before continuing."
+    )
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_evidence_inspect_latest_result",
+        "action": "evidence-inspect-latest",
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "next_action": next_action,
+        "result": inspect_result,
+    }
+    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    if not json_output:
+        typer.echo(f"FINAL_SIGNAL={final_signal}")
+        typer.echo(f"FINAL_NEXT={next_action}")
+        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    if result_status != "PASS":
+        raise typer.Exit(code=1)
+
+
+@transfer_app.command("evidence-finalize-current-transfer")
+def evidence_finalize_current_transfer(
+    slice_name: str = typer.Option(..., "--slice", help="Evidence slice label."),
+    run_log: Path = typer.Option(
+        Path("docs/reports/transfer_runs/latest-transfer-report.log"),
+        "--run-log",
+        help="Local run log to finalize.",
+    ),
+    remote_log: Path | None = typer.Option(
+        None,
+        "--remote-log",
+        help="Repository-relative remote evidence log path under docs/reports/terminal/.",
+    ),
+    scope: str = typer.Option("transfer", "--scope", help="Evidence scope summary."),
+    mode_check: str = typer.Option("standard", "--mode-check", help="Evidence mode check summary."),
+    pr: str = typer.Option("NONE", "--pr", help="Associated PR number or NONE."),
+    ci: str = typer.Option("not-required", "--ci", help="CI state summary."),
+    merge: str = typer.Option("not-required", "--merge", help="Merge state summary."),
+    command_report: str = typer.Option(
+        "transfer lifecycle completed",
+        "--command-report",
+        help="Command report summary.",
+    ),
+    interpretation: str = typer.Option(
+        "Evidence finalized through transfer wrapper.",
+        "--interpretation",
+        help="Evidence interpretation summary.",
+    ),
+    safe_step: str = typer.Option(
+        "Continue with the next planned slice.",
+        "--safe-step",
+        help="Next safe step.",
+    ),
+    push: bool = typer.Option(False, "--push", help="Push evidence commit if finalize-log creates one."),
+    branch: str = typer.Option("", "--branch", help="Expected branch for evidence finalize-log commits."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Finalize the current transfer evidence log through the stricter evidence CLI."""
+    import re
+    from datetime import datetime, timezone
+
+    def slugify(value: str) -> str:
+        slug = re.sub(r"[^A-Za-z0-9._-]+", "-", value.strip()).strip("-")
+        return slug or "transfer"
+
+    if remote_log is None:
+        stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        remote_log = Path("docs/reports/terminal") / f"{stamp}-{slugify(slice_name)}.log"
+
+    argv = [
+        "./.venv/bin/agentic-kit",
+        "evidence",
+        "finalize-log",
+        "--run-log",
+        str(run_log),
+        "--remote-log",
+        str(remote_log),
+        "--slice",
+        slice_name,
+        "--scope",
+        scope,
+        "--mode-check",
+        mode_check,
+        "--pr",
+        pr,
+        "--ci",
+        ci,
+        "--merge",
+        merge,
+        "--command-report",
+        command_report,
+        "--interpretation",
+        interpretation,
+        "--safe-step",
+        safe_step,
+    ]
+    if push:
+        argv.append("--push")
+    if branch:
+        argv.extend(["--branch", branch])
+
+    finalize_result = _run_transfer_subprocess(argv)
+    result_status = "PASS" if finalize_result["ok"] else "FAIL"
+    final_signal = "d" if finalize_result["ok"] else "f"
+    next_action = (
+        "Current transfer evidence finalized."
+        if finalize_result["ok"]
+        else "Inspect evidence-finalize-current-transfer failure before continuing."
+    )
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_evidence_finalize_current_transfer_result",
+        "action": "evidence-finalize-current-transfer",
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "next_action": next_action,
+        "run_log": str(run_log),
+        "remote_log": str(remote_log),
+        "result": finalize_result,
+    }
+    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    if not json_output:
+        typer.echo(f"FINAL_SIGNAL={final_signal}")
+        typer.echo(f"FINAL_NEXT={next_action}")
+        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    if result_status != "PASS":
+        raise typer.Exit(code=1)
+
+
 @transfer_app.command("normalize-session")
 def normalize_session(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),

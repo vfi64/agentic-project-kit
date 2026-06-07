@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `134`
+- Command count: `136`
 
 ## Commands
 
@@ -670,6 +670,35 @@ Regenerate the agentic-kit command reference without committing changes.
 ### `agentic-kit transfer divergence-status`
 
 Report local/upstream divergence without mutating repository state.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
+### `agentic-kit transfer evidence-finalize-current-transfer`
+
+Finalize the current transfer evidence log through the stricter evidence CLI.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `slice_name` | `TyperOption` | --slice | `True` |  | Evidence slice label. |
+| `run_log` | `TyperOption` | --run-log | `False` | `PosixPath('docs/reports/transfer_runs/latest-transfer-report.log')` | Local run log to finalize. |
+| `remote_log` | `TyperOption` | --remote-log | `False` |  | Repository-relative remote evidence log path under docs/reports/terminal/. |
+| `scope` | `TyperOption` | --scope | `False` | `transfer` | Evidence scope summary. |
+| `mode_check` | `TyperOption` | --mode-check | `False` | `standard` | Evidence mode check summary. |
+| `pr` | `TyperOption` | --pr | `False` | `NONE` | Associated PR number or NONE. |
+| `ci` | `TyperOption` | --ci | `False` | `not-required` | CI state summary. |
+| `merge` | `TyperOption` | --merge | `False` | `not-required` | Merge state summary. |
+| `command_report` | `TyperOption` | --command-report | `False` | `transfer lifecycle completed` | Command report summary. |
+| `interpretation` | `TyperOption` | --interpretation | `False` | `Evidence finalized through transfer wrapper.` | Evidence interpretation summary. |
+| `safe_step` | `TyperOption` | --safe-step | `False` | `Continue with the next planned slice.` | Next safe step. |
+| `push` | `TyperOption` | --push | `False` | `False` | Push evidence commit if finalize-log creates one. |
+| `branch` | `TyperOption` | --branch | `False` | `` | Expected branch for evidence finalize-log commits. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
+### `agentic-kit transfer evidence-inspect-latest`
+
+Inspect the latest evidence log with the required-summary contract.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
