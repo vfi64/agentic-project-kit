@@ -464,13 +464,13 @@ def pr_merge_safe_command(
 
 @transfer_app.command("pr-complete")
 def pr_complete_command(
-    pr_number: int = typer.Argument(..., help="Pull request number to wait, merge, sync, and complete."),
+    pr_number: int = typer.Argument(..., help="Pull request number to complete."),
     expected_head_sha: str = typer.Option(
         "",
         "--expected-head-sha",
-        help="Expected PR head SHA, or current to use git rev-parse HEAD.",
+        help="Expected PR head SHA, or current to use git rev-parse HEAD before the merge.",
     ),
-    main_branch: str = typer.Option("main", "--main-branch", help="Expected base branch."),
+    main_branch: str = typer.Option("main", "--main-branch", help="Main branch to sync after the merge."),
     merge_method: str = typer.Option("squash", "--merge-method", help="GitHub merge method."),
     timeout_seconds: int = typer.Option(300, "--timeout-seconds", min=1, help="Maximum CI wait time."),
     poll_seconds: int = typer.Option(
@@ -482,33 +482,117 @@ def pr_complete_command(
     ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
-    """Wait for PR CI, merge safely, and then run the existing post-merge completion lifecycle.
+    import subprocess
+    from datetime import datetime, timezone
 
-    This is intentionally a CLI registration stub in this slice. The full orchestration
-    is added in the next slice after the command contract is pinned.
-    """
+    resolved_head_sha = _resolve_expected_head_sha_alias(expected_head_sha)
+    agentic_kit = "./.venv/bin/agentic-kit"
+    steps: list[dict[str, object]] = []
+
+    def run_step(name: str, argv: list[str]) -> int:
+        completed = subprocess.run(argv, text=True, capture_output=True)
+        item: dict[str, object] = {
+            "name": name,
+            "argv": argv,
+            "returncode": completed.returncode,
+            "stdout": completed.stdout,
+            "stderr": completed.stderr,
+            "ok": completed.returncode == 0,
+        }
+        steps.append(item)
+        return completed.returncode
+
+    step_plan = [
+        (
+            "pr-wait-ci",
+            [
+                agentic_kit,
+                "transfer",
+                "pr-wait-ci",
+                str(pr_number),
+                "--expected-head-sha",
+                resolved_head_sha,
+                "--timeout-seconds",
+                str(timeout_seconds),
+                "--interval-seconds",
+                str(poll_seconds),
+            ],
+        ),
+        (
+            "pr-merge-safe",
+            [
+                agentic_kit,
+                "transfer",
+                "pr-merge-safe",
+                str(pr_number),
+                "--expected-head-sha",
+                resolved_head_sha,
+                "--main-branch",
+                main_branch,
+                "--merge-method",
+                merge_method,
+            ],
+        ),
+        ("main-switch", ["git", "switch", main_branch]),
+        ("main-pull", ["git", "pull", "--ff-only", "origin", main_branch]),
+        ("rules-acknowledge", [agentic_kit, "rules", "acknowledge"]),
+        ("post-merge-complete", [agentic_kit, "transfer", "post-merge-complete", "--after-pr", str(pr_number)]),
+    ]
+
+    failed_step = None
+    for name, argv in step_plan:
+        step_returncode = run_step(name, argv)
+        if step_returncode != 0:
+            failed_step = name
+            break
+
+    result_status = "PASS" if failed_step is None else "BLOCKED"
+    final_signal = "d" if result_status == "PASS" else "f"
+    if failed_step is None:
+        next_action = "PR completion lifecycle is complete."
+        returncode = 0
+    else:
+        next_action = f"Inspect pr-complete step failure before continuing: {failed_step}."
+        returncode = 2
+
     payload = {
         "schema_version": 1,
         "kind": "transfer_pr_complete_result",
         "action": "pr-complete",
+        "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "pr_number": pr_number,
-        "expected_head_sha": _resolve_expected_head_sha_alias(expected_head_sha),
+        "expected_head_sha": resolved_head_sha,
         "main_branch": main_branch,
         "merge_method": merge_method,
         "timeout_seconds": timeout_seconds,
         "poll_seconds": poll_seconds,
-        "result_status": "BLOCKED",
-        "final_signal": "f",
-        "next_action": "Implement pr-complete orchestration after CLI registration contract is green.",
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "failed_step": failed_step,
+        "steps": steps,
+        "next_action": next_action,
     }
+
     if json_output:
         typer.echo(json.dumps(payload, indent=2, sort_keys=True))
     else:
+        typer.echo("*" * 36 + " START SUMMARY " + "*" * 36)
         typer.echo("TRANSFER_PR_COMPLETE")
-        typer.echo("STATE:                 BLOCKED")
-        typer.echo("NEXT:                  Implement pr-complete orchestration after CLI registration contract is green.")
-        typer.echo("CHAT_REPLY:            f | NEXT=Implement pr-complete orchestration after CLI registration contract is green.")
-    raise typer.Exit(code=2)
+        typer.echo("")
+        typer.echo(_summary_line("STATE", result_status))
+        typer.echo(_summary_line("RETURNCODE", returncode))
+        typer.echo("")
+        typer.echo("LIFECYCLE")
+        typer.echo(_summary_line("- PR", pr_number))
+        typer.echo(_summary_line("- FAILED_STEP", failed_step or "none"))
+        typer.echo(_summary_line("- STEPS", len(steps)))
+        typer.echo("")
+        typer.echo(_summary_line("NEXT", next_action))
+        typer.echo(_summary_line("CHAT_REPLY", f"{final_signal} | NEXT={next_action}"))
+        typer.echo("*" * 35 + " END SUMMARY " + "*" * 36)
+
+    if returncode != 0:
+        raise typer.Exit(code=returncode)
 
 
 @transfer_app.command("post-merge-check")
