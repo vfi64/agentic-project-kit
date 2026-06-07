@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: fa9f5cd
-  commit_subject: Update pre-GUI roadmap progress (#1159)
+  commit: dbe8da4
+  commit_subject: Add PR create-complete transfer wrapper (#1161)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
