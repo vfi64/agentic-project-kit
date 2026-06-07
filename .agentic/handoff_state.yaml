@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: dbe8da4
-  commit_subject: Add PR create-complete transfer wrapper (#1161)
+  commit: 98d9cff
+  commit_subject: Update roadmap for PR create-complete wrapper (#1163)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
