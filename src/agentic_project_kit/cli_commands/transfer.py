@@ -728,6 +728,181 @@ def pr_create_command(
         raise typer.Exit(code=result.returncode)
 
 
+@transfer_app.command("pr-create-complete")
+def pr_create_complete_command(
+    title: str = typer.Option(..., "--title", help="Pull request title."),
+    body: str = typer.Option("", "--body", help="Pull request body."),
+    base: str = typer.Option("main", "--base", help="Base branch."),
+    head: str = typer.Option(
+        "current",
+        "--head",
+        help="Head branch. Use current to resolve git branch --show-current.",
+    ),
+    merge_method: str = typer.Option("squash", "--merge-method", help="GitHub merge method."),
+    timeout_seconds: int = typer.Option(300, "--timeout-seconds", min=1, help="Maximum CI wait time."),
+    poll_seconds: int = typer.Option(
+        10,
+        "--interval-seconds",
+        "--poll-seconds",
+        min=1,
+        help="CI polling interval.",
+    ),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    """Create a PR and complete it without requiring manual PR-number or SHA copying."""
+    import re
+    import subprocess
+    from datetime import datetime, timezone
+
+    _require_transfer_capability("rules_confirmed")
+
+    agentic_kit = "./.venv/bin/agentic-kit"
+    steps: list[dict[str, object]] = []
+    blockers: list[str] = []
+
+    def run_step(name: str, argv: list[str]) -> subprocess.CompletedProcess[str]:
+        completed = subprocess.run(argv, text=True, capture_output=True)
+        steps.append(
+            {
+                "name": name,
+                "argv": argv,
+                "returncode": completed.returncode,
+                "stdout": completed.stdout,
+                "stderr": completed.stderr,
+                "ok": completed.returncode == 0,
+            }
+        )
+        if completed.returncode != 0:
+            blockers.append(name + "_failed")
+        return completed
+
+    if head == "current":
+        branch_result = run_step("resolve-current-branch", ["git", "branch", "--show-current"])
+        resolved_head = branch_result.stdout.strip()
+        if not resolved_head:
+            blockers.append("current_branch_missing")
+    else:
+        resolved_head = head
+
+    sha_result = run_step("resolve-current-head-sha", ["git", "rev-parse", "HEAD"])
+    expected_head_sha = sha_result.stdout.strip()
+    if not re.fullmatch(r"[0-9a-fA-F]{40}", expected_head_sha):
+        blockers.append("current_head_sha_invalid")
+
+    pr_number: int | None = None
+    if not blockers:
+        create_result = run_step(
+            "pr-create",
+            [
+                agentic_kit,
+                "transfer",
+                "pr-create",
+                "--title",
+                title,
+                "--body",
+                body,
+                "--base",
+                base,
+                "--head",
+                resolved_head,
+                "--json",
+            ],
+        )
+
+        if create_result.returncode == 0:
+            match = re.search(r"/pull/(\d+)", create_result.stdout)
+            if match:
+                pr_number = int(match.group(1))
+            else:
+                blockers.append("pr_number_not_found_in_pr_create_output")
+        else:
+            existing = run_step(
+                "pr-existing-for-branch",
+                [
+                    "gh",
+                    "pr",
+                    "view",
+                    "--head",
+                    resolved_head,
+                    "--base",
+                    base,
+                    "--json",
+                    "number",
+                    "-q",
+                    ".number",
+                ],
+            )
+            if existing.returncode == 0 and existing.stdout.strip().isdigit():
+                pr_number = int(existing.stdout.strip())
+                blockers = [b for b in blockers if b != "pr-create_failed"]
+            else:
+                blockers.append("existing_pr_number_not_found")
+
+    if pr_number is not None and not blockers:
+        run_step(
+            "pr-complete",
+            [
+                agentic_kit,
+                "transfer",
+                "pr-complete",
+                str(pr_number),
+                "--expected-head-sha",
+                expected_head_sha,
+                "--merge-method",
+                merge_method,
+                "--timeout-seconds",
+                str(timeout_seconds),
+                "--interval-seconds",
+                str(poll_seconds),
+            ],
+        )
+
+    blockers = list(dict.fromkeys(blockers))
+    result_status = "PASS" if not blockers else "BLOCKED"
+    final_signal = "d" if result_status == "PASS" else "f"
+    next_action = (
+        "PR create-complete lifecycle is complete."
+        if result_status == "PASS"
+        else "Inspect pr-create-complete step failure before continuing: " + ", ".join(blockers)
+    )
+
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_pr_create_complete_result",
+        "action": "pr-create-complete",
+        "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "next_action": next_action,
+        "base": base,
+        "head": resolved_head,
+        "expected_head_sha": expected_head_sha,
+        "pr_number": pr_number,
+        "blockers": blockers,
+        "steps": steps,
+    }
+
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    else:
+        _echo_transfer_payload_summary(
+            title="TRANSFER_PR_CREATE_COMPLETE",
+            result_status=result_status,
+            final_signal=final_signal,
+            next_action=next_action,
+            fields={
+                "PR": pr_number if pr_number is not None else "none",
+                "HEAD": resolved_head,
+                "BASE": base,
+                "STEPS": len(steps),
+                "BLOCKERS": len(blockers),
+            },
+        )
+
+    if blockers:
+        raise typer.Exit(code=2)
+
+
 @transfer_app.command("pr-status")
 def pr_status_command(
     pr_number: int = typer.Argument(
