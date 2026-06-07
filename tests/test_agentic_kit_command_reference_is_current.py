@@ -1,26 +1,43 @@
 from __future__ import annotations
 
+import importlib.util
 import json
-import subprocess
 import sys
 from pathlib import Path
 
 
-def test_agentic_kit_command_reference_is_current() -> None:
-    subprocess.run(
-        [sys.executable, "scripts/generate_agentic_kit_command_reference.py"],
-        check=True,
-    )
-    assert Path("docs/reference/agentic-kit-commands.json").exists()
-    assert Path("docs/reference/AGENTIC_KIT_COMMANDS.md").exists()
+def _load_generator():
+    path = Path("scripts/generate_agentic_kit_command_reference.py")
+    spec = importlib.util.spec_from_file_location("command_reference_generator", path)
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
 
-    data = json.loads(Path("docs/reference/agentic-kit-commands.json").read_text(encoding="utf-8"))
-    names = {(item["group"], item["name"]) for item in data["commands"]}
+
+def test_agentic_kit_command_reference_is_current() -> None:
+    generator = _load_generator()
+
+    generated = generator.build_reference()
+    committed = json.loads(generator.JSON_PATH.read_text(encoding="utf-8"))
+
+    assert committed == generated
+    assert generator.MD_PATH.read_text(encoding="utf-8") == generator.render_markdown(generated)
+
+    names = {(item["group"], item["name"]) for item in generated["commands"]}
     assert ("transfer", "pr-complete") in names
     assert ("transfer", "pr-wait-ci") in names
     assert ("transfer", "pr-merge-safe") in names
     assert ("transfer", "post-merge-complete") in names
 
-    markdown = Path("docs/reference/AGENTIC_KIT_COMMANDS.md").read_text(encoding="utf-8")
-    assert "agentic-kit transfer pr-complete" in markdown
-    assert "agentic-kit transfer post-merge-complete" in markdown
+    qualified = {item["qualified_name"] for item in generated["commands"]}
+    assert "agentic-kit transfer pr-complete" in qualified
+    assert "agentic-kit transfer post-merge-complete" in qualified
+
+
+def test_command_reference_registry_contract_exists() -> None:
+    text = Path("docs/governance/COMMAND_REFERENCE_REGISTRY_CONTRACT.md").read_text(encoding="utf-8")
+    assert "generated_from_typer_click_registry" in text
+    assert "tests/test_agentic_kit_command_reference_is_current.py" in text
