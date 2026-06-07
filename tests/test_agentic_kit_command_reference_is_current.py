@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 from pathlib import Path
 
 
 def test_agentic_kit_command_reference_is_current() -> None:
     subprocess.run(
-        ["./.venv/bin/python", "scripts/generate_agentic_kit_command_reference.py"],
+        [sys.executable, "scripts/generate_agentic_kit_command_reference.py"],
         check=True,
     )
     assert Path("docs/reference/agentic-kit-commands.json").exists()
