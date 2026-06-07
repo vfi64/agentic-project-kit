@@ -1,6 +1,6 @@
 schema_version: 1
 updated:
-  date: '2026-06-06'
+  date: '2026-06-07'
   reason: Refresh handoff state to last substantive work commit
   source: agentic-kit handoff refresh
 repo:
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: dc109d6
-  commit_subject: Add patch transfer request schema (#1135)
+  commit: b84939e
+  commit_subject: Register pr-complete transfer command stub (#1137)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
