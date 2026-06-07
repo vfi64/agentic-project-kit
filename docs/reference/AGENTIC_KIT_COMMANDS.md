@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `129`
+- Command count: `132`
 
 ## Commands
 
@@ -651,6 +651,14 @@ _No parameters._
 | `allow_main` | `TyperOption` | --allow-main | `False` | `False` | Allow committing directly on main. Use only for explicit emergency/admin flows. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
+### `agentic-kit transfer divergence-status`
+
+Report local/upstream divergence without mutating repository state.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
 ### `agentic-kit transfer fetch-origin`
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -834,6 +842,14 @@ read it after a simple "g" and produce a copy-and-paste successor chat prompt.
 | `short` | `TyperOption` | --short, --full | `False` | `True` | Use short git status by default. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
+### `agentic-kit transfer restore-known-volatile`
+
+Restore the canonical known volatile transfer files.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
 ### `agentic-kit transfer run-and-log`
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -872,6 +888,15 @@ _No parameters._
 |---|---:|---|---:|---|---|
 | `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/current.yaml')` | Transfer order path. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit transfer sync-main`
+
+Synchronize main, acknowledge rules, and normalize the session.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `main_branch` | `TyperOption` | --main-branch | `False` | `main` | Main branch to synchronize. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
 ### `agentic-kit validate-contract`
 

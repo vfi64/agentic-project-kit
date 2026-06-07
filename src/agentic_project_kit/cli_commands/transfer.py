@@ -840,6 +840,168 @@ def publish_last_report(
 
 
 
+KNOWN_VOLATILE_TRANSFER_PATHS = [
+    ".agentic/transfer/outbox/last_result.txt",
+    "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+    "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
+]
+
+
+def _run_transfer_subprocess(argv: list[str], *, cwd: Path | None = None) -> dict[str, object]:
+    import subprocess
+
+    completed = subprocess.run(argv, cwd=cwd or Path("."), text=True, capture_output=True, check=False)
+    return {
+        "argv": argv,
+        "returncode": completed.returncode,
+        "stdout": completed.stdout,
+        "stderr": completed.stderr,
+        "ok": completed.returncode == 0,
+    }
+
+
+@transfer_app.command("restore-known-volatile")
+def restore_known_volatile(
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Restore the canonical known volatile transfer files."""
+    result = _run_transfer_subprocess(["git", "restore", "--", *KNOWN_VOLATILE_TRANSFER_PATHS])
+    status = "PASS" if result["ok"] else "FAIL"
+    final_signal = "d" if result["ok"] else "f"
+    next_action = (
+        "Known volatile transfer files restored."
+        if result["ok"]
+        else "Inspect restore-known-volatile failure before continuing."
+    )
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_restore_known_volatile_result",
+        "action": "restore-known-volatile",
+        "result_status": status,
+        "final_signal": final_signal,
+        "next_action": next_action,
+        "known_paths": KNOWN_VOLATILE_TRANSFER_PATHS,
+        "result": result,
+    }
+    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    if not json_output:
+        typer.echo(f"FINAL_SIGNAL={final_signal}")
+        typer.echo(f"FINAL_NEXT={next_action}")
+        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    if not result["ok"]:
+        raise typer.Exit(code=1)
+
+
+@transfer_app.command("divergence-status")
+def divergence_status(
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Report local/upstream divergence without mutating repository state."""
+    branch_result = _run_transfer_subprocess(["git", "branch", "--show-current"])
+    head_result = _run_transfer_subprocess(["git", "rev-parse", "HEAD"])
+    upstream_result = _run_transfer_subprocess(["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"])
+    upstream_head_result = (
+        _run_transfer_subprocess(["git", "rev-parse", "@{u}"])
+        if upstream_result["ok"]
+        else {"argv": ["git", "rev-parse", "@{u}"], "returncode": 1, "stdout": "", "stderr": "no upstream", "ok": False}
+    )
+    counts_result = (
+        _run_transfer_subprocess(["git", "rev-list", "--left-right", "--count", "HEAD...@{u}"])
+        if upstream_result["ok"]
+        else {"argv": ["git", "rev-list", "--left-right", "--count", "HEAD...@{u}"], "returncode": 1, "stdout": "", "stderr": "no upstream", "ok": False}
+    )
+    ahead = behind = None
+    if counts_result["ok"]:
+        parts = str(counts_result["stdout"]).strip().split()
+        if len(parts) == 2:
+            ahead = int(parts[0])
+            behind = int(parts[1])
+    head = str(head_result["stdout"]).strip()
+    upstream_head = str(upstream_head_result["stdout"]).strip() if upstream_head_result["ok"] else ""
+    status = "PASS" if branch_result["ok"] and head_result["ok"] else "FAIL"
+    final_signal = "d" if status == "PASS" else "f"
+    next_action = "Divergence status reported; inspect ahead/behind before mutating branches."
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_divergence_status_result",
+        "action": "divergence-status",
+        "result_status": status,
+        "final_signal": final_signal,
+        "next_action": next_action,
+        "repo": {
+            "branch": str(branch_result["stdout"]).strip(),
+            "head": head,
+            "upstream": str(upstream_result["stdout"]).strip() if upstream_result["ok"] else "",
+            "upstream_head": upstream_head,
+            "head_matches_upstream": bool(head and upstream_head and head == upstream_head),
+            "ahead": ahead,
+            "behind": behind,
+        },
+        "commands": {
+            "branch": branch_result,
+            "head": head_result,
+            "upstream": upstream_result,
+            "upstream_head": upstream_head_result,
+            "ahead_behind": counts_result,
+        },
+    }
+    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    if not json_output:
+        typer.echo(f"FINAL_SIGNAL={final_signal}")
+        typer.echo(f"FINAL_NEXT={next_action}")
+        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    if status != "PASS":
+        raise typer.Exit(code=1)
+
+
+@transfer_app.command("sync-main")
+def sync_main(
+    main_branch: str = typer.Option("main", "--main-branch", help="Main branch to synchronize."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Synchronize main, acknowledge rules, and normalize the session."""
+    steps: list[dict[str, object]] = []
+
+    def step(name: str, argv: list[str]) -> dict[str, object]:
+        item = _run_transfer_subprocess(argv)
+        item["name"] = name
+        steps.append(item)
+        return item
+
+    step("restore-before-sync", ["git", "restore", "--", *KNOWN_VOLATILE_TRANSFER_PATHS])
+    step("rules-acknowledge-before-sync", ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
+    step("switch-and-pull-main", ["./.venv/bin/agentic-kit", "transfer", "branch-switch", main_branch, "--pull"])
+    step("rules-acknowledge-after-pull", ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
+    step("normalize-session", ["./.venv/bin/agentic-kit", "transfer", "normalize-session", "--repair-known-volatile"])
+
+    blockers = [str(item["name"]) + "_failed" for item in steps if item["returncode"] != 0]
+    status = "PASS" if not blockers else "FAIL"
+    final_signal = "d" if status == "PASS" else "f"
+    next_action = (
+        "Main synchronized and session normalized."
+        if status == "PASS"
+        else "Inspect sync-main blockers before continuing: " + ", ".join(blockers)
+    )
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_sync_main_result",
+        "action": "sync-main",
+        "main_branch": main_branch,
+        "result_status": status,
+        "final_signal": final_signal,
+        "next_action": next_action,
+        "blockers": blockers,
+        "steps": steps,
+    }
+    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    if not json_output:
+        typer.echo(f"FINAL_SIGNAL={final_signal}")
+        typer.echo(f"FINAL_NEXT={next_action}")
+        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    if blockers:
+        raise typer.Exit(code=1)
+
+
 @transfer_app.command("normalize-session")
 def normalize_session(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
@@ -870,11 +1032,7 @@ def normalize_session(
 
     root = Path(".")
 
-    known_volatile_paths = [
-        ".agentic/transfer/outbox/last_result.txt",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-    ]
+    known_volatile_paths = KNOWN_VOLATILE_TRANSFER_PATHS
 
     def run(argv: list[str]) -> dict[str, Any]:
         completed = subprocess.run(argv, cwd=root, text=True, capture_output=True)
@@ -1373,11 +1531,7 @@ def remote_work_start(
     from typing import Any
 
     root = Path(".")
-    known_volatile_paths = [
-        ".agentic/transfer/outbox/last_result.txt",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-    ]
+    known_volatile_paths = KNOWN_VOLATILE_TRANSFER_PATHS
 
     steps: list[dict[str, Any]] = []
     blockers: list[str] = []

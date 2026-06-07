@@ -3824,6 +3824,32 @@
     },
     {
       "group": "transfer",
+      "help": "Report local/upstream divergence without mutating repository state.",
+      "name": "divergence-status",
+      "params": [
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "divergence-status"
+      ],
+      "qualified_name": "agentic-kit transfer divergence-status"
+    },
+    {
+      "group": "transfer",
       "help": "",
       "name": "fetch-origin",
       "params": [
@@ -5083,6 +5109,32 @@
     },
     {
       "group": "transfer",
+      "help": "Restore the canonical known volatile transfer files.",
+      "name": "restore-known-volatile",
+      "params": [
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "restore-known-volatile"
+      ],
+      "qualified_name": "agentic-kit transfer restore-known-volatile"
+    },
+    {
+      "group": "transfer",
       "help": "",
       "name": "run-and-log",
       "params": [
@@ -5295,6 +5347,46 @@
         "status"
       ],
       "qualified_name": "agentic-kit transfer status"
+    },
+    {
+      "group": "transfer",
+      "help": "Synchronize main, acknowledge rules, and normalize the session.",
+      "name": "sync-main",
+      "params": [
+        {
+          "default": "main",
+          "help": "Main branch to synchronize.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "main_branch",
+          "opts": [
+            "--main-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "sync-main"
+      ],
+      "qualified_name": "agentic-kit transfer sync-main"
     },
     {
       "group": "root",
