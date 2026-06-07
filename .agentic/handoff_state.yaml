@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 0c5e483
-  commit_subject: Add command reference transfer wrappers (#1153)
+  commit: 0a7850c
+  commit_subject: Add evidence transfer ergonomics wrappers (#1155)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
