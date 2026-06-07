@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 9b91825
-  commit_subject: Add agentic-kit command reference seed (#1143)
+  commit: 0fadbca
+  commit_subject: Add introspected agentic-kit command reference registry (#1145)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
