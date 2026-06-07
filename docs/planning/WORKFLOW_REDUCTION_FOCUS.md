@@ -308,6 +308,7 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 | `transfer evidence-inspect-latest` | erledigt und getestet; kann korrekt FAIL melden, wenn das aktuell gefundene Evidence-Log alt/ambig/rot ist |
 | `transfer evidence-finalize-current-transfer` | erledigt und getestet als ergonomische Hülle um `evidence finalize-log` |
 | `transfer remote-work-start` concise default output | erledigt und regressionsgetestet |
+| `transfer pr-create-complete` | erledigt, getestet und real erfolgreich genutzt; beseitigt den manuellen PR-Nummern- und HEAD-SHA-Kopierschritt |
 
 ### Pre-GUI Work Order
 
@@ -316,15 +317,17 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 Priority order:
 
 1. `transfer protected-diff-plan`
-2. `transfer rebase-on-upstream`
-3. `transfer evidence-pr-complete`
-4. `transfer work-order-patch`
+2. `transfer work-order-patch`
+3. `transfer rebase-on-upstream`
+4. `transfer evidence-pr-complete`
 5. `transfer conflict-status`
 6. `transfer conflict-resolve-file`
 7. `transfer pr-existing-for-branch`
 8. `transfer delete-merged-work-branch`
 
-Completed in the first hardening pass: `transfer restore-known-volatile`, `transfer sync-main`, `transfer divergence-status`, `transfer command-reference-refresh`, `transfer command-reference-check`, `transfer evidence-inspect-latest`, and `transfer evidence-finalize-current-transfer`.
+Completed in the hardening passes so far: `transfer restore-known-volatile`, `transfer sync-main`, `transfer divergence-status`, `transfer command-reference-refresh`, `transfer command-reference-check`, `transfer evidence-inspect-latest`, `transfer evidence-finalize-current-transfer`, and `transfer pr-create-complete`.
+
+The manual sequence `pr-create -> read PR number -> FULL_SHA=$(git rev-parse HEAD) -> pr-complete <PR>` is no longer the preferred path. Use `transfer pr-create-complete` for normal PR lifecycle completion.
 
 Reason: these steps are still repeatedly replaced by raw shell, raw git, direct Python invocation, or long copy/paste snippets.
 
@@ -365,6 +368,12 @@ The command reference registry now has a governance contract and a staleness tes
 - the command reference registry as a rule or mechanism in `.agentic/rule_mechanism_inventory.yaml` or the current successor registry;
 - CI coverage proving that command-reference drift is checked whenever CLI commands change.
 
+#### 5. PR-Lifecycle weiter reduzieren
+
+Completed: `transfer pr-create-complete` now creates or reuses a PR, resolves the current HEAD SHA, and runs the complete PR lifecycle without manual PR-number copying.
+
+Remaining: keep `transfer pr-existing-for-branch` as a possible diagnostic wrapper, but normal user-facing PR completion should go through `transfer pr-create-complete`.
+
 #### 5. Output-Disziplin erzwingen
 
 Desired behavior:
@@ -384,7 +393,8 @@ The GUI should expose stable wrappers, not raw git, raw GitHub, or unbounded she
 |---|---|
 | Neuer Arbeitsbranch | `transfer remote-work-start` |
 | Main synchronisieren | `transfer sync-main` |
-| PR abschließen | `transfer pr-complete` |
+| PR erstellen und abschließen | `transfer pr-create-complete` |
+| PR nur abschließen | `transfer pr-complete` |
 | Evidence abschließen | `transfer evidence-finalize-current-transfer` |
 | Handoff erzeugen | `transfer prepare-successor-handoff --render-prompt` |
 | Command-Reference aktualisieren | `transfer command-reference-refresh` |
