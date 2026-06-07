@@ -3876,6 +3876,32 @@
     },
     {
       "group": "transfer",
+      "help": "Report merge/rebase conflict state without resolving anything.",
+      "name": "conflict-status",
+      "params": [
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "conflict-status"
+      ],
+      "qualified_name": "agentic-kit transfer conflict-status"
+    },
+    {
+      "group": "transfer",
       "help": "Report local/upstream divergence without mutating repository state.",
       "name": "divergence-status",
       "params": [
@@ -5178,6 +5204,60 @@
         "prepare-successor-handoff"
       ],
       "qualified_name": "agentic-kit transfer prepare-successor-handoff"
+    },
+    {
+      "group": "transfer",
+      "help": "Write the current diff to /tmp and run ./ns protected-change-plan on it.",
+      "name": "protected-diff-plan",
+      "params": [
+        {
+          "default": "protected-change-plan",
+          "help": "Stable label for the temporary diff file.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "label",
+          "opts": [
+            "--label"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Use staged diff.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "cached",
+          "opts": [
+            "--cached"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "protected-diff-plan"
+      ],
+      "qualified_name": "agentic-kit transfer protected-diff-plan"
     },
     {
       "group": "transfer",

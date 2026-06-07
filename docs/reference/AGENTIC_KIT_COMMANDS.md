@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `137`
+- Command count: `139`
 
 ## Commands
 
@@ -667,6 +667,14 @@ Regenerate the agentic-kit command reference without committing changes.
 | `allow_main` | `TyperOption` | --allow-main | `False` | `False` | Allow committing directly on main. Use only for explicit emergency/admin flows. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
+### `agentic-kit transfer conflict-status`
+
+Report merge/rebase conflict state without resolving anything.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
 ### `agentic-kit transfer divergence-status`
 
 Report local/upstream divergence without mutating repository state.
@@ -844,6 +852,16 @@ read it after a simple "g" and produce a copy-and-paste successor chat prompt.
 | `repair_known_volatile` | `TyperOption` | --repair-known-volatile | `False` | `False` | Restore known volatile transfer output files before preparing the handoff request. |
 | `render_prompt` | `TyperOption` | --render-prompt | `False` | `False` | Render a copy-and-paste successor chat prompt directly from the handoff payload. |
 | `write_outbox` | `TyperOption` | --write-outbox, --no-write-outbox | `False` | `False` | Write the canonical transfer outbox. Defaults to no write to avoid volatile dirty state. |
+
+### `agentic-kit transfer protected-diff-plan`
+
+Write the current diff to /tmp and run ./ns protected-change-plan on it.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `label` | `TyperOption` | --label | `False` | `protected-change-plan` | Stable label for the temporary diff file. |
+| `cached` | `TyperOption` | --cached | `False` | `False` | Use staged diff. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
 ### `agentic-kit transfer publish-last-report`
 
