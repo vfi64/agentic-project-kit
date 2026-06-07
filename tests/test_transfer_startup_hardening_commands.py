@@ -96,3 +96,63 @@ def test_sync_main_orchestrates_safe_startup_sequence(monkeypatch):
         ["./.venv/bin/agentic-kit", "rules", "acknowledge"],
         ["./.venv/bin/agentic-kit", "transfer", "normalize-session", "--repair-known-volatile"],
     ]
+
+
+def test_command_reference_refresh_runs_generator_and_reports_changed_files(monkeypatch):
+    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+        command = list(argv)
+        if command == ["./.venv/bin/python", "scripts/generate_agentic_kit_command_reference.py"]:
+            return _completed(command, stdout="generated\n")
+        if command == ["git", "status", "--short"]:
+            return _completed(command, stdout=" M docs/reference/agentic-kit-commands.json\n")
+        if command == [
+            "git",
+            "diff",
+            "--name-only",
+            "--",
+            "docs/reference/agentic-kit-commands.json",
+            "docs/reference/AGENTIC_KIT_COMMANDS.md",
+        ]:
+            return _completed(
+                command,
+                stdout="docs/reference/agentic-kit-commands.json\ndocs/reference/AGENTIC_KIT_COMMANDS.md\n",
+            )
+        raise AssertionError(f"unexpected command: {command}")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "command-reference-refresh", "--json"])
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert payload["changed_files"] == [
+        "docs/reference/agentic-kit-commands.json",
+        "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    ]
+
+
+def test_command_reference_check_runs_drift_test(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+        calls.append(list(argv))
+        return _completed(list(argv), stdout="1 passed\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "command-reference-check", "--json"])
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert calls == [
+        [
+            "./.venv/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests/test_agentic_kit_command_reference_is_current.py",
+        ]
+    ]
+

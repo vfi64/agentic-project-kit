@@ -3741,6 +3741,58 @@
     },
     {
       "group": "transfer",
+      "help": "Check whether the committed agentic-kit command reference is current.",
+      "name": "command-reference-check",
+      "params": [
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "command-reference-check"
+      ],
+      "qualified_name": "agentic-kit transfer command-reference-check"
+    },
+    {
+      "group": "transfer",
+      "help": "Regenerate the agentic-kit command reference without committing changes.",
+      "name": "command-reference-refresh",
+      "params": [
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "command-reference-refresh"
+      ],
+      "qualified_name": "agentic-kit transfer command-reference-refresh"
+    },
+    {
+      "group": "transfer",
       "help": "",
       "name": "commit",
       "params": [
