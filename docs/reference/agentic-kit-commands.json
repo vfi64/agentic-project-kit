@@ -1,0 +1,79 @@
+{
+  "commands": [
+    {
+      "group": "transfer",
+      "name": "pr-complete",
+      "parameters": [
+        {
+          "meaning": "Pull request number to complete.",
+          "name": "pr_number",
+          "required": true
+        },
+        {
+          "meaning": "Expected PR head SHA; use a full SHA or current alias where supported.",
+          "name": "--expected-head-sha",
+          "required": false
+        },
+        {
+          "meaning": "GitHub merge method, usually squash.",
+          "name": "--merge-method",
+          "required": false
+        }
+      ],
+      "purpose": "Wait for PR CI, merge safely, sync main, acknowledge rules, and run post-merge completion."
+    },
+    {
+      "group": "transfer",
+      "name": "pr-wait-ci",
+      "parameters": [
+        {
+          "meaning": "Pull request number.",
+          "name": "pr_number",
+          "required": true
+        },
+        {
+          "meaning": "Expected PR head SHA.",
+          "name": "--expected-head-sha",
+          "required": false
+        }
+      ],
+      "purpose": "Wait until PR checks are ready."
+    },
+    {
+      "group": "transfer",
+      "name": "pr-merge-safe",
+      "parameters": [
+        {
+          "meaning": "Pull request number.",
+          "name": "pr_number",
+          "required": true
+        },
+        {
+          "meaning": "Expected PR head SHA.",
+          "name": "--expected-head-sha",
+          "required": false
+        },
+        {
+          "meaning": "GitHub merge method.",
+          "name": "--merge-method",
+          "required": false
+        }
+      ],
+      "purpose": "Merge a green PR through the guarded merge path."
+    },
+    {
+      "group": "transfer",
+      "name": "post-merge-complete",
+      "parameters": [
+        {
+          "meaning": "The PR number whose merge triggered the lifecycle.",
+          "name": "--after-pr",
+          "required": true
+        }
+      ],
+      "purpose": "Complete the post-merge lifecycle after a PR merge."
+    }
+  ],
+  "schema_version": 1,
+  "source": "manual_seed_until_introspection_is_added"
+}
