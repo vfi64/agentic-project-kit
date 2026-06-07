@@ -4683,6 +4683,131 @@
     },
     {
       "group": "transfer",
+      "help": "Create a PR and complete it without requiring manual PR-number or SHA copying.",
+      "name": "pr-create-complete",
+      "params": [
+        {
+          "default": null,
+          "help": "Pull request title.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "title",
+          "opts": [
+            "--title"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Pull request body.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "body",
+          "opts": [
+            "--body"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "main",
+          "help": "Base branch.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "base",
+          "opts": [
+            "--base"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "current",
+          "help": "Head branch. Use current to resolve git branch --show-current.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "head",
+          "opts": [
+            "--head"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "squash",
+          "help": "GitHub merge method.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_method",
+          "opts": [
+            "--merge-method"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 300,
+          "help": "Maximum CI wait time.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "timeout_seconds",
+          "opts": [
+            "--timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 10,
+          "help": "CI polling interval.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "poll_seconds",
+          "opts": [
+            "--interval-seconds",
+            "--poll-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "pr-create-complete"
+      ],
+      "qualified_name": "agentic-kit transfer pr-create-complete"
+    },
+    {
+      "group": "transfer",
       "help": "",
       "name": "pr-merge-safe",
       "params": [
