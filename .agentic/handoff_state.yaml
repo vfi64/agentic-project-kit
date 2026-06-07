@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 3554e88
-  commit_subject: Implement pr-complete transfer orchestration (#1139)
+  commit: 21a3ade
+  commit_subject: Add pr-complete real smoke marker (#1141)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
