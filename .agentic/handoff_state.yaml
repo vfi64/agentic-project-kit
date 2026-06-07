@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 0a7850c
-  commit_subject: Add evidence transfer ergonomics wrappers (#1155)
+  commit: 4498d98
+  commit_subject: Make transfer startup output concise (#1157)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
