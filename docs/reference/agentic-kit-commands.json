@@ -1,79 +1,6102 @@
 {
   "commands": [
     {
-      "group": "transfer",
-      "name": "pr-complete",
-      "parameters": [
+      "group": "actions",
+      "help": "",
+      "name": "list",
+      "params": [],
+      "path": [
+        "actions",
+        "list"
+      ],
+      "qualified_name": "agentic-kit actions list"
+    },
+    {
+      "group": "actions",
+      "help": "",
+      "name": "show",
+      "params": [
         {
-          "meaning": "Pull request number to complete.",
-          "name": "pr_number",
-          "required": true
-        },
-        {
-          "meaning": "Expected PR head SHA; use a full SHA or current alias where supported.",
-          "name": "--expected-head-sha",
-          "required": false
-        },
-        {
-          "meaning": "GitHub merge method, usually squash.",
-          "name": "--merge-method",
-          "required": false
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "action_id",
+          "opts": [
+            "action_id"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
         }
       ],
-      "purpose": "Wait for PR CI, merge safely, sync main, acknowledge rules, and run post-merge completion."
+      "path": [
+        "actions",
+        "show"
+      ],
+      "qualified_name": "agentic-kit actions show"
+    },
+    {
+      "group": "boot",
+      "help": "",
+      "name": "check",
+      "params": [
+        {
+          "default": ".",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "boot",
+        "check"
+      ],
+      "qualified_name": "agentic-kit boot check"
+    },
+    {
+      "group": "boot",
+      "help": "",
+      "name": "closeout",
+      "params": [
+        {
+          "default": ".",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "boot",
+        "closeout"
+      ],
+      "qualified_name": "agentic-kit boot closeout"
+    },
+    {
+      "group": "boot",
+      "help": "",
+      "name": "prompt",
+      "params": [
+        {
+          "default": ".",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "boot",
+        "prompt"
+      ],
+      "qualified_name": "agentic-kit boot prompt"
+    },
+    {
+      "group": "boot",
+      "help": "",
+      "name": "report",
+      "params": [
+        {
+          "default": ".",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "boot",
+        "report"
+      ],
+      "qualified_name": "agentic-kit boot report"
+    },
+    {
+      "group": "boot",
+      "help": "",
+      "name": "write",
+      "params": [
+        {
+          "default": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": ".",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "include_state",
+          "opts": [
+            "--include-state"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-include-state"
+          ]
+        }
+      ],
+      "path": [
+        "boot",
+        "write"
+      ],
+      "qualified_name": "agentic-kit boot write"
+    },
+    {
+      "group": "root",
+      "help": "",
+      "name": "check",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "check"
+      ],
+      "qualified_name": "agentic-kit check"
+    },
+    {
+      "group": "root",
+      "help": "",
+      "name": "check-docs",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "check-docs"
+      ],
+      "qualified_name": "agentic-kit check-docs"
+    },
+    {
+      "group": "root",
+      "help": "",
+      "name": "check-todo",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "check-todo"
+      ],
+      "qualified_name": "agentic-kit check-todo"
+    },
+    {
+      "group": "cockpit",
+      "help": "",
+      "name": "actions",
+      "params": [
+        {
+          "default": false,
+          "help": "Print machine-readable JSON action inventory.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "cockpit",
+        "actions"
+      ],
+      "qualified_name": "agentic-kit cockpit actions"
+    },
+    {
+      "group": "cockpit",
+      "help": "",
+      "name": "gatekeeper-status",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON GUI gatekeeper status.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "cockpit",
+        "gatekeeper-status"
+      ],
+      "qualified_name": "agentic-kit cockpit gatekeeper-status"
+    },
+    {
+      "group": "cockpit",
+      "help": "",
+      "name": "run",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "action_id",
+          "opts": [
+            "action_id"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_bounded",
+          "opts": [
+            "--allow-bounded"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON action result.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "cockpit",
+        "run"
+      ],
+      "qualified_name": "agentic-kit cockpit run"
+    },
+    {
+      "group": "cockpit",
+      "help": "",
+      "name": "select",
+      "params": [],
+      "path": [
+        "cockpit",
+        "select"
+      ],
+      "qualified_name": "agentic-kit cockpit select"
+    },
+    {
+      "group": "cockpit",
+      "help": "",
+      "name": "status",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "cockpit",
+        "status"
+      ],
+      "qualified_name": "agentic-kit cockpit status"
+    },
+    {
+      "group": "root",
+      "help": "Audit lifecycle status headers for planning, roadmap, strategy, and idea documents.",
+      "name": "doc-lifecycle-audit",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "report_path",
+          "opts": [
+            "--report"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "doc-lifecycle-audit"
+      ],
+      "qualified_name": "agentic-kit doc-lifecycle-audit"
+    },
+    {
+      "group": "root",
+      "help": "Audit cross-document state, governance, architecture, and historical-plan drift.",
+      "name": "doc-mesh-audit",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "report_path",
+          "opts": [
+            "--report"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "repair_plan_path",
+          "opts": [
+            "--repair-plan"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "doc-mesh-audit"
+      ],
+      "qualified_name": "agentic-kit doc-mesh-audit"
+    },
+    {
+      "group": "root",
+      "help": "Apply safe automatic documentation mesh repairs.",
+      "name": "doc-mesh-repair",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "result_path",
+          "opts": [
+            "--result"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "doc-mesh-repair"
+      ],
+      "qualified_name": "agentic-kit doc-mesh-repair"
+    },
+    {
+      "group": "root",
+      "help": "Run the umbrella documentation-system audit.",
+      "name": "docs-audit",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "report_path",
+          "opts": [
+            "--report"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "docs-audit"
+      ],
+      "qualified_name": "agentic-kit docs-audit"
+    },
+    {
+      "group": "root",
+      "help": "Show a read-only summary of the documentation registry.",
+      "name": "docs-registry",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "report_path",
+          "opts": [
+            "--report"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "docs-registry"
+      ],
+      "qualified_name": "agentic-kit docs-registry"
+    },
+    {
+      "group": "root",
+      "help": "Run a compact project health check.",
+      "name": "doctor",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "doctor"
+      ],
+      "qualified_name": "agentic-kit doctor"
+    },
+    {
+      "group": "evidence",
+      "help": "Classify a terminal/evidence log for deterministic gatekeeper decisions.",
+      "name": "classify-log",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "path"
+          ],
+          "param_type": "TyperArgument",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_summary",
+          "opts": [
+            "--require-summary"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "ignore_git_status",
+          "opts": [
+            "--ignore-git-status"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "evidence",
+        "classify-log"
+      ],
+      "qualified_name": "agentic-kit evidence classify-log"
+    },
+    {
+      "group": "evidence",
+      "help": "Clean local evidence according to repo policy.",
+      "name": "clean",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "evidence",
+        "clean"
+      ],
+      "qualified_name": "agentic-kit evidence clean"
+    },
+    {
+      "group": "evidence",
+      "help": "Pass when git status is clean except one expected in-progress log.",
+      "name": "clean-check",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_log",
+          "opts": [
+            "expected_log"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "evidence",
+        "clean-check"
+      ],
+      "qualified_name": "agentic-kit evidence clean-check"
+    },
+    {
+      "group": "evidence",
+      "help": "Commit an explicit evidence path set and verify the worktree is clean afterwards.",
+      "name": "commit-paths",
+      "params": [
+        {
+          "default": [],
+          "help": "Repository-relative path to commit. Repeat for multiple paths.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "message",
+          "opts": [
+            "--message"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "log_path",
+          "opts": [
+            "--log-path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "push",
+          "opts": [
+            "--push"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Expected branch for evidence commit-paths commits.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "required_branch",
+          "opts": [
+            "--branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Allow evidence commit-paths to commit on main.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_main",
+          "opts": [
+            "--allow-main"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "evidence",
+        "commit-paths"
+      ],
+      "qualified_name": "agentic-kit evidence commit-paths"
+    },
+    {
+      "group": "evidence",
+      "help": "Append a canonical summary, require strict inspection, then upload the evidence log.",
+      "name": "finalize-log",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "run_log",
+          "opts": [
+            "--run-log"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "remote_log",
+          "opts": [
+            "--remote-log"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "slice_name",
+          "opts": [
+            "--slice"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "scope",
+          "opts": [
+            "--scope"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "mode_check",
+          "opts": [
+            "--mode-check"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "PASS",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "work",
+          "opts": [
+            "--work"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PASS",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "evidence",
+          "opts": [
+            "--evidence"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PASS",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "overall",
+          "opts": [
+            "--overall"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "NOT_REQUIRED",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "remote_evidence",
+          "opts": [
+            "--remote-evidence"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "NONE",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "pr",
+          "opts": [
+            "--pr"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "not-required",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "ci",
+          "opts": [
+            "--ci"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "not-required",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge",
+          "opts": [
+            "--merge"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "command_report",
+          "opts": [
+            "--command-report"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "interpretation",
+          "opts": [
+            "--interpretation"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "safe_step",
+          "opts": [
+            "--safe-step"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "d",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "chat_reply",
+          "opts": [
+            "--next"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "local",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "origin",
+          "opts": [
+            "--origin"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "local",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "state_mode",
+          "opts": [
+            "--state-mode"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "COMM-LOCAL",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "comm_id",
+          "opts": [
+            "--comm-id"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "commit_message",
+          "opts": [
+            "--commit-message"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "push",
+          "opts": [
+            "--push"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Expected branch for finalize-log commits.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "required_branch",
+          "opts": [
+            "--branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Allow finalize-log to commit on main.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_main",
+          "opts": [
+            "--allow-main"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "evidence",
+        "finalize-log"
+      ],
+      "qualified_name": "agentic-kit evidence finalize-log"
+    },
+    {
+      "group": "evidence",
+      "help": "Fail if a terminal evidence log has contradictory final state.",
+      "name": "guard",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "logfile",
+          "opts": [
+            "logfile"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "evidence",
+        "guard"
+      ],
+      "qualified_name": "agentic-kit evidence guard"
+    },
+    {
+      "group": "evidence",
+      "help": "Inspect explicit or latest terminal evidence before continuing after chat control signals.",
+      "name": "inspect",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "path"
+          ],
+          "param_type": "TyperArgument",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_summary",
+          "opts": [
+            "--require-summary"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "evidence",
+        "inspect"
+      ],
+      "qualified_name": "agentic-kit evidence inspect"
+    },
+    {
+      "group": "evidence",
+      "help": "Fail if expected target paths are missing from a change set.",
+      "name": "scope-check",
+      "params": [
+        {
+          "default": [],
+          "help": "Changed repository path. Repeat for multiple paths.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "changed",
+          "opts": [
+            "--changed"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": [],
+          "help": "Expected target path. Repeat for multiple paths.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "expected",
+          "opts": [
+            "--expected"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "evidence",
+        "scope-check"
+      ],
+      "qualified_name": "agentic-kit evidence scope-check"
+    },
+    {
+      "group": "root",
+      "help": "",
+      "name": "github-create",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "owner",
+          "opts": [
+            "--owner"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "private",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "visibility",
+          "opts": [
+            "--visibility"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "github-create"
+      ],
+      "qualified_name": "agentic-kit github-create"
+    },
+    {
+      "group": "governance",
+      "help": "",
+      "name": "check",
+      "params": [],
+      "path": [
+        "governance",
+        "check"
+      ],
+      "qualified_name": "agentic-kit governance check"
+    },
+    {
+      "group": "handoff",
+      "help": "",
+      "name": "check",
+      "params": [
+        {
+          "default": ".agentic/handoff_state.yaml",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "handoff",
+        "check"
+      ],
+      "qualified_name": "agentic-kit handoff check"
+    },
+    {
+      "group": "handoff",
+      "help": "",
+      "name": "post-merge-refresh-status",
+      "params": [],
+      "path": [
+        "handoff",
+        "post-merge-refresh-status"
+      ],
+      "qualified_name": "agentic-kit handoff post-merge-refresh-status"
+    },
+    {
+      "group": "handoff",
+      "help": "",
+      "name": "prompt",
+      "params": [
+        {
+          "default": ".agentic/handoff_state.yaml",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "handoff",
+        "prompt"
+      ],
+      "qualified_name": "agentic-kit handoff prompt"
+    },
+    {
+      "group": "handoff",
+      "help": "",
+      "name": "refresh",
+      "params": [
+        {
+          "default": ".agentic/handoff_state.yaml",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "path"
+          ],
+          "param_type": "TyperArgument",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write refreshed safe_state to YAML.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "write",
+          "opts": [
+            "--write"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "handoff",
+        "refresh"
+      ],
+      "qualified_name": "agentic-kit handoff refresh"
+    },
+    {
+      "group": "handoff",
+      "help": "",
+      "name": "show",
+      "params": [
+        {
+          "default": ".agentic/handoff_state.yaml",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "handoff",
+        "show"
+      ],
+      "qualified_name": "agentic-kit handoff show"
+    },
+    {
+      "group": "root",
+      "help": "",
+      "name": "init",
+      "params": [
+        {
+          "default": null,
+          "help": "Project directory/name.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "name",
+          "opts": [
+            "name"
+          ],
+          "param_type": "TyperArgument",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "python-cli",
+          "help": "python-cli, python-lib, generic, governance-wrapper",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_type",
+          "opts": [
+            "--type"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "description",
+          "opts": [
+            "--description"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "MIT",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "license_name",
+          "opts": [
+            "--license"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": true,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "github_actions",
+          "opts": [
+            "--github-actions"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-github-actions"
+          ]
+        },
+        {
+          "default": true,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "pre_commit",
+          "opts": [
+            "--pre-commit"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-pre-commit"
+          ]
+        },
+        {
+          "default": true,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "agent_docs",
+          "opts": [
+            "--agent-docs"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-agent-docs"
+          ]
+        },
+        {
+          "default": true,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "logging_evidence",
+          "opts": [
+            "--logging-evidence"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-logging-evidence"
+          ]
+        },
+        {
+          "default": null,
+          "help": "Comma-separated profile ids. Defaults are recommended from project type.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "profiles",
+          "opts": [
+            "--profiles"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Comma-separated policy pack ids. Defaults are recommended from project type.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "policy_packs",
+          "opts": [
+            "--policy-packs"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "github",
+          "opts": [
+            "--github"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-github"
+          ]
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "github_owner",
+          "opts": [
+            "--owner"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "private",
+          "help": "private or public",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "visibility",
+          "opts": [
+            "--visibility"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "pypi",
+          "help": "agentic-kit install source for generated CI: pypi, testpypi, or none",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "kit_source",
+          "opts": [
+            "--kit-source"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "init"
+      ],
+      "qualified_name": "agentic-kit init"
+    },
+    {
+      "group": "pass-already-done",
+      "help": "",
+      "name": "classify",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "path"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "exit_code",
+          "opts": [
+            "--exit-code"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "target_verified",
+          "opts": [
+            "--target-verified"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Already-done target class. One of: branch-exists, git-clean, pull-request-exists, remote-sync",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "target_state",
+          "opts": [
+            "--target-state"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON output.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "pass-already-done",
+        "classify"
+      ],
+      "qualified_name": "agentic-kit pass-already-done classify"
+    },
+    {
+      "group": "pass-already-done",
+      "help": "",
+      "name": "report",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "path"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "exit_code",
+          "opts": [
+            "--exit-code"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "target_verified",
+          "opts": [
+            "--target-verified"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Already-done target class. One of: branch-exists, git-clean, pull-request-exists, remote-sync",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "target_state",
+          "opts": [
+            "--target-state"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON output.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "pass-already-done",
+        "report"
+      ],
+      "qualified_name": "agentic-kit pass-already-done report"
+    },
+    {
+      "group": "root",
+      "help": "",
+      "name": "patch-preflight",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "paths",
+          "opts": [
+            "paths"
+          ],
+          "param_type": "TyperArgument",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Require a clean passing slice gate before accepting preflight.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_slice_gate",
+          "opts": [
+            "--require-slice-gate"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "patch-preflight"
+      ],
+      "qualified_name": "agentic-kit patch-preflight"
+    },
+    {
+      "group": "patterns",
+      "help": "List known local patterns and anti-patterns.",
+      "name": "list",
+      "params": [],
+      "path": [
+        "patterns",
+        "list"
+      ],
+      "qualified_name": "agentic-kit patterns list"
+    },
+    {
+      "group": "patterns",
+      "help": "Show one local pattern catalog entry by stable ID.",
+      "name": "show",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "pattern_id",
+          "opts": [
+            "pattern_id"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "patterns",
+        "show"
+      ],
+      "qualified_name": "agentic-kit patterns show"
+    },
+    {
+      "group": "root",
+      "help": "Validate post-release GitHub and Zenodo state without guessing DOI metadata.",
+      "name": "post-release-check",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Release version without leading v.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "post-release-check"
+      ],
+      "qualified_name": "agentic-kit post-release-check"
+    },
+    {
+      "group": "pr",
+      "help": "",
+      "name": "closeout-check",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_file",
+          "opts": [
+            "json_file"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "pr",
+        "closeout-check"
+      ],
+      "qualified_name": "agentic-kit pr closeout-check"
+    },
+    {
+      "group": "pr",
+      "help": "Merge only when PR checks are green, refs match, and merge state is clean.",
+      "name": "merge-if-green",
+      "params": [
+        {
+          "default": null,
+          "help": "Pull request number to merge only after green checks.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "squash",
+          "help": "GitHub merge method: squash, merge, or rebase.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_method",
+          "opts": [
+            "--merge-method"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": true,
+          "help": "Delete the branch after a successful merge.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "delete_branch",
+          "opts": [
+            "--delete-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-delete-branch"
+          ]
+        },
+        {
+          "default": false,
+          "help": "Evaluate without merging.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "dry_run",
+          "opts": [
+            "--dry-run"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Do not verify main CI after merge.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "no_verify_main",
+          "opts": [
+            "--no-verify-main"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "main",
+          "help": "Expected base branch and post-merge verification branch.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "main_branch",
+          "opts": [
+            "--main-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Expected PR base branch. Defaults to --main-branch.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_base_branch",
+          "opts": [
+            "--expected-base-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Expected PR head SHA. Refuses merge if the head moved.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_head_sha",
+          "opts": [
+            "--expected-head-sha"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 300,
+          "help": "Post-merge main CI wait timeout.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "main_ci_timeout_seconds",
+          "opts": [
+            "--main-ci-timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 10,
+          "help": "Post-merge main CI polling interval.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "main_ci_poll_seconds",
+          "opts": [
+            "--main-ci-poll-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 60,
+          "help": "Pre-merge GitHub merge-state wait timeout.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_state_timeout_seconds",
+          "opts": [
+            "--merge-state-timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 5,
+          "help": "Pre-merge GitHub merge-state polling interval.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_state_poll_seconds",
+          "opts": [
+            "--merge-state-poll-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "pr",
+        "merge-if-green"
+      ],
+      "qualified_name": "agentic-kit pr merge-if-green"
+    },
+    {
+      "group": "pr",
+      "help": "Print deterministic PR/CI status and fetch failed logs for red CI.",
+      "name": "status",
+      "params": [
+        {
+          "default": null,
+          "help": "Pull request number to inspect.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of the text report.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Do not fetch failed GitHub Actions logs for red checks.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "no_failed_log_fetch",
+          "opts": [
+            "--no-failed-log-fetch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 120,
+          "help": "Maximum failed-log excerpt lines.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "failed_log_lines",
+          "opts": [
+            "--failed-log-lines"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "pr",
+        "status"
+      ],
+      "qualified_name": "agentic-kit pr status"
+    },
+    {
+      "group": "pr",
+      "help": "Wait for pull-request CI; guard merge preparation with --expected-head-sha.",
+      "name": "wait-ci",
+      "params": [
+        {
+          "default": null,
+          "help": "Pull request number to inspect.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Expected PR head SHA for --expected-head-sha. The command fails closed if the head moves.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_head_sha",
+          "opts": [
+            "--expected-head-sha"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 2700,
+          "help": "Maximum wait time.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "timeout_seconds",
+          "opts": [
+            "--timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 20,
+          "help": "Polling interval.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "interval_seconds",
+          "opts": [
+            "--interval-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": [],
+          "help": "Check name that must be present before readiness can pass. Repeatable.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "expected_check",
+          "opts": [
+            "--expected-check"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "pr",
+        "wait-ci"
+      ],
+      "qualified_name": "agentic-kit pr wait-ci"
+    },
+    {
+      "group": "root",
+      "help": "",
+      "name": "pr-closeout",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_file",
+          "opts": [
+            "json_file"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "pr-closeout"
+      ],
+      "qualified_name": "agentic-kit pr-closeout"
+    },
+    {
+      "group": "root",
+      "help": "",
+      "name": "pr-hygiene",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "pr-hygiene"
+      ],
+      "qualified_name": "agentic-kit pr-hygiene"
+    },
+    {
+      "group": "root",
+      "help": "List available project profiles and policy packs.",
+      "name": "profile-explain",
+      "params": [],
+      "path": [
+        "profile-explain"
+      ],
+      "qualified_name": "agentic-kit profile-explain"
+    },
+    {
+      "group": "root",
+      "help": "Validate release state for a target version.",
+      "name": "release-check",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Release version without leading v.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "release-check"
+      ],
+      "qualified_name": "agentic-kit release-check"
+    },
+    {
+      "group": "root",
+      "help": "Print a release preparation checklist for the current project.",
+      "name": "release-plan",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Release version without leading v.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "release-plan"
+      ],
+      "qualified_name": "agentic-kit release-plan"
+    },
+    {
+      "group": "root",
+      "help": "Validate before-metadata release readiness for a target version.",
+      "name": "release-preflight",
+      "params": [
+        {
+          "default": null,
+          "help": "Target release version without leading v.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "release-preflight"
+      ],
+      "qualified_name": "agentic-kit release-preflight"
+    },
+    {
+      "group": "root",
+      "help": "",
+      "name": "remote-next",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON result.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "remote-next"
+      ],
+      "qualified_name": "agentic-kit remote-next"
+    },
+    {
+      "group": "root",
+      "help": "",
+      "name": "rn",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON result.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "rn"
+      ],
+      "qualified_name": "agentic-kit rn"
+    },
+    {
+      "group": "root",
+      "help": "",
+      "name": "rnc",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Commit locally without pushing.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "no_push",
+          "opts": [
+            "--no-push"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "rnc"
+      ],
+      "qualified_name": "agentic-kit rnc"
+    },
+    {
+      "group": "rule-registry",
+      "help": "",
+      "name": "check",
+      "params": [],
+      "path": [
+        "rule-registry",
+        "check"
+      ],
+      "qualified_name": "agentic-kit rule-registry check"
+    },
+    {
+      "group": "rule-registry",
+      "help": "",
+      "name": "report",
+      "params": [
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Exit non-zero when follow-up items remain, even if validation passes.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "fail_on_followups",
+          "opts": [
+            "--fail-on-followups"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "rule-registry",
+        "report"
+      ],
+      "qualified_name": "agentic-kit rule-registry report"
+    },
+    {
+      "group": "rules",
+      "help": "",
+      "name": "acknowledge",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.agentic/rule_ack/current.json')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_path",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "run_next_command",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "next_allowed_action",
+          "opts": [
+            "--next-allowed-action"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "rules",
+        "acknowledge"
+      ],
+      "qualified_name": "agentic-kit rules acknowledge"
+    },
+    {
+      "group": "rules",
+      "help": "",
+      "name": "communication-refresh",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "rules",
+        "communication-refresh"
+      ],
+      "qualified_name": "agentic-kit rules communication-refresh"
+    },
+    {
+      "group": "rules",
+      "help": "",
+      "name": "handoff-refresh",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "rules",
+        "handoff-refresh"
+      ],
+      "qualified_name": "agentic-kit rules handoff-refresh"
+    },
+    {
+      "group": "rules",
+      "help": "",
+      "name": "snapshot",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "rules",
+        "snapshot"
+      ],
+      "qualified_name": "agentic-kit rules snapshot"
+    },
+    {
+      "group": "rules",
+      "help": "",
+      "name": "validate-sources",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "rules",
+        "validate-sources"
+      ],
+      "qualified_name": "agentic-kit rules validate-sources"
+    },
+    {
+      "group": "scaffold",
+      "help": "",
+      "name": "planning-doc",
+      "params": [
+        {
+          "default": null,
+          "help": "Planning document title",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "title",
+          "opts": [
+            "title"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "active",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "status",
+          "opts": [
+            "--status"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "proposed",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "decision_status",
+          "opts": [
+            "--decision-status"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "planning",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "scope",
+          "opts": [
+            "--scope"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "review before implementation and after each milestone",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "review_policy",
+          "opts": [
+            "--review-policy"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "overwrite",
+          "opts": [
+            "--overwrite"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "scaffold",
+        "planning-doc"
+      ],
+      "qualified_name": "agentic-kit scaffold planning-doc"
+    },
+    {
+      "group": "slice",
+      "help": "",
+      "name": "gate",
+      "params": [
+        {
+          "default": "planning-doc",
+          "help": "Slice gate kind to run.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "kind",
+          "opts": [
+            "--kind"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "slice",
+        "gate"
+      ],
+      "qualified_name": "agentic-kit slice gate"
+    },
+    {
+      "group": "state",
+      "help": "",
+      "name": "freshness-check",
+      "params": [],
+      "path": [
+        "state",
+        "freshness-check"
+      ],
+      "qualified_name": "agentic-kit state freshness-check"
+    },
+    {
+      "group": "state",
+      "help": "",
+      "name": "mode-check",
+      "params": [
+        {
+          "default": null,
+          "help": "Execution target: local or remote.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "target",
+          "opts": [
+            "target"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_branch",
+          "opts": [
+            "--expected-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Allow a dirty worktree.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_dirty",
+          "opts": [
+            "--allow-dirty"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "state",
+        "mode-check"
+      ],
+      "qualified_name": "agentic-kit state mode-check"
+    },
+    {
+      "group": "state",
+      "help": "",
+      "name": "mode-write",
+      "params": [
+        {
+          "default": null,
+          "help": "Execution target: local or remote.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "target",
+          "opts": [
+            "target"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_branch",
+          "opts": [
+            "--expected-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "manual_mode_transition",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "reason",
+          "opts": [
+            "--reason"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Allow a dirty worktree.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_dirty",
+          "opts": [
+            "--allow-dirty"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "state",
+        "mode-write"
+      ],
+      "qualified_name": "agentic-kit state mode-write"
+    },
+    {
+      "group": "todo",
+      "help": "Mark a TODO item as done and store evidence.",
+      "name": "complete",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "item_id",
+          "opts": [
+            "item_id"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Evidence for completing the item.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "evidence",
+          "opts": [
+            "--evidence"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": true,
+          "help": "Regenerate docs/TODO.md.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "render",
+          "opts": [
+            "--render"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-render"
+          ]
+        }
+      ],
+      "path": [
+        "todo",
+        "complete"
+      ],
+      "qualified_name": "agentic-kit todo complete"
+    },
+    {
+      "group": "todo",
+      "help": "List project TODO items from .agentic/todo.yaml.",
+      "name": "list",
+      "params": [
+        {
+          "default": false,
+          "help": "Show completed items too.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "all_items",
+          "opts": [
+            "--all"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "todo",
+        "list"
+      ],
+      "qualified_name": "agentic-kit todo list"
+    },
+    {
+      "group": "todo",
+      "help": "Regenerate docs/TODO.md from .agentic/todo.yaml.",
+      "name": "render",
+      "params": [],
+      "path": [
+        "todo",
+        "render"
+      ],
+      "qualified_name": "agentic-kit todo render"
     },
     {
       "group": "transfer",
-      "name": "pr-wait-ci",
-      "parameters": [
+      "help": "",
+      "name": "admin-refresh-pr",
+      "params": [
         {
-          "meaning": "Pull request number.",
-          "name": "pr_number",
-          "required": true
+          "default": null,
+          "help": "Merged PR number that requires the administrative handoff refresh.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "after_pr",
+          "opts": [
+            "--after-pr"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
         },
         {
-          "meaning": "Expected PR head SHA.",
-          "name": "--expected-head-sha",
-          "required": false
+          "default": "main",
+          "help": "Main branch to refresh from.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "main_branch",
+          "opts": [
+            "--main-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
-      "purpose": "Wait until PR checks are ready."
+      "path": [
+        "transfer",
+        "admin-refresh-pr"
+      ],
+      "qualified_name": "agentic-kit transfer admin-refresh-pr"
     },
     {
       "group": "transfer",
-      "name": "pr-merge-safe",
-      "parameters": [
+      "help": "",
+      "name": "apply",
+      "params": [
         {
-          "meaning": "Pull request number.",
-          "name": "pr_number",
-          "required": true
+          "default": "PosixPath('.agentic/transfer/inbox/current.yaml')",
+          "help": "Transfer order path.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         },
         {
-          "meaning": "Expected PR head SHA.",
-          "name": "--expected-head-sha",
-          "required": false
-        },
-        {
-          "meaning": "GitHub merge method.",
-          "name": "--merge-method",
-          "required": false
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
-      "purpose": "Merge a green PR through the guarded merge path."
+      "path": [
+        "transfer",
+        "apply"
+      ],
+      "qualified_name": "agentic-kit transfer apply"
     },
     {
       "group": "transfer",
+      "help": "",
+      "name": "branch-create",
+      "params": [
+        {
+          "default": null,
+          "help": "Branch name to create.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "branch"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "main",
+          "help": "Start point for the new branch.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "start_point",
+          "opts": [
+            "--start-point"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Push the new branch and set upstream.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "push",
+          "opts": [
+            "--push"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "branch-create"
+      ],
+      "qualified_name": "agentic-kit transfer branch-create"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "branch-delete",
+      "params": [
+        {
+          "default": null,
+          "help": "Branch name to delete.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "branch"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Delete branch on origin instead of locally.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "remote",
+          "opts": [
+            "--remote"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Force local branch deletion with -D.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "force",
+          "opts": [
+            "--force"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "branch-delete"
+      ],
+      "qualified_name": "agentic-kit transfer branch-delete"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "branch-switch",
+      "params": [
+        {
+          "default": null,
+          "help": "Branch name to switch to.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "branch"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fast-forward pull from origin after switching.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "pull",
+          "opts": [
+            "--pull"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "branch-switch"
+      ],
+      "qualified_name": "agentic-kit transfer branch-switch"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "closeout",
+      "params": [
+        {
+          "default": false,
+          "help": "Do not remove .agentic/transfer during closeout.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "no_remove_transfer_dir",
+          "opts": [
+            "--no-remove-transfer-dir"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": true,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-json"
+          ]
+        }
+      ],
+      "path": [
+        "transfer",
+        "closeout"
+      ],
+      "qualified_name": "agentic-kit transfer closeout"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "commit",
+      "params": [
+        {
+          "default": null,
+          "help": "Commit message.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "message",
+          "opts": [
+            "--message",
+            "-m"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": [],
+          "help": "Path to add before commit. Repeatable.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Expected branch for the commit. If set, the transfer monitor switches to it or blocks safely.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "--branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Allow committing directly on main. Use only for explicit emergency/admin flows.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_main",
+          "opts": [
+            "--allow-main"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "commit"
+      ],
+      "qualified_name": "agentic-kit transfer commit"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "fetch-origin",
+      "params": [
+        {
+          "default": "main",
+          "help": "Remote branch to fetch from origin.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "--branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "fetch-origin"
+      ],
+      "qualified_name": "agentic-kit transfer fetch-origin"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "head-sha",
+      "params": [
+        {
+          "default": false,
+          "help": "Print the full HEAD SHA instead of the short SHA.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "full",
+          "opts": [
+            "--full"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "head-sha"
+      ],
+      "qualified_name": "agentic-kit transfer head-sha"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "inspect",
+      "params": [
+        {
+          "default": "PosixPath('.agentic/transfer/inbox/current.yaml')",
+          "help": "Transfer order path.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "inspect"
+      ],
+      "qualified_name": "agentic-kit transfer inspect"
+    },
+    {
+      "group": "transfer",
+      "help": "Normalize and summarize the local transfer session state.\n\nThe MVP is diagnostic and evidence-producing only. It does not switch branches,\npull, delete files, commit, push, or mutate the worktree except for writing the\ncanonical transfer outbox file.",
+      "name": "normalize-session",
+      "params": [
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Restore known volatile transfer output files before checking the session.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "repair_known_volatile",
+          "opts": [
+            "--repair-known-volatile"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write the normalized session result to the canonical transfer outbox.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "write_outbox",
+          "opts": [
+            "--write-outbox"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-write-outbox"
+          ]
+        }
+      ],
+      "path": [
+        "transfer",
+        "normalize-session"
+      ],
+      "qualified_name": "agentic-kit transfer normalize-session"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "post-merge-check",
+      "params": [
+        {
+          "default": "main",
+          "help": "Expected current branch after merge.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "main_branch",
+          "opts": [
+            "--main-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "post-merge-check"
+      ],
+      "qualified_name": "agentic-kit transfer post-merge-check"
+    },
+    {
+      "group": "transfer",
+      "help": "",
       "name": "post-merge-complete",
-      "parameters": [
+      "params": [
         {
-          "meaning": "The PR number whose merge triggered the lifecycle.",
-          "name": "--after-pr",
-          "required": true
+          "default": null,
+          "help": "Merged PR number to complete.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "after_pr",
+          "opts": [
+            "--after-pr"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "main",
+          "help": "Main branch to verify.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "main_branch",
+          "opts": [
+            "--main-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "squash",
+          "help": "Merge method for admin refresh PR.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_method",
+          "opts": [
+            "--merge-method"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Expected admin refresh PR head SHA. Existing commands resolve empty values.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "refresh_expected_head_sha",
+          "opts": [
+            "--refresh-expected-head-sha"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 300,
+          "help": "CI wait timeout.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "ci_timeout_seconds",
+          "opts": [
+            "--ci-timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 10,
+          "help": "CI polling interval.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "ci_poll_seconds",
+          "opts": [
+            "--ci-poll-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 60,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_state_timeout_seconds",
+          "opts": [
+            "--merge-state-timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 5,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_state_poll_seconds",
+          "opts": [
+            "--merge-state-poll-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
-      "purpose": "Complete the post-merge lifecycle after a PR merge."
+      "path": [
+        "transfer",
+        "post-merge-complete"
+      ],
+      "qualified_name": "agentic-kit transfer post-merge-complete"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "pr-complete",
+      "params": [
+        {
+          "default": null,
+          "help": "Pull request number to complete.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Expected PR head SHA, or current to use git rev-parse HEAD before the merge.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_head_sha",
+          "opts": [
+            "--expected-head-sha"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "main",
+          "help": "Main branch to sync after the merge.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "main_branch",
+          "opts": [
+            "--main-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "squash",
+          "help": "GitHub merge method.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_method",
+          "opts": [
+            "--merge-method"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 300,
+          "help": "Maximum CI wait time.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "timeout_seconds",
+          "opts": [
+            "--timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 10,
+          "help": "CI polling interval.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "poll_seconds",
+          "opts": [
+            "--interval-seconds",
+            "--poll-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "pr-complete"
+      ],
+      "qualified_name": "agentic-kit transfer pr-complete"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "pr-create",
+      "params": [
+        {
+          "default": "main",
+          "help": "Base branch.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "base",
+          "opts": [
+            "--base"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Head branch.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "head",
+          "opts": [
+            "--head"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Pull request title.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "title",
+          "opts": [
+            "--title"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Pull request body.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "body",
+          "opts": [
+            "--body"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "pr-create"
+      ],
+      "qualified_name": "agentic-kit transfer pr-create"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "pr-merge-safe",
+      "params": [
+        {
+          "default": null,
+          "help": "Pull request number to merge safely.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Expected PR head SHA. If omitted, the PR head SHA is resolved automatically.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_head_sha",
+          "opts": [
+            "--expected-head-sha"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "main",
+          "help": "Expected base branch.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "main_branch",
+          "opts": [
+            "--main-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "squash",
+          "help": "GitHub merge method.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_method",
+          "opts": [
+            "--merge-method"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Skip post-merge main verification.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "no_verify_main",
+          "opts": [
+            "--no-verify-main"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 60,
+          "help": "Pre-merge GitHub merge-state wait timeout.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_state_timeout_seconds",
+          "opts": [
+            "--merge-state-timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 5,
+          "help": "Pre-merge GitHub merge-state polling interval.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_state_poll_seconds",
+          "opts": [
+            "--merge-state-poll-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "pr-merge-safe"
+      ],
+      "qualified_name": "agentic-kit transfer pr-merge-safe"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "pr-status",
+      "params": [
+        {
+          "default": null,
+          "help": "Pull request number to inspect through the transfer wrapper.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text report.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Do not fetch failed GitHub Actions logs for red checks.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "no_failed_log_fetch",
+          "opts": [
+            "--no-failed-log-fetch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 120,
+          "help": "Maximum failed-log excerpt lines.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "failed_log_lines",
+          "opts": [
+            "--failed-log-lines"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Expected full PR head SHA.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_head_sha",
+          "opts": [
+            "--expected-head-sha"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "pr-status"
+      ],
+      "qualified_name": "agentic-kit transfer pr-status"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "pr-wait-ci",
+      "params": [
+        {
+          "default": null,
+          "help": "Pull request number to wait for.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Expected PR head SHA, or current to use git rev-parse HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_head_sha",
+          "opts": [
+            "--expected-head-sha"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 300,
+          "help": "Maximum wait time.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "timeout_seconds",
+          "opts": [
+            "--timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 10,
+          "help": "Polling interval.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "poll_seconds",
+          "opts": [
+            "--interval-seconds",
+            "--poll-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write the detailed wait output to a transfer report and print only go lines.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "quiet_report",
+          "opts": [
+            "--quiet-report"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "pr-wait-ci"
+      ],
+      "qualified_name": "agentic-kit transfer pr-wait-ci"
+    },
+    {
+      "group": "transfer",
+      "help": "Prepare a canonical LLM handoff assignment in the transfer outbox.\n\nThis command creates a repo-backed local-to-LLM transfer message. The LLM can\nread it after a simple \"g\" and produce a copy-and-paste successor chat prompt.",
+      "name": "prepare-successor-handoff",
+      "params": [
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Restore known volatile transfer output files before preparing the handoff request.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "repair_known_volatile",
+          "opts": [
+            "--repair-known-volatile"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Render a copy-and-paste successor chat prompt directly from the handoff payload.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "render_prompt",
+          "opts": [
+            "--render-prompt"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "prepare-successor-handoff"
+      ],
+      "qualified_name": "agentic-kit transfer prepare-successor-handoff"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "publish-last-report",
+      "params": [
+        {
+          "default": "transfer-handoff",
+          "help": "Label for the published tracked handoff report.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "label",
+          "opts": [
+            "--label"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of concise handoff lines.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "publish-last-report"
+      ],
+      "qualified_name": "agentic-kit transfer publish-last-report"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "pull-current",
+      "params": [
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "pull-current"
+      ],
+      "qualified_name": "agentic-kit transfer pull-current"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "push-current",
+      "params": [
+        {
+          "default": "",
+          "help": "Expected branch to push. If set, the transfer monitor switches to it or blocks safely.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "--branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "push-current"
+      ],
+      "qualified_name": "agentic-kit transfer push-current"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "remote-next",
+      "params": [
+        {
+          "default": null,
+          "help": "Optional remote transfer branch. If omitted, read branch from the transfer order.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "branch"
+          ],
+          "param_type": "TyperArgument",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-json"
+          ]
+        }
+      ],
+      "path": [
+        "transfer",
+        "remote-next"
+      ],
+      "qualified_name": "agentic-kit transfer remote-next"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "remote-work-start",
+      "params": [
+        {
+          "default": null,
+          "help": "Feature branch to prepare, for example feature/name.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "branch"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "main",
+          "help": "Base branch for new work branches.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "main_branch",
+          "opts": [
+            "--main-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "remote-work-start"
+      ],
+      "qualified_name": "agentic-kit transfer remote-work-start"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "repo-diff",
+      "params": [
+        {
+          "default": false,
+          "help": "Show staged diff.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "cached",
+          "opts": [
+            "--cached"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Show only changed path names.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "name_only",
+          "opts": [
+            "--name-only"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "repo-diff"
+      ],
+      "qualified_name": "agentic-kit transfer repo-diff"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "repo-log",
+      "params": [
+        {
+          "default": 5,
+          "help": "Number of commits to show.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "limit",
+          "opts": [
+            "--limit",
+            "-n"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "repo-log"
+      ],
+      "qualified_name": "agentic-kit transfer repo-log"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "repo-status",
+      "params": [
+        {
+          "default": true,
+          "help": "Use short git status by default.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "short",
+          "opts": [
+            "--short"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--full"
+          ]
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "repo-status"
+      ],
+      "qualified_name": "agentic-kit transfer repo-status"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "run-and-log",
+      "params": [
+        {
+          "default": "transfer-run",
+          "help": "Label for the transfer uplink report.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "label",
+          "opts": [
+            "--label"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "run-and-log"
+      ],
+      "qualified_name": "agentic-kit transfer run-and-log"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "run-local",
+      "params": [
+        {
+          "default": "PosixPath('.agentic/transfer/inbox/current.yaml')",
+          "help": "Transfer order path.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": true,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-json"
+          ]
+        }
+      ],
+      "path": [
+        "transfer",
+        "run-local"
+      ],
+      "qualified_name": "agentic-kit transfer run-local"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "run-sequence-and-log",
+      "params": [
+        {
+          "default": null,
+          "help": "One command step; quote it as one shell argument.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "step",
+          "opts": [
+            "--step"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "transfer-sequence",
+          "help": "Label for the transfer sequence report.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "label",
+          "opts": [
+            "--label"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "run-sequence-and-log"
+      ],
+      "qualified_name": "agentic-kit transfer run-sequence-and-log"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "show-last-report",
+      "params": [],
+      "path": [
+        "transfer",
+        "show-last-report"
+      ],
+      "qualified_name": "agentic-kit transfer show-last-report"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "state",
+      "params": [
+        {
+          "default": true,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-json"
+          ]
+        }
+      ],
+      "path": [
+        "transfer",
+        "state"
+      ],
+      "qualified_name": "agentic-kit transfer state"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "status",
+      "params": [
+        {
+          "default": "PosixPath('.agentic/transfer/inbox/current.yaml')",
+          "help": "Transfer order path.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "status"
+      ],
+      "qualified_name": "agentic-kit transfer status"
+    },
+    {
+      "group": "root",
+      "help": "Validate the machine-readable project contract.",
+      "name": "validate-contract",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root containing .agentic/project.yaml.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "validate-contract"
+      ],
+      "qualified_name": "agentic-kit validate-contract"
+    },
+    {
+      "group": "root",
+      "help": "Validate an output file against a machine-readable output contract.",
+      "name": "validate-output-contract",
+      "params": [
+        {
+          "default": null,
+          "help": "Output text file to validate.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_path",
+          "opts": [
+            "output_path"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Output contract YAML file.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "contract_path",
+          "opts": [
+            "--contract",
+            "-c"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Write a JSON validation report.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "report_path",
+          "opts": [
+            "--report"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Validate the JSON report against a generated validation-report.schema.json file.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "report_schema_path",
+          "opts": [
+            "--report-schema"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Write a deterministically repaired output file when supported.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "repair_output_path",
+          "opts": [
+            "--repair-output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Write a JSON repair report. Requires --repair-output.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "repair_report_path",
+          "opts": [
+            "--repair-report"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "validate-output-contract"
+      ],
+      "qualified_name": "agentic-kit validate-output-contract"
+    },
+    {
+      "group": "root",
+      "help": "Validate that a text file contains required literal section markers.",
+      "name": "validate-sections",
+      "params": [
+        {
+          "default": null,
+          "help": "Text file to validate.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "path"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Required literal section marker. Repeat the option for multiple sections.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "required_section",
+          "opts": [
+            "--required-section",
+            "-s"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "validate-sections"
+      ],
+      "qualified_name": "agentic-kit validate-sections"
+    },
+    {
+      "group": "work-order",
+      "help": "",
+      "name": "check",
+      "params": [],
+      "path": [
+        "work-order",
+        "check"
+      ],
+      "qualified_name": "agentic-kit work-order check"
+    },
+    {
+      "group": "work-order",
+      "help": "",
+      "name": "list",
+      "params": [],
+      "path": [
+        "work-order",
+        "list"
+      ],
+      "qualified_name": "agentic-kit work-order list"
+    },
+    {
+      "group": "work-order",
+      "help": "",
+      "name": "prepare",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "template_id",
+          "opts": [
+            "template_id"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "work_order_id",
+          "opts": [
+            "work_order_id"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_branch",
+          "opts": [
+            "expected_branch"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "work-order",
+        "prepare"
+      ],
+      "qualified_name": "agentic-kit work-order prepare"
+    },
+    {
+      "group": "work-order",
+      "help": "",
+      "name": "run",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "work_order_id",
+          "opts": [
+            "work_order_id"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Actually run the work order. Omit for dry-run.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "work-order",
+        "run"
+      ],
+      "qualified_name": "agentic-kit work-order run"
+    },
+    {
+      "group": "work-order",
+      "help": "",
+      "name": "show",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "work_order_id",
+          "opts": [
+            "work_order_id"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "work-order",
+        "show"
+      ],
+      "qualified_name": "agentic-kit work-order show"
+    },
+    {
+      "group": "work-order",
+      "help": "",
+      "name": "templates",
+      "params": [],
+      "path": [
+        "work-order",
+        "templates"
+      ],
+      "qualified_name": "agentic-kit work-order templates"
+    },
+    {
+      "group": "work-order",
+      "help": "",
+      "name": "typed-next",
+      "params": [
+        {
+          "default": false,
+          "help": "Print machine-readable JSON result.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "work-order",
+        "typed-next"
+      ],
+      "qualified_name": "agentic-kit work-order typed-next"
+    },
+    {
+      "group": "work-order",
+      "help": "",
+      "name": "typed-queue-status",
+      "params": [
+        {
+          "default": "PosixPath('.agentic/typed_work_orders/inbox')",
+          "help": "Typed work order inbox directory.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "inbox_path",
+          "opts": [
+            "--inbox"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON queue status.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "work-order",
+        "typed-queue-status"
+      ],
+      "qualified_name": "agentic-kit work-order typed-queue-status"
+    },
+    {
+      "group": "work-order",
+      "help": "",
+      "name": "typed-run",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "work_order_path",
+          "opts": [
+            "work_order_path"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Actually run the typed work order. Omit for dry-run.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON result.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "work-order",
+        "typed-run"
+      ],
+      "qualified_name": "agentic-kit work-order typed-run"
+    },
+    {
+      "group": "workflow",
+      "help": "Cleanup completed or stale temporary workflow evidence branches.",
+      "name": "cleanup",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root containing tools/next-step.py.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workflow",
+        "cleanup"
+      ],
+      "qualified_name": "agentic-kit workflow cleanup"
+    },
+    {
+      "group": "workflow",
+      "help": "Upload preserved FAILED workflow evidence without cleanup or retry.",
+      "name": "fail-report",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root containing tools/next-step.py.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workflow",
+        "fail-report"
+      ],
+      "qualified_name": "agentic-kit workflow fail-report"
+    },
+    {
+      "group": "workflow",
+      "help": "Request the configured workflow and run one bounded step.",
+      "name": "go",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root containing .agentic/current_work.yaml and tools/next-step.py.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workflow",
+        "go"
+      ],
+      "qualified_name": "agentic-kit workflow go"
+    },
+    {
+      "group": "workflow",
+      "help": "List stored local workflow items.",
+      "name": "list",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root containing .agentic/work_items.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workflow",
+        "list"
+      ],
+      "qualified_name": "agentic-kit workflow list"
+    },
+    {
+      "group": "workflow",
+      "help": "Request the configured declarative workflow without running it.",
+      "name": "request",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root containing .agentic/current_work.yaml.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workflow",
+        "request"
+      ],
+      "qualified_name": "agentic-kit workflow request"
+    },
+    {
+      "group": "workflow",
+      "help": "Run the current workflow, or set a stored workflow item and run it.",
+      "name": "run",
+      "params": [
+        {
+          "default": null,
+          "help": "Optional stored workflow item name to set before running.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "name",
+          "opts": [
+            "name"
+          ],
+          "param_type": "TyperArgument",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root containing tools/next-step.py.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workflow",
+        "run"
+      ],
+      "qualified_name": "agentic-kit workflow run"
+    },
+    {
+      "group": "workflow",
+      "help": "Show the current workflow request or one stored workflow item.",
+      "name": "show",
+      "params": [
+        {
+          "default": null,
+          "help": "Optional stored workflow item name.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "name",
+          "opts": [
+            "name"
+          ],
+          "param_type": "TyperArgument",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root containing .agentic/current_work.yaml.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workflow",
+        "show"
+      ],
+      "qualified_name": "agentic-kit workflow show"
+    },
+    {
+      "group": "workflow",
+      "help": "Show guided workflow state; shortcut for workflow status --explain.",
+      "name": "state",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root containing .agentic/workflow_state.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workflow",
+        "state"
+      ],
+      "qualified_name": "agentic-kit workflow state"
+    },
+    {
+      "group": "workflow",
+      "help": "Print the current workflow state and bounded evidence pointers.",
+      "name": "status",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root containing .agentic/workflow_state.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Explain the current state and recommend a safe next step.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "explain",
+          "opts": [
+            "--explain"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workflow",
+        "status"
+      ],
+      "qualified_name": "agentic-kit workflow status"
+    },
+    {
+      "group": "workflow",
+      "help": "Alias for upload-output.",
+      "name": "upload",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root containing tools/next-step.py.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workflow",
+        "upload"
+      ],
+      "qualified_name": "agentic-kit workflow upload"
+    },
+    {
+      "group": "workflow",
+      "help": "Alias for upload-output.",
+      "name": "upload-output",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root containing tools/next-step.py.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workflow",
+        "upload-output"
+      ],
+      "qualified_name": "agentic-kit workflow upload-output"
+    },
+    {
+      "group": "workflow-guard",
+      "help": "",
+      "name": "check",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "paths",
+          "opts": [
+            "paths"
+          ],
+          "param_type": "TyperArgument",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workflow-guard",
+        "check"
+      ],
+      "qualified_name": "agentic-kit workflow-guard check"
+    },
+    {
+      "group": "workflow-guard",
+      "help": "",
+      "name": "diagnose",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "paths",
+          "opts": [
+            "paths"
+          ],
+          "param_type": "TyperArgument",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workflow-guard",
+        "diagnose"
+      ],
+      "qualified_name": "agentic-kit workflow-guard diagnose"
     }
   ],
-  "schema_version": 1,
-  "source": "manual_seed_until_introspection_is_added"
+  "generated_by": "scripts/generate_agentic_kit_command_reference.py",
+  "kind": "agentic_kit_command_reference",
+  "schema_version": 2,
+  "source": "generated_from_typer_click_registry"
 }
