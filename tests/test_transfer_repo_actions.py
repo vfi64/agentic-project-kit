@@ -1260,3 +1260,94 @@ def test_admin_refresh_pr_monitor_blocks_before_status(monkeypatch):
     assert result.result_status == "FAIL"
     assert "Transfer operation monitor blocked admin-refresh-pr" in result.stderr
     assert ["git", "status", "--short"] not in calls
+
+
+def test_transfer_protected_diff_plan_runs_diff_and_ns(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:2] == ["git", "diff"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command[:2] == ["./ns", "protected-change-plan"]:
+            return subprocess.CompletedProcess(command, 0, "PROTECTED_CHANGE_PLAN\nresult=PASS\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "protected-diff-plan", "--label", "demo"])
+
+    assert result.exit_code == 0
+    assert "TRANSFER_PROTECTED_DIFF_PLAN" in result.stdout
+    assert "PASS" in result.stdout
+    assert calls[0][:2] == ["git", "diff"]
+    assert "--output" in calls[0]
+    assert calls[1][:2] == ["./ns", "protected-change-plan"]
+
+
+def test_transfer_protected_diff_plan_blocks_on_ns_failure(monkeypatch):
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command[:2] == ["git", "diff"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command[:2] == ["./ns", "protected-change-plan"]:
+            return subprocess.CompletedProcess(command, 1, "result=BLOCK\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "protected-diff-plan", "--label", "demo"])
+
+    assert result.exit_code == 1
+    assert "TRANSFER_PROTECTED_DIFF_PLAN" in result.stdout
+    assert "FAIL" in result.stdout
+
+
+def test_transfer_conflict_status_reports_clean_state(monkeypatch, tmp_path):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / ".git").mkdir()
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "status", "--short"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "diff", "--name-only", "--diff-filter=U"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "conflict-status"])
+
+    assert result.exit_code == 0
+    assert "TRANSFER_CONFLICT_STATUS" in result.stdout
+    assert "CONFLICT:" in result.stdout
+    assert "no" in result.stdout
+
+
+def test_transfer_conflict_status_blocks_when_unmerged_files_exist(monkeypatch, tmp_path):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / ".git").mkdir()
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "status", "--short"]:
+            return subprocess.CompletedProcess(command, 0, "UU file.txt\n", "")
+        if command == ["git", "diff", "--name-only", "--diff-filter=U"]:
+            return subprocess.CompletedProcess(command, 0, "file.txt\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "conflict-status"])
+
+    assert result.exit_code == 2
+    assert "TRANSFER_CONFLICT_STATUS" in result.stdout
+    assert "CONFLICT:" in result.stdout
+    assert "yes" in result.stdout
+    assert "file.txt" in result.stdout

@@ -365,6 +365,181 @@ def repo_diff_command(
         raise typer.Exit(code=result.returncode)
 
 
+@transfer_app.command("protected-diff-plan")
+def protected_diff_plan_command(
+    label: str = typer.Option("protected-change-plan", "--label", help="Stable label for the temporary diff file."),
+    cached: bool = typer.Option(False, "--cached", help="Use staged diff."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Write the current diff to /tmp and run ./ns protected-change-plan on it."""
+    import json
+    import re
+    import subprocess
+    from pathlib import Path
+
+    safe_label = re.sub(r"[^A-Za-z0-9_.-]+", "-", label).strip("-") or "protected-change-plan"
+    diff_path = Path("/tmp") / f"{safe_label}.diff"
+
+    diff_command = ["git", "diff"]
+    if cached:
+        diff_command.append("--cached")
+    diff_command.extend(["--output", str(diff_path)])
+
+    diff_result = subprocess.run(diff_command, text=True, capture_output=True)
+    plan_result = None
+    if diff_result.returncode == 0:
+        plan_result = subprocess.run(
+            ["./ns", "protected-change-plan", "--diff-file", str(diff_path)],
+            text=True,
+            capture_output=True,
+        )
+
+    plan_ok = plan_result is not None and plan_result.returncode == 0
+    result_status = "PASS" if diff_result.returncode == 0 and plan_ok else "FAIL"
+    final_signal = "d" if result_status == "PASS" else "f"
+    next_action = (
+        "Protected change plan passed; proceed with explicit add/commit paths."
+        if result_status == "PASS"
+        else "Inspect protected-diff-plan output before committing."
+    )
+
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_protected_diff_plan_result",
+        "action": "protected-diff-plan",
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "next_action": next_action,
+        "diff_path": str(diff_path),
+        "cached": cached,
+        "commands": {
+            "diff": {
+                "argv": diff_command,
+                "returncode": diff_result.returncode,
+                "stdout": diff_result.stdout,
+                "stderr": diff_result.stderr,
+                "ok": diff_result.returncode == 0,
+            },
+            "protected_change_plan": None
+            if plan_result is None
+            else {
+                "argv": ["./ns", "protected-change-plan", "--diff-file", str(diff_path)],
+                "returncode": plan_result.returncode,
+                "stdout": plan_result.stdout,
+                "stderr": plan_result.stderr,
+                "ok": plan_result.returncode == 0,
+            },
+        },
+    }
+
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    else:
+        _echo_transfer_payload_summary(
+            title="TRANSFER_PROTECTED_DIFF_PLAN",
+            result_status=result_status,
+            final_signal=final_signal,
+            next_action=next_action,
+            fields={
+                "DIFF": str(diff_path),
+                "CACHED": "yes" if cached else "no",
+                "PLAN": "PASS" if plan_ok else "FAIL",
+            },
+        )
+
+    if result_status != "PASS":
+        raise typer.Exit(code=1)
+
+
+@transfer_app.command("conflict-status")
+def conflict_status_command(
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Report merge/rebase conflict state without resolving anything."""
+    import json
+    import subprocess
+    from pathlib import Path
+
+    def run(argv: list[str]) -> dict[str, object]:
+        completed = subprocess.run(argv, text=True, capture_output=True)
+        return {
+            "argv": argv,
+            "returncode": completed.returncode,
+            "stdout": completed.stdout,
+            "stderr": completed.stderr,
+            "ok": completed.returncode == 0,
+        }
+
+    branch = run(["git", "branch", "--show-current"])
+    status = run(["git", "status", "--short"])
+    unmerged = run(["git", "diff", "--name-only", "--diff-filter=U"])
+
+    rebase_apply = Path(".git/rebase-apply").exists()
+    rebase_merge = Path(".git/rebase-merge").exists()
+    merge_head = Path(".git/MERGE_HEAD").exists()
+
+    unmerged_files = [
+        line.strip()
+        for line in str(unmerged["stdout"]).splitlines()
+        if line.strip()
+    ]
+    conflict_present = bool(unmerged_files or rebase_apply or rebase_merge or merge_head)
+
+    result_status = "CONFLICT" if conflict_present else "PASS"
+    final_signal = "f" if conflict_present else "d"
+    next_action = (
+        "Resolve or abort the active merge/rebase before continuing."
+        if conflict_present
+        else "No merge/rebase conflict detected."
+    )
+
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_conflict_status_result",
+        "action": "conflict-status",
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "next_action": next_action,
+        "repo": {
+            "branch": str(branch["stdout"]).strip(),
+            "status_short": status["stdout"],
+            "conflict_present": conflict_present,
+            "unmerged_files": unmerged_files,
+            "rebase_apply": rebase_apply,
+            "rebase_merge": rebase_merge,
+            "merge_head": merge_head,
+        },
+        "commands": {
+            "branch": branch,
+            "status": status,
+            "unmerged": unmerged,
+        },
+    }
+
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    else:
+        _echo_transfer_payload_summary(
+            title="TRANSFER_CONFLICT_STATUS",
+            result_status=result_status,
+            final_signal=final_signal,
+            next_action=next_action,
+            fields={
+                "BRANCH": str(branch["stdout"]).strip(),
+                "CONFLICT": "yes" if conflict_present else "no",
+                "UNMERGED": len(unmerged_files),
+            },
+        )
+        if unmerged_files:
+            typer.echo("")
+            typer.echo("UNMERGED_FILES")
+            for item in unmerged_files:
+                typer.echo(f"- {item}")
+
+    if conflict_present:
+        raise typer.Exit(code=2)
+
+
 @transfer_app.command("fetch-origin")
 def fetch_origin_command(
     branch: str = typer.Option("main", "--branch", help="Remote branch to fetch from origin."),
