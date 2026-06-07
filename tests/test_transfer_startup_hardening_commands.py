@@ -156,3 +156,88 @@ def test_command_reference_check_runs_drift_test(monkeypatch):
         ]
     ]
 
+
+def test_evidence_inspect_latest_requires_summary(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+        calls.append(list(argv))
+        return _completed(list(argv), stdout="PASS\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "evidence-inspect-latest", "--json"])
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert calls == [["./.venv/bin/agentic-kit", "evidence", "inspect", "--require-summary"]]
+
+
+def test_evidence_finalize_current_transfer_builds_finalize_log_command(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+        calls.append(list(argv))
+        return _completed(list(argv), stdout="finalized\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "evidence-finalize-current-transfer",
+            "--slice",
+            "demo slice",
+            "--run-log",
+            "docs/reports/transfer_runs/latest-transfer-report.log",
+            "--remote-log",
+            "docs/reports/terminal/demo.log",
+            "--pr",
+            "123",
+            "--ci",
+            "green",
+            "--merge",
+            "merged",
+            "--branch",
+            "feature/demo",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert calls == [
+        [
+            "./.venv/bin/agentic-kit",
+            "evidence",
+            "finalize-log",
+            "--run-log",
+            "docs/reports/transfer_runs/latest-transfer-report.log",
+            "--remote-log",
+            "docs/reports/terminal/demo.log",
+            "--slice",
+            "demo slice",
+            "--scope",
+            "transfer",
+            "--mode-check",
+            "standard",
+            "--pr",
+            "123",
+            "--ci",
+            "green",
+            "--merge",
+            "merged",
+            "--command-report",
+            "transfer lifecycle completed",
+            "--interpretation",
+            "Evidence finalized through transfer wrapper.",
+            "--safe-step",
+            "Continue with the next planned slice.",
+            "--branch",
+            "feature/demo",
+        ]
+    ]
+

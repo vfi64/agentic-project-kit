@@ -3902,6 +3902,240 @@
     },
     {
       "group": "transfer",
+      "help": "Finalize the current transfer evidence log through the stricter evidence CLI.",
+      "name": "evidence-finalize-current-transfer",
+      "params": [
+        {
+          "default": null,
+          "help": "Evidence slice label.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "slice_name",
+          "opts": [
+            "--slice"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/reports/transfer_runs/latest-transfer-report.log')",
+          "help": "Local run log to finalize.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "run_log",
+          "opts": [
+            "--run-log"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Repository-relative remote evidence log path under docs/reports/terminal/.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "remote_log",
+          "opts": [
+            "--remote-log"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "transfer",
+          "help": "Evidence scope summary.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "scope",
+          "opts": [
+            "--scope"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "standard",
+          "help": "Evidence mode check summary.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "mode_check",
+          "opts": [
+            "--mode-check"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "NONE",
+          "help": "Associated PR number or NONE.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "pr",
+          "opts": [
+            "--pr"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "not-required",
+          "help": "CI state summary.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "ci",
+          "opts": [
+            "--ci"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "not-required",
+          "help": "Merge state summary.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge",
+          "opts": [
+            "--merge"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "transfer lifecycle completed",
+          "help": "Command report summary.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "command_report",
+          "opts": [
+            "--command-report"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "Evidence finalized through transfer wrapper.",
+          "help": "Evidence interpretation summary.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "interpretation",
+          "opts": [
+            "--interpretation"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "Continue with the next planned slice.",
+          "help": "Next safe step.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "safe_step",
+          "opts": [
+            "--safe-step"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Push evidence commit if finalize-log creates one.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "push",
+          "opts": [
+            "--push"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Expected branch for evidence finalize-log commits.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "--branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "evidence-finalize-current-transfer"
+      ],
+      "qualified_name": "agentic-kit transfer evidence-finalize-current-transfer"
+    },
+    {
+      "group": "transfer",
+      "help": "Inspect the latest evidence log with the required-summary contract.",
+      "name": "evidence-inspect-latest",
+      "params": [
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "evidence-inspect-latest"
+      ],
+      "qualified_name": "agentic-kit transfer evidence-inspect-latest"
+    },
+    {
+      "group": "transfer",
       "help": "",
       "name": "fetch-origin",
       "params": [
