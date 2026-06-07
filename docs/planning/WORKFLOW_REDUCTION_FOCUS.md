@@ -288,10 +288,8 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 | `transfer branch-save-commit BRANCH SHA` | lokalen Commit sicher auf Branch retten | `git branch evidence/... 512c771` |
 | `transfer reset-current-to-upstream` | lokalen Branch kontrolliert auf Upstream zurücksetzen | `git reset --hard origin/main` |
 | `transfer rebase-on-upstream` | Rebase mit Guarding und Konfliktbericht | `git rebase origin/branch` |
-| `transfer protected-diff-plan` | Diff erzeugen und protected-change-plan ausführen | `git diff --output=/tmp/...` plus `./ns protected-change-plan` |
 | `transfer concise-report` | lange JSON-/Help-Ausgaben auf Kurzsummary reduzieren | manuelle Python-Auswertung von Reports |
 | `transfer work-order-patch` | Patchauftrag aus Datei statt Heredoc/Inline-Paste | lange Copy/Paste-Pythonblöcke |
-| `transfer conflict-status` | Rebase-/Merge-Konflikte kurz und maschinenlesbar ausgeben | `git status --short` im Konfliktfall |
 | `transfer conflict-resolve-file` | bewusstes Ersetzen einzelner Konfliktdateien mit Guard | manuelles `cat > file` oder Python-Schreibblock |
 | `transfer pr-existing-for-branch` | vorhandenen PR zu Branch finden | manuelle GitHub-/`gh`-Abfrage |
 | `transfer delete-merged-work-branch` | alte Feature-/Evidence-Branches nach Merge löschen | `git branch -d`, `git push origin --delete ...` |
@@ -309,6 +307,8 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 | `transfer evidence-finalize-current-transfer` | erledigt und getestet als ergonomische Hülle um `evidence finalize-log` |
 | `transfer remote-work-start` concise default output | erledigt und regressionsgetestet |
 | `transfer pr-create-complete` | erledigt, getestet und real erfolgreich genutzt; beseitigt den manuellen PR-Nummern- und HEAD-SHA-Kopierschritt |
+| `transfer protected-diff-plan` | erledigt, getestet und real genutzt; ersetzt `git diff --output=/tmp/...` plus `./ns protected-change-plan` |
+| `transfer conflict-status` | erledigt, getestet und real genutzt; diagnostiziert Merge-/Rebase-Konflikte ohne Auflösung |
 
 ### Pre-GUI Work Order
 
@@ -316,16 +316,14 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 
 Priority order:
 
-1. `transfer protected-diff-plan`
-2. `transfer work-order-patch`
-3. `transfer rebase-on-upstream`
-4. `transfer evidence-pr-complete`
-5. `transfer conflict-status`
-6. `transfer conflict-resolve-file`
-7. `transfer pr-existing-for-branch`
-8. `transfer delete-merged-work-branch`
+1. `transfer work-order-patch`
+2. `transfer rebase-on-upstream`
+3. `transfer evidence-pr-complete`
+4. `transfer conflict-resolve-file`
+5. `transfer delete-merged-work-branch`
+6. `transfer pr-existing-for-branch`
 
-Completed in the hardening passes so far: `transfer restore-known-volatile`, `transfer sync-main`, `transfer divergence-status`, `transfer command-reference-refresh`, `transfer command-reference-check`, `transfer evidence-inspect-latest`, `transfer evidence-finalize-current-transfer`, and `transfer pr-create-complete`.
+Completed in the hardening passes so far: `transfer restore-known-volatile`, `transfer sync-main`, `transfer divergence-status`, `transfer command-reference-refresh`, `transfer command-reference-check`, `transfer evidence-inspect-latest`, `transfer evidence-finalize-current-transfer`, `transfer pr-create-complete`, `transfer protected-diff-plan`, and `transfer conflict-status`.
 
 The manual sequence `pr-create -> read PR number -> FULL_SHA=$(git rev-parse HEAD) -> pr-complete <PR>` is no longer the preferred path. Use `transfer pr-create-complete` for normal PR lifecycle completion.
 
@@ -343,6 +341,8 @@ Target:
 - user-visible output is limited to `PASS`, `FAIL`, and the report path.
 
 This reduces quote, terminal, heredoc, escape, copy/paste, and message-stream failure modes.
+
+Next priority: `transfer work-order-patch`, because `transfer protected-diff-plan` now covers the protected-file guard but file mutation still relies too much on inline Python or manual copy/paste snippets.
 
 #### 3. Evidence ergonomisch machen
 
