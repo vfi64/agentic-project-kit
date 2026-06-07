@@ -775,6 +775,7 @@ read it after a simple "g" and produce a copy-and-paste successor chat prompt.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 | `repair_known_volatile` | `TyperOption` | --repair-known-volatile | `False` | `False` | Restore known volatile transfer output files before preparing the handoff request. |
 | `render_prompt` | `TyperOption` | --render-prompt | `False` | `False` | Render a copy-and-paste successor chat prompt directly from the handoff payload. |
+| `write_outbox` | `TyperOption` | --write-outbox, --no-write-outbox | `False` | `False` | Write the canonical transfer outbox. Defaults to no write to avoid volatile dirty state. |
 
 ### `agentic-kit transfer publish-last-report`
 

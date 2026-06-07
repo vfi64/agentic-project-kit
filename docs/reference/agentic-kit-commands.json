@@ -4718,6 +4718,22 @@
           "param_type": "TyperOption",
           "required": false,
           "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write the canonical transfer outbox. Defaults to no write to avoid volatile dirty state.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "write_outbox",
+          "opts": [
+            "--write-outbox"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-write-outbox"
+          ]
         }
       ],
       "path": [
