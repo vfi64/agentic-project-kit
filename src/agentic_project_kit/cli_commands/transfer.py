@@ -80,6 +80,28 @@ def _echo_quiet_repo_report(result: RepoActionResult, *, label: str) -> None:
     typer.echo("CHAT_REPLY=g")
 
 
+def _echo_transfer_payload_summary(
+    *,
+    title: str,
+    result_status: str,
+    final_signal: str,
+    next_action: str,
+    fields: dict[str, object] | None = None,
+) -> None:
+    typer.echo("*" * 34 + " START SUMMARY " + "*" * 35)
+    typer.echo(title)
+    typer.echo("")
+    typer.echo(_summary_line("STATE", result_status))
+    if fields:
+        for key, value in fields.items():
+            typer.echo(_summary_line(key, value))
+    typer.echo("")
+    typer.echo(_summary_line("NEXT", next_action))
+    typer.echo(_summary_line("CHAT_REPLY", f"{final_signal} | NEXT={next_action}"))
+    typer.echo("*" * 35 + " END SUMMARY " + "*" * 36)
+
+
+
 def _summary_line(label: str, value: object, *, indent: int = 0, width: int = 24) -> str:
     return f"{' ' * indent}{label + ':':<{width}}{value}"
 
@@ -993,11 +1015,20 @@ def sync_main(
         "blockers": blockers,
         "steps": steps,
     }
-    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
-    if not json_output:
-        typer.echo(f"FINAL_SIGNAL={final_signal}")
-        typer.echo(f"FINAL_NEXT={next_action}")
-        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    else:
+        _echo_transfer_payload_summary(
+            title="TRANSFER_SYNC_MAIN",
+            result_status=status,
+            final_signal=final_signal,
+            next_action=next_action,
+            fields={
+                "MAIN_BRANCH": main_branch,
+                "BLOCKERS": len(blockers),
+                "STEPS": len(steps),
+            },
+        )
     if blockers:
         raise typer.Exit(code=1)
 
@@ -1855,19 +1886,21 @@ def remote_work_start(
         "next_action": next_action,
     }
 
-    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
-    if not json_output:
-        typer.echo("********************************** START SUMMARY ***********************************")
-        typer.echo("TRANSFER_REMOTE_WORK_START")
-        typer.echo("")
-        typer.echo(f"STATE:                 {result_status}")
-        typer.echo(f"BRANCH:                {branch}")
-        typer.echo(f"MAIN_BRANCH:           {main_branch}")
-        typer.echo(f"BLOCKERS:              {len(blockers)}")
-        typer.echo("")
-        typer.echo(f"NEXT:                  {next_action}")
-        typer.echo(f"CHAT_REPLY:            {final_signal} | NEXT={next_action}")
-        typer.echo("*********************************** END SUMMARY ************************************")
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    else:
+        _echo_transfer_payload_summary(
+            title="TRANSFER_REMOTE_WORK_START",
+            result_status=result_status,
+            final_signal=final_signal,
+            next_action=next_action,
+            fields={
+                "BRANCH": branch,
+                "MAIN_BRANCH": main_branch,
+                "BLOCKERS": len(blockers),
+                "STEPS": len(steps),
+            },
+        )
 
 
 @transfer_app.command("show-last-report")

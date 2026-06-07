@@ -241,3 +241,67 @@ def test_evidence_finalize_current_transfer_builds_finalize_log_command(monkeypa
         ]
     ]
 
+
+
+def test_sync_main_default_output_is_concise(monkeypatch):
+    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+        return _completed(list(argv), stdout="ok\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "sync-main"])
+
+    assert result.exit_code == 0
+    assert "TRANSFER_SYNC_MAIN" in result.stdout
+    assert "START SUMMARY" in result.stdout
+    assert '"steps"' not in result.stdout
+    assert '"argv"' not in result.stdout
+
+
+def test_sync_main_json_output_keeps_steps(monkeypatch):
+    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+        return _completed(list(argv), stdout="ok\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "sync-main", "--json"])
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["action"] == "sync-main"
+    assert "steps" in payload
+
+
+def test_remote_work_start_default_output_is_concise(monkeypatch):
+    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+        command = list(argv)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "branch-create"]:
+            return _completed(command, stdout='{"result_status":"PASS"}\n')
+        return _completed(command, stdout="ok\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "remote-work-start", "feature/output-test"])
+
+    assert result.exit_code == 0
+    assert "TRANSFER_REMOTE_WORK_START" in result.stdout
+    assert "START SUMMARY" in result.stdout
+    assert '"steps"' not in result.stdout
+    assert '"argv"' not in result.stdout
+
+
+def test_remote_work_start_json_output_keeps_steps(monkeypatch):
+    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+        command = list(argv)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "branch-create"]:
+            return _completed(command, stdout='{"result_status":"PASS"}\n')
+        return _completed(command, stdout="ok\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "remote-work-start", "feature/output-test", "--json"])
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["action"] == "remote-work-start"
+    assert "steps" in payload
