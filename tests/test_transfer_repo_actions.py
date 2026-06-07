@@ -1351,3 +1351,110 @@ def test_transfer_conflict_status_blocks_when_unmerged_files_exist(monkeypatch, 
     assert "CONFLICT:" in result.stdout
     assert "yes" in result.stdout
     assert "file.txt" in result.stdout
+
+def test_transfer_work_order_patch_applies_exact_text_replacement(monkeypatch, tmp_path):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / ".git").mkdir()
+    (tmp_path / "demo.txt").write_text("alpha\nold\nomega\n", encoding="utf-8")
+    patch = tmp_path / "patch.yaml"
+    patch.write_text(
+        """
+kind: patch_file
+expected_branch: feature/demo
+protected_change_plan_required: true
+operations:
+  - path: demo.txt
+    old: "old\\n"
+    new: "new\\n"
+""".lstrip(),
+        encoding="utf-8",
+    )
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "work-order-patch", "--path", str(patch)])
+
+    assert result.exit_code == 0
+    assert "TRANSFER_WORK_ORDER_PATCH" in result.stdout
+    assert "STATE:                  PASS" in result.stdout
+    assert (tmp_path / "demo.txt").read_text(encoding="utf-8") == "alpha\nnew\nomega\n"
+
+
+def test_transfer_work_order_patch_blocks_branch_mismatch(monkeypatch, tmp_path):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / ".git").mkdir()
+    (tmp_path / "demo.txt").write_text("old\n", encoding="utf-8")
+    patch = tmp_path / "patch.yaml"
+    patch.write_text(
+        """
+kind: patch_file
+expected_branch: feature/expected
+operations:
+  - path: demo.txt
+    old: "old\\n"
+    new: "new\\n"
+""".lstrip(),
+        encoding="utf-8",
+    )
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/actual\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "work-order-patch", "--path", str(patch)])
+
+    assert result.exit_code == 2
+    assert "branch mismatch" in result.stdout
+    assert (tmp_path / "demo.txt").read_text(encoding="utf-8") == "old\n"
+
+
+def test_transfer_work_order_patch_blocks_ambiguous_replacement(monkeypatch, tmp_path):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / ".git").mkdir()
+    (tmp_path / "demo.txt").write_text("old\nold\n", encoding="utf-8")
+    patch = tmp_path / "patch.yaml"
+    patch.write_text(
+        """
+kind: patch_file
+expected_branch: feature/demo
+operations:
+  - path: demo.txt
+    old: "old\\n"
+    new: "new\\n"
+""".lstrip(),
+        encoding="utf-8",
+    )
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "work-order-patch", "--path", str(patch)])
+
+    assert result.exit_code == 2
+    assert "found 2" in result.stdout
+    assert (tmp_path / "demo.txt").read_text(encoding="utf-8") == "old\nold\n"
+

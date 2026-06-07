@@ -39,6 +39,14 @@ from agentic_project_kit.transfer_runner import (
     transfer_result_as_json_data,
 )
 from agentic_project_kit.transfer_state import build_transfer_state
+from agentic_project_kit.work_order_patch import (
+    DEFAULT_PATCH_ORDER,
+    WorkOrderPatchResult,
+    apply_work_order_patch,
+    load_work_order_patch,
+    render_work_order_patch_result,
+    work_order_patch_result_as_json_data,
+)
 from agentic_project_kit.transfer_uplink import (
     publish_latest_transfer_report,
     read_latest_transfer_report,
@@ -361,6 +369,36 @@ def repo_diff_command(
 ) -> None:
     result = repo_diff(cached=cached, name_only=name_only)
     _echo_repo_result(result, json_output)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("work-order-patch")
+def work_order_patch_command(
+    path: Path = typer.Option(DEFAULT_PATCH_ORDER, "--path", help="JSON/YAML patch work-order path."),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Validate without writing files."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Apply a guarded JSON/YAML text-replacement patch work order."""
+    try:
+        patch = load_work_order_patch(path)
+        result = apply_work_order_patch(patch, patch_path=path, project_root=Path("."), dry_run=dry_run)
+    except (FileNotFoundError, ValueError) as exc:
+        result = WorkOrderPatchResult(
+            result_status="FAIL",
+            returncode=2,
+            patch_path=str(path),
+            expected_branch="",
+            actual_branch="",
+            findings=(str(exc),),
+            message="Work-order patch could not be loaded.",
+        )
+
+    if json_output:
+        typer.echo(json.dumps(work_order_patch_result_as_json_data(result), indent=2, ensure_ascii=False))
+    else:
+        typer.echo(render_work_order_patch_result(result))
+
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
