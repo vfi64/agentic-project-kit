@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `132`
+- Command count: `134`
 
 ## Commands
 
@@ -640,6 +640,22 @@ _No parameters._
 |---|---:|---|---:|---|---|
 | `no_remove_transfer_dir` | `TyperOption` | --no-remove-transfer-dir | `False` | `False` | Do not remove .agentic/transfer during closeout. |
 | `json_output` | `TyperOption` | --json, --no-json | `False` | `True` | Print machine-readable JSON. |
+
+### `agentic-kit transfer command-reference-check`
+
+Check whether the committed agentic-kit command reference is current.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
+### `agentic-kit transfer command-reference-refresh`
+
+Regenerate the agentic-kit command reference without committing changes.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
 ### `agentic-kit transfer commit`
 

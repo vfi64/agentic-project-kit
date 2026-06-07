@@ -1002,6 +1002,99 @@ def sync_main(
         raise typer.Exit(code=1)
 
 
+@transfer_app.command("command-reference-refresh")
+def command_reference_refresh(
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Regenerate the agentic-kit command reference without committing changes."""
+    script_result = _run_transfer_subprocess(
+        ["./.venv/bin/python", "scripts/generate_agentic_kit_command_reference.py"]
+    )
+    status_result = _run_transfer_subprocess(["git", "status", "--short"])
+    diff_result = _run_transfer_subprocess(
+        [
+            "git",
+            "diff",
+            "--name-only",
+            "--",
+            "docs/reference/agentic-kit-commands.json",
+            "docs/reference/AGENTIC_KIT_COMMANDS.md",
+        ]
+    )
+    changed_files = [
+        line.strip()
+        for line in str(diff_result["stdout"]).splitlines()
+        if line.strip()
+    ]
+    result_status = "PASS" if script_result["ok"] and status_result["ok"] and diff_result["ok"] else "FAIL"
+    final_signal = "d" if result_status == "PASS" else "f"
+    next_action = (
+        "Command reference regenerated; inspect changed reference files."
+        if result_status == "PASS"
+        else "Inspect command-reference-refresh failure before continuing."
+    )
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_command_reference_refresh_result",
+        "action": "command-reference-refresh",
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "next_action": next_action,
+        "changed_files": changed_files,
+        "commands": {
+            "generate": script_result,
+            "status": status_result,
+            "diff_name_only": diff_result,
+        },
+    }
+    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    if not json_output:
+        typer.echo(f"FINAL_SIGNAL={final_signal}")
+        typer.echo(f"FINAL_NEXT={next_action}")
+        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    if result_status != "PASS":
+        raise typer.Exit(code=1)
+
+
+@transfer_app.command("command-reference-check")
+def command_reference_check(
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Check whether the committed agentic-kit command reference is current."""
+    check_result = _run_transfer_subprocess(
+        [
+            "./.venv/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests/test_agentic_kit_command_reference_is_current.py",
+        ]
+    )
+    result_status = "PASS" if check_result["ok"] else "FAIL"
+    final_signal = "d" if check_result["ok"] else "f"
+    next_action = (
+        "Command reference is current."
+        if check_result["ok"]
+        else "Regenerate command reference or inspect command-reference-check failure."
+    )
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_command_reference_check_result",
+        "action": "command-reference-check",
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "next_action": next_action,
+        "result": check_result,
+    }
+    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    if not json_output:
+        typer.echo(f"FINAL_SIGNAL={final_signal}")
+        typer.echo(f"FINAL_NEXT={next_action}")
+        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    if not check_result["ok"]:
+        raise typer.Exit(code=1)
+
+
 @transfer_app.command("normalize-session")
 def normalize_session(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
