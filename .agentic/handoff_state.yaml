@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 0fadbca
-  commit_subject: Add introspected agentic-kit command reference registry (#1145)
+  commit: b1da902
+  commit_subject: Avoid prepare-successor-handoff outbox dirty state by default (#1134)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
