@@ -14,6 +14,9 @@ class GuiButtonDefinition:
     implementation_state: str
     enabled: bool
     disabled_reason: str = ""
+    wrapper_command: tuple[str, ...] = ()
+    gui_gate: str = "read_only_gate"
+    requires_parameters: bool = False
 
 
 def _button(
@@ -27,6 +30,9 @@ def _button(
     implementation_state: str = "implemented",
     enabled: bool = True,
     disabled_reason: str = "",
+    wrapper_command: tuple[str, ...] = (),
+    gui_gate: str = "read_only_gate",
+    requires_parameters: bool = False,
 ) -> GuiButtonDefinition:
     return GuiButtonDefinition(
         command_id=command_id,
@@ -38,6 +44,9 @@ def _button(
         implementation_state=implementation_state,
         enabled=enabled,
         disabled_reason=disabled_reason,
+        wrapper_command=wrapper_command,
+        gui_gate=gui_gate,
+        requires_parameters=requires_parameters,
     )
 
 
@@ -87,6 +96,9 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         implementation_state="planned",
         enabled=False,
         disabled_reason="requires guarded GUI dispatch for transfer output mutation",
+        wrapper_command=("agentic-kit", "transfer", "prepare-successor-handoff"),
+        gui_gate="transfer_output_mutation_gate",
+        requires_parameters=True,
     ),
     _button(
         "bootstrap-show",
@@ -201,6 +213,9 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         enabled=False,
         implementation_state="planned",
         disabled_reason="requires --diff-file for the actual git diff",
+        wrapper_command=("agentic-kit", "transfer", "protected-diff-plan"),
+        gui_gate="parameterized_read_only_gate",
+        requires_parameters=True,
     ),
     _button(
         "pr-status",
@@ -211,6 +226,9 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         enabled=False,
         implementation_state="planned",
         disabled_reason="requires a PR number",
+        wrapper_command=("agentic-kit", "transfer", "pr-status"),
+        gui_gate="parameterized_read_only_gate",
+        requires_parameters=True,
     ),
     _button(
         "pr-create",
@@ -222,6 +240,9 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         implementation_state="planned",
         enabled=False,
         disabled_reason="remote mutation requires guarded dispatch",
+        wrapper_command=("agentic-kit", "transfer", "pr-create-complete"),
+        gui_gate="remote_mutation_gate",
+        requires_parameters=True,
     ),
     _button(
         "merge-if-green",
@@ -233,6 +254,9 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         implementation_state="planned",
         enabled=False,
         disabled_reason="merge remains gated outside the GUI",
+        wrapper_command=("agentic-kit", "transfer", "pr-complete"),
+        gui_gate="remote_mutation_gate",
+        requires_parameters=True,
     ),
     _button(
         "push-branch",
@@ -244,6 +268,9 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         implementation_state="planned",
         enabled=False,
         disabled_reason="remote mutation requires guarded dispatch",
+        wrapper_command=("agentic-kit", "transfer", "push-current"),
+        gui_gate="remote_mutation_gate",
+        requires_parameters=True,
     ),
     _button(
         "commit-prepare",
@@ -255,6 +282,9 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         implementation_state="planned",
         enabled=False,
         disabled_reason="local mutation requires dispatch model",
+        wrapper_command=("agentic-kit", "transfer", "commit"),
+        gui_gate="local_mutation_gate",
+        requires_parameters=True,
     ),
     _button(
         "finalize-log",
@@ -266,6 +296,9 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         implementation_state="planned",
         enabled=False,
         disabled_reason="requires run-log and remote-log parameters",
+        wrapper_command=("agentic-kit", "transfer", "evidence-finalize-current-transfer"),
+        gui_gate="evidence_mutation_gate",
+        requires_parameters=True,
     ),
     _button(
         "release-plan",
@@ -326,6 +359,8 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         "Promote the local next-turn result log, then commit and push only docs/reports/terminal/next-turn-latest.log.",
         "work-order-upload",
         safety_class="bounded-mutation",
+        wrapper_command=("agentic-kit", "work-order", "upload"),
+        gui_gate="fixed_path_upload_gate",
     ),
     _button(
         "agent-next",
