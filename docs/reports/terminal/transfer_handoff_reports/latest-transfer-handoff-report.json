@@ -275,8 +275,79 @@
     "next_action": "Review transfer state and evidence report before continuing.",
     "post_report_actions": {
       "attempted": true,
+      "branch": "feature/harden-transfer-file-protocol-rules",
+      "commit_head": "18689bb",
+      "committed": true,
+      "final_head": "18689bb",
+      "final_status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
+      "paths": [
+        "docs/reports/transfer_runs/latest-remote-next-report.json",
+        "docs/reports/transfer_runs/latest-remote-next-report.log",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+      ],
+      "pushed": true,
+      "rule_ack_after_report_commit": {
+        "blocking_reasons": [],
+        "confirmed": true,
+        "head": "18689bb",
+        "path": ".agentic/rule_ack/current.json",
+        "present": true
+      },
+      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "status": "pending_until_report_files_are_written"
+      "steps": [
+        {
+          "argv": [
+            "git",
+            "add",
+            "-f",
+            "docs/reports/transfer_runs/latest-remote-next-report.json",
+            "docs/reports/transfer_runs/latest-remote-next-report.log",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+          ],
+          "name": "git_add_force_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        },
+        {
+          "argv": [
+            "git",
+            "commit",
+            "-m",
+            "Publish remote-next transfer report"
+          ],
+          "name": "git_commit_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "[feature/harden-transfer-file-protocol-rules 18689bb] Publish remote-next transfer report\n 4 files changed, 2688 insertions(+), 1048 deletions(-)"
+        },
+        {
+          "argv": [
+            "./.venv/bin/agentic-kit",
+            "rules",
+            "acknowledge"
+          ],
+          "name": "rules_acknowledge_after_report_commit",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=8268feff457dae55719cbbb8b76f58f9e864897da31ddf3998b1db3f985563e9\nrepo_head=18689bb\ndeclared_next_allowed_action=run_next_command"
+        },
+        {
+          "argv": [
+            "git",
+            "push",
+            "origin",
+            "feature/harden-transfer-file-protocol-rules"
+          ],
+          "name": "git_push_report_commit",
+          "returncode": 0,
+          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   cc652f7..18689bb  feature/harden-transfer-file-protocol-rules -> feature/harden-transfer-file-protocol-rules",
+          "stdout": ""
+        }
+      ]
     },
     "preflight": {
       "current_branch": "feature/harden-transfer-file-protocol-rules",
@@ -786,10 +857,10 @@
     "repo_state": {
       "branch": "feature/harden-transfer-file-protocol-rules",
       "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
-      "head": "cc652f7c583e1bd7497d21bd00bd4b7b4253584a",
+      "head": "18689bb9897c443d74cf9dde8cd19727790a28b4",
       "head_matches_upstream": true,
       "upstream": "origin/feature/harden-transfer-file-protocol-rules",
-      "upstream_head": "cc652f7c583e1bd7497d21bd00bd4b7b4253584a"
+      "upstream_head": "18689bb9897c443d74cf9dde8cd19727790a28b4"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -1105,8 +1176,79 @@
     "next_action": "Review transfer state and evidence report before continuing.",
     "post_report_actions": {
       "attempted": true,
+      "branch": "feature/harden-transfer-file-protocol-rules",
+      "commit_head": "18689bb",
+      "committed": true,
+      "final_head": "18689bb",
+      "final_status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
+      "paths": [
+        "docs/reports/transfer_runs/latest-remote-next-report.json",
+        "docs/reports/transfer_runs/latest-remote-next-report.log",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+      ],
+      "pushed": true,
+      "rule_ack_after_report_commit": {
+        "blocking_reasons": [],
+        "confirmed": true,
+        "head": "18689bb",
+        "path": ".agentic/rule_ack/current.json",
+        "present": true
+      },
+      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "status": "pending_until_report_files_are_written"
+      "steps": [
+        {
+          "argv": [
+            "git",
+            "add",
+            "-f",
+            "docs/reports/transfer_runs/latest-remote-next-report.json",
+            "docs/reports/transfer_runs/latest-remote-next-report.log",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+          ],
+          "name": "git_add_force_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        },
+        {
+          "argv": [
+            "git",
+            "commit",
+            "-m",
+            "Publish remote-next transfer report"
+          ],
+          "name": "git_commit_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "[feature/harden-transfer-file-protocol-rules 18689bb] Publish remote-next transfer report\n 4 files changed, 2688 insertions(+), 1048 deletions(-)"
+        },
+        {
+          "argv": [
+            "./.venv/bin/agentic-kit",
+            "rules",
+            "acknowledge"
+          ],
+          "name": "rules_acknowledge_after_report_commit",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=8268feff457dae55719cbbb8b76f58f9e864897da31ddf3998b1db3f985563e9\nrepo_head=18689bb\ndeclared_next_allowed_action=run_next_command"
+        },
+        {
+          "argv": [
+            "git",
+            "push",
+            "origin",
+            "feature/harden-transfer-file-protocol-rules"
+          ],
+          "name": "git_push_report_commit",
+          "returncode": 0,
+          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   cc652f7..18689bb  feature/harden-transfer-file-protocol-rules -> feature/harden-transfer-file-protocol-rules",
+          "stdout": ""
+        }
+      ]
     },
     "preflight": {
       "current_branch": "feature/harden-transfer-file-protocol-rules",
@@ -1616,10 +1758,10 @@
     "repo_state": {
       "branch": "feature/harden-transfer-file-protocol-rules",
       "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
-      "head": "cc652f7c583e1bd7497d21bd00bd4b7b4253584a",
+      "head": "18689bb9897c443d74cf9dde8cd19727790a28b4",
       "head_matches_upstream": true,
       "upstream": "origin/feature/harden-transfer-file-protocol-rules",
-      "upstream_head": "cc652f7c583e1bd7497d21bd00bd4b7b4253584a"
+      "upstream_head": "18689bb9897c443d74cf9dde8cd19727790a28b4"
     },
     "schema_version": 1,
     "terminal_block_rules": {
