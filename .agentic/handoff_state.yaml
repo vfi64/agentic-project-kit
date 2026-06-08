@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 73f87a2
-  commit_subject: Block implicit release plan for published versions (#1199)
+  commit: 660581c
+  commit_subject: Prepare v0.4.6 release metadata (#1201)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
