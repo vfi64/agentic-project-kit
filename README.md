@@ -482,9 +482,9 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Current version: 0.4.5
-Prepared release: `v0.4.5`; GitHub Release, tag publication, and Zenodo version DOI verification are complete.
-Version `0.4.5` is the current release line prepared as a safety baseline after PR #874, including the post-PR873 GUI work-order upload strip, the deterministic gatekeeper migration plan, and the refreshed handoff/state pointers before gatekeeper implementation begins.
+Current version: 0.4.6
+Prepared release: `v0.4.6`; GitHub Release, tag publication, and Zenodo version DOI verification are pending.
+Version `0.4.6` is the current release line prepared as a safety baseline after the pre-GUI transfer-wrapper, output-discipline, GUI wrapper-gating, PR diagnostics, and release-plan guard hardening work.
 Current verified release: `v0.4.5` with Zenodo version DOI `10.5281/zenodo.20467371`.
 Earlier verified version-specific DOI notes are maintained in `docs/releases/VERIFIED_RELEASES.md`; historical release records remain in this section and the verified release archive.
 

@@ -1,3 +1,9 @@
+## v0.4.6 - 2026-06-08
+
+- Release safety: block implicit `release-plan` output for already published package versions so release preparation must name the next target version explicitly.
+- Transfer workflow: complete the pre-GUI wrapper, output-discipline, GUI wrapper-gating, and PR branch diagnostic hardening line.
+- Documentation: prepare v0.4.6 metadata while keeping v0.4.5 as the last verified release; v0.4.6 has pending verification for GitHub Release publication and post-release Zenodo checks.
+
 ## v0.4.5 - 2026-05-30
 
 Safety release after transfer-wrapper hardening and safe post-merge admin-refresh flow.

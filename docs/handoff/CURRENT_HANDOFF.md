@@ -167,7 +167,7 @@ Status-date: 2026-05-27
 Project: agentic-project-kit
 Branch: codex/refresh-post-pr835-next-step-state
 Base branch: main
-Current version: 0.4.5
+Current version: 0.4.6
 
 ## Purpose
 
@@ -175,8 +175,8 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 
 ## Current State
 
-- Current verified release: 0.4.5.
-- Current release tag: v0.4.5.
+- Current verified release remains 0.4.5 until v0.4.6 is published and post-release verified.
+- Prepared release tag: v0.4.6.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
 - Verified Zenodo version DOI: `10.5281/zenodo.20467371`.
 - Main contains PR #834 at `fd1e631`.
