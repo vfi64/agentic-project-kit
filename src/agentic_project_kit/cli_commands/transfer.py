@@ -599,6 +599,116 @@ def protected_diff_plan_command(
         raise typer.Exit(code=1)
 
 
+@transfer_app.command("conflict-resolve-file")
+def conflict_resolve_file_command(
+    path: Path = typer.Argument(..., help="Repository-relative conflicted file to resolve."),
+    source: Path = typer.Option(..., "--source", help="File whose content should replace the conflicted target."),
+    expected_branch: str = typer.Option("", "--branch", help="Expected current branch."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Resolve one conflicted file by replacing it from an explicit source and staging it."""
+    import subprocess
+    from typing import Any
+
+    steps: list[dict[str, Any]] = []
+    blockers: list[str] = []
+
+    def run_step(name: str, argv: list[str]) -> dict[str, Any]:
+        completed = subprocess.run(argv, text=True, capture_output=True)
+        item = {
+            "name": name,
+            "argv": argv,
+            "returncode": completed.returncode,
+            "stdout": completed.stdout,
+            "stderr": completed.stderr,
+            "ok": completed.returncode == 0,
+        }
+        steps.append(item)
+        return item
+
+    target = Path(path)
+    source_path = Path(source)
+    current_branch = ""
+    unmerged_files: list[str] = []
+
+    if target.is_absolute() or ".." in target.parts:
+        blockers.append("unsafe_target_path")
+    if source_path.is_dir():
+        blockers.append("source_is_directory")
+    if not source_path.exists():
+        blockers.append("source_missing")
+
+    branch_result = run_step("current-branch", ["git", "branch", "--show-current"])
+    current_branch = str(branch_result["stdout"]).strip()
+    if branch_result["returncode"] != 0 or not current_branch:
+        blockers.append("current_branch_missing")
+    if current_branch in {"main", "master"}:
+        blockers.append("refuse_main_branch")
+    if expected_branch and current_branch != expected_branch:
+        blockers.append(f"branch_mismatch_expected_{expected_branch}_actual_{current_branch}")
+
+    unmerged_result = run_step("unmerged-files", ["git", "diff", "--name-only", "--diff-filter=U"])
+    unmerged_files = [line.strip() for line in str(unmerged_result["stdout"]).splitlines() if line.strip()]
+    target_text = target.as_posix()
+    if unmerged_result["returncode"] != 0:
+        blockers.append("unmerged_files_check_failed")
+    elif target_text not in unmerged_files:
+        blockers.append("target_not_unmerged")
+
+    if not blockers:
+        try:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(source_path.read_text(encoding="utf-8"), encoding="utf-8")
+        except OSError as exc:
+            blockers.append(f"write_failed:{exc}")
+        else:
+            add_result = run_step("git-add-target", ["git", "add", target_text])
+            if add_result["returncode"] != 0:
+                blockers.append("git_add_failed")
+
+    result_status = "PASS" if not blockers else "BLOCKED"
+    final_signal = "d" if result_status == "PASS" else "f"
+    next_action = (
+        "Conflict file resolved and staged; run conflict-status or continue the rebase/merge."
+        if result_status == "PASS"
+        else "Inspect conflict-resolve-file blockers before continuing: " + ", ".join(blockers)
+    )
+
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_conflict_resolve_file_result",
+        "action": "conflict-resolve-file",
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "branch": current_branch,
+        "path": target_text,
+        "source": str(source_path),
+        "blockers": blockers,
+        "unmerged_files": unmerged_files,
+        "steps": steps,
+        "next_action": next_action,
+    }
+
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    else:
+        _echo_transfer_payload_summary(
+            title="TRANSFER_CONFLICT_RESOLVE_FILE",
+            result_status=result_status,
+            final_signal=final_signal,
+            next_action=next_action,
+            fields={
+                "BRANCH": current_branch,
+                "PATH": target_text,
+                "SOURCE": str(source_path),
+                "BLOCKERS": len(blockers),
+            },
+        )
+
+    if blockers:
+        raise typer.Exit(code=2)
+
+
 @transfer_app.command("conflict-status")
 def conflict_status_command(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
