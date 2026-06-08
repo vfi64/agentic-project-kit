@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 import json
 from pathlib import Path
-from collections.abc import Sequence
 
 from agentic_project_kit.post_release_closeout import post_release_doi_closeout
 from agentic_project_kit.release import CommandResult
@@ -84,6 +84,35 @@ def test_post_release_doi_closeout_preserves_historical_doi_anchors(tmp_path: Pa
     assert "Zenodo v0.4.4 DOI: 10.5281/zenodo.19000000" in changelog
     assert "- `v0.4.5` / `0.4.5`: Zenodo version DOI `10.5281/zenodo.20467371`; concept DOI `10.5281/zenodo.20101359`." in verified_releases
     assert "# Verified v0.4.5 version DOI: 10.5281/zenodo.20467371" in citation
+
+
+def test_post_release_doi_closeout_blocks_unapproved_write_path(tmp_path: Path, monkeypatch) -> None:
+    from agentic_project_kit import post_release_closeout
+
+    _write_closeout_files(tmp_path, "1.2.3")
+    (tmp_path / "docs/extra").mkdir(parents=True)
+    (tmp_path / "docs/extra/EXTRA.md").write_text("old\n", encoding="utf-8")
+    original = post_release_closeout._metadata_updaters
+
+    def rogue_updaters(version: str, doi: str, concept_doi: str):
+        updaters = original(version, doi, concept_doi)
+        updaters["docs/extra/EXTRA.md"] = lambda _text: "new\n"
+        return updaters
+
+    monkeypatch.setattr(post_release_closeout, "_metadata_updaters", rogue_updaters)
+
+    report = post_release_doi_closeout(
+        tmp_path,
+        version="1.2.3",
+        write=True,
+        command_runner=_runner(github_release=CommandResult(0, "v1.2.3\n", "")),
+        http_getter=_http_getter(json.dumps(_closeout_zenodo_payload("1.2.3", "10.5281/zenodo.99999999"))),
+    )
+
+    assert not report.ok
+    assert "unexpected_write_path:docs/extra/EXTRA.md" in report.blockers
+    assert (tmp_path / "docs/extra/EXTRA.md").read_text(encoding="utf-8") == "old\n"
+    assert "10.5281/zenodo.99999999" not in (tmp_path / "README.md").read_text(encoding="utf-8")
 
 
 def test_post_release_doi_closeout_approved_write_path_guard_is_explicit() -> None:
