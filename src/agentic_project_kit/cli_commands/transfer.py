@@ -7,6 +7,8 @@ from pathlib import Path
 import typer
 
 from agentic_project_kit.transfer_closeout import closeout_transfer
+from agentic_project_kit.transfer_continue import render_transfer_continue_summary
+from agentic_project_kit.transfer_continue import run_transfer_continue
 from agentic_project_kit.transfer_local_runner import run_local_transfer
 from agentic_project_kit.transfer_pr_actions import pr_status_transfer
 from agentic_project_kit.transfer_remote_next import run_remote_next_transfer
@@ -301,6 +303,25 @@ def closeout(
 
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
+
+
+
+@transfer_app.command("continue")
+def continue_transfer_command(
+    branch: str | None = typer.Argument(
+        None,
+        help="Optional target branch. If omitted, infer a single active transfer order.",
+    ),
+    json_output: bool = typer.Option(False, "--json/--no-json", help="Print machine-readable JSON."),
+) -> None:
+    """Continue chat/local transfer communication through the safest available wrapper path."""
+    result = run_transfer_continue(Path("."), branch)
+    if json_output:
+        typer.echo(json.dumps(result, indent=2, sort_keys=True))
+    else:
+        typer.echo(render_transfer_continue_summary(result))
+    if int(result.get("returncode", 2)) != 0:
+        raise typer.Exit(code=int(result.get("returncode", 2)))
 
 
 @transfer_app.command("remote-next")

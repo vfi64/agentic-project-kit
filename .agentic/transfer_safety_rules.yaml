@@ -12,7 +12,8 @@ canonical_runner:
   - transfer
   - remote-next
   direct_python_execution_allowed: recovery_only
-  rule: remote-next is the normal local transfer command; next_command.py.txt is a payload lane and direct user execution is only recovery/debug.
+  rule: remote-next is the normal local transfer command; next_command.py.txt is a
+    payload lane and direct user execution is only recovery/debug.
 decision_tree:
   user_says_g_or_go:
     action: read_latest_remote_transfer_report_first
@@ -30,6 +31,16 @@ decision_tree:
     forbidden: ask_for_long_terminal_output_first
   direct_next_command_execution:
     allowed_only_if: explicit_debug_or_recovery
+  communication_start_or_retry:
+    action: instruct_user_to_run_transfer_continue
+    command: ./.venv/bin/agentic-kit transfer continue
+    forbidden: start_with_remote_next_or_manual_multicommand_sequence
+  active_order_on_non_current_branch:
+    action: transfer_continue_infers_single_active_order_or_requires_branch
+    forbidden: assume_branchless_remote_next_finds_feature_branch_order
+  known_volatile_dirty_state:
+    action: run_restore_known_volatile_inside_transfer_continue
+    forbidden: manual_git_restore_as_first_response
 transfer_lanes:
   control_lane:
     file: .agentic/transfer/inbox/current.yaml
@@ -44,13 +55,17 @@ transfer_lanes:
     role: pure_python_payload
 canonical_transfer_execution_protocol:
   status: active
-  intent: Provide a deterministic one-command handoff between chat, local checkout, and remote repository.
+  intent: Provide a deterministic one-command handoff between chat, local checkout,
+    and remote repository.
   required_order:
   - step: materialize_remote_inbox
-    rule: Before executing any transfer task, the wrapper must ensure that the latest remote-backed transfer order is locally available.
+    rule: Before executing any transfer task, the wrapper must ensure that the latest
+      remote-backed transfer order is locally available.
     requirements:
-    - The local file must be overwritten from the current remote-backed state when stale.
-    - The file remains a pure Python source file even though it carries the .py.txt suffix.
+    - The local file must be overwritten from the current remote-backed state when
+      stale.
+    - The file remains a pure Python source file even though it carries the .py.txt
+      suffix.
     - A stale local inbox file must block execution rather than being run.
   - step: validate_local_inbox
     rule: Validate the transfer order and any materialized Python payload before execution.
@@ -63,27 +78,34 @@ canonical_transfer_execution_protocol:
     rule: Execute bounded transfer-order actions and capture terminal output.
     requirements:
     - Prefer showing only the human-formatted summary to the local user.
-    - Capture stdout, stderr, return code, result status, final signal, next action, and the human summary.
+    - Capture stdout, stderr, return code, result status, final signal, next action,
+      and the human summary.
   - step: write_canonical_outbox
     rule: Write or embed the complete result as the local-to-LLM result state.
     requirements:
-    - Include all terminal output, return code, result status, final signal, next action, and the human summary.
-    - Include enough machine-readable context for the next chat to evaluate the result without chat memory.
+    - Include all terminal output, return code, result status, final signal, next
+      action, and the human summary.
+    - Include enough machine-readable context for the next chat to evaluate the result
+      without chat memory.
     - Failed runs must still write or embed failure semantics.
   - step: publish_outbox_to_remote
-    rule: Publish the outbox result, or an equivalent embedded result, to the remote repository before completion.
+    rule: Publish the outbox result, or an equivalent embedded result, to the remote
+      repository before completion.
     requirements:
     - The remote report must be repo-readable evidence.
     - Upload or publish failure must not be interpreted as workflow success.
-    - A successful local run without a successful remote report or outbox publication is incomplete.
+    - A successful local run without a successful remote report or outbox publication
+      is incomplete.
   - step: show_human_summary_after_remote_publish
     rule: Show the human summary only after last-result state is remote-readable.
     requirements:
     - The visible user summary should be concise and human-readable.
-    - Non-summary terminal output should remain available in last_result.txt or the remote report.
+    - Non-summary terminal output should remain available in last_result.txt or the
+      remote report.
     - The user can then reply with g or go to ask the LLM to continue.
   - step: llm_reads_remote_outbox_before_planning
-    rule: After g/go, the LLM must retrieve and evaluate the latest published result before planning.
+    rule: After g/go, the LLM must retrieve and evaluate the latest published result
+      before planning.
     requirements:
     - Do not continue from chat memory alone.
     - Treat missing, stale, unpublished, or failed outbox state as a blocker.
@@ -144,6 +166,9 @@ known_failure_classes:
 - admin_refresh_pr_missing_after_pr
 - rule_acknowledgement_required_after_commit
 - terminal_quote_prompt_hang
+- communication_start_or_retry_must_use_transfer_continue
+- transfer_continue_missing_or_stale_remote_report
+- manual_git_cleanup_used_before_restore_known_volatile
 preflight_rules:
 - remote_repo_state_must_be_checked_before_transfer_execution
 - canonical_inbox_must_be_materialized_from_remote_before_execution
@@ -168,7 +193,8 @@ canonical_cli_usage:
   canonical_one_command_transfer:
     command: ./.venv/bin/agentic-kit transfer remote-next
     required_behavior:
-    - read branch from .agentic/transfer/inbox/current.yaml when no branch argument is supplied
+    - read branch from .agentic/transfer/inbox/current.yaml when no branch argument
+      is supplied
     - block stale, missing, inactive, or head-mismatched transfer orders
     - synchronize and fast-forward the target branch before local execution
     - refresh stale rule acknowledgement before transfer execution where possible
@@ -179,7 +205,8 @@ canonical_cli_usage:
     - direct next_command.py.txt execution by the user
     - manual multi-command transfer sequences
     notes:
-    - next_command.py.txt is a pure Python payload lane, not the user-facing wrapper command
+    - next_command.py.txt is a pure Python payload lane, not the user-facing wrapper
+      command
     - direct Python execution is reserved for explicit debug or recovery only
   transfer_run_local:
     command: ./.venv/bin/agentic-kit transfer run-local --path .agentic/transfer/inbox/current.yaml
@@ -193,12 +220,15 @@ canonical_cli_usage:
     command: ./.venv/bin/agentic-kit transfer publish-last-report --label <label>
     role: tracked_handoff_upload_for_run_and_log_reports
   transfer_pr_create:
-    command: agentic-kit transfer pr-create --base main --head <branch> --title <title> --body <body>
+    command: agentic-kit transfer pr-create --base main --head <branch> --title <title>
+      --body <body>
     required_options:
     - --head
     - --title
   evidence_finalize_log:
-    command: agentic-kit evidence finalize-log --run-log <path> --remote-log <docs/reports/terminal/name.log> --slice <name> --scope <text> --mode-check <text> --command-report <text> --interpretation <text> --safe-step <text>
+    command: agentic-kit evidence finalize-log --run-log <path> --remote-log <docs/reports/terminal/name.log>
+      --slice <name> --scope <text> --mode-check <text> --command-report <text> --interpretation
+      <text> --safe-step <text>
     required_options:
     - --run-log
     - --remote-log
@@ -219,6 +249,20 @@ canonical_cli_usage:
   rules_acknowledge_after_commit:
     command: agentic-kit rules acknowledge
     trigger: required after every commit because repo_head changes
+  canonical_communication_continue:
+    command: ./.venv/bin/agentic-kit transfer continue
+    role: single_communication_entrypoint_for_successor_chats_and_transfer_retries
+    required_behavior:
+    - restore known volatile transfer files before continuing
+    - infer exactly one active transfer order branch when branchless continuation
+      is ambiguous
+    - run remote-next through the selected branch or current transfer order
+    - treat missing, stale, or unpushed remote reports as BLOCKED
+    - emit g semantics only after a fresh remote report is pushed
+    forbidden_normal_replacements:
+    - manual git cleanup before trying restore-known-volatile
+    - direct next_command.py.txt execution as normal path
+    - remote-next without preflight when transfer continue is available
 terminal_block_rules:
   preferred:
   - Use printf '%s\n' for visible shell output lines
@@ -231,4 +275,5 @@ terminal_block_rules:
   - inline Python with complex shell quoting
   - commands that can leave zsh in quote> or dquote>
   recovery:
-  - If quote>, dquote>, or heredoc> appears, press Ctrl-C, then run git status --short and git branch --show-current
+  - If quote>, dquote>, or heredoc> appears, press Ctrl-C, then run git status --short
+    and git branch --show-current
