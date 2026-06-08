@@ -1,6 +1,6 @@
 schema_version: 1
 updated:
-  date: '2026-06-07'
+  date: '2026-06-08'
   reason: Refresh handoff state to last substantive work commit
   source: agentic-kit handoff refresh
 repo:
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 9b33585
-  commit_subject: Add transfer work-order patch wrapper (#1169)
+  commit: bc547f8
+  commit_subject: Update roadmap for work-order patch wrapper (#1171)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
