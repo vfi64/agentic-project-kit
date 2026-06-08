@@ -435,6 +435,33 @@ Completed: `agentic-kit post-release-doi-closeout --version <version>` now provi
 
 This is a top-level release-governance command, not a transfer wrapper. It reduces the former manual README/CHANGELOG/CITATION/verified-release-archive editing sequence after release publication.
 
+#### 3c. Post-release DOI-Closeout weiter härten
+
+Next planned safety slice: `Harden post-release DOI closeout consistency`.
+
+Scope for that slice:
+
+1. Add an internal expected-path guard to `agentic-kit post-release-doi-closeout`.
+   The command must fail closed if the write path would touch anything outside the intended release metadata files:
+   `README.md`, `CHANGELOG.md`, `CITATION.cff`, `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, and `docs/releases/VERIFIED_RELEASES.md`.
+
+2. Add an idempotency regression test.
+   After a successful `--write`, a second dry run for the same version must report no further changed paths.
+
+3. Add current-release DOI consistency validation.
+   The command should validate that the same `(version, concept DOI, version DOI)` tuple is represented consistently across the release metadata files it manages. Historical DOI notes may remain, but they must not be mistaken for current release state.
+
+4. Add a historical-anchor regression test.
+   Fixtures should include older v0.4.4/v0.4.5 DOI lines and assert that closeout for a newer version does not rewrite historical release notes.
+
+Explicitly out of scope for this slice:
+
+- GitHub Release asset checksum comparison against Zenodo files.
+- Converting the verified release archive to a generated YAML/JSON-backed projection.
+- A general CLI-command-to-rule-registry gate for all future commands.
+
+Rationale: this patch targets the real failure modes seen while implementing `post-release-doi-closeout`: over-broad Markdown replacement, duplicate/malformed DOI archive entries, missing idempotency proof, and consistency checks that currently rely too much on follow-up docs-audit/protected-diff inspection.
+
 #### 4. Command-Reference in Regelverwaltung prüfen
 
 The command reference registry now has a governance contract and a staleness test. The next admin slice should verify or add:
