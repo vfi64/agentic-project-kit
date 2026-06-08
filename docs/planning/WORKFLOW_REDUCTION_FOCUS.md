@@ -289,7 +289,6 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 | `transfer reset-current-to-upstream` | lokalen Branch kontrolliert auf Upstream zurücksetzen | `git reset --hard origin/main` |
 | `transfer concise-report` | lange JSON-/Help-Ausgaben auf Kurzsummary reduzieren | manuelle Python-Auswertung von Reports |
 | `transfer pr-existing-for-branch` | vorhandenen PR zu Branch finden | manuelle GitHub-/`gh`-Abfrage |
-| `transfer delete-merged-work-branch` | alte Feature-/Evidence-Branches nach Merge löschen | `git branch -d`, `git push origin --delete ...` |
 
 ### Completed Pre-GUI Wrapper Commands
 
@@ -309,6 +308,7 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 | `transfer work-order-patch` | erledigt, getestet und real genutzt; wendet JSON/YAML-Textpatches mit Branch-, Pfad- und Exact-Match-Guards an |
 | `transfer rebase-on-upstream` | erledigt, getestet und real genutzt; führt Rebase mit Branch-Guard und `conflict-status`-Integration aus |
 | `transfer conflict-resolve-file` | erledigt, getestet und real genutzt; ersetzt genau ein unmerged File aus expliziter Quelle und staged es kontrolliert |
+| `transfer delete-merged-work-branch` | erledigt, getestet und real genutzt; löscht gemergte Work-Branches lokal/remote mit PR-Merge-State-Prüfung |
 
 ### Pre-GUI Work Order
 
@@ -316,11 +316,10 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 
 Priority order:
 
-1. `transfer delete-merged-work-branch`
-2. `transfer evidence-pr-complete`
-3. `transfer pr-existing-for-branch`
+1. `transfer evidence-pr-complete`
+2. `transfer pr-existing-for-branch`
 
-Completed in the hardening passes so far: `transfer restore-known-volatile`, `transfer sync-main`, `transfer divergence-status`, `transfer command-reference-refresh`, `transfer command-reference-check`, `transfer evidence-inspect-latest`, `transfer evidence-finalize-current-transfer`, `transfer pr-create-complete`, `transfer protected-diff-plan`, `transfer conflict-status`, `transfer work-order-patch`, `transfer rebase-on-upstream`, and `transfer conflict-resolve-file`.
+Completed in the hardening passes so far: `transfer restore-known-volatile`, `transfer sync-main`, `transfer divergence-status`, `transfer command-reference-refresh`, `transfer command-reference-check`, `transfer evidence-inspect-latest`, `transfer evidence-finalize-current-transfer`, `transfer pr-create-complete`, `transfer protected-diff-plan`, `transfer conflict-status`, `transfer work-order-patch`, `transfer rebase-on-upstream`, `transfer conflict-resolve-file`, and `transfer delete-merged-work-branch`.
 
 The manual sequence `pr-create -> read PR number -> FULL_SHA=$(git rev-parse HEAD) -> pr-complete <PR>` is no longer the preferred path. Use `transfer pr-create-complete` for normal PR lifecycle completion.
 
@@ -339,7 +338,7 @@ Target:
 
 This reduces quote, terminal, heredoc, escape, copy/paste, and message-stream failure modes.
 
-Next priority: `transfer delete-merged-work-branch`, because merged feature/docs branches should be cleaned through a bounded wrapper instead of manual local and remote branch deletion.
+Next priority: `transfer evidence-pr-complete`, because evidence closeout still needs a bounded PR-based path instead of direct main-push or manual evidence-branch choreography.
 
 #### 3. Evidence ergonomisch machen
 
