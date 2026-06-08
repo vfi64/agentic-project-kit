@@ -284,7 +284,6 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 
 | Fehlendes Kommando | Warum nötig | Ersetzt bisher |
 |---|---|---|
-| `transfer evidence-pr-complete` | Evidence-Commit über Branch/PR statt direktem `main`-Push abschließen | `git branch evidence/...`, `git reset --hard origin/main`, PR-Erstellung |
 | `transfer branch-save-commit BRANCH SHA` | lokalen Commit sicher auf Branch retten | `git branch evidence/... 512c771` |
 | `transfer reset-current-to-upstream` | lokalen Branch kontrolliert auf Upstream zurücksetzen | `git reset --hard origin/main` |
 | `transfer concise-report` | lange JSON-/Help-Ausgaben auf Kurzsummary reduzieren | manuelle Python-Auswertung von Reports |
@@ -309,6 +308,7 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 | `transfer rebase-on-upstream` | erledigt, getestet und real genutzt; führt Rebase mit Branch-Guard und `conflict-status`-Integration aus |
 | `transfer conflict-resolve-file` | erledigt, getestet und real genutzt; ersetzt genau ein unmerged File aus expliziter Quelle und staged es kontrolliert |
 | `transfer delete-merged-work-branch` | erledigt, getestet und real genutzt; löscht gemergte Work-Branches lokal/remote mit PR-Merge-State-Prüfung |
+| `transfer evidence-pr-complete` | erledigt und getestet; finalisiert Transfer-Evidence auf Evidence-Branch, prüft sie, pusht und schließt den Evidence-PR-Lifecycle über guarded Wrapper ab |
 
 ### Pre-GUI Work Order
 
@@ -316,10 +316,12 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 
 Priority order:
 
-1. `transfer evidence-pr-complete`
-2. `transfer pr-existing-for-branch`
+1. Command-/Rule-Registry-Audit for the completed wrapper set
+2. Output-discipline residual audit
+3. GUI button mapping and gating over stable wrappers
+4. `transfer pr-existing-for-branch` only if still useful as a general diagnostic wrapper
 
-Completed in the hardening passes so far: `transfer restore-known-volatile`, `transfer sync-main`, `transfer divergence-status`, `transfer command-reference-refresh`, `transfer command-reference-check`, `transfer evidence-inspect-latest`, `transfer evidence-finalize-current-transfer`, `transfer pr-create-complete`, `transfer protected-diff-plan`, `transfer conflict-status`, `transfer work-order-patch`, `transfer rebase-on-upstream`, `transfer conflict-resolve-file`, and `transfer delete-merged-work-branch`.
+Completed in the hardening passes so far: `transfer restore-known-volatile`, `transfer sync-main`, `transfer divergence-status`, `transfer command-reference-refresh`, `transfer command-reference-check`, `transfer evidence-inspect-latest`, `transfer evidence-finalize-current-transfer`, `transfer pr-create-complete`, `transfer protected-diff-plan`, `transfer conflict-status`, `transfer work-order-patch`, `transfer rebase-on-upstream`, `transfer conflict-resolve-file`, `transfer delete-merged-work-branch`, and `transfer evidence-pr-complete`.
 
 The manual sequence `pr-create -> read PR number -> FULL_SHA=$(git rev-parse HEAD) -> pr-complete <PR>` is no longer the preferred path. Use `transfer pr-create-complete` for normal PR lifecycle completion.
 
@@ -338,7 +340,7 @@ Target:
 
 This reduces quote, terminal, heredoc, escape, copy/paste, and message-stream failure modes.
 
-Next priority: `transfer evidence-pr-complete`, because evidence closeout still needs a bounded PR-based path instead of direct main-push or manual evidence-branch choreography.
+Next priority: Command-/Rule-Registry-Audit, because the pre-GUI wrapper set is now broad enough that the command reference, governance references, rule-mechanism inventory, tests, and GUI prerequisites must be checked for consistency before GUI expansion.
 
 #### 3. Evidence ergonomisch machen
 
@@ -351,10 +353,14 @@ Completed:
 - automatic remote log path generation;
 - strict wrapper around `evidence finalize-log`.
 
+Completed additionally:
+
+- `transfer evidence-pr-complete` provides the bounded PR-based evidence closeout path;
+- direct `main` evidence commits are no longer the preferred regular workflow.
+
 Still needed:
 
-- automatic `transfer evidence-inspect-latest` after finalization where appropriate;
-- direct detection that evidence must not be pushed directly to `main`, but must go through an evidence PR when branch protection or the transfer monitor requires it.
+- audit that all evidence-facing docs, GUI plans, and rule/governance references point to the wrapper path rather than the old manual choreography.
 
 #### 4. Command-Reference in Regelverwaltung prüfen
 
