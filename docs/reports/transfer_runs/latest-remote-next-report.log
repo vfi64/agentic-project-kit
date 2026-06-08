@@ -2,7 +2,7 @@ TRANSFER_REMOTE_NEXT_REPORT
 RESULT_STATUS=BLOCKED
 RETURNCODE=2
 BRANCH=
-HEAD=6a172d0
+HEAD=8db8df9
 REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
 CHAT_REPLY=g
 NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonical command.
@@ -16,7 +16,7 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
     "blocked_message": "remote-next transfer order is not active: inactive",
     "branch": null,
     "chat_reply": "g",
-    "head": "6a172d0",
+    "head": "8db8df9",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -35,15 +35,17 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
       "returncode": 2,
       "schema_version": 1,
       "state": {
-        "branch": "main",
+        "branch": "feature/transfer-safety-rule-header",
         "dirty_state": {
-          "clean": true,
-          "staged_changes": [],
-          "status_short": "",
+          "clean": false,
+          "staged_changes": [
+            ".agentic/transfer/outbox/last_result.txt"
+          ],
+          "status_short": "M .agentic/transfer/outbox/last_result.txt",
           "unstaged_changes": [],
           "untracked_files": []
         },
-        "head": "6a172d0",
+        "head": "8db8df9",
         "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
         "primary_state": "NEW_ORDER_REQUIRED",
         "reasons": [
@@ -56,96 +58,29 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
     "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
     "post_report_actions": {
       "attempted": true,
-      "branch": null,
-      "commit_head": "f342d16",
-      "committed": true,
-      "final_head": "f342d16",
-      "final_status_short": "",
-      "paths": [
-        "docs/reports/transfer_runs/latest-remote-next-report.json",
-        "docs/reports/transfer_runs/latest-remote-next-report.log",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-      ],
-      "pushed": true,
-      "rule_ack_after_report_commit": {
-        "blocking_reasons": [],
-        "confirmed": true,
-        "head": "f342d16",
-        "path": ".agentic/rule_ack/current.json",
-        "present": true
-      },
-      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "steps": [
-        {
-          "argv": [
-            "git",
-            "add",
-            "-f",
-            "docs/reports/transfer_runs/latest-remote-next-report.json",
-            "docs/reports/transfer_runs/latest-remote-next-report.log",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-          ],
-          "name": "git_add_force_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": ""
-        },
-        {
-          "argv": [
-            "git",
-            "commit",
-            "-m",
-            "Publish remote-next transfer report"
-          ],
-          "name": "git_commit_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "[main f342d16] Publish remote-next transfer report\n 4 files changed, 82 insertions(+), 98 deletions(-)"
-        },
-        {
-          "argv": [
-            "./.venv/bin/agentic-kit",
-            "rules",
-            "acknowledge"
-          ],
-          "name": "rules_acknowledge_after_report_commit",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=b840090a2641dbbbd2f7d53c6bf355330cbb6a9bed0689dd0ab5637bdf8065a6\nrepo_head=f342d16\ndeclared_next_allowed_action=run_next_command"
-        },
-        {
-          "argv": [
-            "git",
-            "push"
-          ],
-          "name": "git_push_report_commit",
-          "returncode": 0,
-          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   6a172d0..f342d16  main -> main",
-          "stdout": ""
-        }
-      ]
+      "status": "pending_until_report_files_are_written"
     },
     "preflight": {
-      "current_branch": "main",
+      "current_branch": "feature/transfer-safety-rule-header",
       "dirty_state": {
-        "clean": true,
-        "staged_changes": [],
-        "status_short": "",
+        "clean": false,
+        "staged_changes": [
+          ".agentic/transfer/outbox/last_result.txt"
+        ],
+        "status_short": "M .agentic/transfer/outbox/last_result.txt",
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "6a172d0",
-      "remote_tracking": "origin/main",
+      "head": "8db8df9",
+      "remote_tracking": "origin/feature/transfer-safety-rule-header",
       "schema_version": 1,
       "transfer_order_guard": {
         "branch": "",
         "created_for_head": "",
-        "current_branch": "main",
-        "current_full_head": "6a172d07f01a1295ed933beb6d7bb3f0904467e1",
-        "current_head": "6a172d0",
+        "current_branch": "feature/transfer-safety-rule-header",
+        "current_full_head": "8db8df914302e09f60822a9400bcd26797076b7f",
+        "current_head": "8db8df9",
         "expected_current_branch": "",
         "expected_current_head": "",
         "expected_head": "",
@@ -165,7 +100,7 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "6a172d0",
+      "head": "8db8df9",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -183,7 +118,7 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
       },
       {
         "path": ".agentic/rule_mechanism_inventory.yaml",
-        "sha256": "eeddfb7fd51a0e9764784dfbb9f532b204497156488ab1b55b3eb4e3a4ae2850"
+        "sha256": "65889c553fd2ba7e7f6bea6432ac278717605314b757772747ffcdd35bb749fb"
       },
       {
         "path": ".agentic/rule_preservation.yaml",
@@ -195,7 +130,7 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
       },
       {
         "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-        "sha256": "e622d208cb98eaec09d23790b200636e2093a007e7edb72d0327a91691ab337f"
+        "sha256": "34e08835e0a1371ee44a547654403337182ae45707e38ecbc9876ecc181e12e4"
       }
     ],
     "canonical_cli_usage": {
@@ -471,12 +406,12 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "main",
-      "dirty_status": "",
-      "head": "f342d1681945f43da699be9a94b43e50bb49edcc",
+      "branch": "feature/transfer-safety-rule-header",
+      "dirty_status": "M .agentic/transfer/outbox/last_result.txt",
+      "head": "8db8df914302e09f60822a9400bcd26797076b7f",
       "head_matches_upstream": true,
-      "upstream": "origin/main",
-      "upstream_head": "f342d1681945f43da699be9a94b43e50bb49edcc"
+      "upstream": "origin/feature/transfer-safety-rule-header",
+      "upstream_head": "8db8df914302e09f60822a9400bcd26797076b7f"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -507,7 +442,7 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
     "blocked_message": "remote-next transfer order is not active: inactive",
     "branch": null,
     "chat_reply": "g",
-    "head": "6a172d0",
+    "head": "8db8df9",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -526,15 +461,17 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
       "returncode": 2,
       "schema_version": 1,
       "state": {
-        "branch": "main",
+        "branch": "feature/transfer-safety-rule-header",
         "dirty_state": {
-          "clean": true,
-          "staged_changes": [],
-          "status_short": "",
+          "clean": false,
+          "staged_changes": [
+            ".agentic/transfer/outbox/last_result.txt"
+          ],
+          "status_short": "M .agentic/transfer/outbox/last_result.txt",
           "unstaged_changes": [],
           "untracked_files": []
         },
-        "head": "6a172d0",
+        "head": "8db8df9",
         "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
         "primary_state": "NEW_ORDER_REQUIRED",
         "reasons": [
@@ -547,96 +484,29 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
     "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
     "post_report_actions": {
       "attempted": true,
-      "branch": null,
-      "commit_head": "f342d16",
-      "committed": true,
-      "final_head": "f342d16",
-      "final_status_short": "",
-      "paths": [
-        "docs/reports/transfer_runs/latest-remote-next-report.json",
-        "docs/reports/transfer_runs/latest-remote-next-report.log",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-      ],
-      "pushed": true,
-      "rule_ack_after_report_commit": {
-        "blocking_reasons": [],
-        "confirmed": true,
-        "head": "f342d16",
-        "path": ".agentic/rule_ack/current.json",
-        "present": true
-      },
-      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "steps": [
-        {
-          "argv": [
-            "git",
-            "add",
-            "-f",
-            "docs/reports/transfer_runs/latest-remote-next-report.json",
-            "docs/reports/transfer_runs/latest-remote-next-report.log",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-          ],
-          "name": "git_add_force_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": ""
-        },
-        {
-          "argv": [
-            "git",
-            "commit",
-            "-m",
-            "Publish remote-next transfer report"
-          ],
-          "name": "git_commit_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "[main f342d16] Publish remote-next transfer report\n 4 files changed, 82 insertions(+), 98 deletions(-)"
-        },
-        {
-          "argv": [
-            "./.venv/bin/agentic-kit",
-            "rules",
-            "acknowledge"
-          ],
-          "name": "rules_acknowledge_after_report_commit",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=b840090a2641dbbbd2f7d53c6bf355330cbb6a9bed0689dd0ab5637bdf8065a6\nrepo_head=f342d16\ndeclared_next_allowed_action=run_next_command"
-        },
-        {
-          "argv": [
-            "git",
-            "push"
-          ],
-          "name": "git_push_report_commit",
-          "returncode": 0,
-          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   6a172d0..f342d16  main -> main",
-          "stdout": ""
-        }
-      ]
+      "status": "pending_until_report_files_are_written"
     },
     "preflight": {
-      "current_branch": "main",
+      "current_branch": "feature/transfer-safety-rule-header",
       "dirty_state": {
-        "clean": true,
-        "staged_changes": [],
-        "status_short": "",
+        "clean": false,
+        "staged_changes": [
+          ".agentic/transfer/outbox/last_result.txt"
+        ],
+        "status_short": "M .agentic/transfer/outbox/last_result.txt",
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "6a172d0",
-      "remote_tracking": "origin/main",
+      "head": "8db8df9",
+      "remote_tracking": "origin/feature/transfer-safety-rule-header",
       "schema_version": 1,
       "transfer_order_guard": {
         "branch": "",
         "created_for_head": "",
-        "current_branch": "main",
-        "current_full_head": "6a172d07f01a1295ed933beb6d7bb3f0904467e1",
-        "current_head": "6a172d0",
+        "current_branch": "feature/transfer-safety-rule-header",
+        "current_full_head": "8db8df914302e09f60822a9400bcd26797076b7f",
+        "current_head": "8db8df9",
         "expected_current_branch": "",
         "expected_current_head": "",
         "expected_head": "",
@@ -656,7 +526,7 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "6a172d0",
+      "head": "8db8df9",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -674,7 +544,7 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
       },
       {
         "path": ".agentic/rule_mechanism_inventory.yaml",
-        "sha256": "eeddfb7fd51a0e9764784dfbb9f532b204497156488ab1b55b3eb4e3a4ae2850"
+        "sha256": "65889c553fd2ba7e7f6bea6432ac278717605314b757772747ffcdd35bb749fb"
       },
       {
         "path": ".agentic/rule_preservation.yaml",
@@ -686,7 +556,7 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
       },
       {
         "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-        "sha256": "e622d208cb98eaec09d23790b200636e2093a007e7edb72d0327a91691ab337f"
+        "sha256": "34e08835e0a1371ee44a547654403337182ae45707e38ecbc9876ecc181e12e4"
       }
     ],
     "canonical_cli_usage": {
@@ -962,12 +832,12 @@ NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonica
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "main",
-      "dirty_status": "",
-      "head": "f342d1681945f43da699be9a94b43e50bb49edcc",
+      "branch": "feature/transfer-safety-rule-header",
+      "dirty_status": "M .agentic/transfer/outbox/last_result.txt",
+      "head": "8db8df914302e09f60822a9400bcd26797076b7f",
       "head_matches_upstream": true,
-      "upstream": "origin/main",
-      "upstream_head": "f342d1681945f43da699be9a94b43e50bb49edcc"
+      "upstream": "origin/feature/transfer-safety-rule-header",
+      "upstream_head": "8db8df914302e09f60822a9400bcd26797076b7f"
     },
     "schema_version": 1,
     "terminal_block_rules": {
