@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 7c10373
-  commit_subject: Update roadmap for merged branch cleanup wrapper (#1183)
+  commit: fabee61
+  commit_subject: Add transfer evidence PR complete wrapper (#1185)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
