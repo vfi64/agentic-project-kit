@@ -6,6 +6,7 @@ import typer
 from rich.console import Console
 
 from agentic_project_kit.post_release import build_post_release_report, render_post_release_report
+from agentic_project_kit.post_release_closeout import post_release_doi_closeout, render_post_release_doi_closeout_result
 from agentic_project_kit.release import (
     ReleaseCheckStatus,
     build_release_plan,
@@ -24,6 +25,7 @@ def register_release_commands(app: typer.Typer) -> None:
     app.command("release-preflight")(release_preflight_command)
     app.command("release-check")(release_check_command)
     app.command("post-release-check")(post_release_check_command)
+    app.command("post-release-doi-closeout")(post_release_doi_closeout_command)
 
 
 def release_plan_command(
@@ -90,3 +92,14 @@ def post_release_check_command(
     console.print(render_post_release_report(report), markup=False)
     if not report.ok:
         raise typer.Exit(code=1)
+
+
+def post_release_doi_closeout_command(
+    project_root: Path = typer.Option(Path("."), "--root"),
+    version: str = typer.Option(..., "--version", help="Release version without leading v."),
+    write: bool = typer.Option(False, "--write", help="Write verified DOI metadata updates."),
+) -> None:
+    result = post_release_doi_closeout(project_root.resolve(), version=version, write=write)
+    console.print(render_post_release_doi_closeout_result(result), markup=False)
+    if not result.ok:
+        raise typer.Exit(code=result.returncode)

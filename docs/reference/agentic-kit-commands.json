@@ -2093,6 +2093,59 @@
       "qualified_name": "agentic-kit post-release-check"
     },
     {
+      "group": "root",
+      "help": "",
+      "name": "post-release-doi-closeout",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Release version without leading v.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write verified DOI metadata updates.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "write",
+          "opts": [
+            "--write"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "post-release-doi-closeout"
+      ],
+      "qualified_name": "agentic-kit post-release-doi-closeout"
+    },
+    {
       "group": "pr",
       "help": "",
       "name": "closeout-check",

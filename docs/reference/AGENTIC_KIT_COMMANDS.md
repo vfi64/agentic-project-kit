@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `145`
+- Command count: `146`
 
 ## Commands
 
@@ -365,6 +365,14 @@ Validate post-release GitHub and Zenodo state without guessing DOI metadata.
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `version` | `TyperOption` | --version | `False` |  | Release version without leading v. |
+
+### `agentic-kit post-release-doi-closeout`
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `version` | `TyperOption` | --version | `True` |  | Release version without leading v. |
+| `write` | `TyperOption` | --write | `False` | `False` | Write verified DOI metadata updates. |
 
 ### `agentic-kit pr closeout-check`
 

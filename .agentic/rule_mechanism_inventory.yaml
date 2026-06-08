@@ -478,6 +478,38 @@ mechanisms:
   - test-gates-docs
   tests:
   - tests/test_post_release.py
+- id: post-release-doi-closeout
+  status: active
+  owner: release-governance
+  category: workflow
+  priority: 3
+  enforcement_phase: guard
+  conflict_domains:
+  - post-release-doi-metadata-closeout
+  - release-doi-metadata-closeout
+  sources:
+  - path: src/agentic_project_kit/post_release_closeout.py
+    required_terms:
+    - post_release_doi_closeout
+    - render_post_release_doi_closeout_result
+    - zenodo_version_doi_not_verified
+    - Dry run passed; rerun with --write to update DOI metadata.
+  - path: src/agentic_project_kit/cli_commands/release.py
+    required_terms:
+    - post-release-doi-closeout
+    - post_release_doi_closeout_command
+  - path: tests/test_post_release.py
+    required_terms:
+    - test_post_release_doi_closeout_blocks_when_zenodo_is_waiting
+    - test_post_release_doi_closeout_dry_run_reports_metadata_paths
+    - test_post_release_doi_closeout_write_updates_metadata_files
+  protected_rule_intent: Preserve guarded post-release DOI metadata closeout after GitHub Release and Zenodo version DOI verification pass.
+  surfaces:
+  - post-release-doi-closeout-cli
+  - post-release-doi-closeout-core
+  - post-release-tests
+  tests:
+  - tests/test_post_release.py
 - id: transfer-safety-rules
   status: active
   owner: execution-governance
