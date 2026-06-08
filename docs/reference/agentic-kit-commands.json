@@ -3876,6 +3876,74 @@
     },
     {
       "group": "transfer",
+      "help": "Resolve one conflicted file by replacing it from an explicit source and staging it.",
+      "name": "conflict-resolve-file",
+      "params": [
+        {
+          "default": null,
+          "help": "Repository-relative conflicted file to resolve.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "path"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "File whose content should replace the conflicted target.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "source",
+          "opts": [
+            "--source"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Expected current branch.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_branch",
+          "opts": [
+            "--branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "conflict-resolve-file"
+      ],
+      "qualified_name": "agentic-kit transfer conflict-resolve-file"
+    },
+    {
+      "group": "transfer",
       "help": "Report merge/rebase conflict state without resolving anything.",
       "name": "conflict-status",
       "params": [

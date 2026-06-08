@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `141`
+- Command count: `142`
 
 ## Commands
 
@@ -666,6 +666,17 @@ Regenerate the agentic-kit command reference without committing changes.
 | `branch` | `TyperOption` | --branch | `False` | `` | Expected branch for the commit. If set, the transfer monitor switches to it or blocks safely. |
 | `allow_main` | `TyperOption` | --allow-main | `False` | `False` | Allow committing directly on main. Use only for explicit emergency/admin flows. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+
+### `agentic-kit transfer conflict-resolve-file`
+
+Resolve one conflicted file by replacing it from an explicit source and staging it.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `path` | `TyperArgument` | path | `True` |  | Repository-relative conflicted file to resolve. |
+| `source` | `TyperOption` | --source | `True` |  | File whose content should replace the conflicted target. |
+| `expected_branch` | `TyperOption` | --branch | `False` | `` | Expected current branch. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
 ### `agentic-kit transfer conflict-status`
 

@@ -1533,3 +1533,97 @@ def test_transfer_rebase_on_upstream_reports_conflict(monkeypatch):
     assert "rebase_failed" in result.stdout
     assert "conflict_detected" in result.stdout
 
+def test_transfer_conflict_resolve_file_replaces_and_stages(monkeypatch, tmp_path):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / ".git").mkdir()
+    (tmp_path / "file.txt").write_text("conflict\n", encoding="utf-8")
+    source = tmp_path / "resolved.txt"
+    source.write_text("resolved\n", encoding="utf-8")
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "diff", "--name-only", "--diff-filter=U"]:
+            return subprocess.CompletedProcess(command, 0, "file.txt\n", "")
+        if command == ["git", "add", "file.txt"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "conflict-resolve-file", "file.txt", "--source", str(source), "--branch", "feature/demo"],
+    )
+
+    assert result.exit_code == 0
+    assert "TRANSFER_CONFLICT_RESOLVE_FILE" in result.stdout
+    assert (tmp_path / "file.txt").read_text(encoding="utf-8") == "resolved\n"
+    assert ["git", "add", "file.txt"] in calls
+
+
+def test_transfer_conflict_resolve_file_blocks_non_unmerged_target(monkeypatch, tmp_path):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / ".git").mkdir()
+    (tmp_path / "file.txt").write_text("original\n", encoding="utf-8")
+    source = tmp_path / "resolved.txt"
+    source.write_text("resolved\n", encoding="utf-8")
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "diff", "--name-only", "--diff-filter=U"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "conflict-resolve-file", "file.txt", "--source", str(source), "--branch", "feature/demo"],
+    )
+
+    assert result.exit_code == 2
+    assert "target_not_unmerged" in result.stdout
+    assert (tmp_path / "file.txt").read_text(encoding="utf-8") == "original\n"
+
+
+def test_transfer_conflict_resolve_file_blocks_main_branch(monkeypatch, tmp_path):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / ".git").mkdir()
+    (tmp_path / "file.txt").write_text("original\n", encoding="utf-8")
+    source = tmp_path / "resolved.txt"
+    source.write_text("resolved\n", encoding="utf-8")
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command == ["git", "diff", "--name-only", "--diff-filter=U"]:
+            return subprocess.CompletedProcess(command, 0, "file.txt\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "conflict-resolve-file", "file.txt", "--source", str(source)],
+    )
+
+    assert result.exit_code == 2
+    assert "refuse_main_branch" in result.stdout
+    assert (tmp_path / "file.txt").read_text(encoding="utf-8") == "original\n"
+
