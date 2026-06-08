@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 3c98476
-  commit_subject: Register transfer wrapper command layer (#1190)
+  commit: 46e1d1d
+  commit_subject: Add GUI wrapper gating metadata (#1193)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
