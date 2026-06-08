@@ -287,7 +287,7 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 | `transfer branch-save-commit BRANCH SHA` | lokalen Commit sicher auf Branch retten | `git branch evidence/... 512c771` |
 | `transfer reset-current-to-upstream` | lokalen Branch kontrolliert auf Upstream zurücksetzen | `git reset --hard origin/main` |
 | `transfer concise-report` | lange JSON-/Help-Ausgaben auf Kurzsummary reduzieren | manuelle Python-Auswertung von Reports |
-| `transfer pr-existing-for-branch` | vorhandenen PR zu Branch finden | manuelle GitHub-/`gh`-Abfrage |
+| `transfer pr-existing-for-branch` | vorhandenen PR zu Branch finden | erledigt als read-only Diagnosewrapper; kein PR-Erstellen, kein Push, kein Merge |
 
 ### Completed Pre-GUI Wrapper Commands
 
@@ -302,6 +302,7 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 | `transfer evidence-finalize-current-transfer` | erledigt und getestet als ergonomische Hülle um `evidence finalize-log` |
 | `transfer remote-work-start` concise default output | erledigt und regressionsgetestet |
 | `transfer pr-create-complete` | erledigt, getestet und real erfolgreich genutzt; beseitigt den manuellen PR-Nummern- und HEAD-SHA-Kopierschritt |
+| `transfer pr-existing-for-branch` | erledigt und getestet als read-only Branch-zu-PR-Diagnosehelper; optional für GUI-Diagnostik |
 | `transfer protected-diff-plan` | erledigt, getestet und real genutzt; ersetzt `git diff --output=/tmp/...` plus `./ns protected-change-plan` |
 | `transfer conflict-status` | erledigt, getestet und real genutzt; diagnostiziert Merge-/Rebase-Konflikte ohne Auflösung |
 | `transfer work-order-patch` | erledigt, getestet und real genutzt; wendet JSON/YAML-Textpatches mit Branch-, Pfad- und Exact-Match-Guards an |
@@ -319,9 +320,9 @@ Priority order:
 1. Command-/Rule-Registry-Audit for the completed wrapper set
 2. Output-discipline residual audit
 3. GUI button mapping and gating over stable wrappers
-4. `transfer pr-existing-for-branch` only if still useful as a general diagnostic wrapper
+4. `transfer pr-existing-for-branch` — done as optional read-only diagnostic wrapper
 
-Completed in the hardening passes so far: `transfer restore-known-volatile`, `transfer sync-main`, `transfer divergence-status`, `transfer command-reference-refresh`, `transfer command-reference-check`, `transfer evidence-inspect-latest`, `transfer evidence-finalize-current-transfer`, `transfer pr-create-complete`, `transfer protected-diff-plan`, `transfer conflict-status`, `transfer work-order-patch`, `transfer rebase-on-upstream`, `transfer conflict-resolve-file`, `transfer delete-merged-work-branch`, and `transfer evidence-pr-complete`.
+Completed in the hardening passes so far: `transfer restore-known-volatile`, `transfer sync-main`, `transfer divergence-status`, `transfer command-reference-refresh`, `transfer command-reference-check`, `transfer evidence-inspect-latest`, `transfer evidence-finalize-current-transfer`, `transfer pr-create-complete`, `transfer protected-diff-plan`, `transfer conflict-status`, `transfer work-order-patch`, `transfer rebase-on-upstream`, `transfer conflict-resolve-file`, `transfer delete-merged-work-branch`, `transfer pr-existing-for-branch`, and `transfer evidence-pr-complete`.
 
 The manual sequence `pr-create -> read PR number -> FULL_SHA=$(git rev-parse HEAD) -> pr-complete <PR>` is no longer the preferred path. Use `transfer pr-create-complete` for normal PR lifecycle completion.
 
@@ -356,7 +357,7 @@ The originally blocking pre-GUI wrapper list is now closed for the first GUI dis
 
 The GUI may now proceed only as a display and gating layer over existing bounded wrappers. It must not introduce raw Git, raw GitHub, raw shell, or unrestricted remote mutation actions.
 
-`transfer pr-existing-for-branch` remains optional. It should be implemented only if later GUI diagnostics need a read-only branch-to-PR lookup helper.
+`transfer pr-existing-for-branch` is implemented as an optional read-only branch-to-PR lookup helper for later diagnostics. It remains outside the normal PR lifecycle path, which should use `transfer pr-create-complete`.
 
 ### Pre-GUI Wrapper Registry Audit
 
@@ -406,7 +407,7 @@ Audit finding after the wrapper registry pass:
 
 Pre-GUI decision: no broad output rewrite before GUI. The GUI must initially map only to the bounded concise wrapper set, keep broad JSON-first commands disabled or read-only, and add command-specific adapters only when a button needs them.
 
-`transfer pr-existing-for-branch` remains optional. Normal PR lifecycle completion is covered by `transfer pr-create-complete`; a standalone PR lookup wrapper is only needed if later GUI diagnostics need it as a read-only helper.
+`transfer pr-existing-for-branch` is now available as an optional read-only diagnostic helper. Normal PR lifecycle completion remains covered by `transfer pr-create-complete`.
 
 #### 3. Evidence ergonomisch machen
 
@@ -440,7 +441,7 @@ The command reference registry now has a governance contract and a staleness tes
 
 Completed: `transfer pr-create-complete` now creates or reuses a PR, resolves the current HEAD SHA, and runs the complete PR lifecycle without manual PR-number copying.
 
-Remaining: keep `transfer pr-existing-for-branch` as a possible diagnostic wrapper, but normal user-facing PR completion should go through `transfer pr-create-complete`.
+Completed: `transfer pr-existing-for-branch` is available for read-only branch-to-PR diagnostics, but normal user-facing PR completion should still go through `transfer pr-create-complete`.
 
 #### 5. Output-Disziplin erzwingen
 
@@ -468,7 +469,7 @@ The GUI should expose stable wrappers, not raw git, raw GitHub, or unbounded she
 | Command-Reference aktualisieren | `transfer command-reference-refresh` |
 | Volatile Dateien bereinigen | `transfer restore-known-volatile` |
 | Status anzeigen | `transfer normalize-session --repair-known-volatile` |
-| Fehlerdiagnose | `transfer pr-status`, `transfer divergence-status`, `transfer evidence-inspect-latest` |
+| Fehlerdiagnose | `transfer pr-status`, `transfer pr-existing-for-branch`, `transfer divergence-status`, `transfer evidence-inspect-latest` |
 
 Acceptance condition before GUI expansion: every GUI button that mutates repository state must map to a bounded wrapper with branch, dirty-state, rule-ack, evidence, and failure-mode guards.
 

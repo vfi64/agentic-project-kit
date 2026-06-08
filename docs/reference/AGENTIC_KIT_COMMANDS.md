@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `144`
+- Command count: `145`
 
 ## Commands
 
@@ -853,6 +853,15 @@ Create a PR and complete it without requiring manual PR-number or SHA copying.
 | `timeout_seconds` | `TyperOption` | --timeout-seconds | `False` | `300` | Maximum CI wait time. |
 | `poll_seconds` | `TyperOption` | --interval-seconds, --poll-seconds | `False` | `10` | CI polling interval. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+
+### `agentic-kit transfer pr-existing-for-branch`
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `head` | `TyperOption` | --head | `False` | `current` | Head branch to look up. Use current to resolve git branch --show-current. |
+| `base` | `TyperOption` | --base | `False` | `main` | Base branch to match. |
+| `state` | `TyperOption` | --state | `False` | `all` | GitHub PR state filter. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text report. |
 
 ### `agentic-kit transfer pr-merge-safe`
 

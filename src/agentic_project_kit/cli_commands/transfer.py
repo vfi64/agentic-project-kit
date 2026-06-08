@@ -1291,6 +1291,145 @@ def pr_create_command(
         raise typer.Exit(code=result.returncode)
 
 
+
+@transfer_app.command("pr-existing-for-branch")
+def pr_existing_for_branch_command(
+    head: str = typer.Option(
+        "current",
+        "--head",
+        help="Head branch to look up. Use current to resolve git branch --show-current.",
+    ),
+    base: str = typer.Option("main", "--base", help="Base branch to match."),
+    state: str = typer.Option("all", "--state", help="GitHub PR state filter."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text report."),
+) -> None:
+    import subprocess
+    from datetime import datetime, timezone
+
+    steps: list[dict[str, object]] = []
+    blockers: list[str] = []
+    resolved_head = head
+
+    def run_step(name: str, argv: list[str]) -> subprocess.CompletedProcess[str]:
+        completed = subprocess.run(argv, text=True, capture_output=True, check=False)
+        steps.append(
+            {
+                "name": name,
+                "argv": argv,
+                "returncode": completed.returncode,
+                "stdout": completed.stdout,
+                "stderr": completed.stderr,
+                "ok": completed.returncode == 0,
+            }
+        )
+        return completed
+
+    if head == "current":
+        branch_result = run_step("resolve-current-branch", ["git", "branch", "--show-current"])
+        resolved_head = branch_result.stdout.strip()
+        if branch_result.returncode != 0 or not resolved_head:
+            blockers.append("current_branch_missing")
+
+    prs: list[dict[str, object]] = []
+    parse_error = ""
+    if not blockers:
+        lookup_result = run_step(
+            "gh-pr-list",
+            [
+                "gh",
+                "pr",
+                "list",
+                "--head",
+                resolved_head,
+                "--base",
+                base,
+                "--state",
+                state,
+                "--json",
+                "number,url,state,headRefName,baseRefName,isDraft,mergeStateStatus",
+            ],
+        )
+        if lookup_result.returncode != 0:
+            blockers.append("gh_pr_list_failed")
+        else:
+            try:
+                raw = json.loads(lookup_result.stdout or "[]")
+                if isinstance(raw, list):
+                    prs = [item for item in raw if isinstance(item, dict)]
+                else:
+                    blockers.append("pr_lookup_output_not_list")
+            except json.JSONDecodeError as exc:
+                parse_error = str(exc)
+                blockers.append("pr_lookup_json_invalid")
+
+    if blockers:
+        result_status = "FAIL" if "gh_pr_list_failed" in blockers else "BLOCKED"
+        returncode = 1 if result_status == "FAIL" else 2
+        pr_number = None
+    elif len(prs) == 1:
+        result_status = "PASS"
+        returncode = 0
+        pr_number = prs[0].get("number")
+    elif len(prs) == 0:
+        result_status = "MISS"
+        returncode = 2
+        pr_number = None
+        blockers.append("existing_pr_not_found")
+    else:
+        result_status = "BLOCKED"
+        returncode = 2
+        pr_number = None
+        blockers.append("multiple_existing_prs_found")
+
+    blockers = list(dict.fromkeys(blockers))
+    final_signal = "d" if result_status == "PASS" else "f"
+    if result_status == "PASS":
+        next_action = "Existing PR found; run transfer pr-status with the reported PR number if needed."
+    elif result_status == "MISS":
+        next_action = "No existing PR found for the requested branch."
+    else:
+        next_action = "Inspect pr-existing-for-branch lookup result before continuing: " + ", ".join(blockers)
+
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_pr_existing_for_branch_result",
+        "action": "pr-existing-for-branch",
+        "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "next_action": next_action,
+        "base": base,
+        "head": resolved_head,
+        "state": state,
+        "pr_number": pr_number,
+        "prs": prs,
+        "blockers": blockers,
+        "parse_error": parse_error,
+        "steps": steps,
+    }
+
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    else:
+        _echo_transfer_payload_summary(
+            title="TRANSFER_PR_EXISTING_FOR_BRANCH",
+            result_status=result_status,
+            final_signal=final_signal,
+            next_action=next_action,
+            fields={
+                "HEAD": resolved_head,
+                "BASE": base,
+                "STATE_FILTER": state,
+                "PR": pr_number if pr_number is not None else "none",
+                "MATCHES": len(prs),
+                "BLOCKERS": len(blockers),
+            },
+        )
+
+    if returncode != 0:
+        raise typer.Exit(code=returncode)
+
+
 @transfer_app.command("pr-create-complete")
 def pr_create_complete_command(
     title: str = typer.Option(..., "--title", help="Pull request title."),

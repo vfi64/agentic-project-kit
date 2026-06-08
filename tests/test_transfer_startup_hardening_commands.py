@@ -493,3 +493,114 @@ def test_evidence_pr_complete_blocks_on_finalize_failure(monkeypatch):
     assert "evidence-finalize-current-transfer_failed" in result.stdout
     assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"] for call in calls)
 
+def test_transfer_pr_existing_for_branch_finds_single_pr(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:3] == ["gh", "pr", "list"]:
+            return _completed(
+                command,
+                stdout=json.dumps(
+                    [
+                        {
+                            "number": 123,
+                            "url": "https://github.com/example/repo/pull/123",
+                            "state": "OPEN",
+                            "headRefName": "feature/demo",
+                            "baseRefName": "main",
+                            "isDraft": False,
+                            "mergeStateStatus": "CLEAN",
+                        }
+                    ]
+                ),
+            )
+        return _completed(command, returncode=99, stderr=f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "pr-existing-for-branch",
+            "--head",
+            "feature/demo",
+            "--base",
+            "main",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert payload["pr_number"] == 123
+    assert payload["head"] == "feature/demo"
+    assert any(call[:3] == ["gh", "pr", "list"] for call in calls)
+
+
+def test_transfer_pr_existing_for_branch_resolves_current_branch(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return _completed(command, stdout="feature/current\n")
+        if command[:3] == ["gh", "pr", "list"]:
+            return _completed(command, stdout="[]")
+        return _completed(command, returncode=99, stderr=f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "pr-existing-for-branch", "--head", "current", "--json"])
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "MISS"
+    assert payload["head"] == "feature/current"
+    assert "existing_pr_not_found" in payload["blockers"]
+    assert ["git", "branch", "--show-current"] in calls
+
+
+def test_transfer_pr_existing_for_branch_blocks_multiple_matches(monkeypatch):
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command[:3] == ["gh", "pr", "list"]:
+            return _completed(command, stdout=json.dumps([{"number": 1}, {"number": 2}]))
+        return _completed(command, returncode=99, stderr=f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "pr-existing-for-branch", "--head", "feature/demo", "--json"],
+    )
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "BLOCKED"
+    assert "multiple_existing_prs_found" in payload["blockers"]
+
+
+def test_transfer_pr_existing_for_branch_reports_gh_failure(monkeypatch):
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command[:3] == ["gh", "pr", "list"]:
+            return _completed(command, returncode=1, stderr="gh failed\n")
+        return _completed(command, returncode=99, stderr=f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "pr-existing-for-branch", "--head", "feature/demo", "--json"],
+    )
+
+    assert result.exit_code == 1
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "FAIL"
+    assert "gh_pr_list_failed" in payload["blockers"]
+

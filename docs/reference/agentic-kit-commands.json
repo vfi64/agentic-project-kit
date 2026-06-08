@@ -5268,6 +5268,74 @@
     {
       "group": "transfer",
       "help": "",
+      "name": "pr-existing-for-branch",
+      "params": [
+        {
+          "default": "current",
+          "help": "Head branch to look up. Use current to resolve git branch --show-current.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "head",
+          "opts": [
+            "--head"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "main",
+          "help": "Base branch to match.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "base",
+          "opts": [
+            "--base"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "all",
+          "help": "GitHub PR state filter.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "state",
+          "opts": [
+            "--state"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text report.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "pr-existing-for-branch"
+      ],
+      "qualified_name": "agentic-kit transfer pr-existing-for-branch"
+    },
+    {
+      "group": "transfer",
+      "help": "",
       "name": "pr-merge-safe",
       "params": [
         {
