@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 3ca0e83
-  commit_subject: Guard prepared release documentation state (#1203)
+  commit: 97fd04e
+  commit_subject: Add post-release DOI closeout command (#1206)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
