@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 912257f
-  commit_subject: Update roadmap for conflict resolve wrapper (#1179)
+  commit: 0b60952
+  commit_subject: Add transfer delete-merged-work-branch wrapper (#1181)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
