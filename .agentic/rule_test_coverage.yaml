@@ -1,5 +1,6 @@
 schema_version: 1
-purpose: Classify rule mechanism test coverage without silently accepting unclassified empty test lists.
+purpose: Classify rule mechanism test coverage without silently accepting unclassified
+  empty test lists.
 coverage:
 - mechanism_id: summary-renderer
   test_coverage: direct
@@ -35,7 +36,8 @@ coverage:
       path: src/agentic_project_kit/execution_mode_state.py
     - kind: test
       path: tests/test_execution_mode_state.py
-    statement: local execution mode readiness checks branch cleanliness, required tools, and venv availability
+    statement: local execution mode readiness checks branch cleanliness, required
+      tools, and venv availability
   - assertion_id: execution-mode-switch-remote-ready
     kind: behavior
     covered_surfaces:
@@ -48,7 +50,8 @@ coverage:
       path: src/agentic_project_kit/cli_commands/state.py
     - kind: test
       path: tests/test_execution_mode_state.py
-    statement: remote execution mode readiness remains distinct from local tooling requirements
+    statement: remote execution mode readiness remains distinct from local tooling
+      requirements
   - assertion_id: execution-mode-switch-blocked-states
     kind: negative-case
     covered_surfaces:
@@ -58,7 +61,8 @@ coverage:
       path: src/agentic_project_kit/execution_mode_state.py
     - kind: test
       path: tests/test_execution_mode_state.py
-    statement: dirty worktrees, missing tooling, and branch mismatches produce deterministic blocked states
+    statement: dirty worktrees, missing tooling, and branch mismatches produce deterministic
+      blocked states
 - mechanism_id: rule-preservation-guard
   test_coverage: direct
   assertions:
@@ -138,7 +142,8 @@ coverage:
       path: .agentic/compiled_agent_context.yaml
     - kind: test
       path: tests/test_chat_communication_contract.py
-    statement: d f w paste-output and stop semantics are direct-tested as control signals rather than evidence
+    statement: d f w paste-output and stop semantics are direct-tested as control
+      signals rather than evidence
   - assertion_id: chat-communication-rules-remote-log-first
     kind: evidence
     covered_surfaces:
@@ -154,7 +159,8 @@ coverage:
       path: .agentic/compiled_agent_context.yaml
     - kind: test
       path: tests/test_chat_communication_contract.py
-    statement: failure recovery and remote-log-first handling are direct-tested against governance contracts
+    statement: failure recovery and remote-log-first handling are direct-tested against
+      governance contracts
   - assertion_id: chat-communication-rules-pass-boundary
     kind: guard
     covered_surfaces:
@@ -167,7 +173,8 @@ coverage:
       path: docs/governance/FINAL_SUMMARY_CONTRACT.md
     - kind: test
       path: tests/test_chat_communication_contract.py
-    statement: PASS claims require matching work, gates, evidence, canonical renderer use, and no overwritten inner FAIL
+    statement: PASS claims require matching work, gates, evidence, canonical renderer
+      use, and no overwritten inner FAIL
 - mechanism_id: chat-bootstrap-drift-rules
   test_coverage: direct
   assertions:
@@ -183,7 +190,8 @@ coverage:
       path: .agentic/compiled_agent_context.yaml
     - kind: test
       path: tests/test_chat_bootstrap_drift_contract.py
-    statement: successor chats must read mandatory sources before proposing mutation and must not replace source-reading with memory
+    statement: successor chats must read mandatory sources before proposing mutation
+      and must not replace source-reading with memory
   - assertion_id: chat-bootstrap-drift-rules-remote-connector-route
     kind: workflow
     covered_surfaces:
@@ -196,7 +204,8 @@ coverage:
       path: .agentic/compiled_agent_context.yaml
     - kind: test
       path: tests/test_chat_bootstrap_drift_contract.py
-    statement: remote work must use the GitHub connector direct-path-first route before search, raw URLs, or local shell fallbacks
+    statement: remote work must use the GitHub connector direct-path-first route before
+      search, raw URLs, or local shell fallbacks
   - assertion_id: chat-bootstrap-drift-rules-drift-response
     kind: negative-case
     covered_surfaces:
@@ -209,7 +218,8 @@ coverage:
       path: .agentic/compiled_agent_context.yaml
     - kind: test
       path: tests/test_chat_bootstrap_drift_contract.py
-    statement: drift classes and drift responses are direct-tested and must not be hidden behind final PASS
+    statement: drift classes and drift responses are direct-tested and must not be
+      hidden behind final PASS
   - assertion_id: chat-bootstrap-drift-rules-yaml-and-handoff-boundary
     kind: guard
     covered_surfaces:
@@ -235,7 +245,8 @@ coverage:
       path: .agentic/compiled_agent_context.yaml
     - kind: test
       path: tests/test_portable_execution_contract.py
-    statement: Python modules and CLI commands remain canonical while shell commands stay adapters only
+    statement: Python modules and CLI commands remain canonical while shell commands
+      stay adapters only
   - assertion_id: portable-execution-rules-yaml-mutation
     kind: guard
     covered_surfaces:
@@ -248,7 +259,8 @@ coverage:
       path: .agentic/compiled_agent_context.yaml
     - kind: test
       path: tests/test_portable_execution_contract.py
-    statement: governance YAML mutation must use parse-modify-dump instead of manual indentation or string concatenation
+    statement: governance YAML mutation must use parse-modify-dump instead of manual
+      indentation or string concatenation
   - assertion_id: portable-execution-rules-evidence-boundary
     kind: evidence
     covered_surfaces:
@@ -258,7 +270,8 @@ coverage:
       path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
     - kind: test
       path: tests/test_portable_execution_contract.py
-    statement: evidence generation and chat terminal blocks remain bounded by portable Python-first rules
+    statement: evidence generation and chat terminal blocks remain bounded by portable
+      Python-first rules
 - mechanism_id: evidence-guard
   test_coverage: direct
   assertions:
@@ -364,7 +377,6 @@ coverage:
     - kind: test
       path: tests/test_post_release.py
     statement: waiting Zenodo records are non-failing until available
-
 - mechanism_id: transfer-safety-rules
   test_coverage: direct
   assertions:
@@ -380,7 +392,8 @@ coverage:
       path: src/agentic_project_kit/transfer_safety_context.py
     - kind: test
       path: tests/test_transfer_safety_context.py
-    statement: transfer safety headers preserve known generated patch and transfer failure classes
+    statement: transfer safety headers preserve known generated patch and transfer
+      failure classes
   - assertion_id: transfer-safety-rules-outbox-header
     kind: behavior
     covered_surfaces:
@@ -392,3 +405,48 @@ coverage:
     - kind: test
       path: tests/test_transfer_uplink.py
     statement: transfer run logs write a deterministic local-to-LLM outbox header
+- mechanism_id: transfer-wrapper-command-layer
+  test_coverage: direct
+  assertions:
+  - assertion_id: transfer-wrapper-command-layer-registry-current
+    kind: guard
+    covered_surfaces:
+    - command-reference-registry
+    - transfer-wrapper-cli
+    - command-reference-tests
+    evidence_refs:
+    - kind: source
+      path: docs/governance/COMMAND_REFERENCE_REGISTRY_CONTRACT.md
+    - kind: source
+      path: docs/reference/agentic-kit-commands.json
+    - kind: test
+      path: tests/test_agentic_kit_command_reference_is_current.py
+    statement: the generated command reference stays current when transfer wrapper
+      commands change
+  - assertion_id: transfer-wrapper-command-layer-governance-inventory
+    kind: guard
+    covered_surfaces:
+    - rule-mechanism-inventory
+    - pre-gui-wrapper-roadmap
+    - future-gui-dispatch
+    evidence_refs:
+    - kind: source
+      path: .agentic/rule_mechanism_inventory.yaml
+    - kind: source
+      path: docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+    - kind: test
+      path: tests/test_rule_mechanism_inventory.py
+    statement: the transfer-wrapper command layer is inventoried before GUI expansion
+      and remains tied to tested registry sources
+  - assertion_id: transfer-wrapper-command-layer-github-coverage
+    kind: workflow
+    covered_surfaces:
+    - transfer-wrapper-cli
+    - github-action-coverage
+    evidence_refs:
+    - kind: test
+      path: tests/test_transfer_github_action_coverage.py
+    - kind: source
+      path: docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
+    statement: transfer and GitHub workflow actions remain visible to the coverage
+      audit before GUI dispatch expands
