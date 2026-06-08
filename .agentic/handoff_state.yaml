@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 0b60952
-  commit_subject: Add transfer delete-merged-work-branch wrapper (#1181)
+  commit: 7c10373
+  commit_subject: Update roadmap for merged branch cleanup wrapper (#1183)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
