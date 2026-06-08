@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: '3733386'
-  commit_subject: Plan post-release DOI closeout hardening (#1208)
+  commit: 70246d6
+  commit_subject: Harden release closeout consistency (#1210)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
