@@ -377,6 +377,21 @@ Completed wrapper set to audit before GUI expansion:
 
 Next audit action: inspect and, if needed, minimally update governance docs, `.agentic/rule_mechanism_inventory.yaml`, and GUI planning/catalog references so the GUI expansion starts from the completed wrapper set rather than raw shell, raw git, raw GitHub, or manual evidence commands.
 
+### Pre-GUI Output Discipline Audit
+
+Audit finding after the wrapper registry pass:
+
+| Output group | Finding |
+| --- | --- |
+| GUI-ready concise transfer defaults | `transfer sync-main`, `transfer remote-work-start`, `transfer pr-complete`, `transfer pr-create-complete`, `transfer protected-diff-plan`, `transfer conflict-status`, `transfer work-order-patch`, `transfer rebase-on-upstream`, `transfer conflict-resolve-file`, `transfer delete-merged-work-branch`, and `transfer evidence-pr-complete` use bounded summaries or command-specific short reports by default and keep JSON behind `--json` where appropriate. |
+| Evidence/transfer publication special cases | `transfer run-and-log`, `transfer run-sequence-and-log`, and `transfer publish-last-report` intentionally keep their compact transfer-report semantics. They must not be converted blindly because `CHAT_REPLY=d` and `CHAT_REPLY=g` have different evidence/publication meanings. |
+| Machine-state and broad diagnostic commands | `transfer state`, `transfer run-local`, `transfer closeout`, broad `status`/`inspect`/`apply` style paths, and legacy diagnostic helpers are not default GUI mutation targets. They may remain JSON-first or verbose until a GUI-specific read-only or parameterized contract is added. |
+| Older JSON-plus-final-signal commands | `restore-known-volatile`, `divergence-status`, `command-reference-refresh`, `command-reference-check`, `evidence-inspect-latest`, `evidence-finalize-current-transfer`, `prepare-successor-handoff`, and related administrative helpers still emit full JSON by default in some modes. This is acceptable before GUI as long as GUI button mapping does not expose them as broad write actions without a bounded adapter. |
+
+Pre-GUI decision: no broad output rewrite before GUI. The GUI must initially map only to the bounded concise wrapper set, keep broad JSON-first commands disabled or read-only, and add command-specific adapters only when a button needs them.
+
+`transfer pr-existing-for-branch` remains optional. Normal PR lifecycle completion is covered by `transfer pr-create-complete`; a standalone PR lookup wrapper is only needed if later GUI diagnostics need it as a read-only helper.
+
 #### 3. Evidence ergonomisch machen
 
 `evidence finalize-log` works. The regular transfer path is now shortened by `transfer evidence-finalize-current-transfer`.
