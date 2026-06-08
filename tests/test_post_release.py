@@ -1,7 +1,6 @@
 from pathlib import Path
 import json
 from collections.abc import Sequence
-import json
 
 import yaml
 
