@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 5a9e3ec
-  commit_subject: Update roadmap for evidence PR complete wrapper (#1187)
+  commit: 3c98476
+  commit_subject: Register transfer wrapper command layer (#1190)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
