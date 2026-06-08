@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 97fd04e
-  commit_subject: Add post-release DOI closeout command (#1206)
+  commit: '3733386'
+  commit_subject: Plan post-release DOI closeout hardening (#1208)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
