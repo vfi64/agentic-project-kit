@@ -340,7 +340,23 @@ Target:
 
 This reduces quote, terminal, heredoc, escape, copy/paste, and message-stream failure modes.
 
-Next priority: Command-/Rule-Registry-Audit, because the pre-GUI wrapper set is now broad enough that the command reference, governance references, rule-mechanism inventory, tests, and GUI prerequisites must be checked for consistency before GUI expansion.
+Next priority: first GUI display/gating phase, while keeping `transfer pr-existing-for-branch` optional as a future read-only diagnostic helper and tracking `./ns` replacement as a separate OS-independence line.
+
+
+### Pre-GUI Wrapper/Gating Closeout
+
+The originally blocking pre-GUI wrapper list is now closed for the first GUI display/gating phase:
+
+| Item | Status |
+|---|---|
+|Output-discipline rest audit | done |
+|GUI button mapping/gating metadata | done |
+|Command-/Rule-Registry audit | done |
+|`transfer pr-existing-for-branch` | optional diagnostic wrapper; not required before the first GUI phase |
+
+The GUI may now proceed only as a display and gating layer over existing bounded wrappers. It must not introduce raw Git, raw GitHub, raw shell, or unrestricted remote mutation actions.
+
+`transfer pr-existing-for-branch` remains optional. It should be implemented only if later GUI diagnostics need a read-only branch-to-PR lookup helper.
 
 ### Pre-GUI Wrapper Registry Audit
 
@@ -455,3 +471,60 @@ The GUI should expose stable wrappers, not raw git, raw GitHub, or unbounded she
 | Fehlerdiagnose | `transfer pr-status`, `transfer divergence-status`, `transfer evidence-inspect-latest` |
 
 Acceptance condition before GUI expansion: every GUI button that mutates repository state must map to a bounded wrapper with branch, dirty-state, rule-ack, evidence, and failure-mode guards.
+
+
+
+### OS-Independence Line: Replace `./ns` Core Dependencies With `agentic-kit`
+
+Goal: make the project workflow operating-system independent by ensuring that `./ns` remains only a human convenience adapter or explicit legacy compatibility route, not a core dependency of `agentic-kit` Python code, normal tests, governance gates, or GUI execution.
+
+Guiding decision:
+
+- `./ns` may remain as a local shortcut for humans.
+- `agentic-kit` product code must not call `./ns` as its normal implementation path.
+- normal product, wrapper, workflow, and GUI tests should call `agentic-kit` commands or Python core APIs directly.
+- only an explicit legacy compatibility test may call `./ns`.
+- documentation must not present `./ns` as the canonical cross-platform route.
+
+Questions to answer in the audit slice:
+
+1. How many `./ns` command references remain?
+B. Which references are in product code, tests, docs, governance, scripts, and `.agentic` control files?
+3. Are any `./ns` routes currently called from `agentic-kit` commands?
+4. Which test cases still rely on `./ns` as the main workflow guarantee?
+5. Which references are historical/legacy and which are normative?
+6. Which replacements are small, medium, or risky?
+
+Initial audit command uses a small future wrapper or bounded grep-style audit, not a heredoc. The first implementation slice should replace this manual audit with an `agentic-kit` command so the output is portable and testable.
+
+Classification:
+
+| Category | Treatment |
+|---|---|
+| `src/...` product code calls `./ns` | replace with Python core API or `agentic-kit` command |
+| tests use `./ns` for product/workflow guarantees | replace with `agentic-kit` or direct Python core tests |
+| explicit legacy `./ns` compatibility tests | may remain, narrowly scoped |
+| docs say `./ns` is required/canonical | update to `agentic-kit`; mark `./ns` as legacy/convenience |
+| docs mention `./ns` historically | keep only if clearly marked historical or local shortcut |
+| `./ns` adapter file itself | may remain as an adapter, but must not be the only route |
+
+Implementation slices:
+
+1. Audit and guard plan: count all `./ns` references, classify them, and record allowed exceptions.
+2. Protected-change-plan Python route: provide a canonical `agentic-kit transfer protected-change-plan --diff-file ...` or equivalent Python-core-backed route for explicit diff-file validation.
+3. Detach `transfer protected-diff-plan` from `./ns`: call the protected-change planner core or the new `agentic-kit` route directly.
+4. Tests and docs migration: replace normative `./ns` calls in tests, bootloader text, governance, and handoff docs with `agentic-kit` routes; retain at most one legacy adapter test.
+5. Regression guard: add a test that blocks `./ns` subprocess calls in `src/`, with only explicit legacy-test exceptions.
+
+Estimated effort:
+
+| Area | Effort |
+|---|---|
+|Audit all `./ns` occurrences | small |
+| Add explicit protected-change-plan `agentic-kit` route | small to medium |
+|Detach product code from `./ns` | small |
+| Update tests | medium |
+|Update docs/governance/handoff references | medium |
+|Add CI guard against new `./ns` product-code use | small to medium |
+
+This is a separate OS-independence line and should not be treated as a blocker for the next GUI display/gating slice unless the GUI would otherwise call `./ns` directly.
