@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 7736ab1
-  commit_subject: Add transfer rebase-on-upstream wrapper (#1173)
+  commit: 76bd23a
+  commit_subject: Update roadmap for rebase wrapper (#1175)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
