@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 3d7fa14
-  commit_subject: Add PR existing branch transfer wrapper (#1197)
+  commit: 73f87a2
+  commit_subject: Block implicit release plan for published versions (#1199)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
