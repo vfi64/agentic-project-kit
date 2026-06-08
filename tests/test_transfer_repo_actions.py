@@ -1458,3 +1458,78 @@ operations:
     assert "found 2" in result.stdout
     assert (tmp_path / "demo.txt").read_text(encoding="utf-8") == "old\nold\n"
 
+def test_transfer_rebase_on_upstream_rebases_current_branch(monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "fetch", "origin", "feature/demo"]:
+            return subprocess.CompletedProcess(command, 0, "fetched\n", "")
+        if command == ["git", "rebase", "origin/feature/demo"]:
+            return subprocess.CompletedProcess(command, 0, "rebased\n", "")
+        if command == ["./.venv/bin/agentic-kit", "transfer", "conflict-status", "--json"]:
+            return subprocess.CompletedProcess(command, 0, '{"conflict_present": false}\n', "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "rebase-on-upstream"])
+
+    assert result.exit_code == 0
+    assert "TRANSFER_REBASE_ON_UPSTREAM" in result.stdout
+    assert "STATE:" in result.stdout
+    assert "PASS" in result.stdout
+    assert ["git", "rebase", "origin/feature/demo"] in calls
+
+
+def test_transfer_rebase_on_upstream_blocks_on_main(monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command == ["./.venv/bin/agentic-kit", "transfer", "conflict-status", "--json"]:
+            return subprocess.CompletedProcess(command, 0, '{"conflict_present": false}\n', "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "rebase-on-upstream"])
+
+    assert result.exit_code == 2
+    assert "refuse_main_branch" in result.stdout
+
+
+def test_transfer_rebase_on_upstream_reports_conflict(monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "fetch", "origin", "feature/demo"]:
+            return subprocess.CompletedProcess(command, 0, "fetched\n", "")
+        if command == ["git", "rebase", "origin/feature/demo"]:
+            return subprocess.CompletedProcess(command, 1, "", "conflict\n")
+        if command == ["./.venv/bin/agentic-kit", "transfer", "conflict-status", "--json"]:
+            return subprocess.CompletedProcess(command, 2, '{"conflict_present": true, "unmerged_files": ["demo.txt"]}\n', "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "rebase-on-upstream"])
+
+    assert result.exit_code == 2
+    assert "TRANSFER_REBASE_ON_UPSTREAM" in result.stdout
+    assert "rebase_failed" in result.stdout
+    assert "conflict_detected" in result.stdout
+

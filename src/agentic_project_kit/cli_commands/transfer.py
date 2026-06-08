@@ -361,6 +361,116 @@ def head_sha_command(
         raise typer.Exit(code=result.returncode)
 
 
+@transfer_app.command("rebase-on-upstream")
+def rebase_on_upstream_command(
+    upstream: str = typer.Option("", "--upstream", help="Upstream ref. Defaults to origin/<current-branch>."),
+    expected_branch: str = typer.Option("", "--branch", help="Expected current branch before rebasing."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Rebase the current branch on its upstream with bounded conflict reporting."""
+    import subprocess
+    from typing import Any
+
+    steps: list[dict[str, Any]] = []
+    blockers: list[str] = []
+
+    def run_step(name: str, argv: list[str]) -> dict[str, Any]:
+        completed = subprocess.run(argv, text=True, capture_output=True)
+        item = {
+            "name": name,
+            "argv": argv,
+            "returncode": completed.returncode,
+            "stdout": completed.stdout,
+            "stderr": completed.stderr,
+            "ok": completed.returncode == 0,
+        }
+        steps.append(item)
+        return item
+
+    branch_result = run_step("current-branch", ["git", "branch", "--show-current"])
+    current_branch = str(branch_result["stdout"]).strip()
+
+    if branch_result["returncode"] != 0 or not current_branch:
+        blockers.append("current_branch_missing")
+    if current_branch in {"main", "master"}:
+        blockers.append("refuse_main_branch")
+    if expected_branch and current_branch != expected_branch:
+        blockers.append(f"branch_mismatch_expected_{expected_branch}_actual_{current_branch}")
+
+    target_upstream = upstream.strip() or (f"origin/{current_branch}" if current_branch else "")
+
+    if not blockers:
+        fetch_result = run_step("fetch-origin", ["git", "fetch", "origin", current_branch])
+        if fetch_result["returncode"] != 0:
+            # Fallback for new branches whose upstream is main or a custom ref.
+            fetch_result = run_step("fetch-origin-main", ["git", "fetch", "origin", "main"])
+        if fetch_result["returncode"] != 0:
+            blockers.append("fetch_failed")
+
+    rebase_returncode = 0
+    if not blockers:
+        rebase_result = run_step("rebase", ["git", "rebase", target_upstream])
+        rebase_returncode = int(rebase_result["returncode"])
+        if rebase_returncode != 0:
+            blockers.append("rebase_failed")
+
+    conflict_status_result = run_step(
+        "conflict-status",
+        ["./.venv/bin/agentic-kit", "transfer", "conflict-status", "--json"],
+    )
+    conflict_payload: dict[str, Any] = {}
+    try:
+        conflict_payload = json.loads(str(conflict_status_result["stdout"]) or "{}")
+    except json.JSONDecodeError:
+        conflict_payload = {"parse_error": "conflict-status output was not valid JSON"}
+
+    conflict_present = bool(conflict_payload.get("conflict_present"))
+    if conflict_present and "conflict_detected" not in blockers:
+        blockers.append("conflict_detected")
+
+    result_status = "PASS" if not blockers else "BLOCKED"
+    final_signal = "d" if result_status == "PASS" else "f"
+    next_action = (
+        "Rebase completed and no merge/rebase conflict is present."
+        if result_status == "PASS"
+        else "Inspect rebase/conflict state before continuing: " + ", ".join(blockers)
+    )
+
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_rebase_on_upstream_result",
+        "action": "rebase-on-upstream",
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "branch": current_branch,
+        "upstream": target_upstream,
+        "blockers": blockers,
+        "conflict_present": conflict_present,
+        "conflict_status": conflict_payload,
+        "steps": steps,
+        "next_action": next_action,
+    }
+
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    else:
+        _echo_transfer_payload_summary(
+            title="TRANSFER_REBASE_ON_UPSTREAM",
+            result_status=result_status,
+            final_signal=final_signal,
+            next_action=next_action,
+            fields={
+                "BRANCH": current_branch,
+                "UPSTREAM": target_upstream,
+                "CONFLICT": "yes" if conflict_present else "no",
+                "BLOCKERS": len(blockers),
+            },
+        )
+
+    if blockers:
+        raise typer.Exit(code=2)
+
+
 @transfer_app.command("repo-diff")
 def repo_diff_command(
     cached: bool = typer.Option(False, "--cached", help="Show staged diff."),

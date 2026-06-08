@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `140`
+- Command count: `141`
 
 ## Commands
 
@@ -882,6 +882,16 @@ Write the current diff to /tmp and run ./ns protected-change-plan on it.
 |---|---:|---|---:|---|---|
 | `branch` | `TyperOption` | --branch | `False` | `` | Expected branch to push. If set, the transfer monitor switches to it or blocks safely. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+
+### `agentic-kit transfer rebase-on-upstream`
+
+Rebase the current branch on its upstream with bounded conflict reporting.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `upstream` | `TyperOption` | --upstream | `False` | `` | Upstream ref. Defaults to origin/<current-branch>. |
+| `expected_branch` | `TyperOption` | --branch | `False` | `` | Expected current branch before rebasing. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
 ### `agentic-kit transfer remote-next`
 

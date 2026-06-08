@@ -5367,6 +5367,60 @@
     },
     {
       "group": "transfer",
+      "help": "Rebase the current branch on its upstream with bounded conflict reporting.",
+      "name": "rebase-on-upstream",
+      "params": [
+        {
+          "default": "",
+          "help": "Upstream ref. Defaults to origin/<current-branch>.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "upstream",
+          "opts": [
+            "--upstream"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Expected current branch before rebasing.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_branch",
+          "opts": [
+            "--branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "rebase-on-upstream"
+      ],
+      "qualified_name": "agentic-kit transfer rebase-on-upstream"
+    },
+    {
+      "group": "transfer",
       "help": "",
       "name": "remote-next",
       "params": [
