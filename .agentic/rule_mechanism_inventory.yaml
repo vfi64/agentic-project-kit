@@ -273,8 +273,8 @@ mechanisms:
   priority: 1
   enforcement_phase: runtime
   conflict_domains:
-  - portable-execution-contract
   - transfer-wrapper-safety
+  - command-reference-registry
   - gui-readiness
   sources:
   - path: docs/governance/COMMAND_REFERENCE_REGISTRY_CONTRACT.md
@@ -289,6 +289,8 @@ mechanisms:
     - transfer evidence-pr-complete
     - transfer work-order-patch
     - transfer protected-diff-plan
+    - Pre-GUI Wrapper Registry Audit
+    - GUI expansion
   - path: docs/reference/agentic-kit-commands.json
     required_terms:
     - agentic-kit transfer pr-create-complete
@@ -299,6 +301,20 @@ mechanisms:
     required_terms:
     - generated_from_typer_click_registry
     - tests/test_agentic_kit_command_reference_is_current.py
+  - path: .agentic/rule_mechanism_inventory.yaml
+    required_terms:
+    - transfer-wrapper-command-layer
+    - command-reference-registry
+    - gui-readiness
+  - path: .agentic/rule_test_coverage.yaml
+    required_terms:
+    - transfer-wrapper-command-layer
+    - transfer-wrapper-command-layer-registry-current
+  - path: docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
+    required_terms:
+    - GUI Implications
+    - transfer
+    - GitHub
   protected_rule_intent: Preserve the generated command reference and transfer-wrapper
     command layer as the canonical workflow surface for chat, transfer, evidence,
     and later GUI dispatch. GUI work must use bounded agentic-kit transfer wrappers
@@ -309,9 +325,12 @@ mechanisms:
   - pre-gui-wrapper-roadmap
   - command-reference-tests
   - future-gui-dispatch
+  - rule-mechanism-inventory
+  - github-action-coverage
   tests:
   - tests/test_agentic_kit_command_reference_is_current.py
   - tests/test_rule_mechanism_inventory.py
+  - tests/test_transfer_github_action_coverage.py
 - id: evidence-guard
   status: active
   owner: evidence-governance
