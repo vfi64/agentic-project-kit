@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 76bd23a
-  commit_subject: Update roadmap for rebase wrapper (#1175)
+  commit: 901fc9c
+  commit_subject: Add transfer conflict-resolve-file wrapper (#1177)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
