@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: fabee61
-  commit_subject: Add transfer evidence PR complete wrapper (#1185)
+  commit: 5a9e3ec
+  commit_subject: Update roadmap for evidence PR complete wrapper (#1187)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
