@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `146`
+- Command count: `147`
 
 ## Commands
 
@@ -693,6 +693,15 @@ Report merge/rebase conflict state without resolving anything.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
+### `agentic-kit transfer continue`
+
+Continue chat/local transfer communication through the safest available wrapper path.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `branch` | `TyperArgument` | branch | `False` |  | Optional target branch. If omitted, infer a single active transfer order. |
+| `json_output` | `TyperOption` | --json, --no-json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer delete-merged-work-branch`
 
