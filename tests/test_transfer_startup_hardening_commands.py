@@ -15,7 +15,7 @@ def _completed(argv: list[str], stdout: str = "", stderr: str = "", returncode: 
 def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
     calls: list[list[str]] = []
 
-    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+    def fake_run(argv, *args, **kwargs):
         calls.append(list(argv))
         return _completed(list(argv))
 
@@ -39,7 +39,7 @@ def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
 
 
 def test_divergence_status_reports_ahead_behind(monkeypatch):
-    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+    def fake_run(argv, *args, **kwargs):
         command = list(argv)
         if command == ["git", "branch", "--show-current"]:
             return _completed(command, stdout="feature/demo\n")
@@ -71,7 +71,7 @@ def test_divergence_status_reports_ahead_behind(monkeypatch):
 def test_sync_main_orchestrates_safe_startup_sequence(monkeypatch):
     calls: list[list[str]] = []
 
-    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+    def fake_run(argv, *args, **kwargs):
         calls.append(list(argv))
         return _completed(list(argv), stdout="ok\n")
 
@@ -99,7 +99,7 @@ def test_sync_main_orchestrates_safe_startup_sequence(monkeypatch):
 
 
 def test_command_reference_refresh_runs_generator_and_reports_changed_files(monkeypatch):
-    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+    def fake_run(argv, *args, **kwargs):
         command = list(argv)
         if command == ["./.venv/bin/python", "scripts/generate_agentic_kit_command_reference.py"]:
             return _completed(command, stdout="generated\n")
@@ -135,7 +135,7 @@ def test_command_reference_refresh_runs_generator_and_reports_changed_files(monk
 def test_command_reference_check_runs_drift_test(monkeypatch):
     calls: list[list[str]] = []
 
-    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+    def fake_run(argv, *args, **kwargs):
         calls.append(list(argv))
         return _completed(list(argv), stdout="1 passed\n")
 
@@ -160,7 +160,7 @@ def test_command_reference_check_runs_drift_test(monkeypatch):
 def test_evidence_inspect_latest_requires_summary(monkeypatch):
     calls: list[list[str]] = []
 
-    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+    def fake_run(argv, *args, **kwargs):
         calls.append(list(argv))
         return _completed(list(argv), stdout="PASS\n")
 
@@ -177,7 +177,7 @@ def test_evidence_inspect_latest_requires_summary(monkeypatch):
 def test_evidence_finalize_current_transfer_builds_finalize_log_command(monkeypatch):
     calls: list[list[str]] = []
 
-    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+    def fake_run(argv, *args, **kwargs):
         calls.append(list(argv))
         return _completed(list(argv), stdout="finalized\n")
 
@@ -244,7 +244,7 @@ def test_evidence_finalize_current_transfer_builds_finalize_log_command(monkeypa
 
 
 def test_sync_main_default_output_is_concise(monkeypatch):
-    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+    def fake_run(argv, *args, **kwargs):
         return _completed(list(argv), stdout="ok\n")
 
     monkeypatch.setattr(subprocess, "run", fake_run)
@@ -259,7 +259,7 @@ def test_sync_main_default_output_is_concise(monkeypatch):
 
 
 def test_sync_main_json_output_keeps_steps(monkeypatch):
-    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+    def fake_run(argv, *args, **kwargs):
         return _completed(list(argv), stdout="ok\n")
 
     monkeypatch.setattr(subprocess, "run", fake_run)
@@ -273,7 +273,7 @@ def test_sync_main_json_output_keeps_steps(monkeypatch):
 
 
 def test_remote_work_start_default_output_is_concise(monkeypatch):
-    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+    def fake_run(argv, *args, **kwargs):
         command = list(argv)
         if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "branch-create"]:
             return _completed(command, stdout='{"result_status":"PASS"}\n')
@@ -291,7 +291,7 @@ def test_remote_work_start_default_output_is_concise(monkeypatch):
 
 
 def test_remote_work_start_json_output_keeps_steps(monkeypatch):
-    def fake_run(argv, cwd=None, text=None, capture_output=None, check=None):
+    def fake_run(argv, *args, **kwargs):
         command = list(argv)
         if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "branch-create"]:
             return _completed(command, stdout='{"result_status":"PASS"}\n')
@@ -305,3 +305,191 @@ def test_remote_work_start_json_output_keeps_steps(monkeypatch):
     payload = json.loads(result.stdout)
     assert payload["action"] == "remote-work-start"
     assert "steps" in payload
+
+def test_evidence_pr_complete_orchestrates_finalize_push_pr_sync_and_post_merge(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return _completed(command, stdout="evidence/demo\n")
+        return _completed(command, stdout="ok\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
+        lambda capability: None,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "evidence-pr-complete",
+            "--slice",
+            "demo",
+            "--evidence-branch",
+            "evidence/demo",
+            "--title",
+            "Evidence demo",
+            "--body",
+            "Evidence body",
+            "--source-pr",
+            "123",
+            "--remote-log",
+            "docs/reports/terminal/demo-evidence.log",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert payload["action"] == "evidence-pr-complete"
+    assert [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "evidence-finalize-current-transfer",
+        "--slice",
+        "demo",
+        "--run-log",
+        "docs/reports/transfer_runs/latest-transfer-report.log",
+        "--scope",
+        "transfer",
+        "--mode-check",
+        "standard",
+        "--pr",
+        "123",
+        "--ci",
+        "not-required",
+        "--merge",
+        "not-required",
+        "--command-report",
+        "transfer lifecycle completed",
+        "--interpretation",
+        "Evidence finalized through transfer evidence-pr-complete wrapper.",
+        "--safe-step",
+        "Continue with the next planned slice.",
+        "--branch",
+        "evidence/demo",
+        "--remote-log",
+        "docs/reports/terminal/demo-evidence.log",
+    ] in calls
+    assert ["./.venv/bin/agentic-kit", "transfer", "evidence-inspect-latest"] in calls
+    assert ["./.venv/bin/agentic-kit", "transfer", "push-current", "--branch", "evidence/demo"] in calls
+    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"] for call in calls)
+    assert ["./.venv/bin/agentic-kit", "transfer", "sync-main"] in calls
+    assert ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] in calls
+
+
+def test_evidence_pr_complete_switches_or_creates_evidence_branch(monkeypatch):
+    calls: list[list[str]] = []
+
+    switch_attempts = 0
+
+    def fake_run(argv, *args, **kwargs):
+        nonlocal switch_attempts
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return _completed(command, stdout="feature/source\n")
+        if command == ["./.venv/bin/agentic-kit", "transfer", "branch-switch", "evidence/demo"]:
+            switch_attempts += 1
+            if switch_attempts == 1:
+                return _completed(command, returncode=1, stderr="missing branch\n")
+            return _completed(command, stdout="switched\n")
+        return _completed(command, stdout="ok\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
+        lambda capability: None,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "evidence-pr-complete",
+            "--slice",
+            "demo",
+            "--evidence-branch",
+            "evidence/demo",
+            "--title",
+            "Evidence demo",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert ["./.venv/bin/agentic-kit", "transfer", "branch-create", "evidence/demo"] in calls
+    assert ["./.venv/bin/agentic-kit", "transfer", "branch-switch", "evidence/demo"] in calls
+
+
+def test_evidence_pr_complete_refuses_main_branch(monkeypatch):
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return _completed(command, stdout="main\n")
+        return _completed(command, stdout="ok\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
+        lambda capability: None,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "evidence-pr-complete",
+            "--slice",
+            "demo",
+            "--evidence-branch",
+            "main",
+            "--title",
+            "Evidence demo",
+        ],
+    )
+
+    assert result.exit_code == 2
+    assert "refuse_main_branch" in result.stdout
+
+
+def test_evidence_pr_complete_blocks_on_finalize_failure(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return _completed(command, stdout="evidence/demo\n")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "evidence-finalize-current-transfer"]:
+            return _completed(command, returncode=1, stderr="finalize failed\n")
+        return _completed(command, stdout="ok\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
+        lambda capability: None,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "evidence-pr-complete",
+            "--slice",
+            "demo",
+            "--evidence-branch",
+            "evidence/demo",
+            "--title",
+            "Evidence demo",
+        ],
+    )
+
+    assert result.exit_code == 2
+    assert "evidence-finalize-current-transfer_failed" in result.stdout
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"] for call in calls)
+

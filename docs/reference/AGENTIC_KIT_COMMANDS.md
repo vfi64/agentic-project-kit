@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `143`
+- Command count: `144`
 
 ## Commands
 
@@ -733,6 +733,32 @@ Inspect the latest evidence log with the required-summary contract.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
+### `agentic-kit transfer evidence-pr-complete`
+
+Finalize transfer evidence on an evidence branch and complete it through a PR.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `slice_name` | `TyperOption` | --slice | `True` |  | Evidence slice label. |
+| `evidence_branch` | `TyperOption` | --evidence-branch | `True` |  | Evidence branch to use as PR head. |
+| `title` | `TyperOption` | --title | `True` |  | Evidence PR title. |
+| `body` | `TyperOption` | --body | `False` | `` | Evidence PR body. |
+| `base` | `TyperOption` | --base | `False` | `main` | Base branch for the evidence PR. |
+| `run_log` | `TyperOption` | --run-log | `False` | `PosixPath('docs/reports/transfer_runs/latest-transfer-report.log')` | Local run log to finalize. |
+| `remote_log` | `TyperOption` | --remote-log | `False` |  | Repository-relative remote evidence log path under docs/reports/terminal/. |
+| `scope` | `TyperOption` | --scope | `False` | `transfer` | Evidence scope summary. |
+| `mode_check` | `TyperOption` | --mode-check | `False` | `standard` | Evidence mode check summary. |
+| `source_pr` | `TyperOption` | --source-pr | `False` | `NONE` | Associated source PR number or NONE. |
+| `ci` | `TyperOption` | --ci | `False` | `not-required` | CI state summary. |
+| `merge` | `TyperOption` | --merge | `False` | `not-required` | Merge state summary. |
+| `command_report` | `TyperOption` | --command-report | `False` | `transfer lifecycle completed` | Command report summary. |
+| `interpretation` | `TyperOption` | --interpretation | `False` | `Evidence finalized through transfer evidence-pr-complete wrapper.` | Evidence interpretation summary. |
+| `safe_step` | `TyperOption` | --safe-step | `False` | `Continue with the next planned slice.` | Next safe step. |
+| `merge_method` | `TyperOption` | --merge-method | `False` | `squash` | GitHub merge method. |
+| `timeout_seconds` | `TyperOption` | --timeout-seconds | `False` | `300` | Maximum CI wait time. |
+| `poll_seconds` | `TyperOption` | --interval-seconds, --poll-seconds | `False` | `10` | CI polling interval. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
 ### `agentic-kit transfer fetch-origin`
