@@ -335,3 +335,59 @@ def _runner(
         raise AssertionError(f"unexpected command: {command}")
 
     return run
+
+
+def test_release_plan_cli_blocks_implicit_already_released_version(tmp_path: Path, monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+    import agentic_project_kit.release as release_module
+
+    (tmp_path / "pyproject.toml").write_text(chr(10).join([
+        "version = \"1.2.3\"",
+        "",
+    ]), encoding="utf-8")
+
+    def fake_runner(project_root: Path, command: Sequence[str]) -> CommandResult:
+        if command[:4] == ["git", "ls-remote", "--tags", "origin"]:
+            return CommandResult(0, "abc123\\trefs/tags/v1.2.3\\n", "")
+        if command[:3] == ["gh", "release", "view"]:
+            return CommandResult(0, "v1.2.3\\n", "")
+        if command[:3] == ["git", "tag", "-l"]:
+            return CommandResult(0, "", "")
+        return CommandResult(99, "", f"unexpected command: {command}")
+
+    monkeypatch.setattr(release_module, "run_command", fake_runner)
+
+    result = CliRunner().invoke(app, ["release-plan", "--root", str(tmp_path)])
+
+    assert result.exit_code == 2
+    assert "already released" in result.stdout
+    assert "agentic-kit release-plan --version <next-version>" in result.stdout
+
+
+def test_release_plan_cli_allows_explicit_next_version_when_current_is_released(tmp_path: Path, monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+    import agentic_project_kit.release as release_module
+
+    (tmp_path / "pyproject.toml").write_text(chr(10).join([
+        "version = \"1.2.3\"",
+        "",
+    ]), encoding="utf-8")
+
+    def fake_runner(project_root: Path, command: Sequence[str]) -> CommandResult:
+        if command[:4] == ["git", "ls-remote", "--tags", "origin"]:
+            return CommandResult(0, "abc123\\trefs/tags/v1.2.3\\n", "")
+        if command[:3] == ["gh", "release", "view"]:
+            return CommandResult(0, "v1.2.3\\n", "")
+        if command[:3] == ["git", "tag", "-l"]:
+            return CommandResult(0, "", "")
+        return CommandResult(99, "", f"unexpected command: {command}")
+
+    monkeypatch.setattr(release_module, "run_command", fake_runner)
+
+    result = CliRunner().invoke(app, ["release-plan", "--root", str(tmp_path), "--version", "1.2.4"])
+
+    assert result.exit_code == 0
+    assert "# Release preparation plan for target v1.2.4" in result.stdout
+

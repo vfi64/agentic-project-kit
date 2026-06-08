@@ -7,6 +7,7 @@ from rich.console import Console
 
 from agentic_project_kit.post_release import build_post_release_report, render_post_release_report
 from agentic_project_kit.release import (
+    ReleaseCheckStatus,
     build_release_plan,
     build_release_preflight_report,
     build_release_state_report,
@@ -30,7 +31,24 @@ def release_plan_command(
     version: str | None = typer.Option(None, "--version", help="Release version without leading v."),
 ) -> None:
     """Print a release preparation checklist for the current project."""
-    plan = build_release_plan(project_root.resolve(), version=version)
+    root = project_root.resolve()
+    if version is None:
+        current_version = build_release_plan(root).version
+        current_report = build_release_preflight_report(root, version=current_version)
+        already_released = any(
+            check.status == ReleaseCheckStatus.FAIL
+            for check in current_report.checks
+            if check.name in {"remote tag unused", "GitHub release unused"}
+        )
+        if already_released:
+            console.print(
+                "Current package version is already released. "
+                "Pass the next target explicitly, for example: "
+                "agentic-kit release-plan --version <next-version>",
+                markup=False,
+            )
+            raise typer.Exit(code=2)
+    plan = build_release_plan(root, version=version)
     console.print(render_release_plan(plan), markup=False)
 
 
