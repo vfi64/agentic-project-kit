@@ -1,4 +1,5 @@
 from pathlib import Path
+import json
 from collections.abc import Sequence
 import json
 
@@ -210,3 +211,159 @@ def test_post_release_report_warns_when_zenodo_lookup_times_out(tmp_path: Path):
     assert report.ok
     assert report.checks[-1].status == PostReleaseStatus.WARN
     assert report.checks[-1].detail == "Zenodo lookup failed: read operation timed out"
+
+def test_post_release_doi_closeout_blocks_when_zenodo_is_waiting(tmp_path: Path):
+    from agentic_project_kit.post_release_closeout import post_release_doi_closeout
+
+    _write_closeout_citation(tmp_path)
+
+    report = post_release_doi_closeout(
+        tmp_path,
+        version="1.2.3",
+        write=False,
+        command_runner=_runner(github_release=CommandResult(0, "v1.2.3\n", "")),
+        http_getter=_http_getter(json.dumps({"hits": {"hits": []}})),
+    )
+
+    assert not report.ok
+    assert report.result_status == "BLOCKED"
+    assert "zenodo_version_doi_not_verified" in report.blockers
+    assert report.changed_paths == ()
+
+
+def test_post_release_doi_closeout_dry_run_reports_metadata_paths(tmp_path: Path):
+    from agentic_project_kit.post_release_closeout import post_release_doi_closeout
+
+    _write_closeout_files(tmp_path, "1.2.3")
+
+    report = post_release_doi_closeout(
+        tmp_path,
+        version="1.2.3",
+        write=False,
+        command_runner=_runner(github_release=CommandResult(0, "v1.2.3\n", "")),
+        http_getter=_http_getter(json.dumps(_closeout_zenodo_payload("1.2.3", "10.5281/zenodo.99999999"))),
+    )
+
+    assert report.ok
+    assert report.version_doi == "10.5281/zenodo.99999999"
+    assert "README.md" in report.changed_paths
+    assert "docs/releases/VERIFIED_RELEASES.md" in report.changed_paths
+    assert "10.5281/zenodo.99999999" not in (tmp_path / "README.md").read_text(encoding="utf-8")
+
+
+def test_post_release_doi_closeout_write_updates_metadata_files(tmp_path: Path):
+    from agentic_project_kit.post_release_closeout import post_release_doi_closeout
+
+    _write_closeout_files(tmp_path, "1.2.3")
+
+    report = post_release_doi_closeout(
+        tmp_path,
+        version="1.2.3",
+        write=True,
+        command_runner=_runner(github_release=CommandResult(0, "v1.2.3\n", "")),
+        http_getter=_http_getter(json.dumps(_closeout_zenodo_payload("1.2.3", "10.5281/zenodo.99999999"))),
+    )
+
+    assert report.ok
+    assert report.changed_paths
+    assert "Current verified release: `v1.2.3` with Zenodo version DOI `10.5281/zenodo.99999999`." in (
+        tmp_path / "README.md"
+    ).read_text(encoding="utf-8")
+    assert "# Verified v1.2.3 version DOI: 10.5281/zenodo.99999999" in (
+        tmp_path / "CITATION.cff"
+    ).read_text(encoding="utf-8")
+    assert "- `v1.2.3` / `1.2.3`: Zenodo version DOI `10.5281/zenodo.99999999`; concept DOI `10.5281/zenodo.20101359`." in (
+        tmp_path / "docs/releases/VERIFIED_RELEASES.md"
+    ).read_text(encoding="utf-8")
+
+
+def test_render_post_release_doi_closeout_result_lists_changes(tmp_path: Path):
+    from agentic_project_kit.post_release_closeout import (
+        post_release_doi_closeout,
+        render_post_release_doi_closeout_result,
+    )
+
+    _write_closeout_files(tmp_path, "1.2.3")
+
+    report = post_release_doi_closeout(
+        tmp_path,
+        version="1.2.3",
+        write=False,
+        command_runner=_runner(github_release=CommandResult(0, "v1.2.3\n", "")),
+        http_getter=_http_getter(json.dumps(_closeout_zenodo_payload("1.2.3", "10.5281/zenodo.99999999"))),
+    )
+    rendered = render_post_release_doi_closeout_result(report)
+
+    assert "POST_RELEASE_DOI_CLOSEOUT" in rendered
+    assert "STATE=PASS" in rendered
+    assert "VERSION_DOI=10.5281/zenodo.99999999" in rendered
+    assert "CHANGED_PATH=README.md" in rendered
+    assert "FINAL_SIGNAL=d" in rendered
+
+
+def _write_closeout_files(root: Path, version: str) -> None:
+    (root / "docs/handoff").mkdir(parents=True)
+    (root / "docs/releases").mkdir(parents=True)
+    (root / "CITATION.cff").write_text(
+        "cff-version: 1.2.0\n"
+        "doi: 10.5281/zenodo.20101359\n"
+        "# Verified v0.4.5 version DOI: 10.5281/zenodo.20467371\n",
+        encoding="utf-8",
+    )
+    (root / "README.md").write_text(
+        f"Version `{version}` is the current release line prepared as a test release.\n"
+        f"Prepared release: `v{version}`; GitHub Release, tag publication, and Zenodo version DOI verification are pending.\n"
+        "Current verified release: `v0.4.5` with Zenodo version DOI `10.5281/zenodo.20467371`.\n",
+        encoding="utf-8",
+    )
+    (root / "docs/STATUS.md").write_text(
+        f"Current version: {version}\n"
+        "Current verified release remains 0.4.5 until v1.2.3 is published and post-release verified.\n"
+        "Prepared release tag: v1.2.3.\n"
+        "Verified Zenodo version DOI: `10.5281/zenodo.20467371`.\n"
+        "Post-release verification command after publication: `agentic-kit post-release-check --version 1.2.3`.\n"
+        "v1.2.3 release metadata is prepared. GitHub Release publication and post-release Zenodo DOI verification are pending.\n",
+        encoding="utf-8",
+    )
+    (root / "docs/handoff/CURRENT_HANDOFF.md").write_text(
+        f"Current version: {version}\n"
+        "- Current verified release remains 0.4.5 until v1.2.3 is published and post-release verified.\n"
+        "- Prepared release tag: v1.2.3.\n"
+        "- Verified Zenodo version DOI: `10.5281/zenodo.20467371`.\n",
+        encoding="utf-8",
+    )
+    (root / "CHANGELOG.md").write_text(
+        f"## v{version} - 2026-06-08\n\n"
+        "- Documentation: pending verification for GitHub Release publication and post-release Zenodo checks.\n\n"
+        "## v0.4.5 - 2026-05-30\n",
+        encoding="utf-8",
+    )
+    (root / "docs/releases/VERIFIED_RELEASES.md").write_text(
+        "# Verified releases\n\n"
+        "- `v0.4.5` / `0.4.5`: Zenodo version DOI `10.5281/zenodo.20467371`; concept DOI `10.5281/zenodo.20101359`.\n",
+        encoding="utf-8",
+    )
+
+def _write_closeout_citation(root: Path) -> None:
+    (root / "CITATION.cff").write_text(
+        "cff-version: 1.2.0\n"
+        "doi: 10.5281/zenodo.20101359\n",
+        encoding="utf-8",
+    )
+
+
+def _closeout_zenodo_payload(version: str, doi: str) -> dict[str, object]:
+    return {
+        "hits": {
+            "hits": [
+                {
+                    "doi": doi,
+                    "metadata": {
+                        "version": version,
+                        "title": f"agentic-project-kit v{version}",
+                    },
+                }
+            ]
+        }
+    }
+
