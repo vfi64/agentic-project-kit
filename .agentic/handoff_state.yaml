@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 660581c
-  commit_subject: Prepare v0.4.6 release metadata (#1201)
+  commit: 3ca0e83
+  commit_subject: Guard prepared release documentation state (#1203)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
