@@ -342,6 +342,41 @@ This reduces quote, terminal, heredoc, escape, copy/paste, and message-stream fa
 
 Next priority: Command-/Rule-Registry-Audit, because the pre-GUI wrapper set is now broad enough that the command reference, governance references, rule-mechanism inventory, tests, and GUI prerequisites must be checked for consistency before GUI expansion.
 
+### Pre-GUI Wrapper Registry Audit
+
+Status-date: 2026-06-08
+Status: active
+
+Audit finding after the completed wrapper hardening pass:
+
+| Area | Finding |
+|---|---|
+| Command reference JSON/Markdown | PASS: completed wrappers are present in `docs/reference/agentic-kit-commands.json` and `docs/reference/AGENTIC_KIT_COMMANDS.md`. |
+| Wrapper tests | PASS: completed wrappers have direct regression coverage in transfer-focused tests. |
+| Roadmap | PASS: completed wrappers are recorded in this roadmap. |
+| Governance references | TODO: verify that governance docs point to wrapper-based workflows rather than manual git/GitHub/evidence choreography. |
+| Rule mechanism inventory | TODO: verify that the command-reference registry and transfer-wrapper layer are represented as rule/mechanism sources where applicable. |
+| GUI catalog and dispatch plan | TODO: map GUI actions only to stable wrappers and keep mutating GUI actions disabled unless branch, dirty-state, rule-ack, PR/evidence, and failure-mode guards are available. |
+
+Completed wrapper set to audit before GUI expansion:
+
+- `transfer remote-work-start`
+- `transfer sync-main`
+- `transfer pr-create-complete`
+- `transfer protected-diff-plan`
+- `transfer work-order-patch`
+- `transfer rebase-on-upstream`
+- `transfer conflict-status`
+- `transfer conflict-resolve-file`
+- `transfer delete-merged-work-branch`
+- `transfer evidence-inspect-latest`
+- `transfer evidence-finalize-current-transfer`
+- `transfer evidence-pr-complete`
+- `transfer command-reference-refresh`
+- `transfer command-reference-check`
+
+Next audit action: inspect and, if needed, minimally update governance docs, `.agentic/rule_mechanism_inventory.yaml`, and GUI planning/catalog references so the GUI expansion starts from the completed wrapper set rather than raw shell, raw git, raw GitHub, or manual evidence commands.
+
 #### 3. Evidence ergonomisch machen
 
 `evidence finalize-log` works. The regular transfer path is now shortened by `transfer evidence-finalize-current-transfer`.
