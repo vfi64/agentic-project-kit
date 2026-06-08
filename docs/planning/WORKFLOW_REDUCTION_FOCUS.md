@@ -287,7 +287,6 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 | `transfer evidence-pr-complete` | Evidence-Commit über Branch/PR statt direktem `main`-Push abschließen | `git branch evidence/...`, `git reset --hard origin/main`, PR-Erstellung |
 | `transfer branch-save-commit BRANCH SHA` | lokalen Commit sicher auf Branch retten | `git branch evidence/... 512c771` |
 | `transfer reset-current-to-upstream` | lokalen Branch kontrolliert auf Upstream zurücksetzen | `git reset --hard origin/main` |
-| `transfer rebase-on-upstream` | Rebase mit Guarding und Konfliktbericht | `git rebase origin/branch` |
 | `transfer concise-report` | lange JSON-/Help-Ausgaben auf Kurzsummary reduzieren | manuelle Python-Auswertung von Reports |
 | `transfer conflict-resolve-file` | bewusstes Ersetzen einzelner Konfliktdateien mit Guard | manuelles `cat > file` oder Python-Schreibblock |
 | `transfer pr-existing-for-branch` | vorhandenen PR zu Branch finden | manuelle GitHub-/`gh`-Abfrage |
@@ -309,6 +308,7 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 | `transfer protected-diff-plan` | erledigt, getestet und real genutzt; ersetzt `git diff --output=/tmp/...` plus `./ns protected-change-plan` |
 | `transfer conflict-status` | erledigt, getestet und real genutzt; diagnostiziert Merge-/Rebase-Konflikte ohne Auflösung |
 | `transfer work-order-patch` | erledigt, getestet und real genutzt; wendet JSON/YAML-Textpatches mit Branch-, Pfad- und Exact-Match-Guards an |
+| `transfer rebase-on-upstream` | erledigt, getestet und real genutzt; führt Rebase mit Branch-Guard und `conflict-status`-Integration aus |
 
 ### Pre-GUI Work Order
 
@@ -316,13 +316,12 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 
 Priority order:
 
-1. `transfer rebase-on-upstream`
-2. `transfer conflict-resolve-file`
-3. `transfer delete-merged-work-branch`
-4. `transfer evidence-pr-complete`
-5. `transfer pr-existing-for-branch`
+1. `transfer conflict-resolve-file`
+2. `transfer delete-merged-work-branch`
+3. `transfer evidence-pr-complete`
+4. `transfer pr-existing-for-branch`
 
-Completed in the hardening passes so far: `transfer restore-known-volatile`, `transfer sync-main`, `transfer divergence-status`, `transfer command-reference-refresh`, `transfer command-reference-check`, `transfer evidence-inspect-latest`, `transfer evidence-finalize-current-transfer`, `transfer pr-create-complete`, `transfer protected-diff-plan`, `transfer conflict-status`, and `transfer work-order-patch`.
+Completed in the hardening passes so far: `transfer restore-known-volatile`, `transfer sync-main`, `transfer divergence-status`, `transfer command-reference-refresh`, `transfer command-reference-check`, `transfer evidence-inspect-latest`, `transfer evidence-finalize-current-transfer`, `transfer pr-create-complete`, `transfer protected-diff-plan`, `transfer conflict-status`, `transfer work-order-patch`, and `transfer rebase-on-upstream`.
 
 The manual sequence `pr-create -> read PR number -> FULL_SHA=$(git rev-parse HEAD) -> pr-complete <PR>` is no longer the preferred path. Use `transfer pr-create-complete` for normal PR lifecycle completion.
 
@@ -341,7 +340,7 @@ Target:
 
 This reduces quote, terminal, heredoc, escape, copy/paste, and message-stream failure modes.
 
-Next priority: `transfer rebase-on-upstream`, because branch update and conflict reporting still rely too much on raw `git rebase` plus manual follow-up inspection.
+Next priority: `transfer conflict-resolve-file`, because rebase conflicts can now be detected, but resolving a specific file still lacks a bounded wrapper.
 
 #### 3. Evidence ergonomisch machen
 
