@@ -19,6 +19,7 @@ EXPECTED_MECHANISMS = {
     "transfer-safety-rules",
     "release-state-validation",
     "post-release-archive-check",
+    "post-release-doi-closeout",
 }
 EXPECTED_LEGACY_IDS = {
     "structured-summary-must-be-enforced",

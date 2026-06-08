@@ -377,6 +377,33 @@ coverage:
     - kind: test
       path: tests/test_post_release.py
     statement: waiting Zenodo records are non-failing until available
+- mechanism_id: post-release-doi-closeout
+  test_coverage: direct
+  assertions:
+  - assertion_id: post-release-doi-closeout-blocks-waiting
+    kind: guard
+    covered_surfaces:
+    - post-release-doi-closeout-cli
+    - post-release-doi-closeout-core
+    - post-release-tests
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/post_release_closeout.py
+    - kind: test
+      path: tests/test_post_release.py
+    statement: DOI metadata closeout blocks while Zenodo has no verified version DOI
+  - assertion_id: post-release-doi-closeout-writes-verified-metadata
+    kind: release
+    covered_surfaces:
+    - post-release-doi-closeout-cli
+    - post-release-doi-closeout-core
+    - post-release-tests
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/post_release_closeout.py
+    - kind: test
+      path: tests/test_post_release.py
+    statement: DOI metadata closeout dry-run and write paths update only verified release DOI metadata
 - mechanism_id: transfer-safety-rules
   test_coverage: direct
   assertions:

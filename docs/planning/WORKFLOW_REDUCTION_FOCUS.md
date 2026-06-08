@@ -429,6 +429,12 @@ Still needed:
 
 - audit that all evidence-facing docs, GUI plans, and rule/governance references point to the wrapper path rather than the old manual choreography.
 
+#### 3b. Post-release DOI-Metadaten-Closeout kapseln
+
+Completed: `agentic-kit post-release-doi-closeout --version <version>` now provides a guarded dry-run for verified post-release DOI metadata closeout. `--write` updates release DOI metadata only after `post-release-check` verifies the GitHub Release, Zenodo concept DOI, and Zenodo version DOI.
+
+This is a top-level release-governance command, not a transfer wrapper. It reduces the former manual README/CHANGELOG/CITATION/verified-release-archive editing sequence after release publication.
+
 #### 4. Command-Reference in Regelverwaltung prüfen
 
 The command reference registry now has a governance contract and a staleness test. The next admin slice should verify or add:
