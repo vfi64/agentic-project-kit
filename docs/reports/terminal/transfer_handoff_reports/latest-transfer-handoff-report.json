@@ -48,8 +48,77 @@
     "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
     "post_report_actions": {
       "attempted": true,
+      "branch": null,
+      "commit_head": "97f61ad",
+      "committed": true,
+      "final_head": "97f61ad",
+      "final_status_short": "M .agentic/transfer/outbox/last_result.txt",
+      "paths": [
+        "docs/reports/transfer_runs/latest-remote-next-report.json",
+        "docs/reports/transfer_runs/latest-remote-next-report.log",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+      ],
+      "pushed": true,
+      "rule_ack_after_report_commit": {
+        "blocking_reasons": [],
+        "confirmed": true,
+        "head": "97f61ad",
+        "path": ".agentic/rule_ack/current.json",
+        "present": true
+      },
+      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "status": "pending_until_report_files_are_written"
+      "steps": [
+        {
+          "argv": [
+            "git",
+            "add",
+            "-f",
+            "docs/reports/transfer_runs/latest-remote-next-report.json",
+            "docs/reports/transfer_runs/latest-remote-next-report.log",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+          ],
+          "name": "git_add_force_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        },
+        {
+          "argv": [
+            "git",
+            "commit",
+            "-m",
+            "Publish remote-next transfer report"
+          ],
+          "name": "git_commit_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "[feature/transfer-safety-rule-header 97f61ad] Publish remote-next transfer report\n 4 files changed, 106 insertions(+), 642 deletions(-)"
+        },
+        {
+          "argv": [
+            "./.venv/bin/agentic-kit",
+            "rules",
+            "acknowledge"
+          ],
+          "name": "rules_acknowledge_after_report_commit",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=f633d7171290417556f9649fb52ca2181a0d13dcb9cdcab2a0c1317962b17c48\nrepo_head=97f61ad\ndeclared_next_allowed_action=run_next_command"
+        },
+        {
+          "argv": [
+            "git",
+            "push"
+          ],
+          "name": "git_push_report_commit",
+          "returncode": 0,
+          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   234d025..97f61ad  feature/transfer-safety-rule-header -> feature/transfer-safety-rule-header",
+          "stdout": ""
+        }
+      ]
     },
     "preflight": {
       "current_branch": "feature/transfer-safety-rule-header",
@@ -400,10 +469,10 @@
     "repo_state": {
       "branch": "feature/transfer-safety-rule-header",
       "dirty_status": "M .agentic/transfer/outbox/last_result.txt",
-      "head": "234d0252439f82ba05111f1d29c0fe30c71c8a28",
+      "head": "97f61ad400f7795241eb67c3dfe3797c5110b55d",
       "head_matches_upstream": true,
       "upstream": "origin/feature/transfer-safety-rule-header",
-      "upstream_head": "234d0252439f82ba05111f1d29c0fe30c71c8a28"
+      "upstream_head": "97f61ad400f7795241eb67c3dfe3797c5110b55d"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -476,8 +545,77 @@
     "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
     "post_report_actions": {
       "attempted": true,
+      "branch": null,
+      "commit_head": "97f61ad",
+      "committed": true,
+      "final_head": "97f61ad",
+      "final_status_short": "M .agentic/transfer/outbox/last_result.txt",
+      "paths": [
+        "docs/reports/transfer_runs/latest-remote-next-report.json",
+        "docs/reports/transfer_runs/latest-remote-next-report.log",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+      ],
+      "pushed": true,
+      "rule_ack_after_report_commit": {
+        "blocking_reasons": [],
+        "confirmed": true,
+        "head": "97f61ad",
+        "path": ".agentic/rule_ack/current.json",
+        "present": true
+      },
+      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "status": "pending_until_report_files_are_written"
+      "steps": [
+        {
+          "argv": [
+            "git",
+            "add",
+            "-f",
+            "docs/reports/transfer_runs/latest-remote-next-report.json",
+            "docs/reports/transfer_runs/latest-remote-next-report.log",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+          ],
+          "name": "git_add_force_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        },
+        {
+          "argv": [
+            "git",
+            "commit",
+            "-m",
+            "Publish remote-next transfer report"
+          ],
+          "name": "git_commit_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "[feature/transfer-safety-rule-header 97f61ad] Publish remote-next transfer report\n 4 files changed, 106 insertions(+), 642 deletions(-)"
+        },
+        {
+          "argv": [
+            "./.venv/bin/agentic-kit",
+            "rules",
+            "acknowledge"
+          ],
+          "name": "rules_acknowledge_after_report_commit",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=f633d7171290417556f9649fb52ca2181a0d13dcb9cdcab2a0c1317962b17c48\nrepo_head=97f61ad\ndeclared_next_allowed_action=run_next_command"
+        },
+        {
+          "argv": [
+            "git",
+            "push"
+          ],
+          "name": "git_push_report_commit",
+          "returncode": 0,
+          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   234d025..97f61ad  feature/transfer-safety-rule-header -> feature/transfer-safety-rule-header",
+          "stdout": ""
+        }
+      ]
     },
     "preflight": {
       "current_branch": "feature/transfer-safety-rule-header",
@@ -828,10 +966,10 @@
     "repo_state": {
       "branch": "feature/transfer-safety-rule-header",
       "dirty_status": "M .agentic/transfer/outbox/last_result.txt",
-      "head": "234d0252439f82ba05111f1d29c0fe30c71c8a28",
+      "head": "97f61ad400f7795241eb67c3dfe3797c5110b55d",
       "head_matches_upstream": true,
       "upstream": "origin/feature/transfer-safety-rule-header",
-      "upstream_head": "234d0252439f82ba05111f1d29c0fe30c71c8a28"
+      "upstream_head": "97f61ad400f7795241eb67c3dfe3797c5110b55d"
     },
     "schema_version": 1,
     "terminal_block_rules": {
