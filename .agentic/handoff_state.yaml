@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: bc547f8
-  commit_subject: Update roadmap for work-order patch wrapper (#1171)
+  commit: 7736ab1
+  commit_subject: Add transfer rebase-on-upstream wrapper (#1173)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
