@@ -2,7 +2,11 @@
 
 - Release safety: block implicit `release-plan` output for already published package versions so release preparation must name the next target version explicitly.
 - Transfer workflow: complete the pre-GUI wrapper, output-discipline, GUI wrapper-gating, and PR branch diagnostic hardening line.
-- Documentation: prepare v0.4.6 metadata while keeping v0.4.5 as the last verified release; v0.4.6 has pending verification for GitHub Release publication and post-release Zenodo checks.
+- Evidence: GitHub Release publication and post-release Zenodo verification are complete for v0.4.6 with version DOI `10.5281/zenodo.20593293`.
+
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.4.6 DOI `10.5281/zenodo.20593293`.
+
+Zenodo v0.4.6 DOI: 10.5281/zenodo.20593293
 
 ## v0.4.5 - 2026-05-30
 

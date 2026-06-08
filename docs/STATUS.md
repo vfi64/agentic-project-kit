@@ -182,14 +182,14 @@ This document is a concise pointer, not a duplicate rule book. Machine guard: `a
 
 ## Current State
 
-Current verified release remains 0.4.5 until v0.4.6 is published and post-release verified.
-Prepared release tag: v0.4.6.
+Current verified release: 0.4.6.
+Current release tag: v0.4.6.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20467371`.
-Post-release verification command after publication: `agentic-kit post-release-check --version 0.4.6`.
+Post-release verification command: `agentic-kit post-release-check --version 0.4.6`.
 Current verified main after handoff freshness repair: `fd1e631` (`Repair post-PR831 handoff freshness state (#834)`).
 Generated handoff safe-state anchor: `fd1e631`.
-v0.4.6 release metadata is prepared. GitHub Release publication and post-release Zenodo DOI verification are pending; keep v0.4.5 as the last verified release until post-release verification passes.
+v0.4.6 GitHub Release publication and post-release Zenodo verification are complete. Verified Zenodo version DOI: `10.5281/zenodo.20593293`.
 
 v0.4.3 safety-release and successor-handoff target:
 - Main contains PR #834 at `fd1e631` (`Repair post-PR831 handoff freshness state (#834)`).
