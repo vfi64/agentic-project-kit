@@ -87,9 +87,9 @@ safe_state:
   - 897
   - 968
 release:
-  current_version: 0.4.5
+  current_version: 0.4.6
   previous_version: 0.4.4
-  tag: v0.4.5
+  tag: v0.4.6
   github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
   zenodo_version_doi: 10.5281/zenodo.20467371
