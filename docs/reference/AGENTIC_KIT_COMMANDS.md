@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `142`
+- Command count: `143`
 
 ## Commands
 
@@ -684,6 +684,18 @@ Report merge/rebase conflict state without resolving anything.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
+### `agentic-kit transfer delete-merged-work-branch`
+
+Delete a merged non-main work branch after PR merge-state verification.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `branch` | `TyperArgument` | branch | `True` |  | Merged feature/docs/fix/chore/evidence branch to delete. |
+| `remote` | `TyperOption` | --remote, --no-remote | `False` | `True` | Delete the branch on origin. |
+| `local` | `TyperOption` | --local, --no-local | `False` | `True` | Delete the local branch. |
+| `force_local` | `TyperOption` | --force-local | `False` | `False` | Force local deletion with git branch -D. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
 ### `agentic-kit transfer divergence-status`

@@ -3970,6 +3970,92 @@
     },
     {
       "group": "transfer",
+      "help": "Delete a merged non-main work branch after PR merge-state verification.",
+      "name": "delete-merged-work-branch",
+      "params": [
+        {
+          "default": null,
+          "help": "Merged feature/docs/fix/chore/evidence branch to delete.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "branch"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": true,
+          "help": "Delete the branch on origin.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "remote",
+          "opts": [
+            "--remote"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-remote"
+          ]
+        },
+        {
+          "default": true,
+          "help": "Delete the local branch.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "local",
+          "opts": [
+            "--local"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-local"
+          ]
+        },
+        {
+          "default": false,
+          "help": "Force local deletion with git branch -D.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "force_local",
+          "opts": [
+            "--force-local"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "delete-merged-work-branch"
+      ],
+      "qualified_name": "agentic-kit transfer delete-merged-work-branch"
+    },
+    {
+      "group": "transfer",
       "help": "Report local/upstream divergence without mutating repository state.",
       "name": "divergence-status",
       "params": [
