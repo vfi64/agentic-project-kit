@@ -1627,3 +1627,91 @@ def test_transfer_conflict_resolve_file_blocks_main_branch(monkeypatch, tmp_path
     assert "refuse_main_branch" in result.stdout
     assert (tmp_path / "file.txt").read_text(encoding="utf-8") == "original\n"
 
+def test_transfer_delete_merged_work_branch_deletes_local_and_remote(monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command[:3] == ["gh", "pr", "view"]:
+            return subprocess.CompletedProcess(command, 0, "MERGED\t2026-06-08T10:00:00Z\t123\tfeature/done\n", "")
+        if command == ["git", "branch", "-d", "feature/done"]:
+            return subprocess.CompletedProcess(command, 0, "deleted\n", "")
+        if command == ["git", "push", "origin", "--delete", "feature/done"]:
+            return subprocess.CompletedProcess(command, 0, "deleted remote\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "delete-merged-work-branch", "feature/done"])
+
+    assert result.exit_code == 0
+    assert "TRANSFER_DELETE_MERGED_WORK_BRANCH" in result.stdout
+    assert ["git", "branch", "-d", "feature/done"] in calls
+    assert ["git", "push", "origin", "--delete", "feature/done"] in calls
+
+
+def test_transfer_delete_merged_work_branch_refuses_main(monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command[:3] == ["gh", "pr", "view"]:
+            return subprocess.CompletedProcess(command, 0, "MERGED\t2026-06-08T10:00:00Z\t123\tmain\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "delete-merged-work-branch", "main"])
+
+    assert result.exit_code == 2
+    assert "refuse_main_branch" in result.stdout
+
+
+def test_transfer_delete_merged_work_branch_blocks_unmerged_pr(monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command[:3] == ["gh", "pr", "view"]:
+            return subprocess.CompletedProcess(command, 0, "OPEN\t\t123\tfeature/not-done\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "delete-merged-work-branch", "feature/not-done"])
+
+    assert result.exit_code == 2
+    assert "pr_not_merged" in result.stdout
+
+
+def test_transfer_delete_merged_work_branch_refuses_current_branch(monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/current\n", "")
+        if command[:3] == ["gh", "pr", "view"]:
+            return subprocess.CompletedProcess(command, 0, "MERGED\t2026-06-08T10:00:00Z\t123\tfeature/current\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "delete-merged-work-branch", "feature/current"])
+
+    assert result.exit_code == 2
+    assert "refuse_delete_current_branch" in result.stdout
+

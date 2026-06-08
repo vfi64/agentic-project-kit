@@ -819,6 +819,136 @@ def pull_current_command(
         raise typer.Exit(code=result.returncode)
 
 
+@transfer_app.command("delete-merged-work-branch")
+def delete_merged_work_branch_command(
+    branch: str = typer.Argument(..., help="Merged feature/docs/fix/chore/evidence branch to delete."),
+    remote: bool = typer.Option(True, "--remote/--no-remote", help="Delete the branch on origin."),
+    local: bool = typer.Option(True, "--local/--no-local", help="Delete the local branch."),
+    force_local: bool = typer.Option(False, "--force-local", help="Force local deletion with git branch -D."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Delete a merged non-main work branch after PR merge-state verification."""
+    import subprocess
+    from typing import Any
+
+    steps: list[dict[str, Any]] = []
+    blockers: list[str] = []
+
+    def run_step(name: str, argv: list[str]) -> dict[str, Any]:
+        completed = subprocess.run(argv, text=True, capture_output=True)
+        item = {
+            "name": name,
+            "argv": argv,
+            "returncode": completed.returncode,
+            "stdout": completed.stdout,
+            "stderr": completed.stderr,
+            "ok": completed.returncode == 0,
+        }
+        steps.append(item)
+        return item
+
+    allowed_prefixes = ("feature/", "fix/", "docs/", "chore/", "evidence/")
+    current_branch = ""
+    pr_number = ""
+
+    if branch in {"main", "master"}:
+        blockers.append("refuse_main_branch")
+    if branch.startswith("/") or branch.endswith("/") or ".." in branch or " " in branch:
+        blockers.append("unsafe_branch_name")
+    if not branch.startswith(allowed_prefixes):
+        blockers.append("branch_prefix_not_allowed")
+    if not (local or remote):
+        blockers.append("nothing_to_delete")
+
+    current_result = run_step("current-branch", ["git", "branch", "--show-current"])
+    current_branch = str(current_result["stdout"]).strip()
+    if current_result["returncode"] != 0:
+        blockers.append("current_branch_check_failed")
+    if current_branch == branch:
+        blockers.append("refuse_delete_current_branch")
+
+    pr_view = run_step(
+        "pr-view-state",
+        [
+            "gh",
+            "pr",
+            "view",
+            branch,
+            "--json",
+            "state,mergedAt,number,headRefName",
+            "--jq",
+            ".state + \"\\t\" + (.mergedAt // \"\") + \"\\t\" + (.number|tostring) + \"\\t\" + .headRefName",
+        ],
+    )
+    pr_info = str(pr_view["stdout"]).strip()
+    if pr_view["returncode"] != 0 or not pr_info:
+        blockers.append("pr_state_not_verified")
+    else:
+        parts = pr_info.split("\t")
+        state = parts[0] if len(parts) > 0 else ""
+        merged_at = parts[1] if len(parts) > 1 else ""
+        pr_number = parts[2] if len(parts) > 2 else ""
+        head_ref = parts[3] if len(parts) > 3 else ""
+        if state != "MERGED" or not merged_at:
+            blockers.append("pr_not_merged")
+        if head_ref and head_ref != branch:
+            blockers.append("pr_head_branch_mismatch")
+
+    if not blockers and local:
+        delete_args = ["git", "branch", "-D" if force_local else "-d", branch]
+        local_delete = run_step("delete-local-branch", delete_args)
+        if local_delete["returncode"] != 0:
+            blockers.append("local_delete_failed")
+
+    if not blockers and remote:
+        remote_delete = run_step("delete-remote-branch", ["git", "push", "origin", "--delete", branch])
+        if remote_delete["returncode"] != 0:
+            blockers.append("remote_delete_failed")
+
+    result_status = "PASS" if not blockers else "BLOCKED"
+    final_signal = "d" if result_status == "PASS" else "f"
+    next_action = (
+        "Merged work branch deletion completed."
+        if result_status == "PASS"
+        else "Inspect delete-merged-work-branch blockers before continuing: " + ", ".join(blockers)
+    )
+
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_delete_merged_work_branch_result",
+        "action": "delete-merged-work-branch",
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "branch": branch,
+        "current_branch": current_branch,
+        "pr_number": pr_number,
+        "local_requested": local,
+        "remote_requested": remote,
+        "blockers": blockers,
+        "steps": steps,
+        "next_action": next_action,
+    }
+
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    else:
+        _echo_transfer_payload_summary(
+            title="TRANSFER_DELETE_MERGED_WORK_BRANCH",
+            result_status=result_status,
+            final_signal=final_signal,
+            next_action=next_action,
+            fields={
+                "BRANCH": branch,
+                "CURRENT": current_branch,
+                "PR": pr_number or "none",
+                "BLOCKERS": len(blockers),
+            },
+        )
+
+    if blockers:
+        raise typer.Exit(code=2)
+
+
 @transfer_app.command("branch-delete")
 def branch_delete_command(
     branch: str = typer.Argument(..., help="Branch name to delete."),
