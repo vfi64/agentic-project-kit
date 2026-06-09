@@ -174,3 +174,26 @@ wrapper_first_inside_transfer_files:
   rule: A canonical transfer file should invoke existing complex agentic-kit transfer
     wrappers whenever possible instead of spelling out many low-level commands.
   manual_sequence_warning_threshold: 5
+
+  command_reference_lifecycle_discipline:
+    status: active
+    normative: true
+    command_reference_sources:
+      - docs/reference/AGENTIC_KIT_COMMANDS.md
+      - docs/reference/agentic-kit-commands.json
+    rules:
+      - "Do not reconstruct agentic-kit commands from memory."
+      - "Use Command Reference before local control, transfer files, or copy/paste commands."
+      - "Use wrapper-first, transfer-file second, copy/paste shell only as fallback."
+      - "Use transfer pr-create-complete for new PRs."
+      - "Use transfer pr-complete for existing PRs."
+      - "After merge, always run transfer post-merge-complete --after-pr <PR_NUMBER>."
+      - "Use run-and-log only for diagnostics or fallback evidence, not as replacement for post-merge-complete."
+      - "Clean known volatile transfer outputs before branch switches and merge-safe operations when they are not target changes."
+    canonical_post_merge_sequence:
+      - "./.venv/bin/agentic-kit transfer sync-main"
+      - "./.venv/bin/agentic-kit transfer post-merge-complete --after-pr <PR_NUMBER>"
+      - "./.venv/bin/agentic-kit transfer sync-main"
+      - "./.venv/bin/agentic-kit transfer post-merge-check"
+      - "./.venv/bin/agentic-kit transfer repo-status"
+

@@ -134,3 +134,71 @@ Manual copy-and-paste of terminal output is allowed only after a hard local fail
 The preferred dialog signals are `d` for done, `f` for fail, and `g` for go. `g` replaces the former German `w` signal for continuing with the next safe planned step. `w` remains accepted as a legacy alias for `g` during transition, but new tooling and generated instructions should prefer `g`.
 
 The local command aliases are `agentic-kit rn` for run-next/remote-next and `agentic-kit rnc` for remote-next closeout. GUI controls must use these aliases rather than introducing a separate execution model.
+
+<!-- agentic-kit:command-reference-lifecycle-discipline:start -->
+## Non-optional command-reference and lifecycle discipline
+
+This section is normative for successor-chat handoff, transfer-file workflows, and local execution guidance.
+
+### Command Reference is the source of truth
+
+A chat must not reconstruct `agentic-kit` or `agentic-kit transfer` commands from memory, prior examples, or guessed parameter names.
+
+Before writing a transfer file, giving a copy/paste command, or choosing a local execution path, the chat must treat these files as required sources of truth:
+
+- `docs/reference/AGENTIC_KIT_COMMANDS.md`
+- `docs/reference/agentic-kit-commands.json`
+
+If a command or option is unclear, the chat must inspect the Command Reference or run the corresponding `--help` locally through an appropriate repo-backed transfer. Guessing command options is a process error.
+
+### Wrapper-first rule
+
+When planning local control, the chat must prefer existing complex `agentic-kit` wrappers over hand-built shell sequences.
+
+Priority order:
+
+1. Existing `agentic-kit` or `agentic-kit transfer` wrapper.
+2. Canonical transfer file that invokes the wrapper.
+3. Copy/paste shell sequence only when no suitable wrapper exists or the wrapper is proven blocked.
+
+### Canonical PR lifecycle
+
+After a checked patch, do not manually merge as the primary path.
+
+For a new PR, use:
+
+    ./.venv/bin/agentic-kit transfer pr-create-complete --title "<PR title>" --body "<PR body>" --base main --head current --merge-method squash
+
+For an existing PR, use:
+
+    ./.venv/bin/agentic-kit transfer pr-complete <PR_NUMBER> --expected-head-sha current --merge-method squash
+
+If `current` is not accepted or if the branch has to be pinned explicitly, resolve the exact head SHA with `git rev-parse HEAD` and pass that SHA. Do not guess unsupported options.
+
+### Canonical post-merge closeout and remote report
+
+After a successful merge, the required closeout is:
+
+    ./.venv/bin/agentic-kit transfer sync-main
+    ./.venv/bin/agentic-kit transfer post-merge-complete --after-pr <PR_NUMBER>
+    ./.venv/bin/agentic-kit transfer sync-main
+    ./.venv/bin/agentic-kit transfer post-merge-check
+    ./.venv/bin/agentic-kit transfer repo-status
+
+`post-merge-complete --after-pr <PR_NUMBER>` is the canonical wrapper that creates post-merge evidence and publishes the transfer report into the remote repository.
+
+`run-and-log` is useful for diagnostics and fallback evidence, but it is not a substitute for `post-merge-complete` after a merge.
+
+### Volatile transfer-output hygiene
+
+Before branch switches, PR completion, or merge-safe operations, known volatile transfer outputs must not be allowed to block the lifecycle.
+
+At minimum, clean these local-only volatile paths when they are dirty and not the target of the current slice:
+
+    git restore -- .agentic/transfer/outbox/last_result.txt
+    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
+    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log
+
+This cleanup is a workaround for volatile report files. It must not be used to discard substantive source, governance, planning, or handoff changes.
+<!-- agentic-kit:command-reference-lifecycle-discipline:end -->
+
