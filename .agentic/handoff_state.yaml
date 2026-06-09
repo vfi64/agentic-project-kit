@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: '9612274'
-  commit_subject: Harden PR merge-safe state diagnostics (#1213)
+  commit: efba3fd
+  commit_subject: Clarify canonical transfer file protocol (#1212)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
