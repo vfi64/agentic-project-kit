@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: d225fb5c
-  commit_subject: Embed generated LLM execution context in transfer reports (#1218)
+  commit: 00ffbfa5
+  commit_subject: Harden normalize-session rule ack and volatile repair (#1220)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
