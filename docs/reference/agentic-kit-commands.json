@@ -4023,6 +4023,48 @@
     },
     {
       "group": "transfer",
+      "help": "Continue chat/local transfer communication through the safest available wrapper path.",
+      "name": "continue",
+      "params": [
+        {
+          "default": null,
+          "help": "Optional target branch. If omitted, infer a single active transfer order.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "branch"
+          ],
+          "param_type": "TyperArgument",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-json"
+          ]
+        }
+      ],
+      "path": [
+        "transfer",
+        "continue"
+      ],
+      "qualified_name": "agentic-kit transfer continue"
+    },
+    {
+      "group": "transfer",
       "help": "Delete a merged non-main work branch after PR merge-state verification.",
       "name": "delete-merged-work-branch",
       "params": [

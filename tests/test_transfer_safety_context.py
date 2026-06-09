@@ -10,6 +10,7 @@ def test_transfer_safety_header_contains_known_failure_classes() -> None:
     assert header["derived_projection"] is True
     assert header["canonical_transfer_files"]["llm_to_local"] == ".agentic/transfer/inbox/next_command.py.txt"
     assert header["canonical_transfer_files"]["local_to_llm"] == ".agentic/transfer/outbox/last_result.txt"
+    assert header["canonical_transfer_files"]["transfer_order"] == ".agentic/transfer/inbox/current.yaml"
     assert "raw_newline_in_python_string_literals" in header["known_failure_classes"]
     assert "python_transfer_txt_suffix_not_syntax_validated" in header["known_failure_classes"]
     assert "expected_branch_must_match" in header["preflight_rules"]
@@ -19,6 +20,7 @@ def test_transfer_safety_header_contains_known_failure_classes() -> None:
 def test_transfer_outbox_is_json_with_safety_header(tmp_path: Path) -> None:
     for relative in (
         ".agentic/transfer_safety_rules.yaml",
+        ".agentic/transfer/one_command_transfer_protocol.yaml",
         ".agentic/rule_mechanism_inventory.yaml",
         ".agentic/rule_preservation.yaml",
         "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
@@ -34,6 +36,8 @@ def test_transfer_outbox_is_json_with_safety_header(tmp_path: Path) -> None:
 
     assert '"kind": "local_to_llm_last_result"' in text
     assert '"safety_header"' in text
+    assert '"canonical_runner"' in text
+    assert '"decision_tree"' in text
     assert '"raw_newline_in_python_string_literals"' in text
     assert '"last_result"' in text
 
@@ -53,3 +57,26 @@ def test_transfer_safety_header_contains_cli_usage_and_terminal_rules() -> None:
     assert "Use ./.venv/bin/python instead of python" in terminal_rules["preferred"]
     assert "commands that can leave zsh in quote> or dquote>" in terminal_rules["avoid"]
     assert "terminal_quote_prompt_hang" in header["known_failure_classes"]
+
+
+def test_transfer_rules_define_remote_next_as_only_normal_user_command() -> None:
+    header = build_transfer_safety_header(Path("."))
+
+    assert header["canonical_runner"]["command"] == ["./.venv/bin/agentic-kit", "transfer", "remote-next"]
+    assert header["canonical_runner"]["direct_python_execution_allowed"] == "recovery_only"
+    assert header["transfer_lanes"]["control_lane"]["runner"] == "./.venv/bin/agentic-kit transfer remote-next"
+    assert header["transfer_lanes"]["python_payload_lane"]["direct_user_execution"] == "forbidden_except_recovery"
+    assert header["canonical_cli_usage"]["canonical_one_command_transfer"]["command"] == (
+        "./.venv/bin/agentic-kit transfer remote-next"
+    )
+    assert "direct next_command.py.txt execution by the user" in header["canonical_cli_usage"]["canonical_one_command_transfer"]["forbidden_normal_replacements"]
+
+
+def test_transfer_rules_require_remote_report_after_g_before_planning() -> None:
+    header = build_transfer_safety_header(Path("."))
+
+    after_g = header["decision_tree"]["user_says_g_or_go"]
+    assert after_g["action"] == "read_latest_remote_transfer_report_first"
+    assert after_g["forbidden"] == "continue_from_chat_memory"
+    assert header["decision_tree"]["remote_report_missing_or_stale"]["action"] == "treat_as_transfer_uplink_problem"
+    assert header["decision_tree"]["local_transfer_needed"]["action"] == "instruct_user_to_run_remote_next"

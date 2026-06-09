@@ -2,19 +2,148 @@ schema_version: 1
 purpose: Machine-readable safety rules for the LLM-to-local and local-to-LLM transfer
   boundary.
 canonical_transfer_files:
+  transfer_order: .agentic/transfer/inbox/current.yaml
   llm_to_local: .agentic/transfer/inbox/next_command.py.txt
   local_to_llm: .agentic/transfer/outbox/last_result.txt
+  remote_latest_report: docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
+canonical_runner:
+  command:
+  - ./.venv/bin/agentic-kit
+  - transfer
+  - remote-next
+  direct_python_execution_allowed: recovery_only
+  rule: remote-next is the normal local transfer command; next_command.py.txt is a
+    payload lane and direct user execution is only recovery/debug.
+decision_tree:
+  user_says_g_or_go:
+    action: read_latest_remote_transfer_report_first
+    forbidden: continue_from_chat_memory
+  local_transfer_needed:
+    action: instruct_user_to_run_remote_next
+    forbidden: direct_python_next_command
+  remote_next_reports_pass:
+    action: continue_planning_from_report
+  remote_next_reports_blocked_or_fail:
+    action: diagnose_from_report
+    forbidden: claim_success
+  remote_report_missing_or_stale:
+    action: treat_as_transfer_uplink_problem
+    forbidden: ask_for_long_terminal_output_first
+  direct_next_command_execution:
+    allowed_only_if: explicit_debug_or_recovery
+  communication_start_or_retry:
+    action: instruct_user_to_run_transfer_continue
+    command: ./.venv/bin/agentic-kit transfer continue
+    forbidden: start_with_remote_next_or_manual_multicommand_sequence
+  active_order_on_non_current_branch:
+    action: transfer_continue_infers_single_active_order_or_requires_branch
+    forbidden: assume_branchless_remote_next_finds_feature_branch_order
+  known_volatile_dirty_state:
+    action: run_restore_known_volatile_inside_transfer_continue
+    forbidden: manual_git_restore_as_first_response
+transfer_lanes:
+  control_lane:
+    file: .agentic/transfer/inbox/current.yaml
+    runner: ./.venv/bin/agentic-kit transfer remote-next
+    user_visible: true
+    role: wrapper_control_plane
+  python_payload_lane:
+    file: .agentic/transfer/inbox/next_command.py.txt
+    runner: ./.venv/bin/python
+    user_visible: false
+    direct_user_execution: forbidden_except_recovery
+    role: pure_python_payload
+canonical_transfer_execution_protocol:
+  status: active
+  intent: Provide a deterministic one-command handoff between chat, local checkout,
+    and remote repository.
+  required_order:
+  - step: materialize_remote_inbox
+    rule: Before executing any transfer task, the wrapper must ensure that the latest
+      remote-backed transfer order is locally available.
+    requirements:
+    - The local file must be overwritten from the current remote-backed state when
+      stale.
+    - The file remains a pure Python source file even though it carries the .py.txt
+      suffix.
+    - A stale local inbox file must block execution rather than being run.
+  - step: validate_local_inbox
+    rule: Validate the transfer order and any materialized Python payload before execution.
+    requirements:
+    - The transfer order path must exist.
+    - Branch, freshness anchor, worktree, and rule acknowledgement must be checked.
+    - Any Python payload content must compile as Python source.
+    - The runner must record the source commit or hash used for the task file.
+  - step: execute_local_inbox
+    rule: Execute bounded transfer-order actions and capture terminal output.
+    requirements:
+    - Prefer showing only the human-formatted summary to the local user.
+    - Capture stdout, stderr, return code, result status, final signal, next action,
+      and the human summary.
+  - step: write_canonical_outbox
+    rule: Write or embed the complete result as the local-to-LLM result state.
+    requirements:
+    - Include all terminal output, return code, result status, final signal, next
+      action, and the human summary.
+    - Include enough machine-readable context for the next chat to evaluate the result
+      without chat memory.
+    - Failed runs must still write or embed failure semantics.
+  - step: publish_outbox_to_remote
+    rule: Publish the outbox result, or an equivalent embedded result, to the remote
+      repository before completion.
+    requirements:
+    - The remote report must be repo-readable evidence.
+    - Upload or publish failure must not be interpreted as workflow success.
+    - A successful local run without a successful remote report or outbox publication
+      is incomplete.
+  - step: show_human_summary_after_remote_publish
+    rule: Show the human summary only after last-result state is remote-readable.
+    requirements:
+    - The visible user summary should be concise and human-readable.
+    - Non-summary terminal output should remain available in last_result.txt or the
+      remote report.
+    - The user can then reply with g or go to ask the LLM to continue.
+  - step: llm_reads_remote_outbox_before_planning
+    rule: After g/go, the LLM must retrieve and evaluate the latest published result
+      before planning.
+    requirements:
+    - Do not continue from chat memory alone.
+    - Treat missing, stale, unpublished, or failed outbox state as a blocker.
+    - Plan the next action from the remote-backed result and repo evidence.
+  terminal_contract:
+    preferred_user_visible_output: human_formatted_summary_only
+    required_outbox_content:
+    - full_stdout
+    - full_stderr
+    - human_formatted_summary
+    - returncode
+    - result_status
+    - final_signal
+    - next_action
+    - source_commit_or_hash
+    - remote_report_path_when_published
+    completion_signal: g_or_go_only_after_remote_publish_pass
 transfer_priorities:
 - remote_repo_backed_work_first
+- canonical_one_command_remote_next_second
 - canonical_transfer_files_second
 - copy_paste_only_fallback
 known_failure_classes:
 - wrong_branch_execution
 - stale_local_branch_after_fetch
+- stale_local_inbox_execution
+- local_inbox_not_materialized_from_remote
+- local_inbox_differs_from_remote_task
+- direct_python_execution_used_as_normal_path
 - rule_acknowledgement_head_mismatch
 - dirty_worktree_before_transfer
 - accumulated_untracked_transfer_or_report_files
 - failed_report_publication_misread_as_go_signal
+- summary_shown_before_outbox_remote_publish
+- outbox_not_written_before_completion_signal
+- outbox_not_uploaded_to_remote
+- user_go_before_remote_report_published
+- llm_planning_without_reading_remote_outbox
 - diagnostic_status_success_masking_earlier_blocker
 - heredoc_style_shell_mutation
 - unescaped_shell_substitution
@@ -37,7 +166,13 @@ known_failure_classes:
 - admin_refresh_pr_missing_after_pr
 - rule_acknowledgement_required_after_commit
 - terminal_quote_prompt_hang
+- communication_start_or_retry_must_use_transfer_continue
+- transfer_continue_missing_or_stale_remote_report
+- manual_git_cleanup_used_before_restore_known_volatile
 preflight_rules:
+- remote_repo_state_must_be_checked_before_transfer_execution
+- canonical_inbox_must_be_materialized_from_remote_before_execution
+- local_inbox_must_match_remote_task_source
 - expected_branch_must_match
 - worktree_must_be_clean_before_transfer
 - local_head_must_match_upstream_head
@@ -48,16 +183,48 @@ post_patch_rules:
 - changed_python_files_must_compile_before_cli_import
 - failed_guard_must_emit_final_signal_f
 - failed_guard_must_not_emit_go_semantics
+outbox_publication_rules:
+- canonical_outbox_must_be_written_for_every_transfer_run
+- canonical_outbox_must_include_human_summary_and_full_terminal_output
+- canonical_outbox_must_be_published_to_remote_before_g_or_go
+- failed_local_runs_may_be_published_as_evidence_but_must_not_emit_go_semantics
+- llm_must_read_remote_outbox_or_report_before_next_plan
 canonical_cli_usage:
+  canonical_one_command_transfer:
+    command: ./.venv/bin/agentic-kit transfer remote-next
+    required_behavior:
+    - read branch from .agentic/transfer/inbox/current.yaml when no branch argument
+      is supplied
+    - block stale, missing, inactive, or head-mismatched transfer orders
+    - synchronize and fast-forward the target branch before local execution
+    - refresh stale rule acknowledgement before transfer execution where possible
+    - run lower-level transfer-order actions through the local transfer runner
+    - publish remote-next report projections under docs/reports/terminal/transfer_handoff_reports/
+    - print a human summary after report publication
+    forbidden_normal_replacements:
+    - direct next_command.py.txt execution by the user
+    - manual multi-command transfer sequences
+    notes:
+    - next_command.py.txt is a pure Python payload lane, not the user-facing wrapper
+      command
+    - direct Python execution is reserved for explicit debug or recovery only
+  transfer_run_local:
+    command: ./.venv/bin/agentic-kit transfer run-local --path .agentic/transfer/inbox/current.yaml
+    role: lower_level_adapter_only
+  transfer_run_and_log:
+    command: ./.venv/bin/agentic-kit transfer run-and-log --label <label> -- <command...>
+    role: local_report_only
+    notes:
+    - Requires publish-last-report before g/go semantics.
+  transfer_publish_last_report:
+    command: ./.venv/bin/agentic-kit transfer publish-last-report --label <label>
+    role: tracked_handoff_upload_for_run_and_log_reports
   transfer_pr_create:
     command: agentic-kit transfer pr-create --base main --head <branch> --title <title>
       --body <body>
     required_options:
     - --head
     - --title
-    notes:
-    - --base defaults to main but should be explicit in transfer examples
-    - Run transfer pr-status on the created PR after creation
   evidence_finalize_log:
     command: agentic-kit evidence finalize-log --run-log <path> --remote-log <docs/reports/terminal/name.log>
       --slice <name> --scope <text> --mode-check <text> --command-report <text> --interpretation
@@ -71,31 +238,31 @@ canonical_cli_usage:
     - --command-report
     - --interpretation
     - --safe-step
-    notes:
-    - remote-log must be repository-relative under docs/reports/terminal/
-    - run-log may already be the same repository-relative evidence path
-    - Use --commit-message and --push only when the current branch is intended for
-      evidence publication
   evidence_inspect:
     command: agentic-kit evidence inspect --require-summary <path>
     invalid_forms:
     - agentic-kit evidence inspect --run-log <path>
-    notes:
-    - The log path is a positional argument, not --run-log
   transfer_admin_refresh_pr:
     command: agentic-kit transfer admin-refresh-pr --after-pr <merged-pr-number>
     required_options:
     - --after-pr
-    notes:
-    - Use after post-merge-check reports REFRESH_REQUIRED
-    - Then run transfer pr-status, pr-wait-ci, and pr-merge-safe on the created admin
-      PR
   rules_acknowledge_after_commit:
     command: agentic-kit rules acknowledge
     trigger: required after every commit because repo_head changes
-    notes:
-    - Do not run transfer actions after a commit until the current rule snapshot has
-      been acknowledged
+  canonical_communication_continue:
+    command: ./.venv/bin/agentic-kit transfer continue
+    role: single_communication_entrypoint_for_successor_chats_and_transfer_retries
+    required_behavior:
+    - restore known volatile transfer files before continuing
+    - infer exactly one active transfer order branch when branchless continuation
+      is ambiguous
+    - run remote-next through the selected branch or current transfer order
+    - treat missing, stale, or unpushed remote reports as BLOCKED
+    - emit g semantics only after a fresh remote report is pushed
+    forbidden_normal_replacements:
+    - manual git cleanup before trying restore-known-volatile
+    - direct next_command.py.txt execution as normal path
+    - remote-next without preflight when transfer continue is available
 terminal_block_rules:
   preferred:
   - Use printf '%s\n' for visible shell output lines
@@ -110,3 +277,55 @@ terminal_block_rules:
   recovery:
   - If quote>, dquote>, or heredoc> appears, press Ctrl-C, then run git status --short
     and git branch --show-current
+communication_precedence:
+  source_of_truth: canonical_transfer_files_first
+  order:
+  - rank: 1
+    mode: canonical_transfer_files
+    description: Primary communication is via .agentic/transfer/inbox/next_command.py.txt
+      and .agentic/transfer/outbox/last_result.txt.
+    required_files:
+      llm_to_local: .agentic/transfer/inbox/next_command.py.txt
+      local_to_llm: .agentic/transfer/outbox/last_result.txt
+    execution_rule: A transfer file should orchestrate existing complex agentic-kit
+      transfer wrappers whenever possible.
+  - rank: 2
+    mode: remote_repo_backed_work
+    description: Remote work through repo-backed evidence or connector actions is
+      secondary when transfer files are unavailable or not needed.
+  - rank: 3
+    mode: copy_paste
+    description: Manual copy-and-paste command sequences are tertiary fallback only.
+    forbidden_as_normal_path: true
+  anti_patterns:
+  - Long manual copy-and-paste command sequences when a transfer file or complex wrapper
+    can do the work.
+  - Using remote-only work as the default when the user explicitly requested canonical
+    transfer-file communication.
+  - Giving five or more local commands before checking for an existing wrapper or
+    canonical transfer-file path.
+workflow_precedence:
+  within_transfer_file:
+  - Use existing complex agentic-kit transfer wrappers first.
+  - Use a short local single command only when no wrapper fits.
+  - Use exactly one robust canonical transfer file when multiple local steps are required.
+  - Use manual copy-and-paste only as last fallback.
+  preferred_complex_wrappers:
+  - transfer continue
+  - transfer sync-main
+  - transfer normalize-session --repair-known-volatile
+  - transfer repo-status
+  - transfer remote-work-start
+  - transfer pr-create-complete
+  - transfer pr-status
+  - transfer pr-complete
+  - transfer post-merge-complete
+  - transfer post-merge-check
+  - transfer protected-diff-plan
+  - transfer command-reference-refresh
+  - transfer pr-existing-for-branch
+  - transfer divergence-status
+  - transfer repo-log
+  - transfer prepare-successor-handoff
+  missing_wrapper_policy: If a suitable complex wrapper is missing, treat that as
+    kit improvement work instead of normalizing kleinteilige Handarbeit.

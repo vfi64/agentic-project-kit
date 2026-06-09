@@ -104,3 +104,4 @@ Steps:
 
 Do not start new product work in this closeout slice.
 ```
+\n\n## Canonical transfer communication command\n\nFor successor-chat starts, transfer retries, and short control signals, prefer the single communication wrapper:\n\n```text\n./.venv/bin/agentic-kit transfer continue\n```\n\nThis wrapper must run before falling back to lower-level `remote-next`, `restore-known-volatile`, or manual command sequences. A chat may continue after `g` only after inspecting the fresh remote report produced by this wrapper.\n
