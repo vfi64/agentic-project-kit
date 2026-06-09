@@ -6,6 +6,8 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from agentic_project_kit.llm_execution_context import build_llm_execution_context
+
 import yaml
 
 TRANSFER_SAFETY_RULES = Path(".agentic/transfer_safety_rules.yaml")
@@ -119,6 +121,7 @@ def build_local_to_llm_payload(
         "derived_projection": True,
         "protocol_header": protocol_header,
         "safety_header": protocol_header,
+        "llm_execution_context": build_llm_execution_context(root),
         "last_result": last_result,
     }
 

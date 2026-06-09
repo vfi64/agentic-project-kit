@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
+from pathlib import Path
 
 from typer.testing import CliRunner
 
@@ -275,3 +276,41 @@ def test_post_merge_complete_cli_reports_publish_blocker(tmp_path, monkeypatch):
     assert "- UPLOADED:            blocked" in result.stdout
     assert "- UPLOAD_ERROR:        broken publish" in result.stdout
     assert "CHAT_REPLY:            f | NEXT=Post-merge lifecycle is complete after admin refresh." in result.stdout
+
+def test_write_post_merge_complete_report_embeds_llm_execution_context(tmp_path):
+    class FakePostMergeCompleteResult:
+        lifecycle_state = "COMPLETE"
+        final_signal = "d"
+        chat_reply = "d | NEXT=done"
+        next_action = "done"
+        refresh_pr = None
+        blocked_reason = ""
+        steps = ()
+
+        def as_json_data(self):
+            return {
+                "lifecycle_state": self.lifecycle_state,
+                "final_signal": self.final_signal,
+                "chat_reply": self.chat_reply,
+                "next_action": self.next_action,
+                "refresh_pr": self.refresh_pr,
+                "blocked_reason": self.blocked_reason,
+                "steps": [],
+            }
+
+    for relative in (
+        ".agentic/compiled_agent_context.yaml",
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/transfer/one_command_transfer_protocol.yaml",
+        "docs/reference/agentic-kit-commands.json",
+        "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    ):
+        src = Path(relative)
+        dst = tmp_path / relative
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+
+    report = write_post_merge_complete_report(FakePostMergeCompleteResult(), after_pr=1216, cwd=tmp_path)
+
+    assert report["llm_execution_context"]["kind"] == "llm_execution_context"
+    assert report["llm_execution_context"]["command_reference"]["must_not_reconstruct_commands_from_memory"] is True
