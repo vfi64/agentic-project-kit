@@ -78,6 +78,20 @@ def _is_transient_merge_state(status: PrStatusDecision) -> bool:
     )
 
 
+def _normalise_merge_state_for_green_pr(
+    status: PrStatusDecision,
+    *,
+    wait_reason: str = "",
+) -> tuple[MergeDecision, str]:
+    """Return an actionable refusal reason for green PRs with unstable merge state."""
+    merge_state = status.merge_state_status or "UNKNOWN"
+    if status.state == "OPEN" and status.decision == "green" and merge_state in {"UNKNOWN", ""}:
+        return "refuse", wait_reason or f"merge state stayed {merge_state} after timeout"
+    if merge_state != "CLEAN":
+        return "refuse", f"merge state is not clean: {merge_state}"
+    return "merge", "PR is green"
+
+
 def wait_for_pr_merge_state(
     pr: str,
     *,
@@ -257,8 +271,15 @@ def merge_if_green(
     effective_expected_base_branch = expected_base_branch or main_branch
     effective_expected_head_sha = expected_head_sha or refs.head_ref_oid
     decision, reason = decide_merge(status)
-    if decision != "merge" and merge_state_wait_reason:
-        reason = merge_state_wait_reason
+    if decision != "merge":
+        normalised_decision, normalised_reason = _normalise_merge_state_for_green_pr(
+            status,
+            wait_reason=merge_state_wait_reason,
+        )
+        if normalised_decision != "merge":
+            decision, reason = normalised_decision, normalised_reason
+        elif merge_state_wait_reason:
+            reason = merge_state_wait_reason
     if decision == "merge":
         decision, ref_reason = verify_merge_refs(
             refs,
