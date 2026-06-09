@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: efba3fd
-  commit_subject: Clarify canonical transfer file protocol (#1212)
+  commit: c088106e
+  commit_subject: Document handoff command-reference and lifecycle discipline (#1216)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
