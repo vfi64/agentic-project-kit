@@ -1,11 +1,11 @@
 TRANSFER_REMOTE_NEXT_REPORT
-RESULT_STATUS=PASS
-RETURNCODE=0
-BRANCH=feature/harden-transfer-file-protocol-rules
-HEAD=cc652f7
+RESULT_STATUS=BLOCKED
+RETURNCODE=2
+BRANCH=
+HEAD=6a172d0
 REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
 CHAT_REPLY=g
-NEXT=Review transfer state and evidence report before continuing.
+NEXT=Create or queue a fresh remote-next transfer order, then rerun the canonical command.
 
 ### JSON RESULT ###
 {
@@ -13,283 +13,54 @@ NEXT=Review transfer state and evidence report before continuing.
   "kind": "local_to_llm_remote_next_report",
   "last_result": {
     "artifact_type": "transfer_remote_next_execution_report",
-    "blocked_message": "",
-    "branch": "feature/harden-transfer-file-protocol-rules",
+    "blocked_message": "remote-next transfer order is not active: inactive",
+    "branch": null,
     "chat_reply": "g",
-    "head": "cc652f7",
+    "head": "6a172d0",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
-      "apply": {
-        "action_results": [
-          {
-            "command": [
-              "./.venv/bin/python",
-              "-m",
-              "pytest",
-              "tests/test_transfer_safety_context.py",
-              "tests/test_transfer_remote_next.py"
-            ],
-            "returncode": 0,
-            "stderr": "",
-            "stdout": "============================= test session starts ==============================\nplatform darwin -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0\nrootdir: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit\nconfigfile: pyproject.toml\ncollected 14 items\n\ntests/test_transfer_safety_context.py .....                              [ 35%]\ntests/test_transfer_remote_next.py .........                             [100%]\n\n============================== 14 passed in 2.93s ==============================\n",
-            "type": "run_command"
-          },
-          {
-            "command": [
-              "./.venv/bin/python",
-              "-m",
-              "ruff",
-              "check",
-              "src/agentic_project_kit/transfer_safety_context.py",
-              "tests/test_transfer_safety_context.py"
-            ],
-            "returncode": 0,
-            "stderr": "",
-            "stdout": "All checks passed!\n",
-            "type": "run_command"
-          },
-          {
-            "command": [
-              "./.venv/bin/agentic-kit",
-              "transfer",
-              "protected-diff-plan",
-              "--label",
-              "transfer-runner-rules"
-            ],
-            "returncode": 0,
-            "stderr": "",
-            "stdout": "********************************** START SUMMARY ***********************************\nTRANSFER_PROTECTED_DIFF_PLAN\n\nSTATE:                  PASS\nDIFF:                   /tmp/transfer-runner-rules.diff\nCACHED:                 no\nPLAN:                   PASS\n\nNEXT:                   Protected change plan passed; proceed with explicit add/commit paths.\nCHAT_REPLY:             d | NEXT=Protected change plan passed; proceed with explicit add/commit paths.\n*********************************** END SUMMARY ************************************\n",
-            "type": "run_command"
-          }
-        ],
-        "message": "Transfer order applied.",
-        "report_path": "docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
-        "result_status": "PASS",
-        "returncode": 0,
-        "safety": "Validate the transfer-rule hardening through existing agentic-kit transfer wrappers and targeted tests.",
-        "schema_version": 1,
-        "transfer_id": "harden-transfer-runner-rules-validation"
-      },
+      "apply": null,
       "inspect": {
-        "action_results": [
-          {
-            "command": [
-              "./.venv/bin/python",
-              "-m",
-              "pytest",
-              "tests/test_transfer_safety_context.py",
-              "tests/test_transfer_remote_next.py"
-            ],
-            "type": "run_command",
-            "would_run": true
-          },
-          {
-            "command": [
-              "./.venv/bin/python",
-              "-m",
-              "ruff",
-              "check",
-              "src/agentic_project_kit/transfer_safety_context.py",
-              "tests/test_transfer_safety_context.py"
-            ],
-            "type": "run_command",
-            "would_run": true
-          },
-          {
-            "command": [
-              "./.venv/bin/agentic-kit",
-              "transfer",
-              "protected-diff-plan",
-              "--label",
-              "transfer-runner-rules"
-            ],
-            "type": "run_command",
-            "would_run": true
-          }
-        ],
-        "message": "Transfer order inspected. Re-run apply to write files or run commands.",
-        "report_path": "docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
-        "result_status": "PENDING",
-        "returncode": 0,
-        "safety": "Validate the transfer-rule hardening through existing agentic-kit transfer wrappers and targeted tests.",
-        "schema_version": 1,
-        "transfer_id": "harden-transfer-runner-rules-validation"
-      },
-      "next_action": "Review transfer state and evidence report before continuing.",
-      "result_status": "PASS",
-      "returncode": 0,
-      "schema_version": 1,
-      "state": {
-        "branch": "feature/harden-transfer-file-protocol-rules",
-        "capabilities": {
-          "closeout_last_run": false,
-          "diagnose": true,
-          "refresh_rules": true,
-          "rules_confirmed": true,
-          "run_next_command": false
-        },
-        "closeout": {
-          "dirty_worktree": true,
-          "pending_transfer_order": true
-        },
-        "created_at": "2026-06-08T19:09:36.021229+00:00",
-        "head": "cc652f7",
-        "last_result": {
-          "exists": true,
-          "report_path": "docs/reports/command_runs/harden-transfer-runner-rules-validation.md"
-        },
-        "next_action": "Review or clean the worktree before running another transfer action.",
-        "primary_state": "BLOCKED",
+        "message": "remote-next transfer order is not active: inactive",
         "reasons": [
-          "dirty_worktree"
+          "no_current_transfer_order"
         ],
-        "repo": "vfi64/agentic-project-kit",
-        "rule_acknowledgement": {
-          "decision": {
-            "blocking_reasons": [],
-            "fail_closed": false,
-            "is_confirmed": true,
-            "schema_version": 1
-          },
-          "path": ".agentic/rule_ack/current.json",
-          "present": true
-        },
-        "rule_snapshot": {
-          "fail_closed": false,
-          "is_valid": true,
-          "schema_version": 1,
-          "snapshot_id": "8268feff457dae55719cbbb8b76f58f9e864897da31ddf3998b1db3f985563e9",
-          "source_digests": [
-            {
-              "path": ".agentic/compiled_agent_context.yaml",
-              "sha256": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
-              "size_bytes": 8483
-            },
-            {
-              "path": ".agentic/handoff_state.yaml",
-              "sha256": "eaf009c7f3d004311173bccaf6580a5c48381a9fb2a32ab569dd61f750742195",
-              "size_bytes": 19968
-            },
-            {
-              "path": ".agentic/rule_mechanism_inventory.yaml",
-              "sha256": "65889c553fd2ba7e7f6bea6432ac278717605314b757772747ffcdd35bb749fb",
-              "size_bytes": 17616
-            },
-            {
-              "path": ".agentic/rule_migrations.yaml",
-              "sha256": "7e47b41dc5a2de80a80a51caac132974c44a747e9ae7f1f4d8813eae7e0b58ef",
-              "size_bytes": 5765
-            },
-            {
-              "path": ".agentic/rule_preservation.yaml",
-              "sha256": "817319e295674992e6665df25778b5c9cb767d1e393e5402df708d52ec79ff39",
-              "size_bytes": 1688
-            },
-            {
-              "path": "docs/STATUS.md",
-              "sha256": "133701c18de99022f8e5a04cbba8490b591ecd15183fa40cbf31d408241cd6fe",
-              "size_bytes": 25655
-            },
-            {
-              "path": "docs/handoff/CURRENT_HANDOFF.md",
-              "sha256": "728550b6ab63b2fca39a186f1da4a3d700f559a7b789985f25b0a0a326ebebd2",
-              "size_bytes": 24329
-            },
-            {
-              "path": "docs/handoff/START_NEW_CHAT_PROMPT.md",
-              "sha256": "0aec68bf50ebbe9165cd2a09915c0ea29c332e0d846c26d68dbd1ab3a0ac3a5b",
-              "size_bytes": 4844
-            },
-            {
-              "path": "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-              "sha256": "840fbfb2caeb45c3c3385b4e506506e7c7f7ad4f65d29f6484f8a7879654d76c",
-              "size_bytes": 5214
-            },
-            {
-              "path": "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-              "sha256": "f3a22adca9ec4e30fdbfedca8ef030be25da63df1159a34d7ebdf0f7b23c2ba6",
-              "size_bytes": 10976
-            },
-            {
-              "path": "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-              "sha256": "2f2ff37428d0c1bc2e9d816abdcaca345cab4e4931a39da05e13afeb9638c680",
-              "size_bytes": 8308
-            },
-            {
-              "path": "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-              "sha256": "3bb7492c9afc41eac24a268bab367e2a3781ec57899691f6f19e34f460fa0801",
-              "size_bytes": 5625
-            },
-            {
-              "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-              "sha256": "65e557eaabe9fabbc20da721fc00798d4625d726fe52b0f7806e85322a3a3979",
-              "size_bytes": 7410
-            },
-            {
-              "path": "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
-              "sha256": "8da278556b422111087997253ac60ec3723872f7bf45c07564c4a6f16304f452",
-              "size_bytes": 8414
-            },
-            {
-              "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-              "sha256": "34e08835e0a1371ee44a547654403337182ae45707e38ecbc9876ecc181e12e4",
-              "size_bytes": 43881
-            },
-            {
-              "path": "docs/TEST_GATES.md",
-              "sha256": "802d896337e268faa5af9ba81c50b9fe6f8dd475d4172756753b6828e5531023",
-              "size_bytes": 32142
-            },
-            {
-              "path": "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md",
-              "sha256": "39468ae932293745ac6b8838d8b2c5a17da42d293f3bd704551e991a7fd3ca1b",
-              "size_bytes": 4445
-            }
-          ],
-          "sources_total": 17,
-          "validation": {
-            "blocking_reasons": [],
-            "fail_closed": false,
-            "handoff_state_errors": [],
-            "is_valid": true,
-            "missing_required_paths": [],
-            "schema_version": 1,
-            "source_paths": [
-              ".agentic/compiled_agent_context.yaml",
-              ".agentic/handoff_state.yaml",
-              ".agentic/rule_mechanism_inventory.yaml",
-              ".agentic/rule_migrations.yaml",
-              ".agentic/rule_preservation.yaml",
-              "docs/STATUS.md",
-              "docs/handoff/CURRENT_HANDOFF.md",
-              "docs/handoff/START_NEW_CHAT_PROMPT.md",
-              "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-              "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-              "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-              "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-              "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-              "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
-              "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-              "docs/TEST_GATES.md",
-              "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md"
-            ],
-            "sources_total": 17,
-            "yaml_parse_error_paths": []
-          }
-        },
+        "result_status": "BLOCKED",
+        "returncode": 2,
         "schema_version": 1
       },
-      "transfer_id": "harden-transfer-runner-rules-validation"
+      "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
+      "result_status": "BLOCKED",
+      "returncode": 2,
+      "schema_version": 1,
+      "state": {
+        "branch": "main",
+        "dirty_state": {
+          "clean": true,
+          "staged_changes": [],
+          "status_short": "",
+          "unstaged_changes": [],
+          "untracked_files": []
+        },
+        "head": "6a172d0",
+        "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
+        "primary_state": "NEW_ORDER_REQUIRED",
+        "reasons": [
+          "no_current_transfer_order"
+        ],
+        "schema_version": 1
+      },
+      "transfer_id": "remote-next-blocked"
     },
-    "next_action": "Review transfer state and evidence report before continuing.",
+    "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
     "post_report_actions": {
       "attempted": true,
-      "branch": "feature/harden-transfer-file-protocol-rules",
-      "commit_head": "18689bb",
+      "branch": null,
+      "commit_head": "f342d16",
       "committed": true,
-      "final_head": "18689bb",
-      "final_status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
+      "final_head": "f342d16",
+      "final_status_short": "",
       "paths": [
         "docs/reports/transfer_runs/latest-remote-next-report.json",
         "docs/reports/transfer_runs/latest-remote-next-report.log",
@@ -300,7 +71,7 @@ NEXT=Review transfer state and evidence report before continuing.
       "rule_ack_after_report_commit": {
         "blocking_reasons": [],
         "confirmed": true,
-        "head": "18689bb",
+        "head": "f342d16",
         "path": ".agentic/rule_ack/current.json",
         "present": true
       },
@@ -332,7 +103,7 @@ NEXT=Review transfer state and evidence report before continuing.
           "name": "git_commit_report_paths",
           "returncode": 0,
           "stderr": "",
-          "stdout": "[feature/harden-transfer-file-protocol-rules 18689bb] Publish remote-next transfer report\n 4 files changed, 2688 insertions(+), 1048 deletions(-)"
+          "stdout": "[main f342d16] Publish remote-next transfer report\n 4 files changed, 82 insertions(+), 98 deletions(-)"
         },
         {
           "argv": [
@@ -343,24 +114,22 @@ NEXT=Review transfer state and evidence report before continuing.
           "name": "rules_acknowledge_after_report_commit",
           "returncode": 0,
           "stderr": "",
-          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=8268feff457dae55719cbbb8b76f58f9e864897da31ddf3998b1db3f985563e9\nrepo_head=18689bb\ndeclared_next_allowed_action=run_next_command"
+          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=b840090a2641dbbbd2f7d53c6bf355330cbb6a9bed0689dd0ab5637bdf8065a6\nrepo_head=f342d16\ndeclared_next_allowed_action=run_next_command"
         },
         {
           "argv": [
             "git",
-            "push",
-            "origin",
-            "feature/harden-transfer-file-protocol-rules"
+            "push"
           ],
           "name": "git_push_report_commit",
           "returncode": 0,
-          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   cc652f7..18689bb  feature/harden-transfer-file-protocol-rules -> feature/harden-transfer-file-protocol-rules",
+          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   6a172d0..f342d16  main -> main",
           "stdout": ""
         }
       ]
     },
     "preflight": {
-      "current_branch": "feature/harden-transfer-file-protocol-rules",
+      "current_branch": "main",
       "dirty_state": {
         "clean": true,
         "staged_changes": [],
@@ -368,90 +137,35 @@ NEXT=Review transfer state and evidence report before continuing.
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "cc652f7",
-      "order_sync": {
-        "attempted": true,
-        "current_branch": "feature/harden-transfer-file-protocol-rules",
-        "final_head": "cc652f7",
-        "head": "cc652f7",
-        "schema_version": 1,
-        "steps": [
-          {
-            "argv": [
-              "git",
-              "fetch",
-              "origin",
-              "feature/harden-transfer-file-protocol-rules"
-            ],
-            "name": "git_fetch_current_branch",
-            "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            feature/harden-transfer-file-protocol-rules -> FETCH_HEAD",
-            "stdout": ""
-          },
-          {
-            "argv": [
-              "git",
-              "pull",
-              "--ff-only",
-              "origin",
-              "feature/harden-transfer-file-protocol-rules"
-            ],
-            "name": "git_pull_current_branch",
-            "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            feature/harden-transfer-file-protocol-rules -> FETCH_HEAD",
-            "stdout": "Already up to date."
-          }
-        ]
-      },
-      "owned_report_artifact_recovery": {
-        "actions": [
-          {
-            "argv": [
-              "git",
-              "restore",
-              "--staged",
-              "--worktree",
-              "--",
-              "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
-            ],
-            "name": "restore_tracked_owned_report_artifacts",
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          },
-          {
-            "name": "remove_untracked_owned_report_artifact",
-            "path": "docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
-            "returncode": 0
-          }
-        ],
-        "attempted": true,
-        "current_order_report": "docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
-        "final_status_short": "",
-        "foreign_dirty_paths": [],
-        "owned_report_artifacts": [
-          "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
-          "docs/reports/command_runs/harden-transfer-runner-rules-validation.md"
-        ],
-        "schema_version": 1
-      },
-      "remote_tracking": "origin/feature/harden-transfer-file-protocol-rules",
+      "head": "6a172d0",
+      "remote_tracking": "origin/main",
+      "schema_version": 1,
       "transfer_order_guard": {
-        "branch": "feature/harden-transfer-file-protocol-rules",
+        "branch": "",
+        "created_for_head": "",
+        "current_branch": "main",
+        "current_full_head": "6a172d07f01a1295ed933beb6d7bb3f0904467e1",
+        "current_head": "6a172d0",
+        "expected_current_branch": "",
+        "expected_current_head": "",
+        "expected_head": "",
+        "id": "no-current-transfer-order",
         "schema_version": 1,
-        "skipped_reason": "explicit_branch_argument"
+        "status": "inactive"
       }
     },
-    "primary_state": "PASS",
+    "primary_state": "NEW_ORDER_REQUIRED",
     "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "reasons": [],
+    "reasons": [
+      "no_current_transfer_order"
+    ],
     "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
-    "result_status": "PASS",
-    "returncode": 0,
+    "result_status": "BLOCKED",
+    "returncode": 2,
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "cc652f7",
+      "head": "6a172d0",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -461,15 +175,15 @@ NEXT=Review transfer state and evidence report before continuing.
     "authoritative_sources": [
       {
         "path": ".agentic/transfer_safety_rules.yaml",
-        "sha256": "cd14338ae34d073227976be2b105e9ec32e7b0f8294589a76fbaa4f5018fa13d"
+        "sha256": "4eb28be3fffb54696d56a18feecfab096ea89e01fe96ae536a03a9f0aa00da39"
       },
       {
         "path": ".agentic/transfer/one_command_transfer_protocol.yaml",
-        "sha256": "113daa46dd533e632a85c3525a3a84beeab3e3942b51a124e2f52452b6aca23e"
+        "sha256": "2a266406cafca66eda83450a5ecdcf2570af5fbd276b1eebf1bafae6f36bcf25"
       },
       {
         "path": ".agentic/rule_mechanism_inventory.yaml",
-        "sha256": "65889c553fd2ba7e7f6bea6432ac278717605314b757772747ffcdd35bb749fb"
+        "sha256": "eeddfb7fd51a0e9764784dfbb9f532b204497156488ab1b55b3eb4e3a4ae2850"
       },
       {
         "path": ".agentic/rule_preservation.yaml",
@@ -481,48 +195,17 @@ NEXT=Review transfer state and evidence report before continuing.
       },
       {
         "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-        "sha256": "34e08835e0a1371ee44a547654403337182ae45707e38ecbc9876ecc181e12e4"
+        "sha256": "e622d208cb98eaec09d23790b200636e2093a007e7edb72d0327a91691ab337f"
       }
     ],
     "canonical_cli_usage": {
-      "canonical_communication_continue": {
-        "command": "./.venv/bin/agentic-kit transfer continue",
-        "forbidden_normal_replacements": [
-          "manual git cleanup before trying restore-known-volatile",
-          "direct next_command.py.txt execution as normal path",
-          "remote-next without preflight when transfer continue is available"
-        ],
-        "required_behavior": [
-          "restore known volatile transfer files before continuing",
-          "infer exactly one active transfer order branch when branchless continuation is ambiguous",
-          "run remote-next through the selected branch or current transfer order",
-          "treat missing, stale, or unpushed remote reports as BLOCKED",
-          "emit g semantics only after a fresh remote report is pushed"
-        ],
-        "role": "single_communication_entrypoint_for_successor_chats_and_transfer_retries"
-      },
-      "canonical_one_command_transfer": {
-        "command": "./.venv/bin/agentic-kit transfer remote-next",
-        "forbidden_normal_replacements": [
-          "direct next_command.py.txt execution by the user",
-          "manual multi-command transfer sequences"
-        ],
-        "notes": [
-          "next_command.py.txt is a pure Python payload lane, not the user-facing wrapper command",
-          "direct Python execution is reserved for explicit debug or recovery only"
-        ],
-        "required_behavior": [
-          "read branch from .agentic/transfer/inbox/current.yaml when no branch argument is supplied",
-          "block stale, missing, inactive, or head-mismatched transfer orders",
-          "synchronize and fast-forward the target branch before local execution",
-          "refresh stale rule acknowledgement before transfer execution where possible",
-          "run lower-level transfer-order actions through the local transfer runner",
-          "publish remote-next report projections under docs/reports/terminal/transfer_handoff_reports/",
-          "print a human summary after report publication"
-        ]
-      },
       "evidence_finalize_log": {
         "command": "agentic-kit evidence finalize-log --run-log <path> --remote-log <docs/reports/terminal/name.log> --slice <name> --scope <text> --mode-check <text> --command-report <text> --interpretation <text> --safe-step <text>",
+        "notes": [
+          "remote-log must be repository-relative under docs/reports/terminal/",
+          "run-log may already be the same repository-relative evidence path",
+          "Use --commit-message and --push only when the current branch is intended for evidence publication"
+        ],
         "required_options": [
           "--run-log",
           "--remote-log",
@@ -538,111 +221,53 @@ NEXT=Review transfer state and evidence report before continuing.
         "command": "agentic-kit evidence inspect --require-summary <path>",
         "invalid_forms": [
           "agentic-kit evidence inspect --run-log <path>"
+        ],
+        "notes": [
+          "The log path is a positional argument, not --run-log"
         ]
       },
       "rules_acknowledge_after_commit": {
         "command": "agentic-kit rules acknowledge",
+        "notes": [
+          "Do not run transfer actions after a commit until the current rule snapshot has been acknowledged"
+        ],
         "trigger": "required after every commit because repo_head changes"
       },
       "transfer_admin_refresh_pr": {
         "command": "agentic-kit transfer admin-refresh-pr --after-pr <merged-pr-number>",
+        "notes": [
+          "Use after post-merge-check reports REFRESH_REQUIRED",
+          "Then run transfer pr-status, pr-wait-ci, and pr-merge-safe on the created admin PR"
+        ],
         "required_options": [
           "--after-pr"
         ]
       },
       "transfer_pr_create": {
         "command": "agentic-kit transfer pr-create --base main --head <branch> --title <title> --body <body>",
+        "notes": [
+          "--base defaults to main but should be explicit in transfer examples",
+          "Run transfer pr-status on the created PR after creation"
+        ],
         "required_options": [
           "--head",
           "--title"
         ]
-      },
-      "transfer_publish_last_report": {
-        "command": "./.venv/bin/agentic-kit transfer publish-last-report --label <label>",
-        "role": "tracked_handoff_upload_for_run_and_log_reports"
-      },
-      "transfer_run_and_log": {
-        "command": "./.venv/bin/agentic-kit transfer run-and-log --label <label> -- <command...>",
-        "notes": [
-          "Requires publish-last-report before g/go semantics."
-        ],
-        "role": "local_report_only"
-      },
-      "transfer_run_local": {
-        "command": "./.venv/bin/agentic-kit transfer run-local --path .agentic/transfer/inbox/current.yaml",
-        "role": "lower_level_adapter_only"
       }
-    },
-    "canonical_runner": {
-      "command": [
-        "./.venv/bin/agentic-kit",
-        "transfer",
-        "remote-next"
-      ],
-      "direct_python_execution_allowed": "recovery_only",
-      "rule": "remote-next is the normal local transfer command; next_command.py.txt is a payload lane and direct user execution is only recovery/debug."
     },
     "canonical_transfer_files": {
       "llm_to_local": ".agentic/transfer/inbox/next_command.py.txt",
-      "local_to_llm": ".agentic/transfer/outbox/last_result.txt",
-      "remote_latest_report": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-      "transfer_order": ".agentic/transfer/inbox/current.yaml"
-    },
-    "decision_tree": {
-      "active_order_on_non_current_branch": {
-        "action": "transfer_continue_infers_single_active_order_or_requires_branch",
-        "forbidden": "assume_branchless_remote_next_finds_feature_branch_order"
-      },
-      "communication_start_or_retry": {
-        "action": "instruct_user_to_run_transfer_continue",
-        "command": "./.venv/bin/agentic-kit transfer continue",
-        "forbidden": "start_with_remote_next_or_manual_multicommand_sequence"
-      },
-      "direct_next_command_execution": {
-        "allowed_only_if": "explicit_debug_or_recovery"
-      },
-      "known_volatile_dirty_state": {
-        "action": "run_restore_known_volatile_inside_transfer_continue",
-        "forbidden": "manual_git_restore_as_first_response"
-      },
-      "local_transfer_needed": {
-        "action": "instruct_user_to_run_remote_next",
-        "forbidden": "direct_python_next_command"
-      },
-      "remote_next_reports_blocked_or_fail": {
-        "action": "diagnose_from_report",
-        "forbidden": "claim_success"
-      },
-      "remote_next_reports_pass": {
-        "action": "continue_planning_from_report"
-      },
-      "remote_report_missing_or_stale": {
-        "action": "treat_as_transfer_uplink_problem",
-        "forbidden": "ask_for_long_terminal_output_first"
-      },
-      "user_says_g_or_go": {
-        "action": "read_latest_remote_transfer_report_first",
-        "forbidden": "continue_from_chat_memory"
-      }
+      "local_to_llm": ".agentic/transfer/outbox/last_result.txt"
     },
     "derived_projection": true,
     "kind": "transfer_protocol_header",
     "known_failure_classes": [
       "wrong_branch_execution",
       "stale_local_branch_after_fetch",
-      "stale_local_inbox_execution",
-      "local_inbox_not_materialized_from_remote",
-      "local_inbox_differs_from_remote_task",
-      "direct_python_execution_used_as_normal_path",
       "rule_acknowledgement_head_mismatch",
       "dirty_worktree_before_transfer",
       "accumulated_untracked_transfer_or_report_files",
       "failed_report_publication_misread_as_go_signal",
-      "summary_shown_before_outbox_remote_publish",
-      "outbox_not_written_before_completion_signal",
-      "outbox_not_uploaded_to_remote",
-      "user_go_before_remote_report_published",
-      "llm_planning_without_reading_remote_outbox",
       "diagnostic_status_success_masking_earlier_blocker",
       "heredoc_style_shell_mutation",
       "unescaped_shell_substitution",
@@ -664,10 +289,7 @@ NEXT=Review transfer state and evidence report before continuing.
       "evidence_inspect_wrong_run_log_option",
       "admin_refresh_pr_missing_after_pr",
       "rule_acknowledgement_required_after_commit",
-      "terminal_quote_prompt_hang",
-      "communication_start_or_retry_must_use_transfer_continue",
-      "transfer_continue_missing_or_stale_remote_report",
-      "manual_git_cleanup_used_before_restore_known_volatile"
+      "terminal_quote_prompt_hang"
     ],
     "one_command_transfer_protocol": {
       "artifact_type": "transfer_protocol",
@@ -720,19 +342,6 @@ NEXT=Review transfer state and evidence report before continuing.
       "branch_argument_rule": {
         "branch_source": "transfer_order_or_derived_remote_next_configuration",
         "user_command_must_not_include_branch_argument": true
-      },
-      "canonical_communication_command": {
-        "command": "./.venv/bin/agentic-kit transfer continue",
-        "notes": [
-          "remote-next remains the lower-level execution wrapper",
-          "transfer continue is the communication wrapper a new chat should prefer"
-        ],
-        "replaces_as_normal_user_entrypoint": [
-          "./.venv/bin/agentic-kit transfer remote-next",
-          "./.venv/bin/agentic-kit transfer restore-known-volatile",
-          "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile"
-        ],
-        "semantics": "single command for successor-chat communication start, transfer retries, and local-to-LLM report publication"
       },
       "central_assumption": {
         "local_state_may_be_blocked_before_remote_next": true,
@@ -854,9 +463,6 @@ NEXT=Review transfer state and evidence report before continuing.
       "failed_guard_must_not_emit_go_semantics"
     ],
     "preflight_rules": [
-      "remote_repo_state_must_be_checked_before_transfer_execution",
-      "canonical_inbox_must_be_materialized_from_remote_before_execution",
-      "local_inbox_must_match_remote_task_source",
       "expected_branch_must_match",
       "worktree_must_be_clean_before_transfer",
       "local_head_must_match_upstream_head",
@@ -865,12 +471,12 @@ NEXT=Review transfer state and evidence report before continuing.
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "feature/harden-transfer-file-protocol-rules",
-      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
-      "head": "18689bb9897c443d74cf9dde8cd19727790a28b4",
+      "branch": "main",
+      "dirty_status": "",
+      "head": "f342d1681945f43da699be9a94b43e50bb49edcc",
       "head_matches_upstream": true,
-      "upstream": "origin/feature/harden-transfer-file-protocol-rules",
-      "upstream_head": "18689bb9897c443d74cf9dde8cd19727790a28b4"
+      "upstream": "origin/main",
+      "upstream_head": "f342d1681945f43da699be9a94b43e50bb49edcc"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -890,307 +496,62 @@ NEXT=Review transfer state and evidence report before continuing.
         "If quote>, dquote>, or heredoc> appears, press Ctrl-C, then run git status --short and git branch --show-current"
       ]
     },
-    "transfer_lanes": {
-      "control_lane": {
-        "file": ".agentic/transfer/inbox/current.yaml",
-        "role": "wrapper_control_plane",
-        "runner": "./.venv/bin/agentic-kit transfer remote-next",
-        "user_visible": true
-      },
-      "python_payload_lane": {
-        "direct_user_execution": "forbidden_except_recovery",
-        "file": ".agentic/transfer/inbox/next_command.py.txt",
-        "role": "pure_python_payload",
-        "runner": "./.venv/bin/python",
-        "user_visible": false
-      }
-    },
     "transfer_priorities": [
       "remote_repo_backed_work_first",
-      "canonical_one_command_remote_next_second",
       "canonical_transfer_files_second",
       "copy_paste_only_fallback"
     ]
   },
   "remote_next_report": {
     "artifact_type": "transfer_remote_next_execution_report",
-    "blocked_message": "",
-    "branch": "feature/harden-transfer-file-protocol-rules",
+    "blocked_message": "remote-next transfer order is not active: inactive",
+    "branch": null,
     "chat_reply": "g",
-    "head": "cc652f7",
+    "head": "6a172d0",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
-      "apply": {
-        "action_results": [
-          {
-            "command": [
-              "./.venv/bin/python",
-              "-m",
-              "pytest",
-              "tests/test_transfer_safety_context.py",
-              "tests/test_transfer_remote_next.py"
-            ],
-            "returncode": 0,
-            "stderr": "",
-            "stdout": "============================= test session starts ==============================\nplatform darwin -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0\nrootdir: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit\nconfigfile: pyproject.toml\ncollected 14 items\n\ntests/test_transfer_safety_context.py .....                              [ 35%]\ntests/test_transfer_remote_next.py .........                             [100%]\n\n============================== 14 passed in 2.93s ==============================\n",
-            "type": "run_command"
-          },
-          {
-            "command": [
-              "./.venv/bin/python",
-              "-m",
-              "ruff",
-              "check",
-              "src/agentic_project_kit/transfer_safety_context.py",
-              "tests/test_transfer_safety_context.py"
-            ],
-            "returncode": 0,
-            "stderr": "",
-            "stdout": "All checks passed!\n",
-            "type": "run_command"
-          },
-          {
-            "command": [
-              "./.venv/bin/agentic-kit",
-              "transfer",
-              "protected-diff-plan",
-              "--label",
-              "transfer-runner-rules"
-            ],
-            "returncode": 0,
-            "stderr": "",
-            "stdout": "********************************** START SUMMARY ***********************************\nTRANSFER_PROTECTED_DIFF_PLAN\n\nSTATE:                  PASS\nDIFF:                   /tmp/transfer-runner-rules.diff\nCACHED:                 no\nPLAN:                   PASS\n\nNEXT:                   Protected change plan passed; proceed with explicit add/commit paths.\nCHAT_REPLY:             d | NEXT=Protected change plan passed; proceed with explicit add/commit paths.\n*********************************** END SUMMARY ************************************\n",
-            "type": "run_command"
-          }
-        ],
-        "message": "Transfer order applied.",
-        "report_path": "docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
-        "result_status": "PASS",
-        "returncode": 0,
-        "safety": "Validate the transfer-rule hardening through existing agentic-kit transfer wrappers and targeted tests.",
-        "schema_version": 1,
-        "transfer_id": "harden-transfer-runner-rules-validation"
-      },
+      "apply": null,
       "inspect": {
-        "action_results": [
-          {
-            "command": [
-              "./.venv/bin/python",
-              "-m",
-              "pytest",
-              "tests/test_transfer_safety_context.py",
-              "tests/test_transfer_remote_next.py"
-            ],
-            "type": "run_command",
-            "would_run": true
-          },
-          {
-            "command": [
-              "./.venv/bin/python",
-              "-m",
-              "ruff",
-              "check",
-              "src/agentic_project_kit/transfer_safety_context.py",
-              "tests/test_transfer_safety_context.py"
-            ],
-            "type": "run_command",
-            "would_run": true
-          },
-          {
-            "command": [
-              "./.venv/bin/agentic-kit",
-              "transfer",
-              "protected-diff-plan",
-              "--label",
-              "transfer-runner-rules"
-            ],
-            "type": "run_command",
-            "would_run": true
-          }
-        ],
-        "message": "Transfer order inspected. Re-run apply to write files or run commands.",
-        "report_path": "docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
-        "result_status": "PENDING",
-        "returncode": 0,
-        "safety": "Validate the transfer-rule hardening through existing agentic-kit transfer wrappers and targeted tests.",
-        "schema_version": 1,
-        "transfer_id": "harden-transfer-runner-rules-validation"
-      },
-      "next_action": "Review transfer state and evidence report before continuing.",
-      "result_status": "PASS",
-      "returncode": 0,
-      "schema_version": 1,
-      "state": {
-        "branch": "feature/harden-transfer-file-protocol-rules",
-        "capabilities": {
-          "closeout_last_run": false,
-          "diagnose": true,
-          "refresh_rules": true,
-          "rules_confirmed": true,
-          "run_next_command": false
-        },
-        "closeout": {
-          "dirty_worktree": true,
-          "pending_transfer_order": true
-        },
-        "created_at": "2026-06-08T19:09:36.021229+00:00",
-        "head": "cc652f7",
-        "last_result": {
-          "exists": true,
-          "report_path": "docs/reports/command_runs/harden-transfer-runner-rules-validation.md"
-        },
-        "next_action": "Review or clean the worktree before running another transfer action.",
-        "primary_state": "BLOCKED",
+        "message": "remote-next transfer order is not active: inactive",
         "reasons": [
-          "dirty_worktree"
+          "no_current_transfer_order"
         ],
-        "repo": "vfi64/agentic-project-kit",
-        "rule_acknowledgement": {
-          "decision": {
-            "blocking_reasons": [],
-            "fail_closed": false,
-            "is_confirmed": true,
-            "schema_version": 1
-          },
-          "path": ".agentic/rule_ack/current.json",
-          "present": true
-        },
-        "rule_snapshot": {
-          "fail_closed": false,
-          "is_valid": true,
-          "schema_version": 1,
-          "snapshot_id": "8268feff457dae55719cbbb8b76f58f9e864897da31ddf3998b1db3f985563e9",
-          "source_digests": [
-            {
-              "path": ".agentic/compiled_agent_context.yaml",
-              "sha256": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
-              "size_bytes": 8483
-            },
-            {
-              "path": ".agentic/handoff_state.yaml",
-              "sha256": "eaf009c7f3d004311173bccaf6580a5c48381a9fb2a32ab569dd61f750742195",
-              "size_bytes": 19968
-            },
-            {
-              "path": ".agentic/rule_mechanism_inventory.yaml",
-              "sha256": "65889c553fd2ba7e7f6bea6432ac278717605314b757772747ffcdd35bb749fb",
-              "size_bytes": 17616
-            },
-            {
-              "path": ".agentic/rule_migrations.yaml",
-              "sha256": "7e47b41dc5a2de80a80a51caac132974c44a747e9ae7f1f4d8813eae7e0b58ef",
-              "size_bytes": 5765
-            },
-            {
-              "path": ".agentic/rule_preservation.yaml",
-              "sha256": "817319e295674992e6665df25778b5c9cb767d1e393e5402df708d52ec79ff39",
-              "size_bytes": 1688
-            },
-            {
-              "path": "docs/STATUS.md",
-              "sha256": "133701c18de99022f8e5a04cbba8490b591ecd15183fa40cbf31d408241cd6fe",
-              "size_bytes": 25655
-            },
-            {
-              "path": "docs/handoff/CURRENT_HANDOFF.md",
-              "sha256": "728550b6ab63b2fca39a186f1da4a3d700f559a7b789985f25b0a0a326ebebd2",
-              "size_bytes": 24329
-            },
-            {
-              "path": "docs/handoff/START_NEW_CHAT_PROMPT.md",
-              "sha256": "0aec68bf50ebbe9165cd2a09915c0ea29c332e0d846c26d68dbd1ab3a0ac3a5b",
-              "size_bytes": 4844
-            },
-            {
-              "path": "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-              "sha256": "840fbfb2caeb45c3c3385b4e506506e7c7f7ad4f65d29f6484f8a7879654d76c",
-              "size_bytes": 5214
-            },
-            {
-              "path": "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-              "sha256": "f3a22adca9ec4e30fdbfedca8ef030be25da63df1159a34d7ebdf0f7b23c2ba6",
-              "size_bytes": 10976
-            },
-            {
-              "path": "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-              "sha256": "2f2ff37428d0c1bc2e9d816abdcaca345cab4e4931a39da05e13afeb9638c680",
-              "size_bytes": 8308
-            },
-            {
-              "path": "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-              "sha256": "3bb7492c9afc41eac24a268bab367e2a3781ec57899691f6f19e34f460fa0801",
-              "size_bytes": 5625
-            },
-            {
-              "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-              "sha256": "65e557eaabe9fabbc20da721fc00798d4625d726fe52b0f7806e85322a3a3979",
-              "size_bytes": 7410
-            },
-            {
-              "path": "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
-              "sha256": "8da278556b422111087997253ac60ec3723872f7bf45c07564c4a6f16304f452",
-              "size_bytes": 8414
-            },
-            {
-              "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-              "sha256": "34e08835e0a1371ee44a547654403337182ae45707e38ecbc9876ecc181e12e4",
-              "size_bytes": 43881
-            },
-            {
-              "path": "docs/TEST_GATES.md",
-              "sha256": "802d896337e268faa5af9ba81c50b9fe6f8dd475d4172756753b6828e5531023",
-              "size_bytes": 32142
-            },
-            {
-              "path": "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md",
-              "sha256": "39468ae932293745ac6b8838d8b2c5a17da42d293f3bd704551e991a7fd3ca1b",
-              "size_bytes": 4445
-            }
-          ],
-          "sources_total": 17,
-          "validation": {
-            "blocking_reasons": [],
-            "fail_closed": false,
-            "handoff_state_errors": [],
-            "is_valid": true,
-            "missing_required_paths": [],
-            "schema_version": 1,
-            "source_paths": [
-              ".agentic/compiled_agent_context.yaml",
-              ".agentic/handoff_state.yaml",
-              ".agentic/rule_mechanism_inventory.yaml",
-              ".agentic/rule_migrations.yaml",
-              ".agentic/rule_preservation.yaml",
-              "docs/STATUS.md",
-              "docs/handoff/CURRENT_HANDOFF.md",
-              "docs/handoff/START_NEW_CHAT_PROMPT.md",
-              "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-              "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-              "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-              "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-              "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-              "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
-              "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-              "docs/TEST_GATES.md",
-              "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md"
-            ],
-            "sources_total": 17,
-            "yaml_parse_error_paths": []
-          }
-        },
+        "result_status": "BLOCKED",
+        "returncode": 2,
         "schema_version": 1
       },
-      "transfer_id": "harden-transfer-runner-rules-validation"
+      "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
+      "result_status": "BLOCKED",
+      "returncode": 2,
+      "schema_version": 1,
+      "state": {
+        "branch": "main",
+        "dirty_state": {
+          "clean": true,
+          "staged_changes": [],
+          "status_short": "",
+          "unstaged_changes": [],
+          "untracked_files": []
+        },
+        "head": "6a172d0",
+        "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
+        "primary_state": "NEW_ORDER_REQUIRED",
+        "reasons": [
+          "no_current_transfer_order"
+        ],
+        "schema_version": 1
+      },
+      "transfer_id": "remote-next-blocked"
     },
-    "next_action": "Review transfer state and evidence report before continuing.",
+    "next_action": "Create or queue a fresh remote-next transfer order, then rerun the canonical command.",
     "post_report_actions": {
       "attempted": true,
-      "branch": "feature/harden-transfer-file-protocol-rules",
-      "commit_head": "18689bb",
+      "branch": null,
+      "commit_head": "f342d16",
       "committed": true,
-      "final_head": "18689bb",
-      "final_status_short": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
+      "final_head": "f342d16",
+      "final_status_short": "",
       "paths": [
         "docs/reports/transfer_runs/latest-remote-next-report.json",
         "docs/reports/transfer_runs/latest-remote-next-report.log",
@@ -1201,7 +562,7 @@ NEXT=Review transfer state and evidence report before continuing.
       "rule_ack_after_report_commit": {
         "blocking_reasons": [],
         "confirmed": true,
-        "head": "18689bb",
+        "head": "f342d16",
         "path": ".agentic/rule_ack/current.json",
         "present": true
       },
@@ -1233,7 +594,7 @@ NEXT=Review transfer state and evidence report before continuing.
           "name": "git_commit_report_paths",
           "returncode": 0,
           "stderr": "",
-          "stdout": "[feature/harden-transfer-file-protocol-rules 18689bb] Publish remote-next transfer report\n 4 files changed, 2688 insertions(+), 1048 deletions(-)"
+          "stdout": "[main f342d16] Publish remote-next transfer report\n 4 files changed, 82 insertions(+), 98 deletions(-)"
         },
         {
           "argv": [
@@ -1244,24 +605,22 @@ NEXT=Review transfer state and evidence report before continuing.
           "name": "rules_acknowledge_after_report_commit",
           "returncode": 0,
           "stderr": "",
-          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=8268feff457dae55719cbbb8b76f58f9e864897da31ddf3998b1db3f985563e9\nrepo_head=18689bb\ndeclared_next_allowed_action=run_next_command"
+          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=b840090a2641dbbbd2f7d53c6bf355330cbb6a9bed0689dd0ab5637bdf8065a6\nrepo_head=f342d16\ndeclared_next_allowed_action=run_next_command"
         },
         {
           "argv": [
             "git",
-            "push",
-            "origin",
-            "feature/harden-transfer-file-protocol-rules"
+            "push"
           ],
           "name": "git_push_report_commit",
           "returncode": 0,
-          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   cc652f7..18689bb  feature/harden-transfer-file-protocol-rules -> feature/harden-transfer-file-protocol-rules",
+          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   6a172d0..f342d16  main -> main",
           "stdout": ""
         }
       ]
     },
     "preflight": {
-      "current_branch": "feature/harden-transfer-file-protocol-rules",
+      "current_branch": "main",
       "dirty_state": {
         "clean": true,
         "staged_changes": [],
@@ -1269,90 +628,35 @@ NEXT=Review transfer state and evidence report before continuing.
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "cc652f7",
-      "order_sync": {
-        "attempted": true,
-        "current_branch": "feature/harden-transfer-file-protocol-rules",
-        "final_head": "cc652f7",
-        "head": "cc652f7",
-        "schema_version": 1,
-        "steps": [
-          {
-            "argv": [
-              "git",
-              "fetch",
-              "origin",
-              "feature/harden-transfer-file-protocol-rules"
-            ],
-            "name": "git_fetch_current_branch",
-            "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            feature/harden-transfer-file-protocol-rules -> FETCH_HEAD",
-            "stdout": ""
-          },
-          {
-            "argv": [
-              "git",
-              "pull",
-              "--ff-only",
-              "origin",
-              "feature/harden-transfer-file-protocol-rules"
-            ],
-            "name": "git_pull_current_branch",
-            "returncode": 0,
-            "stderr": "From github.com:vfi64/agentic-project-kit\n * branch            feature/harden-transfer-file-protocol-rules -> FETCH_HEAD",
-            "stdout": "Already up to date."
-          }
-        ]
-      },
-      "owned_report_artifact_recovery": {
-        "actions": [
-          {
-            "argv": [
-              "git",
-              "restore",
-              "--staged",
-              "--worktree",
-              "--",
-              "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
-            ],
-            "name": "restore_tracked_owned_report_artifacts",
-            "returncode": 0,
-            "stderr": "",
-            "stdout": ""
-          },
-          {
-            "name": "remove_untracked_owned_report_artifact",
-            "path": "docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
-            "returncode": 0
-          }
-        ],
-        "attempted": true,
-        "current_order_report": "docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
-        "final_status_short": "",
-        "foreign_dirty_paths": [],
-        "owned_report_artifacts": [
-          "docs/reports/command_runs/LATEST_COMMAND_RUN.txt",
-          "docs/reports/command_runs/harden-transfer-runner-rules-validation.md"
-        ],
-        "schema_version": 1
-      },
-      "remote_tracking": "origin/feature/harden-transfer-file-protocol-rules",
+      "head": "6a172d0",
+      "remote_tracking": "origin/main",
+      "schema_version": 1,
       "transfer_order_guard": {
-        "branch": "feature/harden-transfer-file-protocol-rules",
+        "branch": "",
+        "created_for_head": "",
+        "current_branch": "main",
+        "current_full_head": "6a172d07f01a1295ed933beb6d7bb3f0904467e1",
+        "current_head": "6a172d0",
+        "expected_current_branch": "",
+        "expected_current_head": "",
+        "expected_head": "",
+        "id": "no-current-transfer-order",
         "schema_version": 1,
-        "skipped_reason": "explicit_branch_argument"
+        "status": "inactive"
       }
     },
-    "primary_state": "PASS",
+    "primary_state": "NEW_ORDER_REQUIRED",
     "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "reasons": [],
+    "reasons": [
+      "no_current_transfer_order"
+    ],
     "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
-    "result_status": "PASS",
-    "returncode": 0,
+    "result_status": "BLOCKED",
+    "returncode": 2,
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "cc652f7",
+      "head": "6a172d0",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -1362,15 +666,15 @@ NEXT=Review transfer state and evidence report before continuing.
     "authoritative_sources": [
       {
         "path": ".agentic/transfer_safety_rules.yaml",
-        "sha256": "cd14338ae34d073227976be2b105e9ec32e7b0f8294589a76fbaa4f5018fa13d"
+        "sha256": "4eb28be3fffb54696d56a18feecfab096ea89e01fe96ae536a03a9f0aa00da39"
       },
       {
         "path": ".agentic/transfer/one_command_transfer_protocol.yaml",
-        "sha256": "113daa46dd533e632a85c3525a3a84beeab3e3942b51a124e2f52452b6aca23e"
+        "sha256": "2a266406cafca66eda83450a5ecdcf2570af5fbd276b1eebf1bafae6f36bcf25"
       },
       {
         "path": ".agentic/rule_mechanism_inventory.yaml",
-        "sha256": "65889c553fd2ba7e7f6bea6432ac278717605314b757772747ffcdd35bb749fb"
+        "sha256": "eeddfb7fd51a0e9764784dfbb9f532b204497156488ab1b55b3eb4e3a4ae2850"
       },
       {
         "path": ".agentic/rule_preservation.yaml",
@@ -1382,48 +686,17 @@ NEXT=Review transfer state and evidence report before continuing.
       },
       {
         "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-        "sha256": "34e08835e0a1371ee44a547654403337182ae45707e38ecbc9876ecc181e12e4"
+        "sha256": "e622d208cb98eaec09d23790b200636e2093a007e7edb72d0327a91691ab337f"
       }
     ],
     "canonical_cli_usage": {
-      "canonical_communication_continue": {
-        "command": "./.venv/bin/agentic-kit transfer continue",
-        "forbidden_normal_replacements": [
-          "manual git cleanup before trying restore-known-volatile",
-          "direct next_command.py.txt execution as normal path",
-          "remote-next without preflight when transfer continue is available"
-        ],
-        "required_behavior": [
-          "restore known volatile transfer files before continuing",
-          "infer exactly one active transfer order branch when branchless continuation is ambiguous",
-          "run remote-next through the selected branch or current transfer order",
-          "treat missing, stale, or unpushed remote reports as BLOCKED",
-          "emit g semantics only after a fresh remote report is pushed"
-        ],
-        "role": "single_communication_entrypoint_for_successor_chats_and_transfer_retries"
-      },
-      "canonical_one_command_transfer": {
-        "command": "./.venv/bin/agentic-kit transfer remote-next",
-        "forbidden_normal_replacements": [
-          "direct next_command.py.txt execution by the user",
-          "manual multi-command transfer sequences"
-        ],
-        "notes": [
-          "next_command.py.txt is a pure Python payload lane, not the user-facing wrapper command",
-          "direct Python execution is reserved for explicit debug or recovery only"
-        ],
-        "required_behavior": [
-          "read branch from .agentic/transfer/inbox/current.yaml when no branch argument is supplied",
-          "block stale, missing, inactive, or head-mismatched transfer orders",
-          "synchronize and fast-forward the target branch before local execution",
-          "refresh stale rule acknowledgement before transfer execution where possible",
-          "run lower-level transfer-order actions through the local transfer runner",
-          "publish remote-next report projections under docs/reports/terminal/transfer_handoff_reports/",
-          "print a human summary after report publication"
-        ]
-      },
       "evidence_finalize_log": {
         "command": "agentic-kit evidence finalize-log --run-log <path> --remote-log <docs/reports/terminal/name.log> --slice <name> --scope <text> --mode-check <text> --command-report <text> --interpretation <text> --safe-step <text>",
+        "notes": [
+          "remote-log must be repository-relative under docs/reports/terminal/",
+          "run-log may already be the same repository-relative evidence path",
+          "Use --commit-message and --push only when the current branch is intended for evidence publication"
+        ],
         "required_options": [
           "--run-log",
           "--remote-log",
@@ -1439,111 +712,53 @@ NEXT=Review transfer state and evidence report before continuing.
         "command": "agentic-kit evidence inspect --require-summary <path>",
         "invalid_forms": [
           "agentic-kit evidence inspect --run-log <path>"
+        ],
+        "notes": [
+          "The log path is a positional argument, not --run-log"
         ]
       },
       "rules_acknowledge_after_commit": {
         "command": "agentic-kit rules acknowledge",
+        "notes": [
+          "Do not run transfer actions after a commit until the current rule snapshot has been acknowledged"
+        ],
         "trigger": "required after every commit because repo_head changes"
       },
       "transfer_admin_refresh_pr": {
         "command": "agentic-kit transfer admin-refresh-pr --after-pr <merged-pr-number>",
+        "notes": [
+          "Use after post-merge-check reports REFRESH_REQUIRED",
+          "Then run transfer pr-status, pr-wait-ci, and pr-merge-safe on the created admin PR"
+        ],
         "required_options": [
           "--after-pr"
         ]
       },
       "transfer_pr_create": {
         "command": "agentic-kit transfer pr-create --base main --head <branch> --title <title> --body <body>",
+        "notes": [
+          "--base defaults to main but should be explicit in transfer examples",
+          "Run transfer pr-status on the created PR after creation"
+        ],
         "required_options": [
           "--head",
           "--title"
         ]
-      },
-      "transfer_publish_last_report": {
-        "command": "./.venv/bin/agentic-kit transfer publish-last-report --label <label>",
-        "role": "tracked_handoff_upload_for_run_and_log_reports"
-      },
-      "transfer_run_and_log": {
-        "command": "./.venv/bin/agentic-kit transfer run-and-log --label <label> -- <command...>",
-        "notes": [
-          "Requires publish-last-report before g/go semantics."
-        ],
-        "role": "local_report_only"
-      },
-      "transfer_run_local": {
-        "command": "./.venv/bin/agentic-kit transfer run-local --path .agentic/transfer/inbox/current.yaml",
-        "role": "lower_level_adapter_only"
       }
-    },
-    "canonical_runner": {
-      "command": [
-        "./.venv/bin/agentic-kit",
-        "transfer",
-        "remote-next"
-      ],
-      "direct_python_execution_allowed": "recovery_only",
-      "rule": "remote-next is the normal local transfer command; next_command.py.txt is a payload lane and direct user execution is only recovery/debug."
     },
     "canonical_transfer_files": {
       "llm_to_local": ".agentic/transfer/inbox/next_command.py.txt",
-      "local_to_llm": ".agentic/transfer/outbox/last_result.txt",
-      "remote_latest_report": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-      "transfer_order": ".agentic/transfer/inbox/current.yaml"
-    },
-    "decision_tree": {
-      "active_order_on_non_current_branch": {
-        "action": "transfer_continue_infers_single_active_order_or_requires_branch",
-        "forbidden": "assume_branchless_remote_next_finds_feature_branch_order"
-      },
-      "communication_start_or_retry": {
-        "action": "instruct_user_to_run_transfer_continue",
-        "command": "./.venv/bin/agentic-kit transfer continue",
-        "forbidden": "start_with_remote_next_or_manual_multicommand_sequence"
-      },
-      "direct_next_command_execution": {
-        "allowed_only_if": "explicit_debug_or_recovery"
-      },
-      "known_volatile_dirty_state": {
-        "action": "run_restore_known_volatile_inside_transfer_continue",
-        "forbidden": "manual_git_restore_as_first_response"
-      },
-      "local_transfer_needed": {
-        "action": "instruct_user_to_run_remote_next",
-        "forbidden": "direct_python_next_command"
-      },
-      "remote_next_reports_blocked_or_fail": {
-        "action": "diagnose_from_report",
-        "forbidden": "claim_success"
-      },
-      "remote_next_reports_pass": {
-        "action": "continue_planning_from_report"
-      },
-      "remote_report_missing_or_stale": {
-        "action": "treat_as_transfer_uplink_problem",
-        "forbidden": "ask_for_long_terminal_output_first"
-      },
-      "user_says_g_or_go": {
-        "action": "read_latest_remote_transfer_report_first",
-        "forbidden": "continue_from_chat_memory"
-      }
+      "local_to_llm": ".agentic/transfer/outbox/last_result.txt"
     },
     "derived_projection": true,
     "kind": "transfer_protocol_header",
     "known_failure_classes": [
       "wrong_branch_execution",
       "stale_local_branch_after_fetch",
-      "stale_local_inbox_execution",
-      "local_inbox_not_materialized_from_remote",
-      "local_inbox_differs_from_remote_task",
-      "direct_python_execution_used_as_normal_path",
       "rule_acknowledgement_head_mismatch",
       "dirty_worktree_before_transfer",
       "accumulated_untracked_transfer_or_report_files",
       "failed_report_publication_misread_as_go_signal",
-      "summary_shown_before_outbox_remote_publish",
-      "outbox_not_written_before_completion_signal",
-      "outbox_not_uploaded_to_remote",
-      "user_go_before_remote_report_published",
-      "llm_planning_without_reading_remote_outbox",
       "diagnostic_status_success_masking_earlier_blocker",
       "heredoc_style_shell_mutation",
       "unescaped_shell_substitution",
@@ -1565,10 +780,7 @@ NEXT=Review transfer state and evidence report before continuing.
       "evidence_inspect_wrong_run_log_option",
       "admin_refresh_pr_missing_after_pr",
       "rule_acknowledgement_required_after_commit",
-      "terminal_quote_prompt_hang",
-      "communication_start_or_retry_must_use_transfer_continue",
-      "transfer_continue_missing_or_stale_remote_report",
-      "manual_git_cleanup_used_before_restore_known_volatile"
+      "terminal_quote_prompt_hang"
     ],
     "one_command_transfer_protocol": {
       "artifact_type": "transfer_protocol",
@@ -1621,19 +833,6 @@ NEXT=Review transfer state and evidence report before continuing.
       "branch_argument_rule": {
         "branch_source": "transfer_order_or_derived_remote_next_configuration",
         "user_command_must_not_include_branch_argument": true
-      },
-      "canonical_communication_command": {
-        "command": "./.venv/bin/agentic-kit transfer continue",
-        "notes": [
-          "remote-next remains the lower-level execution wrapper",
-          "transfer continue is the communication wrapper a new chat should prefer"
-        ],
-        "replaces_as_normal_user_entrypoint": [
-          "./.venv/bin/agentic-kit transfer remote-next",
-          "./.venv/bin/agentic-kit transfer restore-known-volatile",
-          "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile"
-        ],
-        "semantics": "single command for successor-chat communication start, transfer retries, and local-to-LLM report publication"
       },
       "central_assumption": {
         "local_state_may_be_blocked_before_remote_next": true,
@@ -1755,9 +954,6 @@ NEXT=Review transfer state and evidence report before continuing.
       "failed_guard_must_not_emit_go_semantics"
     ],
     "preflight_rules": [
-      "remote_repo_state_must_be_checked_before_transfer_execution",
-      "canonical_inbox_must_be_materialized_from_remote_before_execution",
-      "local_inbox_must_match_remote_task_source",
       "expected_branch_must_match",
       "worktree_must_be_clean_before_transfer",
       "local_head_must_match_upstream_head",
@@ -1766,12 +962,12 @@ NEXT=Review transfer state and evidence report before continuing.
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "feature/harden-transfer-file-protocol-rules",
-      "dirty_status": "M docs/reports/command_runs/LATEST_COMMAND_RUN.txt\n?? docs/reports/command_runs/harden-transfer-runner-rules-validation.md",
-      "head": "18689bb9897c443d74cf9dde8cd19727790a28b4",
+      "branch": "main",
+      "dirty_status": "",
+      "head": "f342d1681945f43da699be9a94b43e50bb49edcc",
       "head_matches_upstream": true,
-      "upstream": "origin/feature/harden-transfer-file-protocol-rules",
-      "upstream_head": "18689bb9897c443d74cf9dde8cd19727790a28b4"
+      "upstream": "origin/main",
+      "upstream_head": "f342d1681945f43da699be9a94b43e50bb49edcc"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -1791,24 +987,8 @@ NEXT=Review transfer state and evidence report before continuing.
         "If quote>, dquote>, or heredoc> appears, press Ctrl-C, then run git status --short and git branch --show-current"
       ]
     },
-    "transfer_lanes": {
-      "control_lane": {
-        "file": ".agentic/transfer/inbox/current.yaml",
-        "role": "wrapper_control_plane",
-        "runner": "./.venv/bin/agentic-kit transfer remote-next",
-        "user_visible": true
-      },
-      "python_payload_lane": {
-        "direct_user_execution": "forbidden_except_recovery",
-        "file": ".agentic/transfer/inbox/next_command.py.txt",
-        "role": "pure_python_payload",
-        "runner": "./.venv/bin/python",
-        "user_visible": false
-      }
-    },
     "transfer_priorities": [
       "remote_repo_backed_work_first",
-      "canonical_one_command_remote_next_second",
       "canonical_transfer_files_second",
       "copy_paste_only_fallback"
     ]

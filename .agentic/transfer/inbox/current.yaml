@@ -1,31 +1,6 @@
 schema_version: 1
-id: harden-transfer-runner-rules-validation
-title: Validate canonical transfer runner rule hardening
-status: active
-branch: feature/harden-transfer-file-protocol-rules
-safety: Validate the transfer-rule hardening through existing agentic-kit transfer wrappers and targeted tests.
-report_path: docs/reports/command_runs/harden-transfer-runner-rules-validation.md
-actions:
-- type: run_command
-  command:
-  - ./.venv/bin/python
-  - -m
-  - pytest
-  - tests/test_transfer_safety_context.py
-  - tests/test_transfer_remote_next.py
-- type: run_command
-  command:
-  - ./.venv/bin/python
-  - -m
-  - ruff
-  - check
-  - src/agentic_project_kit/transfer_safety_context.py
-  - tests/test_transfer_safety_context.py
-- type: run_command
-  command:
-  - ./.venv/bin/agentic-kit
-  - transfer
-  - protected-diff-plan
-  - --label
-  - transfer-runner-rules
+id: no-current-transfer-order
+title: No current remote-next transfer order
+status: inactive
+reason: Previous remote-next transfer order was stale after post-merge-complete implementation and must not be executed.
 expected_chat_reply: g
