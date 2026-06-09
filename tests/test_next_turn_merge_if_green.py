@@ -497,3 +497,32 @@ def test_render_result_marks_post_merge_red_main_ci_as_fail() -> None:
     assert "main_verification_passed=false" in rendered
     assert "gh run view 123456 --log-failed" in rendered
     assert "### RESULT: FAIL ###" in rendered
+
+def test_unknown_merge_state_for_green_pr_has_precise_timeout_reason() -> None:
+    result = merge_if_green_module.merge_if_green(
+        "1212",
+        dry_run=True,
+        expected_head_sha="abc123",
+        pr_payload_fetcher=lambda _pr: green_payload(head_ref_oid="abc123") | {"mergeStateStatus": "UNKNOWN"},
+        merge_state_timeout_seconds=1,
+        merge_state_poll_seconds=0,
+        sleep=lambda _seconds: None,
+    )
+
+    assert result.decision == "refuse"
+    assert result.reason == "DRY_RUN: merge state stayed UNKNOWN after timeout"
+    assert result.merged is False
+    assert result.status_decision.decision == "green"
+
+
+def test_clean_merge_state_for_green_pr_still_allows_dry_run_merge_decision() -> None:
+    result = merge_if_green_module.merge_if_green(
+        "1212",
+        dry_run=True,
+        expected_head_sha="abc123",
+        pr_payload_fetcher=lambda _pr: green_payload(head_ref_oid="abc123"),
+    )
+
+    assert result.decision == "merge"
+    assert result.reason == "DRY_RUN: PR is green"
+    assert result.merged is False
