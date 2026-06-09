@@ -330,7 +330,6 @@ def test_run_and_log_writes_canonical_outbox_with_safety_header(tmp_path):
 
 def test_publish_latest_transfer_report_embeds_llm_execution_context(tmp_path, monkeypatch):
     from agentic_project_kit.transfer_uplink import publish_latest_transfer_report
-    from agentic_project_kit.transfer_uplink import write_transfer_report
 
     for relative in (
         ".agentic/compiled_agent_context.yaml",
@@ -344,10 +343,10 @@ def test_publish_latest_transfer_report_embeds_llm_execution_context(tmp_path, m
         dst.parent.mkdir(parents=True, exist_ok=True)
         dst.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
 
-    write_transfer_report(
-        tmp_path,
-        [["python", "-c", "print('FINAL_SIGNAL=d'); print('FINAL_NEXT=handoff ready')"]],
+    run_and_log_transfer_command(
+        ["python", "-c", "print('FINAL_SIGNAL=d'); print('FINAL_NEXT=handoff ready')"],
         label="llm context handoff",
+        cwd=tmp_path,
     )
 
     published = publish_latest_transfer_report(tmp_path, label="llm context handoff")

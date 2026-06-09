@@ -280,6 +280,8 @@ def test_post_merge_complete_cli_reports_publish_blocker(tmp_path, monkeypatch):
 def test_write_post_merge_complete_report_embeds_llm_execution_context(tmp_path):
     class FakePostMergeCompleteResult:
         lifecycle_state = "COMPLETE"
+        result_status = "PASS"
+        returncode = 0
         final_signal = "d"
         chat_reply = "d | NEXT=done"
         next_action = "done"
@@ -289,7 +291,11 @@ def test_write_post_merge_complete_report_embeds_llm_execution_context(tmp_path)
 
         def as_json_data(self):
             return {
+                "result_status": self.result_status,
+                "returncode": self.returncode,
+                "after_pr": 1216,
                 "lifecycle_state": self.lifecycle_state,
+                "refresh_loop_detected": False,
                 "final_signal": self.final_signal,
                 "chat_reply": self.chat_reply,
                 "next_action": self.next_action,
