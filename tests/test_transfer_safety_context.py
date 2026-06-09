@@ -1,4 +1,5 @@
 from pathlib import Path
+import json
 
 from agentic_project_kit.transfer_safety_context import build_transfer_safety_header
 from agentic_project_kit.transfer_safety_context import write_transfer_outbox
@@ -80,3 +81,24 @@ def test_transfer_rules_require_remote_report_after_g_before_planning() -> None:
     assert after_g["forbidden"] == "continue_from_chat_memory"
     assert header["decision_tree"]["remote_report_missing_or_stale"]["action"] == "treat_as_transfer_uplink_problem"
     assert header["decision_tree"]["local_transfer_needed"]["action"] == "instruct_user_to_run_remote_next"
+
+def test_transfer_outbox_payload_includes_llm_execution_context(tmp_path: Path) -> None:
+    from agentic_project_kit.transfer_safety_context import write_transfer_outbox
+
+    for relative in (
+        ".agentic/compiled_agent_context.yaml",
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/transfer/one_command_transfer_protocol.yaml",
+        "docs/reference/agentic-kit-commands.json",
+        "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    ):
+        src = Path(relative)
+        dst = tmp_path / relative
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+
+    outbox = write_transfer_outbox(tmp_path, {"final_signal": "d", "next_action": "continue"})
+    data = json.loads(outbox.read_text(encoding="utf-8"))
+
+    assert data["llm_execution_context"]["kind"] == "llm_execution_context"
+    assert data["llm_execution_context"]["command_reference"]["must_not_reconstruct_commands_from_memory"] is True

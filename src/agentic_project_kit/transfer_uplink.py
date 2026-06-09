@@ -9,6 +9,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from agentic_project_kit.transfer_safety_context import write_transfer_outbox
+from agentic_project_kit.llm_execution_context import build_llm_execution_context
 
 
 TRANSFER_RUN_DIR = Path("docs/reports/transfer_runs")
@@ -321,6 +322,7 @@ def publish_latest_transfer_report(
     timestamped_log = PUBLISHED_TRANSFER_HANDOFF_DIR / f"{run_id}-{safe_label}.log"
 
     published_data = dict(report_data)
+    published_data["llm_execution_context"] = build_llm_execution_context(root)
     published_data["published_transfer_handoff"] = {
         "schema_version": 1,
         "source_latest_json_path": str(LATEST_JSON),

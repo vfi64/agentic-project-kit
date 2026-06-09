@@ -10,6 +10,7 @@ from uuid import uuid4
 import typer
 
 from agentic_project_kit.transfer_post_merge_lifecycle import post_merge_complete
+from agentic_project_kit.llm_execution_context import build_llm_execution_context
 from agentic_project_kit.transfer_uplink import (
     LATEST_JSON,
     LATEST_LOG,
@@ -206,6 +207,7 @@ def write_post_merge_complete_report(result, *, after_pr: int, cwd: Path | None 
         "transfer_upload": "done",
         "transfer_report_written": "done",
         "post_merge_complete": result.as_json_data(),
+        "llm_execution_context": build_llm_execution_context(root),
         "stdout": rendered_result + "\n",
         "stderr": "",
     }

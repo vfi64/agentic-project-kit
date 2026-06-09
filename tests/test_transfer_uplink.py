@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import sys
+from pathlib import Path
 
 from agentic_project_kit.transfer_uplink import (
     LATEST_JSON,
@@ -203,7 +204,6 @@ def test_write_transfer_report_from_repo_result_does_not_execute_python(tmp_path
     assert uplink.final_signal == "d"
 
 def test_transfer_run_reports_are_gitignored():
-    from pathlib import Path
 
     gitignore = Path(".gitignore").read_text(encoding="utf-8").splitlines()
 
@@ -302,7 +302,6 @@ def test_publish_last_report_cli_prints_go_lines_for_tracked_report(tmp_path, mo
 
 
 def test_run_and_log_writes_canonical_outbox_with_safety_header(tmp_path):
-    from pathlib import Path
 
     for relative in (
         ".agentic/transfer_safety_rules.yaml",
@@ -328,3 +327,30 @@ def test_run_and_log_writes_canonical_outbox_with_safety_header(tmp_path):
     assert data["safety_header"]["canonical_transfer_files"]["local_to_llm"] == ".agentic/transfer/outbox/last_result.txt"
     assert "raw_newline_in_python_string_literals" in data["safety_header"]["known_failure_classes"]
     assert data["last_result"]["transfer_report_written"] == "done"
+
+def test_publish_latest_transfer_report_embeds_llm_execution_context(tmp_path, monkeypatch):
+    from agentic_project_kit.transfer_uplink import publish_latest_transfer_report
+
+    for relative in (
+        ".agentic/compiled_agent_context.yaml",
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/transfer/one_command_transfer_protocol.yaml",
+        "docs/reference/agentic-kit-commands.json",
+        "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    ):
+        src = Path(relative)
+        dst = tmp_path / relative
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+
+    run_and_log_transfer_command(
+        ["python", "-c", "print('FINAL_SIGNAL=d'); print('FINAL_NEXT=handoff ready')"],
+        label="llm context handoff",
+        cwd=tmp_path,
+    )
+
+    published = publish_latest_transfer_report(tmp_path, label="llm context handoff")
+    data = json.loads((tmp_path / published["remote_report"]).read_text(encoding="utf-8"))
+
+    assert data["llm_execution_context"]["kind"] == "llm_execution_context"
+    assert data["llm_execution_context"]["command_reference"]["must_not_reconstruct_commands_from_memory"] is True
