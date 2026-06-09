@@ -1761,6 +1761,7 @@ def publish_last_report(
 
 
 KNOWN_VOLATILE_TRANSFER_PATHS = [
+    ".agentic/transfer/inbox/next_command.py.txt",
     ".agentic/transfer/outbox/last_result.txt",
     "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
@@ -2463,7 +2464,11 @@ def normalize_session(
         try:
             ack_data = json.loads(ack_path.read_text(encoding="utf-8"))
             rule_ack["repo_head"] = ack_data.get("repo_head")
-            rule_ack["matches_head"] = bool(head and ack_data.get("repo_head") == head[:7])
+            ack_head = str(ack_data.get("repo_head") or "")
+            if head and ack_head:
+                rule_ack["matches_head"] = bool(
+                    ack_head == head or (len(ack_head) >= 7 and head.startswith(ack_head))
+                )
         except Exception as exc:
             rule_ack["error"] = str(exc)
 
@@ -2613,6 +2618,7 @@ def prepare_successor_handoff(
     root = Path(".")
 
     known_volatile_paths = [
+        ".agentic/transfer/inbox/next_command.py.txt",
         ".agentic/transfer/outbox/last_result.txt",
         "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
         "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",

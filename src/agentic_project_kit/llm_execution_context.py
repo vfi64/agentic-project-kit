@@ -114,6 +114,7 @@ def build_llm_execution_context(root: str | Path = ".") -> dict[str, Any]:
         },
         "volatile_cleanup": {
             "known_paths": [
+                ".agentic/transfer/inbox/next_command.py.txt",
                 ".agentic/transfer/outbox/last_result.txt",
                 "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
                 "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
