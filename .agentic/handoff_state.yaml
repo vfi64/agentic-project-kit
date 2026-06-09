@@ -1,6 +1,6 @@
 schema_version: 1
 updated:
-  date: '2026-06-08'
+  date: '2026-06-09'
   reason: Refresh handoff state to last substantive work commit
   source: agentic-kit handoff refresh
 repo:
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 70246d6
-  commit_subject: Harden release closeout consistency (#1210)
+  commit: '9612274'
+  commit_subject: Harden PR merge-safe state diagnostics (#1213)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
