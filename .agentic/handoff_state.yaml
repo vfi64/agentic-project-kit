@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: c088106e
-  commit_subject: Document handoff command-reference and lifecycle discipline (#1216)
+  commit: d225fb5c
+  commit_subject: Embed generated LLM execution context in transfer reports (#1218)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
