@@ -158,3 +158,19 @@ canonical_communication_command:
   notes:
   - remote-next remains the lower-level execution wrapper
   - transfer continue is the communication wrapper a new chat should prefer
+communication_precedence:
+  primary:
+    mode: canonical_transfer_files
+    llm_to_local: .agentic/transfer/inbox/next_command.py.txt
+    local_to_llm: .agentic/transfer/outbox/last_result.txt
+  secondary:
+    mode: remote_repo_backed_work
+  tertiary:
+    mode: copy_paste
+    allowed_only_as_fallback: true
+  rule: Use transfer files as the primary communication channel. Remote work is secondary.
+    Copy-and-paste is tertiary fallback only.
+wrapper_first_inside_transfer_files:
+  rule: A canonical transfer file should invoke existing complex agentic-kit transfer
+    wrappers whenever possible instead of spelling out many low-level commands.
+  manual_sequence_warning_threshold: 5

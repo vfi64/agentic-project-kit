@@ -277,3 +277,55 @@ terminal_block_rules:
   recovery:
   - If quote>, dquote>, or heredoc> appears, press Ctrl-C, then run git status --short
     and git branch --show-current
+communication_precedence:
+  source_of_truth: canonical_transfer_files_first
+  order:
+  - rank: 1
+    mode: canonical_transfer_files
+    description: Primary communication is via .agentic/transfer/inbox/next_command.py.txt
+      and .agentic/transfer/outbox/last_result.txt.
+    required_files:
+      llm_to_local: .agentic/transfer/inbox/next_command.py.txt
+      local_to_llm: .agentic/transfer/outbox/last_result.txt
+    execution_rule: A transfer file should orchestrate existing complex agentic-kit
+      transfer wrappers whenever possible.
+  - rank: 2
+    mode: remote_repo_backed_work
+    description: Remote work through repo-backed evidence or connector actions is
+      secondary when transfer files are unavailable or not needed.
+  - rank: 3
+    mode: copy_paste
+    description: Manual copy-and-paste command sequences are tertiary fallback only.
+    forbidden_as_normal_path: true
+  anti_patterns:
+  - Long manual copy-and-paste command sequences when a transfer file or complex wrapper
+    can do the work.
+  - Using remote-only work as the default when the user explicitly requested canonical
+    transfer-file communication.
+  - Giving five or more local commands before checking for an existing wrapper or
+    canonical transfer-file path.
+workflow_precedence:
+  within_transfer_file:
+  - Use existing complex agentic-kit transfer wrappers first.
+  - Use a short local single command only when no wrapper fits.
+  - Use exactly one robust canonical transfer file when multiple local steps are required.
+  - Use manual copy-and-paste only as last fallback.
+  preferred_complex_wrappers:
+  - transfer continue
+  - transfer sync-main
+  - transfer normalize-session --repair-known-volatile
+  - transfer repo-status
+  - transfer remote-work-start
+  - transfer pr-create-complete
+  - transfer pr-status
+  - transfer pr-complete
+  - transfer post-merge-complete
+  - transfer post-merge-check
+  - transfer protected-diff-plan
+  - transfer command-reference-refresh
+  - transfer pr-existing-for-branch
+  - transfer divergence-status
+  - transfer repo-log
+  - transfer prepare-successor-handoff
+  missing_wrapper_policy: If a suitable complex wrapper is missing, treat that as
+    kit improvement work instead of normalizing kleinteilige Handarbeit.
