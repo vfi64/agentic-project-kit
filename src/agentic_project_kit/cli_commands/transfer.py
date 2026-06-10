@@ -2218,6 +2218,49 @@ def _run_transfer_subprocess(argv: list[str], *, cwd: Path | None = None) -> dic
     }
 
 
+
+def _echo_transfer_payload_terminal_summary(payload: dict[str, object], *, title: str | None = None) -> None:
+    action = str(payload.get("action") or "transfer")
+    summary_title = title or f"TRANSFER_{action.upper().replace('-', '_')}"
+    result_status = str(payload.get("result_status") or "UNKNOWN")
+    final_signal = str(payload.get("final_signal") or ("d" if result_status == "PASS" else "f"))
+    next_action = str(payload.get("next_action") or "Inspect command result before continuing.")
+
+    fields: dict[str, object] = {}
+    for key, label in (
+        ("kind", "KIND"),
+        ("changed_files", "CHANGED_FILES"),
+        ("blockers", "BLOCKERS"),
+        ("missing_sources", "MISSING_SOURCES"),
+        ("outbox_written", "OUTBOX_WRITTEN"),
+    ):
+        if key not in payload:
+            continue
+        value = payload.get(key)
+        if isinstance(value, list):
+            value = len(value)
+        fields[label] = value
+
+    _echo_transfer_payload_summary(
+        title=summary_title,
+        result_status=result_status,
+        final_signal=final_signal,
+        fields=fields,
+        next_action=next_action,
+    )
+
+
+def _echo_transfer_payload_json_or_summary(
+    payload: dict[str, object],
+    *,
+    json_output: bool,
+    title: str | None = None,
+) -> None:
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+    else:
+        _echo_transfer_payload_terminal_summary(payload, title=title)
+
 @transfer_app.command("restore-known-volatile")
 def restore_known_volatile(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
@@ -2241,11 +2284,11 @@ def restore_known_volatile(
         "known_paths": KNOWN_VOLATILE_TRANSFER_PATHS,
         "result": result,
     }
-    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
-    if not json_output:
-        typer.echo(f"FINAL_SIGNAL={final_signal}")
-        typer.echo(f"FINAL_NEXT={next_action}")
-        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    _echo_transfer_payload_json_or_summary(
+        payload,
+        json_output=json_output,
+        title="TRANSFER_RESTORE_KNOWN_VOLATILE",
+    )
     if not result["ok"]:
         raise typer.Exit(code=1)
 
@@ -2303,11 +2346,7 @@ def divergence_status(
             "ahead_behind": counts_result,
         },
     }
-    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
-    if not json_output:
-        typer.echo(f"FINAL_SIGNAL={final_signal}")
-        typer.echo(f"FINAL_NEXT={next_action}")
-        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    _echo_transfer_payload_json_or_summary(payload, json_output=json_output)
     if status != "PASS":
         raise typer.Exit(code=1)
 
@@ -2414,11 +2453,7 @@ def command_reference_refresh(
             "diff_name_only": diff_result,
         },
     }
-    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
-    if not json_output:
-        typer.echo(f"FINAL_SIGNAL={final_signal}")
-        typer.echo(f"FINAL_NEXT={next_action}")
-        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    _echo_transfer_payload_json_or_summary(payload, json_output=json_output)
     if result_status != "PASS":
         raise typer.Exit(code=1)
 
@@ -2453,11 +2488,7 @@ def command_reference_check(
         "next_action": next_action,
         "result": check_result,
     }
-    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
-    if not json_output:
-        typer.echo(f"FINAL_SIGNAL={final_signal}")
-        typer.echo(f"FINAL_NEXT={next_action}")
-        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    _echo_transfer_payload_json_or_summary(payload, json_output=json_output)
     if not check_result["ok"]:
         raise typer.Exit(code=1)
 
@@ -2486,11 +2517,7 @@ def evidence_inspect_latest(
         "next_action": next_action,
         "result": inspect_result,
     }
-    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
-    if not json_output:
-        typer.echo(f"FINAL_SIGNAL={final_signal}")
-        typer.echo(f"FINAL_NEXT={next_action}")
-        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    _echo_transfer_payload_json_or_summary(payload, json_output=json_output)
     if result_status != "PASS":
         raise typer.Exit(code=1)
 
@@ -2812,11 +2839,7 @@ def evidence_finalize_current_transfer(
         "remote_log": str(remote_log),
         "result": finalize_result,
     }
-    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
-    if not json_output:
-        typer.echo(f"FINAL_SIGNAL={final_signal}")
-        typer.echo(f"FINAL_NEXT={next_action}")
-        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    _echo_transfer_payload_json_or_summary(payload, json_output=json_output)
     if result_status != "PASS":
         raise typer.Exit(code=1)
 
@@ -3012,11 +3035,7 @@ def normalize_session(
     else:
         payload["outbox_written"] = None
 
-    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
-    if not json_output:
-        typer.echo(f"FINAL_SIGNAL={final_signal}")
-        typer.echo(f"FINAL_NEXT={next_action}")
-        typer.echo(f"CHAT_REPLY={final_signal} | NEXT={next_action}")
+    _echo_transfer_payload_json_or_summary(payload, json_output=json_output)
 
 
 @transfer_app.command("prepare-successor-handoff")
