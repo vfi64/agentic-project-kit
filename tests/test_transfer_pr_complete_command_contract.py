@@ -144,6 +144,7 @@ def test_transfer_pr_create_complete_orchestrates_create_and_complete(monkeypatc
     assert calls[3][:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]
     assert "123" in calls[3]
     assert "0123456789abcdef0123456789abcdef01234567" in calls[3]
+    assert "--skip-llm-context-gate" in calls[3]
 
 
 def test_transfer_pr_create_complete_uses_existing_pr_when_create_fails(monkeypatch) -> None:

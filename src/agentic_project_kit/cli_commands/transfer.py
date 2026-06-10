@@ -1651,23 +1651,23 @@ def pr_create_complete_command(
                 blockers.append("existing_pr_number_not_found")
 
     if pr_number is not None and not blockers:
-        run_step(
+        complete_argv = [
+            agentic_kit,
+            "transfer",
             "pr-complete",
-            [
-                agentic_kit,
-                "transfer",
-                "pr-complete",
-                str(pr_number),
-                "--expected-head-sha",
-                expected_head_sha,
-                "--merge-method",
-                merge_method,
-                "--timeout-seconds",
-                str(timeout_seconds),
-                "--interval-seconds",
-                str(poll_seconds),
-            ],
-        )
+            str(pr_number),
+            "--expected-head-sha",
+            expected_head_sha,
+            "--merge-method",
+            merge_method,
+            "--timeout-seconds",
+            str(timeout_seconds),
+            "--interval-seconds",
+            str(poll_seconds),
+        ]
+        if skip_llm_context_gate:
+            complete_argv.append("--skip-llm-context-gate")
+        run_step("pr-complete", complete_argv)
 
     if pr_number is not None and post_merge_complete and not blockers:
         post_merge_steps = [
