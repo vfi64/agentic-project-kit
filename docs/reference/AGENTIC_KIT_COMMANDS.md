@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `147`
+- Command count: `148`
 
 ## Commands
 
@@ -869,6 +869,7 @@ Create a PR and complete it without requiring manual PR-number or SHA copying.
 | `merge_method` | `TyperOption` | --merge-method | `False` | `squash` | GitHub merge method. |
 | `timeout_seconds` | `TyperOption` | --timeout-seconds | `False` | `300` | Maximum CI wait time. |
 | `poll_seconds` | `TyperOption` | --interval-seconds, --poll-seconds | `False` | `10` | CI polling interval. |
+| `post_merge_complete` | `TyperOption` | --post-merge-complete | `False` | `False` | After pr-complete, run visible post-merge closeout using the concrete PR number. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer pr-existing-for-branch`
@@ -1060,6 +1061,12 @@ Synchronize main, acknowledge rules, and normalize the session.
 |---|---:|---|---:|---|---|
 | `main_branch` | `TyperOption` | --main-branch | `False` | `main` | Main branch to synchronize. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
+### `agentic-kit transfer verify-llm-context-refresh`
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer work-order-patch`
 

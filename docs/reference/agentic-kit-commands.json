@@ -5341,6 +5341,20 @@
         },
         {
           "default": false,
+          "help": "After pr-complete, run visible post-merge closeout using the concrete PR number.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "post_merge_complete",
+          "opts": [
+            "--post-merge-complete"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
           "help": "Print JSON instead of text.",
           "is_flag": true,
           "metavar": null,
@@ -6528,6 +6542,32 @@
         "sync-main"
       ],
       "qualified_name": "agentic-kit transfer sync-main"
+    },
+    {
+      "group": "transfer",
+      "help": "",
+      "name": "verify-llm-context-refresh",
+      "params": [
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "verify-llm-context-refresh"
+      ],
+      "qualified_name": "agentic-kit transfer verify-llm-context-refresh"
     },
     {
       "group": "transfer",

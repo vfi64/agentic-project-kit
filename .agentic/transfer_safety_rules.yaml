@@ -263,6 +263,24 @@ canonical_cli_usage:
     - manual git cleanup before trying restore-known-volatile
     - direct next_command.py.txt execution as normal path
     - remote-next without preflight when transfer continue is available
+  transfer_pr_create_complete_post_merge:
+    command: ./.venv/bin/agentic-kit transfer pr-create-complete --post-merge-complete
+      --base main --head current --merge-method squash
+    role: preferred_new_pr_lifecycle_with_internal_concrete_pr_number_closeout
+    required_behavior:
+    - resolve the concrete PR number internally
+    - run pr-complete
+    - run post-merge-complete with the concrete PR number
+    - run post-merge-check and repo-status
+    - avoid chat or user propagation of PR number placeholders
+  verify_llm_context_refresh:
+    command: ./.venv/bin/agentic-kit transfer verify-llm-context-refresh
+    role: running_chat_and_successor_chat_drift_guard
+    required_behavior:
+    - check local outbox for generated llm_execution_context
+    - check latest handoff report for generated llm_execution_context
+    - verify source hashes and rule-projected policies
+    - block on missing or stale refresh context
 terminal_block_rules:
   preferred:
   - Use printf '%s\n' for visible shell output lines
@@ -329,26 +347,61 @@ workflow_precedence:
   - transfer prepare-successor-handoff
   missing_wrapper_policy: If a suitable complex wrapper is missing, treat that as
     kit improvement work instead of normalizing kleinteilige Handarbeit.
-
   command_reference_lifecycle_discipline:
     status: active
     normative: true
     command_reference_sources:
-      - docs/reference/AGENTIC_KIT_COMMANDS.md
-      - docs/reference/agentic-kit-commands.json
+    - docs/reference/AGENTIC_KIT_COMMANDS.md
+    - docs/reference/agentic-kit-commands.json
     rules:
-      - "Do not reconstruct agentic-kit commands from memory."
-      - "Use Command Reference before local control, transfer files, or copy/paste commands."
-      - "Use wrapper-first, transfer-file second, copy/paste shell only as fallback."
-      - "Use transfer pr-create-complete for new PRs."
-      - "Use transfer pr-complete for existing PRs."
-      - "After merge, always run transfer post-merge-complete --after-pr <PR_NUMBER>."
-      - "Use run-and-log only for diagnostics or fallback evidence, not as replacement for post-merge-complete."
-      - "Clean known volatile transfer outputs before branch switches and merge-safe operations when they are not target changes."
+    - Do not reconstruct agentic-kit commands from memory.
+    - Use Command Reference before local control, transfer files, or copy/paste commands.
+    - Use wrapper-first, transfer-file second, copy/paste shell only as fallback.
+    - Use transfer pr-create-complete for new PRs.
+    - Use transfer pr-complete for existing PRs.
+    - After merge, always run transfer post-merge-complete --after-pr <PR_NUMBER>.
+    - Use run-and-log only for diagnostics or fallback evidence, not as replacement
+      for post-merge-complete.
+    - Clean known volatile transfer outputs before branch switches and merge-safe
+      operations when they are not target changes.
     canonical_post_merge_sequence:
-      - "./.venv/bin/agentic-kit transfer sync-main"
-      - "./.venv/bin/agentic-kit transfer post-merge-complete --after-pr <PR_NUMBER>"
-      - "./.venv/bin/agentic-kit transfer sync-main"
-      - "./.venv/bin/agentic-kit transfer post-merge-check"
-      - "./.venv/bin/agentic-kit transfer repo-status"
-
+    - ./.venv/bin/agentic-kit transfer sync-main
+    - ./.venv/bin/agentic-kit transfer post-merge-complete --after-pr <PR_NUMBER>
+    - ./.venv/bin/agentic-kit transfer sync-main
+    - ./.venv/bin/agentic-kit transfer post-merge-check
+    - ./.venv/bin/agentic-kit transfer repo-status
+running_chat_refresh_contract:
+  status: active
+  normative: true
+  refresh_required_for_running_chats: true
+  refresh_required_for_successor_chats: true
+  chat_memory_is_not_source_of_truth: true
+  local_transfer_context_must_be_regenerated_from_rules: true
+  missing_or_stale_context_blocks_planning: true
+  minimum_context_carriers:
+  - .agentic/transfer/outbox/last_result.txt
+  - docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
+shell_placeholder_policy:
+  status: active
+  normative: true
+  no_angle_bracket_placeholders_in_executable_blocks: true
+  if_pr_number_unknown_first_run_diagnostic_not_shell_placeholder: true
+  known_failure_class: terminal_quote_prompt_hang
+  known_failure_example: zsh parses angle-bracket placeholders as redirection
+terminal_resilience:
+  status: active
+  normative: true
+  avoid_process_ended_terminal_dead_end: true
+  do_not_require_terminal_restart_after_script_errors: true
+  patch_scripts_should_report_status_and_return_to_shell: true
+  avoid_unnecessary_raise_system_exit_in_diagnostics: true
+  avoid_set_euo_pipefail_in_exploratory_patch_blocks: true
+patch_generation_policy:
+  status: active
+  normative: true
+  avoid_heredoc_quote_escape_drift: true
+  avoid_long_shell_mutation_blocks: true
+  avoid_fragile_multiline_inline_python_anchors: true
+  avoid_raw_newlines_inside_generated_python_string_literals: true
+  prefer_small_python_patch_scripts_with_stable_checks: true
+  prefer_yaml_parse_modify_dump_for_governance_yaml: true
