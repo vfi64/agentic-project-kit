@@ -1130,6 +1130,31 @@ def pr_complete_command(
         steps.append(item)
         return completed.returncode
 
+    def pr_status_allows_wait_ci_fallback() -> bool:
+        completed = subprocess.run(
+            [agentic_kit, "transfer", "pr-status", str(pr_number)],
+            text=True,
+            capture_output=True,
+        )
+        item: dict[str, object] = {
+            "name": "pr-status-after-wait-ci-failure",
+            "argv": [agentic_kit, "transfer", "pr-status", str(pr_number)],
+            "returncode": completed.returncode,
+            "stdout": completed.stdout,
+            "stderr": completed.stderr,
+            "ok": completed.returncode == 0,
+        }
+        steps.append(item)
+        if completed.returncode != 0:
+            return False
+        status_text = completed.stdout
+        expected_line = f"head_ref_oid={resolved_head_sha}"
+        return (
+            "decision=green" in status_text
+            and "state=OPEN" in status_text
+            and expected_line in status_text
+        )
+
     step_plan = [
         (
             "pr-wait-ci",
@@ -1173,6 +1198,8 @@ def pr_complete_command(
     for name, argv in step_plan:
         step_returncode = run_step(name, argv)
         if step_returncode != 0:
+            if name == "pr-wait-ci" and pr_status_allows_wait_ci_fallback():
+                continue
             failed_step = name
             break
 

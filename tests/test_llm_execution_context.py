@@ -47,3 +47,20 @@ def test_llm_execution_context_records_placeholder_and_terminal_resilience_polic
     assert context["terminal_resilience"]["avoid_process_ended_terminal_dead_end"] is True
     assert context["patch_generation_policy"]["avoid_heredoc_quote_escape_drift"] is True
     assert context["context_quality"]["source_hashes_complete"] is True
+
+def test_llm_execution_context_records_transfer_payload_and_command_integration_governance() -> None:
+    context = build_llm_execution_context(".")
+
+    transfer_policy = context["llm_to_local_transfer_policy"]
+    assert transfer_policy["payload_file"] == ".agentic/transfer/inbox/next_command.py.txt"
+    assert transfer_policy["payload_language"] == "python"
+    assert transfer_policy["payload_suffix"] == ".py.txt"
+    assert any("raw gh" in rule for rule in transfer_policy["rules"])
+    assert any("agentic-kit wrappers" in rule for rule in transfer_policy["rules"])
+
+    governance = context["command_integration_governance"]
+    assert governance["normative"] is True
+    assert "new agentic-kit commands" in governance["applies_to"]
+    assert "changed agentic-kit commands" in governance["applies_to"]
+    assert "LLM execution context visibility" in governance["required_review"]
+    assert "fresh LLM context gate requirement or explicit non-gated exception" in governance["required_review"]

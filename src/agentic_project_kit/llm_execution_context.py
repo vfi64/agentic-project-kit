@@ -79,6 +79,8 @@ def build_llm_execution_context(root: str | Path = ".") -> dict[str, Any]:
             "important_wrappers": _important_wrappers(command_reference),
         },
         "execution_policy": _execution_policy(transfer_rules, protocol),
+        "llm_to_local_transfer_policy": transfer_rules.get("llm_to_local_transfer_policy", {}),
+        "command_integration_governance": transfer_rules.get("command_integration_governance", {}),
         "context_quality": {
             "generated_from_current_repo_sources": True,
             "source_hashes_present": True,

@@ -41,6 +41,50 @@ decision_tree:
   known_volatile_dirty_state:
     action: run_restore_known_volatile_inside_transfer_continue
     forbidden: manual_git_restore_as_first_response
+
+llm_to_local_transfer_policy:
+  status: active
+  normative: true
+  payload_file: .agentic/transfer/inbox/next_command.py.txt
+  payload_language: python
+  payload_suffix: .py.txt
+  rules:
+  - LLM-to-local transfer payloads must be written as Python source files with the .py.txt suffix.
+  - The Python payload must remain syntactically compilable before local execution.
+  - Do not put raw gh, GitHub API, or direct GitHub shell commands into LLM-to-local payloads or user copy/paste blocks.
+  - GitHub, PR, merge, evidence, release, and transfer operations should be invoked through repo-backed agentic-kit wrappers.
+  - Direct gh or GitHub commands are allowed only inside audited repo-backed wrappers or explicit recovery/diagnostic implementation work.
+  - Copy/paste is a fallback lane; prefer transfer files and wrapper-first commands.
+
+command_integration_governance:
+  status: active
+  normative: true
+  applies_to:
+  - new agentic-kit commands
+  - changed agentic-kit commands
+  - new or changed governance rules
+  required_review:
+  - command reference refresh/check integration
+  - LLM execution context visibility
+  - handoff and transfer-context visibility
+  - fresh LLM context gate requirement or explicit non-gated exception
+  - recovery skip option when a hard gate could deadlock recovery
+  - tests for wrapper behavior and intended exceptions
+  classification:
+    usually_gate:
+    - mutating lifecycle wrappers
+    - PR lifecycle wrappers
+    - merge lifecycle wrappers
+    - release lifecycle wrappers
+    - evidence lifecycle wrappers
+    - transfer orchestration wrappers
+    usually_do_not_gate:
+    - status commands
+    - diagnostics
+    - context generation commands
+    - volatile repair commands
+    - read-only inspection commands
+
 transfer_lanes:
   control_lane:
     file: .agentic/transfer/inbox/current.yaml
