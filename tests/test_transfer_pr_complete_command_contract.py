@@ -196,7 +196,7 @@ def test_transfer_pr_create_complete_uses_existing_pr_when_create_fails(monkeypa
     assert "456" in calls[-1]
 
 
-def test_transfer_pr_create_complete_post_merge_complete_uses_concrete_pr_number(monkeypatch) -> None:
+def test_transfer_pr_create_complete_post_merge_complete_does_not_repeat_inner_closeout(monkeypatch) -> None:
     calls: list[list[str]] = []
 
     def fake_run(argv, *args, **kwargs):
@@ -214,11 +214,9 @@ def test_transfer_pr_create_complete_post_merge_complete_uses_concrete_pr_number
                 "",
             )
         if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]:
-            return subprocess.CompletedProcess(command, 0, "completed\n", "")
+            return subprocess.CompletedProcess(command, 0, "completed with post-merge closeout\n", "")
         if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "sync-main"]:
             return subprocess.CompletedProcess(command, 0, "synced\n", "")
-        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-complete"]:
-            return subprocess.CompletedProcess(command, 0, "post merge\n", "")
         if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"]:
             return subprocess.CompletedProcess(command, 0, "checked\n", "")
         if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "repo-status"]:
@@ -253,16 +251,11 @@ def test_transfer_pr_create_complete_post_merge_complete_uses_concrete_pr_number
 
     assert result.exit_code == 0
     assert "789" in result.stdout
-    assert any(
-        call == [
-            "./.venv/bin/agentic-kit",
-            "transfer",
-            "post-merge-complete",
-            "--after-pr",
-            "789",
-        ]
-        for call in calls
-    )
+    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"] for call in calls)
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-complete"] for call in calls)
+    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "sync-main"] for call in calls)
+    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] for call in calls)
+    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "repo-status"] for call in calls)
     assert not any("PR_NUMMER" in " ".join(call) for call in calls)
     assert not any("<" in " ".join(call) or ">" in " ".join(call) for call in calls)
 
