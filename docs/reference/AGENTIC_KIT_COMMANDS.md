@@ -846,6 +846,7 @@ canonical transfer outbox file.
 | `timeout_seconds` | `TyperOption` | --timeout-seconds | `False` | `300` | Maximum CI wait time. |
 | `poll_seconds` | `TyperOption` | --interval-seconds, --poll-seconds | `False` | `10` | CI polling interval. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+| `skip_llm_context_gate` | `TyperOption` | --skip-llm-context-gate | `False` | `False` | Recovery-only: run PR completion without requiring fresh generated LLM context. |
 
 ### `agentic-kit transfer pr-create`
 
@@ -856,6 +857,7 @@ canonical transfer outbox file.
 | `title` | `TyperOption` | --title | `True` |  | Pull request title. |
 | `body` | `TyperOption` | --body | `False` | `` | Pull request body. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+| `skip_llm_context_gate` | `TyperOption` | --skip-llm-context-gate | `False` | `False` | Recovery-only: create PR without requiring fresh generated LLM context. |
 
 ### `agentic-kit transfer pr-create-complete`
 
@@ -872,6 +874,7 @@ Create a PR and complete it without requiring manual PR-number or SHA copying.
 | `poll_seconds` | `TyperOption` | --interval-seconds, --poll-seconds | `False` | `10` | CI polling interval. |
 | `post_merge_complete` | `TyperOption` | --post-merge-complete | `False` | `False` | After pr-complete, run visible post-merge closeout using the concrete PR number. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+| `skip_llm_context_gate` | `TyperOption` | --skip-llm-context-gate | `False` | `False` | Recovery-only: run PR create/complete without requiring fresh generated LLM context. |
 
 ### `agentic-kit transfer pr-existing-for-branch`
 
@@ -894,6 +897,7 @@ Create a PR and complete it without requiring manual PR-number or SHA copying.
 | `merge_state_timeout_seconds` | `TyperOption` | --merge-state-timeout-seconds | `False` | `60` | Pre-merge GitHub merge-state wait timeout. |
 | `merge_state_poll_seconds` | `TyperOption` | --merge-state-poll-seconds | `False` | `5` | Pre-merge GitHub merge-state polling interval. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+| `skip_llm_context_gate` | `TyperOption` | --skip-llm-context-gate | `False` | `False` | Recovery-only: run PR merge without requiring fresh generated LLM context. |
 
 ### `agentic-kit transfer pr-status`
 

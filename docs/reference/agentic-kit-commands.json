@@ -5159,6 +5159,20 @@
           "param_type": "TyperOption",
           "required": false,
           "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Recovery-only: run PR completion without requiring fresh generated LLM context.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "skip_llm_context_gate",
+          "opts": [
+            "--skip-llm-context-gate"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -5237,6 +5251,20 @@
           "name": "json_output",
           "opts": [
             "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Recovery-only: create PR without requiring fresh generated LLM context.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "skip_llm_context_gate",
+          "opts": [
+            "--skip-llm-context-gate"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -5376,6 +5404,20 @@
           "name": "json_output",
           "opts": [
             "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Recovery-only: run PR create/complete without requiring fresh generated LLM context.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "skip_llm_context_gate",
+          "opts": [
+            "--skip-llm-context-gate"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -5568,6 +5610,20 @@
           "name": "json_output",
           "opts": [
             "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Recovery-only: run PR merge without requiring fresh generated LLM context.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "skip_llm_context_gate",
+          "opts": [
+            "--skip-llm-context-gate"
           ],
           "param_type": "TyperOption",
           "required": false,

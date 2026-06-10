@@ -38,6 +38,7 @@ def test_transfer_pr_complete_orchestrates_wait_merge_sync_ack_and_post_merge(mo
             "0123456789abcdef0123456789abcdef01234567",
             "--merge-method",
             "squash",
+            "--skip-llm-context-gate",
         ],
     )
 
@@ -73,6 +74,7 @@ def test_transfer_pr_complete_blocks_on_first_failed_step(monkeypatch) -> None:
             "123",
             "--expected-head-sha",
             "0123456789abcdef0123456789abcdef01234567",
+            "--skip-llm-context-gate",
         ],
     )
 
@@ -126,6 +128,7 @@ def test_transfer_pr_create_complete_orchestrates_create_and_complete(monkeypatc
             "current",
             "--merge-method",
             "squash",
+            "--skip-llm-context-gate",
         ],
     )
 
@@ -178,6 +181,7 @@ def test_transfer_pr_create_complete_uses_existing_pr_when_create_fails(monkeypa
             "main",
             "--head",
             "current",
+            "--skip-llm-context-gate",
         ],
     )
 
@@ -240,6 +244,7 @@ def test_transfer_pr_create_complete_post_merge_complete_uses_concrete_pr_number
             "--merge-method",
             "squash",
             "--post-merge-complete",
+            "--skip-llm-context-gate",
         ],
     )
 
