@@ -745,7 +745,7 @@ def test_transfer_pr_merge_safe_cli_allows_omitted_expected_head_sha(monkeypatch
         fake_pr_merge_safe,
     )
 
-    result = CliRunner().invoke(app, ["transfer", "pr-merge-safe", "123"])
+    result = CliRunner().invoke(app, ["transfer", "pr-merge-safe", "123", "--skip-llm-context-gate"])
 
     assert result.exit_code == 0
     assert calls == [
