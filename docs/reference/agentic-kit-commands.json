@@ -4055,6 +4055,20 @@
           "secondary_opts": [
             "--no-json"
           ]
+        },
+        {
+          "default": false,
+          "help": "Recovery-only: continue without requiring fresh generated LLM context.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "skip_llm_context_gate",
+          "opts": [
+            "--skip-llm-context-gate"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -6261,6 +6275,46 @@
         "repo-status"
       ],
       "qualified_name": "agentic-kit transfer repo-status"
+    },
+    {
+      "group": "transfer",
+      "help": "Require fresh generated LLM context before transfer planning.",
+      "name": "require-fresh-llm-context",
+      "params": [
+        {
+          "default": 60,
+          "help": "Maximum acceptable age of generated LLM context.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "max_age_minutes",
+          "opts": [
+            "--max-age-minutes"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "require-fresh-llm-context"
+      ],
+      "qualified_name": "agentic-kit transfer require-fresh-llm-context"
     },
     {
       "group": "transfer",
