@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: cd21b19d
-  commit_subject: Harden pr-merge-safe volatile recovery (#1222)
+  commit: '81293427'
+  commit_subject: Harden PR lifecycle and LLM context refresh (#1224)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
