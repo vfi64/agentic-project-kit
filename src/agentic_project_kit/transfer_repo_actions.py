@@ -156,16 +156,64 @@ def final_signal(result: RepoActionResult) -> str:
     return "d" if result.result_status == "PASS" and result.returncode == 0 else "f"
 
 
+def _summary_rule(label: str, *, end: bool = False) -> str:
+    side = " END SUMMARY " if end else f" {label} "
+    width = 80
+    remaining = max(width - len(side), 0)
+    left = remaining // 2
+    right = remaining - left
+    return "*" * left + side + "*" * right
+
+
+def _summary_line(label: str, value: object, *, indent: int = 0) -> str:
+    prefix = " " * indent
+    text = "" if value is None else str(value)
+    return f"{prefix}{label}:".ljust(24) + text
+
+
+def _compact_output_label(value: str, *, max_lines: int = 8) -> list[str]:
+    lines = [line for line in value.rstrip().splitlines() if line.strip()]
+    if not lines:
+        return ["none"]
+    if len(lines) <= max_lines:
+        return lines
+    return [*lines[:max_lines], f"... truncated {len(lines) - max_lines} more line(s); use --json for full output"]
+
+
 def result_terminal(result: RepoActionResult) -> str:
     signal = final_signal(result)
-    return "\n".join(
-        (
-            result_json(result),
-            f"FINAL_SIGNAL={signal}",
-            f"FINAL_NEXT={result.next_action}",
-            f"CHAT_REPLY={signal} | NEXT={result.next_action}",
-        )
+    lines = [
+        _summary_rule("START SUMMARY"),
+        f"TRANSFER_{result.action.upper().replace('-', '_')}",
+        "",
+        _summary_line("STATE", result.result_status),
+        _summary_line("RETURNCODE", result.returncode),
+        "",
+        "COMMAND",
+        _summary_line("- ACTION", result.action),
+        _summary_line("- ARGV", " ".join(result.command)),
+        "",
+    ]
+
+    stdout_lines = _compact_output_label(result.stdout)
+    stderr_lines = _compact_output_label(result.stderr)
+    if stdout_lines != ["none"]:
+        lines.append("STDOUT")
+        lines.extend(_summary_line("- LINE", item) for item in stdout_lines)
+        lines.append("")
+    if stderr_lines != ["none"]:
+        lines.append("STDERR")
+        lines.extend(_summary_line("- LINE", item) for item in stderr_lines)
+        lines.append("")
+
+    lines.extend(
+        [
+            _summary_line("NEXT", result.next_action),
+            _summary_line("CHAT_REPLY", f"{signal} | NEXT={result.next_action}"),
+            _summary_rule("END SUMMARY", end=True),
+        ]
     )
+    return "\n".join(lines)
 
 
 def _monitor_block_result(
