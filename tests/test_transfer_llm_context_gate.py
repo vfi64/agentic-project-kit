@@ -68,6 +68,11 @@ def test_transfer_continue_blocks_without_fresh_llm_context(tmp_path, monkeypatc
     _copy_context_sources(tmp_path)
     monkeypatch.chdir(tmp_path)
 
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer.refresh_llm_context_carriers",
+        lambda root: (_ for _ in ()).throw(FileNotFoundError("missing context carriers")),
+    )
+
     result = CliRunner().invoke(app, ["transfer", "continue"])
 
     assert result.exit_code == 2

@@ -1060,7 +1060,9 @@ Restore the canonical known volatile transfer files.
 
 ### `agentic-kit transfer show-last-report`
 
-_No parameters._
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print the full latest transfer report JSON. |
 
 ### `agentic-kit transfer state`
 

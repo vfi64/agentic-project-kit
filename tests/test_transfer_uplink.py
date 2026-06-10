@@ -144,7 +144,8 @@ def test_run_sequence_cli_prints_go_even_when_step_failed_but_report_written(tmp
     assert data["final_signal"] == "f"
     assert data["returncode"] == 3
 
-def test_show_last_report_prints_latest_json(tmp_path, monkeypatch):
+
+def test_show_last_report_prints_compact_summary_by_default(tmp_path, monkeypatch):
     from typer.testing import CliRunner
     from agentic_project_kit.cli import app
 
@@ -158,10 +159,29 @@ def test_show_last_report_prints_latest_json(tmp_path, monkeypatch):
     result = CliRunner().invoke(app, ["transfer", "show-last-report"])
 
     assert result.exit_code == 0
+    assert "TRANSFER_SHOW_LAST_REPORT" in result.stdout
+    assert "show-latest" in result.stdout
+    assert "FULL_REPORT" in result.stdout
+
+
+def test_show_last_report_prints_full_json_with_json_flag(tmp_path, monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    monkeypatch.chdir(tmp_path)
+    run_and_log_transfer_command(
+        [sys.executable, "-c", "print('FINAL_SIGNAL=d'); print('FINAL_NEXT=continue')"],
+        label="show-latest",
+        cwd=tmp_path,
+    )
+
+    result = CliRunner().invoke(app, ["transfer", "show-last-report", "--json"])
+
+    assert result.exit_code == 0
     data = json.loads(result.stdout)
-    assert data["transfer_report_written"] == "done"
-    assert data["chat_reply"] == "d | NEXT=Run transfer publish-last-report"
-    assert data["remote_report_path"].startswith("docs/reports/transfer_runs/")
+    assert data["label"] == "show-latest"
+    assert data["final_signal"] == "d"
+    assert data["next_action"] == "continue"
 
 
 def test_show_last_report_fails_when_missing(tmp_path, monkeypatch):
@@ -173,8 +193,7 @@ def test_show_last_report_fails_when_missing(tmp_path, monkeypatch):
     result = CliRunner().invoke(app, ["transfer", "show-last-report"])
 
     assert result.exit_code == 1
-    assert "TRANSFER_UPLOAD=missing" in result.stdout
-    assert "CHAT_REPLY=f" in result.stdout
+    assert "latest transfer report not found" in result.stdout
 
 def test_write_transfer_report_from_repo_result_does_not_execute_python(tmp_path):
     from agentic_project_kit.transfer_repo_actions import RepoActionResult

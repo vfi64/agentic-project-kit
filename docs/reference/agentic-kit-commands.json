@@ -6564,7 +6564,22 @@
       "group": "transfer",
       "help": "",
       "name": "show-last-report",
-      "params": [],
+      "params": [
+        {
+          "default": false,
+          "help": "Print the full latest transfer report JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
       "path": [
         "transfer",
         "show-last-report"
