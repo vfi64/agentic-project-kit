@@ -322,7 +322,7 @@ def continue_transfer_command(
 ) -> None:
     """Continue chat/local transfer communication through the safest available wrapper path."""
     if not skip_llm_context_gate:
-        _require_fresh_llm_context_or_exit(max_age_minutes=60, json_output=json_output)
+        _ensure_fresh_llm_context_or_exit(max_age_minutes=60, json_output=json_output)
     result = run_transfer_continue(Path("."), branch)
     if json_output:
         typer.echo(json.dumps(result, indent=2, sort_keys=True))
@@ -2016,6 +2016,33 @@ def _require_fresh_llm_context_or_exit(*, max_age_minutes: int, json_output: boo
     raise typer.Exit(code=2)
 
 
+def _ensure_fresh_llm_context_or_exit(*, max_age_minutes: int, json_output: bool) -> None:
+    payload = _evaluate_llm_context_freshness(Path("."), max_age_minutes=max_age_minutes)
+    if payload.get("result_status") == "PASS":
+        return
+
+    initial_blockers = list(payload.get("blockers", []))
+    try:
+        refresh_result = refresh_llm_context_carriers(Path("."))
+    except (FileNotFoundError, ValueError, OSError) as exc:
+        payload["auto_refresh_attempted"] = True
+        payload["auto_refresh_result_status"] = "BLOCKED"
+        payload["auto_refresh_error"] = str(exc)
+        payload["next_action"] = "Inspect LLM context carrier refresh failure before planning: " + str(exc)
+        _emit_llm_context_gate_result(payload, json_output=json_output)
+        raise typer.Exit(code=2) from exc
+
+    payload = _evaluate_llm_context_freshness(Path("."), max_age_minutes=max_age_minutes)
+    payload["auto_refresh_attempted"] = True
+    payload["auto_refresh_result_status"] = refresh_result.get("result_status")
+    payload["initial_blockers"] = initial_blockers
+    if payload.get("result_status") == "PASS":
+        return
+
+    _emit_llm_context_gate_result(payload, json_output=json_output)
+    raise typer.Exit(code=2)
+
+
 @transfer_app.command("require-fresh-llm-context")
 def require_fresh_llm_context(
     max_age_minutes: int = typer.Option(
@@ -3434,16 +3461,50 @@ def remote_work_start(
         )
 
 
-@transfer_app.command("show-last-report")
-def show_last_report() -> None:
+def _render_latest_transfer_report_summary(report_text: str) -> str:
     try:
-        typer.echo(read_latest_transfer_report(Path(".")))
+        data = json.loads(report_text)
+    except json.JSONDecodeError:
+        return report_text
+    if not isinstance(data, dict):
+        return report_text
+
+    fields = {
+        "LABEL": data.get("label", ""),
+        "RETURNCODE": data.get("returncode", ""),
+        "FINAL_SIGNAL": data.get("final_signal", ""),
+        "CHAT_REPLY": data.get("chat_reply", ""),
+        "NEXT": data.get("next_action", ""),
+        "LOCAL_JSON": data.get("latest_json_path", "docs/reports/transfer_runs/latest-transfer-report.json"),
+        "REMOTE_JSON": data.get("remote_report_path", ""),
+    }
+    lines = [
+        "********************************** START SUMMARY ***********************************",
+        "TRANSFER_SHOW_LAST_REPORT",
+        "",
+    ]
+    lines.extend(_summary_line(name, value) for name, value in fields.items())
+    lines.extend(
+        [
+            "",
+            "FULL_REPORT: use --json or inspect the reported JSON file",
+            "*********************************** END SUMMARY ************************************",
+        ]
+    )
+    return "\n".join(lines)
+
+
+@transfer_app.command("show-last-report")
+def show_last_report(
+    json_output: bool = typer.Option(False, "--json", help="Print the full latest transfer report JSON."),
+) -> None:
+    try:
+        report_text = read_latest_transfer_report(Path("."))
     except FileNotFoundError as exc:
         typer.echo(str(exc))
-        typer.echo("TRANSFER_UPLOAD=missing")
-        typer.echo("REMOTE_REPORT=")
-        typer.echo("CHAT_REPLY=f")
         raise typer.Exit(code=1) from exc
+
+    typer.echo(report_text if json_output else _render_latest_transfer_report_summary(report_text))
 
 
 @transfer_app.command("run-sequence-and-log")
