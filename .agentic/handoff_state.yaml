@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 2281c230
-  commit_subject: Avoid duplicate pr-create-complete post-merge closeout (#1236)
+  commit: 9e3f3435
+  commit_subject: Harden transfer continue self-healing (#1238)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
