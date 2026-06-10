@@ -187,3 +187,73 @@ def test_transfer_pr_create_complete_uses_existing_pr_when_create_fails(monkeypa
     assert any(call[:3] == ["gh", "pr", "view"] for call in calls)
     assert calls[-1][:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]
     assert "456" in calls[-1]
+
+
+def test_transfer_pr_create_complete_post_merge_complete_uses_concrete_pr_number(monkeypatch) -> None:
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "0123456789abcdef0123456789abcdef01234567\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                '{"stdout":"https://github.com/vfi64/agentic-project-kit/pull/789\\n"}\n',
+                "",
+            )
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]:
+            return subprocess.CompletedProcess(command, 0, "completed\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "sync-main"]:
+            return subprocess.CompletedProcess(command, 0, "synced\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-complete"]:
+            return subprocess.CompletedProcess(command, 0, "post merge\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"]:
+            return subprocess.CompletedProcess(command, 0, "checked\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "repo-status"]:
+            return subprocess.CompletedProcess(command, 0, "clean\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
+        lambda capability: None,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "pr-create-complete",
+            "--title",
+            "Demo",
+            "--body",
+            "Body",
+            "--base",
+            "main",
+            "--head",
+            "current",
+            "--merge-method",
+            "squash",
+            "--post-merge-complete",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert "789" in result.stdout
+    assert any(
+        call == [
+            "./.venv/bin/agentic-kit",
+            "transfer",
+            "post-merge-complete",
+            "--after-pr",
+            "789",
+        ]
+        for call in calls
+    )
+    assert not any("PR_NUMMER" in " ".join(call) for call in calls)
+    assert not any("<" in " ".join(call) or ">" in " ".join(call) for call in calls)

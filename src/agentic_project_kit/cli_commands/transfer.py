@@ -1470,6 +1470,11 @@ def pr_create_complete_command(
         min=1,
         help="CI polling interval.",
     ),
+    post_merge_complete: bool = typer.Option(
+        False,
+        "--post-merge-complete",
+        help="After pr-complete, run visible post-merge closeout using the concrete PR number.",
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     """Create a PR and complete it without requiring manual PR-number or SHA copying."""
@@ -1579,6 +1584,22 @@ def pr_create_complete_command(
                 str(poll_seconds),
             ],
         )
+
+    if pr_number is not None and post_merge_complete and not blockers:
+        post_merge_steps = [
+            ("post-pr-sync-main-before-closeout", [agentic_kit, "transfer", "sync-main"]),
+            (
+                "post-pr-post-merge-complete",
+                [agentic_kit, "transfer", "post-merge-complete", "--after-pr", str(pr_number)],
+            ),
+            ("post-pr-sync-main-after-closeout", [agentic_kit, "transfer", "sync-main"]),
+            ("post-pr-post-merge-check", [agentic_kit, "transfer", "post-merge-check"]),
+            ("post-pr-repo-status", [agentic_kit, "transfer", "repo-status"]),
+        ]
+        for name, argv in post_merge_steps:
+            run_step(name, argv)
+            if blockers:
+                break
 
     blockers = list(dict.fromkeys(blockers))
     result_status = "PASS" if not blockers else "BLOCKED"
@@ -1757,6 +1778,103 @@ def publish_last_report(
         typer.echo("TRANSFER_UPLOAD=done")
         typer.echo(f"REMOTE_REPORT={result['remote_report']}")
         typer.echo(f"CHAT_REPLY={result['chat_reply']}")
+
+
+@transfer_app.command("verify-llm-context-refresh")
+def verify_llm_context_refresh(
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    blockers: list[str] = []
+    checked: dict[str, dict[str, object]] = {}
+
+    paths = {
+        "outbox": Path(".agentic/transfer/outbox/last_result.txt"),
+        "latest_handoff_report": Path("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"),
+    }
+    required_context_keys = [
+        "source_hashes",
+        "context_quality",
+        "running_chat_refresh_contract",
+        "shell_placeholder_policy",
+        "terminal_resilience",
+        "patch_generation_policy",
+    ]
+    required_markers = [
+        "agentic-kit transfer pr-create-complete --post-merge-complete",
+        "verify-llm-context-refresh",
+    ]
+    forbidden_fragments = ["<PR_NUMMER>", "<PR_NUMBER>"]
+
+    for name, path in paths.items():
+        status: dict[str, object] = {"path": str(path), "exists": path.exists()}
+        checked[name] = status
+        if not path.exists():
+            blockers.append(name + "_missing")
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            status["json_error"] = str(exc)
+            blockers.append(name + "_json_invalid")
+            continue
+        if not isinstance(data, dict):
+            blockers.append(name + "_not_object")
+            continue
+        ctx = data.get("llm_execution_context")
+        status["llm_execution_context_present"] = isinstance(ctx, dict)
+        if not isinstance(ctx, dict):
+            blockers.append(name + "_llm_execution_context_missing")
+            continue
+        ctx_text = json.dumps(ctx, sort_keys=True, ensure_ascii=False)
+        missing_keys = [key for key in required_context_keys if key not in ctx]
+        missing_markers = [marker for marker in required_markers if marker not in ctx_text]
+        forbidden_hits = [fragment for fragment in forbidden_fragments if fragment in ctx_text]
+        status["missing_context_keys"] = missing_keys
+        status["missing_markers"] = missing_markers
+        status["forbidden_fragments"] = forbidden_hits
+        if missing_keys:
+            blockers.append(name + "_context_keys_missing")
+        if missing_markers:
+            blockers.append(name + "_markers_missing")
+        if forbidden_hits:
+            blockers.append(name + "_forbidden_placeholder_present")
+
+    blockers = list(dict.fromkeys(blockers))
+    result_status = "PASS" if not blockers else "BLOCKED"
+    final_signal = "d" if result_status == "PASS" else "f"
+    next_action = (
+        "LLM context refresh is current for running-chat and successor-chat drift control."
+        if result_status == "PASS"
+        else "Regenerate transfer outbox/latest handoff report before planning: " + ", ".join(blockers)
+    )
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_verify_llm_context_refresh_result",
+        "action": "verify-llm-context-refresh",
+        "result_status": result_status,
+        "final_signal": final_signal,
+        "next_action": next_action,
+        "blockers": blockers,
+        "checked": checked,
+    }
+
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False))
+    else:
+        _echo_transfer_payload_summary(
+            title="TRANSFER_VERIFY_LLM_CONTEXT_REFRESH",
+            result_status=result_status,
+            final_signal=final_signal,
+            next_action=next_action,
+            fields={
+                "OUTBOX_CONTEXT": checked.get("outbox", {}).get("llm_execution_context_present", False),
+                "LATEST_CONTEXT": checked.get("latest_handoff_report", {}).get("llm_execution_context_present", False),
+                "BLOCKERS": len(blockers),
+            },
+        )
+
+    if blockers:
+        raise typer.Exit(code=2)
 
 
 

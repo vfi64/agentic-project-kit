@@ -354,3 +354,87 @@ def test_publish_latest_transfer_report_embeds_llm_execution_context(tmp_path, m
 
     assert data["llm_execution_context"]["kind"] == "llm_execution_context"
     assert data["llm_execution_context"]["command_reference"]["must_not_reconstruct_commands_from_memory"] is True
+
+
+def test_publish_latest_transfer_report_latest_json_embeds_llm_execution_context(tmp_path, monkeypatch):
+    from agentic_project_kit.transfer_uplink import publish_latest_transfer_report
+
+    for relative in (
+        ".agentic/compiled_agent_context.yaml",
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/transfer/one_command_transfer_protocol.yaml",
+        "docs/reference/agentic-kit-commands.json",
+        "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    ):
+        src = Path(relative)
+        dst = tmp_path / relative
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+
+    run_and_log_transfer_command(
+        ["python", "-c", "print('FINAL_SIGNAL=d'); print('FINAL_NEXT=handoff ready')"],
+        label="latest llm context handoff",
+        cwd=tmp_path,
+    )
+
+    published = publish_latest_transfer_report(tmp_path, label="latest llm context handoff")
+    latest = json.loads((tmp_path / published["latest_remote_report"]).read_text(encoding="utf-8"))
+
+    assert latest["llm_execution_context"]["kind"] == "llm_execution_context"
+    assert latest["llm_execution_context"]["command_reference"]["must_not_reconstruct_commands_from_memory"] is True
+
+
+def test_verify_llm_context_refresh_cli_passes_for_generated_reports(tmp_path, monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+    from agentic_project_kit.transfer_safety_context import build_local_to_llm_payload
+
+    for relative in (
+        ".agentic/compiled_agent_context.yaml",
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/transfer/one_command_transfer_protocol.yaml",
+        "docs/reference/agentic-kit-commands.json",
+        "docs/reference/AGENTIC_KIT_COMMANDS.md",
+        ".agentic/rule_mechanism_inventory.yaml",
+        ".agentic/rule_preservation.yaml",
+        "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
+        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    ):
+        src = Path(relative)
+        dst = tmp_path / relative
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+
+    payload = build_local_to_llm_payload(tmp_path, {"final_signal": "d", "next_action": "continue"})
+    outbox = tmp_path / ".agentic/transfer/outbox/last_result.txt"
+    latest = tmp_path / "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
+    outbox.parent.mkdir(parents=True, exist_ok=True)
+    latest.parent.mkdir(parents=True, exist_ok=True)
+    outbox.write_text(json.dumps(payload), encoding="utf-8")
+    latest.write_text(json.dumps(payload), encoding="utf-8")
+
+    monkeypatch.chdir(tmp_path)
+    result = CliRunner().invoke(app, ["transfer", "verify-llm-context-refresh"])
+
+    assert result.exit_code == 0
+    assert "TRANSFER_VERIFY_LLM_CONTEXT_REFRESH" in result.stdout
+    assert "PASS" in result.stdout
+
+
+def test_verify_llm_context_refresh_cli_blocks_when_context_missing(tmp_path, monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    outbox = tmp_path / ".agentic/transfer/outbox/last_result.txt"
+    latest = tmp_path / "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
+    outbox.parent.mkdir(parents=True, exist_ok=True)
+    latest.parent.mkdir(parents=True, exist_ok=True)
+    outbox.write_text(json.dumps({"kind": "old"}), encoding="utf-8")
+    latest.write_text(json.dumps({"kind": "old"}), encoding="utf-8")
+
+    monkeypatch.chdir(tmp_path)
+    result = CliRunner().invoke(app, ["transfer", "verify-llm-context-refresh"])
+
+    assert result.exit_code == 2
+    assert "TRANSFER_VERIFY_LLM_CONTEXT_REFRESH" in result.stdout
+    assert "BLOCKED" in result.stdout
