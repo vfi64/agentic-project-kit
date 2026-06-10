@@ -1670,13 +1670,12 @@ def pr_create_complete_command(
         run_step("pr-complete", complete_argv)
 
     if pr_number is not None and post_merge_complete and not blockers:
+        # pr-complete already runs the concrete post-merge-complete lifecycle after
+        # a successful merge. The outer pr-create-complete wrapper must not run it
+        # a second time, because a successful admin-refresh PR can make the repeated
+        # closeout look like a new failure even though the lifecycle is already done.
         post_merge_steps = [
-            ("post-pr-sync-main-before-closeout", [agentic_kit, "transfer", "sync-main"]),
-            (
-                "post-pr-post-merge-complete",
-                [agentic_kit, "transfer", "post-merge-complete", "--after-pr", str(pr_number)],
-            ),
-            ("post-pr-sync-main-after-closeout", [agentic_kit, "transfer", "sync-main"]),
+            ("post-pr-sync-main-after-complete", [agentic_kit, "transfer", "sync-main"]),
             ("post-pr-post-merge-check", [agentic_kit, "transfer", "post-merge-check"]),
             ("post-pr-repo-status", [agentic_kit, "transfer", "repo-status"]),
         ]
