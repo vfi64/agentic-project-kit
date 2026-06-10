@@ -6,6 +6,7 @@ from pathlib import Path
 
 import typer
 
+from agentic_project_kit.llm_context_carriers import refresh_llm_context_carriers
 from agentic_project_kit.transfer_closeout import closeout_transfer
 from agentic_project_kit.transfer_continue import render_transfer_continue_summary
 from agentic_project_kit.transfer_continue import run_transfer_continue
@@ -1169,7 +1170,6 @@ def pr_complete_command(
                 str(timeout_seconds),
                 "--interval-seconds",
                 str(poll_seconds),
-                "--skip-llm-context-gate",
             ],
         ),
         (
@@ -1363,8 +1363,25 @@ def pr_create_command(
 ) -> None:
     if not skip_llm_context_gate:
         _require_fresh_llm_context_or_exit(max_age_minutes=60, json_output=json_output)
+    resolved_head = head
+    if head == "current":
+        import subprocess
+
+        completed = subprocess.run(["git", "branch", "--show-current"], text=True, capture_output=True)
+        resolved_head = completed.stdout.strip()
+        if completed.returncode != 0 or not resolved_head:
+            payload = {
+                "action": "pr-create",
+                "result_status": "BLOCKED",
+                "final_signal": "f",
+                "next_action": "Resolve current branch before creating a PR.",
+                "blockers": ["current_branch_missing"],
+                "stderr": completed.stderr,
+            }
+            typer.echo(json.dumps(payload, indent=2, sort_keys=True) if json_output else "PR_CREATE_BLOCKED\nreason=current_branch_missing")
+            raise typer.Exit(code=2)
     _require_transfer_capability("rules_confirmed")
-    result = pr_create(base=base, head=head, title=title, body=body)
+    result = pr_create(base=base, head=resolved_head, title=title, body=body)
     _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
@@ -2036,6 +2053,8 @@ def verify_llm_context_refresh(
         "shell_placeholder_policy",
         "terminal_resilience",
         "patch_generation_policy",
+        "llm_to_local_transfer_policy",
+        "command_integration_governance",
     ]
     required_markers = [
         "agentic-kit transfer pr-create-complete --post-merge-complete",
@@ -2113,6 +2132,42 @@ def verify_llm_context_refresh(
 
     if blockers:
         raise typer.Exit(code=2)
+
+
+
+@transfer_app.command("refresh-llm-context-carriers")
+def refresh_llm_context_carriers_command(
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    """Refresh outbox and latest handoff report with fresh generated LLM context."""
+    try:
+        payload = refresh_llm_context_carriers(Path("."))
+    except (FileNotFoundError, ValueError, OSError) as exc:
+        payload = {
+            "schema_version": 1,
+            "kind": "llm_context_carriers_refresh_result",
+            "action": "refresh-llm-context-carriers",
+            "result_status": "BLOCKED",
+            "final_signal": "f",
+            "next_action": f"Inspect LLM context carrier refresh failure: {exc}",
+            "error": str(exc),
+        }
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True) if json_output else f"REFRESH_LLM_CONTEXT_CARRIERS_BLOCKED\nerror={exc}")
+        raise typer.Exit(code=2) from exc
+
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        _echo_transfer_payload_summary(
+            title="TRANSFER_REFRESH_LLM_CONTEXT_CARRIERS",
+            result_status=str(payload["result_status"]),
+            final_signal=str(payload["final_signal"]),
+            next_action=str(payload["next_action"]),
+            fields={
+                "OUTBOX": payload["outbox_path"],
+                "LATEST": payload["latest_handoff_report_path"],
+            },
+        )
 
 
 

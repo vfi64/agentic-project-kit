@@ -239,8 +239,14 @@ def test_post_merge_complete_cli_blocks_dirty_worktree_before_lifecycle(tmp_path
 
 def test_post_merge_complete_cli_writes_and_publishes_report(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
+    refresh_calls = []
     monkeypatch.setattr(command_module, "inspect_local_state", lambda *_args, **_kwargs: LocalState(True, (), (), ()))
     monkeypatch.setattr(command_module, "post_merge_complete", lambda *_args, **_kwargs: FakePostMergeCompleteResult())
+    monkeypatch.setattr(
+        command_module,
+        "refresh_llm_context_carriers",
+        lambda root, label: refresh_calls.append((root, label)) or {"result_status": "PASS"},
+    )
 
     result = CliRunner().invoke(app, ["transfer", "post-merge-complete", "--after-pr", "1090"])
 
@@ -255,6 +261,7 @@ def test_post_merge_complete_cli_writes_and_publishes_report(tmp_path, monkeypat
     assert "- REPORT_PATH:         docs/reports/transfer_runs/" in result.stdout
     assert "CHAT_REPLY:            d | NEXT=Post-merge lifecycle is complete after admin refresh." in result.stdout
     assert "CHAT_REPLY=g" not in result.stdout
+    assert refresh_calls == [(Path("."), "post-merge-complete-after-pr1090")]
     assert (tmp_path / "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json").exists()
 
 

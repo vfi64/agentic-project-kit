@@ -6101,6 +6101,32 @@
     },
     {
       "group": "transfer",
+      "help": "Refresh outbox and latest handoff report with fresh generated LLM context.",
+      "name": "refresh-llm-context-carriers",
+      "params": [
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "refresh-llm-context-carriers"
+      ],
+      "qualified_name": "agentic-kit transfer refresh-llm-context-carriers"
+    },
+    {
+      "group": "transfer",
       "help": "",
       "name": "remote-next",
       "params": [

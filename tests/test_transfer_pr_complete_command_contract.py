@@ -50,6 +50,8 @@ def test_transfer_pr_complete_orchestrates_wait_merge_sync_ack_and_post_merge(mo
         ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"],
         ["./.venv/bin/agentic-kit", "transfer", "pr-merge-safe"],
     ]
+    assert "--skip-llm-context-gate" not in calls[0]
+    assert "--skip-llm-context-gate" in calls[1]
     assert calls[2] == ["git", "switch", "main"]
     assert calls[3] == ["git", "pull", "--ff-only", "origin", "main"]
     assert calls[4] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"]
@@ -309,3 +311,50 @@ def test_transfer_pr_complete_continues_when_wait_ci_blocks_but_pr_status_is_gre
         ["./.venv/bin/agentic-kit", "transfer", "pr-status"],
         ["./.venv/bin/agentic-kit", "transfer", "pr-merge-safe"],
     ]
+
+def test_transfer_pr_create_resolves_head_current_before_pr_create(monkeypatch) -> None:
+    from agentic_project_kit.cli_commands import transfer as transfer_module
+
+    captured: dict[str, str] = {}
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    class FakeRepoResult:
+        returncode = 0
+
+    def fake_pr_create(*, base: str, head: str, title: str, body: str):
+        captured["base"] = base
+        captured["head"] = head
+        captured["title"] = title
+        captured["body"] = body
+        return FakeRepoResult()
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(transfer_module, "pr_create", fake_pr_create)
+    monkeypatch.setattr(transfer_module, "_echo_repo_result", lambda result, json_output: None)
+    monkeypatch.setattr(transfer_module, "_require_transfer_capability", lambda capability: None)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "pr-create",
+            "--base",
+            "main",
+            "--head",
+            "current",
+            "--title",
+            "Demo",
+            "--body",
+            "Body",
+            "--skip-llm-context-gate",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert captured["head"] == "feature/demo"
+

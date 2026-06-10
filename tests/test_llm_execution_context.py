@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 from agentic_project_kit.llm_execution_context import build_llm_execution_context
 
 
@@ -64,3 +66,12 @@ def test_llm_execution_context_records_transfer_payload_and_command_integration_
     assert "changed agentic-kit commands" in governance["applies_to"]
     assert "LLM execution context visibility" in governance["required_review"]
     assert "fresh LLM context gate requirement or explicit non-gated exception" in governance["required_review"]
+
+def test_llm_execution_context_governance_mentions_refresh_and_post_merge_context_carriers() -> None:
+    context = build_llm_execution_context(".")
+    governance_text = json.dumps(context["command_integration_governance"], ensure_ascii=False)
+
+    assert "handoff and transfer-context visibility" in governance_text
+    assert "LLM execution context visibility" in governance_text
+    assert "fresh LLM context gate requirement or explicit non-gated exception" in governance_text
+
