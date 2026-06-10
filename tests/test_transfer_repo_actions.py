@@ -1715,3 +1715,108 @@ def test_transfer_delete_merged_work_branch_refuses_current_branch(monkeypatch):
     assert result.exit_code == 2
     assert "refuse_delete_current_branch" in result.stdout
 
+
+
+def test_pr_merge_safe_repairs_known_volatile_before_merge(monkeypatch):
+    calls = []
+
+    class BlockMonitor:
+        decision = transfer_repo_actions.MonitorDecision.BLOCK
+        actual_branch = "feature/work"
+        required_branch = "main"
+        reason = "dirty_worktree_blocks_branch_switch"
+
+    class ContinueMonitor:
+        decision = transfer_repo_actions.MonitorDecision.CONTINUE
+        actual_branch = "main"
+        required_branch = "main"
+        reason = "already_on_required_branch"
+
+    monitors = [BlockMonitor(), ContinueMonitor()]
+
+    def fake_guard_branch(**kwargs):
+        calls.append(["guard_branch", kwargs])
+        return monitors.pop(0)
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if (
+            len(command) >= 4
+            and command[0].endswith("agentic-kit")
+            and command[1:] == ["transfer", "normalize-session", "--repair-known-volatile"]
+        ):
+            return subprocess.CompletedProcess(command, 0, "normalized\n", "")
+        if len(command) >= 3 and command[0].endswith("agentic-kit") and command[1:3] == ["pr", "merge-if-green"]:
+            return subprocess.CompletedProcess(command, 0, "merged\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.pr_merge_safe(
+        123,
+        expected_head_sha="0123456789abcdef0123456789abcdef01234567",
+        main_branch="main",
+    )
+
+    assert result.returncode == 0
+    assert result.result_status == "PASS"
+    assert any(
+        isinstance(call, list)
+        and len(call) >= 4 and call[0].endswith("agentic-kit") and call[1:] == ["transfer", "normalize-session", "--repair-known-volatile"]
+        for call in calls
+    )
+    assert any(
+        isinstance(call, list)
+        and len(call) >= 3 and call[0].endswith("agentic-kit") and call[1:3] == ["pr", "merge-if-green"]
+        for call in calls
+    )
+    assert len([call for call in calls if isinstance(call, list) and call and call[0] == "guard_branch"]) == 2
+
+
+def test_pr_merge_safe_still_blocks_when_volatile_repair_fails(monkeypatch):
+    calls = []
+
+    class BlockMonitor:
+        decision = transfer_repo_actions.MonitorDecision.BLOCK
+        actual_branch = "feature/work"
+        required_branch = "main"
+        reason = "dirty_worktree_blocks_branch_switch"
+
+    def fake_guard_branch(**kwargs):
+        calls.append(["guard_branch", kwargs])
+        return BlockMonitor()
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == [
+            "./.venv/bin/agentic-kit",
+            "transfer",
+            "normalize-session",
+            "--repair-known-volatile",
+        ]:
+            return subprocess.CompletedProcess(command, 2, "", "dirty product file\n")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.pr_merge_safe(
+        123,
+        expected_head_sha="0123456789abcdef0123456789abcdef01234567",
+        main_branch="main",
+    )
+
+    assert result.returncode == 2
+    assert result.result_status == "FAIL"
+    assert "Transfer operation monitor blocked pr-merge-safe" in result.stderr
+    assert any(
+        isinstance(call, list)
+        and len(call) >= 4 and call[0].endswith("agentic-kit") and call[1:] == ["transfer", "normalize-session", "--repair-known-volatile"]
+        for call in calls
+    )
+    assert not any(
+        isinstance(call, list)
+        and len(call) >= 3 and call[0].endswith("agentic-kit") and call[1:3] == ["pr", "merge-if-green"]
+        for call in calls
+    )
