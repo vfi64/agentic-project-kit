@@ -313,8 +313,15 @@ def continue_transfer_command(
         help="Optional target branch. If omitted, infer a single active transfer order.",
     ),
     json_output: bool = typer.Option(False, "--json/--no-json", help="Print machine-readable JSON."),
+    skip_llm_context_gate: bool = typer.Option(
+        False,
+        "--skip-llm-context-gate",
+        help="Recovery-only: continue without requiring fresh generated LLM context.",
+    ),
 ) -> None:
     """Continue chat/local transfer communication through the safest available wrapper path."""
+    if not skip_llm_context_gate:
+        _require_fresh_llm_context_or_exit(max_age_minutes=60, json_output=json_output)
     result = run_transfer_continue(Path("."), branch)
     if json_output:
         typer.echo(json.dumps(result, indent=2, sort_keys=True))
@@ -1778,6 +1785,177 @@ def publish_last_report(
         typer.echo("TRANSFER_UPLOAD=done")
         typer.echo(f"REMOTE_REPORT={result['remote_report']}")
         typer.echo(f"CHAT_REPLY={result['chat_reply']}")
+
+
+def _evaluate_llm_context_freshness(root: Path, *, max_age_minutes: int) -> dict[str, object]:
+    from datetime import datetime, timezone
+
+    from agentic_project_kit.llm_execution_context import build_llm_execution_context
+
+    paths = {
+        "outbox": root / ".agentic/transfer/outbox/last_result.txt",
+        "latest_handoff_report": root / "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+    }
+    required_context_keys = [
+        "source_hashes",
+        "context_quality",
+        "running_chat_refresh_contract",
+        "shell_placeholder_policy",
+        "terminal_resilience",
+        "patch_generation_policy",
+        "command_reference",
+    ]
+    required_markers = [
+        "agentic-kit transfer pr-create-complete --post-merge-complete",
+        "verify-llm-context-refresh",
+    ]
+    forbidden_fragments = ["<PR_NUMMER>", "<PR_NUMBER>"]
+    now = datetime.now(timezone.utc)
+    blockers: list[str] = []
+    checked: dict[str, dict[str, object]] = {}
+    valid_contexts: list[str] = []
+
+    try:
+        current_context = build_llm_execution_context(root)
+        current_source_hashes = current_context.get("source_hashes", {})
+    except Exception as exc:  # noqa: BLE001
+        current_source_hashes = {}
+        blockers.append("current_context_generation_failed")
+        checked["current_context"] = {"ok": False, "error": str(exc)}
+
+    for name, path in paths.items():
+        status: dict[str, object] = {"path": str(path), "exists": path.exists()}
+        checked[name] = status
+        local_blockers: list[str] = []
+        if not path.exists():
+            local_blockers.append("missing")
+            status["blockers"] = local_blockers
+            blockers.append(name + "_missing")
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            status["json_error"] = str(exc)
+            local_blockers.append("json_invalid")
+            status["blockers"] = local_blockers
+            blockers.append(name + "_json_invalid")
+            continue
+        if not isinstance(data, dict):
+            local_blockers.append("not_object")
+            status["blockers"] = local_blockers
+            blockers.append(name + "_not_object")
+            continue
+        ctx = data.get("llm_execution_context")
+        status["llm_execution_context_present"] = isinstance(ctx, dict)
+        if not isinstance(ctx, dict):
+            local_blockers.append("llm_execution_context_missing")
+            status["blockers"] = local_blockers
+            blockers.append(name + "_llm_execution_context_missing")
+            continue
+        ctx_text = json.dumps(ctx, sort_keys=True, ensure_ascii=False)
+        missing_keys = [key for key in required_context_keys if key not in ctx]
+        missing_markers = [marker for marker in required_markers if marker not in ctx_text]
+        forbidden_hits = [fragment for fragment in forbidden_fragments if fragment in ctx_text]
+        context_quality = ctx.get("context_quality") if isinstance(ctx.get("context_quality"), dict) else {}
+        refresh_contract = ctx.get("running_chat_refresh_contract") if isinstance(ctx.get("running_chat_refresh_contract"), dict) else {}
+        source_hashes = ctx.get("source_hashes") if isinstance(ctx.get("source_hashes"), dict) else {}
+        status["missing_context_keys"] = missing_keys
+        status["missing_markers"] = missing_markers
+        status["forbidden_fragments"] = forbidden_hits
+        status["source_hashes_complete"] = bool(context_quality.get("source_hashes_complete"))
+        status["refresh_required_for_running_chats"] = bool(refresh_contract.get("refresh_required_for_running_chats"))
+        status["source_hashes_match_current_repo"] = bool(source_hashes) and source_hashes == current_source_hashes
+        generated_at = ctx.get("generated_at_utc")
+        status["generated_at_utc"] = generated_at
+        if isinstance(generated_at, str) and generated_at:
+            try:
+                generated_time = datetime.fromisoformat(generated_at.replace("Z", "+00:00"))
+                age_seconds = (now - generated_time).total_seconds()
+                status["age_seconds"] = age_seconds
+                status["fresh"] = age_seconds <= max_age_minutes * 60
+            except ValueError:
+                status["fresh"] = False
+                local_blockers.append("generated_at_invalid")
+        else:
+            status["fresh"] = False
+            local_blockers.append("generated_at_missing")
+        if missing_keys:
+            local_blockers.append("context_keys_missing")
+        if missing_markers:
+            local_blockers.append("markers_missing")
+        if forbidden_hits:
+            local_blockers.append("forbidden_placeholder_present")
+        if not status["source_hashes_complete"]:
+            local_blockers.append("source_hashes_incomplete")
+        if not status["source_hashes_match_current_repo"]:
+            local_blockers.append("source_hashes_mismatch")
+        if not status["refresh_required_for_running_chats"]:
+            local_blockers.append("running_chat_refresh_contract_missing")
+        if not status["fresh"]:
+            local_blockers.append("stale_or_not_fresh")
+        status["blockers"] = local_blockers
+        if local_blockers:
+            blockers.extend(name + "_" + item for item in local_blockers)
+        else:
+            valid_contexts.append(name)
+
+    blockers = list(dict.fromkeys(blockers))
+    result_status = "PASS" if valid_contexts and not blockers else "BLOCKED"
+    return {
+        "schema_version": 1,
+        "kind": "transfer_require_fresh_llm_context_result",
+        "action": "require-fresh-llm-context",
+        "result_status": result_status,
+        "final_signal": "d" if result_status == "PASS" else "f",
+        "next_action": "Fresh LLM context gate passed; planning may continue." if result_status == "PASS" else "Regenerate and publish fresh LLM context before planning: " + ", ".join(blockers),
+        "max_age_minutes": max_age_minutes,
+        "valid_contexts": valid_contexts,
+        "blockers": blockers,
+        "checked": checked,
+    }
+
+
+def _emit_llm_context_gate_result(payload: dict[str, object], *, json_output: bool) -> None:
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False))
+        return
+    _echo_transfer_payload_summary(
+        title="TRANSFER_REQUIRE_FRESH_LLM_CONTEXT",
+        result_status=str(payload.get("result_status", "BLOCKED")),
+        final_signal=str(payload.get("final_signal", "f")),
+        next_action=str(payload.get("next_action", "Regenerate fresh LLM context before planning.")),
+        fields={
+            "VALID_CONTEXTS": len(payload.get("valid_contexts", [])),
+            "BLOCKERS": len(payload.get("blockers", [])),
+            "MAX_AGE_MINUTES": payload.get("max_age_minutes", 0),
+        },
+    )
+
+
+def _require_fresh_llm_context_or_exit(*, max_age_minutes: int, json_output: bool) -> None:
+    payload = _evaluate_llm_context_freshness(Path("."), max_age_minutes=max_age_minutes)
+    if payload.get("result_status") == "PASS":
+        return
+    _emit_llm_context_gate_result(payload, json_output=json_output)
+    raise typer.Exit(code=2)
+
+
+@transfer_app.command("require-fresh-llm-context")
+def require_fresh_llm_context(
+    max_age_minutes: int = typer.Option(
+        60,
+        "--max-age-minutes",
+        min=1,
+        help="Maximum acceptable age of generated LLM context.",
+    ),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    """Require fresh generated LLM context before transfer planning."""
+    payload = _evaluate_llm_context_freshness(Path("."), max_age_minutes=max_age_minutes)
+    _emit_llm_context_gate_result(payload, json_output=json_output)
+    if payload.get("result_status") != "PASS":
+        raise typer.Exit(code=2)
+
 
 
 @transfer_app.command("verify-llm-context-refresh")

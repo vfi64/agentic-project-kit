@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `148`
+- Command count: `149`
 
 ## Commands
 
@@ -702,6 +702,7 @@ Continue chat/local transfer communication through the safest available wrapper 
 |---|---:|---|---:|---|---|
 | `branch` | `TyperArgument` | branch | `False` |  | Optional target branch. If omitted, infer a single active transfer order. |
 | `json_output` | `TyperOption` | --json, --no-json | `False` | `False` | Print machine-readable JSON. |
+| `skip_llm_context_gate` | `TyperOption` | --skip-llm-context-gate | `False` | `False` | Recovery-only: continue without requiring fresh generated LLM context. |
 
 ### `agentic-kit transfer delete-merged-work-branch`
 
@@ -1004,6 +1005,15 @@ Rebase the current branch on its upstream with bounded conflict reporting.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `short` | `TyperOption` | --short, --full | `False` | `True` | Use short git status by default. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+
+### `agentic-kit transfer require-fresh-llm-context`
+
+Require fresh generated LLM context before transfer planning.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `max_age_minutes` | `TyperOption` | --max-age-minutes | `False` | `60` | Maximum acceptable age of generated LLM context. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer restore-known-volatile`
