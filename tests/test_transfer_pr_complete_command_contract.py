@@ -262,3 +262,50 @@ def test_transfer_pr_create_complete_post_merge_complete_uses_concrete_pr_number
     )
     assert not any("PR_NUMMER" in " ".join(call) for call in calls)
     assert not any("<" in " ".join(call) or ">" in " ".join(call) for call in calls)
+
+def test_transfer_pr_complete_continues_when_wait_ci_blocks_but_pr_status_is_green(monkeypatch) -> None:
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"]:
+            return subprocess.CompletedProcess(command, 2, "wait blocked\n", "wait failed\n")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-status"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                "NEXT_TURN_PR_STATUS\n"
+                "pr=123\n"
+                "state=OPEN\n"
+                "merge_state_status=CLEAN\n"
+                "head_ref_oid=0123456789abcdef0123456789abcdef01234567\n"
+                "decision=green\n",
+                "",
+            )
+        return subprocess.CompletedProcess(command, 0, "ok\n", "")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "pr-complete",
+            "123",
+            "--expected-head-sha",
+            "0123456789abcdef0123456789abcdef01234567",
+            "--merge-method",
+            "squash",
+            "--skip-llm-context-gate",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert "TRANSFER_PR_COMPLETE" in result.stdout
+    assert "PASS" in result.stdout
+    assert [call[:3] for call in calls[:3]] == [
+        ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"],
+        ["./.venv/bin/agentic-kit", "transfer", "pr-status"],
+        ["./.venv/bin/agentic-kit", "transfer", "pr-merge-safe"],
+    ]

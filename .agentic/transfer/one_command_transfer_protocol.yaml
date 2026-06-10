@@ -170,6 +170,24 @@ communication_precedence:
     allowed_only_as_fallback: true
   rule: Use transfer files as the primary communication channel. Remote work is secondary.
     Copy-and-paste is tertiary fallback only.
+
+  llm_to_local_payload_discipline:
+    status: active
+    normative: true
+    rules:
+      - "LLM-to-local transfer files must use .agentic/transfer/inbox/next_command.py.txt."
+      - "The .py.txt transfer file must be valid Python source despite the text suffix."
+      - "Do not place raw gh, GitHub API, or direct GitHub shell commands in transfer payloads or copy/paste command blocks."
+      - "Use repo-backed agentic-kit wrappers for GitHub, PR, merge, evidence, release, and transfer operations."
+      - "Direct GitHub commands are recovery/diagnostic exceptions only, or internal implementation details of audited wrappers."
+  command_integration_governance:
+    status: active
+    normative: true
+    rules:
+      - "Every new or changed agentic-kit command must be reviewed for Command Reference, LLM context, handoff/transfer visibility, fresh-context gate, recovery-skip, and explicit exception needs."
+      - "Do not hard-gate diagnostics, context generation, status, or volatile repair commands unless a deadlock analysis shows it is safe."
+      - "Mutating lifecycle wrappers must either require fresh LLM context or document and test a specific exception."
+
 wrapper_first_inside_transfer_files:
   rule: A canonical transfer file should invoke existing complex agentic-kit transfer
     wrappers whenever possible instead of spelling out many low-level commands.
