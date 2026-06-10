@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: ec77bf97
-  commit_subject: Harden PR complete and command integration governance (#1230)
+  commit: 2ed2edfe
+  commit_subject: Harden LLM context refresh and PR lifecycle ergonomics (#1232)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
