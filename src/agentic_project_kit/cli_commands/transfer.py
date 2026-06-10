@@ -1059,7 +1059,14 @@ def pr_merge_safe_command(
         5, "--merge-state-poll-seconds", min=1, help="Pre-merge GitHub merge-state polling interval."
     ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+    skip_llm_context_gate: bool = typer.Option(
+        False,
+        "--skip-llm-context-gate",
+        help="Recovery-only: run PR merge without requiring fresh generated LLM context.",
+    ),
 ) -> None:
+    if not skip_llm_context_gate:
+        _require_fresh_llm_context_or_exit(max_age_minutes=60, json_output=json_output)
     _require_transfer_capability("rules_confirmed")
     result = pr_merge_safe(
         pr_number,
@@ -1094,7 +1101,15 @@ def pr_complete_command(
         help="CI polling interval.",
     ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+    skip_llm_context_gate: bool = typer.Option(
+        False,
+        "--skip-llm-context-gate",
+        help="Recovery-only: run PR completion without requiring fresh generated LLM context.",
+    ),
 ) -> None:
+    if not skip_llm_context_gate:
+        _require_fresh_llm_context_or_exit(max_age_minutes=60, json_output=json_output)
+
     import subprocess
     from datetime import datetime, timezone
 
@@ -1129,6 +1144,7 @@ def pr_complete_command(
                 str(timeout_seconds),
                 "--interval-seconds",
                 str(poll_seconds),
+                "--skip-llm-context-gate",
             ],
         ),
         (
@@ -1144,6 +1160,7 @@ def pr_complete_command(
                 main_branch,
                 "--merge-method",
                 merge_method,
+                "--skip-llm-context-gate",
             ],
         ),
         ("main-switch", ["git", "switch", main_branch]),
@@ -1311,7 +1328,14 @@ def pr_create_command(
     title: str = typer.Option(..., "--title", help="Pull request title."),
     body: str = typer.Option("", "--body", help="Pull request body."),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+    skip_llm_context_gate: bool = typer.Option(
+        False,
+        "--skip-llm-context-gate",
+        help="Recovery-only: create PR without requiring fresh generated LLM context.",
+    ),
 ) -> None:
+    if not skip_llm_context_gate:
+        _require_fresh_llm_context_or_exit(max_age_minutes=60, json_output=json_output)
     _require_transfer_capability("rules_confirmed")
     result = pr_create(base=base, head=head, title=title, body=body)
     _echo_repo_result(result, json_output)
@@ -1483,8 +1507,16 @@ def pr_create_complete_command(
         help="After pr-complete, run visible post-merge closeout using the concrete PR number.",
     ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+    skip_llm_context_gate: bool = typer.Option(
+        False,
+        "--skip-llm-context-gate",
+        help="Recovery-only: run PR create/complete without requiring fresh generated LLM context.",
+    ),
 ) -> None:
     """Create a PR and complete it without requiring manual PR-number or SHA copying."""
+    if not skip_llm_context_gate:
+        _require_fresh_llm_context_or_exit(max_age_minutes=60, json_output=json_output)
+
     import re
     import subprocess
     from datetime import datetime, timezone
@@ -1540,6 +1572,7 @@ def pr_create_complete_command(
                 base,
                 "--head",
                 resolved_head,
+                "--skip-llm-context-gate",
                 "--json",
             ],
         )
