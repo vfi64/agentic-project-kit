@@ -189,6 +189,36 @@ def _monitor_block_result(
     return _result(action, list(completed.args), completed, next_action)
 
 
+
+def _recover_known_volatile_branch_switch_block(
+    *,
+    command_kind: str,
+    required_branch: str,
+    monitor,
+    allow_main_mutation: bool,
+    auto_switch: bool = True,
+):
+    if monitor.reason != "dirty_worktree_blocks_branch_switch":
+        return monitor
+
+    repair_command = [
+        _agentic_kit_command(),
+        "transfer",
+        "normalize-session",
+        "--repair-known-volatile",
+    ]
+    repair = _run(repair_command)
+    if repair.returncode != 0:
+        return monitor
+
+    return guard_branch(
+        command_kind=command_kind,
+        required_branch=required_branch,
+        allow_main_mutation=allow_main_mutation,
+        auto_switch=auto_switch,
+    )
+
+
 def _verify_current_branch(action: str, expected_branch: str, *, command: list[str]) -> RepoActionResult | None:
     branch_command = ["git", "branch", "--show-current"]
     branch_completed = _run(branch_command)
@@ -602,6 +632,14 @@ def pr_merge_safe(
         allow_main_mutation=True,
         auto_switch=True,
     )
+    if monitor.decision == MonitorDecision.BLOCK:
+        monitor = _recover_known_volatile_branch_switch_block(
+            command_kind="pr-merge-safe",
+            required_branch=main_branch,
+            monitor=monitor,
+            allow_main_mutation=True,
+            auto_switch=True,
+        )
     if monitor.decision == MonitorDecision.BLOCK:
         return _monitor_block_result(
             action="pr-merge-safe",
