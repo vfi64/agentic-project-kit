@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 38dcc6ae
-  commit_subject: Propagate PR create-complete skip gate (#1234)
+  commit: 2281c230
+  commit_subject: Avoid duplicate pr-create-complete post-merge closeout (#1236)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
