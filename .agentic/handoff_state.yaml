@@ -1,6 +1,6 @@
 schema_version: 1
 updated:
-  date: '2026-06-09'
+  date: '2026-06-10'
   reason: Refresh handoff state to last substantive work commit
   source: agentic-kit handoff refresh
 repo:
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 00ffbfa5
-  commit_subject: Harden normalize-session rule ack and volatile repair (#1220)
+  commit: cd21b19d
+  commit_subject: Harden pr-merge-safe volatile recovery (#1222)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
