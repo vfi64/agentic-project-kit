@@ -2,24 +2,17 @@ from __future__ import annotations
 
 import json
 import subprocess
-import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 ROOT = Path.cwd()
 OUTBOX = ROOT / ".agentic/transfer/outbox/last_result.txt"
-TARGET_BRANCH = "feature/transfer-safety-rule-header"
+TARGET_BRANCH = "feature/compact-transfer-report-output"
 
 
-def run(command: list[str], *, check: bool = False) -> dict[str, Any]:
-    completed = subprocess.run(
-        command,
-        cwd=ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
+def run(command: list[str]) -> dict[str, Any]:
+    completed = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=False)
     return {
         "command": command,
         "returncode": completed.returncode,
@@ -31,92 +24,61 @@ def run(command: list[str], *, check: bool = False) -> dict[str, Any]:
 
 def git_value(*args: str) -> str:
     result = run(["git", *args])
-    return result["stdout"].strip() if result["ok"] else ""
-
-
-def write_outbox(payload: dict[str, Any]) -> None:
-    OUTBOX.parent.mkdir(parents=True, exist_ok=True)
-    OUTBOX.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return str(result["stdout"]).strip() if result["ok"] else ""
 
 
 def main() -> int:
-    started_at = datetime.now(timezone.utc).isoformat()
     steps: list[dict[str, Any]] = []
-
-    initial_branch = git_value("branch", "--show-current")
-    initial_status = git_value("status", "--short")
-    initial_head = git_value("rev-parse", "HEAD")
-
     blockers: list[str] = []
+    initial_status = git_value("status", "--short")
     if initial_status:
         blockers.append("dirty_worktree_before_transfer_start")
 
-    if not blockers:
-        steps.append(run(["./.venv/bin/agentic-kit", "transfer", "sync-main"]))
-        if not steps[-1]["ok"]:
-            blockers.append("sync_main_failed")
-
-    if not blockers:
-        steps.append(run(["./.venv/bin/agentic-kit", "rules", "acknowledge"]))
-        if not steps[-1]["ok"]:
-            blockers.append("rules_acknowledge_failed")
-
-    if not blockers:
-        steps.append(
-            run([
-                "./.venv/bin/agentic-kit",
-                "transfer",
-                "remote-work-start",
-                TARGET_BRANCH,
-            ])
-        )
-        if not steps[-1]["ok"]:
-            blockers.append("remote_work_start_failed")
+    for name, command in [
+        ("sync-main", ["./.venv/bin/agentic-kit", "transfer", "sync-main"]),
+        ("rules-acknowledge", ["./.venv/bin/agentic-kit", "rules", "acknowledge"]),
+        ("remote-work-start", ["./.venv/bin/agentic-kit", "transfer", "remote-work-start", TARGET_BRANCH]),
+    ]:
+        if blockers:
+            break
+        step = run(command)
+        step["name"] = name
+        steps.append(step)
+        if not step["ok"]:
+            blockers.append(name + "_failed")
 
     final_branch = git_value("branch", "--show-current")
     final_status = git_value("status", "--short")
-    final_head = git_value("rev-parse", "HEAD")
-
+    ok = not blockers and final_branch == TARGET_BRANCH and not final_status
     if not blockers and final_branch != TARGET_BRANCH:
-        blockers.append(f"wrong_final_branch:{final_branch}")
+        blockers.append("wrong_final_branch")
     if not blockers and final_status:
         blockers.append("dirty_worktree_after_transfer_start")
 
-    ok = not blockers
     payload = {
         "schema_version": 1,
         "kind": "local_to_llm_last_result",
-        "action": "start_transfer_safety_rule_header_slice",
+        "action": "start_compact_transfer_report_output_slice",
         "target_branch": TARGET_BRANCH,
-        "started_at": started_at,
         "finished_at": datetime.now(timezone.utc).isoformat(),
-        "initial": {
-            "branch": initial_branch,
-            "head": initial_head,
-            "dirty_status": initial_status,
-        },
-        "final": {
-            "branch": final_branch,
-            "head": final_head,
-            "dirty_status": final_status,
-        },
+        "final_branch": final_branch,
         "steps": steps,
         "blockers": blockers,
         "result_status": "PASS" if ok else "BLOCKED",
-        "final_signal": "g" if ok else "f",
-        "next_action": (
-            "Return this last_result.txt content to the chat; the next transfer file will implement the safety-header slice."
-            if ok
-            else "Inspect blockers before continuing; do not run implementation transfer."
-        ),
-        "chat_reply": (
-            "g | NEXT=Return last_result.txt; ready for implementation transfer."
-            if ok
-            else "f | NEXT=Inspect blockers before continuing."
-        ),
+        "final_signal": "d" if ok else "f",
+        "next_action": "Ready for implementation transfer file." if ok else "Inspect blockers before continuing.",
+        "chat_reply": "g | NEXT=Ready for implementation transfer file." if ok else "f | NEXT=Inspect blockers before continuing.",
     }
-    write_outbox(payload)
-    print(json.dumps(payload, indent=2, sort_keys=True))
+    OUTBOX.parent.mkdir(parents=True, exist_ok=True)
+    OUTBOX.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    print("TRANSFER_PAYLOAD=start_compact_transfer_report_output_slice")
+    print(f"STATE={payload['result_status']}")
+    print(f"BRANCH={final_branch}")
+    print(f"BLOCKERS={len(blockers)}")
+    print(f"FINAL_SIGNAL={payload['final_signal']}")
+    print("FINAL_NEXT=" + str(payload["next_action"]))
+    print("CHAT_REPLY=" + str(payload["chat_reply"]))
     return 0 if ok else 1
 
 
