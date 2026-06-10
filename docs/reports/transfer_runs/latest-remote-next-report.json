@@ -6,7 +6,7 @@
     "blocked_message": "transfer order requires at least one action",
     "branch": "main",
     "chat_reply": "g",
-    "head": "d628a059",
+    "head": "5bdc760e",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -33,7 +33,7 @@
           "unstaged_changes": [],
           "untracked_files": []
         },
-        "head": "d628a059",
+        "head": "5bdc760e",
         "next_action": "Inspect the published remote-next diagnostic report before retrying.",
         "primary_state": "BLOCKED",
         "reasons": [
@@ -46,79 +46,8 @@
     "next_action": "Inspect the published remote-next diagnostic report before retrying.",
     "post_report_actions": {
       "attempted": true,
-      "branch": "main",
-      "commit_head": "de5f2f9a",
-      "committed": true,
-      "final_head": "de5f2f9a",
-      "final_status_short": "",
-      "paths": [
-        "docs/reports/transfer_runs/latest-remote-next-report.json",
-        "docs/reports/transfer_runs/latest-remote-next-report.log",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-      ],
-      "pushed": true,
-      "rule_ack_after_report_commit": {
-        "blocking_reasons": [],
-        "confirmed": true,
-        "head": "de5f2f9a",
-        "path": ".agentic/rule_ack/current.json",
-        "present": true
-      },
-      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "steps": [
-        {
-          "argv": [
-            "git",
-            "add",
-            "-f",
-            "docs/reports/transfer_runs/latest-remote-next-report.json",
-            "docs/reports/transfer_runs/latest-remote-next-report.log",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-          ],
-          "name": "git_add_force_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": ""
-        },
-        {
-          "argv": [
-            "git",
-            "commit",
-            "-m",
-            "Publish remote-next transfer report"
-          ],
-          "name": "git_commit_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "[main de5f2f9a] Publish remote-next transfer report\n 4 files changed, 4890 insertions(+), 721 deletions(-)"
-        },
-        {
-          "argv": [
-            "./.venv/bin/agentic-kit",
-            "rules",
-            "acknowledge"
-          ],
-          "name": "rules_acknowledge_after_report_commit",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=295bc6d4012e8807ac29090219259d92753d231ffbbaa045c38a43444442755b\nrepo_head=de5f2f9a\ndeclared_next_allowed_action=run_next_command"
-        },
-        {
-          "argv": [
-            "git",
-            "push",
-            "origin",
-            "main"
-          ],
-          "name": "git_push_report_commit",
-          "returncode": 0,
-          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   d628a059..de5f2f9a  main -> main",
-          "stdout": ""
-        }
-      ]
+      "status": "pending_until_report_files_are_written"
     },
     "preflight": {
       "current_branch": "main",
@@ -129,7 +58,7 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "d628a059",
+      "head": "5bdc760e",
       "remote_tracking": "origin/main"
     },
     "primary_state": "BLOCKED",
@@ -143,7 +72,7 @@
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "d628a059",
+      "head": "5bdc760e",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -416,11 +345,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-06-10T19:26:33.352711+00:00",
+    "generated_at_utc": "2026-06-10T19:27:56.576989+00:00",
     "generated_from_current_repo": true,
     "git_state": {
       "branch": "main",
-      "head": "de5f2f9ae32f335fdebaaa507f39b5b12e0c01b1",
+      "head": "5bdc760e6c77c4f6f83b4fe5bc02462347fac07f",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -996,10 +925,10 @@
     "repo_state": {
       "branch": "main",
       "dirty_status": "",
-      "head": "de5f2f9ae32f335fdebaaa507f39b5b12e0c01b1",
+      "head": "5bdc760e6c77c4f6f83b4fe5bc02462347fac07f",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "de5f2f9ae32f335fdebaaa507f39b5b12e0c01b1"
+      "upstream_head": "5bdc760e6c77c4f6f83b4fe5bc02462347fac07f"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -1046,7 +975,7 @@
     "blocked_message": "transfer order requires at least one action",
     "branch": "main",
     "chat_reply": "g",
-    "head": "d628a059",
+    "head": "5bdc760e",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
@@ -1073,7 +1002,7 @@
           "unstaged_changes": [],
           "untracked_files": []
         },
-        "head": "d628a059",
+        "head": "5bdc760e",
         "next_action": "Inspect the published remote-next diagnostic report before retrying.",
         "primary_state": "BLOCKED",
         "reasons": [
@@ -1086,79 +1015,8 @@
     "next_action": "Inspect the published remote-next diagnostic report before retrying.",
     "post_report_actions": {
       "attempted": true,
-      "branch": "main",
-      "commit_head": "de5f2f9a",
-      "committed": true,
-      "final_head": "de5f2f9a",
-      "final_status_short": "",
-      "paths": [
-        "docs/reports/transfer_runs/latest-remote-next-report.json",
-        "docs/reports/transfer_runs/latest-remote-next-report.log",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-      ],
-      "pushed": true,
-      "rule_ack_after_report_commit": {
-        "blocking_reasons": [],
-        "confirmed": true,
-        "head": "de5f2f9a",
-        "path": ".agentic/rule_ack/current.json",
-        "present": true
-      },
-      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "steps": [
-        {
-          "argv": [
-            "git",
-            "add",
-            "-f",
-            "docs/reports/transfer_runs/latest-remote-next-report.json",
-            "docs/reports/transfer_runs/latest-remote-next-report.log",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-          ],
-          "name": "git_add_force_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": ""
-        },
-        {
-          "argv": [
-            "git",
-            "commit",
-            "-m",
-            "Publish remote-next transfer report"
-          ],
-          "name": "git_commit_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "[main de5f2f9a] Publish remote-next transfer report\n 4 files changed, 4890 insertions(+), 721 deletions(-)"
-        },
-        {
-          "argv": [
-            "./.venv/bin/agentic-kit",
-            "rules",
-            "acknowledge"
-          ],
-          "name": "rules_acknowledge_after_report_commit",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=295bc6d4012e8807ac29090219259d92753d231ffbbaa045c38a43444442755b\nrepo_head=de5f2f9a\ndeclared_next_allowed_action=run_next_command"
-        },
-        {
-          "argv": [
-            "git",
-            "push",
-            "origin",
-            "main"
-          ],
-          "name": "git_push_report_commit",
-          "returncode": 0,
-          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   d628a059..de5f2f9a  main -> main",
-          "stdout": ""
-        }
-      ]
+      "status": "pending_until_report_files_are_written"
     },
     "preflight": {
       "current_branch": "main",
@@ -1169,7 +1027,7 @@
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "d628a059",
+      "head": "5bdc760e",
       "remote_tracking": "origin/main"
     },
     "primary_state": "BLOCKED",
@@ -1183,7 +1041,7 @@
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "d628a059",
+      "head": "5bdc760e",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
@@ -1684,10 +1542,10 @@
     "repo_state": {
       "branch": "main",
       "dirty_status": "",
-      "head": "de5f2f9ae32f335fdebaaa507f39b5b12e0c01b1",
+      "head": "5bdc760e6c77c4f6f83b4fe5bc02462347fac07f",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "de5f2f9ae32f335fdebaaa507f39b5b12e0c01b1"
+      "upstream_head": "5bdc760e6c77c4f6f83b4fe5bc02462347fac07f"
     },
     "schema_version": 1,
     "terminal_block_rules": {
