@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: dd0dc2f7
-  commit_subject: Gate PR lifecycle with fresh LLM context (#1228)
+  commit: ec77bf97
+  commit_subject: Harden PR complete and command integration governance (#1230)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
