@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 9e3f3435
-  commit_subject: Harden transfer continue self-healing (#1238)
+  commit: 756c4f2a
+  commit_subject: Render repo action results as compact summaries (#1240)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
