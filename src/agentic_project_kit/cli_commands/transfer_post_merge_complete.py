@@ -10,6 +10,7 @@ from uuid import uuid4
 import typer
 
 from agentic_project_kit.transfer_post_merge_lifecycle import post_merge_complete
+from agentic_project_kit.llm_context_carriers import refresh_llm_context_carriers
 from agentic_project_kit.llm_execution_context import build_llm_execution_context
 from agentic_project_kit.transfer_uplink import (
     LATEST_JSON,
@@ -406,10 +407,24 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
                 )
             raise typer.Exit(code=2) from exc
 
+        try:
+            llm_context_carriers_refresh = refresh_llm_context_carriers(
+                Path("."),
+                label=f"post-merge-complete-after-pr{after_pr}",
+            )
+        except (FileNotFoundError, ValueError, OSError) as exc:
+            llm_context_carriers_refresh = {
+                "result_status": "BLOCKED",
+                "final_signal": "f",
+                "next_action": f"Inspect LLM context carrier refresh failure: {exc}",
+                "error": str(exc),
+            }
+
         if json_output:
             payload = result.as_json_data()
             payload["transfer_report"] = local_report
             payload["published_transfer_report"] = published_report
+            payload["llm_context_carriers_refresh"] = llm_context_carriers_refresh
             payload["chat_reply"] = _chat_reply(_final_signal(result), result.next_action)
             typer.echo(json.dumps(payload, indent=2, sort_keys=True))
         else:

@@ -499,6 +499,19 @@ def push_current(*, required_branch: str = "") -> RepoActionResult:
 
 
 def pr_create(*, base: str, head: str, title: str, body: str) -> RepoActionResult:
+    if head == "current":
+        branch_result = _run(["git", "branch", "--show-current"])
+        resolved_head = branch_result.stdout.strip()
+        if branch_result.returncode != 0 or not resolved_head:
+            completed = subprocess.CompletedProcess(
+                ["transfer-monitor", "pr-create", "--base", base, "--head", head],
+                2,
+                "",
+                "Transfer operation monitor blocked pr-create: current_branch_missing; actual_branch=; required_branch=current\n",
+            )
+            return _result("pr-create", list(completed.args), completed, "Inspect current branch resolution before creating a PR.")
+        head = resolved_head
+
     monitor = guard_pr_create(base_branch=base, head_branch=head)
     if monitor.decision == MonitorDecision.BLOCK:
         completed = subprocess.CompletedProcess(

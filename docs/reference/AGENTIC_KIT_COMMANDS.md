@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `149`
+- Command count: `150`
 
 ## Commands
 
@@ -973,6 +973,14 @@ Rebase the current branch on its upstream with bounded conflict reporting.
 | `upstream` | `TyperOption` | --upstream | `False` | `` | Upstream ref. Defaults to origin/<current-branch>. |
 | `expected_branch` | `TyperOption` | --branch | `False` | `` | Expected current branch before rebasing. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
+### `agentic-kit transfer refresh-llm-context-carriers`
+
+Refresh outbox and latest handoff report with fresh generated LLM context.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer remote-next`
 

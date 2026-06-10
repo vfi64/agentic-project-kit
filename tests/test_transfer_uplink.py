@@ -438,3 +438,27 @@ def test_verify_llm_context_refresh_cli_blocks_when_context_missing(tmp_path, mo
     assert result.exit_code == 2
     assert "TRANSFER_VERIFY_LLM_CONTEXT_REFRESH" in result.stdout
     assert "BLOCKED" in result.stdout
+
+def test_refresh_llm_context_carriers_cli_uses_refresh_helper(monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+    from agentic_project_kit.cli_commands import transfer as transfer_module
+
+    monkeypatch.setattr(
+        transfer_module,
+        "refresh_llm_context_carriers",
+        lambda root: {
+            "result_status": "PASS",
+            "final_signal": "d",
+            "next_action": "LLM context carriers refreshed.",
+            "outbox_path": ".agentic/transfer/outbox/last_result.txt",
+            "latest_handoff_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        },
+    )
+
+    result = CliRunner().invoke(app, ["transfer", "refresh-llm-context-carriers"])
+
+    assert result.exit_code == 0
+    assert "TRANSFER_REFRESH_LLM_CONTEXT_CARRIERS" in result.stdout
+    assert "PASS" in result.stdout
+
