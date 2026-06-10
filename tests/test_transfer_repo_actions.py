@@ -123,8 +123,10 @@ def test_transfer_branch_create_cli(tmp_path, monkeypatch):
     result = CliRunner().invoke(app, ["transfer", "branch-create", "feature/cli"])
 
     assert result.exit_code == 0
-    assert '"action": "branch-create"' in result.stdout
-    assert '"result_status": "PASS"' in result.stdout
+    assert "TRANSFER_BRANCH_CREATE" in result.stdout
+    assert '"action": "branch-create"' not in result.stdout
+    assert "STATE:" in result.stdout
+    assert "PASS" in result.stdout
 
 
 def test_transfer_commit_cli_requires_path(tmp_path, monkeypatch):
@@ -203,7 +205,8 @@ def test_transfer_repo_status_cli(tmp_path, monkeypatch):
     result = CliRunner().invoke(app, ["transfer", "repo-status"])
 
     assert result.exit_code == 0
-    assert '"action": "repo-status"' in result.stdout
+    assert "TRANSFER_REPO_STATUS" in result.stdout
+    assert '"action": "repo-status"' not in result.stdout
 
 
 def test_transfer_repo_log_cli(tmp_path, monkeypatch):
@@ -213,7 +216,8 @@ def test_transfer_repo_log_cli(tmp_path, monkeypatch):
     result = CliRunner().invoke(app, ["transfer", "repo-log", "--limit", "1"])
 
     assert result.exit_code == 0
-    assert '"action": "repo-log"' in result.stdout
+    assert "TRANSFER_REPO_LOG" in result.stdout
+    assert '"action": "repo-log"' not in result.stdout
 
 
 def test_transfer_head_sha_cli(tmp_path, monkeypatch):
@@ -224,11 +228,14 @@ def test_transfer_head_sha_cli(tmp_path, monkeypatch):
     full_result = CliRunner().invoke(app, ["transfer", "head-sha", "--full"])
 
     assert result.exit_code == 0
-    assert '"action": "head-sha"' in result.stdout
-    assert '"rev-parse"' in result.stdout
-    assert '"--short"' in result.stdout
+    assert "TRANSFER_HEAD_SHA" in result.stdout
+    assert '"action": "head-sha"' not in result.stdout
+    assert "COMMAND" in result.stdout
+    assert "rev-parse" in result.stdout
+    assert "--short" in result.stdout
     assert full_result.exit_code == 0
-    assert '"action": "head-sha"' in full_result.stdout
+    assert "TRANSFER_HEAD_SHA" in full_result.stdout
+    assert '"action": "head-sha"' not in full_result.stdout
     assert '"--short"' not in full_result.stdout
 
 
@@ -259,7 +266,8 @@ def test_transfer_branch_delete_cli(tmp_path, monkeypatch):
         "stderr": result.stderr,
         "exception": repr(result.exception),
     }
-    assert "\"action\": \"branch-delete\"" in result.stdout
+    assert "TRANSFER_BRANCH_DELETE" in result.stdout
+    assert "\"action\": \"branch-delete\"" not in result.stdout
 
 
 def test_guarded_pr_actions_reject_short_expected_head_sha(tmp_path, monkeypatch):
@@ -277,7 +285,7 @@ def test_guarded_pr_actions_reject_short_expected_head_sha(tmp_path, monkeypatch
     assert "full 40-character head SHA" in merge_result.stderr
 
 
-def test_result_terminal_adds_final_signal_lines_for_pass_and_fail(tmp_path, monkeypatch):
+def test_result_terminal_renders_compact_summary_for_pass_and_fail(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     monkeypatch.chdir(tmp_path)
 
@@ -287,29 +295,37 @@ def test_result_terminal_adds_final_signal_lines_for_pass_and_fail(tmp_path, mon
     passing_output = result_terminal(passing)
     failing_output = result_terminal(failing)
 
-    assert passing_output.splitlines()[-3:] == [
-        "FINAL_SIGNAL=d",
-        "FINAL_NEXT=Use commit SHAs for guarded PR or merge work.",
-        "CHAT_REPLY=d | NEXT=Use commit SHAs for guarded PR or merge work.",
-    ]
-    assert failing_output.splitlines()[-3] == "FINAL_SIGNAL=f"
-    assert failing_output.splitlines()[-2].startswith("FINAL_NEXT=")
-    assert failing_output.splitlines()[-1].startswith("CHAT_REPLY=f | NEXT=")
+    assert "START SUMMARY" in passing_output
+    assert "TRANSFER_REPO_LOG" in passing_output
+    assert "STATE:" in passing_output
+    assert "PASS" in passing_output
+    assert "CHAT_REPLY:" in passing_output
+    assert "d | NEXT=Use commit SHAs for guarded PR or merge work." in passing_output
+    assert "FINAL_SIGNAL=d" not in passing_output
+    assert '"action": "repo-log"' not in passing_output
 
+    assert "START SUMMARY" in failing_output
+    assert "TRANSFER_FETCH_ORIGIN" in failing_output
+    assert "STATE:" in failing_output
+    assert "FAIL" in failing_output
+    assert "CHAT_REPLY:" in failing_output
+    assert "f | NEXT=" in failing_output
+    assert "FINAL_SIGNAL=f" not in failing_output
+    assert '"action": "fetch-origin"' not in failing_output
 
-def test_transfer_repo_log_cli_prints_final_signal_last(tmp_path, monkeypatch):
+def test_transfer_repo_log_cli_prints_compact_summary(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     monkeypatch.chdir(tmp_path)
 
     result = CliRunner().invoke(app, ["transfer", "repo-log", "--limit", "1"])
 
     assert result.exit_code == 0
-    assert result.stdout.splitlines()[-3:] == [
-        "FINAL_SIGNAL=d",
-        "FINAL_NEXT=Use commit SHAs for guarded PR or merge work.",
-        "CHAT_REPLY=d | NEXT=Use commit SHAs for guarded PR or merge work.",
-    ]
-
+    assert "START SUMMARY" in result.stdout
+    assert "TRANSFER_REPO_LOG" in result.stdout
+    assert "CHAT_REPLY:" in result.stdout
+    assert "d | NEXT=Use commit SHAs for guarded PR or merge work." in result.stdout
+    assert "FINAL_SIGNAL=d" not in result.stdout
+    assert '"action": "repo-log"' not in result.stdout
 
 def test_transfer_branch_create_cli_block_prints_final_signal_last(tmp_path, monkeypatch):
     _init_repo(tmp_path)
