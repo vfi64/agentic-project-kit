@@ -170,18 +170,6 @@ This cleanup is a workaround for volatile report files. It must not be used to d
 
 Current operational documentation projection state is `dfb7c2ba` (`Introduce operational handoff projection source (#1249)`). PR #1249 introduced `.agentic/operational_handoff_state.yaml` as the first machine-readable operational handoff state source and projects the current operational bootstrap block from that source. Continue next with Slice 2: generated-block markers and targeted block updates while preserving curated documentation.
 
-## Operational documentation refresh state after PR #1250
+## Operational documentation refresh state
 
-Current administrative handoff refresh state is `9d24918d` (`Refresh operational state after PR1249 (#1250)`). PR #1250 refreshed the post-PR1249 operational handoff state and registered the operational handoff state projection source for Protected Planner coverage. Continue next only after this post-PR1250 refresh is committed and merged; the next substantive documentation step remains Slice 2: generated-block markers and targeted generated-block updates while preserving curated documentation.
-
-## Operational documentation refresh state after PR #1253
-
-Current administrative handoff refresh state is `d23c9a9f` (`Add generated operational handoff markers (#1253)`). PR #1253 added generated-block markers around the projected operational handoff block. Continue next only after this post-PR1253 refresh is committed and merged; the next substantive documentation step is Slice 2b from fresh main.
-
-## Operational documentation refresh state after PR #1255
-
-Current administrative handoff refresh state is `3f111f1d` (`Add generated operational handoff block replacement (#1255)`). PR #1255 added targeted replacement of the marked generated operational handoff block while preserving curated surrounding documentation. Continue next only after this post-PR1255 refresh is committed and merged; the next substantive documentation slice must be created from fresh main.
-
-## Operational documentation refresh state after PR #1257
-
-Current administrative handoff refresh state is `75614eb0` (`Harden admin refresh and PR completion recovery (#1257)`). PR #1257 hardened recovery for existing admin-refresh branches and PR-complete post-merge follow-up behavior. Continue next only after this post-PR1257 refresh is committed and merged; the next substantive slice must be created from fresh main.\n## Operational documentation refresh state after PR #1260\n\nCurrent administrative handoff refresh state is `fb478177` (`Constrain admin refresh handoff rewrites (#1260)`). Continue next only after this post-PR1260 refresh is committed and merged; the next substantive slice must be created from fresh main.\n\n## Operational documentation refresh state after PR #1262\n\nCurrent administrative handoff refresh state is `4c9bba27` (`Document admin refresh handoff policy (#1262)`). Continue next only after this post-PR1262 refresh is committed and merged; the next substantive slice must be created from fresh main.\n\n## Operational documentation refresh state after PR #1264\n\nCurrent administrative handoff refresh state is `56b5c22f` (`Compact status refresh history (#1264)`). Continue next only after this post-PR1264 refresh is committed and merged; the next substantive slice must be created from fresh main.\n
+Recent admin-refresh history is compacted here to preserve documentation headroom. PR #1250, #1253, #1255, #1257, #1260, #1262, and #1264 moved operational handoff refresh toward generated, protected-plan-checked, non-accumulative updates. Current policy: use operational handoff refresh, preserve historical protected-state entries, update only current refresh metadata and successor pointers, run protected diff plan before commit, and continue from fresh main after merge.
