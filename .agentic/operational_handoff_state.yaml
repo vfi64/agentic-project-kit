@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4c9bba27986d9f54e44e32c70ac6304262419b1d
-  short: 4c9bba27
-  subject: Document admin refresh handoff policy (#1262)
+  full: 56b5c22fee0f1f57ed0712100df28d8bda37f6e6
+  short: 56b5c22f
+  subject: Compact status refresh history (#1264)
 last_substantive_work_state:
-  full: 4c9bba27986d9f54e44e32c70ac6304262419b1d
-  short: 4c9bba27
-  subject: Document admin refresh handoff policy (#1262)
+  full: 56b5c22fee0f1f57ed0712100df28d8bda37f6e6
+  short: 56b5c22f
+  subject: Compact status refresh history (#1264)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
