@@ -40,8 +40,7 @@ def test_cockpit_action_registry_classifies_successor_handoff_prompt_as_bounded(
     assert action.command == (
         "agentic-kit",
         "transfer",
-        "prepare-successor-handoff",
-        "--repair-known-volatile",
+        "chat-switch-complete",
         "--render-prompt",
     )
 

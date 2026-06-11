@@ -1,0 +1,126 @@
+{
+  "kind": "successor_source_manifest",
+  "schema_version": 1,
+  "sources": [
+    {
+      "bytes": 8483,
+      "exists": true,
+      "path": ".agentic/compiled_agent_context.yaml"
+    },
+    {
+      "bytes": 20401,
+      "exists": true,
+      "path": ".agentic/handoff_state.yaml"
+    },
+    {
+      "bytes": 1616,
+      "exists": true,
+      "path": ".agentic/operational_handoff_state.yaml"
+    },
+    {
+      "bytes": 17616,
+      "exists": true,
+      "path": ".agentic/rule_mechanism_inventory.yaml"
+    },
+    {
+      "bytes": 5765,
+      "exists": true,
+      "path": ".agentic/rule_migrations.yaml"
+    },
+    {
+      "bytes": 1688,
+      "exists": true,
+      "path": ".agentic/rule_preservation.yaml"
+    },
+    {
+      "bytes": 18535,
+      "exists": true,
+      "path": "AGENTS.md"
+    },
+    {
+      "bytes": 25786,
+      "exists": true,
+      "path": "README.md"
+    },
+    {
+      "bytes": 1596,
+      "exists": true,
+      "path": "SECURITY.md"
+    },
+    {
+      "bytes": 21435,
+      "exists": true,
+      "path": "docs/DOCUMENTATION_COVERAGE.yaml"
+    },
+    {
+      "bytes": 28181,
+      "exists": true,
+      "path": "docs/STATUS.md"
+    },
+    {
+      "bytes": 32142,
+      "exists": true,
+      "path": "docs/TEST_GATES.md"
+    },
+    {
+      "bytes": 26855,
+      "exists": true,
+      "path": "docs/handoff/CURRENT_HANDOFF.md"
+    },
+    {
+      "bytes": 1614,
+      "exists": true,
+      "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
+    },
+    {
+      "bytes": 1213,
+      "exists": true,
+      "path": "docs/handoff/START_NEW_CHAT_PROMPT.md"
+    },
+    {
+      "bytes": 1324,
+      "exists": true,
+      "path": "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
+    },
+    {
+      "bytes": 10976,
+      "exists": true,
+      "path": "docs/governance/FINAL_SUMMARY_CONTRACT.md"
+    },
+    {
+      "bytes": 11600,
+      "exists": true,
+      "path": "docs/governance/CHAT_COMMUNICATION_CONTRACT.md"
+    },
+    {
+      "bytes": 8917,
+      "exists": true,
+      "path": "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md"
+    },
+    {
+      "bytes": 10702,
+      "exists": true,
+      "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md"
+    },
+    {
+      "bytes": 8414,
+      "exists": true,
+      "path": "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md"
+    },
+    {
+      "bytes": 46624,
+      "exists": true,
+      "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md"
+    },
+    {
+      "bytes": 62770,
+      "exists": true,
+      "path": "docs/reference/AGENTIC_KIT_COMMANDS.md"
+    },
+    {
+      "bytes": 194338,
+      "exists": true,
+      "path": "docs/reference/agentic-kit-commands.json"
+    }
+  ]
+}

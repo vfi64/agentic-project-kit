@@ -30,7 +30,7 @@ CANONICAL_SOURCES = (
 IMPORTANT_WRAPPERS = (
     "agentic-kit transfer continue",
     "agentic-kit transfer remote-next",
-    "agentic-kit transfer prepare-successor-handoff",
+    "agentic-kit transfer chat-switch-complete",
     "agentic-kit transfer command-reference-refresh",
     "agentic-kit transfer command-reference-check",
     "agentic-kit transfer sync-main",
