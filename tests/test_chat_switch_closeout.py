@@ -12,7 +12,26 @@ def write_sources(root: Path) -> None:
     for source in MANDATORY_BOOT_SOURCES:
         path = root / source
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text("x\n", encoding="utf-8")
+        if source == ".agentic/operational_handoff_state.yaml":
+            path.write_text(
+                "schema_version: 1\n"
+                "current_head:\n"
+                "  full: abcdef123456\n"
+                "  short: abcdef1\n"
+                "  subject: Admin handoff (#2)\n"
+                "last_substantive_work_state:\n"
+                "  full: 123456789abc\n"
+                "  short: 1234567\n"
+                "  subject: Product slice (#1)\n"
+                "administrative_context: []\n"
+                "freshness_policy:\n"
+                "  text: Freshness policy line.\n"
+                "next_safe_substantive_slice:\n"
+                "  text: document-management projection system\n",
+                encoding="utf-8",
+            )
+        else:
+            path.write_text("x\n", encoding="utf-8")
 
 
 def test_bootstrap_file_matches_generator() -> None:

@@ -21,6 +21,29 @@ REQUIRED_TERMS = (
 )
 
 
+
+def _write_operational_handoff_state(root: Path) -> None:
+    operational_state = root / ".agentic" / "operational_handoff_state.yaml"
+    operational_state.parent.mkdir(parents=True, exist_ok=True)
+    operational_state.write_text(
+        "schema_version: 1\n"
+        "current_head:\n"
+        "  full: abcdef123456\n"
+        "  short: abcdef1\n"
+        "  subject: Admin handoff (#2)\n"
+        "last_substantive_work_state:\n"
+        "  full: 123456789abc\n"
+        "  short: 1234567\n"
+        "  subject: Product slice (#1)\n"
+        "administrative_context: []\n"
+        "freshness_policy:\n"
+        "  text: Freshness policy line.\n"
+        "next_safe_substantive_slice:\n"
+        "  text: document-management projection system\n",
+        encoding="utf-8",
+    )
+
+
 def test_chat_boot_lists_sources_when_present(tmp_path: Path) -> None:
     for source in MANDATORY_BOOT_SOURCES:
         path = tmp_path / source
@@ -29,6 +52,7 @@ def test_chat_boot_lists_sources_when_present(tmp_path: Path) -> None:
     text = render_bootloader(tmp_path)
     assert "CHAT_BOOTLOADER" in text
     assert "compiled_agent_context.yaml" in text
+    assert "operational_handoff_state.yaml" in text
     assert "CURRENT_HANDOFF.md" in text
     assert "START_NEW_CHAT_PROMPT.md" in text
     assert "CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md" in text
@@ -50,6 +74,7 @@ def test_next_chat_bootstrap_contains_standard_prompt_and_next_work(tmp_path: Pa
         path = tmp_path / source
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("x\n", encoding="utf-8")
+    _write_operational_handoff_state(tmp_path)
     text = render_next_chat_bootstrap(tmp_path)
     assert "NEXT CHAT BOOTSTRAP" in text
     assert "Canonical chat-switch prompt files" in text
@@ -74,6 +99,7 @@ def test_next_chat_bootstrap_contains_standard_prompt_and_next_work(tmp_path: Pa
 
 
 def test_next_chat_bootstrap_writer_creates_file(tmp_path: Path) -> None:
+    _write_operational_handoff_state(tmp_path)
     output = tmp_path / "docs" / "handoff" / "NEXT_CHAT_BOOTSTRAP.md"
     written = write_next_chat_bootstrap(output, tmp_path)
     assert written == output
