@@ -11,6 +11,13 @@ FRESHNESS_GUARD_FILES = [
     ".agentic/handoff_state.yaml",
     "docs/handoff/CURRENT_HANDOFF.md",
 ]
+OPERATIONAL_FRESHNESS_FILES = [
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+]
 SUCCESSOR_HANDOFF_GLOBS = [
     "*successor*handoff*.md",
     "*successor*handoff*.yaml",
@@ -98,8 +105,48 @@ def assess_handoff_prompt_freshness(
             f"{relative_prompt} does not mention current handoff commit marker(s): {joined}"
         )
 
+    warnings.extend(
+        _assess_operational_document_freshness(
+            project_root,
+            expected_commits,
+        )
+    )
+
     return warnings
 
+
+
+def _assess_operational_document_freshness(
+    project_root: Path,
+    marker_commits: list[str],
+) -> list[str]:
+    """Return warnings when live operational docs do not mention current markers.
+
+    This intentionally reuses the existing handoff-freshness mechanism. It does
+    not introduce a new rule layer: STATUS, CURRENT_HANDOFF, chat bootstrap
+    prompts, and the active roadmap are human-facing projections of the
+    machine-readable handoff state and must mention at least one current
+    safe/admin commit marker when they exist.
+    """
+
+    markers = [marker for marker in marker_commits if marker]
+    if not markers:
+        return []
+
+    warnings: list[str] = []
+    for relative_path in OPERATIONAL_FRESHNESS_FILES:
+        path = project_root / relative_path
+        if not path.exists():
+            continue
+        content = path.read_text(encoding="utf-8", errors="replace")
+        if any(marker in content for marker in markers):
+            continue
+        joined = ", ".join(markers)
+        warnings.append(
+            f"operational handoff document {relative_path} does not mention "
+            f"current handoff commit marker(s): {joined}"
+        )
+    return warnings
 
 def render_freshness_guard(warnings: list[str]) -> str:
     if not warnings:

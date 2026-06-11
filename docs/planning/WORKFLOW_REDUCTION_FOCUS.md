@@ -1,9 +1,9 @@
 # Workflow Reduction Focus
 
-Status-date: 2026-06-02
+Status-date: 2026-06-10
 Status: active
 Decision status: accepted
-Review policy: Review after PR1054 closeout, before any further product slice, after the transfer-wrapper branch-safety hardening, after the fail-closed precondition-chain hardening, after the rule-semantics cleanup, after the documentation-registry completion audit, before adding deterministic transfer outbox implementation, and before expanding GUI scope or Pattern Advisor scope.
+Review policy: Review after operational handoff freshness changes, after transfer-output summary hardening (#1240/#1242), before adding deterministic transfer outbox implementation, before expanding GUI scope or Pattern Advisor scope, and whenever handoff/bootstrap/status projections drift behind main.
 Project: agentic-project-kit
 
 ## Purpose
@@ -56,6 +56,19 @@ The improvement direction is:
 6. evaluate external policy tooling only after the internal domain model is stable.
 
 This keeps the rule registry professional without letting perfectionism block the next documentation-registry and projection slices.
+
+## Current Operational Roadmap State After PR1243
+
+Current verified main HEAD is `88e01f46f4928174ea241039e0a863f28570130a` (`88e01f46`).
+Last substantive work state is `4bf3da29` (`Render transfer payload commands as compact summaries (#1242)`).
+
+Completed since the older PR1054 roadmap anchor:
+- transfer continue self-healing (#1238);
+- compact RepoActionResult summaries (#1240);
+- compact selected transfer payload summaries (#1242);
+- administrative handoff refresh after PR1242 (#1243).
+
+The current roadmap rule is not release-only: operational handoff freshness includes the live state docs and prompts used by successor chats. Those projections must be updated or blocked through the existing handoff-freshness mechanism before handoff output is treated as authoritative.
 
 ## Priority Order
 

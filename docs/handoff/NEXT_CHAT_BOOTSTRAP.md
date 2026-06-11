@@ -3,6 +3,13 @@
 This file is the canonical remote handoff entry point for a successor chat.
 Do not start from chat memory. Read this file first, then follow its boot sequence.
 
+## Current Operational Handoff State
+
+Current verified main HEAD is `88e01f46f4928174ea241039e0a863f28570130a` (`88e01f46`), after `Refresh handoff state after PR1242 (#1243)`.
+Last substantive work state is `4bf3da29` (`Render transfer payload commands as compact summaries (#1242)`).
+
+A successor chat must treat operational documentation freshness as part of handoff freshness: STATUS, CURRENT_HANDOFF, START_NEW_CHAT_PROMPT, NEXT_CHAT_BOOTSTRAP, and the active roadmap must mention current safe/admin markers before they are used as authoritative orientation.
+
 ## Canonical chat-switch prompt files
 
 - Start a successor chat with `docs/handoff/START_NEW_CHAT_PROMPT.md`.
