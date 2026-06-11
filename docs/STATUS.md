@@ -366,4 +366,4 @@ Current administrative handoff refresh state is `3f111f1d` (`Add generated opera
 
 ## Operational documentation refresh state after PR #1257
 
-Post-PR1257/1260 admin refresh policy: use operational handoff refresh, preserve historical protected-state entries, run protected diff plan before commit, then continue from fresh main after merge.\n
+Post-PR1257/1260 admin refresh policy: use operational handoff refresh, preserve historical protected-state entries, run protected diff plan before commit, then continue from fresh main after merge.\n\n## Operational documentation refresh state after PR #1262\n\nCurrent administrative handoff refresh state is `4c9bba27` (`Document admin refresh handoff policy (#1262)`). Continue next only after this post-PR1262 refresh is committed and merged; the next substantive slice must be created from fresh main.\n

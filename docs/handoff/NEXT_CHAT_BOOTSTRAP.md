@@ -6,8 +6,8 @@ Do not start from chat memory. Read this file first, then follow its boot sequen
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `fb4781779ecfe5623fb824e7b3f84fe061e95f1d` (`fb478177`), after `Constrain admin refresh handoff rewrites (#1260)`.
-Last substantive work state is `fb4781779ecfe5623fb824e7b3f84fe061e95f1d` (`fb478177`), after `Constrain admin refresh handoff rewrites (#1260)`.
+Current verified main/admin HEAD is `4c9bba27986d9f54e44e32c70ac6304262419b1d` (`4c9bba27`), after `Document admin refresh handoff policy (#1262)`.
+Last substantive work state is `4c9bba27986d9f54e44e32c70ac6304262419b1d` (`4c9bba27`), after `Document admin refresh handoff policy (#1262)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
