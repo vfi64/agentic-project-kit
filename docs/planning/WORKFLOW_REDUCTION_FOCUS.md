@@ -592,3 +592,7 @@ Current operational documentation projection state is `dfb7c2ba` (`Introduce ope
 ## Operational documentation refresh state after PR #1250
 
 Current administrative handoff refresh state is `9d24918d` (`Refresh operational state after PR1249 (#1250)`). PR #1250 refreshed the post-PR1249 operational handoff state and registered the operational handoff state projection source for Protected Planner coverage. Continue next only after this post-PR1250 refresh is committed and merged; the next substantive documentation step remains Slice 2: generated-block markers and targeted generated-block updates while preserving curated documentation.
+
+## Operational documentation refresh state after PR #1253
+
+Current administrative handoff refresh state is `d23c9a9f` (`Add generated operational handoff markers (#1253)`). PR #1253 added generated-block markers around the projected operational handoff block. Continue next only after this post-PR1253 refresh is committed and merged; the next substantive documentation step is Slice 2b from fresh main.

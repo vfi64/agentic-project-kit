@@ -6,9 +6,10 @@ Do not start from chat memory. Read this file first, then follow its boot sequen
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `9d24918d00dcb76f2512b2e78c10be913a0aa981` (`9d24918d`), after `Refresh operational state after PR1249 (#1250)`.
-Last substantive work state is `9d24918d00dcb76f2512b2e78c10be913a0aa981` (`9d24918d`), after `Refresh operational state after PR1249 (#1250)`.
+Current verified main/admin HEAD is `d23c9a9f920e7004f7bff05b8ac52b59746ba2e3` (`d23c9a9f`), after `Add generated operational handoff markers (#1253)`.
+Last substantive work state is `d23c9a9f920e7004f7bff05b8ac52b59746ba2e3` (`d23c9a9f`), after `Add generated operational handoff markers (#1253)`.
 
+PR #1253 added generated operational handoff block markers.
 PR #1250 refreshed the post-PR1249 operational handoff state and successor prompt markers.
 PR #1250 refreshed the operational handoff state after PR #1249 and preserved the first generated bootstrap projection path.
 PR #1248 fixes the administrative handoff refresh loop for loop-fix squash commits.
