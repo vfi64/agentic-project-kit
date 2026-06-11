@@ -8,6 +8,7 @@ from agentic_project_kit.operational_handoff_projection import (
     GENERATED_BLOCK_END,
     load_operational_handoff_state,
     render_current_operational_handoff_state,
+    replace_generated_operational_handoff_block,
 )
 
 
@@ -78,3 +79,34 @@ def test_rendered_operational_handoff_state_has_generated_block_markers(tmp_path
     assert rendered[-2] == GENERATED_BLOCK_END
     assert rendered.count(GENERATED_BLOCK_BEGIN) == 1
     assert rendered.count(GENERATED_BLOCK_END) == 1
+
+def test_replace_generated_operational_handoff_block_preserves_curated_text() -> None:
+    document = "\n".join(
+        [
+            "Curated introduction.",
+            GENERATED_BLOCK_BEGIN,
+            "old generated line",
+            GENERATED_BLOCK_END,
+            "Curated footer.",
+            "",
+        ]
+    )
+    replacement = [
+        GENERATED_BLOCK_BEGIN,
+        "new generated line",
+        GENERATED_BLOCK_END,
+        "",
+    ]
+
+    updated = replace_generated_operational_handoff_block(document, replacement)
+
+    assert updated.startswith("Curated introduction.\n")
+    assert "old generated line" not in updated
+    assert "new generated line" in updated
+    assert updated.endswith("Curated footer.\n")
+
+
+def test_replace_generated_operational_handoff_block_requires_exactly_one_block() -> None:
+    with pytest.raises(ValueError, match="exactly one"):
+        replace_generated_operational_handoff_block("no generated block\n", [GENERATED_BLOCK_BEGIN, "x", GENERATED_BLOCK_END])
+
