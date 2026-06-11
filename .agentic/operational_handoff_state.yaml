@@ -1,14 +1,15 @@
 schema_version: 1
 current_head:
-  full: dfb7c2bae8c13fd4193f12d097d60e54a59ce8ce
-  short: dfb7c2ba
-  subject: Introduce operational handoff projection source (#1249)
+  full: 9d24918d00dcb76f2512b2e78c10be913a0aa981
+  short: 9d24918d
+  subject: Refresh operational state after PR1249 (#1250)
 last_substantive_work_state:
-  full: dfb7c2bae8c13fd4193f12d097d60e54a59ce8ce
-  short: dfb7c2ba
-  subject: Introduce operational handoff projection source (#1249)
+  full: 9d24918d00dcb76f2512b2e78c10be913a0aa981
+  short: 9d24918d
+  subject: Refresh operational state after PR1249 (#1250)
 administrative_context:
-  - "PR #1249 introduced the operational handoff projection source and the first generated bootstrap projection."
+  - "PR #1250 refreshed the post-PR1249 operational handoff state and successor prompt markers."
+  - "PR #1250 refreshed the operational handoff state after PR #1249 and preserved the first generated bootstrap projection path."
   - "PR #1248 fixes the administrative handoff refresh loop for loop-fix squash commits."
   - "PR #1247 accepts administrative handoff squash refresh heads."
   - "PR #1246 refreshed operational handoff after PR #1245."
