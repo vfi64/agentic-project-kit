@@ -17,6 +17,9 @@ The lifecycle command builds on existing `agentic-kit` mechanisms instead of rep
 - `agentic-kit transfer pr-merge-safe` wraps `agentic-kit pr merge-if-green` and inherits full-head protection, base-branch protection, GitHub `mergeStateStatus=CLEAN` waiting, PR CI checks, and main CI verification.
 - `agentic-kit transfer post-merge-check` wraps `agentic-kit handoff post-merge-refresh-status`.
 - `agentic-kit transfer admin-refresh-pr --after-pr <PR>` creates or recovers the administrative handoff refresh PR.
+- `admin-refresh-pr` must use the operational handoff refresh path; it must not call the old single-file `handoff refresh .agentic/handoff_state.yaml --write` path.
+- Administrative refreshes must preserve historical protected-state entries and update only current refresh pointers, current head metadata, generated bootstrap content, and the successor prompt.
+- The wrapper must run a protected diff plan before committing the refresh branch and stop on BLOCK or FAIL.
 - `agentic-kit transfer pr-wait-ci` waits for CI with expected-head protection.
 - `agentic-kit transfer pr-merge-safe` merges the administrative refresh PR with the same guarded merge path.
 
