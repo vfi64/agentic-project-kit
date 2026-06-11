@@ -280,3 +280,8 @@ agentic-kit check-docs; agentic-kit doctor; Tkinter cockpit; v0.3.30 GUI Readine
 ## Compatibility Coverage Anchors
 
 These compact anchors are intentionally retained for deterministic coverage: documentation coverage, policy-pack checks, policy packs, Pattern Advisor, `patterns list`, `patterns show`, no-copy/evidence, Communication artifact GC hardening is now part of the pre-GUI baseline, long chat-generated shell or Python patch blocks, Mandatory Final Summary Contract, policy-pack doctor checks, `agentic-kit post-release-check`, `.agentic/compiled_agent_context.yaml`, `CHAT_COMMUNICATION_CONTRACT.md`, `PORTABLE_CHAT_EXECUTION_CONTRACT.md`, `CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`, `FINAL_SUMMARY_CONTRACT.md`, `docs/TEST_GATES.md`, planning-state freshness, post-release Zenodo, docs/DOCUMENTATION_COVERAGE.yaml, docs/DOCUMENTATION_REGISTRY.yaml.
+
+## Operational documentation projection state after PR #1249
+
+Current operational documentation projection state is `dfb7c2ba` (`Introduce operational handoff projection source (#1249)`). PR #1249 introduced `.agentic/operational_handoff_state.yaml` as the first machine-readable operational handoff state source and projects the current operational bootstrap block from that source. Continue next with Slice 2: generated-block markers and targeted block updates while preserving curated documentation.
+

@@ -92,3 +92,11 @@ def test_allows_generated_bootstrap_change_with_generator_source() -> None:
         "+generated output",
     ])
     assert not any(f.code == "generated-artifact-direct-edit" for f in analyze_diff(diff))
+
+def test_generated_bootstrap_is_allowed_when_operational_state_source_changes():
+    diff = "\n".join([
+        "diff --git a/.agentic/operational_handoff_state.yaml b/.agentic/operational_handoff_state.yaml",
+        "diff --git a/docs/handoff/NEXT_CHAT_BOOTSTRAP.md b/docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    ])
+    assert not any(f.code == "generated-artifact-direct-edit" for f in analyze_diff(diff))
+

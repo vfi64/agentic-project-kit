@@ -5,16 +5,17 @@ Do not start from chat memory. Read this file first, then follow its boot sequen
 
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `7c849ff6` (`7c849ff6`), after `Accept administrative handoff loop-fix heads (#1248)`.
-Last substantive work state is `7f5a3310` (`7f5a3310`), after `Enforce operational handoff document freshness (#1244)`.
+Current verified main/admin HEAD is `dfb7c2bae8c13fd4193f12d097d60e54a59ce8ce` (`dfb7c2ba`), after `Introduce operational handoff projection source (#1249)`.
+Last substantive work state is `dfb7c2bae8c13fd4193f12d097d60e54a59ce8ce` (`dfb7c2ba`), after `Introduce operational handoff projection source (#1249)`.
 
+PR #1249 introduced the operational handoff projection source and the first generated bootstrap projection.
 PR #1248 fixes the administrative handoff refresh loop for loop-fix squash commits.
 PR #1247 accepts administrative handoff squash refresh heads.
 PR #1246 refreshed operational handoff after PR #1245.
-PR #1245 is an administrative handoff/evidence refresh after PR #1244 and does not replace the substantive safe-state intent.
+PR #1245 is an administrative handoff/evidence refresh after PR #1244.
 
 A successor chat must treat operational documentation freshness as part of handoff freshness: STATUS, CURRENT_HANDOFF, START_NEW_CHAT_PROMPT, NEXT_CHAT_BOOTSTRAP, and the active roadmap must mention current safe/admin markers before they are used as authoritative orientation.
-Continue the professional operational documentation projection system from a machine-readable state source, with generated blocks, preservation of curated documentation, rule-registry coverage, and drift gates.
+Continue with documentation projection Slice 2: add generated-block markers and update only the generated operational handoff block while preserving curated documentation.
 
 ## Canonical chat-switch prompt files
 

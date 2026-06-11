@@ -166,3 +166,7 @@ At minimum, clean these local-only volatile paths when they are dirty and not th
 This cleanup is a workaround for volatile report files. It must not be used to discard substantive source, governance, planning, or handoff changes.
 <!-- agentic-kit:command-reference-lifecycle-discipline:end -->
 
+## Operational documentation projection state after PR #1249
+
+Current operational documentation projection state is `dfb7c2ba` (`Introduce operational handoff projection source (#1249)`). PR #1249 introduced `.agentic/operational_handoff_state.yaml` as the first machine-readable operational handoff state source and projects the current operational bootstrap block from that source. Continue next with Slice 2: generated-block markers and targeted block updates while preserving curated documentation.
+
