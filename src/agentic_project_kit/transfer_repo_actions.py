@@ -815,12 +815,33 @@ def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionR
             existing = _existing_admin_refresh_pr(refresh_branch)
             if existing is not None:
                 return existing
-        return _result(
-            "admin-refresh-pr",
-            branch_create_step,
-            completed,
-            "Inspect admin refresh branch state or existing PR before continuing.",
-        )
+            switch_step = ["git", "switch", refresh_branch]
+            switched = _run(switch_step)
+            transcript.append(f"$ {' '.join(switch_step)}\n{switched.stdout}{switched.stderr}")
+            if switched.returncode != 0:
+                return _result(
+                    "admin-refresh-pr",
+                    switch_step,
+                    switched,
+                    "Inspect existing admin refresh branch before continuing.",
+                )
+            reset_step = ["git", "reset", "--hard", main_branch]
+            reset = _run(reset_step)
+            transcript.append(f"$ {' '.join(reset_step)}\n{reset.stdout}{reset.stderr}")
+            if reset.returncode != 0:
+                return _result(
+                    "admin-refresh-pr",
+                    reset_step,
+                    reset,
+                    "Inspect existing admin refresh branch reset before continuing.",
+                )
+        else:
+            return _result(
+                "admin-refresh-pr",
+                branch_create_step,
+                completed,
+                "Inspect admin refresh branch state or existing PR before continuing.",
+            )
 
     steps = [
         [_agentic_kit_command(), "handoff", "refresh", ".agentic/handoff_state.yaml", "--write"],
