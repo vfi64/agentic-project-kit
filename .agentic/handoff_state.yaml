@@ -1,6 +1,6 @@
 schema_version: 1
 updated:
-  date: '2026-06-10'
+  date: '2026-06-11'
   reason: Refresh handoff state to last substantive work commit
   source: agentic-kit handoff refresh
 repo:
@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 4bf3da29
-  commit_subject: Render transfer payload commands as compact summaries (#1242)
+  commit: 7f5a3310
+  commit_subject: Enforce operational handoff document freshness (#1244)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
