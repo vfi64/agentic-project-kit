@@ -31,6 +31,7 @@ def test_administrative_evidence_subjects_are_recognized():
     assert is_administrative_evidence_subject("Refresh post-PR974 bootstrap handoff state")
     assert is_administrative_evidence_subject("Refresh post-PR974 bootstrap handoff state (#975)")
     assert is_administrative_evidence_subject("Refresh post-PR974 administrative handoff state")
+    assert is_administrative_evidence_subject("Refresh operational handoff after PR1245 (#1246)")
     assert not is_administrative_evidence_subject("Enable check-docs as read-only GUI action (#655)")
     assert not is_administrative_evidence_subject("Refresh post-PR974 product workflow state")
 

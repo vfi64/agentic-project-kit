@@ -378,3 +378,40 @@ def test_handoff_freshness_guard_warns_on_stale_operational_documents(
     assert any("NEXT_CHAT_BOOTSTRAP.md" in warning for warning in warnings)
     assert any("WORKFLOW_REDUCTION_FOCUS.md" in warning for warning in warnings)
 
+def test_handoff_freshness_accepts_administrative_squash_refresh_subject(
+    tmp_path: Path,
+) -> None:
+    handoff_path = tmp_path / ".agentic" / "handoff_state.yaml"
+    prompt_path = tmp_path / "docs" / "reports" / "terminal" / "post-pr1245-successor-chat-handoff.md"
+    for relative_path in (
+        "docs/STATUS.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    ):
+        _write(tmp_path / relative_path, "administrative handoff marker e97af592\n")
+    _write(handoff_path, "schema_version: 1\n")
+    _write(prompt_path, "successor prompt for administrative marker e97af592\n")
+    data = {
+        "safe_state": {"commit": "7f5a3310"},
+        "administrative_evidence_state": {
+            "current_head": "e97af592",
+            "allowed_after_safe_state": True,
+            "latest_successor_prompt": "docs/reports/terminal/post-pr1245-successor-chat-handoff.md",
+        },
+        "handoff_maintenance": {
+            "latest_successor_prompt": "docs/reports/terminal/post-pr1245-successor-chat-handoff.md",
+        },
+    }
+
+    warnings = assess_handoff_prompt_freshness(
+        data,
+        handoff_path,
+        current_head="a24e868b",
+        current_subject="Refresh operational handoff after PR1245 (#1246)",
+        successor_prompt_text="successor prompt for administrative marker e97af592\n",
+    )
+
+    assert warnings == []
+

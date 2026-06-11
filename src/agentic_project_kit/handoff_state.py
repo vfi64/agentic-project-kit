@@ -34,6 +34,7 @@ HANDOFF_STATE_PRESERVATION_ANCHORS = (
 ADMINISTRATIVE_EVIDENCE_SUBJECT_PREFIXES = (
     "record ",
     "refresh handoff state",
+    "refresh operational handoff",
     "align handoff state",
     "finalize handoff state",
     "finalize post-pr",
