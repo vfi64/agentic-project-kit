@@ -3,6 +3,7 @@
 This file is the canonical remote handoff entry point for a successor chat.
 Do not start from chat memory. Read this file first, then follow its boot sequence.
 
+<!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
 Current verified main/admin HEAD is `9d24918d00dcb76f2512b2e78c10be913a0aa981` (`9d24918d`), after `Refresh operational state after PR1249 (#1250)`.
@@ -17,6 +18,8 @@ PR #1245 is an administrative handoff/evidence refresh after PR #1244.
 
 A successor chat must treat operational documentation freshness as part of handoff freshness: STATUS, CURRENT_HANDOFF, START_NEW_CHAT_PROMPT, NEXT_CHAT_BOOTSTRAP, and the active roadmap must mention current safe/admin markers before they are used as authoritative orientation.
 Continue with documentation projection Slice 2: add generated-block markers and update only the generated operational handoff block while preserving curated documentation.
+
+<!-- agentic:generated operational-handoff-state end -->
 
 ## Canonical chat-switch prompt files
 

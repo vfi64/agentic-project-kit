@@ -7,6 +7,9 @@ import yaml
 
 DEFAULT_OPERATIONAL_HANDOFF_STATE = Path(".agentic/operational_handoff_state.yaml")
 
+GENERATED_BLOCK_BEGIN = "<!-- agentic:generated operational-handoff-state begin -->"
+GENERATED_BLOCK_END = "<!-- agentic:generated operational-handoff-state end -->"
+
 
 def load_operational_handoff_state(
     root: Path | str = ".",
@@ -45,6 +48,7 @@ def render_current_operational_handoff_state(
         raise ValueError("last_substantive_work_state must be a mapping")
 
     lines = [
+        GENERATED_BLOCK_BEGIN,
         "## Current Operational Handoff State",
         "",
         _commit_line("Current verified main/admin HEAD", current_head),
@@ -67,5 +71,5 @@ def render_current_operational_handoff_state(
     if isinstance(next_slice, dict) and next_slice.get("text"):
         lines.append(str(next_slice["text"]))
 
-    lines.append("")
+    lines.extend(["", GENERATED_BLOCK_END, ""])
     return tuple(lines)

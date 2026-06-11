@@ -100,3 +100,12 @@ def test_generated_bootstrap_is_allowed_when_operational_state_source_changes():
     ])
     assert not any(f.code == "generated-artifact-direct-edit" for f in analyze_diff(diff))
 
+def test_generated_bootstrap_is_allowed_when_operational_projection_source_changes():
+    diff = "\n".join(
+        [
+            "diff --git a/src/agentic_project_kit/operational_handoff_projection.py b/src/agentic_project_kit/operational_handoff_projection.py",
+            "diff --git a/docs/handoff/NEXT_CHAT_BOOTSTRAP.md b/docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        ]
+    )
+    assert not any(f.code == "generated-artifact-direct-edit" for f in analyze_diff(diff))
+
