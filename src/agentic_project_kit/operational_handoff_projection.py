@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 import yaml
 
@@ -32,6 +32,33 @@ def _commit_line(label: str, section: dict[str, Any]) -> str:
     if not full or not subject:
         raise ValueError(f"{label} requires full commit and subject")
     return f"{label} is `{full}` (`{short}`), after `{subject}`."
+
+
+def replace_generated_operational_handoff_block(
+    document_text: str,
+    replacement_lines: Iterable[str],
+) -> str:
+    lines = document_text.splitlines()
+    begin_indices = [index for index, line in enumerate(lines) if line.strip() == GENERATED_BLOCK_BEGIN]
+    end_indices = [index for index, line in enumerate(lines) if line.strip() == GENERATED_BLOCK_END]
+
+    if len(begin_indices) != 1 or len(end_indices) != 1:
+        raise ValueError("document must contain exactly one generated operational handoff block")
+    begin = begin_indices[0]
+    end = end_indices[0]
+    if begin >= end:
+        raise ValueError("generated operational handoff block markers are out of order")
+
+    replacement = list(replacement_lines)
+    if not replacement or replacement[0] != GENERATED_BLOCK_BEGIN or GENERATED_BLOCK_END not in replacement:
+        raise ValueError("replacement must include generated operational handoff block markers")
+    replacement_end = replacement.index(GENERATED_BLOCK_END)
+    if replacement_end == 0:
+        raise ValueError("replacement generated operational handoff block is empty")
+
+    new_lines = lines[:begin] + replacement[: replacement_end + 1] + lines[end + 1 :]
+    trailing_newline = "\n" if document_text.endswith("\n") else ""
+    return "\n".join(new_lines) + trailing_newline
 
 
 def render_current_operational_handoff_state(
