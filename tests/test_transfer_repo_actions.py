@@ -443,8 +443,20 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
             return subprocess.CompletedProcess(command, 0, "main\n", "")
         if command == ["git", "status", "--short"]:
             status_count = sum(1 for item in calls if item == ["git", "status", "--short"])
+            if status_count == 1:
+                return subprocess.CompletedProcess(command, 0, "", "")
             return subprocess.CompletedProcess(
-                command, 0, "" if status_count == 1 else " M .agentic/handoff_state.yaml\n", ""
+                command,
+                0,
+                " M .agentic/handoff_state.yaml\n"
+                " M .agentic/operational_handoff_state.yaml\n"
+                " M docs/STATUS.md\n"
+                " M docs/handoff/CURRENT_HANDOFF.md\n"
+                " M docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n"
+                " M docs/handoff/START_NEW_CHAT_PROMPT.md\n"
+                " M docs/planning/WORKFLOW_REDUCTION_FOCUS.md\n"
+                "?? docs/reports/terminal/post-pr123-successor-chat-handoff.md\n",
+                "",
             )
         if command == ["git", "switch", "-c", "docs/post-pr123-handoff-refresh", "main"]:
             return subprocess.CompletedProcess(command, 0, "", "")
@@ -466,7 +478,20 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
             return subprocess.CompletedProcess(
                 command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", ""
             )
-        if command == ["git", "add", ".agentic/handoff_state.yaml"]:
+        if command == ["agentic-kit", "transfer", "protected-diff-plan", "--label", "post-pr123-handoff-refresh"]:
+            return subprocess.CompletedProcess(command, 0, "PLAN: PASS\n", "")
+        if command == [
+            "git",
+            "add",
+            ".agentic/handoff_state.yaml",
+            ".agentic/operational_handoff_state.yaml",
+            "docs/STATUS.md",
+            "docs/handoff/CURRENT_HANDOFF.md",
+            "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+            "docs/handoff/START_NEW_CHAT_PROMPT.md",
+            "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+            "docs/reports/terminal/post-pr123-successor-chat-handoff.md",
+        ]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "commit", "-m", "Refresh handoff state after PR123"]:
             return subprocess.CompletedProcess(
@@ -480,9 +505,22 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
             )
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
+    def fake_refresh_operational_handoff_docs(after_pr):
+        assert after_pr == 123
+        return subprocess.CompletedProcess(
+            ["admin-refresh-operational-handoff-docs", "--after-pr", "123"],
+            0,
+            "Updated operational handoff docs:\n",
+            "",
+        )
+
     monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.transfer_repo_actions._agentic_kit_command", lambda: "agentic-kit"
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._refresh_operational_handoff_docs",
+        fake_refresh_operational_handoff_docs,
     )
 
     result = admin_refresh_pr(123)
@@ -1849,8 +1887,20 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
             return subprocess.CompletedProcess(command, 0, "main\n", "")
         if command == ["git", "status", "--short"]:
             status_count = sum(1 for item in calls if item == ["git", "status", "--short"])
+            if status_count == 1:
+                return subprocess.CompletedProcess(command, 0, "", "")
             return subprocess.CompletedProcess(
-                command, 0, "" if status_count == 1 else " M .agentic/handoff_state.yaml\n", ""
+                command,
+                0,
+                " M .agentic/handoff_state.yaml\n"
+                " M .agentic/operational_handoff_state.yaml\n"
+                " M docs/STATUS.md\n"
+                " M docs/handoff/CURRENT_HANDOFF.md\n"
+                " M docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n"
+                " M docs/handoff/START_NEW_CHAT_PROMPT.md\n"
+                " M docs/planning/WORKFLOW_REDUCTION_FOCUS.md\n"
+                "?? docs/reports/terminal/post-pr123-successor-chat-handoff.md\n",
+                "",
             )
         if command == ["git", "switch", "-c", "docs/post-pr123-handoff-refresh", "main"]:
             return subprocess.CompletedProcess(
@@ -1871,7 +1921,20 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
             return subprocess.CompletedProcess(command, 0, "Persistent handoff state check passed\n", "")
         if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
             return subprocess.CompletedProcess(command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", "")
-        if command == ["git", "add", ".agentic/handoff_state.yaml"]:
+        if command == ["agentic-kit", "transfer", "protected-diff-plan", "--label", "post-pr123-handoff-refresh"]:
+            return subprocess.CompletedProcess(command, 0, "PLAN: PASS\n", "")
+        if command == [
+            "git",
+            "add",
+            ".agentic/handoff_state.yaml",
+            ".agentic/operational_handoff_state.yaml",
+            "docs/STATUS.md",
+            "docs/handoff/CURRENT_HANDOFF.md",
+            "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+            "docs/handoff/START_NEW_CHAT_PROMPT.md",
+            "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+            "docs/reports/terminal/post-pr123-successor-chat-handoff.md",
+        ]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "commit", "-m", "Refresh handoff state after PR123"]:
             return subprocess.CompletedProcess(command, 0, "[branch abc123] Refresh handoff state after PR123\n", "")
@@ -1881,10 +1944,23 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
             return subprocess.CompletedProcess(command, 0, "https://github.com/vfi64/agentic-project-kit/pull/999\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
+    def fake_refresh_operational_handoff_docs(after_pr):
+        assert after_pr == 123
+        return subprocess.CompletedProcess(
+            ["admin-refresh-operational-handoff-docs", "--after-pr", "123"],
+            0,
+            "Updated operational handoff docs:\n",
+            "",
+        )
+
     monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.transfer_repo_actions._agentic_kit_command",
         lambda: "agentic-kit",
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._refresh_operational_handoff_docs",
+        fake_refresh_operational_handoff_docs,
     )
 
     result = admin_refresh_pr(123)
@@ -1935,4 +2011,90 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_followup_whe
     assert '"result_status": "PASS"' in result.output
     assert '"post_merge_complete_followup_required": true' in result.output
     assert "administrative follow-up" in result.output
+
+def test_refresh_operational_handoff_docs_updates_arbitrary_previous_pr_state(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / ".agentic").mkdir()
+    (tmp_path / "docs" / "handoff").mkdir(parents=True)
+    (tmp_path / "docs" / "planning").mkdir(parents=True)
+
+    (tmp_path / ".agentic" / "handoff_state.yaml").write_text(
+        """
+schema_version: 1
+safe_state:
+  commit: abcdef1
+  commit_subject: Old subject (#1111)
+first_instruction: Start from post-PR1111. Verify main at abcdef1.
+handoff_maintenance:
+  latest_successor_prompt: docs/reports/terminal/post-pr1111-successor-chat-handoff.md
+administrative_evidence_state:
+  current_head: abcdef1
+  current_head_subject: Old subject (#1111)
+  latest_successor_prompt: docs/reports/terminal/post-pr1111-successor-chat-handoff.md
+""".lstrip(),
+        encoding="utf-8",
+    )
+    (tmp_path / ".agentic" / "operational_handoff_state.yaml").write_text(
+        """
+schema_version: 1
+current_head:
+  full: 1111111111111111111111111111111111111111
+  short: 1111111
+  subject: Old subject (#1111)
+last_substantive_work_state:
+  full: 1111111111111111111111111111111111111111
+  short: 1111111
+  subject: Old subject (#1111)
+""".lstrip(),
+        encoding="utf-8",
+    )
+
+    for name in [
+        "docs/STATUS.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    ]:
+        Path(name).write_text("Curated text\n", encoding="utf-8")
+
+    full = "1234567890abcdef1234567890abcdef12345678"
+    short = "12345678"
+    subject = "New admin refresh behavior (#2222)"
+
+    def fake_run(command, cwd=None):
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, full + "\n", "")
+        if command == ["git", "rev-parse", "--short=8", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, short + "\n", "")
+        if command == ["git", "log", "-1", "--format=%s"]:
+            return subprocess.CompletedProcess(command, 0, subject + "\n", "")
+        if command == ["agentic-kit", "boot", "write"]:
+            Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md").write_text("bootstrap\n", encoding="utf-8")
+            return subprocess.CompletedProcess(command, 0, "WROTE docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n", "")
+        if command == ["agentic-kit", "handoff", "prompt"]:
+            return subprocess.CompletedProcess(command, 0, "successor prompt\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._agentic_kit_command",
+        lambda: "agentic-kit",
+    )
+
+    result = transfer_repo_actions._refresh_operational_handoff_docs(2222)
+
+    assert result.returncode == 0, result.stderr
+    handoff_text = Path(".agentic/handoff_state.yaml").read_text(encoding="utf-8")
+    operational_text = Path(".agentic/operational_handoff_state.yaml").read_text(encoding="utf-8")
+    assert "commit: 12345678" in handoff_text
+    assert "current_head: 12345678" in handoff_text
+    assert "commit_subject: New admin refresh behavior (#2222)" in handoff_text
+    assert "current_head_subject: New admin refresh behavior (#2222)" in handoff_text
+    assert "post-pr2222-successor-chat-handoff.md" in handoff_text
+    assert "post-PR2222" in handoff_text
+    assert full in operational_text
+    assert "short: 12345678" in operational_text
+    assert "subject: New admin refresh behavior (#2222)" in operational_text
+    assert Path("docs/reports/terminal/post-pr2222-successor-chat-handoff.md").read_text(encoding="utf-8") == "successor prompt\n"
+    assert "Operational documentation refresh state after PR #2222" in Path("docs/STATUS.md").read_text(encoding="utf-8")
 
