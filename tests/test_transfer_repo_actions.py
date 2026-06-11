@@ -1836,3 +1836,103 @@ def test_pr_merge_safe_still_blocks_when_volatile_repair_fails(monkeypatch):
         and len(call) >= 3 and call[0].endswith("agentic-kit") and call[1:3] == ["pr", "merge-if-green"]
         for call in calls
     )
+
+def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    calls = []
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command == ["git", "status", "--short"]:
+            status_count = sum(1 for item in calls if item == ["git", "status", "--short"])
+            return subprocess.CompletedProcess(
+                command, 0, "" if status_count == 1 else " M .agentic/handoff_state.yaml\n", ""
+            )
+        if command == ["git", "switch", "-c", "docs/post-pr123-handoff-refresh", "main"]:
+            return subprocess.CompletedProcess(
+                command,
+                128,
+                "",
+                "fatal: a branch named 'docs/post-pr123-handoff-refresh' already exists\n",
+            )
+        if command[:6] == ["gh", "pr", "list", "--head", "docs/post-pr123-handoff-refresh", "--state"]:
+            return subprocess.CompletedProcess(command, 0, "[]\n", "")
+        if command == ["git", "switch", "docs/post-pr123-handoff-refresh"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "reset", "--hard", "main"]:
+            return subprocess.CompletedProcess(command, 0, "HEAD is now at abc123 main\n", "")
+        if command == ["agentic-kit", "handoff", "refresh", ".agentic/handoff_state.yaml", "--write"]:
+            return subprocess.CompletedProcess(command, 0, "Updated .agentic/handoff_state.yaml\n", "")
+        if command == ["agentic-kit", "handoff", "check"]:
+            return subprocess.CompletedProcess(command, 0, "Persistent handoff state check passed\n", "")
+        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+            return subprocess.CompletedProcess(command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", "")
+        if command == ["git", "add", ".agentic/handoff_state.yaml"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "commit", "-m", "Refresh handoff state after PR123"]:
+            return subprocess.CompletedProcess(command, 0, "[branch abc123] Refresh handoff state after PR123\n", "")
+        if command == ["git", "push", "-u", "origin", "docs/post-pr123-handoff-refresh"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command[:4] == ["gh", "pr", "create", "--base"]:
+            return subprocess.CompletedProcess(command, 0, "https://github.com/vfi64/agentic-project-kit/pull/999\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._agentic_kit_command",
+        lambda: "agentic-kit",
+    )
+
+    result = admin_refresh_pr(123)
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert ["git", "switch", "docs/post-pr123-handoff-refresh"] in calls
+    assert ["git", "reset", "--hard", "main"] in calls
+    assert "pull/999" in result.stdout
+
+def test_transfer_pr_complete_treats_post_merge_complete_failure_as_followup_when_pr_is_merged(monkeypatch):
+    calls = []
+
+    def fake_run(command, text=True, capture_output=True):
+        calls.append(command)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-merge-safe"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "switch", "main"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "pull", "--ff-only", "origin", "main"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["./.venv/bin/agentic-kit", "rules", "acknowledge"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["./.venv/bin/agentic-kit", "transfer", "post-merge-complete", "--after-pr", "123"]:
+            return subprocess.CompletedProcess(command, 2, "post merge follow-up needed\n", "")
+        if command == ["gh", "pr", "view", "123", "--json", "state,isMerged,mergeCommit"]:
+            return subprocess.CompletedProcess(command, 0, '{"state":"MERGED","isMerged":true,"mergeCommit":{"oid":"abc"}}\n', "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr("subprocess.run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "pr-complete",
+            "123",
+            "--expected-head-sha",
+            "a" * 40,
+            "--skip-llm-context-gate",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert '"result_status": "PASS"' in result.output
+    assert '"post_merge_complete_followup_required": true' in result.output
+    assert "administrative follow-up" in result.output
+

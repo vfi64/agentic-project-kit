@@ -1156,6 +1156,26 @@ def pr_complete_command(
             and expected_line in status_text
         )
 
+    def pr_is_merged_after_post_merge_complete_failure() -> bool:
+        command = ["gh", "pr", "view", str(pr_number), "--json", "state,isMerged,mergeCommit"]
+        completed = subprocess.run(command, text=True, capture_output=True)
+        item: dict[str, object] = {
+            "name": "pr-merged-after-post-merge-complete-failure",
+            "argv": command,
+            "returncode": completed.returncode,
+            "stdout": completed.stdout,
+            "stderr": completed.stderr,
+            "ok": completed.returncode == 0,
+        }
+        steps.append(item)
+        if completed.returncode != 0:
+            return False
+        try:
+            data = json.loads(completed.stdout or "{}")
+        except json.JSONDecodeError:
+            return False
+        return bool(data.get("isMerged"))
+
     step_plan = [
         (
             "pr-wait-ci",
@@ -1203,10 +1223,21 @@ def pr_complete_command(
             failed_step = name
             break
 
+    post_merge_complete_followup_required = False
+    if failed_step == "post-merge-complete" and pr_is_merged_after_post_merge_complete_failure():
+        failed_step = None
+        post_merge_complete_followup_required = True
+
     result_status = "PASS" if failed_step is None else "BLOCKED"
     final_signal = "d" if result_status == "PASS" else "f"
     if failed_step is None:
-        next_action = "PR completion lifecycle is complete."
+        if post_merge_complete_followup_required:
+            next_action = (
+                "PR is merged; post-merge-complete requires administrative follow-up. "
+                "Run transfer post-merge-check and admin-refresh-pr if requested."
+            )
+        else:
+            next_action = "PR completion lifecycle is complete."
         returncode = 0
     else:
         next_action = f"Inspect pr-complete step failure before continuing: {failed_step}."
@@ -1226,6 +1257,7 @@ def pr_complete_command(
         "result_status": result_status,
         "final_signal": final_signal,
         "failed_step": failed_step,
+        "post_merge_complete_followup_required": post_merge_complete_followup_required,
         "steps": steps,
         "next_action": next_action,
     }
