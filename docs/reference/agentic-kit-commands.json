@@ -7587,6 +7587,17 @@
         "diagnose"
       ],
       "qualified_name": "agentic-kit workflow-guard diagnose"
+    },
+    {
+      "command": "agentic-kit transfer chat-switch-complete",
+      "options": [
+        "--render-prompt",
+        "--json",
+        "--output-dir",
+        "--update-canonical-prompts",
+        "--no-update-canonical-prompts"
+      ],
+      "summary": "Create the deterministic Successor Handoff Package and render the canonical successor-chat prompt."
     }
   ],
   "generated_by": "scripts/generate_agentic_kit_command_reference.py",

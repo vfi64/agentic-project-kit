@@ -160,6 +160,29 @@ Agentic project doctor report for /path/to/project
 Overall: PASS
 ```
 
+
+## Clean handoff / chat switch
+
+Use the deterministic successor handoff package before switching chats or continuing in another LLM:
+
+```bash
+agentic-kit transfer chat-switch-complete --render-prompt
+```
+
+For local development in this repository, run it through the project environment:
+
+```bash
+./.venv/bin/agentic-kit transfer chat-switch-complete --render-prompt
+```
+
+The command writes a machine-readable successor context, source manifest, validation report, and copy/paste successor prompt under:
+
+```text
+docs/reports/handoff-packages/latest/
+```
+
+It also updates the canonical chat-switch prompt projections in `docs/handoff/`. A successor chat should use `docs/reports/handoff-packages/latest/successor_prompt.md` as the copy/paste prompt and must stop if `validation_report.json` is not `PASS`.
+
 ## Planning-documentation slice gate
 
 `agentic-kit slice gate --kind planning-doc` emits `SLICE_GATE_RESULT` and `slice_result=PASS|BLOCKED`. helper-local PASS is not a slice PASS; `planning-doc` runs targeted tests plus `agentic-kit handoff check`, `agentic-kit check-docs`, `agentic-kit docs-audit`, and `agentic-kit doctor`. Dirty state reports `merge_pr_ready=NO`.

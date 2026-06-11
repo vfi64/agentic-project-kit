@@ -1288,3 +1288,21 @@ Alias for upload-output.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `paths` | `TyperArgument` | paths | `False` |  |  |
+
+
+## transfer chat-switch-complete
+
+Create the deterministic Successor Handoff Package and render the canonical successor-chat prompt projections.
+
+```bash
+agentic-kit transfer chat-switch-complete --render-prompt
+```
+
+Important options:
+
+- `--render-prompt`: print the generated copy/paste successor chat prompt.
+- `--json`: print a machine-readable result.
+- `--output-dir <path>`: write the package to a custom directory.
+- `--update-canonical-prompts` / `--no-update-canonical-prompts`: control whether the canonical prompt projection files under `docs/handoff/` are updated.
+
+Use this command for the human trigger `Clean handoff`. Do not use the legacy `prepare-successor-handoff` path as the primary chat-switch mechanism.

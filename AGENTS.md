@@ -154,6 +154,28 @@ Not allowed without explicit maintainer approval:
 
 Remote branch commits are allowed under this rule, but publication, release, and merge decisions remain maintainer-owned.
 
+
+## Clean Handoff Command
+
+For a chat switch or successor-chat handoff, the canonical human trigger is:
+
+```text
+Clean handoff
+```
+
+The canonical local command behind that trigger is:
+
+```bash
+./.venv/bin/agentic-kit transfer chat-switch-complete --render-prompt
+```
+
+A chat must not reconstruct this command from memory. Before giving or executing any `agentic-kit` command, inspect the command reference:
+
+- `docs/reference/AGENTIC_KIT_COMMANDS.md`
+- `docs/reference/agentic-kit-commands.json`
+
+The command generates the deterministic Successor Handoff Package and updates the canonical chat-switch prompt projections. If `validation_report.json` is not `PASS`, stop and repair handoff drift before product work.
+
 ## Evidence Requirements
 
 Keep evidence requirements explicit and bounded. Do not commit broad logs, credentials, private runtime state, or unreviewed generated evidence.
