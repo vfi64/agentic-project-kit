@@ -426,6 +426,13 @@ def render_closeout_prompt_from_context(context: dict[str, Any]) -> str:
     )
 
 
+
+
+def load_successor_context(path: Path | str) -> dict[str, Any]:
+    """Load a successor handoff context from a package context file."""
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
 def build_successor_handoff_package(root: Path | str = ".") -> SuccessorPackageResult:
     root_path = Path(root)
     context = _build_context(root_path)

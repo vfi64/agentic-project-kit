@@ -121,9 +121,20 @@ def render_bootloader(root: Path | str = ".") -> str:
 def render_next_chat_bootstrap(root: Path | str = ".", *, include_state: bool = False) -> str:
     """Render the deterministic successor handoff bootstrap projection.
 
-    include_state is kept for CLI compatibility; the successor handoff package
-    renderer always embeds the relevant repository state snapshot.
+    Prefer the committed latest successor package when present. This makes
+    bootstrap validation stable in CI merge-checkout contexts. The
+    chat-switch-complete command remains responsible for refreshing the package
+    from live local state.
     """
+    package_context = Path(root) / "docs/reports/handoff-packages/latest/successor_context.yaml"
+    if package_context.exists():
+        from agentic_project_kit.successor_handoff_package import (
+            load_successor_context,
+            render_next_chat_bootstrap_from_context,
+        )
+
+        return render_next_chat_bootstrap_from_context(load_successor_context(package_context))
+
     from agentic_project_kit.successor_handoff_package import build_successor_handoff_package
 
     result = build_successor_handoff_package(root)
