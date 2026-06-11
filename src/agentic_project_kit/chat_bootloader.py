@@ -5,6 +5,8 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
+from agentic_project_kit.operational_handoff_projection import render_current_operational_handoff_state
+
 DEFAULT_BOOTSTRAP_PATH = Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md")
 START_PROMPT_PATH = "docs/handoff/START_NEW_CHAT_PROMPT.md"
 CLOSEOUT_PROMPT_PATH = "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
@@ -13,6 +15,7 @@ BOOT_REPORT_PATH = Path("docs/handoff/BOOT_REPORT.md")
 MANDATORY_BOOT_SOURCES = (
     ".agentic/compiled_agent_context.yaml",
     ".agentic/handoff_state.yaml",
+    ".agentic/operational_handoff_state.yaml",
     ".agentic/rule_mechanism_inventory.yaml",
     ".agentic/rule_migrations.yaml",
     ".agentic/rule_preservation.yaml",
@@ -47,17 +50,8 @@ BOOTLOADER_RULES = (
     "Before a chat switch, run the closeout prompt and check whether START_NEW_CHAT_PROMPT.md, CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md, and NEXT_CHAT_BOOTSTRAP.md all need updates.",
 )
 
-CURRENT_OPERATIONAL_HANDOFF_STATE = (
-    "## Current Operational Handoff State",
-    "",
-    "Current verified main/admin HEAD is `e97af5923886ea41e5114bb3755320ba0212d993` (`e97af592`), after `Refresh handoff state after PR1244 (#1245)`.",
-    "Last substantive work state is `7f5a3310` (`Enforce operational handoff document freshness (#1244)`).",
-    "",
-    "PR #1245 is an administrative handoff/evidence refresh after PR #1244. It does not replace the substantive safe-state intent.",
-    "A successor chat must treat operational documentation freshness as part of handoff freshness: STATUS, CURRENT_HANDOFF, START_NEW_CHAT_PROMPT, NEXT_CHAT_BOOTSTRAP, and the active roadmap must mention current safe/admin markers before they are used as authoritative orientation.",
-    "Next safe substantive slice: implement the professional operational documentation projection system from a machine-readable state source, with generated blocks, preservation of curated documentation, rule-registry coverage, and drift gates.",
-    "",
-)
+def current_operational_handoff_state(root: Path | str = ".") -> tuple[str, ...]:
+    return render_current_operational_handoff_state(root)
 
 NEXT_WORK_ITEMS = (
     "Finish local sync after the bootloader/summary-runner merge and verify boot write/check plus targeted tests.",
@@ -145,7 +139,7 @@ def render_next_chat_bootstrap(root: Path | str = ".", *, include_state: bool = 
                 "",
             ]
         )
-    lines.extend(CURRENT_OPERATIONAL_HANDOFF_STATE)
+    lines.extend(current_operational_handoff_state(root))
     lines.extend(
         [
             "## Canonical chat-switch prompt files",

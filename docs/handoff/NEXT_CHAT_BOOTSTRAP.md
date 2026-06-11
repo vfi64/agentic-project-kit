@@ -5,12 +5,16 @@ Do not start from chat memory. Read this file first, then follow its boot sequen
 
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `e97af5923886ea41e5114bb3755320ba0212d993` (`e97af592`), after `Refresh handoff state after PR1244 (#1245)`.
-Last substantive work state is `7f5a3310` (`Enforce operational handoff document freshness (#1244)`).
+Current verified main/admin HEAD is `7c849ff6` (`7c849ff6`), after `Accept administrative handoff loop-fix heads (#1248)`.
+Last substantive work state is `7f5a3310` (`7f5a3310`), after `Enforce operational handoff document freshness (#1244)`.
 
-PR #1245 is an administrative handoff/evidence refresh after PR #1244. It does not replace the substantive safe-state intent.
+PR #1248 fixes the administrative handoff refresh loop for loop-fix squash commits.
+PR #1247 accepts administrative handoff squash refresh heads.
+PR #1246 refreshed operational handoff after PR #1245.
+PR #1245 is an administrative handoff/evidence refresh after PR #1244 and does not replace the substantive safe-state intent.
+
 A successor chat must treat operational documentation freshness as part of handoff freshness: STATUS, CURRENT_HANDOFF, START_NEW_CHAT_PROMPT, NEXT_CHAT_BOOTSTRAP, and the active roadmap must mention current safe/admin markers before they are used as authoritative orientation.
-Next safe substantive slice: implement the professional operational documentation projection system from a machine-readable state source, with generated blocks, preservation of curated documentation, rule-registry coverage, and drift gates.
+Continue the professional operational documentation projection system from a machine-readable state source, with generated blocks, preservation of curated documentation, rule-registry coverage, and drift gates.
 
 ## Canonical chat-switch prompt files
 
@@ -47,6 +51,7 @@ Purpose: bootstrap a successor chat from repository truth.
 Mandatory boot sources:
 - [present] .agentic/compiled_agent_context.yaml
 - [present] .agentic/handoff_state.yaml
+- [present] .agentic/operational_handoff_state.yaml
 - [present] .agentic/rule_mechanism_inventory.yaml
 - [present] .agentic/rule_migrations.yaml
 - [present] .agentic/rule_preservation.yaml
