@@ -467,9 +467,7 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
             ".agentic/handoff_state.yaml",
             "--write",
         ]:
-            return subprocess.CompletedProcess(
-                command, 0, "Updated .agentic/handoff_state.yaml\n", ""
-            )
+            return subprocess.CompletedProcess(command, 99, "", "old single-file refresh must not run\n")
         if command == ["agentic-kit", "handoff", "check"]:
             return subprocess.CompletedProcess(
                 command, 0, "Persistent handoff state check passed\n", ""
@@ -1916,7 +1914,7 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
         if command == ["git", "reset", "--hard", "main"]:
             return subprocess.CompletedProcess(command, 0, "HEAD is now at abc123 main\n", "")
         if command == ["agentic-kit", "handoff", "refresh", ".agentic/handoff_state.yaml", "--write"]:
-            return subprocess.CompletedProcess(command, 0, "Updated .agentic/handoff_state.yaml\n", "")
+            return subprocess.CompletedProcess(command, 99, "", "old single-file refresh must not run\n")
         if command == ["agentic-kit", "handoff", "check"]:
             return subprocess.CompletedProcess(command, 0, "Persistent handoff state check passed\n", "")
         if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
@@ -2024,7 +2022,9 @@ schema_version: 1
 safe_state:
   commit: abcdef1
   commit_subject: Old subject (#1111)
-first_instruction: Start from post-PR1111. Verify main at abcdef1.
+completed_since_previous_handoff:
+- historical post-PR1111 must stay untouched
+first_instruction: Start the next chat from the fresh post-PR1111 successor handoff prompt. Verify main at abcdef1, confirm the post-PR1111 operational handoff refresh passes explicit summary inspection.
 handoff_maintenance:
   latest_successor_prompt: docs/reports/terminal/post-pr1111-successor-chat-handoff.md
 administrative_evidence_state:
@@ -2092,6 +2092,7 @@ last_substantive_work_state:
     assert "current_head_subject: New admin refresh behavior (#2222)" in handoff_text
     assert "post-pr2222-successor-chat-handoff.md" in handoff_text
     assert "post-PR2222" in handoff_text
+    assert "historical post-PR1111 must stay untouched" in handoff_text
     assert full in operational_text
     assert "short: 12345678" in operational_text
     assert "subject: New admin refresh behavior (#2222)" in operational_text
