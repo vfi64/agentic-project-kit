@@ -600,3 +600,7 @@ Current administrative handoff refresh state is `d23c9a9f` (`Add generated opera
 ## Operational documentation refresh state after PR #1255
 
 Current administrative handoff refresh state is `3f111f1d` (`Add generated operational handoff block replacement (#1255)`). PR #1255 added targeted replacement of the marked generated operational handoff block while preserving curated surrounding documentation. Continue next only after this post-PR1255 refresh is committed and merged; the next substantive documentation slice must be created from fresh main.
+
+## Operational documentation refresh state after PR #1257
+
+Current administrative handoff refresh state is `75614eb0` (`Harden admin refresh and PR completion recovery (#1257)`). PR #1257 hardened recovery for existing admin-refresh branches and PR-complete post-merge follow-up behavior. Continue next only after this post-PR1257 refresh is committed and merged; the next substantive slice must be created from fresh main.
