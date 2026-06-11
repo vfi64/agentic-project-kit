@@ -1,3 +1,12 @@
+## Post-PR1245 Administrative Handoff Refresh State
+
+Current main/admin HEAD: `e97af592` (`Refresh handoff state after PR1244 (#1245)`).
+Last substantive work marker: `7f5a331` / PR #1244 (`Enforce operational handoff document freshness`).
+
+This is an administrative handoff/evidence refresh after PR #1244. It does not replace the substantive safe-state intent. It exists so operational handoff freshness no longer points at stale PR1011-era prompts.
+
+Next safe substantive slice: implement the professional operational documentation projection system from a machine-readable state source, with generated blocks, preservation of curated documentation, rule-registry coverage, and drift gates.
+
 ## Post-PR1243 Operational Handoff Freshness State
 
 Current verified main HEAD is `88e01f46f4928174ea241039e0a863f28570130a` (`88e01f46`).

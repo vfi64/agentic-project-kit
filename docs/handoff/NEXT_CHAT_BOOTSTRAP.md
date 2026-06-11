@@ -5,10 +5,12 @@ Do not start from chat memory. Read this file first, then follow its boot sequen
 
 ## Current Operational Handoff State
 
-Current verified main HEAD is `88e01f46f4928174ea241039e0a863f28570130a` (`88e01f46`), after `Refresh handoff state after PR1242 (#1243)`.
-Last substantive work state is `4bf3da29` (`Render transfer payload commands as compact summaries (#1242)`).
+Current verified main/admin HEAD is `e97af5923886ea41e5114bb3755320ba0212d993` (`e97af592`), after `Refresh handoff state after PR1244 (#1245)`.
+Last substantive work state is `7f5a3310` (`Enforce operational handoff document freshness (#1244)`).
 
+PR #1245 is an administrative handoff/evidence refresh after PR #1244. It does not replace the substantive safe-state intent.
 A successor chat must treat operational documentation freshness as part of handoff freshness: STATUS, CURRENT_HANDOFF, START_NEW_CHAT_PROMPT, NEXT_CHAT_BOOTSTRAP, and the active roadmap must mention current safe/admin markers before they are used as authoritative orientation.
+Next safe substantive slice: implement the professional operational documentation projection system from a machine-readable state source, with generated blocks, preservation of curated documentation, rule-registry coverage, and drift gates.
 
 ## Canonical chat-switch prompt files
 

@@ -1,7 +1,7 @@
 schema_version: 1
 updated:
   date: '2026-06-11'
-  reason: Refresh handoff state to last substantive work commit
+  reason: administrative handoff refresh after PR1245
   source: agentic-kit handoff refresh
 repo:
   name: agentic-project-kit
@@ -423,9 +423,9 @@ blocked_until_closeout:
 - Gatekeeper product work before post-PR888 handoff refresh is merged and verified
 - Treating helper-local PASS as slice PASS without patch-preflight slice-gate evidence
 - GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
-first_instruction: Start the next chat from the fresh post-PR1011 successor handoff
-  prompt. Verify main at 50c73ac, confirm the post-PR1011 closeout evidence log passes
-  explicit summary inspection, then continue only with B11 Gatekeeper Core or another
+first_instruction: Start the next chat from the fresh post-PR1245 successor handoff
+  prompt. Verify main at e97af592, confirm the post-PR1245 operational handoff refresh passes
+  explicit summary inspection, then continue only with the operational documentation projection slice or another
   allowed small test-backed slice.
 handoff_maintenance:
   principle: curated-not-accumulated
@@ -433,17 +433,23 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr1011-successor-chat-handoff.md
-  first_instruction: Start the next chat from the fresh post-PR1011 successor handoff
-    prompt. Verify main at 50c73ac, confirm the post-PR1011 closeout evidence log
-    passes explicit summary inspection, then continue only with B11 Gatekeeper Core
+  latest_successor_prompt: docs/reports/terminal/post-pr1245-successor-chat-handoff.md
+  first_instruction: Start the next chat from the fresh post-PR1245 successor handoff
+    prompt. Verify main at e97af592, confirm the post-PR1245 operational handoff refresh
+    passes explicit summary inspection, then continue only with the operational documentation projection slice
     or another allowed small test-backed slice.
 next_step:
-  first_instruction: Start the next chat from the fresh post-PR1011 successor handoff
-    prompt. Verify main at 50c73ac, confirm the post-PR1011 closeout evidence log
-    passes explicit summary inspection, then continue only with B11 Gatekeeper Core
+  first_instruction: Start the next chat from the fresh post-PR1245 successor handoff
+    prompt. Verify main at e97af592, confirm the post-PR1245 operational handoff refresh
+    passes explicit summary inspection, then continue only with the operational documentation projection slice
     or another allowed small test-backed slice.
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr1011-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1245-successor-chat-handoff.md
+administrative_evidence_state:
+  current_head: e97af592
+  current_head_subject: Refresh handoff state after PR1244 (#1245)
+  allowed_after_safe_state: true
+  reason: administrative evidence/log/handoff commit after substantive safe_state
+  latest_successor_prompt: docs/reports/terminal/post-pr1245-successor-chat-handoff.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
