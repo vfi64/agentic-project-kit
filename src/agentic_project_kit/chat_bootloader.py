@@ -119,77 +119,27 @@ def render_bootloader(root: Path | str = ".") -> str:
 
 
 def render_next_chat_bootstrap(root: Path | str = ".", *, include_state: bool = False) -> str:
-    bootloader_text = render_bootloader(root)
-    lines = [
-        "# NEXT CHAT BOOTSTRAP",
-        "",
-        "This file is the canonical remote handoff entry point for a successor chat.",
-        "Do not start from chat memory. Read this file first, then follow its boot sequence.",
-        "",
-    ]
-    if include_state:
-        lines.extend(
-            [
-                "## Repository state snapshot",
-                "",
-                f"- Branch: `{current_git_branch(root)}`",
-                f"- HEAD: `{current_git_head(root)}`",
-                "- Open PRs: inspect remote GitHub before mutation.",
-                "- CI: inspect remote GitHub before mutation.",
-                "",
-            ]
+    """Render the deterministic successor handoff bootstrap projection.
+
+    Prefer the committed latest successor package when present. This makes
+    bootstrap validation stable in CI merge-checkout contexts. The
+    chat-switch-complete command remains responsible for refreshing the package
+    from live local state.
+    """
+    package_context = Path(root) / "docs/reports/handoff-packages/latest/successor_context.yaml"
+    if package_context.exists():
+        from agentic_project_kit.successor_handoff_package import (
+            load_successor_context,
+            render_next_chat_bootstrap_from_context,
         )
-    lines.extend(current_operational_handoff_state(root))
-    lines.extend(
-        [
-            "## Canonical chat-switch prompt files",
-            "",
-            f"- Start a successor chat with `{START_PROMPT_PATH}`.",
-            f"- Before leaving a chat, run the closeout routine in `{CLOSEOUT_PROMPT_PATH}`.",
-            "- A closeout may need to update both prompt files and this bootstrap file.",
-            "",
-            "## Standard successor-chat prompt",
-            "",
-            "Copy this into the next chat:",
-            "",
-            "```text",
-            "We work in repo vfi64/agentic-project-kit. Do not start from chat memory.",
-            "Read the remote file docs/handoff/NEXT_CHAT_BOOTSTRAP.md on main completely and execute its boot routine.",
-            "After that, verify main, open PRs, CI, STATUS, CURRENT_HANDOFF, handoff_state, compiled_agent_context, rule registry files, document-management rules, and FINAL_SUMMARY_CONTRACT before any mutation.",
-            "If continuing after d, f, w, or any other short chat signal, first run agentic-kit evidence inspect locally or inspect equivalent committed remote/repo evidence.",
-            "```",
-            "",
-            "## First chat command",
-            "",
-            "1. Read this file completely from remote main.",
-            "2. Run or verify `agentic-kit boot check` and `agentic-kit boot prompt` if a local checkout is available.",
-            "3. Open every mandatory boot source listed below before repository mutation.",
-            "4. Report current main HEAD, open PRs, CI status, last clean evidence, and next smallest safe slice.",
-            "5. Before continuing after a chat control signal, use `agentic-kit evidence inspect` or equivalent remote/repo evidence inspection.",
-            "",
-            "## Bootloader output",
-            "",
-            "```text",
-            bootloader_text,
-            "```",
-            "",
-            "## Next work items",
-            "",
-        ]
-    )
-    lines.extend(f"- {item}" for item in NEXT_WORK_ITEMS)
-    lines.extend(
-        [
-            "",
-            "## Final summary requirement",
-            "",
-            "Evidence-bearing workflow outputs must use `agentic_project_kit.run_summary_renderer.SummaryPayload`, the Python workflow summary runner, or `agentic-kit evidence finalize-log`. Do not hand-write legacy final summaries.",
-            "",
-            "### RESULT: PASS ###",
-            "",
-        ]
-    )
-    return "\n".join(lines)
+
+        return render_next_chat_bootstrap_from_context(load_successor_context(package_context))
+
+    from agentic_project_kit.successor_handoff_package import build_successor_handoff_package
+
+    result = build_successor_handoff_package(root)
+    return result.next_chat_bootstrap
+
 
 
 def write_next_chat_bootstrap(

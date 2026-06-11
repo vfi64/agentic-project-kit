@@ -5,7 +5,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `150`
+- Command count: `151`
 
 ## Commands
 
@@ -642,6 +642,17 @@ _No parameters._
 | `pull` | `TyperOption` | --pull | `False` | `False` | Fast-forward pull from origin after switching. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
+### `agentic-kit transfer chat-switch-complete`
+
+Create a deterministic successor handoff package and prompt projections.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+| `render_prompt` | `TyperOption` | --render-prompt | `False` | `False` | Print the generated copy-and-paste successor chat prompt. |
+| `output_dir` | `TyperOption` | --output-dir | `False` | `docs/reports/handoff-packages/latest` | Directory for the generated successor handoff package. |
+| `update_canonical_prompts` | `TyperOption` | --update-canonical-prompts, --no-update-canonical-prompts | `False` | `True` | Update NEXT_CHAT_BOOTSTRAP, START_NEW_CHAT_PROMPT, and CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT. |
+
 ### `agentic-kit transfer closeout`
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -922,17 +933,14 @@ Create a PR and complete it without requiring manual PR-number or SHA copying.
 
 ### `agentic-kit transfer prepare-successor-handoff`
 
-Prepare a canonical LLM handoff assignment in the transfer outbox.
-
-This command creates a repo-backed local-to-LLM transfer message. The LLM can
-read it after a simple "g" and produce a copy-and-paste successor chat prompt.
+Deprecated compatibility alias for transfer chat-switch-complete.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
-| `repair_known_volatile` | `TyperOption` | --repair-known-volatile | `False` | `False` | Restore known volatile transfer output files before preparing the handoff request. |
-| `render_prompt` | `TyperOption` | --render-prompt | `False` | `False` | Render a copy-and-paste successor chat prompt directly from the handoff payload. |
-| `write_outbox` | `TyperOption` | --write-outbox, --no-write-outbox | `False` | `False` | Write the canonical transfer outbox. Defaults to no write to avoid volatile dirty state. |
+| `repair_known_volatile` | `TyperOption` | --repair-known-volatile | `False` | `False` | Deprecated compatibility option; volatile repair belongs in normalize-session. |
+| `render_prompt` | `TyperOption` | --render-prompt | `False` | `False` | Print the generated copy-and-paste successor chat prompt. |
+| `write_outbox` | `TyperOption` | --write-outbox, --no-write-outbox | `False` | `False` | Deprecated compatibility option. The deterministic package is written to docs/reports/handoff-packages/latest. |
 
 ### `agentic-kit transfer protected-diff-plan`
 

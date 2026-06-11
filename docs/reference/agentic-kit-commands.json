@@ -3752,6 +3752,76 @@
     },
     {
       "group": "transfer",
+      "help": "Create a deterministic successor handoff package and prompt projections.",
+      "name": "chat-switch-complete",
+      "params": [
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print the generated copy-and-paste successor chat prompt.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "render_prompt",
+          "opts": [
+            "--render-prompt"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "docs/reports/handoff-packages/latest",
+          "help": "Directory for the generated successor handoff package.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_dir",
+          "opts": [
+            "--output-dir"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": true,
+          "help": "Update NEXT_CHAT_BOOTSTRAP, START_NEW_CHAT_PROMPT, and CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "update_canonical_prompts",
+          "opts": [
+            "--update-canonical-prompts"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-update-canonical-prompts"
+          ]
+        }
+      ],
+      "path": [
+        "transfer",
+        "chat-switch-complete"
+      ],
+      "qualified_name": "agentic-kit transfer chat-switch-complete"
+    },
+    {
+      "group": "transfer",
       "help": "",
       "name": "closeout",
       "params": [
@@ -5817,7 +5887,7 @@
     },
     {
       "group": "transfer",
-      "help": "Prepare a canonical LLM handoff assignment in the transfer outbox.\n\nThis command creates a repo-backed local-to-LLM transfer message. The LLM can\nread it after a simple \"g\" and produce a copy-and-paste successor chat prompt.",
+      "help": "Deprecated compatibility alias for transfer chat-switch-complete.",
       "name": "prepare-successor-handoff",
       "params": [
         {
@@ -5836,7 +5906,7 @@
         },
         {
           "default": false,
-          "help": "Restore known volatile transfer output files before preparing the handoff request.",
+          "help": "Deprecated compatibility option; volatile repair belongs in normalize-session.",
           "is_flag": true,
           "metavar": null,
           "multiple": false,
@@ -5850,7 +5920,7 @@
         },
         {
           "default": false,
-          "help": "Render a copy-and-paste successor chat prompt directly from the handoff payload.",
+          "help": "Print the generated copy-and-paste successor chat prompt.",
           "is_flag": true,
           "metavar": null,
           "multiple": false,
@@ -5864,7 +5934,7 @@
         },
         {
           "default": false,
-          "help": "Write the canonical transfer outbox. Defaults to no write to avoid volatile dirty state.",
+          "help": "Deprecated compatibility option. The deterministic package is written to docs/reports/handoff-packages/latest.",
           "is_flag": true,
           "metavar": null,
           "multiple": false,

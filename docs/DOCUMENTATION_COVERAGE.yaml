@@ -674,3 +674,31 @@ rules:
     - Mandatory Final Summary Contract
     - 'NEXT_CHAT_REPLY: p'
     - 'REMOTE_EVIDENCE: PASS'
+
+- id: successor-handoff-package-command-coverage
+  description: Canonical clean handoff command and successor handoff package must remain visible to users and LLMs.
+  documents:
+  - path: README.md
+    terms:
+    - Clean handoff
+    - agentic-kit transfer chat-switch-complete
+    - successor handoff package
+    - validation_report.json
+  - path: AGENTS.md
+    terms:
+    - Clean Handoff Command
+    - agentic-kit transfer chat-switch-complete
+    - docs/reference/agentic-kit-commands.json
+    - A chat must not reconstruct this command from memory
+  - path: docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+    terms:
+    - Successor Handoff Package
+    - successor_context.yaml
+    - validation_report.json
+  - path: docs/reference/AGENTIC_KIT_COMMANDS.md
+    terms:
+    - chat-switch-complete
+    - --render-prompt
+  - path: docs/reference/agentic-kit-commands.json
+    terms:
+    - chat-switch-complete

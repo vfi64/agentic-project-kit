@@ -1,0 +1,111 @@
+{
+  "generated_at_utc": "2026-06-11T18:44:38.696914+00:00",
+  "generated_by": "agentic-kit transfer chat-switch-complete",
+  "handoff_validity": {
+    "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "canonical_package": "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "canonical_prompt": "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "paired_prompts": [
+      "docs/handoff/START_NEW_CHAT_PROMPT.md",
+      "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
+    ],
+    "status": "PASS"
+  },
+  "kind": "successor_chat_context",
+  "long_term_memory": {
+    "mandatory_sources": [
+      ".agentic/compiled_agent_context.yaml",
+      ".agentic/handoff_state.yaml",
+      ".agentic/operational_handoff_state.yaml",
+      ".agentic/rule_mechanism_inventory.yaml",
+      ".agentic/rule_migrations.yaml",
+      ".agentic/rule_preservation.yaml",
+      "AGENTS.md",
+      "README.md",
+      "SECURITY.md",
+      "docs/DOCUMENTATION_COVERAGE.yaml",
+      "docs/STATUS.md",
+      "docs/TEST_GATES.md",
+      "docs/handoff/CURRENT_HANDOFF.md",
+      "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+      "docs/handoff/START_NEW_CHAT_PROMPT.md",
+      "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+      "docs/governance/FINAL_SUMMARY_CONTRACT.md",
+      "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
+      "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
+      "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
+      "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
+      "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+      "docs/reference/AGENTIC_KIT_COMMANDS.md",
+      "docs/reference/agentic-kit-commands.json"
+    ],
+    "required_startup_commands": [
+      "cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
+      "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile",
+      "./.venv/bin/agentic-kit rules acknowledge",
+      "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile",
+      "git branch --show-current",
+      "git status -sb",
+      "git status --short",
+      "./.venv/bin/agentic-kit transfer post-merge-check",
+      "./.venv/bin/agentic-kit transfer repo-status"
+    ],
+    "source": "repository files and command references"
+  },
+  "repo": {
+    "branch": "feature/successor-handoff-package",
+    "full_name": "vfi64/agentic-project-kit",
+    "head": "2a934c12ffa6a6b79060e1d96e0441aa63bb5111",
+    "head_matches_origin_main": true,
+    "head_short": "2a934c12",
+    "local_path": "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
+    "origin_main": "2a934c12ffa6a6b79060e1d96e0441aa63bb5111",
+    "origin_main_short": "2a934c12",
+    "worktree_clean": false
+  },
+  "schema_version": 1,
+  "short_term_memory": {
+    "open_tasks": [
+      {
+        "files": [
+          "src/agentic_project_kit/successor_handoff_package.py",
+          "src/agentic_project_kit/chat_bootloader.py",
+          "src/agentic_project_kit/cli_commands/transfer.py",
+          "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+          "docs/handoff/START_NEW_CHAT_PROMPT.md",
+          "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
+        ],
+        "id": "successor-handoff-package",
+        "status": "active",
+        "summary": "Replace obsolete chat-switch prompt generation with a deterministic successor handoff package."
+      },
+      {
+        "files": [
+          "AGENTS.md",
+          "README.md",
+          "SECURITY.md",
+          "docs/DOCUMENTATION_COVERAGE.yaml"
+        ],
+        "id": "outer-doc-currency",
+        "status": "pending",
+        "summary": "Add currency checks and minimal updates for AGENTS.md, README.md, and SECURITY.md."
+      }
+    ],
+    "recent_lessons": [
+      "The old prepare-successor-handoff mechanism is not sufficient as a standalone chat-switch source.",
+      "Successor handoff must combine repo-backed long-term context with explicit short-term local work state.",
+      "Generated prompt files must be deterministic projections, not accumulative append targets.",
+      "Stale prompt markers, literal backslash-n artifacts, and old current-state PR anchors must block handoff trust.",
+      "The copy prompt must be usable by other LLMs, not only ChatGPT."
+    ],
+    "source": "current local/repo state at package generation time"
+  },
+  "working_rules": {
+    "language": "de",
+    "large_output_policy": "write large command output to ~/Downloads/*.log and report only LOG=...",
+    "protected_file_policy": "do not broadly replace protected governance, YAML, status, handoff, or planning files; patch minimally and run protected diff plan",
+    "source_of_truth": "current remote main, local repo state, repo/log-backed evidence, and this successor package",
+    "stop_policy": "stop immediately on BLOCK or FAIL; diagnose before continuing",
+    "style": "knapp, direkt, keine langen Logs im Chat"
+  }
+}
