@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 56b5c22fee0f1f57ed0712100df28d8bda37f6e6
-  short: 56b5c22f
-  subject: Compact status refresh history (#1264)
+  full: 8f30fed93422ba9fbe9ea8decca3c6475800ec28
+  short: 8f30fed9
+  subject: Compact handoff refresh history (#1266)
 last_substantive_work_state:
-  full: 56b5c22fee0f1f57ed0712100df28d8bda37f6e6
-  short: 56b5c22f
-  subject: Compact status refresh history (#1264)
+  full: 8f30fed93422ba9fbe9ea8decca3c6475800ec28
+  short: 8f30fed9
+  subject: Compact handoff refresh history (#1266)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
