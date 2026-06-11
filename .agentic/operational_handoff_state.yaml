@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: fb4781779ecfe5623fb824e7b3f84fe061e95f1d
-  short: fb478177
-  subject: Constrain admin refresh handoff rewrites (#1260)
+  full: 4c9bba27986d9f54e44e32c70ac6304262419b1d
+  short: 4c9bba27
+  subject: Document admin refresh handoff policy (#1262)
 last_substantive_work_state:
-  full: fb4781779ecfe5623fb824e7b3f84fe061e95f1d
-  short: fb478177
-  subject: Constrain admin refresh handoff rewrites (#1260)
+  full: 4c9bba27986d9f54e44e32c70ac6304262419b1d
+  short: 4c9bba27
+  subject: Document admin refresh handoff policy (#1262)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
