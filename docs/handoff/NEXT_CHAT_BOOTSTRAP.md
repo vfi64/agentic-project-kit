@@ -6,9 +6,10 @@ Do not start from chat memory. Read this file first, then follow its boot sequen
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `d23c9a9f920e7004f7bff05b8ac52b59746ba2e3` (`d23c9a9f`), after `Add generated operational handoff markers (#1253)`.
-Last substantive work state is `d23c9a9f920e7004f7bff05b8ac52b59746ba2e3` (`d23c9a9f`), after `Add generated operational handoff markers (#1253)`.
+Current verified main/admin HEAD is `3f111f1d1db7ab89f2af688fa5a722e660b805d5` (`3f111f1d`), after `Add generated operational handoff block replacement (#1255)`.
+Last substantive work state is `3f111f1d1db7ab89f2af688fa5a722e660b805d5` (`3f111f1d`), after `Add generated operational handoff block replacement (#1255)`.
 
+PR #1255 added generated operational handoff block replacement.
 PR #1253 added generated operational handoff block markers.
 PR #1250 refreshed the post-PR1249 operational handoff state and successor prompt markers.
 PR #1250 refreshed the operational handoff state after PR #1249 and preserved the first generated bootstrap projection path.

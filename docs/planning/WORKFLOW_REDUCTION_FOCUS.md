@@ -596,3 +596,7 @@ Current administrative handoff refresh state is `9d24918d` (`Refresh operational
 ## Operational documentation refresh state after PR #1253
 
 Current administrative handoff refresh state is `d23c9a9f` (`Add generated operational handoff markers (#1253)`). PR #1253 added generated-block markers around the projected operational handoff block. Continue next only after this post-PR1253 refresh is committed and merged; the next substantive documentation step is Slice 2b from fresh main.
+
+## Operational documentation refresh state after PR #1255
+
+Current administrative handoff refresh state is `3f111f1d` (`Add generated operational handoff block replacement (#1255)`). PR #1255 added targeted replacement of the marked generated operational handoff block while preserving curated surrounding documentation. Continue next only after this post-PR1255 refresh is committed and merged; the next substantive documentation slice must be created from fresh main.
