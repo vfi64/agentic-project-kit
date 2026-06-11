@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 import subprocess
 from dataclasses import dataclass, asdict
@@ -774,6 +775,100 @@ def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
     return _result("post-merge-check", command, completed, next_action)
 
 
+ADMIN_REFRESH_PATHS = (
+    ".agentic/handoff_state.yaml",
+    ".agentic/operational_handoff_state.yaml",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+)
+
+
+def _admin_refresh_successor_prompt_path(after_pr: int) -> str:
+    return f"docs/reports/terminal/post-pr{after_pr}-successor-chat-handoff.md"
+
+
+def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProcess[str]:
+    command = ["admin-refresh-operational-handoff-docs", "--after-pr", str(after_pr)]
+    try:
+        full = _run(["git", "rev-parse", "HEAD"]).stdout.strip()
+        short = _run(["git", "rev-parse", "--short=8", "HEAD"]).stdout.strip() or full[:8]
+        subject = _run(["git", "log", "-1", "--format=%s"]).stdout.strip()
+        prompt_path = _admin_refresh_successor_prompt_path(after_pr)
+
+        touched: list[str] = []
+        successor_prompt_pattern = re.compile(r"post-pr\d+-successor-chat-handoff\.md")
+        post_pr_upper_pattern = re.compile(r"post-PR\d+")
+        post_pr_lower_pattern = re.compile(r"post-pr\d+")
+
+        for file_name in (".agentic/handoff_state.yaml", ".agentic/operational_handoff_state.yaml"):
+            file_path = Path(file_name)
+            if not file_path.exists():
+                continue
+            current = file_path.read_text(encoding="utf-8")
+            updated = current
+            updated = successor_prompt_pattern.sub(f"post-pr{after_pr}-successor-chat-handoff.md", updated)
+            updated = post_pr_upper_pattern.sub(f"post-PR{after_pr}", updated)
+            updated = post_pr_lower_pattern.sub(f"post-pr{after_pr}", updated)
+            if file_name == ".agentic/handoff_state.yaml":
+                updated = re.sub(r"^(\s*commit:\s*)[0-9a-f]{7,40}\s*$", rf"\g<1>{short}", updated, count=1, flags=re.MULTILINE)
+                updated = re.sub(r"^(\s*current_head:\s*)[0-9a-f]{7,40}\s*$", rf"\g<1>{short}", updated, count=1, flags=re.MULTILINE)
+                updated = re.sub(r"^(\s*commit_subject:\s*).*$", rf"\g<1>{subject}", updated, count=1, flags=re.MULTILINE)
+                updated = re.sub(r"^(\s*current_head_subject:\s*).*$", rf"\g<1>{subject}", updated, count=1, flags=re.MULTILINE)
+                updated = re.sub(r"main at [0-9a-f]{7,40}", f"main at {short}", updated)
+            if file_name == ".agentic/operational_handoff_state.yaml":
+                updated = re.sub(r"^(\s*full:\s*)[0-9a-f]{40}\s*$", rf"\g<1>{full}", updated, flags=re.MULTILINE)
+                updated = re.sub(r"^(\s*short:\s*)[0-9a-f]{7,40}\s*$", rf"\g<1>{short}", updated, flags=re.MULTILINE)
+                updated = re.sub(r"^(\s*subject:\s*).*$", rf"\g<1>{subject}", updated, flags=re.MULTILINE)
+            if updated != current:
+                file_path.write_text(updated, encoding="utf-8")
+                touched.append(file_name)
+
+        marker = (
+            f"\\n## Operational documentation refresh state after PR #{after_pr}\\n\\n"
+            f"Current administrative handoff refresh state is `{short}` (`{subject}`). "
+            f"Continue next only after this post-PR{after_pr} refresh is committed and merged; "
+            "the next substantive slice must be created from fresh main.\\n"
+        )
+        for file_name in (
+            "docs/STATUS.md",
+            "docs/handoff/CURRENT_HANDOFF.md",
+            "docs/handoff/START_NEW_CHAT_PROMPT.md",
+            "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+        ):
+            file_path = Path(file_name)
+            if not file_path.exists():
+                continue
+            current = file_path.read_text(encoding="utf-8")
+            if f"Operational documentation refresh state after PR #{after_pr}" not in current:
+                file_path.write_text(current.rstrip() + marker, encoding="utf-8")
+                touched.append(file_name)
+
+        boot = _run([_agentic_kit_command(), "boot", "write"])
+        if boot.returncode != 0:
+            return subprocess.CompletedProcess(command, boot.returncode, boot.stdout, boot.stderr)
+
+        prompt = _run([_agentic_kit_command(), "handoff", "prompt"])
+        if prompt.returncode != 0:
+            return subprocess.CompletedProcess(command, prompt.returncode, prompt.stdout, prompt.stderr)
+
+        prompt_file = Path(prompt_path)
+        prompt_file.parent.mkdir(parents=True, exist_ok=True)
+        prompt_file.write_text(prompt.stdout, encoding="utf-8")
+        touched.append(prompt_path)
+
+        return subprocess.CompletedProcess(
+            command,
+            0,
+            "Updated operational handoff docs:\\n" + "\\n".join(f"- {item}" for item in touched) + "\\n",
+            "",
+        )
+    except Exception as exc:
+        return subprocess.CompletedProcess(command, 2, "", f"{type(exc).__name__}: {exc}\\n")
+
+
 def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionResult:
     monitor = guard_branch(
         command_kind="admin-refresh-pr",
@@ -846,31 +941,38 @@ def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionR
     steps = [
         [_agentic_kit_command(), "handoff", "refresh", ".agentic/handoff_state.yaml", "--write"],
         [_agentic_kit_command(), "handoff", "check"],
+        ["admin-refresh-operational-handoff-docs", "--after-pr", str(after_pr)],
         [_agentic_kit_command(), "handoff", "post-merge-refresh-status"],
+        [_agentic_kit_command(), "transfer", "protected-diff-plan", "--label", f"post-pr{after_pr}-handoff-refresh"],
         ["git", "status", "--short"],
     ]
 
     for step in steps:
-        completed = _run(step)
+        if step[0] == "admin-refresh-operational-handoff-docs":
+            completed = _refresh_operational_handoff_docs(after_pr)
+        else:
+            completed = _run(step)
         transcript.append(f"$ {' '.join(step)}\n{completed.stdout}{completed.stderr}")
         if completed.returncode != 0:
             return _result("admin-refresh-pr", step, completed, "Inspect admin refresh step failure before continuing.")
 
     final_status = _run(["git", "status", "--short"])
     changed = tuple(line.strip() for line in final_status.stdout.splitlines() if line.strip())
-    allowed = ("M .agentic/handoff_state.yaml",)
-    if changed != allowed:
+    allowed = set(tuple(f"M {path}" for path in ADMIN_REFRESH_PATHS) + (
+        f"?? {_admin_refresh_successor_prompt_path(after_pr)}",
+    ))
+    if set(changed) != allowed:
         completed = subprocess.CompletedProcess(
             ["git", "status", "--short"],
             2,
             final_status.stdout,
-            "Admin refresh must change only .agentic/handoff_state.yaml.\n",
+            "Admin refresh must change only the generated administrative handoff refresh paths.\n",
         )
         return _result("admin-refresh-pr", completed.args, completed, "Inspect unexpected admin refresh diff before committing.")
 
     commit_message = f"Refresh handoff state after PR{after_pr}"
     more_steps = [
-        ["git", "add", ".agentic/handoff_state.yaml"],
+        ["git", "add", *ADMIN_REFRESH_PATHS, _admin_refresh_successor_prompt_path(after_pr)],
         ["git", "commit", "-m", commit_message],
         ["git", "push", "-u", "origin", refresh_branch],
         [
@@ -884,7 +986,7 @@ def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionR
             "--title",
             commit_message,
             "--body",
-            f"Administrative handoff-state refresh after PR{after_pr}. No product-code changes.",
+            f"Administrative operational handoff refresh after PR{after_pr}. No product-code changes.",
         ],
     ]
     for step in more_steps:
