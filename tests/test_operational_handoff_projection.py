@@ -4,6 +4,8 @@ import pytest
 import yaml
 
 from agentic_project_kit.operational_handoff_projection import (
+    GENERATED_BLOCK_BEGIN,
+    GENERATED_BLOCK_END,
     load_operational_handoff_state,
     render_current_operational_handoff_state,
 )
@@ -50,3 +52,29 @@ def test_operational_handoff_state_requires_schema_version(tmp_path: Path) -> No
 
     with pytest.raises(ValueError, match="schema_version"):
         load_operational_handoff_state(tmp_path)
+
+
+def test_rendered_operational_handoff_state_has_generated_block_markers(tmp_path: Path) -> None:
+    _write_state(
+        tmp_path,
+        {
+            "schema_version": 1,
+            "current_head": {
+                "full": "abcdef123456",
+                "short": "abcdef1",
+                "subject": "Refresh operational handoff (#10)",
+            },
+            "last_substantive_work_state": {
+                "full": "123456789abc",
+                "short": "1234567",
+                "subject": "Build product slice (#9)",
+            },
+        },
+    )
+
+    rendered = list(render_current_operational_handoff_state(tmp_path))
+
+    assert rendered[0] == GENERATED_BLOCK_BEGIN
+    assert rendered[-2] == GENERATED_BLOCK_END
+    assert rendered.count(GENERATED_BLOCK_BEGIN) == 1
+    assert rendered.count(GENERATED_BLOCK_END) == 1
