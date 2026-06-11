@@ -1,17 +1,18 @@
 schema_version: 1
 current_head:
-  full: 7c849ff6
-  short: 7c849ff6
-  subject: Accept administrative handoff loop-fix heads (#1248)
+  full: dfb7c2bae8c13fd4193f12d097d60e54a59ce8ce
+  short: dfb7c2ba
+  subject: Introduce operational handoff projection source (#1249)
 last_substantive_work_state:
-  full: 7f5a3310
-  short: 7f5a3310
-  subject: Enforce operational handoff document freshness (#1244)
+  full: dfb7c2bae8c13fd4193f12d097d60e54a59ce8ce
+  short: dfb7c2ba
+  subject: Introduce operational handoff projection source (#1249)
 administrative_context:
+  - "PR #1249 introduced the operational handoff projection source and the first generated bootstrap projection."
   - "PR #1248 fixes the administrative handoff refresh loop for loop-fix squash commits."
   - "PR #1247 accepts administrative handoff squash refresh heads."
   - "PR #1246 refreshed operational handoff after PR #1245."
-  - "PR #1245 is an administrative handoff/evidence refresh after PR #1244 and does not replace the substantive safe-state intent."
+  - "PR #1245 is an administrative handoff/evidence refresh after PR #1244."
 freshness_policy:
   text: >-
     A successor chat must treat operational documentation freshness as part of
@@ -20,6 +21,6 @@ freshness_policy:
     markers before they are used as authoritative orientation.
 next_safe_substantive_slice:
   text: >-
-    Continue the professional operational documentation projection system from a
-    machine-readable state source, with generated blocks, preservation of curated
-    documentation, rule-registry coverage, and drift gates.
+    Continue with documentation projection Slice 2: add generated-block markers
+    and update only the generated operational handoff block while preserving
+    curated documentation.
