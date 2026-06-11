@@ -800,8 +800,12 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
 
         touched: list[str] = []
         successor_prompt_pattern = re.compile(r"post-pr\d+-successor-chat-handoff\.md")
-        post_pr_upper_pattern = re.compile(r"post-PR\d+")
-        post_pr_lower_pattern = re.compile(r"post-pr\d+")
+        successor_instruction_pattern = re.compile(
+            r"Start the next chat from the fresh post-PR\d+ successor handoff"
+        )
+        verify_instruction_pattern = re.compile(
+            r"confirm the post-PR\d+ operational handoff refresh"
+        )
 
         for file_name in (".agentic/handoff_state.yaml", ".agentic/operational_handoff_state.yaml"):
             file_path = Path(file_name)
@@ -809,14 +813,30 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
                 continue
             current = file_path.read_text(encoding="utf-8")
             updated = current
-            updated = successor_prompt_pattern.sub(f"post-pr{after_pr}-successor-chat-handoff.md", updated)
-            updated = post_pr_upper_pattern.sub(f"post-PR{after_pr}", updated)
-            updated = post_pr_lower_pattern.sub(f"post-pr{after_pr}", updated)
             if file_name == ".agentic/handoff_state.yaml":
                 updated = re.sub(r"^(\s*commit:\s*)[0-9a-f]{7,40}\s*$", rf"\g<1>{short}", updated, count=1, flags=re.MULTILINE)
                 updated = re.sub(r"^(\s*current_head:\s*)[0-9a-f]{7,40}\s*$", rf"\g<1>{short}", updated, count=1, flags=re.MULTILINE)
                 updated = re.sub(r"^(\s*commit_subject:\s*).*$", rf"\g<1>{subject}", updated, count=1, flags=re.MULTILINE)
                 updated = re.sub(r"^(\s*current_head_subject:\s*).*$", rf"\g<1>{subject}", updated, count=1, flags=re.MULTILINE)
+                updated = re.sub(
+                    r"^(\s*latest_successor_prompt:\s*).*$",
+                    rf"\g<1>{prompt_path}",
+                    updated,
+                    flags=re.MULTILINE,
+                )
+                updated = successor_prompt_pattern.sub(
+                    f"post-pr{after_pr}-successor-chat-handoff.md",
+                    updated,
+                    count=4,
+                )
+                updated = successor_instruction_pattern.sub(
+                    f"Start the next chat from the fresh post-PR{after_pr} successor handoff",
+                    updated,
+                )
+                updated = verify_instruction_pattern.sub(
+                    f"confirm the post-PR{after_pr} operational handoff refresh",
+                    updated,
+                )
                 updated = re.sub(r"main at [0-9a-f]{7,40}", f"main at {short}", updated)
             if file_name == ".agentic/operational_handoff_state.yaml":
                 updated = re.sub(r"^(\s*full:\s*)[0-9a-f]{40}\s*$", rf"\g<1>{full}", updated, flags=re.MULTILINE)
@@ -939,9 +959,8 @@ def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionR
             )
 
     steps = [
-        [_agentic_kit_command(), "handoff", "refresh", ".agentic/handoff_state.yaml", "--write"],
-        [_agentic_kit_command(), "handoff", "check"],
         ["admin-refresh-operational-handoff-docs", "--after-pr", str(after_pr)],
+        [_agentic_kit_command(), "handoff", "check"],
         [_agentic_kit_command(), "handoff", "post-merge-refresh-status"],
         [_agentic_kit_command(), "transfer", "protected-diff-plan", "--label", f"post-pr{after_pr}-handoff-refresh"],
         ["git", "status", "--short"],
