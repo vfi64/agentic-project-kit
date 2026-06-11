@@ -176,8 +176,8 @@ def test_handoff_freshness_guard_accepts_administrative_github_merge_commit(
 ) -> None:
     handoff_path = tmp_path / ".agentic" / "handoff_state.yaml"
     prompt_path = tmp_path / "docs" / "reports" / "terminal" / "after-pr878.md"
-    _write(tmp_path / "docs" / "STATUS.md", "status for admin refresh\n")
-    _write(tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md", "handoff for admin refresh\n")
+    _write(tmp_path / "docs" / "STATUS.md", "status for admin refresh 162fa44\n")
+    _write(tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md", "handoff for admin refresh 162fa44\n")
     _write(handoff_path, "schema_version: 1\n")
     _write(prompt_path, "successor prompt generated for 162fa44\n")
     data = {
@@ -242,8 +242,8 @@ def test_handoff_freshness_guard_accepts_bounded_administrative_merge_chain(
 ) -> None:
     handoff_path = tmp_path / ".agentic" / "handoff_state.yaml"
     prompt_path = tmp_path / "docs" / "reports" / "terminal" / "after-pr879.md"
-    _write(tmp_path / "docs" / "STATUS.md", "status for admin merge chain\n")
-    _write(tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md", "handoff for admin merge chain\n")
+    _write(tmp_path / "docs" / "STATUS.md", "status for admin merge chain 162fa44\n")
+    _write(tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md", "handoff for admin merge chain 162fa44\n")
     _write(handoff_path, "schema_version: 1\n")
     _write(prompt_path, "successor prompt generated for 162fa44\n")
     data = {
@@ -334,4 +334,47 @@ def test_handoff_freshness_guard_rejects_product_merge_inside_admin_chain(
     )
 
     assert any("not represented by handoff safe/admin state" in warning for warning in warnings)
+
+def test_handoff_freshness_guard_warns_on_stale_operational_documents(
+    tmp_path: Path,
+) -> None:
+    handoff_path = tmp_path / ".agentic" / "handoff_state.yaml"
+    prompt_path = tmp_path / "docs" / "reports" / "terminal" / "after-pr1242.md"
+    _write(tmp_path / "docs" / "STATUS.md", "status for stale PR1054\n")
+    _write(
+        tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md",
+        "handoff for stale PR1054\n",
+    )
+    _write(
+        tmp_path / "docs" / "handoff" / "START_NEW_CHAT_PROMPT.md",
+        "successor prompt instructions for stale PR1054\n",
+    )
+    _write(
+        tmp_path / "docs" / "handoff" / "NEXT_CHAT_BOOTSTRAP.md",
+        "bootstrap instructions for stale PR1054\n",
+    )
+    _write(
+        tmp_path / "docs" / "planning" / "WORKFLOW_REDUCTION_FOCUS.md",
+        "roadmap instructions for stale PR1054\n",
+    )
+    _write(handoff_path, "schema_version: 1\n")
+    _write(prompt_path, "successor prompt generated for 4bf3da29\n")
+    data = {
+        "safe_state": {"commit": "4bf3da29"},
+        "handoff_maintenance": {
+            "latest_successor_prompt": "docs/reports/terminal/after-pr1242.md",
+        },
+    }
+
+    warnings = assess_handoff_prompt_freshness(
+        data,
+        handoff_path,
+        current_head="4bf3da29",
+    )
+
+    assert any("docs/STATUS.md" in warning for warning in warnings)
+    assert any("docs/handoff/CURRENT_HANDOFF.md" in warning for warning in warnings)
+    assert any("START_NEW_CHAT_PROMPT.md" in warning for warning in warnings)
+    assert any("NEXT_CHAT_BOOTSTRAP.md" in warning for warning in warnings)
+    assert any("WORKFLOW_REDUCTION_FOCUS.md" in warning for warning in warnings)
 

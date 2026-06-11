@@ -1,13 +1,19 @@
-## Post-PR1054 Handoff Refresh State
+## Post-PR1243 Operational Handoff Freshness State
 
-Current verified main HEAD is d45526ed72d7e48d9cc7bc85ad090dc342a385a6 (d45526e).
-Commit subject: Fix transfer report handoff semantics (#1054).
+Current verified main HEAD is `88e01f46f4928174ea241039e0a863f28570130a` (`88e01f46`).
+Last substantive work state is `4bf3da29` (`Render transfer payload commands as compact summaries (#1242)`).
+Administrative refresh PR #1243 is merged.
 
-PR #1054 is merged. It fixed transfer report handoff semantics: local run-and-log paths now report local report writing, publish-last-report remains the tracked handoff upload path, failed published reports no longer emit a go reply, and the roadmap now prioritizes transfer-wrapper branch-safety hardening next.
+Recent completed transfer hardening:
+- PR #1238: transfer continue self-healing.
+- PR #1240: RepoActionResult terminal output now renders compact START/END SUMMARY by default.
+- PR #1242: selected transfer payload commands now render compact START/END SUMMARY by default while preserving `--json`.
 
-The post-merge handoff refresh status gate is the canonical decision point after merges: agentic-kit handoff post-merge-refresh-status.
+Operational handoff freshness now includes working-state documentation, not only release state:
+`docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, successor/bootstrap prompts, and the active roadmap must mention the current safe/admin commit markers before a handoff is treated as authoritative.
 
-Next safe step after this refresh is merged and verified: implement the transfer-wrapper branch-safety hardening slice. transfer push-current must push the actual current branch or fail closed; no product work should start before this wrapper branch-safety defect is fixed.
+Next safe step: continue with the remaining transfer-safety line only after this freshness slice is merged and post-merge-check reports NOOP. Do not treat older PR1054/PR880 roadmap anchors as current state.
+
 
 ## Post-PR897 Handoff Refresh State
 

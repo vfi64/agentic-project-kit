@@ -47,6 +47,16 @@ BOOTLOADER_RULES = (
     "Before a chat switch, run the closeout prompt and check whether START_NEW_CHAT_PROMPT.md, CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md, and NEXT_CHAT_BOOTSTRAP.md all need updates.",
 )
 
+CURRENT_OPERATIONAL_HANDOFF_STATE = (
+    "## Current Operational Handoff State",
+    "",
+    "Current verified main HEAD is `88e01f46f4928174ea241039e0a863f28570130a` (`88e01f46`), after `Refresh handoff state after PR1242 (#1243)`.",
+    "Last substantive work state is `4bf3da29` (`Render transfer payload commands as compact summaries (#1242)`).",
+    "",
+    "A successor chat must treat operational documentation freshness as part of handoff freshness: STATUS, CURRENT_HANDOFF, START_NEW_CHAT_PROMPT, NEXT_CHAT_BOOTSTRAP, and the active roadmap must mention current safe/admin markers before they are used as authoritative orientation.",
+    "",
+)
+
 NEXT_WORK_ITEMS = (
     "Finish local sync after the bootloader/summary-runner merge and verify boot write/check plus targeted tests.",
     "Use boot write to refresh docs/handoff/NEXT_CHAT_BOOTSTRAP.md before chat changes.",
@@ -133,6 +143,7 @@ def render_next_chat_bootstrap(root: Path | str = ".", *, include_state: bool = 
                 "",
             ]
         )
+    lines.extend(CURRENT_OPERATIONAL_HANDOFF_STATE)
     lines.extend(
         [
             "## Canonical chat-switch prompt files",
