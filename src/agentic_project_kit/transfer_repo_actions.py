@@ -889,7 +889,55 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
         return subprocess.CompletedProcess(command, 2, "", f"{type(exc).__name__}: {exc}\\n")
 
 
+def _is_refresh_only_pr(after_pr: int) -> bool:
+    """Return true when the merged PR is itself an administrative handoff refresh.
+
+    Refresh-only PRs are already the administrative follow-up for an earlier
+    merge. Running another admin refresh after them creates an infinite
+    post-pr<N>-handoff-refresh treadmill.
+    """
+
+    completed = _run(
+        [
+            "gh",
+            "pr",
+            "view",
+            str(after_pr),
+            "--json",
+            "title,headRefName",
+            "--jq",
+            ".title + \"\\n\" + .headRefName",
+        ]
+    )
+    if completed.returncode != 0:
+        return False
+
+    lines = completed.stdout.splitlines()
+    title = lines[0].strip() if lines else ""
+    head_ref = lines[1].strip() if len(lines) > 1 else ""
+
+    return (
+        title.startswith("Refresh successor handoff after PR")
+        and head_ref.startswith("docs/post-pr")
+        and head_ref.endswith("-handoff-refresh")
+    )
+
+
 def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionResult:
+    if _is_refresh_only_pr(after_pr):
+        completed = subprocess.CompletedProcess(
+            ["admin-refresh-pr", "--after-pr", str(after_pr)],
+            0,
+            f"NOOP: PR #{after_pr} is already a refresh-only handoff PR; skipping chained admin refresh.\\n",
+            "",
+        )
+        return _result(
+            "admin-refresh-pr",
+            completed.args,
+            completed,
+            "admin_refresh_skipped_refresh_only_pr",
+        )
+
     monitor = guard_branch(
         command_kind="admin-refresh-pr",
         required_branch=main_branch,
