@@ -184,8 +184,6 @@ def test_validate_successor_outputs_blocks_naked_python_recommendation():
 
 def test_successor_handoff_package_e2e_start_decision_contract(tmp_path, monkeypatch):
     import json
-    import subprocess
-    from pathlib import Path
 
     from agentic_project_kit import successor_handoff_package as package
 
@@ -268,18 +266,3 @@ def test_successor_handoff_package_e2e_start_decision_contract(tmp_path, monkeyp
     assert "validation_report.status is not PASS" in strict_start["stop_conditions"]
     assert "unexpected dirty paths exist" in strict_start["stop_conditions"]
 
-    completed = subprocess.run(
-        [
-            "./.venv/bin/python",
-            "-m",
-            "pytest",
-            "tests/test_successor_handoff_package.py::test_successor_execution_contract_projection_contains_hard_start_rules",
-            "-q",
-        ],
-        cwd=Path.cwd(),
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-    )
-    assert completed.returncode == 0, completed.stdout + completed.stderr
