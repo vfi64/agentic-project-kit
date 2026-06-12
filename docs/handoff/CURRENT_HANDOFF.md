@@ -392,3 +392,6 @@ Current administrative handoff refresh state is `e9371b44` (`Protect start promp
 ## Operational documentation refresh state after PR #1311
 
 Current administrative handoff refresh state is `afc21ade` (`Project bootstrap gate into successor package (#1311)`). Continue next only after this post-PR1311 refresh is committed and merged; the next substantive slice must be created from fresh main.
+## Operational documentation refresh state after PR #1314
+
+Current administrative handoff refresh state is `e8f02f20` (`Accept refresh-only successor package head drift (#1314)`). Continue next only after this post-PR1314 refresh is committed and merged; the next substantive slice must be created from fresh main.
