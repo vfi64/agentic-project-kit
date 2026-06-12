@@ -1,3 +1,14 @@
+---
+artifact_type: agent_instructions
+schema_version: 1
+canonical_execution_contract: docs/reports/handoff-packages/latest/execution_contract.json
+canonical_successor_context: docs/reports/handoff-packages/latest/successor_context.yaml
+canonical_validation_report: docs/reports/handoff-packages/latest/validation_report.json
+protected_file_policy: preserve_additive_minimal_patch
+local_command_policy: one_copy_paste_block_log_to_downloads
+rule_source_boundary: pointer_not_duplicate_rule_book
+---
+
 # Agent Instructions
 
 > Outer-doc currency note: Operational chat handoff now uses the deterministic Successor Handoff Package. Treat `docs/reports/handoff-packages/latest/successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` as the canonical generated handoff package. The markdown prompts are projections, not independent sources of truth.
