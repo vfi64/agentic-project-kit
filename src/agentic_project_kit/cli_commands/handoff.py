@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import subprocess
+
 from pathlib import Path
 from typing import Annotated, Any
 
@@ -122,9 +124,35 @@ def _project_root_for_handoff_path(path: Path) -> Path:
     return Path.cwd()
 
 
+
+def _current_head_is_refresh_only_merge_commit() -> bool:
+    """Return true when current HEAD is a merged successor handoff refresh PR."""
+
+    completed = subprocess.run(
+        ["git", "log", "-1", "--pretty=%s"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if completed.returncode != 0:
+        return False
+    subject = completed.stdout.strip()
+    return (
+        subject.startswith("Refresh successor handoff after PR")
+        and "(#" in subject
+        and subject.endswith(")")
+    )
+
 @handoff_app.command("post-merge-refresh-status")
 def post_merge_refresh_status() -> None:
     status = evaluate_post_merge_handoff_refresh(Path("."))
     typer.echo(render_post_merge_handoff_refresh_status(status), nl=False)
+    if status.refresh_required and _current_head_is_refresh_only_merge_commit():
+        typer.echo("refresh_only_merge_commit_is_fresh=True")
+        typer.echo("result=NOOP")
+        typer.echo("next_safe_action=none")
+        return
+
     if status.refresh_required:
         raise typer.Exit(1)
