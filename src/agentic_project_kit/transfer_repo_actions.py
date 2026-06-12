@@ -153,6 +153,93 @@ def _result(action: str, command: list[str], completed: subprocess.CompletedProc
     )
 
 
+
+def _successor_package_freshness_findings(repo_root: Path | None = None) -> list[str]:
+    """Return deterministic successor handoff package freshness findings."""
+
+    root = repo_root or Path.cwd()
+    findings: list[str] = []
+
+    def read(rel: str) -> str:
+        path = root / rel
+        if not path.exists():
+            findings.append(f"missing {rel}")
+            return ""
+        return path.read_text(encoding="utf-8", errors="replace")
+
+    package_root = root / "docs" / "reports" / "handoff-packages" / "latest"
+    canonical_start_prompt = root / "docs" / "handoff" / "START_NEW_CHAT_PROMPT.md"
+    project_markers = [
+        root / ".agentic",
+        root / "src" / "agentic_project_kit",
+        root / "pyproject.toml",
+    ]
+    if not package_root.exists() and not canonical_start_prompt.exists() and not all(marker.exists() for marker in project_markers):
+        return []
+
+    head = _run(["git", "rev-parse", "HEAD"]).stdout.strip()
+
+    validation_text = read("docs/reports/handoff-packages/latest/validation_report.json")
+    execution_text = read("docs/reports/handoff-packages/latest/execution_contract.json")
+    successor_prompt = read("docs/reports/handoff-packages/latest/successor_prompt.md")
+    start_prompt = read("docs/handoff/START_NEW_CHAT_PROMPT.md")
+
+    try:
+        validation = json.loads(validation_text) if validation_text else {}
+    except json.JSONDecodeError as exc:
+        findings.append(f"invalid validation_report.json: {exc}")
+        validation = {}
+
+    if validation.get("status") != "PASS":
+        findings.append("validation_report.json status is not PASS")
+    if head and validation.get("generated_head") != head:
+        findings.append("validation_report.json generated_head does not match HEAD")
+
+    try:
+        execution_contract = json.loads(execution_text) if execution_text else {}
+    except json.JSONDecodeError as exc:
+        findings.append(f"invalid execution_contract.json: {exc}")
+        execution_contract = {}
+
+    if execution_contract.get("kind") != "successor_execution_contract":
+        findings.append("execution_contract.json kind is not successor_execution_contract")
+
+    rules = execution_contract.get("rules", [])
+    if not isinstance(rules, list):
+        rules = []
+    rule_ids = {rule.get("rule_id") for rule in rules if isinstance(rule, dict)}
+    required = {
+        "local-copy-paste-protocol",
+        "strict-start-decision",
+        "protected-file-preservation",
+        "bootstrap_acceptance_gate",
+    }
+    missing = sorted(required - rule_ids)
+    if missing:
+        findings.append("execution_contract.json missing rule IDs: " + ", ".join(missing))
+
+    combined = "\n".join([successor_prompt, start_prompt, execution_text])
+    for needle in (
+        "Zusätzliche Startbremse nach dem Bootstrap",
+        "RESULT=NEW_CHAT_BOOTSTRAP_DONE",
+        "Übergabe akzeptiert, keine Admin-Arbeit nötig",
+    ):
+        if needle not in combined:
+            findings.append(f"successor handoff package missing bootstrap acceptance marker: {needle}")
+
+    if "\\n## Operational documentation refresh state" in combined or "\\n\\n## Operational documentation refresh state" in combined:
+        findings.append("successor handoff package contains literal newline artifacts")
+
+    return findings
+
+
+def _successor_package_freshness_summary() -> str:
+    findings = _successor_package_freshness_findings()
+    if not findings:
+        return "successor package fresh"
+    return "successor package stale: " + "; ".join(findings)
+
+
 def final_signal(result: RepoActionResult) -> str:
     return "d" if result.result_status == "PASS" and result.returncode == 0 else "f"
 
@@ -777,6 +864,15 @@ def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
     else:
         next_action = "Inspect post-merge handoff refresh status output before continuing."
 
+    package_findings = _successor_package_freshness_findings()
+    if package_findings:
+        completed = subprocess.CompletedProcess(
+            completed.args,
+            1,
+            completed.stdout + ("\n" if completed.stdout else "") + "\n".join(package_findings),
+            completed.stderr,
+        )
+        next_action = "refresh_successor_package"
     return _result("post-merge-check", command, completed, next_action)
 
 
