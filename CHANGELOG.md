@@ -1,3 +1,14 @@
+## v0.4.7 - 2026-06-12
+
+Pending Zenodo version DOI verification after GitHub Release publication.
+
+### Safety release
+
+- Harden successor handoff package freshness checks.
+- Include successor execution contract as a required generated package artifact.
+- Preserve bootstrap acceptance gate in generated successor packages.
+- Treat refresh-only handoff/package commits as fresh when only allowed refresh artifacts changed.
+
 ## v0.4.6 - 2026-06-08
 
 - Release safety: block implicit `release-plan` output for already published package versions so release preparation must name the next target version explicitly.

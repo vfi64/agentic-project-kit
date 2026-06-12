@@ -43,14 +43,14 @@ def test_release_phase_semantics_are_explicit_in_readme_and_handoff():
     assert "post-release-check verifies the already-published release" in readme
     assert "Do not start GUI implementation in this slice." in handoff
 
-def test_verified_release_state_records_completed_v046_doi_closeout():
+def test_release_state_records_v047_pre_publication_safety_release():
     readme = Path("README.md").read_text(encoding="utf-8")
     changelog = Path("CHANGELOG.md").read_text(encoding="utf-8")
     status = Path("docs/STATUS.md").read_text(encoding="utf-8")
     handoff = Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
     version = _project_version()
 
-    assert version == "0.4.6"
+    assert version == "0.4.7"
     assert f"Version `{version}` is the current release line prepared" in readme
 
     verified_lines = [line for line in readme.splitlines() if line.startswith("Current verified release:")]
@@ -58,16 +58,15 @@ def test_verified_release_state_records_completed_v046_doi_closeout():
         "Current verified release: `v0.4.6` with Zenodo version DOI `10.5281/zenodo.20593293`."
     ]
 
-    current_changelog = changelog.split("## v0.4.5", 1)[0]
+    current_changelog = changelog.split("## v0.4.6", 1)[0]
     assert f"## v{version} -" in current_changelog
-    assert "pending verification" not in current_changelog
-    assert "Post-release verification complete" in current_changelog
-    assert "Zenodo v0.4.6 DOI: 10.5281/zenodo.20593293" in current_changelog
+    assert "Pending Zenodo version DOI verification after GitHub Release publication." in current_changelog
+    assert "Harden successor handoff package freshness checks." in current_changelog
+    assert "Include successor execution contract as a required generated package artifact." in current_changelog
 
     assert f"Current version: {version}" in status
     assert "Current verified release: 0.4.6." in status
     assert "v0.4.6 GitHub Release publication and post-release Zenodo verification are complete." in status
-    assert "10.5281/zenodo.20593293" in status
 
     assert f"Current version: {version}" in handoff
     assert "- Current release tag: v0.4.6." in handoff
