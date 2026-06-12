@@ -1,5 +1,7 @@
 # Security Policy
 
+> Safety/currency note: protected governance, status, handoff, planning, and YAML files remain preservation-sensitive. Successor handoff safety now includes `execution_contract.json`, which records critical local-command, strict-start, and protected-file rules. Do not weaken or replace those rules through broad documentation refreshes.
+
 ## Supported versions
 
 Agentic Project Kit is in early MVP development.
