@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 882b43b3d1d744294771ef57f36cfca3fe50d7cc
-  short: 882b43b3
-  subject: Polish command reference and clean repo status (#1299)
+  full: 3cf3090bf161ce92759143231860b258fa491658
+  short: 3cf3090b
+  subject: Close out documentation system hardening (#1301)
 last_substantive_work_state:
-  full: 882b43b3d1d744294771ef57f36cfca3fe50d7cc
-  short: 882b43b3
-  subject: Polish command reference and clean repo status (#1299)
+  full: 3cf3090bf161ce92759143231860b258fa491658
+  short: 3cf3090b
+  subject: Close out documentation system hardening (#1301)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
