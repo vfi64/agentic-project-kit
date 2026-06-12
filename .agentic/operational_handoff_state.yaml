@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d6ec1947840cb72d684bfd33ebf0cb228bdeee03
-  short: d6ec1947
-  subject: Report refresh-only post-merge status as noop (#1291)
+  full: 7516fb3aaef9cfd90e3184d50c0ca3a90389713e
+  short: 7516fb3a
+  subject: Update outer docs for successor handoff package (#1293)
 last_substantive_work_state:
-  full: d6ec1947840cb72d684bfd33ebf0cb228bdeee03
-  short: d6ec1947
-  subject: Report refresh-only post-merge status as noop (#1291)
+  full: 7516fb3aaef9cfd90e3184d50c0ca3a90389713e
+  short: 7516fb3a
+  subject: Update outer docs for successor handoff package (#1293)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
