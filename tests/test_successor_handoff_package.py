@@ -179,3 +179,90 @@ def test_validate_successor_outputs_blocks_naked_python_recommendation():
         finding["code"] == "forbidden_local_command_recommendation"
         for finding in report["findings"]
     )
+
+
+
+def test_successor_handoff_package_e2e_start_decision_contract(tmp_path, monkeypatch):
+    import json
+
+    from agentic_project_kit import successor_handoff_package as package
+
+    def fake_run_git(root, args):
+        joined = " ".join(args)
+        if joined == "rev-parse HEAD":
+            return "abc123456789"
+        if joined == "rev-parse origin/main":
+            return "abc123456789"
+        if joined == "status --short":
+            return ""
+        if joined == "branch --show-current":
+            return "main"
+        return "UNKNOWN"
+
+    monkeypatch.setattr(package, "_run_git", fake_run_git)
+
+    result = package.write_successor_handoff_package(
+        tmp_path,
+        update_canonical_prompts=False,
+    )
+
+    package_dir = tmp_path / package.DEFAULT_PACKAGE_DIR
+    context_path = package_dir / "successor_context.yaml"
+    manifest_path = package_dir / "source_manifest.json"
+    validation_path = package_dir / "validation_report.json"
+    contract_path = package_dir / "execution_contract.json"
+    prompt_path = package_dir / "successor_prompt.md"
+
+    for required_path in (
+        context_path,
+        manifest_path,
+        validation_path,
+        contract_path,
+        prompt_path,
+    ):
+        assert required_path.exists(), required_path
+
+    validation = json.loads(validation_path.read_text(encoding="utf-8"))
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    prompt = prompt_path.read_text(encoding="utf-8")
+
+    assert validation == result.validation_report
+    assert validation["status"] == "PASS"
+
+    assert contract == result.execution_contract
+    assert contract["kind"] == "successor_execution_contract"
+    assert contract["repo"]["head_matches_origin_main"] is True
+    assert contract["repo"]["worktree_clean"] is True
+
+    rule_ids = {rule["rule_id"] for rule in contract["rules"]}
+    assert {
+        "local-copy-paste-protocol",
+        "strict-start-decision",
+        "protected-file-preservation",
+    } <= rule_ids
+
+    assert "Machine-readable execution contract" in prompt
+    assert "Local copy-and-paste protocol" in prompt
+    assert "validation_report.json" in prompt
+    assert "execution_contract.json" in prompt
+    assert "head_matches_origin_main: `True`" in prompt
+    assert "worktree_clean: `True`" in prompt
+
+    local_rule = next(
+        rule
+        for rule in contract["rules"]
+        if rule["rule_id"] == "local-copy-paste-protocol"
+    )
+    forbidden = set(local_rule["forbidden"])
+    assert "naked python" in forbidden
+    assert "naked pytest" in forbidden
+    assert "git add ." in forbidden
+
+    strict_start = next(
+        rule
+        for rule in contract["rules"]
+        if rule["rule_id"] == "strict-start-decision"
+    )
+    assert "validation_report.status is not PASS" in strict_start["stop_conditions"]
+    assert "unexpected dirty paths exist" in strict_start["stop_conditions"]
+
