@@ -592,7 +592,12 @@ def pr_create(*, base: str, head: str, title: str, body: str) -> RepoActionResul
 def repo_status(*, short: bool = True) -> RepoActionResult:
     command = ["git", "status", "--short"] if short else ["git", "status"]
     completed = _run(command)
-    return _result("repo-status", command, completed, "Inspect changes, commit explicit paths, or clean the worktree.")
+    next_action = (
+        "Worktree clean; continue with the next planned slice."
+        if completed.returncode == 0 and not completed.stdout.strip()
+        else "Inspect changes, commit explicit paths, or clean the worktree."
+    )
+    return _result("repo-status", command, completed, next_action)
 
 
 def repo_log(limit: int = 5) -> RepoActionResult:

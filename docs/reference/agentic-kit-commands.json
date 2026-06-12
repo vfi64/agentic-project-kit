@@ -7662,5 +7662,6 @@
   "generated_by": "scripts/generate_agentic_kit_command_reference.py",
   "kind": "agentic_kit_command_reference",
   "schema_version": 2,
-  "source": "generated_from_typer_click_registry"
+  "source": "generated_from_typer_click_registry",
+  "successor_execution_contract": "docs/reports/handoff-packages/latest/execution_contract.json"
 }
