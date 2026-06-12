@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: efe9d1763e33e72f4a167c7032dea7128836705a
-  short: efe9d176
-  subject: Write successor execution contract file (#1287)
+  full: 1214bc04b9a0987dcdb693d0449a95b9122f0296
+  short: 1214bc04
+  subject: Harden successor execution contract validation (#1289)
 last_substantive_work_state:
-  full: efe9d1763e33e72f4a167c7032dea7128836705a
-  short: efe9d176
-  subject: Write successor execution contract file (#1287)
+  full: 1214bc04b9a0987dcdb693d0449a95b9122f0296
+  short: 1214bc04
+  subject: Harden successor execution contract validation (#1289)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
