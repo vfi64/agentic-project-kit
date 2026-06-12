@@ -2146,3 +2146,86 @@ def test_operational_refresh_marker_uses_real_newlines() -> None:
     assert 'f"\\\\n## Operational documentation refresh state after PR #' not in source
     assert 'fresh main.\\\\n"' not in source
     assert '.replace("\\\\n", "\\n")' in source
+
+
+def test_successor_package_freshness_detects_missing_execution_contract(tmp_path, monkeypatch) -> None:
+    import json
+    import subprocess
+    from agentic_project_kit import transfer_repo_actions as actions
+
+    package_dir = tmp_path / "docs" / "reports" / "handoff-packages" / "latest"
+    package_dir.mkdir(parents=True)
+    (tmp_path / "docs" / "handoff").mkdir(parents=True)
+
+    head = "abc123"
+    (package_dir / "validation_report.json").write_text(
+        json.dumps({"status": "PASS", "generated_head": head}),
+        encoding="utf-8",
+    )
+    (package_dir / "successor_prompt.md").write_text(
+        "Zusätzliche Startbremse nach dem Bootstrap\nRESULT=NEW_CHAT_BOOTSTRAP_DONE\nÜbergabe akzeptiert, keine Admin-Arbeit nötig\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "docs" / "handoff" / "START_NEW_CHAT_PROMPT.md").write_text(
+        "Zusätzliche Startbremse nach dem Bootstrap\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(
+        actions,
+        "_run",
+        lambda command: subprocess.CompletedProcess(command, 0, head + "\n", ""),
+    )
+
+    findings = actions._successor_package_freshness_findings(tmp_path)
+    assert any("missing docs/reports/handoff-packages/latest/execution_contract.json" in item for item in findings)
+
+
+def test_successor_package_freshness_detects_stale_generated_head(tmp_path, monkeypatch) -> None:
+    import json
+    import subprocess
+
+    from agentic_project_kit import transfer_repo_actions as actions
+
+    package_dir = tmp_path / "docs" / "reports" / "handoff-packages" / "latest"
+    package_dir.mkdir(parents=True)
+    (tmp_path / "docs" / "handoff").mkdir(parents=True)
+
+    (package_dir / "validation_report.json").write_text(
+        json.dumps({"status": "PASS", "generated_head": "old"}),
+        encoding="utf-8",
+    )
+    (package_dir / "execution_contract.json").write_text(
+        json.dumps(
+            {
+                "kind": "successor_execution_contract",
+                "rules": [
+                    {"rule_id": "local-copy-paste-protocol"},
+                    {"rule_id": "strict-start-decision"},
+                    {"rule_id": "protected-file-preservation"},
+                    {"rule_id": "bootstrap_acceptance_gate"},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (package_dir / "successor_prompt.md").write_text(
+        "Zusätzliche Startbremse nach dem Bootstrap\nRESULT=NEW_CHAT_BOOTSTRAP_DONE\nÜbergabe akzeptiert, keine Admin-Arbeit nötig\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "docs" / "handoff" / "START_NEW_CHAT_PROMPT.md").write_text(
+        "Zusätzliche Startbremse nach dem Bootstrap\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(
+        actions,
+        "_run",
+        lambda command: subprocess.CompletedProcess(command, 0, "new\n", ""),
+    )
+
+    findings = actions._successor_package_freshness_findings(tmp_path)
+    assert "validation_report.json generated_head does not match HEAD" in findings
+
