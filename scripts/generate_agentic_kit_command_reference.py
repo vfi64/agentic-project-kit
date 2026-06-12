@@ -103,6 +103,7 @@ def build_reference() -> dict[str, Any]:
         "kind": "agentic_kit_command_reference",
         "source": "generated_from_typer_click_registry",
         "generated_by": "scripts/generate_agentic_kit_command_reference.py",
+        "successor_execution_contract": "docs/reports/handoff-packages/latest/execution_contract.json",
         "commands": sorted(commands, key=lambda item: item["qualified_name"]),
     }
 
@@ -113,6 +114,8 @@ def render_markdown(data: dict[str, Any]) -> str:
         "",
         "This file is generated from `docs/reference/agentic-kit-commands.json`.",
         "Do not edit this Markdown file manually.",
+        "",
+        "> Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.",
         "",
         f"- Schema version: `{data['schema_version']}`",
         f"- Source: `{data['source']}`",

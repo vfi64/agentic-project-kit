@@ -3,6 +3,8 @@
 This file is generated from `docs/reference/agentic-kit-commands.json`.
 Do not edit this Markdown file manually.
 
+> Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
+
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
 - Command count: `151`
