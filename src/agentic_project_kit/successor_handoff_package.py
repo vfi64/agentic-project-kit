@@ -231,9 +231,134 @@ def validate_successor_outputs(outputs: dict[str, str], context: dict[str, Any])
     }
 
 
+def build_execution_contract(context: dict[str, Any]) -> dict[str, object]:
+    """Build the machine-readable execution contract for successor chats."""
+
+    repo = context.get("repo", {})
+    dirty_paths = context.get("dirty_paths", ())
+    validation_report = context.get("validation_report", {})
+
+    branch = str(repo.get("branch", ""))
+    head = str(repo.get("head", ""))
+    origin_main = str(repo.get("origin_main", ""))
+    worktree_clean = bool(repo.get("worktree_clean", not dirty_paths))
+
+    return {
+        "schema_version": 1,
+        "kind": "successor_execution_contract",
+        "repo": {
+            "full_name": repo.get("full_name", "vfi64/agentic-project-kit"),
+            "local_path": repo.get("local_path", "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit"),
+            "branch": branch,
+            "head": head,
+            "origin_main": origin_main,
+            "head_matches_origin_main": bool(head and origin_main and head == origin_main),
+            "worktree_clean": worktree_clean,
+            "dirty_paths": list(dirty_paths),
+        },
+        "validation": {
+            "status": validation_report.get("status"),
+            "path": validation_report.get("path", ".agentic/successor_handoff_package/validation_report.json"),
+        },
+        "rules": [
+            {
+                "rule_id": "local-copy-paste-protocol",
+                "priority": "critical",
+                "scope": "local-user-command-blocks",
+                "must": [
+                    "Use one complete copy-and-paste Bash block per local action.",
+                    "Start every local block by changing into the repository root.",
+                    "Write verbose output to ~/Downloads/*.log.",
+                    "Print LOG=... and RC=... at the end.",
+                    "Use ./.venv/bin/python and ./.venv/bin/python -m pytest.",
+                ],
+                "forbidden": [
+                    "manual editor instructions",
+                    "loose command fragments",
+                    "naked python",
+                    "naked pytest",
+                    "git add .",
+                    "{ ... } > \"$OUT\" 2>&1 as the recommended logging pattern",
+                ],
+            },
+            {
+                "rule_id": "strict-start-decision",
+                "priority": "critical",
+                "scope": "successor-chat-start",
+                "must": [
+                    "Inspect validation_report.json if present.",
+                    "Inspect branch, HEAD, origin/main, upstream, and dirty paths.",
+                    "Interpret branch != main with head_matches_origin_main=true explicitly.",
+                    "Stop product work when worktree_clean=false.",
+                ],
+                "stop_conditions": [
+                    "validation_report.status is not PASS",
+                    "unexpected dirty paths exist",
+                    "protected files changed without protected-diff-plan",
+                    "HEAD and origin/main disagree without explanation",
+                ],
+                "allowed_next_actions": [
+                    "diagnose_dirty_state",
+                    "commit_admin_refresh_after_passed_protected_plan",
+                    "sync_main",
+                    "start_product_slice_only_from_clean_main",
+                ],
+            },
+            {
+                "rule_id": "protected-file-preservation",
+                "priority": "critical",
+                "scope": "protected governance/status/handoff/YAML files",
+                "must": [
+                    "Inspect the actual git diff before commit.",
+                    "Run protected-diff-plan against the actual diff.",
+                    "Patch protected files minimally and additively.",
+                    "Stop immediately on BLOCK or FAIL.",
+                ],
+                "forbidden": [
+                    "broadly replacing protected files",
+                    "shortening protected governance/status/handoff/YAML files for convenience",
+                    "committing after a blocked protected plan",
+                ],
+            },
+        ],
+    }
+
+
+def render_execution_contract_projection(contract: dict[str, object]) -> str:
+    repo = contract["repo"]
+    rules = contract["rules"]
+    lines = [
+        "## Machine-readable execution contract",
+        "",
+        "The markdown successor prompt is a projection of the machine-readable execution contract.",
+        "",
+        f"- branch: `{repo['branch']}`",
+        f"- head_matches_origin_main: `{repo['head_matches_origin_main']}`",
+        f"- worktree_clean: `{repo['worktree_clean']}`",
+        "",
+        "Critical rule IDs:",
+    ]
+    for rule in rules:
+        lines.append(f"- `{rule['rule_id']}` ({rule['priority']})")
+    lines.extend(
+        [
+            "",
+            "## Local copy-and-paste protocol",
+            "",
+            "Use exactly one complete Bash block per local action. The block must start by changing into the repository root, write verbose output to `~/Downloads/*.log`, and end by printing `LOG=...` and `RC=...`.",
+            "",
+            "Forbidden local-command patterns: loose command fragments, manual editor instructions, naked `python`, naked `pytest`, `git add .`, and `{ ... } > \"$OUT\" 2>&1` as the recommended logging pattern.",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
 def render_successor_prompt(context: dict[str, Any]) -> str:
+    contract = build_execution_contract(context)
+    contract_projection = render_execution_contract_projection(contract)
     repo = context["repo"]
-    return "\n".join(
+    return contract_projection + "\n" + "\n".join(
         [
             "# Successor Chat Prompt",
             "",
