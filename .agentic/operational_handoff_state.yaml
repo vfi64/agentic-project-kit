@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b7a917e706632c8b30206d5e2fc659f233efe280
-  short: b7a917e7
-  subject: Harden successor bootstrap acceptance gate (#1305)
+  full: e88a55913ff4cdfcc9533dd956e5893b16170f24
+  short: e88a5591
+  subject: Harden successor package freshness gates (#1307)
 last_substantive_work_state:
-  full: b7a917e706632c8b30206d5e2fc659f233efe280
-  short: b7a917e7
-  subject: Harden successor bootstrap acceptance gate (#1305)
+  full: e88a55913ff4cdfcc9533dd956e5893b16170f24
+  short: e88a5591
+  subject: Harden successor package freshness gates (#1307)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
