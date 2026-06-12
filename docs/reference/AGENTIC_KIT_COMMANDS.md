@@ -1,8 +1,5 @@
 # Agentic-kit command reference
 
-> Successor handoff contract note: the current machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. Command references should point to that contract rather than duplicate its local-command rules.
-
-
 This file is generated from `docs/reference/agentic-kit-commands.json`.
 Do not edit this Markdown file manually.
 
