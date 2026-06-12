@@ -33,4 +33,4 @@ Copy `docs/reports/handoff-packages/latest/successor_prompt.md` into the success
 
 The successor chat must treat the Successor Handoff Package as the short-term handoff and the repository files listed in `source_manifest.json` as long-term truth.
 
-If the package validation is not PASS, or if HEAD/local status differs from the package without explanation, stop and repair handoff drift first.
+If the package validation is not PASS, or if HEAD/local status differs from the package without explanation, stop and repair handoff drift first.\n## Operational documentation refresh state after PR #1272\n\nCurrent administrative handoff refresh state is `58f1fe76` (`Refresh successor handoff after PR1271 (#1272)`). Continue next only after this post-PR1272 refresh is committed and merged; the next substantive slice must be created from fresh main.\n
