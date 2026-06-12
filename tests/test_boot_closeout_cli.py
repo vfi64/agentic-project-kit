@@ -1,9 +1,12 @@
 from typer.testing import CliRunner
 
+from agentic_project_kit.chat_bootloader import write_next_chat_bootstrap
+
 from agentic_project_kit.cli import app
 
 
 def test_boot_closeout_cli_reports_pass() -> None:
+    write_next_chat_bootstrap()
     runner = CliRunner()
     result = runner.invoke(app, ["boot", "closeout"])
     assert result.exit_code == 0, result.output

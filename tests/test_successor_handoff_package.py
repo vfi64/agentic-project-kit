@@ -321,3 +321,14 @@ def test_successor_package_refresh_does_not_rewrite_start_new_chat_prompt(tmp_pa
     assert (tmp_path / package.CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT).exists()
     assert (tmp_path / package.DEFAULT_PACKAGE_DIR / "execution_contract.json").exists()
 
+
+def test_bootstrap_acceptance_gate_is_projected_into_package_files() -> None:
+    from agentic_project_kit.successor_handoff_package import build_successor_handoff_package
+
+    package = build_successor_handoff_package()
+
+    for text in (package.successor_prompt, package.next_chat_bootstrap):
+        assert "Zusätzliche Startbremse nach dem Bootstrap" in text
+        assert "RESULT=NEW_CHAT_BOOTSTRAP_DONE" in text
+        assert "Übergabe akzeptiert, keine Admin-Arbeit nötig" in text
+
