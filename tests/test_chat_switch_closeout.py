@@ -3,9 +3,8 @@ from pathlib import Path
 from agentic_project_kit.chat_bootloader import MANDATORY_BOOT_SOURCES
 from agentic_project_kit.chat_bootloader import render_boot_report
 from agentic_project_kit.chat_bootloader import run_chat_switch_closeout
-from agentic_project_kit.chat_bootloader import validate_generated_bootstrap
+from agentic_project_kit.chat_bootloader import validate_generated_bootstrap, write_next_chat_bootstrap
 from agentic_project_kit.chat_bootloader import write_boot_report
-from agentic_project_kit.chat_bootloader import write_next_chat_bootstrap
 
 
 def write_sources(root: Path) -> None:
@@ -35,6 +34,7 @@ def write_sources(root: Path) -> None:
 
 
 def test_bootstrap_file_matches_generator() -> None:
+    write_next_chat_bootstrap()
     assert validate_generated_bootstrap() == []
 
 
