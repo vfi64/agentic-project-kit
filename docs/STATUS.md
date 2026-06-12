@@ -1,3 +1,7 @@
+> STATUS boundary: This document uses concise pointers, not duplicate rule books. Machine guard: `agentic-kit docs-audit` enforces the current-state headroom boundary.
+
+
+
 ## Post-PR1245 Administrative Handoff Refresh State
 
 Current main/admin HEAD: `e97af592` (`Refresh handoff state after PR1244 (#1245)`).

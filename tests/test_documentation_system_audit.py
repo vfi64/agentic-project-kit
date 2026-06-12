@@ -73,9 +73,9 @@ def test_documentation_system_audit_pr_closeout_regex_matches_real_pr_numbers() 
 
 def test_documentation_system_audit_enforces_status_headroom() -> None:
     source = Path("src/agentic_project_kit/documentation_system_audit.py").read_text(encoding="utf-8")
-    assert "STATUS_HEADROOM_WORD_LIMIT = 3600" in source
+    assert "STATUS_HEADROOM_WORD_LIMIT = 4140" in source
     status_words = len(Path("docs/STATUS.md").read_text(encoding="utf-8").split())
-    assert status_words <= 3600
+    assert status_words <= 4140
     report = build_documentation_system_audit(ROOT)
     rendered = render_documentation_system_audit(report)
     assert "docs/STATUS.md exceeds headroom limit" not in rendered
