@@ -147,12 +147,21 @@ def _current_head_is_refresh_only_merge_commit() -> bool:
 @handoff_app.command("post-merge-refresh-status")
 def post_merge_refresh_status() -> None:
     status = evaluate_post_merge_handoff_refresh(Path("."))
-    typer.echo(render_post_merge_handoff_refresh_status(status), nl=False)
-    if status.refresh_required and _current_head_is_refresh_only_merge_commit():
-        typer.echo("refresh_only_merge_commit_is_fresh=True")
+    refresh_only_merge_commit_is_fresh = (
+        status.refresh_required and _current_head_is_refresh_only_merge_commit()
+    )
+    if refresh_only_merge_commit_is_fresh:
+        typer.echo("POST_MERGE_HANDOFF_REFRESH")
+        typer.echo(f"current_head={status.current_head}")
+        typer.echo(f"freshness_warning_present={status.freshness_warning_present}")
+        typer.echo("refresh_required=False")
+        typer.echo(f"latest_successor_prompt={status.latest_successor_prompt}")
         typer.echo("result=NOOP")
         typer.echo("next_safe_action=none")
+        typer.echo("refresh_only_merge_commit_is_fresh=True")
         return
 
+    typer.echo(render_post_merge_handoff_refresh_status(status), nl=False)
     if status.refresh_required:
         raise typer.Exit(1)
+

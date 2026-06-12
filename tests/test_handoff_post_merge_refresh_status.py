@@ -44,3 +44,6 @@ def test_post_merge_refresh_status_treats_refresh_only_head_as_fresh(monkeypatch
     assert result.exit_code == 0
     assert "refresh_only_merge_commit_is_fresh=True" in result.stdout
     assert "result=NOOP" in result.stdout
+    assert "refresh_required=False" in result.stdout
+    assert "result=REFRESH_REQUIRED" not in result.stdout
+    assert "next_safe_action=create_administrative_handoff_refresh" not in result.stdout
