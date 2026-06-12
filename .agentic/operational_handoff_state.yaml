@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 1214bc04b9a0987dcdb693d0449a95b9122f0296
-  short: 1214bc04
-  subject: Harden successor execution contract validation (#1289)
+  full: d6ec1947840cb72d684bfd33ebf0cb228bdeee03
+  short: d6ec1947
+  subject: Report refresh-only post-merge status as noop (#1291)
 last_substantive_work_state:
-  full: 1214bc04b9a0987dcdb693d0449a95b9122f0296
-  short: 1214bc04
-  subject: Harden successor execution contract validation (#1289)
+  full: d6ec1947840cb72d684bfd33ebf0cb228bdeee03
+  short: d6ec1947
+  subject: Report refresh-only post-merge status as noop (#1291)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
