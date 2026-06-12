@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e3d5cf4ae7546a01d16b052499401f098252350b
-  short: e3d5cf4a
-  subject: Refresh successor handoff after PR1276 (#1277)
+  full: de4f1bc73381a87f55bc7a97c823ab9fc06e9805
+  short: de4f1bc7
+  subject: Refresh successor handoff after PR1277 (#1278)
 last_substantive_work_state:
-  full: e3d5cf4ae7546a01d16b052499401f098252350b
-  short: e3d5cf4a
-  subject: Refresh successor handoff after PR1276 (#1277)
+  full: de4f1bc73381a87f55bc7a97c823ab9fc06e9805
+  short: de4f1bc7
+  subject: Refresh successor handoff after PR1277 (#1278)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
