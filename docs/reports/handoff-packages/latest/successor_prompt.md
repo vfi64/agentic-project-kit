@@ -67,14 +67,14 @@ git status --short
     "The copy prompt must be usable by other LLMs, not only ChatGPT."
   ],
   "repo": {
-    "branch": "docs/post-pr1270-handoff-refresh",
+    "branch": "docs/post-pr1271-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "42541283a0f463e7b380bb80604714b59c42bef9",
+    "head": "2d5698a10ab9f585f208b33205b34befc05d8998",
     "head_matches_origin_main": true,
-    "head_short": "42541283",
+    "head_short": "2d5698a1",
     "local_path": "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
-    "origin_main": "42541283a0f463e7b380bb80604714b59c42bef9",
-    "origin_main_short": "42541283",
+    "origin_main": "2d5698a10ab9f585f208b33205b34befc05d8998",
+    "origin_main_short": "2d5698a1",
     "worktree_clean": false
   }
 }
