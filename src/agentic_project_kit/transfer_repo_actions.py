@@ -154,6 +154,53 @@ def _result(action: str, command: list[str], completed: subprocess.CompletedProc
 
 
 
+def _is_refresh_only_successor_package_head(generated_head: str, current_head: str, root: Path) -> bool:
+    """Return true when commits after generated_head only touch refresh artifacts.
+
+    Successor package files are generated before they are committed. Therefore a
+    package-refresh commit naturally has validation_report.generated_head set to
+    the parent commit rather than to the package-refresh commit itself. Treat
+    that state as fresh only when the range since generated_head contains
+    generated refresh artifacts and no product/source/governance code changes.
+    """
+
+    if not generated_head or not current_head or generated_head == current_head:
+        return generated_head == current_head
+
+    merge_base = _run(["merge-base", "--is-ancestor", generated_head, current_head], cwd=root)
+    if merge_base.returncode != 0:
+        return False
+
+    diff = _run(["diff", "--name-only", f"{generated_head}..{current_head}"], cwd=root)
+    if diff.returncode != 0:
+        return False
+
+    changed = {line.strip() for line in diff.stdout.splitlines() if line.strip()}
+    if not changed:
+        return True
+
+    fixed_refresh_paths = {
+        ".agentic/handoff_state.yaml",
+        ".agentic/operational_handoff_state.yaml",
+        "docs/STATUS.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+        "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    }
+
+    def allowed(path: str) -> bool:
+        return (
+            path in fixed_refresh_paths
+            or path.startswith("docs/reports/handoff-packages/latest/")
+            or path.startswith("docs/reports/terminal/post-pr")
+        )
+
+    return all(allowed(path) for path in changed)
+
+
+
 def _successor_package_freshness_findings(repo_root: Path | None = None) -> list[str]:
     """Return deterministic successor handoff package freshness findings."""
 
@@ -192,8 +239,9 @@ def _successor_package_freshness_findings(repo_root: Path | None = None) -> list
 
     if validation.get("status") != "PASS":
         findings.append("validation_report.json status is not PASS")
-    if head and validation.get("generated_head") != head:
-        findings.append("validation_report.json generated_head does not match HEAD")
+    generated_head = str(validation.get("generated_head") or "")
+    if head and generated_head != head and not _is_refresh_only_successor_package_head(generated_head, head, root):
+        findings.append("validation_report.json generated_head does not match HEAD or refresh-only ancestry")
 
     try:
         execution_contract = json.loads(execution_text) if execution_text else {}
