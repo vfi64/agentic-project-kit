@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 794ceff0312d247335a32331684bc298a8aa8d20
-  short: 794ceff0
-  subject: Fix operational handoff refresh newlines (#1303)
+  full: b7a917e706632c8b30206d5e2fc659f233efe280
+  short: b7a917e7
+  subject: Harden successor bootstrap acceptance gate (#1305)
 last_substantive_work_state:
-  full: 794ceff0312d247335a32331684bc298a8aa8d20
-  short: 794ceff0
-  subject: Fix operational handoff refresh newlines (#1303)
+  full: b7a917e706632c8b30206d5e2fc659f233efe280
+  short: b7a917e7
+  subject: Harden successor bootstrap acceptance gate (#1305)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
