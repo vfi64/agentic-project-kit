@@ -2138,3 +2138,11 @@ def test_admin_refresh_pr_skips_refresh_only_pr(monkeypatch):
             ".title + \"\\n\" + .headRefName",
         )
     ]
+
+
+
+def test_operational_refresh_marker_uses_real_newlines() -> None:
+    source = Path("src/agentic_project_kit/transfer_repo_actions.py").read_text(encoding="utf-8")
+    assert 'f"\\\\n## Operational documentation refresh state after PR #' not in source
+    assert 'fresh main.\\\\n"' not in source
+    assert '.replace("\\\\n", "\\n")' in source
