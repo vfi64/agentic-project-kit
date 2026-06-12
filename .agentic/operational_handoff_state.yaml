@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3a3368fd9cf5ce877493260f3d0f54a6e9bbe298
-  short: 3a3368fd
-  subject: Close out documentation system handoff pointers (#1297)
+  full: 882b43b3d1d744294771ef57f36cfca3fe50d7cc
+  short: 882b43b3
+  subject: Polish command reference and clean repo status (#1299)
 last_substantive_work_state:
-  full: 3a3368fd9cf5ce877493260f3d0f54a6e9bbe298
-  short: 3a3368fd
-  subject: Close out documentation system handoff pointers (#1297)
+  full: 882b43b3d1d744294771ef57f36cfca3fe50d7cc
+  short: 882b43b3
+  subject: Polish command reference and clean repo status (#1299)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
