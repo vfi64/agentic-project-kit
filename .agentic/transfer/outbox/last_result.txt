@@ -3,10 +3,10 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-06-12T05:48:48.064286+00:00",
+    "created_at_utc": "2026-06-12T06:00:51.077516+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
-    "label": "post-merge-complete-after-pr1272",
+    "label": "post-merge-complete-after-pr1273",
     "next_action": "LLM context carriers refreshed.",
     "result_status": "PASS",
     "schema_version": 1
@@ -280,12 +280,12 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-06-12T05:48:48.138882+00:00",
+    "generated_at_utc": "2026-06-12T06:00:51.157703+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "docs/post-pr1272-handoff-refresh",
-      "head": "58f1fe76e9b08818c7065833020cb7f5446e30ea",
-      "status_short": "M .agentic/handoff_state.yaml\n M .agentic/operational_handoff_state.yaml\n M docs/STATUS.md\n M docs/handoff/CURRENT_HANDOFF.md\n M docs/handoff/START_NEW_CHAT_PROMPT.md\n M docs/planning/WORKFLOW_REDUCTION_FOCUS.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n?? docs/reports/terminal/post-pr1272-successor-chat-handoff.md"
+      "branch": "docs/post-pr1273-handoff-refresh",
+      "head": "509d4119f4afa53dc43173c6aa373dc4f48bd4f9",
+      "status_short": "M .agentic/handoff_state.yaml\n M .agentic/operational_handoff_state.yaml\n M docs/STATUS.md\n M docs/handoff/CURRENT_HANDOFF.md\n M docs/handoff/START_NEW_CHAT_PROMPT.md\n M docs/planning/WORKFLOW_REDUCTION_FOCUS.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n?? docs/reports/terminal/post-pr1273-successor-chat-handoff.md"
     },
     "kind": "llm_execution_context",
     "llm_to_local_transfer_policy": {
@@ -389,7 +389,7 @@
       },
       {
         "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-        "sha256": "8e9d1dfb0ce4ff16f9d1ecb311f1957406f214cced4a90004b63843553deefe4"
+        "sha256": "28fd19628061dc4e1ff18f5b60d2c3ea569e0c2327586dd620facd2753911b4d"
       }
     ],
     "canonical_cli_usage": {
@@ -858,9 +858,9 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "docs/post-pr1272-handoff-refresh",
-      "dirty_status": "M .agentic/handoff_state.yaml\n M .agentic/operational_handoff_state.yaml\n M docs/STATUS.md\n M docs/handoff/CURRENT_HANDOFF.md\n M docs/handoff/START_NEW_CHAT_PROMPT.md\n M docs/planning/WORKFLOW_REDUCTION_FOCUS.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n?? docs/reports/terminal/post-pr1272-successor-chat-handoff.md",
-      "head": "58f1fe76e9b08818c7065833020cb7f5446e30ea",
+      "branch": "docs/post-pr1273-handoff-refresh",
+      "dirty_status": "M .agentic/handoff_state.yaml\n M .agentic/operational_handoff_state.yaml\n M docs/STATUS.md\n M docs/handoff/CURRENT_HANDOFF.md\n M docs/handoff/START_NEW_CHAT_PROMPT.md\n M docs/planning/WORKFLOW_REDUCTION_FOCUS.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n?? docs/reports/terminal/post-pr1273-successor-chat-handoff.md",
+      "head": "509d4119f4afa53dc43173c6aa373dc4f48bd4f9",
       "head_matches_upstream": false,
       "upstream": "",
       "upstream_head": ""
@@ -929,7 +929,7 @@
       },
       {
         "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-        "sha256": "8e9d1dfb0ce4ff16f9d1ecb311f1957406f214cced4a90004b63843553deefe4"
+        "sha256": "28fd19628061dc4e1ff18f5b60d2c3ea569e0c2327586dd620facd2753911b4d"
       }
     ],
     "canonical_cli_usage": {
@@ -1398,9 +1398,9 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "docs/post-pr1272-handoff-refresh",
-      "dirty_status": "M .agentic/handoff_state.yaml\n M .agentic/operational_handoff_state.yaml\n M docs/STATUS.md\n M docs/handoff/CURRENT_HANDOFF.md\n M docs/handoff/START_NEW_CHAT_PROMPT.md\n M docs/planning/WORKFLOW_REDUCTION_FOCUS.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n?? docs/reports/terminal/post-pr1272-successor-chat-handoff.md",
-      "head": "58f1fe76e9b08818c7065833020cb7f5446e30ea",
+      "branch": "docs/post-pr1273-handoff-refresh",
+      "dirty_status": "M .agentic/handoff_state.yaml\n M .agentic/operational_handoff_state.yaml\n M docs/STATUS.md\n M docs/handoff/CURRENT_HANDOFF.md\n M docs/handoff/START_NEW_CHAT_PROMPT.md\n M docs/planning/WORKFLOW_REDUCTION_FOCUS.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log\n?? docs/reports/terminal/post-pr1273-successor-chat-handoff.md",
+      "head": "509d4119f4afa53dc43173c6aa373dc4f48bd4f9",
       "head_matches_upstream": false,
       "upstream": "",
       "upstream_head": ""
