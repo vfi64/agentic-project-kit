@@ -852,10 +852,10 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
                 touched.append(file_name)
 
         marker = (
-            f"\\n## Operational documentation refresh state after PR #{after_pr}\\n\\n"
+            f"\n## Operational documentation refresh state after PR #{after_pr}\n\n"
             f"Current administrative handoff refresh state is `{short}` (`{subject}`). "
             f"Continue next only after this post-PR{after_pr} refresh is committed and merged; "
-            "the next substantive slice must be created from fresh main.\\n"
+            "the next substantive slice must be created from fresh main.\n"
         )
         for file_name in (
             "docs/STATUS.md",
@@ -866,7 +866,15 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
             file_path = Path(file_name)
             if not file_path.exists():
                 continue
-            current = file_path.read_text(encoding="utf-8")
+            current = file_path.read_text(encoding="utf-8").replace("\\n", "\n")
+            current = re.sub(
+                r"\n## Operational documentation refresh state after PR #\d+\n\n"
+                r"Current administrative handoff refresh state is `[^`]+` \$begin:math:text$\[\^\)\]\*\$end:math:text$\. "
+                r"Continue next only after this post-PR\d+ refresh is committed and merged; "
+                r"the next substantive slice must be created from fresh main\.\n",
+                "",
+                current,
+            )
             if f"Operational documentation refresh state after PR #{after_pr}" not in current:
                 file_path.write_text(current.rstrip() + marker, encoding="utf-8")
                 touched.append(file_name)
