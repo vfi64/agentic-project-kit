@@ -509,7 +509,7 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 Current version: 0.4.6
 Prepared release: `v0.4.6`; GitHub Release, tag publication, and Zenodo version DOI verification are complete.
-Version `0.4.6` is the current release line prepared as a safety baseline after the pre-GUI transfer-wrapper, output-discipline, GUI wrapper-gating, PR diagnostics, and release-plan guard hardening work.
+Version `0.4.7` is the current release line prepared as a safety baseline after the pre-GUI transfer-wrapper, output-discipline, GUI wrapper-gating, PR diagnostics, and release-plan guard hardening work.
 Current verified release: `v0.4.6` with Zenodo version DOI `10.5281/zenodo.20593293`.
 Earlier verified version-specific DOI notes are maintained in `docs/releases/VERIFIED_RELEASES.md`; historical release records remain in this section and the verified release archive.
 
