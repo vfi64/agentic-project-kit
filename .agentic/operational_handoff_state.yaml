@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e9371b442d954099e8056f40505778bf4a082a21
-  short: e9371b44
-  subject: Protect start prompt during successor package refresh (#1309)
+  full: afc21ade33f4ffb455a7b5c3661010ebbfcd9c45
+  short: afc21ade
+  subject: Project bootstrap gate into successor package (#1311)
 last_substantive_work_state:
-  full: e9371b442d954099e8056f40505778bf4a082a21
-  short: e9371b44
-  subject: Protect start prompt during successor package refresh (#1309)
+  full: afc21ade33f4ffb455a7b5c3661010ebbfcd9c45
+  short: afc21ade
+  subject: Project bootstrap gate into successor package (#1311)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
