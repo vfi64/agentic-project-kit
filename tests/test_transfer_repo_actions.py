@@ -2099,3 +2099,42 @@ last_substantive_work_state:
     assert Path("docs/reports/terminal/post-pr2222-successor-chat-handoff.md").read_text(encoding="utf-8") == "successor prompt\n"
     assert "Operational documentation refresh state after PR #2222" in Path("docs/STATUS.md").read_text(encoding="utf-8")
 
+
+
+def test_admin_refresh_pr_skips_refresh_only_pr(monkeypatch):
+    from agentic_project_kit import transfer_repo_actions as actions
+
+    calls = []
+
+    def fake_run(argv, **kwargs):
+        calls.append(tuple(argv))
+        if tuple(argv[:3]) == ("gh", "pr", "view"):
+            return subprocess.CompletedProcess(
+                argv,
+                0,
+                "Refresh successor handoff after PR1279\ndocs/post-pr1279-handoff-refresh\n",
+                "",
+            )
+        raise AssertionError(f"unexpected command after refresh-only detection: {argv!r}")
+
+    monkeypatch.setattr(actions, "_run", fake_run)
+
+    result = actions.admin_refresh_pr(1280)
+
+    assert result.returncode == 0
+    assert result.result_status == "PASS"
+    assert result.action == "admin-refresh-pr"
+    assert result.next_action == "admin_refresh_skipped_refresh_only_pr"
+    assert "skipping chained admin refresh" in result.stdout
+    assert calls == [
+        (
+            "gh",
+            "pr",
+            "view",
+            "1280",
+            "--json",
+            "title,headRefName",
+            "--jq",
+            ".title + \"\\n\" + .headRefName",
+        )
+    ]
