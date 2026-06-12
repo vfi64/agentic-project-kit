@@ -100,6 +100,7 @@ class SuccessorPackageResult:
     context: dict[str, Any]
     source_manifest: dict[str, Any]
     validation_report: dict[str, Any]
+    execution_contract: dict[str, object]
     successor_prompt: str
     next_chat_bootstrap: str
     start_new_chat_prompt: str
@@ -576,10 +577,12 @@ def build_successor_handoff_package(root: Path | str = ".") -> SuccessorPackageR
         context,
     )
     context["handoff_validity"]["status"] = validation_report["status"]
+    execution_contract = build_execution_contract({**context, "validation_report": validation_report})
     return SuccessorPackageResult(
         context=context,
         source_manifest=source_manifest,
         validation_report=validation_report,
+        execution_contract=execution_contract,
         successor_prompt=successor_prompt,
         next_chat_bootstrap=next_chat_bootstrap,
         start_new_chat_prompt=start_prompt,
@@ -601,6 +604,7 @@ def write_successor_handoff_package(
     (out / "successor_context.yaml").write_text(_json_block(result.context) + "\n", encoding="utf-8")
     (out / "source_manifest.json").write_text(_json_block(result.source_manifest) + "\n", encoding="utf-8")
     (out / "validation_report.json").write_text(_json_block(result.validation_report) + "\n", encoding="utf-8")
+    (out / "execution_contract.json").write_text(_json_block(result.execution_contract) + "\n", encoding="utf-8")
     (out / "successor_prompt.md").write_text(result.successor_prompt, encoding="utf-8")
     if update_canonical_prompts:
         for rel, text in (
