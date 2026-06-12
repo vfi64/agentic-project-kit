@@ -292,3 +292,32 @@ def test_execution_contract_contains_bootstrap_acceptance_gate() -> None:
     assert "RESULT=NEW_CHAT_BOOTSTRAP_DONE" in text
     assert "refresh_required=False" in text
 
+
+def test_successor_package_refresh_does_not_rewrite_start_new_chat_prompt(tmp_path, monkeypatch) -> None:
+    from agentic_project_kit import successor_handoff_package as package
+
+    def fake_git(_root, args):
+        if args == ["rev-parse", "HEAD"]:
+            return "abc123"
+        if args == ["rev-parse", "origin/main"]:
+            return "abc123"
+        if args == ["status", "--short"]:
+            return ""
+        if args == ["branch", "--show-current"]:
+            return "main"
+        return "UNKNOWN"
+
+    monkeypatch.setattr(package, "_run_git", fake_git)
+
+    start_prompt = tmp_path / "docs" / "handoff" / "START_NEW_CHAT_PROMPT.md"
+    start_prompt.parent.mkdir(parents=True, exist_ok=True)
+    start_prompt.write_text("KEEP EXISTING START PROMPT\n", encoding="utf-8")
+
+    result = package.write_successor_handoff_package(tmp_path, update_canonical_prompts=True)
+
+    assert result.validation_report["status"] == "PASS"
+    assert start_prompt.read_text(encoding="utf-8") == "KEEP EXISTING START PROMPT\n"
+    assert (tmp_path / package.NEXT_CHAT_BOOTSTRAP).exists()
+    assert (tmp_path / package.CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT).exists()
+    assert (tmp_path / package.DEFAULT_PACKAGE_DIR / "execution_contract.json").exists()
+

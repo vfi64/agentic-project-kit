@@ -773,10 +773,13 @@ def write_successor_handoff_package(
     (out / "validation_report.json").write_text(_json_block(result.validation_report) + "\n", encoding="utf-8")
     (out / "execution_contract.json").write_text(_json_block(result.execution_contract) + "\n", encoding="utf-8")
     (out / "successor_prompt.md").write_text(result.successor_prompt, encoding="utf-8")
+    # START_NEW_CHAT_PROMPT is protected against broad generator replacement. The
+    # successor package refresh updates NEXT_CHAT_BOOTSTRAP, the closeout prompt,
+    # and docs/reports/handoff-packages/latest/*; START_NEW_CHAT_PROMPT must be
+    # changed only by a dedicated minimal handoff-refresh/admin slice.
     if update_canonical_prompts:
         for rel, text in (
             (NEXT_CHAT_BOOTSTRAP, result.next_chat_bootstrap),
-            (START_NEW_CHAT_PROMPT, result.start_new_chat_prompt),
             (CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT, result.closeout_prompt),
         ):
             path = root_path / rel

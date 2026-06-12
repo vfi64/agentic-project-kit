@@ -146,12 +146,16 @@ def test_successor_handoff_package_writes_deterministic_outputs(tmp_path: Path) 
     assert (tmp_path / "docs/reports/handoff-packages/latest/successor_context.yaml").exists()
     assert (tmp_path / "docs/reports/handoff-packages/latest/successor_prompt.md").exists()
 
-    for rel in (BOOTSTRAP, START_PROMPT, CLOSEOUT_PROMPT):
+    for rel in (BOOTSTRAP, CLOSEOUT_PROMPT):
         text = (tmp_path / rel).read_text(encoding="utf-8")
         assert "successor_context.yaml" in text
         assert "Post-PR1245" not in text
         assert "PR #880" not in text
         assert "\\\\n" not in text
+
+    # START_NEW_CHAT_PROMPT is protected from broad package-refresh rewrites.
+    # It is updated only by dedicated minimal handoff/admin refresh slices.
+    assert (tmp_path / START_PROMPT).read_text(encoding="utf-8") == "x\n"
 
 
 def test_successor_handoff_package_validation_blocks_stale_markers(tmp_path: Path) -> None:
