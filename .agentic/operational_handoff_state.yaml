@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: dfb22003dab03cd0c90b19fd3005e6166ebe79d7
-  short: dfb22003
-  subject: Skip admin refresh for refresh-only PRs (#1281)
+  full: 60765225325cf004a37477f2e3c808cb66caef28
+  short: 60765225
+  subject: Treat refresh-only post-merge state as fresh (#1283)
 last_substantive_work_state:
-  full: dfb22003dab03cd0c90b19fd3005e6166ebe79d7
-  short: dfb22003
-  subject: Skip admin refresh for refresh-only PRs (#1281)
+  full: 60765225325cf004a37477f2e3c808cb66caef28
+  short: 60765225
+  subject: Treat refresh-only post-merge state as fresh (#1283)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
