@@ -2220,12 +2220,111 @@ def test_successor_package_freshness_detects_stale_generated_head(tmp_path, monk
     )
 
     monkeypatch.chdir(tmp_path)
-    monkeypatch.setattr(
-        actions,
-        "_run",
-        lambda command: subprocess.CompletedProcess(command, 0, "new\n", ""),
-    )
+    def fake_run(command, *, cwd=None):
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "new\n", "")
+        if command == ["merge-base", "--is-ancestor", "old", "new"]:
+            return subprocess.CompletedProcess(command, 1, "", "not ancestor")
+        return subprocess.CompletedProcess(command, 1, "", "unexpected command")
+
+    monkeypatch.setattr(actions, "_run", fake_run)
 
     findings = actions._successor_package_freshness_findings(tmp_path)
-    assert "validation_report.json generated_head does not match HEAD" in findings
+    assert "validation_report.json generated_head does not match HEAD or refresh-only ancestry" in findings
+
+
+def test_successor_package_freshness_allows_refresh_only_head_drift(monkeypatch, tmp_path):
+    from agentic_project_kit import transfer_repo_actions as actions
+
+    package = tmp_path / "docs" / "reports" / "handoff-packages" / "latest"
+    package.mkdir(parents=True)
+    (package / "validation_report.json").write_text(
+        '{"status": "PASS", "generated_head": "old"}',
+        encoding="utf-8",
+    )
+    (package / "execution_contract.json").write_text(
+        '{"kind": "successor_execution_contract", "rules": ['
+        '{"rule_id": "local-copy-paste-protocol"},'
+        '{"rule_id": "strict-start-decision"},'
+        '{"rule_id": "protected-file-preservation"},'
+        '{"rule_id": "bootstrap_acceptance_gate"}'
+        ']}',
+        encoding="utf-8",
+    )
+    (package / "successor_prompt.md").write_text(
+        "Zusätzliche Startbremse nach dem Bootstrap\n"
+        "RESULT=NEW_CHAT_BOOTSTRAP_DONE\n"
+        "Übergabe akzeptiert, keine Admin-Arbeit nötig\n",
+        encoding="utf-8",
+    )
+    start_prompt = tmp_path / "docs" / "handoff" / "START_NEW_CHAT_PROMPT.md"
+    start_prompt.parent.mkdir(parents=True)
+    start_prompt.write_text("stable start prompt\n", encoding="utf-8")
+
+    def fake_run(command, *, cwd=None):
+        import subprocess
+
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "new\n", "")
+        if command == ["merge-base", "--is-ancestor", "old", "new"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["diff", "--name-only", "old..new"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                "docs/reports/handoff-packages/latest/validation_report.json\n"
+                "docs/reports/handoff-packages/latest/execution_contract.json\n"
+                "docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n",
+                "",
+            )
+        return subprocess.CompletedProcess(command, 1, "", "unexpected command")
+
+    monkeypatch.setattr(actions, "_run", fake_run)
+
+    assert actions._successor_package_freshness_findings(tmp_path) == []
+
+
+def test_successor_package_freshness_rejects_product_head_drift(monkeypatch, tmp_path):
+    from agentic_project_kit import transfer_repo_actions as actions
+
+    package = tmp_path / "docs" / "reports" / "handoff-packages" / "latest"
+    package.mkdir(parents=True)
+    (package / "validation_report.json").write_text(
+        '{"status": "PASS", "generated_head": "old"}',
+        encoding="utf-8",
+    )
+    (package / "execution_contract.json").write_text(
+        '{"kind": "successor_execution_contract", "rules": ['
+        '{"rule_id": "local-copy-paste-protocol"},'
+        '{"rule_id": "strict-start-decision"},'
+        '{"rule_id": "protected-file-preservation"},'
+        '{"rule_id": "bootstrap_acceptance_gate"}'
+        ']}',
+        encoding="utf-8",
+    )
+    (package / "successor_prompt.md").write_text(
+        "Zusätzliche Startbremse nach dem Bootstrap\n"
+        "RESULT=NEW_CHAT_BOOTSTRAP_DONE\n"
+        "Übergabe akzeptiert, keine Admin-Arbeit nötig\n",
+        encoding="utf-8",
+    )
+    start_prompt = tmp_path / "docs" / "handoff" / "START_NEW_CHAT_PROMPT.md"
+    start_prompt.parent.mkdir(parents=True)
+    start_prompt.write_text("stable start prompt\n", encoding="utf-8")
+
+    def fake_run(command, *, cwd=None):
+        import subprocess
+
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "new\n", "")
+        if command == ["merge-base", "--is-ancestor", "old", "new"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["diff", "--name-only", "old..new"]:
+            return subprocess.CompletedProcess(command, 0, "src/agentic_project_kit/product.py\n", "")
+        return subprocess.CompletedProcess(command, 1, "", "unexpected command")
+
+    monkeypatch.setattr(actions, "_run", fake_run)
+
+    findings = actions._successor_package_freshness_findings(tmp_path)
+    assert findings == ["validation_report.json generated_head does not match HEAD or refresh-only ancestry"]
 
