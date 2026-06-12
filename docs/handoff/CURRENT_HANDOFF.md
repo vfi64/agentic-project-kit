@@ -380,3 +380,6 @@ Current administrative handoff refresh state is `3cf3090b` (`Close out documenta
 ## Operational documentation refresh state after PR #1303
 
 Current administrative handoff refresh state is `794ceff0` (`Fix operational handoff refresh newlines (#1303)`). Continue next only after this post-PR1303 refresh is committed and merged; the next substantive slice must be created from fresh main.
+## Operational documentation refresh state after PR #1305
+
+Current administrative handoff refresh state is `b7a917e7` (`Harden successor bootstrap acceptance gate (#1305)`). Continue next only after this post-PR1305 refresh is committed and merged; the next substantive slice must be created from fresh main.
