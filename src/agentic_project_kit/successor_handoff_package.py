@@ -482,6 +482,7 @@ def render_successor_prompt(context: dict[str, Any]) -> str:
             "- `docs/reports/handoff-packages/latest/successor_context.yaml`",
             "- `docs/reports/handoff-packages/latest/source_manifest.json`",
             "- `docs/reports/handoff-packages/latest/validation_report.json`",
+            "- `docs/reports/handoff-packages/latest/execution_contract.json`",
             "- `docs/handoff/NEXT_CHAT_BOOTSTRAP.md`",
             "- `docs/handoff/START_NEW_CHAT_PROMPT.md`",
             "- `docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md`",
