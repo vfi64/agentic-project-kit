@@ -1,0 +1,99 @@
+{
+  "kind": "successor_execution_contract",
+  "repo": {
+    "branch": "docs/post-pr1312-successor-package-refresh",
+    "dirty_paths": [],
+    "full_name": "vfi64/agentic-project-kit",
+    "head": "8df2236fe4ac340433f4f626d5de3672b34dbf12",
+    "head_matches_origin_main": true,
+    "local_path": "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
+    "origin_main": "8df2236fe4ac340433f4f626d5de3672b34dbf12",
+    "worktree_clean": true
+  },
+  "rules": [
+    {
+      "forbidden": [
+        "manual editor instructions",
+        "loose command fragments",
+        "naked python",
+        "naked pytest",
+        "git add .",
+        "{ ... } > \"$OUT\" 2>&1 as the recommended logging pattern"
+      ],
+      "must": [
+        "Use one complete copy-and-paste Bash block per local action.",
+        "Start every local block by changing into the repository root.",
+        "Write verbose output to ~/Downloads/*.log.",
+        "Print LOG=... and RC=... at the end.",
+        "Use ./.venv/bin/python and ./.venv/bin/python -m pytest."
+      ],
+      "priority": "critical",
+      "rule_id": "local-copy-paste-protocol",
+      "scope": "local-user-command-blocks"
+    },
+    {
+      "allowed_next_actions": [
+        "diagnose_dirty_state",
+        "commit_admin_refresh_after_passed_protected_plan",
+        "sync_main",
+        "start_product_slice_only_from_clean_main"
+      ],
+      "must": [
+        "Inspect validation_report.json if present.",
+        "Inspect branch, HEAD, origin/main, upstream, and dirty paths.",
+        "Interpret branch != main with head_matches_origin_main=true explicitly.",
+        "Stop product work when worktree_clean=false."
+      ],
+      "priority": "critical",
+      "rule_id": "strict-start-decision",
+      "scope": "successor-chat-start",
+      "stop_conditions": [
+        "validation_report.status is not PASS",
+        "unexpected dirty paths exist",
+        "protected files changed without protected-diff-plan",
+        "HEAD and origin/main disagree without explanation"
+      ]
+    },
+    {
+      "forbidden_when_bootstrap_is_green": [
+        "revalidating already-merged handoff PRs",
+        "regenerating handoff files",
+        "running prepare-successor-handoff --render-prompt",
+        "starting administrative refresh work"
+      ],
+      "must": [
+        "After running the bootstrap block, evaluate the log before starting any new work.",
+        "Confirm RC=0 and RESULT=NEW_CHAT_BOOTSTRAP_DONE.",
+        "Confirm main == origin/main and worktree clean.",
+        "Confirm post-merge-check PASS with refresh_required=False, result=NOOP, next_safe_action=none.",
+        "Confirm repo-status PASS and docs-audit PASS.",
+        "Confirm validation_report.json PASS and execution_contract.json was read.",
+        "Emit exactly one status decision: Übergabe akzeptiert, keine Admin-Arbeit nötig. or BLOCK with the concrete log-backed reason."
+      ],
+      "priority": "critical",
+      "rule_id": "bootstrap_acceptance_gate",
+      "scope": "successor-chat-bootstrap"
+    },
+    {
+      "forbidden": [
+        "broadly replacing protected files",
+        "shortening protected governance/status/handoff/YAML files for convenience",
+        "committing after a blocked protected plan"
+      ],
+      "must": [
+        "Inspect the actual git diff before commit.",
+        "Run protected-diff-plan against the actual diff.",
+        "Patch protected files minimally and additively.",
+        "Stop immediately on BLOCK or FAIL."
+      ],
+      "priority": "critical",
+      "rule_id": "protected-file-preservation",
+      "scope": "protected governance/status/handoff/YAML files"
+    }
+  ],
+  "schema_version": 1,
+  "validation": {
+    "path": ".agentic/successor_handoff_package/validation_report.json",
+    "status": "PASS"
+  }
+}
