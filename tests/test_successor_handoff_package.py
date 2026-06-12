@@ -53,3 +53,28 @@ def test_successor_execution_contract_projection_contains_hard_start_rules():
     assert "naked `pytest`" in prompt
     assert "git add ." in prompt
     assert "{ ... } > \"$OUT\" 2>&1" in prompt
+
+
+
+def test_write_successor_handoff_package_writes_execution_contract_json(tmp_path):
+    import json
+
+    from agentic_project_kit.successor_handoff_package import (
+        DEFAULT_PACKAGE_DIR,
+        write_successor_handoff_package,
+    )
+
+    result = write_successor_handoff_package(tmp_path, update_canonical_prompts=False)
+
+    contract_path = tmp_path / DEFAULT_PACKAGE_DIR / "execution_contract.json"
+    assert contract_path.exists()
+
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    assert contract == result.execution_contract
+    assert contract["kind"] == "successor_execution_contract"
+    assert contract["validation"]["status"] == result.validation_report["status"]
+
+    rule_ids = {rule["rule_id"] for rule in contract["rules"]}
+    assert "local-copy-paste-protocol" in rule_ids
+    assert "strict-start-decision" in rule_ids
+    assert "protected-file-preservation" in rule_ids
