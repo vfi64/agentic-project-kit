@@ -2223,7 +2223,7 @@ def test_successor_package_freshness_detects_stale_generated_head(tmp_path, monk
     def fake_run(command, *, cwd=None):
         if command == ["git", "rev-parse", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "new\n", "")
-        if command == ["merge-base", "--is-ancestor", "old", "new"]:
+        if command == ["git", "merge-base", "--is-ancestor", "old", "new"]:
             return subprocess.CompletedProcess(command, 1, "", "not ancestor")
         return subprocess.CompletedProcess(command, 1, "", "unexpected command")
 
@@ -2266,9 +2266,9 @@ def test_successor_package_freshness_allows_refresh_only_head_drift(monkeypatch,
 
         if command == ["git", "rev-parse", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "new\n", "")
-        if command == ["merge-base", "--is-ancestor", "old", "new"]:
+        if command == ["git", "merge-base", "--is-ancestor", "old", "new"]:
             return subprocess.CompletedProcess(command, 0, "", "")
-        if command == ["diff", "--name-only", "old..new"]:
+        if command == ["git", "diff", "--name-only", "old..new"]:
             return subprocess.CompletedProcess(
                 command,
                 0,
@@ -2317,9 +2317,9 @@ def test_successor_package_freshness_rejects_product_head_drift(monkeypatch, tmp
 
         if command == ["git", "rev-parse", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "new\n", "")
-        if command == ["merge-base", "--is-ancestor", "old", "new"]:
+        if command == ["git", "merge-base", "--is-ancestor", "old", "new"]:
             return subprocess.CompletedProcess(command, 0, "", "")
-        if command == ["diff", "--name-only", "old..new"]:
+        if command == ["git", "diff", "--name-only", "old..new"]:
             return subprocess.CompletedProcess(command, 0, "src/agentic_project_kit/product.py\n", "")
         return subprocess.CompletedProcess(command, 1, "", "unexpected command")
 

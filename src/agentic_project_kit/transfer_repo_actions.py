@@ -167,11 +167,11 @@ def _is_refresh_only_successor_package_head(generated_head: str, current_head: s
     if not generated_head or not current_head or generated_head == current_head:
         return generated_head == current_head
 
-    merge_base = _run(["merge-base", "--is-ancestor", generated_head, current_head], cwd=root)
+    merge_base = _run(["git", "merge-base", "--is-ancestor", generated_head, current_head], cwd=root)
     if merge_base.returncode != 0:
         return False
 
-    diff = _run(["diff", "--name-only", f"{generated_head}..{current_head}"], cwd=root)
+    diff = _run(["git", "diff", "--name-only", f"{generated_head}..{current_head}"], cwd=root)
     if diff.returncode != 0:
         return False
 
