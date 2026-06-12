@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e88a55913ff4cdfcc9533dd956e5893b16170f24
-  short: e88a5591
-  subject: Harden successor package freshness gates (#1307)
+  full: e9371b442d954099e8056f40505778bf4a082a21
+  short: e9371b44
+  subject: Protect start prompt during successor package refresh (#1309)
 last_substantive_work_state:
-  full: e88a55913ff4cdfcc9533dd956e5893b16170f24
-  short: e88a5591
-  subject: Harden successor package freshness gates (#1307)
+  full: e9371b442d954099e8056f40505778bf4a082a21
+  short: e9371b44
+  subject: Protect start prompt during successor package refresh (#1309)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
