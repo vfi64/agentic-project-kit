@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d1f8e327dd01cce8eb9bc1238177f235027dd718
-  short: d1f8e327
-  subject: Compact workflow reduction refresh history (#1268)
+  full: 2d5698a10ab9f585f208b33205b34befc05d8998
+  short: 2d5698a1
+  subject: Refresh successor handoff after PR1270 (#1271)
 last_substantive_work_state:
-  full: d1f8e327dd01cce8eb9bc1238177f235027dd718
-  short: d1f8e327
-  subject: Compact workflow reduction refresh history (#1268)
+  full: 2d5698a10ab9f585f208b33205b34befc05d8998
+  short: 2d5698a1
+  subject: Refresh successor handoff after PR1270 (#1271)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
