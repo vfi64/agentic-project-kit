@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d2c844bef904aec9f1396077cd4ab856c650881c
-  short: d2c844be
-  subject: Add E2E successor handoff contract test (#1295)
+  full: 3a3368fd9cf5ce877493260f3d0f54a6e9bbe298
+  short: 3a3368fd
+  subject: Close out documentation system handoff pointers (#1297)
 last_substantive_work_state:
-  full: d2c844bef904aec9f1396077cd4ab856c650881c
-  short: d2c844be
-  subject: Add E2E successor handoff contract test (#1295)
+  full: 3a3368fd9cf5ce877493260f3d0f54a6e9bbe298
+  short: 3a3368fd
+  subject: Close out documentation system handoff pointers (#1297)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
