@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e8f02f2086cfd30776236484adc996bf6c6ff522
-  short: e8f02f20
-  subject: Accept refresh-only successor package head drift (#1314)
+  full: 23c913f970c28587048fbb45e0334c78095edc94
+  short: 23c913f9
+  subject: Refresh successor package after PR1316 (#1317)
 last_substantive_work_state:
-  full: e8f02f2086cfd30776236484adc996bf6c6ff522
-  short: e8f02f20
-  subject: Accept refresh-only successor package head drift (#1314)
+  full: 23c913f970c28587048fbb45e0334c78095edc94
+  short: 23c913f9
+  subject: Refresh successor package after PR1316 (#1317)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
