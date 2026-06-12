@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 79795ae33f1f497d53139280b0605778885efeb7
-  short: 79795ae3
-  subject: Refresh successor handoff after PR1278 (#1279)
+  full: dfb22003dab03cd0c90b19fd3005e6166ebe79d7
+  short: dfb22003
+  subject: Skip admin refresh for refresh-only PRs (#1281)
 last_substantive_work_state:
-  full: 79795ae33f1f497d53139280b0605778885efeb7
-  short: 79795ae3
-  subject: Refresh successor handoff after PR1278 (#1279)
+  full: dfb22003dab03cd0c90b19fd3005e6166ebe79d7
+  short: dfb22003
+  subject: Skip admin refresh for refresh-only PRs (#1281)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
