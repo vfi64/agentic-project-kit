@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 60765225325cf004a37477f2e3c808cb66caef28
-  short: 60765225
-  subject: Treat refresh-only post-merge state as fresh (#1283)
+  full: 9db86a0ccf15ebd934641eafd25f5c42f48499ac
+  short: 9db86a0c
+  subject: Add successor execution contract projection (#1285)
 last_substantive_work_state:
-  full: 60765225325cf004a37477f2e3c808cb66caef28
-  short: 60765225
-  subject: Treat refresh-only post-merge state as fresh (#1283)
+  full: 9db86a0ccf15ebd934641eafd25f5c42f48499ac
+  short: 9db86a0c
+  subject: Add successor execution contract projection (#1285)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
