@@ -1,5 +1,7 @@
 # Agentic Project Kit
 
+> Current handoff architecture: the project now uses a deterministic Successor Handoff Package. The package writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/`. New chat starts should verify the package and then follow the machine-readable execution contract instead of relying on chat memory.
+
 
 Current version: 0.4.3
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/zenodo.20101359)
@@ -518,4 +520,3 @@ Archived release v0.3.10 covers workflow shortcut commands, bounded workflow-out
 Archived release v0.3.9 remains the previous post-release verified archived release before v0.3.10. Compatibility coverage anchor: Version `0.3.9`.
 
 Verified version-specific DOI history is maintained in `docs/releases/VERIFIED_RELEASES.md`.
-

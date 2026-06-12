@@ -1,5 +1,7 @@
 # Agent Instructions
 
+> Outer-doc currency note: Operational chat handoff now uses the deterministic Successor Handoff Package. Treat `docs/reports/handoff-packages/latest/successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` as the canonical generated handoff package. The markdown prompts are projections, not independent sources of truth.
+
 Deterministic quality rule: prefer the technically robust, testable, and repeatable solution over the fastest workaround. Do not take shortcuts that create dirty state, false PASS, drift, incomplete logs, manual repair, or unclear handoff evidence.
 
 This repository uses explicit project-state and architecture governance. Do not rely on chat history or memory as the source of truth.
