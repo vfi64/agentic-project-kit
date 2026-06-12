@@ -78,3 +78,104 @@ def test_write_successor_handoff_package_writes_execution_contract_json(tmp_path
     assert "local-copy-paste-protocol" in rule_ids
     assert "strict-start-decision" in rule_ids
     assert "protected-file-preservation" in rule_ids
+
+
+
+def _minimal_successor_context():
+    return {
+        "repo": {
+            "head": "abc123",
+            "head_short": "abc123",
+            "origin_main": "abc123",
+            "branch": "main",
+            "worktree_clean": True,
+        },
+        "long_term_memory": {"mandatory_sources": []},
+    }
+
+
+def test_validate_successor_outputs_requires_execution_contract_json():
+    from agentic_project_kit.successor_handoff_package import validate_successor_outputs
+
+    report = validate_successor_outputs(
+        {"successor_prompt.md": "# prompt"},
+        _minimal_successor_context(),
+    )
+
+    assert report["status"] == "FAIL"
+    assert any(
+        finding["code"] == "missing_execution_contract"
+        for finding in report["findings"]
+    )
+
+
+def test_validate_successor_outputs_requires_execution_contract_rule_ids():
+    import json
+
+    from agentic_project_kit.successor_handoff_package import validate_successor_outputs
+
+    report = validate_successor_outputs(
+        {
+            "successor_prompt.md": "# prompt",
+            "execution_contract.json": json.dumps(
+                {
+                    "kind": "successor_execution_contract",
+                    "rules": [{"rule_id": "local-copy-paste-protocol"}],
+                }
+            ),
+        },
+        _minimal_successor_context(),
+    )
+
+    assert report["status"] == "FAIL"
+    missing = [
+        finding
+        for finding in report["findings"]
+        if finding["code"] == "missing_execution_contract_rule_ids"
+    ]
+    assert missing
+    assert "strict-start-decision" in missing[0]["message"]
+    assert "protected-file-preservation" in missing[0]["message"]
+
+
+def test_build_successor_handoff_package_validates_execution_contract():
+    from agentic_project_kit.successor_handoff_package import build_successor_handoff_package
+
+    result = build_successor_handoff_package(".")
+
+    assert result.validation_report["status"] == "PASS"
+    assert result.execution_contract["kind"] == "successor_execution_contract"
+    rule_ids = {rule["rule_id"] for rule in result.execution_contract["rules"]}
+    assert "local-copy-paste-protocol" in rule_ids
+    assert "strict-start-decision" in rule_ids
+    assert "protected-file-preservation" in rule_ids
+
+
+
+def test_validate_successor_outputs_blocks_naked_python_recommendation():
+    import json
+
+    from agentic_project_kit.successor_handoff_package import validate_successor_outputs
+
+    contract = {
+        "kind": "successor_execution_contract",
+        "rules": [
+            {"rule_id": "local-copy-paste-protocol"},
+            {"rule_id": "strict-start-decision"},
+            {"rule_id": "protected-file-preservation"},
+        ],
+    }
+
+    report = validate_successor_outputs(
+        {
+            "successor_prompt.md": "```bash\npython script.py\n```",
+            "execution_contract.json": json.dumps(contract),
+        },
+        _minimal_successor_context(),
+    )
+
+    assert report["status"] == "FAIL"
+    assert any(
+        finding["code"] == "forbidden_local_command_recommendation"
+        for finding in report["findings"]
+    )

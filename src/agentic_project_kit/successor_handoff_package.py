@@ -95,6 +95,49 @@ STALE_MARKERS: tuple[str, ...] = (
 )
 
 
+REQUIRED_EXECUTION_CONTRACT_RULE_IDS: frozenset[str] = frozenset(
+    {
+        "local-copy-paste-protocol",
+        "strict-start-decision",
+        "protected-file-preservation",
+    }
+)
+
+FORBIDDEN_LOCAL_COMMAND_RECOMMENDATIONS: tuple[str, ...] = (
+    "python ",
+    "pytest ",
+    "git add .",
+    "{ ... } > \"$OUT\" 2>&1",
+)
+
+
+def _forbidden_local_command_recommendations(text: str) -> list[str]:
+    """Return forbidden local command recommendations, ignoring explicit forbidden lists."""
+
+    findings: list[str] = []
+    for line in text.splitlines():
+        stripped = line.strip().strip("`")
+        lower = stripped.lower()
+
+        if not stripped:
+            continue
+        if lower.startswith(("forbidden ", "forbidden:", "verboten ", "verboten:")):
+            continue
+        if "\"forbidden\"" in lower or "'forbidden'" in lower:
+            continue
+
+        if stripped.startswith("python "):
+            findings.append("python ")
+        if stripped.startswith("pytest "):
+            findings.append("pytest ")
+        if stripped == "git add ." or stripped.startswith("git add . "):
+            findings.append("git add .")
+        if stripped.startswith("{ ... } > \"$OUT\" 2>&1"):
+            findings.append("{ ... } > \"$OUT\" 2>&1")
+
+    return findings
+
+
 @dataclass(frozen=True)
 class SuccessorPackageResult:
     context: dict[str, Any]
@@ -213,6 +256,67 @@ def validate_successor_outputs(outputs: dict[str, str], context: dict[str, Any])
                         "message": f"Forbidden stale marker found: {marker}",
                     }
                 )
+
+    execution_contract_text = outputs.get("execution_contract.json")
+    if execution_contract_text is None:
+        findings.append(
+            {
+                "severity": "error",
+                "file": "execution_contract.json",
+                "code": "missing_execution_contract",
+                "message": "Successor handoff package must include execution_contract.json.",
+            }
+        )
+    else:
+        try:
+            execution_contract = json.loads(execution_contract_text)
+        except json.JSONDecodeError as exc:
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "invalid_execution_contract_json",
+                    "message": f"execution_contract.json is not valid JSON: {exc}",
+                }
+            )
+            execution_contract = {}
+
+        if execution_contract.get("kind") != "successor_execution_contract":
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "invalid_execution_contract_kind",
+                    "message": "execution_contract.json must have kind=successor_execution_contract.",
+                }
+            )
+
+        rules = execution_contract.get("rules", [])
+        if not isinstance(rules, list):
+            rules = []
+        rule_ids = {rule.get("rule_id") for rule in rules if isinstance(rule, dict)}
+        missing_rule_ids = sorted(REQUIRED_EXECUTION_CONTRACT_RULE_IDS - rule_ids)
+        if missing_rule_ids:
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "missing_execution_contract_rule_ids",
+                    "message": "Missing required execution contract rule IDs: " + ", ".join(missing_rule_ids),
+                }
+            )
+
+        forbidden_text = execution_contract_text + "\n" + outputs.get("successor_prompt.md", "")
+        for forbidden in _forbidden_local_command_recommendations(forbidden_text):
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "forbidden_local_command_recommendation",
+                    "message": f"Forbidden local command recommendation found: {forbidden}",
+                }
+            )
+
     repo = context["repo"]
     if repo["head"] == "UNKNOWN":
         findings.append({"severity": "error", "file": "successor_context.yaml", "code": "unknown_head", "message": "Cannot determine current HEAD."})
@@ -567,12 +671,14 @@ def build_successor_handoff_package(root: Path | str = ".") -> SuccessorPackageR
     next_chat_bootstrap = render_next_chat_bootstrap_from_context(context)
     start_prompt = render_start_prompt_from_context(context)
     closeout_prompt = render_closeout_prompt_from_context(context)
+    provisional_execution_contract = build_execution_contract(context)
     validation_report = validate_successor_outputs(
         {
             str(NEXT_CHAT_BOOTSTRAP): next_chat_bootstrap,
             str(START_NEW_CHAT_PROMPT): start_prompt,
             str(CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT): closeout_prompt,
             "successor_prompt.md": successor_prompt,
+            "execution_contract.json": _json_block(provisional_execution_contract),
         },
         context,
     )
