@@ -266,3 +266,29 @@ def test_successor_handoff_package_e2e_start_decision_contract(tmp_path, monkeyp
     assert "validation_report.status is not PASS" in strict_start["stop_conditions"]
     assert "unexpected dirty paths exist" in strict_start["stop_conditions"]
 
+
+def test_successor_prompt_requires_bootstrap_acceptance_gate() -> None:
+    from agentic_project_kit.successor_handoff_package import (
+        build_successor_handoff_package,
+        render_start_prompt_from_context,
+    )
+
+    package = build_successor_handoff_package()
+    prompt = render_start_prompt_from_context(package.context)
+    assert "Zusätzliche Startbremse nach dem Bootstrap" in prompt
+    assert "RESULT=NEW_CHAT_BOOTSTRAP_DONE" in prompt
+    assert "Übergabe akzeptiert, keine Admin-Arbeit nötig." in prompt
+    assert "prepare-successor-handoff --render-prompt` nicht erneut ausführen" in prompt
+    assert "Beginne erst nach dieser Statusentscheidung mit neuer Arbeit." in prompt
+
+
+def test_execution_contract_contains_bootstrap_acceptance_gate() -> None:
+    from agentic_project_kit.successor_handoff_package import build_successor_handoff_package
+
+    package = build_successor_handoff_package()
+    contract = package.execution_contract
+    text = str(contract)
+    assert "bootstrap_acceptance_gate" in text
+    assert "RESULT=NEW_CHAT_BOOTSTRAP_DONE" in text
+    assert "refresh_required=False" in text
+

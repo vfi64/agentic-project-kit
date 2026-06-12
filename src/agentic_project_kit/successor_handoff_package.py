@@ -100,6 +100,7 @@ REQUIRED_EXECUTION_CONTRACT_RULE_IDS: frozenset[str] = frozenset(
         "local-copy-paste-protocol",
         "strict-start-decision",
         "protected-file-preservation",
+        "bootstrap_acceptance_gate",
     }
 )
 
@@ -410,6 +411,26 @@ def build_execution_contract(context: dict[str, Any]) -> dict[str, object]:
                 ],
             },
             {
+                "rule_id": BOOTSTRAP_ACCEPTANCE_GATE_RULE_ID,
+                "priority": "critical",
+                "scope": "successor-chat-bootstrap",
+                "must": [
+                    "After running the bootstrap block, evaluate the log before starting any new work.",
+                    "Confirm RC=0 and RESULT=NEW_CHAT_BOOTSTRAP_DONE.",
+                    "Confirm main == origin/main and worktree clean.",
+                    "Confirm post-merge-check PASS with refresh_required=False, result=NOOP, next_safe_action=none.",
+                    "Confirm repo-status PASS and docs-audit PASS.",
+                    "Confirm validation_report.json PASS and execution_contract.json was read.",
+                    "Emit exactly one status decision: Übergabe akzeptiert, keine Admin-Arbeit nötig. or BLOCK with the concrete log-backed reason.",
+                ],
+                "forbidden_when_bootstrap_is_green": [
+                    "revalidating already-merged handoff PRs",
+                    "regenerating handoff files",
+                    "running prepare-successor-handoff --render-prompt",
+                    "starting administrative refresh work",
+                ],
+            },
+            {
                 "rule_id": "protected-file-preservation",
                 "priority": "critical",
                 "scope": "protected governance/status/handoff/YAML files",
@@ -566,6 +587,43 @@ def render_next_chat_bootstrap_from_context(context: dict[str, Any]) -> str:
     )
 
 
+
+BOOTSTRAP_ACCEPTANCE_GATE_RULE_ID = "bootstrap_acceptance_gate"
+
+BOOTSTRAP_ACCEPTANCE_GATE_PROMPT = """\
+Zusätzliche Startbremse nach dem Bootstrap:
+
+Nach Ausführung des Bootstrap-Blocks darfst du nicht sofort mit neuer Arbeit beginnen. Werte zuerst ausschließlich das Bootstrap-Log aus.
+
+Prüfe:
+- `RC=0`
+- `RESULT=NEW_CHAT_BOOTSTRAP_DONE`
+- `main == origin/main`
+- Worktree clean
+- `post-merge-check PASS` mit `refresh_required=False`, `result=NOOP`, `next_safe_action=none`
+- `repo-status PASS`
+- `docs-audit PASS`
+- `validation_report.json PASS`
+- `execution_contract.json` wurde gelesen
+
+Gib danach genau eine kurze Statusentscheidung aus:
+
+- `Übergabe akzeptiert, keine Admin-Arbeit nötig.`
+
+oder:
+
+- `BLOCK: ...` mit konkretem Grund aus dem Log.
+
+Beginne erst nach dieser Statusentscheidung mit neuer Arbeit.
+
+Wenn der Bootstrap grün ist:
+- PR #1304 nicht erneut validieren.
+- Übergabedateien nicht neu erzeugen.
+- `prepare-successor-handoff --render-prompt` nicht erneut ausführen.
+- Keine Admin-Refresh-Arbeit starten.
+- Neue Produktarbeit nur aus frischem, sauberem `main` beginnen.
+"""
+
 def render_start_prompt_from_context(context: dict[str, Any]) -> str:
     return "\n".join(
         [
@@ -605,6 +663,8 @@ def render_start_prompt_from_context(context: dict[str, Any]) -> str:
             "The successor chat must treat the Successor Handoff Package as the short-term handoff and the repository files listed in `source_manifest.json` as long-term truth.",
             "",
             "If the package validation is not PASS, or if HEAD/local status differs from the package without explanation, stop and repair handoff drift first.",
+            "",
+            BOOTSTRAP_ACCEPTANCE_GATE_PROMPT.rstrip(),
             "",
         ]
     )
