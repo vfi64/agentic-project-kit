@@ -2,7 +2,6 @@
 
 Status: active
 Decision status: proposed
-Scope: reduce chat-to-terminal copy-and-paste by letting ./ns up complete the standard PR verification and merge cycle
 Review policy: review before implementation, after ns workflow milestone, and before GUI action integration
 
 ## Purpose

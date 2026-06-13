@@ -1,7 +1,11 @@
 
 GUI Deterministic Gatekeeper Plan
-Status: proposed Decision status: proposed
-Scope: planning only Target baseline: post-PR873 main Next release checkpoint: v0.4.4 Product-code changes in this planning PR: none
+Status: proposed
+Decision status: proposed
+Scope: planning only
+Target baseline: post-PR873 main
+Next release checkpoint: v0.4.4
+Product-code changes in this planning PR: none
 Transfer runner MVP contract
 Status: active MVP under agentic-kit transfer
 

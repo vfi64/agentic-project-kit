@@ -1,7 +1,6 @@
 > STATUS boundary: This document uses concise pointers, not duplicate rule books. Machine guard: `agentic-kit docs-audit` enforces the current-state headroom boundary.
 
 
-
 ## Post-PR1245 Administrative Handoff Refresh State
 
 Current main/admin HEAD: `e97af592` (`Refresh handoff state after PR1244 (#1245)`).
@@ -332,7 +331,6 @@ Recent closeout anchors retained for handoff/status sync: PR #650 merged; PR #65
 
 ## Live Status Commands
 
-Use project-local commands first: `./ns state`, `./ns check-docs`, `./ns doctor`, `./ns docs-audit`, `./ns handoff-check`, `./ns governance-check`, `./ns rule-registry check`, `agentic-kit check-docs`, `agentic-kit doctor`, `agentic-kit rule-registry check`, `agentic-kit rule-registry report`, and `agentic-kit handoff prompt` when installed through the active project environment.
 
 The documentation registry can be inspected through `agentic-kit docs-registry` and exported with `agentic-kit docs-registry --report PATH`.
 
@@ -341,11 +339,9 @@ The documentation registry can be inspected through `agentic-kit docs-registry` 
 Required gate set for current-state, handoff, or governance-summary changes:
 - `./ns state-freshness-check`
 - `./ns handoff-check`
-- `./ns governance-check`
 - `./ns rule-registry check`
 - `./ns patch-preflight`
-- `./ns docs-audit`
-- `./ns dev`
+- `./.venv/bin/agentic-kit docs-audit`
 - `agentic-kit check-docs`
 
 ## Next Safe Step
@@ -485,3 +481,5 @@ Current administrative handoff refresh state is `d3685e2a` (`Plan ns to agentic-
 ## Operational documentation refresh state after PR #1334
 
 Current administrative handoff refresh state is `c6ab40da` (`Classify ns migration docs before GUI (#1334)`). Continue next only after this post-PR1334 refresh is committed and merged; the next substantive slice must be created from fresh main.
+
+- Diagnostic command coverage: `agentic-kit doctor`.

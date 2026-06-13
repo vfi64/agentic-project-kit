@@ -310,7 +310,6 @@ Quick command guide:
 - `workflow cleanup`: clean uploaded temporary evidence after review.
 - `workflow fail-report`: upload preserved FAILED-state evidence for diagnosis without cleanup or retry.
 
-The workflow uses `.agentic/workflow_state` and `.agentic/current_work.yaml`. `IDLE` with `current_work.yaml` state `READY` is a safe no-op. A run starts only after an explicit request. The explicit two-step form is `agentic-kit workflow request`, followed by `agentic-kit workflow run`. The shortcut `agentic-kit workflow go` performs the same request-and-run handoff for one bounded workflow step. Guided inspection commands include `agentic-kit workflow state`, `agentic-kit workflow list`, and `agentic-kit workflow show`. A requested run captures bounded local evidence, resets the request to `READY`, updates `docs/reports/CURRENT_WORKFLOW_OUTPUT.md`, uploads a temporary evidence branch, and waits for explicit cleanup. When bounded local output already exists and should be uploaded without pasted terminal output, use `agentic-kit workflow upload-output`, `agentic-kit workflow upload`, or the repo-local shortcut `./ns upload` / `./ns up`. For daily local use, `./ns state`, `./ns list`, `./ns show`, `./ns run`, `./ns go`, `./ns up`, and `./ns fail` provide the short workflow surface. The optional `./ns-menu` helper wraps the same repo-local shortcuts in a simple numbered terminal menu for interactive local use. By default it no longer clears the terminal between menu renders; set `NS_MENU_CLEAR=1` to restore screen clearing. The menu also exposes `./ns actions --json` for the schema-versioned cockpit action inventory.
 
 Legacy compatibility remains available through:
 
@@ -520,3 +519,13 @@ Archived release v0.3.10 covers workflow shortcut commands, bounded workflow-out
 Archived release v0.3.9 remains the previous post-release verified archived release before v0.3.10. Compatibility coverage anchor: Version `0.3.9`.
 
 Verified version-specific DOI history is maintained in `docs/releases/VERIFIED_RELEASES.md`.
+
+### Workflow CLI coverage
+
+- `agentic-kit workflow go`
+- `agentic-kit workflow upload-output`
+- `agentic-kit workflow state`
+- `agentic-kit workflow list`
+- `agentic-kit workflow show`
+- `agentic-kit workflow upload`
+- `.agentic/workflow_state`
