@@ -8,18 +8,45 @@ from typing import Any
 
 ROOT = Path.cwd()
 OUTBOX = ROOT / ".agentic/transfer/outbox/last_result.txt"
-TARGET_BRANCH = "feature/compact-transfer-report-output"
+STALE_HANDOFF_BRANCH = "docs/post-pr1328-handoff-refresh"
+STALE_HANDOFF_PR = "1329"
+
+ACTIVE_SCAN_PATHS = [
+    "ns",
+    "src",
+    "tests",
+    "README.md",
+    "CHANGELOG.md",
+    "docs/STATUS.md",
+    "docs/TEST_GATES.md",
+    "docs/WORKFLOW_OUTPUT_CYCLE.md",
+    "docs/planning",
+    "docs/workflow",
+]
+
+ACTIVE_SCAN_PATTERNS = [
+    "./ns dev",
+    "./ns go",
+    "./ns up",
+    'if [ "${1:-}" = "dev" ]',
+    'if [ "${1:-}" = "go" ]',
+    'if [ "${1:-}" = "up" ]',
+    "./ns ",
+]
 
 
-def run(command: list[str]) -> dict[str, Any]:
+def run(command: list[str], *, check: bool = False) -> dict[str, Any]:
     completed = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=False)
-    return {
+    step = {
         "command": command,
         "returncode": completed.returncode,
         "stdout": completed.stdout,
         "stderr": completed.stderr,
         "ok": completed.returncode == 0,
     }
+    if check and completed.returncode != 0:
+        raise RuntimeError(json.dumps(step, indent=2, sort_keys=True))
+    return step
 
 
 def git_value(*args: str) -> str:
@@ -27,58 +54,101 @@ def git_value(*args: str) -> str:
     return str(result["stdout"]).strip() if result["ok"] else ""
 
 
+def grep_step(name: str, patterns: list[str], paths: list[str]) -> dict[str, Any]:
+    command = [
+        "grep",
+        "-RIn",
+        "--exclude-dir=.git",
+        "--exclude-dir=.venv",
+        "--exclude=*.pyc",
+    ]
+    for pattern in patterns:
+        command.extend(["-e", pattern])
+    command.extend(paths)
+    step = run(command)
+    step["name"] = name
+    step["ok"] = step["returncode"] in (0, 1)
+    return step
+
+
 def main() -> int:
     steps: list[dict[str, Any]] = []
     blockers: list[str] = []
-    initial_status = git_value("status", "--short")
-    if initial_status:
-        blockers.append("dirty_worktree_before_transfer_start")
+    observations: list[str] = []
 
     for name, command in [
         ("sync-main", ["./.venv/bin/agentic-kit", "transfer", "sync-main"]),
-        ("rules-acknowledge", ["./.venv/bin/agentic-kit", "rules", "acknowledge"]),
-        ("remote-work-start", ["./.venv/bin/agentic-kit", "transfer", "remote-work-start", TARGET_BRANCH]),
+        ("post-merge-check", ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"]),
+        ("repo-status", ["./.venv/bin/agentic-kit", "transfer", "repo-status"]),
+        ("docs-audit", ["./.venv/bin/agentic-kit", "docs-audit"]),
+        ("handoff-check", ["./.venv/bin/agentic-kit", "handoff", "check"]),
+        ("handoff-post-merge-refresh-status", ["./.venv/bin/agentic-kit", "handoff", "post-merge-refresh-status"]),
+        ("command-reference-check", ["./.venv/bin/agentic-kit", "transfer", "command-reference-check"]),
+        ("pr-existing-for-stale-handoff-branch", ["./.venv/bin/agentic-kit", "transfer", "pr-existing-for-branch", "--branch", STALE_HANDOFF_BRANCH]),
+        ("pr-status-stale-handoff-pr", ["./.venv/bin/agentic-kit", "transfer", "pr-status", STALE_HANDOFF_PR]),
     ]:
-        if blockers:
-            break
         step = run(command)
         step["name"] = name
         steps.append(step)
         if not step["ok"]:
-            blockers.append(name + "_failed")
+            if name.startswith("pr-"):
+                observations.append(name + " returned non-zero; inspect stdout/stderr for stale PR state.")
+            else:
+                blockers.append(name + "_failed")
+                break
+
+    if not blockers:
+        scan = grep_step("active-ns-migration-remainder-scan", ACTIVE_SCAN_PATTERNS, ACTIVE_SCAN_PATHS)
+        steps.append(scan)
+        if scan["returncode"] == 0:
+            observations.append("active ns references remain in scanned active surfaces; inspect grep output before next slice.")
+        elif scan["returncode"] == 1:
+            observations.append("no active ns references matched in scanned active surfaces.")
+        else:
+            blockers.append("active_ns_scan_failed")
 
     final_branch = git_value("branch", "--show-current")
-    final_status = git_value("status", "--short")
-    ok = not blockers and final_branch == TARGET_BRANCH and not final_status
-    if not blockers and final_branch != TARGET_BRANCH:
-        blockers.append("wrong_final_branch")
-    if not blockers and final_status:
-        blockers.append("dirty_worktree_after_transfer_start")
+    final_head = git_value("rev-parse", "HEAD")
+    final_origin_main = git_value("rev-parse", "origin/main")
+    final_status = git_value("status", "--short", "--untracked-files=all")
 
+    if final_branch != "main":
+        blockers.append("wrong_final_branch")
+    if final_head != final_origin_main:
+        blockers.append("head_not_origin_main")
+    if final_status:
+        blockers.append("dirty_worktree_after_transfer")
+
+    ok = not blockers
     payload = {
         "schema_version": 1,
         "kind": "local_to_llm_last_result",
-        "action": "start_compact_transfer_report_output_slice",
-        "target_branch": TARGET_BRANCH,
+        "action": "inspect_ns_migration_followup_after_pr1338",
         "finished_at": datetime.now(timezone.utc).isoformat(),
         "final_branch": final_branch,
+        "final_head": final_head,
+        "final_origin_main": final_origin_main,
+        "final_status": final_status,
         "steps": steps,
+        "observations": observations,
         "blockers": blockers,
         "result_status": "PASS" if ok else "BLOCKED",
-        "final_signal": "d" if ok else "f",
-        "next_action": "Ready for implementation transfer file." if ok else "Inspect blockers before continuing.",
-        "chat_reply": "g | NEXT=Ready for implementation transfer file." if ok else "f | NEXT=Inspect blockers before continuing.",
+        "final_signal": "g" if ok else "f",
+        "next_action": "LLM should inspect .agentic/transfer/outbox/last_result.txt and choose the next wrapper-backed transfer order." if ok else "Inspect blockers before continuing.",
+        "chat_reply": "g" if ok else "f",
     }
+
     OUTBOX.parent.mkdir(parents=True, exist_ok=True)
     OUTBOX.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
-    print("TRANSFER_PAYLOAD=start_compact_transfer_report_output_slice")
+    print("TRANSFER_PAYLOAD=inspect_ns_migration_followup_after_pr1338")
     print(f"STATE={payload['result_status']}")
-    print(f"BRANCH={final_branch}")
+    print(f"FINAL_BRANCH={final_branch}")
+    print(f"FINAL_HEAD={final_head[:12]}")
     print(f"BLOCKERS={len(blockers)}")
-    print(f"FINAL_SIGNAL={payload['final_signal']}")
-    print("FINAL_NEXT=" + str(payload["next_action"]))
-    print("CHAT_REPLY=" + str(payload["chat_reply"]))
+    print(f"OBSERVATIONS={len(observations)}")
+    print(f"OUTBOX={OUTBOX}")
+    print(f"CHAT_REPLY={payload['chat_reply']}")
     return 0 if ok else 1
 
 
