@@ -467,3 +467,6 @@ Current administrative handoff refresh state is `e8f02f20` (`Accept refresh-only
 ## Operational documentation refresh state after PR #1317
 
 Current administrative handoff refresh state is `23c913f9` (`Refresh successor package after PR1316 (#1317)`). Continue next only after this post-PR1317 refresh is committed and merged; the next substantive slice must be created from fresh main.
+## Operational documentation refresh state after PR #1320
+
+Current administrative handoff refresh state is `879b6f89` (`Harden admin refresh PR freshness check (#1320)`). Continue next only after this post-PR1320 refresh is committed and merged; the next substantive slice must be created from fresh main.
