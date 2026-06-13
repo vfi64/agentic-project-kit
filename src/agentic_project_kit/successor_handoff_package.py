@@ -558,6 +558,7 @@ def render_next_chat_bootstrap_from_context(context: dict[str, Any]) -> str:
             "",
             f"- Repo: `{repo['full_name']}`",
             f"- HEAD: `{repo['head']}` (`{repo['head_short']}`)",
+            f"- Handoff freshness marker: `{repo['head_short']}`",
             f"- Branch at generation: `{repo['branch']}`",
             f"- Worktree clean at generation: `{repo['worktree_clean']}`",
             "",
