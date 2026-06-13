@@ -473,3 +473,6 @@ Current administrative handoff refresh state is `879b6f89` (`Harden admin refres
 ## Operational documentation refresh state after PR #1324
 
 Current administrative handoff refresh state is `75d7a3d3` (`Refresh successor package during admin handoff refresh (#1324)`). Continue next only after this post-PR1324 refresh is committed and merged; the next substantive slice must be created from fresh main.
+## Operational documentation refresh state after PR #1326
+
+Current administrative handoff refresh state is `967d7380` (`Refresh successor package during admin handoff refresh (#1326)`). Continue next only after this post-PR1326 refresh is committed and merged; the next substantive slice must be created from fresh main.
