@@ -932,6 +932,11 @@ ADMIN_REFRESH_PATHS = (
     "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
     "docs/handoff/START_NEW_CHAT_PROMPT.md",
     "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
 )
 
 
@@ -1023,9 +1028,30 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
                 file_path.write_text(current.rstrip() + marker, encoding="utf-8")
                 touched.append(file_name)
 
+        package_refresh = _run([_agentic_kit_command(), "transfer", "prepare-successor-handoff", "--render-prompt"])
+        if package_refresh.returncode != 0:
+            return subprocess.CompletedProcess(
+                command,
+                package_refresh.returncode,
+                package_refresh.stdout,
+                package_refresh.stderr,
+            )
+
+        for package_path in (
+            "docs/reports/handoff-packages/latest/execution_contract.json",
+            "docs/reports/handoff-packages/latest/source_manifest.json",
+            "docs/reports/handoff-packages/latest/successor_context.yaml",
+            "docs/reports/handoff-packages/latest/successor_prompt.md",
+            "docs/reports/handoff-packages/latest/validation_report.json",
+        ):
+            if Path(package_path).exists() and package_path not in touched:
+                touched.append(package_path)
+
         boot = _run([_agentic_kit_command(), "boot", "write"])
         if boot.returncode != 0:
             return subprocess.CompletedProcess(command, boot.returncode, boot.stdout, boot.stderr)
+        if Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md").exists() and "docs/handoff/NEXT_CHAT_BOOTSTRAP.md" not in touched:
+            touched.append("docs/handoff/NEXT_CHAT_BOOTSTRAP.md")
 
         prompt = _run([_agentic_kit_command(), "handoff", "prompt"])
         if prompt.returncode != 0:

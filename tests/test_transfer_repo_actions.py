@@ -374,6 +374,10 @@ def test_post_merge_check_noop_on_main(tmp_path, monkeypatch):
             return subprocess.CompletedProcess(
                 command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", ""
             )
+        if command == ["agentic-kit", "transfer", "prepare-successor-handoff", "--render-prompt"]:
+            return subprocess.CompletedProcess(command, 0, "fresh successor prompt\n", "")
+        if command == ["agentic-kit", "boot", "write"]:
+            return subprocess.CompletedProcess(command, 0, "Wrote docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n", "")
         return subprocess.CompletedProcess(command, 99, "", "unexpected command\n")
 
     monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
@@ -455,6 +459,11 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
                 " M docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n"
                 " M docs/handoff/START_NEW_CHAT_PROMPT.md\n"
                 " M docs/planning/WORKFLOW_REDUCTION_FOCUS.md\n"
+                " M docs/reports/handoff-packages/latest/execution_contract.json\n"
+                " M docs/reports/handoff-packages/latest/source_manifest.json\n"
+                " M docs/reports/handoff-packages/latest/successor_context.yaml\n"
+                " M docs/reports/handoff-packages/latest/successor_prompt.md\n"
+                " M docs/reports/handoff-packages/latest/validation_report.json\n"
                 "?? docs/reports/terminal/post-pr123-successor-chat-handoff.md\n",
                 "",
             )
@@ -488,6 +497,11 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
             "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
             "docs/handoff/START_NEW_CHAT_PROMPT.md",
             "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+            "docs/reports/handoff-packages/latest/execution_contract.json",
+            "docs/reports/handoff-packages/latest/source_manifest.json",
+            "docs/reports/handoff-packages/latest/successor_context.yaml",
+            "docs/reports/handoff-packages/latest/successor_prompt.md",
+            "docs/reports/handoff-packages/latest/validation_report.json",
             "docs/reports/terminal/post-pr123-successor-chat-handoff.md",
         ]:
             return subprocess.CompletedProcess(command, 0, "", "")
@@ -1897,6 +1911,11 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
                 " M docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n"
                 " M docs/handoff/START_NEW_CHAT_PROMPT.md\n"
                 " M docs/planning/WORKFLOW_REDUCTION_FOCUS.md\n"
+                " M docs/reports/handoff-packages/latest/execution_contract.json\n"
+                " M docs/reports/handoff-packages/latest/source_manifest.json\n"
+                " M docs/reports/handoff-packages/latest/successor_context.yaml\n"
+                " M docs/reports/handoff-packages/latest/successor_prompt.md\n"
+                " M docs/reports/handoff-packages/latest/validation_report.json\n"
                 "?? docs/reports/terminal/post-pr123-successor-chat-handoff.md\n",
                 "",
             )
@@ -1924,13 +1943,7 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
         if command == [
             "git",
             "add",
-            ".agentic/handoff_state.yaml",
-            ".agentic/operational_handoff_state.yaml",
-            "docs/STATUS.md",
-            "docs/handoff/CURRENT_HANDOFF.md",
-            "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
-            "docs/handoff/START_NEW_CHAT_PROMPT.md",
-            "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+            *transfer_repo_actions.ADMIN_REFRESH_PATHS,
             "docs/reports/terminal/post-pr123-successor-chat-handoff.md",
         ]:
             return subprocess.CompletedProcess(command, 0, "", "")
@@ -2068,6 +2081,17 @@ last_substantive_work_state:
             return subprocess.CompletedProcess(command, 0, short + "\n", "")
         if command == ["git", "log", "-1", "--format=%s"]:
             return subprocess.CompletedProcess(command, 0, subject + "\n", "")
+        if command == ["agentic-kit", "transfer", "prepare-successor-handoff", "--render-prompt"]:
+            for package_path in [
+                "docs/reports/handoff-packages/latest/execution_contract.json",
+                "docs/reports/handoff-packages/latest/source_manifest.json",
+                "docs/reports/handoff-packages/latest/successor_context.yaml",
+                "docs/reports/handoff-packages/latest/successor_prompt.md",
+                "docs/reports/handoff-packages/latest/validation_report.json",
+            ]:
+                Path(package_path).parent.mkdir(parents=True, exist_ok=True)
+                Path(package_path).write_text("fresh package\n", encoding="utf-8")
+            return subprocess.CompletedProcess(command, 0, "fresh successor prompt\n", "")
         if command == ["agentic-kit", "boot", "write"]:
             Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md").write_text("bootstrap\n", encoding="utf-8")
             return subprocess.CompletedProcess(command, 0, "WROTE docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n", "")
