@@ -1,10 +1,3 @@
-## Handoff Freshness Guard
-
-WARNING: this successor handoff prompt may be stale.
-Refresh `docs/STATUS.md`, `.agentic/handoff_state.yaml`, `docs/handoff/CURRENT_HANDOFF.md`, and the successor prompt before treating this prompt as authoritative.
-
-- latest successor handoff prompt is missing: docs/reports/terminal/post-pr1338-successor-chat-handoff.md
-
 # Übergabeprompt
 
 ## 1. Arbeitsumgebung
@@ -16,8 +9,8 @@ Default branch: `main`
 ## 2. Sicherer Stand
 
 Branch: `main`
-Commit: `979825da`
-Subject: Remove ns dev go up shortcuts (#1338)
+Commit: `eed934fe`
+Subject: Publish final remote-next report projection
 Semantics: `last_substantive_work_state`
 Working tree expected clean: `True`
 
@@ -25,8 +18,8 @@ Working tree expected clean: `True`
 
 Administrative Evidence Commits nach dem fachlichen Safe-State sind erlaubt, wenn sie nur Logs, Handoff, Summary oder Evidence aktualisieren. Sie ändern den fachlichen Safe-State nicht.
 
-Current HEAD at generation time: `979825da`
-HEAD subject: Remove ns dev go up shortcuts (#1338)
+Current HEAD at generation time: `eed934fe`
+HEAD subject: Publish final remote-next report projection
 Allowed after safe state: `True`
 Reason: administrative evidence/log/handoff commit after substantive safe_state
 
@@ -196,7 +189,7 @@ Final-Summary-Vokabular:
 
 ## 13. Erste Arbeitsanweisung
 
-Start the next chat from the fresh post-PR1338 successor handoff prompt. Verify main at 979825da, confirm the post-PR1338 operational handoff refresh passes explicit summary inspection, then continue only with the operational documentation projection slice or another allowed small test-backed slice.
+Start the next chat from the fresh post-PR1338 successor handoff prompt. Verify main at eed934fe, confirm the post-PR1338 operational handoff refresh passes explicit summary inspection, then continue only with the operational documentation projection slice or another allowed small test-backed slice.
 
 ## 14. Arbeitsmodus für den Nachfolge-Chat
 

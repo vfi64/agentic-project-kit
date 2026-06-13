@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 979825da88ed7503dfa361c152cd5c26a3bc2191
-  short: 979825da
-  subject: Remove ns dev go up shortcuts (#1338)
+  full: eed934fe54c9d926074a99055ed997c2a91332be
+  short: eed934fe
+  subject: Publish final remote-next report projection
 last_substantive_work_state:
-  full: 979825da88ed7503dfa361c152cd5c26a3bc2191
-  short: 979825da
-  subject: Remove ns dev go up shortcuts (#1338)
+  full: eed934fe54c9d926074a99055ed997c2a91332be
+  short: eed934fe
+  subject: Publish final remote-next report projection
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

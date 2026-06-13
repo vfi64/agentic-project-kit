@@ -1006,6 +1006,13 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
             f"Continue next only after this post-PR{after_pr} refresh is committed and merged; "
             "the next substantive slice must be created from fresh main.\n"
         )
+        operational_refresh_marker_pattern = re.compile(
+            r"\n## Operational documentation refresh state after PR #\d+\n\n"
+            r"Current administrative handoff refresh state is `[^`]+` \(`[^`]*`\)\. "
+            r"Continue next only after this post-PR\d+ refresh is committed and merged; "
+            r"the next substantive slice must be created from fresh main\.\n?",
+            flags=re.MULTILINE,
+        )
         for file_name in (
             "docs/STATUS.md",
             "docs/handoff/CURRENT_HANDOFF.md",
@@ -1016,16 +1023,9 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
             if not file_path.exists():
                 continue
             current = file_path.read_text(encoding="utf-8").replace("\\n", "\n")
-            current = re.sub(
-                r"\n## Operational documentation refresh state after PR #\d+\n\n"
-                r"Current administrative handoff refresh state is `[^`]+` \$begin:math:text$\[\^\)\]\*\$end:math:text$\. "
-                r"Continue next only after this post-PR\d+ refresh is committed and merged; "
-                r"the next substantive slice must be created from fresh main\.\n",
-                "",
-                current,
-            )
-            if f"Operational documentation refresh state after PR #{after_pr}" not in current:
-                file_path.write_text(current.rstrip() + marker, encoding="utf-8")
+            refreshed = operational_refresh_marker_pattern.sub("", current).rstrip() + marker
+            if refreshed != current:
+                file_path.write_text(refreshed, encoding="utf-8")
                 touched.append(file_name)
 
         package_refresh = _run([_agentic_kit_command(), "transfer", "prepare-successor-handoff", "--render-prompt"])

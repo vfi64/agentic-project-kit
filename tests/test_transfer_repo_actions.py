@@ -2145,6 +2145,93 @@ last_substantive_work_state:
 
 
 
+
+def test_admin_refresh_replaces_existing_operational_refresh_marker(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.chdir(tmp_path)
+    for rel in (
+        ".agentic/handoff_state.yaml",
+        ".agentic/operational_handoff_state.yaml",
+        "docs/STATUS.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    ):
+        (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+
+    (tmp_path / ".agentic/handoff_state.yaml").write_text(
+        "administrative_evidence_state:\n"
+        "  commit: 979825da\n"
+        "  commit_subject: Old refresh (#1338)\n"
+        "  latest_successor_prompt: docs/reports/terminal/post-pr1338-successor-chat-handoff.md\n",
+        encoding="utf-8",
+    )
+    (tmp_path / ".agentic/operational_handoff_state.yaml").write_text(
+        "main_head:\n"
+        "  full: 979825da00000000000000000000000000000000\n"
+        "  short: 979825da\n"
+        "  subject: Old refresh (#1338)\n",
+        encoding="utf-8",
+    )
+    old_marker = (
+        "\n## Operational documentation refresh state after PR #1338\n\n"
+        "Current administrative handoff refresh state is `979825da` (`Old refresh (#1338)`). "
+        "Continue next only after this post-PR1338 refresh is committed and merged; "
+        "the next substantive slice must be created from fresh main.\n"
+    )
+    for rel in (
+        "docs/STATUS.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    ):
+        (tmp_path / rel).write_text(f"# Doc\n{old_marker}", encoding="utf-8")
+
+    def fake_run(argv: list[str]) -> subprocess.CompletedProcess[str]:
+        if argv[:3] == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(argv, 0, "eed934fe54c9d926074a99055ed997c2a91332be\n", "")
+        if argv[:3] == ["git", "rev-parse", "--short=8"]:
+            return subprocess.CompletedProcess(argv, 0, "eed934fe\n", "")
+        if argv[:3] == ["git", "log", "-1"]:
+            return subprocess.CompletedProcess(argv, 0, "Publish remote-next transfer report\n", "")
+        if argv[-2:] == ["prepare-successor-handoff", "--render-prompt"]:
+            for rel in (
+                "docs/reports/handoff-packages/latest/execution_contract.json",
+                "docs/reports/handoff-packages/latest/source_manifest.json",
+                "docs/reports/handoff-packages/latest/successor_context.yaml",
+                "docs/reports/handoff-packages/latest/successor_prompt.md",
+                "docs/reports/handoff-packages/latest/validation_report.json",
+            ):
+                (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+                (tmp_path / rel).write_text("{}", encoding="utf-8")
+            return subprocess.CompletedProcess(argv, 0, "", "")
+        if argv[-2:] == ["boot", "write"]:
+            (tmp_path / "docs/handoff/NEXT_CHAT_BOOTSTRAP.md").parent.mkdir(parents=True, exist_ok=True)
+            (tmp_path / "docs/handoff/NEXT_CHAT_BOOTSTRAP.md").write_text("bootstrap eed934fe\n", encoding="utf-8")
+            return subprocess.CompletedProcess(argv, 0, "", "")
+        if argv[-2:] == ["handoff", "prompt"]:
+            return subprocess.CompletedProcess(argv, 0, "successor prompt eed934fe\n", "")
+        if argv[-2:] == ["post-merge-refresh-status"]:
+            return subprocess.CompletedProcess(argv, 0, "result=NOOP\n", "")
+        return subprocess.CompletedProcess(argv, 0, "", "")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions._refresh_operational_handoff_docs(1338)
+
+    assert result.returncode == 0
+    for rel in (
+        "docs/STATUS.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    ):
+        content = (tmp_path / rel).read_text(encoding="utf-8")
+        assert "979825da" not in content
+        assert "eed934fe" in content
+        assert content.count("Operational documentation refresh state after PR #1338") == 1
+
+
+
 def test_admin_refresh_pr_skips_refresh_only_pr(monkeypatch):
     from agentic_project_kit import transfer_repo_actions as actions
 

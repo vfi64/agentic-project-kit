@@ -124,12 +124,12 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "docs/post-pr1338-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "979825da88ed7503dfa361c152cd5c26a3bc2191",
+    "head": "eed934fe54c9d926074a99055ed997c2a91332be",
     "head_matches_origin_main": true,
-    "head_short": "979825da",
+    "head_short": "eed934fe",
     "local_path": "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
-    "origin_main": "979825da88ed7503dfa361c152cd5c26a3bc2191",
-    "origin_main_short": "979825da",
+    "origin_main": "eed934fe54c9d926074a99055ed997c2a91332be",
+    "origin_main_short": "eed934fe",
     "worktree_clean": false
   }
 }
