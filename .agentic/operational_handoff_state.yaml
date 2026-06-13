@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: eed934fe54c9d926074a99055ed997c2a91332be
-  short: eed934fe
-  subject: Publish final remote-next report projection
+  full: 3b0d010e049475d0dc1a7443ff88b543500ee3af
+  short: 3b0d010e
+  subject: Refresh handoff state after PR1338 (#1340)
 last_substantive_work_state:
-  full: eed934fe54c9d926074a99055ed997c2a91332be
-  short: eed934fe
-  subject: Publish final remote-next report projection
+  full: 3b0d010e049475d0dc1a7443ff88b543500ee3af
+  short: 3b0d010e
+  subject: Refresh handoff state after PR1338 (#1340)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
