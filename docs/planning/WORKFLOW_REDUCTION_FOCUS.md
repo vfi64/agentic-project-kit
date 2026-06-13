@@ -735,4 +735,6 @@ Acceptance gates:
 - `agentic-kit docs-audit` PASS.
 - `agentic-kit transfer protected-diff-plan` PASS for every migration slice.
 - No active workflow instruction points users primarily to `./ns` when a tested `agentic-kit` command exists.
+## Operational documentation refresh state after PR #1332
 
+Current administrative handoff refresh state is `d3685e2a` (`Plan ns to agentic-kit migration before GUI (#1332)`). Continue next only after this post-PR1332 refresh is committed and merged; the next substantive slice must be created from fresh main.
