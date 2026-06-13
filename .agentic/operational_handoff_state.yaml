@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 967d7380be9c900f338087c9b78c6783772fb903
-  short: 967d7380
-  subject: Refresh successor package during admin handoff refresh (#1326)
+  full: 896b66f8f5fa1e78cdad84f689821811eaf535ab
+  short: 896b66f8
+  subject: Audit ns to agentic-kit migration before GUI (#1328)
 last_substantive_work_state:
-  full: 967d7380be9c900f338087c9b78c6783772fb903
-  short: 967d7380
-  subject: Refresh successor package during admin handoff refresh (#1326)
+  full: 896b66f8f5fa1e78cdad84f689821811eaf535ab
+  short: 896b66f8
+  subject: Audit ns to agentic-kit migration before GUI (#1328)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
