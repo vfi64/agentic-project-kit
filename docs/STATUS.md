@@ -483,3 +483,6 @@ Current administrative handoff refresh state is `d3685e2a` (`Plan ns to agentic-
 Current administrative handoff refresh state is `c6ab40da` (`Classify ns migration docs before GUI (#1334)`). Continue next only after this post-PR1334 refresh is committed and merged; the next substantive slice must be created from fresh main.
 
 - Diagnostic command coverage: `agentic-kit doctor`.
+## Operational documentation refresh state after PR #1336
+
+Current administrative handoff refresh state is `375d5df2` (`Replace active ns command docs before GUI (#1336)`). Continue next only after this post-PR1336 refresh is committed and merged; the next substantive slice must be created from fresh main.

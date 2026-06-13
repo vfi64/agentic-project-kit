@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c6ab40dace3112c131a53f8425befc010df33778
-  short: c6ab40da
-  subject: Classify ns migration docs before GUI (#1334)
+  full: 375d5df269bfa5476134ce960892c0d6715dad2f
+  short: 375d5df2
+  subject: Replace active ns command docs before GUI (#1336)
 last_substantive_work_state:
-  full: c6ab40dace3112c131a53f8425befc010df33778
-  short: c6ab40da
-  subject: Classify ns migration docs before GUI (#1334)
+  full: 375d5df269bfa5476134ce960892c0d6715dad2f
+  short: 375d5df2
+  subject: Replace active ns command docs before GUI (#1336)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
