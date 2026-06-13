@@ -332,3 +332,27 @@ def test_bootstrap_acceptance_gate_is_projected_into_package_files() -> None:
         assert "RESULT=NEW_CHAT_BOOTSTRAP_DONE" in text
         assert "Übergabe akzeptiert, keine Admin-Arbeit nötig" in text
 
+def test_next_chat_bootstrap_contains_handoff_freshness_marker():
+    from agentic_project_kit.successor_handoff_package import (
+        render_next_chat_bootstrap_from_context,
+    )
+
+    context = {
+        "repo": {
+            "full_name": "vfi64/agentic-project-kit",
+            "local_path": "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
+            "branch": "main",
+            "head": "1234567890abcdef",
+            "head_short": "12345678",
+            "origin_main": "1234567890abcdef",
+            "worktree_clean": True,
+        },
+        "dirty_paths": (),
+    }
+
+    bootstrap = render_next_chat_bootstrap_from_context(context)
+
+    assert "## Current verified repository state" in bootstrap
+    assert "- HEAD: `1234567890abcdef` (`12345678`)" in bootstrap
+    assert "- Handoff freshness marker: `12345678`" in bootstrap
+    assert "## Bootstrap-Akzeptanzbremse" in bootstrap
