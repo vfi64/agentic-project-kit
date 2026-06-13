@@ -407,3 +407,6 @@ Current administrative handoff refresh state is `75d7a3d3` (`Refresh successor p
 ## Operational documentation refresh state after PR #1326
 
 Current administrative handoff refresh state is `967d7380` (`Refresh successor package during admin handoff refresh (#1326)`). Continue next only after this post-PR1326 refresh is committed and merged; the next substantive slice must be created from fresh main.
+## Operational documentation refresh state after PR #1330
+
+Current administrative handoff refresh state is `a7a0b6a2` (`Audit ns to agentic-kit migration before GUI (#1330)`). Continue next only after this post-PR1330 refresh is committed and merged; the next substantive slice must be created from fresh main.
