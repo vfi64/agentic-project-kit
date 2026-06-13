@@ -123,7 +123,6 @@ Zenodo Concept DOI: 10.5281/zenodo.20101359
 
 ## v0.3.34 - 2026-05-20
 
-- Hardened the pre-GUI portable Python core by adding typed work-order unit-test coverage, explicit `./ns dev-local-feature-gate` routing, and a shared local feature gate core.
 - Added a tested finalize-guard decision core with module CLI/render contract and reachable superseded-branch handling.
 - Recorded remote terminal evidence for the v0.3.34 hardening slices before the Tkinter cockpit work starts.
 
@@ -215,7 +214,6 @@ Zenodo Concept DOI: 10.5281/zenodo.20101359
 ## v0.3.21 DOI: 10.5281/zenodo.20258057
 
 - Add no-copy release shortcut commands for release preparation, release gating, and confirmation-gated release publishing.
-- Harden `./ns up` PR completion for safer no-copy workflows.
 
 ## v0.3.20 - 2026-05-17
 

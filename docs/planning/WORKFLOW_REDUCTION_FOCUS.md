@@ -529,7 +529,6 @@ The GUI should expose stable wrappers, not raw git, raw GitHub, or unbounded she
 Acceptance condition before GUI expansion: every GUI button that mutates repository state must map to a bounded wrapper with branch, dirty-state, rule-ack, evidence, and failure-mode guards.
 
 
-
 ### OS-Independence Line: Replace `./ns` Core Dependencies With `agentic-kit`
 
 Goal: make the project workflow operating-system independent by ensuring that `./ns` remains only a human convenience adapter or explicit legacy compatibility route, not a core dependency of `agentic-kit` Python code, normal tests, governance gates, or GUI execution.
