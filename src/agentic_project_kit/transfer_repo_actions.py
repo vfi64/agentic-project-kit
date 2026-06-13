@@ -1036,6 +1036,18 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
         prompt_file.write_text(prompt.stdout, encoding="utf-8")
         touched.append(prompt_path)
 
+        freshness = _run([_agentic_kit_command(), "handoff", "post-merge-refresh-status"])
+        if freshness.returncode != 0:
+            return subprocess.CompletedProcess(
+                command,
+                freshness.returncode,
+                "Updated operational handoff docs before freshness check:\\n"
+                + "\\n".join(f"- {item}" for item in touched)
+                + "\\n\\n"
+                + freshness.stdout,
+                freshness.stderr,
+            )
+
         return subprocess.CompletedProcess(
             command,
             0,

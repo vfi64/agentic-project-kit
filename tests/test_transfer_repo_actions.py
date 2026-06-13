@@ -2073,6 +2073,25 @@ last_substantive_work_state:
             return subprocess.CompletedProcess(command, 0, "WROTE docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n", "")
         if command == ["agentic-kit", "handoff", "prompt"]:
             return subprocess.CompletedProcess(command, 0, "successor prompt\n", "")
+        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+            state = Path(".agentic/handoff_state.yaml").read_text(encoding="utf-8")
+            for required in [
+                "post-pr2222-successor-chat-handoff.md",
+                "post-PR2222 successor handoff prompt",
+                "post-PR2222 operational handoff refresh",
+                "main at 12345678",
+            ]:
+                assert required in state
+            for file_name in [
+                "docs/STATUS.md",
+                "docs/handoff/CURRENT_HANDOFF.md",
+                "docs/handoff/START_NEW_CHAT_PROMPT.md",
+                "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+            ]:
+                content = Path(file_name).read_text(encoding="utf-8")
+                assert "Operational documentation refresh state after PR #2222" in content
+                assert "12345678" in content
+            return subprocess.CompletedProcess(command, 0, "result=NOOP\nrefresh_required=False\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
@@ -2098,6 +2117,7 @@ last_substantive_work_state:
     assert "subject: New admin refresh behavior (#2222)" in operational_text
     assert Path("docs/reports/terminal/post-pr2222-successor-chat-handoff.md").read_text(encoding="utf-8") == "successor prompt\n"
     assert "Operational documentation refresh state after PR #2222" in Path("docs/STATUS.md").read_text(encoding="utf-8")
+    assert "Updated operational handoff docs:" in result.stdout
 
 
 
