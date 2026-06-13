@@ -716,6 +716,7 @@ Status: required before GUI implementation.
 Audit anchor:
 - `docs/reports/ns-migration/ns_to_agentic_kit_audit.md`
 - `docs/reports/ns-migration/ns_to_agentic_kit_inventory.json`
+- `docs/reports/ns-migration/ns_to_agentic_kit_replacement_table.md`
 
 Policy:
 - Do not start GUI implementation until `./ns` usage is either replaced by `agentic-kit` commands or explicitly retained only as a thin compatibility/deprecation shim.

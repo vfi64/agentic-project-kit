@@ -20,3 +20,9 @@ TODO: define the planned work in small, reviewable slices.
 ## Evidence
 
 TODO: list required gates, tests, review points, or audit evidence.
+
+## Current migration status
+
+This PR-completion note is retained as legacy context. Active PR lifecycle work should now prefer `agentic-kit transfer pr-create-complete`, `pr-complete`, `post-merge-complete`, `post-merge-check`, and related bounded wrappers.
+
+Before GUI implementation, any active `./ns` PR workflow must be mapped to a tested `agentic-kit` replacement or explicitly deprecated.

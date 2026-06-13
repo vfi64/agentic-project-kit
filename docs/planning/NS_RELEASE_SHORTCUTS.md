@@ -20,3 +20,9 @@ TODO: define the planned work in small, reviewable slices.
 ## Evidence
 
 TODO: list required gates, tests, review points, or audit evidence.
+
+## Current migration status
+
+This release-shortcut note is retained as legacy context. Release and post-release work should now use the tested `agentic-kit` release, transfer, handoff, and post-merge commands.
+
+Before GUI implementation, any active release shortcut that still points primarily to `./ns` must be replaced by an `agentic-kit` command path or explicitly deprecated.
