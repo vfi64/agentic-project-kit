@@ -6,9 +6,10 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `99079842aca40cd5b53461caddb953b37ff1ae64` (`99079842`)
-- Branch at generation: `docs/post-pr1316-successor-package-refresh`
-- Worktree clean at generation: `True`
+- HEAD: `75d7a3d3c33e75bf772a02ae3569d2db987e4c01` (`75d7a3d3`)
+- Handoff freshness marker: `75d7a3d3`
+- Branch at generation: `docs/post-pr1324-handoff-refresh`
+- Worktree clean at generation: `False`
 
 ## Successor handoff package
 
@@ -69,5 +70,3 @@ Wenn der Bootstrap grün ist:
 - Add outer-doc currency checks and minimal updates for `AGENTS.md`, `README.md`, and `SECURITY.md`.
 
 ### RESULT: PASS ###
-
-- Post-PR1320 handoff refresh marker: `879b6f8`.
