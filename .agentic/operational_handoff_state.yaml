@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a7a0b6a2f51efd0d55612b7dceba691050a68d67
-  short: a7a0b6a2
-  subject: Audit ns to agentic-kit migration before GUI (#1330)
+  full: d3685e2a0baf7a3c3b56f928b873d22aaa11dfea
+  short: d3685e2a
+  subject: Plan ns to agentic-kit migration before GUI (#1332)
 last_substantive_work_state:
-  full: a7a0b6a2f51efd0d55612b7dceba691050a68d67
-  short: a7a0b6a2
-  subject: Audit ns to agentic-kit migration before GUI (#1330)
+  full: d3685e2a0baf7a3c3b56f928b873d22aaa11dfea
+  short: d3685e2a
+  subject: Plan ns to agentic-kit migration before GUI (#1332)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
