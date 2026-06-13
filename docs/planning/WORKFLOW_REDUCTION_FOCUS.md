@@ -708,3 +708,31 @@ Current administrative handoff refresh state is `967d7380` (`Refresh successor p
 ## Operational documentation refresh state after PR #1330
 
 Current administrative handoff refresh state is `a7a0b6a2` (`Audit ns to agentic-kit migration before GUI (#1330)`). Continue next only after this post-PR1330 refresh is committed and merged; the next substantive slice must be created from fresh main.
+
+## NS-to-agentic-kit migration before GUI
+
+Status: required before GUI implementation.
+
+Audit anchor:
+- `docs/reports/ns-migration/ns_to_agentic_kit_audit.md`
+- `docs/reports/ns-migration/ns_to_agentic_kit_inventory.json`
+
+Policy:
+- Do not start GUI implementation until `./ns` usage is either replaced by `agentic-kit` commands or explicitly retained only as a thin compatibility/deprecation shim.
+- Do not remove `./ns` blindly. First map each remaining workflow to a tested `agentic-kit` command or to a documented deprecation decision.
+- Protected/governance/status/handoff/YAML/generated-reference/planning files remain protected; update them minimally and with `protected-diff-plan`.
+
+Migration slices:
+1. Classify all `./ns` references from the audit as one of: active workflow, historical note, compatibility shim, or obsolete planning note.
+2. Build a replacement table: `./ns` workflow -> existing `agentic-kit` command -> missing wrapper/test if any.
+3. Patch docs to prefer `agentic-kit` commands for active workflows; keep legacy notes explicitly labeled as legacy.
+4. Add or extend tests for every newly introduced `agentic-kit` replacement wrapper.
+5. Only after slices 1-4 pass, start GUI Phase 1 as a display/gating layer over bounded `agentic-kit` wrappers.
+
+Acceptance gates:
+- `agentic-kit transfer command-reference-check` PASS.
+- `agentic-kit transfer repo-status` PASS.
+- `agentic-kit docs-audit` PASS.
+- `agentic-kit transfer protected-diff-plan` PASS for every migration slice.
+- No active workflow instruction points users primarily to `./ns` when a tested `agentic-kit` command exists.
+
