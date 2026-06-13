@@ -9,7 +9,7 @@ FAIL_MARKERS = (
     "WORK RESULT: FAIL",
     "OVERALL RESULT: FAIL",
     "FAIL: targeted tests failed",
-    "FAIL: ./ns dev failed",
+    "FAIL: local feature gate failed",
     "FAIL: gates failed",
     "FAIL: repair did not pass gates",
     "FAILED tests/",
