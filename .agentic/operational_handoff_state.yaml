@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 23c913f970c28587048fbb45e0334c78095edc94
-  short: 23c913f9
-  subject: Refresh successor package after PR1316 (#1317)
+  full: 879b6f8929769c974b37b2ac2ef3ec077a349212
+  short: 879b6f89
+  subject: Harden admin refresh PR freshness check (#1320)
 last_substantive_work_state:
-  full: 23c913f970c28587048fbb45e0334c78095edc94
-  short: 23c913f9
-  subject: Refresh successor package after PR1316 (#1317)
+  full: 879b6f8929769c974b37b2ac2ef3ec077a349212
+  short: 879b6f89
+  subject: Harden admin refresh PR freshness check (#1320)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
