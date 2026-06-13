@@ -61,14 +61,14 @@ def run_ns_up(repo_root: Path) -> int:
     if run_command(repo_root, ["git", "status", "--short"]).returncode != 0:
         status = 1
     if branch == "main":
-        print("ERROR: ./ns up must run from a PR branch, not main.")
+        print("ERROR: PR completion must run from a PR branch, not main.")
         status = 1
 
     porcelain = run_command(repo_root, ["git", "status", "--porcelain"], allow_failure=True)
     if porcelain.output:
-        print("ERROR: working tree is dirty. Commit or restore changes before ./ns up.")
+        print("ERROR: working tree is dirty. Commit or restore changes before PR completion.")
         print("Hint: run ./ns clean-evidence if the dirtiness is only workflow evidence under tmp/agent-evidence or docs/reports/CURRENT_WORKFLOW_OUTPUT.md.")
-        print("Then rerun ./ns up after reviewing git status --short.")
+        print("Then rerun the bounded PR-completion command after reviewing git status --short.")
         status = 1
 
     print("\n### NO-OP BRANCH CHECK ###")
@@ -117,7 +117,7 @@ def run_ns_up(repo_root: Path) -> int:
             print("PR is already merged; treating this as an idempotent completion state.")
             merged = True
         elif mergeable_value != "MERGEABLE":
-            print("ERROR: PR is not mergeable. Resolve conflicts or wait for GitHub to compute mergeability before ./ns up.")
+            print("ERROR: PR is not mergeable. Resolve conflicts or wait for GitHub to compute mergeability before PR completion.")
             status = 1
 
     if status == 0:

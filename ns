@@ -398,41 +398,6 @@ if [ "${1:-}" = "slice-runner" ]; then
   exit $?
 fi
 
-if [ "${1:-}" = "dev" ]; then
-  shift
-  PYTHONPATH=src "$PY" -m agentic_project_kit.local_feature_gate --include-pr-hygiene "$@"
-  exit $?
-fi
- if [ "${1:-}" = "go" ]; then
-  shift
-  BRANCH="$(git branch --show-current 2>/dev/null)"
-  DIRTY="$(git status --short 2>/dev/null)"
-  if [ "$BRANCH" != "main" ] && [ -n "$DIRTY" ] && grep -q "git_pull_ff_only" .agentic/current_work.yaml 2>/dev/null; then
-    printf '
-### NS GO GUARD ###
-'
-    printf 'Refusing governed workflow go on a dirty feature branch because current_work includes git_pull_ff_only.
-'
-    printf 'Use ./ns dev for local feature gates, or clean the branch before ./ns go.
-'
-    printf '
-### RESULT: FAIL ###
-'
-    exit 2
-  fi
-  if [ -x ".venv/bin/agentic-kit" ]; then
-    .venv/bin/agentic-kit workflow go "$@"
-    exit $?
-  fi
-  agentic-kit workflow go "$@"
-  exit $?
-fi
-if [ "${1:-}" = "up" ]; then
-  shift
-  PYTHONPATH=src "$PY" -m agentic_project_kit.ns_up_pr_completion "$@"
-  exit $?
-fi
-
 if [ "${1:-}" = "upload" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
@@ -470,4 +435,3 @@ if [ -x ".venv/bin/python" ]; then
 fi
 "$PY" tools/next-step.py "$@"
 
-# no-copy workflow shortcuts: ./ns dev, ./ns go, ./ns up

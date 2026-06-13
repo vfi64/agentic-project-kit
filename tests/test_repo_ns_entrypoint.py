@@ -102,40 +102,6 @@ def test_ns_menu_exposes_cockpit_json_inventory_entry() -> None:
     assert "./ns actions --json" in menu
     assert "run_ns actions --json" in menu
     assert "14)" in menu
-
-def test_repo_ns_entrypoint_exposes_no_copy_dev_gate() -> None:
-    text = Path("ns").read_text(encoding="utf-8")
-    assert "./ns dev" in text or "${1:-}" in text
-    assert "agentic_project_kit.local_feature_gate" in text
-    assert "agentic_project_kit.local_feature_gate --include-pr-hygiene" in text
-    assert "tools/next-step.py" in text
-    dev = "if [ \"${1:-}\" = \"dev\" ]; then"
-    go = " if [ \"${1:-}\" = \"go\" ]; then"
-    assert dev in text
-    assert go in text
-    block = text[text.index(dev):text.index(go)]
-    assert "pytest -q" not in block
-    assert "ruff check ." not in block
-    assert "git pull" not in block
-    assert "git push" not in block
-    assert "### RESULT: PASS ###" not in block
-    assert "### RESULT: FAIL ###" not in block
-
-
-def test_repo_ns_go_guard_protects_dirty_feature_branch() -> None:
-    text = Path("ns").read_text(encoding="utf-8")
-    assert "NS GO GUARD" in text
-    assert "git_pull_ff_only" in text
-    assert "./ns dev" in text
-    assert "dirty feature branch" in text
-    assert "### RESULT: FAIL ###" in text
-
-
-def test_repo_ns_up_invokes_pr_completion_tool() -> None:
-    text = Path("ns").read_text(encoding="utf-8")
-    assert "agentic_project_kit.ns_up_pr_completion" in text
-    assert "tools/ns_up_pr_completion.sh" not in text
-
 def test_ns_up_pr_completion_tool_has_pass_fail_markers() -> None:
     text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
     assert "### RESULT: PASS ###" in text
@@ -329,11 +295,12 @@ def test_repo_ns_release_prep_routes_to_python_core() -> None:
     assert not Path("tools/ns_release_prep.sh").exists()
     assert "prepare_release" in core_text
 
-def test_repo_ns_up_routes_to_python_core() -> None:
+def test_repo_ns_entrypoint_removes_dev_go_up_shortcuts() -> None:
     text = Path("ns").read_text(encoding="utf-8")
-    core_text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
-    assert "up" in text
-    assert "agentic_project_kit.ns_up_pr_completion" in text
-    assert "tools/ns_up_pr_completion.sh" not in text
-    assert not Path("tools/ns_up_pr_completion.sh").exists()
-    assert "run_ns_up" in core_text
+
+    assert 'if [ "${1:-}" = "dev" ]; then' not in text
+    assert 'if [ "${1:-}" = "go" ]; then' not in text
+    assert 'if [ "${1:-}" = "up" ]; then' not in text
+    assert "./ns dev" not in text
+    assert "./ns go" not in text
+    assert "./ns up" not in text
