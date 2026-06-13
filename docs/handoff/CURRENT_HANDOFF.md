@@ -419,3 +419,6 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 ## Operational documentation refresh state after PR #1336
 
 Current administrative handoff refresh state is `375d5df2` (`Replace active ns command docs before GUI (#1336)`). Continue next only after this post-PR1336 refresh is committed and merged; the next substantive slice must be created from fresh main.
+## Operational documentation refresh state after PR #1338
+
+Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
