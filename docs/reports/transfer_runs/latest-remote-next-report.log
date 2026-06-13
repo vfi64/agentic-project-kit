@@ -56,8 +56,79 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
     "next_action": "Inspect the published remote-next diagnostic report before retrying.",
     "post_report_actions": {
       "attempted": true,
+      "branch": "main",
+      "commit_head": "ee627031",
+      "committed": true,
+      "final_head": "ee627031",
+      "final_status_short": "",
+      "paths": [
+        "docs/reports/transfer_runs/latest-remote-next-report.json",
+        "docs/reports/transfer_runs/latest-remote-next-report.log",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+      ],
+      "pushed": true,
+      "rule_ack_after_report_commit": {
+        "blocking_reasons": [],
+        "confirmed": true,
+        "head": "ee627031",
+        "path": ".agentic/rule_ack/current.json",
+        "present": true
+      },
+      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "status": "pending_until_report_files_are_written"
+      "steps": [
+        {
+          "argv": [
+            "git",
+            "add",
+            "-f",
+            "docs/reports/transfer_runs/latest-remote-next-report.json",
+            "docs/reports/transfer_runs/latest-remote-next-report.log",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+          ],
+          "name": "git_add_force_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        },
+        {
+          "argv": [
+            "git",
+            "commit",
+            "-m",
+            "Publish remote-next transfer report"
+          ],
+          "name": "git_commit_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "[main ee627031] Publish remote-next transfer report\n 4 files changed, 66 insertions(+), 634 deletions(-)"
+        },
+        {
+          "argv": [
+            "./.venv/bin/agentic-kit",
+            "rules",
+            "acknowledge"
+          ],
+          "name": "rules_acknowledge_after_report_commit",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=4d0a7990c24bc174076f3d40f31058362893c47905351cbbc15ff68068b96436\nrepo_head=ee627031\ndeclared_next_allowed_action=run_next_command"
+        },
+        {
+          "argv": [
+            "git",
+            "push",
+            "origin",
+            "main"
+          ],
+          "name": "git_push_report_commit",
+          "returncode": 0,
+          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   2576b76a..ee627031  main -> main",
+          "stdout": ""
+        }
+      ]
     },
     "preflight": {
       "current_branch": "main",
@@ -357,11 +428,11 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-06-13T18:56:53.773618+00:00",
+    "generated_at_utc": "2026-06-13T18:56:56.445573+00:00",
     "generated_from_current_repo": true,
     "git_state": {
       "branch": "main",
-      "head": "2576b76a50ed04af539da5f70f9254d705033c99",
+      "head": "ee627031fa28388bfce00621aa8d2ee3c75a3536",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -937,10 +1008,10 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
     "repo_state": {
       "branch": "main",
       "dirty_status": "",
-      "head": "2576b76a50ed04af539da5f70f9254d705033c99",
+      "head": "ee627031fa28388bfce00621aa8d2ee3c75a3536",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "2576b76a50ed04af539da5f70f9254d705033c99"
+      "upstream_head": "ee627031fa28388bfce00621aa8d2ee3c75a3536"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -1027,8 +1098,79 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
     "next_action": "Inspect the published remote-next diagnostic report before retrying.",
     "post_report_actions": {
       "attempted": true,
+      "branch": "main",
+      "commit_head": "ee627031",
+      "committed": true,
+      "final_head": "ee627031",
+      "final_status_short": "",
+      "paths": [
+        "docs/reports/transfer_runs/latest-remote-next-report.json",
+        "docs/reports/transfer_runs/latest-remote-next-report.log",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+      ],
+      "pushed": true,
+      "rule_ack_after_report_commit": {
+        "blocking_reasons": [],
+        "confirmed": true,
+        "head": "ee627031",
+        "path": ".agentic/rule_ack/current.json",
+        "present": true
+      },
+      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "status": "pending_until_report_files_are_written"
+      "steps": [
+        {
+          "argv": [
+            "git",
+            "add",
+            "-f",
+            "docs/reports/transfer_runs/latest-remote-next-report.json",
+            "docs/reports/transfer_runs/latest-remote-next-report.log",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+          ],
+          "name": "git_add_force_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        },
+        {
+          "argv": [
+            "git",
+            "commit",
+            "-m",
+            "Publish remote-next transfer report"
+          ],
+          "name": "git_commit_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "[main ee627031] Publish remote-next transfer report\n 4 files changed, 66 insertions(+), 634 deletions(-)"
+        },
+        {
+          "argv": [
+            "./.venv/bin/agentic-kit",
+            "rules",
+            "acknowledge"
+          ],
+          "name": "rules_acknowledge_after_report_commit",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=4d0a7990c24bc174076f3d40f31058362893c47905351cbbc15ff68068b96436\nrepo_head=ee627031\ndeclared_next_allowed_action=run_next_command"
+        },
+        {
+          "argv": [
+            "git",
+            "push",
+            "origin",
+            "main"
+          ],
+          "name": "git_push_report_commit",
+          "returncode": 0,
+          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   2576b76a..ee627031  main -> main",
+          "stdout": ""
+        }
+      ]
     },
     "preflight": {
       "current_branch": "main",
@@ -1554,10 +1696,10 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
     "repo_state": {
       "branch": "main",
       "dirty_status": "",
-      "head": "2576b76a50ed04af539da5f70f9254d705033c99",
+      "head": "ee627031fa28388bfce00621aa8d2ee3c75a3536",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "2576b76a50ed04af539da5f70f9254d705033c99"
+      "upstream_head": "ee627031fa28388bfce00621aa8d2ee3c75a3536"
     },
     "schema_version": 1,
     "terminal_block_rules": {
