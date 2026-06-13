@@ -1,13 +1,13 @@
 {
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1316-successor-package-refresh",
+    "branch": "docs/post-pr1321-successor-package-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "99079842aca40cd5b53461caddb953b37ff1ae64",
+    "head": "1f35d7f39f1ca0ce280c7578db3620e173ea7570",
     "head_matches_origin_main": true,
     "local_path": "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
-    "origin_main": "99079842aca40cd5b53461caddb953b37ff1ae64",
+    "origin_main": "1f35d7f39f1ca0ce280c7578db3620e173ea7570",
     "worktree_clean": true
   },
   "rules": [
