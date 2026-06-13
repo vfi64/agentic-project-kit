@@ -57,3 +57,12 @@ The `./ns dev`, `./ns go`, and `./ns up` concepts should remain representable as
 - `agentic-kit doctor`
 - `agentic-kit pr-hygiene`
 - local smoke test for `./ns dev`
+
+## Current migration status
+
+This document is retained as legacy workflow context. Active workflow instructions should now prefer bounded `agentic-kit` commands over direct `./ns` use.
+
+Before GUI implementation:
+- classify every remaining `./ns` reference as active, legacy, compatibility, or obsolete;
+- replace active workflow instructions with tested `agentic-kit` commands;
+- keep any remaining `./ns` mention explicitly labeled as legacy or compatibility-only.
