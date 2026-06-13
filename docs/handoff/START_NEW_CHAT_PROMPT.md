@@ -145,3 +145,6 @@ Current administrative handoff refresh state is `a7a0b6a2` (`Audit ns to agentic
 ## Operational documentation refresh state after PR #1332
 
 Current administrative handoff refresh state is `d3685e2a` (`Plan ns to agentic-kit migration before GUI (#1332)`). Continue next only after this post-PR1332 refresh is committed and merged; the next substantive slice must be created from fresh main.
+## Operational documentation refresh state after PR #1334
+
+Current administrative handoff refresh state is `c6ab40da` (`Classify ns migration docs before GUI (#1334)`). Continue next only after this post-PR1334 refresh is committed and merged; the next substantive slice must be created from fresh main.
