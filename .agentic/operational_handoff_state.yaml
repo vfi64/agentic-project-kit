@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 375d5df269bfa5476134ce960892c0d6715dad2f
-  short: 375d5df2
-  subject: Replace active ns command docs before GUI (#1336)
+  full: 979825da88ed7503dfa361c152cd5c26a3bc2191
+  short: 979825da
+  subject: Remove ns dev go up shortcuts (#1338)
 last_substantive_work_state:
-  full: 375d5df269bfa5476134ce960892c0d6715dad2f
-  short: 375d5df2
-  subject: Replace active ns command docs before GUI (#1336)
+  full: 979825da88ed7503dfa361c152cd5c26a3bc2191
+  short: 979825da
+  subject: Remove ns dev go up shortcuts (#1338)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
