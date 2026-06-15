@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 8f629d8eb51484b671e11c6cf4e997b7088875e6
-  short: 8f629d8e
-  subject: Add idempotent PR merge recovery (#1360)
+  full: e7a9fb5c97eb962e23b831613c267e543a710610
+  short: e7a9fb5c
+  subject: Add workflow-next transfer decision command (#1362)
 last_substantive_work_state:
-  full: 8f629d8eb51484b671e11c6cf4e997b7088875e6
-  short: 8f629d8e
-  subject: Add idempotent PR merge recovery (#1360)
+  full: e7a9fb5c97eb962e23b831613c267e543a710610
+  short: e7a9fb5c
+  subject: Add workflow-next transfer decision command (#1362)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
