@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 from agentic_project_kit.rule_ack import (
     acknowledgement_from_json_data,
@@ -367,6 +368,120 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
             "decision": acknowledgement_decision.as_json_data(),
         },
     )
+
+
+def _archive_transfer_file(project_root: Path, path: Path, archive_root: Path) -> str:
+    relative = path.relative_to(project_root)
+    target = archive_root / relative
+    target.parent.mkdir(parents=True, exist_ok=True)
+    suffix = 1
+    while target.exists():
+        target = archive_root / f"{relative.as_posix()}.{suffix}"
+        suffix += 1
+    path.replace(target)
+    return str(target.relative_to(project_root))
+
+
+def _ensure_current_command_id(path: Path, *, command_id: str) -> bool:
+    if not path.exists():
+        return False
+    metadata = _read_key_value_metadata(path)
+    if metadata.get("command_id") or metadata.get("id"):
+        return False
+    original = path.read_text(encoding="utf-8")
+    path.write_text(f"command_id: {command_id}\n" + original, encoding="utf-8")
+    return True
+
+
+def normalize_transfer_file_lifecycle(
+    project_root: Path = Path("."),
+    *,
+    dry_run: bool = False,
+) -> dict[str, Any]:
+    root = project_root.resolve()
+    before = build_transfer_state(root).transfer_files
+    transfer_root = root / ".agentic" / "transfer"
+    inbox_dir = transfer_root / "inbox"
+    outbox_dir = transfer_root / "outbox"
+    archive_root = transfer_root / "archive" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+
+    current_command = inbox_dir / "current.yaml"
+    last_result = outbox_dir / "last_result.txt"
+
+    operations: list[dict[str, Any]] = []
+    result_status = "PASS"
+    reasons: list[str] = []
+
+    if current_command.exists():
+        metadata = _read_key_value_metadata(current_command)
+        if not metadata.get("command_id") and not metadata.get("id"):
+            command_id = "transfer-" + uuid4().hex
+            operations.append(
+                {
+                    "operation": "ensure_command_id",
+                    "path": ".agentic/transfer/inbox/current.yaml",
+                    "command_id": command_id,
+                    "applied": not dry_run,
+                }
+            )
+            if not dry_run:
+                _ensure_current_command_id(current_command, command_id=command_id)
+
+    for file_path in before["inbox"]["unexpected_files"]:
+        path = root / file_path
+        operations.append(
+            {
+                "operation": "archive_unexpected_inbox_file",
+                "path": file_path,
+                "applied": not dry_run,
+            }
+        )
+        if not dry_run and path.exists():
+            operations[-1]["archive_path"] = _archive_transfer_file(root, path, archive_root)
+
+    for file_path in before["outbox"]["unexpected_files"]:
+        path = root / file_path
+        operations.append(
+            {
+                "operation": "archive_unexpected_outbox_file",
+                "path": file_path,
+                "applied": not dry_run,
+            }
+        )
+        if not dry_run and path.exists():
+            operations[-1]["archive_path"] = _archive_transfer_file(root, path, archive_root)
+
+    if before["state"] == "STALE_RESULT" and last_result.exists():
+        operations.append(
+            {
+                "operation": "archive_stale_last_result",
+                "path": ".agentic/transfer/outbox/last_result.txt",
+                "applied": not dry_run,
+            }
+        )
+        if not dry_run:
+            operations[-1]["archive_path"] = _archive_transfer_file(root, last_result, archive_root)
+
+    if before["state"] in {"REMOTE_DRIFT", "REMOTE_UNREACHABLE"}:
+        reasons.append("transfer_remote_state_not_auto_recovered")
+
+    after = before if dry_run else build_transfer_state(root).transfer_files
+    if after["state"] == "CONFLICT":
+        result_status = "BLOCKED"
+        reasons.append("transfer_file_conflict_remains_after_normalization")
+
+    return {
+        "schema_version": 1,
+        "kind": "transfer_file_lifecycle_normalization",
+        "result_status": result_status,
+        "returncode": 0 if result_status == "PASS" else 2,
+        "dry_run": dry_run,
+        "before": before,
+        "after": after,
+        "operations": operations,
+        "reasons": reasons,
+        "next_action": "Run transfer state and inspect transfer_files.",
+    }
 
 
 def transfer_state_json(project_root: Path = Path(".")) -> str:

@@ -10,6 +10,7 @@ from agentic_project_kit.cli import app
 from agentic_project_kit.rule_ack import RuleAcknowledgement
 from agentic_project_kit.rule_snapshot import build_derived_rule_snapshot
 from agentic_project_kit.transfer_state import PRIMARY_BLOCKED, PRIMARY_WAIT, build_transfer_state
+from agentic_project_kit.transfer_state import normalize_transfer_file_lifecycle
 from tests.test_rule_source_validator import write_minimal_sources
 
 
@@ -399,3 +400,109 @@ def test_transfer_state_reports_remote_unreachable_when_origin_main_missing(tmp_
     assert snapshot.transfer_files["next"] == "retry_remote_check_later"
     assert "expected_origin_main_unavailable" in snapshot.reasons
     assert snapshot.capabilities["run_next_command"] is False
+
+
+def test_normalize_transfer_files_adds_missing_command_id(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    inbox = tmp_path / ".agentic/transfer/inbox/current.yaml"
+    inbox.parent.mkdir(parents=True)
+    inbox.write_text("command_kind: test\n", encoding="utf-8")
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Add command without id"],
+        cwd=tmp_path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    _write_rule_ack(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = normalize_transfer_file_lifecycle(tmp_path)
+
+    assert result["result_status"] == "PASS"
+    assert result["operations"][0]["operation"] == "ensure_command_id"
+    assert "command_id: transfer-" in inbox.read_text(encoding="utf-8")
+    snapshot = build_transfer_state(tmp_path)
+    assert snapshot.transfer_files["state"] == "COMMAND_READY"
+    assert snapshot.transfer_files["inbox"]["current_command"]["command_id"].startswith("transfer-")
+
+
+def test_normalize_transfer_files_archives_stale_last_result(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    outbox = tmp_path / ".agentic/transfer/outbox/last_result.txt"
+    outbox.parent.mkdir(parents=True)
+    outbox.write_text("command_id: stale\nresult_status: PASS\n", encoding="utf-8")
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Add stale result"],
+        cwd=tmp_path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    _write_rule_ack(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = normalize_transfer_file_lifecycle(tmp_path)
+
+    assert result["result_status"] == "PASS"
+    assert not outbox.exists()
+    assert any(op["operation"] == "archive_stale_last_result" for op in result["operations"])
+    archived = list((tmp_path / ".agentic/transfer/archive").rglob("last_result.txt"))
+    assert len(archived) == 1
+    assert build_transfer_state(tmp_path).transfer_files["state"] == "NO_COMMAND"
+
+
+def test_normalize_transfer_files_archives_duplicate_active_files(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    inbox = tmp_path / ".agentic/transfer/inbox/current.yaml"
+    duplicate = tmp_path / ".agentic/transfer/inbox/old-current.yaml"
+    inbox.parent.mkdir(parents=True)
+    inbox.write_text("command_id: cmd-1\n", encoding="utf-8")
+    duplicate.write_text("command_id: old\n", encoding="utf-8")
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Add duplicate active file"],
+        cwd=tmp_path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    _write_rule_ack(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    before = build_transfer_state(tmp_path)
+    result = normalize_transfer_file_lifecycle(tmp_path)
+    after = build_transfer_state(tmp_path)
+
+    assert before.transfer_files["state"] == "CONFLICT"
+    assert result["result_status"] == "PASS"
+    assert after.transfer_files["state"] == "COMMAND_READY"
+    assert not duplicate.exists()
+    assert list((tmp_path / ".agentic/transfer/archive").rglob("old-current.yaml"))
+
+
+def test_transfer_normalize_files_cli_emits_json(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    inbox = tmp_path / ".agentic/transfer/inbox/current.yaml"
+    inbox.parent.mkdir(parents=True)
+    inbox.write_text("command_kind: cli-test\n", encoding="utf-8")
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Add cli command without id"],
+        cwd=tmp_path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    _write_rule_ack(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(app, ["transfer", "normalize-files"])
+
+    assert result.exit_code == 0
+    data = json.loads(result.stdout)
+    assert data["kind"] == "transfer_file_lifecycle_normalization"
+    assert data["result_status"] == "PASS"
+    assert any(op["operation"] == "ensure_command_id" for op in data["operations"])
