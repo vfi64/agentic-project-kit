@@ -1,5 +1,22 @@
 # Workflow Reduction Focus
 
+
+## First priority: Remote transfer state-machine hardening before ns replacement
+
+Before the remaining `ns` replacement work continues, complete the transfer state-machine MVP from `docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md`.
+
+Required before further `ns` replacement slices:
+
+1. Validate exactly-one active transfer command.
+2. Validate inbox/outbox command-id correlation.
+3. Detect stale `last_result` instead of accepting it as current state.
+4. Detect duplicate or obsolete active transfer files.
+5. Block mutable execution on local-vs-remote head drift.
+6. Classify remote outages as `REMOTE_UNREACHABLE`, not success.
+7. Keep all outputs machine-readable with explicit `STATE` and `NEXT`.
+
+This is a workflow safety gate, not a broad rewrite. The goal is to make repo-backed communication deterministic before additional command-surface migration.
+
 ## Post-PR1245 Administrative Handoff Refresh State
 
 Current main/admin HEAD: `e97af592` (`Refresh handoff state after PR1244 (#1245)`).
