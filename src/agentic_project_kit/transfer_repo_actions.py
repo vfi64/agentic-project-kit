@@ -424,6 +424,49 @@ def _verify_current_branch(action: str, expected_branch: str, *, command: list[s
     return None
 
 
+def _remote_mutation_preflight(
+    *,
+    action: str,
+    mutation: str,
+    required_branch: str = "",
+) -> RepoActionResult | None:
+    command = ["remote-preflight", mutation]
+    if required_branch:
+        branch_command = ["git", "branch", "--show-current"]
+        branch_completed = _run(branch_command)
+        if branch_completed.returncode != 0:
+            return _result(action, branch_command, branch_completed, "STATE=BLOCKED; NEXT=diagnose_branch_state")
+
+        actual_branch = branch_completed.stdout.strip()
+        if actual_branch != required_branch:
+            completed = subprocess.CompletedProcess(
+                command,
+                2,
+                branch_completed.stdout,
+                (
+                    "Remote mutation preflight blocked mutation due to branch drift: "
+                    f"mutation={mutation}; expected_branch={required_branch}; actual_branch={actual_branch}\n"
+                ),
+            )
+            return _result(action, command, completed, "STATE=REMOTE_DRIFT; NEXT=sync_or_regenerate_command")
+
+    remote_command = ["git", "ls-remote", "--exit-code", "origin", "HEAD"]
+    remote_completed = _run(remote_command)
+    if remote_completed.returncode != 0:
+        completed = subprocess.CompletedProcess(
+            command,
+            2,
+            remote_completed.stdout,
+            (
+                "Remote mutation preflight could not verify origin reachability: "
+                f"mutation={mutation}\n"
+                + remote_completed.stderr
+            ),
+        )
+        return _result(action, command, completed, "STATE=REMOTE_UNREACHABLE; NEXT=retry_remote_check_later")
+    return None
+
+
 def branch_create(branch: str, *, start_point: str = "main", push: bool = False) -> RepoActionResult:
     monitor = guard_branch(
         command_kind="branch-create",
@@ -450,6 +493,12 @@ def branch_create(branch: str, *, start_point: str = "main", push: bool = False)
         return drift
 
     if push:
+        preflight = _remote_mutation_preflight(
+            action="branch-create",
+            mutation="push-new-branch",
+        )
+        if preflight is not None:
+            return preflight
         push_command = ["git", "push", "-u", "origin", branch]
         pushed = _run(push_command)
         if pushed.returncode != 0:
@@ -670,6 +719,13 @@ def push_current(*, required_branch: str = "") -> RepoActionResult:
             "Inspect transfer operation monitor branch mismatch before pushing.",
         )
 
+    preflight = _remote_mutation_preflight(
+        action="push-current",
+        mutation="push-current",
+    )
+    if preflight is not None:
+        return preflight
+
     command = ["git", "push", "-u", "origin", branch]
     completed = _run(command)
     if completed.returncode != 0:
@@ -705,6 +761,14 @@ def pr_create(*, base: str, head: str, title: str, body: str) -> RepoActionResul
             f"Transfer operation monitor blocked pr-create: {monitor.reason}; actual_branch={monitor.actual_branch}; required_branch={monitor.required_branch}\n",
         )
         return _result("pr-create", list(completed.args), completed, "Inspect transfer operation monitor block before creating a PR.")
+
+    preflight = _remote_mutation_preflight(
+        action="pr-create",
+        mutation="pr-create",
+        required_branch=head,
+    )
+    if preflight is not None:
+        return preflight
 
     command = [
         "gh",
@@ -778,6 +842,12 @@ def pull_current() -> RepoActionResult:
 
 def branch_delete(branch: str, *, remote: bool = False, force: bool = False) -> RepoActionResult:
     if remote:
+        preflight = _remote_mutation_preflight(
+            action="branch-delete",
+            mutation="delete-remote-branch",
+        )
+        if preflight is not None:
+            return preflight
         command = ["git", "push", "origin", "--delete", branch]
         completed = _run(command)
         return _result("branch-delete", command, completed, "Inspect local and remote branch state.")
@@ -859,6 +929,13 @@ def pr_merge_safe(
         expected_head_sha, failure = _resolve_pr_head_sha(pr_number, action="pr-merge-safe")
         if failure is not None:
             return failure
+    preflight = _remote_mutation_preflight(
+        action="pr-merge-safe",
+        mutation="pr-merge-safe",
+    )
+    if preflight is not None:
+        return preflight
+
     command = [
         _agentic_kit_command(),
         "pr",
@@ -1171,6 +1248,13 @@ def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionR
             "Refusing admin refresh with dirty worktree. Commit, clean, or inspect first.\n",
         )
         return _result("admin-refresh-pr", completed.args, completed, "Start admin refresh from a clean main worktree.")
+
+    preflight = _remote_mutation_preflight(
+        action="admin-refresh-pr",
+        mutation="admin-refresh-pr",
+    )
+    if preflight is not None:
+        return preflight
 
     refresh_branch = f"docs/post-pr{after_pr}-handoff-refresh"
     transcript: list[str] = []
