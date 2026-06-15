@@ -59,6 +59,7 @@ from agentic_project_kit.transfer_uplink import (
     run_and_log_transfer_sequence,
     write_transfer_report_from_repo_result,
 )
+from agentic_project_kit.transfer_workflow_next import run_workflow_next
 
 transfer_app = typer.Typer(help="Inspect and apply repo-backed text transfer orders.")
 
@@ -381,6 +382,32 @@ def normalize_transfer_files_command(
         )
     if int(result["returncode"]) != 0:
         raise typer.Exit(code=int(result["returncode"]))
+
+
+@transfer_app.command("workflow-next")
+def workflow_next_command(
+    json_output: bool = typer.Option(False, "--json/--no-json", help="Print machine-readable JSON."),
+) -> None:
+    """Read repo and transfer state and print the next safe wrapper command without mutating state."""
+    result = run_workflow_next(Path("."))
+    if json_output:
+        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo("*" * 35 + " START SUMMARY " + "*" * 35)
+        typer.echo("TRANSFER_WORKFLOW_NEXT")
+        typer.echo("")
+        typer.echo(_summary_line("STATE", result.state))
+        typer.echo(_summary_line("RETURNCODE", result.returncode))
+        if result.reasons:
+            typer.echo(_summary_line("REASONS", ",".join(result.reasons)))
+        if result.command:
+            typer.echo(_summary_line("COMMAND", " ".join(result.command)))
+        typer.echo("")
+        typer.echo(_summary_line("NEXT", result.next_action))
+        typer.echo(_summary_line("CHAT_REPLY", ("g" if result.returncode == 0 else "f")))
+        typer.echo("*" * 36 + " END SUMMARY " + "*" * 36)
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
 
 
 @transfer_app.command("repo-status")
