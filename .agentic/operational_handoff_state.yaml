@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: eed934fe54c9d926074a99055ed997c2a91332be
-  short: eed934fe
-  subject: Publish final remote-next report projection
+  full: 0fd37126e99cf325ebc28d5c9cad4e59bc1e3513
+  short: 0fd37126
+  subject: Refresh successor package before workflow optimization (#1342)
 last_substantive_work_state:
-  full: eed934fe54c9d926074a99055ed997c2a91332be
-  short: eed934fe
-  subject: Publish final remote-next report projection
+  full: 0fd37126e99cf325ebc28d5c9cad4e59bc1e3513
+  short: 0fd37126
+  subject: Refresh successor package before workflow optimization (#1342)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
