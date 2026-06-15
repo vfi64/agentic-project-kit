@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a4983da1b477d6130e1043d204c2644993ad9c93
-  short: a4983da1
-  subject: Block transfer execution on remote drift state (#1352)
+  full: dc4eb1920ea34ea6c8b2ec4b28a271af976d2929
+  short: dc4eb192
+  subject: Normalize active transfer file lifecycle (#1354)
 last_substantive_work_state:
-  full: a4983da1b477d6130e1043d204c2644993ad9c93
-  short: a4983da1
-  subject: Block transfer execution on remote drift state (#1352)
+  full: dc4eb1920ea34ea6c8b2ec4b28a271af976d2929
+  short: dc4eb192
+  subject: Normalize active transfer file lifecycle (#1354)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
