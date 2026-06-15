@@ -881,11 +881,15 @@ def pr_merge_safe(
     return _result("pr-merge-safe", command, completed, "Sync main and run post-merge handoff refresh status.")
 
 
+def _post_merge_state_lines(*, state: str, next_action: str) -> str:
+    return f"STATE={state}\nNEXT={next_action}\n"
+
+
 def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
     branch_command = ["git", "branch", "--show-current"]
     branch_completed = _run(branch_command)
     if branch_completed.returncode != 0:
-        return _result("post-merge-check", branch_command, branch_completed, "Inspect repository branch state.")
+        return _result("post-merge-check", branch_command, branch_completed, "STATE=BLOCKED; NEXT=diagnose_branch_state")
 
     branch = branch_completed.stdout.strip()
     if branch != main_branch:
@@ -895,22 +899,22 @@ def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
             branch_completed.stdout,
             f"Expected branch {main_branch} before post-merge lifecycle check. Current branch: {branch}\n",
         )
-        return _result("post-merge-check", branch_command, completed, f"Switch to {main_branch} and sync before post-merge check.")
+        return _result("post-merge-check", branch_command, completed, "STATE=BLOCKED; NEXT=switch_to_main_and_sync")
 
     command = [_agentic_kit_command(), "handoff", "post-merge-refresh-status"]
     completed = _run(command)
     if completed.returncode != 0:
-        return _result("post-merge-check", command, completed, "Inspect handoff refresh status failure before product work.")
+        return _result("post-merge-check", command, completed, "STATE=BLOCKED; NEXT=diagnose_handoff_refresh_status")
 
     if "result=NOOP" in completed.stdout:
-        next_action = "Continue without administrative handoff refresh."
+        state = "READY"
+        next_action = "none"
     elif "result=REFRESH_REQUIRED" in completed.stdout:
-        next_action = (
-            "Run transfer admin-refresh-pr --after-pr <merged-pr-number>. "
-            "Do not commit directly on main unless --allow-main is explicit."
-        )
+        state = "NEEDS_HANDOFF_REFRESH"
+        next_action = "refresh_handoff_state"
     else:
-        next_action = "Inspect post-merge handoff refresh status output before continuing."
+        state = "BLOCKED"
+        next_action = "diagnose_post_merge_refresh_status_output"
 
     package_findings = _successor_package_freshness_findings()
     if package_findings:
@@ -920,8 +924,15 @@ def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
             completed.stdout + ("\n" if completed.stdout else "") + "\n".join(package_findings),
             completed.stderr,
         )
+        state = "NEEDS_SUCCESSOR_PACKAGE_REFRESH"
         next_action = "refresh_successor_package"
-    return _result("post-merge-check", command, completed, next_action)
+
+    return _result(
+        "post-merge-check",
+        command,
+        completed,
+        _post_merge_state_lines(state=state, next_action=next_action).strip(),
+    )
 
 
 ADMIN_REFRESH_PATHS = (
