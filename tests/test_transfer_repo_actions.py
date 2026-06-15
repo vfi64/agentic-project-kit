@@ -2623,3 +2623,78 @@ def test_remote_mutation_preflight_blocks_branch_drift_directly(monkeypatch):
     assert "STATE=REMOTE_DRIFT" in result.next_action
     assert calls == [["git", "branch", "--show-current"]]
 
+
+
+def test_pr_create_recovers_existing_pull_request(monkeypatch):
+    calls = []
+
+    class ContinueMonitor:
+        decision = transfer_repo_actions.MonitorDecision.CONTINUE
+        actual_branch = "feature/example"
+        required_branch = "feature/example"
+        reason = "test_continue"
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/example\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if command[:3] == ["gh", "pr", "create"]:
+            return subprocess.CompletedProcess(command, 1, "", "a pull request already exists for feature/example\n")
+        if command[:3] == ["gh", "pr", "list"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                '[{"number": 42, "state": "OPEN", "url": "https://example.invalid/pr/42", "headRefName": "feature/example", "baseRefName": "main", "title": "Existing"}]\n',
+                "",
+            )
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+    monkeypatch.setattr(transfer_repo_actions, "guard_pr_create", lambda **kwargs: ContinueMonitor())
+
+    result = transfer_repo_actions.pr_create(
+        base="main",
+        head="feature/example",
+        title="Example",
+        body="Body",
+    )
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert "STATE=PR_EXISTS" in result.stdout
+    assert "STATE=PR_EXISTS" in result.next_action
+    assert any(command[:3] == ["gh", "pr", "list"] for command in calls)
+
+def test_already_merged_pr_result_returns_idempotent_pass(monkeypatch):
+    calls = []
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command[:4] == ["gh", "pr", "view", "42"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                '{"number": 42, "state": "MERGED", "merged": true, "headRefOid": "%s", "url": "https://example.invalid/pr/42", "title": "Merged"}\n' % ("a" * 40),
+                "",
+            )
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    command = ["agentic-kit", "pr", "merge-if-green", "42"]
+    result = transfer_repo_actions._already_merged_pr_result(
+        42,
+        action="pr-merge-safe",
+        command=command,
+    )
+
+    assert result is not None
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert result.command == command
+    assert "STATE=ALREADY_MERGED" in result.stdout
+    assert "STATE=ALREADY_MERGED" in result.next_action
+    assert calls == [["gh", "pr", "view", "42", "--json", "number,state,merged,headRefOid,url,title"]]
+

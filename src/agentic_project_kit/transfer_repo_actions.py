@@ -66,6 +66,44 @@ def _resolve_pr_head_sha(pr_number: int, *, action: str) -> tuple[str, RepoActio
     return head_sha, None
 
 
+def _pr_state_lookup(pr_number: int, *, action: str) -> tuple[dict, RepoActionResult | None]:
+    command = ["gh", "pr", "view", str(pr_number), "--json", "number,state,merged,headRefOid,url,title"]
+    completed = _run(command)
+    if completed.returncode != 0:
+        return {}, _result(action, command, completed, "STATE=BLOCKED; NEXT=diagnose_pr_state_lookup")
+    try:
+        data = json.loads(completed.stdout or "{}")
+    except json.JSONDecodeError as exc:
+        bad = subprocess.CompletedProcess(
+            command,
+            2,
+            completed.stdout,
+            f"Could not parse PR state lookup JSON: {exc}\n",
+        )
+        return {}, _result(action, command, bad, "STATE=BLOCKED; NEXT=diagnose_pr_state_lookup")
+    if not isinstance(data, dict):
+        bad = subprocess.CompletedProcess(command, 2, completed.stdout, "PR state lookup did not return an object.\n")
+        return {}, _result(action, command, bad, "STATE=BLOCKED; NEXT=diagnose_pr_state_lookup")
+    return data, None
+
+
+def _already_merged_pr_result(pr_number: int, *, action: str, command: list[str]) -> RepoActionResult | None:
+    data, failure = _pr_state_lookup(pr_number, action=action)
+    if failure is not None:
+        return None
+    if data.get("merged") is True or str(data.get("state") or "").upper() == "MERGED":
+        out = (
+            "IDEMPOTENT_PR_RECOVERY\n"
+            f"STATE=ALREADY_MERGED\n"
+            f"PR={pr_number}\n"
+            f"URL={data.get('url', '')}\n"
+            "RESULT=PASS\n"
+        )
+        completed = subprocess.CompletedProcess(command, 0, out, "")
+        return _result(action, command, completed, "STATE=ALREADY_MERGED; NEXT=run_post_merge_check_or_handoff_refresh")
+    return None
+
+
 def _existing_admin_refresh_pr(refresh_branch: str, *, action: str = "admin-refresh-pr") -> RepoActionResult | None:
     command = [
         "gh",
@@ -784,6 +822,60 @@ def pr_create(*, base: str, head: str, title: str, body: str) -> RepoActionResul
         body,
     ]
     completed = _run(command)
+    if completed.returncode == 0:
+        return _result("pr-create", command, completed, "Run agentic-kit transfer pr-status on the created PR.")
+
+    combined = f"{completed.stdout}\n{completed.stderr}".lower()
+    if "already exists" in combined or "pull request already exists" in combined:
+        lookup_command = [
+            "gh",
+            "pr",
+            "list",
+            "--base",
+            base,
+            "--head",
+            head,
+            "--state",
+            "all",
+            "--limit",
+            "5",
+            "--json",
+            "number,state,url,headRefName,baseRefName,title",
+        ]
+        lookup = _run(lookup_command)
+        if lookup.returncode != 0:
+            return _result("pr-create", lookup_command, lookup, "STATE=BLOCKED; NEXT=diagnose_existing_pr_lookup")
+        try:
+            prs = json.loads(lookup.stdout or "[]")
+        except json.JSONDecodeError as exc:
+            bad = subprocess.CompletedProcess(
+                lookup_command,
+                2,
+                lookup.stdout,
+                f"Could not parse existing PR lookup JSON: {exc}\n",
+            )
+            return _result("pr-create", lookup_command, bad, "STATE=BLOCKED; NEXT=diagnose_existing_pr_lookup")
+        if isinstance(prs, list) and len(prs) == 1:
+            pr = prs[0]
+            out = (
+                "IDEMPOTENT_PR_RECOVERY\n"
+                "STATE=PR_EXISTS\n"
+                f"PR={pr.get('number', '')}\n"
+                f"URL={pr.get('url', '')}\n"
+                f"BASE={base}\n"
+                f"HEAD={head}\n"
+                "RESULT=PASS\n"
+            )
+            recovered = subprocess.CompletedProcess(command, 0, out, "")
+            return _result("pr-create", command, recovered, "STATE=PR_EXISTS; NEXT=run_pr_status_or_pr_complete")
+        bad = subprocess.CompletedProcess(
+            lookup_command,
+            2,
+            lookup.stdout,
+            f"Expected exactly one existing PR for {head}->{base}; found {len(prs) if isinstance(prs, list) else 'non-list'}\n",
+        )
+        return _result("pr-create", lookup_command, bad, "STATE=BLOCKED; NEXT=diagnose_existing_pr_lookup")
+
     return _result("pr-create", command, completed, "Run agentic-kit transfer pr-status on the created PR.")
 
 
@@ -952,6 +1044,9 @@ def pr_merge_safe(
         "--merge-state-poll-seconds",
         str(merge_state_poll_seconds),
     ]
+    already_merged = _already_merged_pr_result(pr_number, action="pr-merge-safe", command=command)
+    if already_merged is not None:
+        return already_merged
     if no_verify_main:
         command.append("--no-verify-main")
     completed = _run(command)
