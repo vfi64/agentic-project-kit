@@ -31,6 +31,7 @@ class TransferStateSnapshot:
     next_action: str = ""
     capabilities: dict[str, bool] = field(default_factory=dict)
     last_result: dict[str, Any] | None = None
+    transfer_files: dict[str, Any] = field(default_factory=dict)
     closeout: dict[str, Any] = field(default_factory=dict)
     rule_snapshot: dict[str, Any] = field(default_factory=dict)
     rule_acknowledgement: dict[str, Any] = field(default_factory=dict)
@@ -47,6 +48,7 @@ class TransferStateSnapshot:
             "next_action": self.next_action,
             "capabilities": self.capabilities,
             "last_result": self.last_result,
+            "transfer_files": self.transfer_files,
             "closeout": self.closeout,
             "rule_snapshot": self.rule_snapshot,
             "rule_acknowledgement": self.rule_acknowledgement,
@@ -106,6 +108,126 @@ def _has_pending_transfer_order(project_root: Path) -> bool:
     return (project_root / ".agentic/transfer/inbox/current.yaml").exists()
 
 
+def _read_key_value_metadata(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    text = path.read_text(encoding="utf-8", errors="replace").strip()
+    if not text:
+        return {}
+    if text.startswith("{"):
+        try:
+            data = json.loads(text)
+        except json.JSONDecodeError:
+            return {"parse_error": "invalid_json"}
+        return data if isinstance(data, dict) else {"parse_error": "json_root_not_object"}
+
+    data: dict[str, Any] = {}
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#") or ":" not in stripped:
+            continue
+        key, value = stripped.split(":", 1)
+        key = key.strip()
+        value = value.strip().strip("\'\"")
+        if key:
+            data[key] = value
+    return data
+
+
+def _direct_files(path: Path) -> list[Path]:
+    if not path.exists():
+        return []
+    return sorted(item for item in path.iterdir() if item.is_file())
+
+
+def _build_transfer_file_state(project_root: Path) -> dict[str, Any]:
+    transfer_root = project_root / ".agentic" / "transfer"
+    inbox_dir = transfer_root / "inbox"
+    outbox_dir = transfer_root / "outbox"
+    current_command = inbox_dir / "current.yaml"
+    legacy_command = inbox_dir / "next_command.py.txt"
+    last_result = outbox_dir / "last_result.txt"
+
+    inbox_files = _direct_files(inbox_dir)
+    outbox_files = _direct_files(outbox_dir)
+    current_command_meta = _read_key_value_metadata(current_command)
+    last_result_meta = _read_key_value_metadata(last_result)
+
+    unexpected_inbox_files = [
+        str(path.relative_to(project_root))
+        for path in inbox_files
+        if path.name not in {"current.yaml", "next_command.py.txt"}
+    ]
+    unexpected_outbox_files = [
+        str(path.relative_to(project_root))
+        for path in outbox_files
+        if path.name != "last_result.txt"
+    ]
+
+    command_id = str(current_command_meta.get("command_id") or current_command_meta.get("id") or "")
+    result_command_id = str(last_result_meta.get("command_id") or last_result_meta.get("id") or "")
+    reasons: list[str] = []
+
+    state = "NO_COMMAND"
+    next_action = "queue_transfer_command"
+
+    if unexpected_inbox_files or unexpected_outbox_files:
+        state = "CONFLICT"
+        next_action = "inspect_duplicate_or_obsolete_transfer_files"
+        reasons.append("duplicate_or_obsolete_active_transfer_files")
+    elif current_command.exists() and last_result.exists():
+        if command_id and result_command_id and command_id == result_command_id:
+            state = "RESULT_READY"
+            next_action = "consume_result"
+        else:
+            state = "STALE_RESULT"
+            next_action = "ignore_or_archive_stale_result"
+            reasons.append("outbox_result_does_not_match_active_command")
+    elif current_command.exists():
+        state = "COMMAND_READY"
+        next_action = "run_next_command"
+    elif last_result.exists():
+        state = "STALE_RESULT"
+        next_action = "ignore_or_archive_stale_result"
+        reasons.append("outbox_result_without_active_command")
+    elif legacy_command.exists():
+        state = "NO_COMMAND"
+        next_action = "queue_or_migrate_legacy_transfer_command"
+        reasons.append("legacy_next_command_present")
+
+    return {
+        "schema_version": 1,
+        "state": state,
+        "next": next_action,
+        "reasons": reasons,
+        "inbox": {
+            "path": ".agentic/transfer/inbox",
+            "current_command": {
+                "path": ".agentic/transfer/inbox/current.yaml",
+                "exists": current_command.exists(),
+                "command_id": command_id,
+            },
+            "legacy_next_command": {
+                "path": ".agentic/transfer/inbox/next_command.py.txt",
+                "exists": legacy_command.exists(),
+            },
+            "active_files": [str(path.relative_to(project_root)) for path in inbox_files],
+            "unexpected_files": unexpected_inbox_files,
+        },
+        "outbox": {
+            "path": ".agentic/transfer/outbox",
+            "last_result": {
+                "path": ".agentic/transfer/outbox/last_result.txt",
+                "exists": last_result.exists(),
+                "command_id": result_command_id,
+                "result_status": last_result_meta.get("result_status", ""),
+            },
+            "active_files": [str(path.relative_to(project_root)) for path in outbox_files],
+            "unexpected_files": unexpected_outbox_files,
+        },
+    }
+
+
 def _read_rule_acknowledgement(project_root: Path):
     path = project_root / ".agentic/rule_ack/current.json"
     if not path.exists():
@@ -133,6 +255,10 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
     if rule_snapshot.fail_closed:
         reasons.append("rule_snapshot_fail_closed")
 
+    transfer_files = _build_transfer_file_state(root)
+    if transfer_files["state"] == "CONFLICT":
+        reasons.extend(transfer_files["reasons"])
+
     has_order = _has_pending_transfer_order(root)
     latest_result = _read_latest_result(root)
     acknowledgement = _read_rule_acknowledgement(root)
@@ -150,6 +276,9 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
     if dirty:
         primary_state = PRIMARY_BLOCKED
         next_action = "Review or clean the worktree before running another transfer action."
+    elif transfer_files["state"] == "CONFLICT":
+        primary_state = PRIMARY_BLOCKED
+        next_action = "Inspect duplicate or obsolete active transfer files before running transfer actions."
     elif rule_snapshot.fail_closed:
         primary_state = PRIMARY_BLOCKED
         next_action = "Repair canonical rule sources before running transfer actions."
@@ -163,8 +292,9 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
         primary_state = PRIMARY_WAIT
         next_action = "Queue a transfer order or continue with a read-only diagnostic action."
 
-    transfer_allowed = has_order and not dirty and rules_confirmed
-    clean_for_closeout = latest_result is not None and not dirty and rules_confirmed
+    transfer_file_conflict = transfer_files["state"] == "CONFLICT"
+    transfer_allowed = has_order and not dirty and rules_confirmed and not transfer_file_conflict
+    clean_for_closeout = latest_result is not None and not dirty and rules_confirmed and not transfer_file_conflict
 
     capabilities = {
         "refresh_rules": True,
@@ -185,6 +315,7 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
         next_action=next_action,
         capabilities=capabilities,
         last_result=latest_result,
+        transfer_files=transfer_files,
         closeout={
             "pending_transfer_order": has_order,
             "dirty_worktree": bool(dirty),
