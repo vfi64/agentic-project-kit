@@ -6,6 +6,22 @@ from agentic_project_kit.chat_bootloader import run_chat_switch_closeout
 from agentic_project_kit.chat_bootloader import validate_generated_bootstrap, write_next_chat_bootstrap
 from agentic_project_kit.chat_bootloader import write_boot_report
 
+NEXT_CHAT_BOOTSTRAP_PATH_FOR_RESTORE = Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md")
+
+
+def _read_next_chat_bootstrap_for_restore() -> str | None:
+    if NEXT_CHAT_BOOTSTRAP_PATH_FOR_RESTORE.exists():
+        return NEXT_CHAT_BOOTSTRAP_PATH_FOR_RESTORE.read_text(encoding="utf-8")
+    return None
+
+
+def _restore_next_chat_bootstrap(original: str | None) -> None:
+    if original is None:
+        NEXT_CHAT_BOOTSTRAP_PATH_FOR_RESTORE.unlink(missing_ok=True)
+    else:
+        NEXT_CHAT_BOOTSTRAP_PATH_FOR_RESTORE.write_text(original, encoding="utf-8")
+
+
 
 def write_sources(root: Path) -> None:
     for source in MANDATORY_BOOT_SOURCES:
@@ -34,8 +50,12 @@ def write_sources(root: Path) -> None:
 
 
 def test_bootstrap_file_matches_generator() -> None:
-    write_next_chat_bootstrap()
-    assert validate_generated_bootstrap() == []
+    original = _read_next_chat_bootstrap_for_restore()
+    try:
+        write_next_chat_bootstrap()
+        assert validate_generated_bootstrap() == []
+    finally:
+        _restore_next_chat_bootstrap(original)
 
 
 def test_validate_generated_bootstrap_detects_drift(tmp_path: Path) -> None:
