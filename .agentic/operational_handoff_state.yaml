@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d6fa97202242505230a40567332a5593e46da045
-  short: d6fa9720
-  subject: Plan transfer state hardening before ns replacement (#1348)
+  full: 867715f3d966b480ec7b3f98944fc3b338f2aa43
+  short: 867715f3
+  subject: Add transfer file state MVP (#1350)
 last_substantive_work_state:
-  full: d6fa97202242505230a40567332a5593e46da045
-  short: d6fa9720
-  subject: Plan transfer state hardening before ns replacement (#1348)
+  full: 867715f3d966b480ec7b3f98944fc3b338f2aa43
+  short: 867715f3
+  subject: Add transfer file state MVP (#1350)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
