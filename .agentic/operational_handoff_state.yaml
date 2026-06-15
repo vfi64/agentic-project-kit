@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: ae12e93c994ae612a0d695bfc5a15f0134fb36b4
-  short: ae12e93c
-  subject: Classify post-merge state explicitly (#1346)
+  full: d6fa97202242505230a40567332a5593e46da045
+  short: d6fa9720
+  subject: Plan transfer state hardening before ns replacement (#1348)
 last_substantive_work_state:
-  full: ae12e93c994ae612a0d695bfc5a15f0134fb36b4
-  short: ae12e93c
-  subject: Classify post-merge state explicitly (#1346)
+  full: d6fa97202242505230a40567332a5593e46da045
+  short: d6fa9720
+  subject: Plan transfer state hardening before ns replacement (#1348)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
