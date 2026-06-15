@@ -51,6 +51,16 @@ def _set_origin_main(root: Path) -> str:
     return head
 
 
+def _current_branch(root: Path) -> str:
+    return subprocess.run(
+        ["git", "branch", "--show-current"],
+        cwd=root,
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+    ).stdout.strip()
+
+
 def _write_rule_ack(
     root: Path, *, repo_head: str | None = None, next_action: str = "run_next_command"
 ) -> None:
@@ -301,11 +311,12 @@ def test_transfer_state_blocks_expected_head_drift(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     _write_and_commit_minimal_sources(tmp_path)
     _set_origin_main(tmp_path)
+    branch = _current_branch(tmp_path)
     inbox = tmp_path / ".agentic/transfer/inbox/current.yaml"
     inbox.parent.mkdir(parents=True)
     inbox.write_text(
         "command_id: cmd-1\n"
-        "expected_branch: main\n"
+        f"expected_branch: {branch}\n"
         "expected_head: stale\n",
         encoding="utf-8",
     )
@@ -332,11 +343,12 @@ def test_transfer_state_blocks_expected_origin_main_drift(tmp_path, monkeypatch)
     _init_repo(tmp_path)
     _write_and_commit_minimal_sources(tmp_path)
     observed_origin = _set_origin_main(tmp_path)
+    branch = _current_branch(tmp_path)
     inbox = tmp_path / ".agentic/transfer/inbox/current.yaml"
     inbox.parent.mkdir(parents=True)
     inbox.write_text(
         "command_id: cmd-1\n"
-        "expected_branch: main\n"
+        f"expected_branch: {branch}\n"
         f"expected_origin_main: not-{observed_origin}\n",
         encoding="utf-8",
     )
@@ -361,11 +373,12 @@ def test_transfer_state_blocks_expected_origin_main_drift(tmp_path, monkeypatch)
 def test_transfer_state_reports_remote_unreachable_when_origin_main_missing(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     _write_and_commit_minimal_sources(tmp_path)
+    branch = _current_branch(tmp_path)
     inbox = tmp_path / ".agentic/transfer/inbox/current.yaml"
     inbox.parent.mkdir(parents=True)
     inbox.write_text(
         "command_id: cmd-1\n"
-        "expected_branch: main\n"
+        f"expected_branch: {branch}\n"
         "expected_origin_main: abc1234\n",
         encoding="utf-8",
     )
