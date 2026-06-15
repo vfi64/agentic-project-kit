@@ -86,8 +86,12 @@ def test_remote_next_report_includes_protocol_header(tmp_path, monkeypatch):
     assert report["protocol_header"]["one_command_transfer_protocol"]["id"] == (
         "one-command-transfer-protocol"
     )
-    assert report["remote_next_report"]["result_status"] == "BLOCKED"
-    assert report["last_result"] == report["remote_next_report"]
+    remote_report = report["remote_next_report"]
+    assert remote_report["result_status"] == "BLOCKED"
+    assert remote_report["command_id"] == remote_report["transfer_id"]
+    assert remote_report["state"] == remote_report["primary_state"]
+    assert remote_report["next"] == remote_report["next_action"]
+    assert report["last_result"] == remote_report
     post_actions = report["remote_next_report"]["post_report_actions"]
     assert post_actions["attempted"] is True
     assert post_actions.get("status") != "pending_until_report_files_are_written"
@@ -122,3 +126,16 @@ def test_transfer_help_lists_remote_next():
 
     assert completed.returncode == 0
     assert "remote-next" in completed.stdout
+
+
+def test_remote_next_log_includes_state_next_and_command_id(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "dirty.txt").write_text("dirty\n", encoding="utf-8")
+
+    result = run_remote_next_transfer(tmp_path, "transfer/example")
+    log_text = (tmp_path / result.published_report_path.replace(".json", ".log")).read_text(encoding="utf-8")
+
+    assert "COMMAND_ID=remote-next-blocked" in log_text
+    assert "STATE=BLOCKED" in log_text
+    assert "NEXT=Inspect the published remote-next diagnostic report before retrying." in log_text

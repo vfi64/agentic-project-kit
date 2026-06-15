@@ -87,15 +87,20 @@ class TransferRemoteNextRun:
 
     def as_json_data(self) -> dict[str, object]:
         primary_state = _remote_next_primary_state(self.result_status, self.reasons)
+        command_id = self.local_run.transfer_id
         return {
             "schema_version": 1,
             "artifact_type": "transfer_remote_next_execution_report",
+            "command_id": command_id,
+            "transfer_id": command_id,
             "branch": self.branch,
             "head": self.head,
             "result_status": self.result_status,
             "primary_state": primary_state,
+            "state": primary_state,
             "returncode": self.returncode,
             "next_action": self.next_action,
+            "next": self.next_action,
             "chat_reply": "g",
             "report_path": self.report_path,
             "published_report_path": self.published_report_path,
@@ -560,6 +565,8 @@ def _build_log_text(data: dict[str, object], payload_text: str) -> str:
     return "\n".join(
         (
             "TRANSFER_REMOTE_NEXT_REPORT",
+            f"COMMAND_ID={data.get('command_id') or data.get('transfer_id') or ''}",
+            f"STATE={data.get('primary_state') or data['result_status']}",
             f"RESULT_STATUS={data['result_status']}",
             f"RETURNCODE={data['returncode']}",
             f"BRANCH={data.get('branch') or ''}",
