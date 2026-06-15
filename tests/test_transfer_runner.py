@@ -14,6 +14,7 @@ from agentic_project_kit.transfer_runner import (
     inspect_transfer_order,
     load_transfer_order,
     parse_transfer_order,
+    transfer_result_as_json_data,
 )
 
 
@@ -198,3 +199,28 @@ def test_apply_transfer_order_rejects_hash_mismatch_and_writes_report(tmp_path):
     assert "sha256 mismatch" in result.message
     assert not (tmp_path / "generated/example.txt").exists()
     assert (tmp_path / "docs/reports/command_runs/example-transfer.md").exists()
+
+
+def test_transfer_result_json_exposes_command_id_state_and_next(tmp_path):
+    order_path = _write_order(tmp_path)
+    order = load_transfer_order(order_path)
+
+    result = inspect_transfer_order(order, tmp_path)
+    data = transfer_result_as_json_data(result)
+
+    assert data["command_id"] == "example-transfer"
+    assert data["transfer_id"] == "example-transfer"
+    assert data["state"] == RESULT_PENDING
+    assert data["next"] == data["next_action"]
+
+
+def test_transfer_report_exposes_state_next_and_command_id(tmp_path):
+    order_path = _write_order(tmp_path, "written\n")
+    order = load_transfer_order(order_path)
+
+    apply_transfer_order(order, tmp_path)
+    report = (tmp_path / "docs/reports/command_runs/example-transfer.md").read_text(encoding="utf-8")
+
+    assert "COMMAND_ID=example-transfer" in report
+    assert "STATE=PASS" in report
+    assert "NEXT=review_transfer_state_and_evidence" in report

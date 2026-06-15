@@ -30,12 +30,14 @@ class TransferLocalRun:
         return {
             "schema_version": self.schema_version,
             "transfer_id": self.transfer_id,
+            "command_id": self.transfer_id,
             "inspect": self.inspect,
             "apply": self.apply,
             "state": self.state,
             "result_status": self.result_status,
             "returncode": self.returncode,
             "next_action": self.next_action,
+            "next": self.next_action,
         }
 
 

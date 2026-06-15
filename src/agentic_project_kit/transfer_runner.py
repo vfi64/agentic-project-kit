@@ -120,12 +120,24 @@ def load_transfer_order(path: Path = DEFAULT_INBOX) -> TransferOrder:
     return parse_transfer_order(data)
 
 
+def transfer_result_next_action(result: TransferResult) -> str:
+    if result.result_status == RESULT_PASS:
+        return "review_transfer_state_and_evidence"
+    if result.result_status == RESULT_PENDING:
+        return "apply_transfer_order_or_inspect"
+    return "fix_transfer_errors_before_continuing"
+
+
 def transfer_result_as_json_data(result: TransferResult) -> dict[str, Any]:
     return {
         "schema_version": 1,
         "transfer_id": result.transfer_id,
+        "command_id": result.transfer_id,
+        "state": result.result_status,
         "result_status": result.result_status,
         "returncode": result.returncode,
+        "next_action": transfer_result_next_action(result),
+        "next": transfer_result_next_action(result),
         "safety": result.safety,
         "report_path": result.report_path,
         "message": result.message,
@@ -157,6 +169,9 @@ def _write_report(project_root: Path, result: TransferResult) -> None:
     data = transfer_result_as_json_data(result)
     lines = [
         f"Transfer: {result.transfer_id}",
+        f"COMMAND_ID={result.transfer_id}",
+        f"STATE={result.result_status}",
+        f"NEXT={transfer_result_next_action(result)}",
         f"Safety: {result.safety}",
         "",
         "### JSON RESULT ###",
