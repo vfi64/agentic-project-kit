@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7a2f31669501737018ef22a79b9c91acdeeeaa03
-  short: 7a2f3166
-  subject: Add remote mutation preflight gates (#1356)
+  full: 36da24394a7a23074032c918ad18a37510be9f9a
+  short: 36da2439
+  subject: Converge transfer command id and state outputs (#1358)
 last_substantive_work_state:
-  full: 7a2f31669501737018ef22a79b9c91acdeeeaa03
-  short: 7a2f3166
-  subject: Add remote mutation preflight gates (#1356)
+  full: 36da24394a7a23074032c918ad18a37510be9f9a
+  short: 36da2439
+  subject: Converge transfer command id and state outputs (#1358)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
