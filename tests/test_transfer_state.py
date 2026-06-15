@@ -176,3 +176,106 @@ def test_transfer_state_confirms_matching_rule_acknowledgement_without_order(tmp
     assert snapshot.capabilities["rules_confirmed"] is True
     assert snapshot.capabilities["run_next_command"] is False
     assert snapshot.rule_acknowledgement["decision"]["is_confirmed"] is True
+
+
+def test_transfer_state_reports_matching_transfer_result_ready(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    inbox = tmp_path / ".agentic/transfer/inbox/current.yaml"
+    outbox = tmp_path / ".agentic/transfer/outbox/last_result.txt"
+    inbox.parent.mkdir(parents=True)
+    outbox.parent.mkdir(parents=True)
+    inbox.write_text("command_id: cmd-1\ncommand_kind: test\n", encoding="utf-8")
+    outbox.write_text("command_id: cmd-1\nresult_status: PASS\n", encoding="utf-8")
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Add matching transfer files"],
+        cwd=tmp_path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    _write_rule_ack(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    snapshot = build_transfer_state(tmp_path)
+
+    assert snapshot.transfer_files["state"] == "RESULT_READY"
+    assert snapshot.transfer_files["next"] == "consume_result"
+    assert snapshot.transfer_files["inbox"]["current_command"]["command_id"] == "cmd-1"
+    assert snapshot.transfer_files["outbox"]["last_result"]["command_id"] == "cmd-1"
+
+
+def test_transfer_state_reports_stale_last_result_for_mismatched_command(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    inbox = tmp_path / ".agentic/transfer/inbox/current.yaml"
+    outbox = tmp_path / ".agentic/transfer/outbox/last_result.txt"
+    inbox.parent.mkdir(parents=True)
+    outbox.parent.mkdir(parents=True)
+    inbox.write_text("command_id: cmd-new\n", encoding="utf-8")
+    outbox.write_text("command_id: cmd-old\nresult_status: PASS\n", encoding="utf-8")
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Add mismatched transfer files"],
+        cwd=tmp_path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    _write_rule_ack(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    snapshot = build_transfer_state(tmp_path)
+
+    assert snapshot.transfer_files["state"] == "STALE_RESULT"
+    assert snapshot.transfer_files["next"] == "ignore_or_archive_stale_result"
+    assert "outbox_result_does_not_match_active_command" in snapshot.transfer_files["reasons"]
+    assert snapshot.capabilities["run_next_command"] is True
+
+
+def test_transfer_state_reports_stale_last_result_without_active_command(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    outbox = tmp_path / ".agentic/transfer/outbox/last_result.txt"
+    outbox.parent.mkdir(parents=True)
+    outbox.write_text("command_id: cmd-old\nresult_status: PASS\n", encoding="utf-8")
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Add outbox only"],
+        cwd=tmp_path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    _write_rule_ack(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    snapshot = build_transfer_state(tmp_path)
+
+    assert snapshot.transfer_files["state"] == "STALE_RESULT"
+    assert "outbox_result_without_active_command" in snapshot.transfer_files["reasons"]
+    assert snapshot.primary_state == PRIMARY_WAIT
+
+
+def test_transfer_state_blocks_duplicate_active_transfer_files(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    inbox = tmp_path / ".agentic/transfer/inbox/current.yaml"
+    duplicate = tmp_path / ".agentic/transfer/inbox/old-current.yaml"
+    inbox.parent.mkdir(parents=True)
+    inbox.write_text("command_id: cmd-1\n", encoding="utf-8")
+    duplicate.write_text("command_id: cmd-old\n", encoding="utf-8")
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Add duplicate active transfer files"],
+        cwd=tmp_path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    _write_rule_ack(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    snapshot = build_transfer_state(tmp_path)
+
+    assert snapshot.primary_state == PRIMARY_BLOCKED
+    assert snapshot.transfer_files["state"] == "CONFLICT"
+    assert "duplicate_or_obsolete_active_transfer_files" in snapshot.reasons
+    assert snapshot.capabilities["run_next_command"] is False
