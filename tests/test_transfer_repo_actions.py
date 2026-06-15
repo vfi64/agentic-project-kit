@@ -390,7 +390,8 @@ def test_post_merge_check_noop_on_main(tmp_path, monkeypatch):
     assert result.result_status == "PASS"
     assert result.returncode == 0
     assert result.action == "post-merge-check"
-    assert "Continue without administrative handoff refresh" in result.next_action
+    assert "STATE=READY" in result.next_action
+    assert "NEXT=none" in result.next_action
     assert calls == [
         ["git", "branch", "--show-current"],
         ["agentic-kit", "handoff", "post-merge-refresh-status"],
@@ -431,8 +432,65 @@ def test_post_merge_check_detects_refresh_required(tmp_path, monkeypatch):
 
     assert result.result_status == "PASS"
     assert result.returncode == 0
-    assert "admin-refresh-pr" in result.next_action
-    assert "--allow-main" in result.next_action
+    assert "STATE=NEEDS_HANDOFF_REFRESH" in result.next_action
+    assert "NEXT=refresh_handoff_state" in result.next_action
+
+
+def test_post_merge_check_classifies_stale_successor_package(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    def fake_run(command, cwd=None):
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+            return subprocess.CompletedProcess(
+                command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", ""
+            )
+        return subprocess.CompletedProcess(command, 99, "", "unexpected command\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._agentic_kit_command", lambda: "agentic-kit"
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._successor_package_freshness_findings",
+        lambda: ["validation_report.json generated_head does not match HEAD or refresh-only ancestry"],
+    )
+
+    result = post_merge_check(main_branch="main")
+
+    assert result.result_status == "FAIL"
+    assert result.returncode == 1
+    assert "STATE=NEEDS_SUCCESSOR_PACKAGE_REFRESH" in result.next_action
+    assert "NEXT=refresh_successor_package" in result.next_action
+    assert "validation_report.json generated_head" in result.stdout
+
+
+def test_post_merge_check_classifies_unexpected_refresh_status_output(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    def fake_run(command, cwd=None):
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+            return subprocess.CompletedProcess(
+                command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=UNKNOWN\n", ""
+            )
+        return subprocess.CompletedProcess(command, 99, "", "unexpected command\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._agentic_kit_command", lambda: "agentic-kit"
+    )
+
+    result = post_merge_check(main_branch="main")
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert "STATE=BLOCKED" in result.next_action
+    assert "NEXT=diagnose_post_merge_refresh_status_output" in result.next_action
 
 
 def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
