@@ -368,6 +368,8 @@ def test_post_merge_check_noop_on_main(tmp_path, monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "main\n", "")
         if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
@@ -501,6 +503,8 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "main\n", "")
         if command == ["git", "status", "--short"]:
@@ -628,6 +632,8 @@ def test_admin_refresh_pr_returns_existing_pr_when_refresh_branch_exists(tmp_pat
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "main\n", "")
         if command == ["git", "status", "--short"]:
@@ -679,6 +685,8 @@ def test_admin_refresh_pr_fails_when_existing_branch_has_multiple_open_prs(tmp_p
     def fake_run(command, cwd=None):
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "status", "--short"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "switch", "-c", "docs/post-pr123-handoff-refresh", "main"]:
@@ -744,6 +752,8 @@ def test_pr_wait_ci_auto_resolves_head_sha_when_omitted(monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["gh", "pr", "view", "123", "--json", "headRefOid", "--jq", ".headRefOid"]:
             return subprocess.CompletedProcess(command, 0, "a" * 40 + "\n", "")
         if command[:4] == ["agentic-kit", "pr", "wait-ci", "123"]:
@@ -781,6 +791,8 @@ def test_pr_merge_safe_auto_resolves_head_sha_when_omitted(monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["gh", "pr", "view", "123", "--json", "headRefOid", "--jq", ".headRefOid"]:
             return subprocess.CompletedProcess(command, 0, "b" * 40 + "\n", "")
         if command[:4] == ["agentic-kit", "pr", "merge-if-green", "123"]:
@@ -997,6 +1009,8 @@ def test_branch_create_refuses_branch_drift_after_create(monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "switch", "-c", "feature/drift", "main"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "branch", "--show-current"]:
@@ -1066,6 +1080,8 @@ def test_push_current_refuses_branch_drift_after_push(monkeypatch):
             calls["branch"] += 1
             branch = "feature/demo" if calls["branch"] == 1 else "main"
             return subprocess.CompletedProcess(command, 0, branch + "\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "push", "-u", "origin", "feature/demo"]:
             return subprocess.CompletedProcess(command, 0, "pushed\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
@@ -1103,6 +1119,8 @@ def test_pr_create_blocks_head_equal_base_before_gh_call(monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
@@ -1130,6 +1148,8 @@ def test_push_current_with_required_branch_switches_before_push(monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
         if command == ["git", "push", "-u", "origin", "feature/demo"]:
@@ -1161,6 +1181,8 @@ def test_push_current_with_required_branch_blocks_before_push(monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
@@ -1189,6 +1211,8 @@ def test_commit_paths_with_required_branch_switches_before_add(monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
         if command == ["git", "add", "file.txt"]:
@@ -1227,6 +1251,8 @@ def test_commit_paths_with_required_branch_blocks_before_add(monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
@@ -1259,6 +1285,8 @@ def test_branch_create_monitor_switches_to_start_point_before_create(monkeypatch
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "switch", "-c", "feature/demo", "main"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "branch", "--show-current"]:
@@ -1291,6 +1319,8 @@ def test_branch_create_monitor_blocks_before_create(monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
@@ -1318,6 +1348,8 @@ def test_branch_switch_monitor_blocks_before_switch(monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
@@ -1345,6 +1377,8 @@ def test_pr_merge_safe_monitor_blocks_before_sha_lookup(monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
@@ -1373,6 +1407,8 @@ def test_admin_refresh_pr_monitor_blocks_before_status(monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
@@ -1392,6 +1428,8 @@ def test_transfer_protected_diff_plan_runs_diff_and_ns(monkeypatch):
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command[:2] == ["git", "diff"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command[:2] == ["./ns", "protected-change-plan"]:
@@ -1591,6 +1629,8 @@ def test_transfer_rebase_on_upstream_rebases_current_branch(monkeypatch):
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
         if command == ["git", "fetch", "origin", "feature/demo"]:
@@ -1671,6 +1711,8 @@ def test_transfer_conflict_resolve_file_replaces_and_stages(monkeypatch, tmp_pat
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
         if command == ["git", "diff", "--name-only", "--diff-filter=U"]:
@@ -1760,6 +1802,8 @@ def test_transfer_delete_merged_work_branch_deletes_local_and_remote(monkeypatch
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "main\n", "")
         if command[:3] == ["gh", "pr", "view"]:
@@ -1864,6 +1908,8 @@ def test_pr_merge_safe_repairs_known_volatile_before_merge(monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if (
             len(command) >= 4
             and command[0].endswith("agentic-kit")
@@ -1913,6 +1959,8 @@ def test_pr_merge_safe_still_blocks_when_volatile_repair_fails(monkeypatch):
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == [
             "./.venv/bin/agentic-kit",
             "transfer",
@@ -1953,6 +2001,8 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
 
     def fake_run(command, cwd=None):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "main\n", "")
         if command == ["git", "status", "--short"]:
@@ -2045,6 +2095,8 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_followup_whe
 
     def fake_run(command, text=True, capture_output=True):
         calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-merge-safe"]:
@@ -2516,4 +2568,58 @@ def test_successor_package_freshness_rejects_product_head_drift(monkeypatch, tmp
 
     findings = actions._successor_package_freshness_findings(tmp_path)
     assert findings == ["validation_report.json generated_head does not match HEAD or refresh-only ancestry"]
+
+def test_remote_mutation_preflight_blocks_unreachable_remote_directly(monkeypatch):
+    calls = []
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/example\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 128, "", "fatal: unable to access remote\n")
+        return subprocess.CompletedProcess(command, 99, "", "unexpected command\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions._remote_mutation_preflight(
+        action="pr-create",
+        mutation="pr-create",
+        required_branch="feature/example",
+    )
+
+    assert result is not None
+    assert result.result_status == "FAIL"
+    assert result.returncode == 2
+    assert "STATE=REMOTE_UNREACHABLE" in result.next_action
+    assert calls == [
+        ["git", "branch", "--show-current"],
+        ["git", "ls-remote", "--exit-code", "origin", "HEAD"],
+    ]
+
+
+def test_remote_mutation_preflight_blocks_branch_drift_directly(monkeypatch):
+    calls = []
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/other\n", "")
+        return subprocess.CompletedProcess(command, 99, "", "unexpected command\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions._remote_mutation_preflight(
+        action="pr-create",
+        mutation="pr-create",
+        required_branch="feature/example",
+    )
+
+    assert result is not None
+    assert result.result_status == "FAIL"
+    assert result.returncode == 2
+    assert "STATE=REMOTE_DRIFT" in result.next_action
+    assert calls == [["git", "branch", "--show-current"]]
 
