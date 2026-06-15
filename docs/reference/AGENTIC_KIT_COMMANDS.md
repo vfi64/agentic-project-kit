@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `151`
+- Command count: `152`
 
 ## Commands
 
@@ -812,6 +812,15 @@ Finalize transfer evidence on an evidence branch and complete it through a PR.
 |---|---:|---|---:|---|---|
 | `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/current.yaml')` | Transfer order path. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit transfer normalize-files`
+
+Normalize active transfer files by adding missing command IDs and archiving stale active files.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `dry_run` | `TyperOption` | --dry-run | `False` | `False` | Report transfer file lifecycle repairs without applying them. |
+| `json_output` | `TyperOption` | --json, --no-json | `False` | `True` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer normalize-session`
 

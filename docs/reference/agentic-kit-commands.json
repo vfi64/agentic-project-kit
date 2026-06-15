@@ -4894,6 +4894,48 @@
     },
     {
       "group": "transfer",
+      "help": "Normalize active transfer files by adding missing command IDs and archiving stale active files.",
+      "name": "normalize-files",
+      "params": [
+        {
+          "default": false,
+          "help": "Report transfer file lifecycle repairs without applying them.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "dry_run",
+          "opts": [
+            "--dry-run"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": true,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-json"
+          ]
+        }
+      ],
+      "path": [
+        "transfer",
+        "normalize-files"
+      ],
+      "qualified_name": "agentic-kit transfer normalize-files"
+    },
+    {
+      "group": "transfer",
       "help": "Normalize and summarize the local transfer session state.\n\nThe MVP is diagnostic and evidence-producing only. It does not switch branches,\npull, delete files, commit, push, or mutate the worktree except for writing the\ncanonical transfer outbox file.",
       "name": "normalize-session",
       "params": [

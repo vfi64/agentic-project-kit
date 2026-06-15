@@ -42,6 +42,7 @@ from agentic_project_kit.transfer_runner import (
     transfer_result_as_json_data,
 )
 from agentic_project_kit.transfer_state import build_transfer_state
+from agentic_project_kit.transfer_state import normalize_transfer_file_lifecycle
 from agentic_project_kit.work_order_patch import (
     DEFAULT_PATCH_ORDER,
     WorkOrderPatchResult,
@@ -354,6 +355,32 @@ def remote_next(
 
     if result.local_run.returncode != 0:
         raise typer.Exit(code=result.local_run.returncode)
+
+
+@transfer_app.command("normalize-files")
+def normalize_transfer_files_command(
+    dry_run: bool = typer.Option(False, "--dry-run", help="Report transfer file lifecycle repairs without applying them."),
+    json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
+) -> None:
+    """Normalize active transfer files by adding missing command IDs and archiving stale active files."""
+    result = normalize_transfer_file_lifecycle(Path("."), dry_run=dry_run)
+    if json_output:
+        typer.echo(json.dumps(result, indent=2, sort_keys=True))
+    else:
+        _echo_transfer_payload_summary(
+            title="TRANSFER_NORMALIZE_FILES",
+            result_status=str(result["result_status"]),
+            final_signal="d" if result["result_status"] == "PASS" else "f",
+            next_action=str(result["next_action"]),
+            fields={
+                "DRY_RUN": "yes" if dry_run else "no",
+                "OPERATIONS": len(result["operations"]),
+                "BEFORE": result["before"]["state"],
+                "AFTER": result["after"]["state"],
+            },
+        )
+    if int(result["returncode"]) != 0:
+        raise typer.Exit(code=int(result["returncode"]))
 
 
 @transfer_app.command("repo-status")
