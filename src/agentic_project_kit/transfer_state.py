@@ -140,7 +140,13 @@ def _direct_files(path: Path) -> list[Path]:
     return sorted(item for item in path.iterdir() if item.is_file())
 
 
-def _build_transfer_file_state(project_root: Path) -> dict[str, Any]:
+def _build_transfer_file_state(
+    project_root: Path,
+    *,
+    branch: str,
+    head: str,
+    origin_main: str,
+) -> dict[str, Any]:
     transfer_root = project_root / ".agentic" / "transfer"
     inbox_dir = transfer_root / "inbox"
     outbox_dir = transfer_root / "outbox"
@@ -166,6 +172,9 @@ def _build_transfer_file_state(project_root: Path) -> dict[str, Any]:
 
     command_id = str(current_command_meta.get("command_id") or current_command_meta.get("id") or "")
     result_command_id = str(last_result_meta.get("command_id") or last_result_meta.get("id") or "")
+    expected_branch = str(current_command_meta.get("expected_branch") or "")
+    expected_head = str(current_command_meta.get("expected_head") or "")
+    expected_origin_main = str(current_command_meta.get("expected_origin_main") or "")
     reasons: list[str] = []
 
     state = "NO_COMMAND"
@@ -175,6 +184,22 @@ def _build_transfer_file_state(project_root: Path) -> dict[str, Any]:
         state = "CONFLICT"
         next_action = "inspect_duplicate_or_obsolete_transfer_files"
         reasons.append("duplicate_or_obsolete_active_transfer_files")
+    elif current_command.exists() and expected_origin_main and origin_main == "UNKNOWN":
+        state = "REMOTE_UNREACHABLE"
+        next_action = "retry_remote_check_later"
+        reasons.append("expected_origin_main_unavailable")
+    elif current_command.exists() and expected_branch and expected_branch != branch:
+        state = "REMOTE_DRIFT"
+        next_action = "sync_or_regenerate_command"
+        reasons.append("expected_branch_mismatch")
+    elif current_command.exists() and expected_head and expected_head != head:
+        state = "REMOTE_DRIFT"
+        next_action = "sync_or_regenerate_command"
+        reasons.append("expected_head_mismatch")
+    elif current_command.exists() and expected_origin_main and expected_origin_main != origin_main:
+        state = "REMOTE_DRIFT"
+        next_action = "sync_or_regenerate_command"
+        reasons.append("expected_origin_main_mismatch")
     elif current_command.exists() and last_result.exists():
         if command_id and result_command_id and command_id == result_command_id:
             state = "RESULT_READY"
@@ -206,6 +231,9 @@ def _build_transfer_file_state(project_root: Path) -> dict[str, Any]:
                 "path": ".agentic/transfer/inbox/current.yaml",
                 "exists": current_command.exists(),
                 "command_id": command_id,
+                "expected_branch": expected_branch,
+                "expected_head": expected_head,
+                "expected_origin_main": expected_origin_main,
             },
             "legacy_next_command": {
                 "path": ".agentic/transfer/inbox/next_command.py.txt",
@@ -213,6 +241,11 @@ def _build_transfer_file_state(project_root: Path) -> dict[str, Any]:
             },
             "active_files": [str(path.relative_to(project_root)) for path in inbox_files],
             "unexpected_files": unexpected_inbox_files,
+        },
+        "observed": {
+            "branch": branch,
+            "head": head,
+            "origin_main": origin_main,
         },
         "outbox": {
             "path": ".agentic/transfer/outbox",
@@ -245,6 +278,7 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
     root = project_root.resolve()
     branch = _run_git(root, "branch", "--show-current") or "UNKNOWN"
     head = _run_git(root, "rev-parse", "--short", "HEAD") or "UNKNOWN"
+    origin_main = _run_git(root, "rev-parse", "--short", "origin/main") or "UNKNOWN"
     dirty = _read_dirty_worktree(root)
     reasons: list[str] = []
 
@@ -255,8 +289,14 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
     if rule_snapshot.fail_closed:
         reasons.append("rule_snapshot_fail_closed")
 
-    transfer_files = _build_transfer_file_state(root)
-    if transfer_files["state"] == "CONFLICT":
+    transfer_files = _build_transfer_file_state(
+        root,
+        branch=branch,
+        head=head,
+        origin_main=origin_main,
+    )
+    transfer_file_blocks = {"CONFLICT", "REMOTE_DRIFT", "REMOTE_UNREACHABLE"}
+    if transfer_files["state"] in transfer_file_blocks:
         reasons.extend(transfer_files["reasons"])
 
     has_order = _has_pending_transfer_order(root)
@@ -276,9 +316,9 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
     if dirty:
         primary_state = PRIMARY_BLOCKED
         next_action = "Review or clean the worktree before running another transfer action."
-    elif transfer_files["state"] == "CONFLICT":
+    elif transfer_files["state"] in transfer_file_blocks:
         primary_state = PRIMARY_BLOCKED
-        next_action = "Inspect duplicate or obsolete active transfer files before running transfer actions."
+        next_action = transfer_files["next"]
     elif rule_snapshot.fail_closed:
         primary_state = PRIMARY_BLOCKED
         next_action = "Repair canonical rule sources before running transfer actions."
@@ -292,9 +332,9 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
         primary_state = PRIMARY_WAIT
         next_action = "Queue a transfer order or continue with a read-only diagnostic action."
 
-    transfer_file_conflict = transfer_files["state"] == "CONFLICT"
-    transfer_allowed = has_order and not dirty and rules_confirmed and not transfer_file_conflict
-    clean_for_closeout = latest_result is not None and not dirty and rules_confirmed and not transfer_file_conflict
+    transfer_file_blocked = transfer_files["state"] in transfer_file_blocks
+    transfer_allowed = has_order and not dirty and rules_confirmed and not transfer_file_blocked
+    clean_for_closeout = latest_result is not None and not dirty and rules_confirmed and not transfer_file_blocked
 
     capabilities = {
         "refresh_rules": True,

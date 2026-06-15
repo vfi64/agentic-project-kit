@@ -35,6 +35,22 @@ def _write_and_commit_minimal_sources(root: Path) -> None:
     )
 
 
+def _set_origin_main(root: Path) -> str:
+    head = subprocess.run(
+        ["git", "rev-parse", "--short", "HEAD"],
+        cwd=root,
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+    ).stdout.strip()
+    subprocess.run(
+        ["git", "update-ref", "refs/remotes/origin/main", "HEAD"],
+        cwd=root,
+        check=True,
+    )
+    return head
+
+
 def _write_rule_ack(
     root: Path, *, repo_head: str | None = None, next_action: str = "run_next_command"
 ) -> None:
@@ -278,4 +294,95 @@ def test_transfer_state_blocks_duplicate_active_transfer_files(tmp_path, monkeyp
     assert snapshot.primary_state == PRIMARY_BLOCKED
     assert snapshot.transfer_files["state"] == "CONFLICT"
     assert "duplicate_or_obsolete_active_transfer_files" in snapshot.reasons
+    assert snapshot.capabilities["run_next_command"] is False
+
+
+def test_transfer_state_blocks_expected_head_drift(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    _set_origin_main(tmp_path)
+    inbox = tmp_path / ".agentic/transfer/inbox/current.yaml"
+    inbox.parent.mkdir(parents=True)
+    inbox.write_text(
+        "command_id: cmd-1\n"
+        "expected_branch: main\n"
+        "expected_head: stale\n",
+        encoding="utf-8",
+    )
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Add drifted transfer command"],
+        cwd=tmp_path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    _write_rule_ack(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    snapshot = build_transfer_state(tmp_path)
+
+    assert snapshot.primary_state == PRIMARY_BLOCKED
+    assert snapshot.transfer_files["state"] == "REMOTE_DRIFT"
+    assert snapshot.transfer_files["next"] == "sync_or_regenerate_command"
+    assert "expected_head_mismatch" in snapshot.reasons
+    assert snapshot.capabilities["run_next_command"] is False
+
+
+def test_transfer_state_blocks_expected_origin_main_drift(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    observed_origin = _set_origin_main(tmp_path)
+    inbox = tmp_path / ".agentic/transfer/inbox/current.yaml"
+    inbox.parent.mkdir(parents=True)
+    inbox.write_text(
+        "command_id: cmd-1\n"
+        "expected_branch: main\n"
+        f"expected_origin_main: not-{observed_origin}\n",
+        encoding="utf-8",
+    )
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Add origin-drifted transfer command"],
+        cwd=tmp_path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    _write_rule_ack(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    snapshot = build_transfer_state(tmp_path)
+
+    assert snapshot.primary_state == PRIMARY_BLOCKED
+    assert snapshot.transfer_files["state"] == "REMOTE_DRIFT"
+    assert "expected_origin_main_mismatch" in snapshot.reasons
+    assert snapshot.capabilities["run_next_command"] is False
+
+
+def test_transfer_state_reports_remote_unreachable_when_origin_main_missing(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    inbox = tmp_path / ".agentic/transfer/inbox/current.yaml"
+    inbox.parent.mkdir(parents=True)
+    inbox.write_text(
+        "command_id: cmd-1\n"
+        "expected_branch: main\n"
+        "expected_origin_main: abc1234\n",
+        encoding="utf-8",
+    )
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Add command requiring missing origin main"],
+        cwd=tmp_path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    _write_rule_ack(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    snapshot = build_transfer_state(tmp_path)
+
+    assert snapshot.primary_state == PRIMARY_BLOCKED
+    assert snapshot.transfer_files["state"] == "REMOTE_UNREACHABLE"
+    assert snapshot.transfer_files["next"] == "retry_remote_check_later"
+    assert "expected_origin_main_unavailable" in snapshot.reasons
     assert snapshot.capabilities["run_next_command"] is False
