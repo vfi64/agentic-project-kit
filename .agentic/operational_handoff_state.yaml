@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 867715f3d966b480ec7b3f98944fc3b338f2aa43
-  short: 867715f3
-  subject: Add transfer file state MVP (#1350)
+  full: a4983da1b477d6130e1043d204c2644993ad9c93
+  short: a4983da1
+  subject: Block transfer execution on remote drift state (#1352)
 last_substantive_work_state:
-  full: 867715f3d966b480ec7b3f98944fc3b338f2aa43
-  short: 867715f3
-  subject: Add transfer file state MVP (#1350)
+  full: a4983da1b477d6130e1043d204c2644993ad9c93
+  short: a4983da1
+  subject: Block transfer execution on remote drift state (#1352)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
