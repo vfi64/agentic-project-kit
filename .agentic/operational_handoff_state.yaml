@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: dc4eb1920ea34ea6c8b2ec4b28a271af976d2929
-  short: dc4eb192
-  subject: Normalize active transfer file lifecycle (#1354)
+  full: 7a2f31669501737018ef22a79b9c91acdeeeaa03
+  short: 7a2f3166
+  subject: Add remote mutation preflight gates (#1356)
 last_substantive_work_state:
-  full: dc4eb1920ea34ea6c8b2ec4b28a271af976d2929
-  short: dc4eb192
-  subject: Normalize active transfer file lifecycle (#1354)
+  full: 7a2f31669501737018ef22a79b9c91acdeeeaa03
+  short: 7a2f3166
+  subject: Add remote mutation preflight gates (#1356)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

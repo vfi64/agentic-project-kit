@@ -2,7 +2,7 @@
 
 The markdown successor prompt is a projection of the machine-readable execution contract.
 
-- branch: `docs/post-pr1354-handoff-refresh`
+- branch: `docs/post-pr1356-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 
@@ -122,14 +122,14 @@ Wenn der Bootstrap grün ist:
     "The copy prompt must be usable by other LLMs, not only ChatGPT."
   ],
   "repo": {
-    "branch": "docs/post-pr1354-handoff-refresh",
+    "branch": "docs/post-pr1356-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "dc4eb1920ea34ea6c8b2ec4b28a271af976d2929",
+    "head": "7a2f31669501737018ef22a79b9c91acdeeeaa03",
     "head_matches_origin_main": true,
-    "head_short": "dc4eb192",
+    "head_short": "7a2f3166",
     "local_path": "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
-    "origin_main": "dc4eb1920ea34ea6c8b2ec4b28a271af976d2929",
-    "origin_main_short": "dc4eb192",
+    "origin_main": "7a2f31669501737018ef22a79b9c91acdeeeaa03",
+    "origin_main_short": "7a2f3166",
     "worktree_clean": false
   }
 }
