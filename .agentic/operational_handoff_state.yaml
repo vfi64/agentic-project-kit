@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 36da24394a7a23074032c918ad18a37510be9f9a
-  short: 36da2439
-  subject: Converge transfer command id and state outputs (#1358)
+  full: 8f629d8eb51484b671e11c6cf4e997b7088875e6
+  short: 8f629d8e
+  subject: Add idempotent PR merge recovery (#1360)
 last_substantive_work_state:
-  full: 36da24394a7a23074032c918ad18a37510be9f9a
-  short: 36da2439
-  subject: Converge transfer command id and state outputs (#1358)
+  full: 8f629d8eb51484b671e11c6cf4e997b7088875e6
+  short: 8f629d8e
+  subject: Add idempotent PR merge recovery (#1360)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
