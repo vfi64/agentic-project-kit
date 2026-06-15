@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e7a9fb5c97eb962e23b831613c267e543a710610
-  short: e7a9fb5c
-  subject: Add workflow-next transfer decision command (#1362)
+  full: baeada5d863a27d7149da5731b19d6472fce7313
+  short: baeada5d
+  subject: Add recovery workflow smoke tests (#1364)
 last_substantive_work_state:
-  full: e7a9fb5c97eb962e23b831613c267e543a710610
-  short: e7a9fb5c
-  subject: Add workflow-next transfer decision command (#1362)
+  full: baeada5d863a27d7149da5731b19d6472fce7313
+  short: baeada5d
+  subject: Add recovery workflow smoke tests (#1364)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
