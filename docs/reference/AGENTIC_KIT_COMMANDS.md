@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `152`
+- Command count: `153`
 
 ## Commands
 
@@ -1120,6 +1120,14 @@ Apply a guarded JSON/YAML text-replacement patch work order.
 | `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/patch.yaml')` | JSON/YAML patch work-order path. |
 | `dry_run` | `TyperOption` | --dry-run | `False` | `False` | Validate without writing files. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
+### `agentic-kit transfer workflow-next`
+
+Read repo and transfer state and print the next safe wrapper command without mutating state.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json, --no-json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit validate-contract`
 
