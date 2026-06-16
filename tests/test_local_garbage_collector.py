@@ -84,3 +84,70 @@ def test_local_gc_skips_workflow_evidence(tmp_path: Path) -> None:
 
     assert result["deleted"] == []
     assert target.exists()
+
+
+def test_local_gc_runs_at_most_once_per_command_stack_id(tmp_path: Path) -> None:
+    first = tmp_path / "tmp" / "first.log"
+    first.parent.mkdir()
+    first.write_text("first", encoding="utf-8")
+    os.utime(first, (100, 100))
+
+    first_result = run_local_garbage_collector(
+        tmp_path,
+        now=100 + 25 * 60 * 60,
+        retention_seconds=24 * 60 * 60,
+        run_id="stack-1",
+        tracked_predicate=_never_tracked,
+    )
+
+    assert first_result["skipped"] is False
+    assert first_result["deleted"] == ["tmp/first.log"]
+    assert not first.exists()
+
+    second = tmp_path / "tmp" / "second.log"
+    second.write_text("second", encoding="utf-8")
+    os.utime(second, (100, 100))
+
+    second_result = run_local_garbage_collector(
+        tmp_path,
+        now=100 + 25 * 60 * 60,
+        retention_seconds=24 * 60 * 60,
+        run_id="stack-1",
+        tracked_predicate=_never_tracked,
+    )
+
+    assert second_result["skipped"] is True
+    assert second_result["skip_reason"] == "already_ran_for_command_stack"
+    assert second_result["deleted"] == []
+    assert second.exists()
+
+
+def test_local_gc_new_command_stack_id_runs_again(tmp_path: Path) -> None:
+    first = tmp_path / "tmp" / "first.log"
+    first.parent.mkdir()
+    first.write_text("first", encoding="utf-8")
+    os.utime(first, (100, 100))
+
+    run_local_garbage_collector(
+        tmp_path,
+        now=100 + 25 * 60 * 60,
+        retention_seconds=24 * 60 * 60,
+        run_id="stack-1",
+        tracked_predicate=_never_tracked,
+    )
+
+    second = tmp_path / "tmp" / "second.log"
+    second.write_text("second", encoding="utf-8")
+    os.utime(second, (100, 100))
+
+    second_result = run_local_garbage_collector(
+        tmp_path,
+        now=100 + 25 * 60 * 60,
+        retention_seconds=24 * 60 * 60,
+        run_id="stack-2",
+        tracked_predicate=_never_tracked,
+    )
+
+    assert second_result["skipped"] is False
+    assert second_result["deleted"] == ["tmp/second.log"]
+    assert not second.exists()
