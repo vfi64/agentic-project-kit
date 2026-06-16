@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import shlex
 from pathlib import Path
 
@@ -68,7 +69,12 @@ transfer_app = typer.Typer(help="Inspect and apply repo-backed text transfer ord
 
 def _run_local_garbage_collector_preflight() -> None:
     """Run deterministic local runtime cleanup before local transfer preflight."""
-    result = run_local_garbage_collector(Path("."), write_report=True)
+    run_id = (
+        os.environ.get("AGENTIC_LOCAL_COMMAND_STACK_ID")
+        or os.environ.get("AGENTIC_LOCAL_GC_RUN_ID")
+        or ""
+    )
+    result = run_local_garbage_collector(Path("."), write_report=True, run_id=run_id)
     if int(result.get("returncode", 0)) != 0:
         raise typer.BadParameter(str(result.get("next_action", "local garbage collector failed")))
 

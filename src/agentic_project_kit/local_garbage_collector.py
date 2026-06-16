@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Callable, Iterable
 
 LOCAL_GC_REPORT = Path("tmp/local-gc-last.json")
+LOCAL_GC_RUN_MARKER = Path("tmp/local-gc-last-run-id.txt")
 DEFAULT_RETENTION_SECONDS = 24 * 60 * 60
 
 # Intentionally narrow. Broader cleanup belongs to explicit GC rules, not ad-hoc deletion.
@@ -72,6 +73,8 @@ def run_local_garbage_collector(
     now: float | None = None,
     retention_seconds: int = DEFAULT_RETENTION_SECONDS,
     write_report: bool = True,
+    run_id: str | None = None,
+    skip_if_run_id_seen: bool = True,
     tracked_predicate: Callable[[Path, Path], bool] = _is_tracked,
 ) -> dict[str, object]:
     """Delete only deterministic, local, untracked runtime artefacts.
@@ -81,10 +84,40 @@ def run_local_garbage_collector(
     - only allowlisted suffixes,
     - never tracked files,
     - never workflow evidence under tmp/agent-evidence,
-    - age-gated by retention_seconds.
+    - age-gated by retention_seconds,
+    - optionally once per local command stack via run_id.
     """
 
     root = project_root.resolve()
+    normalized_run_id = (run_id or "").strip()
+    marker_path = root / LOCAL_GC_RUN_MARKER
+    if normalized_run_id and skip_if_run_id_seen and marker_path.exists():
+        seen_run_id = marker_path.read_text(encoding="utf-8").strip()
+        if seen_run_id == normalized_run_id:
+            result = {
+                "schema_version": 1,
+                "kind": "local_garbage_collector_result",
+                "result_status": "PASS",
+                "returncode": 0,
+                "dry_run": dry_run,
+                "run_id": normalized_run_id,
+                "skipped": True,
+                "skip_reason": "already_ran_for_command_stack",
+                "allowed_roots": [path.as_posix() for path in ALLOWED_ROOTS],
+                "skipped_roots": [path.as_posix() for path in SKIPPED_ROOTS],
+                "allowed_suffixes": sorted(ALLOWED_SUFFIXES),
+                "retention_seconds": retention_seconds,
+                "deleted": [],
+                "kept": [],
+                "errors": [],
+                "next_action": "Local deterministic garbage collection already ran for this command stack.",
+            }
+            if write_report:
+                report_path = root / LOCAL_GC_REPORT
+                report_path.parent.mkdir(parents=True, exist_ok=True)
+                report_path.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+            return result
+
     effective_now = time.time() if now is None else now
     deleted: list[str] = []
     kept: list[dict[str, object]] = []
@@ -122,6 +155,8 @@ def run_local_garbage_collector(
         "result_status": result_status,
         "returncode": 0 if result_status == "PASS" else 2,
         "dry_run": dry_run,
+        "run_id": normalized_run_id,
+        "skipped": False,
         "allowed_roots": [path.as_posix() for path in ALLOWED_ROOTS],
         "skipped_roots": [path.as_posix() for path in SKIPPED_ROOTS],
         "allowed_suffixes": sorted(ALLOWED_SUFFIXES),
@@ -135,6 +170,10 @@ def run_local_garbage_collector(
             else "Inspect local garbage collector errors before continuing."
         ),
     }
+
+    if normalized_run_id and result_status == "PASS" and not dry_run:
+        marker_path.parent.mkdir(parents=True, exist_ok=True)
+        marker_path.write_text(normalized_run_id + "\n", encoding="utf-8")
 
     if write_report:
         report_path = root / LOCAL_GC_REPORT

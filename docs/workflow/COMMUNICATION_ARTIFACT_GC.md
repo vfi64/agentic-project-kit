@@ -55,6 +55,13 @@ Use dry-run forms first. Mutating forms are bounded to explicitly implemented ar
 Every local `agentic-kit transfer normalize-session` run invokes the deterministic local
 garbage collector preflight before productive transfer follow-up work.
 
+When `AGENTIC_LOCAL_COMMAND_STACK_ID` is set, the local garbage collector runs at
+most once for that command-stack id. Subsequent `normalize-session` calls in the
+same local command stack report `skipped: true` with
+`skip_reason: already_ran_for_command_stack`. This keeps the standard
+`normalize-session -> rules acknowledge -> normalize-session` Pflichtstart
+deterministic without producing repeated cleanup work.
+
 The preflight may automatically delete only allowlisted local runtime artefacts:
 - files below `tmp/`,
 - allowlisted suffixes such as `.log`, `.tmp`, `.out`, `.err`,
