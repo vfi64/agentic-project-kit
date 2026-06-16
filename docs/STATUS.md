@@ -373,6 +373,6 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 - Diagnostic command coverage: `agentic-kit doctor`.## Operational documentation refresh state after PR #1338
 
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1374
+## Operational documentation refresh state after PR #1376
 
-Current administrative handoff refresh state is `4b0b1e17` (`Archive obsolete transfer inbox files before 0.4.8 (#1374)`). Continue next only after this post-PR1374 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `4c674497` (`Close out stale transfer state before 0.4.8 (#1376)`). Continue next only after this post-PR1376 refresh is committed and merged; the next substantive slice must be created from fresh main.
