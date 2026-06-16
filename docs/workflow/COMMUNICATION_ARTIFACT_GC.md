@@ -55,12 +55,18 @@ Use dry-run forms first. Mutating forms are bounded to explicitly implemented ar
 Every local `agentic-kit transfer normalize-session` run invokes the deterministic local
 garbage collector preflight before productive transfer follow-up work.
 
-When `AGENTIC_LOCAL_COMMAND_STACK_ID` is set, the local garbage collector runs at
-most once for that command-stack id. Subsequent `normalize-session` calls in the
-same local command stack report `skipped: true` with
-`skip_reason: already_ran_for_command_stack`. This keeps the standard
-`normalize-session -> rules acknowledge -> normalize-session` Pflichtstart
-deterministic without producing repeated cleanup work.
+The local command-stack identity is managed by an OS-independent Python state
+file, not by shell-specific environment variables. A local command stack begins
+with `agentic-kit transfer command-stack-begin` and ends with
+`agentic-kit transfer command-stack-end`. `normalize-session` reads that repo-local
+state and passes the command-stack id to the local garbage collector.
+
+Subsequent `normalize-session` calls in the same local command stack report
+`skipped: true` with `skip_reason: already_ran_for_command_stack`. This keeps the
+standard `normalize-session -> rules acknowledge -> normalize-session`
+Pflichtstart deterministic without producing repeated cleanup work. If no active
+command-stack state exists, `normalize-session` creates an implicit stack state
+inside the kit, still without relying on OS-specific shell features.
 
 The preflight may automatically delete only allowlisted local runtime artefacts:
 - files below `tmp/`,

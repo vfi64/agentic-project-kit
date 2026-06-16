@@ -34,3 +34,14 @@ def test_normalize_session_runs_local_gc_preflight() -> None:
         if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
     ]
     assert "_run_local_garbage_collector_preflight" in calls
+
+
+def test_normalize_session_uses_python_command_stack_state_not_environment() -> None:
+    path = Path("src/agentic_project_kit/cli_commands/transfer.py")
+    text = path.read_text(encoding="utf-8")
+    helper_start = text.index("def _run_local_garbage_collector_preflight")
+    helper_end = text.index("@transfer_app.command", helper_start)
+    helper = text[helper_start:helper_end]
+    assert "current_or_begin_local_command_stack_id" in helper
+    assert "os.environ" not in helper
+    assert "AGENTIC_LOCAL_COMMAND_STACK_ID" not in helper

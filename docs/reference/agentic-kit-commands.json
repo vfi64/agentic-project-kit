@@ -3916,6 +3916,62 @@
     },
     {
       "group": "transfer",
+      "help": "Begin a repo-local command-stack state for deterministic local preflight cleanup.",
+      "name": "command-stack-begin",
+      "params": [
+        {
+          "default": true,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-json"
+          ]
+        }
+      ],
+      "path": [
+        "transfer",
+        "command-stack-begin"
+      ],
+      "qualified_name": "agentic-kit transfer command-stack-begin"
+    },
+    {
+      "group": "transfer",
+      "help": "End the repo-local command-stack state after a local command stack completed.",
+      "name": "command-stack-end",
+      "params": [
+        {
+          "default": true,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-json"
+          ]
+        }
+      ],
+      "path": [
+        "transfer",
+        "command-stack-end"
+      ],
+      "qualified_name": "agentic-kit transfer command-stack-end"
+    },
+    {
+      "group": "transfer",
       "help": "",
       "name": "commit",
       "params": [
