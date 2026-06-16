@@ -8,6 +8,7 @@ from rich.console import Console
 
 from agentic_project_kit.post_release import build_post_release_report, render_post_release_report
 from agentic_project_kit.release_state import check_release_state
+from agentic_project_kit.release_prepare import prepare_release_state
 from agentic_project_kit.post_release_closeout import post_release_doi_closeout, render_post_release_doi_closeout_result
 from agentic_project_kit.release import (
     ReleaseCheckStatus,
@@ -109,6 +110,44 @@ def post_release_doi_closeout_command(
     console.print(render_post_release_doi_closeout_result(result), markup=False)
     if not result.ok:
         raise typer.Exit(code=result.returncode)
+
+@release_app.command("prepare")
+def release_prepare_subcommand(
+    version: str = typer.Option(
+        ...,
+        "--version",
+        help="Target release version without leading v.",
+    ),
+    date: str = typer.Option(
+        ...,
+        "--date",
+        help="Release date in YYYY-MM-DD format.",
+    ),
+    dry_run: bool = typer.Option(
+        False,
+        "--dry-run",
+        help="Show planned file changes without writing them.",
+    ),
+    json_output: bool = typer.Option(
+        False,
+        "--json",
+        help="Print machine-readable JSON output.",
+    ),
+) -> None:
+    """Prepare release metadata files without publishing anything."""
+    result = prepare_release_state(version=version, date=date, dry_run=dry_run)
+    payload = result.as_dict()
+    if json_output:
+        console.print(json.dumps(payload, indent=2, sort_keys=True), markup=False)
+        return
+    mode = "DRY-RUN" if dry_run else "WRITE"
+    console.print(f"Release prepare: version={version} date={date} mode={mode}", markup=False)
+    if result.changed_paths:
+        for changed_path in result.changed_paths:
+            console.print(f"CHANGED: {changed_path}", markup=False)
+    else:
+        console.print("NOOP: release metadata already matches target state", markup=False)
+
 
 @release_app.command("check")
 def release_check_subcommand(

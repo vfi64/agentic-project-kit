@@ -2618,6 +2618,74 @@
       "qualified_name": "agentic-kit release check"
     },
     {
+      "group": "release",
+      "help": "Prepare release metadata files without publishing anything.",
+      "name": "prepare",
+      "params": [
+        {
+          "default": null,
+          "help": "Target release version without leading v.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Release date in YYYY-MM-DD format.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "date",
+          "opts": [
+            "--date"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Show planned file changes without writing them.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "dry_run",
+          "opts": [
+            "--dry-run"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON output.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "release",
+        "prepare"
+      ],
+      "qualified_name": "agentic-kit release prepare"
+    },
+    {
       "group": "root",
       "help": "Validate release state for a target version.",
       "name": "release-check",
