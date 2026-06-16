@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 8fb8d8fc7ef4afb03c487d6b508a01e5c84d25c0
-  short: 8fb8d8fc
-  subject: Integrate deterministic local garbage collector preflight (#1366)
+  full: a94c17ec601876c17ff4675472a5a80cb5572ec6
+  short: a94c17ec
+  subject: Run local garbage collector once per command stack (#1368)
 last_substantive_work_state:
-  full: 8fb8d8fc7ef4afb03c487d6b508a01e5c84d25c0
-  short: 8fb8d8fc
-  subject: Integrate deterministic local garbage collector preflight (#1366)
+  full: a94c17ec601876c17ff4675472a5a80cb5572ec6
+  short: a94c17ec
+  subject: Run local garbage collector once per command stack (#1368)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
