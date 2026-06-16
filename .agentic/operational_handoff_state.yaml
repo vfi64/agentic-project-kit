@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a94c17ec601876c17ff4675472a5a80cb5572ec6
-  short: a94c17ec
-  subject: Run local garbage collector once per command stack (#1368)
+  full: ec6128305f8f0261aaac38874469c7f73c30c826
+  short: ec612830
+  subject: Use Python command-stack state for local garbage collector (#1370)
 last_substantive_work_state:
-  full: a94c17ec601876c17ff4675472a5a80cb5572ec6
-  short: a94c17ec
-  subject: Run local garbage collector once per command stack (#1368)
+  full: ec6128305f8f0261aaac38874469c7f73c30c826
+  short: ec612830
+  subject: Use Python command-stack state for local garbage collector (#1370)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

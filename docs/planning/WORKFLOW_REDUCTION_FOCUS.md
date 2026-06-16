@@ -652,6 +652,6 @@ Acceptance gates:
 Current administrative handoff refresh state is `c6ab40da` (`Classify ns migration docs before GUI (#1334)`). Continue next only after this post-PR1334 refresh is committed and merged; the next substantive slice must be created from fresh main.## Operational documentation refresh state after PR #1338
 
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1368
+## Operational documentation refresh state after PR #1370
 
-Current administrative handoff refresh state is `a94c17ec` (`Run local garbage collector once per command stack (#1368)`). Continue next only after this post-PR1368 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `ec612830` (`Use Python command-stack state for local garbage collector (#1370)`). Continue next only after this post-PR1370 refresh is committed and merged; the next substantive slice must be created from fresh main.
