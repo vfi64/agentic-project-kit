@@ -49,3 +49,25 @@ The current implementation hardens the communication artifact GC in bounded step
 ```
 
 Use dry-run forms first. Mutating forms are bounded to explicitly implemented artifact classes and must be covered by terminal evidence for relevant workflow blocks.
+
+## Local run garbage collector preflight
+
+Every local `agentic-kit transfer normalize-session` run invokes the deterministic local
+garbage collector preflight before productive transfer follow-up work.
+
+The preflight may automatically delete only allowlisted local runtime artefacts:
+- files below `tmp/`,
+- allowlisted suffixes such as `.log`, `.tmp`, `.out`, `.err`,
+- files older than the configured retention window,
+- files that are not tracked by Git.
+
+The preflight must not delete:
+- tracked files,
+- protected/governance/handoff/status/planning/YAML files,
+- active transfer files,
+- failed workflow evidence,
+- `tmp/agent-evidence/` workflow evidence.
+
+Transfer-file lifecycle cleanup remains the responsibility of
+`agentic-kit transfer normalize-files`. Workflow evidence cleanup remains the
+responsibility of `agentic-kit workflow cleanup`.

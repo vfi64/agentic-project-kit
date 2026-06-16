@@ -7,6 +7,7 @@ from pathlib import Path
 import typer
 
 from agentic_project_kit.llm_context_carriers import refresh_llm_context_carriers
+from agentic_project_kit.local_garbage_collector import run_local_garbage_collector
 from agentic_project_kit.transfer_closeout import closeout_transfer
 from agentic_project_kit.transfer_continue import render_transfer_continue_summary
 from agentic_project_kit.transfer_continue import run_transfer_continue
@@ -62,6 +63,15 @@ from agentic_project_kit.transfer_uplink import (
 from agentic_project_kit.transfer_workflow_next import run_workflow_next
 
 transfer_app = typer.Typer(help="Inspect and apply repo-backed text transfer orders.")
+
+
+
+def _run_local_garbage_collector_preflight() -> None:
+    """Run deterministic local runtime cleanup before local transfer preflight."""
+    result = run_local_garbage_collector(Path("."), write_report=True)
+    if int(result.get("returncode", 0)) != 0:
+        raise typer.BadParameter(str(result.get("next_action", "local garbage collector failed")))
+
 
 
 def _load_or_exit(path: Path):
@@ -2951,6 +2961,7 @@ def normalize_session(
     pull, delete files, commit, push, or mutate the worktree except for writing the
     canonical transfer outbox file.
     """
+    _run_local_garbage_collector_preflight()
     import ast
     import json
     import subprocess
