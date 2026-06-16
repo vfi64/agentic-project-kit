@@ -151,3 +151,84 @@ def test_local_gc_new_command_stack_id_runs_again(tmp_path: Path) -> None:
     assert second_result["skipped"] is False
     assert second_result["deleted"] == ["tmp/second.log"]
     assert not second.exists()
+
+
+def test_local_gc_deletes_old_tmp_allowlisted_artifact_types(tmp_path: Path) -> None:
+    suffixes = [".py", ".md", ".diff", ".json", ".sh", ".txt"]
+    for suffix in suffixes:
+        target = tmp_path / "tmp" / f"old{suffix}"
+        target.parent.mkdir(exist_ok=True)
+        target.write_text("old", encoding="utf-8")
+        os.utime(target, (100, 100))
+
+    result = run_local_garbage_collector(
+        tmp_path,
+        now=100 + 25 * 60 * 60,
+        retention_seconds=24 * 60 * 60,
+        tracked_predicate=_never_tracked,
+    )
+
+    for suffix in suffixes:
+        rel = f"tmp/old{suffix}"
+        assert rel in result["deleted"]
+        assert not (tmp_path / rel).exists()
+
+
+def test_local_gc_preserves_reserved_tmp_state_files(tmp_path: Path) -> None:
+    reserved = [
+        "tmp/local-gc-last.json",
+        "tmp/local-gc-last-run-id.txt",
+        "tmp/local-command-stack-state.json",
+    ]
+    for name in reserved:
+        target = tmp_path / name
+        target.parent.mkdir(exist_ok=True)
+        target.write_text("state", encoding="utf-8")
+        os.utime(target, (100, 100))
+
+    result = run_local_garbage_collector(
+        tmp_path,
+        now=100 + 365 * 24 * 60 * 60,
+        retention_seconds=24 * 60 * 60,
+        tracked_predicate=_never_tracked,
+    )
+
+    for name in reserved:
+        assert name not in result["deleted"]
+        assert (tmp_path / name).exists()
+
+
+def test_local_gc_deletes_old_empty_tmp_directories(tmp_path: Path) -> None:
+    directory = tmp_path / "tmp" / "old-empty-dir"
+    directory.mkdir(parents=True)
+    os.utime(directory, (100, 100))
+
+    result = run_local_garbage_collector(
+        tmp_path,
+        now=100 + 25 * 60 * 60,
+        retention_seconds=24 * 60 * 60,
+        tracked_predicate=_never_tracked,
+    )
+
+    assert "tmp/old-empty-dir" in result["deleted_directories"]
+    assert not directory.exists()
+
+
+def test_local_gc_preserves_nonempty_tmp_directories(tmp_path: Path) -> None:
+    directory = tmp_path / "tmp" / "old-nonempty-dir"
+    directory.mkdir(parents=True)
+    child = directory / "keep.bin"
+    child.write_text("not allowlisted", encoding="utf-8")
+    os.utime(directory, (100, 100))
+    os.utime(child, (100, 100))
+
+    result = run_local_garbage_collector(
+        tmp_path,
+        now=100 + 25 * 60 * 60,
+        retention_seconds=24 * 60 * 60,
+        tracked_predicate=_never_tracked,
+    )
+
+    assert "tmp/old-nonempty-dir" not in result["deleted_directories"]
+    assert directory.exists()
+    assert child.exists()

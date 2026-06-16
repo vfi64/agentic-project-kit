@@ -70,8 +70,9 @@ inside the kit, still without relying on OS-specific shell features.
 
 The preflight may automatically delete only allowlisted local runtime artefacts:
 - files below `tmp/`,
-- allowlisted suffixes such as `.log`, `.tmp`, `.out`, `.err`,
-- files older than the configured retention window,
+- allowlisted suffixes such as `.log`, `.tmp`, `.out`, `.err`, `.py`, `.md`, `.diff`, `.json`, `.sh`, `.txt`,
+- empty old directories below `tmp/`,
+- files and directories older than the configured retention window,
 - files that are not tracked by Git.
 
 The preflight must not delete:
@@ -79,7 +80,10 @@ The preflight must not delete:
 - protected/governance/handoff/status/planning/YAML files,
 - active transfer files,
 - failed workflow evidence,
-- `tmp/agent-evidence/` workflow evidence.
+- `tmp/agent-evidence/` workflow evidence,
+- `tmp/local-gc-last.json`,
+- `tmp/local-gc-last-run-id.txt`,
+- `tmp/local-command-stack-state.json`.
 
 Transfer-file lifecycle cleanup remains the responsibility of
 `agentic-kit transfer normalize-files`. Workflow evidence cleanup remains the

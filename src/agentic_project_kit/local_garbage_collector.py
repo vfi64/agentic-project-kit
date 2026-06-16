@@ -13,7 +13,12 @@ DEFAULT_RETENTION_SECONDS = 24 * 60 * 60
 # Intentionally narrow. Broader cleanup belongs to explicit GC rules, not ad-hoc deletion.
 ALLOWED_ROOTS = (Path("tmp"),)
 SKIPPED_ROOTS = (Path("tmp/agent-evidence"),)
-ALLOWED_SUFFIXES = {".log", ".tmp", ".out", ".err"}
+ALLOWED_SUFFIXES = {".diff", ".err", ".json", ".log", ".md", ".out", ".py", ".sh", ".tmp", ".txt"}
+RESERVED_TMP_FILES = {
+    LOCAL_GC_REPORT,
+    LOCAL_GC_RUN_MARKER,
+    Path("tmp/local-command-stack-state.json"),
+}
 
 
 def _relative_to_root(path: Path, root: Path) -> str:
@@ -51,7 +56,14 @@ def _is_tracked(root: Path, path: Path) -> bool:
     return result.returncode == 0
 
 
-def _iter_candidates(root: Path) -> Iterable[Path]:
+def _is_reserved_tmp_file(path: Path, root: Path) -> bool:
+    for reserved in RESERVED_TMP_FILES:
+        if path.resolve() == (root / reserved).resolve():
+            return True
+    return False
+
+
+def _iter_file_candidates(root: Path) -> Iterable[Path]:
     for allowed_root in ALLOWED_ROOTS:
         directory = root / allowed_root
         if not directory.exists():
@@ -61,7 +73,23 @@ def _iter_candidates(root: Path) -> Iterable[Path]:
                 continue
             if any(_is_under(path, root, skipped) for skipped in SKIPPED_ROOTS):
                 continue
+            if _is_reserved_tmp_file(path, root):
+                continue
             if path.suffix.lower() not in ALLOWED_SUFFIXES:
+                continue
+            yield path
+
+
+def _iter_directory_candidates(root: Path) -> Iterable[Path]:
+    for allowed_root in ALLOWED_ROOTS:
+        directory = root / allowed_root
+        if not directory.exists():
+            continue
+        candidates = [path for path in directory.rglob("*") if path.is_dir()]
+        for path in sorted(candidates, key=lambda item: len(item.parts), reverse=True):
+            if path.resolve() == directory.resolve():
+                continue
+            if any(_is_under(path, root, skipped) for skipped in SKIPPED_ROOTS):
                 continue
             yield path
 
@@ -108,6 +136,7 @@ def run_local_garbage_collector(
                 "allowed_suffixes": sorted(ALLOWED_SUFFIXES),
                 "retention_seconds": retention_seconds,
                 "deleted": [],
+                "deleted_directories": [],
                 "kept": [],
                 "errors": [],
                 "next_action": "Local deterministic garbage collection already ran for this command stack.",
@@ -120,10 +149,11 @@ def run_local_garbage_collector(
 
     effective_now = time.time() if now is None else now
     deleted: list[str] = []
+    deleted_directories: list[str] = []
     kept: list[dict[str, object]] = []
     errors: list[dict[str, str]] = []
 
-    for path in sorted(_iter_candidates(root)):
+    for path in sorted(_iter_file_candidates(root)):
         rel = _relative_to_root(path, root)
         try:
             stat = path.stat()
@@ -148,6 +178,30 @@ def run_local_garbage_collector(
         except OSError as exc:
             errors.append({"path": rel, "error": str(exc)})
 
+    for directory in _iter_directory_candidates(root):
+        rel = _relative_to_root(directory, root)
+        try:
+            stat = directory.stat()
+        except FileNotFoundError:
+            continue
+        age_seconds = max(0, int(effective_now - stat.st_mtime))
+        if age_seconds < retention_seconds:
+            kept.append({"path": rel, "reason": "directory_retention_not_reached", "age_seconds": age_seconds})
+            continue
+        try:
+            next(directory.iterdir())
+        except StopIteration:
+            if dry_run:
+                deleted_directories.append(rel)
+                continue
+            try:
+                directory.rmdir()
+                deleted_directories.append(rel)
+            except OSError as exc:
+                errors.append({"path": rel, "error": str(exc)})
+        except OSError as exc:
+            errors.append({"path": rel, "error": str(exc)})
+
     result_status = "PASS" if not errors else "BLOCKED"
     result = {
         "schema_version": 1,
@@ -162,6 +216,7 @@ def run_local_garbage_collector(
         "allowed_suffixes": sorted(ALLOWED_SUFFIXES),
         "retention_seconds": retention_seconds,
         "deleted": deleted,
+        "deleted_directories": deleted_directories,
         "kept": kept,
         "errors": errors,
         "next_action": (
