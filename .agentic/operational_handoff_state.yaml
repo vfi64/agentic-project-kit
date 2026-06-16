@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4c674497f3061e4fa3d62d47a10b55b7be329e94
-  short: 4c674497
-  subject: Close out stale transfer state before 0.4.8 (#1376)
+  full: bffc82cca9100d5283f529585866810b24f0139f
+  short: bffc82cc
+  subject: Close out active transfer state before 0.4.8 (#1378)
 last_substantive_work_state:
-  full: 4c674497f3061e4fa3d62d47a10b55b7be329e94
-  short: 4c674497
-  subject: Close out stale transfer state before 0.4.8 (#1376)
+  full: bffc82cca9100d5283f529585866810b24f0139f
+  short: bffc82cc
+  subject: Close out active transfer state before 0.4.8 (#1378)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
