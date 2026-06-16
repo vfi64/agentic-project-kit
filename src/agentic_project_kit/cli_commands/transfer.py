@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import os
 import shlex
 from pathlib import Path
 
@@ -9,6 +8,9 @@ import typer
 
 from agentic_project_kit.llm_context_carriers import refresh_llm_context_carriers
 from agentic_project_kit.local_garbage_collector import run_local_garbage_collector
+from agentic_project_kit.local_command_stack import begin_local_command_stack
+from agentic_project_kit.local_command_stack import current_or_begin_local_command_stack_id
+from agentic_project_kit.local_command_stack import end_local_command_stack
 from agentic_project_kit.transfer_closeout import closeout_transfer
 from agentic_project_kit.transfer_continue import render_transfer_continue_summary
 from agentic_project_kit.transfer_continue import run_transfer_continue
@@ -69,12 +71,8 @@ transfer_app = typer.Typer(help="Inspect and apply repo-backed text transfer ord
 
 def _run_local_garbage_collector_preflight() -> None:
     """Run deterministic local runtime cleanup before local transfer preflight."""
-    run_id = (
-        os.environ.get("AGENTIC_LOCAL_COMMAND_STACK_ID")
-        or os.environ.get("AGENTIC_LOCAL_GC_RUN_ID")
-        or ""
-    )
-    result = run_local_garbage_collector(Path("."), write_report=True, run_id=run_id)
+    command_stack_id = current_or_begin_local_command_stack_id(Path("."))
+    result = run_local_garbage_collector(Path("."), write_report=True, run_id=command_stack_id)
     if int(result.get("returncode", 0)) != 0:
         raise typer.BadParameter(str(result.get("next_action", "local garbage collector failed")))
 
@@ -372,6 +370,35 @@ def remote_next(
 
     if result.local_run.returncode != 0:
         raise typer.Exit(code=result.local_run.returncode)
+
+
+
+@transfer_app.command("command-stack-begin")
+def command_stack_begin_command(
+    json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
+) -> None:
+    """Begin a repo-local command-stack state for deterministic local preflight cleanup."""
+    state = begin_local_command_stack(Path("."))
+    if json_output:
+        typer.echo(json.dumps(state, indent=2, sort_keys=True))
+    else:
+        typer.echo(_summary_line("STATE", "PASS"))
+        typer.echo(_summary_line("COMMAND_STACK_ID", state["command_stack_id"]))
+        typer.echo(_summary_line("NEXT", "Run normalize-session."))
+
+
+@transfer_app.command("command-stack-end")
+def command_stack_end_command(
+    json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
+) -> None:
+    """End the repo-local command-stack state after a local command stack completed."""
+    state = end_local_command_stack(Path("."))
+    if json_output:
+        typer.echo(json.dumps(state, indent=2, sort_keys=True))
+    else:
+        typer.echo(_summary_line("STATE", "PASS"))
+        typer.echo(_summary_line("COMMAND_STACK_ID", state.get("command_stack_id", "")))
+        typer.echo(_summary_line("NEXT", "Command stack ended."))
 
 
 @transfer_app.command("normalize-files")

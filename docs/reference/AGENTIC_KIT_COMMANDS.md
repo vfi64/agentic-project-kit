@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `153`
+- Command count: `155`
 
 ## Commands
 
@@ -677,6 +677,22 @@ Regenerate the agentic-kit command reference without committing changes.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
+### `agentic-kit transfer command-stack-begin`
+
+Begin a repo-local command-stack state for deterministic local preflight cleanup.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json, --no-json | `False` | `True` | Print machine-readable JSON. |
+
+### `agentic-kit transfer command-stack-end`
+
+End the repo-local command-stack state after a local command stack completed.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json, --no-json | `False` | `True` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer commit`
 
