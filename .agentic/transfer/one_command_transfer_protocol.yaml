@@ -1,0 +1,217 @@
+schema_version: 1
+artifact_type: transfer_protocol
+id: one-command-transfer-protocol
+status: proposed_normative_requirement
+language: en
+scope: llm_to_local_to_remote_report_fallback
+purpose: When direct remote work is not possible because of tool, connector, or safety
+  boundaries, collaboration must use one permanently stable local command. The user
+  must not be required to manually run several transfer, commit, push, diagnostic,
+  pull, or branch commands.
+principles:
+- Chat is only the control channel.
+- Evidence lives in the repository, or, if remote publication is blocked, first in
+  stable local transfer evidence.
+- The user runs exactly the same local command every time.
+- All concrete execution steps live in the transfer order or are executed by the remote-next
+  wrapper.
+user_command:
+  working_directory: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+  argv:
+  - ./.venv/bin/agentic-kit
+  - transfer
+  - remote-next
+  chat_reply: g
+chat_signal:
+  canonical: g
+  meaning: I ran the standard local command. Read the newest remote-backed transfer
+    report, or, if none is visible, treat the state as BLOCKED or TRANSFER_UPLINK_PROBLEM
+    and decide from available evidence whether the state is PASS, FAIL, BLOCK, or
+    WAIT.
+  legacy_signals_replaced:
+  - d
+  - f
+  - w
+  failure_reply_is_still: g
+central_assumption:
+  local_state_may_be_blocked_before_remote_next: true
+  remote_next_must_not_assume:
+  - clean_checkout
+  - synchronized_checkout
+  - confirmed_rule_ack
+  - pushable_branch
+remote_next_preflight_must_capture:
+- current_branch
+- current_head
+- remote_tracking_state
+- rule_ack_status
+- rule_ack_head_match
+- dirty_state
+- untracked_files
+- staged_changes
+- unstaged_changes
+- branch_switch_safety
+- pull_fast_forward_safety
+- report_creation_capability
+- remote_report_publication_capability
+blocked_state_requirement:
+  must_emit_stable_diagnostic_report: true
+  product_progress: false
+  example_reasons:
+  - dirty_worktree
+  - repo_head_mismatch
+  - missing_rule_ack
+  - stale_rule_ack
+  - missing_transfer_order
+  - missing_branch_in_transfer_order
+  - branch_switch_blocked
+  - pull_blocked
+  - push_blocked
+  - report_commit_blocked
+  required_report_fields:
+    result_status: BLOCKED
+    primary_state: BLOCKED
+    reasons: list[str]
+    branch: current_branch_or_null
+    head: current_head_or_null
+    expected_branch: transfer_order_branch_or_null
+    rule_ack:
+      present: bool
+      confirmed: bool
+      blocking_reasons: list[str]
+    dirty_state:
+      clean: bool
+      paths: list[str]
+    next_safe_action: string
+    chat_reply: g
+transfer_order_minimum_schema:
+  schema_version: 1
+  id: stable_transfer_id
+  title: short_title
+  branch: working_branch
+  safety: safety_description
+  label: short_label
+  allow_blocked_start: true
+  steps:
+  - command: list[str]
+  publish_last_report: true
+  commit:
+    message: Publish <short-label> transfer report
+    paths:
+    - docs/reports/transfer_runs
+    - docs/reports/terminal/transfer_handoff_reports
+  push:
+    branch: working_branch
+  expected_chat_reply: g
+branch_argument_rule:
+  user_command_must_not_include_branch_argument: true
+  branch_source: transfer_order_or_derived_remote_next_configuration
+publish_last_report_requirements:
+  success_output:
+    TRANSFER_UPLOAD: done
+    REMOTE_REPORT: repo_relative_path
+    CHAT_REPLY: g
+  blocked_output:
+    TRANSFER_UPLOAD: blocked
+    REMOTE_REPORT: ''
+    CHAT_REPLY: g
+    NEXT: concrete_next_safe_diagnostic_or_recovery_step
+  must_update_stable_latest_pointer: true
+  must_report_commit_or_push_blockers_as_BLOCKED: true
+assistant_after_g:
+- Read the newest remote report or latest pointer from the repository.
+- Verify whether the report is fresh.
+- Derive the actual status from evidence, not from the chat signal.
+- Continue only on PASS.
+- Inspect evidence on FAIL or BLOCK.
+- Diagnose transfer-uplink problems when the remote report is missing or stale.
+- Never claim success if the report is stale.
+- Never invent success state.
+- Do not ask for long terminal output while a repo-backed or local diagnosis path
+  is available.
+transfer_file_header_requirement:
+  enabled: true
+  description: This protocol must be stored in a machine-readable form and prepended
+    as a machine-readable header to every local-to-LLM transfer file. The goal is
+    to reduce LLM drift by making the communication contract available inside each
+    transfer artifact.
+next_implementation_slice:
+  title: Harden remote-next as block-tolerant one-command transfer wrapper
+  do_not_do:
+  - release_publish_work
+  - governance_file_rewrites_before_working_technical_protocol
+  - manual_multi_command_user_sequences
+  must_fix_first:
+  - tests/test_transfer_remote_next.py currently contains a syntax error from the
+    bootstrap script output.
+  - remote-next currently reads branchless orders but is not yet block-tolerant end-to-end.
+  - report publication, commit, rule re-ack, and push must be integrated into one
+    wrapper-owned execution report.
+canonical_communication_command:
+  command: ./.venv/bin/agentic-kit transfer continue
+  semantics: single command for successor-chat communication start, transfer retries,
+    and local-to-LLM report publication
+  replaces_as_normal_user_entrypoint:
+  - ./.venv/bin/agentic-kit transfer remote-next
+  - ./.venv/bin/agentic-kit transfer restore-known-volatile
+  - ./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile
+  notes:
+  - remote-next remains the lower-level execution wrapper
+  - transfer continue is the communication wrapper a new chat should prefer
+communication_precedence:
+  primary:
+    mode: canonical_transfer_files
+    llm_to_local: .agentic/transfer/inbox/next_command.py.txt
+    local_to_llm: .agentic/transfer/outbox/last_result.txt
+  secondary:
+    mode: remote_repo_backed_work
+  tertiary:
+    mode: copy_paste
+    allowed_only_as_fallback: true
+  rule: Use transfer files as the primary communication channel. Remote work is secondary.
+    Copy-and-paste is tertiary fallback only.
+
+  llm_to_local_payload_discipline:
+    status: active
+    normative: true
+    rules:
+      - "LLM-to-local transfer files must use .agentic/transfer/inbox/next_command.py.txt."
+      - "The .py.txt transfer file must be valid Python source despite the text suffix."
+      - "Do not place raw gh, GitHub API, or direct GitHub shell commands in transfer payloads or copy/paste command blocks."
+      - "Use repo-backed agentic-kit wrappers for GitHub, PR, merge, evidence, release, and transfer operations."
+      - "Direct GitHub commands are recovery/diagnostic exceptions only, or internal implementation details of audited wrappers."
+  command_integration_governance:
+    status: active
+    normative: true
+    rules:
+      - "Every new or changed agentic-kit command must be reviewed for Command Reference, LLM context, handoff/transfer visibility, fresh-context gate, recovery-skip, and explicit exception needs."
+      - "Do not hard-gate diagnostics, context generation, status, or volatile repair commands unless a deadlock analysis shows it is safe."
+      - "Mutating lifecycle wrappers must either require fresh LLM context or document and test a specific exception."
+
+wrapper_first_inside_transfer_files:
+  rule: A canonical transfer file should invoke existing complex agentic-kit transfer
+    wrappers whenever possible instead of spelling out many low-level commands.
+  manual_sequence_warning_threshold: 5
+
+  command_reference_lifecycle_discipline:
+    status: active
+    normative: true
+    command_reference_sources:
+      - docs/reference/AGENTIC_KIT_COMMANDS.md
+      - docs/reference/agentic-kit-commands.json
+    rules:
+      - "Do not reconstruct agentic-kit commands from memory."
+      - "Use Command Reference before local control, transfer files, or copy/paste commands."
+      - "Use wrapper-first, transfer-file second, copy/paste shell only as fallback."
+      - "Use transfer pr-create-complete for new PRs."
+      - "Use transfer pr-complete for existing PRs."
+      - "After merge, always run transfer post-merge-complete --after-pr <PR_NUMBER>."
+      - "Use run-and-log only for diagnostics or fallback evidence, not as replacement for post-merge-complete."
+      - "Clean known volatile transfer outputs before branch switches and merge-safe operations when they are not target changes."
+    canonical_post_merge_sequence:
+      - "./.venv/bin/agentic-kit transfer sync-main"
+      - "./.venv/bin/agentic-kit transfer post-merge-complete --after-pr <PR_NUMBER>"
+      - "./.venv/bin/agentic-kit transfer sync-main"
+      - "./.venv/bin/agentic-kit transfer post-merge-check"
+      - "./.venv/bin/agentic-kit transfer repo-status"
+
