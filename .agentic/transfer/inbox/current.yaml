@@ -1,6 +1,0 @@
-schema_version: 1
-id: no-current-transfer-order
-title: No current remote-next transfer order
-status: inactive
-reason: Previous remote-next transfer order was stale after post-merge-complete implementation and must not be executed.
-expected_chat_reply: g
