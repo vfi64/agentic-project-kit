@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 137483979834ef5e57e744a154405f7e5b4e3223
-  short: 13748397
-  subject: Add deterministic release state check command (#1380)
+  full: 2af966bff6c8a2ec21d4e4fe7955a759d07991ad
+  short: 2af966bf
+  subject: Add deterministic release prepare command (#1382)
 last_substantive_work_state:
-  full: 137483979834ef5e57e744a154405f7e5b4e3223
-  short: 13748397
-  subject: Add deterministic release state check command (#1380)
+  full: 2af966bff6c8a2ec21d4e4fe7955a759d07991ad
+  short: 2af966bf
+  subject: Add deterministic release prepare command (#1382)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
