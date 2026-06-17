@@ -107,6 +107,8 @@ def test_transfer_pr_create_complete_orchestrates_create_and_complete(monkeypatc
             )
         if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]:
             return subprocess.CompletedProcess(command, 0, "completed\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile"]:
+            return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}\n', "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr(subprocess, "run", fake_run)
@@ -163,6 +165,8 @@ def test_transfer_pr_create_complete_uses_existing_pr_when_create_fails(monkeypa
             return subprocess.CompletedProcess(command, 0, "456\n", "")
         if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]:
             return subprocess.CompletedProcess(command, 0, "completed\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile"]:
+            return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}\n', "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr(subprocess, "run", fake_run)
@@ -192,8 +196,18 @@ def test_transfer_pr_create_complete_uses_existing_pr_when_create_fails(monkeypa
     assert "TRANSFER_PR_CREATE_COMPLETE" in result.stdout
     assert "456" in result.stdout
     assert any(call[:3] == ["gh", "pr", "view"] for call in calls)
-    assert calls[-1][:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]
-    assert "456" in calls[-1]
+    assert any(
+        call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]
+        for call in calls
+    )
+    assert calls[-1][:3] == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile"]
+    pr_complete_calls = [
+        call
+        for call in calls
+        if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]
+    ]
+    assert pr_complete_calls
+    assert "456" in pr_complete_calls[-1]
 
 
 def test_transfer_pr_create_complete_post_merge_complete_does_not_repeat_inner_closeout(monkeypatch) -> None:
@@ -221,6 +235,8 @@ def test_transfer_pr_create_complete_post_merge_complete_does_not_repeat_inner_c
             return subprocess.CompletedProcess(command, 0, "checked\n", "")
         if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "repo-status"]:
             return subprocess.CompletedProcess(command, 0, "clean\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile"]:
+            return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}\n', "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr(subprocess, "run", fake_run)
