@@ -43,7 +43,7 @@ def test_release_phase_semantics_are_explicit_in_readme_and_handoff():
     assert "post-release-check verifies the already-published release" in readme
     assert "Do not start GUI implementation in this slice." in handoff
 
-def test_release_state_records_current_pre_publication_safety_release():
+def test_release_state_records_current_verified_safety_release():
     readme = Path("README.md").read_text(encoding="utf-8")
     changelog = Path("CHANGELOG.md").read_text(encoding="utf-8")
     status = Path("docs/STATUS.md").read_text(encoding="utf-8")
@@ -55,19 +55,20 @@ def test_release_state_records_current_pre_publication_safety_release():
 
     verified_lines = [line for line in readme.splitlines() if line.startswith("Current verified release:")]
     assert verified_lines == [
-        "Current verified release: `v0.4.6` with Zenodo version DOI `10.5281/zenodo.20593293`."
+        "Current verified release: `v0.4.8` with Zenodo version DOI `10.5281/zenodo.20727067`."
     ]
 
-    current_changelog = changelog.split("## v0.4.6", 1)[0]
+    current_changelog = changelog.split("## v0.4.7", 1)[0]
     assert f"## v{version} -" in current_changelog
-    assert "Zenodo DOI verification pending until the GitHub release is created." in current_changelog
+    assert "Post-release verification complete: GitHub Release exists" in current_changelog
+    assert "verified v0.4.8 DOI `10.5281/zenodo.20727067`" in current_changelog
     assert "unfinished grouped `agentic-kit release prepare/check` route" in current_changelog
     assert "routing `./ns release-prep` through guarded metadata updates" in current_changelog
 
     assert f"Current version: {version}" in status
-    assert "Current verified release: 0.4.6." in status
-    assert "v0.4.6 GitHub Release publication and post-release Zenodo verification are complete." in status
+    assert "Current verified release: 0.4.8." in status
+    assert "v0.4.8 GitHub Release publication and post-release Zenodo verification are complete." in status
 
     assert f"Current version: {version}" in handoff
-    assert "- Current release tag: v0.4.6." in handoff
-    assert "- Current verified release: 0.4.6." in handoff
+    assert "- Current release tag: v0.4.8." in handoff
+    assert "- Current verified release: 0.4.8." in handoff

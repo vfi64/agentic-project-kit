@@ -200,19 +200,19 @@ This document is a concise pointer, not a duplicate rule book. Machine guard: `a
 
 ## Current State
 
-Current verified release: 0.4.6.
-Current release tag: v0.4.6.
+Current verified release: 0.4.8.
+Current release tag: v0.4.8.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.20467371`.
-Post-release verification command: `agentic-kit post-release-check --version 0.4.6`.
-Current verified main after handoff freshness repair: `fd1e631` (`Repair post-PR831 handoff freshness state (#834)`).
-Generated handoff safe-state anchor: `fd1e631`.
-v0.4.6 GitHub Release publication and post-release Zenodo verification are complete. Verified Zenodo version DOI: `10.5281/zenodo.20593293`.
+Verified Zenodo version DOI: `10.5281/zenodo.20727067`.
+Post-release verification command: `agentic-kit post-release-check --version 0.4.8`.
+Current verified main after handoff freshness repair: `e07ccd4` (`Refresh handoff state after PR1386 (#1387)`).
+Generated handoff safe-state anchor: `e07ccd4`.
+v0.4.8 GitHub Release publication and post-release Zenodo verification are complete. Verified Zenodo version DOI: `10.5281/zenodo.20727067`.
 
 v0.4.3 safety-release and successor-handoff target:
-- Main contains PR #834 at `fd1e631` (`Repair post-PR831 handoff freshness state (#834)`).
-- PR #835 added PR834 closeout evidence at `docs/reports/terminal/post-pr836-successor-handoff.log`.
-- Generated handoff safe-state now anchors to PR #834 via `docs/reports/terminal/post-pr836-successor-handoff.md`.
+- Main contains PR #1387 at `e07ccd4` (`Refresh handoff state after PR1386 (#1387)`).
+- PR #1387 refreshed handoff state after the v0.4.8 release PR #1386.
+- Generated handoff safe-state now anchors to PR #1387 via `docs/reports/terminal/post-pr1386-successor-chat-handoff.md`.
 - PR #833 recorded the corrected post-PR831 successor handoff at `docs/reports/terminal/post-pr831-successor-handoff.md`.
 - PR #831 recorded PR #830 closeout evidence at `docs/reports/terminal/pr830-merge-finalize.log`.
 - PR #825 hardened active handoff freshness checks so already-recorded closeout evidence and stale release-version instructions are blocking drift.

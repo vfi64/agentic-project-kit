@@ -4,6 +4,9 @@
 - Hardened release route governance by removing the unfinished grouped `agentic-kit release prepare/check` route so release work uses the documented `release-plan`, `release-preflight`, `release-check`, and `post-release-check` path.
 - Recorded deterministic release-prep evidence by routing `./ns release-prep` through guarded metadata updates with no tag or publication side effects.
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.4.8 DOI `10.5281/zenodo.20727067`.
+
+Zenodo v0.4.8 DOI: 10.5281/zenodo.20727067
 ## v0.4.7 - 2026-06-12
 
 Pending Zenodo version DOI verification after GitHub Release publication.
