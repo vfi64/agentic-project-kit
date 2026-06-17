@@ -200,10 +200,10 @@ This document is a concise pointer, not a duplicate rule book. Machine guard: `a
 
 ## Current State
 
-Current verified release: 0.4.8.
-Current release tag: v0.4.8.
+Current verified release: 0.4.9.
+Current release tag: v0.4.9.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.20727067`.
+Verified Zenodo version DOI: `10.5281/zenodo.20738074`.
 Post-release verification command: `agentic-kit post-release-check --version 0.4.8`.
 Current verified main after handoff freshness repair: `e07ccd4` (`Refresh handoff state after PR1386 (#1387)`).
 Generated handoff safe-state anchor: `e07ccd4`.

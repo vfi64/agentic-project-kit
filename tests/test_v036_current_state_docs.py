@@ -55,20 +55,20 @@ def test_release_state_records_current_verified_safety_release():
 
     verified_lines = [line for line in readme.splitlines() if line.startswith("Current verified release:")]
     assert verified_lines == [
-        "Current verified release: `v0.4.8` with Zenodo version DOI `10.5281/zenodo.20727067`."
+        "Current verified release: `v0.4.9` with Zenodo version DOI `10.5281/zenodo.20738074`."
     ]
 
     current_changelog = changelog.split("## v0.4.7", 1)[0]
     assert f"## v{version} -" in current_changelog
     assert "Post-release verification complete: GitHub Release exists" in current_changelog
-    assert "verified v0.4.8 DOI `10.5281/zenodo.20727067`" in current_changelog
+    assert "verified v0.4.9 DOI `10.5281/zenodo.20738074`" in current_changelog
     assert "unfinished grouped `agentic-kit release prepare/check` route" in current_changelog
     assert "routing `./ns release-prep` through guarded metadata updates" in current_changelog
 
     assert f"Current version: {version}" in status
-    assert "Current verified release: 0.4.8." in status
-    assert "v0.4.8 GitHub Release publication and post-release Zenodo verification are complete." in status
+    assert "Current verified release: 0.4.9." in status
+    assert "0.4.9" in status
 
     assert f"Current version: {version}" in handoff
-    assert "- Current release tag: v0.4.8." in handoff
-    assert "- Current verified release: 0.4.8." in handoff
+    assert "- Current release tag: v0.4.9." in handoff
+    assert "- Current verified release: 0.4.9." in handoff
