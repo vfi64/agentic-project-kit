@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: da7873d71082fc33beda5a6c9a3c43e447ad3359
-  short: da7873d7
-  subject: Add Codex ns command migration handoff (#1396)
+  full: 5a5b1efc35ab5df9a6c1c24b61d7e2ed84c36d26
+  short: 5a5b1efc
+  subject: Classify ns command migration targets (#1398)
 last_substantive_work_state:
-  full: da7873d71082fc33beda5a6c9a3c43e447ad3359
-  short: da7873d7
-  subject: Add Codex ns command migration handoff (#1396)
+  full: 5a5b1efc35ab5df9a6c1c24b61d7e2ed84c36d26
+  short: 5a5b1efc
+  subject: Classify ns command migration targets (#1398)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
