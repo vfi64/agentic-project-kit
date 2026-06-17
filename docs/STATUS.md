@@ -373,6 +373,6 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 - Diagnostic command coverage: `agentic-kit doctor`.## Operational documentation refresh state after PR #1338
 
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1400
+## Operational documentation refresh state after PR #1402
 
-Current administrative handoff refresh state is `f10895bb` (`Add agentic-kit dev local feature gate (#1400)`). Continue next only after this post-PR1400 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `b340f899` (`Guard workflow go on dirty pull branches (#1402)`). Continue next only after this post-PR1402 refresh is committed and merged; the next substantive slice must be created from fresh main.

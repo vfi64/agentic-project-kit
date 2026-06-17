@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f10895bb8fe93e9dab39720c93a1cb5b2aaa17f7
-  short: f10895bb
-  subject: Add agentic-kit dev local feature gate (#1400)
+  full: b340f8992d4052a0ed662c0f5aa00fb980ed78ee
+  short: b340f899
+  subject: Guard workflow go on dirty pull branches (#1402)
 last_substantive_work_state:
-  full: f10895bb8fe93e9dab39720c93a1cb5b2aaa17f7
-  short: f10895bb
-  subject: Add agentic-kit dev local feature gate (#1400)
+  full: b340f8992d4052a0ed662c0f5aa00fb980ed78ee
+  short: b340f899
+  subject: Guard workflow go on dirty pull branches (#1402)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
