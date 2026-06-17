@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5a5b1efc35ab5df9a6c1c24b61d7e2ed84c36d26
-  short: 5a5b1efc
-  subject: Classify ns command migration targets (#1398)
+  full: f10895bb8fe93e9dab39720c93a1cb5b2aaa17f7
+  short: f10895bb
+  subject: Add agentic-kit dev local feature gate (#1400)
 last_substantive_work_state:
-  full: 5a5b1efc35ab5df9a6c1c24b61d7e2ed84c36d26
-  short: 5a5b1efc
-  subject: Classify ns command migration targets (#1398)
+  full: f10895bb8fe93e9dab39720c93a1cb5b2aaa17f7
+  short: f10895bb
+  subject: Add agentic-kit dev local feature gate (#1400)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
