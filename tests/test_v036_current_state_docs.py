@@ -43,14 +43,14 @@ def test_release_phase_semantics_are_explicit_in_readme_and_handoff():
     assert "post-release-check verifies the already-published release" in readme
     assert "Do not start GUI implementation in this slice." in handoff
 
-def test_release_state_records_v047_pre_publication_safety_release():
+def test_release_state_records_current_pre_publication_safety_release():
     readme = Path("README.md").read_text(encoding="utf-8")
     changelog = Path("CHANGELOG.md").read_text(encoding="utf-8")
     status = Path("docs/STATUS.md").read_text(encoding="utf-8")
     handoff = Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
     version = _project_version()
 
-    assert version == "0.4.7"
+    assert version == "0.4.8"
     assert f"Version `{version}` is the current release line prepared" in readme
 
     verified_lines = [line for line in readme.splitlines() if line.startswith("Current verified release:")]
@@ -60,9 +60,9 @@ def test_release_state_records_v047_pre_publication_safety_release():
 
     current_changelog = changelog.split("## v0.4.6", 1)[0]
     assert f"## v{version} -" in current_changelog
-    assert "Pending Zenodo version DOI verification after GitHub Release publication." in current_changelog
-    assert "Harden successor handoff package freshness checks." in current_changelog
-    assert "Include successor execution contract as a required generated package artifact." in current_changelog
+    assert "Zenodo DOI verification pending until the GitHub release is created." in current_changelog
+    assert "unfinished grouped `agentic-kit release prepare/check` route" in current_changelog
+    assert "routing `./ns release-prep` through guarded metadata updates" in current_changelog
 
     assert f"Current version: {version}" in status
     assert "Current verified release: 0.4.6." in status
@@ -71,4 +71,3 @@ def test_release_state_records_v047_pre_publication_safety_release():
     assert f"Current version: {version}" in handoff
     assert "- Current release tag: v0.4.6." in handoff
     assert "- Current verified release: 0.4.6." in handoff
-

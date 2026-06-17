@@ -1,56 +1,38 @@
 from __future__ import annotations
 
-import re
+from datetime import date
 import sys
 from pathlib import Path
 
-
-def replace_once(path: Path, pattern: str, replacement: str) -> None:
-    text = path.read_text(encoding="utf-8")
-    new_text, count = re.subn(pattern, replacement, text, count=1, flags=re.MULTILINE)
-    if count != 1:
-        raise SystemExit(f"Could not patch expected pattern in {path}: {pattern}")
-    path.write_text(new_text, encoding="utf-8")
+REPO_ROOT = Path(__file__).resolve().parents[1]
+SRC = REPO_ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
 
 
-def ensure_contains(path: Path, needle: str, insert: str, *, prepend: bool = False) -> None:
-    text = path.read_text(encoding="utf-8") if path.exists() else ""
-    if needle in text:
-        return
-    if prepend:
-        path.write_text(insert.rstrip() + "\n\n" + text.lstrip(), encoding="utf-8")
-    else:
-        sep = "" if text.endswith("\n") or not text else "\n"
-        path.write_text(text + sep + insert.rstrip() + "\n", encoding="utf-8")
-
-
-def main() -> int:
-    if len(sys.argv) != 2:
+def main(argv: list[str] | None = None) -> int:
+    args = list(sys.argv[1:] if argv is None else argv)
+    if len(args) != 1:
         print("usage: ns_release_metadata_prep.py <version>")
         return 2
-    version = sys.argv[1].removeprefix("v")
-    if not re.fullmatch(r"\d+\.\d+\.\d+", version):
-        print(f"invalid semantic version: {version}")
+    version = args[0].removeprefix("v")
+    from agentic_project_kit.release_prepare import prepare_release_state
+
+    try:
+        result = prepare_release_state(
+            Path(".").resolve(),
+            version=version,
+            date=date.today().isoformat(),
+        )
+    except ValueError as exc:
+        print(str(exc))
         return 2
-
-    replace_once(Path("pyproject.toml"), r"^version = \"[^\"]+\"", f"version = \"{version}\"")
-    replace_once(Path("src/agentic_project_kit/__init__.py"), r"^__version__ = \"[^\"]+\"", f"__version__ = \"{version}\"")
-    replace_once(Path("CITATION.cff"), r"^version:\s*.*$", f"version: {version}")
-    replace_once(Path("docs/STATUS.md"), r"^Current version:\s*.*$", f"Current version: {version}")
-    replace_once(Path("docs/handoff/CURRENT_HANDOFF.md"), r"^Current version:\s*.*$", f"Current version: {version}")
-
-    ensure_contains(
-        Path("CHANGELOG.md"),
-        f"## v{version}",
-        f"## v{version}\n\n- Prepare release metadata for v{version}.",
-        prepend=True,
-    )
-    ensure_contains(
-        Path("README.md"),
-        f"Version `{version}`",
-        f"Version `{version}` is the current release line prepared by `./ns release-prep {version}`.",
-    )
-    print(f"Prepared release metadata for v{version}")
+    for changed_path in result.changed_paths:
+        print(f"CHANGED: {changed_path}")
+    if not result.changed_paths:
+        print(f"Release metadata already prepared for v{version}")
+    else:
+        print(f"Prepared release metadata for v{version} on {result.date}")
     return 0
 
 
