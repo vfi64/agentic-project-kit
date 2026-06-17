@@ -8,6 +8,9 @@
 
 Zenodo verification pending until GitHub Release publication and archive processing.
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.4.9 DOI `10.5281/zenodo.20738074`.
+
+Zenodo v0.4.9 DOI: 10.5281/zenodo.20738074
 ## v0.4.8 - 2026-06-17
 
 - Release metadata prepared for v0.4.8; Zenodo DOI verification pending until the GitHub release is created.
