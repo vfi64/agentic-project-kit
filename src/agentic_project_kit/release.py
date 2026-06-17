@@ -154,7 +154,7 @@ def build_release_state_report(
         check_remote_tag_absent(project_root, resolved_version, resolved_command_runner),
         check_github_release_absent(project_root, resolved_version, resolved_command_runner),
     ]
-    checks.append(check_release_publish_readiness(checks))
+    checks.append(check_release_publish_readiness(checks, block_on_warn=False))
     return ReleaseStateReport(
         version=resolved_version,
         checks=tuple(checks),
@@ -174,7 +174,7 @@ def build_release_preflight_report(
         check_remote_tag_absent(project_root, version, resolved_command_runner),
         check_github_release_absent(project_root, version, resolved_command_runner),
     ]
-    checks.append(check_release_publish_readiness(checks))
+    checks.append(check_release_publish_readiness(checks, block_on_warn=True))
     return ReleaseStateReport(version=version, checks=tuple(checks))
 
 
@@ -246,7 +246,11 @@ def check_github_release_absent(
     return ReleaseCheckResult("GitHub release unused", ReleaseCheckStatus.WARN, output or "gh release view failed")
 
 
-def check_release_publish_readiness(checks: Sequence[ReleaseCheckResult]) -> ReleaseCheckResult:
+def check_release_publish_readiness(
+    checks: Sequence[ReleaseCheckResult],
+    *,
+    block_on_warn: bool = True,
+) -> ReleaseCheckResult:
     remote_checks = {check.name: check for check in checks if check.name in REMOTE_RELEASE_CHECK_NAMES}
     missing_checks = [name for name in REMOTE_RELEASE_CHECK_NAMES if name not in remote_checks]
     if missing_checks:
@@ -263,13 +267,21 @@ def check_release_publish_readiness(checks: Sequence[ReleaseCheckResult]) -> Rel
             "remote release target is not unused: " + ", ".join(failed),
         )
     warned = [check.name for check in remote_checks.values() if check.status == ReleaseCheckStatus.WARN]
-    if warned:
+    if warned and block_on_warn:
         return ReleaseCheckResult(
             "release publish readiness",
             ReleaseCheckStatus.BLOCK,
             "remote release checks are inconclusive: "
             + ", ".join(warned)
             + "; do not tag or publish until they pass",
+        )
+    if warned:
+        return ReleaseCheckResult(
+            "release publish readiness",
+            ReleaseCheckStatus.WARN,
+            "remote release checks are inconclusive: "
+            + ", ".join(warned)
+            + "; metadata preparation may continue, but retry remote checks before tagging or publishing",
         )
     return ReleaseCheckResult(
         "release publish readiness",

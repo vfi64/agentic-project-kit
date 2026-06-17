@@ -113,7 +113,7 @@ def test_build_release_state_report_allows_local_tag_warning_without_remote_warn
     assert _check_by_name(report, "release publish readiness").status == ReleaseCheckStatus.PASS
 
 
-def test_build_release_state_report_warns_when_remote_tag_check_is_unavailable(tmp_path: Path):
+def test_build_release_state_report_allows_inconclusive_remote_tag_check(tmp_path: Path):
     _write_release_files(tmp_path, "1.2.3")
 
     report = build_release_state_report(
@@ -121,15 +121,16 @@ def test_build_release_state_report_warns_when_remote_tag_check_is_unavailable(t
         command_runner=_runner(remote_tag=CommandResult(2, "", "fatal: 'origin' does not appear to be a git repository")),
     )
 
-    assert not report.ok
-    assert report.outcome == ReleaseCheckStatus.BLOCK
+    assert report.ok
+    assert report.outcome == ReleaseCheckStatus.PASS
     assert _check_by_name(report, "remote tag unused").status == ReleaseCheckStatus.WARN
     readiness = _check_by_name(report, "release publish readiness")
-    assert readiness.status == ReleaseCheckStatus.BLOCK
-    assert "do not tag or publish" in readiness.detail
+    assert readiness.status == ReleaseCheckStatus.WARN
+    assert "metadata preparation may continue" in readiness.detail
+    assert "before tagging or publishing" in readiness.detail
 
 
-def test_build_release_state_report_warns_when_github_release_check_is_unavailable(tmp_path: Path):
+def test_build_release_state_report_allows_inconclusive_github_release_check(tmp_path: Path):
     _write_release_files(tmp_path, "1.2.3")
 
     report = build_release_state_report(
@@ -137,12 +138,13 @@ def test_build_release_state_report_warns_when_github_release_check_is_unavailab
         command_runner=_runner(github_release=CommandResult(127, "", "could not run gh: not found")),
     )
 
-    assert not report.ok
-    assert report.outcome == ReleaseCheckStatus.BLOCK
+    assert report.ok
+    assert report.outcome == ReleaseCheckStatus.PASS
     assert _check_by_name(report, "GitHub release unused").status == ReleaseCheckStatus.WARN
     readiness = _check_by_name(report, "release publish readiness")
-    assert readiness.status == ReleaseCheckStatus.BLOCK
-    assert "do not tag or publish" in readiness.detail
+    assert readiness.status == ReleaseCheckStatus.WARN
+    assert "metadata preparation may continue" in readiness.detail
+    assert "before tagging or publishing" in readiness.detail
 
 
 def test_build_release_state_report_fails_for_missing_changelog_version(tmp_path: Path):
@@ -246,7 +248,7 @@ def test_render_release_state_report_shows_overall_status(tmp_path: Path):
     assert "Overall: PASS" in rendered
 
 
-def test_render_release_state_report_blocks_when_remote_check_warns(tmp_path: Path):
+def test_render_release_state_report_warns_when_remote_check_is_inconclusive(tmp_path: Path):
     _write_release_files(tmp_path, "1.2.3")
 
     report = build_release_state_report(
@@ -256,8 +258,9 @@ def test_render_release_state_report_blocks_when_remote_check_warns(tmp_path: Pa
     rendered = render_release_state_report(report)
 
     assert "[WARN] remote tag unused: network unavailable" in rendered
-    assert "[BLOCK] release publish readiness" in rendered
-    assert "Overall: BLOCK" in rendered
+    assert "[WARN] release publish readiness" in rendered
+    assert "metadata preparation may continue" in rendered
+    assert "Overall: PASS" in rendered
 
 
 def test_build_release_preflight_report_blocks_on_remote_warnings(tmp_path: Path):
