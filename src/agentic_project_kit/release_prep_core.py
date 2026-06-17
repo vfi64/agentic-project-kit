@@ -138,7 +138,7 @@ def prepare_release(version: str, repo_root: Path) -> int:
         return abort_before_metadata_patch("ERROR: release prep branch could not be created or checked out.")
 
     section("PATCH RELEASE METADATA")
-    append_command([py, "tools/ns_release_metadata_prep.py", plain_version])
+    append_command([py, "src/agentic_project_kit/release_metadata_prep.py", plain_version])
 
     section("RELEASE CHECK AFTER METADATA PATCH")
     append_command([py, "-m", "agentic_project_kit.cli", "release-check", "--version", plain_version], env_prefix="PYTHONPATH=src")

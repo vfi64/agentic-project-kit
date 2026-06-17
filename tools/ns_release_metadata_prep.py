@@ -1,39 +1,23 @@
+#!/usr/bin/env python3
+"""Backward-compatible wrapper for release metadata preparation.
+
+The supported implementation lives in
+:mod:`agentic_project_kit.release_metadata_prep`.
+
+This wrapper intentionally exposes `date` for historical tests and callers that
+monkeypatch the legacy script module directly.
+"""
+
 from __future__ import annotations
 
 from datetime import date
-import sys
-from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-SRC = REPO_ROOT / "src"
-if str(SRC) not in sys.path:
-    sys.path.insert(0, str(SRC))
+from agentic_project_kit import release_metadata_prep as _impl
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = list(sys.argv[1:] if argv is None else argv)
-    if len(args) != 1:
-        print("usage: ns_release_metadata_prep.py <version>")
-        return 2
-    version = args[0].removeprefix("v")
-    from agentic_project_kit.release_prepare import prepare_release_state
-
-    try:
-        result = prepare_release_state(
-            Path(".").resolve(),
-            version=version,
-            date=date.today().isoformat(),
-        )
-    except ValueError as exc:
-        print(str(exc))
-        return 2
-    for changed_path in result.changed_paths:
-        print(f"CHANGED: {changed_path}")
-    if not result.changed_paths:
-        print(f"Release metadata already prepared for v{version}")
-    else:
-        print(f"Prepared release metadata for v{version} on {result.date}")
-    return 0
+    _impl.date = date
+    return _impl.main(argv)
 
 
 if __name__ == "__main__":
