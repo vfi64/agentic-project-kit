@@ -1,4 +1,4 @@
-from agentic_project_kit.ns_slice_runner import classify_step_output, load_plan, render_run, run_steps
+from agentic_project_kit.entrypoint_slice_runner import classify_step_output, load_plan, render_run, run_steps
 
 
 def test_classifies_explicit_fail_marker_before_exit_status():
@@ -26,7 +26,7 @@ def test_load_plan_ignores_blank_and_comment_lines(tmp_path):
 
 def test_run_steps_stops_on_pending(monkeypatch, tmp_path):
     outputs = iter([(0, "### RESULT: PASS ###"), (0, "### RESULT: PENDING ###"), (0, "should not run")])
-    monkeypatch.setattr("agentic_project_kit.ns_slice_runner.run_command", lambda root, command: next(outputs))
+    monkeypatch.setattr("agentic_project_kit.entrypoint_slice_runner.run_command", lambda root, command: next(outputs))
     status, results = run_steps(tmp_path, ["one", "two", "three"])
     assert status == 2
     assert [result.command for result in results] == ["one", "two"]
@@ -35,7 +35,7 @@ def test_run_steps_stops_on_pending(monkeypatch, tmp_path):
 
 def test_run_steps_stops_on_fail(monkeypatch, tmp_path):
     outputs = iter([(0, "### RESULT: PASS ###"), (1, "boom"), (0, "should not run")])
-    monkeypatch.setattr("agentic_project_kit.ns_slice_runner.run_command", lambda root, command: next(outputs))
+    monkeypatch.setattr("agentic_project_kit.entrypoint_slice_runner.run_command", lambda root, command: next(outputs))
     status, results = run_steps(tmp_path, ["one", "two", "three"])
     assert status == 1
     assert [result.command for result in results] == ["one", "two"]
