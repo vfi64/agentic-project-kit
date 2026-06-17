@@ -132,3 +132,14 @@ Intent:
 - move active workflow progression away from `tools/local_workflow_cycle.sh`;
 - provide Python-backed output capture through `tools/capture_workflow_output.py`;
 - keep shell files only as legacy/local helpers until a later removal decision, unless active references are fully eliminated in this slice.
+
+
+## Slice 3 status
+
+Status: in progress in `feature/screen-control-gate-portability`.
+
+Intent:
+
+- provide a Python-backed replacement for `tools/screen_control_gate.sh`;
+- avoid shell pipeline/`tee` dependency in the supported gate runner;
+- keep the legacy shell file only until a later removal decision verifies no user-facing dependency remains.
