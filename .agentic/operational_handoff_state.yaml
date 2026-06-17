@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: bd4729a8b239730dbc25fcf97047e901f1ac9b37
-  short: bd4729a8
-  subject: Update citation metadata during release prepare (#1384)
+  full: 27fe9c541a120d56198b1be942dba8ba186dc3ab
+  short: 27fe9c54
+  subject: Prepare v0.4.8 release and consolidate release route (#1386)
 last_substantive_work_state:
-  full: bd4729a8b239730dbc25fcf97047e901f1ac9b37
-  short: bd4729a8
-  subject: Update citation metadata during release prepare (#1384)
+  full: 27fe9c541a120d56198b1be942dba8ba186dc3ab
+  short: 27fe9c54
+  subject: Prepare v0.4.8 release and consolidate release route (#1386)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
