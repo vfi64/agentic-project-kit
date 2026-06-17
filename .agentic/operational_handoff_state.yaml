@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d3f0c0de56d8f750e56d09969dd9b2402546ce18
-  short: d3f0c0de
-  subject: Port workflow shell helper route (#1412)
+  full: bf108e5bf22009e55c95f4d3c0c912850db9c623
+  short: bf108e5b
+  subject: Add portable screen control gate (#1414)
 last_substantive_work_state:
-  full: d3f0c0de56d8f750e56d09969dd9b2402546ce18
-  short: d3f0c0de
-  subject: Port workflow shell helper route (#1412)
+  full: bf108e5bf22009e55c95f4d3c0c912850db9c623
+  short: bf108e5b
+  subject: Add portable screen control gate (#1414)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
