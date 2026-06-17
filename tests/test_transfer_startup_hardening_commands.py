@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import json
 import subprocess
+from pathlib import Path
 
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
+from agentic_project_kit.cli_commands.transfer import _restore_known_volatile_paths
 
 
 def _completed(argv: list[str], stdout: str = "", stderr: str = "", returncode: int = 0):
@@ -27,6 +29,20 @@ def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "PASS"
     assert calls == [
+        ["git", "ls-files", "--error-unmatch", ".agentic/transfer/inbox/next_command.py.txt"],
+        ["git", "ls-files", "--error-unmatch", ".agentic/transfer/outbox/last_result.txt"],
+        [
+            "git",
+            "ls-files",
+            "--error-unmatch",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        ],
+        [
+            "git",
+            "ls-files",
+            "--error-unmatch",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
+        ],
         [
             "git",
             "restore",
@@ -37,6 +53,32 @@ def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
             "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
         ]
     ]
+
+
+def test_restore_known_volatile_removes_untracked_outbox_and_restores_tracked_reports(tmp_path: Path):
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True, text=True)
+    report_dir = tmp_path / "docs/reports/terminal/transfer_handoff_reports"
+    report_dir.mkdir(parents=True)
+    latest_json = report_dir / "latest-transfer-handoff-report.json"
+    latest_log = report_dir / "latest-transfer-handoff-report.log"
+    latest_json.write_text('{"state": "old"}\n', encoding="utf-8")
+    latest_log.write_text("old\n", encoding="utf-8")
+    subprocess.run(["git", "add", str(latest_json), str(latest_log)], cwd=tmp_path, check=True)
+
+    latest_json.write_text('{"state": "new"}\n', encoding="utf-8")
+    latest_log.write_text("new\n", encoding="utf-8")
+    outbox = tmp_path / ".agentic/transfer/outbox/last_result.txt"
+    outbox.parent.mkdir(parents=True)
+    outbox.write_text('{"result_status": "PASS"}\n', encoding="utf-8")
+
+    payload = _restore_known_volatile_paths(tmp_path)
+
+    assert payload["ok"] is True
+    assert "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json" in payload["tracked_paths"]
+    assert ".agentic/transfer/outbox/last_result.txt" in payload["removed_untracked"]
+    assert latest_json.read_text(encoding="utf-8") == '{"state": "old"}\n'
+    assert latest_log.read_text(encoding="utf-8") == "old\n"
+    assert not outbox.exists()
 
 
 def test_divergence_status_reports_ahead_behind(monkeypatch):
@@ -605,4 +647,3 @@ def test_transfer_pr_existing_for_branch_reports_gh_failure(monkeypatch):
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "FAIL"
     assert "gh_pr_list_failed" in payload["blockers"]
-
