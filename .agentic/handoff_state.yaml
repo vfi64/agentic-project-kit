@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: e29d5f45
-  commit_subject: Add removed ns command diagnosis (#1394)
+  commit: da7873d7
+  commit_subject: Add Codex ns command migration handoff (#1396)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -423,8 +423,8 @@ blocked_until_closeout:
 - Gatekeeper product work before post-PR888 handoff refresh is merged and verified
 - Treating helper-local PASS as slice PASS without patch-preflight slice-gate evidence
 - GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
-first_instruction: Start the next chat from the fresh post-PR1394 successor handoff
-  prompt. Verify main at e29d5f45, confirm the post-PR1394 operational handoff refresh passes
+first_instruction: Start the next chat from the fresh post-PR1396 successor handoff
+  prompt. Verify main at da7873d7, confirm the post-PR1396 operational handoff refresh passes
   explicit summary inspection, then continue only with the operational documentation projection slice or another
   allowed small test-backed slice.
 handoff_maintenance:
@@ -433,23 +433,23 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr1394-successor-chat-handoff.md
-  first_instruction: Start the next chat from the fresh post-PR1394 successor handoff
-    prompt. Verify main at e29d5f45, confirm the post-PR1394 operational handoff refresh
+  latest_successor_prompt: docs/reports/terminal/post-pr1396-successor-chat-handoff.md
+  first_instruction: Start the next chat from the fresh post-PR1396 successor handoff
+    prompt. Verify main at da7873d7, confirm the post-PR1396 operational handoff refresh
     passes explicit summary inspection, then continue only with the operational documentation projection slice
     or another allowed small test-backed slice.
 next_step:
-  first_instruction: Start the next chat from the fresh post-PR1394 successor handoff
-    prompt. Verify main at e29d5f45, confirm the post-PR1394 operational handoff refresh
+  first_instruction: Start the next chat from the fresh post-PR1396 successor handoff
+    prompt. Verify main at da7873d7, confirm the post-PR1396 operational handoff refresh
     passes explicit summary inspection, then continue only with the operational documentation projection slice
     or another allowed small test-backed slice.
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr1394-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1396-successor-chat-handoff.md
 administrative_evidence_state:
-  current_head: e29d5f45
-  current_head_subject: Add removed ns command diagnosis (#1394)
+  current_head: da7873d7
+  current_head_subject: Add Codex ns command migration handoff (#1396)
   allowed_after_safe_state: true
   reason: administrative evidence/log/handoff commit after substantive safe_state
-  latest_successor_prompt: docs/reports/terminal/post-pr1394-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1396-successor-chat-handoff.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers

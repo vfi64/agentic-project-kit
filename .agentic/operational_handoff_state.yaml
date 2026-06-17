@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e29d5f454c86de3f577ba75c4e2f02872b0715e2
-  short: e29d5f45
-  subject: Add removed ns command diagnosis (#1394)
+  full: da7873d71082fc33beda5a6c9a3c43e447ad3359
+  short: da7873d7
+  subject: Add Codex ns command migration handoff (#1396)
 last_substantive_work_state:
-  full: e29d5f454c86de3f577ba75c4e2f02872b0715e2
-  short: e29d5f45
-  subject: Add removed ns command diagnosis (#1394)
+  full: da7873d71082fc33beda5a6c9a3c43e447ad3359
+  short: da7873d7
+  subject: Add Codex ns command migration handoff (#1396)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
