@@ -121,3 +121,14 @@ Do not:
 - replace protected docs broadly;
 - combine screen/TTY work with unrelated shell cleanup.
 
+
+
+## Slice 2 status
+
+Status: in progress in `feature/port-workflow-shell-helpers`.
+
+Intent:
+
+- move active workflow progression away from `tools/local_workflow_cycle.sh`;
+- provide Python-backed output capture through `tools/capture_workflow_output.py`;
+- keep shell files only as legacy/local helpers until a later removal decision, unless active references are fully eliminated in this slice.

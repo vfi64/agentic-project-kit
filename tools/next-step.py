@@ -101,7 +101,7 @@ def create_evidence_branch(next_state: str) -> str:
 
 
 def step_test() -> None:
-    run(["./tools/local_workflow_cycle.sh"])
+    run(["./.venv/bin/python", "tools/workflow_runner.py", "go"])
     state = read_state()
     if state != "UPLOAD":
         raise SystemExit(f"Expected state UPLOAD after TEST step, got {state}")
