@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c17c5482de0f38ff0012814ed8aada2ec9059115
-  short: c17c5482
-  subject: Port ns release metadata prep to package module (#1418)
+  full: 00a3a833c4c795ebd9128bdc402e5d3dff088ee0
+  short: 00a3a833
+  subject: Remove remaining tool shell scripts (#1420)
 last_substantive_work_state:
-  full: c17c5482de0f38ff0012814ed8aada2ec9059115
-  short: c17c5482
-  subject: Port ns release metadata prep to package module (#1418)
+  full: 00a3a833c4c795ebd9128bdc402e5d3dff088ee0
+  short: 00a3a833
+  subject: Remove remaining tool shell scripts (#1420)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
