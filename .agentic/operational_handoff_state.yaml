@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b438a6a3994643623f71bc7e8a7d67c56b3c5678
-  short: b438a6a3
-  subject: Classify remaining portability work (#1410)
+  full: d3f0c0de56d8f750e56d09969dd9b2402546ce18
+  short: d3f0c0de
+  subject: Port workflow shell helper route (#1412)
 last_substantive_work_state:
-  full: b438a6a3994643623f71bc7e8a7d67c56b3c5678
-  short: b438a6a3
-  subject: Classify remaining portability work (#1410)
+  full: d3f0c0de56d8f750e56d09969dd9b2402546ce18
+  short: d3f0c0de
+  subject: Port workflow shell helper route (#1412)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
