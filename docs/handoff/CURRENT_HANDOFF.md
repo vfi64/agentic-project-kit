@@ -192,13 +192,13 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 
 ## Current State
 
-- Current verified release: 0.4.6.
-- Current release tag: v0.4.6.
+- Current verified release: 0.4.8.
+- Current release tag: v0.4.8.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
-- Verified Zenodo version DOI: `10.5281/zenodo.20467371`.
-- Main contains PR #834 at `fd1e631`.
-- PR #835 added PR834 closeout evidence at `docs/reports/terminal/post-pr836-successor-handoff.log`.
-- Generated handoff safe-state now anchors to PR #834 via `docs/reports/terminal/post-pr836-successor-handoff.md`.
+- Verified Zenodo version DOI: `10.5281/zenodo.20727067`.
+- Main contains PR #1387 at `e07ccd4`.
+- PR #1387 refreshed handoff state after the v0.4.8 release PR #1386.
+- Generated handoff safe-state now anchors to PR #1387 via `docs/reports/terminal/post-pr1386-successor-chat-handoff.md`.
 - PR #833 recorded the corrected post-PR831 successor handoff at `docs/reports/terminal/post-pr831-successor-handoff.md`.
 - PR #831 recorded PR #830 closeout evidence at `docs/reports/terminal/pr830-merge-finalize.log`.
 - PR #825 hardened active handoff freshness checks so already-recorded closeout evidence and stale release-version instructions are blocking drift.
