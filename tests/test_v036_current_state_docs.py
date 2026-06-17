@@ -50,7 +50,7 @@ def test_release_state_records_current_verified_safety_release():
     handoff = Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
     version = _project_version()
 
-    assert version == "0.4.8"
+    assert version == "0.4.9"
     assert f"Version `{version}` is the current release line prepared" in readme
 
     verified_lines = [line for line in readme.splitlines() if line.startswith("Current verified release:")]

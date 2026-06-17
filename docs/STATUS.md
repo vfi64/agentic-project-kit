@@ -184,7 +184,7 @@ Status-date: 2026-05-27
 Project: agentic-project-kit
 Primary branch: main
 Current work branch: codex/refresh-post-pr835-next-step-state
-Current version: 0.4.8
+Current version: 0.4.9
 
 ## Purpose
 
