@@ -174,6 +174,8 @@ Current evidence:
 
 Document the existing command as the migration target and mark `agentic_project_kit.ns_up_pr_completion` obsolete for future cleanup. Do not add `agentic-kit up`; do not preserve `ns_up_pr_completion` as the supported route.
 
+Follow-up status, 2026-06-17: the obsolete `agentic_project_kit.ns_up_pr_completion` module has been removed. The supported runtime target remains `agentic-kit transfer pr-complete`.
+
 ### Proposed Target
 
 `agentic-kit transfer pr-complete`

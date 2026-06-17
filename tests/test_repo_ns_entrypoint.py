@@ -102,22 +102,15 @@ def test_ns_menu_exposes_cockpit_json_inventory_entry() -> None:
     assert "./ns actions --json" in menu
     assert "run_ns actions --json" in menu
     assert "14)" in menu
-def test_ns_up_pr_completion_tool_has_pass_fail_markers() -> None:
-    text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
-    assert "### RESULT: PASS ###" in text
-    assert "### RESULT: FAIL ###" in text
 
-def test_ns_up_tool_updates_main_only_after_successful_merge() -> None:
-    text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
-    assert "if merged:" in text
-    assert "git" in text
-    assert "switch" in text
-    assert "main" in text
-    assert "Main update skipped because PR merge did not complete successfully." in text
 
-def test_ns_up_tool_is_valid_python_syntax() -> None:
-    import py_compile
-    py_compile.compile("src/agentic_project_kit/ns_up_pr_completion.py", doraise=True)
+def test_ns_up_legacy_module_is_removed_in_favor_of_transfer_pr_complete() -> None:
+    transfer_text = Path("src/agentic_project_kit/cli_commands/transfer.py").read_text(encoding="utf-8")
+    command_reference = Path("docs/reference/AGENTIC_KIT_COMMANDS.md").read_text(encoding="utf-8")
+
+    assert not Path("src/agentic_project_kit/ns_up_pr_completion.py").exists()
+    assert '@transfer_app.command("pr-complete")' in transfer_text
+    assert "agentic-kit transfer pr-complete" in command_reference
 
 def test_repo_ns_release_shortcuts_are_wired() -> None:
     text = Path("ns").read_text(encoding="utf-8")
@@ -175,21 +168,6 @@ def test_release_publish_waits_for_github_release_and_verifies() -> None:
     assert "release-verify" in text
     assert "publish-" in text
 
-def test_ns_up_handles_already_merged_pr_idempotently() -> None:
-    text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
-    assert "MERGED" in text
-    assert "idempotent completion state" in text
-    assert "MERGEABLE" in text
-
-def test_ns_up_treats_pending_checks_as_wait_state_not_fail_state() -> None:
-    text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
-    assert "### PR CHECKS SNAPSHOT ###" in text
-    assert "agentic-kit" in text
-    assert "pr" in text
-    assert "wait-ci" in text
-    assert "--expected-head-sha" in text
-    assert "--watch" not in text
-
 def test_ns_pr_create_or_skip_handles_no_delta_idempotently() -> None:
     text = Path("src/agentic_project_kit/pr_create_or_skip.py").read_text(encoding="utf-8")
     ns_text = Path("ns").read_text(encoding="utf-8")
@@ -208,13 +186,6 @@ def test_ns_pr_create_or_skip_reuses_existing_pr_before_create() -> None:
     assert "gh" in text
     assert "pr" in text
     assert "create" in text
-
-def test_ns_up_handles_noop_branches_idempotently() -> None:
-    text = Path("src/agentic_project_kit/ns_up_pr_completion.py").read_text(encoding="utf-8")
-    assert "commits_ahead_of_main" in text
-    assert "idempotent no-op completion" in text
-    assert "rev-list" in text
-    assert "### RESULT: PASS ###" in text
 
 def test_repo_ns_commit_guard_routes_to_python_core() -> None:
     ns_text = Path("ns").read_text(encoding="utf-8")
