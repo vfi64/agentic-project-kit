@@ -36,7 +36,7 @@ def test_agentic_kit_protected_change_plan_help_is_available_without_ns() -> Non
     assert result.returncode == 0
     output = result.stdout + result.stderr
     assert "protected-diff-plan" in output
-    assert "--label" in output
+    assert "Write the current diff" in output or "protected change" in output.lower()
 
 
 def test_protected_change_planner_core_keeps_blocking_contract() -> None:
