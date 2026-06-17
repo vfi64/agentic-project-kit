@@ -35,6 +35,11 @@ def test_agentic_kit_command_reference_is_current() -> None:
     qualified = {item["qualified_name"] for item in generated["commands"]}
     assert "agentic-kit transfer pr-complete" in qualified
     assert "agentic-kit transfer post-merge-complete" in qualified
+    assert "agentic-kit release-plan" in qualified
+    assert "agentic-kit release-preflight" in qualified
+    assert "agentic-kit release-check" in qualified
+    assert "agentic-kit release prepare" not in qualified
+    assert "agentic-kit release check" not in qualified
 
 
 def test_command_reference_registry_contract_exists() -> None:

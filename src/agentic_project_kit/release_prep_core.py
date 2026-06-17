@@ -116,7 +116,7 @@ def prepare_release(version: str, repo_root: Path) -> int:
         return abort_before_metadata_patch("ERROR: release prep could not update main cleanly.")
 
     section("VERIFY MAIN BEFORE RELEASE BRANCH")
-    append_command(["./ns", "dev"])
+    append_command(["./ns", "dev-local-feature-gate"])
     append_command([py, "-m", "agentic_project_kit.cli", "pr-hygiene"], env_prefix="PYTHONPATH=src")
     if status != 0:
         return abort_before_metadata_patch("ERROR: release prep main verification failed.")

@@ -107,8 +107,8 @@ def _changelog_section(version: str, date: str) -> str:
     return (
         f"## v{version} - {date}\n\n"
         f"- Release metadata prepared for v{version}; Zenodo DOI verification pending until the GitHub release is created.\n"
-        "- Hardened deterministic release preparation/check workflow with guarded metadata updates and no tag or publication side effects.\n"
-        "- Recorded release evidence handoff and current-state documentation boundary for successor validation.\n"
+        "- Hardened release route governance by removing the unfinished grouped `agentic-kit release prepare/check` route so release work uses the documented `release-plan`, `release-preflight`, `release-check`, and `post-release-check` path.\n"
+        "- Recorded deterministic release-prep evidence by routing `./ns release-prep` through guarded metadata updates with no tag or publication side effects.\n"
     )
 
 

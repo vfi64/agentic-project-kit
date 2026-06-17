@@ -1,16 +1,19 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
+from datetime import date as Date
+import importlib.util
 from pathlib import Path
 import shutil
+import sys
 
-from typer.testing import CliRunner
-
-from agentic_project_kit.cli import app
+from agentic_project_kit.release import CommandResult, build_release_state_report
 from agentic_project_kit.release_prepare import prepare_release_state
-from agentic_project_kit.release_state import check_release_state
 
 
 ROOT = Path(__file__).resolve().parents[1]
+TARGET_VERSION = "0.4.9"
+TARGET_DATE = "2026-06-18"
 
 
 def _copy_release_state_files(tmp_path: Path) -> Path:
@@ -35,11 +38,11 @@ def _copy_release_state_files(tmp_path: Path) -> Path:
 def test_prepare_release_state_updates_expected_files(tmp_path: Path) -> None:
     project = _copy_release_state_files(tmp_path)
 
-    result = prepare_release_state(project, version="0.4.8", date="2026-06-16")
+    result = prepare_release_state(project, version=TARGET_VERSION, date=TARGET_DATE)
 
     assert result.ok
-    assert result.version == "0.4.8"
-    assert result.date == "2026-06-16"
+    assert result.version == TARGET_VERSION
+    assert result.date == TARGET_DATE
     assert result.changed_paths == [
         "CHANGELOG.md",
         "CITATION.cff",
@@ -50,31 +53,32 @@ def test_prepare_release_state_updates_expected_files(tmp_path: Path) -> None:
         "src/agentic_project_kit/__init__.py",
     ]
 
-    assert 'version = "0.4.8"' in (project / "pyproject.toml").read_text(encoding="utf-8")
-    assert '__version__ = "0.4.8"' in (
+    assert f'version = "{TARGET_VERSION}"' in (project / "pyproject.toml").read_text(encoding="utf-8")
+    assert f'__version__ = "{TARGET_VERSION}"' in (
         project / "src" / "agentic_project_kit" / "__init__.py"
     ).read_text(encoding="utf-8")
-    assert "Version `0.4.8` is the current release line prepared" in (
+    assert f"Version `{TARGET_VERSION}` is the current release line prepared" in (
         project / "README.md"
     ).read_text(encoding="utf-8")
-    assert "version: 0.4.8" in (project / "CITATION.cff").read_text(encoding="utf-8")
-    assert "Current version: 0.4.8" in (project / "docs" / "STATUS.md").read_text(
+    assert f"version: {TARGET_VERSION}" in (project / "CITATION.cff").read_text(encoding="utf-8")
+    assert f"Current version: {TARGET_VERSION}" in (project / "docs" / "STATUS.md").read_text(
         encoding="utf-8"
     )
-    assert "Current version: 0.4.8" in (
+    assert f"Current version: {TARGET_VERSION}" in (
         project / "docs" / "handoff" / "CURRENT_HANDOFF.md"
     ).read_text(encoding="utf-8")
     changelog = (project / "CHANGELOG.md").read_text(encoding="utf-8")
-    assert "## v0.4.8 - 2026-06-16" in changelog
+    assert f"## v{TARGET_VERSION} - {TARGET_DATE}" in changelog
     assert "Zenodo DOI verification pending" in changelog
+    assert "unfinished grouped `agentic-kit release prepare/check` route" in changelog
     assert "no tag or publication side effects" in changelog
 
 
 def test_prepare_release_state_is_idempotent(tmp_path: Path) -> None:
     project = _copy_release_state_files(tmp_path)
 
-    first = prepare_release_state(project, version="0.4.8", date="2026-06-16")
-    second = prepare_release_state(project, version="0.4.8", date="2026-06-16")
+    first = prepare_release_state(project, version=TARGET_VERSION, date=TARGET_DATE)
+    second = prepare_release_state(project, version=TARGET_VERSION, date=TARGET_DATE)
 
     assert first.changed_paths
     assert second.changed_paths == []
@@ -84,47 +88,52 @@ def test_prepare_release_state_dry_run_does_not_write(tmp_path: Path) -> None:
     project = _copy_release_state_files(tmp_path)
     before = (project / "pyproject.toml").read_text(encoding="utf-8")
 
-    result = prepare_release_state(project, version="0.4.8", date="2026-06-16", dry_run=True)
+    result = prepare_release_state(project, version=TARGET_VERSION, date=TARGET_DATE, dry_run=True)
 
     assert result.changed_paths
     assert (project / "pyproject.toml").read_text(encoding="utf-8") == before
 
 
-def test_release_prepare_cli_updates_temp_project_and_check_passes(
+def test_ns_release_metadata_prep_updates_temp_project_and_release_check_passes(
     tmp_path: Path,
     monkeypatch,
 ) -> None:
     project = _copy_release_state_files(tmp_path)
     monkeypatch.chdir(project)
-    runner = CliRunner()
+    module = _load_metadata_prep_script()
 
-    result = runner.invoke(
-        app,
-        [
-            "release",
-            "prepare",
-            "--version",
-            "0.4.8",
-            "--date",
-            "2026-06-16",
-        ],
-        catch_exceptions=False,
-        prog_name="agentic-kit",
-    )
+    class FrozenDate:
+        @classmethod
+        def today(cls) -> Date:
+            return Date(2026, 6, 17)
 
-    assert result.exit_code == 0
-    check = check_release_state(project, expected_version="0.4.8")
-    assert check.ok, check.errors
+    monkeypatch.setattr(module, "date", FrozenDate)
+
+    assert module.main([TARGET_VERSION]) == 0
+    report = build_release_state_report(project, version=TARGET_VERSION, command_runner=_runner())
+    assert report.ok
+    assert f"## v{TARGET_VERSION} - 2026-06-17" in (project / "CHANGELOG.md").read_text(encoding="utf-8")
 
 
-def test_release_prepare_cli_json_dry_run_on_current_repo() -> None:
-    runner = CliRunner()
+def _load_metadata_prep_script():
+    path = ROOT / "tools" / "ns_release_metadata_prep.py"
+    spec = importlib.util.spec_from_file_location("ns_release_metadata_prep_for_test", path)
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
 
-    result = runner.invoke(
-        app,
-        ["release", "prepare", "--version", "0.4.8", "--date", "2026-06-16", "--dry-run", "--json"],
-    )
 
-    assert result.exit_code == 0
-    assert '"dry_run": true' in result.output
-    assert '"version": "0.4.8"' in result.output
+def _runner():
+    def run(_project_root: Path, command: Sequence[str]) -> CommandResult:
+        if command[:3] == ["git", "tag", "-l"]:
+            return CommandResult(0, "", "")
+        if command[:4] == ["git", "ls-remote", "--tags", "origin"]:
+            return CommandResult(0, "", "")
+        if command[:3] == ["gh", "release", "view"]:
+            return CommandResult(1, "", "release not found")
+        raise AssertionError(f"unexpected command: {command}")
+
+    return run

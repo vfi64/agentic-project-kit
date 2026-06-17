@@ -1,3 +1,9 @@
+## v0.4.8 - 2026-06-17
+
+- Release metadata prepared for v0.4.8; Zenodo DOI verification pending until the GitHub release is created.
+- Hardened release route governance by removing the unfinished grouped `agentic-kit release prepare/check` route so release work uses the documented `release-plan`, `release-preflight`, `release-check`, and `post-release-check` path.
+- Recorded deterministic release-prep evidence by routing `./ns release-prep` through guarded metadata updates with no tag or publication side effects.
+
 ## v0.4.7 - 2026-06-12
 
 Pending Zenodo version DOI verification after GitHub Release publication.

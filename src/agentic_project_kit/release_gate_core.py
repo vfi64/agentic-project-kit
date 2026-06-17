@@ -85,7 +85,7 @@ def run_release_gate(
     for name, command in (
         ("### BRANCH ###", ("git", "branch", "--show-current")),
         ("### STATUS ###", ("git", "status", "--short")),
-        ("### LOCAL GATE ###", ("./ns", "dev")),
+        ("### LOCAL GATE ###", ("./ns", "dev-local-feature-gate")),
         (
             "### RELEASE CHECK ###",
             (

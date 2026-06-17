@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 import shlex
+import shutil
+import subprocess
 from pathlib import Path
 
 import typer
@@ -2335,17 +2337,76 @@ KNOWN_VOLATILE_TRANSFER_PATHS = [
 ]
 
 
-def _run_transfer_subprocess(argv: list[str], *, cwd: Path | None = None) -> dict[str, object]:
-    import subprocess
-
-    completed = subprocess.run(argv, cwd=cwd or Path("."), text=True, capture_output=True, check=False)
+def _completed_process_payload(completed: subprocess.CompletedProcess[str]) -> dict[str, object]:
     return {
-        "argv": argv,
+        "argv": list(completed.args),
         "returncode": completed.returncode,
         "stdout": completed.stdout,
         "stderr": completed.stderr,
         "ok": completed.returncode == 0,
     }
+
+
+def _restore_known_volatile_paths(root: Path | str = ".") -> dict[str, object]:
+    root_path = Path(root)
+    tracked_paths: list[str] = []
+    removed_untracked: list[str] = []
+    skipped_missing: list[str] = []
+    checks: list[dict[str, object]] = []
+    errors: list[str] = []
+
+    for relative_path in KNOWN_VOLATILE_TRANSFER_PATHS:
+        check = subprocess.run(
+            ["git", "ls-files", "--error-unmatch", relative_path],
+            cwd=root_path,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        checks.append(_completed_process_payload(check))
+        target = root_path / relative_path
+        if check.returncode == 0:
+            tracked_paths.append(relative_path)
+            continue
+        if target.exists():
+            try:
+                if target.is_dir():
+                    shutil.rmtree(target)
+                else:
+                    target.unlink()
+                removed_untracked.append(relative_path)
+            except OSError as exc:
+                errors.append(f"remove_untracked_failed:{relative_path}:{exc}")
+        else:
+            skipped_missing.append(relative_path)
+
+    restore_result: dict[str, object] | None = None
+    if tracked_paths:
+        restore = subprocess.run(
+            ["git", "restore", "--", *tracked_paths],
+            cwd=root_path,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        restore_result = _completed_process_payload(restore)
+        if restore.returncode != 0:
+            errors.append("git_restore_failed")
+
+    return {
+        "ok": not errors,
+        "tracked_paths": tracked_paths,
+        "removed_untracked": removed_untracked,
+        "skipped_missing": skipped_missing,
+        "checks": checks,
+        "restore": restore_result,
+        "errors": errors,
+    }
+
+
+def _run_transfer_subprocess(argv: list[str], *, cwd: Path | None = None) -> dict[str, object]:
+    completed = subprocess.run(argv, cwd=cwd or Path("."), text=True, capture_output=True, check=False)
+    return _completed_process_payload(completed)
 
 
 
@@ -2396,7 +2457,7 @@ def restore_known_volatile(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
 ) -> None:
     """Restore the canonical known volatile transfer files."""
-    result = _run_transfer_subprocess(["git", "restore", "--", *KNOWN_VOLATILE_TRANSFER_PATHS])
+    result = _restore_known_volatile_paths(Path("."))
     status = "PASS" if result["ok"] else "FAIL"
     final_signal = "d" if result["ok"] else "f"
     next_action = (
@@ -3019,7 +3080,7 @@ def normalize_session(
 
     volatile_repair_result = None
     if repair_known_volatile:
-        volatile_repair_result = run(["git", "restore", "--", *known_volatile_paths])
+        volatile_repair_result = _restore_known_volatile_paths(root)
 
     branch_result = run(["git", "branch", "--show-current"])
     status_result = run(["git", "status", "--short"])

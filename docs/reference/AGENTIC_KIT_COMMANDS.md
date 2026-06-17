@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `157`
+- Command count: `155`
 
 ## Commands
 
@@ -442,26 +442,6 @@ Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 List available project profiles and policy packs.
 
 _No parameters._
-
-### `agentic-kit release check`
-
-Check prepared release-state anchors without mutating the repository.
-
-| Parameter | Type | Options | Required | Default | Help |
-|---|---:|---|---:|---|---|
-| `version` | `TyperOption` | --version | `False` |  | Expected prepared release version. Defaults to pyproject.toml. |
-| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON output. |
-
-### `agentic-kit release prepare`
-
-Prepare release metadata files without publishing anything.
-
-| Parameter | Type | Options | Required | Default | Help |
-|---|---:|---|---:|---|---|
-| `version` | `TyperOption` | --version | `True` |  | Target release version without leading v. |
-| `date` | `TyperOption` | --date | `True` |  | Release date in YYYY-MM-DD format. |
-| `dry_run` | `TyperOption` | --dry-run | `False` | `False` | Show planned file changes without writing them. |
-| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON output. |
 
 ### `agentic-kit release-check`
 
