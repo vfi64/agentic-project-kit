@@ -199,15 +199,15 @@ def test_repo_ns_commit_guard_routes_to_python_core() -> None:
     assert "branch" in core_text
 
 
-def test_ns_slice_runner_is_wired() -> None:
+def test_entrypoint_slice_runner_is_wired() -> None:
     text = Path("ns").read_text(encoding="utf-8")
     assert "slice-runner" in text
-    assert "agentic_project_kit.ns_slice_runner" in text
-    assert "tools/ns_slice_runner.sh" not in text
+    assert "agentic_project_kit.entrypoint_slice_runner" in text
+    assert "tools/entrypoint_slice_runner.sh" not in text
 
 
-def test_ns_slice_runner_has_step_stop_semantics() -> None:
-    text = Path("src/agentic_project_kit/ns_slice_runner.py").read_text(encoding="utf-8")
+def test_entrypoint_slice_runner_has_step_stop_semantics() -> None:
+    text = Path("src/agentic_project_kit/entrypoint_slice_runner.py").read_text(encoding="utf-8")
     assert "Stopping slice runner at retryable state" in text
     assert "Stopping slice runner at first failing step" in text
     assert "### RESULT: FAIL ###" in text
@@ -231,13 +231,13 @@ def test_repo_ns_pr_cleanup_routes_to_python_core() -> None:
     assert not Path("tools/ns_pr_cleanup.sh").exists()
     assert "NS PR CLEANUP CLASSIFICATION" in core_text
 
-def test_repo_ns_slice_runner_routes_to_python_core() -> None:
+def test_repo_entrypoint_slice_runner_routes_to_python_core() -> None:
     ns_text = Path("ns").read_text(encoding="utf-8")
-    core_text = Path("src/agentic_project_kit/ns_slice_runner.py").read_text(encoding="utf-8")
+    core_text = Path("src/agentic_project_kit/entrypoint_slice_runner.py").read_text(encoding="utf-8")
     assert "\"slice-runner\"" in ns_text
-    assert "agentic_project_kit.ns_slice_runner" in ns_text
-    assert "tools/ns_slice_runner.sh" not in ns_text
-    assert not Path("tools/ns_slice_runner.sh").exists()
+    assert "agentic_project_kit.entrypoint_slice_runner" in ns_text
+    assert "tools/entrypoint_slice_runner.sh" not in ns_text
+    assert not Path("tools/entrypoint_slice_runner.sh").exists()
     assert "NS SLICE RUNNER" in core_text
 
 def test_repo_ns_release_gate_routes_to_python_core() -> None:

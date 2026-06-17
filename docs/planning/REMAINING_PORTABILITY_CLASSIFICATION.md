@@ -143,3 +143,15 @@ Intent:
 - provide a Python-backed replacement for `tools/screen_control_gate.sh`;
 - avoid shell pipeline/`tee` dependency in the supported gate runner;
 - keep the legacy shell file only until a later removal decision verifies no user-facing dependency remains.
+
+
+## Slice 4 status
+
+Status: in progress in `feature/port-ns-slice-runner`.
+
+Intent:
+
+- move the active `ns` entrypoint away from `agentic_project_kit.ns_slice_runner`;
+- introduce neutral `agentic_project_kit.entrypoint_slice_runner`;
+- keep `agentic_project_kit.ns_slice_runner` only as a temporary compatibility shim if required by historical imports;
+- keep no-exec and evidence safety guards.
