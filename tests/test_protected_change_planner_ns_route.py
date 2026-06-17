@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,7 +21,9 @@ def test_agentic_kit_protected_change_plan_route_exists() -> None:
 def test_agentic_kit_protected_change_plan_help_is_available_without_ns() -> None:
     result = subprocess.run(
         [
-            "./.venv/bin/agentic-kit",
+            sys.executable,
+            "-m",
+            "agentic_project_kit.cli",
             "transfer",
             "protected-diff-plan",
             "--help",

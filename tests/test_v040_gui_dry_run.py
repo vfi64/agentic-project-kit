@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import subprocess
+import sys
 from pathlib import Path
 
 from agentic_project_kit.gui_dry_run import render_result, run_gui_dry_run
@@ -29,7 +30,7 @@ def test_legacy_ns_gui_dry_run_route_is_removed() -> None:
 
 def test_gui_dry_run_executes_without_shell_adapter() -> None:
     result = subprocess.run(
-        ["./.venv/bin/python", "-m", "agentic_project_kit.gui_dry_run"],
+        [sys.executable, "-m", "agentic_project_kit.gui_dry_run"],
         text=True,
         capture_output=True,
         check=False,
