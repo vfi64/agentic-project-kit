@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 27fe9c541a120d56198b1be942dba8ba186dc3ab
-  short: 27fe9c54
-  subject: Prepare v0.4.8 release and consolidate release route (#1386)
+  full: cafe450101390acbb62006a9debdb68b76c9a439
+  short: cafe4501
+  subject: Close out v0.4.8 DOI metadata (#1388)
 last_substantive_work_state:
-  full: 27fe9c541a120d56198b1be942dba8ba186dc3ab
-  short: 27fe9c54
-  subject: Prepare v0.4.8 release and consolidate release route (#1386)
+  full: cafe450101390acbb62006a9debdb68b76c9a439
+  short: cafe4501
+  subject: Close out v0.4.8 DOI metadata (#1388)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
