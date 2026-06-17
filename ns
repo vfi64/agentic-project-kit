@@ -398,16 +398,6 @@ if [ "${1:-}" = "slice-runner" ]; then
   exit $?
 fi
 
-if [ "${1:-}" = "upload" ]; then
-  shift
-  if [ -x ".venv/bin/agentic-kit" ]; then
-    .venv/bin/agentic-kit workflow upload "$@"
-    exit $?
-  fi
-  agentic-kit workflow upload "$@"
-  exit $?
-fi
-
 if [ "${1:-}" = "fail" ]; then
   shift
   if [ -x ".venv/bin/agentic-kit" ]; then
@@ -434,4 +424,3 @@ if [ -x ".venv/bin/python" ]; then
   "$PY" tools/next-step.py "$@"
 fi
 "$PY" tools/next-step.py "$@"
-

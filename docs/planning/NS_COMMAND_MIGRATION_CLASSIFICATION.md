@@ -230,6 +230,8 @@ Current evidence:
 
 Document existing command. No migration needed.
 
+Follow-up status, 2026-06-17: the active `./ns upload` shortcut was removed from `ns` and `ns-menu`; the supported user-facing command is `agentic-kit workflow upload`.
+
 ### Proposed Target
 
 `agentic-kit workflow upload`

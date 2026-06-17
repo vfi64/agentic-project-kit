@@ -27,7 +27,8 @@ def test_repo_ns_menu_exposes_expected_shortcuts_without_heredocs() -> None:
     assert "./ns list" in text
     assert "./ns show" in text
     assert "./ns run <work-item-name>" in text
-    assert "./ns upload" in text
+    assert "agentic-kit workflow upload" in text
+    assert "run_agentic_kit workflow upload" in text
     assert "./ns fail" in text
     assert "./ns cleanup" in text
     assert "<<" not in text
@@ -272,6 +273,7 @@ def test_repo_ns_entrypoint_removes_dev_go_up_shortcuts() -> None:
     assert 'if [ "${1:-}" = "dev" ]; then' not in text
     assert 'if [ "${1:-}" = "go" ]; then' not in text
     assert 'if [ "${1:-}" = "up" ]; then' not in text
+    assert 'if [ "${1:-}" = "upload" ]; then' not in text
     assert "./ns dev" not in text
     assert "./ns go" not in text
     assert "./ns up" not in text

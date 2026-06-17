@@ -29,6 +29,23 @@ run_ns() {
   pause_after_run
 }
 
+run_agentic_kit() {
+  echo
+  echo "------------------------------------------------------------"
+  echo "Starte: agentic-kit $*"
+  echo "------------------------------------------------------------"
+  echo
+  if [ -x ".venv/bin/agentic-kit" ]; then
+    .venv/bin/agentic-kit "$@"
+  else
+    agentic-kit "$@"
+  fi
+  code=$?
+  echo
+  echo "Exit-Code: $code"
+  pause_after_run
+}
+
 show_menu() {
   if [ "${NS_MENU_CLEAR:-0}" = "1" ]; then
     clear
@@ -41,7 +58,7 @@ show_menu() {
   echo "4)  ./ns show"
   echo "5)  ./ns run"
   echo "6)  ./ns run <work-item-name>"
-  echo "7)  ./ns upload"
+  echo "7)  agentic-kit workflow upload"
   echo "8)  ./ns fail"
   echo "9)  ./ns status"
   echo "10) ./ns cleanup"
@@ -92,7 +109,7 @@ while true; do
       fi
       ;;
     7)
-      run_ns upload
+      run_agentic_kit workflow upload
       ;;
     8)
       run_ns fail
