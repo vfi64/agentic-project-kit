@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `156`
+- Command count: `157`
 
 ## Commands
 
@@ -103,6 +103,14 @@ _No parameters._
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+
+### `agentic-kit dev local-feature-gate`
+
+Run the local feature gate through the supported agentic-kit CLI.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `include_pr_hygiene` | `TyperOption` | --include-pr-hygiene | `False` | `False` | Also run PR hygiene after the local feature gate. |
 
 ### `agentic-kit doc-lifecycle-audit`
 

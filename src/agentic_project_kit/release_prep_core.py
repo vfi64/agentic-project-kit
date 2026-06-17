@@ -50,6 +50,11 @@ def python_tool(repo_root: Path) -> str:
     return str(local) if local.exists() else "python3"
 
 
+def agentic_kit_tool(repo_root: Path) -> str:
+    local = repo_root / ".venv" / "bin" / "agentic-kit"
+    return str(local) if local.exists() else "agentic-kit"
+
+
 def render_header(tag: str) -> list[str]:
     return [
         "",
@@ -79,6 +84,7 @@ def prepare_release(version: str, repo_root: Path) -> int:
     status = 0
     lines = render_header(tag)
     py = python_tool(repo_root)
+    agentic_kit = agentic_kit_tool(repo_root)
 
     def section(title: str) -> None:
         lines.extend(["", f"### {title} ###"])
@@ -116,7 +122,7 @@ def prepare_release(version: str, repo_root: Path) -> int:
         return abort_before_metadata_patch("ERROR: release prep could not update main cleanly.")
 
     section("VERIFY MAIN BEFORE RELEASE BRANCH")
-    append_command(["./ns", "dev-local-feature-gate"])
+    append_command([agentic_kit, "dev", "local-feature-gate"])
     append_command([py, "-m", "agentic_project_kit.cli", "pr-hygiene"], env_prefix="PYTHONPATH=src")
     if status != 0:
         return abort_before_metadata_patch("ERROR: release prep main verification failed.")

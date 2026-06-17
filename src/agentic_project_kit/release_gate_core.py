@@ -44,6 +44,13 @@ def default_runner(command: Sequence[str]) -> int:
     return int(completed.returncode)
 
 
+def agentic_kit_command(repo_root: Path) -> tuple[str, ...]:
+    local = repo_root / ".venv" / "bin" / "agentic-kit"
+    if local.exists():
+        return (str(local),)
+    return ("agentic-kit",)
+
+
 def _section(title: str) -> None:
     print()
     print(title)
@@ -85,7 +92,7 @@ def run_release_gate(
     for name, command in (
         ("### BRANCH ###", ("git", "branch", "--show-current")),
         ("### STATUS ###", ("git", "status", "--short")),
-        ("### LOCAL GATE ###", ("./ns", "dev-local-feature-gate")),
+        ("### LOCAL GATE ###", (*agentic_kit_command(root), "dev", "local-feature-gate")),
         (
             "### RELEASE CHECK ###",
             (
