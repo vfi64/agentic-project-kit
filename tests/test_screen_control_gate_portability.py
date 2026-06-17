@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import sys
 
 import tools.screen_control_gate as gate
 
@@ -18,7 +19,7 @@ def test_run_gate_captures_output_without_shell(tmp_path: Path) -> None:
     commands = [
         gate.GateCommand(
             "python-hello",
-            ("./.venv/bin/python", "-c", "print('hello screen gate')"),
+            (sys.executable, "-c", "print('hello screen gate')"),
         )
     ]
     rc = gate.run_gate(commands, output)
