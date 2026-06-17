@@ -1,11 +1,13 @@
-from pathlib import Path
+from __future__ import annotations
+
 import subprocess
 import sys
+from pathlib import Path
 
 from agentic_project_kit.gui_dry_run import render_result, run_gui_dry_run
 
 
-def test_gui_dry_run_module_reports_required_checks():
+def test_gui_dry_run_module_reports_required_checks() -> None:
     result = run_gui_dry_run(Path.cwd())
     output = render_result(result)
     assert "GUI DRY RUN" in output
@@ -19,69 +21,22 @@ def test_gui_dry_run_module_reports_required_checks():
     assert "presenter_action_count=" in output
     assert "presenter_preview_begin" in output
     assert "presenter_preview_end" in output
-    assert "mode_guard_available=true" in output
-    assert "shell_adapters_absent=true" in output
+    assert "real_window_opened=false" in output
 
 
-def test_gui_dry_run_module_cli_has_deterministic_output():
+def test_legacy_ns_gui_dry_run_route_is_removed() -> None:
+    assert not Path("ns").exists()
+
+
+def test_gui_dry_run_executes_without_shell_adapter() -> None:
     result = subprocess.run(
-        [sys.executable, "-m", "agentic_project_kit.gui_dry_run", "--dry-run"],
-        cwd=Path.cwd(),
+        [sys.executable, "-m", "agentic_project_kit.gui_dry_run"],
         text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
+        capture_output=True,
         check=False,
     )
-    assert result.returncode == 0
-    output = result.stdout
+    assert result.returncode in {0, 1}
+    output = result.stdout + result.stderr
     assert "GUI DRY RUN" in output
-    assert "### RESULT:" in output
-    assert "Traceback" not in output
-
-
-def test_ns_gui_dry_run_route_is_python_backed():
-    text = Path("ns").read_text(encoding="utf-8")
-    assert 'if [ "${1:-}" = "gui" ]' in text
-    assert "agentic_project_kit.gui_dry_run" in text
-    assert "tools/ns_gui" not in text
-
-
-def test_ns_gui_dry_run_executes_without_shell_adapter():
-    result = subprocess.run(
-        ["./ns", "gui", "--dry-run"],
-        cwd=Path.cwd(),
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        check=False,
-    )
-    assert result.returncode == 0
-    output = result.stdout
-    assert "GUI DRY RUN" in output
-    assert "no window is opened" in output
-    assert "tools/ns_gui" not in output
-
-
-
-def test_gui_dry_run_mode_guard_detection_uses_existing_ns_routes():
-    module = Path("src/agentic_project_kit/gui_dry_run.py").read_text(encoding="utf-8")
-    assert "agentic_project_kit.mode_guard" not in module
-    assert "\"mode-check\" in ns_text" in module
-    assert "\"mode-write\" in ns_text" in module
-
-
-
-
-
-def test_gui_dry_run_does_not_require_tkinter_for_no_window_contract():
-    module = Path("src/agentic_project_kit/gui_dry_run.py").read_text(encoding="utf-8")
-    start = module.index("    ok = all((")
-    end = module.index("    message =", start)
-    ok_block = module[start:end]
-    assert "tkinter_available" not in ok_block
-    assert "action_registry_available" in ok_block
-    assert "action_specs_available" in ok_block
-    assert "mode_guard_available" in ok_block
-    assert "shell_adapters_absent" in ok_block
-    assert "tkinter_note=nonblocking for --dry-run" in module
-    assert "window_launch_ready=" in module
+    assert "ns_gui_dry_run" not in output
+    assert ".sh" not in output

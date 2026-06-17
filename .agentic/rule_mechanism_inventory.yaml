@@ -10,10 +10,10 @@ mechanisms:
   conflict_domains:
   - summary-output-contract
   sources:
-  - path: ./ns
+  - path: src/agentic_project_kit/run_summary_renderer.py
     required_terms:
-    - run_summary_renderer
-    - summary
+    - validate_rendered_summary_text
+    - terminal_log_remote
   - path: src/agentic_project_kit/run_summary_renderer.py
     required_terms:
     - VALID_REMOTE_EVIDENCE_RESULTS
@@ -27,7 +27,7 @@ mechanisms:
     - CHAT_REPLY
   protected_rule_intent: Canonical structured summary rendering and validation.
   surfaces:
-  - ns-cli
+  - agentic-kit-cli
   - summary-renderer
   - summary-tests
   tests:
@@ -41,10 +41,10 @@ mechanisms:
   conflict_domains:
   - execution-mode-state
   sources:
-  - path: ./ns
+  - path: src/agentic_project_kit/cli_commands/state.py
     required_terms:
-    - mode-check
-    - mode-write
+    - mode_check
+    - mode_write
   - path: src/agentic_project_kit/cli_commands/state.py
     required_terms:
     - mode_check
@@ -59,7 +59,7 @@ mechanisms:
     - MODE_SWITCH_BLOCKED
   protected_rule_intent: Explicit local versus remote execution-mode checks and switching.
   surfaces:
-  - ns-cli
+  - agentic-kit-cli
   - execution-mode-state
   - state-cli
   tests:
@@ -163,11 +163,10 @@ mechanisms:
     required_terms:
     - test_flags_large_rewrite_without_decision
     - test_accepts_large_rewrite_with_explicit_decision
-  - path: ./ns
+  - path: src/agentic_project_kit/cli_commands/transfer.py
     required_terms:
-    - patch-preflight
-    - protected-change-plan
-    - agentic_project_kit.cli
+    - protected-diff-plan
+    - protected_diff_plan
   protected_rule_intent: Block unsafe generated patch artifacts, broad protected-file
     replacements, anchor removal, and rule-registry drift before patch application.
   surfaces:

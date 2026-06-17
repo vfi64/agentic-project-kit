@@ -6163,7 +6163,7 @@
     },
     {
       "group": "transfer",
-      "help": "Write the current diff to /tmp and run ./ns protected-change-plan on it.",
+      "help": "Write the current diff to /tmp and run the Python protected change planner on it.",
       "name": "protected-diff-plan",
       "params": [
         {
