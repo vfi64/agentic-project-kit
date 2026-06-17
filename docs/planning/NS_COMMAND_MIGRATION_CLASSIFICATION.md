@@ -7,6 +7,22 @@ Scope: classification only. This document does not migrate or add commands.
 Review policy: Review before adding, removing, or redirecting any `agentic-kit` command that replaces old `./ns` semantics.
 Project: agentic-project-kit
 
+## Completion status after PR #1406
+
+Status: completed.
+
+The four classified migration targets have been resolved in small merged slices:
+
+- `ns dev`: migrated to the supported Python-backed command `agentic-kit dev local-feature-gate`; release prep/gate no longer route through `./ns dev-local-feature-gate`.
+- `ns go`: the old dirty non-main pull-branch guard was migrated into `agentic-kit workflow go`.
+- `ns up`: the obsolete `agentic_project_kit.ns_up_pr_completion` route was removed; the supported target is `agentic-kit transfer pr-complete`.
+- `ns upload`: the active `./ns upload` shortcut was removed; `ns-menu` routes directly to `agentic-kit workflow upload`.
+
+Verification after PR #1406 confirmed `main == origin/main == 65eda04758632981a4cbdb7f80ed90d1c76af77d`, a clean worktree, `post-merge-check` PASS/NOOP, `repo-status` PASS, `docs-audit` PASS, `check-docs` PASS, `doctor` PASS, Ruff PASS, and full pytest with 1705 passed tests.
+
+Remaining references to `ns dev`, `ns go`, `ns up`, and `ns upload` are historical classification, test, handoff, or diagnostic references, not active runtime entrypoints.
+
+
 ## Evidence Base
 
 - Mandatory start log: `tmp/codex-ns-migration-start-20260617-162611.log`

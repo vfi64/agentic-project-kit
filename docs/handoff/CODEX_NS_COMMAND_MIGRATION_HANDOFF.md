@@ -3,6 +3,21 @@
 Status-date: 2026-06-17
 Scope: classification-first migration of remaining meaningful `./ns` command semantics to the supported `agentic-kit` Python CLI surface.
 
+## Closeout status after PR #1406
+
+This Codex handoff has been fulfilled for the four classified command families. Do not restart the same migration loop unless a fresh scan finds an active runtime entrypoint.
+
+Completed slices:
+
+- PR #1398: classified `ns dev`, `ns go`, `ns up`, and `ns upload`.
+- PR #1400: added `agentic-kit dev local-feature-gate` and moved release prep/gate away from the old `./ns` compatibility route.
+- PR #1402: migrated the old `ns go` dirty-branch guard into `agentic-kit workflow go`.
+- PR #1404: removed the obsolete `ns_up_pr_completion` route; supported replacement is `agentic-kit transfer pr-complete`.
+- PR #1406: removed the active `./ns upload` shortcut; `ns-menu` uses `agentic-kit workflow upload`.
+
+Next work must be a fresh slice based on current `main`, not a continuation of this handoff.
+
+
 ## Current Verified Start State
 
 The mandatory Codex start block completed successfully.
