@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: bd4729a8
-  commit_subject: Update citation metadata during release prepare (#1384)
+  commit: 27fe9c54
+  commit_subject: Prepare v0.4.8 release and consolidate release route (#1386)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -423,8 +423,8 @@ blocked_until_closeout:
 - Gatekeeper product work before post-PR888 handoff refresh is merged and verified
 - Treating helper-local PASS as slice PASS without patch-preflight slice-gate evidence
 - GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
-first_instruction: Start the next chat from the fresh post-PR1384 successor handoff
-  prompt. Verify main at bd4729a8, confirm the post-PR1384 operational handoff refresh passes
+first_instruction: Start the next chat from the fresh post-PR1386 successor handoff
+  prompt. Verify main at 27fe9c54, confirm the post-PR1386 operational handoff refresh passes
   explicit summary inspection, then continue only with the operational documentation projection slice or another
   allowed small test-backed slice.
 handoff_maintenance:
@@ -433,23 +433,23 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr1384-successor-chat-handoff.md
-  first_instruction: Start the next chat from the fresh post-PR1384 successor handoff
-    prompt. Verify main at bd4729a8, confirm the post-PR1384 operational handoff refresh
+  latest_successor_prompt: docs/reports/terminal/post-pr1386-successor-chat-handoff.md
+  first_instruction: Start the next chat from the fresh post-PR1386 successor handoff
+    prompt. Verify main at 27fe9c54, confirm the post-PR1386 operational handoff refresh
     passes explicit summary inspection, then continue only with the operational documentation projection slice
     or another allowed small test-backed slice.
 next_step:
-  first_instruction: Start the next chat from the fresh post-PR1384 successor handoff
-    prompt. Verify main at bd4729a8, confirm the post-PR1384 operational handoff refresh
+  first_instruction: Start the next chat from the fresh post-PR1386 successor handoff
+    prompt. Verify main at 27fe9c54, confirm the post-PR1386 operational handoff refresh
     passes explicit summary inspection, then continue only with the operational documentation projection slice
     or another allowed small test-backed slice.
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr1384-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1386-successor-chat-handoff.md
 administrative_evidence_state:
-  current_head: bd4729a8
-  current_head_subject: Update citation metadata during release prepare (#1384)
+  current_head: 27fe9c54
+  current_head_subject: Prepare v0.4.8 release and consolidate release route (#1386)
   allowed_after_safe_state: true
   reason: administrative evidence/log/handoff commit after substantive safe_state
-  latest_successor_prompt: docs/reports/terminal/post-pr1384-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1386-successor-chat-handoff.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
