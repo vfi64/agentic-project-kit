@@ -155,6 +155,31 @@ def _working_tree_dirty(root: Path) -> bool:
     return result.returncode == 0 and bool(result.stdout.strip())
 
 
+def _current_branch(root: Path) -> str:
+    result = _run_git(root.resolve(), ["branch", "--show-current"])
+    if result.returncode != 0:
+        return ""
+    return result.stdout.strip()
+
+
+def _current_work_mentions_git_pull_ff_only(root: Path) -> bool:
+    work_path = _rooted(WORK_FILE, root)
+    if not work_path.exists():
+        return False
+    return "git_pull_ff_only" in work_path.read_text(encoding="utf-8")
+
+
+def _workflow_go_guard_reason(root: Path) -> str | None:
+    branch = _current_branch(root)
+    if branch == "main":
+        return None
+    if not _working_tree_dirty(root):
+        return None
+    if not _current_work_mentions_git_pull_ff_only(root):
+        return None
+    return "refusing workflow go on a dirty non-main branch because current_work includes git_pull_ff_only"
+
+
 def _status_interpretation(state: str, work_state: str | None, dirty: bool) -> tuple[list[str], list[str]]:
     interpretation: list[str] = []
     recommendation: list[str] = []
@@ -354,6 +379,9 @@ def workflow_go(
     state = _read_state(root)
     if state != "IDLE":
         raise typer.BadParameter(f"refusing to start workflow from state: {state}")
+    guard_reason = _workflow_go_guard_reason(root)
+    if guard_reason is not None:
+        raise typer.BadParameter(guard_reason)
     _workflow_request_state(root)
     _set_workflow_request_state(root, "REQUESTED")
     typer.echo(f"Current workflow request file: {WORK_FILE}")

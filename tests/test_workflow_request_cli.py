@@ -192,6 +192,59 @@ def test_workflow_go_refuses_non_idle_workflow_state(tmp_path: Path, monkeypatch
     assert calls == []
 
 
+def test_workflow_go_refuses_dirty_feature_branch_with_git_pull_step(tmp_path: Path, monkeypatch) -> None:
+    _write_workflow_files(tmp_path)
+    current_work = tmp_path / ".agentic" / "current_work.yaml"
+    current_work.write_text(
+        current_work.read_text(encoding="utf-8") + "  - git_pull_ff_only\n",
+        encoding="utf-8",
+    )
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "checkout", "-b", "feature"], cwd=tmp_path, check=True, capture_output=True, text=True)
+    (tmp_path / "dirty.txt").write_text("dirty\n", encoding="utf-8")
+    calls: list[tuple[Path, list[str] | None]] = []
+
+    def fake_run_next_step(root: Path, extra_args: list[str] | None = None) -> int:
+        calls.append((root, extra_args))
+        return 0
+
+    import agentic_project_kit.cli_commands.workflow as workflow_module
+
+    monkeypatch.setattr(workflow_module, "_run_next_step", fake_run_next_step)
+    result = runner.invoke(app, ["workflow", "go", "--root", str(tmp_path)])
+
+    assert result.exit_code != 0
+    assert "dirty non-main branch" in result.output
+    assert calls == []
+    assert "state: READY" in current_work.read_text(encoding="utf-8")
+
+
+def test_workflow_go_allows_dirty_main_branch_with_git_pull_step(tmp_path: Path, monkeypatch) -> None:
+    _write_workflow_files(tmp_path)
+    current_work = tmp_path / ".agentic" / "current_work.yaml"
+    current_work.write_text(
+        current_work.read_text(encoding="utf-8") + "  - git_pull_ff_only\n",
+        encoding="utf-8",
+    )
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "checkout", "-b", "main"], cwd=tmp_path, check=True, capture_output=True, text=True)
+    (tmp_path / "dirty.txt").write_text("dirty\n", encoding="utf-8")
+    calls: list[tuple[Path, list[str] | None]] = []
+
+    def fake_run_next_step(root: Path, extra_args: list[str] | None = None) -> int:
+        calls.append((root, extra_args))
+        return 0
+
+    import agentic_project_kit.cli_commands.workflow as workflow_module
+
+    monkeypatch.setattr(workflow_module, "_run_next_step", fake_run_next_step)
+    result = runner.invoke(app, ["workflow", "go", "--root", str(tmp_path)])
+
+    assert result.exit_code == 0
+    assert calls == [(tmp_path.resolve(), None)]
+    assert "state: REQUESTED" in current_work.read_text(encoding="utf-8")
+
+
 def test_workflow_upload_output_uploads_latest_bounded_output(tmp_path: Path, monkeypatch) -> None:
     _write_workflow_files(tmp_path)
     calls: list[tuple[Path, list[str] | None]] = []
