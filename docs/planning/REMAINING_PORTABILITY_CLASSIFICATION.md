@@ -180,4 +180,16 @@ Intent:
 - keep supported replacements in Python-backed routes;
 - preserve historical safety checks without requiring shell-script files.
 
-Note: The legacy `./ns` compatibility entrypoint remains intentionally out of scope for this closeout slice and needs a dedicated migration of route-regression tests and workflow guards.
+Note: The legacy `./ns` and `./ns-menu` entrypoints are removed in Slice 7; route-regression coverage now targets `agentic-kit` command surfaces and Python cores.
+
+
+## Slice 7 status
+
+Status: in progress in `feature/remove-legacy-ns-entrypoints`.
+
+Intent:
+
+- remove the legacy `./ns` and `./ns-menu` entrypoints;
+- replace legacy ns text-marker tests with `agentic-kit` command-surface and Python-core contract tests;
+- require `git ls-files '*.sh'` to be empty;
+- require `ns` and `ns-menu` to be absent from tracked files and worktree.

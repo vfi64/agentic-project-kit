@@ -377,3 +377,5 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1420
 
 Current administrative handoff refresh state is `00a3a833` (`Remove remaining tool shell scripts (#1420)`). Continue next only after this post-PR1420 refresh is committed and merged; the next substantive slice must be created from fresh main.
+
+- Portability closeout: legacy `ns` and `ns-menu` entrypoints removed; no tracked shell scripts remain, pending final gates and PR merge.

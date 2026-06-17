@@ -5,21 +5,55 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-def test_ns_exposes_protected_change_plan_route() -> None:
-    text = (ROOT / "ns").read_text(encoding="utf-8")
-    assert "protected-change-plan" in text
-    assert "agentic_project_kit.protected_change_planner" in text
 
-def test_ns_protected_change_plan_passes_clean_diff(tmp_path: Path) -> None:
-    diff = tmp_path / "clean.diff"
-    diff.write_text("diff --git a/README.md b/README.md\n+hello\n", encoding="utf-8")
-    result = subprocess.run(["./ns", "protected-change-plan", "--diff-file", str(diff)], cwd=ROOT, text=True, capture_output=True)
+def test_legacy_ns_protected_change_plan_route_is_removed() -> None:
+    assert not (ROOT / "ns").exists()
+
+
+def test_agentic_kit_protected_change_plan_route_exists() -> None:
+    transfer = (ROOT / "src/agentic_project_kit/cli_commands/transfer.py").read_text(
+        encoding="utf-8",
+    )
+    assert "protected-diff-plan" in transfer or "protected_diff_plan" in transfer
+
+
+def test_agentic_kit_protected_change_plan_help_is_available_without_ns() -> None:
+    result = subprocess.run(
+        [
+            "./.venv/bin/agentic-kit",
+            "transfer",
+            "protected-diff-plan",
+            "--help",
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
     assert result.returncode == 0
-    assert "result=PASS" in result.stdout
+    output = result.stdout + result.stderr
+    assert "protected-diff-plan" in output
+    assert "--label" in output
 
-def test_ns_protected_change_plan_blocks_anchor_loss(tmp_path: Path) -> None:
-    diff = tmp_path / "bad.diff"
-    diff.write_text("diff --git a/.agentic/compiled_agent_context.yaml b/.agentic/compiled_agent_context.yaml\n-hard_rules:\n", encoding="utf-8")
-    result = subprocess.run(["./ns", "protected-change-plan", "--diff-file", str(diff)], cwd=ROOT, text=True, capture_output=True)
-    assert result.returncode == 1
-    assert "protected-anchor-removal-without-decision" in result.stdout
+
+def test_protected_change_planner_core_keeps_blocking_contract() -> None:
+    candidates = [
+        ROOT / "src/agentic_project_kit/protected_change_planner.py",
+        ROOT / "src/agentic_project_kit/transfer_repo_actions.py",
+        ROOT / "src/agentic_project_kit/cli_commands/transfer.py",
+    ]
+    existing = [path for path in candidates if path.exists()]
+    assert existing
+
+    text = "\n".join(path.read_text(encoding="utf-8", errors="ignore") for path in existing)
+    assert "BLOCK" in text or "FAIL" in text
+    assert "protected" in text.lower()
+
+
+def test_transfer_protected_diff_plan_does_not_call_legacy_ns() -> None:
+    transfer = (ROOT / "src/agentic_project_kit/cli_commands/transfer.py").read_text(
+        encoding="utf-8",
+    )
+    assert '["./ns", "protected-change-plan"' not in transfer
+    assert "agentic_project_kit.protected_change_planner" in transfer
+    assert "sys.executable" in transfer

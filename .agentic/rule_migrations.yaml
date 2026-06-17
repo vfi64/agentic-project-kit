@@ -1,5 +1,6 @@
 schema_version: 1
-purpose: Record legacy rule anchors and their governed successors instead of deleting rule intent.
+purpose: Record legacy rule anchors and their governed successors instead of deleting
+  rule intent.
 known_legacy_rule_ids:
 - structured-summary-must-be-enforced
 - structured-summary-drift
@@ -21,10 +22,9 @@ migrations:
   status: migrated
   replaced_by: summary-renderer
   evidence:
-  - ./ns
   - src/agentic_project_kit/run_summary_renderer.py
   - tests/test_run_summary_renderer.py
-  migration_reason: Canonical behavior is preserved by ./ns summary and run_summary_renderer.
+  migration_reason: Canonical behavior is preserved by run_summary_renderer and agentic-kit/Python-core surfaces.
 - legacy_id: structured-summary-drift
   status: migrated
   replaced_by: summary-renderer
@@ -38,15 +38,16 @@ migrations:
   evidence:
   - src/agentic_project_kit/run_summary_renderer.py
   - docs/governance/CHAT_COMMUNICATION_CONTRACT.md
-  migration_reason: Repo-backed evidence handoff is preserved by terminal_log_remote and canonical summary semantics.
+  migration_reason: Repo-backed evidence handoff is preserved by terminal_log_remote
+    and canonical summary semantics.
 - legacy_id: local-remote-mode-switching
   status: migrated
   replaced_by: execution-mode-switch
   evidence:
-  - ./ns
   - src/agentic_project_kit/cli_commands/state.py
   - src/agentic_project_kit/execution_mode_state.py
-  migration_reason: Existing mode-check and mode-write commands are the canonical execution-mode mechanism.
+  migration_reason: Existing mode-check and mode-write commands are the canonical
+    execution-mode mechanism.
 - legacy_id: rules-must-be-test-backed
   status: migrated
   replaced_by: rule-preservation-guard
@@ -54,7 +55,8 @@ migrations:
   - .agentic/rule_preservation.yaml
   - src/agentic_project_kit/rule_preservation.py
   - tests/test_rule_preservation.py
-  migration_reason: Active restored workflow-rule anchors are now preserved through a machine-readable registry and tests.
+  migration_reason: Active restored workflow-rule anchors are now preserved through
+    a machine-readable registry and tests.
 - legacy_id: workflow-guard-diagnostics
   status: migrated
   replaced_by: workflow-guard
@@ -62,23 +64,24 @@ migrations:
   - src/agentic_project_kit/workflow_guard.py
   - tests/test_workflow_guard.py
   - docs/workflow/WORKFLOW_GUARD.md
-  migration_reason: Recurring workflow drift is reported through hard workflow-guard findings with repair modes.
+  migration_reason: Recurring workflow drift is reported through hard workflow-guard
+    findings with repair modes.
 - legacy_id: patch-artifact-preflight-before-application
   status: migrated
   replaced_by: patch-preflight
   evidence:
   - src/agentic_project_kit/patch_artifact_preflight.py
   - tests/test_patch_artifact_preflight.py
-  - ./ns
-  migration_reason: Generated patch artifacts and governance YAML are checked before patch application.
+  migration_reason: Generated patch artifacts and governance YAML are checked before
+    patch application.
 - legacy_id: chat-acknowledgements-are-not-evidence
   status: migrated
   replaced_by: chat-communication-rules
   evidence:
   - docs/governance/CHAT_COMMUNICATION_CONTRACT.md
   - .agentic/compiled_agent_context.yaml
-  migration_reason: Short replies such as d, f, w, paste-output, and stop are communication signals only and must be interpreted
-    through evidence.
+  migration_reason: Short replies such as d, f, w, paste-output, and stop are communication
+    signals only and must be interpreted through evidence.
 - legacy_id: remote-log-direct-path-first
   status: migrated
   replaced_by: chat-communication-rules
@@ -86,23 +89,24 @@ migrations:
   - docs/governance/FINAL_SUMMARY_CONTRACT.md
   - docs/governance/CHAT_COMMUNICATION_CONTRACT.md
   - .agentic/compiled_agent_context.yaml
-  migration_reason: Remote log lookup and no-copy evidence semantics are preserved through communication and summary contracts.
+  migration_reason: Remote log lookup and no-copy evidence semantics are preserved
+    through communication and summary contracts.
 - legacy_id: successor-chat-mandatory-bootstrap
   status: migrated
   replaced_by: chat-bootstrap-drift-rules
   evidence:
   - docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
   - .agentic/compiled_agent_context.yaml
-  migration_reason: Mandatory successor-chat source reading and drift response are preserved through the bootstrap contract
-    and compiled context.
+  migration_reason: Mandatory successor-chat source reading and drift response are
+    preserved through the bootstrap contract and compiled context.
 - legacy_id: portable-python-core-first
   status: migrated
   replaced_by: portable-execution-rules
   evidence:
   - docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
   - .agentic/compiled_agent_context.yaml
-  migration_reason: Python-core-first portable execution and shell-as-adapter behavior are preserved through the portable
-    execution contract.
+  migration_reason: Python-core-first portable execution and shell-as-adapter behavior
+    are preserved through the portable execution contract.
 - legacy_id: false-pass-evidence-must-fail
   status: migrated
   replaced_by: evidence-guard
@@ -117,7 +121,8 @@ migrations:
   evidence:
   - src/agentic_project_kit/typed_work_order_runner.py
   - tests/test_typed_work_order_runner.py
-  migration_reason: Typed work orders keep machine-readable result logs and structured step execution.
+  migration_reason: Typed work orders keep machine-readable result logs and structured
+    step execution.
 - legacy_id: release-state-validation-before-release
   status: migrated
   replaced_by: release-state-validation
@@ -126,7 +131,8 @@ migrations:
   - src/agentic_project_kit/cli_commands/release.py
   - tests/test_release.py
   - docs/TEST_GATES.md
-  migration_reason: Release changes stay guarded by version-file, tag, and GitHub-release state checks.
+  migration_reason: Release changes stay guarded by version-file, tag, and GitHub-release
+    state checks.
 - legacy_id: post-release-doi-waiting-safety
   status: migrated
   replaced_by: post-release-archive-check
@@ -135,4 +141,5 @@ migrations:
   - src/agentic_project_kit/cli_commands/release.py
   - tests/test_post_release.py
   - docs/TEST_GATES.md
-  migration_reason: Post-release archive and DOI waiting behavior remains explicit and guarded.
+  migration_reason: Post-release archive and DOI waiting behavior remains explicit
+    and guarded.

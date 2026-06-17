@@ -991,7 +991,7 @@ Deprecated compatibility alias for transfer chat-switch-complete.
 
 ### `agentic-kit transfer protected-diff-plan`
 
-Write the current diff to /tmp and run ./ns protected-change-plan on it.
+Write the current diff to /tmp and run the Python protected change planner on it.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|

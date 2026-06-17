@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import subprocess
+import sys
 
 from typer.testing import CliRunner
 
@@ -1422,7 +1423,7 @@ def test_admin_refresh_pr_monitor_blocks_before_status(monkeypatch):
     assert ["git", "status", "--short"] not in calls
 
 
-def test_transfer_protected_diff_plan_runs_diff_and_ns(monkeypatch):
+def test_transfer_protected_diff_plan_runs_diff_and_python_planner(monkeypatch):
     calls: list[list[str]] = []
 
     def fake_run(argv, *args, **kwargs):
@@ -1432,7 +1433,7 @@ def test_transfer_protected_diff_plan_runs_diff_and_ns(monkeypatch):
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command[:2] == ["git", "diff"]:
             return subprocess.CompletedProcess(command, 0, "", "")
-        if command[:2] == ["./ns", "protected-change-plan"]:
+        if command[:3] == [sys.executable, "-m", "agentic_project_kit.protected_change_planner"]:
             return subprocess.CompletedProcess(command, 0, "PROTECTED_CHANGE_PLAN\nresult=PASS\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
@@ -1445,15 +1446,16 @@ def test_transfer_protected_diff_plan_runs_diff_and_ns(monkeypatch):
     assert "PASS" in result.stdout
     assert calls[0][:2] == ["git", "diff"]
     assert "--output" in calls[0]
-    assert calls[1][:2] == ["./ns", "protected-change-plan"]
+    assert calls[1][:3] == [sys.executable, "-m", "agentic_project_kit.protected_change_planner"]
+    assert "--diff-file" in calls[1]
 
 
-def test_transfer_protected_diff_plan_blocks_on_ns_failure(monkeypatch):
+def test_transfer_protected_diff_plan_blocks_on_python_planner_failure(monkeypatch):
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
         if command[:2] == ["git", "diff"]:
             return subprocess.CompletedProcess(command, 0, "", "")
-        if command[:2] == ["./ns", "protected-change-plan"]:
+        if command[:3] == [sys.executable, "-m", "agentic_project_kit.protected_change_planner"]:
             return subprocess.CompletedProcess(command, 1, "result=BLOCK\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 

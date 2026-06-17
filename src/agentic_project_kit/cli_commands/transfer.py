@@ -648,10 +648,11 @@ def protected_diff_plan_command(
     cached: bool = typer.Option(False, "--cached", help="Use staged diff."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
 ) -> None:
-    """Write the current diff to /tmp and run ./ns protected-change-plan on it."""
+    """Write the current diff to /tmp and run the Python protected change planner on it."""
     import json
     import re
     import subprocess
+    import sys
     from pathlib import Path
 
     safe_label = re.sub(r"[^A-Za-z0-9_.-]+", "-", label).strip("-") or "protected-change-plan"
@@ -664,9 +665,16 @@ def protected_diff_plan_command(
 
     diff_result = subprocess.run(diff_command, text=True, capture_output=True)
     plan_result = None
+    plan_command = [
+        sys.executable,
+        "-m",
+        "agentic_project_kit.protected_change_planner",
+        "--diff-file",
+        str(diff_path),
+    ]
     if diff_result.returncode == 0:
         plan_result = subprocess.run(
-            ["./ns", "protected-change-plan", "--diff-file", str(diff_path)],
+            plan_command,
             text=True,
             capture_output=True,
         )
@@ -700,7 +708,7 @@ def protected_diff_plan_command(
             "protected_change_plan": None
             if plan_result is None
             else {
-                "argv": ["./ns", "protected-change-plan", "--diff-file", str(diff_path)],
+                "argv": plan_command,
                 "returncode": plan_result.returncode,
                 "stdout": plan_result.stdout,
                 "stderr": plan_result.stderr,
