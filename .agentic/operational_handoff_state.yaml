@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 0241b00951dd11276818fc58be675e69c05a446d
-  short: 0241b009
-  subject: Restore known volatile files after PR create-complete (#1392)
+  full: e29d5f454c86de3f577ba75c4e2f02872b0715e2
+  short: e29d5f45
+  subject: Add removed ns command diagnosis (#1394)
 last_substantive_work_state:
-  full: 0241b00951dd11276818fc58be675e69c05a446d
-  short: 0241b009
-  subject: Restore known volatile files after PR create-complete (#1392)
+  full: e29d5f454c86de3f577ba75c4e2f02872b0715e2
+  short: e29d5f45
+  subject: Add removed ns command diagnosis (#1394)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
