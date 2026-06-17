@@ -1,3 +1,13 @@
+## v0.4.9 - 2026-06-17
+
+- Safety release after completing the legacy `ns`/`ns-menu` migration to `agentic-kit` and Python-core command surfaces.
+- Removed tracked shell entrypoints and shell adapter scripts from the repository release line.
+- Ported `agentic-kit transfer protected-diff-plan` away from `./ns protected-change-plan` to the Python protected-change-planner module.
+- Updated governance registry, migration evidence, command reference, and regression tests so release-critical surfaces no longer depend on `./ns`.
+- Verified on `main`: no tracked `ns`, `ns-menu`, or `*.sh` files remain; critical governance and transfer surfaces no longer reference the removed `ns` route.
+
+Zenodo verification pending until GitHub Release publication and archive processing.
+
 ## v0.4.8 - 2026-06-17
 
 - Release metadata prepared for v0.4.8; Zenodo DOI verification pending until the GitHub release is created.

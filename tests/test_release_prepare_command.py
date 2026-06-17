@@ -13,6 +13,7 @@ from agentic_project_kit.release_prepare import prepare_release_state
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET_VERSION = "0.4.9"
+PREVIOUS_VERSION = "0.4.8"
 TARGET_DATE = "2026-06-18"
 
 
@@ -32,6 +33,39 @@ def _copy_release_state_files(tmp_path: Path) -> Path:
         target = project / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source, target)
+
+    # Keep this fixture stable after the repository itself has been bumped to
+    # TARGET_VERSION: release preparation must still be tested from a previous
+    # release state, not from the already-updated working tree.
+    replacements = {
+        "pyproject.toml": (f'version = "{TARGET_VERSION}"', f'version = "{PREVIOUS_VERSION}"'),
+        "src/agentic_project_kit/__init__.py": (
+            f'__version__ = "{TARGET_VERSION}"',
+            f'__version__ = "{PREVIOUS_VERSION}"',
+        ),
+        "README.md": (f"Version `{TARGET_VERSION}`", f"Version `{PREVIOUS_VERSION}`"),
+        "CITATION.cff": (f"version: {TARGET_VERSION}", f"version: {PREVIOUS_VERSION}"),
+        "docs/STATUS.md": (
+            f"Current version: {TARGET_VERSION}",
+            f"Current version: {PREVIOUS_VERSION}",
+        ),
+        "docs/handoff/CURRENT_HANDOFF.md": (
+            f"Current version: {TARGET_VERSION}",
+            f"Current version: {PREVIOUS_VERSION}",
+        ),
+    }
+    for relative, (needle, replacement) in replacements.items():
+        target = project / relative
+        target.write_text(target.read_text(encoding="utf-8").replace(needle, replacement), encoding="utf-8")
+
+    changelog = project / "CHANGELOG.md"
+    changelog_text = changelog.read_text(encoding="utf-8")
+    marker = f"## v{TARGET_VERSION} - "
+    previous_marker = f"## v{PREVIOUS_VERSION} - "
+    if changelog_text.startswith(marker) and previous_marker in changelog_text:
+        changelog_text = previous_marker + changelog_text.split(previous_marker, 1)[1]
+        changelog.write_text(changelog_text, encoding="utf-8")
+
     return project
 
 
