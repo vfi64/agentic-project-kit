@@ -64,6 +64,15 @@ def _update_pyproject(text: str, version: str) -> str:
     )
 
 
+def _update_citation(text: str, version: str) -> str:
+    return _replace_required(
+        r"^version:\s*[\"']?[^\"'\n]+[\"']?$",
+        f"version: {version}",
+        text,
+        label="CITATION.cff version",
+    )
+
+
 def _update_package_init(text: str, version: str) -> str:
     return _replace_required(
         r'^__version__\s*=\s*"[^"]+"$',
@@ -146,6 +155,7 @@ def prepare_release_state(
             version,
         ),
         root / "README.md": _update_readme(_read(root / "README.md"), version),
+        root / "CITATION.cff": _update_citation(_read(root / "CITATION.cff"), version),
         root / "docs" / "STATUS.md": _update_current_version_doc(
             _read(root / "docs" / "STATUS.md"),
             version,
