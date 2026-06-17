@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 91488d40
-  commit_subject: Scope inconclusive remote release checks to metadata readiness (#1390)
+  commit: 0241b009
+  commit_subject: Restore known volatile files after PR create-complete (#1392)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -423,8 +423,8 @@ blocked_until_closeout:
 - Gatekeeper product work before post-PR888 handoff refresh is merged and verified
 - Treating helper-local PASS as slice PASS without patch-preflight slice-gate evidence
 - GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
-first_instruction: Start the next chat from the fresh post-PR1390 successor handoff
-  prompt. Verify main at 91488d40, confirm the post-PR1390 operational handoff refresh passes
+first_instruction: Start the next chat from the fresh post-PR1392 successor handoff
+  prompt. Verify main at 0241b009, confirm the post-PR1392 operational handoff refresh passes
   explicit summary inspection, then continue only with the operational documentation projection slice or another
   allowed small test-backed slice.
 handoff_maintenance:
@@ -433,23 +433,23 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr1390-successor-chat-handoff.md
-  first_instruction: Start the next chat from the fresh post-PR1390 successor handoff
-    prompt. Verify main at 91488d40, confirm the post-PR1390 operational handoff refresh
+  latest_successor_prompt: docs/reports/terminal/post-pr1392-successor-chat-handoff.md
+  first_instruction: Start the next chat from the fresh post-PR1392 successor handoff
+    prompt. Verify main at 0241b009, confirm the post-PR1392 operational handoff refresh
     passes explicit summary inspection, then continue only with the operational documentation projection slice
     or another allowed small test-backed slice.
 next_step:
-  first_instruction: Start the next chat from the fresh post-PR1390 successor handoff
-    prompt. Verify main at 91488d40, confirm the post-PR1390 operational handoff refresh
+  first_instruction: Start the next chat from the fresh post-PR1392 successor handoff
+    prompt. Verify main at 0241b009, confirm the post-PR1392 operational handoff refresh
     passes explicit summary inspection, then continue only with the operational documentation projection slice
     or another allowed small test-backed slice.
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr1390-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1392-successor-chat-handoff.md
 administrative_evidence_state:
-  current_head: 91488d40
-  current_head_subject: Scope inconclusive remote release checks to metadata readiness (#1390)
+  current_head: 0241b009
+  current_head_subject: Restore known volatile files after PR create-complete (#1392)
   allowed_after_safe_state: true
   reason: administrative evidence/log/handoff commit after substantive safe_state
-  latest_successor_prompt: docs/reports/terminal/post-pr1390-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1392-successor-chat-handoff.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers

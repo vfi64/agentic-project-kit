@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 91488d405bd7ca1cde355a47def91ed656a24f2b
-  short: 91488d40
-  subject: Scope inconclusive remote release checks to metadata readiness (#1390)
+  full: 0241b00951dd11276818fc58be675e69c05a446d
+  short: 0241b009
+  subject: Restore known volatile files after PR create-complete (#1392)
 last_substantive_work_state:
-  full: 91488d405bd7ca1cde355a47def91ed656a24f2b
-  short: 91488d40
-  subject: Scope inconclusive remote release checks to metadata readiness (#1390)
+  full: 0241b00951dd11276818fc58be675e69c05a446d
+  short: 0241b009
+  subject: Restore known volatile files after PR create-complete (#1392)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
