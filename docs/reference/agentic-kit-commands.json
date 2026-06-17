@@ -458,6 +458,32 @@
       "qualified_name": "agentic-kit cockpit status"
     },
     {
+      "group": "dev",
+      "help": "Run the local feature gate through the supported agentic-kit CLI.",
+      "name": "local-feature-gate",
+      "params": [
+        {
+          "default": false,
+          "help": "Also run PR hygiene after the local feature gate.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "include_pr_hygiene",
+          "opts": [
+            "--include-pr-hygiene"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "dev",
+        "local-feature-gate"
+      ],
+      "qualified_name": "agentic-kit dev local-feature-gate"
+    },
+    {
       "group": "root",
       "help": "Audit lifecycle status headers for planning, roadmap, strategy, and idea documents.",
       "name": "doc-lifecycle-audit",

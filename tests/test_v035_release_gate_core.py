@@ -24,7 +24,7 @@ def test_release_gate_runs_expected_sequence_and_passes(tmp_path: Path, monkeypa
     assert isinstance(result, ReleaseGateResult)
     assert result.ok
     assert result.exit_code == 0
-    assert ["./ns", "dev-local-feature-gate"] in calls
+    assert ["agentic-kit", "dev", "local-feature-gate"] in calls
     assert any("release-check" in command for call in calls for command in call)
     assert any("-m" in call and "build" in call for call in calls)
     assert any("-m" in call and "twine" in call for call in calls)

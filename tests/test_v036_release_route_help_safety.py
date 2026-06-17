@@ -44,8 +44,9 @@ def test_release_verify_help_and_invalid_version_return_before_wait(monkeypatch)
     assert release_verify_core.main(["--help-like"]) == 2
 
 
-def test_release_prep_uses_existing_local_feature_gate_shortcut() -> None:
+def test_release_prep_uses_agentic_kit_local_feature_gate_command() -> None:
     text = Path("src/agentic_project_kit/release_prep_core.py").read_text(encoding="utf-8")
 
-    assert '["./ns", "dev-local-feature-gate"]' in text
+    assert '"dev", "local-feature-gate"' in text
+    assert '["./ns", "dev-local-feature-gate"]' not in text
     assert '["./ns", "dev"]' not in text
