@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 00a3a833c4c795ebd9128bdc402e5d3dff088ee0
-  short: 00a3a833
-  subject: Remove remaining tool shell scripts (#1420)
+  full: 94d62a9b100198859c073c25035461c4f1db643f
+  short: 94d62a9b
+  subject: Remove legacy ns entrypoints (#1422)
 last_substantive_work_state:
-  full: 00a3a833c4c795ebd9128bdc402e5d3dff088ee0
-  short: 00a3a833
-  subject: Remove remaining tool shell scripts (#1420)
+  full: 94d62a9b100198859c073c25035461c4f1db643f
+  short: 94d62a9b
+  subject: Remove legacy ns entrypoints (#1422)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
