@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b5d838799ed96aa2d6400cb8e4fa54b469868c66
-  short: b5d83879
-  subject: Port ns slice runner to neutral entrypoint module (#1416)
+  full: c17c5482de0f38ff0012814ed8aada2ec9059115
+  short: c17c5482
+  subject: Port ns release metadata prep to package module (#1418)
 last_substantive_work_state:
-  full: b5d838799ed96aa2d6400cb8e4fa54b469868c66
-  short: b5d83879
-  subject: Port ns slice runner to neutral entrypoint module (#1416)
+  full: c17c5482de0f38ff0012814ed8aada2ec9059115
+  short: c17c5482
+  subject: Port ns release metadata prep to package module (#1418)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
