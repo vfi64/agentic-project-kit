@@ -376,3 +376,5 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1418
 
 Current administrative handoff refresh state is `c17c5482` (`Port ns release metadata prep to package module (#1418)`). Continue next only after this post-PR1418 refresh is committed and merged; the next substantive slice must be created from fresh main.
+
+- Portability closeout: in progress; all tracked shell scripts removed in Slice 6, pending final gates and PR merge.

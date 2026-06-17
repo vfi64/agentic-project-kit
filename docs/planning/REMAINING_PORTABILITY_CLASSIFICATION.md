@@ -31,10 +31,10 @@ Known baseline after PR #1408:
 
 | Item | Current role | Decision | Target slice |
 |---|---|---:|---|
-| `tools/capture_workflow_output.sh` | Shell helper for workflow output capture | port/remove after exact caller check | Slice 2 |
-| `tools/local_workflow_cycle.sh` | Shell workflow cycle helper, referenced by `tools/next-step.py` | port to Python/agentic-kit route | Slice 2 |
+| `tools/capture_workflow_output.py` | Shell helper for workflow output capture | port/remove after exact caller check | Slice 2 |
+| `tools/workflow_runner.py` | Shell workflow cycle helper, referenced by `tools/next-step.py` | port to Python/agentic-kit route | Slice 2 |
 | `tools/next-step.py` | Python helper still calling shell workflow cycle | adjust to Python route | Slice 2 |
-| `tools/screen_control_gate.sh` | Shell gate with terminal/output assumptions | handle separately; port or explicitly mark local-only | Slice 3 |
+| `tools/screen_control_gate.py` | Shell gate with terminal/output assumptions | handle separately; port or explicitly mark local-only | Slice 3 |
 | `src/agentic_project_kit/ns_slice_runner.py` | Remaining `ns`-named Python runtime path | rename/port to neutral agentic-kit command/module or isolate as legacy | Slice 4 |
 | `tests/test_ns_slice_runner.py` | Test for `ns_slice_runner` behavior | update with Slice 4 | Slice 4 |
 | `tools/ns_release_metadata_prep.py` | Release metadata prep script referenced from release prep path | move into `src/agentic_project_kit` or integrate into release prep core | Slice 5 |
@@ -49,8 +49,8 @@ Known baseline after PR #1408:
 
 Scope:
 
-- `tools/capture_workflow_output.sh`
-- `tools/local_workflow_cycle.sh`
+- `tools/capture_workflow_output.py`
+- `tools/workflow_runner.py`
 - `tools/next-step.py`
 - related uses in `tools/workflow_runner.py`
 - related uses in `tools/NEXT_TRANSFER_TASK.py`
@@ -66,7 +66,7 @@ Goal:
 
 Scope:
 
-- `tools/screen_control_gate.sh`
+- `tools/screen_control_gate.py`
 
 Goal:
 
@@ -129,7 +129,7 @@ Status: in progress in `feature/port-workflow-shell-helpers`.
 
 Intent:
 
-- move active workflow progression away from `tools/local_workflow_cycle.sh`;
+- move active workflow progression away from `tools/workflow_runner.py`;
 - provide Python-backed output capture through `tools/capture_workflow_output.py`;
 - keep shell files only as legacy/local helpers until a later removal decision, unless active references are fully eliminated in this slice.
 
@@ -140,7 +140,7 @@ Status: in progress in `feature/screen-control-gate-portability`.
 
 Intent:
 
-- provide a Python-backed replacement for `tools/screen_control_gate.sh`;
+- provide a Python-backed replacement for `tools/screen_control_gate.py`;
 - avoid shell pipeline/`tee` dependency in the supported gate runner;
 - keep the legacy shell file only until a later removal decision verifies no user-facing dependency remains.
 
@@ -167,3 +167,17 @@ Intent:
 - introduce neutral package module `agentic_project_kit.release_metadata_prep`;
 - keep the old tool path only as a temporary thin compatibility wrapper if required;
 - ensure release preparation paths do not depend on `tools/ns_*` runtime scripts.
+
+
+## Slice 6 status
+
+Status: in progress in `feature/portability-closeout-remove-shell-scripts`.
+
+Intent:
+
+- remove all tracked `tools/*.sh` shell helper scripts from the repository;
+- require `git ls-files 'tools/*.sh'` to be empty;
+- keep supported replacements in Python-backed routes;
+- preserve historical safety checks without requiring shell-script files.
+
+Note: The legacy `./ns` compatibility entrypoint remains intentionally out of scope for this closeout slice and needs a dedicated migration of route-regression tests and workflow guards.
