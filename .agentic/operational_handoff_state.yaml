@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 1a6e5cc730b4a078c2ed3d75c9be7300bc0f966d
-  short: 1a6e5cc7
-  subject: Remove obsolete ns up completion route (#1404)
+  full: c9ab07a2429a40f42dd370f2b41924f7c285ffab
+  short: c9ab07a2
+  subject: Remove ns upload shortcut (#1406)
 last_substantive_work_state:
-  full: 1a6e5cc730b4a078c2ed3d75c9be7300bc0f966d
-  short: 1a6e5cc7
-  subject: Remove obsolete ns up completion route (#1404)
+  full: c9ab07a2429a40f42dd370f2b41924f7c285ffab
+  short: c9ab07a2
+  subject: Remove ns upload shortcut (#1406)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
