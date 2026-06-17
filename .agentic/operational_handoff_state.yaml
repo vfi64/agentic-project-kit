@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: bf108e5bf22009e55c95f4d3c0c912850db9c623
-  short: bf108e5b
-  subject: Add portable screen control gate (#1414)
+  full: b5d838799ed96aa2d6400cb8e4fa54b469868c66
+  short: b5d83879
+  subject: Port ns slice runner to neutral entrypoint module (#1416)
 last_substantive_work_state:
-  full: bf108e5bf22009e55c95f4d3c0c912850db9c623
-  short: bf108e5b
-  subject: Add portable screen control gate (#1414)
+  full: b5d838799ed96aa2d6400cb8e4fa54b469868c66
+  short: b5d83879
+  subject: Port ns slice runner to neutral entrypoint module (#1416)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
