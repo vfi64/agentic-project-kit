@@ -652,6 +652,6 @@ Acceptance gates:
 Current administrative handoff refresh state is `c6ab40da` (`Classify ns migration docs before GUI (#1334)`). Continue next only after this post-PR1334 refresh is committed and merged; the next substantive slice must be created from fresh main.## Operational documentation refresh state after PR #1338
 
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1406
+## Operational documentation refresh state after PR #1408
 
-Current administrative handoff refresh state is `c9ab07a2` (`Remove ns upload shortcut (#1406)`). Continue next only after this post-PR1406 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `1d4fabaa` (`Close ns command migration classification (#1408)`). Continue next only after this post-PR1408 refresh is committed and merged; the next substantive slice must be created from fresh main.
