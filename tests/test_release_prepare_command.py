@@ -20,6 +20,7 @@ def _copy_release_state_files(tmp_path: Path) -> Path:
         "pyproject.toml",
         "README.md",
         "CHANGELOG.md",
+        "CITATION.cff",
         "docs/STATUS.md",
         "docs/handoff/CURRENT_HANDOFF.md",
         "src/agentic_project_kit/__init__.py",
@@ -41,6 +42,7 @@ def test_prepare_release_state_updates_expected_files(tmp_path: Path) -> None:
     assert result.date == "2026-06-16"
     assert result.changed_paths == [
         "CHANGELOG.md",
+        "CITATION.cff",
         "README.md",
         "docs/STATUS.md",
         "docs/handoff/CURRENT_HANDOFF.md",
@@ -55,6 +57,7 @@ def test_prepare_release_state_updates_expected_files(tmp_path: Path) -> None:
     assert "Version `0.4.8` is the current release line prepared" in (
         project / "README.md"
     ).read_text(encoding="utf-8")
+    assert "version: 0.4.8" in (project / "CITATION.cff").read_text(encoding="utf-8")
     assert "Current version: 0.4.8" in (project / "docs" / "STATUS.md").read_text(
         encoding="utf-8"
     )
