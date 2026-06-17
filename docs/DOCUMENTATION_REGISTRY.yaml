@@ -193,6 +193,10 @@ documents:
     class: planning
     owner: maintainers
     notes: Priority plan for hardening unsafe individual commands before GUI or release orchestration work resumes.
+  - path: docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
+    class: planning
+    owner: maintainers
+    notes: Classification-first plan for mapping remaining meaningful old ns command semantics to supported agentic-kit commands.
   - path: docs/handoff/CURRENT_HANDOFF.md
     class: planning
     owner: maintainers
