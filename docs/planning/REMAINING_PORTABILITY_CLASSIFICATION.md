@@ -155,3 +155,15 @@ Intent:
 - introduce neutral `agentic_project_kit.entrypoint_slice_runner`;
 - keep `agentic_project_kit.ns_slice_runner` only as a temporary compatibility shim if required by historical imports;
 - keep no-exec and evidence safety guards.
+
+
+## Slice 5 status
+
+Status: in progress in `feature/port-ns-release-metadata-prep`.
+
+Intent:
+
+- move release metadata preparation out of `tools/ns_release_metadata_prep.py`;
+- introduce neutral package module `agentic_project_kit.release_metadata_prep`;
+- keep the old tool path only as a temporary thin compatibility wrapper if required;
+- ensure release preparation paths do not depend on `tools/ns_*` runtime scripts.
