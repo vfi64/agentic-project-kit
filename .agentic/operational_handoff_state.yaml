@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: cafe450101390acbb62006a9debdb68b76c9a439
-  short: cafe4501
-  subject: Close out v0.4.8 DOI metadata (#1388)
+  full: 91488d405bd7ca1cde355a47def91ed656a24f2b
+  short: 91488d40
+  subject: Scope inconclusive remote release checks to metadata readiness (#1390)
 last_substantive_work_state:
-  full: cafe450101390acbb62006a9debdb68b76c9a439
-  short: cafe4501
-  subject: Close out v0.4.8 DOI metadata (#1388)
+  full: 91488d405bd7ca1cde355a47def91ed656a24f2b
+  short: 91488d40
+  subject: Scope inconclusive remote release checks to metadata readiness (#1390)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
