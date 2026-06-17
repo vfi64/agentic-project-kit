@@ -1800,6 +1800,11 @@ def pr_create_complete_command(
         if skip_llm_context_gate:
             complete_argv.append("--skip-llm-context-gate")
         run_step("pr-complete", complete_argv)
+        if not blockers:
+            run_step(
+                "restore-known-volatile-after-pr-complete",
+                [agentic_kit, "transfer", "restore-known-volatile", "--json"],
+            )
 
     if pr_number is not None and post_merge_complete and not blockers:
         # pr-complete already runs the concrete post-merge-complete lifecycle after
@@ -1815,6 +1820,11 @@ def pr_create_complete_command(
             run_step(name, argv)
             if blockers:
                 break
+        if not blockers:
+            run_step(
+                "restore-known-volatile-after-post-merge-followup",
+                [agentic_kit, "transfer", "restore-known-volatile", "--json"],
+            )
 
     blockers = list(dict.fromkeys(blockers))
     result_status = "PASS" if not blockers else "BLOCKED"
