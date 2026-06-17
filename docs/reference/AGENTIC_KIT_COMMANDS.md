@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `155`
+- Command count: `156`
 
 ## Commands
 
@@ -744,6 +744,18 @@ Delete a merged non-main work branch after PR merge-state verification.
 | `local` | `TyperOption` | --local, --no-local | `False` | `True` | Delete the local branch. |
 | `force_local` | `TyperOption` | --force-local | `False` | `False` | Force local deletion with git branch -D. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
+
+### `agentic-kit transfer diagnose-removed-ns-commands`
+
+Diagnose ns command definitions/usages removed or reduced between release refs.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `old` | `TyperOption` | --old | `False` | `0.4.6` | Old release tag/ref. |
+| `new` | `TyperOption` | --new | `False` | `0.4.8` | New release tag/ref. |
+| `json_out` | `TyperOption` | --json-out | `False` |  | Write machine-readable report. |
+| `md_out` | `TyperOption` | --md-out | `False` |  | Write Markdown report. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print full JSON report to stdout. |
 
 ### `agentic-kit transfer divergence-status`
 

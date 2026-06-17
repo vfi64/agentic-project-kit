@@ -4291,6 +4291,88 @@
     },
     {
       "group": "transfer",
+      "help": "Diagnose ns command definitions/usages removed or reduced between release refs.",
+      "name": "diagnose-removed-ns-commands",
+      "params": [
+        {
+          "default": "0.4.6",
+          "help": "Old release tag/ref.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "old",
+          "opts": [
+            "--old"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "0.4.8",
+          "help": "New release tag/ref.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "new",
+          "opts": [
+            "--new"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Write machine-readable report.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_out",
+          "opts": [
+            "--json-out"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Write Markdown report.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "md_out",
+          "opts": [
+            "--md-out"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print full JSON report to stdout.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "diagnose-removed-ns-commands"
+      ],
+      "qualified_name": "agentic-kit transfer diagnose-removed-ns-commands"
+    },
+    {
+      "group": "transfer",
       "help": "Report local/upstream divergence without mutating repository state.",
       "name": "divergence-status",
       "params": [
