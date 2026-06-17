@@ -36,3 +36,8 @@ def test_legacy_shell_screen_gate_is_not_required_by_python_references() -> None
                 continue
             text = file_path.read_text(encoding="utf-8", errors="ignore")
             assert "screen_control_gate.sh" not in text
+
+
+def test_python_screen_gate_replacement_exists() -> None:
+    assert Path("tools/screen_control_gate.py").exists()
+    assert not Path("tools/screen_control_gate.sh").exists()

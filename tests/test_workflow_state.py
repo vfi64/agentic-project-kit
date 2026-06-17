@@ -7,8 +7,8 @@ def test_workflow_state_is_known_value() -> None:
 
 
 def test_workflow_scripts_exist() -> None:
-    assert Path("tools/capture_workflow_output.sh").exists()
-    assert Path("tools/local_workflow_cycle.sh").exists()
+    assert Path("tools/capture_workflow_output.py").exists()
+    assert Path("tools/workflow_runner.py").exists()
     assert Path("tools/workflow_runner.py").exists()
     assert Path(".agentic/current_work.yaml").exists()
 

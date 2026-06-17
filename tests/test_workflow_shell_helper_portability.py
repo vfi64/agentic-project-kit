@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 
-def test_next_step_no_longer_references_local_workflow_cycle_shell() -> None:
+def test_next_step_uses_python_workflow_runner_not_legacy_shell_cycle() -> None:
     text = Path("tools/next-step.py").read_text(encoding="utf-8")
     assert "local_workflow_cycle.sh" not in text
     assert "workflow_runner.py" in text
@@ -38,14 +38,13 @@ def test_active_workflow_route_does_not_require_local_workflow_cycle_shell() -> 
     )
     assert "tools/local_workflow_cycle.sh" not in active_text
     assert "./tools/local_workflow_cycle.sh" not in active_text
-    assert "local_workflow_cycle.sh" not in Path("tools/next-step.py").read_text(
+    assert "local_workflow_cycle.sh" not in active_text
+    assert "tools/workflow_runner.py" in Path("tools/next-step.py").read_text(
         encoding="utf-8",
         errors="ignore",
     )
 
 
-def test_legacy_shell_helpers_are_not_deleted_in_this_slice() -> None:
-    # Slice 2 moves the active route away from the shell helper.
-    # It does not yet delete legacy/local helper files; that remains a later decision.
-    assert Path("tools/local_workflow_cycle.sh").exists()
-    assert Path("tools/capture_workflow_output.sh").exists()
+def test_legacy_workflow_shell_helpers_are_removed_in_closeout_slice() -> None:
+    assert not Path("tools/local_workflow_cycle.sh").exists()
+    assert not Path("tools/capture_workflow_output.sh").exists()
