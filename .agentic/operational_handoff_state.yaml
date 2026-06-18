@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5bb322f1e177b759034cf72c6c0b7fba74a3ea6e
-  short: 5bb322f1
-  subject: Establish release command authority (#1439)
+  full: 820286273dd9fe2c8c55a9ce0baf1d5d6b047b6d
+  short: 82028627
+  subject: Add release metadata authority gate (#1441)
 last_substantive_work_state:
-  full: 5bb322f1e177b759034cf72c6c0b7fba74a3ea6e
-  short: 5bb322f1
-  subject: Establish release command authority (#1439)
+  full: 820286273dd9fe2c8c55a9ce0baf1d5d6b047b6d
+  short: 82028627
+  subject: Add release metadata authority gate (#1441)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
