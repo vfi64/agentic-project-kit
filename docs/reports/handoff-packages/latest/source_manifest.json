@@ -8,12 +8,12 @@
       "path": ".agentic/compiled_agent_context.yaml"
     },
     {
-      "bytes": 19981,
+      "bytes": 19982,
       "exists": true,
       "path": ".agentic/handoff_state.yaml"
     },
     {
-      "bytes": 1600,
+      "bytes": 1602,
       "exists": true,
       "path": ".agentic/operational_handoff_state.yaml"
     },
@@ -53,7 +53,7 @@
       "path": "docs/DOCUMENTATION_COVERAGE.yaml"
     },
     {
-      "bytes": 30965,
+      "bytes": 30966,
       "exists": true,
       "path": "docs/STATUS.md"
     },
@@ -63,7 +63,7 @@
       "path": "docs/TEST_GATES.md"
     },
     {
-      "bytes": 29683,
+      "bytes": 29684,
       "exists": true,
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
@@ -73,7 +73,7 @@
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
     {
-      "bytes": 4106,
+      "bytes": 4107,
       "exists": true,
       "path": "docs/handoff/START_NEW_CHAT_PROMPT.md"
     },
@@ -113,17 +113,17 @@
       "path": "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md"
     },
     {
-      "bytes": 52112,
+      "bytes": 52113,
       "exists": true,
       "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md"
     },
     {
-      "bytes": 66106,
+      "bytes": 66928,
       "exists": true,
       "path": "docs/reference/AGENTIC_KIT_COMMANDS.md"
     },
     {
-      "bytes": 202615,
+      "bytes": 204914,
       "exists": true,
       "path": "docs/reference/agentic-kit-commands.json"
     }

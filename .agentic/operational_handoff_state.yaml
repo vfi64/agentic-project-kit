@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: bfc8e42cad61a1ca49edaf8ff74fbae1682def16
-  short: bfc8e42c
-  subject: Refresh handoff state after PR1436 (#1437)
+  full: 5bb322f1e177b759034cf72c6c0b7fba74a3ea6e
+  short: 5bb322f1
+  subject: Establish release command authority (#1439)
 last_substantive_work_state:
-  full: bfc8e42cad61a1ca49edaf8ff74fbae1682def16
-  short: bfc8e42c
-  subject: Refresh handoff state after PR1436 (#1437)
+  full: 5bb322f1e177b759034cf72c6c0b7fba74a3ea6e
+  short: 5bb322f1
+  subject: Establish release command authority (#1439)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
