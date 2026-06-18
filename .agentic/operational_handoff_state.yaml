@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f55d04027893d06ff676f70d833b689a303733bd
-  short: f55d0402
-  subject: Avoid false red after automatic admin refresh (#1430)
+  full: 8c172a86378f414108b2fbafdd9fb5bea8a12d2e
+  short: 8c172a86
+  subject: Clear false red after green post-merge check (#1432)
 last_substantive_work_state:
-  full: f55d04027893d06ff676f70d833b689a303733bd
-  short: f55d0402
-  subject: Avoid false red after automatic admin refresh (#1430)
+  full: 8c172a86378f414108b2fbafdd9fb5bea8a12d2e
+  short: 8c172a86
+  subject: Clear false red after green post-merge check (#1432)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
