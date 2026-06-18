@@ -5,6 +5,7 @@ from pathlib import Path
 
 import typer
 
+from agentic_project_kit import __version__ as PACKAGE_VERSION
 from agentic_project_kit.gui_readiness_gate import (
     evaluate_gui_readiness,
     render_gui_readiness_gate,
@@ -13,7 +14,7 @@ from agentic_project_kit.gui_readiness_gate import (
 
 def gui_readiness_gate_command(
     root: Path = typer.Option(Path("."), "--root"),
-    version: str = typer.Option("0.4.9", "--version"),
+    version: str = typer.Option(PACKAGE_VERSION, "--version"),
     json_output: bool = typer.Option(False, "--json"),
 ) -> None:
     """Run the pre-GUI readiness gate."""

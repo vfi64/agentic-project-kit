@@ -3,6 +3,8 @@ from __future__ import annotations
 from collections.abc import Callable, Sequence
 from dataclasses import asdict, dataclass
 from pathlib import Path
+
+from agentic_project_kit import __version__ as PACKAGE_VERSION
 import shutil
 import subprocess
 
@@ -131,7 +133,7 @@ def _current_branch(root: Path) -> str | None:
 def evaluate_gui_readiness(
     root: Path = Path("."),
     *,
-    version: str = "0.4.9",
+    version: str = PACKAGE_VERSION,
     runner: Runner | None = None,
 ) -> GuiReadinessGateResult:
     root = root.resolve()
