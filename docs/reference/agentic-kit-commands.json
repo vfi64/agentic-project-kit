@@ -2708,6 +2708,87 @@
     },
     {
       "group": "root",
+      "help": "Prepare release metadata through the supported agentic-kit route.\n\nThis edits only local release metadata files. It does not tag, publish,\npush, create GitHub releases, or write Zenodo DOI metadata.",
+      "name": "release-prep",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Target release version without leading v.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Release metadata date in YYYY-MM-DD format. Defaults to today.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "release_date",
+          "opts": [
+            "--date"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Report changed paths without writing files.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "dry_run",
+          "opts": [
+            "--dry-run"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print a machine-readable result.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "release-prep"
+      ],
+      "qualified_name": "agentic-kit release-prep"
+    },
+    {
+      "group": "root",
       "help": "",
       "name": "remote-next",
       "params": [

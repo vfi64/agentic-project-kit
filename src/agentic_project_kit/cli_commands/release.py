@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+from datetime import date as date_cls
+import json
+import re
 from pathlib import Path
 
 import typer
 from rich.console import Console
 
 from agentic_project_kit.post_release import build_post_release_report, render_post_release_report
+from agentic_project_kit.release_prepare import prepare_release_state
 from agentic_project_kit.post_release_closeout import post_release_doi_closeout, render_post_release_doi_closeout_result
 from agentic_project_kit.release import (
     ReleaseCheckStatus,
@@ -23,6 +27,7 @@ console = Console()
 def register_release_commands(app: typer.Typer) -> None:
     app.command("release-plan")(release_plan_command)
     app.command("release-preflight")(release_preflight_command)
+    app.command("release-prep")(release_prep_command)
     app.command("release-check")(release_check_command)
     app.command("post-release-check")(post_release_check_command)
     app.command("post-release-doi-closeout")(post_release_doi_closeout_command)
@@ -70,6 +75,87 @@ def run_release_preflight(version: str) -> int:
     report = build_release_preflight_report(Path(".").resolve(), version=version)
     console.print(render_release_preflight_report(report), markup=False)
     return 0 if report.ok else 1
+
+
+def release_prep_command(
+    project_root: Path = typer.Option(Path("."), "--root"),
+    version: str = typer.Option(..., "--version", help="Target release version without leading v."),
+    release_date: str | None = typer.Option(
+        None,
+        "--date",
+        help="Release metadata date in YYYY-MM-DD format. Defaults to today.",
+    ),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Report changed paths without writing files."),
+    json_output: bool = typer.Option(False, "--json", help="Print a machine-readable result."),
+) -> None:
+    """Prepare release metadata through the supported agentic-kit route.
+
+    This edits only local release metadata files. It does not tag, publish,
+    push, create GitHub releases, or write Zenodo DOI metadata.
+    """
+    plain_version = version.removeprefix("v")
+    date_value = release_date or date_cls.today().isoformat()
+    if not re.fullmatch(r"\d+\.\d+\.\d+", plain_version):
+        message = f"Invalid release version: {version!r}; expected MAJOR.MINOR.PATCH"
+        if json_output:
+            console.print(
+                json.dumps(
+                    {
+                        "ok": False,
+                        "version": plain_version,
+                        "date": date_value,
+                        "dry_run": dry_run,
+                        "error": message,
+                    },
+                    indent=2,
+                    sort_keys=True,
+                ),
+                markup=False,
+            )
+        else:
+            console.print(f"ERROR: {message}", markup=False)
+        raise typer.Exit(code=2)
+
+    try:
+        result = prepare_release_state(
+            project_root.resolve(),
+            version=plain_version,
+            date=date_value,
+            dry_run=dry_run,
+        )
+    except (FileNotFoundError, ValueError) as exc:
+        if json_output:
+            console.print(
+                json.dumps(
+                    {
+                        "ok": False,
+                        "version": plain_version,
+                        "date": date_value,
+                        "dry_run": dry_run,
+                        "error": str(exc),
+                    },
+                    indent=2,
+                    sort_keys=True,
+                ),
+                markup=False,
+            )
+        else:
+            console.print(f"ERROR: {exc}", markup=False)
+        raise typer.Exit(code=2) from exc
+
+    if json_output:
+        console.print(json.dumps(result.as_dict(), indent=2, sort_keys=True), markup=False)
+    else:
+        mode = "DRY-RUN" if dry_run else "WRITE"
+        if result.changed_paths:
+            console.print(
+                f"{mode}: prepared release metadata for v{result.version} on {result.date}",
+                markup=False,
+            )
+            for changed_path in result.changed_paths:
+                console.print(f"CHANGED: {changed_path}", markup=False)
+        else:
+            console.print(f"{mode}: release metadata already prepared for v{result.version}", markup=False)
 
 
 def release_check_command(

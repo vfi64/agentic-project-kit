@@ -64,7 +64,10 @@ def test_release_cores_remain_available_without_ns_entrypoint() -> None:
     )
     assert "publish-" in publish_text
     assert "refusing release publish" in publish_text
-    assert "release-verify" in publish_text
+    assert "direct release publish core is disabled after legacy ns removal" in publish_text
+    assert "No branch, tag, push, GitHub release, or DOI side effect was attempted." in publish_text
+    assert "./ns" not in publish_text
+    assert "release-verify" not in publish_text
 
 
 def test_transfer_pr_complete_replaces_legacy_ns_up_route() -> None:

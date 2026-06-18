@@ -13,7 +13,7 @@ if str(SRC) not in sys.path:
 def main(argv: list[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
     if len(args) != 1:
-        print("usage: ns_release_metadata_prep.py <version>")
+        print("usage: agentic-kit release-prep --version <version>")
         return 2
     version = args[0].removeprefix("v")
     from agentic_project_kit.release_prepare import prepare_release_state
