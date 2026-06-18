@@ -104,8 +104,10 @@ def finalize_terminal_log(tmp_log: Path, name: str) -> tuple[str, str]:
     try:
         source_resolved.relative_to(terminal_resolved)
     except ValueError:
-        pass
+        source_inside_terminal_dir = False
     else:
+        source_inside_terminal_dir = True
+    if source_inside_terminal_dir:
         return "FAIL_SOURCE_INSIDE_TERMINAL_DIR", source.as_posix()
     TERMINAL_DIR.mkdir(parents=True, exist_ok=True)
     target = make_log_path(name)
