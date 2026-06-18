@@ -3,6 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 from collections.abc import Sequence
 
+from agentic_project_kit import __version__ as PACKAGE_VERSION
+
 from agentic_project_kit.gui_readiness_gate import (
     REQUIRED_CURRENT_DOCS,
     evaluate_gui_readiness,
@@ -86,4 +88,19 @@ def test_gui_readiness_gate_defers_post_merge_check_on_feature_branch(tmp_path: 
         and "deferred on branch feature/gui-work" in item.detail
         for item in result.checks
     )
+
+def test_gui_readiness_gate_default_version_follows_package_version(tmp_path: Path) -> None:
+    _write_required_docs(tmp_path)
+    seen: list[tuple[str, ...]] = []
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        seen.append(tuple(args))
+        return 0, "PASS\n"
+
+    result = evaluate_gui_readiness(tmp_path, runner=runner)
+
+    assert result.ok is True
+    assert result.version == PACKAGE_VERSION
+    assert any("post-release-check" in args for args in seen)
+    assert any(PACKAGE_VERSION in args for args in seen)
 
