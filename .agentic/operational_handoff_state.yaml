@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9bfb14a0245ebcf552b67d23385272088f0eb224
-  short: 9bfb14a0
-  subject: Gate current release document currency (#1445)
+  full: 71eac27c14f443f10d4c658645c2eec4261eb156
+  short: 71eac27c
+  subject: Audit legacy ns shell references (#1447)
 last_substantive_work_state:
-  full: 9bfb14a0245ebcf552b67d23385272088f0eb224
-  short: 9bfb14a0
-  subject: Gate current release document currency (#1445)
+  full: 71eac27c14f443f10d4c658645c2eec4261eb156
+  short: 71eac27c
+  subject: Audit legacy ns shell references (#1447)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
