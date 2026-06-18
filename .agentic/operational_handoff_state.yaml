@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 8c172a86378f414108b2fbafdd9fb5bea8a12d2e
-  short: 8c172a86
-  subject: Clear false red after green post-merge check (#1432)
+  full: a1d5929a3578237c8cd9916ffd88114b2231fae8
+  short: a1d5929a
+  subject: Fix outer followup merged PR lookup (#1434)
 last_substantive_work_state:
-  full: 8c172a86378f414108b2fbafdd9fb5bea8a12d2e
-  short: 8c172a86
-  subject: Clear false red after green post-merge check (#1432)
+  full: a1d5929a3578237c8cd9916ffd88114b2231fae8
+  short: a1d5929a
+  subject: Fix outer followup merged PR lookup (#1434)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
