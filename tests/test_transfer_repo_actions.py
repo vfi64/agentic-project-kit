@@ -2112,11 +2112,11 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_ad
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["./.venv/bin/agentic-kit", "transfer", "post-merge-complete", "--after-pr", "123"]:
             return subprocess.CompletedProcess(command, 2, "post merge follow-up needed\n", "")
-        if command == ["gh", "pr", "view", "123", "--json", "state,isMerged,mergeCommit"]:
+        if command == ["gh", "pr", "view", "123", "--json", "state,mergedAt,mergeCommit"]:
             return subprocess.CompletedProcess(
                 command,
                 0,
-                '{"state":"MERGED","isMerged":true,"mergeCommit":{"oid":"abc"}}\n',
+                '{"state":"MERGED","mergedAt":"2026-06-18T08:00:00Z","mergeCommit":{"oid":"abc"}}\n',
                 "",
             )
         if command == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"]:
@@ -2811,5 +2811,7 @@ def test_pr_create_complete_clears_outer_sync_false_red_when_pr_merged_and_post_
     assert "outer-followup-pr-merged-check" in source
     assert "outer-followup-post-merge-check-green-check" in source
     assert "outer_followup_false_red_cleared" in source
+    assert "isMerged" not in source
+    assert "mergedAt" in source
     assert "non-fatal sync/restore failure" in source
     assert "post-merge-check is green" in source
