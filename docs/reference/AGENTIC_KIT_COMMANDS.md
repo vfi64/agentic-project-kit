@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `161`
+- Command count: `162`
 
 ## Commands
 
@@ -24,6 +24,15 @@ _No parameters._
 ### `agentic-kit audit-absolute-path-portability`
 
 Audit absolute local paths that may break portability.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
+### `agentic-kit audit-doc-currency`
+
+Audit current release/documentation currency across handoff and release docs.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
