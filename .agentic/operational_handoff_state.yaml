@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 71eac27c14f443f10d4c658645c2eec4261eb156
-  short: 71eac27c
-  subject: Audit legacy ns shell references (#1447)
+  full: a2e6bc9d140b338fc93e437b75ef34aca74435fe
+  short: a2e6bc9d
+  subject: Audit absolute path portability (#1449)
 last_substantive_work_state:
-  full: 71eac27c14f443f10d4c658645c2eec4261eb156
-  short: 71eac27c
-  subject: Audit legacy ns shell references (#1447)
+  full: a2e6bc9d140b338fc93e437b75ef34aca74435fe
+  short: a2e6bc9d
+  subject: Audit absolute path portability (#1449)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
