@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: dfcb9e5f5d6810fad224676f8986c249abe6bd7a
-  short: dfcb9e5f
-  subject: Audit documentation currency (#1451)
+  full: 17f0b5aca36bf9a8ab47fbfe8fe765ff974f2cb0
+  short: 17f0b5ac
+  subject: Audit planning docs consolidation (#1453)
 last_substantive_work_state:
-  full: dfcb9e5f5d6810fad224676f8986c249abe6bd7a
-  short: dfcb9e5f
-  subject: Audit documentation currency (#1451)
+  full: 17f0b5aca36bf9a8ab47fbfe8fe765ff974f2cb0
+  short: 17f0b5ac
+  subject: Audit planning docs consolidation (#1453)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
