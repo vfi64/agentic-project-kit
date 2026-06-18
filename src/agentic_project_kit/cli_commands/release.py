@@ -243,8 +243,12 @@ def post_release_doi_closeout_command(
     project_root: Path = typer.Option(Path("."), "--root"),
     version: str = typer.Option(..., "--version", help="Release version without leading v."),
     write: bool = typer.Option(False, "--write", help="Write verified DOI metadata updates."),
+    json_output: bool = typer.Option(False, "--json", help="Print a machine-readable result."),
 ) -> None:
     result = post_release_doi_closeout(project_root.resolve(), version=version, write=write)
-    console.print(render_post_release_doi_closeout_result(result), markup=False)
+    if json_output:
+        console.print(json.dumps(result.as_dict(), indent=2, sort_keys=True), markup=False)
+    else:
+        console.print(render_post_release_doi_closeout_result(result), markup=False)
     if not result.ok:
         raise typer.Exit(code=result.returncode)

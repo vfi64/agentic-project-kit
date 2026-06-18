@@ -12,16 +12,16 @@ from agentic_project_kit.release import CommandResult
 CommandRunner = Callable[[Path, Sequence[str]], CommandResult]
 HttpGetter = Callable[[str], tuple[int, str]]
 
-_ALLOWED_WRITE_PATHS = frozenset(
-    {
-        "README.md",
-        "CHANGELOG.md",
-        "CITATION.cff",
-        "docs/STATUS.md",
-        "docs/handoff/CURRENT_HANDOFF.md",
-        "docs/releases/VERIFIED_RELEASES.md",
-    }
+EXPECTED_DOI_CLOSEOUT_PATHS: tuple[str, ...] = (
+    "README.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/releases/VERIFIED_RELEASES.md",
 )
+
+_ALLOWED_WRITE_PATHS = frozenset(EXPECTED_DOI_CLOSEOUT_PATHS)
 
 
 @dataclass(frozen=True)
@@ -32,6 +32,7 @@ class PostReleaseDoiCloseoutResult:
     write: bool
     blockers: tuple[str, ...]
     changed_paths: tuple[str, ...]
+    expected_paths: tuple[str, ...]
     version_doi: str
     concept_doi: str
     next_action: str
@@ -39,6 +40,21 @@ class PostReleaseDoiCloseoutResult:
     @property
     def ok(self) -> bool:
         return self.returncode == 0 and not self.blockers
+
+    def as_dict(self) -> dict[str, object]:
+        return {
+            "version": self.version,
+            "result_status": self.result_status,
+            "returncode": self.returncode,
+            "write": self.write,
+            "blockers": list(self.blockers),
+            "changed_paths": list(self.changed_paths),
+            "expected_paths": list(self.expected_paths),
+            "version_doi": self.version_doi,
+            "concept_doi": self.concept_doi,
+            "next_action": self.next_action,
+            "ok": self.ok,
+        }
 
 
 def post_release_doi_closeout(
@@ -75,6 +91,7 @@ def post_release_doi_closeout(
             write,
             tuple(blockers),
             (),
+            EXPECTED_DOI_CLOSEOUT_PATHS,
             version_doi,
             concept_doi,
             "Wait for post-release-check PASS before writing DOI metadata.",
@@ -122,6 +139,7 @@ def post_release_doi_closeout(
             write,
             tuple(blockers),
             tuple(changed_paths),
+            EXPECTED_DOI_CLOSEOUT_PATHS,
             version_doi,
             concept_doi,
             next_action,
@@ -143,6 +161,7 @@ def post_release_doi_closeout(
         write,
         (),
         tuple(changed_paths),
+        EXPECTED_DOI_CLOSEOUT_PATHS,
         version_doi,
         concept_doi,
         next_action,
@@ -159,7 +178,12 @@ def render_post_release_doi_closeout_result(result: PostReleaseDoiCloseoutResult
         f"WRITE={str(result.write).lower()}",
         f"RETURNCODE={result.returncode}",
     ]
+    lines.extend(f"EXPECTED_PATH={path}" for path in result.expected_paths)
     lines.extend(f"CHANGED_PATH={path}" for path in result.changed_paths)
+    missing_changed = sorted(set(result.expected_paths) - set(result.changed_paths))
+    if not result.changed_paths:
+        lines.append("CHANGED_PATH=<none>")
+    lines.extend(f"UNCHANGED_EXPECTED_PATH={path}" for path in missing_changed)
     lines.extend(f"BLOCKER={blocker}" for blocker in result.blockers)
     lines.append(f"NEXT={result.next_action}")
     lines.append("FINAL_SIGNAL=d" if result.ok else "FINAL_SIGNAL=f")
