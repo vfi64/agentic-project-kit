@@ -1266,7 +1266,7 @@ def pr_complete_command(
         )
 
     def pr_is_merged_after_post_merge_complete_failure() -> bool:
-        command = ["gh", "pr", "view", str(pr_number), "--json", "state,isMerged,mergeCommit"]
+        command = ["gh", "pr", "view", str(pr_number), "--json", "state,mergedAt,mergeCommit"]
         completed = subprocess.run(command, text=True, capture_output=True)
         item: dict[str, object] = {
             "name": "pr-merged-after-post-merge-complete-failure",
@@ -1283,7 +1283,7 @@ def pr_complete_command(
             data = json.loads(completed.stdout or "{}")
         except json.JSONDecodeError:
             return False
-        return bool(data.get("isMerged"))
+        return bool(data.get("mergedAt")) or str(data.get("state", "")).upper() == "MERGED"
     def post_merge_check_requests_successor_refresh(output: str) -> bool:
         return "NEEDS_SUCCESSOR_PACKAGE_REFRESH" in output or "successor package stale" in output
     def _extract_admin_refresh_pr_number(output: str) -> int | None:
@@ -1900,7 +1900,7 @@ def pr_create_complete_command(
     def pr_is_merged_for_outer_followup() -> bool:
         if pr_number is None:
             return False
-        command = ["gh", "pr", "view", str(pr_number), "--json", "state,isMerged,mergeCommit"]
+        command = ["gh", "pr", "view", str(pr_number), "--json", "state,mergedAt,mergeCommit"]
         completed = subprocess.run(command, text=True, capture_output=True)
         steps.append(
             {
@@ -1920,7 +1920,7 @@ def pr_create_complete_command(
             return False
         if not isinstance(payload, dict):
             return False
-        return bool(payload.get("isMerged")) or str(payload.get("state", "")).upper() == "MERGED"
+        return bool(payload.get("mergedAt")) or str(payload.get("state", "")).upper() == "MERGED"
 
     def post_merge_check_is_green_for_outer_followup() -> bool:
         command = [agentic_kit, "transfer", "post-merge-check"]
