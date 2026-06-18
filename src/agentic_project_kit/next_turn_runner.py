@@ -7,13 +7,14 @@ import sys
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+import os
 
 from agentic_project_kit.next_turn_evidence import commit_and_push_evidence, publish_and_stage_evidence, render_finalize_result
 from agentic_project_kit.next_turn_slot import FIXED_SLOT_SCRIPT, FIXED_SLOT_YAML
 from agentic_project_kit.work_order_validator import LOCAL_RESULT_LOG_PATH
 
 LATEST_TERMINAL_LOG = LOCAL_RESULT_LOG_PATH
-LATEST_COMMAND_REPORT = Path("/tmp/agentic-project-kit/next-turn-latest.json")
+LATEST_COMMAND_REPORT = Path(os.environ.get("AGENTIC_KIT_NEXT_TURN_REPORT", "tmp/next-turn-latest.json"))
 
 
 @dataclass(frozen=True)

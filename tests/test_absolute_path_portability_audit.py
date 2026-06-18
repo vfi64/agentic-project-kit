@@ -90,3 +90,17 @@ def test_absolute_path_audit_classifies_audit_patterns_as_implementation(tmp_pat
     assert result.references
     assert result.references[0].classification == "audit_implementation"
 
+def test_absolute_path_audit_blocks_source_path_even_with_historical_word(tmp_path: Path) -> None:
+    module = tmp_path / "src" / "agentic_project_kit" / "leak.py"
+    module.parent.mkdir(parents=True)
+    module.write_text(
+        '# used to test local dev setup at /Users/hof/project\n',
+        encoding="utf-8",
+    )
+
+    result = audit_absolute_path_portability(tmp_path)
+
+    assert result.ok is False
+    assert result.blockers
+    assert result.blockers[0].classification == "absolute_path_blocker"
+

@@ -3,10 +3,11 @@ from __future__ import annotations
 import ast
 from dataclasses import dataclass
 from pathlib import Path
+import os
 
 WORK_ORDER_PATH = Path('.agentic/commands/inbox/next-turn.py')
 RESULT_LOG_PATH = Path('docs/reports/terminal/next-turn-latest.log')
-LOCAL_RESULT_LOG_PATH = Path('/tmp/agentic-project-kit/next-turn-latest.log')
+LOCAL_RESULT_LOG_PATH = Path(os.environ.get("AGENTIC_KIT_NEXT_TURN_LOG", "tmp/next-turn-latest.log"))
 
 REQUIRED_PHRASES = (
     'agentic-project-kit work order',
