@@ -32,9 +32,11 @@ from agentic_project_kit.cli_commands.work_orders import work_orders_app
 from agentic_project_kit.cli_commands.workflow import workflow_app
 from agentic_project_kit.cli_commands.workflow_guard import workflow_guard_app
 from agentic_project_kit.cli_commands.removed_ns_commands import register_removed_ns_commands
+from agentic_project_kit.cli_commands.ns_legacy_audit import audit_ns_legacy_references_command
 from agentic_project_kit.patch_artifact_preflight import register_patch_preflight_command
 
 app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
+app.command("audit-ns-legacy-references")(audit_ns_legacy_references_command)
 
 register_init_command(app)
 register_profile_commands(app)
@@ -72,3 +74,4 @@ app.add_typer(transfer_app, name="transfer")
 
 if __name__ == "__main__":
     app()
+

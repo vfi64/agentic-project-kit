@@ -253,7 +253,7 @@ The following decisions remain maintainer-owned and require explicit approval:
 
 ## Local Cockpit Gate
 
-When changing the local cockpit, cockpit action registry, cockpit CLI adapter, `./ns cockpit` shortcuts, or `./ns-menu` cockpit entries, run unit tests plus explicit CLI smoke commands.
+When changing the local cockpit, cockpit action registry, cockpit CLI adapter, `agentic-kit cockpit` shortcuts, or `./ns-menu` cockpit entries, run unit tests plus explicit CLI smoke commands.
 When changing the experimental Tkinter GUI cockpit, also verify that the selected local Python can import `tkinter`. On Homebrew/macOS, Tk support is provided by the separate `python-tk@3.13` package and is not a pip dependency. A GUI launch smoke should use a dedicated Tk-capable virtual environment when the default development venv lacks `_tkinter`. Real Tk window smoke checks are blocked by default during local gates; set `AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE=1` only for an intentional real-window launch evidence run.
 
 
@@ -266,8 +266,8 @@ Required evidence:
     agentic-kit cockpit actions --json | python -m json.tool
     agentic-kit cockpit run git.status
     agentic-kit cockpit run workflow.go || true
-    ./ns cockpit
-    ./ns actions
+    agentic-kit cockpit
+    agentic-kit actions
 
 The action registry must preserve explicit safety classification. Machine-readable inventory output must remain parseable JSON and must not execute actions. Read-only cockpit commands must not execute destructive Git, release, tag, merge, cleanup, or remote operations. `cockpit run` may execute registered `read_only` actions through argument-vector execution. Bounded actions may be listed as action metadata, but they must be blocked unless an explicit bounded-action allow path is used. Destructive actions must remain blocked.
 
@@ -504,3 +504,4 @@ Required evidence:
     agentic-kit check-docs
 
 A YAML parse failure in CI is a failed workflow gate. It must not be treated as a normal trial-and-error step.
+Supported state freshness gate: `agentic-kit state-freshness-check`.

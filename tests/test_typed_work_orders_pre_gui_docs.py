@@ -7,9 +7,9 @@ def test_typed_work_orders_are_documented_as_pre_gui_execution_path() -> None:
     combined = status + chr(10) + handoff
     assert "Typed Work Orders Pre-GUI Execution Path" in combined
     assert "preferred pre-GUI execution path" in status
-    assert "./ns typed-run <path>" in handoff
-    assert "./ns typed-queue-status --json" in handoff
-    assert "./ns typed-next --json" in handoff
+    assert "agentic-kit typed-run <path>" in handoff
+    assert "agentic-kit typed-queue-status --json" in handoff
+    assert "agentic-kit typed-next --json" in handoff
     assert "no_command" in combined
     assert "exactly_one_command" in combined
     assert "multiple_commands" in combined

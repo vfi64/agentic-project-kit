@@ -253,8 +253,8 @@ rules:
     - agentic-kit workflow cleanup
     - .agentic/workflow_state
     - IDLE
-    - ./ns
-    - ./ns --request
+    - agentic-kit
+    - agentic-kit workflow request
   - path: docs/WORKFLOW_OUTPUT_CYCLE.md
     terms:
     - agentic-kit workflow request
@@ -271,8 +271,8 @@ rules:
     terms:
     - Standard next-step terminal workflow
     - cd <your-project-root>
-    - ./ns
-    - ./ns --request
+    - agentic-kit
+    - agentic-kit workflow request
     - done
     - The short acknowledgement `d` is also valid
     - instead of long manual Copy-and-Paste terminal blocks
@@ -293,14 +293,14 @@ rules:
     terms:
     - Single-command state behavior
     - IDLE + .agentic/current_work.yaml state READY -> no-op -> IDLE
-    - ./ns --request
+    - agentic-kit workflow request
     - IDLE + .agentic/current_work.yaml state REQUESTED -> run workflow -> reset request
       to READY -> upload evidence -> UPLOADED
     - UPLOADED -> cleanup temporary evidence branch -> IDLE
     - FAILED -> preserve evidence; no automatic cleanup
     - RUNNING -> refuse duplicate execution
     - Optional shell shortcut
-    - ./ns
+    - agentic-kit
 - id: failed-next-step-handling-coverage
   description: FAILED workflow-state handling must remain explicit because it requires
     diagnosis, not automatic cleanup.
@@ -605,8 +605,8 @@ rules:
     - read_only
     - bounded
     - destructive
-    - ./ns cockpit
-    - ./ns actions
+    - agentic-kit cockpit
+    - agentic-kit actions
     - Tkinter cockpit
   - path: docs/architecture/LOCAL_COCKPIT_FOUNDATION.md
     terms:
@@ -645,11 +645,11 @@ rules:
     terms:
     - Planning-state freshness rule
     - curated, not accumulated
-    - ./ns state-freshness-check
+    - agentic-kit state-freshness-check
   - path: docs/TEST_GATES.md
     terms:
     - Planning State Freshness Gate
-    - ./ns state-freshness-check
+    - agentic-kit state-freshness-check
 - id: final-summary-contract-coverage
   description: Mandatory final terminal summaries must remain documented and test-backed.
   documents:

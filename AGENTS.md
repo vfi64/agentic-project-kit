@@ -226,13 +226,13 @@ For app-based ChatGPT workflows, use the compatibility entrypoint as the normal 
 
 ```bash
 cd <your-project-root>
-./ns
+agentic-kit workflow
 ```
 
 A plain next-step command is a no-op while `.agentic/current_work.yaml` is `READY`. Request the configured workflow explicitly first:
 
 ```bash
-./ns --request
+agentic-kit workflow request
 ```
 
 After the command finishes, the expected chat reply is usually only:
@@ -365,7 +365,7 @@ Temporary raw reports should be deleted or left uncommitted once they have serve
 
 ## Workflow output handoff
 
-When complete local terminal evidence is needed, prefer `./ns` over manual Copy-and-Paste. The script cycles through `TEST`, `UPLOAD`, and `CLEANUP`; see `docs/WORKFLOW_OUTPUT_CYCLE.md`. Evidence branches are temporary and must be cleaned up.
+When complete local terminal evidence is needed, prefer repo-backed `agentic-kit` workflow/evidence commands over manual Copy-and-Paste. The legacy compatibility details are historical; see `docs/WORKFLOW_OUTPUT_CYCLE.md`. Evidence branches are temporary and must be cleaned up.
 
 ## Terminal result markers
 

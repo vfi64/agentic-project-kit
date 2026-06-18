@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `159`
+- Command count: `160`
 
 ## Commands
 
@@ -20,6 +20,15 @@ _No parameters._
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `action_id` | `TyperArgument` | action_id | `True` |  |  |
+
+### `agentic-kit audit-ns-legacy-references`
+
+Audit remaining legacy ./ns/ns-menu/ns_release references.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit boot check`
 

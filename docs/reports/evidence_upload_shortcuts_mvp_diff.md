@@ -40,7 +40,7 @@ index b2e7289..e242738 100644
 +The older compatibility form remains available when a split request/run cycle is useful:
 +
  ```zsh
- ./ns --request
+ agentic-kit workflow request
  ./ns
 @@ -165,6 +172,8 @@ It does not switch to `main`, so it can validate either `main` or the current PR
  Use these commands for explicit operation:

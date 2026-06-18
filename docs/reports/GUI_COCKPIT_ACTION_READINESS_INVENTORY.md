@@ -13,7 +13,7 @@ Implemented files:
 - `tools/cockpit_readiness.py`
 - `tests/test_action_registry.py`
 - `tests/test_cockpit_readiness.py`
-- `./ns cockpit-readiness`
+- `agentic-kit cockpit-readiness`
 
 ## Safety boundary
 
@@ -27,7 +27,7 @@ Implemented files:
 - Known actions have explicit safety class metadata.
 - Read-only actions are asserted to have `mutation_scope="none"`.
 - Local-mutating actions are not marked read-only.
-- `./ns cockpit-readiness` provides a deterministic Markdown report for a future local cockpit.
+- `agentic-kit cockpit-readiness` provides a deterministic Markdown report for a future local cockpit.
 
 ## Deferred intentionally
 

@@ -38,6 +38,45 @@
       "qualified_name": "agentic-kit actions show"
     },
     {
+      "group": "root",
+      "help": "Audit remaining legacy ./ns/ns-menu/ns_release references.",
+      "name": "audit-ns-legacy-references",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "audit-ns-legacy-references"
+      ],
+      "qualified_name": "agentic-kit audit-ns-legacy-references"
+    },
+    {
       "group": "boot",
       "help": "",
       "name": "check",
