@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `160`
+- Command count: `161`
 
 ## Commands
 
@@ -20,6 +20,15 @@ _No parameters._
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `action_id` | `TyperArgument` | action_id | `True` |  |  |
+
+### `agentic-kit audit-absolute-path-portability`
+
+Audit absolute local paths that may break portability.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit audit-ns-legacy-references`
 

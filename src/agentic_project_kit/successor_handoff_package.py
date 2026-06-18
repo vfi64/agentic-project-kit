@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 REPO_FULL_NAME = "vfi64/agentic-project-kit"
-LOCAL_PATH = "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit"
+DEFAULT_LOCAL_PATH = "cd /path/to/agentic-project-kit"
 
 NEXT_CHAT_BOOTSTRAP = Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md")
 START_NEW_CHAT_PROMPT = Path("docs/handoff/START_NEW_CHAT_PROMPT.md")
@@ -45,7 +45,7 @@ LONG_TERM_SOURCES: tuple[str, ...] = (
 )
 
 STARTUP_COMMANDS: tuple[str, ...] = (
-    "cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
+    "cd /path/to/agentic-project-kit",
     "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile",
     "./.venv/bin/agentic-kit rules acknowledge",
     "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile",
@@ -212,7 +212,7 @@ def _build_repo_state(root: Path) -> dict[str, Any]:
     branch = _run_git(root, ["branch", "--show-current"])
     return {
         "full_name": REPO_FULL_NAME,
-        "local_path": LOCAL_PATH,
+        "local_path": DEFAULT_LOCAL_PATH,
         "branch": branch,
         "head": head,
         "head_short": _head_short(head),
@@ -377,7 +377,7 @@ def build_execution_contract(context: dict[str, Any]) -> dict[str, object]:
         "kind": "successor_execution_contract",
         "repo": {
             "full_name": repo.get("full_name", "vfi64/agentic-project-kit"),
-            "local_path": repo.get("local_path", "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit"),
+            "local_path": repo.get("local_path", "cd /path/to/agentic-project-kit"),
             "branch": branch,
             "head": head,
             "origin_main": origin_main,
@@ -759,7 +759,7 @@ def render_closeout_prompt_from_context(context: dict[str, Any]) -> str:
             "Before leaving a chat, run the deterministic successor handoff package command:",
             "",
             "```bash",
-            "cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
+            "cd /path/to/agentic-project-kit",
             "./.venv/bin/agentic-kit transfer chat-switch-complete --render-prompt",
             "```",
             "",

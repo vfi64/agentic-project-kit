@@ -41,7 +41,7 @@ def test_next_step_terminal_workflow_is_documented_and_gated() -> None:
     assert "## Standard next-step terminal workflow" in workflow_doc
 
     required_terms = {
-        "cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
+        "cd /path/to/agentic-project-kit",
         "python tools/next-step.py",
         "done",
         "The short acknowledgement `d` is also valid",

@@ -102,7 +102,7 @@ Required evidence for this registry gate:
 
     python -m pytest -q tests/test_documentation_registry.py
     agentic-kit docs-registry
-    agentic-kit docs-registry --report /tmp/agentic-docs-registry-summary.json
+    agentic-kit docs-registry --report tmp/agentic-docs-registry-summary.json
     agentic-kit check-docs
 
 ## Failure-Mode Review Automation Gate (planned)

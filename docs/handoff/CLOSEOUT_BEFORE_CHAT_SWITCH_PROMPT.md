@@ -30,7 +30,7 @@ required_terms:
 Before leaving a chat, run the deterministic successor handoff package command:
 
 ```bash
-cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+cd /path/to/agentic-project-kit
 ./.venv/bin/agentic-kit transfer chat-switch-complete --render-prompt
 ```
 

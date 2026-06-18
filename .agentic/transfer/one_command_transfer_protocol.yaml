@@ -16,7 +16,7 @@ principles:
 - All concrete execution steps live in the transfer order or are executed by the remote-next
   wrapper.
 user_command:
-  working_directory: /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+  working_directory: <local-repo-path>
   argv:
   - ./.venv/bin/agentic-kit
   - transfer

@@ -4,9 +4,9 @@ from __future__ import annotations
 from pathlib import Path
 import subprocess
 
-ROOT = Path('/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit')
+ROOT = Path(__file__).resolve().parents[1]
 BRANCH = 'docs/gui-transfer-basic-mvp-plan-update'
-TMP_DIFF = Path('/tmp/gui-transfer-basic-mvp-plan-update.diff')
+TMP_DIFF = ROOT / 'tmp' / 'gui-transfer-basic-mvp-plan-update.diff'
 PLAN = Path('docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md')
 
 PLAN_SECTION = r'''
