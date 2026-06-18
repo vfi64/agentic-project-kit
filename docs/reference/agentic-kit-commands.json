@@ -78,6 +78,45 @@
     },
     {
       "group": "root",
+      "help": "Audit current release/documentation currency across handoff and release docs.",
+      "name": "audit-doc-currency",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "audit-doc-currency"
+      ],
+      "qualified_name": "agentic-kit audit-doc-currency"
+    },
+    {
+      "group": "root",
       "help": "Audit remaining legacy ./ns/ns-menu/ns_release references.",
       "name": "audit-ns-legacy-references",
       "params": [

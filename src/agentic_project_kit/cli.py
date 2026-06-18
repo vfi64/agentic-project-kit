@@ -34,9 +34,11 @@ from agentic_project_kit.cli_commands.workflow_guard import workflow_guard_app
 from agentic_project_kit.cli_commands.removed_ns_commands import register_removed_ns_commands
 from agentic_project_kit.cli_commands.ns_legacy_audit import audit_ns_legacy_references_command
 from agentic_project_kit.cli_commands.absolute_path_audit import audit_absolute_path_portability_command
+from agentic_project_kit.cli_commands.doc_currency_audit import audit_doc_currency_command
 from agentic_project_kit.patch_artifact_preflight import register_patch_preflight_command
 
 app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
+app.command("audit-doc-currency")(audit_doc_currency_command)
 app.command("audit-absolute-path-portability")(audit_absolute_path_portability_command)
 app.command("audit-ns-legacy-references")(audit_ns_legacy_references_command)
 
