@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 820286273dd9fe2c8c55a9ce0baf1d5d6b047b6d
-  short: 82028627
-  subject: Add release metadata authority gate (#1441)
+  full: 993aa63c7c80f65e2e624b3d1377dae92312f247
+  short: 993aa63c
+  subject: Harden DOI closeout atomicity (#1443)
 last_substantive_work_state:
-  full: 820286273dd9fe2c8c55a9ce0baf1d5d6b047b6d
-  short: 82028627
-  subject: Add release metadata authority gate (#1441)
+  full: 993aa63c7c80f65e2e624b3d1377dae92312f247
+  short: 993aa63c
+  subject: Harden DOI closeout atomicity (#1443)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
