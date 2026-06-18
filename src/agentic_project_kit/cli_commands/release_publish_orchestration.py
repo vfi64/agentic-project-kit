@@ -16,6 +16,7 @@ def release_publish_command(
     version: str = typer.Option(PACKAGE_VERSION, "--version"),
     dry_run: bool = typer.Option(True, "--dry-run/--no-dry-run"),
     execute: bool = typer.Option(False, "--execute"),
+    allow_execute: bool = typer.Option(False, "--allow-execute"),
     root: Path = typer.Option(Path("."), "--root"),
     json_output: bool = typer.Option(False, "--json"),
 ) -> None:
@@ -25,6 +26,7 @@ def release_publish_command(
         version=version,
         dry_run=dry_run,
         execute=execute,
+        allow_execute=allow_execute,
     )
     if json_output:
         typer.echo(json.dumps(plan.as_dict(), indent=2, sort_keys=True))
