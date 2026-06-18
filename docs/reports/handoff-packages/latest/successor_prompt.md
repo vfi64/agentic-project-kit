@@ -2,7 +2,7 @@
 
 The markdown successor prompt is a projection of the machine-readable execution contract.
 
-- branch: `docs/post-pr1447-handoff-refresh`
+- branch: `docs/post-pr1449-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 
@@ -27,7 +27,7 @@ Arbeite nicht aus Chat-Erinnerung. Quelle der Wahrheit ist der aktuelle Remote-S
 ## Pflichtstart
 
 ```bash
-cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+cd /path/to/agentic-project-kit
 ./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile
 ./.venv/bin/agentic-kit rules acknowledge
 ./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile
@@ -139,14 +139,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1447-handoff-refresh",
+    "branch": "docs/post-pr1449-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "71eac27c14f443f10d4c658645c2eec4261eb156",
+    "head": "a2e6bc9d140b338fc93e437b75ef34aca74435fe",
     "head_matches_origin_main": true,
-    "head_short": "71eac27c",
-    "local_path": "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
-    "origin_main": "71eac27c14f443f10d4c658645c2eec4261eb156",
-    "origin_main_short": "71eac27c",
+    "head_short": "a2e6bc9d",
+    "local_path": "cd /path/to/agentic-project-kit",
+    "origin_main": "a2e6bc9d140b338fc93e437b75ef34aca74435fe",
+    "origin_main_short": "a2e6bc9d",
     "worktree_clean": false
   }
 }
