@@ -2644,6 +2644,87 @@
     },
     {
       "group": "root",
+      "help": "Block manual release metadata anchor edits without release-prep evidence.",
+      "name": "release-metadata-authority-gate",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "origin/main",
+          "help": "Git ref used as the diff base.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "base_ref",
+          "opts": [
+            "--base-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Expected release version without leading v.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Authoritative release-prep evidence file. May be passed more than once.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "evidence",
+          "opts": [
+            "--evidence"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print a machine-readable result.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "release-metadata-authority-gate"
+      ],
+      "qualified_name": "agentic-kit release-metadata-authority-gate"
+    },
+    {
+      "group": "root",
       "help": "Print a release preparation checklist for the current project.",
       "name": "release-plan",
       "params": [
