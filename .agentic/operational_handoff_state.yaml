@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 534864932a24f9011f4774f9cc0fba58e9b25432
-  short: 53486493
-  subject: '[codex] Plan release command authority slice (#1436)'
+  full: bfc8e42cad61a1ca49edaf8ff74fbae1682def16
+  short: bfc8e42c
+  subject: Refresh handoff state after PR1436 (#1437)
 last_substantive_work_state:
-  full: 534864932a24f9011f4774f9cc0fba58e9b25432
-  short: 53486493
-  subject: '[codex] Plan release command authority slice (#1436)'
+  full: bfc8e42cad61a1ca49edaf8ff74fbae1682def16
+  short: bfc8e42c
+  subject: Refresh handoff state after PR1436 (#1437)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
