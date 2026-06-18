@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a2e6bc9d140b338fc93e437b75ef34aca74435fe
-  short: a2e6bc9d
-  subject: Audit absolute path portability (#1449)
+  full: dfcb9e5f5d6810fad224676f8986c249abe6bd7a
+  short: dfcb9e5f
+  subject: Audit documentation currency (#1451)
 last_substantive_work_state:
-  full: a2e6bc9d140b338fc93e437b75ef34aca74435fe
-  short: a2e6bc9d
-  subject: Audit absolute path portability (#1449)
+  full: dfcb9e5f5d6810fad224676f8986c249abe6bd7a
+  short: dfcb9e5f
+  subject: Audit documentation currency (#1451)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
