@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 10fc52f043812a6d19be6bef4c63f53b4929c58b
-  short: 10fc52f0
-  subject: Record v0.4.9 post-release DOI metadata (#1426)
+  full: 13d77886128990a6841055852f0a45efd2878079
+  short: 13d77886
+  subject: Harden post-merge handoff refresh gate (#1428)
 last_substantive_work_state:
-  full: 10fc52f043812a6d19be6bef4c63f53b4929c58b
-  short: 10fc52f0
-  subject: Record v0.4.9 post-release DOI metadata (#1426)
+  full: 13d77886128990a6841055852f0a45efd2878079
+  short: 13d77886
+  subject: Harden post-merge handoff refresh gate (#1428)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
