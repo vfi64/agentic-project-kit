@@ -180,6 +180,14 @@ Next safe step: continue with guarded status/handoff refresh closeout and then g
 
 > CURRENT_HANDOFF boundary: This document uses concise pointers, not duplicate rule books. Detailed historical evidence and expanded narratives belong in linked repo reports, not in this handoff index.
 
+## Release Command Authority Planning Slice Refresh
+
+Current planning-slice branch: `codex/release-command-authority-plan`.
+Current planning-slice commit: `1becc4a7` (`Plan release command authority slice`).
+Planning PR: #1436 (`[codex] Plan release command authority slice`).
+
+Current handoff package and prompt projections are refreshed for this planning slice. After PR #1436 merges, the next product action is to start from fresh `main` and implement `docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md`.
+
 Status-date: 2026-05-27
 Project: agentic-project-kit
 Branch: codex/refresh-post-pr835-next-step-state

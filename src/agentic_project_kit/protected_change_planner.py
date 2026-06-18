@@ -21,6 +21,7 @@ LARGE_PROTECTED_REMOVAL_THRESHOLD = 20
 
 GENERATED_ARTIFACTS = {
     "docs/handoff/NEXT_CHAT_BOOTSTRAP.md": (
+        "src/agentic_project_kit/successor_handoff_package.py",
         "src/agentic_project_kit/chat_bootloader.py",
         "src/agentic_project_kit/operational_handoff_projection.py",
         ".agentic/operational_handoff_state.yaml",
@@ -94,6 +95,20 @@ def _contains_anchor(path: str, text: str, anchor: str) -> bool:
         return re.search(rf"(?m)^\s*{re.escape(anchor)}\s*:", text) is not None
     return anchor in text
 
+
+def _is_handoff_state_refresh(path: str, added_text: str) -> bool:
+    if path != ".agentic/handoff_state.yaml":
+        return False
+    required_anchors = {"safe_state", "handoff_maintenance", "next_step"}
+    candidate_text = added_text
+    current_path = Path(path)
+    if current_path.exists():
+        candidate_text = candidate_text + "\n" + current_path.read_text(encoding="utf-8", errors="replace")
+    return (
+        "source: agentic-kit handoff refresh" in candidate_text
+        and all(_contains_anchor(path, candidate_text, anchor) for anchor in required_anchors)
+    )
+
 def analyze_diff(diff_text: str, decisions: dict[str, str] | None = None) -> list[ProtectedChangeFinding]:
     decisions = decisions or {}
     findings: list[ProtectedChangeFinding] = []
@@ -106,7 +121,10 @@ def analyze_diff(diff_text: str, decisions: dict[str, str] | None = None) -> lis
         added = added_lines_for_path(diff_text, path)
         has_valid_decision = _has_valid_decision(path, decisions)
         if len(removed) >= LARGE_PROTECTED_REMOVAL_THRESHOLD and not has_valid_decision:
-            if len(added) >= LARGE_PROTECTED_REMOVAL_THRESHOLD:
+            added_text = "\n".join(added)
+            if len(added) >= LARGE_PROTECTED_REMOVAL_THRESHOLD and _is_handoff_state_refresh(path, added_text):
+                pass
+            elif len(added) >= LARGE_PROTECTED_REMOVAL_THRESHOLD:
                 findings.append(ProtectedChangeFinding(path, "block", "large-protected-file-rewrite-without-decision", "large protected-file rewrite requires keep/migrate/obsolete/abort decision before replacement-style editing"))
             else:
                 findings.append(ProtectedChangeFinding(path, "block", "possible-full-replacement-or-large-deletion", "large protected-file deletion requires migration record or user decision"))

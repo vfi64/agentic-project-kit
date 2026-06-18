@@ -139,6 +139,12 @@ documents:
     owner: project
     review_policy: required
     summary: Classifies remaining ns-named and shell-dependent portability work after ns command migration closeout.
+  - path: docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
+    class: planning
+    status: active
+    owner: project
+    review_policy: required
+    summary: First post-v0.4.9 implementation slice for establishing the supported release metadata route and making release publish core portable or fail-closed.
   - path: docs/DOCUMENTATION_REGISTRY.yaml
     class: governance/system
     owner: maintainers

@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `a1d5929a3578237c8cd9916ffd88114b2231fae8` (`a1d5929a`)
-- Handoff freshness marker: `a1d5929a`
-- Branch at generation: `docs/post-pr1434-handoff-refresh`
+- HEAD: `1becc4a7ac8b482111a656c19c64cfeb98f2f038` (`1becc4a7`)
+- Handoff freshness marker: `1becc4a7`
+- Branch at generation: `codex/release-command-authority-plan`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -66,7 +66,8 @@ Wenn der Bootstrap grün ist:
 
 ## Open high-priority work
 
-- Replace obsolete chat-switch prompt generation with this deterministic package mechanism.
-- Add outer-doc currency checks and minimal updates for `AGENTS.md`, `README.md`, and `SECURITY.md`.
+- `release-command-authority-and-publish-core-triage` (active): Implement the first post-v0.4.9 release-governance slice from docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md: establish one supported agentic-kit release metadata-prep route and make release_publish_core portable or fail-closed.
+- `doi-closeout-atomicity` (pending): After release command authority is fixed, harden DOI closeout completeness and commit-safe expected-path coverage.
+- `outer-doc-currency` (pending): Add currency checks and minimal updates for AGENTS.md, README.md, and SECURITY.md.
 
 ### RESULT: PASS ###

@@ -37,6 +37,7 @@ LONG_TERM_SOURCES: tuple[str, ...] = (
     "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
     "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
     "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
+    "docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md",
     "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
     "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
     "docs/reference/AGENTIC_KIT_COMMANDS.md",
@@ -57,16 +58,36 @@ STARTUP_COMMANDS: tuple[str, ...] = (
 
 CURRENT_OPEN_TASKS: tuple[dict[str, Any], ...] = (
     {
-        "id": "successor-handoff-package",
+        "id": "release-command-authority-and-publish-core-triage",
         "status": "active",
-        "summary": "Replace obsolete chat-switch prompt generation with a deterministic successor handoff package.",
+        "summary": (
+            "Implement the first post-v0.4.9 release-governance slice from "
+            "docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md: establish one supported "
+            "agentic-kit release metadata-prep route and make release_publish_core portable "
+            "or fail-closed."
+        ),
         "files": [
-            "src/agentic_project_kit/successor_handoff_package.py",
-            "src/agentic_project_kit/chat_bootloader.py",
-            "src/agentic_project_kit/cli_commands/transfer.py",
-            "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
-            "docs/handoff/START_NEW_CHAT_PROMPT.md",
-            "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+            "docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md",
+            "src/agentic_project_kit/cli_commands/release.py",
+            "src/agentic_project_kit/release_prepare.py",
+            "src/agentic_project_kit/release_metadata_prep.py",
+            "src/agentic_project_kit/release_prep_core.py",
+            "src/agentic_project_kit/release_publish_core.py",
+            "tests/test_release_prepare_command.py",
+            "tests/test_release_metadata_prep_portability.py",
+            "tests/test_release_prep_core.py",
+            "tests/test_release_publish_core.py",
+            "tests/test_v036_release_route_help_safety.py",
+        ],
+    },
+    {
+        "id": "doi-closeout-atomicity",
+        "status": "pending",
+        "summary": "After release command authority is fixed, harden DOI closeout completeness and commit-safe expected-path coverage.",
+        "files": [
+            "src/agentic_project_kit/post_release_closeout.py",
+            "tests/test_post_release_closeout_hardening.py",
+            "docs/releases/VERIFIED_RELEASES.md",
         ],
     },
     {
@@ -83,6 +104,8 @@ RECENT_LESSONS: tuple[str, ...] = (
     "Generated prompt files must be deterministic projections, not accumulative append targets.",
     "Stale prompt markers, literal backslash-n artifacts, and old current-state PR anchors must block handoff trust.",
     "The copy prompt must be usable by other LLMs, not only ChatGPT.",
+    "After v0.4.9, release metadata preparation must have one supported agentic-kit route before manual-metadata gates are tightened.",
+    "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal.",
 )
 
 STALE_MARKERS: tuple[str, ...] = (
@@ -533,16 +556,34 @@ def render_successor_prompt(context: dict[str, Any]) -> str:
             "- Große Ausgaben nach `~/Downloads/*.log` umleiten und nur `LOG=...` posten.",
             "- Vor Commit: tatsächlichen Diff inspizieren, Tests laufen lassen, protected-diff-plan ausführen.",
             "- Bei `BLOCK` oder `FAIL`: sofort stoppen, Diagnose statt Weiterarbeiten.",
-            "- `AGENTS.md`, `README.md` und `SECURITY.md` sind als Outer-doc-Currency-Aufgabe offen und dürfen nicht vergessen werden.",
+            "- Die aktive erste Aufgabe ist `release-command-authority-and-publish-core-triage`; Outer-doc-Currency bleibt pending.",
             "",
             "## Nächste sichere Entscheidung",
             "",
             "1. Wenn `validation_report.json` nicht PASS ist: Handoff-Projektion reparieren.",
             "2. Wenn der Arbeitsbaum dirty ist: nur explizite WIP-Dateien prüfen und abschließen oder sauber dokumentieren.",
-            "3. Danach Outer-doc-Currency-Slice für `AGENTS.md`, `README.md`, `SECURITY.md`.",
+            "3. Danach die aktive Aufgabe aus `docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md` bearbeiten.",
             "",
         ]
     )
+
+
+def _format_open_tasks_for_bootstrap(context: dict[str, Any]) -> list[str]:
+    tasks = context.get("short_term_memory", {}).get("open_tasks", [])
+    lines: list[str] = []
+    if not isinstance(tasks, list):
+        return ["- No structured open task list available; inspect `successor_context.yaml`."]
+    for task in tasks:
+        if not isinstance(task, dict):
+            continue
+        task_id = str(task.get("id", "unknown-task"))
+        status = str(task.get("status", "unknown"))
+        summary = str(task.get("summary", "")).strip()
+        if summary:
+            lines.append(f"- `{task_id}` ({status}): {summary}")
+        else:
+            lines.append(f"- `{task_id}` ({status})")
+    return lines or ["- No open tasks recorded."]
 
 
 def render_next_chat_bootstrap_from_context(context: dict[str, Any]) -> str:
@@ -587,8 +628,7 @@ def render_next_chat_bootstrap_from_context(context: dict[str, Any]) -> str:
             "",
             "## Open high-priority work",
             "",
-            "- Replace obsolete chat-switch prompt generation with this deterministic package mechanism.",
-            "- Add outer-doc currency checks and minimal updates for `AGENTS.md`, `README.md`, and `SECURITY.md`.",
+            *_format_open_tasks_for_bootstrap(context),
             "",
             "### RESULT: PASS ###",
             "",
@@ -634,12 +674,15 @@ Wenn der Bootstrap grün ist:
 """
 
 def render_start_prompt_from_context(context: dict[str, Any]) -> str:
+    repo = context["repo"]
     return "\n".join(
         [
             "---",
             "schema_version: 2",
             "artifact_type: chat_switch_prompt",
             "role: start_new_chat",
+            f"current_handoff_marker: {repo['head_short']}",
+            f"current_branch_at_generation: {repo['branch']}",
             f"canonical_bootstrap: {NEXT_CHAT_BOOTSTRAP}",
             "successor_context: docs/reports/handoff-packages/latest/successor_context.yaml",
             "paired_prompt: docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
@@ -666,6 +709,8 @@ def render_start_prompt_from_context(context: dict[str, Any]) -> str:
             "---",
             "",
             "# Start New Chat Prompt",
+            "",
+            f"Current handoff marker: `{repo['head_short']}`.",
             "",
             "Copy `docs/reports/handoff-packages/latest/successor_prompt.md` into the successor chat.",
             "",

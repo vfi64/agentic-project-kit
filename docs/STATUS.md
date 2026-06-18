@@ -1,6 +1,15 @@
 > STATUS boundary: This document uses concise pointers, not duplicate rule books. Machine guard: `agentic-kit docs-audit` enforces the current-state headroom boundary.
 
 
+## Release Command Authority Planning Slice Refresh
+
+Current planning-slice branch: `codex/release-command-authority-plan`.
+Current planning-slice commit: `1becc4a7` (`Plan release command authority slice`).
+Planning PR: #1436 (`[codex] Plan release command authority slice`).
+
+This slice records `docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md` as the first implementation step after v0.4.9. After PR #1436 merges, start from fresh `main` and implement `release-command-authority-and-publish-core-triage` before DOI closeout atomicity, broad legacy-doc cleanup, absolute-path cleanup, or GUI work.
+
+
 ## Post-PR1245 Administrative Handoff Refresh State
 
 Current main/admin HEAD: `e97af592` (`Refresh handoff state after PR1244 (#1245)`).
