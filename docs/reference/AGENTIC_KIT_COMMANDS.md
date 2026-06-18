@@ -383,6 +383,7 @@ Validate post-release GitHub and Zenodo state without guessing DOI metadata.
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `version` | `TyperOption` | --version | `True` |  | Release version without leading v. |
 | `write` | `TyperOption` | --write | `False` | `False` | Write verified DOI metadata updates. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print a machine-readable result. |
 
 ### `agentic-kit pr closeout-check`
 
