@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `166`
+- Command count: `167`
 
 ## Commands
 
@@ -569,6 +569,18 @@ push, create GitHub releases, or write Zenodo DOI metadata.
 | `release_date` | `TyperOption` | --date | `False` |  | Release metadata date in YYYY-MM-DD format. Defaults to today. |
 | `dry_run` | `TyperOption` | --dry-run | `False` | `False` | Report changed paths without writing files. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print a machine-readable result. |
+
+### `agentic-kit release-publish`
+
+Plan release publishing without live tag/release side effects.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `version` | `TyperOption` | --version | `False` | `0.4.9` |  |
+| `dry_run` | `TyperOption` | --dry-run, --no-dry-run | `False` | `True` |  |
+| `execute` | `TyperOption` | --execute | `False` | `False` |  |
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit remote-next`
 
