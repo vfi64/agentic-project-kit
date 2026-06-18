@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `162`
+- Command count: `163`
 
 ## Commands
 
@@ -42,6 +42,15 @@ Audit current release/documentation currency across handoff and release docs.
 ### `agentic-kit audit-ns-legacy-references`
 
 Audit remaining legacy ./ns/ns-menu/ns_release references.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
+### `agentic-kit audit-planning-docs-consolidation`
+
+Audit planning and handoff docs for consolidation candidates.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|

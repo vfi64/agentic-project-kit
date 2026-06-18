@@ -155,6 +155,45 @@
       "qualified_name": "agentic-kit audit-ns-legacy-references"
     },
     {
+      "group": "root",
+      "help": "Audit planning and handoff docs for consolidation candidates.",
+      "name": "audit-planning-docs-consolidation",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "audit-planning-docs-consolidation"
+      ],
+      "qualified_name": "agentic-kit audit-planning-docs-consolidation"
+    },
+    {
       "group": "boot",
       "help": "",
       "name": "check",

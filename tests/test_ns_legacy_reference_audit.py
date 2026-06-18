@@ -144,3 +144,11 @@ def test_classifies_workflow_output_cycle_as_legacy_documentation_context() -> N
     assert classification == "legacy_documentation_context"
     assert "documentation cleanup" in reason
 
+def test_classifies_planning_docs_audit_patterns_as_compatibility_implementation() -> None:
+    classification, reason = classify_legacy_reference(
+        "src/agentic_project_kit/planning_docs_consolidation_audit.py",
+        '"./ns",',
+    )
+    assert classification == "compatibility_implementation"
+    assert "compatibility patterns" in reason
+

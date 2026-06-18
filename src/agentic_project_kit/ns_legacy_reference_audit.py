@@ -150,6 +150,7 @@ def _legacy_documentation_context(relative_path: str) -> bool:
 def _compatibility_implementation_context(relative_path: str) -> bool:
     return relative_path in {
         "src/agentic_project_kit/ns_legacy_reference_audit.py",
+        "src/agentic_project_kit/planning_docs_consolidation_audit.py",
         "src/agentic_project_kit/release_gate_core.py",
         "src/agentic_project_kit/release_verify_core.py",
         "src/agentic_project_kit/removed_ns_commands.py",
