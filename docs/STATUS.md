@@ -276,7 +276,7 @@ Remote main is refreshed after Protected Change Planner A1.
 
 - Current verified main HEAD: `c07f8ece568501771849bd922aefd1f8ed169ff6`.
 - PR #791 `Expose protected change planner through ns` is merged.
-- `./ns protected-change-plan --diff-file <file>` is available as a read-only route.
+- `agentic-kit transfer protected-diff-plan --diff-file <file>` is available as a read-only route.
 - A1 verification evidence: `docs/reports/terminal/protected-change-planner-a1-merge-verify.log`.
 - The A1 verification log contains an expected negative planner smoke that prints `### RESULT: FAIL ###`; this is not an unresolved gate failure, but it exposes the next standard-error hardening target: expected negative smokes must not look like final workflow failures.
 
@@ -346,10 +346,10 @@ The documentation registry can be inspected through `agentic-kit docs-registry` 
 ## Gate Status
 
 Required gate set for current-state, handoff, or governance-summary changes:
-- `./ns state-freshness-check`
-- `./ns handoff-check`
-- `./ns rule-registry check`
-- `./ns patch-preflight`
+- `agentic-kit state-freshness-check`
+- `agentic-kit handoff-check`
+- `agentic-kit rule-registry check`
+- `agentic-kit patch-preflight`
 - `./.venv/bin/agentic-kit docs-audit`
 - `agentic-kit check-docs`
 

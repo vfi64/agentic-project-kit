@@ -314,8 +314,8 @@ Quick command guide:
 Legacy compatibility remains available through:
 
 ```bash
-./ns --request
-./ns
+agentic-kit workflow request
+agentic-kit workflow
 ```
 
 Prefer the package CLI for normal use; the legacy command is kept visible for compatibility and documentation coverage.
@@ -341,11 +341,11 @@ agentic-kit patterns show bounded-workflow-evidence
 
 ## Local Cockpit Foundation
 
-The local cockpit foundation exposes a conservative control surface for local project operation. Use `agentic-kit cockpit status` to inspect the current project root, Git branch, dirty-tree state, workflow state, and current-work request state. Use `agentic-kit cockpit actions` to list the structured action inventory, or `agentic-kit cockpit actions --json` to print the schema-versioned machine-readable action inventory. Use `agentic-kit cockpit run <action-id>` to execute explicitly registered read-only cockpit actions through the shared action layer.
+The local cockpit foundation exposes a conservative control surface for local project operation. Use `agentic-kit cockpit` and `agentic-kit actions status` to inspect the current project root, Git branch, dirty-tree state, workflow state, and current-work request state. Use `agentic-kit cockpit actions` to list the structured action inventory, or `agentic-kit cockpit actions --json` to print the schema-versioned machine-readable action inventory. Use `agentic-kit cockpit run <action-id>` to execute explicitly registered read-only cockpit actions through the shared action layer.
 
 The cockpit action inventory classifies actions by category and safety, including `read_only`, `bounded`, and future `destructive` classes. Cockpit action execution allows `read_only` actions by default, blocks `bounded` actions unless explicitly allowed by the action layer, and blocks `destructive` actions. It does not execute destructive Git, release, tag, merge, cleanup, or remote operations.
 
-Repo-local shortcuts are available through `./ns cockpit` and `./ns actions`. The optional `./ns-menu` helper includes the same cockpit entries plus `./ns actions --json` for machine-readable cockpit action inventory output. The long-term direction is a shared action layer that can be reused by CLI, shell/menu adapters, and a later Tkinter cockpit without assembling fragile shell snippets. The experimental `agentic-kit-gui` entry point starts a local Tkinter cockpit skeleton that presents registered cockpit actions, keeps bounded and destructive actions blocked by default, and shows command output in a persistent output widget. Launch it locally with `.venv/bin/agentic-kit-gui`; use it first for read-only inspection and read-only command execution, not for release, merge, migration, or cleanup operations. The GUI requires a Python build with Tk support. On Homebrew/macOS this may require `brew install python-tk@3.13` or `brew reinstall python@3.13 python-tk@3.13`, then recreating the GUI virtual environment. Real Tk window smoke checks are opt-in for local evidence runs; set `AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE=1` only when a real window launch is intended and safe in the current session.
+Repo-local shortcuts are available through `agentic-kit workflow cockpit` and `agentic-kit workflow actions`. The optional `agentic-kit workflow-menu` helper includes the same cockpit entries plus `agentic-kit workflow actions --json` for machine-readable cockpit action inventory output. The long-term direction is a shared action layer that can be reused by CLI, shell/menu adapters, and a later Tkinter cockpit without assembling fragile shell snippets. The experimental `agentic-kit-gui` entry point starts a local Tkinter cockpit skeleton that presents registered cockpit actions, keeps bounded and destructive actions blocked by default, and shows command output in a persistent output widget. Launch it locally with `.venv/bin/agentic-kit-gui`; use it first for read-only inspection and read-only command execution, not for release, merge, migration, or cleanup operations. The GUI requires a Python build with Tk support. On Homebrew/macOS this may require `brew install python-tk@3.13` or `brew reinstall python@3.13 python-tk@3.13`, then recreating the GUI virtual environment. Real Tk window smoke checks are opt-in for local evidence runs; set `AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE=1` only when a real window launch is intended and safe in the current session.
 
 Architecture details are documented in `docs/architecture/LOCAL_COCKPIT_FOUNDATION.md`.
 
@@ -529,3 +529,4 @@ Verified version-specific DOI history is maintained in `docs/releases/VERIFIED_R
 - `agentic-kit workflow show`
 - `agentic-kit workflow upload`
 - `.agentic/workflow_state`
+Supported cockpit status check: `agentic-kit cockpit status`.

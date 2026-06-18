@@ -154,7 +154,7 @@ After adding those aliases to `~/.zshrc`, routine compatibility-entrypoint work 
 The older compatibility form remains available when a split request/run cycle is useful:
 
 ```zsh
-./ns --request
+agentic-kit workflow request
 ./ns
 ```
 

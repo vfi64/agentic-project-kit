@@ -230,7 +230,7 @@ Protected Change Planner A1 is complete on remote main.
 
 - Verified main HEAD: `c07f8ece568501771849bd922aefd1f8ed169ff6`.
 - PR #791 is merged.
-- `./ns protected-change-plan --diff-file <file>` routes to `agentic_project_kit.protected_change_planner`.
+- `agentic-kit transfer protected-diff-plan --diff-file <file>` routes to `agentic_project_kit.protected_change_planner`.
 - Verification log: `docs/reports/terminal/protected-change-planner-a1-merge-verify.log`.
 - Immediate next slice: fix expected-negative-smoke and final-summary ambiguity before product work.
 
@@ -266,7 +266,7 @@ Read before mutation: `.agentic/compiled_agent_context.yaml`, `docs/governance/F
 - No executable placeholder summaries and final-summary-no-executable-placeholders remain active.
 - Remote log lookup must direct-fetch the named docs/reports/terminal log path before asking the user to paste output.
 - FAIL without terminal kill uses NEXT_CHAT_REPLY: f and must first inspect the repo-backed log before requesting paste-output.
-- Typed Work Orders Pre-GUI Execution Path remains preferred: ./ns typed-run <path>; ./ns typed-queue-status --json; ./ns typed-next --json; it uses the minimal typed Work Order Runner as the pre-GUI bridge without chat-generated patch scripts and dirty-state blocking. Required typed-state anchors: no_command, exactly_one_command, multiple_commands, already_executed, dirty worktrees, typed Patch DSL, structured State Source of Truth, Markdown is a projection.
+- Typed Work Orders Pre-GUI Execution Path remains preferred through the supported `agentic-kit` command surface: `agentic-kit typed-run <path>`, `agentic-kit typed-queue-status --json`, and `agentic-kit typed-next --json`; it uses the minimal typed Work Order Runner as the pre-GUI bridge without chat-generated patch scripts and dirty-state blocking. Required typed-state anchors: no_command, exactly_one_command, multiple_commands, already_executed, dirty worktrees, typed Patch DSL, structured State Source of Truth, Markdown is a projection.
 - Recurring workflow problems must become rules, failure patterns, tests, or tooling.
 - Governed rule-registry changes must be additive, structured, test-backed, and validated through `rule-registry check`, workflow-guard, and patch-preflight.
 - Documentation-management rebuild work may resume only as small additive documentation-registry or projection slices after this closeout is merged and verified.
