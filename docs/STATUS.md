@@ -384,6 +384,6 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
 - Portability closeout: in progress; all tracked shell scripts removed in Slice 6, pending final gates and PR merge.
 - Portability closeout: legacy `ns` and `ns-menu` entrypoints removed; no tracked shell scripts remain, pending final gates and PR merge.
-## Operational documentation refresh state after PR #1434
+## Operational documentation refresh state after PR #1436
 
-Current administrative handoff refresh state is `a1d5929a` (`Fix outer followup merged PR lookup (#1434)`). Continue next only after this post-PR1434 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `53486493` (`[codex] Plan release command authority slice (#1436)`). Continue next only after this post-PR1436 refresh is committed and merged; the next substantive slice must be created from fresh main.

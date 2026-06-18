@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a1d5929a3578237c8cd9916ffd88114b2231fae8
-  short: a1d5929a
-  subject: Fix outer followup merged PR lookup (#1434)
+  full: 534864932a24f9011f4774f9cc0fba58e9b25432
+  short: 53486493
+  subject: '[codex] Plan release command authority slice (#1436)'
 last_substantive_work_state:
-  full: a1d5929a3578237c8cd9916ffd88114b2231fae8
-  short: a1d5929a
-  subject: Fix outer followup merged PR lookup (#1434)
+  full: 534864932a24f9011f4774f9cc0fba58e9b25432
+  short: 53486493
+  subject: '[codex] Plan release command authority slice (#1436)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
