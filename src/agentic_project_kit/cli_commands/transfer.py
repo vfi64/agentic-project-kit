@@ -1884,6 +1884,19 @@ def pr_create_complete_command(
             blockers.append(name + "_failed")
         return completed
 
+    def post_merge_complete_verified_by_inner_pr_complete(stdout: str) -> bool:
+        try:
+            payload = json.loads(stdout or "{}")
+        except json.JSONDecodeError:
+            return False
+        if not isinstance(payload, dict):
+            return False
+        return (
+            payload.get("result_status") == "PASS"
+            and payload.get("post_merge_complete_followup_required") is True
+            and "created, completed, and verified" in str(payload.get("next_action", ""))
+        )
+
     if head == "current":
         branch_result = run_step("resolve-current-branch", ["git", "branch", "--show-current"])
         resolved_head = branch_result.stdout.strip()
@@ -1898,6 +1911,7 @@ def pr_create_complete_command(
         blockers.append("current_head_sha_invalid")
 
     pr_number: int | None = None
+    inner_post_merge_followup_verified = False
     if not blockers:
         create_result = run_step(
             "pr-create",
@@ -1964,14 +1978,22 @@ def pr_create_complete_command(
         ]
         if skip_llm_context_gate:
             complete_argv.append("--skip-llm-context-gate")
-        run_step("pr-complete", complete_argv)
+        complete_result = run_step("pr-complete", complete_argv)
+        inner_post_merge_followup_verified = post_merge_complete_verified_by_inner_pr_complete(
+            complete_result.stdout
+        )
         if not blockers:
             run_step(
                 "restore-known-volatile-after-pr-complete",
                 [agentic_kit, "transfer", "restore-known-volatile", "--json"],
             )
 
-    if pr_number is not None and post_merge_complete and not blockers:
+    if (
+        pr_number is not None
+        and post_merge_complete
+        and not blockers
+        and not inner_post_merge_followup_verified
+    ):
         # pr-complete already runs the concrete post-merge-complete lifecycle after
         # a successful merge. The outer pr-create-complete wrapper must not run it
         # a second time, because a successful admin-refresh PR can make the repeated
@@ -1994,11 +2016,17 @@ def pr_create_complete_command(
     blockers = list(dict.fromkeys(blockers))
     result_status = "PASS" if not blockers else "BLOCKED"
     final_signal = "d" if result_status == "PASS" else "f"
-    next_action = (
-        "PR create-complete lifecycle is complete."
-        if result_status == "PASS"
-        else "Inspect pr-create-complete step failure before continuing: " + ", ".join(blockers)
-    )
+    if result_status == "PASS" and inner_post_merge_followup_verified:
+        next_action = (
+            "PR create-complete lifecycle is complete; inner pr-complete already "
+            "created, completed, and verified the administrative handoff refresh."
+        )
+    else:
+        next_action = (
+            "PR create-complete lifecycle is complete."
+            if result_status == "PASS"
+            else "Inspect pr-create-complete step failure before continuing: " + ", ".join(blockers)
+        )
 
     payload = {
         "schema_version": 1,
@@ -2012,6 +2040,7 @@ def pr_create_complete_command(
         "head": resolved_head,
         "expected_head_sha": expected_head_sha,
         "pr_number": pr_number,
+        "post_merge_complete_verified_by_inner_pr_complete": inner_post_merge_followup_verified,
         "blockers": blockers,
         "steps": steps,
     }

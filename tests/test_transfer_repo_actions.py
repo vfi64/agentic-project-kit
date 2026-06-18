@@ -2782,3 +2782,18 @@ def test_admin_refresh_pr_command_signature_stays_canonical():
     assert "--merge-method" not in source
     assert "--title" not in source
     assert "--body" not in source
+
+
+def test_pr_create_complete_skips_outer_followup_when_inner_pr_complete_verified_admin_refresh():
+    """Outer pr-create-complete must not turn red after inner auto admin refresh succeeded."""
+    import inspect
+
+    import agentic_project_kit.cli_commands.transfer as transfer_cli
+
+    source = inspect.getsource(transfer_cli.pr_create_complete_command)
+
+    assert "post_merge_complete_verified_by_inner_pr_complete" in source
+    assert "post_merge_complete_followup_required" in source
+    assert "created, completed, and verified" in source
+    assert "and not inner_post_merge_followup_verified" in source
+    assert "post-pr-sync-main-after-complete" in source
