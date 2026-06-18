@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f660492f39a6df6d975edd100ef6cbffc0098a22
-  short: f660492f
-  subject: Audit program redundancy (#1455)
+  full: 2dc565bc70e56d4f5f8803882710ffa0466f5333
+  short: 2dc565bc
+  subject: Add GUI readiness gate (#1457)
 last_substantive_work_state:
-  full: f660492f39a6df6d975edd100ef6cbffc0098a22
-  short: f660492f
-  subject: Audit program redundancy (#1455)
+  full: 2dc565bc70e56d4f5f8803882710ffa0466f5333
+  short: 2dc565bc
+  subject: Add GUI readiness gate (#1457)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
