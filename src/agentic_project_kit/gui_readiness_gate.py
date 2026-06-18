@@ -13,6 +13,7 @@ REQUIRED_GATE_COMMANDS: tuple[tuple[str, ...], ...] = (
     ("audit-doc-currency",),
     ("audit-planning-docs-consolidation",),
     ("audit-program-redundancy",),
+    ("audit-patch-failure-discipline",),
     ("docs-audit",),
     ("transfer", "command-reference-check"),
     ("post-release-check", "--version", "{version}"),

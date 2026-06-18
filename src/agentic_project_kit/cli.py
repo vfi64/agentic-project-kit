@@ -38,9 +38,11 @@ from agentic_project_kit.cli_commands.doc_currency_audit import audit_doc_curren
 from agentic_project_kit.cli_commands.planning_docs_audit import audit_planning_docs_consolidation_command
 from agentic_project_kit.cli_commands.program_redundancy_audit import audit_program_redundancy_command
 from agentic_project_kit.cli_commands.gui_readiness_gate import gui_readiness_gate_command
+from agentic_project_kit.cli_commands.patch_failure_discipline_audit import audit_patch_failure_discipline_command
 from agentic_project_kit.patch_artifact_preflight import register_patch_preflight_command
 
 app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
+app.command("audit-patch-failure-discipline")(audit_patch_failure_discipline_command)
 app.command("gui-readiness-gate")(gui_readiness_gate_command)
 app.command("audit-program-redundancy")(audit_program_redundancy_command)
 app.command("audit-planning-docs-consolidation")(audit_planning_docs_consolidation_command)

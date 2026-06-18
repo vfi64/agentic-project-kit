@@ -156,6 +156,59 @@
     },
     {
       "group": "root",
+      "help": "Audit whether repeated patch failures were followed by diagnosis evidence.",
+      "name": "audit-patch-failure-discipline",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "include_tmp",
+          "opts": [
+            "--include-tmp"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "audit-patch-failure-discipline"
+      ],
+      "qualified_name": "agentic-kit audit-patch-failure-discipline"
+    },
+    {
+      "group": "root",
       "help": "Audit planning and handoff docs for consolidation candidates.",
       "name": "audit-planning-docs-consolidation",
       "params": [
