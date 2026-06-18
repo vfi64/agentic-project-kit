@@ -17,7 +17,7 @@ Use the workflow CLI or compatibility entrypoint as the normal local entrypoint 
 For app-based ChatGPT workflows, the normal local command is:
 
 ```bash
-cd /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit
+cd /path/to/agentic-project-kit
 agentic-kit workflow request
 agentic-kit workflow run
 ```
