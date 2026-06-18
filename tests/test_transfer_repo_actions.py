@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 
@@ -2092,7 +2093,7 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
     assert ["git", "reset", "--hard", "main"] in calls
     assert "pull/999" in result.stdout
 
-def test_transfer_pr_complete_treats_post_merge_complete_failure_as_followup_when_pr_is_merged(monkeypatch):
+def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_admin_refresh(monkeypatch):
     calls = []
 
     def fake_run(command, text=True, capture_output=True):
@@ -2112,7 +2113,57 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_followup_whe
         if command == ["./.venv/bin/agentic-kit", "transfer", "post-merge-complete", "--after-pr", "123"]:
             return subprocess.CompletedProcess(command, 2, "post merge follow-up needed\n", "")
         if command == ["gh", "pr", "view", "123", "--json", "state,isMerged,mergeCommit"]:
-            return subprocess.CompletedProcess(command, 0, '{"state":"MERGED","isMerged":true,"mergeCommit":{"oid":"abc"}}\n', "")
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                '{"state":"MERGED","isMerged":true,"mergeCommit":{"oid":"abc"}}\n',
+                "",
+            )
+        if command == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"]:
+            prior_checks = sum(1 for item in calls if item == command)
+            if prior_checks == 1:
+                return subprocess.CompletedProcess(
+                    command,
+                    2,
+                    "NEEDS_SUCCESSOR_PACKAGE_REFRESH\nsuccessor package stale\n",
+                    "",
+                )
+            return subprocess.CompletedProcess(command, 0, "TRANSFER_POST_MERGE_CHECK\nSTATE=PASS\n", "")
+        if command == [
+            "./.venv/bin/agentic-kit",
+            "transfer",
+            "admin-refresh-pr",
+            "--after-pr",
+            "123",
+            "--main-branch",
+            "main",
+            "--json",
+        ]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                '{"stdout":"https://github.com/vfi64/agentic-project-kit/pull/456"}\n',
+                "",
+            )
+        if command == ["gh", "pr", "view", "456", "--json", "headRefOid", "--jq", ".headRefOid"]:
+            return subprocess.CompletedProcess(command, 0, "b" * 40 + "\n", "")
+        if command == [
+            "./.venv/bin/agentic-kit",
+            "transfer",
+            "pr-complete",
+            "456",
+            "--expected-head-sha",
+            "b" * 40,
+            "--merge-method",
+            "squash",
+            "--timeout-seconds",
+            "300",
+            "--interval-seconds",
+            "10",
+            "--skip-llm-context-gate",
+            "--json",
+        ]:
+            return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}\n', "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr("subprocess.run", fake_run)
@@ -2131,9 +2182,17 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_followup_whe
     )
 
     assert result.exit_code == 0, result.output
-    assert '"result_status": "PASS"' in result.output
-    assert '"post_merge_complete_followup_required": true' in result.output
-    assert "administrative follow-up" in result.output
+    payload = json.loads(result.output)
+    assert payload["result_status"] == "PASS"
+    assert payload["post_merge_complete_followup_required"] is True
+    assert payload["failed_step"] is None
+    assert "created, completed, and verified" in payload["next_action"]
+
+    step_names = [step["name"] for step in payload["steps"]]
+    assert "post-merge-check-after-post-merge-complete" in step_names
+    assert "admin-refresh-pr-after-successor-refresh-needed" in step_names
+    assert "admin-refresh-pr-complete" in step_names
+    assert "post-merge-check-after-admin-refresh-complete" in step_names
 
 def test_refresh_operational_handoff_docs_updates_arbitrary_previous_pr_state(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
@@ -2700,3 +2759,26 @@ def test_already_merged_pr_result_returns_idempotent_pass(monkeypatch):
     assert "STATE=ALREADY_MERGED" in result.next_action
     assert calls == [["gh", "pr", "view", "42", "--json", "number,state,merged,headRefOid,url,title"]]
 
+
+def test_pr_complete_auto_runs_admin_refresh_when_successor_package_is_stale():
+    """The PR lifecycle must not leave successor handoff refresh as manual follow-up."""
+    import inspect
+    import agentic_project_kit.cli_commands.transfer as transfer_cli
+    source = inspect.getsource(transfer_cli.pr_complete_command)
+    assert "NEEDS_SUCCESSOR_PACKAGE_REFRESH" in source
+    assert "admin-refresh-pr" in source
+    assert "admin-refresh-pr-complete" in source
+    assert "post-merge-check-after-admin-refresh-complete" in source
+    assert "post-merge-check_still_requires_successor_refresh" in source
+    assert "Run transfer post-merge-check and admin-refresh-pr if requested" not in source
+def test_admin_refresh_pr_command_signature_stays_canonical():
+    """The canonical admin refresh wrapper must remain the small safe interface."""
+    import inspect
+    import agentic_project_kit.cli_commands.transfer as transfer_cli
+    source = inspect.getsource(transfer_cli.admin_refresh_pr_command)
+    assert "--after-pr" in source
+    assert "--main-branch" in source
+    assert "--json" in source
+    assert "--merge-method" not in source
+    assert "--title" not in source
+    assert "--body" not in source

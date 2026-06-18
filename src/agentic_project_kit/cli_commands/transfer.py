@@ -1219,6 +1219,7 @@ def pr_complete_command(
     if not skip_llm_context_gate:
         _require_fresh_llm_context_or_exit(max_age_minutes=60, json_output=json_output)
 
+    import re
     import subprocess
     from datetime import datetime, timezone
 
@@ -1283,6 +1284,158 @@ def pr_complete_command(
         except json.JSONDecodeError:
             return False
         return bool(data.get("isMerged"))
+    def post_merge_check_requests_successor_refresh(output: str) -> bool:
+        return "NEEDS_SUCCESSOR_PACKAGE_REFRESH" in output or "successor package stale" in output
+    def _extract_admin_refresh_pr_number(output: str) -> int | None:
+        pull_match = re.search(r"/pull/(\d+)", output)
+        if pull_match:
+            return int(pull_match.group(1))
+        existing_match = re.search(r"existing_pr=(\d+)", output)
+        if existing_match:
+            return int(existing_match.group(1))
+        try:
+            payload = json.loads(output or "{}")
+        except json.JSONDecodeError:
+            return None
+        if not isinstance(payload, dict):
+            return None
+        combined = "\n".join(
+            str(payload.get(key, ""))
+            for key in ("stdout", "stderr", "next_action")
+        )
+        pull_match = re.search(r"/pull/(\d+)", combined)
+        if pull_match:
+            return int(pull_match.group(1))
+        existing_match = re.search(r"existing_pr=(\d+)", combined)
+        if existing_match:
+            return int(existing_match.group(1))
+        return None
+    def run_admin_refresh_followup_if_needed() -> tuple[bool, str]:
+        check_command = [agentic_kit, "transfer", "post-merge-check"]
+        check = subprocess.run(check_command, text=True, capture_output=True)
+        steps.append(
+            {
+                "name": "post-merge-check-after-post-merge-complete",
+                "argv": check_command,
+                "returncode": check.returncode,
+                "stdout": check.stdout,
+                "stderr": check.stderr,
+                "ok": check.returncode == 0,
+            }
+        )
+        check_output = f"{check.stdout}\n{check.stderr}"
+        if check.returncode == 0 and not post_merge_check_requests_successor_refresh(check_output):
+            return True, ""
+        if not post_merge_check_requests_successor_refresh(check_output):
+            return False, "post-merge-check_failed_after_post-merge-complete"
+        admin_command = [
+            agentic_kit,
+            "transfer",
+            "admin-refresh-pr",
+            "--after-pr",
+            str(pr_number),
+            "--main-branch",
+            main_branch,
+            "--json",
+        ]
+        admin = subprocess.run(admin_command, text=True, capture_output=True)
+        steps.append(
+            {
+                "name": "admin-refresh-pr-after-successor-refresh-needed",
+                "argv": admin_command,
+                "returncode": admin.returncode,
+                "stdout": admin.stdout,
+                "stderr": admin.stderr,
+                "ok": admin.returncode == 0,
+            }
+        )
+        if admin.returncode != 0:
+            return False, "admin-refresh-pr_failed_after_successor_refresh_needed"
+        admin_pr_number = _extract_admin_refresh_pr_number(admin.stdout)
+        if admin_pr_number is None:
+            return False, "admin-refresh-pr_number_not_found"
+        head_command = [
+            "gh",
+            "pr",
+            "view",
+            str(admin_pr_number),
+            "--json",
+            "headRefOid",
+            "--jq",
+            ".headRefOid",
+        ]
+        head = subprocess.run(head_command, text=True, capture_output=True)
+        steps.append(
+            {
+                "name": "admin-refresh-pr-head-sha",
+                "argv": head_command,
+                "returncode": head.returncode,
+                "stdout": head.stdout,
+                "stderr": head.stderr,
+                "ok": head.returncode == 0,
+            }
+        )
+        admin_head_sha = head.stdout.strip()
+        if head.returncode != 0 or len(admin_head_sha) != 40:
+            return False, "admin-refresh-pr_head_sha_not_resolved"
+        ack_command = [agentic_kit, "rules", "acknowledge"]
+        ack = subprocess.run(ack_command, text=True, capture_output=True)
+        steps.append(
+            {
+                "name": "rules-acknowledge-before-admin-refresh-complete",
+                "argv": ack_command,
+                "returncode": ack.returncode,
+                "stdout": ack.stdout,
+                "stderr": ack.stderr,
+                "ok": ack.returncode == 0,
+            }
+        )
+        if ack.returncode != 0:
+            return False, "rules-acknowledge_failed_before_admin_refresh_complete"
+        complete_command = [
+            agentic_kit,
+            "transfer",
+            "pr-complete",
+            str(admin_pr_number),
+            "--expected-head-sha",
+            admin_head_sha,
+            "--merge-method",
+            merge_method,
+            "--timeout-seconds",
+            str(timeout_seconds),
+            "--interval-seconds",
+            str(poll_seconds),
+            "--skip-llm-context-gate",
+            "--json",
+        ]
+        complete = subprocess.run(complete_command, text=True, capture_output=True)
+        steps.append(
+            {
+                "name": "admin-refresh-pr-complete",
+                "argv": complete_command,
+                "returncode": complete.returncode,
+                "stdout": complete.stdout,
+                "stderr": complete.stderr,
+                "ok": complete.returncode == 0,
+            }
+        )
+        if complete.returncode != 0:
+            return False, "admin-refresh-pr-complete_failed"
+        final_check = subprocess.run(check_command, text=True, capture_output=True)
+        steps.append(
+            {
+                "name": "post-merge-check-after-admin-refresh-complete",
+                "argv": check_command,
+                "returncode": final_check.returncode,
+                "stdout": final_check.stdout,
+                "stderr": final_check.stderr,
+                "ok": final_check.returncode == 0,
+            }
+        )
+        final_output = f"{final_check.stdout}\n{final_check.stderr}"
+        if final_check.returncode != 0 or post_merge_check_requests_successor_refresh(final_output):
+            return False, "post-merge-check_still_requires_successor_refresh"
+        return True, ""
 
     step_plan = [
         (
@@ -1333,16 +1486,20 @@ def pr_complete_command(
 
     post_merge_complete_followup_required = False
     if failed_step == "post-merge-complete" and pr_is_merged_after_post_merge_complete_failure():
-        failed_step = None
-        post_merge_complete_followup_required = True
+        followup_ok, followup_blocker = run_admin_refresh_followup_if_needed()
+        if followup_ok:
+            failed_step = None
+            post_merge_complete_followup_required = True
+        else:
+            failed_step = followup_blocker or "post-merge-complete_followup_failed"
 
     result_status = "PASS" if failed_step is None else "BLOCKED"
     final_signal = "d" if result_status == "PASS" else "f"
     if failed_step is None:
         if post_merge_complete_followup_required:
             next_action = (
-                "PR is merged; post-merge-complete requires administrative follow-up. "
-                "Run transfer post-merge-check and admin-refresh-pr if requested."
+                "PR is merged and required administrative handoff refresh PR was "
+                "created, completed, and verified by post-merge-check."
             )
         else:
             next_action = "PR completion lifecycle is complete."
