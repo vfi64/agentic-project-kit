@@ -17,7 +17,7 @@ SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
 
 
 def usage() -> str:
-    return "usage: ./ns release-publish <version> publish-v<version>"
+    return "release publish core is disabled after legacy ns removal; use a supported agentic-kit release workflow"
 
 
 def is_help_arg(value: str) -> bool:
@@ -66,7 +66,7 @@ def render_header(tag: str, expected: str) -> list[str]:
         "",
         "",
         "",
-        f"NS RELEASE PUBLISH CYCLE {tag}",
+        f"UNSUPPORTED RELEASE PUBLISH CORE {tag}",
         "",
         "### SAFETY ###",
         f"Safety: publishes only with exact confirmation token: {expected}",
@@ -83,7 +83,7 @@ def publish_release(
     try:
         plain_version, tag = normalize_version(version)
     except ValueError:
-        print("ERROR: usage: ./ns release-publish <version> publish-v<version>")
+        print("ERROR: release publish core is disabled after legacy ns removal")
         print("\n### RESULT: FAIL ###")
         return 2
 
@@ -91,10 +91,17 @@ def publish_release(
     lines = render_header(tag, expected)
     if confirmation != expected:
         lines.append("ERROR: refusing release publish without exact confirmation token.")
-        lines.append(f"Run: ./ns release-publish {plain_version} {expected}")
+        lines.append("Use a supported agentic-kit release workflow after the publish orchestration follow-up is implemented.")
         lines.append("\n### RESULT: FAIL ###")
         print("\n".join(lines))
         return 2
+
+    lines.append("ERROR: direct release publish core is disabled after legacy ns removal.")
+    lines.append("No branch, tag, push, GitHub release, or DOI side effect was attempted.")
+    lines.append("Use a supported agentic-kit release workflow after the publish orchestration follow-up is implemented.")
+    lines.append("\n### RESULT: FAIL ###")
+    print("\n".join(lines))
+    return 2
 
     status = 0
 
@@ -128,7 +135,7 @@ def publish_release(
 
     section("RELEASE GATE")
     if status == 0:
-        append_command(["./ns", "release-gate", plain_version])
+        append_command(["agentic-kit", "release-preflight", "--version", plain_version])
 
     section("VERIFY TAG IS UNUSED")
     if status == 0:
@@ -180,7 +187,7 @@ def publish_release(
 
     section("VERIFY COMPLETED RELEASE")
     if status == 0:
-        append_command(["./ns", "release-verify", plain_version])
+        append_command(["agentic-kit", "post-release-check", "--version", plain_version])
 
     section("FINAL STATE")
     append_command(["git", "branch", "--show-current"])
@@ -195,7 +202,7 @@ def publish_release(
 def main(argv: list[str] | None = None) -> int:
     args = argv if argv is not None else []
     if len(args) < 1:
-        print("ERROR: usage: ./ns release-publish <version> publish-v<version>")
+        print("ERROR: release publish core is disabled after legacy ns removal")
         print("\n### RESULT: FAIL ###")
         return 2
     if is_help_arg(args[0]):

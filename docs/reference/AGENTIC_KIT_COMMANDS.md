@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `157`
+- Command count: `158`
 
 ## Commands
 
@@ -476,6 +476,21 @@ Validate before-metadata release readiness for a target version.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `version` | `TyperOption` | --version | `True` |  | Target release version without leading v. |
+
+### `agentic-kit release-prep`
+
+Prepare release metadata through the supported agentic-kit route.
+
+This edits only local release metadata files. It does not tag, publish,
+push, create GitHub releases, or write Zenodo DOI metadata.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `version` | `TyperOption` | --version | `True` |  | Target release version without leading v. |
+| `release_date` | `TyperOption` | --date | `False` |  | Release metadata date in YYYY-MM-DD format. Defaults to today. |
+| `dry_run` | `TyperOption` | --dry-run | `False` | `False` | Report changed paths without writing files. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print a machine-readable result. |
 
 ### `agentic-kit remote-next`
 

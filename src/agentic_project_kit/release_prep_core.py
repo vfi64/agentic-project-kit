@@ -16,7 +16,7 @@ SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
 
 
 def usage() -> str:
-    return "usage: ./ns release-prep <version>"
+    return "usage: agentic-kit release-prep --version <version>"
 
 
 def is_help_arg(value: str) -> bool:
@@ -66,7 +66,7 @@ def render_header(tag: str) -> list[str]:
         "",
         "",
         "",
-        f"NS RELEASE PREP CYCLE {tag}",
+        f"AGENTIC-KIT RELEASE PREP CYCLE {tag}",
         "",
         "### SAFETY ###",
         "Safety: prepares a release branch only; no tag, release, merge, or publish action.",
@@ -77,7 +77,7 @@ def prepare_release(version: str, repo_root: Path) -> int:
     try:
         plain_version, tag = normalize_version(version)
     except ValueError:
-        print("ERROR: missing version argument. Example: ./ns release-prep 0.3.21")
+        print("ERROR: missing version argument. Example: agentic-kit release-prep --version 0.3.21")
         print("\n### RESULT: FAIL ###")
         return 2
 
@@ -138,7 +138,7 @@ def prepare_release(version: str, repo_root: Path) -> int:
         return abort_before_metadata_patch("ERROR: release prep branch could not be created or checked out.")
 
     section("PATCH RELEASE METADATA")
-    append_command([py, "src/agentic_project_kit/release_metadata_prep.py", plain_version])
+    append_command([agentic_kit, "release-prep", "--version", plain_version])
 
     section("RELEASE CHECK AFTER METADATA PATCH")
     append_command([py, "-m", "agentic_project_kit.cli", "release-check", "--version", plain_version], env_prefix="PYTHONPATH=src")
@@ -168,7 +168,7 @@ def prepare_release(version: str, repo_root: Path) -> int:
 def main(argv: list[str] | None = None) -> int:
     args = argv if argv is not None else []
     if not args:
-        print("ERROR: missing version argument. Example: ./ns release-prep 0.3.21")
+        print("ERROR: missing version argument. Example: agentic-kit release-prep --version 0.3.21")
         print("\n### RESULT: FAIL ###")
         return 2
     if is_help_arg(args[0]):
