@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7ff976c6761aa8cd9d58d36460c734a078fcd78b
-  short: 7ff976c6
-  subject: Use package version for GUI readiness (#1463)
+  full: b394b0d35418ff0e73cf1f15a68dd841a3c16911
+  short: b394b0d3
+  subject: Add release publish dry-run orchestration (#1465)
 last_substantive_work_state:
-  full: 7ff976c6761aa8cd9d58d36460c734a078fcd78b
-  short: 7ff976c6
-  subject: Use package version for GUI readiness (#1463)
+  full: b394b0d35418ff0e73cf1f15a68dd841a3c16911
+  short: b394b0d3
+  subject: Add release publish dry-run orchestration (#1465)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
