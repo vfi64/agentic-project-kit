@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 13d77886128990a6841055852f0a45efd2878079
-  short: 13d77886
-  subject: Harden post-merge handoff refresh gate (#1428)
+  full: f55d04027893d06ff676f70d833b689a303733bd
+  short: f55d0402
+  subject: Avoid false red after automatic admin refresh (#1430)
 last_substantive_work_state:
-  full: 13d77886128990a6841055852f0a45efd2878079
-  short: 13d77886
-  subject: Harden post-merge handoff refresh gate (#1428)
+  full: f55d04027893d06ff676f70d833b689a303733bd
+  short: f55d0402
+  subject: Avoid false red after automatic admin refresh (#1430)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
