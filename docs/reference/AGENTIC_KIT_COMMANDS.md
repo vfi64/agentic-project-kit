@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `164`
+- Command count: `165`
 
 ## Commands
 
@@ -322,6 +322,16 @@ Fail if expected target paths are missing from a change set.
 ### `agentic-kit governance check`
 
 _No parameters._
+
+### `agentic-kit gui-readiness-gate`
+
+Run the pre-GUI readiness gate.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `version` | `TyperOption` | --version | `False` | `0.4.9` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit handoff check`
 

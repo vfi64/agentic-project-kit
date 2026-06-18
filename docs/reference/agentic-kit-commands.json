@@ -1689,6 +1689,59 @@
       "qualified_name": "agentic-kit governance check"
     },
     {
+      "group": "root",
+      "help": "Run the pre-GUI readiness gate.",
+      "name": "gui-readiness-gate",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "0.4.9",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "gui-readiness-gate"
+      ],
+      "qualified_name": "agentic-kit gui-readiness-gate"
+    },
+    {
       "group": "handoff",
       "help": "",
       "name": "check",
