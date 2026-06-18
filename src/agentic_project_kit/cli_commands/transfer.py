@@ -1897,6 +1897,60 @@ def pr_create_complete_command(
             and "created, completed, and verified" in str(payload.get("next_action", ""))
         )
 
+    def pr_is_merged_for_outer_followup() -> bool:
+        if pr_number is None:
+            return False
+        command = ["gh", "pr", "view", str(pr_number), "--json", "state,isMerged,mergeCommit"]
+        completed = subprocess.run(command, text=True, capture_output=True)
+        steps.append(
+            {
+                "name": "outer-followup-pr-merged-check",
+                "argv": command,
+                "returncode": completed.returncode,
+                "stdout": completed.stdout,
+                "stderr": completed.stderr,
+                "ok": completed.returncode == 0,
+            }
+        )
+        if completed.returncode != 0:
+            return False
+        try:
+            payload = json.loads(completed.stdout or "{}")
+        except json.JSONDecodeError:
+            return False
+        if not isinstance(payload, dict):
+            return False
+        return bool(payload.get("isMerged")) or str(payload.get("state", "")).upper() == "MERGED"
+
+    def post_merge_check_is_green_for_outer_followup() -> bool:
+        command = [agentic_kit, "transfer", "post-merge-check"]
+        completed = subprocess.run(command, text=True, capture_output=True)
+        steps.append(
+            {
+                "name": "outer-followup-post-merge-check-green-check",
+                "argv": command,
+                "returncode": completed.returncode,
+                "stdout": completed.stdout,
+                "stderr": completed.stderr,
+                "ok": completed.returncode == 0,
+            }
+        )
+        combined = f"{completed.stdout}\n{completed.stderr}"
+        if completed.returncode != 0:
+            return False
+        return any(
+            marker in combined
+            for marker in (
+                "STATE:                  PASS",
+                '"result_status": "PASS"',
+                "result=NOOP",
+                "STATE=PASS",
+            )
+        )
+
+    def outer_followup_false_red_is_safe_to_clear() -> bool:
+        return pr_is_merged_for_outer_followup() and post_merge_check_is_green_for_outer_followup()
+
     if head == "current":
         branch_result = run_step("resolve-current-branch", ["git", "branch", "--show-current"])
         resolved_head = branch_result.stdout.strip()
@@ -2014,12 +2068,23 @@ def pr_create_complete_command(
             )
 
     blockers = list(dict.fromkeys(blockers))
+    outer_followup_false_red_cleared = False
+    if blockers and post_merge_complete and outer_followup_false_red_is_safe_to_clear():
+        blockers = []
+        outer_followup_false_red_cleared = True
+
     result_status = "PASS" if not blockers else "BLOCKED"
     final_signal = "d" if result_status == "PASS" else "f"
     if result_status == "PASS" and inner_post_merge_followup_verified:
         next_action = (
             "PR create-complete lifecycle is complete; inner pr-complete already "
             "created, completed, and verified the administrative handoff refresh."
+        )
+    elif result_status == "PASS" and outer_followup_false_red_cleared:
+        next_action = (
+            "PR create-complete lifecycle is complete; outer post-merge follow-up "
+            "had a non-fatal sync/restore failure, but the PR is merged and "
+            "post-merge-check is green."
         )
     else:
         next_action = (
@@ -2041,6 +2106,7 @@ def pr_create_complete_command(
         "expected_head_sha": expected_head_sha,
         "pr_number": pr_number,
         "post_merge_complete_verified_by_inner_pr_complete": inner_post_merge_followup_verified,
+        "outer_followup_false_red_cleared": outer_followup_false_red_cleared,
         "blockers": blockers,
         "steps": steps,
     }

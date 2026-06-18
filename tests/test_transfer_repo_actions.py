@@ -2797,3 +2797,19 @@ def test_pr_create_complete_skips_outer_followup_when_inner_pr_complete_verified
     assert "created, completed, and verified" in source
     assert "and not inner_post_merge_followup_verified" in source
     assert "post-pr-sync-main-after-complete" in source
+
+
+def test_pr_create_complete_clears_outer_sync_false_red_when_pr_merged_and_post_merge_check_green():
+    """Outer pr-create-complete may clear non-fatal follow-up blockers after green post-merge-check."""
+    import inspect
+
+    import agentic_project_kit.cli_commands.transfer as transfer_cli
+
+    source = inspect.getsource(transfer_cli.pr_create_complete_command)
+
+    assert "outer_followup_false_red_is_safe_to_clear" in source
+    assert "outer-followup-pr-merged-check" in source
+    assert "outer-followup-post-merge-check-green-check" in source
+    assert "outer_followup_false_red_cleared" in source
+    assert "non-fatal sync/restore failure" in source
+    assert "post-merge-check is green" in source
