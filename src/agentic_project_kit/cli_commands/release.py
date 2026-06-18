@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import date as date_cls
 import json
 import re
+from typing import Annotated
 from pathlib import Path
 
 import typer
@@ -10,6 +11,10 @@ from rich.console import Console
 
 from agentic_project_kit.post_release import build_post_release_report, render_post_release_report
 from agentic_project_kit.release_prepare import prepare_release_state
+from agentic_project_kit.release_metadata_authority_gate import (
+    evaluate_release_metadata_authority_gate,
+    render_release_metadata_authority_gate_result,
+)
 from agentic_project_kit.post_release_closeout import post_release_doi_closeout, render_post_release_doi_closeout_result
 from agentic_project_kit.release import (
     ReleaseCheckStatus,
@@ -28,6 +33,7 @@ def register_release_commands(app: typer.Typer) -> None:
     app.command("release-plan")(release_plan_command)
     app.command("release-preflight")(release_preflight_command)
     app.command("release-prep")(release_prep_command)
+    app.command("release-metadata-authority-gate")(release_metadata_authority_gate_command)
     app.command("release-check")(release_check_command)
     app.command("post-release-check")(post_release_check_command)
     app.command("post-release-doi-closeout")(post_release_doi_closeout_command)
@@ -156,6 +162,59 @@ def release_prep_command(
                 console.print(f"CHANGED: {changed_path}", markup=False)
         else:
             console.print(f"{mode}: release metadata already prepared for v{result.version}", markup=False)
+
+
+def release_metadata_authority_gate_command(
+    project_root: Path = typer.Option(Path("."), "--root"),
+    base_ref: str = typer.Option("origin/main", "--base-ref", help="Git ref used as the diff base."),
+    version: str | None = typer.Option(None, "--version", help="Expected release version without leading v."),
+    evidence: Annotated[
+        list[Path] | None,
+        typer.Option(
+            "--evidence",
+            help="Authoritative release-prep evidence file. May be passed more than once.",
+        ),
+    ] = None,
+    json_output: bool = typer.Option(False, "--json", help="Print a machine-readable result."),
+) -> None:
+    """Block manual release metadata anchor edits without release-prep evidence."""
+    try:
+        result = evaluate_release_metadata_authority_gate(
+            project_root.resolve(),
+            base_ref=base_ref,
+            version=version,
+            evidence_paths=evidence or [],
+        )
+    except (RuntimeError, ValueError) as exc:
+        result = None
+        if json_output:
+            console.print(
+                json.dumps(
+                    {
+                        "ok": False,
+                        "status": "BLOCK",
+                        "version": version,
+                        "base_ref": base_ref,
+                        "changed_release_anchor_paths": [],
+                        "evidence_paths": [path.as_posix() for path in evidence or []],
+                        "message": str(exc),
+                    },
+                    indent=2,
+                    sort_keys=True,
+                ),
+                markup=False,
+            )
+        else:
+            console.print(f"BLOCK: {exc}", markup=False)
+        raise typer.Exit(code=2) from exc
+
+    if json_output:
+        console.print(json.dumps(result.as_dict(), indent=2, sort_keys=True), markup=False)
+    else:
+        console.print(render_release_metadata_authority_gate_result(result), markup=False)
+
+    if not result.ok:
+        raise typer.Exit(code=1)
 
 
 def release_check_command(
