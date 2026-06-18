@@ -52,7 +52,7 @@ def default_yaml(command_id: str = "next-turn") -> str:
         "safety_class: bounded",
         "status: pending",
         "evidence:",
-        "  local_terminal_log: /tmp/agentic-project-kit/next-turn-latest.log",
+        "  local_terminal_log: ${AGENTIC_KIT_NEXT_TURN_LOG:-tmp/next-turn-latest.log}",
         "  remote_terminal_log: docs/reports/terminal/next-turn-latest.log",
         "  command_report: docs/reports/command_runs/next-turn-latest.json",
         "",

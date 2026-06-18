@@ -7,7 +7,7 @@ from agentic_project_kit.work_order_validator import (
 )
 
 
-VALID_WORK_ORDER = '# agentic-project-kit work order\nfrom pathlib import Path\n\nLOG = Path("/tmp/agentic-project-kit/next-turn-latest.log")\nREMOTE_LOG = Path("docs/reports/terminal/next-turn-latest.log")\nCOMMAND_HINT = "./ns pr-status 123"\nSUMMARY = """### CANONICAL SUMMARY ###\n### RESULT: PASS ###\nTerminal bleibt offen. Kein exit am Blockende.\n"""\n'
+VALID_WORK_ORDER = '# agentic-project-kit work order\nfrom pathlib import Path\n\nLOG = Path("tmp/next-turn-latest.log")\nREMOTE_LOG = Path("docs/reports/terminal/next-turn-latest.log")\nCOMMAND_HINT = "./ns pr-status 123"\nSUMMARY = """### CANONICAL SUMMARY ###\n### RESULT: PASS ###\nTerminal bleibt offen. Kein exit am Blockende.\n"""\n'
 
 
 def test_valid_work_order_text_passes_minimal_contract():

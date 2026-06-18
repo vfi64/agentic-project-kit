@@ -14,8 +14,9 @@ def test_write_fixed_slot_creates_yaml_and_script(tmp_path):
     assert (tmp_path / ".agentic/commands/inbox/next-turn.py").exists()
     yaml_text = (tmp_path / ".agentic/commands/inbox/next-turn.yaml").read_text(encoding="utf-8")
     assert "command_id: abc" in yaml_text
-    assert "local_terminal_log: /tmp/agentic-project-kit/next-turn-latest.log" in yaml_text
+    assert "local_terminal_log: ${AGENTIC_KIT_NEXT_TURN_LOG:-tmp/next-turn-latest.log}" in yaml_text
     assert "remote_terminal_log: docs/reports/terminal/next-turn-latest.log" in yaml_text
+    assert "command_report: docs/reports/command_runs/next-turn-latest.json" in yaml_text
 
 def test_write_fixed_slot_refuses_existing_without_force(tmp_path):
     write_fixed_slot(tmp_path)

@@ -347,3 +347,8 @@ End the implementation slice with:
 - command-reference result;
 - explicit note that no release/tag/DOI/publish side effects occurred;
 - exact next slice.
+## Pre-GUI closeout note: release publish remains fail-closed
+
+The `agentic-kit release-prep --version <version>` route is the supported metadata preparation path.  The legacy direct publish core remains intentionally fail-closed after the ns migration until a separate release-publish orchestration follow-up rebuilds tag/publish behavior through supported `agentic-kit` wrappers.
+
+This is a non-GUI follow-up.  It must not be solved by GUI code and must not reintroduce raw shell, raw GitHub CLI, or legacy `ns` routing into GUI actions.  GUI work may start after `agentic-kit gui-readiness-gate --version 0.4.9` is green, but real release publishing remains outside the GUI readiness scope until that follow-up is implemented and tested.

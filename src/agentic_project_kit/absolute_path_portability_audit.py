@@ -161,11 +161,17 @@ def _classify(relative: str, line: str, match: str) -> tuple[str, str]:
     if relative.startswith("tests/"):
         return "test_fixture", "test fixture"
 
-    if any(marker in lowered for marker in HISTORICAL_MARKERS):
-        return "historical_or_example_context", "line contains historical/example/evidence marker"
+    if relative.startswith(("src/", "tools/")):
+        return "absolute_path_blocker", (
+            "source/tool files must not contain user-specific absolute paths; "
+            "line-level historical words are not enough to downgrade this"
+        )
 
     if relative in SAFE_PATHS and any(marker in lowered for marker in HISTORICAL_MARKERS):
         return "historical_or_example_context", "stable doc with historical/example marker"
+
+    if any(marker in lowered for marker in HISTORICAL_MARKERS):
+        return "historical_or_example_context", "line contains historical/example/evidence marker"
 
     if match.startswith("/tmp/") or match.startswith("/mnt/data/") or match.startswith("/var/folders/"):
         return "transient_path_reference", "transient local path should not be current repo contract"
