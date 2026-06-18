@@ -188,7 +188,16 @@ def run_work_order(order: WorkOrder, project_root: Path = Path(".")) -> int:
         body += "\n### RESULT: FAIL ###\nReturn code: 98\nTerminal bleibt offen. Kein exit am Blockende.\n"
         _write_log(order, project_root, body)
         return 98
-    result = subprocess.run(order.command, shell=True, cwd=project_root, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False)
+    # Work orders intentionally use shell syntax; run it through an explicit shell
+    # executable instead of implicit shell mode so argument boundaries stay visible.
+    result = subprocess.run(
+        ["bash", "-lc", order.command],
+        cwd=project_root,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
     status = "PASS" if result.returncode == 0 else "FAIL"
     body = "\n".join(header) + "\n### OUTPUT ###\n" + result.stdout
     body += f"\n### RESULT: {status} ###\n"

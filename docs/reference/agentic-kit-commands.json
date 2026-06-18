@@ -194,6 +194,45 @@
       "qualified_name": "agentic-kit audit-planning-docs-consolidation"
     },
     {
+      "group": "root",
+      "help": "Audit source for risky bug/redundancy patterns.",
+      "name": "audit-program-redundancy",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "audit-program-redundancy"
+      ],
+      "qualified_name": "agentic-kit audit-program-redundancy"
+    },
+    {
       "group": "boot",
       "help": "",
       "name": "check",

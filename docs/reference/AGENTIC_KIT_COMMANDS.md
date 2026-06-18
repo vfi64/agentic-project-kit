@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `163`
+- Command count: `164`
 
 ## Commands
 
@@ -51,6 +51,15 @@ Audit remaining legacy ./ns/ns-menu/ns_release references.
 ### `agentic-kit audit-planning-docs-consolidation`
 
 Audit planning and handoff docs for consolidation candidates.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
+### `agentic-kit audit-program-redundancy`
+
+Audit source for risky bug/redundancy patterns.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
