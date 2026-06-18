@@ -2,7 +2,7 @@
 
 The markdown successor prompt is a projection of the machine-readable execution contract.
 
-- branch: `docs/post-pr1459-handoff-refresh`
+- branch: `docs/post-pr1461-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 
@@ -139,14 +139,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1459-handoff-refresh",
+    "branch": "docs/post-pr1461-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "e49d56cbdf2568b68ffa44ca18702049948f2cbc",
+    "head": "f2724f784db344da3f67f753b1280c9dd2301fc4",
     "head_matches_origin_main": true,
-    "head_short": "e49d56cb",
+    "head_short": "f2724f78",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "e49d56cbdf2568b68ffa44ca18702049948f2cbc",
-    "origin_main_short": "e49d56cb",
+    "origin_main": "f2724f784db344da3f67f753b1280c9dd2301fc4",
+    "origin_main_short": "f2724f78",
     "worktree_clean": false
   }
 }
