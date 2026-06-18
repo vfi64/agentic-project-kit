@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 17f0b5aca36bf9a8ab47fbfe8fe765ff974f2cb0
-  short: 17f0b5ac
-  subject: Audit planning docs consolidation (#1453)
+  full: f660492f39a6df6d975edd100ef6cbffc0098a22
+  short: f660492f
+  subject: Audit program redundancy (#1455)
 last_substantive_work_state:
-  full: 17f0b5aca36bf9a8ab47fbfe8fe765ff974f2cb0
-  short: 17f0b5ac
-  subject: Audit planning docs consolidation (#1453)
+  full: f660492f39a6df6d975edd100ef6cbffc0098a22
+  short: f660492f
+  subject: Audit program redundancy (#1455)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
