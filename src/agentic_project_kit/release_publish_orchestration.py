@@ -11,6 +11,8 @@ from agentic_project_kit import __version__ as PACKAGE_VERSION
 
 Runner = Callable[[Sequence[str], Path], tuple[int, str]]
 
+EXECUTE_CAPABILITY_PATH = ".agentic/release/ENABLE_LIVE_PUBLISH"
+
 
 @dataclass(frozen=True)
 class ReleasePublishCheck:
@@ -117,6 +119,7 @@ def evaluate_release_publish_plan(
     dry_run: bool = True,
     execute: bool = False,
     runner: Runner | None = None,
+    allow_execute: bool = False,
 ) -> ReleasePublishPlan:
     root = root.resolve()
     run = runner or _default_runner
@@ -174,27 +177,55 @@ def evaluate_release_publish_plan(
         )
     )
 
-    if execute:
+    capability_file = root / EXECUTE_CAPABILITY_PATH
+    execute_capability_present = capability_file.exists()
+
+    if execute and not (allow_execute and execute_capability_present):
         checks.append(
             ReleasePublishCheck(
                 name="execute capability",
                 status="FAIL",
                 detail=(
-                    "live release publishing remains intentionally fail-closed in this slice; "
-                    "use --dry-run for supported orchestration planning"
+                    "live release publishing requires --allow-execute and "
+                    f"{EXECUTE_CAPABILITY_PATH}; dry-run remains the default supported path"
                 ),
                 returncode=2,
             )
         )
 
-    planned_actions = (
+    planned_actions = [
         f"verify release-prep evidence for {version}",
         f"verify release metadata authority for {version}",
         f"plan git tag {tag}",
         f"plan GitHub release {tag}",
-        "plan post-release-check after a future live publish",
-        "perform no tag, release, DOI, or metadata write in dry-run mode",
-    )
+        "plan post-release-check after live publish",
+    ]
+    if execute and allow_execute and execute_capability_present:
+        planned_actions.extend(
+            [
+                f"execute git tag {tag}",
+                f"execute git push origin {tag}",
+                f"execute GitHub release publish for {tag}",
+                f"execute post-release-check --version {version}",
+            ]
+        )
+        live_commands: tuple[tuple[str, ...], ...] = (
+            ("git", "tag", tag),
+            ("git", "push", "origin", tag),
+            ("gh", "release", "view", tag),
+            (executable, "post-release-check", "--version", version),
+        )
+        for command in live_commands:
+            checks.append(
+                _run_check(
+                    name="execute " + " ".join(command),
+                    args=command,
+                    root=root,
+                    runner=run,
+                )
+            )
+    else:
+        planned_actions.append("perform no tag, release, DOI, or metadata write in dry-run/fail-closed mode")
 
     return ReleasePublishPlan(
         version=version,
@@ -202,8 +233,8 @@ def evaluate_release_publish_plan(
         root=root.as_posix(),
         mode="execute" if execute else "dry-run" if dry_run else "unspecified",
         checks=tuple(checks),
-        planned_actions=planned_actions,
-        execute_enabled=False,
+        planned_actions=tuple(planned_actions),
+        execute_enabled=bool(execute and allow_execute and execute_capability_present),
     )
 
 

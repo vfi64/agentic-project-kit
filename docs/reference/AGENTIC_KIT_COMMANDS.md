@@ -579,6 +579,7 @@ Plan release publishing without live tag/release side effects.
 | `version` | `TyperOption` | --version | `False` | `0.4.9` |  |
 | `dry_run` | `TyperOption` | --dry-run, --no-dry-run | `False` | `True` |  |
 | `execute` | `TyperOption` | --execute | `False` | `False` |  |
+| `allow_execute` | `TyperOption` | --allow-execute | `False` | `False` |  |
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 

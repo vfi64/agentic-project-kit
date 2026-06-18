@@ -38,6 +38,7 @@ def test_release_publish_execute_remains_fail_closed(tmp_path: Path) -> None:
     assert plan.mode == "execute"
     assert plan.execute_enabled is False
     assert any(check.name == "execute capability" for check in plan.blockers)
+    assert plan.execute_enabled is False
 
 
 def test_release_publish_reports_failed_gate(tmp_path: Path) -> None:
@@ -77,3 +78,47 @@ def test_render_release_publish_plan_contains_planned_actions(tmp_path: Path) ->
     assert "RELEASE_PUBLISH_ORCHESTRATION" in rendered
     assert "STATUS=PASS" in rendered
     assert "PLAN=plan git tag v9.9.9" in rendered
+
+def test_release_publish_execute_requires_capability_even_with_allow_execute(tmp_path: Path) -> None:
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        return 0, "PASS\n"
+
+    plan = evaluate_release_publish_plan(
+        tmp_path,
+        version="9.9.9",
+        execute=True,
+        allow_execute=True,
+        runner=runner,
+    )
+
+    assert plan.ok is False
+    assert plan.execute_enabled is False
+    assert any(check.name == "execute capability" for check in plan.blockers)
+
+
+def test_release_publish_execute_capability_runs_ordered_live_plan_with_fake_runner(tmp_path: Path) -> None:
+    capability = tmp_path / ".agentic" / "release" / "ENABLE_LIVE_PUBLISH"
+    capability.parent.mkdir(parents=True)
+    capability.write_text("test-only\n", encoding="utf-8")
+    seen: list[tuple[str, ...]] = []
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        seen.append(tuple(args))
+        return 0, "PASS\n"
+
+    plan = evaluate_release_publish_plan(
+        tmp_path,
+        version="9.9.9",
+        execute=True,
+        allow_execute=True,
+        runner=runner,
+    )
+
+    assert plan.ok is True
+    assert plan.execute_enabled is True
+    assert ("git", "tag", "v9.9.9") in seen
+    assert ("git", "push", "origin", "v9.9.9") in seen
+    assert ("gh", "release", "view", "v9.9.9") in seen
+    assert any("post-release-check" in args for args in seen)
+    assert any("execute git tag v9.9.9" in action for action in plan.planned_actions)
+

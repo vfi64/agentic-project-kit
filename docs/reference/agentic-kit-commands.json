@@ -3233,6 +3233,20 @@
           "secondary_opts": []
         },
         {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_execute",
+          "opts": [
+            "--allow-execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
           "default": "PosixPath('.')",
           "help": "",
           "is_flag": false,
