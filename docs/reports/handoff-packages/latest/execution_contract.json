@@ -1,13 +1,13 @@
 {
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1434-handoff-refresh",
+    "branch": "codex/release-command-authority-plan",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "a1d5929a3578237c8cd9916ffd88114b2231fae8",
-    "head_matches_origin_main": true,
+    "head": "1becc4a7ac8b482111a656c19c64cfeb98f2f038",
+    "head_matches_origin_main": false,
     "local_path": "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit",
-    "origin_main": "a1d5929a3578237c8cd9916ffd88114b2231fae8",
+    "origin_main": "d33dd595f031445dd73c1f0f75a1ce174a4dfe42",
     "worktree_clean": false
   },
   "rules": [

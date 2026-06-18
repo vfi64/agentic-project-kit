@@ -109,3 +109,37 @@ def test_generated_bootstrap_is_allowed_when_operational_projection_source_chang
     )
     assert not any(f.code == "generated-artifact-direct-edit" for f in analyze_diff(diff))
 
+
+def test_generated_bootstrap_is_allowed_when_successor_package_source_changes():
+    diff = "\n".join(
+        [
+            "diff --git a/src/agentic_project_kit/successor_handoff_package.py b/src/agentic_project_kit/successor_handoff_package.py",
+            "diff --git a/docs/handoff/NEXT_CHAT_BOOTSTRAP.md b/docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        ]
+    )
+    assert not any(f.code == "generated-artifact-direct-edit" for f in analyze_diff(diff))
+
+
+def test_allows_large_handoff_state_refresh_when_core_anchors_remain():
+    removed = "\n".join(f"-old handoff line {i}" for i in range(25))
+    added = "\n".join(
+        [
+            "+updated:",
+            "+  source: agentic-kit handoff refresh",
+            "+safe_state:",
+            "+  commit: abc1234",
+            "+handoff_maintenance:",
+            "+  latest_successor_prompt: docs/reports/handoff-packages/latest/successor_prompt.md",
+            "+next_step:",
+            "+  first_instruction: Continue with the refreshed slice.",
+            *(f"+new handoff line {i}" for i in range(25)),
+        ]
+    )
+    diff = "\n".join(
+        [
+            "diff --git a/.agentic/handoff_state.yaml b/.agentic/handoff_state.yaml",
+            removed,
+            added,
+        ]
+    )
+    assert not any(f.code == "large-protected-file-rewrite-without-decision" for f in analyze_diff(diff))

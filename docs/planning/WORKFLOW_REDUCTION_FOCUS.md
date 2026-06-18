@@ -2,6 +2,8 @@
 
 ## Current First Slice After v0.4.9
 
+Current planning-slice marker: `1becc4a7` / PR #1436 (`[codex] Plan release command authority slice`).
+
 Before DOI closeout hardening, broad legacy-doc cleanup, planning consolidation, absolute-path cleanup, or GUI work, execute `docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md`.
 
 That slice establishes the supported release metadata preparation route and makes the remaining release publish core portable or fail-closed after the `./ns` removal.

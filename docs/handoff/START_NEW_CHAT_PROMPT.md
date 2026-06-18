@@ -2,6 +2,8 @@
 schema_version: 2
 artifact_type: chat_switch_prompt
 role: start_new_chat
+current_handoff_marker: 1becc4a7
+current_branch_at_generation: codex/release-command-authority-plan
 canonical_bootstrap: docs/handoff/NEXT_CHAT_BOOTSTRAP.md
 successor_context: docs/reports/handoff-packages/latest/successor_context.yaml
 paired_prompt: docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
@@ -28,6 +30,8 @@ required_terms:
 ---
 
 # Start New Chat Prompt
+
+Current handoff marker: `1becc4a7`.
 
 Copy `docs/reports/handoff-packages/latest/successor_prompt.md` into the successor chat.
 
