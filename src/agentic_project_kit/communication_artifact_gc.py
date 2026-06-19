@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import subprocess
 import sys
 import time
@@ -77,6 +78,15 @@ REPORT_RETENTION_KEEP_NAME_FRAGMENTS = frozenset(
 )
 
 REPORT_RETENTION_AUTO_DELETE_SUFFIXES = frozenset({".log", ".json"})
+
+REPORT_RETENTION_AUTO_DELETE_MARKDOWN_PATTERNS = frozenset(
+    {
+        r"docs/reports/terminal/post-pr[0-9]+-successor-chat-handoff[.]md",
+        r"docs/reports/terminal/post-pr[0-9]+-successor-handoff[.]md",
+        r"docs/reports/terminal/v[0-9]+-successor-chat-handoff-after-pr[0-9]+[.]md",
+        r"docs/reports/terminal/v[0-9]+-handoff-after-pr[0-9]+[.]md",
+    }
+)
 
 REPORT_RETENTION_REFERENCE_EXCLUDED_PREFIXES = (
     ".git/",
@@ -269,6 +279,16 @@ def _is_report_keep_name(name: str) -> bool:
     return any(fragment in lowered for fragment in REPORT_RETENTION_KEEP_NAME_FRAGMENTS)
 
 
+def _is_auto_delete_report_retention_path(rel: Path) -> bool:
+    suffix = rel.suffix.lower()
+    if suffix in REPORT_RETENTION_AUTO_DELETE_SUFFIXES:
+        return True
+    if suffix != ".md":
+        return False
+    text = rel.as_posix()
+    return any(re.fullmatch(pattern, text) for pattern in REPORT_RETENTION_AUTO_DELETE_MARKDOWN_PATTERNS)
+
+
 def _is_report_retention_excluded_reference_file(rel: Path) -> bool:
     text = rel.as_posix()
     return any(text == prefix.rstrip("/") or text.startswith(prefix) for prefix in REPORT_RETENTION_REFERENCE_EXCLUDED_PREFIXES)
@@ -340,7 +360,7 @@ def collect_report_retention_candidates(
     unreferenced_check: list[Path] = []
     for path in files:
         rel = path.relative_to(base)
-        if path.suffix.lower() not in REPORT_RETENTION_AUTO_DELETE_SUFFIXES:
+        if not _is_auto_delete_report_retention_path(rel):
             continue
         if _is_report_keep_name(path.name):
             continue
@@ -396,6 +416,8 @@ def execute_report_retention_gc(
             return "FAIL_SYMLINK_ARTIFACT", item.path.as_posix()
         if not any(root_path == resolved or root_path in resolved.parents for root_path in allowed_roots):
             return "FAIL_UNREGISTERED_PATH", item.path.as_posix()
+        if not _is_auto_delete_report_retention_path(item.path):
+            return "FAIL_UNREGISTERED_REPORT_RETENTION_FILE", item.path.as_posix()
         if _is_report_keep_name(target.name):
             return "FAIL_PROTECTED_REPORT_RETENTION_FILE", item.path.as_posix()
         if item.path in referenced:
