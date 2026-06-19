@@ -8,8 +8,6 @@ from typing import Any, Literal
 import yaml
 
 PROJECT_DIRECTION_PATH = Path("docs/planning/project_direction.yaml")
-VALID_SECTIONS = ("all", "strategy", "roadmap", "ideas")
-VALID_FORMATS = ("text", "markdown", "json")
 
 
 @dataclass(frozen=True)
@@ -36,8 +34,7 @@ class ProjectDirection:
 
 
 def load_project_direction(root: Path | str = ".") -> ProjectDirection:
-    base = Path(root)
-    path = base / PROJECT_DIRECTION_PATH
+    path = Path(root) / PROJECT_DIRECTION_PATH
     raw = path.read_text(encoding="utf-8")
     data = yaml.safe_load(raw)
     if not isinstance(data, dict):
@@ -56,15 +53,10 @@ def render_project_direction(
         raise ValueError("; ".join(findings))
 
     if output_format == "json":
-        if section == "all":
-            payload: Any = direction.data
-        else:
-            payload = {section: direction.data[section]}
+        payload: Any = direction.data if section == "all" else {section: direction.data[section]}
         return json.dumps(payload, indent=2, sort_keys=True) + "\n"
-
     if output_format == "markdown":
         return _render_markdown(direction.data, section)
-
     return _render_text(direction.data, section)
 
 
