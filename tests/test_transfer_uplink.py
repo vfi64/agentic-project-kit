@@ -530,3 +530,19 @@ def test_publish_latest_transfer_report_refreshes_outbox_carrier(tmp_path, monke
     )
     assert isinstance(outbox_data["llm_execution_context"], dict)
     assert isinstance(outbox_data["last_result"]["llm_execution_context"], dict)
+
+def test_transfer_outbox_last_result_is_ignored_by_gitignore():
+    import subprocess
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parents[1]
+    outbox = ".agentic/transfer/outbox/last_result.txt"
+    result = subprocess.run(
+        ["git", "check-ignore", "-q", outbox],
+        cwd=repo_root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stderr

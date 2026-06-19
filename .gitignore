@@ -25,3 +25,5 @@ docs/reports/transfer_runs/
 # Keep only stable latest-transfer-handoff-report.* files tracked for chat handoff.
 docs/reports/terminal/transfer_handoff_reports/20*.json
 docs/reports/terminal/transfer_handoff_reports/20*.log
+# Local transfer carrier generated for LLM handoff freshness checks.
+.agentic/transfer/outbox/last_result.txt
