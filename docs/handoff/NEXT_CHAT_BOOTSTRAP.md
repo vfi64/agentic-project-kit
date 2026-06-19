@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `4d323e522415e6270d3da058f76bdd05b7aca2ef` (`4d323e52`)
-- Handoff freshness marker: `4d323e52`
-- Branch at generation: `docs/post-pr1496-handoff-refresh`
+- HEAD: `536a05c97c37363eab4157e509c59d6eadfd4f16` (`536a05c9`)
+- Handoff freshness marker: `536a05c9`
+- Branch at generation: `docs/post-pr1499-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -66,8 +66,11 @@ Wenn der Bootstrap grün ist:
 
 ## Open high-priority work
 
-- `release-command-authority-and-publish-core-triage` (active): Implement the first post-v0.4.9 release-governance slice from docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md: establish one supported agentic-kit release metadata-prep route and make release_publish_core portable or fail-closed.
-- `doi-closeout-atomicity` (pending): After release command authority is fixed, harden DOI closeout completeness and commit-safe expected-path coverage.
-- `outer-doc-currency` (pending): Add currency checks and minimal updates for AGENTS.md, README.md, and SECURITY.md.
+Source: `docs/planning/project_direction.yaml`.
+
+- `project-direction` (active): Unify strategy, roadmap, and ideas into a machine-readable source for v0.4.10
+- `docs-reconciliation` (active): Reconcile docs/planning, docs/plans, docs/roadmap, docs/strategy, and docs/workflow for v0.4.10
+- `release-v0.4.10` (planned): Prepare and publish v0.4.10 for v0.4.10
+- `gui-gatekeeper` (planned): Start deterministic GUI gatekeeper for v0.5.0
 
 ### RESULT: PASS ###

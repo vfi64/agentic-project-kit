@@ -2,7 +2,7 @@
 
 The markdown successor prompt is a projection of the machine-readable execution contract.
 
-- branch: `docs/post-pr1496-handoff-refresh`
+- branch: `docs/post-pr1499-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 
@@ -91,42 +91,39 @@ Wenn der Bootstrap grün ist:
   "open_tasks": [
     {
       "files": [
-        "docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md",
-        "src/agentic_project_kit/cli_commands/release.py",
-        "src/agentic_project_kit/release_prepare.py",
-        "src/agentic_project_kit/release_metadata_prep.py",
-        "src/agentic_project_kit/release_prep_core.py",
-        "src/agentic_project_kit/release_publish_core.py",
-        "tests/test_release_prepare_command.py",
-        "tests/test_release_metadata_prep_portability.py",
-        "tests/test_release_prep_core.py",
-        "tests/test_release_publish_core.py",
-        "tests/test_v036_release_route_help_safety.py"
+        "docs/planning/project_direction.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "release-command-authority-and-publish-core-triage",
+      "id": "project-direction",
       "status": "active",
-      "summary": "Implement the first post-v0.4.9 release-governance slice from docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md: establish one supported agentic-kit release metadata-prep route and make release_publish_core portable or fail-closed."
+      "summary": "Unify strategy, roadmap, and ideas into a machine-readable source for v0.4.10"
     },
     {
       "files": [
-        "src/agentic_project_kit/post_release_closeout.py",
-        "tests/test_post_release_closeout_hardening.py",
-        "docs/releases/VERIFIED_RELEASES.md"
+        "docs/planning/project_direction.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "doi-closeout-atomicity",
-      "status": "pending",
-      "summary": "After release command authority is fixed, harden DOI closeout completeness and commit-safe expected-path coverage."
+      "id": "docs-reconciliation",
+      "status": "active",
+      "summary": "Reconcile docs/planning, docs/plans, docs/roadmap, docs/strategy, and docs/workflow for v0.4.10"
     },
     {
       "files": [
-        "AGENTS.md",
-        "README.md",
-        "SECURITY.md",
-        "docs/DOCUMENTATION_COVERAGE.yaml"
+        "docs/planning/project_direction.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "outer-doc-currency",
-      "status": "pending",
-      "summary": "Add currency checks and minimal updates for AGENTS.md, README.md, and SECURITY.md."
+      "id": "release-v0.4.10",
+      "status": "planned",
+      "summary": "Prepare and publish v0.4.10 for v0.4.10"
+    },
+    {
+      "files": [
+        "docs/planning/project_direction.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "gui-gatekeeper",
+      "status": "planned",
+      "summary": "Start deterministic GUI gatekeeper for v0.5.0"
     }
   ],
   "recent_lessons": [
@@ -139,14 +136,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1496-handoff-refresh",
+    "branch": "docs/post-pr1499-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "4d323e522415e6270d3da058f76bdd05b7aca2ef",
+    "head": "536a05c97c37363eab4157e509c59d6eadfd4f16",
     "head_matches_origin_main": true,
-    "head_short": "4d323e52",
+    "head_short": "536a05c9",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "4d323e522415e6270d3da058f76bdd05b7aca2ef",
-    "origin_main_short": "4d323e52",
+    "origin_main": "536a05c97c37363eab4157e509c59d6eadfd4f16",
+    "origin_main_short": "536a05c9",
     "worktree_clean": false
   }
 }
@@ -159,10 +156,10 @@ Wenn der Bootstrap grün ist:
 - Große Ausgaben nach `~/Downloads/*.log` umleiten und nur `LOG=...` posten.
 - Vor Commit: tatsächlichen Diff inspizieren, Tests laufen lassen, protected-diff-plan ausführen.
 - Bei `BLOCK` oder `FAIL`: sofort stoppen, Diagnose statt Weiterarbeiten.
-- Die aktive erste Aufgabe ist `release-command-authority-and-publish-core-triage`; Outer-doc-Currency bleibt pending.
+- Aktive Aufgaben stammen aus `docs/planning/project_direction.yaml`; alte Planungsdokumente sind keine Startautorität.
 
 ## Nächste sichere Entscheidung
 
 1. Wenn `validation_report.json` nicht PASS ist: Handoff-Projektion reparieren.
 2. Wenn der Arbeitsbaum dirty ist: nur explizite WIP-Dateien prüfen und abschließen oder sauber dokumentieren.
-3. Danach die aktive Aufgabe aus `docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md` bearbeiten.
+3. Danach die nächste aktive Aufgabe aus `docs/planning/project_direction.yaml` bearbeiten.
