@@ -314,6 +314,6 @@ Current administrative handoff refresh state is `a7a0b6a2` (`Audit ns to agentic
 Current administrative handoff refresh state is `c6ab40da` (`Classify ns migration docs before GUI (#1334)`). Continue next only after this post-PR1334 refresh is committed and merged; the next substantive slice must be created from fresh main.## Operational documentation refresh state after PR #1338
 
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1490
+## Operational documentation refresh state after PR #1492
 
-Current administrative handoff refresh state is `4f4245ec` (`Add report retention garbage collection (#1490)`). Continue next only after this post-PR1490 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `c1d19c31` (`Harden report retention GC extension scope (#1492)`). Continue next only after this post-PR1492 refresh is committed and merged; the next substantive slice must be created from fresh main.
