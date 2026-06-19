@@ -145,3 +145,61 @@ def test_pr_create_blocks_without_fresh_llm_context(tmp_path, monkeypatch):
 
     assert result.exit_code == 2
     assert "TRANSFER_REQUIRE_FRESH_LLM_CONTEXT" in result.stdout
+
+def test_require_fresh_llm_context_passes_with_valid_outbox_and_stale_published_report(tmp_path, monkeypatch):
+    from agentic_project_kit.cli import app
+    from agentic_project_kit.transfer_safety_context import write_transfer_outbox
+    from typer.testing import CliRunner
+
+    monkeypatch.chdir(tmp_path)
+
+    (tmp_path / ".agentic/transfer_safety_rules.yaml").parent.mkdir(parents=True, exist_ok=True)
+    (tmp_path / ".agentic/transfer_safety_rules.yaml").write_text(
+        """
+canonical_transfer_files:
+  inbox: .agentic/transfer/inbox/next_command.py.txt
+  outbox: .agentic/transfer/outbox/last_result.txt
+running_chat_refresh_contract:
+  refresh_required_for_running_chats: true
+transfer_priorities: {}
+known_failure_classes: {}
+preflight_rules: {}
+post_patch_rules: {}
+""".lstrip(),
+        encoding="utf-8",
+    )
+    (tmp_path / ".agentic/transfer/one_command_transfer_protocol.yaml").parent.mkdir(parents=True, exist_ok=True)
+    (tmp_path / ".agentic/transfer/one_command_transfer_protocol.yaml").write_text(
+        "schema_version: 1\n", encoding="utf-8"
+    )
+    (tmp_path / "docs").mkdir(exist_ok=True)
+    (tmp_path / "docs/DOCUMENTATION_REGISTRY.yaml").write_text("schema_version: 1\n", encoding="utf-8")
+    (tmp_path / "docs/planning").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "docs/planning/project_direction.yaml").write_text("schema_version: 1\n", encoding="utf-8")
+
+    write_transfer_outbox(tmp_path, {"result_status": "PASS", "final_signal": "d"})
+
+    stale_report = tmp_path / "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
+    stale_report.parent.mkdir(parents=True, exist_ok=True)
+    stale_report.write_text(
+        """
+{
+  "schema_version": 1,
+  "llm_execution_context": {
+    "source_hashes": {
+      ".agentic/transfer_safety_rules.yaml": "stale"
+    }
+  }
+}
+""".lstrip(),
+        encoding="utf-8",
+    )
+
+    result = CliRunner().invoke(app, ["transfer", "require-fresh-llm-context", "--json"])
+
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.output)
+    assert data["result_status"] == "PASS"
+    assert "outbox" in data["valid_contexts"]
+    assert "latest_handoff_report" not in data["valid_contexts"]
+    assert "latest_handoff_report_stale_or_not_fresh" in data["blockers"]
