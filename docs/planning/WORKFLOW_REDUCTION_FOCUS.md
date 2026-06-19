@@ -662,3 +662,38 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1471
 
 Current administrative handoff refresh state is `b8098f8c` (`Add command taxonomy and patch scope preflight (#1471)`). Continue next only after this post-PR1471 refresh is committed and merged; the next substantive slice must be created from fresh main.
+
+## Planning-document authority closeout before v0.4.10
+
+Status: ACTIVE AUTHORITY.
+
+Slice 16 and Slice 17 changed the repository from a collection of individual
+safety tools into a gate-backed workflow:
+
+- `standard-gates-audit-suite` is the standard aggregation point for the new
+  audit layer.
+- `doctor` and `gui-readiness-gate` must expose the standard audit layer.
+- `command-taxonomy-check` keeps the growing CLI classifiable for humans,
+  successor chats, and the future GUI gatekeeper.
+- `patch-scope-preflight` is the diagnostic preflight for patch size,
+  protected-path exposure, and review risk. It is intentionally diagnostic at
+  this stage so feature branches do not self-block while still surfacing risk.
+
+Planning documents are now interpreted through this authority order:
+
+1. Current status and handoff files define the current state.
+2. This file and release-command-authority planning define active workflow
+   direction.
+3. Dedicated GUI planning files define GUI design only after the readiness
+   gates pass.
+4. Older review, migration, and historical planning documents remain preserved
+   evidence. They do not override current gates, command taxonomy, release
+   authority, or handoff status.
+
+Before v0.4.10, avoid broad planning-document rewrites. Prefer minimal
+additive authority notes, then verify with:
+
+- `agentic-kit audit-planning-docs-consolidation`
+- `agentic-kit audit-doc-currency`
+- `agentic-kit docs-audit`
+- `agentic-kit standard-gates-audit-suite`

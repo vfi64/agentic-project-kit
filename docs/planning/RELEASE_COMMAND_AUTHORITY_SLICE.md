@@ -352,3 +352,26 @@ End the implementation slice with:
 The `agentic-kit release-prep --version <version>` route is the supported metadata preparation path.  The legacy direct publish core remains intentionally fail-closed after the ns migration until a separate release-publish orchestration follow-up rebuilds tag/publish behavior through supported `agentic-kit` wrappers.
 
 This is a non-GUI follow-up.  It must not be solved by GUI code and must not reintroduce raw shell, raw GitHub CLI, or legacy `ns` routing into GUI actions.  GUI work may start after `agentic-kit gui-readiness-gate --version 0.4.9` is green, but real release publishing remains outside the GUI readiness scope until that follow-up is implemented and tested.
+
+## v0.4.10 release-preparation authority
+
+Status: ACTIVE AUTHORITY.
+
+v0.4.10 is a safety, audit, and workflow-consolidation release. It is not the
+GUI implementation release.
+
+Release preparation for v0.4.10 must require the following green signals before
+version bump or publication work starts:
+
+- `standard-gates-audit-suite`
+- `command-taxonomy-check`
+- `patch-scope-preflight --label <slice-label>`
+- `gui-readiness-gate`
+- `release-publish --dry-run`
+- `release-metadata-authority-gate`
+- `post-release-check`
+- `docs-audit`
+- `audit-planning-docs-consolidation`
+
+`release-publish --execute` remains capability-gated. Live publication must not
+be treated as a normal GUI or routine automation action.
