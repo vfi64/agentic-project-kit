@@ -481,3 +481,52 @@ def test_refresh_llm_context_carriers_cli_uses_refresh_helper(monkeypatch):
     assert "TRANSFER_REFRESH_LLM_CONTEXT_CARRIERS" in result.stdout
     assert "PASS" in result.stdout
 
+def test_publish_latest_transfer_report_refreshes_outbox_carrier(tmp_path, monkeypatch):
+    from agentic_project_kit.transfer_uplink import LATEST_JSON
+    from agentic_project_kit.transfer_uplink import LATEST_LOG
+    from agentic_project_kit.transfer_uplink import publish_latest_transfer_report
+
+    monkeypatch.chdir(tmp_path)
+
+    latest_json = tmp_path / LATEST_JSON
+    latest_log = tmp_path / LATEST_LOG
+    latest_json.parent.mkdir(parents=True, exist_ok=True)
+    latest_json.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "run_id": "20260619T000000Z-test",
+                "label": "unit",
+                "command": ["agentic-kit", "transfer", "example"],
+                "returncode": 0,
+                "stdout": "",
+                "stderr": "",
+                "final_signal": "d",
+                "next_action": "Continue.",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    latest_log.write_text("TRANSFER_UPLINK_RUN=20260619T000000Z-test\n", encoding="utf-8")
+
+    result = publish_latest_transfer_report(tmp_path)
+
+    outbox = tmp_path / ".agentic/transfer/outbox/last_result.txt"
+    latest_published = tmp_path / "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
+
+    assert str(result["local_outbox"]).endswith(".agentic/transfer/outbox/last_result.txt")
+    assert outbox.exists()
+    assert latest_published.exists()
+
+    outbox_data = json.loads(outbox.read_text(encoding="utf-8"))
+    published_data = json.loads(latest_published.read_text(encoding="utf-8"))
+
+    assert outbox_data["kind"] == "local_to_llm_last_result"
+    assert outbox_data["derived_projection"] is True
+    assert outbox_data["last_result"] == published_data
+    assert outbox_data["last_result"]["published_transfer_handoff"]["latest_published_report_path"] == (
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
+    )
+    assert isinstance(outbox_data["llm_execution_context"], dict)
+    assert isinstance(outbox_data["last_result"]["llm_execution_context"], dict)
