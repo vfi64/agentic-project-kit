@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e6f0a6f0e3874b219fd4ec9a823acc2cf49b3682
-  short: e6f0a6f0
-  subject: Use volatile restore helper in sync-main (#1504)
+  full: 9fe7c6912ba06922288e7c97aa4480c6219ed38c
+  short: 9fe7c691
+  subject: Add generated handoff projection discipline rules (#1506)
 last_substantive_work_state:
-  full: e6f0a6f0e3874b219fd4ec9a823acc2cf49b3682
-  short: e6f0a6f0
-  subject: Use volatile restore helper in sync-main (#1504)
+  full: 9fe7c6912ba06922288e7c97aa4480c6219ed38c
+  short: 9fe7c691
+  subject: Add generated handoff projection discipline rules (#1506)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
