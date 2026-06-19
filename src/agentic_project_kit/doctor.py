@@ -207,6 +207,12 @@ def _version_drift_check(project_root: Path) -> DoctorCheck:
 
 
 def _standard_gates_audit_suite_check(project_root: Path) -> DoctorCheck:
+    if not _is_agentic_project_kit_development_checkout(project_root):
+        return DoctorCheck(
+            "standard audit suite",
+            DoctorStatus.WARN,
+            "skipped outside the agentic-project-kit development checkout",
+        )
     try:
         result = evaluate_standard_gates_audit_suite(project_root)
     except FileNotFoundError as exc:
@@ -221,6 +227,14 @@ def _standard_gates_audit_suite_check(project_root: Path) -> DoctorCheck:
         f"{blocker.name}: {blocker.detail}" for blocker in result.blockers
     )
     return DoctorCheck("standard audit suite", DoctorStatus.FAIL, blockers)
+
+
+def _is_agentic_project_kit_development_checkout(project_root: Path) -> bool:
+    return (
+        (project_root / "src" / "agentic_project_kit").is_dir()
+        and (project_root / "docs" / "reference" / "agentic-kit-commands.json").exists()
+        and (project_root / "pyproject.toml").exists()
+    )
 
 def _read_pyproject_version(path: Path) -> str | None:
     if not path.exists():
