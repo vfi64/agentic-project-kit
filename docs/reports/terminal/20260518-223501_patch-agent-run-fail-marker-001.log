@@ -1,2 +1,0 @@
-terminal_log=docs/reports/terminal/20260518-223501_patch-agent-run-fail-marker-001.log
-### RUN: sh .agentic/commands/current.sh

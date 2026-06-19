@@ -35,17 +35,19 @@ The current implementation hardens the communication artifact GC in bounded step
 - Command-run reports under `docs/reports/command_runs/*.md` are protected evidence.
 - Command inbox files under `.agentic/commands/inbox/*` are protected pending or consumable commands and are never generic temporary files.
 - Local `/tmp/agentic-project-kit-*.log` files are the only TTL-based local tmp-log class currently handled by the GC.
-- `./ns artifact-gc --tmp-logs` performs a dry-run for expired local tmp logs and reports `PENDING_EXPIRED_TMP_LOGS` without deleting.
-- `./ns artifact-gc --tmp-logs --execute` may delete only expired, non-symlink `/tmp/agentic-project-kit-*.log` files directly under `/tmp`.
+- `agentic-kit artifact-gc --tmp-logs` performs a dry-run for expired local tmp logs and reports `PENDING_EXPIRED_TMP_LOGS` without deleting.
+- `agentic-kit artifact-gc --tmp-logs --execute` may delete only expired, non-symlink `/tmp/agentic-project-kit-*.log` files directly under `/tmp`.
 - The GC must stay conservative: unknown files, repo evidence, command inbox files, symlinks, and files outside allowlisted zones are not collected.
 
 ## Current safe commands
 
 ```bash
-./ns artifact-gc
-./ns artifact-gc --execute
-./ns artifact-gc --tmp-logs
-./ns artifact-gc --tmp-logs --execute
+agentic-kit artifact-gc
+agentic-kit artifact-gc --execute
+agentic-kit artifact-gc --tmp-logs
+agentic-kit artifact-gc --tmp-logs --execute
+agentic-kit artifact-gc --transfer-runs
+agentic-kit artifact-gc --report-retention
 ```
 
 Use dry-run forms first. Mutating forms are bounded to explicitly implemented artifact classes and must be covered by terminal evidence for relevant workflow blocks.
@@ -109,6 +111,9 @@ Retention policy:
   - `latest-transfer-report.json`
   - `latest-remote-next-report.log`
   - `latest-remote-next-report.json`
+- `artifact-gc --report-retention` may collect expired `.log` and `.json`
+  report-retention files under governed report surfaces when they are not
+  referenced by active non-report documents.
 - GC must not delete current handoff files, latest handoff package manifests, or
   files referenced by the latest handoff/source manifest.
 - GC must not delete protected governance/status/handoff files.

@@ -230,6 +230,67 @@ def test_transfer_run_gc_keeps_latest_and_collects_expired_reports(tmp_path: Pat
     assert fresh.exists()
 
 
+def test_report_retention_preserves_files_referenced_by_active_docs(tmp_path: Path) -> None:
+    import os
+    from agentic_project_kit.communication_artifact_gc import collect_report_retention_candidates
+
+    terminal = tmp_path / "docs" / "reports" / "terminal"
+    terminal.mkdir(parents=True)
+    stale = terminal / "important.log"
+    stale.write_text("important evidence\n", encoding="utf-8")
+    (tmp_path / "README.md").write_text(
+        "See docs/reports/terminal/important.log for durable evidence.\n",
+        encoding="utf-8",
+    )
+    now = 1_000_000.0
+    old_time = now - (2 * 24 * 60 * 60)
+    os.utime(stale, (old_time, old_time))
+
+    found = collect_report_retention_candidates(tmp_path, now=now, keep_last_per_parent=0)
+
+    assert [item.path for item in found] == []
+    assert stale.exists()
+
+
+def test_report_retention_ignores_transfer_run_embedded_references(tmp_path: Path) -> None:
+    import os
+    from agentic_project_kit.communication_artifact_gc import (
+        collect_report_retention_candidates,
+        execute_report_retention_gc,
+    )
+
+    terminal = tmp_path / "docs" / "reports" / "terminal"
+    terminal.mkdir(parents=True)
+    stale = terminal / "old.log"
+    stale.write_text("old evidence copied into transfer report\n", encoding="utf-8")
+    transfer_runs = tmp_path / "docs" / "reports" / "transfer_runs"
+    transfer_runs.mkdir(parents=True)
+    embedded_reference = transfer_runs / "20260618T000000Z-run.json"
+    embedded_reference.write_text(
+        '{"stdout": "docs/reports/terminal/old.log"}\n',
+        encoding="utf-8",
+    )
+    now = 1_000_000.0
+    old_time = now - (2 * 24 * 60 * 60)
+    os.utime(stale, (old_time, old_time))
+
+    found = collect_report_retention_candidates(tmp_path, now=now, keep_last_per_parent=0)
+
+    assert [item.path for item in found] == [Path("docs/reports/terminal/old.log")]
+
+    outcome, message = execute_report_retention_gc(
+        tmp_path,
+        execute=True,
+        now=now,
+        keep_last_per_parent=0,
+    )
+
+    assert outcome == "PASS_COLLECTED"
+    assert "docs/reports/terminal/old.log" in message
+    assert not stale.exists()
+    assert embedded_reference.exists()
+
+
 def test_tmp_log_gc_keeps_protected_names_and_last_n_logs(tmp_path: Path) -> None:
     import os
     from agentic_project_kit.communication_artifact_gc import collect_expired_tmp_logs
@@ -289,4 +350,3 @@ def test_artifact_gc_cli_rejects_two_modes() -> None:
 
     assert result.exit_code == 1
     assert "FAIL_MUTUALLY_EXCLUSIVE_MODES" in result.output
-

@@ -1,5 +1,0 @@
-terminal_log=docs/reports/terminal/20260518-092057_intentional-fail-upload-test.log
-### RUN: python3 -c import sys; print("intentional failure for terminal-upload e2e test"); sys.exit(7)
-intentional failure for terminal-upload e2e test
-### EXIT: 7
-### RESULT: FAIL ###

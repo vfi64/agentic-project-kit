@@ -1,7 +1,0 @@
-GUI_GATEKEEPER_INVENTORY_GENERATION
-inventory_path=docs/reports/terminal/gui-gatekeeper-inventory-files.txt
-markdown_path=docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
-files=161
-classified_areas_with_entries=10
-unclassified=4
-result=PASS

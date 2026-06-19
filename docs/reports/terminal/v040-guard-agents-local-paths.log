@@ -1,8 +1,0 @@
-FINALIZE AGENTS LOCAL PATH GUARD
-
-Scope: AGENTS.md setup path portability, coverage term update, regression guard, word-limit adjustment without deleting rules.
-Changed active setup command to cd <your-project-root>.
-Updated docs/DOCUMENTATION_COVERAGE.yaml coverage term accordingly.
-Raised AGENTS.md word-limit guard to 2700 to avoid rule deletion.
-Added regression test for AGENTS.md setup path portability.
-No tag, no release, no merge performed.

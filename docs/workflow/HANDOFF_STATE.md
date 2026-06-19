@@ -37,7 +37,7 @@ Temporary communication files must be centrally classified before cleanup. Use `
 
 ## Communication artifact garbage collection
 
-Temporary communication artifacts must be centrally recognizable and removable only through registered safe paths. Use `./ns artifact-gc` for a dry-run plan and `./ns artifact-gc --execute` only after reviewing the plan. The collector must not delete arbitrary `docs/reports` files, release evidence, handoff state, source files, or unregistered paths.
+Temporary communication artifacts must be centrally recognizable and removable only through registered safe paths. Use `agentic-kit artifact-gc` for a dry-run plan and `agentic-kit artifact-gc --execute` only after reviewing the plan. The collector must not delete arbitrary `docs/reports` files, release evidence, handoff state, source files, or unregistered paths.
 
 ## Commit Semantics
 
