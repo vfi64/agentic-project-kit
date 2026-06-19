@@ -693,6 +693,6 @@ additive authority notes, then verify with:
 - `agentic-kit audit-doc-currency`
 - `agentic-kit docs-audit`
 - `agentic-kit standard-gates-audit-suite`
-## Operational documentation refresh state after PR #1490
+## Operational documentation refresh state after PR #1492
 
-Current administrative handoff refresh state is `4f4245ec` (`Add report retention garbage collection (#1490)`). Continue next only after this post-PR1490 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `c1d19c31` (`Harden report retention GC extension scope (#1492)`). Continue next only after this post-PR1492 refresh is committed and merged; the next substantive slice must be created from fresh main.

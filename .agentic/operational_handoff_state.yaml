@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4f4245eccb53e2d143e7084415a0e98ffaf5957c
-  short: 4f4245ec
-  subject: Add report retention garbage collection (#1490)
+  full: c1d19c3163015cb2364670cd2a9527e541468b16
+  short: c1d19c31
+  subject: Harden report retention GC extension scope (#1492)
 last_substantive_work_state:
-  full: 4f4245eccb53e2d143e7084415a0e98ffaf5957c
-  short: 4f4245ec
-  subject: Add report retention garbage collection (#1490)
+  full: c1d19c3163015cb2364670cd2a9527e541468b16
+  short: c1d19c31
+  subject: Harden report retention GC extension scope (#1492)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
