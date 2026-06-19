@@ -8,12 +8,12 @@
       "path": ".agentic/compiled_agent_context.yaml"
     },
     {
-      "bytes": 19993,
+      "bytes": 20001,
       "exists": true,
       "path": ".agentic/handoff_state.yaml"
     },
     {
-      "bytes": 1624,
+      "bytes": 1640,
       "exists": true,
       "path": ".agentic/operational_handoff_state.yaml"
     },
@@ -53,7 +53,7 @@
       "path": "docs/DOCUMENTATION_COVERAGE.yaml"
     },
     {
-      "bytes": 31019,
+      "bytes": 31027,
       "exists": true,
       "path": "docs/STATUS.md"
     },
@@ -63,7 +63,7 @@
       "path": "docs/TEST_GATES.md"
     },
     {
-      "bytes": 29792,
+      "bytes": 29800,
       "exists": true,
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
@@ -73,7 +73,7 @@
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
     {
-      "bytes": 4118,
+      "bytes": 4126,
       "exists": true,
       "path": "docs/handoff/START_NEW_CHAT_PROMPT.md"
     },
@@ -103,7 +103,7 @@
       "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md"
     },
     {
-      "bytes": 16468,
+      "bytes": 17176,
       "exists": true,
       "path": "docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md"
     },
@@ -113,7 +113,7 @@
       "path": "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md"
     },
     {
-      "bytes": 52124,
+      "bytes": 53623,
       "exists": true,
       "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md"
     },

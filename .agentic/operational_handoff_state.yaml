@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b8098f8cb5341646c8181172d320fcb16c750a45
-  short: b8098f8c
-  subject: Add command taxonomy and patch scope preflight (#1471)
+  full: 5c3a611ad9085223bb807e92831436bd2e1f1bb1
+  short: 5c3a611a
+  subject: Consolidate planning document authority before v0.4.10 (#1473)
 last_substantive_work_state:
-  full: b8098f8cb5341646c8181172d320fcb16c750a45
-  short: b8098f8c
-  subject: Add command taxonomy and patch scope preflight (#1471)
+  full: 5c3a611ad9085223bb807e92831436bd2e1f1bb1
+  short: 5c3a611a
+  subject: Consolidate planning document authority before v0.4.10 (#1473)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

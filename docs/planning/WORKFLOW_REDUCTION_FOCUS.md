@@ -659,10 +659,6 @@ Acceptance gates:
 Current administrative handoff refresh state is `c6ab40da` (`Classify ns migration docs before GUI (#1334)`). Continue next only after this post-PR1334 refresh is committed and merged; the next substantive slice must be created from fresh main.## Operational documentation refresh state after PR #1338
 
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1471
-
-Current administrative handoff refresh state is `b8098f8c` (`Add command taxonomy and patch scope preflight (#1471)`). Continue next only after this post-PR1471 refresh is committed and merged; the next substantive slice must be created from fresh main.
-
 ## Planning-document authority closeout before v0.4.10
 
 Status: ACTIVE AUTHORITY.
@@ -697,3 +693,6 @@ additive authority notes, then verify with:
 - `agentic-kit audit-doc-currency`
 - `agentic-kit docs-audit`
 - `agentic-kit standard-gates-audit-suite`
+## Operational documentation refresh state after PR #1473
+
+Current administrative handoff refresh state is `5c3a611a` (`Consolidate planning document authority before v0.4.10 (#1473)`). Continue next only after this post-PR1473 refresh is committed and merged; the next substantive slice must be created from fresh main.
