@@ -106,7 +106,7 @@ roadmap:
       target_release: v0.4.10
     - id: docs-reconciliation
       title: Reconcile docs/planning, docs/plans, docs/roadmap, docs/strategy, and docs/workflow
-      status: planned
+      status: active
       target_release: v0.4.10
     - id: release-v0.4.10
       title: Prepare and publish v0.4.10

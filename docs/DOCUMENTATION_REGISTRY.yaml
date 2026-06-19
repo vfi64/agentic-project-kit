@@ -133,6 +133,48 @@ class_rules:
     gate_coverage: doc-mesh audit, lifecycle audit, release DOI list checks, and historical banner checks.
 
 documents:
+  - path: docs/plans/DOCUMENT_ARTIFACT_GOVERNANCE_OS_PLAN.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
+  - path: docs/plans/V040_DOCUMENTATION_FOLLOW_UP.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
+  - path: docs/roadmap/V0.3.0_OUTPUT_REPAIR_PLAN.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
+  - path: docs/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
+  - path: docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
+  - path: docs/strategy/V0.4_PROFESSIONAL_SINGLE_USER_STRATEGY.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
   - path: docs/planning/project_direction.yaml
     class: planning
     status: active
