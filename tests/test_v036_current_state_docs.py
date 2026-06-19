@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 import tomllib
 
 
@@ -49,26 +50,36 @@ def test_release_state_records_current_verified_safety_release():
     status = Path("docs/STATUS.md").read_text(encoding="utf-8")
     handoff = Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
     version = _project_version()
+    verified_match = re.search(
+        r"^Current verified release:\s+`v([^`]+)` with Zenodo version DOI `([^`]+)`\.",
+        readme,
+        re.MULTILINE,
+    )
+    assert verified_match is not None
+    verified_version = verified_match.group(1)
+    verified_doi = verified_match.group(2)
 
-    assert version == "0.4.9"
     assert f"Version `{version}` is the current release line prepared" in readme
 
     verified_lines = [line for line in readme.splitlines() if line.startswith("Current verified release:")]
     assert verified_lines == [
-        "Current verified release: `v0.4.9` with Zenodo version DOI `10.5281/zenodo.20738074`."
+        f"Current verified release: `v{verified_version}` with Zenodo version DOI `{verified_doi}`."
     ]
 
     current_changelog = changelog.split("## v0.4.7", 1)[0]
     assert f"## v{version} -" in current_changelog
-    assert "Post-release verification complete: GitHub Release exists" in current_changelog
-    assert "verified v0.4.9 DOI `10.5281/zenodo.20738074`" in current_changelog
+    if verified_version == version:
+        assert "Post-release verification complete: GitHub Release exists" in current_changelog
+        assert f"verified v{verified_version} DOI `{verified_doi}`" in current_changelog
+    else:
+        assert "Zenodo DOI verification pending" in current_changelog
     assert "unfinished grouped `agentic-kit release prepare/check` route" in current_changelog
     assert "routing `./ns release-prep` through guarded metadata updates" in current_changelog
 
     assert f"Current version: {version}" in status
-    assert "Current verified release: 0.4.9." in status
-    assert "0.4.9" in status
+    assert f"Current verified release: {verified_version}." in status
+    assert verified_version in status
 
     assert f"Current version: {version}" in handoff
-    assert "- Current release tag: v0.4.9." in handoff
-    assert "- Current verified release: 0.4.9." in handoff
+    assert f"- Current release tag: v{verified_version}." in handoff
+    assert f"- Current verified release: {verified_version}." in handoff

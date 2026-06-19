@@ -1,3 +1,9 @@
+## v0.4.10 - 2026-06-20
+
+- Release metadata prepared for v0.4.10; Zenodo DOI verification pending until the GitHub release is created.
+- Hardened release route governance by removing the unfinished grouped `agentic-kit release prepare/check` route so release work uses the documented `release-plan`, `release-preflight`, `release-check`, and `post-release-check` path.
+- Recorded deterministic release-prep evidence by routing `./ns release-prep` through guarded metadata updates with no tag or publication side effects.
+
 ## v0.4.9 - 2026-06-17
 
 - Safety release after completing the legacy `ns`/`ns-menu` migration to `agentic-kit` and Python-core command surfaces.
