@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c3f8b12840cdfc6274bfcea0d30efe785f10d10c
-  short: c3f8b128
-  subject: Gate live release publish execution (#1467)
+  full: 96c8ab8c8f622da20c4fe054ac817d13977d8d31
+  short: 96c8ab8c
+  subject: Integrate audits into standard gates (#1469)
 last_substantive_work_state:
-  full: c3f8b12840cdfc6274bfcea0d30efe785f10d10c
-  short: c3f8b128
-  subject: Gate live release publish execution (#1467)
+  full: 96c8ab8c8f622da20c4fe054ac817d13977d8d31
+  short: 96c8ab8c
+  subject: Integrate audits into standard gates (#1469)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
