@@ -285,12 +285,13 @@ documents:
     review_policy: required
     superseded_by: docs/planning/project_direction.yaml
     summary: Historical release-scope note.
-  - path: docs/planning/RULE_REGISTRY_IMPLEMENTATION_PLAN.yaml
+  - path: docs/archive/planning/RULE_REGISTRY_IMPLEMENTATION_PLAN.yaml
     class: historical archive
     status: superseded
     owner: maintainers
     review_policy: required
     superseded_by: docs/planning/project_direction.yaml
+    archived_from: docs/planning/RULE_REGISTRY_IMPLEMENTATION_PLAN.yaml
     summary: Historical rule-registry implementation plan retained as context.
   - path: docs/planning/RULE_REGISTRY_ARCHITECTURE.md
     class: historical archive
@@ -369,12 +370,13 @@ documents:
     review_policy: required
     superseded_by: docs/planning/project_direction.yaml
     summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
-  - path: docs/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md
+  - path: docs/archive/planning/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md
     class: historical archive
     status: superseded
     owner: maintainers
     review_policy: required
     superseded_by: docs/planning/project_direction.yaml
+    archived_from: docs/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md
     summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
   - path: docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md
     class: historical archive
