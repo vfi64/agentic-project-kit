@@ -157,6 +157,11 @@ def audit_doc_currency(root: Path = Path(".")) -> DocCurrencyAuditResult:
     version = _project_version(root)
     package_version = _package_version(root)
     version_doi, concept_doi = _doi_values(root, version)
+    changelog = _read_text(root, "CHANGELOG.md") or ""
+    prepared_release_pending_doi = bool(
+        version
+        and re.search(rf"(?ms)^##\s+v{re.escape(version)}\b.*?Zenodo DOI verification pending", changelog)
+    )
 
     _finding(
         findings,
@@ -179,8 +184,8 @@ def audit_doc_currency(root: Path = Path(".")) -> DocCurrencyAuditResult:
         blockers,
         "docs/releases/VERIFIED_RELEASES.md",
         "current_version_doi_exists",
-        version_doi is not None,
-        f"version_doi={version_doi}",
+        version_doi is not None or prepared_release_pending_doi,
+        f"version_doi={version_doi}, prepared_release_pending_doi={prepared_release_pending_doi}",
     )
     _finding(
         findings,
@@ -205,13 +210,16 @@ def audit_doc_currency(root: Path = Path(".")) -> DocCurrencyAuditResult:
             continue
 
         if version:
+            mentions_current_version = f"v{version}" in text or version in text
+            if relative == "docs/releases/VERIFIED_RELEASES.md" and prepared_release_pending_doi:
+                mentions_current_version = True
             _finding(
                 findings,
                 blockers,
                 relative,
                 "mentions_current_version",
-                f"v{version}" in text or version in text,
-                f"version={version}",
+                mentions_current_version,
+                f"version={version}, prepared_release_pending_doi={prepared_release_pending_doi}",
             )
         if version_doi:
             _finding(

@@ -65,6 +65,38 @@ def test_doc_currency_audit_blocks_missing_current_doi(tmp_path: Path) -> None:
     )
 
 
+def test_doc_currency_audit_allows_prepared_release_pending_doi_archive(tmp_path: Path) -> None:
+    _write_minimal_current_docs(tmp_path)
+    version = "1.2.4"
+    previous_doi = "10.5281/zenodo.22222222"
+    concept_doi = "10.5281/zenodo.11111111"
+    (tmp_path / "pyproject.toml").write_text(
+        f'[project]\nname = "agentic-project-kit"\nversion = "{version}"\n',
+        encoding="utf-8",
+    )
+    (tmp_path / "src" / "agentic_project_kit" / "__init__.py").write_text(
+        f'__version__ = "{version}"\n',
+        encoding="utf-8",
+    )
+    current_docs = {
+        "README.md": f"Version `{version}` is the current release line prepared.\nCurrent verified release: `v1.2.3` with Zenodo version DOI `{previous_doi}`.\nconcept {concept_doi}\n",
+        "CHANGELOG.md": f"## v{version} - 2026-06-20\nZenodo DOI verification pending until publish.\n## v1.2.3\nDOI {previous_doi}\n",
+        "CITATION.cff": f"version: {version}\ndoi: {concept_doi}\n# Verified v1.2.3 version DOI: {previous_doi}\n",
+        "docs/STATUS.md": f"Current version: {version}\nCurrent verified release: 1.2.3.\nCurrent release tag: v1.2.3.\nVerified Zenodo version DOI: `{previous_doi}`.\n",
+        "docs/handoff/CURRENT_HANDOFF.md": f"Current version: {version}\n- Current verified release: 1.2.3.\n- Current release tag: v1.2.3.\n- Verified Zenodo version DOI: `{previous_doi}`.\n",
+        "docs/releases/VERIFIED_RELEASES.md": f"## v1.2.3\nVersion DOI: {previous_doi}\nConcept DOI: {concept_doi}\n",
+        "docs/reports/handoff-packages/latest/successor_prompt.md": f"v{version}\n",
+    }
+    for relative, text in current_docs.items():
+        (tmp_path / relative).write_text(text, encoding="utf-8")
+
+    result = audit_doc_currency(tmp_path)
+
+    assert result.ok is True
+    assert result.version == version
+    assert result.version_doi is None
+
+
 def test_render_doc_currency_audit_reports_blockers(tmp_path: Path) -> None:
     _write_minimal_current_docs(tmp_path)
     (tmp_path / "docs" / "STATUS.md").write_text("stale\n", encoding="utf-8")
@@ -90,4 +122,3 @@ def test_doc_currency_audit_treats_source_manifest_as_structural(tmp_path: Path)
         and item.status == "PASS"
         for item in result.findings
     )
-
