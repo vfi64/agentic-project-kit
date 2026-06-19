@@ -693,6 +693,6 @@ additive authority notes, then verify with:
 - `agentic-kit audit-doc-currency`
 - `agentic-kit docs-audit`
 - `agentic-kit standard-gates-audit-suite`
-## Operational documentation refresh state after PR #1473
+## Operational documentation refresh state after PR #1475
 
-Current administrative handoff refresh state is `5c3a611a` (`Consolidate planning document authority before v0.4.10 (#1473)`). Continue next only after this post-PR1473 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `7a3370bb` (`Enforce GC retention for transfer run reports (#1475)`). Continue next only after this post-PR1475 refresh is committed and merged; the next substantive slice must be created from fresh main.

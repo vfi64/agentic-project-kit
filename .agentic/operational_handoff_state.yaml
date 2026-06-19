@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5c3a611ad9085223bb807e92831436bd2e1f1bb1
-  short: 5c3a611a
-  subject: Consolidate planning document authority before v0.4.10 (#1473)
+  full: 7a3370bbd61370ce124fb5ae3312bb0feb01593c
+  short: 7a3370bb
+  subject: Enforce GC retention for transfer run reports (#1475)
 last_substantive_work_state:
-  full: 5c3a611ad9085223bb807e92831436bd2e1f1bb1
-  short: 5c3a611a
-  subject: Consolidate planning document authority before v0.4.10 (#1473)
+  full: 7a3370bbd61370ce124fb5ae3312bb0feb01593c
+  short: 7a3370bb
+  subject: Enforce GC retention for transfer run reports (#1475)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
