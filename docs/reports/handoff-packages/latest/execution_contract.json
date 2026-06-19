@@ -1,13 +1,13 @@
 {
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1475-handoff-refresh",
+    "branch": "docs/post-pr1477-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "7a3370bbd61370ce124fb5ae3312bb0feb01593c",
+    "head": "e967cb91210a9d9adaec07f6bffbe18a25519565",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "7a3370bbd61370ce124fb5ae3312bb0feb01593c",
+    "origin_main": "e967cb91210a9d9adaec07f6bffbe18a25519565",
     "worktree_clean": false
   },
   "rules": [

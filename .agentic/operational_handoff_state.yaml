@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7a3370bbd61370ce124fb5ae3312bb0feb01593c
-  short: 7a3370bb
-  subject: Enforce GC retention for transfer run reports (#1475)
+  full: e967cb91210a9d9adaec07f6bffbe18a25519565
+  short: e967cb91
+  subject: Add machine-readable project direction (#1477)
 last_substantive_work_state:
-  full: 7a3370bbd61370ce124fb5ae3312bb0feb01593c
-  short: 7a3370bb
-  subject: Enforce GC retention for transfer run reports (#1475)
+  full: e967cb91210a9d9adaec07f6bffbe18a25519565
+  short: e967cb91
+  subject: Add machine-readable project direction (#1477)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
