@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `168`
+- Command count: `170`
 
 ## Commands
 
@@ -158,6 +158,15 @@ _No parameters._
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+
+### `agentic-kit command-taxonomy-check`
+
+Check that public commands have stable GUI-usable taxonomy.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit dev local-feature-gate`
 
@@ -417,6 +426,20 @@ _No parameters._
 |---|---:|---|---:|---|---|
 | `paths` | `TyperArgument` | paths | `False` |  |  |
 | `require_slice_gate` | `TyperOption` | --require-slice-gate | `False` |  | Require a clean passing slice gate before accepting preflight. |
+
+### `agentic-kit patch-scope-preflight`
+
+Diagnose patch size, protected paths, and diff-risk before closeout.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `label` | `TyperOption` | --label | `False` | `patch` |  |
+| `base_ref` | `TyperOption` | --base-ref | `False` | `HEAD` |  |
+| `max_files` | `TyperOption` | --max-files | `False` | `6` |  |
+| `max_diff_lines` | `TyperOption` | --max-diff-lines | `False` | `400` |  |
+| `strict` | `TyperOption` | --strict | `False` | `False` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit patterns list`
 

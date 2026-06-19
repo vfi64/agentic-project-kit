@@ -706,6 +706,45 @@
       "qualified_name": "agentic-kit cockpit status"
     },
     {
+      "group": "root",
+      "help": "Check that public commands have stable GUI-usable taxonomy.",
+      "name": "command-taxonomy-check",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "command-taxonomy-check"
+      ],
+      "qualified_name": "agentic-kit command-taxonomy-check"
+    },
+    {
       "group": "dev",
       "help": "Run the local feature gate through the supported agentic-kit CLI.",
       "name": "local-feature-gate",
@@ -2342,6 +2381,115 @@
         "patch-preflight"
       ],
       "qualified_name": "agentic-kit patch-preflight"
+    },
+    {
+      "group": "root",
+      "help": "Diagnose patch size, protected paths, and diff-risk before closeout.",
+      "name": "patch-scope-preflight",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "patch",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "label",
+          "opts": [
+            "--label"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "HEAD",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "base_ref",
+          "opts": [
+            "--base-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 6,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "max_files",
+          "opts": [
+            "--max-files"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 400,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "max_diff_lines",
+          "opts": [
+            "--max-diff-lines"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "strict",
+          "opts": [
+            "--strict"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "patch-scope-preflight"
+      ],
+      "qualified_name": "agentic-kit patch-scope-preflight"
     },
     {
       "group": "patterns",
