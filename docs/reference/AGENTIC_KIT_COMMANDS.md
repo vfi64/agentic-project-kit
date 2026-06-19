@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `167`
+- Command count: `168`
 
 ## Commands
 
@@ -671,6 +671,16 @@ _No parameters._
 |---|---:|---|---:|---|---|
 | `kind` | `TyperOption` | --kind | `False` | `planning-doc` | Slice gate kind to run. |
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+
+### `agentic-kit standard-gates-audit-suite`
+
+Run the audit suite required by standard project gates.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `version` | `TyperOption` | --version | `False` | `0.4.9` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit state freshness-check`
 

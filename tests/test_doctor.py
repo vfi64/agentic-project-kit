@@ -97,6 +97,7 @@ def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
     report = build_doctor_report(tmp_path)
 
     assert report.ok
+    assert [check.name for check in report.checks][-2:] == ["standard audit suite", "version drift"]
     assert [check.status for check in report.checks] == [
         DoctorStatus.WARN,
         DoctorStatus.PASS,
@@ -106,6 +107,7 @@ def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
         DoctorStatus.WARN,
         DoctorStatus.PASS,
         DoctorStatus.PASS,
+        DoctorStatus.WARN,
         DoctorStatus.WARN,
         DoctorStatus.WARN,
     ]

@@ -40,9 +40,11 @@ from agentic_project_kit.cli_commands.program_redundancy_audit import audit_prog
 from agentic_project_kit.cli_commands.gui_readiness_gate import gui_readiness_gate_command
 from agentic_project_kit.cli_commands.patch_failure_discipline_audit import audit_patch_failure_discipline_command
 from agentic_project_kit.cli_commands.release_publish_orchestration import release_publish_command
+from agentic_project_kit.cli_commands.standard_gates_audit_suite import standard_gates_audit_suite_command
 from agentic_project_kit.patch_artifact_preflight import register_patch_preflight_command
 
 app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
+app.command("standard-gates-audit-suite")(standard_gates_audit_suite_command)
 app.command("release-publish")(release_publish_command)
 app.command("audit-patch-failure-discipline")(audit_patch_failure_discipline_command)
 app.command("gui-readiness-gate")(gui_readiness_gate_command)

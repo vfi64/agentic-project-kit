@@ -9,6 +9,7 @@ from typing import Any
 
 from agentic_project_kit.checks import check_docs, check_todo
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_report
+from agentic_project_kit.standard_gates_audit_suite import evaluate_standard_gates_audit_suite
 from agentic_project_kit.contract import (
     CONTRACT_PATH,
     contract_summary,
@@ -54,6 +55,7 @@ def build_doctor_report(project_root: Path) -> DoctorReport:
         _docs_check(root),
         _doc_lifecycle_check(root),
         _todo_check(root),
+        _standard_gates_audit_suite_check(root),
         _version_drift_check(root),
     ]
     return DoctorReport(project_root=root, checks=checks)
@@ -202,6 +204,37 @@ def _version_drift_check(project_root: Path) -> DoctorCheck:
         return DoctorCheck("version drift", DoctorStatus.FAIL, "version mismatch in: " + ", ".join(missing))
     return DoctorCheck("version drift", DoctorStatus.PASS, f"project state matches version {version}")
 
+
+
+def _standard_gates_audit_suite_check(project_root: Path) -> DoctorCheck:
+    if not _is_agentic_project_kit_development_checkout(project_root):
+        return DoctorCheck(
+            "standard audit suite",
+            DoctorStatus.WARN,
+            "skipped outside the agentic-project-kit development checkout",
+        )
+    try:
+        result = evaluate_standard_gates_audit_suite(project_root)
+    except FileNotFoundError as exc:
+        return DoctorCheck(
+            "standard audit suite",
+            DoctorStatus.WARN,
+            f"skipped because agentic-kit executable is unavailable: {exc}",
+        )
+    if result.ok:
+        return DoctorCheck("standard audit suite", DoctorStatus.PASS, "passed")
+    blockers = "; ".join(
+        f"{blocker.name}: {blocker.detail}" for blocker in result.blockers
+    )
+    return DoctorCheck("standard audit suite", DoctorStatus.FAIL, blockers)
+
+
+def _is_agentic_project_kit_development_checkout(project_root: Path) -> bool:
+    return (
+        (project_root / "src" / "agentic_project_kit").is_dir()
+        and (project_root / "docs" / "reference" / "agentic-kit-commands.json").exists()
+        and (project_root / "pyproject.toml").exists()
+    )
 
 def _read_pyproject_version(path: Path) -> str | None:
     if not path.exists():
