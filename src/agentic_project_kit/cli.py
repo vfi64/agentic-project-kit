@@ -43,9 +43,11 @@ from agentic_project_kit.cli_commands.release_publish_orchestration import relea
 from agentic_project_kit.cli_commands.standard_gates_audit_suite import standard_gates_audit_suite_command
 from agentic_project_kit.cli_commands.command_taxonomy import command_taxonomy_check_command
 from agentic_project_kit.cli_commands.patch_preflight import patch_preflight_command
+from agentic_project_kit.cli_commands.artifact_gc import artifact_gc_command
 from agentic_project_kit.patch_artifact_preflight import register_patch_preflight_command
 
 app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
+app.command("artifact-gc")(artifact_gc_command)
 app.command("patch-scope-preflight")(patch_preflight_command)
 app.command("command-taxonomy-check")(command_taxonomy_check_command)
 app.command("standard-gates-audit-suite")(standard_gates_audit_suite_command)

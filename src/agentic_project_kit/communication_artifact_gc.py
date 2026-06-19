@@ -42,6 +42,32 @@ ALLOWED_EXACT_PATHS = (
     "docs/reports/command_runs/next-turn-latest.json",
 )
 DEFAULT_TMP_LOG_TTL_SECONDS = 24 * 60 * 60
+DEFAULT_KEEP_LAST_SLICE_LOGS = 12
+
+TRANSFER_RUNS_KEEP_NAMES = frozenset(
+    {
+        "latest-transfer-report.log",
+        "latest-transfer-report.json",
+        "latest-remote-next-report.log",
+        "latest-remote-next-report.json",
+    }
+)
+
+PROTECTED_LOCAL_NAMES = frozenset(
+    {
+        "local-gc-last.json",
+        "local-command-stack-state.json",
+        "local-gc-last-run-id.txt",
+        "next-turn-latest.log",
+    }
+)
+
+LOCAL_LOG_PATTERNS = (
+    "*slice*.log",
+    "*handoff*.log",
+    "*release*.log",
+    "*gc*.log",
+)
 
 
 def _is_allowed(path: Path) -> bool:
@@ -110,19 +136,37 @@ def collect_expired_tmp_logs(
     tmp_root: Path | str = "/tmp",
     now: float | None = None,
     ttl_seconds: int = DEFAULT_TMP_LOG_TTL_SECONDS,
+    keep_last: int = DEFAULT_KEEP_LAST_SLICE_LOGS,
 ) -> list[Path]:
     root = Path(tmp_root)
     if not root.exists() or not root.is_dir():
         return []
     now_value = time.time() if now is None else now
-    expired: list[Path] = []
-    for path in sorted(root.glob("agentic-project-kit-*.log")):
+    expired_agentic_logs: list[Path] = []
+    for path in root.glob("agentic-project-kit-*.log"):
         if path.is_symlink() or not path.is_file():
+            continue
+        if path.name in PROTECTED_LOCAL_NAMES:
             continue
         age_seconds = now_value - path.stat().st_mtime
         if age_seconds >= ttl_seconds:
-            expired.append(path)
-    return expired
+            expired_agentic_logs.append(path)
+
+    expired_slice_logs: list[Path] = []
+    for pattern in LOCAL_LOG_PATTERNS:
+        for path in root.glob(pattern):
+            if path.is_symlink() or not path.is_file():
+                continue
+            if path.name in PROTECTED_LOCAL_NAMES:
+                continue
+            age_seconds = now_value - path.stat().st_mtime
+            if age_seconds >= ttl_seconds:
+                expired_slice_logs.append(path)
+
+    unique_slice_logs = sorted(set(expired_slice_logs), key=lambda item: item.stat().st_mtime, reverse=True)
+    if keep_last > 0:
+        unique_slice_logs = unique_slice_logs[keep_last:]
+    return sorted(set(expired_agentic_logs).union(unique_slice_logs))
 
 
 def execute_tmp_log_gc(
@@ -130,8 +174,9 @@ def execute_tmp_log_gc(
     execute: bool = False,
     now: float | None = None,
     ttl_seconds: int = DEFAULT_TMP_LOG_TTL_SECONDS,
+    keep_last: int = DEFAULT_KEEP_LAST_SLICE_LOGS,
 ) -> tuple[str, str]:
-    candidates = collect_expired_tmp_logs(tmp_root, now=now, ttl_seconds=ttl_seconds)
+    candidates = collect_expired_tmp_logs(tmp_root, now=now, ttl_seconds=ttl_seconds, keep_last=keep_last)
     if not candidates:
         return "PASS_NOTHING_TO_COLLECT", ""
     message = "\n".join(path.as_posix() for path in candidates)
@@ -151,11 +196,70 @@ def execute_tmp_log_gc(
     return "PASS_COLLECTED", "\n".join(removed)
 
 
+
+def collect_expired_transfer_run_reports(
+    root: Path | str = ".",
+    now: float | None = None,
+    ttl_seconds: int = DEFAULT_TMP_LOG_TTL_SECONDS,
+) -> list[Path]:
+    base = Path(root) / "docs" / "reports" / "transfer_runs"
+    if not base.exists() or not base.is_dir():
+        return []
+    now_value = time.time() if now is None else now
+    expired: list[Path] = []
+    for path in sorted(base.rglob("*")):
+        if path.is_symlink() or not path.is_file():
+            continue
+        if path.name in TRANSFER_RUNS_KEEP_NAMES:
+            continue
+        age_seconds = now_value - path.stat().st_mtime
+        if age_seconds >= ttl_seconds:
+            expired.append(path)
+    return expired
+
+
+def execute_transfer_run_report_gc(
+    root: Path | str = ".",
+    execute: bool = False,
+    now: float | None = None,
+    ttl_seconds: int = DEFAULT_TMP_LOG_TTL_SECONDS,
+) -> tuple[str, str]:
+    base = Path(root)
+    candidates = collect_expired_transfer_run_reports(base, now=now, ttl_seconds=ttl_seconds)
+    if not candidates:
+        return "PASS_NOTHING_TO_COLLECT", ""
+    message = "\n".join(path.relative_to(base).as_posix() for path in candidates)
+    if not execute:
+        return "PENDING_EXPIRED_TRANSFER_RUN_REPORTS", message
+
+    removed: list[str] = []
+    transfer_root = (base / "docs" / "reports" / "transfer_runs").resolve()
+    for path in candidates:
+        resolved = path.resolve()
+        if path.is_symlink():
+            return "FAIL_SYMLINK_ARTIFACT", path.as_posix()
+        if transfer_root not in resolved.parents:
+            return "FAIL_UNREGISTERED_PATH", path.as_posix()
+        if path.name in TRANSFER_RUNS_KEEP_NAMES:
+            return "FAIL_PROTECTED_LATEST_REPORT", path.as_posix()
+        if not path.is_file():
+            return "FAIL_NOT_A_FILE", path.as_posix()
+        path.unlink()
+        removed.append(path.relative_to(base).as_posix())
+    return "PASS_COLLECTED", "\n".join(removed)
+
 def main(argv: list[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
     execute = "--execute" in args
     if "--tmp-logs" in args:
-        outcome, message = execute_tmp_log_gc("/tmp", execute=execute)
+        tmp_root = "tmp" if "--local-tmp" in args else "/tmp"
+        outcome, message = execute_tmp_log_gc(tmp_root, execute=execute)
+        print(outcome)
+        if message:
+            print(message)
+        return 0 if outcome.startswith("PASS") or outcome.startswith("PENDING") else 1
+    if "--transfer-runs" in args:
+        outcome, message = execute_transfer_run_report_gc(".", execute=execute)
         print(outcome)
         if message:
             print(message)

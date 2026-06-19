@@ -88,3 +88,30 @@ The preflight must not delete:
 Transfer-file lifecycle cleanup remains the responsibility of
 `agentic-kit transfer normalize-files`. Workflow evidence cleanup remains the
 responsibility of `agentic-kit workflow cleanup`.
+
+## 24-hour retention policy for local and transfer-run logs
+
+Status: ACTIVE AUTHORITY.
+
+`agentic-kit artifact-gc` is dry-run by default. Destructive cleanup requires
+explicit `--execute`.
+
+Retention policy:
+
+- `artifact-gc --tmp-logs --local-tmp` may collect local `tmp/*slice*.log`,
+  `tmp/*handoff*.log`, `tmp/*release*.log`, and `tmp/*gc*.log` files older than
+  24 hours while keeping the newest slice logs and protecting current GC,
+  command-stack, and next-turn fixed-slot files.
+- `artifact-gc --transfer-runs` may collect
+  `docs/reports/transfer_runs` files older than 24 hours except these fixed
+  latest files:
+  - `latest-transfer-report.log`
+  - `latest-transfer-report.json`
+  - `latest-remote-next-report.log`
+  - `latest-remote-next-report.json`
+- GC must not delete current handoff files, latest handoff package manifests, or
+  files referenced by the latest handoff/source manifest.
+- GC must not delete protected governance/status/handoff files.
+- GC must not treat broad documentation cleanup as log retention. Review,
+  planning, roadmap, strategy, and workflow cleanup require separate
+  protected-diff planning.
