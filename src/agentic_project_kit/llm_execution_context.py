@@ -94,6 +94,16 @@ def build_llm_execution_context(root: str | Path = ".") -> dict[str, Any]:
         "canonical_lifecycle": {
             "new_pr_single_command_text": "agentic-kit transfer pr-create-complete --post-merge-complete",
             "verify_context_refresh_command": "agentic-kit transfer verify-llm-context-refresh",
+            "feature_branch_pre_pr_gate": "agentic-kit transfer repo-status",
+            "forbidden_feature_branch_pre_pr_gate": "agentic-kit transfer post-merge-check",
+            "fresh_llm_context_before_pr": [
+                "./.venv/bin/agentic-kit transfer prepare-successor-handoff --render-prompt",
+                "./.venv/bin/agentic-kit transfer publish-last-report",
+                "./.venv/bin/agentic-kit transfer require-fresh-llm-context --json",
+            ],
+            "post_merge_checks_belong_to_main": True,
+            "post_merge_check_after_merge_only": True,
+            "do_not_use_stale_prompt_text_as_handoff_source": True,
             "new_pr_single_command": [
                 "./.venv/bin/agentic-kit",
                 "transfer",

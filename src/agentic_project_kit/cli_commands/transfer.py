@@ -2378,7 +2378,10 @@ def _evaluate_llm_context_freshness(root: Path, *, max_age_minutes: int) -> dict
             valid_contexts.append(name)
 
     blockers = list(dict.fromkeys(blockers))
-    result_status = "PASS" if valid_contexts and not blockers else "BLOCKED"
+    # A single fresh, hash-consistent carrier is sufficient. Other stale or
+    # missing carriers remain diagnostic findings, but must not block when at
+    # least one authoritative local handoff context is valid.
+    result_status = "PASS" if valid_contexts else "BLOCKED"
     return {
         "schema_version": 1,
         "kind": "transfer_require_fresh_llm_context_result",

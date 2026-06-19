@@ -366,12 +366,15 @@ def publish_latest_transfer_report(
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(content, encoding="utf-8")
 
+    outbox_path = write_transfer_outbox(base, published_data)
+
     return {
         "transfer_upload": "done",
         "remote_report": str(timestamped_json),
         "latest_remote_report": str(PUBLISHED_LATEST_JSON),
         "remote_log": str(timestamped_log),
         "latest_remote_log": str(PUBLISHED_LATEST_LOG),
+        "local_outbox": str(outbox_path),
         "chat_reply": "g" if int(report_data.get("returncode", 1)) == 0 and str(report_data.get("final_signal", "f")) == "d" else "f | NEXT=Inspect published transfer handoff report.",
     }
 
