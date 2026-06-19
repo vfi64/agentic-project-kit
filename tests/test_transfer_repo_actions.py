@@ -2578,6 +2578,54 @@ def test_successor_package_freshness_allows_refresh_only_head_drift(monkeypatch,
     assert actions._successor_package_freshness_findings(tmp_path) == []
 
 
+def test_successor_package_freshness_rejects_project_direction_head_drift(monkeypatch, tmp_path):
+    from agentic_project_kit import transfer_repo_actions as actions
+
+    package = tmp_path / "docs" / "reports" / "handoff-packages" / "latest"
+    package.mkdir(parents=True)
+    (package / "validation_report.json").write_text(
+        '{"status": "PASS", "generated_head": "old"}',
+        encoding="utf-8",
+    )
+    (package / "execution_contract.json").write_text(
+        '{"kind": "successor_execution_contract", "rules": ['
+        '{"rule_id": "local-copy-paste-protocol"},'
+        '{"rule_id": "strict-start-decision"},'
+        '{"rule_id": "protected-file-preservation"},'
+        '{"rule_id": "bootstrap_acceptance_gate"}'
+        ']}',
+        encoding="utf-8",
+    )
+    (package / "successor_prompt.md").write_text(
+        "Zusätzliche Startbremse nach dem Bootstrap\n"
+        "RESULT=NEW_CHAT_BOOTSTRAP_DONE\n"
+        "Übergabe akzeptiert, keine Admin-Arbeit nötig\n",
+        encoding="utf-8",
+    )
+
+    def fake_run(command, *, cwd=None):
+        import subprocess
+
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "new\n", "")
+        if command == ["git", "merge-base", "--is-ancestor", "old", "new"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "diff", "--name-only", "old..new"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                "docs/planning/project_direction.yaml\n",
+                "",
+            )
+        return subprocess.CompletedProcess(command, 1, "", "unexpected command")
+
+    monkeypatch.setattr(actions, "_run", fake_run)
+
+    assert "validation_report.json generated_head does not match HEAD or refresh-only ancestry" in (
+        actions._successor_package_freshness_findings(tmp_path)
+    )
+
+
 def test_successor_package_freshness_rejects_product_head_drift(monkeypatch, tmp_path):
     from agentic_project_kit import transfer_repo_actions as actions
 

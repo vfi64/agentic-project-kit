@@ -225,7 +225,6 @@ def _is_refresh_only_successor_package_head(generated_head: str, current_head: s
         "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
         "docs/handoff/START_NEW_CHAT_PROMPT.md",
         "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-        "docs/planning/project_direction.yaml",
     }
 
     def allowed(path: str) -> bool:

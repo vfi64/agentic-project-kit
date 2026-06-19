@@ -16,7 +16,6 @@ OPERATIONAL_FRESHNESS_FILES = [
     "docs/handoff/CURRENT_HANDOFF.md",
     "docs/handoff/START_NEW_CHAT_PROMPT.md",
     "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
-    "docs/planning/project_direction.yaml",
 ]
 SUCCESSOR_HANDOFF_GLOBS = [
     "*successor*handoff*.md",
@@ -126,7 +125,9 @@ def _assess_operational_document_freshness(
     not introduce a new rule layer: STATUS, CURRENT_HANDOFF, chat bootstrap
     prompts, and the active roadmap are human-facing projections of the
     machine-readable handoff state and must mention at least one current
-    safe/admin commit marker when they exist.
+    safe/admin commit marker when they exist. Stable authority sources such as
+    project_direction.yaml are intentionally excluded; they are required
+    context, not per-PR refresh projections.
     """
 
     markers = [marker for marker in marker_commits if marker]
