@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 96c8ab8c8f622da20c4fe054ac817d13977d8d31
-  short: 96c8ab8c
-  subject: Integrate audits into standard gates (#1469)
+  full: b8098f8cb5341646c8181172d320fcb16c750a45
+  short: b8098f8c
+  subject: Add command taxonomy and patch scope preflight (#1471)
 last_substantive_work_state:
-  full: 96c8ab8c8f622da20c4fe054ac817d13977d8d31
-  short: 96c8ab8c
-  subject: Integrate audits into standard gates (#1469)
+  full: b8098f8cb5341646c8181172d320fcb16c750a45
+  short: b8098f8c
+  subject: Add command taxonomy and patch scope preflight (#1471)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
