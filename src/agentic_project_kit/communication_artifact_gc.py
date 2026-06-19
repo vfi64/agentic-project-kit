@@ -76,6 +76,8 @@ REPORT_RETENTION_KEEP_NAME_FRAGMENTS = frozenset(
     }
 )
 
+REPORT_RETENTION_AUTO_DELETE_SUFFIXES = frozenset({".log", ".json"})
+
 REPORT_RETENTION_REFERENCE_EXCLUDED_PREFIXES = (
     ".git/",
     ".venv/",
@@ -327,6 +329,8 @@ def collect_report_retention_candidates(
     candidates: list[ReportRetentionCandidate] = []
     for path in files:
         rel = path.relative_to(base)
+        if path.suffix.lower() not in REPORT_RETENTION_AUTO_DELETE_SUFFIXES:
+            continue
         if _is_report_keep_name(path.name):
             continue
         if path in newest_by_parent.get(path.parent, set()):
