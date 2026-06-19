@@ -354,8 +354,8 @@ def test_handoff_freshness_guard_warns_on_stale_operational_documents(
         "bootstrap instructions for stale PR1054\n",
     )
     _write(
-        tmp_path / "docs" / "planning" / "WORKFLOW_REDUCTION_FOCUS.md",
-        "roadmap instructions for stale PR1054\n",
+        tmp_path / "docs" / "planning" / "project_direction.yaml",
+        "authority: docs/planning/project_direction.yaml\nsummary: stale PR1054\n",
     )
     _write(handoff_path, "schema_version: 1\n")
     _write(prompt_path, "successor prompt generated for 4bf3da29\n")
@@ -376,7 +376,7 @@ def test_handoff_freshness_guard_warns_on_stale_operational_documents(
     assert any("docs/handoff/CURRENT_HANDOFF.md" in warning for warning in warnings)
     assert any("START_NEW_CHAT_PROMPT.md" in warning for warning in warnings)
     assert any("NEXT_CHAT_BOOTSTRAP.md" in warning for warning in warnings)
-    assert any("WORKFLOW_REDUCTION_FOCUS.md" in warning for warning in warnings)
+    assert any("project_direction.yaml" in warning for warning in warnings)
 
 def test_handoff_freshness_accepts_administrative_squash_refresh_subject(
     tmp_path: Path,
@@ -388,7 +388,7 @@ def test_handoff_freshness_accepts_administrative_squash_refresh_subject(
         "docs/handoff/CURRENT_HANDOFF.md",
         "docs/handoff/START_NEW_CHAT_PROMPT.md",
         "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
-        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+        "docs/planning/project_direction.yaml",
     ):
         _write(tmp_path / relative_path, "administrative handoff marker e97af592\n")
     _write(handoff_path, "schema_version: 1\n")
@@ -414,4 +414,3 @@ def test_handoff_freshness_accepts_administrative_squash_refresh_subject(
     )
 
     assert warnings == []
-

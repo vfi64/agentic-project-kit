@@ -18,8 +18,8 @@ CANONICAL_SOURCE_PATHS = (
     ".agentic/transfer/one_command_transfer_protocol.yaml",
     ".agentic/rule_mechanism_inventory.yaml",
     ".agentic/rule_preservation.yaml",
-    "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
-    "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    "docs/DOCUMENTATION_REGISTRY.yaml",
+    "docs/planning/project_direction.yaml",
 )
 
 

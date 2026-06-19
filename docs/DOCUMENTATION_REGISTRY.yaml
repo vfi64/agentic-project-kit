@@ -259,12 +259,14 @@ documents:
     owner: maintainers
     review_policy: required
     summary: Review-required next-turn work-order plan; should not be treated as long-term direction.
-  - path: docs/planning/NEXT_TURN_A0_STANDARD_ERROR_ADDITIONS.md
-    class: planning
-    status: review_required
+  - path: docs/archive/planning/NEXT_TURN_A0_STANDARD_ERROR_ADDITIONS.md
+    class: historical archive
+    status: archived
     owner: maintainers
     review_policy: required
-    summary: Review-required next-turn planning note; should not be treated as long-term direction.
+    archived_from: docs/planning/NEXT_TURN_A0_STANDARD_ERROR_ADDITIONS.md
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Archived next-turn planning note; current direction is governed by project_direction.yaml.
   - path: docs/planning/IDEMPOTENT_FINALIZATION_GUARD.md
     class: planning
     status: review_required
@@ -356,12 +358,13 @@ documents:
     review_policy: required
     superseded_by: docs/planning/project_direction.yaml
     summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
-  - path: docs/plans/V040_DOCUMENTATION_FOLLOW_UP.md
+  - path: docs/archive/planning/V040_DOCUMENTATION_FOLLOW_UP.md
     class: historical archive
-    status: superseded
+    status: archived
     owner: maintainers
     review_policy: required
     superseded_by: docs/planning/project_direction.yaml
+    archived_from: docs/plans/V040_DOCUMENTATION_FOLLOW_UP.md
     summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
   - path: docs/roadmap/V0.3.0_OUTPUT_REPAIR_PLAN.md
     class: historical archive

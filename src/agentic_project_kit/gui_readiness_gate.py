@@ -27,8 +27,8 @@ REQUIRED_GATE_COMMANDS: tuple[tuple[str, ...], ...] = (
 REQUIRED_CURRENT_DOCS: tuple[str, ...] = (
     "docs/STATUS.md",
     "docs/handoff/CURRENT_HANDOFF.md",
-    "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-    "docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md",
+    "docs/DOCUMENTATION_REGISTRY.yaml",
+    "docs/planning/project_direction.yaml",
     "docs/reference/AGENTIC_KIT_COMMANDS.md",
     "docs/reference/agentic-kit-commands.json",
 )

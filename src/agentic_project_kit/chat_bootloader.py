@@ -27,8 +27,8 @@ MANDATORY_BOOT_SOURCES = (
     "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
     "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
     "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-    "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
-    "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    "docs/DOCUMENTATION_REGISTRY.yaml",
+    "docs/planning/project_direction.yaml",
 )
 
 BOOTLOADER_RULES = (
