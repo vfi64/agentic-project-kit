@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 536a05c97c37363eab4157e509c59d6eadfd4f16
-  short: 536a05c9
-  subject: Fix handoff freshness for planning authority (#1499)
+  full: 24fb9714703d07bba919132e3083c6a60cecfa1e
+  short: 24fb9714
+  subject: Refresh handoff state after PR1499 (#1500)
 last_substantive_work_state:
-  full: 536a05c97c37363eab4157e509c59d6eadfd4f16
-  short: 536a05c9
-  subject: Fix handoff freshness for planning authority (#1499)
+  full: 24fb9714703d07bba919132e3083c6a60cecfa1e
+  short: 24fb9714
+  subject: Refresh handoff state after PR1499 (#1500)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
