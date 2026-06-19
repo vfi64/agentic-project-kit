@@ -28,7 +28,7 @@ This plan records documentation and review follow-up work that must not be mixed
 
 ## Document and Artifact Governance OS
 
-The broader professionalization track is defined in `docs/plans/DOCUMENT_ARTIFACT_GOVERNANCE_OS_PLAN.md`.
+The former broader professionalization track is superseded; current strategy, roadmap, and ideas are governed by `docs/planning/project_direction.yaml`.
 
 That plan treats documentation, generated handoffs, terminal evidence, temporary artifacts, security filters, source-of-truth relationships, update triggers, garbage-collector integration, and LLM/Codex/Claude-Code collaboration artifacts as one modular governance subsystem.
 
