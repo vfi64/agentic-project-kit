@@ -3135,6 +3135,59 @@
     },
     {
       "group": "root",
+      "help": "Render strategy, roadmap, and ideas from the project direction YAML source.",
+      "name": "project-direction",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "all",
+          "help": "all, strategy, roadmap, or ideas.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "section",
+          "opts": [
+            "--section"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "text",
+          "help": "text, markdown, or json.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_format",
+          "opts": [
+            "--format"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "project-direction"
+      ],
+      "qualified_name": "agentic-kit project-direction"
+    },
+    {
+      "group": "root",
       "help": "Validate release state for a target version.",
       "name": "release-check",
       "params": [
