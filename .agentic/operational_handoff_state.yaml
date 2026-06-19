@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4da64519a237aeadcc1078b11418e18a6526a68a
-  short: 4da64519
-  subject: Dereference low-risk obsolete docs (#1486)
+  full: ec5360930d0725f40f5394847fe24cbf84142127
+  short: ec536093
+  subject: Dereference active tests from obsolete docs (#1488)
 last_substantive_work_state:
-  full: 4da64519a237aeadcc1078b11418e18a6526a68a
-  short: 4da64519
-  subject: Dereference low-risk obsolete docs (#1486)
+  full: ec5360930d0725f40f5394847fe24cbf84142127
+  short: ec536093
+  subject: Dereference active tests from obsolete docs (#1488)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
