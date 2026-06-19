@@ -1,7 +1,0 @@
-terminal_log=docs/reports/terminal/20260518-215619_agent-next-smoke-003.log
-### RUN: sh .agentic/commands/current.sh
-AGENT NEXT SMOKE 003
-This command intentionally performs no repo mutation itself.
-It verifies that agent-next writes the command report, terminal log, latest command-run pointer, and visible PASS footer.
-### EXIT: 0
-### RESULT: PASS ###

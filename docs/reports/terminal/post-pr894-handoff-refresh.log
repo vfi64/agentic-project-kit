@@ -1,9 +1,0 @@
-POST_PR894_HANDOFF_REFRESH
-target_head=87407ac463b46638f340fc757ec452c46e803096
-target_subject=Merge pull request #894 from vfi64/docs/post-merge-gate-bootstrap-visibility
-status_changed=True
-current_handoff_changed=True
-prompt_path=docs/reports/terminal/v044-successor-chat-handoff-after-pr894.md
-prompt_returncode=0
-freshness_warning_present=True
-result=PASS

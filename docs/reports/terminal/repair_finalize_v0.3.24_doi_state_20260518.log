@@ -1,6 +1,0 @@
-# Terminal evidence: repair finalize v0.3.24 DOI planning PR
-
-- Repair reason: previous commit overwrote required STATUS/HANDOFF sections and failed documentation gates.
-- Repair action: restored STATUS/HANDOFF from `origin/main` and appended only focused closeout/planning notes.
-- Added document lifecycle headers to `docs/planning/PERSISTENT_HANDOFF_STATE.md`.
-- This repair preserves required coverage terms and fixes the failed document lifecycle audit.

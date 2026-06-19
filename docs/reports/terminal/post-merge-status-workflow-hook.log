@@ -1,4 +1,0 @@
-POST_MERGE_STATUS_WORKFLOW_HOOK
-target=docs/TEST_GATES.md
-changed=True
-result=PASS

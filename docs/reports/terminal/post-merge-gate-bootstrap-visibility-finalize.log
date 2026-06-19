@@ -1,6 +1,0 @@
-POST_MERGE_GATE_BOOTSTRAP_VISIBILITY_FINALIZE
-branch=docs/post-merge-gate-bootstrap-visibility
-status_after_add=?? docs/reports/terminal/post-merge-gate-bootstrap-visibility-finalize.log
-staged_files=<none>
-result=FAIL
-error=no_staged_changes

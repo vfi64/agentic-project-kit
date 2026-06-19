@@ -1,7 +1,0 @@
-# Terminal evidence: finalize v0.3.24 DOI state and handoff planning
-
-- PR #341 was merged into main: `17a2e8e Record v0.3.24 DOI metadata (#341)`.
-- Local validation after merge: `319 passed`, ruff PASS, check-docs PASS, doctor PASS.
-- Release verification for v0.3.24: PASS.
-- This finalize slice records the next planning direction: persistent handoff state first, parameterized actions second, GUI later.
-- Note: full raw terminal output for the previous manual verification was available in chat/terminal only. This file records the essential evidence as committed repository state.

@@ -88,6 +88,7 @@ REPORT_RETENTION_REFERENCE_EXCLUDED_PREFIXES = (
     "docs/reports/command_runs/",
     "docs/reports/branch_cleanup/",
     "docs/reports/ns-migration/",
+    "docs/reports/transfer_runs/",
     "docs/reference/agentic-kit-commands.json",
 )
 
@@ -273,17 +274,7 @@ def _is_report_retention_excluded_reference_file(rel: Path) -> bool:
     return any(text == prefix.rstrip("/") or text.startswith(prefix) for prefix in REPORT_RETENTION_REFERENCE_EXCLUDED_PREFIXES)
 
 
-def _text_file_contains(path: Path, needle: str) -> bool:
-    try:
-        return needle in path.read_text(encoding="utf-8")
-    except UnicodeDecodeError:
-        return False
-    except OSError:
-        return False
-
-
-def _has_reference_outside_report_retention_surfaces(base: Path, rel: Path) -> bool:
-    needle = rel.as_posix()
+def _iter_report_retention_reference_files(base: Path):
     for candidate in base.rglob("*"):
         if not candidate.is_file() or candidate.is_symlink():
             continue
@@ -293,9 +284,29 @@ def _has_reference_outside_report_retention_surfaces(base: Path, rel: Path) -> b
             continue
         if _is_report_retention_excluded_reference_file(candidate_rel):
             continue
-        if _text_file_contains(candidate, needle):
-            return True
-    return False
+        yield candidate
+
+
+def _referenced_report_retention_paths(base: Path, rels: list[Path]) -> set[Path]:
+    if not rels:
+        return set()
+    needles = {rel.as_posix(): rel for rel in rels}
+    referenced: set[Path] = set()
+    for candidate in _iter_report_retention_reference_files(base):
+        try:
+            content = candidate.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            continue
+        except OSError:
+            continue
+        for needle, rel in needles.items():
+            if rel in referenced:
+                continue
+            if needle in content:
+                referenced.add(rel)
+        if len(referenced) == len(needles):
+            break
+    return referenced
 
 
 def _report_retention_roots(base: Path) -> list[Path]:
@@ -326,7 +337,7 @@ def collect_report_retention_candidates(
             ordered = sorted(items, key=lambda item: item.stat().st_mtime, reverse=True)
             newest_by_parent[parent].update(ordered[:keep_last_per_parent])
 
-    candidates: list[ReportRetentionCandidate] = []
+    unreferenced_check: list[Path] = []
     for path in files:
         rel = path.relative_to(base)
         if path.suffix.lower() not in REPORT_RETENTION_AUTO_DELETE_SUFFIXES:
@@ -338,7 +349,12 @@ def collect_report_retention_candidates(
         age_seconds = now_value - path.stat().st_mtime
         if age_seconds < ttl_seconds:
             continue
-        if _has_reference_outside_report_retention_surfaces(base, rel):
+        unreferenced_check.append(rel)
+
+    referenced = _referenced_report_retention_paths(base, unreferenced_check)
+    candidates: list[ReportRetentionCandidate] = []
+    for rel in unreferenced_check:
+        if rel in referenced:
             continue
         candidates.append(
             ReportRetentionCandidate(
@@ -372,6 +388,7 @@ def execute_report_retention_gc(
 
     allowed_roots = [root_path.resolve() for root_path in _report_retention_roots(base)]
     removed: list[str] = []
+    referenced = _referenced_report_retention_paths(base, [item.path for item in candidates])
     for item in candidates:
         target = base / item.path
         resolved = target.resolve()
@@ -381,7 +398,7 @@ def execute_report_retention_gc(
             return "FAIL_UNREGISTERED_PATH", item.path.as_posix()
         if _is_report_keep_name(target.name):
             return "FAIL_PROTECTED_REPORT_RETENTION_FILE", item.path.as_posix()
-        if _has_reference_outside_report_retention_surfaces(base, item.path):
+        if item.path in referenced:
             return "FAIL_REFERENCED_REPORT_RETENTION_FILE", item.path.as_posix()
         if not target.is_file():
             return "FAIL_NOT_A_FILE", item.path.as_posix()

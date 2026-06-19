@@ -1,6 +1,0 @@
-terminal_log=docs/reports/terminal/20260518-215910_agent-next-fail-smoke-004.log
-### RUN: sh .agentic/commands/current.sh
-AGENT NEXT FAIL SMOKE 004
-This command intentionally exits with code 7 to verify reply=f and remote evidence.
-### EXIT: 7
-### RESULT: FAIL ###
