@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 59fa631399d3712a54d71658b4bf731693470fba
-  short: 59fa6313
-  subject: Prepare v0.4.10 release (#1508)
+  full: c70ce66241668de02ab71262927c27eaed7a02fb
+  short: c70ce662
+  subject: Record v0.4.10 DOI closeout metadata (#1510)
 last_substantive_work_state:
-  full: 59fa631399d3712a54d71658b4bf731693470fba
-  short: 59fa6313
-  subject: Prepare v0.4.10 release (#1508)
+  full: c70ce66241668de02ab71262927c27eaed7a02fb
+  short: c70ce662
+  subject: Record v0.4.10 DOI closeout metadata (#1510)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
