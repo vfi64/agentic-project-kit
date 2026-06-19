@@ -115,8 +115,8 @@ Destructive documentation automation must require explicit human approval. Garba
 - docs/architecture/AGENTIC_CODING_RESEARCH_INPUTS.md: labelled research and planning input linked to architecture
 - docs/ideas/*.md: non-binding idea notes unless promoted
 - docs/planning/V0.3.8_SCOPE.md: historical planning candidate requiring lifecycle review
-- docs/roadmap/V0.3.0_OUTPUT_REPAIR_PLAN.md: historical roadmap or planning candidate requiring lifecycle review
-- docs/strategy/V0.4_PROFESSIONAL_SINGLE_USER_STRATEGY.md: current strategy document for professional single-user direction
+- superseded historical output-repair roadmap candidate; current direction is `docs/planning/project_direction.yaml`
+- superseded historical professional single-user strategy candidate; current strategy is `docs/planning/project_direction.yaml`
 
 ## Invariants
 
