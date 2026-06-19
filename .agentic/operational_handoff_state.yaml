@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9fe7c6912ba06922288e7c97aa4480c6219ed38c
-  short: 9fe7c691
-  subject: Add generated handoff projection discipline rules (#1506)
+  full: 59fa631399d3712a54d71658b4bf731693470fba
+  short: 59fa6313
+  subject: Prepare v0.4.10 release (#1508)
 last_substantive_work_state:
-  full: 9fe7c6912ba06922288e7c97aa4480c6219ed38c
-  short: 9fe7c691
-  subject: Add generated handoff projection discipline rules (#1506)
+  full: 59fa631399d3712a54d71658b4bf731693470fba
+  short: 59fa6313
+  subject: Prepare v0.4.10 release (#1508)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
