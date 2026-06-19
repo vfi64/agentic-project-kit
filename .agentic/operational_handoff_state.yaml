@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6500033ca10d1028e79385b1d916162b9082d78d
-  short: 6500033c
-  subject: Harden report retention GC cleanup (#1494)
+  full: 4d323e522415e6270d3da058f76bdd05b7aca2ef
+  short: 4d323e52
+  subject: Add Markdown report retention policy (#1496)
 last_substantive_work_state:
-  full: 6500033ca10d1028e79385b1d916162b9082d78d
-  short: 6500033c
-  subject: Harden report retention GC cleanup (#1494)
+  full: 4d323e522415e6270d3da058f76bdd05b7aca2ef
+  short: 4d323e52
+  subject: Add Markdown report retention policy (#1496)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
