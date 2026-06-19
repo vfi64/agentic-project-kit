@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: ec5360930d0725f40f5394847fe24cbf84142127
-  short: ec536093
-  subject: Dereference active tests from obsolete docs (#1488)
+  full: 4f4245eccb53e2d143e7084415a0e98ffaf5957c
+  short: 4f4245ec
+  subject: Add report retention garbage collection (#1490)
 last_substantive_work_state:
-  full: ec5360930d0725f40f5394847fe24cbf84142127
-  short: ec536093
-  subject: Dereference active tests from obsolete docs (#1488)
+  full: 4f4245eccb53e2d143e7084415a0e98ffaf5957c
+  short: 4f4245ec
+  subject: Add report retention garbage collection (#1490)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
