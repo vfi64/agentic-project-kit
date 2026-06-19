@@ -126,15 +126,7 @@ def test_sync_main_orchestrates_safe_startup_sequence(monkeypatch):
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "PASS"
     assert calls == [
-        [
-            "git",
-            "restore",
-            "--",
-            ".agentic/transfer/inbox/next_command.py.txt",
-            ".agentic/transfer/outbox/last_result.txt",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-        ],
+        ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"],
         ["./.venv/bin/agentic-kit", "rules", "acknowledge"],
         ["./.venv/bin/agentic-kit", "transfer", "branch-switch", "main", "--pull"],
         ["./.venv/bin/agentic-kit", "rules", "acknowledge"],
