@@ -31,6 +31,13 @@ AUDIT_IMPLEMENTATION_PATHS = {
     "src/agentic_project_kit/work_order_validator.py",
 }
 
+ALLOWED_REPEATED_FUNCTION_NAMES = {
+    # Small standalone scripts intentionally keep these local helpers instead of
+    # coupling old workflow tools to a shared runtime module.
+    "current_branch",
+    "run",
+}
+
 
 RISK_PATTERNS = (
     ("shell_true", re.compile(r"\bshell\s*=\s*True\b"), "subprocess shell=True should be justified or avoided"),
@@ -158,6 +165,8 @@ def _duplicate_function_findings(root: Path, files: list[Path]) -> list[ProgramF
         if counts[name] < 4:
             continue
         if name.startswith("_") or name in {"main", "as_dict", "returncode", "status"}:
+            continue
+        if name in ALLOWED_REPEATED_FUNCTION_NAMES:
             continue
         findings.append(
             ProgramFinding(

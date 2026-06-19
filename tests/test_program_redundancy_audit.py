@@ -96,3 +96,58 @@ def test_program_redundancy_audit_reviews_validator_pattern_lists_without_blocki
     assert result.ok is True
     assert {item.kind for item in result.findings} >= {"os_system", "shell_true", "eval_exec"}
 
+def test_program_redundancy_audit_allows_repeated_current_branch_helpers(tmp_path: Path) -> None:
+    for index in range(4):
+        src = tmp_path / "tools" / f"workflow_tool_{index}.py"
+        src.parent.mkdir(parents=True, exist_ok=True)
+        src.write_text(
+            "def current_branch() -> str:\n"
+            "    return 'main'\n",
+            encoding="utf-8",
+        )
+
+    result = audit_program_redundancy(tmp_path)
+
+    assert result.ok is True
+    assert not any(
+        item.kind == "repeated_function_name" and item.text == "current_branch"
+        for item in result.findings
+    )
+
+
+def test_program_redundancy_audit_still_reviews_unallowlisted_repeated_helpers(tmp_path: Path) -> None:
+    for index in range(4):
+        src = tmp_path / "tools" / f"workflow_tool_{index}.py"
+        src.parent.mkdir(parents=True, exist_ok=True)
+        src.write_text(
+            "def duplicated_helper() -> str:\n"
+            "    return 'value'\n",
+            encoding="utf-8",
+        )
+
+    result = audit_program_redundancy(tmp_path)
+
+    assert result.ok is True
+    assert any(
+        item.kind == "repeated_function_name" and item.text == "duplicated_helper"
+        for item in result.findings
+    )
+
+def test_program_redundancy_audit_allows_repeated_run_helpers(tmp_path: Path) -> None:
+    for index in range(5):
+        src = tmp_path / "tools" / f"workflow_tool_{index}.py"
+        src.parent.mkdir(parents=True, exist_ok=True)
+        src.write_text(
+            "def run() -> int:\n"
+            "    return 0\n",
+            encoding="utf-8",
+        )
+
+    result = audit_program_redundancy(tmp_path)
+
+    assert result.ok is True
+    assert not any(
+        item.kind == "repeated_function_name" and item.text == "run"
+        for item in result.findings
+    )
+
