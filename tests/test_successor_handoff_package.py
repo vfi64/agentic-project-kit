@@ -423,7 +423,28 @@ def test_successor_execution_contract_contains_required_agentic_kit_rule_ids() -
         "repo-backed-rules-and-gates",
         "gc-retention-not-document-migration",
         "ns-legacy-not-active-control-plane",
+        "generated-handoff-projection-update-policy",
+        "patch-cycle-diagnostic-gate",
+        "copy-paste-output-discipline",
     } <= rule_ids
+
+
+def test_handoff_projection_contract_names_generated_paths_and_update_policy() -> None:
+    from agentic_project_kit.successor_handoff_package import build_execution_contract
+
+    contract = build_execution_contract(_minimal_successor_context())
+    projection = contract["handoff_projection_contract"]
+
+    assert "docs/handoff/NEXT_CHAT_BOOTSTRAP.md" in projection["generated_projection_paths"]
+    assert "docs/reports/handoff-packages/latest/execution_contract.json" in projection["generated_projection_paths"]
+    assert projection["source_of_truth"] == "generator_and_machine_readable_successor_package"
+    assert projection["generator_command"] == "agentic-kit transfer prepare-successor-handoff --render-prompt"
+    assert "manual direct edits to generated handoff projections" in projection["forbidden_update_path"]
+    assert {
+        "generated-handoff-projection-update-policy",
+        "patch-cycle-diagnostic-gate",
+        "copy-paste-output-discipline",
+    } <= set(contract["general_contract"]["rule_ids"])
 
 
 def test_successor_prompt_renders_machine_readable_precedence_and_state_separation() -> None:
@@ -459,6 +480,11 @@ def test_successor_prompt_renders_machine_readable_precedence_and_state_separati
     assert "not a feature-branch pre-PR gate" in prompt
     assert "docs/DOCUMENTATION_REGISTRY.yaml" in prompt
     assert "Garbage Collector nur für technische Retention" in prompt
+    assert "generated handoff projections" in prompt
+    assert "manual direct edits to generated handoff projections" in prompt
+    assert "Patch-cycle diagnostic gate" in prompt
+    assert "next_mutation_allowed" in prompt
+    assert "Chat output after local blocks should be only `LOG=...` and `RC=...`" in prompt
 
 
 def test_successor_validation_requires_contract_layers() -> None:
@@ -499,3 +525,32 @@ def test_successor_validation_requires_contract_layers() -> None:
     assert "missing_current_state_contract" in codes
     assert "missing_handoff_projection_contract" in codes
     assert "missing_execution_contract_rule_ids" in codes
+
+
+def test_successor_validation_requires_generated_projection_update_policy() -> None:
+    import json
+
+    from agentic_project_kit.successor_handoff_package import build_execution_contract, validate_successor_outputs
+
+    context = _minimal_successor_context()
+    context["long_term_memory"] = {"mandatory_sources": []}
+    contract = build_execution_contract(context)
+    projection = contract["handoff_projection_contract"]
+    projection.pop("generated_projection_paths")
+    projection.pop("source_of_truth")
+    projection.pop("generator_command")
+    projection["forbidden_update_path"] = []
+
+    report = validate_successor_outputs(
+        {
+            "execution_contract.json": json.dumps(contract),
+            "successor_prompt.md": "",
+        },
+        context,
+    )
+
+    codes = {finding["code"] for finding in report["findings"]}
+    assert "missing_generated_handoff_projection_paths" in codes
+    assert "invalid_handoff_projection_source_of_truth" in codes
+    assert "missing_handoff_projection_generator_command" in codes
+    assert "missing_forbidden_generated_handoff_update_path" in codes

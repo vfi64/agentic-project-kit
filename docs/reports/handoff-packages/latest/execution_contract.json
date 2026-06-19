@@ -51,22 +51,25 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1504-handoff-refresh",
+      "branch": "codex/handoff-contract-discipline-rules",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "e6f0a6f0e3874b219fd4ec9a823acc2cf49b3682",
+      "head": "12183dff65b432807dcc23c971de1ee72a4de1b3",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/agentic-project-kit",
-      "origin_main": "e6f0a6f0e3874b219fd4ec9a823acc2cf49b3682",
+      "origin_main": "12183dff65b432807dcc23c971de1ee72a4de1b3",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
   },
   "general_contract": {
     "rule_ids": [
+      "copy-paste-output-discipline",
       "documentation-authority-model",
       "gc-retention-not-document-migration",
+      "generated-handoff-projection-update-policy",
       "ns-legacy-not-active-control-plane",
+      "patch-cycle-diagnostic-gate",
       "repo-backed-rules-and-gates",
       "successor-package-not-prompt-only",
       "wrapper-first-complete-development-cycle"
@@ -93,7 +96,30 @@
     }
   },
   "handoff_projection_contract": {
+    "allowed_update_path": [
+      "Change successor_handoff_package.py, execution contract inputs, or repo-backed rule sources.",
+      "Add or update tests and validation for new handoff content.",
+      "Run agentic-kit transfer prepare-successor-handoff --render-prompt to regenerate projections."
+    ],
     "do_not_use_uploaded_or_copied_prompt_text_as_sole_source": true,
+    "forbidden_update_path": [
+      "manual direct edits to generated handoff projections",
+      "adding durable rules only to docs/handoff/*.md",
+      "editing latest handoff-package JSON/YAML/Markdown as the primary patch"
+    ],
+    "generated_projection_paths": [
+      "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+      "docs/handoff/START_NEW_CHAT_PROMPT.md",
+      "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+      "docs/reports/handoff-packages/latest/execution_contract.json",
+      "docs/reports/handoff-packages/latest/source_manifest.json",
+      "docs/reports/handoff-packages/latest/successor_context.yaml",
+      "docs/reports/handoff-packages/latest/successor_prompt.md",
+      "docs/reports/handoff-packages/latest/validation_report.json",
+      "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+      "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+    ],
+    "generator_command": "agentic-kit transfer prepare-successor-handoff --render-prompt",
     "machine_readable_files_take_precedence": true,
     "must_read_files": [
       "docs/reports/handoff-packages/latest/execution_contract.json",
@@ -103,17 +129,18 @@
       "docs/reports/handoff-packages/latest/successor_prompt.md"
     ],
     "prompt_is_projection_only": true,
+    "source_of_truth": "generator_and_machine_readable_successor_package",
     "stale_local_prompt_files_are_not_authoritative": true
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1504-handoff-refresh",
+    "branch": "codex/handoff-contract-discipline-rules",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "e6f0a6f0e3874b219fd4ec9a823acc2cf49b3682",
+    "head": "12183dff65b432807dcc23c971de1ee72a4de1b3",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "e6f0a6f0e3874b219fd4ec9a823acc2cf49b3682",
+    "origin_main": "12183dff65b432807dcc23c971de1ee72a4de1b3",
     "worktree_clean": false
   },
   "rules": [
@@ -270,6 +297,52 @@
       "priority": "critical",
       "rule_id": "ns-legacy-not-active-control-plane",
       "scope": "legacy-ns-references"
+    },
+    {
+      "forbidden": [
+        "manual direct edits to generated handoff projection files as the primary source of a new rule",
+        "making copied prompt text the durable source of truth"
+      ],
+      "must": [
+        "Treat docs/handoff/*.md and latest successor package files as generated projections.",
+        "Change the generator, execution contract, validation, or rule source before changing projected handoff content.",
+        "Regenerate projections with agentic-kit transfer prepare-successor-handoff --render-prompt."
+      ],
+      "priority": "critical",
+      "rule_id": "generated-handoff-projection-update-policy",
+      "scope": "generated handoff projections"
+    },
+    {
+      "forbidden": [
+        "starting a third mutation in the same patch family without diagnosis",
+        "continuing a micro-patch cascade after repeated red tests"
+      ],
+      "must": [
+        "After one failed patch, allow exactly one direct correction in the same patch family.",
+        "After a second failure in the same patch family, stop mutations and run a bounded diagnosis block.",
+        "Classify product bug versus test-model bug before another mutation.",
+        "Record next_mutation_allowed explicitly before continuing."
+      ],
+      "priority": "critical",
+      "rule_id": "patch-cycle-diagnostic-gate",
+      "scope": "failed patch/test cycles"
+    },
+    {
+      "forbidden": [
+        "cat whole diagnostic or summary files into chat",
+        "unbounded grep over docs/reports, .agentic/outbox, generated JSON, or logs",
+        "tail or grep excerpts as chat output for long workflows",
+        "large terminal output pasted directly into chat"
+      ],
+      "must": [
+        "After local blocks, chat output should be only LOG=... and RC=....",
+        "Write large outputs to tmp/*.log or ~/Downloads/*.log.",
+        "Use compact JSON summaries for diagnostics.",
+        "Compress or summarize large logs before discussion."
+      ],
+      "priority": "critical",
+      "rule_id": "copy-paste-output-discipline",
+      "scope": "local copy-and-paste workflows"
     },
     {
       "forbidden": [
