@@ -10,7 +10,7 @@ ACTIVE_DOCUMENTATION_PATHS = [
     Path("docs/governance/CHAT_COMMUNICATION_CONTRACT.md"),
     Path("docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md"),
     Path("docs/governance/TERMINAL_SAFETY.md"),
-    Path("docs/plans/V040_DOCUMENTATION_FOLLOW_UP.md"),
+    Path("docs/planning/project_direction.yaml"),
 ]
 
 GERMAN_ACTIVE_DOC_MARKERS = [
