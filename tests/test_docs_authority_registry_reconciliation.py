@@ -31,16 +31,19 @@ def test_project_direction_is_only_active_direction_source() -> None:
 
 def test_legacy_ns_planning_docs_are_not_active_direction_sources() -> None:
     registry = _registry()
-    legacy_paths = [
-        "docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md",
-        "docs/planning/NS_RELEASE_SHORTCUTS.md",
-        "docs/planning/NS_UP_PR_COMPLETION.md",
-        "docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md",
+    legacy_ns_entries = [
+        (path, entry)
+        for path, entry in registry.items()
+        if path.startswith("docs/planning/")
+        and (
+            "/NS_" in path
+            or "NO_COPY_NS_WORKFLOW_CONTROL" in path
+        )
     ]
 
-    for path in legacy_paths:
-        if Path(path).exists():
-            assert registry[path]["status"] == "superseded", path
+    assert legacy_ns_entries
+    for path, entry in legacy_ns_entries:
+        assert entry["status"] == "superseded", path
 
 
 def test_workflow_docs_remain_operational_not_project_direction() -> None:
@@ -56,9 +59,10 @@ def test_workflow_docs_remain_operational_not_project_direction() -> None:
         assert registry[rel]["status"] == "active", rel
 
 
-def test_old_handoff_overlay_is_delete_candidate_not_active_handoff() -> None:
-    path = "docs/handoff/CURRENT_HANDOFF_OVERLAY_AFTER_PR660.md"
-    if Path(path).exists():
-        entry = _registry()[path]
-        assert entry["status"] == "delete_candidate"
-        assert entry["class"] == "historical archive"
+def test_delete_candidates_are_not_active_handoff_authority() -> None:
+    registry = _registry()
+
+    for path, entry in registry.items():
+        if path.startswith("docs/handoff/") and entry.get("status") == "delete_candidate":
+            assert entry["class"] == "historical archive"
+            assert path != "docs/handoff/CURRENT_HANDOFF.md"

@@ -42,7 +42,7 @@ def test_source_scope_excludes_generated_reports_and_transfer_outbox() -> None:
     assert _is_probably_text("ns")
     assert _is_probably_text("tools/ns-dev-local-feature-gate.sh")
     assert _is_probably_text("src/agentic_project_kit/local_feature_gate.py")
-    assert _is_probably_text("docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md")
+    assert _is_probably_text("docs/DOCUMENTATION_REGISTRY.yaml")
 
     assert not _is_probably_text("docs/reports/terminal/old.log")
     assert not _is_probably_text("docs/reports/transfer_runs/report.json")
@@ -53,7 +53,7 @@ def test_source_scope_excludes_generated_reports_and_transfer_outbox() -> None:
 def test_path_scope_excludes_transfer_artifacts_directly() -> None:
     assert _path_in_scope("ns")
     assert _path_in_scope("tools/ns-dev-local-feature-gate.sh")
-    assert _path_in_scope("docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md")
+    assert _path_in_scope("docs/DOCUMENTATION_REGISTRY.yaml")
 
     assert not _path_in_scope(".agentic/transfer/inbox/current.yaml")
     assert not _path_in_scope(".agentic/transfer/inbox/b11_transfer_report_contract_semantics_apply.py.txt")

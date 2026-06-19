@@ -11,7 +11,7 @@ def test_slugify_title_creates_stable_file_stem() -> None:
 
 
 def test_planning_doc_path_uses_docs_planning_and_uppercase_filename(tmp_path: Path) -> None:
-    assert planning_doc_path(tmp_path, "GUI Cockpit Expansion Roadmap") == tmp_path / "docs/planning/GUI_COCKPIT_EXPANSION_ROADMAP.md"
+    assert planning_doc_path(tmp_path, "Project Direction") == tmp_path / "docs/planning/PROJECT_DIRECTION.md"
 
 
 def test_render_planning_doc_emits_lifecycle_metadata() -> None:
