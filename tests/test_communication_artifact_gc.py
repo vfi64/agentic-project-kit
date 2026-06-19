@@ -291,6 +291,70 @@ def test_report_retention_ignores_transfer_run_embedded_references(tmp_path: Pat
     assert embedded_reference.exists()
 
 
+def test_report_retention_collects_generated_successor_handoff_markdown(tmp_path: Path) -> None:
+    import os
+    from agentic_project_kit.communication_artifact_gc import (
+        collect_report_retention_candidates,
+        execute_report_retention_gc,
+    )
+
+    terminal = tmp_path / "docs" / "reports" / "terminal"
+    terminal.mkdir(parents=True)
+    generated = terminal / "post-pr1200-successor-chat-handoff.md"
+    legacy_named = terminal / "post-pr1200-kit-generated-successor-handoff.md"
+    generic = terminal / "manual-audit-report.md"
+    generated.write_text("# generated successor prompt\n", encoding="utf-8")
+    legacy_named.write_text("# legacy named semantic report\n", encoding="utf-8")
+    generic.write_text("# keep as semantic report\n", encoding="utf-8")
+    now = 1_000_000.0
+    old_time = now - (2 * 24 * 60 * 60)
+    os.utime(generated, (old_time, old_time))
+    os.utime(legacy_named, (old_time, old_time))
+    os.utime(generic, (old_time, old_time))
+
+    found = collect_report_retention_candidates(tmp_path, now=now, keep_last_per_parent=0)
+
+    assert [item.path for item in found] == [
+        Path("docs/reports/terminal/post-pr1200-successor-chat-handoff.md")
+    ]
+
+    outcome, message = execute_report_retention_gc(
+        tmp_path,
+        execute=True,
+        now=now,
+        keep_last_per_parent=0,
+    )
+
+    assert outcome == "PASS_COLLECTED"
+    assert "docs/reports/terminal/post-pr1200-successor-chat-handoff.md" in message
+    assert not generated.exists()
+    assert legacy_named.exists()
+    assert generic.exists()
+
+
+def test_report_retention_preserves_generated_markdown_referenced_by_active_docs(tmp_path: Path) -> None:
+    import os
+    from agentic_project_kit.communication_artifact_gc import collect_report_retention_candidates
+
+    terminal = tmp_path / "docs" / "reports" / "terminal"
+    terminal.mkdir(parents=True)
+    generated = terminal / "v044-successor-chat-handoff-after-pr900.md"
+    generated.write_text("# generated successor prompt\n", encoding="utf-8")
+    (tmp_path / "docs" / "handoff").mkdir(parents=True)
+    (tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md").write_text(
+        "Use docs/reports/terminal/v044-successor-chat-handoff-after-pr900.md.\n",
+        encoding="utf-8",
+    )
+    now = 1_000_000.0
+    old_time = now - (2 * 24 * 60 * 60)
+    os.utime(generated, (old_time, old_time))
+
+    found = collect_report_retention_candidates(tmp_path, now=now, keep_last_per_parent=0)
+
+    assert [item.path for item in found] == []
+    assert generated.exists()
+
+
 def test_tmp_log_gc_keeps_protected_names_and_last_n_logs(tmp_path: Path) -> None:
     import os
     from agentic_project_kit.communication_artifact_gc import collect_expired_tmp_logs

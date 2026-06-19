@@ -28,7 +28,11 @@ def artifact_gc_command(
     tmp_logs: bool = typer.Option(False, "--tmp-logs", help="Collect expired local tmp logs."),
     local_tmp: bool = typer.Option(False, "--local-tmp", help="Use repository-local tmp/ instead of /tmp for --tmp-logs."),
     transfer_runs: bool = typer.Option(False, "--transfer-runs", help="Collect expired docs/reports/transfer_runs files."),
-    report_retention: bool = typer.Option(False, "--report-retention", help="Collect expired report-like files under docs/terminal and selected docs/reports directories."),
+    report_retention: bool = typer.Option(
+        False,
+        "--report-retention",
+        help="Collect expired report-like files and generated successor-handoff Markdown under selected docs/report surfaces.",
+    ),
     execute: bool = typer.Option(False, "--execute", help="Actually delete candidates. Default is dry-run."),
 ) -> None:
     """Dry-run by default garbage collector for transient communication artifacts."""

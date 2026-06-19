@@ -86,7 +86,7 @@
         },
         {
           "default": false,
-          "help": "Collect expired report-like files under docs/terminal and selected docs/reports directories.",
+          "help": "Collect expired report-like files and generated successor-handoff Markdown under selected docs/report surfaces.",
           "is_flag": true,
           "metavar": null,
           "multiple": false,

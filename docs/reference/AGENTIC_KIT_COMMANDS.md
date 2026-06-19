@@ -30,7 +30,7 @@ Dry-run by default garbage collector for transient communication artifacts.
 | `tmp_logs` | `TyperOption` | --tmp-logs | `False` | `False` | Collect expired local tmp logs. |
 | `local_tmp` | `TyperOption` | --local-tmp | `False` | `False` | Use repository-local tmp/ instead of /tmp for --tmp-logs. |
 | `transfer_runs` | `TyperOption` | --transfer-runs | `False` | `False` | Collect expired docs/reports/transfer_runs files. |
-| `report_retention` | `TyperOption` | --report-retention | `False` | `False` | Collect expired report-like files under docs/terminal and selected docs/reports directories. |
+| `report_retention` | `TyperOption` | --report-retention | `False` | `False` | Collect expired report-like files and generated successor-handoff Markdown under selected docs/report surfaces. |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Actually delete candidates. Default is dry-run. |
 
 ### `agentic-kit audit-absolute-path-portability`

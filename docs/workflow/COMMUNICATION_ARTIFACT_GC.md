@@ -21,7 +21,7 @@ The goal is deterministic technical quality, not quick cleanup. A cleanup that r
 
 ## Current compatibility targets
 
-The registry covers the existing temporary and communication artifact classes currently used by the repository: `/tmp/agentic-project-kit-*.log`, `docs/reports/terminal/*.log`, `docs/reports/terminal/LATEST_TERMINAL_LOG.txt`, `docs/reports/command_runs/*.md`, `.agentic/commands/inbox/*`, and `.agentic/commands/current.*`.
+The registry covers the existing temporary and communication artifact classes currently used by the repository: `/tmp/agentic-project-kit-*.log`, `docs/reports/terminal/*.log`, generated successor-handoff Markdown snapshots under `docs/reports/terminal/`, `docs/reports/terminal/LATEST_TERMINAL_LOG.txt`, `docs/reports/command_runs/*.md`, `.agentic/commands/inbox/*`, and `.agentic/commands/current.*`.
 
 
 ## Implemented hardening status
@@ -31,6 +31,7 @@ The current implementation hardens the communication artifact GC in bounded step
 - `.agentic/commands/current.yaml` and `.agentic/commands/current.sh` are treated as transient runner compatibility files.
 - Symlinked transient artifacts are rejected with `FAIL_SYMLINK_ARTIFACT` and are never followed or deleted.
 - Repo-backed terminal logs under `docs/reports/terminal/*.log` are protected evidence.
+- Generated successor-handoff Markdown snapshots under `docs/reports/terminal/` may be collected only by the report-retention route after TTL, newest-file, keep-name, and active-reference checks.
 - `docs/reports/terminal/LATEST_TERMINAL_LOG.txt` is a protected pointer and must not be collected.
 - Command-run reports under `docs/reports/command_runs/*.md` are protected evidence.
 - Command inbox files under `.agentic/commands/inbox/*` are protected pending or consumable commands and are never generic temporary files.
@@ -113,7 +114,11 @@ Retention policy:
   - `latest-remote-next-report.json`
 - `artifact-gc --report-retention` may collect expired `.log` and `.json`
   report-retention files under governed report surfaces when they are not
-  referenced by active non-report documents.
+  referenced by active non-report documents. It may also collect generated
+  successor-handoff Markdown snapshots under `docs/reports/terminal/` that match
+  the explicit post-PR/versioned handoff filename patterns. It must not collect
+  generic Markdown reports such as command-run reports, audits, plans, or
+  semantic closeout notes.
 - GC must not delete current handoff files, latest handoff package manifests, or
   files referenced by the latest handoff/source manifest.
 - GC must not delete protected governance/status/handoff files.
