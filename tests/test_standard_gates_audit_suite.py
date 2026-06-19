@@ -1,0 +1,81 @@
+from __future__ import annotations
+
+from pathlib import Path
+from collections.abc import Sequence
+
+from agentic_project_kit import __version__ as PACKAGE_VERSION
+from agentic_project_kit.standard_gates_audit_suite import (
+    REQUIRED_STANDARD_GATE_COMMANDS,
+    evaluate_standard_gates_audit_suite,
+    render_standard_gates_audit_suite,
+)
+
+
+REQUIRED_NAMES = {
+    "audit-patch-failure-discipline",
+    "audit-ns-legacy-references",
+    "audit-absolute-path-portability",
+    "audit-doc-currency",
+    "audit-planning-docs-consolidation",
+    "audit-program-redundancy",
+    "release-publish",
+}
+
+
+def test_standard_gates_audit_suite_contains_required_gates() -> None:
+    command_names = {command[0] for command in REQUIRED_STANDARD_GATE_COMMANDS}
+
+    assert REQUIRED_NAMES <= command_names
+
+
+def test_standard_gates_audit_suite_passes_when_commands_pass(tmp_path: Path) -> None:
+    seen: list[tuple[str, ...]] = []
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        seen.append(tuple(args))
+        return 0, "PASS\n"
+
+    result = evaluate_standard_gates_audit_suite(tmp_path, version="9.9.9", runner=runner)
+
+    assert result.ok is True
+    assert result.version == "9.9.9"
+    assert any("release-publish" in args for args in seen)
+    assert any("9.9.9" in args for args in seen)
+
+
+def test_standard_gates_audit_suite_fails_when_required_gate_fails(tmp_path: Path) -> None:
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        if "audit-doc-currency" in args:
+            return 1, "BLOCKER_COUNT=1\n"
+        return 0, "PASS\n"
+
+    result = evaluate_standard_gates_audit_suite(tmp_path, runner=runner)
+
+    assert result.ok is False
+    assert any(check.name == "audit-doc-currency" for check in result.blockers)
+
+
+def test_standard_gates_audit_suite_default_version_follows_package_version(tmp_path: Path) -> None:
+    seen: list[tuple[str, ...]] = []
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        seen.append(tuple(args))
+        return 0, "PASS\n"
+
+    result = evaluate_standard_gates_audit_suite(tmp_path, runner=runner)
+
+    assert result.version == PACKAGE_VERSION
+    assert any(PACKAGE_VERSION in args for args in seen)
+
+
+def test_render_standard_gates_audit_suite_lists_blockers(tmp_path: Path) -> None:
+    result = evaluate_standard_gates_audit_suite(
+        tmp_path,
+        runner=lambda args, cwd: (1, "FAIL\n"),
+    )
+
+    rendered = render_standard_gates_audit_suite(result)
+
+    assert "STANDARD_GATES_AUDIT_SUITE" in rendered
+    assert "STATUS=FAIL" in rendered
+    assert "BLOCKER=" in rendered
