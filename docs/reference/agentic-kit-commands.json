@@ -86,6 +86,20 @@
         },
         {
           "default": false,
+          "help": "Collect expired report-like files under docs/terminal and selected docs/reports directories.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "report_retention",
+          "opts": [
+            "--report-retention"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
           "help": "Actually delete candidates. Default is dry-run.",
           "is_flag": true,
           "metavar": null,
