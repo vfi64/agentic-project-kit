@@ -1,13 +1,119 @@
 {
+  "current_state_contract": {
+    "document_registry_source": "docs/DOCUMENTATION_REGISTRY.yaml",
+    "next_action_rule": "Use current_state_contract only as continuation state; do not promote it to durable rules.",
+    "open_tasks": [
+      {
+        "files": [
+          "docs/planning/project_direction.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "project-direction",
+        "status": "active",
+        "summary": "Unify strategy, roadmap, and ideas into a machine-readable source for v0.4.10"
+      },
+      {
+        "files": [
+          "docs/planning/project_direction.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "docs-reconciliation",
+        "status": "active",
+        "summary": "Reconcile docs/planning, docs/plans, docs/roadmap, docs/strategy, and docs/workflow for v0.4.10"
+      },
+      {
+        "files": [
+          "docs/planning/project_direction.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "release-v0.4.10",
+        "status": "planned",
+        "summary": "Prepare and publish v0.4.10 for v0.4.10"
+      },
+      {
+        "files": [
+          "docs/planning/project_direction.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "gui-gatekeeper",
+        "status": "planned",
+        "summary": "Start deterministic GUI gatekeeper for v0.5.0"
+      }
+    ],
+    "open_tasks_source": "docs/planning/project_direction.yaml",
+    "recent_lessons": [
+      "The old prepare-successor-handoff mechanism is not sufficient as a standalone chat-switch source.",
+      "Successor handoff must combine repo-backed long-term context with explicit short-term local work state.",
+      "Generated prompt files must be deterministic projections, not accumulative append targets.",
+      "Stale prompt markers, literal backslash-n artifacts, and old current-state PR anchors must block handoff trust.",
+      "The copy prompt must be usable by other LLMs, not only ChatGPT.",
+      "After v0.4.9, release metadata preparation must have one supported agentic-kit route before manual-metadata gates are tightened.",
+      "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
+    ],
+    "repo": {
+      "branch": "docs/post-pr1502-handoff-refresh",
+      "dirty_paths": [],
+      "full_name": "vfi64/agentic-project-kit",
+      "head": "03f559fb04aa9636393ee060127fc2771c98dff8",
+      "head_matches_origin_main": true,
+      "local_path": "cd /path/to/agentic-project-kit",
+      "origin_main": "03f559fb04aa9636393ee060127fc2771c98dff8",
+      "worktree_clean": false
+    },
+    "scope": "current-continuation-state"
+  },
+  "general_contract": {
+    "rule_ids": [
+      "documentation-authority-model",
+      "gc-retention-not-document-migration",
+      "ns-legacy-not-active-control-plane",
+      "repo-backed-rules-and-gates",
+      "successor-package-not-prompt-only",
+      "wrapper-first-complete-development-cycle"
+    ],
+    "scope": "durable-agentic-kit-operating-model",
+    "source_authorities": [
+      ".agentic/compiled_agent_context.yaml",
+      ".agentic/transfer_safety_rules.yaml",
+      ".agentic/transfer/one_command_transfer_protocol.yaml",
+      "docs/planning/project_direction.yaml",
+      "docs/DOCUMENTATION_REGISTRY.yaml",
+      "docs/reference/agentic-kit-commands.json",
+      "docs/reference/AGENTIC_KIT_COMMANDS.md"
+    ],
+    "summary": {
+      "agentic_kit_is_control_plane": true,
+      "complete_development_cycle_required": true,
+      "do_not_plan_from_stale_chat_memory": true,
+      "documentation_authority_model_required": true,
+      "gc_is_retention_not_document_migration": true,
+      "ns_is_legacy_not_active_control_plane": true,
+      "repo_backed_rules_and_gates_required": true,
+      "wrapper_first": true
+    }
+  },
+  "handoff_projection_contract": {
+    "do_not_use_uploaded_or_copied_prompt_text_as_sole_source": true,
+    "machine_readable_files_take_precedence": true,
+    "must_read_files": [
+      "docs/reports/handoff-packages/latest/execution_contract.json",
+      "docs/reports/handoff-packages/latest/successor_context.yaml",
+      "docs/reports/handoff-packages/latest/validation_report.json",
+      "docs/reports/handoff-packages/latest/source_manifest.json",
+      "docs/reports/handoff-packages/latest/successor_prompt.md"
+    ],
+    "prompt_is_projection_only": true,
+    "stale_local_prompt_files_are_not_authoritative": true
+  },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1500-handoff-refresh",
+    "branch": "docs/post-pr1502-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "24fb9714703d07bba919132e3083c6a60cecfa1e",
+    "head": "03f559fb04aa9636393ee060127fc2771c98dff8",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "24fb9714703d07bba919132e3083c6a60cecfa1e",
+    "origin_main": "03f559fb04aa9636393ee060127fc2771c98dff8",
     "worktree_clean": false
   },
   "rules": [
@@ -73,6 +179,97 @@
       "priority": "critical",
       "rule_id": "bootstrap_acceptance_gate",
       "scope": "successor-chat-bootstrap"
+    },
+    {
+      "forbidden": [
+        "manual PR creation/merge when the wrapper can perform the lifecycle",
+        "running post-merge-check as a feature-branch pre-PR gate",
+        "planning from stale chat memory or stale copied prompt text"
+      ],
+      "must": [
+        "Use agentic-kit wrappers as the authoritative control plane.",
+        "Prefer complex transfer wrappers over hand-built Git/GitHub/handoff/release/GC shell logic.",
+        "Run focused tests, full tests/audits as needed, inspect actual diff, and run transfer protected-diff-plan before commit.",
+        "Commit through transfer commit, then run rules acknowledge.",
+        "Before PR completion, regenerate and publish fresh successor/LLM handoff context.",
+        "Use transfer pr-create-complete with --post-merge-complete for the normal PR lifecycle.",
+        "After merge, sync main, restore known volatile files, run post-merge-check on main, repo-status, audits, standard gates, and final successor handoff."
+      ],
+      "priority": "critical",
+      "rule_id": "wrapper-first-complete-development-cycle",
+      "scope": "feature-development-pr-handoff"
+    },
+    {
+      "forbidden": [
+        "using NEW_CHAT_HANDOFF_PROMPT.md or copied chat text as the sole start authority",
+        "starting product work before validation_report.json and execution_contract.json were inspected"
+      ],
+      "must": [
+        "Treat successor_prompt.md as a human-readable projection only.",
+        "Read execution_contract.json, successor_context.yaml, validation_report.json, and source_manifest.json before work.",
+        "Use machine-readable files over stale copied prompt text when they disagree."
+      ],
+      "priority": "critical",
+      "rule_id": "successor-package-not-prompt-only",
+      "scope": "chat-switch-handoff"
+    },
+    {
+      "forbidden": [
+        "adding new operational rules to historical, archived, superseded, or migration-report documents",
+        "treating old roadmap or planning markdown files as active authority",
+        "deleting semantic documentation through report-retention GC"
+      ],
+      "must": [
+        "Use docs/planning/project_direction.yaml for active roadmap, strategy, and current tasks.",
+        "Use docs/DOCUMENTATION_REGISTRY.yaml for document classification and authority mapping.",
+        "Classify obsolete documents before archive/delete decisions.",
+        "Retarget active references away from obsolete/superseded documents before archival."
+      ],
+      "priority": "critical",
+      "rule_id": "documentation-authority-model",
+      "scope": "documentation-reconciliation"
+    },
+    {
+      "forbidden": [
+        "committing, pushing, creating PRs, or merging after protected-diff-plan FAIL",
+        "overwriting protected files broadly to make gates pass"
+      ],
+      "must": [
+        "Treat repo-backed rules, tests, gates, and evidence logs as authoritative.",
+        "Stop on BLOCK or FAIL and diagnose before continuing.",
+        "Run protected-diff-plan before protected/governance/status/handoff/YAML commits.",
+        "Use evidence-producing commands; do not substitute a free-text PASS."
+      ],
+      "priority": "critical",
+      "rule_id": "repo-backed-rules-and-gates",
+      "scope": "rules-tests-evidence"
+    },
+    {
+      "forbidden": [
+        "using GC as semantic documentation migration",
+        "deleting .md/.py/.yaml/.txt without explicit policy and review"
+      ],
+      "must": [
+        "Treat report-retention GC as technical artifact/report retention.",
+        "Use dry-run before execute.",
+        "Restrict automatic report-retention execution to explicitly allowed candidate types."
+      ],
+      "priority": "critical",
+      "rule_id": "gc-retention-not-document-migration",
+      "scope": "artifact-gc"
+    },
+    {
+      "forbidden": [
+        "placing new operational rules in docs/reports/ns-migration/",
+        "resurrecting removed ./ns routes as active workflow instructions"
+      ],
+      "must": [
+        "Treat ns migration documents as historical or compatibility context unless the registry says otherwise.",
+        "Classify ./ns references as historical, test fixture, compatibility implementation, or active blocker before changing them."
+      ],
+      "priority": "critical",
+      "rule_id": "ns-legacy-not-active-control-plane",
+      "scope": "legacy-ns-references"
     },
     {
       "forbidden": [

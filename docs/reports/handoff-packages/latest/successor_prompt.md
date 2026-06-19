@@ -1,16 +1,58 @@
 ## Machine-readable execution contract
 
-The markdown successor prompt is a projection of the machine-readable execution contract.
+The markdown successor prompt is a compact projection. The machine-readable files take precedence.
 
-- branch: `docs/post-pr1500-handoff-refresh`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+Read first: `execution_contract.json`, `successor_context.yaml`, `validation_report.json`, and `source_manifest.json`.
+
+## Durable agentic-kit operating model
+
+- scope: `durable-agentic-kit-operating-model`
+- agentic-kit wrappers are the authoritative control plane.
+- Use the rule system, command reference, documentation registry, project direction authority, gates, evidence logs, report-retention GC, and successor handoff package as active subsystems.
+- GC is technical retention, not semantic documentation migration.
+- Historical `ns` migration documents are not active rule locations.
+
+Source authorities:
+- `.agentic/compiled_agent_context.yaml`
+- `.agentic/transfer_safety_rules.yaml`
+- `.agentic/transfer/one_command_transfer_protocol.yaml`
+- `docs/planning/project_direction.yaml`
+- `docs/DOCUMENTATION_REGISTRY.yaml`
+- `docs/reference/agentic-kit-commands.json`
+- `docs/reference/AGENTIC_KIT_COMMANDS.md`
 
 Critical rule IDs:
 - `local-copy-paste-protocol` (critical)
 - `strict-start-decision` (critical)
 - `bootstrap_acceptance_gate` (critical)
+- `wrapper-first-complete-development-cycle` (critical)
+- `successor-package-not-prompt-only` (critical)
+- `documentation-authority-model` (critical)
+- `repo-backed-rules-and-gates` (critical)
+- `gc-retention-not-document-migration` (critical)
+- `ns-legacy-not-active-control-plane` (critical)
 - `protected-file-preservation` (critical)
+
+## Current continuation state
+
+- branch: `docs/post-pr1502-handoff-refresh`
+- head_matches_origin_main: `True`
+- worktree_clean: `False`
+- open_tasks_source: `docs/planning/project_direction.yaml`
+- document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
+- Current state is volatile continuation data, not a durable rule source.
+
+## Wrapper-first complete development cycle
+
+Normal feature lifecycle: feature branch -> tests/audits -> `transfer protected-diff-plan` -> `transfer commit` -> `rules acknowledge` -> fresh successor/LLM context -> `transfer pr-create-complete ... --post-merge-complete` -> sync main -> `transfer post-merge-check` on main -> `transfer repo-status` -> docs/program/standard gates -> final successor handoff package.
+
+`transfer post-merge-check` is a main/post-merge lifecycle check, not a feature-branch pre-PR gate. Use `transfer repo-status` for feature-branch cleanliness.
+
+## Handoff package precedence
+
+- prompt_is_projection_only: `True`
+- machine_readable_files_take_precedence: `True`
+- Do not use stale copied prompt text or `NEW_CHAT_HANDOFF_PROMPT.md` as sole authority.
 
 ## Local copy-and-paste protocol
 
@@ -136,14 +178,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1500-handoff-refresh",
+    "branch": "docs/post-pr1502-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "24fb9714703d07bba919132e3083c6a60cecfa1e",
+    "head": "03f559fb04aa9636393ee060127fc2771c98dff8",
     "head_matches_origin_main": true,
-    "head_short": "24fb9714",
+    "head_short": "03f559fb",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "24fb9714703d07bba919132e3083c6a60cecfa1e",
-    "origin_main_short": "24fb9714",
+    "origin_main": "03f559fb04aa9636393ee060127fc2771c98dff8",
+    "origin_main_short": "03f559fb",
     "worktree_clean": false
   }
 }
@@ -157,6 +199,10 @@ Wenn der Bootstrap grün ist:
 - Vor Commit: tatsächlichen Diff inspizieren, Tests laufen lassen, protected-diff-plan ausführen.
 - Bei `BLOCK` oder `FAIL`: sofort stoppen, Diagnose statt Weiterarbeiten.
 - Aktive Aufgaben stammen aus `docs/planning/project_direction.yaml`; alte Planungsdokumente sind keine Startautorität.
+- Allgemeingültige Regeln stehen in `execution_contract.json.general_contract`; aktueller Fortsetzungspunkt steht in `execution_contract.json.current_state_contract` und `successor_context.yaml`.
+- `successor_prompt.md` ist nur Projektion. Maschinenlesbare Dateien haben Vorrang.
+- Komplexe `agentic-kit`-Wrapper haben Vorrang vor selbstgebauten Git-/GitHub-/Handoff-/GC-/Release-Blöcken.
+- Garbage Collector nur für technische Retention verwenden, nicht für semantische Dokumentenmigration.
 
 ## Nächste sichere Entscheidung
 

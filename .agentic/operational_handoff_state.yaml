@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 24fb9714703d07bba919132e3083c6a60cecfa1e
-  short: 24fb9714
-  subject: Refresh handoff state after PR1499 (#1500)
+  full: 03f559fb04aa9636393ee060127fc2771c98dff8
+  short: 03f559fb
+  subject: Harden successor handoff information transfer (#1502)
 last_substantive_work_state:
-  full: 24fb9714703d07bba919132e3083c6a60cecfa1e
-  short: 24fb9714
-  subject: Refresh handoff state after PR1499 (#1500)
+  full: 03f559fb04aa9636393ee060127fc2771c98dff8
+  short: 03f559fb
+  subject: Harden successor handoff information transfer (#1502)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
