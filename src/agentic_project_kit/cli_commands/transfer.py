@@ -2829,7 +2829,7 @@ def sync_main(
         steps.append(item)
         return item
 
-    step("restore-before-sync", ["git", "restore", "--", *KNOWN_VOLATILE_TRANSFER_PATHS])
+    step("restore-before-sync", ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"])
     step("rules-acknowledge-before-sync", ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
     step("switch-and-pull-main", ["./.venv/bin/agentic-kit", "transfer", "branch-switch", main_branch, "--pull"])
     step("rules-acknowledge-after-pull", ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
