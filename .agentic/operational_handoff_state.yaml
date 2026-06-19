@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 53a9ccb9206bdfbf08ffd9c50d59dac55d24b8ca
-  short: 53a9ccb9
-  subject: Mark duplicate direction docs superseded (#1480)
+  full: 9b978e00fda4612fbeb776a36ced7a38fb02b740
+  short: 9b978e00
+  subject: Reconcile remaining docs authority registry (#1482)
 last_substantive_work_state:
-  full: 53a9ccb9206bdfbf08ffd9c50d59dac55d24b8ca
-  short: 53a9ccb9
-  subject: Mark duplicate direction docs superseded (#1480)
+  full: 9b978e00fda4612fbeb776a36ced7a38fb02b740
+  short: 9b978e00
+  subject: Reconcile remaining docs authority registry (#1482)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
