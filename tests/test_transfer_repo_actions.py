@@ -522,7 +522,6 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
                 " M docs/handoff/CURRENT_HANDOFF.md\n"
                 " M docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n"
                 " M docs/handoff/START_NEW_CHAT_PROMPT.md\n"
-                " M docs/planning/WORKFLOW_REDUCTION_FOCUS.md\n"
                 " M docs/reports/handoff-packages/latest/execution_contract.json\n"
                 " M docs/reports/handoff-packages/latest/source_manifest.json\n"
                 " M docs/reports/handoff-packages/latest/successor_context.yaml\n"
@@ -560,7 +559,6 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
             "docs/handoff/CURRENT_HANDOFF.md",
             "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
             "docs/handoff/START_NEW_CHAT_PROMPT.md",
-            "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
             "docs/reports/handoff-packages/latest/execution_contract.json",
             "docs/reports/handoff-packages/latest/source_manifest.json",
             "docs/reports/handoff-packages/latest/successor_context.yaml",
@@ -2021,7 +2019,6 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
                 " M docs/handoff/CURRENT_HANDOFF.md\n"
                 " M docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n"
                 " M docs/handoff/START_NEW_CHAT_PROMPT.md\n"
-                " M docs/planning/WORKFLOW_REDUCTION_FOCUS.md\n"
                 " M docs/reports/handoff-packages/latest/execution_contract.json\n"
                 " M docs/reports/handoff-packages/latest/source_manifest.json\n"
                 " M docs/reports/handoff-packages/latest/successor_context.yaml\n"
@@ -2237,7 +2234,6 @@ last_substantive_work_state:
         "docs/STATUS.md",
         "docs/handoff/CURRENT_HANDOFF.md",
         "docs/handoff/START_NEW_CHAT_PROMPT.md",
-        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
     ]:
         Path(name).write_text("Curated text\n", encoding="utf-8")
 
@@ -2281,7 +2277,6 @@ last_substantive_work_state:
                 "docs/STATUS.md",
                 "docs/handoff/CURRENT_HANDOFF.md",
                 "docs/handoff/START_NEW_CHAT_PROMPT.md",
-                "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
             ]:
                 content = Path(file_name).read_text(encoding="utf-8")
                 assert "Operational documentation refresh state after PR #2222" in content
@@ -2325,7 +2320,6 @@ def test_admin_refresh_replaces_existing_operational_refresh_marker(tmp_path: Pa
         "docs/STATUS.md",
         "docs/handoff/CURRENT_HANDOFF.md",
         "docs/handoff/START_NEW_CHAT_PROMPT.md",
-        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
     ):
         (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
 
@@ -2353,7 +2347,6 @@ def test_admin_refresh_replaces_existing_operational_refresh_marker(tmp_path: Pa
         "docs/STATUS.md",
         "docs/handoff/CURRENT_HANDOFF.md",
         "docs/handoff/START_NEW_CHAT_PROMPT.md",
-        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
     ):
         (tmp_path / rel).write_text(f"# Doc\n{old_marker}", encoding="utf-8")
 
@@ -2394,7 +2387,6 @@ def test_admin_refresh_replaces_existing_operational_refresh_marker(tmp_path: Pa
         "docs/STATUS.md",
         "docs/handoff/CURRENT_HANDOFF.md",
         "docs/handoff/START_NEW_CHAT_PROMPT.md",
-        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
     ):
         content = (tmp_path / rel).read_text(encoding="utf-8")
         assert "979825da" not in content

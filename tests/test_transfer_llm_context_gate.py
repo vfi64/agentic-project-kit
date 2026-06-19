@@ -17,8 +17,8 @@ SOURCE_FILES = (
     "docs/reference/AGENTIC_KIT_COMMANDS.md",
     ".agentic/rule_mechanism_inventory.yaml",
     ".agentic/rule_preservation.yaml",
-    "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
-    "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    "docs/DOCUMENTATION_REGISTRY.yaml",
+    "docs/planning/project_direction.yaml",
 )
 
 

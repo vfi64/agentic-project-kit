@@ -16,7 +16,7 @@ OPERATIONAL_FRESHNESS_FILES = [
     "docs/handoff/CURRENT_HANDOFF.md",
     "docs/handoff/START_NEW_CHAT_PROMPT.md",
     "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
-    "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    "docs/planning/project_direction.yaml",
 ]
 SUCCESSOR_HANDOFF_GLOBS = [
     "*successor*handoff*.md",

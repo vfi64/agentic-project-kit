@@ -46,11 +46,32 @@ def _write_operational_handoff_state(root: Path) -> None:
     )
 
 
+def _write_boot_source(path: Path, source: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if source == "docs/planning/project_direction.yaml":
+        path.write_text(
+            "schema_version: 1\n"
+            "status: active\n"
+            "updated: '2026-06-19'\n"
+            "authority: docs/planning/project_direction.yaml\n"
+            "strategy: {}\n"
+            "roadmap:\n"
+            "  milestones:\n"
+            "    - id: docs-reconciliation\n"
+            "      title: Reconcile documentation authority\n"
+            "      status: active\n"
+            "      target_release: v0.4.10\n"
+            "ideas: {}\n",
+            encoding="utf-8",
+        )
+        return
+    path.write_text("x\n", encoding="utf-8")
+
+
 def test_chat_boot_lists_sources_when_present(tmp_path: Path) -> None:
     for source in MANDATORY_BOOT_SOURCES:
         path = tmp_path / source
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text("x\n", encoding="utf-8")
+        _write_boot_source(path, source)
     text = render_bootloader(tmp_path)
     assert "CHAT_BOOTLOADER" in text
     assert "compiled_agent_context.yaml" in text
@@ -74,8 +95,7 @@ def test_chat_boot_detects_absent_sources(tmp_path: Path) -> None:
 def test_next_chat_bootstrap_contains_standard_prompt_and_next_work(tmp_path: Path) -> None:
     for source in MANDATORY_BOOT_SOURCES:
         path = tmp_path / source
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text("x\n", encoding="utf-8")
+        _write_boot_source(path, source)
     _write_operational_handoff_state(tmp_path)
     text = render_next_chat_bootstrap(tmp_path)
     assert "NEXT CHAT BOOTSTRAP" in text
@@ -86,9 +106,8 @@ def test_next_chat_bootstrap_contains_standard_prompt_and_next_work(tmp_path: Pa
     assert "successor_context.yaml" in text
     assert "validation_report.json" in text
     assert "chat-switch-complete" not in text or "stale" not in text
-    assert "AGENTS.md" in text
-    assert "README.md" in text
-    assert "SECURITY.md" in text
+    assert "project_direction.yaml" in text
+    assert "docs-reconciliation" in text
     assert "Post-PR1245" not in text
     assert "PR #880" not in text
     assert "\\n" not in text

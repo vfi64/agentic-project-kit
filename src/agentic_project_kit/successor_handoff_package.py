@@ -7,6 +7,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from agentic_project_kit.project_direction import load_project_direction
+
 REPO_FULL_NAME = "vfi64/agentic-project-kit"
 DEFAULT_LOCAL_PATH = "cd /path/to/agentic-project-kit"
 
@@ -27,6 +29,7 @@ LONG_TERM_SOURCES: tuple[str, ...] = (
     "README.md",
     "SECURITY.md",
     "docs/DOCUMENTATION_COVERAGE.yaml",
+    "docs/DOCUMENTATION_REGISTRY.yaml",
     "docs/STATUS.md",
     "docs/TEST_GATES.md",
     "docs/handoff/CURRENT_HANDOFF.md",
@@ -37,9 +40,7 @@ LONG_TERM_SOURCES: tuple[str, ...] = (
     "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
     "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
     "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-    "docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md",
-    "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
-    "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    "docs/planning/project_direction.yaml",
     "docs/reference/AGENTIC_KIT_COMMANDS.md",
     "docs/reference/agentic-kit-commands.json",
 )
@@ -54,48 +55,6 @@ STARTUP_COMMANDS: tuple[str, ...] = (
     "git status --short",
     "./.venv/bin/agentic-kit transfer post-merge-check",
     "./.venv/bin/agentic-kit transfer repo-status",
-)
-
-CURRENT_OPEN_TASKS: tuple[dict[str, Any], ...] = (
-    {
-        "id": "release-command-authority-and-publish-core-triage",
-        "status": "active",
-        "summary": (
-            "Implement the first post-v0.4.9 release-governance slice from "
-            "docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md: establish one supported "
-            "agentic-kit release metadata-prep route and make release_publish_core portable "
-            "or fail-closed."
-        ),
-        "files": [
-            "docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md",
-            "src/agentic_project_kit/cli_commands/release.py",
-            "src/agentic_project_kit/release_prepare.py",
-            "src/agentic_project_kit/release_metadata_prep.py",
-            "src/agentic_project_kit/release_prep_core.py",
-            "src/agentic_project_kit/release_publish_core.py",
-            "tests/test_release_prepare_command.py",
-            "tests/test_release_metadata_prep_portability.py",
-            "tests/test_release_prep_core.py",
-            "tests/test_release_publish_core.py",
-            "tests/test_v036_release_route_help_safety.py",
-        ],
-    },
-    {
-        "id": "doi-closeout-atomicity",
-        "status": "pending",
-        "summary": "After release command authority is fixed, harden DOI closeout completeness and commit-safe expected-path coverage.",
-        "files": [
-            "src/agentic_project_kit/post_release_closeout.py",
-            "tests/test_post_release_closeout_hardening.py",
-            "docs/releases/VERIFIED_RELEASES.md",
-        ],
-    },
-    {
-        "id": "outer-doc-currency",
-        "status": "pending",
-        "summary": "Add currency checks and minimal updates for AGENTS.md, README.md, and SECURITY.md.",
-        "files": ["AGENTS.md", "README.md", "SECURITY.md", "docs/DOCUMENTATION_COVERAGE.yaml"],
-    },
 )
 
 RECENT_LESSONS: tuple[str, ...] = (
@@ -223,6 +182,65 @@ def _build_repo_state(root: Path) -> dict[str, Any]:
     }
 
 
+def _open_tasks_from_project_direction(root: Path) -> list[dict[str, Any]]:
+    try:
+        direction = load_project_direction(root)
+        findings = direction.validate()
+    except (OSError, ValueError) as exc:
+        return [
+            {
+                "id": "project-direction-unavailable",
+                "status": "blocked",
+                "summary": f"Cannot load docs/planning/project_direction.yaml: {exc}",
+                "files": ["docs/planning/project_direction.yaml"],
+            }
+        ]
+    if findings:
+        return [
+            {
+                "id": "project-direction-invalid",
+                "status": "blocked",
+                "summary": "Project direction validation failed: " + "; ".join(findings),
+                "files": ["docs/planning/project_direction.yaml"],
+            }
+        ]
+
+    roadmap = direction.data.get("roadmap", {})
+    current_phase = roadmap.get("current_phase", {})
+    tasks: list[dict[str, Any]] = []
+    for item in roadmap.get("milestones", []):
+        if not isinstance(item, dict):
+            continue
+        status = str(item.get("status", "")).strip()
+        if status not in {"active", "planned"}:
+            continue
+        task_id = str(item.get("id", "unknown-milestone")).strip()
+        title = str(item.get("title", task_id)).strip()
+        target_release = str(item.get("target_release", current_phase.get("id", ""))).strip()
+        summary = title
+        if target_release:
+            summary = f"{summary} for {target_release}"
+        tasks.append(
+            {
+                "id": task_id,
+                "status": status,
+                "summary": summary,
+                "files": [
+                    "docs/planning/project_direction.yaml",
+                    "docs/DOCUMENTATION_REGISTRY.yaml",
+                ],
+            }
+        )
+    return tasks or [
+        {
+            "id": "project-direction-no-open-milestones",
+            "status": "review",
+            "summary": "No active or planned milestones are listed in project_direction.yaml.",
+            "files": ["docs/planning/project_direction.yaml"],
+        }
+    ]
+
+
 def _build_context(root: Path) -> dict[str, Any]:
     repo_state = _build_repo_state(root)
     return {
@@ -245,7 +263,7 @@ def _build_context(root: Path) -> dict[str, Any]:
         },
         "short_term_memory": {
             "source": "current local/repo state at package generation time",
-            "open_tasks": list(CURRENT_OPEN_TASKS),
+            "open_tasks": _open_tasks_from_project_direction(root),
             "recent_lessons": list(RECENT_LESSONS),
         },
         "working_rules": {
@@ -556,13 +574,13 @@ def render_successor_prompt(context: dict[str, Any]) -> str:
             "- Große Ausgaben nach `~/Downloads/*.log` umleiten und nur `LOG=...` posten.",
             "- Vor Commit: tatsächlichen Diff inspizieren, Tests laufen lassen, protected-diff-plan ausführen.",
             "- Bei `BLOCK` oder `FAIL`: sofort stoppen, Diagnose statt Weiterarbeiten.",
-            "- Die aktive erste Aufgabe ist `release-command-authority-and-publish-core-triage`; Outer-doc-Currency bleibt pending.",
+            "- Aktive Aufgaben stammen aus `docs/planning/project_direction.yaml`; alte Planungsdokumente sind keine Startautorität.",
             "",
             "## Nächste sichere Entscheidung",
             "",
             "1. Wenn `validation_report.json` nicht PASS ist: Handoff-Projektion reparieren.",
             "2. Wenn der Arbeitsbaum dirty ist: nur explizite WIP-Dateien prüfen und abschließen oder sauber dokumentieren.",
-            "3. Danach die aktive Aufgabe aus `docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md` bearbeiten.",
+            "3. Danach die nächste aktive Aufgabe aus `docs/planning/project_direction.yaml` bearbeiten.",
             "",
         ]
     )
@@ -627,6 +645,8 @@ def render_next_chat_bootstrap_from_context(context: dict[str, Any]) -> str:
             "4. If the package, prompts, HEAD, or validation report are stale: stop and repair handoff drift first.",
             "",
             "## Open high-priority work",
+            "",
+            "Source: `docs/planning/project_direction.yaml`.",
             "",
             *_format_open_tasks_for_bootstrap(context),
             "",

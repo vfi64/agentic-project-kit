@@ -225,7 +225,7 @@ def _is_refresh_only_successor_package_head(generated_head: str, current_head: s
         "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
         "docs/handoff/START_NEW_CHAT_PROMPT.md",
         "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-        "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+        "docs/planning/project_direction.yaml",
     }
 
     def allowed(path: str) -> bool:
@@ -1114,7 +1114,6 @@ ADMIN_REFRESH_PATHS = (
     "docs/handoff/CURRENT_HANDOFF.md",
     "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
     "docs/handoff/START_NEW_CHAT_PROMPT.md",
-    "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
     "docs/reports/handoff-packages/latest/execution_contract.json",
     "docs/reports/handoff-packages/latest/source_manifest.json",
     "docs/reports/handoff-packages/latest/successor_context.yaml",
@@ -1200,7 +1199,6 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
             "docs/STATUS.md",
             "docs/handoff/CURRENT_HANDOFF.md",
             "docs/handoff/START_NEW_CHAT_PROMPT.md",
-            "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
         ):
             file_path = Path(file_name)
             if not file_path.exists():

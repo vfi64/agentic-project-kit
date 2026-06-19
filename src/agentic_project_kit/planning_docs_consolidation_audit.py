@@ -47,20 +47,20 @@ POST_V049_MARKERS = (
 )
 
 AUTHORITATIVE_PLANNING_DOCS = {
-    "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-    "docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md",
+    "docs/planning/project_direction.yaml",
 }
 
 HISTORICAL_PLANNING_DOCS = {
     "docs/handoff/CODEX_NS_COMMAND_MIGRATION_HANDOFF.md",
+    "docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md",
+    "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+    "docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md",
     "docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md",
     "docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md",
     "docs/planning/V0.3.8_SCOPE.md",
 }
 
-KNOWN_ACTIVE_PLANNING_DOCS = {
-    "docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md",
-}
+KNOWN_ACTIVE_PLANNING_DOCS = set()
 
 
 LEGACY_REVIEW_DOCS = {
@@ -220,7 +220,7 @@ def _iter_docs(root: Path) -> list[Path]:
         base = root / planning_root
         if not base.exists():
             continue
-        docs.extend(path for path in base.rglob("*.md") if path.is_file())
+        docs.extend(path for path in base.rglob("*") if path.is_file() and path.suffix in {".md", ".yaml", ".yml"})
     return sorted(docs)
 
 

@@ -31,10 +31,10 @@ def test_planning_docs_audit_classifies_current_handoff_as_authoritative(tmp_pat
     assert result.records[0].classification == "authoritative_current_handoff"
 
 
-def test_planning_docs_audit_classifies_release_slice_as_active_anchor(tmp_path: Path) -> None:
-    doc = tmp_path / "docs" / "planning" / "RELEASE_COMMAND_AUTHORITY_SLICE.md"
+def test_planning_docs_audit_classifies_project_direction_as_active_anchor(tmp_path: Path) -> None:
+    doc = tmp_path / "docs" / "planning" / "project_direction.yaml"
     doc.parent.mkdir(parents=True)
-    doc.write_text("# Slice\npost-v0.4.9 active release command authority\n", encoding="utf-8")
+    doc.write_text("status: active\nauthority: docs/planning/project_direction.yaml\n", encoding="utf-8")
 
     result = audit_planning_docs_consolidation(tmp_path)
 
@@ -55,7 +55,7 @@ def test_render_planning_docs_audit_reports_blockers(tmp_path: Path) -> None:
     assert "STATUS=FAIL" in rendered
     assert "BLOCKER=" in rendered
 
-def test_planning_docs_audit_classifies_workflow_reduction_focus_as_authoritative(tmp_path: Path) -> None:
+def test_planning_docs_audit_classifies_workflow_reduction_focus_as_historical(tmp_path: Path) -> None:
     doc = tmp_path / "docs" / "planning" / "WORKFLOW_REDUCTION_FOCUS.md"
     doc.parent.mkdir(parents=True)
     doc.write_text("# Workflow Reduction Focus\nsource of truth for active GUI planning\n", encoding="utf-8")
@@ -63,7 +63,7 @@ def test_planning_docs_audit_classifies_workflow_reduction_focus_as_authoritativ
     result = audit_planning_docs_consolidation(tmp_path)
 
     assert result.ok is True
-    assert result.records[0].classification == "authoritative_planning_anchor"
+    assert result.records[0].classification == "historical_planning_doc"
 
 
 def test_planning_docs_audit_classifies_known_historical_plan(tmp_path: Path) -> None:
@@ -87,7 +87,7 @@ def test_planning_docs_audit_classifies_known_legacy_review_doc(tmp_path: Path) 
     assert result.ok is True
     assert result.records[0].classification == "legacy_review_candidate"
 
-def test_planning_docs_audit_classifies_gui_gatekeeper_as_known_active_plan(tmp_path: Path) -> None:
+def test_planning_docs_audit_classifies_gui_gatekeeper_as_historical_plan(tmp_path: Path) -> None:
     doc = tmp_path / "docs" / "planning" / "GUI_DETERMINISTIC_GATEKEEPER_PLAN.md"
     doc.parent.mkdir(parents=True)
     doc.write_text("# GUI\ncurrent source of truth for GUI gatekeeper planning\n", encoding="utf-8")
@@ -95,7 +95,7 @@ def test_planning_docs_audit_classifies_gui_gatekeeper_as_known_active_plan(tmp_
     result = audit_planning_docs_consolidation(tmp_path)
 
     assert result.ok is True
-    assert result.records[0].classification == "active_planning_candidate"
+    assert result.records[0].classification == "historical_planning_doc"
 
 
 def test_planning_docs_audit_classifies_next_turn_work_order_as_legacy_review(tmp_path: Path) -> None:
@@ -107,4 +107,3 @@ def test_planning_docs_audit_classifies_next_turn_work_order_as_legacy_review(tm
 
     assert result.ok is True
     assert result.records[0].classification == "legacy_review_candidate"
-
