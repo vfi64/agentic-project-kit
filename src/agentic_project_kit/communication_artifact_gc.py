@@ -3,6 +3,7 @@ from __future__ import annotations
 import subprocess
 import sys
 import time
+from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -52,6 +53,47 @@ TRANSFER_RUNS_KEEP_NAMES = frozenset(
         "latest-remote-next-report.json",
     }
 )
+
+REPORT_RETENTION_ROOTS = (
+    "docs/terminal",
+    "docs/reports/terminal",
+    "docs/reports/command_runs",
+    "docs/reports/branch_cleanup",
+    "docs/reports/ns-migration",
+)
+
+REPORT_RETENTION_KEEP_NAME_FRAGMENTS = frozenset(
+    {
+        "latest",
+        "current",
+        "manifest",
+        "source_manifest",
+        "validation_report",
+        "execution_contract",
+        "summary",
+        "index",
+        "readme",
+    }
+)
+
+REPORT_RETENTION_REFERENCE_EXCLUDED_PREFIXES = (
+    ".git/",
+    ".venv/",
+    "tmp/",
+    "__pycache__/",
+    "docs/terminal/",
+    "docs/reports/terminal/",
+    "docs/reports/command_runs/",
+    "docs/reports/branch_cleanup/",
+    "docs/reports/ns-migration/",
+    "docs/reference/agentic-kit-commands.json",
+)
+
+
+@dataclass(frozen=True)
+class ReportRetentionCandidate:
+    path: Path
+    reason: str
 
 PROTECTED_LOCAL_NAMES = frozenset(
     {
@@ -218,6 +260,132 @@ def collect_expired_transfer_run_reports(
     return expired
 
 
+
+def _is_report_keep_name(name: str) -> bool:
+    lowered = name.lower()
+    return any(fragment in lowered for fragment in REPORT_RETENTION_KEEP_NAME_FRAGMENTS)
+
+
+def _is_report_retention_excluded_reference_file(rel: Path) -> bool:
+    text = rel.as_posix()
+    return any(text == prefix.rstrip("/") or text.startswith(prefix) for prefix in REPORT_RETENTION_REFERENCE_EXCLUDED_PREFIXES)
+
+
+def _text_file_contains(path: Path, needle: str) -> bool:
+    try:
+        return needle in path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        return False
+    except OSError:
+        return False
+
+
+def _has_reference_outside_report_retention_surfaces(base: Path, rel: Path) -> bool:
+    needle = rel.as_posix()
+    for candidate in base.rglob("*"):
+        if not candidate.is_file() or candidate.is_symlink():
+            continue
+        try:
+            candidate_rel = candidate.relative_to(base)
+        except ValueError:
+            continue
+        if _is_report_retention_excluded_reference_file(candidate_rel):
+            continue
+        if _text_file_contains(candidate, needle):
+            return True
+    return False
+
+
+def _report_retention_roots(base: Path) -> list[Path]:
+    return [base / item for item in REPORT_RETENTION_ROOTS if (base / item).exists() and (base / item).is_dir()]
+
+
+def collect_report_retention_candidates(
+    root: Path | str = ".",
+    now: float | None = None,
+    ttl_seconds: int = DEFAULT_TMP_LOG_TTL_SECONDS,
+    keep_last_per_parent: int = 2,
+) -> list[ReportRetentionCandidate]:
+    base = Path(root)
+    now_value = time.time() if now is None else now
+    files: list[Path] = []
+    for report_root in _report_retention_roots(base):
+        for path in sorted(report_root.rglob("*")):
+            if path.is_symlink() or not path.is_file():
+                continue
+            files.append(path)
+
+    newest_by_parent: dict[Path, set[Path]] = defaultdict(set)
+    if keep_last_per_parent > 0:
+        grouped: dict[Path, list[Path]] = defaultdict(list)
+        for path in files:
+            grouped[path.parent].append(path)
+        for parent, items in grouped.items():
+            ordered = sorted(items, key=lambda item: item.stat().st_mtime, reverse=True)
+            newest_by_parent[parent].update(ordered[:keep_last_per_parent])
+
+    candidates: list[ReportRetentionCandidate] = []
+    for path in files:
+        rel = path.relative_to(base)
+        if _is_report_keep_name(path.name):
+            continue
+        if path in newest_by_parent.get(path.parent, set()):
+            continue
+        age_seconds = now_value - path.stat().st_mtime
+        if age_seconds < ttl_seconds:
+            continue
+        if _has_reference_outside_report_retention_surfaces(base, rel):
+            continue
+        candidates.append(
+            ReportRetentionCandidate(
+                path=rel,
+                reason="expired report-retention artifact; unreferenced outside report surfaces",
+            )
+        )
+    return candidates
+
+
+def execute_report_retention_gc(
+    root: Path | str = ".",
+    execute: bool = False,
+    now: float | None = None,
+    ttl_seconds: int = DEFAULT_TMP_LOG_TTL_SECONDS,
+    keep_last_per_parent: int = 2,
+) -> tuple[str, str]:
+    base = Path(root)
+    candidates = collect_report_retention_candidates(
+        base,
+        now=now,
+        ttl_seconds=ttl_seconds,
+        keep_last_per_parent=keep_last_per_parent,
+    )
+    if not candidates:
+        return "PASS_NOTHING_TO_COLLECT", ""
+
+    message = "\n".join(f"{item.path.as_posix()}\t{item.reason}" for item in candidates)
+    if not execute:
+        return "PENDING_EXPIRED_REPORT_RETENTION_FILES", message
+
+    allowed_roots = [root_path.resolve() for root_path in _report_retention_roots(base)]
+    removed: list[str] = []
+    for item in candidates:
+        target = base / item.path
+        resolved = target.resolve()
+        if target.is_symlink():
+            return "FAIL_SYMLINK_ARTIFACT", item.path.as_posix()
+        if not any(root_path == resolved or root_path in resolved.parents for root_path in allowed_roots):
+            return "FAIL_UNREGISTERED_PATH", item.path.as_posix()
+        if _is_report_keep_name(target.name):
+            return "FAIL_PROTECTED_REPORT_RETENTION_FILE", item.path.as_posix()
+        if _has_reference_outside_report_retention_surfaces(base, item.path):
+            return "FAIL_REFERENCED_REPORT_RETENTION_FILE", item.path.as_posix()
+        if not target.is_file():
+            return "FAIL_NOT_A_FILE", item.path.as_posix()
+        target.unlink()
+        removed.append(item.path.as_posix())
+    return "PASS_COLLECTED", "\n".join(removed)
+
+
 def execute_transfer_run_report_gc(
     root: Path | str = ".",
     execute: bool = False,
@@ -260,6 +428,12 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if outcome.startswith("PASS") or outcome.startswith("PENDING") else 1
     if "--transfer-runs" in args:
         outcome, message = execute_transfer_run_report_gc(".", execute=execute)
+        print(outcome)
+        if message:
+            print(message)
+        return 0 if outcome.startswith("PASS") or outcome.startswith("PENDING") else 1
+    if "--report-retention" in args:
+        outcome, message = execute_report_retention_gc(".", execute=execute)
         print(outcome)
         if message:
             print(message)
