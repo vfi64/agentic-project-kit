@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 18feba8fcc5394f0d1d7eca290326527674934dc
-  short: 18feba8f
-  subject: Archive safe direct superseded docs (#1484)
+  full: 4da64519a237aeadcc1078b11418e18a6526a68a
+  short: 4da64519
+  subject: Dereference low-risk obsolete docs (#1486)
 last_substantive_work_state:
-  full: 18feba8fcc5394f0d1d7eca290326527674934dc
-  short: 18feba8f
-  subject: Archive safe direct superseded docs (#1484)
+  full: 4da64519a237aeadcc1078b11418e18a6526a68a
+  short: 4da64519
+  subject: Dereference low-risk obsolete docs (#1486)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
