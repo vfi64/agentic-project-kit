@@ -100,3 +100,28 @@ def test_artifact_gc_report_retention_cli_is_dry_run_by_default(tmp_path: Path, 
     assert oldest.exists()
     assert newer.exists()
     assert newest.exists()
+
+def test_report_retention_gc_only_auto_candidates_log_and_json(tmp_path: Path) -> None:
+    log_file = _touch(tmp_path / "docs/reports/terminal/old.log")
+    json_file = _touch(tmp_path / "docs/reports/terminal/old.json")
+    md_file = _touch(tmp_path / "docs/reports/terminal/old.md")
+    py_file = _touch(tmp_path / "docs/reports/terminal/old.py")
+    yaml_file = _touch(tmp_path / "docs/reports/terminal/old.yaml")
+    txt_file = _touch(tmp_path / "docs/reports/terminal/old.txt")
+
+    candidates = collect_report_retention_candidates(
+        tmp_path,
+        now=OLD_NOW,
+        keep_last_per_parent=0,
+    )
+    paths = {item.path.as_posix() for item in candidates}
+
+    assert log_file.exists() and json_file.exists()
+    assert "docs/reports/terminal/old.log" in paths
+    assert "docs/reports/terminal/old.json" in paths
+    assert "docs/reports/terminal/old.md" not in paths
+    assert "docs/reports/terminal/old.py" not in paths
+    assert "docs/reports/terminal/old.yaml" not in paths
+    assert "docs/reports/terminal/old.txt" not in paths
+    assert md_file.exists() and py_file.exists() and yaml_file.exists() and txt_file.exists()
+
