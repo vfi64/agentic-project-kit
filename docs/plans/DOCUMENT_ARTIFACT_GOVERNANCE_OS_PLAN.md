@@ -1,3 +1,10 @@
+<!--
+Status: superseded
+Authority: docs/planning/project_direction.yaml
+Reason: Strategy, roadmap, and idea direction now live in the machine-readable project direction source.
+Retention: Keep as historical context until a later protected reference check archives or removes it explicitly.
+-->
+
 # Document and Artifact Governance OS Plan
 
 Status-date: 2026-05-23
