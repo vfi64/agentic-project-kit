@@ -133,6 +133,221 @@ class_rules:
     gate_coverage: doc-mesh audit, lifecycle audit, release DOI list checks, and historical banner checks.
 
 documents:
+  - path: docs/handoff/CURRENT_HANDOFF_OVERLAY_AFTER_PR660.md
+    class: historical archive
+    status: delete_candidate
+    owner: maintainers
+    review_policy: required
+    summary: Historical handoff overlay candidate retained until explicit reference-checked deletion.
+  - path: docs/workflow/WORK_ORDER_TEMPLATES.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/WORK_ORDER_PREPARE.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/WORK_ORDERS.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/WORKFLOW_GUARD.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/TEXT_TRANSFER_RUNNER.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/RULE_GOVERNANCE.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/REPO_COMMAND_RUNNER.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/PR_CLOSEOUT_GATE.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/PRE_GUI_EXECUTION_HARDENING.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/PARAMETERIZED_ACTIONS.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/HANDOFF_STATE.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/GOVERNANCE_CHECK.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/workflow/CONTROL_MODEL.md
+    class: operational/automation
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+  - path: docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
+    class: planning
+    status: review_required
+    owner: maintainers
+    review_policy: required
+    summary: Review-required historical standard-error hardening plan.
+  - path: docs/planning/PATCH_ARTIFACT_PREFLIGHT_SLICE.md
+    class: planning
+    status: review_required
+    owner: maintainers
+    review_policy: required
+    summary: Review-required implementation-slice note after patch preflight work.
+  - path: docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+    class: planning
+    status: review_required
+    owner: maintainers
+    review_policy: required
+    summary: Review-required next-turn work-order plan; should not be treated as long-term direction.
+  - path: docs/planning/NEXT_TURN_A0_STANDARD_ERROR_ADDITIONS.md
+    class: planning
+    status: review_required
+    owner: maintainers
+    review_policy: required
+    summary: Review-required next-turn planning note; should not be treated as long-term direction.
+  - path: docs/planning/IDEMPOTENT_FINALIZATION_GUARD.md
+    class: planning
+    status: review_required
+    owner: maintainers
+    review_policy: required
+    summary: Review-required planning note for idempotent finalization behavior.
+  - path: docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Historical v0.4.0 planning note.
+  - path: docs/planning/V0.3.8_SCOPE.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Historical release-scope note.
+  - path: docs/planning/RULE_REGISTRY_IMPLEMENTATION_PLAN.yaml
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Historical rule-registry implementation plan retained as context.
+  - path: docs/planning/RULE_REGISTRY_ARCHITECTURE.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Historical rule-registry architecture note retained as context.
+  - path: docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Historical transfer-state-machine hardening plan retained as context.
+  - path: docs/planning/PERSISTENT_HANDOFF_STATE.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Historical handoff-state planning note retained as context.
+  - path: docs/planning/NS_UP_PR_COMPLETION.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Superseded ns PR completion note retained as historical context.
+  - path: docs/planning/NS_RELEASE_SHORTCUTS.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Superseded ns release shortcuts retained as historical context.
+  - path: docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Superseded ns workflow control note retained as historical context.
+  - path: docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Historical GUI gatekeeper planning context; current phase is summarized in project_direction.yaml.
+  - path: docs/planning/GUI_COCKPIT_EXPANSION_ROADMAP.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    superseded_by: docs/planning/project_direction.yaml
+    summary: Superseded GUI roadmap; current GUI direction is governed by project_direction.yaml.
   - path: docs/plans/DOCUMENT_ARTIFACT_GOVERNANCE_OS_PLAN.md
     class: historical archive
     status: superseded
@@ -187,12 +402,14 @@ documents:
     owner: project
     review_policy: required
     summary: Classifies remaining ns-named and shell-dependent portability work after ns command migration closeout.
+    superseded_by: docs/planning/project_direction.yaml
   - path: docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
     class: planning
     status: active
     owner: project
     review_policy: required
     summary: First post-v0.4.9 implementation slice for establishing the supported release metadata route and making release publish core portable or fail-closed.
+    superseded_by: docs/planning/project_direction.yaml
   - path: docs/DOCUMENTATION_REGISTRY.yaml
     class: governance/system
     owner: maintainers
@@ -217,46 +434,63 @@ documents:
     class: planning
     owner: maintainers
     notes: Accepted near-term focus for reducing manual orchestration before GUI and Pattern Advisor expansion.
+    superseded_by: docs/planning/project_direction.yaml
+    status: superseded
   - path: docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
     class: planning
     owner: maintainers
     notes: Accepted backlog for reducing remaining rule-registry weaknesses without blocking documentation-management work.
+    superseded_by: docs/planning/project_direction.yaml
+    status: superseded
   - path: docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
     class: planning
     owner: maintainers
     notes: Implementation contract for repo-backed failure-mode review automation before slices and after merges.
+    status: active
   - path: docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
     class: planning
     owner: maintainers
     notes: Hardened plan for machine-checkable local-to-LLM and LLM-to-local rule-refresh handshake state before GUI expansion.
+    superseded_by: docs/planning/project_direction.yaml
+    status: superseded
   - path: docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
     class: planning
     owner: maintainers
     notes: Stable JSON contract for the read-only canonical rule source validator consumed by rule-refresh, transfer-state, and GUI gates.
+    status: active
   - path: docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
     class: planning
     owner: maintainers
     notes: Phase 0 coverage matrix for transfer GitHub actions needed before hardened rule-refresh handshake and GUI write-action expansion.
+    status: active
   - path: docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
     class: planning
     owner: maintainers
     notes: Full structured Tkinter workbench GUI plan with complete button catalog, staged enablement, dispatch integration, and evidence requirements.
+    superseded_by: docs/planning/project_direction.yaml
+    status: superseded
   - path: docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
     class: planning
     owner: maintainers
     notes: Read-only implementation-surface inventory for the GUI deterministic gatekeeper migration.
+    status: active
   - path: docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
     class: planning
     owner: maintainers
     notes: Typed post-merge lifecycle state model for completing PR merges without REFRESH_REQUIRED loops.
+    superseded_by: docs/planning/project_direction.yaml
+    status: superseded
   - path: docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
     class: planning
     owner: maintainers
     notes: Priority plan for hardening unsafe individual commands before GUI or release orchestration work resumes.
+    status: active
   - path: docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
     class: planning
     owner: maintainers
     notes: Classification-first plan for mapping remaining meaningful old ns command semantics to supported agentic-kit commands.
+    superseded_by: docs/planning/project_direction.yaml
+    status: superseded
   - path: docs/handoff/CURRENT_HANDOFF.md
     class: planning
     owner: maintainers
@@ -285,10 +519,12 @@ documents:
     class: operational/automation
     owner: maintainers
     notes: Active no-copy terminal evidence policy for d/f handoff.
+    status: active
   - path: docs/workflow/COMMUNICATION_ARTIFACT_GC.md
     class: operational/automation
     owner: maintainers
     notes: Active communication artifact GC runbook and protected-artifact policy.
+    status: active
   - path: .agentic/communication_artifacts.yaml
     class: operational/automation
     owner: maintainers
