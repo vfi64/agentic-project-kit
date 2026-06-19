@@ -89,6 +89,9 @@ REQUIRED_EXECUTION_CONTRACT_RULE_IDS: frozenset[str] = frozenset(
         "repo-backed-rules-and-gates",
         "gc-retention-not-document-migration",
         "ns-legacy-not-active-control-plane",
+        "generated-handoff-projection-update-policy",
+        "patch-cycle-diagnostic-gate",
+        "copy-paste-output-discipline",
     }
 )
 
@@ -100,7 +103,23 @@ GENERAL_CONTRACT_RULE_IDS: frozenset[str] = frozenset(
         "repo-backed-rules-and-gates",
         "gc-retention-not-document-migration",
         "ns-legacy-not-active-control-plane",
+        "generated-handoff-projection-update-policy",
+        "patch-cycle-diagnostic-gate",
+        "copy-paste-output-discipline",
     }
+)
+
+GENERATED_HANDOFF_PROJECTION_PATHS: tuple[str, ...] = (
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+    "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
 )
 
 GENERAL_SOURCE_AUTHORITIES: tuple[str, ...] = (
@@ -457,6 +476,45 @@ def validate_successor_outputs(outputs: dict[str, str], context: dict[str, Any])
                     "message": "handoff_projection_contract must make machine-readable files authoritative over copied prompt text.",
                 }
             )
+        expected_projection_paths = set(GENERATED_HANDOFF_PROJECTION_PATHS)
+        actual_projection_paths = set(projection_contract.get("generated_projection_paths", []))
+        missing_projection_paths = sorted(expected_projection_paths - actual_projection_paths)
+        if missing_projection_paths:
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "missing_generated_handoff_projection_paths",
+                    "message": "Missing generated handoff projection paths: " + ", ".join(missing_projection_paths),
+                }
+            )
+        if projection_contract.get("source_of_truth") != "generator_and_machine_readable_successor_package":
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "invalid_handoff_projection_source_of_truth",
+                    "message": "handoff_projection_contract.source_of_truth must point at generator and machine-readable package.",
+                }
+            )
+        if projection_contract.get("generator_command") != "agentic-kit transfer prepare-successor-handoff --render-prompt":
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "missing_handoff_projection_generator_command",
+                    "message": "handoff_projection_contract.generator_command must name the canonical projection generator.",
+                }
+            )
+        if "manual direct edits to generated handoff projections" not in projection_contract.get("forbidden_update_path", []):
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "missing_forbidden_generated_handoff_update_path",
+                    "message": "handoff_projection_contract must forbid manual direct edits to generated handoff projections.",
+                }
+            )
 
         forbidden_text = execution_contract_text + "\n" + outputs.get("successor_prompt.md", "")
         for forbidden in _forbidden_local_command_recommendations(forbidden_text):
@@ -541,6 +599,19 @@ def build_execution_contract(context: dict[str, Any]) -> dict[str, object]:
     handoff_projection_contract = {
         "prompt_is_projection_only": True,
         "machine_readable_files_take_precedence": True,
+        "generated_projection_paths": list(GENERATED_HANDOFF_PROJECTION_PATHS),
+        "source_of_truth": "generator_and_machine_readable_successor_package",
+        "allowed_update_path": [
+            "Change successor_handoff_package.py, execution contract inputs, or repo-backed rule sources.",
+            "Add or update tests and validation for new handoff content.",
+            "Run agentic-kit transfer prepare-successor-handoff --render-prompt to regenerate projections.",
+        ],
+        "forbidden_update_path": [
+            "manual direct edits to generated handoff projections",
+            "adding durable rules only to docs/handoff/*.md",
+            "editing latest handoff-package JSON/YAML/Markdown as the primary patch",
+        ],
+        "generator_command": "agentic-kit transfer prepare-successor-handoff --render-prompt",
         "must_read_files": [
             "docs/reports/handoff-packages/latest/execution_contract.json",
             "docs/reports/handoff-packages/latest/successor_context.yaml",
@@ -719,6 +790,52 @@ def build_execution_contract(context: dict[str, Any]) -> dict[str, object]:
                 ],
             },
             {
+                "rule_id": "generated-handoff-projection-update-policy",
+                "priority": "critical",
+                "scope": "generated handoff projections",
+                "must": [
+                    "Treat docs/handoff/*.md and latest successor package files as generated projections.",
+                    "Change the generator, execution contract, validation, or rule source before changing projected handoff content.",
+                    "Regenerate projections with agentic-kit transfer prepare-successor-handoff --render-prompt.",
+                ],
+                "forbidden": [
+                    "manual direct edits to generated handoff projection files as the primary source of a new rule",
+                    "making copied prompt text the durable source of truth",
+                ],
+            },
+            {
+                "rule_id": "patch-cycle-diagnostic-gate",
+                "priority": "critical",
+                "scope": "failed patch/test cycles",
+                "must": [
+                    "After one failed patch, allow exactly one direct correction in the same patch family.",
+                    "After a second failure in the same patch family, stop mutations and run a bounded diagnosis block.",
+                    "Classify product bug versus test-model bug before another mutation.",
+                    "Record next_mutation_allowed explicitly before continuing.",
+                ],
+                "forbidden": [
+                    "starting a third mutation in the same patch family without diagnosis",
+                    "continuing a micro-patch cascade after repeated red tests",
+                ],
+            },
+            {
+                "rule_id": "copy-paste-output-discipline",
+                "priority": "critical",
+                "scope": "local copy-and-paste workflows",
+                "must": [
+                    "After local blocks, chat output should be only LOG=... and RC=....",
+                    "Write large outputs to tmp/*.log or ~/Downloads/*.log.",
+                    "Use compact JSON summaries for diagnostics.",
+                    "Compress or summarize large logs before discussion.",
+                ],
+                "forbidden": [
+                    "cat whole diagnostic or summary files into chat",
+                    "unbounded grep over docs/reports, .agentic/outbox, generated JSON, or logs",
+                    "tail or grep excerpts as chat output for long workflows",
+                    "large terminal output pasted directly into chat",
+                ],
+            },
+            {
                 "rule_id": "protected-file-preservation",
                 "priority": "critical",
                 "scope": "protected governance/status/handoff/YAML files",
@@ -796,13 +913,23 @@ def render_execution_contract_projection(contract: dict[str, object]) -> str:
             "",
             f"- prompt_is_projection_only: `{projection_contract.get('prompt_is_projection_only')}`",
             f"- machine_readable_files_take_precedence: `{projection_contract.get('machine_readable_files_take_precedence')}`",
+            f"- source_of_truth: `{projection_contract.get('source_of_truth')}`",
+            f"- generator_command: `{projection_contract.get('generator_command')}`",
+            "- Markdown handoff files and latest package files are generated projections; update generator/contract/rule sources first, then regenerate projections.",
+            "- Forbidden update path: manual direct edits to generated handoff projections as the primary source of new rules.",
             "- Do not use stale copied prompt text or `NEW_CHAT_HANDOFF_PROMPT.md` as sole authority.",
+            "",
+            "## Patch-cycle diagnostic gate",
+            "",
+            "After one failed patch, exactly one direct correction is allowed. After a second failure in the same patch family, stop mutations, run bounded diagnosis, classify product bug versus test-model bug, and record `next_mutation_allowed`.",
             "",
             "## Local copy-and-paste protocol",
             "",
             "Use exactly one complete Bash block per local action. The block must start by changing into the repository root, write verbose output to `~/Downloads/*.log`, and end by printing `LOG=...` and `RC=...`.",
             "",
-            "Forbidden local-command patterns: loose command fragments, manual editor instructions, naked `python`, naked `pytest`, `git add .`, and `{ ... } > \"$OUT\" 2>&1` as the recommended logging pattern.",
+            "Chat output after local blocks should be only `LOG=...` and `RC=...`; large diagnostics belong in compact JSON summaries or log files.",
+            "",
+            "Forbidden local-command patterns: loose command fragments, manual editor instructions, naked `python`, naked `pytest`, `git add .`, `{ ... } > \"$OUT\" 2>&1` as the recommended logging pattern, `cat` of whole diagnostic files, and unbounded grep over reports/outbox/generated logs.",
             "",
         ]
     )

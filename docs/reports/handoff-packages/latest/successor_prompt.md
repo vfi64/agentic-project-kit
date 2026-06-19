@@ -31,11 +31,14 @@ Critical rule IDs:
 - `repo-backed-rules-and-gates` (critical)
 - `gc-retention-not-document-migration` (critical)
 - `ns-legacy-not-active-control-plane` (critical)
+- `generated-handoff-projection-update-policy` (critical)
+- `patch-cycle-diagnostic-gate` (critical)
+- `copy-paste-output-discipline` (critical)
 - `protected-file-preservation` (critical)
 
 ## Current continuation state
 
-- branch: `docs/post-pr1504-handoff-refresh`
+- branch: `codex/handoff-contract-discipline-rules`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/project_direction.yaml`
@@ -52,13 +55,23 @@ Normal feature lifecycle: feature branch -> tests/audits -> `transfer protected-
 
 - prompt_is_projection_only: `True`
 - machine_readable_files_take_precedence: `True`
+- source_of_truth: `generator_and_machine_readable_successor_package`
+- generator_command: `agentic-kit transfer prepare-successor-handoff --render-prompt`
+- Markdown handoff files and latest package files are generated projections; update generator/contract/rule sources first, then regenerate projections.
+- Forbidden update path: manual direct edits to generated handoff projections as the primary source of new rules.
 - Do not use stale copied prompt text or `NEW_CHAT_HANDOFF_PROMPT.md` as sole authority.
+
+## Patch-cycle diagnostic gate
+
+After one failed patch, exactly one direct correction is allowed. After a second failure in the same patch family, stop mutations, run bounded diagnosis, classify product bug versus test-model bug, and record `next_mutation_allowed`.
 
 ## Local copy-and-paste protocol
 
 Use exactly one complete Bash block per local action. The block must start by changing into the repository root, write verbose output to `~/Downloads/*.log`, and end by printing `LOG=...` and `RC=...`.
 
-Forbidden local-command patterns: loose command fragments, manual editor instructions, naked `python`, naked `pytest`, `git add .`, and `{ ... } > "$OUT" 2>&1` as the recommended logging pattern.
+Chat output after local blocks should be only `LOG=...` and `RC=...`; large diagnostics belong in compact JSON summaries or log files.
+
+Forbidden local-command patterns: loose command fragments, manual editor instructions, naked `python`, naked `pytest`, `git add .`, `{ ... } > "$OUT" 2>&1` as the recommended logging pattern, `cat` of whole diagnostic files, and unbounded grep over reports/outbox/generated logs.
 
 # Successor Chat Prompt
 
@@ -178,14 +191,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1504-handoff-refresh",
+    "branch": "codex/handoff-contract-discipline-rules",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "e6f0a6f0e3874b219fd4ec9a823acc2cf49b3682",
+    "head": "12183dff65b432807dcc23c971de1ee72a4de1b3",
     "head_matches_origin_main": true,
-    "head_short": "e6f0a6f0",
+    "head_short": "12183dff",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "e6f0a6f0e3874b219fd4ec9a823acc2cf49b3682",
-    "origin_main_short": "e6f0a6f0",
+    "origin_main": "12183dff65b432807dcc23c971de1ee72a4de1b3",
+    "origin_main_short": "12183dff",
     "worktree_clean": false
   }
 }
