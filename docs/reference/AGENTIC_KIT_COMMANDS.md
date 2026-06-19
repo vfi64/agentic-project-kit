@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `171`
+- Command count: `172`
 
 ## Commands
 
@@ -550,6 +550,16 @@ Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 List available project profiles and policy packs.
 
 _No parameters._
+
+### `agentic-kit project-direction`
+
+Render strategy, roadmap, and ideas from the project direction YAML source.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `section` | `TyperOption` | --section | `False` | `all` | all, strategy, roadmap, or ideas. |
+| `output_format` | `TyperOption` | --format | `False` | `text` | text, markdown, or json. |
 
 ### `agentic-kit release-check`
 

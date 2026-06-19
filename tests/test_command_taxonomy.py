@@ -90,3 +90,15 @@ def test_classify_patch_scope_preflight_as_diagnostic() -> None:
 
     assert entry.category == "diagnostic"
 
+def test_classify_project_direction_as_docs() -> None:
+    entry = classify_command(
+        {
+            "qualified_name": "agentic-kit project-direction",
+            "group": "root",
+            "path": ["project-direction"],
+            "help": "Render project direction",
+        }
+    )
+
+    assert entry.category == "docs"
+
