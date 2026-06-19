@@ -97,16 +97,19 @@ def test_changelog_current_release_has_post_release_doi_facts() -> None:
     assert CONCEPT_DOI in current_section
 
 
-def test_successor_package_mentions_current_release_and_next_slice() -> None:
+def test_successor_package_mentions_current_release_and_project_direction_tasks() -> None:
     successor_prompt = _read("docs/reports/handoff-packages/latest/successor_prompt.md")
+    successor_context = _read("docs/reports/handoff-packages/latest/successor_context.yaml")
     validation_report = _read("docs/reports/handoff-packages/latest/validation_report.json")
     source_manifest = _read("docs/reports/handoff-packages/latest/source_manifest.json")
 
-    combined = "\n".join([successor_prompt, validation_report, source_manifest])
+    combined = "\n".join([successor_prompt, successor_context, validation_report, source_manifest])
 
     assert CURRENT_VERSION in combined
-    assert "release-metadata-authority-gate" in combined or "doi-closeout-atomicity" in combined
-    assert "release-command-authority-and-publish-core-triage" in combined
+    assert "docs/planning/project_direction.yaml" in combined
+    assert "project-direction" in combined
+    assert "docs-reconciliation" in combined
+    assert "release-v0.4.10" in combined
 
 
 def test_current_state_docs_do_not_depend_on_over_specific_status_sentence() -> None:
