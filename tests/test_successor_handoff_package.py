@@ -356,3 +356,146 @@ def test_next_chat_bootstrap_contains_handoff_freshness_marker():
     assert "- HEAD: `1234567890abcdef` (`12345678`)" in bootstrap
     assert "- Handoff freshness marker: `12345678`" in bootstrap
     assert "## Bootstrap-Akzeptanzbremse" in bootstrap
+
+def test_successor_execution_contract_separates_general_rules_from_current_state() -> None:
+    from agentic_project_kit.successor_handoff_package import (
+        GENERAL_CONTRACT_RULE_IDS,
+        REQUIRED_EXECUTION_CONTRACT_RULE_IDS,
+        build_execution_contract,
+    )
+
+    context = {
+        "repo": {
+            "full_name": "vfi64/agentic-project-kit",
+            "local_path": "cd /path/to/agentic-project-kit",
+            "branch": "feature/docs-reconciliation-active-obsolete-refs",
+            "head": "feature-head",
+            "origin_main": "main-head",
+            "worktree_clean": True,
+        },
+        "short_term_memory": {
+            "open_tasks": [{"id": "docs-reconciliation", "status": "active"}],
+            "recent_lessons": ["current blocker belongs to current state"],
+        },
+        "validation_report": {"status": "PASS"},
+        "dirty_paths": [],
+    }
+
+    contract = build_execution_contract(context)
+
+    assert set(GENERAL_CONTRACT_RULE_IDS) <= set(REQUIRED_EXECUTION_CONTRACT_RULE_IDS)
+    assert contract["general_contract"]["scope"] == "durable-agentic-kit-operating-model"
+    assert contract["current_state_contract"]["scope"] == "current-continuation-state"
+    assert contract["handoff_projection_contract"]["prompt_is_projection_only"] is True
+    assert contract["handoff_projection_contract"]["machine_readable_files_take_precedence"] is True
+
+    assert "docs/planning/project_direction.yaml" in contract["general_contract"]["source_authorities"]
+    assert "docs/DOCUMENTATION_REGISTRY.yaml" in contract["general_contract"]["source_authorities"]
+    assert contract["current_state_contract"]["repo"]["branch"] == "feature/docs-reconciliation-active-obsolete-refs"
+    assert contract["current_state_contract"]["open_tasks"][0]["id"] == "docs-reconciliation"
+
+    general_text = str(contract["general_contract"])
+    assert "feature/docs-reconciliation-active-obsolete-refs" not in general_text
+    assert "feature-head" not in general_text
+
+
+def test_successor_execution_contract_contains_required_agentic_kit_rule_ids() -> None:
+    from agentic_project_kit.successor_handoff_package import build_execution_contract
+
+    context = {
+        "repo": {
+            "branch": "main",
+            "head": "abc123",
+            "origin_main": "abc123",
+            "worktree_clean": True,
+        },
+        "short_term_memory": {"open_tasks": [], "recent_lessons": []},
+        "validation_report": {"status": "PASS"},
+    }
+
+    contract = build_execution_contract(context)
+    rule_ids = {rule["rule_id"] for rule in contract["rules"]}
+
+    assert {
+        "wrapper-first-complete-development-cycle",
+        "successor-package-not-prompt-only",
+        "documentation-authority-model",
+        "repo-backed-rules-and-gates",
+        "gc-retention-not-document-migration",
+        "ns-legacy-not-active-control-plane",
+    } <= rule_ids
+
+
+def test_successor_prompt_renders_machine_readable_precedence_and_state_separation() -> None:
+    from agentic_project_kit.successor_handoff_package import render_successor_prompt
+
+    context = {
+        "repo": {
+            "full_name": "vfi64/agentic-project-kit",
+            "local_path": "cd /path/to/agentic-project-kit",
+            "branch": "main",
+            "head": "abc123",
+            "head_short": "abc123",
+            "origin_main": "abc123",
+            "origin_main_short": "abc123",
+            "head_matches_origin_main": True,
+            "worktree_clean": True,
+        },
+        "short_term_memory": {
+            "open_tasks": [{"id": "docs-reconciliation", "status": "active"}],
+            "recent_lessons": [],
+        },
+    }
+
+    prompt = render_successor_prompt(context)
+
+    assert "Durable agentic-kit operating model" in prompt
+    assert "Current continuation state" in prompt
+    assert "Handoff package precedence" in prompt
+    assert "execution_contract.json.general_contract" in prompt
+    assert "execution_contract.json.current_state_contract" in prompt
+    assert "Maschinenlesbare Dateien haben Vorrang" in prompt
+    assert "transfer pr-create-complete" in prompt
+    assert "not a feature-branch pre-PR gate" in prompt
+    assert "docs/DOCUMENTATION_REGISTRY.yaml" in prompt
+    assert "Garbage Collector nur für technische Retention" in prompt
+
+
+def test_successor_validation_requires_contract_layers() -> None:
+    import json
+
+    from agentic_project_kit.successor_handoff_package import validate_successor_outputs
+
+    context = {
+        "repo": {
+            "head": "abc123",
+            "head_short": "abc123",
+        },
+        "long_term_memory": {
+            "mandatory_sources": [],
+        },
+    }
+    broken_contract = {
+        "schema_version": 1,
+        "kind": "successor_execution_contract",
+        "rules": [
+            {"rule_id": "local-copy-paste-protocol"},
+            {"rule_id": "strict-start-decision"},
+            {"rule_id": "protected-file-preservation"},
+            {"rule_id": "bootstrap_acceptance_gate"},
+        ],
+    }
+
+    report = validate_successor_outputs(
+        {
+            "execution_contract.json": json.dumps(broken_contract),
+            "successor_prompt.md": "",
+        },
+        context,
+    )
+
+    codes = {finding["code"] for finding in report["findings"]}
+    assert "missing_general_contract" in codes
+    assert "missing_current_state_contract" in codes
+    assert "missing_handoff_projection_contract" in codes
+    assert "missing_execution_contract_rule_ids" in codes

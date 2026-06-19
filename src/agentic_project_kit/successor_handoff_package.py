@@ -83,7 +83,34 @@ REQUIRED_EXECUTION_CONTRACT_RULE_IDS: frozenset[str] = frozenset(
         "strict-start-decision",
         "protected-file-preservation",
         "bootstrap_acceptance_gate",
+        "wrapper-first-complete-development-cycle",
+        "successor-package-not-prompt-only",
+        "documentation-authority-model",
+        "repo-backed-rules-and-gates",
+        "gc-retention-not-document-migration",
+        "ns-legacy-not-active-control-plane",
     }
+)
+
+GENERAL_CONTRACT_RULE_IDS: frozenset[str] = frozenset(
+    {
+        "wrapper-first-complete-development-cycle",
+        "successor-package-not-prompt-only",
+        "documentation-authority-model",
+        "repo-backed-rules-and-gates",
+        "gc-retention-not-document-migration",
+        "ns-legacy-not-active-control-plane",
+    }
+)
+
+GENERAL_SOURCE_AUTHORITIES: tuple[str, ...] = (
+    ".agentic/compiled_agent_context.yaml",
+    ".agentic/transfer_safety_rules.yaml",
+    ".agentic/transfer/one_command_transfer_protocol.yaml",
+    "docs/planning/project_direction.yaml",
+    "docs/DOCUMENTATION_REGISTRY.yaml",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
 )
 
 FORBIDDEN_LOCAL_COMMAND_RECOMMENDATIONS: tuple[str, ...] = (
@@ -348,6 +375,89 @@ def validate_successor_outputs(outputs: dict[str, str], context: dict[str, Any])
                 }
             )
 
+        general_contract = execution_contract.get("general_contract")
+        if not isinstance(general_contract, dict):
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "missing_general_contract",
+                    "message": "execution_contract.json must separate durable agentic-kit rules into general_contract.",
+                }
+            )
+            general_contract = {}
+        general_rule_ids = set(general_contract.get("rule_ids", []))
+        missing_general_rule_ids = sorted(GENERAL_CONTRACT_RULE_IDS - general_rule_ids)
+        if missing_general_rule_ids:
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "missing_general_contract_rule_ids",
+                    "message": "Missing general contract rule IDs: " + ", ".join(missing_general_rule_ids),
+                }
+            )
+        if general_contract.get("scope") != "durable-agentic-kit-operating-model":
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "invalid_general_contract_scope",
+                    "message": "general_contract.scope must identify durable agentic-kit operating rules.",
+                }
+            )
+
+        current_state_contract = execution_contract.get("current_state_contract")
+        if not isinstance(current_state_contract, dict):
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "missing_current_state_contract",
+                    "message": "execution_contract.json must separate current continuation state into current_state_contract.",
+                }
+            )
+            current_state_contract = {}
+        if current_state_contract.get("scope") != "current-continuation-state":
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "invalid_current_state_contract_scope",
+                    "message": "current_state_contract.scope must identify volatile/current continuation state.",
+                }
+            )
+
+        projection_contract = execution_contract.get("handoff_projection_contract")
+        if not isinstance(projection_contract, dict):
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "missing_handoff_projection_contract",
+                    "message": "execution_contract.json must state that markdown prompts are projections.",
+                }
+            )
+            projection_contract = {}
+        if projection_contract.get("prompt_is_projection_only") is not True:
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "prompt_not_marked_projection_only",
+                    "message": "handoff_projection_contract.prompt_is_projection_only must be true.",
+                }
+            )
+        if projection_contract.get("machine_readable_files_take_precedence") is not True:
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "machine_readable_precedence_missing",
+                    "message": "handoff_projection_contract must make machine-readable files authoritative over copied prompt text.",
+                }
+            )
+
         forbidden_text = execution_contract_text + "\n" + outputs.get("successor_prompt.md", "")
         for forbidden in _forbidden_local_command_recommendations(forbidden_text):
             findings.append(
@@ -390,9 +500,27 @@ def build_execution_contract(context: dict[str, Any]) -> dict[str, object]:
     origin_main = str(repo.get("origin_main", ""))
     worktree_clean = bool(repo.get("worktree_clean", not dirty_paths))
 
-    return {
-        "schema_version": 1,
-        "kind": "successor_execution_contract",
+    open_tasks = context.get("short_term_memory", {}).get("open_tasks", [])
+    recent_lessons = context.get("short_term_memory", {}).get("recent_lessons", [])
+
+    general_contract = {
+        "scope": "durable-agentic-kit-operating-model",
+        "rule_ids": sorted(GENERAL_CONTRACT_RULE_IDS),
+        "source_authorities": list(GENERAL_SOURCE_AUTHORITIES),
+        "summary": {
+            "agentic_kit_is_control_plane": True,
+            "wrapper_first": True,
+            "complete_development_cycle_required": True,
+            "repo_backed_rules_and_gates_required": True,
+            "documentation_authority_model_required": True,
+            "gc_is_retention_not_document_migration": True,
+            "ns_is_legacy_not_active_control_plane": True,
+            "do_not_plan_from_stale_chat_memory": True,
+        },
+    }
+
+    current_state_contract = {
+        "scope": "current-continuation-state",
         "repo": {
             "full_name": repo.get("full_name", "vfi64/agentic-project-kit"),
             "local_path": repo.get("local_path", "cd /path/to/agentic-project-kit"),
@@ -403,6 +531,34 @@ def build_execution_contract(context: dict[str, Any]) -> dict[str, object]:
             "worktree_clean": worktree_clean,
             "dirty_paths": list(dirty_paths),
         },
+        "open_tasks_source": "docs/planning/project_direction.yaml",
+        "document_registry_source": "docs/DOCUMENTATION_REGISTRY.yaml",
+        "open_tasks": open_tasks,
+        "recent_lessons": recent_lessons,
+        "next_action_rule": "Use current_state_contract only as continuation state; do not promote it to durable rules.",
+    }
+
+    handoff_projection_contract = {
+        "prompt_is_projection_only": True,
+        "machine_readable_files_take_precedence": True,
+        "must_read_files": [
+            "docs/reports/handoff-packages/latest/execution_contract.json",
+            "docs/reports/handoff-packages/latest/successor_context.yaml",
+            "docs/reports/handoff-packages/latest/validation_report.json",
+            "docs/reports/handoff-packages/latest/source_manifest.json",
+            "docs/reports/handoff-packages/latest/successor_prompt.md",
+        ],
+        "stale_local_prompt_files_are_not_authoritative": True,
+        "do_not_use_uploaded_or_copied_prompt_text_as_sole_source": True,
+    }
+
+    return {
+        "schema_version": 1,
+        "kind": "successor_execution_contract",
+        "general_contract": general_contract,
+        "current_state_contract": current_state_contract,
+        "handoff_projection_contract": handoff_projection_contract,
+        "repo": current_state_contract["repo"],
         "validation": {
             "status": validation_report.get("status"),
             "path": validation_report.get("path", ".agentic/successor_handoff_package/validation_report.json"),
@@ -472,6 +628,97 @@ def build_execution_contract(context: dict[str, Any]) -> dict[str, object]:
                 ],
             },
             {
+                "rule_id": "wrapper-first-complete-development-cycle",
+                "priority": "critical",
+                "scope": "feature-development-pr-handoff",
+                "must": [
+                    "Use agentic-kit wrappers as the authoritative control plane.",
+                    "Prefer complex transfer wrappers over hand-built Git/GitHub/handoff/release/GC shell logic.",
+                    "Run focused tests, full tests/audits as needed, inspect actual diff, and run transfer protected-diff-plan before commit.",
+                    "Commit through transfer commit, then run rules acknowledge.",
+                    "Before PR completion, regenerate and publish fresh successor/LLM handoff context.",
+                    "Use transfer pr-create-complete with --post-merge-complete for the normal PR lifecycle.",
+                    "After merge, sync main, restore known volatile files, run post-merge-check on main, repo-status, audits, standard gates, and final successor handoff.",
+                ],
+                "forbidden": [
+                    "manual PR creation/merge when the wrapper can perform the lifecycle",
+                    "running post-merge-check as a feature-branch pre-PR gate",
+                    "planning from stale chat memory or stale copied prompt text",
+                ],
+            },
+            {
+                "rule_id": "successor-package-not-prompt-only",
+                "priority": "critical",
+                "scope": "chat-switch-handoff",
+                "must": [
+                    "Treat successor_prompt.md as a human-readable projection only.",
+                    "Read execution_contract.json, successor_context.yaml, validation_report.json, and source_manifest.json before work.",
+                    "Use machine-readable files over stale copied prompt text when they disagree.",
+                ],
+                "forbidden": [
+                    "using NEW_CHAT_HANDOFF_PROMPT.md or copied chat text as the sole start authority",
+                    "starting product work before validation_report.json and execution_contract.json were inspected",
+                ],
+            },
+            {
+                "rule_id": "documentation-authority-model",
+                "priority": "critical",
+                "scope": "documentation-reconciliation",
+                "must": [
+                    "Use docs/planning/project_direction.yaml for active roadmap, strategy, and current tasks.",
+                    "Use docs/DOCUMENTATION_REGISTRY.yaml for document classification and authority mapping.",
+                    "Classify obsolete documents before archive/delete decisions.",
+                    "Retarget active references away from obsolete/superseded documents before archival.",
+                ],
+                "forbidden": [
+                    "adding new operational rules to historical, archived, superseded, or migration-report documents",
+                    "treating old roadmap or planning markdown files as active authority",
+                    "deleting semantic documentation through report-retention GC",
+                ],
+            },
+            {
+                "rule_id": "repo-backed-rules-and-gates",
+                "priority": "critical",
+                "scope": "rules-tests-evidence",
+                "must": [
+                    "Treat repo-backed rules, tests, gates, and evidence logs as authoritative.",
+                    "Stop on BLOCK or FAIL and diagnose before continuing.",
+                    "Run protected-diff-plan before protected/governance/status/handoff/YAML commits.",
+                    "Use evidence-producing commands; do not substitute a free-text PASS.",
+                ],
+                "forbidden": [
+                    "committing, pushing, creating PRs, or merging after protected-diff-plan FAIL",
+                    "overwriting protected files broadly to make gates pass",
+                ],
+            },
+            {
+                "rule_id": "gc-retention-not-document-migration",
+                "priority": "critical",
+                "scope": "artifact-gc",
+                "must": [
+                    "Treat report-retention GC as technical artifact/report retention.",
+                    "Use dry-run before execute.",
+                    "Restrict automatic report-retention execution to explicitly allowed candidate types.",
+                ],
+                "forbidden": [
+                    "using GC as semantic documentation migration",
+                    "deleting .md/.py/.yaml/.txt without explicit policy and review",
+                ],
+            },
+            {
+                "rule_id": "ns-legacy-not-active-control-plane",
+                "priority": "critical",
+                "scope": "legacy-ns-references",
+                "must": [
+                    "Treat ns migration documents as historical or compatibility context unless the registry says otherwise.",
+                    "Classify ./ns references as historical, test fixture, compatibility implementation, or active blocker before changing them.",
+                ],
+                "forbidden": [
+                    "placing new operational rules in docs/reports/ns-migration/",
+                    "resurrecting removed ./ns routes as active workflow instructions",
+                ],
+            },
+            {
                 "rule_id": "protected-file-preservation",
                 "priority": "critical",
                 "scope": "protected governance/status/handoff/YAML files",
@@ -494,21 +741,62 @@ def build_execution_contract(context: dict[str, Any]) -> dict[str, object]:
 def render_execution_contract_projection(contract: dict[str, object]) -> str:
     repo = contract["repo"]
     rules = contract["rules"]
+    general_contract = contract.get("general_contract", {})
+    current_state_contract = contract.get("current_state_contract", {})
+    projection_contract = contract.get("handoff_projection_contract", {})
+
     lines = [
         "## Machine-readable execution contract",
         "",
-        "The markdown successor prompt is a projection of the machine-readable execution contract.",
+        "The markdown successor prompt is a compact projection. The machine-readable files take precedence.",
         "",
-        f"- branch: `{repo['branch']}`",
-        f"- head_matches_origin_main: `{repo['head_matches_origin_main']}`",
-        f"- worktree_clean: `{repo['worktree_clean']}`",
+        "Read first: `execution_contract.json`, `successor_context.yaml`, `validation_report.json`, and `source_manifest.json`.",
         "",
-        "Critical rule IDs:",
+        "## Durable agentic-kit operating model",
+        "",
+        f"- scope: `{general_contract.get('scope', 'UNKNOWN')}`",
+        "- agentic-kit wrappers are the authoritative control plane.",
+        "- Use the rule system, command reference, documentation registry, project direction authority, gates, evidence logs, report-retention GC, and successor handoff package as active subsystems.",
+        "- GC is technical retention, not semantic documentation migration.",
+        "- Historical `ns` migration documents are not active rule locations.",
+        "",
+        "Source authorities:",
     ]
-    for rule in rules:
-        lines.append(f"- `{rule['rule_id']}` ({rule['priority']})")
+    for source in general_contract.get("source_authorities", []):
+        lines.append(f"- `{source}`")
+
     lines.extend(
         [
+            "",
+            "Critical rule IDs:",
+        ]
+    )
+    for rule in rules:
+        lines.append(f"- `{rule['rule_id']}` ({rule['priority']})")
+
+    lines.extend(
+        [
+            "",
+            "## Current continuation state",
+            "",
+            f"- branch: `{repo['branch']}`",
+            f"- head_matches_origin_main: `{repo['head_matches_origin_main']}`",
+            f"- worktree_clean: `{repo['worktree_clean']}`",
+            f"- open_tasks_source: `{current_state_contract.get('open_tasks_source', 'UNKNOWN')}`",
+            f"- document_registry_source: `{current_state_contract.get('document_registry_source', 'UNKNOWN')}`",
+            "- Current state is volatile continuation data, not a durable rule source.",
+            "",
+            "## Wrapper-first complete development cycle",
+            "",
+            "Normal feature lifecycle: feature branch -> tests/audits -> `transfer protected-diff-plan` -> `transfer commit` -> `rules acknowledge` -> fresh successor/LLM context -> `transfer pr-create-complete ... --post-merge-complete` -> sync main -> `transfer post-merge-check` on main -> `transfer repo-status` -> docs/program/standard gates -> final successor handoff package.",
+            "",
+            "`transfer post-merge-check` is a main/post-merge lifecycle check, not a feature-branch pre-PR gate. Use `transfer repo-status` for feature-branch cleanliness.",
+            "",
+            "## Handoff package precedence",
+            "",
+            f"- prompt_is_projection_only: `{projection_contract.get('prompt_is_projection_only')}`",
+            f"- machine_readable_files_take_precedence: `{projection_contract.get('machine_readable_files_take_precedence')}`",
+            "- Do not use stale copied prompt text or `NEW_CHAT_HANDOFF_PROMPT.md` as sole authority.",
             "",
             "## Local copy-and-paste protocol",
             "",
@@ -575,6 +863,10 @@ def render_successor_prompt(context: dict[str, Any]) -> str:
             "- Vor Commit: tatsächlichen Diff inspizieren, Tests laufen lassen, protected-diff-plan ausführen.",
             "- Bei `BLOCK` oder `FAIL`: sofort stoppen, Diagnose statt Weiterarbeiten.",
             "- Aktive Aufgaben stammen aus `docs/planning/project_direction.yaml`; alte Planungsdokumente sind keine Startautorität.",
+            "- Allgemeingültige Regeln stehen in `execution_contract.json.general_contract`; aktueller Fortsetzungspunkt steht in `execution_contract.json.current_state_contract` und `successor_context.yaml`.",
+            "- `successor_prompt.md` ist nur Projektion. Maschinenlesbare Dateien haben Vorrang.",
+            "- Komplexe `agentic-kit`-Wrapper haben Vorrang vor selbstgebauten Git-/GitHub-/Handoff-/GC-/Release-Blöcken.",
+            "- Garbage Collector nur für technische Retention verwenden, nicht für semantische Dokumentenmigration.",
             "",
             "## Nächste sichere Entscheidung",
             "",
