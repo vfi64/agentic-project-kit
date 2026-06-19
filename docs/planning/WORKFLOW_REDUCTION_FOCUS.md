@@ -693,6 +693,6 @@ additive authority notes, then verify with:
 - `agentic-kit audit-doc-currency`
 - `agentic-kit docs-audit`
 - `agentic-kit standard-gates-audit-suite`
-## Operational documentation refresh state after PR #1480
+## Operational documentation refresh state after PR #1482
 
-Current administrative handoff refresh state is `53a9ccb9` (`Mark duplicate direction docs superseded (#1480)`). Continue next only after this post-PR1480 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `9b978e00` (`Reconcile remaining docs authority registry (#1482)`). Continue next only after this post-PR1482 refresh is committed and merged; the next substantive slice must be created from fresh main.
