@@ -190,3 +190,103 @@ def test_tmp_log_gc_ignores_symlink(tmp_path: Path) -> None:
     assert collect_expired_tmp_logs(tmp_path, now=1_000_000.0) == []
     assert link.is_symlink()
     assert target.exists()
+
+def test_transfer_run_gc_keeps_latest_and_collects_expired_reports(tmp_path: Path) -> None:
+    import os
+    from agentic_project_kit.communication_artifact_gc import (
+        collect_expired_transfer_run_reports,
+        execute_transfer_run_report_gc,
+    )
+
+    base = tmp_path / "docs" / "reports" / "transfer_runs"
+    base.mkdir(parents=True)
+    stale = base / "20260604T000000Z-old.log"
+    latest = base / "latest-transfer-report.log"
+    fresh = base / "fresh.log"
+    stale.write_text("old\n", encoding="utf-8")
+    latest.write_text("latest\n", encoding="utf-8")
+    fresh.write_text("fresh\n", encoding="utf-8")
+    now = 1_000_000.0
+    old_time = now - (2 * 24 * 60 * 60)
+    fresh_time = now - 60
+    os.utime(stale, (old_time, old_time))
+    os.utime(latest, (old_time, old_time))
+    os.utime(fresh, (fresh_time, fresh_time))
+
+    found = collect_expired_transfer_run_reports(tmp_path, now=now)
+
+    assert found == [stale]
+
+    outcome, message = execute_transfer_run_report_gc(tmp_path, execute=False, now=now)
+    assert outcome == "PENDING_EXPIRED_TRANSFER_RUN_REPORTS"
+    assert "20260604T000000Z-old.log" in message
+    assert stale.exists()
+
+    outcome, message = execute_transfer_run_report_gc(tmp_path, execute=True, now=now)
+    assert outcome == "PASS_COLLECTED"
+    assert "20260604T000000Z-old.log" in message
+    assert not stale.exists()
+    assert latest.exists()
+    assert fresh.exists()
+
+
+def test_tmp_log_gc_keeps_protected_names_and_last_n_logs(tmp_path: Path) -> None:
+    import os
+    from agentic_project_kit.communication_artifact_gc import collect_expired_tmp_logs
+
+    now = 1_000_000.0
+    old_time = now - (2 * 24 * 60 * 60)
+
+    protected = tmp_path / "local-gc-last.json"
+    protected.write_text("{}\n", encoding="utf-8")
+    os.utime(protected, (old_time, old_time))
+
+    logs = []
+    for index in range(4):
+        log = tmp_path / f"slice-test-{index}.log"
+        log.write_text("old\n", encoding="utf-8")
+        os.utime(log, (old_time + index, old_time + index))
+        logs.append(log)
+
+    found = collect_expired_tmp_logs(tmp_path, now=now, keep_last=2)
+
+    assert protected not in found
+    assert logs[0] in found
+    assert logs[1] in found
+    assert logs[2] not in found
+    assert logs[3] not in found
+
+def test_artifact_gc_cli_transfer_runs_dry_run(tmp_path: Path, monkeypatch) -> None:
+    import os
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    base = tmp_path / "docs" / "reports" / "transfer_runs"
+    base.mkdir(parents=True)
+    stale = base / "old.log"
+    latest = base / "latest-transfer-report.log"
+    stale.write_text("old\n", encoding="utf-8")
+    latest.write_text("latest\n", encoding="utf-8")
+    old_time = 1_000_000.0 - (2 * 24 * 60 * 60)
+    os.utime(stale, (old_time, old_time))
+    os.utime(latest, (old_time, old_time))
+
+    monkeypatch.chdir(tmp_path)
+    result = CliRunner().invoke(app, ["artifact-gc", "--transfer-runs"])
+
+    assert result.exit_code == 0
+    assert "PENDING_EXPIRED_TRANSFER_RUN_REPORTS" in result.output
+    assert "old.log" in result.output
+    assert stale.exists()
+    assert latest.exists()
+
+
+def test_artifact_gc_cli_rejects_two_modes() -> None:
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    result = CliRunner().invoke(app, ["artifact-gc", "--tmp-logs", "--transfer-runs"])
+
+    assert result.exit_code == 1
+    assert "FAIL_MUTUALLY_EXCLUSIVE_MODES" in result.output
+

@@ -39,6 +39,73 @@
     },
     {
       "group": "root",
+      "help": "Dry-run by default garbage collector for transient communication artifacts.",
+      "name": "artifact-gc",
+      "params": [
+        {
+          "default": false,
+          "help": "Collect expired local tmp logs.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "tmp_logs",
+          "opts": [
+            "--tmp-logs"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Use repository-local tmp/ instead of /tmp for --tmp-logs.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "local_tmp",
+          "opts": [
+            "--local-tmp"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Collect expired docs/reports/transfer_runs files.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "transfer_runs",
+          "opts": [
+            "--transfer-runs"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Actually delete candidates. Default is dry-run.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "artifact-gc"
+      ],
+      "qualified_name": "agentic-kit artifact-gc"
+    },
+    {
+      "group": "root",
       "help": "Audit absolute local paths that may break portability.",
       "name": "audit-absolute-path-portability",
       "params": [

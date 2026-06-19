@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `170`
+- Command count: `171`
 
 ## Commands
 
@@ -20,6 +20,17 @@ _No parameters._
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `action_id` | `TyperArgument` | action_id | `True` |  |  |
+
+### `agentic-kit artifact-gc`
+
+Dry-run by default garbage collector for transient communication artifacts.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `tmp_logs` | `TyperOption` | --tmp-logs | `False` | `False` | Collect expired local tmp logs. |
+| `local_tmp` | `TyperOption` | --local-tmp | `False` | `False` | Use repository-local tmp/ instead of /tmp for --tmp-logs. |
+| `transfer_runs` | `TyperOption` | --transfer-runs | `False` | `False` | Collect expired docs/reports/transfer_runs files. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Actually delete candidates. Default is dry-run. |
 
 ### `agentic-kit audit-absolute-path-portability`
 
