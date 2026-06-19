@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import json
 
 from agentic_project_kit.llm_execution_context import build_llm_execution_context
@@ -74,4 +76,32 @@ def test_llm_execution_context_governance_mentions_refresh_and_post_merge_contex
     assert "handoff and transfer-context visibility" in governance_text
     assert "LLM execution context visibility" in governance_text
     assert "fresh LLM context gate requirement or explicit non-gated exception" in governance_text
+
+def test_llm_execution_context_encodes_pr_handoff_lifecycle_order(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.chdir(tmp_path)
+    Path(".agentic/transfer").mkdir(parents=True)
+    Path("docs/reference").mkdir(parents=True)
+    Path(".agentic/compiled_agent_context.yaml").write_text("schema_version: 1\n", encoding="utf-8")
+    Path(".agentic/transfer_safety_rules.yaml").write_text("schema_version: 1\n", encoding="utf-8")
+    Path(".agentic/transfer/one_command_transfer_protocol.yaml").write_text("schema_version: 1\n", encoding="utf-8")
+    Path("docs/reference/agentic-kit-commands.json").write_text(
+        '{"schema_version": 1, "commands": []}\n',
+        encoding="utf-8",
+    )
+    Path("docs/reference/AGENTIC_KIT_COMMANDS.md").write_text("# Commands\n", encoding="utf-8")
+
+    from agentic_project_kit.llm_execution_context import build_llm_execution_context
+
+    lifecycle = build_llm_execution_context(tmp_path)["canonical_lifecycle"]
+
+    assert lifecycle["feature_branch_pre_pr_gate"] == "agentic-kit transfer repo-status"
+    assert lifecycle["forbidden_feature_branch_pre_pr_gate"] == "agentic-kit transfer post-merge-check"
+    assert lifecycle["post_merge_checks_belong_to_main"] is True
+    assert lifecycle["post_merge_check_after_merge_only"] is True
+    assert lifecycle["do_not_use_stale_prompt_text_as_handoff_source"] is True
+    assert lifecycle["fresh_llm_context_before_pr"] == [
+        "./.venv/bin/agentic-kit transfer prepare-successor-handoff --render-prompt",
+        "./.venv/bin/agentic-kit transfer publish-last-report",
+        "./.venv/bin/agentic-kit transfer require-fresh-llm-context --json",
+    ]
 
