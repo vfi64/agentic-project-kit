@@ -596,6 +596,8 @@ Generate deterministic evidence-backed release notes from a local git tag diff.
 | `json_out` | `TyperOption` | --json-out | `False` |  | Write generated JSON release notes here. |
 | `out` | `TyperOption` | --out | `False` |  | Write generated Markdown release notes here. |
 | `write` | `TyperOption` | --write | `False` | `False` | Write --json-out and --out files. |
+| `check` | `TyperOption` | --check | `False` | `False` | Check existing --json-out and --out files for generated-output drift. |
+| `include_github_metadata` | `TyperOption` | --include-github-metadata | `False` | `False` | Augment PR evidence with optional gh pr view metadata. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print a machine-readable result. |
 
 ### `agentic-kit release-plan`

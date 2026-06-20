@@ -28,6 +28,7 @@ from agentic_project_kit.release import (
 from agentic_project_kit.release_state import build_release_lifecycle_status, render_release_lifecycle_status
 from agentic_project_kit.release_notes import (
     build_release_notes_report,
+    check_release_notes_outputs,
     render_release_notes_markdown,
     write_release_notes_outputs,
 )
@@ -198,10 +199,18 @@ def release_notes_generate_command(
     json_out: Path | None = typer.Option(None, "--json-out", help="Write generated JSON release notes here."),
     out: Path | None = typer.Option(None, "--out", help="Write generated Markdown release notes here."),
     write: bool = typer.Option(False, "--write", help="Write --json-out and --out files."),
+    check: bool = typer.Option(False, "--check", help="Check existing --json-out and --out files for generated-output drift."),
+    include_github_metadata: bool = typer.Option(False, "--include-github-metadata", help="Augment PR evidence with optional gh pr view metadata."),
     json_output: bool = typer.Option(False, "--json", help="Print a machine-readable result."),
 ) -> None:
     """Generate deterministic evidence-backed release notes from a local git tag diff."""
-    result = build_release_notes_report(project_root.resolve(), version=version, from_tag=from_tag, to_ref=to_ref)
+    result = build_release_notes_report(
+        project_root.resolve(),
+        version=version,
+        from_tag=from_tag,
+        to_ref=to_ref,
+        include_github_metadata=include_github_metadata,
+    )
     if write:
         if json_out is None or out is None:
             message = "--write requires both --json-out and --out"
@@ -211,11 +220,28 @@ def release_notes_generate_command(
                 console.print(f"BLOCK: {message}", markup=False)
             raise typer.Exit(code=2)
         write_release_notes_outputs(result, json_out=json_out, markdown_out=out)
+    drift_check: dict[str, object] | None = None
+    if check:
+        if json_out is None or out is None:
+            message = "--check requires both --json-out and --out"
+            if json_output:
+                _print_json({"ok": False, "status": "BLOCK", "message": message})
+            else:
+                console.print(f"BLOCK: {message}", markup=False)
+            raise typer.Exit(code=2)
+        drift_check = check_release_notes_outputs(result, json_out=json_out, markdown_out=out)
     if json_output:
-        _print_json(result.as_dict())
+        payload = result.as_dict()
+        if drift_check is not None:
+            payload["drift_check"] = drift_check
+        _print_json(payload)
     else:
         console.print(render_release_notes_markdown(result), markup=False)
+        if drift_check is not None:
+            console.print(f"DRIFT_CHECK={drift_check['status']}", markup=False)
     if result.validation.status != "PASS":
+        raise typer.Exit(code=2)
+    if drift_check is not None and drift_check["status"] != "PASS":
         raise typer.Exit(code=2)
 
 

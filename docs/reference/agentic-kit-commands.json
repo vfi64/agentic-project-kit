@@ -3425,6 +3425,34 @@
         },
         {
           "default": false,
+          "help": "Check existing --json-out and --out files for generated-output drift.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "check",
+          "opts": [
+            "--check"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Augment PR evidence with optional gh pr view metadata.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "include_github_metadata",
+          "opts": [
+            "--include-github-metadata"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
           "help": "Print a machine-readable result.",
           "is_flag": true,
           "metavar": null,
