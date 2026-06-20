@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3a46853e96679cbca7af26bca39ce03c69f2e7fe
-  short: 3a46853e
-  subject: Add patch cycle workflow status renderer (#1515)
+  full: d4bf839a9a37175a8bf2963beb00ab2a812aa6f0
+  short: d4bf839a
+  subject: Add release lifecycle status model (#1517)
 last_substantive_work_state:
-  full: 3a46853e96679cbca7af26bca39ce03c69f2e7fe
-  short: 3a46853e
-  subject: Add patch cycle workflow status renderer (#1515)
+  full: d4bf839a9a37175a8bf2963beb00ab2a812aa6f0
+  short: d4bf839a
+  subject: Add release lifecycle status model (#1517)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
