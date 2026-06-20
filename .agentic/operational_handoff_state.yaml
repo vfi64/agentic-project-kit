@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4e5e6465276b81b5eea3d70d9b4233c04f39f30d
-  short: 4e5e6465
-  subject: Add deterministic release notes generator (#1519)
+  full: 105793733d74304b4e7841f2544226488004d90e
+  short: 10579373
+  subject: Harden release prep current-state currency (#1521)
 last_substantive_work_state:
-  full: 4e5e6465276b81b5eea3d70d9b4233c04f39f30d
-  short: 4e5e6465
-  subject: Add deterministic release notes generator (#1519)
+  full: 105793733d74304b4e7841f2544226488004d90e
+  short: 10579373
+  subject: Harden release prep current-state currency (#1521)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
