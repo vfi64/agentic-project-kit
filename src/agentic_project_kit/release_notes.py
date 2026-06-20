@@ -4,6 +4,7 @@ from collections import defaultdict
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from datetime import datetime, timezone
+import json
 from pathlib import Path
 import re
 
@@ -36,9 +37,10 @@ class ReleaseNoteItem:
     commit_sha: str
     evidence: tuple[dict[str, object], ...]
     confidence: str
+    github_metadata: dict[str, object] | None = None
 
     def as_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "category": self.category,
             "title": self.title,
             "pr_number": self.pr_number,
@@ -46,6 +48,9 @@ class ReleaseNoteItem:
             "evidence": list(self.evidence),
             "confidence": self.confidence,
         }
+        if self.github_metadata is not None:
+            result["github_metadata"] = self.github_metadata
+        return result
 
 
 @dataclass(frozen=True)
@@ -66,6 +71,8 @@ class ReleaseNotesReport:
     to_ref: str
     generated_at_utc: str
     deterministic_timestamp_source: str
+    github_metadata_requested: bool
+    github_metadata_available: bool
     items: tuple[ReleaseNoteItem, ...]
     administrative_items: tuple[ReleaseNoteItem, ...]
     unclassified_items: tuple[ReleaseNoteItem, ...]
@@ -81,6 +88,8 @@ class ReleaseNotesReport:
             "to_ref": self.to_ref,
             "generated_at_utc": self.generated_at_utc,
             "deterministic_timestamp_source": self.deterministic_timestamp_source,
+            "github_metadata_requested": self.github_metadata_requested,
+            "github_metadata_available": self.github_metadata_available,
             "items": [item.as_dict() for item in self.items],
             "administrative_items": [item.as_dict() for item in self.administrative_items],
             "unclassified_items": [item.as_dict() for item in self.unclassified_items],
@@ -103,6 +112,7 @@ def build_release_notes_report(
     from_tag: str,
     to_ref: str = "HEAD",
     command_runner: ReleaseNotesRunner | None = None,
+    include_github_metadata: bool = False,
 ) -> ReleaseNotesReport:
     runner = command_runner or run_command
     plain_version = version.removeprefix("v")
@@ -112,9 +122,24 @@ def build_release_notes_report(
     administrative_items: list[ReleaseNoteItem] = []
     unclassified_items: list[ReleaseNoteItem] = []
     missing_evidence: list[dict[str, object]] = []
+    github_metadata_available = include_github_metadata
 
     for commit in commits:
-        item, item_missing_evidence = _item_from_commit(commit, from_tag=from_tag, to_ref=to_ref)
+        pr_number = _pr_number_from_subject(commit.subject)
+        github_metadata, github_missing_evidence = _github_metadata_for_pr(
+            project_root,
+            pr_number=pr_number,
+            runner=runner,
+            enabled=include_github_metadata,
+        )
+        if github_missing_evidence:
+            github_metadata_available = False
+        item, item_missing_evidence = _item_from_commit(
+            commit,
+            from_tag=from_tag,
+            to_ref=to_ref,
+            github_metadata=github_metadata,
+        )
         if item.category == "Administrative Handoff Refresh":
             administrative_items.append(item)
         else:
@@ -122,6 +147,7 @@ def build_release_notes_report(
             if item.category == "Unclassified":
                 unclassified_items.append(item)
         missing_evidence.extend(item_missing_evidence)
+        missing_evidence.extend(github_missing_evidence)
 
     missing_evidence.extend(evidence_errors)
     validation = _validate_release_notes(
@@ -137,6 +163,8 @@ def build_release_notes_report(
         to_ref=to_ref,
         generated_at_utc=generated_at,
         deterministic_timestamp_source="to_ref_committer_date_utc",
+        github_metadata_requested=include_github_metadata,
+        github_metadata_available=github_metadata_available,
         items=tuple(items),
         administrative_items=tuple(administrative_items),
         unclassified_items=tuple(unclassified_items),
@@ -199,12 +227,30 @@ def render_release_notes_markdown(report: ReleaseNotesReport) -> str:
 
 
 def write_release_notes_outputs(report: ReleaseNotesReport, *, json_out: Path, markdown_out: Path) -> None:
-    import json
-
     json_out.parent.mkdir(parents=True, exist_ok=True)
     markdown_out.parent.mkdir(parents=True, exist_ok=True)
     json_out.write_text(json.dumps(report.as_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
     markdown_out.write_text(render_release_notes_markdown(report), encoding="utf-8")
+
+
+def check_release_notes_outputs(report: ReleaseNotesReport, *, json_out: Path, markdown_out: Path) -> dict[str, object]:
+    expected_json = json.dumps(report.as_dict(), indent=2, sort_keys=True) + "\n"
+    expected_markdown = render_release_notes_markdown(report)
+    checked_paths = (json_out.as_posix(), markdown_out.as_posix())
+    missing_paths = [path.as_posix() for path in (json_out, markdown_out) if not path.exists()]
+    drifted_paths: list[str] = []
+    if not missing_paths:
+        if json_out.read_text(encoding="utf-8") != expected_json:
+            drifted_paths.append(json_out.as_posix())
+        if markdown_out.read_text(encoding="utf-8") != expected_markdown:
+            drifted_paths.append(markdown_out.as_posix())
+    status = "BLOCK" if missing_paths or drifted_paths else "PASS"
+    return {
+        "status": status,
+        "checked_paths": list(checked_paths),
+        "missing_paths": missing_paths,
+        "drifted_paths": drifted_paths,
+    }
 
 
 def _collect_commits(
@@ -256,10 +302,11 @@ def _item_from_commit(
     *,
     from_tag: str,
     to_ref: str,
+    github_metadata: dict[str, object] | None,
 ) -> tuple[ReleaseNoteItem, tuple[dict[str, object], ...]]:
     pr_number = _pr_number_from_subject(commit.subject)
     title = _title_from_subject(commit.subject)
-    category = _classify_subject(commit.subject)
+    category = _classify_with_metadata(commit.subject, github_metadata)
     missing_evidence: list[dict[str, object]] = []
     if pr_number is None:
         missing_evidence.append({"type": "missing_pr_number", "commit_sha": commit.sha, "title": title})
@@ -269,6 +316,18 @@ def _item_from_commit(
     ]
     if pr_number is not None:
         evidence.append({"type": "pull_request", "number": pr_number})
+    if github_metadata is not None:
+        evidence.append(
+            {
+                "type": "github_pull_request_metadata",
+                "number": pr_number,
+                "title": github_metadata.get("title"),
+                "labels": github_metadata.get("labels", []),
+                "merge_commit_sha": github_metadata.get("merge_commit_sha"),
+                "author": github_metadata.get("author"),
+                "url": github_metadata.get("url"),
+            }
+        )
     return (
         ReleaseNoteItem(
             category=category,
@@ -277,8 +336,70 @@ def _item_from_commit(
             commit_sha=commit.sha,
             evidence=tuple(evidence),
             confidence="high" if pr_number is not None and category != "Unclassified" else "medium",
+            github_metadata=github_metadata,
         ),
         tuple(missing_evidence),
+    )
+
+
+def _github_metadata_for_pr(
+    project_root: Path,
+    *,
+    pr_number: int | None,
+    runner: ReleaseNotesRunner,
+    enabled: bool,
+) -> tuple[dict[str, object] | None, tuple[dict[str, object], ...]]:
+    if not enabled:
+        return None, ()
+    if pr_number is None:
+        return None, ()
+    result = runner(
+        project_root,
+        [
+            "gh",
+            "pr",
+            "view",
+            str(pr_number),
+            "--json",
+            "number,title,body,labels,mergeCommit,author,state,url",
+        ],
+    )
+    if result.returncode != 0:
+        return None, (
+            {
+                "type": "github_metadata_unavailable",
+                "severity": "WARN",
+                "pr_number": pr_number,
+                "stderr": result.stderr.strip(),
+            },
+        )
+    try:
+        payload = json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        return None, (
+            {
+                "type": "github_metadata_unparseable",
+                "severity": "WARN",
+                "pr_number": pr_number,
+                "error": str(exc),
+            },
+        )
+    labels = payload.get("labels") or []
+    label_names = [str(label.get("name", "")) for label in labels if isinstance(label, dict)]
+    merge_commit = payload.get("mergeCommit") if isinstance(payload.get("mergeCommit"), dict) else {}
+    author = payload.get("author") if isinstance(payload.get("author"), dict) else {}
+    return (
+        {
+            "number": payload.get("number", pr_number),
+            "title": payload.get("title") or "",
+            "body": payload.get("body") or "",
+            "labels": label_names,
+            "merge_commit_sha": merge_commit.get("oid"),
+            "author": author.get("login"),
+            "state": payload.get("state"),
+            "url": payload.get("url"),
+        },
+        (),
     )
 
 
@@ -314,6 +435,69 @@ def _classify_subject(subject: str) -> str:
     if lowered.startswith("add "):
         return "Added"
     return "Unclassified"
+
+
+def _classify_with_metadata(subject: str, github_metadata: dict[str, object] | None) -> str:
+    if github_metadata is not None:
+        body_category = _category_from_body(str(github_metadata.get("body", "")))
+        if body_category:
+            return body_category
+        label_category = _category_from_labels(github_metadata.get("labels", []))
+        if label_category:
+            return label_category
+    return _classify_subject(subject)
+
+
+def _category_from_body(body: str) -> str | None:
+    for line in body.splitlines()[:40]:
+        match = re.match(r"\s*release-note-category\s*:\s*(.+?)\s*$", line, re.I)
+        if match:
+            return _normalize_category(match.group(1))
+    return None
+
+
+def _category_from_labels(labels: object) -> str | None:
+    if not isinstance(labels, list):
+        return None
+    for raw in labels:
+        label = str(raw).strip().lower()
+        if label.startswith("release-note:"):
+            category = _normalize_category(label.split(":", 1)[1])
+            if category:
+                return category
+        if label in {"type:fix", "bug", "fix"}:
+            return "Fixed"
+        if label in {"type:docs", "docs", "documentation"}:
+            return "Docs"
+        if label in {"type:test", "tests", "gates"}:
+            return "Tests / Gates"
+        if label in {"type:release", "release"}:
+            return "Release"
+    return None
+
+
+def _normalize_category(value: str) -> str | None:
+    normalized = re.sub(r"\s+", " ", value.strip()).lower()
+    aliases = {
+        "add": "Added",
+        "added": "Added",
+        "change": "Changed",
+        "changed": "Changed",
+        "fix": "Fixed",
+        "fixed": "Fixed",
+        "governance": "Governance",
+        "transfer": "Transfer / Handoff",
+        "handoff": "Transfer / Handoff",
+        "transfer / handoff": "Transfer / Handoff",
+        "docs": "Docs",
+        "documentation": "Docs",
+        "tests": "Tests / Gates",
+        "tests / gates": "Tests / Gates",
+        "release": "Release",
+        "breaking": "Breaking",
+        "known issues": "Known Issues",
+    }
+    return aliases.get(normalized)
 
 
 def _validate_release_notes(
