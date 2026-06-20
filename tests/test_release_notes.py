@@ -312,3 +312,38 @@ def test_release_notes_generator_mvp_analysis_report_contract() -> None:
 def _git(root: Path, *args: str) -> None:
     result = subprocess.run(["git", *args], cwd=root, text=True, capture_output=True, check=False)
     assert result.returncode == 0, result.stderr
+
+
+def test_release_notes_generate_cli_writes_summary_lines_artifact(tmp_path: Path) -> None:
+    _git(tmp_path, "init")
+    _git(tmp_path, "config", "user.email", "test@example.invalid")
+    _git(tmp_path, "config", "user.name", "Test User")
+    (tmp_path / "file.txt").write_text("base\n", encoding="utf-8")
+    _git(tmp_path, "add", "file.txt")
+    _git(tmp_path, "commit", "-m", "Base release")
+    _git(tmp_path, "tag", "v0.4.10")
+    (tmp_path / "file.txt").write_text("base\nnext\n", encoding="utf-8")
+    _git(tmp_path, "add", "file.txt")
+    _git(tmp_path, "commit", "-m", "Add release notes generator (#42)")
+
+    summary_lines_json = tmp_path / "summary-lines.json"
+    result = CliRunner().invoke(
+        app,
+        [
+            "release-notes-generate",
+            "--root",
+            str(tmp_path),
+            "--version",
+            "0.4.11",
+            "--from-tag",
+            "v0.4.10",
+            "--summary-lines-json",
+            str(summary_lines_json),
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(summary_lines_json.read_text(encoding="utf-8"))
+    assert payload["kind"] == "release_prep_summary_lines"
+    assert payload["summary_lines"] == ["Add release notes generator"]

@@ -111,6 +111,11 @@ def release_prep_command(
             help="Release changelog summary line. Repeat for multiple lines; required to avoid stale template reuse.",
         ),
     ] = None,
+    summary_lines_from: Path | None = typer.Option(
+        None,
+        "--summary-lines-from",
+        help="Read explicit release changelog summary lines from a JSON artifact generated from release notes.",
+    ),
     dry_run: bool = typer.Option(False, "--dry-run", help="Report changed paths without writing files."),
     json_output: bool = typer.Option(False, "--json", help="Print a machine-readable result."),
 ) -> None:
@@ -138,11 +143,15 @@ def release_prep_command(
         raise typer.Exit(code=2)
 
     try:
+        effective_summary_lines = _combine_release_prep_summary_lines(
+            explicit_lines=summary_lines or [],
+            summary_lines_from=summary_lines_from,
+        )
         result = prepare_release_state(
             project_root.resolve(),
             version=plain_version,
             date=date_value,
-            summary_lines=summary_lines or [],
+            summary_lines=effective_summary_lines,
             dry_run=dry_run,
         )
     except (FileNotFoundError, ValueError) as exc:
@@ -198,6 +207,11 @@ def release_notes_generate_command(
     to_ref: str = typer.Option("HEAD", "--to-ref", help="Upper git ref used for release-note evidence."),
     json_out: Path | None = typer.Option(None, "--json-out", help="Write generated JSON release notes here."),
     out: Path | None = typer.Option(None, "--out", help="Write generated Markdown release notes here."),
+    summary_lines_json: Path | None = typer.Option(
+        None,
+        "--summary-lines-json",
+        help="Write a compact JSON artifact containing explicit release-prep summary lines.",
+    ),
     write: bool = typer.Option(False, "--write", help="Write --json-out and --out files."),
     check: bool = typer.Option(False, "--check", help="Check existing --json-out and --out files for generated-output drift."),
     include_github_metadata: bool = typer.Option(False, "--include-github-metadata", help="Augment PR evidence with optional gh pr view metadata."),
@@ -211,6 +225,8 @@ def release_notes_generate_command(
         to_ref=to_ref,
         include_github_metadata=include_github_metadata,
     )
+    if summary_lines_json is not None:
+        _write_release_summary_lines_artifact(result, summary_lines_json=summary_lines_json)
     if write:
         if json_out is None or out is None:
             message = "--write requires both --json-out and --out"
@@ -243,6 +259,49 @@ def release_notes_generate_command(
         raise typer.Exit(code=2)
     if drift_check is not None and drift_check["status"] != "PASS":
         raise typer.Exit(code=2)
+
+
+def _combine_release_prep_summary_lines(*, explicit_lines: list[str], summary_lines_from: Path | None) -> list[str]:
+    lines = list(explicit_lines)
+    if summary_lines_from is not None:
+        lines.extend(_read_release_summary_lines_artifact(summary_lines_from))
+    return lines
+
+
+def _read_release_summary_lines_artifact(path: Path) -> list[str]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if isinstance(payload, list):
+        raw_lines = payload
+    elif isinstance(payload, dict) and isinstance(payload.get("summary_lines"), list):
+        raw_lines = payload["summary_lines"]
+    elif isinstance(payload, dict) and isinstance(payload.get("items"), list):
+        raw_lines = [item.get("title") for item in payload["items"] if isinstance(item, dict)]
+    else:
+        raise ValueError("--summary-lines-from must point to a JSON list, a {summary_lines: [...]} artifact, or a release-notes JSON report")
+    lines = [str(line).strip() for line in raw_lines if str(line).strip()]
+    if not lines:
+        raise ValueError("--summary-lines-from did not contain any usable release changelog summary lines")
+    return lines
+
+
+def _release_summary_lines_from_report(report: object) -> list[str]:
+    items = getattr(report, "items")
+    return [str(item.title).strip() for item in items if str(item.title).strip()]
+
+
+def _write_release_summary_lines_artifact(report: object, *, summary_lines_json: Path) -> None:
+    lines = _release_summary_lines_from_report(report)
+    payload: dict[str, object] = {
+        "schema_version": 1,
+        "kind": "release_prep_summary_lines",
+        "version": getattr(report, "version"),
+        "from_tag": getattr(report, "from_tag"),
+        "to_ref": getattr(report, "to_ref"),
+        "source": "agentic-kit release-notes-generate",
+        "summary_lines": lines,
+    }
+    summary_lines_json.parent.mkdir(parents=True, exist_ok=True)
+    summary_lines_json.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
 def release_metadata_authority_gate_command(

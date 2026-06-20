@@ -197,3 +197,70 @@ def _runner():
         raise AssertionError(f"unexpected command: {command}")
 
     return run
+
+
+def test_release_prep_cli_reads_summary_lines_from_release_notes_artifact(tmp_path: Path) -> None:
+    import json
+    from typer.testing import CliRunner
+
+    from agentic_project_kit.cli import app
+
+    project = _copy_release_prep_project(tmp_path)
+    artifact = project / "tmp" / "summary-lines.json"
+    artifact.parent.mkdir(parents=True, exist_ok=True)
+    artifact.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "kind": "release_prep_summary_lines",
+                "version": TARGET_VERSION,
+                "summary_lines": [
+                    "Prepare release metadata from explicit release-notes summary evidence."
+                ],
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "release-prep",
+            "--root",
+            str(project),
+            "--version",
+            TARGET_VERSION,
+            "--date",
+            TARGET_DATE,
+            "--summary-lines-from",
+            str(artifact),
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["ok"] is True
+    changelog = (project / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert "Prepare release metadata from explicit release-notes summary evidence." in changelog
+
+
+def _copy_release_prep_project(tmp_path: Path) -> Path:
+    project = tmp_path / "project"
+    project.mkdir()
+    for relative in [
+        "pyproject.toml",
+        "CHANGELOG.md",
+        "README.md",
+        "CITATION.cff",
+        "src/agentic_project_kit/__init__.py",
+        "docs/STATUS.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+        "docs/releases/VERIFIED_RELEASES.md",
+    ]:
+        source = Path(relative)
+        target = project / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+    return project

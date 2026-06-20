@@ -595,6 +595,7 @@ Generate deterministic evidence-backed release notes from a local git tag diff.
 | `to_ref` | `TyperOption` | --to-ref | `False` | `HEAD` | Upper git ref used for release-note evidence. |
 | `json_out` | `TyperOption` | --json-out | `False` |  | Write generated JSON release notes here. |
 | `out` | `TyperOption` | --out | `False` |  | Write generated Markdown release notes here. |
+| `summary_lines_json` | `TyperOption` | --summary-lines-json | `False` |  | Write a compact JSON artifact containing explicit release-prep summary lines. |
 | `write` | `TyperOption` | --write | `False` | `False` | Write --json-out and --out files. |
 | `check` | `TyperOption` | --check | `False` | `False` | Check existing --json-out and --out files for generated-output drift. |
 | `include_github_metadata` | `TyperOption` | --include-github-metadata | `False` | `False` | Augment PR evidence with optional gh pr view metadata. |
@@ -630,6 +631,7 @@ push, create GitHub releases, or write Zenodo DOI metadata.
 | `version` | `TyperOption` | --version | `True` |  | Target release version without leading v. |
 | `release_date` | `TyperOption` | --date | `False` |  | Release metadata date in YYYY-MM-DD format. Defaults to today. |
 | `summary_lines` | `TyperOption` | --summary-line | `False` |  | Release changelog summary line. Repeat for multiple lines; required to avoid stale template reuse. |
+| `summary_lines_from` | `TyperOption` | --summary-lines-from | `False` |  | Read explicit release changelog summary lines from a JSON artifact generated from release notes. |
 | `dry_run` | `TyperOption` | --dry-run | `False` | `False` | Report changed paths without writing files. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print a machine-readable result. |
 
