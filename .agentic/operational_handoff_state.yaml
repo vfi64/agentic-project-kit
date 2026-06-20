@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 292fc24097bbffcd6c20f96cde839ba3f82ab70f
-  short: 292fc240
-  subject: Harden release status remote checks (#1525)
+  full: 5f5993798bdf305f5464de940907645a52d2ab62
+  short: 5f599379
+  subject: Harden release notes evidence and drift checks (#1527)
 last_substantive_work_state:
-  full: 292fc24097bbffcd6c20f96cde839ba3f82ab70f
-  short: 292fc240
-  subject: Harden release status remote checks (#1525)
+  full: 5f5993798bdf305f5464de940907645a52d2ab62
+  short: 5f599379
+  subject: Harden release notes evidence and drift checks (#1527)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
