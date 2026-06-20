@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6f0c4161876c0707b9e2f7d78bb62fdd9df17478
-  short: 6f0c4161
-  subject: Harden patch cycle status evidence (#1529)
+  full: 84c51b690a27827a04677df8172b4bac2b87ad92
+  short: 84c51b69
+  subject: Refresh transfer report carrier after PR1530 (#1531)
 last_substantive_work_state:
-  full: 6f0c4161876c0707b9e2f7d78bb62fdd9df17478
-  short: 6f0c4161
-  subject: Harden patch cycle status evidence (#1529)
+  full: 84c51b690a27827a04677df8172b4bac2b87ad92
+  short: 84c51b69
+  subject: Refresh transfer report carrier after PR1530 (#1531)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
