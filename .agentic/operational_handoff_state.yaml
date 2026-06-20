@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d4bf839a9a37175a8bf2963beb00ab2a812aa6f0
-  short: d4bf839a
-  subject: Add release lifecycle status model (#1517)
+  full: 4e5e6465276b81b5eea3d70d9b4233c04f39f30d
+  short: 4e5e6465
+  subject: Add deterministic release notes generator (#1519)
 last_substantive_work_state:
-  full: d4bf839a9a37175a8bf2963beb00ab2a812aa6f0
-  short: d4bf839a
-  subject: Add release lifecycle status model (#1517)
+  full: 4e5e6465276b81b5eea3d70d9b4233c04f39f30d
+  short: 4e5e6465
+  subject: Add deterministic release notes generator (#1519)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
