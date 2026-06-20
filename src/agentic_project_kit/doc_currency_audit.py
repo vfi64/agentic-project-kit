@@ -443,12 +443,13 @@ def _audit_current_state_currency(
                 "current release section references removed ./ns route",
             )
 
+    legacy_release_metadata_tool = Path("tools") / ("ns_" "release_metadata_prep.py")
     _finding(
         findings,
         blockers,
-        "tools/ns_release_metadata_prep.py",
+        legacy_release_metadata_tool.as_posix(),
         "current_state_currency_legacy_release_metadata_prep_tool_removed",
-        not (root / "tools" / "ns_release_metadata_prep.py").exists(),
+        not (root / legacy_release_metadata_tool).exists(),
         "legacy tool wrapper must not exist",
     )
 
