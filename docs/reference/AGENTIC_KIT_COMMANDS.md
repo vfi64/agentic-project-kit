@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `173`
+- Command count: `174`
 
 ## Commands
 
@@ -627,6 +627,16 @@ Plan release publishing without live tag/release side effects.
 | `allow_execute` | `TyperOption` | --allow-execute | `False` | `False` |  |
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
+### `agentic-kit release-status`
+
+Render the local release lifecycle state without mutating release files.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `version` | `TyperOption` | --version | `False` |  | Release version without leading v. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print a machine-readable result. |
 
 ### `agentic-kit remote-next`
 
