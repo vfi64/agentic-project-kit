@@ -52,9 +52,13 @@ class PatchCycleStatus:
     pr_number: int | None
     pr: dict[str, object] | None
     handoff_generated_head: str
+    handoff_validation_status: str
     handoff_fresh_for_head: bool
     steps: tuple[PatchCycleStep, ...]
     next_action: str
+    recommended_next_action: str
+    disabled_actions: tuple[dict[str, object], ...]
+    traffic_lights: dict[str, str]
     blockers: tuple[str, ...]
 
     def as_dict(self) -> dict[str, object]:
@@ -71,9 +75,13 @@ class PatchCycleStatus:
             "pr_number": self.pr_number,
             "pr": self.pr,
             "handoff_generated_head": self.handoff_generated_head,
+            "handoff_validation_status": self.handoff_validation_status,
             "handoff_fresh_for_head": self.handoff_fresh_for_head,
             "steps": [step.as_dict() for step in self.steps],
             "next_action": self.next_action,
+            "recommended_next_action": self.recommended_next_action,
+            "disabled_actions": list(self.disabled_actions),
+            "traffic_lights": self.traffic_lights,
             "blockers": list(self.blockers),
         }
 
@@ -82,6 +90,7 @@ def build_patch_cycle_status(
     project_root: Path,
     *,
     pr_number: int | None = None,
+    include_ci: bool = False,
     command_runner: PatchCycleRunner | None = None,
 ) -> PatchCycleStatus:
     runner = command_runner or run_command
@@ -91,9 +100,11 @@ def build_patch_cycle_status(
     status_result = runner(project_root, ["git", "status", "--short", "--untracked-files=all"])
     dirty_paths = tuple(line.strip() for line in status_result.stdout.splitlines() if line.strip())
     worktree_clean = status_result.returncode == 0 and not dirty_paths
-    handoff_generated_head = _read_handoff_generated_head(project_root)
+    handoff_validation = _read_handoff_validation(project_root)
+    handoff_generated_head = str(handoff_validation.get("generated_head") or "")
+    handoff_validation_status = str(handoff_validation.get("status") or "MISSING")
     handoff_fresh_for_head = bool(head_sha and handoff_generated_head == head_sha)
-    pr = _read_pr(project_root, pr_number, runner) if pr_number is not None else None
+    pr = _read_pr(project_root, pr_number, include_ci, runner) if pr_number is not None else None
     current_stage = _current_stage(
         branch=branch,
         worktree_clean=worktree_clean,
@@ -118,6 +129,8 @@ def build_patch_cycle_status(
         origin_main_sha=origin_main_sha,
     )
     next_action = _next_action(current_stage, blockers, steps)
+    disabled_actions = _disabled_actions(steps, blockers)
+    traffic_lights = _traffic_lights(steps, blockers)
     result_status = "BLOCKED" if blockers else ("PASS" if current_stage == "POST_MERGE_CLEAN_STATE" else "READY")
     return PatchCycleStatus(
         schema_version=1,
@@ -132,9 +145,13 @@ def build_patch_cycle_status(
         pr_number=pr_number,
         pr=pr,
         handoff_generated_head=handoff_generated_head,
+        handoff_validation_status=handoff_validation_status,
         handoff_fresh_for_head=handoff_fresh_for_head,
         steps=steps,
         next_action=next_action,
+        recommended_next_action=next_action,
+        disabled_actions=disabled_actions,
+        traffic_lights=traffic_lights,
         blockers=blockers,
     )
 
@@ -148,6 +165,7 @@ def render_patch_cycle_status(status: PatchCycleStatus) -> str:
         f"HEAD={status.head_sha or '<unknown>'}",
         f"ORIGIN_MAIN={status.origin_main_sha or '<unknown>'}",
         f"WORKTREE_CLEAN={str(status.worktree_clean).lower()}",
+        f"HANDOFF_VALIDATION_STATUS={status.handoff_validation_status}",
         f"HANDOFF_FRESH_FOR_HEAD={str(status.handoff_fresh_for_head).lower()}",
     ]
     if status.pr_number is not None:
@@ -175,18 +193,21 @@ def _stdout(result: CommandResult) -> str:
     return (result.stdout or "").strip() if result.returncode == 0 else ""
 
 
-def _read_handoff_generated_head(project_root: Path) -> str:
+def _read_handoff_validation(project_root: Path) -> dict[str, object]:
     path = project_root / "docs/reports/handoff-packages/latest/validation_report.json"
     if not path.exists():
-        return ""
+        return {}
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
-        return ""
-    return str(payload.get("generated_head") or "").strip()
+        return {"status": "INVALID"}
+    return payload
 
 
-def _read_pr(project_root: Path, pr_number: int, runner: PatchCycleRunner) -> dict[str, object]:
+def _read_pr(project_root: Path, pr_number: int, include_ci: bool, runner: PatchCycleRunner) -> dict[str, object]:
+    fields = "number,state,mergeStateStatus,headRefName,headRefOid,isDraft,url"
+    if include_ci:
+        fields += ",statusCheckRollup"
     result = runner(
         project_root,
         [
@@ -195,7 +216,7 @@ def _read_pr(project_root: Path, pr_number: int, runner: PatchCycleRunner) -> di
             "view",
             str(pr_number),
             "--json",
-            "number,state,mergeStateStatus,headRefName,headRefOid,isDraft,url",
+            fields,
         ],
     )
     if result.returncode != 0:
@@ -209,7 +230,41 @@ def _read_pr(project_root: Path, pr_number: int, runner: PatchCycleRunner) -> di
     except json.JSONDecodeError as exc:
         return {"number": pr_number, "available": False, "error": f"invalid_pr_json:{exc}"}
     payload["available"] = True
+    if include_ci:
+        payload["checks"] = _summarize_checks(payload.get("statusCheckRollup"))
+        payload["checks_status"] = _checks_status(payload["checks"])
     return payload
+
+
+def _summarize_checks(raw_checks: object) -> list[dict[str, object]]:
+    if not isinstance(raw_checks, list):
+        return []
+    checks: list[dict[str, object]] = []
+    for item in raw_checks:
+        if not isinstance(item, dict):
+            continue
+        checks.append(
+            {
+                "name": item.get("name") or item.get("workflowName") or item.get("context") or "<unknown>",
+                "status": item.get("status"),
+                "conclusion": item.get("conclusion"),
+                "state": item.get("state"),
+            }
+        )
+    return checks
+
+
+def _checks_status(checks: object) -> str:
+    if not isinstance(checks, list) or not checks:
+        return "UNKNOWN"
+    conclusions = {str(item.get("conclusion") or item.get("state") or item.get("status") or "").upper() for item in checks if isinstance(item, dict)}
+    if any(value in {"FAILURE", "FAILED", "CANCELLED", "TIMED_OUT", "ACTION_REQUIRED"} for value in conclusions):
+        return "FAIL"
+    if any(value in {"PENDING", "IN_PROGRESS", "QUEUED", "REQUESTED", "WAITING"} for value in conclusions):
+        return "PENDING"
+    if conclusions and all(value in {"SUCCESS", "COMPLETED", "NEUTRAL", "SKIPPED"} for value in conclusions):
+        return "PASS"
+    return "UNKNOWN"
 
 
 def _current_stage(*, branch: str, worktree_clean: bool, handoff_fresh_for_head: bool) -> str:
@@ -239,6 +294,8 @@ def _global_blockers(
         blockers.append("main_not_synced_with_origin_main")
     if pr is not None and pr.get("available") is False:
         blockers.append("pr_metadata_unavailable")
+    if pr is not None and pr.get("checks_status") == "FAIL":
+        blockers.append("pr_checks_failing")
     return tuple(blockers)
 
 
@@ -339,6 +396,8 @@ def _pr_blockers(pr_number: int | None, pr: dict[str, object] | None) -> tuple[s
         return ()
     if pr and pr.get("available") is False:
         return ("pr_metadata_unavailable",)
+    if pr and pr.get("checks_status") == "FAIL":
+        return ("pr_checks_failing",)
     return ()
 
 
@@ -346,6 +405,33 @@ def _pr_evidence(pr_number: int | None, pr_state: str) -> tuple[str, ...]:
     if pr_number is None:
         return ()
     return (f"pr={pr_number}", f"pr_state={pr_state}")
+
+
+def _disabled_actions(steps: tuple[PatchCycleStep, ...], blockers: tuple[str, ...]) -> tuple[dict[str, object], ...]:
+    disabled: list[dict[str, object]] = []
+    for step in steps:
+        if step.status == "ACTIVE":
+            continue
+        disabled.append({"step": step.id, "reason": f"step_status_{step.status.lower()}"})
+    for blocker in blockers:
+        disabled.append({"step": "GLOBAL", "reason": blocker})
+    return tuple(disabled)
+
+
+def _traffic_lights(steps: tuple[PatchCycleStep, ...], blockers: tuple[str, ...]) -> dict[str, str]:
+    lights: dict[str, str] = {}
+    for step in steps:
+        if step.blockers:
+            lights[step.id] = "red"
+        elif step.status == "DONE":
+            lights[step.id] = "green"
+        elif step.status == "ACTIVE":
+            lights[step.id] = "yellow"
+        else:
+            lights[step.id] = "gray"
+    if blockers:
+        lights["GLOBAL"] = "red"
+    return lights
 
 
 def _is_handoff_refresh_branch(branch: str) -> bool:

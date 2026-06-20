@@ -6315,6 +6315,20 @@
           "secondary_opts": []
         },
         {
+          "default": false,
+          "help": "Include PR statusCheckRollup summary when --pr is provided.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "include_ci",
+          "opts": [
+            "--include-ci"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
           "default": "PosixPath('.')",
           "help": "Project root.",
           "is_flag": false,
