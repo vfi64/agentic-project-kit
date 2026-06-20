@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 84c51b690a27827a04677df8172b4bac2b87ad92
-  short: 84c51b69
-  subject: Refresh transfer report carrier after PR1530 (#1531)
+  full: 4564b0ca9c3c59998d0ad5a9a69cd8e6ea1b3fd1
+  short: 4564b0ca
+  subject: Use release notes as release-prep summary evidence (#1533)
 last_substantive_work_state:
-  full: 84c51b690a27827a04677df8172b4bac2b87ad92
-  short: 84c51b69
-  subject: Refresh transfer report carrier after PR1530 (#1531)
+  full: 4564b0ca9c3c59998d0ad5a9a69cd8e6ea1b3fd1
+  short: 4564b0ca
+  subject: Use release notes as release-prep summary evidence (#1533)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
