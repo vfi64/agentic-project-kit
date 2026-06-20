@@ -1,0 +1,145 @@
+{
+  "acceptance_criteria": [
+    "Read-only status command exists and returns JSON.",
+    "State contains every four-slice step, blockers, allowed next actions and evidence pointers.",
+    "Command reference is current.",
+    "Focused tests cover main clean, dirty feature, clean feature PR, handoff branch and bounded text rendering."
+  ],
+  "authoritative_carriers": [
+    {
+      "exists": false,
+      "path": ".agentic/transfer/inbox/next_command.py.txt",
+      "tracked": false
+    },
+    {
+      "exists": false,
+      "path": ".agentic/transfer/outbox/last_result.txt",
+      "tracked": false
+    },
+    {
+      "exists": true,
+      "path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+      "tracked": true
+    },
+    {
+      "exists": true,
+      "path": "docs/reports/handoff-packages/latest/execution_contract.json",
+      "tracked": true
+    },
+    {
+      "exists": true,
+      "path": "docs/reports/handoff-packages/latest/validation_report.json",
+      "tracked": true
+    },
+    {
+      "exists": true,
+      "path": ".agentic/rule_ack/current.json",
+      "tracked": false
+    }
+  ],
+  "existing_commands": {
+    "commit": [
+      "commit-paths",
+      "commit"
+    ],
+    "continue": [
+      "continue"
+    ],
+    "post-merge-check": [
+      "post-merge-check"
+    ],
+    "post-merge-complete": [
+      "post-merge-complete"
+    ],
+    "pr-complete": [
+      "evidence-pr-complete",
+      "pr-complete"
+    ],
+    "pr-create-complete": [
+      "pr-create-complete"
+    ],
+    "prepare-successor-handoff": [
+      "prepare-successor-handoff"
+    ],
+    "protected-diff-plan": [
+      "protected-diff-plan"
+    ],
+    "publish-last-report": [
+      "publish-last-report"
+    ],
+    "push-current": [
+      "push-current"
+    ],
+    "remote-work-start": [
+      "remote-work-start"
+    ],
+    "repo-status": [
+      "repo-status"
+    ],
+    "require-fresh-llm-context": [
+      "require-fresh-llm-context"
+    ],
+    "sync-main": [
+      "sync-main"
+    ]
+  },
+  "kind": "patch_cycle_workflow_analysis",
+  "loop_risks": [
+    "post-merge-complete may NOOP while validation_report generated_head is stale; patch-cycle-status surfaces HANDOFF_REFRESH_SLICE when main is clean but handoff is stale.",
+    "PR number/SHA transfer is unreliable if it only lives in chat; optional --pr enriches state when available but status remains useful without it.",
+    "Generated handoff projection changes must continue through admin-refresh-pr or generator-backed paths, not manual edits."
+  ],
+  "new_minimal_renderer": {
+    "command": "agentic-kit transfer patch-cycle-status --json",
+    "core_module": "src/agentic_project_kit/patch_cycle_workflow.py",
+    "gui_use": "A GUI can poll this command and show one primary next action plus per-step status.",
+    "purpose": "Render current four-slice patch/handoff state from existing git, PR and handoff carriers without creating a parallel workflow engine."
+  },
+  "open_questions": [
+    "Should a later patch-cycle-continue command call existing wrappers automatically or only recommend next commands?",
+    "Should patch-cycle status persist a run_id for GUI continuity, or stay entirely derived/read-only?",
+    "Should PR enrichment become mandatory for GUI mode after a PR number is known?"
+  ],
+  "redundancy_assessment": [
+    "Existing wrappers already perform mutations; patch-cycle-status must stay read-only.",
+    "pr-create-complete and admin-refresh-pr remain the mutation authorities for PR and handoff refresh work.",
+    "No new persistent state file is introduced in this slice; validation_report.json and git status are reused."
+  ],
+  "schema_version": 1,
+  "state_model": {
+    "states": [
+      "PATCH_SLICE",
+      "PATCH_PR",
+      "HANDOFF_REFRESH_SLICE",
+      "HANDOFF_REFRESH_PR",
+      "POST_MERGE_CLEAN_STATE"
+    ],
+    "stop_states": [
+      "BLOCKED",
+      "FAILED_DIAGNOSIS_REQUIRED"
+    ],
+    "transitions": [
+      {
+        "from": "PATCH_SLICE",
+        "guard": "worktree clean, protected-diff-plan PASS, explicit commit/push complete",
+        "to": "PATCH_PR"
+      },
+      {
+        "from": "PATCH_PR",
+        "guard": "patch PR merged, main synced, post-merge-complete/check detects or confirms handoff need",
+        "to": "HANDOFF_REFRESH_SLICE"
+      },
+      {
+        "from": "HANDOFF_REFRESH_SLICE",
+        "guard": "admin refresh generated through wrapper/generator, protected-diff-plan PASS",
+        "to": "HANDOFF_REFRESH_PR"
+      },
+      {
+        "from": "HANDOFF_REFRESH_PR",
+        "guard": "handoff PR merged, post-merge-check PASS, repo-status clean, fresh context available",
+        "to": "POST_MERGE_CLEAN_STATE"
+      }
+    ]
+  },
+  "workflow_id": "patch_cycle_four_slice"
+}

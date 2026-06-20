@@ -13,6 +13,7 @@ from agentic_project_kit.local_garbage_collector import run_local_garbage_collec
 from agentic_project_kit.local_command_stack import begin_local_command_stack
 from agentic_project_kit.local_command_stack import current_or_begin_local_command_stack_id
 from agentic_project_kit.local_command_stack import end_local_command_stack
+from agentic_project_kit.patch_cycle_workflow import build_patch_cycle_status, render_patch_cycle_status
 from agentic_project_kit.transfer_closeout import closeout_transfer
 from agentic_project_kit.transfer_continue import render_transfer_continue_summary
 from agentic_project_kit.transfer_continue import run_transfer_continue
@@ -464,6 +465,26 @@ def repo_status_command(
     _echo_repo_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
+
+
+@transfer_app.command("patch-cycle-status")
+def patch_cycle_status_command(
+    pr_number: int | None = typer.Option(
+        None,
+        "--pr",
+        help="Optional pull request number to include in the patch-cycle state.",
+    ),
+    root: Path = typer.Option(Path("."), "--root", help="Project root."),
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    """Render the current four-slice patch/handoff workflow state."""
+    result = build_patch_cycle_status(root.resolve(), pr_number=pr_number)
+    if json_output:
+        typer.echo(json.dumps(result.as_dict(), indent=2, sort_keys=True))
+    else:
+        typer.echo(render_patch_cycle_status(result), nl=False)
+    if result.blockers:
+        raise typer.Exit(code=2)
 
 
 @transfer_app.command("repo-log")
