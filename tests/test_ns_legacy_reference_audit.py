@@ -128,6 +128,15 @@ def test_classifies_audit_implementation_tokens_as_compatibility_implementation(
     assert "compatibility patterns" in reason
 
 
+def test_classifies_doc_currency_audit_legacy_guards_as_compatibility_implementation() -> None:
+    classification, reason = classify_legacy_reference(
+        "src/agentic_project_kit/doc_currency_audit.py",
+        'if current_section and ("./ns" in current_section or "ns release-prep" in current_section):',
+    )
+    assert classification == "compatibility_implementation"
+    assert "compatibility patterns" in reason
+
+
 def test_classifies_workflow_docs_as_legacy_documentation_context() -> None:
     classification, reason = classify_legacy_reference(
         "docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md",
@@ -151,4 +160,3 @@ def test_classifies_planning_docs_audit_patterns_as_compatibility_implementation
     )
     assert classification == "compatibility_implementation"
     assert "compatibility patterns" in reason
-

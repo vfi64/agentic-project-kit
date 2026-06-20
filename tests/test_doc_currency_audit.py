@@ -21,10 +21,17 @@ def _write_minimal_current_docs(root: Path) -> None:
     )
 
     docs = {
-        "README.md": f"Release v{version}; DOI {version_doi}; concept {concept_doi}\n",
-        "CHANGELOG.md": f"## v{version}\nDOI {version_doi}\n",
-        "CITATION.cff": f"version: {version}\ndoi: {version_doi}\nconcept: {concept_doi}\n",
-        "docs/STATUS.md": f"Current v{version}; DOI {version_doi}\n",
+        "README.md": f"Current version: {version}\nRelease v{version}; DOI {version_doi}; concept {concept_doi}\n",
+        "CHANGELOG.md": f"## v{version} - 2026-06-20\nDOI {version_doi}\n## v1.2.2 - 2026-06-19\nPrevious.\n",
+        "CITATION.cff": f"version: {version}\ndate-released: \"2026-06-20\"\ndoi: {version_doi}\nconcept: {concept_doi}\n",
+        "docs/STATUS.md": (
+            "> STATUS boundary\n\n"
+            "## Current State\n\n"
+            f"Current version: {version}\n"
+            f"Current verified release: {version}.\n"
+            f"Current release tag: v{version}.\n"
+            f"Verified Zenodo version DOI: `{version_doi}`.\n"
+        ),
         "docs/handoff/CURRENT_HANDOFF.md": f"Current v{version}; DOI {version_doi}\n",
         "docs/releases/VERIFIED_RELEASES.md": (
             f"## v{version}\nVersion DOI: {version_doi}\nConcept DOI: {concept_doi}\n"
@@ -50,6 +57,7 @@ def test_doc_currency_audit_passes_for_consistent_docs(tmp_path: Path) -> None:
     assert result.version == "1.2.3"
     assert result.version_doi == "10.5281/zenodo.22222222"
     assert result.concept_doi == "10.5281/zenodo.11111111"
+    assert result.as_dict()["current_state_currency"]["status"] == "PASS"
 
 
 def test_doc_currency_audit_blocks_missing_current_doi(tmp_path: Path) -> None:
@@ -61,6 +69,85 @@ def test_doc_currency_audit_blocks_missing_current_doi(tmp_path: Path) -> None:
     assert result.ok is False
     assert any(
         item.path == "README.md" and item.check == "mentions_current_version_doi"
+        for item in result.blockers
+    )
+
+
+def test_doc_currency_audit_blocks_duplicate_readme_current_version_marker(tmp_path: Path) -> None:
+    _write_minimal_current_docs(tmp_path)
+    readme = tmp_path / "README.md"
+    readme.write_text(readme.read_text(encoding="utf-8") + "Current version: 1.2.2\n", encoding="utf-8")
+
+    result = audit_doc_currency(tmp_path)
+
+    assert any(
+        item.check == "current_state_currency_readme_single_current_version_marker"
+        for item in result.blockers
+    )
+
+
+def test_doc_currency_audit_blocks_stale_citation_release_date(tmp_path: Path) -> None:
+    _write_minimal_current_docs(tmp_path)
+    citation = tmp_path / "CITATION.cff"
+    citation.write_text(citation.read_text(encoding="utf-8").replace("2026-06-20", "2026-05-26"), encoding="utf-8")
+
+    result = audit_doc_currency(tmp_path)
+
+    assert any(
+        item.check == "current_state_currency_citation_date_matches_current_changelog"
+        for item in result.blockers
+    )
+
+
+def test_doc_currency_audit_blocks_stale_status_head(tmp_path: Path) -> None:
+    _write_minimal_current_docs(tmp_path)
+    (tmp_path / "docs" / "STATUS.md").write_text(
+        "> STATUS boundary\n\n"
+        "## Current State\n\n"
+        "Current version: 1.2.3\n"
+        "Current planning-slice branch: `codex/release-command-authority-plan`.\n"
+        "Planning PR: #1436.\n\n",
+        encoding="utf-8",
+    )
+
+    result = audit_doc_currency(tmp_path)
+
+    assert any(
+        item.check == "current_state_currency_status_top_not_historical_pr"
+        for item in result.blockers
+    )
+
+
+def test_doc_currency_audit_allows_historical_status_snapshot_after_current_state(tmp_path: Path) -> None:
+    _write_minimal_current_docs(tmp_path)
+    (tmp_path / "docs" / "STATUS.md").write_text(
+        "> STATUS boundary\n\n"
+        "## Current State\n\n"
+        "Current version: 1.2.3\n"
+        "Current verified release: 1.2.3.\n\n"
+        "## Historical State Snapshots\n\n"
+        "Historical planning PR: #1436.\n",
+        encoding="utf-8",
+    )
+
+    result = audit_doc_currency(tmp_path)
+
+    assert not any(
+        item.check == "current_state_currency_status_top_not_historical_pr"
+        for item in result.blockers
+    )
+
+
+def test_doc_currency_audit_blocks_legacy_release_metadata_tool(tmp_path: Path) -> None:
+    _write_minimal_current_docs(tmp_path)
+    tool = tmp_path / "tools" / "ns_release_metadata_prep.py"
+    tool.parent.mkdir(parents=True)
+    tool.write_text("legacy\n", encoding="utf-8")
+
+    result = audit_doc_currency(tmp_path)
+
+    assert any(
+        item.check == "current_state_currency_legacy_release_metadata_prep_tool_removed"
         for item in result.blockers
     )
 
@@ -79,10 +166,17 @@ def test_doc_currency_audit_allows_prepared_release_pending_doi_archive(tmp_path
         encoding="utf-8",
     )
     current_docs = {
-        "README.md": f"Version `{version}` is the current release line prepared.\nCurrent verified release: `v1.2.3` with Zenodo version DOI `{previous_doi}`.\nconcept {concept_doi}\n",
-        "CHANGELOG.md": f"## v{version} - 2026-06-20\nZenodo DOI verification pending until publish.\n## v1.2.3\nDOI {previous_doi}\n",
-        "CITATION.cff": f"version: {version}\ndoi: {concept_doi}\n# Verified v1.2.3 version DOI: {previous_doi}\n",
-        "docs/STATUS.md": f"Current version: {version}\nCurrent verified release: 1.2.3.\nCurrent release tag: v1.2.3.\nVerified Zenodo version DOI: `{previous_doi}`.\n",
+        "README.md": f"Current version: {version}\nVersion `{version}` is the current release line prepared.\nCurrent verified release: `v1.2.3` with Zenodo version DOI `{previous_doi}`.\nconcept {concept_doi}\n",
+        "CHANGELOG.md": f"## v{version} - 2026-06-20\nZenodo DOI verification pending until publish.\n## v1.2.3 - 2026-06-19\nDOI {previous_doi}\n",
+        "CITATION.cff": f"version: {version}\ndate-released: \"2026-06-20\"\ndoi: {concept_doi}\n# Verified v1.2.3 version DOI: {previous_doi}\n",
+        "docs/STATUS.md": (
+            "> STATUS boundary\n\n"
+            "## Current State\n\n"
+            f"Current version: {version}\n"
+            "Current verified release: 1.2.3.\n"
+            "Current release tag: v1.2.3.\n"
+            f"Verified Zenodo version DOI: `{previous_doi}`.\n"
+        ),
         "docs/handoff/CURRENT_HANDOFF.md": f"Current version: {version}\n- Current verified release: 1.2.3.\n- Current release tag: v1.2.3.\n- Verified Zenodo version DOI: `{previous_doi}`.\n",
         "docs/releases/VERIFIED_RELEASES.md": f"## v1.2.3\nVersion DOI: {previous_doi}\nConcept DOI: {concept_doi}\n",
         "docs/reports/handoff-packages/latest/successor_prompt.md": f"v{version}\n",
