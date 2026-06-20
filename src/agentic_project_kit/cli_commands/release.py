@@ -25,14 +25,20 @@ from agentic_project_kit.release import (
     render_release_preflight_report,
     render_release_state_report,
 )
+from agentic_project_kit.release_state import build_release_lifecycle_status, render_release_lifecycle_status
 
 console = Console()
+
+
+def _print_json(payload: dict[str, object]) -> None:
+    typer.echo(json.dumps(payload, indent=2, sort_keys=True))
 
 
 def register_release_commands(app: typer.Typer) -> None:
     app.command("release-plan")(release_plan_command)
     app.command("release-preflight")(release_preflight_command)
     app.command("release-prep")(release_prep_command)
+    app.command("release-status")(release_status_command)
     app.command("release-metadata-authority-gate")(release_metadata_authority_gate_command)
     app.command("release-check")(release_check_command)
     app.command("post-release-check")(post_release_check_command)
@@ -104,19 +110,14 @@ def release_prep_command(
     if not re.fullmatch(r"\d+\.\d+\.\d+", plain_version):
         message = f"Invalid release version: {version!r}; expected MAJOR.MINOR.PATCH"
         if json_output:
-            console.print(
-                json.dumps(
-                    {
-                        "ok": False,
-                        "version": plain_version,
-                        "date": date_value,
-                        "dry_run": dry_run,
-                        "error": message,
-                    },
-                    indent=2,
-                    sort_keys=True,
-                ),
-                markup=False,
+            _print_json(
+                {
+                    "ok": False,
+                    "version": plain_version,
+                    "date": date_value,
+                    "dry_run": dry_run,
+                    "error": message,
+                }
             )
         else:
             console.print(f"ERROR: {message}", markup=False)
@@ -131,26 +132,21 @@ def release_prep_command(
         )
     except (FileNotFoundError, ValueError) as exc:
         if json_output:
-            console.print(
-                json.dumps(
-                    {
-                        "ok": False,
-                        "version": plain_version,
-                        "date": date_value,
-                        "dry_run": dry_run,
-                        "error": str(exc),
-                    },
-                    indent=2,
-                    sort_keys=True,
-                ),
-                markup=False,
+            _print_json(
+                {
+                    "ok": False,
+                    "version": plain_version,
+                    "date": date_value,
+                    "dry_run": dry_run,
+                    "error": str(exc),
+                }
             )
         else:
             console.print(f"ERROR: {exc}", markup=False)
         raise typer.Exit(code=2) from exc
 
     if json_output:
-        console.print(json.dumps(result.as_dict(), indent=2, sort_keys=True), markup=False)
+        _print_json(result.as_dict())
     else:
         mode = "DRY-RUN" if dry_run else "WRITE"
         if result.changed_paths:
@@ -162,6 +158,21 @@ def release_prep_command(
                 console.print(f"CHANGED: {changed_path}", markup=False)
         else:
             console.print(f"{mode}: release metadata already prepared for v{result.version}", markup=False)
+
+
+def release_status_command(
+    project_root: Path = typer.Option(Path("."), "--root"),
+    version: str | None = typer.Option(None, "--version", help="Release version without leading v."),
+    json_output: bool = typer.Option(False, "--json", help="Print a machine-readable result."),
+) -> None:
+    """Render the local release lifecycle state without mutating release files."""
+    result = build_release_lifecycle_status(project_root.resolve(), version=version)
+    if json_output:
+        _print_json(result.as_dict())
+    else:
+        console.print(render_release_lifecycle_status(result), markup=False)
+    if result.blockers:
+        raise typer.Exit(code=2)
 
 
 def release_metadata_authority_gate_command(
@@ -188,28 +199,23 @@ def release_metadata_authority_gate_command(
     except (RuntimeError, ValueError) as exc:
         result = None
         if json_output:
-            console.print(
-                json.dumps(
-                    {
-                        "ok": False,
-                        "status": "BLOCK",
-                        "version": version,
-                        "base_ref": base_ref,
-                        "changed_release_anchor_paths": [],
-                        "evidence_paths": [path.as_posix() for path in evidence or []],
-                        "message": str(exc),
-                    },
-                    indent=2,
-                    sort_keys=True,
-                ),
-                markup=False,
+            _print_json(
+                {
+                    "ok": False,
+                    "status": "BLOCK",
+                    "version": version,
+                    "base_ref": base_ref,
+                    "changed_release_anchor_paths": [],
+                    "evidence_paths": [path.as_posix() for path in evidence or []],
+                    "message": str(exc),
+                }
             )
         else:
             console.print(f"BLOCK: {exc}", markup=False)
         raise typer.Exit(code=2) from exc
 
     if json_output:
-        console.print(json.dumps(result.as_dict(), indent=2, sort_keys=True), markup=False)
+        _print_json(result.as_dict())
     else:
         console.print(render_release_metadata_authority_gate_result(result), markup=False)
 
@@ -247,7 +253,7 @@ def post_release_doi_closeout_command(
 ) -> None:
     result = post_release_doi_closeout(project_root.resolve(), version=version, write=write)
     if json_output:
-        console.print(json.dumps(result.as_dict(), indent=2, sort_keys=True), markup=False)
+        _print_json(result.as_dict())
     else:
         console.print(render_post_release_doi_closeout_result(result), markup=False)
     if not result.ok:

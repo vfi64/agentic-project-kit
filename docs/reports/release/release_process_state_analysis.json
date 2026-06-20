@@ -1,0 +1,202 @@
+{
+  "kind": "release_process_state_analysis",
+  "logical_findings": [
+    "prepared and current_verified are intentionally different states; v0.4.10 can be prepared while v0.4.9 remains current_verified until publish and DOI closeout finish",
+    "release-prep mutates local metadata only and must not tag, publish, push, or write DOI closeout metadata",
+    "release-publish is guarded and may need retry/polling around GitHub/Zenodo eventual consistency",
+    "DOI closeout is atomic: expected closeout paths must be changed/committed together"
+  ],
+  "minimal_status_command": "agentic-kit release-status --json",
+  "recommended_next_fixes": [
+    "Add retry/polling around release-publish post-create checks to avoid false FAIL immediately after GitHub release creation",
+    "Keep release-status read-only and let GUI consume it before enabling any release button",
+    "Integrate release notes generator after state model so notes can bind to planned/prepared/published transitions"
+  ],
+  "release_commands": [
+    {
+      "help": "Validate post-release GitHub and Zenodo state without guessing DOI metadata.",
+      "name": "post-release-check",
+      "options": []
+    },
+    {
+      "help": "",
+      "name": "post-release-doi-closeout",
+      "options": []
+    },
+    {
+      "help": "Validate release state for a target version.",
+      "name": "release-check",
+      "options": []
+    },
+    {
+      "help": "Block manual release metadata anchor edits without release-prep evidence.",
+      "name": "release-metadata-authority-gate",
+      "options": []
+    },
+    {
+      "help": "Print a release preparation checklist for the current project.",
+      "name": "release-plan",
+      "options": []
+    },
+    {
+      "help": "Validate before-metadata release readiness for a target version.",
+      "name": "release-preflight",
+      "options": []
+    },
+    {
+      "help": "Prepare release metadata through the supported agentic-kit route.\n\nThis edits only local release metadata files. It does not tag, publish,\npush, create GitHub releases, or write Zenodo DOI metadata.",
+      "name": "release-prep",
+      "options": []
+    },
+    {
+      "help": "Plan release publishing without live tag/release side effects.",
+      "name": "release-publish",
+      "options": []
+    }
+  ],
+  "release_context": {
+    "package_version": "0.4.10",
+    "verified_release_from_readme": {
+      "doi": "10.5281/zenodo.20767675",
+      "version": "0.4.10"
+    }
+  },
+  "schema_version": 1,
+  "state_matrix": [
+    {
+      "allowed_commands": [
+        "release-plan",
+        "release-preflight",
+        "release-prep --dry-run"
+      ],
+      "expected_docs": "previous current verified release remains authoritative",
+      "forbidden_commands": [
+        "release-publish --execute",
+        "post-release-doi-closeout --write"
+      ],
+      "meaning": "Target version is selected; metadata may still reflect previous release.",
+      "required_artifacts": [
+        "target version string"
+      ],
+      "required_gates": [
+        "release-preflight"
+      ],
+      "state": "planned"
+    },
+    {
+      "allowed_commands": [
+        "release-check",
+        "release-publish --dry-run",
+        "release-metadata-authority-gate"
+      ],
+      "expected_docs": "package version may be target while current verified release remains previous version",
+      "forbidden_commands": [
+        "manual release metadata patching",
+        "post-release-doi-closeout --write before post-release-check PASS"
+      ],
+      "meaning": "Release metadata anchors contain target version, but tag/release/DOI are not authoritative yet.",
+      "required_artifacts": [
+        "pyproject.toml",
+        "__init__.py",
+        "CHANGELOG.md",
+        "README.md",
+        "CITATION.cff",
+        "STATUS/HANDOFF prepared state"
+      ],
+      "required_gates": [
+        "release-check",
+        "docs-audit",
+        "audit-doc-currency",
+        "protected-diff-plan"
+      ],
+      "state": "prepared"
+    },
+    {
+      "allowed_commands": [
+        "post-release-check --version X"
+      ],
+      "expected_docs": "metadata can still say DOI pending until verification",
+      "forbidden_commands": [
+        "DOI metadata edits without verified DOI"
+      ],
+      "meaning": "Tag and GitHub release exist; Zenodo/version DOI may still be propagating.",
+      "required_artifacts": [
+        "tag vX",
+        "GitHub release vX"
+      ],
+      "required_gates": [
+        "post-release-check"
+      ],
+      "state": "published"
+    },
+    {
+      "allowed_commands": [
+        "post-release-doi-closeout --version X --write --json"
+      ],
+      "expected_docs": "closeout write should update all expected DOI closeout files atomically",
+      "forbidden_commands": [
+        "partial closeout commit",
+        "manual DOI patching"
+      ],
+      "meaning": "post-release-check confirms concept DOI and version DOI.",
+      "required_artifacts": [
+        "verified Zenodo version DOI"
+      ],
+      "required_gates": [
+        "post-release-check PASS"
+      ],
+      "state": "doi_verified"
+    },
+    {
+      "allowed_commands": [
+        "tests/audits/protected-diff-plan",
+        "PR/merge closeout"
+      ],
+      "expected_docs": "current verified release should move to target version",
+      "forbidden_commands": [
+        "dropping any expected closeout file from commit"
+      ],
+      "meaning": "All DOI closeout files contain target version and version DOI.",
+      "required_artifacts": [
+        "README",
+        "CHANGELOG",
+        "CITATION",
+        "STATUS",
+        "CURRENT_HANDOFF",
+        "VERIFIED_RELEASES"
+      ],
+      "required_gates": [
+        "pytest",
+        "ruff",
+        "docs-audit",
+        "audit-doc-currency",
+        "post-release-check",
+        "protected-diff-plan"
+      ],
+      "state": "closed_out"
+    },
+    {
+      "allowed_commands": [
+        "post-merge-check",
+        "repo-status",
+        "prepare next planning slice"
+      ],
+      "expected_docs": "target version is current package and current verified release",
+      "forbidden_commands": [
+        "GUI/release follow-up before final handoff if post-merge-check fails"
+      ],
+      "meaning": "Release is published, DOI-closed-out and handoff/main are clean.",
+      "required_artifacts": [
+        "fresh handoff package",
+        "clean worktree",
+        "main==origin/main"
+      ],
+      "required_gates": [
+        "post-merge-check",
+        "repo-status",
+        "require-fresh-llm-context"
+      ],
+      "state": "current_verified"
+    }
+  ]
+}
