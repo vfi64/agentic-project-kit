@@ -13,7 +13,7 @@ if str(SRC) not in sys.path:
 def main(argv: list[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
     if len(args) != 1:
-        print("usage: agentic-kit release-prep --version <version>")
+        print("usage: agentic-kit release-prep --version <version> --summary-line <line>")
         return 2
     version = args[0].removeprefix("v")
     from agentic_project_kit.release_prepare import prepare_release_state
@@ -23,6 +23,9 @@ def main(argv: list[str] | None = None) -> int:
             Path(".").resolve(),
             version=version,
             date=date.today().isoformat(),
+            summary_lines=[
+                f"Release metadata prepared for v{version}; Zenodo DOI verification remains pending until publication.",
+            ],
         )
     except ValueError as exc:
         print(str(exc))

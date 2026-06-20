@@ -300,7 +300,10 @@ def _steps(
             "prepared",
             "PASS" if prepared else "PENDING",
             (f"metadata_prepared={prepared}",),
-            ("agentic-kit release-prep --version <version> --json", "agentic-kit release-check --version <version>"),
+            (
+                "agentic-kit release-prep --version <version> --summary-line <line> --json",
+                "agentic-kit release-check --version <version>",
+            ),
             ("manual release metadata patching",),
             "published",
         ),

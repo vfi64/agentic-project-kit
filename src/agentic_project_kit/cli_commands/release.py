@@ -103,6 +103,13 @@ def release_prep_command(
         "--date",
         help="Release metadata date in YYYY-MM-DD format. Defaults to today.",
     ),
+    summary_lines: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--summary-line",
+            help="Release changelog summary line. Repeat for multiple lines; required to avoid stale template reuse.",
+        ),
+    ] = None,
     dry_run: bool = typer.Option(False, "--dry-run", help="Report changed paths without writing files."),
     json_output: bool = typer.Option(False, "--json", help="Print a machine-readable result."),
 ) -> None:
@@ -134,6 +141,7 @@ def release_prep_command(
             project_root.resolve(),
             version=plain_version,
             date=date_value,
+            summary_lines=summary_lines or [],
             dry_run=dry_run,
         )
     except (FileNotFoundError, ValueError) as exc:

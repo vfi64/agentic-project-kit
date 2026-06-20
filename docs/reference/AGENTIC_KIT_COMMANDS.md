@@ -627,6 +627,7 @@ push, create GitHub releases, or write Zenodo DOI metadata.
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `version` | `TyperOption` | --version | `True` |  | Target release version without leading v. |
 | `release_date` | `TyperOption` | --date | `False` |  | Release metadata date in YYYY-MM-DD format. Defaults to today. |
+| `summary_lines` | `TyperOption` | --summary-line | `False` |  | Release changelog summary line. Repeat for multiple lines; required to avoid stale template reuse. |
 | `dry_run` | `TyperOption` | --dry-run | `False` | `False` | Report changed paths without writing files. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print a machine-readable result. |
 

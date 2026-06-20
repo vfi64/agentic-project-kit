@@ -3555,6 +3555,20 @@
           "secondary_opts": []
         },
         {
+          "default": null,
+          "help": "Release changelog summary line. Repeat for multiple lines; required to avoid stale template reuse.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "summary_lines",
+          "opts": [
+            "--summary-line"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
           "default": false,
           "help": "Report changed paths without writing files.",
           "is_flag": true,

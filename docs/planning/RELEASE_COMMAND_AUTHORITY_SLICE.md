@@ -52,7 +52,7 @@ Re-verify these findings from current `main` at slice start:
 
 - `src/agentic_project_kit/release_prepare.py` contains deterministic release metadata write logic.
 - `src/agentic_project_kit/release_metadata_prep.py` is a package script around that core.
-- `tools/ns_release_metadata_prep.py` is a remaining compatibility wrapper and must not be the canonical route.
+- The legacy ns-named release metadata prep tool wrapper is removed; `src/agentic_project_kit/release_metadata_prep.py` is the package route around the deterministic core.
 - `src/agentic_project_kit/release_prep_core.py` still advertises `./ns release-prep <version>` in usage or error text and still renders an `NS RELEASE PREP CYCLE` header.
 - `src/agentic_project_kit/release_publish_core.py` still advertises `./ns release-publish`, still renders an `NS RELEASE PUBLISH CYCLE` header, and still calls `./ns release-gate` and `./ns release-verify`.
 - `src/agentic_project_kit/cli_commands/release.py` registers release planning, preflight, check, post-release check, and DOI closeout commands, but does not register one clear metadata-prep command.
@@ -119,7 +119,7 @@ mkdir -p tmp
   ./.venv/bin/agentic-kit post-release-check --help
   ./.venv/bin/agentic-kit post-release-doi-closeout --help
   echo "=== release route references ==="
-  rg -n "release-prep|release-publish|release-gate|release-verify|./ns|NS RELEASE|ns_release_metadata_prep" src tools tests docs README.md CHANGELOG.md || true
+  rg -n "release-prep|release-publish|release-gate|release-verify|./ns|NS RELEASE" src tools tests docs README.md CHANGELOG.md || true
   echo "RESULT=RELEASE_COMMAND_AUTHORITY_START_DONE"
 } > "$OUT" 2>&1
 RC=$?
@@ -144,7 +144,7 @@ Inspect these files first:
 - `src/agentic_project_kit/cli_commands/release.py`
 - `src/agentic_project_kit/release_prepare.py`
 - `src/agentic_project_kit/release_metadata_prep.py`
-- `tools/ns_release_metadata_prep.py`
+- Removed legacy tool wrapper path for release metadata prep
 - `src/agentic_project_kit/release_prep_core.py`
 - `src/agentic_project_kit/release_publish_core.py`
 - `tests/test_release_prepare_command.py`
@@ -167,7 +167,7 @@ Choose exactly one supported `agentic-kit` command name for release metadata pre
 
 Preferred direction, unless current CLI structure proves otherwise:
 
-- `agentic-kit release-prep --version X`
+- `agentic-kit release-prep --version X --summary-line "..."`
 
 Acceptable alternative:
 
@@ -349,7 +349,7 @@ End the implementation slice with:
 - exact next slice.
 ## Pre-GUI closeout note: release publish remains fail-closed
 
-The `agentic-kit release-prep --version <version>` route is the supported metadata preparation path.  The legacy direct publish core remains intentionally fail-closed after the ns migration until a separate release-publish orchestration follow-up rebuilds tag/publish behavior through supported `agentic-kit` wrappers.
+The `agentic-kit release-prep --version <version> --summary-line <line>` route is the supported metadata preparation path.  The legacy direct publish core remains intentionally fail-closed after the ns migration until a separate release-publish orchestration follow-up rebuilds tag/publish behavior through supported `agentic-kit` wrappers.
 
 This is a non-GUI follow-up.  It must not be solved by GUI code and must not reintroduce raw shell, raw GitHub CLI, or legacy `ns` routing into GUI actions.  GUI work may start after `agentic-kit gui-readiness-gate --version 0.4.9` is green, but real release publishing remains outside the GUI readiness scope until that follow-up is implemented and tested.
 
