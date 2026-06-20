@@ -3322,6 +3322,129 @@
     },
     {
       "group": "root",
+      "help": "Generate deterministic evidence-backed release notes from a local git tag diff.",
+      "name": "release-notes-generate",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Target release version without leading v.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Previous release tag used as the lower diff bound.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "from_tag",
+          "opts": [
+            "--from-tag"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "HEAD",
+          "help": "Upper git ref used for release-note evidence.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "to_ref",
+          "opts": [
+            "--to-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Write generated JSON release notes here.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_out",
+          "opts": [
+            "--json-out"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Write generated Markdown release notes here.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "out",
+          "opts": [
+            "--out"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write --json-out and --out files.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "write",
+          "opts": [
+            "--write"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print a machine-readable result.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "release-notes-generate"
+      ],
+      "qualified_name": "agentic-kit release-notes-generate"
+    },
+    {
+      "group": "root",
       "help": "Print a release preparation checklist for the current project.",
       "name": "release-plan",
       "params": [

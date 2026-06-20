@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "kind": "release_notes_generator_mvp_analysis",
+  "command": "agentic-kit release-notes-generate",
+  "state_model_alignment": {
+    "release_state_dependency": "agentic-kit release-status --json",
+    "intended_release_phase": "prepared_or_later",
+    "forbidden_side_effects": [
+      "no tag creation",
+      "no GitHub release creation",
+      "no DOI closeout writes",
+      "no release publication"
+    ]
+  },
+  "source_of_truth": {
+    "primary": "local git tag diff",
+    "required_inputs": [
+      "version",
+      "from_tag",
+      "to_ref"
+    ],
+    "optional_future_inputs": [
+      "GitHub PR metadata",
+      "release-prep evidence report",
+      "release-publish evidence report"
+    ]
+  },
+  "outputs": {
+    "canonical": "JSON release_notes report",
+    "projection": "Markdown rendered from JSON",
+    "generated_projection_policy": "Markdown release notes are generated projections and must be regenerated from JSON/core evidence instead of manually edited as the authority."
+  },
+  "validation": {
+    "blocks": [
+      "missing from_tag or to_ref",
+      "unparseable git log record",
+      "unclassified product PR",
+      "product item without PR evidence"
+    ],
+    "passes": [
+      "all product commits classified",
+      "administrative handoff refresh commits separated",
+      "local commit and tag-diff evidence present"
+    ]
+  },
+  "categories": [
+    "Added",
+    "Changed",
+    "Fixed",
+    "Governance",
+    "Transfer / Handoff",
+    "Docs",
+    "Tests / Gates",
+    "Release",
+    "Breaking",
+    "Known Issues",
+    "Administrative Handoff Refresh",
+    "Unclassified"
+  ],
+  "determinism": {
+    "generated_at_utc_source": "to_ref committer date normalized to UTC",
+    "same_input_same_output": true,
+    "llm_dependency": false
+  },
+  "follow_up_slices": [
+    "add optional GitHub PR metadata enrichment without making GitHub required",
+    "bind generated release notes into release-prep or release-status once the MVP is stable",
+    "add generated-release-notes drift validation if release notes become committed release artifacts"
+  ]
+}

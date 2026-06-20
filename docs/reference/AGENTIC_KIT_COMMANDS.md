@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `174`
+- Command count: `175`
 
 ## Commands
 
@@ -581,6 +581,21 @@ Block manual release metadata anchor edits without release-prep evidence.
 | `base_ref` | `TyperOption` | --base-ref | `False` | `origin/main` | Git ref used as the diff base. |
 | `version` | `TyperOption` | --version | `False` |  | Expected release version without leading v. |
 | `evidence` | `TyperOption` | --evidence | `False` |  | Authoritative release-prep evidence file. May be passed more than once. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print a machine-readable result. |
+
+### `agentic-kit release-notes-generate`
+
+Generate deterministic evidence-backed release notes from a local git tag diff.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `version` | `TyperOption` | --version | `True` |  | Target release version without leading v. |
+| `from_tag` | `TyperOption` | --from-tag | `True` |  | Previous release tag used as the lower diff bound. |
+| `to_ref` | `TyperOption` | --to-ref | `False` | `HEAD` | Upper git ref used for release-note evidence. |
+| `json_out` | `TyperOption` | --json-out | `False` |  | Write generated JSON release notes here. |
+| `out` | `TyperOption` | --out | `False` |  | Write generated Markdown release notes here. |
+| `write` | `TyperOption` | --write | `False` | `False` | Write --json-out and --out files. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print a machine-readable result. |
 
 ### `agentic-kit release-plan`

@@ -26,6 +26,11 @@ from agentic_project_kit.release import (
     render_release_state_report,
 )
 from agentic_project_kit.release_state import build_release_lifecycle_status, render_release_lifecycle_status
+from agentic_project_kit.release_notes import (
+    build_release_notes_report,
+    render_release_notes_markdown,
+    write_release_notes_outputs,
+)
 
 console = Console()
 
@@ -39,6 +44,7 @@ def register_release_commands(app: typer.Typer) -> None:
     app.command("release-preflight")(release_preflight_command)
     app.command("release-prep")(release_prep_command)
     app.command("release-status")(release_status_command)
+    app.command("release-notes-generate")(release_notes_generate_command)
     app.command("release-metadata-authority-gate")(release_metadata_authority_gate_command)
     app.command("release-check")(release_check_command)
     app.command("post-release-check")(post_release_check_command)
@@ -172,6 +178,35 @@ def release_status_command(
     else:
         console.print(render_release_lifecycle_status(result), markup=False)
     if result.blockers:
+        raise typer.Exit(code=2)
+
+
+def release_notes_generate_command(
+    project_root: Path = typer.Option(Path("."), "--root"),
+    version: str = typer.Option(..., "--version", help="Target release version without leading v."),
+    from_tag: str = typer.Option(..., "--from-tag", help="Previous release tag used as the lower diff bound."),
+    to_ref: str = typer.Option("HEAD", "--to-ref", help="Upper git ref used for release-note evidence."),
+    json_out: Path | None = typer.Option(None, "--json-out", help="Write generated JSON release notes here."),
+    out: Path | None = typer.Option(None, "--out", help="Write generated Markdown release notes here."),
+    write: bool = typer.Option(False, "--write", help="Write --json-out and --out files."),
+    json_output: bool = typer.Option(False, "--json", help="Print a machine-readable result."),
+) -> None:
+    """Generate deterministic evidence-backed release notes from a local git tag diff."""
+    result = build_release_notes_report(project_root.resolve(), version=version, from_tag=from_tag, to_ref=to_ref)
+    if write:
+        if json_out is None or out is None:
+            message = "--write requires both --json-out and --out"
+            if json_output:
+                _print_json({"ok": False, "status": "BLOCK", "message": message})
+            else:
+                console.print(f"BLOCK: {message}", markup=False)
+            raise typer.Exit(code=2)
+        write_release_notes_outputs(result, json_out=json_out, markdown_out=out)
+    if json_output:
+        _print_json(result.as_dict())
+    else:
+        console.print(render_release_notes_markdown(result), markup=False)
+    if result.validation.status != "PASS":
         raise typer.Exit(code=2)
 
 
