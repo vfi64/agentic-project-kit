@@ -1,0 +1,296 @@
+{
+  "design_principles": [
+    "wrapper_first_only",
+    "state_model_before_buttons",
+    "one_visible_next_action_per_mode_when_possible",
+    "no_raw_shell_git_github_release_logic_in_gui",
+    "generated_handoff_projections_are_read_only_outputs",
+    "logs_are_evidence_not_chat_content"
+  ],
+  "kind": "agentic_kit_gui_transfer_concept",
+  "main_window": {
+    "must_not_show_by_default": [
+      "full long logs",
+      "all 150+ commands",
+      "raw generated handoff package JSON"
+    ],
+    "must_show": [
+      "current branch",
+      "repo clean/dirty",
+      "current mode",
+      "last command",
+      "last log path",
+      "last RC",
+      "next safe action"
+    ],
+    "preferred_structure": "single main window with mode-aware status header, terminal/log area, current-state cards and selected evidence preview",
+    "role": "central status/evidence workspace"
+  },
+  "open_questions": [
+    "Should the first GUI MVP use a separate panel window like the reference, or a docked side panel for simpler packaging?",
+    "Which terminal launchers should be supported first on macOS/Windows/Linux?",
+    "Should GUI persist workflow state in an existing transfer carrier or a new patch-cycle state file?",
+    "Which release actions should remain CLI-only until release-state hardening lands?"
+  ],
+  "panel_window": {
+    "button_policy": "small curated wrapper buttons only; disabled or warning state when guard is not satisfied",
+    "inspiration_from_reference": "separate side panel with grouped dynamic buttons and state-dependent toggles",
+    "recommended_mode_groups": [
+      "Remote",
+      "Transferdateien",
+      "Copy-and-Paste",
+      "Release",
+      "Diagnostics"
+    ],
+    "role": "mode-specific command surface"
+  },
+  "schema_version": 1,
+  "source_inputs": {
+    "external_reference": "vfi64/Comm-SCI-Control-private",
+    "external_reference_commit": "e65d6c8a8c02204420703829a171f9423a5a49bf",
+    "image_reference_missing": true,
+    "kit_authorities": [
+      "docs/planning/project_direction.yaml",
+      "docs/DOCUMENTATION_REGISTRY.yaml",
+      "docs/reports/handoff-packages/latest/execution_contract.json",
+      "docs/reference/agentic-kit-commands.json"
+    ]
+  },
+  "state_model": {
+    "copy_paste": [
+      "BLOCK_READY",
+      "TERMINAL_OPENED",
+      "RUNNING_UNKNOWN",
+      "LOG_READY",
+      "RC_PASS",
+      "RC_FAIL",
+      "DIAGNOSIS_REQUIRED"
+    ],
+    "release": [
+      "PLANNED",
+      "PREPARED",
+      "PUBLISHED",
+      "DOI_VERIFIED",
+      "CLOSED_OUT",
+      "CURRENT_VERIFIED"
+    ],
+    "remote": [
+      "UNKNOWN",
+      "SYNC_REQUIRED",
+      "READY",
+      "PR_OPEN",
+      "CI_RUNNING",
+      "CI_FAILED",
+      "MERGED",
+      "HANDOFF_REQUIRED",
+      "FRESH_CONTEXT_REQUIRED",
+      "CLEAN"
+    ],
+    "transfer_files": [
+      "NO_INBOX",
+      "INBOX_READY",
+      "RUNNING",
+      "OUTBOX_READY",
+      "BLOCKED",
+      "FAILED",
+      "FRESH_CONTEXT_REQUIRED"
+    ]
+  },
+  "terminal_strategy": {
+    "embedded_terminal": "optional future enhancement; not required for MVP because cross-platform PTY embedding is risky",
+    "linux": [
+      "xterm/gnome-terminal/konsole external launch when available",
+      "fallback: copy command to clipboard and watch tmp log"
+    ],
+    "macos": [
+      "Terminal.app/iTerm2 external launch",
+      "fallback: copy command to clipboard and watch tmp log"
+    ],
+    "preferred": "external-terminal-first with log watcher and bounded LOG/RC capture",
+    "required_log_contract": "every local command writes tmp/*.log and GUI only surfaces LOG path, RC, compact JSON summary and bounded diagnostics",
+    "windows": [
+      "Windows Terminal/PowerShell external launch",
+      "fallback: copy command to clipboard and watch tmp log"
+    ]
+  },
+  "traffic_light_model": {
+    "gray": "not checked or unavailable",
+    "green": "last checked state PASS/success/clean/fresh",
+    "red": "FAIL, BLOCK, CI red, dirty when clean required, protected-diff-plan blocked",
+    "yellow": "running, unknown, waiting, stale, warning or needs attention"
+  },
+  "transfer_modes": [
+    {
+      "forbidden_actions": [
+        "direct git merge/push/tag from GUI",
+        "manual editing of generated handoff projections",
+        "release publish without release state guard",
+        "broad log dumping into chat"
+      ],
+      "id": "remote",
+      "label": "Remote-Arbeitsweise",
+      "minimal_buttons": [
+        "Sync main",
+        "Repo status",
+        "Post merge check",
+        "PR status",
+        "Open latest log",
+        "Prepare successor handoff",
+        "Publish last report",
+        "Require fresh LLM context",
+        "Run standard gates"
+      ],
+      "primary_user_goal": "Remote/LLM work over GitHub PR/CI while local GUI shows repo, PR, CI, log and handoff state without bypassing governance.",
+      "safe_wrappers": [
+        "agentic-kit transfer sync-main",
+        "agentic-kit transfer repo-status",
+        "agentic-kit transfer post-merge-check",
+        "agentic-kit transfer pr-status",
+        "agentic-kit transfer prepare-successor-handoff --render-prompt",
+        "agentic-kit transfer publish-last-report",
+        "agentic-kit transfer require-fresh-llm-context --json",
+        "agentic-kit standard-gates-audit-suite"
+      ],
+      "status_indicators": [
+        "repo_cleanliness",
+        "branch",
+        "pr_state",
+        "ci_state",
+        "handoff_freshness",
+        "latest_report_presence",
+        "standard_gates_state"
+      ]
+    },
+    {
+      "forbidden_actions": [
+        "arbitrary execution of inbox text outside transfer continue",
+        "unsafe reset/delete of volatile carriers",
+        "showing unbounded outbox/log content by default"
+      ],
+      "id": "transfer_files",
+      "label": "Dialog via Transferdateien",
+      "minimal_buttons": [
+        "Inbox pr\u00fcfen",
+        "Continue starten",
+        "Outbox anzeigen",
+        "Outbox kopieren",
+        "Outbox als Datei \u00f6ffnen",
+        "Require fresh context",
+        "Restore known volatile"
+      ],
+      "primary_user_goal": "Inbox command pr\u00fcfen, transfer continue sicher ausf\u00fchren und Outbox/Last-Result als bounded evidence zur\u00fcckgeben.",
+      "safe_wrappers": [
+        "agentic-kit transfer continue",
+        "agentic-kit transfer require-fresh-llm-context --json",
+        "agentic-kit transfer restore-known-volatile --json",
+        "agentic-kit transfer repo-status"
+      ],
+      "state_paths": [
+        ".agentic/transfer/inbox/next_command.py.txt",
+        ".agentic/transfer/outbox/last_result.txt"
+      ],
+      "status_indicators": [
+        "inbox_present",
+        "outbox_present",
+        "last_run_state",
+        "fresh_context_state",
+        "worktree_state"
+      ]
+    },
+    {
+      "forbidden_actions": [
+        "cat ganzer Logs in Chat",
+        "unbounded grep over docs/reports or outbox",
+        "loose command fragments",
+        "hidden shell mutation without log path"
+      ],
+      "id": "copy_paste",
+      "label": "Dialog via Copy-and-Paste",
+      "minimal_buttons": [
+        "Copy block vorbereiten",
+        "Externes Terminal \u00f6ffnen",
+        "Logpfad anzeigen",
+        "Log \u00f6ffnen",
+        "LOG/RC kopieren",
+        "Fehlerdiagnose vorbereiten"
+      ],
+      "primary_user_goal": "Vollst\u00e4ndigen lokalen Bashblock ausf\u00fchren lassen, Log/RC erfassen und nur bounded evidence zur\u00fcckgeben.",
+      "safe_wrappers": [
+        "agentic-kit transfer repo-status",
+        "agentic-kit transfer protected-diff-plan",
+        "agentic-kit transfer require-fresh-llm-context --json"
+      ],
+      "status_indicators": [
+        "last_local_run_state",
+        "log_file_presence",
+        "rc_state",
+        "copy_discipline_state"
+      ]
+    },
+    {
+      "forbidden_actions": [
+        "live publish without explicit release guard",
+        "manual regex patching release metadata",
+        "release notes publication without evidence"
+      ],
+      "id": "release",
+      "label": "Release",
+      "minimal_buttons": [
+        "Release status",
+        "Release prep dry-run",
+        "Release publish dry-run",
+        "Post-release check",
+        "DOI closeout dry-run"
+      ],
+      "primary_user_goal": "Release-Zustand sichtbar machen und nur guarded release-prep/publish/closeout-Aktionen anbieten.",
+      "safe_wrappers": [
+        "agentic-kit release-prep --dry-run --json",
+        "agentic-kit release-publish --dry-run --json",
+        "agentic-kit post-release-check --version X",
+        "agentic-kit post-release-doi-closeout --version X --json"
+      ],
+      "status_indicators": [
+        "planned",
+        "prepared",
+        "published",
+        "doi_verified",
+        "closed_out",
+        "current_verified"
+      ]
+    },
+    {
+      "forbidden_actions": [
+        "automatic broad cleanup from diagnostics screen",
+        "diagnostic mutation without explicit slice"
+      ],
+      "id": "diagnostics",
+      "label": "Diagnostics",
+      "minimal_buttons": [
+        "Docs audit",
+        "Doc currency",
+        "Planning docs audit",
+        "NS legacy audit",
+        "Program redundancy",
+        "Standard gates",
+        "Open latest diagnostic summary"
+      ],
+      "primary_user_goal": "Geb\u00fcndelte, bounded Diagnoseberichte \u00f6ffnen und Gate-Status als Ampel zeigen.",
+      "safe_wrappers": [
+        "agentic-kit docs-audit",
+        "agentic-kit audit-doc-currency",
+        "agentic-kit audit-planning-docs-consolidation",
+        "agentic-kit audit-ns-legacy-references",
+        "agentic-kit audit-program-redundancy",
+        "agentic-kit standard-gates-audit-suite"
+      ],
+      "status_indicators": [
+        "docs_audit",
+        "doc_currency",
+        "planning_consolidation",
+        "ns_legacy",
+        "program_redundancy",
+        "standard_gates"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,289 @@
+{
+  "analysis_method": "static_code_analysis_without_running_gui",
+  "button_groups": [
+    {
+      "id": "comm",
+      "labels_or_actions": [
+        "Comm Start",
+        "Comm Stop",
+        "Comm toggle"
+      ],
+      "source_paths": [
+        "src/panel/panel_ui_snapshot_seam.py",
+        "src/panel/ui_panel_model.py"
+      ],
+      "state_behavior": "Start/Stop collapsed into state-dependent toggle"
+    },
+    {
+      "id": "profiles",
+      "labels_or_actions": "dynamic profile command list",
+      "source_paths": [
+        "src/panel/panel_ui_snapshot_seam.py"
+      ],
+      "state_behavior": "loaded from governance UI snapshot"
+    },
+    {
+      "id": "sci",
+      "labels_or_actions": [
+        "SCI on",
+        "SCI off",
+        "SCI menu",
+        "SCI recurse"
+      ],
+      "source_paths": [
+        "src/panel/ui_panel_model.py"
+      ],
+      "state_behavior": "SCI menu/recurse hidden unless SCI is on"
+    },
+    {
+      "id": "overlays",
+      "labels_or_actions": [
+        "Strict on/off",
+        "Explore on/off"
+      ],
+      "source_paths": [
+        "src/panel/ui_panel_model.py"
+      ],
+      "state_behavior": "state-dependent toggle normalization"
+    },
+    {
+      "id": "tools",
+      "labels_or_actions": "dynamic tools list",
+      "source_paths": [
+        "src/panel/panel_ui_snapshot_seam.py"
+      ],
+      "state_behavior": "governance snapshot driven"
+    },
+    {
+      "id": "logs",
+      "labels_or_actions": "dynamic log/chat-log list",
+      "source_paths": [
+        "src/panel/panel_ui_snapshot_seam.py",
+        "src/panel/ui_history_replay_runtime.py"
+      ],
+      "state_behavior": "selectable chat log, rebuilds main chat UI from history"
+    },
+    {
+      "id": "manual_test_monitor",
+      "labels_or_actions": [
+        "manual_test_monitor_show",
+        "manual_test_monitor_hide",
+        "manual_test_monitor_reset",
+        "manual_test_monitor_append"
+      ],
+      "source_paths": [
+        "src/panel/panel_action_gate_runtime.py"
+      ],
+      "state_behavior": "blocked while Comm is off"
+    },
+    {
+      "id": "qc_override",
+      "labels_or_actions": [
+        "qc_override_apply",
+        "qc_override_clear",
+        "qc_override_cancel"
+      ],
+      "source_paths": [
+        "src/panel/panel_action_gate_runtime.py"
+      ],
+      "state_behavior": "modal gate blocks unrelated actions"
+    }
+  ],
+  "entrypoints": [
+    {
+      "path": "Comm-SCI-Control-App.py",
+      "role": "root compatibility launcher"
+    },
+    {
+      "path": "Comm-SCI-Control-App2.py",
+      "role": "root compatibility launcher"
+    },
+    {
+      "path": "src/Comm-SCI-Control-App2.py",
+      "role": "source compatibility launcher"
+    },
+    {
+      "path": "src/app/app_bootstrap.py",
+      "role": "desktop composition/bootstrap"
+    },
+    {
+      "path": "src/app/app2_runtime.py",
+      "role": "desktop runtime API / app2 entry"
+    }
+  ],
+  "framework": "pywebview with HTML/JavaScript UI; tkinter import detected only in bootstrap fallback/dependency context; no Tkinter widget tree detected",
+  "framework_evidence": {
+    "pywebview_files": [
+      "tests/test_app_bootstrap.py",
+      "tests/test_app2_runtime.py",
+      "tests/test_app.py",
+      "src/app/app_bootstrap.py",
+      "src/app/module_only_dependencies.py",
+      "src/app/module_only_api_base.py",
+      "src/panel/panel_lifecycle_seam.py",
+      "src/logging_runtime/export_preview_runtime.py",
+      "src/legacy_runtime/base_runtime_ops.py",
+      "src/legacy_runtime/legacy_base_app.py"
+    ],
+    "textual_hits_are_textual_content_or_tests": [
+      "tests/test_app.py",
+      "src/wrapper_contracts/deterministic_output_compiler.py",
+      "src/app/model_only_prompt_contract.py",
+      "src/Module/compliance_scan.py",
+      "src/content/color_marker_policy.py",
+      "src/legacy_runtime/legacy_base_app.py",
+      "src/output/renderers/text_artifact_cleanup.py"
+    ],
+    "tkinter_files": [
+      "src/app/app_bootstrap.py"
+    ]
+  },
+  "image_reference_missing": true,
+  "kind": "external_gui_reference_analysis",
+  "schema_version": 1,
+  "source_branch": "main",
+  "source_commit": "e65d6c8a8c02204420703829a171f9423a5a49bf",
+  "source_repo": "vfi64/Comm-SCI-Control-private",
+  "status_indicators": [
+    {
+      "id": "panel_bootstrap",
+      "source_paths": [
+        "src/panel/panel_bootstrap_state.py"
+      ],
+      "states": [
+        "idle",
+        "pending",
+        "passed",
+        "failed",
+        "skipped"
+      ]
+    },
+    {
+      "id": "comm_state",
+      "source_paths": [
+        "src/panel/panel_ui_snapshot_seam.py",
+        "src/app/app2_runtime.py"
+      ],
+      "states": [
+        "comm_active true/false",
+        "sci active/pending/off",
+        "overlay strict/explore/off",
+        "color on/off"
+      ]
+    },
+    {
+      "id": "action_gate",
+      "source_paths": [
+        "src/panel/panel_action_gate_runtime.py"
+      ],
+      "states": [
+        "ok",
+        "comm_off_blocked",
+        "qc_override_modal_blocked"
+      ]
+    }
+  ],
+  "terminal_or_log_components": [
+    {
+      "id": "chat_log_listing",
+      "notes": "Log/chat history UI is present; no embedded OS terminal component was detected in static code analysis.",
+      "source_paths": [
+        "src/panel/panel_ui_snapshot_seam.py",
+        "src/panel/ui_history_replay_runtime.py"
+      ]
+    },
+    {
+      "id": "quality_gate_scripts",
+      "notes": "CLI subprocess scripts exist outside GUI runtime.",
+      "source_paths": [
+        "scripts/quality_gate.py",
+        "scripts/run_scenario_harness.py"
+      ]
+    }
+  ],
+  "unknowns": [
+    "No visual screenshot/image was available in this conversation; image_reference_missing=true.",
+    "Exact rendered CSS layout and button count are not fully recoverable without running the pywebview app.",
+    "Window resizable flags and min_size are not declared in the inspected pywebview create_window calls.",
+    "No robust cross-platform embedded terminal widget was found in the external GUI reference."
+  ],
+  "windows": [
+    {
+      "evidence": [
+        "compute_startup_window_layout",
+        "bootstrap_desktop_windows",
+        "webview.create_window(html=html_chat)"
+      ],
+      "layout": "side-by-side pywebview window; x/y from primary screen; created before panel",
+      "name": "Main chat window",
+      "role": "main",
+      "size": {
+        "default": "computed from primary screen: main width = screen width - panel width; fallback width 1100, fallback height 1000",
+        "minimum": "implicit lower bound main_w >= 220 in compute_startup_window_layout; no pywebview min_size literal found",
+        "resizable": "not_declared_in_code"
+      },
+      "source_paths": [
+        "src/app/app_bootstrap.py"
+      ],
+      "widgets": [
+        "HTML chat surface",
+        "JS API bridge",
+        "chat history rendering",
+        "status messages"
+      ]
+    },
+    {
+      "evidence": [
+        "api._create_panel()",
+        "panel_ui_default_snapshot",
+        "panel_create_window_kwargs_plan"
+      ],
+      "layout": "separate side panel, pre-created before webview.start to avoid macOS/Cocoa secondary-window bridge issues",
+      "name": "Panel window",
+      "role": "panel",
+      "size": {
+        "default": "computed panel width = clamp(round(screen_width * 0.26), 320..420) with small-screen fallbacks; full screen height",
+        "minimum": "implicit lower bound panel_w >= 220 in compute_startup_window_layout; no pywebview min_size literal found",
+        "resizable": "not_declared_in_code"
+      },
+      "source_paths": [
+        "src/app/app_bootstrap.py",
+        "src/panel/panel_lifecycle_seam.py",
+        "src/panel/panel_ui_snapshot_seam.py"
+      ],
+      "widgets": [
+        "dynamic button groups",
+        "status snapshots",
+        "chat log selection",
+        "manual-test controls",
+        "QC override controls"
+      ]
+    },
+    {
+      "evidence": [
+        "api._create_qc_override()",
+        "qc_override_apply",
+        "qc_override_clear",
+        "qc_override_cancel"
+      ],
+      "layout": "modal-like secondary pywebview flow; non-QC actions are blocked while active",
+      "name": "QC override window",
+      "role": "dialog",
+      "size": {
+        "default": "not_declared_in_static_summary",
+        "minimum": "not_declared_in_static_summary",
+        "resizable": "not_declared_in_static_summary"
+      },
+      "source_paths": [
+        "src/app/app_bootstrap.py",
+        "src/panel/qc_override_window_seam.py",
+        "src/panel/panel_action_gate_runtime.py"
+      ],
+      "widgets": [
+        "Apply",
+        "Clear",
+        "Cancel actions inferred from action gate"
+      ]
+    }
+  ]
+}
