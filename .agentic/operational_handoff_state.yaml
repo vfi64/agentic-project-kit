@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 105793733d74304b4e7841f2544226488004d90e
-  short: 10579373
-  subject: Harden release prep current-state currency (#1521)
+  full: 10921b6755d751d818682a582d7dbd056d8249d6
+  short: 10921b67
+  subject: Harden current-state doc currency audit (#1523)
 last_substantive_work_state:
-  full: 105793733d74304b4e7841f2544226488004d90e
-  short: 10579373
-  subject: Harden release prep current-state currency (#1521)
+  full: 10921b6755d751d818682a582d7dbd056d8249d6
+  short: 10921b67
+  subject: Harden current-state doc currency audit (#1523)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
