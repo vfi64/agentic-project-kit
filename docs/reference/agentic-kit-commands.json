@@ -3734,6 +3734,20 @@
         },
         {
           "default": false,
+          "help": "Include remote tag, GitHub Release, and DOI/Zenodo checks.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "include_remote",
+          "opts": [
+            "--include-remote"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
           "help": "Print a machine-readable result.",
           "is_flag": true,
           "metavar": null,

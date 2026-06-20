@@ -177,10 +177,11 @@ def release_prep_command(
 def release_status_command(
     project_root: Path = typer.Option(Path("."), "--root"),
     version: str | None = typer.Option(None, "--version", help="Release version without leading v."),
+    include_remote: bool = typer.Option(False, "--include-remote", help="Include remote tag, GitHub Release, and DOI/Zenodo checks."),
     json_output: bool = typer.Option(False, "--json", help="Print a machine-readable result."),
 ) -> None:
     """Render the local release lifecycle state without mutating release files."""
-    result = build_release_lifecycle_status(project_root.resolve(), version=version)
+    result = build_release_lifecycle_status(project_root.resolve(), version=version, include_remote=include_remote)
     if json_output:
         _print_json(result.as_dict())
     else:
