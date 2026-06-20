@@ -42,13 +42,48 @@ def _seed_release_files(root: Path, *, version: str = "1.2.3", doi: str = "10.52
 
 
 class FakeRunner:
-    def __init__(self, *, tag_exists: bool) -> None:
+    def __init__(
+        self,
+        *,
+        tag_exists: bool,
+        remote_tag_exists: bool | None = None,
+        github_release_exists: bool | None = None,
+    ) -> None:
         self.tag_exists = tag_exists
+        self.remote_tag_exists = remote_tag_exists
+        self.github_release_exists = github_release_exists
 
     def __call__(self, _root: Path, argv: Sequence[str]) -> CommandResult:
         if list(argv[:3]) == ["git", "rev-parse", "--verify"]:
             return CommandResult(0, "tag-sha\n", "") if self.tag_exists else CommandResult(128, "", "missing")
+        if list(argv[:3]) == ["git", "ls-remote", "--tags"]:
+            if self.remote_tag_exists is None:
+                return CommandResult(2, "", "remote unavailable")
+            tag = argv[-1]
+            return CommandResult(0, f"remote-sha\trefs/tags/{tag}\n" if self.remote_tag_exists else "", "")
+        if list(argv[:3]) == ["gh", "release", "view"]:
+            if self.github_release_exists is None:
+                return CommandResult(127, "", "gh unavailable")
+            tag = argv[3]
+            return CommandResult(0, json.dumps({"tagName": tag}), "") if self.github_release_exists else CommandResult(1, "", "not found")
         return CommandResult(127, "", "unexpected command")
+
+
+class FakeHttpGetter:
+    def __init__(self, *, concept_ok: bool | None = True, version_payload: str | None = "") -> None:
+        self.concept_ok = concept_ok
+        self.version_payload = version_payload
+
+    def __call__(self, url: str) -> CommandResult:
+        if "doi.org" in url:
+            if self.concept_ok is None:
+                return CommandResult(2, "", "network unavailable")
+            return CommandResult(0 if self.concept_ok else 404, "", "")
+        if "zenodo.org/api/records" in url:
+            if self.version_payload is None:
+                return CommandResult(2, "", "network unavailable")
+            return CommandResult(0, self.version_payload, "")
+        return CommandResult(404, "", "not found")
 
 
 def test_release_lifecycle_status_reports_current_verified(tmp_path: Path) -> None:
@@ -60,6 +95,8 @@ def test_release_lifecycle_status_reports_current_verified(tmp_path: Path) -> No
     assert status.current_state == "current_verified"
     assert status.version_doi == "10.5281/zenodo.22222222"
     assert status.blockers == ()
+    assert status.remote.status == "NOT_CHECKED"
+    assert status.warnings == ()
 
 
 def test_release_lifecycle_status_reads_compact_verified_release_list(tmp_path: Path) -> None:
@@ -125,6 +162,60 @@ def test_release_status_cli_json_is_machine_readable(tmp_path: Path) -> None:
     payload = json.loads(result.stdout)
     assert payload["kind"] == "release_lifecycle_status"
     assert payload["version"] == "1.2.3"
+    assert payload["remote"]["status"] == "NOT_CHECKED"
+
+
+def test_release_lifecycle_status_include_remote_reports_verified_remote_state(tmp_path: Path) -> None:
+    _seed_release_files(tmp_path)
+
+    status = build_release_lifecycle_status(
+        tmp_path,
+        command_runner=FakeRunner(tag_exists=True, remote_tag_exists=True, github_release_exists=True),
+        include_remote=True,
+        http_getter=FakeHttpGetter(version_payload='{"metadata": {"version": "1.2.3"}, "doi": "10.5281/zenodo.22222222"}'),
+    )
+
+    assert status.result_status == "PASS"
+    assert status.remote.status == "PASS"
+    assert status.remote.remote_tag_exists is True
+    assert status.remote.github_release_exists is True
+    assert status.remote.zenodo_concept_doi_verified is True
+    assert status.remote.zenodo_version_doi_verified is True
+    assert status.remote.doi_metadata_version_matches is True
+
+
+def test_release_lifecycle_status_include_remote_blocks_missing_published_remote_state(tmp_path: Path) -> None:
+    _seed_release_files(tmp_path)
+
+    status = build_release_lifecycle_status(
+        tmp_path,
+        command_runner=FakeRunner(tag_exists=True, remote_tag_exists=False, github_release_exists=False),
+        include_remote=True,
+        http_getter=FakeHttpGetter(version_payload='{"metadata": {"version": "1.2.3"}, "doi": "10.5281/zenodo.22222222"}'),
+    )
+
+    assert status.result_status == "BLOCK"
+    assert status.remote.status == "BLOCK"
+    assert "remote_tag_missing_for_local_tag" in status.blockers
+    assert "github_release_missing_for_local_tag" in status.blockers
+
+
+def test_release_lifecycle_status_include_remote_warns_for_inconclusive_remote_checks(tmp_path: Path) -> None:
+    _seed_release_files(tmp_path)
+
+    status = build_release_lifecycle_status(
+        tmp_path,
+        command_runner=FakeRunner(tag_exists=True),
+        include_remote=True,
+        http_getter=FakeHttpGetter(concept_ok=None, version_payload=None),
+    )
+
+    assert status.result_status == "PASS"
+    assert status.remote.status == "WARN"
+    assert status.remote.remote_tag_exists is None
+    assert "remote_tag_check_inconclusive" in status.warnings
+    assert "github_release_check_inconclusive" in status.warnings
+    assert "zenodo_version_doi_check_inconclusive" in status.warnings
 
 
 def test_release_process_state_analysis_report_contract() -> None:

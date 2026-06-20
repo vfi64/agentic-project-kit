@@ -4,12 +4,15 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 import re
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 from agentic_project_kit.post_release_closeout import EXPECTED_DOI_CLOSEOUT_PATHS
 from agentic_project_kit.release import CommandResult, run_command
 
 
 ReleaseStateRunner = Callable[[Path, Sequence[str]], CommandResult]
+ReleaseStateHttpGetter = Callable[[str], CommandResult]
 ZENODO_DOI_RE = re.compile(r"10\.5281/zenodo\.\d+")
 
 
@@ -48,6 +51,7 @@ class ReleaseLifecycleStatus:
     current_verified_version: str
     current_verified_doi: str
     local_tag_exists: bool
+    remote: "RemoteReleaseStatus"
     steps: tuple[ReleaseLifecycleStep, ...]
     blockers: tuple[str, ...]
     warnings: tuple[str, ...]
@@ -68,10 +72,41 @@ class ReleaseLifecycleStatus:
             "current_verified_version": self.current_verified_version,
             "current_verified_doi": self.current_verified_doi,
             "local_tag_exists": self.local_tag_exists,
+            "remote": self.remote.as_dict(),
             "steps": [step.as_dict() for step in self.steps],
             "blockers": list(self.blockers),
             "warnings": list(self.warnings),
             "next_action": self.next_action,
+        }
+
+
+@dataclass(frozen=True)
+class RemoteReleaseStatus:
+    status: str
+    checked: bool
+    local_tag_exists: bool
+    remote_tag_exists: bool | None
+    github_release_exists: bool | None
+    github_release_tag_matches: bool | None
+    zenodo_concept_doi_verified: bool | None
+    zenodo_version_doi_verified: bool | None
+    doi_metadata_version_matches: bool | None
+    blockers: tuple[str, ...]
+    warnings: tuple[str, ...]
+
+    def as_dict(self) -> dict[str, object]:
+        return {
+            "status": self.status,
+            "checked": self.checked,
+            "local_tag_exists": self.local_tag_exists,
+            "remote_tag_exists": self.remote_tag_exists,
+            "github_release_exists": self.github_release_exists,
+            "github_release_tag_matches": self.github_release_tag_matches,
+            "zenodo_concept_doi_verified": self.zenodo_concept_doi_verified,
+            "zenodo_version_doi_verified": self.zenodo_version_doi_verified,
+            "doi_metadata_version_matches": self.doi_metadata_version_matches,
+            "blockers": list(self.blockers),
+            "warnings": list(self.warnings),
         }
 
 
@@ -80,6 +115,8 @@ def build_release_lifecycle_status(
     *,
     version: str | None = None,
     command_runner: ReleaseStateRunner | None = None,
+    include_remote: bool = False,
+    http_getter: ReleaseStateHttpGetter | None = None,
 ) -> ReleaseLifecycleStatus:
     runner = command_runner or run_command
     package_version = _read_pyproject_version(project_root)
@@ -103,6 +140,16 @@ def build_release_lifecycle_status(
     )
     closed_out = _is_closed_out(project_root, resolved_version, version_doi)
     current_verified = current_verified_version == resolved_version and current_verified_doi == version_doi and bool(version_doi)
+    remote = _remote_release_status(
+        project_root,
+        version=resolved_version,
+        concept_doi=concept_doi,
+        version_doi=version_doi,
+        local_tag_exists=local_tag_exists,
+        include_remote=include_remote,
+        runner=runner,
+        http_getter=http_getter or _http_get,
+    )
     blockers = _blockers(
         package_version=package_version,
         init_version=init_version,
@@ -112,8 +159,11 @@ def build_release_lifecycle_status(
         version_doi=version_doi,
         current_verified_version=current_verified_version,
         current_verified_doi=current_verified_doi,
+    ) + remote.blockers
+    warnings = (
+        _warnings(prepared=prepared, local_tag_exists=local_tag_exists, version_doi=version_doi, closed_out=closed_out)
+        + (remote.warnings if remote.checked else ())
     )
-    warnings = _warnings(prepared=prepared, local_tag_exists=local_tag_exists, version_doi=version_doi, closed_out=closed_out)
     steps = _steps(
         version=resolved_version,
         prepared=prepared,
@@ -138,6 +188,7 @@ def build_release_lifecycle_status(
         current_verified_version=current_verified_version,
         current_verified_doi=current_verified_doi,
         local_tag_exists=local_tag_exists,
+        remote=remote,
         steps=steps,
         blockers=blockers,
         warnings=warnings,
@@ -159,6 +210,12 @@ def render_release_lifecycle_status(status: ReleaseLifecycleStatus) -> str:
         f"CURRENT_VERIFIED_VERSION={status.current_verified_version or '<missing>'}",
         f"CURRENT_VERIFIED_DOI={status.current_verified_doi or '<missing>'}",
         f"LOCAL_TAG_EXISTS={str(status.local_tag_exists).lower()}",
+        f"REMOTE_STATUS={status.remote.status}",
+        f"REMOTE_TAG_EXISTS={_bool_or_unknown(status.remote.remote_tag_exists)}",
+        f"GITHUB_RELEASE_EXISTS={_bool_or_unknown(status.remote.github_release_exists)}",
+        f"ZENODO_CONCEPT_DOI_VERIFIED={_bool_or_unknown(status.remote.zenodo_concept_doi_verified)}",
+        f"ZENODO_VERSION_DOI_VERIFIED={_bool_or_unknown(status.remote.zenodo_version_doi_verified)}",
+        f"DOI_METADATA_VERSION_MATCHES={_bool_or_unknown(status.remote.doi_metadata_version_matches)}",
     ]
     for step in status.steps:
         lines.append(f"STEP={step.id}|{step.status}|{step.next_state}")
@@ -169,6 +226,12 @@ def render_release_lifecycle_status(status: ReleaseLifecycleStatus) -> str:
     lines.append(f"NEXT={status.next_action}")
     lines.append(f"FINAL_SIGNAL={'f' if status.blockers else 'd'}")
     return "\n".join(lines) + "\n"
+
+
+def _bool_or_unknown(value: bool | None) -> str:
+    if value is None:
+        return "not_checked"
+    return str(value).lower()
 
 
 def _read(project_root: Path, relative_path: str) -> str:
@@ -214,6 +277,129 @@ def _version_doi_from_verified_releases(text: str, version: str) -> str:
 def _tag_exists(project_root: Path, version: str, runner: ReleaseStateRunner) -> bool:
     result = runner(project_root, ["git", "rev-parse", "--verify", f"v{version}"])
     return result.returncode == 0
+
+
+def _remote_release_status(
+    project_root: Path,
+    *,
+    version: str,
+    concept_doi: str,
+    version_doi: str,
+    local_tag_exists: bool,
+    include_remote: bool,
+    runner: ReleaseStateRunner,
+    http_getter: ReleaseStateHttpGetter,
+) -> RemoteReleaseStatus:
+    if not include_remote:
+        return RemoteReleaseStatus(
+            status="NOT_CHECKED",
+            checked=False,
+            local_tag_exists=local_tag_exists,
+            remote_tag_exists=None,
+            github_release_exists=None,
+            github_release_tag_matches=None,
+            zenodo_concept_doi_verified=None,
+            zenodo_version_doi_verified=None,
+            doi_metadata_version_matches=None,
+            blockers=(),
+            warnings=("remote_checks_not_requested",),
+        )
+
+    tag = f"v{version}"
+    remote_tag_exists: bool | None = None
+    github_release_exists: bool | None = None
+    github_release_tag_matches: bool | None = None
+    zenodo_concept_doi_verified: bool | None = None
+    zenodo_version_doi_verified: bool | None = None
+    doi_metadata_version_matches: bool | None = None
+    blockers: list[str] = []
+    warnings: list[str] = []
+
+    remote_tag = runner(project_root, ["git", "ls-remote", "--tags", "origin", tag])
+    if remote_tag.returncode == 0:
+        remote_tag_exists = tag in remote_tag.stdout
+    else:
+        warnings.append("remote_tag_check_inconclusive")
+
+    github_release = runner(project_root, ["gh", "release", "view", tag, "--json", "tagName"])
+    if github_release.returncode == 0:
+        github_release_exists = True
+        github_release_tag_matches = tag in github_release.stdout
+    elif github_release.returncode == 1:
+        github_release_exists = False
+        github_release_tag_matches = False
+    else:
+        warnings.append("github_release_check_inconclusive")
+
+    if concept_doi:
+        zenodo_concept_doi_verified = _doi_http_verified(concept_doi, http_getter)
+        if zenodo_concept_doi_verified is None:
+            warnings.append("zenodo_concept_doi_check_inconclusive")
+    if version_doi:
+        version_payload = _zenodo_record_payload(version_doi, http_getter)
+        if version_payload is None:
+            zenodo_version_doi_verified = None
+            doi_metadata_version_matches = None
+            warnings.append("zenodo_version_doi_check_inconclusive")
+        else:
+            zenodo_version_doi_verified = version_doi in version_payload
+            doi_metadata_version_matches = version in version_payload
+
+    if local_tag_exists and remote_tag_exists is False:
+        blockers.append("remote_tag_missing_for_local_tag")
+    if local_tag_exists and github_release_exists is False:
+        blockers.append("github_release_missing_for_local_tag")
+    if local_tag_exists and github_release_tag_matches is False:
+        blockers.append("github_release_tag_mismatch")
+    if concept_doi and zenodo_concept_doi_verified is False:
+        blockers.append("zenodo_concept_doi_not_verified")
+    if version_doi and zenodo_version_doi_verified is False:
+        blockers.append("zenodo_version_doi_not_verified")
+    if version_doi and doi_metadata_version_matches is False:
+        blockers.append("zenodo_version_metadata_mismatch")
+
+    status = "BLOCK" if blockers else ("WARN" if warnings else "PASS")
+    return RemoteReleaseStatus(
+        status=status,
+        checked=True,
+        local_tag_exists=local_tag_exists,
+        remote_tag_exists=remote_tag_exists,
+        github_release_exists=github_release_exists,
+        github_release_tag_matches=github_release_tag_matches,
+        zenodo_concept_doi_verified=zenodo_concept_doi_verified,
+        zenodo_version_doi_verified=zenodo_version_doi_verified,
+        doi_metadata_version_matches=doi_metadata_version_matches,
+        blockers=tuple(blockers),
+        warnings=tuple(warnings),
+    )
+
+
+def _doi_http_verified(doi: str, http_getter: ReleaseStateHttpGetter) -> bool | None:
+    result = http_getter(f"https://doi.org/{doi}")
+    if result.returncode == 0:
+        return True
+    if result.returncode == 404:
+        return False
+    return None
+
+
+def _zenodo_record_payload(doi: str, http_getter: ReleaseStateHttpGetter) -> str | None:
+    record_id = doi.rsplit(".", 1)[-1]
+    result = http_getter(f"https://zenodo.org/api/records/{record_id}")
+    if result.returncode != 0:
+        return None
+    return result.stdout
+
+
+def _http_get(url: str) -> CommandResult:
+    request = Request(url, headers={"User-Agent": "agentic-project-kit/release-status"})
+    try:
+        with urlopen(request, timeout=10) as response:
+            return CommandResult(0, response.read().decode("utf-8", errors="replace"), "")
+    except HTTPError as exc:
+        return CommandResult(exc.code, "", str(exc))
+    except URLError as exc:
+        return CommandResult(2, "", str(exc))
 
 
 def _is_prepared(

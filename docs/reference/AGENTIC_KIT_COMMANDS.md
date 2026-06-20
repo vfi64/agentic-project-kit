@@ -652,6 +652,7 @@ Render the local release lifecycle state without mutating release files.
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `version` | `TyperOption` | --version | `False` |  | Release version without leading v. |
+| `include_remote` | `TyperOption` | --include-remote | `False` | `False` | Include remote tag, GitHub Release, and DOI/Zenodo checks. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print a machine-readable result. |
 
 ### `agentic-kit remote-next`
