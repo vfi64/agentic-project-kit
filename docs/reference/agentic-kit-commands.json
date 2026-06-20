@@ -3410,6 +3410,20 @@
           "secondary_opts": []
         },
         {
+          "default": null,
+          "help": "Write a compact JSON artifact containing explicit release-prep summary lines.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "summary_lines_json",
+          "opts": [
+            "--summary-lines-json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
           "default": false,
           "help": "Write --json-out and --out files.",
           "is_flag": true,
@@ -3591,6 +3605,20 @@
           "name": "summary_lines",
           "opts": [
             "--summary-line"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Read explicit release changelog summary lines from a JSON artifact generated from release notes.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "summary_lines_from",
+          "opts": [
+            "--summary-lines-from"
           ],
           "param_type": "TyperOption",
           "required": false,
