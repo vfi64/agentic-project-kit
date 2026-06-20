@@ -140,7 +140,15 @@ def evaluate_release_publish_plan(
     checks.append(
         _run_check(
             name="release-prep dry-run",
-            args=(executable, "release-prep", "--version", version, "--dry-run"),
+            args=(
+                executable,
+                "release-prep",
+                "--version",
+                version,
+                "--summary-line",
+                f"Release metadata prepared for v{version}; publish and DOI verification remain separate guarded steps.",
+                "--dry-run",
+            ),
             root=root,
             runner=run,
         )

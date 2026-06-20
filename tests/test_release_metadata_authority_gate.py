@@ -52,7 +52,7 @@ def test_gate_accepts_authoritative_json_evidence(tmp_path: Path) -> None:
     evidence.write_text(
         json.dumps(
             {
-                "command": "agentic-kit release-prep --version 0.4.9 --json",
+                "command": "agentic-kit release-prep --version 0.4.9 --summary-line 'Prepare release metadata.' --json",
                 "version": "0.4.9",
                 "changed_paths": ["README.md", "pyproject.toml"],
             }
@@ -77,7 +77,7 @@ def test_gate_rejects_evidence_for_wrong_version(tmp_path: Path) -> None:
     evidence.write_text(
         json.dumps(
             {
-                "command": "agentic-kit release-prep --version 0.4.8 --json",
+                "command": "agentic-kit release-prep --version 0.4.8 --summary-line 'Prepare release metadata.' --json",
                 "version": "0.4.8",
                 "changed_paths": ["README.md", "pyproject.toml"],
             }

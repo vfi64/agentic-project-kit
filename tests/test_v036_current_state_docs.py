@@ -73,8 +73,7 @@ def test_release_state_records_current_verified_safety_release():
         assert f"verified v{verified_version} DOI `{verified_doi}`" in current_changelog
     else:
         assert "Zenodo DOI verification pending" in current_changelog
-    assert "unfinished grouped `agentic-kit release prepare/check` route" in current_changelog
-    assert "routing `./ns release-prep` through guarded metadata updates" in current_changelog
+    assert "Current verified release:" not in current_changelog
 
     assert f"Current version: {version}" in status
     assert f"Current verified release: {verified_version}." in status

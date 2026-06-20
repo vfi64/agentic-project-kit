@@ -1,13 +1,26 @@
 > STATUS boundary: This document uses concise pointers, not duplicate rule books. Machine guard: `agentic-kit docs-audit` enforces the current-state headroom boundary.
 
+## Current State
 
-## Release Command Authority Planning Slice Refresh
+Current version: 0.4.10
+Current verified release: 0.4.10.
+Current release tag: v0.4.10.
+Zenodo concept DOI: `10.5281/zenodo.20101359`.
+Verified Zenodo version DOI: `10.5281/zenodo.20767675`.
+Current verified main: `0f40567b` (`Refresh handoff state after PR1519 (#1520)`).
+Latest substantive release/DOC hardening: PR #1519 (`Add deterministic release notes generator`).
+Post-merge handoff status: PASS/NOOP after PR #1519 administrative refresh PR #1520.
+Next safe step: continue release-/documentation-current-state hardening before GUI implementation.
 
-Current planning-slice branch: `codex/release-command-authority-plan`.
-Current planning-slice commit: `1becc4a7` (`Plan release command authority slice`).
-Planning PR: #1436 (`[codex] Plan release command authority slice`).
+## Historical State Snapshots
 
-This slice records `docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md` as the first implementation step after v0.4.9. After PR #1436 merges, start from fresh `main` and implement `release-command-authority-and-publish-core-triage` before DOI closeout atomicity, broad legacy-doc cleanup, absolute-path cleanup, or GUI work.
+### Release Command Authority Planning Slice Refresh
+
+Historical planning-slice branch: `codex/release-command-authority-plan`.
+Historical planning-slice commit: `1becc4a7` (`Plan release command authority slice`).
+Historical planning PR: #1436 (`[codex] Plan release command authority slice`).
+
+This slice recorded `docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md` as the first implementation step after v0.4.9. It is historical and must not be treated as the current next step.
 
 
 ## Post-PR1245 Administrative Handoff Refresh State
@@ -193,7 +206,7 @@ Status-date: 2026-05-27
 Project: agentic-project-kit
 Primary branch: main
 Current work branch: codex/refresh-post-pr835-next-step-state
-Current version: 0.4.10
+Snapshot package version: 0.4.10
 
 ## Purpose
 
@@ -207,7 +220,7 @@ The repository is the source of truth; chat memory is not a source of truth. Cha
 
 This document is a concise pointer, not a duplicate rule book. Machine guard: `agentic-kit docs-audit` enforces the current-state headroom boundary and fails if `docs/STATUS.md` exceeds the configured word limit. This is a hard drift signal.
 
-## Current State
+## Historical Current State Snapshot
 
 Current verified release: 0.4.10.
 Current release tag: v0.4.10.

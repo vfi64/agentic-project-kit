@@ -80,10 +80,21 @@ def test_verified_releases_archive_contains_current_release_and_dois() -> None:
 def test_readme_declares_current_verified_release_semantically() -> None:
     readme = _read("README.md")
     _, verified_tag, version_doi = _verified_release_facts()
+    current_version = _pyproject_version()
 
+    assert readme.count("Current version:") == 1
+    assert f"Current version: {current_version}" in readme
     assert f"Current verified release: `{verified_tag}`" in readme
     assert version_doi in readme
     assert "Current verified release: `v0.4.8`" not in readme
+
+
+def test_citation_version_and_date_released_match_current_release() -> None:
+    citation = _read("CITATION.cff")
+    current_version = _pyproject_version()
+
+    assert _citation_version() == current_version
+    assert 'date-released: "2026-06-20"' in citation
 
 
 def test_status_current_release_block_is_consistent() -> None:
@@ -91,6 +102,10 @@ def test_status_current_release_block_is_consistent() -> None:
     current_version = _pyproject_version()
     verified_version, verified_tag, version_doi = _verified_release_facts()
 
+    assert status.count("## Current State") == 1
+    assert status.count("Current version:") == 1
+    assert status.splitlines()[2] == "## Current State"
+    assert "#1436" not in "\n".join(status.splitlines()[:20])
     assert f"Current version: {current_version}" in status
     assert f"Current verified release: {verified_version}." in status
     assert f"Current release tag: {verified_tag}." in status

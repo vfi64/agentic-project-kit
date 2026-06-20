@@ -198,7 +198,7 @@ def evaluate_release_metadata_authority_gate(
         evidence_paths=[path.as_posix() for path in candidates],
         message=(
             "Release metadata files changed without authoritative release-prepare evidence. "
-            "Use `agentic-kit release-prep --version <version> --json` evidence instead of "
+            "Use `agentic-kit release-prep --version <version> --summary-line <line> --json` evidence instead of "
             "manual regex/file patching."
         ),
     )

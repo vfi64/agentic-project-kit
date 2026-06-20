@@ -10,7 +10,7 @@ def test_release_prep_help_returns_before_mutation(monkeypatch, capsys):
         raise AssertionError("prepare_release must not run for --help")
     monkeypatch.setattr(release_prep_core, "prepare_release", fail_prepare)
     assert release_prep_core.main(["--help"]) == 0
-    assert "usage: agentic-kit release-prep --version <version>" in capsys.readouterr().out
+    assert "usage: agentic-kit release-prep --version <version> --summary-line <line>" in capsys.readouterr().out
 
 
 def test_release_prep_invalid_version_returns_before_mutation(monkeypatch):

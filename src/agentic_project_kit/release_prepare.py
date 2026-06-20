@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 import re
@@ -64,12 +65,18 @@ def _update_pyproject(text: str, version: str) -> str:
     )
 
 
-def _update_citation(text: str, version: str) -> str:
-    return _replace_required(
+def _update_citation(text: str, version: str, date: str) -> str:
+    updated = _replace_required(
         r"^version:\s*[\"']?[^\"'\n]+[\"']?$",
         f"version: {version}",
         text,
         label="CITATION.cff version",
+    )
+    return _replace_required(
+        r"^date-released:\s*[\"']?\d{4}-\d{2}-\d{2}[\"']?$",
+        f'date-released: "{date}"',
+        updated,
+        label="CITATION.cff date-released",
     )
 
 
@@ -83,15 +90,24 @@ def _update_package_init(text: str, version: str) -> str:
 
 
 def _update_readme(text: str, version: str) -> str:
+    matches = re.findall(rf"^Current version:\s*{VERSION_RE}\s*$", text, flags=re.MULTILINE)
+    if len(matches) != 1:
+        raise ValueError(f"README.md must contain exactly one Current version marker, found {len(matches)}")
+    updated = _replace_required(
+        rf"^Current version:\s*{VERSION_RE}\s*$",
+        f"Current version: {version}",
+        text,
+        label="README.md current version",
+    )
     line = _prepared_release_line(version)
-    if "current release line prepared" in text:
+    if "current release line prepared" in updated:
         return re.sub(
             rf"Version `(?:v)?{VERSION_RE}` is the current release line prepared",
             line,
-            text,
+            updated,
             count=1,
         )
-    raise ValueError("README.md has no current release line prepared marker")
+    return updated
 
 
 def _update_current_version_doc(text: str, version: str, *, label: str) -> str:
@@ -103,21 +119,28 @@ def _update_current_version_doc(text: str, version: str, *, label: str) -> str:
     )
 
 
-def _changelog_section(version: str, date: str) -> str:
-    return (
-        f"## v{version} - {date}\n\n"
-        f"- Release metadata prepared for v{version}; Zenodo DOI verification pending until the GitHub release is created.\n"
-        "- Hardened release route governance by removing the unfinished grouped `agentic-kit release prepare/check` route so release work uses the documented `release-plan`, `release-preflight`, `release-check`, and `post-release-check` path.\n"
-        "- Recorded deterministic release-prep evidence by routing `./ns release-prep` through guarded metadata updates with no tag or publication side effects.\n"
-    )
+def _changelog_section(version: str, date: str, *, summary_lines: Sequence[str]) -> str:
+    normalized = _normalize_changelog_summary_lines(summary_lines)
+    body = "\n".join(f"- {line}" for line in normalized)
+    return f"## v{version} - {date}\n\n{body}\n"
 
 
-def _update_changelog(text: str, version: str, date: str) -> str:
+def _normalize_changelog_summary_lines(summary_lines: Sequence[str]) -> tuple[str, ...]:
+    normalized = tuple(line.strip().removeprefix("-").strip() for line in summary_lines if line.strip())
+    if not normalized:
+        raise ValueError("Release changelog summary_lines are required; refusing to reuse an old release body")
+    removed_route_refs = [line for line in normalized if "./ns" in line or "ns release-prep" in line]
+    if removed_route_refs:
+        raise ValueError("Release changelog summary_lines must not reference removed ./ns release routes")
+    return normalized
+
+
+def _update_changelog(text: str, version: str, date: str, *, summary_lines: Sequence[str]) -> str:
     existing = re.compile(
         rf"^##\s+v{re.escape(version)}\s+-\s+\d{{4}}-\d{{2}}-\d{{2}}.*?(?=^##\s+v|\Z)",
         re.MULTILINE | re.DOTALL,
     )
-    section = _changelog_section(version, date)
+    section = _changelog_section(version, date, summary_lines=summary_lines)
     if existing.search(text):
         return existing.sub(section.rstrip() + "\n\n", text, count=1)
 
@@ -133,6 +156,7 @@ def prepare_release_state(
     *,
     version: str,
     date: str,
+    summary_lines: Sequence[str],
     dry_run: bool = False,
 ) -> ReleasePrepareResult:
     """Prepare release metadata files deterministically.
@@ -155,7 +179,7 @@ def prepare_release_state(
             version,
         ),
         root / "README.md": _update_readme(_read(root / "README.md"), version),
-        root / "CITATION.cff": _update_citation(_read(root / "CITATION.cff"), version),
+        root / "CITATION.cff": _update_citation(_read(root / "CITATION.cff"), version, date),
         root / "docs" / "STATUS.md": _update_current_version_doc(
             _read(root / "docs" / "STATUS.md"),
             version,
@@ -166,7 +190,12 @@ def prepare_release_state(
             version,
             label="docs/handoff/CURRENT_HANDOFF.md current version",
         ),
-        root / "CHANGELOG.md": _update_changelog(_read(root / "CHANGELOG.md"), version, date),
+        root / "CHANGELOG.md": _update_changelog(
+            _read(root / "CHANGELOG.md"),
+            version,
+            date,
+            summary_lines=summary_lines,
+        ),
     }
 
     for path, text in updates.items():

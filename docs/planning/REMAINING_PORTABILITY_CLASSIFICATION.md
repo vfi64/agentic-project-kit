@@ -37,7 +37,7 @@ Known baseline after PR #1408:
 | `tools/screen_control_gate.py` | Shell gate with terminal/output assumptions | handle separately; port or explicitly mark local-only | Slice 3 |
 | `src/agentic_project_kit/ns_slice_runner.py` | Remaining `ns`-named Python runtime path | rename/port to neutral agentic-kit command/module or isolate as legacy | Slice 4 |
 | `tests/test_ns_slice_runner.py` | Test for `ns_slice_runner` behavior | update with Slice 4 | Slice 4 |
-| `tools/ns_release_metadata_prep.py` | Release metadata prep script referenced from release prep path | move into `src/agentic_project_kit` or integrate into release prep core | Slice 5 |
+| `agentic_project_kit.release_metadata_prep` | Release metadata prep entry now lives in package code; the legacy tool wrapper is removed | keep package route; no compatibility wrapper | Slice 5 complete |
 | `tests/test_ns_interpreter_and_no_exec_guard.py` | Guard against unsafe ns interpretation/exec behavior | likely keep as safety regression or rename after runtime ns removal | Slice 4/6 |
 | `tests/test_ns_evidence_guard_shortcut.py` | Guard against unsafe ns evidence shortcuts | likely keep as safety regression or rename after runtime ns removal | Slice 4/6 |
 | `tools/workflow_runner.py` | Python workflow runner with subprocess/tool interactions | audit as dependency of Slice 2 | Slice 2 |
@@ -92,7 +92,7 @@ Goal:
 
 Scope:
 
-- `tools/ns_release_metadata_prep.py`
+- `agentic_project_kit.release_metadata_prep`
 - release prep callers and tests
 
 Goal:
@@ -163,9 +163,8 @@ Status: in progress in `feature/port-ns-release-metadata-prep`.
 
 Intent:
 
-- move release metadata preparation out of `tools/ns_release_metadata_prep.py`;
-- introduce neutral package module `agentic_project_kit.release_metadata_prep`;
-- keep the old tool path only as a temporary thin compatibility wrapper if required;
+- keep release metadata preparation in neutral package module `agentic_project_kit.release_metadata_prep`;
+- keep the old tool path removed rather than retaining a temporary compatibility wrapper;
 - ensure release preparation paths do not depend on `tools/ns_*` runtime scripts.
 
 

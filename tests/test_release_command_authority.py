@@ -31,8 +31,8 @@ def test_release_prepare_core_is_still_deterministic_metadata_authority(tmp_path
     for relative, content in {
         "pyproject.toml": 'version = "0.4.8"\n',
         "src/agentic_project_kit/__init__.py": '__version__ = "0.4.8"\n',
-        "README.md": "Version `0.4.8` is the current release line prepared\n",
-        "CITATION.cff": "version: 0.4.8\n",
+        "README.md": "Current version: 0.4.8\n",
+        "CITATION.cff": 'version: 0.4.8\ndate-released: "2026-06-01"\n',
         "docs/STATUS.md": "Current version: 0.4.8\n",
         "docs/handoff/CURRENT_HANDOFF.md": "Current version: 0.4.8\n",
         "CHANGELOG.md": "## v0.4.8 - 2026-06-01\n\n- Existing.\n",
@@ -41,7 +41,13 @@ def test_release_prepare_core_is_still_deterministic_metadata_authority(tmp_path
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
 
-    result = prepare_release_state(tmp_path, version="0.4.9", date="2026-06-18", dry_run=True)
+    result = prepare_release_state(
+        tmp_path,
+        version="0.4.9",
+        date="2026-06-18",
+        summary_lines=["Release metadata prepared through explicit changelog summary input."],
+        dry_run=True,
+    )
 
     assert result.ok is True
     assert result.dry_run is True
