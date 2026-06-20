@@ -69,8 +69,10 @@ def test_patch_cycle_status_reports_clean_main_done(tmp_path: Path) -> None:
     assert status.result_status == "PASS"
     assert status.current_stage == "POST_MERGE_CLEAN_STATE"
     assert status.worktree_clean is True
+    assert status.handoff_validation_status == "PASS"
     assert status.handoff_fresh_for_head is True
     assert status.blockers == ()
+    assert status.traffic_lights["POST_MERGE_CLEAN_STATE"] == "green"
 
 
 def test_patch_cycle_status_reports_dirty_feature_patch_slice(tmp_path: Path) -> None:
@@ -108,6 +110,36 @@ def test_patch_cycle_status_reports_clean_feature_pr_slice(tmp_path: Path) -> No
     patch_pr = next(step for step in status.steps if step.id == "PATCH_PR")
     assert patch_pr.status == "ACTIVE"
     assert "pr=42" in patch_pr.evidence
+    assert status.recommended_next_action == patch_pr.allowed_next_actions[0]
+    assert any(action["step"] == "PATCH_SLICE" for action in status.disabled_actions)
+
+
+def test_patch_cycle_status_includes_ci_failure_when_requested(tmp_path: Path) -> None:
+    _write_validation_report(tmp_path, "origin")
+
+    status = build_patch_cycle_status(
+        tmp_path,
+        pr_number=42,
+        include_ci=True,
+        command_runner=FakeRunner(
+            branch="codex/demo",
+            head="feature",
+            pr_json={
+                "number": 42,
+                "state": "OPEN",
+                "headRefName": "codex/demo",
+                "headRefOid": "feature",
+                "statusCheckRollup": [{"name": "test", "status": "COMPLETED", "conclusion": "FAILURE"}],
+            },
+        ),
+    )
+
+    assert status.result_status == "BLOCKED"
+    assert status.pr is not None
+    assert status.pr["checks_status"] == "FAIL"
+    assert status.pr["checks"] == [{"name": "test", "status": "COMPLETED", "conclusion": "FAILURE", "state": None}]
+    assert "pr_checks_failing" in status.blockers
+    assert status.traffic_lights["PATCH_PR"] == "red"
 
 
 def test_patch_cycle_status_reports_handoff_refresh_branch(tmp_path: Path) -> None:
@@ -131,6 +163,7 @@ def test_render_patch_cycle_status_is_bounded_text(tmp_path: Path) -> None:
 
     assert "PATCH_CYCLE_WORKFLOW_STATUS" in rendered
     assert "CURRENT_STAGE=POST_MERGE_CLEAN_STATE" in rendered
+    assert "HANDOFF_VALIDATION_STATUS=PASS" in rendered
     assert "FINAL_SIGNAL=d" in rendered
 
 

@@ -474,11 +474,12 @@ def patch_cycle_status_command(
         "--pr",
         help="Optional pull request number to include in the patch-cycle state.",
     ),
+    include_ci: bool = typer.Option(False, "--include-ci", help="Include PR statusCheckRollup summary when --pr is provided."),
     root: Path = typer.Option(Path("."), "--root", help="Project root."),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     """Render the current four-slice patch/handoff workflow state."""
-    result = build_patch_cycle_status(root.resolve(), pr_number=pr_number)
+    result = build_patch_cycle_status(root.resolve(), pr_number=pr_number, include_ci=include_ci)
     if json_output:
         typer.echo(json.dumps(result.as_dict(), indent=2, sort_keys=True))
     else:

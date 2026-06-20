@@ -1069,6 +1069,7 @@ Render the current four-slice patch/handoff workflow state.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `pr_number` | `TyperOption` | --pr | `False` |  | Optional pull request number to include in the patch-cycle state. |
+| `include_ci` | `TyperOption` | --include-ci | `False` | `False` | Include PR statusCheckRollup summary when --pr is provided. |
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
