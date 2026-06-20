@@ -157,6 +157,7 @@ def _compatibility_implementation_context(relative_path: str) -> bool:
         "src/agentic_project_kit/work_order_validator.py",
         "src/agentic_project_kit/gui_dry_run.py",
         "src/agentic_project_kit/chat_bootloader.py",
+        "src/agentic_project_kit/doc_currency_audit.py",
         "src/agentic_project_kit/entrypoint_slice_runner.py",
         "src/agentic_project_kit/handoff_prompt.py",
         "src/agentic_project_kit/release_prepare.py",

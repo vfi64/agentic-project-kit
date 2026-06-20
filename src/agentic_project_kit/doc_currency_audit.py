@@ -43,6 +43,7 @@ class DocCurrencyAuditResult:
     concept_doi: str | None
     findings: tuple[DocCurrencyFinding, ...]
     blockers: tuple[DocCurrencyFinding, ...]
+    warnings: tuple[DocCurrencyFinding, ...] = ()
 
     @property
     def ok(self) -> bool:
@@ -68,8 +69,25 @@ class DocCurrencyAuditResult:
             "concept_doi": self.concept_doi,
             "finding_count": len(self.findings),
             "blocker_count": len(self.blockers),
+            "warning_count": len(self.warnings),
             "findings": [item.as_dict() for item in self.findings],
             "blockers": [item.as_dict() for item in self.blockers],
+            "warnings": [item.as_dict() for item in self.warnings],
+            "current_state_currency": {
+                "status": "PASS"
+                if not any(item.check.startswith("current_state_currency_") for item in self.blockers)
+                else "FAIL",
+                "blockers": [
+                    item.as_dict()
+                    for item in self.blockers
+                    if item.check.startswith("current_state_currency_")
+                ],
+                "warnings": [
+                    item.as_dict()
+                    for item in self.warnings
+                    if item.check.startswith("current_state_currency_")
+                ],
+            },
         }
 
 
@@ -149,10 +167,17 @@ def _finding(
         blockers.append(item)
 
 
+def _warning(findings: list[DocCurrencyFinding], warnings: list[DocCurrencyFinding], path: str, check: str, detail: str) -> None:
+    item = DocCurrencyFinding(path=path, check=check, status="WARN", detail=detail)
+    findings.append(item)
+    warnings.append(item)
+
+
 def audit_doc_currency(root: Path = Path(".")) -> DocCurrencyAuditResult:
     root = root.resolve()
     findings: list[DocCurrencyFinding] = []
     blockers: list[DocCurrencyFinding] = []
+    warnings: list[DocCurrencyFinding] = []
 
     version = _project_version(root)
     package_version = _package_version(root)
@@ -271,6 +296,14 @@ def audit_doc_currency(root: Path = Path(".")) -> DocCurrencyAuditResult:
             f"version={version}",
         )
 
+    _audit_current_state_currency(
+        root=root,
+        version=version,
+        findings=findings,
+        blockers=blockers,
+        warnings=warnings,
+    )
+
     return DocCurrencyAuditResult(
         root=root.as_posix(),
         version=version,
@@ -279,7 +312,204 @@ def audit_doc_currency(root: Path = Path(".")) -> DocCurrencyAuditResult:
         concept_doi=concept_doi,
         findings=tuple(findings),
         blockers=tuple(blockers),
+        warnings=tuple(warnings),
     )
+
+
+def _audit_current_state_currency(
+    *,
+    root: Path,
+    version: str | None,
+    findings: list[DocCurrencyFinding],
+    blockers: list[DocCurrencyFinding],
+    warnings: list[DocCurrencyFinding],
+) -> None:
+    readme = _read_text(root, "README.md") or ""
+    citation = _read_text(root, "CITATION.cff") or ""
+    status = _read_text(root, "docs/STATUS.md") or ""
+    changelog = _read_text(root, "CHANGELOG.md") or ""
+
+    current_version_markers = re.findall(r"^Current version:\s*(\d+\.\d+\.\d+)\s*$", readme, re.MULTILINE)
+    _finding(
+        findings,
+        blockers,
+        "README.md",
+        "current_state_currency_readme_single_current_version_marker",
+        len(current_version_markers) == 1,
+        f"marker_count={len(current_version_markers)}",
+    )
+    if version and current_version_markers:
+        _finding(
+            findings,
+            blockers,
+            "README.md",
+            "current_state_currency_readme_current_version_matches_package",
+            current_version_markers == [version],
+            f"markers={current_version_markers}, package={version}",
+        )
+
+    citation_version = _match_text(r"^version:\s*['\"]?([^'\"\n]+)['\"]?$", citation)
+    citation_date = _match_text(r"^date-released:\s*['\"]?(\d{4}-\d{2}-\d{2})['\"]?$", citation)
+    changelog_date = _current_changelog_date(changelog, version)
+    _finding(
+        findings,
+        blockers,
+        "CITATION.cff",
+        "current_state_currency_citation_version_matches_package",
+        bool(version and citation_version == version),
+        f"citation={citation_version}, package={version}",
+    )
+    _finding(
+        findings,
+        blockers,
+        "CITATION.cff",
+        "current_state_currency_citation_date_matches_current_changelog",
+        bool(citation_date and changelog_date and citation_date == changelog_date),
+        f"citation_date={citation_date}, changelog_date={changelog_date}",
+    )
+
+    status_lines = status.splitlines()
+    status_current_block = _markdown_heading_section(status, "## Current State")
+    _finding(
+        findings,
+        blockers,
+        "docs/STATUS.md",
+        "current_state_currency_status_single_current_state_block",
+        status.count("## Current State") == 1,
+        f"current_state_heading_count={status.count('## Current State')}",
+    )
+    status_current_version_marker_count = len(re.findall(r"^Current version:\s*", status, re.MULTILINE))
+    _finding(
+        findings,
+        blockers,
+        "docs/STATUS.md",
+        "current_state_currency_status_single_current_version_marker",
+        status_current_version_marker_count == 1,
+        f"current_version_marker_count={status_current_version_marker_count}",
+    )
+    _finding(
+        findings,
+        blockers,
+        "docs/STATUS.md",
+        "current_state_currency_status_current_state_at_top",
+        len(status_lines) > 2 and status_lines[2] == "## Current State",
+        f"line3={status_lines[2] if len(status_lines) > 2 else '<missing>'}",
+    )
+    _finding(
+        findings,
+        blockers,
+        "docs/STATUS.md",
+        "current_state_currency_status_top_not_historical_pr",
+        "#1436" not in status_current_block
+        and "Current planning-slice branch" not in status_current_block,
+        "current_state_block_checked",
+    )
+
+    current_section = _changelog_section(changelog, version)
+    previous_section = _previous_changelog_section(changelog, version)
+    _finding(
+        findings,
+        blockers,
+        "CHANGELOG.md",
+        "current_state_currency_changelog_current_section_exists",
+        bool(current_section),
+        f"version={version}",
+    )
+    if current_section and previous_section:
+        _finding(
+            findings,
+            blockers,
+            "CHANGELOG.md",
+            "current_state_currency_changelog_not_duplicate_previous_release",
+            current_section.strip() != previous_section.strip(),
+            "current release section compared with previous release section",
+        )
+    if current_section and ("./ns" in current_section or "ns release-prep" in current_section):
+        if version == "0.4.10":
+            _warning(
+                findings,
+                warnings,
+                "CHANGELOG.md",
+                "current_state_currency_changelog_legacy_ns_route_in_pinned_release",
+                "v0.4.10 is DOI-pinned; legacy text is warned but not rewritten in this slice",
+            )
+        else:
+            _finding(
+                findings,
+                blockers,
+                "CHANGELOG.md",
+                "current_state_currency_changelog_no_removed_ns_route_in_current_release",
+                False,
+                "current release section references removed ./ns route",
+            )
+
+    _finding(
+        findings,
+        blockers,
+        "tools/ns_release_metadata_prep.py",
+        "current_state_currency_legacy_release_metadata_prep_tool_removed",
+        not (root / "tools" / "ns_release_metadata_prep.py").exists(),
+        "legacy tool wrapper must not exist",
+    )
+
+    for path in sorted((root / "docs" / "releases").glob("*.release-notes.json")):
+        text = path.read_text(encoding="utf-8")
+        _finding(
+            findings,
+            blockers,
+            path.relative_to(root).as_posix(),
+            "current_state_currency_release_notes_json_projection_shape",
+            '"kind": "release_notes"' in text and '"schema_version": 1' in text,
+            "committed release-note JSON must be generator-shaped",
+        )
+
+
+def _match_text(pattern: str, text: str) -> str | None:
+    match = re.search(pattern, text, re.MULTILINE)
+    return match.group(1).strip() if match else None
+
+
+def _current_changelog_date(changelog: str, version: str | None) -> str | None:
+    if not version:
+        return None
+    return _match_text(rf"^##\s+v{re.escape(version)}\s+-\s+(\d{{4}}-\d{{2}}-\d{{2}})", changelog)
+
+
+def _markdown_heading_section(text: str, heading: str) -> str:
+    lines = text.splitlines()
+    try:
+        start = lines.index(heading)
+    except ValueError:
+        return ""
+    section: list[str] = []
+    for line in lines[start + 1 :]:
+        if line.startswith("## "):
+            break
+        section.append(line)
+    return "\n".join(section).strip()
+
+
+def _changelog_section(changelog: str, version: str | None) -> str:
+    if not version:
+        return ""
+    match = re.search(
+        rf"(?ms)^##\s+v{re.escape(version)}\s+-\s+\d{{4}}-\d{{2}}-\d{{2}}.*?(?=^##\s+v|\Z)",
+        changelog,
+    )
+    return match.group(0) if match else ""
+
+
+def _previous_changelog_section(changelog: str, version: str | None) -> str:
+    if not version:
+        return ""
+    current = re.search(
+        rf"(?ms)^##\s+v{re.escape(version)}\s+-\s+\d{{4}}-\d{{2}}-\d{{2}}.*?(?=^##\s+v|\Z)",
+        changelog,
+    )
+    if not current:
+        return ""
+    previous = re.search(r"(?ms)^##\s+v\d+\.\d+\.\d+\s+-\s+\d{4}-\d{2}-\d{2}.*?(?=^##\s+v|\Z)", changelog[current.end() :])
+    return previous.group(0) if previous else ""
 
 
 def render_doc_currency_audit(result: DocCurrencyAuditResult) -> str:
@@ -292,11 +522,14 @@ def render_doc_currency_audit(result: DocCurrencyAuditResult) -> str:
         f"CONCEPT_DOI={result.concept_doi}",
         f"FINDING_COUNT={len(result.findings)}",
         f"BLOCKER_COUNT={len(result.blockers)}",
+        f"WARNING_COUNT={len(result.warnings)}",
     ]
 
     for item in result.blockers:
         lines.append(
             f"BLOCKER={item.path}|{item.check}|{item.status}|{item.detail}"
         )
+    for item in result.warnings:
+        lines.append(f"WARNING={item.path}|{item.check}|{item.status}|{item.detail}")
 
     return "\n".join(lines) + "\n"
