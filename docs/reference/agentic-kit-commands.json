@@ -6065,6 +6065,60 @@
     },
     {
       "group": "transfer",
+      "help": "Render the current four-slice patch/handoff workflow state.",
+      "name": "patch-cycle-status",
+      "params": [
+        {
+          "default": null,
+          "help": "Optional pull request number to include in the patch-cycle state.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "pr_number",
+          "opts": [
+            "--pr"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "patch-cycle-status"
+      ],
+      "qualified_name": "agentic-kit transfer patch-cycle-status"
+    },
+    {
+      "group": "transfer",
       "help": "",
       "name": "post-merge-check",
       "params": [

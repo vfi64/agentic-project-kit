@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `172`
+- Command count: `173`
 
 ## Commands
 
@@ -1032,6 +1032,16 @@ canonical transfer outbox file.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 | `repair_known_volatile` | `TyperOption` | --repair-known-volatile | `False` | `False` | Restore known volatile transfer output files before checking the session. |
 | `write_outbox` | `TyperOption` | --write-outbox, --no-write-outbox | `False` | `False` | Write the normalized session result to the canonical transfer outbox. |
+
+### `agentic-kit transfer patch-cycle-status`
+
+Render the current four-slice patch/handoff workflow state.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `pr_number` | `TyperOption` | --pr | `False` |  | Optional pull request number to include in the patch-cycle state. |
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer post-merge-check`
 
