@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 3a46853e
-  commit_subject: Add patch cycle workflow status renderer (#1515)
+  commit: d4bf839a
+  commit_subject: Add release lifecycle status model (#1517)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -434,7 +434,7 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr1515-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1517-successor-chat-handoff.md
   first_instruction: >-
     Review PR #1436 and the refreshed successor handoff package for the release
     command authority planning slice. After merge, start from fresh main and
@@ -447,6 +447,6 @@ next_step:
     implement docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md before DOI,
     legacy-doc, absolute-path, or GUI work.
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr1515-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1517-successor-chat-handoff.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
