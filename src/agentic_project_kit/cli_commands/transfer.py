@@ -623,7 +623,8 @@ def _scan_static_meta_preference_projection_drift(root: Path) -> dict[str, objec
         for candidate in scan_root.rglob("*"):
             if not candidate.is_file():
                 continue
-            if any(part in {".git", ".venv", "tmp", "__pycache__"} for part in candidate.parts):
+            relative_parts = candidate.relative_to(scan_root).parts
+            if any(part in {".git", ".venv", "tmp", "__pycache__"} for part in relative_parts):
                 continue
             if candidate.suffix not in {"", ".md", ".txt", ".yaml", ".yml", ".json"}:
                 continue
