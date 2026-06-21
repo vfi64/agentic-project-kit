@@ -591,7 +591,9 @@ def _scan_static_meta_preference_projection_drift(root: Path) -> dict[str, objec
     ]
     forbidden_markers = [
         "meta_command_preference:",
+        '"meta_command_preference"',
         "META_COMMAND_PREFERENCE:",
+        '"META_COMMAND_PREFERENCE"',
     ]
     matches: list[dict[str, object]] = []
 

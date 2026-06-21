@@ -72,6 +72,14 @@ def _write_minimal_meta_preference_rules(root: Path) -> None:
     )
 
 
+def _write_minimal_standard_error_scan_repo(root: Path) -> None:
+    (root / "src").mkdir(exist_ok=True)
+    (root / "tests").mkdir(exist_ok=True)
+    (root / "docs").mkdir(exist_ok=True)
+    (root / "pyproject.toml").write_text("[tool.pytest.ini_options]\n", encoding="utf-8")
+    _write_minimal_meta_preference_rules(root)
+
+
 def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
     calls: list[list[str]] = []
 
@@ -1077,7 +1085,7 @@ def test_static_meta_preference_projection_gate_blocks_yaml_json_projections(tmp
 
     projected_json = tmp_path / "docs" / "reports" / "handoff-packages" / "latest" / "execution_contract.json"
     projected_json.parent.mkdir(parents=True)
-    projected_json.write_text('{"meta_command_preference:": {"priority": "primary_path"}}\n', encoding="utf-8")
+    projected_json.write_text('{"meta_command_preference": {"priority": "primary_path"}}\n', encoding="utf-8")
 
     result = _scan_static_meta_preference_projection_drift(tmp_path)
 
@@ -1265,10 +1273,7 @@ def test_transfer_log_header_and_upload_hint_commands():
 
 
 def test_standard_error_scan_reports_local_to_llm_log_header_gate(tmp_path: Path):
-    (tmp_path / "src").mkdir()
-    (tmp_path / "tests").mkdir()
-    (tmp_path / "docs").mkdir()
-    _write_minimal_meta_preference_rules(tmp_path)
+    _write_minimal_standard_error_scan_repo(tmp_path)
 
     result = CliRunner().invoke(app, ["transfer", "standard-error-scan", "--root", str(tmp_path), "--json"])
 
@@ -1280,10 +1285,7 @@ def test_standard_error_scan_reports_local_to_llm_log_header_gate(tmp_path: Path
 
 
 def test_standard_error_scan_reports_python_only_work_order_contract_gate(tmp_path: Path):
-    (tmp_path / "src").mkdir()
-    (tmp_path / "tests").mkdir()
-    (tmp_path / "docs").mkdir()
-    _write_minimal_meta_preference_rules(tmp_path)
+    _write_minimal_standard_error_scan_repo(tmp_path)
 
     result = CliRunner().invoke(app, ["transfer", "standard-error-scan", "--root", str(tmp_path), "--json"])
 
