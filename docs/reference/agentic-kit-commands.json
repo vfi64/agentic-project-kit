@@ -8183,6 +8183,116 @@
     },
     {
       "group": "transfer",
+      "help": "Run a bounded scan for known workflow standard errors before patch/transfer/release work.",
+      "name": "standard-error-scan",
+      "params": [
+        {
+          "default": false,
+          "help": "Run the release-oriented standard-error scan bundle.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "before_release",
+          "opts": [
+            "--before-release"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "0.4.11",
+          "help": "Release version for before-release checks.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "v0.4.10",
+          "help": "Previous release tag for release notes checks.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "from_tag",
+          "opts": [
+            "--from-tag"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "main",
+          "help": "Target ref for release notes checks.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "to_ref",
+          "opts": [
+            "--to-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Release date for release-prep dry-run. Defaults to today.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "date",
+          "opts": [
+            "--date"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "standard-error-scan"
+      ],
+      "qualified_name": "agentic-kit transfer standard-error-scan"
+    },
+    {
+      "group": "transfer",
       "help": "",
       "name": "state",
       "params": [

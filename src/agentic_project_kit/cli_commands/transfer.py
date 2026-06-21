@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date as date_cls
 import json
 import shlex
 import shutil
@@ -382,6 +383,239 @@ def command_composition_check_command(
         )
 
     if result_status != "PASS":
+        raise typer.Exit(code=2)
+
+
+def _run_standard_error_scan_step(
+    name: str,
+    argv: list[str],
+    *,
+    allowed_returncodes: set[int] | None = None,
+) -> dict[str, object]:
+    allowed = allowed_returncodes or {0}
+    completed = subprocess.run(argv, text=True, capture_output=True)
+    ok = completed.returncode in allowed
+    return {
+        "name": name,
+        "argv": argv,
+        "returncode": completed.returncode,
+        "ok": ok,
+        "stdout": completed.stdout,
+        "stderr": completed.stderr,
+        "allowed_returncodes": sorted(allowed),
+    }
+
+
+def _known_bad_pattern_scan(root: Path) -> dict[str, object]:
+    # Build these from fragments so repository audits do not flag the scanner's own
+    # negative examples as active workflow instructions.
+    patterns = [
+        "tests/" + "test_release_status.py",
+        "agentic-kit " + "command-reference-refresh",
+        "_copy_" + "project_fixture",
+        "<" + "pr-number>",
+        "./" + "ns protected-diff-check",
+        "./" + "ns merge-if-green",
+        "./" + "ns next-safe-step",
+    ]
+    search_roots = [root / "src", root / "tests", root / "docs", root / ".agentic"]
+    matches: list[dict[str, object]] = []
+    for base in search_roots:
+        if not base.exists():
+            continue
+        for file_path in base.rglob("*"):
+            if not file_path.is_file():
+                continue
+            if any(part in {".git", ".venv", "tmp", "__pycache__"} for part in file_path.parts):
+                continue
+            try:
+                content = file_path.read_text(encoding="utf-8")
+            except UnicodeDecodeError:
+                continue
+            for line_number, line in enumerate(content.splitlines(), start=1):
+                for pattern in patterns:
+                    if pattern in line:
+                        matches.append(
+                            {
+                                "path": str(file_path.relative_to(root)),
+                                "line": line_number,
+                                "pattern": pattern,
+                                "text": line.strip()[:240],
+                            }
+                        )
+    return {"patterns": patterns, "matches": matches}
+
+
+@transfer_app.command("standard-error-scan")
+def standard_error_scan_command(
+    before_release: bool = typer.Option(
+        False,
+        "--before-release",
+        help="Run the release-oriented standard-error scan bundle.",
+    ),
+    version: str = typer.Option("0.4.11", "--version", help="Release version for before-release checks."),
+    from_tag: str = typer.Option("v0.4.10", "--from-tag", help="Previous release tag for release notes checks."),
+    to_ref: str = typer.Option("main", "--to-ref", help="Target ref for release notes checks."),
+    date: str = typer.Option("", "--date", help="Release date for release-prep dry-run. Defaults to today."),
+    root: Path = typer.Option(Path("."), "--root", help="Project root."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Run a bounded scan for known workflow standard errors before patch/transfer/release work."""
+    project_root = root.resolve()
+    release_date = date or date_cls.today().isoformat()
+    steps: list[dict[str, object]] = []
+
+    def step(name: str, argv: list[str], *, allowed_returncodes: set[int] | None = None) -> None:
+        steps.append(_run_standard_error_scan_step(name, argv, allowed_returncodes=allowed_returncodes))
+
+    step("post-merge-check", ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"])
+    step("repo-status", ["./.venv/bin/agentic-kit", "transfer", "repo-status"])
+
+    release_tests = [
+        "tests/test_release_prepare_command.py",
+        "tests/test_release_notes.py",
+        "tests/test_release_state.py",
+        "tests/test_agentic_kit_command_reference_is_current.py",
+    ]
+    command_check = [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "command-composition-check",
+        "--json",
+    ]
+    for test_path in release_tests:
+        command_check.extend(["--test-path", test_path])
+    for command in [
+        "agentic-kit transfer command-reference-check",
+        "agentic-kit transfer command-composition-check",
+        "agentic-kit transfer patch-cycle-status",
+        "agentic-kit release-status",
+        "agentic-kit release-notes-generate",
+        "agentic-kit release-prep",
+    ]:
+        command_check.extend(["--command", command])
+    step("command-composition-check", command_check)
+    step("command-reference-check", ["./.venv/bin/agentic-kit", "transfer", "command-reference-check", "--json"])
+    step("patch-cycle-status", ["./.venv/bin/agentic-kit", "transfer", "patch-cycle-status", "--include-ci", "--json"], allowed_returncodes={0, 2})
+
+    if before_release:
+        summary_lines_path = project_root / "tmp" / f"release-{version.replace('.', '')}-summary-lines.json"
+        step("release-status", ["./.venv/bin/agentic-kit", "release-status", "--include-remote", "--json"], allowed_returncodes={0, 2})
+        step(
+            "release-notes-generate",
+            [
+                "./.venv/bin/agentic-kit",
+                "release-notes-generate",
+                "--version",
+                version,
+                "--from-tag",
+                from_tag,
+                "--to-ref",
+                to_ref,
+                "--include-github-metadata",
+                "--summary-lines-json",
+                str(summary_lines_path),
+                "--json",
+            ],
+        )
+        step(
+            "release-prep-dry-run",
+            [
+                "./.venv/bin/agentic-kit",
+                "release-prep",
+                "--version",
+                version,
+                "--date",
+                release_date,
+                "--summary-lines-from",
+                str(summary_lines_path),
+                "--dry-run",
+                "--json",
+            ],
+        )
+
+    step(
+        "fresh-context-strict",
+        ["./.venv/bin/agentic-kit", "transfer", "require-fresh-llm-context", "--json"],
+        allowed_returncodes={0, 2},
+    )
+    step(
+        "fresh-context-clean-post-merge-allowance",
+        [
+            "./.venv/bin/agentic-kit",
+            "transfer",
+            "require-fresh-llm-context",
+            "--allow-clean-post-merge-carrier-staleness",
+            "--json",
+        ],
+        allowed_returncodes={0},
+    )
+    step("docs-audit", ["./.venv/bin/agentic-kit", "docs-audit"])
+    step("audit-doc-currency", ["./.venv/bin/agentic-kit", "audit-doc-currency"])
+    step("audit-planning-docs-consolidation", ["./.venv/bin/agentic-kit", "audit-planning-docs-consolidation"])
+    step("audit-ns-legacy-references", ["./.venv/bin/agentic-kit", "audit-ns-legacy-references"])
+    step("audit-program-redundancy", ["./.venv/bin/agentic-kit", "audit-program-redundancy"])
+    step("standard-gates-audit-suite", ["./.venv/bin/agentic-kit", "standard-gates-audit-suite"])
+
+    pattern_scan = _known_bad_pattern_scan(project_root)
+    blockers: list[str] = []
+    warnings: list[str] = []
+
+    for item in steps:
+        if not item["ok"]:
+            blockers.append(str(item["name"]))
+
+    if pattern_scan["matches"]:
+        warnings.append("known_bad_patterns_found")
+
+    strict_step = next((item for item in steps if item["name"] == "fresh-context-strict"), None)
+    allowance_step = next((item for item in steps if item["name"] == "fresh-context-clean-post-merge-allowance"), None)
+    if strict_step and strict_step["returncode"] == 2 and allowance_step and allowance_step["returncode"] == 0:
+        warnings.append("strict_fresh_context_blocked_but_clean_post_merge_allowance_passed")
+
+    result_status = "BLOCKED" if blockers else "WARN" if warnings else "PASS"
+    next_action = (
+        "Fix blocking standard-error scan steps before continuing."
+        if blockers
+        else "Review warnings, then continue release readiness."
+        if warnings
+        else "No known standard-error blockers detected."
+    )
+
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_standard_error_scan_result",
+        "action": "standard-error-scan",
+        "result_status": result_status,
+        "returncode": 2 if blockers else 0,
+        "before_release": before_release,
+        "version": version,
+        "from_tag": from_tag,
+        "to_ref": to_ref,
+        "date": release_date,
+        "blockers": blockers,
+        "warnings": warnings,
+        "steps": steps,
+        "known_bad_pattern_scan": pattern_scan,
+        "next_action": next_action,
+    }
+
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        _echo_transfer_payload_summary(
+            title="TRANSFER_STANDARD_ERROR_SCAN",
+            result_status=result_status,
+            final_signal="f" if blockers else "d",
+            next_action=next_action,
+            fields={
+                "BLOCKERS": len(blockers),
+                "WARNINGS": len(warnings),
+                "PATTERN_MATCHES": len(pattern_scan["matches"]),
+            },
+        )
+
+    if blockers:
         raise typer.Exit(code=2)
 
 

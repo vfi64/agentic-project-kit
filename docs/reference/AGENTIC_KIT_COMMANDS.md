@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `176`
+- Command count: `177`
 
 ## Commands
 
@@ -1333,6 +1333,20 @@ Restore the canonical known volatile transfer files.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print the full latest transfer report JSON. |
+
+### `agentic-kit transfer standard-error-scan`
+
+Run a bounded scan for known workflow standard errors before patch/transfer/release work.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `before_release` | `TyperOption` | --before-release | `False` | `False` | Run the release-oriented standard-error scan bundle. |
+| `version` | `TyperOption` | --version | `False` | `0.4.11` | Release version for before-release checks. |
+| `from_tag` | `TyperOption` | --from-tag | `False` | `v0.4.10` | Previous release tag for release notes checks. |
+| `to_ref` | `TyperOption` | --to-ref | `False` | `main` | Target ref for release notes checks. |
+| `date` | `TyperOption` | --date | `False` | `` | Release date for release-prep dry-run. Defaults to today. |
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
 ### `agentic-kit transfer state`
 
