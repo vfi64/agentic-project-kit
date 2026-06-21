@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `175`
+- Command count: `176`
 
 ## Commands
 
@@ -861,6 +861,17 @@ Create a deterministic successor handoff package and prompt projections.
 |---|---:|---|---:|---|---|
 | `no_remove_transfer_dir` | `TyperOption` | --no-remove-transfer-dir | `False` | `False` | Do not remove .agentic/transfer during closeout. |
 | `json_output` | `TyperOption` | --json, --no-json | `False` | `True` | Print machine-readable JSON. |
+
+### `agentic-kit transfer command-composition-check`
+
+Block common copied-command mistakes before running patch, transfer, or release gates.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `test_paths` | `TyperOption` | --test-path | `False` |  | Repository-relative test path that must exist before composing a pytest command. Repeatable. |
+| `commands` | `TyperOption` | --command | `False` |  | agentic-kit command prefix that must exist in docs/reference/agentic-kit-commands.json. Repeatable. |
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
 ### `agentic-kit transfer command-reference-check`
 

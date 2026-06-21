@@ -268,6 +268,123 @@ def _require_transfer_capability(capability: str) -> None:
     raise typer.Exit(code=2)
 
 
+def _normalize_agentic_command_for_reference(command: str) -> str:
+    parts = shlex.split(command)
+    if not parts:
+        return ""
+    if parts[0].endswith("agentic-kit"):
+        parts[0] = "agentic-kit"
+    elif parts[:2] == ["./.venv/bin/python", "-m"] and len(parts) >= 3 and parts[2] == "agentic_project_kit":
+        parts = ["agentic-kit", *parts[3:]]
+    else:
+        return " ".join(parts)
+    return " ".join(parts)
+
+
+def _load_command_reference_names(root: Path) -> set[str]:
+    reference_path = root / "docs/reference/agentic-kit-commands.json"
+    payload = json.loads(reference_path.read_text(encoding="utf-8"))
+    commands = payload.get("commands", [])
+    names: set[str] = set()
+    for item in commands:
+        if isinstance(item, dict) and isinstance(item.get("qualified_name"), str):
+            names.add(str(item["qualified_name"]))
+    return names
+
+
+@transfer_app.command("command-composition-check")
+def command_composition_check_command(
+    test_paths: list[Path] | None = typer.Option(
+        None,
+        "--test-path",
+        help="Repository-relative test path that must exist before composing a pytest command. Repeatable.",
+    ),
+    commands: list[str] | None = typer.Option(
+        None,
+        "--command",
+        help="agentic-kit command prefix that must exist in docs/reference/agentic-kit-commands.json. Repeatable.",
+    ),
+    root: Path = typer.Option(Path("."), "--root", help="Project root."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
+) -> None:
+    """Block common copied-command mistakes before running patch, transfer, or release gates."""
+    project_root = root.resolve()
+    missing_test_paths: list[str] = []
+    existing_test_paths: list[str] = []
+    for raw_path in test_paths or []:
+        candidate = raw_path if raw_path.is_absolute() else project_root / raw_path
+        rel = str(raw_path)
+        if candidate.exists():
+            existing_test_paths.append(rel)
+        else:
+            missing_test_paths.append(rel)
+
+    reference_missing = False
+    valid_commands: list[str] = []
+    invalid_commands: list[str] = []
+    try:
+        reference_names = _load_command_reference_names(project_root)
+    except (OSError, json.JSONDecodeError, ValueError):
+        reference_names = set()
+        reference_missing = bool(commands)
+
+    for command in commands or []:
+        normalized = _normalize_agentic_command_for_reference(command)
+        if normalized and normalized in reference_names:
+            valid_commands.append(command)
+        else:
+            invalid_commands.append(command)
+
+    blockers: list[str] = []
+    if missing_test_paths:
+        blockers.append("missing_test_paths")
+    if reference_missing:
+        blockers.append("command_reference_unavailable")
+    if invalid_commands:
+        blockers.append("invalid_agentic_kit_commands")
+
+    result_status = "PASS" if not blockers else "BLOCKED"
+    next_action = (
+        "Command composition inputs are valid."
+        if result_status == "PASS"
+        else "Fix missing test paths or invalid agentic-kit command names before running the composed block."
+    )
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_command_composition_check_result",
+        "action": "command-composition-check",
+        "result_status": result_status,
+        "returncode": 0 if result_status == "PASS" else 2,
+        "blockers": blockers,
+        "test_paths": {
+            "existing": existing_test_paths,
+            "missing": missing_test_paths,
+        },
+        "commands": {
+            "valid": valid_commands,
+            "invalid": invalid_commands,
+        },
+        "next_action": next_action,
+    }
+
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        _echo_transfer_payload_summary(
+            title="TRANSFER_COMMAND_COMPOSITION_CHECK",
+            result_status=result_status,
+            final_signal="d" if result_status == "PASS" else "f",
+            next_action=next_action,
+            fields={
+                "MISSING_TEST_PATHS": len(missing_test_paths),
+                "INVALID_COMMANDS": len(invalid_commands),
+            },
+        )
+
+    if result_status != "PASS":
+        raise typer.Exit(code=2)
+
+
 @transfer_app.command("run-and-log", context_settings={"allow_extra_args": True, "ignore_unknown_options": True})
 def run_and_log(
     ctx: typer.Context,
