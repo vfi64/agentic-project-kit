@@ -130,3 +130,15 @@ def test_large_plan_findings_are_compacted_and_upload_guard_blocks_large_artifac
     big.write_text("x" * 101, encoding="utf-8")
     with pytest.raises(ValueError, match="too large"):
         assert_uploadable_artifact(big, max_bytes=100)
+
+
+def test_pr_create_complete_payload_guard_detects_blocked_json() -> None:
+    from agentic_project_kit.release_process_guardrails import rc_from_result_payload
+
+    assert rc_from_result_payload({"result_status": "BLOCKED", "blockers": ["inner"]}) == 2
+
+
+def test_pr_complete_invalid_post_merge_complete_message_is_present() -> None:
+    source = Path("src/agentic_project_kit/cli_commands/transfer.py").read_text(encoding="utf-8")
+    assert "invalid_argument_post_merge_complete" in source
+    assert "--post-merge-complete is not valid for transfer pr-complete" in source

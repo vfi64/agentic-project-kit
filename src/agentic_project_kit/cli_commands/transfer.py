@@ -2009,7 +2009,37 @@ def pr_complete_command(
         "--skip-llm-context-gate",
         help="Recovery-only: run PR completion without requiring fresh generated LLM context.",
     ),
+    post_merge_complete: bool = typer.Option(
+        False,
+        "--post-merge-complete",
+        help=(
+            "Invalid for pr-complete. Use pr-create-complete --post-merge-complete for new PRs, "
+            "or run post-merge-complete separately after an existing PR is merged."
+        ),
+    ),
 ) -> None:
+    if post_merge_complete:
+        payload = {
+            "schema_version": 1,
+            "kind": "transfer_pr_complete_result",
+            "action": "pr-complete",
+            "result_status": "BLOCKED",
+            "final_signal": "f",
+            "failed_step": "invalid_argument_post_merge_complete",
+            "blockers": ["invalid_argument_post_merge_complete"],
+            "next_action": (
+                "--post-merge-complete is not valid for transfer pr-complete. "
+                "For an existing PR: run transfer pr-complete, then transfer post-merge-complete --after-pr <PR>."
+            ),
+        }
+        if json_output:
+            typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+        else:
+            typer.echo("TRANSFER_PR_COMPLETE_BLOCKED")
+            typer.echo("reason=invalid_argument_post_merge_complete")
+            typer.echo(f"NEXT: {payload['next_action']}")
+        raise typer.Exit(code=2)
+
     if not skip_llm_context_gate:
         _require_fresh_llm_context_or_exit(max_age_minutes=60, json_output=json_output)
 
@@ -2664,6 +2694,19 @@ def pr_create_complete_command(
 
     def run_step(name: str, argv: list[str]) -> subprocess.CompletedProcess[str]:
         completed = subprocess.run(argv, text=True, capture_output=True)
+        step_payload_status = ""
+        try:
+            from agentic_project_kit.release_process_guardrails import rc_from_result_payload
+
+            parsed = json.loads(completed.stdout or "{}")
+            if isinstance(parsed, dict):
+                derived_rc = rc_from_result_payload(parsed)
+                step_payload_status = str(parsed.get("result_status", parsed.get("status", "")))
+                if completed.returncode == 0 and derived_rc != 0:
+                    blockers.append(name + "_blocked_payload")
+        except Exception:
+            pass
+
         steps.append(
             {
                 "name": name,
@@ -2672,6 +2715,7 @@ def pr_create_complete_command(
                 "stdout": completed.stdout,
                 "stderr": completed.stderr,
                 "ok": completed.returncode == 0,
+                "payload_status": step_payload_status,
             }
         )
         if completed.returncode != 0:

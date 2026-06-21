@@ -7014,6 +7014,20 @@
           "param_type": "TyperOption",
           "required": false,
           "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Invalid for pr-complete. Use pr-create-complete --post-merge-complete for new PRs, or run post-merge-complete separately after an existing PR is merged.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "post_merge_complete",
+          "opts": [
+            "--post-merge-complete"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
