@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a89fe068c1d58879dab1608fdac9bb620b74be12
-  short: a89fe068
-  subject: Enforce meta-command and Python work-order contracts (#1543)
+  full: 6f3f486f9c08d24dbe460f354b3c74392a9efc15
+  short: 6f3f486f
+  subject: Prepare release 0.4.11 (#1545)
 last_substantive_work_state:
-  full: a89fe068c1d58879dab1608fdac9bb620b74be12
-  short: a89fe068
-  subject: Enforce meta-command and Python work-order contracts (#1543)
+  full: 6f3f486f9c08d24dbe460f354b3c74392a9efc15
+  short: 6f3f486f
+  subject: Prepare release 0.4.11 (#1545)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
