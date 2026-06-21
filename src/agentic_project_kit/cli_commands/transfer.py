@@ -386,6 +386,21 @@ def command_composition_check_command(
         raise typer.Exit(code=2)
 
 
+def _latest_release_tag() -> str:
+    completed = subprocess.run(
+        ["git", "tag", "--sort=-creatordate"],
+        text=True,
+        capture_output=True,
+    )
+    if completed.returncode != 0:
+        return ""
+    for line in completed.stdout.splitlines():
+        tag = line.strip()
+        if tag.startswith("v"):
+            return tag
+    return ""
+
+
 def _run_standard_error_scan_step(
     name: str,
     argv: list[str],
@@ -418,7 +433,15 @@ def _known_bad_pattern_scan(root: Path) -> dict[str, object]:
         "./" + "ns merge-if-green",
         "./" + "ns next-safe-step",
     ]
-    search_roots = [root / "src", root / "tests", root / "docs", root / ".agentic"]
+    # Scan only active workflow surfaces. Historical planning/test-gate docs may
+    # legitimately mention old commands as examples or archived failure modes.
+    search_roots = [
+        root / "src",
+        root / "tests",
+        root / "docs/reference",
+        root / "docs/handoff",
+        root / ".agentic",
+    ]
     matches: list[dict[str, object]] = []
     for base in search_roots:
         if not base.exists():
@@ -453,8 +476,8 @@ def standard_error_scan_command(
         "--before-release",
         help="Run the release-oriented standard-error scan bundle.",
     ),
-    version: str = typer.Option("0.4.11", "--version", help="Release version for before-release checks."),
-    from_tag: str = typer.Option("v0.4.10", "--from-tag", help="Previous release tag for release notes checks."),
+    version: str = typer.Option("", "--version", help="Release version for before-release checks. Required with --before-release."),
+    from_tag: str = typer.Option("", "--from-tag", help="Previous release tag for release notes checks. Defaults to the latest local v* git tag."),
     to_ref: str = typer.Option("main", "--to-ref", help="Target ref for release notes checks."),
     date: str = typer.Option("", "--date", help="Release date for release-prep dry-run. Defaults to today."),
     root: Path = typer.Option(Path("."), "--root", help="Project root."),
@@ -463,12 +486,14 @@ def standard_error_scan_command(
     """Run a bounded scan for known workflow standard errors before patch/transfer/release work."""
     project_root = root.resolve()
     release_date = date or date_cls.today().isoformat()
+    effective_from_tag = from_tag or _latest_release_tag()
     steps: list[dict[str, object]] = []
 
     def step(name: str, argv: list[str], *, allowed_returncodes: set[int] | None = None) -> None:
         steps.append(_run_standard_error_scan_step(name, argv, allowed_returncodes=allowed_returncodes))
 
-    step("post-merge-check", ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"])
+    if before_release:
+        step("post-merge-check", ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"])
     step("repo-status", ["./.venv/bin/agentic-kit", "transfer", "repo-status"])
 
     release_tests = [
@@ -499,6 +524,30 @@ def standard_error_scan_command(
     step("patch-cycle-status", ["./.venv/bin/agentic-kit", "transfer", "patch-cycle-status", "--include-ci", "--json"], allowed_returncodes={0, 2})
 
     if before_release:
+        if not version:
+            steps.append(
+                {
+                    "name": "release-version",
+                    "argv": [],
+                    "returncode": 2,
+                    "ok": False,
+                    "allowed_returncodes": [0],
+                    "stdout": "",
+                    "stderr": "--version is required with --before-release.",
+                }
+            )
+        if not effective_from_tag:
+            steps.append(
+                {
+                    "name": "release-from-tag",
+                    "argv": [],
+                    "returncode": 2,
+                    "ok": False,
+                    "allowed_returncodes": [0],
+                    "stdout": "",
+                    "stderr": "--from-tag was not provided and no local v* git tag could be derived.",
+                }
+            )
         summary_lines_path = project_root / "tmp" / f"release-{version.replace('.', '')}-summary-lines.json"
         step("release-status", ["./.venv/bin/agentic-kit", "release-status", "--include-remote", "--json"], allowed_returncodes={0, 2})
         step(
@@ -509,7 +558,7 @@ def standard_error_scan_command(
                 "--version",
                 version,
                 "--from-tag",
-                from_tag,
+                effective_from_tag,
                 "--to-ref",
                 to_ref,
                 "--include-github-metadata",
@@ -548,7 +597,7 @@ def standard_error_scan_command(
             "--allow-clean-post-merge-carrier-staleness",
             "--json",
         ],
-        allowed_returncodes={0},
+        allowed_returncodes={0} if before_release else {0, 2},
     )
     step("docs-audit", ["./.venv/bin/agentic-kit", "docs-audit"])
     step("audit-doc-currency", ["./.venv/bin/agentic-kit", "audit-doc-currency"])
@@ -570,8 +619,11 @@ def standard_error_scan_command(
 
     strict_step = next((item for item in steps if item["name"] == "fresh-context-strict"), None)
     allowance_step = next((item for item in steps if item["name"] == "fresh-context-clean-post-merge-allowance"), None)
-    if strict_step and strict_step["returncode"] == 2 and allowance_step and allowance_step["returncode"] == 0:
-        warnings.append("strict_fresh_context_blocked_but_clean_post_merge_allowance_passed")
+    if strict_step and strict_step["returncode"] == 2 and allowance_step:
+        if allowance_step["returncode"] == 0:
+            warnings.append("strict_fresh_context_blocked_but_clean_post_merge_allowance_passed")
+        elif not before_release and allowance_step["returncode"] == 2:
+            warnings.append("fresh_context_stale_in_feature_branch_diagnostic")
 
     result_status = "BLOCKED" if blockers else "WARN" if warnings else "PASS"
     next_action = (
@@ -590,7 +642,7 @@ def standard_error_scan_command(
         "returncode": 2 if blockers else 0,
         "before_release": before_release,
         "version": version,
-        "from_tag": from_tag,
+        "from_tag": effective_from_tag,
         "to_ref": to_ref,
         "date": release_date,
         "blockers": blockers,

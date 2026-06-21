@@ -3201,6 +3201,186 @@
       "qualified_name": "agentic-kit project-direction"
     },
     {
+      "group": "release",
+      "help": "Generate release summary evidence and run release-prep safely.",
+      "name": "prepare",
+      "params": [
+        {
+          "default": null,
+          "help": "Target release version.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Previous release tag. Defaults to latest local v* git tag.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "from_tag",
+          "opts": [
+            "--from-tag"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "main",
+          "help": "Target ref.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "to_ref",
+          "opts": [
+            "--to-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Release date. Defaults to today.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "date",
+          "opts": [
+            "--date"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": true,
+          "help": "Dry-run by default. Use --write to update release metadata.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "dry_run",
+          "opts": [
+            "--dry-run"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--write"
+          ]
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "release",
+        "prepare"
+      ],
+      "qualified_name": "agentic-kit release prepare"
+    },
+    {
+      "group": "release",
+      "help": "Run release readiness through the standard-error scan wrapper.",
+      "name": "ready",
+      "params": [
+        {
+          "default": null,
+          "help": "Target release version.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Previous release tag. Defaults to latest local v* git tag.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "from_tag",
+          "opts": [
+            "--from-tag"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "main",
+          "help": "Target ref.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "to_ref",
+          "opts": [
+            "--to-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Release date. Defaults to today.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "date",
+          "opts": [
+            "--date"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "release",
+        "ready"
+      ],
+      "qualified_name": "agentic-kit release ready"
+    },
+    {
       "group": "root",
       "help": "Validate release state for a target version.",
       "name": "release-check",
@@ -8201,8 +8381,8 @@
           "secondary_opts": []
         },
         {
-          "default": "0.4.11",
-          "help": "Release version for before-release checks.",
+          "default": "",
+          "help": "Release version for before-release checks. Required with --before-release.",
           "is_flag": false,
           "metavar": null,
           "multiple": false,
@@ -8215,8 +8395,8 @@
           "secondary_opts": []
         },
         {
-          "default": "v0.4.10",
-          "help": "Previous release tag for release notes checks.",
+          "default": "",
+          "help": "Previous release tag for release notes checks. Defaults to the latest local v* git tag.",
           "is_flag": false,
           "metavar": null,
           "multiple": false,
@@ -8667,6 +8847,238 @@
         "validate-sections"
       ],
       "qualified_name": "agentic-kit validate-sections"
+    },
+    {
+      "group": "work",
+      "help": "Run common human workflow gates without committing or pushing.",
+      "name": "check",
+      "params": [
+        {
+          "default": "code",
+          "help": "Check profile: minimal, code, docs, or release.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "profile",
+          "opts": [
+            "--profile"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "work",
+        "check"
+      ],
+      "qualified_name": "agentic-kit work check"
+    },
+    {
+      "group": "work",
+      "help": "Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks.",
+      "name": "finish",
+      "params": [
+        {
+          "default": null,
+          "help": "Feature branch to finish.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "--branch"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Pull request title.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "title",
+          "opts": [
+            "--title"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Commit message.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "message",
+          "opts": [
+            "--message"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Path to include in the commit. Repeatable.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "paths",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "squash",
+          "help": "PR merge method.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_method",
+          "opts": [
+            "--merge-method"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": true,
+          "help": "Plan by default. Use --execute to commit, push, and merge.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "dry_run",
+          "opts": [
+            "--dry-run"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--execute"
+          ]
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "work",
+        "finish"
+      ],
+      "qualified_name": "agentic-kit work finish"
+    },
+    {
+      "group": "work",
+      "help": "Run safe recovery/status commands after interrupted work.",
+      "name": "recover",
+      "params": [
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "work",
+        "recover"
+      ],
+      "qualified_name": "agentic-kit work recover"
+    },
+    {
+      "group": "work",
+      "help": "Start a human patch/slice workflow with the safe standard startup sequence.",
+      "name": "start",
+      "params": [
+        {
+          "default": null,
+          "help": "Feature branch to create or switch to.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "--branch"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "patch",
+          "help": "Human label for the work kind.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "kind",
+          "opts": [
+            "--kind"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "work",
+        "start"
+      ],
+      "qualified_name": "agentic-kit work start"
     },
     {
       "group": "work-order",
