@@ -616,9 +616,15 @@ def _scan_static_meta_preference_projection_drift(root: Path) -> dict[str, objec
             for marker in forbidden_markers:
                 marker_matches = [marker]
                 if marker == "meta_command_preference:":
-                    marker_matches.append('"meta_command_preference"')
+                    marker_matches.extend([
+                        '"meta_command_preference"',
+                        "'meta_command_preference'",
+                    ])
                 if marker == "META_COMMAND_PREFERENCE:":
-                    marker_matches.append('"META_COMMAND_PREFERENCE"')
+                    marker_matches.extend([
+                        '"META_COMMAND_PREFERENCE"',
+                        "'META_COMMAND_PREFERENCE'",
+                    ])
                 if not any(marker_match in content for marker_match in marker_matches):
                     continue
                 line_numbers = [
