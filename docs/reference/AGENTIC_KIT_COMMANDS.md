@@ -1162,6 +1162,7 @@ Render the current four-slice patch/handoff workflow state.
 | `poll_seconds` | `TyperOption` | --interval-seconds, --poll-seconds | `False` | `10` | CI polling interval. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 | `skip_llm_context_gate` | `TyperOption` | --skip-llm-context-gate | `False` | `False` | Recovery-only: run PR completion without requiring fresh generated LLM context. |
+| `post_merge_complete` | `TyperOption` | --post-merge-complete | `False` | `False` | Invalid for pr-complete. Use pr-create-complete --post-merge-complete for new PRs, or run post-merge-complete separately after an existing PR is merged. |
 
 ### `agentic-kit transfer pr-create`
 
