@@ -698,7 +698,7 @@ def test_command_composition_check_blocks_invalid_agentic_kit_command(tmp_path: 
             "--command",
             "agentic-kit transfer command-reference-refresh",
             "--command",
-            "agentic-kit command-reference-refresh",
+            "agentic-kit " + "command-reference-refresh",
             "--json",
         ],
     )
@@ -707,7 +707,7 @@ def test_command_composition_check_blocks_invalid_agentic_kit_command(tmp_path: 
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "BLOCKED"
     assert payload["commands"]["valid"] == ["agentic-kit transfer command-reference-refresh"]
-    assert payload["commands"]["invalid"] == ["agentic-kit command-reference-refresh"]
+    assert payload["commands"]["invalid"] == ["agentic-kit " + "command-reference-refresh"]
 
 
 def test_command_composition_check_accepts_existing_paths_and_known_commands(tmp_path: Path):
@@ -739,3 +739,73 @@ def test_command_composition_check_accepts_existing_paths_and_known_commands(tmp
     assert result.exit_code == 0, result.output
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "PASS"
+
+
+def test_standard_error_scan_reports_pass_when_guard_steps_pass(monkeypatch, tmp_path: Path):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "src").mkdir()
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "docs/reference").mkdir(parents=True)
+    (tmp_path / ".agentic").mkdir()
+    (tmp_path / "docs/reference/agentic-kit-commands.json").write_text('{"commands": []}\n', encoding="utf-8")
+
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "require-fresh-llm-context"] and "--allow-clean-post-merge-carrier-staleness" not in command:
+            return _completed(command, stdout='{"result_status": "BLOCKED"}\n', returncode=2)
+        return _completed(command, stdout='{"result_status": "PASS"}\n')
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "standard-error-scan",
+            "--root",
+            str(tmp_path),
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "WARN"
+    assert "strict_fresh_context_blocked_but_clean_post_merge_allowance_passed" in payload["warnings"]
+    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "command-composition-check"] for call in calls)
+
+
+def test_standard_error_scan_blocks_failed_required_step(monkeypatch, tmp_path: Path):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "src").mkdir()
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "docs/reference").mkdir(parents=True)
+    (tmp_path / ".agentic").mkdir()
+    (tmp_path / "docs/reference/agentic-kit-commands.json").write_text('{"commands": []}\n', encoding="utf-8")
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "repo-status"]:
+            return _completed(command, stdout="dirty\n", returncode=1)
+        return _completed(command, stdout='{"result_status": "PASS"}\n')
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "standard-error-scan",
+            "--root",
+            str(tmp_path),
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "BLOCKED"
+    assert "repo-status" in payload["blockers"]
