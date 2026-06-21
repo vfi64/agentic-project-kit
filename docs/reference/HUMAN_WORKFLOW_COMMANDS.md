@@ -67,3 +67,12 @@ Typical use:
     agentic-kit release prepare --version <version> --from-tag <from-tag> --date <date> --dry-run --json
 
 Use --write only when readiness checks are clean.
+
+## Preference and fallback rule
+
+The authoritative preference and fallback policy is defined in these repository rule sources:
+
+- `.agentic/transfer_safety_rules.yaml`
+- `.agentic/transfer/one_command_transfer_protocol.yaml`
+
+This document explains the human-facing commands. It must not duplicate the full policy payload. Local-to-LLM transfer headers, successor handoff contracts, and generated projections should render the current policy dynamically from those rule files.

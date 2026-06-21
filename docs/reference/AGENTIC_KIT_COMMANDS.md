@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `183`
+- Command count: `185`
 
 ## Commands
 
@@ -895,6 +895,7 @@ Block common copied-command mistakes before running patch, transfer, or release 
 |---|---:|---|---:|---|---|
 | `test_paths` | `TyperOption` | --test-path | `False` |  | Repository-relative test path that must exist before composing a pytest command. Repeatable. |
 | `commands` | `TyperOption` | --command | `False` |  | agentic-kit command prefix that must exist in docs/reference/agentic-kit-commands.json. Repeatable. |
+| `sequence_commands` | `TyperOption` | --sequence-command | `False` |  | Command sequence entry to check for avoidable low-level workflow chains. Repeatable. |
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
@@ -1076,6 +1077,23 @@ Finalize transfer evidence on an evidence branch and complete it through a PR.
 |---|---:|---|---:|---|---|
 | `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/current.yaml')` | Transfer order path. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit transfer log-header`
+
+Render the dynamic local-to-LLM copy/paste log header from rule files.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `log_path` | `TyperOption` | --log-path | `False` | `` | Optional log path to include in the dynamic local-to-LLM header. |
+
+### `agentic-kit transfer log-upload-hint`
+
+Render the terminal hint for copy/paste communication with the LLM.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `log_path` | `TyperOption` | --log-path | `True` |  | Log file path to mention in the terminal upload hint. |
+| `return_code` | `TyperOption` | --rc | `False` |  | Optional return code to explain in the upload hint. |
 
 ### `agentic-kit transfer normalize-files`
 

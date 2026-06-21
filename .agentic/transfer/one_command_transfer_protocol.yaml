@@ -215,3 +215,28 @@ wrapper_first_inside_transfer_files:
       - "./.venv/bin/agentic-kit transfer post-merge-check"
       - "./.venv/bin/agentic-kit transfer repo-status"
 
+
+meta_command_preference:
+  human_cli_primary_path: true
+  rule: Prefer agentic-kit work/release meta commands for routine work, release readiness, and release preparation.
+  low_level_fallback_requires_reason: true
+  preferred_entrypoints:
+    - agentic-kit work start
+    - agentic-kit work check
+    - agentic-kit work finish
+    - agentic-kit work recover
+    - agentic-kit release ready
+    - agentic-kit release prepare
+
+llm_work_order_contract:
+  status: active
+  required_format: python_script
+  transfer_file:
+    canonical_inbox: .agentic/transfer/inbox/next_command.py.txt
+    allowed_payload: python_script
+    shell_commands_allowed: false
+  copy_paste:
+    required_payload: python_script
+    shell_commands_allowed: false
+    shell_wrapper_allowed_for_logging: true
+
