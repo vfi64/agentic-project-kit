@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4564b0ca9c3c59998d0ad5a9a69cd8e6ea1b3fd1
-  short: 4564b0ca
-  subject: Use release notes as release-prep summary evidence (#1533)
+  full: a95f8aed56b791bc7cac870a0ac0c075068f7037
+  short: a95f8aed
+  subject: Guard command composition before release (#1535)
 last_substantive_work_state:
-  full: 4564b0ca9c3c59998d0ad5a9a69cd8e6ea1b3fd1
-  short: 4564b0ca
-  subject: Use release notes as release-prep summary evidence (#1533)
+  full: a95f8aed56b791bc7cac870a0ac0c075068f7037
+  short: a95f8aed
+  subject: Guard command composition before release (#1535)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
