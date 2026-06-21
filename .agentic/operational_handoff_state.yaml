@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 011ad7c42126a5f3b9391c66b125be2a2855240b
-  short: 011ad7c4
-  subject: Harden fresh-context carrier staleness handling (#1537)
+  full: 41b7170b92a403f4867fcbdff1d9977c7673e02a
+  short: 41b7170b
+  subject: Add standard error scan before release (#1539)
 last_substantive_work_state:
-  full: 011ad7c42126a5f3b9391c66b125be2a2855240b
-  short: 011ad7c4
-  subject: Harden fresh-context carrier staleness handling (#1537)
+  full: 41b7170b92a403f4867fcbdff1d9977c7673e02a
+  short: 41b7170b
+  subject: Add standard error scan before release (#1539)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
