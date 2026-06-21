@@ -123,3 +123,7 @@
     "style": "knapp, direkt, keine langen Logs im Chat"
   }
 }
+
+# Release-prep CI currency marker.
+# Kept minimal because generated terminal handoff carriers are protected and must not be mixed broadly into the release branch.
+release_prep_current_version: "0.4.11"

@@ -1,5 +1,6 @@
 ## v0.4.11 - 2026-06-21
 
+- Zenodo DOI verification pending for v0.4.11.
 - Record v0.4.10 DOI closeout metadata
 - Add GUI reference analysis and transfer concept
 - Add patch cycle workflow status renderer
