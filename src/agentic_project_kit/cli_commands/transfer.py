@@ -614,12 +614,17 @@ def _scan_static_meta_preference_projection_drift(root: Path) -> dict[str, objec
             except UnicodeDecodeError:
                 continue
             for marker in forbidden_markers:
-                if marker not in content:
+                marker_matches = [marker]
+                if marker == "meta_command_preference:":
+                    marker_matches.append('"meta_command_preference"')
+                if marker == "META_COMMAND_PREFERENCE:":
+                    marker_matches.append('"META_COMMAND_PREFERENCE"')
+                if not any(marker_match in content for marker_match in marker_matches):
                     continue
                 line_numbers = [
                     index
                     for index, line in enumerate(content.splitlines(), start=1)
-                    if marker in line
+                    if any(marker_match in line for marker_match in marker_matches)
                 ]
                 matches.append(
                     {

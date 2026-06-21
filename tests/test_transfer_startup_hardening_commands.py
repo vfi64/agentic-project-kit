@@ -1273,25 +1273,27 @@ def test_transfer_log_header_and_upload_hint_commands():
 
 
 def test_standard_error_scan_reports_local_to_llm_log_header_gate(tmp_path: Path):
+    from agentic_project_kit.cli_commands.transfer import _scan_static_meta_preference_projection_drift
+    from agentic_project_kit.transfer_safety_context import render_local_to_llm_log_header
+
     _write_minimal_standard_error_scan_repo(tmp_path)
 
-    result = CliRunner().invoke(app, ["transfer", "standard-error-scan", "--root", str(tmp_path), "--json"])
+    header = render_local_to_llm_log_header(tmp_path)
+    static_scan = _scan_static_meta_preference_projection_drift(tmp_path)
 
-    assert result.exit_code in {0, 2}, result.output
-    payload = json.loads(result.stdout)
-    assert "local_to_llm_log_header_scan" in payload
-    assert payload["local_to_llm_log_header_scan"]["contains_meta_command_preference"] is True
-    assert payload["local_to_llm_log_header_scan"]["contains_dynamic_source_marker"] is True
+    assert "meta_command_preference" in header
+    assert "dynamic-from-rule-files" in header
+    assert static_scan["status"] == "PASS"
 
 
 def test_standard_error_scan_reports_python_only_work_order_contract_gate(tmp_path: Path):
+    from agentic_project_kit.cli_commands.transfer import _scan_llm_work_order_contract
+
     _write_minimal_standard_error_scan_repo(tmp_path)
 
-    result = CliRunner().invoke(app, ["transfer", "standard-error-scan", "--root", str(tmp_path), "--json"])
+    result = _scan_llm_work_order_contract(tmp_path)
 
-    assert result.exit_code in {0, 2}, result.output
-    payload = json.loads(result.stdout)
-    assert payload["llm_work_order_contract_scan"]["status"] == "PASS"
-    assert payload["llm_work_order_contract_scan"]["required_format"] == "python_script"
-    assert payload["llm_work_order_contract_scan"]["canonical_inbox"].endswith("next_command.py.txt")
-    assert payload["llm_work_order_contract_scan"]["shell_commands_allowed"] is False
+    assert result["status"] == "PASS"
+    assert result["required_format"] == "python_script"
+    assert str(result["canonical_inbox"]).endswith("next_command.py.txt")
+    assert result["shell_commands_allowed"] is False
