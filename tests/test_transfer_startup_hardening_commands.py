@@ -809,3 +809,114 @@ def test_standard_error_scan_blocks_failed_required_step(monkeypatch, tmp_path: 
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "BLOCKED"
     assert "repo-status" in payload["blockers"]
+
+
+def test_standard_error_scan_ignores_historical_planning_docs(monkeypatch, tmp_path: Path):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "src").mkdir()
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "docs/reference").mkdir(parents=True)
+    (tmp_path / "docs/planning").mkdir(parents=True)
+    (tmp_path / "docs/planning/ARCHIVE.md").write_text(
+        "`./" + "ns merge-if-green <pr>` is an archived legacy example.\n",
+        encoding="utf-8",
+    )
+    (tmp_path / ".agentic").mkdir()
+    (tmp_path / "docs/reference/agentic-kit-commands.json").write_text('{"commands": []}\n', encoding="utf-8")
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "require-fresh-llm-context"] and "--allow-clean-post-merge-carrier-staleness" not in command:
+            return _completed(command, stdout='{"result_status": "BLOCKED"}\n', returncode=2)
+        return _completed(command, stdout='{"result_status": "PASS"}\n')
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "standard-error-scan",
+            "--root",
+            str(tmp_path),
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["known_bad_pattern_scan"]["matches"] == []
+
+
+def test_standard_error_scan_without_before_release_does_not_require_post_merge_check(monkeypatch, tmp_path: Path):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "src").mkdir()
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "docs/reference").mkdir(parents=True)
+    (tmp_path / ".agentic").mkdir()
+    (tmp_path / "docs/reference/agentic-kit-commands.json").write_text('{"commands": []}\n', encoding="utf-8")
+
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "require-fresh-llm-context"]:
+            return _completed(command, stdout='{"result_status": "BLOCKED"}\n', returncode=2)
+        return _completed(command, stdout='{"result_status": "PASS"}\n')
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "standard-error-scan",
+            "--root",
+            str(tmp_path),
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "WARN"
+    assert "fresh_context_stale_in_feature_branch_diagnostic" in payload["warnings"]
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] for call in calls)
+
+
+def test_standard_error_scan_before_release_requires_post_merge_check(monkeypatch, tmp_path: Path):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "src").mkdir()
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "docs/reference").mkdir(parents=True)
+    (tmp_path / ".agentic").mkdir()
+    (tmp_path / "docs/reference/agentic-kit-commands.json").write_text('{"commands": []}\n', encoding="utf-8")
+
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        return _completed(command, stdout='{"result_status": "PASS"}\n')
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "standard-error-scan",
+            "--root",
+            str(tmp_path),
+            "--before-release",
+            "--version",
+            "1.2.3",
+            "--from-tag",
+            "v1.2.2",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] for call in calls)

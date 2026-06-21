@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `177`
+- Command count: `183`
 
 ## Commands
 
@@ -561,6 +561,31 @@ Render strategy, roadmap, and ideas from the project direction YAML source.
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
 | `section` | `TyperOption` | --section | `False` | `all` | all, strategy, roadmap, or ideas. |
 | `output_format` | `TyperOption` | --format | `False` | `text` | text, markdown, or json. |
+
+### `agentic-kit release prepare`
+
+Generate release summary evidence and run release-prep safely.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `version` | `TyperOption` | --version | `True` |  | Target release version. |
+| `from_tag` | `TyperOption` | --from-tag | `False` | `` | Previous release tag. Defaults to latest local v* git tag. |
+| `to_ref` | `TyperOption` | --to-ref | `False` | `main` | Target ref. |
+| `date` | `TyperOption` | --date | `False` | `` | Release date. Defaults to today. |
+| `dry_run` | `TyperOption` | --dry-run, --write | `False` | `True` | Dry-run by default. Use --write to update release metadata. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit release ready`
+
+Run release readiness through the standard-error scan wrapper.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `version` | `TyperOption` | --version | `True` |  | Target release version. |
+| `from_tag` | `TyperOption` | --from-tag | `False` | `` | Previous release tag. Defaults to latest local v* git tag. |
+| `to_ref` | `TyperOption` | --to-ref | `False` | `main` | Target ref. |
+| `date` | `TyperOption` | --date | `False` | `` | Release date. Defaults to today. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit release-check`
 
@@ -1341,8 +1366,8 @@ Run a bounded scan for known workflow standard errors before patch/transfer/rele
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `before_release` | `TyperOption` | --before-release | `False` | `False` | Run the release-oriented standard-error scan bundle. |
-| `version` | `TyperOption` | --version | `False` | `0.4.11` | Release version for before-release checks. |
-| `from_tag` | `TyperOption` | --from-tag | `False` | `v0.4.10` | Previous release tag for release notes checks. |
+| `version` | `TyperOption` | --version | `False` | `` | Release version for before-release checks. Required with --before-release. |
+| `from_tag` | `TyperOption` | --from-tag | `False` | `` | Previous release tag for release notes checks. Defaults to the latest local v* git tag. |
 | `to_ref` | `TyperOption` | --to-ref | `False` | `main` | Target ref for release notes checks. |
 | `date` | `TyperOption` | --date | `False` | `` | Release date for release-prep dry-run. Defaults to today. |
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
@@ -1423,6 +1448,47 @@ Validate that a text file contains required literal section markers.
 |---|---:|---|---:|---|---|
 | `path` | `TyperArgument` | path | `True` |  | Text file to validate. |
 | `required_section` | `TyperOption` | --required-section, -s | `True` |  | Required literal section marker. Repeat the option for multiple sections. |
+
+### `agentic-kit work check`
+
+Run common human workflow gates without committing or pushing.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `profile` | `TyperOption` | --profile | `False` | `code` | Check profile: minimal, code, docs, or release. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit work finish`
+
+Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `branch` | `TyperOption` | --branch | `True` |  | Feature branch to finish. |
+| `title` | `TyperOption` | --title | `True` |  | Pull request title. |
+| `message` | `TyperOption` | --message | `True` |  | Commit message. |
+| `paths` | `TyperOption` | --path | `False` |  | Path to include in the commit. Repeatable. |
+| `merge_method` | `TyperOption` | --merge-method | `False` | `squash` | PR merge method. |
+| `dry_run` | `TyperOption` | --dry-run, --execute | `False` | `True` | Plan by default. Use --execute to commit, push, and merge. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit work recover`
+
+Run safe recovery/status commands after interrupted work.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit work start`
+
+Start a human patch/slice workflow with the safe standard startup sequence.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `branch` | `TyperOption` | --branch | `True` |  | Feature branch to create or switch to. |
+| `kind` | `TyperOption` | --kind | `False` | `patch` | Human label for the work kind. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit work-order check`
 

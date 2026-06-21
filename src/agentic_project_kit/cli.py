@@ -9,6 +9,7 @@ from agentic_project_kit.cli_commands.evidence import app as evidence_app
 from agentic_project_kit.cli_commands.github import register_github_commands
 from agentic_project_kit.cli_commands.governance import governance_app
 from agentic_project_kit.cli_commands.handoff import handoff_app
+from agentic_project_kit.cli_commands.human_workflows import release_flow_app, work_app
 from agentic_project_kit.cli_commands.init import register_init_command
 from agentic_project_kit.cli_commands.pass_already_done import app as pass_already_done_app
 from agentic_project_kit.cli_commands.patterns import patterns_app
@@ -74,6 +75,8 @@ register_validation_commands(app)
 register_patch_preflight_command(app)
 register_transfer_post_merge_complete_command(transfer_app)
 register_removed_ns_commands(transfer_app)
+app.add_typer(work_app, name="work")
+app.add_typer(release_flow_app, name="release")
 app.add_typer(workflow_app, name="workflow")
 app.add_typer(workflow_guard_app, name="workflow-guard")
 app.add_typer(rule_registry_app, name="rule-registry")

@@ -38,7 +38,12 @@ def test_agentic_kit_command_reference_is_current() -> None:
     assert "agentic-kit release-plan" in qualified
     assert "agentic-kit release-preflight" in qualified
     assert "agentic-kit release-check" in qualified
-    assert "agentic-kit release prepare" not in qualified
+    assert "agentic-kit release prepare" in qualified
+    assert "agentic-kit release ready" in qualified
+    assert "agentic-kit work start" in qualified
+    assert "agentic-kit work check" in qualified
+    assert "agentic-kit work finish" in qualified
+    assert "agentic-kit work recover" in qualified
     assert "agentic-kit release check" not in qualified
 
 
