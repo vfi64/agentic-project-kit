@@ -14,6 +14,64 @@ def _completed(argv: list[str], stdout: str = "", stderr: str = "", returncode: 
     return subprocess.CompletedProcess(argv, returncode, stdout, stderr)
 
 
+
+def _write_minimal_meta_preference_rules(root: Path) -> None:
+    safety = root / ".agentic" / "transfer_safety_rules.yaml"
+    protocol = root / ".agentic" / "transfer" / "one_command_transfer_protocol.yaml"
+    safety.parent.mkdir(parents=True, exist_ok=True)
+    protocol.parent.mkdir(parents=True, exist_ok=True)
+    safety.write_text(
+        "\n".join(
+            [
+                "canonical_transfer_files:",
+                "  inbox: .agentic/transfer/inbox/next_command.py.txt",
+                "  outbox: .agentic/transfer/outbox/last_result.txt",
+                "transfer_priorities: []",
+                "known_failure_classes: []",
+                "preflight_rules: []",
+                "post_patch_rules: []",
+                "llm_work_order_contract:",
+                "  status: active",
+                "  required_format: python_script",
+                "  applies_to:",
+                "    - copy_paste_blocks",
+                "    - transfer_file_next_command",
+                "  shell_usage: outer_logging_wrapper_only",
+                "  rule: All assistant-issued work orders must be Python scripts. Shell may only be used as a minimal local runner for logging, return-code capture, and invoking the Python script.",
+                "meta_command_preference:",
+                "  priority: primary_path",
+                "  preferred_commands:",
+                "    work_start: agentic-kit work start",
+                "  fallback_rule: Low-level commands require a reason.",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    protocol.write_text(
+        "\n".join(
+            [
+                "llm_work_order_contract:",
+                "  status: active",
+                "  required_format: python_script",
+                "  transfer_file:",
+                "    canonical_inbox: .agentic/transfer/inbox/next_command.py.txt",
+                "    allowed_payload: python_script",
+                "    shell_commands_allowed: false",
+                "  copy_paste:",
+                "    required_payload: python_script",
+                "    shell_commands_allowed: false",
+                "    shell_wrapper_allowed_for_logging: true",
+                "meta_command_preference:",
+                "  preferred_entrypoints:",
+                "    - agentic-kit release ready",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+
 def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
     calls: list[list[str]] = []
 
@@ -747,6 +805,7 @@ def test_standard_error_scan_reports_pass_when_guard_steps_pass(monkeypatch, tmp
     (tmp_path / "tests").mkdir()
     (tmp_path / "docs/reference").mkdir(parents=True)
     (tmp_path / ".agentic").mkdir()
+    _write_minimal_meta_preference_rules(tmp_path)
     (tmp_path / "docs/reference/agentic-kit-commands.json").write_text('{"commands": []}\n', encoding="utf-8")
 
     calls: list[list[str]] = []
@@ -784,6 +843,7 @@ def test_standard_error_scan_blocks_failed_required_step(monkeypatch, tmp_path: 
     (tmp_path / "tests").mkdir()
     (tmp_path / "docs/reference").mkdir(parents=True)
     (tmp_path / ".agentic").mkdir()
+    _write_minimal_meta_preference_rules(tmp_path)
     (tmp_path / "docs/reference/agentic-kit-commands.json").write_text('{"commands": []}\n', encoding="utf-8")
 
     def fake_run(argv, *args, **kwargs):
@@ -822,6 +882,7 @@ def test_standard_error_scan_ignores_historical_planning_docs(monkeypatch, tmp_p
         encoding="utf-8",
     )
     (tmp_path / ".agentic").mkdir()
+    _write_minimal_meta_preference_rules(tmp_path)
     (tmp_path / "docs/reference/agentic-kit-commands.json").write_text('{"commands": []}\n', encoding="utf-8")
 
     def fake_run(argv, *args, **kwargs):
@@ -854,6 +915,7 @@ def test_standard_error_scan_without_before_release_does_not_require_post_merge_
     (tmp_path / "tests").mkdir()
     (tmp_path / "docs/reference").mkdir(parents=True)
     (tmp_path / ".agentic").mkdir()
+    _write_minimal_meta_preference_rules(tmp_path)
     (tmp_path / "docs/reference/agentic-kit-commands.json").write_text('{"commands": []}\n', encoding="utf-8")
 
     calls: list[list[str]] = []
@@ -891,6 +953,7 @@ def test_standard_error_scan_before_release_requires_post_merge_check(monkeypatc
     (tmp_path / "tests").mkdir()
     (tmp_path / "docs/reference").mkdir(parents=True)
     (tmp_path / ".agentic").mkdir()
+    _write_minimal_meta_preference_rules(tmp_path)
     (tmp_path / "docs/reference/agentic-kit-commands.json").write_text('{"commands": []}\n', encoding="utf-8")
 
     calls: list[list[str]] = []
@@ -920,3 +983,313 @@ def test_standard_error_scan_before_release_requires_post_merge_check(monkeypatc
 
     assert result.exit_code == 0, result.output
     assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] for call in calls)
+
+
+def test_transfer_meta_command_preference_header_is_rendered_from_rule_files(tmp_path: Path):
+    from agentic_project_kit.cli_commands.transfer import _render_transfer_meta_command_preference_header
+
+    safety = tmp_path / ".agentic" / "transfer_safety_rules.yaml"
+    protocol = tmp_path / ".agentic" / "transfer" / "one_command_transfer_protocol.yaml"
+    safety.parent.mkdir(parents=True)
+    protocol.parent.mkdir(parents=True)
+
+    safety.write_text(
+        "\n".join(
+            [
+                "meta_command_preference:",
+                "  priority: primary_path",
+                "  preferred_commands:",
+                "    work_start: agentic-kit work start",
+                "    work_check: agentic-kit work check",
+                "  fallback_rule: Low-level commands require a reason.",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    protocol.write_text(
+        "\n".join(
+            [
+                "meta_command_preference:",
+                "  preferred_entrypoints:",
+                "    - agentic-kit release ready",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    header = _render_transfer_meta_command_preference_header(tmp_path)
+
+    assert "source: dynamic-from-rule-files" in header
+    assert "agentic-kit work start" in header
+    assert "agentic-kit work check" in header
+    assert "agentic-kit release ready" in header
+    assert "Low-level commands require a reason." in header
+
+
+def test_transfer_meta_command_preference_header_changes_when_rule_file_changes(tmp_path: Path):
+    from agentic_project_kit.cli_commands.transfer import _render_transfer_meta_command_preference_header
+
+    safety = tmp_path / ".agentic" / "transfer_safety_rules.yaml"
+    protocol = tmp_path / ".agentic" / "transfer" / "one_command_transfer_protocol.yaml"
+    safety.parent.mkdir(parents=True)
+    protocol.parent.mkdir(parents=True)
+    protocol.write_text("meta_command_preference:\n  preferred_entrypoints: []\n", encoding="utf-8")
+
+    safety.write_text(
+        "meta_command_preference:\n  preferred_commands:\n    work_start: agentic-kit work start\n",
+        encoding="utf-8",
+    )
+    first = _render_transfer_meta_command_preference_header(tmp_path)
+
+    safety.write_text(
+        "meta_command_preference:\n  preferred_commands:\n    work_recover: agentic-kit work recover\n",
+        encoding="utf-8",
+    )
+    second = _render_transfer_meta_command_preference_header(tmp_path)
+
+    assert "agentic-kit work start" in first
+    assert "agentic-kit work recover" in second
+    assert "agentic-kit work start" not in second
+
+
+def test_meta_command_preference_sources_are_explicit_yaml_rule_files(tmp_path: Path):
+    from agentic_project_kit.cli_commands.transfer import _meta_command_preference_source_paths
+
+    sources = {str(path.relative_to(tmp_path)) for path in _meta_command_preference_source_paths(tmp_path)}
+
+    assert sources == {
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/transfer/one_command_transfer_protocol.yaml",
+    }
+
+
+def test_static_meta_preference_projection_gate_blocks_yaml_json_projections(tmp_path: Path):
+    from agentic_project_kit.cli_commands.transfer import _scan_static_meta_preference_projection_drift
+
+    safety = tmp_path / ".agentic" / "transfer_safety_rules.yaml"
+    protocol = tmp_path / ".agentic" / "transfer" / "one_command_transfer_protocol.yaml"
+    safety.parent.mkdir(parents=True)
+    protocol.parent.mkdir(parents=True)
+    safety.write_text("meta_command_preference:\n  priority: primary_path\n", encoding="utf-8")
+    protocol.write_text("meta_command_preference:\n  preferred_entrypoints: []\n", encoding="utf-8")
+
+    projected_json = tmp_path / "docs" / "reports" / "handoff-packages" / "latest" / "execution_contract.json"
+    projected_json.parent.mkdir(parents=True)
+    projected_json.write_text('{"meta_command_preference:": {"priority": "primary_path"}}\n', encoding="utf-8")
+
+    result = _scan_static_meta_preference_projection_drift(tmp_path)
+
+    assert result["status"] == "BLOCKED"
+    assert result["matches"][0]["path"].endswith("execution_contract.json")
+
+
+def test_static_meta_preference_projection_gate_allows_rule_sources_only(tmp_path: Path):
+    from agentic_project_kit.cli_commands.transfer import _scan_static_meta_preference_projection_drift
+
+    safety = tmp_path / ".agentic" / "transfer_safety_rules.yaml"
+    protocol = tmp_path / ".agentic" / "transfer" / "one_command_transfer_protocol.yaml"
+    safety.parent.mkdir(parents=True)
+    protocol.parent.mkdir(parents=True)
+    safety.write_text("meta_command_preference:\n  priority: primary_path\n", encoding="utf-8")
+    protocol.write_text("meta_command_preference:\n  preferred_entrypoints: []\n", encoding="utf-8")
+
+    reference_doc = tmp_path / "docs" / "reference" / "HUMAN_WORKFLOW_COMMANDS.md"
+    reference_doc.parent.mkdir(parents=True)
+    reference_doc.write_text(
+        "Policy is defined in .agentic/transfer_safety_rules.yaml.\n",
+        encoding="utf-8",
+    )
+
+    result = _scan_static_meta_preference_projection_drift(tmp_path)
+
+    assert result["status"] == "PASS"
+    assert result["matches"] == []
+
+
+def test_transfer_meta_command_preference_header_is_dynamic_from_rule_files(tmp_path: Path):
+    from agentic_project_kit.cli_commands.transfer import _render_transfer_meta_command_preference_header
+
+    safety = tmp_path / ".agentic" / "transfer_safety_rules.yaml"
+    protocol = tmp_path / ".agentic" / "transfer" / "one_command_transfer_protocol.yaml"
+    safety.parent.mkdir(parents=True)
+    protocol.parent.mkdir(parents=True)
+    protocol.write_text("meta_command_preference:\n  preferred_entrypoints: []\n", encoding="utf-8")
+
+    safety.write_text(
+        "meta_command_preference:\n  preferred_commands:\n    work_start: agentic-kit work start\n",
+        encoding="utf-8",
+    )
+    first = _render_transfer_meta_command_preference_header(tmp_path)
+
+    safety.write_text(
+        "meta_command_preference:\n  preferred_commands:\n    work_recover: agentic-kit work recover\n",
+        encoding="utf-8",
+    )
+    second = _render_transfer_meta_command_preference_header(tmp_path)
+
+    assert "source: dynamic-from-rule-files" in first
+    assert "agentic-kit work start" in first
+    assert "agentic-kit work recover" in second
+    assert "agentic-kit work start" not in second
+
+
+def test_local_to_llm_transfer_header_is_rendered_from_rule_files(tmp_path: Path):
+    from agentic_project_kit.cli_commands.transfer import _render_local_to_llm_transfer_header
+
+    safety = tmp_path / ".agentic" / "transfer_safety_rules.yaml"
+    protocol = tmp_path / ".agentic" / "transfer" / "one_command_transfer_protocol.yaml"
+    safety.parent.mkdir(parents=True)
+    protocol.parent.mkdir(parents=True)
+    safety.write_text(
+        "meta_command_preference:\n"
+        "  priority: primary_path\n"
+        "  preferred_commands:\n"
+        "    work_start: agentic-kit work start\n"
+        "  fallback_rule: Low-level commands require a reason.\n",
+        encoding="utf-8",
+    )
+    protocol.write_text(
+        "llm_work_order_contract:\n"
+        "  required_format: python_script\n"
+        "  transfer_file:\n"
+        "    canonical_inbox: .agentic/transfer/inbox/next_command.py.txt\n"
+        "    shell_commands_allowed: false\n"
+        "meta_command_preference:\n"
+        "  preferred_entrypoints:\n"
+        "    - agentic-kit release ready\n",
+        encoding="utf-8",
+    )
+
+    header = _render_local_to_llm_transfer_header(tmp_path)
+
+    assert "META_COMMAND_PREFERENCE:" in header
+    assert "source: dynamic-from-rule-files" in header
+    assert "agentic-kit work start" in header
+    assert "agentic-kit release ready" in header
+    assert "Low-level commands require a reason." in header
+
+
+def test_local_to_llm_transfer_header_prefix_changes_with_rule_files(tmp_path: Path):
+    from agentic_project_kit.cli_commands.transfer import _prefix_local_to_llm_transfer_header
+
+    safety = tmp_path / ".agentic" / "transfer_safety_rules.yaml"
+    protocol = tmp_path / ".agentic" / "transfer" / "one_command_transfer_protocol.yaml"
+    safety.parent.mkdir(parents=True)
+    protocol.parent.mkdir(parents=True)
+    protocol.write_text("meta_command_preference:\n  preferred_entrypoints: []\n", encoding="utf-8")
+
+    safety.write_text(
+        "meta_command_preference:\n  preferred_commands:\n    work_start: agentic-kit work start\n",
+        encoding="utf-8",
+    )
+    first = _prefix_local_to_llm_transfer_header("BODY\n", root=tmp_path)
+
+    safety.write_text(
+        "meta_command_preference:\n  preferred_commands:\n    work_check: agentic-kit work check\n",
+        encoding="utf-8",
+    )
+    second = _prefix_local_to_llm_transfer_header("BODY\n", root=tmp_path)
+
+    assert "agentic-kit work start" in first
+    assert "agentic-kit work check" in second
+    assert "agentic-kit work start" not in second
+    assert second.endswith("BODY\n")
+
+
+def test_command_composition_check_blocks_avoidable_low_level_work_finish_sequence():
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "command-composition-check",
+            "--sequence-command",
+            "agentic-kit transfer protected-diff-plan",
+            "--sequence-command",
+            "agentic-kit transfer commit",
+            "--sequence-command",
+            "agentic-kit transfer push-current",
+            "--sequence-command",
+            "agentic-kit transfer pr-create-complete",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "BLOCKED"
+    assert "avoidable_low_level_sequences" in payload["blockers"]
+    assert payload["avoidable_low_level_sequences"][0]["preferred_meta_command"] == "agentic-kit work finish"
+
+
+def test_command_composition_check_accepts_sequence_when_meta_command_is_present():
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "command-composition-check",
+            "--sequence-command",
+            "agentic-kit work finish",
+            "--sequence-command",
+            "agentic-kit transfer protected-diff-plan",
+            "--sequence-command",
+            "agentic-kit transfer commit",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["avoidable_low_level_sequences"] == []
+
+
+def test_transfer_log_header_and_upload_hint_commands():
+    header = CliRunner().invoke(
+        app,
+        ["transfer", "log-header", "--log-path", "tmp/example.log"],
+    )
+    assert header.exit_code == 0, header.output
+    assert "LOCAL_TO_LLM_COPY_PASTE_LOG_HEADER" in header.output
+    assert "dynamic-from-rule-files" in header.output
+
+    hint = CliRunner().invoke(
+        app,
+        ["transfer", "log-upload-hint", "--log-path", "tmp/example.log", "--rc", "1"],
+    )
+    assert hint.exit_code == 0, hint.output
+    assert "ACTION REQUIRED FOR COPY-AND-PASTE COMMUNICATION" in hint.output
+    assert "LOG  =  tmp/example.log" in hint.output
+    assert "RC   =  1" in hint.output
+    assert "RC=1   error / command failed; inspect the log before continuing" in hint.output
+
+
+def test_standard_error_scan_reports_local_to_llm_log_header_gate(tmp_path: Path):
+    (tmp_path / "src").mkdir()
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "docs").mkdir()
+    _write_minimal_meta_preference_rules(tmp_path)
+
+    result = CliRunner().invoke(app, ["transfer", "standard-error-scan", "--root", str(tmp_path), "--json"])
+
+    assert result.exit_code in {0, 2}, result.output
+    payload = json.loads(result.stdout)
+    assert "local_to_llm_log_header_scan" in payload
+    assert payload["local_to_llm_log_header_scan"]["contains_meta_command_preference"] is True
+    assert payload["local_to_llm_log_header_scan"]["contains_dynamic_source_marker"] is True
+
+
+def test_standard_error_scan_reports_python_only_work_order_contract_gate(tmp_path: Path):
+    (tmp_path / "src").mkdir()
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "docs").mkdir()
+    _write_minimal_meta_preference_rules(tmp_path)
+
+    result = CliRunner().invoke(app, ["transfer", "standard-error-scan", "--root", str(tmp_path), "--json"])
+
+    assert result.exit_code in {0, 2}, result.output
+    payload = json.loads(result.stdout)
+    assert payload["llm_work_order_contract_scan"]["status"] == "PASS"
+    assert payload["llm_work_order_contract_scan"]["required_format"] == "python_script"
+    assert payload["llm_work_order_contract_scan"]["canonical_inbox"].endswith("next_command.py.txt")
+    assert payload["llm_work_order_contract_scan"]["shell_commands_allowed"] is False

@@ -449,3 +449,31 @@ patch_generation_policy:
   avoid_raw_newlines_inside_generated_python_string_literals: true
   prefer_small_python_patch_scripts_with_stable_checks: true
   prefer_yaml_parse_modify_dump_for_governance_yaml: true
+
+meta_command_preference:
+  status: active
+  priority: primary_path
+  summary: Human workflow meta commands are the preferred control plane for routine agentic-kit work.
+  preferred_commands:
+    work_start: "agentic-kit work start"
+    work_check: "agentic-kit work check"
+    work_finish: "agentic-kit work finish"
+    work_recover: "agentic-kit work recover"
+    release_ready: "agentic-kit release ready"
+    release_prepare: "agentic-kit release prepare"
+  fallback_rule: Low-level transfer/release commands may be used only for targeted diagnostics, recovery, or unsupported flows, and the reason must be explicit.
+  composition_gate: Command compositions should prefer the matching meta command over long low-level command chains.
+
+llm_work_order_contract:
+  status: active
+  required_format: python_script
+  applies_to:
+    - copy_paste_blocks
+    - transfer_file_next_command
+  shell_usage: outer_logging_wrapper_only
+  rule: All assistant-issued work orders must be Python scripts. Shell may only be used as a minimal local runner for logging, return-code capture, and invoking the Python script.
+  enforced_by:
+    - transfer standard-error-scan
+    - transfer safety header
+    - tests
+

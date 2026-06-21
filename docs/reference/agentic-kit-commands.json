@@ -5271,6 +5271,20 @@
           "secondary_opts": []
         },
         {
+          "default": null,
+          "help": "Command sequence entry to check for avoidable low-level workflow chains. Repeatable.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "sequence_commands",
+          "opts": [
+            "--sequence-command"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
           "default": "PosixPath('.')",
           "help": "Project root.",
           "is_flag": false,
@@ -6472,6 +6486,72 @@
         "inspect"
       ],
       "qualified_name": "agentic-kit transfer inspect"
+    },
+    {
+      "group": "transfer",
+      "help": "Render the dynamic local-to-LLM copy/paste log header from rule files.",
+      "name": "log-header",
+      "params": [
+        {
+          "default": "",
+          "help": "Optional log path to include in the dynamic local-to-LLM header.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "log_path",
+          "opts": [
+            "--log-path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "log-header"
+      ],
+      "qualified_name": "agentic-kit transfer log-header"
+    },
+    {
+      "group": "transfer",
+      "help": "Render the terminal hint for copy/paste communication with the LLM.",
+      "name": "log-upload-hint",
+      "params": [
+        {
+          "default": null,
+          "help": "Log file path to mention in the terminal upload hint.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "log_path",
+          "opts": [
+            "--log-path"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional return code to explain in the upload hint.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "return_code",
+          "opts": [
+            "--rc"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "log-upload-hint"
+      ],
+      "qualified_name": "agentic-kit transfer log-upload-hint"
     },
     {
       "group": "transfer",

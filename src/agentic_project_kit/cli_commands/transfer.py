@@ -8,6 +8,8 @@ import subprocess
 from pathlib import Path
 
 import typer
+from agentic_project_kit.transfer_safety_context import render_local_to_llm_log_header, render_local_to_llm_log_upload_hint, build_transfer_safety_header
+import yaml
 
 from agentic_project_kit.llm_context_carriers import refresh_llm_context_carriers
 from agentic_project_kit.local_garbage_collector import run_local_garbage_collector
@@ -293,6 +295,81 @@ def _load_command_reference_names(root: Path) -> set[str]:
     return names
 
 
+def _detect_avoidable_low_level_meta_command_sequences(sequence_commands: list[str] | None) -> list[dict[str, object]]:
+    if not sequence_commands:
+        return []
+
+    meta_command_sequences = {
+        "work-start": {
+            "meta_command": "agentic-kit work start",
+            "low_level_markers": {
+                "agentic-kit transfer sync-main",
+                "agentic-kit rules acknowledge",
+                "agentic-kit transfer post-merge-check",
+                "agentic-kit transfer repo-status",
+            },
+        },
+        "work-check": {
+            "meta_command": "agentic-kit work check",
+            "low_level_markers": {
+                "agentic-kit transfer command-reference-check",
+                "agentic-kit docs-audit",
+                "agentic-kit audit-doc-currency",
+            },
+        },
+        "work-finish": {
+            "meta_command": "agentic-kit work finish",
+            "low_level_markers": {
+                "agentic-kit transfer protected-diff-plan",
+                "agentic-kit transfer commit",
+                "agentic-kit transfer push-current",
+                "agentic-kit transfer pr-create-complete",
+            },
+        },
+        "work-recover": {
+            "meta_command": "agentic-kit work recover",
+            "low_level_markers": {
+                "agentic-kit transfer restore-known-volatile",
+                "agentic-kit transfer normalize-session",
+                "agentic-kit transfer conflict-status",
+                "agentic-kit transfer patch-cycle-status",
+            },
+        },
+        "release-ready": {
+            "meta_command": "agentic-kit release ready",
+            "low_level_markers": {
+                "agentic-kit transfer standard-error-scan",
+                "agentic-kit release-status",
+            },
+        },
+        "release-prepare": {
+            "meta_command": "agentic-kit release prepare",
+            "low_level_markers": {
+                "agentic-kit release-notes-generate",
+                "agentic-kit release-prep",
+            },
+        },
+    }
+
+    normalized_sequence = [" ".join(command.split()) for command in sequence_commands]
+    sequence_blob = "\n".join(normalized_sequence)
+    avoidable: list[dict[str, object]] = []
+    for sequence_name, rule in meta_command_sequences.items():
+        meta_command = str(rule["meta_command"])
+        markers = set(rule["low_level_markers"])
+        matched_markers = sorted(marker for marker in markers if marker in sequence_blob)
+        if len(matched_markers) >= 2 and meta_command not in sequence_blob:
+            avoidable.append(
+                {
+                    "sequence": sequence_name,
+                    "preferred_meta_command": meta_command,
+                    "matched_low_level_markers": matched_markers,
+                }
+            )
+    return avoidable
+
+
+
 @transfer_app.command("command-composition-check")
 def command_composition_check_command(
     test_paths: list[Path] | None = typer.Option(
@@ -305,11 +382,17 @@ def command_composition_check_command(
         "--command",
         help="agentic-kit command prefix that must exist in docs/reference/agentic-kit-commands.json. Repeatable.",
     ),
+    sequence_commands: list[str] | None = typer.Option(
+        None,
+        "--sequence-command",
+        help="Command sequence entry to check for avoidable low-level workflow chains. Repeatable.",
+    ),
     root: Path = typer.Option(Path("."), "--root", help="Project root."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
 ) -> None:
     """Block common copied-command mistakes before running patch, transfer, or release gates."""
     project_root = root.resolve()
+    avoidable_low_level_sequences = _detect_avoidable_low_level_meta_command_sequences(sequence_commands)
     missing_test_paths: list[str] = []
     existing_test_paths: list[str] = []
     for raw_path in test_paths or []:
@@ -343,6 +426,8 @@ def command_composition_check_command(
         blockers.append("command_reference_unavailable")
     if invalid_commands:
         blockers.append("invalid_agentic_kit_commands")
+    if avoidable_low_level_sequences:
+        blockers.append("avoidable_low_level_sequences")
 
     result_status = "PASS" if not blockers else "BLOCKED"
     next_action = (
@@ -365,6 +450,7 @@ def command_composition_check_command(
             "valid": valid_commands,
             "invalid": invalid_commands,
         },
+        "avoidable_low_level_sequences": avoidable_low_level_sequences,
         "next_action": next_action,
     }
 
@@ -379,11 +465,172 @@ def command_composition_check_command(
             fields={
                 "MISSING_TEST_PATHS": len(missing_test_paths),
                 "INVALID_COMMANDS": len(invalid_commands),
+                "AVOIDABLE_LOW_LEVEL_SEQUENCES": len(avoidable_low_level_sequences),
             },
         )
 
     if result_status != "PASS":
         raise typer.Exit(code=2)
+
+
+def _load_yaml_mapping(path: Path) -> dict[str, object]:
+    if not path.exists():
+        return {}
+    try:
+        loaded = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    return loaded if isinstance(loaded, dict) else {}
+
+
+def _meta_command_preference_source_paths(root: Path) -> set[Path]:
+    """Return the explicit YAML rule sources for active meta-command policy."""
+    return {
+        root / ".agentic" / "transfer_safety_rules.yaml",
+        root / ".agentic" / "transfer" / "one_command_transfer_protocol.yaml",
+    }
+
+
+def _load_transfer_meta_command_preference(root: Path) -> dict[str, object]:
+    """Load local-to-LLM meta-command preference dynamically from rule sources."""
+    safety = _load_yaml_mapping(root / ".agentic" / "transfer_safety_rules.yaml")
+    protocol = _load_yaml_mapping(root / ".agentic" / "transfer" / "one_command_transfer_protocol.yaml")
+
+    safety_pref = safety.get("meta_command_preference")
+    protocol_pref = protocol.get("meta_command_preference")
+
+    preferred_commands: list[str] = []
+    if isinstance(safety_pref, dict):
+        raw = safety_pref.get("preferred_commands")
+        if isinstance(raw, dict):
+            preferred_commands.extend(str(value) for value in raw.values())
+        elif isinstance(raw, list):
+            preferred_commands.extend(str(value) for value in raw)
+    if isinstance(protocol_pref, dict):
+        raw = protocol_pref.get("preferred_entrypoints")
+        if isinstance(raw, list):
+            preferred_commands.extend(str(value) for value in raw)
+
+    unique_commands: list[str] = []
+    seen: set[str] = set()
+    for command in preferred_commands:
+        if command and command not in seen:
+            seen.add(command)
+            unique_commands.append(command)
+
+    fallback_rule = ""
+    priority = ""
+    if isinstance(safety_pref, dict):
+        fallback_rule = str(safety_pref.get("fallback_rule") or "")
+        priority = str(safety_pref.get("priority") or "")
+    if not fallback_rule and isinstance(protocol_pref, dict):
+        fallback_rule = str(protocol_pref.get("rule") or "")
+
+    return {
+        "status": "active" if unique_commands else "missing",
+        "priority": priority or "primary_path",
+        "preferred_commands": unique_commands,
+        "fallback_rule": fallback_rule,
+        "sources": sorted(str(path) for path in _meta_command_preference_source_paths(root)),
+    }
+
+
+def _render_transfer_meta_command_preference_header(root: Path) -> str:
+    preference = _load_transfer_meta_command_preference(root)
+    if preference["status"] != "active":
+        return ""
+    lines = [
+        "META_COMMAND_PREFERENCE:",
+        f"  status: {preference['status']}",
+        f"  priority: {preference['priority']}",
+        "  source: dynamic-from-rule-files",
+        "  preferred_commands:",
+    ]
+    for command in preference["preferred_commands"]:
+        lines.append(f"    - {command}")
+    fallback = str(preference.get("fallback_rule") or "").strip()
+    if fallback:
+        lines.append(f"  fallback_rule: {fallback}")
+    lines.append("  low_level_fallback_requires_reason: true")
+    return "\n".join(lines)
+
+
+def _render_local_to_llm_transfer_header(root: Path) -> str:
+    """Render the local-to-LLM transfer header from current rule sources."""
+    sections: list[str] = []
+    meta_header = _render_transfer_meta_command_preference_header(root).strip()
+    if meta_header:
+        sections.append(meta_header)
+    return "\n\n".join(sections).strip()
+
+
+
+def _prefix_local_to_llm_transfer_header(content: str, *, root: Path | None = None) -> str:
+    """Prefix local-to-LLM transfer content with a dynamically rendered header."""
+    effective_root = root or Path(".")
+    header = _render_local_to_llm_transfer_header(effective_root).strip()
+    if not header:
+        return content
+    if content.startswith("META_COMMAND_PREFERENCE:"):
+        return content
+    return f"{header}\n\n{content}"
+
+
+
+def _scan_static_meta_preference_projection_drift(root: Path) -> dict[str, object]:
+    """Block static active meta-command policy outside explicit YAML rule sources.
+
+    This scans projections and generated/compiled carriers. It deliberately does
+    not scan implementation source code, because renderer code necessarily
+    contains marker strings such as META_COMMAND_PREFERENCE.
+    """
+    allowed_sources = {path.resolve() for path in _meta_command_preference_source_paths(root)}
+    scanned_roots = [
+        root / ".agentic",
+        root / "docs",
+    ]
+    forbidden_markers = [
+        "meta_command_preference:",
+        "META_COMMAND_PREFERENCE:",
+    ]
+    matches: list[dict[str, object]] = []
+
+    for scan_root in scanned_roots:
+        if not scan_root.exists():
+            continue
+        for candidate in scan_root.rglob("*"):
+            if not candidate.is_file():
+                continue
+            if any(part in {".git", ".venv", "tmp", "__pycache__"} for part in candidate.parts):
+                continue
+            if candidate.suffix not in {"", ".md", ".txt", ".yaml", ".yml", ".json"}:
+                continue
+            if candidate.resolve() in allowed_sources:
+                continue
+            try:
+                content = candidate.read_text(encoding="utf-8")
+            except UnicodeDecodeError:
+                continue
+            for marker in forbidden_markers:
+                if marker not in content:
+                    continue
+                line_numbers = [
+                    index
+                    for index, line in enumerate(content.splitlines(), start=1)
+                    if marker in line
+                ]
+                matches.append(
+                    {
+                        "path": str(candidate.relative_to(root)),
+                        "marker": marker,
+                        "line_numbers": line_numbers,
+                    }
+                )
+    return {
+        "status": "PASS" if not matches else "BLOCKED",
+        "allowed_static_sources": sorted(str(path.relative_to(root)) for path in _meta_command_preference_source_paths(root)),
+        "matches": matches,
+    }
 
 
 def _latest_release_tag() -> str:
@@ -467,6 +714,55 @@ def _known_bad_pattern_scan(root: Path) -> dict[str, object]:
                             }
                         )
     return {"patterns": patterns, "matches": matches}
+
+
+def _scan_llm_work_order_contract(root: Path) -> dict[str, object]:
+    """Verify that LLM work orders are contractually Python scripts."""
+    try:
+        header = build_transfer_safety_header(root)
+    except Exception as exc:
+        return {
+            "status": "BLOCKED",
+            "error": str(exc),
+            "required_format": None,
+            "canonical_inbox": None,
+            "shell_commands_allowed": None,
+        }
+
+    contract = header.get("llm_work_order_contract")
+    if not isinstance(contract, dict):
+        return {
+            "status": "BLOCKED",
+            "error": "llm_work_order_contract_missing",
+            "required_format": None,
+            "canonical_inbox": None,
+            "shell_commands_allowed": None,
+        }
+
+    transfer_file = contract.get("transfer_file")
+    if not isinstance(transfer_file, dict):
+        transfer_file = {}
+
+    required_format = contract.get("required_format")
+    canonical_inbox = transfer_file.get("canonical_inbox")
+    shell_commands_allowed = transfer_file.get("shell_commands_allowed")
+
+    failures: list[str] = []
+    if required_format != "python_script":
+        failures.append("required_format_not_python_script")
+    if not str(canonical_inbox or "").endswith(".py.txt"):
+        failures.append("canonical_inbox_not_python_script_file")
+    if shell_commands_allowed is not False:
+        failures.append("transfer_file_allows_shell_commands")
+
+    return {
+        "status": "PASS" if not failures else "BLOCKED",
+        "failures": failures,
+        "required_format": required_format,
+        "canonical_inbox": canonical_inbox,
+        "shell_commands_allowed": shell_commands_allowed,
+    }
+
 
 
 @transfer_app.command("standard-error-scan")
@@ -607,6 +903,20 @@ def standard_error_scan_command(
     step("standard-gates-audit-suite", ["./.venv/bin/agentic-kit", "standard-gates-audit-suite"])
 
     pattern_scan = _known_bad_pattern_scan(project_root)
+    llm_work_order_contract_scan = _scan_llm_work_order_contract(project_root)
+    local_to_llm_log_header = render_local_to_llm_log_header(project_root)
+    local_to_llm_log_header_contains_meta_preference = (
+        "META_COMMAND_PREFERENCE" in local_to_llm_log_header
+        or "meta_command_preference" in local_to_llm_log_header
+    )
+    local_to_llm_log_header_scan = {
+        "status": "PASS"
+        if local_to_llm_log_header_contains_meta_preference and "dynamic-from-rule-files" in local_to_llm_log_header
+        else "BLOCKED",
+        "contains_meta_command_preference": local_to_llm_log_header_contains_meta_preference,
+        "contains_dynamic_source_marker": "dynamic-from-rule-files" in local_to_llm_log_header,
+    }
+    static_meta_preference_projection_scan = _scan_static_meta_preference_projection_drift(project_root)
     blockers: list[str] = []
     warnings: list[str] = []
 
@@ -616,6 +926,12 @@ def standard_error_scan_command(
 
     if pattern_scan["matches"]:
         warnings.append("known_bad_patterns_found")
+    if llm_work_order_contract_scan["status"] != "PASS":
+        blockers.append("llm_work_order_contract_not_python_script")
+    if local_to_llm_log_header_scan["status"] != "PASS":
+        blockers.append("local_to_llm_log_header_missing_dynamic_meta_preference")
+    if static_meta_preference_projection_scan["matches"]:
+        blockers.append("static_meta_preference_projection_drift")
 
     strict_step = next((item for item in steps if item["name"] == "fresh-context-strict"), None)
     allowance_step = next((item for item in steps if item["name"] == "fresh-context-clean-post-merge-allowance"), None)
@@ -649,6 +965,9 @@ def standard_error_scan_command(
         "warnings": warnings,
         "steps": steps,
         "known_bad_pattern_scan": pattern_scan,
+        "llm_work_order_contract_scan": llm_work_order_contract_scan,
+        "local_to_llm_log_header_scan": local_to_llm_log_header_scan,
+        "static_meta_preference_projection_scan": static_meta_preference_projection_scan,
         "next_action": next_action,
     }
 
@@ -4287,3 +4606,20 @@ def run_sequence_and_log(
 
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
+
+@transfer_app.command("log-header")
+def transfer_log_header_command(
+    log_path: str = typer.Option("", "--log-path", help="Optional log path to include in the dynamic local-to-LLM header."),
+) -> None:
+    """Render the dynamic local-to-LLM copy/paste log header from rule files."""
+    typer.echo(render_local_to_llm_log_header(Path("."), log_path=log_path or None))
+
+
+@transfer_app.command("log-upload-hint")
+def transfer_log_upload_hint_command(
+    log_path: str = typer.Option(..., "--log-path", help="Log file path to mention in the terminal upload hint."),
+    return_code: int | None = typer.Option(None, "--rc", help="Optional return code to explain in the upload hint."),
+) -> None:
+    """Render the terminal hint for copy/paste communication with the LLM."""
+    typer.echo(render_local_to_llm_log_upload_hint(log_path, return_code=return_code))
+
