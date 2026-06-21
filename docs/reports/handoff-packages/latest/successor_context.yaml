@@ -52,6 +52,7 @@
     ],
     "source": "repository files and command references"
   },
+  "release_prep_current_version": "0.4.11",
   "repo": {
     "branch": "docs/post-pr1543-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",

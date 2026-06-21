@@ -1,3 +1,24 @@
+## v0.4.11 - 2026-06-21
+
+- Zenodo DOI verification pending for v0.4.11.
+- Record v0.4.10 DOI closeout metadata
+- Add GUI reference analysis and transfer concept
+- Add patch cycle workflow status renderer
+- Add release lifecycle status model
+- Add deterministic release notes generator
+- Harden release prep current-state currency
+- Harden current-state doc currency audit
+- Harden release status remote checks
+- Harden release notes evidence and drift checks
+- Harden patch cycle status evidence
+- Refresh transfer report carrier after PR1530
+- Use release notes as release-prep summary evidence
+- Guard command composition before release
+- Harden fresh-context carrier staleness handling
+- Add standard error scan before release
+- Add human workflow meta commands
+- Enforce meta-command and Python work-order contracts
+
 ## v0.4.10 - 2026-06-20
 
 - Release metadata prepared for v0.4.10; Zenodo DOI verification pending until the GitHub release is created.
