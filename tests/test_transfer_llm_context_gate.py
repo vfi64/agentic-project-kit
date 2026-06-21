@@ -203,3 +203,73 @@ post_patch_rules: {}
     assert "outbox" in data["valid_contexts"]
     assert "latest_handoff_report" not in data["valid_contexts"]
     assert "latest_handoff_report_stale_or_not_fresh" in data["blockers"]
+
+
+def test_require_fresh_llm_context_can_warn_on_clean_post_merge_carrier_staleness(monkeypatch):
+    from agentic_project_kit.cli_commands import transfer as transfer_cli
+
+    def fake_evaluate(root, *, max_age_minutes, allow_clean_post_merge_carrier_staleness=False):
+        payload = {
+            "schema_version": 1,
+            "kind": "transfer_require_fresh_llm_context_result",
+            "action": "require-fresh-llm-context",
+            "result_status": "WARN" if allow_clean_post_merge_carrier_staleness else "BLOCKED",
+            "final_signal": "d" if allow_clean_post_merge_carrier_staleness else "f",
+            "next_action": "warn",
+            "max_age_minutes": max_age_minutes,
+            "valid_contexts": [],
+            "blockers": [
+                "outbox_missing",
+                "latest_handoff_report_source_hashes_mismatch",
+                "latest_handoff_report_stale_or_not_fresh",
+            ],
+            "checked": {},
+            "allow_clean_post_merge_carrier_staleness": allow_clean_post_merge_carrier_staleness,
+            "clean_post_merge_carrier_staleness_allowed": allow_clean_post_merge_carrier_staleness,
+        }
+        return payload
+
+    monkeypatch.setattr(transfer_cli, "_evaluate_llm_context_freshness", fake_evaluate)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "require-fresh-llm-context",
+            "--allow-clean-post-merge-carrier-staleness",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "WARN"
+    assert payload["clean_post_merge_carrier_staleness_allowed"] is True
+
+
+def test_require_fresh_llm_context_strict_still_blocks_on_carrier_staleness(monkeypatch):
+    from agentic_project_kit.cli_commands import transfer as transfer_cli
+
+    def fake_evaluate(root, *, max_age_minutes, allow_clean_post_merge_carrier_staleness=False):
+        return {
+            "schema_version": 1,
+            "kind": "transfer_require_fresh_llm_context_result",
+            "action": "require-fresh-llm-context",
+            "result_status": "BLOCKED",
+            "final_signal": "f",
+            "next_action": "blocked",
+            "max_age_minutes": max_age_minutes,
+            "valid_contexts": [],
+            "blockers": ["outbox_missing"],
+            "checked": {},
+            "allow_clean_post_merge_carrier_staleness": allow_clean_post_merge_carrier_staleness,
+            "clean_post_merge_carrier_staleness_allowed": False,
+        }
+
+    monkeypatch.setattr(transfer_cli, "_evaluate_llm_context_freshness", fake_evaluate)
+
+    result = CliRunner().invoke(app, ["transfer", "require-fresh-llm-context", "--json"])
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "BLOCKED"

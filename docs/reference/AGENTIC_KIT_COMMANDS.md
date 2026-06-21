@@ -1295,6 +1295,7 @@ Require fresh generated LLM context before transfer planning.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `max_age_minutes` | `TyperOption` | --max-age-minutes | `False` | `60` | Maximum acceptable age of generated LLM context. |
+| `allow_clean_post_merge_carrier_staleness` | `TyperOption` | --allow-clean-post-merge-carrier-staleness | `False` | `False` | Downgrade stale volatile LLM-context carrier state to WARN when post-merge-check is NOOP and the worktree is clean. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer restore-known-volatile`

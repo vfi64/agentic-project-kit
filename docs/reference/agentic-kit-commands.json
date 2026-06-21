@@ -7960,6 +7960,20 @@
         },
         {
           "default": false,
+          "help": "Downgrade stale volatile LLM-context carrier state to WARN when post-merge-check is NOOP and the worktree is clean.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_clean_post_merge_carrier_staleness",
+          "opts": [
+            "--allow-clean-post-merge-carrier-staleness"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
           "help": "Print JSON instead of text.",
           "is_flag": true,
           "metavar": null,
