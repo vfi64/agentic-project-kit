@@ -2696,10 +2696,13 @@ def pr_create_complete_command(
         completed = subprocess.run(argv, text=True, capture_output=True)
         step_payload_status = ""
         try:
-            from agentic_project_kit.release_process_guardrails import rc_from_result_payload
+            from agentic_project_kit.release_process_guardrails import (
+                is_transfer_result_payload,
+                rc_from_result_payload,
+            )
 
             parsed = json.loads(completed.stdout or "{}")
-            if isinstance(parsed, dict):
+            if isinstance(parsed, dict) and is_transfer_result_payload(parsed):
                 derived_rc = rc_from_result_payload(parsed)
                 step_payload_status = str(parsed.get("result_status", parsed.get("status", "")))
                 if completed.returncode == 0 and derived_rc != 0:

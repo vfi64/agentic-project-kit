@@ -152,6 +152,25 @@ def require_release_notes_from_tag(version: str, from_tag: str | None) -> None:
         raise ValueError("--from-tag must point to the previous release, not the release being prepared.")
 
 
+
+def is_transfer_result_payload(payload: dict[str, Any]) -> bool:
+    """Return true only for structured transfer wrapper result payloads.
+
+    GitHub/gh command outputs and unrelated JSON snippets may contain fields such
+    as `state` or `status`; those must not be interpreted as transfer blockers.
+    """
+
+    kind = str(payload.get("kind", ""))
+    action = str(payload.get("action", ""))
+    if kind.startswith("transfer_"):
+        return True
+    if action.startswith(("pr-", "post-merge", "repo-", "sync-", "transfer")) and (
+        "result_status" in payload or "blockers" in payload or "failed_step" in payload
+    ):
+        return True
+    return False
+
+
 def rc_from_result_payload(payload: dict[str, Any]) -> int:
     status = str(payload.get("result_status", payload.get("status", ""))).upper()
     if status == "PASS":

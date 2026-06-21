@@ -142,3 +142,14 @@ def test_pr_complete_invalid_post_merge_complete_message_is_present() -> None:
     source = Path("src/agentic_project_kit/cli_commands/transfer.py").read_text(encoding="utf-8")
     assert "invalid_argument_post_merge_complete" in source
     assert "--post-merge-complete is not valid for transfer pr-complete" in source
+
+
+def test_payload_guard_ignores_unrelated_json() -> None:
+    from agentic_project_kit.release_process_guardrails import is_transfer_result_payload
+
+    assert not is_transfer_result_payload({"state": "OPEN", "number": 1547})
+    assert is_transfer_result_payload({
+        "kind": "transfer_pr_complete_result",
+        "result_status": "BLOCKED",
+        "blockers": ["x"],
+    })
