@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 41b7170b92a403f4867fcbdff1d9977c7673e02a
-  short: 41b7170b
-  subject: Add standard error scan before release (#1539)
+  full: 0e2e54e2f929043116e3f3070f176a6ca3e1be7d
+  short: 0e2e54e2
+  subject: Add human workflow meta commands (#1541)
 last_substantive_work_state:
-  full: 41b7170b92a403f4867fcbdff1d9977c7673e02a
-  short: 41b7170b
-  subject: Add standard error scan before release (#1539)
+  full: 0e2e54e2f929043116e3f3070f176a6ca3e1be7d
+  short: 0e2e54e2
+  subject: Add human workflow meta commands (#1541)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
