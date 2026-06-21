@@ -2404,7 +2404,20 @@ def publish_last_report(
         typer.echo(f"CHAT_REPLY={result['chat_reply']}")
 
 
-def _evaluate_llm_context_freshness(root: Path, *, max_age_minutes: int) -> dict[str, object]:
+def _clean_post_merge_status_is_noop() -> bool:
+    status = repo_status(short=True)
+    if status.returncode != 0 or str(status.stdout).strip():
+        return False
+    post_merge = post_merge_check()
+    return post_merge.returncode == 0 and "result=NOOP" in post_merge.stdout
+
+
+def _evaluate_llm_context_freshness(
+    root: Path,
+    *,
+    max_age_minutes: int,
+    allow_clean_post_merge_carrier_staleness: bool = False,
+) -> dict[str, object]:
     from datetime import datetime, timezone
 
     from agentic_project_kit.llm_execution_context import build_llm_execution_context
@@ -2520,18 +2533,44 @@ def _evaluate_llm_context_freshness(root: Path, *, max_age_minutes: int) -> dict
     # A single fresh, hash-consistent carrier is sufficient. Other stale or
     # missing carriers remain diagnostic findings, but must not block when at
     # least one authoritative local handoff context is valid.
-    result_status = "PASS" if valid_contexts else "BLOCKED"
+    clean_post_merge_carrier_staleness_allowed = (
+        allow_clean_post_merge_carrier_staleness
+        and not valid_contexts
+        and set(blockers).issubset(
+            {
+                "outbox_missing",
+                "latest_handoff_report_source_hashes_mismatch",
+                "latest_handoff_report_stale_or_not_fresh",
+            }
+        )
+        and _clean_post_merge_status_is_noop()
+    )
+    result_status = (
+        "PASS"
+        if valid_contexts
+        else "WARN"
+        if clean_post_merge_carrier_staleness_allowed
+        else "BLOCKED"
+    )
     return {
         "schema_version": 1,
         "kind": "transfer_require_fresh_llm_context_result",
         "action": "require-fresh-llm-context",
         "result_status": result_status,
-        "final_signal": "d" if result_status == "PASS" else "f",
-        "next_action": "Fresh LLM context gate passed; planning may continue." if result_status == "PASS" else "Regenerate and publish fresh LLM context before planning: " + ", ".join(blockers),
+        "final_signal": "d" if result_status in {"PASS", "WARN"} else "f",
+        "next_action": (
+            "Fresh LLM context gate passed; planning may continue."
+            if result_status == "PASS"
+            else "Clean post-merge state detected; stale volatile LLM-context carriers are a warning, not a product blocker."
+            if result_status == "WARN"
+            else "Regenerate and publish fresh LLM context before planning: " + ", ".join(blockers)
+        ),
         "max_age_minutes": max_age_minutes,
         "valid_contexts": valid_contexts,
         "blockers": blockers,
         "checked": checked,
+        "allow_clean_post_merge_carrier_staleness": allow_clean_post_merge_carrier_staleness,
+        "clean_post_merge_carrier_staleness_allowed": clean_post_merge_carrier_staleness_allowed,
     }
 
 
@@ -2595,12 +2634,21 @@ def require_fresh_llm_context(
         min=1,
         help="Maximum acceptable age of generated LLM context.",
     ),
+    allow_clean_post_merge_carrier_staleness: bool = typer.Option(
+        False,
+        "--allow-clean-post-merge-carrier-staleness",
+        help="Downgrade stale volatile LLM-context carrier state to WARN when post-merge-check is NOOP and the worktree is clean.",
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     """Require fresh generated LLM context before transfer planning."""
-    payload = _evaluate_llm_context_freshness(Path("."), max_age_minutes=max_age_minutes)
+    payload = _evaluate_llm_context_freshness(
+        Path("."),
+        max_age_minutes=max_age_minutes,
+        allow_clean_post_merge_carrier_staleness=allow_clean_post_merge_carrier_staleness,
+    )
     _emit_llm_context_gate_result(payload, json_output=json_output)
-    if payload.get("result_status") != "PASS":
+    if payload.get("result_status") == "BLOCKED":
         raise typer.Exit(code=2)
 
 
