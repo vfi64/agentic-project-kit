@@ -639,3 +639,103 @@ def test_transfer_pr_existing_for_branch_reports_gh_failure(monkeypatch):
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "FAIL"
     assert "gh_pr_list_failed" in payload["blockers"]
+
+
+def test_command_composition_check_blocks_missing_test_paths(tmp_path: Path):
+    existing = tmp_path / "tests" / "test_existing.py"
+    existing.parent.mkdir()
+    existing.write_text("def test_ok():\n    assert True\n", encoding="utf-8")
+    reference = tmp_path / "docs/reference/agentic-kit-commands.json"
+    reference.parent.mkdir(parents=True)
+    reference.write_text('{"commands": []}\n', encoding="utf-8")
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "command-composition-check",
+            "--root",
+            str(tmp_path),
+            "--test-path",
+            "tests/test_existing.py",
+            "--test-path",
+            "tests/test_missing.py",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "BLOCKED"
+    assert payload["blockers"] == ["missing_test_paths"]
+    assert payload["test_paths"]["existing"] == ["tests/test_existing.py"]
+    assert payload["test_paths"]["missing"] == ["tests/test_missing.py"]
+
+
+def test_command_composition_check_blocks_invalid_agentic_kit_command(tmp_path: Path):
+    reference = tmp_path / "docs/reference/agentic-kit-commands.json"
+    reference.parent.mkdir(parents=True)
+    reference.write_text(
+        json.dumps(
+            {
+                "commands": [
+                    {"qualified_name": "agentic-kit transfer command-reference-refresh"},
+                    {"qualified_name": "agentic-kit release-status"},
+                ]
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "command-composition-check",
+            "--root",
+            str(tmp_path),
+            "--command",
+            "agentic-kit transfer command-reference-refresh",
+            "--command",
+            "agentic-kit command-reference-refresh",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "BLOCKED"
+    assert payload["commands"]["valid"] == ["agentic-kit transfer command-reference-refresh"]
+    assert payload["commands"]["invalid"] == ["agentic-kit command-reference-refresh"]
+
+
+def test_command_composition_check_accepts_existing_paths_and_known_commands(tmp_path: Path):
+    existing = tmp_path / "tests" / "test_existing.py"
+    existing.parent.mkdir()
+    existing.write_text("def test_ok():\n    assert True\n", encoding="utf-8")
+    reference = tmp_path / "docs/reference/agentic-kit-commands.json"
+    reference.parent.mkdir(parents=True)
+    reference.write_text(
+        json.dumps({"commands": [{"qualified_name": "agentic-kit transfer command-reference-refresh"}]}) + "\n",
+        encoding="utf-8",
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "command-composition-check",
+            "--root",
+            str(tmp_path),
+            "--test-path",
+            "tests/test_existing.py",
+            "--command",
+            "./.venv/bin/agentic-kit transfer command-reference-refresh",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"

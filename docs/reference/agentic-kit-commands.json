@@ -5059,6 +5059,74 @@
     },
     {
       "group": "transfer",
+      "help": "Block common copied-command mistakes before running patch, transfer, or release gates.",
+      "name": "command-composition-check",
+      "params": [
+        {
+          "default": null,
+          "help": "Repository-relative test path that must exist before composing a pytest command. Repeatable.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "test_paths",
+          "opts": [
+            "--test-path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "agentic-kit command prefix that must exist in docs/reference/agentic-kit-commands.json. Repeatable.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "commands",
+          "opts": [
+            "--command"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "command-composition-check"
+      ],
+      "qualified_name": "agentic-kit transfer command-composition-check"
+    },
+    {
+      "group": "transfer",
       "help": "Check whether the committed agentic-kit command reference is current.",
       "name": "command-reference-check",
       "params": [
