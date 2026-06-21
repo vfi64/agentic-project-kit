@@ -577,6 +577,26 @@ def _prefix_local_to_llm_transfer_header(content: str, *, root: Path | None = No
 
 
 
+def _json_contains_static_meta_preference_policy(content: str) -> bool:
+    try:
+        parsed = json.loads(content)
+    except json.JSONDecodeError:
+        return False
+
+    def walk(value: object) -> bool:
+        if isinstance(value, dict):
+            for key, nested in value.items():
+                if key in {"meta_command_preference", "META_COMMAND_PREFERENCE"}:
+                    return True
+                if walk(nested):
+                    return True
+        elif isinstance(value, list):
+            return any(walk(item) for item in value)
+        return False
+
+    return walk(parsed)
+
+
 def _scan_static_meta_preference_projection_drift(root: Path) -> dict[str, object]:
     """Block static active meta-command policy outside explicit YAML rule sources.
 
@@ -613,6 +633,22 @@ def _scan_static_meta_preference_projection_drift(root: Path) -> dict[str, objec
                 content = candidate.read_text(encoding="utf-8")
             except UnicodeDecodeError:
                 continue
+            json_policy_match = candidate.suffix == ".json" and _json_contains_static_meta_preference_policy(content)
+            if json_policy_match:
+                line_numbers = [
+                    index
+                    for index, line in enumerate(content.splitlines(), start=1)
+                    if "meta_command_preference" in line or "META_COMMAND_PREFERENCE" in line
+                ] or [1]
+                matches.append(
+                    {
+                        "path": str(candidate.relative_to(root)),
+                        "marker": "json:meta_command_preference",
+                        "line_numbers": line_numbers,
+                    }
+                )
+                continue
+
             for marker in forbidden_markers:
                 marker_matches = [marker]
                 if marker == "meta_command_preference:":
