@@ -438,9 +438,14 @@ documents:
   - path: docs/planning/WORKFLOW_REDUCTION_FOCUS.md
     class: planning
     owner: maintainers
-    notes: Accepted near-term focus for reducing manual orchestration before GUI and Pattern Advisor expansion.
-    superseded_by: docs/planning/project_direction.yaml
+    notes: Historical near-term focus document. Pre-GUI hardening tasks moved to PRE_GUI_HARDENING_TASKS.md; durable strategy/roadmap authority remains project_direction.yaml.
+    superseded_by: docs/planning/PRE_GUI_HARDENING_TASKS.md
     status: superseded
+  - path: docs/planning/PRE_GUI_HARDENING_TASKS.md
+    class: planning
+    owner: maintainers
+    notes: Active scoped authority for post-v0.4.11 pre-GUI hardening tasks and planning-target guard follow-up before GUI expansion.
+    status: active
   - path: docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
     class: planning
     owner: maintainers

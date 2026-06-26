@@ -1,7 +1,7 @@
 from pathlib import Path
 
 PLAN = Path("docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md")
-WORKFLOW = Path("docs/planning/WORKFLOW_REDUCTION_FOCUS.md")
+PRE_GUI = Path("docs/planning/PRE_GUI_HARDENING_TASKS.md")
 REGISTRY = Path("docs/DOCUMENTATION_REGISTRY.yaml")
 
 
@@ -22,11 +22,12 @@ def test_rule_refresh_handshake_plan_registers_phase_zero_transfer_coverage() ->
     assert "unsafe-for-gui" in text
 
 
-def test_workflow_focus_links_rule_refresh_handshake_plan() -> None:
-    text = WORKFLOW.read_text(encoding="utf-8")
+def test_pre_gui_hardening_tasks_records_planning_target_guard() -> None:
+    text = PRE_GUI.read_text(encoding="utf-8")
 
-    assert "RULE_REFRESH_HANDSHAKE_PLAN.md" in text
-    assert "machine-checkable, fail-closed" in text
+    assert "Authoritative target for pre-GUI hardening planning" in text
+    assert "WORKFLOW_REDUCTION_FOCUS.md is superseded" in text
+    assert "If the resolver cannot determine a non-superseded target" in text
 
 
 def test_documentation_registry_contains_rule_refresh_handshake_plan() -> None:
