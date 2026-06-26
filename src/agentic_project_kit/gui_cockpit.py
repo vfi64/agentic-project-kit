@@ -2,9 +2,17 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import subprocess
 from typing import Any
 
 from agentic_project_kit.cockpit import READ_ONLY, CockpitAction, CockpitActionResult, cockpit_actions, run_cockpit_action
+from agentic_project_kit.gui_task_editor import (
+    TaskEditorState,
+    task_editor_send_enabled,
+    task_editor_state_after_read,
+    task_editor_state_after_send,
+    task_editor_visible_for_mode,
+)
 from agentic_project_kit.gui_tk_widgets import (
     attach_tooltip,
     communication_mode_explanation,
@@ -268,6 +276,60 @@ class CockpitGui:
             attach_tooltip(widget, tooltip)
             widget.pack(side=tk.LEFT, padx=(0, 8), pady=1)
 
+        self.task_editor_state = TaskEditorState.IDLE
+        self.task_status_var = tk.StringVar(value="Write a file-transfer task, then send it through the guarded wrapper.")
+        if task_editor_visible_for_mode(self.basic_view.communication_mode):
+            task_frame = ttk.LabelFrame(frame, text="File Transfer Task", padding=8)
+            task_frame.pack(fill=tk.X, pady=(0, 8))
+            self.task_text = tk.Text(task_frame, height=6, wrap=tk.WORD)
+            self.task_text.pack(fill=tk.X, expand=False)
+            self.task_text.bind("<KeyRelease>", self.refresh_task_editor_buttons)
+            task_button_row = ttk.Frame(task_frame)
+            task_button_row.pack(fill=tk.X, pady=(6, 0))
+            self.initial_prompt_button = ttk.Button(
+                task_button_row,
+                text="Initial Prompt",
+                command=self.show_initial_llm_prompt,
+            )
+            attach_tooltip(
+                self.initial_prompt_button,
+                "Render the one-time initial LLM prompt for file-transfer dialog setup.",
+            )
+            self.initial_prompt_button.pack(side=tk.LEFT, padx=(0, 8))
+            self.task_send_button = ttk.Button(
+                task_button_row,
+                text="Send",
+                command=self.send_user_task,
+            )
+            attach_tooltip(
+                self.task_send_button,
+                "Write the task through agentic-kit transfer submit-user-task.",
+            )
+            self.task_send_button.pack(side=tk.LEFT, padx=(0, 8))
+            self.task_read_button = ttk.Button(
+                task_button_row,
+                text="Read",
+                command=self.read_last_task_result,
+                state=tk.DISABLED,
+            )
+            attach_tooltip(
+                self.task_read_button,
+                "Read the latest transfer report through agentic-kit transfer show-last-report --json.",
+            )
+            self.task_read_button.pack(side=tk.LEFT, padx=(0, 8))
+            ttk.Label(
+                task_frame,
+                textvariable=self.task_status_var,
+                anchor=tk.W,
+                wraplength=980,
+            ).pack(fill=tk.X, pady=(6, 0))
+            self.refresh_task_editor_buttons()
+        else:
+            self.task_text = None
+            self.initial_prompt_button = None
+            self.task_send_button = None
+            self.task_read_button = None
+
         columns = ("label", "category", "safety", "command")
         self.tree = ttk.Treeview(frame, columns=columns, show="headings", height=12)
         self.tree.heading("label", text="Action")
@@ -335,6 +397,93 @@ class CockpitGui:
             self.basic_view.communication_mode,
         )
         self.mode_explanation_var.set(communication_mode_explanation(selected))
+
+    def current_task_body(self) -> str:
+        if self.task_text is None:
+            return ""
+        return self.task_text.get("1.0", "end").strip()
+
+    def refresh_task_editor_buttons(self, _event: object | None = None) -> None:
+        if self.task_send_button is None or self.task_read_button is None:
+            return
+        can_send = task_editor_send_enabled(
+            self.current_task_body(),
+            traffic_light_state=self.basic_view.traffic_light_state,
+            communication_context_fresh=self.basic_view.communication_context_fresh,
+            required_next_reply=self.basic_view.required_next_reply,
+        )
+        if self.task_editor_state == TaskEditorState.SENT:
+            self.task_send_button.configure(state="disabled")
+            self.task_read_button.configure(state="normal")
+            self.task_status_var.set("Task sent. Send 'g' or 'go' in chat, then use Read.")
+            return
+        self.task_read_button.configure(state="disabled")
+        self.task_send_button.configure(state="normal" if can_send else "disabled")
+        if self.basic_view.required_next_reply == "d2":
+            self.task_status_var.set("Blocked: send d2 and complete communication-rule ACK before mutation.")
+        elif not self.current_task_body():
+            self.task_status_var.set("Write a file-transfer task before sending.")
+        elif not can_send:
+            self.task_status_var.set("Blocked: gatekeeper must be READY and communication context fresh.")
+        else:
+            self.task_status_var.set("Ready to send the file-transfer task.")
+
+    def _agentic_command(self, *parts: str) -> subprocess.CompletedProcess[str]:
+        executable = self.project_root / ".venv" / "bin" / "agentic-kit"
+        command = [str(executable) if executable.exists() else "agentic-kit", *parts]
+        return subprocess.run(
+            command,
+            cwd=self.project_root,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+
+    def show_initial_llm_prompt(self) -> None:
+        completed = self._agentic_command("gui", "initial-llm-prompt", "--json")
+        self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
+
+    def send_user_task(self) -> None:
+        body = self.current_task_body()
+        if not task_editor_send_enabled(
+            body,
+            traffic_light_state=self.basic_view.traffic_light_state,
+            communication_context_fresh=self.basic_view.communication_context_fresh,
+            required_next_reply=self.basic_view.required_next_reply,
+        ):
+            self.task_editor_state = TaskEditorState.BLOCKED
+            self.task_status_var.set("Blocked: task text, READY state, and fresh communication context are required.")
+            self.refresh_task_editor_buttons()
+            return
+        tmp_path = self.project_root / "tmp" / "gui-task-editor-current-task.md"
+        tmp_path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_path.write_text(body + "\n", encoding="utf-8")
+        completed = self._agentic_command(
+            "transfer",
+            "submit-user-task",
+            "--title",
+            "GUI file-transfer task",
+            "--body-file",
+            str(tmp_path),
+            "--json",
+        )
+        self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
+        result_status = "PASS" if completed.returncode == 0 else "FAIL"
+        self.task_editor_state = task_editor_state_after_send(result_status)
+        if self.task_editor_state == TaskEditorState.SENT and self.task_text is not None:
+            self.task_text.configure(state="disabled")
+        self.refresh_task_editor_buttons()
+
+    def read_last_task_result(self) -> None:
+        completed = self._agentic_command("transfer", "show-last-report", "--json")
+        self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
+        result_status = "PASS" if completed.returncode == 0 else "FAIL"
+        self.task_editor_state = task_editor_state_after_read(result_status)
+        if self.task_editor_state == TaskEditorState.IDLE and self.task_text is not None:
+            self.task_text.configure(state="normal")
+            self.task_text.delete("1.0", "end")
+        self.refresh_task_editor_buttons()
 
     def inspect_selected(self) -> None:
         action_id = self.selected_action_id()

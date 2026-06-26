@@ -8,6 +8,7 @@ from agentic_project_kit.cli_commands.dev import dev_app
 from agentic_project_kit.cli_commands.evidence import app as evidence_app
 from agentic_project_kit.cli_commands.github import register_github_commands
 from agentic_project_kit.cli_commands.governance import governance_app
+from agentic_project_kit.cli_commands.gui import gui_app
 from agentic_project_kit.cli_commands.handoff import handoff_app
 from agentic_project_kit.cli_commands.human_workflows import release_flow_app, work_app
 from agentic_project_kit.cli_commands.init import register_init_command
@@ -88,6 +89,7 @@ app.add_typer(dev_app, name="dev")
 app.add_typer(evidence_app, name="evidence")
 app.add_typer(work_orders_app, name="work-order")
 app.add_typer(governance_app, name="governance")
+app.add_typer(gui_app, name="gui")
 app.add_typer(pr_app, name="pr")
 register_pr_closeout_alias(app)
 app.add_typer(cockpit_app, name="cockpit")
@@ -101,4 +103,3 @@ app.add_typer(transfer_app, name="transfer")
 
 if __name__ == "__main__":
     app()
-

@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `187`
+- Command count: `189`
 
 ## Commands
 
@@ -353,6 +353,12 @@ Fail if expected target paths are missing from a change set.
 ### `agentic-kit governance check`
 
 _No parameters._
+
+### `agentic-kit gui initial-llm-prompt`
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit gui-readiness-gate`
 
@@ -1419,6 +1425,14 @@ Run a bounded scan for known workflow standard errors before patch/transfer/rele
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/current.yaml')` | Transfer order path. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit transfer submit-user-task`
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `title` | `TyperOption` | --title | `False` | `GUI file-transfer task` | Task title. |
+| `body_file` | `TyperOption` | --body-file | `True` |  | UTF-8 text file containing the task body. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer sync-main`
