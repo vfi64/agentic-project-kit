@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `185`
+- Command count: `187`
 
 ## Commands
 
@@ -725,14 +725,30 @@ _No parameters._
 | `next_allowed_action` | `TyperOption` | --next-allowed-action | `False` | `run_next_command` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
+### `agentic-kit rules acknowledge-communication-refresh`
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `ack_file` | `TyperOption` | --ack-file | `True` |  | Path to RULE_REFRESH_ACK JSON/text. |
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
 ### `agentic-kit rules communication-refresh`
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `publish` | `TyperOption` | --publish | `False` | `False` | Write d2 pending state and emit carrier metadata. |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
+### `agentic-kit rules handoff-refresh`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
-### `agentic-kit rules handoff-refresh`
+### `agentic-kit rules require-current-communication-context`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|

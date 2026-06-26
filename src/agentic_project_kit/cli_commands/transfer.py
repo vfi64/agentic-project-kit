@@ -11,6 +11,7 @@ import typer
 from agentic_project_kit.transfer_safety_context import render_local_to_llm_log_header, render_local_to_llm_log_upload_hint, build_transfer_safety_header
 import yaml
 
+from agentic_project_kit.communication_rule_context import require_current_communication_context
 from agentic_project_kit.llm_context_carriers import refresh_llm_context_carriers
 from agentic_project_kit.local_garbage_collector import run_local_garbage_collector
 from agentic_project_kit.local_command_stack import begin_local_command_stack
@@ -2696,6 +2697,10 @@ def pr_create_complete_command(
     """Create a PR and complete it without requiring manual PR-number or SHA copying."""
     if not skip_llm_context_gate:
         _require_fresh_llm_context_or_exit(max_age_minutes=60, json_output=json_output)
+    _require_current_communication_context_or_exit(
+        json_output=json_output,
+        allow_rule_carrier_publish=True,
+    )
 
     import re
     import subprocess
@@ -3329,6 +3334,44 @@ def _require_fresh_llm_context_or_exit(*, max_age_minutes: int, json_output: boo
     if payload.get("result_status") == "PASS":
         return
     _emit_llm_context_gate_result(payload, json_output=json_output)
+    raise typer.Exit(code=2)
+
+
+def _branch_publishes_communication_rule_carrier() -> bool:
+    completed = subprocess.run(
+        ["git", "diff", "--name-only", "origin/main...HEAD"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if completed.returncode != 0:
+        return False
+    return "docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md" in set(
+        completed.stdout.splitlines()
+    )
+
+
+def _require_current_communication_context_or_exit(
+    *,
+    json_output: bool,
+    allow_rule_carrier_publish: bool = False,
+) -> None:
+    result = require_current_communication_context(Path("."))
+    if result.result_status == "PASS":
+        return
+    if allow_rule_carrier_publish and _branch_publishes_communication_rule_carrier():
+        return
+    payload = result.as_json_data()
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        typer.echo("COMMUNICATION_CONTEXT_GATE")
+        typer.echo(f"result_status={result.result_status}")
+        typer.echo(f"reason={result.reason}")
+        typer.echo(f"required_next_reply={result.required_next_reply or '<none>'}")
+        typer.echo(f"remote_path={result.remote_path}")
+        typer.echo(f"next_action={result.next_action}")
     raise typer.Exit(code=2)
 
 

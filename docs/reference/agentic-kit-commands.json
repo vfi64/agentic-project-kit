@@ -4241,6 +4241,60 @@
     {
       "group": "rules",
       "help": "",
+      "name": "acknowledge-communication-refresh",
+      "params": [
+        {
+          "default": null,
+          "help": "Path to RULE_REFRESH_ACK JSON/text.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "ack_file",
+          "opts": [
+            "--ack-file"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "rules",
+        "acknowledge-communication-refresh"
+      ],
+      "qualified_name": "agentic-kit rules acknowledge-communication-refresh"
+    },
+    {
+      "group": "rules",
+      "help": "",
       "name": "communication-refresh",
       "params": [
         {
@@ -4252,6 +4306,20 @@
           "name": "project_root",
           "opts": [
             "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write d2 pending state and emit carrier metadata.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "publish",
+          "opts": [
+            "--publish"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -4317,6 +4385,46 @@
         "handoff-refresh"
       ],
       "qualified_name": "agentic-kit rules handoff-refresh"
+    },
+    {
+      "group": "rules",
+      "help": "",
+      "name": "require-current-communication-context",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "rules",
+        "require-current-communication-context"
+      ],
+      "qualified_name": "agentic-kit rules require-current-communication-context"
     },
     {
       "group": "rules",

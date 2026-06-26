@@ -1,7 +1,7 @@
 # Current communication rules refresh
 
 Status: generated
-Generated at: 2026-05-29T19:49:50+00:00
+Generated at: 2026-06-26T17:20:19+00:00
 Next reply trigger: `d2`
 
 ## Assistant instruction
@@ -61,6 +61,14 @@ Manual paste is an exception, not the normal workflow. It is allowed only when t
 Local execution requests must be delivered as repo-backed Python programs, typed work orders, or `agentic-kit` commands. They must run through the repository virtual environment and must not depend on global Python or shell state. For this repository the canonical local runtime is `.venv/bin/python` and `.venv/bin/agentic-kit` with Python 3.13.
 
 Long ad-hoc shell blocks, fragile multi-line `python -c` strings, and raw decoration lines as terminal input are not valid default execution paths. They are recovery-only tools when the repo-backed Python or typed-work-order path is unavailable.
+
+## Safe evidence closeout helper
+
+Use `agentic-kit evidence commit-paths` for explicit evidence path commits. The helper accepts only the expected path set, commits it with a supplied message, and verifies that the worktree is clean after the commit. Closeout scripts must finalize any repo-backed log before invoking this helper and must not write to the committed repo-backed log afterwards. The helper must accept expected tracked deletions and stage them with `git add -A -- <paths>`.
+
+## Remote-next aliases
+
+Use `agentic-kit rn` as the short alias for `agentic-kit remote-next`. Use `agentic-kit rnc` to close out the dirty path set produced by the last successful remote-next run. If no closeout paths are dirty, `rnc` must report `result_status=no_closeout`, render `### RESULT: NO-CLOSEOUT ###`, and exit with code 2 rather than presenting the state as a hard failure. The GUI must expose these as Run Next Work Order and Close Out Last Run.
 ```
 
 ### `docs/governance/CHAT_COMMUNICATION_CONTRACT.md`
@@ -196,6 +204,89 @@ For assistant-initiated local work, complete terminal output must be captured in
 Local tasks must normally be provided as repo-backed Python programs, typed work orders, or `agentic-kit` commands and must run through the repository virtual environment. Global Python, global shell state, long ad-hoc shell blocks, risky multi-line `python -c`, and raw visual separator lines as terminal commands are forbidden as default control paths.
 
 Manual copy-and-paste of terminal output is allowed only after a hard local failure that prevents evidence creation or transfer, including kill -9, process startup failure, terminal loss, machine crash, filesystem failure, network failure before push, or explicitly broken logging.
+
+## Preferred dialog signals
+
+The preferred dialog signals are `d` for done, `f` for fail, and `g` for go. `g` replaces the former German `w` signal for continuing with the next safe planned step. `w` remains accepted as a legacy alias for `g` during transition, but new tooling and generated instructions should prefer `g`.
+
+The local command aliases are `agentic-kit rn` for run-next/remote-next and `agentic-kit rnc` for remote-next closeout. GUI controls must use these aliases rather than introducing a separate execution model.
+
+### Communication rule refresh handshake
+
+`d2` is a mandatory rule-loading dialog state, not a normal continuation signal.
+
+`agentic-kit rules communication-refresh --publish --json` writes the communication rule capsule metadata and a local pending state with `required_next_reply=d2`. A normal `g` continuation must not bypass that pending state.
+
+The refresh file is not magical LLM memory. The assistant must read the remote rule capsule at `docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md`, verify the expected blob hash, and provide a machine-readable `RULE_REFRESH_ACK` before mutating workflows continue.
+
+`agentic-kit rules acknowledge-communication-refresh --ack-file <path> --json` validates that ACK. `agentic-kit rules require-current-communication-context --json` blocks when a `d2` pending state exists without a matching ACK.
+
+<!-- agentic-kit:command-reference-lifecycle-discipline:start -->
+## Non-optional command-reference and lifecycle discipline
+
+This section is normative for successor-chat handoff, transfer-file workflows, and local execution guidance.
+
+### Command Reference is the source of truth
+
+A chat must not reconstruct `agentic-kit` or `agentic-kit transfer` commands from memory, prior examples, or guessed parameter names.
+
+Before writing a transfer file, giving a copy/paste command, or choosing a local execution path, the chat must treat these files as required sources of truth:
+
+- `docs/reference/AGENTIC_KIT_COMMANDS.md`
+- `docs/reference/agentic-kit-commands.json`
+
+If a command or option is unclear, the chat must inspect the Command Reference or run the corresponding `--help` locally through an appropriate repo-backed transfer. Guessing command options is a process error.
+
+### Wrapper-first rule
+
+When planning local control, the chat must prefer existing complex `agentic-kit` wrappers over hand-built shell sequences.
+
+Priority order:
+
+1. Existing `agentic-kit` or `agentic-kit transfer` wrapper.
+2. Canonical transfer file that invokes the wrapper.
+3. Copy/paste shell sequence only when no suitable wrapper exists or the wrapper is proven blocked.
+
+### Canonical PR lifecycle
+
+After a checked patch, do not manually merge as the primary path.
+
+For a new PR, use:
+
+    ./.venv/bin/agentic-kit transfer pr-create-complete --title "<PR title>" --body "<PR body>" --base main --head current --merge-method squash
+
+For an existing PR, use:
+
+    ./.venv/bin/agentic-kit transfer pr-complete <PR_NUMBER> --expected-head-sha current --merge-method squash
+
+If `current` is not accepted or if the branch has to be pinned explicitly, resolve the exact head SHA with `git rev-parse HEAD` and pass that SHA. Do not guess unsupported options.
+
+### Canonical post-merge closeout and remote report
+
+After a successful merge, the required closeout is:
+
+    ./.venv/bin/agentic-kit transfer sync-main
+    ./.venv/bin/agentic-kit transfer post-merge-complete --after-pr <PR_NUMBER>
+    ./.venv/bin/agentic-kit transfer sync-main
+    ./.venv/bin/agentic-kit transfer post-merge-check
+    ./.venv/bin/agentic-kit transfer repo-status
+
+`post-merge-complete --after-pr <PR_NUMBER>` is the canonical wrapper that creates post-merge evidence and publishes the transfer report into the remote repository.
+
+`run-and-log` is useful for diagnostics and fallback evidence, but it is not a substitute for `post-merge-complete` after a merge.
+
+### Volatile transfer-output hygiene
+
+Before branch switches, PR completion, or merge-safe operations, known volatile transfer outputs must not be allowed to block the lifecycle.
+
+At minimum, clean these local-only volatile paths when they are dirty and not the target of the current slice:
+
+    git restore -- .agentic/transfer/outbox/last_result.txt
+    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
+    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log
+
+This cleanup is a workaround for volatile report files. It must not be used to discard substantive source, governance, planning, or handoff changes.
+<!-- agentic-kit:command-reference-lifecycle-discipline:end -->
 ```
 
 ### `docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md`
@@ -245,7 +336,7 @@ Required direction:
 - `agentic-kit comm-rules-check` verifies communication, summary, bootstrap, and drift contracts.
 - `agentic-kit handoff-prompt --reason drift` emits a successor-chat prompt when drift is detected.
 
-`./ns` may expose shortcuts for local convenience, but it must not be the only canonical route.
+`./ns` may expose shortcuts for local convenience, but it must not be the only canonical route. A chat or workflow must use a wrapper only when the wrapper contract is clear for the concrete task from repository documentation, command help, or existing evidence. If the wrapper is ambiguous, unavailable, or narrower than the requested workflow, use the explicit project-local Python entry point such as `./.venv/bin/python -m agentic_project_kit.cli ...` or the documented Python module path instead of guessing a wrapper subcommand.
 
 ## Local repository freshness rule
 
@@ -284,6 +375,73 @@ Documentation and tests must not define macOS-only, Linux-only, or Windows-only 
 ## Optimization requirement
 
 Whenever a workflow is converted from shell to Python, the implementation must remove assumptions instead of merely translating shell commands. Prefer file parsing, imports, and deterministic checks over external process execution whenever possible.
+
+<!-- agentic-kit:command-reference-lifecycle-discipline:start -->
+## Non-optional command-reference and lifecycle discipline
+
+This section is normative for successor-chat handoff, transfer-file workflows, and local execution guidance.
+
+### Command Reference is the source of truth
+
+A chat must not reconstruct `agentic-kit` or `agentic-kit transfer` commands from memory, prior examples, or guessed parameter names.
+
+Before writing a transfer file, giving a copy/paste command, or choosing a local execution path, the chat must treat these files as required sources of truth:
+
+- `docs/reference/AGENTIC_KIT_COMMANDS.md`
+- `docs/reference/agentic-kit-commands.json`
+
+If a command or option is unclear, the chat must inspect the Command Reference or run the corresponding `--help` locally through an appropriate repo-backed transfer. Guessing command options is a process error.
+
+### Wrapper-first rule
+
+When planning local control, the chat must prefer existing complex `agentic-kit` wrappers over hand-built shell sequences.
+
+Priority order:
+
+1. Existing `agentic-kit` or `agentic-kit transfer` wrapper.
+2. Canonical transfer file that invokes the wrapper.
+3. Copy/paste shell sequence only when no suitable wrapper exists or the wrapper is proven blocked.
+
+### Canonical PR lifecycle
+
+After a checked patch, do not manually merge as the primary path.
+
+For a new PR, use:
+
+    ./.venv/bin/agentic-kit transfer pr-create-complete --title "<PR title>" --body "<PR body>" --base main --head current --merge-method squash
+
+For an existing PR, use:
+
+    ./.venv/bin/agentic-kit transfer pr-complete <PR_NUMBER> --expected-head-sha current --merge-method squash
+
+If `current` is not accepted or if the branch has to be pinned explicitly, resolve the exact head SHA with `git rev-parse HEAD` and pass that SHA. Do not guess unsupported options.
+
+### Canonical post-merge closeout and remote report
+
+After a successful merge, the required closeout is:
+
+    ./.venv/bin/agentic-kit transfer sync-main
+    ./.venv/bin/agentic-kit transfer post-merge-complete --after-pr <PR_NUMBER>
+    ./.venv/bin/agentic-kit transfer sync-main
+    ./.venv/bin/agentic-kit transfer post-merge-check
+    ./.venv/bin/agentic-kit transfer repo-status
+
+`post-merge-complete --after-pr <PR_NUMBER>` is the canonical wrapper that creates post-merge evidence and publishes the transfer report into the remote repository.
+
+`run-and-log` is useful for diagnostics and fallback evidence, but it is not a substitute for `post-merge-complete` after a merge.
+
+### Volatile transfer-output hygiene
+
+Before branch switches, PR completion, or merge-safe operations, known volatile transfer outputs must not be allowed to block the lifecycle.
+
+At minimum, clean these local-only volatile paths when they are dirty and not the target of the current slice:
+
+    git restore -- .agentic/transfer/outbox/last_result.txt
+    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
+    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log
+
+This cleanup is a workaround for volatile report files. It must not be used to discard substantive source, governance, planning, or handoff changes.
+<!-- agentic-kit:command-reference-lifecycle-discipline:end -->
 ```
 
 ### `docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md`
@@ -416,6 +574,73 @@ Ein Handoff-Prompt unterscheidet zwischen `safe_state` und `administrative_evide
 Ein Nachfolge-Chat muss prüfen, ob spätere Commits nur administrative Evidence betreffen. Fachliche Änderungen nach dem Safe-State sind Drift und müssen vor Produktarbeit geklärt werden.
 
 Dieses Modell verhindert die Endlosschleife, bei der ein finaler Log-Commit den gerade erzeugten Handoff-Prompt sofort wieder formal veralten lässt.
+
+<!-- agentic-kit:command-reference-lifecycle-discipline:start -->
+## Non-optional command-reference and lifecycle discipline
+
+This section is normative for successor-chat handoff, transfer-file workflows, and local execution guidance.
+
+### Command Reference is the source of truth
+
+A chat must not reconstruct `agentic-kit` or `agentic-kit transfer` commands from memory, prior examples, or guessed parameter names.
+
+Before writing a transfer file, giving a copy/paste command, or choosing a local execution path, the chat must treat these files as required sources of truth:
+
+- `docs/reference/AGENTIC_KIT_COMMANDS.md`
+- `docs/reference/agentic-kit-commands.json`
+
+If a command or option is unclear, the chat must inspect the Command Reference or run the corresponding `--help` locally through an appropriate repo-backed transfer. Guessing command options is a process error.
+
+### Wrapper-first rule
+
+When planning local control, the chat must prefer existing complex `agentic-kit` wrappers over hand-built shell sequences.
+
+Priority order:
+
+1. Existing `agentic-kit` or `agentic-kit transfer` wrapper.
+2. Canonical transfer file that invokes the wrapper.
+3. Copy/paste shell sequence only when no suitable wrapper exists or the wrapper is proven blocked.
+
+### Canonical PR lifecycle
+
+After a checked patch, do not manually merge as the primary path.
+
+For a new PR, use:
+
+    ./.venv/bin/agentic-kit transfer pr-create-complete --title "<PR title>" --body "<PR body>" --base main --head current --merge-method squash
+
+For an existing PR, use:
+
+    ./.venv/bin/agentic-kit transfer pr-complete <PR_NUMBER> --expected-head-sha current --merge-method squash
+
+If `current` is not accepted or if the branch has to be pinned explicitly, resolve the exact head SHA with `git rev-parse HEAD` and pass that SHA. Do not guess unsupported options.
+
+### Canonical post-merge closeout and remote report
+
+After a successful merge, the required closeout is:
+
+    ./.venv/bin/agentic-kit transfer sync-main
+    ./.venv/bin/agentic-kit transfer post-merge-complete --after-pr <PR_NUMBER>
+    ./.venv/bin/agentic-kit transfer sync-main
+    ./.venv/bin/agentic-kit transfer post-merge-check
+    ./.venv/bin/agentic-kit transfer repo-status
+
+`post-merge-complete --after-pr <PR_NUMBER>` is the canonical wrapper that creates post-merge evidence and publishes the transfer report into the remote repository.
+
+`run-and-log` is useful for diagnostics and fallback evidence, but it is not a substitute for `post-merge-complete` after a merge.
+
+### Volatile transfer-output hygiene
+
+Before branch switches, PR completion, or merge-safe operations, known volatile transfer outputs must not be allowed to block the lifecycle.
+
+At minimum, clean these local-only volatile paths when they are dirty and not the target of the current slice:
+
+    git restore -- .agentic/transfer/outbox/last_result.txt
+    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
+    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log
+
+This cleanup is a workaround for volatile report files. It must not be used to discard substantive source, governance, planning, or handoff changes.
+<!-- agentic-kit:command-reference-lifecycle-discipline:end -->
 ```
 
 ### `.agentic/compiled_agent_context.yaml`
@@ -606,8 +831,8 @@ workflow_friction_rules:
 ```text
 schema_version: 1
 updated:
-  date: '2026-05-29'
-  reason: Refresh handoff state to last substantive work commit
+  date: '2026-06-18'
+  reason: Refresh handoff state after release command authority planning slice
   source: agentic-kit handoff refresh
 repo:
   name: agentic-project-kit
@@ -616,9 +841,9 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: e1cac6c
-  commit_subject: Integrate GUI gatekeeper into Tkinter shell (#911)
-  semantics: current_main_head
+  commit: 5d68dd9c
+  commit_subject: Resolve cockpit agentic-kit commands from GUI (#1573)
+  semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
   - 656
@@ -691,20 +916,23 @@ safe_state:
   - 892
   - 894
   - 897
+  - 968
 release:
-  current_version: 0.4.4
-  previous_version: 0.4.3
-  tag: v0.4.4
+  current_version: 0.4.6
+  previous_version: 0.4.4
+  tag: v0.4.6
   github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
-  zenodo_version_doi: 10.5281/zenodo.20431326
+  zenodo_version_doi: 10.5281/zenodo.20467371
   post_release_check: PASS
-  post_release_evidence: docs/reports/terminal/v044-post-release-verify.log
+  post_release_evidence: docs/reports/terminal/v045-doi-metadata-update.log
 open_items:
   prs: []
   next_expected_chat_action: Continue after PR892 with post-merge gate visibility
     follow-up work only after the post-merge refresh status gate reports NOOP.
 completed_since_previous_handoff:
+- 'PR #968 refreshed handoff state after README release-history extraction and v0.4.5
+  DOI closeout.'
 - 'PR #897 merged standard summary validator hardening before this administrative
   handoff refresh.'
 - 'PR #894 merged post-merge gate bootstrap visibility documentation before this administrative
@@ -873,6 +1101,10 @@ current_capabilities:
 policies:
   no_copy_terminal_policy: .agentic/no_copy_terminal_policy.yaml
   control_file_preservation: .agentic/control_file_preservation.yaml
+  test_bound_anchors:
+  - use d for log-backed PASS and f for log-backed FAIL
+  - nested quote-based code generation
+  - nested shell/Python quote layers
 rules:
 - id: remote-first-no-guess
   status: active
@@ -980,18 +1212,33 @@ recent_failure_patterns:
     OVERALL, REMOTE_EVIDENCE, terminal_log, command_report, CHAT_REPLY, and RESULT
     marker.
 next_allowed_tasks:
-- id: tkinter-workbench-gui-slice-1
-  title: Continue with the smallest Tkinter workbench GUI slice from docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
-    after PR834 closeout evidence is inspected.
+- id: readme-release-history-extraction-follow-up
+  title: Continue only with the next smallest README release-history extraction follow-up
+    if README size or DOI-history drift reappears.
   priority: 1
-- id: failure-mode-review-automation-slice-1
-  title: Continue with the smallest failure-mode review automation slice from docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
-    after PR834 closeout evidence is inspected.
+- id: inspect-selected-dead-code-slice
+  title: Remove or justify inspect_selected() dead code in one isolated, test-backed
+    slice.
   priority: 2
-- id: release-evidence-kernel-hardening-follow-up
-  title: Use only a small release/evidence-kernel hardening follow-up if freshness
-    or evidence drift reappears.
+- id: doctor-absolute-path-gate-slice
+  title: Add the missing doctor gate for absolute path leakage in one isolated, test-backed
+    slice.
   priority: 3
+- id: cockpit-action-result-enum-slice
+  title: Replace CockpitActionResult string literal result constants with an enum
+    in one isolated, test-backed slice.
+  priority: 4
+- id: b11-gatekeeper-core
+  title: 'Implement B11 Gatekeeper Core before GUI work: machine-readable READY/WAIT/BLOCKED/FAILED
+    state model, next_action, allowed actions, button enablement contract, safe GitHub/PR/CI
+    checks, race-condition handling, automatic log/evidence classification, no-copy
+    transfer path, and hardened handoff-prompt preparation command.'
+  priority: 1
+- id: tkinter-workbench-gui-slice-1
+  title: Resume the smallest Tkinter workbench GUI slice only after B11 Gatekeeper
+    Core state/action contract is test-backed and current-state/handoff freshness
+    are clean.
+  priority: 5
 blocked_until_closeout:
 - Remote/destructive GUI actions
 - Large GUI architecture expansion before successor-chat bootstrap
@@ -1006,15 +1253,32 @@ blocked_until_closeout:
 - Treating helper-local PASS as slice PASS without slice-gate evidence
 - Gatekeeper product work before post-PR888 handoff refresh is merged and verified
 - Treating helper-local PASS as slice PASS without patch-preflight slice-gate evidence
-first_instruction: Start the next chat from the fresh post-PR911 successor handoff
-  prompt and obey agentic-kit handoff post-merge-refresh-status before product work.
+- GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
+first_instruction: >-
+  Review PR #1436 and the refreshed successor handoff package for the release
+  command authority planning slice. After merge, start from fresh main and
+  implement docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md before DOI,
+  legacy-doc, absolute-path, or GUI work.
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/v044-successor-chat-handoff-after-pr911.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1573-successor-chat-handoff.md
+  first_instruction: >-
+    Review PR #1436 and the refreshed successor handoff package for the release
+    command authority planning slice. After merge, start from fresh main and
+    implement docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md before DOI,
+    legacy-doc, absolute-path, or GUI work.
+next_step:
+  first_instruction: >-
+    Review PR #1436 and the refreshed successor handoff package for the release
+    command authority planning slice. After merge, start from fresh main and
+    implement docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md before DOI,
+    legacy-doc, absolute-path, or GUI work.
+evidence:
+  latest_successor_prompt: docs/reports/terminal/post-pr1573-successor-chat-handoff.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
 ```

@@ -116,6 +116,10 @@ def test_transfer_pr_create_complete_orchestrates_create_and_complete(monkeypatc
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
         lambda capability: None,
     )
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
+        lambda **kwargs: None,
+    )
 
     result = CliRunner().invoke(
         app,
@@ -174,6 +178,10 @@ def test_transfer_pr_create_complete_uses_existing_pr_when_create_fails(monkeypa
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
         lambda capability: None,
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
+        lambda **kwargs: None,
     )
 
     result = CliRunner().invoke(
@@ -244,6 +252,10 @@ def test_transfer_pr_create_complete_post_merge_complete_does_not_repeat_inner_c
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
         lambda capability: None,
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
+        lambda **kwargs: None,
     )
 
     result = CliRunner().invoke(

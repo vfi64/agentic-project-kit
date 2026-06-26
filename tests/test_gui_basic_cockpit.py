@@ -17,6 +17,9 @@ def _status(
     workflow_state: str = "IDLE",
     current_work_state: str | None = "READY",
     blockers: tuple[str, ...] = (),
+    communication_context_fresh: bool = True,
+    communication_context_reason: str = "communication_context_current",
+    required_next_reply: str | None = None,
 ) -> GuiGatekeeperStatus:
     return GuiGatekeeperStatus(
         branch="main",
@@ -28,6 +31,9 @@ def _status(
         ready_for_mutating_actions=not git_dirty and workflow_state in {"IDLE", "READY"},
         action_statuses=(),
         blockers=blockers,
+        communication_context_fresh=communication_context_fresh,
+        communication_context_reason=communication_context_reason,
+        required_next_reply=required_next_reply,
     )
 
 
@@ -70,6 +76,17 @@ def test_basic_cockpit_traffic_light_states_are_deterministic() -> None:
             gatekeeper_status=_status(current_work_state="FAILED")
         ).traffic_light_state
         == "FAILED"
+    )
+    assert (
+        build_basic_cockpit_view_model(
+            gatekeeper_status=_status(
+                blockers=("communication_rule_refresh_pending",),
+                communication_context_fresh=False,
+                communication_context_reason="communication_rule_refresh_pending",
+                required_next_reply="d2",
+            )
+        ).traffic_light_state
+        == "WAIT_FOR_D2"
     )
 
 
