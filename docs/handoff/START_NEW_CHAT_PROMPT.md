@@ -54,6 +54,6 @@ Current administrative handoff refresh state is `a7a0b6a2` (`Audit ns to agentic
 Current administrative handoff refresh state is `c6ab40da` (`Classify ns migration docs before GUI (#1334)`). Continue next only after this post-PR1334 refresh is committed and merged; the next substantive slice must be created from fresh main.## Operational documentation refresh state after PR #1338
 
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1547
+## Operational documentation refresh state after PR #1550
 
-Current administrative handoff refresh state is `c2169e6f` (`Harden release process standard-error guardrails (#1547)`). Continue next only after this post-PR1547 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `03fdaf84` (`Repair release and handoff rule flow (#1550)`). Continue next only after this post-PR1550 refresh is committed and merged; the next substantive slice must be created from fresh main.

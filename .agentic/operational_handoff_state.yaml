@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c2169e6fa42ea8189156d3679f381752f908f60a
-  short: c2169e6f
-  subject: Harden release process standard-error guardrails (#1547)
+  full: 03fdaf84b40ac4c28d92a5d80f53eb3300890502
+  short: 03fdaf84
+  subject: Repair release and handoff rule flow (#1550)
 last_substantive_work_state:
-  full: c2169e6fa42ea8189156d3679f381752f908f60a
-  short: c2169e6f
-  subject: Harden release process standard-error guardrails (#1547)
+  full: 03fdaf84b40ac4c28d92a5d80f53eb3300890502
+  short: 03fdaf84
+  subject: Repair release and handoff rule flow (#1550)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
