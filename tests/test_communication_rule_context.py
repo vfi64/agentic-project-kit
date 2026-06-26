@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 
 from typer.testing import CliRunner
 
@@ -61,6 +62,41 @@ def test_require_current_communication_context_blocks_pending_without_ack(tmp_pa
     assert result.result_status == "BLOCK"
     assert result.required_next_reply == "d2"
     assert result.communication_context_fresh is False
+
+
+def test_require_current_communication_context_rechecks_published_pending_state(tmp_path) -> None:
+    write_sources(tmp_path)
+    CliRunner().invoke(
+        app,
+        ["rules", "communication-refresh", "--root", str(tmp_path), "--publish", "--json"],
+    )
+
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, stdout=subprocess.PIPE)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "add", "docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md"],
+        cwd=tmp_path,
+        check=True,
+    )
+    subprocess.run(
+        ["git", "commit", "-m", "publish communication rules"],
+        cwd=tmp_path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    subprocess.run(
+        ["git", "update-ref", "refs/remotes/origin/main", "HEAD"],
+        cwd=tmp_path,
+        check=True,
+    )
+
+    result = require_current_communication_context(tmp_path)
+
+    assert result.result_status == "BLOCK"
+    assert result.reason == "communication_rule_refresh_pending"
+    assert result.required_next_reply == "d2"
+    assert "ACK" in result.next_action
 
 
 def test_acknowledge_communication_refresh_accepts_valid_ack(tmp_path) -> None:

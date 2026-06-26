@@ -220,7 +220,12 @@ def require_current_communication_context(
     remote_path = str(pending.get("remote_path", COMMUNICATION_RULES_OUTPUT.as_posix()))
     expected_blob_sha = str(pending.get("expected_blob_sha", ""))
     generated_at = str(pending.get("generated_at", ""))
-    if not bool(pending.get("remote_readable", False)):
+    remote_readable = bool(pending.get("remote_readable", False)) or _pending_capsule_is_remote_readable(
+        root,
+        remote_path=remote_path,
+        expected_blob_sha=expected_blob_sha,
+    )
+    if not remote_readable:
         return CommunicationContextGateResult(
             result_status="BLOCK",
             reason="communication_rule_refresh_not_remote_readable",
@@ -241,6 +246,26 @@ def require_current_communication_context(
         generated_at=generated_at,
         next_action="Assistant must read the remote rule capsule and provide RULE_REFRESH_ACK before mutation.",
     )
+
+
+def _pending_capsule_is_remote_readable(
+    root: Path,
+    *,
+    remote_path: str,
+    expected_blob_sha: str,
+) -> bool:
+    if not remote_path or not expected_blob_sha:
+        return False
+    if _git_output(root, "status", "--porcelain", "--", remote_path):
+        return False
+    candidates = ["origin/main"]
+    upstream = _git_output(root, "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}")
+    if upstream:
+        candidates.insert(0, upstream)
+    for ref in dict.fromkeys(candidates):
+        if _git_output(root, "rev-parse", f"{ref}:{remote_path}") == expected_blob_sha:
+            return True
+    return False
 
 
 def acknowledge_communication_refresh(
