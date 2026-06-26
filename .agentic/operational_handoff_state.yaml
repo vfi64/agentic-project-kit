@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 95bc1246992c9175d2a39d1e9c4798a83276c4aa
-  short: 95bc1246
-  subject: Repair live release publish orchestration (#1557)
+  full: 26e0d0844e3a46956a5a836c9932e957c21576ef
+  short: 26e0d084
+  subject: Close out v0.4.11 DOI release state (#1559)
 last_substantive_work_state:
-  full: 95bc1246992c9175d2a39d1e9c4798a83276c4aa
-  short: 95bc1246
-  subject: Repair live release publish orchestration (#1557)
+  full: 26e0d0844e3a46956a5a836c9932e957c21576ef
+  short: 26e0d084
+  subject: Close out v0.4.11 DOI release state (#1559)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
