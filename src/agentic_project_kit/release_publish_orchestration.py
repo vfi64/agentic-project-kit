@@ -206,6 +206,95 @@ def _run_release_prep_consistency_check(
     )
 
 
+def _github_release_notes(root: Path, version: str) -> str:
+    release_date, summary_lines = _current_changelog_release_metadata(root, version)
+    if not summary_lines:
+        return f"Release v{version}."
+    heading = f"Release v{version}"
+    if release_date:
+        heading += f" - {release_date}"
+    body = "\n".join(f"- {line}" for line in summary_lines)
+    return f"{heading}\n\n{body}"
+
+
+def _check_from_run(name: str, returncode: int, output: str, *, pass_detail: str = "") -> ReleasePublishCheck:
+    return ReleasePublishCheck(
+        name=name,
+        status="PASS" if returncode == 0 else "FAIL",
+        detail=pass_detail or _last_line(output),
+        returncode=returncode,
+    )
+
+
+def _append_live_release_publish_checks(
+    *,
+    checks: list[ReleasePublishCheck],
+    executable: str,
+    version: str,
+    tag: str,
+    root: Path,
+    runner: Runner,
+) -> None:
+    tag_ref = f"refs/tags/{tag}"
+
+    tag_exists_rc, _tag_exists_output = runner(("git", "rev-parse", "--verify", tag_ref), root)
+    if tag_exists_rc == 0:
+        checks.append(
+            ReleasePublishCheck(
+                name=f"execute git tag {tag}",
+                status="PASS",
+                detail="local tag already exists",
+                returncode=0,
+            )
+        )
+    else:
+        rc, output = runner(("git", "tag", tag), root)
+        checks.append(_check_from_run(f"execute git tag {tag}", rc, output))
+        if rc != 0:
+            return
+
+    remote_exists_rc, _remote_exists_output = runner(("git", "ls-remote", "--exit-code", "--tags", "origin", tag), root)
+    if remote_exists_rc == 0:
+        checks.append(
+            ReleasePublishCheck(
+                name=f"execute git push origin {tag}",
+                status="PASS",
+                detail="remote tag already exists",
+                returncode=0,
+            )
+        )
+    else:
+        rc, output = runner(("git", "push", "origin", tag), root)
+        checks.append(_check_from_run(f"execute git push origin {tag}", rc, output))
+        if rc != 0:
+            return
+
+    release_view_rc, release_view_output = runner(("gh", "release", "view", tag), root)
+    if release_view_rc == 0:
+        checks.append(
+            ReleasePublishCheck(
+                name=f"execute gh release view {tag}",
+                status="PASS",
+                detail="GitHub release already exists",
+                returncode=0,
+            )
+        )
+    else:
+        notes = _github_release_notes(root, version)
+        create_command = ("gh", "release", "create", tag, "--title", tag, "--notes", notes)
+        create_rc, create_output = runner(create_command, root)
+        checks.append(_check_from_run(f"execute gh release create {tag}", create_rc, create_output))
+        if create_rc != 0:
+            return
+        verify_rc, verify_output = runner(("gh", "release", "view", tag), root)
+        checks.append(_check_from_run(f"execute gh release view {tag}", verify_rc, verify_output, pass_detail="GitHub release exists"))
+        if verify_rc != 0:
+            return
+
+    rc, output = runner((executable, "post-release-check", "--version", version), root)
+    checks.append(_check_from_run(f"execute post-release-check --version {version}", rc, output))
+
+
 def evaluate_release_publish_plan(
     root: Path = Path("."),
     *,
@@ -299,25 +388,18 @@ def evaluate_release_publish_plan(
             [
                 f"execute git tag {tag}",
                 f"execute git push origin {tag}",
-                f"execute GitHub release publish for {tag}",
+                f"execute GitHub release create/view for {tag}",
                 f"execute post-release-check --version {version}",
             ]
         )
-        live_commands: tuple[tuple[str, ...], ...] = (
-            ("git", "tag", tag),
-            ("git", "push", "origin", tag),
-            ("gh", "release", "view", tag),
-            (executable, "post-release-check", "--version", version),
+        _append_live_release_publish_checks(
+            checks=checks,
+            executable=executable,
+            version=version,
+            tag=tag,
+            root=root,
+            runner=run,
         )
-        for command in live_commands:
-            checks.append(
-                _run_check(
-                    name="execute " + " ".join(command),
-                    args=command,
-                    root=root,
-                    runner=run,
-                )
-            )
     else:
         planned_actions.append("perform no tag, release, DOI, or metadata write in dry-run/fail-closed mode")
 
