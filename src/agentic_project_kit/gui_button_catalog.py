@@ -52,6 +52,58 @@ def _button(
 
 GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
     _button(
+        "status-refresh",
+        "Status Refresh",
+        "Basic",
+        "Refresh the deterministic cockpit and gatekeeper status.",
+        "status",
+        wrapper_command=("agentic-kit", "cockpit", "gatekeeper-status"),
+    ),
+    _button(
+        "communication-rules-refresh",
+        "Communication Rules Refresh",
+        "Basic",
+        "Refresh local communication-rule acknowledgement through the governed rules command.",
+        "rules",
+        safety_class="local-only",
+        enabled=False,
+        disabled_reason="requires clean READY gatekeeper state before local rule acknowledgement",
+        wrapper_command=("agentic-kit", "rules", "acknowledge"),
+        gui_gate="local_mutation_gate",
+    ),
+    _button(
+        "run-next-work-order",
+        "Run Next Work Order",
+        "Basic",
+        "Run the validated file-transfer work order through the existing work-order wrapper.",
+        "work-order",
+        safety_class="local-only",
+        enabled=False,
+        disabled_reason="requires validated work order and clean READY gatekeeper state",
+        wrapper_command=("agentic-kit", "work-order", "run"),
+        gui_gate="local_mutation_gate",
+    ),
+    _button(
+        "close-out-last-run",
+        "Close Out Last Run",
+        "Basic",
+        "Close out the last run through the fixed-path work-order upload wrapper.",
+        "closeout",
+        safety_class="bounded-mutation",
+        enabled=False,
+        disabled_reason="requires fixed-path evidence and clean READY gatekeeper state",
+        wrapper_command=("agentic-kit", "work-order", "upload"),
+        gui_gate="fixed_path_upload_gate",
+    ),
+    _button(
+        "diagnose",
+        "Diagnose",
+        "Basic",
+        "Run compact read-only diagnostics through the project doctor.",
+        "diagnose",
+        wrapper_command=("agentic-kit", "doctor"),
+    ),
+    _button(
         "branch-status-check",
         "Branch Status",
         "Session",
@@ -398,6 +450,14 @@ TOOLBAR_BUTTON_IDS = (
     "workflow-guard-check",
 )
 
+BASIC_BUTTON_IDS = (
+    "status-refresh",
+    "communication-rules-refresh",
+    "run-next-work-order",
+    "close-out-last-run",
+    "diagnose",
+)
+
 
 def all_gui_buttons() -> tuple[GuiButtonDefinition, ...]:
     return GUI_BUTTON_CATALOG
@@ -406,6 +466,11 @@ def all_gui_buttons() -> tuple[GuiButtonDefinition, ...]:
 def toolbar_gui_buttons() -> tuple[GuiButtonDefinition, ...]:
     by_id = {button.command_id: button for button in GUI_BUTTON_CATALOG}
     return tuple(by_id[button_id] for button_id in TOOLBAR_BUTTON_IDS if button_id in by_id)
+
+
+def basic_gui_buttons() -> tuple[GuiButtonDefinition, ...]:
+    by_id = {button.command_id: button for button in GUI_BUTTON_CATALOG}
+    return tuple(by_id[button_id] for button_id in BASIC_BUTTON_IDS if button_id in by_id)
 
 
 def gui_buttons_by_category() -> dict[str, tuple[GuiButtonDefinition, ...]]:

@@ -2,8 +2,11 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 
-from agentic_project_kit.gui_viewmodel import GuiActionViewModel
-from agentic_project_kit.gui_viewmodel import GuiControllerViewModel
+from agentic_project_kit.gui_viewmodel import (
+    BasicCockpitViewModel,
+    GuiActionViewModel,
+    GuiControllerViewModel,
+)
 
 
 def render_action_row(action: GuiActionViewModel, index: int) -> str:
@@ -33,4 +36,35 @@ def render_controller_view_model(view_model: GuiControllerViewModel) -> str:
         lines.extend(rows)
     else:
         lines.append("none")
+    return "\n".join(lines)
+
+
+def render_basic_cockpit_view_model(view_model: BasicCockpitViewModel) -> str:
+    lines = [
+        view_model.title,
+        f"traffic_light_state={view_model.traffic_light_state}",
+        f"traffic_light_color={view_model.traffic_light_color}",
+        f"communication_mode={view_model.communication_mode}",
+        f"mutation_allowed={str(view_model.mutation_allowed).lower()}",
+        f"state_source={view_model.state_source}",
+        f"reason={view_model.reason}",
+        f"next_safe_action={view_model.next_safe_action}",
+        f"evidence={view_model.evidence}",
+        f"last_result={view_model.last_result}",
+        "communication_modes:",
+    ]
+    for mode in view_model.communication_modes:
+        selected = "selected" if mode.selected else "available"
+        default = "default" if mode.is_default else "non-default"
+        lines.append(f"- {mode.mode_id} [{mode.role}; {selected}; {default}] {mode.safety_note}")
+    lines.append("buttons:")
+    for button in view_model.buttons:
+        state = "enabled" if button.enabled else "disabled"
+        command = " ".join(button.wrapper_command) if button.wrapper_command else "<no-wrapper>"
+        reason = button.disabled_reason or button.why
+        lines.append(
+            f"- {button.command_id} [{button.safety_class}; {state}] "
+            f"label={button.label}; wrapper={command}; source={button.source}; why={reason}"
+        )
+    lines.append(f"explanation={view_model.explanation}")
     return "\n".join(lines)

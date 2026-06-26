@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Iterable
 
 from agentic_project_kit.action_registry import list_actions
-
-from dataclasses import dataclass
-from typing import Iterable
+from agentic_project_kit.gui_button_catalog import GuiButtonDefinition, basic_gui_buttons
+from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperStatus, build_gui_gatekeeper_status
 
 
 @dataclass(frozen=True)
@@ -28,6 +30,49 @@ class GuiControllerViewModel:
         return len(self.actions)
 
 
+@dataclass(frozen=True)
+class CommunicationModeViewModel:
+    mode_id: str
+    label: str
+    role: str
+    selected: bool
+    is_default: bool
+    safety_note: str
+
+
+@dataclass(frozen=True)
+class BasicCockpitButtonViewModel:
+    command_id: str
+    label: str
+    safety_class: str
+    enabled: bool
+    disabled_reason: str
+    wrapper_command: tuple[str, ...]
+    source: str
+    why: str
+
+
+@dataclass(frozen=True)
+class BasicCockpitViewModel:
+    title: str
+    traffic_light_state: str
+    traffic_light_color: str
+    reason: str
+    next_safe_action: str
+    evidence: str
+    mutation_allowed: bool
+    state_source: str
+    communication_mode: str
+    communication_modes: tuple[CommunicationModeViewModel, ...]
+    buttons: tuple[BasicCockpitButtonViewModel, ...]
+    last_result: str
+    explanation: str
+
+    @property
+    def button_count(self) -> int:
+        return len(self.buttons)
+
+
 def _value(value: object, default: str = "") -> str:
     if value is None:
         return default
@@ -42,6 +87,161 @@ def _field(action: object, *names: str, default: object = "") -> object:
         if isinstance(action, dict) and name in action:
             return action[name]
     return default
+
+
+def _normalize_state(value: object) -> str:
+    return str(value or "").strip().upper().replace("-", "_")
+
+
+def _traffic_light_from_gatekeeper_status(status: GuiGatekeeperStatus) -> tuple[str, str, str, str]:
+    workflow_state = _normalize_state(status.workflow_state)
+    current_work_state = _normalize_state(status.current_work_state)
+    combined = {workflow_state, current_work_state}
+    if combined & {"FAILED", "FAIL", "ERROR"}:
+        return (
+            "FAILED",
+            "red",
+            "The last known workflow state is failed.",
+            "Open diagnostics and preserve evidence before any mutation.",
+        )
+    if status.blockers:
+        return (
+            "BLOCKED",
+            "red",
+            "; ".join(status.blockers),
+            "Resolve deterministic blockers before running mutating actions.",
+        )
+    if combined & {"WAIT", "WAITING", "PENDING", "RUNNING", "REQUESTED", "UPLOADED"}:
+        return (
+            "WAIT",
+            "yellow",
+            f"Waiting workflow state: {status.current_work_state or status.workflow_state}.",
+            "Wait for CI, remote state, transfer files, or wrapper completion.",
+        )
+    return (
+        "READY",
+        "green",
+        "Gatekeeper state allows the next safe action.",
+        "Use File Transfer as the default path or run a read-only diagnostic.",
+    )
+
+
+def _communication_modes(selected_mode: str) -> tuple[CommunicationModeViewModel, ...]:
+    selected = selected_mode if selected_mode in {"file_transfer", "remote", "copy_paste"} else "file_transfer"
+    return (
+        CommunicationModeViewModel(
+            "file_transfer",
+            "Dateitransfer",
+            "Standard",
+            selected == "file_transfer",
+            True,
+            "Normal path: typed transfer files, work orders, reports, evidence, no chat paste required.",
+        ),
+        CommunicationModeViewModel(
+            "remote",
+            "Remote",
+            "GitHub/PR/CI",
+            selected == "remote",
+            False,
+            "Remote work is visible here but mutations remain strictly wrapper- and gatekeeper-guarded.",
+        ),
+        CommunicationModeViewModel(
+            "copy_paste",
+            "Copy-and-Paste",
+            "Recovery/Fallback",
+            selected == "copy_paste",
+            False,
+            "Fallback only for terminal loss, Python startup issues, filesystem errors, network trouble before push, broken logs, or hard recovery.",
+        ),
+    )
+
+
+def _button_is_mutating(button: GuiButtonDefinition) -> bool:
+    return button.safety_class in {"bounded-mutation", "local-only", "remote-mutation", "destructive"}
+
+
+def _button_enabled_for_basic(button: GuiButtonDefinition, status: GuiGatekeeperStatus, traffic_state: str) -> tuple[bool, str, str]:
+    if button.safety_class in {"remote-mutation", "destructive"}:
+        return False, "remote/destructive actions are blocked in Basic Mode", "Basic Mode exposes readiness only for this action class."
+    if "release" in button.command_id or "publish" in button.command_id:
+        return False, "release publish/destructive actions are blocked in Basic Mode", "Release controls stay readiness-only until a guarded maintainer flow exists."
+    if not _button_is_mutating(button):
+        return True, "", "read-only diagnostic or status action is allowed"
+    if not button.enabled:
+        return (
+            False,
+            button.disabled_reason or "mutating Basic action has no guarded dispatcher yet",
+            "Basic Mode may show this capability, but execution stays disabled until the catalog marks it safe.",
+        )
+    if traffic_state == "READY" and status.ready_for_mutating_actions:
+        return True, "", "mutating local/fixed-path action is allowed only after gatekeeper revalidation"
+    reason = "mutating action requires READY state and clean gatekeeper revalidation"
+    if status.git_dirty:
+        reason = "mutating action blocked because working tree is dirty"
+    elif traffic_state != "READY":
+        reason = f"mutating action blocked while traffic light is {traffic_state}"
+    return False, reason, "Basic Mode keeps mutation disabled until deterministic state is READY."
+
+
+def _basic_button_view_models(
+    status: GuiGatekeeperStatus,
+    *,
+    traffic_state: str,
+    buttons: Iterable[GuiButtonDefinition] | None = None,
+) -> tuple[BasicCockpitButtonViewModel, ...]:
+    selected = tuple(buttons) if buttons is not None else basic_gui_buttons()
+    items: list[BasicCockpitButtonViewModel] = []
+    for button in selected:
+        enabled, disabled_reason, why = _button_enabled_for_basic(button, status, traffic_state)
+        if not disabled_reason and not button.enabled and not _button_is_mutating(button):
+            disabled_reason = button.disabled_reason
+            enabled = False
+        items.append(
+            BasicCockpitButtonViewModel(
+                command_id=button.command_id,
+                label=button.label,
+                safety_class=button.safety_class,
+                enabled=enabled,
+                disabled_reason=disabled_reason,
+                wrapper_command=button.wrapper_command,
+                source="gui_button_catalog",
+                why=why,
+            )
+        )
+    return tuple(items)
+
+
+def build_basic_cockpit_view_model(
+    project_root: Path | str = ".",
+    *,
+    gatekeeper_status: GuiGatekeeperStatus | None = None,
+    communication_mode: str = "file_transfer",
+    buttons: Iterable[GuiButtonDefinition] | None = None,
+) -> BasicCockpitViewModel:
+    status = gatekeeper_status or build_gui_gatekeeper_status(project_root)
+    traffic_state, color, reason, next_action = _traffic_light_from_gatekeeper_status(status)
+    modes = _communication_modes(communication_mode)
+    selected_mode = next((mode.mode_id for mode in modes if mode.selected), "file_transfer")
+    mutation_allowed = traffic_state == "READY" and status.ready_for_mutating_actions
+    evidence = (
+        f"branch={status.branch}; workflow_state={status.workflow_state}; "
+        f"current_work_state={status.current_work_state or '<none>'}"
+    )
+    return BasicCockpitViewModel(
+        title="agentic-project-kit Cockpit - Basic",
+        traffic_light_state=traffic_state,
+        traffic_light_color=color,
+        reason=reason,
+        next_safe_action=next_action,
+        evidence=evidence,
+        mutation_allowed=mutation_allowed,
+        state_source="gui_gatekeeper_status",
+        communication_mode=selected_mode,
+        communication_modes=modes,
+        buttons=_basic_button_view_models(status, traffic_state=traffic_state, buttons=buttons),
+        last_result="No action has run in this GUI session.",
+        explanation="Basic Mode is a thin control surface over registered wrappers, gatekeeper state, typed work orders, evidence, and readiness reports.",
+    )
 
 
 def action_to_view_model(action: object, *, destructive_actions_enabled: bool = False) -> GuiActionViewModel:
