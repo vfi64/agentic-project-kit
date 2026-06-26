@@ -41,6 +41,7 @@ class PostMergeLifecycleResult:
 
 _REFRESH_REQUIRED = "result=REFRESH_REQUIRED"
 _NOOP = "result=NOOP"
+_REFRESH_ONLY_NOOP = "is already a refresh-only handoff PR"
 
 
 def _post_merge_state(result: RepoActionResult) -> str:
@@ -64,6 +65,10 @@ def _extract_pr_number(text: str) -> int | None:
         if match:
             return int(match.group(1))
     return None
+
+
+def _is_refresh_only_noop(text: str) -> bool:
+    return _REFRESH_ONLY_NOOP in text and "NOOP:" in text
 
 
 def _finish(
@@ -246,7 +251,21 @@ def post_merge_complete(
             steps=steps,
         )
 
-    refresh_pr = _extract_pr_number(f"{refresh_create.stdout}\n{refresh_create.stderr}")
+    refresh_create_output = f"{refresh_create.stdout}\n{refresh_create.stderr}"
+    if _is_refresh_only_noop(refresh_create_output):
+        return _finish(
+            after_pr=after_pr,
+            result_status="PASS",
+            returncode=0,
+            lifecycle_state="REFRESH_ONLY_PR_NOOP",
+            next_action=(
+                "PR is already an administrative handoff refresh; "
+                "no chained refresh PR is allowed."
+            ),
+            steps=steps,
+        )
+
+    refresh_pr = _extract_pr_number(refresh_create_output)
     if refresh_pr is None:
         return _finish(
             after_pr=after_pr,

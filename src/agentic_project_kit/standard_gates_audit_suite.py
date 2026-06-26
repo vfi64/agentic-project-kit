@@ -95,11 +95,16 @@ def _format_command(parts: Sequence[str], version: str) -> tuple[str, ...]:
     return tuple(part.format(version=version) for part in parts)
 
 
-def _last_line(output: str) -> str:
+def _diagnostic_line(output: str) -> str:
     stripped = output.strip()
     if not stripped:
         return "no output"
-    return stripped.splitlines()[-1][:500]
+    lines = stripped.splitlines()
+    for prefix in ("BLOCKER=", "STATUS=FAIL", "ERROR=", "FAIL"):
+        for line in lines:
+            if line.startswith(prefix):
+                return line[:500]
+    return lines[-1][:500]
 
 
 def evaluate_standard_gates_audit_suite(
@@ -120,7 +125,7 @@ def evaluate_standard_gates_audit_suite(
             StandardGateCheck(
                 name=" ".join(formatted),
                 status="PASS" if returncode == 0 else "FAIL",
-                detail=_last_line(output),
+                detail=_diagnostic_line(output),
                 returncode=returncode,
             )
         )

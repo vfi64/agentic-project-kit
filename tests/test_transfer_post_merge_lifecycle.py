@@ -350,6 +350,44 @@ def test_post_merge_complete_stops_on_refresh_loop_after_merge_block_recovery(mo
     assert [step.name for step in result.steps][-1] == "merge-block-recovery-post-merge-check"
 
 
+def test_post_merge_complete_stops_without_chained_refresh_for_refresh_only_pr(monkeypatch):
+    calls: list[str] = []
+
+    def fake_post_merge_check(**_kwargs):
+        calls.append("post_merge_check")
+        return _result(
+            "post-merge-check",
+            "POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n",
+        )
+
+    def fake_admin_refresh_pr(after_pr, **_kwargs):
+        calls.append(f"admin_refresh_pr:{after_pr}")
+        return _result(
+            "admin-refresh-pr",
+            "NOOP: PR #1546 is already a refresh-only handoff PR; skipping chained admin refresh.\n",
+        )
+
+    def fail_if_called(*_args, **_kwargs):
+        raise AssertionError("refresh-only PR must not start CI wait or merge")
+
+    monkeypatch.setattr(f"{TARGET}.post_merge_check", fake_post_merge_check)
+    monkeypatch.setattr(f"{TARGET}.admin_refresh_pr", fake_admin_refresh_pr)
+    monkeypatch.setattr(f"{TARGET}.pr_wait_ci", fail_if_called)
+    monkeypatch.setattr(f"{TARGET}.pr_merge_safe", fail_if_called)
+
+    result = post_merge_complete(1546)
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert result.lifecycle_state == "REFRESH_ONLY_PR_NOOP"
+    assert result.refresh_pr is None
+    assert [step.name for step in result.steps] == [
+        "initial-post-merge-check",
+        "admin-refresh-pr",
+    ]
+    assert calls == ["post_merge_check", "admin_refresh_pr:1546"]
+
+
 def test_post_merge_complete_blocks_unknown_initial_state(monkeypatch):
     monkeypatch.setattr(
         f"{TARGET}.post_merge_check",

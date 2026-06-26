@@ -2707,8 +2707,8 @@ def pr_create_complete_command(
                 step_payload_status = str(parsed.get("result_status", parsed.get("status", "")))
                 if completed.returncode == 0 and derived_rc != 0:
                     blockers.append(name + "_blocked_payload")
-        except Exception:
-            pass
+        except Exception as exc:  # noqa: BLE001 - diagnostic parsing must not hide the wrapped command result.
+            step_payload_status = f"payload_parse_unavailable:{type(exc).__name__}"
 
         steps.append(
             {
@@ -4719,4 +4719,3 @@ def transfer_log_upload_hint_command(
 ) -> None:
     """Render the terminal hint for copy/paste communication with the LLM."""
     typer.echo(render_local_to_llm_log_upload_hint(log_path, return_code=return_code))
-
