@@ -11,6 +11,26 @@ from agentic_project_kit.release_publish_orchestration import (
 )
 
 
+def _write_current_verified_release_files(root: Path, *, version: str, doi: str) -> None:
+    concept_doi = "10.5281/zenodo.20101359"
+    files = {
+        "pyproject.toml": f'version = "{version}"\n',
+        "src/agentic_project_kit/__init__.py": f'__version__ = "{version}"\n',
+        "README.md": f"Current verified release: `{version}` with Zenodo version DOI `{doi}`.\n",
+        "CHANGELOG.md": f"## v{version} - 2026-06-21\n\n- Verified DOI closeout `{doi}`.\n",
+        "CITATION.cff": f'version: {version}\ndoi: "{concept_doi}"\n# Verified v{version} version DOI: {doi}\n',
+        "docs/STATUS.md": f"Current version: {version}\nVerified Zenodo version DOI: `{doi}`.\n",
+        "docs/handoff/CURRENT_HANDOFF.md": f"- Current verified release: {version}.\n- Verified Zenodo version DOI: `{doi}`.\n",
+        "docs/releases/VERIFIED_RELEASES.md": (
+            f"- `v{version}` / `{version}`: Zenodo version DOI `{doi}`; concept DOI `{concept_doi}`.\n"
+        ),
+    }
+    for relative_path, content in files.items():
+        path = root / relative_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content, encoding="utf-8")
+
+
 def test_release_publish_dry_run_plans_without_side_effects(tmp_path: Path) -> None:
     seen: list[tuple[str, ...]] = []
 
@@ -192,6 +212,32 @@ def test_release_publish_execute_is_idempotent_when_tag_and_release_exist(tmp_pa
     assert not any(tuple(args[:3]) == ("gh", "release", "create") for args in seen)
     assert ("gh", "release", "view", "v9.9.9") in seen
     assert any("post-release-check" in args for args in seen)
+
+
+def test_release_publish_dry_run_skips_release_prep_after_current_verified_closeout(tmp_path: Path) -> None:
+    _write_current_verified_release_files(
+        tmp_path,
+        version="9.9.9",
+        doi="10.5281/zenodo.29999999",
+    )
+    seen: list[tuple[str, ...]] = []
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        seen.append(tuple(args))
+        if args == ("git", "rev-parse", "--verify", "v9.9.9"):
+            return 0, "local tag exists\n"
+        if "release-prep" in args:
+            return 0, json.dumps({"changed_paths": ["CHANGELOG.md"]}) + "\n"
+        return 0, "PASS\n"
+
+    plan = evaluate_release_publish_plan(tmp_path, version="9.9.9", runner=runner)
+
+    assert plan.ok is True
+    assert not any("release-prep" in args for args in seen)
+    assert any(
+        check.name == "release-prep dry-run" and "already current_verified" in check.detail
+        for check in plan.checks
+    )
 
 
 def test_release_publish_uses_current_changelog_date_and_summary_for_prep_check(tmp_path: Path) -> None:

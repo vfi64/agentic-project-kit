@@ -19,6 +19,9 @@
 - Add human workflow meta commands
 - Enforce meta-command and Python work-order contracts
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.4.11 DOI `10.5281/zenodo.20917074`.
+
+Zenodo v0.4.11 DOI: 10.5281/zenodo.20917074
 ## v0.4.10 - 2026-06-20
 
 - Release metadata prepared for v0.4.10; Zenodo DOI verification pending until the GitHub release is created.

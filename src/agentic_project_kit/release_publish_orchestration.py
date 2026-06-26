@@ -9,6 +9,8 @@ import shutil
 import subprocess
 
 from agentic_project_kit import __version__ as PACKAGE_VERSION
+from agentic_project_kit.release import CommandResult
+from agentic_project_kit.release_state import build_release_lifecycle_status
 
 
 Runner = Callable[[Sequence[str], Path], tuple[int, str]]
@@ -206,6 +208,28 @@ def _run_release_prep_consistency_check(
     )
 
 
+def _release_already_current_verified(
+    *,
+    version: str,
+    root: Path,
+    runner: Runner,
+) -> bool:
+    def state_runner(cwd: Path, args: Sequence[str]) -> CommandResult:
+        returncode, output = runner(args, cwd)
+        return CommandResult(returncode, output, "")
+
+    try:
+        status = build_release_lifecycle_status(
+            root,
+            version=version,
+            command_runner=state_runner,
+            include_remote=False,
+        )
+    except OSError:
+        return False
+    return status.current_state == "current_verified" and not status.blockers
+
+
 def _github_release_notes(root: Path, version: str) -> str:
     release_date, summary_lines = _current_changelog_release_metadata(root, version)
     if not summary_lines:
@@ -310,6 +334,7 @@ def evaluate_release_publish_plan(
     tag = f"v{version}"
 
     checks: list[ReleasePublishCheck] = []
+    release_already_current_verified = _release_already_current_verified(version=version, root=root, runner=run)
 
     if not dry_run and not execute:
         checks.append(
@@ -320,14 +345,24 @@ def evaluate_release_publish_plan(
             )
         )
 
-    checks.append(
-        _run_release_prep_consistency_check(
-            executable=executable,
-            version=version,
-            root=root,
-            runner=run,
+    if release_already_current_verified:
+        checks.append(
+            ReleasePublishCheck(
+                name="release-prep dry-run",
+                status="PASS",
+                detail="Skipped because release lifecycle state is already current_verified.",
+                returncode=0,
+            )
         )
-    )
+    else:
+        checks.append(
+            _run_release_prep_consistency_check(
+                executable=executable,
+                version=version,
+                root=root,
+                runner=run,
+            )
+        )
     checks.append(
         _run_check(
             name="release metadata authority gate",
