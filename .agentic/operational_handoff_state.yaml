@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5d68dd9c70dabcf5306a3d2ce8d3647dfea3887d
-  short: 5d68dd9c
-  subject: Resolve cockpit agentic-kit commands from GUI (#1573)
+  full: 9d703b2012abbc562ba86b0852f97a4ac0a458ea
+  short: 9d703b20
+  subject: Harden communication rule refresh handshake (#1575)
 last_substantive_work_state:
-  full: 5d68dd9c70dabcf5306a3d2ce8d3647dfea3887d
-  short: 5d68dd9c
-  subject: Resolve cockpit agentic-kit commands from GUI (#1573)
+  full: 9d703b2012abbc562ba86b0852f97a4ac0a458ea
+  short: 9d703b20
+  subject: Harden communication rule refresh handshake (#1575)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
