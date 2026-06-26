@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5a3030e753f088bda5198fa5879639d4512604ab
-  short: 5a3030e7
-  subject: Publish GUI task carrier to dedicated transfer branch (#1586)
+  full: 3dce73ce3ca1d3b5d4a1f38ffd12a4b93fd24f45
+  short: 3dce73ce
+  subject: Add safe GUI volatile restore action (#1588)
 last_substantive_work_state:
-  full: 5a3030e753f088bda5198fa5879639d4512604ab
-  short: 5a3030e7
-  subject: Publish GUI task carrier to dedicated transfer branch (#1586)
+  full: 3dce73ce3ca1d3b5d4a1f38ffd12a4b93fd24f45
+  short: 3dce73ce
+  subject: Add safe GUI volatile restore action (#1588)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
