@@ -1439,6 +1439,7 @@ Run a bounded scan for known workflow standard errors before patch/transfer/rele
 |---|---:|---|---:|---|---|
 | `title` | `TyperOption` | --title | `False` | `GUI file-transfer task` | Task title. |
 | `body_file` | `TyperOption` | --body-file | `True` |  | UTF-8 text file containing the task body. |
+| `publish` | `TyperOption` | --publish | `False` | `False` | Publish the task carrier to the gui-transfer-tasks remote branch. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer sync-main`

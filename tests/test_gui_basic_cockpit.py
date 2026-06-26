@@ -261,6 +261,13 @@ def test_basic_cockpit_header_text() -> None:
     assert HEADER_TEXT == "Agentic-Project-Kit — Basic Cockpit"
 
 
+def test_task_send_uses_publish_and_success_status_mentions_gui_transfer_branch() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+
+    assert '"--publish"' in source
+    assert "Task published to gui-transfer-tasks. Send g/go in chat." in source
+
+
 def test_cockpit_gui_shows_wait_for_d2_label_when_pending() -> None:
     view_model = build_basic_cockpit_view_model(
         gatekeeper_status=_status(

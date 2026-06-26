@@ -8828,6 +8828,20 @@
         },
         {
           "default": false,
+          "help": "Publish the task carrier to the gui-transfer-tasks remote branch.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "publish",
+          "opts": [
+            "--publish"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
           "help": "Print machine-readable JSON.",
           "is_flag": true,
           "metavar": null,
