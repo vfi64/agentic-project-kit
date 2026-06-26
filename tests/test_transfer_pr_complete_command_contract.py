@@ -147,6 +147,7 @@ def test_transfer_pr_create_complete_orchestrates_create_and_complete(monkeypatc
     assert "123" in calls[3]
     assert "0123456789abcdef0123456789abcdef01234567" in calls[3]
     assert "--skip-llm-context-gate" in calls[3]
+    assert "--json" in calls[3]
 
 
 def test_transfer_pr_create_complete_uses_existing_pr_when_create_fails(monkeypatch) -> None:
@@ -367,4 +368,3 @@ def test_transfer_pr_create_resolves_head_current_before_pr_create(monkeypatch) 
 
     assert result.exit_code == 0
     assert captured["head"] == "feature/demo"
-

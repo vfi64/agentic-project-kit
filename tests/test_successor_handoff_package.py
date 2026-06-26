@@ -139,11 +139,13 @@ def test_validate_successor_outputs_requires_execution_contract_rule_ids():
 
 
 def test_build_successor_handoff_package_validates_execution_contract():
+    from agentic_project_kit import __version__ as package_version
     from agentic_project_kit.successor_handoff_package import build_successor_handoff_package
 
     result = build_successor_handoff_package(".")
 
     assert result.validation_report["status"] == "PASS"
+    assert result.context["release"]["package_version"] == package_version
     assert result.execution_contract["kind"] == "successor_execution_contract"
     rule_ids = {rule["rule_id"] for rule in result.execution_contract["rules"]}
     assert "local-copy-paste-protocol" in rule_ids
