@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 314450995a949cee8feb2d90be0bb0ef3bef01bc
-  short: 31445099
-  subject: Finalize pre-GUI planning authority shift (#1565)
+  full: 9251d6bcdb7e2c186f17eb095aacc5405a7d4fb0
+  short: 9251d6bc
+  subject: Build basic cockpit GUI state surface (#1567)
 last_substantive_work_state:
-  full: 314450995a949cee8feb2d90be0bb0ef3bef01bc
-  short: 31445099
-  subject: Finalize pre-GUI planning authority shift (#1565)
+  full: 9251d6bcdb7e2c186f17eb095aacc5405a7d4fb0
+  short: 9251d6bc
+  subject: Build basic cockpit GUI state surface (#1567)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
