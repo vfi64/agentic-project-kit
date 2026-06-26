@@ -1,7 +1,12 @@
 from __future__ import annotations
 
 from agentic_project_kit.gui_button_catalog import GuiButtonDefinition, basic_gui_buttons
-from agentic_project_kit.gui_cockpit import format_basic_cockpit_summary
+from agentic_project_kit.gui_cockpit import (
+    build_gui_action_views,
+    format_action_details,
+    format_basic_cockpit_summary,
+    format_state_details,
+)
 from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperStatus
 from agentic_project_kit.gui_presenter import build_basic_no_window_presenter_result
 from agentic_project_kit.gui_tkinter_shell import (
@@ -163,7 +168,51 @@ def test_basic_cockpit_summary_is_stable_for_entrypoint_output() -> None:
 
     assert "BASIC_COCKPIT" in text
     assert "traffic_light_state=READY" in text
+    assert "required_next_reply=<none>" in text
     assert "buttons=status-refresh" in text
+
+
+def test_cockpit_gui_shows_wait_for_d2_label_when_pending() -> None:
+    view_model = build_basic_cockpit_view_model(
+        gatekeeper_status=_status(
+            blockers=("communication_rule_refresh_pending",),
+            communication_context_fresh=False,
+            communication_context_reason="communication_rule_refresh_pending",
+            required_next_reply="d2",
+        )
+    )
+
+    details = format_state_details(view_model)
+
+    assert "STATE: WAIT_FOR_D2 (yellow)" in details
+    assert "Send 'd2' to the chat" in details
+    assert "provide ACK before mutation" in details
+
+
+def test_cockpit_gui_disables_bounded_buttons_when_d2_pending() -> None:
+    view_model = build_basic_cockpit_view_model(
+        gatekeeper_status=_status(
+            blockers=("communication_rule_refresh_pending",),
+            communication_context_fresh=False,
+            communication_context_reason="communication_rule_refresh_pending",
+            required_next_reply="d2",
+        ),
+        buttons=(_button("bounded-demo", safety_class="bounded-mutation"),),
+    )
+
+    button = view_model.buttons[0]
+
+    assert button.enabled is False
+    assert "WAIT_FOR_D2" in button.disabled_reason
+
+
+def test_cockpit_gui_shows_ready_when_no_pending() -> None:
+    view_model = build_basic_cockpit_view_model(gatekeeper_status=_status())
+
+    details = format_state_details(view_model)
+
+    assert "STATE: READY (green)" in details
+    assert "Send 'd2'" not in details
 
 
 def test_basic_button_execution_revalidates_gatekeeper_before_dispatch() -> None:
@@ -175,3 +224,16 @@ def test_basic_button_execution_revalidates_gatekeeper_before_dispatch() -> None
     assert "action=communication-rules-refresh" in output
     assert "allowed=false" in output
     assert "executed=false" in output
+
+
+def test_inspect_selected_shows_structured_explanation() -> None:
+    actions = {
+        action.action_id: action
+        for action in build_gui_action_views()
+    }
+
+    text = format_action_details(actions["rules.communication-refresh"])
+
+    assert "structured_explanation:" in text
+    assert "PURPOSE:" in text
+    assert "AFTER PASS:" in text

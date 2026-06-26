@@ -253,13 +253,30 @@ def test_cockpit_actions_json_cli_does_not_execute_actions() -> None:
     assert "executed=true" not in result.output
 
 
-def test_cockpit_rule_refresh_actions_are_read_only() -> None:
+def test_cockpit_rule_refresh_actions_are_bounded() -> None:
     communication = action_by_id("rules.communication-refresh")
     handoff = action_by_id("rules.handoff-refresh")
 
     assert communication is not None
     assert handoff is not None
-    assert communication.safety == READ_ONLY
-    assert handoff.safety == READ_ONLY
+    assert communication.safety == BOUNDED
+    assert handoff.safety == BOUNDED
     assert communication.command == ("agentic-kit", "rules", "communication-refresh", "--publish", "--json")
     assert handoff.command == ("agentic-kit", "rules", "handoff-refresh")
+
+
+def test_no_read_only_cockpit_action_uses_known_writing_command() -> None:
+    writing_fragments = {
+        "rules communication-refresh",
+        "rules handoff-refresh",
+        "transfer chat-switch-complete",
+        "workflow go",
+        "rn",
+        "rnc",
+    }
+
+    for action in cockpit_actions():
+        if action.safety != READ_ONLY:
+            continue
+        command = " ".join(action.command)
+        assert not any(fragment in command for fragment in writing_fragments), action.action_id

@@ -2,14 +2,24 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import subprocess
 from typing import Any
 
 from agentic_project_kit.cockpit import READ_ONLY, CockpitAction, CockpitActionResult, cockpit_actions, run_cockpit_action
+from agentic_project_kit.gui_task_editor import (
+    TaskEditorState,
+    task_editor_send_enabled,
+    task_editor_state_after_read,
+    task_editor_state_after_send,
+    task_editor_visible_for_mode,
+)
 from agentic_project_kit.gui_tk_widgets import (
     attach_tooltip,
+    communication_mode_explanation,
     communication_mode_option_values,
     selected_communication_mode_option,
     traffic_light_fill,
+    traffic_light_state_label,
 )
 from agentic_project_kit.gui_tkinter_shell import run_basic_cockpit_button
 from agentic_project_kit.gui_viewmodel import BasicCockpitViewModel, build_basic_cockpit_view_model
@@ -24,6 +34,51 @@ class GuiActionView:
     command: tuple[str, ...]
     description: str
     can_run_by_default: bool
+    structured_explanation: str | None = None
+
+
+STRUCTURED_ACTION_EXPLANATIONS = {
+    "git.status": (
+        "PURPOSE: Show local repository dirty state.\n"
+        "EFFECT: Reads git status only.\n"
+        "WHEN: Use before any mutation or PR closeout.\n"
+        "BLOCKED WHEN: Git status cannot run.\n"
+        "AFTER PASS: Continue with the next safe action.\n"
+        "AFTER FAIL: Diagnose repository access."
+    ),
+    "workflow.state": (
+        "PURPOSE: Show workflow and gatekeeper readiness.\n"
+        "EFFECT: Reads workflow state only.\n"
+        "WHEN: Use when deciding whether the GUI may proceed.\n"
+        "BLOCKED WHEN: Workflow state files are unreadable.\n"
+        "AFTER PASS: Continue with the recommended action.\n"
+        "AFTER FAIL: Preserve evidence and diagnose workflow state."
+    ),
+    "dialog.rn": (
+        "PURPOSE: Run the next file-transfer work order through the wrapper.\n"
+        "EFFECT: Performs bounded local workflow mutation.\n"
+        "WHEN: Use only after READY state and valid work order.\n"
+        "BLOCKED WHEN: d2 is pending, state is dirty, or work order is invalid.\n"
+        "AFTER PASS: Read the generated result/evidence.\n"
+        "AFTER FAIL: Inspect the report before retrying."
+    ),
+    "dialog.rnc": (
+        "PURPOSE: Close out the last run through the fixed closeout wrapper.\n"
+        "EFFECT: Commits/pushes expected closeout paths when guarded.\n"
+        "WHEN: Use after a successful bounded run.\n"
+        "BLOCKED WHEN: Required evidence or clean state is missing.\n"
+        "AFTER PASS: Continue with handoff or next slice.\n"
+        "AFTER FAIL: Diagnose closeout evidence."
+    ),
+    "rules.communication-refresh": (
+        "PURPOSE: Publish the current communication rule capsule.\n"
+        "EFFECT: Writes generated rule artifacts and a local d2 pending state.\n"
+        "WHEN: Use when the assistant must reload communication rules.\n"
+        "BLOCKED WHEN: Local mutation is not safe.\n"
+        "AFTER PASS: Send d2 and require machine-readable ACK.\n"
+        "AFTER FAIL: Diagnose rule-refresh output."
+    ),
+}
 
 
 def build_gui_action_views(actions: list[CockpitAction] | None = None) -> list[GuiActionView]:
@@ -37,6 +92,7 @@ def build_gui_action_views(actions: list[CockpitAction] | None = None) -> list[G
             command=action.command,
             description=action.description,
             can_run_by_default=action.safety == READ_ONLY,
+            structured_explanation=STRUCTURED_ACTION_EXPLANATIONS.get(action.action_id),
         )
         for action in selected
     ]
@@ -64,6 +120,8 @@ def format_action_details(action: GuiActionView) -> str:
         f"description={action.description}",
         f"safety_explanation={explain_safety(action.safety)}",
     ]
+    if action.structured_explanation:
+        lines.extend(["", "structured_explanation:", action.structured_explanation])
     return "\n".join(lines)
 
 
@@ -90,11 +148,30 @@ def format_basic_cockpit_summary(view_model: BasicCockpitViewModel) -> str:
         f"traffic_light_state={view_model.traffic_light_state}",
         f"traffic_light_color={view_model.traffic_light_color}",
         f"communication_mode={view_model.communication_mode}",
+        f"communication_context_fresh={str(view_model.communication_context_fresh).lower()}",
+        f"required_next_reply={view_model.required_next_reply or '<none>'}",
         f"mutation_allowed={str(view_model.mutation_allowed).lower()}",
         f"next_safe_action={view_model.next_safe_action}",
         f"reason={view_model.reason}",
         "buttons=" + ",".join(button.command_id for button in view_model.buttons),
     ]
+    return "\n".join(lines)
+
+
+def format_state_details(view_model: BasicCockpitViewModel) -> str:
+    lines = [
+        f"STATE: {traffic_light_state_label(view_model.traffic_light_state)}",
+        f"REASON: {view_model.reason}",
+        f"NEXT ACTION: {view_model.next_safe_action}",
+    ]
+    if view_model.required_next_reply == "d2":
+        lines.extend(
+            [
+                "",
+                "Communication Rules Refresh pending. Send 'd2' to the chat.",
+                "The assistant must read the remote rule capsule and provide ACK before mutation.",
+            ]
+        )
     return "\n".join(lines)
 
 
@@ -133,7 +210,7 @@ class CockpitGui:
         traffic_light.pack(side=tk.LEFT, padx=(0, 8))
         ttk.Label(
             traffic_row,
-            text=f"{self.basic_view.traffic_light_state} ({self.basic_view.traffic_light_color})",
+            text=traffic_light_state_label(self.basic_view.traffic_light_state),
             font=("TkDefaultFont", 12, "bold"),
         ).pack(side=tk.LEFT, padx=(0, 12))
         ttk.Label(
@@ -145,6 +222,13 @@ class CockpitGui:
         ttk.Label(status_frame, text=self.basic_view.reason, anchor=tk.W, wraplength=980).pack(
             fill=tk.X, pady=(4, 0)
         )
+        ttk.Label(
+            status_frame,
+            text=format_state_details(self.basic_view),
+            anchor=tk.W,
+            justify=tk.LEFT,
+            wraplength=980,
+        ).pack(fill=tk.X, pady=(6, 0))
 
         mode_row = ttk.Frame(status_frame)
         mode_row.pack(fill=tk.X, pady=(6, 0))
@@ -164,6 +248,16 @@ class CockpitGui:
             mode_select,
             "Select the communication mode. File Transfer is the standard path; Copy-and-Paste is a recovery fallback.",
         )
+        self.mode_explanation_var = tk.StringVar(
+            value=communication_mode_explanation(self.basic_view.communication_mode)
+        )
+        ttk.Label(
+            status_frame,
+            textvariable=self.mode_explanation_var,
+            anchor=tk.W,
+            wraplength=980,
+        ).pack(fill=tk.X, pady=(4, 0))
+        mode_select.bind("<<ComboboxSelected>>", self.update_mode_explanation)
 
         basic_buttons = ttk.LabelFrame(frame, text="Basic Actions", padding=8)
         basic_buttons.pack(fill=tk.X, pady=(0, 8))
@@ -181,6 +275,60 @@ class CockpitGui:
                 tooltip = f"{tooltip} Disabled: {button.disabled_reason}"
             attach_tooltip(widget, tooltip)
             widget.pack(side=tk.LEFT, padx=(0, 8), pady=1)
+
+        self.task_editor_state = TaskEditorState.IDLE
+        self.task_status_var = tk.StringVar(value="Write a file-transfer task, then send it through the guarded wrapper.")
+        if task_editor_visible_for_mode(self.basic_view.communication_mode):
+            task_frame = ttk.LabelFrame(frame, text="File Transfer Task", padding=8)
+            task_frame.pack(fill=tk.X, pady=(0, 8))
+            self.task_text = tk.Text(task_frame, height=6, wrap=tk.WORD)
+            self.task_text.pack(fill=tk.X, expand=False)
+            self.task_text.bind("<KeyRelease>", self.refresh_task_editor_buttons)
+            task_button_row = ttk.Frame(task_frame)
+            task_button_row.pack(fill=tk.X, pady=(6, 0))
+            self.initial_prompt_button = ttk.Button(
+                task_button_row,
+                text="Initial Prompt",
+                command=self.show_initial_llm_prompt,
+            )
+            attach_tooltip(
+                self.initial_prompt_button,
+                "Render the one-time initial LLM prompt for file-transfer dialog setup.",
+            )
+            self.initial_prompt_button.pack(side=tk.LEFT, padx=(0, 8))
+            self.task_send_button = ttk.Button(
+                task_button_row,
+                text="Send",
+                command=self.send_user_task,
+            )
+            attach_tooltip(
+                self.task_send_button,
+                "Write the task through agentic-kit transfer submit-user-task.",
+            )
+            self.task_send_button.pack(side=tk.LEFT, padx=(0, 8))
+            self.task_read_button = ttk.Button(
+                task_button_row,
+                text="Read",
+                command=self.read_last_task_result,
+                state=tk.DISABLED,
+            )
+            attach_tooltip(
+                self.task_read_button,
+                "Read the latest transfer report through agentic-kit transfer show-last-report --json.",
+            )
+            self.task_read_button.pack(side=tk.LEFT, padx=(0, 8))
+            ttk.Label(
+                task_frame,
+                textvariable=self.task_status_var,
+                anchor=tk.W,
+                wraplength=980,
+            ).pack(fill=tk.X, pady=(6, 0))
+            self.refresh_task_editor_buttons()
+        else:
+            self.task_text = None
+            self.initial_prompt_button = None
+            self.task_send_button = None
+            self.task_read_button = None
 
         columns = ("label", "category", "safety", "command")
         self.tree = ttk.Treeview(frame, columns=columns, show="headings", height=12)
@@ -237,6 +385,105 @@ class CockpitGui:
 
     def clear_output(self) -> None:
         self.output.delete("1.0", "end")
+
+    def update_mode_explanation(self, _event: object | None = None) -> None:
+        option = self.mode_var.get()
+        selected = next(
+            (
+                mode.mode_id
+                for mode in self.basic_view.communication_modes
+                if f"{mode.label}: {mode.role}" == option
+            ),
+            self.basic_view.communication_mode,
+        )
+        self.mode_explanation_var.set(communication_mode_explanation(selected))
+
+    def current_task_body(self) -> str:
+        if self.task_text is None:
+            return ""
+        return self.task_text.get("1.0", "end").strip()
+
+    def refresh_task_editor_buttons(self, _event: object | None = None) -> None:
+        if self.task_send_button is None or self.task_read_button is None:
+            return
+        can_send = task_editor_send_enabled(
+            self.current_task_body(),
+            traffic_light_state=self.basic_view.traffic_light_state,
+            communication_context_fresh=self.basic_view.communication_context_fresh,
+            required_next_reply=self.basic_view.required_next_reply,
+        )
+        if self.task_editor_state == TaskEditorState.SENT:
+            self.task_send_button.configure(state="disabled")
+            self.task_read_button.configure(state="normal")
+            self.task_status_var.set("Task sent. Send 'g' or 'go' in chat, then use Read.")
+            return
+        self.task_read_button.configure(state="disabled")
+        self.task_send_button.configure(state="normal" if can_send else "disabled")
+        if self.basic_view.required_next_reply == "d2":
+            self.task_status_var.set("Blocked: send d2 and complete communication-rule ACK before mutation.")
+        elif not self.current_task_body():
+            self.task_status_var.set("Write a file-transfer task before sending.")
+        elif not can_send:
+            self.task_status_var.set("Blocked: gatekeeper must be READY and communication context fresh.")
+        else:
+            self.task_status_var.set("Ready to send the file-transfer task.")
+
+    def _agentic_command(self, *parts: str) -> subprocess.CompletedProcess[str]:
+        executable = self.project_root / ".venv" / "bin" / "agentic-kit"
+        command = [str(executable) if executable.exists() else "agentic-kit", *parts]
+        return subprocess.run(
+            command,
+            cwd=self.project_root,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+
+    def show_initial_llm_prompt(self) -> None:
+        completed = self._agentic_command("gui", "initial-llm-prompt", "--json")
+        self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
+
+    def send_user_task(self) -> None:
+        body = self.current_task_body()
+        if not task_editor_send_enabled(
+            body,
+            traffic_light_state=self.basic_view.traffic_light_state,
+            communication_context_fresh=self.basic_view.communication_context_fresh,
+            required_next_reply=self.basic_view.required_next_reply,
+        ):
+            self.task_editor_state = TaskEditorState.BLOCKED
+            self.task_status_var.set("Blocked: task text, READY state, and fresh communication context are required.")
+            self.refresh_task_editor_buttons()
+            return
+        tmp_path = self.project_root / "tmp" / "gui-task-editor-current-task.md"
+        tmp_path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_path.write_text(body + "\n", encoding="utf-8")
+        completed = self._agentic_command(
+            "transfer",
+            "submit-user-task",
+            "--title",
+            "GUI file-transfer task",
+            "--body-file",
+            str(tmp_path),
+            "--json",
+        )
+        self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
+        result_status = "PASS" if completed.returncode == 0 else "FAIL"
+        self.task_editor_state = task_editor_state_after_send(result_status)
+        if self.task_editor_state == TaskEditorState.SENT and self.task_text is not None:
+            self.task_text.configure(state="disabled")
+        self.refresh_task_editor_buttons()
+
+    def read_last_task_result(self) -> None:
+        completed = self._agentic_command("transfer", "show-last-report", "--json")
+        self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
+        result_status = "PASS" if completed.returncode == 0 else "FAIL"
+        self.task_editor_state = task_editor_state_after_read(result_status)
+        if self.task_editor_state == TaskEditorState.IDLE and self.task_text is not None:
+            self.task_text.configure(state="normal")
+            self.task_text.delete("1.0", "end")
+        self.refresh_task_editor_buttons()
 
     def inspect_selected(self) -> None:
         action_id = self.selected_action_id()

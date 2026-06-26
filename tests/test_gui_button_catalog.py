@@ -159,3 +159,26 @@ def test_gui_button_catalog_enabled_bounded_mutation_is_fixed_path_only():
     assert upload.gui_gate == "fixed_path_upload_gate"
     assert upload.requires_parameters is False
 
+
+def test_communication_refresh_button_is_bounded_local_mutation():
+    button = get_gui_button("communication-rules-refresh")
+
+    assert button is not None
+    assert button.safety_class == "bounded-mutation"
+    assert button.enabled is False
+    assert button.wrapper_command == (
+        "agentic-kit",
+        "rules",
+        "communication-refresh",
+        "--publish",
+        "--json",
+    )
+
+
+def test_communication_refresh_button_has_structured_explanation():
+    button = get_gui_button("communication-rules-refresh")
+
+    assert button is not None
+    assert button.structured_explanation is not None
+    assert "PURPOSE:" in button.structured_explanation
+    assert "AFTER PASS:" in button.structured_explanation

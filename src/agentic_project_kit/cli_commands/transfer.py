@@ -4742,6 +4742,41 @@ def show_last_report(
     typer.echo(report_text if json_output else _render_latest_transfer_report_summary(report_text))
 
 
+@transfer_app.command("submit-user-task")
+def submit_user_task_command(
+    title: str = typer.Option("GUI file-transfer task", "--title", help="Task title."),
+    body_file: Path = typer.Option(..., "--body-file", help="UTF-8 text file containing the task body."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    from agentic_project_kit.gui_task_editor import submit_user_task
+
+    try:
+        body = body_file.read_text(encoding="utf-8")
+        result = submit_user_task(Path("."), title=title, body=body)
+    except (OSError, ValueError) as exc:
+        payload = {
+            "schema_version": 1,
+            "kind": "gui_file_transfer_user_task_submission",
+            "result_status": "FAIL",
+            "reason": str(exc),
+            "button_next_state": "BLOCKED",
+        }
+        if json_output:
+            typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+        else:
+            typer.echo(f"RESULT=FAIL\nREASON={exc}")
+        raise typer.Exit(code=2) from exc
+    if json_output:
+        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo("GUI_FILE_TRANSFER_USER_TASK")
+        typer.echo(f"result_status={result.result_status}")
+        typer.echo(f"task_id={result.task_id}")
+        typer.echo(f"remote_path={result.remote_path}")
+        typer.echo(f"next_reply={result.next_reply}")
+        typer.echo(f"next_action={result.next_action}")
+
+
 @transfer_app.command("run-sequence-and-log")
 def run_sequence_and_log(
     step: list[str] = typer.Option(
