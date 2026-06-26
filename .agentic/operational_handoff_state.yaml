@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c43a687a33d2cf21c8ad03c0ca0fa57038e1dcf9
-  short: c43a687a
-  subject: Add cockpit visual hierarchy, recommended-action zone, and theme constants (#1584)
+  full: 5a3030e753f088bda5198fa5879639d4512604ab
+  short: 5a3030e7
+  subject: Publish GUI task carrier to dedicated transfer branch (#1586)
 last_substantive_work_state:
-  full: c43a687a33d2cf21c8ad03c0ca0fa57038e1dcf9
-  short: c43a687a
-  subject: Add cockpit visual hierarchy, recommended-action zone, and theme constants (#1584)
+  full: 5a3030e753f088bda5198fa5879639d4512604ab
+  short: 5a3030e7
+  subject: Publish GUI task carrier to dedicated transfer branch (#1586)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
