@@ -5,13 +5,17 @@ from datetime import datetime, timezone
 from enum import StrEnum
 import hashlib
 import json
+import os
 from pathlib import Path
 import subprocess
+from typing import Callable
 
 from agentic_project_kit.communication_rule_context import REQUIRED_LOADED_SECTIONS
+from agentic_project_kit import transfer_repo_actions
 
 
 CURRENT_USER_TASK_PATH = Path("docs/reports/transfer_tasks/current_user_task.json")
+GUI_TRANSFER_TASK_REF = "gui-transfer-tasks"
 
 
 class TaskEditorState(StrEnum):
@@ -28,6 +32,7 @@ class InitialLlmPrompt:
     prompt_text: str
     copy_paste_instruction: str
     task_path: str
+    task_ref: str
 
     def as_json_data(self) -> dict[str, object]:
         return asdict(self)
@@ -41,12 +46,16 @@ class SubmittedUserTask:
     title: str
     remote_path: str
     task_path: str
+    published_ref: str | None
     next_reply: str
     next_action: str
     button_next_state: str
     body_sha256: str
     created_at_utc: str
     head_sha: str
+    blob_sha: str
+    commit_status: str
+    push_status: str
     local_only: bool
     remote_readable: bool
     reason: str
@@ -78,13 +87,18 @@ the discrepancy.
 """
 
 
-def _initial_prompt_file_transfer_block(task_path: Path = CURRENT_USER_TASK_PATH) -> str:
+def _initial_prompt_file_transfer_block(
+    task_path: Path = CURRENT_USER_TASK_PATH,
+    task_ref: str = GUI_TRANSFER_TASK_REF,
+) -> str:
     path = task_path.as_posix()
     return f"""File-transfer dialog (normal path):
 
 When the user writes "g" or "go":
-- Read {path} from the remote repository.
-- If the file does not exist (HTTP 404 or missing): reply exactly
+- Read {path} from the remote ref `{task_ref}`.
+  Do not read this task carrier from `main` unless the send result explicitly
+  says it was published to `main`.
+- If the ref or file does not exist (HTTP 404 or missing): reply exactly
   TASK_NOT_FOUND and do not mutate anything. The user must click Send
   in the GUI first.
 - If the file exists: treat it as the current user task carrier.
@@ -130,7 +144,7 @@ Do not continue with mutation if blob_sha does not match expected_blob_sha.
 def _initial_prompt_stop_rules_block() -> str:
     return """Stop and report without mutating when:
 - Bootstrap not accepted or validation_report.json is not PASS.
-- g/go received but current_user_task.json is missing. Reply TASK_NOT_FOUND.
+- g/go received but the task ref or current_user_task.json is missing. Reply TASK_NOT_FOUND.
 - d2 received but no pending state exists. Reply RULE_REFRESH_NOT_PENDING.
 - d2 received but blob_sha does not match. Reply RULE_REFRESH_ACK_BLOCKED.
 - Communication rule refresh is pending and no valid ACK exists.
@@ -141,11 +155,14 @@ Do not guess. Do not improvise. Stop and report.
 """
 
 
-def build_initial_llm_prompt(task_path: Path = CURRENT_USER_TASK_PATH) -> InitialLlmPrompt:
+def build_initial_llm_prompt(
+    task_path: Path = CURRENT_USER_TASK_PATH,
+    task_ref: str = GUI_TRANSFER_TASK_REF,
+) -> InitialLlmPrompt:
     prompt = "\n\n".join(
         (
             _initial_prompt_bootstrap_block().strip(),
-            _initial_prompt_file_transfer_block(task_path).strip(),
+            _initial_prompt_file_transfer_block(task_path, task_ref).strip(),
             _initial_prompt_d2_block().strip(),
             _initial_prompt_stop_rules_block().strip(),
         )
@@ -159,7 +176,23 @@ def build_initial_llm_prompt(task_path: Path = CURRENT_USER_TASK_PATH) -> Initia
             "of a new session. The LLM must read the bootstrap files before any work."
         ),
         task_path=task_path.as_posix(),
+        task_ref=task_ref,
     )
+
+
+GitRunner = Callable[[Path, tuple[str, ...]], subprocess.CompletedProcess[str]]
+
+
+@dataclass(frozen=True)
+class TaskCarrierPublishResult:
+    result_status: str
+    published_ref: str
+    remote_path: str
+    remote_readable: bool
+    blob_sha: str
+    commit_status: str
+    push_status: str
+    reason: str
 
 
 def submit_user_task(
@@ -168,7 +201,9 @@ def submit_user_task(
     title: str,
     body: str,
     task_path: Path = CURRENT_USER_TASK_PATH,
+    publish: bool = False,
     created_at_utc: str | None = None,
+    git_runner: GitRunner | None = None,
 ) -> SubmittedUserTask:
     root = Path(project_root).resolve()
     normalized_title = title.strip() or "GUI file-transfer task"
@@ -194,36 +229,228 @@ def submit_user_task(
         "status": "submitted",
         "next_reply": "g",
         "next_action": (
-            "Task carrier written locally only. Publish through the guarded "
-            "agentic-kit transfer path before sending g/go to the LLM."
+            f"Send g/go to the LLM; assistant must read the task carrier from ref {GUI_TRANSFER_TASK_REF}."
+            if publish
+            else (
+                "Task carrier written locally only. Publish through the guarded "
+                "agentic-kit transfer path before sending g/go to the LLM."
+            )
         ),
         "remote_path": relative_path,
         "task_path": relative_path,
-        "local_only": True,
+        "published_ref": GUI_TRANSFER_TASK_REF if publish else None,
+        "local_only": not publish,
         "remote_readable": False,
     }
-    target = root / task_path
-    target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    publish_result = None
+    if publish:
+        publish_result = _publish_task_carrier(
+            root,
+            task_path,
+            payload,
+            git_runner=git_runner or _run_git,
+        )
+    else:
+        _write_task_payload(root / task_path, payload)
+
+    remote_readable = bool(publish_result and publish_result.remote_readable)
+    result_status = "PASS" if not publish or remote_readable else "FAIL"
+    commit_status = publish_result.commit_status if publish_result else "SKIPPED"
+    push_status = publish_result.push_status if publish_result else "SKIPPED"
+    blob_sha = publish_result.blob_sha if publish_result else ""
+    reason = (
+        publish_result.reason
+        if publish_result
+        else "task_carrier_local_only"
+    )
+    next_action = (
+        f"Send g/go to the LLM; assistant must read the task carrier from ref {GUI_TRANSFER_TASK_REF}."
+        if remote_readable
+        else (
+            "Task carrier written locally only. Publish through the guarded "
+            "agentic-kit transfer path before sending g/go to the LLM."
+            if not publish
+            else "Inspect task carrier publish failure before sending g/go."
+        )
+    )
     return SubmittedUserTask(
-        result_status="PASS",
+        result_status=result_status,
         kind="gui_file_transfer_user_task_submission",
         task_id=task_id,
         title=normalized_title,
         remote_path=relative_path,
         task_path=relative_path,
+        published_ref=GUI_TRANSFER_TASK_REF if publish else None,
         next_reply="g",
-        next_action=(
-            "Task carrier written locally only. Publish through the guarded "
-            "agentic-kit transfer path before sending g/go to the LLM."
-        ),
-        button_next_state=TaskEditorState.BLOCKED.value,
+        next_action=next_action,
+        button_next_state=TaskEditorState.SENT.value if remote_readable else TaskEditorState.BLOCKED.value,
         body_sha256=body_sha,
         created_at_utc=created,
         head_sha=head_sha,
-        local_only=True,
+        blob_sha=blob_sha,
+        commit_status=commit_status,
+        push_status=push_status,
+        local_only=not remote_readable,
+        remote_readable=remote_readable,
+        reason=reason,
+    )
+
+
+def _write_task_payload(target: Path, payload: dict[str, object]) -> None:
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _publish_task_carrier(
+    root: Path,
+    task_path: Path,
+    payload: dict[str, object],
+    *,
+    git_runner: GitRunner,
+) -> TaskCarrierPublishResult:
+    payload_text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    with _working_directory(root):
+        original_branch = _git_runner_output(root, git_runner, ("branch", "--show-current")) or ""
+        ensure_result = _ensure_task_carrier_branch(root, git_runner=git_runner)
+        if ensure_result is not None:
+            return _restore_branch_after_publish(root, original_branch, ensure_result)
+
+        _write_task_payload(root / task_path, payload)
+        commit_result = transfer_repo_actions.commit_paths(
+            "Publish GUI transfer task carrier",
+            [task_path.as_posix()],
+            required_branch=GUI_TRANSFER_TASK_REF,
+        )
+        if commit_result.returncode != 0:
+            result = TaskCarrierPublishResult(
+                result_status="FAIL",
+                published_ref=GUI_TRANSFER_TASK_REF,
+                remote_path=task_path.as_posix(),
+                remote_readable=False,
+                blob_sha="",
+                commit_status=commit_result.result_status,
+                push_status="SKIPPED",
+                reason="commit_failed",
+            )
+            return _restore_branch_after_publish(root, original_branch, result)
+
+        push_result = transfer_repo_actions.push_current(required_branch=GUI_TRANSFER_TASK_REF)
+        if push_result.returncode != 0:
+            result = TaskCarrierPublishResult(
+                result_status="FAIL",
+                published_ref=GUI_TRANSFER_TASK_REF,
+                remote_path=task_path.as_posix(),
+                remote_readable=False,
+                blob_sha="",
+                commit_status=commit_result.result_status,
+                push_status=push_result.result_status,
+                reason="push_failed",
+            )
+            return _restore_branch_after_publish(root, original_branch, result)
+
+        verification = _verify_remote_task_carrier(
+            root,
+            task_path,
+            expected_payload_text=payload_text,
+            git_runner=git_runner,
+        )
+        result = TaskCarrierPublishResult(
+            result_status="PASS" if verification.remote_readable else "FAIL",
+            published_ref=GUI_TRANSFER_TASK_REF,
+            remote_path=task_path.as_posix(),
+            remote_readable=verification.remote_readable,
+            blob_sha=verification.blob_sha,
+            commit_status=commit_result.result_status,
+            push_status=push_result.result_status,
+            reason=verification.reason,
+        )
+        return _restore_branch_after_publish(root, original_branch, result)
+
+
+def _ensure_task_carrier_branch(
+    root: Path,
+    *,
+    git_runner: GitRunner,
+) -> TaskCarrierPublishResult | None:
+    fetch = git_runner(root, ("fetch", "origin", GUI_TRANSFER_TASK_REF))
+    local_exists = git_runner(root, ("rev-parse", "--verify", "--quiet", GUI_TRANSFER_TASK_REF)).returncode == 0
+    remote_exists = git_runner(root, ("rev-parse", "--verify", "--quiet", f"origin/{GUI_TRANSFER_TASK_REF}")).returncode == 0
+    if local_exists or remote_exists:
+        switch_result = transfer_repo_actions.branch_switch(GUI_TRANSFER_TASK_REF, pull=remote_exists)
+        if switch_result.returncode != 0:
+            return TaskCarrierPublishResult(
+                result_status="FAIL",
+                published_ref=GUI_TRANSFER_TASK_REF,
+                remote_path=CURRENT_USER_TASK_PATH.as_posix(),
+                remote_readable=False,
+                blob_sha="",
+                commit_status="SKIPPED",
+                push_status="SKIPPED",
+                reason="branch_switch_failed",
+            )
+        return None
+
+    create_result = transfer_repo_actions.branch_create(GUI_TRANSFER_TASK_REF, start_point="main")
+    if create_result.returncode != 0:
+        return TaskCarrierPublishResult(
+            result_status="FAIL",
+            published_ref=GUI_TRANSFER_TASK_REF,
+            remote_path=CURRENT_USER_TASK_PATH.as_posix(),
+            remote_readable=False,
+            blob_sha="",
+            commit_status="SKIPPED",
+            push_status="SKIPPED",
+            reason="branch_create_failed" if fetch.returncode != 0 else "branch_create_failed_after_fetch",
+        )
+    return None
+
+
+@dataclass(frozen=True)
+class RemoteTaskCarrierVerification:
+    remote_readable: bool
+    blob_sha: str
+    reason: str
+
+
+def _verify_remote_task_carrier(
+    root: Path,
+    task_path: Path,
+    *,
+    expected_payload_text: str,
+    git_runner: GitRunner,
+) -> RemoteTaskCarrierVerification:
+    git_runner(root, ("fetch", "origin", GUI_TRANSFER_TASK_REF))
+    remote_spec = f"origin/{GUI_TRANSFER_TASK_REF}:{task_path.as_posix()}"
+    blob = git_runner(root, ("rev-parse", "--verify", remote_spec))
+    if blob.returncode != 0:
+        return RemoteTaskCarrierVerification(False, "", "remote_blob_missing")
+    show = git_runner(root, ("show", remote_spec))
+    if show.returncode != 0:
+        return RemoteTaskCarrierVerification(False, blob.stdout.strip(), "remote_file_missing")
+    if show.stdout != expected_payload_text:
+        return RemoteTaskCarrierVerification(False, blob.stdout.strip(), "remote_content_mismatch")
+    return RemoteTaskCarrierVerification(True, blob.stdout.strip(), "remote_carrier_verified")
+
+
+def _restore_branch_after_publish(
+    root: Path,
+    original_branch: str,
+    result: TaskCarrierPublishResult,
+) -> TaskCarrierPublishResult:
+    if not original_branch or original_branch == GUI_TRANSFER_TASK_REF:
+        return result
+    restore = transfer_repo_actions.branch_switch(original_branch)
+    if restore.returncode == 0:
+        return result
+    return TaskCarrierPublishResult(
+        result_status="FAIL",
+        published_ref=result.published_ref,
+        remote_path=result.remote_path,
         remote_readable=False,
-        reason="task_carrier_local_only",
+        blob_sha=result.blob_sha,
+        commit_status=result.commit_status,
+        push_status=result.push_status,
+        reason=f"{result.reason}; restore_branch_failed",
     )
 
 
@@ -299,7 +526,21 @@ def task_editor_state_after_read(result_status: str) -> TaskEditorState:
 
 
 def _git_output(root: Path, *args: str) -> str:
-    completed = subprocess.run(
+    completed = _run_git(root, args)
+    if completed.returncode != 0:
+        return ""
+    return completed.stdout.strip()
+
+
+def _git_runner_output(root: Path, git_runner: GitRunner, args: tuple[str, ...]) -> str:
+    completed = git_runner(root, args)
+    if completed.returncode != 0:
+        return ""
+    return completed.stdout.strip()
+
+
+def _run_git(root: Path, args: tuple[str, ...]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
         ["git", *args],
         cwd=root,
         text=True,
@@ -307,6 +548,17 @@ def _git_output(root: Path, *args: str) -> str:
         stderr=subprocess.PIPE,
         check=False,
     )
-    if completed.returncode != 0:
-        return ""
-    return completed.stdout.strip()
+
+
+class _working_directory:
+    def __init__(self, path: Path) -> None:
+        self.path = path
+        self.previous: Path | None = None
+
+    def __enter__(self) -> None:
+        self.previous = Path.cwd()
+        os.chdir(self.path)
+
+    def __exit__(self, *_exc: object) -> None:
+        if self.previous is not None:
+            os.chdir(self.previous)

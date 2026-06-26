@@ -437,7 +437,7 @@ class CockpitGui:
             )
             attach_tooltip(
                 self.task_send_button,
-                "Write the task through agentic-kit transfer submit-user-task. The current implementation reports local-only until published.",
+                "Publish the task through agentic-kit transfer submit-user-task --publish.",
             )
             self.task_send_button.pack(side=tk.LEFT, padx=(0, 8))
             self.task_read_button = ttk.Button(
@@ -575,7 +575,7 @@ class CockpitGui:
         if self.task_editor_state == TaskEditorState.SENT:
             self.task_send_button.configure(state="disabled")
             self.task_read_button.configure(state="normal")
-            self.task_status_var.set("Task is remote-readable. Send 'g' or 'go' in chat, then use Read.")
+            self.task_status_var.set("Task published to gui-transfer-tasks. Send g/go in chat.")
             return
         self.task_read_button.configure(state="disabled")
         self.task_send_button.configure(state="normal" if can_send else "disabled")
@@ -626,6 +626,7 @@ class CockpitGui:
             "GUI file-transfer task",
             "--body-file",
             str(tmp_path),
+            "--publish",
             "--json",
         )
         self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")

@@ -4746,13 +4746,18 @@ def show_last_report(
 def submit_user_task_command(
     title: str = typer.Option("GUI file-transfer task", "--title", help="Task title."),
     body_file: Path = typer.Option(..., "--body-file", help="UTF-8 text file containing the task body."),
+    publish: bool = typer.Option(
+        False,
+        "--publish",
+        help="Publish the task carrier to the gui-transfer-tasks remote branch.",
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     from agentic_project_kit.gui_task_editor import submit_user_task
 
     try:
         body = body_file.read_text(encoding="utf-8")
-        result = submit_user_task(Path("."), title=title, body=body)
+        result = submit_user_task(Path("."), title=title, body=body, publish=publish)
     except (OSError, ValueError) as exc:
         payload = {
             "schema_version": 1,
@@ -4772,9 +4777,16 @@ def submit_user_task_command(
         typer.echo("GUI_FILE_TRANSFER_USER_TASK")
         typer.echo(f"result_status={result.result_status}")
         typer.echo(f"task_id={result.task_id}")
+        typer.echo(f"published_ref={result.published_ref or '<none>'}")
         typer.echo(f"remote_path={result.remote_path}")
+        typer.echo(f"remote_readable={str(result.remote_readable).lower()}")
+        typer.echo(f"blob_sha={result.blob_sha}")
+        typer.echo(f"commit_status={result.commit_status}")
+        typer.echo(f"push_status={result.push_status}")
         typer.echo(f"next_reply={result.next_reply}")
         typer.echo(f"next_action={result.next_action}")
+    if result.result_status != "PASS":
+        raise typer.Exit(code=2)
 
 
 @transfer_app.command("read-user-task")
