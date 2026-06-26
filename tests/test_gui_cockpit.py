@@ -125,3 +125,23 @@ def test_format_action_result_marks_blocked_status_explicitly() -> None:
     assert "status=blocked" in text
     assert "allowed=false" in text
     assert "executed=false" in text
+
+
+def test_gui_basic_cockpit_header_text_is_project_specific() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+
+    assert "Agentic-Project-Kit - Basic Cockpit" in source
+
+
+def test_gui_action_list_is_four_rows_and_scrollable() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+
+    assert 'height=4' in source
+    assert "ttk.Scrollbar" in source
+    assert "yscrollcommand" in source
+
+
+def test_gui_output_height_increased_to_21() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+
+    assert "height=21" in source

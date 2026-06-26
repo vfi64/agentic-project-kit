@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `189`
+- Command count: `190`
 
 ## Commands
 
@@ -1298,6 +1298,12 @@ Write the current diff to /tmp and run the Python protected change planner on it
 |---|---:|---|---:|---|---|
 | `branch` | `TyperOption` | --branch | `False` | `` | Expected branch to push. If set, the transfer monitor switches to it or blocks safely. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+
+### `agentic-kit transfer read-user-task`
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer rebase-on-upstream`
 

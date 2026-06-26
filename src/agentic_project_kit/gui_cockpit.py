@@ -185,16 +185,16 @@ class CockpitGui:
         self.actions = build_gui_action_views()
         self.basic_view = build_basic_cockpit_view_model(self.project_root)
         self.root.title("agentic-project-kit cockpit")
-        self.root.geometry("1120x760")
+        self.root.geometry("1120x820")
 
         frame = ttk.Frame(root, padding=10)
         frame.pack(fill=tk.BOTH, expand=True)
 
-        title = ttk.Label(frame, text="Basic Cockpit", font=("TkDefaultFont", 16, "bold"))
+        title = ttk.Label(frame, text="Agentic-Project-Kit - Basic Cockpit", font=("TkDefaultFont", 16, "bold"))
         title.pack(anchor=tk.W)
 
-        status_frame = ttk.LabelFrame(frame, text="State", padding=8)
-        status_frame.pack(fill=tk.X, pady=(4, 8))
+        status_frame = ttk.LabelFrame(frame, text="State", padding=4)
+        status_frame.pack(fill=tk.X, pady=(2, 4))
 
         traffic_row = ttk.Frame(status_frame)
         traffic_row.pack(fill=tk.X)
@@ -228,10 +228,10 @@ class CockpitGui:
             anchor=tk.W,
             justify=tk.LEFT,
             wraplength=980,
-        ).pack(fill=tk.X, pady=(6, 0))
+        ).pack(fill=tk.X, pady=(3, 0))
 
         mode_row = ttk.Frame(status_frame)
-        mode_row.pack(fill=tk.X, pady=(6, 0))
+        mode_row.pack(fill=tk.X, pady=(3, 0))
         ttk.Label(mode_row, text="Transfer mode").pack(side=tk.LEFT, padx=(0, 8))
         self.mode_var = tk.StringVar(
             value=selected_communication_mode_option(self.basic_view.communication_modes)
@@ -256,11 +256,11 @@ class CockpitGui:
             textvariable=self.mode_explanation_var,
             anchor=tk.W,
             wraplength=980,
-        ).pack(fill=tk.X, pady=(4, 0))
+        ).pack(fill=tk.X, pady=(2, 0))
         mode_select.bind("<<ComboboxSelected>>", self.update_mode_explanation)
 
-        basic_buttons = ttk.LabelFrame(frame, text="Basic Actions", padding=8)
-        basic_buttons.pack(fill=tk.X, pady=(0, 8))
+        basic_buttons = ttk.LabelFrame(frame, text="Basic Actions", padding=4)
+        basic_buttons.pack(fill=tk.X, pady=(0, 4))
         for button in self.basic_view.buttons:
             state = tk.NORMAL if button.enabled else tk.DISABLED
             widget = ttk.Button(
@@ -279,8 +279,8 @@ class CockpitGui:
         self.task_editor_state = TaskEditorState.IDLE
         self.task_status_var = tk.StringVar(value="Write a file-transfer task, then send it through the guarded wrapper.")
         if task_editor_visible_for_mode(self.basic_view.communication_mode):
-            task_frame = ttk.LabelFrame(frame, text="File Transfer Task", padding=8)
-            task_frame.pack(fill=tk.X, pady=(0, 8))
+            task_frame = ttk.LabelFrame(frame, text="File Transfer Task", padding=4)
+            task_frame.pack(fill=tk.X, pady=(0, 4))
             self.task_text = tk.Text(task_frame, height=6, wrap=tk.WORD)
             self.task_text.pack(fill=tk.X, expand=False)
             self.task_text.bind("<KeyRelease>", self.refresh_task_editor_buttons)
@@ -303,7 +303,7 @@ class CockpitGui:
             )
             attach_tooltip(
                 self.task_send_button,
-                "Write the task through agentic-kit transfer submit-user-task.",
+                "Write the task through agentic-kit transfer submit-user-task. The current implementation reports local-only until published.",
             )
             self.task_send_button.pack(side=tk.LEFT, padx=(0, 8))
             self.task_read_button = ttk.Button(
@@ -314,7 +314,7 @@ class CockpitGui:
             )
             attach_tooltip(
                 self.task_read_button,
-                "Read the latest transfer report through agentic-kit transfer show-last-report --json.",
+                "Read the current task carrier through agentic-kit transfer read-user-task --json.",
             )
             self.task_read_button.pack(side=tk.LEFT, padx=(0, 8))
             ttk.Label(
@@ -322,7 +322,7 @@ class CockpitGui:
                 textvariable=self.task_status_var,
                 anchor=tk.W,
                 wraplength=980,
-            ).pack(fill=tk.X, pady=(6, 0))
+            ).pack(fill=tk.X, pady=(3, 0))
             self.refresh_task_editor_buttons()
         else:
             self.task_text = None
@@ -331,7 +331,9 @@ class CockpitGui:
             self.task_read_button = None
 
         columns = ("label", "category", "safety", "command")
-        self.tree = ttk.Treeview(frame, columns=columns, show="headings", height=12)
+        tree_frame = ttk.Frame(frame)
+        tree_frame.pack(fill=tk.X, expand=False)
+        self.tree = ttk.Treeview(tree_frame, columns=columns, show="headings", height=4)
         self.tree.heading("label", text="Action")
         self.tree.heading("category", text="Category")
         self.tree.heading("safety", text="Safety")
@@ -340,7 +342,11 @@ class CockpitGui:
         self.tree.column("category", width=100)
         self.tree.column("safety", width=100)
         self.tree.column("command", width=610)
-        self.tree.pack(fill=tk.BOTH, expand=False)
+        tree_scrollbar = ttk.Scrollbar(tree_frame, orient=tk.VERTICAL, command=self.tree.yview)
+        self.tree.configure(yscrollcommand=tree_scrollbar.set)
+        self.tree.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        tree_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.tree_scrollbar = tree_scrollbar
 
         for action in self.actions:
             self.tree.insert("", tk.END, iid=action.action_id, values=(action.label, action.category, action.safety, " ".join(action.command)))
@@ -363,7 +369,7 @@ class CockpitGui:
 
         output_label = ttk.Label(frame, text="Output")
         output_label.pack(anchor=tk.W)
-        self.output = tk.Text(frame, height=16, wrap=tk.WORD)
+        self.output = tk.Text(frame, height=21, wrap=tk.WORD)
         self.output.pack(fill=tk.BOTH, expand=True)
         self.write_output(format_basic_cockpit_summary(self.basic_view) + "\n")
 
@@ -415,7 +421,7 @@ class CockpitGui:
         if self.task_editor_state == TaskEditorState.SENT:
             self.task_send_button.configure(state="disabled")
             self.task_read_button.configure(state="normal")
-            self.task_status_var.set("Task sent. Send 'g' or 'go' in chat, then use Read.")
+            self.task_status_var.set("Task is remote-readable. Send 'g' or 'go' in chat, then use Read.")
             return
         self.task_read_button.configure(state="disabled")
         self.task_send_button.configure(state="normal" if can_send else "disabled")
@@ -470,13 +476,25 @@ class CockpitGui:
         )
         self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
         result_status = "PASS" if completed.returncode == 0 else "FAIL"
-        self.task_editor_state = task_editor_state_after_send(result_status)
+        remote_readable = False
+        if completed.stdout:
+            try:
+                payload = __import__("json").loads(completed.stdout)
+                remote_readable = bool(payload.get("remote_readable"))
+            except ValueError:
+                remote_readable = False
+        self.task_editor_state = task_editor_state_after_send(
+            result_status,
+            remote_readable=remote_readable,
+        )
         if self.task_editor_state == TaskEditorState.SENT and self.task_text is not None:
             self.task_text.configure(state="disabled")
+        elif result_status == "PASS":
+            self.task_status_var.set("Task written locally only. Publish through the guarded transfer path before sending g/go.")
         self.refresh_task_editor_buttons()
 
     def read_last_task_result(self) -> None:
-        completed = self._agentic_command("transfer", "show-last-report", "--json")
+        completed = self._agentic_command("transfer", "read-user-task", "--json")
         self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
         result_status = "PASS" if completed.returncode == 0 else "FAIL"
         self.task_editor_state = task_editor_state_after_read(result_status)
