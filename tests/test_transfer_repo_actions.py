@@ -523,7 +523,6 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
                 " M docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n"
                 " M docs/handoff/START_NEW_CHAT_PROMPT.md\n"
                 " M docs/reports/handoff-packages/latest/execution_contract.json\n"
-                " M docs/reports/handoff-packages/latest/source_manifest.json\n"
                 " M docs/reports/handoff-packages/latest/successor_context.yaml\n"
                 " M docs/reports/handoff-packages/latest/successor_prompt.md\n"
                 " M docs/reports/handoff-packages/latest/validation_report.json\n"

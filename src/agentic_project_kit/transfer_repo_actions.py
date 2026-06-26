@@ -1410,12 +1410,15 @@ def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionR
     allowed = set(tuple(f"M {path}" for path in ADMIN_REFRESH_PATHS) + (
         f"?? {_admin_refresh_successor_prompt_path(after_pr)}",
     ))
-    if set(changed) != allowed:
+    changed_set = set(changed)
+    unexpected = sorted(changed_set - allowed)
+    if not changed_set or unexpected:
         completed = subprocess.CompletedProcess(
             ["git", "status", "--short"],
             2,
             final_status.stdout,
-            "Admin refresh must change only the generated administrative handoff refresh paths.\n",
+            "Admin refresh must change a non-empty subset of generated administrative handoff refresh paths "
+            "and no unexpected paths.\n",
         )
         return _result("admin-refresh-pr", completed.args, completed, "Inspect unexpected admin refresh diff before committing.")
 
