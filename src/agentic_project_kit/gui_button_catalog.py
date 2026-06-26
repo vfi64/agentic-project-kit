@@ -65,7 +65,7 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         "Basic",
         "Publish the communication rule capsule and require d2 acknowledgement before mutation.",
         "rules",
-        safety_class="local-only",
+        safety_class="bounded-mutation",
         enabled=False,
         disabled_reason="requires guarded d2 rule-capsule dispatcher before Basic Mode execution",
         wrapper_command=("agentic-kit", "rules", "communication-refresh", "--publish", "--json"),
