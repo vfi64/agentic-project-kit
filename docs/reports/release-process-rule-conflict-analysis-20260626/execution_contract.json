@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "kind": "release_process_rule_conflict_analysis_contract",
+  "status": "active",
+  "created_date": "2026-06-26",
+  "repo": "vfi64/agentic-project-kit",
+  "branch": "codex/release-process-rule-conflict-analysis",
+  "base_pr": 1548,
+  "base_merge_commit": "4d3903797990cbf1443cf9e1ba8cbc462c7a964f",
+  "must_read": [
+    "docs/planning/RELEASE_PROCESS_RULE_CONFLICT_ANALYSIS_PLAN.md",
+    "docs/handoff/CODEX_RELEASE_PROCESS_RULE_CONFLICT_HANDOFF.md",
+    "docs/reports/release-process-rule-conflict-analysis-20260626/CODEX_PROMPT.md",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    ".agentic/transfer/one_command_transfer_protocol.yaml",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md"
+  ],
+  "required_first_outputs": [
+    "release_lifecycle_stage_map",
+    "rule_conflict_table",
+    "minimal_fix_list",
+    "tests_required",
+    "next_mutation_allowed"
+  ],
+  "scope": {
+    "publication_side_effects_allowed": false,
+    "manual_latest_handoff_projection_edits_allowed": false,
+    "broad_protected_file_rewrites_allowed": false,
+    "analysis_before_implementation_required": true
+  }
+}
