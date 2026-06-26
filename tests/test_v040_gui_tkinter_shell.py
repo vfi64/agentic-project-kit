@@ -99,7 +99,7 @@ def test_main_no_window_smoke(capsys):
 
 
 def test_windows_style_design_has_menu_bar_toolbar_buttons_and_tooltips():
-    design = build_windows_style_design_spec()
+    design = build_windows_style_design_spec(clean_gui_gatekeeper_status())
     assert [menu.label for menu in design.menu_bar] == [
         "File",
         "Communication",
@@ -125,7 +125,15 @@ def test_windows_style_design_has_menu_bar_toolbar_buttons_and_tooltips():
     }
     assert {"agent-run", "merge-if-green", "release-publish"} <= set(disabled_gui_button_ids())
     assert all(
-        button.safety_class == "read-only" for button in design.action_buttons if button.enabled
+        button.safety_class == "read-only" or button.command_id == "restore-volatile"
+        for button in design.action_buttons
+        if button.enabled
+    )
+    assert any(
+        button.command_id == "restore-volatile"
+        and button.safety_class == "bounded-mutation"
+        and button.enabled
+        for button in design.action_buttons
     )
     assert any(
         button.command_id == "release-publish" and not button.enabled
@@ -597,4 +605,3 @@ def test_tkinter_shell_spec_keeps_readonly_enabled_when_gatekeeper_clean():
     assert spec.status == "tkinter-shell-ready"
     doctor = next(button for button in spec.design.action_buttons if button.command_id == "doctor")
     assert doctor.enabled is True
-
