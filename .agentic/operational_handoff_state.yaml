@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9251d6bcdb7e2c186f17eb095aacc5405a7d4fb0
-  short: 9251d6bc
-  subject: Build basic cockpit GUI state surface (#1567)
+  full: 2e075b7dccab452c4553a499db1a7690e11677bd
+  short: 2e075b7d
+  subject: Allow generated handoff projection refresh bundle (#1569)
 last_substantive_work_state:
-  full: 9251d6bcdb7e2c186f17eb095aacc5405a7d4fb0
-  short: 9251d6bc
-  subject: Build basic cockpit GUI state surface (#1567)
+  full: 2e075b7dccab452c4553a499db1a7690e11677bd
+  short: 2e075b7d
+  subject: Allow generated handoff projection refresh bundle (#1569)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
