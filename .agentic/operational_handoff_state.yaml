@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 286013d210f60f77ed45ab0d6ca296e3b9dfe289
-  short: 286013d2
-  subject: Harden GUI initial prompt and task editor cycle (#1581)
+  full: c43a687a33d2cf21c8ad03c0ca0fa57038e1dcf9
+  short: c43a687a
+  subject: Add cockpit visual hierarchy, recommended-action zone, and theme constants (#1584)
 last_substantive_work_state:
-  full: 286013d210f60f77ed45ab0d6ca296e3b9dfe289
-  short: 286013d2
-  subject: Harden GUI initial prompt and task editor cycle (#1581)
+  full: c43a687a33d2cf21c8ad03c0ca0fa57038e1dcf9
+  short: c43a687a
+  subject: Add cockpit visual hierarchy, recommended-action zone, and theme constants (#1584)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
