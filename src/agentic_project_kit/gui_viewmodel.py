@@ -178,7 +178,39 @@ def _button_is_mutating(button: GuiButtonDefinition) -> bool:
     }
 
 
+def _restore_volatile_allowed(status: GuiGatekeeperStatus, traffic_state: str) -> bool:
+    current_work_state = _normalize_state(status.current_work_state)
+    workflow_state = _normalize_state(status.workflow_state)
+    if current_work_state in {"FAILED", "FAIL", "ERROR"} or workflow_state in {"FAILED", "FAIL", "ERROR"}:
+        return False
+    if status.required_next_reply == "d2" and not status.communication_context_fresh:
+        return False
+    return traffic_state == "READY" or (
+        status.git_dirty
+        and status.communication_context_fresh
+        and workflow_state in {"", "IDLE", "READY", "MISSING"}
+    )
+
+
 def _button_enabled_for_basic(button: GuiButtonDefinition, status: GuiGatekeeperStatus, traffic_state: str) -> tuple[bool, str, str]:
+    if button.command_id == "restore-volatile":
+        if not button.enabled:
+            return (
+                False,
+                button.disabled_reason or "known volatile restore is disabled by policy",
+                "Restore Volatile is the only dirty-state recovery button and remains wrapper-backed.",
+            )
+        if _restore_volatile_allowed(status, traffic_state):
+            return (
+                True,
+                "",
+                "known volatile restore is allowed as bounded recovery; product changes remain blocked",
+            )
+        return (
+            False,
+            "restore volatile is blocked while failed workflow evidence or d2 acknowledgement is pending",
+            "Preserve failed workflow evidence and communication-rule state before cleanup.",
+        )
     if button.safety_class in {"remote-mutation", "destructive"}:
         return False, "remote/destructive actions are blocked in Basic Mode", "Basic Mode exposes readiness only for this action class."
     if "release" in button.command_id or "publish" in button.command_id:

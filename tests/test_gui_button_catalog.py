@@ -34,14 +34,21 @@ def test_gui_button_catalog_covers_communication_and_workflow_surface():
 
 def test_gui_button_catalog_keeps_only_readonly_buttons_enabled():
     enabled = [button for button in all_gui_buttons() if button.enabled]
+    allowed_enabled_mutations = {"restore-volatile", "work-order-upload"}
     assert {button.command_id for button in enabled} == set(enabled_gui_button_ids())
     assert all(
-        button.safety_class == "read-only" or button.command_id == "work-order-upload"
+        button.safety_class == "read-only" or button.command_id in allowed_enabled_mutations
         for button in enabled
     )
     assert any(
         button.command_id == "work-order-upload"
         and button.safety_class == "bounded-mutation"
+        for button in enabled
+    )
+    assert any(
+        button.command_id == "restore-volatile"
+        and button.safety_class == "bounded-mutation"
+        and button.gui_gate == "known_volatile_restore_gate"
         for button in enabled
     )
     assert {
@@ -146,15 +153,28 @@ def test_gui_button_catalog_parameterized_read_only_wrappers_remain_disabled():
     assert pr_status.enabled is False
 
 
-def test_gui_button_catalog_enabled_bounded_mutation_is_fixed_path_only():
+def test_gui_button_catalog_enabled_bounded_mutations_are_explicit_safe_wrappers():
     enabled_mutations = [
         button
         for button in all_gui_buttons()
         if button.enabled and button.safety_class != "read-only"
     ]
 
-    assert [button.command_id for button in enabled_mutations] == ["work-order-upload"]
-    upload = enabled_mutations[0]
+    assert [button.command_id for button in enabled_mutations] == [
+        "restore-volatile",
+        "work-order-upload",
+    ]
+    restore = enabled_mutations[0]
+    assert restore.safety_class == "bounded-mutation"
+    assert restore.gui_gate == "known_volatile_restore_gate"
+    assert restore.wrapper_command == (
+        "agentic-kit",
+        "transfer",
+        "restore-known-volatile",
+        "--json",
+    )
+    assert restore.requires_parameters is False
+    upload = enabled_mutations[1]
     assert upload.safety_class == "bounded-mutation"
     assert upload.gui_gate == "fixed_path_upload_gate"
     assert upload.requires_parameters is False
