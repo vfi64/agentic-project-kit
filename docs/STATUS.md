@@ -3,10 +3,10 @@
 ## Current State
 
 Current version: 0.4.11
-Current verified release: 0.4.10.
-Current release tag: v0.4.10.
+Current verified release: 0.4.11.
+Current release tag: v0.4.11.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.20767675`.
+Verified Zenodo version DOI: `10.5281/zenodo.20917074`.
 Current verified main: `0f40567b` (`Refresh handoff state after PR1519 (#1520)`).
 Latest substantive release/DOC hardening: PR #1519 (`Add deterministic release notes generator`).
 Post-merge handoff status: PASS/NOOP after PR #1519 administrative refresh PR #1520.
