@@ -17,6 +17,7 @@ class CockpitAction:
     command: tuple[str, ...]
     safety: str
     description: str
+    short_description: str
 
 
 @dataclass(frozen=True)
@@ -60,23 +61,159 @@ CommandExecutor = Callable[[tuple[str, ...], Path], subprocess.CompletedProcess[
 
 def cockpit_actions() -> list[CockpitAction]:
     return [
-        CockpitAction("git.status", "Git status", "git", ("git", "status", "--short"), READ_ONLY, "Show uncommitted local changes."),
-        CockpitAction("workflow.state", "Workflow state", "workflow", ("agentic-kit", "workflow", "state"), READ_ONLY, "Show guided workflow state and recommended next step."),
-        CockpitAction("dialog.rn", "Run Next Work Order", "dialog", ("agentic-kit", "rn"), BOUNDED, "Synchronize main and run the next typed work order."),
-        CockpitAction("dialog.rnc", "Close Out Last Run", "dialog", ("agentic-kit", "rnc"), BOUNDED, "Commit and push the expected closeout paths from the last remote-next run."),
-        CockpitAction("workflow.list", "Workflow items", "workflow", ("agentic-kit", "workflow", "list"), READ_ONLY, "List stored local workflow items."),
-        CockpitAction("gate.check-docs", "Documentation gate", "gate", ("agentic-kit", "check-docs"), READ_ONLY, "Run deterministic documentation gates."),
-        CockpitAction("gate.doctor", "Doctor", "gate", ("agentic-kit", "doctor"), READ_ONLY, "Run compact project health checks."),
-        CockpitAction("audit.doc-mesh", "Document mesh audit", "audit", ("agentic-kit", "doc-mesh-audit"), READ_ONLY, "Audit cross-document state and governance drift."),
-        CockpitAction("audit.doc-lifecycle", "Document lifecycle audit", "audit", ("agentic-kit", "doc-lifecycle-audit"), READ_ONLY, "Audit lifecycle metadata for governed planning documents."),
-        CockpitAction("audit.pr-hygiene", "PR hygiene", "audit", ("agentic-kit", "pr-hygiene"), READ_ONLY, "Diagnose stale, duplicate, or empty pull-request and branch hygiene signals."),
-        CockpitAction("rules.communication-refresh", "Communication Rules Refresh", "rules", ("agentic-kit", "rules", "communication-refresh", "--publish", "--json"), BOUNDED, "Generate the communication rule capsule and d2 pending state."),
-        CockpitAction("rules.handoff-refresh", "Handoff Rules Refresh", "rules", ("agentic-kit", "rules", "handoff-refresh"), BOUNDED, "Generate the repo-backed handoff rules refresh file for d3."),
-        CockpitAction("handoff.successor-prompt", "Successor Handoff Package", "handoff", ("agentic-kit", "transfer", "chat-switch-complete", "--render-prompt"), BOUNDED, "Render the copy-and-paste successor chat prompt through the guarded transfer command."),
-        CockpitAction("release.plan", "Release plan", "release", ("agentic-kit", "release-plan"), READ_ONLY, "Print release preparation checklist."),
-        CockpitAction("release.check", "Release check", "release", ("agentic-kit", "release-check"), READ_ONLY, "Validate release state for a target version."),
-        CockpitAction("release.post-check", "Post-release check", "release", ("agentic-kit", "post-release-check"), READ_ONLY, "Validate GitHub and Zenodo post-release state."),
-        CockpitAction("workflow.go", "Run one bounded workflow step", "workflow", ("agentic-kit", "workflow", "go"), BOUNDED, "Request and run one bounded workflow step."),
+        CockpitAction(
+            "git.status",
+            "Git status",
+            "git",
+            ("git", "status", "--short"),
+            READ_ONLY,
+            "Show uncommitted local changes.",
+            "Show local uncommitted changes",
+        ),
+        CockpitAction(
+            "workflow.state",
+            "Workflow state",
+            "workflow",
+            ("agentic-kit", "workflow", "state"),
+            READ_ONLY,
+            "Show guided workflow state and recommended next step.",
+            "Show current state and recommended next step",
+        ),
+        CockpitAction(
+            "dialog.rn",
+            "Run Next Work Order",
+            "dialog",
+            ("agentic-kit", "rn"),
+            BOUNDED,
+            "Synchronize main and run the next typed work order.",
+            "Run the next queued work order",
+        ),
+        CockpitAction(
+            "dialog.rnc",
+            "Close Out Last Run",
+            "dialog",
+            ("agentic-kit", "rnc"),
+            BOUNDED,
+            "Commit and push the expected closeout paths from the last remote-next run.",
+            "Commit and push the last run's closeout paths",
+        ),
+        CockpitAction(
+            "workflow.list",
+            "Workflow items",
+            "workflow",
+            ("agentic-kit", "workflow", "list"),
+            READ_ONLY,
+            "List stored local workflow items.",
+            "List queued workflow items",
+        ),
+        CockpitAction(
+            "gate.check-docs",
+            "Documentation gate",
+            "gate",
+            ("agentic-kit", "check-docs"),
+            READ_ONLY,
+            "Run deterministic documentation gates.",
+            "Run documentation checks",
+        ),
+        CockpitAction(
+            "gate.doctor",
+            "Doctor",
+            "gate",
+            ("agentic-kit", "doctor"),
+            READ_ONLY,
+            "Run compact project health checks.",
+            "Run project health checks",
+        ),
+        CockpitAction(
+            "audit.doc-mesh",
+            "Document mesh audit",
+            "audit",
+            ("agentic-kit", "doc-mesh-audit"),
+            READ_ONLY,
+            "Audit cross-document state and governance drift.",
+            "Audit cross-document drift",
+        ),
+        CockpitAction(
+            "audit.doc-lifecycle",
+            "Document lifecycle audit",
+            "audit",
+            ("agentic-kit", "doc-lifecycle-audit"),
+            READ_ONLY,
+            "Audit lifecycle metadata for governed planning documents.",
+            "Audit document lifecycle metadata",
+        ),
+        CockpitAction(
+            "audit.pr-hygiene",
+            "PR hygiene",
+            "audit",
+            ("agentic-kit", "pr-hygiene"),
+            READ_ONLY,
+            "Diagnose stale, duplicate, or empty pull-request and branch hygiene signals.",
+            "Inspect pull-request hygiene",
+        ),
+        CockpitAction(
+            "rules.communication-refresh",
+            "Communication Rules Refresh",
+            "rules",
+            ("agentic-kit", "rules", "communication-refresh", "--publish", "--json"),
+            BOUNDED,
+            "Generate the communication rule capsule and d2 pending state.",
+            "Refresh communication rules (writes files)",
+        ),
+        CockpitAction(
+            "rules.handoff-refresh",
+            "Handoff Rules Refresh",
+            "rules",
+            ("agentic-kit", "rules", "handoff-refresh"),
+            BOUNDED,
+            "Generate the repo-backed handoff rules refresh file for d3.",
+            "Refresh handoff rules (writes files)",
+        ),
+        CockpitAction(
+            "handoff.successor-prompt",
+            "Successor Handoff Package",
+            "handoff",
+            ("agentic-kit", "transfer", "chat-switch-complete", "--render-prompt"),
+            BOUNDED,
+            "Render the copy-and-paste successor chat prompt through the guarded transfer command.",
+            "Render the successor handoff prompt",
+        ),
+        CockpitAction(
+            "release.plan",
+            "Release plan",
+            "release",
+            ("agentic-kit", "release-plan"),
+            READ_ONLY,
+            "Print release preparation checklist.",
+            "Show the release preparation checklist",
+        ),
+        CockpitAction(
+            "release.check",
+            "Release check",
+            "release",
+            ("agentic-kit", "release-check"),
+            READ_ONLY,
+            "Validate release state for a target version.",
+            "Validate release readiness",
+        ),
+        CockpitAction(
+            "release.post-check",
+            "Post-release check",
+            "release",
+            ("agentic-kit", "post-release-check"),
+            READ_ONLY,
+            "Validate GitHub and Zenodo post-release state.",
+            "Validate post-release state",
+        ),
+        CockpitAction(
+            "workflow.go",
+            "Run one bounded workflow step",
+            "workflow",
+            ("agentic-kit", "workflow", "go"),
+            BOUNDED,
+            "Request and run one bounded workflow step.",
+            "Run one guarded workflow step",
+        ),
     ]
 
 
@@ -113,6 +250,8 @@ def validate_cockpit_action_registry(actions: list[CockpitAction] | None = None)
             errors.append(f'empty label for {action.action_id}')
         if not action.description.strip():
             errors.append(f'empty description for {action.action_id}')
+        if not action.short_description.strip():
+            errors.append(f'empty short_description for {action.action_id}')
     return errors
 
 
@@ -212,6 +351,7 @@ def action_inventory_as_json_data(actions: list[CockpitAction] | None = None) ->
                 "safety": action.safety,
                 "command": list(action.command),
                 "description": action.description,
+                "short_description": action.short_description,
             }
             for action in selected
         ],

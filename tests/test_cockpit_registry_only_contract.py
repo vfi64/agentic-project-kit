@@ -28,7 +28,7 @@ def test_registry_rejects_duplicate_action_ids() -> None:
     assert any("duplicate action_id: git.status" in error for error in errors)
 
 def test_registry_rejects_invalid_safety_and_empty_command() -> None:
-    action = CockpitAction("bad.action", "Bad", "bad", (), "unsafe", "Bad action.")
+    action = CockpitAction("bad.action", "Bad", "bad", (), "unsafe", "Bad action.", "Run bad action")
     errors = validate_cockpit_action_registry([action])
     assert any("invalid safety for bad.action: unsafe" in error for error in errors)
     assert any("empty command for bad.action" in error for error in errors)

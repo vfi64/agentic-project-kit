@@ -2,6 +2,11 @@ from pathlib import Path
 
 from agentic_project_kit.cockpit import BOUNDED, READ_ONLY, CockpitAction, CockpitActionResult
 from agentic_project_kit.gui_cockpit import (
+    HEADER_TEXT,
+    THEME,
+    action_tree_columns,
+    action_tree_tag_colors,
+    action_tree_visible_rows,
     build_gui_action_views,
     explain_safety,
     format_action_details,
@@ -12,8 +17,24 @@ from agentic_project_kit.gui_cockpit import (
 
 def test_gui_action_views_reuse_cockpit_action_metadata() -> None:
     actions = [
-        CockpitAction("demo.status", "Demo status", "demo", ("demo", "status"), READ_ONLY, "Inspect demo state."),
-        CockpitAction("demo.go", "Demo go", "demo", ("demo", "go"), BOUNDED, "Run bounded demo step."),
+        CockpitAction(
+            "demo.status",
+            "Demo status",
+            "demo",
+            ("demo", "status"),
+            READ_ONLY,
+            "Inspect demo state.",
+            "Inspect demo state",
+        ),
+        CockpitAction(
+            "demo.go",
+            "Demo go",
+            "demo",
+            ("demo", "go"),
+            BOUNDED,
+            "Run bounded demo step.",
+            "Run demo step",
+        ),
     ]
 
     views = build_gui_action_views(actions)
@@ -21,6 +42,7 @@ def test_gui_action_views_reuse_cockpit_action_metadata() -> None:
     assert views[0].action_id == "demo.status"
     assert views[0].label == "Demo status"
     assert views[0].command == ("demo", "status")
+    assert views[0].short_description == "Inspect demo state"
     assert views[0].can_run_by_default is True
     assert views[1].action_id == "demo.go"
     assert views[1].safety == BOUNDED
@@ -111,10 +133,19 @@ def test_explain_safety_distinguishes_default_and_blocked_actions() -> None:
 
 
 def test_format_action_details_includes_clear_safety_explanation() -> None:
-    action = CockpitAction("demo.go", "Demo go", "demo", ("demo", "go"), BOUNDED, "Run bounded demo step.")
+    action = CockpitAction(
+        "demo.go",
+        "Demo go",
+        "demo",
+        ("demo", "go"),
+        BOUNDED,
+        "Run bounded demo step.",
+        "Run demo step",
+    )
     view = build_gui_action_views([action])[0]
     text = format_action_details(view)
     assert "action_id=demo.go" in text
+    assert "short_description=Run demo step" in text
     assert "can_run_by_default=false" in text
     assert "safety_explanation=Blocked by default" in text
 
@@ -128,20 +159,33 @@ def test_format_action_result_marks_blocked_status_explicitly() -> None:
 
 
 def test_gui_basic_cockpit_header_text_is_project_specific() -> None:
-    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
-
-    assert "Agentic-Project-Kit - Basic Cockpit" in source
+    assert HEADER_TEXT == "Agentic-Project-Kit — Basic Cockpit"
 
 
 def test_gui_action_list_is_four_rows_and_scrollable() -> None:
     source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
 
-    assert 'height=4' in source
+    assert action_tree_visible_rows() == 4
     assert "ttk.Scrollbar" in source
     assert "yscrollcommand" in source
 
 
 def test_gui_output_height_increased_to_21() -> None:
-    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    assert THEME.output_height == 21
 
-    assert "height=21" in source
+
+def test_gui_theme_action_rows_visible() -> None:
+    assert THEME.action_rows_visible == 4
+
+
+def test_action_tree_hides_raw_command_column() -> None:
+    assert action_tree_columns() == ("action", "what_it_does", "safety")
+    assert "command" not in action_tree_columns()
+
+
+def test_action_tree_has_safety_color_tags() -> None:
+    assert action_tree_tag_colors() == {
+        "read_only": THEME.color_read_only,
+        "bounded": THEME.color_bounded,
+        "destructive": THEME.color_destructive,
+    }
