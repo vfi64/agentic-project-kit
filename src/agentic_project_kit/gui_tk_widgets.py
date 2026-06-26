@@ -12,9 +12,41 @@ TRAFFIC_LIGHT_FILL_BY_COLOR = {
     "gray": "#6e7781",
 }
 
+TRAFFIC_LIGHT_LABEL_BY_STATE = {
+    "READY": "READY (green)",
+    "WAIT_FOR_D2": "WAIT_FOR_D2 (yellow)",
+    "WAIT": "WAIT (yellow)",
+    "BLOCKED": "BLOCKED (red)",
+    "FAILED": "FAILED (red)",
+}
+
+COMMUNICATION_MODE_EXPLANATIONS = {
+    "file_transfer": (
+        "Normal mode. Write the task to the repo-backed transfer task, send g/go in chat, "
+        "then read the result. Minimizes copy-and-paste."
+    ),
+    "remote": (
+        "PR/CI/GitHub focused mode. Use safe read-only checks and bounded wrappers; "
+        "do not bypass governance."
+    ),
+    "copy_paste": (
+        "Recovery fallback only for terminal loss or missing remote access. "
+        "Not the normal operating mode."
+    ),
+}
+
 
 def traffic_light_fill(color: str) -> str:
     return TRAFFIC_LIGHT_FILL_BY_COLOR.get(color.lower(), TRAFFIC_LIGHT_FILL_BY_COLOR["gray"])
+
+
+def traffic_light_state_label(state: str) -> str:
+    normalized = state.strip().upper().replace("-", "_")
+    return TRAFFIC_LIGHT_LABEL_BY_STATE.get(normalized, f"{normalized or 'UNKNOWN'} (gray)")
+
+
+def communication_mode_explanation(mode: str) -> str:
+    return COMMUNICATION_MODE_EXPLANATIONS.get(mode, COMMUNICATION_MODE_EXPLANATIONS["file_transfer"])
 
 
 def communication_mode_option_label(mode: CommunicationModeViewModel) -> str:

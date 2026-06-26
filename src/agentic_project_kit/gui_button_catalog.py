@@ -17,6 +17,7 @@ class GuiButtonDefinition:
     wrapper_command: tuple[str, ...] = ()
     gui_gate: str = "read_only_gate"
     requires_parameters: bool = False
+    structured_explanation: str | None = None
 
 
 def _button(
@@ -33,6 +34,7 @@ def _button(
     wrapper_command: tuple[str, ...] = (),
     gui_gate: str = "read_only_gate",
     requires_parameters: bool = False,
+    structured_explanation: str | None = None,
 ) -> GuiButtonDefinition:
     return GuiButtonDefinition(
         command_id=command_id,
@@ -47,6 +49,7 @@ def _button(
         wrapper_command=wrapper_command,
         gui_gate=gui_gate,
         requires_parameters=requires_parameters,
+        structured_explanation=structured_explanation,
     )
 
 
@@ -58,6 +61,14 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         "Refresh the deterministic cockpit and gatekeeper status.",
         "status",
         wrapper_command=("agentic-kit", "cockpit", "gatekeeper-status"),
+        structured_explanation=(
+            "PURPOSE: Refresh deterministic cockpit and gatekeeper state.\n"
+            "EFFECT: Reads state only; does not mutate repo files.\n"
+            "WHEN: Use before choosing the next GUI action.\n"
+            "BLOCKED WHEN: The cockpit command itself cannot run.\n"
+            "AFTER PASS: Continue with the enabled safe action.\n"
+            "AFTER FAIL: Open diagnostics and preserve evidence."
+        ),
     ),
     _button(
         "communication-rules-refresh",
@@ -70,6 +81,14 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         disabled_reason="requires guarded d2 rule-capsule dispatcher before Basic Mode execution",
         wrapper_command=("agentic-kit", "rules", "communication-refresh", "--publish", "--json"),
         gui_gate="local_mutation_gate",
+        structured_explanation=(
+            "PURPOSE: Publish the current communication rule capsule.\n"
+            "EFFECT: Writes the generated communication-rules report and a local d2 pending state.\n"
+            "WHEN: Use when chat communication rules must be refreshed before more mutation.\n"
+            "BLOCKED WHEN: Worktree or gatekeeper state is not safe for bounded local mutation.\n"
+            "AFTER PASS: Send d2; the assistant must read the remote capsule and ACK it.\n"
+            "AFTER FAIL: Diagnose the rule-refresh gate before retrying."
+        ),
     ),
     _button(
         "run-next-work-order",
@@ -82,6 +101,14 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         disabled_reason="requires validated work order and clean READY gatekeeper state",
         wrapper_command=("agentic-kit", "work-order", "run"),
         gui_gate="local_mutation_gate",
+        structured_explanation=(
+            "PURPOSE: Run the next validated file-transfer work order.\n"
+            "EFFECT: Runs only through the registered work-order wrapper.\n"
+            "WHEN: Use after a valid work order is present and the gatekeeper is READY.\n"
+            "BLOCKED WHEN: d2 is pending, the worktree is dirty, or no guarded dispatcher exists.\n"
+            "AFTER PASS: Read the generated result/evidence.\n"
+            "AFTER FAIL: Preserve output and inspect diagnostics."
+        ),
     ),
     _button(
         "close-out-last-run",
@@ -94,6 +121,14 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         disabled_reason="requires fixed-path evidence and clean READY gatekeeper state",
         wrapper_command=("agentic-kit", "work-order", "upload"),
         gui_gate="fixed_path_upload_gate",
+        structured_explanation=(
+            "PURPOSE: Close out the last run through the fixed-path upload wrapper.\n"
+            "EFFECT: Publishes expected evidence paths through a bounded closeout path.\n"
+            "WHEN: Use only after the previous run produced valid fixed-path evidence.\n"
+            "BLOCKED WHEN: Evidence is missing, dirty, or not gatekeeper-approved.\n"
+            "AFTER PASS: Continue with handoff or next work order.\n"
+            "AFTER FAIL: Inspect closeout evidence before retrying."
+        ),
     ),
     _button(
         "diagnose",
@@ -102,6 +137,14 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         "Run compact read-only diagnostics through the project doctor.",
         "diagnose",
         wrapper_command=("agentic-kit", "doctor"),
+        structured_explanation=(
+            "PURPOSE: Run compact project health diagnostics.\n"
+            "EFFECT: Reads repo health and reports findings.\n"
+            "WHEN: Use after a FAIL/BLOCK or before risky work.\n"
+            "BLOCKED WHEN: The doctor command cannot run.\n"
+            "AFTER PASS: Continue with the next safe action.\n"
+            "AFTER FAIL: Fix or diagnose the reported blockers."
+        ),
     ),
     _button(
         "branch-status-check",

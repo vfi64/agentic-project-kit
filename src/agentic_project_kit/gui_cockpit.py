@@ -7,9 +7,11 @@ from typing import Any
 from agentic_project_kit.cockpit import READ_ONLY, CockpitAction, CockpitActionResult, cockpit_actions, run_cockpit_action
 from agentic_project_kit.gui_tk_widgets import (
     attach_tooltip,
+    communication_mode_explanation,
     communication_mode_option_values,
     selected_communication_mode_option,
     traffic_light_fill,
+    traffic_light_state_label,
 )
 from agentic_project_kit.gui_tkinter_shell import run_basic_cockpit_button
 from agentic_project_kit.gui_viewmodel import BasicCockpitViewModel, build_basic_cockpit_view_model
@@ -24,6 +26,51 @@ class GuiActionView:
     command: tuple[str, ...]
     description: str
     can_run_by_default: bool
+    structured_explanation: str | None = None
+
+
+STRUCTURED_ACTION_EXPLANATIONS = {
+    "git.status": (
+        "PURPOSE: Show local repository dirty state.\n"
+        "EFFECT: Reads git status only.\n"
+        "WHEN: Use before any mutation or PR closeout.\n"
+        "BLOCKED WHEN: Git status cannot run.\n"
+        "AFTER PASS: Continue with the next safe action.\n"
+        "AFTER FAIL: Diagnose repository access."
+    ),
+    "workflow.state": (
+        "PURPOSE: Show workflow and gatekeeper readiness.\n"
+        "EFFECT: Reads workflow state only.\n"
+        "WHEN: Use when deciding whether the GUI may proceed.\n"
+        "BLOCKED WHEN: Workflow state files are unreadable.\n"
+        "AFTER PASS: Continue with the recommended action.\n"
+        "AFTER FAIL: Preserve evidence and diagnose workflow state."
+    ),
+    "dialog.rn": (
+        "PURPOSE: Run the next file-transfer work order through the wrapper.\n"
+        "EFFECT: Performs bounded local workflow mutation.\n"
+        "WHEN: Use only after READY state and valid work order.\n"
+        "BLOCKED WHEN: d2 is pending, state is dirty, or work order is invalid.\n"
+        "AFTER PASS: Read the generated result/evidence.\n"
+        "AFTER FAIL: Inspect the report before retrying."
+    ),
+    "dialog.rnc": (
+        "PURPOSE: Close out the last run through the fixed closeout wrapper.\n"
+        "EFFECT: Commits/pushes expected closeout paths when guarded.\n"
+        "WHEN: Use after a successful bounded run.\n"
+        "BLOCKED WHEN: Required evidence or clean state is missing.\n"
+        "AFTER PASS: Continue with handoff or next slice.\n"
+        "AFTER FAIL: Diagnose closeout evidence."
+    ),
+    "rules.communication-refresh": (
+        "PURPOSE: Publish the current communication rule capsule.\n"
+        "EFFECT: Writes generated rule artifacts and a local d2 pending state.\n"
+        "WHEN: Use when the assistant must reload communication rules.\n"
+        "BLOCKED WHEN: Local mutation is not safe.\n"
+        "AFTER PASS: Send d2 and require machine-readable ACK.\n"
+        "AFTER FAIL: Diagnose rule-refresh output."
+    ),
+}
 
 
 def build_gui_action_views(actions: list[CockpitAction] | None = None) -> list[GuiActionView]:
@@ -37,6 +84,7 @@ def build_gui_action_views(actions: list[CockpitAction] | None = None) -> list[G
             command=action.command,
             description=action.description,
             can_run_by_default=action.safety == READ_ONLY,
+            structured_explanation=STRUCTURED_ACTION_EXPLANATIONS.get(action.action_id),
         )
         for action in selected
     ]
@@ -64,6 +112,8 @@ def format_action_details(action: GuiActionView) -> str:
         f"description={action.description}",
         f"safety_explanation={explain_safety(action.safety)}",
     ]
+    if action.structured_explanation:
+        lines.extend(["", "structured_explanation:", action.structured_explanation])
     return "\n".join(lines)
 
 
@@ -90,11 +140,30 @@ def format_basic_cockpit_summary(view_model: BasicCockpitViewModel) -> str:
         f"traffic_light_state={view_model.traffic_light_state}",
         f"traffic_light_color={view_model.traffic_light_color}",
         f"communication_mode={view_model.communication_mode}",
+        f"communication_context_fresh={str(view_model.communication_context_fresh).lower()}",
+        f"required_next_reply={view_model.required_next_reply or '<none>'}",
         f"mutation_allowed={str(view_model.mutation_allowed).lower()}",
         f"next_safe_action={view_model.next_safe_action}",
         f"reason={view_model.reason}",
         "buttons=" + ",".join(button.command_id for button in view_model.buttons),
     ]
+    return "\n".join(lines)
+
+
+def format_state_details(view_model: BasicCockpitViewModel) -> str:
+    lines = [
+        f"STATE: {traffic_light_state_label(view_model.traffic_light_state)}",
+        f"REASON: {view_model.reason}",
+        f"NEXT ACTION: {view_model.next_safe_action}",
+    ]
+    if view_model.required_next_reply == "d2":
+        lines.extend(
+            [
+                "",
+                "Communication Rules Refresh pending. Send 'd2' to the chat.",
+                "The assistant must read the remote rule capsule and provide ACK before mutation.",
+            ]
+        )
     return "\n".join(lines)
 
 
@@ -133,7 +202,7 @@ class CockpitGui:
         traffic_light.pack(side=tk.LEFT, padx=(0, 8))
         ttk.Label(
             traffic_row,
-            text=f"{self.basic_view.traffic_light_state} ({self.basic_view.traffic_light_color})",
+            text=traffic_light_state_label(self.basic_view.traffic_light_state),
             font=("TkDefaultFont", 12, "bold"),
         ).pack(side=tk.LEFT, padx=(0, 12))
         ttk.Label(
@@ -145,6 +214,13 @@ class CockpitGui:
         ttk.Label(status_frame, text=self.basic_view.reason, anchor=tk.W, wraplength=980).pack(
             fill=tk.X, pady=(4, 0)
         )
+        ttk.Label(
+            status_frame,
+            text=format_state_details(self.basic_view),
+            anchor=tk.W,
+            justify=tk.LEFT,
+            wraplength=980,
+        ).pack(fill=tk.X, pady=(6, 0))
 
         mode_row = ttk.Frame(status_frame)
         mode_row.pack(fill=tk.X, pady=(6, 0))
@@ -164,6 +240,16 @@ class CockpitGui:
             mode_select,
             "Select the communication mode. File Transfer is the standard path; Copy-and-Paste is a recovery fallback.",
         )
+        self.mode_explanation_var = tk.StringVar(
+            value=communication_mode_explanation(self.basic_view.communication_mode)
+        )
+        ttk.Label(
+            status_frame,
+            textvariable=self.mode_explanation_var,
+            anchor=tk.W,
+            wraplength=980,
+        ).pack(fill=tk.X, pady=(4, 0))
+        mode_select.bind("<<ComboboxSelected>>", self.update_mode_explanation)
 
         basic_buttons = ttk.LabelFrame(frame, text="Basic Actions", padding=8)
         basic_buttons.pack(fill=tk.X, pady=(0, 8))
@@ -237,6 +323,18 @@ class CockpitGui:
 
     def clear_output(self) -> None:
         self.output.delete("1.0", "end")
+
+    def update_mode_explanation(self, _event: object | None = None) -> None:
+        option = self.mode_var.get()
+        selected = next(
+            (
+                mode.mode_id
+                for mode in self.basic_view.communication_modes
+                if f"{mode.label}: {mode.role}" == option
+            ),
+            self.basic_view.communication_mode,
+        )
+        self.mode_explanation_var.set(communication_mode_explanation(selected))
 
     def inspect_selected(self) -> None:
         action_id = self.selected_action_id()

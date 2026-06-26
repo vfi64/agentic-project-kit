@@ -51,6 +51,7 @@ class BasicCockpitButtonViewModel:
     wrapper_command: tuple[str, ...]
     source: str
     why: str
+    structured_explanation: str | None = None
 
 
 @dataclass(frozen=True)
@@ -64,6 +65,9 @@ class BasicCockpitViewModel:
     mutation_allowed: bool
     state_source: str
     communication_mode: str
+    communication_context_fresh: bool
+    communication_context_reason: str
+    required_next_reply: str | None
     communication_modes: tuple[CommunicationModeViewModel, ...]
     buttons: tuple[BasicCockpitButtonViewModel, ...]
     last_result: str
@@ -165,7 +169,13 @@ def _communication_modes(selected_mode: str) -> tuple[CommunicationModeViewModel
 
 
 def _button_is_mutating(button: GuiButtonDefinition) -> bool:
-    return button.safety_class in {"bounded-mutation", "local-only", "remote-mutation", "destructive"}
+    return button.safety_class in {
+        "bounded-local-mutation",
+        "bounded-mutation",
+        "local-only",
+        "remote-mutation",
+        "destructive",
+    }
 
 
 def _button_enabled_for_basic(button: GuiButtonDefinition, status: GuiGatekeeperStatus, traffic_state: str) -> tuple[bool, str, str]:
@@ -215,6 +225,7 @@ def _basic_button_view_models(
                 wrapper_command=button.wrapper_command,
                 source="gui_button_catalog",
                 why=why,
+                structured_explanation=button.structured_explanation,
             )
         )
     return tuple(items)
@@ -246,6 +257,9 @@ def build_basic_cockpit_view_model(
         mutation_allowed=mutation_allowed,
         state_source="gui_gatekeeper_status",
         communication_mode=selected_mode,
+        communication_context_fresh=status.communication_context_fresh,
+        communication_context_reason=status.communication_context_reason,
+        required_next_reply=status.required_next_reply,
         communication_modes=modes,
         buttons=_basic_button_view_models(status, traffic_state=traffic_state, buttons=buttons),
         last_result="No action has run in this GUI session.",

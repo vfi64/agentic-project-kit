@@ -173,3 +173,12 @@ def test_communication_refresh_button_is_bounded_local_mutation():
         "--publish",
         "--json",
     )
+
+
+def test_communication_refresh_button_has_structured_explanation():
+    button = get_gui_button("communication-rules-refresh")
+
+    assert button is not None
+    assert button.structured_explanation is not None
+    assert "PURPOSE:" in button.structured_explanation
+    assert "AFTER PASS:" in button.structured_explanation
