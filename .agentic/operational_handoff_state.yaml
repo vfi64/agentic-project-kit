@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 2d79bddb35547b8ef5dcfb90644c049b43239b76
-  short: 2d79bddb
-  subject: Move and harden pre-GUI planning target (#1563)
+  full: 314450995a949cee8feb2d90be0bb0ef3bef01bc
+  short: 31445099
+  subject: Finalize pre-GUI planning authority shift (#1565)
 last_substantive_work_state:
-  full: 2d79bddb35547b8ef5dcfb90644c049b43239b76
-  short: 2d79bddb
-  subject: Move and harden pre-GUI planning target (#1563)
+  full: 314450995a949cee8feb2d90be0bb0ef3bef01bc
+  short: 31445099
+  subject: Finalize pre-GUI planning authority shift (#1565)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
