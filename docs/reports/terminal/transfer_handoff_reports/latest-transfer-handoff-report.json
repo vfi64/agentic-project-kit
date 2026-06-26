@@ -1,15 +1,15 @@
 {
   "artifact_type": "post_merge_complete_transfer_report",
-  "chat_reply": "d | NEXT=Post-merge lifecycle is complete; continue with the next planned slice.",
+  "chat_reply": "d | NEXT=Post-merge lifecycle is complete after admin refresh.",
   "command": [
     "agentic-kit",
     "transfer",
     "post-merge-complete",
     "--after-pr",
-    "1530"
+    "1567"
   ],
   "final_signal": "d",
-  "label": "post-merge-complete-after-pr1530",
+  "label": "post-merge-complete-after-pr1567",
   "latest_json_path": "docs/reports/transfer_runs/latest-transfer-report.json",
   "latest_log_path": "docs/reports/transfer_runs/latest-transfer-report.log",
   "llm_execution_context": {
@@ -96,7 +96,7 @@
       "status": "active"
     },
     "command_reference": {
-      "command_count": 175,
+      "command_count": 185,
       "generated_by": "scripts/generate_agentic_kit_command_reference.py",
       "important_wrappers": [
         {
@@ -204,6 +204,7 @@
             "--main-branch",
             "--merge-method",
             "--poll-seconds",
+            "--post-merge-complete",
             "--skip-llm-context-gate",
             "--timeout-seconds"
           ],
@@ -291,12 +292,12 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-06-20T19:03:46.532980+00:00",
+    "generated_at_utc": "2026-06-26T13:21:38.163263+00:00",
     "generated_from_current_repo": true,
     "git_state": {
       "branch": "main",
-      "head": "758bb54d7ca8f0a4fb2a3bb45d3df8cf1a40092b",
-      "status_short": ""
+      "head": "5925125adba072d1c91da4a61aa8464d3115bc41",
+      "status_short": "M docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n M docs/reports/handoff-packages/latest/execution_contract.json\n M docs/reports/handoff-packages/latest/successor_context.yaml\n M docs/reports/handoff-packages/latest/successor_prompt.md\n M docs/reports/handoff-packages/latest/validation_report.json"
     },
     "kind": "llm_execution_context",
     "llm_to_local_transfer_policy": {
@@ -353,10 +354,10 @@
     ],
     "source_hashes": {
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
-      ".agentic/transfer/one_command_transfer_protocol.yaml": "399eeb7211a4804396f41c09a04dd0aa7cab77a883bc1e921864c10c9a25e102",
-      ".agentic/transfer_safety_rules.yaml": "5630321ab7e733116e7017c1a97938865e217cb80effd082ce9c09cc42c6f975",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "84bf7bccc75bbbb8b79431f5aea1061d7a14805220236e9a6793e3389994c413",
-      "docs/reference/agentic-kit-commands.json": "f627cf31c1aaf641f9290252f9e848b7f466eb9b8230656ef10c94bb2e933e2e"
+      ".agentic/transfer/one_command_transfer_protocol.yaml": "5f784f41355f3063a34d51e6a3ed4dd64f29f4a71b8859bdb7df1529aefdc789",
+      ".agentic/transfer_safety_rules.yaml": "926473e7a669d11c8402a92f91358a3b92b0021f0f6627907d37dae49ea76412",
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "031d04187f8a76c98480b681fba2608b17dafafd98bb27c958834d014901e0d2",
+      "docs/reference/agentic-kit-commands.json": "74dee93af384fbd98a8fe7e5c9dc311a877b2001613c35de5f277eb81004bf2f"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -376,13 +377,13 @@
       "only_when_not_target_changes": true
     }
   },
-  "next_action": "Post-merge lifecycle is complete; continue with the next planned slice.",
+  "next_action": "Post-merge lifecycle is complete after admin refresh.",
   "post_merge_complete": {
-    "after_pr": 1530,
-    "lifecycle_state": "NOOP",
-    "next_action": "Post-merge lifecycle is complete; continue with the next planned slice.",
+    "after_pr": 1567,
+    "lifecycle_state": "COMPLETE",
+    "next_action": "Post-merge lifecycle is complete after admin refresh.",
     "refresh_loop_detected": false,
-    "refresh_pr": null,
+    "refresh_pr": 1568,
     "result_status": "PASS",
     "returncode": 0,
     "steps": [
@@ -395,11 +396,113 @@
             "handoff",
             "post-merge-refresh-status"
           ],
+          "next_action": "STATE=BLOCKED; NEXT=diagnose_handoff_refresh_status",
+          "result_status": "FAIL",
+          "returncode": 1,
+          "stderr": "",
+          "stdout": "POST_MERGE_HANDOFF_REFRESH\ncurrent_head=9251d6bc\nfreshness_warning_present=True\nrefresh_required=True\nlatest_successor_prompt=docs/reports/terminal/post-pr1565-successor-chat-handoff.md\nresult=REFRESH_REQUIRED\nnext_safe_action=create_administrative_handoff_refresh\n"
+        }
+      },
+      {
+        "name": "admin-refresh-pr",
+        "result": {
+          "action": "admin-refresh-pr",
+          "command": [
+            "agentic-kit",
+            "transfer",
+            "admin-refresh-pr",
+            "--after-pr",
+            "1567"
+          ],
+          "next_action": "Run transfer pr-status on the created admin refresh PR.",
+          "result_status": "PASS",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "$ git switch -c docs/post-pr1567-handoff-refresh main\nSwitched to a new branch 'docs/post-pr1567-handoff-refresh'\n\n$ admin-refresh-operational-handoff-docs --after-pr 1567\nUpdated operational handoff docs:\\n- .agentic/handoff_state.yaml\\n- .agentic/operational_handoff_state.yaml\\n- docs/STATUS.md\\n- docs/handoff/CURRENT_HANDOFF.md\\n- docs/handoff/START_NEW_CHAT_PROMPT.md\\n- docs/reports/handoff-packages/latest/execution_contract.json\\n- docs/reports/handoff-packages/latest/source_manifest.json\\n- docs/reports/handoff-packages/latest/successor_context.yaml\\n- docs/reports/handoff-packages/latest/successor_prompt.md\\n- docs/reports/handoff-packages/latest/validation_report.json\\n- docs/handoff/NEXT_CHAT_BOOTSTRAP.md\\n- docs/reports/terminal/post-pr1567-successor-chat-handoff.md\\n\n$ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/agentic-kit handoff check\nPersistent handoff state check passed\nDocumentation registry:\n- registry: docs/DOCUMENTATION_REGISTRY.yaml\n- version: 1\n- documents: 72\n- broad_migration_allowed: False\n- class:architecture: 1\n- class:evidence/log: 2\n- class:generated artifact: 1\n- class:governance/system: 4\n- class:historical archive: 19\n- class:operational/automation: 21\n- class:planning: 21\n- class:release: 2\n- class:user-facing description: 1\n\n$ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/agentic-kit handoff post-merge-refresh-status\nPOST_MERGE_HANDOFF_REFRESH\ncurrent_head=9251d6bc\nfreshness_warning_present=False\nrefresh_required=False\nlatest_successor_prompt=docs/reports/terminal/post-pr1567-successor-chat-handoff.md\nresult=NOOP\nnext_safe_action=continue_without_post_merge_handoff_refresh\n\n$ /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/agentic-kit transfer protected-diff-plan --label post-pr1567-handoff-refresh\n********************************** START SUMMARY ***********************************\nTRANSFER_PROTECTED_DIFF_PLAN\n\nSTATE:                  PASS\nDIFF:                   /tmp/post-pr1567-handoff-refresh.diff\nCACHED:                 no\nPLAN:                   PASS\n\nNEXT:                   Protected change plan passed; proceed with explicit add/commit paths.\nCHAT_REPLY:             d | NEXT=Protected change plan passed; proceed with explicit add/commit paths.\n*********************************** END SUMMARY ************************************\n\n$ git status --short\n M .agentic/handoff_state.yaml\n M .agentic/operational_handoff_state.yaml\n M docs/STATUS.md\n M docs/handoff/CURRENT_HANDOFF.md\n M docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n M docs/handoff/START_NEW_CHAT_PROMPT.md\n M docs/reports/handoff-packages/latest/execution_contract.json\n M docs/reports/handoff-packages/latest/source_manifest.json\n M docs/reports/handoff-packages/latest/successor_context.yaml\n M docs/reports/handoff-packages/latest/successor_prompt.md\n M docs/reports/handoff-packages/latest/validation_report.json\n?? docs/reports/terminal/post-pr1567-successor-chat-handoff.md\n\n$ git add .agentic/handoff_state.yaml .agentic/operational_handoff_state.yaml docs/STATUS.md docs/handoff/CURRENT_HANDOFF.md docs/handoff/NEXT_CHAT_BOOTSTRAP.md docs/handoff/START_NEW_CHAT_PROMPT.md docs/reports/handoff-packages/latest/execution_contract.json docs/reports/handoff-packages/latest/source_manifest.json docs/reports/handoff-packages/latest/successor_context.yaml docs/reports/handoff-packages/latest/successor_prompt.md docs/reports/handoff-packages/latest/validation_report.json docs/reports/terminal/post-pr1567-successor-chat-handoff.md\n\n$ git commit -m Refresh handoff state after PR1567\n[docs/post-pr1567-handoff-refresh 8fdc8500] Refresh handoff state after PR1567\n 12 files changed, 244 insertions(+), 44 deletions(-)\n create mode 100644 docs/reports/terminal/post-pr1567-successor-chat-handoff.md\n\n$ git push -u origin docs/post-pr1567-handoff-refresh\nbranch 'docs/post-pr1567-handoff-refresh' set up to track 'origin/docs/post-pr1567-handoff-refresh'.\nremote: \nremote: Create a pull request for 'docs/post-pr1567-handoff-refresh' on GitHub by visiting:        \nremote:      https://github.com/vfi64/agentic-project-kit/pull/new/docs/post-pr1567-handoff-refresh        \nremote: \nTo https://github.com/vfi64/agentic-project-kit.git\n * [new branch]        docs/post-pr1567-handoff-refresh -> docs/post-pr1567-handoff-refresh\n\n$ gh pr create --base main --head docs/post-pr1567-handoff-refresh --title Refresh handoff state after PR1567 --body Administrative operational handoff refresh after PR1567. No product-code changes.\nhttps://github.com/vfi64/agentic-project-kit/pull/1568\n"
+        }
+      },
+      {
+        "name": "admin-refresh-pr-wait-ci",
+        "result": {
+          "action": "pr-wait-ci",
+          "command": [
+            "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/agentic-kit",
+            "pr",
+            "wait-ci",
+            "1568",
+            "--timeout-seconds",
+            "300",
+            "--interval-seconds",
+            "10",
+            "--expected-head-sha",
+            "8fdc850027416c812832d3e52ab440ea8d8c869d"
+          ],
+          "next_action": "Run transfer pr-status or merge-if-green after CI is green.",
+          "result_status": "PASS",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "PR readiness outcome: READY_TO_MERGE\nterminal=true\nsuccess=true\n- all required checks passed and merge state is clean\n"
+        }
+      },
+      {
+        "name": "admin-refresh-pr-merge-safe",
+        "result": {
+          "action": "pr-merge-safe",
+          "command": [
+            "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/agentic-kit",
+            "pr",
+            "merge-if-green",
+            "1568",
+            "--expected-head-sha",
+            "8fdc850027416c812832d3e52ab440ea8d8c869d",
+            "--main-branch",
+            "main",
+            "--merge-method",
+            "squash",
+            "--merge-state-timeout-seconds",
+            "60",
+            "--merge-state-poll-seconds",
+            "5"
+          ],
+          "next_action": "Sync main and run post-merge handoff refresh status.",
+          "result_status": "PASS",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "NEXT_TURN_MERGE_IF_GREEN\npr=1568\ndecision=merge\nreason=PR is green\nstatus_decision=green\nstate=OPEN\nmerge_state_status=CLEAN\nbase_ref_name=main\nbase_ref_oid=9251d6bcdb7e2c186f17eb095aacc5405a7d4fb0\nhead_ref_name=docs/post-pr1567-handoff-refresh\nhead_ref_oid=8fdc850027416c812832d3e52ab440ea8d8c869d\nexpected_base_branch=main\nexpected_head_sha=8fdc850027416c812832d3e52ab440ea8d8c869d\nmerged=true\nmerge_commit_sha=5925125adba072d1c91da4a61aa8464d3115bc41\nmain_verification_required=true\nmain_verification_decision=green\nmain_verification_passed=true\nmain_failed_run_log_hint=none\nmain_verification_error=none\nfailed_checks:\npending_checks:\nunknown_checks:\nmain_failed_run_diagnostics:\n### RESULT: PASS ###\n"
+        }
+      },
+      {
+        "name": "final-main-sync",
+        "result": {
+          "action": "pull-current",
+          "command": [
+            "git",
+            "pull",
+            "--ff-only",
+            "origin",
+            "main"
+          ],
+          "next_action": "Run transfer state or continue with queued work.",
+          "result_status": "PASS",
+          "returncode": 0,
+          "stderr": "From https://github.com/vfi64/agentic-project-kit\n * branch              main       -> FETCH_HEAD\n   9251d6bc..5925125a  main       -> origin/main\n",
+          "stdout": "Updating 9251d6bc..5925125a\nFast-forward\n .agentic/handoff_state.yaml                        |   8 +-\n .agentic/operational_handoff_state.yaml            |  12 +-\n docs/STATUS.md                                     |   4 +-\n docs/handoff/CURRENT_HANDOFF.md                    |   4 +-\n docs/handoff/NEXT_CHAT_BOOTSTRAP.md                |   6 +-\n docs/handoff/START_NEW_CHAT_PROMPT.md              |   4 +-\n .../latest/execution_contract.json                 |  12 +-\n .../handoff-packages/latest/source_manifest.json   |  10 +-\n .../handoff-packages/latest/successor_context.yaml |  12 +-\n .../handoff-packages/latest/successor_prompt.md    |  12 +-\n .../handoff-packages/latest/validation_report.json |   4 +-\n .../terminal/post-pr1567-successor-chat-handoff.md | 200 +++++++++++++++++++++\n 12 files changed, 244 insertions(+), 44 deletions(-)\n create mode 100644 docs/reports/terminal/post-pr1567-successor-chat-handoff.md\n"
+        }
+      },
+      {
+        "name": "final-post-merge-check",
+        "result": {
+          "action": "post-merge-check",
+          "command": [
+            "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.venv/bin/agentic-kit",
+            "handoff",
+            "post-merge-refresh-status"
+          ],
           "next_action": "STATE=READY\nNEXT=none",
           "result_status": "PASS",
           "returncode": 0,
           "stderr": "",
-          "stdout": "POST_MERGE_HANDOFF_REFRESH\ncurrent_head=758bb54d\nfreshness_warning_present=False\nrefresh_required=False\nlatest_successor_prompt=docs/reports/terminal/post-pr1529-successor-chat-handoff.md\nresult=NOOP\nnext_safe_action=continue_without_post_merge_handoff_refresh\n"
+          "stdout": "POST_MERGE_HANDOFF_REFRESH\ncurrent_head=5925125a\nfreshness_warning_present=False\nrefresh_required=False\nlatest_successor_prompt=docs/reports/terminal/post-pr1567-successor-chat-handoff.md\nresult=NOOP\nnext_safe_action=continue_without_post_merge_handoff_refresh\n"
         }
       }
     ]
@@ -407,20 +510,20 @@
   "published_transfer_handoff": {
     "latest_published_log_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "published_log_path": "docs/reports/terminal/transfer_handoff_reports/20260620T185653Z-08ce5f95-post-merge-complete-after-pr1530.log",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260620T185653Z-08ce5f95-post-merge-complete-after-pr1530.json",
+    "published_log_path": "docs/reports/terminal/transfer_handoff_reports/20260626T132004Z-7fcc0975-post-merge-complete-after-pr1567.log",
+    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/20260626T132004Z-7fcc0975-post-merge-complete-after-pr1567.json",
     "schema_version": 1,
     "source_latest_json_path": "docs/reports/transfer_runs/latest-transfer-report.json",
     "source_latest_log_path": "docs/reports/transfer_runs/latest-transfer-report.log",
-    "source_remote_report_path": "docs/reports/transfer_runs/20260620T185653Z-08ce5f95-post-merge-complete-after-pr1530.json"
+    "source_remote_report_path": "docs/reports/transfer_runs/20260626T132004Z-7fcc0975-post-merge-complete-after-pr1567.json"
   },
-  "remote_report_path": "docs/reports/transfer_runs/20260620T185653Z-08ce5f95-post-merge-complete-after-pr1530.json",
+  "remote_report_path": "docs/reports/transfer_runs/20260626T132004Z-7fcc0975-post-merge-complete-after-pr1567.json",
   "returncode": 0,
-  "run_id": "20260620T185653Z-08ce5f95",
+  "run_id": "20260626T132004Z-7fcc0975",
   "schema_version": 1,
   "stderr": "",
-  "stdout": "********************************** START SUMMARY ***********************************\nTRANSFER_POST_MERGE_COMPLETE\n\nSTATE:                 PASS\nRETURNCODE:            0\n\nLIFECYCLE\n- AFTER_PR:            1530\n- STATE:               NOOP\n- REFRESH_PR:          \n- REFRESH_LOOP:        false\n\nREMOTE_REPORT\n- UPLOADED:            pending\n- REPORT_PATH:         \n\nLOCAL\n- REPORT_PATH:         \n\nNEXT:                  Post-merge lifecycle is complete; continue with the next planned slice.\nCHAT_REPLY:            d | NEXT=Post-merge lifecycle is complete; continue with the next planned slice.\n*********************************** END SUMMARY ************************************\n",
-  "timestamped_log_path": "docs/reports/transfer_runs/20260620T185653Z-08ce5f95-post-merge-complete-after-pr1530.log",
+  "stdout": "********************************** START SUMMARY ***********************************\nTRANSFER_POST_MERGE_COMPLETE\n\nSTATE:                 PASS\nRETURNCODE:            0\n\nLIFECYCLE\n- AFTER_PR:            1567\n- STATE:               COMPLETE\n- REFRESH_PR:          1568\n- REFRESH_LOOP:        false\n\nREMOTE_REPORT\n- UPLOADED:            pending\n- REPORT_PATH:         \n\nLOCAL\n- REPORT_PATH:         \n\nNEXT:                  Post-merge lifecycle is complete after admin refresh.\nCHAT_REPLY:            d | NEXT=Post-merge lifecycle is complete after admin refresh.\n*********************************** END SUMMARY ************************************\n",
+  "timestamped_log_path": "docs/reports/transfer_runs/20260626T132004Z-7fcc0975-post-merge-complete-after-pr1567.log",
   "transfer_report_written": "done",
   "transfer_upload": "done"
 }

@@ -1,6 +1,6 @@
-TRANSFER_UPLINK_RUN=20260620T185653Z-08ce5f95
-LABEL=post-merge-complete-after-pr1530
-COMMAND=agentic-kit transfer post-merge-complete --after-pr 1530
+TRANSFER_UPLINK_RUN=20260626T132004Z-7fcc0975
+LABEL=post-merge-complete-after-pr1567
+COMMAND=agentic-kit transfer post-merge-complete --after-pr 1567
 RETURNCODE=0
 ### STDOUT ###
 ********************************** START SUMMARY ***********************************
@@ -10,9 +10,9 @@ STATE:                 PASS
 RETURNCODE:            0
 
 LIFECYCLE
-- AFTER_PR:            1530
-- STATE:               NOOP
-- REFRESH_PR:          
+- AFTER_PR:            1567
+- STATE:               COMPLETE
+- REFRESH_PR:          1568
 - REFRESH_LOOP:        false
 
 REMOTE_REPORT
@@ -22,14 +22,14 @@ REMOTE_REPORT
 LOCAL
 - REPORT_PATH:         
 
-NEXT:                  Post-merge lifecycle is complete; continue with the next planned slice.
-CHAT_REPLY:            d | NEXT=Post-merge lifecycle is complete; continue with the next planned slice.
+NEXT:                  Post-merge lifecycle is complete after admin refresh.
+CHAT_REPLY:            d | NEXT=Post-merge lifecycle is complete after admin refresh.
 *********************************** END SUMMARY ************************************
 ### STDERR ###
 
 ### SUMMARY ###
 TRANSFER_REPORT_WRITTEN=done
-LOCAL_REPORT=docs/reports/transfer_runs/20260620T185653Z-08ce5f95-post-merge-complete-after-pr1530.json
+LOCAL_REPORT=docs/reports/transfer_runs/20260626T132004Z-7fcc0975-post-merge-complete-after-pr1567.json
 FINAL_SIGNAL=d
-FINAL_NEXT=Post-merge lifecycle is complete; continue with the next planned slice.
-CHAT_REPLY=d | NEXT=Post-merge lifecycle is complete; continue with the next planned slice.
+FINAL_NEXT=Post-merge lifecycle is complete after admin refresh.
+CHAT_REPLY=d | NEXT=Post-merge lifecycle is complete after admin refresh.

@@ -93,6 +93,38 @@ def test_allows_generated_bootstrap_change_with_generator_source() -> None:
     ])
     assert not any(f.code == "generated-artifact-direct-edit" for f in analyze_diff(diff))
 
+
+def test_allows_generated_bootstrap_change_with_successor_handoff_projection_bundle() -> None:
+    diff = "\n".join(
+        [
+            "diff --git a/docs/handoff/NEXT_CHAT_BOOTSTRAP.md b/docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+            "+generated bootstrap",
+            "diff --git a/docs/reports/handoff-packages/latest/execution_contract.json b/docs/reports/handoff-packages/latest/execution_contract.json",
+            "+{}",
+            "diff --git a/docs/reports/handoff-packages/latest/successor_context.yaml b/docs/reports/handoff-packages/latest/successor_context.yaml",
+            "+repo:",
+            "diff --git a/docs/reports/handoff-packages/latest/successor_prompt.md b/docs/reports/handoff-packages/latest/successor_prompt.md",
+            "+prompt",
+            "diff --git a/docs/reports/handoff-packages/latest/validation_report.json b/docs/reports/handoff-packages/latest/validation_report.json",
+            "+{\"status\": \"PASS\"}",
+        ]
+    )
+    assert not any(f.code == "generated-artifact-direct-edit" for f in analyze_diff(diff))
+
+
+def test_blocks_generated_bootstrap_change_with_incomplete_successor_projection_bundle() -> None:
+    diff = "\n".join(
+        [
+            "diff --git a/docs/handoff/NEXT_CHAT_BOOTSTRAP.md b/docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+            "+generated bootstrap",
+            "diff --git a/docs/reports/handoff-packages/latest/validation_report.json b/docs/reports/handoff-packages/latest/validation_report.json",
+            "+{\"status\": \"PASS\"}",
+        ]
+    )
+    findings = analyze_diff(diff)
+    assert any(f.code == "generated-artifact-direct-edit" for f in findings)
+
+
 def test_generated_bootstrap_is_allowed_when_operational_state_source_changes():
     diff = "\n".join([
         "diff --git a/.agentic/operational_handoff_state.yaml b/.agentic/operational_handoff_state.yaml",

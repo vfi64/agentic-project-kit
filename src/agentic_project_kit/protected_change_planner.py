@@ -28,6 +28,13 @@ GENERATED_ARTIFACTS = {
     ),
 }
 
+SUCCESSOR_HANDOFF_PROJECTION_BUNDLE = {
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+}
+
 ANCHORS = {
     ".agentic/compiled_agent_context.yaml": {"hard_rules", "final_summary_contract", "communication_rules", "normal_operator_path"},
     ".agentic/handoff_state.yaml": {"safe_state", "release", "recent_failure_patterns"},
@@ -109,12 +116,21 @@ def _is_handoff_state_refresh(path: str, added_text: str) -> bool:
         and all(_contains_anchor(path, candidate_text, anchor) for anchor in required_anchors)
     )
 
+
+def _is_successor_handoff_projection_refresh(touched: set[str]) -> bool:
+    return SUCCESSOR_HANDOFF_PROJECTION_BUNDLE <= touched
+
+
 def analyze_diff(diff_text: str, decisions: dict[str, str] | None = None) -> list[ProtectedChangeFinding]:
     decisions = decisions or {}
     findings: list[ProtectedChangeFinding] = []
     touched = touched_files(diff_text)
     for path, generator_sources in sorted(GENERATED_ARTIFACTS.items()):
-        if path in touched and not any(source in touched for source in generator_sources):
+        if (
+            path in touched
+            and not any(source in touched for source in generator_sources)
+            and not _is_successor_handoff_projection_refresh(touched)
+        ):
             findings.append(ProtectedChangeFinding(path, "block", "generated-artifact-direct-edit", "generated artifact changed without its generator source; use the generator path instead of direct editing"))
     for path in sorted(touched & PROTECTED_FILES):
         removed = removed_lines_for_path(diff_text, path)
