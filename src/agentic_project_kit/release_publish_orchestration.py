@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 from dataclasses import asdict, dataclass
+import json
 from pathlib import Path
+import re
 import shutil
 import subprocess
 
@@ -112,6 +114,98 @@ def _run_check(
     )
 
 
+def _current_changelog_release_metadata(root: Path, version: str) -> tuple[str | None, tuple[str, ...]]:
+    changelog = root / "CHANGELOG.md"
+    if not changelog.exists():
+        return None, ()
+    text = changelog.read_text(encoding="utf-8")
+    match = re.search(
+        rf"(?ms)^##\s+v{re.escape(version)}\s+-\s+(\d{{4}}-\d{{2}}-\d{{2}})\n\n(.*?)(?=^##\s+v|\Z)",
+        text,
+    )
+    if not match:
+        return None, ()
+    summary_lines = tuple(
+        line.strip()[2:].strip()
+        for line in match.group(2).splitlines()
+        if line.strip().startswith("- ")
+    )
+    return match.group(1), summary_lines
+
+
+def _release_prep_dry_run_args(executable: str, version: str, root: Path) -> tuple[str, ...]:
+    release_date, summary_lines = _current_changelog_release_metadata(root, version)
+    args: list[str] = [
+        executable,
+        "release-prep",
+        "--version",
+        version,
+        "--dry-run",
+        "--json",
+    ]
+    if release_date:
+        args.extend(["--date", release_date])
+    if summary_lines:
+        for line in summary_lines:
+            args.extend(["--summary-line", line])
+    else:
+        args.extend(
+            [
+                "--summary-line",
+                f"Release metadata prepared for v{version}; publish and DOI verification remain separate guarded steps.",
+            ]
+        )
+    return tuple(args)
+
+
+def _run_release_prep_consistency_check(
+    *,
+    executable: str,
+    version: str,
+    root: Path,
+    runner: Runner,
+) -> ReleasePublishCheck:
+    args = _release_prep_dry_run_args(executable, version, root)
+    returncode, output = runner(args, root)
+    if returncode != 0:
+        return ReleasePublishCheck(
+            name="release-prep dry-run",
+            status="FAIL",
+            detail=_last_line(output),
+            returncode=returncode,
+        )
+    try:
+        payload = json.loads(output or "{}")
+    except json.JSONDecodeError as exc:
+        return ReleasePublishCheck(
+            name="release-prep dry-run",
+            status="FAIL",
+            detail=f"release-prep dry-run did not return JSON: {exc}",
+            returncode=1,
+        )
+    changed_paths = payload.get("changed_paths") if isinstance(payload, dict) else None
+    if not isinstance(changed_paths, list):
+        return ReleasePublishCheck(
+            name="release-prep dry-run",
+            status="FAIL",
+            detail="release-prep dry-run JSON missing changed_paths",
+            returncode=1,
+        )
+    if changed_paths:
+        return ReleasePublishCheck(
+            name="release-prep dry-run",
+            status="FAIL",
+            detail="release-prep dry-run would change paths: " + ", ".join(str(path) for path in changed_paths),
+            returncode=1,
+        )
+    return ReleasePublishCheck(
+        name="release-prep dry-run",
+        status="PASS",
+        detail="No release metadata anchor files changed.",
+        returncode=0,
+    )
+
+
 def evaluate_release_publish_plan(
     root: Path = Path("."),
     *,
@@ -138,17 +232,9 @@ def evaluate_release_publish_plan(
         )
 
     checks.append(
-        _run_check(
-            name="release-prep dry-run",
-            args=(
-                executable,
-                "release-prep",
-                "--version",
-                version,
-                "--summary-line",
-                f"Release metadata prepared for v{version}; publish and DOI verification remain separate guarded steps.",
-                "--dry-run",
-            ),
+        _run_release_prep_consistency_check(
+            executable=executable,
+            version=version,
             root=root,
             runner=run,
         )
