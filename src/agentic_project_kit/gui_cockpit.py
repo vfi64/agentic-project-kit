@@ -5,6 +5,8 @@ from pathlib import Path
 from typing import Any
 
 from agentic_project_kit.cockpit import READ_ONLY, CockpitAction, CockpitActionResult, cockpit_actions, run_cockpit_action
+from agentic_project_kit.gui_tkinter_shell import run_basic_cockpit_button
+from agentic_project_kit.gui_viewmodel import BasicCockpitViewModel, build_basic_cockpit_view_model
 
 
 @dataclass(frozen=True)
@@ -76,6 +78,20 @@ def format_action_result(result: CockpitActionResult) -> str:
     return "\n".join(lines).rstrip()
 
 
+def format_basic_cockpit_summary(view_model: BasicCockpitViewModel) -> str:
+    lines = [
+        "BASIC_COCKPIT",
+        f"traffic_light_state={view_model.traffic_light_state}",
+        f"traffic_light_color={view_model.traffic_light_color}",
+        f"communication_mode={view_model.communication_mode}",
+        f"mutation_allowed={str(view_model.mutation_allowed).lower()}",
+        f"next_safe_action={view_model.next_safe_action}",
+        f"reason={view_model.reason}",
+        "buttons=" + ",".join(button.command_id for button in view_model.buttons),
+    ]
+    return "\n".join(lines)
+
+
 class CockpitGui:
     def __init__(self, root: Any, project_root: Path | None = None) -> None:
         import tkinter as tk
@@ -84,21 +100,47 @@ class CockpitGui:
         self.root = root
         self.project_root = (project_root or Path(".")).resolve()
         self.actions = build_gui_action_views()
+        self.basic_view = build_basic_cockpit_view_model(self.project_root)
         self.root.title("agentic-project-kit cockpit")
-        self.root.geometry("1040x700")
+        self.root.geometry("1120x760")
 
         frame = ttk.Frame(root, padding=10)
         frame.pack(fill=tk.BOTH, expand=True)
 
-        title = ttk.Label(frame, text="Local Cockpit", font=("TkDefaultFont", 16, "bold"))
+        title = ttk.Label(frame, text="Basic Cockpit", font=("TkDefaultFont", 16, "bold"))
         title.pack(anchor=tk.W)
 
-        info = ttk.Label(
-            frame,
-            text="Read-only actions may run through the shared cockpit layer. Bounded and destructive actions remain blocked by default. Select an action to inspect its command, safety class, and explanation before running it.",
-            wraplength=860,
+        status_frame = ttk.LabelFrame(frame, text="State", padding=8)
+        status_frame.pack(fill=tk.X, pady=(4, 8))
+        status_text = (
+            f"{self.basic_view.traffic_light_state} ({self.basic_view.traffic_light_color}) | "
+            f"mode={self.basic_view.communication_mode} | "
+            f"next={self.basic_view.next_safe_action}"
         )
-        info.pack(anchor=tk.W, pady=(4, 10))
+        ttk.Label(status_frame, text=status_text, anchor=tk.W, wraplength=980).pack(fill=tk.X)
+        ttk.Label(status_frame, text=self.basic_view.reason, anchor=tk.W, wraplength=980).pack(
+            fill=tk.X, pady=(4, 0)
+        )
+
+        mode_row = ttk.Frame(status_frame)
+        mode_row.pack(fill=tk.X, pady=(6, 0))
+        for mode in self.basic_view.communication_modes:
+            marker = "[x]" if mode.selected else "[ ]"
+            ttk.Label(mode_row, text=f"{marker} {mode.label}: {mode.role}").pack(
+                side=tk.LEFT, padx=(0, 12)
+            )
+
+        basic_buttons = ttk.LabelFrame(frame, text="Basic Actions", padding=8)
+        basic_buttons.pack(fill=tk.X, pady=(0, 8))
+        for button in self.basic_view.buttons:
+            state = tk.NORMAL if button.enabled else tk.DISABLED
+            ttk.Button(
+                basic_buttons,
+                text=button.label,
+                state=state,
+                command=lambda command_id=button.command_id: self.run_basic_action(command_id),
+                width=22,
+            ).pack(side=tk.LEFT, padx=(0, 8), pady=1)
 
         columns = ("label", "category", "safety", "command")
         self.tree = ttk.Treeview(frame, columns=columns, show="headings", height=12)
@@ -125,7 +167,7 @@ class CockpitGui:
         output_label.pack(anchor=tk.W)
         self.output = tk.Text(frame, height=16, wrap=tk.WORD)
         self.output.pack(fill=tk.BOTH, expand=True)
-        self.write_output("GUI cockpit ready. Select an action, inspect its details, then run read-only actions explicitly. Bounded and destructive actions stay blocked here.\n")
+        self.write_output(format_basic_cockpit_summary(self.basic_view) + "\n")
 
     def selected_action_id(self) -> str | None:
         selected = self.tree.selection()
@@ -168,6 +210,9 @@ class CockpitGui:
         ]
         self.write_output("\n\n" + format_action_details(action) + "\n")
 
+    def run_basic_action(self, command_id: str) -> None:
+        self.write_output("\n" + run_basic_cockpit_button(command_id, project_root=self.project_root) + "\n")
+
     def run_selected_read_only(self) -> None:
         action_id = self.selected_action_id()
         if action_id is None:
@@ -183,4 +228,3 @@ def main() -> None:
     root = tk.Tk()
     CockpitGui(root)
     root.mainloop()
-

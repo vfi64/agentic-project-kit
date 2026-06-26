@@ -19,13 +19,17 @@ from agentic_project_kit.gui_action_execution import (
 from agentic_project_kit.gui_gatekeeper_status import (
     GuiGatekeeperStatus,
     build_gui_gatekeeper_status,
+    render_gui_gatekeeper_status,
 )
 from agentic_project_kit.gui_button_catalog import (
     all_gui_buttons,
     get_gui_button,
     toolbar_gui_buttons,
 )
-from agentic_project_kit.gui_presenter import build_no_window_presenter_result
+from agentic_project_kit.gui_presenter import (
+    build_basic_no_window_presenter_result,
+)
+from agentic_project_kit.gui_viewmodel import build_basic_cockpit_view_model
 from agentic_project_kit.gui_window_guard import (
     check_window_launch_ready,
     render_window_guard_result,
@@ -126,6 +130,11 @@ class TkinterShellSpec:
     destructive_actions_enabled: bool
     preview: str
     design: TkinterShellDesignSpec
+    traffic_light_state: str = "UNKNOWN"
+    traffic_light_color: str = "gray"
+    communication_mode: str = "file_transfer"
+    next_safe_action: str = ""
+    basic_button_count: int = 0
 
 
 def _button(
@@ -281,9 +290,13 @@ def build_windows_style_design_spec(
 def build_tkinter_shell_spec(
     gatekeeper_status: GuiGatekeeperStatus | None = None,
 ) -> TkinterShellSpec:
-    presenter = build_no_window_presenter_result(list_actions())
     gatekeeper = gatekeeper_status or build_gui_gatekeeper_status(Path.cwd())
-    status = "tkinter-shell-ready" if presenter.ok and gatekeeper.ready_for_read_only_actions else "tkinter-shell-blocked"
+    basic_view = build_basic_cockpit_view_model(gatekeeper_status=gatekeeper)
+    presenter = build_basic_no_window_presenter_result(gatekeeper_status=gatekeeper)
+    shell_state = basic_view.traffic_light_state.lower()
+    if basic_view.traffic_light_state in {"BLOCKED", "FAILED"}:
+        shell_state = "blocked"
+    status = f"tkinter-shell-{shell_state}" if presenter.ok else "tkinter-shell-blocked"
     preview_lines = [presenter.rendered]
     if gatekeeper.blockers:
         preview_lines.append("GUI gatekeeper blockers: " + ", ".join(gatekeeper.blockers))
@@ -296,6 +309,11 @@ def build_tkinter_shell_spec(
         False,
         chr(10).join(preview_lines),
         build_windows_style_design_spec(gatekeeper),
+        basic_view.traffic_light_state,
+        basic_view.traffic_light_color,
+        basic_view.communication_mode,
+        basic_view.next_safe_action,
+        basic_view.button_count,
     )
 
 
@@ -322,7 +340,12 @@ def render_tkinter_shell_summary(spec: TkinterShellSpec) -> str:
             "TKINTER SHELL",
             f"title={spec.title}",
             f"status={spec.status}",
+            f"traffic_light_state={spec.traffic_light_state}",
+            f"traffic_light_color={spec.traffic_light_color}",
+            f"communication_mode={spec.communication_mode}",
+            f"next_safe_action={spec.next_safe_action}",
             f"action_count={spec.action_count}",
+            f"basic_button_count={spec.basic_button_count}",
             f"menu_count={len(spec.design.menu_bar)}",
             f"toolbar_button_count={len(spec.design.toolbar)}",
             f"action_button_count={len(spec.design.action_buttons)}",
@@ -475,6 +498,46 @@ def run_manual_gui_catalog_action(action_name: str) -> str:
     return render_gui_action_execution_result(result)
 
 
+def run_basic_cockpit_button(
+    command_id: str,
+    *,
+    gatekeeper_status: GuiGatekeeperStatus | None = None,
+    project_root: Path | str = ".",
+) -> str:
+    status = gatekeeper_status or build_gui_gatekeeper_status(project_root)
+    view_model = build_basic_cockpit_view_model(project_root, gatekeeper_status=status)
+    button = next((item for item in view_model.buttons if item.command_id == command_id), None)
+    if button is None:
+        return _catalog_action_result(
+            command_id,
+            "unknown",
+            allowed=False,
+            executed=False,
+            returncode=2,
+            message="Basic cockpit button not found.",
+        )
+    if not button.enabled:
+        return _catalog_action_result(
+            button.command_id,
+            button.safety_class,
+            allowed=False,
+            executed=False,
+            returncode=2,
+            message=button.disabled_reason or "Basic cockpit gatekeeper blocked this action.",
+        )
+    runner = MANUAL_GUI_READONLY_RUNNERS.get(button.command_id)
+    if runner is None:
+        return _catalog_action_result(
+            button.command_id,
+            button.safety_class,
+            allowed=False,
+            executed=False,
+            returncode=2,
+            message="No bounded Basic cockpit runner is registered for this button.",
+        )
+    return run_manual_gui_catalog_action(button.command_id)
+
+
 def run_cockpit_readiness_for_manual_gui() -> str:
     return run_manual_gui_catalog_action("cockpit-readiness")
 
@@ -612,6 +675,10 @@ def _run_gui_dry_run() -> tuple[int, str]:
     return 0, render_tkinter_shell_summary(build_tkinter_shell_spec())
 
 
+def _run_status_refresh() -> tuple[int, str]:
+    return 0, render_gui_gatekeeper_status(build_gui_gatekeeper_status(Path.cwd()))
+
+
 def _run_work_order_show() -> tuple[int, str]:
     return read_work_order_preview()
 
@@ -660,7 +727,9 @@ MANUAL_GUI_READONLY_RUNNERS: dict[str, Callable[[], tuple[int, str]]] = {
     "rule-registry-check": _run_rule_registry_check,
     "rule-registry-report": _run_rule_registry_report,
     "state-freshness": _run_state_freshness,
+    "status-refresh": _run_status_refresh,
     "terminal-remote-preflight": _run_terminal_remote_preflight,
+    "diagnose": _run_doctor,
     "work-order-show": _run_work_order_show,
     "work-order-validate": _run_work_order_validate,
     "work-order-run": _run_work_order_run,
@@ -686,15 +755,16 @@ def render_manual_launch_content(root: object) -> None:
     )
     header.pack(fill="x", padx=12, pady=(12, 6))
     spec = build_tkinter_shell_spec()
+    basic_view = build_basic_cockpit_view_model()
     buttons = spec.design.action_buttons
     enabled_count = len([button for button in buttons if button.enabled])
     disabled_count = len([button for button in buttons if not button.enabled])
     safety = ttk.Label(
         root,
         text=(
-            "Safety: manual launch; communication/workflow read-only buttons enabled; "
-            f"remote/destructive/parameterized buttons disabled ({enabled_count} enabled, "
-            f"{disabled_count} disabled)."
+            f"State: {basic_view.traffic_light_state} | mode: {basic_view.communication_mode} | "
+            f"next: {basic_view.next_safe_action} | catalog: {enabled_count} enabled, "
+            f"{disabled_count} disabled; remote/destructive/parameterized buttons disabled."
         ),
         anchor="w",
     )
@@ -743,6 +813,60 @@ def render_manual_launch_content(root: object) -> None:
                 f"GUI ACTION EXECUTION RESULT\naction={command_id}\nreturncode=1\nmessage={exc}"
             )
             set_status(f"Status: fail | branch: main | action: {command_id}")
+
+    def run_basic_action_click(command_id: str) -> None:
+        set_status(f"Status: running | branch: main | basic_action: {command_id}")
+        try:
+            value = run_basic_cockpit_button(command_id)
+            write_output(value)
+            if "returncode=0" in value:
+                set_status(f"Status: success | branch: main | basic_action: {command_id}")
+            else:
+                set_status(f"Status: blocked | branch: main | basic_action: {command_id}")
+        except Exception as exc:
+            write_output(
+                "GUI ACTION EXECUTION RESULT\n"
+                f"action={command_id}\nreturncode=1\nmessage={exc}"
+            )
+            set_status(f"Status: fail | branch: main | basic_action: {command_id}")
+
+    basic_panel = ttk.LabelFrame(root, text="Basic Cockpit", padding=(12, 8, 12, 8))
+    basic_panel.pack(fill="x", padx=12, pady=(0, 8))
+    ttk.Label(
+        basic_panel,
+        text=(
+            f"{basic_view.traffic_light_state} ({basic_view.traffic_light_color}) | "
+            f"{basic_view.reason}"
+        ),
+        anchor="w",
+    ).pack(fill="x", pady=(0, 4))
+    mode_row = ttk.Frame(basic_panel)
+    mode_row.pack(fill="x", pady=(0, 4))
+    for mode in basic_view.communication_modes:
+        marker = "[x]" if mode.selected else "[ ]"
+        ttk.Label(
+            mode_row,
+            text=f"{marker} {mode.label}: {mode.role}",
+            anchor="w",
+        ).pack(side="left", padx=(0, 12))
+    basic_button_row = ttk.Frame(basic_panel)
+    basic_button_row.pack(fill="x")
+    for button in basic_view.buttons:
+        if button.enabled:
+            ttk.Button(
+                basic_button_row,
+                text=button.label,
+                command=lambda command_id=button.command_id: run_basic_action_click(command_id),
+                width=22,
+            ).pack(side="left", padx=(0, 8), pady=1)
+        else:
+            ttk.Button(
+                basic_button_row,
+                text=button.label,
+                state="disabled",
+                width=22,
+                style="ReadableDisabled.TButton",
+            ).pack(side="left", padx=(0, 8), pady=1)
 
     # The former top toolbar duplicated actions from the categorized left action list.
     # Keep toolbar metadata in the catalog for future compact quick-access designs, but

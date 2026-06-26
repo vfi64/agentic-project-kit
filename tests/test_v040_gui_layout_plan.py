@@ -41,7 +41,7 @@ def test_render_layout_plan_is_deterministic():
     assert f"toolbar_button_count={len(toolbar_gui_buttons())}" in output
     assert f"action_button_count={len([button for button in all_gui_buttons() if button.command_id not in WORK_ORDER_STRIP_COMMAND_IDS])}" in output
     assert (
-        "action_categories=Diagnostics,Evidence,Git Workflow,Quality Gates,Release,Session,Workflow Automation"
+        "action_categories=Basic,Diagnostics,Evidence,Git Workflow,Quality Gates,Release,Session,Workflow Automation"
         in output
     )
     assert "disabled_commands=" in output
