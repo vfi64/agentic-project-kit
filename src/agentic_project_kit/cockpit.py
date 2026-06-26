@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import os
+import shutil
 import subprocess
+import sys
 from typing import Callable
 
 
@@ -289,8 +292,63 @@ def _git_stdout(root: Path, args: list[str], default: str) -> str:
     return completed.stdout.strip() or default
 
 
+def _resolve_command(command: tuple[str, ...], root: Path) -> list[str]:
+    if not command:
+        return []
+    first, *rest = command
+    if first != "agentic-kit":
+        return list(command)
+
+    candidates: list[Path] = [
+        root / ".venv" / "bin" / "agentic-kit",
+        root / ".venv" / "Scripts" / "agentic-kit.exe",
+    ]
+    if sys.executable:
+        executable = Path(sys.executable)
+        candidates.append(executable.with_name("agentic-kit"))
+    for candidate in candidates:
+        if candidate.exists():
+            return [str(candidate), *rest]
+
+    found = shutil.which("agentic-kit")
+    if found:
+        return [found, *rest]
+
+    # Keep the original command. _run_command catches FileNotFoundError and
+    # returns a structured failure instead of leaking a Tkinter callback traceback.
+    return list(command)
+
+
+def _completed_process_for_missing_command(
+    command: tuple[str, ...],
+    error: FileNotFoundError,
+) -> subprocess.CompletedProcess[str]:
+    missing = str(error.filename or (command[0] if command else "<empty>"))
+    return subprocess.CompletedProcess(
+        list(command),
+        127,
+        "",
+        (
+            "Command executable not found: "
+            + missing
+            + ". Start the GUI from the project virtual environment or keep "
+            + ".venv/bin/agentic-kit available for cockpit actions."
+        ),
+    )
+
+
 def _run_command(command: tuple[str, ...], root: Path) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(list(command), cwd=root, text=True, capture_output=True, check=False)
+    try:
+        return subprocess.run(
+            _resolve_command(command, root),
+            cwd=root,
+            text=True,
+            capture_output=True,
+            check=False,
+            env=os.environ.copy(),
+        )
+    except FileNotFoundError as exc:
+        return _completed_process_for_missing_command(command, exc)
 
 
 def _present(value: bool) -> str:
