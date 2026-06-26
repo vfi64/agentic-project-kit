@@ -2116,6 +2116,8 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_ad
                 '{"state":"MERGED","mergedAt":"2026-06-18T08:00:00Z","mergeCommit":{"oid":"abc"}}\n',
                 "",
             )
+        if command == ["./.venv/bin/agentic-kit", "transfer", "sync-main"]:
+            return subprocess.CompletedProcess(command, 0, "synced\n", "")
         if command == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"]:
             prior_checks = sum(1 for item in calls if item == command)
             if prior_checks == 1:
@@ -2186,6 +2188,7 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_ad
     assert "created, completed, and verified" in payload["next_action"]
 
     step_names = [step["name"] for step in payload["steps"]]
+    assert "sync-main-before-post-merge-check-after-post-merge-complete" in step_names
     assert "post-merge-check-after-post-merge-complete" in step_names
     assert "admin-refresh-pr-after-successor-refresh-needed" in step_names
     assert "admin-refresh-pr-complete" in step_names
@@ -2849,6 +2852,7 @@ def test_pr_create_complete_clears_outer_sync_false_red_when_pr_merged_and_post_
 
     assert "outer_followup_false_red_is_safe_to_clear" in source
     assert "outer-followup-pr-merged-check" in source
+    assert "outer-followup-sync-main-before-post-merge-check" in source
     assert "outer-followup-post-merge-check-green-check" in source
     assert "outer_followup_false_red_cleared" in source
     assert "isMerged" not in source

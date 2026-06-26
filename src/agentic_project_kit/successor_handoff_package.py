@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from agentic_project_kit import __version__ as PACKAGE_VERSION
 from agentic_project_kit.project_direction import load_project_direction
 
 REPO_FULL_NAME = "vfi64/agentic-project-kit"
@@ -295,6 +296,9 @@ def _build_context(root: Path) -> dict[str, Any]:
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "generated_by": "agentic-kit transfer chat-switch-complete",
         "repo": repo_state,
+        "release": {
+            "package_version": PACKAGE_VERSION,
+        },
         "handoff_validity": {
             "status": "PENDING_VALIDATION",
             "canonical_package": "docs/reports/handoff-packages/latest/successor_context.yaml",

@@ -2135,6 +2135,21 @@ def pr_complete_command(
             return int(existing_match.group(1))
         return None
     def run_admin_refresh_followup_if_needed() -> tuple[bool, str]:
+        sync_command = [agentic_kit, "transfer", "sync-main"]
+        sync = subprocess.run(sync_command, text=True, capture_output=True)
+        steps.append(
+            {
+                "name": "sync-main-before-post-merge-check-after-post-merge-complete",
+                "argv": sync_command,
+                "returncode": sync.returncode,
+                "stdout": sync.stdout,
+                "stderr": sync.stderr,
+                "ok": sync.returncode == 0,
+            }
+        )
+        if sync.returncode != 0:
+            return False, "sync-main_failed_before_post-merge-check_after_post-merge-complete"
+
         check_command = [agentic_kit, "transfer", "post-merge-check"]
         check = subprocess.run(check_command, text=True, capture_output=True)
         steps.append(
@@ -2764,6 +2779,21 @@ def pr_create_complete_command(
         return bool(payload.get("mergedAt")) or str(payload.get("state", "")).upper() == "MERGED"
 
     def post_merge_check_is_green_for_outer_followup() -> bool:
+        sync_command = [agentic_kit, "transfer", "sync-main"]
+        sync = subprocess.run(sync_command, text=True, capture_output=True)
+        steps.append(
+            {
+                "name": "outer-followup-sync-main-before-post-merge-check",
+                "argv": sync_command,
+                "returncode": sync.returncode,
+                "stdout": sync.stdout,
+                "stderr": sync.stderr,
+                "ok": sync.returncode == 0,
+            }
+        )
+        if sync.returncode != 0:
+            return False
+
         command = [agentic_kit, "transfer", "post-merge-check"]
         completed = subprocess.run(command, text=True, capture_output=True)
         steps.append(
@@ -2873,6 +2903,7 @@ def pr_create_complete_command(
         ]
         if skip_llm_context_gate:
             complete_argv.append("--skip-llm-context-gate")
+        complete_argv.append("--json")
         complete_result = run_step("pr-complete", complete_argv)
         inner_post_merge_followup_verified = post_merge_complete_verified_by_inner_pr_complete(
             complete_result.stdout
