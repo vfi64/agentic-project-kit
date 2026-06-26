@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 26e0d0844e3a46956a5a836c9932e957c21576ef
-  short: 26e0d084
-  subject: Close out v0.4.11 DOI release state (#1559)
+  full: ac7421cc0de6718c83d6ad843a384162be22076b
+  short: ac7421cc
+  subject: Plan pre-GUI hardening tasks (#1561)
 last_substantive_work_state:
-  full: 26e0d0844e3a46956a5a836c9932e957c21576ef
-  short: 26e0d084
-  subject: Close out v0.4.11 DOI release state (#1559)
+  full: ac7421cc0de6718c83d6ad843a384162be22076b
+  short: ac7421cc
+  subject: Plan pre-GUI hardening tasks (#1561)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
