@@ -48,7 +48,17 @@ def test_bounded_action_without_allow_is_pending_contract(tmp_path: Path) -> Non
     assert result.safety == "bounded"
 
 def test_destructive_action_is_hard_fail_contract(tmp_path: Path) -> None:
-    actions = [CockpitAction("git.push", "Git push", "git", ("git", "push"), "destructive", "Push changes.")]
+    actions = [
+        CockpitAction(
+            "git.push",
+            "Git push",
+            "git",
+            ("git", "push"),
+            "destructive",
+            "Push changes.",
+            "Push local changes",
+        )
+    ]
     result = run_cockpit_action("git.push", tmp_path, actions=actions)
     assert result.allowed is False
     assert result.executed is False

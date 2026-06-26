@@ -4,7 +4,18 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
-from agentic_project_kit.cockpit import BOUNDED, DESTRUCTIVE, READ_ONLY, CockpitAction, action_by_id, action_inventory_as_json_data, cockpit_actions, render_action_selection, run_cockpit_action
+from agentic_project_kit.cockpit import (
+    BOUNDED,
+    DESTRUCTIVE,
+    READ_ONLY,
+    CockpitAction,
+    action_by_id,
+    action_inventory_as_json_data,
+    cockpit_actions,
+    render_action_selection,
+    run_cockpit_action,
+    validate_cockpit_action_registry,
+)
 
 
 runner = CliRunner()
@@ -80,7 +91,15 @@ def test_cockpit_actions_command_lists_structured_actions() -> None:
 
 
 def test_cockpit_select_renderer_lists_numbered_actions_without_execution_contract() -> None:
-    action = CockpitAction("demo.action", "Demo", "demo", ("demo", "run"), READ_ONLY, "Demo action.")
+    action = CockpitAction(
+        "demo.action",
+        "Demo",
+        "demo",
+        ("demo", "run"),
+        READ_ONLY,
+        "Demo action.",
+        "Inspect demo state",
+    )
 
     output = render_action_selection([action])
 
@@ -143,7 +162,17 @@ def test_cockpit_run_blocks_bounded_without_explicit_allow_flag(tmp_path: Path) 
 
 
 def test_cockpit_run_blocks_destructive_actions(tmp_path: Path) -> None:
-    actions = [CockpitAction("git.push", "Git push", "git", ("git", "push"), DESTRUCTIVE, "Push changes.")]
+    actions = [
+        CockpitAction(
+            "git.push",
+            "Git push",
+            "git",
+            ("git", "push"),
+            DESTRUCTIVE,
+            "Push changes.",
+            "Push local changes",
+        )
+    ]
 
     result = run_cockpit_action("git.push", tmp_path, actions=actions)
 
@@ -212,7 +241,15 @@ def test_cockpit_run_cli_blocks_bounded_action_without_allow_flag() -> None:
 
 
 def test_cockpit_action_inventory_json_data_has_stable_schema() -> None:
-    action = CockpitAction("demo.action", "Demo", "demo", ("demo", "run"), READ_ONLY, "Demo action.")
+    action = CockpitAction(
+        "demo.action",
+        "Demo",
+        "demo",
+        ("demo", "run"),
+        READ_ONLY,
+        "Demo action.",
+        "Inspect demo state",
+    )
     data = action_inventory_as_json_data([action])
 
     assert data == {
@@ -225,6 +262,7 @@ def test_cockpit_action_inventory_json_data_has_stable_schema() -> None:
                 "safety": READ_ONLY,
                 "command": ["demo", "run"],
                 "description": "Demo action.",
+                "short_description": "Inspect demo state",
             }
         ],
     }
@@ -241,8 +279,37 @@ def test_cockpit_actions_json_cli_outputs_machine_readable_inventory() -> None:
     assert git_status["category"] == "git"
     assert git_status["safety"] == READ_ONLY
     assert git_status["command"] == ["git", "status", "--short"]
+    assert git_status["short_description"] == "Show local uncommitted changes"
     workflow_go = next(action for action in data["actions"] if action["action_id"] == "workflow.go")
     assert workflow_go["safety"] == BOUNDED
+
+
+def test_every_cockpit_action_has_short_description() -> None:
+    for action in cockpit_actions():
+        assert action.short_description.strip(), action.action_id
+
+
+def test_cockpit_actions_json_includes_short_description() -> None:
+    data = action_inventory_as_json_data()
+    for action in data["actions"]:
+        assert isinstance(action["short_description"], str)
+        assert action["short_description"].strip()
+
+
+def test_validate_registry_rejects_empty_short_description() -> None:
+    action = CockpitAction(
+        "bad.action",
+        "Bad",
+        "bad",
+        ("bad", "run"),
+        READ_ONLY,
+        "Bad action.",
+        "",
+    )
+
+    errors = validate_cockpit_action_registry([action])
+
+    assert "empty short_description for bad.action" in errors
 
 
 def test_cockpit_actions_json_cli_does_not_execute_actions() -> None:

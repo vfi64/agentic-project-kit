@@ -1,11 +1,23 @@
 from __future__ import annotations
 
+import inspect
+from pathlib import Path
+
 from agentic_project_kit.gui_button_catalog import GuiButtonDefinition, basic_gui_buttons
 from agentic_project_kit.gui_cockpit import (
+    CockpitGui,
+    HEADER_TEXT,
+    THEME,
+    action_tree_columns,
+    action_tree_tag_colors,
+    action_tree_visible_rows,
     build_gui_action_views,
+    format_recommended_action,
     format_action_details,
     format_basic_cockpit_summary,
     format_state_details,
+    ordered_action_views,
+    recommended_recovery_action_id,
 )
 from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperStatus
 from agentic_project_kit.gui_presenter import build_basic_no_window_presenter_result
@@ -170,6 +182,83 @@ def test_basic_cockpit_summary_is_stable_for_entrypoint_output() -> None:
     assert "traffic_light_state=READY" in text
     assert "required_next_reply=<none>" in text
     assert "buttons=status-refresh" in text
+
+
+def test_gui_theme_output_height_increased() -> None:
+    assert THEME.output_height == 21
+
+
+def test_gui_theme_action_rows_visible() -> None:
+    assert THEME.action_rows_visible == 4
+
+
+def test_recommended_zone_shows_next_safe_action() -> None:
+    view_model = build_basic_cockpit_view_model(gatekeeper_status=_status())
+
+    text = format_recommended_action(view_model)
+
+    assert view_model.next_safe_action in text
+    assert view_model.reason in text
+
+
+def test_recommended_zone_recovery_only_selects_does_not_run() -> None:
+    view_model = build_basic_cockpit_view_model(
+        gatekeeper_status=_status(git_dirty=True, blockers=("working tree is dirty",))
+    )
+    source = inspect.getsource(CockpitGui.load_recovery_action)
+
+    assert recommended_recovery_action_id(view_model) == "gate.doctor"
+    text = format_recommended_action(view_model)
+    assert "without running it" in text
+    assert "selection_set" in source
+    assert "_agentic_command" not in source
+    assert "run_cockpit_action" not in source
+
+
+def test_recommended_zone_recovery_hidden_when_not_blocked() -> None:
+    view_model = build_basic_cockpit_view_model(gatekeeper_status=_status())
+
+    assert recommended_recovery_action_id(view_model) is None
+    assert "Recovery:" not in format_recommended_action(view_model)
+
+
+def test_action_tree_orders_read_only_first() -> None:
+    actions = ordered_action_views(build_gui_action_views())
+    safety_order = {"read_only": 0, "bounded": 1, "destructive": 2}
+
+    assert [safety_order[action.safety] for action in actions] == sorted(
+        safety_order[action.safety] for action in actions
+    )
+
+
+def test_action_tree_has_safety_color_tags() -> None:
+    assert action_tree_tag_colors() == {
+        "read_only": THEME.color_read_only,
+        "bounded": THEME.color_bounded,
+        "destructive": THEME.color_destructive,
+    }
+
+
+def test_action_tree_hides_raw_command_column() -> None:
+    assert action_tree_columns() == ("action", "what_it_does", "safety")
+    assert "command" not in action_tree_columns()
+
+
+def test_action_tree_shows_short_description_column() -> None:
+    assert "what_it_does" in action_tree_columns()
+    assert all(action.short_description for action in ordered_action_views(build_gui_action_views()))
+
+
+def test_action_tree_has_scrollbar_and_four_visible_rows() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+
+    assert action_tree_visible_rows() == 4
+    assert "ttk.Scrollbar" in source
+    assert "yscrollcommand" in source
+
+
+def test_basic_cockpit_header_text() -> None:
+    assert HEADER_TEXT == "Agentic-Project-Kit — Basic Cockpit"
 
 
 def test_cockpit_gui_shows_wait_for_d2_label_when_pending() -> None:

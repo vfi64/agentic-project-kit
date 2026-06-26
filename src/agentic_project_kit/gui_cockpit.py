@@ -5,7 +5,15 @@ from pathlib import Path
 import subprocess
 from typing import Any
 
-from agentic_project_kit.cockpit import READ_ONLY, CockpitAction, CockpitActionResult, cockpit_actions, run_cockpit_action
+from agentic_project_kit.cockpit import (
+    BOUNDED,
+    DESTRUCTIVE,
+    READ_ONLY,
+    CockpitAction,
+    CockpitActionResult,
+    cockpit_actions,
+    run_cockpit_action,
+)
 from agentic_project_kit.gui_task_editor import (
     TaskEditorState,
     task_editor_send_enabled,
@@ -26,6 +34,32 @@ from agentic_project_kit.gui_viewmodel import BasicCockpitViewModel, build_basic
 
 
 @dataclass(frozen=True)
+class GuiTheme:
+    title_font: tuple[str, int, str] = ("TkDefaultFont", 16, "bold")
+    section_font: tuple[str, int, str] = ("TkDefaultFont", 11, "bold")
+    recommended_font: tuple[str, int, str] = ("TkDefaultFont", 13, "bold")
+    frame_padding: int = 10
+    section_padding: int = 8
+    output_height: int = 21
+    action_rows_visible: int = 4
+    task_text_height: int = 6
+    color_read_only: str = "#e8f3ea"
+    color_bounded: str = "#fdf4e3"
+    color_destructive: str = "#fbeaea"
+    color_recommended_bg: str = "#eaf1fb"
+    action_column_width: int = 220
+    what_it_does_column_width: int = 620
+    safety_column_width: int = 120
+
+
+THEME = GuiTheme()
+HEADER_TEXT = "Agentic-Project-Kit — Basic Cockpit"
+ACTION_TREE_COLUMNS = ("action", "what_it_does", "safety")
+SAFETY_SORT_ORDER = {READ_ONLY: 0, BOUNDED: 1, DESTRUCTIVE: 2}
+RECOVERY_ACTION_ID = "gate.doctor"
+
+
+@dataclass(frozen=True)
 class GuiActionView:
     action_id: str
     label: str
@@ -33,6 +67,7 @@ class GuiActionView:
     safety: str
     command: tuple[str, ...]
     description: str
+    short_description: str
     can_run_by_default: bool
     structured_explanation: str | None = None
 
@@ -91,6 +126,7 @@ def build_gui_action_views(actions: list[CockpitAction] | None = None) -> list[G
             safety=action.safety,
             command=action.command,
             description=action.description,
+            short_description=action.short_description,
             can_run_by_default=action.safety == READ_ONLY,
             structured_explanation=STRUCTURED_ACTION_EXPLANATIONS.get(action.action_id),
         )
@@ -109,6 +145,54 @@ def explain_safety(safety: str) -> str:
     return SAFETY_EXPLANATIONS.get(safety, f"Blocked: unknown safety class {safety}.")
 
 
+def ordered_action_views(actions: list[GuiActionView] | None = None) -> list[GuiActionView]:
+    selected = actions if actions is not None else build_gui_action_views()
+    return sorted(
+        selected,
+        key=lambda action: (
+            SAFETY_SORT_ORDER.get(action.safety, len(SAFETY_SORT_ORDER)),
+            action.label.casefold(),
+            action.action_id,
+        ),
+    )
+
+
+def action_tree_columns() -> tuple[str, ...]:
+    return ACTION_TREE_COLUMNS
+
+
+def action_tree_visible_rows(theme: GuiTheme = THEME) -> int:
+    return theme.action_rows_visible
+
+
+def action_tree_tag_colors(theme: GuiTheme = THEME) -> dict[str, str]:
+    return {
+        READ_ONLY: theme.color_read_only,
+        BOUNDED: theme.color_bounded,
+        DESTRUCTIVE: theme.color_destructive,
+    }
+
+
+def action_tree_tag_for_safety(safety: str) -> str:
+    return safety if safety in action_tree_tag_colors() else "unknown"
+
+
+def recommended_recovery_action_id(view_model: BasicCockpitViewModel) -> str | None:
+    if view_model.traffic_light_color == "red":
+        return RECOVERY_ACTION_ID
+    return None
+
+
+def format_recommended_action(view_model: BasicCockpitViewModel) -> str:
+    lines = [
+        view_model.next_safe_action,
+        view_model.reason,
+    ]
+    if recommended_recovery_action_id(view_model):
+        lines.append("Recovery: load the diagnostic action without running it.")
+    return "\n".join(lines)
+
+
 def format_action_details(action: GuiActionView) -> str:
     lines = [
         f"action_id={action.action_id}",
@@ -118,6 +202,7 @@ def format_action_details(action: GuiActionView) -> str:
         f"can_run_by_default={str(action.can_run_by_default).lower()}",
         "command=" + " ".join(action.command),
         f"description={action.description}",
+        f"short_description={action.short_description}",
         f"safety_explanation={explain_safety(action.safety)}",
     ]
     if action.structured_explanation:
@@ -182,19 +267,68 @@ class CockpitGui:
 
         self.root = root
         self.project_root = (project_root or Path(".")).resolve()
-        self.actions = build_gui_action_views()
+        self.actions = ordered_action_views(build_gui_action_views())
         self.basic_view = build_basic_cockpit_view_model(self.project_root)
-        self.root.title("agentic-project-kit cockpit")
+        self.recovery_action_id = recommended_recovery_action_id(self.basic_view)
+        self.root.title(HEADER_TEXT)
         self.root.geometry("1120x820")
 
-        frame = ttk.Frame(root, padding=10)
+        frame = ttk.Frame(root, padding=THEME.frame_padding)
         frame.pack(fill=tk.BOTH, expand=True)
 
-        title = ttk.Label(frame, text="Agentic-Project-Kit - Basic Cockpit", font=("TkDefaultFont", 16, "bold"))
+        title = ttk.Label(frame, text=HEADER_TEXT, font=THEME.title_font)
         title.pack(anchor=tk.W)
 
-        status_frame = ttk.LabelFrame(frame, text="State", padding=4)
-        status_frame.pack(fill=tk.X, pady=(2, 4))
+        recommended_frame = tk.LabelFrame(
+            frame,
+            text="Recommended Next Action",
+            font=THEME.section_font,
+            bg=THEME.color_recommended_bg,
+            padx=THEME.section_padding,
+            pady=THEME.section_padding,
+        )
+        recommended_frame.pack(fill=tk.X, pady=(4, 4))
+        tk.Label(
+            recommended_frame,
+            text=self.basic_view.next_safe_action,
+            font=THEME.recommended_font,
+            bg=THEME.color_recommended_bg,
+            anchor=tk.W,
+            justify=tk.LEFT,
+            wraplength=980,
+        ).pack(fill=tk.X)
+        tk.Label(
+            recommended_frame,
+            text=self.basic_view.reason,
+            bg=THEME.color_recommended_bg,
+            anchor=tk.W,
+            justify=tk.LEFT,
+            wraplength=980,
+        ).pack(fill=tk.X, pady=(2, 0))
+        if self.recovery_action_id is not None:
+            recovery_action = self.action_view_by_id(self.recovery_action_id)
+            recovery_label = recovery_action.label if recovery_action is not None else self.recovery_action_id
+            tk.Label(
+                recommended_frame,
+                text=f"Recovery: load {recovery_label} for diagnostics. This does not run the action.",
+                bg=THEME.color_recommended_bg,
+                anchor=tk.W,
+                justify=tk.LEFT,
+                wraplength=980,
+            ).pack(fill=tk.X, pady=(4, 0))
+            recovery_button = ttk.Button(
+                recommended_frame,
+                text="Load Recovery Action",
+                command=self.load_recovery_action,
+            )
+            attach_tooltip(
+                recovery_button,
+                "Select the recommended read-only diagnostic action without executing it.",
+            )
+            recovery_button.pack(anchor=tk.W, pady=(4, 0))
+
+        status_frame = ttk.LabelFrame(frame, text="State", padding=THEME.section_padding)
+        status_frame.pack(fill=tk.X, pady=(0, 4))
 
         traffic_row = ttk.Frame(status_frame)
         traffic_row.pack(fill=tk.X)
@@ -211,7 +345,7 @@ class CockpitGui:
         ttk.Label(
             traffic_row,
             text=traffic_light_state_label(self.basic_view.traffic_light_state),
-            font=("TkDefaultFont", 12, "bold"),
+            font=THEME.section_font,
         ).pack(side=tk.LEFT, padx=(0, 12))
         ttk.Label(
             traffic_row,
@@ -259,7 +393,7 @@ class CockpitGui:
         ).pack(fill=tk.X, pady=(2, 0))
         mode_select.bind("<<ComboboxSelected>>", self.update_mode_explanation)
 
-        basic_buttons = ttk.LabelFrame(frame, text="Basic Actions", padding=4)
+        basic_buttons = ttk.LabelFrame(frame, text="Basic Actions", padding=THEME.section_padding)
         basic_buttons.pack(fill=tk.X, pady=(0, 4))
         for button in self.basic_view.buttons:
             state = tk.NORMAL if button.enabled else tk.DISABLED
@@ -279,9 +413,9 @@ class CockpitGui:
         self.task_editor_state = TaskEditorState.IDLE
         self.task_status_var = tk.StringVar(value="Write a file-transfer task, then send it through the guarded wrapper.")
         if task_editor_visible_for_mode(self.basic_view.communication_mode):
-            task_frame = ttk.LabelFrame(frame, text="File Transfer Task", padding=4)
+            task_frame = ttk.LabelFrame(frame, text="File Transfer Task", padding=THEME.section_padding)
             task_frame.pack(fill=tk.X, pady=(0, 4))
-            self.task_text = tk.Text(task_frame, height=6, wrap=tk.WORD)
+            self.task_text = tk.Text(task_frame, height=THEME.task_text_height, wrap=tk.WORD)
             self.task_text.pack(fill=tk.X, expand=False)
             self.task_text.bind("<KeyRelease>", self.refresh_task_editor_buttons)
             task_button_row = ttk.Frame(task_frame)
@@ -330,18 +464,22 @@ class CockpitGui:
             self.task_send_button = None
             self.task_read_button = None
 
-        columns = ("label", "category", "safety", "command")
         tree_frame = ttk.Frame(frame)
         tree_frame.pack(fill=tk.X, expand=False)
-        self.tree = ttk.Treeview(tree_frame, columns=columns, show="headings", height=4)
-        self.tree.heading("label", text="Action")
-        self.tree.heading("category", text="Category")
+        self.tree = ttk.Treeview(
+            tree_frame,
+            columns=ACTION_TREE_COLUMNS,
+            show="headings",
+            height=THEME.action_rows_visible,
+        )
+        self.tree.heading("action", text="Action")
+        self.tree.heading("what_it_does", text="What it does")
         self.tree.heading("safety", text="Safety")
-        self.tree.heading("command", text="Command")
-        self.tree.column("label", width=190)
-        self.tree.column("category", width=100)
-        self.tree.column("safety", width=100)
-        self.tree.column("command", width=610)
+        self.tree.column("action", width=THEME.action_column_width)
+        self.tree.column("what_it_does", width=THEME.what_it_does_column_width)
+        self.tree.column("safety", width=THEME.safety_column_width)
+        for tag, color in action_tree_tag_colors().items():
+            self.tree.tag_configure(tag, background=color)
         tree_scrollbar = ttk.Scrollbar(tree_frame, orient=tk.VERTICAL, command=self.tree.yview)
         self.tree.configure(yscrollcommand=tree_scrollbar.set)
         self.tree.pack(side=tk.LEFT, fill=tk.X, expand=True)
@@ -349,7 +487,13 @@ class CockpitGui:
         self.tree_scrollbar = tree_scrollbar
 
         for action in self.actions:
-            self.tree.insert("", tk.END, iid=action.action_id, values=(action.label, action.category, action.safety, " ".join(action.command)))
+            self.tree.insert(
+                "",
+                tk.END,
+                iid=action.action_id,
+                values=(action.label, action.short_description, action.safety),
+                tags=(action_tree_tag_for_safety(action.safety),),
+            )
 
         button_row = ttk.Frame(frame)
         button_row.pack(fill=tk.X, pady=8)
@@ -369,7 +513,7 @@ class CockpitGui:
 
         output_label = ttk.Label(frame, text="Output")
         output_label.pack(anchor=tk.W)
-        self.output = tk.Text(frame, height=21, wrap=tk.WORD)
+        self.output = tk.Text(frame, height=THEME.output_height, wrap=tk.WORD)
         self.output.pack(fill=tk.BOTH, expand=True)
         self.write_output(format_basic_cockpit_summary(self.basic_view) + "\n")
 
@@ -391,6 +535,16 @@ class CockpitGui:
 
     def clear_output(self) -> None:
         self.output.delete("1.0", "end")
+
+    def load_recovery_action(self) -> None:
+        if self.recovery_action_id is None:
+            return
+        self.tree.selection_set(self.recovery_action_id)
+        self.tree.focus(self.recovery_action_id)
+        self.tree.see(self.recovery_action_id)
+        action = self.action_view_by_id(self.recovery_action_id)
+        label = action.label if action is not None else self.recovery_action_id
+        self.write_output(f"\nRecovery action loaded: {label}. Inspect or run read-only manually.\n")
 
     def update_mode_explanation(self, _event: object | None = None) -> None:
         option = self.mode_var.get()
@@ -532,6 +686,10 @@ class CockpitGui:
         action_id = self.selected_action_id()
         if action_id is None:
             self.write_output("No cockpit action selected.\n")
+            return
+        action = self.action_view_by_id(action_id)
+        if action is not None and action.safety != READ_ONLY:
+            self.write_output("\n" + format_action_details(action) + "\n")
             return
         result = run_cockpit_action(action_id, self.project_root, allow_bounded=False)
         self.write_output("\n" + format_action_result(result) + "\n")
