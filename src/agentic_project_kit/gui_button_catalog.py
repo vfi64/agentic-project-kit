@@ -71,6 +71,24 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         ),
     ),
     _button(
+        "restore-volatile",
+        "Restore Volatile",
+        "Basic",
+        "Restore only known volatile transfer artifacts; never reset product files.",
+        "restore",
+        safety_class="bounded-mutation",
+        wrapper_command=("agentic-kit", "transfer", "restore-known-volatile", "--json"),
+        gui_gate="known_volatile_restore_gate",
+        structured_explanation=(
+            "PURPOSE: Restore the canonical known volatile transfer files.\n"
+            "EFFECT: Runs only agentic-kit transfer restore-known-volatile --json.\n"
+            "WHEN: Use when the worktree is blocked by generated transfer or handoff artifacts.\n"
+            "BLOCKED WHEN: A workflow is failed, d2 is pending, or real product changes remain.\n"
+            "AFTER PASS: Refresh status; if dirty paths remain, review them manually.\n"
+            "AFTER FAIL: Inspect restore-known-volatile output before retrying."
+        ),
+    ),
+    _button(
         "communication-rules-refresh",
         "Refresh Rules",
         "Basic",
@@ -495,6 +513,7 @@ TOOLBAR_BUTTON_IDS = (
 
 BASIC_BUTTON_IDS = (
     "status-refresh",
+    "restore-volatile",
     "communication-rules-refresh",
     "run-next-work-order",
     "close-out-last-run",

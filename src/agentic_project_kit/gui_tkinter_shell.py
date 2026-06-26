@@ -3,6 +3,8 @@ from __future__ import annotations
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
+import shutil
+import subprocess
 from types import SimpleNamespace
 
 from agentic_project_kit.action_registry import list_actions
@@ -486,7 +488,7 @@ def run_manual_gui_catalog_action(action_name: str) -> str:
             returncode=2,
             message="No bounded read-only runner is registered for this button.",
         )
-    if button.command_id == "work-order-upload":
+    if button.command_id in {"restore-volatile", "work-order-upload"}:
         returncode, output = runner()
         return _catalog_action_result(
             button.command_id,
@@ -494,7 +496,7 @@ def run_manual_gui_catalog_action(action_name: str) -> str:
             allowed=True,
             executed=True,
             returncode=returncode,
-            message="Action executed through bounded fixed-path uploader.",
+            message="Action executed through its bounded registered wrapper.",
             output=output,
         )
     action = SimpleNamespace(name=button.command_id, safety_class=button.safety_class)
@@ -685,6 +687,32 @@ def _run_status_refresh() -> tuple[int, str]:
     return 0, render_gui_gatekeeper_status(build_gui_gatekeeper_status(Path.cwd()))
 
 
+def _agentic_kit_command(*args: str) -> list[str]:
+    root = Path.cwd()
+    candidates = (
+        root / ".venv" / "bin" / "agentic-kit",
+        root / ".venv" / "Scripts" / "agentic-kit.exe",
+    )
+    for candidate in candidates:
+        if candidate.exists():
+            return [str(candidate), *args]
+    found = shutil.which("agentic-kit")
+    if found:
+        return [found, *args]
+    return ["agentic-kit", *args]
+
+
+def _run_restore_volatile() -> tuple[int, str]:
+    completed = subprocess.run(
+        _agentic_kit_command("transfer", "restore-known-volatile", "--json"),
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    output_parts = [part.strip() for part in (completed.stdout, completed.stderr) if part.strip()]
+    return completed.returncode, "\n".join(output_parts)
+
+
 def _run_work_order_show() -> tuple[int, str]:
     return read_work_order_preview()
 
@@ -732,6 +760,7 @@ MANUAL_GUI_READONLY_RUNNERS: dict[str, Callable[[], tuple[int, str]]] = {
     "patch-preflight": _run_patch_preflight,
     "rule-registry-check": _run_rule_registry_check,
     "rule-registry-report": _run_rule_registry_report,
+    "restore-volatile": _run_restore_volatile,
     "state-freshness": _run_state_freshness,
     "status-refresh": _run_status_refresh,
     "terminal-remote-preflight": _run_terminal_remote_preflight,

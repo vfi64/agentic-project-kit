@@ -80,6 +80,15 @@ def cockpit_actions() -> list[CockpitAction]:
             "Show current state and recommended next step",
         ),
         CockpitAction(
+            "transfer.restore-known-volatile",
+            "Restore Volatile",
+            "transfer",
+            ("agentic-kit", "transfer", "restore-known-volatile", "--json"),
+            BOUNDED,
+            "Restore only known volatile transfer files; never reset product files.",
+            "Restore known volatile transfer artifacts",
+        ),
+        CockpitAction(
             "dialog.rn",
             "Run Next Work Order",
             "dialog",

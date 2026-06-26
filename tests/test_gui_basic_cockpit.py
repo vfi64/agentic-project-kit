@@ -3,6 +3,7 @@ from __future__ import annotations
 import inspect
 from pathlib import Path
 
+from agentic_project_kit import gui_tkinter_shell
 from agentic_project_kit.gui_button_catalog import GuiButtonDefinition, basic_gui_buttons
 from agentic_project_kit.gui_cockpit import (
     CockpitGui,
@@ -129,6 +130,14 @@ def test_basic_cockpit_buttons_are_derived_from_registered_basic_catalog() -> No
     by_id = {button.command_id: button for button in view_model.buttons}
     assert by_id["status-refresh"].enabled is True
     assert by_id["status-refresh"].tooltip
+    assert by_id["restore-volatile"].enabled is True
+    assert by_id["restore-volatile"].tooltip
+    assert by_id["restore-volatile"].wrapper_command == (
+        "agentic-kit",
+        "transfer",
+        "restore-known-volatile",
+        "--json",
+    )
     assert by_id["diagnose"].enabled is True
     assert by_id["diagnose"].tooltip
     assert by_id["communication-rules-refresh"].enabled is False
@@ -162,6 +171,51 @@ def test_basic_cockpit_dirty_worktree_blocks_mutating_actions() -> None:
     button = view_model.buttons[0]
     assert button.enabled is False
     assert "dirty" in button.disabled_reason
+
+
+def test_basic_cockpit_allows_restore_volatile_as_dirty_recovery() -> None:
+    restore_button = next(button for button in basic_gui_buttons() if button.command_id == "restore-volatile")
+    view_model = build_basic_cockpit_view_model(
+        gatekeeper_status=_status(git_dirty=True, blockers=("working tree is dirty",)),
+        buttons=(restore_button,),
+    )
+
+    button = view_model.buttons[0]
+
+    assert button.enabled is True
+    assert button.wrapper_command == ("agentic-kit", "transfer", "restore-known-volatile", "--json")
+    assert "bounded recovery" in button.why
+
+
+def test_basic_cockpit_blocks_restore_volatile_when_failed_evidence_must_be_preserved() -> None:
+    restore_button = next(button for button in basic_gui_buttons() if button.command_id == "restore-volatile")
+    view_model = build_basic_cockpit_view_model(
+        gatekeeper_status=_status(current_work_state="FAILED"),
+        buttons=(restore_button,),
+    )
+
+    button = view_model.buttons[0]
+
+    assert button.enabled is False
+    assert "failed workflow evidence" in button.disabled_reason
+
+
+def test_restore_volatile_basic_button_uses_registered_wrapper(monkeypatch) -> None:
+    monkeypatch.setitem(
+        gui_tkinter_shell.MANUAL_GUI_READONLY_RUNNERS,
+        "restore-volatile",
+        lambda: (0, "volatile restored"),
+    )
+
+    output = run_basic_cockpit_button(
+        "restore-volatile",
+        gatekeeper_status=_status(git_dirty=True, blockers=("working tree is dirty",)),
+    )
+
+    assert "action=restore-volatile" in output
+    assert "allowed=true" in output
+    assert "executed=true" in output
+    assert "volatile restored" in output
 
 
 def test_basic_no_window_presenter_and_tkinter_smoke_expose_basic_state() -> None:
