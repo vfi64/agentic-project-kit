@@ -79,3 +79,15 @@ def test_render_standard_gates_audit_suite_lists_blockers(tmp_path: Path) -> Non
     assert "STANDARD_GATES_AUDIT_SUITE" in rendered
     assert "STATUS=FAIL" in rendered
     assert "BLOCKER=" in rendered
+
+
+def test_standard_gates_audit_suite_prefers_blocker_line_in_failure_detail(tmp_path: Path) -> None:
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        if "audit-program-redundancy" in args:
+            return 1, "PROGRAM_REDUNDANCY_AUDIT\nBLOCKER=pass_in_exception|file.py:1|pass|reason\nFINDING=review|later\n"
+        return 0, "PASS\n"
+
+    result = evaluate_standard_gates_audit_suite(tmp_path, runner=runner)
+
+    blocker = next(check for check in result.blockers if check.name == "audit-program-redundancy")
+    assert blocker.detail.startswith("BLOCKER=pass_in_exception")

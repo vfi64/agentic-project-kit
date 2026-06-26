@@ -57,6 +57,17 @@ def _current_changelog_section(version: str) -> str:
     return current_section_match.group(0)
 
 
+def _current_changelog_date(version: str) -> str:
+    changelog = _read("CHANGELOG.md")
+    current_heading_match = re.search(
+        rf"^##\s+v{re.escape(version)}\s+-\s+(\d{{4}}-\d{{2}}-\d{{2}})",
+        changelog,
+        re.MULTILINE,
+    )
+    assert current_heading_match is not None
+    return current_heading_match.group(1)
+
+
 def test_package_version_sources_agree_on_current_release() -> None:
     current_version = _pyproject_version()
     assert _package_version() == current_version
@@ -92,9 +103,10 @@ def test_readme_declares_current_verified_release_semantically() -> None:
 def test_citation_version_and_date_released_match_current_release() -> None:
     citation = _read("CITATION.cff")
     current_version = _pyproject_version()
+    current_release_date = _current_changelog_date(current_version)
 
     assert _citation_version() == current_version
-    assert 'date-released: "2026-06-20"' in citation
+    assert f'date-released: "{current_release_date}"' in citation
 
 
 def test_status_current_release_block_is_consistent() -> None:
