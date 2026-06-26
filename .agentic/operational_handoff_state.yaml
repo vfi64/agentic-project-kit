@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 15fc6ede30394c6bb0ffdfff3ab53915ff628eb8
-  short: 15fc6ede
-  subject: Refine basic cockpit GUI controls (#1571)
+  full: 5d68dd9c70dabcf5306a3d2ce8d3647dfea3887d
+  short: 5d68dd9c
+  subject: Resolve cockpit agentic-kit commands from GUI (#1573)
 last_substantive_work_state:
-  full: 15fc6ede30394c6bb0ffdfff3ab53915ff628eb8
-  short: 15fc6ede
-  subject: Refine basic cockpit GUI controls (#1571)
+  full: 5d68dd9c70dabcf5306a3d2ce8d3647dfea3887d
+  short: 5d68dd9c
+  subject: Resolve cockpit agentic-kit commands from GUI (#1573)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
