@@ -29,6 +29,12 @@ from agentic_project_kit.gui_button_catalog import (
 from agentic_project_kit.gui_presenter import (
     build_basic_no_window_presenter_result,
 )
+from agentic_project_kit.gui_tk_widgets import (
+    attach_tooltip,
+    communication_mode_option_values,
+    selected_communication_mode_option,
+    traffic_light_fill,
+)
 from agentic_project_kit.gui_viewmodel import build_basic_cockpit_view_model
 from agentic_project_kit.gui_window_guard import (
     check_window_launch_ready,
@@ -776,12 +782,14 @@ def render_manual_launch_content(root: object) -> None:
         button = get_gui_button(command_id)
         if button is None:
             continue
-        ttk.Button(
+        widget = ttk.Button(
             workflow_strip,
             text=button.label,
             command=lambda command_id=command_id: run_action_click(command_id),
-            width=22,
-        ).pack(side="left", padx=(0, 8))
+            width=18,
+        )
+        attach_tooltip(widget, button.tooltip)
+        widget.pack(side="left", padx=(0, 8))
 
     output_text = None
     status_text = None
@@ -832,41 +840,65 @@ def render_manual_launch_content(root: object) -> None:
 
     basic_panel = ttk.LabelFrame(root, text="Basic Cockpit", padding=(12, 8, 12, 8))
     basic_panel.pack(fill="x", padx=12, pady=(0, 8))
+    traffic_row = ttk.Frame(basic_panel)
+    traffic_row.pack(fill="x", pady=(0, 4))
+    traffic_light = tk.Canvas(traffic_row, width=18, height=18, highlightthickness=0, bg=frame_bg)
+    traffic_light.create_oval(
+        3,
+        3,
+        15,
+        15,
+        fill=traffic_light_fill(basic_view.traffic_light_color),
+        outline=traffic_light_fill(basic_view.traffic_light_color),
+    )
+    traffic_light.pack(side="left", padx=(0, 8))
     ttk.Label(
-        basic_panel,
-        text=(
-            f"{basic_view.traffic_light_state} ({basic_view.traffic_light_color}) | "
-            f"{basic_view.reason}"
-        ),
-        anchor="w",
-    ).pack(fill="x", pady=(0, 4))
+        traffic_row,
+        text=f"{basic_view.traffic_light_state} ({basic_view.traffic_light_color})",
+        font=("TkDefaultFont", 12, "bold"),
+    ).pack(side="left", padx=(0, 12))
+    ttk.Label(traffic_row, text=basic_view.reason, anchor="w").pack(
+        side="left", fill="x", expand=True
+    )
     mode_row = ttk.Frame(basic_panel)
     mode_row.pack(fill="x", pady=(0, 4))
-    for mode in basic_view.communication_modes:
-        marker = "[x]" if mode.selected else "[ ]"
-        ttk.Label(
-            mode_row,
-            text=f"{marker} {mode.label}: {mode.role}",
-            anchor="w",
-        ).pack(side="left", padx=(0, 12))
+    ttk.Label(mode_row, text="Transfer mode").pack(side="left", padx=(0, 8))
+    mode_var = tk.StringVar(value=selected_communication_mode_option(basic_view.communication_modes))
+    mode_select = ttk.Combobox(
+        mode_row,
+        textvariable=mode_var,
+        values=communication_mode_option_values(basic_view.communication_modes),
+        state="readonly",
+        width=34,
+    )
+    mode_select.pack(side="left")
+    attach_tooltip(
+        mode_select,
+        "Select the communication mode. File Transfer is the standard path; Copy-and-Paste is a recovery fallback.",
+    )
     basic_button_row = ttk.Frame(basic_panel)
     basic_button_row.pack(fill="x")
     for button in basic_view.buttons:
+        tooltip = button.tooltip
+        if button.disabled_reason:
+            tooltip = f"{tooltip} Disabled: {button.disabled_reason}"
         if button.enabled:
-            ttk.Button(
+            widget = ttk.Button(
                 basic_button_row,
                 text=button.label,
                 command=lambda command_id=button.command_id: run_basic_action_click(command_id),
-                width=22,
-            ).pack(side="left", padx=(0, 8), pady=1)
+                width=18,
+            )
         else:
-            ttk.Button(
+            widget = ttk.Button(
                 basic_button_row,
                 text=button.label,
                 state="disabled",
-                width=22,
+                width=18,
                 style="ReadableDisabled.TButton",
-            ).pack(side="left", padx=(0, 8), pady=1)
+            )
+        attach_tooltip(widget, tooltip)
+        widget.pack(side="left", padx=(0, 8), pady=1)
 
     # The former top toolbar duplicated actions from the categorized left action list.
     # Keep toolbar metadata in the catalog for future compact quick-access designs, but
@@ -914,20 +946,22 @@ def render_manual_launch_content(root: object) -> None:
             if is_work_order_strip_button(button.command_id):
                 continue
             if button.enabled:
-                ttk.Button(
+                widget = ttk.Button(
                     category_frame,
                     text=button.label,
                     command=lambda command_id=button.command_id: run_action_click(command_id),
                     width=20,
-                ).pack(fill="x", pady=1)
+                )
             else:
-                ttk.Button(
+                widget = ttk.Button(
                     category_frame,
                     text=button.label,
                     state="disabled",
                     width=20,
                     style="ReadableDisabled.TButton",
-                ).pack(fill="x", pady=1)
+                )
+            attach_tooltip(widget, button.tooltip)
+            widget.pack(fill="x", pady=1)
 
     output = ttk.LabelFrame(body, text="Output / Status", padding=6)
     output.pack(side="left", fill="both", expand=True)

@@ -1,7 +1,13 @@
 from pathlib import Path
 
 from agentic_project_kit.cockpit import BOUNDED, READ_ONLY, CockpitAction, CockpitActionResult
-from agentic_project_kit.gui_cockpit import build_gui_action_views, explain_safety, format_action_details, format_action_result, main
+from agentic_project_kit.gui_cockpit import (
+    build_gui_action_views,
+    explain_safety,
+    format_action_details,
+    format_action_result,
+    main,
+)
 
 
 def test_gui_action_views_reuse_cockpit_action_metadata() -> None:
@@ -74,6 +80,17 @@ def test_format_action_result_preserves_blocked_action_message() -> None:
 
 def test_gui_module_main_is_importable_without_starting_tk() -> None:
     assert callable(main)
+
+
+def test_basic_cockpit_window_uses_option_menu_traffic_light_and_tooltips() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    init_source = source[source.index("class CockpitGui") :]
+
+    assert "ttk.Combobox" in init_source
+    assert "create_oval" in init_source
+    assert "traffic_light_fill" in init_source
+    assert "attach_tooltip" in init_source
+    assert "[x]" not in init_source
 
 
 def test_gui_tests_do_not_require_project_root_mutation(tmp_path: Path) -> None:

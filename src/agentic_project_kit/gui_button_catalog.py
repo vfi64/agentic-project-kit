@@ -53,7 +53,7 @@ def _button(
 GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
     _button(
         "status-refresh",
-        "Status Refresh",
+        "Status",
         "Basic",
         "Refresh the deterministic cockpit and gatekeeper status.",
         "status",
@@ -61,7 +61,7 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
     ),
     _button(
         "communication-rules-refresh",
-        "Communication Rules Refresh",
+        "Refresh Rules",
         "Basic",
         "Refresh local communication-rule acknowledgement through the governed rules command.",
         "rules",
@@ -73,7 +73,7 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
     ),
     _button(
         "run-next-work-order",
-        "Run Next Work Order",
+        "Run Work Order",
         "Basic",
         "Run the validated file-transfer work order through the existing work-order wrapper.",
         "work-order",
@@ -85,7 +85,7 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
     ),
     _button(
         "close-out-last-run",
-        "Close Out Last Run",
+        "Close Out Run",
         "Basic",
         "Close out the last run through the fixed-path work-order upload wrapper.",
         "closeout",
