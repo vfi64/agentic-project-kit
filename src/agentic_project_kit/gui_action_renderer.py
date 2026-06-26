@@ -64,7 +64,8 @@ def render_basic_cockpit_view_model(view_model: BasicCockpitViewModel) -> str:
         reason = button.disabled_reason or button.why
         lines.append(
             f"- {button.command_id} [{button.safety_class}; {state}] "
-            f"label={button.label}; wrapper={command}; source={button.source}; why={reason}"
+            f"label={button.label}; tooltip={button.tooltip}; wrapper={command}; "
+            f"source={button.source}; why={reason}"
         )
     lines.append(f"explanation={view_model.explanation}")
     return "\n".join(lines)

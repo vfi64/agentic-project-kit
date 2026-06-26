@@ -5,6 +5,12 @@ from pathlib import Path
 from typing import Any
 
 from agentic_project_kit.cockpit import READ_ONLY, CockpitAction, CockpitActionResult, cockpit_actions, run_cockpit_action
+from agentic_project_kit.gui_tk_widgets import (
+    attach_tooltip,
+    communication_mode_option_values,
+    selected_communication_mode_option,
+    traffic_light_fill,
+)
 from agentic_project_kit.gui_tkinter_shell import run_basic_cockpit_button
 from agentic_project_kit.gui_viewmodel import BasicCockpitViewModel, build_basic_cockpit_view_model
 
@@ -112,35 +118,69 @@ class CockpitGui:
 
         status_frame = ttk.LabelFrame(frame, text="State", padding=8)
         status_frame.pack(fill=tk.X, pady=(4, 8))
-        status_text = (
-            f"{self.basic_view.traffic_light_state} ({self.basic_view.traffic_light_color}) | "
-            f"mode={self.basic_view.communication_mode} | "
-            f"next={self.basic_view.next_safe_action}"
+
+        traffic_row = ttk.Frame(status_frame)
+        traffic_row.pack(fill=tk.X)
+        traffic_light = tk.Canvas(traffic_row, width=18, height=18, highlightthickness=0)
+        traffic_light.create_oval(
+            3,
+            3,
+            15,
+            15,
+            fill=traffic_light_fill(self.basic_view.traffic_light_color),
+            outline=traffic_light_fill(self.basic_view.traffic_light_color),
         )
-        ttk.Label(status_frame, text=status_text, anchor=tk.W, wraplength=980).pack(fill=tk.X)
+        traffic_light.pack(side=tk.LEFT, padx=(0, 8))
+        ttk.Label(
+            traffic_row,
+            text=f"{self.basic_view.traffic_light_state} ({self.basic_view.traffic_light_color})",
+            font=("TkDefaultFont", 12, "bold"),
+        ).pack(side=tk.LEFT, padx=(0, 12))
+        ttk.Label(
+            traffic_row,
+            text=f"Next: {self.basic_view.next_safe_action}",
+            anchor=tk.W,
+            wraplength=820,
+        ).pack(side=tk.LEFT, fill=tk.X, expand=True)
         ttk.Label(status_frame, text=self.basic_view.reason, anchor=tk.W, wraplength=980).pack(
             fill=tk.X, pady=(4, 0)
         )
 
         mode_row = ttk.Frame(status_frame)
         mode_row.pack(fill=tk.X, pady=(6, 0))
-        for mode in self.basic_view.communication_modes:
-            marker = "[x]" if mode.selected else "[ ]"
-            ttk.Label(mode_row, text=f"{marker} {mode.label}: {mode.role}").pack(
-                side=tk.LEFT, padx=(0, 12)
-            )
+        ttk.Label(mode_row, text="Transfer mode").pack(side=tk.LEFT, padx=(0, 8))
+        self.mode_var = tk.StringVar(
+            value=selected_communication_mode_option(self.basic_view.communication_modes)
+        )
+        mode_select = ttk.Combobox(
+            mode_row,
+            textvariable=self.mode_var,
+            values=communication_mode_option_values(self.basic_view.communication_modes),
+            state="readonly",
+            width=34,
+        )
+        mode_select.pack(side=tk.LEFT)
+        attach_tooltip(
+            mode_select,
+            "Select the communication mode. File Transfer is the standard path; Copy-and-Paste is a recovery fallback.",
+        )
 
         basic_buttons = ttk.LabelFrame(frame, text="Basic Actions", padding=8)
         basic_buttons.pack(fill=tk.X, pady=(0, 8))
         for button in self.basic_view.buttons:
             state = tk.NORMAL if button.enabled else tk.DISABLED
-            ttk.Button(
+            widget = ttk.Button(
                 basic_buttons,
                 text=button.label,
                 state=state,
                 command=lambda command_id=button.command_id: self.run_basic_action(command_id),
-                width=22,
-            ).pack(side=tk.LEFT, padx=(0, 8), pady=1)
+                width=18,
+            )
+            tooltip = button.tooltip
+            if button.disabled_reason:
+                tooltip = f"{tooltip} Disabled: {button.disabled_reason}"
+            attach_tooltip(widget, tooltip)
+            widget.pack(side=tk.LEFT, padx=(0, 8), pady=1)
 
         columns = ("label", "category", "safety", "command")
         self.tree = ttk.Treeview(frame, columns=columns, show="headings", height=12)
@@ -159,9 +199,19 @@ class CockpitGui:
 
         button_row = ttk.Frame(frame)
         button_row.pack(fill=tk.X, pady=8)
-        ttk.Button(button_row, text="Inspect selected", command=self.inspect_selected).pack(side=tk.LEFT)
-        ttk.Button(button_row, text="Run selected read-only", command=self.run_selected_read_only).pack(side=tk.LEFT, padx=8)
-        ttk.Button(button_row, text="Clear output", command=self.clear_output).pack(side=tk.LEFT)
+        inspect_button = ttk.Button(
+            button_row, text="Inspect Selected", command=self.inspect_selected
+        )
+        attach_tooltip(inspect_button, "Show metadata, command, and safety details for the selected action.")
+        inspect_button.pack(side=tk.LEFT)
+        run_button = ttk.Button(
+            button_row, text="Run Selected Read-Only", command=self.run_selected_read_only
+        )
+        attach_tooltip(run_button, "Run only selected read-only cockpit actions through the shared cockpit layer.")
+        run_button.pack(side=tk.LEFT, padx=8)
+        clear_button = ttk.Button(button_row, text="Clear Output", command=self.clear_output)
+        attach_tooltip(clear_button, "Clear the output panel.")
+        clear_button.pack(side=tk.LEFT)
 
         output_label = ttk.Label(frame, text="Output")
         output_label.pack(anchor=tk.W)

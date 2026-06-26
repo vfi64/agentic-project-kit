@@ -44,6 +44,7 @@ class CommunicationModeViewModel:
 class BasicCockpitButtonViewModel:
     command_id: str
     label: str
+    tooltip: str
     safety_class: str
     enabled: bool
     disabled_reason: str
@@ -131,7 +132,7 @@ def _communication_modes(selected_mode: str) -> tuple[CommunicationModeViewModel
     return (
         CommunicationModeViewModel(
             "file_transfer",
-            "Dateitransfer",
+            "File Transfer",
             "Standard",
             selected == "file_transfer",
             True,
@@ -200,6 +201,7 @@ def _basic_button_view_models(
             BasicCockpitButtonViewModel(
                 command_id=button.command_id,
                 label=button.label,
+                tooltip=button.tooltip,
                 safety_class=button.safety_class,
                 enabled=enabled,
                 disabled_reason=disabled_reason,

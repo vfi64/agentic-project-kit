@@ -78,6 +78,7 @@ def test_basic_cockpit_modes_keep_file_transfer_as_default_and_copy_paste_as_fal
 
     modes = {mode.mode_id: mode for mode in view_model.communication_modes}
     assert view_model.communication_mode == "file_transfer"
+    assert modes["file_transfer"].label == "File Transfer"
     assert modes["file_transfer"].is_default is True
     assert modes["file_transfer"].selected is True
     assert modes["remote"].is_default is False
@@ -93,7 +94,9 @@ def test_basic_cockpit_buttons_are_derived_from_registered_basic_catalog() -> No
     ]
     by_id = {button.command_id: button for button in view_model.buttons}
     assert by_id["status-refresh"].enabled is True
+    assert by_id["status-refresh"].tooltip
     assert by_id["diagnose"].enabled is True
+    assert by_id["diagnose"].tooltip
     assert by_id["communication-rules-refresh"].enabled is False
     assert by_id["run-next-work-order"].enabled is False
     assert by_id["close-out-last-run"].enabled is False
