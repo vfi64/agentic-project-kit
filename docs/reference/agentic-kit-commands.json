@@ -8036,6 +8036,32 @@
     },
     {
       "group": "transfer",
+      "help": "",
+      "name": "read-user-task",
+      "params": [
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "read-user-task"
+      ],
+      "qualified_name": "agentic-kit transfer read-user-task"
+    },
+    {
+      "group": "transfer",
       "help": "Rebase the current branch on its upstream with bounded conflict reporting.",
       "name": "rebase-on-upstream",
       "params": [

@@ -4777,6 +4777,25 @@ def submit_user_task_command(
         typer.echo(f"next_action={result.next_action}")
 
 
+@transfer_app.command("read-user-task")
+def read_user_task_command(
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    from agentic_project_kit.gui_task_editor import read_user_task
+
+    payload = read_user_task(Path("."))
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        typer.echo("GUI_FILE_TRANSFER_USER_TASK_READ")
+        typer.echo(f"result_status={payload.get('result_status')}")
+        typer.echo(f"reason={payload.get('reason')}")
+        typer.echo(f"task_path={payload.get('task_path')}")
+        typer.echo(f"next_action={payload.get('next_action')}")
+    if payload.get("result_status") != "PASS":
+        raise typer.Exit(code=2)
+
+
 @transfer_app.command("run-sequence-and-log")
 def run_sequence_and_log(
     step: list[str] = typer.Option(
