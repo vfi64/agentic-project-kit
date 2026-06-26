@@ -50,6 +50,10 @@ AUTHORITATIVE_PLANNING_DOCS = {
     "docs/planning/project_direction.yaml",
 }
 
+SCOPED_AUTHORITATIVE_PLANNING_DOCS = {
+    "docs/planning/PRE_GUI_HARDENING_TASKS.md",
+}
+
 HISTORICAL_PLANNING_DOCS = {
     "docs/handoff/CODEX_NS_COMMAND_MIGRATION_HANDOFF.md",
     "docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md",
@@ -186,6 +190,9 @@ def _classify(relative: str, text: str, active_score: int, stale_score: int, pos
 
     if relative in AUTHORITATIVE_PLANNING_DOCS:
         return "authoritative_planning_anchor", "explicit current planning authority"
+
+    if relative in SCOPED_AUTHORITATIVE_PLANNING_DOCS:
+        return "authoritative_scoped_planning_anchor", "explicit scoped planning authority"
 
     if relative in HISTORICAL_PLANNING_DOCS:
         return "historical_planning_doc", "known historical planning/handoff artifact"

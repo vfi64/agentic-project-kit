@@ -42,6 +42,22 @@ def test_planning_docs_audit_classifies_project_direction_as_active_anchor(tmp_p
     assert result.records[0].classification == "authoritative_planning_anchor"
 
 
+def test_planning_docs_audit_classifies_pre_gui_tasks_as_scoped_anchor(tmp_path: Path) -> None:
+    doc = tmp_path / "docs" / "planning" / "PRE_GUI_HARDENING_TASKS.md"
+    doc.parent.mkdir(parents=True)
+    doc.write_text(
+        "# Pre-GUI Hardening Tasks\n"
+        "Status: active\n"
+        "Authoritative target for pre-GUI hardening planning.\n",
+        encoding="utf-8",
+    )
+
+    result = audit_planning_docs_consolidation(tmp_path)
+
+    assert result.ok is True
+    assert result.records[0].classification == "authoritative_scoped_planning_anchor"
+
+
 def test_render_planning_docs_audit_reports_blockers(tmp_path: Path) -> None:
     doc = tmp_path / "docs" / "planning" / "PLAN.md"
     doc.parent.mkdir(parents=True)
