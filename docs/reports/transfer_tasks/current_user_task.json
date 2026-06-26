@@ -1,0 +1,18 @@
+{
+  "body": "Smoke-test GUI carrier publish. Do not mutate product state.",
+  "body_sha256": "c52384a94a55dd12c6243b5af032766462450292c643d5d2fd04e348b498b156",
+  "created_at_utc": "2026-06-26T22:55:37+00:00",
+  "head_sha": "199f9c721f5da360f2a4c499f36df27ffa1398f1",
+  "kind": "gui_file_transfer_user_task",
+  "local_only": false,
+  "next_action": "Send g/go to the LLM; assistant must read the task carrier from ref gui-transfer-tasks.",
+  "next_reply": "g",
+  "published_ref": "gui-transfer-tasks",
+  "remote_path": "docs/reports/transfer_tasks/current_user_task.json",
+  "remote_readable": false,
+  "schema_version": 1,
+  "status": "submitted",
+  "task_id": "f4d2ecc1d4dc7ae1",
+  "task_path": "docs/reports/transfer_tasks/current_user_task.json",
+  "title": "GUI carrier publish smoke"
+}
