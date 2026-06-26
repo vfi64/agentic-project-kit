@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3a5f8fb4c4cdffd223a581face35086bc3f85c46
-  short: 3a5f8fb4
-  subject: Recheck published communication rule pending state (#1577)
+  full: e74cdb53f6de48229cbfeca583478b9af82364ff
+  short: e74cdb53
+  subject: Add file-transfer task editor and harden d2 GUI state (#1579)
 last_substantive_work_state:
-  full: 3a5f8fb4c4cdffd223a581face35086bc3f85c46
-  short: 3a5f8fb4
-  subject: Recheck published communication rule pending state (#1577)
+  full: e74cdb53f6de48229cbfeca583478b9af82364ff
+  short: e74cdb53
+  subject: Add file-transfer task editor and harden d2 GUI state (#1579)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
