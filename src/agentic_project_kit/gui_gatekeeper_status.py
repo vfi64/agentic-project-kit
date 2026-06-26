@@ -13,6 +13,7 @@ from typing import Sequence
 import yaml
 
 from agentic_project_kit.action_registry import ACTIONS, SafetyClass
+from agentic_project_kit.communication_rule_context import require_current_communication_context
 
 
 @dataclass(frozen=True)
@@ -35,6 +36,9 @@ class GuiGatekeeperStatus:
     ready_for_mutating_actions: bool
     action_statuses: tuple[GuiGatekeeperActionStatus, ...]
     blockers: tuple[str, ...]
+    communication_context_fresh: bool = True
+    communication_context_reason: str = "communication_context_current"
+    required_next_reply: str | None = None
 
 
 def build_gui_gatekeeper_status(
@@ -51,6 +55,8 @@ def build_gui_gatekeeper_status(
     current_work_path = root / ".agentic" / "current_work.yaml"
     current_work_present = current_work_path.exists()
     current_work_state = _read_current_work_state(current_work_path) if current_work_present else None
+    communication_context = require_current_communication_context(root)
+    communication_context_fresh = communication_context.result_status == "PASS"
 
     blockers: list[str] = []
     if branch == "unknown":
@@ -59,12 +65,15 @@ def build_gui_gatekeeper_status(
         blockers.append("working tree is dirty")
     if workflow_state not in {"IDLE", "READY"}:
         blockers.append(f"workflow_state is {workflow_state}")
+    if not communication_context_fresh:
+        blockers.append(communication_context.reason)
 
     ready_for_read_only_actions = not git_dirty
     ready_for_mutating_actions = (
         not git_dirty
         and branch != "unknown"
         and workflow_state in {"IDLE", "READY"}
+        and communication_context_fresh
     )
 
     action_statuses = tuple(
@@ -86,6 +95,9 @@ def build_gui_gatekeeper_status(
         ready_for_mutating_actions=ready_for_mutating_actions,
         action_statuses=action_statuses,
         blockers=tuple(blockers),
+        communication_context_fresh=communication_context_fresh,
+        communication_context_reason=communication_context.reason,
+        required_next_reply=communication_context.required_next_reply,
     )
 
 
@@ -154,6 +166,9 @@ def render_gui_gatekeeper_status(status: GuiGatekeeperStatus) -> str:
         f"current_work_state={status.current_work_state or '<none>'}",
         f"ready_for_read_only_actions={str(status.ready_for_read_only_actions).lower()}",
         f"ready_for_mutating_actions={str(status.ready_for_mutating_actions).lower()}",
+        f"communication_context_fresh={str(status.communication_context_fresh).lower()}",
+        f"communication_context_reason={status.communication_context_reason}",
+        f"required_next_reply={status.required_next_reply or '<none>'}",
         "blockers=" + (",".join(status.blockers) if status.blockers else "<none>"),
     ]
     for action in status.action_statuses:
@@ -180,6 +195,9 @@ def gui_gatekeeper_status_as_json_data(status: GuiGatekeeperStatus) -> dict[str,
         "current_work_state": status.current_work_state,
         "ready_for_read_only_actions": status.ready_for_read_only_actions,
         "ready_for_mutating_actions": status.ready_for_mutating_actions,
+        "communication_context_fresh": status.communication_context_fresh,
+        "communication_context_reason": status.communication_context_reason,
+        "required_next_reply": status.required_next_reply,
         "blockers": list(status.blockers),
         "actions": [
             {

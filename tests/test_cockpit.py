@@ -261,5 +261,5 @@ def test_cockpit_rule_refresh_actions_are_read_only() -> None:
     assert handoff is not None
     assert communication.safety == READ_ONLY
     assert handoff.safety == READ_ONLY
-    assert communication.command == ("agentic-kit", "rules", "communication-refresh")
+    assert communication.command == ("agentic-kit", "rules", "communication-refresh", "--publish", "--json")
     assert handoff.command == ("agentic-kit", "rules", "handoff-refresh")

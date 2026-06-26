@@ -135,6 +135,16 @@ The preferred dialog signals are `d` for done, `f` for fail, and `g` for go. `g`
 
 The local command aliases are `agentic-kit rn` for run-next/remote-next and `agentic-kit rnc` for remote-next closeout. GUI controls must use these aliases rather than introducing a separate execution model.
 
+### Communication rule refresh handshake
+
+`d2` is a mandatory rule-loading dialog state, not a normal continuation signal.
+
+`agentic-kit rules communication-refresh --publish --json` writes the communication rule capsule metadata and a local pending state with `required_next_reply=d2`. A normal `g` continuation must not bypass that pending state.
+
+The refresh file is not magical LLM memory. The assistant must read the remote rule capsule at `docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md`, verify the expected blob hash, and provide a machine-readable `RULE_REFRESH_ACK` before mutating workflows continue.
+
+`agentic-kit rules acknowledge-communication-refresh --ack-file <path> --json` validates that ACK. `agentic-kit rules require-current-communication-context --json` blocks when a `d2` pending state exists without a matching ACK.
+
 <!-- agentic-kit:command-reference-lifecycle-discipline:start -->
 ## Non-optional command-reference and lifecycle discipline
 
@@ -201,4 +211,3 @@ At minimum, clean these local-only volatile paths when they are dirty and not th
 
 This cleanup is a workaround for volatile report files. It must not be used to discard substantive source, governance, planning, or handoff changes.
 <!-- agentic-kit:command-reference-lifecycle-discipline:end -->
-

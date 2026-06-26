@@ -98,6 +98,13 @@ def _traffic_light_from_gatekeeper_status(status: GuiGatekeeperStatus) -> tuple[
     workflow_state = _normalize_state(status.workflow_state)
     current_work_state = _normalize_state(status.current_work_state)
     combined = {workflow_state, current_work_state}
+    if status.required_next_reply == "d2" and not status.communication_context_fresh:
+        return (
+            "WAIT_FOR_D2",
+            "yellow",
+            status.communication_context_reason,
+            "Send d2 only after the remote rule capsule is readable, then validate RULE_REFRESH_ACK.",
+        )
     if combined & {"FAILED", "FAIL", "ERROR"}:
         return (
             "FAILED",

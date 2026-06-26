@@ -2,6 +2,7 @@ import json
 from types import SimpleNamespace
 
 from agentic_project_kit.action_registry import SafetyClass
+from agentic_project_kit.communication_rule_context import PENDING_STATE_PATH
 from agentic_project_kit.gui_gatekeeper_status import (
     build_gui_gatekeeper_status,
     classify_gui_gatekeeper_action,
@@ -57,6 +58,43 @@ def test_gui_gatekeeper_status_blocks_readonly_actions_when_dirty(tmp_path, monk
     assert "working tree is dirty" in status.blockers
     assert status.action_statuses[0].enabled is False
     assert status.action_statuses[0].reason == "read-only action blocked because working tree is dirty"
+
+
+def test_gui_gatekeeper_status_blocks_mutation_when_d2_pending(tmp_path, monkeypatch):
+    agentic = tmp_path / ".agentic"
+    agentic.mkdir()
+    (agentic / "workflow_state").write_text("IDLE\n", encoding="utf-8")
+    pending = tmp_path / PENDING_STATE_PATH
+    pending.parent.mkdir(parents=True, exist_ok=True)
+    pending.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "required_next_reply": "d2",
+                "remote_path": "docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md",
+                "expected_blob_sha": "abc",
+                "generated_at": "2026-06-26T00:00:00+00:00",
+                "remote_readable": True,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr("agentic_project_kit.gui_gatekeeper_status._git_branch", lambda root: "main")
+    monkeypatch.setattr("agentic_project_kit.gui_gatekeeper_status._git_dirty", lambda root: False)
+
+    actions = [
+        SimpleNamespace(name="workflow.go", safety_class=SafetyClass.LOCAL_ONLY, mutation_scope="working-tree-files"),
+    ]
+
+    status = build_gui_gatekeeper_status(tmp_path, actions=actions)
+
+    assert status.ready_for_read_only_actions is True
+    assert status.ready_for_mutating_actions is False
+    assert status.communication_context_fresh is False
+    assert status.required_next_reply == "d2"
+    assert "communication_rule_refresh_pending" in status.blockers
+    assert status.action_statuses[0].enabled is False
 
 
 def test_gui_gatekeeper_action_classifier_blocks_remote_actions_even_when_clean():
@@ -121,6 +159,9 @@ def test_gui_gatekeeper_rendering_is_deterministic(tmp_path, monkeypatch):
         "current_work_state=<none>",
         "ready_for_read_only_actions=true",
         "ready_for_mutating_actions=true",
+        "communication_context_fresh=true",
+        "communication_context_reason=communication_context_current",
+        "required_next_reply=<none>",
         "blockers=<none>",
         "action=git.status;safety=read-only;enabled=true;reason=read-only action allowed in clean GUI gatekeeper state",
     ]
@@ -146,6 +187,8 @@ def test_gui_gatekeeper_status_json_data_has_stable_schema(tmp_path, monkeypatch
     assert data["git_dirty"] is False
     assert data["ready_for_read_only_actions"] is True
     assert data["ready_for_mutating_actions"] is True
+    assert data["communication_context_fresh"] is True
+    assert data["required_next_reply"] is None
     assert data["actions"][0]["action_id"] == "git.status"
     assert data["actions"][0]["enabled"] is True
 
@@ -160,6 +203,7 @@ def test_cockpit_gatekeeper_status_cli_renders_text():
     assert "GUI_GATEKEEPER_STATUS" in result.output
     assert "ready_for_read_only_actions=" in result.output
     assert "ready_for_mutating_actions=" in result.output
+    assert "communication_context_fresh=" in result.output
 
 
 def test_cockpit_gatekeeper_status_cli_outputs_json():
@@ -173,4 +217,4 @@ def test_cockpit_gatekeeper_status_cli_outputs_json():
     assert data["schema_version"] == 1
     assert "actions" in data
     assert "ready_for_mutating_actions" in data
-
+    assert "communication_context_fresh" in data
