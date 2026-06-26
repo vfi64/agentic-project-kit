@@ -397,6 +397,6 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
 - Portability closeout: in progress; all tracked shell scripts removed in Slice 6, pending final gates and PR merge.
 - Portability closeout: legacy `ns` and `ns-menu` entrypoints removed; no tracked shell scripts remain, pending final gates and PR merge.
-## Operational documentation refresh state after PR #1579
+## Operational documentation refresh state after PR #1581
 
-Current administrative handoff refresh state is `e74cdb53` (`Add file-transfer task editor and harden d2 GUI state (#1579)`). Continue next only after this post-PR1579 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `286013d2` (`Harden GUI initial prompt and task editor cycle (#1581)`). Continue next only after this post-PR1581 refresh is committed and merged; the next substantive slice must be created from fresh main.

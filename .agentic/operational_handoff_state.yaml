@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e74cdb53f6de48229cbfeca583478b9af82364ff
-  short: e74cdb53
-  subject: Add file-transfer task editor and harden d2 GUI state (#1579)
+  full: 286013d210f60f77ed45ab0d6ca296e3b9dfe289
+  short: 286013d2
+  subject: Harden GUI initial prompt and task editor cycle (#1581)
 last_substantive_work_state:
-  full: e74cdb53f6de48229cbfeca583478b9af82364ff
-  short: e74cdb53
-  subject: Add file-transfer task editor and harden d2 GUI state (#1579)
+  full: 286013d210f60f77ed45ab0d6ca296e3b9dfe289
+  short: 286013d2
+  subject: Harden GUI initial prompt and task editor cycle (#1581)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
