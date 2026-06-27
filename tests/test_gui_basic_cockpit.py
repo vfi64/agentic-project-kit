@@ -17,6 +17,7 @@ from agentic_project_kit.gui_cockpit import (
     format_action_details,
     format_basic_cockpit_summary,
     format_state_details,
+    grouped_action_views,
     ordered_action_views,
     recommended_recovery_action_id,
 )
@@ -263,6 +264,8 @@ def test_recommended_zone_shows_next_safe_action() -> None:
 
     text = format_recommended_action(view_model)
 
+    assert view_model.recommended_action.label == "Run next work order"
+    assert view_model.recommended_action.command_id == "run-next-work-order"
     assert view_model.next_safe_action in text
     assert view_model.reason in text
 
@@ -274,6 +277,7 @@ def test_recommended_zone_recovery_only_selects_does_not_run() -> None:
     source = inspect.getsource(CockpitGui.load_recovery_action)
 
     assert recommended_recovery_action_id(view_model) == "gate.doctor"
+    assert view_model.recommended_action.kind == "select_action"
     text = format_recommended_action(view_model)
     assert "without running it" in text
     assert "_select_action" in source
@@ -286,6 +290,31 @@ def test_recommended_zone_recovery_hidden_when_not_blocked() -> None:
 
     assert recommended_recovery_action_id(view_model) is None
     assert "Recovery:" not in format_recommended_action(view_model)
+
+
+def test_view_model_exposes_button_groups_for_didactic_guidance() -> None:
+    view_model = build_basic_cockpit_view_model(gatekeeper_status=_status())
+
+    groups = {group.group_id: group for group in view_model.button_groups}
+
+    assert "routine" in groups
+    assert "transfer" in groups
+    assert "diagnostics" in groups
+    assert "status-refresh" in groups["routine"].button_ids
+    assert "run-next-work-order" in groups["routine"].button_ids
+    assert "communication-rules-refresh" in groups["transfer"].button_ids
+    assert "diagnose" in groups["diagnostics"].button_ids
+
+
+def test_action_cards_are_grouped_by_routine_transfer_diagnostics_and_advanced() -> None:
+    grouped = grouped_action_views(ordered_action_views(build_gui_action_views(access_level="advanced")))
+    groups = {group.group_id: group for group in grouped}
+
+    assert [group.group_id for group in grouped] == ["routine", "transfer", "diagnostics", "advanced"]
+    assert any(action.action_id == "git.status" for action in groups["routine"].actions)
+    assert any(action.action_id == "dialog.rn" for action in groups["transfer"].actions)
+    assert any(action.action_id == "gate.doctor" for action in groups["diagnostics"].actions)
+    assert any(action.action_id == "release.plan" for action in groups["advanced"].actions)
 
 
 def test_action_tree_orders_read_only_first() -> None:
@@ -403,13 +432,36 @@ def test_task_send_uses_publish_and_success_status_mentions_gui_transfer_branch(
     source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
 
     assert '"--publish"' in source
-    assert "Transfer order published to gui-transfer-tasks. Send g/go in chat." in source
+    assert "Transfer order published to gui-transfer-tasks as mode" in source
     assert "CANONICAL_TRANSFER_INBOX_PATH" in source
     assert CANONICAL_TRANSFER_INBOX_PATH.as_posix() == ".agentic/transfer/inbox/current.yaml"
+    assert '"--communication-mode"' in source
+    assert "self.current_communication_mode()" in source
     assert '"state", "--json"' in source
     assert "transfer read-user-task" not in source
     assert ".agentic/transfer/outbox/last_result.txt" in source
     assert "docs/reports/transfer_tasks/current_user_task.json" not in source
+
+
+def test_task_editor_exposes_terminal_and_transfer_continue_buttons() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    task_editor_source = Path("src/agentic_project_kit/gui_task_editor.py").read_text(encoding="utf-8")
+
+    assert 'text="Open local terminal"' in source
+    assert "standard_command_label_for_communication_mode" in source
+    assert "Run mode-b standard" in task_editor_source
+    assert "Run mode-a standard" in task_editor_source
+    assert '"transfer", "continue", "--json"' in task_editor_source
+    assert '"transfer", "patch-cycle-status", "--json"' in task_editor_source
+    assert "open_transfer_terminal_for_project" in source
+    assert "run_mode_standard_command" in source
+
+
+def test_action_cards_use_single_tooltip_source_per_card() -> None:
+    source = inspect.getsource(CockpitGui._create_action_card)
+
+    assert "attach_tooltip(card, tooltip)" in source
+    assert "attach_tooltip(widget, tooltip)" not in source
 
 
 def test_cockpit_gui_shows_wait_for_d2_label_when_pending() -> None:

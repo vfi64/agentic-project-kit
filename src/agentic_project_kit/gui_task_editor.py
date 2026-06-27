@@ -1,11 +1,13 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from enum import StrEnum
 import hashlib
 import os
 from pathlib import Path
+import platform
+import shlex
 import subprocess
 from typing import Callable
 
@@ -22,6 +24,27 @@ GUI_TRANSFER_TASK_REF = "gui-transfer-tasks"
 CANONICAL_TRANSFER_INBOX_PATH = DEFAULT_INBOX
 CANONICAL_TRANSFER_OUTBOX_PATH = OUTBOX_LAST_RESULT
 LEGACY_GUI_TRANSFER_TASK_PATH = Path("docs/reports/transfer_tasks/current_user_task.json")
+REMOTE_STATUS_COMMAND_ARGS = ("transfer", "patch-cycle-status", "--json")
+FILE_TRANSFER_CONTINUE_COMMAND_ARGS = ("transfer", "continue", "--json")
+POSIX_AGENTIC_KIT = "./.venv/bin/agentic-kit"
+WINDOWS_AGENTIC_KIT = r".venv\Scripts\agentic-kit.exe"
+REMOTE_STATUS_COMMAND = (POSIX_AGENTIC_KIT, *REMOTE_STATUS_COMMAND_ARGS)
+TRANSFER_CONTINUE_COMMAND = (POSIX_AGENTIC_KIT, *FILE_TRANSFER_CONTINUE_COMMAND_ARGS)
+COMMUNICATION_MODE_ALIASES = {
+    "a": "remote",
+    "remote": "remote",
+    "github": "remote",
+    "github_pr_ci": "remote",
+    "b": "file_transfer",
+    "file": "file_transfer",
+    "file_transfer": "file_transfer",
+    "transfer": "file_transfer",
+    "transfer_files": "file_transfer",
+    "c": "copy_paste",
+    "copy": "copy_paste",
+    "copy_paste": "copy_paste",
+    "copy-and-paste": "copy_paste",
+}
 
 
 class TaskEditorState(StrEnum):
@@ -65,9 +88,142 @@ class SubmittedUserTask:
     local_only: bool
     remote_readable: bool
     reason: str
+    communication_mode: str = "file_transfer"
+    communication_mode_code: str = "b"
+    communication_mode_label: str = "File Transfer"
+    local_execution_command: tuple[str, ...] = TRANSFER_CONTINUE_COMMAND
+    reply_contract: dict[str, object] = field(default_factory=dict)
 
     def as_json_data(self) -> dict[str, object]:
         return asdict(self)
+
+
+def normalize_communication_mode(mode: str) -> str:
+    key = str(mode or "").strip().lower().replace(" ", "_")
+    return COMMUNICATION_MODE_ALIASES.get(key, "file_transfer")
+
+
+def communication_mode_code(mode: str) -> str:
+    normalized = normalize_communication_mode(mode)
+    return {"remote": "a", "file_transfer": "b", "copy_paste": "c"}[normalized]
+
+
+def communication_mode_label(mode: str) -> str:
+    normalized = normalize_communication_mode(mode)
+    return {
+        "remote": "Remote: GitHub/PR/CI",
+        "file_transfer": "File Transfer: Transfer files",
+        "copy_paste": "Copy-and-Paste: Recovery/Fallback",
+    }[normalized]
+
+
+def standard_command_args_for_communication_mode(mode: str) -> tuple[str, ...]:
+    normalized = normalize_communication_mode(mode)
+    if normalized == "remote":
+        return REMOTE_STATUS_COMMAND_ARGS
+    if normalized == "file_transfer":
+        return FILE_TRANSFER_CONTINUE_COMMAND_ARGS
+    return ()
+
+
+def standard_command_for_communication_mode(
+    mode: str,
+    *,
+    platform_name: str | None = None,
+) -> tuple[str, ...]:
+    args = standard_command_args_for_communication_mode(mode)
+    if not args:
+        return ()
+    executable = WINDOWS_AGENTIC_KIT if platform_name == "Windows" else POSIX_AGENTIC_KIT
+    return (executable, *args)
+
+
+def standard_command_label_for_communication_mode(mode: str) -> str:
+    normalized = normalize_communication_mode(mode)
+    return {
+        "remote": "Run mode-a standard",
+        "file_transfer": "Run mode-b standard",
+        "copy_paste": "No standard command",
+    }[normalized]
+
+
+def standard_command_description_for_communication_mode(mode: str) -> str:
+    normalized = normalize_communication_mode(mode)
+    return {
+        "remote": (
+            "Mode a standard command: agentic-kit transfer patch-cycle-status --json "
+            "for remote GitHub/PR/CI status and evidence orientation."
+        ),
+        "file_transfer": (
+            "Mode b standard command: agentic-kit transfer continue --json reads and "
+            "executes the canonical repo-backed transfer reply."
+        ),
+        "copy_paste": (
+            "Mode c has no standard agentic-kit execution command; open a terminal "
+            "and paste the LLM-provided recovery block."
+        ),
+    }[normalized]
+
+
+def communication_reply_contract(mode: str) -> dict[str, object]:
+    normalized = normalize_communication_mode(mode)
+    code = communication_mode_code(normalized)
+    selected_command = standard_command_for_communication_mode(normalized)
+    mode_map = {
+        "a": {
+            "mode": "remote",
+            "label": "Remote: GitHub/PR/CI",
+            "standard_local_command": list(REMOTE_STATUS_COMMAND),
+            "llm_response": (
+                "Finish the remote work through repo-backed PR/CI/evidence mechanisms, "
+                "then reply with a compact completion status and evidence pointers."
+            ),
+            "local_followup": (
+                "The local user/GUI may inspect the remote workflow state through: "
+                + " ".join(REMOTE_STATUS_COMMAND)
+            ),
+        },
+        "b": {
+            "mode": "file_transfer",
+            "label": "File Transfer: Transfer files",
+            "standard_local_command": list(TRANSFER_CONTINUE_COMMAND),
+            "llm_response": (
+                "Publish a repo-backed transfer order/script through the existing agentic-kit "
+                "transfer protocol. Do not paste a terminal block as the normal answer."
+            ),
+            "local_followup": (
+                "The local user/GUI executes the reply through: "
+                + " ".join(TRANSFER_CONTINUE_COMMAND)
+            ),
+        },
+        "c": {
+            "mode": "copy_paste",
+            "label": "Copy-and-Paste: Recovery/Fallback",
+            "standard_local_command": [],
+            "llm_response": (
+                "Reply with one complete copy-and-paste terminal block and no hidden side protocol. "
+                "Use this only as recovery/fallback."
+            ),
+            "local_followup": "The local user may open an OS terminal and paste the provided block.",
+        },
+    }
+    return {
+        "schema_version": 1,
+        "kind": "gui_task_reply_contract",
+        "selected_code": code,
+        "selected_mode": normalized,
+        "selected_label": communication_mode_label(normalized),
+        "mode_map": mode_map,
+        "selected_response": mode_map[code]["llm_response"],
+        "local_execution_command": list(selected_command),
+        "rules": {
+            "g_go_always_reads_remote_task_first": True,
+            "forbidden": "answering_g_go_from_chat_memory",
+            "compare_task_id_and_body_sha256": True,
+            "discard_previous_task_context_when_identity_changes": True,
+            "do_not_invent_result_files_branches_refs_or_protocols": True,
+        },
+    }
 
 
 def _loaded_sections_json_block() -> str:
@@ -100,7 +256,7 @@ def _initial_prompt_file_transfer_block(
     task_ref: str = GUI_TRANSFER_TASK_REF,
 ) -> str:
     path = task_path.as_posix()
-    return f"""File-transfer dialog (normal path):
+    return f"""GUI task-transfer dialog:
 
 When the user writes "g" or "go":
 - Read {path} from the remote ref `{task_ref}`.
@@ -110,7 +266,19 @@ When the user writes "g" or "go":
   TASK_NOT_FOUND and do not mutate anything. The user must click Send
   in the GUI first.
 - If the file exists: treat it as the current agentic-kit transfer order.
+  Never answer a bare g/go from chat memory or from a previous user question.
+  Read the transfer file first every time.
+  Extract task_id and user_task.body_sha256 from the transfer file.
+  Compare them to the last task_id/body_sha256 you handled in this chat.
+  If they differ, discard prior task context and handle the newly read task.
+  If they match, still use the freshly read transfer file as the source of truth.
   The user task is in `user_task.body`.
+  The communication mode is in `reply_contract.selected_code`:
+    a = remote GitHub/PR/CI work; answer with a compact completion status.
+        The local standard command is `{" ".join(REMOTE_STATUS_COMMAND)}`.
+    b = transfer files; publish a repo-backed transfer order/script and tell
+        the user to run `{" ".join(TRANSFER_CONTINUE_COMMAND)}`.
+    c = copy-and-paste fallback; answer with one complete terminal block.
   Work according to repo rules, gates, protected-file policy, and
   existing agentic-kit wrappers.
   Use existing agentic-kit transfer/result wrappers for result publication.
@@ -217,6 +385,7 @@ def submit_user_task(
     title: str,
     body: str,
     task_path: Path = CURRENT_USER_TASK_PATH,
+    communication_mode: str = "file_transfer",
     publish: bool = False,
     created_at_utc: str | None = None,
     git_runner: GitRunner | None = None,
@@ -236,6 +405,10 @@ def submit_user_task(
         f"{created}\n{head_sha}\n{normalized_title}\n{body_sha}".encode("utf-8")
     ).hexdigest()[:16]
     relative_path = task_path.as_posix()
+    normalized_mode = normalize_communication_mode(communication_mode)
+    reply_contract = communication_reply_contract(normalized_mode)
+    local_execution_command = standard_command_for_communication_mode(normalized_mode)
+    local_execution_description = standard_command_description_for_communication_mode(normalized_mode)
     payload = {
         "schema_version": 1,
         "kind": "gui_user_task_transfer_order",
@@ -244,13 +417,31 @@ def submit_user_task(
         "task_id": task_id,
         "title": normalized_title,
         "safety": "remote_llm_user_task",
-        "status": "active",
+        "status": "submitted",
         "branch": branch,
         "expected_current_branch": branch,
         "expected_head": short_head,
         "expected_origin_main": origin_main,
         "created_for_head": head_sha,
         "report_path": f"docs/reports/command_runs/{task_id}-gui-user-task.md",
+        "communication_mode": normalized_mode,
+        "communication_mode_code": communication_mode_code(normalized_mode),
+        "communication_mode_label": communication_mode_label(normalized_mode),
+        "reply_contract": reply_contract,
+        "task_identity": {
+            "task_id": task_id,
+            "body_sha256": body_sha,
+        },
+        "g_go_handling": {
+            "always_read_remote_task_first": True,
+            "forbidden": "answering_g_go_from_chat_memory",
+            "compare_task_id_and_body_sha256": True,
+            "discard_previous_task_context_when_identity_changes": True,
+        },
+        "local_execution": {
+            "standard_command": list(local_execution_command),
+            "description": local_execution_description,
+        },
         "actions": [
             {
                 "type": "run_command",
@@ -332,6 +523,11 @@ def submit_user_task(
         local_only=not remote_readable,
         remote_readable=remote_readable,
         reason=reason,
+        communication_mode=normalized_mode,
+        communication_mode_code=communication_mode_code(normalized_mode),
+        communication_mode_label=communication_mode_label(normalized_mode),
+        local_execution_command=local_execution_command,
+        reply_contract=reply_contract,
     )
 
 
@@ -460,6 +656,156 @@ class RemoteTaskCarrierVerification:
     reason: str
 
 
+@dataclass(frozen=True)
+class TerminalLaunchPlan:
+    result_status: str
+    platform_name: str
+    script_path: str
+    command: tuple[str, ...]
+    launch_argv: tuple[str, ...]
+    reason: str
+
+    def as_json_data(self) -> dict[str, object]:
+        return asdict(self)
+
+
+def _terminal_script_command_for_platform(
+    platform_name: str,
+    communication_mode: str,
+) -> tuple[str, ...]:
+    return standard_command_for_communication_mode(
+        communication_mode,
+        platform_name=platform_name,
+    )
+
+
+def _terminal_script_path(root: Path, platform_name: str, communication_mode: str) -> Path:
+    suffix = ".cmd" if platform_name == "Windows" else ".command" if platform_name == "Darwin" else ".sh"
+    mode_name = normalize_communication_mode(communication_mode).replace("_", "-")
+    return root / "tmp" / f"agentic-kit-{mode_name}-standard{suffix}"
+
+
+def _terminal_script_text(
+    root: Path,
+    command: tuple[str, ...],
+    platform_name: str,
+    communication_mode: str,
+) -> str:
+    description = standard_command_description_for_communication_mode(communication_mode)
+    if platform_name == "Windows":
+        command_text = subprocess.list2cmdline(command) if command else ""
+        command_line = f"{command_text}\r\n" if command_text else "echo Paste the LLM recovery block here.\r\n"
+        return (
+            "@echo off\r\n"
+            f"cd /d {subprocess.list2cmdline([str(root)])}\r\n"
+            f"echo [agentic-kit] {description}\r\n"
+            f"{command_line}"
+            "echo.\r\n"
+            "echo [agentic-kit] command finished with RC=%ERRORLEVEL%\r\n"
+            "cmd /k\r\n"
+        )
+    command_text = " ".join(shlex.quote(part) for part in command)
+    command_block = (
+        f"{command_text}\n"
+        "rc=$?\n"
+        "printf '\\n[agentic-kit] command finished with RC=%s\\n' \"$rc\"\n"
+        if command_text
+        else "printf '%s\\n' '[agentic-kit] Paste the LLM recovery block here.'\n"
+    )
+    return (
+        "#!/bin/sh\n"
+        f"cd {shlex.quote(str(root))}\n"
+        f"printf '%s\\n' {shlex.quote('[agentic-kit] ' + description)}\n"
+        f"{command_block}"
+        "exec ${SHELL:-/bin/sh}\n"
+    )
+
+
+def build_terminal_launch_plan(
+    project_root: Path | str,
+    *,
+    communication_mode: str = "file_transfer",
+    platform_name: str | None = None,
+) -> TerminalLaunchPlan:
+    root = Path(project_root).resolve()
+    detected = platform_name or platform.system()
+    command = _terminal_script_command_for_platform(detected, communication_mode)
+    script_path = _terminal_script_path(root, detected, communication_mode)
+    script_path.parent.mkdir(parents=True, exist_ok=True)
+    script_path.write_text(
+        _terminal_script_text(root, command, detected, communication_mode),
+        encoding="utf-8",
+    )
+    if detected != "Windows":
+        script_path.chmod(0o755)
+
+    if detected == "Darwin":
+        argv = ("open", "-a", "Terminal", str(script_path))
+    elif detected == "Windows":
+        argv = ("cmd.exe", "/c", "start", "Agentic Kit Transfer", str(script_path))
+    elif detected == "Linux":
+        terminal = _first_available_terminal()
+        if not terminal:
+            return TerminalLaunchPlan(
+                "FAIL",
+                detected,
+                str(script_path),
+                command,
+                (),
+                "terminal_not_found",
+            )
+        if terminal.endswith("gnome-terminal") or terminal.endswith("konsole"):
+            argv = (terminal, "--", str(script_path))
+        else:
+            argv = (terminal, "-e", str(script_path))
+    else:
+        return TerminalLaunchPlan("FAIL", detected, str(script_path), command, (), "unsupported_platform")
+    return TerminalLaunchPlan("PASS", detected, str(script_path), command, argv, "terminal_launcher_ready")
+
+
+def _first_available_terminal() -> str:
+    candidates = (
+        "x-terminal-emulator",
+        "gnome-terminal",
+        "konsole",
+        "xfce4-terminal",
+        "xterm",
+    )
+    for candidate in candidates:
+        resolved = subprocess.run(
+            ["which", candidate],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+        if resolved.returncode == 0 and resolved.stdout.strip():
+            return resolved.stdout.strip()
+    return ""
+
+
+def open_transfer_terminal(
+    project_root: Path | str,
+    *,
+    communication_mode: str = "file_transfer",
+) -> TerminalLaunchPlan:
+    plan = build_terminal_launch_plan(project_root, communication_mode=communication_mode)
+    if plan.result_status != "PASS":
+        return plan
+    try:
+        subprocess.Popen(list(plan.launch_argv))
+    except OSError as exc:
+        return TerminalLaunchPlan(
+            "FAIL",
+            plan.platform_name,
+            plan.script_path,
+            plan.command,
+            plan.launch_argv,
+            f"terminal_launch_failed: {exc}",
+        )
+    return plan
+
+
 def _verify_remote_task_carrier(
     root: Path,
     task_path: Path,
@@ -513,7 +859,7 @@ def _restore_branch_after_publish(
 
 
 def task_editor_visible_for_mode(mode: str) -> bool:
-    return mode == "file_transfer"
+    return normalize_communication_mode(mode) in {"remote", "file_transfer", "copy_paste"}
 
 
 def task_editor_send_enabled(

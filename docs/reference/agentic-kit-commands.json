@@ -8827,6 +8827,20 @@
           "secondary_opts": []
         },
         {
+          "default": "file_transfer",
+          "help": "GUI communication mode: remote, file_transfer, or copy_paste.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "communication_mode",
+          "opts": [
+            "--communication-mode"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
           "default": false,
           "help": "Publish the canonical transfer order to the gui-transfer-tasks remote branch.",
           "is_flag": true,

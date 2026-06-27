@@ -14,9 +14,16 @@ from agentic_project_kit.gui_task_editor import (
     CURRENT_USER_TASK_PATH,
     GUI_TRANSFER_TASK_REF,
     LEGACY_GUI_TRANSFER_TASK_PATH,
+    REMOTE_STATUS_COMMAND,
+    TRANSFER_CONTINUE_COMMAND,
     TaskEditorState,
+    build_terminal_launch_plan,
     build_initial_llm_prompt,
+    communication_reply_contract,
+    normalize_communication_mode,
     read_user_task,
+    standard_command_args_for_communication_mode,
+    standard_command_for_communication_mode,
     submit_user_task,
     task_editor_send_enabled,
     task_editor_state_after_read,
@@ -62,6 +69,25 @@ def test_initial_llm_prompt_contains_task_not_found_instruction() -> None:
 
     assert "TASK_NOT_FOUND" in text
     assert CURRENT_USER_TASK_PATH.as_posix() in text
+
+
+def test_initial_llm_prompt_forces_go_to_reread_transfer_file_and_compare_identity() -> None:
+    text = build_initial_llm_prompt().prompt_text
+
+    assert "Never answer a bare g/go from chat memory" in text
+    assert "Read the transfer file first every time" in text
+    assert "Extract task_id and user_task.body_sha256" in text
+    assert "discard prior task context" in text
+
+
+def test_initial_llm_prompt_explains_three_reply_modes() -> None:
+    text = build_initial_llm_prompt().prompt_text
+
+    assert "a = remote GitHub/PR/CI work" in text
+    assert "b = transfer files" in text
+    assert "c = copy-and-paste fallback" in text
+    assert "agentic-kit transfer patch-cycle-status --json" in text
+    assert "agentic-kit transfer continue --json" in text
 
 
 def test_initial_llm_prompt_contains_rule_refresh_ack_schema() -> None:
@@ -151,9 +177,22 @@ def test_submit_user_task_writes_canonical_transfer_inbox(tmp_path) -> None:
     assert payload["title"] == "Demo"
     assert payload["kind"] == "gui_user_task_transfer_order"
     assert payload["id"] == result.task_id
-    assert payload["status"] == "active"
+    assert payload["status"] == "submitted"
     assert "remote_readable" not in payload
     assert payload["user_task"]["body"] == "Implement the safe thing."
+    assert payload["communication_mode"] == "file_transfer"
+    assert payload["communication_mode_code"] == "b"
+    assert payload["communication_mode_label"] == "File Transfer: Transfer files"
+    assert payload["task_identity"] == {
+        "task_id": result.task_id,
+        "body_sha256": result.body_sha256,
+    }
+    assert payload["g_go_handling"]["forbidden"] == "answering_g_go_from_chat_memory"
+    assert payload["reply_contract"]["selected_code"] == "b"
+    assert payload["reply_contract"]["selected_mode"] == "file_transfer"
+    assert payload["reply_contract"]["local_execution_command"] == list(TRANSFER_CONTINUE_COMMAND)
+    assert payload["reply_contract"]["mode_map"]["a"]["standard_local_command"] == list(REMOTE_STATUS_COMMAND)
+    assert payload["local_execution"]["standard_command"] == list(TRANSFER_CONTINUE_COMMAND)
     assert payload["actions"][0]["command"] == [
         "./.venv/bin/agentic-kit",
         "transfer",
@@ -181,6 +220,33 @@ def test_transfer_submit_user_task_cli_json(tmp_path, monkeypatch) -> None:
     assert data["local_only"] is True
     assert data["remote_readable"] is False
     assert (tmp_path / CURRENT_USER_TASK_PATH).exists()
+
+
+def test_transfer_submit_user_task_cli_accepts_communication_mode(tmp_path, monkeypatch) -> None:
+    monkeypatch.chdir(tmp_path)
+    body = tmp_path / "task.md"
+    body.write_text("Please do the safe task.\n", encoding="utf-8")
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "submit-user-task",
+            "--title",
+            "Demo",
+            "--body-file",
+            str(body),
+            "--communication-mode",
+            "copy_paste",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.output)
+    assert data["communication_mode"] == "copy_paste"
+    assert data["communication_mode_code"] == "c"
+    assert data["local_execution_command"] == []
 
 
 def test_transfer_submit_user_task_cli_publish_json(tmp_path, monkeypatch) -> None:
@@ -325,6 +391,8 @@ def test_submit_user_task_publish_uses_gui_transfer_branch_and_verifies_remote(
     assert result.button_next_state == TaskEditorState.SENT.value
     assert result.next_reply == "g"
     assert result.next_action == EXPECTED_GUI_TASK_NEXT_ACTION
+    assert result.communication_mode == "file_transfer"
+    assert result.communication_mode_code == "b"
     assert ("branch_create", GUI_TRANSFER_TASK_REF, "main") in calls
     assert (
         "commit_paths",
@@ -448,8 +516,56 @@ def test_transfer_state_outbox_result_detector_uses_canonical_transfer_file() ->
 
 def test_task_editor_hidden_outside_file_transfer_mode() -> None:
     assert task_editor_visible_for_mode("file_transfer")
-    assert not task_editor_visible_for_mode("remote")
-    assert not task_editor_visible_for_mode("copy_paste")
+    assert task_editor_visible_for_mode("remote")
+    assert task_editor_visible_for_mode("copy_paste")
+
+
+def test_communication_reply_contracts_define_modes_and_execution_command() -> None:
+    assert normalize_communication_mode("a") == "remote"
+    assert normalize_communication_mode("b") == "file_transfer"
+    assert normalize_communication_mode("c") == "copy_paste"
+
+    remote_contract = communication_reply_contract("remote")
+    file_contract = communication_reply_contract("file_transfer")
+    copy_contract = communication_reply_contract("copy_paste")
+
+    assert remote_contract["selected_code"] == "a"
+    assert remote_contract["local_execution_command"] == list(REMOTE_STATUS_COMMAND)
+    assert file_contract["selected_code"] == "b"
+    assert file_contract["rules"]["forbidden"] == "answering_g_go_from_chat_memory"
+    assert file_contract["rules"]["compare_task_id_and_body_sha256"] is True
+    assert file_contract["local_execution_command"] == list(TRANSFER_CONTINUE_COMMAND)
+    assert copy_contract["selected_code"] == "c"
+    assert copy_contract["local_execution_command"] == []
+    assert standard_command_args_for_communication_mode("a") == ("transfer", "patch-cycle-status", "--json")
+    assert standard_command_args_for_communication_mode("b") == ("transfer", "continue", "--json")
+    assert standard_command_args_for_communication_mode("c") == ()
+    assert standard_command_for_communication_mode("a") == REMOTE_STATUS_COMMAND
+
+
+def test_terminal_launch_plan_is_os_specific_and_uses_standard_transfer_command(tmp_path) -> None:
+    darwin = build_terminal_launch_plan(tmp_path, communication_mode="file_transfer", platform_name="Darwin")
+    windows = build_terminal_launch_plan(tmp_path, communication_mode="file_transfer", platform_name="Windows")
+    remote = build_terminal_launch_plan(tmp_path, communication_mode="remote", platform_name="Darwin")
+    copy_paste = build_terminal_launch_plan(tmp_path, communication_mode="copy_paste", platform_name="Darwin")
+
+    assert darwin.result_status == "PASS"
+    assert darwin.launch_argv[:3] == ("open", "-a", "Terminal")
+    assert darwin.command == TRANSFER_CONTINUE_COMMAND
+    assert "agentic-kit transfer continue --json" in (
+        tmp_path / "tmp/agentic-kit-file-transfer-standard.command"
+    ).read_text(encoding="utf-8")
+    assert windows.result_status == "PASS"
+    assert windows.launch_argv[:4] == ("cmd.exe", "/c", "start", "Agentic Kit Transfer")
+    assert windows.command[-3:] == ("transfer", "continue", "--json")
+    assert remote.command == REMOTE_STATUS_COMMAND
+    assert "agentic-kit transfer patch-cycle-status --json" in (
+        tmp_path / "tmp/agentic-kit-remote-standard.command"
+    ).read_text(encoding="utf-8")
+    assert copy_paste.command == ()
+    assert "Paste the LLM recovery block here" in (
+        tmp_path / "tmp/agentic-kit-copy-paste-standard.command"
+    ).read_text(encoding="utf-8")
 
 
 def test_read_user_task_missing_reports_task_not_found(tmp_path) -> None:
