@@ -1,8 +1,10 @@
 TRANSFER_REMOTE_NEXT_REPORT
+COMMAND_ID=remote-next-blocked
+STATE=BLOCKED
 RESULT_STATUS=BLOCKED
 RETURNCODE=2
 BRANCH=main
-HEAD=2576b76a
+HEAD=44396f49
 REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
 CHAT_REPLY=g
 NEXT=Inspect the published remote-next diagnostic report before retrying.
@@ -13,23 +15,26 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
   "kind": "local_to_llm_remote_next_report",
   "last_result": {
     "artifact_type": "transfer_remote_next_execution_report",
-    "blocked_message": "transfer order requires at least one action",
+    "blocked_message": "command failed: git switch main\nstdout=\nstderr=fatal: Unable to create '/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.",
     "branch": "main",
     "chat_reply": "g",
-    "head": "2576b76a",
+    "command_id": "remote-next-blocked",
+    "head": "44396f49",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
       "apply": null,
+      "command_id": "remote-next-blocked",
       "inspect": {
-        "message": "transfer order requires at least one action",
+        "message": "command failed: git switch main\nstdout=\nstderr=fatal: Unable to create '/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.",
         "reasons": [
-          "invalid_transfer_order"
+          "remote_next_blocked"
         ],
         "result_status": "BLOCKED",
         "returncode": 2,
         "schema_version": 1
       },
+      "next": "Inspect the published remote-next diagnostic report before retrying.",
       "next_action": "Inspect the published remote-next diagnostic report before retrying.",
       "result_status": "BLOCKED",
       "returncode": 2,
@@ -43,92 +48,22 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
           "unstaged_changes": [],
           "untracked_files": []
         },
-        "head": "2576b76a",
+        "head": "44396f49",
         "next_action": "Inspect the published remote-next diagnostic report before retrying.",
         "primary_state": "BLOCKED",
         "reasons": [
-          "invalid_transfer_order"
+          "remote_next_blocked"
         ],
         "schema_version": 1
       },
       "transfer_id": "remote-next-blocked"
     },
+    "next": "Inspect the published remote-next diagnostic report before retrying.",
     "next_action": "Inspect the published remote-next diagnostic report before retrying.",
     "post_report_actions": {
       "attempted": true,
-      "branch": "main",
-      "commit_head": "ee627031",
-      "committed": true,
-      "final_head": "ee627031",
-      "final_status_short": "",
-      "paths": [
-        "docs/reports/transfer_runs/latest-remote-next-report.json",
-        "docs/reports/transfer_runs/latest-remote-next-report.log",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-      ],
-      "pushed": true,
-      "rule_ack_after_report_commit": {
-        "blocking_reasons": [],
-        "confirmed": true,
-        "head": "ee627031",
-        "path": ".agentic/rule_ack/current.json",
-        "present": true
-      },
-      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "steps": [
-        {
-          "argv": [
-            "git",
-            "add",
-            "-f",
-            "docs/reports/transfer_runs/latest-remote-next-report.json",
-            "docs/reports/transfer_runs/latest-remote-next-report.log",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-          ],
-          "name": "git_add_force_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": ""
-        },
-        {
-          "argv": [
-            "git",
-            "commit",
-            "-m",
-            "Publish remote-next transfer report"
-          ],
-          "name": "git_commit_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "[main ee627031] Publish remote-next transfer report\n 4 files changed, 66 insertions(+), 634 deletions(-)"
-        },
-        {
-          "argv": [
-            "./.venv/bin/agentic-kit",
-            "rules",
-            "acknowledge"
-          ],
-          "name": "rules_acknowledge_after_report_commit",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=4d0a7990c24bc174076f3d40f31058362893c47905351cbbc15ff68068b96436\nrepo_head=ee627031\ndeclared_next_allowed_action=run_next_command"
-        },
-        {
-          "argv": [
-            "git",
-            "push",
-            "origin",
-            "main"
-          ],
-          "name": "git_push_report_commit",
-          "returncode": 0,
-          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   2576b76a..ee627031  main -> main",
-          "stdout": ""
-        }
-      ]
+      "status": "pending_until_report_files_are_written"
     },
     "preflight": {
       "current_branch": "main",
@@ -139,13 +74,13 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "2576b76a",
+      "head": "44396f49",
       "remote_tracking": "origin/main"
     },
     "primary_state": "BLOCKED",
     "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "reasons": [
-      "invalid_transfer_order"
+      "remote_next_blocked"
     ],
     "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "result_status": "BLOCKED",
@@ -153,14 +88,17 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "2576b76a",
+      "head": "44396f49",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
-    "schema_version": 1
+    "schema_version": 1,
+    "state": "BLOCKED",
+    "transfer_id": "remote-next-blocked"
   },
   "llm_execution_context": {
     "canonical_lifecycle": {
+      "do_not_use_stale_prompt_text_as_handoff_source": true,
       "existing_pr_requires_concrete_number": [
         "./.venv/bin/agentic-kit",
         "transfer",
@@ -170,6 +108,13 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
         "current",
         "--merge-method",
         "squash"
+      ],
+      "feature_branch_pre_pr_gate": "agentic-kit transfer repo-status",
+      "forbidden_feature_branch_pre_pr_gate": "agentic-kit transfer post-merge-check",
+      "fresh_llm_context_before_pr": [
+        "./.venv/bin/agentic-kit transfer prepare-successor-handoff --render-prompt",
+        "./.venv/bin/agentic-kit transfer publish-last-report",
+        "./.venv/bin/agentic-kit transfer require-fresh-llm-context --json"
       ],
       "new_pr_single_command": [
         "./.venv/bin/agentic-kit",
@@ -184,6 +129,8 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
         "squash"
       ],
       "new_pr_single_command_text": "agentic-kit transfer pr-create-complete --post-merge-complete",
+      "post_merge_check_after_merge_only": true,
+      "post_merge_checks_belong_to_main": true,
       "post_merge_requires_concrete_number": [
         "./.venv/bin/agentic-kit transfer sync-main",
         "./.venv/bin/agentic-kit transfer post-merge-complete --after-pr use-the-concrete-pr-number-from-wrapper-output",
@@ -233,7 +180,7 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
       "status": "active"
     },
     "command_reference": {
-      "command_count": 151,
+      "command_count": 190,
       "generated_by": "scripts/generate_agentic_kit_command_reference.py",
       "important_wrappers": [
         {
@@ -299,7 +246,7 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
           "qualified_name": "agentic-kit transfer remote-work-start"
         },
         {
-          "help": "Write the current diff to /tmp and run ./ns protected-change-plan on it.",
+          "help": "Write the current diff to /tmp and run the Python protected change planner on it.",
           "options": [
             "--cached",
             "--json",
@@ -341,6 +288,7 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
             "--main-branch",
             "--merge-method",
             "--poll-seconds",
+            "--post-merge-complete",
             "--skip-llm-context-gate",
             "--timeout-seconds"
           ],
@@ -428,11 +376,11 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-06-13T18:56:56.445573+00:00",
+    "generated_at_utc": "2026-06-27T19:41:17.737065+00:00",
     "generated_from_current_repo": true,
     "git_state": {
       "branch": "main",
-      "head": "ee627031fa28388bfce00621aa8d2ee3c75a3536",
+      "head": "44396f4960c370909d251c3b128f774cf1326914",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -490,10 +438,10 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
     ],
     "source_hashes": {
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
-      ".agentic/transfer/one_command_transfer_protocol.yaml": "08ff91eefc0d57aae833a70302a948a4f72a81a6d9beaa6432a1ab9a13c4cee9",
-      ".agentic/transfer_safety_rules.yaml": "5630321ab7e733116e7017c1a97938865e217cb80effd082ce9c09cc42c6f975",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "592b7ccea333b750127d3d0ddab73baac19fcd80acd47756e040586e1c95d8cf",
-      "docs/reference/agentic-kit-commands.json": "d7f6440490b17ee5ae09ded3c1baf04d31019a295e5e86acf9a19e05f01a82f3"
+      ".agentic/transfer/one_command_transfer_protocol.yaml": "5f784f41355f3063a34d51e6a3ed4dd64f29f4a71b8859bdb7df1529aefdc789",
+      ".agentic/transfer_safety_rules.yaml": "926473e7a669d11c8402a92f91358a3b92b0021f0f6627907d37dae49ea76412",
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "ef8ecf278d23e2d92857c6c49955ad78111a1e514b34db171e39b5582e14d95a",
+      "docs/reference/agentic-kit-commands.json": "0a9ae78d98446d5b03916cc8bcfd01725683900427ed08cf9e0e9141201cd501"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -517,27 +465,27 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
     "authoritative_sources": [
       {
         "path": ".agentic/transfer_safety_rules.yaml",
-        "sha256": "5630321ab7e733116e7017c1a97938865e217cb80effd082ce9c09cc42c6f975"
+        "sha256": "926473e7a669d11c8402a92f91358a3b92b0021f0f6627907d37dae49ea76412"
       },
       {
         "path": ".agentic/transfer/one_command_transfer_protocol.yaml",
-        "sha256": "08ff91eefc0d57aae833a70302a948a4f72a81a6d9beaa6432a1ab9a13c4cee9"
+        "sha256": "5f784f41355f3063a34d51e6a3ed4dd64f29f4a71b8859bdb7df1529aefdc789"
       },
       {
         "path": ".agentic/rule_mechanism_inventory.yaml",
-        "sha256": "65889c553fd2ba7e7f6bea6432ac278717605314b757772747ffcdd35bb749fb"
+        "sha256": "dd6332ba4e543ec78a930f36c4458158863f889c378dc6b76e8e0ea1d54a5b9a"
       },
       {
         "path": ".agentic/rule_preservation.yaml",
         "sha256": "817319e295674992e6665df25778b5c9cb767d1e393e5402df708d52ec79ff39"
       },
       {
-        "path": "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
-        "sha256": "d43b4451f778fd2875be4a5f22aee0be669bf28021d795dca856cdf6352e3165"
+        "path": "docs/DOCUMENTATION_REGISTRY.yaml",
+        "sha256": "b90729570bf844c504eb142f196778bdd072fd0855ea07e10910dd85015f9c71"
       },
       {
-        "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-        "sha256": "6c5afd2e2d0eb7be6d6f06cda3ad6f112c0dbf4cc9178db1f92a100a9d0e0f70"
+        "path": "docs/planning/project_direction.yaml",
+        "sha256": "62572f1bf99bf8b86554652fd78ae453c6ff81bcb70ac69e1ad0fc8bfcc7cca4"
       }
     ],
     "canonical_cli_usage": {
@@ -746,6 +694,43 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
       "transfer_continue_missing_or_stale_remote_report",
       "manual_git_cleanup_used_before_restore_known_volatile"
     ],
+    "llm_work_order_contract": {
+      "applies_to": [
+        "copy_paste_blocks",
+        "transfer_file_next_command"
+      ],
+      "authoritative_sources": [
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/transfer/one_command_transfer_protocol.yaml"
+      ],
+      "required_format": "python_script",
+      "shell_usage": "outer_logging_wrapper_only",
+      "source": "dynamic-from-rule-files",
+      "status": "active",
+      "transfer_file": {
+        "canonical_inbox": ".agentic/transfer/inbox/next_command.py.txt",
+        "shell_commands_allowed": false
+      }
+    },
+    "meta_command_preference": {
+      "authoritative_sources": [
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/transfer/one_command_transfer_protocol.yaml"
+      ],
+      "fallback_rule": "Low-level transfer/release commands may be used only for targeted diagnostics, recovery, or unsupported flows, and the reason must be explicit.",
+      "low_level_fallback_requires_reason": true,
+      "preferred_commands": [
+        "agentic-kit work start",
+        "agentic-kit work check",
+        "agentic-kit work finish",
+        "agentic-kit work recover",
+        "agentic-kit release ready",
+        "agentic-kit release prepare"
+      ],
+      "priority": "primary_path",
+      "source": "dynamic-from-rule-files",
+      "status": "active"
+    },
     "one_command_transfer_protocol": {
       "artifact_type": "transfer_protocol",
       "assistant_after_g": [
@@ -867,6 +852,33 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
       },
       "id": "one-command-transfer-protocol",
       "language": "en",
+      "llm_work_order_contract": {
+        "copy_paste": {
+          "required_payload": "python_script",
+          "shell_commands_allowed": false,
+          "shell_wrapper_allowed_for_logging": true
+        },
+        "required_format": "python_script",
+        "status": "active",
+        "transfer_file": {
+          "allowed_payload": "python_script",
+          "canonical_inbox": ".agentic/transfer/inbox/next_command.py.txt",
+          "shell_commands_allowed": false
+        }
+      },
+      "meta_command_preference": {
+        "human_cli_primary_path": true,
+        "low_level_fallback_requires_reason": true,
+        "preferred_entrypoints": [
+          "agentic-kit work start",
+          "agentic-kit work check",
+          "agentic-kit work finish",
+          "agentic-kit work recover",
+          "agentic-kit release ready",
+          "agentic-kit release prepare"
+        ],
+        "rule": "Prefer agentic-kit work/release meta commands for routine work, release readiness, and release preparation."
+      },
       "next_implementation_slice": {
         "do_not_do": [
           "release_publish_work",
@@ -957,7 +969,7 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
           "remote-next"
         ],
         "chat_reply": "g",
-        "working_directory": "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit"
+        "working_directory": "<local-repo-path>"
       },
       "wrapper_first_inside_transfer_files": {
         "command_reference_lifecycle_discipline": {
@@ -1008,10 +1020,10 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
     "repo_state": {
       "branch": "main",
       "dirty_status": "",
-      "head": "ee627031fa28388bfce00621aa8d2ee3c75a3536",
+      "head": "44396f4960c370909d251c3b128f774cf1326914",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "ee627031fa28388bfce00621aa8d2ee3c75a3536"
+      "upstream_head": "44396f4960c370909d251c3b128f774cf1326914"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -1055,23 +1067,26 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
   },
   "remote_next_report": {
     "artifact_type": "transfer_remote_next_execution_report",
-    "blocked_message": "transfer order requires at least one action",
+    "blocked_message": "command failed: git switch main\nstdout=\nstderr=fatal: Unable to create '/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.",
     "branch": "main",
     "chat_reply": "g",
-    "head": "2576b76a",
+    "command_id": "remote-next-blocked",
+    "head": "44396f49",
     "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "local_run": {
       "apply": null,
+      "command_id": "remote-next-blocked",
       "inspect": {
-        "message": "transfer order requires at least one action",
+        "message": "command failed: git switch main\nstdout=\nstderr=fatal: Unable to create '/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.",
         "reasons": [
-          "invalid_transfer_order"
+          "remote_next_blocked"
         ],
         "result_status": "BLOCKED",
         "returncode": 2,
         "schema_version": 1
       },
+      "next": "Inspect the published remote-next diagnostic report before retrying.",
       "next_action": "Inspect the published remote-next diagnostic report before retrying.",
       "result_status": "BLOCKED",
       "returncode": 2,
@@ -1085,92 +1100,22 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
           "unstaged_changes": [],
           "untracked_files": []
         },
-        "head": "2576b76a",
+        "head": "44396f49",
         "next_action": "Inspect the published remote-next diagnostic report before retrying.",
         "primary_state": "BLOCKED",
         "reasons": [
-          "invalid_transfer_order"
+          "remote_next_blocked"
         ],
         "schema_version": 1
       },
       "transfer_id": "remote-next-blocked"
     },
+    "next": "Inspect the published remote-next diagnostic report before retrying.",
     "next_action": "Inspect the published remote-next diagnostic report before retrying.",
     "post_report_actions": {
       "attempted": true,
-      "branch": "main",
-      "commit_head": "ee627031",
-      "committed": true,
-      "final_head": "ee627031",
-      "final_status_short": "",
-      "paths": [
-        "docs/reports/transfer_runs/latest-remote-next-report.json",
-        "docs/reports/transfer_runs/latest-remote-next-report.log",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-      ],
-      "pushed": true,
-      "rule_ack_after_report_commit": {
-        "blocking_reasons": [],
-        "confirmed": true,
-        "head": "ee627031",
-        "path": ".agentic/rule_ack/current.json",
-        "present": true
-      },
-      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "steps": [
-        {
-          "argv": [
-            "git",
-            "add",
-            "-f",
-            "docs/reports/transfer_runs/latest-remote-next-report.json",
-            "docs/reports/transfer_runs/latest-remote-next-report.log",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-          ],
-          "name": "git_add_force_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": ""
-        },
-        {
-          "argv": [
-            "git",
-            "commit",
-            "-m",
-            "Publish remote-next transfer report"
-          ],
-          "name": "git_commit_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "[main ee627031] Publish remote-next transfer report\n 4 files changed, 66 insertions(+), 634 deletions(-)"
-        },
-        {
-          "argv": [
-            "./.venv/bin/agentic-kit",
-            "rules",
-            "acknowledge"
-          ],
-          "name": "rules_acknowledge_after_report_commit",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=4d0a7990c24bc174076f3d40f31058362893c47905351cbbc15ff68068b96436\nrepo_head=ee627031\ndeclared_next_allowed_action=run_next_command"
-        },
-        {
-          "argv": [
-            "git",
-            "push",
-            "origin",
-            "main"
-          ],
-          "name": "git_push_report_commit",
-          "returncode": 0,
-          "stderr": "To github.com:vfi64/agentic-project-kit.git\n   2576b76a..ee627031  main -> main",
-          "stdout": ""
-        }
-      ]
+      "status": "pending_until_report_files_are_written"
     },
     "preflight": {
       "current_branch": "main",
@@ -1181,13 +1126,13 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
         "unstaged_changes": [],
         "untracked_files": []
       },
-      "head": "2576b76a",
+      "head": "44396f49",
       "remote_tracking": "origin/main"
     },
     "primary_state": "BLOCKED",
     "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
     "reasons": [
-      "invalid_transfer_order"
+      "remote_next_blocked"
     ],
     "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
     "result_status": "BLOCKED",
@@ -1195,37 +1140,39 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
     "rule_ack": {
       "blocking_reasons": [],
       "confirmed": true,
-      "head": "2576b76a",
+      "head": "44396f49",
       "path": ".agentic/rule_ack/current.json",
       "present": true
     },
-    "schema_version": 1
+    "schema_version": 1,
+    "state": "BLOCKED",
+    "transfer_id": "remote-next-blocked"
   },
   "safety_header": {
     "authoritative_sources": [
       {
         "path": ".agentic/transfer_safety_rules.yaml",
-        "sha256": "5630321ab7e733116e7017c1a97938865e217cb80effd082ce9c09cc42c6f975"
+        "sha256": "926473e7a669d11c8402a92f91358a3b92b0021f0f6627907d37dae49ea76412"
       },
       {
         "path": ".agentic/transfer/one_command_transfer_protocol.yaml",
-        "sha256": "08ff91eefc0d57aae833a70302a948a4f72a81a6d9beaa6432a1ab9a13c4cee9"
+        "sha256": "5f784f41355f3063a34d51e6a3ed4dd64f29f4a71b8859bdb7df1529aefdc789"
       },
       {
         "path": ".agentic/rule_mechanism_inventory.yaml",
-        "sha256": "65889c553fd2ba7e7f6bea6432ac278717605314b757772747ffcdd35bb749fb"
+        "sha256": "dd6332ba4e543ec78a930f36c4458158863f889c378dc6b76e8e0ea1d54a5b9a"
       },
       {
         "path": ".agentic/rule_preservation.yaml",
         "sha256": "817319e295674992e6665df25778b5c9cb767d1e393e5402df708d52ec79ff39"
       },
       {
-        "path": "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
-        "sha256": "d43b4451f778fd2875be4a5f22aee0be669bf28021d795dca856cdf6352e3165"
+        "path": "docs/DOCUMENTATION_REGISTRY.yaml",
+        "sha256": "b90729570bf844c504eb142f196778bdd072fd0855ea07e10910dd85015f9c71"
       },
       {
-        "path": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
-        "sha256": "6c5afd2e2d0eb7be6d6f06cda3ad6f112c0dbf4cc9178db1f92a100a9d0e0f70"
+        "path": "docs/planning/project_direction.yaml",
+        "sha256": "62572f1bf99bf8b86554652fd78ae453c6ff81bcb70ac69e1ad0fc8bfcc7cca4"
       }
     ],
     "canonical_cli_usage": {
@@ -1434,6 +1381,43 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
       "transfer_continue_missing_or_stale_remote_report",
       "manual_git_cleanup_used_before_restore_known_volatile"
     ],
+    "llm_work_order_contract": {
+      "applies_to": [
+        "copy_paste_blocks",
+        "transfer_file_next_command"
+      ],
+      "authoritative_sources": [
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/transfer/one_command_transfer_protocol.yaml"
+      ],
+      "required_format": "python_script",
+      "shell_usage": "outer_logging_wrapper_only",
+      "source": "dynamic-from-rule-files",
+      "status": "active",
+      "transfer_file": {
+        "canonical_inbox": ".agentic/transfer/inbox/next_command.py.txt",
+        "shell_commands_allowed": false
+      }
+    },
+    "meta_command_preference": {
+      "authoritative_sources": [
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/transfer/one_command_transfer_protocol.yaml"
+      ],
+      "fallback_rule": "Low-level transfer/release commands may be used only for targeted diagnostics, recovery, or unsupported flows, and the reason must be explicit.",
+      "low_level_fallback_requires_reason": true,
+      "preferred_commands": [
+        "agentic-kit work start",
+        "agentic-kit work check",
+        "agentic-kit work finish",
+        "agentic-kit work recover",
+        "agentic-kit release ready",
+        "agentic-kit release prepare"
+      ],
+      "priority": "primary_path",
+      "source": "dynamic-from-rule-files",
+      "status": "active"
+    },
     "one_command_transfer_protocol": {
       "artifact_type": "transfer_protocol",
       "assistant_after_g": [
@@ -1555,6 +1539,33 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
       },
       "id": "one-command-transfer-protocol",
       "language": "en",
+      "llm_work_order_contract": {
+        "copy_paste": {
+          "required_payload": "python_script",
+          "shell_commands_allowed": false,
+          "shell_wrapper_allowed_for_logging": true
+        },
+        "required_format": "python_script",
+        "status": "active",
+        "transfer_file": {
+          "allowed_payload": "python_script",
+          "canonical_inbox": ".agentic/transfer/inbox/next_command.py.txt",
+          "shell_commands_allowed": false
+        }
+      },
+      "meta_command_preference": {
+        "human_cli_primary_path": true,
+        "low_level_fallback_requires_reason": true,
+        "preferred_entrypoints": [
+          "agentic-kit work start",
+          "agentic-kit work check",
+          "agentic-kit work finish",
+          "agentic-kit work recover",
+          "agentic-kit release ready",
+          "agentic-kit release prepare"
+        ],
+        "rule": "Prefer agentic-kit work/release meta commands for routine work, release readiness, and release preparation."
+      },
       "next_implementation_slice": {
         "do_not_do": [
           "release_publish_work",
@@ -1645,7 +1656,7 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
           "remote-next"
         ],
         "chat_reply": "g",
-        "working_directory": "/Users/hof/Dropbox/Privat/GitHub/agentic-project-kit"
+        "working_directory": "<local-repo-path>"
       },
       "wrapper_first_inside_transfer_files": {
         "command_reference_lifecycle_discipline": {
@@ -1696,10 +1707,10 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
     "repo_state": {
       "branch": "main",
       "dirty_status": "",
-      "head": "ee627031fa28388bfce00621aa8d2ee3c75a3536",
+      "head": "44396f4960c370909d251c3b128f774cf1326914",
       "head_matches_upstream": true,
       "upstream": "origin/main",
-      "upstream_head": "ee627031fa28388bfce00621aa8d2ee3c75a3536"
+      "upstream_head": "44396f4960c370909d251c3b128f774cf1326914"
     },
     "schema_version": 1,
     "terminal_block_rules": {
