@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7a584ffd9d09a16142bf8dcfc45aa81497ccbb86
-  short: 7a584ffd
-  subject: Harden GUI prompt contract and compact cockpit layout (#1598)
+  full: 44396f4960c370909d251c3b128f774cf1326914
+  short: 44396f49
+  subject: Guide cockpit actions with grouped recommendations (#1600)
 last_substantive_work_state:
-  full: 7a584ffd9d09a16142bf8dcfc45aa81497ccbb86
-  short: 7a584ffd
-  subject: Harden GUI prompt contract and compact cockpit layout (#1598)
+  full: 44396f4960c370909d251c3b128f774cf1326914
+  short: 44396f49
+  subject: Guide cockpit actions with grouped recommendations (#1600)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
