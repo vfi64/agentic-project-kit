@@ -15,6 +15,7 @@ from agentic_project_kit.cockpit import (
     run_cockpit_action,
 )
 from agentic_project_kit.gui_task_editor import (
+    CANONICAL_TRANSFER_INBOX_PATH,
     CANONICAL_TRANSFER_OUTBOX_PATH,
     TaskEditorState,
     task_editor_send_enabled,
@@ -482,7 +483,9 @@ class CockpitGui:
             )
             attach_tooltip(
                 self.task_send_button,
-                "Publish the canonical agentic-kit transfer inbox file through agentic-kit transfer submit-user-task --publish.",
+                "Publish the canonical agentic-kit transfer inbox file "
+                f"{CANONICAL_TRANSFER_INBOX_PATH.as_posix()} through "
+                "agentic-kit transfer submit-user-task --publish.",
             )
             self.task_send_button.pack(side=tk.LEFT, padx=(0, 8))
             self.task_read_button = ttk.Button(
@@ -642,6 +645,16 @@ class CockpitGui:
             self.task_read_button.configure(state="normal")
             self.task_status_var.set("Transfer order published to gui-transfer-tasks. Send g/go in chat.")
             return
+        if self.task_editor_state == TaskEditorState.BLOCKED:
+            self.task_read_button.configure(state="disabled")
+            self.task_send_button.configure(state="normal" if can_send else "disabled")
+            if self.basic_view.required_next_reply == "d2":
+                self.task_status_var.set("Blocked: send d2 and complete communication-rule ACK before mutation.")
+            elif not self.current_task_body():
+                self.task_status_var.set("Blocked: write a transfer order before sending.")
+            else:
+                self.task_status_var.set("Publish failed or is blocked. Inspect the Send output before retrying.")
+            return
         self.task_read_button.configure(state="disabled")
         self.task_send_button.configure(state="normal" if can_send else "disabled")
         if self.basic_view.required_next_reply == "d2":
@@ -709,8 +722,6 @@ class CockpitGui:
         )
         if self.task_editor_state == TaskEditorState.SENT and self.task_text is not None:
             self.task_text.configure(state="disabled")
-        elif result_status == "PASS":
-            self.task_status_var.set("Transfer order written locally only. Publish through the guarded transfer path before sending g/go.")
         self.refresh_task_editor_buttons()
 
     def read_last_task_result(self) -> None:

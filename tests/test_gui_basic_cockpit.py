@@ -21,6 +21,7 @@ from agentic_project_kit.gui_cockpit import (
     recommended_recovery_action_id,
 )
 from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperStatus
+from agentic_project_kit.gui_task_editor import CANONICAL_TRANSFER_INBOX_PATH
 from agentic_project_kit.gui_presenter import build_basic_no_window_presenter_result
 from agentic_project_kit.gui_tkinter_shell import (
     build_tkinter_shell_spec,
@@ -382,6 +383,8 @@ def test_task_send_uses_publish_and_success_status_mentions_gui_transfer_branch(
 
     assert '"--publish"' in source
     assert "Transfer order published to gui-transfer-tasks. Send g/go in chat." in source
+    assert "CANONICAL_TRANSFER_INBOX_PATH" in source
+    assert CANONICAL_TRANSFER_INBOX_PATH.as_posix() == ".agentic/transfer/inbox/current.yaml"
     assert '"state", "--json"' in source
     assert "transfer read-user-task" not in source
     assert ".agentic/transfer/outbox/last_result.txt" in source
