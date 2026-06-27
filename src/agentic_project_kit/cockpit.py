@@ -8,6 +8,8 @@ import subprocess
 import sys
 from typing import Callable
 
+from agentic_project_kit.access_levels import ACCESS_LEVEL_ORDER, DEFAULT_ACCESS_LEVEL, AccessLevel
+
 
 @dataclass(frozen=True)
 class CockpitAction:
@@ -18,6 +20,7 @@ class CockpitAction:
     safety: str
     description: str
     short_description: str
+    min_access_level: AccessLevel = DEFAULT_ACCESS_LEVEL
 
 
 @dataclass(frozen=True)
@@ -141,6 +144,7 @@ def cockpit_actions() -> list[CockpitAction]:
             READ_ONLY,
             "Audit cross-document state and governance drift.",
             "Audit cross-document drift",
+            min_access_level="maintainer",
         ),
         CockpitAction(
             "audit.doc-lifecycle",
@@ -150,6 +154,7 @@ def cockpit_actions() -> list[CockpitAction]:
             READ_ONLY,
             "Audit lifecycle metadata for governed planning documents.",
             "Audit document lifecycle metadata",
+            min_access_level="maintainer",
         ),
         CockpitAction(
             "audit.pr-hygiene",
@@ -159,6 +164,7 @@ def cockpit_actions() -> list[CockpitAction]:
             READ_ONLY,
             "Diagnose stale, duplicate, or empty pull-request and branch hygiene signals.",
             "Inspect pull-request hygiene",
+            min_access_level="maintainer",
         ),
         CockpitAction(
             "rules.communication-refresh",
@@ -168,6 +174,7 @@ def cockpit_actions() -> list[CockpitAction]:
             BOUNDED,
             "Generate the communication rule capsule and d2 pending state.",
             "Refresh communication rules (writes files)",
+            min_access_level="advanced",
         ),
         CockpitAction(
             "rules.handoff-refresh",
@@ -177,6 +184,7 @@ def cockpit_actions() -> list[CockpitAction]:
             BOUNDED,
             "Generate the repo-backed handoff rules refresh file for d3.",
             "Refresh handoff rules (writes files)",
+            min_access_level="advanced",
         ),
         CockpitAction(
             "handoff.successor-prompt",
@@ -186,6 +194,7 @@ def cockpit_actions() -> list[CockpitAction]:
             BOUNDED,
             "Render the copy-and-paste successor chat prompt through the guarded transfer command.",
             "Render the successor handoff prompt",
+            min_access_level="advanced",
         ),
         CockpitAction(
             "release.plan",
@@ -195,6 +204,7 @@ def cockpit_actions() -> list[CockpitAction]:
             READ_ONLY,
             "Print release preparation checklist.",
             "Show the release preparation checklist",
+            min_access_level="advanced",
         ),
         CockpitAction(
             "release.check",
@@ -204,6 +214,7 @@ def cockpit_actions() -> list[CockpitAction]:
             READ_ONLY,
             "Validate release state for a target version.",
             "Validate release readiness",
+            min_access_level="advanced",
         ),
         CockpitAction(
             "release.post-check",
@@ -213,6 +224,7 @@ def cockpit_actions() -> list[CockpitAction]:
             READ_ONLY,
             "Validate GitHub and Zenodo post-release state.",
             "Validate post-release state",
+            min_access_level="advanced",
         ),
         CockpitAction(
             "workflow.go",
@@ -241,6 +253,7 @@ def validate_cockpit_action_registry(actions: list[CockpitAction] | None = None)
     errors: list[str] = []
     seen: set[str] = set()
     allowed_safety = {READ_ONLY, BOUNDED, DESTRUCTIVE}
+    allowed_access = set(ACCESS_LEVEL_ORDER)
     for action in selected:
         if not action.action_id.strip():
             errors.append('empty action_id')
@@ -249,6 +262,8 @@ def validate_cockpit_action_registry(actions: list[CockpitAction] | None = None)
         seen.add(action.action_id)
         if action.safety not in allowed_safety:
             errors.append(f'invalid safety for {action.action_id}: {action.safety}')
+        if action.min_access_level not in allowed_access:
+            errors.append(f'invalid min_access_level for {action.action_id}: {action.min_access_level}')
         if not action.command:
             errors.append(f'empty command for {action.action_id}')
         if any(not part for part in action.command):
@@ -274,6 +289,7 @@ def cockpit_registry_contract_as_json_data(actions: list[CockpitAction] | None =
         'errors': errors,
         'allowed_action_ids': [action.action_id for action in selected],
         'allowed_safety_classes': [READ_ONLY, BOUNDED, DESTRUCTIVE],
+        'allowed_access_levels': list(ACCESS_LEVEL_ORDER),
     }
 
 def run_cockpit_action(
@@ -361,6 +377,7 @@ def action_inventory_as_json_data(actions: list[CockpitAction] | None = None) ->
                 "command": list(action.command),
                 "description": action.description,
                 "short_description": action.short_description,
+                "min_access_level": action.min_access_level,
             }
             for action in selected
         ],

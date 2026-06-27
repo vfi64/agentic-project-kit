@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from agentic_project_kit.access_levels import ACCESS_LEVEL_ORDER
 from agentic_project_kit.gui_viewmodel import CommunicationModeViewModel
 
 
@@ -64,6 +65,10 @@ def selected_communication_mode_option(
 ) -> str:
     selected = next((mode for mode in modes if mode.selected), modes[0])
     return communication_mode_option_label(selected)
+
+
+def access_level_option_values() -> tuple[str, ...]:
+    return tuple(ACCESS_LEVEL_ORDER)
 
 
 class TkTooltip:

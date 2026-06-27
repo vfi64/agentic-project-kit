@@ -4,7 +4,15 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
+from agentic_project_kit.access_level_policy import visible_actions
+from agentic_project_kit.access_levels import (
+    ACCESS_LEVEL_ORDER,
+    DEFAULT_ACCESS_LEVEL,
+    AccessLevel,
+    normalize_access_level,
+)
 from agentic_project_kit.action_registry import list_actions
+from agentic_project_kit.cockpit import CockpitAction, cockpit_actions
 from agentic_project_kit.gui_button_catalog import GuiButtonDefinition, basic_gui_buttons
 from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperStatus, build_gui_gatekeeper_status
 
@@ -68,6 +76,9 @@ class BasicCockpitViewModel:
     communication_context_fresh: bool
     communication_context_reason: str
     required_next_reply: str | None
+    access_level: str
+    access_level_options: tuple[str, ...]
+    access_level_explanation: str
     communication_modes: tuple[CommunicationModeViewModel, ...]
     buttons: tuple[BasicCockpitButtonViewModel, ...]
     last_result: str
@@ -166,6 +177,25 @@ def _communication_modes(selected_mode: str) -> tuple[CommunicationModeViewModel
             "Fallback only for terminal loss, Python startup issues, filesystem errors, network trouble before push, broken logs, or hard recovery.",
         ),
     )
+
+
+def access_level_explanation(access_level: str) -> str:
+    selected = normalize_access_level(access_level)
+    if selected == "basic":
+        return "Basic shows status, routine work-order actions, and safe dirty-state recovery."
+    if selected == "advanced":
+        return "Advanced adds release, rules, and handoff workflow actions."
+    return "Maintainer adds deep governance and drift audits."
+
+
+def cockpit_actions_for_access_level(
+    actions: Iterable[CockpitAction] | None = None,
+    *,
+    access_level: str = DEFAULT_ACCESS_LEVEL,
+) -> tuple[CockpitAction, ...]:
+    selected_level = normalize_access_level(access_level)
+    selected_actions = list(actions) if actions is not None else cockpit_actions()
+    return tuple(visible_actions(selected_actions, selected_level))
 
 
 def _button_is_mutating(button: GuiButtonDefinition) -> bool:
@@ -268,12 +298,14 @@ def build_basic_cockpit_view_model(
     *,
     gatekeeper_status: GuiGatekeeperStatus | None = None,
     communication_mode: str = "file_transfer",
+    access_level: str = DEFAULT_ACCESS_LEVEL,
     buttons: Iterable[GuiButtonDefinition] | None = None,
 ) -> BasicCockpitViewModel:
     status = gatekeeper_status or build_gui_gatekeeper_status(project_root)
     traffic_state, color, reason, next_action = _traffic_light_from_gatekeeper_status(status)
     modes = _communication_modes(communication_mode)
     selected_mode = next((mode.mode_id for mode in modes if mode.selected), "file_transfer")
+    selected_access_level: AccessLevel = normalize_access_level(access_level)
     mutation_allowed = traffic_state == "READY" and status.ready_for_mutating_actions
     evidence = (
         f"branch={status.branch}; workflow_state={status.workflow_state}; "
@@ -292,6 +324,9 @@ def build_basic_cockpit_view_model(
         communication_context_fresh=status.communication_context_fresh,
         communication_context_reason=status.communication_context_reason,
         required_next_reply=status.required_next_reply,
+        access_level=selected_access_level,
+        access_level_options=tuple(ACCESS_LEVEL_ORDER),
+        access_level_explanation=access_level_explanation(selected_access_level),
         communication_modes=modes,
         buttons=_basic_button_view_models(status, traffic_state=traffic_state, buttons=buttons),
         last_result="No action has run in this GUI session.",

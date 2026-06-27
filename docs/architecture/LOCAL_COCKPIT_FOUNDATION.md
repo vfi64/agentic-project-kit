@@ -27,6 +27,10 @@ Actions are classified by safety:
 - `bounded`: constrained workflow actions with existing safety checks.
 - `destructive`: future actions that mutate branches, tags, releases, or remote state and must require explicit user intent.
 
+## Access-level model
+
+Cockpit Access level is a visibility convenience for the Tkinter cockpit, not an authorization system. `basic` shows status, routine workflow, and safe dirty-state recovery actions. `advanced` adds release, rules, and handoff workflow actions. `maintainer` adds deep governance and drift audits. Access level must not override safety classification: bounded and destructive actions remain blocked unless the existing action layer and gatekeeper allow them.
+
 ## Non-goals for v0.3.14
 
 - No large Tkinter implementation.
