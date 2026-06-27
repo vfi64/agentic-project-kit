@@ -22,7 +22,11 @@ from agentic_project_kit.transfer_safety_context import OUTBOX_LAST_RESULT
 CURRENT_USER_TASK_PATH = DEFAULT_INBOX
 GUI_TRANSFER_TASK_REF = "gui-transfer-tasks"
 CANONICAL_TRANSFER_INBOX_PATH = DEFAULT_INBOX
+CANONICAL_TRANSFER_PAYLOAD_PATH = Path(".agentic/transfer/inbox/next_command.py.txt")
 CANONICAL_TRANSFER_OUTBOX_PATH = OUTBOX_LAST_RESULT
+CANONICAL_REMOTE_TRANSFER_REPORT_PATH = Path(
+    "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
+)
 LEGACY_GUI_TRANSFER_TASK_PATH = Path("docs/reports/transfer_tasks/current_user_task.json")
 REMOTE_STATUS_COMMAND_ARGS = ("transfer", "patch-cycle-status", "--json")
 FILE_TRANSFER_CONTINUE_COMMAND_ARGS = ("transfer", "continue", "--json")
@@ -188,13 +192,28 @@ def communication_reply_contract(mode: str) -> dict[str, object]:
             "label": "File Transfer: Transfer files",
             "standard_local_command": list(TRANSFER_CONTINUE_COMMAND),
             "llm_response": (
-                "Publish a repo-backed transfer order/script through the existing agentic-kit "
-                "transfer protocol. Do not paste a terminal block as the normal answer."
+                "Publish a fresh active transfer order through the existing agentic-kit "
+                "transfer protocol, then tell the local user to run the standard command. "
+                "Do not paste a terminal block as the normal answer."
             ),
             "local_followup": (
                 "The local user/GUI executes the reply through: "
                 + " ".join(TRANSFER_CONTINUE_COMMAND)
             ),
+            "response_order_contract": {
+                "submitted_gui_task_status": "submitted",
+                "active_order_ref": GUI_TRANSFER_TASK_REF,
+                "active_order_path": CANONICAL_TRANSFER_INBOX_PATH.as_posix(),
+                "active_order_required_status": "active",
+                "active_order_required_branch": GUI_TRANSFER_TASK_REF,
+                "python_payload_path": CANONICAL_TRANSFER_PAYLOAD_PATH.as_posix(),
+                "local_user_command": list(TRANSFER_CONTINUE_COMMAND),
+                "forbidden": [
+                    "using_submitted_gui_task_as_executable_transfer_order",
+                    "inventing_transfer_files_or_refs",
+                    "asking_user_to_run_python_payload_directly",
+                ],
+            },
         },
         "c": {
             "mode": "copy_paste",
@@ -217,11 +236,20 @@ def communication_reply_contract(mode: str) -> dict[str, object]:
         "selected_response": mode_map[code]["llm_response"],
         "local_execution_command": list(selected_command),
         "rules": {
-            "g_go_always_reads_remote_task_first": True,
+            "g_go_reads_repo_backed_state_first": True,
             "forbidden": "answering_g_go_from_chat_memory",
             "compare_task_id_and_body_sha256": True,
             "discard_previous_task_context_when_identity_changes": True,
             "do_not_invent_result_files_branches_refs_or_protocols": True,
+            "latest_remote_transfer_report_path": CANONICAL_REMOTE_TRANSFER_REPORT_PATH.as_posix(),
+            "gui_task_carrier_ref": GUI_TRANSFER_TASK_REF,
+            "gui_task_carrier_path": CANONICAL_TRANSFER_INBOX_PATH.as_posix(),
+            "gui_task_carrier_status": "submitted",
+            "active_transfer_order_status": "active",
+            "g_go_priority": [
+                "read_latest_remote_transfer_report_or_outbox_first",
+                "if_no_fresh_result_read_gui_task_carrier",
+            ],
         },
     }
 
@@ -259,25 +287,37 @@ def _initial_prompt_file_transfer_block(
     return f"""GUI task-transfer dialog:
 
 When the user writes "g" or "go":
-- Read {path} from the remote ref `{task_ref}`.
-  Do not read this transfer order from `main` unless the send result explicitly
-  says it was published to `main`.
-- If the ref or file does not exist (HTTP 404 or missing): reply exactly
+- Never answer a bare g/go from chat memory or from a previous user question.
+- First inspect the latest repo-backed transfer result, normally
+  `{CANONICAL_REMOTE_TRANSFER_REPORT_PATH.as_posix()}`. If that report is fresh
+  and belongs to the last local `agentic-kit transfer continue --json` run,
+  continue from the report/outbox evidence.
+- If no fresh transfer result exists, read the GUI task carrier `{path}` from
+  the remote ref `{task_ref}`.
+  Do not read this GUI task carrier from `main` unless the send result
+  explicitly says it was published to `main`.
+- If neither a fresh transfer result nor the GUI task carrier exists
+  (HTTP 404 or missing): reply exactly
   TASK_NOT_FOUND and do not mutate anything. The user must click Send
   in the GUI first.
-- If the file exists: treat it as the current agentic-kit transfer order.
-  Never answer a bare g/go from chat memory or from a previous user question.
-  Read the transfer file first every time.
-  Extract task_id and user_task.body_sha256 from the transfer file.
+- If the GUI task carrier exists: treat it as a submitted user task for the LLM,
+  not as an executable local transfer order. Its status is `submitted`.
+  Read the task carrier first every time before planning from it.
+  Extract task_id and user_task.body_sha256 from the task carrier.
   Compare them to the last task_id/body_sha256 you handled in this chat.
   If they differ, discard prior task context and handle the newly read task.
-  If they match, still use the freshly read transfer file as the source of truth.
+  If they match, still use the freshly read task carrier as the source of truth.
   The user task is in `user_task.body`.
   The communication mode is in `reply_contract.selected_code`:
     a = remote GitHub/PR/CI work; answer with a compact completion status.
         The local standard command is `{" ".join(REMOTE_STATUS_COMMAND)}`.
-    b = transfer files; publish a repo-backed transfer order/script and tell
-        the user to run `{" ".join(TRANSFER_CONTINUE_COMMAND)}`.
+    b = transfer files; publish a fresh active transfer order to remote ref
+        `{task_ref}` at `{path}` and tell the user to run
+        `{" ".join(TRANSFER_CONTINUE_COMMAND)}`. The active reply order must
+        have `status: active` and `branch: {task_ref}`. If a Python payload is
+        needed, use `{CANONICAL_TRANSFER_PAYLOAD_PATH.as_posix()}` as the payload
+        lane and reference it from the active transfer order; do not ask the user
+        to run the payload directly.
     c = copy-and-paste fallback; answer with one complete terminal block.
   Work according to repo rules, gates, protected-file policy, and
   existing agentic-kit wrappers.
@@ -327,7 +367,7 @@ RULE_REFRESH_ACK_BLOCKED and do not mutate anything.
 def _initial_prompt_stop_rules_block() -> str:
     return """Stop and report without mutating when:
 - Bootstrap not accepted or validation_report.json is not PASS. Reply BOOTSTRAP_BLOCKED.
-- g/go received but the task ref or canonical transfer inbox file is missing. Reply TASK_NOT_FOUND.
+- g/go received but neither a fresh transfer result nor the GUI task carrier is available. Reply TASK_NOT_FOUND.
 - d2 received but no pending state exists. Reply RULE_REFRESH_NOT_PENDING.
 - d2 received but blob_sha does not match. Reply RULE_REFRESH_ACK_BLOCKED.
 - Communication rule refresh is pending and no valid ACK exists.
@@ -433,10 +473,36 @@ def submit_user_task(
             "body_sha256": body_sha,
         },
         "g_go_handling": {
-            "always_read_remote_task_first": True,
+            "read_repo_backed_state_first": True,
+            "latest_remote_transfer_report_path": CANONICAL_REMOTE_TRANSFER_REPORT_PATH.as_posix(),
+            "read_order": [
+                "latest_remote_transfer_report_or_outbox_first",
+                "gui_task_carrier_if_no_fresh_result_exists",
+            ],
             "forbidden": "answering_g_go_from_chat_memory",
             "compare_task_id_and_body_sha256": True,
             "discard_previous_task_context_when_identity_changes": True,
+        },
+        "task_carrier_contract": {
+            "role": "gui_user_task_for_llm",
+            "status": "submitted",
+            "not_executable_by_transfer_continue": True,
+            "authoritative_ref": GUI_TRANSFER_TASK_REF,
+            "authoritative_path": relative_path,
+            "same_file_active_reply_contract": {
+                "submitted_gui_task_status": "submitted",
+                "active_order_ref": GUI_TRANSFER_TASK_REF,
+                "active_order_path": relative_path,
+                "active_order_required_status": "active",
+                "active_order_required_branch": GUI_TRANSFER_TASK_REF,
+                "python_payload_path": CANONICAL_TRANSFER_PAYLOAD_PATH.as_posix(),
+                "local_user_command": list(TRANSFER_CONTINUE_COMMAND),
+                "forbidden": [
+                    "using_submitted_gui_task_as_executable_transfer_order",
+                    "inventing_transfer_files_or_refs",
+                    "asking_user_to_run_python_payload_directly",
+                ],
+            },
         },
         "local_execution": {
             "standard_command": list(local_execution_command),
@@ -459,10 +525,10 @@ def submit_user_task(
         "next_reply": "g",
         "next_action": (
             "Send g/go to the LLM; assistant must read "
-            f"{relative_path} from remote ref {GUI_TRANSFER_TASK_REF}."
+            f"the GUI task carrier {relative_path} from remote ref {GUI_TRANSFER_TASK_REF}."
             if publish
             else (
-                "Transfer order written locally only. Publish through the guarded "
+                "GUI task carrier written locally only. Publish through the guarded "
                 "agentic-kit transfer path before sending g/go to the LLM."
             )
         ),
@@ -494,13 +560,13 @@ def submit_user_task(
     )
     next_action = (
         "Send g/go to the LLM; assistant must read "
-        f"{relative_path} from remote ref {GUI_TRANSFER_TASK_REF}."
+        f"the GUI task carrier {relative_path} from remote ref {GUI_TRANSFER_TASK_REF}."
         if remote_readable
         else (
-            "Transfer order written locally only. Publish through the guarded "
+            "GUI task carrier written locally only. Publish through the guarded "
             "agentic-kit transfer path before sending g/go to the LLM."
             if not publish
-            else "Inspect transfer order publish failure before sending g/go."
+            else "Inspect GUI task carrier publish failure before sending g/go."
         )
     )
     return SubmittedUserTask(

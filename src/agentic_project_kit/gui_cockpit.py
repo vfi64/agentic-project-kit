@@ -725,7 +725,7 @@ class CockpitGui:
         from tkinter import ttk
 
         self.task_editor_state = TaskEditorState.IDLE
-        self.task_status_var = tk.StringVar(value="Write a transfer order, then send it through the guarded wrapper.")
+        self.task_status_var = tk.StringVar(value="Write a GUI task, then send it through the guarded wrapper.")
         if not task_editor_visible_for_mode(self.basic_view.communication_mode):
             self.task_text = None
             self.initial_prompt_button = None
@@ -1071,7 +1071,7 @@ class CockpitGui:
             self.task_send_button.configure(state="disabled")
             self.task_read_button.configure(state="normal")
             self.task_status_var.set(
-                f"Transfer order published to gui-transfer-tasks as mode {mode}. Send g/go in chat."
+                f"Task carrier published to gui-transfer-tasks as mode {mode}. Send g/go in chat."
             )
             return
         if self.task_editor_state == TaskEditorState.BLOCKED:
@@ -1080,7 +1080,7 @@ class CockpitGui:
             if self.basic_view.required_next_reply == "d2":
                 self.task_status_var.set("Blocked: send d2 and complete communication-rule ACK before mutation.")
             elif not self.current_task_body():
-                self.task_status_var.set("Blocked: write a transfer order before sending.")
+                self.task_status_var.set("Blocked: write a GUI task before sending.")
             else:
                 self.task_status_var.set("Publish failed or is blocked. Inspect the Send output before retrying.")
             return
@@ -1091,11 +1091,11 @@ class CockpitGui:
         if self.basic_view.required_next_reply == "d2":
             self.task_status_var.set("Blocked: send d2 and complete communication-rule ACK before mutation.")
         elif not self.current_task_body():
-            self.task_status_var.set("Write a transfer order before sending.")
+            self.task_status_var.set("Write a GUI task before sending.")
         elif not can_send:
             self.task_status_var.set("Blocked: gatekeeper must be READY and communication context fresh.")
         else:
-            self.task_status_var.set("Ready to send the transfer order.")
+            self.task_status_var.set("Ready to publish the GUI task carrier.")
 
     def _agentic_command(self, *parts: str) -> subprocess.CompletedProcess[str]:
         executable = self.project_root / ".venv" / "bin" / "agentic-kit"

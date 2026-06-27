@@ -432,7 +432,7 @@ def test_task_send_uses_publish_and_success_status_mentions_gui_transfer_branch(
     source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
 
     assert '"--publish"' in source
-    assert "Transfer order published to gui-transfer-tasks as mode" in source
+    assert "Task carrier published to gui-transfer-tasks as mode" in source
     assert "CANONICAL_TRANSFER_INBOX_PATH" in source
     assert CANONICAL_TRANSFER_INBOX_PATH.as_posix() == ".agentic/transfer/inbox/current.yaml"
     assert '"--communication-mode"' in source
