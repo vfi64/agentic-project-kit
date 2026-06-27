@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d7417582a3a7c5d996744eea121a48f066e2c16d
-  short: d7417582
-  subject: Harden GUI transfer files and PR remote head checks (#1590)
+  full: b025a0de1e50866d67a18f1853f5df5a215b9dc5
+  short: b025a0de
+  subject: Add cockpit access-level visibility policy (#1592)
 last_substantive_work_state:
-  full: d7417582a3a7c5d996744eea121a48f066e2c16d
-  short: d7417582
-  subject: Harden GUI transfer files and PR remote head checks (#1590)
+  full: b025a0de1e50866d67a18f1853f5df5a215b9dc5
+  short: b025a0de
+  subject: Add cockpit access-level visibility policy (#1592)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
