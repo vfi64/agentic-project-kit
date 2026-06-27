@@ -248,8 +248,10 @@ def test_basic_cockpit_summary_is_stable_for_entrypoint_output() -> None:
 
 
 def test_gui_theme_output_is_readable_without_dominating_layout() -> None:
-    assert THEME.output_height == 9
-    assert THEME.output_font == ("TkFixedFont", 13)
+    assert THEME.output_height == 20
+    assert THEME.output_font == ("TkFixedFont", 10)
+    assert THEME.body_font == ("TkDefaultFont", 10)
+    assert THEME.frame_padding == 16
 
 
 def test_gui_theme_action_rows_visible() -> None:
@@ -359,6 +361,22 @@ def test_action_cards_have_scrollbar_and_four_visible_rows() -> None:
     assert "yscrollcommand" in source
     assert "action_card_container" in source
     assert "ttk.Treeview" not in source
+    assert "THEME.action_card_height" in source
+
+
+def test_cockpit_output_has_copy_button() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+
+    assert "text=\"Copy\"" in source
+    assert "def copy_output" in source
+    assert "clipboard_append" in source
+
+
+def test_d2_pending_status_detail_has_tooltip() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+
+    assert "d2 means a communication-rule refresh is pending" in source
+    assert "RULE_REFRESH_ACK" in source
 
 
 def test_basic_cockpit_header_text() -> None:

@@ -48,6 +48,7 @@ def test_communication_refresh_publish_writes_d2_pending_state(tmp_path) -> None
     assert pending["required_next_reply"] == "d2"
     assert pending["blocks_normal_go"] is True
     assert pending["remote_path"] == "docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md"
+    assert pending["remote_ref"] == "main"
 
 
 def test_require_current_communication_context_blocks_pending_without_ack(tmp_path) -> None:
@@ -96,6 +97,7 @@ def test_require_current_communication_context_rechecks_published_pending_state(
     assert result.result_status == "BLOCK"
     assert result.reason == "communication_rule_refresh_pending"
     assert result.required_next_reply == "d2"
+    assert result.remote_ref == "main"
     assert "ACK" in result.next_action
 
 
@@ -110,7 +112,7 @@ def test_acknowledge_communication_refresh_accepts_valid_ack(tmp_path) -> None:
         "kind": "communication_rule_refresh_ack",
         "result_status": "PASS",
         "source": pending["remote_path"],
-        "remote": "main",
+        "remote": pending["remote_ref"],
         "blob_sha": pending["expected_blob_sha"],
         "generated_at": pending["generated_at"],
         "loaded_sections": list(REQUIRED_LOADED_SECTIONS),
@@ -182,6 +184,36 @@ def test_acknowledge_communication_refresh_blocks_wrong_source(tmp_path) -> None
 
     assert result.result_status == "BLOCK"
     assert "source_mismatch" in result.reason
+
+
+def test_acknowledge_communication_refresh_blocks_wrong_remote_ref(tmp_path) -> None:
+    write_sources(tmp_path)
+    CliRunner().invoke(
+        app,
+        ["rules", "communication-refresh", "--root", str(tmp_path), "--publish", "--json"],
+    )
+    pending = json.loads((tmp_path / PENDING_STATE_PATH).read_text(encoding="utf-8"))
+    ack_path = tmp_path / "ack.json"
+    ack_path.write_text(
+        json.dumps(
+            {
+                "kind": "communication_rule_refresh_ack",
+                "result_status": "PASS",
+                "source": pending["remote_path"],
+                "remote": "gui-transfer-tasks",
+                "blob_sha": pending["expected_blob_sha"],
+                "generated_at": pending["generated_at"],
+                "loaded_sections": list(REQUIRED_LOADED_SECTIONS),
+                "rules_loaded": True,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = acknowledge_communication_refresh(tmp_path, ack_path)
+
+    assert result.result_status == "BLOCK"
+    assert "remote_ref_mismatch" in result.reason
 
 
 def test_rules_require_current_communication_context_cli_blocks_pending(tmp_path) -> None:

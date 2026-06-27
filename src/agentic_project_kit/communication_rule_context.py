@@ -13,6 +13,7 @@ from agentic_project_kit.rule_refresh import COMMUNICATION_RULES_OUTPUT, RuleRef
 
 PENDING_STATE_PATH = Path(".agentic/rule_ack/communication_refresh_pending.json")
 ACK_STATE_PATH = Path(".agentic/rule_ack/communication_refresh_ack.json")
+COMMUNICATION_RULES_REMOTE_REF = "main"
 
 REQUIRED_LOADED_SECTIONS = (
     "NO_COPY_TERMINAL_EVIDENCE",
@@ -37,6 +38,7 @@ class CommunicationRuleCapsule:
     remote_readable: bool
     pending_state_path: str | None = None
     next_action: str = ""
+    remote_ref: str = COMMUNICATION_RULES_REMOTE_REF
 
     def as_json_data(self) -> dict[str, object]:
         return {
@@ -54,6 +56,7 @@ class CommunicationRuleCapsule:
             "remote_readable": self.remote_readable,
             "pending_state_path": self.pending_state_path,
             "next_action": self.next_action,
+            "remote_ref": self.remote_ref,
         }
 
 
@@ -64,6 +67,7 @@ class CommunicationContextGateResult:
     communication_context_fresh: bool
     required_next_reply: str | None
     remote_path: str
+    remote_ref: str
     expected_blob_sha: str | None
     generated_at: str | None
     ack_source: str | None = None
@@ -79,6 +83,7 @@ class CommunicationContextGateResult:
             "communication_context_fresh": self.communication_context_fresh,
             "required_next_reply": self.required_next_reply,
             "remote_path": self.remote_path,
+            "remote_ref": self.remote_ref,
             "expected_blob_sha": self.expected_blob_sha,
             "generated_at": self.generated_at,
             "ack_source": self.ack_source,
@@ -186,6 +191,7 @@ def pending_state_from_capsule(capsule: CommunicationRuleCapsule) -> dict[str, o
         "required_next_reply": "d2",
         "required_action": "read_remote_communication_rules",
         "remote_path": capsule.remote_path,
+        "remote_ref": capsule.remote_ref,
         "local_path": capsule.local_path,
         "expected_blob_sha": capsule.blob_sha,
         "generated_at": capsule.generated_at,
@@ -210,6 +216,7 @@ def require_current_communication_context(
             communication_context_fresh=True,
             required_next_reply=None,
             remote_path=str(ack.get("source", COMMUNICATION_RULES_OUTPUT.as_posix())) if ack else COMMUNICATION_RULES_OUTPUT.as_posix(),
+            remote_ref=str(ack.get("remote", COMMUNICATION_RULES_REMOTE_REF)) if ack else COMMUNICATION_RULES_REMOTE_REF,
             expected_blob_sha=None,
             generated_at=str(ack.get("generated_at")) if ack else None,
             ack_source=str(ack.get("source")) if ack else None,
@@ -218,11 +225,13 @@ def require_current_communication_context(
         )
 
     remote_path = str(pending.get("remote_path", COMMUNICATION_RULES_OUTPUT.as_posix()))
+    remote_ref = str(pending.get("remote_ref", COMMUNICATION_RULES_REMOTE_REF))
     expected_blob_sha = str(pending.get("expected_blob_sha", ""))
     generated_at = str(pending.get("generated_at", ""))
     remote_readable = bool(pending.get("remote_readable", False)) or _pending_capsule_is_remote_readable(
         root,
         remote_path=remote_path,
+        remote_ref=remote_ref,
         expected_blob_sha=expected_blob_sha,
     )
     if not remote_readable:
@@ -232,6 +241,7 @@ def require_current_communication_context(
             communication_context_fresh=False,
             required_next_reply="d2",
             remote_path=remote_path,
+            remote_ref=remote_ref,
             expected_blob_sha=expected_blob_sha,
             generated_at=generated_at,
             next_action="Commit and publish the rule capsule before sending d2.",
@@ -242,6 +252,7 @@ def require_current_communication_context(
         communication_context_fresh=False,
         required_next_reply="d2",
         remote_path=remote_path,
+        remote_ref=remote_ref,
         expected_blob_sha=expected_blob_sha,
         generated_at=generated_at,
         next_action="Assistant must read the remote rule capsule and provide RULE_REFRESH_ACK before mutation.",
@@ -252,13 +263,14 @@ def _pending_capsule_is_remote_readable(
     root: Path,
     *,
     remote_path: str,
+    remote_ref: str,
     expected_blob_sha: str,
 ) -> bool:
     if not remote_path or not expected_blob_sha:
         return False
     if _git_output(root, "status", "--porcelain", "--", remote_path):
         return False
-    candidates = ["origin/main"]
+    candidates = [_remote_tracking_ref(remote_ref)]
     upstream = _git_output(root, "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}")
     if upstream:
         candidates.insert(0, upstream)
@@ -266,6 +278,13 @@ def _pending_capsule_is_remote_readable(
         if _git_output(root, "rev-parse", f"{ref}:{remote_path}") == expected_blob_sha:
             return True
     return False
+
+
+def _remote_tracking_ref(ref: str) -> str:
+    normalized = ref.strip() or COMMUNICATION_RULES_REMOTE_REF
+    if normalized.startswith(("origin/", "refs/")):
+        return normalized
+    return f"origin/{normalized}"
 
 
 def acknowledge_communication_refresh(
@@ -293,7 +312,7 @@ def acknowledge_communication_refresh(
         "kind": "communication_rule_refresh_ack",
         "result_status": "PASS",
         "source": ack["source"],
-        "remote": ack.get("remote", "main"),
+        "remote": ack.get("remote", pending.get("remote_ref", COMMUNICATION_RULES_REMOTE_REF)),
         "blob_sha": ack["blob_sha"],
         "generated_at": ack["generated_at"],
         "loaded_sections": list(ack["loaded_sections"]),
@@ -345,6 +364,9 @@ def _ack_problems(ack: dict[str, Any], pending: dict[str, object]) -> list[str]:
     problems: list[str] = []
     if ack.get("source") != pending.get("remote_path"):
         problems.append("source_mismatch")
+    expected_remote = str(pending.get("remote_ref", COMMUNICATION_RULES_REMOTE_REF))
+    if str(ack.get("remote", expected_remote)) != expected_remote:
+        problems.append("remote_ref_mismatch")
     if ack.get("blob_sha") != pending.get("expected_blob_sha"):
         problems.append("blob_sha_mismatch")
     if ack.get("generated_at") != pending.get("generated_at"):
