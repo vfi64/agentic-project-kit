@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b025a0de1e50866d67a18f1853f5df5a215b9dc5
-  short: b025a0de
-  subject: Add cockpit access-level visibility policy (#1592)
+  full: bb33332f20d764bbe320b74868c1a8ad676546a8
+  short: bb33332f
+  subject: Fix GUI file-transfer carrier contract (#1594)
 last_substantive_work_state:
-  full: b025a0de1e50866d67a18f1853f5df5a215b9dc5
-  short: b025a0de
-  subject: Add cockpit access-level visibility policy (#1592)
+  full: bb33332f20d764bbe320b74868c1a8ad676546a8
+  short: bb33332f
+  subject: Fix GUI file-transfer carrier contract (#1594)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
