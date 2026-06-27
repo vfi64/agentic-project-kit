@@ -598,6 +598,7 @@ rules:
   - path: README.md
     terms:
     - Local Cockpit Foundation
+    - Access level
     - agentic-kit cockpit status
     - agentic-kit cockpit actions
     - agentic-kit cockpit run
@@ -611,6 +612,8 @@ rules:
   - path: docs/architecture/LOCAL_COCKPIT_FOUNDATION.md
     terms:
     - Local Cockpit Foundation
+    - Access-level model
+    - Access level is a visibility convenience
     - shared action inventory
     - central cockpit status command
     - CLI adapter
@@ -620,6 +623,8 @@ rules:
   - path: docs/TEST_GATES.md
     terms:
     - Local Cockpit Gate
+    - min_access_level
+    - Access level is a visibility convenience
     - agentic-kit cockpit status
     - agentic-kit cockpit actions
     - agentic-kit cockpit run

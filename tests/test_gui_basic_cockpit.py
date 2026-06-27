@@ -121,6 +121,14 @@ def test_basic_cockpit_modes_keep_file_transfer_as_default_and_copy_paste_as_fal
     assert modes["copy_paste"].role == "Recovery/Fallback"
 
 
+def test_basic_cockpit_view_model_carries_access_level() -> None:
+    view_model = build_basic_cockpit_view_model(gatekeeper_status=_status(), access_level="advanced")
+
+    assert view_model.access_level == "advanced"
+    assert view_model.access_level_options == ("basic", "advanced", "maintainer")
+    assert "release" in view_model.access_level_explanation
+
+
 def test_basic_cockpit_buttons_are_derived_from_registered_basic_catalog() -> None:
     view_model = build_basic_cockpit_view_model(gatekeeper_status=_status())
 
@@ -285,6 +293,44 @@ def test_action_tree_orders_read_only_first() -> None:
     )
 
 
+def test_view_model_basic_excludes_maintainer_actions() -> None:
+    actions = build_gui_action_views(access_level="basic")
+    action_ids = {action.action_id for action in actions}
+
+    assert "git.status" in action_ids
+    assert "workflow.state" in action_ids
+    assert "transfer.restore-known-volatile" in action_ids
+    assert "release.plan" not in action_ids
+    assert "audit.pr-hygiene" not in action_ids
+
+
+def test_view_model_advanced_shows_release_hides_audit() -> None:
+    actions = build_gui_action_views(access_level="advanced")
+    action_ids = {action.action_id for action in actions}
+
+    assert "release.plan" in action_ids
+    assert "rules.communication-refresh" in action_ids
+    assert "audit.doc-mesh" not in action_ids
+
+
+def test_view_model_maintainer_includes_all_actions() -> None:
+    actions = build_gui_action_views(access_level="maintainer")
+
+    assert len(actions) == 18
+    assert {action.action_id for action in actions if action.min_access_level == "maintainer"} == {
+        "audit.doc-mesh",
+        "audit.doc-lifecycle",
+        "audit.pr-hygiene",
+    }
+
+
+def test_access_level_does_not_override_safety_gating() -> None:
+    actions = {action.action_id: action for action in build_gui_action_views(access_level="maintainer")}
+
+    assert actions["transfer.restore-known-volatile"].safety == "bounded"
+    assert actions["transfer.restore-known-volatile"].can_run_by_default is False
+
+
 def test_action_tree_has_safety_color_tags() -> None:
     assert action_tree_tag_colors() == {
         "read_only": THEME.color_read_only,
@@ -313,6 +359,22 @@ def test_action_tree_has_scrollbar_and_four_visible_rows() -> None:
 
 def test_basic_cockpit_header_text() -> None:
     assert HEADER_TEXT == "Agentic-Project-Kit — Basic Cockpit"
+
+
+def test_cockpit_has_access_level_selector() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+
+    assert "Access level" in source
+    assert "access_level_option_values()" in source
+    assert "update_access_level" in source
+
+
+def test_changing_access_level_rebuilds_action_table() -> None:
+    source = inspect.getsource(CockpitGui.update_access_level)
+
+    assert "build_basic_cockpit_view_model" in source
+    assert "build_gui_action_views" in source
+    assert "populate_action_tree" in source
 
 
 def test_task_send_uses_publish_and_success_status_mentions_gui_transfer_branch() -> None:
@@ -383,7 +445,7 @@ def test_basic_button_execution_revalidates_gatekeeper_before_dispatch() -> None
 def test_inspect_selected_shows_structured_explanation() -> None:
     actions = {
         action.action_id: action
-        for action in build_gui_action_views()
+        for action in build_gui_action_views(access_level="advanced")
     }
 
     text = format_action_details(actions["rules.communication-refresh"])

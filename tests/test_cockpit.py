@@ -3,6 +3,7 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
+from agentic_project_kit.access_levels import ACCESS_LEVEL_ORDER
 from agentic_project_kit.cli import app
 from agentic_project_kit.cockpit import (
     BOUNDED,
@@ -12,6 +13,7 @@ from agentic_project_kit.cockpit import (
     action_by_id,
     action_inventory_as_json_data,
     cockpit_actions,
+    cockpit_registry_contract_as_json_data,
     render_action_selection,
     run_cockpit_action,
     validate_cockpit_action_registry,
@@ -263,6 +265,7 @@ def test_cockpit_action_inventory_json_data_has_stable_schema() -> None:
                 "command": ["demo", "run"],
                 "description": "Demo action.",
                 "short_description": "Inspect demo state",
+                "min_access_level": "basic",
             }
         ],
     }
@@ -280,8 +283,11 @@ def test_cockpit_actions_json_cli_outputs_machine_readable_inventory() -> None:
     assert git_status["safety"] == READ_ONLY
     assert git_status["command"] == ["git", "status", "--short"]
     assert git_status["short_description"] == "Show local uncommitted changes"
+    assert git_status["min_access_level"] == "basic"
     workflow_go = next(action for action in data["actions"] if action["action_id"] == "workflow.go")
     assert workflow_go["safety"] == BOUNDED
+    restore = next(action for action in data["actions"] if action["action_id"] == "transfer.restore-known-volatile")
+    assert restore["min_access_level"] == "basic"
 
 
 def test_every_cockpit_action_has_short_description() -> None:
@@ -294,6 +300,39 @@ def test_cockpit_actions_json_includes_short_description() -> None:
     for action in data["actions"]:
         assert isinstance(action["short_description"], str)
         assert action["short_description"].strip()
+
+
+def test_every_cockpit_action_has_valid_min_access_level() -> None:
+    for action in cockpit_actions():
+        assert action.min_access_level in ACCESS_LEVEL_ORDER, action.action_id
+
+
+def test_basic_actions_include_git_status_workflow_state_and_restore_volatile() -> None:
+    by_id = {action.action_id: action for action in cockpit_actions()}
+
+    assert by_id["git.status"].min_access_level == "basic"
+    assert by_id["workflow.state"].min_access_level == "basic"
+    assert by_id["transfer.restore-known-volatile"].min_access_level == "basic"
+
+
+def test_release_and_rules_actions_require_advanced_access() -> None:
+    by_id = {action.action_id: action for action in cockpit_actions()}
+
+    assert by_id["release.plan"].min_access_level == "advanced"
+    assert by_id["rules.communication-refresh"].min_access_level == "advanced"
+    assert by_id["handoff.successor-prompt"].min_access_level == "advanced"
+
+
+def test_audit_actions_require_maintainer_access() -> None:
+    for action in cockpit_actions():
+        if action.category == "audit":
+            assert action.min_access_level == "maintainer", action.action_id
+
+
+def test_registry_json_includes_access_level_contract() -> None:
+    data = cockpit_registry_contract_as_json_data()
+
+    assert data["allowed_access_levels"] == list(ACCESS_LEVEL_ORDER)
 
 
 def test_validate_registry_rejects_empty_short_description() -> None:
@@ -310,6 +349,23 @@ def test_validate_registry_rejects_empty_short_description() -> None:
     errors = validate_cockpit_action_registry([action])
 
     assert "empty short_description for bad.action" in errors
+
+
+def test_validate_registry_rejects_invalid_min_access_level() -> None:
+    action = CockpitAction(
+        "bad.action",
+        "Bad",
+        "bad",
+        ("bad", "run"),
+        READ_ONLY,
+        "Bad action.",
+        "Inspect bad state",
+    )
+    broken = action.__class__(**{**action.__dict__, "min_access_level": "expert"})
+
+    errors = validate_cockpit_action_registry([broken])
+
+    assert "invalid min_access_level for bad.action: expert" in errors
 
 
 def test_cockpit_actions_json_cli_does_not_execute_actions() -> None:

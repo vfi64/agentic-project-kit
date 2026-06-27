@@ -5,13 +5,13 @@ from pathlib import Path
 import subprocess
 from typing import Any
 
+from agentic_project_kit.access_levels import DEFAULT_ACCESS_LEVEL, normalize_access_level
 from agentic_project_kit.cockpit import (
     BOUNDED,
     DESTRUCTIVE,
     READ_ONLY,
     CockpitAction,
     CockpitActionResult,
-    cockpit_actions,
     run_cockpit_action,
 )
 from agentic_project_kit.gui_task_editor import (
@@ -24,6 +24,7 @@ from agentic_project_kit.gui_task_editor import (
     transfer_state_has_canonical_outbox_result,
 )
 from agentic_project_kit.gui_tk_widgets import (
+    access_level_option_values,
     attach_tooltip,
     communication_mode_explanation,
     communication_mode_option_values,
@@ -33,6 +34,7 @@ from agentic_project_kit.gui_tk_widgets import (
 )
 from agentic_project_kit.gui_tkinter_shell import run_basic_cockpit_button
 from agentic_project_kit.gui_viewmodel import BasicCockpitViewModel, build_basic_cockpit_view_model
+from agentic_project_kit.gui_viewmodel import cockpit_actions_for_access_level
 
 
 @dataclass(frozen=True)
@@ -70,6 +72,7 @@ class GuiActionView:
     command: tuple[str, ...]
     description: str
     short_description: str
+    min_access_level: str
     can_run_by_default: bool
     structured_explanation: str | None = None
 
@@ -118,8 +121,12 @@ STRUCTURED_ACTION_EXPLANATIONS = {
 }
 
 
-def build_gui_action_views(actions: list[CockpitAction] | None = None) -> list[GuiActionView]:
-    selected = actions if actions is not None else cockpit_actions()
+def build_gui_action_views(
+    actions: list[CockpitAction] | None = None,
+    *,
+    access_level: str = DEFAULT_ACCESS_LEVEL,
+) -> list[GuiActionView]:
+    selected = cockpit_actions_for_access_level(actions, access_level=access_level)
     return [
         GuiActionView(
             action_id=action.action_id,
@@ -129,6 +136,7 @@ def build_gui_action_views(actions: list[CockpitAction] | None = None) -> list[G
             command=action.command,
             description=action.description,
             short_description=action.short_description,
+            min_access_level=action.min_access_level,
             can_run_by_default=action.safety == READ_ONLY,
             structured_explanation=STRUCTURED_ACTION_EXPLANATIONS.get(action.action_id),
         )
@@ -147,8 +155,12 @@ def explain_safety(safety: str) -> str:
     return SAFETY_EXPLANATIONS.get(safety, f"Blocked: unknown safety class {safety}.")
 
 
-def ordered_action_views(actions: list[GuiActionView] | None = None) -> list[GuiActionView]:
-    selected = actions if actions is not None else build_gui_action_views()
+def ordered_action_views(
+    actions: list[GuiActionView] | None = None,
+    *,
+    access_level: str = DEFAULT_ACCESS_LEVEL,
+) -> list[GuiActionView]:
+    selected = actions if actions is not None else build_gui_action_views(access_level=access_level)
     return sorted(
         selected,
         key=lambda action: (
@@ -205,6 +217,7 @@ def format_action_details(action: GuiActionView) -> str:
         "command=" + " ".join(action.command),
         f"description={action.description}",
         f"short_description={action.short_description}",
+        f"min_access_level={action.min_access_level}",
         f"safety_explanation={explain_safety(action.safety)}",
     ]
     if action.structured_explanation:
@@ -235,6 +248,7 @@ def format_basic_cockpit_summary(view_model: BasicCockpitViewModel) -> str:
         f"traffic_light_state={view_model.traffic_light_state}",
         f"traffic_light_color={view_model.traffic_light_color}",
         f"communication_mode={view_model.communication_mode}",
+        f"access_level={view_model.access_level}",
         f"communication_context_fresh={str(view_model.communication_context_fresh).lower()}",
         f"required_next_reply={view_model.required_next_reply or '<none>'}",
         f"mutation_allowed={str(view_model.mutation_allowed).lower()}",
@@ -269,8 +283,10 @@ class CockpitGui:
 
         self.root = root
         self.project_root = (project_root or Path(".")).resolve()
-        self.actions = ordered_action_views(build_gui_action_views())
         self.basic_view = build_basic_cockpit_view_model(self.project_root)
+        self.actions = ordered_action_views(
+            build_gui_action_views(access_level=self.basic_view.access_level)
+        )
         self.recovery_action_id = recommended_recovery_action_id(self.basic_view)
         self.root.title(HEADER_TEXT)
         self.root.geometry("1120x820")
@@ -395,6 +411,33 @@ class CockpitGui:
         ).pack(fill=tk.X, pady=(2, 0))
         mode_select.bind("<<ComboboxSelected>>", self.update_mode_explanation)
 
+        access_row = ttk.Frame(status_frame)
+        access_row.pack(fill=tk.X, pady=(3, 0))
+        ttk.Label(access_row, text="Access level").pack(side=tk.LEFT, padx=(0, 8))
+        self.access_level_var = tk.StringVar(value=self.basic_view.access_level)
+        access_select = ttk.Combobox(
+            access_row,
+            textvariable=self.access_level_var,
+            values=access_level_option_values(),
+            state="readonly",
+            width=18,
+        )
+        access_select.pack(side=tk.LEFT)
+        attach_tooltip(
+            access_select,
+            "Basic shows routine actions. Advanced adds release and rules. Maintainer adds deep audits. Access level does not grant permission.",
+        )
+        self.access_level_explanation_var = tk.StringVar(
+            value=self.basic_view.access_level_explanation
+        )
+        ttk.Label(
+            status_frame,
+            textvariable=self.access_level_explanation_var,
+            anchor=tk.W,
+            wraplength=980,
+        ).pack(fill=tk.X, pady=(2, 0))
+        access_select.bind("<<ComboboxSelected>>", self.update_access_level)
+
         basic_buttons = ttk.LabelFrame(frame, text="Basic Actions", padding=THEME.section_padding)
         basic_buttons.pack(fill=tk.X, pady=(0, 4))
         for button in self.basic_view.buttons:
@@ -488,14 +531,7 @@ class CockpitGui:
         tree_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.tree_scrollbar = tree_scrollbar
 
-        for action in self.actions:
-            self.tree.insert(
-                "",
-                tk.END,
-                iid=action.action_id,
-                values=(action.label, action.short_description, action.safety),
-                tags=(action_tree_tag_for_safety(action.safety),),
-            )
+        self.populate_action_tree()
 
         button_row = ttk.Frame(frame)
         button_row.pack(fill=tk.X, pady=8)
@@ -531,6 +567,19 @@ class CockpitGui:
                 return action
         return None
 
+    def populate_action_tree(self) -> None:
+        import tkinter as tk
+
+        self.tree.delete(*self.tree.get_children())
+        for action in self.actions:
+            self.tree.insert(
+                "",
+                tk.END,
+                iid=action.action_id,
+                values=(action.label, action.short_description, action.safety),
+                tags=(action_tree_tag_for_safety(action.safety),),
+            )
+
     def write_output(self, text: str) -> None:
         self.output.insert("end", text)
         self.output.see("end")
@@ -559,6 +608,20 @@ class CockpitGui:
             self.basic_view.communication_mode,
         )
         self.mode_explanation_var.set(communication_mode_explanation(selected))
+
+    def update_access_level(self, _event: object | None = None) -> None:
+        selected = normalize_access_level(self.access_level_var.get())
+        # Access level is a visibility convenience only; safety remains the execution boundary.
+        self.basic_view = build_basic_cockpit_view_model(
+            self.project_root,
+            communication_mode=self.basic_view.communication_mode,
+            access_level=selected,
+        )
+        self.access_level_var.set(self.basic_view.access_level)
+        self.access_level_explanation_var.set(self.basic_view.access_level_explanation)
+        self.actions = ordered_action_views(build_gui_action_views(access_level=selected))
+        self.populate_action_tree()
+        self.write_output(f"\nAccess level changed to {self.basic_view.access_level}; action list rebuilt.\n")
 
     def current_task_body(self) -> str:
         if self.task_text is None:
