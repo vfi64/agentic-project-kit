@@ -464,6 +464,64 @@ def test_action_cards_use_single_tooltip_source_per_card() -> None:
     assert "attach_tooltip(widget, tooltip)" not in source
 
 
+def test_cockpit_builds_work_cycle_bar_above_body() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+
+    assert "self._build_header(shell)\n        self._build_work_cycle_bar(shell)\n\n        body =" in source
+    assert "WORK CYCLE" in source
+    assert "build_work_cycle_views" in source
+
+
+def test_work_cycle_bar_exposes_human_phase_labels() -> None:
+    source = Path("src/agentic_project_kit/work_cycle.py").read_text(encoding="utf-8")
+
+    assert "Start work" in source
+    assert "Make changes" in source
+    assert "Check" in source
+    assert "Finish & publish" in source
+    assert "Needs recovery" in source
+    assert "Confirm publish" in source
+
+
+def test_work_cycle_finish_requires_dry_run_before_execute() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+
+    assert "preview_work_finish" in source
+    assert "confirm_work_finish" in source
+    assert "pending_finish_preview" in source
+    assert "allow_confirm_from_preview=True" in source
+    assert "execute=False" in source
+    assert "execute=True" in source
+    assert "Run Finish & publish first" in source
+
+
+def test_work_cycle_uses_existing_work_wrappers_not_direct_remote_mutation() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+
+    assert '"work", "start"' in source
+    assert '"work", "check"' in source
+    assert '"work", "recover"' in source
+    assert "build_work_finish_args" in source
+    assert '"gh"' not in source
+    assert '"push"' not in inspect.getsource(CockpitGui.preview_work_finish)
+    assert '"push"' not in inspect.getsource(CockpitGui.confirm_work_finish)
+
+
+def test_work_cycle_make_changes_focuses_existing_task_editor() -> None:
+    source = inspect.getsource(CockpitGui.focus_make_changes)
+
+    assert "self.task_text.focus_set()" in source
+    assert "file-transfer task editor" in source
+
+
+def test_work_cycle_start_generates_safe_branch_name_from_task() -> None:
+    source = inspect.getsource(CockpitGui.start_work_cycle)
+
+    assert "simpledialog.askstring" in source
+    assert "slugify_work_title" in source
+    assert '"--branch"' in source
+
+
 def test_cockpit_gui_shows_wait_for_d2_label_when_pending() -> None:
     view_model = build_basic_cockpit_view_model(
         gatekeeper_status=_status(
