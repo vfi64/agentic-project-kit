@@ -92,6 +92,14 @@ class GuiActionView:
     structured_explanation: str | None = None
 
 
+@dataclass(frozen=True)
+class GuiActionGroupView:
+    group_id: str
+    label: str
+    description: str
+    actions: tuple[GuiActionView, ...]
+
+
 STRUCTURED_ACTION_EXPLANATIONS = {
     "git.status": (
         "PURPOSE: Show local repository dirty state.\n"
@@ -186,6 +194,34 @@ def ordered_action_views(
     )
 
 
+def action_group_for(action: GuiActionView) -> tuple[str, str, str]:
+    if action.category in {"git", "workflow"} and action.safety == READ_ONLY:
+        return ("routine", "Routine", "Frequent read-only orientation checks.")
+    if action.category in {"dialog", "transfer"} or action.action_id == "workflow.go":
+        return ("transfer", "Transfer", "File-transfer work-order and closeout actions.")
+    if action.category in {"gate", "audit"}:
+        return ("diagnostics", "Diagnostics", "Read-only checks for blockers and drift.")
+    return ("advanced", "Advanced", "Release, handoff, and rule-refresh controls.")
+
+
+def grouped_action_views(actions: list[GuiActionView] | tuple[GuiActionView, ...]) -> tuple[GuiActionGroupView, ...]:
+    order = ("routine", "transfer", "diagnostics", "advanced")
+    labels: dict[str, tuple[str, str]] = {}
+    buckets: dict[str, list[GuiActionView]] = {}
+    for action in actions:
+        group_id, label, description = action_group_for(action)
+        labels[group_id] = (label, description)
+        buckets.setdefault(group_id, []).append(action)
+    groups: list[GuiActionGroupView] = []
+    for group_id in order:
+        actions_in_group = tuple(buckets.get(group_id, ()))
+        if not actions_in_group:
+            continue
+        label, description = labels[group_id]
+        groups.append(GuiActionGroupView(group_id, label, description, actions_in_group))
+    return tuple(groups)
+
+
 def action_tree_columns() -> tuple[str, ...]:
     return ACTION_TREE_COLUMNS
 
@@ -207,18 +243,19 @@ def action_tree_tag_for_safety(safety: str) -> str:
 
 
 def recommended_recovery_action_id(view_model: BasicCockpitViewModel) -> str | None:
-    if view_model.traffic_light_color == "red":
-        return RECOVERY_ACTION_ID
+    if view_model.recommended_action.kind == "select_action":
+        return view_model.recommended_action.cockpit_action_id or None
     return None
 
 
 def format_recommended_action(view_model: BasicCockpitViewModel) -> str:
     lines = [
-        view_model.next_safe_action,
+        view_model.recommended_action.label,
+        view_model.recommended_action.description,
         view_model.reason,
     ]
-    if recommended_recovery_action_id(view_model):
-        lines.append("Recovery: load the diagnostic action without running it.")
+    if view_model.recovery_hint:
+        lines.append(view_model.recovery_hint)
     return "\n".join(lines)
 
 
@@ -268,6 +305,8 @@ def format_basic_cockpit_summary(view_model: BasicCockpitViewModel) -> str:
         f"required_next_reply={view_model.required_next_reply or '<none>'}",
         f"mutation_allowed={str(view_model.mutation_allowed).lower()}",
         f"next_safe_action={view_model.next_safe_action}",
+        f"recommended_action={view_model.recommended_action.label}",
+        f"recommended_action_kind={view_model.recommended_action.kind}",
         f"reason={view_model.reason}",
         "buttons=" + ",".join(button.command_id for button in view_model.buttons),
     ]
@@ -478,6 +517,8 @@ class CockpitGui:
             wraplength=255,
         ).pack(fill=tk.X, pady=(12, 0))
 
+        self._build_recommended_card(sidebar)
+
         self._section_heading(sidebar, "Status Detail")
         self._detail_row(sidebar, "Worktree", "dirty" if "dirty" in self.basic_view.reason.lower() else "clean", value_color="#006b00")
         self._detail_row(sidebar, "Mutation", "allowed" if self.basic_view.mutation_allowed else "guarded")
@@ -549,32 +590,66 @@ class CockpitGui:
         ).pack(fill=tk.X, pady=(7, 0))
         access_select.bind("<<ComboboxSelected>>", self.update_access_level)
 
-        tk.Frame(sidebar, height=27, bg=THEME.color_panel_bg).pack(fill=tk.X, expand=True)
-        ttk.Separator(sidebar, orient=tk.HORIZONTAL).pack(fill=tk.X, pady=(0, 13))
-        tk.Label(
+        tk.Frame(sidebar, height=10, bg=THEME.color_panel_bg).pack(fill=tk.X, expand=True)
+
+    def _build_recommended_card(self, sidebar: Any) -> None:
+        import tkinter as tk
+
+        action = self.basic_view.recommended_action
+        card = tk.Frame(
             sidebar,
-            text="Recommended next",
-            bg=THEME.color_panel_bg,
-            fg=THEME.color_muted_text,
-            font=THEME.small_font,
+            bg=THEME.color_recommended_bg,
+            highlightbackground="#7eb1f1",
+            highlightthickness=1,
+            padx=11,
+            pady=10,
+        )
+        card.pack(fill=tk.X, pady=(0, 18))
+        tk.Label(
+            card,
+            text="RECOMMENDED NEXT",
+            bg=THEME.color_recommended_bg,
+            fg="#174ea6",
+            font=THEME.section_font,
             anchor=tk.W,
         ).pack(fill=tk.X, pady=(0, 6))
         recommended = tk.Button(
-            sidebar,
-            text=f"□  {self._recommended_button_label()}",
+            card,
+            text=f"□  {action.label}",
             font=THEME.recommended_font,
-            bg=THEME.color_recommended_bg,
+            bg="#c5ddfb",
             fg="#174ea6",
-            activebackground=THEME.color_recommended_bg,
+            activebackground="#c5ddfb",
             relief=tk.GROOVE,
             bd=1,
-            command=self.load_recovery_action if self.recovery_action_id else lambda: self.run_basic_action("run-next-work-order"),
+            command=self.run_recommended_action,
             anchor=tk.W,
             padx=12,
-            pady=7,
+            pady=8,
         )
-        attach_tooltip(recommended, "Use the gatekeeper-recommended next action through the registered GUI wrapper.")
+        attach_tooltip(recommended, action.tooltip)
         recommended.pack(fill=tk.X)
+        tk.Label(
+            card,
+            text=action.description,
+            bg=THEME.color_recommended_bg,
+            fg="#174ea6",
+            font=THEME.small_font,
+            anchor=tk.W,
+            justify=tk.LEFT,
+            wraplength=255,
+        ).pack(fill=tk.X, pady=(7, 0))
+        if self.basic_view.recovery_hint:
+            tk.Label(
+                card,
+                text=self.basic_view.recovery_hint,
+                bg=THEME.color_recommended_bg,
+                fg="#5f2f00" if self.basic_view.traffic_light_color == "yellow" else "#8a1f11",
+                font=THEME.small_font,
+                anchor=tk.W,
+                justify=tk.LEFT,
+                wraplength=255,
+            ).pack(fill=tk.X, pady=(5, 0))
 
     def _package_version(self) -> str:
         try:
@@ -789,13 +864,38 @@ class CockpitGui:
         for child in self.action_card_container.winfo_children():
             child.destroy()
         self.action_card_widgets = {}
-        visible_actions = self.actions[: THEME.action_rows_visible]
-        for action in visible_actions:
-            self._create_action_card(action)
-        visible_ids = {action.action_id for action in visible_actions}
+        action_groups = grouped_action_views(self.actions)
+        for group in action_groups:
+            self._create_action_group_heading(group)
+            for action in group.actions:
+                self._create_action_card(action)
+        visible_ids = {action.action_id for group in action_groups for action in group.actions}
         if self.selected_action_id_value not in visible_ids:
-            self.selected_action_id_value = visible_actions[0].action_id if visible_actions else None
+            first_group = action_groups[0] if action_groups else None
+            self.selected_action_id_value = first_group.actions[0].action_id if first_group and first_group.actions else None
         self._refresh_action_card_selection()
+
+    def _create_action_group_heading(self, group: GuiActionGroupView) -> None:
+        import tkinter as tk
+
+        frame = tk.Frame(self.action_card_container, bg=THEME.color_panel_bg)
+        frame.pack(fill=tk.X, pady=(7 if self.action_card_widgets else 0, 4))
+        tk.Label(
+            frame,
+            text=group.label.upper(),
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.section_font,
+            anchor=tk.W,
+        ).pack(side=tk.LEFT)
+        tk.Label(
+            frame,
+            text=group.description,
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+            anchor=tk.E,
+        ).pack(side=tk.RIGHT)
 
     def _create_action_card(self, action: GuiActionView) -> None:
         import tkinter as tk
@@ -870,6 +970,19 @@ class CockpitGui:
         action = self.action_view_by_id(self.recovery_action_id)
         label = action.label if action is not None else self.recovery_action_id
         self.write_output(f"\nRecovery action loaded: {label}. Inspect or run read-only manually.\n")
+
+    def run_recommended_action(self) -> None:
+        action = self.basic_view.recommended_action
+        if action.kind == "run_button" and action.command_id:
+            self.run_basic_action(action.command_id)
+            return
+        if action.kind == "select_action" and action.cockpit_action_id:
+            self._select_action(action.cockpit_action_id)
+            label = action.label
+            self.write_output(f"\nRecommended action loaded: {label}. Inspect or run read-only manually.\n")
+            return
+        message = self.basic_view.recovery_hint or action.description
+        self.write_output(f"\nRecommended next: {message}\n")
 
     def update_mode_explanation(self, _event: object | None = None) -> None:
         option = self.mode_var.get()

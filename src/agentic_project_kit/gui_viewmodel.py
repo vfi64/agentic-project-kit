@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterable
 
@@ -63,6 +63,25 @@ class BasicCockpitButtonViewModel:
 
 
 @dataclass(frozen=True)
+class BasicCockpitRecommendedAction:
+    label: str
+    description: str
+    tooltip: str
+    kind: str
+    command_id: str = ""
+    cockpit_action_id: str = ""
+    enabled: bool = False
+
+
+@dataclass(frozen=True)
+class BasicCockpitButtonGroupViewModel:
+    group_id: str
+    label: str
+    description: str
+    button_ids: tuple[str, ...]
+
+
+@dataclass(frozen=True)
 class BasicCockpitViewModel:
     title: str
     traffic_light_state: str
@@ -83,6 +102,19 @@ class BasicCockpitViewModel:
     buttons: tuple[BasicCockpitButtonViewModel, ...]
     last_result: str
     explanation: str
+    recommended_action: BasicCockpitRecommendedAction = field(
+        default_factory=lambda: BasicCockpitRecommendedAction(
+            label="Inspect state",
+            description="Refresh status before choosing a next action.",
+            tooltip="Refresh the GUI gatekeeper status before any mutation.",
+            kind="run_button",
+            command_id="status-refresh",
+            enabled=True,
+        )
+    )
+    button_groups: tuple[BasicCockpitButtonGroupViewModel, ...] = ()
+    recovery_hint: str = ""
+    last_transfer_message: str = "No transfer task has been sent in this GUI session."
 
     @property
     def button_count(self) -> int:
@@ -293,6 +325,110 @@ def _basic_button_view_models(
     return tuple(items)
 
 
+def _recommended_action_for_state(
+    status: GuiGatekeeperStatus,
+    *,
+    traffic_state: str,
+    next_action: str,
+    mutation_allowed: bool,
+) -> BasicCockpitRecommendedAction:
+    if status.required_next_reply == "d2" and not status.communication_context_fresh:
+        return BasicCockpitRecommendedAction(
+            label="Complete d2 acknowledgement",
+            description=next_action,
+            tooltip="Send d2 in chat and wait for RULE_REFRESH_ACK before any mutation.",
+            kind="show_hint",
+            enabled=False,
+        )
+    if traffic_state in {"FAILED", "BLOCKED"}:
+        return BasicCockpitRecommendedAction(
+            label="Open diagnostics",
+            description="Load Doctor so the blocker can be inspected without running it or mutating the repository.",
+            tooltip="Select the read-only Doctor action. It does not repair or mutate by itself.",
+            kind="select_action",
+            cockpit_action_id="gate.doctor",
+            enabled=True,
+        )
+    if traffic_state == "WAIT":
+        return BasicCockpitRecommendedAction(
+            label="Show state and next step",
+            description=next_action,
+            tooltip="Select the read-only workflow state action while the workflow is waiting.",
+            kind="select_action",
+            cockpit_action_id="workflow.state",
+            enabled=True,
+        )
+    if mutation_allowed:
+        return BasicCockpitRecommendedAction(
+            label="Run next work order",
+            description=next_action,
+            tooltip="Run the registered Basic action for the next guarded file-transfer work order.",
+            kind="run_button",
+            command_id="run-next-work-order",
+            cockpit_action_id="dialog.rn",
+            enabled=True,
+        )
+    return BasicCockpitRecommendedAction(
+        label="Refresh status",
+        description=next_action,
+        tooltip="Refresh gatekeeper state before choosing a mutating action.",
+        kind="run_button",
+        command_id="status-refresh",
+        cockpit_action_id="workflow.state",
+        enabled=True,
+    )
+
+
+def _button_group_for(button: BasicCockpitButtonViewModel) -> tuple[str, str, str]:
+    command_id = button.command_id
+    if command_id in {"status-refresh", "run-next-work-order", "close-out-last-run"}:
+        return ("routine", "Routine", "Normal next-step and closeout controls.")
+    if command_id in {"communication-rules-refresh", "handoff-rules-refresh"}:
+        return ("transfer", "Transfer", "Communication, transfer, and handoff controls.")
+    if command_id in {"diagnose", "doctor", "check-docs"} or "diagnose" in command_id:
+        return ("diagnostics", "Diagnostics", "Read-only checks for blockers and drift.")
+    return ("advanced", "Advanced", "Less common controls that stay behind policy gates.")
+
+
+def _group_basic_buttons(
+    buttons: tuple[BasicCockpitButtonViewModel, ...],
+) -> tuple[BasicCockpitButtonGroupViewModel, ...]:
+    order = ("routine", "transfer", "diagnostics", "advanced")
+    metadata: dict[str, tuple[str, str]] = {}
+    grouped: dict[str, list[str]] = {}
+    for button in buttons:
+        group_id, label, description = _button_group_for(button)
+        metadata[group_id] = (label, description)
+        grouped.setdefault(group_id, []).append(button.command_id)
+    result: list[BasicCockpitButtonGroupViewModel] = []
+    for group_id in order:
+        button_ids = tuple(grouped.get(group_id, ()))
+        if not button_ids:
+            continue
+        label, description = metadata[group_id]
+        result.append(
+            BasicCockpitButtonGroupViewModel(
+                group_id=group_id,
+                label=label,
+                description=description,
+                button_ids=button_ids,
+            )
+        )
+    return tuple(result)
+
+
+def _recovery_hint(status: GuiGatekeeperStatus, traffic_state: str) -> str:
+    if status.required_next_reply == "d2" and not status.communication_context_fresh:
+        return "Recovery: send d2 in chat and require RULE_REFRESH_ACK before running or sending tasks."
+    if traffic_state == "FAILED":
+        return "Recovery: preserve evidence, inspect diagnostics, and do not clean up until the failure is classified."
+    if traffic_state == "BLOCKED":
+        return "Recovery: resolve deterministic blockers first; read-only diagnostics remain safe."
+    if traffic_state == "WAIT":
+        return "Recovery: wait for the external workflow, CI, or transfer state to settle before retrying."
+    return ""
+
+
 def build_basic_cockpit_view_model(
     project_root: Path | str = ".",
     *,
@@ -307,6 +443,7 @@ def build_basic_cockpit_view_model(
     selected_mode = next((mode.mode_id for mode in modes if mode.selected), "file_transfer")
     selected_access_level: AccessLevel = normalize_access_level(access_level)
     mutation_allowed = traffic_state == "READY" and status.ready_for_mutating_actions
+    button_models = _basic_button_view_models(status, traffic_state=traffic_state, buttons=buttons)
     evidence = (
         f"branch={status.branch}; workflow_state={status.workflow_state}; "
         f"current_work_state={status.current_work_state or '<none>'}"
@@ -328,9 +465,17 @@ def build_basic_cockpit_view_model(
         access_level_options=tuple(ACCESS_LEVEL_ORDER),
         access_level_explanation=access_level_explanation(selected_access_level),
         communication_modes=modes,
-        buttons=_basic_button_view_models(status, traffic_state=traffic_state, buttons=buttons),
+        buttons=button_models,
         last_result="No action has run in this GUI session.",
         explanation="Basic Mode is a thin control surface over registered wrappers, gatekeeper state, typed work orders, evidence, and readiness reports.",
+        recommended_action=_recommended_action_for_state(
+            status,
+            traffic_state=traffic_state,
+            next_action=next_action,
+            mutation_allowed=mutation_allowed,
+        ),
+        button_groups=_group_basic_buttons(button_models),
+        recovery_hint=_recovery_hint(status, traffic_state),
     )
 
 

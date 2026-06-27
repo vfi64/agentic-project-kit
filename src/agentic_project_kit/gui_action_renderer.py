@@ -49,6 +49,8 @@ def render_basic_cockpit_view_model(view_model: BasicCockpitViewModel) -> str:
         f"state_source={view_model.state_source}",
         f"reason={view_model.reason}",
         f"next_safe_action={view_model.next_safe_action}",
+        f"recommended_action={view_model.recommended_action.label}",
+        f"recommended_action_kind={view_model.recommended_action.kind}",
         f"evidence={view_model.evidence}",
         f"last_result={view_model.last_result}",
         "communication_modes:",
@@ -67,5 +69,13 @@ def render_basic_cockpit_view_model(view_model: BasicCockpitViewModel) -> str:
             f"label={button.label}; tooltip={button.tooltip}; wrapper={command}; "
             f"source={button.source}; why={reason}"
         )
+    if view_model.button_groups:
+        lines.append("button_groups:")
+        for group in view_model.button_groups:
+            lines.append(
+                f"- {group.group_id}: {group.label}; buttons={','.join(group.button_ids)}"
+            )
+    if view_model.recovery_hint:
+        lines.append(f"recovery_hint={view_model.recovery_hint}")
     lines.append(f"explanation={view_model.explanation}")
     return "\n".join(lines)

@@ -17,6 +17,7 @@ from agentic_project_kit.gui_cockpit import (
     format_action_details,
     format_basic_cockpit_summary,
     format_state_details,
+    grouped_action_views,
     ordered_action_views,
     recommended_recovery_action_id,
 )
@@ -263,6 +264,8 @@ def test_recommended_zone_shows_next_safe_action() -> None:
 
     text = format_recommended_action(view_model)
 
+    assert view_model.recommended_action.label == "Run next work order"
+    assert view_model.recommended_action.command_id == "run-next-work-order"
     assert view_model.next_safe_action in text
     assert view_model.reason in text
 
@@ -274,6 +277,7 @@ def test_recommended_zone_recovery_only_selects_does_not_run() -> None:
     source = inspect.getsource(CockpitGui.load_recovery_action)
 
     assert recommended_recovery_action_id(view_model) == "gate.doctor"
+    assert view_model.recommended_action.kind == "select_action"
     text = format_recommended_action(view_model)
     assert "without running it" in text
     assert "_select_action" in source
@@ -286,6 +290,31 @@ def test_recommended_zone_recovery_hidden_when_not_blocked() -> None:
 
     assert recommended_recovery_action_id(view_model) is None
     assert "Recovery:" not in format_recommended_action(view_model)
+
+
+def test_view_model_exposes_button_groups_for_didactic_guidance() -> None:
+    view_model = build_basic_cockpit_view_model(gatekeeper_status=_status())
+
+    groups = {group.group_id: group for group in view_model.button_groups}
+
+    assert "routine" in groups
+    assert "transfer" in groups
+    assert "diagnostics" in groups
+    assert "status-refresh" in groups["routine"].button_ids
+    assert "run-next-work-order" in groups["routine"].button_ids
+    assert "communication-rules-refresh" in groups["transfer"].button_ids
+    assert "diagnose" in groups["diagnostics"].button_ids
+
+
+def test_action_cards_are_grouped_by_routine_transfer_diagnostics_and_advanced() -> None:
+    grouped = grouped_action_views(ordered_action_views(build_gui_action_views(access_level="advanced")))
+    groups = {group.group_id: group for group in grouped}
+
+    assert [group.group_id for group in grouped] == ["routine", "transfer", "diagnostics", "advanced"]
+    assert any(action.action_id == "git.status" for action in groups["routine"].actions)
+    assert any(action.action_id == "dialog.rn" for action in groups["transfer"].actions)
+    assert any(action.action_id == "gate.doctor" for action in groups["diagnostics"].actions)
+    assert any(action.action_id == "release.plan" for action in groups["advanced"].actions)
 
 
 def test_action_tree_orders_read_only_first() -> None:
