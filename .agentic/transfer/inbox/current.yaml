@@ -1,17 +1,17 @@
 schema_version: 1
 kind: gui_user_task_transfer_order
-id: 624c118f4977be80
-command_id: 624c118f4977be80
-task_id: 624c118f4977be80
+id: 1b84cffb81e9bab1
+command_id: 1b84cffb81e9bab1
+task_id: 1b84cffb81e9bab1
 title: GUI file-transfer task
 safety: remote_llm_user_task
 status: active
-branch: codex/gui-guided-action-groups
-expected_current_branch: codex/gui-guided-action-groups
-expected_head: e226f716
+branch: main
+expected_current_branch: main
+expected_head: 1091b1b7
 expected_origin_main: 1091b1b76d07b86a4d764f304c6edac8bb7b3e57
-created_for_head: e226f716544b05a4b513ae8f280837774b9924dd
-report_path: docs/reports/command_runs/624c118f4977be80-gui-user-task.md
+created_for_head: 1091b1b76d07b86a4d764f304c6edac8bb7b3e57
+report_path: docs/reports/command_runs/1b84cffb81e9bab1-gui-user-task.md
 actions:
 - type: run_command
   command:
@@ -21,10 +21,11 @@ actions:
   - --json
 user_task:
   title: GUI file-transfer task
-  body: Was ist Zeit?
-  body_sha256: 5783209f1ceb0034b924935a7166a619d2b41894ca0f1958cb99caeadda98eaf
-created_at_utc: '2026-06-27T17:47:28+00:00'
-head_sha: e226f716544b05a4b513ae8f280837774b9924dd
+  body: "Die Tooltipps bei den Actions-Buttons zum Beispiel \"Doctor\" schienen doppelt\
+    \ zu erscheinen. Kannst Du dies bitte \xFCberpr\xFCfen?"
+  body_sha256: d3081f4d9b449ca2c1f870cb063a80607f4b66be1860e590208d661e5f99923c
+created_at_utc: '2026-06-27T17:56:00+00:00'
+head_sha: 1091b1b76d07b86a4d764f304c6edac8bb7b3e57
 task_status: submitted
 next_reply: g
 next_action: Send g/go to the LLM; assistant must read .agentic/transfer/inbox/current.yaml
