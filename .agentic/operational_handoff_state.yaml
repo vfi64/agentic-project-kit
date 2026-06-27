@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 588308bc117b223e86fd93d3cc7c20d7545bfd65
-  short: 588308bc
-  subject: Harden GUI transfer communication contract (#1604)
+  full: 2fe6f274398c2e16bcaa346d49ac51b5db0e0524
+  short: 2fe6f274
+  subject: Add guided work-cycle bar to cockpit (#1606)
 last_substantive_work_state:
-  full: 588308bc117b223e86fd93d3cc7c20d7545bfd65
-  short: 588308bc
-  subject: Harden GUI transfer communication contract (#1604)
+  full: 2fe6f274398c2e16bcaa346d49ac51b5db0e0524
+  short: 2fe6f274
+  subject: Add guided work-cycle bar to cockpit (#1606)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
