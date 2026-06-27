@@ -445,11 +445,16 @@ def test_task_send_uses_publish_and_success_status_mentions_gui_transfer_branch(
 
 def test_task_editor_exposes_terminal_and_transfer_continue_buttons() -> None:
     source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    task_editor_source = Path("src/agentic_project_kit/gui_task_editor.py").read_text(encoding="utf-8")
 
-    assert 'text="Open terminal"' in source
-    assert 'text="Run transfer continue"' in source
-    assert '"transfer", "continue", "--json"' in source
+    assert 'text="Open local terminal"' in source
+    assert "standard_command_label_for_communication_mode" in source
+    assert "Run mode-b standard" in task_editor_source
+    assert "Run mode-a standard" in task_editor_source
+    assert '"transfer", "continue", "--json"' in task_editor_source
+    assert '"transfer", "patch-cycle-status", "--json"' in task_editor_source
     assert "open_transfer_terminal_for_project" in source
+    assert "run_mode_standard_command" in source
 
 
 def test_action_cards_use_single_tooltip_source_per_card() -> None:

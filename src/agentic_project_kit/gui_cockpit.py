@@ -19,6 +19,9 @@ from agentic_project_kit.gui_task_editor import (
     CANONICAL_TRANSFER_OUTBOX_PATH,
     TaskEditorState,
     open_transfer_terminal as open_transfer_terminal_for_project,
+    standard_command_args_for_communication_mode,
+    standard_command_description_for_communication_mode,
+    standard_command_label_for_communication_mode,
     task_editor_send_enabled,
     task_editor_state_after_read,
     task_editor_state_after_send,
@@ -729,7 +732,7 @@ class CockpitGui:
             self.task_send_button = None
             self.task_read_button = None
             self.task_open_terminal_button = None
-            self.task_continue_button = None
+            self.task_standard_command_button = None
             return
 
         task_frame = tk.Frame(
@@ -803,24 +806,28 @@ class CockpitGui:
         self.task_read_button.pack(side=tk.LEFT, padx=(0, 9))
         self.task_open_terminal_button = ttk.Button(
             task_button_row,
-            text="Open terminal",
+            text="Open local terminal",
             command=self.open_transfer_terminal,
         )
         attach_tooltip(
             self.task_open_terminal_button,
-            "Open the operating-system terminal for running agentic-kit transfer commands.",
+            "Open the operating-system terminal for the currently selected transfer mode.",
         )
         self.task_open_terminal_button.pack(side=tk.LEFT, padx=(0, 9))
-        self.task_continue_button = ttk.Button(
+        self.task_standard_command_button = ttk.Button(
             task_button_row,
-            text="Run transfer continue",
-            command=self.run_transfer_continue_command,
+            text=standard_command_label_for_communication_mode(self.current_communication_mode()),
+            command=self.run_mode_standard_command,
         )
         attach_tooltip(
-            self.task_continue_button,
-            "Run the standard mode-b command: agentic-kit transfer continue --json.",
+            self.task_standard_command_button,
+            (
+                "Run the selected mode's standard command: mode a uses "
+                "agentic-kit transfer patch-cycle-status --json; mode b uses "
+                "agentic-kit transfer continue --json."
+            ),
         )
-        self.task_continue_button.pack(side=tk.LEFT, padx=(0, 9))
+        self.task_standard_command_button.pack(side=tk.LEFT, padx=(0, 9))
         tk.Label(
             task_frame,
             textvariable=self.task_status_var,
@@ -1046,8 +1053,12 @@ class CockpitGui:
         if self.task_send_button is None or self.task_read_button is None:
             return
         mode = self.current_communication_mode()
-        if self.task_continue_button is not None:
-            self.task_continue_button.configure(state="normal" if mode == "file_transfer" else "disabled")
+        if self.task_standard_command_button is not None:
+            command_args = standard_command_args_for_communication_mode(mode)
+            self.task_standard_command_button.configure(
+                text=standard_command_label_for_communication_mode(mode),
+                state="normal" if command_args else "disabled",
+            )
         if self.task_open_terminal_button is not None:
             self.task_open_terminal_button.configure(state="normal")
         can_send = task_editor_send_enabled(
@@ -1075,6 +1086,8 @@ class CockpitGui:
             return
         self.task_read_button.configure(state="disabled")
         self.task_send_button.configure(state="normal" if can_send else "disabled")
+        if command_description := standard_command_description_for_communication_mode(mode):
+            self.task_status_var.set(command_description)
         if self.basic_view.required_next_reply == "d2":
             self.task_status_var.set("Blocked: send d2 and complete communication-rule ACK before mutation.")
         elif not self.current_task_body():
@@ -1101,11 +1114,18 @@ class CockpitGui:
         self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
 
     def open_transfer_terminal(self) -> None:
-        plan = open_transfer_terminal_for_project(self.project_root)
+        plan = open_transfer_terminal_for_project(
+            self.project_root,
+            communication_mode=self.current_communication_mode(),
+        )
         self.write_output("\n" + __import__("json").dumps(plan.as_json_data(), indent=2, sort_keys=True) + "\n")
 
-    def run_transfer_continue_command(self) -> None:
-        completed = self._agentic_command("transfer", "continue", "--json")
+    def run_mode_standard_command(self) -> None:
+        command_args = standard_command_args_for_communication_mode(self.current_communication_mode())
+        if not command_args:
+            self.write_output("\nNo standard command is defined for Copy-and-Paste recovery mode.\n")
+            return
+        completed = self._agentic_command(*command_args)
         self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
 
     def send_user_task(self) -> None:
