@@ -1,8 +1,8 @@
 schema_version: 1
 kind: gui_user_task_transfer_order
-id: ad405b4e47c3cfaf
-command_id: ad405b4e47c3cfaf
-task_id: ad405b4e47c3cfaf
+id: 4fbc9bef13181334
+command_id: 4fbc9bef13181334
+task_id: 4fbc9bef13181334
 title: GUI file-transfer task
 safety: remote_llm_user_task
 status: active
@@ -11,7 +11,7 @@ expected_current_branch: main
 expected_head: 1091b1b7
 expected_origin_main: 1091b1b76d07b86a4d764f304c6edac8bb7b3e57
 created_for_head: 1091b1b76d07b86a4d764f304c6edac8bb7b3e57
-report_path: docs/reports/command_runs/ad405b4e47c3cfaf-gui-user-task.md
+report_path: docs/reports/command_runs/4fbc9bef13181334-gui-user-task.md
 actions:
 - type: run_command
   command:
@@ -21,9 +21,9 @@ actions:
   - --json
 user_task:
   title: GUI file-transfer task
-  body: WIe ist der lokale Zustand?
-  body_sha256: 2247b6726d935746db2ba3c0cd666a98dc293ec9de2e63352efae6cdf7308217
-created_at_utc: '2026-06-27T19:06:31+00:00'
+  body: Wie sit der Zustand des Systems?
+  body_sha256: fa2c94d7c6afb9343c67271b28520d35358c1b700270bc54dfe701bce6a9682c
+created_at_utc: '2026-06-27T19:37:43+00:00'
 head_sha: 1091b1b76d07b86a4d764f304c6edac8bb7b3e57
 task_status: submitted
 next_reply: g
