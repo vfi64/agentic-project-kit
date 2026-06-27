@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import json
 from pathlib import Path
 import subprocess
 from typing import Any
+from tkinter import simpledialog
 
 from agentic_project_kit.access_levels import DEFAULT_ACCESS_LEVEL, normalize_access_level
 from agentic_project_kit.cockpit import (
@@ -40,6 +42,15 @@ from agentic_project_kit.gui_tk_widgets import (
 from agentic_project_kit.gui_tkinter_shell import run_basic_cockpit_button
 from agentic_project_kit.gui_viewmodel import BasicCockpitViewModel, build_basic_cockpit_view_model
 from agentic_project_kit.gui_viewmodel import cockpit_actions_for_access_level
+from agentic_project_kit.work_cycle import (
+    ChangedPath,
+    build_work_cycle_views,
+    build_work_finish_args,
+    changed_paths_from_status,
+    derive_work_phase,
+    humanize_work_result,
+    slugify_work_title,
+)
 
 
 @dataclass(frozen=True)
@@ -351,6 +362,10 @@ class CockpitGui:
         if hasattr(self.root, "minsize"):
             self.root.minsize(1040, 680)
         self.selected_action_id_value: str | None = None
+        self.work_cycle_last_check_passed = False
+        self.work_cycle_last_check_signature = ""
+        self.pending_finish_preview: dict[str, object] | None = None
+        self.work_finish_confirm_button: Any | None = None
 
         shell = tk.Frame(
             root,
@@ -361,6 +376,7 @@ class CockpitGui:
         shell.pack(fill=tk.BOTH, expand=True, padx=14, pady=14)
 
         self._build_header(shell)
+        self._build_work_cycle_bar(shell)
 
         body = tk.Frame(shell, bg=THEME.color_panel_bg)
         body.pack(fill=tk.BOTH, expand=True)
@@ -427,6 +443,91 @@ class CockpitGui:
 
         ttk.Separator(parent, orient=tk.HORIZONTAL).pack(fill=tk.X)
 
+    def _build_work_cycle_bar(self, parent: Any) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        phase = self.current_work_phase()
+        views = build_work_cycle_views(phase)
+        normal_views = [view for view in views if view.phase_id != "recover"]
+        recovery_view = next(view for view in views if view.phase_id == "recover")
+
+        frame = tk.Frame(parent, bg=THEME.color_panel_bg, padx=16, pady=10)
+        frame.pack(fill=tk.X)
+        title = tk.Label(
+            frame,
+            text="WORK CYCLE",
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.section_font,
+        )
+        title.pack(side=tk.LEFT, padx=(0, 12))
+
+        if phase == "recover":
+            button = tk.Button(
+                frame,
+                text=recovery_view.label,
+                command=self.run_work_recover,
+                bg=THEME.color_bounded,
+                fg="#5f2f00",
+                font=THEME.action_font,
+                relief=tk.GROOVE,
+                bd=1,
+                padx=10,
+                pady=5,
+            )
+            attach_tooltip(button, recovery_view.tooltip)
+            button.pack(side=tk.LEFT, padx=(0, 8))
+        else:
+            for index, view in enumerate(normal_views):
+                button = tk.Button(
+                    frame,
+                    text=view.label,
+                    command=self._work_cycle_command_for(view.phase_id),
+                    bg=THEME.color_recommended_bg if view.is_current else THEME.color_panel_bg,
+                    fg="#174ea6" if view.is_current else "#222222",
+                    font=THEME.action_font if view.is_current else THEME.body_font,
+                    relief=tk.GROOVE,
+                    bd=1,
+                    padx=10,
+                    pady=5,
+                    state=tk.NORMAL if view.is_available else tk.DISABLED,
+                )
+                attach_tooltip(button, f"{view.tooltip}\n{view.command_hint}")
+                button.pack(side=tk.LEFT, padx=(0, 6))
+                if index < len(normal_views) - 1:
+                    tk.Label(
+                        frame,
+                        text="→",
+                        bg=THEME.color_panel_bg,
+                        fg=THEME.color_muted_text,
+                        font=THEME.body_font,
+                    ).pack(side=tk.LEFT, padx=(0, 6))
+
+        self.work_finish_confirm_button = ttk.Button(
+            frame,
+            text="Confirm publish",
+            command=self.confirm_work_finish,
+            state=tk.DISABLED,
+        )
+        attach_tooltip(
+            self.work_finish_confirm_button,
+            "Runs agentic-kit work finish --execute only after a successful dry-run preview.",
+        )
+        self.work_finish_confirm_button.pack(side=tk.RIGHT)
+        ttk.Separator(parent, orient=tk.HORIZONTAL).pack(fill=tk.X)
+
+    def _work_cycle_command_for(self, phase_id: str) -> Any:
+        if phase_id == "start":
+            return self.start_work_cycle
+        if phase_id == "changes":
+            return self.focus_make_changes
+        if phase_id == "check":
+            return self.run_work_check
+        if phase_id == "finish":
+            return self.preview_work_finish
+        return self.run_work_recover
+
     def _branch_label(self) -> str:
         branch = "unknown"
         for part in self.basic_view.evidence.split(";"):
@@ -447,6 +548,48 @@ class CockpitGui:
         except OSError:
             short = "unknown"
         return f"{branch} · {short}"
+
+    def current_branch(self) -> str:
+        for part in self.basic_view.evidence.split(";"):
+            key, _, value = part.strip().partition("=")
+            if key == "branch" and value:
+                return value
+        return "unknown"
+
+    def _git_status_short(self) -> str:
+        try:
+            completed = subprocess.run(
+                ["git", "status", "--short"],
+                cwd=self.project_root,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+        except OSError:
+            return ""
+        return completed.stdout if completed.returncode == 0 else ""
+
+    def _changed_paths(self) -> tuple[ChangedPath, ...]:
+        return changed_paths_from_status(self._git_status_short())
+
+    def _work_cycle_signature(self) -> str:
+        return f"{self.current_branch()}::{self._git_status_short()}"
+
+    def current_work_phase(self) -> str:
+        branch = self.current_branch()
+        changed_paths = self._changed_paths()
+        has_blockers = self.basic_view.traffic_light_state in {"BLOCKED", "FAILED", "WAIT_FOR_D2"}
+        return derive_work_phase(
+            repo_clean=not changed_paths,
+            on_feature_branch=branch not in {"", "unknown", "main", "master"},
+            has_blockers=has_blockers,
+            has_changes=bool(changed_paths),
+            last_check_passed=(
+                self.work_cycle_last_check_passed
+                and self.work_cycle_last_check_signature == self._work_cycle_signature()
+            ),
+        )
 
     def _section_heading(self, parent: Any, text: str) -> None:
         import tkinter as tk
@@ -1108,6 +1251,149 @@ class CockpitGui:
             stderr=subprocess.PIPE,
             check=False,
         )
+
+    def _write_work_command_result(
+        self,
+        completed: subprocess.CompletedProcess[str],
+        *,
+        allow_confirm_from_preview: bool = False,
+    ) -> dict[str, object] | None:
+        output = completed.stdout or completed.stderr
+        payload: dict[str, object] | None = None
+        if completed.stdout:
+            try:
+                loaded = json.loads(completed.stdout)
+                if isinstance(loaded, dict):
+                    payload = loaded
+            except ValueError:
+                payload = None
+        if payload is None:
+            self.write_output("\n" + output + "\n")
+            self._disable_confirm_publish()
+            return None
+        message = humanize_work_result(payload)
+        lines = [
+            "",
+            message.headline,
+            message.detail,
+        ]
+        if message.blockers_human:
+            lines.append("")
+            lines.extend(f"- {blocker}" for blocker in message.blockers_human)
+        lines.extend(["", f"Next: {message.suggested_next}", ""])
+        self.write_output("\n".join(lines))
+        if allow_confirm_from_preview and message.allow_confirm_publish:
+            self.pending_finish_preview = payload
+            if self.work_finish_confirm_button is not None:
+                self.work_finish_confirm_button.configure(state="normal")
+        else:
+            self._disable_confirm_publish()
+        return payload
+
+    def _disable_confirm_publish(self) -> None:
+        self.pending_finish_preview = None
+        if self.work_finish_confirm_button is not None:
+            self.work_finish_confirm_button.configure(state="disabled")
+
+    def start_work_cycle(self) -> None:
+        title = self.current_task_body()
+        if not title:
+            title = simpledialog.askstring(
+                "Start work",
+                "What are you working on?",
+                parent=self.root,
+            ) or ""
+        branch = slugify_work_title(title)
+        completed = self._agentic_command("work", "start", "--branch", branch, "--kind", "patch", "--json")
+        self._write_work_command_result(completed)
+
+    def focus_make_changes(self) -> None:
+        if self.task_text is not None:
+            self.task_text.focus_set()
+            self.task_text.configure(highlightthickness=1, highlightbackground="#7eb1f1")
+        self.write_output(
+            "\nDescribe the change in the file-transfer task editor, then send it. "
+            "The assistant will work from the published task carrier via g/go.\n"
+        )
+
+    def run_work_check(self) -> None:
+        signature = self._work_cycle_signature()
+        completed = self._agentic_command("work", "check", "--profile", "code", "--json")
+        payload = self._write_work_command_result(completed)
+        self.work_cycle_last_check_passed = bool(
+            payload and str(payload.get("result_status", "")).upper() == "PASS"
+        )
+        self.work_cycle_last_check_signature = signature if self.work_cycle_last_check_passed else ""
+
+    def _finish_title(self) -> str:
+        task_body = self.current_task_body()
+        first_line = next((line.strip() for line in task_body.splitlines() if line.strip()), "")
+        return first_line or "Finish guided work slice"
+
+    def _current_finish_args(self, *, execute: bool) -> tuple[str, ...] | None:
+        paths = self._changed_paths()
+        if not paths:
+            fake_payload = {
+                "result_status": "BLOCKED",
+                "action": "work-finish",
+                "blockers": ["path-selection"],
+                "dry_run": not execute,
+            }
+            self._write_work_command_result(
+                subprocess.CompletedProcess(args=(), returncode=2, stdout=json.dumps(fake_payload), stderr="")
+            )
+            return None
+        branch = self.current_branch()
+        if branch in {"", "unknown", "main", "master"}:
+            fake_payload = {
+                "result_status": "BLOCKED",
+                "action": "work-finish",
+                "blockers": ["repo-status"],
+                "dry_run": not execute,
+            }
+            self._write_work_command_result(
+                subprocess.CompletedProcess(args=(), returncode=2, stdout=json.dumps(fake_payload), stderr="")
+            )
+            return None
+        title = self._finish_title()
+        return build_work_finish_args(
+            branch=branch,
+            title=title,
+            message=title,
+            paths=paths,
+            execute=execute,
+        )
+
+    def preview_work_finish(self) -> None:
+        args = self._current_finish_args(execute=False)
+        if args is None:
+            return
+        completed = self._agentic_command(*args)
+        payload = self._write_work_command_result(completed, allow_confirm_from_preview=True)
+        if payload and self.pending_finish_preview is not None:
+            self.pending_finish_preview = {
+                "payload": payload,
+                "signature": self._work_cycle_signature(),
+                "args": args,
+            }
+
+    def confirm_work_finish(self) -> None:
+        if not self.pending_finish_preview:
+            self.write_output("\nRun Finish & publish first. Confirm is enabled only after a passing dry-run.\n")
+            return
+        if self.pending_finish_preview.get("signature") != self._work_cycle_signature():
+            self.write_output("\nChanged files moved after the dry-run. Run Finish & publish again before confirming.\n")
+            self._disable_confirm_publish()
+            return
+        args = self._current_finish_args(execute=True)
+        if args is None:
+            return
+        completed = self._agentic_command(*args)
+        self._write_work_command_result(completed)
+
+    def run_work_recover(self) -> None:
+        completed = self._agentic_command("work", "recover", "--json")
+        self._write_work_command_result(completed)
 
     def show_initial_llm_prompt(self) -> None:
         completed = self._agentic_command("gui", "initial-llm-prompt", "--json")
