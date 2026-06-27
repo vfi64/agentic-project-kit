@@ -4746,6 +4746,11 @@ def show_last_report(
 def submit_user_task_command(
     title: str = typer.Option("GUI file-transfer task", "--title", help="Task title."),
     body_file: Path = typer.Option(..., "--body-file", help="UTF-8 text file containing the task body."),
+    communication_mode: str = typer.Option(
+        "file_transfer",
+        "--communication-mode",
+        help="GUI communication mode: remote, file_transfer, or copy_paste.",
+    ),
     publish: bool = typer.Option(
         False,
         "--publish",
@@ -4757,7 +4762,13 @@ def submit_user_task_command(
 
     try:
         body = body_file.read_text(encoding="utf-8")
-        result = submit_user_task(Path("."), title=title, body=body, publish=publish)
+        result = submit_user_task(
+            Path("."),
+            title=title,
+            body=body,
+            communication_mode=communication_mode,
+            publish=publish,
+        )
     except (OSError, ValueError) as exc:
         payload = {
             "schema_version": 1,
@@ -4785,6 +4796,7 @@ def submit_user_task_command(
         typer.echo(f"push_status={result.push_status}")
         typer.echo(f"next_reply={result.next_reply}")
         typer.echo(f"next_action={result.next_action}")
+        typer.echo(f"communication_mode={result.communication_mode}")
     if result.result_status != "PASS":
         raise typer.Exit(code=2)
 

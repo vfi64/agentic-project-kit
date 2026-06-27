@@ -432,13 +432,31 @@ def test_task_send_uses_publish_and_success_status_mentions_gui_transfer_branch(
     source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
 
     assert '"--publish"' in source
-    assert "Transfer order published to gui-transfer-tasks. Send g/go in chat." in source
+    assert "Transfer order published to gui-transfer-tasks as mode" in source
     assert "CANONICAL_TRANSFER_INBOX_PATH" in source
     assert CANONICAL_TRANSFER_INBOX_PATH.as_posix() == ".agentic/transfer/inbox/current.yaml"
+    assert '"--communication-mode"' in source
+    assert "self.current_communication_mode()" in source
     assert '"state", "--json"' in source
     assert "transfer read-user-task" not in source
     assert ".agentic/transfer/outbox/last_result.txt" in source
     assert "docs/reports/transfer_tasks/current_user_task.json" not in source
+
+
+def test_task_editor_exposes_terminal_and_transfer_continue_buttons() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+
+    assert 'text="Open terminal"' in source
+    assert 'text="Run transfer continue"' in source
+    assert '"transfer", "continue", "--json"' in source
+    assert "open_transfer_terminal_for_project" in source
+
+
+def test_action_cards_use_single_tooltip_source_per_card() -> None:
+    source = inspect.getsource(CockpitGui._create_action_card)
+
+    assert "attach_tooltip(card, tooltip)" in source
+    assert "attach_tooltip(widget, tooltip)" not in source
 
 
 def test_cockpit_gui_shows_wait_for_d2_label_when_pending() -> None:

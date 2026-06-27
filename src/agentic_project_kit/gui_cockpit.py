@@ -18,6 +18,7 @@ from agentic_project_kit.gui_task_editor import (
     CANONICAL_TRANSFER_INBOX_PATH,
     CANONICAL_TRANSFER_OUTBOX_PATH,
     TaskEditorState,
+    open_transfer_terminal as open_transfer_terminal_for_project,
     task_editor_send_enabled,
     task_editor_state_after_read,
     task_editor_state_after_send,
@@ -727,6 +728,8 @@ class CockpitGui:
             self.initial_prompt_button = None
             self.task_send_button = None
             self.task_read_button = None
+            self.task_open_terminal_button = None
+            self.task_continue_button = None
             return
 
         task_frame = tk.Frame(
@@ -798,6 +801,26 @@ class CockpitGui:
             "Read canonical transfer state through agentic-kit transfer state --json; the local result is .agentic/transfer/outbox/last_result.txt.",
         )
         self.task_read_button.pack(side=tk.LEFT, padx=(0, 9))
+        self.task_open_terminal_button = ttk.Button(
+            task_button_row,
+            text="Open terminal",
+            command=self.open_transfer_terminal,
+        )
+        attach_tooltip(
+            self.task_open_terminal_button,
+            "Open the operating-system terminal for running agentic-kit transfer commands.",
+        )
+        self.task_open_terminal_button.pack(side=tk.LEFT, padx=(0, 9))
+        self.task_continue_button = ttk.Button(
+            task_button_row,
+            text="Run transfer continue",
+            command=self.run_transfer_continue_command,
+        )
+        attach_tooltip(
+            self.task_continue_button,
+            "Run the standard mode-b command: agentic-kit transfer continue --json.",
+        )
+        self.task_continue_button.pack(side=tk.LEFT, padx=(0, 9))
         tk.Label(
             task_frame,
             textvariable=self.task_status_var,
@@ -933,7 +956,7 @@ class CockpitGui:
         tooltip = f"{action.short_description}. {explain_safety(action.safety)}"
         for widget in (card, dot, label, safety):
             widget.bind("<Button-1>", lambda _event, action_id=action.action_id: self._select_action(action_id))
-            attach_tooltip(widget, tooltip)
+        attach_tooltip(card, tooltip)
         self.action_card_widgets[action.action_id] = card
 
     def _select_action(self, action_id: str) -> None:
@@ -985,8 +1008,13 @@ class CockpitGui:
         self.write_output(f"\nRecommended next: {message}\n")
 
     def update_mode_explanation(self, _event: object | None = None) -> None:
+        selected = self.current_communication_mode()
+        self.mode_explanation_var.set(communication_mode_explanation(selected))
+        self.refresh_task_editor_buttons()
+
+    def current_communication_mode(self) -> str:
         option = self.mode_var.get()
-        selected = next(
+        return next(
             (
                 mode.mode_id
                 for mode in self.basic_view.communication_modes
@@ -994,7 +1022,6 @@ class CockpitGui:
             ),
             self.basic_view.communication_mode,
         )
-        self.mode_explanation_var.set(communication_mode_explanation(selected))
 
     def update_access_level(self, _event: object | None = None) -> None:
         selected = normalize_access_level(self.access_level_var.get())
@@ -1018,6 +1045,11 @@ class CockpitGui:
     def refresh_task_editor_buttons(self, _event: object | None = None) -> None:
         if self.task_send_button is None or self.task_read_button is None:
             return
+        mode = self.current_communication_mode()
+        if self.task_continue_button is not None:
+            self.task_continue_button.configure(state="normal" if mode == "file_transfer" else "disabled")
+        if self.task_open_terminal_button is not None:
+            self.task_open_terminal_button.configure(state="normal")
         can_send = task_editor_send_enabled(
             self.current_task_body(),
             traffic_light_state=self.basic_view.traffic_light_state,
@@ -1027,7 +1059,9 @@ class CockpitGui:
         if self.task_editor_state == TaskEditorState.SENT:
             self.task_send_button.configure(state="disabled")
             self.task_read_button.configure(state="normal")
-            self.task_status_var.set("Transfer order published to gui-transfer-tasks. Send g/go in chat.")
+            self.task_status_var.set(
+                f"Transfer order published to gui-transfer-tasks as mode {mode}. Send g/go in chat."
+            )
             return
         if self.task_editor_state == TaskEditorState.BLOCKED:
             self.task_read_button.configure(state="disabled")
@@ -1066,6 +1100,14 @@ class CockpitGui:
         completed = self._agentic_command("gui", "initial-llm-prompt", "--json")
         self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
 
+    def open_transfer_terminal(self) -> None:
+        plan = open_transfer_terminal_for_project(self.project_root)
+        self.write_output("\n" + __import__("json").dumps(plan.as_json_data(), indent=2, sort_keys=True) + "\n")
+
+    def run_transfer_continue_command(self) -> None:
+        completed = self._agentic_command("transfer", "continue", "--json")
+        self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
+
     def send_user_task(self) -> None:
         body = self.current_task_body()
         if not task_editor_send_enabled(
@@ -1088,6 +1130,8 @@ class CockpitGui:
             "GUI file-transfer task",
             "--body-file",
             str(tmp_path),
+            "--communication-mode",
+            self.current_communication_mode(),
             "--publish",
             "--json",
         )
