@@ -1,0 +1,36 @@
+schema_version: 1
+kind: gui_user_task_transfer_order
+id: 070ca138a4829605
+command_id: 070ca138a4829605
+task_id: 070ca138a4829605
+title: GUI file-transfer task
+safety: remote_llm_user_task
+status: active
+branch: codex/cockpit-access-levels
+expected_current_branch: codex/cockpit-access-levels
+expected_head: 4447797a
+expected_origin_main: 4447797ad27ba3bddfef72f9fb98e38d92fca35f
+created_for_head: 4447797ad27ba3bddfef72f9fb98e38d92fca35f
+report_path: docs/reports/command_runs/070ca138a4829605-gui-user-task.md
+actions:
+- type: run_command
+  command:
+  - ./.venv/bin/agentic-kit
+  - transfer
+  - state
+  - --json
+user_task:
+  title: GUI file-transfer task
+  body: Was its Zeit?
+  body_sha256: 5a4068cedcff838574a4437a31b62610342e9b702712b20a4800273fda6a53ec
+created_at_utc: '2026-06-27T15:14:16+00:00'
+head_sha: 4447797ad27ba3bddfef72f9fb98e38d92fca35f
+task_status: submitted
+next_reply: g
+next_action: Send g/go to the LLM; assistant must read the transfer order from ref
+  gui-transfer-tasks.
+remote_path: .agentic/transfer/inbox/current.yaml
+task_path: .agentic/transfer/inbox/current.yaml
+published_ref: gui-transfer-tasks
+local_only: false
+remote_readable: false
