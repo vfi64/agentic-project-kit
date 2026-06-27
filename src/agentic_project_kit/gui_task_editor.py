@@ -4,18 +4,23 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from enum import StrEnum
 import hashlib
-import json
 import os
 from pathlib import Path
 import subprocess
 from typing import Callable
 
+import yaml
+
 from agentic_project_kit.communication_rule_context import REQUIRED_LOADED_SECTIONS
 from agentic_project_kit import transfer_repo_actions
+from agentic_project_kit.transfer_runner import DEFAULT_INBOX
+from agentic_project_kit.transfer_safety_context import OUTBOX_LAST_RESULT
 
 
-CURRENT_USER_TASK_PATH = Path("docs/reports/transfer_tasks/current_user_task.json")
+CURRENT_USER_TASK_PATH = DEFAULT_INBOX
 GUI_TRANSFER_TASK_REF = "gui-transfer-tasks"
+CANONICAL_TRANSFER_INBOX_PATH = DEFAULT_INBOX
+CANONICAL_TRANSFER_OUTBOX_PATH = OUTBOX_LAST_RESULT
 
 
 class TaskEditorState(StrEnum):
@@ -96,12 +101,13 @@ def _initial_prompt_file_transfer_block(
 
 When the user writes "g" or "go":
 - Read {path} from the remote ref `{task_ref}`.
-  Do not read this task carrier from `main` unless the send result explicitly
+  Do not read this transfer order from `main` unless the send result explicitly
   says it was published to `main`.
 - If the ref or file does not exist (HTTP 404 or missing): reply exactly
   TASK_NOT_FOUND and do not mutate anything. The user must click Send
   in the GUI first.
-- If the file exists: treat it as the current user task carrier.
+- If the file exists: treat it as the current agentic-kit transfer order.
+  The user task is in `user_task.body`.
   Work according to repo rules, gates, protected-file policy, and
   existing agentic-kit wrappers.
   Write result/evidence back through repo-backed mechanisms only.
@@ -144,7 +150,7 @@ Do not continue with mutation if blob_sha does not match expected_blob_sha.
 def _initial_prompt_stop_rules_block() -> str:
     return """Stop and report without mutating when:
 - Bootstrap not accepted or validation_report.json is not PASS.
-- g/go received but the task ref or current_user_task.json is missing. Reply TASK_NOT_FOUND.
+- g/go received but the task ref or canonical transfer inbox file is missing. Reply TASK_NOT_FOUND.
 - d2 received but no pending state exists. Reply RULE_REFRESH_NOT_PENDING.
 - d2 received but blob_sha does not match. Reply RULE_REFRESH_ACK_BLOCKED.
 - Communication rule refresh is pending and no valid ACK exists.
@@ -212,6 +218,9 @@ def submit_user_task(
         raise ValueError("task body must not be empty")
     created = created_at_utc or datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     head_sha = _git_output(root, "rev-parse", "HEAD") or "UNKNOWN"
+    short_head = _git_output(root, "rev-parse", "--short", "HEAD") or head_sha[:12]
+    branch = _git_output(root, "branch", "--show-current") or "UNKNOWN"
+    origin_main = _git_output(root, "rev-parse", "origin/main") or "UNKNOWN"
     body_sha = hashlib.sha256(normalized_body.encode("utf-8")).hexdigest()
     task_id = hashlib.sha256(
         f"{created}\n{head_sha}\n{normalized_title}\n{body_sha}".encode("utf-8")
@@ -219,20 +228,39 @@ def submit_user_task(
     relative_path = task_path.as_posix()
     payload = {
         "schema_version": 1,
-        "kind": "gui_file_transfer_user_task",
+        "kind": "gui_user_task_transfer_order",
+        "id": task_id,
+        "command_id": task_id,
         "task_id": task_id,
         "title": normalized_title,
-        "body": normalized_body,
-        "body_sha256": body_sha,
+        "safety": "remote_llm_user_task",
+        "status": "active",
+        "branch": branch,
+        "expected_current_branch": branch,
+        "expected_head": short_head,
+        "expected_origin_main": origin_main,
+        "created_for_head": head_sha,
+        "report_path": f"docs/reports/command_runs/{task_id}-gui-user-task.md",
+        "actions": [
+            {
+                "type": "run_command",
+                "command": ["./.venv/bin/agentic-kit", "transfer", "state", "--json"],
+            }
+        ],
+        "user_task": {
+            "title": normalized_title,
+            "body": normalized_body,
+            "body_sha256": body_sha,
+        },
         "created_at_utc": created,
         "head_sha": head_sha,
-        "status": "submitted",
+        "task_status": "submitted",
         "next_reply": "g",
         "next_action": (
-            f"Send g/go to the LLM; assistant must read the task carrier from ref {GUI_TRANSFER_TASK_REF}."
+            f"Send g/go to the LLM; assistant must read the transfer order from ref {GUI_TRANSFER_TASK_REF}."
             if publish
             else (
-                "Task carrier written locally only. Publish through the guarded "
+                "Transfer order written locally only. Publish through the guarded "
                 "agentic-kit transfer path before sending g/go to the LLM."
             )
         ),
@@ -264,13 +292,13 @@ def submit_user_task(
         else "task_carrier_local_only"
     )
     next_action = (
-        f"Send g/go to the LLM; assistant must read the task carrier from ref {GUI_TRANSFER_TASK_REF}."
+        f"Send g/go to the LLM; assistant must read the transfer order from ref {GUI_TRANSFER_TASK_REF}."
         if remote_readable
         else (
-            "Task carrier written locally only. Publish through the guarded "
+            "Transfer order written locally only. Publish through the guarded "
             "agentic-kit transfer path before sending g/go to the LLM."
             if not publish
-            else "Inspect task carrier publish failure before sending g/go."
+            else "Inspect transfer order publish failure before sending g/go."
         )
     )
     return SubmittedUserTask(
@@ -298,7 +326,11 @@ def submit_user_task(
 
 def _write_task_payload(target: Path, payload: dict[str, object]) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    target.write_text(_render_task_payload(payload), encoding="utf-8")
+
+
+def _render_task_payload(payload: dict[str, object]) -> str:
+    return yaml.safe_dump(payload, sort_keys=False, allow_unicode=False)
 
 
 def _publish_task_carrier(
@@ -308,7 +340,7 @@ def _publish_task_carrier(
     *,
     git_runner: GitRunner,
 ) -> TaskCarrierPublishResult:
-    payload_text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    payload_text = _render_task_payload(payload)
     with _working_directory(root):
         original_branch = _git_runner_output(root, git_runner, ("branch", "--show-current")) or ""
         ensure_result = _ensure_task_carrier_branch(root, git_runner=git_runner)
@@ -317,7 +349,7 @@ def _publish_task_carrier(
 
         _write_task_payload(root / task_path, payload)
         commit_result = transfer_repo_actions.commit_paths(
-            "Publish GUI transfer task carrier",
+            "Publish GUI transfer order",
             [task_path.as_posix()],
             required_branch=GUI_TRANSFER_TASK_REF,
         )
@@ -487,28 +519,28 @@ def read_user_task(project_root: Path | str, task_path: Path = CURRENT_USER_TASK
             "result_status": "FAIL",
             "reason": "TASK_NOT_FOUND",
             "task_path": task_path.as_posix(),
-            "next_action": "Click Send in the GUI first, then publish the task carrier.",
+            "next_action": "Click Send in the GUI first, then publish the transfer order.",
         }
     try:
-        payload = json.loads(target.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
+        payload = yaml.safe_load(target.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError as exc:
         return {
             "schema_version": 1,
             "kind": "gui_file_transfer_user_task_read",
             "result_status": "FAIL",
-            "reason": "TASK_JSON_INVALID",
+            "reason": "TASK_YAML_INVALID",
             "task_path": task_path.as_posix(),
             "error": str(exc),
-            "next_action": "Inspect the task carrier JSON before continuing.",
+            "next_action": "Inspect the transfer order YAML before continuing.",
         }
     if not isinstance(payload, dict):
         return {
             "schema_version": 1,
             "kind": "gui_file_transfer_user_task_read",
             "result_status": "FAIL",
-            "reason": "TASK_JSON_NOT_OBJECT",
+            "reason": "TASK_YAML_NOT_OBJECT",
             "task_path": task_path.as_posix(),
-            "next_action": "Inspect the task carrier JSON before continuing.",
+            "next_action": "Inspect the transfer order YAML before continuing.",
         }
     return {
         "schema_version": 1,
@@ -517,12 +549,26 @@ def read_user_task(project_root: Path | str, task_path: Path = CURRENT_USER_TASK
         "reason": "TASK_FOUND",
         "task_path": task_path.as_posix(),
         "task": payload,
-        "next_action": "Inspect the task carrier or publish it through the guarded transfer path.",
+        "next_action": "Inspect the transfer order or publish it through the guarded transfer path.",
     }
 
 
 def task_editor_state_after_read(result_status: str) -> TaskEditorState:
     return TaskEditorState.IDLE if result_status == "PASS" else TaskEditorState.BLOCKED
+
+
+def transfer_state_has_canonical_outbox_result(payload: dict[str, object]) -> bool:
+    transfer_files = payload.get("transfer_files")
+    if isinstance(transfer_files, dict):
+        outbox = transfer_files.get("outbox")
+    else:
+        outbox = payload.get("outbox")
+    if not isinstance(outbox, dict):
+        return False
+    last_result = outbox.get("last_result")
+    if not isinstance(last_result, dict):
+        return False
+    return bool(last_result.get("exists"))
 
 
 def _git_output(root: Path, *args: str) -> str:

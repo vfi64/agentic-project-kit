@@ -543,6 +543,14 @@ def branch_create(branch: str, *, start_point: str = "main", push: bool = False)
         drift = _verify_current_branch("branch-create", branch, command=push_command)
         if drift is not None:
             return drift
+        remote_drift = _verify_remote_branch_matches_local(
+            action="branch-create",
+            branch=branch,
+            command=push_command,
+            next_action="Resolve remote branch mismatch before continuing with queued work.",
+        )
+        if remote_drift is not None:
+            return remote_drift
         return _result("branch-create", push_command, pushed, "Run transfer state or continue with queued work.")
 
     return _result("branch-create", command, completed, "Run transfer state or continue with queued work.")
@@ -772,7 +780,155 @@ def push_current(*, required_branch: str = "") -> RepoActionResult:
     if drift is not None:
         return drift
 
+    remote_drift = _verify_remote_branch_matches_local(
+        action="push-current",
+        branch=branch,
+        command=command,
+        next_action="Resolve remote branch mismatch before creating or updating a PR.",
+    )
+    if remote_drift is not None:
+        return remote_drift
+
     return _result("push-current", command, completed, "Create or inspect pull request.")
+
+
+def _remote_head_sha(head: str) -> tuple[str, subprocess.CompletedProcess[str]]:
+    command = ["git", "ls-remote", "--exit-code", "--heads", "origin", head]
+    completed = _run(command)
+    if completed.returncode != 0:
+        return "", completed
+    for line in completed.stdout.splitlines():
+        parts = line.split()
+        if len(parts) >= 2 and parts[1] == f"refs/heads/{head}":
+            return parts[0], completed
+    return "", subprocess.CompletedProcess(command, 2, completed.stdout, f"Remote branch origin/{head} was not found.\n")
+
+
+def _verify_remote_branch_matches_local(
+    *,
+    action: str,
+    branch: str,
+    command: list[str],
+    next_action: str,
+) -> RepoActionResult | None:
+    local_command = ["git", "rev-parse", "HEAD"]
+    local_completed = _run(local_command)
+    if local_completed.returncode != 0:
+        return _result(action, local_command, local_completed, "Inspect local HEAD before verifying remote branch.")
+    local_head = local_completed.stdout.strip()
+    remote_sha, remote_completed = _remote_head_sha(branch)
+    if remote_completed.returncode != 0 or not remote_sha:
+        completed = subprocess.CompletedProcess(
+            remote_completed.args,
+            2,
+            remote_completed.stdout,
+            (
+                f"Remote branch origin/{branch} could not be verified after push.\n"
+                f"{remote_completed.stderr}"
+            ),
+        )
+        return _result(action, list(completed.args), completed, "Inspect remote branch verification before continuing.")
+    if remote_sha != local_head:
+        completed = subprocess.CompletedProcess(
+            command,
+            2,
+            remote_completed.stdout,
+            (
+                f"Remote branch origin/{branch} does not match local HEAD after push. "
+                f"remote={remote_sha}; local={local_head}.\n"
+            ),
+        )
+        return _result(action, command, completed, next_action)
+    return None
+
+
+def ensure_remote_head(
+    head: str,
+    *,
+    auto_push: bool = True,
+    action: str = "ensure-remote-head",
+) -> RepoActionResult:
+    """Verify that the remote head branch exists and matches local HEAD.
+
+    This is intentionally stricter than a successful `gh pr create`: PR creation
+    must not rely on a stale or missing remote branch and must never silently
+    force-push divergent remote state.
+    """
+
+    branch_command = ["git", "branch", "--show-current"]
+    branch_completed = _run(branch_command)
+    if branch_completed.returncode != 0:
+        return _result(action, branch_command, branch_completed, "Inspect repository branch state.")
+    branch = branch_completed.stdout.strip()
+    if branch != head:
+        completed = subprocess.CompletedProcess(
+            branch_command,
+            2,
+            branch_completed.stdout,
+            f"Current branch {branch!r} does not match PR head {head!r}.\n",
+        )
+        return _result(action, branch_command, completed, "Switch to the PR head branch before creating a PR.")
+
+    local_command = ["git", "rev-parse", "HEAD"]
+    local_completed = _run(local_command)
+    if local_completed.returncode != 0:
+        return _result(action, local_command, local_completed, "Inspect local HEAD before creating a PR.")
+    local_head = local_completed.stdout.strip()
+
+    remote_sha, remote_completed = _remote_head_sha(head)
+    auto_pushed = False
+    if not remote_sha:
+        if not auto_push:
+            completed = subprocess.CompletedProcess(
+                remote_completed.args,
+                2,
+                remote_completed.stdout,
+                f"Remote branch origin/{head} is missing and auto-push is disabled.\n{remote_completed.stderr}",
+            )
+            return _result(action, list(completed.args), completed, "Push the branch through transfer push-current before creating a PR.")
+
+        push_result = push_current(required_branch=head)
+        if push_result.returncode != 0:
+            completed = subprocess.CompletedProcess(
+                push_result.command,
+                push_result.returncode,
+                push_result.stdout,
+                push_result.stderr,
+            )
+            return _result(action, push_result.command, completed, "Inspect push-current failure before creating a PR.")
+        auto_pushed = True
+
+        local_completed = _run(local_command)
+        if local_completed.returncode != 0:
+            return _result(action, local_command, local_completed, "Inspect local HEAD after branch push.")
+        local_head = local_completed.stdout.strip()
+        remote_sha, remote_completed = _remote_head_sha(head)
+
+    if remote_completed.returncode not in {0, 2} and not remote_sha:
+        return _result(action, list(remote_completed.args), remote_completed, "Inspect remote branch lookup before creating a PR.")
+
+    if remote_sha != local_head:
+        completed = subprocess.CompletedProcess(
+            remote_completed.args,
+            2,
+            remote_completed.stdout,
+            (
+                f"Remote branch origin/{head} does not match local HEAD. "
+                f"remote={remote_sha or '<missing>'}; local={local_head}. "
+                "Refusing PR create without force-push.\n"
+            ),
+        )
+        return _result(action, list(completed.args), completed, "Resolve remote branch divergence before creating a PR.")
+
+    stdout = (
+        "REMOTE_HEAD_VERIFIED\n"
+        f"head={head}\n"
+        f"local_head={local_head}\n"
+        f"remote_head={remote_sha}\n"
+        f"auto_pushed={str(auto_pushed).lower()}\n"
+    )
+    completed = subprocess.CompletedProcess(list(remote_completed.args), 0, stdout, "")
+    return _result(action, list(completed.args), completed, "Create or inspect pull request.")
 
 
 def pr_create(*, base: str, head: str, title: str, body: str) -> RepoActionResult:
@@ -806,6 +962,10 @@ def pr_create(*, base: str, head: str, title: str, body: str) -> RepoActionResul
     )
     if preflight is not None:
         return preflight
+
+    remote_head = ensure_remote_head(head, auto_push=True, action="pr-create")
+    if remote_head.returncode != 0:
+        return remote_head
 
     command = [
         "gh",
@@ -1423,29 +1583,57 @@ def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionR
         return _result("admin-refresh-pr", completed.args, completed, "Inspect unexpected admin refresh diff before committing.")
 
     commit_message = f"Refresh handoff state after PR{after_pr}"
-    more_steps = [
-        ["git", "add", *ADMIN_REFRESH_PATHS, _admin_refresh_successor_prompt_path(after_pr)],
-        ["git", "commit", "-m", commit_message],
-        ["git", "push", "-u", "origin", refresh_branch],
-        [
-            "gh",
-            "pr",
-            "create",
-            "--base",
-            main_branch,
-            "--head",
-            refresh_branch,
-            "--title",
-            commit_message,
-            "--body",
-            f"Administrative operational handoff refresh after PR{after_pr}. No product-code changes.",
-        ],
-    ]
-    for step in more_steps:
-        completed = _run(step)
-        transcript.append(f"$ {' '.join(step)}\n{completed.stdout}{completed.stderr}")
-        if completed.returncode != 0:
-            return _result("admin-refresh-pr", step, completed, "Inspect admin refresh PR creation failure.")
+    commit_result = commit_paths(
+        commit_message,
+        [*ADMIN_REFRESH_PATHS, _admin_refresh_successor_prompt_path(after_pr)],
+        required_branch=refresh_branch,
+    )
+    transcript.append(
+        f"$ transfer commit --message {commit_message!r} --path <admin-refresh-paths>\n"
+        f"{commit_result.stdout}{commit_result.stderr}"
+    )
+    if commit_result.returncode != 0:
+        completed = subprocess.CompletedProcess(
+            commit_result.command,
+            commit_result.returncode,
+            commit_result.stdout,
+            commit_result.stderr,
+        )
+        return _result("admin-refresh-pr", commit_result.command, completed, "Inspect admin refresh commit failure before continuing.")
+
+    push_result = push_current(required_branch=refresh_branch)
+    transcript.append(
+        f"$ transfer push-current --branch {refresh_branch}\n"
+        f"{push_result.stdout}{push_result.stderr}"
+    )
+    if push_result.returncode != 0:
+        completed = subprocess.CompletedProcess(
+            push_result.command,
+            push_result.returncode,
+            push_result.stdout,
+            push_result.stderr,
+        )
+        return _result("admin-refresh-pr", push_result.command, completed, "Inspect admin refresh push failure before continuing.")
+
+    pr_body = f"Administrative operational handoff refresh after PR{after_pr}. No product-code changes."
+    pr_result = pr_create(
+        base=main_branch,
+        head=refresh_branch,
+        title=commit_message,
+        body=pr_body,
+    )
+    transcript.append(
+        f"$ transfer pr-create --base {main_branch} --head {refresh_branch}\n"
+        f"{pr_result.stdout}{pr_result.stderr}"
+    )
+    if pr_result.returncode != 0:
+        completed = subprocess.CompletedProcess(
+            pr_result.command,
+            pr_result.returncode,
+            pr_result.stdout,
+            pr_result.stderr,
+        )
+        return _result("admin-refresh-pr", pr_result.command, completed, "Inspect admin refresh PR creation failure.")
 
     completed = subprocess.CompletedProcess(
         ["agentic-kit", "transfer", "admin-refresh-pr", "--after-pr", str(after_pr)],

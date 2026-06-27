@@ -27,6 +27,10 @@ def test_smoke_pr_exists_recovery_returns_state_next(monkeypatch):
             return subprocess.CompletedProcess(command, 0, "feature/example\n", "")
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "abc123\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "--heads", "origin", "feature/example"]:
+            return subprocess.CompletedProcess(command, 0, "abc123\trefs/heads/feature/example\n", "")
         if command[:3] == ["gh", "pr", "create"]:
             return subprocess.CompletedProcess(command, 1, "", "a pull request already exists for feature/example\n")
         if command[:3] == ["gh", "pr", "list"]:
