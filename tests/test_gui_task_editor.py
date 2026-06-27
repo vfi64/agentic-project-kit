@@ -13,6 +13,7 @@ from agentic_project_kit.gui_task_editor import (
     CANONICAL_TRANSFER_OUTBOX_PATH,
     CURRENT_USER_TASK_PATH,
     GUI_TRANSFER_TASK_REF,
+    LEGACY_GUI_TRANSFER_TASK_PATH,
     TaskEditorState,
     build_initial_llm_prompt,
     read_user_task,
@@ -22,6 +23,17 @@ from agentic_project_kit.gui_task_editor import (
     task_editor_state_after_send,
     task_editor_visible_for_mode,
     transfer_state_has_canonical_outbox_result,
+)
+
+
+FETCH_GUI_TRANSFER_REF = (
+    "fetch",
+    "origin",
+    f"{GUI_TRANSFER_TASK_REF}:refs/remotes/origin/{GUI_TRANSFER_TASK_REF}",
+)
+EXPECTED_GUI_TASK_NEXT_ACTION = (
+    "Send g/go to the LLM; assistant must read "
+    ".agentic/transfer/inbox/current.yaml from remote ref gui-transfer-tasks."
 )
 
 
@@ -126,6 +138,7 @@ def test_submit_user_task_writes_canonical_transfer_inbox(tmp_path) -> None:
     assert payload["kind"] == "gui_user_task_transfer_order"
     assert payload["id"] == result.task_id
     assert payload["status"] == "active"
+    assert "remote_readable" not in payload
     assert payload["user_task"]["body"] == "Implement the safe thing."
     assert payload["actions"][0]["command"] == [
         "./.venv/bin/agentic-kit",
@@ -173,9 +186,7 @@ def test_transfer_submit_user_task_cli_publish_json(tmp_path, monkeypatch) -> No
             task_path=CURRENT_USER_TASK_PATH.as_posix(),
             published_ref=GUI_TRANSFER_TASK_REF,
             next_reply="g",
-            next_action=(
-                "Send g/go to the LLM; assistant must read the transfer order from ref gui-transfer-tasks."
-            ),
+            next_action=EXPECTED_GUI_TASK_NEXT_ACTION,
             button_next_state=TaskEditorState.SENT.value,
             body_sha256="sha",
             created_at_utc="2026-06-26T00:00:00+00:00",
@@ -211,6 +222,9 @@ def test_submit_user_task_publish_uses_gui_transfer_branch_and_verifies_remote(
     monkeypatch,
 ) -> None:
     calls: list[object] = []
+    legacy_path = tmp_path / LEGACY_GUI_TRANSFER_TASK_PATH
+    legacy_path.parent.mkdir(parents=True)
+    legacy_path.write_text('{"kind":"legacy"}\n', encoding="utf-8")
 
     def fake_git_runner(root, args):
         calls.append(("git", args))
@@ -222,7 +236,7 @@ def test_submit_user_task_publish_uses_gui_transfer_branch_and_verifies_remote(
             return subprocess.CompletedProcess(["git", *args], 0, "abc123\n", "")
         if args == ("rev-parse", "origin/main"):
             return subprocess.CompletedProcess(["git", *args], 0, "originmain123\n", "")
-        if args == ("fetch", "origin", GUI_TRANSFER_TASK_REF):
+        if args == FETCH_GUI_TRANSFER_REF:
             return subprocess.CompletedProcess(["git", *args], 0, "", "")
         if args == ("rev-parse", "--verify", "--quiet", GUI_TRANSFER_TASK_REF):
             return subprocess.CompletedProcess(["git", *args], 1, "", "")
@@ -296,18 +310,16 @@ def test_submit_user_task_publish_uses_gui_transfer_branch_and_verifies_remote(
     assert result.local_only is False
     assert result.button_next_state == TaskEditorState.SENT.value
     assert result.next_reply == "g"
-    assert (
-        result.next_action
-        == "Send g/go to the LLM; assistant must read the transfer order from ref gui-transfer-tasks."
-    )
+    assert result.next_action == EXPECTED_GUI_TASK_NEXT_ACTION
     assert ("branch_create", GUI_TRANSFER_TASK_REF, "main") in calls
     assert (
         "commit_paths",
         "Publish GUI transfer order",
-        (CURRENT_USER_TASK_PATH.as_posix(),),
+        (CURRENT_USER_TASK_PATH.as_posix(), LEGACY_GUI_TRANSFER_TASK_PATH.as_posix()),
         GUI_TRANSFER_TASK_REF,
         False,
     ) in calls
+    assert not legacy_path.exists()
     assert ("push_current", GUI_TRANSFER_TASK_REF) in calls
     assert ("branch_switch", "main", False) in calls
     assert ("git", ("rev-parse", "--verify", f"origin/{GUI_TRANSFER_TASK_REF}:{CURRENT_USER_TASK_PATH.as_posix()}")) in calls
@@ -326,7 +338,7 @@ def test_submit_user_task_publish_does_not_mark_remote_readable_without_verifica
             return subprocess.CompletedProcess(["git", *args], 0, "abc123\n", "")
         if args == ("rev-parse", "origin/main"):
             return subprocess.CompletedProcess(["git", *args], 0, "originmain123\n", "")
-        if args == ("fetch", "origin", GUI_TRANSFER_TASK_REF):
+        if args == FETCH_GUI_TRANSFER_REF:
             return subprocess.CompletedProcess(["git", *args], 0, "", "")
         if args == ("rev-parse", "--verify", "--quiet", GUI_TRANSFER_TASK_REF):
             return subprocess.CompletedProcess(["git", *args], 1, "", "")

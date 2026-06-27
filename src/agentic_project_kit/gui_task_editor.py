@@ -21,6 +21,7 @@ CURRENT_USER_TASK_PATH = DEFAULT_INBOX
 GUI_TRANSFER_TASK_REF = "gui-transfer-tasks"
 CANONICAL_TRANSFER_INBOX_PATH = DEFAULT_INBOX
 CANONICAL_TRANSFER_OUTBOX_PATH = OUTBOX_LAST_RESULT
+LEGACY_GUI_TRANSFER_TASK_PATH = Path("docs/reports/transfer_tasks/current_user_task.json")
 
 
 class TaskEditorState(StrEnum):
@@ -257,7 +258,8 @@ def submit_user_task(
         "task_status": "submitted",
         "next_reply": "g",
         "next_action": (
-            f"Send g/go to the LLM; assistant must read the transfer order from ref {GUI_TRANSFER_TASK_REF}."
+            "Send g/go to the LLM; assistant must read "
+            f"{relative_path} from remote ref {GUI_TRANSFER_TASK_REF}."
             if publish
             else (
                 "Transfer order written locally only. Publish through the guarded "
@@ -268,7 +270,6 @@ def submit_user_task(
         "task_path": relative_path,
         "published_ref": GUI_TRANSFER_TASK_REF if publish else None,
         "local_only": not publish,
-        "remote_readable": False,
     }
     publish_result = None
     if publish:
@@ -292,7 +293,8 @@ def submit_user_task(
         else "task_carrier_local_only"
     )
     next_action = (
-        f"Send g/go to the LLM; assistant must read the transfer order from ref {GUI_TRANSFER_TASK_REF}."
+        "Send g/go to the LLM; assistant must read "
+        f"{relative_path} from remote ref {GUI_TRANSFER_TASK_REF}."
         if remote_readable
         else (
             "Transfer order written locally only. Publish through the guarded "
@@ -348,9 +350,14 @@ def _publish_task_carrier(
             return _restore_branch_after_publish(root, original_branch, ensure_result)
 
         _write_task_payload(root / task_path, payload)
+        commit_paths = [task_path.as_posix()]
+        legacy_path = root / LEGACY_GUI_TRANSFER_TASK_PATH
+        if legacy_path.exists():
+            legacy_path.unlink()
+            commit_paths.append(LEGACY_GUI_TRANSFER_TASK_PATH.as_posix())
         commit_result = transfer_repo_actions.commit_paths(
             "Publish GUI transfer order",
-            [task_path.as_posix()],
+            commit_paths,
             required_branch=GUI_TRANSFER_TASK_REF,
         )
         if commit_result.returncode != 0:
@@ -404,7 +411,7 @@ def _ensure_task_carrier_branch(
     *,
     git_runner: GitRunner,
 ) -> TaskCarrierPublishResult | None:
-    fetch = git_runner(root, ("fetch", "origin", GUI_TRANSFER_TASK_REF))
+    fetch = git_runner(root, _fetch_task_ref_args())
     local_exists = git_runner(root, ("rev-parse", "--verify", "--quiet", GUI_TRANSFER_TASK_REF)).returncode == 0
     remote_exists = git_runner(root, ("rev-parse", "--verify", "--quiet", f"origin/{GUI_TRANSFER_TASK_REF}")).returncode == 0
     if local_exists or remote_exists:
@@ -451,7 +458,9 @@ def _verify_remote_task_carrier(
     expected_payload_text: str,
     git_runner: GitRunner,
 ) -> RemoteTaskCarrierVerification:
-    git_runner(root, ("fetch", "origin", GUI_TRANSFER_TASK_REF))
+    fetch = git_runner(root, _fetch_task_ref_args())
+    if fetch.returncode != 0:
+        return RemoteTaskCarrierVerification(False, "", "remote_fetch_failed")
     remote_spec = f"origin/{GUI_TRANSFER_TASK_REF}:{task_path.as_posix()}"
     blob = git_runner(root, ("rev-parse", "--verify", remote_spec))
     if blob.returncode != 0:
@@ -462,6 +471,14 @@ def _verify_remote_task_carrier(
     if show.stdout != expected_payload_text:
         return RemoteTaskCarrierVerification(False, blob.stdout.strip(), "remote_content_mismatch")
     return RemoteTaskCarrierVerification(True, blob.stdout.strip(), "remote_carrier_verified")
+
+
+def _fetch_task_ref_args() -> tuple[str, str, str]:
+    return (
+        "fetch",
+        "origin",
+        f"{GUI_TRANSFER_TASK_REF}:refs/remotes/origin/{GUI_TRANSFER_TASK_REF}",
+    )
 
 
 def _restore_branch_after_publish(
