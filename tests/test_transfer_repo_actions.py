@@ -502,6 +502,7 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
 
     calls = []
+    wrapper_calls = []
 
     def fake_run(command, cwd=None):
         calls.append(command)
@@ -549,33 +550,6 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
             )
         if command == ["agentic-kit", "transfer", "protected-diff-plan", "--label", "post-pr123-handoff-refresh"]:
             return subprocess.CompletedProcess(command, 0, "PLAN: PASS\n", "")
-        if command == [
-            "git",
-            "add",
-            ".agentic/handoff_state.yaml",
-            ".agentic/operational_handoff_state.yaml",
-            "docs/STATUS.md",
-            "docs/handoff/CURRENT_HANDOFF.md",
-            "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
-            "docs/handoff/START_NEW_CHAT_PROMPT.md",
-            "docs/reports/handoff-packages/latest/execution_contract.json",
-            "docs/reports/handoff-packages/latest/source_manifest.json",
-            "docs/reports/handoff-packages/latest/successor_context.yaml",
-            "docs/reports/handoff-packages/latest/successor_prompt.md",
-            "docs/reports/handoff-packages/latest/validation_report.json",
-            "docs/reports/terminal/post-pr123-successor-chat-handoff.md",
-        ]:
-            return subprocess.CompletedProcess(command, 0, "", "")
-        if command == ["git", "commit", "-m", "Refresh handoff state after PR123"]:
-            return subprocess.CompletedProcess(
-                command, 0, "[branch abc123] Refresh handoff state after PR123\n", ""
-            )
-        if command == ["git", "push", "-u", "origin", "docs/post-pr123-handoff-refresh"]:
-            return subprocess.CompletedProcess(command, 0, "", "")
-        if command[:4] == ["gh", "pr", "create", "--base"]:
-            return subprocess.CompletedProcess(
-                command, 0, "https://github.com/vfi64/agentic-project-kit/pull/999\n", ""
-            )
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     def fake_refresh_operational_handoff_docs(after_pr):
@@ -595,6 +569,38 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
         "agentic_project_kit.transfer_repo_actions._refresh_operational_handoff_docs",
         fake_refresh_operational_handoff_docs,
     )
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "commit_paths",
+        lambda message, paths, required_branch="", allow_main=False: wrapper_calls.append(
+            ("commit_paths", message, tuple(paths), required_branch, allow_main)
+        )
+        or transfer_repo_actions.RepoActionResult(
+            "commit", "PASS", 0, ["commit"], "committed\n", "", "Push current branch or inspect status."
+        ),
+    )
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "push_current",
+        lambda required_branch="": wrapper_calls.append(("push_current", required_branch))
+        or transfer_repo_actions.RepoActionResult(
+            "push-current", "PASS", 0, ["push-current"], "pushed\n", "", "Create or inspect pull request."
+        ),
+    )
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "pr_create",
+        lambda base, head, title, body: wrapper_calls.append((base, head, title, body))
+        or transfer_repo_actions.RepoActionResult(
+            "pr-create",
+            "PASS",
+            0,
+            ["pr-create"],
+            "https://github.com/vfi64/agentic-project-kit/pull/999\n",
+            "",
+            "Run agentic-kit transfer pr-status on the created PR.",
+        ),
+    )
 
     result = admin_refresh_pr(123)
 
@@ -602,6 +608,17 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
     assert result.returncode == 0
     assert "docs/post-pr123-handoff-refresh" in result.stdout
     assert "pull/999" in result.stdout
+    assert (
+        "commit_paths",
+        "Refresh handoff state after PR123",
+        (*transfer_repo_actions.ADMIN_REFRESH_PATHS, "docs/reports/terminal/post-pr123-successor-chat-handoff.md"),
+        "docs/post-pr123-handoff-refresh",
+        False,
+    ) in wrapper_calls
+    assert ("push_current", "docs/post-pr123-handoff-refresh") in wrapper_calls
+    assert any(call[:3] == ("main", "docs/post-pr123-handoff-refresh", "Refresh handoff state after PR123") for call in wrapper_calls if isinstance(call, tuple))
+    assert ["git", "push", "-u", "origin", "docs/post-pr123-handoff-refresh"] not in calls
+    assert not any(command[:3] == ["gh", "pr", "create"] for command in calls)
 
 
 def test_admin_refresh_pr_requires_clean_main(tmp_path, monkeypatch):
@@ -1153,6 +1170,10 @@ def test_push_current_with_required_branch_switches_before_push(monkeypatch):
             return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
         if command == ["git", "push", "-u", "origin", "feature/demo"]:
             return subprocess.CompletedProcess(command, 0, "pushed\n", "")
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "abc123\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "--heads", "origin", "feature/demo"]:
+            return subprocess.CompletedProcess(command, 0, "abc123\trefs/heads/feature/demo\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
@@ -1162,6 +1183,40 @@ def test_push_current_with_required_branch_switches_before_push(monkeypatch):
 
     assert result.returncode == 0
     assert result.result_status == "PASS"
+    assert ["git", "push", "-u", "origin", "feature/demo"] in calls
+
+
+def test_push_current_refuses_remote_mismatch_after_push(monkeypatch):
+    calls = []
+
+    class PassingMonitor:
+        decision = transfer_repo_actions.MonitorDecision.CONTINUE
+        actual_branch = "feature/demo"
+        required_branch = "feature/demo"
+        reason = "test_monitor_pass"
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if command == ["git", "push", "-u", "origin", "feature/demo"]:
+            return subprocess.CompletedProcess(command, 0, "pushed\n", "")
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "local123\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "--heads", "origin", "feature/demo"]:
+            return subprocess.CompletedProcess(command, 0, "remote456\trefs/heads/feature/demo\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", lambda **kwargs: PassingMonitor())
+
+    result = transfer_repo_actions.push_current(required_branch="feature/demo")
+
+    assert result.returncode == 2
+    assert result.result_status == "FAIL"
+    assert "does not match local HEAD after push" in result.stderr
     assert ["git", "push", "-u", "origin", "feature/demo"] in calls
 
 
@@ -1998,6 +2053,7 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
     monkeypatch.chdir(tmp_path)
 
     calls = []
+    wrapper_calls = []
 
     def fake_run(command, cwd=None):
         calls.append(command)
@@ -2047,19 +2103,6 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
             return subprocess.CompletedProcess(command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", "")
         if command == ["agentic-kit", "transfer", "protected-diff-plan", "--label", "post-pr123-handoff-refresh"]:
             return subprocess.CompletedProcess(command, 0, "PLAN: PASS\n", "")
-        if command == [
-            "git",
-            "add",
-            *transfer_repo_actions.ADMIN_REFRESH_PATHS,
-            "docs/reports/terminal/post-pr123-successor-chat-handoff.md",
-        ]:
-            return subprocess.CompletedProcess(command, 0, "", "")
-        if command == ["git", "commit", "-m", "Refresh handoff state after PR123"]:
-            return subprocess.CompletedProcess(command, 0, "[branch abc123] Refresh handoff state after PR123\n", "")
-        if command == ["git", "push", "-u", "origin", "docs/post-pr123-handoff-refresh"]:
-            return subprocess.CompletedProcess(command, 0, "", "")
-        if command[:4] == ["gh", "pr", "create", "--base"]:
-            return subprocess.CompletedProcess(command, 0, "https://github.com/vfi64/agentic-project-kit/pull/999\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     def fake_refresh_operational_handoff_docs(after_pr):
@@ -2080,6 +2123,38 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
         "agentic_project_kit.transfer_repo_actions._refresh_operational_handoff_docs",
         fake_refresh_operational_handoff_docs,
     )
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "commit_paths",
+        lambda message, paths, required_branch="", allow_main=False: wrapper_calls.append(
+            ("commit_paths", message, tuple(paths), required_branch, allow_main)
+        )
+        or transfer_repo_actions.RepoActionResult(
+            "commit", "PASS", 0, ["commit"], "committed\n", "", "Push current branch or inspect status."
+        ),
+    )
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "push_current",
+        lambda required_branch="": wrapper_calls.append(("push_current", required_branch))
+        or transfer_repo_actions.RepoActionResult(
+            "push-current", "PASS", 0, ["push-current"], "pushed\n", "", "Create or inspect pull request."
+        ),
+    )
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "pr_create",
+        lambda base, head, title, body: wrapper_calls.append((base, head, title, body))
+        or transfer_repo_actions.RepoActionResult(
+            "pr-create",
+            "PASS",
+            0,
+            ["pr-create"],
+            "https://github.com/vfi64/agentic-project-kit/pull/999\n",
+            "",
+            "Run agentic-kit transfer pr-status on the created PR.",
+        ),
+    )
 
     result = admin_refresh_pr(123)
 
@@ -2088,6 +2163,10 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
     assert ["git", "switch", "docs/post-pr123-handoff-refresh"] in calls
     assert ["git", "reset", "--hard", "main"] in calls
     assert "pull/999" in result.stdout
+    assert ("push_current", "docs/post-pr123-handoff-refresh") in wrapper_calls
+    assert any(call[:3] == ("main", "docs/post-pr123-handoff-refresh", "Refresh handoff state after PR123") for call in wrapper_calls if isinstance(call, tuple))
+    assert ["git", "push", "-u", "origin", "docs/post-pr123-handoff-refresh"] not in calls
+    assert not any(command[:3] == ["gh", "pr", "create"] for command in calls)
 
 def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_admin_refresh(monkeypatch):
     calls = []
@@ -2743,6 +2822,10 @@ def test_pr_create_recovers_existing_pull_request(monkeypatch):
             return subprocess.CompletedProcess(command, 0, "feature/example\n", "")
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "abc123\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "--heads", "origin", "feature/example"]:
+            return subprocess.CompletedProcess(command, 0, "abc123\trefs/heads/feature/example\n", "")
         if command[:3] == ["gh", "pr", "create"]:
             return subprocess.CompletedProcess(command, 1, "", "a pull request already exists for feature/example\n")
         if command[:3] == ["gh", "pr", "list"]:
@@ -2769,6 +2852,102 @@ def test_pr_create_recovers_existing_pull_request(monkeypatch):
     assert "STATE=PR_EXISTS" in result.stdout
     assert "STATE=PR_EXISTS" in result.next_action
     assert any(command[:3] == ["gh", "pr", "list"] for command in calls)
+
+
+def test_pr_create_blocks_stale_remote_head_before_gh_call(monkeypatch):
+    calls = []
+
+    class ContinueMonitor:
+        decision = transfer_repo_actions.MonitorDecision.CONTINUE
+        actual_branch = "feature/example"
+        required_branch = "feature/example"
+        reason = "test_continue"
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/example\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "local123\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "--heads", "origin", "feature/example"]:
+            return subprocess.CompletedProcess(command, 0, "remote456\trefs/heads/feature/example\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+    monkeypatch.setattr(transfer_repo_actions, "guard_pr_create", lambda **kwargs: ContinueMonitor())
+
+    result = transfer_repo_actions.pr_create(
+        base="main",
+        head="feature/example",
+        title="Example",
+        body="Body",
+    )
+
+    assert result.returncode == 2
+    assert result.result_status == "FAIL"
+    assert "does not match local HEAD" in result.stderr
+    assert not any(command[:3] == ["gh", "pr", "create"] for command in calls)
+
+
+def test_pr_create_auto_pushes_missing_remote_head_before_gh_call(monkeypatch):
+    calls = []
+    head_lookup_count = 0
+    push_calls = []
+
+    class ContinueMonitor:
+        decision = transfer_repo_actions.MonitorDecision.CONTINUE
+        actual_branch = "feature/example"
+        required_branch = "feature/example"
+        reason = "test_continue"
+
+    def fake_run(command, cwd=None):
+        nonlocal head_lookup_count
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/example\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "local123\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "--heads", "origin", "feature/example"]:
+            head_lookup_count += 1
+            if head_lookup_count == 1:
+                return subprocess.CompletedProcess(command, 2, "", "missing\n")
+            return subprocess.CompletedProcess(command, 0, "local123\trefs/heads/feature/example\n", "")
+        if command[:3] == ["gh", "pr", "create"]:
+            return subprocess.CompletedProcess(command, 0, "https://example.invalid/pr/42\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    def fake_push_current(required_branch=""):
+        push_calls.append(required_branch)
+        return transfer_repo_actions.RepoActionResult(
+            "push-current",
+            "PASS",
+            0,
+            ["push-current"],
+            "pushed\n",
+            "",
+            "Create or inspect pull request.",
+        )
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+    monkeypatch.setattr(transfer_repo_actions, "guard_pr_create", lambda **kwargs: ContinueMonitor())
+    monkeypatch.setattr(transfer_repo_actions, "push_current", fake_push_current)
+
+    result = transfer_repo_actions.pr_create(
+        base="main",
+        head="feature/example",
+        title="Example",
+        body="Body",
+    )
+
+    assert result.returncode == 0
+    assert result.result_status == "PASS"
+    assert push_calls == ["feature/example"]
+    assert any(command[:3] == ["gh", "pr", "create"] for command in calls)
+
 
 def test_already_merged_pr_result_returns_idempotent_pass(monkeypatch):
     calls = []

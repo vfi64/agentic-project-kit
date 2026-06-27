@@ -4,11 +4,13 @@ import json
 import subprocess
 
 from typer.testing import CliRunner
+import yaml
 
 from agentic_project_kit.cli import app
 from agentic_project_kit.communication_rule_context import REQUIRED_LOADED_SECTIONS
 from agentic_project_kit import transfer_repo_actions
 from agentic_project_kit.gui_task_editor import (
+    CANONICAL_TRANSFER_OUTBOX_PATH,
     CURRENT_USER_TASK_PATH,
     GUI_TRANSFER_TASK_REF,
     TaskEditorState,
@@ -19,6 +21,7 @@ from agentic_project_kit.gui_task_editor import (
     task_editor_state_after_read,
     task_editor_state_after_send,
     task_editor_visible_for_mode,
+    transfer_state_has_canonical_outbox_result,
 )
 
 
@@ -94,11 +97,12 @@ def test_initial_llm_prompt_points_go_to_gui_transfer_task_ref() -> None:
 
     assert result.task_ref == GUI_TRANSFER_TASK_REF
     assert f"remote ref `{GUI_TRANSFER_TASK_REF}`" in result.prompt_text
-    assert "Do not read this task carrier from `main`" in result.prompt_text
+    assert "Do not read this transfer order from `main`" in result.prompt_text
     assert "If the ref or file does not exist" in result.prompt_text
+    assert CURRENT_USER_TASK_PATH.as_posix() == ".agentic/transfer/inbox/current.yaml"
 
 
-def test_submit_user_task_writes_current_task_json(tmp_path) -> None:
+def test_submit_user_task_writes_canonical_transfer_inbox(tmp_path) -> None:
     result = submit_user_task(
         tmp_path,
         title="Demo",
@@ -106,7 +110,7 @@ def test_submit_user_task_writes_current_task_json(tmp_path) -> None:
         created_at_utc="2026-06-26T00:00:00+00:00",
     )
 
-    payload = json.loads((tmp_path / CURRENT_USER_TASK_PATH).read_text(encoding="utf-8"))
+    payload = yaml.safe_load((tmp_path / CURRENT_USER_TASK_PATH).read_text(encoding="utf-8"))
     assert result.result_status == "PASS"
     assert result.remote_path == CURRENT_USER_TASK_PATH.as_posix()
     assert result.task_path == CURRENT_USER_TASK_PATH.as_posix()
@@ -119,7 +123,16 @@ def test_submit_user_task_writes_current_task_json(tmp_path) -> None:
     assert result.push_status == "SKIPPED"
     assert result.button_next_state == TaskEditorState.BLOCKED.value
     assert payload["title"] == "Demo"
-    assert payload["body"] == "Implement the safe thing."
+    assert payload["kind"] == "gui_user_task_transfer_order"
+    assert payload["id"] == result.task_id
+    assert payload["status"] == "active"
+    assert payload["user_task"]["body"] == "Implement the safe thing."
+    assert payload["actions"][0]["command"] == [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "state",
+        "--json",
+    ]
 
 
 def test_transfer_submit_user_task_cli_json(tmp_path, monkeypatch) -> None:
@@ -161,7 +174,7 @@ def test_transfer_submit_user_task_cli_publish_json(tmp_path, monkeypatch) -> No
             published_ref=GUI_TRANSFER_TASK_REF,
             next_reply="g",
             next_action=(
-                "Send g/go to the LLM; assistant must read the task carrier from ref gui-transfer-tasks."
+                "Send g/go to the LLM; assistant must read the transfer order from ref gui-transfer-tasks."
             ),
             button_next_state=TaskEditorState.SENT.value,
             body_sha256="sha",
@@ -205,6 +218,10 @@ def test_submit_user_task_publish_uses_gui_transfer_branch_and_verifies_remote(
             return subprocess.CompletedProcess(["git", *args], 0, "main\n", "")
         if args == ("rev-parse", "HEAD"):
             return subprocess.CompletedProcess(["git", *args], 0, "abc123\n", "")
+        if args == ("rev-parse", "--short", "HEAD"):
+            return subprocess.CompletedProcess(["git", *args], 0, "abc123\n", "")
+        if args == ("rev-parse", "origin/main"):
+            return subprocess.CompletedProcess(["git", *args], 0, "originmain123\n", "")
         if args == ("fetch", "origin", GUI_TRANSFER_TASK_REF):
             return subprocess.CompletedProcess(["git", *args], 0, "", "")
         if args == ("rev-parse", "--verify", "--quiet", GUI_TRANSFER_TASK_REF):
@@ -281,12 +298,12 @@ def test_submit_user_task_publish_uses_gui_transfer_branch_and_verifies_remote(
     assert result.next_reply == "g"
     assert (
         result.next_action
-        == "Send g/go to the LLM; assistant must read the task carrier from ref gui-transfer-tasks."
+        == "Send g/go to the LLM; assistant must read the transfer order from ref gui-transfer-tasks."
     )
     assert ("branch_create", GUI_TRANSFER_TASK_REF, "main") in calls
     assert (
         "commit_paths",
-        "Publish GUI transfer task carrier",
+        "Publish GUI transfer order",
         (CURRENT_USER_TASK_PATH.as_posix(),),
         GUI_TRANSFER_TASK_REF,
         False,
@@ -305,6 +322,10 @@ def test_submit_user_task_publish_does_not_mark_remote_readable_without_verifica
             return subprocess.CompletedProcess(["git", *args], 0, "main\n", "")
         if args == ("rev-parse", "HEAD"):
             return subprocess.CompletedProcess(["git", *args], 0, "abc123\n", "")
+        if args == ("rev-parse", "--short", "HEAD"):
+            return subprocess.CompletedProcess(["git", *args], 0, "abc123\n", "")
+        if args == ("rev-parse", "origin/main"):
+            return subprocess.CompletedProcess(["git", *args], 0, "originmain123\n", "")
         if args == ("fetch", "origin", GUI_TRANSFER_TASK_REF):
             return subprocess.CompletedProcess(["git", *args], 0, "", "")
         if args == ("rev-parse", "--verify", "--quiet", GUI_TRANSFER_TASK_REF):
@@ -382,6 +403,23 @@ def test_task_editor_read_fetches_result_state() -> None:
     assert task_editor_state_after_read("FAIL") == TaskEditorState.BLOCKED
 
 
+def test_transfer_state_outbox_result_detector_uses_canonical_transfer_file() -> None:
+    assert transfer_state_has_canonical_outbox_result(
+        {
+            "transfer_files": {
+                "outbox": {
+                    "last_result": {
+                        "path": CANONICAL_TRANSFER_OUTBOX_PATH.as_posix(),
+                        "exists": True,
+                    }
+                }
+            }
+        }
+    )
+    assert not transfer_state_has_canonical_outbox_result({"outbox": {"last_result": {"exists": False}}})
+    assert not transfer_state_has_canonical_outbox_result({"task_path": CURRENT_USER_TASK_PATH.as_posix()})
+
+
 def test_task_editor_hidden_outside_file_transfer_mode() -> None:
     assert task_editor_visible_for_mode("file_transfer")
     assert not task_editor_visible_for_mode("remote")
@@ -409,6 +447,7 @@ def test_read_user_task_reads_submit_path(tmp_path) -> None:
     assert result["result_status"] == "PASS"
     assert result["task_path"] == CURRENT_USER_TASK_PATH.as_posix()
     assert result["task"]["title"] == "Demo"
+    assert result["task"]["user_task"]["body"] == "Implement the safe thing."
 
 
 def test_transfer_read_user_task_cli_reports_missing(tmp_path, monkeypatch) -> None:

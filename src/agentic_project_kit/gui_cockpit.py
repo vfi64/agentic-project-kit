@@ -15,11 +15,13 @@ from agentic_project_kit.cockpit import (
     run_cockpit_action,
 )
 from agentic_project_kit.gui_task_editor import (
+    CANONICAL_TRANSFER_OUTBOX_PATH,
     TaskEditorState,
     task_editor_send_enabled,
     task_editor_state_after_read,
     task_editor_state_after_send,
     task_editor_visible_for_mode,
+    transfer_state_has_canonical_outbox_result,
 )
 from agentic_project_kit.gui_tk_widgets import (
     attach_tooltip,
@@ -411,9 +413,9 @@ class CockpitGui:
             widget.pack(side=tk.LEFT, padx=(0, 8), pady=1)
 
         self.task_editor_state = TaskEditorState.IDLE
-        self.task_status_var = tk.StringVar(value="Write a file-transfer task, then send it through the guarded wrapper.")
+        self.task_status_var = tk.StringVar(value="Write a transfer order, then send it through the guarded wrapper.")
         if task_editor_visible_for_mode(self.basic_view.communication_mode):
-            task_frame = ttk.LabelFrame(frame, text="File Transfer Task", padding=THEME.section_padding)
+            task_frame = ttk.LabelFrame(frame, text="Transfer Order", padding=THEME.section_padding)
             task_frame.pack(fill=tk.X, pady=(0, 4))
             self.task_text = tk.Text(task_frame, height=THEME.task_text_height, wrap=tk.WORD)
             self.task_text.pack(fill=tk.X, expand=False)
@@ -437,18 +439,18 @@ class CockpitGui:
             )
             attach_tooltip(
                 self.task_send_button,
-                "Publish the task through agentic-kit transfer submit-user-task --publish.",
+                "Publish the canonical agentic-kit transfer inbox file through agentic-kit transfer submit-user-task --publish.",
             )
             self.task_send_button.pack(side=tk.LEFT, padx=(0, 8))
             self.task_read_button = ttk.Button(
                 task_button_row,
-                text="Read",
+                text="Read Result",
                 command=self.read_last_task_result,
                 state=tk.DISABLED,
             )
             attach_tooltip(
                 self.task_read_button,
-                "Read the current task carrier through agentic-kit transfer read-user-task --json.",
+                "Read canonical transfer state through agentic-kit transfer state --json; the local result is .agentic/transfer/outbox/last_result.txt.",
             )
             self.task_read_button.pack(side=tk.LEFT, padx=(0, 8))
             ttk.Label(
@@ -575,18 +577,18 @@ class CockpitGui:
         if self.task_editor_state == TaskEditorState.SENT:
             self.task_send_button.configure(state="disabled")
             self.task_read_button.configure(state="normal")
-            self.task_status_var.set("Task published to gui-transfer-tasks. Send g/go in chat.")
+            self.task_status_var.set("Transfer order published to gui-transfer-tasks. Send g/go in chat.")
             return
         self.task_read_button.configure(state="disabled")
         self.task_send_button.configure(state="normal" if can_send else "disabled")
         if self.basic_view.required_next_reply == "d2":
             self.task_status_var.set("Blocked: send d2 and complete communication-rule ACK before mutation.")
         elif not self.current_task_body():
-            self.task_status_var.set("Write a file-transfer task before sending.")
+            self.task_status_var.set("Write a transfer order before sending.")
         elif not can_send:
             self.task_status_var.set("Blocked: gatekeeper must be READY and communication context fresh.")
         else:
-            self.task_status_var.set("Ready to send the file-transfer task.")
+            self.task_status_var.set("Ready to send the transfer order.")
 
     def _agentic_command(self, *parts: str) -> subprocess.CompletedProcess[str]:
         executable = self.project_root / ".venv" / "bin" / "agentic-kit"
@@ -645,13 +647,30 @@ class CockpitGui:
         if self.task_editor_state == TaskEditorState.SENT and self.task_text is not None:
             self.task_text.configure(state="disabled")
         elif result_status == "PASS":
-            self.task_status_var.set("Task written locally only. Publish through the guarded transfer path before sending g/go.")
+            self.task_status_var.set("Transfer order written locally only. Publish through the guarded transfer path before sending g/go.")
         self.refresh_task_editor_buttons()
 
     def read_last_task_result(self) -> None:
-        completed = self._agentic_command("transfer", "read-user-task", "--json")
+        completed = self._agentic_command("transfer", "state", "--json")
         self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
-        result_status = "PASS" if completed.returncode == 0 else "FAIL"
+        outbox_available = False
+        if completed.stdout:
+            try:
+                payload = __import__("json").loads(completed.stdout)
+                outbox_available = transfer_state_has_canonical_outbox_result(payload)
+            except ValueError:
+                outbox_available = False
+        if completed.returncode == 0 and not outbox_available:
+            self.task_editor_state = TaskEditorState.SENT
+            self.task_status_var.set(
+                f"No canonical transfer result yet at {CANONICAL_TRANSFER_OUTBOX_PATH.as_posix()}."
+            )
+            if self.task_send_button is not None:
+                self.task_send_button.configure(state="disabled")
+            if self.task_read_button is not None:
+                self.task_read_button.configure(state="normal")
+            return
+        result_status = "PASS" if completed.returncode == 0 and outbox_available else "FAIL"
         self.task_editor_state = task_editor_state_after_read(result_status)
         if self.task_editor_state == TaskEditorState.IDLE and self.task_text is not None:
             self.task_text.configure(state="normal")
