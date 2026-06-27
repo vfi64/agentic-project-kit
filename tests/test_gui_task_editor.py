@@ -53,6 +53,8 @@ def test_initial_llm_prompt_contains_bootstrap_block() -> None:
     assert "validation_report.json" in text
     assert "source_manifest.json" in text
     assert "execution_contract.json" in text
+    assert "Bootstrap is accepted only after all required bootstrap files have been read" in text
+    assert "reply exactly BOOTSTRAP_BLOCKED" in text
 
 
 def test_initial_llm_prompt_contains_task_not_found_instruction() -> None:
@@ -70,6 +72,9 @@ def test_initial_llm_prompt_contains_rule_refresh_ack_schema() -> None:
     assert "blob_sha" in text
     assert "loaded_sections" in text
     assert "rules_loaded" in text
+    assert "remote_ref in the pending state" in text
+    assert "sha1(\"blob \" + byte_length" in text
+    assert '"remote": "<remote_ref from pending state, or main if absent>"' in text
 
 
 def test_initial_llm_prompt_ack_sections_match_required_sections() -> None:
@@ -82,9 +87,18 @@ def test_initial_llm_prompt_ack_sections_match_required_sections() -> None:
 def test_initial_llm_prompt_contains_stop_rules() -> None:
     text = build_initial_llm_prompt().prompt_text
 
+    assert "BOOTSTRAP_BLOCKED" in text
     assert "TASK_NOT_FOUND" in text
     assert "RULE_REFRESH_NOT_PENDING" in text
     assert "RULE_REFRESH_ACK_BLOCKED" in text
+    assert "REQUIRED_RESULT_WRAPPER_MISSING" in text
+
+
+def test_initial_llm_prompt_forbids_ad_hoc_result_protocols() -> None:
+    text = build_initial_llm_prompt().prompt_text
+
+    assert "Use existing agentic-kit transfer/result wrappers" in text
+    assert "Do not invent new result files, branches, refs, or ad-hoc protocols" in text
 
 
 def test_initial_llm_prompt_copy_paste_instruction_updated() -> None:

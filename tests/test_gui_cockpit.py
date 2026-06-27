@@ -173,8 +173,9 @@ def test_gui_action_cards_are_four_rows_and_scrollable() -> None:
 
 
 def test_gui_output_uses_readable_large_font_and_panel_height() -> None:
-    assert THEME.output_height == 9
-    assert THEME.output_font == ("TkFixedFont", 13)
+    assert THEME.output_height == 20
+    assert THEME.output_font == ("TkFixedFont", 10)
+    assert THEME.body_font == ("TkDefaultFont", 10)
 
 
 def test_gui_theme_action_rows_visible() -> None:

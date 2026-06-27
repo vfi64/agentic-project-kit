@@ -86,10 +86,12 @@ Before doing anything else, read these files from the repository in order:
 4. docs/reports/handoff-packages/latest/source_manifest.json
 5. docs/reports/handoff-packages/latest/execution_contract.json
 
-Do not mutate, commit, or begin any work until you have read these files
-and accepted the bootstrap. If validation_report.json is not PASS, or if
-HEAD differs from the handoff package without explanation, stop and report
-the discrepancy.
+Bootstrap is accepted only after all required bootstrap files have been read
+from the repository and validation_report.json has result_status/status PASS.
+If any required bootstrap file is missing, unreadable, stale, or internally
+inconsistent, reply exactly BOOTSTRAP_BLOCKED and do not mutate anything.
+If HEAD differs from the handoff package without explanation, reply exactly
+BOOTSTRAP_BLOCKED and do not mutate anything.
 """
 
 
@@ -111,7 +113,10 @@ When the user writes "g" or "go":
   The user task is in `user_task.body`.
   Work according to repo rules, gates, protected-file policy, and
   existing agentic-kit wrappers.
-  Write result/evidence back through repo-backed mechanisms only.
+  Use existing agentic-kit transfer/result wrappers for result publication.
+  Do not invent new result files, branches, refs, or ad-hoc protocols.
+  If no suitable wrapper exists, reply exactly REQUIRED_RESULT_WRAPPER_MISSING
+  and do not mutate anything.
   Reply with compact machine-readable status and evidence pointers.
 
 Copy-and-paste terminal evidence is recovery/fallback only.
@@ -125,11 +130,13 @@ def _initial_prompt_d2_block() -> str:
 When the user writes "d2":
 1. Read the pending state:
    .agentic/rule_ack/communication_refresh_pending.json
-2. Read the remote communication rule capsule from the pending state's
-   remote_path.
-   If no pending state exists, reply RULE_REFRESH_NOT_PENDING.
-3. Verify the Git blob SHA of the file you read against expected_blob_sha
-   in the pending state.
+2. Read the remote communication rule capsule from the ref specified by
+   remote_ref in the pending state, at the pending state's remote_path.
+   If remote_ref is absent, read it from `main`.
+   If no pending state exists, reply exactly RULE_REFRESH_NOT_PENDING.
+3. Compute the Git blob SHA exactly as Git does for SHA-1 blob objects:
+   sha1("blob " + byte_length + "\\0" + raw_file_bytes).
+   Verify it against expected_blob_sha in the pending state.
 4. Return a RULE_REFRESH_ACK in exactly this JSON format before any
    further mutation:
 
@@ -137,24 +144,26 @@ When the user writes "d2":
   "kind": "communication_rule_refresh_ack",
   "result_status": "PASS",
   "source": "<remote_path from pending state>",
-  "remote": "main",
+  "remote": "<remote_ref from pending state, or main if absent>",
   "blob_sha": "<actual blob SHA you computed>",
   "generated_at": "<generated_at from the capsule file>",
   "loaded_sections": {_loaded_sections_json_block()},
   "rules_loaded": true
 }}
 
-Do not continue with mutation if blob_sha does not match expected_blob_sha.
+If blob_sha does not match expected_blob_sha, reply exactly
+RULE_REFRESH_ACK_BLOCKED and do not mutate anything.
 """
 
 
 def _initial_prompt_stop_rules_block() -> str:
     return """Stop and report without mutating when:
-- Bootstrap not accepted or validation_report.json is not PASS.
+- Bootstrap not accepted or validation_report.json is not PASS. Reply BOOTSTRAP_BLOCKED.
 - g/go received but the task ref or canonical transfer inbox file is missing. Reply TASK_NOT_FOUND.
 - d2 received but no pending state exists. Reply RULE_REFRESH_NOT_PENDING.
 - d2 received but blob_sha does not match. Reply RULE_REFRESH_ACK_BLOCKED.
 - Communication rule refresh is pending and no valid ACK exists.
+- No suitable agentic-kit transfer/result wrapper exists for result publication. Reply REQUIRED_RESULT_WRAPPER_MISSING.
 - Worktree is dirty in a way that blocks the required operation.
 - Required command, wrapper, or source file is missing or ambiguous.
 

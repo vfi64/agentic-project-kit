@@ -110,6 +110,9 @@ class TkTooltip:
 
 
 def attach_tooltip(widget: Any, text: str) -> Any:
+    existing = getattr(widget, "_agentic_tooltip", None)
+    if existing is not None and hasattr(existing, "hide"):
+        existing.hide()
     widget._agentic_tooltip_text = text
     widget._agentic_tooltip = TkTooltip(widget, text)
     return widget

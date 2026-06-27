@@ -77,3 +77,13 @@ def test_attach_tooltip_records_text_and_binds_hover_events() -> None:
     assert widget._agentic_tooltip_text == "Helpful text"
     assert "<Enter>" in widget.bound_events
     assert "<Leave>" in widget.bound_events
+
+
+def test_attach_tooltip_replaces_existing_tooltip() -> None:
+    widget = FakeWidget()
+    first = attach_tooltip(widget, "First")._agentic_tooltip
+
+    attach_tooltip(widget, "Second")
+
+    assert widget._agentic_tooltip_text == "Second"
+    assert widget._agentic_tooltip is not first

@@ -565,6 +565,12 @@ Severity expectations:
 - `FAIL`: blocks the relevant gate;
 - `CRITICAL`: indicates corrupted state, unsafe automation, or a violation of fundamental architecture boundaries.
 
+Tier-0 diagnostics are mutation-free integrity and audit checks. They report
+state, drift, warnings, blockers, and recovery evidence only; they do not grant
+execution permission. Execution governance belongs to Tier-1+ access, capability,
+and wrapper checks. A `WARN` may enable a bounded review or recovery loop, but
+`WARN` does not grant mutation or execution permission.
+
 Diagnostics should include reviewability findings where relevant, for example missing PR intent, missing test evidence, missing architecture-impact notes, or broad unbounded evidence dumps.
 
 ## 14. Automation Boundary
