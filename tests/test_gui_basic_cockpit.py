@@ -247,8 +247,9 @@ def test_basic_cockpit_summary_is_stable_for_entrypoint_output() -> None:
     assert "buttons=status-refresh" in text
 
 
-def test_gui_theme_output_height_increased() -> None:
-    assert THEME.output_height == 21
+def test_gui_theme_output_is_readable_without_dominating_layout() -> None:
+    assert THEME.output_height == 9
+    assert THEME.output_font == ("TkFixedFont", 13)
 
 
 def test_gui_theme_action_rows_visible() -> None:
@@ -273,7 +274,7 @@ def test_recommended_zone_recovery_only_selects_does_not_run() -> None:
     assert recommended_recovery_action_id(view_model) == "gate.doctor"
     text = format_recommended_action(view_model)
     assert "without running it" in text
-    assert "selection_set" in source
+    assert "_select_action" in source
     assert "_agentic_command" not in source
     assert "run_cockpit_action" not in source
 
@@ -350,16 +351,18 @@ def test_action_tree_shows_short_description_column() -> None:
     assert all(action.short_description for action in ordered_action_views(build_gui_action_views()))
 
 
-def test_action_tree_has_scrollbar_and_four_visible_rows() -> None:
+def test_action_cards_have_scrollbar_and_four_visible_rows() -> None:
     source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
 
     assert action_tree_visible_rows() == 4
     assert "ttk.Scrollbar" in source
     assert "yscrollcommand" in source
+    assert "action_card_container" in source
+    assert "ttk.Treeview" not in source
 
 
 def test_basic_cockpit_header_text() -> None:
-    assert HEADER_TEXT == "Agentic-Project-Kit — Basic Cockpit"
+    assert HEADER_TEXT == "Agentic Project Kit — Cockpit"
 
 
 def test_cockpit_has_access_level_selector() -> None:

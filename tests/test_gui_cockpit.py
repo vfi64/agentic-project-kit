@@ -159,19 +159,22 @@ def test_format_action_result_marks_blocked_status_explicitly() -> None:
 
 
 def test_gui_basic_cockpit_header_text_is_project_specific() -> None:
-    assert HEADER_TEXT == "Agentic-Project-Kit — Basic Cockpit"
+    assert HEADER_TEXT == "Agentic Project Kit — Cockpit"
 
 
-def test_gui_action_list_is_four_rows_and_scrollable() -> None:
+def test_gui_action_cards_are_four_rows_and_scrollable() -> None:
     source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
 
     assert action_tree_visible_rows() == 4
     assert "ttk.Scrollbar" in source
     assert "yscrollcommand" in source
+    assert "action_card_container" in source
+    assert "ttk.Treeview" not in source
 
 
-def test_gui_output_height_increased_to_21() -> None:
-    assert THEME.output_height == 21
+def test_gui_output_uses_readable_large_font_and_panel_height() -> None:
+    assert THEME.output_height == 9
+    assert THEME.output_font == ("TkFixedFont", 13)
 
 
 def test_gui_theme_action_rows_visible() -> None:

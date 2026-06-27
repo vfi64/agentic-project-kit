@@ -40,25 +40,38 @@ from agentic_project_kit.gui_viewmodel import cockpit_actions_for_access_level
 
 @dataclass(frozen=True)
 class GuiTheme:
-    title_font: tuple[str, int, str] = ("TkDefaultFont", 16, "bold")
-    section_font: tuple[str, int, str] = ("TkDefaultFont", 11, "bold")
+    title_font: tuple[str, int, str] = ("TkDefaultFont", 18, "bold")
+    section_font: tuple[str, int, str] = ("TkDefaultFont", 12, "bold")
+    body_font: tuple[str, int] = ("TkDefaultFont", 13)
+    small_font: tuple[str, int] = ("TkDefaultFont", 11)
+    action_font: tuple[str, int, str] = ("TkDefaultFont", 14, "bold")
+    output_font: tuple[str, int] = ("TkFixedFont", 13)
     recommended_font: tuple[str, int, str] = ("TkDefaultFont", 13, "bold")
-    frame_padding: int = 10
-    section_padding: int = 8
-    output_height: int = 21
+    frame_padding: int = 22
+    section_padding: int = 16
+    output_height: int = 9
     action_rows_visible: int = 4
-    task_text_height: int = 6
-    color_read_only: str = "#e8f3ea"
-    color_bounded: str = "#fdf4e3"
-    color_destructive: str = "#fbeaea"
-    color_recommended_bg: str = "#eaf1fb"
+    task_text_height: int = 4
+    window_geometry: str = "1180x760"
+    sidebar_width: int = 360
+    color_shell_bg: str = "#fbfbfa"
+    color_panel_bg: str = "#ffffff"
+    color_border: str = "#dddddd"
+    color_muted_text: str = "#737373"
+    color_read_only: str = "#dff3ef"
+    color_bounded: str = "#fdf0d9"
+    color_destructive: str = "#fbe6e6"
+    color_ready_bg: str = "#d8f0d1"
+    color_ready_border: str = "#68c36a"
+    color_recommended_bg: str = "#d7eaff"
+    color_button_outline: str = "#cfcfcf"
     action_column_width: int = 220
     what_it_does_column_width: int = 620
     safety_column_width: int = 120
 
 
 THEME = GuiTheme()
-HEADER_TEXT = "Agentic-Project-Kit — Basic Cockpit"
+HEADER_TEXT = "Agentic Project Kit — Cockpit"
 ACTION_TREE_COLUMNS = ("action", "what_it_does", "safety")
 SAFETY_SORT_ORDER = {READ_ONLY: 0, BOUNDED: 1, DESTRUCTIVE: 2}
 RECOVERY_ACTION_ID = "gate.doctor"
@@ -290,113 +303,192 @@ class CockpitGui:
         )
         self.recovery_action_id = recommended_recovery_action_id(self.basic_view)
         self.root.title(HEADER_TEXT)
-        self.root.geometry("1120x820")
+        self.root.geometry(THEME.window_geometry)
+        if hasattr(self.root, "minsize"):
+            self.root.minsize(1040, 680)
+        self.selected_action_id_value: str | None = None
 
-        frame = ttk.Frame(root, padding=THEME.frame_padding)
-        frame.pack(fill=tk.BOTH, expand=True)
-
-        title = ttk.Label(frame, text=HEADER_TEXT, font=THEME.title_font)
-        title.pack(anchor=tk.W)
-
-        recommended_frame = tk.LabelFrame(
-            frame,
-            text="Recommended Next Action",
-            font=THEME.section_font,
-            bg=THEME.color_recommended_bg,
-            padx=THEME.section_padding,
-            pady=THEME.section_padding,
+        shell = tk.Frame(
+            root,
+            bg=THEME.color_shell_bg,
+            highlightbackground=THEME.color_border,
+            highlightthickness=1,
         )
-        recommended_frame.pack(fill=tk.X, pady=(4, 4))
-        tk.Label(
-            recommended_frame,
-            text=self.basic_view.next_safe_action,
-            font=THEME.recommended_font,
-            bg=THEME.color_recommended_bg,
-            anchor=tk.W,
-            justify=tk.LEFT,
-            wraplength=980,
-        ).pack(fill=tk.X)
-        tk.Label(
-            recommended_frame,
-            text=self.basic_view.reason,
-            bg=THEME.color_recommended_bg,
-            anchor=tk.W,
-            justify=tk.LEFT,
-            wraplength=980,
-        ).pack(fill=tk.X, pady=(2, 0))
-        if self.recovery_action_id is not None:
-            recovery_action = self.action_view_by_id(self.recovery_action_id)
-            recovery_label = recovery_action.label if recovery_action is not None else self.recovery_action_id
-            tk.Label(
-                recommended_frame,
-                text=f"Recovery: load {recovery_label} for diagnostics. This does not run the action.",
-                bg=THEME.color_recommended_bg,
-                anchor=tk.W,
-                justify=tk.LEFT,
-                wraplength=980,
-            ).pack(fill=tk.X, pady=(4, 0))
-            recovery_button = ttk.Button(
-                recommended_frame,
-                text="Load Recovery Action",
-                command=self.load_recovery_action,
-            )
-            attach_tooltip(
-                recovery_button,
-                "Select the recommended read-only diagnostic action without executing it.",
-            )
-            recovery_button.pack(anchor=tk.W, pady=(4, 0))
+        shell.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
 
-        status_frame = ttk.LabelFrame(frame, text="State", padding=THEME.section_padding)
-        status_frame.pack(fill=tk.X, pady=(0, 4))
+        self._build_header(shell)
 
-        traffic_row = ttk.Frame(status_frame)
-        traffic_row.pack(fill=tk.X)
-        traffic_light = tk.Canvas(traffic_row, width=18, height=18, highlightthickness=0)
-        traffic_light.create_oval(
+        body = tk.Frame(shell, bg=THEME.color_panel_bg)
+        body.pack(fill=tk.BOTH, expand=True)
+
+        sidebar = tk.Frame(
+            body,
+            bg=THEME.color_panel_bg,
+            width=THEME.sidebar_width,
+            padx=THEME.frame_padding,
+            pady=THEME.frame_padding,
+        )
+        sidebar.pack(side=tk.LEFT, fill=tk.Y)
+        sidebar.pack_propagate(False)
+
+        separator = ttk.Separator(body, orient=tk.VERTICAL)
+        separator.pack(side=tk.LEFT, fill=tk.Y)
+
+        main_area = tk.Frame(
+            body,
+            bg=THEME.color_panel_bg,
+            padx=THEME.frame_padding,
+            pady=THEME.frame_padding,
+        )
+        main_area.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        self._build_sidebar(sidebar)
+        self._build_action_cards(main_area)
+        self._build_task_editor(main_area)
+        self._build_output_panel(main_area)
+
+        self.write_output(format_basic_cockpit_summary(self.basic_view) + "\n")
+
+    def _build_header(self, parent: Any) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        header = tk.Frame(parent, bg=THEME.color_panel_bg, height=64)
+        header.pack(fill=tk.X)
+        header.pack_propagate(False)
+
+        icon = tk.Canvas(header, width=22, height=22, bg=THEME.color_panel_bg, highlightthickness=0)
+        icon.create_rectangle(3, 3, 19, 19, outline="#1f5b9d", width=2)
+        icon.pack(side=tk.LEFT, padx=(22, 12))
+
+        tk.Label(
+            header,
+            text=HEADER_TEXT,
+            bg=THEME.color_panel_bg,
+            font=THEME.title_font,
+            anchor=tk.W,
+        ).pack(side=tk.LEFT, fill=tk.X, expand=True)
+
+        branch_label = self._branch_label()
+        branch_icon = tk.Canvas(header, width=18, height=18, bg=THEME.color_panel_bg, highlightthickness=0)
+        branch_icon.create_rectangle(4, 4, 14, 14, outline="#656565", width=2)
+        branch_icon.pack(side=tk.LEFT, padx=(0, 10))
+        tk.Label(
+            header,
+            text=branch_label,
+            bg=THEME.color_panel_bg,
+            fg="#4d4d4d",
+            font=THEME.body_font,
+        ).pack(side=tk.RIGHT, padx=(0, 22))
+
+        ttk.Separator(parent, orient=tk.HORIZONTAL).pack(fill=tk.X)
+
+    def _branch_label(self) -> str:
+        branch = "unknown"
+        for part in self.basic_view.evidence.split(";"):
+            key, _, value = part.strip().partition("=")
+            if key == "branch" and value:
+                branch = value
+                break
+        try:
+            head = subprocess.run(
+                ["git", "rev-parse", "--short", "HEAD"],
+                cwd=self.project_root,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+            short = head.stdout.strip() if head.returncode == 0 else "unknown"
+        except OSError:
+            short = "unknown"
+        return f"{branch} · {short}"
+
+    def _section_heading(self, parent: Any, text: str) -> None:
+        import tkinter as tk
+
+        tk.Label(
+            parent,
+            text=text.upper(),
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.section_font,
+            anchor=tk.W,
+        ).pack(fill=tk.X, pady=(0, 10))
+
+    def _detail_row(self, parent: Any, label: str, value: str, *, value_color: str = "#1f1f1f") -> None:
+        import tkinter as tk
+
+        row = tk.Frame(parent, bg=THEME.color_panel_bg)
+        row.pack(fill=tk.X, pady=3)
+        tk.Label(row, text=label, bg=THEME.color_panel_bg, fg="#4a4a4a", font=THEME.body_font).pack(side=tk.LEFT)
+        tk.Label(row, text=value, bg=THEME.color_panel_bg, fg=value_color, font=THEME.body_font).pack(side=tk.RIGHT)
+
+    def _build_sidebar(self, sidebar: Any) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        ready_card = tk.Frame(
+            sidebar,
+            bg=THEME.color_ready_bg if self.basic_view.traffic_light_color == "green" else "#fff8dc",
+            highlightbackground=THEME.color_ready_border,
+            highlightthickness=1,
+            padx=18,
+            pady=18,
+        )
+        ready_card.pack(fill=tk.X, pady=(0, 24))
+
+        ready_row = tk.Frame(ready_card, bg=ready_card["bg"])
+        ready_row.pack(fill=tk.X)
+        light = tk.Canvas(ready_row, width=22, height=22, bg=ready_card["bg"], highlightthickness=0)
+        light.create_oval(
             3,
             3,
-            15,
-            15,
+            19,
+            19,
             fill=traffic_light_fill(self.basic_view.traffic_light_color),
             outline=traffic_light_fill(self.basic_view.traffic_light_color),
         )
-        traffic_light.pack(side=tk.LEFT, padx=(0, 8))
-        ttk.Label(
-            traffic_row,
-            text=traffic_light_state_label(self.basic_view.traffic_light_state),
-            font=THEME.section_font,
-        ).pack(side=tk.LEFT, padx=(0, 12))
-        ttk.Label(
-            traffic_row,
-            text=f"Next: {self.basic_view.next_safe_action}",
-            anchor=tk.W,
-            wraplength=820,
-        ).pack(side=tk.LEFT, fill=tk.X, expand=True)
-        ttk.Label(status_frame, text=self.basic_view.reason, anchor=tk.W, wraplength=980).pack(
-            fill=tk.X, pady=(4, 0)
-        )
-        ttk.Label(
-            status_frame,
-            text=format_state_details(self.basic_view),
+        light.pack(side=tk.LEFT, padx=(0, 12))
+        tk.Label(
+            ready_row,
+            text=traffic_light_state_label(self.basic_view.traffic_light_state).split(" ")[0],
+            bg=ready_card["bg"],
+            fg="#08775f",
+            font=("TkDefaultFont", 17, "bold"),
+        ).pack(side=tk.LEFT)
+        tk.Label(
+            ready_card,
+            text=self.basic_view.reason,
+            bg=ready_card["bg"],
+            fg="#006b50",
+            font=THEME.body_font,
             anchor=tk.W,
             justify=tk.LEFT,
-            wraplength=980,
-        ).pack(fill=tk.X, pady=(3, 0))
+            wraplength=285,
+        ).pack(fill=tk.X, pady=(16, 0))
 
-        mode_row = ttk.Frame(status_frame)
-        mode_row.pack(fill=tk.X, pady=(3, 0))
-        ttk.Label(mode_row, text="Transfer mode").pack(side=tk.LEFT, padx=(0, 8))
+        self._section_heading(sidebar, "Status Detail")
+        self._detail_row(sidebar, "Worktree", "dirty" if "dirty" in self.basic_view.reason.lower() else "clean", value_color="#006b00")
+        self._detail_row(sidebar, "Mutation", "allowed" if self.basic_view.mutation_allowed else "guarded")
+        self._detail_row(sidebar, "d2 pending", "yes" if self.basic_view.required_next_reply == "d2" else "no")
+        version = self._package_version()
+        self._detail_row(sidebar, "Version", version)
+
+        tk.Frame(sidebar, height=26, bg=THEME.color_panel_bg).pack(fill=tk.X)
+        self._section_heading(sidebar, "Transfer Mode")
         self.mode_var = tk.StringVar(
             value=selected_communication_mode_option(self.basic_view.communication_modes)
         )
         mode_select = ttk.Combobox(
-            mode_row,
+            sidebar,
             textvariable=self.mode_var,
             values=communication_mode_option_values(self.basic_view.communication_modes),
             state="readonly",
-            width=34,
+            width=28,
+            font=THEME.body_font,
         )
-        mode_select.pack(side=tk.LEFT)
+        mode_select.pack(fill=tk.X)
         attach_tooltip(
             mode_select,
             "Select the communication mode. File Transfer is the standard path; Copy-and-Paste is a recovery fallback.",
@@ -404,26 +496,30 @@ class CockpitGui:
         self.mode_explanation_var = tk.StringVar(
             value=communication_mode_explanation(self.basic_view.communication_mode)
         )
-        ttk.Label(
-            status_frame,
+        tk.Label(
+            sidebar,
             textvariable=self.mode_explanation_var,
             anchor=tk.W,
-            wraplength=980,
-        ).pack(fill=tk.X, pady=(2, 0))
+            justify=tk.LEFT,
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+            wraplength=285,
+        ).pack(fill=tk.X, pady=(10, 0))
         mode_select.bind("<<ComboboxSelected>>", self.update_mode_explanation)
 
-        access_row = ttk.Frame(status_frame)
-        access_row.pack(fill=tk.X, pady=(3, 0))
-        ttk.Label(access_row, text="Access level").pack(side=tk.LEFT, padx=(0, 8))
+        tk.Frame(sidebar, height=24, bg=THEME.color_panel_bg).pack(fill=tk.X)
+        self._section_heading(sidebar, "Access Level")
         self.access_level_var = tk.StringVar(value=self.basic_view.access_level)
         access_select = ttk.Combobox(
-            access_row,
+            sidebar,
             textvariable=self.access_level_var,
             values=access_level_option_values(),
             state="readonly",
-            width=18,
+            width=28,
+            font=THEME.body_font,
         )
-        access_select.pack(side=tk.LEFT)
+        access_select.pack(fill=tk.X)
         attach_tooltip(
             access_select,
             "Basic shows routine actions. Advanced adds release and rules. Maintainer adds deep audits. Access level does not grant permission.",
@@ -431,138 +527,244 @@ class CockpitGui:
         self.access_level_explanation_var = tk.StringVar(
             value=self.basic_view.access_level_explanation
         )
-        ttk.Label(
-            status_frame,
+        tk.Label(
+            sidebar,
             textvariable=self.access_level_explanation_var,
             anchor=tk.W,
-            wraplength=980,
-        ).pack(fill=tk.X, pady=(2, 0))
+            justify=tk.LEFT,
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+            wraplength=285,
+        ).pack(fill=tk.X, pady=(10, 0))
         access_select.bind("<<ComboboxSelected>>", self.update_access_level)
 
-        basic_buttons = ttk.LabelFrame(frame, text="Basic Actions", padding=THEME.section_padding)
-        basic_buttons.pack(fill=tk.X, pady=(0, 4))
-        for button in self.basic_view.buttons:
-            state = tk.NORMAL if button.enabled else tk.DISABLED
-            widget = ttk.Button(
-                basic_buttons,
-                text=button.label,
-                state=state,
-                command=lambda command_id=button.command_id: self.run_basic_action(command_id),
-                width=18,
-            )
-            tooltip = button.tooltip
-            if button.disabled_reason:
-                tooltip = f"{tooltip} Disabled: {button.disabled_reason}"
-            attach_tooltip(widget, tooltip)
-            widget.pack(side=tk.LEFT, padx=(0, 8), pady=1)
+        tk.Frame(sidebar, height=36, bg=THEME.color_panel_bg).pack(fill=tk.X, expand=True)
+        ttk.Separator(sidebar, orient=tk.HORIZONTAL).pack(fill=tk.X, pady=(0, 18))
+        tk.Label(
+            sidebar,
+            text="Recommended next",
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+            anchor=tk.W,
+        ).pack(fill=tk.X, pady=(0, 8))
+        recommended = tk.Button(
+            sidebar,
+            text=f"□  {self._recommended_button_label()}",
+            font=THEME.recommended_font,
+            bg=THEME.color_recommended_bg,
+            fg="#174ea6",
+            activebackground=THEME.color_recommended_bg,
+            relief=tk.GROOVE,
+            bd=1,
+            command=self.load_recovery_action if self.recovery_action_id else lambda: self.run_basic_action("run-next-work-order"),
+            anchor=tk.W,
+            padx=16,
+            pady=10,
+        )
+        attach_tooltip(recommended, "Use the gatekeeper-recommended next action through the registered GUI wrapper.")
+        recommended.pack(fill=tk.X)
+
+    def _package_version(self) -> str:
+        try:
+            from agentic_project_kit import __version__
+        except ImportError:
+            return "unknown"
+        return __version__
+
+    def _recommended_button_label(self) -> str:
+        if self.recovery_action_id:
+            action = self.action_view_by_id(self.recovery_action_id)
+            return action.label if action is not None else self.recovery_action_id
+        return "Run next work order"
+
+    def _build_action_cards(self, parent: Any) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        self._section_heading(parent, "Actions")
+        action_scroll_shell = tk.Frame(parent, bg=THEME.color_panel_bg)
+        action_scroll_shell.pack(fill=tk.X)
+        self.action_card_canvas = tk.Canvas(
+            action_scroll_shell,
+            bg=THEME.color_panel_bg,
+            height=THEME.action_rows_visible * 58,
+            highlightthickness=0,
+        )
+        self.action_card_scrollbar = ttk.Scrollbar(
+            action_scroll_shell,
+            orient=tk.VERTICAL,
+            command=self.action_card_canvas.yview,
+        )
+        self.action_card_canvas.configure(yscrollcommand=self.action_card_scrollbar.set)
+        self.action_card_container = tk.Frame(self.action_card_canvas, bg=THEME.color_panel_bg)
+        self.action_card_window = self.action_card_canvas.create_window(
+            (0, 0),
+            window=self.action_card_container,
+            anchor=tk.NW,
+        )
+        self.action_card_container.bind(
+            "<Configure>",
+            lambda _event: self.action_card_canvas.configure(
+                scrollregion=self.action_card_canvas.bbox(tk.ALL)
+            ),
+        )
+        self.action_card_canvas.bind(
+            "<Configure>",
+            lambda event: self.action_card_canvas.itemconfigure(
+                self.action_card_window,
+                width=event.width,
+            ),
+        )
+        self.action_card_canvas.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self.action_card_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.action_card_widgets: dict[str, Any] = {}
+        self.populate_action_tree()
+
+        button_row = tk.Frame(parent, bg=THEME.color_panel_bg)
+        button_row.pack(fill=tk.X, pady=(14, 20))
+        inspect_button = ttk.Button(button_row, text="Inspect", command=self.inspect_selected)
+        attach_tooltip(inspect_button, "Show metadata, command, and safety details for the selected action.")
+        inspect_button.pack(side=tk.LEFT, padx=(0, 12))
+        run_button = ttk.Button(button_row, text="Run read-only", command=self.run_selected_read_only)
+        attach_tooltip(run_button, "Run only selected read-only cockpit actions through the shared cockpit layer.")
+        run_button.pack(side=tk.LEFT, padx=(0, 12))
+
+    def _build_task_editor(self, parent: Any) -> None:
+        import tkinter as tk
+        from tkinter import ttk
 
         self.task_editor_state = TaskEditorState.IDLE
         self.task_status_var = tk.StringVar(value="Write a transfer order, then send it through the guarded wrapper.")
-        if task_editor_visible_for_mode(self.basic_view.communication_mode):
-            task_frame = ttk.LabelFrame(frame, text="Transfer Order", padding=THEME.section_padding)
-            task_frame.pack(fill=tk.X, pady=(0, 4))
-            self.task_text = tk.Text(task_frame, height=THEME.task_text_height, wrap=tk.WORD)
-            self.task_text.pack(fill=tk.X, expand=False)
-            self.task_text.bind("<KeyRelease>", self.refresh_task_editor_buttons)
-            task_button_row = ttk.Frame(task_frame)
-            task_button_row.pack(fill=tk.X, pady=(6, 0))
-            self.initial_prompt_button = ttk.Button(
-                task_button_row,
-                text="Initial Prompt",
-                command=self.show_initial_llm_prompt,
-            )
-            attach_tooltip(
-                self.initial_prompt_button,
-                "Render the one-time initial LLM prompt for file-transfer dialog setup.",
-            )
-            self.initial_prompt_button.pack(side=tk.LEFT, padx=(0, 8))
-            self.task_send_button = ttk.Button(
-                task_button_row,
-                text="Send",
-                command=self.send_user_task,
-            )
-            attach_tooltip(
-                self.task_send_button,
-                "Publish the canonical agentic-kit transfer inbox file "
-                f"{CANONICAL_TRANSFER_INBOX_PATH.as_posix()} through "
-                "agentic-kit transfer submit-user-task --publish.",
-            )
-            self.task_send_button.pack(side=tk.LEFT, padx=(0, 8))
-            self.task_read_button = ttk.Button(
-                task_button_row,
-                text="Read Result",
-                command=self.read_last_task_result,
-                state=tk.DISABLED,
-            )
-            attach_tooltip(
-                self.task_read_button,
-                "Read canonical transfer state through agentic-kit transfer state --json; the local result is .agentic/transfer/outbox/last_result.txt.",
-            )
-            self.task_read_button.pack(side=tk.LEFT, padx=(0, 8))
-            ttk.Label(
-                task_frame,
-                textvariable=self.task_status_var,
-                anchor=tk.W,
-                wraplength=980,
-            ).pack(fill=tk.X, pady=(3, 0))
-            self.refresh_task_editor_buttons()
-        else:
+        if not task_editor_visible_for_mode(self.basic_view.communication_mode):
             self.task_text = None
             self.initial_prompt_button = None
             self.task_send_button = None
             self.task_read_button = None
+            return
 
-        tree_frame = ttk.Frame(frame)
-        tree_frame.pack(fill=tk.X, expand=False)
-        self.tree = ttk.Treeview(
-            tree_frame,
-            columns=ACTION_TREE_COLUMNS,
-            show="headings",
-            height=THEME.action_rows_visible,
+        task_frame = tk.Frame(
+            parent,
+            bg=THEME.color_panel_bg,
+            highlightbackground=THEME.color_border,
+            highlightthickness=1,
+            padx=THEME.section_padding,
+            pady=THEME.section_padding,
         )
-        self.tree.heading("action", text="Action")
-        self.tree.heading("what_it_does", text="What it does")
-        self.tree.heading("safety", text="Safety")
-        self.tree.column("action", width=THEME.action_column_width)
-        self.tree.column("what_it_does", width=THEME.what_it_does_column_width)
-        self.tree.column("safety", width=THEME.safety_column_width)
-        for tag, color in action_tree_tag_colors().items():
-            self.tree.tag_configure(tag, background=color)
-        tree_scrollbar = ttk.Scrollbar(tree_frame, orient=tk.VERTICAL, command=self.tree.yview)
-        self.tree.configure(yscrollcommand=tree_scrollbar.set)
-        self.tree.pack(side=tk.LEFT, fill=tk.X, expand=True)
-        tree_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        self.tree_scrollbar = tree_scrollbar
+        task_frame.pack(fill=tk.X, pady=(0, 20))
+        heading_row = tk.Frame(task_frame, bg=THEME.color_panel_bg)
+        heading_row.pack(fill=tk.X)
+        tk.Label(
+            heading_row,
+            text="File transfer task",
+            bg=THEME.color_panel_bg,
+            font=THEME.body_font,
+            anchor=tk.W,
+        ).pack(side=tk.LEFT)
+        tk.Label(
+            heading_row,
+            text="writes to repo · publishes",
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+        ).pack(side=tk.RIGHT)
 
-        self.populate_action_tree()
+        self.task_text = tk.Text(
+            task_frame,
+            height=THEME.task_text_height,
+            wrap=tk.WORD,
+            font=THEME.body_font,
+            relief=tk.GROOVE,
+            bd=1,
+            padx=12,
+            pady=10,
+        )
+        self.task_text.pack(fill=tk.X, expand=False, pady=(12, 12))
+        self.task_text.bind("<KeyRelease>", self.refresh_task_editor_buttons)
+        task_button_row = tk.Frame(task_frame, bg=THEME.color_panel_bg)
+        task_button_row.pack(fill=tk.X)
+        self.initial_prompt_button = ttk.Button(
+            task_button_row,
+            text="Initial prompt",
+            command=self.show_initial_llm_prompt,
+        )
+        attach_tooltip(
+            self.initial_prompt_button,
+            "Render the one-time initial LLM prompt for file-transfer dialog setup.",
+        )
+        self.initial_prompt_button.pack(side=tk.LEFT, padx=(0, 12))
+        self.task_send_button = ttk.Button(task_button_row, text="Send", command=self.send_user_task)
+        attach_tooltip(
+            self.task_send_button,
+            "Publish the canonical agentic-kit transfer inbox file "
+            f"{CANONICAL_TRANSFER_INBOX_PATH.as_posix()} through "
+            "agentic-kit transfer submit-user-task --publish.",
+        )
+        self.task_send_button.pack(side=tk.LEFT, padx=(0, 12))
+        self.task_read_button = ttk.Button(
+            task_button_row,
+            text="Read",
+            command=self.read_last_task_result,
+            state=tk.DISABLED,
+        )
+        attach_tooltip(
+            self.task_read_button,
+            "Read canonical transfer state through agentic-kit transfer state --json; the local result is .agentic/transfer/outbox/last_result.txt.",
+        )
+        self.task_read_button.pack(side=tk.LEFT, padx=(0, 12))
+        tk.Label(
+            task_frame,
+            textvariable=self.task_status_var,
+            anchor=tk.W,
+            justify=tk.LEFT,
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+            wraplength=720,
+        ).pack(fill=tk.X, pady=(10, 0))
+        self.refresh_task_editor_buttons()
 
-        button_row = ttk.Frame(frame)
-        button_row.pack(fill=tk.X, pady=8)
-        inspect_button = ttk.Button(
-            button_row, text="Inspect Selected", command=self.inspect_selected
+    def _build_output_panel(self, parent: Any) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        output_frame = tk.Frame(
+            parent,
+            bg=THEME.color_panel_bg,
+            highlightbackground=THEME.color_border,
+            highlightthickness=1,
+            padx=THEME.section_padding,
+            pady=THEME.section_padding,
         )
-        attach_tooltip(inspect_button, "Show metadata, command, and safety details for the selected action.")
-        inspect_button.pack(side=tk.LEFT)
-        run_button = ttk.Button(
-            button_row, text="Run Selected Read-Only", command=self.run_selected_read_only
-        )
-        attach_tooltip(run_button, "Run only selected read-only cockpit actions through the shared cockpit layer.")
-        run_button.pack(side=tk.LEFT, padx=8)
-        clear_button = ttk.Button(button_row, text="Clear Output", command=self.clear_output)
+        output_frame.pack(fill=tk.BOTH, expand=True)
+        output_header = tk.Frame(output_frame, bg=THEME.color_panel_bg)
+        output_header.pack(fill=tk.X, pady=(0, 10))
+        tk.Label(
+            output_header,
+            text="□  OUTPUT",
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.section_font,
+            anchor=tk.W,
+        ).pack(side=tk.LEFT)
+        clear_button = ttk.Button(output_header, text="Clear", command=self.clear_output)
         attach_tooltip(clear_button, "Clear the output panel.")
-        clear_button.pack(side=tk.LEFT)
-
-        output_label = ttk.Label(frame, text="Output")
-        output_label.pack(anchor=tk.W)
-        self.output = tk.Text(frame, height=THEME.output_height, wrap=tk.WORD)
+        clear_button.pack(side=tk.RIGHT)
+        self.output = tk.Text(
+            output_frame,
+            height=THEME.output_height,
+            wrap=tk.WORD,
+            font=THEME.output_font,
+            relief=tk.FLAT,
+            bd=0,
+            padx=8,
+            pady=6,
+        )
         self.output.pack(fill=tk.BOTH, expand=True)
-        self.write_output(format_basic_cockpit_summary(self.basic_view) + "\n")
 
     def selected_action_id(self) -> str | None:
-        selected = self.tree.selection()
-        if not selected:
-            return None
-        return str(selected[0])
+        return self.selected_action_id_value
 
     def action_view_by_id(self, action_id: str) -> GuiActionView | None:
         for action in self.actions:
@@ -571,16 +773,67 @@ class CockpitGui:
         return None
 
     def populate_action_tree(self) -> None:
+        for child in self.action_card_container.winfo_children():
+            child.destroy()
+        self.action_card_widgets = {}
+        visible_actions = self.actions[: THEME.action_rows_visible]
+        for action in visible_actions:
+            self._create_action_card(action)
+        visible_ids = {action.action_id for action in visible_actions}
+        if self.selected_action_id_value not in visible_ids:
+            self.selected_action_id_value = visible_actions[0].action_id if visible_actions else None
+        self._refresh_action_card_selection()
+
+    def _create_action_card(self, action: GuiActionView) -> None:
         import tkinter as tk
 
-        self.tree.delete(*self.tree.get_children())
-        for action in self.actions:
-            self.tree.insert(
-                "",
-                tk.END,
-                iid=action.action_id,
-                values=(action.label, action.short_description, action.safety),
-                tags=(action_tree_tag_for_safety(action.safety),),
+        bg = action_tree_tag_colors().get(action.safety, "#f4f4f4")
+        card = tk.Frame(
+            self.action_card_container,
+            bg=bg,
+            highlightbackground=bg,
+            highlightthickness=2,
+            padx=14,
+            pady=10,
+        )
+        card.pack(fill=tk.X, pady=(0, 8))
+        dot = tk.Canvas(card, width=16, height=16, bg=bg, highlightthickness=0)
+        dot.create_oval(3, 3, 13, 13, fill=traffic_light_fill("green" if action.safety == READ_ONLY else "yellow"), outline="")
+        dot.pack(side=tk.LEFT, padx=(0, 12))
+        label = tk.Label(
+            card,
+            text=action.label,
+            bg=bg,
+            fg="#0b2f27" if action.safety == READ_ONLY else "#3d2200",
+            font=THEME.action_font,
+            anchor=tk.W,
+        )
+        label.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        safety = tk.Label(
+            card,
+            text=action.safety.replace("_", "-"),
+            bg=bg,
+            fg="#006b50" if action.safety == READ_ONLY else "#6b3d00",
+            font=THEME.small_font,
+        )
+        safety.pack(side=tk.RIGHT)
+        tooltip = f"{action.short_description}. {explain_safety(action.safety)}"
+        for widget in (card, dot, label, safety):
+            widget.bind("<Button-1>", lambda _event, action_id=action.action_id: self._select_action(action_id))
+            attach_tooltip(widget, tooltip)
+        self.action_card_widgets[action.action_id] = card
+
+    def _select_action(self, action_id: str) -> None:
+        self.selected_action_id_value = action_id
+        self._refresh_action_card_selection()
+
+    def _refresh_action_card_selection(self) -> None:
+        for action_id, card in self.action_card_widgets.items():
+            selected = action_id == self.selected_action_id_value
+            bg = card.cget("bg")
+            card.configure(
+                highlightbackground="#1f5b9d" if selected else bg,
+                highlightthickness=2 if selected else 1,
             )
 
     def write_output(self, text: str) -> None:
@@ -593,9 +846,7 @@ class CockpitGui:
     def load_recovery_action(self) -> None:
         if self.recovery_action_id is None:
             return
-        self.tree.selection_set(self.recovery_action_id)
-        self.tree.focus(self.recovery_action_id)
-        self.tree.see(self.recovery_action_id)
+        self._select_action(self.recovery_action_id)
         action = self.action_view_by_id(self.recovery_action_id)
         label = action.label if action is not None else self.recovery_action_id
         self.write_output(f"\nRecovery action loaded: {label}. Inspect or run read-only manually.\n")
