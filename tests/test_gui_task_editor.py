@@ -10,6 +10,8 @@ from agentic_project_kit.cli import app
 from agentic_project_kit.communication_rule_context import REQUIRED_LOADED_SECTIONS
 from agentic_project_kit import transfer_repo_actions
 from agentic_project_kit.gui_task_editor import (
+    CANONICAL_REMOTE_TRANSFER_REPORT_PATH,
+    CANONICAL_TRANSFER_PAYLOAD_PATH,
     CANONICAL_TRANSFER_OUTBOX_PATH,
     CURRENT_USER_TASK_PATH,
     GUI_TRANSFER_TASK_REF,
@@ -40,7 +42,7 @@ FETCH_GUI_TRANSFER_REF = (
 )
 EXPECTED_GUI_TASK_NEXT_ACTION = (
     "Send g/go to the LLM; assistant must read "
-    ".agentic/transfer/inbox/current.yaml from remote ref gui-transfer-tasks."
+    "the GUI task carrier .agentic/transfer/inbox/current.yaml from remote ref gui-transfer-tasks."
 )
 
 
@@ -75,9 +77,18 @@ def test_initial_llm_prompt_forces_go_to_reread_transfer_file_and_compare_identi
     text = build_initial_llm_prompt().prompt_text
 
     assert "Never answer a bare g/go from chat memory" in text
-    assert "Read the transfer file first every time" in text
+    assert "Read the task carrier first every time" in text
     assert "Extract task_id and user_task.body_sha256" in text
     assert "discard prior task context" in text
+
+
+def test_initial_llm_prompt_prioritizes_transfer_result_before_gui_task_carrier() -> None:
+    text = build_initial_llm_prompt().prompt_text
+
+    assert CANONICAL_REMOTE_TRANSFER_REPORT_PATH.as_posix() in text
+    assert "First inspect the latest repo-backed transfer result" in text
+    assert "If no fresh transfer result exists, read the GUI task carrier" in text
+    assert "neither a fresh transfer result nor the GUI task carrier" in text
 
 
 def test_initial_llm_prompt_explains_three_reply_modes() -> None:
@@ -88,6 +99,9 @@ def test_initial_llm_prompt_explains_three_reply_modes() -> None:
     assert "c = copy-and-paste fallback" in text
     assert "agentic-kit transfer patch-cycle-status --json" in text
     assert "agentic-kit transfer continue --json" in text
+    assert "status: active" in text
+    assert "branch: gui-transfer-tasks" in text
+    assert CANONICAL_TRANSFER_PAYLOAD_PATH.as_posix() in text
 
 
 def test_initial_llm_prompt_contains_rule_refresh_ack_schema() -> None:
@@ -149,8 +163,8 @@ def test_initial_llm_prompt_points_go_to_gui_transfer_task_ref() -> None:
 
     assert result.task_ref == GUI_TRANSFER_TASK_REF
     assert f"remote ref `{GUI_TRANSFER_TASK_REF}`" in result.prompt_text
-    assert "Do not read this transfer order from `main`" in result.prompt_text
-    assert "If the ref or file does not exist" in result.prompt_text
+    assert "Do not read this GUI task carrier from `main`" in result.prompt_text
+    assert "If neither a fresh transfer result nor the GUI task carrier exists" in result.prompt_text
     assert CURRENT_USER_TASK_PATH.as_posix() == ".agentic/transfer/inbox/current.yaml"
 
 
@@ -188,10 +202,24 @@ def test_submit_user_task_writes_canonical_transfer_inbox(tmp_path) -> None:
         "body_sha256": result.body_sha256,
     }
     assert payload["g_go_handling"]["forbidden"] == "answering_g_go_from_chat_memory"
+    assert payload["g_go_handling"]["read_order"] == [
+        "latest_remote_transfer_report_or_outbox_first",
+        "gui_task_carrier_if_no_fresh_result_exists",
+    ]
+    assert payload["task_carrier_contract"]["role"] == "gui_user_task_for_llm"
+    assert payload["task_carrier_contract"]["status"] == "submitted"
+    assert payload["task_carrier_contract"]["not_executable_by_transfer_continue"] is True
+    active_reply = payload["task_carrier_contract"]["same_file_active_reply_contract"]
+    assert active_reply["active_order_ref"] == GUI_TRANSFER_TASK_REF
+    assert active_reply["active_order_path"] == CURRENT_USER_TASK_PATH.as_posix()
+    assert active_reply["active_order_required_status"] == "active"
+    assert active_reply["active_order_required_branch"] == GUI_TRANSFER_TASK_REF
+    assert active_reply["python_payload_path"] == CANONICAL_TRANSFER_PAYLOAD_PATH.as_posix()
     assert payload["reply_contract"]["selected_code"] == "b"
     assert payload["reply_contract"]["selected_mode"] == "file_transfer"
     assert payload["reply_contract"]["local_execution_command"] == list(TRANSFER_CONTINUE_COMMAND)
     assert payload["reply_contract"]["mode_map"]["a"]["standard_local_command"] == list(REMOTE_STATUS_COMMAND)
+    assert payload["reply_contract"]["mode_map"]["b"]["response_order_contract"] == active_reply
     assert payload["local_execution"]["standard_command"] == list(TRANSFER_CONTINUE_COMMAND)
     assert payload["actions"][0]["command"] == [
         "./.venv/bin/agentic-kit",
@@ -534,7 +562,19 @@ def test_communication_reply_contracts_define_modes_and_execution_command() -> N
     assert file_contract["selected_code"] == "b"
     assert file_contract["rules"]["forbidden"] == "answering_g_go_from_chat_memory"
     assert file_contract["rules"]["compare_task_id_and_body_sha256"] is True
+    assert file_contract["rules"]["g_go_priority"] == [
+        "read_latest_remote_transfer_report_or_outbox_first",
+        "if_no_fresh_result_read_gui_task_carrier",
+    ]
+    assert file_contract["rules"]["gui_task_carrier_status"] == "submitted"
+    assert file_contract["rules"]["active_transfer_order_status"] == "active"
     assert file_contract["local_execution_command"] == list(TRANSFER_CONTINUE_COMMAND)
+    assert file_contract["mode_map"]["b"]["response_order_contract"]["active_order_ref"] == (
+        GUI_TRANSFER_TASK_REF
+    )
+    assert file_contract["mode_map"]["b"]["response_order_contract"]["python_payload_path"] == (
+        CANONICAL_TRANSFER_PAYLOAD_PATH.as_posix()
+    )
     assert copy_contract["selected_code"] == "c"
     assert copy_contract["local_execution_command"] == []
     assert standard_command_args_for_communication_mode("a") == ("transfer", "patch-cycle-status", "--json")

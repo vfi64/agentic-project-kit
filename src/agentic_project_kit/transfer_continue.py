@@ -84,12 +84,34 @@ def run_transfer_continue(root: Path | str = ".", branch: str | None = None) -> 
         "stderr": restore.stderr,
         "ok": restore.returncode == 0,
     })
+    fetch = _run(["git", "fetch", "origin"], root_path)
+    steps.append({
+        "name": "fetch-origin-before-active-order-inference",
+        "argv": ["git", "fetch", "origin"],
+        "returncode": fetch.returncode,
+        "stdout": fetch.stdout,
+        "stderr": fetch.stderr,
+        "ok": fetch.returncode == 0,
+    })
 
     inferred_branch = branch
     inference_state = "explicit_branch" if branch else "not_needed_or_not_found"
     candidates: list[str] = []
 
     if inferred_branch is None and not _current_order_is_active(root_path):
+        if fetch.returncode != 0:
+            return {
+                "schema_version": 1,
+                "kind": "transfer_continue_result",
+                "result_status": "BLOCKED",
+                "returncode": 2,
+                "final_signal": "f",
+                "reasons": ["remote_ref_fetch_failed"],
+                "candidate_branches": candidates,
+                "steps": steps,
+                "next_action": "Fetch origin before inferring the active transfer order branch.",
+                "chat_reply": "f",
+            }
         candidates = _active_order_branches(root_path)
         if len(candidates) == 1:
             inferred_branch = candidates[0]

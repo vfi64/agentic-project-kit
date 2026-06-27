@@ -4754,7 +4754,7 @@ def submit_user_task_command(
     publish: bool = typer.Option(
         False,
         "--publish",
-        help="Publish the canonical transfer order to the gui-transfer-tasks remote branch.",
+        help="Publish the canonical GUI task carrier to the gui-transfer-tasks remote branch.",
     ),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:

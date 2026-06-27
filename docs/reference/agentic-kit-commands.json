@@ -8842,7 +8842,7 @@
         },
         {
           "default": false,
-          "help": "Publish the canonical transfer order to the gui-transfer-tasks remote branch.",
+          "help": "Publish the canonical GUI task carrier to the gui-transfer-tasks remote branch.",
           "is_flag": true,
           "metavar": null,
           "multiple": false,
