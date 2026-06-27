@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: bb33332f20d764bbe320b74868c1a8ad676546a8
-  short: bb33332f
-  subject: Fix GUI file-transfer carrier contract (#1594)
+  full: 3e3fe44c7333e1fe642f5dd7e2d5551a44b0f0dc
+  short: 3e3fe44c
+  subject: Refine cockpit GUI visual hierarchy (#1596)
 last_substantive_work_state:
-  full: bb33332f20d764bbe320b74868c1a8ad676546a8
-  short: bb33332f
-  subject: Fix GUI file-transfer carrier contract (#1594)
+  full: 3e3fe44c7333e1fe642f5dd7e2d5551a44b0f0dc
+  short: 3e3fe44c
+  subject: Refine cockpit GUI visual hierarchy (#1596)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
