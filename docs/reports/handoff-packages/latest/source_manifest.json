@@ -113,12 +113,12 @@
       "path": "docs/planning/project_direction.yaml"
     },
     {
-      "bytes": 85487,
+      "bytes": 85835,
       "exists": true,
       "path": "docs/reference/AGENTIC_KIT_COMMANDS.md"
     },
     {
-      "bytes": 262044,
+      "bytes": 263218,
       "exists": true,
       "path": "docs/reference/agentic-kit-commands.json"
     }

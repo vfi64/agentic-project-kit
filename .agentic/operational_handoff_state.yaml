@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 015d01f5cbe69e7f3880e58b1b039a6b42775cb5
-  short: 015d01f5
-  subject: Add pr-create-complete live status (#1627)
+  full: 5a4128617ab86c93f6fcbaedd221eaad7bb9ff8c
+  short: 5a412861
+  subject: Harden governance planning helpers (#1629)
 last_substantive_work_state:
-  full: 015d01f5cbe69e7f3880e58b1b039a6b42775cb5
-  short: 015d01f5
-  subject: Add pr-create-complete live status (#1627)
+  full: 5a4128617ab86c93f6fcbaedd221eaad7bb9ff8c
+  short: 5a412861
+  subject: Harden governance planning helpers (#1629)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
