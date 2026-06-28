@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3a6816201c207af4b9e46141e2aa7e04fddc3fd5
-  short: 3a681620
-  subject: Add status current-state audit (#1613)
+  full: 38910def89511ca35df85182628e5043e30472b5
+  short: 38910def
+  subject: Sync STATUS current state during handoff refresh (#1615)
 last_substantive_work_state:
-  full: 3a6816201c207af4b9e46141e2aa7e04fddc3fd5
-  short: 3a681620
-  subject: Add status current-state audit (#1613)
+  full: 38910def89511ca35df85182628e5043e30472b5
+  short: 38910def
+  subject: Sync STATUS current state during handoff refresh (#1615)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
