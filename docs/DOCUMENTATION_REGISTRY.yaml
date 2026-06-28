@@ -473,6 +473,11 @@ documents:
     owner: maintainers
     notes: Phase 0 coverage matrix for transfer GitHub actions needed before hardened rule-refresh handshake and GUI write-action expansion.
     status: active
+  - path: docs/testing/TRANSFER_TEST_PLAN.md
+    class: operational/automation
+    owner: maintainers
+    notes: Active transfer-mode test specification for remote, file-transfer, and Copy-and-Paste recovery paths before GUI expansion.
+    status: active
   - path: docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
     class: planning
     owner: maintainers
