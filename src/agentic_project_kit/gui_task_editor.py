@@ -15,19 +15,17 @@ import yaml
 
 from agentic_project_kit.communication_rule_context import REQUIRED_LOADED_SECTIONS
 from agentic_project_kit import transfer_repo_actions
-from agentic_project_kit.transfer_runner import DEFAULT_INBOX
-from agentic_project_kit.transfer_safety_context import OUTBOX_LAST_RESULT
-
-
-CURRENT_USER_TASK_PATH = DEFAULT_INBOX
-GUI_TRANSFER_TASK_REF = "gui-transfer-tasks"
-CANONICAL_TRANSFER_INBOX_PATH = DEFAULT_INBOX
-CANONICAL_TRANSFER_PAYLOAD_PATH = Path(".agentic/transfer/inbox/next_command.py.txt")
-CANONICAL_TRANSFER_OUTBOX_PATH = OUTBOX_LAST_RESULT
-CANONICAL_REMOTE_TRANSFER_REPORT_PATH = Path(
-    "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
+from agentic_project_kit.gui_transfer_contract import (
+    CANONICAL_REMOTE_TRANSFER_REPORT_PATH,
+    CANONICAL_TRANSFER_INBOX_PATH,
+    CANONICAL_TRANSFER_OUTBOX_PATH as CANONICAL_TRANSFER_OUTBOX_PATH,
+    CANONICAL_TRANSFER_PAYLOAD_PATH,
+    CURRENT_USER_TASK_PATH,
+    GUI_TRANSFER_TASK_REF,
+    LEGACY_GUI_TRANSFER_TASK_PATH,
+    fetch_gui_transfer_ref_args,
+    remote_gui_task_spec,
 )
-LEGACY_GUI_TRANSFER_TASK_PATH = Path("docs/reports/transfer_tasks/current_user_task.json")
 REMOTE_STATUS_COMMAND_ARGS = ("transfer", "patch-cycle-status", "--json")
 FILE_TRANSFER_CONTINUE_COMMAND_ARGS = ("transfer", "continue", "--json")
 POSIX_AGENTIC_KIT = "./.venv/bin/agentic-kit"
@@ -882,7 +880,7 @@ def _verify_remote_task_carrier(
     fetch = git_runner(root, _fetch_task_ref_args())
     if fetch.returncode != 0:
         return RemoteTaskCarrierVerification(False, "", "remote_fetch_failed")
-    remote_spec = f"origin/{GUI_TRANSFER_TASK_REF}:{task_path.as_posix()}"
+    remote_spec = remote_gui_task_spec(task_path)
     blob = git_runner(root, ("rev-parse", "--verify", remote_spec))
     if blob.returncode != 0:
         return RemoteTaskCarrierVerification(False, "", "remote_blob_missing")
@@ -895,11 +893,7 @@ def _verify_remote_task_carrier(
 
 
 def _fetch_task_ref_args() -> tuple[str, str, str]:
-    return (
-        "fetch",
-        "origin",
-        f"{GUI_TRANSFER_TASK_REF}:refs/remotes/origin/{GUI_TRANSFER_TASK_REF}",
-    )
+    return fetch_gui_transfer_ref_args()
 
 
 def _restore_branch_after_publish(

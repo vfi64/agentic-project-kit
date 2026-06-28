@@ -9,6 +9,7 @@ import yaml
 from agentic_project_kit.cli import app
 from agentic_project_kit.communication_rule_context import REQUIRED_LOADED_SECTIONS
 from agentic_project_kit import transfer_repo_actions
+from agentic_project_kit import gui_transfer_contract
 from agentic_project_kit.gui_task_editor import (
     CANONICAL_REMOTE_TRANSFER_REPORT_PATH,
     CANONICAL_TRANSFER_PAYLOAD_PATH,
@@ -38,7 +39,7 @@ from agentic_project_kit.gui_task_editor import (
 FETCH_GUI_TRANSFER_REF = (
     "fetch",
     "origin",
-    f"{GUI_TRANSFER_TASK_REF}:refs/remotes/origin/{GUI_TRANSFER_TASK_REF}",
+    gui_transfer_contract.gui_transfer_refspec(),
 )
 EXPECTED_GUI_TASK_NEXT_ACTION = (
     "Send g/go to the LLM; assistant must read "
@@ -166,6 +167,24 @@ def test_initial_llm_prompt_points_go_to_gui_transfer_task_ref() -> None:
     assert "Do not read this GUI task carrier from `main`" in result.prompt_text
     assert "If neither a fresh transfer result nor the GUI task carrier exists" in result.prompt_text
     assert CURRENT_USER_TASK_PATH.as_posix() == ".agentic/transfer/inbox/current.yaml"
+
+
+def test_initial_llm_prompt_uses_gui_transfer_contract_constants() -> None:
+    result = build_initial_llm_prompt()
+    cli = CliRunner().invoke(app, ["gui", "initial-llm-prompt", "--json"])
+    data = json.loads(cli.output)
+
+    assert cli.exit_code == 0, cli.output
+    assert GUI_TRANSFER_TASK_REF == gui_transfer_contract.GUI_TRANSFER_TASK_REF
+    assert CURRENT_USER_TASK_PATH == gui_transfer_contract.CURRENT_USER_TASK_PATH
+    assert result.task_ref == gui_transfer_contract.GUI_TRANSFER_TASK_REF
+    assert result.task_path == gui_transfer_contract.CURRENT_USER_TASK_PATH.as_posix()
+    assert data["task_ref"] == gui_transfer_contract.GUI_TRANSFER_TASK_REF
+    assert data["task_path"] == gui_transfer_contract.CURRENT_USER_TASK_PATH.as_posix()
+    assert gui_transfer_contract.GUI_TRANSFER_TASK_REF in result.prompt_text
+    assert gui_transfer_contract.CURRENT_USER_TASK_PATH.as_posix() in result.prompt_text
+    assert "Do not read this GUI task carrier from `main`" in result.prompt_text
+    assert gui_transfer_contract.LEGACY_GUI_TRANSFER_TASK_PATH.as_posix() not in result.prompt_text
 
 
 def test_submit_user_task_writes_canonical_transfer_inbox(tmp_path) -> None:
