@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 64f5799b3f94b14e026ebede7363efe196a6528c
-  short: 64f5799b
-  subject: Harden guided work cycle availability (#1623)
+  full: b92cbdbcb124f05d61d64775180d63b9224ad080
+  short: b92cbdbc
+  subject: Add shared communication mode examples (#1625)
 last_substantive_work_state:
-  full: 64f5799b3f94b14e026ebede7363efe196a6528c
-  short: 64f5799b
-  subject: Harden guided work cycle availability (#1623)
+  full: b92cbdbcb124f05d61d64775180d63b9224ad080
+  short: b92cbdbc
+  subject: Add shared communication mode examples (#1625)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
