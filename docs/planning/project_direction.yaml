@@ -21,18 +21,18 @@
 #   superseded or archives them explicitly.
 schema_version: 1
 status: active
-updated: "2026-06-19"
+updated: "2026-06-28"
 authority: docs/planning/project_direction.yaml
 title: Agentic Project Kit direction
 summary: >-
-  The current direction is to complete a safety, audit, retention, and
-  documentation-authority consolidation before the GUI gatekeeper work starts.
+  Complete the v0.4.12 transfer hardening and GUI-readiness sequence before
+  starting the external-project operating model architecture work.
 
 strategy:
   summary: >-
-    Prefer deterministic wrappers, machine-checked gates, and repo-backed
-    evidence over raw shell, implicit chat memory, or manually maintained
-    status fragments.
+    Prefer deterministic wrappers, machine-checked gates, repo-backed evidence,
+    and explicit planning authority over raw shell, implicit chat memory,
+    duplicated GUI workflow logic, or manually maintained status fragments.
   principles:
     - id: wrapper-first
       title: Wrapper first
@@ -45,7 +45,8 @@ strategy:
       status: active
       text: >-
         The GUI must trigger stable wrappers and readiness gates. It must not
-        become a raw shell front end.
+        become a raw shell front end or a second implementation of repository
+        workflow logic.
     - id: protected-source-preservation
       title: Protected source preservation
       status: active
@@ -66,74 +67,128 @@ strategy:
         Garbage collection handles transient artifacts and bounded retention.
         Planning, roadmap, strategy, and workflow documents require protected
         documentation consolidation, not GC deletion.
+    - id: external-operating-model-deferred
+      title: External operating model deferred
+      status: active
+      text: >-
+        Work to use the kit as an external operating model for other
+        repositories starts only after v0.4.12 and begins with an architecture
+        document for Model A.
 
 roadmap:
   current_phase:
-    id: v0.4.10
-    title: Safety, audit, retention, and documentation authority consolidation
+    id: v0.4.12
+    title: Transfer hardening and GUI readiness before external operating model
     status: active
     goal: >-
-      Ship a consolidation release after standard gates, command taxonomy,
-      patch-scope preflight, GC retention, and project-direction authority are
-      stable.
+      Stabilize transfer tests, current-state auditing, SEND/READ ref handling,
+      tooltip correctness, GUI modularity, guided work-cycle UX,
+      communication-mode explanations, and bounded live wrapper status.
   next_phase:
-    id: v0.5.0
-    title: GUI gatekeeper start
+    id: post-v0.4.12-external-operating-model
+    title: External operating model architecture
     status: planned
     goal: >-
-      Begin GUI gatekeeper work only after wrappers, gates, documentation
-      authority, release dry-runs, and retention policy are stable.
+      After v0.4.12, create an architecture document for Model A: external kit
+      plus reserved .agentic/ governance area. Do not start implementation
+      before that architecture is reviewed.
   milestones:
-    - id: standard-gates
-      title: Integrate audits into standard gates
-      status: done
-      target_release: v0.4.10
-    - id: command-taxonomy
-      title: Add command taxonomy and patch scope preflight
-      status: done
-      target_release: v0.4.10
-    - id: planning-authority
-      title: Consolidate planning document authority before v0.4.10
-      status: done
-      target_release: v0.4.10
-    - id: gc-retention
-      title: Enforce GC retention for transfer run reports
-      status: done
-      target_release: v0.4.10
-    - id: project-direction
-      title: Unify strategy, roadmap, and ideas into a machine-readable source
-      status: active
-      target_release: v0.4.10
-    - id: docs-reconciliation
-      title: Reconcile docs/planning, docs/plans, docs/roadmap, docs/strategy, and docs/workflow
-      status: active
-      target_release: v0.4.10
-    - id: release-v0.4.10
-      title: Prepare and publish v0.4.10
+    - id: transfer-test-plan
+      title: Specify transfer tests for remote, transfer-file, and copy-paste modes
       status: planned
-      target_release: v0.4.10
-    - id: gui-gatekeeper
-      title: Start deterministic GUI gatekeeper
+      target_release: v0.4.12
+      order: 1
+    - id: audit-status-current-state
+      title: Add current-state drift audit with STATUS.md consistency checks
       status: planned
-      target_release: v0.5.0
+      target_release: v0.4.12
+      order: 2
+    - id: send-read-ref-consistency
+      title: Test that g/go reads the gui-transfer-tasks carrier ref
+      status: planned
+      target_release: v0.4.12
+      order: 3
+    - id: tooltip-idempotence
+      title: Make GUI tooltip attachment idempotent
+      status: planned
+      target_release: v0.4.12
+      order: 4
+    - id: gui-modularization-smoke-tests
+      title: Add GUI smoke tests before modularizing large GUI files
+      status: planned
+      target_release: v0.4.12
+      order: 5
+    - id: guided-work-cycle-bar
+      title: Add guided work-cycle bar over existing work wrappers
+      status: planned
+      target_release: v0.4.12
+      order: 6
+    - id: communication-mode-examples
+      title: Add communication-mode explanations with examples
+      status: planned
+      target_release: v0.4.12
+      order: 7
+    - id: wrapper-live-status
+      title: Add bounded live status for pr-create-complete
+      status: planned
+      target_release: v0.4.12
+      order: 8
+    - id: artifact-gc-extension
+      title: Extend artifact-gc instead of adding duplicate log-GC commands
+      status: planned
+      target_release: v0.4.12
+      order: 9
+    - id: documentation-auto-registration
+      title: Plan documentation auto-registration
+      status: planned
+      target_release: post-v0.4.12
+      order: 10
+    - id: rule-auto-registration-inventory
+      title: Inventory rule auto-registration prerequisites
+      status: planned
+      target_release: post-v0.4.12
+      order: 11
+    - id: branch-release-selection
+      title: Defer branch and release selection until after guided cycle UX
+      status: deferred
+      target_release: post-v0.4.12
+      order: 12
+    - id: discard-all-separate-from-recover
+      title: Keep discard-all separate from recover
+      status: deferred
+      target_release: post-v0.4.12
+      order: 13
+    - id: external-operating-model-a
+      title: Plan external operating model using Model A
+      status: parked
+      target_release: post-v0.4.12
+      order: 14
 
 ideas:
   active:
     - id: project-direction-gui-panel
       title: Project direction panel
       status: active
-      promoted_to: v0.5.0
+      promoted_to: v0.4.12
       text: >-
         The future GUI can render project strategy, roadmap, and ideas from
         `agentic-kit project-direction --format json`.
     - id: deterministic-gui-gatekeeper
       title: Deterministic GUI gatekeeper
       status: planned
-      promoted_to: v0.5.0
+      promoted_to: v0.4.12
       text: >-
-        The first GUI phase should expose safe wrappers, readiness checks, and
-        project direction without raw shell execution.
+        The first GUI phase should expose safe wrappers, readiness checks,
+        guided work-cycle state, communication-mode examples, and project
+        direction without raw shell execution or duplicate workflow logic.
   parked:
+    - id: kit-operating-system-model-a
+      title: Kit as external operating model for other repositories
+      status: deferred
+      reason: >-
+        Start only after v0.4.12. The first slice must be an architecture
+        document for Model A: external kit plus reserved .agentic/ governance
+        area.
     - id: live-release-gui
       title: Live release publish from GUI
       status: deferred
@@ -157,3 +212,9 @@ ideas:
       reason: >-
         GC is a retention tool for transient artifacts, not a semantic
         documentation consolidation mechanism.
+    - id: copied-in-kit-model-b
+      title: Copy the kit into every target repository
+      status: rejected
+      reason: >-
+        Model B would mix kit code with project code and create avoidable
+        maintenance drift.
