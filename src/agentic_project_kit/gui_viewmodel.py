@@ -14,6 +14,11 @@ from agentic_project_kit.access_levels import (
 from agentic_project_kit.action_registry import list_actions
 from agentic_project_kit.cockpit import CockpitAction, cockpit_actions
 from agentic_project_kit.gui_button_catalog import GuiButtonDefinition, basic_gui_buttons
+from agentic_project_kit.gui_communication_modes import (
+    DEFAULT_COMMUNICATION_MODE,
+    communication_mode_definitions,
+    communication_mode_ids,
+)
 from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperStatus, build_gui_gatekeeper_status
 
 
@@ -182,32 +187,17 @@ def _traffic_light_from_gatekeeper_status(status: GuiGatekeeperStatus) -> tuple[
 
 
 def _communication_modes(selected_mode: str) -> tuple[CommunicationModeViewModel, ...]:
-    selected = selected_mode if selected_mode in {"file_transfer", "remote", "copy_paste"} else "file_transfer"
-    return (
+    selected = selected_mode if selected_mode in communication_mode_ids() else DEFAULT_COMMUNICATION_MODE
+    return tuple(
         CommunicationModeViewModel(
-            "file_transfer",
-            "File Transfer",
-            "Standard",
-            selected == "file_transfer",
-            True,
-            "Normal path: typed transfer files, work orders, reports, evidence, no chat paste required.",
-        ),
-        CommunicationModeViewModel(
-            "remote",
-            "Remote",
-            "GitHub/PR/CI",
-            selected == "remote",
-            False,
-            "Remote work is visible here but mutations remain strictly wrapper- and gatekeeper-guarded.",
-        ),
-        CommunicationModeViewModel(
-            "copy_paste",
-            "Copy-and-Paste",
-            "Recovery/Fallback",
-            selected == "copy_paste",
-            False,
-            "Fallback only for terminal loss, Python startup issues, filesystem errors, network trouble before push, broken logs, or hard recovery.",
-        ),
+            definition.mode_id,
+            definition.label,
+            definition.role,
+            selected == definition.mode_id,
+            definition.is_default,
+            definition.safety_note,
+        )
+        for definition in communication_mode_definitions()
     )
 
 

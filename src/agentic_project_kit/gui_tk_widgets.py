@@ -3,6 +3,9 @@ from __future__ import annotations
 from typing import Any
 
 from agentic_project_kit.access_levels import ACCESS_LEVEL_ORDER
+from agentic_project_kit.gui_communication_modes import (
+    communication_mode_explanation as shared_communication_mode_explanation,
+)
 from agentic_project_kit.gui_viewmodel import CommunicationModeViewModel
 
 
@@ -21,22 +24,6 @@ TRAFFIC_LIGHT_LABEL_BY_STATE = {
     "FAILED": "FAILED (red)",
 }
 
-COMMUNICATION_MODE_EXPLANATIONS = {
-    "file_transfer": (
-        "Normal mode. Write the task to the repo-backed transfer task, send g/go in chat, "
-        "then read the result. Minimizes copy-and-paste."
-    ),
-    "remote": (
-        "PR/CI/GitHub focused mode. Use safe read-only checks and bounded wrappers; "
-        "do not bypass governance."
-    ),
-    "copy_paste": (
-        "Recovery fallback only for terminal loss or missing remote access. "
-        "Not the normal operating mode."
-    ),
-}
-
-
 def traffic_light_fill(color: str) -> str:
     return TRAFFIC_LIGHT_FILL_BY_COLOR.get(color.lower(), TRAFFIC_LIGHT_FILL_BY_COLOR["gray"])
 
@@ -47,7 +34,7 @@ def traffic_light_state_label(state: str) -> str:
 
 
 def communication_mode_explanation(mode: str) -> str:
-    return COMMUNICATION_MODE_EXPLANATIONS.get(mode, COMMUNICATION_MODE_EXPLANATIONS["file_transfer"])
+    return shared_communication_mode_explanation(mode)
 
 
 def communication_mode_option_label(mode: CommunicationModeViewModel) -> str:
