@@ -32,6 +32,9 @@ Dry-run by default garbage collector for transient communication artifacts.
 | `transfer_runs` | `TyperOption` | --transfer-runs | `False` | `False` | Collect expired docs/reports/transfer_runs files. |
 | `report_retention` | `TyperOption` | --report-retention | `False` | `False` | Collect expired report-like files and generated successor-handoff Markdown under selected docs/report surfaces. |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Actually delete candidates. Default is dry-run. |
+| `ttl_seconds` | `TyperOption` | --ttl-seconds | `False` | `86400` | Retention age in seconds for age-gated modes. |
+| `older_than` | `TyperOption` | --older-than | `False` | `` | ISO date/datetime cutoff. Overrides --ttl-seconds for age-gated modes. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit audit-absolute-path-portability`
 

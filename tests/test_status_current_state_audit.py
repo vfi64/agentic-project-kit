@@ -172,6 +172,29 @@ def test_audit_status_current_state_blocks_duplicate_live_current_verified_main(
     assert any(finding.check == "status_live_area_single_current_verified_main" for finding in result.blockers)
 
 
+def test_audit_status_current_state_blocks_conflicting_current_verified_main_values(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    status = tmp_path / "docs" / "STATUS.md"
+    status.write_text(
+        status.read_text(encoding="utf-8").replace(
+            "Post-merge handoff status: PASS/NOOP.",
+            "Current verified main: `bbbbbbb` (`Conflicting`).\nPost-merge handoff status: PASS/NOOP.",
+        ),
+        encoding="utf-8",
+    )
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=_git_runner(),
+        release_status_builder=lambda _root: _release_status(),
+    )
+
+    assert any(
+        finding.check == "status_current_block_current_verified_main_values_consistent"
+        for finding in result.blockers
+    )
+
+
 def test_audit_status_current_state_blocks_when_validation_head_is_too_far_behind_origin(tmp_path: Path) -> None:
     _write_project(tmp_path)
 

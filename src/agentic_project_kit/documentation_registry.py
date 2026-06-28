@@ -43,6 +43,14 @@ REQUIRED_DOCUMENT_FIELDS = (
     "owner",
 )
 
+DOCUMENT_REGISTRATION_SCAN_SUFFIXES = frozenset({".md", ".yaml", ".yml"})
+DOCUMENT_REGISTRATION_SCAN_ROOTS = (Path("docs"),)
+DOCUMENT_REGISTRATION_EXCLUDED_PREFIXES = (
+    "docs/reports/handoff-packages/",
+    "docs/reports/terminal/",
+    "docs/reports/transfer_runs/",
+)
+
 
 def load_documentation_registry(project_root: Path) -> dict[str, Any]:
     path = project_root / REGISTRY_PATH
@@ -123,13 +131,22 @@ def build_documentation_registry_summary(project_root: Path) -> dict[str, Any]:
 
     class_counts: Counter[str] = Counter()
     owner_counts: Counter[str] = Counter()
+    registered_paths: set[str] = set()
     for entry in documents:
         if not isinstance(entry, dict):
             continue
         document_class = str(entry.get("class", "")).strip() or "<missing>"
         owner = str(entry.get("owner", "")).strip() or "<missing>"
+        path = str(entry.get("path", "")).strip()
+        if path:
+            registered_paths.add(path)
         class_counts[document_class] += 1
         owner_counts[owner] += 1
+
+    unregistered_candidates = find_unregistered_document_candidates(
+        project_root,
+        registered_paths=registered_paths,
+    )
 
     return {
         "registry_path": str(REGISTRY_PATH),
@@ -145,6 +162,16 @@ def build_documentation_registry_summary(project_root: Path) -> dict[str, Any]:
         "document_count": len(documents),
         "class_counts": dict(sorted(class_counts.items())),
         "owner_counts": dict(sorted(owner_counts.items())),
+        "registration_policy": {
+            "status": "inventory_only",
+            "mutation_allowed": False,
+            "next_step": (
+                "Review unregistered candidates, classify them, then patch "
+                "docs/DOCUMENTATION_REGISTRY.yaml explicitly through the normal PR lifecycle."
+            ),
+        },
+        "unregistered_candidate_count": len(unregistered_candidates),
+        "unregistered_candidates": unregistered_candidates,
         "artifact_policy": build_artifact_policy_summary(project_root),
     }
 
@@ -168,6 +195,13 @@ def render_documentation_registry_summary(summary: dict[str, Any]) -> str:
     if isinstance(owner_counts, dict):
         for owner, count in owner_counts.items():
             lines.append(f"- {owner}: {count}")
+    lines.extend(
+        [
+            "registration policy:",
+            "- status: inventory_only",
+            f"- unregistered_candidates: {summary.get('unregistered_candidate_count', 0)}",
+        ]
+    )
 
     artifact_policy = summary.get("artifact_policy", {})
     if isinstance(artifact_policy, dict) and artifact_policy.get("present"):
@@ -189,6 +223,46 @@ def render_documentation_registry_summary(summary: dict[str, Any]) -> str:
             for rule_id in protected:
                 lines.append(f"  - {rule_id}")
     return "\n".join(lines)
+
+
+def find_unregistered_document_candidates(
+    project_root: Path,
+    *,
+    registered_paths: set[str] | None = None,
+) -> list[str]:
+    """Return document-like files that are not registered yet.
+
+    This is intentionally inventory-only. It does not mutate the protected
+    registry, because document classification still requires explicit review.
+    """
+    if registered_paths is None:
+        try:
+            registry = load_documentation_registry(project_root)
+            documents = registry.get("documents", [])
+            registered_paths = {
+                str(entry.get("path", "")).strip()
+                for entry in documents
+                if isinstance(entry, dict) and str(entry.get("path", "")).strip()
+            }
+        except (FileNotFoundError, OSError, ValueError, yaml.YAMLError):
+            registered_paths = set()
+    candidates: list[str] = []
+    for root in DOCUMENT_REGISTRATION_SCAN_ROOTS:
+        scan_root = project_root / root
+        if not scan_root.exists():
+            continue
+        for path in sorted(scan_root.rglob("*")):
+            if not path.is_file() or path.is_symlink():
+                continue
+            if path.suffix.lower() not in DOCUMENT_REGISTRATION_SCAN_SUFFIXES:
+                continue
+            rel = path.relative_to(project_root).as_posix()
+            if rel in registered_paths:
+                continue
+            if any(rel.startswith(prefix) for prefix in DOCUMENT_REGISTRATION_EXCLUDED_PREFIXES):
+                continue
+            candidates.append(rel)
+    return candidates
 
 
 def write_documentation_registry_summary_json(

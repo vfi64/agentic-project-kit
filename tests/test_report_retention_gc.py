@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 
@@ -101,6 +102,29 @@ def test_artifact_gc_report_retention_cli_is_dry_run_by_default(tmp_path: Path, 
     assert newer.exists()
     assert newest.exists()
 
+
+def test_artifact_gc_report_retention_cli_emits_json_dry_run(tmp_path: Path, monkeypatch) -> None:
+    _touch(tmp_path / "docs/terminal/transfer_handoff_reports/oldest.log", mtime=OLD_MTIME)
+    _touch(tmp_path / "docs/terminal/transfer_handoff_reports/newer.log", mtime=OLD_MTIME + 1)
+    _touch(tmp_path / "docs/terminal/transfer_handoff_reports/newest.log", mtime=OLD_MTIME + 2)
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(
+        app,
+        ["artifact-gc", "--report-retention", "--older-than", "2026-01-01", "--json"],
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["kind"] == "artifact_gc_result"
+    assert payload["mode"] == "report-retention"
+    assert payload["dry_run"] is True
+    assert payload["execute"] is False
+    assert payload["candidate_count"] == 1
+    assert payload["candidates"][0].startswith("docs/terminal/transfer_handoff_reports/oldest.log")
+    assert payload["remote_execution_policy"]["forbidden_path"] == "ad-hoc remote deletion or a new transfer gc-logs command"
+
+
 def test_report_retention_gc_only_auto_candidates_log_and_json(tmp_path: Path) -> None:
     log_file = _touch(tmp_path / "docs/reports/terminal/old.log")
     json_file = _touch(tmp_path / "docs/reports/terminal/old.json")
@@ -124,4 +148,3 @@ def test_report_retention_gc_only_auto_candidates_log_and_json(tmp_path: Path) -
     assert "docs/reports/terminal/old.yaml" not in paths
     assert "docs/reports/terminal/old.txt" not in paths
     assert md_file.exists() and py_file.exists() and yaml_file.exists() and txt_file.exists()
-

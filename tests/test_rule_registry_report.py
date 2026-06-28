@@ -222,6 +222,8 @@ def test_build_rule_registry_report_summarizes_coverage(tmp_path: Path) -> None:
     _write_registry(tmp_path)
     report = build_rule_registry_report(tmp_path)
     assert report["status"] == "warn"
+    assert report["auto_registration_policy"]["status"] == "inventory_only"
+    assert report["auto_registration_policy"]["mutation_allowed"] is False
     assert report["summary"]["active_mechanism_count"] == 2
     assert report["summary"]["direct_mechanism_count"] == 1
     assert report["summary"]["documented_mechanism_count"] == 1

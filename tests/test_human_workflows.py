@@ -110,8 +110,14 @@ def test_work_recover_runs_recovery_wrappers(monkeypatch):
     result = CliRunner().invoke(app, ["work", "recover", "--json"])
 
     assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["destructive_actions_allowed"] is False
+    assert payload["discard_all_available"] is False
     assert calls[0][:3] == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile"]
     assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "patch-cycle-status"] for call in calls)
+    flattened = " ".join(" ".join(call) for call in calls)
+    assert "reset --hard" not in flattened
+    assert " clean " not in flattened
 
 
 def test_release_ready_requires_target_version_and_derives_tag(monkeypatch):

@@ -32,6 +32,15 @@ class ChangedPath:
     selected: bool = True
 
 
+@dataclass(frozen=True)
+class WorkBranchOption:
+    option_id: str
+    label: str
+    branch: str
+    purpose: str
+    safe_default: bool = False
+
+
 _PHASE_DEFINITIONS: tuple[tuple[WorkPhase, str, str, str], ...] = (
     (
         "start",
@@ -197,6 +206,42 @@ def slugify_work_title(text: str, *, prefix: str = "codex") -> str:
     slug = re.sub(r"-{2,}", "-", slug)[:64].strip("-") or "work-slice"
     clean_prefix = prefix.strip("/")
     return f"{clean_prefix}/{slug}" if clean_prefix else slug
+
+
+def build_branch_selection_options(
+    title: str,
+    *,
+    release_version: str = "",
+) -> tuple[WorkBranchOption, ...]:
+    """Build human-oriented branch choices without exposing Git jargon first."""
+    patch_branch = slugify_work_title(title, prefix="codex")
+    docs_branch = slugify_work_title(title, prefix="docs")
+    options = [
+        WorkBranchOption(
+            option_id="patch",
+            label="Regular change",
+            branch=patch_branch,
+            purpose="Use for normal code, GUI, workflow, documentation, or test changes.",
+            safe_default=True,
+        ),
+        WorkBranchOption(
+            option_id="docs",
+            label="Documentation refresh",
+            branch=docs_branch,
+            purpose="Use for administrative handoff, planning, or documentation-only refreshes.",
+        ),
+    ]
+    cleaned_version = release_version.strip().lstrip("v")
+    if cleaned_version:
+        options.append(
+            WorkBranchOption(
+                option_id="release",
+                label="Release preparation",
+                branch=f"release/prepare-v{cleaned_version}",
+                purpose="Use only for an explicit release-preparation slice.",
+            )
+        )
+    return tuple(options)
 
 
 def changed_paths_from_status(status_text: str) -> tuple[ChangedPath, ...]:
