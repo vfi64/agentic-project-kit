@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 221cecdb84b6f2c7bedf6ce39733b983add48cba
-  short: 221cecdb
-  subject: Centralize GUI transfer carrier contract (#1617)
+  full: 674e365a4d6bbe56f751f8189c65afbcc6dccbbf
+  short: 674e365a
+  subject: Make GUI tooltip attachment idempotent (#1619)
 last_substantive_work_state:
-  full: 221cecdb84b6f2c7bedf6ce39733b983add48cba
-  short: 221cecdb
-  subject: Centralize GUI transfer carrier contract (#1617)
+  full: 674e365a4d6bbe56f751f8189c65afbcc6dccbbf
+  short: 674e365a
+  subject: Make GUI tooltip attachment idempotent (#1619)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
