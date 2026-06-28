@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `7756f0fb2f58910072ae3478398f1ee99f07bd6e` (`7756f0fb`)
-- Handoff freshness marker: `7756f0fb`
-- Branch at generation: `docs/post-pr1611-handoff-refresh`
+- HEAD: `3a6816201c207af4b9e46141e2aa7e04fddc3fd5` (`3a681620`)
+- Handoff freshness marker: `3a681620`
+- Branch at generation: `docs/post-pr1613-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
