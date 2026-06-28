@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e3935e50cde2e2f5bb842e50d8fd07759a4fa37e
-  short: e3935e50
-  subject: Split cockpit GUI into focused modules (#1631)
+  full: a6592e9a3785ebf8612ab8bce5498736770aa4f0
+  short: a6592e9a
+  subject: Add local artifact GC cockpit button (#1633)
 last_substantive_work_state:
-  full: e3935e50cde2e2f5bb842e50d8fd07759a4fa37e
-  short: e3935e50
-  subject: Split cockpit GUI into focused modules (#1631)
+  full: a6592e9a3785ebf8612ab8bce5498736770aa4f0
+  short: a6592e9a
+  subject: Add local artifact GC cockpit button (#1633)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
